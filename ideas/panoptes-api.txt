@@ -1,0 +1,33 @@
+/users/:user_name/subject_sets
+title: 'Antarctica (February 2014)'
+subjects: []
+
+/users/:user_name/subject_sets/:subject_set_name/subjects
+
+# Might be multiple locations, any format (image, audio, video, etc.)
+locations: ['/foo.jpg']
+location_sizes: [{width: 640, height: 480}] # Nice to have
+
+# Preview is always a single image.
+preview: '/foo-thumb.jpg'
+preview_size: {width: 64, height: 48} # Nice to have
+
+dimensions: {width: 6, height: 4} # Real dimensional measurements visible in photo (not always applicable)
+units: 'm' # Units of real measurements
+
+coords: {lat: 89.1234, lng: 1.2345}
+
+tags: ['site_x', 'or_whatever'] # This replaces subject "groups" from Ouroboros
+
+classification_count: 0
+classifications_until_retirement: 10
+
+/users/:user_name/workflows
+title: 'Mark the penguins'
+tasks: {} # The same as readymade decision tree tasks
+first_task: 'mark'
+
+/users/:user_name/projects
+title: 'The Penguin Project'
+workflows: [{workflow: '', subject_sets: []}]
+state: 'development' # beta, waiting, active, complete

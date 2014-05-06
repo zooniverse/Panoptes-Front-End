@@ -1,0 +1,18 @@
+User can create an account
+  With an email address
+  With Twitter, Facebook, Google, GitHub, etc.
+
+User can log in
+
+User can create a subject set
+  Upload images
+  Upload a CSV manifest
+  Patch/delete individual subjects
+
+User can create a workflow
+  Raw JSON to start out
+  Fancy editor later
+
+User can create a project
+  Associate workflow(s) with subject set(s)
+  Define retirement rules
