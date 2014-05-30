@@ -6,16 +6,15 @@
     "coffee-script": "^1.7.1",
     "coffeeify": "~0.6.0",
     "connect": "^2.17.3",
+    "event-stream": "^3.1.5",
     "gulp": "^3.6.2",
     "gulp-cached": "~0.0.3",
     "gulp-ect": "brian-c/gulp-ect#fix-paths",
     "gulp-filelog": "~0.2.0",
     "gulp-html-file-to-directory": "~0.0.1",
     "gulp-livereload": "^1.5.0",
-    "gulp-tap": "~0.1.1",
     "nib": "^1.0.2",
-    "stylus": "~0.45.1",
-    "vinyl-source-stream": "~0.1.1"
+    "stylus": "~0.45.1"
   },
   "scripts": {
     "start": "gulp"
