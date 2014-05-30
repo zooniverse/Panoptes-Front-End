@@ -1,8 +1,6 @@
 gulp = require 'gulp'
 cache = require 'gulp-cached'
 filelog = require 'gulp-filelog'
-ect = require 'gulp-ect'
-htmlFileToDirectory = require 'gulp-html-file-to-directory'
 
 files =
   html: './html/**/*.{html,ect}'
@@ -24,6 +22,9 @@ transform = ([options]..., transformation) ->
       callback error, file
 
 gulp.task 'html', ->
+  ect = require 'gulp-ect'
+  htmlFileToDirectory = require 'gulp-html-file-to-directory'
+
   gulp.src files.html
     .pipe cache 'html', optimizeMemory: true
     .pipe ect()
