@@ -92,6 +92,7 @@ gulp.task 'serve', (next) ->
   staticServer = connect()
   staticServer.use connect.static buildDir
   staticServer.listen port, next
+  console.log "Static server listening on: #{port}"
 
   changeServer = livereload()
   gulp.watch "#{buildDir}/**/*"
