@@ -3,9 +3,11 @@ cache = require 'gulp-cached'
 filelog = require 'gulp-filelog'
 
 files =
-  html: './html/**/*.{html,ect}'
+  html: './html/**/*.ect'
   js: ['./js/main.coffee', './js/project.coffee']
   css: ['./css/main.styl']
+
+translations = ['en-us', 'es-mx']
 
 buildDir = './build'
 
@@ -24,13 +26,24 @@ transform = ([options]..., transformation) ->
 gulp.task 'html', ->
   ect = require 'gulp-ect'
   htmlFileToDirectory = require 'gulp-html-file-to-directory'
+  eventStream = require 'event-stream'
+  path = require 'path'
 
-  gulp.src files.html
-    .pipe cache 'html', optimizeMemory: true
-    .pipe ect()
-    .pipe htmlFileToDirectory()
-    .pipe gulp.dest buildDir
-    .pipe filelog()
+  translations.forEach (translation, i) ->
+    data =
+      require: require # Make local require available in templates.
+      t: require "./translations/#{translation}" # Translated strings
+
+    gulp.src files.html
+      .pipe ect({data}).on 'error', console.log
+      .pipe htmlFileToDirectory()
+      .pipe eventStream.map (file, callback) ->
+        unless i is 0
+          # TODO: This feels pretty hacky.
+          file.path = file.path.replace file.base, path.join(file.base, translation) + path.sep
+        callback null, file
+      .pipe gulp.dest buildDir
+      .pipe filelog()
   return
 
 gulp.task 'js', ->
