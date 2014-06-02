@@ -4,6 +4,7 @@ filelog = require 'gulp-filelog'
 
 files =
   html: './html/**/*.ect'
+  components: './{components,}/**/*.html'
   js: ['./{js,}/main.coffee', './{js,}/project.coffee']
   css: ['./{css,}/main.styl']
 
@@ -45,6 +46,11 @@ gulp.task 'html', ->
       .pipe filelog()
   return
 
+gulp.task 'components', ->
+  gulp.src files.components
+    .pipe gulp.dest buildDir
+    .pipe filelog()
+
 gulp.task 'js', ->
   browserify = require 'browserify'
   coffeeify = require 'coffeeify'
@@ -74,10 +80,11 @@ gulp.task 'css', ->
     .pipe filelog()
   return
 
-gulp.task 'build', ['html', 'js', 'css']
+gulp.task 'build', ['html', 'components', 'js', 'css']
 
 gulp.task 'watch', ['build'], ->
   gulp.watch files.html, ['html']
+  gulp.watch files.components, ['components']
   gulp.watch files.js, ['js']
   gulp.watch files.css, ['css']
   return
