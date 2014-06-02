@@ -4,8 +4,8 @@ filelog = require 'gulp-filelog'
 
 files =
   html: './html/**/*.ect'
-  js: ['./js/main.coffee', './js/project.coffee']
-  css: ['./css/main.styl']
+  js: ['./{js,}/main.coffee', './{js,}/project.coffee']
+  css: ['./{css,}/main.styl']
 
 translations = ['en-us', 'es-mx']
 
@@ -18,7 +18,6 @@ transform = ([options]..., transformation) ->
     transformation file, (error, css) ->
       console.log error.toString() if error? # TODO: Gulp has a nice util for logging.
       file.path = file.path.replace /[^\.]+$/, options.ext if options?.ext
-      file.base = file.cwd if options?.baseCwd
       file.contents = new Buffer error?.toString() ? css
       error = null if options?.squelch
       callback error, file
@@ -52,7 +51,7 @@ gulp.task 'js', ->
 
   gulp.src files.js
     .pipe cache 'js', optimizeMemory: true
-    .pipe transform ext: 'js', baseCwd: true, squelch: true, (file, callback) ->
+    .pipe transform ext: 'js', squelch: true, (file, callback) ->
       b = browserify file.path, extensions: ['.coffee']
       b.transform coffeeify
       b.bundle callback
@@ -66,7 +65,7 @@ gulp.task 'css', ->
 
   gulp.src files.css
     .pipe cache 'css', optimizeMemory: true
-    .pipe transform ext: 'css', baseCwd: true, squelch: true, (file, callback) ->
+    .pipe transform ext: 'css', squelch: true, (file, callback) ->
       stylus file.contents.toString(), filename: file.path
         .use nib()
         .import 'nib'
