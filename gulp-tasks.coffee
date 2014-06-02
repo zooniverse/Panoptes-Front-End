@@ -1,3 +1,4 @@
+fs = require 'fs'
 gulp = require 'gulp'
 cache = require 'gulp-cached'
 filelog = require 'gulp-filelog'
@@ -10,7 +11,10 @@ files =
   js: ['./{js,_}/main.coffee', './{js,_}/project.coffee']
   css: ['./{css,_}/main.styl']
 
-translations = ['en-us', 'es-mx']
+defaultTranslation = 'en-us'
+translations = fs.readdirSync './translations'
+  .map (file) ->
+    file.split('.')[0]
 
 buildDir = './build'
 
@@ -31,20 +35,20 @@ gulp.task 'html', ->
   eventStream = require 'event-stream'
   path = require 'path'
 
+  data =
+    require: require # Make local require available in templates.
+    t: null # This is where translated strings will go.
+
   translations.forEach (translation, i) ->
-    data =
-      require: require # Make local require available in templates.
-      t: require "./translations/#{translation}" # Translated strings
+    data.t = require "./translations/#{translation}" # Translated strings
+
+    unless translation.split('.')[0] is defaultTranslation
+      localBuildDir = path.join buildDir, translation
 
     gulp.src files.html
       .pipe ect({data}).on 'error', console.log
       .pipe htmlFileToDirectory()
-      .pipe eventStream.map (file, callback) ->
-        unless i is 0
-          # TODO: This feels pretty hacky.
-          file.path = file.path.replace file.base, path.join(file.base, translation) + path.sep
-        callback null, file
-      .pipe gulp.dest buildDir
+      .pipe gulp.dest localBuildDir ? buildDir
       .pipe filelog()
   return
 
