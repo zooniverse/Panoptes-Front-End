@@ -1,5 +1,8 @@
 <% extend 'main-layout' %>
 <% block 'page-title': %>Zooniverse Home<% end %>
+<link rel="import" href="/components/dialog.html" />
+
+<% include './partials/account-dialog' %>
 
 <h1><%- @t.home.welcome %></h1>
 
