@@ -1,4 +1,5 @@
 fs = require 'fs'
+path = require 'path'
 gulp = require 'gulp'
 cache = require 'gulp-cached'
 filelog = require 'gulp-filelog'
@@ -11,10 +12,11 @@ files =
   js: ['./{js,_}/main.coffee', './{js,_}/project.coffee']
   css: ['./{css,_}/main.styl']
 
-defaultTranslation = 'en-us'
 translations = fs.readdirSync './translations'
-  .map (file) ->
-    file.split('.')[0]
+  .filter (file) ->
+    path.extname(file) of require.extensions
+
+defaultStrings = require './translations/en-us'
 
 buildDir = './build'
 
@@ -32,18 +34,17 @@ transform = ([options]..., transformation) ->
 gulp.task 'html', ->
   ect = require 'gulp-ect'
   htmlFileToDirectory = require 'gulp-html-file-to-directory'
-  eventStream = require 'event-stream'
-  path = require 'path'
-
-  data =
-    require: require # Make local require available in templates.
-    t: null # This is where translated strings will go.
+  merge = require 'lodash.merge'
 
   translations.forEach (translation, i) ->
-    data.t = require "./translations/#{translation}" # Translated strings
+    strings = require "./translations/#{translation}"
 
-    unless translation.split('.')[0] is defaultTranslation
-      localBuildDir = path.join buildDir, translation
+    data =
+      require: require # Make local require available in templates.
+      t: merge {}, defaultStrings, strings
+
+    unless strings is defaultStrings
+      localBuildDir = path.join buildDir, translation.split('.')[0]
 
     gulp.src files.html
       .pipe ect({data}).on 'error', console.log
@@ -56,6 +57,7 @@ gulp.task 'components', ->
   gulp.src files.components
     .pipe gulp.dest buildDir
     .pipe filelog()
+  return
 
 gulp.task 'js', ->
   browserify = require 'browserify'
@@ -89,7 +91,7 @@ gulp.task 'css', ->
 gulp.task 'build', ['html', 'components', 'js', 'css']
 
 gulp.task 'watch', ['build'], ->
-  gulp.watch files.html, ['html']
+  gulp.watch ['./translations/**/*'].concat(files.html), ['html']
   gulp.watch files.components, ['components']
   gulp.watch files.js, ['js']
   gulp.watch files.css, ['css']

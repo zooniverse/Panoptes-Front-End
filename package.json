@@ -13,6 +13,7 @@
     "gulp-filelog": "~0.2.0",
     "gulp-html-file-to-directory": "~0.0.1",
     "gulp-livereload": "^1.5.0",
+    "lodash.merge": "^2.4.1",
     "nib": "^1.0.2",
     "stylus": "~0.45.1"
   },
