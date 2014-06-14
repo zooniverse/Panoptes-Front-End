@@ -24,15 +24,17 @@ buildDir = './build'
 eventStream = require 'event-stream'
 transform = ([options]..., transformation) ->
   eventStream.map (file, callback) ->
-    transformation file, (error, css) ->
+    transformation file, (error, result) ->
       console.log error.toString() if error? # TODO: Gulp has a nice util for logging.
       file.path = file.path.replace /[^\.]+$/, options.ext if options?.ext
-      file.contents = new Buffer error?.toString() ? css
+      file.contents = new Buffer error?.toString() ? result
       error = null if options?.squelch
       callback error, file
 
 gulp.task 'html', ->
   ect = require 'gulp-ect'
+  cheerio = require 'cheerio'
+  CoffeeScript = require 'coffee-script'
   htmlFileToDirectory = require 'gulp-html-file-to-directory'
   merge = require 'lodash.merge'
 
@@ -48,6 +50,17 @@ gulp.task 'html', ->
 
     gulp.src files.html
       .pipe ect({data}).on 'error', console.log
+      .pipe transform (file, callback) ->
+        $ = cheerio.load file.contents.toString()
+        $('script[type="text/coffeescript"]').each ->
+          script = $(this)
+          script.html try
+            script.attr 'type', null
+            CoffeeScript.compile script.html()
+          catch e
+            script.attr 'type', 'text/error'
+            e.toString()
+        callback null, $.html()
       .pipe htmlFileToDirectory()
       .pipe gulp.dest localBuildDir ? buildDir
       .pipe filelog()
