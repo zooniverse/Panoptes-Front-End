@@ -1,0 +1,39 @@
+<template>
+  <content></content>
+
+  <style>
+    :host {
+      display: flex;
+      justify-content: space-between;
+    }
+
+  </style>
+</template>
+
+<script>
+  (function() {
+    'use strict';
+
+    var Platform = window.Platform;
+
+    var currentScript = document._currentScript || document.currentScript;
+
+    addEventListener('WebComponentsReady', function() {
+      var proto = Object.create(HTMLElement.prototype);
+
+      proto.createdCallback = function() {
+        var shadowRoot = this.createShadowRoot();
+        var template = currentScript.ownerDocument.getElementsByTagName('template')[0];
+        if (Platform.ShadowCSS) {
+          Platform.ShadowCSS.shimStyling(template.content, 'panoptes-title');
+        }
+        var clone = document.importNode(template.content, true);
+        shadowRoot.appendChild(clone);
+      };
+
+      window.PanoptesTitle = document.registerElement('panoptes-title', {
+        prototype: proto
+      });
+    });
+  }());
+</script>

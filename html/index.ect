@@ -1,11 +1,13 @@
-<% extend 'main-layout' %>
+<% extend './templates/main' %>
 <% block 'page-title': %>Zooniverse Home<% end %>
-<link rel="import" href="/components/dialog.html" />
 
-<% include './partials/account-dialog' %>
+<link rel="import" href="/components/panoptes-content.html" />
 
-<h1><%- @t.home.welcome %></h1>
-
-<% block 'scripts': %>
-  <script src="./js/project.js"></script>
-<% end %>
+<panoptes-content>
+  <h1><%- @t.home.welcome %></h1>
+  <ul>
+    <li>What we do, why we do it</li>
+    <li>[Register / Sign in] | [Or get started!]</li>
+    <li>List a few projects || For scientists | For the classroom</li>
+  </ul>
+</panoptes-content>

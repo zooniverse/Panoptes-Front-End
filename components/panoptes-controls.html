@@ -1,0 +1,44 @@
+<template>
+  <content></content>
+
+  <style>
+    ::content button {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      cursor: pointer;
+      font: inherit;
+      line-height: initial;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</template>
+
+<script>
+  (function() {
+    'use strict';
+
+    var Platform = window.Platform;
+
+    var currentScript = document._currentScript || document.currentScript;
+
+    addEventListener('WebComponentsReady', function() {
+      var proto = Object.create(HTMLElement.prototype);
+
+      proto.createdCallback = function() {
+        var shadowRoot = this.createShadowRoot();
+        var template = currentScript.ownerDocument.getElementsByTagName('template')[0];
+        if (Platform.ShadowCSS) {
+          Platform.ShadowCSS.shimStyling(template.content, 'panoptes-controls');
+        }
+        var clone = document.importNode(template.content, true);
+        shadowRoot.appendChild(clone);
+      };
+
+      window.PanoptesControls = document.registerElement('panoptes-controls', {
+        prototype: proto
+      });
+    });
+  }());
+</script>

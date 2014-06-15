@@ -1,0 +1,108 @@
+<template>
+  <div part="underlay">
+    <div part="container">
+      <content></content>
+    </div>
+  </div>
+
+  <style>
+    :host {
+      display: none;
+    }
+
+    :host([visible]) {
+      display: block;
+    }
+
+    [part="underlay"] {
+      background: rgba(0, 0, 0, 0.5);
+      bottom: 0;
+      left: 0;
+      position: fixed;
+      right: 0;
+      top: 0;
+      z-index: 1;
+    }
+
+    [part="container"] {
+      background: white;
+      box-shadow: 0 1px 2px black;
+      display: flex;
+      flex-direction: column;
+      left: 50%;
+      max-height: 90vh;
+      max-width: 90vw;
+      position: absolute;
+      top: 33%;
+      transform: translate(-50%, -33%);
+    }
+
+    [part="container"] > ::content > panoptes-title:first-child {
+      background: rgba(0, 0, 0, 0.75);
+      color: white;
+      flex-shrink: 0;
+      padding: 0.25em 0.75em;
+    }
+
+    [part="container"] > ::content > panoptes-controls:last-child {
+      background: rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-shrink: 0;
+      justify-content: center;
+      padding: 0.25em 0.75em;
+    }
+  </style>
+</template>
+
+<script>
+  (function() {
+    'use strict';
+
+    var Platform = window.Platform;
+
+    var currentScript = document._currentScript || document.currentScript;
+
+    addEventListener('WebComponentsReady', function() {
+      var proto = Object.create(HTMLElement.prototype, {
+        visible: {
+          get: function() {
+            return this.hasAttribute('visible');
+          },
+          set: function(value) {
+            if (value) {
+              this.setAttribute('visible', true);
+            } else {
+              this.removeAttribute('visible');
+            }
+          }
+        }
+      });
+
+      proto.createdCallback = function() {
+        var shadowRoot = this.createShadowRoot();
+        var template = currentScript.ownerDocument.getElementsByTagName('template')[0];
+        if (Platform.ShadowCSS) {
+          Platform.ShadowCSS.shimStyling(template.content, 'panoptes-dialog');
+        }
+        var clone = document.importNode(template.content, true);
+        shadowRoot.appendChild(clone);
+      };
+
+      proto.open = function() {
+        this.visible = true;
+      };
+
+      proto.close = function() {
+        this.visible = false;
+      };
+
+      proto.toggle = function() {
+        this.visible = !this.visible;
+      };
+
+      window.PanoptesDialog = document.registerElement('panoptes-dialog', {
+        prototype: proto
+      });
+    });
+  }());
+</script>

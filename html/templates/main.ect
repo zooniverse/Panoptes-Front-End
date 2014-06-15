@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html class="signed-in">
+  <head>
+    <meta charset="utf-8" />
+    <title><% content 'page-title' %></title>
+    <script src="/bower_components/platform/platform.js"></script>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Playfair+Display:400italic" />
+  </head>
+
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol id="the-zooniverse-logo" viewBox="0 0 100 100">
+        <g fill="currentColor" stroke="transparent" stroke-width="0">
+          <path transform="translate(50, 50) rotate(45)" d="
+            M 0 -45 A 45 45 0 0 1 0 45 A 45 45 0 0 1 0 -45 Z
+            M 0 -30 A 30 30 0 0 0 0 30 A 30 30 0 0 0 0 -30 Z
+            M 0 -14 A 14 14 0 0 1 0 14 A 14 14 0 0 1 0 -14 Z
+            M 0 -70 L 8 0 L 0 70 L -8 0 Z
+          "></path>
+        </g>
+      </symbol>
+    </svg>
+
+    <a href="#start-of-content" class="jump-link">Jump to content</a>
+
+    <header>
+      <div class="logo"><a href="/">Ø Zooniverse</a></div>
+      <div><a href="/projects">Projects</a></div>
+      <div><a href="/discuss">Discussion</a></div>
+      <div><a href="/about">About</a></div>
+      <div><a href="/blog">Blog</a></div>
+
+      <hr class="not-signed-in" />
+
+      <a href="#" class="not-signed-in">Register</a>
+      <a href="#" class="not-signed-in">Sign in</a>
+
+      <hr class="signed-in" />
+
+      <div class="signed-in">
+        <a href="/edit/account" class="name">brian-c</a>
+        <button type="button" class="group badge">Zooniverse</button>
+        <a href="/people/#/brian-c">
+          <img src="//placekitten.com/64/64" width="48" height="48" class="avatar" />
+        </a>
+      </div>
+    </header>
+
+    <a id="start-of-content"></a>
+    <% content %>
+
+    <footer id="site-footer">
+      <a href="/contact">Contact</a>
+      <a href="/privacy">Privacy policy</a>
+    </footer>
+
+    <script src="/js/main.js"></script>
+  </body>
+</html>

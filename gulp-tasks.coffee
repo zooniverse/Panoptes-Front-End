@@ -8,7 +8,7 @@ files =
   # NOTE: The underscores here only exist so that the glob starts at the right place.
   # This keeps the output paths the way they should be.
   html: './html/**/*.ect'
-  components: './{components,_}/**/*.html'
+  components: ['./{bower_components,_}/**/*.{html,js,css}', './{components,_}/**/*.html']
   js: ['./{js,_}/main.coffee', './{js,_}/project.coffee']
   css: ['./{css,_}/main.styl']
 

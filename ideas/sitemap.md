@@ -9,33 +9,33 @@ Hash        | Description
 User account
 ============
 
-Path                          | Description
------------------------------ | -----------
-`/my/account`                 | General account settings (avatar, real name, change password)
-`/my/account/#/profile`       | Public profile information (location, bio)
-`/my/account/#/roles`         | List projects do you have special roles on
-`/my/account/#/notifications` | Email/notification settings for watched projects and Talk threads
+Path                            | Description
+------------------------------- | -----------
+`/edit/account`                 | General account settings (avatar, real name, change password)
+`/edit/account/#/profile`       | Public profile information (location, bio)
+`/edit/account/#/roles`         | List projects do you have special roles on
+`/edit/account/#/notifications` | Email/notification settings for watched projects and Talk threads
 
 Group accounts
 ==============
 
-Path                       | Description
--------------------------- | -----------
-`/my/groups/#/create`      | Create a new group (group name, location)
-`/my/groups`               | List groups you're a member of
-`/my/groups/#/:group_name` | Edit a group (profile info, members); list projects, collections, subjects
+Path                         | Description
+---------------------------- | -----------
+`/edit/groups/#/create`      | Create a new group (group name, location)
+`/edit/groups`               | List groups you're a member of
+`/edit/groups/#/:group_name` | Edit a group (profile info, members); list projects, collections, subjects
 
 Data
 ====
 
-Path                               | Description
----------------------------------- | -----------
-`/my/projects`                     | List of projects you own
-`/my/projects/#/:project_id`       | Edit details about a project
-`/my/collections`                  | List of collections you own
-`/my/collections/#/:collection_id` | Collection details, list of subjects in a collection
-`/my/subjects`                     | List of subjects you own (by collection, and leftovers by date?)
-`/my/subjects/#/:subject_id`       | Edit details about a subject
+Path                                 | Description
+------------------------------------ | -----------
+`/edit/projects`                     | List of projects you own
+`/edit/projects/#/:project_id`       | Edit details about a project
+`/edit/collections`                  | List of collections you own
+`/edit/collections/#/:collection_id` | Collection details, list of subjects in a collection
+`/edit/subjects`                     | List of subjects you own (by collection, and leftovers by date?)
+`/edit/subjects/#/:subject_id`       | Edit details about a subject
 
 Public user or group profiles
 =============================

@@ -1,88 +1,149 @@
-.panoptes-root {
-  background: #ccc;
-  color: black;
-  font: 16px sans-serif;
-}
+:unresolved
+  visibility: hidden
 
-h1 {
-  font-weight: normal;
-  font-size: 24px;
-  margin: 0 0 0.25em;
-  /*text-shadow: 0 1px rgba(0, 0, 0, 0.5);*/
-}
+#_RESET_BUTTON
+  background: transparent
+  border: 0
+  cursor: pointer
+  font: inherit
+  margin: 0
+  padding: 0
+  line-height: inherit
+  color: inherit
 
-.panoptes-grid {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-}
+html
+  background: #fff
+  color: #333
+  font: 400 14px Montserrat, sans-serif
 
-.panoptes-grid > :not(:first-child) {
-  margin-left: 1em;
-}
+body
+  margin: 0
 
-.panoptes-minor-column {
-  /*flex: 1;*/
-}
+table
+  border-collapse: separate
+  border-spacing: 0 1vh
 
-.panoptes-major-column {
-  /*flex: 1;*/
-}
+td
+  vertical-align: baseline
 
-.panoptes-nav-menu {
-  background: white;
-  border: 1px solid;
-  box-shadow: 2px 2px 0 -1px rgba(0, 0, 0, 0.5);
-}
+h1
+  border-bottom: 1px solid rgba(black, 0.2)
+  font: italic 400 2.5em "Playfair Display", serif
+  margin: 0 0 0.5em
+  padding-bottom: 0.2em
 
-.panoptes-nav-menu ul {
-  padding: 0;
-  margin: 0;
-}
+fieldset
+  border: 1px solid rgba(black, 0.2)
+  border-width: 1px 0 0
+  margin: 4vh 0
+  padding: 3vh 0
 
-.panoptes-nav-menu li {
-  display: block;
-}
+legend
+  border: 1px solid rgba(black, 0.2)
+  border-radius: 1em
+  font-size: 0.7em
+  font-weight: 700
+  margin: 0 -1em
+  opacity: 1
+  padding: 0 1em
+  text-transform: uppercase
+  letter-spacing: 0.05em
 
-.panoptes-nav-menu a {
-  border-bottom: 1px solid;
-  display: block;
-  color: inherit;
-  padding: 0.25em 1em;
-  text-decoration: none;
-}
+a
+  color: orangered
 
-.panoptes-nav-menu li:last-child a {
-  border-bottom: none;
-}
+.jump-link
+  background: rgba(0, 0, 0, 0.8)
+  color: white
+  left: 0
+  padding: 0.2em 1.4em
+  position: fixed
+  text-decoration: none
+  top: 10px
+  transform: translateX(-100%)
+  transition: transform 0.1s
 
-.panoptes-subpage {
-  background: white;
-  border: 1px solid;
-  box-shadow: 2px 2px 0 -1px rgba(0, 0, 0, 0.5);
-}
+  &:focus
+    transform: translateX(0)
 
-.panoptes-subpage:not(:target) {
-  display: none;
-}
+.badge
+  background: orangered
+  border-radius: 2em
+  box-sizing: border-box
+  color: white
+  display: inline-block
+  font-size: 0.8em
+  height: 1.3em
+  min-width: 1.3em
+  padding: 0 0.6em
+  line-height: 1.3
+  text-align: center
 
-.panoptes-subpage > .header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-  font-weight: bold;
-  padding: 1em;
-}
+  button
+    @extends #_RESET_BUTTON
 
-.fieldset {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-  padding: 1em;
-}
+body > header
+  background: rgba(white, 0.9)
+  border-bottom: 1px solid rgba(black, 0.5)
+  color: orangered
+  display: flex
+  justify-content: space-between
 
-.fieldset:last-child {
-  border-bottom: 0;
-}
+  a
+    color: inherit
+    text-decoration: none
 
-table {
-  margin: 0;
-  border-collapse: collapse;
-  border-width: 0;
-}
+  button
+    @extends #_RESET_BUTTON
+
+  & > :not(hr)
+    align-items: center
+    background: rgba(orangered, 0)
+    border-right: 1px solid rgba(black, 0.2)
+    display: flex
+    flex: 0 0 auto
+    padding: 1.2vh 1.5vw 0.4vh
+
+    &:last-child
+      border-right: 0
+
+    &:active,
+    &:focus,
+    &[data-active]
+      background: rgba(orangered, 1)
+      color: white
+
+    &.logo
+      font-size: 1.3em
+      letter-spacing: 0.05em
+      text-transform: uppercase
+
+  .name,
+  .group
+    margin: 0 0.2em
+
+  .avatar
+    border-radius: 50%
+    margin: -35% 0 -35% 0.3em
+
+  & > a
+    align-items: center
+    display: flex
+
+  & > hr
+    flex: 1 0 1em
+    visibility: hidden
+
+    & + :not(hr)
+      border-left: 1px solid rgba(black, 0.2)
+
+body > footer
+  border-top: 1px solid rgba(black, 0.4)
+  padding: 3vh 5vw
+
+  a
+    text-decoration: none
+
+:root.signed-in .not-signed-in,
+:root:not(.signed-in) .signed-in
+  display: none

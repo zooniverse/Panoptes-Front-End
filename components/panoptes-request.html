@@ -1,0 +1,244 @@
+<template id="panoptes-request-template">
+  <content></content>
+  <div id="progress-bar"><div id="progress-fill"></div></div>
+  <div id="error">
+    <button type="button" id="retry-button">
+      <svg viewBox="0 0 100 100">
+        <!--TODO-->
+        <path d="M 10 10 L 90 90 M 90 10 L 10 90"></path>
+      </svg>
+    </button>
+  </div>
+
+  <style>
+    :host {
+      display: block;
+      position: relative;
+    }
+
+    #progress-bar {
+      background: gray;
+      border-radius: 1em;
+      display: none;
+      height: 1em;
+      left: 50%;
+      overflow: hidden;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 50%;
+    }
+
+    #progress-fill {
+      background: currentColor;
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      transition: width 0.25s;
+    }
+
+    :host([progress]) #progress-bar {
+      display: block;
+    }
+
+    #error {
+      background: rgba(255, 100, 0, 0.25);
+      bottom: 0;
+      display: none;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    #retry-button {
+      border: 0;
+      background: transparent;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #retry-button svg {
+      height: 5em;
+      width: 5em;
+    }
+
+    #retry-button path {
+      fill: transparent;
+      stroke: currentColor;
+      stroke-width: 1;
+    }
+
+    :host([error]) #error {
+      display: block;
+    }
+  </style>
+</template>
+
+<script>
+  (function() {
+    'use strict';
+
+    var currentScript = document._currentScript || document.currentScript;
+
+    addEventListener('WebComponentsReady', function() {
+      var requestProto = Object.create(HTMLElement.prototype, {
+        from: {
+          get: function() {
+            return this.getAttribute('from');
+          },
+          set: function(value) {
+            this.setAttribute('from', value);
+            this.fetch();
+          }
+        },
+
+        data: {
+          get: function() {
+            return this._data;
+          },
+          set: function(value) {
+            this._data = value;
+            this.updateFields();
+          }
+        },
+
+        progress: {
+          get: function() {
+            return this.getAttribute('progress');
+          },
+          set: function(value) {
+            if (isFinite(value)) {
+              this.progressFill.style.width = (value * 100).toString() + '%'
+
+              if (value === 1) {
+                this.removeAttribute('progress');
+              } else {
+                this.setAttribute('progress', value);
+              }
+            } else {
+              this.progressFill.style.width = '' // Default is 100%.
+            }
+          }
+        },
+
+        error: {
+          get: function() {
+            return this.getAttribute('error');
+          },
+          set: function(value) {
+            if (value) {
+              this.setAttribute('error', true);
+            } else {
+              this.removeAttribute('error');
+            }
+
+          }
+        }
+      });
+
+      requestProto.createdCallback = function() {
+        var shadowRoot = this.createShadowRoot();
+        var template = currentScript.ownerDocument.getElementById('panoptes-request-template');
+        var clone = document.importNode(template.content, true);
+        shadowRoot.appendChild(clone);
+
+        this.progressFill = shadowRoot.getElementById('progress-fill');
+
+        this.request = new XMLHttpRequest();
+        this.request.addEventListener('progress', this);
+        this.request.addEventListener('load', this);
+        this.request.addEventListener('error', this);
+        this.request.addEventListener('loadend', this);
+
+        if (this.from) {
+          this.fetch();
+        }
+      };
+
+      requestProto.attributeChangedCallback = function(attribute, old, value) {
+        if (attribute === 'from') {
+          this.from = value;
+        }
+      };
+
+      requestProto.handleEvent = function(e) {
+        // console.log('Handling', e.type, 'event', e);
+
+        if (e.type === 'progress') {
+          if (e.lengthComputable) {
+            this.progress = e.loaded / e.total;
+          } else {
+            this.progress = Infinity;
+          }
+        } else if (e.type === 'error') {
+          this.error = true;
+        } else if (e.type === 'load') {
+          if (e.target.status === 200) {
+            this.error = false;
+            this.data = JSON.parse(e.target.responseText);
+          } else {
+            this.error = true;
+          }
+        } else if (e.type === 'loadend') {
+          this.progress = 1;
+        }
+      };
+
+      function forKeysAndValuesInString(keysAndValues, fn, scope) {
+        keysAndValues = keysAndValues.split(/\s*;\s*/).filter(Boolean);
+        keysAndValues.forEach(function(keyAndValue) {
+          keyAndValue = keyAndValue.split(/\s*:\s*/);
+          var value = keyAndValue.pop();
+          var key = keyAndValue.shift();
+          fn.call(scope, key, value);
+        }, scope);
+      }
+
+      function getFromObject(object, path) {
+        var pathSegments = path.split('.');
+        return pathSegments.reduce(function(value, segment) {
+          if (value !== undefined) {
+            return value[segment];
+          }
+        }, object);
+      }
+
+      requestProto.updateFields = function() {
+        var fields = this.querySelectorAll('[data-panoptes-request-field]');
+        Array.prototype.forEach.call(fields, function(element) {
+          var propsAndKeys = element.getAttribute('data');
+          propsAndKeys = propsAndKeys || element.getAttribute('data-panoptes-request-field');
+          forKeysAndValuesInString(propsAndKeys, function(prop, key) {
+            prop = prop || 'innerHTML';
+
+            var value = getFromObject(this.data, key);
+
+            if (element.hasAttribute(prop)) {
+              if (value !== undefined) {
+                element.setAttribute(prop, value);
+              } else {
+                element.removeAttribute(prop);
+              }
+            } else {
+              element[prop] = value;
+            }
+          }, this);
+        }, this);
+      };
+
+      requestProto.fetch = function() {
+        this.request.open('get', this.from, true);
+        this.request.send();
+      };
+
+      window.PanoptesRequest = document.registerElement('panoptes-request', {
+        prototype: requestProto
+      });
+    });
+  }());
+</script>
