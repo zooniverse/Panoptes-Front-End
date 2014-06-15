@@ -2,12 +2,61 @@
 <% block 'page-title': %>Zooniverse Home<% end %>
 
 <link rel="import" href="/components/panoptes-content.html" />
+<link rel="import" href="/components/panoptes-controls.html" />
 
 <panoptes-content>
-  <h1><%- @t.home.welcome %></h1>
-  <ul>
-    <li>What we do, why we do it</li>
-    <li>[Register / Sign in] | [Or get started!]</li>
-    <li>List a few projects || For scientists | For the classroom</li>
-  </ul>
+  <h1>We help you help get science done.</h1>
+
+  <p><img src="//placehold.it/800x400.png&amp;text=Some kinda cartoon showing the process" style="width: 100%;" /></p>
+
+  <div style="display: flex">
+    <section style="flex: 1; margin-right: 2.2vw">
+      <h2>Projects</h2>
+      <div style="">
+        <div style="margin: 1.3em 0;">
+          <a href="#" style="background: white; color: inherit; text-decoration: none; display: flex;">
+            <img src="https://pbs.twimg.com/profile_images/2597266958/image.jpg" style="width: 13vh; height: 13vh; flex: 0 0 auto; border-radius: 0.4em;" />
+            <div class="details" style="flex: 1; flex-direction: column; margin-left: 1.3vw;">
+              <div class="owner" style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.05em;">Zooniverse</div>
+              <div class="project" style="font: italic 700 1.4em 'Playfair Display', serif;">Galaxy Zoo</div>
+              <div><small>Identify features of galaxies to help improve our understanding of galaxy formation.</small></div>
+            </div>
+          </a>
+        </div>
+        <div style="margin: 1.3em 0;">
+          <a href="#" style="background: white; color: inherit; text-decoration: none; display: flex;">
+            <img src="https://pbs.twimg.com/profile_images/2680218809/833e660203bc11e4b5b86f932da17526.png" style="width: 13vh; height: 13vh; flex: 0 0 auto; border-radius: 0.4em;" />
+            <div class="details" style="flex: 1; flex-direction: column; margin-left: 1.3vw;">
+              <div class="owner" style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.05em;">Zooniverse</div>
+              <div class="project" style="font: italic 700 1.4em 'Playfair Display', serif;">Planet Hunters</div>
+              <div><small>Identify features of galaxies to help improve our understanding of galaxy formation.</small></div>
+            </div>
+          </a>
+        </div>
+        <div style="margin: 1.3em 0;">
+          <a href="#" style="background: white; color: inherit; text-decoration: none; display: flex;">
+            <img src="//placekitten.com/200/200" style="width: 13vh; height: 13vh; flex: 0 0 auto; border-radius: 0.4em;" />
+            <div class="details" style="flex: 1; flex-direction: column; margin-left: 1.3vw;">
+              <div class="owner" style="font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.05em;">The Chicago Center for the Advancement of the Feline Sciences (CCAFS)</div>
+              <div class="project" style="font: italic 700 1.4em 'Playfair Display', serif;">Meowterhouse 5, or the Kittens' Crusade</div>
+              <div><small>Identify features of kittens to help improve our understanding of kitten formation.</small></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div style="flex: 1;">
+      <section style="flex: 1;">
+        <h2>For scientists</h2>
+        <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+        <p><panoptes-controls><a href="#">Learn more</a></panoptes-controls></p>
+      </section>
+
+      <section style="flex: 1;">
+        <h2>In the classroom</h2>
+        <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+        <p><panoptes-controls><a href="#">Learn more</a></panoptes-controls></p>
+      </section>
+    </div>
 </panoptes-content>
