@@ -9,8 +9,8 @@ files =
   # This keeps the output paths the way they should be.
   html: './html/**/*.ect'
   components: ['./{bower_components,_}/**/*.{html,js,css}', './{components,_}/**/*.html']
-  js: ['./{js,_}/main.coffee', './{js,_}/project.coffee']
-  css: ['./{css,_}/main.styl']
+  js: ['./{js,_}/main.coffee']
+  css: ['./{css,_}/**/*.styl']
 
 translations = fs.readdirSync './translations'
   .filter (file) ->
@@ -91,7 +91,6 @@ gulp.task 'css', ->
   nib = require 'nib'
 
   gulp.src files.css
-    .pipe cache 'css', optimizeMemory: true
     .pipe transform ext: 'css', squelch: true, (file, callback) ->
       stylus file.contents.toString(), filename: file.path
         .use nib()

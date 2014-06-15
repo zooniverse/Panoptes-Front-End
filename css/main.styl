@@ -1,23 +1,17 @@
+@require "./common"
+@require "./layout"
+@require "./columns"
+@require "./site-header"
+@require "./site-footer"
+@require "./project-card"
+
 :unresolved
   visibility: hidden
-
-#_RESET_BUTTON
-  background: transparent
-  border: 0
-  cursor: pointer
-  font: inherit
-  margin: 0
-  padding: 0
-  line-height: inherit
-  color: inherit
 
 html
   background: #fff
   color: #333
   font: 400 14px Montserrat, sans-serif
-
-body
-  margin: 0
 
 table
   border-collapse: separate
@@ -28,13 +22,19 @@ td
 
 h1,
 h2
+  // background: linear-gradient(rgba(black, 0) 1.12em, rgba(black, 0.2) 1.15em, rgba(black, 0) 1.18em)
   border-bottom: 1px solid rgba(black, 0.2)
   font: italic 400 calc(2em + 1vh) "Playfair Display", serif
-  margin: 0 0 0.5em
-  padding-bottom: 0.2em
+  margin: 0 0 3vh
+  padding: 0 0 1vh
 
 h2
   font-size: calc(1.5em + 1vh)
+
+hr
+  border: 0 solid rgba(black, 0.2)
+  border-top-width: 1px
+  margin: 3vh 0
 
 fieldset
   border: 1px solid rgba(black, 0.2)
@@ -84,68 +84,6 @@ a
 
   button
     @extends #_RESET_BUTTON
-
-body > header
-  background: rgba(white, 0.9)
-  border-bottom: 1px solid rgba(black, 0.5)
-  color: orangered
-  display: flex
-  justify-content: space-between
-
-  a
-    color: inherit
-    text-decoration: none
-
-  button
-    @extends #_RESET_BUTTON
-
-  & > :not(hr)
-    align-items: center
-    background: rgba(orangered, 0)
-    border-right: 1px solid rgba(black, 0.2)
-    display: flex
-    flex: 0 0 auto
-    padding: 1.2vh 1.5vw 0.4vh
-
-    &:last-child
-      border-right: 0
-
-    &:active,
-    &:focus,
-    &[data-active]
-      background: rgba(orangered, 1)
-      color: white
-
-    &.logo
-      font-size: 1.3em
-      letter-spacing: 0.05em
-      text-transform: uppercase
-
-  .name,
-  .group
-    margin: 0 0.2em
-
-  .avatar
-    border-radius: 50%
-    margin: -35% 0 -35% 0.3em
-
-  & > a
-    align-items: center
-    display: flex
-
-  & > hr
-    flex: 1 0 1em
-    visibility: hidden
-
-    & + :not(hr)
-      border-left: 1px solid rgba(black, 0.2)
-
-body > footer
-  border-top: 1px solid rgba(black, 0.4)
-  padding: 3vh 5vw
-
-  a
-    text-decoration: none
 
 :root.signed-in .not-signed-in,
 :root:not(.signed-in) .signed-in
