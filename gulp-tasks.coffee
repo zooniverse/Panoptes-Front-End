@@ -33,22 +33,22 @@ transform = do ->
     eventStream.map (file, callback) ->
       fileExt = path.extname file.path
       if fileExt is options?.from or not options?.from?
-        if options?.to?
-          file.path = file.path.slice(0, file.path.lastIndexOf fileExt) + options.to
-
         transformation file, (error, result) ->
           # TODO: Gulp has a nice util for logging.
           console.log error.toString() if error?
+
+          if options?.to?
+            file.path = file.path.slice(0, file.path.lastIndexOf fileExt) + options.to
 
           file.contents = new Buffer error?.toString() ? result
 
           callback error, file
 
       else
-        # Extension didn't match.
+        # Extension didn't match, so skip it.
         callback null, file
 
-# TODO: Another module
+# TODO: Here's another module.
 manipulateTags = do ->
   eventStream = require 'event-stream'
   cheerio = require 'cheerio'
@@ -56,22 +56,44 @@ manipulateTags = do ->
   (selectors) ->
     eventStream.map (file, callback) ->
       $ = cheerio.load file.contents.toString()
-      tagsToGo = 0
       for selector, manipulation of selectors
-        $(selector).each (tag) ->
-          tagsToGo += 1
-          manipulation $(this), (error) ->
-            tagsToGo -= 1
-            if tagsToGo is 0
-              file.contents = new Buffer $.html()
-              callback null, file
+        tags = $(selector)
+        if tags.length is 0
+          callback null, file
+        else
+          tagsToGo = tags.length
+          tags.each ->
+            manipulation $(this), ->
+              tagsToGo -= 1
+              if tagsToGo is 0
+                file.contents = new Buffer $.html()
+                callback null, file
 
-gulp.task 'html', ->
-  ect = require 'gulp-ect'
-  cheerio = require 'cheerio'
+compileInlineTags = ->
   CoffeeScript = require 'coffee-script'
   stylus = require 'stylus'
   nib = require 'nib'
+
+  manipulateTags
+    'script[type="text/coffeescript"]': (tag, callback) ->
+      tag.attr 'type', null
+      tag.html try
+        CoffeeScript.compile tag.html()
+      catch e
+        e.toString()
+      callback null
+
+    'style[type="text/stylus"]': (tag, callback) ->
+      tag.attr 'type', null
+      stylus tag.html()
+        .use nib()
+        .import 'nib'
+        .render (error, content) ->
+          tag.html content
+          callback error
+
+gulp.task 'html', ->
+  ect = require 'gulp-ect'
   htmlFileToDirectory = require 'gulp-html-file-to-directory'
   merge = require 'lodash.merge'
 
@@ -88,23 +110,9 @@ gulp.task 'html', ->
       localBuildDir = path.join buildDir, translationName
 
     gulp.src files.html
+      .pipe filelog()
       .pipe ect({data}).on 'error', console.error
-      .pipe manipulateTags
-        'script[type="text/coffeescript"]': (tag, callback) ->
-          tag.attr 'type', null
-          tag.html try
-            CoffeeScript.compile tag.html()
-          catch e
-            e.toString()
-          callback null
-        'style[type="text/stylus"]': (tag, callback) ->
-          tag.attr 'type', null
-          stylus tag.html()
-            .use nib()
-            .import 'nib'
-            .render (error, content) ->
-              tag.html content
-              callback error
+      .pipe compileInlineTags()
       .pipe htmlFileToDirectory()
       .pipe gulp.dest localBuildDir ? buildDir
       .pipe filelog()
@@ -112,6 +120,7 @@ gulp.task 'html', ->
 
 gulp.task 'components', ->
   gulp.src files.components
+    .pipe compileInlineTags()
     .pipe gulp.dest buildDir
     .pipe filelog()
   return
@@ -122,7 +131,7 @@ gulp.task 'js', ->
 
   gulp.src files.js
     .pipe cache 'js', optimizeMemory: true
-    .pipe transform ext: 'js', squelch: true, (file, callback) ->
+    .pipe transform from: '.coffee', to: '.js', (file, callback) ->
       b = browserify file.path, extensions: ['.coffee']
       b.transform coffeeify
       b.bundle callback
@@ -135,7 +144,7 @@ gulp.task 'css', ->
   nib = require 'nib'
 
   gulp.src files.css.main
-    .pipe transform ext: 'css', squelch: true, (file, callback) ->
+    .pipe transform from: '.styl', to: '.css', (file, callback) ->
       stylus file.contents.toString(), filename: file.path
         .use nib()
         .import 'nib'
