@@ -10,7 +10,9 @@ files =
   html: './html/**/*.ect'
   components: ['./{bower_components,_}/**/*.{html,js,css}', './{components,_}/**/*.html']
   js: ['./{js,_}/main.coffee']
-  css: ['./{css,_}/**/*.styl']
+  css:
+    main: './{css,_}/main.styl'
+    all: './{css,_}/**/*.styl'
 
 translations = fs.readdirSync './translations'
   .filter (file) ->
@@ -90,7 +92,7 @@ gulp.task 'css', ->
   stylus = require 'stylus'
   nib = require 'nib'
 
-  gulp.src files.css
+  gulp.src files.css.main
     .pipe transform ext: 'css', squelch: true, (file, callback) ->
       stylus file.contents.toString(), filename: file.path
         .use nib()
@@ -106,7 +108,7 @@ gulp.task 'watch', ['build'], ->
   gulp.watch ['./translations/**/*'].concat(files.html), ['html']
   gulp.watch files.components, ['components']
   gulp.watch files.js, ['js']
-  gulp.watch files.css, ['css']
+  gulp.watch files.css.all, ['css']
   return
 
 gulp.task 'serve', (next) ->
