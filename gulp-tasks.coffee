@@ -34,9 +34,6 @@ transform = do ->
       fileExt = path.extname file.path
       if fileExt is options?.from or not options?.from?
         transformation file, (error, result) ->
-          # TODO: Gulp has a nice util for logging.
-          console.log error.toString() if error?
-
           if options?.to?
             file.path = file.path.slice(0, file.path.lastIndexOf fileExt) + options.to
 
@@ -63,11 +60,11 @@ manipulateTags = do ->
         else
           tagsToGo = tags.length
           tags.each ->
-            manipulation $(this), ->
+            manipulation $(this), (error) ->
               tagsToGo -= 1
               if tagsToGo is 0
                 file.contents = new Buffer $.html()
-                callback null, file
+                callback error, file
 
 compileInlineTags = ->
   CoffeeScript = require 'coffee-script'
@@ -92,6 +89,10 @@ compileInlineTags = ->
           tag.html content
           callback error
 
+loggingErrors = (emitter) ->
+  emitter.on 'error', console.error
+  emitter
+
 gulp.task 'html', ->
   ect = require 'gulp-ect'
   htmlFileToDirectory = require 'gulp-html-file-to-directory'
@@ -111,7 +112,7 @@ gulp.task 'html', ->
 
     gulp.src files.html
       .pipe filelog()
-      .pipe ect({data}).on 'error', console.error
+      .pipe loggingErrors ect {data}
       .pipe compileInlineTags()
       .pipe htmlFileToDirectory()
       .pipe gulp.dest localBuildDir ? buildDir
