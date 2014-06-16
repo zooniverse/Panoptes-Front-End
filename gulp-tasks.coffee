@@ -14,29 +14,64 @@ files =
     main: './{css,_}/main.styl'
     all: './{css,_}/**/*.styl'
 
+# Get a list of all requireable files.
 translations = fs.readdirSync './translations'
   .filter (file) ->
     path.extname(file) of require.extensions
 
+# Fall back to these if a string is missing.
 defaultStrings = require './translations/en-us'
 
 buildDir = './build'
 
 # TODO: Break this out into its own module?
-eventStream = require 'event-stream'
-transform = ([options]..., transformation) ->
-  eventStream.map (file, callback) ->
-    transformation file, (error, result) ->
-      console.log error.toString() if error? # TODO: Gulp has a nice util for logging.
-      file.path = file.path.replace /[^\.]+$/, options.ext if options?.ext
-      file.contents = new Buffer error?.toString() ? result
-      error = null if options?.squelch
-      callback error, file
+transform = do ->
+  eventStream = require 'event-stream'
+  path = require 'path'
+
+  ([options]..., transformation) ->
+    eventStream.map (file, callback) ->
+      fileExt = path.extname file.path
+      if fileExt is options?.from or not options?.from?
+        if options?.to?
+          file.path = file.path.slice(0, file.path.lastIndexOf fileExt) + options.to
+
+        transformation file, (error, result) ->
+          # TODO: Gulp has a nice util for logging.
+          console.log error.toString() if error?
+
+          file.contents = new Buffer error?.toString() ? result
+
+          callback error, file
+
+      else
+        # Extension didn't match.
+        callback null, file
+
+# TODO: Another module
+manipulateTags = do ->
+  eventStream = require 'event-stream'
+  cheerio = require 'cheerio'
+
+  (selectors) ->
+    eventStream.map (file, callback) ->
+      $ = cheerio.load file.contents.toString()
+      tagsToGo = 0
+      for selector, manipulation of selectors
+        $(selector).each (tag) ->
+          tagsToGo += 1
+          manipulation $(this), (error) ->
+            tagsToGo -= 1
+            if tagsToGo is 0
+              file.contents = new Buffer $.html()
+              callback null, file
 
 gulp.task 'html', ->
   ect = require 'gulp-ect'
   cheerio = require 'cheerio'
   CoffeeScript = require 'coffee-script'
+  stylus = require 'stylus'
+  nib = require 'nib'
   htmlFileToDirectory = require 'gulp-html-file-to-directory'
   merge = require 'lodash.merge'
 
@@ -45,24 +80,31 @@ gulp.task 'html', ->
 
     data =
       require: require # Make local require available in templates.
+      relate: (absolute) -> absolute # TODO!
       t: merge {}, defaultStrings, strings
 
     unless strings is defaultStrings
-      localBuildDir = path.join buildDir, translation.split('.')[0]
+      translationName = translation.slice 0, translation.lastIndexOf '.'
+      localBuildDir = path.join buildDir, translationName
 
     gulp.src files.html
-      .pipe ect({data}).on 'error', console.log
-      .pipe transform (file, callback) ->
-        $ = cheerio.load file.contents.toString()
-        $('script[type="text/coffeescript"]').each ->
-          script = $(this)
-          script.html try
-            script.attr 'type', null
-            CoffeeScript.compile script.html()
+      .pipe ect({data}).on 'error', console.error
+      .pipe manipulateTags
+        'script[type="text/coffeescript"]': (tag, callback) ->
+          tag.attr 'type', null
+          tag.html try
+            CoffeeScript.compile tag.html()
           catch e
-            script.attr 'type', 'text/error'
             e.toString()
-        callback null, $.html()
+          callback null
+        'style[type="text/stylus"]': (tag, callback) ->
+          tag.attr 'type', null
+          stylus tag.html()
+            .use nib()
+            .import 'nib'
+            .render (error, content) ->
+              tag.html content
+              callback error
       .pipe htmlFileToDirectory()
       .pipe gulp.dest localBuildDir ? buildDir
       .pipe filelog()
