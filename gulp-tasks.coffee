@@ -8,11 +8,11 @@ files =
   # NOTE: The underscores here only exist so that the glob starts at the right place.
   # This keeps the output paths the way they should be.
   html: './html/**/*.ect'
-  components: ['./{bower_components,_}/**/*.{html,js,css}', './{components,_}/**/*.html']
-  js: ['./{js,_}/main.coffee']
+  components: ['./b?wer_components/**/*.{html,js,css}', './c?mponents/**/*.{html,js,css}']
+  js: ['./j?/main.coffee']
   css:
-    main: './{css,_}/main.styl'
-    all: './{css,_}/**/*.styl'
+    main: './cs?/main.styl'
+    all: './cs?/**/*.styl'
 
 # Get a list of all requireable files.
 translations = fs.readdirSync './translations'
@@ -111,7 +111,6 @@ gulp.task 'html', ->
       localBuildDir = path.join buildDir, translationName
 
     gulp.src files.html
-      .pipe filelog()
       .pipe loggingErrors ect {data}
       .pipe compileInlineTags()
       .pipe htmlFileToDirectory()
