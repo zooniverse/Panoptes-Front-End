@@ -1,6 +1,7 @@
 fs = require 'fs'
 path = require 'path'
 gulp = require 'gulp'
+util = require 'gulp-util'
 cache = require 'gulp-cached'
 filelog = require 'gulp-filelog'
 transform = require './gulp-helpers/transform'
@@ -27,11 +28,6 @@ defaultStrings = require './translations/en-us'
 buildDir = './build'
 tempBuildDir = "#{buildDir}-temp"
 
-# This reads more nicely than chaining a bunch of "error" listeners.
-loggingErrors = (emitter) ->
-  emitter.on 'error', console.error
-  emitter
-
 gulp.task 'html', ->
   ect = require 'gulp-ect'
   htmlFileToDirectory = require 'gulp-html-file-to-directory'
@@ -54,18 +50,21 @@ gulp.task 'html', ->
       localTempBuildDir = path.join tempBuildDir, translationName
 
     gulp.src files.html
-      .pipe loggingErrors ect {data}
+      .pipe ect {data}
       .pipe compileInlineTags()
+      .on 'error', util.log
       .pipe htmlFileToDirectory()
-      .pipe loggingErrors gulp.dest localTempBuildDir
+      .pipe gulp.dest localTempBuildDir
       .pipe relativizeLinks localTempBuildDir
-      .pipe loggingErrors gulp.dest localBuildDir
+      .on 'error', util.log
+      .pipe gulp.dest localBuildDir
       .pipe filelog()
   return
 
 gulp.task 'components', ->
   gulp.src files.components
     .pipe compileInlineTags()
+    .on 'error', util.log
     .pipe gulp.dest buildDir
     .pipe filelog()
   return
@@ -80,6 +79,7 @@ gulp.task 'js', ->
       b = browserify file.path, extensions: ['.coffee']
       b.transform coffeeify
       b.bundle callback
+    .on 'error', util.log
     .pipe gulp.dest buildDir
     .pipe filelog()
   return
@@ -94,6 +94,7 @@ gulp.task 'css', ->
         .use nib()
         .import 'nib'
         .render callback
+    .on 'error', util.log
     .pipe gulp.dest buildDir
     .pipe filelog()
   return
@@ -105,6 +106,7 @@ gulp.task 'watch', ['build'], ->
   gulp.watch files.components, ['components']
   gulp.watch files.js, ['js']
   gulp.watch files.css.all, ['css']
+  .on 'error', util.log
   return
 
 gulp.task 'serve', (next) ->
@@ -116,12 +118,13 @@ gulp.task 'serve', (next) ->
   staticServer = connect()
   staticServer.use connect.static buildDir
   staticServer.listen port, next
-  console.log "Static server listening on: #{port}"
+  util.log 'Static server listening on', port
 
   changeServer = livereload()
   gulp.watch "#{buildDir}/**/*"
     .on 'change', (file) ->
       changeServer.changed file.path
+    .on 'error', util.log
   return
 
 gulp.task 'default', ['watch', 'serve']
