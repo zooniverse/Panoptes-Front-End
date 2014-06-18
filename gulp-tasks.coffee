@@ -3,6 +3,8 @@ path = require 'path'
 gulp = require 'gulp'
 cache = require 'gulp-cached'
 filelog = require 'gulp-filelog'
+transform = require './gulp-helpers/transform'
+compileInlineTags = require './gulp-helpers/compile-inline-tags'
 
 files =
   # NOTE: The underscores here only exist so that the glob starts at the right place.
@@ -23,72 +25,9 @@ translations = fs.readdirSync './translations'
 defaultStrings = require './translations/en-us'
 
 buildDir = './build'
+tempBuildDir = "#{buildDir}-temp"
 
-# TODO: Break this out into its own module?
-transform = do ->
-  eventStream = require 'event-stream'
-  path = require 'path'
-
-  ([options]..., transformation) ->
-    eventStream.map (file, callback) ->
-      fileExt = path.extname file.path
-      if fileExt is options?.from or not options?.from?
-        transformation file, (error, result) ->
-          if options?.to?
-            file.path = file.path.slice(0, file.path.lastIndexOf fileExt) + options.to
-
-          file.contents = new Buffer error?.toString() ? result
-
-          callback error, file
-
-      else
-        # Extension didn't match, so skip it.
-        callback null, file
-
-# TODO: Here's another module.
-manipulateTags = do ->
-  eventStream = require 'event-stream'
-  cheerio = require 'cheerio'
-
-  (selectors) ->
-    eventStream.map (file, callback) ->
-      $ = cheerio.load file.contents.toString()
-      for selector, manipulation of selectors
-        tags = $(selector)
-        if tags.length is 0
-          callback null, file
-        else
-          tagsToGo = tags.length
-          tags.each ->
-            manipulation $(this), (error) ->
-              tagsToGo -= 1
-              if tagsToGo is 0
-                file.contents = new Buffer $.html()
-                callback error, file
-
-compileInlineTags = ->
-  CoffeeScript = require 'coffee-script'
-  stylus = require 'stylus'
-  nib = require 'nib'
-
-  manipulateTags
-    'script[type="text/coffeescript"]': (tag, callback) ->
-      tag.attr 'type', null
-      tag.html try
-        CoffeeScript.compile tag.html()
-      catch e
-        e.toString()
-      callback null
-
-    'style[type="text/stylus"]': (tag, callback) ->
-      tag.attr 'type', null
-      stylus tag.html()
-        .use nib()
-        .import 'nib'
-        .render (error, content) ->
-          tag.html content
-          callback error
-
+# This reads more nicely than chaining a bunch of "error" listeners.
 loggingErrors = (emitter) ->
   emitter.on 'error', console.error
   emitter
@@ -97,24 +36,30 @@ gulp.task 'html', ->
   ect = require 'gulp-ect'
   htmlFileToDirectory = require 'gulp-html-file-to-directory'
   merge = require 'lodash.merge'
+  relativizeLinks = require './gulp-helpers/relativize-links'
 
   translations.forEach (translation, i) ->
     strings = require "./translations/#{translation}"
 
     data =
       require: require # Make local require available in templates.
-      relate: (absolute) -> absolute # TODO!
       t: merge {}, defaultStrings, strings
 
-    unless strings is defaultStrings
+    if strings is defaultStrings
+      localBuildDir = buildDir
+      localTempBuildDir = tempBuildDir
+    else
       translationName = translation.slice 0, translation.lastIndexOf '.'
       localBuildDir = path.join buildDir, translationName
+      localTempBuildDir = path.join tempBuildDir, translationName
 
     gulp.src files.html
       .pipe loggingErrors ect {data}
       .pipe compileInlineTags()
       .pipe htmlFileToDirectory()
-      .pipe gulp.dest localBuildDir ? buildDir
+      .pipe loggingErrors gulp.dest localTempBuildDir
+      .pipe relativizeLinks localTempBuildDir
+      .pipe loggingErrors gulp.dest localBuildDir
       .pipe filelog()
   return
 
