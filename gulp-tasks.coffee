@@ -51,6 +51,7 @@ gulp.task 'html', ->
 
     gulp.src files.html
       .pipe ect {data}
+      .on 'error', util.log
       .pipe compileInlineTags()
       .on 'error', util.log
       .pipe htmlFileToDirectory()
