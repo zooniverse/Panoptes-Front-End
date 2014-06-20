@@ -11,6 +11,8 @@
   </head>
 
   <body>
+    <a href="#main-content" class="jump-link">Jump to content</a>
+
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol id="the-zooniverse-logo" viewBox="0 0 100 100">
         <g fill="currentColor" stroke="transparent" stroke-width="0">
@@ -24,37 +26,44 @@
       </symbol>
     </svg>
 
-    <a href="#main-content" class="jump-link">Jump to content</a>
+    <!--TODO: This is an awful way to get the right path.-->
+    <% path = require 'path' %>
+    <% include path.resolve 'html/partials/account-dialog' %>
 
-    <header>
-      <div class="logo"><a href="/">Ø Zooniverse</a></div>
-      <div><a href="/projects">Projects</a></div>
-      <div><a href="/discuss">Discussion</a></div>
-      <div><a href="/about">About</a></div>
-      <div><a href="/blog">Blog</a></div>
-
-      <hr class="not-signed-in" />
-
-      <a href="#" class="not-signed-in">Register</a>
-      <a href="#" class="not-signed-in">Sign in</a>
-
-      <hr class="signed-in" />
-
-      <div class="signed-in">
-        <a href="/edit/account" class="name">brian-c</a>
-        <button type="button" class="group badge">Zooniverse</button>
-        <a href="/people/#/brian-c" onclick="document.documentElement.classList.toggle('signed-in'); return false;">
-          <img src="https://pbs.twimg.com/profile_images/437294429955563520/MM1_4w75.jpeg" width="48" height="48" class="avatar" />
+    <div class="main-container">
+      <header class="main-header">
+        <a href="/" class="logo main-option">Ø Zooniverse</a>
+        <a href="/projects" class="main-option">Projects</a>
+        <a href="/discuss" class="main-option">
+          Discussion
+          <span class="badge" title="Unread comments">5</span>
         </a>
-      </div>
-    </header>
+        <a href="/about" class="main-option">About</a>
+        <a href="/blog" class="main-option">Blog</a>
 
-    <div id="main-content">
-      <% content %>
+        <hr class="not-signed-in" />
+
+        <a href="#" class="not-signed-in">Register</a>
+        <a href="#" class="not-signed-in">Sign in</a>
+
+        <hr class="signed-in" />
+
+        <div id="user-option" class="signed-in main-option">
+          <a href="/edit/account">brian-c</a>
+          <span class="badge"><button type="button">Zooniverse</button></span>
+          <a href="/people/#/brian-c" onclick="document.documentElement.classList.toggle('signed-in'); return false;">
+            <img src="https://pbs.twimg.com/profile_images/437294429955563520/MM1_4w75.jpeg" class="avatar" />
+          </a>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <% content %>
+      </div>
     </div>
 
-    <footer id="site-footer">
-      <a href="/contact">Contact</a>
+    <footer class="main-footer">
+      <a href="/contact">Contact us</a>
       <a href="/privacy">Privacy policy</a>
     </footer>
 

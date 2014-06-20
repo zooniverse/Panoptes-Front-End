@@ -1,24 +1,17 @@
 @require "./common"
 @require "./layout"
 @require "./columns"
-@require "./site-header"
-@require "./site-footer"
+@require "./main-header"
+@require "./main-footer"
 @require "./project-card"
-
-:unresolved
-  visibility: hidden
 
 html
   background: #fff
   color: #333
   font: 400 14px Montserrat, sans-serif
 
-table
-  border-collapse: separate
-  border-spacing: 0 1vh
-
-td
-  vertical-align: baseline
+:unresolved
+  visibility: hidden
 
 h1,
 h2
@@ -36,18 +29,34 @@ hr
   border-top-width: 1px
   margin: 3vh 0
 
+p.action
+  text-align: center
+
+table
+  border-collapse: separate
+
+  &.for-text-fields
+    border-spacing: 3vw 1vh
+
+  &.for-checkboxes
+    border-spacing: 1vw 1vh
+
+  &.standalone
+    margin: 0 auto;
+
+td
+  vertical-align: baseline
+
 fieldset
   border: 1px solid rgba(black, 0.2)
   border-width: 1px 0 0
   margin: 4vh 0
-  padding: 3vh 0
+  padding: 2vh 0
 
 legend
-  border: 1px solid rgba(black, 0.2)
-  border-radius: 1em
   font-size: 0.7em
   font-weight: 700
-  margin: 0 -1em
+  margin: 0 auto
   opacity: 1
   padding: 0 1em
   text-transform: uppercase
@@ -77,8 +86,9 @@ a
   display: inline-block
   font-size: 0.8em
   height: 1.3em
+  margin-left: 0.5em
   min-width: 1.3em
-  padding: 0 0.6em
+  padding: 0 0.5em
   line-height: 1.3
   text-align: center
 

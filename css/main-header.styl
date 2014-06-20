@@ -1,33 +1,27 @@
 @require "./common"
 
-body > header
-  background: rgba(white, 0.9)
-  border-bottom: 1px solid rgba(black, 0.5)
+.main-header
+  background: rgba(white, 0.8)
+  border-bottom: 1px solid rgba(black, 0.4)
   color: orangered
   display: flex
   justify-content: space-between
 
-  a
-    color: inherit
-    text-decoration: none
-
-  button
-    @extends #_RESET_BUTTON
-
-  & > :not(hr)
+  .main-option
     align-items: center
     background: rgba(orangered, 0)
     border-right: 1px solid rgba(black, 0.2)
+    color: inherit
     display: flex
     flex: 0 0 auto
     padding: 1.2vh 1.5vw 0.4vh
+    text-decoration: none
 
     &:last-child
       border-right: 0
 
     &:active,
-    &:focus,
-    &[data-active]
+    &:focus
       background: rgba(orangered, 1)
       color: white
 
@@ -36,21 +30,18 @@ body > header
       letter-spacing: 0.05em
       text-transform: uppercase
 
-  .name,
-  .group
-    margin: 0 0.2em
-
-  .avatar
-    border-radius: 50%
-    margin: -35% 0 -35% 0.3em
-
-  & > a
-    align-items: center
-    display: flex
-
   & > hr
     flex: 1 0 1em
     visibility: hidden
 
     & + :not(hr)
       border-left: 1px solid rgba(black, 0.2)
+
+  .avatar
+    border-radius: 50%
+    height: 4em
+    margin: -35% 0 -35% 0.3em
+    width: 4em
+
+  a
+    text-decoration: none

@@ -1,0 +1,33 @@
+<% extend './templates/main' %>
+<% block 'page-title': %>Zooniverse Projects<% end %>
+
+<h1>Featured projects</h1>
+
+<panoptes-list page="0" per-page="10">
+  <panoptes-resource src="/projects/?state=featured#projects"></panoptes-resource>
+
+  <template>
+    <panoptes-project-card for="{{id}}">
+      <img src="{{avatar}}" />
+      <h1>{{title}}</h1>
+      <p>{{description}}</p>
+    </panoptes-project-card>
+  </template>
+
+  <p>Loading featured projects...</p>
+</panoptes-list>
+
+<h1>Some group</h1>
+
+<panoptes-resource src="/groups/1QA2WS">
+  <template data-select="groups">
+    <panoptes-group-card for="{{id}}">
+      <img src="{{avatar}}" />
+      <h1>{{display_name}}</h1>
+      <h2>{{location}}</h2>
+      <p>{{description}}</p>
+      <ul>
+        
+    </panoptes-group-card>
+  </template>
+</panoptes-resource>
