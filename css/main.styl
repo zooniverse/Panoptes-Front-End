@@ -4,6 +4,7 @@
 @require "./main-header"
 @require "./main-footer"
 @require "./project-card"
+@require "./project"
 
 html
   background: #fff
@@ -15,14 +16,13 @@ html
 
 h1,
 h2
-  // background: linear-gradient(rgba(black, 0) 1.12em, rgba(black, 0.2) 1.15em, rgba(black, 0) 1.18em)
   border-bottom: 1px solid rgba(black, 0.2)
-  font: italic 400 calc(2em + 1vh) "Playfair Display", serif
+  font: italic 400 3em "Playfair Display", serif
   margin: 0 0 3vh
   padding: 0 0 1vh
 
 h2
-  font-size: calc(1.5em + 1vh)
+  font-size: 2em
 
 hr
   border: 0 solid rgba(black, 0.2)
@@ -67,6 +67,7 @@ a
 
 .jump-link
   color: white
+  background: rgba(black, 0.8)
   left: 0
   padding: 0.2em 1.4em
   position: fixed

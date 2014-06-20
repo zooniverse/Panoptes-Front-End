@@ -1,0 +1,40 @@
+.project-container
+  color: white
+  display: flex
+  flex: 1
+  flex-direction: column
+  min-height: 80vh
+  z-index: 1
+
+  .project-header
+    align-items: center
+    display: flex
+    font-size: 0.7em
+    letter-spacing: 0.1em
+    text-transform: uppercase
+
+    > a
+      display: inline-block
+      padding: 0 1em
+
+    .project-name
+      font: italic 3em "Playfair Display", serif
+      line-height: 1
+      margin-top: -0.25em
+      padding: 0
+      text-transform: none
+
+    a
+      color: inherit
+      text-decoration: none
+
+  .project-content
+    display: flex
+    flex-direction: column
+    flex: 1
+    justify-content: flex-end
+
+    > section
+      .content
+        -webkit-columns: 25em
+        -webkit-column-gap: 2vw

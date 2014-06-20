@@ -1,0 +1,56 @@
+<% extend './templates/main' %>
+<% block 'page-title': %>Zooniverse Project<% end %>
+
+<link rel="import" href="/components/panoptes-content.html" />
+<link rel="import" href="/components/panoptes-title.html" />
+<link rel="import" href="/components/panoptes-controls.html" />
+<link rel="import" href="/components/panoptes-request.html" />
+
+<style type="text/stylus">
+  .main-header
+    color: white
+
+  .main-container
+    background: url("http://s3.amazonaws.com/rapgenius/1363634162_milky-way1.jpg") 50% 33%
+    background-size: cover
+    position: relative
+
+  .main-container::after
+    background-image: linear-gradient(rgba(black, 0), rgba(black, 0.7))
+    bottom: 0
+    content: ""
+    left: 0
+    position: absolute
+    right: 0
+    top: 33%
+
+  .main-content
+    display: flex
+    flex-direction: column
+</style>
+
+<panoptes-content class="project-container">
+  <header class="project-header">
+    <a href="#/">Zooniverse</span>
+    <a href="#/" class="project-name">Galaxy Zoo</a>
+    <a href="#/about">Science case</a>
+    <a href="#/classify" class="classify-link">Classify</a>
+    <a href="#/discuss">Discuss</a>
+  </header>
+
+  <div class="project-content">
+    <section>
+      <header>
+        <h1>This is a project.</h1>
+      </header>
+
+      <div class="content">
+        <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+        <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+        <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+        <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+        <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
+      </div>
+    </section>
+  </div>
+</panoptes-content>
