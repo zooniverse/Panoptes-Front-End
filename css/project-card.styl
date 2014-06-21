@@ -1,21 +1,34 @@
+.list-of-cards
+  display: flex
+  flex-wrap: wrap
+
+  > *
+    @media (min-width: 600px)
+      flex: 1 1 45%
+
+    @media (min-width: 900px)
+      flex: 1 1 30%
+
 .project-card
-  border: 1px solid transparent
-  color: inherit
+  color: #333
   display: flex
   font-size: 12px
-  margin: 3vh 0
+  margin: 0 2vw 4vh 0
+  // outline: 1px dashed gray
   text-decoration: none
 
   figure
-    margin: 0 1vw 0 0
+    margin: 0 0.5em 0 0
     text-align: center
 
   .avatar
     border-radius: 0.4em
     display: block
-    flex: 0 0 auto
-    height: 10vw
-    width: 10vw
+    flex: 1 0 auto
+    height: 6.7vw
+    min-height: 5em
+    min-width: 5em
+    width: 6.7vw
 
   .details
     flex: 1
@@ -25,5 +38,5 @@
     letter-spacing: 0.05em
     text-transform: uppercase
 
-  .project
+  .title
     font: italic 700 1.5em 'Playfair Display', serif

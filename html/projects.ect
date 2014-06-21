@@ -1,33 +1,73 @@
 <% extend './templates/main' %>
 <% block 'page-title': %>Zooniverse Projects<% end %>
 
-<h1>Featured projects</h1>
+<script type="text/coffeescript">
+  window.test =
+    owners:
+      'o0':
+        name: 'Zooniverse'
 
-<panoptes-list page="0" per-page="10">
-  <panoptes-resource src="/projects/?state=featured#projects"></panoptes-resource>
+    projects:
+      'p0':
+        owner: -> window.test.owners.o0
+        avatar: '//placehold.it/64.png'
+        title: 'Galaxy Zoo'
+        description: 'Help study galaxy formation by lorem ipsum dolor sit amet.'
 
-  <template>
-    <panoptes-project-card for="{{id}}">
-      <img src="{{avatar}}" />
-      <h1>{{title}}</h1>
-      <p>{{description}}</p>
-    </panoptes-project-card>
-  </template>
+  addEventListener 'WebComponentsReady', ->
+    ListProto = Object.create HTMLElement.prototype
 
-  <p>Loading featured projects...</p>
-</panoptes-list>
+    ListProto.createdCallback = ->
+      @template = @querySelector 'template'
 
-<h1>Some group</h1>
+    ListProto.attachedCallback = ->
+      @update [
+        window.test.projects.p0
+        window.test.projects.p0
+        window.test.projects.p0
+        window.test.projects.p0
+        window.test.projects.p0
+        window.test.projects.p0
+        window.test.projects.p0
+        window.test.projects.p0
+      ]
 
-<panoptes-resource src="/groups/1QA2WS">
-  <template data-select="groups">
-    <panoptes-group-card for="{{id}}">
-      <img src="{{avatar}}" />
-      <h1>{{display_name}}</h1>
-      <h2>{{location}}</h2>
-      <p>{{description}}</p>
-      <ul>
-        
-    </panoptes-group-card>
-  </template>
-</panoptes-resource>
+    getFrom = (path, object) ->
+      segments = path.split '.'
+      until segments.length is 0 or not object?
+        segment = segments.shift()
+        object = object[segment]?.call?() ? object[segment]
+      object
+
+    ListProto.update = (items) ->
+      console.log 'Updating'
+      for item in items
+        newHTML = @template.innerHTML.replace /{{([^}]+)}}/g, (match, key) ->
+          getFrom key.trim(), item
+
+        console.log newHTML
+        @insertAdjacentHTML 'beforeEnd', newHTML
+
+    window.PanoptesList = document.registerElement 'panoptes-list', prototype: ListProto
+</script>
+
+<panoptes-content>
+  <h1>Featured projects</h1>
+
+  <panoptes-list page="0" per-page="10" class="list-of-cards">
+    <template>
+      <a href="/project/#/{{owner.name}}/{{title}}" class="project-card">
+        <figure>
+          <img src="{{avatar}}" class="avatar" />
+        </figure>
+        <div class="details">
+          <div class="owner">{{owner.name}}</div>
+          <div class="title">{{title}}</div>
+          <div class="description">{{description}}</div>
+        </div>
+      </div>
+    </template>
+
+    <p>Loading featured projects...</p>
+  </panoptes-list>
+</panoptes-content>
