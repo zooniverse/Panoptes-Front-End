@@ -6,35 +6,96 @@
   min-height: 80vh
   z-index: 1
 
-  .project-header
-    align-items: center
-    display: flex
-    font-size: 0.7em
+.project-header
+  margin-bottom: 2vh
+
+  .nav-item
+    color: inherit
+    display: inline-block
     letter-spacing: 0.1em
+    text-decoration: none
     text-transform: uppercase
 
-    > a
-      display: inline-block
-      padding: 0 1em
+  .connector
+    opacity: 0.6
 
-    .project-name
-      font: italic 3em "Playfair Display", serif
-      line-height: 1
-      margin-top: -0.25em
-      padding: 0
-      text-transform: none
+  .project-name
+    font: italic 1.5em "Playfair Display", serif
+    letter-spacing: 0
+    text-transform: none
 
-    a
-      color: inherit
-      text-decoration: none
+  > nav
+    display: inline-block
+    margin-left: 1vw
 
-  .project-content
-    display: flex
-    flex-direction: column
-    flex: 1
-    justify-content: flex-end
+    .nav-item
+      margin: 0 1vw
 
-    > section
-      .content
-        -webkit-columns: 25em
-        -webkit-column-gap: 2vw
+      &.active
+        border-bottom: 2px solid
+
+.project-content
+  display: flex
+  flex-direction: column
+  flex: 1
+  justify-content: flex-end
+
+  > section
+    .content
+      -webkit-columns: 25em
+      -webkit-column-gap: 2vw
+
+.classification-interface
+  display: flex
+
+.subject-view
+  display: flex
+  flex: 4
+  flex-direction: column
+
+.subject-image-container
+  background: black
+  display: flex
+  flex: 1
+  flex-direction: column
+  justify-content: space-around
+
+.subject-image
+  display: block
+  margin: 0 auto
+  max-height: 90vh
+  max-width: 100%
+
+.subject-controls
+  display: flex
+  justify-content: space-around
+
+.decision-tree-container
+  margin-left: 1vw
+
+.decision-tree-task
+  .question
+    border-bottom: 1px solid rgba(white, 0.6)
+    margin-bottom: 2vh
+    padding-bottom: 2vh
+
+  .action
+    border-top: 1px solid rgba(white, 0.6)
+    margin-top: 2vh
+    padding-top: 2vh
+    position: relative
+    text-align: center
+
+    button[name="back"]
+      left: 0
+      position: absolute
+      top: 50%
+      transform: translateY(-50%)
+
+.click-target
+  background: white
+  color: #333
+  cursor: pointer
+  display: block
+  margin: 2vh 0
+  padding: 1vh 1vw

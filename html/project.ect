@@ -8,10 +8,12 @@
 
 <style type="text/stylus">
   .main-header
+    background: rgba(black, 0.3)
     color: white
 
   .main-container
-    background: url("http://s3.amazonaws.com/rapgenius/1363634162_milky-way1.jpg") 50% 33%
+    background: gray
+    /*background: url("http://s3.amazonaws.com/rapgenius/1363634162_milky-way1.jpg") 50% 33%*/
     background-size: cover
     position: relative
 
@@ -31,14 +33,94 @@
 
 <panoptes-content class="project-container">
   <header class="project-header">
-    <a href="#/">Zooniverse</span>
-    <a href="#/" class="project-name">Galaxy Zoo</a>
-    <a href="#/about">Science case</a>
-    <a href="#/classify" class="classify-link">Classify</a>
-    <a href="#/discuss">Discuss</a>
+    <a href="/people/#/zooniverse" class="nav-item">Zooniverse</a>
+    <span class="connector">&frasl;</span>
+    <a href="/projects/zooniverse/galaxy_zoo" class="project-name nav-item">Galaxy Zoo</a>
+    <nav>
+      <a href="#/classify" class="nav-item classify-link">Classify</a>
+      <a href="#/about" class="nav-item">Science case</a>
+      <a href="#/discuss" class="nav-item">Discuss</a>
+    </nav>
   </header>
 
-  <div class="project-content">
+  <div class="classify-page">
+    <div class="classification-interface">
+      <div class="subject-view">
+        <div class="subject-image-container">
+          <img src="//placehold.it/640x480.png" class="subject-image" />
+        </div>
+
+        <div class="subject-controls">
+          <span class="frame-navigation">
+            <button type="button">Play</button>
+            <input type="radio" name="frame" value="0" checked="checked" />
+            <input type="radio" name="frame" value="1" />
+            <input type="radio" name="frame" value="2" />
+            <input type="radio" name="frame" value="3" />
+          </span>
+
+          <button type="button">Meta</button>
+
+          <span class="marking-controls">
+            <label><input type="checkbox" name="hide-old-marks" /> Hide old marks</label>
+          </span>
+
+        </div>
+      </div>
+
+      <div class="decision-tree-container">
+        <div class="decision-tree-task">
+          <div class="question">Choose the substrates you see.</div>
+          <div class="choices">
+            <div class="choice">
+              <label class="click-target">
+                <input type="checkbox" />
+                <span>Sand</span>
+              </label>
+            </div>
+            <div class="choice">
+              <label class="click-target">
+                <input type="checkbox" />
+                <span>Gravel</span>
+              </label>
+            </div>
+            <div class="choice">
+              <label class="click-target">
+                <input type="checkbox" />
+                <span>Rocks</span>
+              </label>
+            </div>
+            <div class="choice">
+              <label class="click-target">
+                <input type="checkbox" />
+                <span>Boulders</span>
+              </label>
+            </div>
+          </div>
+          <div class="action">
+            <button type="button" name="back">Back</button>
+            <button type="button">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Field guide</h2>
+    <div class="field-guide">
+      <panoptes-tabs style="background: white; color: #333;">
+        <panoptes-title>Identifying substrates</panoptes-title>
+        <panoptes-content>
+          <p>Lorem ipsum dolor sit amet...</p>
+        </panoptes-content>
+        <panoptes-title>Different animals</panoptes-title>
+        <panoptes-content>
+          <p>Lorem ipsum dolor sit amet...</p>
+        </panoptes-content>
+      </panoptes-tabs>
+    </div>
+  </div>
+
+  <!--<div class="project-content">
     <section>
       <header>
         <h1>This is a project.</h1>
@@ -52,5 +134,5 @@
         <p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p>
       </div>
     </section>
-  </div>
+  </div>-->
 </panoptes-content>
