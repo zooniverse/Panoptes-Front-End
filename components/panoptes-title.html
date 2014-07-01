@@ -1,39 +1,46 @@
-<template>
-  <content></content>
+<link rel="import" href="/bower_components/polymer/polymer.html" />
 
-  <style>
-    :host {
-      display: flex;
-      justify-content: space-between;
-    }
+<polymer-element name="panoptes-title">
+  <template>
+    <content></content>
 
-  </style>
-</template>
+    <style type="text/stylus">
+      :host
+        display: flex
+        justify-content: space-between
+    </style>
+  </template>
+
+  <script type="text/coffeescript">
+    addEventListener 'WebComponentsReady', ->
+      Polymer 'panoptes-title'
+  </script>
+</polymer-element>
 
 <script>
-  (function() {
-    'use strict';
+  // (function() {
+  //   'use strict';
 
-    var Platform = window.Platform;
+  //   var Platform = window.Platform;
 
-    var currentScript = document._currentScript || document.currentScript;
+  //   var currentScript = document._currentScript || document.currentScript;
 
-    addEventListener('WebComponentsReady', function() {
-      var proto = Object.create(HTMLElement.prototype);
+  //   addEventListener('WebComponentsReady', function() {
+  //     var proto = Object.create(HTMLElement.prototype);
 
-      proto.createdCallback = function() {
-        var shadowRoot = this.createShadowRoot();
-        var template = currentScript.ownerDocument.getElementsByTagName('template')[0];
-        if (Platform.ShadowCSS) {
-          Platform.ShadowCSS.shimStyling(template.content, 'panoptes-title');
-        }
-        var clone = document.importNode(template.content, true);
-        shadowRoot.appendChild(clone);
-      };
+  //     proto.createdCallback = function() {
+  //       var shadowRoot = this.createShadowRoot();
+  //       var template = currentScript.ownerDocument.getElementsByTagName('template')[0];
+  //       if (Platform.ShadowCSS) {
+  //         Platform.ShadowCSS.shimStyling(template.content, 'panoptes-title');
+  //       }
+  //       var clone = document.importNode(template.content, true);
+  //       shadowRoot.appendChild(clone);
+  //     };
 
-      window.PanoptesTitle = document.registerElement('panoptes-title', {
-        prototype: proto
-      });
-    });
-  }());
+  //     window.PanoptesTitle = document.registerElement('panoptes-title', {
+  //       prototype: proto
+  //     });
+  //   });
+  // }());
 </script>

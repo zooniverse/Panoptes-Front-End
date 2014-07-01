@@ -1,0 +1,81 @@
+<link rel="import" href="/components/util/get-from.html" />
+
+<style type="text/stylus">
+  panoptes-data
+    display: none !important
+</style>
+
+<script type="text/coffeescript">
+  addEventListener 'WebComponentsReady', ->
+    PanoptesDataProto = Object.create HTMLElement.prototype,
+      src:
+        get: ->
+          @getAttribute 'src'
+
+        set: (value) ->
+          if value?
+            @setAttribute 'src'
+          else
+            @removeAttribute 'src'
+
+      path:
+        get: ->
+          @getAttribute 'path'
+
+        set: (value) ->
+          if value?
+            @setAttribute 'path'
+          else
+            @removeAttribute 'path'
+
+    PanoptesDataProto.createdCallback = ->
+      console.log 'Creating', this
+      @update()
+
+    PanoptesDataProto.update = ->
+      @deferred = do ->
+        deferred = {}
+        deferred.promise = new Promise (resolve, reject) ->
+          deferred.resolve = resolve
+          deferred.reject = reject
+        deferred
+
+      @data = @deferred.promise
+      console.log 'Data set', this
+
+      if @src
+        @request = new XMLHttpRequest()
+        @request.addEventListener 'loadend', this
+        @request.open 'get', @src
+        @request.send()
+
+      else if @path
+        gotten = window.panoptes.getFrom @path, window
+
+        if gotten?
+          Promise.all([gotten]).then ([gotten]) =>
+            @deferred.resolve gotten
+        else
+          deferred.reject gotten
+
+      else
+        @deferred.resolve null
+
+    PanoptesDataProto.handleEvent = (e) ->
+      if e.type is 'loadend'
+        if e.target.status is 200
+          try
+            response = JSON.parse e.target.responseText
+            if @path
+              response = window.panoptes.getFrom @path, response
+            @deferred.resolve response
+          catch e
+            @deferred.reject e
+        else
+          try
+            @deferred.reject JSON.parse e.target.responseText
+          catch e
+            @deferred.reject e
+
+    window.PanoptesData = document.registerElement 'panoptes-data', prototype: PanoptesDataProto
+</script>

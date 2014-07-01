@@ -8,14 +8,16 @@ transform = require './gulp-helpers/transform'
 compileInlineTags = require './gulp-helpers/compile-inline-tags'
 
 files =
-  # NOTE: The underscores here only exist so that the glob starts at the right place.
-  # This keeps the output paths the way they should be.
+  # NOTE: The question marks here only exist so that the glob starts at the right place.
+  # This keeps the output paths the way we want them, since the output path starts at the first glob.
   html: './html/**/*.ect'
   components: ['./b?wer_components/**/*.{html,js,css}', './c?mponents/**/*.{html,js,css}']
-  js: ['./j?/main.coffee']
+  js:
+    all: './j?/**/*'
+    main: './j?/main.coffee'
   css:
     main: './cs?/main.styl'
-    all: './cs?/**/*.styl'
+    all: './cs?/**/*'
 
 # Get a list of all requireable files.
 translations = fs.readdirSync './translations'
@@ -74,8 +76,7 @@ gulp.task 'js', ->
   browserify = require 'browserify'
   coffeeify = require 'coffeeify'
 
-  gulp.src files.js
-    .pipe cache 'js', optimizeMemory: true
+  gulp.src files.js.main
     .pipe transform from: '.coffee', to: '.js', (file, callback) ->
       b = browserify file.path, extensions: ['.coffee']
       b.transform coffeeify
@@ -105,7 +106,7 @@ gulp.task 'build', ['html', 'components', 'js', 'css']
 gulp.task 'watch', ['build'], ->
   gulp.watch ['./translations/**/*'].concat(files.html), ['html']
   gulp.watch files.components, ['components']
-  gulp.watch files.js, ['js']
+  gulp.watch files.js.all, ['js']
   gulp.watch files.css.all, ['css']
   .on 'error', util.log
   return

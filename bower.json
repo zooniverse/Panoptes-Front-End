@@ -1,6 +1,0 @@
-{
-  "name": "panoptes-front-end",
-  "dependencies": {
-    "polymer": "~0.2.3"
-  }
-}

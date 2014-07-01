@@ -7,11 +7,11 @@
 
   <style>
     :host {
-      display: none;
+      position: fixed;
     }
 
-    :host([visible]) {
-      display: block;
+    :host(:not([visible])) {
+      display: none;
     }
 
     [part="underlay"] {

@@ -1,23 +1,27 @@
-<link rel="import" href="./panoptes-title.html" />
+<link rel="import" href="/bower_components/polymer/polymer.html" />
 
-<template>
-  <content></content>
+<polymer-element name="panoptes-content">
+  <template>
+    <content></content>
 
-  <style>
-    :host {
-      display: block;
-      padding: 3vh 6vw;
-    }
+    <style type="text/stylus">
+      :host
+        display: block
+        padding: 3vh 6vw
 
-    ::content > :first-child {
-      margin-top: 0;
-    }
+      ::content > :first-child
+        margin-top: 0
 
-    ::content > :last-child {
-      margin-bottom: 0;
-    }
-  </style>
-</template>
+      ::content > :last-child
+        margin-bottom: 0
+    </style>
+  </template>
+
+  <script type="text/coffeescript">
+    addEventListener 'WebComponentsReady', ->
+      Polymer 'panoptes-content'
+  </script>
+</polymer-element>
 
 <script>
   (function() {
@@ -52,20 +56,6 @@
             }
           }
         }
-      });
-
-      proto.createdCallback = function() {
-        var shadowRoot = this.createShadowRoot();
-        var template = currentScript.ownerDocument.getElementsByTagName('template')[0];
-        if (Platform.ShadowCSS) {
-          Platform.ShadowCSS.shimStyling(template.content, 'panoptes-content');
-        }
-        var clone = document.importNode(template.content, true);
-        shadowRoot.appendChild(clone);
-      };
-
-      window.PanoptesContent = document.registerElement('panoptes-content', {
-        prototype: proto
       });
 
       dispatchTargetEvents();

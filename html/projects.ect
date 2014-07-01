@@ -1,6 +1,10 @@
 <% extend './templates/main' %>
 <% block 'page-title': %>Zooniverse Projects<% end %>
 
+<link rel="import" href="/components/util/get-from.html" />
+<link rel="import" href="/components/panoptes-data.html" />
+<link rel="import" href="/components/panoptes-list.html" />
+
 <script type="text/coffeescript">
   window.test =
     owners:
@@ -14,14 +18,9 @@
         title: 'Galaxy Zoo'
         description: 'Help study galaxy formation by lorem ipsum dolor sit amet.'
 
-  addEventListener 'WebComponentsReady', ->
-    ListProto = Object.create HTMLElement.prototype
-
-    ListProto.createdCallback = ->
-      @template = @querySelector 'template'
-
-    ListProto.attachedCallback = ->
-      @update [
+  window.testProjects = new Promise (resolve, reject) ->
+    setTimeout (->
+      resolve [
         window.test.projects.p0
         window.test.projects.p0
         window.test.projects.p0
@@ -30,36 +29,20 @@
         window.test.projects.p0
         window.test.projects.p0
         window.test.projects.p0
-      ]
-
-    getFrom = (path, object) ->
-      segments = path.split '.'
-      until segments.length is 0 or not object?
-        segment = segments.shift()
-        object = object[segment]?.call?() ? object[segment]
-      object
-
-    ListProto.update = (items) ->
-      console.log 'Updating'
-      for item in items
-        newHTML = @template.innerHTML.replace /{{([^}]+)}}/g, (match, key) ->
-          getFrom key.trim(), item
-
-        console.log newHTML
-        @insertAdjacentHTML 'beforeEnd', newHTML
-
-    window.PanoptesList = document.registerElement 'panoptes-list', prototype: ListProto
+      ]), 1000
 </script>
 
 <panoptes-content>
   <h1>Featured projects</h1>
 
-  <panoptes-list page="0" per-page="10" class="list-of-cards">
+  <panoptes-list class="list-of-cards">
+    <panoptes-data path="testProjects"></panoptes-data>
     <template>
       <a href="/project/#/{{owner.name}}/{{title}}" class="project-card">
         <figure>
           <img src="{{avatar}}" class="avatar" />
         </figure>
+
         <div class="details">
           <div class="owner">{{owner.name}}</div>
           <div class="title">{{title}}</div>
@@ -67,7 +50,5 @@
         </div>
       </div>
     </template>
-
-    <p>Loading featured projects...</p>
   </panoptes-list>
 </panoptes-content>

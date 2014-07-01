@@ -4,8 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <title><% content 'page-title' %></title>
-    <script src="/bower_components/platform/platform.js"></script>
-    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700" />
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Playfair+Display:400italic,700italic" />
   </head>
@@ -25,10 +24,6 @@
         </g>
       </symbol>
     </svg>
-
-    <!--TODO: This is an awful way to get the right path.-->
-    <% path = require 'path' %>
-    <% include path.resolve 'html/partials/account-dialog' %>
 
     <div class="main-container" id="start-of-content">
       <header class="main-header">
@@ -67,6 +62,6 @@
       <a href="/privacy">Privacy policy</a>
     </footer>
 
-    <script src="/js/main.js"></script>
+    <script src="/main.js"></script>
   </body>
 </html>

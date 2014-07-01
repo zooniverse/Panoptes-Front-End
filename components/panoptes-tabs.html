@@ -1,152 +1,125 @@
+<link rel="import" href="/bower_components/polymer/polymer.html" />
 <link rel="import" href="./panoptes-title.html" />
 <link rel="import" href="./panoptes-content.html" />
 
-<template>
-  <div id="tab-and-controls-container">
-    <div id="tab-container">
-      <content select="panoptes-title, hr"></content>
+<polymer-element name="panoptes-tabs" side="{{side}}">
+  <template>
+    <div id="tab-and-controls-container">
+      <div id="tab-container">
+        <content id="tabs" select="panoptes-title, hr"></content>
+      </div>
+
+      <div id="controls-container">
+        <content select="panoptes-controls"></content>
+      </div>
     </div>
 
-    <div id="controls-container">
-      <content select="panoptes-controls"></content>
+    <div id="content-container">
+      <content id="contents" select="panoptes-content"></content>
     </div>
-  </div>
 
-  <div id="content-container">
-    <content select="panoptes-content"></content>
-  </div>
+    <style type="text/stylus">
+      :host
+        display: flex
 
-  <style>
-    :host {
-      display: flex;
-    }
+      :host([side="top"])
+        flex-direction: column
 
-    :host([side="top"]) {
-      flex-direction: column;
-    }
+      :host([side="bottom"])
+        flex-direction: column-reverse
 
-    :host([side="bottom"]) {
-      flex-direction: column-reverse;
-    }
+      :host([side="left"])
+        flex-direction: row
 
-    :host([side="left"]) {
-      flex-direction: row;
-    }
+      :host([side="right"])
+        flex-direction: row-reverse
 
-    :host([side="right"]) {
-      flex-direction: row-reverse;
-    }
+      #tab-and-controls-container
+        display: flex
 
-    #tab-and-controls-container {
-      display: flex;
-    }
+      #tab-container
+        display: flex
+        flex: 1
+        overflow: auto
 
-    #tab-container {
-      display: flex;
-      flex: 1;
-      overflow: auto;
-    }
+      #tab-container ::content > *
+        cursor: pointer
+        flex-shrink: 0
+        padding: 0.4em 1em
 
-    #tab-container ::content > * {
-      cursor: pointer;
-      flex-shrink: 0;
-      padding: 0.4em 1em;
-    }
+      #tab-container ::content > [active-tab]
+        background: orangered
+        color: white
 
-    #tab-container ::content > [active-tab] {
-      background: orangered;
-      color: white;
-    }
+      :host([side="top"]) #tab-and-controls-container,
+      :host([side="top"]) #tab-container,
+      :host([side="bottom"]) #tab-and-controls-container,
+      :host([side="bottom"]) #tab-container
+        flex-direction: row
 
-    :host([side="top"]) #tab-and-controls-container,
-    :host([side="top"]) #tab-container,
-    :host([side="bottom"]) #tab-and-controls-container,
-    :host([side="bottom"]) #tab-container {
-      flex-direction: row;
-    }
+      :host([side="left"]) #tab-and-controls-container,
+      :host([side="left"]) #tab-container,
+      :host([side="right"]) #tab-and-controls-container,
+      :host([side="right"]) #tab-container
+        flex-direction: column
+        padding: 1vh 0
 
-    :host([side="left"]) #tab-and-controls-container,
-    :host([side="left"]) #tab-container,
-    :host([side="right"]) #tab-and-controls-container,
-    :host([side="right"]) #tab-container {
-      flex-direction: column;
-      padding: 1vh 0;
-    }
+      #controls-container
+        display: flex
+        justify-content: space-around
 
-    #controls-container {
-      display: flex;
-      justify-content: space-around;
-    }
+      :host([side="left"]) #controls-container,
+      :host([side="right"]) #controls-container
+        align-items: center
 
-    :host([side="left"]) #controls-container,
-    :host([side="right"]) #controls-container {
-      align-items: center;
-    }
+      #controls-container ::content > panoptes-controls
+        padding: 0.4em 1em
 
-    #controls-container ::content > panoptes-controls {
-      padding: 0.4em 1em;
-    }
+      #content-container
+        border: 0 solid rgba(0, 0, 0, 0.2)
+        flex: 1
+        overflow: auto
+        position: relative
 
-    #content-container {
-      border: 0 solid rgba(0, 0, 0, 0.2);
-      flex: 1;
-      overflow: auto;
-      position: relative;
-    }
+      :host([side="top"]) #content-container
+        border-top-width: 1px
+        padding-top: 3vh
 
-    :host([side="top"]) #content-container {
-      border-top-width: 1px;
-      padding-top: 3vh;
-    }
+      :host([side="bottom"]) #content-container
+        border-bottom-width: 1px
+        padding-bottom: 3vh
 
-    :host([side="bottom"]) #content-container {
-      border-bottom-width: 1px;
-      padding-bottom: 3vh;
-    }
+      :host([side="left"]) #content-container
+        border-left-width: 1px
+        padding: 3vh 0 3vh 5vw
 
-    :host([side="left"]) #content-container {
-      border-left-width: 1px;
-      padding: 3vh 0 3vh 5vw;
-    }
+      :host([side="right"]) #content-container
+        border-right-width: 1px
+        padding: 3vh 5vw 3vh 0
 
-    :host([side="right"]) #content-container {
-      border-right-width: 1px;
-      padding: 3vh 5vw 3vh 0;
-    }
+      #content-container ::content > *
+        padding: 0
 
-    #content-container ::content > * {
-      padding: 0;
-    }
+      #content-container ::content > :not([active-tab])
+        display: none
+    </style>
+  </template>
 
-    #content-container ::content > :not([active-tab]) {
-      display: none;
-    }
-  </style>
-</template>
+  <script type="text/coffeescript">
+    validSides = ['top', 'right', 'bottom', 'left']
+
+    addEventListener 'WebComponentsReady', ->
+      Polymer 'panoptes-tabs',
+        ready: ->
+          @$.contents.getDistributedNodes()[@activeTab].setAttribute 'active-tab', true
+
+        side: 'top'
+        activeTab: 0
+  </script>
+</polymer-element>
 
 <script>
-  (function() {
-    'use strict';
-
-    var Platform = window.Platform;
-
-    var currentScript = document._currentScript || document.currentScript;
-
-    var validSides = {top: null, right: null, bottom: null, left: null};
-
-    addEventListener('WebComponentsReady', function() {
-      var proto = Object.create(HTMLElement.prototype, {
-        side: {
-          get: function() {
-            return this.getAttribute('side');
-          },
-          set: function(side) {
-            if (side in validSides) {
-              this.setAttribute('side', side);
-            }
-          }
-        },
-
+/*  (function() {
         activeTab: {
           get: function() {
             return parseFloat(this.getAttribute('active-tab'));
@@ -298,10 +271,6 @@
           content.parentNode.removeChild(content);
         }
       };
-
-      window.PanoptesTabs = document.registerElement('panoptes-tabs', {
-        prototype: proto
-      });
     });
   }());
-</script>
+*/</script>

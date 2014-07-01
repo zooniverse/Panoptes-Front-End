@@ -1,0 +1,10 @@
+<script type="text/coffeescript">
+  addEventListener 'WebComponentsReady', ->
+    window.panoptes ?= {}
+    window.panoptes.getFrom = (path, object) ->
+      segments = path.split '.'
+      until segments.length is 0 or not object?
+        segment = segments.shift()
+        object = object[segment]?.call?() ? object[segment]
+      object
+</script>
