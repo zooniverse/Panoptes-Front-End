@@ -14,9 +14,8 @@ module.exports = React.createClass
 
   render: ->
     nav className: 'main-nav',
-      ul null,
-        li null, Link to: 'home', className: 'home-link',
-          span className: 'zooniverse-logo', 'Ø'
-          Translator null, 'nav.home'
-        li null, Link to: 'projects', Translator null, 'nav.projects'
-        li null, Link to: 'edit-account', 'Edit account'
+      Link to: 'home', className: 'main-item logo',
+        span className: 'zooniverse-logo', 'Ø'
+        Translator null, 'nav.home'
+      Link to: 'projects', className: 'main-item', Translator null, 'nav.projects'
+      Link to: 'edit-account', className: 'main-item', 'Edit account'

@@ -6,41 +6,38 @@
   display: flex
   justify-content: space-between
 
-  .main-option
+.main-nav
+  display: flex
+  flex-direction: row
+
+  > *
+    border-right: 1px solid rgba(black, 0.2)
+
+  .main-item
     align-items: center
     background: rgba(orangered, 0)
-    border-right: 1px solid rgba(black, 0.2)
     color: inherit
     display: flex
-    flex: 0 0 auto
     padding: 1.2vh 1.5vw 0.4vh
     text-decoration: none
-
-    &:last-child
-      border-right: 0
-
-    &:active,
-    &:focus
-      background: rgba(orangered, 1)
-      color: white
 
     &.logo
       font-size: 1.3em
       letter-spacing: 0.05em
       text-transform: uppercase
 
-  & > hr
-    flex: 1 0 1em
-    visibility: hidden
+  a.main-item
+    &:active,
+    &:focus
+      background: rgba(orangered, 1)
+      color: white
 
-    & + :not(hr)
-      border-left: 1px solid rgba(black, 0.2)
+.account-bar
+  @extends .main-nav .main-item
+  border-left: 1px solid rgba(black, 0.2)
 
   .avatar
     border-radius: 50%
     height: 4em
     margin: -35% 0 -35% 0.3em
     width: 4em
-
-  a
-    text-decoration: none
