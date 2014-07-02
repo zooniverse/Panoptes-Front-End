@@ -1,14 +1,20 @@
-{Route} = require 'react-nested-router'
-App = require './partials/app'
 React = window.React = require 'react'
+MainHeader = require './partials/main-header'
+Routed = require 'react-routed'
+MainFooter = require './partials/main-footer'
 
-mainRoute = Route handler: App,
-  Route name: 'home', path: '/', handler: require './pages/home'
-  Route name: 'projects', handler: require './pages/projects'
-  Route name: 'edit-account', path: 'edit/account', handler: require './pages/edit-account'
+{div} = React.DOM
+
+app = div className: 'main-app',
+  MainHeader null
+  Routed className: 'main-content',
+    Routed hash: '#/', handler: require './pages/home'
+    Routed hash: '#/projects', handler: require './pages/projects'
+    Routed hash: '#/edit/account', handler: require './pages/edit-account'
+  MainFooter null
 
 appContainer = document.createElement 'div'
 appContainer.id = 'panoptes-main'
 document.body.appendChild appContainer
 
-window.panoptesMain = module.exports = React.renderComponent mainRoute, appContainer
+module.exports = React.renderComponent app, appContainer

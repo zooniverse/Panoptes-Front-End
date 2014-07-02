@@ -2,7 +2,7 @@ React = require 'react'
 {Link} = require 'react-nested-router'
 Translator = require 'react-translator'
 
-{nav, ul, li, span} = React.DOM
+{nav, a, span} = React.DOM
 
 Translator.setStrings
   nav:
@@ -14,8 +14,8 @@ module.exports = React.createClass
 
   render: ->
     nav className: 'main-nav',
-      Link to: 'home', className: 'main-item logo',
+      a href: '#/', className: 'main-item logo',
         span className: 'zooniverse-logo', 'Ø'
         Translator null, 'nav.home'
-      Link to: 'projects', className: 'main-item', Translator null, 'nav.projects'
-      Link to: 'edit-account', className: 'main-item', 'Edit account'
+      a href: '#/projects', className: 'main-item', Translator null, 'nav.projects'
+      a href: '#/edit/account', className: 'main-item', 'Edit account'

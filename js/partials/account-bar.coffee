@@ -1,14 +1,14 @@
 React = require 'react'
-{Link} = require 'react-nested-router'
+# {Link} = require 'react-nested-router'
 
-{div, span, img, button} = React.DOM
+{div, span, img, a, button} = React.DOM
 
 module.exports = React.createClass
   displayName: 'AccountBar'
 
   render: ->
     div className: 'account-bar',
-      Link to: 'edit-account', 'USER_NAME_OR_LOGIN'
+      a href: '#/edit/account', 'USER_NAME_OR_LOGIN'
       span className: 'badge',
         button type: 'button', 'GROUP_NAME'
       span null,

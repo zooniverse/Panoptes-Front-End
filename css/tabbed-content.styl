@@ -1,0 +1,83 @@
+.tabbed-content
+  display: flex
+
+  &[data-side="top"]
+    flex-direction: column
+
+  &[data-side="bottom"]
+    flex-direction: column-reverse
+
+  &[data-side="left"]
+    flex-direction: row
+
+  &[data-side="right"]
+    flex-direction: row-reverse
+
+.tabbed-content-tabs
+  display: flex
+  flex: 1
+  overflow: auto
+
+.tabbed-content-tab
+  cursor: pointer
+  flex-shrink: 0
+  padding: 0.4em 1em
+
+.tabbed-content-content
+  flex: 1
+
+#tab-container ::content > [active-tab]
+  background: orangered
+  color: white
+
+.tabbed-content([data-side="top"]) #tab-and-controls-container,
+.tabbed-content([data-side="top"]) #tab-container,
+.tabbed-content([data-side="bottom"]) #tab-and-controls-container,
+.tabbed-content([data-side="bottom"]) #tab-container
+  flex-direction: row
+
+.tabbed-content([data-side="left"]) #tab-and-controls-container,
+.tabbed-content([data-side="left"]) #tab-container,
+.tabbed-content([data-side="right"]) #tab-and-controls-container,
+.tabbed-content([data-side="right"]) #tab-container
+  flex-direction: column
+  padding: 1vh 0
+
+#controls-container
+  display: flex
+  justify-content: space-around
+
+.tabbed-content([data-side="left"]) #controls-container,
+.tabbed-content([data-side="right"]) #controls-container
+  align-items: center
+
+#controls-container ::content > panoptes-controls
+  padding: 0.4em 1em
+
+#content-container
+  border: 0 solid rgba(0, 0, 0, 0.2)
+  flex: 1
+  overflow: auto
+  position: relative
+
+.tabbed-content([data-side="top"]) #content-container
+  border-top-width: 1px
+  padding-top: 3vh
+
+.tabbed-content([data-side="bottom"]) #content-container
+  border-bottom-width: 1px
+  padding-bottom: 3vh
+
+.tabbed-content([data-side="left"]) #content-container
+  border-left-width: 1px
+  padding: 3vh 0 3vh 5vw
+
+.tabbed-content([data-side="right"]) #content-container
+  border-right-width: 1px
+  padding: 3vh 5vw 3vh 0
+
+#content-container ::content > *
+  padding: 0
+
+#content-container ::content > :not([active-tab])
+  display: none
