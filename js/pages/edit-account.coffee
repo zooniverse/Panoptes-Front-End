@@ -1,29 +1,42 @@
 React = require 'react'
 Routed = require 'react-routed'
 
-{div, p, img, span, a, strong, small, ul, li, fieldset, legend, label, input, button, table, tr, td} = React.DOM
+{div, p, img, span, a, strong, small, ul, li, table, tr, td} = React.DOM
+{form, fieldset, legend, label, input, button} = React.DOM
 
 module.exports = React.createClass
   displayName: 'EditAccountPage'
 
-  render: ->
-    div className: 'edit-account-page',
-      div null, a href: '#/edit/account/contact', 'Contact details'
-      div null, a href: '#/edit/account/password', 'Password'
-      div null, a href: '#/edit/account/profile', 'Profile'
-      div null, a href: '#/edit/account/roles', 'Roles'
-      div null, a href: '#/edit/account/notifications', 'Notifications'
-      div null, a href: '#/edit/account/groups', 'Groups'
-      div null, a href: '#/edit/account/projects', 'Projects'
-      div null, a href: '#/edit/account/subjects', 'Subjects'
+  getInitialState: ->
+    user: require '../data/current-user'
 
-      Routed null,
+  handleInputChange: (e) ->
+    property = 'value'
+    if e.target.type in ['radio', 'checkbox']
+      property = 'checked'
+
+    @state.user[e.target.name] = e.target[property]
+    @setState user: @state.user
+
+  render: ->
+    div className: 'edit-account-page tabbed-content', 'data-side': 'left', style: padding: '1vh 1vw',
+      div className: 'tabbed-content-tabs',
+        a href: '#/edit/account/contact', className: 'tabbed-content-tab', 'Contact details'
+        a href: '#/edit/account/password', className: 'tabbed-content-tab', 'Password'
+        a href: '#/edit/account/profile', className: 'tabbed-content-tab', 'Profile'
+        a href: '#/edit/account/roles', className: 'tabbed-content-tab', 'Roles'
+        a href: '#/edit/account/notifications', className: 'tabbed-content-tab', 'Notifications'
+        a href: '#/edit/account/groups', className: 'tabbed-content-tab', 'Groups'
+        a href: '#/edit/account/projects', className: 'tabbed-content-tab', 'Projects'
+        a href: '#/edit/account/subjects', className: 'tabbed-content-tab', 'Subjects'
+
+      Routed className: 'tabbed-content-content',
         Routed hash: '#/edit/account/contact',
-          div null,
+          form method: 'put', action: "/users/#{@state.user.id}", onSubmit: ((e) => e.preventDefault(); @state.user.save('email', 'wants_betas', 'can_survey')),
             fieldset null,
               legend null, 'Contact info'
                 span null, 'Email address'
-                input type: 'email', name: 'email', placeholder: 'me@example.com', size: 50
+                input type: 'email', name: 'email', value: @state.user.email, placeholder: 'me@example.com', size: 50, onChange: @handleInputChange
                 p null,
                   small null, 'We\'ll never share this address. You can edit your public contact information in your profile'
 
@@ -32,12 +45,12 @@ module.exports = React.createClass
               table className: 'for-checkboxes',
                 tr null,
                   td null,
-                    input type: 'checkbox', name: 'wants-betas'
+                    input type: 'checkbox', name: 'wants_betas', checked: @state.user.wants_betas, onChange: @handleInputChange
                   td null,
                     label null, 'I want to help test new projects under development.'
                 tr null,
                   td null,
-                    input type: 'checkbox', name: 'can-survey'
+                    input type: 'checkbox', name: 'can_survey', checked: @state.user.can_survey, onChange: @handleInputChange
                   td null,
                     label null, 'I\'m willing to take part in occasional surveys from the Zooniverse and associated scientists.'
 
@@ -104,7 +117,7 @@ module.exports = React.createClass
                   td null,
                     label null, 'Web site'
                   td null,
-                    input type: 'url', name: 'www', placeholder: 'https://www.example.com/', size: 50
+                    input type: 'personal_url', name: 'www', placeholder: 'https://www.example.com/', size: 50
 
             fieldset null,
               legend null, 'Social media'

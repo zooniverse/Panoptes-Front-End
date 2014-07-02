@@ -15,7 +15,7 @@
 
 .tabbed-content-tabs
   display: flex
-  flex: 1
+  flex-shrink: 0
   overflow: auto
 
 .tabbed-content-tab
@@ -23,61 +23,43 @@
   flex-shrink: 0
   padding: 0.4em 1em
 
-.tabbed-content-content
-  flex: 1
-
-#tab-container ::content > [active-tab]
+.tabbed-content-tab.active
   background: orangered
   color: white
 
-.tabbed-content([data-side="top"]) #tab-and-controls-container,
-.tabbed-content([data-side="top"]) #tab-container,
-.tabbed-content([data-side="bottom"]) #tab-and-controls-container,
-.tabbed-content([data-side="bottom"]) #tab-container
+.tabbed-content-content
+  flex: 1
+
+.tabbed-content[data-side="top"] .tabbed-content-tabs,
+.tabbed-content[data-side="bottom"] .tabbed-content-tabs
   flex-direction: row
 
-.tabbed-content([data-side="left"]) #tab-and-controls-container,
-.tabbed-content([data-side="left"]) #tab-container,
-.tabbed-content([data-side="right"]) #tab-and-controls-container,
-.tabbed-content([data-side="right"]) #tab-container
+.tabbed-content[data-side="left"] .tabbed-content-tabs,
+.tabbed-content[data-side="right"] .tabbed-content-tabs
   flex-direction: column
   padding: 1vh 0
 
-#controls-container
-  display: flex
-  justify-content: space-around
-
-.tabbed-content([data-side="left"]) #controls-container,
-.tabbed-content([data-side="right"]) #controls-container
-  align-items: center
-
-#controls-container ::content > panoptes-controls
-  padding: 0.4em 1em
-
-#content-container
-  border: 0 solid rgba(0, 0, 0, 0.2)
+.tabbed-content-content
+  border: 0 solid rgba(black, 0.2)
   flex: 1
   overflow: auto
   position: relative
 
-.tabbed-content([data-side="top"]) #content-container
+.tabbed-content[data-side="top"] .tabbed-content-content
   border-top-width: 1px
   padding-top: 3vh
 
-.tabbed-content([data-side="bottom"]) #content-container
+.tabbed-content[data-side="bottom"] .tabbed-content-content
   border-bottom-width: 1px
   padding-bottom: 3vh
 
-.tabbed-content([data-side="left"]) #content-container
+.tabbed-content[data-side="left"] .tabbed-content-content
   border-left-width: 1px
   padding: 3vh 0 3vh 5vw
 
-.tabbed-content([data-side="right"]) #content-container
+.tabbed-content[data-side="right"] .tabbed-content-content
   border-right-width: 1px
   padding: 3vh 5vw 3vh 0
 
-#content-container ::content > *
+.tabbed-content-content > *
   padding: 0
-
-#content-container ::content > :not([active-tab])
-  display: none
