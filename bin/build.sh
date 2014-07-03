@@ -1,21 +1,23 @@
 #!/usr/bin/env bash
 
+cp -av ./public ./build
+
 ./node_modules/.bin/browserify \
   --verbose \
   --extension ".coffee" \
   --transform coffeeify \
-  --outfile ./public/main.js \
+  --outfile ./build/main.js \
   ./app/main.coffee
 
 ./node_modules/.bin/stylus \
   --use nib \
   --import nib \
-  --out ./public \
+  --out ./build \
   ./css/main.styl
 
 ./node_modules/.bin/uglifyjs \
   --screw-ie8 \
   --mangle \
   --compress \
-  --output ./public/main.js \
-  ./public/main.js
+  --output ./build/main.js \
+  ./build/main.js
