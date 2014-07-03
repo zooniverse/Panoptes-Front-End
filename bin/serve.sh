@@ -18,8 +18,9 @@ jobs=""
   ./css/main.styl \
   & jobs="$jobs $!"
 
-./node_modules/.bin/serveup \
+./node_modules/.bin/static \
   --port 3735 \
+  --headers '{"Cache-Control": "no-cache, must-revalidate"}' \
   ./public \
   & jobs="$jobs $!"
 
