@@ -5,7 +5,8 @@ cp -av ./public ./build
 ./node_modules/.bin/browserify \
   --verbose \
   --extension ".coffee" \
-  --transform coffeeify \
+  --extension ".cjsx" \
+  --transform coffee-reactify \
   --outfile ./build/main.js \
   ./app/main.coffee
 

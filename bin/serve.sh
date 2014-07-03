@@ -5,7 +5,8 @@ jobs=""
 ./node_modules/.bin/watchify \
   --verbose \
   --extension ".coffee" \
-  --transform coffeeify \
+  --extension ".cjsx" \
+  --transform coffee-reactify \
   --outfile ./public/main.js \
   ./app/main.coffee \
   & jobs="$jobs $!"
