@@ -17,4 +17,7 @@ appContainer = document.createElement 'div'
 appContainer.id = 'panoptes-main'
 document.body.appendChild appContainer
 
+currentUserActions = require './actions/current-user'
+currentUserActions.check()
+
 module.exports = React.renderComponent app, appContainer

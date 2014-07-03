@@ -1,30 +1,35 @@
-class User
-  constructor: (options) ->
-    for property, value of options
-      @[property] = value
+Store = require './store'
 
-  url: ->
-    "/users/#{@id}"
+currentUser = new Store
+  path: '/me'
 
-  save: (keys...) ->
-    if keys.length is 0
-      console.log "PUT #{JSON.stringify this} to #{@url()}"
-    else
-      changes = {}
-      for key in keys
-        changes[key] = @[key]
-      console.log "PATCH #{JSON.stringify changes} to #{@url()}"
+  current: null
 
-module.exports = new User
+  handlers:
+    'current-user:check': ->
+      setTimeout =>
+        @set 'current', @filter(({id}) -> id is 'DEV_USER').DEV_USER
+
+    'current-user:sign-out': ->
+      @set 'current', null
+
+    'current-user:set-preference': (key, value) ->
+      console.log 'Setting pref', key, value
+      @set "current.preferences.#{key}", value
+
+currentUser.add
   id: 'DEV_USER'
   email: 'dev-user@zooniverse.org'
   wants_betas: true
   can_survey: false
-
-  avatar: '//placehold.it/64.png'
+  avatar: 'https://pbs.twimg.com/profile_images/420634335964692480/aXU3vnUq.jpeg'
   real_name: 'Mr. Dev User'
   location: 'Dev City'
   public_email: 'dev-user+spam@zooniverse.org'
   personal_url: 'http://www.zooniverse.org/'
   twitter: 'zoonidev'
   pinterest: 'devdevdev'
+  preferences: {}
+
+window.cu = currentUser
+module.exports = currentUser

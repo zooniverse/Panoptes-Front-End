@@ -1,17 +1,20 @@
 # @cjsx React.DOM
 
 React = require 'react'
+currentUserActions = require '../actions/current-user'
 
 module.exports = React.createClass
   displayName: 'AccountBar'
 
+  getInitialState: ->
+    user: null
+
   render: ->
+    isCool = @props.user.preferences.cool ? false
     <div className="account-bar">
-      <a href="#/edit/account">USER_NAME_OR_LOGIN</a>
-
-      <span className="badge">
-        <button type="button">GROUP_NAME</button>
-      </span>
-
-      <img src="https://pbs.twimg.com/profile_images/437294429955563520/MM1_4w75.jpeg" className="avatar" />
+      <a href="#/edit/account">{@props.user.real_name}</a>
+      <img src={@props.user.avatar} className="avatar" />
+      <button type="button" onClick={currentUserActions.signOut}>Sign out</button>
+      <button onClick={currentUserActions.setPreference.bind null, 'cool', not isCool}>Toggle cool</button>
+      Currently {isCool.toString()}.
     </div>
