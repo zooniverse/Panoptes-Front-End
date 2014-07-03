@@ -1,5 +1,4 @@
 React = require 'react'
-{Link} = require 'react-nested-router'
 Translator = require 'react-translator'
 
 {nav, a, span} = React.DOM
