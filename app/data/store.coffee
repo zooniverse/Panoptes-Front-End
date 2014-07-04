@@ -1,4 +1,4 @@
-{register} = require './dispatcher'
+dispatcher = require './dispatcher'
 
 class Store
   path: '/'
@@ -11,10 +11,10 @@ class Store
     for property, value of options
       @[property] = value
 
-    @_items ?= {} # TODO: Probably make this an array.
+    @_items ?= []
     @_actions ?= []
 
-    register this
+    dispatcher.register this
 
   on: (action, [context]..., handler) ->
     @_actions.push {action, context, handler}
@@ -48,16 +48,19 @@ class Store
     @emit 'change'
 
   add: (item) ->
-    @_items[item.id] = item
+    @_items.push item
     @emit 'change'
 
   remove: (item) ->
-    @_items[item.id] = null
+    index = @_items.indexOf item
+    @_items.splice index, 1
 
-  filter: (fn) ->
-    results = {}
-    matches = (item for id, item of @_items when item? and fn item)
-    results[match.id] = match for match in matches
-    results
+  filter: (params) ->
+    if typeof params is 'function'
+      @_items.filter arguments...
+    else if typeof params is 'string'
+      @filter (item) -> item.id is params
+    else
+      # TODO: Allow filtering by properties.
 
 module.exports = Store

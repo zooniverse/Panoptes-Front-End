@@ -7,18 +7,18 @@ currentUser = new Store
 
   handlers:
     'current-user:check': ->
-      setTimeout =>
-        @set 'current', @filter(({id}) -> id is 'DEV_USER').DEV_USER
+      @set 'current', @filter('DEV_USER')[0]
 
     'current-user:sign-out': ->
+      localStorage.removeItem 'panoptes-auth-token'
       @set 'current', null
 
     'current-user:set-preference': (key, value) ->
-      console.log 'Setting pref', key, value
       @set "current.preferences.#{key}", value
 
 currentUser.add
   id: 'DEV_USER'
+  login: 'devuser'
   email: 'dev-user@zooniverse.org'
   wants_betas: true
   can_survey: false
@@ -31,5 +31,4 @@ currentUser.add
   pinterest: 'devdevdev'
   preferences: {}
 
-window.cu = currentUser
 module.exports = currentUser

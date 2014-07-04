@@ -2,7 +2,10 @@
 
 module.exports =
   check: ->
-    dispatch 'current-user:check'
+    dispatch 'current-user:check',
+
+  signIn: (login, password) ->
+    dispatch 'current-user:sign-in'
 
   signOut: ->
     dispatch 'current-user:sign-out'
