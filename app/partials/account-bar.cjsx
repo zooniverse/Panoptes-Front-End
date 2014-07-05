@@ -11,7 +11,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="account-bar">
-      <a href="#/edit/account/contact">{@props.user.real_name}</a>
+      <a href="#/edit/account">{@props.user.real_name}</a>
       <button type="button" onClick={currentUserActions.signOut}>Sign out</button>
       <img src={@props.user.avatar} className="avatar" />
     </div>

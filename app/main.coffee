@@ -12,7 +12,7 @@ EditAccount = require './pages/edit-account'
 
 Main = React.createClass
   getInitialState: ->
-    user: null
+    user: currentUser.current
 
   componentDidMount: ->
     currentUser.on 'change', this, 'handleUserChange'
@@ -30,7 +30,13 @@ Main = React.createClass
         Home hash: '#'
         SignIn hash: '#/sign-in/*'
         Projects hash: '#/projects'
-        EditAccount hash: '#/edit/account/*'
+        React.DOM.div hash: '#/edit/account/*',
+          if @state.user?
+            EditAccount user: @state.user
+          else
+            React.DOM.p className: 'normal-content', style: textAlign: 'center', paddingTop: '25vh',
+              React.DOM.a href: '#/sign-in', 'Looks like you need to sign in.'
+
       MainFooter null
 
 mainContainer = document.createElement 'div'

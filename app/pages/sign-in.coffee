@@ -33,7 +33,7 @@ module.exports = React.createClass
           <p>
             <label>
               User name<br />
-              <input type="text" name="login" />
+              <input type="text" name="login" autoFocus="autoFocus" />
             </label>
           </p>
 
