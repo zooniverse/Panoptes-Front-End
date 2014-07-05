@@ -1,8 +1,8 @@
 stores = []
 
-dispatch = (action, payload...) ->
+dispatch = (signal, payload...) ->
   for store in stores
-    store.handlers[action]?.call store, payload...
+    store.handlers[signal]?.call store, payload...
 
 register = (store) ->
   stores.push store

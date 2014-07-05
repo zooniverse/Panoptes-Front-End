@@ -1,6 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
+currentUserActions = require '../actions/current-user'
 ChildRouter = require 'react-child-router'
 
 module.exports = React.createClass
@@ -10,8 +11,7 @@ module.exports = React.createClass
     property = 'value'
     if e.target.type in ['radio', 'checkbox']
       property = 'checked'
-
-    @props.user[e.target.name] = e.target[property]
+    currentUserActions.set e.target.name, e.target[property]
 
   render: ->
     <div className="edit-account-page tabbed-content" data-side="left" style={padding: '1vh 1vw'}>
@@ -31,9 +31,15 @@ module.exports = React.createClass
         <div hash="#/edit/account">
           <form method="put" onSubmit={(e) -> e.preventDefault(); @props.user.save 'email', 'wants_betas', 'can_survey'}>
             <fieldset>
+              <legend>Login name</legend>
+              <p>This feature won’t be quite as discoverable as this.</p>
+              <input type="text" name="login" value={@props.user.login} placeholder="cool_guy_123" onChange={@handleInputChange} />
+            </fieldset>
+
+            <fieldset>
               <legend>Contact info</legend>
               <p>Email address</p>
-              <input type="email" name="email" value={@props.user.email} placeholder="me@example.com" size="50", onChange={@handleInputChange} />
+              <input type="email" name="email" value={@props.user.email} placeholder="me@example.com" onChange={@handleInputChange} />
               <p><small>We’ll never share this address. You can edit your public contact information in your profile</small></p>
             </fieldset>
 
@@ -70,19 +76,19 @@ module.exports = React.createClass
               <tr>
                 <td>Old password</td>
                 <td>
-                  <input type="password" name="passsword-old" size="50" />
+                  <input type="password" name="passsword-old" />
                 </td>
               </tr>
               <tr>
                 <td>New password</td>
                 <td>
-                  <input type="password" name="passsword-new" size="50" />
+                  <input type="password" name="passsword-new" />
                 </td>
               </tr>
               <tr>
                 <td>Confirm new password</td>
                 <td>
-                  <input type="password" name="passsword-confirmed" size="50" />
+                  <input type="password" name="passsword-confirmed" />
                 </td>
               </tr>
             </table>
@@ -97,7 +103,7 @@ module.exports = React.createClass
             <table>
               <tr>
                 <td style={verticalAlign: 'middle'}>
-                  <img src={@props.user.avatar} width="96", height="96" />
+                  <img src={@props.user.avatar} width="96" height="96" />
                 </td>
                 <td>
                   <label>
@@ -116,21 +122,21 @@ module.exports = React.createClass
               <tr>
                 <td><label>Your name</label></td>
                 <td>
-                  <input type="text" name="real-name" placeholder="John Smith" size="50" />
+                  <input type="text" name="real_name" value={@props.user.real_name} placeholder="John Smith" onChange={@handleInputChange} />
                   <p><small>We’ll use this to give acknowledgement in papers, on posters, etc.</small></p>
                 </td>
               </tr>
               <tr>
                 <td><label>Location</label></td>
-                <td><input type="text" name="location" placeholder="Chicago, IL" size="50" /></td>
+                <td><input type="text" name="location" value={@props.user.location} placeholder="Chicago, IL" onChange={@handleInputChange} /></td>
               </tr>
               <tr>
                 <td><label>Public email address</label></td>
-                <td><input type="text" name="public-email" placeholder="me@example.com" size="50" /></td>
+                <td><input type="text" name="public_email" value={@props.user.public_email} placeholder="me@example.com" onChange={@handleInputChange} /></td>
               </tr>
               <tr>
                 <td><label>Web site</label></td>
-                <td><input type="personal_url" name="www" placeholder="https://www.example.com/" size="50" /></td>
+                <td><input type="www" name="personal_url" value={@props.user.personal_url} placeholder="https://www.example.com/" onChange={@handleInputChange} /></td>
               </tr>
             </table>
           </fieldset>
@@ -140,11 +146,11 @@ module.exports = React.createClass
             <table>
               <tr>
                 <td>Twitter</td>
-                <td><input type="text" name="twitter" placeholder="Your Twitter handle" /></td>
+                <td><input type="text" name="twitter" value={@props.user.twitter} placeholder="Your Twitter handle" onChange={@handleInputChange} /></td>
               </tr>
               <tr>
                 <td>Pinterest</td>
-                <td><input type="text" name="pinterest" placeholder="Your Pinterest user name" /></td>
+                <td><input type="text" name="pinterest" value={@props.user.pinterest} placeholder="Your Pinterest user name" onChange={@handleInputChange} /></td>
               </tr>
             </table>
           </fieldset>

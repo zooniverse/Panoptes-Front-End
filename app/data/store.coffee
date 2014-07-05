@@ -5,14 +5,14 @@ class Store
   handers: null
 
   _items: null
-  _actions: null
+  _signals: null
 
   constructor: (options = {}) ->
     for property, value of options
       @[property] = value
 
     @_items ?= []
-    @_actions ?= []
+    @_signals ?= []
 
     dispatcher.register this
 
@@ -21,16 +21,16 @@ class Store
       # TODO?
       @emit 'change'
 
-  on: (action, [context]..., handler) ->
-    @_actions.push {action, context, handler}
+  on: (signal, [context]..., handler) ->
+    @_signals.push {signal, context, handler}
 
-  off: (action, [context]..., handler) ->
-    for {a, c, h}, i in @_actions when a is action and c is context and h is handler
+  off: (signal, [context]..., handler) ->
+    for {a, c, h}, i in @_signals when a is signal and c is context and h is handler
       index = i
-    @_actions.splice index, 1
+    @_signals.splice index, 1
 
-  emit: (action, payload) ->
-    for {action: a, context, handler} in @_actions when a is action
+  emit: (signal, payload) ->
+    for {signal: a, context, handler} in @_signals when a is signal
       if typeof handler is 'string'
         handler = context[handler]
       handler.call context, payload

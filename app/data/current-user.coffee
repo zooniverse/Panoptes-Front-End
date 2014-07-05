@@ -13,8 +13,17 @@ currentUser = new Store
       @remove @current
       @set 'current', null
 
+    'current-user:set': (key, value) ->
+      @set "current.#{key}", value
+
     'current-user:set-preference': (key, value) ->
       @set "current.preferences.#{key}", value
+
+    'current-user:save-properties': (properties...) ->
+      dataToSave = {}
+      for key in properties
+        dataToSave[key] = @[key]
+      console?.log 'PUT', JSON.stringify dataToSave
 
 currentUser.add
   id: 'DEV_USER'

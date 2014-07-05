@@ -2,7 +2,7 @@
 
 module.exports =
   check: ->
-    setTimeout () ->
+    setTimeout ->
       dispatch 'current-user:check'
 
   signIn: (login, password) ->
@@ -11,5 +11,11 @@ module.exports =
   signOut: ->
     dispatch 'current-user:sign-out'
 
+  set: (key, value) ->
+    dispatch 'current-user:set', key, value
+
   setPreference: (key, value) ->
     dispatch 'current-user:set-preference', key, value
+
+  save: (properties...) ->
+    dispatch 'current-user:save-properies', properties...
