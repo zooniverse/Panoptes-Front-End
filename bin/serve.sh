@@ -4,6 +4,7 @@ jobs=""
 
 ./node_modules/.bin/watchify \
   --verbose \
+  --debug \
   --extension ".coffee" \
   --extension ".cjsx" \
   --transform coffee-reactify \
