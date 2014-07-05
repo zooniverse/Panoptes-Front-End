@@ -9,7 +9,6 @@ Home = require './pages/home'
 SignIn = require './pages/sign-in'
 Projects = require './pages/projects'
 EditAccount = require './pages/edit-account'
-{div} = React.DOM
 
 Main = React.createClass
   getInitialState: ->
@@ -25,7 +24,7 @@ Main = React.createClass
     @setState user: currentUser.current
 
   render: ->
-    div className: 'panoptes-main',
+    React.DOM.div className: 'panoptes-main',
       MainHeader user: @state.user
       ChildRouter className: 'main-content',
         Home hash: '#'
