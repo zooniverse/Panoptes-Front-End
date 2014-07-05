@@ -1,8 +1,14 @@
-.columns
+.has-columns
   display: flex
 
-  & > *
-    flex: 1
-
-    &:not(:first-child)
+  > :not(:first-child)
       margin-left: 3vw
+
+  > hr
+    border-left-width: 1px
+    margin-bottom: 0
+    margin-top: 0
+
+  > .primary-column
+  &.fixed > :not(hr)
+    flex: 1

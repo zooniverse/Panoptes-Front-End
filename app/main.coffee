@@ -1,10 +1,14 @@
 React = require 'react'
 currentUser = require './data/current-user'
 MainHeader = require './partials/main-header'
-Routed = require 'react-routed'
+ChildRouter = require 'react-child-router'
 MainFooter = require './partials/main-footer'
 currentUserActions = require './actions/current-user'
 
+Home = require './pages/home'
+SignIn = require './pages/sign-in'
+Projects = require './pages/projects'
+EditAccount = require './pages/edit-account'
 {div} = React.DOM
 
 Main = React.createClass
@@ -23,10 +27,11 @@ Main = React.createClass
   render: ->
     div className: 'panoptes-main',
       MainHeader user: @state.user
-      Routed className: 'main-content',
-        Routed hash: '#/', handler: require './pages/home'
-        Routed hash: '#/projects', handler: require './pages/projects'
-        Routed hash: '#/edit/account', handler: require './pages/edit-account'
+      ChildRouter className: 'main-content',
+        Home hash: '#'
+        SignIn hash: '#/sign-in/*'
+        Projects hash: '#/projects'
+        EditAccount hash: '#/edit/account/*'
       MainFooter null
 
 mainContainer = document.createElement 'div'

@@ -14,21 +14,25 @@
     flex-direction: row-reverse
 
 .tabbed-content-tabs
+  border: 0 solid rgba(black, 0.2)
   display: flex
   flex-shrink: 0
   overflow: auto
 
-.tabbed-content-tab
-  cursor: pointer
-  flex-shrink: 0
-  padding: 0.4em 1em
+.tabbed-content[data-side="top"] .tabbed-content-tabs
+  border-bottom-width: 1px
 
-.tabbed-content-tab.active
-  background: orangered
-  color: white
 
-.tabbed-content-content
-  flex: 1
+.tabbed-content[data-side="bottom"] .tabbed-content-tabs
+  border-top-width: 1px
+
+
+.tabbed-content[data-side="left"] .tabbed-content-tabs
+  border-right-width: 1px
+
+
+.tabbed-content[data-side="right"] .tabbed-content-tabs
+  border-left-width: 1px
 
 .tabbed-content[data-side="top"] .tabbed-content-tabs,
 .tabbed-content[data-side="bottom"] .tabbed-content-tabs
@@ -39,27 +43,31 @@
   flex-direction: column
   padding: 1vh 0
 
-.tabbed-content-content
-  border: 0 solid rgba(black, 0.2)
+.tabbed-content-tab
+  cursor: pointer
+  flex-shrink: 0
+  padding: 0.4em 1em
+
+.tabbed-content-tab.selected-tab
+  background: orangered
+  color: white
+
+.tabbed-content-tabs + *
   flex: 1
   overflow: auto
   position: relative
 
-.tabbed-content[data-side="top"] .tabbed-content-content
-  border-top-width: 1px
+.tabbed-content[data-side="top"] .tabbed-content-tabs + *
   padding-top: 3vh
 
-.tabbed-content[data-side="bottom"] .tabbed-content-content
-  border-bottom-width: 1px
+.tabbed-content[data-side="bottom"] .tabbed-content-tabs + *
   padding-bottom: 3vh
 
-.tabbed-content[data-side="left"] .tabbed-content-content
-  border-left-width: 1px
+.tabbed-content[data-side="left"] .tabbed-content-tabs + *
   padding: 3vh 0 3vh 5vw
 
-.tabbed-content[data-side="right"] .tabbed-content-content
-  border-right-width: 1px
+.tabbed-content[data-side="right"] .tabbed-content-tabs + *
   padding: 3vh 5vw 3vh 0
 
-.tabbed-content-content > *
+.tabbed-content-tabs + * > *
   padding: 0

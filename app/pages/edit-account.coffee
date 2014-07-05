@@ -1,7 +1,8 @@
 React = require 'react'
-Routed = require 'react-routed'
+ChildRouter = require 'react-child-router'
 
-{div, p, img, span, a, strong, small, ul, li, table, tr, td} = React.DOM
+{div, span, p, img, a, strong, small} = React.DOM
+{ul, li, table, tr, td} = React.DOM
 {form, fieldset, legend, label, input, button} = React.DOM
 
 module.exports = React.createClass
@@ -30,8 +31,8 @@ module.exports = React.createClass
         a href: '#/edit/account/projects', className: 'tabbed-content-tab', 'Projects'
         a href: '#/edit/account/subjects', className: 'tabbed-content-tab', 'Subjects'
 
-      Routed className: 'tabbed-content-content',
-        Routed hash: '#/edit/account/contact',
+      ChildRouter className: 'tabbed-content-content',
+        div hash: '#/edit/account/contact',
           form method: 'put', action: "/users/#{@state.user.id}", onSubmit: ((e) => e.preventDefault(); @state.user.save('email', 'wants_betas', 'can_survey')),
             fieldset null,
               legend null, 'Contact info'
@@ -56,7 +57,7 @@ module.exports = React.createClass
 
             button type: 'submit', 'Save account settings'
 
-        Routed hash: '#/edit/account/password',
+        div hash: '#/edit/account/password',
           div null,
             fieldset null,
               legend null, 'Change your password'
@@ -76,7 +77,7 @@ module.exports = React.createClass
 
             button type: 'submit', 'Save password'
 
-        Routed hash: '#/edit/account/profile',
+        div hash: '#/edit/account/profile',
           div null,
             fieldset null,
               legend null, 'Avatar'
@@ -133,7 +134,7 @@ module.exports = React.createClass
 
             button type: 'submit', 'Save profile'
 
-        Routed hash: '#/edit/account/roles',
+        div hash: '#/edit/account/roles',
           div null,
             p null,
               'Project roles are assigned by project owners, and visible to other volunteers in discussions and on your profile.'
@@ -155,7 +156,7 @@ module.exports = React.createClass
                 'Scientist'
                 button null, '&times;'
 
-        Routed hash: '#/edit/account/notifications',
+        div hash: '#/edit/account/notifications',
           div null,
             fieldset null,
               legend null, 'News and updates'
@@ -208,7 +209,7 @@ module.exports = React.createClass
 
             button type: 'submit', 'Save notification settings'
 
-        Routed hash: '#/edit/account/groups',
+        div hash: '#/edit/account/groups',
           div null,
             p null, 'You own'
             ul null,
@@ -221,10 +222,10 @@ module.exports = React.createClass
               li null,
                 a href: '#', 'NYPL'
 
-        Routed hash: '#/edit/account/projects',
+        div hash: '#/edit/account/projects',
           div null,
             p null, 'Your projects are...'
 
-        Routed hash: '#/edit/account/subjects',
+        div hash: '#/edit/account/subjects',
           div null,
             p null, 'Your subjects are...'
