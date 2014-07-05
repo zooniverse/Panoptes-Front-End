@@ -7,10 +7,10 @@ currentUser = new Store
 
   handlers:
     'current-user:check': ->
-      @set 'current', @filter('DEV_USER')[0]
+      @set 'current', @find 'DEV_USER'
 
     'current-user:sign-out': ->
-      localStorage.removeItem 'panoptes-auth-token'
+      @remove @current
       @set 'current', null
 
     'current-user:set-preference': (key, value) ->

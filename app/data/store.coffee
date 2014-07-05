@@ -16,6 +16,11 @@ class Store
 
     dispatcher.register this
 
+  fetch: (params) ->
+    request.get @path, params, (response) =>
+      # TODO?
+      @emit 'change'
+
   on: (action, [context]..., handler) ->
     @_actions.push {action, context, handler}
 
@@ -30,11 +35,6 @@ class Store
         handler = context[handler]
       handler.call context, payload
 
-  fetch: (params) ->
-    request.get @path, params, (response) =>
-      # TODO?
-      @emit 'change'
-
   set: (property, value) ->
     object = this
     segments = property.split '.'
@@ -47,20 +47,37 @@ class Store
 
     @emit 'change'
 
-  add: (item) ->
-    @_items.push item
+  add: (items...) ->
+    @_items.push items...
     @emit 'change'
+    items
 
-  remove: (item) ->
-    index = @_items.indexOf item
-    @_items.splice index, 1
+  remove: (items...) ->
+    for item in items
+      index = @_items.indexOf item
+      unless index is -1
+        @_items.splice index, 1
+    items
 
   filter: (params) ->
     if typeof params is 'function'
       @_items.filter arguments...
     else if typeof params is 'string'
-      @filter (item) -> item.id is params
+      item for item in @_items when item.id is params
     else
-      # TODO: Allow filtering by properties.
+      matches = []
+      for item in @_items
+        okay = true
+        for key, value of params
+          unless item[key] is value
+            okay = false
+            break
+        if okay
+          matches.push item
+      matches
 
+  find: ->
+    @filter(arguments...)[0]
+
+window.Store = Store
 module.exports = Store

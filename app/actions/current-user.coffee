@@ -2,7 +2,8 @@
 
 module.exports =
   check: ->
-    dispatch 'current-user:check',
+    setTimeout () ->
+      dispatch 'current-user:check'
 
   signIn: (login, password) ->
     dispatch 'current-user:sign-in'

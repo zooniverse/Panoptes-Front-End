@@ -10,11 +10,8 @@ module.exports = React.createClass
     user: null
 
   render: ->
-    isCool = @props.user?.preferences.cool ? false
     <div className="account-bar">
-      <a href="#/edit/account">{@props.user.real_name}</a>
-      <img src={@props.user.avatar} className="avatar" />
+      <a href="#/edit/account/contact">{@props.user.real_name}</a>
       <button type="button" onClick={currentUserActions.signOut}>Sign out</button>
-      <button onClick={currentUserActions.setPreference.bind null, 'cool', not isCool}>Toggle cool</button>
-      Currently {isCool.toString()}.
+      <img src={@props.user.avatar} className="avatar" />
     </div>
