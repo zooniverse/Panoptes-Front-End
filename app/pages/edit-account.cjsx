@@ -118,38 +118,32 @@ module.exports = React.createClass
 
           <fieldset>
             <legend>Optional profile details</legend>
-            <table>
+            <table className="for-text-fields">
               <tr>
-                <td><label>Your name</label></td>
+                <th>Your name</th>
                 <td>
-                  <input type="text" name="real_name" value={@props.user.real_name} placeholder="John Smith" onChange={@handleInputChange} />
-                  <p><small>We’ll use this to give acknowledgement in papers, on posters, etc.</small></p>
+                  <input type="text" name="real_name" value={@props.user.real_name} placeholder="John Smith" onChange={@handleInputChange} /><br />
+                  <small>We’ll use this to give acknowledgement in papers, on posters, etc.</small>
                 </td>
               </tr>
               <tr>
-                <td><label>Location</label></td>
+                <th>Location</th>
                 <td><input type="text" name="location" value={@props.user.location} placeholder="Chicago, IL" onChange={@handleInputChange} /></td>
               </tr>
               <tr>
-                <td><label>Public email address</label></td>
+                <th>Public email address</th>
                 <td><input type="text" name="public_email" value={@props.user.public_email} placeholder="me@example.com" onChange={@handleInputChange} /></td>
               </tr>
               <tr>
-                <td><label>Web site</label></td>
-                <td><input type="www" name="personal_url" value={@props.user.personal_url} placeholder="https://www.example.com/" onChange={@handleInputChange} /></td>
-              </tr>
-            </table>
-          </fieldset>
-
-          <fieldset>
-            <legend>Social media</legend>
-            <table>
-              <tr>
-                <td>Twitter</td>
-                <td><input type="text" name="twitter" value={@props.user.twitter} placeholder="Your Twitter handle" onChange={@handleInputChange} /></td>
+                <th>Web site</th>
+                <td><input type="url" name="personal_url" value={@props.user.personal_url} placeholder="https://www.example.com/" onChange={@handleInputChange} /></td>
               </tr>
               <tr>
-                <td>Pinterest</td>
+                <th>Twitter</th>
+                <td><input type="text" name="twitter" prefix="@" value={@props.user.twitter} placeholder="Your twitter name" onChange={@handleInputChange} /></td>
+              </tr>
+              <tr>
+                <th>Pinterest</th>
                 <td><input type="text" name="pinterest" value={@props.user.pinterest} placeholder="Your Pinterest user name" onChange={@handleInputChange} /></td>
               </tr>
             </table>

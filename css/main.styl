@@ -11,10 +11,7 @@
 html
   background: white
   color: #333
-  font: 400 14px Montserrat, sans-serif
-
-:unresolved
-  visibility: hidden
+  font: 400 16px Montserrat, sans-serif
 
 h1,
 h2
@@ -30,22 +27,20 @@ hr
   border-top-width: 1px
   margin: 3vh 0
 
-p.action
-  text-align: center
-
 table
-  border-collapse: separate
+  border-collapse: collapse
 
-  &.for-text-fields
-    border-spacing: 3vw 1vh
+tr:not(:first-child)
+  border-top: 1px solid rgba(gray, 0.1)
 
-  &.for-checkboxes
-    border-spacing: 1vw 1vh
-
-  &.standalone
-    margin: 0 auto;
+th
+  font-size: 0.8em
+  padding-right: 1em
+  text-align: left
+  vertical-align: baseline
 
 td
+  padding: 0.7em 1em 0.7em 0
   vertical-align: baseline
 
 fieldset
@@ -62,6 +57,12 @@ legend
   padding: 0 1em
   text-transform: uppercase
   letter-spacing: 0.05em
+
+input:not([type="radio"]):not([type="checkbox"])
+  min-width: 25em
+
+  &[name="twitter"]::before
+    content: "@"
 
 a
   color: orangered
@@ -97,7 +98,3 @@ a
 
   button
     @extends #_RESET_BUTTON
-
-:root.signed-in .not-signed-in,
-:root:not(.signed-in) .signed-in
-  display: none
