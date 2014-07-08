@@ -1,12 +1,10 @@
 Store = require './store'
 
 currentUser = new Store
-  path: '/me'
-
   current: null
 
   handlers:
-    'current-user:check': ->
+    'current-user:sign-in': ->
       @set 'current', @find 'DEV_USER'
 
     'current-user:sign-out': ->

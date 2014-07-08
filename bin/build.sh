@@ -26,4 +26,6 @@ cp -av ./public ./build
   --out ./build \
   ./css/main.styl
 
-./node_modules/.bin/csso ./build/main.css ./build/main.css
+./node_modules/.bin/csso \
+  ./build/main.css \
+  ./build/main.css

@@ -16,11 +16,6 @@ class Store
 
     dispatcher.register this
 
-  fetch: (params) ->
-    request.get @path, params, (response) =>
-      # TODO?
-      @emit 'change'
-
   on: (signal, [context]..., handler) ->
     @_signals.push {signal, context, handler}
 
