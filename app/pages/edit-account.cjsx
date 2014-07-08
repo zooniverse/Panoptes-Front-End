@@ -3,6 +3,7 @@
 React = require 'react'
 currentUserActions = require '../actions/current-user'
 ChildRouter = require 'react-child-router'
+InPlaceForm = require '../components/in-place-form'
 
 module.exports = React.createClass
   displayName: 'EditAccountPage'
@@ -29,7 +30,7 @@ module.exports = React.createClass
 
       <ChildRouter className="tabbed-content-content">
         <div hash="#/edit/account">
-          <form method="put" onSubmit={(e) -> e.preventDefault(); @props.user.save 'email', 'wants_betas', 'can_survey'}>
+          <InPlaceForm method="put" onSubmit={currentUserActions.save.bind currentUserActions, 'login', 'email', 'wants_betas', 'can_survey'}>
             <fieldset>
               <legend>Login name</legend>
               <p>This feature won’t be quite as discoverable as this.</p>
@@ -66,7 +67,7 @@ module.exports = React.createClass
 
               <button type="submit">Save account settings</button>
             </fieldset>
-          </form>
+          </InPlaceForm>
         </div>
 
         <div hash="#/edit/account/password">

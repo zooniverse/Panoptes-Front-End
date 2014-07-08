@@ -17,10 +17,10 @@ currentUser = new Store
     'current-user:set-preference': (key, value) ->
       @set "current.preferences.#{key}", value
 
-    'current-user:save-properties': (properties...) ->
+    'current-user:save': (properties...) ->
       dataToSave = {}
       for key in properties
-        dataToSave[key] = @[key]
+        dataToSave[key] = @current[key]
       console?.log 'PUT', JSON.stringify dataToSave
 
 currentUser.add
