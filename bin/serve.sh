@@ -8,6 +8,7 @@ jobs=""
   --extension ".coffee" \
   --extension ".cjsx" \
   --transform coffee-reactify \
+  --transform envify \
   --outfile ./public/main.js \
   ./app/main.coffee \
   & jobs="$jobs $!"

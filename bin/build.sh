@@ -9,6 +9,7 @@ cp -av ./public ./build
   --extension ".coffee" \
   --extension ".cjsx" \
   --transform coffee-reactify \
+  --transform envify \
   --outfile ./build/main.js \
   ./app/main.coffee
 
