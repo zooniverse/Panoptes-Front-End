@@ -3,7 +3,7 @@ request = require '../lib/request'
 
 currentUserActions =
   check: ->
-    request.get '/me', {token}, (error, {users}) ->
+    request.get '/me', (error, {users}) ->
       if users.length is 1
         dispatch 'current-user:sign-in', users[0]
 
