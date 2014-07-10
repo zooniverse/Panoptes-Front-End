@@ -1,12 +1,19 @@
+request = require '../lib/request'
 {dispatch} = require '../data/dispatcher'
 
-module.exports =
+currentUserActions =
   check: ->
-    setTimeout ->
-      dispatch 'current-user:sign-in'
+    request.get '/me', {token}, (error, {users}) ->
+      if users.length is 1
+        dispatch 'current-user:sign-in', users[0]
 
   signIn: (login, password) ->
-    dispatch 'current-user:sign-in'
+    request.post '/sessions', {login, password}, (error, {users, tokens, errors}) ->
+      if users.length is 1
+        request.headers.token = tokens[0]
+        dispatch 'current-user:sign-in:succeed', users[0]
+      else if errors?
+        dispatch 'current-user:sign-in:fail', errors...
 
   signOut: ->
     dispatch 'current-user:sign-out'
@@ -14,8 +21,7 @@ module.exports =
   set: (key, value) ->
     dispatch 'current-user:set', key, value
 
-  setPreference: (key, value) ->
-    dispatch 'current-user:set-preference', key, value
-
   save: (properties...) ->
     dispatch 'current-user:save', properties...
+
+module.exports = currentUserActions
