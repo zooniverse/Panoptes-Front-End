@@ -1,10 +1,15 @@
 Store = require './store'
 
 currentUser = new Store
+  loading: true
+  errors: null
   current: null
 
   handlers:
-    'current-user:sign-in': (user) ->
+    'current-user:sign-in:succeed': (user) ->
+      @set 'current', user
+
+    'current-user:sign-in:fail': (user) ->
       @set 'current', user
 
     'current-user:sign-out': ->

@@ -1,17 +1,16 @@
 # @cjsx React.DOM
 
 React = require 'react'
-TabbedContent = require '../components/tabbed-content'
+currentUserActions = require '../actions/current-user'
 ChildRouter = require 'react-child-router'
+SignInForm = require '../partials/sign-in-form'
 Translator = require 'react-translator'
-
-{Tab} = TabbedContent
+InPlaceForm = require '../components/in-place-form'
 
 Translator.setStrings
   signIn:
-    withFacebook: 'Sign in with Facebook'
-    withTwitter: 'Sign in with Twitter'
-    withGoogle: 'Sign in with Google'
+    withZooniverse: 'Sign in with your Zooniverse account'
+    whyHaveAccount: 'Signed-in volunteers lorem ipsum dolor sit amet blah blah blah.'
 
 module.exports = React.createClass
   displayName: 'SignInPage'
@@ -24,28 +23,15 @@ module.exports = React.createClass
 
   render: ->
     <ChildRouter className="sign-in-page normal-content">
+      <Translator tag="h1">signIn.withZooniverse</Translator>
+      <Translator tag="p">signIn.whyHaveAccount</Translator>
+
+      <nav>
+        <a href="#/sign-in">Sign in</a> | <a href="#/sign-in/register">Register</a>
+      </nav>
+
       <div hash="#/sign-in" className="has-columns">
-        <form className="primary-column">
-          <h1>Sign in to your Zooniverse account</h1>
-
-          <p>Signed-in volunteers lorem ipsum dolor sit amet blah blah blah.</p>
-
-          <p>
-            <label>
-              User name<br />
-              <input type="text" name="login" autoFocus="autoFocus" />
-            </label>
-          </p>
-
-          <p>
-            <label>
-              Password<br />
-              <input type="password" />
-            </label>
-          </p>
-
-          <p><button type="submit">Sign in</button></p>
-        </form>
+        <SignInForm className="primary-column" />
 
         <div className="oauth-providers">
           <p>Or sign in with another service</p>

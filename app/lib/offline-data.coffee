@@ -32,7 +32,7 @@ subject1 =
   location: '//placehold.it/256.png'
 
 module.exports =
-  '/tokens': tokens: ['THIS_IS_A_TOKEN']
+  '/sessions': tokens: ['THIS_IS_A_TOKEN'], users: [devUser]
   '/me': users: [devUser]
   '/users': users: [devUser]
   '/projects': projects: [galaxyZoo]

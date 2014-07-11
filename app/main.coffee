@@ -1,4 +1,7 @@
-React = require 'react'
+if process.env.NODE_ENV is 'offline'
+  console?.warn 'NODE_ENV is', process.env.NODE_ENV
+
+React = window.React = require 'react'
 currentUser = require './data/current-user'
 MainHeader = require './partials/main-header'
 ChildRouter = require 'react-child-router'
@@ -43,6 +46,6 @@ mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'
 document.body.appendChild mainContainer
 
-currentUserActions.check()
-
 React.renderComponent Main(null), mainContainer
+
+currentUserActions.check()

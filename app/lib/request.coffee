@@ -1,6 +1,10 @@
 if process.env.NODE_ENV is 'offline'
-  console?.warn 'NODE_ENV is', process.env.NODE_ENV
   offlineData = require './offline-data'
+
+  delay = (fn) ->
+    pause = 500
+    pause += Math.random() * 2000
+    setTimeout fn, pause
 
 request =
   headers: {}
@@ -9,7 +13,7 @@ request =
     new Promise (resolve, reject) ->
       if process.env.NODE_ENV is 'offline'
         console?.info 'Would GET', path, JSON.stringify params
-        setTimeout ->
+        delay ->
           response = offlineData[path]
           if response?
             resolve response
@@ -23,7 +27,7 @@ request =
     new Promise (resolve, reject) ->
       if process.env.NODE_ENV is 'offline'
         console?.info 'Would POST', path, JSON.stringify data
-        setTimeout ->
+        delay ->
           offlineData[path] = data
           resolve()
           callback?()
@@ -32,7 +36,7 @@ request =
     new Promise (resolve, reject) ->
       if process.env.NODE_ENV is 'offline'
         console?.info 'Would PATCH', path, JSON.stringify data
-        setTimeout ->
+        delay ->
           if offlineData[path]?
             for key, value of data
               offlineData[path][key] = value
@@ -46,7 +50,7 @@ request =
   delete: (path, callback) ->
     new Promise (resolve, reject) ->
       console?.info 'Would DELETE', path
-      setTimeout ->
+      delay ->
         if delete offlineData[path]
           resolve()
           callback?()
