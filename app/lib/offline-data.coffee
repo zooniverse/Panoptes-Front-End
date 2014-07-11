@@ -17,7 +17,16 @@ devUser =
 galaxyZoo =
   id: 'GALAXY_ZOO'
   name: 'Galaxy Zoo'
-  description: 'Classify galaxies to help improve out understanding of galaxy formation'
+  description: 'Classify images to improve our understanding of galaxy formation'
+  owners: ['DEV_USER']
+  workflows:
+    main:
+      subjects: ['SUBJECT_0', 'SUBJECT_1']
+
+planetHunters =
+  id: 'PLANET_HUNTERS'
+  name: 'Planet Hunters'
+  description: 'Help discover new exoplanets'
   owners: ['DEV_USER']
   workflows:
     main:
@@ -35,5 +44,5 @@ module.exports =
   '/sessions': tokens: ['THIS_IS_A_TOKEN'], users: [devUser]
   '/me': users: [devUser]
   '/users': users: [devUser]
-  '/projects': projects: [galaxyZoo]
+  '/projects': projects: [galaxyZoo, planetHunters]
   '/projects/GALAXY_ZOO': projects: [galaxyZoo]

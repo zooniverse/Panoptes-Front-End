@@ -5,20 +5,15 @@ ChildRouter = require 'react-child-router'
 module.exports = React.createClass
   displayName: 'ProjectPage'
 
-  getInitialState: ->
-    project: null
-
   componentDidMount: ->
     @loadProject @props.name
-
-  componentWillUnmount: ->
 
   loadProject: (name) ->
     request.get '/projects', {name}, (error, {projects}) =>
       @setState project: projects[0]
 
   render: ->
-    @transferPropsTo if @state.project?
+    @transferPropsTo if @state?.project?
       <ChildRouter className="project-page">
         <nav>
           <a href="#/projects/#{@state.project.name}">{@state.project.name}</a>
@@ -52,5 +47,6 @@ module.exports = React.createClass
           <p>Classification interface for this project</p>
         </div>
       </ChildRouter>
+
     else
-      <div>Loading {@props.params.name}</div>
+      <div>Loading {@props.params.name}...</div>

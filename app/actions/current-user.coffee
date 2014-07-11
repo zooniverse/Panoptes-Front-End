@@ -7,7 +7,6 @@ currentUserActions =
       if error?
         console?.error error
       else if users.length is 1
-        console?.info users[0]
         currentUserActions.succeed users[0]
 
   signIn: (login, password) ->
