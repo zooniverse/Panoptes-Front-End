@@ -11,6 +11,9 @@ Translator.setStrings
   signIn:
     withZooniverse: 'Sign in with your Zooniverse account'
     whyHaveAccount: 'Signed-in volunteers lorem ipsum dolor sit amet blah blah blah.'
+    withFacebook: 'Sign in with Facebook'
+    withTwitter: 'Sign in with Twitter'
+    withGoogle: 'Sign in with Google'
 
 module.exports = React.createClass
   displayName: 'SignInPage'

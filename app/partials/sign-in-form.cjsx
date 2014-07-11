@@ -7,14 +7,11 @@ currentUserActions = require '../actions/current-user'
 InPlaceForm = require '../components/in-place-form'
 
 Translator.setStrings
-  signIn:
+  signInForm:
     signIn: 'Sign in'
     signOut: 'Sign out'
     userName: 'User name'
     password: 'Password'
-    withFacebook: 'Sign in with Facebook'
-    withTwitter: 'Sign in with Twitter'
-    withGoogle: 'Sign in with Google'
     errors:
       badCredentials: 'Wrong username or password'
       serverError: 'Something went wrong! Try again later.'
@@ -59,7 +56,7 @@ module.exports = React.createClass
     <InPlaceForm onSubmit={@handleSubmit}>
       <p>
         <label>
-          <Translator>signIn.userName</Translator><br />
+          <Translator>signInForm.userName</Translator><br />
           <input type="text" name="login" disabled={@state.user?} onChange={@handleInputChange} autoFocus="autoFocus" ref="login" />
           {if @state.errors?.login
             <span className="error">@state.errors.login</span>
@@ -69,7 +66,7 @@ module.exports = React.createClass
 
       <p>
         <label>
-          <Translator>signIn.password</Translator><br />
+          <Translator>signInForm.password</Translator><br />
           <input type="password" disabled={@state.user?} onChange={@handleInputChange} ref="password" />
           {if @state.errors?.password
             <span className="error">@state.errors.password</span>
@@ -79,11 +76,11 @@ module.exports = React.createClass
 
       <p>
         <button type="submit" disabled={@state.user? or not @state.hasLoginAndPassword}>
-          <Translator>signIn.signIn</Translator>
+          <Translator>signInForm.signIn</Translator>
         </button>
 
         <button type="button" disabled={not @state.user?} onClick={@handleSignOut}>
-          <Translator>signIn.signOut</Translator>
+          <Translator>signInForm.signOut</Translator>
         </button>
 
         {if @state.loading
