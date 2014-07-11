@@ -11,9 +11,12 @@ currentUserActions = require './actions/current-user'
 Home = require './pages/home'
 SignIn = require './pages/sign-in'
 Projects = require './pages/projects'
+Project = require './pages/project'
 EditAccount = require './pages/edit-account'
 
 Main = React.createClass
+  displayName: 'Main'
+
   getInitialState: ->
     user: currentUser.current
 
@@ -33,6 +36,7 @@ Main = React.createClass
         Home hash: '#'
         SignIn hash: '#/sign-in/*'
         Projects hash: '#/projects'
+        Project hash: '#/projects/:name/*'
         React.DOM.div hash: '#/edit/account/*',
           if @state.user?
             EditAccount user: @state.user
