@@ -1,14 +1,18 @@
-.has-columns
+.columns-container
   display: flex
 
-  > :not(:first-child)
-      margin-left: 3vw
+  > :not(:last-child)
+      margin-right: 2.5vw
+
+  > :not(hr)
+    flex: 0 1 auto
+
+  > .column
+    flex: 1 1 auto
+    width: 100% // It'll flex with its siblings, so it won't actually be 100% wide.
 
   > hr
-    border-left-width: 1px
+    border-width: 0 0 0 1px
+    height: auto
     margin-bottom: 0
     margin-top: 0
-
-  > .primary-column
-  &.fixed > :not(hr)
-    flex: 1

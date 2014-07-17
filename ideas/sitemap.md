@@ -14,13 +14,17 @@
 
 Main navigation: "Home" (logo), "Projects", "Discussion", "About"
 
-Requests `/me`, or whatever the route is to check current login. If no user is signed in, show "Sign in" and "Register" buttons to open the sign-in dialog.
+Requests `/me`, or whatever the route is to check current login.
 
-Unread messages count. Includes private messages and replied in threads you're watching. Polls/subscribes to `/messages?involved={current_user.login}&state=unread`. Links to **/messages**.
+* If no user is signed in, show "Sign in" and "Register" buttons to open the sign-in dialog.
 
-Current user info (login, avatar). Links to **/settings**
+* Unread messages count. Includes private messages and replied in threads you're watching. Polls/subscribes to `/messages?involved={current_user.login}&state=unread`. Links to **/messages**.
 
-"Classify with {group.name}" Menu to show and change association to a group when classifying.
+  Current user info (login, avatar). Links to **/settings**
+
+  "Classify with {group.name}" Menu to show and change association to a group when classifying.
+
+  > Checking for a logged-in user probably happens at a higher level; this'd be the first place it's used.
 
 ### Sign-in dialog
 
