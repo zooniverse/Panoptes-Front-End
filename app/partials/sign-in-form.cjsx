@@ -31,9 +31,6 @@ module.exports = React.createClass
     errors: null
     user: null
 
-  onCurrentUserChange: ->
-    @setState user: currentUser.current
-
   handleInputChange: ->
     login = !!@refs.login.getDOMNode().value
     password = !!@refs.password.getDOMNode().value
@@ -42,15 +39,17 @@ module.exports = React.createClass
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
     password = @refs.password.getDOMNode().value
-    signin = currentUserActions.signIn login, password
-
+    currentUserActions.signIn login, password
     @setState loading: true
-    signin.then =>
-      @setState loading: false
 
   handleSignOut: ->
     @refs.password.getDOMNode().value = ''
     currentUserActions.signOut()
+
+  onCurrentUserChange: ->
+    @setState
+      user: currentUser.current
+      loading: false
 
   render: ->
     <InPlaceForm onSubmit={@handleSubmit}>
@@ -75,7 +74,7 @@ module.exports = React.createClass
       </p>
 
       <p>
-        <button type="submit" disabled={@state.user? or not @state.hasLoginAndPassword}>
+        <button type="submit" disabled={@state.loading or @state.user? or not @state.hasLoginAndPassword}>
           <Translator>signInForm.signIn</Translator>
         </button>
 

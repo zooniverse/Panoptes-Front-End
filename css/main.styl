@@ -1,14 +1,19 @@
 @require "./common"
+
 @require "./layout"
 @require "./content-container"
 @require "./columns"
+
 @require "./main-header"
 @require "./main-footer"
+
 @require "./dialog"
 @require "./tabbed-content"
 @require "./list-of-cards"
-@require "./project-card"
 @require "./project"
+
+@require "./project-card"
+@require "./pill"
 
 html
   background: white
@@ -68,35 +73,3 @@ input:not([type="radio"]):not([type="checkbox"])
 
 a
   color: orangered
-
-.jump-link
-  color: white
-  background: rgba(black, 0.8)
-  left: 0
-  padding: 0.2em 1.4em
-  position: fixed
-  text-decoration: none
-  top: 10px
-  transform: translateX(-100%)
-  transition: transform 0.1s
-  z-index: 1
-
-  &:focus
-    transform: translateX(0)
-
-.badge
-  background: orangered
-  border-radius: 2em
-  box-sizing: border-box
-  color: white
-  display: inline-block
-  font-size: 0.8em
-  height: 1.3em
-  margin-left: 0.5em
-  min-width: 1.3em
-  padding: 0 0.5em
-  line-height: 1.3
-  text-align: center
-
-  button
-    @extends #_RESET_BUTTON
