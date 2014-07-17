@@ -2,6 +2,20 @@
 
 jobs=""
 
+# TODO: Bundle external libs separately.
+# ./node_modules/.bin/browserify \
+#   --verbose \
+#   --debug \
+#   --require react \
+#   --transform envify \
+#   --outfile ./public/vendor.js \
+#   &
+
+# TODO: Prevent React from being bundled. Currently broken (#828).
+# --external react
+# --no-bundle-external
+# Then include "vendor.js" in index.html
+
 ./node_modules/.bin/watchify \
   --verbose \
   --debug \
