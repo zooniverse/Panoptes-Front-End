@@ -9,6 +9,6 @@ Translator.setStrings
 
 module.exports = React.createClass
   render: ->
-    <div className="login-bar">
-      <a href="#/sign-in"><Translator>loginBar.signIn</Translator></a>
+    <div className="login-bar main-header-group">
+      <a href="#/sign-in" className="main-header-item"><Translator>loginBar.signIn</Translator></a>
     </div>

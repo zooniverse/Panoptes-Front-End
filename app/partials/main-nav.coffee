@@ -12,9 +12,9 @@ module.exports = React.createClass
   displayName: 'MainNav'
 
   render: ->
-    nav className: 'main-nav',
-      a href: '#/', className: 'main-item logo',
+    nav className: 'main-nav main-header-group',
+      a href: '#/', className: 'main-header-item logo',
         span className: 'zooniverse-logo', 'Ø'
         Translator null, 'nav.home'
-      a href: '#/projects', className: 'main-item', Translator null, 'nav.projects'
-      a href: '#/edit/account/contact', className: 'main-item', 'Edit account'
+      a href: '#/projects', className: 'main-header-item', Translator null, 'nav.projects'
+      a href: '#/edit/account/contact', className: 'main-header-item', 'Edit account'
