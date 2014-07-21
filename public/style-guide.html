@@ -7,12 +7,29 @@
     <link rel="stylesheet" href="./main.css" />
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700" />
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Playfair+Display:400italic,700italic" />
+    <style>
+      [class]:hover {
+        position: relative;
+        outline: 1px solid rgba(0, 0, 0, 0.25);
+      }
+
+      [class]:hover::after {
+        background: rgba(0, 0, 0, 0.25);
+        top: 0;
+        color: white;
+        content: attr(class);
+        font-size: 9px;
+        left: 0;
+        position: absolute;
+        z-index: 1;
+      }
+    </style>
   </head>
 
   <body>
     <div class="content-container">
       <h2>.content-container</h2>
-      <p>Just provides some padding</p>
+      <p>This just provides some normal padding around content.</p>
     </div>
 
     <hr />
@@ -21,7 +38,7 @@
       <h2>.columns-container</h2>
       <div class="columns-container">
         <div class="column">
-          <p>Splits things into columns.</p>
+          <p>Splits things into columns. Each column has a <code>column</code> class.</p>
         </div>
         <hr />
         <div class="column">
@@ -35,25 +52,27 @@
     <div class="content-container">
       <h2>.tabbed-content</h2>
 
-      <div class="columns-container">
-        <div class="tabbed-content" data-side="top">
-          <div class="tabbed-content-tabs">
-            <div class="tabbed-content-tab">This is a tab</div>
-            <div class="tabbed-content-tab selected-tab">This is another tab</div>
-          </div>
-          <div class="content-container">
-            <p>This is tabbed content with <code>data-side="top"</code>.</p>
-          </div>
-        </div>
+      <p>With tabs across the top:</p>
 
-        <div class="tabbed-content" data-side="left">
-          <div class="tabbed-content-tabs">
-            <div class="tabbed-content-tab">This is a tab</div>
-            <div class="tabbed-content-tab selected-tab">This is another tab</div>
-          </div>
-          <div class="content-container">
-            <p>This is tabbed content with <code>data-side="left"</code>.</p>
-          </div>
+      <div class="tabbed-content" data-side="top">
+        <div class="tabbed-content-tabs">
+          <div class="tabbed-content-tab">This is a tab</div>
+          <div class="tabbed-content-tab selected">This is a <code>.selected</code> tab</div>
+        </div>
+        <div class="content-container">
+          <p>This is tabbed content with <code>data-side="top"</code>.</p>
+        </div>
+      </div>
+
+      <p>With tabs down the side:</p>
+
+      <div class="tabbed-content" data-side="left">
+        <div class="tabbed-content-tabs">
+          <div class="tabbed-content-tab">This is a tab</div>
+          <div class="tabbed-content-tab selected">This is a <code>.selected</code> tab</div>
+        </div>
+        <div class="content-container">
+          <p>This is tabbed content with <code>data-side="left"</code>.</p>
         </div>
       </div>
     </div>
