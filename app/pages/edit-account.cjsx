@@ -29,7 +29,7 @@ module.exports = React.createClass
     @setState newState
 
   render: ->
-    <div className="edit-account-page tabbed-content" data-side="left" style={padding: '1vh 1vw'}>
+    <div className="edit-account-page content-container tabbed-content" data-side="left">
       <div className="tabbed-content-tabs">
         <a href="#/edit/account" className="tabbed-content-tab">General</a>
         <a href="#/edit/account/password" className="tabbed-content-tab">Password</a>
@@ -42,7 +42,7 @@ module.exports = React.createClass
         <a href="#/edit/account/advanced" className="tabbed-content-tab">Advanced</a>
       </div>
 
-      <ChildRouter className="tabbed-content-content">
+      <ChildRouter className="content-container">
         <div hash="#/edit/account">
           <InPlaceForm method="put" onSubmit={currentUserActions.save.bind currentUserActions, 'login', 'email', 'wants_betas', 'can_survey'}>
             <fieldset>

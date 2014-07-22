@@ -12,6 +12,6 @@ module.exports = React.createClass
   displayName: 'HomePage'
 
   render: ->
-    div className: 'home-page',
+    div className: 'home-page content-container',
       Translator tag: 'h1', 'home.title'
       Translator tag: 'p', 'home.intro'

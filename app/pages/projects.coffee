@@ -6,6 +6,6 @@ module.exports = React.createClass
   displayName: 'ProjectsPage'
 
   render: ->
-    div className: 'projects-page',
+    div className: 'projects-page content-container',
       h1 null, 'Projects'
       p null, 'This is the projects page.'
