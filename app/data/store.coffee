@@ -11,21 +11,46 @@ class Store
     for property, value of options
       @[property] = value
 
+    @handlers ?= {}
+
     @_items ?= []
     @_signals ?= []
 
     dispatcher.register this
 
+    store = this
+    @mixInto = (stateProperties) ->
+      if typeof stateProperties is 'string'
+        stateProp = stateProperties
+        stateProperties = {}
+        stateProperties._items = stateProp
+
+      updateState = ->
+        newState = {}
+        for storeProp, stateProp of stateProperties
+          newState[stateProp] = store[storeProp]
+
+        @setState newState
+
+      componentDidMount: ->
+        store.on 'change', this, updateState
+
+      componentWillUnmount: ->
+        store.off 'change', this, updateState
+
   on: (signal, [context]..., handler) ->
+    console.log 'On-ing', arguments
     @_signals.push {signal, context, handler}
 
   off: (signal, [context]..., handler) ->
     for {a, c, h}, i in @_signals when a is signal and c is context and h is handler
       index = i
+    console.log 'Off-ing', arguments
     @_signals.splice index, 1
 
   emit: (signal, payload) ->
     for {signal: a, context, handler} in @_signals when a is signal
+      console.log 'Handling', handler
       if typeof handler is 'string'
         handler = context[handler]
       handler.call context, payload

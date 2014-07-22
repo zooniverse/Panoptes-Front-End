@@ -42,7 +42,7 @@ subject1 =
 
 module.exports =
   '/sessions': tokens: ['THIS_IS_A_TOKEN'], users: [devUser]
-  '/me': users: [devUser]
+  '/me': users: [null]
   '/users': users: [devUser]
   '/projects': projects: [galaxyZoo, planetHunters]
   '/projects/GALAXY_ZOO': projects: [galaxyZoo]

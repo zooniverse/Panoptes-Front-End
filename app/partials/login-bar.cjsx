@@ -1,6 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
+appState = require '../data/app-state'
 Translator = require 'react-translator'
 
 Translator.setStrings
@@ -10,5 +11,7 @@ Translator.setStrings
 module.exports = React.createClass
   render: ->
     <div className="login-bar main-header-group">
-      <a href="#/sign-in" className="main-header-item"><Translator>loginBar.signIn</Translator></a>
+      <button className="main-header-item" onClick={appState.set.bind appState, 'showLoginDialog', true}>
+        <Translator>loginBar.signIn</Translator>
+      </button>
     </div>

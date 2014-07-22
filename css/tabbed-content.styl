@@ -1,3 +1,5 @@
+@require "./common"
+
 .tabbed-content
   display: flex
 
@@ -41,6 +43,7 @@
     padding: 1.5em 0
 
 .tabbed-content-tab
+  @extends $reset-button
   color: inherit
   cursor: pointer
   flex-shrink: 0

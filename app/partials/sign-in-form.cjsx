@@ -47,12 +47,13 @@ module.exports = React.createClass
     currentUserActions.signOut()
 
   onCurrentUserChange: ->
+    console.log 'Sign-in form handling currentUser change'
     @setState
       user: currentUser.current
       loading: false
 
   render: ->
-    <InPlaceForm onSubmit={@handleSubmit}>
+    @transferPropsTo <InPlaceForm onSubmit={@handleSubmit}>
       <p>
         <label>
           <Translator>signInForm.userName</Translator><br />

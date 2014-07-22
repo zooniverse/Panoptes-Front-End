@@ -1,4 +1,4 @@
-React = window.React = require 'react'
+React = require 'react'
 
 {div, a} = React.DOM
 
@@ -14,7 +14,7 @@ Tab = React.createClass
       type = a
 
     @transferPropsTo type
-      className: "tabbed-content-tab #{if @props.selected then 'selected-tab' else ''}"
+      className: "tabbed-content-tab #{if @props.selected then 'selected' else ''}"
       @props.children
 
 TabbedContent = React.createClass
@@ -34,27 +34,29 @@ TabbedContent = React.createClass
     tabChildren = React.Children.map @props.children, (child) =>
       if child.type.ConvenienceConstructor is Tab
         tabIndex += 1
-        child.props.onClick = @setIndex.bind this, tabIndex
-        child.props.selected = tabIndex is @state.selectedIndex
-        child
+        # The original tab children don't re-render when we change their props manually.
+        # TODO: This is completely awful. Figure out a better way.
+        Tab
+          onClick: @setIndex.bind this, tabIndex
+          selected: tabIndex is @state.selectedIndex
+          child.props.children
 
     contentsCount = 0
-    React.Children.map @props.children, (child) =>
+    React.Children.map @props.children, (child) ->
       unless child.type.ConvenienceConstructor is Tab
         contentsCount += 1
 
     selectedContentIndex = @state.selectedIndex %% contentsCount
 
     contentIndex = -1
-    activeContent = React.Children.map @props.children, (child) =>
+    activeContent = React.Children.map @props.children, (child) ->
       unless child.type.ConvenienceConstructor is Tab
         contentIndex += 1
         if contentIndex is selectedContentIndex
           child
 
     @transferPropsTo div className: 'tabbed-content', 'data-side': @props.side,
-      div className: 'tabbed-content-tabs',
-      tabChildren
+      div className: 'tabbed-content-tabs', tabChildren
       activeContent
 
 TabbedContent.Tab = Tab
