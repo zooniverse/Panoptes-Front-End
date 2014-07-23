@@ -1,10 +1,15 @@
 Store = require './store'
 
 appState = new Store
-  showLoginDialog: false
+  showingLoginDialog: false
+
+  notifications: []
 
   handlers:
-    'current-user:sign-in:succeed': ->
-      @set 'showLoginDialog', false
+    'login-dialog:show': ->
+      @set 'showingLoginDialog', true
+
+    'login-dialog:hide': ->
+      @set 'showingLoginDialog', false
 
 module.exports = appState

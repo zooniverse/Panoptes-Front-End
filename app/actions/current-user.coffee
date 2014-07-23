@@ -1,4 +1,5 @@
 request = require '../lib/request'
+appActions = require './app'
 {dispatch} = require '../data/dispatcher'
 
 currentUserActions =
@@ -19,6 +20,7 @@ currentUserActions =
 
   succeed: (user) ->
     dispatch 'current-user:sign-in:succeed', user
+    appActions.hideLoginDialog()
 
   fail: (errors) ->
     dispatch 'current-user:sign-in:fail', errors

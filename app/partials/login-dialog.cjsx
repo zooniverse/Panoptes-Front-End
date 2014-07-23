@@ -1,16 +1,26 @@
-# cjsx React.DOM
+# @cjsx React.DOM
 
 React = require 'react'
+Store = require '../data/store'
+{dispatch} = require '../data/dispatcher'
 Dialog = require '../components/dialog'
 SignInForm = require './sign-in-form'
-appState = require '../data/app-state'
+appActions = require '../actions/app'
+
+loginDialogStore = new Store
+  tab: 1
+
+  handlers:
+    'login-dialog:switch-tab': (index) ->
+      @set 'tab', index
 
 LoginDialog = React.createClass
-  getInitialState: ->
-    tab: 0
+  displayName: 'LoginDialog'
+
+  mixins: [loginDialogStore.mixInto {'tab'}]
 
   switchTab: (index) ->
-    @setState tab: index
+    dispatch 'login-dialog:switch-tab', index
 
   render: ->
     <Dialog className="columns-container" style={height: '70%'}>
@@ -21,7 +31,7 @@ LoginDialog = React.createClass
         </div>
 
         {if @state.tab is 0
-          <SignInForm className="content-container" />
+          <SignInForm user={@props.user} className="content-container" />
         else if @state.tab is 1
           <div className="content-container">
             <p>TODO: REGISTER</p>
@@ -34,8 +44,8 @@ LoginDialog = React.createClass
         <p>TODO: SOCIAL LOGIN</p>
       </div>
 
-      <div className="dialog-action">
-        <button onClick={appState.set.bind appState, 'showLoginDialog', false}>Close</button>
+      <div className="dialog-actions">
+        <button onClick={appActions.hideLoginDialog}>&times;</button>
       </div>
     </Dialog>
 

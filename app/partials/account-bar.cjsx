@@ -6,9 +6,6 @@ currentUserActions = require '../actions/current-user'
 module.exports = React.createClass
   displayName: 'AccountBar'
 
-  getDefaultProps: ->
-    user: null
-
   render: ->
     <div className="account-bar main-header-group">
       <div className="main-header-item">

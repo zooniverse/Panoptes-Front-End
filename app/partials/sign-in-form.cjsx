@@ -19,17 +19,10 @@ Translator.setStrings
 module.exports = React.createClass
   displayName: 'SignInForm'
 
-  componentDidMount: ->
-    currentUser.on 'change', this, 'onCurrentUserChange'
-
-  componentWillUnmount: ->
-    currentUser.off 'change', this, 'onCurrentUserChange'
-
   getInitialState: ->
     hasLoginAndPassword: false
     loading: false
     errors: null
-    user: null
 
   handleInputChange: ->
     login = !!@refs.login.getDOMNode().value
@@ -47,9 +40,7 @@ module.exports = React.createClass
     currentUserActions.signOut()
 
   onCurrentUserChange: ->
-    console.log 'Sign-in form handling currentUser change'
     @setState
-      user: currentUser.current
       loading: false
 
   render: ->
@@ -57,7 +48,7 @@ module.exports = React.createClass
       <p>
         <label>
           <Translator>signInForm.userName</Translator><br />
-          <input type="text" name="login" disabled={@state.user?} onChange={@handleInputChange} autoFocus="autoFocus" ref="login" />
+          <input type="text" name="login" disabled={@props.user?} onChange={@handleInputChange} autoFocus="autoFocus" ref="login" />
           {if @state.errors?.login
             <span className="error">@state.errors.login</span>
           }
@@ -67,7 +58,7 @@ module.exports = React.createClass
       <p>
         <label>
           <Translator>signInForm.password</Translator><br />
-          <input type="password" disabled={@state.user?} onChange={@handleInputChange} ref="password" />
+          <input type="password" disabled={@props.user?} onChange={@handleInputChange} ref="password" />
           {if @state.errors?.password
             <span className="error">@state.errors.password</span>
           }
@@ -75,11 +66,11 @@ module.exports = React.createClass
       </p>
 
       <p>
-        <button type="submit" disabled={@state.loading or @state.user? or not @state.hasLoginAndPassword}>
+        <button type="submit" disabled={@state.loading or @props.user? or not @state.hasLoginAndPassword}>
           <Translator>signInForm.signIn</Translator>
         </button>
 
-        <button type="button" disabled={not @state.user?} onClick={@handleSignOut}>
+        <button type="button" disabled={not @props.user?} onClick={@handleSignOut}>
           <Translator>signInForm.signOut</Translator>
         </button>
 

@@ -18,20 +18,10 @@ EditAccount = require './pages/edit-account'
 
 Main = React.createClass
   displayName: 'Main'
-  mixins: [appState.mixInto {'showLoginDialog'}]
-
-  getInitialState: ->
-    user: currentUser.current
-    showLoginDialog: appState.showLoginDialog
-
-  componentDidMount: ->
-    currentUser.on 'change', this, 'handleUserChange'
-
-  componentWillUnmount: ->
-    currentUser.off 'change', this, 'handleUserChange'
-
-  handleUserChange: ->
-    @setState user: currentUser.current
+  mixins: [
+    appState.mixInto {'showingLoginDialog'}
+    currentUser.mixInto current: 'user'
+  ]
 
   render: ->
     React.DOM.div className: 'panoptes-main',
@@ -51,10 +41,8 @@ Main = React.createClass
 
       MainFooter null
 
-      if @state.showLoginDialog
-        LoginDialog null
-      else
-        React.DOM.noscript null
+      if @state.showingLoginDialog
+        LoginDialog user: @state.user
 
 mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'
