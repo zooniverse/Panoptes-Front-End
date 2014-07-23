@@ -1,6 +1,8 @@
 # @cjsx React.DOM
 
 React = require 'react'
+ChildRouter = require 'react-child-router'
+{Link} = ChildRouter
 
 getUser = (login, callback) ->
   setTimeout ->
@@ -48,8 +50,8 @@ module.exports = React.createClass
   displayName: 'UserPage'
 
   componentWillMount: ->
-    console.log 'MOUNTING WITH', @state.params.login
-    getUser @state.params.login, (error, user) =>
+    console.log 'MOUNTING WITH', @props.params.login
+    getUser @props.params.login, (error, user) =>
       @setState {user}
 
   render: ->
@@ -59,14 +61,20 @@ module.exports = React.createClass
 
         <div className="tabbed-content" data-side="top">
           <div className="tabbed-content-tabs">
-            <a href="#" className="tabbed-content-tab selected">Bio</a>
-            <a href="#" className="tabbed-content-tab">Recents</a>
-            <a href="#" className="tabbed-content-tab">Collections</a>
-            <a href="#" className="tabbed-content-tab">Talk</a>
+            <Link href="#/users/#{@state.user.display_name}" className="tabbed-content-tab">Bio</Link>
+            <Link href="#/users/#{@state.user.display_name}/activity" className="tabbed-content-tab">Activity</Link>
+            <Link href="#/users/#{@state.user.display_name}/collections" className="tabbed-content-tab">Collections</Link>
+            <Link href="#/users/#{@state.user.display_name}/projects" className="tabbed-content-tab">Projects</Link>
+            <Link href="#/users/#{@state.user.display_name}/talk" className="tabbed-content-tab">Talk</Link>
           </div>
-          <div className="content-container">
-            <p>TODO: Put some content here.</p>
-          </div>
+
+          <ChildRouter className="content-container">
+            <div hash="#/users/#{@state.user.display_name}">User's bio</div>
+            <div hash="#/users/#{@state.user.display_name}/activity">Timeline of this user's recent activity</div>
+            <div hash="#/users/#{@state.user.display_name}/collections">Collections this user has created</div>
+            <div hash="#/users/#{@state.user.display_name}/projects">Projects this user has created or has a special role in</div>
+            <div hash="#/users/#{@state.user.display_name}/talk">Your private messages with this user</div>
+          </ChildRouter>
         </div>
       </div>
 

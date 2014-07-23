@@ -39,7 +39,7 @@ Main = React.createClass
           else
             React.DOM.p className: 'content-container',
               React.DOM.a href: '#/sign-in', 'Looks like you need to sign in.'
-        UserProfile hash: '#/users/:login'
+        UserProfile hash: '#/users/:login/*'
 
       MainFooter null
 

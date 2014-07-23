@@ -37,6 +37,9 @@
   .tabbed-content[data-side="bottom"] &
     flex-direction: row
 
+    .tabbed-content-tab
+      flex: 1
+
   .tabbed-content[data-side="left"] &,
   .tabbed-content[data-side="right"] &
     flex-direction: column
@@ -48,8 +51,10 @@
   cursor: pointer
   flex-shrink: 0
   padding: 0.4em 1em
+  text-align: center
   text-decoration: none
 
   &.selected
+  &[data-active]
     background: orangered
     color: white
