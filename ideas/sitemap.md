@@ -1,10 +1,10 @@
 # Zooniverse sitemap
 
-> This is going to be a fairly detailed outline of what appears on which page of the site. I may have taken some liberties with how I expect some features to work. Open issues if you disagree, or just push your changes and see if anybody complains.
+This is going to be a fairly detailed outline of what appears on which page of the site. I may have taken some liberties with how I expect some features to work. Open issues if you disagree, or just push your changes and see if anybody complains.
 
-> API requests' URLs are in `code` style. Client-facing, in-browser URLS are **bold**. Comments are in block quotes.
+API requests' URLs are in `code` style. Client-facing, in-browser URLS are **bold**. Comments are in block quotes.
 
-> API URLs are currently idealized. Whatever works.
+API URLs are currently idealized. Whatever works.
 
 ***
 
@@ -24,7 +24,7 @@ Requests `/me`, or whatever the route is to check current login.
 
   "Classify with {group.name}" Menu to show and change association to a group when classifying.
 
-  > Checking for a logged-in user probably happens at a higher level; this'd be the first place it's used.
+  > Checking for a logged-in user probably happens at a higher level; this'd just be the first place it's used.
 
 ### Sign-in dialog
 
@@ -88,7 +88,7 @@ List non-project-specific talk boards. Requests `/talk_boards`.
 
 ### /messages
 
-A list of private conversations with other users, sorted newest-first. Requests `/messages?involved={current_user.login}&sort=newest`. Conversations with unread messages are highlighted somehow. Each is linked to `/users/:username/talk#{message_id}`, where private conversations take place.
+A list of private conversations with other users, sorted newest-first. Requests `/messages?involved={current_user.login}&sort=newest`. Conversations with unread messages are highlighted somehow. Each is linked to `/users/:login/talk#{message_id}`, where private conversations take place.
 
 ***
 
@@ -212,13 +212,23 @@ List of recent/featured discussions on the project and its subjects
 
     For linking directly to a post.
 
-## Subject info page
+## Subject page
 
 ### /projects/:owner_name/:project_name/subjects/:subject_id
 
-Display the subject image(s) and list any available metadata (world/sky map?), users' short-ish comments on it, any other posts that reference it, and any user collections it appears in. Requests `/subjects/subject_id`.
+Display the subject image(s) and list any available metadata (with a world/sky map if there are coordinates), users' short-ish comments on it, any other posts that reference it, and any user collections it appears in. Requests `/subjects/subject_id`.
 
-Maybe include a "Reference in discussions as 50B4D455" note?
+Subjects are scoped to projects, so though a subject might exist twice in the system, the comments shown will be specific to the project. If there are other projects using the same subject, we should link to those here too.
+
+## Collection page
+
+### /collections/:user_login/:collection_name
+
+View a set of subjects gallery-style, each linking to the collection-framed subject info page.
+
+### /collections/:user_login/:collection_name/:subject_id
+
+View a subject info in the context of a collection. This is probably exactly the same as the subject info page, but framed within a list with next/previous navigation. Think Flickr.
 
 ## Project building
 
