@@ -33,7 +33,8 @@ Main = React.createClass
         Home hash: '#'
         SignIn hash: '#/sign-in/*'
         Projects hash: '#/projects'
-        Project hash: '#/projects/:name/*'
+        Projects hash: '#/projects/:categories'
+        Project hash: '#/projects/:owner/:name/*'
         React.DOM.div hash: '#/edit/account/*',
           if @state.user?
             EditAccount user: @state.user

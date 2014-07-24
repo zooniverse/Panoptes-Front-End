@@ -1,19 +1,23 @@
-.project-card
-  color: #333
+.project-card-list
   display: flex
-  font-size: 12px
-  margin: 0 2vw 4vh 0
-  // outline: 1px dashed gray
+  flex-wrap: wrap
+
+.project-card
+  box-sizing: border-box
+  color: #333
+  display: inline-flex
+  flex: 0 1 33%
+  font-size: 0.7rem
+  padding: 0 2.5vw 2em 0
   text-decoration: none
 
-  figure
-    margin: 0 0.5em 0 0
+  .media
+    margin-right: 1vw
     text-align: center
 
   .avatar
     border-radius: 0.3em
     display: block
-    flex: 1 0 auto
     height: 6.7vw
     min-height: 5em
     min-width: 5em
@@ -21,11 +25,10 @@
 
   .details
     flex: 1
-    flex-direction: column
 
   .owner
     letter-spacing: 0.05em
     text-transform: uppercase
 
   .title
-    font: italic 700 1.5em 'Playfair Display', serif
+    font: italic 700 1.5em SERIF
