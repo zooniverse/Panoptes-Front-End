@@ -13,6 +13,7 @@ devUser =
   twitter: 'zoonidev'
   pinterest: 'devdevdev'
   preferences: {}
+  unseen_events: 4
 
 galaxyZoo =
   id: 'GALAXY_ZOO'
@@ -42,7 +43,7 @@ subject1 =
 
 module.exports =
   '/sessions': tokens: ['THIS_IS_A_TOKEN'], users: [devUser]
-  '/me': users: [null]
+  '/me': users: [devUser]
   '/users': users: [devUser]
   '/projects': projects: [galaxyZoo, planetHunters]
   '/projects/GALAXY_ZOO': projects: [galaxyZoo]

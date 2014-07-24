@@ -7,6 +7,7 @@ Translator.setStrings
   nav:
     home: 'Zooniverse'
     projects: 'Projects'
+    about: 'About'
 
 module.exports = React.createClass
   displayName: 'MainNav'
@@ -17,4 +18,4 @@ module.exports = React.createClass
         span className: 'zooniverse-logo', 'Ø'
         Translator null, 'nav.home'
       a href: '#/projects', className: 'main-header-item', Translator null, 'nav.projects'
-      a href: '#/edit/account', className: 'main-header-item', 'Edit account'
+      a href: '#/about', className: 'main-header-item', Translator null, 'nav.about'
