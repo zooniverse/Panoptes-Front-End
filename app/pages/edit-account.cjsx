@@ -3,6 +3,7 @@
 React = require 'react'
 currentUserActions = require '../actions/current-user'
 ChildRouter = require 'react-child-router'
+{Link} = ChildRouter
 InPlaceForm = require '../components/in-place-form'
 
 module.exports = React.createClass
@@ -31,15 +32,15 @@ module.exports = React.createClass
   render: ->
     <div className="edit-account-page content-container tabbed-content" data-side="left">
       <div className="tabbed-content-tabs">
-        <a href="#/edit/account" className="tabbed-content-tab">General</a>
-        <a href="#/edit/account/password" className="tabbed-content-tab">Password</a>
-        <a href="#/edit/account/profile" className="tabbed-content-tab">Profile</a>
-        <a href="#/edit/account/roles" className="tabbed-content-tab">Roles</a>
-        <a href="#/edit/account/notifications" className="tabbed-content-tab">Notifications</a>
-        <a href="#/edit/account/groups" className="tabbed-content-tab">Groups</a>
-        <a href="#/edit/account/projects" className="tabbed-content-tab">Projects</a>
-        <a href="#/edit/account/subjects" className="tabbed-content-tab">Subjects</a>
-        <a href="#/edit/account/advanced" className="tabbed-content-tab">Advanced</a>
+        <Link href="#/edit/account" className="tabbed-content-tab">General</Link>
+        <Link href="#/edit/account/password" className="tabbed-content-tab">Password</Link>
+        <Link href="#/edit/account/profile" className="tabbed-content-tab">Profile</Link>
+        <Link href="#/edit/account/roles" className="tabbed-content-tab">Roles</Link>
+        <Link href="#/edit/account/notifications" className="tabbed-content-tab">Notifications</Link>
+        <Link href="#/edit/account/groups" className="tabbed-content-tab">Groups</Link>
+        <Link href="#/edit/account/projects" className="tabbed-content-tab">Projects</Link>
+        <Link href="#/edit/account/subjects" className="tabbed-content-tab">Subjects</Link>
+        <Link href="#/edit/account/advanced" className="tabbed-content-tab">Advanced</Link>
       </div>
 
       <ChildRouter className="content-container">

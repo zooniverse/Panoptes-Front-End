@@ -3,7 +3,7 @@
 module.exports =
   showLoginDialog: (tabIndex) ->
     dispatch 'login-dialog:show'
-    if tabIndex?
+    if typeof tabIndex is 'number'
       dispatch 'login-dialog:switch-tab', tabIndex
 
   hideLoginDialog: ->
