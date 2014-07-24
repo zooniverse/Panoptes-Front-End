@@ -1,0 +1,17 @@
+@keyframes loading-indicator-bounce
+  0%
+    transform: translateY(-0.3em)
+
+  100%
+    transform: translateY(0.3em)
+
+.loading-indicator > *
+  TIME = 500ms
+
+  animation: loading-indicator-bounce TIME ease-in-out infinite alternate
+
+  &:nth-child(3n-1)
+    animation-delay: (TIME / 3)ms
+
+  &:nth-child(3n)
+    animation-delay: (TIME / 1.5)ms
