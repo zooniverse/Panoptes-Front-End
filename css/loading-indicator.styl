@@ -11,7 +11,7 @@
   animation: loading-indicator-bounce TIME ease-in-out infinite alternate
 
   &:nth-child(3n-1)
-    animation-delay: (TIME / 3)ms
+    animation-delay: unit(TIME / 3, unit(TIME))
 
   &:nth-child(3n)
-    animation-delay: (TIME / 1.5)ms
+    animation-delay: unit(TIME / 1.5, unit(TIME))
