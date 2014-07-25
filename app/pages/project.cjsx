@@ -1,6 +1,8 @@
 React = require 'react'
 request = require '../lib/request'
 ChildRouter = require 'react-child-router'
+{Link} = ChildRouter
+LoadingIndicator = require '../components/loading-indicator'
 
 module.exports = React.createClass
   displayName: 'ProjectPage'
@@ -14,39 +16,40 @@ module.exports = React.createClass
 
   render: ->
     @transferPropsTo if @state?.project?
-      <ChildRouter className="project-page">
-        <nav>
-          <a href="#/projects/#{@state.project.name}">{@state.project.name}</a>
-          |
-          <a href="#/projects/#{@state.project.name}/science">Science</a>
-          |
-          <a href="#/projects/#{@state.project.name}/status">Status</a>
-          |
-          <a href="#/projects/#{@state.project.name}/crew">Crew</a>
-          |
-          <a href="#/projects/#{@state.project.name}/classify">Classify</a>
+      <div className="project-page tabbed-content" data-side="top">
+        <br />
+        <nav className="tabbed-content-tabs">
+          <Link href="#/projects/#{@state.project.owner_login}/#{@state.project.name}" className="tabbed-content-tab"><h2>{@state.project.name}</h2></Link>
+          <Link href="#/projects/#{@state.project.owner_login}/#{@state.project.name}/science" className="tabbed-content-tab">Science</Link>
+          <Link href="#/projects/#{@state.project.owner_login}/#{@state.project.name}/status" className="tabbed-content-tab">Status</Link>
+          <Link href="#/projects/#{@state.project.owner_login}/#{@state.project.name}/crew" className="tabbed-content-tab">Crew</Link>
+          <Link href="#/projects/#{@state.project.owner_login}/#{@state.project.name}/classify" className="tabbed-content-tab">Classify</Link>
         </nav>
 
-        <div hash="#/projects/:name">
-          <p>Introduction to this project</p>
-        </div>
+        <ChildRouter>
+          <div hash="#/projects/:owner/:name" className="content-container">
+            <p>Introduction to this project</p>
+          </div>
 
-        <div hash="#/projects/:name/science">
-          <p>Science case. What are we doing with the data?</p>
-        </div>
+          <div hash="#/projects/:owner/:name/science" className="content-container">
+            <p>Science case. What are we doing with the data?</p>
+          </div>
 
-        <div hash="#/projects/:name/status">
-          <p>Status dashboard for this project</p>
-        </div>
+          <div hash="#/projects/:owner/:name/status" className="content-container">
+            <p>Status dashboard for this project</p>
+          </div>
 
-        <div hash="#/projects/:name/crew">
-          <p>Who’s in charge of this project? What organizations are behind it?</p>
-        </div>
+          <div hash="#/projects/:owner/:name/crew" className="content-container">
+            <p>Who’s in charge of this project? What organizations are behind it?</p>
+          </div>
 
-        <div hash="#/projects/:name/classify">
-          <p>Classification interface for this project</p>
-        </div>
-      </ChildRouter>
+          <div hash="#/projects/:owner/:name/classify" className="content-container">
+            <p>Classification interface for this project</p>
+          </div>
+        </ChildRouter>
+      </div>
 
     else
-      <div>Loading {@props.params.name}...</div>
+      <div className="content-container">
+        <LoadingIndicator />
+      </div>

@@ -19,7 +19,7 @@ galaxyZoo =
   id: 'GALAXY_ZOO'
   name: 'Galaxy Zoo'
   description: 'Classify images to improve our understanding of galaxy formation'
-  owners: ['DEV_USER']
+  owner_login: 'Zooniverse'
   workflows:
     main:
       subjects: ['SUBJECT_0', 'SUBJECT_1']
@@ -28,7 +28,7 @@ planetHunters =
   id: 'PLANET_HUNTERS'
   name: 'Planet Hunters'
   description: 'Help discover new exoplanets'
-  owners: ['DEV_USER']
+  owner_login: 'Zooniverse'
   workflows:
     main:
       subjects: ['SUBJECT_0', 'SUBJECT_1']
