@@ -2,20 +2,17 @@
 
 jobs=""
 
-# TODO: Bundle external libs separately.
-# ./node_modules/.bin/browserify \
-#   --verbose \
-#   --debug \
-#   --require react \
-#   --transform envify \
-#   --outfile ./public/vendor.js \
-#   &
+# Bundle big external libs separately to keep recompile time down.
+[[ -f ./public/vendor.js ]] && rm ./public/vendor.js
+./node_modules/.bin/browserify \
+  --verbose \
+  --debug \
+  --require react \
+  --transform envify \
+  --outfile ./public/vendor.js \
+  &
 
-# TODO: Prevent React from being bundled. Currently broken (#828).
-# --external react
-# --no-bundle-external
-# Then include "vendor.js" in index.html
-
+[[ -f ./public/main.js ]] && rm ./public/main.js
 ./node_modules/.bin/watchify \
   --verbose \
   --debug \
@@ -23,15 +20,17 @@ jobs=""
   --extension ".cjsx" \
   --transform coffee-reactify \
   --transform envify \
+  --external react \
   --outfile ./public/main.js \
   ./app/main.coffee \
   & jobs="$jobs $!"
 
+[[ -f ./public/main.css ]] && rm ./public/main.css
 ./node_modules/.bin/stylus \
+  --watch \
   --use nib \
   --import nib \
   --out ./public \
-  --watch \
   ./css/main.styl \
   & jobs="$jobs $!"
 

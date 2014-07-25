@@ -1,8 +1,22 @@
 #!/usr/bin/env bash
 
-rm -rf ./build
+[[ -d ./build ]] && rm -rf ./build
 
 cp -av ./public ./build
+
+./node_modules/.bin/browserify \
+  --verbose \
+  --require react \
+  --transform envify \
+  --outfile ./build/vendor.js
+
+./node_modules/.bin/uglifyjs \
+  --verbose \
+  --screw-ie8 \
+  --mangle \
+  --compress \
+  --output ./build/vendor.js \
+  ./build/vendor.js
 
 ./node_modules/.bin/browserify \
   --verbose \
@@ -10,6 +24,7 @@ cp -av ./public ./build
   --extension ".cjsx" \
   --transform coffee-reactify \
   --transform envify \
+  --external react \
   --outfile ./build/main.js \
   ./app/main.coffee
 
