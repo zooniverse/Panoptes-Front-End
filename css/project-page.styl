@@ -20,16 +20,19 @@ OFF_BLACK = #333
 
   .project-avatar
     border-radius: 50%
-    height: 2em
-    margin: -1em 0.2em -1em -1em
+    height: 2.2em
+    margin: -1.1em 0.2em -1.1em -1em
     vertical-align: middle
-    width: 2em
+    width: 2.2em
 
   .tabbed-content-tabs
     margin-top: 1em
 
     > .tabbed-content-tab
       background: linear-gradient(rgba(black, 0) 25%, rgba(black, 0.3))
+
+      &.classify
+        margin-right: 1px
 
       &[data-active]
         background: white
@@ -43,13 +46,8 @@ OFF_BLACK = #333
           color: inherit
 
         &.classify
-          background: rgba(black, 0.8)
-          border: 1px solid rgba(white, 0.8)
-          border-bottom-width: 0
+          background: linear-gradient(rgba(black, 0), rgba(black, 0.7))
           color: inherit
-
-          &::before
-            display: none
 
 .project-page-content
   display: flex
@@ -77,9 +75,11 @@ OFF_BLACK = #333
 
 .classify-content
   flex: 1 0 auto
-  background: rgba(black, 0.8)
+  background: rgba(black, 0.7)
 
 .on-project-page
+  background: gray
+
   .main-header-item
     color: white
     z-index: 1

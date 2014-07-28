@@ -49,12 +49,12 @@ module.exports = React.createClass
 
         <ChildRouter className="project-page-content">
           <div hash="#/projects/:owner/:name" className="project-home-content">
-            <div className="call-to-action-conatiner content-container">
-              <a href="#/projects/#{qualifiedProjectName}/classify" className="call-to-action">Get started</a>
-            </div>
             <Markdown className="project-introduction content-container">
               {@state.project.introduction}
             </Markdown>
+            <div className="call-to-action-conatiner content-container">
+              <a href="#/projects/#{qualifiedProjectName}/classify" className="call-to-action">Get started</a>
+            </div>
           </div>
 
           <Markdown hash="#/projects/:owner/:name/science" className="project-text-content content-container">
