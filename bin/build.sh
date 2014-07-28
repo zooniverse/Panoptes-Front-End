@@ -7,6 +7,7 @@ cp -av ./public ./build
 ./node_modules/.bin/browserify \
   --verbose \
   --require react \
+  --require marked \
   --transform envify \
   --outfile ./build/vendor.js
 
@@ -25,6 +26,7 @@ cp -av ./public ./build
   --transform coffee-reactify \
   --transform envify \
   --external react \
+  --external marked \
   --outfile ./build/main.js \
   ./app/main.coffee
 

@@ -8,6 +8,7 @@ jobs=""
   --verbose \
   --debug \
   --require react \
+  --require marked \
   --transform envify \
   --outfile ./public/vendor.js \
   &
@@ -21,6 +22,7 @@ jobs=""
   --transform coffee-reactify \
   --transform envify \
   --external react \
+  --external marked \
   --outfile ./public/main.js \
   ./app/main.coffee \
   & jobs="$jobs $!"
