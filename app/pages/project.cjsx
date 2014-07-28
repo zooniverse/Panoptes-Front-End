@@ -39,12 +39,12 @@ module.exports = React.createClass
       <div className="project-page tabbed-content" data-side="top" style={backgroundImage: "url(#{@state.project.background_image})"}>
         <div className="background-cover"></div>
         <nav className="tabbed-content-tabs">
-          <Link href="#/projects/#{qualifiedProjectName}" className="home tabbed-content-tab"><h2>{@state.project.name}</h2></Link>
+          <Link href="#/projects/#{qualifiedProjectName}" className="home tabbed-content-tab"><h2><img src={@state.project.avatar} className="project-avatar"/>{@state.project.name}</h2></Link>
           <Link href="#/projects/#{qualifiedProjectName}/science" className="tabbed-content-tab">Science</Link>
           <Link href="#/projects/#{qualifiedProjectName}/status" className="tabbed-content-tab">Status</Link>
           <Link href="#/projects/#{qualifiedProjectName}/team" className="tabbed-content-tab">Team</Link>
           <Link href="#/projects/#{qualifiedProjectName}/classify" className="classify tabbed-content-tab">Classify</Link>
-          <Link href="#/projects/#{qualifiedProjectName}/classify" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
+          <Link href="#/projects/#{qualifiedProjectName}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
         </nav>
 
         <ChildRouter className="project-page-content">
@@ -71,6 +71,10 @@ module.exports = React.createClass
 
           <div hash="#/projects/:owner/:name/classify" className="classify-content content-container">
             <p>Classification interface for this project</p>
+          </div>
+
+          <div hash="#/projects/:owner/:name/talk" className="project-text-content content-container">
+            <p>Discussion boards this project</p>
           </div>
         </ChildRouter>
       </div>

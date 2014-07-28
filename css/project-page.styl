@@ -18,26 +18,38 @@ OFF_BLACK = #333
     right: 0
     top: 0
 
+  .project-avatar
+    border-radius: 50%
+    height: 2em
+    margin: -1em 0.2em -1em -1em
+    vertical-align: middle
+    width: 2em
+
   .tabbed-content-tabs
     margin-top: 1em
 
-    > [data-active]
-      background: white
-      color: OFF_BLACK
+    > .tabbed-content-tab
+      background: linear-gradient(rgba(black, 0) 25%, rgba(black, 0.3))
 
-      &::after
-        border-color: transparent
+      &[data-active]
+        background: white
+        color: OFF_BLACK
 
-      &.home
-        background: transparent
-        color: inherit
+        &::after
+          border-color: transparent
 
-      &.classify
-        background: rgba(black, 0.8)
-        color: inherit
+        &.home
+          background: transparent
+          color: inherit
 
-        &::before
-          display: none
+        &.classify
+          background: rgba(black, 0.8)
+          border: 1px solid rgba(white, 0.8)
+          border-bottom-width: 0
+          color: inherit
+
+          &::before
+            display: none
 
 .project-page-content
   display: flex
