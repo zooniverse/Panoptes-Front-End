@@ -1,0 +1,73 @@
+OFF_BLACK = #333
+
+.project-page
+  background-position: 50% 40%
+  background-size: cover
+  color: white
+  display: flex
+  flex: 1 0 auto
+  flex-direction: column
+  position: relative
+
+  .background-cover
+    background: radial-gradient(rgba(black, 0.2), rgba(black, 0.8))
+    bottom: 0
+    left:0
+    pointer-events: none
+    position: fixed
+    right: 0
+    top: 0
+
+  .tabbed-content-tabs
+    margin-top: 1em
+
+    > [data-active]
+      background: white
+      color: OFF_BLACK
+
+      &::after
+        border-color: transparent
+
+      &.home
+        background: transparent
+        color: inherit
+
+      &.classify
+        background: rgba(black, 0.8)
+        color: inherit
+
+        &::before
+          display: none
+
+.project-page-content
+  display: flex
+  flex: 1 0 auto
+  flex-direction: column
+  position: relative
+
+  > .project-text-content
+    background: white
+    color: OFF_BLACK
+    flex: 1 0 auto
+
+.project-home-content
+  display: flex
+  flex-direction: column
+  flex: 1 0 auto
+  justify-content: flex-end
+
+.project-introduction
+  column-gap: 2.5vw
+  column-width: 20em
+
+  > :first-child
+    margin-top: 0
+
+.classify-content
+  flex: 1 0 auto
+  background: rgba(black, 0.8)
+
+.on-project-page
+  .main-header-item
+    color: white
+    z-index: 1

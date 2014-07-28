@@ -6,9 +6,6 @@
   &[data-side="top"]
     flex-direction: column
 
-  &[data-side="bottom"]
-    flex-direction: column-reverse
-
   &[data-side="left"]
     flex-direction: row
 
@@ -16,33 +13,45 @@
     flex-direction: row-reverse
 
 .tabbed-content-tabs
-  border: 0 solid rgba(black, 0.3)
   display: flex
-  flex-shrink: 0
-  overflow: auto
+  flex-wrap: wrap
 
-  .tabbed-content[data-side="top"] &
-    border-bottom-width: 1px
-
-  .tabbed-content[data-side="bottom"] &
-    border-top-width: 1px
-
-  .tabbed-content[data-side="left"] &
-    border-right-width: 1px
-
-  .tabbed-content[data-side="right"] &
-    border-left-width: 1px
-
-  .tabbed-content[data-side="top"] &,
-  .tabbed-content[data-side="bottom"] &
-    align-items: baseline
+  .tabbed-content[data-side="top"] > &
+    align-items: flex-end
     flex-direction: row
 
-    .tabbed-content-tab
-      flex: 1
+    > .tabbed-content-tab
+      flex: 1 0 auto
 
-  .tabbed-content[data-side="left"] &,
-  .tabbed-content[data-side="right"] &
+      &:not(:first-child)::before
+        border-left: 1px solid
+        bottom: 0
+        content: ""
+        height: 1em
+        left: -1px
+        opacity: 0.5
+        position: absolute
+
+      &::after
+        border-bottom-width: 1px
+        left: 0
+        right: 0
+        bottom: 0
+
+  .tabbed-content[data-side="left"] > &::after
+    bottom: 0
+    border-right-width: 1px
+    right: 0
+    top: 0
+
+  .tabbed-content[data-side="right"] > &::after
+    bottom: 0
+    border-left-width: 1px
+    left: 0
+    top: 0
+
+  .tabbed-content[data-side="left"] > &,
+  .tabbed-content[data-side="right"] > &
     flex-direction: column
     padding: 1.5em 0
 
@@ -52,10 +61,18 @@
   cursor: pointer
   flex-shrink: 0
   padding: 0.4em 1em
+  position: relative
   text-align: center
   text-decoration: none
+
+  &::after
+    border: 0 solid
+    content: ""
+    opacity: 0.5
+    position: absolute
 
   &.selected
   &[data-active]
     background: orangered
     color: white
+    z-index: 1
