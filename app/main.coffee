@@ -15,7 +15,7 @@ Home = require './pages/home'
 SignIn = require './pages/sign-in'
 Projects = require './pages/projects'
 Project = require './pages/project'
-EditAccount = require './pages/edit-account'
+Settings = require './pages/settings'
 UserProfile = require './pages/user-profile'
 
 Main = React.createClass
@@ -35,9 +35,9 @@ Main = React.createClass
         Projects hash: '#/projects'
         Projects hash: '#/projects/:categories'
         Project hash: '#/projects/:owner/:name/*'
-        React.DOM.div hash: '#/edit/account/*',
+        React.DOM.div hash: '#/settings/*',
           if @state.user?
-            EditAccount user: @state.user
+            Settings user: @state.user
           else
             React.DOM.p className: 'content-container',
               React.DOM.button onClick: appActions.showLoginDialog.bind(null, 0), 'Looks like you need to sign in.'

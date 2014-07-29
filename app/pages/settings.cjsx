@@ -32,19 +32,19 @@ module.exports = React.createClass
   render: ->
     <div className="edit-account-page content-container tabbed-content" data-side="left">
       <div className="tabbed-content-tabs">
-        <Link href="#/edit/account" className="tabbed-content-tab">General</Link>
-        <Link href="#/edit/account/password" className="tabbed-content-tab">Password</Link>
-        <Link href="#/edit/account/profile" className="tabbed-content-tab">Profile</Link>
-        <Link href="#/edit/account/roles" className="tabbed-content-tab">Roles</Link>
-        <Link href="#/edit/account/notifications" className="tabbed-content-tab">Notifications</Link>
-        <Link href="#/edit/account/groups" className="tabbed-content-tab">Groups</Link>
-        <Link href="#/edit/account/projects" className="tabbed-content-tab">Projects</Link>
-        <Link href="#/edit/account/subjects" className="tabbed-content-tab">Subjects</Link>
-        <Link href="#/edit/account/advanced" className="tabbed-content-tab">Advanced</Link>
+        <Link href="#/settings" className="tabbed-content-tab">General</Link>
+        <Link href="#/settings/password" className="tabbed-content-tab">Password</Link>
+        <Link href="#/settings/profile" className="tabbed-content-tab">Profile</Link>
+        <Link href="#/settings/roles" className="tabbed-content-tab">Roles</Link>
+        <Link href="#/settings/notifications" className="tabbed-content-tab">Notifications</Link>
+        <Link href="#/settings/groups" className="tabbed-content-tab">Groups</Link>
+        <Link href="#/settings/projects" className="tabbed-content-tab">Projects</Link>
+        <Link href="#/settings/subjects" className="tabbed-content-tab">Subjects</Link>
+        <Link href="#/settings/advanced" className="tabbed-content-tab">Advanced</Link>
       </div>
 
       <ChildRouter className="content-container">
-        <div hash="#/edit/account">
+        <div hash="#/settings">
           <InPlaceForm method="put" onSubmit={currentUserActions.save.bind currentUserActions, 'login', 'email', 'wants_betas', 'can_survey'}>
             <fieldset>
               <legend>Login name</legend>
@@ -85,7 +85,7 @@ module.exports = React.createClass
           </InPlaceForm>
         </div>
 
-        <div hash="#/edit/account/password">
+        <div hash="#/settings/password">
           <fieldset>
             <legend>Change your password</legend>
             <table className="for-text-fields">
@@ -117,7 +117,7 @@ module.exports = React.createClass
           <button type="submit">Save password</button>
         </div>
 
-        <div hash="#/edit/account/profile">
+        <div hash="#/settings/profile">
           <fieldset>
             <legend>Avatar</legend>
             <table>
