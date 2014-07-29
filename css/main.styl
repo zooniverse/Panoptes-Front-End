@@ -1,79 +1,13 @@
 @require "./common"
 
+@require "./typography"
 @require "./layout"
-@require "./content-container"
-@require "./columns"
 
 @require "./main-header"
 @require "./main-footer"
 
-@require "./dialog"
-@require "./tabbed-content"
-@require "./list-of-cards"
-@require "./project"
-
-@require "./owner-header"
-
-@require "./project-card"
-@require "./pill"
-@require "./loading-indicator"
-
 @require "./project-page"
+@require "./user-profile"
 
-html
-  background: white
-  color: #333
-  font: 400 16px SANS_SERIF
-
-h1,
-h2
-  font: italic 400 3em SERIF
-  margin: 0
-
-h2
-  font-size: 2em
-
-hr
-  border: 0 solid rgba(black, 0.2)
-  border-top-width: 1px
-  margin: 3vh 0
-
-table
-  border-collapse: collapse
-
-tr:not(:first-child)
-  border-top: 1px solid rgba(gray, 0.1)
-
-th
-  font-size: 0.8em
-  padding-right: 1em
-  text-align: left
-  vertical-align: baseline
-
-td
-  padding: 0.7em 1em 0.7em 0
-  vertical-align: baseline
-
-fieldset
-  border: 1px solid rgba(black, 0.2)
-  border-width: 1px 0 0
-  margin: 4vh 0
-  padding: 2vh 0
-
-legend
-  font-size: 0.7em
-  font-weight: 700
-  margin: 0 auto
-  opacity: 1
-  padding: 0 1em
-  text-transform: uppercase
-  letter-spacing: 0.05em
-
-input:not([type="radio"]):not([type="checkbox"])
-  min-width: 25em
-
-  &[name="twitter"]::before
-    content: "@"
-
-a
-  color: orangered
+@require "./loading-indicator"
+@require "./project-card"

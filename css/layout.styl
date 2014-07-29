@@ -1,16 +1,18 @@
 body
-  display: flex
-  flex-direction: column
   margin: 0
-  min-height: 100vh
 
-#panoptes-main-container,
 .panoptes-main
   display: flex
   flex: 1 0 auto
   flex-direction: column
+  min-height: 100vh // TODO: iOS's `vh` is buggy, so work around it.
 
 .main-content
   display: flex
   flex: 1 0 auto
   flex-direction: column
+
+@require "./content-container"
+@require "./tabbed-content"
+@require "./columns"
+@require "./dialog"
