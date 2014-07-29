@@ -6,7 +6,7 @@ module.exports = React.createClass
   displayName: 'ProjectCard'
 
   render: ->
-    <a href="#/projects/#{@props.owner_login}/#{@props.title}" className="project-card">
+    <a href="#/projects/#{@props.owner_name}/#{@props.title}" className="project-card">
       <div className="media">
         <img src={@props.avatar} className="avatar" />
       </div>
