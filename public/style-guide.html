@@ -18,6 +18,23 @@
     <hr />
 
     <div class="content-container">
+      <label style="position: relative; z-index: 1;">
+        <input type="checkbox" onchange="document.getElementById('example-dialog').style.display = this.checked ? '' : 'none';" />
+        Show dialog
+      </label>
+    </div>
+
+    <div id="example-dialog" class="dialog-underlay" style="display: none;">
+      <div class="dialog-content">
+        <div class="content-container">
+          <p>This is a dialog.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="content-container">
       <h1>Heading 1</h1>
       <p>Consequat consequat aute ipsum Lorem magna laborum incididunt exercitation do magna. Laboris occaecat deserunt magna excepteur laborum culpa cupidatat dolore velit qui velit laborum consectetur. Velit sit culpa pariatur ipsum eu. Esse proident laborum velit ad excepteur occaecat nisi nulla ullamco. Commodo velit ad ut laborum exercitation minim commodo officia minim veniam reprehenderit. Aute voluptate duis et ipsum ea duis. Consectetur amet aliqua ad elit esse aliqua. Culpa reprehenderit nisi dolore voluptate fugiat ut cillum exercitation. Lorem in mollit veniam labore nisi nisi sunt esse. Quis ex ad est eu ipsum duis aliqua ea quis dolore pariatur dolor.</p>
       <h2>Heading 2</h2>
@@ -26,14 +43,7 @@
       <p>Sint voluptate consequat cupidatat aute eu mollit irure sit ea ad. Ad id quis qui voluptate velit laborum reprehenderit non enim do voluptate ad. Non ut adipisicing id ad quis duis duis excepteur. Amet id cillum officia adipisicing dolor labore duis id pariatur occaecat laborum do reprehenderit. Velit anim Lorem est sit et consectetur aute amet.</p>
       <h4>Heading 4</h4>
       <p>Id mollit dolore non id sit exercitation non non ex anim cillum nulla aliquip enim. Non tempor ex irure commodo nostrud. Officia cupidatat cupidatat sunt mollit sunt deserunt reprehenderit adipisicing. Mollit ipsum ea ullamco esse occaecat nulla est. Qui laboris cillum do cillum proident.</p>
-      <p>
-        <span>Loading indicator:</span>
-        <span class="loading-indicator">
-          <span>•</span>
-          <span>•</span>
-          <span>•</span>
-        </span>
-      </p>
+      <p>Loading indicator: <span class="loading-indicator"><span>•</span><span>•</span><span>•</span></span></p>
     </div>
 
     <hr />
