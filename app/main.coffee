@@ -1,6 +1,3 @@
-if process.env.NODE_ENV is 'offline'
-  console?.warn 'NODE_ENV is', process.env.NODE_ENV
-
 React = window.React = require 'react'
 appState = require './data/app-state'
 appActions = require './actions/app'

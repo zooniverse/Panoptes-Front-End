@@ -1,26 +1,16 @@
-request = require '../lib/request'
 appActions = require './app'
 {dispatch} = require '../data/dispatcher'
 
 currentUserActions =
   check: ->
-    request.get '/me', (error, {users}) ->
-      if error?
-        console?.error error
-      else if users.length is 1
-        currentUserActions.succeed users[0]
+    dispatch 'current-user:check'
 
   signIn: (login, password) ->
-    request.get '/sessions', {login, password}, (error, {users, tokens, errors}) ->
-      if users.length is 1
-        request.headers.token = tokens[0]
-        currentUserActions.succeed users[0]
-      else if errors?
-        currentUserActions.fail errors
+    dispatch 'current-user:sign-in', user
 
   succeed: (user) ->
     dispatch 'current-user:sign-in:succeed', user
-    appActions.hideLoginDialog()
+    dispatch 'login-dialog:hide'
 
   fail: (errors) ->
     dispatch 'current-user:sign-in:fail', errors

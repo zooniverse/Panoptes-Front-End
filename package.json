@@ -19,7 +19,7 @@
     "watchify": "^1.0.0"
   },
   "scripts": {
-    "start": "NODE_ENV=offline ./bin/serve.sh",
+    "start": "./bin/serve.sh",
     "build": "NODE_ENV=production ./bin/build.sh",
     "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end"
   }

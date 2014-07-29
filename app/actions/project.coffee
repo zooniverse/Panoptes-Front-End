@@ -1,8 +1,5 @@
-request = require '../lib/request'
-
 projectActions =
   fetch: (name) ->
-    request.get "/projects", {name}, ->
-
+    # TODO
 
 module.exports = projectActions

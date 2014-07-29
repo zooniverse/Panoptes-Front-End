@@ -4,7 +4,7 @@ React = require 'react'
 ChildRouter = require 'react-child-router'
 {Link} = ChildRouter
 
-getUser = (login, callback) ->
+GET_EXAMPLE_USER = (login, callback) ->
   setTimeout ->
     callback null,
       login: 'brian-c'
@@ -51,7 +51,7 @@ module.exports = React.createClass
 
   componentWillMount: ->
     console.log 'MOUNTING WITH', @props.params.login
-    getUser @props.params.login, (error, user) =>
+    GET_EXAMPLE_USER @props.params.login, (error, user) =>
       @setState {user}
 
   render: ->
