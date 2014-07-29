@@ -5,13 +5,16 @@
   100%
     transform: translateY(0.3em)
 
-.loading-indicator > *
-  TIME = 500ms
+.loading-indicator
+  letter-spacing: 0.1em
 
-  animation: loading-indicator-bounce TIME ease-in-out infinite alternate
+  > *
+    TIME = 500ms
 
-  &:nth-child(3n-1)
-    animation-delay: unit(TIME / 3, unit(TIME))
+    animation: loading-indicator-bounce TIME ease-in-out infinite alternate
 
-  &:nth-child(3n)
-    animation-delay: unit(TIME / 1.5, unit(TIME))
+    &:nth-child(3n-1)
+      animation-delay: unit(TIME / 3, unit(TIME))
+
+    &:nth-child(3n)
+      animation-delay: unit(TIME / 1.5, unit(TIME))

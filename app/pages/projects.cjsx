@@ -10,7 +10,13 @@ module.exports = React.createClass
     categories = @props?.params?.categories?.split '+'
     categories ?= ['*']
 
-    <div className="projects-page content-container">
-      <h1>Projects</h1>
-      <ProjectCardList query={{categories}} />
+    <div className="projects-page">
+      <div className="content-container">
+        <h1>Projects</h1>
+        <p>Nostrud elit laborum aliquip elit id aliquip minim et velit ex mollit ipsum enim quis.</p>
+      </div>
+      <hr />
+      <div className="content-container">
+        <ProjectCardList query={{categories}} />
+      </div>
     </div>

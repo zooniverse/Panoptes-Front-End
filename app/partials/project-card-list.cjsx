@@ -1,24 +1,25 @@
 # @cjsx React.DOM
 
-GALAXY_ZOO =
-  id: 'GZ'
-  owner_login: 'Zooniverse'
-  title: 'Galaxy Zoo'
-  avatar: 'https://pbs.twimg.com/profile_images/2597266958/image.jpg'
-  description: 'Help learn about galaxy formation, and help learn about galaxy formation, and help learn about galaxy formation.'
-  total_subjects: 1000000
-  retired_subjects: 666667
-
 React = require 'react'
 ProjectCard = require './project-card'
 LoadingIndicator = require '../components/loading-indicator'
+
+EXAMPLE_PROJECTS =
+  for i in [0...5]
+    id: Math.random().toString().split('.')[1]
+    owner_name: 'Zooniverse'
+    title: 'Galaxy Zoo'
+    avatar: 'https://pbs.twimg.com/profile_images/2597266958/image.jpg'
+    description: new Array(Math.floor Math.random() * 5).join 'Consectetur quis consequat qui velit adipisicing in aute consequat sunt do aliqua aliqua.'
+    total_subjects: 1000000
+    retired_subjects: 666667
 
 module.exports = React.createClass
   displayName: 'ProjectCardList'
 
   fetch: (query, callback) ->
     console?.info 'Fetching projects to build a project card list', JSON.stringify(query)
-    setTimeout callback?.bind(null, null, [GALAXY_ZOO, GALAXY_ZOO, GALAXY_ZOO, GALAXY_ZOO, GALAXY_ZOO]), 1000
+    setTimeout callback?.bind(null, null, EXAMPLE_PROJECTS), 1000
 
   componentWillMount: ->
     if @props.query?
@@ -30,10 +31,12 @@ module.exports = React.createClass
       projectCards = for project in @state.projects
         new ProjectCard project
 
-      @transferPropsTo <div className="project-card-list">
+      <div className="project-card-list">
         {@props.children}
         {projectCards}
       </div>
 
     else
-      <LoadingIndicator />
+      <div style={textAlign: 'center'}>
+        <LoadingIndicator />
+      </div>

@@ -3,12 +3,13 @@
   flex-wrap: wrap
 
 .project-card
-  box-sizing: border-box
   color: #333
   display: inline-flex
-  flex: 0 1 33%
+  flex: 0 1 30%
   font-size: 0.7rem
-  padding: 0 2.5vw 2em 0
+  line-height: 1.4
+  margin: 0 2em 2em 0
+  position: relative
   text-decoration: none
 
   .media
@@ -27,8 +28,10 @@
     flex: 1
 
   .owner
-    letter-spacing: 0.05em
-    text-transform: uppercase
+    @extends h3
 
   .title
-    font: italic 700 1.5em SERIF
+    @extends h2
+
+  .description
+    margin-top: 0.5em

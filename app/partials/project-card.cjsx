@@ -12,7 +12,7 @@ module.exports = React.createClass
       </div>
 
       <div className="details">
-        <div className="owner">{@props.owner}</div>
+        <div className="owner">{@props.owner_name}</div>
         <div className="title">{@props.title}</div>
         <div className="description">{@props.description}</div>
       </div>
