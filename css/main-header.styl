@@ -1,5 +1,5 @@
 .main-header
-  border-bottom: 1px solid rgba(black, 0.4)
+  border-bottom: 1px solid rgba(FOREGROUND, 0.5)
   display: flex
   justify-content: space-between
 
@@ -8,14 +8,14 @@
   flex-direction: row
 
   &:not(:first-child)
-    border-left: 1px solid rgba(black, 0.2)
+    border-left: 1px solid rgba(FOREGROUND, 0.5)
     margin-left: 1vw
 
 .main-header-item
   @extends $reset-button
   align-items: center
   background: rgba(MAIN_HIGHLIGHT, 0)
-  border-right: 1px solid rgba(black, 0.2)
+  border-right: 1px solid rgba(FOREGROUND, 0.5)
   cursor: normal
   color: MAIN_HIGHLIGHT
   display: flex

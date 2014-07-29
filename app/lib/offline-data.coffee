@@ -1,6 +1,7 @@
 devUser =
   id: 'DEV_USER'
-  login: 'devuser'
+  login: 'brian-c'
+  display_name: 'brian-c'
   password: 'password'
   email: 'dev-user@zooniverse.org'
   wants_betas: true

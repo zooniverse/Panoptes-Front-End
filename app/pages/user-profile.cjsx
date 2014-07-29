@@ -33,15 +33,15 @@ OwnerHeader = React.createClass
       <div>
         <span className="credited-name">{@props.user.credited_name || @props.user.display_name}</span>
         {if @props.user.credited_name
-          <span className="display-name">&emsp;({@props.user.display_name})</span>}
+          <span className="display-name">({@props.user.display_name})</span>}
         {if @props.user.location
           <div className="location">{@props.user.location}</div>}
         <hr />
         <div className="external-links">
           {if @props.user.website
-            <div><i>[w]</i> <a href={@props.user.website}>{@props.user.website}</a></div>}
+            <div><i className="fa fa-globe"></i> <a href={@props.user.website}>{@props.user.website.split('//')[1]}</a></div>}
           {if @props.user.twitter
-            <div><i>[t]</i> @<a href="https://twitter.com/#{@props.user.twitter}">{@props.user.twitter}</a></div>}
+            <div><i className="fa fa-twitter"></i> <a href="https://twitter.com/#{@props.user.twitter}">{@props.user.twitter}</a></div>}
         </div>
       </div>
     </div>
@@ -65,7 +65,7 @@ module.exports = React.createClass
             <Link href="#/users/#{@state.user.display_name}/activity" className="tabbed-content-tab">Activity</Link>
             <Link href="#/users/#{@state.user.display_name}/collections" className="tabbed-content-tab">Collections</Link>
             <Link href="#/users/#{@state.user.display_name}/projects" className="tabbed-content-tab">Projects</Link>
-            <Link href="#/users/#{@state.user.display_name}/talk" className="tabbed-content-tab">Talk</Link>
+            <Link href="#/users/#{@state.user.display_name}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
           </div>
 
           <ChildRouter className="content-container">

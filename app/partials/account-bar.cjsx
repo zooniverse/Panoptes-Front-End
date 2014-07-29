@@ -15,7 +15,7 @@ module.exports = React.createClass
         </Link>}
 
       <div className="main-header-item">
-        {@props.user.real_name} &emsp; <Link href="#/edit/account"><i className="fa fa-cog"></i></Link>
+        <a href="#/users/#{@props.user.display_name}">{@props.user.real_name}</a> <Link href="#/settings"><i className="fa fa-cog"></i></Link>
         <span className="pill"><button type="button" onClick={currentUserActions.signOut}>Sign out</button></span>
         <img src={@props.user.avatar} className="account-bar-avatar" />
       </div>
