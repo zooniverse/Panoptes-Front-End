@@ -12,9 +12,10 @@
     TIME = 500ms
 
     animation: loading-indicator-bounce TIME ease-in-out infinite alternate
+    display: inline-block
 
     &:nth-child(3n-1)
       animation-delay: unit(TIME / 3, unit(TIME))
 
-    &:nth-child(3n)
+    &:nth-child(3n-2)
       animation-delay: unit(TIME / 1.5, unit(TIME))
