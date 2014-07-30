@@ -9,6 +9,7 @@ module.exports = React.createClass
   render: ->
     React.DOM.header className: 'main-header',
       MainNav null
+      React.DOM.div className: 'main-header-group'
       if @props.user?
         AccountBar user: @props.user
       else

@@ -1,5 +1,6 @@
 React = require 'react'
 Translator = require 'react-translator'
+{Link} = require 'react-child-router'
 ZooniverseLogo = require './zooniverse-logo'
 
 Translator.setStrings
@@ -13,11 +14,11 @@ module.exports = React.createClass
 
   render: ->
     <nav className="main-nav main-header-group">
-      <a href="#/" className="main-header-item logo">
+      <Link href="#/" className="main-header-item logo">
         <ZooniverseLogo />
         &nbsp;
         <Translator>nav.home</Translator>
-      </a>
-      <a href="#/projects" className="main-header-item"><Translator>nav.projects</Translator></a>
-      <a href="#/about" className="main-header-item"><Translator>nav.about</Translator></a>
+      </Link>
+      <Link href="#/projects" className="main-header-item"><Translator>nav.projects</Translator></Link>
+      <Link href="#/about" className="main-header-item"><Translator>nav.about</Translator></Link>
     </nav>
