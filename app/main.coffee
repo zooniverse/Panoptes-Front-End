@@ -14,6 +14,7 @@ Projects = require './pages/projects'
 Project = require './pages/project'
 Settings = require './pages/settings'
 UserProfile = require './pages/user-profile'
+Build = require './pages/build'
 
 Main = React.createClass
   displayName: 'Main'
@@ -39,6 +40,7 @@ Main = React.createClass
             React.DOM.p className: 'content-container',
               React.DOM.button onClick: appActions.showLoginDialog.bind(null, 0), 'Looks like you need to sign in.'
         UserProfile hash: '#/users/:login/*'
+        Build hash: '#/build/*'
 
       MainFooter null
 

@@ -36,13 +36,21 @@ OwnerHeader = React.createClass
           <span className="display-name">({@props.user.display_name})</span>}
         {if @props.user.location
           <div className="location">{@props.user.location}</div>}
+
         <hr />
+
         <div className="external-links">
           {if @props.user.website
             <div><i className="fa fa-globe"></i> <a href={@props.user.website}>{@props.user.website.split('//')[1]}</a></div>}
           {if @props.user.twitter
             <div><i className="fa fa-twitter"></i> <a href="https://twitter.com/#{@props.user.twitter}">{@props.user.twitter}</a></div>}
         </div>
+      </div>
+
+      <hr />
+
+      <div>
+        Misc. user stats go here.
       </div>
     </div>
 
