@@ -5,12 +5,17 @@ ProjectCard = require './project-card'
 LoadingIndicator = require '../components/loading-indicator'
 
 EXAMPLE_PROJECTS =
-  for i in [0...5]
+  for i in [0...15]
     id: Math.random().toString().split('.')[1]
     owner_name: 'Zooniverse'
     title: 'Galaxy Zoo'
     avatar: 'https://pbs.twimg.com/profile_images/2597266958/image.jpg'
-    description: new Array(Math.floor Math.random() * 5).join 'Consectetur quis consequat qui velit adipisicing in aute consequat sunt do aliqua aliqua.'
+    description: [
+      'Amet dolor et quis nulla incididunt ea aliqua proident reprehenderit cupidatat consectetur magna officia.'
+      'Incididunt nulla voluptate nisi nulla voluptate in ea in ipsum voluptate excepteur aute.'
+      'Culpa proident quis aliqua exercitation sit dolor amet laboris esse.'
+      'Nulla sint id incididunt elit reprehenderit reprehenderit pariatur.'
+      ][i % 4]
     total_subjects: 1000000
     retired_subjects: 666667
 

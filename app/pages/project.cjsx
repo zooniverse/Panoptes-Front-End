@@ -9,7 +9,7 @@ EXAMPLE_PROJECT =
   owner_name: 'Zooniverse'
   avatar: 'https://pbs.twimg.com/profile_images/2597266958/image.jpg'
   background_image: 'http://upload.wikimedia.org/wikipedia/commons/thumb/4/43/ESO-VLT-Laser-phot-33a-07.jpg/1280px-ESO-VLT-Laser-phot-33a-07.jpg'
-  description: 'Help futher our understanding of galaxy formation.'
+  description: 'Help further our understanding of galaxy formation.'
   introduction: new Array(5).join '''
     This is an _introduction_ with some **Markdown**. This paragraph has some <em>HTML</em>. This is an _introduction_ with some **Markdown**. This paragraph has some <em>HTML</em>.
   ''' + '\n\n'
@@ -49,12 +49,16 @@ module.exports = React.createClass
 
         <ChildRouter className="project-page-content">
           <div hash="#/projects/:owner/:name" className="project-home-content">
-            <Markdown className="project-introduction content-container">
+            <div className="call-to-action-container content-container">
+              <Markdown className="description">{@state.project.description}</Markdown>
+              <div>
+                <a href="#/projects/#{qualifiedProjectName}/classify" className="call-to-action">Get started <i className="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+
+            <Markdown className="introduction content-container">
               {@state.project.introduction}
             </Markdown>
-            <div className="call-to-action-conatiner content-container">
-              <a href="#/projects/#{qualifiedProjectName}/classify" className="call-to-action">Get started</a>
-            </div>
           </div>
 
           <Markdown hash="#/projects/:owner/:name/science" className="project-text-content content-container">

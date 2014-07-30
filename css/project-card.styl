@@ -1,28 +1,35 @@
 .project-card-list
-  display: flex
-  flex-wrap: wrap
+  column-width: 20em
+  column-gap: 1.5vw
 
 .project-card
-  color: #333
-  display: inline-flex
-  flex: 0 1 30%
+  color: FOREGROUND
+  vendor("column-break-inside", avoid)
+  background: BACKGROUND
+  display: flex
   font-size: 0.7rem
-  line-height: 1.4
-  margin: 0 2em 2em 0
-  position: relative
+  line-height: 1.2
+  margin-bottom: 1.5vw
   text-decoration: none
+
+  &
+    border: 1px solid rgba(black, 0.3)
+    box-shadow: 0 1px 2px -2px black
+    box-sizing: border-box
+    padding: 1em
 
   .media
     margin-right: 1vw
     text-align: center
 
   .avatar
-    border-radius: 0.3em
+    border-radius: 50%
     display: block
-    height: 6.7vw
-    min-height: 5em
-    min-width: 5em
-    width: 6.7vw
+    height: 6vw
+    margin-left: -3vw
+    min-height: 3em
+    min-width: 3em
+    width: 6vw
 
   .details
     flex: 1

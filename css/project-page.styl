@@ -1,9 +1,6 @@
-OFF_BLACK = #333
-
 .project-page
   background-position: 50% 40%
   background-size: cover
-  color: white
   display: flex
   flex: 1 0 auto
   flex-direction: column
@@ -35,8 +32,8 @@ OFF_BLACK = #333
         margin-right: 1px
 
       &[data-active]
-        background: white
-        color: OFF_BLACK
+        background: BACKGROUND
+        color: FOREGROUND
 
         &::after
           border-color: transparent
@@ -56,8 +53,8 @@ OFF_BLACK = #333
   position: relative
 
   > .project-text-content
-    background: white
-    color: OFF_BLACK
+    background: BACKGROUND
+    color: FOREGROUND
     flex: 1 0 auto
 
 .project-home-content
@@ -66,20 +63,45 @@ OFF_BLACK = #333
   flex: 1 0 auto
   justify-content: flex-end
 
-.project-introduction
-  column-gap: 2.5vw
-  column-width: 20em
+  .call-to-action-container
+    display: flex
+    flex: 1 0 auto
+    flex-direction: column
+    text-align: center
+    justify-content: center
 
-  > :first-child
-    margin-top: 0
+  .call-to-action
+    @extends $reset-button
+    @extends h3
+    background: BACKGROUND
+    color: FOREGROUND
+    display: inline-block
+    padding: 0.5em 2em
+
+  .description
+    @extends h3
+    margin: 0
+    text-align: center
+
+  .introduction
+    column-gap: 1.5vw
+    column-width: 30em
+    font-size: 0.7em
+
+    > :first-child
+      margin-top: 0
 
 .classify-content
   flex: 1 0 auto
   background: rgba(black, 0.7)
 
 .on-project-page
-  background: gray
+  background: FOREGROUND
+  color: BACKGROUND
+
+  .main-header
+    background: inherit
 
   .main-header-item
-    color: white
+    color: inherit
     z-index: 1
