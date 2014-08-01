@@ -9,6 +9,7 @@ cp -av ./public ./build
   --require react \
   --require marked \
   --transform envify \
+  --plugin bundle-collapser/plugin \
   --outfile ./build/vendor.js
 
 ./node_modules/.bin/uglifyjs \
@@ -28,6 +29,7 @@ cp -av ./public ./build
   --external react \
   --external marked \
   --no-bundle-external \
+  --plugin bundle-collapser/plugin \
   --outfile ./build/main.js \
   ./app/main.coffee
 
