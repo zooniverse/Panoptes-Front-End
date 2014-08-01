@@ -31,8 +31,14 @@ class Store
     (stateProperties) ->
       getCurrentState = ->
         state = {}
-        for storeProperty, stateProperty of stateProperties
-          state[stateProperty] = store[storeProperty]
+
+        if typeof stateProperties is 'string'
+          state[stateProperties] = store
+
+        else
+          for storeProperty, stateProperty of stateProperties
+            state[stateProperty] = store[storeProperty]
+
         state
 
       updateState = ->
