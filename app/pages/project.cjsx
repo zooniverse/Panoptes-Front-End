@@ -8,6 +8,7 @@ ClassifyPage = require './classify'
 LoadingIndicator = require '../components/loading-indicator'
 
 EXAMPLE_PROJECT =
+  id: 'GZ_PROJECT'
   name: 'Galaxy Zoo'
   owner_name: 'Zooniverse'
   avatar: 'https://pbs.twimg.com/profile_images/2597266958/image.jpg'
