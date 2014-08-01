@@ -1,7 +1,10 @@
+# @cjsx React.DOM
+
 React = require 'react'
 ChildRouter = require 'react-child-router'
 {Link} = ChildRouter
 Markdown = require '../components/markdown'
+ClassifyPage = require './classify'
 LoadingIndicator = require '../components/loading-indicator'
 
 EXAMPLE_PROJECT =
@@ -17,7 +20,28 @@ EXAMPLE_PROJECT =
     Here's the science case for this project...
   '''
   team_members: []
-  workflows: {}
+  workflows:
+    main:
+      firstTask: 'shape'
+      tasks:
+        shape:
+          type: 'radio'
+          question: 'What shape is this galaxy?'
+          answers: [
+            {value: 'smooth', label: 'Smooth'}
+            {value: 'features', label: 'Features'}
+            {value: 'other', label: 'Star or artifact'}
+          ]
+          next: 'roundness'
+        roundness:
+          type: 'radio'
+          question: 'How round is it?'
+          answers: [
+            {value: 'very', label: 'Very'}
+            {value: 'sorta', label: 'In between'}
+            {value: 'not', label: 'Cigar shaped'}
+          ]
+          next: null
 
 module.exports = React.createClass
   displayName: 'ProjectPage'
@@ -74,7 +98,7 @@ module.exports = React.createClass
           </div>
 
           <div hash="#/projects/:owner/:name/classify" className="classify-content content-container">
-            <p>Classification interface for this project</p>
+            <ClassifyPage project={@state.project} />
           </div>
 
           <div hash="#/projects/:owner/:name/talk" className="project-text-content content-container">
