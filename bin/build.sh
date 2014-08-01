@@ -27,6 +27,7 @@ cp -av ./public ./build
   --transform envify \
   --external react \
   --external marked \
+  --no-bundle-external \
   --outfile ./build/main.js \
   ./app/main.coffee
 
