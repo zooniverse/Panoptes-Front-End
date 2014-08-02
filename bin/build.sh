@@ -6,29 +6,10 @@ cp -av ./public ./build
 
 ./node_modules/.bin/browserify \
   --verbose \
-  --require react \
-  --require marked \
-  --transform envify \
-  --plugin bundle-collapser/plugin \
-  --outfile ./build/vendor.js
-
-./node_modules/.bin/uglifyjs \
-  --verbose \
-  --screw-ie8 \
-  --mangle \
-  --compress \
-  --output ./build/vendor.js \
-  ./build/vendor.js
-
-./node_modules/.bin/browserify \
-  --verbose \
   --extension ".coffee" \
   --extension ".cjsx" \
   --transform coffee-reactify \
   --transform envify \
-  --external react \
-  --external marked \
-  --no-bundle-external \
   --plugin bundle-collapser/plugin \
   --outfile ./build/main.js \
   ./app/main.coffee

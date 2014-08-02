@@ -2,18 +2,8 @@
 
 jobs=""
 
-# Bundle big external libs separately to keep recompile time down.
-[[ -f ./public/vendor.js ]] && rm ./public/vendor.js
-./node_modules/.bin/browserify \
-  --verbose \
-  --debug \
-  --require react \
-  --require marked \
-  --transform envify \
-  --outfile ./public/vendor.js \
-  &
-
 [[ -f ./public/main.js ]] && rm ./public/main.js
+
 ./node_modules/.bin/watchify \
   --verbose \
   --debug \
@@ -21,13 +11,12 @@ jobs=""
   --extension ".cjsx" \
   --transform coffee-reactify \
   --transform envify \
-  --external react \
-  --external marked \
   --outfile ./public/main.js \
   ./app/main.coffee \
   & jobs="$jobs $!"
 
 [[ -f ./public/main.css ]] && rm ./public/main.css
+
 ./node_modules/.bin/stylus \
   --watch \
   --use nib \
