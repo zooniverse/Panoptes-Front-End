@@ -67,6 +67,12 @@ class Store
         handler = context[handler]
       handler.call context, payload
 
+  listen: (callback) ->
+    @on 'change', callback
+
+  stopListening: ->
+    @off 'change', callback
+
   emitChange: ->
     @emit 'change'
 

@@ -10,51 +10,41 @@ EXAMPLE_SUBJECT =
   location: '//placehold.it/256.png&text=Subject'
   workflow: 'main'
 
-classificationStore = window.cS = new Store
-  classification: null
-
-  createClassification: ->
-    @classification =
-      subject: EXAMPLE_SUBJECT
-      annotations: []
-    setTimeout @emit.bind(this, 'change'), 1000
-
-  pushAnnotation: (annotation) ->
-    @classification.annotations.push annotation
-    setTimeout @emit.bind this, 'change'
-
-  popAnnotation: ->
-    @classification.annotations.pop()
-    setTimeout @emit.bind this, 'change'
+classifierStore = window.ccs = new Store
+  classifications: {}
 
   handlers:
-    'classification:create': (projectID) ->
-      @createClassification()
+    'classification:create': (project) ->
+      console.log 'Fetching subject'
+      fetchSubject = new Promise (resolve, reject) ->
+        setTimeout resolve.bind(null, EXAMPLE_SUBJECT), 1000
 
-    'classification:annotation:create': (classification, task) ->
-      if classification is @classification
-        @pushAnnotation {task}
+      fetchSubject.then (subject) =>
+        console.log 'Fetched subject'
+        firstTask = project.workflows[subject.workflow].firstTask
+        @classifications[project.id] =
+          subject: subject
+          annotations: [{task: firstTask}]
 
-    'classification:annotation:destroy': (classification) ->
-      if classification is @classification
-        @popAnnotation()
+    'classification:annotation:create': (project, task) ->
+      @classifications[project.id].annotations.push {task}
 
-    'classification:answer': (classification, answer) ->
-      if classification is @classification
-        annotationIndex = @classification.annotations.length - 1
-        @set "classification.annotations.#{annotationIndex}.answer", answer
+    'classification:annotation:destroy-last': (project) ->
+      @classifications[project.id].annotations.pop()
 
-    'classification:save': (classification) ->
-      console.log 'hi'
-      if classification is @classification
+    'classification:answer': (project, answer) ->
+      annotations = @classifications[project.id].annotations
+      annotations[annotations.length - 1].answer = answer
 
-        data = classification:
-          subject: @classification.subject.id
-          annotations: for {task, answer, marks} in @classification.annotations
+    'classification:save': (project) ->
+      data =
+        classification:
+          subject: @classifications[project.id].subject.id
+          annotations: for {task, answer, marks} in @classifications[project.id].annotations
             task: task
             value: marks ? answer.value
 
-        console.log 'Saving', JSON.stringify data
+      console?.info 'Saving', JSON.stringify data
 
 SubjectView = React.createClass
   displayName: 'SubjectView'
@@ -83,7 +73,16 @@ RadioTask = React.createClass
 
 module.exports = React.createClass
   displayName: 'ClassifyPage'
-  mixins: [classificationStore.mixInto {'classification'}]
+
+  componentDidMount: ->
+    classifierStore.listen @updateState
+
+  componentWillUnmount: ->
+    classifierStore.stopListening @updateState
+
+  updateState: ->
+    @setState
+      classification: classifierStore.classifications[@props.project.id]
 
   taskComponents:
     radio: RadioTask
@@ -133,16 +132,16 @@ module.exports = React.createClass
       <LoadingIndicator />
 
   requestClassification: ->
-    dispatch 'classification:create', @props.project.id
+    dispatch 'classification:create', @props.project
 
   handleAnswer: (answer) ->
-    dispatch 'classification:answer', @state.classification, answer
-
-  previousTask: ->
-    dispatch 'classification:annotation:destroy', @state.classification
+    dispatch 'classification:answer', @props.project, answer
 
   loadTask: (task) ->
-    dispatch 'classification:annotation:create', @state.classification, task
+    dispatch 'classification:annotation:create', @props.project, task
+
+  previousTask: ->
+    dispatch 'classification:annotation:destroy-last', @props.project
 
   finishClassification: ->
-    dispatch 'classification:save', @state.classification
+    dispatch 'classification:save', @props.project
