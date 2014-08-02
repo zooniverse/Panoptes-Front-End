@@ -67,6 +67,9 @@ class Store
         handler = context[handler]
       handler.call context, payload
 
+  emitChange: ->
+    @emit 'change'
+
   set: (property, value) ->
     object = this
     segments = property.split '.'
