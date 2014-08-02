@@ -10,9 +10,8 @@ appActions = require '../actions/app'
 loginDialogStore = new Store
   tab: 1
 
-  handlers:
-    'login-dialog:switch-tab': (index) ->
-      @set 'tab', index
+  'login-dialog:switch-tab': (index) ->
+    @set 'tab', index
 
 LoginDialog = React.createClass
   displayName: 'LoginDialog'

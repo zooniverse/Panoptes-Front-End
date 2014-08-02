@@ -26,7 +26,7 @@ This is still somewhat in _flux_, rofl.
 
 ### Flux
 
-Stores automatically register with the dispatcher when instantiated. A `handlers` property maps action names to handlers. **NOTE: Soon there won't be a separate `handlers` property.**
+Stores automatically register with the dispatcher when instantiated. Special methods matching action names (generally formatted `object:action`) will be called by the dispatcher.
 
 Event handlers in views can `dispatch` an action with a payload.
 

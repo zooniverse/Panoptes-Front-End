@@ -13,38 +13,37 @@ EXAMPLE_SUBJECT =
 classifierStore = window.ccs = new Store
   classifications: {}
 
-  handlers:
-    'classification:create': (project) ->
-      console.log 'Fetching subject'
-      fetchSubject = new Promise (resolve, reject) ->
-        setTimeout resolve.bind(null, EXAMPLE_SUBJECT), 1000
+  'classification:create': (project) ->
+    console.log 'Fetching subject'
+    fetchSubject = new Promise (resolve, reject) ->
+      setTimeout resolve.bind(null, EXAMPLE_SUBJECT), 1000
 
-      fetchSubject.then (subject) =>
-        console.log 'Fetched subject'
-        firstTask = project.workflows[subject.workflow].firstTask
-        @classifications[project.id] =
-          subject: subject
-          annotations: [{task: firstTask}]
+    fetchSubject.then (subject) =>
+      console.log 'Fetched subject'
+      firstTask = project.workflows[subject.workflow].firstTask
+      @classifications[project.id] =
+        subject: subject
+        annotations: [{task: firstTask}]
 
-    'classification:annotation:create': (project, task) ->
-      @classifications[project.id].annotations.push {task}
+  'classification:annotation:create': (project, task) ->
+    @classifications[project.id].annotations.push {task}
 
-    'classification:annotation:destroy-last': (project) ->
-      @classifications[project.id].annotations.pop()
+  'classification:annotation:destroy-last': (project) ->
+    @classifications[project.id].annotations.pop()
 
-    'classification:answer': (project, answer) ->
-      annotations = @classifications[project.id].annotations
-      annotations[annotations.length - 1].answer = answer
+  'classification:answer': (project, answer) ->
+    annotations = @classifications[project.id].annotations
+    annotations[annotations.length - 1].answer = answer
 
-    'classification:save': (project) ->
-      data =
-        classification:
-          subject: @classifications[project.id].subject.id
-          annotations: for {task, answer, marks} in @classifications[project.id].annotations
-            task: task
-            value: marks ? answer.value
+  'classification:save': (project) ->
+    data =
+      classification:
+        subject: @classifications[project.id].subject.id
+        annotations: for {task, answer, marks} in @classifications[project.id].annotations
+          task: task
+          value: marks ? answer.value
 
-      console?.info 'Saving', JSON.stringify data
+    console?.info 'Saving', JSON.stringify data
 
 SubjectView = React.createClass
   displayName: 'SubjectView'
