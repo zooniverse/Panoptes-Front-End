@@ -1,6 +1,6 @@
 # @cjsx React.DOM
 
-React = require 'React'
+React = require 'react'
 
 module.exports = React.createClass
   displayName: 'BuildPage'
