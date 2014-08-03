@@ -2,7 +2,7 @@
 
 React = require 'react'
 Store = require '../data/store'
-{dispatch} = require '../data/dispatcher'
+{dispatch} = require '../lib/dispatcher'
 Dialog = require '../components/dialog'
 SignInForm = require './sign-in-form'
 

@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-{dispatch} = require '../data/dispatcher'
+{dispatch} = require '../lib/dispatcher'
 ChildRouter = require 'react-child-router'
 {Link} = ChildRouter
 InPlaceForm = require '../components/in-place-form'

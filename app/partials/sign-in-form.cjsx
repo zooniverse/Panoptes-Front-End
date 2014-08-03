@@ -1,6 +1,6 @@
 # @cjsx React.DOM
 
-{dispatch} = require '../data/dispatcher'
+{dispatch} = require '../lib/dispatcher'
 Translator = require 'react-translator'
 React = require 'react'
 currentUser = require '../data/current-user'

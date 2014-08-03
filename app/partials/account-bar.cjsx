@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-{dispatch} = require '../data/dispatcher'
+{dispatch} = require '../lib/dispatcher'
 {Link} = require 'react-child-router'
 
 module.exports = React.createClass

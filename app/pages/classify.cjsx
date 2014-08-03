@@ -2,7 +2,7 @@
 
 React = require 'react'
 Store = require '../data/store'
-{dispatch} = require '../data/dispatcher'
+{dispatch} = require '../lib/dispatcher'
 LoadingIndicator = require '../components/loading-indicator'
 
 EXAMPLE_SUBJECT =

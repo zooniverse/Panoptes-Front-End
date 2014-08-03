@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-{dispatch} = require '../data/dispatcher'
+{dispatch} = require '../lib/dispatcher'
 appState = require '../data/app-state'
 Translator = require 'react-translator'
 

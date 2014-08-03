@@ -19,7 +19,6 @@ EXAMPLE_LOGIN =
   unseen_events: 4
 
 currentUser = new Store
-  name: 'login'
   loading: true
   errors: null
   current: null

@@ -1,5 +1,5 @@
 React = window.React = require 'react'
-{dispatch} = require './data/dispatcher'
+{dispatch} = require './lib/dispatcher'
 appState = require './data/app-state'
 currentUser = require './data/current-user'
 MainHeader = require './partials/main-header'

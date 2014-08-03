@@ -1,4 +1,4 @@
-dispatcher = require './dispatcher'
+dispatcher = require '../lib/dispatcher'
 
 class Store
   callbacks: null
