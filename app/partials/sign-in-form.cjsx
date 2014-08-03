@@ -1,9 +1,9 @@
 # @cjsx React.DOM
 
+{dispatch} = require '../data/dispatcher'
 Translator = require 'react-translator'
 React = require 'react'
 currentUser = require '../data/current-user'
-currentUserActions = require '../actions/current-user'
 InPlaceForm = require '../components/in-place-form'
 
 Translator.setStrings
@@ -32,12 +32,12 @@ module.exports = React.createClass
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
     password = @refs.password.getDOMNode().value
-    currentUserActions.signIn login, password
+    dispatch 'current-user:sign-in', login, password
     @setState loading: true
 
   handleSignOut: ->
     @refs.password.getDOMNode().value = ''
-    currentUserActions.signOut()
+    dispatch 'current-user:sign-out'
 
   onCurrentUserChange: ->
     @setState

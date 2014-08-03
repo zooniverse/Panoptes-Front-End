@@ -5,7 +5,6 @@ Store = require '../data/store'
 {dispatch} = require '../data/dispatcher'
 Dialog = require '../components/dialog'
 SignInForm = require './sign-in-form'
-appActions = require '../actions/app'
 
 loginDialogStore = new Store
   tab: 1
@@ -20,6 +19,9 @@ LoginDialog = React.createClass
 
   switchTab: (index) ->
     dispatch 'login-dialog:switch-tab', index
+
+  hide: ->
+    dispatch 'login-dialog:hide'
 
   render: ->
     <Dialog className="columns-container" style={height: '70%'}>
@@ -44,7 +46,7 @@ LoginDialog = React.createClass
       </div>
 
       <div className="dialog-actions">
-        <button onClick={appActions.hideLoginDialog}>&times;</button>
+        <button onClick={@hide}>&times;</button>
       </div>
     </Dialog>
 

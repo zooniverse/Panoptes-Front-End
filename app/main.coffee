@@ -1,12 +1,11 @@
 React = window.React = require 'react'
+{dispatch} = require './data/dispatcher'
 appState = require './data/app-state'
-appActions = require './actions/app'
 currentUser = require './data/current-user'
 MainHeader = require './partials/main-header'
 ChildRouter = require 'react-child-router'
 MainFooter = require './partials/main-footer'
 LoginDialog = require './partials/login-dialog'
-currentUserActions = require './actions/current-user'
 
 Home = require './pages/home'
 SignIn = require './pages/sign-in'
@@ -34,11 +33,7 @@ Main = React.createClass
         Projects hash: '#/projects/:categories'
         Project hash: '#/projects/:owner/:name/*'
         React.DOM.div hash: '#/settings/*',
-          if @state.user?
-            Settings user: @state.user
-          else
-            React.DOM.p className: 'content-container',
-              React.DOM.button onClick: appActions.showLoginDialog.bind(null, 0), 'Looks like you need to sign in.'
+        Settings user: @state.user
         UserProfile hash: '#/users/:login/*'
         Build hash: '#/build/*'
 
@@ -53,4 +48,4 @@ document.body.appendChild mainContainer
 
 React.renderComponent Main(null), mainContainer
 
-currentUserActions.check()
+dispatch 'current-user:check'

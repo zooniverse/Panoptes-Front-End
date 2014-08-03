@@ -1,8 +1,8 @@
 # @cjsx React.DOM
 
 React = require 'react'
+{dispatch} = require '../data/dispatcher'
 appState = require '../data/app-state'
-appActions = require '../actions/app'
 Translator = require 'react-translator'
 
 Translator.setStrings
@@ -17,11 +17,19 @@ module.exports = React.createClass
 
   render: ->
     <div className="login-bar main-header-group">
-      <button className="main-header-item" onClick={appActions.showLoginDialog.bind null, 0}>
+      <button className="main-header-item" onClick={@handleSignInClick}>
         <Translator>loginBar.signIn</Translator>
       </button>
 
-      <button className="main-header-item" onClick={appActions.showLoginDialog.bind null, 1}>
+      <button className="main-header-item" onClick={@handleRegisterClick}>
         <Translator>loginBar.register</Translator>
       </button>
     </div>
+
+  handleSignInClick: ->
+    dispatch 'login-dialog:show'
+    dispatch 'login-dialog:switch-tab', 0
+
+  handleRegisterClick: ->
+    dispatch 'login-dialog:show'
+    dispatch 'login-dialog:switch-tab', 1

@@ -1,7 +1,6 @@
 # @cjsx React.DOM
 
 React = require 'react'
-currentUserActions = require '../actions/current-user'
 ChildRouter = require 'react-child-router'
 SignInForm = require '../partials/sign-in-form'
 Translator = require 'react-translator'

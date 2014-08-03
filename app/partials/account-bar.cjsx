@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-currentUserActions = require '../actions/current-user'
+{dispatch} = require '../data/dispatcher'
 {Link} = require 'react-child-router'
 
 module.exports = React.createClass
@@ -18,7 +18,10 @@ module.exports = React.createClass
         <a href="#/users/#{@props.user.display_name}">{@props.user.real_name}</a>
         &nbsp;
         <Link href="#/settings"><i className="fa fa-cog"></i></Link>
-        <span className="pill"><button type="button" onClick={currentUserActions.signOut}>Sign out</button></span>
+        <span className="pill"><button type="button" onClick={@handleSignOutClick}>Sign out</button></span>
         <img src={@props.user.avatar} className="account-bar-avatar" />
       </div>
     </div>
+
+  handleSignOutClick: ->
+    dispatch 'current-user:sign-out'
