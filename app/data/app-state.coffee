@@ -6,9 +6,9 @@ appState = new Store
   notifications: []
 
   'login-dialog:show': ->
-    @set 'showingLoginDialog', true
+    @showingLoginDialog = true
 
   'login-dialog:hide': ->
-    @set 'showingLoginDialog', false
+    @showingLoginDialog = false
 
 module.exports = appState

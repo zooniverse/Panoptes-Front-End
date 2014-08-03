@@ -1,6 +1,6 @@
 Store = require './store'
 
-EXAMPLE_USER =
+EXAMPLE_LOGIN =
   id: 'DEV_USER'
   login: 'brian-c'
   display_name: 'brian-c'
@@ -19,28 +19,36 @@ EXAMPLE_USER =
   unseen_events: 4
 
 currentUser = new Store
+  name: 'login'
   loading: true
   errors: null
   current: null
 
   'current-user:check': ->
-    # TODO: Request `/me` or whatever.
-    setTimeout @set.bind(this, 'current', EXAMPLE_USER), 1000
+    loginCheck = new Promise (resolve, reject) ->
+      setTimeout resolve.bind(null, EXAMPLE_LOGIN), 1000
+
+    loginCheck.then (user) =>
+      @current = user
 
   'current-user:sign-in:succeed': ->
-    setTimeout @set.bind(this, 'current', EXAMPLE_USER), 1000
+    login = new Promise (resolve, reject) ->
+      setTimeout resolve.bind(null, EXAMPLE_LOGIN), 1000
+
+    login.then (user) =>
+      @current = user
 
   'current-user:sign-in:fail': ->
-    @set 'current', null
+    @current = null
 
   'current-user:sign-out': ->
-    @set 'current', null
+    @current = null
 
   'current-user:set': (key, value) ->
-    @set "current.#{key}", value
+    @current[key] = value
 
   'current-user:set-preference': (key, value) ->
-    @set "current.preferences.#{key}", value
+    @current.preferences[key] = value
 
   'current-user:save': (properties...) ->
     dataToSave = {}
@@ -48,4 +56,5 @@ currentUser = new Store
       dataToSave[key] = @current[key]
     console?.log 'PUT', JSON.stringify dataToSave
 
+window.loginStore = currentUser
 module.exports = currentUser

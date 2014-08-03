@@ -3,8 +3,6 @@ dispatcher = require './dispatcher'
 class Store
   callbacks: null
 
-  handers: null
-
   constructor: (options = {}) ->
     @callbacks = []
 
@@ -25,6 +23,8 @@ class Store
     store = this
 
     (stateProperties) ->
+      changeCallbackName = "updateStateWithStore_#{Math.random().toString().split('.')[1]}"
+
       getCurrentState = ->
         state = {}
 
@@ -36,8 +36,6 @@ class Store
             state[stateProperty] = store[storeProperty]
 
         state
-
-      changeCallbackName = "updateStateWithStore_#{Math.random().toString().split('.')[1]}"
 
       Mixin =
         getInitialState: ->
@@ -54,7 +52,6 @@ class Store
 
       Mixin
 
-
   listen: (callback) ->
     @callbacks.push callback
 
@@ -66,17 +63,5 @@ class Store
   emitChange: ->
     for callback in @callbacks
       callback()
-
-  set: (property, value) ->
-    object = this
-    segments = property.split '.'
-
-    until segments.length is 1
-      segment = segments.shift()
-      object = object[segment]
-
-    object[segments[0]] = value
-
-    @emitChange()
 
 module.exports = Store

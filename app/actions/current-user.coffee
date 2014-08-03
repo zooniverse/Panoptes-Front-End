@@ -6,7 +6,7 @@ currentUserActions =
     dispatch 'current-user:check'
 
   signIn: (login, password) ->
-    dispatch 'current-user:sign-in', user
+    dispatch 'current-user:succeed'
 
   succeed: (user) ->
     dispatch 'current-user:sign-in:succeed', user

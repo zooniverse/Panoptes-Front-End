@@ -11,7 +11,7 @@ loginDialogStore = new Store
   tab: 1
 
   'login-dialog:switch-tab': (index) ->
-    @set 'tab', index
+    @tab = index
 
 LoginDialog = React.createClass
   displayName: 'LoginDialog'
