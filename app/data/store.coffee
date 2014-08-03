@@ -70,7 +70,7 @@ class Store
   listen: (callback) ->
     @on 'change', callback
 
-  stopListening: ->
+  stopListening: (callback) ->
     @off 'change', callback
 
   emitChange: ->
