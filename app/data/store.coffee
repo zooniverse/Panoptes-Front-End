@@ -1,13 +1,11 @@
 dispatcher = require './dispatcher'
 
 class Store
-  _items: null
   _signals: null
 
   handers: null
 
   constructor: (options = {}) ->
-    @_items = []
     @_signals = []
 
     for property, value of options
@@ -88,37 +86,4 @@ class Store
 
     @emit 'change'
 
-  add: (items...) ->
-    @_items.push items...
-    @emit 'change'
-    items
-
-  remove: (items...) ->
-    for item in items
-      index = @_items.indexOf item
-      unless index is -1
-        @_items.splice index, 1
-    items
-
-  filter: (params) ->
-    if typeof params is 'function'
-      @_items.filter arguments...
-    else if typeof params is 'string'
-      item for item in @_items when item.id is params
-    else
-      matches = []
-      for item in @_items
-        okay = true
-        for key, value of params
-          unless item[key] is value
-            okay = false
-            break
-        if okay
-          matches.push item
-      matches
-
-  find: ->
-    @filter(arguments...)[0]
-
-window.Store = Store
 module.exports = Store
