@@ -1,17 +1,15 @@
 dispatcher = require './dispatcher'
 
 class Store
-  _signals: null
+  callbacks: null
 
   handers: null
 
   constructor: (options = {}) ->
-    @_signals = []
+    @callbacks = []
 
     for property, value of options
       @[property] = value
-
-    @handlers ?= {}
 
     @mixInto = @_generateMixIntoMethod()
 
@@ -39,40 +37,35 @@ class Store
 
         state
 
-      updateState = ->
+      changeCallbackName = "updateStateWithStore_#{Math.random().toString().split('.')[1]}"
+
+      Mixin =
+        getInitialState: ->
+          getCurrentState()
+
+        componentDidMount: ->
+          store.listen @[changeCallbackName]
+
+        componentWillUnmount: ->
+          store.stopListening @[changeCallbackName]
+
+      Mixin[changeCallbackName] = ->
         @setState getCurrentState()
 
-      getInitialState: ->
-        getCurrentState()
+      Mixin
 
-      componentDidMount: ->
-        store.on 'change', this, updateState
-
-      componentWillUnmount: ->
-        store.off 'change', this, updateState
-
-  on: (signal, [context]..., handler) ->
-    @_signals.push {signal, context, handler}
-
-  off: (signal, [context]..., handler) ->
-    for {a, c, h}, i in @_signals when a is signal and c is context and h is handler
-      index = i
-    @_signals.splice index, 1
-
-  emit: (signal, payload) ->
-    for {signal: a, context, handler} in @_signals when a is signal
-      if typeof handler is 'string'
-        handler = context[handler]
-      handler.call context, payload
 
   listen: (callback) ->
-    @on 'change', callback
+    @callbacks.push callback
 
   stopListening: (callback) ->
-    @off 'change', callback
+    index = @callbacks.indexOf callback
+    unless index is -1
+      @callbacks.splice index, 1
 
   emitChange: ->
-    @emit 'change'
+    for callback in @callbacks
+      callback()
 
   set: (property, value) ->
     object = this
@@ -84,6 +77,6 @@ class Store
 
     object[segments[0]] = value
 
-    @emit 'change'
+    @emitChange()
 
 module.exports = Store
