@@ -20,16 +20,13 @@ EXAMPLE_LOGIN =
   unseen_events: 4
 
 loginStore = new Store
-  potentialLogins: {}
   loading: true
   current: null
-
-  startLoading: ->
-    @loading = true
-    @emitChange()
+  errors: {}
 
   'current-user:check': ->
-    @startLoading()
+    @loading = true
+    @emitChange()
 
     checkRequest = new Promise (resolve, reject) ->
       console?.log 'GET /tokens&token=(RANDOM)'
@@ -42,24 +39,30 @@ loginStore = new Store
       @current = user
 
   'current-user:sign-in': (login, password, source) ->
-    @startLoading()
+    @loading = true
+    @errors[source] = null
+    @emitChange()
 
     loginRequest = new Promise (resolve, reject) ->
       console?.log "GET /tokens?login=#{login}&password=#{password}"
       if login is EXAMPLE_LOGIN.login and password is EXAMPLE_LOGIN.password
         user = EXAMPLE_LOGIN
       else
-        errors = ['BAD_PASSWORD']
+        errors =
+          password: 'BAD_PASSWORD'
+
       setTimeout resolve.bind(null, {user, errors}), 1000
 
     loginRequest.then ({user, errors}) =>
       @loading = false
+
       @current = user
 
       if user?
         dispatch 'current-user:sign-in:success', user, source
-      else
-        dispatch 'current-user:sign-in:success', errors, source
+
+      if errors?
+        @errors[source] = errors
 
   'current-user:sign-out': ->
     console?.log 'DELETE /tokens/(TOKEN_ID)'

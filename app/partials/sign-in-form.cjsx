@@ -14,24 +14,28 @@ Translator.setStrings
     userName: 'User name'
     password: 'Password'
     errors:
-      badCredentials: 'Wrong username or password'
-      serverError: 'Something went wrong! Try again later.'
+      BAD_PASSWORD: 'Wrong username or password'
+      SERVER_ERROR: 'Something went wrong! Try again later.'
 
 module.exports = React.createClass
   displayName: 'SignInForm'
 
   mixins: [
-    loginStore.mixInto current: 'currentUser', loading: 'loading'
+    loginStore.mixInto {current: 'currentUser', 'loading', 'errors'}
   ]
 
   getInitialState: ->
+    identifier: Math.random().toString().split('.')[1]
     login: ''
     password: ''
 
   render: ->
+    errors = @state.errors?[@state.identifier]
+    console.log 'e', errors
+
     if @state.currentUser?
       <p>
-        <span>Logged in as {@state.currentUser.credited_name} ({@state.currentUser.display_name}).</span>
+        <span>Logged in as {@state.currentUser.real_name} ({@state.currentUser.display_name}).</span>
         <button onClick={@handleSignOut}>Sign out</button>
       </p>
 
@@ -43,8 +47,9 @@ module.exports = React.createClass
             <br />
             <input type="text" name="login" value={@state.login} onChange={@handleInputChange} autoFocus="autoFocus" />
 
-            {if @state.login.errors?.login?
-              <span className="error">@state.login.errors.login</span>}
+            {if errors?.login?
+              errorString = "signInForm.errors.#{errors.login}"
+              <Translator className="error">{errorString}</Translator>}
           </label>
         </p>
 
@@ -54,8 +59,9 @@ module.exports = React.createClass
             <br />
             <input type="password" name="password" value={@state.password} onChange={@handleInputChange} />
 
-            {if @state.login.errors?.password?
-              <span className="error">@state.login.errors.password</span>}
+            {if errors?.password?
+              errorString = "signInForm.errors.#{errors.password}"
+              <Translator className="error">{errorString}</Translator>}
           </label>
         </p>
 
@@ -79,4 +85,4 @@ module.exports = React.createClass
     @setState stateChange
 
   handleSubmit: ->
-    dispatch 'current-user:sign-in', @state.login, @state.password, this
+    dispatch 'current-user:sign-in', @state.login, @state.password, @state.identifier
