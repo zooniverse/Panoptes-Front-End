@@ -11,7 +11,7 @@
     "nib": "^1.0.2",
     "node-static": "~0.7.3",
     "publisssh": "~0.2.5",
-    "react": "~0.10.0",
+    "react": "^0.11.1",
     "react-child-router": "~0.0.1",
     "react-translator": "~0.0.1",
     "stylus": "~0.45.1",
