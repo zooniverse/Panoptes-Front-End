@@ -1,7 +1,5 @@
 React = window.React = require 'react'
 {dispatch} = require './lib/dispatcher'
-appState = require './data/app-state'
-currentUser = require './data/current-user'
 MainHeader = require './partials/main-header'
 ChildRouter = require 'react-child-router'
 MainFooter = require './partials/main-footer'
@@ -17,14 +15,10 @@ Build = require './pages/build'
 
 Main = React.createClass
   displayName: 'Main'
-  mixins: [
-    appState.mixInto {'showingLoginDialog'}
-    currentUser.mixInto current: 'user'
-  ]
 
   render: ->
     React.DOM.div className: 'panoptes-main',
-      MainHeader user: @state.user
+      MainHeader user: null
 
       ChildRouter className: 'main-content',
         Home hash: '#'
@@ -32,15 +26,13 @@ Main = React.createClass
         Projects hash: '#/projects'
         Projects hash: '#/projects/:categories'
         Project hash: '#/projects/:owner/:name/*'
-        React.DOM.div hash: '#/settings/*',
-        Settings user: @state.user
+        Settings hash: '#/settings/*',
         UserProfile hash: '#/users/:login/*'
         Build hash: '#/build/*'
 
       MainFooter null
 
-      if @state.showingLoginDialog
-        LoginDialog user: @state.user
+      LoginDialog null
 
 mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'

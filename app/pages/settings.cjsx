@@ -1,13 +1,19 @@
 # @cjsx React.DOM
 
 React = require 'react'
-{dispatch} = require '../lib/dispatcher'
+loginStore = require '../data/login'
+LoadingIndicator = require '../components/loading-indicator'
 ChildRouter = require 'react-child-router'
 {Link} = ChildRouter
 InPlaceForm = require '../components/in-place-form'
+{dispatch} = require '../lib/dispatcher'
 
 module.exports = React.createClass
   displayName: 'EditAccountPage'
+
+  mixins: [
+    loginStore.mixInto 'login'
+  ]
 
   getInitialState: ->
     newPassword: ''
@@ -33,7 +39,10 @@ module.exports = React.createClass
     dispatch 'current-user:save', properties...
 
   render: ->
-    if @props.user?
+    if @state.login.loading
+      <LoadingIndicator />
+
+    else if @state.login.current?
       <div className="edit-account-page content-container tabbed-content" data-side="left">
         <div className="tabbed-content-tabs">
           <Link href="#/settings" className="tabbed-content-tab">General</Link>
@@ -53,13 +62,13 @@ module.exports = React.createClass
               <fieldset>
                 <legend>Login name</legend>
                 <p>This feature won’t be quite as discoverable as this.</p>
-                <input type="text" name="login" value={@props.user.login} placeholder="cool_guy_123" onChange={@handlePropertyInputChange} />
+                <input type="text" name="login" value={@state.login.current.login} placeholder="cool_guy_123" onChange={@handlePropertyInputChange} />
               </fieldset>
 
               <fieldset>
                 <legend>Contact info</legend>
                 <p>Email address</p>
-                <input type="email" name="email" value={@props.user.email} placeholder="me@example.com" onChange={@handlePropertyInputChange} />
+                <input type="email" name="email" value={@state.login.current.email} placeholder="me@example.com" onChange={@handlePropertyInputChange} />
                 <p><small>We’ll never share this address. You can edit your public contact information in your profile</small></p>
               </fieldset>
 
@@ -68,7 +77,7 @@ module.exports = React.createClass
                 <table className="for-checkboxes">
                   <tr>
                     <td>
-                      <input type="checkbox" name="wants_betas" checked={@props.user.wants_betas} onChange={@handlePropertyInputChange} />
+                      <input type="checkbox" name="wants_betas" checked={@state.login.current.wants_betas} onChange={@handlePropertyInputChange} />
                     </td>
                     <td>
                       <label>I want to help test new projects under development.</label>
@@ -76,7 +85,7 @@ module.exports = React.createClass
                   </tr>
                   <tr>
                     <td>
-                      <input type="checkbox" name="can_survey" checked={@props.user.can_survey} onChange={@handlePropertyInputChange} />
+                      <input type="checkbox" name="can_survey" checked={@state.login.current.can_survey} onChange={@handlePropertyInputChange} />
                     </td>
                     <td>
                       <label>I’m willing to take part in occasional surveys from the Zooniverse and associated scientists.</label>
@@ -127,7 +136,7 @@ module.exports = React.createClass
               <table>
                 <tr>
                   <td style={verticalAlign: 'middle'}>
-                    <img src={@props.user.avatar} width="96" height="96" />
+                    <img src={@state.login.current.avatar} width="96" height="96" />
                   </td>
                   <td>
                     <label>
@@ -146,29 +155,29 @@ module.exports = React.createClass
                 <tr>
                   <th>Your name</th>
                   <td>
-                    <input type="text" name="real_name" value={@props.user.real_name} placeholder="John Smith" onChange={@handlePropertyInputChange} /><br />
+                    <input type="text" name="real_name" value={@state.login.current.real_name} placeholder="John Smith" onChange={@handlePropertyInputChange} /><br />
                     <small>We’ll use this to give acknowledgement in papers, on posters, etc.</small>
                   </td>
                 </tr>
                 <tr>
                   <th>Location</th>
-                  <td><input type="text" name="location" value={@props.user.location} placeholder="Chicago, IL" onChange={@handlePropertyInputChange} /></td>
+                  <td><input type="text" name="location" value={@state.login.current.location} placeholder="Chicago, IL" onChange={@handlePropertyInputChange} /></td>
                 </tr>
                 <tr>
                   <th>Public email address</th>
-                  <td><input type="text" name="public_email" value={@props.user.public_email} placeholder="me@example.com" onChange={@handlePropertyInputChange} /></td>
+                  <td><input type="text" name="public_email" value={@state.login.current.public_email} placeholder="me@example.com" onChange={@handlePropertyInputChange} /></td>
                 </tr>
                 <tr>
                   <th>Web site</th>
-                  <td><input type="url" name="personal_url" value={@props.user.personal_url} placeholder="https://www.example.com/" onChange={@handlePropertyInputChange} /></td>
+                  <td><input type="url" name="personal_url" value={@state.login.current.personal_url} placeholder="https://www.example.com/" onChange={@handlePropertyInputChange} /></td>
                 </tr>
                 <tr>
                   <th>Twitter</th>
-                  <td><input type="text" name="twitter" prefix="@" value={@props.user.twitter} placeholder="Your twitter name" onChange={@handlePropertyInputChange} /></td>
+                  <td><input type="text" name="twitter" prefix="@" value={@state.login.current.twitter} placeholder="Your twitter name" onChange={@handlePropertyInputChange} /></td>
                 </tr>
                 <tr>
                   <th>Pinterest</th>
-                  <td><input type="text" name="pinterest" value={@props.user.pinterest} placeholder="Your Pinterest user name" onChange={@handlePropertyInputChange} /></td>
+                  <td><input type="text" name="pinterest" value={@state.login.current.pinterest} placeholder="Your Pinterest user name" onChange={@handlePropertyInputChange} /></td>
                 </tr>
               </table>
             </fieldset>

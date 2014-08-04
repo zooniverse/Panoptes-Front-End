@@ -1,9 +1,8 @@
 # @cjsx React.DOM
 
+Translator = require 'react-translator'
 React = require 'react'
 {dispatch} = require '../lib/dispatcher'
-appState = require '../data/app-state'
-Translator = require 'react-translator'
 
 Translator.setStrings
   loginBar:
@@ -12,8 +11,6 @@ Translator.setStrings
 
 module.exports = React.createClass
   displayName: 'LoginBar'
-
-  mixins: [appState.mixInto {'showingLoginDialog'}]
 
   render: ->
     <div className="login-bar main-header-group">

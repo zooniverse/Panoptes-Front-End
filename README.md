@@ -18,6 +18,8 @@ This is still somewhat in _flux_, rofl.
 
 ### React
 
+Everything that renders on the page is a React component. They're fairly organized:
+
 **Components** are generic content holders. They have no content of their own.
 
 **Partials** are more specific than components. They might be reusable across the site, but display their own content.

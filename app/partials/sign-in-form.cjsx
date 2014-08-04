@@ -1,10 +1,11 @@
 # @cjsx React.DOM
 
-{dispatch} = require '../lib/dispatcher'
 Translator = require 'react-translator'
 React = require 'react'
-currentUser = require '../data/current-user'
+loginStore = require '../data/login'
 InPlaceForm = require '../components/in-place-form'
+LoadingIndicator = require '../components/loading-indicator'
+{dispatch} = require '../lib/dispatcher'
 
 Translator.setStrings
   signInForm:
@@ -19,63 +20,63 @@ Translator.setStrings
 module.exports = React.createClass
   displayName: 'SignInForm'
 
+  mixins: [
+    loginStore.mixInto current: 'currentUser', loading: 'loading'
+  ]
+
   getInitialState: ->
-    hasLoginAndPassword: false
-    loading: false
-    errors: null
-
-  handleInputChange: ->
-    login = !!@refs.login.getDOMNode().value
-    password = !!@refs.password.getDOMNode().value
-    @setState hasLoginAndPassword: login and password
-
-  handleSubmit: ->
-    login = @refs.login.getDOMNode().value
-    password = @refs.password.getDOMNode().value
-    dispatch 'current-user:sign-in', login, password
-    @setState loading: true
-
-  handleSignOut: ->
-    @refs.password.getDOMNode().value = ''
-    dispatch 'current-user:sign-out'
-
-  onCurrentUserChange: ->
-    @setState
-      loading: false
+    login: ''
+    password: ''
 
   render: ->
-    @transferPropsTo <InPlaceForm onSubmit={@handleSubmit}>
+    if @state.currentUser?
       <p>
-        <label>
-          <Translator>signInForm.userName</Translator><br />
-          <input type="text" name="login" disabled={@props.user?} onChange={@handleInputChange} autoFocus="autoFocus" ref="login" />
-          {if @state.errors?.login
-            <span className="error">@state.errors.login</span>
-          }
-        </label>
+        <span>Logged in as {@state.currentUser.credited_name} ({@state.currentUser.display_name}).</span>
+        <button onClick={@handleSignOut}>Sign out</button>
       </p>
 
-      <p>
-        <label>
-          <Translator>signInForm.password</Translator><br />
-          <input type="password" disabled={@props.user?} onChange={@handleInputChange} ref="password" />
-          {if @state.errors?.password
-            <span className="error">@state.errors.password</span>
-          }
-        </label>
-      </p>
+    else
+      <InPlaceForm onSubmit={@handleSubmit}>
+        <p>
+          <label>
+            <Translator>signInForm.userName</Translator>
+            <br />
+            <input type="text" name="login" value={@state.login} onChange={@handleInputChange} autoFocus="autoFocus" />
 
-      <p>
-        <button type="submit" disabled={@state.loading or @props.user? or not @state.hasLoginAndPassword}>
-          <Translator>signInForm.signIn</Translator>
-        </button>
+            {if @state.login.errors?.login?
+              <span className="error">@state.login.errors.login</span>}
+          </label>
+        </p>
 
-        <button type="button" disabled={not @props.user?} onClick={@handleSignOut}>
-          <Translator>signInForm.signOut</Translator>
-        </button>
+        <p>
+          <label>
+            <Translator>signInForm.password</Translator>
+            <br />
+            <input type="password" name="password" value={@state.password} onChange={@handleInputChange} />
 
-        {if @state.loading
-          <span className="loading">Hold on...</span>
-        }
-      </p>
-    </InPlaceForm>
+            {if @state.login.errors?.password?
+              <span className="error">@state.login.errors.password</span>}
+          </label>
+        </p>
+
+        <p>
+          <button type="submit">
+            <Translator>signInForm.signIn</Translator>
+          </button>
+
+          {if @state.loading
+            <LoadingIndicator />}
+        </p>
+      </InPlaceForm>
+
+  handleSignOut: ->
+    dispatch 'current-user:sign-out'
+    @setState password: ''
+
+  handleInputChange: (e) ->
+    stateChange = {}
+    stateChange[e.target.name] = e.target.value
+    @setState stateChange
+
+  handleSubmit: ->
+    dispatch 'current-user:sign-in', @state.login, @state.password, this
