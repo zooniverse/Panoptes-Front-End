@@ -26,7 +26,7 @@ Main = React.createClass
         Projects hash: '#/projects'
         Projects hash: '#/projects/:categories'
         Project hash: '#/projects/:owner/:name/*'
-        Settings hash: '#/settings/*',
+        Settings hash: '#/settings/*'
         UserProfile hash: '#/users/:login/*'
         Build hash: '#/build/*'
 

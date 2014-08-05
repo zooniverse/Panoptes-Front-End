@@ -37,7 +37,6 @@ LoginDialog = React.createClass
 
   render: ->
     if @state.showing
-      console.log 'Login dialog is showing!'
       <Dialog className="columns-container" style={height: '70%'}>
         <div className="tabbed-content column" data-side="top" style={width: 640}>
           <div className="tabbed-content-tabs">
@@ -65,7 +64,6 @@ LoginDialog = React.createClass
       </Dialog>
 
     else
-      console.log 'Login dialog is not showing'
-      <noscript />
+      null
 
 module.exports = LoginDialog
