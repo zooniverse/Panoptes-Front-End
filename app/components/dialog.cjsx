@@ -1,3 +1,5 @@
+# @cjsx React.DOM
+
 React = require 'react'
 
 Dialog = React.createClass

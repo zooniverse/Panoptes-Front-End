@@ -1,3 +1,5 @@
+# @cjsx React.DOM
+
 React = require 'react'
 loginStore = require '../data/login'
 LoadingIndicator = require '../components/loading-indicator'
@@ -13,18 +15,21 @@ module.exports = React.createClass
   ]
 
   render: ->
-    React.DOM.header className: 'main-header',
-      MainNav null
+    <header className="main-header">
+      <MainNav />
 
-      React.DOM.div className: 'main-header-group'
+      <div className="main-header-group"></div>
 
-      if @state.login.loading
-        React.DOM.div className: 'main-header-group',
-          React.DOM.div className: 'main-header-item',
-            LoadingIndicator null
+      {if @state.login.loading
+        <div className="main-header-group">
+          <div className="main-header-item">
+            <LoadingIndicator />
+          </div>
+        </div>
 
       else if @state.login.current?
-        AccountBar user: @state.login.current
+        <AccountBar user={@state.login.current} />
 
       else
-        LoginBar null
+        <LoginBar />}
+    </header>
