@@ -1,3 +1,5 @@
+# @cjsx React.DOM
+
 React = window.React = require 'react'
 {dispatch} = require './lib/dispatcher'
 MainHeader = require './partials/main-header'
@@ -17,22 +19,24 @@ Main = React.createClass
   displayName: 'Main'
 
   render: ->
-    React.DOM.div className: 'panoptes-main',
-      MainHeader user: null
+    <div className="panoptes-main">
+      <MainHeader />
 
-      ChildRouter className: 'main-content',
-        Home hash: '#'
-        SignIn hash: '#/sign-in/*'
-        Projects hash: '#/projects'
-        Projects hash: '#/projects/:categories'
-        Project hash: '#/projects/:owner/:name/*'
-        Settings hash: '#/settings/*'
-        UserProfile hash: '#/users/:login/*'
-        Build hash: '#/build/*'
+      <ChildRouter className="main-content">
+        <Home hash="#" />
+        <SignIn hash="#/sign-in/*" />
+        <Projects hash="#/projects" />
+        <Projects hash="#/projects/:categories" />
+        <Project hash="#/projects/:owner/:name/*" />
+        <Settings hash="#/settings/*" />
+        <UserProfile hash="#/users/:login/*" />
+        <Build hash="#/build/*" />
+      </ChildRouter>
 
-      MainFooter null
+      <MainFooter />
 
-      LoginDialog null
+      <LoginDialog />
+    </div>
 
 mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'

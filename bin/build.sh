@@ -12,7 +12,7 @@ cp -av ./public ./build
   --transform envify \
   --plugin bundle-collapser/plugin \
   --outfile ./build/main.js \
-  ./app/main.coffee
+  ./app/main.cjsx
 
 ./node_modules/.bin/uglifyjs \
   --verbose \

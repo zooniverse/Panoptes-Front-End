@@ -1,7 +1,7 @@
+# @cjsx React.DOM
+
 React = require 'react'
 Translator = require 'react-translator'
-
-{div} = React.DOM
 
 Translator.setStrings
   home:
@@ -12,6 +12,7 @@ module.exports = React.createClass
   displayName: 'HomePage'
 
   render: ->
-    div className: 'home-page content-container',
-      Translator tag: 'h1', 'home.title'
-      Translator tag: 'p', 'home.intro'
+    <div className="home-page content-container">
+      <Translator tag="h1">home.title</Translator>
+      <Translator tag="p">home.intro</Translator>
+    </div>

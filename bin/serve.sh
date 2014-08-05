@@ -12,7 +12,7 @@ jobs=""
   --transform coffee-reactify \
   --transform envify \
   --outfile ./public/main.js \
-  ./app/main.coffee \
+  ./app/main.cjsx \
   & jobs="$jobs $!"
 
 [[ -f ./public/main.css ]] && rm ./public/main.css
