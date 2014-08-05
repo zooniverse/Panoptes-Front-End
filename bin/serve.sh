@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+source "$(dirname "$0")/config.sh"
+
 jobs=""
 
-[[ -f ./public/main.js ]] && rm ./public/main.js
+[[ -f "$DEV_DIR/$OUT_JS" ]] && rm "$DEV_DIR/$OUT_JS"
 
 ./node_modules/.bin/watchify \
   --verbose \
@@ -11,24 +13,24 @@ jobs=""
   --extension ".cjsx" \
   --transform coffee-reactify \
   --transform envify \
-  --outfile ./public/main.js \
-  ./app/main.cjsx \
+  --outfile "$DEV_DIR/$OUT_JS" \
+  "$SRC_JS" \
   & jobs="$jobs $!"
 
-[[ -f ./public/main.css ]] && rm ./public/main.css
+[[ -f "$DEV_DIR/$OUT_CSS" ]] && rm "$DEV_DIR/$OUT_CSS"
 
 ./node_modules/.bin/stylus \
   --watch \
   --use nib \
   --import nib \
-  --out ./public \
+  --out "$DEV_DIR" \
   ./css/main.styl \
   & jobs="$jobs $!"
 
 ./node_modules/.bin/static \
-  --port 3735 \
+  --port "$PORT" \
   --headers '{"Cache-Control": "no-cache, must-revalidate"}' \
-  ./public \
+  "$DEV_DIR" \
   & jobs="$jobs $!"
 
 trap 'kill -HUP $jobs' INT TERM HUP

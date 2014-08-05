@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-[[ -d ./build ]] && rm -rf ./build
+source "$(dirname "$0")/config.sh"
 
-cp -av ./public ./build
+[[ -d "$BUILD_DIR" ]] && rm -rf "$BUILD_DIR"
+
+cp -av "$DEV_DIR" "$BUILD_DIR"
 
 ./node_modules/.bin/browserify \
   --verbose \
@@ -11,23 +13,23 @@ cp -av ./public ./build
   --transform coffee-reactify \
   --transform envify \
   --plugin bundle-collapser/plugin \
-  --outfile ./build/main.js \
-  ./app/main.cjsx
+  --outfile "$BUILD_DIR/$OUT_JS" \
+  "$SRC_JS"
 
 ./node_modules/.bin/uglifyjs \
   --verbose \
   --screw-ie8 \
   --mangle \
   --compress \
-  --output ./build/main.js \
-  ./build/main.js
+  --output "$BUILD_DIR/$OUT_JS" \
+  "$BUILD_DIR/$OUT_JS"
 
 ./node_modules/.bin/stylus \
   --use nib \
   --import nib \
-  --out ./build \
-  ./css/main.styl
+  --out "$BUILD_DIR" \
+  "$SRC_CSS"
 
 ./node_modules/.bin/csso \
-  ./build/main.css \
-  ./build/main.css
+  "$BUILD_DIR/$OUT_CSS" \
+  "$BUILD_DIR/$OUT_CSS"
