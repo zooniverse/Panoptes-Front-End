@@ -26,20 +26,24 @@ class Store
       changeCallbackName = "updateStateWithStore_#{Math.random().toString().split('.')[1]}"
 
       getCurrentState = ->
-        state = {}
-
-        if typeof stateProperties is 'string'
-          state[stateProperties] = store
+        if typeof stateProperties is 'function'
+          state = stateProperties.call this
 
         else
-          for storeProperty, stateProperty of stateProperties
-            state[stateProperty] = store[storeProperty]
+          state = {}
+
+          if typeof stateProperties is 'string'
+            state[stateProperties] = store
+
+          else
+            for storeProperty, stateProperty of stateProperties
+              state[stateProperty] = store[storeProperty]
 
         state
 
       Mixin =
         getInitialState: ->
-          getCurrentState()
+          getCurrentState.call this
 
         componentDidMount: ->
           store.listen @[changeCallbackName]
@@ -48,7 +52,7 @@ class Store
           store.stopListening @[changeCallbackName]
 
       Mixin[changeCallbackName] = ->
-        @setState getCurrentState()
+        @setState getCurrentState.call this
 
       Mixin
 
