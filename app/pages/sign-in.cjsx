@@ -1,8 +1,9 @@
 # @cjsx React.DOM
 
 React = require 'react'
-ChildRouter = require 'react-child-router'
+ChildRouter = {Link} = require 'react-child-router'
 SignInForm = require '../partials/sign-in-form'
+RegisterForm = require '../partials/register-form'
 Translator = require 'react-translator'
 InPlaceForm = require '../components/in-place-form'
 
@@ -17,81 +18,41 @@ Translator.setStrings
 module.exports = React.createClass
   displayName: 'SignInPage'
 
-  getInitialState: ->
-    needsToRegister: false
-
-  toggleNeedsAccount: (e) ->
-    @setState needsToRegister: not @state.needsToRegister
-
   render: ->
-    <ChildRouter className="sign-in-page normal-content">
+    <div className="sign-in-page content-container">
       <Translator tag="h1">signIn.withZooniverse</Translator>
       <Translator tag="p">signIn.whyHaveAccount</Translator>
 
-      <nav>
-        <a href="#/sign-in">Sign in</a> | <a href="#/sign-in/register">Register</a>
-      </nav>
+      <div className="columns-container">
+        <ChildRouter className="tabbed-content column" data-side="top">
+          <nav className="tabbed-content-tabs">
+            <Link href="#/sign-in" className="tabbed-content-tab">Sign in</Link>
+            <Link href="#/sign-in/register" className="tabbed-content-tab">Register</Link>
+          </nav>
 
-      <div hash="#/sign-in" className="has-columns">
-        <SignInForm className="primary-column" />
+          <div hash="#/sign-in" className="content-container">
+            <SignInForm />
+          </div>
 
-        <div className="oauth-providers">
-          <p>Or sign in with another service</p>
-          <div><button><Translator>signIn.withFacebook</Translator></button></div>
-          <div><button><Translator>signIn.withTwitter</Translator></button></div>
-          <div><button><Translator>signIn.withGoogle</Translator></button></div>
-        </div>
-      </div>
-
-      <div hash="#/sign-in/register">
-        <form>
-          <h1>Register a new Zooniverse account</h1>
-
-          <p>
-            <label>
-              User name<br />
-              <input type="text" name="login" />
-            </label>
-          </p>
-
-          <p>
-            <label>
-              Password<br />
-              <input type="password" />
-            </label>
-          </p>
-
-          <p>
-            <label>
-              <input type="checkbox" checked={@state.needsToRegister} onClick={@toggleNeedsAccount} />
-              I need to register
-            </label>
-          </p>
-          <p>
-            <label>
-              Confirm password<br />
-              <input type="password" name="confirm_password" />
-            </label>
-          </p>
-
-          <p>
-            <label>
-              Your real name<br />
-              <input type="text" name="real_name" /><br />
-              <small>Optional; we’ll use this to acknowledge your work in scientific papers, posters, etc.</small>
-            </label>
-          </p>
-
-          <p><button type="submit">Sign up</button></p>
-        </form>
+          <div hash="#/sign-in/register" className="content-container">
+            <RegisterForm />
+          </div>
+        </ChildRouter>
 
         <hr />
 
         <div className="oauth-providers">
-          <p>Or sign in with another service</p>
-          <div><button><Translator>signIn.withFacebook</Translator></button></div>
-          <div><button><Translator>signIn.withTwitter</Translator></button></div>
-          <div><button><Translator>signIn.withGoogle</Translator></button></div>
+          <div>Or sign in with another service</div>
+          <br />
+          <div>
+            <button><Translator>signIn.withFacebook</Translator></button>
+          </div>
+          <div>
+            <button><Translator>signIn.withTwitter</Translator></button>
+          </div>
+          <div>
+            <button><Translator>signIn.withGoogle</Translator></button>
+          </div>
         </div>
       </div>
-    </ChildRouter>
+    </div>
