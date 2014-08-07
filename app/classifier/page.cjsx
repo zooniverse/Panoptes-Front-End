@@ -10,7 +10,7 @@ module.exports = React.createClass
   displayName: 'ClassifyPage'
 
   mixins: [
-    classifierStore.mixInto -> classification: classifierStore.classifications[@props.project.id]
+    classifierStore.mixInto -> classification: classifierStore.classifiers[@props.project.id]
   ]
 
   componentWillMount: ->

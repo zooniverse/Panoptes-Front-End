@@ -1,7 +1,8 @@
 Store = require './store'
+{dispatch} = require '../lib/dispatcher'
 
 EXAMPLE_PROJECT =
-  id: 'GPROJECT_GZ'
+  id: 'PROJECT_GZ'
   name: 'Galaxy Zoo'
   owner_name: 'Zooniverse'
   avatar: 'https://pbs.twimg.com/profile_images/2597266958/image.jpg'
@@ -15,6 +16,7 @@ EXAMPLE_PROJECT =
     Here's the science case for this project...
   '''
   team_members: []
+
   workflows:
     main:
       firstTask: 'shape'
@@ -39,12 +41,29 @@ EXAMPLE_PROJECT =
           next: null
 
 module.exports = new Store
-  projects: {}
+  root: '/projects'
+  items : {}
 
-  'project:get', (query) ->
-    getProject = new Promise (resolve, reject) ->
+  get: (owner, name) ->
+    unless owner of @items and name of @items[owner]
+      dispatch 'projects:get', owner, name
+    @items[owner]?[name]
+
+  fetch: (query) ->
+    fetchItems = new Promise (resolve, reject) =>
+      console?.info 'GET', @root, JSON.stringify query
       setTimeout resolve.bind(null, [EXAMPLE_PROJECT]), 1000
 
-    getProject.then (projects) =>
-      for project in projects
-        @projects[project.id] = project
+    fetchItems.then (items) =>
+      for item in items
+        @items[item.owner_name][item.name] = item
+      @emitChange()
+
+  'projects:get': (owner, name) ->
+    unless owner of @items and name of @items[owner]
+      @items[owner] ?= {}
+      @items[owner][name] = null
+
+      @fetch
+        owner_name: owner
+        name: name

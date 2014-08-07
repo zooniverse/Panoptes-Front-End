@@ -6,7 +6,7 @@ EXAMPLE_SUBJECT =
   workflow: 'main'
 
 module.exports = new Store
-  classifications: {}
+  classifiers: {}
 
   'classification:create': (project) ->
     fetchSubject = new Promise (resolve, reject) ->
@@ -14,22 +14,23 @@ module.exports = new Store
 
     fetchSubject.then (subject) =>
       firstTask = project.workflows[subject.workflow].firstTask
-      @classifications[project.id] =
+      console.log 'Creating new classification', project.id, subject.id
+      @classifiers[project.id] =
         subject: subject
         annotations: [{task: firstTask, marks: [{type: 'point', x: 10, y: 10}, {type: 'point', x: 30, y: 30}]}]
 
   'classification:annotation:create': (project, task) ->
-    @classifications[project.id].annotations.push {task}
+    @classifiers[project.id].annotations.push {task}
 
   'classification:annotation:destroy-last': (project) ->
-    @classifications[project.id].annotations.pop()
+    @classifiers[project.id].annotations.pop()
 
   'classification:answer': (project, answer) ->
-    annotations = @classifications[project.id].annotations
+    annotations = @classifiers[project.id].annotations
     annotations[annotations.length - 1].answer = answer
 
   'classification:save': (project) ->
-    classification = @classifications[project.id]
+    classification = @classifiers[project.id]
 
     postClassification = new Promise (resolve, reject) ->
       console?.info 'POST /classifications', JSON.stringify classification

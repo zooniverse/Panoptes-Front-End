@@ -13,19 +13,14 @@ module.exports = React.createClass
   displayName: 'ProjectPage'
 
   mixins: [
-    projectsStore.mixInto -> project: projectsStore.projects["#{@props.params.owner}/#{@props.params.name}"]
+    projectsStore.mixInto -> project: projectsStore.get @props.params.owner, @props.params.name
   ]
 
   componentWillMount: ->
-    dispatch 'projects:get', owner: @props.params.owner, name: @props.params.name
     document.documentElement.classList.add 'on-project-page'
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-project-page'
-
-  loadProject: ->
-    console?.info "Loading project owned by '#{@props.params.owner}' and named '#{@props.params.name}'"
-    dispatch 'project:get', @props.params
 
   render: ->
     if @state?.project?
@@ -78,7 +73,6 @@ module.exports = React.createClass
       </div>
 
     else
-      @loadProject()
       <div className="content-container">
         <LoadingIndicator />
       </div>
