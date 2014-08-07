@@ -6,7 +6,7 @@ module.exports = React.createClass
   displayName: 'LoadingIndicator'
 
   render: ->
-    <span className="loading-indicator">
+    @transferPropsTo <span className="loading-indicator">
       <span>•</span>
       <span>•</span>
       <span>•</span>

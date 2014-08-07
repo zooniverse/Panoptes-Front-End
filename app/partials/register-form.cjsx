@@ -2,6 +2,9 @@
 
 React = require 'react'
 InPlaceForm = require '../components/in-place-form'
+LoadingIndicator = require '../components/loading-indicator'
+
+CHECKING = 'CHECKING'
 
 module.exports = React.createClass
   displayName: 'RegisterForm'
@@ -10,18 +13,22 @@ module.exports = React.createClass
 
   render: ->
     {badLoginChars, loginTaken, passwordTooShort, passwordsDontMatch} = @state
+    email = @refs.email?.getDOMNode().value
 
     <InPlaceForm>
       <div>
         <label>
-          <div>Login</div>
-          <input type="text" name="login" onChange={@handleLoginChange} ref="login" />
+          <div>User name</div>
+          <input type="text" name="login" onChange={@handleLoginChange} ref="login" autoFocus="autoFocus" />
+          &ensp;
           {if badLoginChars?.length > 0
             <span className="form-help error">Don't use weird characters ({badLoginChars.join ', '}).</span>
           else if loginTaken is true
-            <span className="form-help error">Sorry, that login is taken. <a href="#">Forget your password?</a></span>
+            <span className="form-help error">Sorry, that login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
           else if loginTaken is false
-            <span className="form-help success">Looks good.</span>}
+            <span className="form-help success">Looks good.</span>
+          else if loginTaken is CHECKING
+            <LoadingIndicator className="form-help" />}
         </label>
       </div>
       <br />
@@ -29,8 +36,9 @@ module.exports = React.createClass
         <label>
           <div>Password</div>
           <input type="password" name="password" ref="password" onChange={@handlePasswordChange} />
+          &ensp;
           {if passwordTooShort
-            <span className="form-help error">That password is too short. <a href="#">Forget your password?</a></span>}
+            <span className="form-help error">That password is too short.</span>}
         </label>
       </div>
       <br />
@@ -38,6 +46,7 @@ module.exports = React.createClass
         <label>
           <div>Confirm password</div>
           <input type="password" name="confirmed_password" ref="confirmedPassword" onChange={@handlePasswordChange} />
+          &ensp;
           {if passwordsDontMatch is true
             <span className="form-help error">These passwords don't match!</span>
           else if passwordsDontMatch is false
@@ -48,7 +57,8 @@ module.exports = React.createClass
       <div>
         <label>
           <div>Email</div>
-          <input type="text" name="email" />
+          <input type="text" name="email" ref="email" onChange={@forceUpdate.bind this, null} />
+          &ensp;
         </label>
       </div>
       <br />
@@ -56,6 +66,7 @@ module.exports = React.createClass
         <label>
           <div>Real name</div>
           <input type="text" name="real_name" />
+          &ensp;
           <div className="form-help">We'll use this to give you credit in scientific papers, posters, etc.</div>
         </label>
       </div>
@@ -82,16 +93,19 @@ module.exports = React.createClass
       badLoginChars: badChars
       loginTaken: null
 
-    if badChars.length is 0
+    if exists and badChars.length is 0
+      @setState
+        loginTaken: CHECKING
+
       checkTaken = new Promise (resolve) ->
         matches = []
         if Math.random() < 0.5
           matches.push true
-        resolve matches
+        setTimeout resolve.bind(this, matches), 1000
 
       checkTaken.then (matches) =>
         @setState
-          loginTaken: if login then matches.length isnt 0
+          loginTaken: matches.length isnt 0
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
