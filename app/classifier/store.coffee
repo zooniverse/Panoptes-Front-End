@@ -30,13 +30,12 @@ module.exports = new Store
 
   'classification:save': (project) ->
     classification = @classifications[project.id]
-    classification._saving = true
-    @emitChange()
 
     postClassification = new Promise (resolve, reject) ->
+      console?.info 'POST /classifications', JSON.stringify classification
+      classification._saving = true
+      @emitChange()
       setTimeout resolve, 1000
-
-    console?.info 'POST /classifications', JSON.stringify classification
 
     postClassification.then =>
       classification._saving = false

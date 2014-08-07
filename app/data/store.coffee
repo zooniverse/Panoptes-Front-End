@@ -1,6 +1,9 @@
 dispatcher = require '../lib/dispatcher'
 
 class Store
+  root: '' # The endpoint to query from and post to, e.g. "/subjects"
+  examples: null
+
   callbacks: null
 
   constructor: (options = {}) ->
@@ -67,5 +70,13 @@ class Store
   emitChange: ->
     for callback in @callbacks
       callback()
+
+  fetch: (query) ->
+    get = new Promise (resolve, reject) ->
+      setTimeout resolve.bind(null, @examples), 1000
+
+    get.then (results) =>
+      for result in results
+        @items[result.id] = result
 
 module.exports = Store
