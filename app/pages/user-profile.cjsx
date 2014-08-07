@@ -12,11 +12,11 @@ UserHeader = React.createClass
   displayName: 'UserHeader'
 
   mixins: [
-    usersStore.mixInto -> user: usersStore.users[@props.login]
+    usersStore.mixInto -> user: usersStore.get @props.login
   ]
 
   render: ->
-    <div className="user-header owner-header content-container columns-container">
+    <div className="user-header owner-header content-container columns-container #{pendingClass ? ''}">
       <div>
         <img src={@state.user?.avatar ? ''} className="avatar" />
       </div>
@@ -58,7 +58,7 @@ UserDetails = React.createClass
   displayName: 'UserDetails'
 
   mixins: [
-    usersStore.mixInto -> user: usersStore.users[@props.login]
+    usersStore.mixInto -> user: usersStore.get @props.login
   ]
 
   render: ->
@@ -101,9 +101,6 @@ UserDetails = React.createClass
 
 module.exports = React.createClass
   displayName: 'UserProfilePage'
-
-  componentWillMount: ->
-    dispatch 'users:get', login: @props.params.login
 
   render: ->
     <div className="user-profile-page">

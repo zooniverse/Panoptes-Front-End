@@ -48,7 +48,7 @@ class Store
         getInitialState: ->
           getCurrentState.call this
 
-        componentDidMount: ->
+        componentWillMount: ->
           store.listen @[changeCallbackName]
 
         componentWillUnmount: ->
