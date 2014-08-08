@@ -3,6 +3,7 @@
 React = require 'react'
 InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
+{dispatch} = require '../lib/dispatcher'
 
 CHECKING = 'CHECKING'
 
@@ -15,7 +16,7 @@ module.exports = React.createClass
     {badLoginChars, loginTaken, passwordTooShort, passwordsDontMatch} = @state
     email = @refs.email?.getDOMNode().value
 
-    <InPlaceForm>
+    <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
           <div>User name</div>
@@ -65,7 +66,7 @@ module.exports = React.createClass
       <div>
         <label>
           <div>Real name</div>
-          <input type="text" name="real_name" />
+          <input type="text" name="real_name" ref="realName" />
           &ensp;
           <div className="form-help">We'll use this to give you credit in scientific papers, posters, etc.</div>
         </label>
@@ -74,7 +75,7 @@ module.exports = React.createClass
       <div>
         <label>
           <input type="checkbox" name="agrees_to_privacy_policy" ref="agreesToPrivacyPolicy" onChange={@forceUpdate.bind this, null} />
-          You agree to our <a href="#">privacy policy</a> <span className="form-help">(required)</span>.
+          You agree to our <a href="#/privacy">privacy policy</a> <span className="form-help">(required)</span>.
         </label>
       </div>
       <br />
@@ -126,3 +127,13 @@ module.exports = React.createClass
 
     console.log (badLoginChars?.length is 0), (loginTaken is false), (passwordsDontMatch is false), agreesToPrivacyPolicy
     (badLoginChars?.length is 0) and (loginTaken is false) and (passwordsDontMatch is false) and agreesToPrivacyPolicy
+
+  handleSubmit: ->
+    login = @refs.login.getDOMNode().value
+    password = @refs.password.getDOMNode().value
+    confirmedPassword = @refs.confirmedPassword.getDOMNode().value
+    email = @refs.email.getDOMNode().value
+    realName = @refs.realName.getDOMNode().value
+    agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy.getDOMNode().checked
+
+    dispatch 'users:create', {login, password, confirmedPassword, email, realName, agreesToPrivacyPolicy}
