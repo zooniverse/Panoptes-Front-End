@@ -7,6 +7,8 @@ InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
 {dispatch} = require '../lib/dispatcher'
 
+loginFormsIDPool = -1
+
 Translator.setStrings
   signInForm:
     signIn: 'Sign in'
@@ -21,27 +23,28 @@ module.exports = React.createClass
   displayName: 'SignInForm'
 
   mixins: [
-    loginStore.mixInto {current: 'loading', 'errors'}
+    loginStore.mixInto ->
+      loading: loginStore.attempts[@props.id]?.loading
+      errors: loginStore.attempts[@props.id]?.errors
   ]
 
-  getInitialState: ->
-    identifier: Math.random().toString().split('.')[1]
-    login: ''
-    password: ''
+  getDefaultProps: ->
+    loginFormsIDPool += 1
+    id: "login-form-#{loginFormsIDPool}"
 
   render: ->
-    errors = @state.errors?[@state.identifier]
+    {loading, errors} = @state
 
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
           <Translator>signInForm.userName</Translator>
           <br />
-          <input type="text" name="login" value={@state.login} onChange={@handleInputChange} autoFocus="autoFocus" />
+          <input type="text" name="login" ref="login" autoFocus="autoFocus" />
 
           {if errors?.login?
             errorString = "signInForm.errors.#{errors.login}"
-            <Translator className="error">{errorString}</Translator>}
+            <Translator className="form-help error">{errorString}</Translator>}
         </label>
       </div>
       <br />
@@ -49,11 +52,11 @@ module.exports = React.createClass
         <label>
           <Translator>signInForm.password</Translator>
           <br />
-          <input type="password" name="password" value={@state.password} onChange={@handleInputChange} />
+          <input type="password" name="password" ref="password" />
 
           {if errors?.password?
             errorString = "signInForm.errors.#{errors.password}"
-            <Translator className="error">{errorString}</Translator>}
+            <Translator className="form-help error">{errorString}</Translator>}
         </label>
       </div>
       <br />
@@ -62,19 +65,12 @@ module.exports = React.createClass
           <Translator>signInForm.signIn</Translator>
         </button>
 
-        {if @state.loading
+        {if loading
           <LoadingIndicator />}
       </div>
     </InPlaceForm>
 
-  handleSignOut: ->
-    dispatch 'current-user:sign-out'
-    @setState password: ''
-
-  handleInputChange: (e) ->
-    stateChange = {}
-    stateChange[e.target.name] = e.target.value
-    @setState stateChange
-
   handleSubmit: ->
-    dispatch 'current-user:sign-in', @state.login, @state.password, @state.identifier
+    login = @refs.login.getDOMNode().value
+    password = @refs.password.getDOMNode().value
+    dispatch 'current-user:sign-in', login, password, @props.id

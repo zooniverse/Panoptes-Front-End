@@ -20,8 +20,7 @@ module.exports = React.createClass
       <div>
         <label>
           <div>User name</div>
-          <input type="text" name="login" onChange={@handleLoginChange} ref="login" autoFocus="autoFocus" />
-          &ensp;
+          <input type="text" name="login" ref="login" onChange={@handleLoginChange} autoFocus="autoFocus" />
           {if badLoginChars?.length > 0
             <span className="form-help error">Don't use weird characters ({badLoginChars.join ', '}).</span>
           else if loginTaken is true
@@ -37,7 +36,6 @@ module.exports = React.createClass
         <label>
           <div>Password</div>
           <input type="password" name="password" ref="password" onChange={@handlePasswordChange} />
-          &ensp;
           {if passwordTooShort
             <span className="form-help error">That password is too short.</span>}
         </label>
@@ -47,7 +45,6 @@ module.exports = React.createClass
         <label>
           <div>Confirm password</div>
           <input type="password" name="confirmed_password" ref="confirmedPassword" onChange={@handlePasswordChange} />
-          &ensp;
           {if passwordsDontMatch is true
             <span className="form-help error">These passwords don't match!</span>
           else if passwordsDontMatch is false
@@ -59,7 +56,6 @@ module.exports = React.createClass
         <label>
           <div>Email</div>
           <input type="text" name="email" ref="email" onChange={@forceUpdate.bind this, null} />
-          &ensp;
         </label>
       </div>
       <br />
@@ -67,7 +63,6 @@ module.exports = React.createClass
         <label>
           <div>Real name</div>
           <input type="text" name="real_name" ref="realName" />
-          &ensp;
           <div className="form-help">We'll use this to give you credit in scientific papers, posters, etc.</div>
         </label>
       </div>
