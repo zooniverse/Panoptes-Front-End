@@ -2,7 +2,7 @@
 
 Translator = require 'react-translator'
 React = require 'react'
-{dispatch} = require '../lib/dispatcher'
+{Link} = require 'react-child-router'
 
 Translator.setStrings
   loginBar:
@@ -14,19 +14,11 @@ module.exports = React.createClass
 
   render: ->
     <div className="login-bar main-header-group">
-      <button className="main-header-item" onClick={@handleSignInClick}>
+      <Link href="#/sign-in" className="main-header-item">
         <Translator>loginBar.signIn</Translator>
-      </button>
+      </Link>
 
-      <button className="main-header-item" onClick={@handleRegisterClick}>
+      <Link href="#/sign-in/register" className="main-header-item">
         <Translator>loginBar.register</Translator>
-      </button>
+      </Link>
     </div>
-
-  handleSignInClick: ->
-    dispatch 'login-dialog:show'
-    dispatch 'login-dialog:switch-tab', 0
-
-  handleRegisterClick: ->
-    dispatch 'login-dialog:show'
-    dispatch 'login-dialog:switch-tab', 1

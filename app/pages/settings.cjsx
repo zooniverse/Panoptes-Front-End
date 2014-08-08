@@ -188,8 +188,4 @@ module.exports = React.createClass
       </div>
 
     else
-      <div className="content-container">You're not signed in! <button onClick={@openSignInDialog}>Sign in</button></div>
-
-  openSignInDialog: ->
-    dispatch 'login-dialog:show'
-    dispatch 'login-dialog:switch-tab', 0
+      <div className="content-container">You're not signed in! <a href="#/sign-in">Sign in</a></div>

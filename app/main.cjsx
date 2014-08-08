@@ -5,7 +5,6 @@ React = window.React = require 'react'
 MainHeader = require './partials/main-header'
 ChildRouter = require 'react-child-router'
 MainFooter = require './partials/main-footer'
-LoginDialog = require './partials/login-dialog'
 
 Home = require './pages/home'
 SignIn = require './pages/sign-in'
@@ -34,8 +33,6 @@ Main = React.createClass
       </ChildRouter>
 
       <MainFooter />
-
-      <LoginDialog />
     </div>
 
 mainContainer = document.createElement 'div'
