@@ -1,7 +1,6 @@
 # @cjsx React.DOM
 
 React = require 'react'
-{dispatch} = require '../lib/dispatcher'
 projectsStore = require '../data/projects'
 ChildRouter = require 'react-child-router'
 {Link} = ChildRouter
@@ -12,19 +11,31 @@ LoadingIndicator = require '../components/loading-indicator'
 module.exports = React.createClass
   displayName: 'ProjectPage'
 
-  mixins: [
-    projectsStore.mixInto -> project: projectsStore.get @props.params.owner, @props.params.name
-  ]
-
   componentWillMount: ->
     document.documentElement.classList.add 'on-project-page'
+    @componentWillReceiveProps @props
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-project-page'
 
+  componentWillReceiveProps: (nextProps) ->
+    sameOwner = nextProps.params.owner is @state?.project?.owner_name
+    sameName = nextProps.params.name is @state?.project?.name
+
+    unless sameOwner and sameName
+      query =
+        owner_name: nextProps.params.owner
+        name: nextProps.params.name
+
+      projectsStore.fetch(query).then ([project]) =>
+        setTimeout @setState.bind this, {project}
+
   render: ->
+    console.log "Rendering #{@constructor.displayName}", @state?.project?
+
     if @state?.project?
       qualifiedProjectName = "#{@state.project.owner_name}/#{@state.project.name}"
+
       <div className="project-page tabbed-content" data-side="top" style={backgroundImage: "url(#{@state.project.background_image})"}>
         <div className="background-cover"></div>
         <nav className="tabbed-content-tabs">
@@ -63,7 +74,7 @@ module.exports = React.createClass
           </div>
 
           <div hash="#/projects/:owner/:name/classify" className="classify-content content-container">
-            <ClassifyPage project={@state.project} />
+            <ClassifyPage project={@state.project.id} />
           </div>
 
           <div hash="#/projects/:owner/:name/talk" className="project-text-content content-container">
@@ -74,5 +85,5 @@ module.exports = React.createClass
 
     else
       <div className="content-container">
-        <LoadingIndicator />
+        <p>Loading project <LoadingIndicator /></p>
       </div>

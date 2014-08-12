@@ -21,26 +21,4 @@ EXAMPLE_USER =
 module.exports = window.usersStore = new Store
   root: '/users'
   keyedOn: 'login'
-  items: {}
-
-  get: (key) ->
-    unless key of @items
-      dispatch 'users:get', key
-    @items[key]
-
-  fetch: (query) ->
-    fetchItems = new Promise (resolve, reject) =>
-      console?.info 'GET', @root, JSON.stringify query
-      setTimeout resolve.bind(null, [EXAMPLE_USER]), 1000
-
-    fetchItems.then (items) =>
-      for item in items
-        @items[item[@keyedOn]] = item
-      @emitChange()
-
-  'users:get': (key) ->
-    unless key of @items
-      @items[key] = null
-      query = {}
-      query[@keyedOn] = key
-      @fetch query
+  examples: [EXAMPLE_USER]

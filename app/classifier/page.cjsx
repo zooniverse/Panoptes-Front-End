@@ -1,26 +1,39 @@
 # @cjsx React.DOM
 
 React = require 'react'
-classifierStore = require './store'
+subjectsStore = require '../data/subjects'
+workflowsStore = require '../data/workflows'
+classificationsStore = require '../data/classifications'
 SubjectViewer = require './subject-viewer'
 TaskViewer = require './task-viewer'
 {dispatch} = require '../lib/dispatcher'
 
 module.exports = React.createClass
-  displayName: 'ClassifyPage'
-
-  mixins: [
-    classifierStore.mixInto -> classification: classifierStore.classifiers[@props.project.id]
-  ]
+  displayName: 'Classifier'
 
   componentWillMount: ->
-    unless @state.classification?
-      @requestClassification()
+    @componentWillReceiveProps @props
 
-  requestClassification: ->
-    dispatch 'classification:create', @props.project
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.subject is @state?.subject?.id
+      subjectsStore.get(nextProps.subject).then (subject) =>
+        setTimeout @setState.bind this, {subject}
 
   render: ->
+    console.log "Rendering #{@constructor.displayName}", @state?.subject?
+
+    return if @state?.subject?
+      <p>Classifier OK</p>
+    else
+      <p>Classifier waiting on subject</p>
+
+    if @state.subject?
+        <p>Waiting for workflow</p>
+    else
+      @fetchSubject()
+      <p>Waiting for subject</p>
+
+  WAS_RENDER: ->
     workflow = @props.project.workflows[@state.classification?.subject.workflow]
     annotation = @state.classification?.annotations[@state.classification?.annotations.length - 1]
     task = workflow?.tasks[annotation?.task]

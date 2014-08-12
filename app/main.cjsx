@@ -41,4 +41,4 @@ document.body.appendChild mainContainer
 
 React.renderComponent Main(null), mainContainer
 
-dispatch 'current-user:check'
+# dispatch 'current-user:check'

@@ -2,17 +2,16 @@ dispatcher = require '../lib/dispatcher'
 
 class Store
   root: '' # The endpoint to query from and post to, e.g. "/subjects"
-  examples: null
-
-  callbacks: null
+  keyedOn: 'id'
+  examples: []
 
   constructor: (options = {}) ->
+    @items = {}
     @callbacks = []
+    @mixInto = @_generateMixIntoMethod()
 
     for property, value of options
       @[property] = value
-
-    @mixInto = @_generateMixIntoMethod()
 
     dispatcher.register this
 
@@ -71,12 +70,42 @@ class Store
     for callback in @callbacks
       callback()
 
-  fetch: (query) ->
-    get = new Promise (resolve, reject) ->
-      setTimeout resolve.bind(null, @examples), 1000
+  get: (query, enough = Infinity) ->
+    if typeof query is 'string'
+      new Promise (resolve) =>
+        [key, query] = [query, {}]
+        query[@keyedOn] = key
+        @items[key] ?= @fetch(query).then ([result]) => result
+        resolve @items[key]
+    else
+      matches = (item for key, item of @items when item? and @matchesQuery item, query)
 
-    get.then (results) =>
-      for result in results
-        @items[result.id] = result
+      if matches.length < enough
+        @fetch(query).then (results) =>
+          for result in results
+            @items[result[@keyedOn]] = result
+      else
+        new Promise (resolve) ->
+          resolve matches
+
+  fetch: (query) ->
+    fetchItems = new Promise (resolve, reject) =>
+      console?.info 'GET', @root, JSON.stringify query
+      matches = (item for item in @examples when @matchesQuery item, query)
+      setTimeout resolve.bind(null, matches), 1000
+
+    fetchItems.then (results) =>
+      console?.info 'Got', @root, {results}
+      for item in results
+        @items[item[@keyedOn]] = item
+      @emitChange()
+      results
+
+  matchesQuery: (item, query) ->
+    match = true
+    for key, value of query
+      unless item[key] is value
+        match = false
+    match
 
 module.exports = Store
