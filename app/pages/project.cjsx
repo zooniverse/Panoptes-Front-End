@@ -8,45 +8,64 @@ Markdown = require '../components/markdown'
 ClassifyPage = require './classify'
 LoadingIndicator = require '../components/loading-indicator'
 
-module.exports = React.createClass
+ProjectPage = React.createClass
   displayName: 'ProjectPage'
+
+  getInitialState: ->
+    project: null
 
   componentWillMount: ->
     document.documentElement.classList.add 'on-project-page'
-    @componentWillReceiveProps @props
+    @loadProject @props.owner, @props.project
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-project-page'
 
   componentWillReceiveProps: (nextProps) ->
-    sameOwner = nextProps.params.owner is @state?.project?.owner_name
-    sameName = nextProps.params.name is @state?.project?.name
+    {owner, project} = nextProps
+
+    sameOwner = owner is @state.project?.owner_name
+    sameName = project is @state.project?.name
 
     unless sameOwner and sameName
-      query =
-        owner_name: nextProps.params.owner
-        name: nextProps.params.name
+      @loadProject owner, project
 
-      projectsStore.fetch(query).then ([project]) =>
-        setTimeout @setState.bind this, {project}
+  loadProject: (owner, project) ->
+    query =
+      owner_name: owner
+      name: project
+
+    get = projectsStore.get query, 1
+
+    get.then ([project]) =>
+      setTimeout @setState.bind this, {project}
+
+    get.catch (error) ->
+      console?.error 'Error getting project', JSON.stringify(query), error
 
   render: ->
-    console.log "Rendering #{@constructor.displayName}", @state?.project?
+    owner = @state.project?.owner_name ? @props.owner
+    name = @state.project?.name ? @props.project
 
-    if @state?.project?
-      qualifiedProjectName = "#{@state.project.owner_name}/#{@state.project.name}"
+    qualifiedProjectName = "#{owner}/#{name}"
 
-      <div className="project-page tabbed-content" data-side="top" style={backgroundImage: "url(#{@state.project.background_image})"}>
-        <div className="background-cover"></div>
-        <nav className="tabbed-content-tabs">
-          <Link href="#/projects/#{qualifiedProjectName}" className="home tabbed-content-tab"><h2><img src={@state.project.avatar} className="project-avatar"/>{@state.project.name}</h2></Link>
-          <Link href="#/projects/#{qualifiedProjectName}/science" className="tabbed-content-tab">Science</Link>
-          <Link href="#/projects/#{qualifiedProjectName}/status" className="tabbed-content-tab">Status</Link>
-          <Link href="#/projects/#{qualifiedProjectName}/team" className="tabbed-content-tab">Team</Link>
-          <Link href="#/projects/#{qualifiedProjectName}/classify" className="classify tabbed-content-tab">Classify</Link>
-          <Link href="#/projects/#{qualifiedProjectName}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
-        </nav>
+    defaultImgSrc = '//placehold.it/1.png' # TODO: Add in a completely transparent PNG.
 
+    <div className="project-page tabbed-content" data-side="top" style={backgroundImage: "url(#{@state.project?.background_image ? defaultImgSrc})"}>
+      <div className="background-cover"></div>
+
+      <nav className="tabbed-content-tabs">
+        <Link href="#/projects/#{qualifiedProjectName}" className="home tabbed-content-tab">
+          <h2><img src={@state.project?.avatar ? defaultImgSrc} className="project-avatar"/>{name}</h2>
+        </Link>
+        <Link href="#/projects/#{qualifiedProjectName}/science" className="tabbed-content-tab">Science</Link>
+        <Link href="#/projects/#{qualifiedProjectName}/status" className="tabbed-content-tab">Status</Link>
+        <Link href="#/projects/#{qualifiedProjectName}/team" className="tabbed-content-tab">Team</Link>
+        <Link href="#/projects/#{qualifiedProjectName}/classify" className="classify tabbed-content-tab">Classify</Link>
+        <Link href="#/projects/#{qualifiedProjectName}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
+      </nav>
+
+      {if @state.project?
         <ChildRouter className="project-page-content">
           <div hash="#/projects/:owner/:name" className="project-home-content">
             <div className="call-to-action-container content-container">
@@ -81,9 +100,15 @@ module.exports = React.createClass
             <p>Discussion boards this project</p>
           </div>
         </ChildRouter>
-      </div>
 
-    else
-      <div className="content-container">
-        <p>Loading project <LoadingIndicator /></p>
-      </div>
+      else
+        <div className="content-container">
+          <p>Loading project {qualifiedProjectName}</p>
+        </div>}
+    </div>
+
+module.exports = React.createClass
+  displayName: 'ProjectPageContainer'
+
+  render: ->
+    <ProjectPage owner={@props.params.owner} project={@props.params.name} />

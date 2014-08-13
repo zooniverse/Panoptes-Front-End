@@ -6,7 +6,7 @@ EXAMPLE_SUBJECT =
   project: 'GZ_PROJECT'
   workflow: 'GZ_MAIN_WORKFLOW'
 
-module.exports = new Store
+module.exports = window.subjectsStore = new Store
   root: '/subjects'
   examples: [EXAMPLE_SUBJECT]
 

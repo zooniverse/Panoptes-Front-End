@@ -64,12 +64,11 @@ class Store extends Model
       instance = new @type instance
 
     key = instance[@keyedOn] ? Math.random().toString().split('.')[1]
+    instance[@keyedOn] = key
     @items[key] = instance
     @items[key]
 
   get: (query, enough = Infinity) ->
-    console.log 'GET', @root, JSON.stringify(query), {enough}
-
     if typeof query is 'string'
       new Promise (resolve) =>
         [key, query] = [query, {}]
@@ -89,7 +88,7 @@ class Store extends Model
 
   fetch: (query) ->
     fetchItems = new Promise (resolve, reject) =>
-      console?.info 'GET', @root, JSON.stringify query
+      console?.info 'GET', @root, query
       matches = (item for item in @examples when @matchesQuery item, query)
       setTimeout resolve.bind(null, matches), 1000
 
