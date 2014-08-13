@@ -1,17 +1,18 @@
 dispatcher = require '../lib/dispatcher'
+Model = require './model'
 
-class Store
+class Store extends Model
+  @Model: Model # TODO: This is a mess, I know, I gotta sort this all out.
+
   root: '' # The endpoint to query from and post to, e.g. "/subjects"
   keyedOn: 'id'
   examples: []
 
   constructor: (options = {}) ->
     @items = {}
-    @callbacks = []
     @mixInto = @_generateMixIntoMethod()
 
-    for property, value of options
-      @[property] = value
+    super
 
     dispatcher.register this
 
@@ -58,18 +59,6 @@ class Store
 
       Mixin
 
-  listen: (callback) ->
-    @callbacks.push callback
-
-  stopListening: (callback) ->
-    index = @callbacks.indexOf callback
-    unless index is -1
-      @callbacks.splice index, 1
-
-  emitChange: ->
-    for callback in @callbacks
-      callback()
-
   create: (instance) ->
     if @type?
       instance = new @type instance
@@ -79,6 +68,8 @@ class Store
     @items[key]
 
   get: (query, enough = Infinity) ->
+    console.log 'GET', @root, JSON.stringify(query), {enough}
+
     if typeof query is 'string'
       new Promise (resolve) =>
         [key, query] = [query, {}]
@@ -115,10 +106,5 @@ class Store
       unless item[key] is value
         match = false
     match
-
-  @Model: class
-    constructor: (properties) ->
-      for key, value of properties
-        @[key] = value
 
 module.exports = Store
