@@ -8,8 +8,8 @@ ZooniverseLogoSource = React.createClass
       <symbol id="zooniverse-logo-source" viewBox="0 0 100 100">
         <g fill="currentColor" stroke="transparent" stroke-width="0" transform="translate(50, 50)">
           <path d="M 0 -45 A 45 45 0 0 1 0 45 A 45 45 0 0 1 0 -45 Z M 0 -30 A 30 30 0 0 0 0 30 A 30 30 0 0 0 0 -30 Z" />
-          <path d="M 0 -13.5 A 13.5 13.5 0 0 1 0 13.5 A 13.5 13.5 0 0 1 0 -13.5 Z" />
-          <path d="M 0 -75 L 6 0 L 0 75 L -6 0 Z" transform="rotate(50)" />
+          <path d="M 0 -14 A 14 14 0 0 1 0 14 A 14 14 0 0 1 0 -14 Z" />
+          <ellipse cx="0" cy="0" rx="6" ry="65" transform="rotate(50)" />
         </g>
       </symbol>
     '''
