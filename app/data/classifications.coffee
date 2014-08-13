@@ -1,8 +1,15 @@
-Store = require '../data/store'
+Store = {Model} = require '../data/store'
 subjectsStore = require './subjects'
+
+class Classification extends Model
+  subject: ''
+  constructor: ->
+    super
+    @annotations ?= []
 
 module.exports = window.classificationsStore = new Store
   root: '/classifications'
+  type: Classification
 
   'classification:create': (subjectID) ->
     @items["FOR_#{subjectID}"] =

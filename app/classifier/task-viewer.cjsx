@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-{dispatch} = require '../lib/dispatcher'
+LoadingIndicator = require '../components/loading-indicator'
 
 taskComponents =
   radio: require './tasks/radio'
@@ -10,9 +10,14 @@ module.exports = React.createClass
   displayName: 'TaskViewer'
 
   render: ->
-    TaskComponent = taskComponents[@props.task?.type]
+    if @props?.workflow and @props.annotation
+      task = @props.workflow.tasks[@props.annotation.task]
+      TaskComponent = taskComponents[task?.type]
 
-    <div>
-      {if TaskComponent?
-        <TaskComponent question={@props.task.question} answers={@props.task.answers} answer={@props.annotation.answer} onChange={@props.onChange} />}
-    </div>
+      <div>
+        {if TaskComponent?
+          <TaskComponent question={task.question} answers={task.answers} answer={@props.annotation.answer} onChange={@props.onChange} />}
+      </div>
+
+    else
+      <p>Loading task <LoadingIndicator /></p>

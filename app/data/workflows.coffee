@@ -23,6 +23,6 @@ EXAMPLE_WORKFLOW =
       ]
       next: null
 
-module.exports = new Store
+module.exports = window.workflowStore = new Store
   root: '/workflows'
   examples: [EXAMPLE_WORKFLOW]

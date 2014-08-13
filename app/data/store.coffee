@@ -70,6 +70,14 @@ class Store
     for callback in @callbacks
       callback()
 
+  create: (instance) ->
+    if @type?
+      instance = new @type instance
+
+    key = instance[@keyedOn] ? Math.random().toString().split('.')[1]
+    @items[key] = instance
+    @items[key]
+
   get: (query, enough = Infinity) ->
     if typeof query is 'string'
       new Promise (resolve) =>
@@ -107,5 +115,10 @@ class Store
       unless item[key] is value
         match = false
     match
+
+  @Model: class
+    constructor: (properties) ->
+      for key, value of properties
+        @[key] = value
 
 module.exports = Store
