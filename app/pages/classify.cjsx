@@ -28,7 +28,9 @@ module.exports = React.createClass
   loadClassificationFor: (project) ->
     classification = classificationsInProgress[project]
     classification ?= subjectsStore.fetch({project}).then ([subject]) ->
-      classificationsInProgress[project] ?= classificationsStore.create subject: subject.id
+      classificationsInProgress[project] ?= classificationsStore.create
+        subject: subject.id
+        workflow: subject.workflow
       classificationsInProgress[project]
 
     Promise.all([classification]).then ([classification]) =>
