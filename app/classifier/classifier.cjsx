@@ -17,13 +17,15 @@ module.exports = React.createClass
   componentWillMount: ->
     @loadClassification @props.classification
 
+  componentWillUnmount: ->
+    @state.classification?.stopListening @handleClassificationChange
+
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.classification is @state.classification?.id
+      @state.classification?.stopListening @handleClassificationChange
       @loadClassification nextProps.classification
 
   loadClassification: (id) ->
-    @state.classification?.stopListening @handleClassificationChange
-
     classificationsStore.get(id).then (classification) =>
       classification.listen @handleClassificationChange
       @setState {classification}
@@ -40,8 +42,12 @@ module.exports = React.createClass
     if @state.classification?
       if @state.workflow?
         annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
-        nextTaskKey = annotation?.answer?.next ? @state.workflow.tasks[annotation?.task].next
-        nextTask = @state.workflow.tasks[nextTaskKey]
+
+        if annotation?
+          nextTaskKey = annotation?.answer?.next ? @state.workflow.tasks[annotation?.task].next
+          nextTask = @state.workflow.tasks[nextTaskKey]
+        else
+          @loadTask @state.workflow.firstTask
 
       <div className="project-classify-page">
         <div className="subject">
@@ -72,8 +78,8 @@ module.exports = React.createClass
       @state.classification.annotations.push task: taskKey
 
   previousTask: ->
-    @state.classification.apply =>
-      @state.classification.annotations.pop()
+    @state.classification.annotations.pop()
+    @state.classification.emitChange()
 
   finishClassification: ->
-    dispatch 'classification:save', @props.project
+    @state.classification.save()

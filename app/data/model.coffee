@@ -8,7 +8,7 @@ class Model
   listen: (callback) ->
     @callbacks.push callback
 
-  forget: (callback) ->
+  stopListening: (callback) ->
     index = @callbacks.indexOf callback
     unless index is -1
       @callbacks.splice index, 1

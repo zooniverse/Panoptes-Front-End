@@ -4,8 +4,20 @@ subjectsStore = require './subjects'
 class Classification extends Model
   subject: ''
   constructor: ->
+    window.classification = this
     super
     @annotations ?= []
+
+  save: ->
+    postClassification = new Promise (resolve, reject) ->
+      console?.info 'POST /classifications', JSON.stringify this
+      @apply =>
+        @_saving = true
+      setTimeout resolve, 1000
+
+    postClassification.then =>
+      @apply =>
+        @_saving = false
 
 module.exports = window.classificationsStore = new Store
   root: '/classifications'
@@ -25,15 +37,3 @@ module.exports = window.classificationsStore = new Store
   # 'classification:answer': (project, answer) ->
   #   annotations = @classifiers[project.id].annotations
   #   annotations[annotations.length - 1].answer = answer
-
-  # 'classification:save': (project) ->
-  #   classification = @classifiers[project.id]
-
-  #   postClassification = new Promise (resolve, reject) ->
-  #     console?.info 'POST /classifications', JSON.stringify classification
-  #     classification._saving = true
-  #     @emitChange()
-  #     setTimeout resolve, 1000
-
-  #   postClassification.then =>
-  #     classification._saving = false

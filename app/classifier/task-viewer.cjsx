@@ -25,9 +25,6 @@ module.exports = React.createClass
   loadWorkflowFor: (subject) ->
     subjectsStore.get(subject).then (subject) =>
       workflowsStore.get(subject.workflow).then (workflow) =>
-        if @props.classification.annotations.length is 0
-          @props.classification.apply =>
-            @props.classification.annotations.push task: workflow.firstTask
         @setState {subject, workflow}
 
   render: ->
