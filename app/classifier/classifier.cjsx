@@ -18,11 +18,11 @@ module.exports = React.createClass
     @loadClassification @props.classification
 
   componentWillUnmount: ->
-    @state.classification?.stopListening @handleClassificationChange
+    @unloadClassification()
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.classification is @state.classification?.id
-      @state.classification?.stopListening @handleClassificationChange
+      @unloadClassification()
       @loadClassification nextProps.classification
 
   loadClassification: (id) ->
@@ -31,6 +31,9 @@ module.exports = React.createClass
       @setState {classification}
       workflowsStore.get(classification.workflow).then (workflow) =>
         @setState {workflow}
+
+  unloadClassification: ->
+    @state.classification?.stopListening @handleClassificationChange
 
   handleClassificationChange: ->
     # Kinda hacky, eh?
