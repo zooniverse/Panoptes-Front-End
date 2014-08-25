@@ -14,6 +14,6 @@ module.exports = React.createClass
       sanitize: true
       breaks: @props.breaks ? true
 
-    __html = marked @props.children, markedOptions
+    __html = marked @props.children ? '', markedOptions
 
     @transferPropsTo tag dangerouslySetInnerHTML: {__html}
