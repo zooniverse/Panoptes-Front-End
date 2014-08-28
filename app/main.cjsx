@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = window.React = require 'react'
-{dispatch} = require './lib/dispatcher'
+loginStore = require './data/login'
 MainHeader = require './partials/main-header'
 ChildRouter = require 'react-child-router'
 MainFooter = require './partials/main-footer'
@@ -17,9 +17,11 @@ Build = require './pages/build'
 Main = React.createClass
   displayName: 'Main'
 
+  mixins: [loginStore.mixin]
+
   render: ->
     <div className="panoptes-main">
-      <MainHeader />
+      <MainHeader login={loginStore.current} loading={loginStore.loading} />
 
       <ChildRouter className="main-content">
         <Home hash="#" />
@@ -27,7 +29,7 @@ Main = React.createClass
         <Projects hash="#/projects" />
         <Projects hash="#/projects/:categories" />
         <Project hash="#/projects/:owner/:name/*" />
-        <Settings hash="#/settings/*" />
+        <Settings hash="#/settings/*" login={loginStore.current} loading={loginStore.loading} />
         <UserProfile hash="#/users/:login/*" />
         <Build hash="#/build/*" />
       </ChildRouter>
@@ -41,4 +43,5 @@ document.body.appendChild mainContainer
 
 React.renderComponent Main(null), mainContainer
 
-# dispatch 'current-user:check'
+login = require './data/login'
+login.check()

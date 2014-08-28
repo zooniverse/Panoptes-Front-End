@@ -5,9 +5,6 @@ React = require 'react'
 loginStore = require '../data/login'
 InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
-{dispatch} = require '../lib/dispatcher'
-
-loginFormsIDPool = -1
 
 Translator.setStrings
   signInForm:
@@ -22,28 +19,23 @@ Translator.setStrings
 module.exports = React.createClass
   displayName: 'SignInForm'
 
-  mixins: [
-    loginStore.mixInto ->
-      loading: loginStore.attempts[@props.id]?.loading
-      errors: loginStore.attempts[@props.id]?.errors
-  ]
+  mixins: [loginStore.mixin]
 
-  getDefaultProps: ->
-    loginFormsIDPool += 1
-    id: "login-form-#{loginFormsIDPool}"
+  getInitialState: ->
+    errors: {}
 
   render: ->
-    {loading, errors} = @state
+    disabled = loginStore.loading or loginStore.current?
 
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
           <Translator>signInForm.userName</Translator>
           <br />
-          <input type="text" name="login" ref="login" autoFocus="autoFocus" />
+          <input type="text" name="login" value={loginStore.current?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
 
-          {if errors?.login?
-            errorString = "signInForm.errors.#{errors.login}"
+          {if @state.errors.login?
+            errorString = "signInForm.errors.#{@state.errors.login}"
             <Translator className="form-help error">{errorString}</Translator>}
         </label>
       </div>
@@ -52,25 +44,31 @@ module.exports = React.createClass
         <label>
           <Translator>signInForm.password</Translator>
           <br />
-          <input type="password" name="password" ref="password" />
+          <input type="password" name="password" value={loginStore.current?.password} disabled={disabled} ref="password" />
 
-          {if errors?.password?
-            errorString = "signInForm.errors.#{errors.password}"
+          {if @state.errors.password?
+            errorString = "signInForm.errors.#{@state.errors.password}"
             <Translator className="form-help error">{errorString}</Translator>}
         </label>
       </div>
       <br />
       <div>
-        <button type="submit">
+        <button type="submit" disabled={disabled}>
           <Translator>signInForm.signIn</Translator>
         </button>
 
-        {if loading
+        {if loginStore.loading
           <LoadingIndicator />}
+
+        {if loginStore.current?
+          <span className="form-help">Signed in as {loginStore.current.display_name}</span>}
       </div>
     </InPlaceForm>
 
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
     password = @refs.password.getDOMNode().value
-    dispatch 'current-user:sign-in', login, password, @props.id
+    signInAttempt = loginStore.signIn login, password
+    signInAttempt.then ({errors, user}) =>
+      errors ?= {}
+      @setState {errors}

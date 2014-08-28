@@ -21,11 +21,11 @@ EXAMPLE_LOGIN =
 
 loginStore = new Store
   attempts: {}
-  loading: true
+  loading: false
   current: null
   errors: {}
 
-  'current-user:check': ->
+  check: ->
     @loading = true
     @emitChange()
 
@@ -38,12 +38,12 @@ loginStore = new Store
     checkRequest.then (user) =>
       @loading = false
       @current = user
+      @emitChange()
 
-  'current-user:sign-in': (login, password, id) ->
-    @attempts[id] =
-      loading: true
-      errors: {}
-
+  signIn: (login, password) ->
+    console.log 'Sign in started', {login}, {password}
+    console.log 'Set loginStore loading'
+    @loading = true
     @emitChange()
 
     console?.log "GET /tokens?login=#{login}&password=#{password}"
@@ -53,17 +53,17 @@ loginStore = new Store
       else
         errors = password: 'BAD_PASSWORD'
 
+      console.log 'Will resolve with', {user}, {errors}
       setTimeout resolve.bind(null, {user, errors}), 1000
 
     loginRequest.then ({user, errors}) =>
-      @attempts[id].loading = false
+      console.log 'Resolved with', {user}, {errors}
+      console.log 'loginStore no longer loading'
+      @loading = false
       @current = user
+      @emitChange()
 
-      if user?
-        dispatch 'current-user:sign-in:success', user, id
-
-      if errors?
-        @attempts[id].errors = errors
+    loginRequest
 
   'current-user:sign-out': ->
     console?.log 'DELETE /tokens/(TOKEN_ID)'
