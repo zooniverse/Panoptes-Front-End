@@ -10,20 +10,22 @@ module.exports = React.createClass
   displayName: 'MainHeader'
 
   render: ->
+    console.log 'Rendering main header'
+
     <header className="main-header">
       <MainNav />
 
       <div className="main-header-group"></div>
 
-      {if @props.loading
+      {if @props.loggingIn
         <div className="main-header-group">
           <div className="main-header-item">
             <LoadingIndicator />
           </div>
         </div>
 
-      else if @props.login
-        <AccountBar user={@props.login} />
+      else if @props.currentLogin
+        <AccountBar user={@props.currentLogin} />
 
       else
         <LoginBar />}

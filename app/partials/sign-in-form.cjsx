@@ -19,20 +19,18 @@ Translator.setStrings
 module.exports = React.createClass
   displayName: 'SignInForm'
 
-  mixins: [loginStore.mixin]
-
   getInitialState: ->
     errors: {}
 
   render: ->
-    disabled = loginStore.loading or loginStore.current?
+    disabled = @props.loggingIn or @props.currentLogin?
 
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
           <Translator>signInForm.userName</Translator>
           <br />
-          <input type="text" name="login" value={loginStore.current?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
+          <input type="text" name="login" value={@props.currentLogin?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
 
           {if @state.errors.login?
             errorString = "signInForm.errors.#{@state.errors.login}"
@@ -44,7 +42,7 @@ module.exports = React.createClass
         <label>
           <Translator>signInForm.password</Translator>
           <br />
-          <input type="password" name="password" value={loginStore.current?.password} disabled={disabled} ref="password" />
+          <input type="password" name="password" value={@props.currentLogin?.password} disabled={disabled} ref="password" />
 
           {if @state.errors.password?
             errorString = "signInForm.errors.#{@state.errors.password}"
@@ -57,11 +55,11 @@ module.exports = React.createClass
           <Translator>signInForm.signIn</Translator>
         </button>
 
-        {if loginStore.loading
+        {if @props.loggingIn
           <LoadingIndicator />}
 
-        {if loginStore.current?
-          <span className="form-help">Signed in as {loginStore.current.display_name}</span>}
+        {if @props.currentLogin?
+          <span className="form-help">Signed in as {@props.currentLogin.display_name}</span>}
       </div>
     </InPlaceForm>
 

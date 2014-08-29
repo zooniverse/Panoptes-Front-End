@@ -4,19 +4,6 @@ class Model
       @[key] = value
 
     @callbacks ?= []
-    @mixin ?= @generateMixin()
-
-  generateMixin: ->
-    model = this
-
-    boundForceUpdate = null
-
-    componentWillMount: ->
-      boundForceUpdate = @forceUpdate.bind this
-      model.listen boundForceUpdate
-
-    componentWillUnmount: ->
-      model.stopListening boundForceUpdate
 
   listen: (callback) ->
     @callbacks.push callback

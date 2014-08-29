@@ -31,11 +31,11 @@ module.exports = React.createClass
           </nav>
 
           <div hash="#/sign-in" className="content-container">
-            <SignInForm />
+            <SignInForm currentLogin={@props.currentLogin} loggingIn={@props.loggingIn} />
           </div>
 
           <div hash="#/sign-in/register" className="content-container">
-            <RegisterForm />
+            <RegisterForm currentLogin={@props.currentLogin} loggingIn={@props.loggingIn} />
           </div>
         </ChildRouter>
 

@@ -20,10 +20,8 @@ EXAMPLE_LOGIN =
   unseen_events: 4
 
 loginStore = new Store
-  attempts: {}
   loading: false
   current: null
-  errors: {}
 
   check: ->
     @loading = true

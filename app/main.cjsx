@@ -17,19 +17,32 @@ Build = require './pages/build'
 Main = React.createClass
   displayName: 'Main'
 
-  mixins: [loginStore.mixin]
+  getInitialState: ->
+    currentLogin: null
+    loggingIn: false
+
+  componentWillMount: ->
+    loginStore.listen @handleLoginChange
+
+  componentWillUnmount: ->
+    loginStore.stopListening @handleLoginChange
+
+  handleLoginChange: ->
+    @setState
+      currentLogin: loginStore.current
+      loggingIn: loginStore.loading
 
   render: ->
     <div className="panoptes-main">
-      <MainHeader login={loginStore.current} loading={loginStore.loading} />
+      <MainHeader currentLogin={@state.currentLogin} loggingIn={@state.loggingIn} />
 
       <ChildRouter className="main-content">
         <Home hash="#" />
-        <SignIn hash="#/sign-in/*" />
+        <SignIn hash="#/sign-in/*" currentLogin={@state.currentLogin} loggingIn={@state.loggingIn} />
         <Projects hash="#/projects" />
         <Projects hash="#/projects/:categories" />
         <Project hash="#/projects/:owner/:name/*" />
-        <Settings hash="#/settings/*" login={loginStore.current} loading={loginStore.loading} />
+        <Settings hash="#/settings/*" login={@state.currentLogin} loading={@state.loggingIn} />
         <UserProfile hash="#/users/:login/*" />
         <Build hash="#/build/*" />
       </ChildRouter>
