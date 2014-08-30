@@ -7,7 +7,7 @@ module.exports = React.createClass
   displayName: 'ProjectsPage'
 
   render: ->
-    categories = @props?.params?.categories?.split '+'
+    categories = @props?.route.params.categories?.split ','
     categories ?= ['*']
 
     <div className="projects-page">

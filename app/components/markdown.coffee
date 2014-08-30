@@ -16,4 +16,4 @@ module.exports = React.createClass
 
     __html = marked @props.children ? '', markedOptions
 
-    @transferPropsTo tag dangerouslySetInnerHTML: {__html}
+    @transferPropsTo tag className: 'markdown', dangerouslySetInnerHTML: {__html}

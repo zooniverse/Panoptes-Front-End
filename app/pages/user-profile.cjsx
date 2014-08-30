@@ -15,11 +15,11 @@ module.exports = React.createClass
     user: null
 
   componentWillMount: ->
-    @loadUser @props.params?.login
+    @loadUser @props.route.params?.login
 
   componentWillReceiveProps: (nextProps) ->
-    unless @state.loading or nextProps.params?.login is @state.user?.login
-      @loadUser nextProps.params?.login
+    unless @state.loading or nextProps.route.params?.login is @state.user?.login
+      @loadUser nextProps.route.params?.login
 
   loadUser: (login) ->
     @setState loading: true
