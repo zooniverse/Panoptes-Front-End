@@ -2,7 +2,7 @@
 
 React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
-ChildRouter = require 'react-child-router'
+Route = require '../lib/route'
 Link = require '../lib/link'
 InPlaceForm = require '../components/in-place-form'
 {dispatch} = require '../lib/dispatcher'
@@ -51,8 +51,8 @@ module.exports = React.createClass
           <Link href="/settings/advanced" className="tabbed-content-tab">Advanced</Link>
         </div>
 
-        <ChildRouter className="content-container">
-          <div hash="#/settings">
+        <div className="content-container">
+          <Route path="/settings">
             <InPlaceForm method="put" onSubmit={@handleFormSubmit.bind this, 'login', 'email', 'wants_betas', 'can_survey'}>
               <fieldset>
                 <legend>Login name</legend>
@@ -91,9 +91,9 @@ module.exports = React.createClass
                 <button type="submit">Save account settings</button>
               </fieldset>
             </InPlaceForm>
-          </div>
+          </Route>
 
-          <div hash="#/settings/password">
+          <Route path="/settings/password">
             <fieldset>
               <legend>Change your password</legend>
               <table className="for-text-fields">
@@ -123,9 +123,9 @@ module.exports = React.createClass
             </fieldset>
 
             <button type="submit">Save password</button>
-          </div>
+          </Route>
 
-          <div hash="#/settings/profile">
+          <Route path="/settings/profile">
             <fieldset>
               <legend>Avatar</legend>
               <table>
@@ -178,8 +178,8 @@ module.exports = React.createClass
             </fieldset>
 
             <button type="submit">Save profile</button>
-          </div>
-        </ChildRouter>
+          </Route>
+        </div>
       </div>
 
     else

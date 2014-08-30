@@ -2,7 +2,7 @@
 
 React = require 'react'
 usersStore = require '../data/users'
-ChildRouter = require 'react-child-router'
+Route = require '../lib/route'
 Link = require '../lib/link'
 Markdown = require '../components/markdown'
 LoadingIndicator = require '../components/loading-indicator'
@@ -83,30 +83,30 @@ module.exports = React.createClass
               <Link href="/users/#{@state.user.login}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
             </div>
 
-            <ChildRouter className="content-container">
-              <div hash="#/users/#{@state.user.login}">
+            <div className="content-container">
+              <Route path="/users/#{@state.user.login}">
                 {if @state.user?
                   <Markdown>{@state.user.bio}</Markdown>
                 else
                   <LoadingIndicator />}
-              </div>
+              </Route>
 
-              <div hash="#/users/#{@state.user.login}/activity">
+              <Route path="/users/#{@state.user.login}/activity">
                 <p>Timeline of this user’s recent activity</p>
-              </div>
+              </Route>
 
-              <div hash="#/users/#{@state.user.login}/collections">
+              <Route path="/users/#{@state.user.login}/collections">
                 <p>Collections this user has created</p>
-              </div>
+              </Route>
 
-              <div hash="#/users/#{@state.user.login}/projects">
+              <Route path="/users/#{@state.user.login}/projects">
                 <p>Projects this user has created or has a special role in</p>
-              </div>
+              </Route>
 
-              <div hash="#/users/#{@state.user.login}/talk">
+              <Route path="/users/#{@state.user.login}/talk">
                 <p>Your private messages with this user</p>
-              </div>
-            </ChildRouter>
+              </Route>
+            </div>
           </div>
         </div>
       </div>
