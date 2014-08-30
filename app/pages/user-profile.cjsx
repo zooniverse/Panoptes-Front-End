@@ -7,27 +7,6 @@ ChildRouter = require 'react-child-router'
 Markdown = require '../components/markdown'
 LoadingIndicator = require '../components/loading-indicator'
 
-UserHeader = React.createClass
-  displayName: 'UserHeader'
-
-  render: ->
-    if @props.user?
-      <div>User OK</div>
-    else
-      <div>User not found</div>
-
-  OLD_RENDER: ->
-
-UserDetails = React.createClass
-  displayName: 'UserDetails'
-
-  mixins: [
-    usersStore.mixInto -> user: usersStore.get @props.login
-  ]
-
-  render: ->
-
-
 module.exports = React.createClass
   displayName: 'UserProfilePage'
 
