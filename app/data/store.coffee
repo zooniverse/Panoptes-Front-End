@@ -10,54 +10,10 @@ class Store extends Model
 
   constructor: (options = {}) ->
     @items = {}
-    @mixInto = @_generateMixIntoMethod()
 
     super
 
     dispatcher.register this
-
-  _generateMixIntoMethod: ->
-    # Here's a shortcut mixin to keep React components state up to date with stores' properties.
-    # To indicate that the store's `foo` should be passed as the component's state's `bar`:
-    # React.createClass({
-    #   mixins: [store.mixInto({foo: bar})]
-    # });
-
-    store = this
-
-    (stateProperties) ->
-      changeCallbackName = "updateStateWithStore_#{Math.random().toString().split('.')[1]}"
-
-      getCurrentState = ->
-        if typeof stateProperties is 'function'
-          state = stateProperties.call this
-
-        else
-          state = {}
-
-          if typeof stateProperties is 'string'
-            state[stateProperties] = store
-
-          else
-            for storeProperty, stateProperty of stateProperties
-              state[stateProperty] = store[storeProperty]
-
-        state
-
-      Mixin =
-        getInitialState: ->
-          getCurrentState.call this
-
-        componentWillMount: ->
-          store.listen @[changeCallbackName]
-
-        componentWillUnmount: ->
-          store.stopListening @[changeCallbackName]
-
-      Mixin[changeCallbackName] = ->
-        @setState getCurrentState.call this
-
-      Mixin
 
   create: (instance) ->
     if @type?
