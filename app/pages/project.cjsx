@@ -2,9 +2,8 @@
 
 React = require 'react'
 projectsStore = require '../data/projects'
-ChildRouter = require 'react-child-router'
 Route = require '../lib/route'
-{Link} = ChildRouter
+Link = require '../lib/link'
 Markdown = require '../components/markdown'
 ClassifyPage = require './classify'
 LoadingIndicator = require '../components/loading-indicator'
@@ -56,14 +55,14 @@ ProjectPage = React.createClass
       <div className="background-cover"></div>
 
       <nav className="tabbed-content-tabs">
-        <Link href="#/projects/#{qualifiedProjectName}" className="home tabbed-content-tab">
+        <Link href="/projects/#{qualifiedProjectName}" root={true} className="home tabbed-content-tab">
           <h2><img src={@state.project?.avatar ? defaultImgSrc} className="project-avatar"/>{name}</h2>
         </Link>
-        <Link href="#/projects/#{qualifiedProjectName}/science" className="tabbed-content-tab">Science</Link>
-        <Link href="#/projects/#{qualifiedProjectName}/status" className="tabbed-content-tab">Status</Link>
-        <Link href="#/projects/#{qualifiedProjectName}/team" className="tabbed-content-tab">Team</Link>
-        <Link href="#/projects/#{qualifiedProjectName}/classify" className="classify tabbed-content-tab">Classify</Link>
-        <Link href="#/projects/#{qualifiedProjectName}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
+        <Link href="/projects/#{qualifiedProjectName}/science" className="tabbed-content-tab">Science</Link>
+        <Link href="/projects/#{qualifiedProjectName}/status" className="tabbed-content-tab">Status</Link>
+        <Link href="/projects/#{qualifiedProjectName}/team" className="tabbed-content-tab">Team</Link>
+        <Link href="/projects/#{qualifiedProjectName}/classify" className="classify tabbed-content-tab">Classify</Link>
+        <Link href="/projects/#{qualifiedProjectName}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
       </nav>
 
       {if @state.project?

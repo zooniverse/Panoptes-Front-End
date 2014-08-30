@@ -3,7 +3,6 @@
 React = window.React = require 'react'
 loginStore = require './data/login'
 MainHeader = require './partials/main-header'
-ChildRouter = require 'react-child-router'
 Route = require './lib/route'
 MainFooter = require './partials/main-footer'
 

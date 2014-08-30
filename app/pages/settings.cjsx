@@ -3,7 +3,7 @@
 React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 ChildRouter = require 'react-child-router'
-{Link} = ChildRouter
+Link = require '../lib/link'
 InPlaceForm = require '../components/in-place-form'
 {dispatch} = require '../lib/dispatcher'
 
@@ -40,15 +40,15 @@ module.exports = React.createClass
     else if @props.login?
       <div className="edit-account-page content-container tabbed-content" data-side="left">
         <div className="tabbed-content-tabs">
-          <Link href="#/settings" className="tabbed-content-tab">General</Link>
-          <Link href="#/settings/password" className="tabbed-content-tab">Password</Link>
-          <Link href="#/settings/profile" className="tabbed-content-tab">Profile</Link>
-          <Link href="#/settings/roles" className="tabbed-content-tab">Roles</Link>
-          <Link href="#/settings/notifications" className="tabbed-content-tab">Notifications</Link>
-          <Link href="#/settings/groups" className="tabbed-content-tab">Groups</Link>
-          <Link href="#/settings/projects" className="tabbed-content-tab">Projects</Link>
-          <Link href="#/settings/subjects" className="tabbed-content-tab">Subjects</Link>
-          <Link href="#/settings/advanced" className="tabbed-content-tab">Advanced</Link>
+          <Link href="/settings" root={true} className="tabbed-content-tab">General</Link>
+          <Link href="/settings/password" className="tabbed-content-tab">Password</Link>
+          <Link href="/settings/profile" className="tabbed-content-tab">Profile</Link>
+          <Link href="/settings/roles" className="tabbed-content-tab">Roles</Link>
+          <Link href="/settings/notifications" className="tabbed-content-tab">Notifications</Link>
+          <Link href="/settings/groups" className="tabbed-content-tab">Groups</Link>
+          <Link href="/settings/projects" className="tabbed-content-tab">Projects</Link>
+          <Link href="/settings/subjects" className="tabbed-content-tab">Subjects</Link>
+          <Link href="/settings/advanced" className="tabbed-content-tab">Advanced</Link>
         </div>
 
         <ChildRouter className="content-container">

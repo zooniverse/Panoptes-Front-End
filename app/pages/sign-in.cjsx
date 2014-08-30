@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-ChildRouter = {Link} = require 'react-child-router'
+Link = require '../lib/link'
 Route = require '../lib/route'
 SignInForm = require '../partials/sign-in-form'
 RegisterForm = require '../partials/register-form'
@@ -27,8 +27,8 @@ module.exports = React.createClass
       <div className="columns-container">
         <div className="tabbed-content column" data-side="top">
           <nav className="tabbed-content-tabs">
-            <Link href="#/sign-in" className="tabbed-content-tab">Sign in</Link>
-            <Link href="#/sign-in/register" className="tabbed-content-tab">Register</Link>
+            <Link href="/sign-in" root={true} className="tabbed-content-tab">Sign in</Link>
+            <Link href="/sign-in/register" className="tabbed-content-tab">Register</Link>
           </nav>
 
           <Route path="/sign-in" className="content-container">

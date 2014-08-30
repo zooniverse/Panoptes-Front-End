@@ -21,9 +21,9 @@ module.exports = React.createClass
       href: '#' + @props.href
 
     match = if @props.root
-      @state.location.path is @props.href
+      decodeURI(@state.location.path) is decodeURI @props.href
     else
-      @state.location.path.indexOf(@props.href) is 0
+      decodeURI(@state.location.path).indexOf(decodeURI @props.href) is 0
 
     if match
       newProps['data-active'] = true

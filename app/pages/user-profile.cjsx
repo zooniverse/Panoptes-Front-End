@@ -3,7 +3,7 @@
 React = require 'react'
 usersStore = require '../data/users'
 ChildRouter = require 'react-child-router'
-{Link} = ChildRouter
+Link = require '../lib/link'
 Markdown = require '../components/markdown'
 LoadingIndicator = require '../components/loading-indicator'
 
@@ -76,11 +76,11 @@ module.exports = React.createClass
         <div className="user-details">
           <div className="tabbed-content" data-side="top">
             <div className="tabbed-content-tabs">
-              <Link href="#/users/#{@state.user.login}" className="tabbed-content-tab">Bio</Link>
-              <Link href="#/users/#{@state.user.login}/activity" className="tabbed-content-tab">Activity</Link>
-              <Link href="#/users/#{@state.user.login}/collections" className="tabbed-content-tab">Collections</Link>
-              <Link href="#/users/#{@state.user.login}/projects" className="tabbed-content-tab">Projects</Link>
-              <Link href="#/users/#{@state.user.login}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
+              <Link href="/users/#{@state.user.login}" root={true} className="tabbed-content-tab">Bio</Link>
+              <Link href="/users/#{@state.user.login}/activity" className="tabbed-content-tab">Activity</Link>
+              <Link href="/users/#{@state.user.login}/collections" className="tabbed-content-tab">Collections</Link>
+              <Link href="/users/#{@state.user.login}/projects" className="tabbed-content-tab">Projects</Link>
+              <Link href="/users/#{@state.user.login}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
             </div>
 
             <ChildRouter className="content-container">

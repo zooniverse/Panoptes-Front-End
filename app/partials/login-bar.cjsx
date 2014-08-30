@@ -2,7 +2,7 @@
 
 Translator = require 'react-translator'
 React = require 'react'
-{Link} = require 'react-child-router'
+Link = require '../lib/link'
 
 Translator.setStrings
   loginBar:
@@ -14,11 +14,11 @@ module.exports = React.createClass
 
   render: ->
     <div className="login-bar main-header-group">
-      <Link href="#/sign-in" className="main-header-item">
+      <Link href="/sign-in" root={true} className="main-header-item">
         <Translator>loginBar.signIn</Translator>
       </Link>
 
-      <Link href="#/sign-in/register" className="main-header-item">
+      <Link href="/sign-in/register" className="main-header-item">
         <Translator>loginBar.register</Translator>
       </Link>
     </div>
