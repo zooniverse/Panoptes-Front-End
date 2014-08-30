@@ -1,38 +1,32 @@
 # @cjsx React.DOM
 
 React = require 'react'
+projectsStore = require '../data/projects'
 ProjectCard = require './project-card'
 LoadingIndicator = require '../components/loading-indicator'
-
-EXAMPLE_PROJECTS =
-  for i in [0...15]
-    id: Math.random().toString().split('.')[1]
-    owner_name: 'Zooniverse'
-    title: 'Galaxy Zoo'
-    avatar: 'https://pbs.twimg.com/profile_images/2597266958/image.jpg'
-    description: [
-      'Amet dolor et quis nulla incididunt ea aliqua proident reprehenderit cupidatat consectetur magna officia.'
-      'Incididunt nulla voluptate nisi nulla voluptate in ea in ipsum voluptate excepteur aute.'
-      'Culpa proident quis aliqua exercitation sit dolor amet laboris esse.'
-      'Nulla sint id incididunt elit reprehenderit reprehenderit pariatur.'
-      ][i % 4]
-    total_subjects: 1000000
-    retired_subjects: 666667
 
 module.exports = React.createClass
   displayName: 'ProjectCardList'
 
-  fetch: (query, callback) ->
-    console?.info 'Fetching projects to build a project card list', JSON.stringify(query)
-    setTimeout callback?.bind(null, null, EXAMPLE_PROJECTS), 1000
+  getInitialState: ->
+    projects: null
 
   componentWillMount: ->
-    if @props.query?
-      @fetch @props.query, (error, projects) =>
-        @setState {projects}
+    @fetchProjects @props.query
+
+  componentWillReceiveProps: (nextProps) ->
+    @fetchProjects nextProps.query
+
+  fetchProjects: (query) ->
+    query ?= {}
+    projectsStore.fetch(query).then (projects) =>
+      @setState {projects}
 
   render: ->
-    if @state?.projects?
+    if @state.projects?.length is 0
+      <div className="empty project-card-list">No matches for {JSON.stringify @props.query}</div>
+
+    else if @state.projects?
       projectCards = for project in @state.projects
         new ProjectCard project
 

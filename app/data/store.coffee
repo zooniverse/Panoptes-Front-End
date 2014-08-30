@@ -102,7 +102,7 @@ class Store extends Model
   matchesQuery: (item, query) ->
     match = true
     for key, value of query
-      unless item[key] is value
+      unless value[0] is '*' or item[key] is value
         match = false
     match
 
