@@ -19,4 +19,4 @@ module.exports = React.createClass
 
   handleChange: (e) ->
     answerIndex = e.target.value
-    @props.onChange @props.answers[answerIndex]
+    @props.onChange @props.answers[answerIndex].value

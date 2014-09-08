@@ -9,7 +9,7 @@ module.exports = React.createClass
     currentAnswers = @props.answer ? []
     answers = for answer, i in @props.answers
       <label className="answer" key={i}>
-        <input type="checkbox" name="currentTaskAnswer" value={i} checked={answer in currentAnswers} onChange={@handleChange} />
+        <input type="checkbox" name="currentTaskAnswer" value={i} checked={answer.value in currentAnswers} onChange={@handleChange} />
         <span className="clickable">{answer.label}</span>
       </label>
 
@@ -19,7 +19,7 @@ module.exports = React.createClass
     </div>
 
   handleChange: (e) ->
-    newAnswer = @props.answers[e.target.value]
+    newAnswer = @props.answers[e.target.value].value
     existingAnswers = @props.answer ? []
 
     # We'll make some effort to preserve the order things were chosen in.
