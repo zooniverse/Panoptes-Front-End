@@ -3,7 +3,7 @@
 React = require 'react'
 
 module.exports = React.createClass
-  displayName: 'RadioTask'
+  displayName: 'MultipleChoiceTask'
 
   render: ->
     currentAnswers = @props.answer ? []

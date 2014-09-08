@@ -3,7 +3,7 @@
 React = require 'react'
 
 module.exports = React.createClass
-  displayName: 'SingleTask'
+  displayName: 'SingleChoiceTask'
 
   render: ->
     answers = for answer, i in @props.answers
