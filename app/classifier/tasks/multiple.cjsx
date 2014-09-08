@@ -6,10 +6,12 @@ module.exports = React.createClass
   displayName: 'MultipleChoiceTask'
 
   render: ->
-    currentAnswers = @props.answer ? []
-    answers = for answer, i in @props.answers
-      <label className="answer" key={i}>
-        <input type="checkbox" name="currentTaskAnswer" value={i} checked={answer.value in currentAnswers} onChange={@handleChange} />
+    console?.log "Rendering #{@constructor.displayName}", '@props', @props, '@state', @state
+
+    existingAnswers = @props.value ? []
+    answers = for answer, i in @props.options
+      <label className="workflow-task-answer" key={answer.label}>
+        <input type="checkbox" value={i} checked={answer in existingAnswers} onChange={@handleChange} />
         <span className="clickable">{answer.label}</span>
       </label>
 
@@ -19,8 +21,8 @@ module.exports = React.createClass
     </div>
 
   handleChange: (e) ->
-    newAnswer = @props.answers[e.target.value].value
-    existingAnswers = @props.answer ? []
+    newAnswer = @props.options[e.target.value]
+    existingAnswers = @props.value ? []
 
     # We'll make some effort to preserve the order things were chosen in.
 

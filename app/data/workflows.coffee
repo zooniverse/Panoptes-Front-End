@@ -2,8 +2,17 @@ Store = require './store'
 
 EXAMPLE_WORKFLOW =
   id: 'GZ_MAIN_WORKFLOW'
-  firstTask: 'shape'
+  firstTask: 'interest'
   tasks:
+    interest:
+      type: 'drawing'
+      question: 'Click your favorite point'
+      tools: [
+        {value: 'interesting', label: 'Best point', tool: 'point'}
+      ]
+      required: false
+      next: 'shape'
+
     shape:
       type: 'multiple'
       question: 'What shape is this galaxy?'
@@ -13,6 +22,7 @@ EXAMPLE_WORKFLOW =
         {value: 'other', label: 'Star or artifact'}
       ]
       next: 'roundness'
+
     roundness:
       type: 'single'
       question: 'How round is it?'

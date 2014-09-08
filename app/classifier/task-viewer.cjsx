@@ -8,6 +8,7 @@ LoadingIndicator = require '../components/loading-indicator'
 taskComponents =
   single: require './tasks/single'
   multiple: require './tasks/multiple'
+  drawing: require './tasks/drawing'
 
 module.exports = React.createClass
   displayName: 'TaskViewer'
@@ -36,8 +37,7 @@ module.exports = React.createClass
       task = @state.workflow.tasks[annotation?.task]
       TaskComponent = taskComponents[task?.type]
 
-      if TaskComponent?
-        <TaskComponent question={task.question} answers={task.answers} answer={annotation.answer} onChange={@props.onChange} />
+      <TaskComponent question={task.question} options={task.answers ? task.tools} value={annotation.answer ? @props.drawingTool} onChange={@props.onChange} />
 
     else
       <p>Loading task viewer</p>

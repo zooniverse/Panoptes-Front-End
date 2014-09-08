@@ -5,6 +5,9 @@ subjectsStore = require '../data/subjects'
 SVGImage = require '../components/svg-image'
 LoadingIndicator = require '../components/loading-indicator'
 
+drawingComponents =
+  point: require './drawing-tools/point'
+
 module.exports = React.createClass
   displayName: 'SubjectView'
 

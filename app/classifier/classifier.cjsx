@@ -13,6 +13,7 @@ module.exports = React.createClass
   getInitialState: ->
     classification: null
     workflow: null
+    drawingTool: null
 
   componentWillMount: ->
     @loadClassification @props.classification
@@ -47,23 +48,28 @@ module.exports = React.createClass
         annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
 
         if annotation?
-          nextTaskKey = annotation?.answer?.next ? @state.workflow.tasks[annotation?.task].next
+          task = @state.workflow.tasks[annotation?.task]
+          nextTaskKey = annotation?.answer?.next ? task.next
           nextTask = @state.workflow.tasks[nextTaskKey]
         else
           @loadTask @state.workflow.firstTask
 
+      needsAnswer = task?.required and not annotation?.answer?
+      canGoBack = @state.classification.annotations.length > 1
+      canGoForward = nextTask?
+
       <div className="project-classify-page">
         <div className="subject">
-          <SubjectViewer subject={@state.classification.subject} annotations={@state.classification.annotations} />
+          <SubjectViewer subject={@state.classification.subject} annotations={@state.classification.annotations} drawingTool={@state.drawingTool} />
         </div>
 
         <div className="task">
-          <TaskViewer subject={@state.classification.subject} classification={@state.classification} onChange={@handleAnswer} />
+          <TaskViewer subject={@state.classification.subject} classification={@state.classification} drawingTool={@state.drawingTool} onChange={@handleAnswer} />
 
           <div className="task-nav">
-            <button onClick={@previousTask} disabled={@state.classification.annotations.length < 2}><i className="fa fa-arrow-left"></i></button>
-            <button onClick={@loadTask.bind this, nextTaskKey} disabled={(not annotation?.answer?) or (not nextTask?)}><i className="fa fa-check"></i></button>
-            <button onClick={@finishClassification}disabled={(not annotation?.answer?) or nextTask?}><i className="fa fa-flag-checkered"></i></button>
+            <button onClick={@previousTask} disabled={not canGoBack}><i className="fa fa-arrow-left"></i></button>
+            <button onClick={@loadTask.bind this, nextTaskKey} disabled={needsAnswer or not canGoForward}><i className="fa fa-check"></i></button>
+            <button onClick={@finishClassification} disabled={needsAnswer or canGoForward}><i className="fa fa-flag-checkered"></i></button>
           </div>
         </div>
       </div>
@@ -71,15 +77,26 @@ module.exports = React.createClass
     else
       <p>Loading classification {@props}</p>
 
-  handleAnswer: (answer) ->
-    annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
-    @state.classification.apply =>
-      annotation.answer = answer
-
   loadTask: (taskKey) ->
     @state.classification.apply =>
       @state.classification.annotations.push
         task: taskKey
+
+    if 'tools' of @state.workflow.tasks[taskKey]
+      firstTool = @state.workflow.tasks[taskKey].tools[0]
+
+    setTimeout =>
+      # Gross.
+      @setState drawingTool: firstTool
+
+  handleAnswer: (answer) ->
+    if 'tool' of answer
+      @setState drawingTool: answer
+
+    else
+      annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+      @state.classification.apply ->
+        annotation.answer = answer
 
   previousTask: ->
     @state.classification.annotations.pop()

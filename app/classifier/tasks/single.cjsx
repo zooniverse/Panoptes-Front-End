@@ -6,9 +6,9 @@ module.exports = React.createClass
   displayName: 'SingleChoiceTask'
 
   render: ->
-    answers = for answer, i in @props.answers
-      <label className="answer" key={i}>
-        <input type="radio" name="currentTaskAnswer" value={i} checked={answer is @props.answer} onChange={@handleChange} />
+    answers = for answer, i in @props.options
+      <label className="workflow-task-answer" key={answer.label}>
+        <input type="radio" value={i} checked={answer is @props.value} onChange={@handleChange} />
         <span className="clickable">{answer.label}</span>
       </label>
 
@@ -19,4 +19,4 @@ module.exports = React.createClass
 
   handleChange: (e) ->
     answerIndex = e.target.value
-    @props.onChange @props.answers[answerIndex].value
+    @props.onChange @props.options[answerIndex]
