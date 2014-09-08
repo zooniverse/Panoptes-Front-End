@@ -1,5 +1,5 @@
 /build
 /node_modules
+/public/.main.js
 /public/main.css
 /public/main.js
-/public/vendor.js
