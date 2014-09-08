@@ -62,8 +62,8 @@ module.exports = React.createClass
 
           <div className="task-nav">
             <button onClick={@previousTask} disabled={@state.classification.annotations.length < 2}><i className="fa fa-arrow-left"></i></button>
-            <button onClick={@loadTask.bind this, nextTaskKey} disabled={not nextTask?}><i className="fa fa-check"></i></button>
-            <button onClick={@finishClassification}disabled={nextTask?}><i className="fa fa-flag-checkered"></i></button>
+            <button onClick={@loadTask.bind this, nextTaskKey} disabled={(not annotation?.answer?) or (not nextTask?)}><i className="fa fa-check"></i></button>
+            <button onClick={@finishClassification}disabled={(not annotation?.answer?) or nextTask?}><i className="fa fa-flag-checkered"></i></button>
           </div>
         </div>
       </div>
@@ -78,7 +78,8 @@ module.exports = React.createClass
 
   loadTask: (taskKey) ->
     @state.classification.apply =>
-      @state.classification.annotations.push task: taskKey
+      @state.classification.annotations.push
+        task: taskKey
 
   previousTask: ->
     @state.classification.annotations.pop()
