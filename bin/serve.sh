@@ -21,6 +21,7 @@ jobs=""
 
 ./node_modules/.bin/stylus \
   --watch \
+  --sourcemap-inline \
   --use nib \
   --import nib \
   --out "$DEV_DIR" \
