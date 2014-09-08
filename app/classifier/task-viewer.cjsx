@@ -7,6 +7,7 @@ LoadingIndicator = require '../components/loading-indicator'
 
 taskComponents =
   single: require './tasks/single'
+  multiple: require './tasks/multiple'
 
 module.exports = React.createClass
   displayName: 'TaskViewer'

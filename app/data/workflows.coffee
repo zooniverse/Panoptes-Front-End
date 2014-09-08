@@ -5,7 +5,7 @@ EXAMPLE_WORKFLOW =
   firstTask: 'shape'
   tasks:
     shape:
-      type: 'single'
+      type: 'multiple'
       question: 'What shape is this galaxy?'
       answers: [
         {value: 'smooth', label: 'Smooth'}

@@ -3,21 +3,23 @@ subjectsStore = require './subjects'
 
 class Classification extends Model
   subject: ''
+
   constructor: ->
     window.classification = this
     super
     @annotations ?= []
 
   save: ->
-    postClassification = new Promise (resolve, reject) ->
-      console?.info 'POST /classifications', JSON.stringify this
-      @apply =>
-        @_saving = true
-      setTimeout resolve, 1000
+    console.log 'Saving', JSON.stringify this
+    # postClassification = new Promise (resolve, reject) ->
+    #   console?.info 'POST /classifications', JSON.stringify this
+    #   @apply =>
+    #     @_saving = true
+    #   setTimeout resolve, 1000
 
-    postClassification.then =>
-      @apply =>
-        @_saving = false
+    # postClassification.then =>
+    #   @apply =>
+    #     @_saving = false
 
 module.exports = window.classificationsStore = new Store
   root: '/classifications'
