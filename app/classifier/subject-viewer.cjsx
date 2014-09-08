@@ -43,9 +43,22 @@ module.exports = React.createClass
 
   render: ->
     if @state.subject?
-      <svg viewBox="0 0 #{@state.width ? 0} #{@state.height ? 0}">
+      <svg viewBox="0 0 #{@state.width ? 0} #{@state.height ? 0}" ref="svg" onMouseDown={@handleSVGMouseDown}>
         <SVGImage src={@state.subject.location[@state.frame]} width={@state.width} height={@state.height} />
       </svg>
 
     else
       <p>Loading subject viewer</p>
+
+  handleSVGMouseDown: (e) ->
+    svg = @refs.svg.getDOMNode()
+
+    view = svg.viewBox.animVal
+    rect = svg.getBoundingClientRect()
+    scale = rect.width / view.width
+
+    click =
+      x: ((e.pageX - pageXOffset - rect.left) / scale) + view.x
+      y: ((e.pageY - pageYOffset - rect.top) / scale) + view.y
+
+    console.log 'SVG moused at', click
