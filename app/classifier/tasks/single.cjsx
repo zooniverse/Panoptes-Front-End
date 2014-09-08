@@ -3,7 +3,7 @@
 React = require 'react'
 
 module.exports = React.createClass
-  displayName: 'RadioTask'
+  displayName: 'SingleTask'
 
   render: ->
     answers = for answer, i in @props.answers
@@ -12,7 +12,7 @@ module.exports = React.createClass
         <span className="clickable">{answer.label}</span>
       </label>
 
-    <div className="radio-task">
+    <div className="single-choice-task">
       <div className="question">{@props.question}</div>
       <div className="answers">{answers}</div>
     </div>

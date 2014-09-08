@@ -5,7 +5,7 @@ EXAMPLE_WORKFLOW =
   firstTask: 'shape'
   tasks:
     shape:
-      type: 'radio'
+      type: 'single'
       question: 'What shape is this galaxy?'
       answers: [
         {value: 'smooth', label: 'Smooth'}
@@ -14,7 +14,7 @@ EXAMPLE_WORKFLOW =
       ]
       next: 'roundness'
     roundness:
-      type: 'radio'
+      type: 'single'
       question: 'How round is it?'
       answers: [
         {value: 'very', label: 'Very'}

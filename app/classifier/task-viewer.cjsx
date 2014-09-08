@@ -6,7 +6,7 @@ workflowsStore = require '../data/workflows'
 LoadingIndicator = require '../components/loading-indicator'
 
 taskComponents =
-  radio: require './tasks/radio'
+  single: require './tasks/single'
 
 module.exports = React.createClass
   displayName: 'TaskViewer'
