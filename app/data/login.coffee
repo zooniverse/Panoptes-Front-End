@@ -28,7 +28,7 @@ loginStore = new Store
     @emitChange()
 
     checkRequest = new Promise (resolve, reject) ->
-      console?.log 'GET /tokens&token=(RANDOM)'
+      # console?.log 'GET /tokens&token=(RANDOM)'
       if Math.random() > 0.5
         currentLogin = EXAMPLE_LOGIN
       setTimeout resolve.bind(null, currentLogin), 1000

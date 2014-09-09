@@ -8,7 +8,7 @@ EXAMPLE_WORKFLOW =
       type: 'drawing'
       question: 'Click your favorite point'
       tools: [
-        {value: 'interesting', label: 'Best point', tool: 'point'}
+        {value: 'interesting', label: 'Best point', type: 'point'}
       ]
       required: false
       next: 'shape'
@@ -19,7 +19,7 @@ EXAMPLE_WORKFLOW =
       answers: [
         {value: 'smooth', label: 'Smooth'}
         {value: 'features', label: 'Features'}
-        {value: 'other', label: 'Star or artifact'}
+        {value: 'other', label: 'Star or artifact (done!)'}
       ]
       next: 'roundness'
 
@@ -27,7 +27,7 @@ EXAMPLE_WORKFLOW =
       type: 'single'
       question: 'How round is it?'
       answers: [
-        {value: 'very', label: 'Very'}
+        {value: 'very', label: 'Very', next: 'shape'}
         {value: 'sorta', label: 'In between'}
         {value: 'not', label: 'Cigar shaped'}
       ]

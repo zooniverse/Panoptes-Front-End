@@ -6,10 +6,8 @@ module.exports = React.createClass
   displayName: 'DrawingTask'
 
   render: ->
-    console?.log "Rendering #{@constructor.displayName}", '@props', @props, '@state', @state
-
     tools = for tool, i in @props.options
-      <label className="workflow-task-answer drawing-tool" key={tool.label}>
+      <label className="workflow-task-answer drawing-tool #{tool.type}" key={tool.label}>
         <input type="radio" value={i} checked={tool is @props.value} onChange={@handleChange} />
         <span className="clickable">{tool.label}</span>
       </label>
@@ -20,6 +18,8 @@ module.exports = React.createClass
     </div>
 
   handleChange: (e) ->
-    toolIndex = e.target.value
+    if e.target.checked
+      toolIndex = e.target.value
+
     tool = @props.options[toolIndex]
     @props.onChange tool

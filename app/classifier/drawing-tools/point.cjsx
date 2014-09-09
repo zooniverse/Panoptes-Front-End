@@ -6,4 +6,8 @@ module.exports = React.createClass
   displayName: 'PointTool'
 
   render: ->
-    <circle className="point-tool" cx={@props.x} cy={@props.y} r="5" />
+    <g className="point drawing-tool" transform="translate(#{@props.x}, #{@props.y})">
+      <g  transform="scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})">
+        <circle className="point-tool-disc" cx="0" cy="0" r="5" />
+      </g>
+    </g>

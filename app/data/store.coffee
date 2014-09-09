@@ -44,12 +44,12 @@ class Store extends Model
 
   fetch: (query) ->
     fetchItems = new Promise (resolve, reject) =>
-      console?.info 'GET', @root, query
+      # console?.info 'GET', @root, query
       matches = (item for item in @examples when @matchesQuery item, query)
       setTimeout resolve.bind(null, matches), 1000
 
     fetchItems.then (results) =>
-      console?.info 'Got', @root, {results}
+      # console?.info 'Got', @root, {results}
       for item in results
         @items[item[@keyedOn]] = item
       @emitChange()

@@ -37,10 +37,10 @@ module.exports = React.createClass
       @setState {classification}
 
   render: ->
-    console.log "Rendering #{@constructor.displayName}", {@props}, {@state}
+    <div className="classify-content">
+      {if @state.classification?
+        <Classifier classification={@state.classification.id} />
 
-    if @state.classification?
-      <Classifier classification={@state.classification.id} />
-
-    else
-      <p>Loading classification for project <code>{@props.project}</code></p>
+      else
+        <p>Loading classification for project <code>{@props.project}</code></p>}
+    </div>

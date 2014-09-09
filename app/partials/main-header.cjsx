@@ -10,8 +10,6 @@ module.exports = React.createClass
   displayName: 'MainHeader'
 
   render: ->
-    console.log 'Rendering main header'
-
     <header className="main-header">
       <MainNav />
 

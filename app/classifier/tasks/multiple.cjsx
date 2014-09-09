@@ -6,8 +6,6 @@ module.exports = React.createClass
   displayName: 'MultipleChoiceTask'
 
   render: ->
-    console?.log "Rendering #{@constructor.displayName}", '@props', @props, '@state', @state
-
     existingAnswers = @props.value ? []
     answers = for answer, i in @props.options
       <label className="workflow-task-answer" key={answer.label}>

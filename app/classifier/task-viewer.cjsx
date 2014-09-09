@@ -17,7 +17,7 @@ module.exports = React.createClass
     subject: null
     workflow: null
 
-  componentWillMount: ->
+  componentDidMount: ->
     @loadWorkflowFor @props.subject
 
   componentWillReceiveProps: (nextProps) ->
@@ -30,8 +30,6 @@ module.exports = React.createClass
         @setState {subject, workflow}
 
   render: ->
-    console?.log "Rendering #{@constructor.displayName}", '@props', @props, '@state', @state
-
     if @state.workflow?
       annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
       task = @state.workflow.tasks[annotation?.task]
