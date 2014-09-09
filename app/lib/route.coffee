@@ -29,11 +29,7 @@ module.exports = React.createClass
           hash: @state.hash
 
       if @props.children?
-        if typeof @props.children is 'string' or @props.children instanceof Array
           @transferPropsTo React.DOM.div className: 'route', @props.children
-
-        else # It's a component.
-          @transferPropsTo cloneWithProps @props.children, merge @props.props, routeProps
 
       else # Look for a `handler` property.
         @transferPropsTo @props.handler routeProps

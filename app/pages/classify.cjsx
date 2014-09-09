@@ -37,7 +37,7 @@ module.exports = React.createClass
       @setState {classification}
 
   render: ->
-    <div className="classify-content">
+    <div>
       {if @state.classification?
         <Classifier classification={@state.classification.id} />
 
