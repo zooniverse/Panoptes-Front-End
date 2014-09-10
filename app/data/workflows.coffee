@@ -6,9 +6,11 @@ EXAMPLE_WORKFLOW =
   tasks:
     interest:
       type: 'drawing'
-      question: 'Click your favorite point'
+      question: 'Color some points'
       tools: [
-        {value: 'interesting', label: 'Best point', type: 'point'}
+        {value: 'red', label: 'Red', type: 'point', color: 'red'}
+        {value: 'green', label: 'Green', type: 'point', color: 'lime'}
+        {value: 'blue', label: 'Blue', type: 'point', color: 'blue'}
       ]
       required: false
       next: 'shape'

@@ -89,7 +89,7 @@ module.exports = React.createClass
       drawnComponents = []
       for {marks}, a in @state.classification.annotations when marks?
         for mark, m in marks
-          Tool = drawingComponents[mark.type]
+          Tool = drawingComponents[mark.tool.type]
           drawnComponents.push new Tool merge mark, scale: scale, key: "#{a}#{m}" # TODO: How can we itentify these uniquely?
 
       <svg ref="svg" className="subject-viewer-svg" viewBox="#{@state.viewX} #{@state.viewY} #{@state.viewWidth ? 0} #{@state.viewHeight ? 0}" data-tool={@props.drawingTool?.type} onMouseDown={@handleSVGMouseDown}>
@@ -103,7 +103,7 @@ module.exports = React.createClass
   handleSVGMouseDown: (e) ->
     mouse = @getEventOffset e
     if @props.drawingTool?
-      mouse.type = @props.drawingTool.type
+      mouse.tool = @props.drawingTool
 
       annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
       annotation.marks ?= []
