@@ -21,7 +21,7 @@ EXAMPLE_WORKFLOW =
       answers: [
         {value: 'smooth', label: 'Smooth'}
         {value: 'features', label: 'Features'}
-        {value: 'other', label: 'Star or artifact (done!)'}
+        {value: 'other', label: 'Star or artifact'}
       ]
       next: 'roundness'
 
@@ -29,7 +29,7 @@ EXAMPLE_WORKFLOW =
       type: 'single'
       question: 'How round is it?'
       answers: [
-        {value: 'very', label: 'Very', next: 'shape'}
+        {value: 'very', label: 'Very...', next: 'shape'}
         {value: 'sorta', label: 'In between'}
         {value: 'not', label: 'Cigar shaped'}
       ]
