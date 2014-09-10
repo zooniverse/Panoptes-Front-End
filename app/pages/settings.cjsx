@@ -164,7 +164,7 @@ module.exports = React.createClass
                 </tr>
                 <tr>
                   <th>Web site</th>
-                  <td><input type="url" name="personal_url" value={@props.login.personal_url} placeholder="https://www.example.com/" onChange={@handlePropertyInputChange} /></td>
+                  <td><input type="url" name="website" value={@props.login.website} placeholder="https://www.example.com/" onChange={@handlePropertyInputChange} /></td>
                 </tr>
                 <tr>
                   <th>Twitter</th>

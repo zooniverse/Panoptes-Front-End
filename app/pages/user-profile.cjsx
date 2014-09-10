@@ -42,10 +42,10 @@ module.exports = React.createClass
 
           <div>
             <span className="credited-name">
-              {@state.user.credited_name || @state.user.display_name}
+              {@state.user.real_name || @state.user.display_name}
             </span>
 
-            {if @state.user.credited_name
+            {if @state.user.real_name
               <span className="display-name">({@state.user.display_name})</span>}
 
             {if @state.user.location
