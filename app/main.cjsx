@@ -1,6 +1,6 @@
 # @cjsx React.DOM
 
-React = window.React = require 'react'
+React = require 'react'
 loginStore = require './data/login'
 MainHeader = require './partials/main-header'
 Route = require './lib/route'
@@ -65,3 +65,7 @@ React.renderComponent Main(null), mainContainer
 
 login = require './data/login'
 login.check()
+
+# For React DevTools Chrome plugin:
+unless process.env.NODE_ENV is 'production'
+  window.React = React
