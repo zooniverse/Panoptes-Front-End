@@ -10,7 +10,8 @@ module.exports = React.createClass
     children: React.PropTypes.component.isRequired
 
   render: ->
-    cloneWithProps @props.children, onMouseDown: @handleStart
+    cloneWithProps @props.children,
+      onMouseDown: @handleStart
 
   handleStart: (e) ->
     e.preventDefault()
@@ -18,6 +19,7 @@ module.exports = React.createClass
     startHandler e
     document.addEventListener 'mousemove', @handleMove
     document.addEventListener 'mouseup', @handleEnd
+    document.body.classList.add 'dragging'
 
   handleMove: (e) ->
     @props.onDrag? e
@@ -26,3 +28,4 @@ module.exports = React.createClass
     @props.onEnd? e
     document.removeEventListener 'mousemove', @handleMove
     document.removeEventListener 'mouseup', @handleEnd
+    document.body.classList.remove 'dragging'

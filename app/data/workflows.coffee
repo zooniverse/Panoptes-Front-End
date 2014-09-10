@@ -12,7 +12,6 @@ EXAMPLE_WORKFLOW =
         {value: 'green', label: 'Green', type: 'point', color: 'lime'}
         {value: 'blue', label: 'Blue', type: 'point', color: 'blue'}
       ]
-      required: false
       next: 'shape'
 
     shape:

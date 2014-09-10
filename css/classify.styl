@@ -19,7 +19,25 @@
   stroke: none
   stroke-width: 0
 
+  &[data-disabled]
+    pointer-events: none
+
   &.point
-    fill: transparent
+    cursor: move
+    cursor: grab
+    cursor: -moz-grab
+    cursor: -webkit-grab
+    fill-opacity: 0.3
     stroke: currentColor
-    stroke-width: 2
+    stroke-width: 1.5
+
+    &[data-disabled]
+      opacity: 0.8
+
+    &[data-selected]
+      stroke-width: 3
+
+    .dragging &
+      cursor: grabbing
+      cursor: -moz-grabbing
+      cursor: -webkit-grabbing

@@ -20,10 +20,12 @@ module.exports = React.createClass
     MarkClass: Point
 
   render: ->
-    radius = if @props.selected
-      10
+    radius = if @props.disabled
+      6
+    else if @props.selected
+      12
     else
-      5
+      10
 
     transform = "
       translate(#{@props.mark.x}, #{@props.mark.y})
@@ -33,12 +35,13 @@ module.exports = React.createClass
     color = @props.mark._tool.color ? 'currentcolor'
 
     <Draggable onStart={@props.select} onDrag={@handleDrag}>
-      <g className="point drawing-tool" transform={transform}>
-        <circle className="point-tool-disc" r={radius} fill={color} fillOpacity="0.5" stroke={color} />
+      <g className="point drawing-tool" transform={transform} data-disabled={@props.disabled || null} data-selected={@props.selected || null}>
+        <circle className="point-tool-disc" r={radius} fill={color} stroke={color} />
       </g>
     </Draggable>
 
   handleDrag: (e) ->
-    {x, y} = @props.getEventOffset e
-    @props.mark.x = x
-    @props.mark.y = y
+    unless @props.disabled
+      {x, y} = @props.getEventOffset e
+      @props.mark.x = x
+      @props.mark.y = y

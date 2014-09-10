@@ -86,10 +86,11 @@ module.exports = React.createClass
 
   selectMark: (mark) ->
     annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
-    index = annotation.marks.indexOf mark
-    annotation.marks.splice index, 1
-    annotation.marks.push mark
-    @setState selectedMark: mark
+    index = annotation.marks?.indexOf mark
+    if index? and index isnt -1
+      annotation.marks.splice index, 1
+      annotation.marks.push mark
+      @setState selectedMark: mark
 
   render: ->
     if @state.classification? and @state.subject?
@@ -101,12 +102,14 @@ module.exports = React.createClass
       for {marks}, a in @state.classification.annotations when marks?
         for mark, m in marks
           Tool = drawingComponents[mark._tool.type]
+          fromOtherAnnotation = a < @state.classification.annotations.length - 1
 
           tools.push new Tool
             key: mark._key
             mark: mark
-            selected: mark is @state.selectedMark
             scale: scale
+            disabled: fromOtherAnnotation
+            selected: mark is @state.selectedMark and not fromOtherAnnotation
             select: @selectMark.bind null, mark
             getEventOffset: @getEventOffset
 
@@ -148,21 +151,23 @@ module.exports = React.createClass
         mark.initStart? mouseCoords, e
 
   handleInitDrag: (e) ->
-    mouseCoords = @getEventOffset e
-    annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
-    mark = annotation.marks[annotation.marks.length - 1]
+    if @props.selectedDrawingTool?
+      mouseCoords = @getEventOffset e
+      annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+      mark = annotation.marks[annotation.marks.length - 1]
 
-    @state.classification.apply =>
-      mark.initMove? mouseCoords, e
+      @state.classification.apply =>
+        mark.initMove? mouseCoords, e
 
   handleInitRelease: (e) ->
-    mouseCoords = @getEventOffset e
-    annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
-    mark = annotation.marks[annotation.marks.length - 1]
+    if @props.selectedDrawingTool?
+      mouseCoords = @getEventOffset e
+      annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+      mark = annotation.marks[annotation.marks.length - 1]
 
-    @state.classification.apply =>
-      mark.initRelease? mouseCoords, e
-      mark._releases += 1
+      @state.classification.apply =>
+        mark.initRelease? mouseCoords, e
+        mark._releases += 1
 
   handleToolMove: ->
     @forceUpdate()
