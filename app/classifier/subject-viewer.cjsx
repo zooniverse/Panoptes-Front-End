@@ -96,7 +96,7 @@ module.exports = React.createClass
           Tool = drawingComponents[mark._tool.type]
 
           tools.push new Tool
-            key: "#{a}#{m}" # TODO: How can we itentify these uniquely?
+            key: mark._key
             mark: mark
             selected: mark is @state.selectedMark
             scale: scale
@@ -127,6 +127,7 @@ module.exports = React.createClass
         mark = new MarkClass mouseCoords
         mark._tool = @props.selectedDrawingTool
         mark._releases = 0
+        mark._key = Math.random()
 
       if mark in @state.classification.annotations
         markIndex = @state.classification.annotations.indexOf mark
