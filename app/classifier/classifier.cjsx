@@ -13,7 +13,7 @@ module.exports = React.createClass
   getInitialState: ->
     classification: null
     workflow: null
-    drawingTool: null
+    selectedDrawingTool: null
 
   componentDidMount: ->
     @loadClassification @props.classification
@@ -59,11 +59,11 @@ module.exports = React.createClass
 
         <div className="project-classify-page">
           <div className="subject">
-            <SubjectViewer classification={@state.classification.id} drawingTool={@state.drawingTool} />
+            <SubjectViewer classification={@state.classification.id} selectedDrawingTool={@state.selectedDrawingTool} />
           </div>
 
           <div className="task">
-            <TaskViewer subject={@state.classification.subject} classification={@state.classification} drawingTool={@state.drawingTool} onChange={@handleAnswer} />
+            <TaskViewer subject={@state.classification.subject} classification={@state.classification} selectedDrawingTool={@state.selectedDrawingTool} onChange={@handleAnswer} />
 
             <div className="task-nav">
               <button onClick={@previousTask} disabled={not canGoBack}><i className="fa fa-arrow-left"></i></button>
@@ -78,7 +78,7 @@ module.exports = React.createClass
 
   handleAnswer: (answer) ->
     if 'type' of answer
-      @setState drawingTool: answer
+      @setState selectedDrawingTool: answer
 
     else
       annotation = @getAnnotation()
@@ -89,14 +89,14 @@ module.exports = React.createClass
     @state.classification.apply =>
       @state.classification.annotations.push task: taskKey
 
-    @setState drawingTool: @state.workflow.tasks[taskKey].tools?[0]
+    @setState selectedDrawingTool: @state.workflow.tasks[taskKey].tools?[0]
 
   previousTask: ->
     @state.classification.apply =>
       @state.classification.annotations.pop()
 
     taskKey = @getAnnotation().task
-    @setState drawingTool: @state.workflow.tasks[taskKey].tools?[0]
+    @setState selectedDrawingTool: @state.workflow.tasks[taskKey].tools?[0]
 
   finishClassification: ->
     @state.classification.save()

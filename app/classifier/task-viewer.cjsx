@@ -35,7 +35,7 @@ module.exports = React.createClass
       task = @state.workflow.tasks[annotation?.task]
       TaskComponent = taskComponents[task?.type]
 
-      <TaskComponent question={task.question} options={task.answers ? task.tools} value={annotation.answer ? @props.drawingTool} onChange={@props.onChange} />
+      <TaskComponent question={task.question} options={task.answers ? task.tools} value={annotation.answer ? @props.selectedDrawingTool} onChange={@props.onChange} />
 
     else
       <p>Loading task viewer</p>

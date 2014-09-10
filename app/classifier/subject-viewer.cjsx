@@ -5,6 +5,7 @@ classificationsStore = require '../data/classifications'
 subjectsStore = require '../data/subjects'
 loadImage = require '../lib/load-image'
 merge = require 'react/lib/merge'
+Draggable = require '../lib/draggable'
 SVGImage = require '../components/svg-image'
 
 drawingComponents =
@@ -27,6 +28,8 @@ module.exports = React.createClass
     viewY: 0
     viewWidth: 0
     viewHeight: 0
+
+    selectedMark: null
 
   componentDidMount: ->
     console.log 'SubjectViewer::componentDidMount'
@@ -78,37 +81,79 @@ module.exports = React.createClass
   getEventOffset: (e) ->
     rect = @refs.svg.getDOMNode().getBoundingClientRect()
     {horizontal, vertical} = @getScale()
-    console.log {horizontal}, {vertical}
     x: ((e.pageX - pageXOffset - rect.left) / horizontal) + @state.viewX
     y: ((e.pageY - pageYOffset - rect.top) / vertical) + @state.viewY
 
   render: ->
     if @state.classification? and @state.subject?
+      viewBox = [@state.viewX, @state.viewY, @state.viewWidth ? 0, @state.viewHeight ? 0]
+
       scale = @getScale()
 
-      drawnComponents = []
+      tools = []
       for {marks}, a in @state.classification.annotations when marks?
         for mark, m in marks
-          Tool = drawingComponents[mark.tool.type]
-          drawnComponents.push new Tool merge mark, scale: scale, key: "#{a}#{m}" # TODO: How can we itentify these uniquely?
+          Tool = drawingComponents[mark._tool.type]
 
-      <svg ref="svg" className="subject-viewer-svg" viewBox="#{@state.viewX} #{@state.viewY} #{@state.viewWidth ? 0} #{@state.viewHeight ? 0}" data-tool={@props.drawingTool?.type} onMouseDown={@handleSVGMouseDown}>
-        <SVGImage src={@state.subject.location[@state.frame]} width={@state.imageWidth} height={@state.imageHeight} />
-        {drawnComponents}
+          tools.push new Tool
+            key: "#{a}#{m}" # TODO: How can we itentify these uniquely?
+            mark: mark
+            selected: mark is @state.selectedMark
+            scale: scale
+            getEventOffset: @getEventOffset
+
+      <svg ref="svg" className="subject-viewer-svg" viewBox={viewBox} data-tool={@props.selectedDrawingTool?.type}>
+        <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
+          <SVGImage src={@state.subject.location[@state.frame]} width={@state.imageWidth} height={@state.imageHeight} />
+        </Draggable>
+
+        <Draggable onDrag={@handleToolMove}>
+          <g className="subject-viewer-tools" onMouseDown={@handleToolMouseDown}>{tools}</g>
+        </Draggable>
       </svg>
 
     else
       <p>Loading subject viewer</p>
 
-  handleSVGMouseDown: (e) ->
-    mouse = @getEventOffset e
-    if @props.drawingTool?
-      mouse.tool = @props.drawingTool
-
+  handleInitStart: (e) ->
+    if @props.selectedDrawingTool?
+      mouseCoords = @getEventOffset e
       annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
       annotation.marks ?= []
+      mark = annotation.marks[annotation.marks.length - 1]
+
+      if mark?.isComplete?() ? true
+        MarkClass  = drawingComponents[@props.selectedDrawingTool.type].MarkClass
+        mark = new MarkClass mouseCoords
+        mark._tool = @props.selectedDrawingTool
+        mark._releases = 0
+
+      if mark in @state.classification.annotations
+        markIndex = @state.classification.annotations.indexOf mark
+        @state.classification.annotations.splice markIndex, 1
+      annotation.marks.push mark
+
+      @setState selectedMark: mark
 
       @state.classification.apply =>
-        annotation.marks.push mouse
+        mark.initStart? mouseCoords, e
 
-    console.log 'SVG moused at', mouse
+  handleInitDrag: (e) ->
+    mouseCoords = @getEventOffset e
+    annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+    mark = annotation.marks[annotation.marks.length - 1]
+
+    @state.classification.apply =>
+      mark.initMove? mouseCoords, e
+
+  handleInitRelease: (e) ->
+    mouseCoords = @getEventOffset e
+    annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+    mark = annotation.marks[annotation.marks.length - 1]
+
+    @state.classification.apply =>
+      mark.initRelease? mouseCoords, e
+      mark._releases += 1
+
+  handleToolMove: ->
+    @forceUpdate()

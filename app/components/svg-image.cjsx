@@ -16,4 +16,4 @@ module.exports = React.createClass
 
   render: ->
     imageHTML = "<image xlink:href='#{@props.src}' width='#{@props.width}' height='#{@props.height}' />"
-    <g className="svg-image-container" dangerouslySetInnerHTML={__html: imageHTML} />
+    @transferPropsTo <g className="svg-image-container" dangerouslySetInnerHTML={__html: imageHTML} />
