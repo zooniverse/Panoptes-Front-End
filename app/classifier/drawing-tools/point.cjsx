@@ -30,9 +30,11 @@ module.exports = React.createClass
       scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})
     "
 
-    <Draggable onDrag={@handleDrag}>
+    color = @props.mark._tool.color ? 'currentcolor'
+
+    <Draggable onStart={@props.select} onDrag={@handleDrag}>
       <g className="point drawing-tool" transform={transform}>
-        <circle className="point-tool-disc" r={radius} stroke={@props.mark._tool.color} />
+        <circle className="point-tool-disc" r={radius} fill={color} fillOpacity="0.5" stroke={color} />
       </g>
     </Draggable>
 

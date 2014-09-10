@@ -84,6 +84,13 @@ module.exports = React.createClass
     x: ((e.pageX - pageXOffset - rect.left) / horizontal) + @state.viewX
     y: ((e.pageY - pageYOffset - rect.top) / vertical) + @state.viewY
 
+  selectMark: (mark) ->
+    annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+    index = annotation.marks.indexOf mark
+    annotation.marks.splice index, 1
+    annotation.marks.push mark
+    @setState selectedMark: mark
+
   render: ->
     if @state.classification? and @state.subject?
       viewBox = [@state.viewX, @state.viewY, @state.viewWidth ? 0, @state.viewHeight ? 0]
@@ -100,6 +107,7 @@ module.exports = React.createClass
             mark: mark
             selected: mark is @state.selectedMark
             scale: scale
+            select: @selectMark.bind null, mark
             getEventOffset: @getEventOffset
 
       <svg ref="svg" className="subject-viewer-svg" viewBox={viewBox} data-tool={@props.selectedDrawingTool?.type}>
