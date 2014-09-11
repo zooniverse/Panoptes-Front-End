@@ -22,22 +22,30 @@
   &[data-disabled]
     pointer-events: none
 
-  &.point
+  .clickable
+    cursor: pointer
+    display: none
+
+  &[data-selected] .clickable
+    display: initial
+
+  .draggable
     cursor: move
     cursor: grab
-    cursor: -moz-grab
     cursor: -webkit-grab
-    fill-opacity: 0.3
-    stroke: currentColor
-    stroke-width: 1.5
-
-    &[data-disabled]
-      opacity: 0.8
-
-    &[data-selected]
-      stroke-width: 3
 
     .dragging &
       cursor: grabbing
-      cursor: -moz-grabbing
       cursor: -webkit-grabbing
+
+  &.point
+    .main-disc
+      fill-opacity: 0.3
+      stroke: currentColor
+      stroke-width: 1.5
+
+    &[data-disabled] .main-disc
+      opacity: 0.8
+
+    &[data-selected] .main-disc
+      stroke-width: 3
