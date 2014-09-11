@@ -21,23 +21,29 @@ module.exports = React.createClass
     MarkClass: Point
 
   render: ->
+    color = @props.mark._tool.color ? 'currentcolor'
+
     radius = if @props.disabled
-      6
+      4
     else if @props.selected
       12
     else
-      10
+      6
+
+    strokeWidth = 3
 
     transform = "
       translate(#{@props.mark.x}, #{@props.mark.y})
       scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})
     "
 
-    color = @props.mark._tool.color ? 'currentcolor'
-
     <g className="point drawing-tool" transform={transform} data-disabled={@props.disabled || null} data-selected={@props.selected || null}>
       <Draggable onStart={@props.select} onDrag={@handleDrag}>
-        <circle className="main-disc" r={radius} fill={color} stroke={color} />
+        <g strokeWidth={strokeWidth}>
+          <circle cy="2" r={radius + (strokeWidth / 4)} stroke="black" strokeWidth={strokeWidth * 1.5} opacity="0.3" />
+          <circle r={radius + (strokeWidth / 2)} stroke="white" />
+          <circle r={radius} fill={color if @props.disabled} stroke={color} />
+        </g>
       </Draggable>
 
       <DeleteButton transform="translate(#{radius}, #{-1 * radius})" onClick={@deleteMark} />
