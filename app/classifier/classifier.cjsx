@@ -62,7 +62,7 @@ module.exports = React.createClass
             <SubjectViewer classification={@state.classification.id} selectedDrawingTool={@state.selectedDrawingTool} />
           </div>
 
-          <div className="task">
+          <div className="classifier-task">
             <TaskViewer subject={@state.classification.subject} classification={@state.classification} selectedDrawingTool={@state.selectedDrawingTool} onChange={@handleAnswer} />
 
             <div className="task-nav">

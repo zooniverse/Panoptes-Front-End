@@ -30,12 +30,14 @@ module.exports = React.createClass
         @setState {subject, workflow}
 
   render: ->
-    if @state.workflow?
-      annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-      task = @state.workflow.tasks[annotation?.task]
-      TaskComponent = taskComponents[task?.type]
+    <div className="task-viewer">
+      {if @state.workflow?
+        annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
+        task = @state.workflow.tasks[annotation?.task]
+        TaskComponent = taskComponents[task?.type]
 
-      <TaskComponent question={task.question} options={task.answers ? task.tools} value={annotation.answer ? @props.selectedDrawingTool} onChange={@props.onChange} />
+        <TaskComponent question={task.question} options={task.answers ? task.tools} value={annotation.answer ? @props.selectedDrawingTool} onChange={@props.onChange} />
 
-    else
-      <p>Loading task viewer</p>
+      else
+        <p>Loading task viewer</p>}
+    </div>

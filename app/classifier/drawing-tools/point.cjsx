@@ -42,7 +42,7 @@ module.exports = React.createClass
         <g strokeWidth={strokeWidth}>
           <circle cy="2" r={radius + (strokeWidth / 4)} stroke="black" strokeWidth={strokeWidth * 1.5} opacity="0.3" />
           <circle r={radius + (strokeWidth / 2)} stroke="white" />
-          <circle r={radius} fill={color if @props.disabled} stroke={color} />
+          <circle r={radius} fill={if @props.disabled then color else 'transparent'} stroke={color} />
         </g>
       </Draggable>
 

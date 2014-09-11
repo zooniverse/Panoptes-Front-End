@@ -4,36 +4,20 @@
   > .subject
     flex: 4
 
-  > .task
+  > .classifier-task
+    display: flex
     flex: 1
+    flex-direction: column
 
-    .workflow-task-answer
-      display: block
+    .task-viewer
+      flex: 1 0 auto
+
+    .task-nav
+      flex: 1 0 auto
 
 .subject-viewer-svg
   &[data-tool]
     cursor: crosshair
 
-.drawing-tool
-  fill: none
-  stroke: none
-  stroke-width: 0
-
-  &[data-disabled]
-    pointer-events: none
-
-  .clickable
-    cursor: pointer
-    display: none
-
-  &[data-selected] .clickable
-    display: initial
-
-  .draggable
-    cursor: move
-    cursor: grab
-    cursor: -webkit-grab
-
-    .dragging &
-      cursor: grabbing
-      cursor: -webkit-grabbing
+@require "./task-viewer"
+@require "./drawing-tool"

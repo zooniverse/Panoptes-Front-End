@@ -12,7 +12,7 @@ module.exports = React.createClass
         <span className="clickable">{answer.label}</span>
       </label>
 
-    <div className="single-choice-task">
+    <div className="workflow-task single-choice">
       <div className="question">{@props.question}</div>
       <div className="answers">{answers}</div>
     </div>
