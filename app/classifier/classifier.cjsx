@@ -67,8 +67,10 @@ module.exports = React.createClass
 
             <div className="task-nav">
               <button onClick={@previousTask} disabled={not canGoBack}><i className="fa fa-arrow-left"></i></button>
-              <button onClick={@loadTask.bind this, nextTaskKey} disabled={needsAnswer or not canGoForward}><i className="fa fa-check"></i></button>
-              <button onClick={@finishClassification} disabled={needsAnswer or canGoForward}><i className="fa fa-flag-checkered"></i></button>
+              {if canGoForward
+                <button onClick={@loadTask.bind this, nextTaskKey} disabled={needsAnswer}><i className="fa fa-check"></i></button>
+              else
+                <button onClick={@finishClassification} disabled={needsAnswer}><i className="fa fa-flag-checkered"></i></button>}
             </div>
           </div>
         </div>

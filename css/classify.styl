@@ -1,5 +1,9 @@
+.classify-content
+  display: flex
+
 .project-classify-page
   display: flex
+  flex: 1
 
   > .subject
     flex: 4
@@ -8,14 +12,34 @@
     display: flex
     flex: 1
     flex-direction: column
+    max-height: 90vh
+    padding-left: 1vw
 
-    .task-viewer
+  .task-viewer
+    flex: 1 0 auto
+
+  .task-nav
+    border-top: 1px solid
+    display: flex
+    flex: 0 0 auto
+    margin-top: 1em
+
+    button
+      @extends $reset-button
+      padding: 0.5em 0
       flex: 1 0 auto
 
-    .task-nav
-      flex: 1 0 auto
+      &:not(:first-child)
+        border-left: 1px solid
+
+      &:disabled
+        opacity: 0.4
 
 .subject-viewer-svg
+  background-stripes: transparent rgba(gray, 0.3) 20px
+  width: 100%
+  height: 90vh
+
   &[data-tool]
     cursor: crosshair
 

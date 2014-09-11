@@ -73,13 +73,13 @@ module.exports = React.createClass
             imageHeight: img.height
 
   getScale: ->
-    rect = @refs.svg?.getDOMNode().getBoundingClientRect()
+    rect = @refs.sizeRect?.getDOMNode().getBoundingClientRect()
     rect ?= width: 0, height: 0
     horizontal: rect.width / @state.viewWidth
     vertical: rect.height / @state.viewHeight
 
   getEventOffset: (e) ->
-    rect = @refs.svg.getDOMNode().getBoundingClientRect()
+    rect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
     {horizontal, vertical} = @getScale()
     x: ((e.pageX - pageXOffset - rect.left) / horizontal) + @state.viewX
     y: ((e.pageY - pageYOffset - rect.top) / vertical) + @state.viewY
@@ -113,7 +113,8 @@ module.exports = React.createClass
             select: @selectMark.bind null, mark
             getEventOffset: @getEventOffset
 
-      <svg ref="svg" className="subject-viewer-svg" viewBox={viewBox} data-tool={@props.selectedDrawingTool?.type}>
+      <svg ref="svg" className="subject-viewer-svg" width={@state.viewWidth} height={@state.viewHeight} viewBox={viewBox} data-tool={@props.selectedDrawingTool?.type}>
+        <rect ref="sizeRect" width={@state.viewWidth} height={@state.viewHeight} />
         <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
           <SVGImage src={@state.subject.location[@state.frame]} width={@state.imageWidth} height={@state.imageHeight} />
         </Draggable>
