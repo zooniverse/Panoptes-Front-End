@@ -22,6 +22,7 @@ EXAMPLE_WORKFLOW =
         {value: 'features', label: 'Features'}
         {value: 'other', label: 'Star or artifact'}
       ]
+      required: true
       next: 'roundness'
 
     roundness:

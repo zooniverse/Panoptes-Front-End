@@ -66,11 +66,11 @@ module.exports = React.createClass
             <TaskViewer subject={@state.classification.subject} classification={@state.classification} selectedDrawingTool={@state.selectedDrawingTool} onChange={@handleAnswer} />
 
             <div className="task-nav">
-              <button onClick={@previousTask} disabled={not canGoBack}><i className="fa fa-arrow-left"></i></button>
+              <button className="backward" disabled={not canGoBack} onClick={@previousTask}><i className="fa fa-arrow-left"></i></button>
               {if canGoForward
-                <button onClick={@loadTask.bind this, nextTaskKey} disabled={needsAnswer}><i className="fa fa-check"></i></button>
+                <button className="forward" disabled={needsAnswer} onClick={@loadTask.bind this, nextTaskKey}>Next <i className="fa fa-arrow-right"></i></button>
               else
-                <button onClick={@finishClassification} disabled={needsAnswer}><i className="fa fa-flag-checkered"></i></button>}
+                <button className="forward" disabled={needsAnswer} onClick={@finishClassification}>Done <i className="fa fa-check"></i></button>}
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@ module.exports = React.createClass
         <p>Loading classification {@props.classification}</p>
 
   handleAnswer: (answer) ->
-    if 'type' of answer
+    if answer? and 'type' of answer
       @setState selectedDrawingTool: answer
 
     else
