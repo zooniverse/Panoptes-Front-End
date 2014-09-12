@@ -1,4 +1,5 @@
-Store = {Model} = require '../data/store'
+Model = require '../data/model'
+Store = require '../data/store'
 subjectsStore = require './subjects'
 
 class Classification extends Model

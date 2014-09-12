@@ -2,8 +2,6 @@ dispatcher = require '../lib/dispatcher'
 Model = require './model'
 
 class Store extends Model
-  @Model: Model # TODO: This is a mess, I know, I gotta sort this all out.
-
   root: '' # The endpoint to query from and post to, e.g. "/subjects"
   keyedOn: 'id'
   examples: []
