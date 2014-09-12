@@ -20,7 +20,7 @@ cp -av "$DEV_DIR" "$BUILD_DIR"
   --verbose \
   --screw-ie8 \
   --mangle \
-  --compress \
+  --compress drop_console \
   --output "$BUILD_DIR/$OUT_JS" \
   "$BUILD_DIR/$OUT_JS"
 
