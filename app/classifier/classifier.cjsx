@@ -58,30 +58,29 @@ module.exports = React.createClass
 
   getAnnotation: ->
     # Just a shortcut:
-    @props.classification?.annotations[@props.classification.annotations.length - 1]
+    @props.classification.annotations[@props.classification.annotations.length - 1]
 
   render: ->
       annotation = @getAnnotation()
       if annotation?
         task = @state.workflow?.tasks[annotation.task]
-        nextTaskKey = annotation.answer?.next ? task.next
-        nextTask = @state.workflow?.tasks[nextTaskKey]
+        nextTaskKey = annotation.answer?.next ? task?.next
 
-        needsAnswer = task?.required and not annotation.answer?
-        canGoBack = @props.classification.annotations.length > 1
-        canGoForward = nextTask?
+      canGoBack = @props.classification.annotations.length > 1
+      needsAnswer = task?.required and not annotation.answer?
+      canGoForward = nextTaskKey?
 
       <div className="project-classify-page">
         <div className="subject">
           {if @state.subject?
-            <SubjectViewer classification={@props.classification.id} subject={@props.classification.subject} selectedDrawingTool={@state.selectedDrawingTool} />
+            <SubjectViewer classification={@props.classification} subject={@state.subject} selectedDrawingTool={@state.selectedDrawingTool} />
           else
             <p>Loading subject {@props.classification.subject}</p>}
         </div>
 
         <div className="classifier-task">
           {if @state.workflow?
-            <TaskViewer subject={@props.classification.subject} classification={@props.classification} selectedDrawingTool={@state.selectedDrawingTool} onChange={@handleAnswer} />
+            <TaskViewer task={task} annotation={annotation} selectedDrawingTool={@state.selectedDrawingTool} onChange={@handleAnswer} />
           else
             <p>Loading workflow {@props.classification.workflow}</p>}
 

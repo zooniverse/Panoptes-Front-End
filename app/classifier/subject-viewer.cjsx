@@ -1,29 +1,25 @@
 # @cjsx React.DOM
 
 React = require 'react'
-classificationsStore = require '../data/classifications'
-subjectsStore = require '../data/subjects'
 loadImage = require '../lib/load-image'
-merge = require 'react/lib/merge'
 Draggable = require '../lib/draggable'
 SVGImage = require '../components/svg-image'
 
 drawingComponents =
   point: require './drawing-tools/point'
 
+# TODO: Replace classification prop with just its annotations.
+
 module.exports = React.createClass
   displayName: 'SubjectViewer'
 
   getInitialState: ->
     loading: false
-    classification: null
-    subject: null
-    frame: 0
 
+    frame: 0
     imageWidth: 0
     imageHeight: 0
 
-    # NOTE: We'll only change viewX and viewY if we support zoom later.
     viewX: 0
     viewY: 0
     viewWidth: 0
@@ -32,45 +28,30 @@ module.exports = React.createClass
     selectedMark: null
 
   componentDidMount: ->
-    console.log 'SubjectViewer::componentDidMount'
-    @loadClassification @props.classification
+    @resetSubject @props.subject
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.classification in [@state.classification?.id, @state.loading]
-      @loadClassification nextProps.classification
+    unless nextProps.subject is @props.subject
+      @resetSubject nextProps.subject
 
-  loadClassification: (id) ->
-    console.log 'SubjectViewer::loadClassification'
-    @setState loading: id, =>
-      console.log 'Loading classification', id
-      classificationsStore.get(id).then (classification) =>
-        console.log 'Loading subject', classification.subject
-        subjectsStore.get(classification.subject).then (subject) =>
-          console.log 'Loading image', subject.location[0]
-          loadImage(subject.location[0]).then (img) =>
-            if @isMounted()
-              console.log 'Setting state'
-              @setState
-                loading: false
-                classification: classification
-                subject: subject
-                frame: 0
-                imageWidth: img.width
-                imageHeight: img.height
-                viewX: 0
-                viewY: 0
-                viewWidth: img.width
-                viewHeight: img.height
-                -> console.log 'Done'
+  resetSubject: (subject) ->
+    @setFrame(0).then =>
+      @setView 0, 0, @state.imageWidth, @state.imageHeight
 
   setFrame: (frame) ->
-    @setState frame: frame, =>
-      loadImage(@state.subject.location[frame]).then (img) =>
-        if @isMounted()
-          @setState
-            loading: false
-            imageWidth: img.width
-            imageHeight: img.height
+    new Promise (resolve, reject) =>
+      @setState loading: true, =>
+        loadImage(@props.subject.location[frame]).then (img) =>
+          if @isMounted()
+            @setState
+              loading: false
+              frame: frame
+              imageWidth: img.width
+              imageHeight: img.height
+            resolve img
+
+  setView: (viewX, viewY, viewWidth, viewHeight) ->
+    @setState {viewX, viewY, viewWidth, viewHeight}
 
   getScale: ->
     rect = @refs.sizeRect?.getDOMNode().getBoundingClientRect()
@@ -85,7 +66,7 @@ module.exports = React.createClass
     y: ((e.pageY - pageYOffset - rect.top) / vertical) + @state.viewY
 
   selectMark: (mark) ->
-    annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+    annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     index = annotation.marks?.indexOf mark
     if index? and index isnt -1
       annotation.marks.splice index, 1
@@ -93,42 +74,37 @@ module.exports = React.createClass
       @setState selectedMark: mark
 
   render: ->
-    if @state.classification? and @state.subject?
-      viewBox = [@state.viewX, @state.viewY, @state.viewWidth ? 0, @state.viewHeight ? 0]
+    scale = @getScale()
 
-      scale = @getScale()
+    tools = []
+    for {marks}, a in @props.classification.annotations when marks?
+      for mark, m in marks
+        Tool = drawingComponents[mark._tool.type]
+        fromOtherAnnotation = a < @props.classification.annotations.length - 1
 
-      tools = []
-      for {marks}, a in @state.classification.annotations when marks?
-        for mark, m in marks
-          Tool = drawingComponents[mark._tool.type]
-          fromOtherAnnotation = a < @state.classification.annotations.length - 1
+        tools.push new Tool
+          key: mark._key
+          mark: mark
+          scale: scale
+          disabled: fromOtherAnnotation
+          selected: mark is @state.selectedMark and not fromOtherAnnotation
+          select: @selectMark.bind null, mark
+          getEventOffset: @getEventOffset
 
-          tools.push new Tool
-            key: mark._key
-            mark: mark
-            scale: scale
-            disabled: fromOtherAnnotation
-            selected: mark is @state.selectedMark and not fromOtherAnnotation
-            select: @selectMark.bind null, mark
-            getEventOffset: @getEventOffset
+    viewBox = [@state.viewX, @state.viewY, @state.viewWidth, @state.viewHeight]
 
-      <svg ref="svg" className="subject-viewer-svg" width={@state.viewWidth} height={@state.viewHeight} viewBox={viewBox} data-tool={@props.selectedDrawingTool?.type}>
-        <rect ref="sizeRect" width={@state.viewWidth} height={@state.viewHeight} />
-        <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
-          <SVGImage src={@state.subject.location[@state.frame]} width={@state.imageWidth} height={@state.imageHeight} />
-        </Draggable>
-
-        <g className="subject-viewer-tools" onMouseDown={@handleToolMouseDown}>{tools}</g>
-      </svg>
-
-    else
-      <p>Loading subject viewer</p>
+    <svg  className="subject-viewer-svg" width={@state.imageWidth} height={@state.imageHeight} viewBox={viewBox} data-tool={@props.selectedDrawingTool?.type}>
+      <rect ref="sizeRect" width={@state.imageWidth} height={@state.imageHeight} />
+      <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
+        <SVGImage src={@props.subject.location?[@state.frame]} width={@state.imageWidth} height={@state.imageHeight} />
+      </Draggable>
+      <g className="subject-viewer-tools" onMouseDown={@handleToolMouseDown}>{tools}</g>
+    </svg>
 
   handleInitStart: (e) ->
     if @props.selectedDrawingTool?
       mouseCoords = @getEventOffset e
-      annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+      annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
       annotation.marks ?= []
       mark = annotation.marks[annotation.marks.length - 1]
 
@@ -139,31 +115,31 @@ module.exports = React.createClass
         mark._releases = 0
         mark._key = Math.random()
 
-      if mark in @state.classification.annotations
-        markIndex = @state.classification.annotations.indexOf mark
-        @state.classification.annotations.splice markIndex, 1
+      if mark in @props.classification.annotations
+        markIndex = @props.classification.annotations.indexOf mark
+        @props.classification.annotations.splice markIndex, 1
       annotation.marks.push mark
 
       @setState selectedMark: mark
 
       mark.initStart? mouseCoords, e
-      @state.classification.emitChange()
+      @props.classification.emitChange()
 
   handleInitDrag: (e) ->
     if @props.selectedDrawingTool?
       mouseCoords = @getEventOffset e
-      annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+      annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
       mark = annotation.marks[annotation.marks.length - 1]
 
       mark.initMove? mouseCoords, e
-      @state.classification.emitChange()
+      @props.classification.emitChange()
 
   handleInitRelease: (e) ->
     if @props.selectedDrawingTool?
       mouseCoords = @getEventOffset e
-      annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
+      annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
       mark = annotation.marks[annotation.marks.length - 1]
 
       mark.initRelease? mouseCoords, e
-      @state.classification.emitChange()
+      @props.classification.emitChange()
       mark._releases += 1
