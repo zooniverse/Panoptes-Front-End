@@ -4,11 +4,10 @@ React = require 'react'
 loadImage = require '../lib/load-image'
 Draggable = require '../lib/draggable'
 SVGImage = require '../components/svg-image'
+{dispatch} = require '../lib/dispatcher'
 
 drawingComponents =
   point: require './drawing-tools/point'
-
-# TODO: Replace classification prop with just its annotations.
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'
@@ -83,7 +82,7 @@ module.exports = React.createClass
         fromOtherAnnotation = a < @props.classification.annotations.length - 1
 
         tools.push new Tool
-          key: mark._key
+          key: mark._id
           mark: mark
           scale: scale
           disabled: fromOtherAnnotation
@@ -107,39 +106,51 @@ module.exports = React.createClass
       annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
       annotation.marks ?= []
       mark = annotation.marks[annotation.marks.length - 1]
+      MarkComponent = drawingComponents[@props.selectedDrawingTool.type]
 
-      if mark?.isComplete?() ? true
-        MarkClass  = drawingComponents[@props.selectedDrawingTool.type].MarkClass
-        mark = new MarkClass mouseCoords
-        mark._tool = @props.selectedDrawingTool
-        mark._releases = 0
-        mark._key = Math.random()
+      if MarkComponent.isComplete?
+        incomplete = not MarkComponent.isComplete? mark
 
-      if mark in @props.classification.annotations
-        markIndex = @props.classification.annotations.indexOf mark
-        @props.classification.annotations.splice markIndex, 1
-      annotation.marks.push mark
+      unless incomplete
+        mark =
+          _id: Math.random()
+          _tool: @props.selectedDrawingTool
+          _releases: 0
 
-      @setState selectedMark: mark
+        if MarkComponent.defaultValues?
+          defaultValues = MarkComponent.defaultValues mouseCoords
+          for key, value of defaultValues
+            mark[key] = value
 
-      mark.initStart? mouseCoords, e
-      @props.classification.emitChange()
+        dispatch 'classification:annotation:mark:create', @props.classification, annotation, mark
+
+      # TODO: I don't entirely trust that the action always fires immediately.
+      # There should probably be a one-time listener here on the classification.
+
+      @setState selectedMark: annotation.marks[annotation.marks.length - 1], =>
+        mark = @state.selectedMark
+        if MarkComponent.initStart?
+          initProps = MarkComponent.initStart mouseCoords, e
+          dispatch 'classification:annotation:mark:update', mark, initProps
 
   handleInitDrag: (e) ->
     if @props.selectedDrawingTool?
+      mark = @state.selectedMark
+      MarkComponent = drawingComponents[@props.selectedDrawingTool.type]
       mouseCoords = @getEventOffset e
-      annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-      mark = annotation.marks[annotation.marks.length - 1]
 
-      mark.initMove? mouseCoords, e
-      @props.classification.emitChange()
+      if MarkComponent.initMove?
+        initProps = MarkComponent.initMove mouseCoords, e
+        dispatch 'classification:annotation:mark:update', mark, initProps
 
   handleInitRelease: (e) ->
     if @props.selectedDrawingTool?
       mouseCoords = @getEventOffset e
       annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-      mark = annotation.marks[annotation.marks.length - 1]
+      mark = @state.selectedMark
+      MarkComponent = drawingComponents[@props.selectedDrawingTool.type]
 
-      mark.initRelease? mouseCoords, e
-      @props.classification.emitChange()
-      mark._releases += 1
+      dispatch 'classification:annotation:mark:update', mark, _releases: mark._releases + 1
+      if MarkComponent.initRelease?
+        initProps = MarkComponent.initRelease mouseCoords, e
+        dispatch 'classification:annotation:mark:update', mark, initProps

@@ -52,6 +52,11 @@ module.exports = window.classificationsStore = new Store
         if mark in annotation.marks
           return {classification, annotation}
 
+  'classification:annotation:mark:create': (classification, annotation, data) ->
+    annotation.marks ?= []
+    annotation.marks.push new Model data
+    classification.emitChange()
+
   'classification:annotation:mark:update': (mark, changes) ->
     {classification} = @findClassificationAndAnnotationForMark mark
     mark.update changes

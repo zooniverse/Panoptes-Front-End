@@ -6,21 +6,18 @@ Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 {dispatch} = require '../../lib/dispatcher'
 
-class Point extends Model
-  type: 'point'
-
-  initStart: ->
-    @initMove arguments...
-
-  initMove: ({x, y}) ->
-    @x = Math.max 0, x
-    @y = Math.max 0, y
-
 module.exports = React.createClass
   displayName: 'PointTool'
 
   statics:
-    MarkClass: Point
+    defaultValues: ->
+      @initStart arguments...
+
+    initStart: ->
+      @initMove arguments...
+
+    initMove: ({x, y}) ->
+      {x, y}
 
   render: ->
     color = @props.mark._tool.color ? 'currentcolor'

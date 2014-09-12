@@ -73,7 +73,7 @@ module.exports = React.createClass
       <div className="project-classify-page">
         <div className="subject">
           {if @state.subject?
-            <SubjectViewer classification={@props.classification} subject={@state.subject} selectedDrawingTool={@state.selectedDrawingTool} />
+            <SubjectViewer subject={@state.subject} classification={@props.classification} selectedDrawingTool={@state.selectedDrawingTool} />
           else
             <p>Loading subject {@props.classification.subject}</p>}
         </div>
