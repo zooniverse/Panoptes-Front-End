@@ -3,8 +3,13 @@
 React = require 'react'
 subjectsStore = require '../data/subjects'
 classificationsStore = require '../data/classifications'
+{dispatch} = require '../lib/dispatcher'
 Classifier = require '../classifier/classifier'
 LoadingIndicator = require '../components/loading-indicator'
+
+# This module just takes a project ID
+# and recalls or creates a local in-progress classification for it.
+# The `Classifier` does all the hard work from there.
 
 module.exports = React.createClass
   displayName: 'ClassifyPage'
@@ -12,26 +17,32 @@ module.exports = React.createClass
   getInitialState: ->
     classification: null
 
-  componentWillMount: ->
+  componentDidMount: ->
+    classificationsStore.listen @handleClassificationsChange
     @loadClassificationFor @props.project
 
+  componentWillUnmount: ->
+    classificationsStore.stopListening @handleClassificationsChange
+
   componentWillReceiveProps: (nextProps) ->
-    unless classificationsStore.inProgress[nextProps.project] is @state.classification
+    unless nextProps.project is @props.project
       @loadClassificationFor nextProps.project
+
+  handleClassificationsChange: ->
+    @loadClassificationFor @props.project
 
   loadClassificationFor: (project) ->
     classification = classificationsStore.inProgress[project]
-    classification ?= subjectsStore.fetch({project}).then ([subject]) ->
-      classificationsStore.inProgress[project] ?= classificationsStore.create
-        subject: subject.id
-        workflow: subject.workflow
-      classificationsStore.inProgress[project]
-
-    Promise.all([classification]).then ([classification]) =>
-      @setState {classification}
+    if classification?
+      if classification? instanceof Promise
+        @setState classification: null
+      else
+        @setState {classification}
+    else
+      dispatch 'classification:create', project
 
   render: ->
     if @state.classification?
       <Classifier classification={@state.classification.id} />
     else
-      <p>Loading classification for project <code>{@props.project}</code></p>
+      <p>Loading subject for classification for project <code>{@props.project}</code></p>

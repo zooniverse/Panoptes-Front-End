@@ -14,13 +14,11 @@ class Classification extends Model
     console.log 'Saving', JSON.stringify this
     postClassification = new Promise (resolve, reject) ->
       console?.info 'POST /classifications', JSON.stringify this
-      @apply =>
-        @_saving = true
+      @update _saving: true
       setTimeout resolve, 1000
 
     postClassification.then =>
-      @apply =>
-        @_saving = false
+      @update _saving: false
 
 module.exports = window.classificationsStore = new Store
   root: '/classifications'
@@ -29,20 +27,12 @@ module.exports = window.classificationsStore = new Store
   # Map a project ID to a classification ID:
   inProgress: {}
 
-  # 'classification:create': (subjectID) ->
-  #   @items["FOR_#{subjectID}"] =
-  #     subject: subjectID
-  #     annotations: []
-
-  # 'classification:annotation:create': (project, task) ->
-  #   @classifiers[project.id].annotations.push {task}
-
-  # 'classification:annotation:destroy-last': (project) ->
-  #   @classifiers[project.id].annotations.pop()
-
-  # 'classification:answer': (project, answer) ->
-  #   annotations = @classifiers[project.id].annotations
-  #   annotations[annotations.length - 1].answer = answer
+  'classification:create': (project) ->
+    console.log 'Create classification'
+    @inProgress[project] = subjectsStore.fetch({project}).then ([subject]) =>
+      @inProgress[project] = @create
+        subject: subject.id
+        workflow: subject.workflow
 
   # This is a hack until there's an annotations store and a marks store.
   findClassificationAndAnnotationForMark: (mark) ->
@@ -53,8 +43,7 @@ module.exports = window.classificationsStore = new Store
 
   'classification:annotation:mark:update': (mark, changes) ->
     {classification} = @findClassificationAndAnnotationForMark mark
-    for key, value of changes
-      mark[key] = value
+    mark.update changes
     classification.emitChange()
 
   'classification:annotation:mark:delete': (mark) ->

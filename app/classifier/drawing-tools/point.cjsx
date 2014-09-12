@@ -9,9 +9,6 @@ DeleteButton = require './delete-button'
 class Point extends Model
   type: 'point'
 
-  constructor: ({@x, @y}) ->
-    super
-
   initStart: ->
     @initMove arguments...
 
