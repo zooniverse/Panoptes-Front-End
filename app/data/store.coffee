@@ -8,9 +8,7 @@ class Store extends Model
 
   constructor: (options = {}) ->
     @items = {}
-
     super
-
     dispatcher.register this
 
   create: (instance) ->

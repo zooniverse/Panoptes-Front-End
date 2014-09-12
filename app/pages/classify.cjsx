@@ -6,12 +6,6 @@ classificationsStore = require '../data/classifications'
 Classifier = require '../classifier/classifier'
 LoadingIndicator = require '../components/loading-indicator'
 
-# Map a project ID to a classification ID
-classificationsInProgress = window.classificationsInProgress = {}
-
-# TODO: Think about making `classificationsInProgress` a store,
-# then having this component just listen for changes.
-
 module.exports = React.createClass
   displayName: 'ClassifyPage'
 
@@ -22,16 +16,16 @@ module.exports = React.createClass
     @loadClassificationFor @props.project
 
   componentWillReceiveProps: (nextProps) ->
-    unless classificationsInProgress[nextProps.project] is @state.classification
+    unless classificationsStore.inProgress[nextProps.project] is @state.classification
       @loadClassificationFor nextProps.project
 
   loadClassificationFor: (project) ->
-    classification = classificationsInProgress[project]
+    classification = classificationsStore.inProgress[project]
     classification ?= subjectsStore.fetch({project}).then ([subject]) ->
-      classificationsInProgress[project] ?= classificationsStore.create
+      classificationsStore.inProgress[project] ?= classificationsStore.create
         subject: subject.id
         workflow: subject.workflow
-      classificationsInProgress[project]
+      classificationsStore.inProgress[project]
 
     Promise.all([classification]).then ([classification]) =>
       @setState {classification}

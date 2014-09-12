@@ -1,11 +1,16 @@
 # @cjsx React.DOM
 
+Model = require '../../data/model'
 React = require 'react'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
+{dispatch} = require '../../lib/dispatcher'
 
-class Point
+class Point extends Model
+  type: 'point'
+
   constructor: ({@x, @y}) ->
+    super
 
   initStart: ->
     @initMove arguments...
@@ -50,10 +55,7 @@ module.exports = React.createClass
     </g>
 
   handleDrag: (e) ->
-    unless @props.disabled
-      {x, y} = @props.getEventOffset e
-      @props.mark.x = x
-      @props.mark.y = y
+    dispatch 'classification:annotation:mark:update', @props.mark, @props.getEventOffset e
 
   deleteMark: ->
-    console.log 'Delete mark'
+    dispatch 'classification:annotation:mark:delete', @props.mark

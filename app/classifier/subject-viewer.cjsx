@@ -119,9 +119,7 @@ module.exports = React.createClass
           <SVGImage src={@state.subject.location[@state.frame]} width={@state.imageWidth} height={@state.imageHeight} />
         </Draggable>
 
-        <Draggable onDrag={@handleToolMove}>
-          <g className="subject-viewer-tools" onMouseDown={@handleToolMouseDown}>{tools}</g>
-        </Draggable>
+        <g className="subject-viewer-tools" onMouseDown={@handleToolMouseDown}>{tools}</g>
       </svg>
 
     else
@@ -148,8 +146,8 @@ module.exports = React.createClass
 
       @setState selectedMark: mark
 
-      @state.classification.apply =>
-        mark.initStart? mouseCoords, e
+      mark.initStart? mouseCoords, e
+      @state.classification.emitChange()
 
   handleInitDrag: (e) ->
     if @props.selectedDrawingTool?
@@ -157,8 +155,8 @@ module.exports = React.createClass
       annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
       mark = annotation.marks[annotation.marks.length - 1]
 
-      @state.classification.apply =>
-        mark.initMove? mouseCoords, e
+      mark.initMove? mouseCoords, e
+      @state.classification.emitChange()
 
   handleInitRelease: (e) ->
     if @props.selectedDrawingTool?
@@ -166,9 +164,6 @@ module.exports = React.createClass
       annotation = @state.classification.annotations[@state.classification.annotations.length - 1]
       mark = annotation.marks[annotation.marks.length - 1]
 
-      @state.classification.apply =>
-        mark.initRelease? mouseCoords, e
-        mark._releases += 1
-
-  handleToolMove: ->
-    @forceUpdate()
+      mark.initRelease? mouseCoords, e
+      @state.classification.emitChange()
+      mark._releases += 1

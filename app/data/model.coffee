@@ -3,23 +3,30 @@ class Model
     for key, value of properties
       @[key] = value
 
-    @callbacks ?= []
+    @_callbacks ?= []
 
   listen: (callback) ->
-    @callbacks.push callback
+    @_callbacks.push callback
 
   stopListening: (callback) ->
-    index = @callbacks.indexOf callback
+    index = @_callbacks.indexOf callback
     unless index is -1
-      @callbacks.splice index, 1
+      @_callbacks.splice index, 1
+
+  update: (changes) ->
+    for key, value of changes
+      @[key] = value
+    @emitChange()
 
   emitChange: ->
-    for callback in @callbacks
+    for callback in @_callbacks
       callback()
+    @_parent?.emitChange()
 
-  apply: (fn) ->
-    Promise.all([
-      fn()
-    ]).then @emitChange.bind this
+  toJSON: ->
+    result = {}
+    for key, value of this when key.charAt(0) isnt '_'
+      result[key] = value
+    result
 
 module.exports = Model

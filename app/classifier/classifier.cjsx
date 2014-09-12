@@ -29,7 +29,6 @@ module.exports = React.createClass
   loadClassification: (id) ->
     classificationsStore.get(id).then (classification) =>
       classification.listen @handleClassificationChange
-      window.classification = classification
       workflowsStore.get(classification.workflow).then (workflow) =>
         @setState {classification, workflow}, =>
           if classification.annotations.length is 0
@@ -76,7 +75,7 @@ module.exports = React.createClass
         </div>
 
       else
-        <p>Loading classification {@props.classification}</p>
+        <p>Loading classification: {@props.classification}</p>
 
   handleAnswer: (answer) ->
     if answer? and 'type' of answer
@@ -84,19 +83,16 @@ module.exports = React.createClass
 
     else
       annotation = @getAnnotation()
-      @state.classification.apply ->
-        annotation.answer = answer
+      annotation.update {answer}
 
   loadTask: (taskKey) ->
-    @state.classification.apply =>
-      @state.classification.annotations.push task: taskKey
-
+    @state.classification.annotations.push task: taskKey
+    @state.classification.emitChange()
     @setState selectedDrawingTool: @state.workflow.tasks[taskKey].tools?[0]
 
   previousTask: ->
-    @state.classification.apply =>
-      @state.classification.annotations.pop()
-
+    @state.classification.annotations.pop()
+    @state.classification.emitChange()
     taskKey = @getAnnotation().task
     @setState selectedDrawingTool: @state.workflow.tasks[taskKey].tools?[0]
 
