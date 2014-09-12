@@ -28,11 +28,22 @@ module.exports = window.classificationsStore = new Store
   inProgress: {}
 
   'classification:create': (project) ->
-    console.log 'Create classification'
     @inProgress[project] = subjectsStore.fetch({project}).then ([subject]) =>
       @inProgress[project] = @create
         subject: subject.id
         workflow: subject.workflow
+
+  'classification:annotate': (classification, task) ->
+    classification.annotations.push {task}
+    classification.emitChange()
+
+  'classification:annotation:update': (classification, annotation, answer) ->
+    annotation.answer = answer
+    classification.emitChange()
+
+  'classification:annotation:abort': (classification, annotation) ->
+    classification.annotations.pop() # TODO: Test.
+    classification.emitChange()
 
   # This is a hack until there's an annotations store and a marks store.
   findClassificationAndAnnotationForMark: (mark) ->

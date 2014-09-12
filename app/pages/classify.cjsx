@@ -1,7 +1,6 @@
 # @cjsx React.DOM
 
 React = require 'react'
-subjectsStore = require '../data/subjects'
 classificationsStore = require '../data/classifications'
 {dispatch} = require '../lib/dispatcher'
 Classifier = require '../classifier/classifier'
@@ -9,7 +8,7 @@ LoadingIndicator = require '../components/loading-indicator'
 
 # This module just takes a project ID
 # and recalls or creates a local in-progress classification for it.
-# The `Classifier` does all the hard work from there.
+# The Classifier does all the hard work from there.
 
 module.exports = React.createClass
   displayName: 'ClassifyPage'
@@ -43,6 +42,6 @@ module.exports = React.createClass
 
   render: ->
     if @state.classification?
-      <Classifier classification={@state.classification.id} />
+      <Classifier classification={@state.classification} />
     else
-      <p>Loading subject for classification for project <code>{@props.project}</code></p>
+      <p>Loading classification for project <code>{@props.project}</code></p>
