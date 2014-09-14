@@ -33,7 +33,7 @@ module.exports = React.createClass
   loadClassificationFor: (project) ->
     classification = classificationsStore.inProgress[project]
     if classification?
-      if classification? instanceof Promise
+      if classification instanceof Promise
         @setState classification: null
       else
         @setState {classification}

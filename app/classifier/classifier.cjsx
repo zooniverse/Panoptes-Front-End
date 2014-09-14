@@ -44,9 +44,7 @@ module.exports = React.createClass
 
   loadWorkflow: (id) ->
     workflowsStore.get(id).then (workflow) =>
-      @setState {workflow}, =>
-        if @props.classification.annotations.length is 0
-          @loadTask workflow.firstTask
+      @setState {workflow}
 
   handleClassificationChange: ->
     # Kinda hacky, eh?
@@ -64,6 +62,7 @@ module.exports = React.createClass
       annotation = @getAnnotation()
       if annotation?
         task = @state.workflow?.tasks[annotation.task]
+        currentTool = @state.selectedDrawingTool ? task?.tools?[0]
         nextTaskKey = annotation.answer?.next ? task?.next
 
       canGoBack = @props.classification.annotations.length > 1
@@ -73,14 +72,14 @@ module.exports = React.createClass
       <div className="project-classify-page">
         <div className="subject">
           {if @state.subject?
-            <SubjectViewer subject={@state.subject} classification={@props.classification} selectedDrawingTool={@state.selectedDrawingTool} />
+            <SubjectViewer subject={@state.subject} classification={@props.classification} selectedDrawingTool={currentTool} />
           else
             <p>Loading subject {@props.classification.subject}</p>}
         </div>
 
         <div className="classifier-task">
           {if @state.workflow?
-            <TaskViewer task={task} annotation={annotation} selectedDrawingTool={@state.selectedDrawingTool} onChange={@handleAnswer} />
+            <TaskViewer task={task} annotation={annotation} selectedDrawingTool={currentTool} onChange={@handleAnswer} />
           else
             <p>Loading workflow {@props.classification.workflow}</p>}
 

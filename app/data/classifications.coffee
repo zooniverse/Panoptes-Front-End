@@ -1,6 +1,8 @@
 Model = require '../data/model'
 Store = require '../data/store'
 subjectsStore = require './subjects'
+workflowsStore = require './workflows'
+{dispatch} = require '../lib/dispatcher'
 
 class Classification extends Model
   subject: ''
@@ -28,10 +30,12 @@ module.exports = window.classificationsStore = new Store
   inProgress: {}
 
   'classification:create': (project) ->
-    @inProgress[project] = subjectsStore.fetch({project}).then ([subject]) =>
+    @inProgress[project] = subjectsStore.fetch({project}, 1).then ([subject]) =>
       @inProgress[project] = @create
         subject: subject.id
         workflow: subject.workflow
+      workflowsStore.get(subject.workflow).then (workflow) =>
+        dispatch 'classification:annotate', @inProgress[project], workflow.firstTask
 
   'classification:annotate': (classification, task) ->
     classification.annotations.push {task}

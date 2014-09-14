@@ -1,3 +1,4 @@
+subjectsStore = require './subjects'
 Store = require './store'
 {dispatch} = require '../lib/dispatcher'
 
