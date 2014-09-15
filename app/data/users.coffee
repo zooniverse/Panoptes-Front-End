@@ -1,5 +1,5 @@
 Store = require './store'
-{dispatch} = require '../lib/dispatcher'
+merge = require 'react/lib/merge'
 
 EXAMPLE_USER =
   id: 'DEV_USER'
@@ -26,7 +26,13 @@ EXAMPLE_USER =
   projects: []
   unseen_events: 4
 
+EXAMPLE_USER_2 = merge EXAMPLE_USER,
+  id: 'BRIAN_USER'
+  login: 'brian-c'
+  password: 'brian-c'
+  real_name: 'Brian Carstensen'
+
 module.exports = window.usersStore = new Store
   root: '/users'
   keyedOn: 'login'
-  examples: [EXAMPLE_USER]
+  examples: [EXAMPLE_USER, EXAMPLE_USER_2]
