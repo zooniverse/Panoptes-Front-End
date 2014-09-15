@@ -14,14 +14,6 @@ Settings = require './pages/settings'
 UserProfile = require './pages/user-profile'
 Build = require './pages/build'
 
-DemoRouteHandler = React.createClass
-  render: ->
-    <ul>
-      <li>Params: <code>{JSON.stringify @props.route.params}</code></li>
-      <li>Query: <code>{JSON.stringify @props.route.query}</code></li>
-      <li>Hash: <code>{JSON.stringify @props.route.hash}</code></li>
-    </ul>
-
 Main = React.createClass
   displayName: 'Main'
 
