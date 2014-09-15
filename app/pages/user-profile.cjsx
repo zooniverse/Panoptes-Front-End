@@ -1,6 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
+PromiseToSetState = require '../lib/promise-to-set-state'
 usersStore = require '../data/users'
 Route = require '../lib/route'
 Link = require '../lib/link'
@@ -9,59 +10,63 @@ LoadingIndicator = require '../components/loading-indicator'
 
 module.exports = React.createClass
   displayName: 'UserProfilePage'
+  mixins: [PromiseToSetState]
 
-  getInitialState: ->
-    loading: false
-    user: null
-
-  componentWillMount: ->
-    @loadUser @props.route.params?.login
+  componentDidMount: ->
+    @promiseToSetState user: usersStore.get login: @props.route.params.login, 1
 
   componentWillReceiveProps: (nextProps) ->
-    unless @state.loading or nextProps.route.params?.login is @state.user?.login
-      @loadUser nextProps.route.params?.login
-
-  loadUser: (login) ->
-    @setState loading: true
-    usersStore.get({login}).then ([user]) =>
-      loading = false
-      @setState {user, loading}
+    unless nextProps.route.params.login is @props.route.params.login
+      @promiseToSetState user: usersStore.get login: nextProps.route.params.login, 1
 
   render: ->
-    if @state.loading
+    if @state.user instanceof Promise
       <div className="content-container">
-        <LoadingIndicator />
+        <p>Loading {@props.route.params.login}...</p>
+      </div>
+
+    else if @state.user instanceof Error
+      <div className="content-container">
+        <p>Error finding {@props.route.params.login}:</p>
+        <p>{@state.user.toString()}</p>
+      </div>
+
+    else if @state.user?.length is 0
+      <div className="content-container">
+        <p>No user “{@props.route.params.login}” exists.</p>
       </div>
 
     else if @state.user?
+      [user] = @state.user
+
       <div>
         <div className="user-header owner-header content-container columns-container #{pendingClass ? ''}">
           <div>
-            <img src={@state.user.avatar ? ''} className="avatar" />
+            <img src={user.avatar ? ''} className="avatar" />
           </div>
 
           <div>
             <span className="credited-name">
-              {@state.user.real_name || @state.user.display_name}
+              {user.real_name || user.display_name}
             </span>
 
-            {if @state.user.real_name
-              <span className="display-name">({@state.user.display_name})</span>}
+            {if user.real_name
+              <span className="display-name">({user.display_name})</span>}
 
-            {if @state.user.location
+            {if user.location
               <div className="location">
-                <i className="fa fa-map-marker"></i> {@state.user.location}
+                <i className="fa fa-map-marker"></i> {user.location}
               </div>}
 
             <div className="external-links">
-              {if @state.user.website
+              {if user.website
                 <div>
-                  <i className="fa fa-globe"></i> <a href={@state.user.website}>{@state.user.website.split('//')[1]}</a>
+                  <i className="fa fa-globe"></i> <a href={user.website}>{user.website.split('//')[1]}</a>
                 </div>}
 
-              {if @state.user.twitter
+              {if user.twitter
                 <div>
-                  <i className="fa fa-twitter"></i> <a href="https://twitter.com/#{@state.user.twitter}">{@state.user.twitter}</a>
+                  <i className="fa fa-twitter"></i> <a href="https://twitter.com/#{user.twitter}">{user.twitter}</a>
                 </div>}
             </div>
           </div>
@@ -76,34 +81,34 @@ module.exports = React.createClass
         <div className="user-details">
           <div className="tabbed-content" data-side="top">
             <div className="tabbed-content-tabs">
-              <Link href="/users/#{@state.user.login}" root={true} className="tabbed-content-tab">Bio</Link>
-              <Link href="/users/#{@state.user.login}/activity" className="tabbed-content-tab">Activity</Link>
-              <Link href="/users/#{@state.user.login}/collections" className="tabbed-content-tab">Collections</Link>
-              <Link href="/users/#{@state.user.login}/projects" className="tabbed-content-tab">Projects</Link>
-              <Link href="/users/#{@state.user.login}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
+              <Link href="/users/#{user.login}" root={true} className="tabbed-content-tab">Bio</Link>
+              <Link href="/users/#{user.login}/activity" className="tabbed-content-tab">Activity</Link>
+              <Link href="/users/#{user.login}/collections" className="tabbed-content-tab">Collections</Link>
+              <Link href="/users/#{user.login}/projects" className="tabbed-content-tab">Projects</Link>
+              <Link href="/users/#{user.login}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
             </div>
 
             <div className="content-container">
-              <Route path="/users/#{@state.user.login}">
-                {if @state.user?
-                  <Markdown>{@state.user.bio}</Markdown>
+              <Route path="/users/#{user.login}">
+                {if user?
+                  <Markdown>{user.bio}</Markdown>
                 else
                   <LoadingIndicator />}
               </Route>
 
-              <Route path="/users/#{@state.user.login}/activity">
+              <Route path="/users/#{user.login}/activity">
                 <p>Timeline of this user’s recent activity</p>
               </Route>
 
-              <Route path="/users/#{@state.user.login}/collections">
+              <Route path="/users/#{user.login}/collections">
                 <p>Collections this user has created</p>
               </Route>
 
-              <Route path="/users/#{@state.user.login}/projects">
+              <Route path="/users/#{user.login}/projects">
                 <p>Projects this user has created or has a special role in</p>
               </Route>
 
-              <Route path="/users/#{@state.user.login}/talk">
+              <Route path="/users/#{user.login}/talk">
                 <p>Your private messages with this user</p>
               </Route>
             </div>
@@ -112,4 +117,4 @@ module.exports = React.createClass
       </div>
 
     else
-      <div className="content-container">User not found</div>
+      null
