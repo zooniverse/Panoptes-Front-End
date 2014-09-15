@@ -30,8 +30,7 @@ module.exports =
       callback?()
 
   _handlePromisedState: (stateKey, promise, value) ->
-    # We need to check to see if something else changed
-    # the state while the promise was loading.
+    # Only change the state if its current value is the same promise that's resolving.
     samePromise = @state[stateKey] is promise
     if @isMounted() and samePromise
       valueState = {}
