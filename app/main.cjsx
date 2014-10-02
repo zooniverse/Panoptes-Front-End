@@ -14,6 +14,8 @@ Settings = require './pages/settings'
 UserProfile = require './pages/user-profile'
 Build = require './pages/build'
 
+NotificationViewer = require './components/notification-viewer'
+
 Main = React.createClass
   displayName: 'Main'
 
@@ -47,6 +49,8 @@ Main = React.createClass
       </div>
 
       <MainFooter />
+
+      <NotificationViewer event="notify" />
     </div>
 
 mainContainer = document.createElement 'div'
