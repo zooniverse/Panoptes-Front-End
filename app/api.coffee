@@ -1,6 +1,8 @@
 JSONAPIClient = require 'json-api-client'
 {makeHTTPRequest} = JSONAPIClient.util
 
+DEFAULT_ENV = '_cam'
+
 API_HOSTS =
   production: '' # Same domain!
   staging: 'https://panoptes-staging.zooniverse.org'
@@ -8,7 +10,8 @@ API_HOSTS =
   test: 'http://localhost:7357'
   _cam: 'http://172.17.2.87:3000'
 
-DEFAULT_ENV = '_cam'
+API_APPLICATION_IDS =
+  _cam: '05fd85e729327b2f71cda394d8e87e042e0b77b05e05280e8246e8bdb05d54ed'
 
 JSON_HEADERS =
   'Accept': 'application/json'
@@ -28,31 +31,61 @@ api = {}
 
 api.host = API_HOSTS[process.env.NODE_ENV ? DEFAULT_ENV]
 
+api.clientAppID = API_APPLICATION_IDS[process.env.NODE_ENV ? DEFAULT_ENV]
+
 api.client = new JSONAPIClient api.host + '/api',
-  'Content-Type': 'application/vnd.api+json; version=1'
+  'Content-Type': 'application/json'
   'Accept': 'application/vnd.api+json; version=1'
 
-api.projects = api.client.createType 'projects'
+api.users = api.client.createType 'users'
 
 # Proxy the client's HTTP methods to the API object.
-for method in ['post', 'get', 'put', 'delete']
+for method in ['get', 'post', 'put', 'delete']
   api[method] = api.client[method].bind api.client
 
 api.auth =
-  currentToken: ''
-  currentSession: null
+  currentUser: null
+  bearerToken: ''
 
   getAuthToken: ->
-    if @currentToken
-      Promise.resolve @currentToken
+    # if @authToken
+    #   Promise.resolve @authToken
+    # else
+      makeHTTPRequest('GET', api.host + '/', null, 'Accept': 'text/html', ADD_CREDENTIALS).then []...,
+        (request) ->
+          [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
+          authToken = authTokenMatch1 ? authTokenMatch2
+          console?.log 'Got auth token', authToken
+          authToken
+
+        (error) ->
+          console?.error 'Failed to get auth token', error
+
+  getBearerToken: ->
+    if @bearerToken
+      Promise.resolve @bearerToken
     else
-      makeHTTPRequest('GET', api.host + '/users/sign_up', null, null, ADD_CREDENTIALS).then (request) =>
-        [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
-        @currentToken = authTokenMatch1 ? authTokenMatch2
-        @currentToken
+      data =
+        grant_type: 'password'
+        client_id: api.clientAppID
+
+      makeHTTPRequest('POST', api.host + '/oauth/token', data, JSON_HEADERS, ADD_CREDENTIALS).then []...,
+        (request) =>
+          response = JSON.parse request.responseText
+          @bearerToken = response.access_token
+          api.client.headers['Authorization'] = "Bearer #{@bearerToken}"
+          console?.log 'Got bearer token', @bearerToken
+          @bearerToken
+
+        (error) =>
+          console?.error 'Failed to get bearer token', error
+
+  deleteBearerToken: ->
+    @bearerToken = ''
+    delete api.client.headers['Authorization']
 
   register: ({login, email, password, passwordConfirmation}) ->
-    api.auth.currentSession = @getAuthToken().then (token) ->
+    @currentUser = @getAuthToken().then (token) ->
       data =
         authenticity_token: token
         user:
@@ -61,36 +94,56 @@ api.auth =
           password: password
           password_confirmation: passwordConfirmation
 
-      registration = makeHTTPRequest 'POST', api.host + '/users', data, JSON_HEADERS, ADD_CREDENTIALS
+      makeHTTPRequest('POST', api.host + '/users', data, JSON_HEADERS, ADD_CREDENTIALS).then []...,
+        (request) ->
+          response = JSON.parse request.responseText
+          console?.log 'Created user', response
+          response
 
-      registration.then (response) ->
-        console?.log 'Created user', response
+        (error) ->
+          console?.error 'Failed to register', error
+          null
 
-      registration
-
-  checkSession: ->
-    # TODO
+  getCurrentUser: ->
+    # TODO: Check to see if anybody's signed in.
 
   signIn: ({login, password}) ->
-    @getAuthToken().then (token) ->
+    @currentUser = @getAuthToken().then (token) =>
       data =
         authenticity_token: token
         user:
           login: login
           password: password
 
-      makeHTTPRequest('POST', api.host + '/users/sign_in', data, JSON_HEADERS, ADD_CREDENTIALS).then (response) ->
-        console?.log 'Signed in', response
-        response
+      makeHTTPRequest('POST', api.host + '/users/sign_in', data, JSON_HEADERS, ADD_CREDENTIALS).then []...,
+        (request) =>
+          console?.log 'Signed in successfully as', login
+
+          # This route returns a JSON-API `users` resource.
+          api.client.processResponseTo request
+
+          Promise.all([@getBearerToken(), api.users.get {login}, 1]).then ([token, [user]]) ->
+            console?.log 'Current user', user
+            user
+
+        (error) ->
+          console?.error 'Failed to sign in', error
+          null
 
   signOut: ->
     @getAuthToken().then (token) ->
       data =
         authenticity_token: token
 
-      makeHTTPRequest('DELETE', api.host + '/users/sign_out', data, JSON_HEADERS, ADD_CREDENTIALS).then (response) ->
-        console?.log 'Signed out'
-        response
+      makeHTTPRequest('DELETE', api.host + '/users/sign_out', data, JSON_HEADERS, ADD_CREDENTIALS).then []...,
+        (request) =>
+          response = JSON.parse request.responseText
+          console?.log 'Signed out', response
+          @deleteBearerToken()
+          response
+
+        (error) ->
+          console?.log 'Failed to sign out', error
 
 module.exports = api
 window?.api = api
