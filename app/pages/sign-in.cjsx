@@ -7,7 +7,6 @@ SignInForm = require '../partials/sign-in-form'
 RegisterForm = require '../partials/register-form'
 Translator = require 'react-translator'
 InPlaceForm = require '../components/in-place-form'
-api = require '../api'
 
 Translator.setStrings
   signIn:

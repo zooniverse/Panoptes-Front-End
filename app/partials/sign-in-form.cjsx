@@ -5,6 +5,7 @@ React = require 'react'
 loginStore = require '../data/login'
 InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
+auth = require '../api/auth'
 
 Translator.setStrings
   signInForm:
