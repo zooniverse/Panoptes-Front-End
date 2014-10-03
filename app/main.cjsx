@@ -13,6 +13,7 @@ Project = require './pages/project'
 Settings = require './pages/settings'
 UserProfile = require './pages/user-profile'
 Build = require './pages/build'
+EditProject = require './pages/edit-project'
 
 NotificationViewer = require './components/notification-viewer'
 
@@ -46,6 +47,7 @@ Main = React.createClass
         <Route path="/settings(/:section)" login={@state.currentLogin} loading={@state.loggingIn} handler={Settings} />
         <Route path="/users/:login(/:section)" handler={UserProfile} />
         <Route path="/build" handler={Build} />
+        <Route path="/build/:project_name" handler={EditProject} />
       </div>
 
       <MainFooter />

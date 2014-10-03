@@ -1,0 +1,55 @@
+.markdown-editor
+  display: inline-block
+  position: relative
+
+.markdown-editor-input
+  display: block
+  font-family: Courier, monospace
+  font-size: inherit
+  padding: 0.3em 1em 0.5em 0.5em
+  position: relative
+
+.markdown-editor-preview
+  bottom: 0
+  border: 1px solid rgba(gray, 0.2)
+  left: 0
+  overflow: auto
+  padding: 0.3em 1em 0.5em 0.5em
+  position: absolute
+  right: 0
+  top: 0
+
+  > :first-child
+    margin-top: 0
+
+  > :last-child
+    margin-bottom: 0
+
+.markdown-editor-controls
+  font-size: small
+  position: absolute
+  right: 0.2em
+  text-align: center
+  top: 0.1em
+  z-index: 1
+
+  button
+    @extends $reset-button
+    padding: 0 0.2em
+
+.markdown-editor
+  &:not([data-previewing])
+    .markdown-editor-input
+      opacity: 1
+      z-index: 1
+
+    .markdown-editor-preview
+      opacity: 0
+
+  &[data-previewing]
+    .markdown-editor-input
+      opacity: 0
+
+    .markdown-editor-preview
+      opacity: 1
+      z-index: 1

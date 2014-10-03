@@ -1,20 +1,21 @@
 # @cjsx React.DOM
 
 React = require 'react'
+Link = require '../lib/link'
 
 module.exports = React.createClass
   displayName: 'BuildPage'
-
-  componentWillMount: ->
-    document.documentElement.classList.add 'admin'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'admin'
 
   render: ->
     <div>
       <div className="content-container">
         <h1>Build the Zooniverse</h1>
-        <p>This is the place to build and manage your own citizen science projects.</p>
+      </div>
+      <hr />
+      <div className="content-container">
+        <h2>Your projects</h2>
+        <ul>
+          <li>Zooniverse/Galaxy Zoo</li>
+        </ul>
       </div>
     </div>
