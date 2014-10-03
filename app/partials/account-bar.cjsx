@@ -9,6 +9,8 @@ module.exports = React.createClass
 
   render: ->
     <div className="account-bar main-header-group">
+      <Link href="/build" className="main-header-item"><i className="fa fa-flask"></i></Link>
+
       <Link href="/timeline" className="main-header-item">
         <i className="fa fa-bell"></i>
         {@props.user.unseen_events unless @props.user.unseen_events is 0}

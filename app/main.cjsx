@@ -47,7 +47,7 @@ Main = React.createClass
         <Route path="/settings(/:section)" login={@state.currentLogin} loading={@state.loggingIn} handler={Settings} />
         <Route path="/users/:login(/:section)" handler={UserProfile} />
         <Route path="/build" handler={Build} />
-        <Route path="/build/:project_name" handler={EditProject} />
+        <Route path="/build/:project_name(/*etc)" handler={EditProject} />
       </div>
 
       <MainFooter />

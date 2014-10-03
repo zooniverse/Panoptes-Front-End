@@ -15,7 +15,7 @@ module.exports = React.createClass
       <div className="content-container">
         <h2>Your projects</h2>
         <ul>
-          <li>Zooniverse/Galaxy Zoo</li>
+          <li><a href="#/build/Galaxy%20Zoo">Zooniverse/Galaxy Zoo</a></li>
         </ul>
       </div>
     </div>

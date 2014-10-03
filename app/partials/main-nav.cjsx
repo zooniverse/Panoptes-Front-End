@@ -21,5 +21,4 @@ module.exports = React.createClass
       </Link>
       <Link href="/projects" className="main-header-item"><Translator>nav.projects</Translator></Link>
       <Link href="/about" className="main-header-item"><Translator>nav.about</Translator></Link>
-      <Link href="/build" className="main-header-item"><i className="fa fa-flask"></i></Link>
     </nav>
