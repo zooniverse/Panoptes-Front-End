@@ -8,6 +8,7 @@
     "coffee-reactify": "^0.5.2",
     "coffee-script": "^1.8.0",
     "csso": "^1.3.11",
+    "emojify.js": "^0.9.5",
     "envify": "^1.2.1",
     "es6-promise": "^1.0.0",
     "json-api-client": "0.0.1",
