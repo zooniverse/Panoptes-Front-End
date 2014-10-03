@@ -1,3 +1,4 @@
+Model = require '../data/model'
 makeHTTPRequest = require('json-api-client').util.makeHTTPRequest
 config = require './config'
 client = require './client'
@@ -17,7 +18,7 @@ CSRF_TOKEN_PATTERN = do ->
   CONTENT_ATTR = '''content=['"](.+)['"]'''
   ///#{NAME_ATTR}\s*#{CONTENT_ATTR}|#{CONTENT_ATTR}\s*#{NAME_ATTR}///
 
-module.exports =
+module.exports = new Model
   currentUser: null
   bearerToken: ''
 
@@ -59,7 +60,7 @@ module.exports =
     delete client.headers['Authorization']
 
   register: ({login, email, password, passwordConfirmation}) ->
-    @currentUser = @getAuthToken().then (token) ->
+    @update currentUser: @getAuthToken().then (token) ->
       data =
         authenticity_token: token
         user:
@@ -78,11 +79,8 @@ module.exports =
           console?.error 'Failed to register', error
           null
 
-  getCurrentUser: ->
-    # TODO: Check to see if anybody's signed in.
-
   signIn: ({login, password}) ->
-    @currentUser = @getAuthToken().then (token) =>
+    @getAuthToken().then (token) =>
       data =
         authenticity_token: token
         user:
@@ -96,13 +94,13 @@ module.exports =
           # This route returns a JSON-API `users` resource.
           client.processResponseTo request
 
-          Promise.all([@getBearerToken(), users.get {login}, 1]).then ([token, [user]]) ->
+          Promise.all([@getBearerToken(), users.get {login}, 1]).then ([token, [user]]) =>
             console?.log 'Current user', user
-            user
+            @update currentUser: user
 
         (error) ->
           console?.error 'Failed to sign in', error
-          null
+          error
 
   signOut: ->
     @getAuthToken().then (token) ->

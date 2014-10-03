@@ -23,6 +23,15 @@ module.exports = React.createClass
   getInitialState: ->
     errors: {}
 
+  # componentDidMount: ->
+  #   auth.listen @handleAuthChange
+
+  # componentWillUnmount: ->
+  #   auth.stopListening @handleAuthChange
+
+  # handleAuthChange: ->
+
+
   render: ->
     disabled = @props.loggingIn or @props.currentLogin?
 
@@ -67,7 +76,6 @@ module.exports = React.createClass
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
     password = @refs.password.getDOMNode().value
-    signInAttempt = loginStore.signIn login, password
-    signInAttempt.then ({errors, user}) =>
-      errors ?= {}
-      @setState {errors}
+    auth.signIn({login, password}).catch (error) ->
+      console.warn 'Sign in error:', error
+
