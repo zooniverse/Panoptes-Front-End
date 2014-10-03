@@ -1,6 +1,7 @@
 {
   "name": "panoptes-front-end",
   "version": "0.0.0",
+  "private": true,
   "dependencies": {
     "blue-tape": "^0.1.7",
     "browserify": "^5.11.1",
