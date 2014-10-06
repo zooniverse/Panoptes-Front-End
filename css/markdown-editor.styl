@@ -2,12 +2,16 @@
   display: inline-block
   position: relative
 
+  &.full
+    width: 100%
+
 .markdown-editor-input
+  @extends $text-input
   display: block
   font-family: Courier, monospace
-  font-size: inherit
-  padding: 0.3em 1em 0.5em 0.5em
+  padding-right: 1.5em // Leave room for the controls.
   position: relative
+  width: 100%
 
 .markdown-editor-preview
   bottom: 0
