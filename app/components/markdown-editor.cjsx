@@ -13,7 +13,7 @@ module.exports = React.createClass
   render: ->
     previewing = @props.previewing ? @state.previewing
 
-    <div className="markdown-editor" data-previewing={@state.previewing or null}>
+    <div className={['markdown-editor', @props.className].join ' '} data-previewing={@state.previewing or null}>
       {@transferPropsTo <textarea className="markdown-editor-input" value={@props.value ? @state.value} onChange={@handleChange} />}
 
       <Markdown className="markdown-editor-preview">{@state.value}</Markdown>

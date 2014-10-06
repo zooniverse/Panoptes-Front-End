@@ -17,5 +17,6 @@ module.exports = React.createClass
         <ul>
           <li><a href="#/build/Galaxy%20Zoo">Zooniverse/Galaxy Zoo</a></li>
         </ul>
+        <p><button>Create a new project</button></p>
       </div>
     </div>

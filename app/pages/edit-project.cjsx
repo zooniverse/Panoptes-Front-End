@@ -22,30 +22,28 @@ module.exports = React.createClass
           <Link href="/build/#{TODO_PROJECT_NAME}/subjects" className="tabbed-content-tab">Subjects</Link>
           <Link href="/build/#{TODO_PROJECT_NAME}/workflows" className="tabbed-content-tab">Workflows</Link>
           <Link href="/build/#{TODO_PROJECT_NAME}/user-roles" className="tabbed-content-tab">User roles</Link>
+          <Link href="/build/#{TODO_PROJECT_NAME}/user-roles" className="tabbed-content-tab">Admin</Link>
         </nav>
 
         <Route path="/build/#{TODO_PROJECT_NAME}" className="content-container">
           <label>
             <div>Title</div>
-            <input type="text" defaultValue="Galaxy Zoo" />
+            <h2><input type="text" defaultValue="Galaxy Zoo" className="full" /></h2>
           </label>
 
           <label>
             <div>Tag line</div>
-            <input type="text" defaultValue="Help further our understanding of galaxy formation." />
+            <input type="text" defaultValue="Help further our understanding of galaxy formation." className="full" />
           </label>
 
           <label>
             <div>Introductory text</div>
-            <MarkdownEditor rows="10" cols="80" />
+            <MarkdownEditor rows="10" className="full" />
           </label>
         </Route>
 
         <Route path="/build/#{TODO_PROJECT_NAME}/science-case" className="content-container">
-          <label>
-            <div>Science case</div>
-            <textarea></textarea>
-          </label>
+            <MarkdownEditor className="full" />
         </Route>
 
         <Route path="/build/#{TODO_PROJECT_NAME}/subjects">
