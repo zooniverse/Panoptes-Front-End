@@ -11,6 +11,7 @@ EXAMPLE_WORKFLOW =
         {value: 'red', label: 'Red', type: 'point', color: 'red'}
         {value: 'green', label: 'Green', type: 'point', color: 'lime'}
         {value: 'blue', label: 'Blue', type: 'point', color: 'blue'}
+        {value: 'ellipse', label: 'Ellipse', type: 'ellipse', color: 'orangered'}
       ]
       next: 'shape'
 
