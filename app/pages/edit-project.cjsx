@@ -17,7 +17,7 @@ module.exports = React.createClass
 
       <div className="tabbed-content" data-side="top">
         <nav className="tabbed-content-tabs">
-          <Link href="/build/#{TODO_PROJECT_NAME}" root={true} className="tabbed-content-tab">Introduction</Link>
+          <Link href="/build/#{TODO_PROJECT_NAME}" root={true} className="tabbed-content-tab">General</Link>
           <Link href="/build/#{TODO_PROJECT_NAME}/science-case" className="tabbed-content-tab">Science case</Link>
           <Link href="/build/#{TODO_PROJECT_NAME}/subjects" className="tabbed-content-tab">Subjects</Link>
           <Link href="/build/#{TODO_PROJECT_NAME}/workflows" className="tabbed-content-tab">Workflows</Link>
@@ -26,18 +26,28 @@ module.exports = React.createClass
         </nav>
 
         <Route path="/build/#{TODO_PROJECT_NAME}" className="content-container">
-          <div>
-            <label>
-              <div>Title</div>
-              <h2><input type="text" defaultValue="Galaxy Zoo" className="full" /></h2>
-            </label>
-          </div>
+          <div className="columns-container">
+            <div>
+              <div>Avatar</div>
+              <img src="//placehold.it/64.png" />
+              <input type="file" />
+            </div>
 
-          <div>
-            <label>
-              <div>Tag line</div>
-              <input type="text" defaultValue="Help further our understanding of galaxy formation." className="full" />
-            </label>
+            <div>
+              <div>
+                <label>
+                  <div>Title</div>
+                  <h2><input type="text" defaultValue="Galaxy Zoo" className="full" /></h2>
+                </label>
+              </div>
+
+              <div>
+                <label>
+                  <div>Tag line</div>
+                  <input type="text" defaultValue="Help further our understanding of galaxy formation." className="full" />
+                </label>
+              </div>
+            </div>
           </div>
 
           <div>
@@ -49,7 +59,7 @@ module.exports = React.createClass
         </Route>
 
         <Route path="/build/#{TODO_PROJECT_NAME}/science-case" className="content-container">
-            <MarkdownEditor className="full" />
+          <MarkdownEditor className="full" />
         </Route>
 
         <Route path="/build/#{TODO_PROJECT_NAME}/subjects">
