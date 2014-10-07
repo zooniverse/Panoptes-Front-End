@@ -21,25 +21,31 @@ module.exports = React.createClass
           <Link href="/build/#{TODO_PROJECT_NAME}/science-case" className="tabbed-content-tab">Science case</Link>
           <Link href="/build/#{TODO_PROJECT_NAME}/subjects" className="tabbed-content-tab">Subjects</Link>
           <Link href="/build/#{TODO_PROJECT_NAME}/workflows" className="tabbed-content-tab">Workflows</Link>
-          <Link href="/build/#{TODO_PROJECT_NAME}/user-roles" className="tabbed-content-tab">User roles</Link>
-          <Link href="/build/#{TODO_PROJECT_NAME}/user-roles" className="tabbed-content-tab">Admin</Link>
+          <Link href="/build/#{TODO_PROJECT_NAME}/roles" className="tabbed-content-tab">User roles</Link>
+          <Link href="/build/#{TODO_PROJECT_NAME}/admin" className="tabbed-content-tab">Admin</Link>
         </nav>
 
         <Route path="/build/#{TODO_PROJECT_NAME}" className="content-container">
-          <label>
-            <div>Title</div>
-            <h2><input type="text" defaultValue="Galaxy Zoo" className="full" /></h2>
-          </label>
+          <div>
+            <label>
+              <div>Title</div>
+              <h2><input type="text" defaultValue="Galaxy Zoo" className="full" /></h2>
+            </label>
+          </div>
 
-          <label>
-            <div>Tag line</div>
-            <input type="text" defaultValue="Help further our understanding of galaxy formation." className="full" />
-          </label>
+          <div>
+            <label>
+              <div>Tag line</div>
+              <input type="text" defaultValue="Help further our understanding of galaxy formation." className="full" />
+            </label>
+          </div>
 
-          <label>
-            <div>Introductory text</div>
-            <MarkdownEditor rows="10" className="full" />
-          </label>
+          <div>
+            <label>
+              <div>Introductory text</div>
+              <MarkdownEditor rows="10" className="full" />
+            </label>
+          </div>
         </Route>
 
         <Route path="/build/#{TODO_PROJECT_NAME}/science-case" className="content-container">
@@ -68,6 +74,16 @@ module.exports = React.createClass
                 </td>
               </tr>}
           </table>
+        </Route>
+
+        <Route path="/build/#{TODO_PROJECT_NAME}/workflows">
+          <p>workflows</p>
+        </Route>
+        <Route path="/build/#{TODO_PROJECT_NAME}/roles">
+          <p>roles</p>
+        </Route>
+        <Route path="/build/#{TODO_PROJECT_NAME}/admin">
+          <p>admin</p>
         </Route>
       </div>
     </div>
