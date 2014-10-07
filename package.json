@@ -12,7 +12,7 @@
     "emojify.js": "^0.9.5",
     "envify": "^1.2.1",
     "es6-promise": "^1.0.0",
-    "json-api-client": "0.0.1",
+    "json-api-client": "^0.0.3",
     "marked": "^0.3.2",
     "nib": "^1.0.3",
     "node-static": "^0.7.3",
