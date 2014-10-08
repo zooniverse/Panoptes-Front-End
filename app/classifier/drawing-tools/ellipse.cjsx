@@ -51,20 +51,21 @@ module.exports = React.createClass
     transform = "
       translate(#{@props.mark.x}, #{@props.mark.y})
       rotate(#{-1 * @props.mark.angle})
-      scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})
     "
+
+    averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
 
     deletePosition = @getDeletePosition()
 
     <g className="ellipse drawing-tool" transform={transform} data-disabled={@props.disabled || null} data-selected={@props.selected || null}>
       <Draggable onStart={@handleDragStart} onDrag={@handleMainDrag}>
-        <ellipse rx={@props.mark.rx} ry={@props.mark.ry} fill="transparent" stroke={color} strokeWidth="2" />
+        <ellipse rx={@props.mark.rx * @props.scale.horizontal} ry={@props.mark.ry * @props.scale.vertical} fill="transparent" stroke={color} strokeWidth="2" />
       </Draggable>
 
       <DeleteButton transform="translate(#{deletePosition.x}, #{deletePosition.y}) rotate(#{@props.mark.angle})" onClick={@deleteMark} />
 
-      <DragHandle onStart={@handleDragStart} onDrag={@handleXHandleDrag} x={@props.mark.rx} y={0} rotate={@props.mark.angle} color={@props.mark._tool.color} disabled={@props.disabled} selected={@props.selected} />
-      <DragHandle onStart={@handleDragStart} onDrag={@handleYHandleDrag} x={0} y={-1 * @props.mark.ry} rotate={@props.mark.angle} color={@props.mark._tool.color} disabled={@props.disabled} selected={@props.selected} />
+      <DragHandle onStart={@handleDragStart} onDrag={@handleXHandleDrag} x={@props.mark.rx * @props.scale.horizontal} y={0} rotate={@props.mark.angle} color={@props.mark._tool.color} disabled={@props.disabled} selected={@props.selected} />
+      <DragHandle onStart={@handleDragStart} onDrag={@handleYHandleDrag} x={0} y={-1 * @props.mark.ry * @props.scale.vertical} rotate={@props.mark.angle} color={@props.mark._tool.color} disabled={@props.disabled} selected={@props.selected} />
     </g>
 
   handleDragStart: (e) ->
@@ -100,5 +101,5 @@ module.exports = React.createClass
     # TODO: It'd be nice if it stayed absolutely 45deg.
     theta = CLOSE_BUTTON_ANGLE * (Math.PI / 180)
     r = (@props.mark.rx * @props.mark.ry) / Math.sqrt(Math.pow(@props.mark.ry * Math.cos(theta), 2) + Math.pow(@props.mark.rx * Math.sin(theta), 2))
-    x: r * Math.sin theta
-    y: -r * Math.cos theta
+    x: @props.scale.horizontal * r * Math.sin theta
+    y: @props.scale.vertical * -r * Math.cos theta
