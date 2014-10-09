@@ -10,7 +10,7 @@ test 'Registering an account with no data fails', (t) ->
 
   auth.register BLANK_REGISTRATION
     .then ->
-      throw new Error 'Should not have been able to register'
+      t.fail 'Should not have been able to register'
 
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
@@ -26,7 +26,7 @@ test 'Registering an account with a short password fails', (t) ->
 
   auth.register SHORT_PASSWORD_REGISTRATION
     .then ->
-      throw new Error 'Should not have been able to register'
+      t.fail 'Should not have been able to register'
 
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
@@ -44,14 +44,14 @@ test 'Registering a new account works', (t) ->
       t.ok user.display_name is TEST_LOGIN, 'Display name should be whatever login was given'
 
     .catch ->
-      throw new Error 'Should have worked'
+      t.fail 'Should have worked'
 
 # test 'Registering keeps you signed in', ->
 
 test 'Sign out', (t) ->
   auth.signOut()
     .catch ->
-      throw new Error 'Sign out should work'
+      t.fail 'Sign out should work'
 
 test 'Registering an account with an already used login fails', (t) ->
   DUPLICATE_REGISTRATION =
@@ -61,7 +61,7 @@ test 'Registering an account with an already used login fails', (t) ->
 
   auth.register DUPLICATE_REGISTRATION
     .then ->
-      throw new Error 'Should not have been able to register with a duplicate login'
+      t.fail 'Should not have been able to register with a duplicate login'
 
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
@@ -75,7 +75,7 @@ test 'Signing in with an unknown login fails', (t) ->
 
   auth.signIn BAD_LOGIN
     .then ->
-      throw new Error 'Should not have been able to sign in with a bad login'
+      t.fail 'Should not have been able to sign in with a bad login'
 
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
@@ -89,7 +89,7 @@ test 'Signing in with the wrong password fails', (t) ->
 
   auth.signIn BAD_PASSWORD
     .then ->
-      throw new Error 'Should not have been able to sign in with a bad password'
+      t.fail 'Should not have been able to sign in with a bad password'
 
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
@@ -106,4 +106,4 @@ test 'Signing in with good details works', (t) ->
       t.ok user.display_name is TEST_LOGIN, 'Display name should be original'
 
     .catch ->
-      throw new Error 'Sign in should work'
+      t.fail 'Sign in should work'
