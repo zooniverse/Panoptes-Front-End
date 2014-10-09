@@ -1,23 +1,7 @@
 test = require 'blue-tape'
 assert = require 'assert'
-global.XMLHttpRequest ?= require 'xhr2'
-global.Promise ?= require('es6-promise').Promise
 
-api = require '../app/api'
-
-test 'Register new account', ->
-
-# test 'Create user group', ->
-
-test 'Sign out', ->
-
-test 'Sign in', ->
-
-# test 'Sign out again', ->
-
-# test 'Register another account', ->
-
-# test 'Join user group', ->
+# Sign in...
 
 # test 'Create subject set', ->
 
@@ -45,4 +29,4 @@ test 'Sign in', ->
 
 # test 'Disable subject set', ->
 
-test 'Disable account', ->
+# test 'Disable account', ->

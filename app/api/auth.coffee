@@ -23,61 +23,73 @@ module.exports = new Model
   bearerToken: ''
 
   getAuthToken: ->
-    # if @authToken
-    #   Promise.resolve @authToken
-    # else
-      makeHTTPRequest('GET', config.host + '/', null, 'Accept': 'text/html', ADD_CREDENTIALS).then []...,
-        (request) ->
-          [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
-          authToken = authTokenMatch1 ? authTokenMatch2
-          console?.log 'Got auth token', authToken
-          authToken
+    makeHTTPRequest 'GET', config.host + '/', null, 'Accept': 'text/html', ADD_CREDENTIALS
+      .then (request) ->
+        [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
+        authToken = authTokenMatch1 ? authTokenMatch2
+        console?.log 'Got auth token', authToken
+        authToken
 
-        (error) ->
-          console?.error 'Failed to get auth token', error
+      .catch (request) ->
+        try {errors} = JSON.parse request.responseText
+        console?.error 'Failed to get auth token', errors
+        Promise.reject errors
 
   getBearerToken: ->
+    console.log 'GETTING BEARER TOKEN'
     if @bearerToken
+      console.log 'ALREADY HAVE IT'
       Promise.resolve @bearerToken
     else
+      console.log 'GOING TO GET ONE'
       data =
         grant_type: 'password'
         client_id: config.clientAppID
 
-      makeHTTPRequest('POST', config.host + '/oauth/token', data, JSON_HEADERS, ADD_CREDENTIALS).then []...,
-        (request) =>
+      makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS, ADD_CREDENTIALS
+        .then (request) =>
           response = JSON.parse request.responseText
           @bearerToken = response.access_token
           client.headers['Authorization'] = "Bearer #{@bearerToken}"
           console?.log 'Got bearer token', @bearerToken
           @bearerToken
 
-        (error) =>
-          console?.error 'Failed to get bearer token', error
+        .catch (request) ->
+          try {errors} = JSON.parse request.responseText
+          console?.error 'Failed to get bearer token', errors
+          Promise.reject errors
 
   deleteBearerToken: ->
     @bearerToken = ''
     delete client.headers['Authorization']
 
   register: ({login, email, password, passwordConfirmation}) ->
-    @update currentUser: @getAuthToken().then (token) ->
+    @getAuthToken().then (token) =>
       data =
         authenticity_token: token
         user:
           login: login
           email: email
           password: password
-          password_confirmation: passwordConfirmation
+          # password_confirmation: passwordConfirmation
 
-      makeHTTPRequest('POST', config.host + '/users', data, JSON_HEADERS, ADD_CREDENTIALS).then []...,
-        (request) ->
-          response = JSON.parse request.responseText
-          console?.log 'Created user', response
-          response
+      makeHTTPRequest 'POST', config.host + '/users', data, JSON_HEADERS, ADD_CREDENTIALS
+        .then (request) =>
+          client.processResponseTo request
 
-        (error) ->
-          console?.error 'Failed to register', error
-          null
+          console.log 'GOING TO GET BEARER TOKEN'
+          @getBearerToken().then =>
+            users.get display_name: login, 1
+              .then ([user]) =>
+                console?.log 'Current user', user
+                @update currentUser: user
+                console.info 'After registration, user is', user
+                @currentUser
+
+        .catch (request) ->
+          try {errors} = JSON.parse request.responseText
+          console?.error 'Failed to register', errors
+          Promise.reject errors
 
   signIn: ({login, password}) ->
     @getAuthToken().then (token) =>
@@ -87,34 +99,43 @@ module.exports = new Model
           login: login
           password: password
 
-      makeHTTPRequest('POST', config.host + '/users/sign_in', data, JSON_HEADERS, ADD_CREDENTIALS).then []...,
-        (request) =>
+      makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS, ADD_CREDENTIALS
+        .then (request) =>
           console?.log 'Signed in successfully as', login
 
           # This route returns a JSON-API `users` resource.
           client.processResponseTo request
 
-          Promise.all([@getBearerToken(), users.get {login}, 1]).then ([token, [user]]) =>
-            console?.log 'Current user', user
-            @update currentUser: user
+          @getBearerToken().then =>
+            users.get display_name: login, 1
+              .then ([user]) =>
+                console?.log 'Current user', user
+                @update currentUser: user
+                @currentUser
 
-        (error) ->
-          console?.error 'Failed to sign in', error
-          error
+        .catch (request) ->
+          try {errors} = JSON.parse request.responseText
+          console?.error 'Failed to sign in', errors
+          Promise.reject errors
 
   signOut: ->
-    @getAuthToken().then (token) ->
+    @getAuthToken().then (token) =>
       data =
         authenticity_token: token
 
-      makeHTTPRequest('DELETE', config.host + '/users/sign_out', data, JSON_HEADERS, ADD_CREDENTIALS).then []...,
-        (request) =>
-          response = JSON.parse request.responseText
-          console?.log 'Signed out', response
+      makeHTTPRequest 'DELETE', config.host + '/users/sign_out', data, JSON_HEADERS, ADD_CREDENTIALS
+        .then (request) =>
           @deleteBearerToken()
-          response
+          @update currentUser: null
+          @currentUser
 
-        (error) ->
-          console?.log 'Failed to sign out', error
+        .catch (request) ->
+          try {errors} = JSON.parse request.responseText
+          console?.log 'Failed to sign out', errors
+          Promise.reject errors
 
-window.zooAuth = module.exports
+window?.zooAuth = module.exports
+
+# For quick debugging:
+window?.log = console.info.bind console, 'LOG'
+window?.err = console.error.bind console, 'ERR'

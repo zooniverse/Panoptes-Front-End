@@ -23,6 +23,7 @@
     "stylus": "^0.48.1",
     "superagent": "^0.18.0",
     "tap-spec": "^1.0.0",
+    "testling": "^1.7.1",
     "uglify-js": "^2.4.15",
     "watchify": "^1.0.2",
     "xhr2": "^0.1.0"
@@ -31,6 +32,6 @@
     "build": "NODE_ENV=production ./bin/build.sh",
     "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
     "start": "./bin/serve.sh",
-    "test": "coffee ./test/api.coffee | tap-spec"
+    "test": "browserify ./test/* --extension .coffee --transform coffee-reactify | testling -x \"open\" | tap-spec"
   }
 }
