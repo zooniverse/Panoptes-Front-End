@@ -5,8 +5,8 @@ client = require './client'
 users = require './users'
 
 JSON_HEADERS =
-  'Accept': 'application/json'
   'Content-Type': 'application/json'
+  'Accept': 'application/json'
 
 ADD_CREDENTIALS = (request) ->
   request.withCredentials = true
@@ -36,12 +36,9 @@ module.exports = new Model
         Promise.reject errors
 
   getBearerToken: ->
-    console.log 'GETTING BEARER TOKEN'
     if @bearerToken
-      console.log 'ALREADY HAVE IT'
       Promise.resolve @bearerToken
     else
-      console.log 'GOING TO GET ONE'
       data =
         grant_type: 'password'
         client_id: config.clientAppID
@@ -75,15 +72,14 @@ module.exports = new Model
 
       makeHTTPRequest 'POST', config.host + '/users', data, JSON_HEADERS, ADD_CREDENTIALS
         .then (request) =>
+          # The response contains a JSON-API "users" resource.
           client.processResponseTo request
 
-          console.log 'GOING TO GET BEARER TOKEN'
           @getBearerToken().then =>
             users.get display_name: login, 1
               .then ([user]) =>
-                console?.log 'Current user', user
                 @update currentUser: user
-                console.info 'After registration, user is', user
+                console?.info 'Registered user', user.display_name
                 @currentUser
 
         .catch (request) ->
@@ -101,21 +97,19 @@ module.exports = new Model
 
       makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS, ADD_CREDENTIALS
         .then (request) =>
-          console?.log 'Signed in successfully as', login
-
-          # This route returns a JSON-API `users` resource.
+          # The response contains a JSON-API "users" resource.
           client.processResponseTo request
 
           @getBearerToken().then =>
             users.get display_name: login, 1
               .then ([user]) =>
-                console?.log 'Current user', user
                 @update currentUser: user
+                console?.log 'Signed in successfully as', @currentUser.display_name
                 @currentUser
 
         .catch (request) ->
-          try {errors} = JSON.parse request.responseText
-          console?.error 'Failed to sign in', errors
+          if request.status in [401, 0] # The server says 401, but the response object says 0, so who knows?
+            errors = [message: password: ['Login or password was incorrect']]
           Promise.reject errors
 
   signOut: ->
@@ -123,7 +117,11 @@ module.exports = new Model
       data =
         authenticity_token: token
 
-      makeHTTPRequest 'DELETE', config.host + '/users/sign_out', data, JSON_HEADERS, ADD_CREDENTIALS
+      # PhantomJS doesn't send any data with DELETE, so fake it here.
+      headers = Object.create JSON_HEADERS
+      headers['X-HTTP-Method-Override'] = 'DELETE'
+
+      makeHTTPRequest 'POST', config.host + '/users/sign_out', data, headers, ADD_CREDENTIALS
         .then (request) =>
           @deleteBearerToken()
           @update currentUser: null
@@ -137,5 +135,5 @@ module.exports = new Model
 window?.zooAuth = module.exports
 
 # For quick debugging:
-window?.log = console.info.bind console, 'LOG'
-window?.err = console.error.bind console, 'ERR'
+window?.log = console?.info.bind console, 'LOG'
+window?.err = console?.error.bind console, 'ERR'

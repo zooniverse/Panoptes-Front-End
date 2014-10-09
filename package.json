@@ -12,6 +12,7 @@
     "emojify.js": "^0.9.5",
     "envify": "^1.2.1",
     "es6-promise": "^1.0.0",
+    "function-bind": "^1.0.2",
     "json-api-client": "^0.0.3",
     "marked": "^0.3.2",
     "nib": "^1.0.3",
@@ -32,6 +33,7 @@
     "build": "NODE_ENV=production ./bin/build.sh",
     "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
     "start": "./bin/serve.sh",
-    "test": "browserify ./test/* --extension .coffee --transform coffee-reactify | testling -x \"open\" | tap-spec"
+    "test": "browserify ./test/runner.coffee --extension .coffee --transform coffee-reactify --transform envify | testling | tap-spec",
+    "test-mac": "browserify ./test/runner.coffee --extension .coffee --transform coffee-reactify --transform envify | testling -x \"open\" | tap-spec"
   }
 }
