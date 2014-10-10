@@ -14,9 +14,9 @@ test 'Registering an account with no data fails', (t) ->
 
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
-      t.ok errors[0].message.login[0].indexOf('blank' isnt -1), 'Login error should mention "blank"'
-      t.ok errors[0].message.email[0].indexOf('blank' isnt -1), 'Email error should mention "blank"'
-      t.ok errors[0].message.password[0].indexOf('blank' isnt -1), 'Password error should mention "blank"'
+      t.ok errors[0].message.login[0].indexOf('blank') isnt -1, 'Login error should mention "blank"'
+      t.ok errors[0].message.email[0].indexOf('blank') isnt -1, 'Email error should mention "blank"'
+      t.ok errors[0].message.password[0].indexOf('blank') isnt -1, 'Password error should mention "blank"'
 
 test 'Registering an account with a short password fails', (t) ->
   SHORT_PASSWORD_REGISTRATION =
@@ -30,7 +30,7 @@ test 'Registering an account with a short password fails', (t) ->
 
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
-      t.ok errors[0].message.password[0].indexOf('short' isnt -1), 'Password error should mention "short"'
+      t.ok errors[0].message.password[0].indexOf('short') isnt -1, 'Password error should mention "short"'
 
 test 'Registering a new account works', (t) ->
   GOOD_REGISTRATION =
@@ -65,8 +65,8 @@ test 'Registering an account with an already used login fails', (t) ->
 
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
-      t.ok errors[0].message.login[0].indexOf('taken' isnt -1), 'Login error should mention "taken"'
-      t.ok errors[0].message.email[0].indexOf('taken' isnt -1), 'Email error should mention "taken"'
+      t.ok errors[0].message.login[0].indexOf('taken') isnt -1, 'Login error should mention "taken"'
+      t.ok errors[0].message.email[0].indexOf('taken') isnt -1, 'Email error should mention "taken"'
 
 test 'Signing in with an unknown login fails', (t) ->
   BAD_LOGIN =
@@ -80,7 +80,7 @@ test 'Signing in with an unknown login fails', (t) ->
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
       # NOTE: A bad login should return the same error as a bad password.
-      t.ok errors[0].message.password.indexOf('incorrect' isnt -1), 'Password error should mention "incorrect"'
+      t.ok errors[0].message.password.indexOf('incorrect') isnt -1, 'Password error should mention "incorrect"'
 
 test 'Signing in with the wrong password fails', (t) ->
   BAD_PASSWORD =
@@ -93,7 +93,7 @@ test 'Signing in with the wrong password fails', (t) ->
 
     .catch (errors) ->
       t.ok errors?.length is 1, 'Should have gotten one error'
-      t.ok errors[0].message.password.indexOf('incorrect' isnt -1), 'Password error should mention "incorrect"'
+      t.ok errors[0].message.password.indexOf('incorrect') isnt -1, 'Password error should mention "incorrect"'
 
 test 'Signing in with good details works', (t) ->
   GOOD_LOGIN_DETAILS =
