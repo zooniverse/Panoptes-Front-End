@@ -5,6 +5,14 @@ TEST_LOGIN = 'TEST_' + (new Date).toISOString().replace /\W/g, '_'
 TEST_EMAIL = TEST_LOGIN.toLowerCase() + '@zooniverse.org'
 TEST_PASSWORD = 'P@$$wørd'
 
+test 'Checking the current user initially fails', (t) ->
+  auth.checkCurrent()
+    .then ->
+      t.fail 'Nobody should be signed in'
+
+    .catch ->
+      t.pass 'Nobody is signed in'
+
 test 'Registering an account with no data fails', (t) ->
   BLANK_REGISTRATION = {}
 
@@ -22,7 +30,7 @@ test 'Registering an account with a short password fails', (t) ->
   SHORT_PASSWORD_REGISTRATION =
     login: TEST_LOGIN
     email: TEST_EMAIL
-    password: TEST_PASSWORD[0...7]
+    password: TEST_PASSWORD[0...7] # 8 characters minimum
 
   auth.register SHORT_PASSWORD_REGISTRATION
     .then ->
@@ -46,10 +54,20 @@ test 'Registering a new account works', (t) ->
     .catch ->
       t.fail 'Should have worked'
 
-# test 'Registering keeps you signed in', ->
+test 'Registering keeps you signed in', (t) ->
+  auth.checkCurrent()
+    .then (user) ->
+      t.ok user?, 'Should have gotten a user'
+      t.ok user.display_name is TEST_LOGIN, 'Display name should be whatever login was given'
+
+    .catch ->
+      t.fail 'Somebody should be signed in'
 
 test 'Sign out', (t) ->
   auth.signOut()
+    .then ->
+      t.pass 'Signed out'
+
     .catch ->
       t.fail 'Sign out should work'
 

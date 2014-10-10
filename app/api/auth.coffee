@@ -87,6 +87,14 @@ module.exports = new Model
           console?.error 'Failed to register', errors
           Promise.reject errors
 
+  checkCurrent: ->
+    @getBearerToken().then =>
+      client.get '/me'
+        .then ([user]) =>
+          @update currentUser: user
+          console?.log 'Was signed in as', @currentUser.display_name
+          @currentUser
+
   signIn: ({login, password}) ->
     @getAuthToken().then (token) =>
       data =
