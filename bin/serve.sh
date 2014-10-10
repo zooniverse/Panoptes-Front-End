@@ -25,7 +25,7 @@ jobs=""
   --use nib \
   --import nib \
   --out "$DEV_DIR" \
-  ./css/main.styl \
+  "$SRC_CSS" \
   & jobs="$jobs $!"
 
 ./node_modules/.bin/static \

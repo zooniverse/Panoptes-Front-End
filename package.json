@@ -19,7 +19,7 @@
     "publisssh": "^0.2.5",
     "react": "^0.11.1",
     "react-translator": "*",
-    "route-parser": "0.0.2",
+    "route-parser": "^0.0.2",
     "stylus": "^0.48.1",
     "superagent": "^0.18.0",
     "tap-spec": "^1.0.0",
