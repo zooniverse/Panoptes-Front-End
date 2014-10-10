@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "blue-tape": "^0.1.7",
+    "browser-sync": "^1.5.7",
     "browserify": "^5.11.1",
     "bundle-collapser": "^1.1.0",
     "coffee-reactify": "^0.5.2",
@@ -15,7 +16,6 @@
     "json-api-client": "^0.0.3",
     "marked": "^0.3.2",
     "nib": "^1.0.3",
-    "node-static": "^0.7.3",
     "publisssh": "^0.2.5",
     "react": "^0.11.1",
     "react-translator": "*",
