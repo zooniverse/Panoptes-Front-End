@@ -1,0 +1,47 @@
+.dashboard
+  padding-bottom: 50px
+
+  h1, h2
+    text-align: center
+    margin-top: 30px
+
+  .line-graph
+    circle:hover
+      stroke: MAIN_HIGHLIGHT
+
+    .hover-box
+      padding: 5px 0
+      border-radius: 5px
+      box-sizing: border-box
+      font-size: 12px
+
+      &:after
+        border: 10px solid transparent;
+        border-top-color: rgb(230, 230, 230)
+        content: "";
+        left: 60px; // half of hover-box width
+        margin-left: -7.5px
+        position: absolute;
+        top: 100%;
+
+      p
+        margin: 0
+
+  .stats-box
+    text-align: center
+    background: rgb(230, 230, 230)
+    border-radius: 5px
+
+    > h2
+      padding: 15px 0
+
+    .stats-items
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+
+      .stats-item
+        flex-grow: 1
+
+        h1
+          margin: 0

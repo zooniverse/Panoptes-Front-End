@@ -7,6 +7,7 @@ Link = require '../lib/link'
 Markdown = require '../components/markdown'
 ClassifyPage = require './classify'
 LoadingIndicator = require '../components/loading-indicator'
+Dashboard = require './dashboard'
 
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
@@ -88,7 +89,7 @@ ProjectPage = React.createClass
 
           <Route path="/projects/:owner/:name/status" className="project-text-content content-container">
             <div>
-              <p>Status dashboard for this project</p>
+              <Dashboard project={@state.project} />
             </div>
           </Route>
 
