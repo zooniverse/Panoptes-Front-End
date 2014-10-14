@@ -3,6 +3,7 @@
 React = require 'react'
 {dispatch} = require '../lib/dispatcher'
 Link = require '../lib/link'
+auth = require '../api/auth'
 
 module.exports = React.createClass
   displayName: 'AccountBar'
@@ -17,7 +18,7 @@ module.exports = React.createClass
       </Link>
 
       <div className="main-header-item">
-        <a href="#/users/#{@props.user.display_name}">{@props.user.real_name}</a>
+        <a href="#/users/#{@props.user.display_name}">{@props.user.display_name}</a>
         &nbsp;
         <Link href="/settings"><i className="fa fa-cog"></i></Link>
         <span className="pill"><button type="button" onClick={@handleSignOutClick}>Sign out</button></span>
@@ -26,4 +27,4 @@ module.exports = React.createClass
     </div>
 
   handleSignOutClick: ->
-    dispatch 'current-user:sign-out'
+    auth.signOut()

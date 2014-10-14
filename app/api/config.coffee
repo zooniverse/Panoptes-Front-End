@@ -4,7 +4,6 @@ API_HOSTS =
   production: '' # Same domain!
   staging: 'https://panoptes-staging.zooniverse.org'
   development: 'http://localhost:3000'
-  test: 'http://localhost:7357'
   cam: 'http://172.17.2.87:3000'
 
 API_APPLICATION_IDS =

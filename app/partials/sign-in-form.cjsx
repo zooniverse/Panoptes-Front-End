@@ -22,9 +22,6 @@ module.exports = React.createClass
 
   mixins: [promiseToSetState]
 
-  getInitialState: ->
-    errors: null
-
   componentDidMount: ->
     auth.listen @handleAuthChange
 
@@ -47,7 +44,9 @@ module.exports = React.createClass
           <input type="text" name="login" value={@props.currentLogin?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
         </label>
       </div>
+
       <br />
+
       <div>
         <label>
           <Translator>signInForm.password</Translator>
@@ -55,20 +54,22 @@ module.exports = React.createClass
           <input type="password" name="password" value={@props.currentLogin?.password} disabled={disabled} ref="password" />
         </label>
       </div>
+
       <br />
+
       <div>
         <button type="submit" disabled={disabled}>
           <Translator>signInForm.signIn</Translator>
         </button>
-
-        {if working
-          <LoadingIndicator />}
 
         {if signedIn
           <span className="form-help">Signed in as {@state.user.display_name} <button onClick={@handleSignOut}>Sign out</button></span>}
 
         {if @state.errors?
           <span className="form-help error">{@state.errors}</span>}
+
+        {if working
+          <LoadingIndicator />}
       </div>
     </InPlaceForm>
 

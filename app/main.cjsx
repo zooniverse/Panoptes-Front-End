@@ -37,7 +37,7 @@ Main = React.createClass
 
   render: ->
     <div className="panoptes-main">
-      <MainHeader currentLogin={@state.currentLogin} loggingIn={@state.loggingIn} />
+      <MainHeader />
 
       <div className="main-content">
         <Route path="/" handler={Home} />

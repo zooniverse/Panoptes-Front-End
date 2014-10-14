@@ -2,6 +2,8 @@
 
 React = require 'react'
 InPlaceForm = require '../components/in-place-form'
+promiseToSetState = require '../lib/promise-to-set-state'
+auth = require '../api/auth'
 LoadingIndicator = require '../components/loading-indicator'
 {dispatch} = require '../lib/dispatcher'
 
@@ -10,11 +12,21 @@ CHECKING = 'CHECKING'
 module.exports = React.createClass
   displayName: 'RegisterForm'
 
-  getInitialState: ->
-    {}
+  mixins: [promiseToSetState]
+
+  componentDidMount: ->
+    auth.listen @handleAuthChange
+
+  componentWillUnmount: ->
+    auth.stopListening @handleAuthChange
+
+  handleAuthChange: ->
+    @promiseToSetState user: auth.checkCurrent()
 
   render: ->
-    disabled = @props.loggingIn or @props.currentLogin?
+    working = @state.user instanceof Promise
+    signedIn = @state.user? and (not @state.errors?) and (not working)
+    disabled = working or signedIn
     {badLoginChars, loginTaken, passwordTooShort, passwordsDontMatch} = @state
     email = @refs.email?.getDOMNode().value
 
@@ -22,9 +34,9 @@ module.exports = React.createClass
       <div>
         <label>
           <div>User name</div>
-          <input type="text" name="login" defaultValue={@props.currentLogin?.display_name} disabled={disabled} ref="login" onChange={@handleLoginChange} autoFocus="autoFocus" />
+          <input type="text" name="login" defaultValue={@state.user?.display_name} disabled={disabled} ref="login" onChange={@handleLoginChange} autoFocus="autoFocus" />
           {if badLoginChars?.length > 0
-            <span className="form-help error">Don't use weird characters ({badLoginChars.join ', '}).</span>
+            <span className="form-help error">Don’t use weird characters ({badLoginChars.join ', '}).</span>
           else if loginTaken is true
             <span className="form-help error">Sorry, that login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
           else if loginTaken is false
@@ -33,51 +45,73 @@ module.exports = React.createClass
             <LoadingIndicator className="form-help" />}
         </label>
       </div>
+
       <br />
+
       <div>
         <label>
           <div>Password</div>
-          <input type="password" name="password" defaultValue={@props.currentLogin?.password} disabled={disabled} ref="password" onChange={@handlePasswordChange} />
+          <input type="password" name="password" disabled={disabled} ref="password" onChange={@handlePasswordChange} />
           {if passwordTooShort
             <span className="form-help error">That password is too short.</span>}
         </label>
       </div>
+
       <br />
+
       <div>
         <label>
           <div>Confirm password</div>
           <input type="password" name="confirmed_password" disabled={disabled} ref="confirmedPassword" onChange={@handlePasswordChange} />
           {if passwordsDontMatch is true
-            <span className="form-help error">These passwords don't match!</span>
+            <span className="form-help error">These passwords don’t match!</span>
           else if passwordsDontMatch is false
             <span className="form-help success">They match!</span>}
         </label>
       </div>
+
       <br />
+
       <div>
         <label>
           <div>Email</div>
           <input type="text" name="email" disabled={disabled} ref="email" onChange={@forceUpdate.bind this, null} />
         </label>
       </div>
+
       <br />
+
       <div>
         <label>
           <div>Real name</div>
           <input type="text" name="real_name" disabled={disabled} ref="realName" />
-          <div className="form-help">We'll use this to give you credit in scientific papers, posters, etc.</div>
+          <div className="form-help">We’ll use this to give you credit in scientific papers, posters, etc.</div>
         </label>
       </div>
+
       <br />
+
       <div>
         <label>
           <input type="checkbox" name="agrees_to_privacy_policy" disabled={disabled} ref="agreesToPrivacyPolicy" onChange={@forceUpdate.bind this, null} />
           You agree to our <a href="#/privacy">privacy policy</a> <span className="form-help">(required)</span>.
         </label>
       </div>
+
       <br />
+
       <div>
         <button type="submit" disabled={disabled or not @isFormValid()}>Register</button>
+
+        {if signedIn
+          <span className="form-help">Signed in as {@state.user.display_name} <button onClick={@handleSignOut}>Sign out</button></span>}
+
+        {if @state.errors?
+          <span className="form-help error">{@state.errors}</span>}
+
+        {if working
+          <LoadingIndicator />}
+
       </div>
     </InPlaceForm>
 
@@ -110,7 +144,7 @@ module.exports = React.createClass
     confirmedPassword = @refs.confirmedPassword.getDOMNode().value
 
     exists = password.length isnt 0
-    longEnough = password.length > 5
+    longEnough = password.length > 7
     asLong = confirmedPassword.length >= password.length
     matches = password is confirmedPassword
 
@@ -133,7 +167,9 @@ module.exports = React.createClass
     realName = @refs.realName.getDOMNode().value
     agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy.getDOMNode().checked
 
-    # TODO:
-    # creation = users.create {login, password, confirmedPassword, email, realName, agreesToPrivacyPolicy}
-    # creation.then ({errors, user}) ->
-    #   loginStore.signIn login, confirmedPassword
+    auth.register {login, password, email, realName}
+      .catch (errors) ->
+        @setState {errors}
+
+  handleSignOut: ->
+    auth.signOut()
