@@ -7,11 +7,14 @@ TEST_PASSWORD = 'P@$$wørd'
 
 test 'Checking the current user initially fails', (t) ->
   auth.checkCurrent()
-    .then ->
-      t.fail 'Nobody should be signed in'
+    .then (user) ->
+      if user?
+        t.fail 'Nobody should be signed in'
+      else
+        t.pass 'Nobody is signed in'
 
     .catch ->
-      t.pass 'Nobody is signed in'
+      t.fail 'Failed to check current user'
 
 test 'Registering an account with no data fails', (t) ->
   BLANK_REGISTRATION = {}

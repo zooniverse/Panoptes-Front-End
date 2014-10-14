@@ -22,7 +22,8 @@ module.exports = new Model
   currentUser: null
   bearerToken: ''
 
-  getAuthToken: ->
+  _getAuthToken: ->
+    console?.log 'Getting auth token'
     makeHTTPRequest 'GET', config.host + '/', null, 'Accept': 'text/html', ADD_CREDENTIALS
       .then (request) ->
         [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
@@ -31,18 +32,22 @@ module.exports = new Model
         authToken
 
       .catch (request) ->
+        # Back end is down or something.
         try {errors} = JSON.parse request.responseText
         console?.error 'Failed to get auth token', errors
         Promise.reject errors
 
-  getBearerToken: ->
+  _getBearerToken: ->
+    console?.log 'Getting bearer token'
     if @bearerToken
+      console?.log 'Already had a bearer token', @bearerToken
       Promise.resolve @bearerToken
     else
       data =
         grant_type: 'password'
         client_id: config.clientAppID
 
+      console?.log 'Requesting a new bearer token'
       makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS, ADD_CREDENTIALS
         .then (request) =>
           response = JSON.parse request.responseText
@@ -52,51 +57,65 @@ module.exports = new Model
           @bearerToken
 
         .catch (request) ->
+          # You're probably not signed in.
           try {errors} = JSON.parse request.responseText
           console?.error 'Failed to get bearer token', errors
           Promise.reject errors
 
-  deleteBearerToken: ->
+  _deleteBearerToken: ->
+    console?.log 'Deleting bearer token'
     @bearerToken = ''
     delete client.headers['Authorization']
 
-  register: ({login, email, password, passwordConfirmation}) ->
-    @getAuthToken().then (token) =>
+  register: ({login, email, password}) ->
+    console?.log 'Registering new account', login
+    @update currentUser: @_getAuthToken().then (token) =>
       data =
         authenticity_token: token
         user:
           login: login
           email: email
           password: password
-          # password_confirmation: passwordConfirmation
 
       makeHTTPRequest 'POST', config.host + '/users', data, JSON_HEADERS, ADD_CREDENTIALS
         .then (request) =>
           # The response contains a JSON-API "users" resource.
           client.processResponseTo request
 
-          @getBearerToken().then =>
+          @_getBearerToken().then =>
+            # The given login is transformed on the back end, but stored as display_name.
             users.get display_name: login, 1
               .then ([user]) =>
-                @update currentUser: user
-                console?.info 'Registered user', user.display_name
-                @currentUser
+                console?.info 'Registered account', user.display_name
+                user
 
         .catch (request) ->
           try {errors} = JSON.parse request.responseText
           console?.error 'Failed to register', errors
           Promise.reject errors
 
+    @currentUser
+
   checkCurrent: ->
-    @getBearerToken().then =>
-      client.get '/me'
-        .then ([user]) =>
-          @update currentUser: user
-          console?.log 'Was signed in as', @currentUser.display_name
-          @currentUser
+    console?.log 'Checking for existing session'
+    unless @currentUser?
+      @update currentUser:
+        @_getBearerToken()
+          .then =>
+            client.get '/me'
+              .then ([user]) =>
+                console?.log 'Session exists for', user.display_name
+                user
+
+          .catch ->
+            # If you can't get a bearer token, nobody's signed in.
+            null
+
+    @currentUser
 
   signIn: ({login, password}) ->
-    @getAuthToken().then (token) =>
+    console?.log 'Signing in', login
+    @update currentUser: @_getAuthToken().then (token) =>
       data =
         authenticity_token: token
         user:
@@ -108,20 +127,26 @@ module.exports = new Model
           # The response contains a JSON-API "users" resource.
           client.processResponseTo request
 
-          @getBearerToken().then =>
+          @_getBearerToken().then =>
             users.get display_name: login, 1
               .then ([user]) =>
-                @update currentUser: user
-                console?.log 'Signed in successfully as', @currentUser.display_name
-                @currentUser
+                user
+                console?.log 'Signed in', user.display_name
+                user
 
         .catch (request) ->
           if request.status in [401, 0] # The server says 401, but the response object says 0, so who knows?
             errors = [message: password: ['Login or password was incorrect']]
+          else
+            try {errors} = JSON.parse request.responseText
+
           Promise.reject errors
 
+    @currentUser
+
   signOut: ->
-    @getAuthToken().then (token) =>
+    console?.log 'Signing out'
+    @update currentUser: @_getAuthToken().then (token) =>
       data =
         authenticity_token: token
 
@@ -130,15 +155,16 @@ module.exports = new Model
       headers['X-HTTP-Method-Override'] = 'DELETE'
 
       makeHTTPRequest 'POST', config.host + '/users/sign_out', data, headers, ADD_CREDENTIALS
-        .then (request) =>
-          @deleteBearerToken()
-          @update currentUser: null
-          @currentUser
+        .then =>
+          @_deleteBearerToken()
+          null
 
         .catch (request) ->
           try {errors} = JSON.parse request.responseText
           console?.log 'Failed to sign out', errors
           Promise.reject errors
+
+    @currentUser
 
 window?.zooAuth = module.exports
 
