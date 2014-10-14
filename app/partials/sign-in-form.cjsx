@@ -2,7 +2,7 @@
 
 Translator = require 'react-translator'
 React = require 'react'
-loginStore = require '../data/login'
+promiseToSetState = require '../lib/promise-to-set-state'
 InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
 auth = require '../api/auth'
@@ -20,20 +20,24 @@ Translator.setStrings
 module.exports = React.createClass
   displayName: 'SignInForm'
 
+  mixins: [promiseToSetState]
+
   getInitialState: ->
-    errors: {}
+    errors: null
 
-  # componentDidMount: ->
-  #   auth.listen @handleAuthChange
+  componentDidMount: ->
+    auth.listen @handleAuthChange
 
-  # componentWillUnmount: ->
-  #   auth.stopListening @handleAuthChange
+  componentWillUnmount: ->
+    auth.stopListening @handleAuthChange
 
-  # handleAuthChange: ->
-
+  handleAuthChange: ->
+    @promiseToSetState user: auth.checkCurrent()
 
   render: ->
-    disabled = @props.loggingIn or @props.currentLogin?
+    working = @state.user instanceof Promise
+    signedIn = @state.user? and (not @state.errors?) and (not working)
+    disabled = working or signedIn
 
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
@@ -41,10 +45,6 @@ module.exports = React.createClass
           <Translator>signInForm.userName</Translator>
           <br />
           <input type="text" name="login" value={@props.currentLogin?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
-
-          {if @state.errors.login?
-            errorString = "signInForm.errors.#{@state.errors.login}"
-            <Translator className="form-help error">{errorString}</Translator>}
         </label>
       </div>
       <br />
@@ -53,10 +53,6 @@ module.exports = React.createClass
           <Translator>signInForm.password</Translator>
           <br />
           <input type="password" name="password" value={@props.currentLogin?.password} disabled={disabled} ref="password" />
-
-          {if @state.errors.password?
-            errorString = "signInForm.errors.#{@state.errors.password}"
-            <Translator className="form-help error">{errorString}</Translator>}
         </label>
       </div>
       <br />
@@ -65,17 +61,29 @@ module.exports = React.createClass
           <Translator>signInForm.signIn</Translator>
         </button>
 
-        {if @props.loggingIn
+        {if working
           <LoadingIndicator />}
 
-        {if @props.currentLogin?
-          <span className="form-help">Signed in as {@props.currentLogin.display_name}</span>}
+        {if signedIn
+          <span className="form-help">Signed in as {@state.user.display_name} <button onClick={@handleSignOut}>Sign out</button></span>}
+
+        {if @state.errors?
+          <span className="form-help error">{@state.errors}</span>}
       </div>
     </InPlaceForm>
 
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
     password = @refs.password.getDOMNode().value
-    auth.signIn({login, password}).catch (error) ->
-      console.warn 'Sign in error:', error
 
+    auth.signIn {login, password}
+      .then =>
+        @setState errors: null
+
+      .catch (errors) =>
+        @setState errors: errors
+
+  handleSignOut: ->
+    auth.signOut().then =>
+      @refs.login.getDOMNode().value = ''
+      @refs.password.getDOMNode().value = ''

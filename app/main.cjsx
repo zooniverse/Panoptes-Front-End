@@ -61,9 +61,6 @@ document.body.appendChild mainContainer
 
 React.renderComponent Main(null), mainContainer
 
-login = require './data/login'
-login.check()
-
 # For React DevTools Chrome plugin:
 unless process.env.NODE_ENV is 'production'
   window.React = React
