@@ -8,9 +8,6 @@ JSON_HEADERS =
   'Content-Type': 'application/json'
   'Accept': 'application/json'
 
-ADD_CREDENTIALS = (request) ->
-  request.withCredentials = true
-
 # This will match the CSRF token in a string of HTML.
 # TODO: Get JSON instead.
 CSRF_TOKEN_PATTERN = do ->
@@ -24,7 +21,7 @@ module.exports = new Model
 
   _getAuthToken: ->
     console?.log 'Getting auth token'
-    makeHTTPRequest 'GET', config.host + '/', null, 'Accept': 'text/html', ADD_CREDENTIALS
+    makeHTTPRequest 'GET', config.host + '/', null, 'Accept': 'text/html'
       .then (request) ->
         [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
         authToken = authTokenMatch1 ? authTokenMatch2
@@ -48,7 +45,7 @@ module.exports = new Model
         client_id: config.clientAppID
 
       console?.log 'Requesting a new bearer token'
-      makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS, ADD_CREDENTIALS
+      makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS
         .then (request) =>
           response = JSON.parse request.responseText
           @bearerToken = response.access_token
@@ -77,7 +74,7 @@ module.exports = new Model
           email: email
           password: password
 
-      makeHTTPRequest 'POST', config.host + '/users', data, JSON_HEADERS, ADD_CREDENTIALS
+      makeHTTPRequest 'POST', config.host + '/users', data, JSON_HEADERS
         .then (request) =>
           # The response contains a JSON-API "users" resource.
           client.processResponseTo request
@@ -122,7 +119,7 @@ module.exports = new Model
           login: login
           password: password
 
-      makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS, ADD_CREDENTIALS
+      makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS
         .then (request) =>
           # The response contains a JSON-API "users" resource.
           client.processResponseTo request
@@ -151,10 +148,10 @@ module.exports = new Model
         authenticity_token: token
 
       # PhantomJS doesn't send any data with DELETE, so fake it here.
-      headers = Object.create JSON_HEADERS
-      headers['X-HTTP-Method-Override'] = 'DELETE'
+      deleteOverrideJSONHeaders = Object.create JSON_HEADERS
+      deleteOverrideJSONHeaders['X-HTTP-Method-Override'] = 'DELETE'
 
-      makeHTTPRequest 'POST', config.host + '/users/sign_out', data, headers, ADD_CREDENTIALS
+      makeHTTPRequest 'POST', config.host + '/users/sign_out', data, deleteOverrideJSONHeaders
         .then =>
           @_deleteBearerToken()
           null
