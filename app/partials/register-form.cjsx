@@ -4,6 +4,7 @@ React = require 'react'
 InPlaceForm = require '../components/in-place-form'
 promiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
+users = require '../api/users'
 LoadingIndicator = require '../components/loading-indicator'
 {dispatch} = require '../lib/dispatcher'
 
@@ -15,6 +16,7 @@ module.exports = React.createClass
   mixins: [promiseToSetState]
 
   componentDidMount: ->
+    @handleAuthChange()
     auth.listen @handleAuthChange
 
   componentWillUnmount: ->
@@ -34,15 +36,18 @@ module.exports = React.createClass
       <div>
         <label>
           <div>User name</div>
-          <input type="text" name="login" defaultValue={@state.user?.display_name} disabled={disabled} ref="login" onChange={@handleLoginChange} autoFocus="autoFocus" />
+          <input type="text" name="login" disabled={disabled} ref="login" onChange={@handleLoginChange} autoFocus="autoFocus" />
           {if badLoginChars?.length > 0
             <span className="form-help error">Don’t use weird characters ({badLoginChars.join ', '}).</span>
-          else if loginTaken is true
-            <span className="form-help error">Sorry, that login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
-          else if loginTaken is false
-            <span className="form-help success">Looks good.</span>
-          else if loginTaken is CHECKING
-            <LoadingIndicator className="form-help" />}
+          else if loginTaken?
+            if loginTaken instanceof Promise
+              <LoadingIndicator className="form-help" />
+            else if loginTaken instanceof Error
+              <span className="form-help error"><i className="fa fa-exclamation-triangle"></i> Can’t determine this login’s availability.</span>
+            else if loginTaken.length isnt 0
+              <span className="form-help error">Sorry, that login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
+            else if loginTaken.length is 0
+              <span className="form-help success">Looks good.</span>}
         </label>
       </div>
 
@@ -104,7 +109,10 @@ module.exports = React.createClass
         <button type="submit" disabled={disabled or not @isFormValid()}>Register</button>
 
         {if signedIn
-          <span className="form-help">Signed in as {@state.user.display_name} <button onClick={@handleSignOut}>Sign out</button></span>}
+          <span className="form-help">
+            Signed in as {@state.user.display_name}
+            <button type="button" onClick={@handleSignOut}>Sign out</button>
+          </span>}
 
         {if @state.errors?
           <span className="form-help error">{@state.errors}</span>}
@@ -126,18 +134,7 @@ module.exports = React.createClass
       loginTaken: null
 
     if exists and badChars.length is 0
-      @setState
-        loginTaken: CHECKING
-
-      checkTaken = new Promise (resolve) ->
-        matches = []
-        if Math.random() < 0.5
-          matches.push true
-        setTimeout resolve.bind(this, matches), 1000
-
-      checkTaken.then (matches) =>
-        @setState
-          loginTaken: matches.length isnt 0
+      @promiseToSetState loginTaken: users.get {login}, 1
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
@@ -156,7 +153,6 @@ module.exports = React.createClass
     {badLoginChars, loginTaken, passwordsDontMatch} = @state
     agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
 
-    console.log (badLoginChars?.length is 0), (loginTaken is false), (passwordsDontMatch is false), agreesToPrivacyPolicy
     (badLoginChars?.length is 0) and (loginTaken is false) and (passwordsDontMatch is false) and agreesToPrivacyPolicy
 
   handleSubmit: ->
