@@ -8,7 +8,7 @@ users = require '../api/users'
 LoadingIndicator = require '../components/loading-indicator'
 {dispatch} = require '../lib/dispatcher'
 
-CHECKING = 'CHECKING'
+MIN_PASSWORD_LENGTH = 8
 
 module.exports = React.createClass
   displayName: 'RegisterForm'
@@ -141,7 +141,7 @@ module.exports = React.createClass
     confirmedPassword = @refs.confirmedPassword.getDOMNode().value
 
     exists = password.length isnt 0
-    longEnough = password.length > 7
+    longEnough = password.length >= MIN_PASSWORD_LENGTH
     asLong = confirmedPassword.length >= password.length
     matches = password is confirmedPassword
 
