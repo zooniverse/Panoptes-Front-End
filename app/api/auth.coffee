@@ -31,6 +31,8 @@ module.exports = new Model
       .catch (request) ->
         # Back end is down or something.
         try {errors} = JSON.parse request.responseText
+        errors ?= [message: password: ['Could not connect to the server']]
+
         console?.error 'Failed to get auth token', errors
         Promise.reject errors
 
