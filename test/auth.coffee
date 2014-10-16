@@ -128,3 +128,21 @@ test 'Signing in with good details works', (t) ->
 
     .catch ->
       t.fail 'Sign in should work'
+
+test 'Deleting an account works', (t) ->
+  auth.checkCurrent().then (user) ->
+    user.delete()
+      .then ->
+        OLD_LOGIN_DETAILS =
+          login: TEST_LOGIN
+          password: TEST_PASSWORD
+
+        auth.signIn OLD_LOGIN_DETAILS
+          .then (user) ->
+            t.fail 'Should not have been able to sign in to a deleted account'
+
+          .catch ->
+            t.pass 'Could not sign in to a deleted account'
+
+      .catch (errors) ->
+        t.fail 'Failed to delete account', JSON.stringify errors
