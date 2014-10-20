@@ -17,7 +17,6 @@ module?.exports = React.createClass
       y2={@props.height * (n / @props.yLines)}
       stroke={@strokeColor}
       strokeWidth={@strokeWidth}
-      style={zIndex: -1}
     />
 
   render: ->

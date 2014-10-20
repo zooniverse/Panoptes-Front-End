@@ -13,7 +13,6 @@ module?.exports = React.createClass
       y1={0}
       y2={10}
       stroke={@props.color}
-      style={zIndex: -2}
     />
 
   render: ->

@@ -10,19 +10,20 @@
       stroke: MAIN_HIGHLIGHT
 
     .hover-box
-      padding: 5px 0
+      padding: 10px
       border-radius: 5px
       box-sizing: border-box
       font-size: 12px
+      transform: translate(-50% + 5px, (-100% - 50px))
 
       &:after
         border: 10px solid transparent;
         border-top-color: rgb(230, 230, 230)
-        content: "";
-        left: 60px; // half of hover-box width
+        content: ""
+        left: 50%
         margin-left: -7.5px
-        position: absolute;
-        top: 100%;
+        position: absolute
+        top: 100%
 
       p
         margin: 0

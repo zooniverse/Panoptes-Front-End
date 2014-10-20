@@ -24,7 +24,7 @@ module?.exports = React.createClass
     yLabel: React.PropTypes.string      # Label for hover-box value
 
   getInitialState: ->
-    circleHover: {x: 0, y: 0, display: "none"}
+    circleHover: {x: 0, y: 0}
 
   coords: (yKey) ->
     dataMax = @dataMax()
@@ -57,7 +57,7 @@ module?.exports = React.createClass
     @setState circleHover: {x: +position.left, y: +position.top, content: "#{dataValue} #{@props.yLabel}"}
 
   onCircleMouseOut: (e) ->
-    @setState circleHover: {display: "none"}
+    @setState circleHover: {}
 
   render: ->
     lines = @props.yKeys.map(@line)
@@ -74,12 +74,9 @@ module?.exports = React.createClass
 
       {@transferPropsTo <XLabels />}
 
-      <HoverBox
-        display={@state.circleHover.display}
-        top={@state.circleHover.y}
-        left={@state.circleHover.x}
-        content={@state.circleHover.content}
-        targetRadius={@props.pointRadius / 2} />
+      <HoverBox top={@state.circleHover.y} left={@state.circleHover.x}>
+        {@state.circleHover.content}
+      </HoverBox>
     </div>
 
   flatten: (arrayOfArrays) ->
@@ -114,5 +111,5 @@ module?.exports = React.createClass
     (percentVal - ((percentVal / dataMax) * radiusPercent)) + radiusPercent
 
   coordPairNotUndefined: (p) ->
-    p.coord1?.x and p.coord2?.y and p.coord1?.x and p.coord2?.y
+    p.coord1? and p.coord2?
 
