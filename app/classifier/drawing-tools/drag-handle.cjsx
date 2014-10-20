@@ -10,10 +10,18 @@ RADII =
 
 STROKE_WIDTH = 3
 
-# A consistent drag handle for use across controls.
+# A consistent drag handle for use across drawing tools.
 
 module.exports = React.createClass
   displayName: 'DragHandle'
+
+  getDefaultProps: ->
+    x: 0
+    y: 0
+    scale:
+      horizontal: 1
+      vertical: 1
+    rotate: 0
 
   render: ->
     color = @props.color ? 'currentcolor'
@@ -27,6 +35,7 @@ module.exports = React.createClass
 
     transform = "
       translate(#{@props.x}, #{@props.y})
+      scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})
       rotate(#{@props.rotate})
     "
 

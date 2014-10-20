@@ -12,6 +12,7 @@ DEFAULT_RADIUS = 10
 DEFAULT_SQUASH = 1 / 2
 DEFAULT_ANGLE = 0
 
+STROKE_WIDTH = 2
 CLOSE_BUTTON_ANGLE = 45
 
 module.exports = React.createClass
@@ -48,24 +49,56 @@ module.exports = React.createClass
   render: ->
     color = @props.mark._tool.color ? 'currentcolor'
 
-    transform = "
+    positionAndRotate = "
       translate(#{@props.mark.x}, #{@props.mark.y})
       rotate(#{-1 * @props.mark.angle})
+    "
+
+    scaleAndDerotateControls = "
+      scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})
+      rotate(#{@props.mark.angle})
     "
 
     averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
 
     deletePosition = @getDeletePosition()
 
-    <g className="ellipse drawing-tool" transform={transform} data-disabled={@props.disabled || null} data-selected={@props.selected || null}>
+    <g className="ellipse drawing-tool" transform={positionAndRotate} data-disabled={@props.disabled || null} data-selected={@props.selected || null}>
       <Draggable onStart={@handleDragStart} onDrag={@handleMainDrag}>
-        <ellipse rx={@props.mark.rx * @props.scale.horizontal} ry={@props.mark.ry * @props.scale.vertical} fill="transparent" stroke={color} strokeWidth="2" />
+        <ellipse rx={@props.mark.rx} ry={@props.mark.ry} fill="transparent" stroke={color} strokeWidth={STROKE_WIDTH / averageScale} />
       </Draggable>
 
-      <DeleteButton transform="translate(#{deletePosition.x}, #{deletePosition.y}) rotate(#{@props.mark.angle})" onClick={@deleteMark} />
+      <DeleteButton
+        x={deletePosition.x}
+        y={deletePosition.y}
+        scale={@props.scale}
+        rotate={@props.mark.angle}
+        onClick={@deleteMark}
+      />
 
-      <DragHandle onStart={@handleDragStart} onDrag={@handleXHandleDrag} x={@props.mark.rx * @props.scale.horizontal} y={0} rotate={@props.mark.angle} color={@props.mark._tool.color} disabled={@props.disabled} selected={@props.selected} />
-      <DragHandle onStart={@handleDragStart} onDrag={@handleYHandleDrag} x={0} y={-1 * @props.mark.ry * @props.scale.vertical} rotate={@props.mark.angle} color={@props.mark._tool.color} disabled={@props.disabled} selected={@props.selected} />
+      <DragHandle
+        onStart={@handleDragStart}
+        onDrag={@handleXHandleDrag}
+        color={@props.mark._tool.color}
+        x={@props.mark.rx}
+        y={0}
+        scale={@props.scale}
+        rotate={@props.mark.angle}
+        disabled={@props.disabled}
+        selected={@props.selected}
+      />
+
+      <DragHandle
+        onStart={@handleDragStart}
+        onDrag={@handleYHandleDrag}
+        color={@props.mark._tool.color}
+        x={0}
+        y={-1 * @props.mark.ry}
+        scale={@props.scale}
+        rotate={@props.mark.angle}
+        disabled={@props.disabled}
+        selected={@props.selected}
+      />
     </g>
 
   handleDragStart: (e) ->
@@ -98,8 +131,8 @@ module.exports = React.createClass
     dispatch 'classification:annotation:mark:delete', @props.mark
 
   getDeletePosition: ->
-    # TODO: It'd be nice if it stayed absolutely 45deg.
+    # TODO: It'd be nice if it stayed absolutely 45 degrees.
     theta = CLOSE_BUTTON_ANGLE * (Math.PI / 180)
     r = (@props.mark.rx * @props.mark.ry) / Math.sqrt(Math.pow(@props.mark.ry * Math.cos(theta), 2) + Math.pow(@props.mark.rx * Math.sin(theta), 2))
-    x: @props.scale.horizontal * r * Math.sin theta
-    y: @props.scale.vertical * -r * Math.cos theta
+    x: r * Math.sin theta
+    y: -1 * r * Math.cos theta

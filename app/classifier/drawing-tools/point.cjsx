@@ -45,7 +45,7 @@ module.exports = React.createClass
         </g>
       </Draggable>
 
-      <DeleteButton transform="translate(#{radius}, #{-1 * radius})" onClick={@deleteMark} />
+      <DeleteButton x={radius} y={-1 * radius} onClick={@deleteMark} />
     </g>
 
   handleDrag: (e) ->
