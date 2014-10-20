@@ -3,8 +3,6 @@
 React = require 'react'
 LineGraph = require '../dashboard/line-graph/line-graph'
 LineGraphLegend = require '../dashboard/line-graph/legend'
-StatsBox = require '../dashboard/stats-box/stats-box'
-
 
 PROJECT_CLASSIFICATIONS =
   data: [
@@ -39,25 +37,37 @@ PROJECT_CLASSIFICATIONS =
     {average_classifications: 2, user_classifications: 5, date: "09/11/2014"}
   ]
 
-PROJECT_STATS_DATA =
-  total_classifications: "26,127"
-  total_users: "3,145"
-  total_subjects: "92,301"
-  percent_complete: "27%"
+PROJECT_STATS_DATA = [
+  {name: "Total Classifications", value: "26,127"}
+  {name: "Total Users", value: "3,145"}
+  {name: "Total Subjects", value: "92,301"}
+  {name: "Percent Complete", value: "27%"}
+]
 
-USER_STATS_DATA =
-  total_classifications: "1,231"
-  average_daily_classifications: "15"
-  total_talk_comments: "71"
-  classifications_today: "5"
+USER_STATS_DATA = [
+  {name: "Total Classifications", value: "1,231"}
+  {name: "Average Daily Classifications", value: "15"}
+  {name: "Total Talk Comments", value: "71"}
+  {name: "Classifications Today", value: "5"}
+]
 
 module?.exports = React.createClass
   displayName: 'Dashboard'
 
+  statsItem: (d, i) ->
+    <div className="stats-item" key={i}><h1>{d.value}</h1><p>{d.name}</p></div>
+
   render: ->
     <div className="dashboard">
-      <StatsBox data={PROJECT_STATS_DATA} title={"#{@props.project.name} Statistics"}/>
-      <StatsBox data={USER_STATS_DATA} title={"User Statistics"} />
+      <div className="stats-box">
+        <h2>{@props.project.name} Statistics</h2>
+        <div className="stats-items">{PROJECT_STATS_DATA.map(@statsItem)}</div>
+      </div>
+
+      <div className="stats-box">
+        <h2>Your Statistics</h2>
+        <div className="stats-items">{USER_STATS_DATA.map(@statsItem)}</div>
+      </div>
 
       <h2>Classification Count</h2>
 
