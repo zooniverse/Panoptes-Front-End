@@ -13,7 +13,7 @@
     "envify": "^1.2.1",
     "es6-promise": "^2.0.0",
     "function-bind": "^1.0.2",
-    "json-api-client": "~0.0.3",
+    "json-api-client": "~0.0.8",
     "marked": "^0.3.2",
     "nib": "^1.0.3",
     "publisssh": "^0.2.5",
