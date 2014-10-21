@@ -5,15 +5,6 @@ React = require 'react'
 module?.exports = React.createClass
   displayName: 'LineGraphXLabels'
 
-  height: 25
-  color: "darkgrey"
-
-  xLabelTextAnchor: (i) ->
-    switch i
-      when 0 then 'start'
-      when (@xAxisLabels().length - 1) then 'end'
-      else 'middle'
-
   xAxisLabels: ->
     # [first, middle, last] x-labels
     dataLength = @props.data.length
@@ -23,18 +14,13 @@ module?.exports = React.createClass
      @props.data[dataLength - 1][@props.xKey]]
 
   xAxisLabel: (date, i) ->
-    <text
-      key={i}
-      x={((i / 2) * 100) + "%"}
-      y={20}
-      style={textAnchor: @xLabelTextAnchor(i)}
-      fill={@color}>
-        {date}
+    <text key={i} x={((i / 2) * 100) + "%"} y={20}>
+      {date}
     </text>
 
   render: ->
     labels = @xAxisLabels().map(@xAxisLabel)
 
-    <svg width="100%" height={@height}>
+    <svg className="line-graph-x-labels">
       <g>{labels}</g>
     </svg>

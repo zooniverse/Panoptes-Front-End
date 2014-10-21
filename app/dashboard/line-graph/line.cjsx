@@ -4,9 +4,7 @@ React = require 'react'
 
 module?.exports = React.createClass
   displayName: 'LineGraphLine'
-
   borderWidth: 2
-  fill: '#fff'
 
   circle: (d, i) ->
     <circle
@@ -14,10 +12,8 @@ module?.exports = React.createClass
       cx={d.x + "%"}
       cy={d.y + "%"}
       r={@props.pointRadius - @borderWidth}
-      fill={@fill}
       value={d.value}
       stroke={@props.color}
-      strokeWidth={@borderWidth}
       onMouseOver={@props.onCircleMouseOver}
       onMouseOut={@props.onCircleMouseOut}
     />
@@ -30,14 +26,13 @@ module?.exports = React.createClass
       x2={p.coord2.x + "%"}
       y2={p.coord2.y + "%"}
       stroke={@props.color}
-      strokeWidth={@borderWidth}
     />
 
   render: ->
     circles = @props.coords.map(@circle)
     lines = @props.coordPairs.map(@line)
 
-    <g>
+    <g className="line-graph-line">
       <g>{lines}</g>
       <g>{circles}</g>
     </g>
