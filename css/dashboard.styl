@@ -1,0 +1,93 @@
+.dashboard
+  padding-bottom: 50px
+
+  h1, h2
+    text-align: center
+    margin-top: 30px
+
+  .line-graph
+    circle:hover
+      stroke: MAIN_HIGHLIGHT
+
+    .hover-box
+      text-align: center
+      position: fixed
+      background: rgb(230, 230, 230)
+      padding: 10px
+      border-radius: 5px
+      box-sizing: border-box
+      font-size: 12px
+      transform: translate(-50% + 5px, (-100% - 50px))
+
+      &:after
+        border: 10px solid transparent;
+        border-top-color: rgb(230, 230, 230)
+        content: ""
+        left: 50%
+        margin-left: -7.5px
+        position: absolute
+        top: 100%
+      p
+        margin: 0
+
+    .line-graph-x-labels
+      height: 25px
+      width: 100%
+      text
+        text-anchor: middle
+        fill: darkgrey
+        &:first-child
+          text-anchor: start
+        &:last-child
+          text-anchor: end
+
+    .line-graph-y-labels
+      text
+        fill: darkgrey
+
+    .line-graph-y-rules
+      stroke: lightgrey
+      stroke-width: 1
+
+    .line-graph-line
+      line, circle
+        stroke-width: 2
+      circle
+        fill: #fff
+
+  .line-graph-legend
+    text-align: center
+    svg
+      overflow: auto
+      width: 200px
+      height: 100px
+
+      circle, line, text
+        stroke-width: 2px
+
+      circle
+        fill: #fff
+
+      text
+        text-anchor: middle
+        fill: darkgrey
+
+
+  .stats-box
+    text-align: center
+    background: rgb(230, 230, 230)
+    border-radius: 5px
+
+    > h2
+      padding: 15px 0
+
+    .stats-items
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+
+      .stats-item
+        flex-grow: 1
+
+        h1
+          margin: 0
