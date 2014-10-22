@@ -24,15 +24,19 @@ module.exports =
     @setState loadingState, =>
       for stateKey, promise of keysAndPromises
         promiseHandler = @_handlePromisedState.bind this, stateKey, promise
-        promise.then promiseHandler
-        promise.catch promiseHandler
+        promise.then promiseHandler.bind this, false
+        promise.catch promiseHandler.bind this, true
 
       callback?()
 
-  _handlePromisedState: (stateKey, promise, value) ->
+  _handlePromisedState: (stateKey, promise, caught, value) ->
     # Only change the state if its current value is the same promise that's resolving.
     samePromise = @state[stateKey] is promise
     if @isMounted() and samePromise
+      if caught and value not instanceof Error
+        error = new Error value
+        error.message = value # Override string-only messages. TODO: Maybe this isn't a great idea.
+        value = error
       valueState = {}
       valueState[stateKey] = value
       @setState valueState

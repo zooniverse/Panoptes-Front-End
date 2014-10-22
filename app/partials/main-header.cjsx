@@ -5,26 +5,34 @@ LoadingIndicator = require '../components/loading-indicator'
 MainNav = require './main-nav'
 AccountBar = require './account-bar'
 LoginBar = require './login-bar'
+PromiseToSetState = require '../lib/promise-to-set-state'
+auth = require '../api/auth'
 
 module.exports = React.createClass
   displayName: 'MainHeader'
 
+  mixins: [PromiseToSetState]
+
+  componentDidMount: ->
+    @handleAuthChange()
+    auth.listen @handleAuthChange
+
+  componentWillUnmount: ->
+    auth.stopListening @handleAuthChange
+
+  handleAuthChange: ->
+    @promiseToSetState user: auth.checkCurrent()
+
   render: ->
+    console.log 'Rendering with', @state.user
+
     <header className="main-header">
       <MainNav />
 
       <div className="main-header-group"></div>
 
-      {if @props.loggingIn
-        <div className="main-header-group">
-          <div className="main-header-item">
-            <LoadingIndicator />
-          </div>
-        </div>
-
-      else if @props.currentLogin
-        <AccountBar user={@props.currentLogin} />
-
+      {if @state.user?.login?
+        <AccountBar user={@state.user} />
       else
         <LoginBar />}
     </header>

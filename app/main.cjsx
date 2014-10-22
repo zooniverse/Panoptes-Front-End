@@ -37,7 +37,7 @@ Main = React.createClass
 
   render: ->
     <div className="panoptes-main">
-      <MainHeader currentLogin={@state.currentLogin} loggingIn={@state.loggingIn} />
+      <MainHeader />
 
       <div className="main-content">
         <Route path="/" handler={Home} />
@@ -60,9 +60,6 @@ mainContainer.id = 'panoptes-main-container'
 document.body.appendChild mainContainer
 
 React.renderComponent Main(null), mainContainer
-
-login = require './data/login'
-login.check()
 
 # For React DevTools Chrome plugin:
 unless process.env.NODE_ENV is 'production'
