@@ -131,8 +131,6 @@ module.exports = React.createClass
     dispatch 'classification:annotation:mark:delete', @props.mark
 
   getDeletePosition: ->
-    # TODO: It'd be nice if it stayed absolutely 45 degrees.
     theta = CLOSE_BUTTON_ANGLE * (Math.PI / 180)
-    r = (@props.mark.rx * @props.mark.ry) / Math.sqrt(Math.pow(@props.mark.ry * Math.cos(theta), 2) + Math.pow(@props.mark.rx * Math.sin(theta), 2))
-    x: r * Math.sin theta
-    y: -1 * r * Math.cos theta
+    x: @props.mark.rx * Math.cos theta
+    y: -1 * @props.mark.ry * Math.sin theta
