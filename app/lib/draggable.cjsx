@@ -24,6 +24,10 @@ module.exports = React.createClass
 
   handleStart: (e) ->
     e.preventDefault()
+
+    # Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
+    document.body.classList.add 'dragging'
+
     document.addEventListener 'mousemove', @handleDrag
     document.addEventListener 'mouseup', @handleEnd
 
@@ -31,9 +35,6 @@ module.exports = React.createClass
     startHandler = @props.onStart ? @handleDrag
     if startHandler # You can set to `false` if you don't want anything to fire.
       startHandler e
-
-    # Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
-    document.body.classList.add 'dragging'
 
   handleDrag: (e) ->
     @props.onDrag? e

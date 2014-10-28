@@ -2,20 +2,39 @@
 
 React = require 'react'
 
+RADIUS = 8
+STROKE_COLOR = 'white'
+FILL_COLOR = 'black'
+STROKE_WIDTH = 2
+
+CROSS_PATH = "
+  M #{-1 * RADIUS * 0.7 } 0
+  L #{RADIUS * 0.7 } 0
+  M 0 #{-1 * RADIUS * 0.7 }
+  L 0 #{RADIUS * 0.7 }
+"
+
 module.exports = React.createClass
   displayName: 'DeleteButton'
 
-  render: ->
-    radius = 10
+  getDefaultProps: ->
+    x: 0
+    y: 0
+    scale:
+      horizontal: 1
+      vertical: 1
+    rotate: 0
 
-    cross = "
-      M #{-1 * radius * 0.6 } 0
-      L #{radius * 0.6 } 0
-      M 0 #{-1 * radius * 0.6 }
-      L 0 #{radius * 0.6 }
+  render: ->
+    transform = "
+      translate(#{@props.x}, #{@props.y})
+      scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})
+      rotate(#{@props.rotate})
     "
 
-    @transferPropsTo <g className="clickable drawing-tool-delete-button" stroke="white" strokeWidth="2" onClick={@props.onClick}>
-      <circle r={radius} fill="black" />
-      <path d={cross} transform="rotate(45)" />
+    averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
+
+    <g className="clickable drawing-tool-delete-button" transform={transform} stroke={STROKE_COLOR} strokeWidth={STROKE_WIDTH * averageScale} onClick={@props.onClick}>
+      <circle r={RADIUS} fill={FILL_COLOR} />
+      <path d={CROSS_PATH} transform="rotate(45)" />
     </g>

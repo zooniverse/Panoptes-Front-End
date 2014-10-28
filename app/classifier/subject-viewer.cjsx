@@ -8,6 +8,7 @@ SVGImage = require '../components/svg-image'
 
 drawingComponents =
   point: require './drawing-tools/point'
+  ellipse: require './drawing-tools/ellipse'
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'
@@ -130,7 +131,7 @@ module.exports = React.createClass
       @setState selectedMark: annotation.marks[annotation.marks.length - 1], =>
         mark = @state.selectedMark
         if MarkComponent.initStart?
-          initProps = MarkComponent.initStart mouseCoords, e
+          initProps = MarkComponent.initStart mouseCoords, mark, e
           dispatch 'classification:annotation:mark:update', mark, initProps
 
   handleInitDrag: (e) ->
@@ -140,7 +141,7 @@ module.exports = React.createClass
       mouseCoords = @getEventOffset e
 
       if MarkComponent.initMove?
-        initProps = MarkComponent.initMove mouseCoords, e
+        initProps = MarkComponent.initMove mouseCoords, mark, e
         dispatch 'classification:annotation:mark:update', mark, initProps
 
   handleInitRelease: (e) ->
@@ -152,5 +153,5 @@ module.exports = React.createClass
 
       dispatch 'classification:annotation:mark:update', mark, _releases: mark._releases + 1
       if MarkComponent.initRelease?
-        initProps = MarkComponent.initRelease mouseCoords, e
+        initProps = MarkComponent.initRelease mouseCoords, mark, e
         dispatch 'classification:annotation:mark:update', mark, initProps
