@@ -1,6 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
+window.React = React
 loginStore = require './data/login'
 MainHeader = require './partials/main-header'
 Route = require './lib/route'
@@ -60,7 +61,3 @@ mainContainer.id = 'panoptes-main-container'
 document.body.appendChild mainContainer
 
 React.renderComponent Main(null), mainContainer
-
-# For React DevTools Chrome plugin:
-unless process.env.NODE_ENV is 'production'
-  window.React = React
