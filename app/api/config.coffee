@@ -10,10 +10,17 @@ API_APPLICATION_IDS =
   staging: '535759b966935c297be11913acee7a9ca17c025f9f15520e7504728e71110a27'
   cam: '05fd85e729327b2f71cda394d8e87e042e0b77b05e05280e8246e8bdb05d54ed'
 
-BROWSER_ENV_PARAM = location?.search.match(/\W?env=(\w+)/)?[1]
+hostFromBrowser = location?.search.match(/\W?panoptes-api-host=([^&]+)/)?[1]
+appFromBrowser = location?.search.match(/\W?panoptes-api-application=([^&]+)/)?[1]
 
-env = BROWSER_ENV_PARAM ? process.env.NODE_ENV ? DEFAULT_ENV
+hostFromShell = process.env.PANOPTES_API_HOST
+appFromShell = process.env.PANOPTES_API_APPLICATION
+
+envFromBrowser = location?.search.match(/\W?env=(\w+)/)?[1]
+envFromShell = process.env.NODE_ENV
+
+env = envFromBrowser ? envFromShell ? DEFAULT_ENV
 
 module.exports =
-  host: API_HOSTS[env]
-  clientAppID: API_APPLICATION_IDS[env]
+  host: hostFromBrowser ? hostFromShell ? API_HOSTS[env]
+  clientAppID: appFromBrowser ? appFromShell ? API_APPLICATION_IDS[env]
