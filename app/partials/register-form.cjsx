@@ -3,7 +3,6 @@
 React = require 'react'
 InPlaceForm = require '../components/in-place-form'
 promiseToSetState = require '../lib/promise-to-set-state'
-auth = require '../api/auth'
 users = require '../api/users'
 LoadingIndicator = require '../components/loading-indicator'
 {dispatch} = require '../lib/dispatcher'
@@ -15,21 +14,22 @@ module.exports = React.createClass
 
   mixins: [promiseToSetState]
 
-  componentDidMount: ->
-    @handleAuthChange()
-    auth.listen @handleAuthChange
+  componentWillReceiveProps: (props) ->
+    if props.currentUser
+      @setState
+        loginTaken: null
+        emailTaken: null
+    else if props.errors and props.errors[0]?.message
+      {email, login} = props.errors[0].message
 
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent()
+      @setState
+        loginTaken: login
+        emailTaken: email
 
   render: ->
-    working = @state.user instanceof Promise
-    signedIn = @state.user? and (not @state.errors?) and (not working)
-    disabled = working or signedIn
-    {badLoginChars, loginTaken, passwordTooShort, passwordsDontMatch} = @state
+    signedIn = @props.currentUser? and (not @state.errors?) and (not @props.loggingIn)
+    disabled = @props.loggingIn or signedIn
+    {badLoginChars, loginTaken, emailTaken, passwordTooShort, passwordsDontMatch} = @state
     email = @refs.email?.getDOMNode().value
 
     <InPlaceForm onSubmit={@handleSubmit}>
@@ -40,14 +40,8 @@ module.exports = React.createClass
           {if badLoginChars?.length > 0
             <span className="form-help error">Don’t use weird characters ({badLoginChars.join ', '}).</span>
           else if loginTaken?
-            if loginTaken instanceof Promise
-              <LoadingIndicator className="form-help" />
-            else if loginTaken instanceof Error
-              <span className="form-help error"><i className="fa fa-exclamation-triangle"></i> Can’t determine this login’s availability.</span>
-            else if loginTaken.length isnt 0
-              <span className="form-help error">Sorry, that login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
-            else if loginTaken.length is 0
-              <span className="form-help success">Looks good.</span>}
+            <span className="form-help error">Sorry, that login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
+           }
         </label>
       </div>
 
@@ -80,7 +74,10 @@ module.exports = React.createClass
       <div>
         <label>
           <div>Email</div>
-          <input type="text" name="email" disabled={disabled} ref="email" onChange={@forceUpdate.bind this, null} />
+          <input type="text" name="email" disabled={disabled} ref="email" onChange={@handleEmailChange} />
+          {if emailTaken?
+            <span className="form-help error">Sorry, that email is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
+          }
         </label>
       </div>
 
@@ -110,14 +107,14 @@ module.exports = React.createClass
 
         {if signedIn
           <span className="form-help">
-            Signed in as {@state.user.display_name}
+            Signed in as {@props.currentUser.display_name}
             <button type="button" onClick={@handleSignOut}>Sign out</button>
           </span>}
 
         {if @state.errors?
           <span className="form-help error">{@state.errors}</span>}
 
-        {if working
+        {if @props.loggingIn
           <LoadingIndicator />}
 
       </div>
@@ -125,16 +122,17 @@ module.exports = React.createClass
 
   handleLoginChange: ->
     login = @refs.login.getDOMNode().value
-
-    exists = login.length isnt 0
     badChars = (char for char in login.split('') when char isnt encodeURIComponent char)
 
     @setState
       badLoginChars: badChars
       loginTaken: null
 
-    if exists and badChars.length is 0
-      @promiseToSetState loginTaken: users.get {login}, 1
+  handleEmailChange: ->
+    email = @refs.email.getDOMNode().value.trim()
+    # validate email?
+    @setState
+      emailTaken: null
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
@@ -150,10 +148,9 @@ module.exports = React.createClass
       passwordsDontMatch: if exists and asLong then not matches
 
   isFormValid: ->
-    {badLoginChars, loginTaken, passwordsDontMatch} = @state
+    {badLoginChars, loginTaken, emailTaken, passwordsDontMatch} = @state
     agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
-
-    (badLoginChars?.length is 0) and (loginTaken is false) and (passwordsDontMatch is false) and agreesToPrivacyPolicy
+    (badLoginChars?.length is 0) and (not loginTaken) and (not emailTaken) and (passwordsDontMatch is false) and agreesToPrivacyPolicy
 
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
@@ -163,9 +160,14 @@ module.exports = React.createClass
     realName = @refs.realName.getDOMNode().value
     agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy.getDOMNode().checked
 
-    auth.register {login, password, email, realName}
-      .catch (errors) ->
-        @setState {errors}
+    @setState
+      loginTaken: null
+      emailTaken: null
+
+    dispatch 'current-user:sign-up', {login, password, email, realName}
 
   handleSignOut: ->
-    auth.signOut()
+    dispatch 'current-user:sign-out'
+    refs = ['login', 'password', 'email', 'confirmedPassword', 'agreesToPrivacyPolicy', 'realName']
+    for ref in refs
+      @refs[ref].getDOMNode().value = ''
