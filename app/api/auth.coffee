@@ -1,4 +1,3 @@
-Model = require '../data/model'
 makeHTTPRequest = require('json-api-client').util.makeHTTPRequest
 config = require './config'
 client = require './client'
@@ -15,7 +14,7 @@ CSRF_TOKEN_PATTERN = do ->
   CONTENT_ATTR = '''content=['"](.+)['"]'''
   ///#{NAME_ATTR}\s*#{CONTENT_ATTR}|#{CONTENT_ATTR}\s*#{NAME_ATTR}///
 
-module.exports = new Model
+class Auth
   currentUser: null
   bearerToken: ''
 
@@ -68,7 +67,7 @@ module.exports = new Model
 
   register: ({login, email, password}) ->
     console?.log 'Registering new account', login
-    @update currentUser: @_getAuthToken().then (token) =>
+    @_getAuthToken().then (token) =>
       data =
         authenticity_token: token
         user:
@@ -86,35 +85,35 @@ module.exports = new Model
             users.get display_name: login, 1
               .then ([user]) =>
                 console?.info 'Registered account', user.display_name
-                user
+                @currentUser = user
 
         .catch (request) ->
           try {errors} = JSON.parse request.responseText
           console?.error 'Failed to register', errors
           Promise.reject errors
 
-    @currentUser
-
   checkCurrent: ->
     console?.log 'Checking for existing session'
-    unless @currentUser?
-      @update currentUser:
-        @_getBearerToken()
-          .then =>
-            client.get '/me'
-              .then ([user]) =>
-                console?.log 'Session exists for', user.display_name
-                user
+    if @currentUser
+      Promise.resolve @currentUser
+    else
+      @_getBearerToken()
+        .then =>
+          client.get '/me'
+            .then ([user]) =>
+              console?.log 'Session exists for', user.display_name
+              @currentUser = user
+            .catch ->
+              console?.log 'Error fetching user'
+              null
 
-          .catch ->
-            # If you can't get a bearer token, nobody's signed in.
-            null
-
-    @currentUser
+        .catch ->
+          # If you can't get a bearer token, nobody's signed in.
+          null
 
   signIn: ({login, password}) ->
     console?.log 'Signing in', login
-    @update currentUser: @_getAuthToken().then (token) =>
+    @_getAuthToken().then (token) =>
       data =
         authenticity_token: token
         user:
@@ -129,9 +128,8 @@ module.exports = new Model
           @_getBearerToken().then =>
             users.get display_name: login, 1
               .then ([user]) =>
-                user
                 console?.log 'Signed in', user.display_name
-                user
+                @currentUser = user
 
         .catch (request) ->
           if request.status in [401, 0] # The server says 401, but the response object says 0, so who knows?
@@ -141,11 +139,9 @@ module.exports = new Model
 
           Promise.reject errors
 
-    @currentUser
-
   signOut: ->
     console?.log 'Signing out'
-    @update currentUser: @_getAuthToken().then (token) =>
+    @_getAuthToken().then (token) =>
       data =
         authenticity_token: token
 
@@ -156,17 +152,11 @@ module.exports = new Model
       makeHTTPRequest 'POST', config.host + '/users/sign_out', data, deleteOverrideJSONHeaders
         .then =>
           @_deleteBearerToken()
-          null
+          @currentUser = null
 
         .catch (request) ->
           try {errors} = JSON.parse request.responseText
           console?.log 'Failed to sign out', errors
           Promise.reject errors
 
-    @currentUser
-
-window?.zooAuth = module.exports
-
-# For quick debugging:
-window?.log = console?.info.bind console, 'LOG'
-window?.err = console?.error.bind console, 'ERR'
+module.exports = Auth

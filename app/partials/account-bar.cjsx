@@ -3,7 +3,6 @@
 React = require 'react'
 {dispatch} = require '../lib/dispatcher'
 Link = require '../lib/link'
-auth = require '../api/auth'
 
 module.exports = React.createClass
   displayName: 'AccountBar'
@@ -27,4 +26,4 @@ module.exports = React.createClass
     </div>
 
   handleSignOutClick: ->
-    auth.signOut()
+    dispatch 'current-user:sign-out'

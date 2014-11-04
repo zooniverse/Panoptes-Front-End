@@ -1,5 +1,6 @@
 test = require 'blue-tape'
-auth = require '../app/api/auth'
+Auth = require '../app/api/auth'
+auth = new Auth()
 
 TEST_LOGIN = 'TEST_' + (new Date).toISOString().replace /\W/g, '_'
 TEST_EMAIL = TEST_LOGIN.toLowerCase() + '@zooniverse.org'

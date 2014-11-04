@@ -32,11 +32,11 @@ module.exports = React.createClass
           </nav>
 
           <Route path="/sign-in" className="content-container">
-            <SignInForm currentLogin={@props.currentLogin} loggingIn={@props.loggingIn} />
+            <SignInForm currentUser={@props.currentUser} errors={@props.errors} loggingIn={@props.loggingIn} />
           </Route>
 
           <Route path="/sign-in/register" className="content-container">
-            <RegisterForm currentLogin={@props.currentLogin} loggingIn={@props.loggingIn} />
+            <RegisterForm currentUser={@props.currentUser} errors={@props.errors} loggingIn={@props.loggingIn} />
           </Route>
         </div>
 

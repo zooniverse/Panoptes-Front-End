@@ -1,70 +1,84 @@
 Store = require './store'
-{dispatch} = require '../lib/dispatcher'
-
-EXAMPLE_LOGIN = require('./users').examples[0]
+Auth = require '../api/auth'
+auth = new Auth()
 
 loginStore = new Store
   loading: false
-  current: null
+  currentUser: null
+  errors: null
 
-  check: ->
+  'current-user:check': ->
+    console.log 'Checking current user'
     @loading = true
     @emitChange()
 
-    checkRequest = new Promise (resolve, reject) ->
-      # console?.log 'GET /tokens&token=(RANDOM)'
-      if Math.random() > 0.5
-        currentLogin = EXAMPLE_LOGIN
-      setTimeout resolve.bind(null, currentLogin), 1000
-
-    checkRequest.then (user) =>
+    auth.checkCurrent().then (@currentUser) =>
+      console.log 'Current user is ', @currentUser
       @loading = false
-      @current = user
+      @errors = null
+      @emitChange()
+    .catch (@errors) =>
+      console.log 'Caught errors ', @errors
+      @loading = false
       @emitChange()
 
-  signIn: (login, password) ->
-    console.log 'Sign in started', {login}, {password}
-    console.log 'Set loginStore loading'
+  'current-user:sign-in': ({ login, password }) ->
+    console.log 'Sign in with ', { login, password }
     @loading = true
     @emitChange()
-
-    console?.log "GET /tokens?login=#{login}&password=#{password}"
-    loginRequest = new Promise (resolve, reject) ->
-      if login is EXAMPLE_LOGIN.login and password is EXAMPLE_LOGIN.password
-        user = EXAMPLE_LOGIN
-      else
-        errors = password: 'BAD_PASSWORD'
-
-      console.log 'Will resolve with', {user}, {errors}
-      setTimeout resolve.bind(null, {user, errors}), 1000
-
-    loginRequest.then ({user, errors}) =>
-      console.log 'Resolved with', {user}, {errors}
-      console.log 'loginStore no longer loading'
+    auth.signIn({ login, password }).then (@currentUser) =>
+      console.log 'Signed in as ', @currentUser
       @loading = false
-      @current = user
+      @errors = null
+      @emitChange()
+    .catch (@errors) =>
+      console.log 'Caught errors ', @errors
+      @loading = false
       @emitChange()
 
-    loginRequest
+  'current-user:sign-up': ({ login, password, email, realName }) ->
+    console.log 'Sign up with ', {login, password, email, realName}
+    @loading = true
+    @emitChange()
+    auth.register({login, password, email, realName}).then (@currentUser) =>
+      console.log 'Signed up as ', @currentUser
+      @loading = false
+      @errors = null
+      @emitChange()
+    .catch (@errors) =>
+      console.log 'Caught errors ', @errors
+      @loading = false
+      @emitChange()
 
   'current-user:sign-out': ->
-    console?.log 'DELETE /tokens/(TOKEN_ID)'
-    @current = null
+    console.log 'Sign Out'
+    @loading = true
+    @emitChange()
+    auth.signOut().then =>
+      console.log 'Signed out'
+      @currentUser = null
+      @loading = false
+      @errors = null
+      @emitChange()
+    .catch (@errors) =>
+      console.log 'Caught errors ', @errors
+      @loading = false
+      @emitChange()
 
   'current-user:set': (key, value) ->
-    @current[key] = value
+    @currentUser[key] = value
 
   'current-user:set-preference': (key, value) ->
-    @current.preferences[key] = value
+    @currentUser.preferences[key] = value
 
   'current-user:save': (properties...) ->
     if properties.length is 0
-      console?.log 'PUT', JSON.stringify @current
+      console?.log 'PUT', JSON.stringify @currentUser
 
     else
       dataToSave = {}
       for key in properties
-        dataToSave[key] = @current[key]
+        dataToSave[key] = @currentUser[key]
       console?.log 'PATCH', JSON.stringify dataToSave
 
 module.exports = loginStore
