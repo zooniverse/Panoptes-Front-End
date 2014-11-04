@@ -43,25 +43,11 @@ module.exports = React.createClass
 
     <div className="edit-account-page content-container tabbed-content" data-side="left">
       <div className="tabbed-content-tabs">
-        <Link href="/settings" root={true} className="tabbed-content-tab">General</Link>
-        <Link href="/settings/profile" className="tabbed-content-tab">Profile</Link>
+        <Link href="/settings" root={true} className="tabbed-content-tab">Profile</Link>
       </div>
 
       <div className="content-container">
         <Route path="/settings">
-          <InPlaceForm onSubmit={@saveUser}>
-            <fieldset>
-              <legend>Contact info</legend>
-              <p>Email address</p>
-              <input type="email" name="email" placeholder="you@example.com" value={@state.user?.email} disabled={disabled} />
-              <p><small>We’ll never share this address.</small></p>
-            </fieldset>
-
-            <p><button type="submit" disabled={disabled}>Save account settings</button></p>
-          </InPlaceForm>
-        </Route>
-
-        <Route path="/settings/profile">
           <InPlaceForm onSubmit={@saveUser}>
             <fieldset>
               <legend>Optional profile details</legend>
@@ -69,7 +55,7 @@ module.exports = React.createClass
                 <tr>
                   <th>Your credited name</th>
                   <td>
-                    <input type="text" name="credited_name" placeholder="John Smith" value={@state.user?.credited_name} onChange={@handleBoundInput} /><br />
+                    <input type="text" name="credited_name" placeholder="John Smith" value={@state.user?.credited_name} disabled={disabled} onChange={@handleBoundInput} /><br />
                     <span className="form-help">We’ll use this to give acknowledgement in papers, on posters, etc.</span>
                   </td>
                 </tr>
@@ -88,4 +74,10 @@ module.exports = React.createClass
     @state.user.update changes
 
   saveUser: ->
-    @promiseToSetState saving: @state.user?.save?()
+    save = @state.user.save()
+
+    save.catch ({errors}) ->
+      errorMessage = (message for {message} in errors).join '\n'
+      alert errorMessage # TODO: Something nicer
+
+    @promiseToSetState saving: save
