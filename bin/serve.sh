@@ -6,16 +6,7 @@ jobs=""
 
 [[ -f "$DEV_DIR/$OUT_JS" ]] && rm "$DEV_DIR/$OUT_JS"
 
-./node_modules/.bin/watchify \
-  --verbose \
-  --debug \
-  --extension ".coffee" \
-  --extension ".cjsx" \
-  --transform coffee-reactify \
-  --transform envify \
-  --outfile "$DEV_DIR/$OUT_JS" \
-  "$SRC_JS" \
-  & jobs="$jobs $!"
+./node_modules/.bin/webpack --watch --output $DEV_DIR/$OUT_JS & jobs="$jobs $!"
 
 [[ -f "$DEV_DIR/$OUT_CSS" ]] && rm "$DEV_DIR/$OUT_CSS"
 

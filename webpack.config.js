@@ -1,11 +1,10 @@
 module.exports = {
-  watch: true,
   context: __dirname + '/app',
   entry: {
     main: './main.cjsx'
   },
   output: {
-    path: __dirname + '/public/build',
+    path: __dirname + '/public',
     filename: '[name].js',
     chunkFilename: '[id].bundle.js'
   },
@@ -18,7 +17,8 @@ module.exports = {
       { test: /\.coffee$/, loader: 'coffee-loader' }
     ],
     noParse: [
-      /^react$/
+      /^react$/,
+      /json\-api\-client/
     ]
   },
   node: {

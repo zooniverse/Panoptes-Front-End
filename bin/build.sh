@@ -5,16 +5,10 @@ source "$(dirname "$0")/config.sh"
 [[ -d "$BUILD_DIR" ]] && rm -rf "$BUILD_DIR"
 
 cp -av "$DEV_DIR" "$BUILD_DIR"
+[[ -f "$BUILD_DIR/$OUT_JS" ]] && rm "$BUILD_DIR/$OUT_JS"
+[[ -f "$BUILD_DIR/$OUT_CSS" ]] && rm "$BUILD_DIR/$OUT_CSS"
 
-./node_modules/.bin/browserify \
-  --verbose \
-  --extension ".coffee" \
-  --extension ".cjsx" \
-  --transform coffee-reactify \
-  --transform envify \
-  --plugin bundle-collapser/plugin \
-  --outfile "$BUILD_DIR/$OUT_JS" \
-  "$SRC_JS"
+./node_modules/.bin/webpack --production --progress --config webpack.build.config.js
 
 ./node_modules/.bin/uglifyjs \
   --verbose \

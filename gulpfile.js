@@ -11,6 +11,8 @@ var imagemin = require('gulp-imagemin');
 
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.config.js');
+webpackConfig.output.path = __dirname + '/public/build';
+webpackConfig.watch = true;
 
 var browserSync = require('browser-sync');
 
