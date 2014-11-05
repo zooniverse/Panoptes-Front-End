@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 
 # React.DOM doesn't include an SVG <image> tag

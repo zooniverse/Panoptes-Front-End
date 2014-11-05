@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 InPlaceForm = require '../components/in-place-form'
 promiseToSetState = require '../lib/promise-to-set-state'

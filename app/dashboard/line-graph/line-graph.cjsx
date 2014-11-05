@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 HoverBox = require './hover-box'
 Line = require './line'

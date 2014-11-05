@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 Link = require '../lib/link'
 Route = require '../lib/route'

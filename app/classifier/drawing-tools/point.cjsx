@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 Model = require '../../data/model'
 React = require 'react'
 Draggable = require '../../lib/draggable'

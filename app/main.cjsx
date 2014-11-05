@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 window.React = React
 loginStore = require './data/login'

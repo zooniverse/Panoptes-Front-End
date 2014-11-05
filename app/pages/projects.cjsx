@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 ProjectCardList = require '../partials/project-card-list'
 

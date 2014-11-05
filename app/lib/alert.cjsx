@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 Dialog = require '../components/dialog'
 

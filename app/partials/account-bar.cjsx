@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 {dispatch} = require '../lib/dispatcher'
 Link = require '../lib/link'

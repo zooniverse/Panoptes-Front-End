@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 mergeInto = require 'react/lib/mergeInto'
 Model = require '../../data/model'
 React = require 'react'

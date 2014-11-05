@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 Route = require '../lib/route'

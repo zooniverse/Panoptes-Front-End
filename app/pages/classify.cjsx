@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 classificationsStore = require '../data/classifications'
 {dispatch} = require '../lib/dispatcher'

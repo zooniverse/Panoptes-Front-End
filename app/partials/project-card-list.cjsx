@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 projectsStore = require '../data/projects'
 ProjectCard = require './project-card'

@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 subjectsStore = require '../data/subjects'
 workflowsStore = require '../data/workflows'
