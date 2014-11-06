@@ -1,7 +1,7 @@
 React = require 'react'
 {parseLocation, comparePaths} = require './route-helpers'
 cloneWithProps = require 'react/lib/cloneWithProps'
-merge = require 'react/lib/merge'
+merge = require 'lodash.merge'
 
 module.exports = React.createClass
   displayName: 'Route'

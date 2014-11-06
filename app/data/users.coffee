@@ -1,5 +1,5 @@
 Store = require './store'
-merge = require 'react/lib/merge'
+merge = require 'lodash.merge'
 
 EXAMPLE_USER =
   id: 'DEV_USER'

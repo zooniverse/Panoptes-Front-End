@@ -1,4 +1,4 @@
-mergeInto = require 'react/lib/mergeInto'
+mergeInto = require 'lodash.merge'
 Model = require '../../data/model'
 React = require 'react'
 DragHandle = require './drag-handle'
