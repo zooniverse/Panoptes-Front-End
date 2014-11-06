@@ -26,6 +26,7 @@
         }
 
         polyfill('Promise' in window, '//s3.amazonaws.com/es6-promises/promise-1.0.0.js');
+        polyfill('Object.assign' in window, './object-assign-polyfill.js');
       }());
     </script>
 
