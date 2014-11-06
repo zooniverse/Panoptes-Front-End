@@ -36,7 +36,7 @@ ProjectPage = React.createClass
       owner_name: owner
       name: project
 
-    get = projectsStore.get query, 1
+    get = Promise.resolve projectsStore
 
     get.then ([project]) =>
       setTimeout @setState.bind this, {project}

@@ -2,7 +2,6 @@
 
 React = require 'react'
 window.React = React
-loginStore = require './data/login'
 MainHeader = require './partials/main-header'
 Route = require './lib/route'
 MainFooter = require './partials/main-footer'
@@ -22,19 +21,13 @@ Main = React.createClass
   displayName: 'Main'
 
   getInitialState: ->
-    currentLogin: loginStore.current
-    loggingIn: loginStore.loading
-
-  componentWillMount: ->
-    loginStore.listen @handleLoginChange
-
-  componentWillUnmount: ->
-    loginStore.stopListening @handleLoginChange
+    currentLogin: null
+    loggingIn: false
 
   handleLoginChange: ->
     @setState
-      currentLogin: loginStore.current
-      loggingIn: loginStore.loading
+      currentLogin: null
+      loggingIn: false
 
   render: ->
     <div className="panoptes-main">

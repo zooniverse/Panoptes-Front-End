@@ -19,8 +19,7 @@ module.exports = React.createClass
 
   fetchProjects: (query) ->
     query ?= {}
-    projectsStore.fetch(query).then (projects) =>
-      @setState {projects}
+    @setState projects: projectsStore
 
   render: ->
     if @state.projects?.length is 0

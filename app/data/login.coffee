@@ -1,7 +1,7 @@
 Store = require './store'
 {dispatch} = require '../lib/dispatcher'
 
-EXAMPLE_LOGIN = require('./users').examples[0]
+EXAMPLE_LOGIN = require('./users')[0]
 
 loginStore = new Store
   loading: false

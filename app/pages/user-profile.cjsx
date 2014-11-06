@@ -108,11 +108,11 @@ module.exports = React.createClass
   mixins: [PromiseToSetState]
 
   componentDidMount: ->
-    @promiseToSetState user: usersStore.get login: @props.route.params.login, 1
+    @promiseToSetState user: Promise.resolve usersStore[0]
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.route.params.login is @props.route.params.login
-      @promiseToSetState user: usersStore.get login: nextProps.route.params.login, 1
+      @promiseToSetState user: Promise.resolve usersStore[0]
 
   render: ->
     user = if @state.user instanceof Array
