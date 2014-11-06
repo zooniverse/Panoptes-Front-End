@@ -4,7 +4,6 @@ Route = require '../lib/route'
 SignInForm = require '../partials/sign-in-form'
 RegisterForm = require '../partials/register-form'
 Translator = require 'react-translator'
-InPlaceForm = require '../components/in-place-form'
 
 Translator.setStrings
   signIn:
