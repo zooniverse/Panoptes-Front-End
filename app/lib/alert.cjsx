@@ -10,7 +10,7 @@ module.exports = (messages...) ->
     React.unmountComponentAtNode container
     container.parentNode.removeChild container
 
-  React.renderComponent <Dialog className="alert">
+  React.render <Dialog className="alert">
     {messages}
     <button className="alert-dialog-close-button" onClick={unmount}>&times;</button>
   </Dialog>, container

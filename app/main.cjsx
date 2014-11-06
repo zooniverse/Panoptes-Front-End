@@ -58,4 +58,4 @@ mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'
 document.body.appendChild mainContainer
 
-React.renderComponent Main(null), mainContainer
+React.render <Main />, mainContainer
