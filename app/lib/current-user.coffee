@@ -1,9 +1,9 @@
 auth = require '../api/auth'
-promiseToSetState = require '../lib/promise-to-set-state'
+promisedState = require '../lib/promised-state'
 signUpErrorParser = require '../lib/sign-up-errors'
 
 module.exports =
-  mixins: [promiseToSetState]
+  mixins: [promisedState]
 
   getInitialState: ->
     signInErrors: { }, signUpErrors: { }

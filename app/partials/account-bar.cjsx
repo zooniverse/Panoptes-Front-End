@@ -3,10 +3,12 @@
 React = require 'react'
 {dispatch} = require '../lib/dispatcher'
 Link = require '../lib/link'
-auth = require '../api/auth'
+currentUserMixin = require '../lib/current-user'
 
 module.exports = React.createClass
   displayName: 'AccountBar'
+
+  mixins: [currentUserMixin]
 
   render: ->
     <div className="account-bar main-header-group">
@@ -14,17 +16,14 @@ module.exports = React.createClass
 
       <Link href="/timeline" className="main-header-item">
         <i className="fa fa-bell"></i>
-        {@props.user.unseen_events unless @props.user.unseen_events is 0}
+        {@state.currentUser?.unseen_events if @isSignedIn() and @state.currentUser?.unseen_events}
       </Link>
 
       <div className="main-header-item">
-        <a href="#/users/#{@props.user.display_name}">{@props.user.display_name}</a>
+        <a href="#/users/#{@state.currentUser?.display_name}">{@state.currentUser?.display_name}</a>
         &nbsp;
         <Link href="/settings"><i className="fa fa-cog"></i></Link>
-        <span className="pill"><button type="button" onClick={@handleSignOutClick}>Sign out</button></span>
-        <img src={@props.user.avatar} className="account-bar-avatar" />
+        <span className="pill"><button type="button" onClick={@handleSignOut}>Sign out</button></span>
+        <img src={@state.currentUser?.avatar} className="account-bar-avatar" />
       </div>
     </div>
-
-  handleSignOutClick: ->
-    auth.signOut()
