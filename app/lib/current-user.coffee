@@ -16,7 +16,7 @@ module.exports =
     auth.stopListening @handleAuthChange
 
   handleAuthChange: ->
-    @promiseToSetState currentUser: auth.checkCurrent()
+    @promiseToSetState currentUser: auth.checkCurrent(), { loadingState: true }
 
   isSignedIn: ->
     @state.currentUser and
@@ -28,24 +28,20 @@ module.exports =
     @state.currentUserLoading or @isSignedIn()
 
   handleSignIn: ({ login, password }) ->
-    @setState currentUserLoading: true
     auth.signIn { login, password }
       .then =>
-        @setState hasSignInErrors: false, signInErrors: { }, currentUserLoading: false
+        @setState hasSignInErrors: false, signInErrors: { }
       .catch (errors) =>
         errors = Object.assign { }, @state.signInErrors, errors
-        @setState hasSignInErrors: true, signInErrors: errors, currentUserLoading: false
+        @setState hasSignInErrors: true, signInErrors: errors
 
   handleSignUp: ({ login, password, email, realName }) ->
-    @setState currentUserLoading: true
     auth.register { login, password, email, realName }
       .then =>
-        @setState hasSignUpErrors: false, signUpErrors: { }, currentUserLoading: false
+        @setState hasSignUpErrors: false, signUpErrors: { }
       .catch (errors) =>
         errors = Object.assign { }, @state.signUpErrors, signUpErrorParser.parse(errors)
-        @setState hasSignUpErrors: true, signUpErrors: errors, currentUserLoading: false
+        @setState hasSignUpErrors: true, signUpErrors: errors
 
   handleSignOut: ->
-    @setState currentUserLoading: true
-    auth.signOut().then =>
-      @setState currentUserLoading: false
+    auth.signOut()
