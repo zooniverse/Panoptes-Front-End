@@ -1,7 +1,7 @@
 # NOTE: Store/dispatcher stuff is no longer used.
 # Call methods on resources or collections directly.
 
-Model = require '../data/model'
+Model = require '../lib/model'
 Store = require '../data/store'
 subjectsStore = require './subjects'
 workflowsStore = require './workflows'
