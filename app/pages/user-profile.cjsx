@@ -2,7 +2,7 @@
 
 React = require 'react'
 PromiseToSetState = require '../lib/promise-to-set-state'
-usersStore = require '../data/users'
+usersStore = require '../mock-data/users'
 Route = require '../lib/route'
 Link = require '../lib/link'
 Markdown = require '../components/markdown'

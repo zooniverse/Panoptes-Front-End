@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-projectsStore = require '../data/projects'
+projectsStore = require '../mock-data/projects'
 ProjectCard = require './project-card'
 LoadingIndicator = require '../components/loading-indicator'
 

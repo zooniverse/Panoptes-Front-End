@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-projectsStore = require '../data/projects'
+projectsStore = require '../mock-data/projects'
 Route = require '../lib/route'
 Link = require '../lib/link'
 Markdown = require '../components/markdown'
