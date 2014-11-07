@@ -14,7 +14,7 @@ Project = require './pages/project'
 Settings = require './pages/settings'
 UserProfile = require './pages/user-profile'
 Build = require './pages/build'
-EditProject = require './pages/edit-project'
+CreateProject = require './pages/create-project'
 
 NotificationViewer = require './components/notification-viewer'
 
@@ -48,7 +48,7 @@ Main = React.createClass
         <Route path="/settings(/:section)" handler={Settings} />
         <Route path="/users/:login(/:section)" handler={UserProfile} />
         <Route path="/build" handler={Build} />
-        <Route path="/build/:project_name(/*etc)" handler={EditProject} />
+        <Route path="/new-project(/*etc)" handler={CreateProject} />
       </div>
 
       <MainFooter />
