@@ -1,3 +1,6 @@
+# NOTE: Store/dispatcher stuff is no longer used.
+# Call methods on resources or collections directly.
+
 dispatcher = require '../lib/dispatcher'
 Model = require './model'
 
