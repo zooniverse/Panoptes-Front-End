@@ -11,6 +11,7 @@ newProjectData = new Model
   name: ''
   description: ''
   language: languages[0]
+  example_images: []
 
 module.exports = React.createClass
   displayName: 'CreateProjectPage'
@@ -44,6 +45,9 @@ module.exports = React.createClass
         <h2>Upload some example images</h2>
         <p>You’ll be able to pick multiple files in the file picker:</p>
         <input type="file" multiple="multiple" name="example_images" onChange={@handleInputChange} />
+        <ul>
+          {<li key={file.name}>{file.name}</li> for file in newProjectData.example_images}
+        </ul>
 
         <hr />
 
@@ -67,7 +71,7 @@ module.exports = React.createClass
             <td>Science case</td>
           </tr>
           <tr>
-            <td>{<i className="fa fa-check"></i> if newProjectData.example_images}</td>
+            <td>{<i className="fa fa-check"></i> if newProjectData.example_images.length isnt 0}</td>
             <td>Example images</td>
           </tr>
         </table>
@@ -77,8 +81,14 @@ module.exports = React.createClass
     </div>
 
   handleInputChange: (e) ->
-    console.log 'Changed', e.target
-    changes = new -> @[e.target.name] = e.target.value
+    valueProperty = switch e.target.type
+      when 'radio', 'checkbox' then 'checked'
+      when 'file' then 'files'
+      else 'value'
+
+    changes = {}
+    changes[e.target.name] = e.target[valueProperty]
+
     newProjectData.update changes
 
   handleSubmit: ->
