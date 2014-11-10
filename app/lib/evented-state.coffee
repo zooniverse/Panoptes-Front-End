@@ -26,14 +26,14 @@ module.exports =
     handler = @_eventedHandlerFor opts
     @_eventedStates[opts.on] = handler
     opts.from.on opts.on, handler
-  
+
   _eventedHandlerFor: (opts) ->
     handler = ( (ev, args...) ->
       this.set args...
     ).bind opts
     handler[key] = value for key, value of opts
     handler
-  
+
   _eventedStateSetter: (keyOrFn) ->
     return keyOrFn if typeof keyOrFn is 'function'
     (value) =>

@@ -125,13 +125,14 @@ module.exports = React.createClass
       loginTaken: false
 
     if exists and badChars.length is 0
+      # Check login uniqueness once endpoint exists
       # @promiseToSetState loginTaken: users.get {login}, 1
       @promiseToSetState loginTaken: Promise.resolve(false)
 
   handleEmailChange: ->
     email = @refs.email.getDOMNode().value
     # validate email?
-    
+
     @mergeSignUpErrors
       emailTaken: false
       emailInvalid: false
@@ -144,7 +145,7 @@ module.exports = React.createClass
     longEnough = password.length >= MIN_PASSWORD_LENGTH
     asLong = confirmedPassword.length >= password.length
     matches = password is confirmedPassword
-    
+
     @mergeSignUpErrors
       passwordTooShort: if exists then not longEnough
       passwordsDontMatch: if exists and asLong then not matches
