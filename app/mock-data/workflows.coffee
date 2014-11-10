@@ -1,3 +1,6 @@
+# NOTE: Store/dispatcher stuff is no longer used.
+# Call methods on resources or collections directly.
+
 Store = require './store'
 
 EXAMPLE_WORKFLOW =
