@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-projectsStore = require '../data/projects'
+projectsStore = require '../mock-data/projects'
 Route = require '../lib/route'
 Link = require '../lib/link'
 Markdown = require '../components/markdown'
@@ -36,7 +36,7 @@ ProjectPage = React.createClass
       owner_name: owner
       name: project
 
-    get = projectsStore.get query, 1
+    get = Promise.resolve projectsStore
 
     get.then ([project]) =>
       setTimeout @setState.bind this, {project}

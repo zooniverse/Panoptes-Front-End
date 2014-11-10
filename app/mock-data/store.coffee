@@ -1,5 +1,8 @@
+# NOTE: Store/dispatcher stuff is no longer used.
+# Call methods on resources or collections directly.
+
 dispatcher = require '../lib/dispatcher'
-Model = require './model'
+Model = require '../lib/model'
 
 class Store extends Model
   root: '' # The endpoint to query from and post to, e.g. "/subjects"

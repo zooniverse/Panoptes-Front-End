@@ -1,4 +1,4 @@
-Store = require '../data/store'
+Store = require '../mock-data/store'
 
 EXAMPLE_SUBJECT =
   id: 'EXAMPLE_SUBJECT'
