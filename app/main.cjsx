@@ -1,6 +1,5 @@
 React = require 'react'
 window.React = React
-loginStore = require './data/login'
 MainHeader = require './partials/main-header'
 Route = require './lib/route'
 MainFooter = require './partials/main-footer'
@@ -20,19 +19,13 @@ Main = React.createClass
   displayName: 'Main'
 
   getInitialState: ->
-    currentLogin: loginStore.current
-    loggingIn: loginStore.loading
-
-  componentWillMount: ->
-    loginStore.listen @handleLoginChange
-
-  componentWillUnmount: ->
-    loginStore.stopListening @handleLoginChange
+    currentLogin: null
+    loggingIn: false
 
   handleLoginChange: ->
     @setState
-      currentLogin: loginStore.current
-      loggingIn: loginStore.loading
+      currentLogin: null
+      loggingIn: false
 
   render: ->
     <div className="panoptes-main">
@@ -43,7 +36,7 @@ Main = React.createClass
         <Route path="/sign-in(/:form)" handler={SignIn} currentLogin={@state.currentLogin} loggingIn={@state.loggingIn} />
         <Route path="/projects(/:categories)" handler={Projects} />
         <Route path="/projects/:owner/:name(/:section)" handler={Project} />
-        <Route path="/settings(/:section)" login={@state.currentLogin} loading={@state.loggingIn} handler={Settings} />
+        <Route path="/settings(/:section)" handler={Settings} />
         <Route path="/users/:login(/:section)" handler={UserProfile} />
         <Route path="/build" handler={Build} />
         <Route path="/build/:project_name(/*etc)" handler={EditProject} />

@@ -1,8 +1,4 @@
-subjectsStore = require './subjects'
-Store = require './store'
-{dispatch} = require '../lib/dispatcher'
-
-EXAMPLE_PROJECT =
+module.exports = [
   id: 'GZ_PROJECT'
   name: 'Galaxy Zoo'
   owner_name: 'Zooniverse'
@@ -17,7 +13,4 @@ EXAMPLE_PROJECT =
     Here's the science case for this project...
   '''
   team_members: []
-
-module.exports = window.projectsStore = new Store
-  root: '/projects'
-  examples: [EXAMPLE_PROJECT]
+]
