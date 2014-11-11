@@ -1,6 +1,3 @@
-Store = require './store'
-merge = require 'lodash.merge'
-
 EXAMPLE_USER =
   id: 'DEV_USER'
   login: 'dev'
@@ -26,13 +23,11 @@ EXAMPLE_USER =
   projects: []
   unseen_events: 4
 
-EXAMPLE_USER_2 = merge EXAMPLE_USER,
-  id: 'BRIAN_USER'
-  login: 'brian-c'
-  password: 'brian-c'
-  real_name: 'Brian Carstensen'
+EXAMPLE_USER_2 = Object.create EXAMPLE_USER
+EXAMPLE_USER_2.id = 'BRIAN_USER'
+EXAMPLE_USER_2.login = 'brian-c'
+EXAMPLE_USER_2.password = 'brian-c'
+EXAMPLE_USER_2.real_name = 'Brian Carstensen'
 
-module.exports = window.usersStore = new Store
-  root: '/users'
-  keyedOn: 'login'
-  examples: [EXAMPLE_USER, EXAMPLE_USER_2]
+module.exports = [EXAMPLE_USER, EXAMPLE_USER_2]
+
