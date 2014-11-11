@@ -29,10 +29,12 @@ module.exports = React.createClass
           hash: @state.hash
 
       if @props.children?
-          @transferPropsTo React.DOM.div className: 'route', @props.children
+        <div className="route" {...@props}>
+          {@props.children}
+        </div>
 
       else # Look for a `handler` property.
-        @transferPropsTo @props.handler routeProps
+        React.createElement @props.handler, routeProps
 
     else # If the path doesn't match, don't render!
       null
