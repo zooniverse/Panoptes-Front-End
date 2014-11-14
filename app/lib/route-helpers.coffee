@@ -1,15 +1,19 @@
 RouteParser = require 'route-parser'
+zipObject = require 'lodash.zipobject'
 
 a = document.createElement 'a'
 
+queryStringPairs = (queryString) ->
+  queryString?.split('&').map (keyval) -> keyval.split '='
+
 module.exports =
   parseLocation: ->
-    a.href = location.hash.slice 1
+    [path, queryString] = location.hash.slice(1).split('?')
 
-    query = {}
-    for keyAndValue in a.search.slice(1).split '&'
-      [key, value] = keyAndValue.split '='
-      query[key] = value
+    a.href = path
+      .replace(/\/$/g, '') # trim trailing slash
+
+    query = zipObject queryStringPairs(queryString)
 
     path: a.pathname
     hash: a.hash.slice 1
