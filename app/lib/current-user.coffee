@@ -16,7 +16,7 @@ module.exports =
     auth.stopListening @handleAuthChange
 
   handleAuthChange: ->
-    @promiseToSetState currentUser: auth.checkCurrent(), { loadingState: true }
+    @promiseToSetState currentUser: auth.checkCurrent()
 
   isSignedIn: ->
     @state.currentUser and

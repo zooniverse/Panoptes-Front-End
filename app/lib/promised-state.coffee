@@ -10,39 +10,39 @@
 #     # will call
 #     #   @setState someStateLoading: true
 #     #   @setState someState: 'bar', someStateLoading: false
-#     @promiseToSetState someState: Promise.resolve('bar'), { loadingState: true }
+#     @promiseToSetState someState: Promise.resolve('bar')
 #     
 #     # will call @setState someState: 'foo', otherState: 'bar' once both promises have resolved
-#     @promiseToSetState someState: Promise.resolve('foo'), otherState: Promise.resolve('bar'), { waitForAll }
+#     @promiseToSetState someState: Promise.resolve('foo'), otherState: Promise.resolve('bar')
 
 module.exports =
   getInitialState: ->
     { }
 
-  promiseToSetState: (keysAndPromises, { waitForAll, loadingState } = { }) ->
+  promiseToSetState: (keysAndPromises) ->
     promises = []
     for key, promise of keysAndPromises
       promise = Promise.resolve(promise) unless promise instanceof Promise
-      @_setPromiseLoading(key) if loadingState
-      promises.push @_statefulPromise key, promise, loadingState
+      @_setPromiseLoading key
+      promises.push @_statefulPromise key, promise
 
-    if waitForAll then Promise.all(promises) else promises
+    Promise.all promises
 
-  _statefulPromise: (key, promise, loadingState) ->
+  _statefulPromise: (key, promise) ->
     promise.then (value) =>
-      @_fulfillPromise key, value, loadingState
+      @_fulfillPromise key, value
     .catch (error) =>
       error.error = true
-      @_fulfillPromise key, error, loadingState
+      @_fulfillPromise key, error
 
   _setPromiseLoading: (key) ->
     loading = { }
     loading["#{ key }Loading"] = true
     @setState loading
 
-  _fulfillPromise: (key, value, loadingState) ->
+  _fulfillPromise: (key, value) ->
     newState = { }
-    newState["#{ key }Loading"] = false if loadingState
+    newState["#{ key }Loading"] = false
     newState[key] = value
     @setState newState if @isMounted()
     value
