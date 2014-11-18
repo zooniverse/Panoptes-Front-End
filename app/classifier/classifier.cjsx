@@ -1,8 +1,8 @@
 # @cjsx React.DOM
 
 React = require 'react'
-subjectsStore = require '../data/subjects'
-workflowsStore = require '../data/workflows'
+subjectsStore = require '../mock-data/subjects'
+workflowsStore = require '../mock-data/workflows'
 SubjectViewer = require './subject-viewer'
 TaskViewer = require './task-viewer'
 {dispatch} = require '../lib/dispatcher'

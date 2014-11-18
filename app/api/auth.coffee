@@ -1,4 +1,4 @@
-Model = require '../data/model'
+Model = require '../lib/model'
 makeHTTPRequest = require('json-api-client').util.makeHTTPRequest
 config = require './config'
 client = require './client'
