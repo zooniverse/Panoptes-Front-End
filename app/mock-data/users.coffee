@@ -30,3 +30,4 @@ EXAMPLE_USER_2.password = 'brian-c'
 EXAMPLE_USER_2.real_name = 'Brian Carstensen'
 
 module.exports = [EXAMPLE_USER, EXAMPLE_USER_2]
+

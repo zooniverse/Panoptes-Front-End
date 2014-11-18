@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 
 module.exports = React.createClass
@@ -10,6 +8,6 @@ module.exports = React.createClass
     @props.onSubmit? e
 
   render: ->
-    @transferPropsTo <form className="in-place-form" onSubmit={@overrideSubmit}>
+    <form className="in-place-form" onSubmit={@overrideSubmit}>
       {@props.children}
     </form>

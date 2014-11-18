@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 subjectsStore = require '../mock-data/subjects'
 workflowsStore = require '../mock-data/workflows'

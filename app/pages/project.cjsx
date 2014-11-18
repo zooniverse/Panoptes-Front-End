@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 projectsStore = require '../mock-data/projects'
 Route = require '../lib/route'

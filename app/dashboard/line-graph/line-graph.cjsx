@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 HoverBox = require './hover-box'
 Line = require './line'
@@ -42,7 +40,8 @@ module?.exports = React.createClass
       .filter(@coordPairNotUndefined)
 
   line: (yKey, i) ->
-    @transferPropsTo <Line
+    <Line
+      {...@props}
       key={i}
       color={@props.dataColors[i]}
       coords={@coords(yKey)}
@@ -64,15 +63,15 @@ module?.exports = React.createClass
 
     <div className='line-graph'>
       <svg width="100%" height={@props.height}>
-        {@transferPropsTo <YLabels max={@dataMax()} />}
+        <YLabels {...@props} max={@dataMax()} />
         <g transform="scale(1,-1), translate(0, -#{@props.height})">
-          {@transferPropsTo <XAxis color={@axisColor} ticks={@xAxisPercentages()}/>}
+          <XAxis {...@props} color={@axisColor} ticks={@xAxisPercentages()}/>
           <YRules yLines={@props.yLines} height=@props.height />
           {lines}
         </g>
       </svg>
 
-      {@transferPropsTo <XLabels />}
+      <XLabels {...@props} />
 
       <HoverBox top={@state.circleHover.y} left={@state.circleHover.x}>
         {@state.circleHover.content}

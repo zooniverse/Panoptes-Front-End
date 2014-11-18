@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 InPlaceForm = require '../components/in-place-form'
 currentUserMixin = require '../lib/current-user'
