@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 PromiseToSetState = require '../lib/promise-to-set-state'
 usersStore = require '../mock-data/users'

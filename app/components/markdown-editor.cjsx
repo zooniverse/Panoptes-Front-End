@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 Markdown = require './markdown'
 
@@ -10,11 +8,14 @@ module.exports = React.createClass
     previewing: false
     value: @props.defaultValue ? ''
 
+  getDefaultProps: ->
+    rows: '5'
+
   render: ->
     previewing = @props.previewing ? @state.previewing
 
     <div className={['markdown-editor', @props.className].join ' '} data-previewing={@state.previewing or null}>
-      {@transferPropsTo <textarea className="markdown-editor-input" value={@props.value ? @state.value} onChange={@handleChange} />}
+      <textarea className="markdown-editor-input" rows={@props.rows} value={@props.value ? @state.value} onChange={@handleChange} />
 
       <Markdown className="markdown-editor-preview">{@state.value}</Markdown>
 

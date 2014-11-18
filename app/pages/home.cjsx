@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 Translator = require 'react-translator'
 

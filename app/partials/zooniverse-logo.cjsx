@@ -21,7 +21,7 @@ sourceContainer.id = 'zooniverse-logo-source-container'
 sourceContainer.style.display = 'none'
 document.body.appendChild sourceContainer
 
-React.renderComponent <ZooniverseLogoSource />, sourceContainer
+React.render <ZooniverseLogoSource />, sourceContainer
 
 module.exports = React.createClass
   displayName: 'ZooniverseLogo'

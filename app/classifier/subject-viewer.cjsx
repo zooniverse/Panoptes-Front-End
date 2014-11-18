@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 loadImage = require '../lib/load-image'
 Draggable = require '../lib/draggable'

@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 window.React = React
 MainHeader = require './partials/main-header'
@@ -53,4 +51,4 @@ mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'
 document.body.appendChild mainContainer
 
-React.renderComponent Main(null), mainContainer
+React.render <Main />, mainContainer
