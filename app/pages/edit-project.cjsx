@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 MarkdownEditor = require '../components/markdown-editor'
 Link = require '../lib/link'

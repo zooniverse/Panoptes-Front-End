@@ -14,13 +14,14 @@ module.exports = React.createClass
     "<img class='emoji' src='#{EMOJI_ROOT}/#{icon}.png' alt='#{match}' title='#{match}' />"
 
   render: ->
-    tag = React.DOM[@props.tag] ? React.DOM.div
+    tag = @props.tag ? 'div'
 
     markedOptions =
       sanitize: true
       breaks: @props.breaks ? true
 
+    className = @props.className ? ''
     markup = marked @props.children ? '', markedOptions
     __html = emojify.replace markup, @replaceEmoji
 
-    @transferPropsTo tag className: 'markdown', dangerouslySetInnerHTML: {__html}
+    React.createElement tag, {className: "markdown #{className}", dangerouslySetInnerHTML: {__html}}

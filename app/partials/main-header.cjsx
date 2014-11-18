@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 MainNav = require './main-nav'

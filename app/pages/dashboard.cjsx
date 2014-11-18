@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 LineGraph = require '../dashboard/line-graph/line-graph'
 LineGraphLegend = require '../dashboard/line-graph/legend'
