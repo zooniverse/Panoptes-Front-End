@@ -1,7 +1,5 @@
-# @cjsx React.DOM
-
 React = require 'react'
-classificationsStore = require '../data/classifications'
+classificationsStore = require '../mock-data/classifications'
 {dispatch} = require '../lib/dispatcher'
 Classifier = require '../classifier/classifier'
 LoadingIndicator = require '../components/loading-indicator'

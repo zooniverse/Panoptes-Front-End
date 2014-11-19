@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 
 # React.DOM doesn't include an SVG <image> tag
@@ -16,7 +14,7 @@ module.exports = React.createClass
 
   render: ->
     imageHTML = "<image xlink:href='#{@props.src}' width='#{@props.width}' height='#{@props.height}' />"
-    @transferPropsTo <g className="svg-image-container" dangerouslySetInnerHTML={__html: imageHTML} />
+    <g {...@props} className="svg-image-container" dangerouslySetInnerHTML={__html: imageHTML} />
 
   componentDidUpdate: ->
     @fixWeirdSize()

@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 Translator = require 'react-translator'
 React = require 'react'
 promiseToSetState = require '../lib/promise-to-set-state'

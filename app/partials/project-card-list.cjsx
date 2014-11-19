@@ -1,7 +1,5 @@
-# @cjsx React.DOM
-
 React = require 'react'
-projectsStore = require '../data/projects'
+projectsStore = require '../mock-data/projects'
 ProjectCard = require './project-card'
 LoadingIndicator = require '../components/loading-indicator'
 
@@ -19,8 +17,7 @@ module.exports = React.createClass
 
   fetchProjects: (query) ->
     query ?= {}
-    projectsStore.fetch(query).then (projects) =>
-      @setState {projects}
+    @setState projects: projectsStore
 
   render: ->
     if @state.projects?.length is 0

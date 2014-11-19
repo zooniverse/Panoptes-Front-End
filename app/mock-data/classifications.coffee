@@ -1,5 +1,8 @@
-Model = require '../data/model'
-Store = require '../data/store'
+# NOTE: Store/dispatcher stuff is no longer used.
+# Call methods on resources or collections directly.
+
+Model = require '../lib/model'
+Store = require '../mock-data/store'
 subjectsStore = require './subjects'
 workflowsStore = require './workflows'
 {dispatch} = require '../lib/dispatcher'

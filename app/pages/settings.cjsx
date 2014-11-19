@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 React = require 'react'
 promiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'

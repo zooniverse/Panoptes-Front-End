@@ -1,7 +1,5 @@
-# @cjsx React.DOM
-
-mergeInto = require 'react/lib/mergeInto'
-Model = require '../../data/model'
+mergeInto = require 'lodash.merge'
+Model = require '../../lib/model'
 React = require 'react'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'

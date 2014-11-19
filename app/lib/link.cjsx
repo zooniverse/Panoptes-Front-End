@@ -17,15 +17,11 @@ module.exports = React.createClass
     removeEventListener 'hashchange', @handleHashChange
 
   render: ->
-    newProps =
-      href: '#' + @props.href
-
     match = if @props.root
       decodeURI(@state.location.path) is decodeURI @props.href
     else
       decodeURI(@state.location.path).indexOf(decodeURI @props.href) is 0
 
-    if match
-      newProps['data-active'] = true
-
-    @transferPropsTo React.DOM.a newProps, @props.children
+    <a {...@props} data-active={true if match} href={'#' + @props.href}>
+      {@props.children}
+    </a>
