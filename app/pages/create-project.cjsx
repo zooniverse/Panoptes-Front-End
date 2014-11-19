@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 React = require 'react'
-Model = require '../data/model'
+Model = require '../lib/model'
 InPlaceForm = require '../components/in-place-form'
 MarkdownEditor = require '../components/markdown-editor'
 

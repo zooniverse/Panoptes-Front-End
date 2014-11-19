@@ -8,21 +8,20 @@ module.exports = React.createClass
   displayName: 'MarkdownEditor'
 
   getDefaultProps: ->
-    placeholder: ''
+    name: ''
     value: ''
+    placeholder: ''
+    rows: 5
     onChange: NOOP
 
   getInitialState: ->
     previewing: false
 
-  getDefaultProps: ->
-    rows: '5'
-
   render: ->
     previewing = @props.previewing ? @state.previewing
 
     <div className={['markdown-editor', @props.className].join ' '} data-previewing={@state.previewing or null}>
-      <textarea className="markdown-editor-input" rows={@props.rows} value={@props.value ? @state.value} onChange={@handleChange} />
+      <textarea className="markdown-editor-input" name={@props.name} placeholder={@props.placeholder} value={@props.value} rows={@props.rows} cols={@props.cols} onChange={@props.onChange} />
 
       <Markdown className="markdown-editor-preview">{@props.value}</Markdown>
 
