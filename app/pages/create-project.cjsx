@@ -3,6 +3,7 @@ Model = require '../lib/model'
 InPlaceForm = require '../components/in-place-form'
 MarkdownEditor = require '../components/markdown-editor'
 projects = require '../api/projects'
+alert = require '../lib/alert'
 
 languages = ['en-us']
 
@@ -93,5 +94,8 @@ module.exports = React.createClass
   handleSubmit: ->
     data = JSON.parse JSON.stringify newProjectData # Clear out functions, etc.
     projects.createResource(data).save()
-      .then (project) -> console.info 'Saved project', project
-      .catch (errors) -> console.error 'Error saving project', errors
+      .then (project) ->
+        location.hash = '/build/' + project.id
+
+      .catch (errors) ->
+        alert <p>Error saving project: <code>{errors}</code></p>
