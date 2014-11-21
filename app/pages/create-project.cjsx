@@ -1,17 +1,15 @@
-# @cjsx React.DOM
-
 React = require 'react'
 Model = require '../lib/model'
 InPlaceForm = require '../components/in-place-form'
 MarkdownEditor = require '../components/markdown-editor'
+projects = require '../api/projects'
 
 languages = ['en-us']
 
 newProjectData = new Model
   name: ''
   description: ''
-  language: languages[0]
-  example_images: []
+  primary_language: languages[0]
 
 module.exports = React.createClass
   displayName: 'CreateProjectPage'
@@ -43,10 +41,11 @@ module.exports = React.createClass
         <hr />
 
         <h2>Upload some example images</h2>
+        <p>TODO</p>
         <p>You’ll be able to pick multiple files in the file picker:</p>
-        <input type="file" multiple="multiple" name="example_images" onChange={@handleInputChange} />
+        <input type="file" multiple="multiple" name="example_images" onChange={@handleInputChange} disabled="disabled" />
         <ul>
-          {<li key={file.name}>{file.name}</li> for file in newProjectData.example_images}
+          {<li key={file.name}>{file.name}</li> for file in newProjectData.example_images ? []}
         </ul>
 
         <hr />
@@ -71,7 +70,7 @@ module.exports = React.createClass
             <td>Science case</td>
           </tr>
           <tr>
-            <td>{<i className="fa fa-check"></i> if newProjectData.example_images.length isnt 0}</td>
+            <td>{<i className="fa fa-check"></i> if newProjectData.example_images?.length isnt 0}</td>
             <td>Example images</td>
           </tr>
         </table>
@@ -92,4 +91,7 @@ module.exports = React.createClass
     newProjectData.update changes
 
   handleSubmit: ->
-    console.log 'Create a project with these values', JSON.stringify newProjectData
+    data = JSON.parse JSON.stringify newProjectData # Clear out functions, etc.
+    projects.createResource(data).save()
+      .then (project) -> console.info 'Saved project', project
+      .catch (errors) -> console.error 'Error saving project', errors
