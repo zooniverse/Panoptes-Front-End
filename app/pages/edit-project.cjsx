@@ -123,7 +123,9 @@ ProjectEditor = React.createClass
           </tbody>
         </table>
 
-        <button type="submit" disabled={@state.saving}>Save project</button>
+        <p><button type="submit" disabled={@state.saving}>Save project</button></p>
+        <hr />
+        <p><small><button type="button" onClick={@handleDelete}>Delete this project</button></small></p>
       </InPlaceForm>
     </div>
 
@@ -143,6 +145,14 @@ ProjectEditor = React.createClass
     @setState saving: true, =>
       @props.project.save().then =>
         @setState saving: false
+
+  handleDelete: ->
+    # TODO: Make this nicer.
+    confirmation = prompt "To confirm PERMANENT deletion of this project, enter #{@props.project.display_name.replace(/[^A-Z]/gi, '').toUpperCase()} here."
+    if confirmation is @props.project.display_name.replace(/[^A-Z]/gi, '').toUpperCase()
+      @setState saving: true, =>
+        @props.project.delete().then =>
+          location.hash = '/build'
 
 module.exports = React.createClass
   displayName: 'EditProjectPage'
