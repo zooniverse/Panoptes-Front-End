@@ -9,7 +9,9 @@ languages = ['en-us']
 
 newProjectData = new Model
   name: ''
+  introduction: ''
   description: ''
+  science_case: ''
   primary_language: languages[0]
 
 module.exports = React.createClass
@@ -29,14 +31,17 @@ module.exports = React.createClass
       <div className="content-container">
         <h1>Create a new project</h1>
         <h2>General information</h2>
-        <p>Name: <input type="text" name="name" placeholder="Project name" value={newProjectData.name} onChange={@handleInputChange} /></p>
-        <p>Description: <MarkdownEditor name="description" placeholder="A brief description of the project" value={newProjectData.description} onChange={@handleInputChange} /></p>
+        <p>Name: <input type="text" name="display_name" placeholder="Project name" value={newProjectData.display_name} onChange={@handleInputChange} /></p>
+        <p>Introduction: <input type="text" name="introduction" placeholder="A catchy slogan for the project" value={newProjectData.introduction} onChange={@handleInputChange} /></p>
         <p>TODO: Avatar</p>
 
         <hr />
 
+        <h2>Describe your project</h2>
+        <p><MarkdownEditor name="description" placeholder="Why is this project interesting?" value={newProjectData.description} onChange={@handleInputChange} /></p>
+        <hr />
+
         <h2>Explain your science case</h2>
-        <p>TODO: Science case:</p>
         <p><MarkdownEditor name="science_case" placeholder="A more detailed explanation of what you hope to acheive with the data you collect" value={newProjectData.science_case} onChange={@handleInputChange} /></p>
 
         <hr />
@@ -95,7 +100,7 @@ module.exports = React.createClass
     data = JSON.parse JSON.stringify newProjectData # Clear out functions, etc.
     projects.createResource(data).save()
       .then (project) ->
-        location.hash = '/build/' + project.id
+        location.hash = '/build/edit-project/' + project.id
 
       .catch (errors) ->
         alert <p>Error saving project: <code>{errors}</code></p>

@@ -153,6 +153,8 @@ ProjectEditor = React.createClass
       @setState saving: true, =>
         @props.project.delete().then =>
           location.hash = '/build'
+    else
+      alert "You entered #{confirmation} instead. Project not deleted."
 
 module.exports = React.createClass
   displayName: 'EditProjectPage'
