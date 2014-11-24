@@ -5,11 +5,12 @@ auth = require '../api/auth'
 projects = require '../api/projects'
 InPlaceForm = require '../components/in-place-form'
 MarkdownEditor = require '../components/markdown-editor'
-Link = require '../lib/link'
-Route = require '../lib/route'
 
-module.exports = React.createClass
-  displayName: 'EditProjectPage'
+ProjectEditor = React.createClass
+  displayName: 'ProjectEditor'
+
+  propTypes:
+    project: React.PropTypes.object.isRequired # TODO: Expose JSONAPIClient.Resource.
 
   getInitialState: ->
     saving: false
@@ -20,29 +21,24 @@ module.exports = React.createClass
     </div>
 
   renderAuthTest: ->
-    userAndProject = Promise.all [
-      auth.checkCurrent()
-      projects.get @props.route.params.project
-    ]
-
-    <PromiseRenderer promise={userAndProject} then={@renderPermissions}>
+    <PromiseRenderer promise={auth.checkCurrent()} then={@renderPermissions}>
       <p>Checking permissions...</p>
     </PromiseRenderer>
 
-  renderPermissions: ([user, project]) ->
+  renderPermissions: (user) ->
     if user?
-      if project.id in user.links.projects
-        <ChangeListener target={project} eventName="change" handler={@renderProjectEditor.bind this, project} />
+      if @props.project.id in user.links.projects
+        <ChangeListener target={@props.project} eventName="change" handler={@renderProjectEditor} />
       else
         <p>You don’t have permission to edit this project.</p>
     else
       <p>You’re not signed in.</p>
 
   renderProjectEditor: (project) ->
-    handleInputChange = @handleInputChange.bind this, project
+    {project} = @props
 
     <div>
-      <InPlaceForm onSubmit={@handleSubmit.bind this, project}>
+      <InPlaceForm onSubmit={@handleSubmit}>
         <table>
           <tbody>
             <tr>
@@ -67,7 +63,7 @@ module.exports = React.createClass
 
             <tr>
               <th>display_name</th>
-              <td><input type="text" name="display_name" value={project.display_name} required="required" onChange={handleInputChange} /></td>
+              <td><input type="text" name="display_name" value={project.display_name} required="required" onChange={@handleInputChange} /></td>
             </tr>
 
             <tr>
@@ -102,17 +98,17 @@ module.exports = React.createClass
 
             <tr>
               <th>description</th>
-              <td><MarkdownEditor name="description" value={project.description} onChange={handleInputChange} /></td>
+              <td><MarkdownEditor name="description" value={project.description} onChange={@handleInputChange} /></td>
             </tr>
 
             <tr>
               <th>introduction</th>
-              <td><MarkdownEditor name="introduction" value={project.introduction} onChange={handleInputChange} /></td>
+              <td><MarkdownEditor name="introduction" value={project.introduction} onChange={@handleInputChange} /></td>
             </tr>
 
             <tr>
               <th>science_case</th>
-              <td><MarkdownEditor name="science_case" value={project.science_case} onChange={handleInputChange} /></td>
+              <td><MarkdownEditor name="science_case" value={project.science_case} onChange={@handleInputChange} /></td>
             </tr>
 
             <tr>
@@ -132,7 +128,7 @@ module.exports = React.createClass
     </div>
 
   # TODO: Abstract this out somewhere, it'll be used a lot.
-  handleInputChange: (project, e) ->
+  handleInputChange: (e) ->
     valueProperty = switch e.target.type
       when 'radio', 'checkbox' then 'checked'
       when 'file' then 'files'
@@ -141,9 +137,22 @@ module.exports = React.createClass
     changes = {}
     changes[e.target.name] = e.target[valueProperty]
 
-    project.update changes
+    @props.project.update changes
 
-  handleSubmit: (project) ->
+  handleSubmit: ->
     @setState saving: true, =>
-      project.save().then =>
+      @props.project.save().then =>
         @setState saving: false
+
+module.exports = React.createClass
+  displayName: 'EditProjectPage'
+
+  render: ->
+    <PromiseRenderer promise={projects.get @props.route.params.projectID} then={@renderProjectEditor}>
+      <div className="content-container">
+        <p>Loading project <code>{@props.route.params.projectID}</code>...</p>
+      </div>
+    </PromiseRenderer>
+
+  renderProjectEditor: (project) ->
+    <ProjectEditor project={project} />

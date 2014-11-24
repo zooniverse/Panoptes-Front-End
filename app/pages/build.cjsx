@@ -35,7 +35,7 @@ module.exports = React.createClass
 
   renderProjectsList: (projects) ->
     items = for project in projects
-      <li key={project.id}><a href={'#/build/' + project.id}>{project.display_name}</a></li>
+      <li key={project.id}><a href={'#/build/edit-project/' + project.id}>{project.display_name}</a></li>
 
     <ul>
       {items}
