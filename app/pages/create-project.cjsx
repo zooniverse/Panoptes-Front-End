@@ -6,6 +6,15 @@ MarkdownEditor = require '../components/markdown-editor'
 JSONEditor = require '../components/json-editor'
 alert = require '../lib/alert'
 
+MANIFEST_COLUMNS = [
+  'original_width'
+  'original_height'
+  'title'
+  'coord_0'
+  'coord_1'
+  'timestamp'
+]
+
 languages = ['en-us'] # TODO: Where should this live?
 
 DEFAULT_TASKS =
@@ -81,47 +90,21 @@ module.exports = React.createClass
         <h2>Create a set of subjects</h2>
         <p>Now you’ll be able to choose the images you want volunteers to look at (JPEG, PNG, or GIF, please). Optionally, you can include metadata about the images with a manifest file <small>(TODO: describe the manifest)</small>.</p>
         <p>These images will be uploaded during after last step of this process, which could take a long time depending on how many you select. Make sure you’ve got a steady internet connection. You’ll have an opportunity to review and refine your selection here before continuing.</p>
-        <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesSelection} /></p>
 
         <table>
           <thead>
             <tr>
-              <th>File name</th>
-              <th>Original width</th>
-              <th>Original height</th>
-              <th>Title</th>
-              <th>Latitude or declination or X</th>
-              <th>Longitude or right ascension or Y</th>
-              <th>Timestamp</th>
+              <th></th>
+              {<th>{column}</th> for column in MANIFEST_COLUMNS}
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {<tr style={background: 'rgba(255, 0, 0, 0.2)'}>
-              <td>{filename} in manifest but not in selection</td>
-            </tr> for filename, metadata of wizardData.subjectManifest when filename not of wizardData.subjects}
-
-            {<tr style={background: 'rgba(255, 128, 0, 0.2)'}>
-              <td>{filename} in selection but not in manifest</td>
-            </tr> for filename, metadata of wizardData.subjects when filename not of wizardData.subjectManifest}
-
-            {<tr key={filename}>
-              <td>{filename}</td>
-              <td>{metadata.original_width}</td>
-              <td>{metadata.original_height}</td>
-              <td>{metadata.title}</td>
-              <td>{metadata.coord_0}</td>
-              <td>{metadata.coord_1}</td>
-              <td>{metadata.timestamp}</td>
-              <td>
-                <button><i className="fa fa-times"></i></button>
-              </td>
-            </tr> for filename, metadata of wizardData.subjects when filename of wizardData.subjectManifest}
+            {@_renderSubjectRows()}
           </tbody>
         </table>
 
-        {if wizardData.subjects.length is 0
-          <em className="form-help">(No images chosen)</em>}
+        <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesSelection} /></p>
       </div>
 
       <hr />
@@ -151,7 +134,7 @@ module.exports = React.createClass
             <td>Subjects</td>
           </tr>
           <tr>
-            <td>{Object.keys(JSON.parse wizardData.tasks).length}</td>
+            <td>{try Object.keys(JSON.parse wizardData.tasks).length catch then <i className="fa fa-times form-help error"></i>}</td>
             <td>Workflow tasks</td>
           </tr>
         </table>
@@ -159,6 +142,47 @@ module.exports = React.createClass
         <p><button type="submit" onClick={@handleSubmit}>Create project and upload subject images</button></p>
       </div>
     </div>
+
+  _renderSubjectRows: ->
+    subjectsInOrder = []
+
+    if wizardData.subjectManifest?
+      for filename, metadata of wizardData.subjectManifest when filename not of wizardData.subjects
+        subjectsInOrder.push {filename, metadata}
+      for filename, metadata of wizardData.subjects when filename not of wizardData.subjectManifest
+        subjectsInOrder.push {filename, metadata}
+      for filename, metadata of wizardData.subjectManifest when filename of wizardData.subjects
+        subjectsInOrder.push {filename, metadata}
+
+    else
+      for filename, metadata of wizardData.subjects
+        subjectsInOrder.push {filename, metadata}
+
+    @_renderSubjectRow filename, metadata for {filename, metadata} in subjectsInOrder
+
+  _renderSubjectRow: (filename, metadata) ->
+    missing = wizardData.subjectManifest? and filename not of wizardData.subjects
+    notInManifest = wizardData.subjectManifest? and filename not of wizardData.subjectManifest
+
+    style = if missing
+      background: 'rgba(255, 0, 0, 0.2)'
+      color: 'red'
+    else if notInManifest
+      background: 'rgba(255, 255, 0, 0.2)'
+
+    <tr key={filename} style={style}>
+      <td>
+        {filename}
+        {<div className="form-help"><i className="fa fa-exclamation-circle"></i> In manifest, missing image</div> if missing}
+        {<div className="form-help"><i className="fa fa-exclamation-triangle"></i> Not in manifest</div> if notInManifest}
+      </td>
+
+      {<td>{metadata[column] ? <span className="form-help">?</span>}</td> for column in MANIFEST_COLUMNS}
+
+      <td>
+        {<button onClick={@removeSubject.bind this, filename}><i className="fa fa-times"></i></button> unless missing}
+      </td>
+    </tr>
 
   handleInputChange: (e) ->
     valueProperty = switch e.target.type
@@ -170,6 +194,14 @@ module.exports = React.createClass
     changes[e.target.name] = e.target[valueProperty]
 
     wizardData.update changes
+
+  removeSubject: (filename) ->
+    delete wizardData.subjects[filename]
+
+    if wizardData.subjectManifest?
+      delete wizardData.subjectManifest[filename]
+
+    @forceUpdate()
 
   handleSubjectFilesSelection: (e) ->
     manifest = null
@@ -185,7 +217,8 @@ module.exports = React.createClass
 
     if manifest?
       @_setManifest manifest
-
+    else
+      wizardData.update subjectManifest: null
 
   _setManifest: (file) ->
     reader = new FileReader
