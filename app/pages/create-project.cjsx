@@ -234,21 +234,39 @@ module.exports = React.createClass
     reader.readAsText file
 
   handleSubmit: ->
-    # projectData = JSON.parse JSON.stringify wizardData
-    # project = apiClient.createType('projects').createResource projectData
-    # project.save()
-    #   .then (project) ->
-    #     workflowData = JSON.parse JSON.stringify newWorkflowData
-    #     workflowData.tasks = JSON.parse workflowData.tasks
-    #     workflowData.links = project: project.id
-    #     workflow = apiClient.createType('workflows').createResource workflowData
-    #     workflow.save()
-    #       .then (workflow) =>
-    #         console?.info 'Saved a project and a workflow', project, workflow
-    #         # location.hash = '/build/edit-project/' + project.id
+    {language: primary_language, name: display_name, introduction, description, scienceCase: science_case} = wizardData
+    projectData = {primary_language, display_name, introduction, description, science_case}
+    project = apiClient.createType('projects').createResource projectData
+    project.save()
+      .then (project) ->
+        workflowData =
+          name: "#{display_name} default workflow"
+          tasks: JSON.parse wizardData.tasks
+          primary_language: primary_language
+          links: project: project.id
+        workflow = apiClient.createType('workflows').createResource workflowData
+        workflow.save()
+          .then (workflow) ->
+            subjectSetData =
+              name: "#{display_name} initial subjects"
+              links: project: project.id
+            subjectSet = apiClient.createType('subject_sets').createResource subjectSetData
+            subjectSet.save()
+              .then (subjectSet) ->
+                console.group 'Created!'
+                console.info 'project', project
+                console.info 'workflow', workflow
+                console.info 'subjectSet', subjectSet
+                console.groupEnd()
 
-    #       .catch (errors) ->
-    #         alert <p>Error saving workflow:<br /><code>{errors}</code></p>
+  # TODO: Break these down a bit:
 
-    #   .catch (errors) ->
-    #     alert <p>Error saving project:<br /><code>{errors}</code></p>
+  # _saveProject: ->
+
+  # _saveWorkflow: (project) ->
+
+  # _saveSubjectSet: (project) ->
+
+  # _saveSubjects: ->
+
+  # _saveSubject: ->
