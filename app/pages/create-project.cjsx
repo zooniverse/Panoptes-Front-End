@@ -50,6 +50,9 @@ refreshWizardData()
 module.exports = React.createClass
   displayName: 'CreateProjectPage'
 
+  getInitialState: ->
+    {}
+
   render: ->
     <ChangeListener target={wizardData} handler={@renderWizard} />
 
@@ -60,17 +63,20 @@ module.exports = React.createClass
         <fieldset>
           <legend>Project name</legend>
           <input type="text" name="name" placeholder="Project name" value={wizardData.name} onChange={@handleInputChange} style={width: '100%'} />
-          <span /><div className="form-help">This will be used to identify your project across the site.</div>
+          <br />
+          <div className="form-help">This will be used to identify your project across the site.</div>
         </fieldset>
         <fieldset>
           <legend>Introduction</legend>
           <input type="text" name="introduction" placeholder="A catchy slogan for the project" value={wizardData.introduction} onChange={@handleInputChange} style={width: '100%'} />
-          <span /><div className="form-help">This will often be shown when a link on the site points to your project.</div>
+          <br />
+          <div className="form-help">This will often be shown when a link on the site points to your project.</div>
         </fieldset>
         <fieldset>
           <legend>Project description</legend>
           <MarkdownEditor name="description" placeholder="Why is this project interesting?" value={wizardData.description} onChange={@handleInputChange} style={width: '100%'} />
-          <span /><div className="form-help">Tell people why they should help with your project. What question are you trying to answer, and why is it important?</div>
+          <br />
+          <div className="form-help">Tell people why they should help with your project. What question are you trying to answer, and why is it important?</div>
         </fieldset>
       </div>
 
@@ -140,6 +146,41 @@ module.exports = React.createClass
         </table>
 
         <p><button type="submit" onClick={@handleSubmit}>Create project and upload subject images</button></p>
+      </div>
+
+      <hr />
+
+      <div className="content-container">
+        <table>
+          <tr>
+            <td>
+              {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingProject}
+              {<i className="fa fa-check fa-fw"></i> if @state.savedProject}
+            </td>
+            <td>Project</td>
+          </tr>
+          <tr>
+            <td>
+              {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingWorkflow}
+              {<i className="fa fa-check fa-fw"></i> if @state.savedWorkflow}
+            </td>
+            <td>Workflow</td>
+          </tr>
+          <tr>
+            <td>
+              {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjectSet}
+              {<i className="fa fa-check fa-fw"></i> if @state.savedSubjectSet}
+            </td>
+            <td>Subject set</td>
+          </tr>
+          <tr>
+            <td>
+              {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjects}
+              {<i className="fa fa-check fa-fw"></i> if @state.savedSubjects}
+            </td>
+            <td>Subjects ({0} of {Object.keys(wizardData.subjects).length})</td>
+          </tr>
+        </table>
       </div>
     </div>
 
@@ -253,6 +294,19 @@ module.exports = React.createClass
             subjectSet = apiClient.createType('subject_sets').createResource subjectSetData
             subjectSet.save()
               .then (subjectSet) ->
+                sharedSubjectLinks =
+                  project: project.id
+                  subject_set: subjectSet.id
+
+                for filename, metadata in wizardData.subjects
+                  subjectData =
+                    locations: [filename]
+                    metadata: metadata
+                    links: Object.create sharedSubjectLinks
+                  subject = apiClient.createType('subject_sets').createResource subjectSetData
+                  # subject.save().then (subject) ->
+                  #   subject.locations
+
                 console.group 'Created!'
                 console.info 'project', project
                 console.info 'workflow', workflow
