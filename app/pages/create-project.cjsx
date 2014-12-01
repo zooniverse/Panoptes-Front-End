@@ -1,18 +1,17 @@
 React = require 'react'
 Model = require '../lib/model'
-apiClient = require '../api/client'
 ChangeListener = require '../components/change-listener'
 MarkdownEditor = require '../components/markdown-editor'
 JSONEditor = require '../components/json-editor'
-alert = require '../lib/alert'
+apiClient = require '../api/client'
 
 MANIFEST_COLUMNS = [
-  'original_width'
-  'original_height'
-  'title'
-  'coord_0'
-  'coord_1'
-  'timestamp'
+  'filenames'
+  'timestamps'
+  'coord[0]'
+  'coord[1]'
+  'rotation'
+  'coords_type'
 ]
 
 languages = ['en-us'] # TODO: Where should this live?
@@ -32,198 +31,204 @@ DEFAULT_TASKS =
 
 DEFAULT_DATA =
   language: languages[0]
-  name: 'Something Zoo'
+  name: "Something Zoo #{(new Date).toISOString()}"
   introduction: 'Welcome to the Something Zoo'
   description: 'Here is a description.'
   scienceCase: 'Here is some science.'
   subjects: {}
-  subjectManifest: null
   tasks: JSON.stringify DEFAULT_TASKS, null, 2
 
 wizardData = new Model
+  refresh: ->
+    wizardData.update JSON.parse JSON.stringify DEFAULT_DATA
 
-refreshWizardData = ->
-  wizardData.update JSON.parse JSON.stringify DEFAULT_DATA
+wizardData.refresh()
 
-refreshWizardData()
+StepStatusIcon = React.createClass
+  displayName: 'StepStatusIcon'
+
+  render: ->
+    [iconClass, style] = if @props.completed
+      ['fa-check', color: 'green']
+    else if @props.error
+      ['fa-times', color: 'red']
+    else
+      ['fa-pencil', opacity: 0.5]
+
+    <i className="fa #{iconClass} fa-fw" style={style}></i>
 
 module.exports = React.createClass
   displayName: 'CreateProjectPage'
 
   getInitialState: ->
-    {}
+    step: 'general'
 
   render: ->
     <ChangeListener target={wizardData} handler={@renderWizard} />
 
   renderWizard: ->
     <div className="create-project-page">
-      <div className="content-container">
-        <h2>General information</h2>
-        <fieldset>
-          <legend>Project name</legend>
-          <input type="text" name="name" placeholder="Project name" value={wizardData.name} onChange={@handleInputChange} style={width: '100%'} />
-          <br />
-          <div className="form-help">This will be used to identify your project across the site.</div>
-        </fieldset>
-        <fieldset>
-          <legend>Introduction</legend>
-          <input type="text" name="introduction" placeholder="A catchy slogan for the project" value={wizardData.introduction} onChange={@handleInputChange} style={width: '100%'} />
-          <br />
-          <div className="form-help">This will often be shown when a link on the site points to your project.</div>
-        </fieldset>
-        <fieldset>
-          <legend>Project description</legend>
-          <MarkdownEditor name="description" placeholder="Why is this project interesting?" value={wizardData.description} onChange={@handleInputChange} style={width: '100%'} />
-          <br />
-          <div className="form-help">Tell people why they should help with your project. What question are you trying to answer, and why is it important?</div>
-        </fieldset>
-      </div>
+      {switch @state.step
+        when 'general'
+          <div className="content-container">
+            <h2>General information</h2>
+            <p>Let’s get started by creating a basic description of your project. Everything you define here can be changed until your project goes live.</p>
+            <fieldset>
+              <legend>Project name</legend>
+              <input type="text" name="name" placeholder="Project name" value={wizardData.name} onChange={@handleInputChange} style={width: '100%'} />
+              <br />
+              <div className="form-help">This will be used to identify your project across the site.</div>
+            </fieldset>
+            <fieldset>
+              <legend>Introduction</legend>
+              <input type="text" name="introduction" placeholder="A catchy slogan for the project" value={wizardData.introduction} onChange={@handleInputChange} style={width: '100%'} />
+              <br />
+              <div className="form-help">This will often be shown when a link on the site points to your project.</div>
+            </fieldset>
+            <fieldset>
+              <legend>Project description</legend>
+              <MarkdownEditor name="description" placeholder="Why is this project interesting?" value={wizardData.description} onChange={@handleInputChange} style={width: '100%'} />
+              <br />
+              <div className="form-help">Tell people why they should help with your project. What question are you trying to answer, and why is it important?</div>
+            </fieldset>
+          </div>
 
-      <hr />
+        when 'science'
+          <div className="content-container">
+            <h2>Science case</h2>
+            <fieldset>
+              <MarkdownEditor name="scienceCase" placeholder="A more detailed explanation of what you hope to achieve with the data you collect" value={wizardData.scienceCase} onChange={@handleInputChange} />
+              <span /><div className="form-help">Tell people how the data you collect will be used. What is the expected output of this project?</div>
+            </fieldset>
+          </div>
 
-      <div className="content-container">
-        <h2>Science case</h2>
-        <fieldset>
-          <MarkdownEditor name="scienceCase" placeholder="A more detailed explanation of what you hope to achieve with the data you collect" value={wizardData.scienceCase} onChange={@handleInputChange} />
-          <span /><div className="form-help">Tell people how the data you collect will be used. What is the expected output of this project?</div>
-        </fieldset>
-      </div>
+        when 'subjects'
+          <div className="content-container">
+            <h2>Create a set of subjects</h2>
+            <p>Now you’ll be able to choose the images you want volunteers to look at (JPEG, PNG, or GIF, please). Optionally, you can include metadata about the images with a manifest file <small>(TODO: describe the manifest)</small>.</p>
+            <p>These images will be uploaded during after last step of this process, which could take a long time depending on how many you select. Make sure you’ve got a steady internet connection. You’ll have an opportunity to review and refine your selection here before continuing.</p>
 
-      <hr />
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  {<th>{column}</th> for column in MANIFEST_COLUMNS[1...]}
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {@_renderSubjectRows()}
+              </tbody>
+            </table>
 
-      <div className="content-container">
-        <h2>Create a set of subjects</h2>
-        <p>Now you’ll be able to choose the images you want volunteers to look at (JPEG, PNG, or GIF, please). Optionally, you can include metadata about the images with a manifest file <small>(TODO: describe the manifest)</small>.</p>
-        <p>These images will be uploaded during after last step of this process, which could take a long time depending on how many you select. Make sure you’ve got a steady internet connection. You’ll have an opportunity to review and refine your selection here before continuing.</p>
+            <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesSelection} /></p>
+          </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              {<th>{column}</th> for column in MANIFEST_COLUMNS}
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {@_renderSubjectRows()}
-          </tbody>
-        </table>
+        when 'workflow'
+          <div className="content-container">
+            <h2>Define the classification workflow</h2>
+            <p>Now you’ll define and link together the tasks each volunteer will do to complete a classification. <small>TODO: This is done in raw JSON for now.</small></p>
+            <p className="form-help">Each task object gets a <code>type</code> of <code>single</code> or <code>multiple</code>, a <code>question</code> string, and an <code>answers</code> array. Each answer object gets a <code>value</code> and a <code>label</code>. TODO: describe type <code>drawing</code>.</p>
+            <JSONEditor name="tasks" placeholder={JSON.stringify DEFAULT_TASKS, null, 2} value={wizardData.tasks} onChange={@handleInputChange} rows={20} cols={80} />
+          </div>
 
-        <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesSelection} /></p>
-      </div>
+        when 'review'
+          <div className="content-container">
+            <h2>Review and complete</h2>
+            <table>
+              <tr>
+                <td>{<i className="fa fa-check"></i> if wizardData.name and wizardData.introduction and wizardData.description}</td>
+                <td>Name, introduction, description</td>
+              </tr>
+              <tr>
+                <td>{<i className="fa fa-check"></i> if wizardData.scienceCase}</td>
+                <td>Science case</td>
+              </tr>
+              <tr>
+                <td>{Object.keys(wizardData.subjects).length}</td>
+                <td>Subjects</td>
+              </tr>
+              <tr>
+                <td>{try Object.keys(JSON.parse wizardData.tasks).length catch then <i className="fa fa-times form-help error"></i>}</td>
+                <td>Workflow tasks</td>
+              </tr>
+            </table>
 
-      <hr />
+            <p><button type="submit" onClick={@handleSubmit}>Create project and upload subject images</button></p>
+          </div>
 
-      <div className="content-container">
-        <h2>Define the classification workflow</h2>
-        <p>Now you’ll define and link together the tasks each volunteer will do to complete a classification. <small>TODO: This is done in raw JSON for now.</small></p>
-        <p className="form-help">Each task object gets a <code>type</code> of <code>single</code> or <code>multiple</code>, a <code>question</code> string, and an <code>answers</code> array. Each answer object gets a <code>value</code> and a <code>label</code>. TODO: describe type <code>drawing</code>.</p>
-        <JSONEditor name="tasks" placeholder={JSON.stringify DEFAULT_TASKS, null, 2} value={wizardData.tasks} onChange={@handleInputChange} rows={20} cols={80} />
-      </div>
+        when 'progress'
+          <div className="content-container">
+            <table>
+              <tr>
+                <td>
+                  {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingProject}
+                  {<i className="fa fa-check fa-fw"></i> if @state.savedProject}
+                </td>
+                <td>Project</td>
+              </tr>
+              <tr>
+                <td>
+                  {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingWorkflow}
+                  {<i className="fa fa-check fa-fw"></i> if @state.savedWorkflow}
+                </td>
+                <td>Workflow</td>
+              </tr>
+              <tr>
+                <td>
+                  {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjectSet}
+                  {<i className="fa fa-check fa-fw"></i> if @state.savedSubjectSet}
+                </td>
+                <td>Subject set</td>
+              </tr>
+              <tr>
+                <td>
+                  {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjects}
+                  {<i className="fa fa-check fa-fw"></i> if @state.savedSubjects}
+                </td>
+                <td>Subjects ({0} of {Object.keys(wizardData.subjects).length})</td>
+              </tr>
+            </table>
+          </div>}
 
-      <hr />
+      <nav className="wizard-steps content-container">
+        <button className={'active' if @state.step is 'general'} onClick={@setState.bind this, step: 'general', null}>
+          General
+          <StepStatusIcon completed={wizardData.name and wizardData.introduction and wizardData.description} />
+        </button>
 
-      <div className="content-container">
-        <h2>Review and complete</h2>
-        <table>
-          <tr>
-            <td>{<i className="fa fa-check"></i> if wizardData.name and wizardData.introduction and wizardData.description}</td>
-            <td>Name, introduction, description</td>
-          </tr>
-          <tr>
-            <td>{<i className="fa fa-check"></i> if wizardData.scienceCase}</td>
-            <td>Science case</td>
-          </tr>
-          <tr>
-            <td>{Object.keys(wizardData.subjects).length}</td>
-            <td>Subjects</td>
-          </tr>
-          <tr>
-            <td>{try Object.keys(JSON.parse wizardData.tasks).length catch then <i className="fa fa-times form-help error"></i>}</td>
-            <td>Workflow tasks</td>
-          </tr>
-        </table>
+        <button className={'active' if @state.step is 'science'} onClick={@setState.bind this, step: 'science', null}>
+          Science case
+          <StepStatusIcon completed={wizardData.scienceCase} />
+        </button>
 
-        <p><button type="submit" onClick={@handleSubmit}>Create project and upload subject images</button></p>
-      </div>
+        <button className={'active' if @state.step is 'subjects'} onClick={@setState.bind this, step: 'subjects', null}>
+          Subjects
+          <StepStatusIcon completed={Object.keys(wizardData.subjects).length isnt 0} />
+        </button>
 
-      <hr />
+        <button className={'active' if @state.step is 'workflow'} onClick={@setState.bind this, step: 'workflow', null}>
+          Workflow
+          <StepStatusIcon completed={wizardData.workflow} />
+        </button>
 
-      <div className="content-container">
-        <table>
-          <tr>
-            <td>
-              {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingProject}
-              {<i className="fa fa-check fa-fw"></i> if @state.savedProject}
-            </td>
-            <td>Project</td>
-          </tr>
-          <tr>
-            <td>
-              {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingWorkflow}
-              {<i className="fa fa-check fa-fw"></i> if @state.savedWorkflow}
-            </td>
-            <td>Workflow</td>
-          </tr>
-          <tr>
-            <td>
-              {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjectSet}
-              {<i className="fa fa-check fa-fw"></i> if @state.savedSubjectSet}
-            </td>
-            <td>Subject set</td>
-          </tr>
-          <tr>
-            <td>
-              {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjects}
-              {<i className="fa fa-check fa-fw"></i> if @state.savedSubjects}
-            </td>
-            <td>Subjects ({0} of {Object.keys(wizardData.subjects).length})</td>
-          </tr>
-        </table>
-      </div>
+        <button className={'active' if @state.step is 'review'} onClick={@setState.bind this, step: 'review', null}>
+          Review
+        </button>
+      </nav>
     </div>
 
   _renderSubjectRows: ->
-    subjectsInOrder = []
+    for filename, {metadata} of wizardData.subjects
+      <tr key={filename}>
+        <td><strong>{filename}</strong></td>
+        {for column in MANIFEST_COLUMNS
+          <td title={column}>{metadata?[column] ? <span className="form-help">?</span>}</td>}
 
-    if wizardData.subjectManifest?
-      for filename, metadata of wizardData.subjectManifest when filename not of wizardData.subjects
-        subjectsInOrder.push {filename, metadata}
-      for filename, metadata of wizardData.subjects when filename not of wizardData.subjectManifest
-        subjectsInOrder.push {filename, metadata}
-      for filename, metadata of wizardData.subjectManifest when filename of wizardData.subjects
-        subjectsInOrder.push {filename, metadata}
-
-    else
-      for filename, metadata of wizardData.subjects
-        subjectsInOrder.push {filename, metadata}
-
-    @_renderSubjectRow filename, metadata for {filename, metadata} in subjectsInOrder
-
-  _renderSubjectRow: (filename, metadata) ->
-    missing = wizardData.subjectManifest? and filename not of wizardData.subjects
-    notInManifest = wizardData.subjectManifest? and filename not of wizardData.subjectManifest
-
-    style = if missing
-      background: 'rgba(255, 0, 0, 0.2)'
-      color: 'red'
-    else if notInManifest
-      background: 'rgba(255, 255, 0, 0.2)'
-
-    <tr key={filename} style={style}>
-      <td>
-        {filename}
-        {<div className="form-help"><i className="fa fa-exclamation-circle"></i> In manifest, missing image</div> if missing}
-        {<div className="form-help"><i className="fa fa-exclamation-triangle"></i> Not in manifest</div> if notInManifest}
-      </td>
-
-      {<td>{metadata[column] ? <span className="form-help">?</span>}</td> for column in MANIFEST_COLUMNS}
-
-      <td>
-        {<button onClick={@removeSubject.bind this, filename}><i className="fa fa-times"></i></button> unless missing}
-      </td>
-    </tr>
+        <td>
+          {<button onClick={@removeSubject.bind this, filename}><i className="fa fa-times"></i></button>}
+        </td>
+      </tr>
 
   handleInputChange: (e) ->
     valueProperty = switch e.target.type
@@ -238,89 +243,92 @@ module.exports = React.createClass
 
   removeSubject: (filename) ->
     delete wizardData.subjects[filename]
-
-    if wizardData.subjectManifest?
-      delete wizardData.subjectManifest[filename]
-
-    @forceUpdate()
+    wizardData.emitChange()
 
   handleSubjectFilesSelection: (e) ->
-    manifest = null
-    images = {}
+    thingsBeingProcessed = for file in e.target.files
+      if file.type in ['text/csv', 'text/tab-separated-values']
+        @_applyManifest file
+      else if file.type.indexOf('image') is 0
+        wizardData.subjects[file.name] ?= {}
+        wizardData.subjects[file.name].file = file
 
-    for file in e.target.files
-      if file.type is 'text/tab-separated-values'
-        manifest = file
-      else if file.type.indexOf 'image' is 0
-        images[file.name] = file
+    Promise.all(thingsBeingProcessed).then =>
+      wizardData.emitChange()
 
-    wizardData.update subjects: images
+  _applyManifest: (file) ->
+    newlines = /\n|\r\n|\r/
 
-    if manifest?
-      @_setManifest manifest
-    else
-      wizardData.update subjectManifest: null
+    delimeters = switch file.type
+      when 'text/csv' then  ','
+      when 'text/tab-separated-values' then '\t'
 
-  _setManifest: (file) ->
-    reader = new FileReader
-    files = {}
+    new Promise (resolve) =>
+      reader = new FileReader
 
-    reader.onload = ->
-      for line in reader.result.split '\n' when line
-        [filename, original_width, original_height, title, coord_0, coord_1, timestamp] = line.split '\t'
-        files[filename] = {original_width, original_height, title, coord_0, coord_1, timestamp}
+      reader.onload = =>
+        for line in reader.result.split newlines when line
+          metadata = line.split delimeters
+          wizardData.subjects[metadata.filenames] ?= {}
+          wizardData.subjects[metadata.filenames].metadata = {}
+          for key, i in MANIFEST_COLUMNS when metadata[i]?
+            wizardData.subjects[metadata.filenames].metadata[key] = metadata[i]
+        resolve()
 
-      wizardData.update subjectManifest: files
-
-    reader.readAsText file
+      reader.readAsText file
 
   handleSubmit: ->
+    @_saveProject().then (project) =>
+      @_saveWorkflow(project).then (workflow) =>
+        @_saveSubjectSet(project, workflow).then (subjectSet) =>
+          @_saveSubjects(project, subjectSet).then =>
+            console.group 'Created!'
+            console.info 'project', project
+            console.info 'workflow', workflow
+            console.info 'subjectSet', subjectSet
+            console.groupEnd()
+
+  _saveProject: ->
     {language: primary_language, name: display_name, introduction, description, scienceCase: science_case} = wizardData
     projectData = {primary_language, display_name, introduction, description, science_case}
+
     project = apiClient.createType('projects').createResource projectData
     project.save()
-      .then (project) ->
-        workflowData =
-          name: "#{display_name} default workflow"
-          tasks: JSON.parse wizardData.tasks
-          primary_language: primary_language
-          links: project: project.id
-        workflow = apiClient.createType('workflows').createResource workflowData
-        workflow.save()
-          .then (workflow) ->
-            subjectSetData =
-              name: "#{display_name} initial subjects"
-              links: project: project.id
-            subjectSet = apiClient.createType('subject_sets').createResource subjectSetData
-            subjectSet.save()
-              .then (subjectSet) ->
-                sharedSubjectLinks =
-                  project: project.id
-                  subject_set: subjectSet.id
 
-                for filename, metadata in wizardData.subjects
-                  subjectData =
-                    locations: [filename]
-                    metadata: metadata
-                    links: Object.create sharedSubjectLinks
-                  subject = apiClient.createType('subject_sets').createResource subjectSetData
-                  # subject.save().then (subject) ->
-                  #   subject.locations
+  _saveWorkflow: (project) ->
+    workflowData =
+      name: "#{project.display_name} default workflow"
+      tasks: JSON.parse wizardData.tasks
+      primary_language: project.available_languages[0]
+      links:
+        project: project.id
 
-                console.group 'Created!'
-                console.info 'project', project
-                console.info 'workflow', workflow
-                console.info 'subjectSet', subjectSet
-                console.groupEnd()
+    workflow = apiClient.createType('workflows').createResource workflowData
+    workflow.save()
 
-  # TODO: Break these down a bit:
+  _saveSubjectSet: (project, workflow) ->
+    subjectSetData =
+      name: "#{project.display_name} initial subjects"
+      links:
+        project: project.id
+        workflows: [workflow.id]
 
-  # _saveProject: ->
+    subjectSet = apiClient.createType('subject_sets').createResource subjectSetData
+    subjectSet.save()
 
-  # _saveWorkflow: (project) ->
+  _saveSubjects: (project, subjectSet) ->
+    # sharedSubjectLinks =
+    #   project: project.id
+    #   subject_set: subjectSet.id
 
-  # _saveSubjectSet: (project) ->
+    # subjects = for filename, metadata in wizardData.subjects
+    #   subjectData =
+    #     locations:
+    #       standard:
+    #     metadata: metadata
+    #     links: Object.create sharedSubjectLinks
+    #   subject = apiClient.createType('subject_sets').createResource subjectSetData
+    #   subject.save().then (subject) ->
+    #     subject.locations
 
-  # _saveSubjects: ->
-
-  # _saveSubject: ->
+    # _saveSubject: (file, subjectSet) ->
