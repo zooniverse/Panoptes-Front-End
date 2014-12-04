@@ -4,6 +4,7 @@ ChangeListener = require '../components/change-listener'
 MarkdownEditor = require '../components/markdown-editor'
 JSONEditor = require '../components/json-editor'
 apiClient = require '../api/client'
+{makeHTTPRequest} = require('json-api-client').util
 
 MANIFEST_COLUMNS = [
   'filenames'
@@ -42,6 +43,7 @@ wizardData = new Model
   refresh: ->
     wizardData.update JSON.parse JSON.stringify DEFAULT_DATA
 
+window.projectCreationWizardData = wizardData
 wizardData.refresh()
 
 StepStatusIcon = React.createClass
@@ -279,13 +281,14 @@ module.exports = React.createClass
 
   handleSubmit: ->
     @_saveProject().then (project) =>
-      @_saveWorkflow(project).then (workflow) =>
-        @_saveSubjectSet(project, workflow).then (subjectSet) =>
-          @_saveSubjects(project, subjectSet).then =>
+      @_saveSubjectSet(project).then (subjectSet) =>
+        @_saveWorkflow(project, subjectSet).then (workflow) =>
+          @_saveSubjects(project).then (subjects) =>
             console.group 'Created!'
             console.info 'project', project
-            console.info 'workflow', workflow
             console.info 'subjectSet', subjectSet
+            console.info 'workflow', workflow
+            console.info 'subjects', subjects
             console.groupEnd()
 
   _saveProject: ->
@@ -295,40 +298,62 @@ module.exports = React.createClass
     project = apiClient.createType('projects').createResource projectData
     project.save()
 
-  _saveWorkflow: (project) ->
-    workflowData =
-      name: "#{project.display_name} default workflow"
-      tasks: JSON.parse wizardData.tasks
-      primary_language: project.available_languages[0]
-      links:
-        project: project.id
-
-    workflow = apiClient.createType('workflows').createResource workflowData
-    workflow.save()
-
-  _saveSubjectSet: (project, workflow) ->
+  _saveSubjectSet: (project) ->
     subjectSetData =
-      name: "#{project.display_name} initial subjects"
+      display_name: "#{project.display_name} initial subjects"
       links:
         project: project.id
-        workflows: [workflow.id]
 
     subjectSet = apiClient.createType('subject_sets').createResource subjectSetData
     subjectSet.save()
 
-  _saveSubjects: (project, subjectSet) ->
-    # sharedSubjectLinks =
-    #   project: project.id
-    #   subject_set: subjectSet.id
+  _saveWorkflow: (project, subjectSet) ->
+    workflowData =
+      display_name: "#{project.display_name} default workflow"
+      tasks: JSON.parse wizardData.tasks
+      primary_language: project.available_languages[0]
+      links:
+        project: project.id
+        subject_sets: [subjectSet.id]
 
-    # subjects = for filename, metadata in wizardData.subjects
-    #   subjectData =
-    #     locations:
-    #       standard:
-    #     metadata: metadata
-    #     links: Object.create sharedSubjectLinks
-    #   subject = apiClient.createType('subject_sets').createResource subjectSetData
-    #   subject.save().then (subject) ->
-    #     subject.locations
+    workflow = apiClient.createType('workflows').createResource workflowData
+    workflow.save()
 
-    # _saveSubject: (file, subjectSet) ->
+  _saveSubjects: window.saveSubjects = (project) ->
+    sharedSubjectLinks =
+      project: project.id
+
+    subjects = for filename, {file, metadata} of wizardData.subjects
+      subjectData =
+        locations:
+          standard: file.type
+        # metadata: metadata ? {filenames: [filename]}
+        links: sharedSubjectLinks
+
+      subject = apiClient.createType('subjects').createResource subjectData
+      subject.save().then (subject) =>
+        window.subject = subject
+        @_uploadSubjectFiles subject, file
+
+  _uploadSubjectFiles: window._uploadSubjectFiles = (subject, file) ->
+    a = document.createElement 'a'
+    a.href = subject.locations.standard
+
+    params = {}
+    a.search.slice(1).split('&').forEach (keyAndValue) ->
+      [key, value] = keyAndValue.split '='
+      params[key] = decodeURIComponent value
+
+    url = a.protocol + a.host + a.pathname
+    headers =
+      'x-amz-acl': params['x-amz-acl']
+      'x-amz-security-token': params['x-amz-security-token']
+      'Authorization': "AWS #{params['AWSAccessKeyId']}:#{params['Signature']}"
+      'Content-Type': params['response-content-type']
+
+    makeHTTPRequest 'PUT', url, file, headers
+
+    # reader = new FileReader
+    # reader.onload = (e) ->
+    #   makeHTTPRequest url, e.target.result, headers
+    # reader.readAsBinaryString file
