@@ -17,6 +17,17 @@ PROJECT_DATA =
   description: 'Everyone knows projects are awesome. Does the science back it up? Help us test our hypothesis blah blah blah...'
   science_case: 'We hope to prove once and for all the awesomeness of projects. We’ll publish a paper in blah blah blah...'
 
+SUBJECT_SET_DATA =
+  display_name: "Subject set for #{PROJECT_DATA.display_name}"
+
+SUBJECT_DATA =
+  locations:
+    standard: 'image/jpeg'
+
+  metadata:
+    latitude: 41.87
+    longitude: -87.63
+
 WORKFLOW_DATA =
   display_name: "Workflow for #{PROJECT_DATA.display_name}"
   tasks:
@@ -28,9 +39,6 @@ WORKFLOW_DATA =
         {value: false, label: 'Not very hot at all.'}
       ]
   primary_language: LANGUAGE
-
-SUBJECT_SET_DATA =
-  display_name: "Subject set for #{PROJECT_DATA.display_name}"
 
 projects = apiClient.createType 'projects'
 workflows = apiClient.createType 'workflows'
@@ -50,6 +58,8 @@ test 'Create a project', (t) ->
     t.ok project?, 'Responded with a project resource'
     t.ok project?.id, 'Project got an ID'
 
+    project.update
+
 test 'Create a subject set',  (t) ->
   subjectSetData = Object.create SUBJECT_SET_DATA
   subjectSetData.links =
@@ -63,6 +73,17 @@ test 'Create a subject set',  (t) ->
     subjectSet.attr('project').then (subjectSetProject) ->
       t.ok subjectSetProject?, 'Subject set is linked to a project'
       t.equal subjectSetProject?.id, resources.project.id, 'Subject set project is the one specified'
+
+test 'Create a subject', (t) ->
+  subjectData = Object.create SUBJECT_DATA
+  subjectData.links =
+    project: resources.project.id
+
+  subjects.createResource(subjectData).save().then (subject) ->
+    resources.subject = subject
+    t.ok subject?, 'Responded with a subject'
+    t.ok subject?.id?, 'Subject got an ID'
+    t.ok subject?.locations.standard.indexOf('http') isnt -1, 'Subject got a standard location'
 
 test 'Create a workflow', (t) ->
   workflowData = Object.create WORKFLOW_DATA
