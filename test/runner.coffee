@@ -7,4 +7,4 @@ if process.env.TEST?
   require './' + process.env.TEST
 else
   require './auth'
-  require './api'
+  require './project-creation'
