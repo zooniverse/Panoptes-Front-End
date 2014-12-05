@@ -25,11 +25,11 @@ module.exports = new Model
       .then (request) ->
         [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
         authToken = authTokenMatch1 ? authTokenMatch2
-        console?.log 'Got auth token', authToken
+        console?.info 'Got auth token', authToken
         authToken
 
       .catch (request) ->
-        # Back end is down or something.
+        # The back end is down or something.
         try {errors} = JSON.parse request.responseText
         errors ?= [message: password: ['Could not connect to the server']]
 
@@ -39,20 +39,19 @@ module.exports = new Model
   _getBearerToken: ->
     console?.log 'Getting bearer token'
     if @bearerToken
-      console?.log 'Already had a bearer token', @bearerToken
+      console?.info 'Already had a bearer token', @bearerToken
       Promise.resolve @bearerToken
     else
       data =
         grant_type: 'password'
         client_id: config.clientAppID
 
-      console?.log 'Requesting a new bearer token'
       makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS
         .then (request) =>
           response = JSON.parse request.responseText
           @bearerToken = response.access_token
           client.headers['Authorization'] = "Bearer #{@bearerToken}"
-          console?.log 'Got bearer token', @bearerToken
+          console?.info 'Got bearer token', @bearerToken
           @bearerToken
 
         .catch (request) ->
@@ -62,9 +61,9 @@ module.exports = new Model
           Promise.reject errors
 
   _deleteBearerToken: ->
-    console?.log 'Deleting bearer token'
     @bearerToken = ''
     delete client.headers['Authorization']
+    console?.log 'Deleted bearer token'
 
   register: ({login, email, password}) ->
     console?.log 'Registering new account', login
@@ -103,11 +102,12 @@ module.exports = new Model
           .then =>
             client.get '/me'
               .then ([user]) =>
-                console?.log 'Session exists for', user.display_name
+                console?.info 'Session exists for', user.display_name
                 user
 
           .catch ->
-            # If you can't get a bearer token, nobody's signed in.
+            # If you can't get a bearer token, nobody's signed in. This isn't an error.
+            console?.info 'No active session'
             null
 
     @currentUser
@@ -130,7 +130,7 @@ module.exports = new Model
             users.get display_name: login, 1
               .then ([user]) =>
                 user
-                console?.log 'Signed in', user.display_name
+                console?.info 'Signed in', user.display_name
                 user
 
         .catch (request) ->
@@ -139,6 +139,7 @@ module.exports = new Model
           else
             try {errors} = JSON.parse request.responseText
 
+          console?.error 'Failed to sign in', errors
           Promise.reject errors
 
     @currentUser
@@ -156,11 +157,12 @@ module.exports = new Model
       makeHTTPRequest 'POST', config.host + '/users/sign_out', data, deleteOverrideJSONHeaders
         .then =>
           @_deleteBearerToken()
+          console?.info 'Signed out'
           null
 
         .catch (request) ->
           try {errors} = JSON.parse request.responseText
-          console?.log 'Failed to sign out', errors
+          console?.error 'Failed to sign out', errors
           Promise.reject errors
 
     @currentUser
