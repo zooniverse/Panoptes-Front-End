@@ -20,7 +20,7 @@ CSRF_TOKEN_PATTERN = do ->
   ///#{NAME_ATTR}\s*#{CONTENT_ATTR}|#{CONTENT_ATTR}\s*#{NAME_ATTR}///
 
 module.exports = new Model
-  currentUser: Promise.resolve null
+  currentUser: null
   bearerToken: ''
 
   _getAuthToken: ->
