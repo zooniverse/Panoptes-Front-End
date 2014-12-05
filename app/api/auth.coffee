@@ -79,20 +79,16 @@ module.exports = new Model
           email: email
           password: password
 
-      makeHTTPRequest 'POST', config.host + '/users', data, JSON_HEADERS
-        .then (request) =>
-          # The response contains a JSON-API "users" resource.
-          client.processResponseTo request
-
+      # This weird URL is actually out of the API, but returns a JSON-API response.
+      client.post '/../users', data, JSON_HEADERS
+        .then =>
           @_getBearerToken().then =>
-            # The given login is transformed on the back end, but stored as display_name.
-            users.get display_name: login, 1
+            client.get '/me'
               .then ([user]) =>
                 console?.info 'Registered account', user.display_name
                 user
 
-        .catch (request) ->
-          try {errors} = JSON.parse request.responseText
+        .catch ({errors}) ->
           console?.error 'Failed to register', errors
           Promise.reject errors
 
@@ -131,9 +127,8 @@ module.exports = new Model
           client.processResponseTo request
 
           @_getBearerToken().then =>
-            users.get display_name: login, 1
+            client.get '/me'
               .then ([user]) =>
-                user
                 console?.info 'Signed in', user.display_name
                 user
 
