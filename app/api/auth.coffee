@@ -69,6 +69,11 @@ module.exports = new Model
     delete client.headers['Authorization']
     console?.log 'Deleted bearer token'
 
+  _getMe: ->
+    client.get('/me').then ([user]) =>
+      user.listen 'delete', [@, '_handleCurrentUserDeletion', user]
+      user
+
   register: ({login, email, password}) ->
     console?.log 'Registering new account', login
     @update currentUser: @_getAuthToken().then (token) =>
@@ -83,10 +88,9 @@ module.exports = new Model
       client.post '/../users', data, JSON_HEADERS
         .then =>
           @_getBearerToken().then =>
-            client.get '/me'
-              .then ([user]) =>
-                console?.info 'Registered account', user.display_name
-                user
+            @_getMe().then (user) =>
+              console?.info 'Registered account', user.display_name
+              user
 
         .catch ({errors}) ->
           console?.error 'Failed to register', errors
@@ -100,10 +104,9 @@ module.exports = new Model
       @update currentUser:
         @_getBearerToken()
           .then =>
-            client.get '/me'
-              .then ([user]) =>
-                console?.info 'Session exists for', user.display_name
-                user
+            @_getMe().then (user) =>
+              console?.info 'Session exists for', user.display_name
+              user
 
           .catch ->
             # If you can't get a bearer token, nobody's signed in. This isn't an error.
@@ -127,10 +130,9 @@ module.exports = new Model
           client.processResponseTo request
 
           @_getBearerToken().then =>
-            client.get '/me'
-              .then ([user]) =>
-                console?.info 'Signed in', user.display_name
-                user
+            @_getMe().then (user) =>
+              console?.info 'Signed in', user.display_name
+              user
 
         .catch (request) ->
           if request.status in [401, 0] # The server says 401, but the response object says 0, so who knows?
@@ -161,6 +163,12 @@ module.exports = new Model
           Promise.reject errors
 
     @currentUser
+
+  _handleCurrentUserDeletion: (user) ->
+    console?.log 'Handling account deletion', user.display_name
+    user.stopListening 'delete', [@, '_handleCurrentUserDeletion', user]
+    @_deleteBearerToken()
+    @update currentUser: Promise.resolve null
 
 window?.zooAuth = module.exports
 
