@@ -145,4 +145,4 @@ test 'Deleting an account works', (t) ->
             t.pass 'Could not sign in to a deleted account'
 
       .catch (errors) ->
-        t.fail 'Failed to delete account', JSON.stringify errors
+        t.fail 'Failed to delete account'
