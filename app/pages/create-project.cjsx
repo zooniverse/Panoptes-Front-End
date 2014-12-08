@@ -39,6 +39,7 @@ DEFAULT_DATA =
   description: 'Here is a description.'
   scienceCase: 'Here is some science.'
   subjects: {}
+  manifests: {}
   tasks: JSON.stringify DEFAULT_TASKS, null, 2
 
 wizardData = new Model
@@ -145,11 +146,17 @@ module.exports = React.createClass
           <p>Now you’ll be able to choose the images you want volunteers to look at (JPEG, PNG, or GIF, please). Optionally, you can include metadata about the images with a manifest file <small>(TODO: describe the manifest)</small>.</p>
           <p>These images will be uploaded during after last step of this process, which could take a long time depending on how many you select. Make sure you’ve got a steady internet connection. You’ll have an opportunity to review and refine your selection here before continuing.</p>
 
+          {for manifestFilename of wizardData.manifests
+            <span>
+              {manifestFilename}
+              <button onClick={@removeManifest.bind this, manifestFilename}>&times;</button>
+              &emsp;
+            </span>}
+
           <table>
             <thead>
               <tr>
-                <th></th>
-                {<th>{column}</th> for column in MANIFEST_COLUMNS[1...]}
+                {<th>{column}</th> for column in MANIFEST_COLUMNS}
                 <th></th>
               </tr>
             </thead>
@@ -233,15 +240,52 @@ module.exports = React.createClass
       </Route>
     </div>
 
+  _getSubjects: window.getSubjects = ->
+    missing = []
+    loose = []
+    inManifest = []
+
+    manifestedSubjectFilenames = []
+
+    for manifest, subjects of wizardData.manifests
+      for metadata in subjects
+        manifestedSubjectFilenames.push metadata.filenames...
+
+        files = (wizardData.subjects[filename] ? null for filename in metadata.filenames)
+        if null in files
+          missing.push {files, metadata}
+        else
+          inManifest.push {files, metadata}
+
+    for filename, file of wizardData.subjects when filename not in manifestedSubjectFilenames
+      files = [file]
+      loose.push {files}
+
+    [missing..., loose..., inManifest...]
+
   _renderSubjectRows: ->
-    for filename, {metadata} of wizardData.subjects
-      <tr key={filename}>
-        <td><strong>{filename}</strong></td>
-        {for column in MANIFEST_COLUMNS
-          <td title={column}>{metadata?[column] ? <span className="form-help">?</span>}</td>}
+    manifests = Object.keys(wizardData.manifests).length isnt 0
+
+    for {files, metadata} in @_getSubjects()
+      filenames = metadata?.filenames ? (name for {name} in files)
+
+      <tr key={filenames.join()}>
+        <td>
+          {for filename, i in filenames
+            <div>
+              {filename}
+              {unless files[i]?
+                <span className="form-help error" title="Missing image">&nbsp;<i className="fa fa-exclamation-circle"></i></span>}
+            </div>}
+          {if manifests and not metadata?
+            <div className="form-help warning"><i className="fa fa-exclamation-triangle"></i> Not present in any manifest</div>}
+        </td>
+
+        {for column in MANIFEST_COLUMNS[1...]
+          <td>{metadata?[column] ? <span className="form-help">?</span>}</td>}
 
         <td>
-          {<button onClick={@removeSubject.bind this, filename}><i className="fa fa-times"></i></button>}
+          <button onClick={@removeSubjects.bind this, filenames...}>&times;</button>
         </td>
       </tr>
 
@@ -256,8 +300,13 @@ module.exports = React.createClass
 
     wizardData.update changes
 
-  removeSubject: (filename) ->
-    delete wizardData.subjects[filename]
+  removeSubjects: (filenames...) ->
+    for filename in filenames
+      delete wizardData.subjects[filename]
+    wizardData.emitChange()
+
+  removeManifest: (filename) ->
+    delete wizardData.manifests[filename]
     wizardData.emitChange()
 
   handleSubjectFilesSelection: (e) ->
@@ -265,8 +314,7 @@ module.exports = React.createClass
       if file.type in ['text/csv', 'text/tab-separated-values']
         @_applyManifest file
       else if file.type.indexOf('image/') is 0
-        wizardData.subjects[file.name] ?= {}
-        wizardData.subjects[file.name].file = file
+        wizardData.subjects[file.name] = file
 
     Promise.all(thingsBeingProcessed).then =>
       wizardData.emitChange()
@@ -274,20 +322,30 @@ module.exports = React.createClass
   _applyManifest: (file) ->
     newlines = /\n|\r\n|\r/
 
-    delimeters = switch file.type
+    columnDelimiter = switch file.type
+      # TODO: Parse these files properly.
       when 'text/csv' then  ','
       when 'text/tab-separated-values' then '\t'
 
+    listDelimeter = ';'
+
     new Promise (resolve) =>
       reader = new FileReader
-
       reader.onload = =>
+        wizardData.manifests[file.name] ?= []
         for line in reader.result.split newlines when line
-          metadata = line.split delimeters
-          wizardData.subjects[metadata.filenames] ?= {}
-          wizardData.subjects[metadata.filenames].metadata = {}
-          for key, i in MANIFEST_COLUMNS when metadata[i]?
-            wizardData.subjects[metadata.filenames].metadata[key] = metadata[i]
+          metadataInOrder = line.split columnDelimiter
+
+          metadata = {}
+          for key, i in MANIFEST_COLUMNS when metadataInOrder[i]?
+            metadata[key] = metadataInOrder[i]
+
+          if metadata.filenames?
+            metadata.filenames = metadata.filenames.split listDelimeter
+
+          for imageFilename in metadata.filenames
+            wizardData.manifests[file.name].push metadata
+
         resolve()
 
       reader.readAsText file
@@ -336,7 +394,7 @@ module.exports = React.createClass
     sharedSubjectLinks =
       project: project.id
 
-    subjects = for filename, {file, metadata} of wizardData.subjects
+    subjects = for filename, file of wizardData.subjects
       subjectData =
         locations:
           standard: file.type
@@ -365,8 +423,3 @@ module.exports = React.createClass
       'Content-Type': params['response-content-type']
 
     makeHTTPRequest 'PUT', url, file, headers
-
-    # reader = new FileReader
-    # reader.onload = (e) ->
-    #   makeHTTPRequest url, e.target.result, headers
-    # reader.readAsBinaryString file
