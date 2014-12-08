@@ -1,6 +1,8 @@
 React = require 'react'
 Model = require '../lib/model'
 ChangeListener = require '../components/change-listener'
+Route = require '../lib/route'
+Link = require '../lib/link'
 MarkdownEditor = require '../components/markdown-editor'
 JSONEditor = require '../components/json-editor'
 apiClient = require '../api/client'
@@ -59,6 +61,36 @@ StepStatusIcon = React.createClass
 
     <i className="fa #{iconClass} fa-fw" style={style}></i>
 
+WizardNavigation = React.createClass
+  displayName: 'WizardNavigation'
+
+  render: ->
+    <div className="tabbed-content-tabs">
+      <Link href="/build/new-project" root={true} className="tabbed-content-tab">
+        General
+        <StepStatusIcon completed={wizardData.name and wizardData.introduction and wizardData.description} />
+      </Link>
+
+      <Link href="/build/new-project/science-case" className="tabbed-content-tab">
+        Science case
+        <StepStatusIcon completed={wizardData.scienceCase} />
+      </Link>
+
+      <Link href="/build/new-project/subjects" className="tabbed-content-tab">
+        Subjects
+        <StepStatusIcon completed={Object.keys(wizardData.subjects).length isnt 0} />
+      </Link>
+
+      <Link href="/build/new-project/workflow" className="tabbed-content-tab">
+        Workflow
+        <StepStatusIcon completed={wizardData.workflow} />
+      </Link>
+
+      <Link href="/build/new-project/review" className="tabbed-content-tab">
+        Review
+      </Link>
+    </div>
+
 module.exports = React.createClass
   displayName: 'CreateProjectPage'
 
@@ -69,155 +101,136 @@ module.exports = React.createClass
     <ChangeListener target={wizardData} handler={@renderWizard} />
 
   renderWizard: ->
-    <div className="create-project-page">
-      {switch @state.step
-        when 'general'
-          <div className="content-container">
-            <h2>General information</h2>
-            <p>Let’s get started by creating a basic description of your project. Everything you define here can be changed until your project goes live.</p>
-            <fieldset>
-              <legend>Project name</legend>
-              <input type="text" name="name" placeholder="Project name" value={wizardData.name} onChange={@handleInputChange} style={width: '100%'} />
-              <br />
-              <div className="form-help">This will be used to identify your project across the site.</div>
-            </fieldset>
-            <fieldset>
-              <legend>Introduction</legend>
-              <input type="text" name="introduction" placeholder="A catchy slogan for the project" value={wizardData.introduction} onChange={@handleInputChange} style={width: '100%'} />
-              <br />
-              <div className="form-help">This will often be shown when a link on the site points to your project.</div>
-            </fieldset>
-            <fieldset>
-              <legend>Project description</legend>
-              <MarkdownEditor name="description" placeholder="Why is this project interesting?" value={wizardData.description} onChange={@handleInputChange} style={width: '100%'} />
-              <br />
-              <div className="form-help">Tell people why they should help with your project. What question are you trying to answer, and why is it important?</div>
-            </fieldset>
-          </div>
+    <div className="create-project-page tabbed-content content-container" data-side="top">
+      <WizardNavigation />
 
-        when 'science'
-          <div className="content-container">
-            <h2>Science case</h2>
-            <fieldset>
-              <MarkdownEditor name="scienceCase" placeholder="A more detailed explanation of what you hope to achieve with the data you collect" value={wizardData.scienceCase} onChange={@handleInputChange} />
-              <span /><div className="form-help">Tell people how the data you collect will be used. What is the expected output of this project?</div>
-            </fieldset>
-          </div>
+      <Route path="/build/new-project">
+        <div className="content-container">
+          <h2>General information</h2>
+          <p>Let’s get started by creating a basic description of your project. Everything you define here can be changed until your project goes live.</p>
+          <fieldset>
+            <legend>Project name</legend>
+            <input type="text" name="name" placeholder="Project name" value={wizardData.name} onChange={@handleInputChange} style={width: '100%'} />
+            <br />
+            <div className="form-help">This will be used to identify your project across the site.</div>
+          </fieldset>
+          <fieldset>
+            <legend>Introduction</legend>
+            <input type="text" name="introduction" placeholder="A catchy slogan for the project" value={wizardData.introduction} onChange={@handleInputChange} style={width: '100%'} />
+            <br />
+            <div className="form-help">This will often be shown when a link on the site points to your project.</div>
+          </fieldset>
+          <fieldset>
+            <legend>Project description</legend>
+            <MarkdownEditor name="description" placeholder="Why is this project interesting?" value={wizardData.description} onChange={@handleInputChange} style={width: '100%'} />
+            <br />
+            <div className="form-help">Tell people why they should help with your project. What question are you trying to answer, and why is it important?</div>
+          </fieldset>
+        </div>
+      </Route>
 
-        when 'subjects'
-          <div className="content-container">
-            <h2>Create a set of subjects</h2>
-            <p>Now you’ll be able to choose the images you want volunteers to look at (JPEG, PNG, or GIF, please). Optionally, you can include metadata about the images with a manifest file <small>(TODO: describe the manifest)</small>.</p>
-            <p>These images will be uploaded during after last step of this process, which could take a long time depending on how many you select. Make sure you’ve got a steady internet connection. You’ll have an opportunity to review and refine your selection here before continuing.</p>
+      <Route path="/build/new-project/science-case">
+        <div className="content-container">
+          <h2>Science case</h2>
+          <fieldset>
+            <MarkdownEditor name="scienceCase" placeholder="A more detailed explanation of what you hope to achieve with the data you collect" value={wizardData.scienceCase} onChange={@handleInputChange} />
+            <span /><div className="form-help">Tell people how the data you collect will be used. What is the expected output of this project?</div>
+          </fieldset>
+        </div>
+      </Route>
 
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  {<th>{column}</th> for column in MANIFEST_COLUMNS[1...]}
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {@_renderSubjectRows()}
-              </tbody>
-            </table>
+      <Route path="/build/new-project/subjects">
+        <div className="content-container">
+          <h2>Create a set of subjects</h2>
+          <p>Now you’ll be able to choose the images you want volunteers to look at (JPEG, PNG, or GIF, please). Optionally, you can include metadata about the images with a manifest file <small>(TODO: describe the manifest)</small>.</p>
+          <p>These images will be uploaded during after last step of this process, which could take a long time depending on how many you select. Make sure you’ve got a steady internet connection. You’ll have an opportunity to review and refine your selection here before continuing.</p>
 
-            <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesSelection} /></p>
-          </div>
-
-        when 'workflow'
-          <div className="content-container">
-            <h2>Define the classification workflow</h2>
-            <p>Now you’ll define and link together the tasks each volunteer will do to complete a classification. <small>TODO: This is done in raw JSON for now.</small></p>
-            <p className="form-help">Each task object gets a <code>type</code> of <code>single</code> or <code>multiple</code>, a <code>question</code> string, and an <code>answers</code> array. Each answer object gets a <code>value</code> and a <code>label</code>. TODO: describe type <code>drawing</code>.</p>
-            <JSONEditor name="tasks" placeholder={JSON.stringify DEFAULT_TASKS, null, 2} value={wizardData.tasks} onChange={@handleInputChange} rows={20} cols={80} />
-          </div>
-
-        when 'review'
-          <div className="content-container">
-            <h2>Review and complete</h2>
-            <table>
+          <table>
+            <thead>
               <tr>
-                <td>{<i className="fa fa-check"></i> if wizardData.name and wizardData.introduction and wizardData.description}</td>
-                <td>Name, introduction, description</td>
+                <th></th>
+                {<th>{column}</th> for column in MANIFEST_COLUMNS[1...]}
+                <th></th>
               </tr>
-              <tr>
-                <td>{<i className="fa fa-check"></i> if wizardData.scienceCase}</td>
-                <td>Science case</td>
-              </tr>
-              <tr>
-                <td>{Object.keys(wizardData.subjects).length}</td>
-                <td>Subjects</td>
-              </tr>
-              <tr>
-                <td>{try Object.keys(JSON.parse wizardData.tasks).length catch then <i className="fa fa-times form-help error"></i>}</td>
-                <td>Workflow tasks</td>
-              </tr>
-            </table>
+            </thead>
+            <tbody>
+              {@_renderSubjectRows()}
+            </tbody>
+          </table>
 
-            <p><button type="submit" onClick={@handleSubmit}>Create project and upload subject images</button></p>
-          </div>
+          <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesSelection} /></p>
+        </div>
+      </Route>
 
-        when 'progress'
-          <div className="content-container">
-            <table>
-              <tr>
-                <td>
-                  {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingProject}
-                  {<i className="fa fa-check fa-fw"></i> if @state.savedProject}
-                </td>
-                <td>Project</td>
-              </tr>
-              <tr>
-                <td>
-                  {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingWorkflow}
-                  {<i className="fa fa-check fa-fw"></i> if @state.savedWorkflow}
-                </td>
-                <td>Workflow</td>
-              </tr>
-              <tr>
-                <td>
-                  {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjectSet}
-                  {<i className="fa fa-check fa-fw"></i> if @state.savedSubjectSet}
-                </td>
-                <td>Subject set</td>
-              </tr>
-              <tr>
-                <td>
-                  {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjects}
-                  {<i className="fa fa-check fa-fw"></i> if @state.savedSubjects}
-                </td>
-                <td>Subjects ({0} of {Object.keys(wizardData.subjects).length})</td>
-              </tr>
-            </table>
-          </div>}
+      <Route path="/build/new-project/workflow">
+        <div className="content-container">
+          <h2>Define the classification workflow</h2>
+          <p>Now you’ll define and link together the tasks each volunteer will do to complete a classification. <small>TODO: This is done in raw JSON for now.</small></p>
+          <p className="form-help">Each task object gets a <code>type</code> of <code>single</code> or <code>multiple</code>, a <code>question</code> string, and an <code>answers</code> array. Each answer object gets a <code>value</code> and a <code>label</code>. TODO: describe type <code>drawing</code>.</p>
+          <JSONEditor name="tasks" placeholder={JSON.stringify DEFAULT_TASKS, null, 2} value={wizardData.tasks} onChange={@handleInputChange} rows={20} cols={80} />
+        </div>
+      </Route>
 
-      <nav className="wizard-steps content-container">
-        <button className={'active' if @state.step is 'general'} onClick={@setState.bind this, step: 'general', null}>
-          General
-          <StepStatusIcon completed={wizardData.name and wizardData.introduction and wizardData.description} />
-        </button>
+      <Route path="/build/new-project/review">
+        <div className="content-container">
+          <h2>Review and complete</h2>
+          <table>
+            <tr>
+              <td>{<i className="fa fa-check"></i> if wizardData.name and wizardData.introduction and wizardData.description}</td>
+              <td>Name, introduction, description</td>
+            </tr>
+            <tr>
+              <td>{<i className="fa fa-check"></i> if wizardData.scienceCase}</td>
+              <td>Science case</td>
+            </tr>
+            <tr>
+              <td>{Object.keys(wizardData.subjects).length}</td>
+              <td>Subjects</td>
+            </tr>
+            <tr>
+              <td>{try Object.keys(JSON.parse wizardData.tasks).length catch then <i className="fa fa-times form-help error"></i>}</td>
+              <td>Workflow tasks</td>
+            </tr>
+          </table>
 
-        <button className={'active' if @state.step is 'science'} onClick={@setState.bind this, step: 'science', null}>
-          Science case
-          <StepStatusIcon completed={wizardData.scienceCase} />
-        </button>
+          <p><button type="submit" onClick={@handleSubmit}>Create project and upload subject images</button></p>
+        </div>
+      </Route>
 
-        <button className={'active' if @state.step is 'subjects'} onClick={@setState.bind this, step: 'subjects', null}>
-          Subjects
-          <StepStatusIcon completed={Object.keys(wizardData.subjects).length isnt 0} />
-        </button>
-
-        <button className={'active' if @state.step is 'workflow'} onClick={@setState.bind this, step: 'workflow', null}>
-          Workflow
-          <StepStatusIcon completed={wizardData.workflow} />
-        </button>
-
-        <button className={'active' if @state.step is 'review'} onClick={@setState.bind this, step: 'review', null}>
-          Review
-        </button>
-      </nav>
+      <Route path="/build/new-project/progress">
+        <div className="content-container">
+          <table>
+            <tr>
+              <td>
+                {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingProject}
+                {<i className="fa fa-check fa-fw"></i> if @state.savedProject}
+              </td>
+              <td>Project</td>
+            </tr>
+            <tr>
+              <td>
+                {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingWorkflow}
+                {<i className="fa fa-check fa-fw"></i> if @state.savedWorkflow}
+              </td>
+              <td>Workflow</td>
+            </tr>
+            <tr>
+              <td>
+                {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjectSet}
+                {<i className="fa fa-check fa-fw"></i> if @state.savedSubjectSet}
+              </td>
+              <td>Subject set</td>
+            </tr>
+            <tr>
+              <td>
+                {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjects}
+                {<i className="fa fa-check fa-fw"></i> if @state.savedSubjects}
+              </td>
+              <td>Subjects ({0} of {Object.keys(wizardData.subjects).length})</td>
+            </tr>
+          </table>
+        </div>
+      </Route>
     </div>
 
   _renderSubjectRows: ->
@@ -251,7 +264,7 @@ module.exports = React.createClass
     thingsBeingProcessed = for file in e.target.files
       if file.type in ['text/csv', 'text/tab-separated-values']
         @_applyManifest file
-      else if file.type.indexOf('image') is 0
+      else if file.type.indexOf('image/') is 0
         wizardData.subjects[file.name] ?= {}
         wizardData.subjects[file.name].file = file
 
