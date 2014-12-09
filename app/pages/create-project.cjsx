@@ -240,7 +240,7 @@ module.exports = React.createClass
       </Route>
     </div>
 
-  _getSubjects: window.getSubjects = ->
+  _getSubjects: window._getSubjects = ->
     missing = []
     loose = []
     inManifest = []
@@ -391,35 +391,44 @@ module.exports = React.createClass
     workflow.save()
 
   _saveSubjects: window.saveSubjects = (project) ->
+    subjectsToSave = (subject for subject in @_getSubjects() when null not in subject.files?)
+
     sharedSubjectLinks =
       project: project.id
 
-    subjects = for filename, file of wizardData.subjects
+    for {files, metadata} in subjectsToSave
+      metadata ?=
+        filenames: (name for {name} in files)
+
       subjectData =
-        locations:
-          standard: file.type
-        # metadata: metadata ? {filenames: [filename]}
+        locations: (type for {type} in files)
+
+        # metadata: metadata # FIXME: Metadata should be free-form.
+
         links: sharedSubjectLinks
 
       subject = apiClient.createType('subjects').createResource subjectData
       subject.save().then (subject) =>
         window.subject = subject
-        @_uploadSubjectFiles subject, file
+        @_uploadSubjectFiles subject, files
 
-  _uploadSubjectFiles: window._uploadSubjectFiles = (subject, file) ->
+  _uploadSubjectFiles: window._uploadSubjectFiles = (subject, files) ->
     a = document.createElement 'a'
-    a.href = subject.locations.standard
 
-    params = {}
-    a.search.slice(1).split('&').forEach (keyAndValue) ->
-      [key, value] = keyAndValue.split '='
-      params[key] = decodeURIComponent value
+    for location, i in subject.locations
+      for type, src of location then do (i, src) ->
+        a = document.createElement 'a'
+        a.href = src
 
-    url = a.protocol + a.host + a.pathname
-    headers =
-      'x-amz-acl': params['x-amz-acl']
-      'x-amz-security-token': params['x-amz-security-token']
-      'Authorization': "AWS #{params['AWSAccessKeyId']}:#{params['Signature']}"
-      'Content-Type': params['response-content-type']
+        destination = a.protocol + a.host + a.pathname
 
-    makeHTTPRequest 'PUT', url, file, headers
+        xhr = new XMLHttpRequest
+        xhr.open 'PUT', destination
+
+        formData = new FormData
+        a.search.slice(1).split('&').forEach (keyAndValue) ->
+          [key, value] = keyAndValue.split('=').map decodeURIComponent
+          formData.append key, value
+        formData.append 'file', files[i]
+
+        xhr.send formData
