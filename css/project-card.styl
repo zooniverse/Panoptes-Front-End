@@ -31,6 +31,10 @@
     min-width: 3em
     width: 6vw
 
+    &:not([src]),
+    &[src=""]
+      background-stripes: rgba(gray, 0.5) yellow 20px
+
   .details
     flex: 1
 
@@ -40,5 +44,5 @@
   .title
     @extends h2
 
-  .description
+  .introduction
     margin-top: 0.5em
