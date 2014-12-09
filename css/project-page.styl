@@ -6,7 +6,7 @@
   flex-direction: column
   position: relative
 
-  .background-cover
+  .background-darkener
     background: radial-gradient(rgba(black, 0.2), rgba(black, 0.8))
     bottom: 0
     left:0
@@ -21,6 +21,10 @@
     margin: -1.1em 0.2em -1.1em -1em
     vertical-align: middle
     width: 2.2em
+
+    &:not([src]),
+    &[src=""]
+      background-stripes: rgba(gray, 0.5) yellow 20px
 
   .tabbed-content-tabs
     margin-top: 1em
@@ -78,12 +82,12 @@
     display: inline-block
     padding: 0.5em 2em
 
-  .description
+  .introduction
     @extends h3
     margin: 0
     text-align: center
 
-  .introduction
+  .description
     column-gap: 1.5vw
     column-width: 30em
     font-size: 0.7em
