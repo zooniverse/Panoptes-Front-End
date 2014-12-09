@@ -417,18 +417,23 @@ module.exports = React.createClass
 
     for location, i in subject.locations
       for type, src of location then do (i, src) ->
-        a = document.createElement 'a'
-        a.href = src
-
-        destination = a.protocol + a.host + a.pathname
 
         xhr = new XMLHttpRequest
-        xhr.open 'PUT', destination
+        xhr.open 'PUT', src
+        xhr.send files[i]
 
-        formData = new FormData
-        a.search.slice(1).split('&').forEach (keyAndValue) ->
-          [key, value] = keyAndValue.split('=').map decodeURIComponent
-          formData.append key, value
-        formData.append 'file', files[i]
+        # a = document.createElement 'a'
+        # a.href = src
 
-        xhr.send formData
+        # destination = a.protocol + a.host + a.pathname
+
+        # xhr = new XMLHttpRequest
+        # xhr.open 'POST', destination
+
+        # formData = new FormData
+        # a.search.slice(1).split('&').forEach (keyAndValue) ->
+        #   [key, value] = keyAndValue.split('=').map decodeURIComponent
+        #   formData.append key, value
+        # formData.append 'file', files[i]
+
+        # xhr.send formData
