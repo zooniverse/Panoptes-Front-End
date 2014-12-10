@@ -96,5 +96,4 @@ module.exports = React.createClass
     if project?
       <ProjectPage project={project} />
     else
-      # TODO: Catch this in the PromiseRenderer.
       throw new Error "No project '#{@props.route.params.name}' found"

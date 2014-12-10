@@ -1,8 +1,8 @@
 React = require 'react'
 
-DEFAULT_RENDER_FAILURE = ->
+DEFAULT_RENDER_FAILURE = (error) ->
   <strong>
-    <code>Error</code>
+    <code>{error.toString()}</code>
   </strong>
 
 module.exports = React.createClass
@@ -48,7 +48,10 @@ module.exports = React.createClass
 
   render: ->
     if @state.resolved
-      @props.then @state.value
+      try
+        @props.then @state.value
+      catch e
+        @props.catch e
 
     else if @state.rejected
       @props.catch @state.error
