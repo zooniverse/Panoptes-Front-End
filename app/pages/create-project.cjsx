@@ -8,14 +8,7 @@ JSONEditor = require '../components/json-editor'
 apiClient = require '../api/client'
 {makeHTTPRequest} = require('json-api-client').util
 
-MANIFEST_COLUMNS = [
-  'filenames'
-  'timestamps'
-  'coord[0]'
-  'coord[1]'
-  'rotation'
-  'coords_type'
-]
+MANIFEST_COLUMNS = ['filenames', 'timestamps', 'coord[0]', 'coord[1]', 'rotation', 'coords_type']
 
 languages = ['en-us'] # TODO: Where should this live?
 
@@ -23,13 +16,10 @@ DEFAULT_TASKS =
   is_cool:
     type: 'single'
     question: 'Is this image cool?'
-    answers: [{
-      value: true
-      label: 'Yes!'
-    }, {
-      value: false
-      label: 'Nope'
-    }]
+    answers: [
+      {value: true, label: 'Yes!'}
+      {value: false, label: 'Nope'}
+    ]
     next: null
 
 DEFAULT_DATA =
@@ -46,7 +36,6 @@ wizardData = new Model
   refresh: ->
     wizardData.update JSON.parse JSON.stringify DEFAULT_DATA
 
-window.projectCreationWizardData = wizardData
 wizardData.refresh()
 
 StepStatusIcon = React.createClass
@@ -96,12 +85,15 @@ module.exports = React.createClass
   displayName: 'CreateProjectPage'
 
   getInitialState: ->
-    step: 'general'
+    log: []
 
   render: ->
     <ChangeListener target={wizardData} handler={@renderWizard} />
 
   renderWizard: ->
+    subjectsCount = Object.keys(wizardData.subjects).length
+    workflowTasks = try Object.keys(JSON.parse wizardData.tasks).length
+
     <div className="create-project-page tabbed-content content-container" data-side="top">
       <WizardNavigation />
 
@@ -165,7 +157,7 @@ module.exports = React.createClass
             </tbody>
           </table>
 
-          <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesSelection} /></p>
+          <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesChange} /></p>
         </div>
       </Route>
 
@@ -183,64 +175,38 @@ module.exports = React.createClass
           <h2>Review and complete</h2>
           <table>
             <tr>
-              <td>{<i className="fa fa-check"></i> if wizardData.name and wizardData.introduction and wizardData.description}</td>
-              <td>Name, introduction, description</td>
+              <td>{<i className="fa fa-check"></i> if wizardData.name and wizardData.introduction and wizardData.description and wizardData.scienceCase}</td>
+              <td>General info and science case</td>
             </tr>
             <tr>
-              <td>{<i className="fa fa-check"></i> if wizardData.scienceCase}</td>
-              <td>Science case</td>
-            </tr>
-            <tr>
-              <td>{Object.keys(wizardData.subjects).length}</td>
+              <td>{if subjectsCount is 0
+                <span style={color: 'red'}>{subjectsCount}</span>
+              else
+                subjectsCount}</td>
               <td>Subjects</td>
             </tr>
             <tr>
-              <td>{try Object.keys(JSON.parse wizardData.tasks).length catch then <i className="fa fa-times form-help error"></i>}</td>
+              <td>{workflowTasks ? <i className="fa fa-times form-help error"></i>}</td>
               <td>Workflow tasks</td>
             </tr>
           </table>
 
-          <p><button type="submit" onClick={@handleSubmit}>Create project and upload subject images</button></p>
-        </div>
-      </Route>
+          <p>
+            <button onClick={@submitData}>Create project</button>
+          </p>
 
-      <Route path="/build/new-project/progress">
-        <div className="content-container">
-          <table>
-            <tr>
-              <td>
-                {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingProject}
-                {<i className="fa fa-check fa-fw"></i> if @state.savedProject}
-              </td>
-              <td>Project</td>
-            </tr>
-            <tr>
-              <td>
-                {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingWorkflow}
-                {<i className="fa fa-check fa-fw"></i> if @state.savedWorkflow}
-              </td>
-              <td>Workflow</td>
-            </tr>
-            <tr>
-              <td>
-                {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjectSet}
-                {<i className="fa fa-check fa-fw"></i> if @state.savedSubjectSet}
-              </td>
-              <td>Subject set</td>
-            </tr>
-            <tr>
-              <td>
-                {<i className="fa fa-refresh fa-spin fa-fw"></i> if @state.savingSubjects}
-                {<i className="fa fa-check fa-fw"></i> if @state.savedSubjects}
-              </td>
-              <td>Subjects ({0} of {Object.keys(wizardData.subjects).length})</td>
-            </tr>
-          </table>
+          <ul>
+            {for line in @state.log
+              if line instanceof Error
+                <li style={color: red}>{line.toString()}</li>
+              else
+                <li>{line}</li>}
+          </ul>
         </div>
       </Route>
     </div>
 
-  _getSubjects: window._getSubjects = ->
+  _getSubjects: ->
     missing = []
     loose = []
     inManifest = []
@@ -303,23 +269,24 @@ module.exports = React.createClass
   removeSubjects: (filenames...) ->
     for filename in filenames
       delete wizardData.subjects[filename]
+    # TODO: Remove them from all the manifests too, so they don't appear to be missing.
     wizardData.emitChange()
 
   removeManifest: (filename) ->
     delete wizardData.manifests[filename]
     wizardData.emitChange()
 
-  handleSubjectFilesSelection: (e) ->
+  handleSubjectFilesChange: (e) ->
     thingsBeingProcessed = for file in e.target.files
       if file.type in ['text/csv', 'text/tab-separated-values']
-        @_applyManifest file
+        @_addManifest file
       else if file.type.indexOf('image/') is 0
         wizardData.subjects[file.name] = file
 
     Promise.all(thingsBeingProcessed).then =>
       wizardData.emitChange()
 
-  _applyManifest: (file) ->
+  _addManifest: (file) ->
     newlines = /\n|\r\n|\r/
 
     columnDelimiter = switch file.type
@@ -350,7 +317,7 @@ module.exports = React.createClass
 
       reader.readAsText file
 
-  handleSubmit: ->
+  submitData: ->
     @_saveProject().then (project) =>
       @_saveSubjectSet(project).then (subjectSet) =>
         @_saveWorkflow(project, subjectSet).then (workflow) =>
@@ -363,13 +330,20 @@ module.exports = React.createClass
             console.groupEnd()
 
   _saveProject: ->
+    @setState log: @state.log.concat ['Saving project']
     {language: primary_language, name: display_name, introduction, description, scienceCase: science_case} = wizardData
     projectData = {primary_language, display_name, introduction, description, science_case}
 
     project = apiClient.createType('projects').createResource projectData
     project.save()
+      .then =>
+        @setState log: @state.log.concat ['Saved project']
+        project
+      .catch =>
+        @setState log: @state.log.concat [new Error 'Failed to save project!']
 
   _saveSubjectSet: (project) ->
+    @setState log: @state.log.concat ['Saving subject set']
     subjectSetData =
       display_name: "#{project.display_name} initial subjects"
       links:
@@ -377,8 +351,14 @@ module.exports = React.createClass
 
     subjectSet = apiClient.createType('subject_sets').createResource subjectSetData
     subjectSet.save()
+      .then =>
+        @setState log: @state.log.concat ['Saved subject set']
+        subjectSet
+      .catch =>
+        @setState log: @state.log.concat [new Error 'Failed to save subject set!']
 
   _saveWorkflow: (project, subjectSet) ->
+    @setState log: @state.log.concat ['Saving workflow']
     workflowData =
       display_name: "#{project.display_name} default workflow"
       tasks: JSON.parse wizardData.tasks
@@ -389,51 +369,65 @@ module.exports = React.createClass
 
     workflow = apiClient.createType('workflows').createResource workflowData
     workflow.save()
+      .then =>
+        @setState log: @state.log.concat ['Saved workflow']
+        workflow
+      .catch =>
+        @setState log: @state.log.concat [new Error 'Failed to save workflow!']
 
-  _saveSubjects: window.saveSubjects = (project) ->
+  _saveSubjects: (project) ->
     subjectsToSave = (subject for subject in @_getSubjects() when null not in subject.files?)
 
     sharedSubjectLinks =
       project: project.id
 
-    for {files, metadata} in subjectsToSave
+    subjectSaves = for {files, metadata} in subjectsToSave
       metadata ?=
         filenames: (name for {name} in files)
 
       subjectData =
         locations: (type for {type} in files)
 
-        # metadata: metadata # FIXME: Metadata should be free-form.
+        # FIXME: Metadata should be free-form.
+        # metadata: metadata
 
         links: sharedSubjectLinks
 
       subject = apiClient.createType('subjects').createResource subjectData
-      subject.save().then (subject) =>
-        window.subject = subject
-        @_uploadSubjectFiles subject, files
 
-  _uploadSubjectFiles: window._uploadSubjectFiles = (subject, files) ->
-    a = document.createElement 'a'
+      subjectFilesString = (name for {name} in files).join ', '
+      @setState log: @state.log.concat ["Saving subject #{subjectFilesString}"]
+      subject.save()
+        .then (subject) =>
+          @setState log: @state.log.concat ["Saved subject #{subjectFilesString}"]
+          @_uploadSubjectFiles subject, files
+        .catch =>
+          @setState log: @state.log.concat [new Error "Failed to save subject #{subjectFilesString}!"]
 
+    Promise.all subjectSaves
+
+  _uploadSubjectFiles: (subject, files) ->
+    uploads = []
     for location, i in subject.locations
-      for type, src of location then do (i, src) ->
+      for type, src of location
+        uploads.push @_putFile src, files[i]
 
-        xhr = new XMLHttpRequest
-        xhr.open 'PUT', src
-        xhr.send files[i]
+    Promise.all uploads
 
-        # a = document.createElement 'a'
-        # a.href = src
+  _putFile: (location, file) ->
+    @setState log: @state.log.concat ["Uploading #{file.name}"]
+    new Promise (resolve, reject) =>
+      xhr = new XMLHttpRequest
 
-        # destination = a.protocol + a.host + a.pathname
+      xhr.onreadystatechange = (e) =>
+        if e.target.readyState is e.target.DONE
+          resolver = if 200 <= e.target.status < 300
+            @setState log: @state.log.concat ["Uploaded #{file.name}"]
+            resolve
+          else
+            @setState log: @state.log.concat [new Error "Failed to upload #{file.name}!"]
+            reject
+          resolver e.target
 
-        # xhr = new XMLHttpRequest
-        # xhr.open 'POST', destination
-
-        # formData = new FormData
-        # a.search.slice(1).split('&').forEach (keyAndValue) ->
-        #   [key, value] = keyAndValue.split('=').map decodeURIComponent
-        #   formData.append key, value
-        # formData.append 'file', files[i]
-
-        # xhr.send formData
+      xhr.open 'PUT', location
+      xhr.send file
