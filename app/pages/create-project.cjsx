@@ -73,7 +73,7 @@ WizardNavigation = React.createClass
 
       <Link href="/build/new-project/workflow" className="tabbed-content-tab">
         Workflow
-        <StepStatusIcon completed={wizardData.workflow} />
+        <StepStatusIcon completed={try Object.keys(JSON.parse(wizardData.tasks)).length isnt 0} />
       </Link>
 
       <Link href="/build/new-project/review" className="tabbed-content-tab">
@@ -198,7 +198,7 @@ module.exports = React.createClass
           <ul>
             {for line in @state.log
               if line instanceof Error
-                <li style={color: red}>{line.toString()}</li>
+                <li style={color: 'red'}>{line.toString()}</li>
               else
                 <li>{line}</li>}
           </ul>
@@ -319,15 +319,14 @@ module.exports = React.createClass
 
   submitData: ->
     @_saveProject().then (project) =>
+      console.info 'project', project
       @_saveSubjectSet(project).then (subjectSet) =>
+        console.info 'subjectSet', subjectSet
         @_saveWorkflow(project, subjectSet).then (workflow) =>
+          console.info 'workflow', workflow
           @_saveSubjects(project).then (subjects) =>
-            console.group 'Created!'
-            console.info 'project', project
-            console.info 'subjectSet', subjectSet
-            console.info 'workflow', workflow
             console.info 'subjects', subjects
-            console.groupEnd()
+            @_linkSubjectSet(subjectSet, subjects)
 
   _saveProject: ->
     @setState log: @state.log.concat ['Saving project']
@@ -381,7 +380,7 @@ module.exports = React.createClass
     sharedSubjectLinks =
       project: project.id
 
-    subjectSaves = for {files, metadata} in subjectsToSave
+    subjectSaves = for {files, metadata} in subjectsToSave then do (files, metadata) =>
       metadata ?=
         filenames: (name for {name} in files)
 
@@ -401,6 +400,7 @@ module.exports = React.createClass
         .then (subject) =>
           @setState log: @state.log.concat ["Saved subject #{subjectFilesString}"]
           @_uploadSubjectFiles subject, files
+          subject
         .catch =>
           @setState log: @state.log.concat [new Error "Failed to save subject #{subjectFilesString}!"]
 
@@ -431,3 +431,17 @@ module.exports = React.createClass
 
       xhr.open 'PUT', location
       xhr.send file
+
+  _linkSubjectSet: (subjectSet, subjects) ->
+    debugger
+    @setState log: @state.log.concat ["Linking #{subjects.length} subjects to subject set"]
+    subjectSet.update links: Object.create subjectSet.links # HACK
+    subjectSet.links.subjects ?= []
+    subjectSet.links.subjects.push (id for {id} in subjects)...
+
+    subjectSet.save()
+      .then (subjectSet) =>
+        @setState log: @state.log.concat ["Linked #{subjects.length} subject(s)"]
+        subjectSet
+      .catch =>
+        @setState log: @state.log.concat [new Error "Failed to link #{subjects.length} subjects!"]
