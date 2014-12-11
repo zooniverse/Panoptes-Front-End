@@ -23,22 +23,22 @@ ProjectPage = React.createClass
       <div className="background-darkener"></div>
 
       <nav className="tabbed-content-tabs">
-        <Link href="/projects/#{@props.project.name}" root={true} className="home tabbed-content-tab">
+        <Link href="/projects/#{@props.project.display_name}" root={true} className="home tabbed-content-tab">
           <h2><img src={@props.project.avatar} className="project-avatar" />{@props.project.display_name}</h2>
         </Link>
-        <Link href="/projects/#{@props.project.name}/science" className="tabbed-content-tab">Science</Link>
-        <Link href="/projects/#{@props.project.name}/status" className="tabbed-content-tab">Status</Link>
-        <Link href="/projects/#{@props.project.name}/team" className="tabbed-content-tab">Team</Link>
-        <Link href="/projects/#{@props.project.name}/classify" className="classify tabbed-content-tab">Classify</Link>
-        <Link href="/projects/#{@props.project.name}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
+        <Link href="/projects/#{@props.project.display_name}/science" className="tabbed-content-tab">Science</Link>
+        <Link href="/projects/#{@props.project.display_name}/status" className="tabbed-content-tab">Status</Link>
+        <Link href="/projects/#{@props.project.display_name}/team" className="tabbed-content-tab">Team</Link>
+        <Link href="/projects/#{@props.project.display_name}/classify" className="classify tabbed-content-tab">Classify</Link>
+        <Link href="/projects/#{@props.project.display_name}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
       </nav>
 
       <div className="project-page-content">
-        <Route path="/projects/#{@props.project.name}" className="project-home-content">
+        <Route path="/projects/#{@props.project.display_name}" className="project-home-content">
           <div className="call-to-action-container content-container">
             <Markdown className="introduction">{@props.project.introduction}</Markdown>
             <div>
-              <a href="#/projects/#{@props.project.name}/classify" className="call-to-action">Get started <i className="fa fa-arrow-circle-right"></i></a>
+              <a href="#/projects/#{@props.project.display_name}/classify" className="call-to-action">Get started <i className="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
 
@@ -47,29 +47,29 @@ ProjectPage = React.createClass
           </Markdown>
         </Route>
 
-        <Route path="/projects/#{@props.project.name}/science" className="project-text-content content-container">
+        <Route path="/projects/#{@props.project.display_name}/science" className="project-text-content content-container">
           <Markdown>
             {@props.project.science_case}
           </Markdown>
         </Route>
 
-        <Route path="/projects/#{@props.project.name}/status" className="project-text-content content-container">
+        <Route path="/projects/#{@props.project.display_name}/status" className="project-text-content content-container">
           <div>
             <hr Dashboard project={@props.project} />
           </div>
         </Route>
 
-        <Route path="/projects/#{@props.project.name}/team" className="project-text-content content-container">
+        <Route path="/projects/#{@props.project.display_name}/team" className="project-text-content content-container">
           <div>
             <p>Who’s in charge of this project? What organizations are behind it?</p>
           </div>
         </Route>
 
-        <Route path="/projects/#{@props.project.name}/classify" className="classify-content content-container">
-          <hr ClassifyPage project={@props.project.id} />
+        <Route path="/projects/#{@props.project.display_name}/classify" className="classify-content content-container">
+          <ClassifyPage project={@props.project} />
         </Route>
 
-        <Route path="/projects/#{@props.project.name}/talk" className="project-text-content content-container">
+        <Route path="/projects/#{@props.project.display_name}/talk" className="project-text-content content-container">
           <div>
             <p>Discussion boards this project</p>
           </div>
@@ -84,15 +84,17 @@ module.exports = React.createClass
   displayName: 'ProjectPageContainer'
 
   render: ->
-    project = apiClient.createType('projects').get name: @props.route.params.name, 1
+    project = apiClient.createType('projects').get display_name: @props.route.params.name, 1
+      .then ([project]) ->
+        project.refresh()
 
     <PromiseRenderer promise={project} then={@renderProjectPage}>
       <p>Loading project <code>{@props.route.params.name}</code>...</p>
     </PromiseRenderer>
 
-  renderProjectPage: ([project]) ->
+  renderProjectPage: (project) ->
     if project?
       <ProjectPage project={project} />
     else
       # TODO: Catch this in the PromiseRenderer.
-      throw new Error "No project '#{@props.route.params.name}' in ProjectPageWrapper"
+      throw new Error "No project '#{@props.route.params.name}' found"
