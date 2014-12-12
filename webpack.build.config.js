@@ -1,11 +1,19 @@
 var webpackConfig = require('./webpack.config');
+var webpack = require('webpack');
+
 delete webpackConfig.module.noParse;
 delete webpackConfig.devtool;
 
-webpackConfig.output.path = __dirname + '/' + process.env.BUILD_DIR;
 webpackConfig.optimize = {
+  minimize: true,
   occurenceOrder: true,
-  minimize: true
+  dedupe: true
 };
+
+// webpackConfig.plugins = [
+//   new webpack.DefinePlugin({
+//     'process.env': {NODE_ENV: 'production'}
+//   })
+// ];
 
 module.exports = webpackConfig;

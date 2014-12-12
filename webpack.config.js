@@ -1,29 +1,21 @@
 module.exports = {
-  context: __dirname + '/app',
-  entry: {
-    main: './main.cjsx'
-  },
-  output: {
-    path: __dirname + '/public',
-    filename: '[name].js',
-    chunkFilename: '[id].bundle.js'
-  },
   resolve: {
-    extensions: ['', '.js', '.cjsx', '.coffee']
+    extensions: ['', '.coffee', '.cjsx', '.js', '.jsx']
   },
+
   module: {
     loaders: [
-      { test: /\.cjsx$/, loaders: ['coffee-loader', 'cjsx-loader'] },
-      { test: /\.coffee$/, loader: 'coffee-loader' }
+      {test: /\.cjsx$/, loaders: ['coffee', 'cjsx']},
+      {test: /\.coffee$/, loader: 'coffee'}
     ],
-    noParse: [
-      /^react$/,
-      /json\-api\-client/
-    ]
+
+    noParse: [/^react$/, /json\-api\-client/]
   },
+
   node: {
     fs: 'empty'
   },
-  watchDelay: 0,
-  devtool: 'eval-source-map'
+
+  devtool: 'source-map',
+  watchDelay: 0
 };
