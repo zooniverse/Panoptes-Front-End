@@ -1,7 +1,7 @@
 React = require 'react'
+PromiseRenderer = require '../components/promise-renderer'
 loadImage = require '../lib/load-image'
 Draggable = require '../lib/draggable'
-SVGImage = require '../components/svg-image'
 {dispatch} = require '../lib/dispatcher'
 
 drawingComponents =
@@ -12,56 +12,37 @@ module.exports = React.createClass
   displayName: 'SubjectViewer'
 
   getInitialState: ->
-    loading: false
-
     frame: 0
-    imageWidth: 0
-    imageHeight: 0
-
-    viewX: 0
-    viewY: 0
-    viewWidth: 0
-    viewHeight: 0
+    width: 0
+    height: 0
 
     selectedMark: null
 
-  componentDidMount: ->
-    @resetSubject @props.subject
-
-  componentWillReceiveProps: (nextProps) ->
-    unless nextProps.subject is @props.subject
-      @resetSubject nextProps.subject
-
-  resetSubject: (subject) ->
-    @setFrame(0).then =>
-      @setView 0, 0, @state.imageWidth, @state.imageHeight
-
-  setFrame: (frame) ->
-    new Promise (resolve, reject) =>
-      @setState loading: true, =>
-        loadImage(@props.subject.location[frame]).then (img) =>
-          if @isMounted()
-            @setState
-              loading: false
-              frame: frame
-              imageWidth: img.width
-              imageHeight: img.height
-            resolve img
-
-  setView: (viewX, viewY, viewWidth, viewHeight) ->
-    @setState {viewX, viewY, viewWidth, viewHeight}
+  # setFrame: (frame) ->
+  #   new Promise (resolve, reject) =>
+  #     location = @props.subject.locations[frame]
+  #     src = location['image/jpeg'] ? location['image/png'] ? location['image/gif']
+  #     loadImage(src).then (img) =>
+  #       if @isMounted()
+  #         @setState
+  #           frame: frame
+  #           width: img.width
+  #           height: img.height
+  #         resolve img
 
   getScale: ->
-    rect = @refs.sizeRect?.getDOMNode().getBoundingClientRect()
+    rect = @refs.subjectContainer?.getDOMNode().getBoundingClientRect()
     rect ?= width: 0, height: 0
-    horizontal: rect.width / @state.viewWidth
-    vertical: rect.height / @state.viewHeight
+    horizontal = rect.width / @state.width || 0.01
+    vertical = rect.height / @state.height || 0.01
+    {horizontal, vertical}
 
   getEventOffset: (e) ->
-    rect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-    {horizontal, vertical} = @getScale()
-    x: ((e.pageX - pageXOffset - rect.left) / horizontal) + @state.viewX
-    y: ((e.pageY - pageYOffset - rect.top) / vertical) + @state.viewY
+    rect = @refs.subjectContainer.getDOMNode().getBoundingClientRect()
+    scale = @getScale()
+    x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
+    y = (e.pageY - pageYOffset - rect.top) / scale.vertical
+    {x,y}
 
   selectMark: (mark) ->
     annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
@@ -72,16 +53,61 @@ module.exports = React.createClass
       @setState selectedMark: mark
 
   render: ->
+    type = (mime for mime of @props.subject.locations[0])[0].split('/')[0]
+
+    <div className="subject-viewer">
+      <div ref="subjectContainer" className="subject-container" style={display: 'inline-block', position: 'relative'}>
+        {@["renderType_#{type}"]()}
+        {@renderMarkingSVG()}
+      </div>
+    </div>
+
+  renderType_image: ->
+    WHICH_LOCATION = 0 # Temporary
+
+    location = @props.subject.locations[WHICH_LOCATION]
+
+    knownGood = location['image/jpeg'] ? location['image/png'] ? location['image/gif']
+    knownGood = knownGood.replace(/anoptes/, 'panoptes')
+
+    viewBox = [@state.viewX, @state.viewY, @state.viewWidth, @state.viewHeight]
+
+    <img src={knownGood} onLoad={@handleImageLoad} style={display: 'block'} />
+
+  handleImageLoad: (e) ->
+    console.log 'Subject image loaded, setting width and height'
+    @setState
+      width: e.target.width
+      height: e.target.height
+
+  renderMarkingSVG: ->
+    viewBox = [0, 0, @state.width, @state.height]
+
+    svgStyle = height: '100%', left: 0, position: 'absolute', top: 0, width: '100%'
+
+    <svg className="subject-viewer-svg" viewBox={viewBox} preserveAspectRatio="none" data-tool={@props.selectedDrawingTool?.type} style={svgStyle}>
+      <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
+        <rect width={@state.width} height={@state.height} fill="transparent" stroke="none" />
+      </Draggable>
+      <g className="subject-viewer-tools">{@renderTools()}</g>
+    </svg>
+
+  renderTools: ->
     scale = @getScale()
+    @props.classification.annotations[0].marks ?= [
+      {_id: '0', _tool: {type: 'point'}, x: 20, y: 20}
+      # {_id: '1', _tool: {type: 'ellipse'}, x: 100, y: 100, rx: 20, ry: 40, angle: 10}
+    ] # Demo
 
     tools = []
-    for {marks}, a in @props.classification.annotations when marks?
-      for mark, m in marks
+    for annotation, a in @props.classification.annotations when annotation.marks?
+      for mark, m in annotation.marks
         Tool = drawingComponents[mark._tool.type]
         fromOtherAnnotation = a < @props.classification.annotations.length - 1
 
-        tools.push new Tool
-          key: mark._id
+        props =
+          classification: @props.classification
+          annotation: annotation
           mark: mark
           scale: scale
           disabled: fromOtherAnnotation
@@ -89,15 +115,9 @@ module.exports = React.createClass
           select: @selectMark.bind null, mark
           getEventOffset: @getEventOffset
 
-    viewBox = [@state.viewX, @state.viewY, @state.viewWidth, @state.viewHeight]
+        tools.push <Tool key={mark._id} {...props} />
 
-    <svg  className="subject-viewer-svg" width={@state.imageWidth} height={@state.imageHeight} viewBox={viewBox} data-tool={@props.selectedDrawingTool?.type}>
-      <rect ref="sizeRect" width={@state.imageWidth} height={@state.imageHeight} />
-      <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
-        <SVGImage src={@props.subject.location?[@state.frame]} width={@state.imageWidth} height={@state.imageHeight} />
-      </Draggable>
-      <g className="subject-viewer-tools" onMouseDown={@handleToolMouseDown}>{tools}</g>
-    </svg>
+    tools
 
   handleInitStart: (e) ->
     if @props.selectedDrawingTool?

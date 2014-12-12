@@ -39,14 +39,26 @@
       &.backward
         flex-grow: 0
 
+.subject-viewer
+  text-align center
+
 .subject-viewer-svg
-  background-stripes: transparent rgba(gray, 0.3) 20px
-  height: 100%
-  max-height: 95vh
-  width: 100%
+  outline: 1px dashed rgba(yellow, 0.5)
 
   &[data-tool]
     cursor: crosshair
+
+.drawing-tool
+  transition: opacity 0.3s
+
+  .drawing-tool-main
+    transition: transform 0.1s
+
+.drawing-tool[data-destroying]
+  opacity: 0
+
+  .drawing-tool-main
+    transform: scale(0.1)
 
 @require "./task-viewer"
 @require "./drawing-tool"
