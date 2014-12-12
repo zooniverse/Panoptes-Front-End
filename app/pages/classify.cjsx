@@ -17,11 +17,14 @@ module.exports = React.createClass
       }, 1).then ([subject]) ->
         subject
 
-    classification = subject.then (subject) =>
-      apiClient.createType('classifications').createResource
-        annotations: []
+    classification = Promise.all([workflow, subject]).then ([workflow, subject]) ->
+      initialAnnotation = task: workflow.first_task
+      classification = apiClient.createType('classifications').createResource
+        annotations: [initialAnnotation]
         links:
           subjects: [subject.id]
+      window.classification = classification
+      classification
 
     <PromiseRenderer promise={Promise.all [workflow, subject, classification]} then={@renderClassifier} />
 

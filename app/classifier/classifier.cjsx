@@ -1,9 +1,7 @@
 React = require 'react'
-subjectsStore = require '../mock-data/subjects'
-workflowsStore = require '../mock-data/workflows'
+ChangeListener = require '../components/change-listener'
 SubjectViewer = require './subject-viewer'
 TaskViewer = require './task-viewer'
-{dispatch} = require '../lib/dispatcher'
 
 module.exports = React.createClass
   displayName: 'Classifier'
@@ -11,59 +9,69 @@ module.exports = React.createClass
   getInitialState: ->
     selectedDrawingTool: null
 
-  loadTask: (taskKey) ->
-    # dispatch 'classification:annotate', @props.classification, taskKey
-    # @setState selectedDrawingTool: @props.workflow.tasks[taskKey].tools?[0]
-
   getAnnotation: ->
-    # Just a shortcut:
     @props.classification.annotations[@props.classification.annotations.length - 1]
 
+  getTask: ->
+    @props.workflow.tasks[@getAnnotation().task]
+
   render: ->
-      annotation = @getAnnotation()
-      if annotation?
-        task = @props.workflow?.tasks[annotation.task]
-        currentTool = @state.selectedDrawingTool ? task?.tools?[0]
-        nextTaskKey = annotation.answer?.next ? task?.next
+    <ChangeListener target={@props.classification} eventName="change" handler={@renderClassification} />
 
-      canGoBack = @props.classification.annotations.length > 1
-      needsAnswer = task?.required and not annotation.answer?
-      canGoForward = nextTaskKey?
+  renderClassification: ->
+    annotation = @getAnnotation()
+    task = @props.workflow.tasks[annotation.task]
+    currentTool = @state.selectedDrawingTool ? task?.tools?[0]
 
-      <div className="project-classify-page">
-        <div className="subject">
-          {if @props.subject?
-            <SubjectViewer subject={@props.subject} classification={@props.classification} selectedDrawingTool={currentTool} />
-          else
-            <p>Loading subject {@props.classification.subject}</p>}
-        </div>
+    <div className="project-classify-page">
+      {@renderSubject annotation, currentTool}
+      {@renderTaskArea annotation, task, currentTool}
+    </div>
 
-        <div className="classifier-task">
-          {if @props.workflow?
-            <TaskViewer task={task} annotation={annotation} selectedDrawingTool={currentTool} onChange={@handleAnswer} />
-          else
-            <p>Loading workflow {@props.classification.workflow}</p>}
+  renderSubject: (currentTool) ->
+    <div className="subject">
+      <SubjectViewer subject={@props.subject} classification={@props.classification} selectedDrawingTool={currentTool} />
+    </div>
 
-          <div className="task-nav">
-            <button className="backward" disabled={not canGoBack} onClick={@previousTask}><i className="fa fa-arrow-left"></i></button>
-            {if canGoForward
-              <button className="forward" disabled={needsAnswer} onClick={@loadTask.bind this, nextTaskKey}>Next <i className="fa fa-arrow-right"></i></button>
-            else
-              <button className="forward" disabled={needsAnswer} onClick={@finishClassification}>Done <i className="fa fa-check"></i></button>}
-          </div>
-        </div>
+  renderTaskArea: (annotation, task, currentTool) ->
+    onFirstTask = @props.classification.annotations.length is 1
+    needsAnswer = task.required and not annotation.answer?
+    nextTaskKey = annotation.answer?.next ? task.next
+    canGoForward = nextTaskKey?
+
+    <div className="classifier-task">
+      <TaskViewer task={task} annotation={annotation} selectedDrawingTool={currentTool} onChange={@handleAnswer} />
+
+      <div className="task-nav">
+        <button className="backward" disabled={onFirstTask} onClick={@previousTask}><i className="fa fa-arrow-left"></i></button>
+
+        {if canGoForward
+          <button className="forward" disabled={needsAnswer} onClick={@loadTask.bind this, nextTaskKey}>Next <i className="fa fa-arrow-right"></i></button>
+        else
+          <button className="forward" disabled={needsAnswer} onClick={@finishClassification}>Finished <i className="fa fa-check"></i></button>}
       </div>
+    </div>
 
-  handleAnswer: (answer) ->
-    if answer? and 'type' of answer
-      @setState selectedDrawingTool: answer
-    else
-      dispatch 'classification:annotation:update', @props.classification, @getAnnotation(), answer
+  handleAnswer: (e, answer) ->
+    if answer?
+      # Is there a more elegant way to identify a tool vs. a regular answer?
+      if @getTask.type is 'drawing'
+        @setState selectedDrawingTool: answer
+      else
+        # TODO: Allow for providing a function to `update`, maybe like this:
+        # @classification.update annotation: ->
+        #   @getAnnotation().answer = answer.value
+        @getAnnotation().answer = answer.value
+        @props.classification.emit 'change'
+
+  loadTask: (task) ->
+    @props.classification.annotations.push {task}
+    @props.classification.emit 'change'
 
   previousTask: ->
-    dispatch 'classification:annotation:abort', @props.classification, @getAnnotation()
-    taskKey = @getAnnotation().task
-    @setState selectedDrawingTool: @props.workflow.tasks[taskKey].tools?[0]
+    @props.classification.annotations.pop()
+    @props.classification.emit 'change'
+    @setState selectedDrawingTool: @getTask().tools?[0]
 
   finishClassification: ->
-    dispatch 'classification:save', @props.classification
+    alert 'TODO: Save the classification and get the next subject.'
