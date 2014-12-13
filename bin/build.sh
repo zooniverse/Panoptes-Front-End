@@ -10,7 +10,9 @@ cp -av "$DEV_DIR" "$BUILD_DIR"
 
 ./node_modules/.bin/webpack \
   --progress \
-  --config webpack.build.config.js \
+  --optimize-minimize \
+  --optimize-occurence-order \
+  --optimize-dedupe \
   "$SRC_JS" \
   "$BUILD_DIR/$OUT_JS"
 
