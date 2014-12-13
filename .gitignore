@@ -1,8 +1,7 @@
 /build
 /node_modules
-/public/.main.js
+/npm-debug.log
 /public/main.css
 /public/main.js
 /public/main.js.map
-/tmp
-npm-debug.log
+/test/bundle.js

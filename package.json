@@ -28,9 +28,10 @@
   },
   "scripts": {
     "build": "NODE_ENV=production ./bin/build.sh",
+    "pretest": "webpack --devtool inline-source-map ./test/runner.coffee ./test/bundle.js",
     "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
     "start": "./bin/serve.sh",
-    "test": "mkdir -p ./tmp; webpack --config webpack.test.config.js; cat ./tmp/test.js | testling | tap-spec; rm -rf ./tmp",
-    "test-mac": "mkdir -p ./tmp; webpack --config webpack.test.config.js; cat ./tmp/test.js | testling -x \"open\" | tap-spec; rm -rf ./tmp"
+    "test": "cat ./test/bundle.js | testling \"${TESTLING_ARGS:---pass}\" | tap-spec; rm ./test/bundle.js",
+    "test-mac": "TESTLING_ARGS=\"-x open --new -a Google\\ Chrome --args --incognito\" npm run test"
   }
 }
