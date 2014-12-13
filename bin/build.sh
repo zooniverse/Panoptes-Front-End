@@ -13,6 +13,7 @@ cp -av "$DEV_DIR" "$BUILD_DIR"
   --optimize-minimize \
   --optimize-occurence-order \
   --optimize-dedupe \
+  --devtool hidden-source-map \
   "$SRC_JS" \
   "$BUILD_DIR/$OUT_JS"
 
