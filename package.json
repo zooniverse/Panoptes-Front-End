@@ -28,6 +28,8 @@
   },
   "scripts": {
     "build": "NODE_ENV=production ./bin/build.sh",
+    "get-font-awesome": "rm -rf ./public/font-awesome; curl --output ./fa.zip http://fontawesome.io/assets/font-awesome-4.2.0.zip && unzip ./fa.zip -d ./fa.tmp && mv ./fa.tmp/* ./public/font-awesome; rm -rf ./fa.{zip,tmp}",
+    "postinstall": "npm run get-font-awesome",
     "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
     "start": "./bin/serve.sh",
     "test": "mkdir -p ./tmp; webpack --config webpack.test.config.js; cat ./tmp/test.js | testling | tap-spec; rm -rf ./tmp",

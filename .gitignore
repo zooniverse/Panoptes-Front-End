@@ -1,6 +1,7 @@
 /build
 /node_modules
 /public/.main.js
+/public/font-awesome
 /public/main.css
 /public/main.js
 /tmp
