@@ -48,17 +48,5 @@
   &[data-tool]
     cursor: crosshair
 
-.drawing-tool
-  transition: opacity 0.3s
-
-  .drawing-tool-main
-    transition: transform 0.1s
-
-.drawing-tool[data-destroying]
-  opacity: 0
-
-  .drawing-tool-main
-    transform: scale(0.1)
-
 @require "./task-viewer"
 @require "./drawing-tool"

@@ -16,6 +16,9 @@ CLOSE_BUTTON_ANGLE = 45
 module.exports = React.createClass
   displayName: 'EllipseTool'
 
+  getInitialState: ->
+    destroying: false
+
   statics:
     defaultValues: (mouseCoords) ->
       values =
@@ -61,42 +64,44 @@ module.exports = React.createClass
 
     deletePosition = @getDeletePosition()
 
-    <g className="ellipse drawing-tool" transform={positionAndRotate} data-disabled={@props.disabled || null} data-selected={@props.selected || null}>
-      <Draggable onStart={@handleDragStart} onDrag={@handleMainDrag}>
-        <ellipse rx={@props.mark.rx} ry={@props.mark.ry} fill="transparent" stroke={color} strokeWidth={STROKE_WIDTH / averageScale} />
-      </Draggable>
+    <g className="ellipse drawing-tool" transform={positionAndRotate} data-disabled={@props.disabled || null} data-selected={@props.selected || null} data-destroying={@state.destroying || null}>
+      <g className="drawing-tool-main">
+        <Draggable onStart={@handleDragStart} onDrag={@handleMainDrag}>
+          <ellipse rx={@props.mark.rx} ry={@props.mark.ry} fill="transparent" stroke={color} strokeWidth={STROKE_WIDTH / averageScale} />
+        </Draggable>
 
-      <DeleteButton
-        x={deletePosition.x}
-        y={deletePosition.y}
-        scale={@props.scale}
-        rotate={@props.mark.angle}
-        onClick={@deleteMark}
-      />
+        <DeleteButton
+          x={deletePosition.x}
+          y={deletePosition.y}
+          scale={@props.scale}
+          rotate={@props.mark.angle}
+          onClick={@deleteMark}
+        />
 
-      <DragHandle
-        onStart={@handleDragStart}
-        onDrag={@handleXHandleDrag}
-        color={@props.mark._tool.color}
-        x={@props.mark.rx}
-        y={0}
-        scale={@props.scale}
-        rotate={@props.mark.angle}
-        disabled={@props.disabled}
-        selected={@props.selected}
-      />
+        <DragHandle
+          onStart={@handleDragStart}
+          onDrag={@handleXHandleDrag}
+          color={@props.mark._tool.color}
+          x={@props.mark.rx}
+          y={0}
+          scale={@props.scale}
+          rotate={@props.mark.angle}
+          disabled={@props.disabled}
+          selected={@props.selected}
+        />
 
-      <DragHandle
-        onStart={@handleDragStart}
-        onDrag={@handleYHandleDrag}
-        color={@props.mark._tool.color}
-        x={0}
-        y={-1 * @props.mark.ry}
-        scale={@props.scale}
-        rotate={@props.mark.angle}
-        disabled={@props.disabled}
-        selected={@props.selected}
-      />
+        <DragHandle
+          onStart={@handleDragStart}
+          onDrag={@handleYHandleDrag}
+          color={@props.mark._tool.color}
+          x={0}
+          y={-1 * @props.mark.ry}
+          scale={@props.scale}
+          rotate={@props.mark.angle}
+          disabled={@props.disabled}
+          selected={@props.selected}
+        />
+      </g>
     </g>
 
   handleDragStart: (e) ->
@@ -110,25 +115,35 @@ module.exports = React.createClass
     {x, y} = @props.getEventOffset e
     x -= @startOffset.x
     y -= @startOffset.y
-    dispatch 'classification:annotation:mark:update', @props.mark, {x, y}
+    @props.mark.x = x
+    @props.mark.y = y
+    @props.classification.emit 'change'
 
   handleXHandleDrag: (e) ->
     {x, y} = @props.getEventOffset e
     rx = @constructor.getDistance @props.mark.x, @props.mark.y , x, y
     angle = @constructor.getAngle @props.mark.x, @props.mark.y , x, y
-    dispatch 'classification:annotation:mark:update', @props.mark, {rx, angle}
+    @props.mark.rx = rx
+    @props.mark.angle = angle
+    @props.classification.emit 'change'
 
   handleYHandleDrag: (e) ->
     {x, y} = @props.getEventOffset e
     ry = @constructor.getDistance @props.mark.x, @props.mark.y , x, y
     angle = @constructor.getAngle @props.mark.x, @props.mark.y , x, y
     angle -= 90
-    dispatch 'classification:annotation:mark:update', @props.mark, {ry, angle}
+    @props.mark.ry = ry
+    @props.mark.angle = angle
+    @props.classification.emit 'change'
 
   deleteMark: ->
-    dispatch 'classification:annotation:mark:delete', @props.mark
+    @setState destroying: true
+    setTimeout (=>
+      markIndex = @props.annotation.marks.indexOf @props.mark
+      @props.annotation.marks.splice markIndex, 1
+      @props.classification.emit 'change'), 500
 
   getDeletePosition: ->
-    theta = CLOSE_BUTTON_ANGLE * (Math.PI / 180)
+    theta = (CLOSE_BUTTON_ANGLE - @props.mark.angle) * (Math.PI / 180)
     x: @props.mark.rx * Math.cos theta
     y: -1 * @props.mark.ry * Math.sin theta

@@ -58,7 +58,7 @@ module.exports = React.createClass
       if @getTask.type is 'drawing'
         @setState selectedDrawingTool: answer
       else
-        # TODO: Allow for providing a function to `update`, maybe like this:
+        # TODO: Allow for providing a function to `update` properties, maybe like this:
         # @classification.update annotation: ->
         #   @getAnnotation().answer = answer.value
         @getAnnotation().answer = answer.value

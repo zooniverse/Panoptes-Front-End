@@ -2,10 +2,14 @@
   fill: none
   stroke: none
   stroke-width: 0
+  transition: opacity 0.3s
 
   &[data-disabled]
     opacity: 0.5
     pointer-events: none
+
+  .drawing-tool-main
+    transition: transform 0.1s
 
   .clickable
     cursor: pointer
@@ -22,3 +26,15 @@
     .dragging &
       cursor: grabbing
       cursor: -webkit-grabbing
+
+  .drag-handle
+    cursor: move
+
+    .dragging &
+      cursor: none
+
+  &[data-destroying]
+    opacity: 0
+
+    .drawing-tool-main
+      transform: scale(0.1)

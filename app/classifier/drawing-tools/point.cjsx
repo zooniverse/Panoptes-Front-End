@@ -38,15 +38,17 @@ module.exports = React.createClass
     "
 
     <g className="point drawing-tool" transform={transform} data-disabled={@props.disabled || null} data-selected={@props.selected || null} data-destroying={@state.destroying || null}>
-      <Draggable onStart={@props.select} onDrag={@handleDrag}>
-        <g className="drawing-tool-main" strokeWidth={strokeWidth}>
-          <circle cy="2" r={radius + (strokeWidth / 4)} stroke="black" strokeWidth={strokeWidth * 1.5} opacity="0.3" />
-          <circle r={radius + (strokeWidth / 2)} stroke="white" />
-          <circle r={radius} fill={if @props.disabled then color else 'transparent'} stroke={color} />
-        </g>
-      </Draggable>
+      <g className="drawing-tool-main">
+        <Draggable onStart={@props.select} onDrag={@handleDrag}>
+          <g className="drag-handle" strokeWidth={strokeWidth}>
+            <circle cy="2" r={radius + (strokeWidth / 4)} stroke="black" strokeWidth={strokeWidth * 1.5} opacity="0.3" />
+            <circle r={radius + (strokeWidth / 2)} stroke="white" />
+            <circle r={radius} fill={if @props.disabled then color else 'transparent'} stroke={color} />
+          </g>
+        </Draggable>
 
-      <DeleteButton x={radius} y={-1 * radius} onClick={@deleteMark} />
+        <DeleteButton x={radius} y={-1 * radius} onClick={@deleteMark} />
+      </g>
     </g>
 
   handleDrag: (e) ->

@@ -12,29 +12,16 @@ module.exports = React.createClass
   displayName: 'SubjectViewer'
 
   getInitialState: ->
-    frame: 0
     width: 0
     height: 0
-
     selectedMark: null
 
-  # setFrame: (frame) ->
-  #   new Promise (resolve, reject) =>
-  #     location = @props.subject.locations[frame]
-  #     src = location['image/jpeg'] ? location['image/png'] ? location['image/gif']
-  #     loadImage(src).then (img) =>
-  #       if @isMounted()
-  #         @setState
-  #           frame: frame
-  #           width: img.width
-  #           height: img.height
-  #         resolve img
-
   getScale: ->
+    ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
     rect = @refs.subjectContainer?.getDOMNode().getBoundingClientRect()
     rect ?= width: 0, height: 0
-    horizontal = rect.width / @state.width || 0.01
-    vertical = rect.height / @state.height || 0.01
+    horizontal = rect.width / @state.width || ALMOST_ZERO
+    vertical = rect.height / @state.height || ALMOST_ZERO
     {horizontal, vertical}
 
   getEventOffset: (e) ->
@@ -42,7 +29,7 @@ module.exports = React.createClass
     scale = @getScale()
     x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
-    {x,y}
+    {x, y}
 
   selectMark: (mark) ->
     annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
@@ -53,42 +40,37 @@ module.exports = React.createClass
       @setState selectedMark: mark
 
   render: ->
-    type = (mime for mime of @props.subject.locations[0])[0].split('/')[0]
+    type = Object.keys(@props.subject.locations[0])[0].split('/')[0]
+    renderApproprtiately = @["renderType_#{type}"]
 
     <div className="subject-viewer">
       <div ref="subjectContainer" className="subject-container" style={display: 'inline-block', position: 'relative'}>
-        {@["renderType_#{type}"]()}
+        {renderApproprtiately()}
         {@renderMarkingSVG()}
       </div>
+
+      {if @props.subject.locations.length > 1
+        <div className="frame-selection">
+          {for frame, i in @props.subject.locations
+            <button onClick={@handleFrameChange.bind this, i}>{i + 1}</button>}
+        </div>}
     </div>
 
   renderType_image: ->
-    WHICH_LOCATION = 0 # Temporary
-
-    location = @props.subject.locations[WHICH_LOCATION]
-
+    frameIndex = @props.classification._frame ? 0
+    location = @props.subject.locations[frameIndex]
     knownGood = location['image/jpeg'] ? location['image/png'] ? location['image/gif']
-    knownGood = knownGood.replace(/anoptes/, 'panoptes')
-
-    viewBox = [@state.viewX, @state.viewY, @state.viewWidth, @state.viewHeight]
-
     <img src={knownGood} onLoad={@handleImageLoad} style={display: 'block'} />
-
-  handleImageLoad: (e) ->
-    console.log 'Subject image loaded, setting width and height'
-    @setState
-      width: e.target.width
-      height: e.target.height
 
   renderMarkingSVG: ->
     viewBox = [0, 0, @state.width, @state.height]
-
     svgStyle = height: '100%', left: 0, position: 'absolute', top: 0, width: '100%'
 
     <svg className="subject-viewer-svg" viewBox={viewBox} preserveAspectRatio="none" data-tool={@props.selectedDrawingTool?.type} style={svgStyle}>
       <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
         <rect width={@state.width} height={@state.height} fill="transparent" stroke="none" />
       </Draggable>
+
       <g className="subject-viewer-tools">{@renderTools()}</g>
     </svg>
 
@@ -96,7 +78,7 @@ module.exports = React.createClass
     scale = @getScale()
     @props.classification.annotations[0].marks ?= [
       {_id: '0', _tool: {type: 'point'}, x: 20, y: 20}
-      # {_id: '1', _tool: {type: 'ellipse'}, x: 100, y: 100, rx: 20, ry: 40, angle: 10}
+      {_id: '1', _tool: {type: 'ellipse'}, x: 100, y: 100, rx: 20, ry: 40, angle: 10}
     ] # Demo
 
     tools = []
@@ -105,19 +87,29 @@ module.exports = React.createClass
         Tool = drawingComponents[mark._tool.type]
         fromOtherAnnotation = a < @props.classification.annotations.length - 1
 
-        props =
+        toolProps =
           classification: @props.classification
           annotation: annotation
           mark: mark
           scale: scale
           disabled: fromOtherAnnotation
           selected: mark is @state.selectedMark and not fromOtherAnnotation
+
+        toolFunctions =
           select: @selectMark.bind null, mark
           getEventOffset: @getEventOffset
 
-        tools.push <Tool key={mark._id} {...props} />
+        tools.push <Tool key={mark._id} {...toolProps} {...toolFunctions} />
 
     tools
+
+  handleImageLoad: (e) ->
+    {width, height} = e.target
+    unless @state.width is width and @state.height is height
+      @setState {width, height}
+
+  handleFrameChange: (index) ->
+    @props.classification.update _frame: index
 
   handleInitStart: (e) ->
     if @props.selectedDrawingTool?
