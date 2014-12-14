@@ -28,6 +28,8 @@
   },
   "scripts": {
     "build": "NODE_ENV=production ./bin/build.sh",
+    "postinstall": "npm run get-fallback-polyfills",
+    "get-fallback-polyfills": "curl \"https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6&flags=gated&ua=(MSIE%206.0)\" > ./public/fallback-polyfills.js",
     "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
     "start": "./bin/serve.sh",
     "test": "mkdir -p ./tmp; webpack --config webpack.test.config.js; cat ./tmp/test.js | testling | tap-spec; rm -rf ./tmp",
