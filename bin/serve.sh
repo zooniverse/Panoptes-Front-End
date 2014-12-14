@@ -23,18 +23,10 @@ jobs=""
   "$SRC_CSS" \
   & jobs="$jobs $!"
 
-# If these files don't exist, BrowserSync won't detect when they change.
-touch "$DEV_DIR/$OUT_JS"
-touch "$DEV_DIR/$OUT_CSS"
-
-./node_modules/.bin/browser-sync \
-  start \
-  --logLevel debug \
-  --server "$DEV_DIR" \
+./node_modules/.bin/static \
   --port "$PORT" \
-  --files "$DEV_DIR/*.{html,js,css}" \
-  --no-open \
-  --no-notify \
+  --cache "no-cache, must-revalidate" \
+  "$DEV_DIR"
   & jobs="$jobs $!"
 
 trap 'kill -HUP $jobs' INT TERM HUP
