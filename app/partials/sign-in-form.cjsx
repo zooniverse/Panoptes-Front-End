@@ -1,9 +1,8 @@
 Translator = require 'react-translator'
 React = require 'react'
-promiseToSetState = require '../lib/promise-to-set-state'
+currentUserMixin = require '../lib/current-user'
 InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
-auth = require '../api/auth'
 
 Translator.setStrings
   signInForm:
@@ -18,29 +17,15 @@ Translator.setStrings
 module.exports = React.createClass
   displayName: 'SignInForm'
 
-  mixins: [promiseToSetState]
-
-  componentDidMount: ->
-    @handleAuthChange()
-    auth.listen @handleAuthChange
-
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent()
+  mixins: [currentUserMixin]
 
   render: ->
-    working = @state.user instanceof Promise
-    signedIn = @state.user? and (not @state.errors?) and (not working)
-    disabled = working or signedIn
-
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
           <Translator>signInForm.userName</Translator>
           <br />
-          <input type="text" name="login" value={@props.currentLogin?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
+          <input type="text" name="login" value={@props.currentLogin?.display_name} disabled={@isDisabled()} ref="login" autoFocus="autoFocus" />
         </label>
       </div>
 
@@ -50,24 +35,24 @@ module.exports = React.createClass
         <label>
           <Translator>signInForm.password</Translator>
           <br />
-          <input type="password" name="password" value={@props.currentLogin?.password} disabled={disabled} ref="password" />
+          <input type="password" name="password" value={@props.currentLogin?.password} disabled={@isDisabled()} ref="password" />
         </label>
       </div>
 
       <br />
 
       <div>
-        <button type="submit" disabled={disabled}>
+        <button type="submit" disabled={@isDisabled()}>
           <Translator>signInForm.signIn</Translator>
         </button>
 
-        {if signedIn
-          <span className="form-help">Signed in as {@state.user.display_name} <button onClick={@handleSignOut}>Sign out</button></span>}
+        {if @isSignedIn()
+          <span className="form-help">Signed in as {@state.currentUser.display_name} <button onClick={@handleSignOutClick}>Sign out</button></span>}
 
-        {if @state.errors?
-          <span className="form-help error">{@state.errors}</span>}
+        {if @state.hasSignInErrors
+          <span className="form-help error">{@state.signInErrors}</span>}
 
-        {if working
+        {if @state.currentUserLoading
           <LoadingIndicator />}
       </div>
     </InPlaceForm>
@@ -75,15 +60,9 @@ module.exports = React.createClass
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
     password = @refs.password.getDOMNode().value
+    @handleSignIn { login, password }
 
-    auth.signIn {login, password}
-      .then =>
-        @setState errors: null
-
-      .catch (errors) =>
-        @setState errors: errors
-
-  handleSignOut: ->
-    auth.signOut().then =>
+  handleSignOutClick: ->
+    @handleSignOut().then =>
       @refs.login.getDOMNode().value = ''
       @refs.password.getDOMNode().value = ''
