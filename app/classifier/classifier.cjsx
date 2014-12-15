@@ -7,7 +7,7 @@ module.exports = React.createClass
   displayName: 'Classifier'
 
   getInitialState: ->
-    selectedDrawingTool: null
+    selectedDrawingTool: @getTask()?.tools?[0]
 
   getAnnotation: ->
     @props.classification.annotations[@props.classification.annotations.length - 1]
@@ -21,16 +21,16 @@ module.exports = React.createClass
   renderClassification: ->
     annotation = @getAnnotation()
     task = @props.workflow.tasks[annotation.task]
-    currentTool = @state.selectedDrawingTool ? task?.tools?[0]
+    currentTool = @state.selectedDrawingTool
 
     <div className="project-classify-page">
       {@renderSubject annotation, currentTool}
       {@renderTaskArea annotation, task, currentTool}
     </div>
 
-  renderSubject: (currentTool) ->
+  renderSubject: (annotation, currentTool) ->
     <div className="subject">
-      <SubjectViewer subject={@props.subject} classification={@props.classification} selectedDrawingTool={currentTool} />
+      <SubjectViewer subject={@props.subject} classification={@props.classification} annotation={annotation} selectedDrawingTool={currentTool} />
     </div>
 
   renderTaskArea: (annotation, task, currentTool) ->
@@ -53,14 +53,10 @@ module.exports = React.createClass
     </div>
 
   handleAnswer: (e, answer) ->
-    if answer?
-      # Is there a more elegant way to identify a tool vs. a regular answer?
-      if @getTask.type is 'drawing'
+    switch @getTask().type
+      when 'drawing'
         @setState selectedDrawingTool: answer
       else
-        # TODO: Allow for providing a function to `update` properties, maybe like this:
-        # @classification.update annotation: ->
-        #   @getAnnotation().answer = answer.value
         @getAnnotation().answer = answer.value
         @props.classification.emit 'change'
 

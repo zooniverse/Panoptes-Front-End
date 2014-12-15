@@ -16,6 +16,7 @@ module.exports = React.createClass
     </div>
 
   handleChange: (e) ->
-    answerIndex = e.target.dataset.index
-    answer = @props.options[answerIndex]
-    @props.onChange e, answer
+    if e.target.checked
+      answerIndex = e.target.dataset.index
+      answer = @props.options[answerIndex]
+      @props.onChange e, answer

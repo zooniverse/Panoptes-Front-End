@@ -18,7 +18,7 @@ module.exports = React.createClass
         subject
 
     classification = Promise.all([workflow, subject]).then ([workflow, subject]) ->
-      initialAnnotation = task: workflow.first_task
+      initialAnnotation = task: workflow.first_task ? Object.keys(workflow.tasks)[0]
       classification = apiClient.createType('classifications').createResource
         annotations: [initialAnnotation]
         links:

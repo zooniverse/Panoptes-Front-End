@@ -32,11 +32,10 @@ module.exports = React.createClass
     {x, y}
 
   selectMark: (mark) ->
-    annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-    index = annotation.marks?.indexOf mark
+    index = @props.annotation.marks?.indexOf mark
     if index? and index isnt -1
-      annotation.marks.splice index, 1
-      annotation.marks.push mark
+      @props.annotation.marks.splice index, 1
+      @props.annotation.marks.push mark
       @setState selectedMark: mark
 
   render: ->
@@ -60,7 +59,7 @@ module.exports = React.createClass
     frameIndex = @props.classification._frame ? 0
     location = @props.subject.locations[frameIndex]
     knownGood = location['image/jpeg'] ? location['image/png'] ? location['image/gif']
-    <img src={knownGood} onLoad={@handleImageLoad} style={display: 'block'} />
+    <img className="subject-image" src={knownGood} onLoad={@handleImageLoad} style={display: 'block'} />
 
   renderMarkingSVG: ->
     viewBox = [0, 0, @state.width, @state.height]
@@ -76,16 +75,15 @@ module.exports = React.createClass
 
   renderTools: ->
     scale = @getScale()
-    @props.classification.annotations[0].marks ?= [
+    @props.annotation.marks ?= [
       {_id: '0', _tool: {type: 'point'}, x: 20, y: 20}
       {_id: '1', _tool: {type: 'ellipse'}, x: 100, y: 100, rx: 20, ry: 40, angle: 10}
     ] # Demo
 
-    tools = []
-    for annotation, a in @props.classification.annotations when annotation.marks?
-      for mark, m in annotation.marks
+    for annotation in @props.classification.annotations when annotation.marks?
+      for mark in annotation.marks
         Tool = drawingComponents[mark._tool.type]
-        fromOtherAnnotation = a < @props.classification.annotations.length - 1
+        fromOtherAnnotation = annotation isnt @props.annotation
 
         toolProps =
           classification: @props.classification
@@ -99,9 +97,7 @@ module.exports = React.createClass
           select: @selectMark.bind null, mark
           getEventOffset: @getEventOffset
 
-        tools.push <Tool key={mark._id} {...toolProps} {...toolFunctions} />
-
-    tools
+        <Tool key={mark._id} {...toolProps} {...toolFunctions} />
 
   handleImageLoad: (e) ->
     {width, height} = e.target
@@ -114,15 +110,17 @@ module.exports = React.createClass
   handleInitStart: (e) ->
     if @props.selectedDrawingTool?
       mouseCoords = @getEventOffset e
-      annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-      annotation.marks ?= []
-      mark = annotation.marks[annotation.marks.length - 1]
+
+      @props.annotation.marks ?= []
+
       MarkComponent = drawingComponents[@props.selectedDrawingTool.type]
 
-      if MarkComponent.isComplete?
-        incomplete = not MarkComponent.isComplete? mark
+      if @state.selectedMark? and MarkComponent.isComplete?
+        selectedMarkIsIncomplete = not MarkComponent.isComplete @state.selectedMark
 
-      unless incomplete
+      if selectedMarkIsIncomplete
+        mark = @state.selectedMark
+      else
         mark =
           _id: Math.random()
           _tool: @props.selectedDrawingTool
@@ -133,35 +131,30 @@ module.exports = React.createClass
           for key, value of defaultValues
             mark[key] = value
 
-        dispatch 'classification:annotation:mark:create', @props.classification, annotation, mark
+        @props.annotation.marks.push mark
+        @setState selectedMark: mark
 
-      # TODO: I don't entirely trust that the action always fires immediately.
-      # There should probably be a one-time listener here on the classification.
+      if MarkComponent.initStart?
+        initValues = MarkComponent.initStart mouseCoords, mark, e
+        for key, value of initValues
+          mark[key] = value
 
-      @setState selectedMark: annotation.marks[annotation.marks.length - 1], =>
-        mark = @state.selectedMark
-        if MarkComponent.initStart?
-          initProps = MarkComponent.initStart mouseCoords, mark, e
-          dispatch 'classification:annotation:mark:update', mark, initProps
+      @props.classification.emit 'change'
 
   handleInitDrag: (e) ->
-    if @props.selectedDrawingTool?
-      mark = @state.selectedMark
-      MarkComponent = drawingComponents[@props.selectedDrawingTool.type]
-      mouseCoords = @getEventOffset e
-
-      if MarkComponent.initMove?
-        initProps = MarkComponent.initMove mouseCoords, mark, e
-        dispatch 'classification:annotation:mark:update', mark, initProps
+    mouseCoords = @getEventOffset e
+    MarkComponent = drawingComponents[@state.selectedMark._tool.type]
+    if MarkComponent.initMove?
+      initMoveValues = MarkComponent.initMove mouseCoords, @state.selectedMark, e
+      for key, value of initMoveValues
+        @state.selectedMark[key] = value
+      @props.classification.emit 'change'
 
   handleInitRelease: (e) ->
-    if @props.selectedDrawingTool?
-      mouseCoords = @getEventOffset e
-      annotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-      mark = @state.selectedMark
-      MarkComponent = drawingComponents[@props.selectedDrawingTool.type]
-
-      dispatch 'classification:annotation:mark:update', mark, _releases: mark._releases + 1
-      if MarkComponent.initRelease?
-        initProps = MarkComponent.initRelease mouseCoords, mark, e
-        dispatch 'classification:annotation:mark:update', mark, initProps
+    mouseCoords = @getEventOffset e
+    MarkComponent = drawingComponents[@state.selectedMark._tool.type]
+    if MarkComponent.initRelease?
+      initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
+      for key, value of initReleaseValues
+        @state.selectedMark[key] = value
+      @props.classification.emit 'change'
