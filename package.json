@@ -9,15 +9,15 @@
     "json-api-client": "~0.0.8",
     "lodash.merge": "^2.4.1",
     "marked": "^0.3.2",
+    "nib": "^1.0.4",
+    "node-static": "^0.7.6",
     "react": "^0.12.0",
     "react-translator": "~0.0.4",
     "route-parser": "^0.0.2",
-    "nib": "^1.0.4",
     "stylus": "^0.49.2"
   },
   "devDependencies": {
     "blue-tape": "^0.1.7",
-    "browser-sync": "^1.5.7",
     "cjsx-loader": "^1.0.0",
     "coffee-loader": "^0.7.2",
     "csso": "^1.3.11",
@@ -28,11 +28,14 @@
   },
   "scripts": {
     "build": "NODE_ENV=production ./bin/build.sh",
+    "postinstall": "npm run get-fallback-polyfills && npm run get-font-awesome",
     "get-font-awesome": "rm -rf ./public/font-awesome; curl --output ./fa.zip http://fontawesome.io/assets/font-awesome-4.2.0.zip && unzip ./fa.zip -d ./fa.tmp && mv ./fa.tmp/* ./public/font-awesome; rm -rf ./fa.{zip,tmp}",
-    "postinstall": "npm run get-font-awesome",
+    "get-fallback-polyfills": "curl \"https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6&flags=gated&ua=(MSIE%206.0)\" > ./public/fallback-polyfills.js",
+    "check-build-size": "npm run build && cat ./build/main.js | gzip --best | wc -c",
+    "pretest": "webpack --devtool inline-source-map ./test/runner.coffee ./test/bundle.js",
     "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
     "start": "./bin/serve.sh",
-    "test": "mkdir -p ./tmp; webpack --config webpack.test.config.js; cat ./tmp/test.js | testling | tap-spec; rm -rf ./tmp",
-    "test-mac": "mkdir -p ./tmp; webpack --config webpack.test.config.js; cat ./tmp/test.js | testling -x \"open\" | tap-spec; rm -rf ./tmp"
+    "test": "cat ./test/bundle.js | testling \"${TESTLING_ARGS:---pass}\" | tap-spec; rm ./test/bundle.js",
+    "test-mac": "TESTLING_ARGS=\"-x open --new -a Google\\ Chrome --args --incognito\" npm run test"
   }
 }
