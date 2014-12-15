@@ -1,5 +1,7 @@
 /build
 /node_modules
+/public/.main.js
+/public/fallback-polyfills.js
 /npm-debug.log
 /public/main.css
 /public/main.js
