@@ -26,7 +26,7 @@ pids=""
 ./node_modules/.bin/static \
   --port "$PORT" \
   --cache "no-cache, must-revalidate" \
-  "$DEV_DIR"
+  "$DEV_DIR" \
   & pids="$pids $!"
 
 trap 'kill -HUP $pids' INT TERM HUP
