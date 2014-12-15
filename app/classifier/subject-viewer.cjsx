@@ -75,10 +75,6 @@ module.exports = React.createClass
 
   renderTools: ->
     scale = @getScale()
-    @props.annotation.marks ?= [
-      {_id: '0', _tool: {type: 'point'}, x: 20, y: 20}
-      {_id: '1', _tool: {type: 'ellipse'}, x: 100, y: 100, rx: 20, ry: 40, angle: 10}
-    ] # Demo
 
     for annotation in @props.classification.annotations when annotation.marks?
       for mark in annotation.marks
