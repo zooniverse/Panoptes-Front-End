@@ -12,6 +12,7 @@
 
   <body>
     <script>
+     (function() {
         function polyfill(test, scriptSrc) {
           if (!test) document.write('<script class="polyfill" src="' + scriptSrc + '"></'+'script>');
         }
