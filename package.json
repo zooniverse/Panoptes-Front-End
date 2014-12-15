@@ -28,7 +28,8 @@
   },
   "scripts": {
     "build": "NODE_ENV=production ./bin/build.sh",
-    "postinstall": "npm run get-fallback-polyfills",
+    "postinstall": "npm run get-fallback-polyfills && npm run get-font-awesome",
+    "get-font-awesome": "rm -rf ./public/font-awesome; curl --output ./fa.zip http://fontawesome.io/assets/font-awesome-4.2.0.zip && unzip ./fa.zip -d ./fa.tmp && mv ./fa.tmp/* ./public/font-awesome; rm -rf ./fa.{zip,tmp}",
     "get-fallback-polyfills": "curl \"https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6&flags=gated&ua=(MSIE%206.0)\" > ./public/fallback-polyfills.js",
     "check-build-size": "npm run build && cat ./build/main.js | gzip --best | wc -c",
     "pretest": "webpack --devtool inline-source-map ./test/runner.coffee ./test/bundle.js",
