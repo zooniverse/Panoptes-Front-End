@@ -27,9 +27,8 @@ module.exports = React.createClass
     working = @state.user instanceof Promise
     signedIn = @state.user? and (not @state.errors?) and (not working)
     disabled = working or signedIn
-    {badLoginChars, loginTaken, passwordTooShort, passwordsDontMatch} = @state
+    {badLoginChars, usernameConflicts, passwordTooShort, passwordsDontMatch} = @state
     email = @refs.email?.getDOMNode().value
-
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
@@ -37,14 +36,14 @@ module.exports = React.createClass
           <input type="text" name="login" disabled={disabled} ref="login" onChange={@handleLoginChange} autoFocus="autoFocus" />
           {if badLoginChars?.length > 0
             <span className="form-help error">Don’t use weird characters ({badLoginChars.join ', '}).</span>
-          else if loginTaken?
-            if loginTaken instanceof Promise
+          else if usernameConflicts?
+            if usernameConflicts instanceof Promise
               <LoadingIndicator className="form-help" />
-            else if loginTaken instanceof Error
+            else if usernameConflicts instanceof Error
               <span className="form-help error"><i className="fa fa-exclamation-triangle"></i> Can’t determine this login’s availability.</span>
-            else if loginTaken.length isnt 0
+            else if usernameConflicts.length isnt 0
               <span className="form-help error">Sorry, that login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
-            else if loginTaken.length is 0
+            else if usernameConflicts.length is 0
               <span className="form-help success">Looks good.</span>}
         </label>
       </div>
@@ -129,10 +128,10 @@ module.exports = React.createClass
 
     @setState
       badLoginChars: badChars
-      loginTaken: null
+      usernameConflicts: null
 
     if exists and badChars.length is 0
-      @promiseToSetState loginTaken: users.get {login}, 1
+      @promiseToSetState usernameConflicts: users.get {login}, 1
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
@@ -148,10 +147,10 @@ module.exports = React.createClass
       passwordsDontMatch: if exists and asLong then not matches
 
   isFormValid: ->
-    {badLoginChars, loginTaken, passwordsDontMatch} = @state
+    {badLoginChars, usernameConflicts, passwordsDontMatch} = @state
     agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
 
-    (badLoginChars?.length is 0) and (loginTaken is false) and (passwordsDontMatch is false) and agreesToPrivacyPolicy
+    (badLoginChars?.length is 0) and (usernameConflicts.length is 0) and (passwordsDontMatch is false) and agreesToPrivacyPolicy
 
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
