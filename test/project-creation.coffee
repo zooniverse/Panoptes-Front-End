@@ -21,8 +21,7 @@ SUBJECT_SET_DATA =
   display_name: "Subject set for #{PROJECT_DATA.display_name}"
 
 SUBJECT_DATA =
-  locations:
-    standard: 'image/jpeg'
+  locations: ['image/jpeg']
 
   metadata:
     latitude: 41.87
@@ -83,7 +82,7 @@ test 'Create a subject', (t) ->
     resources.subject = subject
     t.ok subject?, 'Responded with a subject'
     t.ok subject?.id?, 'Subject got an ID'
-    t.ok subject?.locations.standard.indexOf('http') isnt -1, 'Subject got a standard location'
+    t.ok subject?.locations[0]['image/jpeg'].indexOf('http') isnt -1, 'Subject got a place to PUT its JPEG'
 
 test 'Create a workflow', (t) ->
   workflowData = Object.create WORKFLOW_DATA
