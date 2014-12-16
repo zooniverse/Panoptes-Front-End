@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "debounce": "^1.0.0",
     "emojify.js": "^0.9.5",
     "es6-promise": "^2.0.0",
     "function-bind": "^1.0.2",

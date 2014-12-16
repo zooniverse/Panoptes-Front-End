@@ -5,7 +5,9 @@ auth = require '../api/auth'
 users = require '../api/users'
 LoadingIndicator = require '../components/loading-indicator'
 {dispatch} = require '../lib/dispatcher'
+debounce = require 'debounce'
 
+USERNAME_CHECK_DELAY = 1000
 MIN_PASSWORD_LENGTH = 8
 
 module.exports = React.createClass
@@ -131,7 +133,12 @@ module.exports = React.createClass
       usernameConflicts: null
 
     if exists and badChars.length is 0
-      @promiseToSetState usernameConflicts: users.get {login}, 1
+      @debouncedCheckForLoginConflicts ?= debounce @checkForLoginConflicts, USERNAME_CHECK_DELAY
+      @debouncedCheckForLoginConflicts login
+
+  debouncedCheckForLoginConflicts: null
+  checkForLoginConflicts: (login) ->
+    @promiseToSetState usernameConflicts: users.get {login}, 1
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
@@ -150,7 +157,7 @@ module.exports = React.createClass
     {badLoginChars, usernameConflicts, passwordsDontMatch} = @state
     agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
 
-    (badLoginChars?.length is 0) and (usernameConflicts.length is 0) and (passwordsDontMatch is false) and agreesToPrivacyPolicy
+    (badLoginChars?.length is 0) and (usernameConflicts?.length is 0) and (passwordsDontMatch is false) and agreesToPrivacyPolicy
 
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
