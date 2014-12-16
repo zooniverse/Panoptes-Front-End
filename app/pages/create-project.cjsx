@@ -6,7 +6,6 @@ Link = require '../lib/link'
 MarkdownEditor = require '../components/markdown-editor'
 JSONEditor = require '../components/json-editor'
 apiClient = require '../api/client'
-{makeHTTPRequest} = require('json-api-client').util
 
 MANIFEST_COLUMNS = ['filenames', 'timestamps', 'coord[0]', 'coord[1]', 'rotation', 'coords_type']
 
@@ -15,22 +14,22 @@ languages = ['en-us'] # TODO: Where should this live?
 DEFAULT_TASKS =
   is_cool:
     type: 'single'
-    question: 'Is this image cool?'
+    question: 'Is this thing cool?'
     answers: [
-      {value: true, label: 'Yes!'}
-      {value: false, label: 'Nope'}
+      {value: true, label: 'Yeah!'}
+      {value: false, label: 'Nope!'}
     ]
     next: null
 
 DEFAULT_DATA =
   language: languages[0]
-  name: "Something Zoo #{(new Date).toISOString()}"
-  introduction: 'Welcome to the Something Zoo'
-  description: 'Here is a description.'
-  scienceCase: 'Here is some science.'
+  name: ''
+  introduction: ''
+  description: ''
+  scienceCase: ''
   subjects: {}
   manifests: {}
-  tasks: JSON.stringify DEFAULT_TASKS, null, 2
+  tasks: '{}'
 
 wizardData = new Model
   refresh: ->
@@ -119,6 +118,7 @@ module.exports = React.createClass
             <br />
             <div className="form-help">Tell people why they should help with your project. What question are you trying to answer, and why is it important?</div>
           </fieldset>
+          <Link href="/build/new-project/science-case">Next, describe your science case <i className="fa fa-arrow-right"></i></Link>
         </div>
       </Route>
 
@@ -129,6 +129,7 @@ module.exports = React.createClass
             <MarkdownEditor name="scienceCase" placeholder="A more detailed explanation of what you hope to achieve with the data you collect" value={wizardData.scienceCase} onChange={@handleInputChange} />
             <span /><div className="form-help">Tell people how the data you collect will be used. What is the expected output of this project?</div>
           </fieldset>
+          <Link href="/build/new-project/subjects">Next, select some subjects <i className="fa fa-arrow-right"></i></Link>
         </div>
       </Route>
 
@@ -158,6 +159,7 @@ module.exports = React.createClass
           </table>
 
           <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesChange} /></p>
+          <Link href="/build/new-project/workflow">Next, create a workflow <i className="fa fa-arrow-right"></i></Link>
         </div>
       </Route>
 
@@ -167,6 +169,7 @@ module.exports = React.createClass
           <p>Now you’ll define and link together the tasks each volunteer will do to complete a classification. <small>TODO: This is done in raw JSON for now.</small></p>
           <p className="form-help">Each task object gets a <code>type</code> of <code>single</code> or <code>multiple</code>, a <code>question</code> string, and an <code>answers</code> array. Each answer object gets a <code>value</code> and a <code>label</code>. TODO: describe type <code>drawing</code>.</p>
           <JSONEditor name="tasks" placeholder={JSON.stringify DEFAULT_TASKS, null, 2} value={wizardData.tasks} onChange={@handleInputChange} rows={20} cols={80} />
+          <Link href="/build/new-project/review">Next, review these details and create your project! <i className="fa fa-arrow-right"></i></Link>
         </div>
       </Route>
 
@@ -375,7 +378,7 @@ module.exports = React.createClass
         @setState log: @state.log.concat [new Error 'Failed to save workflow!']
 
   _saveSubjects: (project) ->
-    subjectsToSave = (subject for subject in @_getSubjects() when null not in subject.files?)
+    subjectsToSave = (subject for subject in @_getSubjects() when null not in subject.files)
 
     sharedSubjectLinks =
       project: project.id
@@ -386,10 +389,7 @@ module.exports = React.createClass
 
       subjectData =
         locations: (type for {type} in files)
-
-        # FIXME: Metadata should be free-form.
         # metadata: metadata
-
         links: sharedSubjectLinks
 
       subject = apiClient.createType('subjects').createResource subjectData
@@ -433,7 +433,6 @@ module.exports = React.createClass
       xhr.send file
 
   _linkSubjectSet: (subjectSet, subjects) ->
-    debugger
     @setState log: @state.log.concat ["Linking #{subjects.length} subjects to subject set"]
     subjectSet.update links: Object.create subjectSet.links # HACK
     subjectSet.links.subjects ?= []
