@@ -2,11 +2,15 @@
 
 source "$(dirname "$0")/config.sh"
 
-jobs=""
+pids=""
 
 [[ -f "$DEV_DIR/$OUT_JS" ]] && rm "$DEV_DIR/$OUT_JS"
 
-./node_modules/.bin/webpack --watch --output $DEV_DIR/$OUT_JS & jobs="$jobs $!"
+./node_modules/.bin/webpack \
+  --watch \
+  "$SRC_JS" \
+  "$DEV_DIR/$OUT_JS" \
+  & pids="$pids $!"
 
 [[ -f "$DEV_DIR/$OUT_CSS" ]] && rm "$DEV_DIR/$OUT_CSS"
 
@@ -17,22 +21,14 @@ jobs=""
   --import nib \
   --out "$DEV_DIR" \
   "$SRC_CSS" \
-  & jobs="$jobs $!"
+  & pids="$pids $!"
 
-# If these files don't exist, BrowserSync won't detect when they change.
-touch "$DEV_DIR/$OUT_JS"
-touch "$DEV_DIR/$OUT_CSS"
-
-./node_modules/.bin/browser-sync \
-  start \
-  --logLevel debug \
-  --server "$DEV_DIR" \
+./node_modules/.bin/static \
   --port "$PORT" \
-  --files "$DEV_DIR/*.{html,js,css}" \
-  --no-open \
-  --no-notify \
-  & jobs="$jobs $!"
+  --cache "no-cache, must-revalidate" \
+  "$DEV_DIR" \
+  & pids="$pids $!"
 
-trap 'kill -HUP $jobs' INT TERM HUP
+trap 'kill -HUP $pids' INT TERM HUP
 
 wait
