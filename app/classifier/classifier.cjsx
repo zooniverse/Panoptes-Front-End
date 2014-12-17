@@ -36,8 +36,8 @@ module.exports = React.createClass
   renderTaskArea: (annotation, task, currentTool) ->
     onFirstTask = @props.classification.annotations.length is 1
     needsAnswer = task.required and not annotation.answer?
-    nextTaskKey = annotation.answer?.next ? task.next
-    canGoForward = nextTaskKey?
+    nextTaskKey = annotation._answer?.next ? task.next
+    canGoForward = needsAnswer or nextTaskKey?
 
     <div className="classifier-task">
       <TaskViewer task={task} annotation={annotation} selectedDrawingTool={currentTool} onChange={@handleAnswer} />
@@ -58,6 +58,7 @@ module.exports = React.createClass
         @setState selectedDrawingTool: answer
       else
         @getAnnotation().answer = answer.value
+        @getAnnotation()._answer = answer
         @props.classification.emit 'change'
 
   loadTask: (task) ->
