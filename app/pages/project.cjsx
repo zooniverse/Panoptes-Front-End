@@ -86,7 +86,8 @@ module.exports = React.createClass
   render: ->
     project = apiClient.createType('projects').get display_name: @props.route.params.name, 1
       .then ([project]) ->
-        project.refresh()
+        project?.refresh()
+        project
 
     <PromiseRenderer promise={project} then={@renderProjectPage}>
       <p>Loading project <code>{@props.route.params.name}</code>...</p>
