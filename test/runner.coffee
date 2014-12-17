@@ -3,4 +3,4 @@ Function::bind ?= require 'function-bind'
 require('es6-promise').polyfill()
 
 require './auth'
-require './api'
+require './project-creation'
