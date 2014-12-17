@@ -29,4 +29,8 @@ module.exports = React.createClass
     <PromiseRenderer promise={Promise.all [workflow, subject, classification]} then={@renderClassifier} />
 
   renderClassifier: ([workflow, subject, classification]) ->
-    <Classifier workflow={workflow} subject={subject} classification={classification} />
+    <Classifier workflow={workflow} subject={subject} classification={classification} onFinishClassification={@handleFinishingClassification} />
+
+  handleFinishingClassification: (classification) ->
+    console.info 'FINISHED', JSON.stringify classification
+    alert 'TODO: Save the classification and load another subject.'

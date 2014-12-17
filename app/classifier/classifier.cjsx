@@ -71,4 +71,4 @@ module.exports = React.createClass
     @setState selectedDrawingTool: @getTask().tools?[0]
 
   finishClassification: ->
-    alert 'TODO: Save the classification and get the next subject.'
+    @props.onFinishClassification @props.classification
