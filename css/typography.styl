@@ -11,6 +11,16 @@ hr
 a
   color: MAIN_HIGHLIGHT
 
+@keyframes promise-pending-pulse
+  0%
+    opacity: 1
+  100%
+    opacity: 0.5
+
+.promise-pending
+  animation: promise-pending-pulse 0.7s alternate infinite
+  pointer-events: none
+
 .emoji
   max-height: 1em
 
