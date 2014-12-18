@@ -1,10 +1,5 @@
 React = require 'react'
 
-DEFAULT_RENDER_FAILURE = (error) ->
-  <strong>
-    <code>{error.toString()}</code>
-  </strong>
-
 module.exports = React.createClass
   displayName: 'PromiseRenderer'
 
@@ -14,7 +9,7 @@ module.exports = React.createClass
     catch: React.PropTypes.func
 
   getDefaultProps: ->
-    catch: DEFAULT_RENDER_FAILURE
+    catch: @::defaultCatch
 
   getInitialState: ->
     resolved: false
@@ -49,13 +44,20 @@ module.exports = React.createClass
   render: ->
     if @state.resolved
       try
-        @props.then @state.value
+        @props.then.call this, @state.value
       catch e
-        @props.catch e
+        @props.catch.call this, e
 
     else if @state.rejected
-      @props.catch @state.error
+      @props.catch.call this, @state.error
 
     else
       # Until the promise is resolved or rejected, show the given children.
       @props.children ? null
+
+  defaultCatch: (error) ->
+    <code>
+      <strong>{error.toString()}</strong>
+      {if @props.name?
+        <span>&nbsp;({@props.name})</span>}
+    </code>

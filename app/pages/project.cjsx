@@ -9,10 +9,7 @@ Dashboard = require './dashboard'
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
 
-  getDefaultProps: ->
-    project: {}
-
-  componentWillMount: ->
+  componentDidMount: ->
     document.documentElement.classList.add 'on-project-page'
 
   componentWillUnmount: ->

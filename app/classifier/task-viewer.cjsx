@@ -1,5 +1,4 @@
 React = require 'react'
-LoadingIndicator = require '../components/loading-indicator'
 
 taskComponents =
   single: require './tasks/single'

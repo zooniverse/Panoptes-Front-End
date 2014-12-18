@@ -1,5 +1,4 @@
 React = require 'react'
-PromiseRenderer = require '../components/promise-renderer'
 loadImage = require '../lib/load-image'
 Draggable = require '../lib/draggable'
 {dispatch} = require '../lib/dispatcher'
