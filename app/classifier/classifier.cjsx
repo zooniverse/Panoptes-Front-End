@@ -35,9 +35,9 @@ module.exports = React.createClass
 
   renderTaskArea: (annotation, task, currentTool) ->
     onFirstTask = @props.classification.annotations.length is 1
-    needsAnswer = task.required and not annotation.answer?
+    givenAnswers = (answer for answer in [].concat annotation.answer when answer?)
+    answerStillRequired = givenAnswers.length < task.required ? 0
     nextTaskKey = annotation._answer?.next ? task.next
-    canGoForward = needsAnswer or nextTaskKey?
 
     <div className="classifier-task">
       <TaskViewer task={task} annotation={annotation} selectedDrawingTool={currentTool} onChange={@handleAnswer} />
@@ -45,10 +45,10 @@ module.exports = React.createClass
       <div className="task-nav">
         <button className="backward" disabled={onFirstTask} onClick={@previousTask}><i className="fa fa-arrow-left"></i></button>
 
-        {if canGoForward
-          <button className="forward" disabled={needsAnswer} onClick={@loadTask.bind this, nextTaskKey}>Next <i className="fa fa-arrow-right"></i></button>
+        {if nextTaskKey?
+          <button className="forward" disabled={answerStillRequired} onClick={@loadTask.bind this, nextTaskKey}>Next <i className="fa fa-arrow-right"></i></button>
         else
-          <button className="forward" disabled={needsAnswer} onClick={@finishClassification}>Finished <i className="fa fa-check"></i></button>}
+          <button className="forward" disabled={answerStillRequired} onClick={@finishClassification}>Finished <i className="fa fa-check"></i></button>}
       </div>
     </div>
 
