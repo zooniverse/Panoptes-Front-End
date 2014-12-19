@@ -81,9 +81,9 @@ module.exports = React.createClass
   displayName: 'ProjectPageContainer'
 
   render: ->
-    project = apiClient.createType('projects').get display_name: @props.route.params.name, 1
-      .then ([project]) ->
-        project?.refresh()
+    project = apiClient.createType('projects').get @props.route.params.id # By-ID a is temporary workaround for router weirdness.
+      # .then ([project]) ->
+      #   project?.refresh()
 
     <PromiseRenderer promise={project} then={@renderProjectPage}>
       <p>Loading project <code>{@props.route.params.name}</code>...</p>
