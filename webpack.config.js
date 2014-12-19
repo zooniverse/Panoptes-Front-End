@@ -27,6 +27,6 @@ module.exports = {
     fs: 'empty'
   },
 
-  devtool: 'eval-source-map',
+  devtool: '#eval-source-map',
   watchDelay: 0
 };

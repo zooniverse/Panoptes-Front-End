@@ -38,7 +38,7 @@ module.exports = React.createClass
       <li key={project.id}>
         {project.display_name}&nbsp;
         <a href={'#/build/edit-project/' + project.id}><i className="fa fa-pencil"></i></a>&nbsp;
-        <a href={'#/projects/' + project.name}><i className="fa fa-hand-o-right"></i></a>
+        <a href={'#/projects/' + project.id}><i className="fa fa-hand-o-right"></i></a>
       </li>
 
     <ul>

@@ -30,9 +30,7 @@ module.exports = React.createClass
       rotate(#{@props.rotate})
     "
 
-    averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
-
-    <g className="clickable drawing-tool-delete-button" transform={transform} stroke={STROKE_COLOR} strokeWidth={STROKE_WIDTH * averageScale} onClick={@props.onClick}>
+    <g className="clickable drawing-tool-delete-button" transform={transform} stroke={STROKE_COLOR} strokeWidth={STROKE_WIDTH} onClick={@props.onClick}>
       <circle r={RADIUS} fill={FILL_COLOR} />
       <path d={CROSS_PATH} transform="rotate(45)" />
     </g>

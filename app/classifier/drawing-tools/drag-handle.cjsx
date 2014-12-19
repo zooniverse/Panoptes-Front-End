@@ -2,11 +2,11 @@ React = require 'react'
 Draggable = require '../../lib/draggable'
 
 RADII =
-  selected: 12
-  normal: 6
-  disabled: 4
+  selected: 8
+  normal: 5
+  disabled: 2
 
-STROKE_WIDTH = 3
+STROKE_WIDTH = 2
 
 # A consistent drag handle for use across drawing tools.
 

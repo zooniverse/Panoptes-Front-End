@@ -1,45 +1,41 @@
 React = require 'react'
-classificationsStore = require '../mock-data/classifications'
-{dispatch} = require '../lib/dispatcher'
+apiClient = require '../api/client'
+PromiseRenderer = require '../components/promise-renderer'
 Classifier = require '../classifier/classifier'
-LoadingIndicator = require '../components/loading-indicator'
-
-# This module just takes a project ID
-# and recalls or creates a local in-progress classification for it.
-# The Classifier does all the hard work from there.
 
 module.exports = React.createClass
   displayName: 'ClassifyPage'
 
-  getInitialState: ->
-    classification: null
-
-  componentDidMount: ->
-    classificationsStore.listen @handleClassificationsChange
-    @loadClassificationFor @props.project
-
-  componentWillUnmount: ->
-    classificationsStore.stopListening @handleClassificationsChange
-
-  componentWillReceiveProps: (nextProps) ->
-    unless nextProps.project is @props.project
-      @loadClassificationFor nextProps.project
-
-  handleClassificationsChange: ->
-    @loadClassificationFor @props.project
-
-  loadClassificationFor: (project) ->
-    classification = classificationsStore.inProgress[project]
-    if classification?
-      if classification instanceof Promise
-        @setState classification: null
-      else
-        @setState {classification}
-    else
-      dispatch 'classification:create', project
-
   render: ->
-    if @state.classification?
-      <Classifier classification={@state.classification} />
-    else
-      <p>Loading classification for project <code>{@props.project}</code></p>
+    workflow = @props.project.attr('workflows').then (workflows) ->
+      # TODO: Allow workflow selection, maybe?
+      workflows[Math.floor Math.random() * workflows.length]
+
+    subject = workflow.then (workflow) =>
+      apiClient.createType('subjects').get({
+        project_id: @props.project.id
+        workflow_id: workflow.id
+        sort: 'cellect'
+      }, 1).then (subjects) ->
+        console.log 'Got these subjects', subjects
+        subjects[Math.floor Math.random() * subjects.length]
+
+    classification = Promise.all([workflow, subject]).then ([workflow, subject]) =>
+      initialAnnotation = task: workflow.first_task ? Object.keys(workflow.tasks)[0]
+      classification = apiClient.createType('classifications').createResource
+        annotations: [initialAnnotation]
+        links:
+          project: @props.project.id
+          workflow: workflow.id
+          subject: subject.id
+      window.classification = classification
+      classification
+
+    <PromiseRenderer promise={Promise.all [workflow, subject, classification]} then={@renderClassifier} />
+
+  renderClassifier: ([workflow, subject, classification]) ->
+    <Classifier workflow={workflow} subject={subject} classification={classification} onFinishClassification={@handleFinishingClassification} />
+
+  handleFinishingClassification: (classification) ->
+    console.info 'FINISHED', JSON.stringify classification
+    alert 'TODO: Save the classification and load another subject.'

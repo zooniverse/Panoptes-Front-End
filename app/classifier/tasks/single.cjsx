@@ -5,8 +5,8 @@ module.exports = React.createClass
 
   render: ->
     answers = for answer, i in @props.options
-      <label className="workflow-task-answer" key={answer.label}>
-        <input type="radio" value={i} checked={answer is @props.value} onChange={@handleChange} />
+      <label className="workflow-task-answer" key={answer.value}>
+        <input type="radio" data-index={i} checked={answer.value is @props.value} onChange={@handleChange} />
         <span className="clickable">{answer.label}</span>
       </label>
 
@@ -16,5 +16,7 @@ module.exports = React.createClass
     </div>
 
   handleChange: (e) ->
-    answerIndex = e.target.value
-    @props.onChange @props.options[answerIndex]
+    if e.target.checked
+      answerIndex = e.target.dataset.index
+      answer = @props.options[answerIndex]
+      @props.onChange e, answer

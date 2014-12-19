@@ -6,31 +6,33 @@ module.exports = React.createClass
   render: ->
     existingAnswers = @props.value ? []
     answers = for answer, i in @props.options
-      <label className="workflow-task-answer" key={answer.label}>
-        <input type="checkbox" value={i} checked={answer in existingAnswers} onChange={@handleChange} />
+      <label className="workflow-task-answer" key={answer.value}>
+        <input type="checkbox" data-index={i} checked={answer.value in existingAnswers} onChange={@handleChange} />
         <span className="clickable">{answer.label}</span>
       </label>
 
-    <div className="multiple-choice-task">
+    <div className="workflow-task multiple-choice-task">
       <div className="question">{@props.question}</div>
       <div className="answers">{answers}</div>
     </div>
 
   handleChange: (e) ->
-    newAnswer = @props.options[e.target.value]
-    existingAnswers = @props.value ? []
+    answers = @props.value ? []
+
+    answerIndex = e.target.dataset.index
+    newAnswer = @props.options[answerIndex].value
 
     # We'll make some effort to preserve the order things were chosen in.
 
     if e.target.checked
-      if newAnswer not in existingAnswers
-        existingAnswers.push newAnswer
+      if newAnswer not in answers
+        answers.push newAnswer
     else
-      if newAnswer in existingAnswers
-        index = existingAnswers.indexOf newAnswer
-        existingAnswers.splice index, 1
+      if newAnswer in answers
+        index = answers.indexOf newAnswer
+        answers.splice index, 1
 
-    if existingAnswers.length is 0
-      existingAnswers = null
+    if answers.length is 0
+      answers = null
 
-    @props.onChange existingAnswers
+    @props.onChange e, value: answers

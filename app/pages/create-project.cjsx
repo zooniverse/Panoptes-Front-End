@@ -140,7 +140,7 @@ module.exports = React.createClass
           <p>These images will be uploaded during after last step of this process, which could take a long time depending on how many you select. Make sure you’ve got a steady internet connection. You’ll have an opportunity to review and refine your selection here before continuing.</p>
 
           {for manifestFilename of wizardData.manifests
-            <span>
+            <span key={manifestFilename}>
               {manifestFilename}
               <button onClick={@removeManifest.bind this, manifestFilename}>&times;</button>
               &emsp;
@@ -149,7 +149,8 @@ module.exports = React.createClass
           <table>
             <thead>
               <tr>
-                {<th>{column}</th> for column in MANIFEST_COLUMNS}
+                {for column in MANIFEST_COLUMNS
+                  <th key={column}>{column}</th>}
                 <th></th>
               </tr>
             </thead>
@@ -199,11 +200,11 @@ module.exports = React.createClass
           </p>
 
           <ul>
-            {for line in @state.log
+            {for line, i in @state.log
               if line instanceof Error
-                <li style={color: 'red'}>{line.toString()}</li>
+                <li key={i} style={color: 'red'}>{line.toString()}</li>
               else
-                <li>{line}</li>}
+                <li key={i}>{line}</li>}
           </ul>
         </div>
       </Route>
@@ -241,7 +242,7 @@ module.exports = React.createClass
       <tr key={filenames.join()}>
         <td>
           {for filename, i in filenames
-            <div>
+            <div key={filename}>
               {filename}
               {unless files[i]?
                 <span className="form-help error" title="Missing image">&nbsp;<i className="fa fa-exclamation-circle"></i></span>}
@@ -251,7 +252,7 @@ module.exports = React.createClass
         </td>
 
         {for column in MANIFEST_COLUMNS[1...]
-          <td>{metadata?[column] ? <span className="form-help">?</span>}</td>}
+          <td key={column}>{metadata?[column] ? <span className="form-help">?</span>}</td>}
 
         <td>
           <button onClick={@removeSubjects.bind this, filenames...}>&times;</button>

@@ -1,12 +1,9 @@
 React = require 'react'
 
-DEFAULT_RENDER_FAILURE = ->
-  <strong>
-    <code>Error</code>
-  </strong>
-
 module.exports = React.createClass
   displayName: 'PromiseRenderer'
+
+  pendingClass: 'promise-pending'
 
   propTypes:
     promise: React.PropTypes.instanceOf(Promise).isRequired
@@ -14,9 +11,10 @@ module.exports = React.createClass
     catch: React.PropTypes.func
 
   getDefaultProps: ->
-    catch: DEFAULT_RENDER_FAILURE
+    catch: @::defaultCatch
 
   getInitialState: ->
+    pending: false
     resolved: false
     rejected: false
     value: null
@@ -30,16 +28,23 @@ module.exports = React.createClass
       @attachTo nextProps.promise
 
   attachTo: (promise) ->
-    @setState @getInitialState()
+    @setState
+      pending: true
 
     promise.then (value) =>
       @safelySetState
+        pending: false
         resolved: true
+        rejected: false
         value: value
+        error: null
 
     promise.catch (error) =>
       @safelySetState
+        pending: false
+        resolved: false
         rejected: true
+        value: null
         error: error
 
   safelySetState: (state) ->
@@ -48,11 +53,26 @@ module.exports = React.createClass
 
   render: ->
     if @state.resolved
-      @props.then @state.value
+      try
+        @props.then.call this, @state.value
+      catch e
+        @props.catch.call this, e
 
     else if @state.rejected
-      @props.catch @state.error
+      @props.catch.call this, @state.error
 
     else
-      # Until the promise is resolved or rejected, show the given children.
+      # Until the initial promise is resolved or rejected, show the given children.
       @props.children ? null
+
+  componentDidUpdate: (prevProps, prevState) ->
+    classList = @getDOMNode()?.classList
+    if @state.pending
+      classList?.add @pendingClass
+    else
+      classList?.remove @pendingClass
+
+  defaultCatch: (error) ->
+    <code>
+      <strong>{error.toString()}</strong>
+    </code>
