@@ -29,10 +29,10 @@
   },
   "scripts": {
     "build": "NODE_ENV=production ./bin/build.sh",
-    "postinstall": "npm run get-fallback-polyfills && npm run get-font-awesome",
-    "get-font-awesome": "rm -rf ./public/font-awesome; curl --location \"$npm_package_config_fontAwesomeURL\" --output ./fa.zip && unzip -q ./fa.zip -d ./fa.tmp && mkdir ./public/font-awesome && mv ./fa.tmp/*/{css,fonts} ./public/font-awesome; rm -rf ./fa.{zip,tmp}",
-    "get-fallback-polyfills": "curl \"$npm_package_config_fallbackPolyfillsURL\" > ./public/fallback-polyfills.js",
     "check-build-size": "npm run build && cat ./build/main.js | gzip --best | wc -c",
+    "get-fallback-polyfills": "curl \"$npm_package_config_fallbackPolyfillsURL\" > ./public/fallback-polyfills.js",
+    "get-font-awesome": "rm -rf ./public/font-awesome; curl --location \"$npm_package_config_fontAwesomeURL\" --output ./fa.zip && unzip -q ./fa.zip -d ./fa.tmp && mkdir ./public/font-awesome && mv ./fa.tmp/*/{css,fonts} ./public/font-awesome; rm -rf ./fa.{zip,tmp}",
+    "postinstall": "npm run get-fallback-polyfills && npm run get-font-awesome",
     "pretest": "webpack --devtool inline-source-map ./test/runner.coffee ./test/bundle.js",
     "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
     "start": "./bin/serve.sh",
