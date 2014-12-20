@@ -4,21 +4,22 @@
   <head>
     <meta charset="utf-8" />
     <title>Panoptes</title>
-    <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700" />
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Playfair+Display:700" />
+    <link rel="stylesheet" href="./main.css" />
   </head>
 
   <body>
+    <i id="font-awesome-test" class="fa" style="opacity: 0; pointer-events: none; position: absolute;"></i>
     <script>
-     (function() {
-        function polyfill(test, scriptSrc) {
-          if (!test) document.write('<script class="polyfill" src="' + scriptSrc + '"></'+'script>');
+      addEventListener('DOMContentLoaded', function() {
+        var testIconFontFamily = getComputedStyle(document.getElementById('font-awesome-test')).fontFamily;
+        var fallbackLinkTag = '<link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css" />';
+        if (testIconFontFamily !== 'FontAwesome') {
+          document.head.insertAdjacentHTML('beforeEnd', fallbackLinkTag);
         }
-
-        polyfill('Promise' in window, '//s3.amazonaws.com/es6-promises/promise-1.0.0.js');
-      }());
+      });
     </script>
 
     <script src="https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6&amp;flags=gated"></script>
