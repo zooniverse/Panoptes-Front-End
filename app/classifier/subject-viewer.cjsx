@@ -6,6 +6,7 @@ Draggable = require '../lib/draggable'
 drawingComponents =
   point: require './drawing-tools/point'
   ellipse: require './drawing-tools/ellipse'
+  line: require './drawing-tools/line'
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'

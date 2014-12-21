@@ -2,14 +2,15 @@
   fill: none
   stroke: none
   stroke-width: 0
-  transition: opacity 0.3s
+  transition: opacity 0.5s
 
   &[data-disabled]
     opacity: 0.5
     pointer-events: none
 
   .drawing-tool-main
-    transition: transform 0.1s
+    transform-origin: 50% 50%
+    transition: transform 0.4s
 
   .clickable
     cursor: pointer
