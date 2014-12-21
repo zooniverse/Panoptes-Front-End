@@ -51,10 +51,9 @@ module.exports = React.createClass
       </g>
     </g>
 
-  handleDrag: (e) ->
-    {x, y} = @props.getEventOffset e
-    @props.mark.x = x
-    @props.mark.y = y
+  handleDrag: (e, d) ->
+    @props.mark.x += d.x
+    @props.mark.y += d.y
     @props.classification.emit 'change'
 
   deleteMark: ->

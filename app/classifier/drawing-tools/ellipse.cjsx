@@ -45,8 +45,6 @@ module.exports = React.createClass
       deltaY = y2 - y1
       Math.atan2(deltaY, deltaX) * (-180 / Math.PI)
 
-  startOffset: null
-
   render: ->
     color = @props.mark._tool.color ? 'currentcolor'
 
@@ -66,7 +64,7 @@ module.exports = React.createClass
 
     <g className="ellipse drawing-tool" transform={positionAndRotate} data-disabled={@props.disabled || null} data-selected={@props.selected || null} data-destroying={@state.destroying || null}>
       <g className="drawing-tool-main">
-        <Draggable onStart={@handleDragStart} onDrag={@handleMainDrag}>
+        <Draggable onDrag={@handleMainDrag}>
           <ellipse rx={@props.mark.rx} ry={@props.mark.ry} fill="transparent" stroke={color} strokeWidth={STROKE_WIDTH / averageScale} />
         </Draggable>
 
@@ -104,22 +102,12 @@ module.exports = React.createClass
       </g>
     </g>
 
-  handleDragStart: (e) ->
-    @props.select()
-    {x, y} = @props.getEventOffset e
-    x -= @props.mark.x
-    y -= @props.mark.y
-    @startOffset = {x, y}
-
-  handleMainDrag: (e) ->
-    {x, y} = @props.getEventOffset e
-    x -= @startOffset.x
-    y -= @startOffset.y
-    @props.mark.x = x
-    @props.mark.y = y
+  handleMainDrag: (e, d) ->
+    @props.mark.x += d.x
+    @props.mark.y += d.y
     @props.classification.emit 'change'
 
-  handleXHandleDrag: (e) ->
+  handleXHandleDrag: (e, d) ->
     {x, y} = @props.getEventOffset e
     rx = @constructor.getDistance @props.mark.x, @props.mark.y , x, y
     angle = @constructor.getAngle @props.mark.x, @props.mark.y , x, y
@@ -127,7 +115,7 @@ module.exports = React.createClass
     @props.mark.angle = angle
     @props.classification.emit 'change'
 
-  handleYHandleDrag: (e) ->
+  handleYHandleDrag: (e, d) ->
     {x, y} = @props.getEventOffset e
     ry = @constructor.getDistance @props.mark.x, @props.mark.y , x, y
     angle = @constructor.getAngle @props.mark.x, @props.mark.y , x, y

@@ -11,8 +11,6 @@ STROKE_GRABBER_WIDTH = 5
 module.exports = React.createClass
   displayName: 'PointTool'
 
-  lastOffset: null
-
   getInitialState: ->
     destroying: false
 
@@ -47,7 +45,7 @@ module.exports = React.createClass
       <g className="drawing-tool-main">
         <line {...points} stroke={color} strokeWidth={STROKE_WIDTH / averageScale} />
 
-        <Draggable onStart={@handleStrokeStart} onDrag={@handleStrokeDrag}>
+        <Draggable onDrag={@handleStrokeDrag}>
           <line {...points} stroke={color} strokeOpacity="0.5" strokeWidth={STROKE_GRABBER_WIDTH / averageScale} />
         </Draggable>
 
@@ -72,23 +70,15 @@ module.exports = React.createClass
       </g>
     </g>
 
-  handleStrokeStart: (e) ->
-    @lastOffset = @props.getEventOffset e
-
-  handleStrokeDrag: (e) ->
-    offset = @props.getEventOffset e
-    dx = offset.x - @lastOffset?.x
-    dy = offset.y - @lastOffset?.y
+  handleStrokeDrag: (e, d) ->
     for n in [1..2]
-      @props.mark["x#{n}"] += dx
-      @props.mark["y#{n}"] += dy
+      @props.mark["x#{n}"] += d.x
+      @props.mark["y#{n}"] += d.y
     @props.classification.emit 'change'
-    @lastOffset = offset
 
-  handleHandleDrag: (n, e) ->
-    {x, y} = @props.getEventOffset e
-    @props.mark["x#{n}"] = x
-    @props.mark["y#{n}"] = y
+  handleHandleDrag: (n, e, d) ->
+    @props.mark["x#{n}"] += d.x
+    @props.mark["y#{n}"] += d.y
     @props.classification.emit 'change'
 
   deleteMark: ->
