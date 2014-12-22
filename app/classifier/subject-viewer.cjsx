@@ -12,16 +12,16 @@ module.exports = React.createClass
   displayName: 'SubjectViewer'
 
   getInitialState: ->
-    width: 0
-    height: 0
+    naturalWidth: 0
+    naturalHeight: 0
     selectedMark: null
 
   getScale: ->
     ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
     rect = @refs.subjectContainer?.getDOMNode().getBoundingClientRect()
     rect ?= width: 0, height: 0
-    horizontal = rect.width / @state.width || ALMOST_ZERO
-    vertical = rect.height / @state.height || ALMOST_ZERO
+    horizontal = rect.width / @state.naturalWidth || ALMOST_ZERO
+    vertical = rect.height / @state.naturalHeight || ALMOST_ZERO
     {horizontal, vertical}
 
   getEventOffset: (e) ->
@@ -62,12 +62,12 @@ module.exports = React.createClass
     <img className="subject-image" src={knownGood} onLoad={@handleImageLoad} style={display: 'block'} />
 
   renderMarkingSVG: ->
-    viewBox = [0, 0, @state.width, @state.height]
+    viewBox = [0, 0, @state.naturalWidth, @state.naturalHeight]
     svgStyle = height: '100%', left: 0, position: 'absolute', top: 0, width: '100%'
 
     <svg className="subject-viewer-svg" viewBox={viewBox} preserveAspectRatio="none" data-tool={@props.selectedDrawingTool?.type} style={svgStyle}>
       <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
-        <rect width={@state.width} height={@state.height} fill="transparent" stroke="none" />
+        <rect width={@state.naturalWidth} height={@state.naturalHeight} fill="transparent" stroke="none" />
       </Draggable>
 
       <g className="subject-viewer-tools">{@renderTools()}</g>
@@ -96,9 +96,9 @@ module.exports = React.createClass
         <Tool key={mark._id} {...toolProps} {...toolFunctions} />
 
   handleImageLoad: (e) ->
-    {width, height} = e.target
-    unless @state.width is width and @state.height is height
-      @setState {width, height}
+    {naturalWidth, naturalHeight} = e.target
+    unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
+      @setState {naturalWidth, naturalHeight}
 
   handleFrameChange: (index) ->
     @props.classification.update _frame: index
