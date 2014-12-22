@@ -1,89 +1,50 @@
-Model = require '../../lib/model'
 React = require 'react'
+DrawingToolRoot = require './root'
 Draggable = require '../../lib/draggable'
-DragHandle = require './drag-handle'
 DeleteButton = require './delete-button'
-{dispatch} = require '../../lib/dispatcher'
+DragHandle = require './drag-handle'
 
-STROKE_WIDTH = 1.5
-STROKE_GRABBER_WIDTH = 5
+GRAB_STROKE_WIDTH = 6
 
 module.exports = React.createClass
-  displayName: 'PointTool'
-
-  getInitialState: ->
-    destroying: false
+  displayName: 'LineTool'
 
   statics:
     defaultValues: ({x, y}) ->
-      x1: x, y1: y, x2: x, y2: y
-
-    initStart: ({x, y}) ->
-      x1: x, y1: y
+      x1: x
+      y1: y
+      x2: x
+      y2: y
 
     initMove: ({x, y}) ->
-      x2: x, y2: y
+      x2: x
+      y2: y
 
   render: ->
-    color = @props.mark._tool.color ? 'currentcolor'
-
-    toolState =
-      'data-disabled': @props.disabled or null
-      'data-selected': @props.selected or null
-      'data-destroying': @state.destroying or null
-
     {x1, y1, x2, y2} = @props.mark
     points = {x1, y1, x2, y2}
 
-    averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
+    <DrawingToolRoot tool={this}>
+      <line {...points} />
 
-    deleteButtonPosition =
-      x: (x1 + x2) / 2
-      y: (y1 + y2) / 2
+      <Draggable onStart={@props.select} onDrag={@handleStrokeDrag}>
+        <line {...points} strokeWidth={GRAB_STROKE_WIDTH} strokeOpacity="0" />
+      </Draggable>
 
-    <g className="line drawing-tool" {...toolState}>
-      <g className="drawing-tool-main">
-        <line {...points} stroke={color} strokeWidth={STROKE_WIDTH / averageScale} />
+      <DeleteButton tool={this} x={(x1 + x2) / 2} y={(y1 + y2) / 2} />
 
-        <Draggable onDrag={@handleStrokeDrag}>
-          <line {...points} stroke={color} strokeOpacity="0.5" strokeWidth={STROKE_GRABBER_WIDTH / averageScale} />
-        </Draggable>
-
-        <DeleteButton
-          x={deleteButtonPosition.x}
-          y={deleteButtonPosition.y}
-          onClick={@deleteMark}
-        />
-
-        {for n in [1..2]
-          <DragHandle
-            key={n}
-            onDrag={@handleHandleDrag.bind this, n}
-            color={@props.mark._tool.color}
-            x={@props.mark["x#{n}"]}
-            y={@props.mark["y#{n}"]}
-            scale={@props.scale}
-            rotate={@props.mark.angle}
-            disabled={@props.disabled}
-            selected={@props.selected}
-          />}
-      </g>
-    </g>
+      {for n in [1..2]
+        coords = x: @props.mark["x#{n}"], y: @props.mark["y#{n}"]
+        <DragHandle key={n} {...coords} onDrag={@handleHandleDrag.bind this, n} />}
+    </DrawingToolRoot>
 
   handleStrokeDrag: (e, d) ->
     for n in [1..2]
-      @props.mark["x#{n}"] += d.x
-      @props.mark["y#{n}"] += d.y
+      @props.mark["x#{n}"] += d.x / @props.scale.horizontal
+      @props.mark["y#{n}"] += d.y / @props.scale.vertical
     @props.classification.emit 'change'
 
   handleHandleDrag: (n, e, d) ->
-    @props.mark["x#{n}"] += d.x
-    @props.mark["y#{n}"] += d.y
+    @props.mark["x#{n}"] += d.x / @props.scale.horizontal
+    @props.mark["y#{n}"] += d.y / @props.scale.vertical
     @props.classification.emit 'change'
-
-  deleteMark: ->
-    @setState destroying: true
-    setTimeout (=>
-      markIndex = @props.annotation.marks.indexOf @props.mark
-      @props.annotation.marks.splice markIndex, 1
-      @props.classification.emit 'change'), 500

@@ -1,23 +1,23 @@
 .drawing-tool
-  fill: none
-  stroke: none
-  stroke-width: 0
-  transition: opacity 0.5s
-
   &[data-disabled]
     opacity: 0.5
     pointer-events: none
 
   .drawing-tool-main
     transform-origin: 50% 50%
-    transition: transform 0.4s
+    transition:
+      opacity 0.4s,
+      transform 0.4s
+
+  &[data-destroying] .drawing-tool-main
+    opacity: 0
+    transform: scale(0.1)
 
   .clickable
     cursor: pointer
-    display: none
 
-  &[data-selected] .clickable
-    display: initial
+  &:not([data-selected]) .clickable
+    display: none
 
   .draggable
     cursor: move
@@ -30,12 +30,10 @@
 
   .drag-handle
     cursor: move
+    transition: opacity 0.2s
 
     .dragging &
       cursor: none
 
-  &[data-destroying]
+  &:not([data-selected]):not(:hover) .drag-handle
     opacity: 0
-
-    .drawing-tool-main
-      transform: scale(0.1)

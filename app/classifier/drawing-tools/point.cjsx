@@ -1,64 +1,42 @@
-Model = require '../../lib/model'
 React = require 'react'
+DrawingToolRoot = require './root'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
-{dispatch} = require '../../lib/dispatcher'
+
+STROKE_WIDTH = 1.5
+RADIUS = 10
+SELECTED_RADIUS = 20
+DELETE_BUTTON_ANGLE = 45
 
 module.exports = React.createClass
   displayName: 'PointTool'
 
-  getInitialState: ->
-    destroying: false
-
   statics:
-    defaultValues: ->
-      @initStart arguments...
-
-    initStart: ->
-      @initMove arguments...
+    defaultValues: ({x, y}) ->
+      {x, y}
 
     initMove: ({x, y}) ->
       {x, y}
 
+  getDeleteButtonPosition: ->
+    theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)
+    x: SELECTED_RADIUS * Math.cos theta
+    y: -1 * SELECTED_RADIUS * Math.sin theta
+
   render: ->
-    color = @props.mark._tool.color ? 'currentcolor'
-
-    radius = if @props.disabled
-      4
-    else if @props.selected
-      12
+    discStyle = if @props.selected
+      r: SELECTED_RADIUS
     else
-      6
+      r: RADIUS
 
-    strokeWidth = 3
-
-    transform = "
-      translate(#{@props.mark.x}, #{@props.mark.y})
-      scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})
-    "
-
-    <g className="point drawing-tool" transform={transform} data-disabled={@props.disabled || null} data-selected={@props.selected || null} data-destroying={@state.destroying || null}>
-      <g className="drawing-tool-main">
-        <Draggable onStart={@props.select} onDrag={@handleDrag}>
-          <g className="drag-handle" strokeWidth={strokeWidth}>
-            <circle cy="2" r={radius + (strokeWidth / 4)} stroke="black" strokeWidth={strokeWidth * 1.5} opacity="0.3" />
-            <circle r={radius + (strokeWidth / 2)} stroke="white" />
-            <circle r={radius} fill={if @props.disabled then color else 'transparent'} stroke={color} />
-          </g>
-        </Draggable>
-
-        <DeleteButton x={radius} y={-1 * radius} onClick={@deleteMark} />
-      </g>
-    </g>
+    <DrawingToolRoot tool={this} transform="translate(#{@props.mark.x}, #{@props.mark.y})">
+      <Draggable onStart={@props.select} onDrag={@handleDrag}>
+        <circle {...discStyle} />
+      </Draggable>
+      <DeleteButton tool={this} {...@getDeleteButtonPosition()} />
+    </DrawingToolRoot>
 
   handleDrag: (e, d) ->
-    @props.mark.x += d.x
-    @props.mark.y += d.y
+    @props.mark.x += d.x / @props.scale.horizontal
+    @props.mark.y += d.y / @props.scale.vertical
     @props.classification.emit 'change'
-
-  deleteMark: ->
-    @setState destroying: true
-    setTimeout (=>
-      markIndex = @props.annotation.marks.indexOf @props.mark
-      @props.annotation.marks.splice markIndex, 1
-      @props.classification.emit 'change'), 500

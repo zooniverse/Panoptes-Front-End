@@ -1,6 +1,5 @@
-mergeInto = require 'lodash.merge'
-Model = require '../../lib/model'
 React = require 'react'
+DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
@@ -9,24 +8,18 @@ DeleteButton = require './delete-button'
 DEFAULT_RADIUS = 10
 DEFAULT_SQUASH = 1 / 2
 DEFAULT_ANGLE = 0
-
-STROKE_WIDTH = 2
-CLOSE_BUTTON_ANGLE = 45
+DELETE_BUTTON_ANGLE = 45
 
 module.exports = React.createClass
   displayName: 'EllipseTool'
 
-  getInitialState: ->
-    destroying: false
-
   statics:
-    defaultValues: (mouseCoords) ->
-      values =
-        rx: DEFAULT_RADIUS
-        ry: DEFAULT_RADIUS * DEFAULT_SQUASH
-        angle: DEFAULT_ANGLE
-      mergeInto values, mouseCoords
-      values
+    defaultValues: ({x, y}) ->
+      x: x
+      y: y
+      rx: DEFAULT_RADIUS
+      ry: DEFAULT_RADIUS * DEFAULT_SQUASH
+      angle: DEFAULT_ANGLE
 
     initMove: ({x, y}, mark) ->
       distance = @getDistance mark.x, mark.y, x, y
@@ -45,93 +38,41 @@ module.exports = React.createClass
       deltaY = y2 - y1
       Math.atan2(deltaY, deltaX) * (-180 / Math.PI)
 
-  render: ->
-    color = @props.mark._tool.color ? 'currentcolor'
+  getDeletePosition: ->
+    theta = (DELETE_BUTTON_ANGLE - @props.mark.angle) * (Math.PI / 180)
+    x: @props.mark.rx * Math.cos theta
+    y: -1 * @props.mark.ry * Math.sin theta
 
+  render: ->
     positionAndRotate = "
       translate(#{@props.mark.x}, #{@props.mark.y})
       rotate(#{-1 * @props.mark.angle})
     "
 
-    scaleAndDerotateControls = "
-      scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})
-      rotate(#{@props.mark.angle})
-    "
-
-    averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
-
     deletePosition = @getDeletePosition()
 
-    <g className="ellipse drawing-tool" transform={positionAndRotate} data-disabled={@props.disabled || null} data-selected={@props.selected || null} data-destroying={@state.destroying || null}>
-      <g className="drawing-tool-main">
-        <Draggable onDrag={@handleMainDrag}>
-          <ellipse rx={@props.mark.rx} ry={@props.mark.ry} fill="transparent" stroke={color} strokeWidth={STROKE_WIDTH / averageScale} />
+    <DrawingToolRoot tool={this}>
+      <g transform={positionAndRotate}>
+        <Draggable onStart={@props.select} onDrag={@handleMainDrag}>
+          <ellipse rx={@props.mark.rx} ry={@props.mark.ry} />
         </Draggable>
-
-        <DeleteButton
-          x={deletePosition.x}
-          y={deletePosition.y}
-          scale={@props.scale}
-          rotate={@props.mark.angle}
-          onClick={@deleteMark}
-        />
-
-        <DragHandle
-          onStart={@handleDragStart}
-          onDrag={@handleXHandleDrag}
-          color={@props.mark._tool.color}
-          x={@props.mark.rx}
-          y={0}
-          scale={@props.scale}
-          rotate={@props.mark.angle}
-          disabled={@props.disabled}
-          selected={@props.selected}
-        />
-
-        <DragHandle
-          onStart={@handleDragStart}
-          onDrag={@handleYHandleDrag}
-          color={@props.mark._tool.color}
-          x={0}
-          y={-1 * @props.mark.ry}
-          scale={@props.scale}
-          rotate={@props.mark.angle}
-          disabled={@props.disabled}
-          selected={@props.selected}
-        />
+        <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />
+        <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'x'} x={@props.mark.rx} y={0} />
+        <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'y'} x={0} y={-1 * @props.mark.ry} />
       </g>
-    </g>
+    </DrawingToolRoot>
 
   handleMainDrag: (e, d) ->
-    @props.mark.x += d.x
-    @props.mark.y += d.y
+    @props.mark.x += d.x / @props.scale.horizontal
+    @props.mark.y += d.y / @props.scale.vertical
     @props.classification.emit 'change'
 
-  handleXHandleDrag: (e, d) ->
+  handleRadiusHandleDrag: (coord, e, d) ->
     {x, y} = @props.getEventOffset e
-    rx = @constructor.getDistance @props.mark.x, @props.mark.y , x, y
+    r = @constructor.getDistance @props.mark.x, @props.mark.y , x, y
     angle = @constructor.getAngle @props.mark.x, @props.mark.y , x, y
-    @props.mark.rx = rx
+    @props.mark["r#{coord}"] = r
     @props.mark.angle = angle
+    if coord is 'y'
+      @props.mark.angle -= 90
     @props.classification.emit 'change'
-
-  handleYHandleDrag: (e, d) ->
-    {x, y} = @props.getEventOffset e
-    ry = @constructor.getDistance @props.mark.x, @props.mark.y , x, y
-    angle = @constructor.getAngle @props.mark.x, @props.mark.y , x, y
-    angle -= 90
-    @props.mark.ry = ry
-    @props.mark.angle = angle
-    @props.classification.emit 'change'
-
-  deleteMark: ->
-    @setState destroying: true
-    setTimeout (=>
-      markIndex = @props.annotation.marks.indexOf @props.mark
-      @props.annotation.marks.splice markIndex, 1
-      @props.classification.emit 'change'), 500
-
-  getDeletePosition: ->
-    theta = (CLOSE_BUTTON_ANGLE - @props.mark.angle) * (Math.PI / 180)
-    x: @props.mark.rx * Math.cos theta
-    y: -1 * @props.mark.ry * Math.sin theta
