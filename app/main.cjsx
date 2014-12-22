@@ -29,6 +29,9 @@ Main = React.createClass
       loggingIn: false
 
   render: ->
+    if location.search.indexOf('test-classifier=1') isnt -1
+      return @renderClassifier()
+
     <div className="panoptes-main">
       <MainHeader />
 
@@ -48,6 +51,32 @@ Main = React.createClass
 
       <NotificationViewer event="notify" />
     </div>
+
+  renderClassifier: ->
+    if process.env.NODE_ENV isnt 'production'
+      # This is just a blank image for testing drawing tools.
+      DEMO_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
+        'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
+        'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
+
+      Classifier = require './classifier/classifier'
+      {Type, Resource} = require 'json-api-client'
+
+      Resource::_type = new Type
+
+      workflow = new Resource {
+        tasks: draw:
+          type: 'drawing'
+          tools: [
+            {type: 'line', value: 'line', label: 'Line', color: 'magenta'}
+            {type: 'ellipse', value: 'ellipse', label: 'Ellipse', color: 'magenta'}
+            {type: 'point', value: 'point', label: 'Point', color: 'magenta'}
+          ]
+      }
+      subject = new Resource locations: [{'image/svg': DEMO_IMAGE}]
+      classification = new Resource annotations: [{task: 'draw'}]
+
+      <Classifier workflow={workflow} subject={subject} classification={classification} />
 
 mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'
