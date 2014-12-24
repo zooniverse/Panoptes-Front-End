@@ -99,8 +99,8 @@ module.exports = new Model
     @currentUser
 
   checkCurrent: ->
-    console?.log 'Checking for existing session'
     unless @currentUser?
+      console?.log 'Checking for existing session'
       @update currentUser:
         @_getBearerToken()
           .then =>
