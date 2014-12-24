@@ -38,7 +38,7 @@ module.exports = React.createClass
       apiClient.createType('subjects').get({
         project_id: @props.project.id
         workflow_id: workflow.id
-        sort: 'cellect'
+        # sort: 'cellect'
       }, 1).then (subjects) ->
         subjects[Math.floor Math.random() * subjects.length]
 
