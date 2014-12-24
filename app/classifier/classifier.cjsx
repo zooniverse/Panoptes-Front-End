@@ -24,6 +24,9 @@ module.exports = React.createClass
     currentTool = @state.selectedDrawingTool
 
     <div className="project-classify-page">
+      <button type="button" name="scroll-to-classifier" onClick={@scrollIntoView}>
+        <i className="fa fa-anchor"></i>
+      </button>
       {@renderSubject annotation, currentTool}
       {@renderTaskArea annotation, task, currentTool}
     </div>
@@ -51,6 +54,9 @@ module.exports = React.createClass
           <button className="forward" disabled={answerStillRequired} onClick={@finishClassification}>Finished <i className="fa fa-check"></i></button>}
       </div>
     </div>
+
+  scrollIntoView: (e) ->
+    scrollTo scrollX, e.target.getBoundingClientRect().top
 
   handleAnswer: (e, answer) ->
     switch @getTask().type
