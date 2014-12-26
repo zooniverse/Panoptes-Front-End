@@ -85,20 +85,16 @@ module.exports = React.createClass
   mixins: [PromiseToSetState]
 
   componentDidMount: ->
-    console.log 'componentDidMount', @props.route.params.id
     @fetchProject @props.route.params.id
 
   componentWillReceiveProps: (nextProps) ->
-    console.log 'componentWillReceiveProps', nextProps.route.params.id
     unless nextProps.route.params.id is @props.route.params.id
       @fetchProject nextProps.route.params.id
 
   fetchProject: (id) ->
-    console.log 'fetchProject', id
-    @promiseToSetState project: apiClient.type('projects').get id
+    @promiseToSetState project: apiClient.createType('projects').get id
 
   render: ->
-    console.log 'render', @state
     if @state.project?.id?
       <ProjectPage project={@state.project} />
     else

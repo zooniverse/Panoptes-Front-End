@@ -65,7 +65,7 @@ module.exports = React.createClass
       <div>Loading workflow, subject, and classification</div>
 
   handleFinishingClassification: (classification) ->
-    console.info 'FINISHED', JSON.stringify classification
+    console?.info 'FINISHED', JSON.stringify classification
 
     @createNewClassification @props.project
     @promiseToSetState projectStatesInProgress[@props.project.id]

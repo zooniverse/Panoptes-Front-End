@@ -323,13 +323,13 @@ module.exports = React.createClass
 
   submitData: ->
     @_saveProject().then (project) =>
-      console.info 'project', project
+      console?.info 'project', project
       @_saveSubjectSet(project).then (subjectSet) =>
-        console.info 'subjectSet', subjectSet
+        console?.info 'subjectSet', subjectSet
         @_saveWorkflow(project, subjectSet).then (workflow) =>
-          console.info 'workflow', workflow
+          console?.info 'workflow', workflow
           @_saveSubjects(project).then (subjects) =>
-            console.info 'subjects', subjects
+            console?.info 'subjects', subjects
             @_linkSubjectSet(subjectSet, subjects)
 
   _saveProject: ->
