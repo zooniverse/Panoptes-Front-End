@@ -2,7 +2,6 @@ Model = require '../lib/model'
 makeHTTPRequest = require('json-api-client').util.makeHTTPRequest
 config = require './config'
 client = require './client'
-users = require './users'
 
 JSON_HEADERS =
   'Content-Type': 'application/json'

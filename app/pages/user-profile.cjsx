@@ -1,6 +1,5 @@
 React = require 'react'
 PromiseToSetState = require '../lib/promise-to-set-state'
-usersStore = require '../mock-data/users'
 Route = require '../lib/route'
 Link = require '../lib/link'
 Markdown = require '../components/markdown'
@@ -106,11 +105,11 @@ module.exports = React.createClass
   mixins: [PromiseToSetState]
 
   componentDidMount: ->
-    @promiseToSetState user: Promise.resolve usersStore[0]
+    @promiseToSetState user: Promise.resolve {} # TODO
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.route.params.login is @props.route.params.login
-      @promiseToSetState user: Promise.resolve usersStore[0]
+      @promiseToSetState user: Promise.resolve {} # TODO
 
   render: ->
     user = if @state.user instanceof Array

@@ -1,5 +1,4 @@
 React = require 'react'
-{dispatch} = require '../lib/dispatcher'
 Link = require '../lib/link'
 auth = require '../api/auth'
 
