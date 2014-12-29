@@ -4,6 +4,7 @@ Draggable = require '../lib/draggable'
 {dispatch} = require '../lib/dispatcher'
 
 drawingComponents =
+  polygon: require './drawing-tools/polygon'
   rectangle: require './drawing-tools/rectangle'
   point: require './drawing-tools/point'
   ellipse: require './drawing-tools/ellipse'
@@ -112,8 +113,11 @@ module.exports = React.createClass
 
       MarkComponent = drawingComponents[@props.selectedDrawingTool.type]
 
-      if @state.selectedMark? and MarkComponent.isComplete?
-        selectedMarkIsIncomplete = not MarkComponent.isComplete @state.selectedMark
+      if @state.selectedMark? and @state.selectedMark in @props.annotation.marks
+        SelectionComponent = drawingComponents[@state.selectedMark._tool.type]
+
+        if SelectionComponent is MarkComponent and MarkComponent.isComplete?
+          selectedMarkIsIncomplete = not MarkComponent.isComplete @state.selectedMark
 
       if selectedMarkIsIncomplete
         mark = @state.selectedMark

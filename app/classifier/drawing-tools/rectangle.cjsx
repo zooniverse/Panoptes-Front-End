@@ -15,8 +15,8 @@ module.exports = React.createClass
     defaultValues: ({x, y}) ->
       x: x
       y: y
-      width: 10
-      height: 10
+      width: 0
+      height: 0
 
     initStart: ({x, y}, mark) ->
       @initCoords = {x, y}

@@ -1,3 +1,9 @@
+@keyframes guideline-marching-ants
+  from
+    stroke-dashoffset: 0
+  to
+    stroke-dashoffset: -5
+
 .drawing-tool
   &[data-disabled]
     opacity: 0.5
@@ -37,3 +43,7 @@
 
   &:not([data-selected]):not(:hover) .drag-handle
     opacity: 0
+
+  .guideline
+    stroke-dasharray: 2 3
+    animation: guideline-marching-ants 0.5s linear infinite
