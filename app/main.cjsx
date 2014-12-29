@@ -68,15 +68,16 @@ Main = React.createClass
         tasks: draw:
           type: 'drawing'
           tools: [
+            {type: 'rectangle', value: 'rectangle', label: 'Rectangle', color: 'magenta'}
             {type: 'line', value: 'line', label: 'Line', color: 'magenta'}
             {type: 'ellipse', value: 'ellipse', label: 'Ellipse', color: 'magenta'}
             {type: 'point', value: 'point', label: 'Point', color: 'magenta'}
           ]
       }
-      subject = new Resource locations: [{'image/svg': DEMO_IMAGE}]
+      subject = new Resource locations: [{'image/png': DEMO_IMAGE}]
       classification = new Resource annotations: [{task: 'draw'}]
 
-      <Classifier workflow={workflow} subject={subject} classification={classification} />
+      <Classifier workflow={workflow} subject={subject} classification={classification} onFinishClassification={console.info.bind console} />
 
 mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'

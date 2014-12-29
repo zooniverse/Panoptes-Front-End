@@ -4,6 +4,7 @@ Draggable = require '../lib/draggable'
 {dispatch} = require '../lib/dispatcher'
 
 drawingComponents =
+  rectangle: require './drawing-tools/rectangle'
   point: require './drawing-tools/point'
   ellipse: require './drawing-tools/ellipse'
   line: require './drawing-tools/line'
@@ -66,7 +67,7 @@ module.exports = React.createClass
     svgStyle = height: '100%', left: 0, position: 'absolute', top: 0, width: '100%'
 
     <svg className="subject-viewer-svg" viewBox={viewBox} preserveAspectRatio="none" data-tool={@props.selectedDrawingTool?.type} style={svgStyle}>
-      <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
+      <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitEnd}>
         <rect width={@state.naturalWidth} height={@state.naturalHeight} fill="transparent" stroke="none" />
       </Draggable>
 
@@ -146,11 +147,11 @@ module.exports = React.createClass
         @state.selectedMark[key] = value
       @props.classification.emit 'change'
 
-  handleInitRelease: (e) ->
+  handleInitEnd: (e) ->
     mouseCoords = @getEventOffset e
     MarkComponent = drawingComponents[@state.selectedMark._tool.type]
-    if MarkComponent.initRelease?
-      initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
-      for key, value of initReleaseValues
+    if MarkComponent.initEnd?
+      initEndValues = MarkComponent.initEnd mouseCoords, mark, e
+      for key, value of initEndValues
         @state.selectedMark[key] = value
       @props.classification.emit 'change'
