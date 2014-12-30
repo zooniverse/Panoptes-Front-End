@@ -68,11 +68,11 @@ Main = React.createClass
         tasks: draw:
           type: 'drawing'
           tools: [
-            {type: 'polygon', value: 'polygon', label: 'Polygon', color: 'red'}
-            {type: 'rectangle', value: 'rectangle', label: 'Rectangle', color: 'red'}
-            {type: 'line', value: 'line', label: 'Line', color: 'red'}
-            {type: 'ellipse', value: 'ellipse', label: 'Ellipse', color: 'red'}
             {type: 'point', value: 'point', label: 'Point', color: 'red'}
+            {type: 'line', value: 'line', label: 'Line', color: 'red'}
+            {type: 'rectangle', value: 'rectangle', label: 'Rectangle', color: 'red'}
+            {type: 'polygon', value: 'polygon', label: 'Polygon', color: 'red'}
+            {type: 'ellipse', value: 'ellipse', label: 'Ellipse', color: 'red'}
           ]
       }
       subject = new Resource locations: [{'image/png': DEMO_IMAGE}]
