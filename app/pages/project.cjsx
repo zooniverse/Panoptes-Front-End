@@ -2,9 +2,9 @@ React = require 'react'
 Route = require '../lib/route'
 Link = require '../lib/link'
 Markdown = require '../components/markdown'
-ClassifyPage = require './classify'
-LoadingIndicator = require '../components/loading-indicator'
 Dashboard = require './dashboard'
+ClassifyPage = require './classify'
+PromiseToSetState = require '../lib/promise-to-set-state'
 
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
@@ -82,17 +82,20 @@ PromiseRenderer = require '../components/promise-renderer'
 module.exports = React.createClass
   displayName: 'ProjectPageContainer'
 
+  mixins: [PromiseToSetState]
+
+  componentDidMount: ->
+    @fetchProject @props.route.params.id
+
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.route.params.id is @props.route.params.id
+      @fetchProject nextProps.route.params.id
+
+  fetchProject: (id) ->
+    @promiseToSetState project: apiClient.createType('projects').get id
+
   render: ->
-    project = apiClient.createType('projects').get @props.route.params.id # By-ID a is temporary workaround for router weirdness.
-      # .then ([project]) ->
-      #   project?.refresh()
-
-    <PromiseRenderer promise={project} then={@renderProjectPage}>
-      <p>Loading project <code>{@props.route.params.name}</code>...</p>
-    </PromiseRenderer>
-
-  renderProjectPage: (project) ->
-    if project?
-      <ProjectPage project={project} />
+    if @state.project?.id?
+      <ProjectPage project={@state.project} />
     else
-      throw new Error "No project '#{@props.route.params.name}' found"
+      null

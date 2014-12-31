@@ -1,6 +1,6 @@
 React = require 'react'
+apiClient = require '../api/client'
 PromiseToSetState = require '../lib/promise-to-set-state'
-usersStore = require '../mock-data/users'
 Route = require '../lib/route'
 Link = require '../lib/link'
 Markdown = require '../components/markdown'
@@ -106,16 +106,16 @@ module.exports = React.createClass
   mixins: [PromiseToSetState]
 
   componentDidMount: ->
-    @promiseToSetState user: Promise.resolve usersStore[0]
+    @loadUser @props.route.params.login
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.route.params.login is @props.route.params.login
-      @promiseToSetState user: Promise.resolve usersStore[0]
+      @loadUser nextProps.route.params.login
+
+  loadUser: (login) ->
+    findUsers = apiClient.createType('users').get {login}, 1
+    @promiseToSetState user: findUsers.then ([user]) ->
+      user
 
   render: ->
-    user = if @state.user instanceof Array
-      @state.user[0]
-    else
-      @state.user
-
-    <UserProfile login={@props.route.params.login} user={user} section={@props.route.params.section} />
+    <UserProfile user={@state.user} />

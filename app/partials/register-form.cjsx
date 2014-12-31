@@ -2,13 +2,14 @@ React = require 'react'
 InPlaceForm = require '../components/in-place-form'
 promiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
-users = require '../api/users'
+apiClient = require '../api/client'
 LoadingIndicator = require '../components/loading-indicator'
-{dispatch} = require '../lib/dispatcher'
 debounce = require 'debounce'
 
 LOGIN_CHECK_DELAY = 1000
 MIN_PASSWORD_LENGTH = 8
+
+users = apiClient.createType 'users'
 
 module.exports = React.createClass
   displayName: 'RegisterForm'

@@ -2,7 +2,6 @@ Model = require '../lib/model'
 makeHTTPRequest = require('json-api-client').util.makeHTTPRequest
 config = require './config'
 client = require './client'
-users = require './users'
 
 JSON_HEADERS =
   'Content-Type': 'application/json'
@@ -99,8 +98,8 @@ module.exports = new Model
     @currentUser
 
   checkCurrent: ->
-    console?.log 'Checking for existing session'
     unless @currentUser?
+      console?.log 'Checking for existing session'
       @update currentUser:
         @_getBearerToken()
           .then =>

@@ -2,7 +2,7 @@ React = require 'react'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 auth = require '../api/auth'
-projects = require '../api/projects'
+apiClient = require '../api/client'
 InPlaceForm = require '../components/in-place-form'
 MarkdownEditor = require '../components/markdown-editor'
 
@@ -160,7 +160,7 @@ module.exports = React.createClass
   displayName: 'EditProjectPage'
 
   render: ->
-    <PromiseRenderer promise={projects.get @props.route.params.projectID} then={@renderProjectEditor}>
+    <PromiseRenderer promise={apiClient.createType('projects').get @props.route.params.projectID} then={@renderProjectEditor}>
       <div className="content-container">
         <p>Loading project <code>{@props.route.params.projectID}</code>...</p>
       </div>
