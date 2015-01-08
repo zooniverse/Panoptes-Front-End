@@ -187,7 +187,7 @@ module.exports = React.createClass
   isFormValid: ->
     {badLoginChars, loginConflict, passwordsDontMatch, emailConflict} = @state
     agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
-    badLoginChars?.length is 0 and loginConflict?.length is 0 and not passwordsDontMatch and not emailConflict and agreesToPrivacyPolicy
+    badLoginChars?.length is 0 and not loginConflict and not passwordsDontMatch and not emailConflict and agreesToPrivacyPolicy
 
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
