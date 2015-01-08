@@ -33,7 +33,7 @@ module.exports = React.createClass
           </Route>
 
           <Route path="/sign-in/register" className="content-container">
-            <RegisterForm currentLogin={@props.currentLogin} loggingIn={@props.loggingIn} />
+            <RegisterForm />
           </Route>
         </div>
 

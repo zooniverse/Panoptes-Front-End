@@ -1,12 +1,12 @@
 React = require 'react'
-InPlaceForm = require '../components/in-place-form'
+apiClient = require '../api/client'
 promiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
-apiClient = require '../api/client'
+InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
 debounce = require 'debounce'
 
-LOGIN_CHECK_DELAY = 1000
+REMOTE_CHECK_DELAY = 1000
 MIN_PASSWORD_LENGTH = 8
 
 users = apiClient.createType 'users'
@@ -24,30 +24,29 @@ module.exports = React.createClass
     auth.stopListening @handleAuthChange
 
   handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent()
+    @promiseToSetState user: auth.checkCurrent().catch ->
+      null
 
   render: ->
-    working = @state.user instanceof Promise
-    signedIn = @state.user? and (not @state.errors?) and (not working)
-    disabled = working or signedIn
-    {badLoginChars, loginConflicts, passwordTooShort, passwordsDontMatch} = @state
+    {badLoginChars, loginConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
     email = @refs.email?.getDOMNode().value
+
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
           <div>User name</div>
-          <input type="text" name="login" disabled={disabled} ref="login" onChange={@handleLoginChange} autoFocus="autoFocus" />
+          <input type="text" name="login" disabled={@state.user?} ref="login" onChange={@handleLoginChange} autoFocus />
+
           {if badLoginChars?.length > 0
             <span className="form-help error">Don’t use weird characters ({badLoginChars.join ', '}).</span>
-          else if loginConflicts?
-            if loginConflicts instanceof Promise
-              <LoadingIndicator className="form-help" />
-            else if loginConflicts instanceof Error
-              <span className="form-help error"><i className="fa fa-exclamation-triangle"></i> Can’t determine this login’s availability.</span>
-            else if loginConflicts.length isnt 0
-              <span className="form-help error">Sorry, that login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
-            else if loginConflicts.length is 0
-              <span className="form-help success">Looks good.</span>}
+
+          else if "loginConflict" in @state.awaiting
+            <LoadingIndicator />
+          else if loginConflict?
+            if loginConflict
+              <span className="form-help error">That login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
+            else
+              <span className="form-help">Looks good</span>}
         </label>
       </div>
 
@@ -56,9 +55,9 @@ module.exports = React.createClass
       <div>
         <label>
           <div>Password</div>
-          <input type="password" name="password" disabled={disabled} ref="password" onChange={@handlePasswordChange} />
+          <input type="password" name="password" disabled={@state.user?} ref="password" onChange={@handlePasswordChange} />
           {if passwordTooShort
-            <span className="form-help error">That password is too short.</span>}
+            <span className="form-help error">Too short</span>}
         </label>
       </div>
 
@@ -67,11 +66,12 @@ module.exports = React.createClass
       <div>
         <label>
           <div>Confirm password</div>
-          <input type="password" name="confirmed_password" disabled={disabled} ref="confirmedPassword" onChange={@handlePasswordChange} />
-          {if passwordsDontMatch is true
-            <span className="form-help error">These passwords don’t match!</span>
-          else if passwordsDontMatch is false
-            <span className="form-help success">They match!</span>}
+          <input type="password" name="confirmed_password" disabled={@state.user?} ref="confirmedPassword" onChange={@handlePasswordChange} />
+          {if passwordsDontMatch?
+            if passwordsDontMatch
+              <span className="form-help error">These don’t match</span>
+            else
+              <span className="form-help success">Looks good</span>}
         </label>
       </div>
 
@@ -79,8 +79,15 @@ module.exports = React.createClass
 
       <div>
         <label>
-          <div>Email</div>
-          <input type="text" name="email" disabled={disabled} ref="email" onChange={@forceUpdate.bind this, null} />
+          <div>Email <span className="form-help">(required)</span></div>
+          <input type="text" name="email" disabled={@state.user?} ref="email" onChange={@handleEmailChange} />
+          {if 'emailConflict' in @state.awaiting
+            <LoadingIndicator />
+          else if emailConflict?
+            if emailConflict
+              <span className="form-help error">An account with this address already exists. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
+            else
+              <span className="form-help">Looks good</span>}
         </label>
       </div>
 
@@ -88,8 +95,8 @@ module.exports = React.createClass
 
       <div>
         <label>
-          <div>Real name</div>
-          <input type="text" name="real_name" disabled={disabled} ref="realName" />
+          <div>Real name <span className="form-help">(optional)</span></div>
+          <input type="text" name="real_name" disabled={@state.user?} ref="realName" />
           <div className="form-help">We’ll use this to give you credit in scientific papers, posters, etc.</div>
         </label>
       </div>
@@ -98,28 +105,23 @@ module.exports = React.createClass
 
       <div>
         <label>
-          <input type="checkbox" name="agrees_to_privacy_policy" disabled={disabled} ref="agreesToPrivacyPolicy" onChange={@forceUpdate.bind this, null} />
-          You agree to our <a href="#/privacy">privacy policy</a> <span className="form-help">(required)</span>.
+          <input type="checkbox" name="agrees_to_privacy_policy" disabled={@state.user?} ref="agreesToPrivacyPolicy" onChange={@forceUpdate.bind this, null} />
+          You agree to our <a href="#/privacy">privacy policy</a> <span className="form-help">(required)</span>
         </label>
       </div>
 
       <br />
 
       <div>
-        <button type="submit" disabled={disabled or not @isFormValid()}>Register</button>
+        <button type="submit" disabled={not @isFormValid() or @state.awaiting.length isnt 0 or @state.user?}>Register</button>
+        &nbsp;
 
-        {if signedIn
+        {if 'user' in @state.awaiting
+          <LoadingIndicator />
+        else if @state.user?
           <span className="form-help">
-            Signed in as {@state.user.display_name}
-            <button type="button" onClick={@handleSignOut}>Sign out</button>
+            Signed in as {@state.user.display_name} <button type="button" onClick={@handleSignOut}>Sign out</button>
           </span>}
-
-        {if @state.errors?
-          <span className="form-help error">{@state.errors}</span>}
-
-        {if working
-          <LoadingIndicator />}
-
       </div>
     </InPlaceForm>
 
@@ -131,15 +133,16 @@ module.exports = React.createClass
 
     @setState
       badLoginChars: badChars
-      loginConflicts: null
+      loginConflict: null
 
     if exists and badChars.length is 0
-      @debouncedCheckForLoginConflicts ?= debounce @checkForLoginConflicts, LOGIN_CHECK_DELAY
-      @debouncedCheckForLoginConflicts login
+      @debouncedCheckForLoginConflict ?= debounce @checkForLoginConflict, REMOTE_CHECK_DELAY
+      @debouncedCheckForLoginConflict login
 
-  debouncedCheckForLoginConflicts: null
-  checkForLoginConflicts: (login) ->
-    @promiseToSetState loginConflicts: users.get {login}, 1
+  debouncedCheckForLoginConflict: null
+  checkForLoginConflict: (login) ->
+    @promiseToSetState loginConflict: users.get({login}, 1).then (users) ->
+      users.length isnt 0
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
@@ -154,23 +157,49 @@ module.exports = React.createClass
       passwordTooShort: if exists then not longEnough
       passwordsDontMatch: if exists and asLong then not matches
 
-  isFormValid: ->
-    {badLoginChars, loginConflicts, passwordsDontMatch} = @state
-    agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
+  handleEmailChange: ->
+    @setState
+      emailConflict: null
 
-    (badLoginChars?.length is 0) and (loginConflicts?.length is 0) and (passwordsDontMatch is false) and agreesToPrivacyPolicy
+    email = @refs.email.getDOMNode().value
+    if email.match /.+@.+\..+/
+      @debouncedCheckForEmailConflicts ?= debounce @checkForEmailConflicts, REMOTE_CHECK_DELAY
+      @debouncedCheckForEmailConflicts email
+
+  debouncedCheckForEmailConflicts: null
+  checkForEmailConflicts: (email) ->
+    # TODO: Is there a nicer way to check for email availability?
+    # This request will always throw because there's no login or password.
+    # We're only concerned with the existence of any "email" error.
+    @promiseToSetState emailConflict: auth._getAuthToken().then (token) ->
+      data =
+        authenticity_token: token
+        user: {email}
+
+      headers =
+        'Content-Type': 'application/json'
+        'Accept': 'application/json'
+
+      apiClient.post '/../users', data, headers
+        .catch ({errors}) ->
+          errors?[0]?.message?.email?[0]?.contains('taken') ? false
+
+  isFormValid: ->
+    {badLoginChars, loginConflict, passwordsDontMatch, emailConflict} = @state
+    agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
+    badLoginChars?.length is 0 and not loginConflict and not passwordsDontMatch and not emailConflict and agreesToPrivacyPolicy
 
   handleSubmit: ->
     login = @refs.login.getDOMNode().value
     password = @refs.password.getDOMNode().value
-    confirmedPassword = @refs.confirmedPassword.getDOMNode().value
     email = @refs.email.getDOMNode().value
     realName = @refs.realName.getDOMNode().value
-    agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy.getDOMNode().checked
 
     auth.register {login, password, email, realName}
       .catch (errors) ->
-        @setState {errors}
+        for {message} in errors
+          if message.email?[0].indexOf('taken') isnt -1
+            @setState emailConflict: true
 
   handleSignOut: ->
     auth.signOut()
