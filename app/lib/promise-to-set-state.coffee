@@ -1,17 +1,23 @@
 module.exports =
   getInitialState: ->
-    awaiting: false
+    awaiting: []
+
+  componentWillMount: ->
+    @_statePromises = {}
 
   promiseToSetState: (keysAndPromises, callback) ->
-    @_statePromises ?= {}
-
     for key, promise of keysAndPromises
       promiseHandler = @_handlePromisedState.bind this, key, promise
       promise.then promiseHandler.bind this, false
       promise.catch promiseHandler.bind this, true
       @_statePromises[key] = promise
 
-    @setState awaiting: true, callback
+    {awaiting} = @state
+    if key in awaiting
+      callback()
+    else
+      awaiting.push key
+      @setState {awaiting}, callback
 
   _handlePromisedState: (key, promise, caught, value) ->
     # Only change the state if its current value is the same promise that's resolving.
@@ -28,8 +34,8 @@ module.exports =
 
       newState[key] = value
 
-      finished = Object.keys(@_statePromises).length is 0
-      if finished
-        newState.awaiting = false
+      {awaiting} = @state
+      awaiting.splice awaiting.indexOf(key), 1
+      newState.awaiting = awaiting
 
       @setState newState
