@@ -4,7 +4,6 @@ Router = {RouteHandler, DefaultRoute, Route} = require 'react-router'
 MainHeader = require './partials/main-header'
 MainFooter = require './partials/main-footer'
 
-SignIn = require './pages/sign-in'
 Settings = require './pages/settings'
 UserProfile = require './pages/user-profile'
 Build = require './pages/build'
@@ -29,6 +28,12 @@ App = React.createClass
 
 routes = <Route handler={App}>
   <DefaultRoute name="home" handler={require './pages/home'} />
+
+  <Route handler={require './pages/sign-in'}>
+    <Route name="sign-in" handler={require './partials/sign-in-form'} />
+    <Route name="register" handler={require './partials/register-form'} />
+  </Route>
+
   <Route name="projects" handler={require './pages/projects'} />
   <Route path="projects/:id" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
@@ -61,7 +66,6 @@ Router.run routes, (Handler, {params}) ->
 
 #       <div className="main-content">
 #         <Route path="/" handler={Home} />
-#         <Route path="/sign-in(/:form)" handler={SignIn} currentLogin={@state.currentLogin} loggingIn={@state.loggingIn} />
 #         <Route path="/settings(/:section)" handler={Settings} />
 #         <Route path="/users/:login(/:section)" handler={UserProfile} />
 #         <Route path="/build" handler={Build} />
