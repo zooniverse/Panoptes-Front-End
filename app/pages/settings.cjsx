@@ -1,8 +1,6 @@
 React = require 'react'
 promiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
-Link = require '../lib/link'
-Route = require '../lib/route'
 InPlaceForm = require '../components/in-place-form'
 
 module.exports = React.createClass
@@ -41,11 +39,10 @@ module.exports = React.createClass
 
     <div className="edit-account-page content-container tabbed-content" data-side="left">
       <div className="tabbed-content-tabs">
-        <Link href="/settings" root={true} className="tabbed-content-tab">Profile</Link>
+        <a href="/settings" root={true} className="tabbed-content-tab">Profile</a>
       </div>
 
       <div className="content-container">
-        <Route path="/settings">
           <InPlaceForm onSubmit={@saveUser}>
             <fieldset>
               <legend>Optional profile details</legend>
@@ -62,7 +59,6 @@ module.exports = React.createClass
 
             <p><button type="submit" disabled={disabled}>Save profile</button></p>
           </InPlaceForm>
-        </Route>
       </div>
     </div>
 

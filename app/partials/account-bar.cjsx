@@ -10,7 +10,7 @@ module.exports = React.createClass
       <Link to="build" className="main-header-item"><i className="fa fa-flask"></i></Link>
 
       <div className="main-header-item">
-        <a href="#/TODO/users/#{@props.user.display_name}">{@props.user.display_name}</a>
+        <Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link>
         &nbsp;
         <span className="pill"><button type="button" onClick={@handleSignOutClick}>Sign out</button></span>
         <img src={@props.user.avatar} className="account-bar-avatar" />
