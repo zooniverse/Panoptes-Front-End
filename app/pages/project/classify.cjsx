@@ -1,7 +1,7 @@
 React = require 'react'
-apiClient = require '../api/client'
-PromiseToSetState = require '../lib/promise-to-set-state'
-Classifier = require '../classifier/classifier'
+apiClient = require '../../api/client'
+PromiseToSetState = require '../../lib/promise-to-set-state'
+Classifier = require '../../classifier/classifier'
 
 projectStatesInProgress = {}
 
@@ -55,14 +55,16 @@ module.exports = React.createClass
       classification
 
   render: ->
-    if @state.workflow?.id and @state.subject?.id and @state.classification?.annotations
-      <Classifier
-        workflow={@state.workflow}
-        subject={@state.subject}
-        classification={@state.classification}
-        onFinishClassification={@handleFinishingClassification} />
-    else
-      <div>Loading workflow, subject, and classification</div>
+    <div className="classify-content content-container">
+      {if @state.workflow?.id and @state.subject?.id and @state.classification?.annotations
+        <Classifier
+          workflow={@state.workflow}
+          subject={@state.subject}
+          classification={@state.classification}
+          onFinishClassification={@handleFinishingClassification} />
+      else
+        <div>Loading workflow, subject, and classification</div>}
+    </div>
 
   handleFinishingClassification: (classification) ->
     console?.info 'FINISHED', JSON.stringify classification

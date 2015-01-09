@@ -1,9 +1,6 @@
 React = require 'react'
-Link = require '../lib/link'
-Route = require '../lib/route'
-SignInForm = require '../partials/sign-in-form'
-RegisterForm = require '../partials/register-form'
 Translator = require 'react-translator'
+{Link, RouteHandler} = require 'react-router'
 
 Translator.setStrings
   signIn:
@@ -24,17 +21,11 @@ module.exports = React.createClass
       <div className="columns-container">
         <div className="tabbed-content column" data-side="top">
           <nav className="tabbed-content-tabs">
-            <Link href="/sign-in" root={true} className="tabbed-content-tab">Sign in</Link>
-            <Link href="/sign-in/register" className="tabbed-content-tab">Register</Link>
+            <Link to="sign-in" className="tabbed-content-tab">Sign in</Link>
+            <Link to="register" className="tabbed-content-tab">Register</Link>
           </nav>
 
-          <Route path="/sign-in" className="content-container">
-            <SignInForm currentLogin={@props.currentLogin} loggingIn={@props.loggingIn} />
-          </Route>
-
-          <Route path="/sign-in/register" className="content-container">
-            <RegisterForm />
-          </Route>
+          <RouteHandler />
         </div>
 
         <hr />

@@ -1,5 +1,5 @@
 React = require 'react'
-Link = require '../lib/link'
+{Link} = require 'react-router'
 auth = require '../api/auth'
 
 module.exports = React.createClass
@@ -7,17 +7,11 @@ module.exports = React.createClass
 
   render: ->
     <div className="account-bar main-header-group">
-      <Link href="/build" className="main-header-item"><i className="fa fa-flask"></i></Link>
-
-      <Link href="/timeline" className="main-header-item">
-        <i className="fa fa-bell"></i>
-        {@props.user.unseen_events unless @props.user.unseen_events is 0}
-      </Link>
+      <Link to="build" className="main-header-item"><i className="fa fa-flask"></i></Link>
 
       <div className="main-header-item">
-        <a href="#/users/#{@props.user.display_name}">{@props.user.display_name}</a>
+        <Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link>
         &nbsp;
-        <Link href="/settings"><i className="fa fa-cog"></i></Link>
         <span className="pill"><button type="button" onClick={@handleSignOutClick}>Sign out</button></span>
         <img src={@props.user.avatar} className="account-bar-avatar" />
       </div>

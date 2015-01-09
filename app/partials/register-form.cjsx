@@ -44,7 +44,7 @@ module.exports = React.createClass
             <LoadingIndicator />
           else if loginConflict?
             if loginConflict
-              <span className="form-help error">That login is taken. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
+              <span className="form-help error">That login is taken. <a href="#/TODO/reset-password?email=#{email || '?'}">Forget your password?</a></span>
             else
               <span className="form-help">Looks good</span>}
         </label>
@@ -85,7 +85,7 @@ module.exports = React.createClass
             <LoadingIndicator />
           else if emailConflict?
             if emailConflict
-              <span className="form-help error">An account with this address already exists. <a href="#/reset-password?email=#{email || '?'}">Forget your password?</a></span>
+              <span className="form-help error">An account with this address already exists. <a href="#/TODO/reset-password?email=#{email || '?'}">Forget your password?</a></span>
             else
               <span className="form-help">Looks good</span>}
         </label>
@@ -106,7 +106,7 @@ module.exports = React.createClass
       <div>
         <label>
           <input type="checkbox" name="agrees_to_privacy_policy" disabled={@state.user?} ref="agreesToPrivacyPolicy" onChange={@forceUpdate.bind this, null} />
-          You agree to our <a href="#/privacy">privacy policy</a> <span className="form-help">(required)</span>
+          You agree to our <a href="#/TODO/privacy">privacy policy</a> <span className="form-help">(required)</span>
         </label>
       </div>
 

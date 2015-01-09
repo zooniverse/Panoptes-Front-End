@@ -14,7 +14,7 @@ module.exports =
 
     {awaiting} = @state
     if key in awaiting
-      callback()
+      callback?()
     else
       awaiting.push key
       @setState {awaiting}, callback

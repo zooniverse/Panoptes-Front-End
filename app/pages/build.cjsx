@@ -1,4 +1,5 @@
 React = require 'react'
+{Link} = require 'react-router'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 PromiseToSetState = require '../lib/promise-to-set-state'
@@ -37,15 +38,15 @@ module.exports = React.createClass
         <span>Loading projects...</span>
       </PromiseRenderer>
       <hr />
-      <a href="#/build/new-project">Create a new project</a>
+      <Link to="new-project">Create a new project</Link>
     </div>
 
   renderProjectsList: (projects) ->
     items = for project in projects
       <li key={project.id}>
         {project.display_name}&nbsp;
-        <a href={'#/build/edit-project/' + project.id}><i className="fa fa-pencil"></i></a>&nbsp;
-        <a href={'#/projects/' + project.id}><i className="fa fa-hand-o-right"></i></a>
+        <Link to="edit-project" params={id: project.id}><i className="fa fa-pencil"></i></Link>&nbsp;
+        <Link to="project-home" params={id: project.id}><i className="fa fa-hand-o-right"></i></Link>
       </li>
 
     <ul>
