@@ -6,9 +6,6 @@ MainFooter = require './partials/main-footer'
 
 Settings = require './pages/settings'
 UserProfile = require './pages/user-profile'
-Build = require './pages/build'
-CreateProject = require './pages/create-project'
-EditProject = require './pages/edit-project'
 
 mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'
@@ -35,7 +32,7 @@ routes = <Route handler={App}>
   </Route>
 
   <Route name="projects" handler={require './pages/projects'} />
-  <Route path="projects/:id" handler={require './pages/project'}>
+  <Route name="project" path="projects/:id" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
     <Route name="project-science-case" path="science-case" handler={require './pages/project/science-case'} />
     <Route name="project-status" path="status" handler={require './pages/project/status'} />
@@ -43,6 +40,16 @@ routes = <Route handler={App}>
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
     <Route name="project-talk" path="talk" handler={require './pages/project/talk'} />
   </Route>
+
+  <Route name="build" handler={require './pages/build'} />
+  <Route name="new-project" path="build/new-project" handler={require './pages/new-project'}>
+    <DefaultRoute name="new-project-general" handler={require './pages/new-project/general'} />
+    <Route name="new-project-science-case" path="science-case" handler={require './pages/new-project/science-case'} />
+    <Route name="new-project-subjects" path="subjects" handler={require './pages/new-project/subjects'} />
+    <Route name="new-project-workflow" path="workflow" handler={require './pages/new-project/workflow'} />
+    <Route name="new-project-review" path="review" handler={require './pages/new-project/review'} />
+  </Route>
+  <Route name="build/edit-project" handler={require './pages/edit-project'} />
 </Route>
 
 Router.run routes, (Handler, {params}) ->
@@ -68,9 +75,6 @@ Router.run routes, (Handler, {params}) ->
 #         <Route path="/" handler={Home} />
 #         <Route path="/settings(/:section)" handler={Settings} />
 #         <Route path="/users/:login(/:section)" handler={UserProfile} />
-#         <Route path="/build" handler={Build} />
-#         <Route path="/build/new-project(/*section)" handler={CreateProject} />
-#         <Route path="/build/edit-project/:projectID" handler={EditProject} />
 #       </div>
 
 #       <MainFooter />
