@@ -26,7 +26,7 @@ App = React.createClass
 routes = <Route handler={App}>
   <DefaultRoute name="home" handler={require './pages/home'} />
 
-  <Route handler={require './pages/sign-in'}>
+  <Route path="account" handler={require './pages/sign-in'}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
     <Route name="register" handler={require './partials/register-form'} />
   </Route>
@@ -49,7 +49,7 @@ routes = <Route handler={App}>
     <Route name="new-project-workflow" path="workflow" handler={require './pages/new-project/workflow'} />
     <Route name="new-project-review" path="review" handler={require './pages/new-project/review'} />
   </Route>
-  <Route name="build/edit-project" handler={require './pages/edit-project'} />
+  <Route name="edit-project" handler={require './pages/edit-project'} />
 </Route>
 
 Router.run routes, (Handler, {params}) ->
@@ -72,7 +72,6 @@ Router.run routes, (Handler, {params}) ->
 #       <MainHeader />
 
 #       <div className="main-content">
-#         <Route path="/" handler={Home} />
 #         <Route path="/settings(/:section)" handler={Settings} />
 #         <Route path="/users/:login(/:section)" handler={UserProfile} />
 #       </div>
