@@ -1,6 +1,6 @@
 React = require 'react'
 window.React = React
-Router = {RouteHandler, DefaultRoute, Route} = require 'react-router'
+Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-router'
 MainHeader = require './partials/main-header'
 MainFooter = require './partials/main-footer'
 
@@ -43,6 +43,9 @@ routes = <Route handler={App}>
     <Route name="new-project-review" path="review" handler={require './pages/new-project/review'} />
   </Route>
   <Route name="edit-project" path="edit-project/:id" handler={require './pages/edit-project'} />
+
+  <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
+  <NotFoundRoute handler={React.createClass render: -> <div className="content-container"><i className="fa fa-frown-o"></i> Not found</div>} />
 </Route>
 
 mainContainer = document.createElement 'div'
