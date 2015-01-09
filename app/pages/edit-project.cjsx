@@ -160,9 +160,9 @@ module.exports = React.createClass
   displayName: 'EditProjectPage'
 
   render: ->
-    <PromiseRenderer promise={apiClient.createType('projects').get @props.route.params.projectID} then={@renderProjectEditor}>
+    <PromiseRenderer promise={apiClient.createType('projects').get @props.params.id} then={@renderProjectEditor}>
       <div className="content-container">
-        <p>Loading project <code>{@props.route.params.projectID}</code>...</p>
+        <p>Loading project <code>{@props.params.id}</code>...</p>
       </div>
     </PromiseRenderer>
 

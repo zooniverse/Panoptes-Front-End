@@ -4,13 +4,6 @@ Router = {RouteHandler, DefaultRoute, Route} = require 'react-router'
 MainHeader = require './partials/main-header'
 MainFooter = require './partials/main-footer'
 
-Settings = require './pages/settings'
-UserProfile = require './pages/user-profile'
-
-mainContainer = document.createElement 'div'
-mainContainer.id = 'panoptes-main-container'
-document.body.appendChild mainContainer
-
 App = React.createClass
   displayName: 'PanoptesApp'
 
@@ -49,34 +42,12 @@ routes = <Route handler={App}>
     <Route name="new-project-workflow" path="workflow" handler={require './pages/new-project/workflow'} />
     <Route name="new-project-review" path="review" handler={require './pages/new-project/review'} />
   </Route>
-  <Route name="edit-project" handler={require './pages/edit-project'} />
+  <Route name="edit-project" path="edit-project/:id" handler={require './pages/edit-project'} />
 </Route>
+
+mainContainer = document.createElement 'div'
+mainContainer.id = 'panoptes-main-container'
+document.body.appendChild mainContainer
 
 Router.run routes, (Handler, {params}) ->
   React.render(<Handler params={params} />, mainContainer);
-
-# Main = React.createClass
-#   displayName: 'Main'
-
-#   getInitialState: ->
-#     currentLogin: null
-#     loggingIn: false
-
-#   handleLoginChange: ->
-#     @setState
-#       currentLogin: null
-#       loggingIn: false
-
-#   render: ->
-#     <div className="panoptes-main">
-#       <MainHeader />
-
-#       <div className="main-content">
-#         <Route path="/settings(/:section)" handler={Settings} />
-#         <Route path="/users/:login(/:section)" handler={UserProfile} />
-#       </div>
-
-#       <MainFooter />
-#     </div>
-
-# React.render <Main />, mainContainer

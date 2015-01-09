@@ -1,4 +1,5 @@
 React = require 'react'
+{Link} = require 'react-router'
 
 module.exports = React.createClass
   displayName: 'ProjectCard'
@@ -6,7 +7,7 @@ module.exports = React.createClass
   render: ->
     {project} = @props
 
-    <a href="#/projects/#{decodeURIComponent project.id}" className="project-card">
+    <Link to="project-home" params={id: project.id} className="project-card">
       <div className="media">
         <img src={project.avatar} className="avatar" />
       </div>
@@ -16,4 +17,4 @@ module.exports = React.createClass
         <div className="title">{project.display_name}</div>
         <div className="introduction">{project.introduction}</div>
       </div>
-    </a>
+    </Link>
