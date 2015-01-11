@@ -1,11 +1,12 @@
-Translator = require 'react-translator'
+counterpart = require 'counterpart'
 React = require 'react'
+Translate = require 'react-translate-component'
 promiseToSetState = require '../lib/promise-to-set-state'
 InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
 auth = require '../api/auth'
 
-Translator.setStrings
+counterpart.registerTranslations 'en',
   signInForm:
     signIn: 'Sign in'
     signOut: 'Sign out'
@@ -38,7 +39,7 @@ module.exports = React.createClass
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
-          <Translator>signInForm.userName</Translator>
+          <Translate content="signInForm.userName" />
           <br />
           <input type="text" name="login" value={@props.currentLogin?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
         </label>
@@ -48,7 +49,7 @@ module.exports = React.createClass
 
       <div>
         <label>
-          <Translator>signInForm.password</Translator>
+          <Translate content="signInForm.password" />
           <br />
           <input type="password" name="password" value={@props.currentLogin?.password} disabled={disabled} ref="password" />
         </label>
@@ -58,7 +59,7 @@ module.exports = React.createClass
 
       <div>
         <button type="submit" disabled={disabled}>
-          <Translator>signInForm.signIn</Translator>
+          <Translate content="signInForm.signIn" />
         </button>
 
         {if signedIn

@@ -1,7 +1,8 @@
+counterpart = require 'counterpart'
 React = require 'react'
-Translator = require 'react-translator'
+Translate = require 'react-translate-component'
 
-Translator.setStrings
+counterpart.registerTranslations 'en',
   home:
     title: 'Home'
     intro: 'Welcome to the home page.'
@@ -11,6 +12,6 @@ module.exports = React.createClass
 
   render: ->
     <div className="home-page content-container">
-      <Translator tag="h1">home.title</Translator>
-      <Translator tag="p">home.intro</Translator>
+      <Translate component="h1" content="home.title" />
+      <Translate component="p" content="home.intro" />
     </div>
