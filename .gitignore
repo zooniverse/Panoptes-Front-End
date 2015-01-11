@@ -8,3 +8,6 @@
 /public/main.js
 /public/main.js.map
 /test/bundle.js
+
+fa.tmp/
+fa.zip
