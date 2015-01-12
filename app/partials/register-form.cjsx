@@ -1,4 +1,4 @@
-window.counterpart = require 'counterpart'
+counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 apiClient = require '../api/client'
