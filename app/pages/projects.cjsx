@@ -5,7 +5,7 @@ apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 ProjectCard = require '../partials/project-card'
 
-counterpart.registerTranslations, 'en',
+counterpart.registerTranslations 'en',
   projectsPage:
     title: 'Projects'
 
