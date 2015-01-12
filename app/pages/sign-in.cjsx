@@ -7,6 +7,9 @@ counterpart.registerTranslations 'en',
   signIn:
     withZooniverse: 'Sign in with your Zooniverse account'
     whyHaveAccount: 'Signed-in volunteers lorem ipsum dolor sit amet blah blah blah.'
+    signIn: 'Sign in'
+    register: 'Register'
+    orThirdParty: 'Or sign in with another service'
     withFacebook: 'Sign in with Facebook'
     withTwitter: 'Sign in with Twitter'
     withGoogle: 'Sign in with Google'
@@ -22,8 +25,8 @@ module.exports = React.createClass
       <div className="columns-container">
         <div className="tabbed-content column" data-side="top">
           <nav className="tabbed-content-tabs">
-            <Link to="sign-in" className="tabbed-content-tab">Sign in</Link>
-            <Link to="register" className="tabbed-content-tab">Register</Link>
+            <Link to="sign-in" className="tabbed-content-tab"><Translate content="signIn.signIn" /></Link>
+            <Link to="register" className="tabbed-content-tab"><Translate content="signIn.register" /></Link>
           </nav>
 
           <RouteHandler />
@@ -32,7 +35,7 @@ module.exports = React.createClass
         <hr />
 
         <div className="oauth-providers">
-          <div>Or sign in with another service</div>
+          <Translate content="signIn.orThirdParty" />
           <br />
           <div>
             <button><Translate content="signIn.withFacebook" /></button>

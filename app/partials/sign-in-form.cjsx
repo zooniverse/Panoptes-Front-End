@@ -39,8 +39,7 @@ module.exports = React.createClass
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
-          <Translate content="signInForm.userName" />
-          <br />
+          <Translate content="signInForm.userName" /><br />
           <input type="text" name="login" value={@props.currentLogin?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
         </label>
       </div>
@@ -49,8 +48,7 @@ module.exports = React.createClass
 
       <div>
         <label>
-          <Translate content="signInForm.password" />
-          <br />
+          <Translate content="signInForm.password" /><br />
           <input type="password" name="password" value={@props.currentLogin?.password} disabled={disabled} ref="password" />
         </label>
       </div>
