@@ -1,4 +1,6 @@
+counterpart = require 'counterpart'
 React = require 'react'
+Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 promiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
@@ -8,6 +10,29 @@ debounce = require 'debounce'
 
 REMOTE_CHECK_DELAY = 1000
 MIN_PASSWORD_LENGTH = 8
+
+counterpart.registerTranslations 'en',
+  registerForm:
+    required: '(required)'
+    optional: '(optional)'
+    looksGood: 'Looks good.'
+    userName: 'User name'
+    badChars: 'Don’t use weird characters: %(chars)s'
+    loginConflict: 'That login is taken.'
+    forgotPassword: 'Forgotten your password?'
+    password: 'Password'
+    passwordTooShort: 'Too short.'
+    confirmPassword: 'Confirm password'
+    passwordsDontMatch: 'These don’t match.'
+    email: 'Email address'
+    emailConflict: 'An account with this address already exists.'
+    realName: 'Real name'
+    whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc.'
+    agreeToPrivacyPolicy: 'You agree to our %(link)s.'
+    privacyPolicy: 'privacy policy'
+    register: 'Register'
+    alreadySignedIn: 'Already signed in as %(name)s.'
+    signOut: 'Sign out'
 
 users = apiClient.createType 'users'
 
@@ -29,24 +54,34 @@ module.exports = React.createClass
 
   render: ->
     {badLoginChars, loginConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
-    email = @refs.email?.getDOMNode().value
+
+    forgotPasswordLink = <a href="/todo/account/reset-password?email=#{@refs.email?.getDOMNode().value ? '?'}">
+      <Translate content="registerForm.forgotPassword" />
+    </a>
 
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
-          <div>User name</div>
+          <Translate content="registerForm.userName" /><br />
           <input type="text" name="login" disabled={@state.user?} ref="login" onChange={@handleLoginChange} autoFocus />
 
           {if badLoginChars?.length > 0
-            <span className="form-help error">Don’t use weird characters ({badLoginChars.join ', '}).</span>
+            chars = for char in badLoginChars
+              <kbd key={char}>{char}</kbd>
+            <Translate component="span" className="form-help error" content="registerForm.badChars" chars={chars} />
 
           else if "loginConflict" in @state.awaiting
             <LoadingIndicator />
           else if loginConflict?
             if loginConflict
-              <span className="form-help error">That login is taken. <a href="#/TODO/reset-password?email=#{email || '?'}">Forget your password?</a></span>
+              <span className="form-help error">
+                <Translate content="registerForm.loginConflict" />{' '}
+                {forgotPasswordLink}
+              </span>
             else
-              <span className="form-help">Looks good</span>}
+              <span className="form-help">
+                <Translate content="registerForm.looksGood" />
+              </span>}
         </label>
       </div>
 
@@ -54,10 +89,10 @@ module.exports = React.createClass
 
       <div>
         <label>
-          <div>Password</div>
+          <Translate content="registerForm.password" /><br />
           <input type="password" name="password" disabled={@state.user?} ref="password" onChange={@handlePasswordChange} />
           {if passwordTooShort
-            <span className="form-help error">Too short</span>}
+            <Translate className="form-help error" content="registerForm.passwordTooShort" />}
         </label>
       </div>
 
@@ -65,13 +100,13 @@ module.exports = React.createClass
 
       <div>
         <label>
-          <div>Confirm password</div>
+          <Translate content="registerForm.confirmPassword" /><br />
           <input type="password" name="confirmed_password" disabled={@state.user?} ref="confirmedPassword" onChange={@handlePasswordChange} />
           {if passwordsDontMatch?
             if passwordsDontMatch
-              <span className="form-help error">These don’t match</span>
+              <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
             else
-              <span className="form-help success">Looks good</span>}
+              <Translate className="form-help" content="registerForm.looksGood" />}
         </label>
       </div>
 
@@ -79,15 +114,18 @@ module.exports = React.createClass
 
       <div>
         <label>
-          <div>Email <span className="form-help">(required)</span></div>
+          <Translate content="registerForm.email" /> <Translate className="form-help" content="registerForm.required" /><br />
           <input type="text" name="email" disabled={@state.user?} ref="email" onChange={@handleEmailChange} />
           {if 'emailConflict' in @state.awaiting
             <LoadingIndicator />
           else if emailConflict?
             if emailConflict
-              <span className="form-help error">An account with this address already exists. <a href="#/TODO/reset-password?email=#{email || '?'}">Forget your password?</a></span>
+              <span className="form-help error">
+                <Translate content="registerForm.emailConflict" />{' '}
+                {forgotPasswordLink}
+              </span>
             else
-              <span className="form-help">Looks good</span>}
+              <Translate className="form-help" content="registerForm.looksGood" />}
         </label>
       </div>
 
@@ -95,9 +133,9 @@ module.exports = React.createClass
 
       <div>
         <label>
-          <div>Real name <span className="form-help">(optional)</span></div>
-          <input type="text" name="real_name" disabled={@state.user?} ref="realName" />
-          <div className="form-help">We’ll use this to give you credit in scientific papers, posters, etc.</div>
+          <Translate content="registerForm.realName" /> <Translate className="form-help" content="registerForm.optional" /><br />
+          <input type="text" name="real_name" disabled={@state.user?} ref="realName" /><br />
+          <Translate className="form-help" content="registerForm.whyRealName" />
         </label>
       </div>
 
@@ -106,21 +144,25 @@ module.exports = React.createClass
       <div>
         <label>
           <input type="checkbox" name="agrees_to_privacy_policy" disabled={@state.user?} ref="agreesToPrivacyPolicy" onChange={@forceUpdate.bind this, null} />
-          You agree to our <a href="#/TODO/privacy">privacy policy</a> <span className="form-help">(required)</span>
+          {privacyPolicyLink = <a href="#/todo/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
+          <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />{' '}
+          <span className="form-help">(required)</span>
         </label>
       </div>
 
       <br />
 
       <div>
-        <button type="submit" disabled={not @isFormValid() or @state.awaiting.length isnt 0 or @state.user?}>Register</button>
-        &nbsp;
+        <button type="submit" disabled={not @isFormValid() or @state.awaiting.length isnt 0 or @state.user?}>
+          <Translate content="registerForm.register" />
+        </button>{' '}
 
         {if 'user' in @state.awaiting
           <LoadingIndicator />
         else if @state.user?
           <span className="form-help">
-            Signed in as {@state.user.display_name} <button type="button" onClick={@handleSignOut}>Sign out</button>
+            <Translate content="registerForm.alreadySignedIn" name={@state.user.display_name} />{' '}
+            <button type="button" onClick={@handleSignOut}><Translate content="registerForm.signOut" /></button>
           </span>}
       </div>
     </InPlaceForm>

@@ -1,8 +1,9 @@
-Translator = require 'react-translator'
+counterpart = require 'counterpart'
 React = require 'react'
+Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 
-Translator.setStrings
+counterpart.registerTranslations 'en',
   loginBar:
     signIn: 'Sign in'
     register: 'Register'
@@ -13,10 +14,10 @@ module.exports = React.createClass
   render: ->
     <div className="login-bar main-header-group">
       <Link to="sign-in" root={true} className="main-header-item">
-        <Translator>loginBar.signIn</Translator>
+        <Translate content="loginBar.signIn" />
       </Link>
 
       <Link to="register" className="main-header-item">
-        <Translator>loginBar.register</Translator>
+        <Translate content="loginBar.register" />
       </Link>
     </div>
