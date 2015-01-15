@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "counterpart": "^0.16.4",
     "debounce": "^1.0.0",
     "emojify.js": "^0.9.5",
     "json-api-client": "~0.0.8",
