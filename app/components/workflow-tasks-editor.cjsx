@@ -245,15 +245,6 @@ module.exports = React.createClass
 
   renderEditor: ->
     <div className="workflow-editor">
-      <label>
-        Name
-        <br />
-        <input type="text" name="display_name" value={@props.workflow.display_name} onChange={handleInputChange.bind @props.workflow} style={width: '100%'} />
-      </label>
-      <hr />
-
-      Tasks
-      <br />
       <div className="task-list">
         {for taskKey in @getTaskKeysInOrder()
           <TaskEditor key={taskKey} taskKey={taskKey} workflow={@props.workflow} />}
@@ -270,7 +261,7 @@ module.exports = React.createClass
 
   renderCode: ->
     <div className="workflow-editor-code-view">
-      <pre>{JSON.stringify @props.workflow, null, 2}</pre>
+      <pre>{JSON.stringify @props.workflow.tasks, null, 2}</pre>
     </div>
 
   getTaskKeysInOrder: ->

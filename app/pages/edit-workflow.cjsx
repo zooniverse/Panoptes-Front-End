@@ -1,7 +1,7 @@
 React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
 apiClient = require '../api/client'
-WorkflowEditor = require '../components/workflow-editor'
+WorkflowTasksEditor = require '../components/workflow-tasks-editor'
 
 module.exports = React.createClass
   displayName: 'EditWorkflowPage'
@@ -17,4 +17,6 @@ module.exports = React.createClass
     </PromiseRenderer>
 
   renderWorkflowEditor: (workflow) ->
-    <WorkflowEditor workflow={workflow} />
+    <div>
+      <WorkflowTasksEditor workflow={workflow} />
+    </div>
