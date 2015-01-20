@@ -22,6 +22,7 @@ handleInputChange = (e) ->
     delete data[path[0]]
   else
     data[path[0]] = value
+
   @emit 'change'
 
 AnswerEditor = React.createClass
@@ -45,10 +46,10 @@ AnswerEditor = React.createClass
           <label>
             {nextValue = @props.answer.next ? JSON.stringify(@props.answer.next) ? 'undefined'; null}
             Next task <select name="tasks.#{@props.taskKey}.answers.#{@props.answerIndex}.next" value={nextValue} onChange={handleInputChange.bind @props.workflow}>
-              <option value="undefined" data-delete-value>(Default)</option>
+              <option value="undefined" data-delete-value>(Next in line)</option>
               {for key, task of @props.workflow.tasks
-                <option key={key} value={key}>{task.question ? task.instruction} ({key})</option>}
-              <option value="null" data-json-value>End classification</option>
+                <option key={key} value={key}>{"#{task.question ? task.instruction} (#{key})"}</option>}
+              <option value="null" data-json-value>(End classification)</option>
             </select>
           </label>
         </span>
@@ -203,7 +204,7 @@ module.exports = React.createClass
     willTransitionFrom: (transition, component) ->
       if component.props.workflow.hasUnsavedChanges()
         transition.abort()
-        if confirm 'You have unsaved changes that **will be lost**. Do you really want to leave the workflow editor?'
+        if confirm 'You have unsaved changes that will be lost forever. Do you really want to leave the workflow editor?'
           transition.retry()
 
   getDefaultProps: ->
@@ -216,7 +217,6 @@ module.exports = React.createClass
           type: 'question'
           question: 'Cool?'
           answers: [
-            value: true
             label: 'Yep'
           ]
       first_task: 'cool'
