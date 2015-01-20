@@ -2,6 +2,7 @@ React = require 'react'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 auth = require '../api/auth'
+{Link} = require 'react-router'
 apiClient = require '../api/client'
 InPlaceForm = require '../components/in-place-form'
 MarkdownEditor = require '../components/markdown-editor'
@@ -38,6 +39,13 @@ ProjectEditor = React.createClass
     {project} = @props
 
     <div>
+      <h2>Workflows</h2>
+      {for workflowID in project.links.workflows
+        console.log {project}
+        <div key={workflowID}>
+          <Link to="edit-workflow" params={id: workflowID}>{workflowID}</Link>
+        </div>}
+
       <InPlaceForm onSubmit={@handleSubmit}>
         <table>
           <tbody>
