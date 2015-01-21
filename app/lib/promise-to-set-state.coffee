@@ -1,41 +1,38 @@
 module.exports =
   getInitialState: ->
-    awaiting: []
-
-  componentWillMount: ->
-    @_statePromises = {}
+    pending: {}
+    rejected: {}
 
   promiseToSetState: (keysAndPromises, callback) ->
+    {pending, rejected} = @state
+
     for key, promise of keysAndPromises
       promiseHandler = @_handlePromisedState.bind this, key, promise
       promise.then promiseHandler.bind this, false
       promise.catch promiseHandler.bind this, true
-      @_statePromises[key] = promise
 
-    {awaiting} = @state
-    if key in awaiting
-      callback?()
-    else
-      awaiting.push key
-      @setState {awaiting}, callback
+      pending[key] = promise
+      delete rejected[key]
+
+    @setState {pending, rejected}, callback
 
   _handlePromisedState: (key, promise, caught, value) ->
     # Only change the state if its current value is the same promise that's resolving.
-    samePromise = @_statePromises[key] is promise
-    delete @_statePromises[key]
+    isThePromiseInState = promise is @state.pending[key]
 
-    if @isMounted() and samePromise
-      newState = {}
+    if @isMounted() and isThePromiseInState
+      {pending, rejected} = @state
+      newState = {pending, rejected}
 
-      if caught and value not instanceof Error
-        error = new Error value
-        error.message = value # Override string-only messages. Maybe this isn't a great idea.
-        value = error
+      delete pending[key]
 
-      newState[key] = value
-
-      {awaiting} = @state
-      awaiting.splice awaiting.indexOf(key), 1
-      newState.awaiting = awaiting
+      if caught
+        newState[key] = null
+        rejected[key] = value
+      else
+        newState[key] = value
+        delete rejected[key]
 
       @setState newState
+
+    null

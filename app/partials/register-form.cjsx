@@ -70,7 +70,7 @@ module.exports = React.createClass
               <kbd key={char}>{char}</kbd>
             <Translate component="span" className="form-help error" content="registerForm.badChars" chars={chars} />
 
-          else if "loginConflict" in @state.awaiting
+          else if "loginConflict" of @state.pending
             <LoadingIndicator />
           else if loginConflict?
             if loginConflict
@@ -116,7 +116,7 @@ module.exports = React.createClass
         <label>
           <Translate content="registerForm.email" /> <Translate className="form-help" content="registerForm.required" /><br />
           <input type="text" name="email" disabled={@state.user?} ref="email" onChange={@handleEmailChange} />
-          {if 'emailConflict' in @state.awaiting
+          {if 'emailConflict' of @state.pending
             <LoadingIndicator />
           else if emailConflict?
             if emailConflict
@@ -153,11 +153,11 @@ module.exports = React.createClass
       <br />
 
       <div>
-        <button type="submit" disabled={not @isFormValid() or @state.awaiting.length isnt 0 or @state.user?}>
+        <button type="submit" disabled={not @isFormValid() or Object.keys(@state.pending).length isnt 0 or @state.user?}>
           <Translate content="registerForm.register" />
         </button>{' '}
 
-        {if 'user' in @state.awaiting
+        {if 'user' of @state.pending
           <LoadingIndicator />
         else if @state.user?
           <span className="form-help">
