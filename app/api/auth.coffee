@@ -18,19 +18,6 @@ CSRF_TOKEN_PATTERN = do ->
   CONTENT_ATTR = '''content=['"](.+)['"]'''
   ///#{NAME_ATTR}\s*#{CONTENT_ATTR}|#{CONTENT_ATTR}\s*#{NAME_ATTR}///
 
-throwErrorFromRequest = (request) ->
-  response = try JSON.parse request.responseText
-  if response?.error?
-    errorMessage = response.error
-    if response.error_description?
-      errorMessage = "#{errorMessage} #{response.error_description}"
-  else if response?.errors?[0].message?
-    errorMessage = for {message} in response.errors
-      ("#{key} #{error}" for key, error of message).join '\n'
-    errorMessage = errorMessage.join '\n'
-  errorMessage ?= request.responseText || "#{request.status} #{request.statusText}"
-  Promise.reject new Error errorMessage
-
 module.exports = new Model
   _currentUser: null
   _bearerToken: ''
@@ -46,7 +33,7 @@ module.exports = new Model
 
       .catch (request) ->
         console?.error 'Failed to get auth token'
-        throwErrorFromRequest request
+        client.handleError request
 
   _getBearerToken: ->
     console?.log 'Getting bearer token'
@@ -69,7 +56,7 @@ module.exports = new Model
         .catch (request) ->
           # You're probably not signed in.
           console?.error 'Failed to get bearer token'
-          throwErrorFromRequest request
+          client.handleError request
 
   _deleteBearerToken: ->
     @_bearerToken = ''
@@ -84,9 +71,9 @@ module.exports = new Model
         user.listen 'delete', [@, '_handleCurrentUserDeletion', user]
         user
 
-      .catch (request) ->
+      .catch (error) ->
         console?.error 'Failed to get session'
-        throwErrorFromRequest request
+        throw error
 
   register: ({login, email, password}) ->
     @checkCurrent().then (user) =>
@@ -112,9 +99,9 @@ module.exports = new Model
                   console?.info 'Registered account', user.display_name, user.id
                   user
 
-            .catch (request) ->
+            .catch (error) ->
               console?.error 'Failed to register'
-              throwErrorFromRequest request
+              throw error
 
         @update _currentUser: registrationRequest.catch =>
           null
@@ -160,7 +147,7 @@ module.exports = new Model
 
             .catch (request) ->
               console?.error 'Failed to sign in'
-              throwErrorFromRequest request
+              client.handleError request
 
         @update _currentUser: signInRequest.catch =>
           null
@@ -185,7 +172,7 @@ module.exports = new Model
 
             .catch (request) ->
               console?.error 'Failed to sign out'
-              throwErrorFromRequest request
+              client.handleError request
       else
         null
 
