@@ -7,7 +7,7 @@ The [Panoptes-Front-End](https://github.com/zooniverse/Panoptes-Front-End) (FE) 
 
 You can find a live version of the Panoptes FE here:
 
-* <https://demo.zooniverse.org/panoptes-front-end/>, 
+* <http://demo.zooniverse.org/panoptes-front-end/>, 
 
 where you can register as a user and start to create projects - though, of course, it is still under active development. As ever, any feedback is much appreciated - good luck!
 
@@ -24,7 +24,7 @@ $ npm install
 (where `$PFE_WORKING_DIR` is an environment variable specifying the path of where you've just cloned the repo to). **npm** should do the rest.
 
 ###Running the FE locally with the "staging" Panoptes instance
-Out of the box, the FE will actually work with the `staging` Panoptes instance. This means that the user and project management is all done elsewhere (and will be the same as what you find [here](https://demo.zooniverse.org/panoptes-front-end/)). You can run a local FE with:
+Out of the box, the FE will actually work with the `staging` Panoptes instance. This means that the user and project management is all done elsewhere (and will be the same as what you find [here](http://demo.zooniverse.org/panoptes-front-end/)). You can run a local FE with:
 
 ```bash
 $ npm start
@@ -51,7 +51,7 @@ You'll need to make sure your [Panoptes](https://github.com/zooniverse/Panoptes/
 npm run stage
 ```
 
-runs **./bin/build.sh**, which builds and optimizes the site before deploying it to <https://demo.zooniverse.org/panoptes-front-end>.
+runs **./bin/build.sh**, which builds and optimizes the site before deploying it to <http://demo.zooniverse.org/panoptes-front-end>.
 
 
 ## Planning
@@ -72,5 +72,5 @@ Everything that renders on the page is a React component. They're fairly organiz
 ##Useful links
 
 * [The Zooniverse](https://www.zooniverse.org/) - where it all began/begins!
-* [The Panoptes Front End](https://demo.zooniverse.org/panoptes-front-end/) (the `staging` deployment - so may not reflect the code here...);
+* [The Panoptes Front End](http://demo.zooniverse.org/panoptes-front-end/) (the `staging` deployment - so may not reflect the code here...);
 * [Panoptes](https://github.com/zooniverse/Panoptes/) on [GitHub](http://github.com).
