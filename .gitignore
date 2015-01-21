@@ -9,3 +9,6 @@
 /public/main.js.map
 /public/vendor.js
 /test/bundle.js
+
+fa.tmp/
+fa.zip

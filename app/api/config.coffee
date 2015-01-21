@@ -1,4 +1,5 @@
 DEFAULT_ENV = 'staging'
+#DEFAULT_ENV = 'development'
 
 API_HOSTS =
   production: '' # Same domain!
@@ -7,6 +8,7 @@ API_HOSTS =
   cam: 'http://172.17.2.87:3000'
 
 API_APPLICATION_IDS =
+  development: 'ABC123'
   staging: '535759b966935c297be11913acee7a9ca17c025f9f15520e7504728e71110a27'
   cam: '05fd85e729327b2f71cda394d8e87e042e0b77b05e05280e8246e8bdb05d54ed'
 
