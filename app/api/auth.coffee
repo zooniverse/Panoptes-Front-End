@@ -19,7 +19,7 @@ CSRF_TOKEN_PATTERN = do ->
   ///#{NAME_ATTR}\s*#{CONTENT_ATTR}|#{CONTENT_ATTR}\s*#{NAME_ATTR}///
 
 module.exports = new Model
-  _currentUser: null
+  _currentUserPromise: null
   _bearerToken: ''
 
   _getAuthToken: ->
@@ -68,7 +68,6 @@ module.exports = new Model
     client.get '/me'
       .then ([user]) =>
         console?.info 'Got session', user.display_name, user.id
-        user.listen 'delete', [@, '_handleCurrentUserDeletion', user]
         user
 
       .catch (error) ->
@@ -103,15 +102,15 @@ module.exports = new Model
               console?.error 'Failed to register'
               throw error
 
-        @update _currentUser: registrationRequest.catch =>
+        @update _currentUserPromise: registrationRequest.catch =>
           null
 
         registrationRequest
 
   checkCurrent: ->
-    unless @_currentUser?
+    unless @_currentUserPromise?
       console?.log 'Checking current user'
-      @update _currentUser:
+      @update _currentUserPromise:
         @_getBearerToken()
           .then =>
             @_getSession()
@@ -121,7 +120,7 @@ module.exports = new Model
             console?.info 'No current user'
             null
 
-    @_currentUser
+    @_currentUserPromise
 
   signIn: ({login, password}) ->
     @checkCurrent().then (user) =>
@@ -149,16 +148,28 @@ module.exports = new Model
               console?.error 'Failed to sign in'
               client.handleError request
 
-        @update _currentUser: signInRequest.catch =>
+        @update _currentUserPromise: signInRequest.catch =>
           null
 
         signInRequest
 
-  signOut: ->
+  disableAccount: ->
+    console?.log 'Disabling account'
     @checkCurrent().then (user) =>
       if user?
-        console?.log 'Signing out'
+        user.refresh().then =>
+          user.delete().then =>
+            @_deleteBearerToken()
+            @update _currentUserPromise: Promise.resolve null
+            console?.info 'Disabled account'
+            null
+      else
+        throw new Error 'Failed to disable account; not signed in'
 
+  signOut: ->
+    console?.log 'Signing out'
+    @checkCurrent().then (user) =>
+      if user?
         @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
@@ -166,21 +177,15 @@ module.exports = new Model
           makeHTTPRequest 'POST', config.host + '/users/sign_out', data, DELETE_METHOD_OVERRIDE_HEADERS
             .then =>
               @_deleteBearerToken()
+              @update _currentUserPromise: Promise.resolve null
               console?.info 'Signed out'
-              @update _currentUser: Promise.resolve null
               null
 
             .catch (request) ->
               console?.error 'Failed to sign out'
               client.handleError request
       else
-        null
-
-  _handleCurrentUserDeletion: (user) ->
-    console?.log 'Handling account deletion', user.display_name, user.id
-    user.stopListening 'delete', [@, '_handleCurrentUserDeletion', user]
-    @_deleteBearerToken()
-    @update _currentUser: Promise.resolve null
+        throw new Error 'Failed to sign out; not signed in'
 
 # For quick debugging:
 window?.zooAuth = module.exports

@@ -51,8 +51,7 @@ clone = (object) ->
   JSON.parse JSON.stringify object
 
 test 'Create a temporary user', ->
-  auth.register(USER_DATA).then (user) ->
-    resources.user = user
+  auth.register USER_DATA
 
 test 'Create a project', (t) ->
   projects.create(PROJECT_DATA).save().then (project) ->
@@ -104,5 +103,5 @@ test 'Create a workflow', (t) ->
       subjectSetIDs = (id for {id} in workflowSubjectSets)
       t.ok resources.subjectSet.id in subjectSetIDs, 'The workflow knows about the subject set we created'
 
-test.skip 'Delete temporary user', ->
-  resources.user.delete()
+test 'Delete temporary user', ->
+  auth.disableAccount()
