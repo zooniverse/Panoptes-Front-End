@@ -1,4 +1,9 @@
+{Model} = require 'json-api-client'
+
 module.exports = (e) ->
+  unless this instanceof Model
+    throw new Error 'Bind the handleInputChange function to a Model instance'
+
   valueProperty = switch e.target.type
     when 'checkbox' then 'checked'
     when 'file' then 'files'
@@ -23,8 +28,3 @@ module.exports = (e) ->
     @[rootKey]
 
   @update changes
-
-  if e.target.dataset.deleteValue
-    delete data[path[0]]
-  else
-    data[path[0]] = value

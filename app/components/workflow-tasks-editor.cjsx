@@ -1,29 +1,6 @@
 React = require 'react'
-ChangeListener = require '../components/change-listener'
-
-handleInputChange = (e) ->
-  valueProp = switch e.target.type
-    when 'checkbox' then 'checked'
-    else 'value'
-
-  value = e.target[valueProp]
-
-  if e.target.type is 'number'
-    value = parseFloat value
-  else if e.target.dataset.jsonValue
-    value = JSON.parse value
-
-  data = this
-  path = e.target.name.split '.'
-  until path.length is 1
-    data = data[path.shift()]
-
-  if e.target.dataset.deleteValue
-    delete data[path[0]]
-  else
-    data[path[0]] = value
-
-  @emit 'change'
+ChangeListener = require './change-listener'
+handleInputChange = require '../lib/handle-input-change'
 
 AnswerEditor = React.createClass
   displayName: 'AnswerEditor'
@@ -42,17 +19,18 @@ AnswerEditor = React.createClass
       <br />
 
       <div className="answer-properties">
-        <span>
-          <label>
-            {nextValue = @props.answer.next ? JSON.stringify(@props.answer.next) ? 'undefined'; null}
-            Next task <select name="tasks.#{@props.taskKey}.answers.#{@props.answerIndex}.next" value={nextValue} onChange={handleInputChange.bind @props.workflow}>
-              <option value="undefined" data-delete-value>(Next in line)</option>
-              {for key, task of @props.workflow.tasks
-                <option key={key} value={key}>{"#{task.question ? task.instruction} (#{key})"}</option>}
-              <option value="null" data-json-value>(End classification)</option>
-            </select>
-          </label>
-        </span>
+        {if @props.task.type is 'single'
+          <span>
+            <label>
+              {nextValue = @props.answer.next ? JSON.stringify(@props.answer.next) ? 'undefined'; null}
+              Next task <select name="tasks.#{@props.taskKey}.answers.#{@props.answerIndex}.next" value={nextValue} onChange={handleInputChange.bind @props.workflow}>
+                <option value="undefined" data-delete-value>(Next in line)</option>
+                {for key, task of @props.workflow.tasks
+                  <option key={key} value={key}>{"#{task.question ? task.instruction || '· · ·'} (#{key})"}</option>}
+                <option value="null" data-json-value>(End classification)</option>
+              </select>
+            </label>
+          </span>}
       </div>
     </div>
 
@@ -70,7 +48,7 @@ QuestionTaskEditor = React.createClass
 
       <span className="field-label">Answers</span>
       <label className="inline-input">
-        <input type="checkbox" name="tasks.#{@props.taskKey}.multiple" checked={@props.task.multiple || null} onChange={handleInputChange.bind @props.workflow} />
+        <input type="checkbox" checked={@props.task.type is 'multiple' || null} onChange={@handleChangeMultiple} />
         Allow multiple
       </label>
       <br />
@@ -85,6 +63,14 @@ QuestionTaskEditor = React.createClass
       </div>
     </div>
 
+  handleChangeMultiple: (e) ->
+    @props.workflow.update tasks: =>
+      @props.task.type = if e.target.checked
+        'multiple'
+      else
+        'single'
+      @props.workflow.tasks
+
   addAnswer: ->
     @props.task.answers ?= []
     @props.task.answers.push
@@ -96,8 +82,8 @@ QuestionTaskEditor = React.createClass
     @props.task.answers.splice index, 1
     @props.workflow.emit 'change'
 
-FeatureEditor = React.createClass
-  displayName: 'FeatureEditor'
+ToolEditor = React.createClass
+  displayName: 'ToolEditor'
 
   render: ->
     <div className="answer">
@@ -108,14 +94,14 @@ FeatureEditor = React.createClass
       <label>
         <span className="field-label">Label</span>
         <br />
-        <textarea name="tasks.#{@props.taskKey}.features.#{@props.featureIndex}.label" value={@props.feature.label} onChange={handleInputChange.bind @props.workflow} rows="1" style={width: '100%'} />
+        <textarea name="tasks.#{@props.taskKey}.tools.#{@props.toolIndex}.label" value={@props.tool.label} onChange={handleInputChange.bind @props.workflow} rows="1" style={width: '100%'} />
       </label>
       <br />
 
       <div className="answer-properties">
         <span>
           <label>
-            Shape <select name="tasks.#{@props.taskKey}.features.#{@props.featureIndex}.shape" value={@props.feature.shape} onChange={handleInputChange.bind @props.workflow}>
+            Shape <select name="tasks.#{@props.taskKey}.tools.#{@props.toolIndex}.shape" value={@props.tool.shape} onChange={handleInputChange.bind @props.workflow}>
               <option value="point">Point</option>
               <option value="ellipse">Ellipse</option>
             </select>
@@ -124,7 +110,7 @@ FeatureEditor = React.createClass
 
         <span>
           <label>
-            Color <select name="tasks.#{@props.taskKey}.features.#{@props.featureIndex}.color" value={@props.feature.color} onChange={handleInputChange.bind @props.workflow}>
+            Color <select name="tasks.#{@props.taskKey}.tools.#{@props.toolIndex}.color" value={@props.tool.color} onChange={handleInputChange.bind @props.workflow}>
               <option value="">(Default)</option>
               <option value="#f00">Red</option>
               <option value="#ff0">Yellow</option>
@@ -138,8 +124,8 @@ FeatureEditor = React.createClass
       </div>
     </div>
 
-MarkingTaskEditor = React.createClass
-  displayName: 'MarkingTaskEditor'
+DrawingTaskEditor = React.createClass
+  displayName: 'DrawingTaskEditor'
 
   render: ->
     <div>
@@ -153,25 +139,25 @@ MarkingTaskEditor = React.createClass
       <span className="field-label">Features to mark</span>
       <br />
       <div className="answers-list">
-        {for feature, i in @props.task.features ? []
-          <FeatureEditor key={i} {...@props} featureIndex={i} feature={feature} remove={@removeFeature.bind this, i} />}
+        {for tool, i in @props.task.tools ? []
+          <ToolEditor key={i} {...@props} toolIndex={i} tool={tool} remove={@removeTool.bind this, i} />}
 
         <div className="adder-container">
-          <button type="button" className="adder" onClick={@addFeature}>Add a new feature</button>
+          <button type="button" className="adder" onClick={@addTool}>Add a new tool</button>
         </div>
       </div>
     </div>
 
-  addFeature: ->
-    @props.task.features ?= []
-    @props.task.features.push
+  addTool: ->
+    @props.task.tools ?= []
+    @props.task.tools.push
       label: ''
       shape: 'point'
       color: null
     @props.workflow.emit 'change'
 
-  removeFeature: (index) ->
-    @props.task.features.splice index, 1
+  removeTool: (index) ->
+    @props.task.tools.splice index, 1
     @props.workflow.emit 'change'
 
 TaskEditor = React.createClass
@@ -181,21 +167,15 @@ TaskEditor = React.createClass
     task = @props.workflow.tasks[@props.taskKey]
 
     TaskComponent = switch task.type
-      when 'question', 'single', 'multiple' then QuestionTaskEditor
-      when 'marking', 'drawing' then MarkingTaskEditor
+      when 'single', 'multiple' then QuestionTaskEditor
+      when 'drawing' then DrawingTaskEditor
 
     <div className="task">
       <div className="controls">
-        {@props.taskKey} <button type="button" onClick={@remove}>&times;</button>
+        {@props.taskKey} <button type="button" onClick={@props.remove}>&times;</button>
       </div>
       <TaskComponent {...@props} task={task} />
     </div>
-
-  remove: ->
-    delete @props.workflow.tasks[@props.taskKey]
-    if @props.taskKey is @props.workflow.first_task
-      delete @props.workflow.first_task
-    @props.workflow.emit 'change'
 
 module.exports = React.createClass
   displayName: 'WorkflowEditor'
@@ -208,13 +188,12 @@ module.exports = React.createClass
           transition.retry()
 
   getDefaultProps: ->
-    {Resource, Type} = require 'json-api-client'
-    workflow: new Resource
-      _type: new Type
+    apiClient = require '../api/client'
+    workflow: apiClient.type('workflows-for-dev-only').create
       display_name: 'Test workflow'
       tasks:
         cool:
-          type: 'question'
+          type: 'single'
           question: 'Cool?'
           answers: [
             label: 'Yep'
@@ -247,14 +226,14 @@ module.exports = React.createClass
     <div className="workflow-editor">
       <div className="task-list">
         {for taskKey in @getTaskKeysInOrder()
-          <TaskEditor key={taskKey} taskKey={taskKey} workflow={@props.workflow} />}
+          <TaskEditor key={taskKey} taskKey={taskKey} workflow={@props.workflow} remove={@removeTask.bind this, taskKey} />}
       </div>
 
       <span className="field-label">Add a new task</span>
       <br />
       <div className="adder-container">
-        <button type="button" className="adder" onClick={@addNewTask.bind this, 'question'}>Question</button>
-        <button type="button" className="adder" onClick={@addNewTask.bind this, 'marking'}>Marking</button>
+        <button type="button" className="adder" onClick={@addNewTask.bind this, 'single'}>Question</button>
+        <button type="button" className="adder" onClick={@addNewTask.bind this, 'drawing'}>Marking</button>
         <button type="button" className="adder" onClick={@addNewTask.bind this, 'survey'} disabled>Image survey</button>
       </div>
     </div>
@@ -284,4 +263,19 @@ module.exports = React.createClass
     else
       @props.workflow.first_task = newTaskKey
 
+    @props.workflow.emit 'change'
+
+  removeTask: (taskKey) ->
+    for key, task of @props.workflow.tasks
+      if task.next is taskKey
+        delete task.next
+      if task.type in ['single', 'multiple'] and task.answers?
+        for answer in task.answers when answer.next is taskKey
+          delete answer.next
+    if taskKey is @props.workflow.first_task
+      if @props.workflow.tasks[taskKey].next?
+        @props.workflow.first_task = @props.workflow.tasks[taskKey].next
+      else
+        delete @props.workflow.first_task
+    delete @props.workflow.tasks[taskKey]
     @props.workflow.emit 'change'
