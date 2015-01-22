@@ -101,7 +101,7 @@ module.exports = React.createClass
       @loadUser nextProps.params.name
 
   loadUser: (name) ->
-    @promiseToSetState user: apiClient.createType('users').get(display_name: name, 1).then ([user]) ->
+    @promiseToSetState user: apiClient.type('users').get(display_name: name, 1).then ([user]) ->
       user
 
   render: ->

@@ -61,7 +61,7 @@ module.exports = React.createClass
     {language: primary_language, name: display_name, introduction, description, scienceCase: science_case} = data
     projectData = {primary_language, display_name, introduction, description, science_case}
 
-    project = apiClient.createType('projects').createResource projectData
+    project = apiClient.type('projects').create projectData
     project.save()
       .then =>
         @setState log: @state.log.concat ['Saved project']
@@ -76,7 +76,7 @@ module.exports = React.createClass
       links:
         project: project.id
 
-    subjectSet = apiClient.createType('subject_sets').createResource subjectSetData
+    subjectSet = apiClient.type('subject_sets').create subjectSetData
     subjectSet.save()
       .then =>
         @setState log: @state.log.concat ['Saved subject set']
@@ -94,7 +94,7 @@ module.exports = React.createClass
         project: project.id
         subject_sets: [subjectSet.id]
 
-    workflow = apiClient.createType('workflows').createResource workflowData
+    workflow = apiClient.type('workflows').create workflowData
     workflow.save()
       .then =>
         @setState log: @state.log.concat ['Saved workflow']
@@ -117,7 +117,7 @@ module.exports = React.createClass
         # metadata: metadata
         links: sharedSubjectLinks
 
-      subject = apiClient.createType('subjects').createResource subjectData
+      subject = apiClient.type('subjects').create subjectData
 
       subjectFilesString = (name for {name} in files).join ', '
       @setState log: @state.log.concat ["Saving subject #{subjectFilesString}"]

@@ -34,7 +34,7 @@ module.exports = React.createClass
   renderUser: (user) ->
     <div>
       <p>Projects owned by {user.display_name}:</p>
-      <PromiseRenderer promise={user.attr 'projects'} then={@renderProjectsList}>
+      <PromiseRenderer promise={user.link 'projects'} then={@renderProjectsList}>
         <span>Loading projects...</span>
       </PromiseRenderer>
       <hr />

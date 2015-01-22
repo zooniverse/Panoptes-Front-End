@@ -34,7 +34,7 @@ counterpart.registerTranslations 'en',
     alreadySignedIn: 'Already signed in as %(name)s.'
     signOut: 'Sign out'
 
-users = apiClient.createType 'users'
+users = apiClient.type 'users'
 
 module.exports = React.createClass
   displayName: 'RegisterForm'

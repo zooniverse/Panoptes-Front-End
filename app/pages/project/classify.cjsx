@@ -29,13 +29,13 @@ module.exports = React.createClass
     projectStatesInProgress[project.id] = {workflow, subject, classification}
 
   getWorkflow: (index) ->
-    @props.project.attr('workflows').then (workflows) ->
+    @props.project.link('workflows').then (workflows) ->
       randomIndex = Math.floor Math.random() * workflows.length
       workflows[index ? randomIndex]
 
   getSubject: (workflow) ->
     workflow.then (workflow) =>
-      apiClient.createType('subjects').get({
+      apiClient.type('subjects').get({
         project_id: @props.project.id
         workflow_id: workflow.id
         # sort: 'cellect'
@@ -45,7 +45,7 @@ module.exports = React.createClass
   createClassification: (workflow, subject) ->
     Promise.all([workflow, subject]).then ([workflow, subject]) =>
       firstAnnotation = task: workflow.first_task ? Object.keys(workflow.tasks)[0]
-      classification = apiClient.createType('classifications').createResource
+      classification = apiClient.type('classifications').create
         annotations: [firstAnnotation]
         links:
           project: @props.project.id
