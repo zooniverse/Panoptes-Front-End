@@ -71,7 +71,7 @@ module.exports = React.createClass
     @promiseToSetState project: apiClient.createType('projects').get id
 
   render: ->
-    if @state.project?.id?
+    if @state.project?
       <ProjectPage project={@state.project} />
     else
       null

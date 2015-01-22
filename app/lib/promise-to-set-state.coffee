@@ -3,24 +3,30 @@ module.exports =
     pending: {}
     rejected: {}
 
+  componentWillMount: ->
+    @_promiseStateKeys = {}
+
   promiseToSetState: (keysAndPromises, callback) ->
     {pending, rejected} = @state
 
     for key, promise of keysAndPromises
-      promiseHandler = @_handlePromisedState.bind this, key, promise
-      promise.then promiseHandler.bind this, false
-      promise.catch promiseHandler.bind this, true
+      @_promiseStateKeys[key] = promise
 
-      pending[key] = promise
+      promiseHandler = @_handlePromisedState.bind this, key, promise
+      handledPromise = promise
+        .then promiseHandler.bind this, false
+        .catch promiseHandler.bind this, true
+
+      pending[key] = handledPromise
       delete rejected[key]
 
     @setState {pending, rejected}, callback
 
   _handlePromisedState: (key, promise, caught, value) ->
     # Only change the state if its current value is the same promise that's resolving.
-    isThePromiseInState = promise is @state.pending[key]
+    isLatestPromise = promise is @_promiseStateKeys[key]
 
-    if @isMounted() and isThePromiseInState
+    if @isMounted() and isLatestPromise
       {pending, rejected} = @state
       newState = {pending, rejected}
 
@@ -34,5 +40,4 @@ module.exports =
         delete rejected[key]
 
       @setState newState
-
-    null
+      null

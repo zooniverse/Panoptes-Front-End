@@ -20,7 +20,7 @@ apiClient.handleError = (request) ->
     errorMessage = errorMessage.join '\n'
 
   errorMessage ?= request.responseText || "#{request.status} #{request.statusText}"
-  Promise.reject new Error errorMessage
+  throw new Error errorMessage
 
 module.exports = apiClient
 window.zooAPI = apiClient
