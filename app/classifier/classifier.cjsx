@@ -10,8 +10,41 @@ counterpart.registerTranslations 'en',
     next: 'Next'
     finished: 'Finished'
 
+DEV_CLASSIFICATION_DATA = unless process.env.NODE_ENV is 'production'
+  do ->
+    apiClient = require '../api/client'
+
+    # This is just a blank image for testing drawing tools.
+    DEMO_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
+      'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
+      'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
+
+    workflow = apiClient.type('workflows').create
+      first_task: 'draw'
+      tasks:
+        draw:
+          type: 'drawing'
+          tools: [
+            {type: 'point', value: 'point', label: 'Point', color: 'red'}
+            {type: 'line', value: 'line', label: 'Line', color: 'red'}
+            {type: 'rectangle', value: 'rectangle', label: 'Rectangle', color: 'red'}
+            {type: 'polygon', value: 'polygon', label: 'Polygon', color: 'red'}
+            {type: 'ellipse', value: 'ellipse', label: 'Ellipse', color: 'red'}
+          ]
+
+    subject = apiClient.type('subjects').create
+      locations: [{'image/png': DEMO_IMAGE}]
+
+    classification = apiClient.type('classifications').create
+      annotations: [{task: 'draw'}]
+
+    {workflow, subject, classification}
+
 module.exports = React.createClass
   displayName: 'Classifier'
+
+  getDefaultProps: ->
+    DEV_CLASSIFICATION_DATA
 
   getInitialState: ->
     selectedDrawingTool: @getTask()?.tools?[0]
