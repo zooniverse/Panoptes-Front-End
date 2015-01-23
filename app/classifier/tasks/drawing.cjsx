@@ -46,5 +46,4 @@ module.exports = React.createClass
     if e.target.checked
       toolIndex = e.target.dataset.index
       tool = @props.options[toolIndex]
-      console.log 'Setting tool to', tool
       @props.onChange e, tool

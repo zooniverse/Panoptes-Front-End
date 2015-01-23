@@ -22,8 +22,6 @@ module.exports = React.createClass
     @promiseToSetState user: auth.checkCurrent()
 
   render: ->
-    console.log 'Rendering with', @state.user
-
     <header className="main-header">
       <MainNav />
 

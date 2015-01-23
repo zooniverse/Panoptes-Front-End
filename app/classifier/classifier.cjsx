@@ -1,7 +1,14 @@
+counterpart = require 'counterpart'
 React = require 'react'
+Translate = require 'react-translate-component'
 ChangeListener = require '../components/change-listener'
 SubjectViewer = require './subject-viewer'
 TaskViewer = require './task-viewer'
+
+counterpart.registerTranslations 'en',
+  classifier:
+    next: 'Next'
+    finished: 'Finished'
 
 module.exports = React.createClass
   displayName: 'Classifier'
@@ -24,6 +31,9 @@ module.exports = React.createClass
     currentTool = @state.selectedDrawingTool
 
     <div className="project-classify-page">
+      <button type="button" name="scroll-to-classifier" onClick={@scrollIntoView}>
+        <i className="fa fa-anchor"></i>
+      </button>
       {@renderSubject annotation, currentTool}
       {@renderTaskArea annotation, task, currentTool}
     </div>
@@ -46,11 +56,20 @@ module.exports = React.createClass
         <button className="backward" disabled={onFirstTask} onClick={@previousTask}><i className="fa fa-arrow-left"></i></button>
 
         {if nextTaskKey?
-          <button className="forward" disabled={answerStillRequired} onClick={@loadTask.bind this, nextTaskKey}>Next <i className="fa fa-arrow-right"></i></button>
+          <button className="forward" disabled={answerStillRequired} onClick={@loadTask.bind this, nextTaskKey}>
+            <Translate content="classifier.next" />{' '}
+            <i className="fa fa-arrow-right"></i>
+          </button>
         else
-          <button className="forward" disabled={answerStillRequired} onClick={@finishClassification}>Finished <i className="fa fa-check"></i></button>}
+          <button className="forward" disabled={answerStillRequired} onClick={@finishClassification}>
+            <Translate content="classifier.finished" />{' '}
+            <i className="fa fa-check"></i>
+          </button>}
       </div>
     </div>
+
+  scrollIntoView: (e) ->
+    scrollTo scrollX, e.target.getBoundingClientRect().top
 
   handleAnswer: (e, answer) ->
     switch @getTask().type

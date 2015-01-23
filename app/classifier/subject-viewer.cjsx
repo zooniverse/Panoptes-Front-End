@@ -1,7 +1,6 @@
 React = require 'react'
 loadImage = require '../lib/load-image'
 Draggable = require '../lib/draggable'
-{dispatch} = require '../lib/dispatcher'
 
 drawingComponents =
   polygon: require './drawing-tools/polygon'

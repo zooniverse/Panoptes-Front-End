@@ -3,7 +3,6 @@ DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
-{dispatch} = require '../../lib/dispatcher'
 
 DEFAULT_RADIUS = 10
 DEFAULT_SQUASH = 1 / 2

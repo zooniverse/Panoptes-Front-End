@@ -1,8 +1,6 @@
 React = require 'react'
+apiClient = require '../api/client'
 PromiseToSetState = require '../lib/promise-to-set-state'
-usersStore = require '../mock-data/users'
-Route = require '../lib/route'
-Link = require '../lib/link'
 Markdown = require '../components/markdown'
 
 UserProfileHeader = React.createClass
@@ -43,33 +41,23 @@ UserProfileSubpages = React.createClass
   render: ->
     <div className="user-profile-subpages tabbed-content" data-side="top">
       <div className="tabbed-content-tabs">
-        <Link href="/users/#{@props.user.login}" root={true} className="tabbed-content-tab">Bio</Link>
-        <Link href="/users/#{@props.user.login}/activity" className="tabbed-content-tab">Activity</Link>
-        <Link href="/users/#{@props.user.login}/collections" className="tabbed-content-tab">Collections</Link>
-        <Link href="/users/#{@props.user.login}/projects" className="tabbed-content-tab">Projects</Link>
-        <Link href="/users/#{@props.user.login}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></Link>
+        <a href="#/TODO/users/#{@props.user.login}" className="active tabbed-content-tab">Bio</a>
+        <a href="#/TODO/users/#{@props.user.login}/activity" className="tabbed-content-tab">Activity</a>
+        <a href="#/TODO/users/#{@props.user.login}/collections" className="tabbed-content-tab">Collections</a>
+        <a href="#/TODO/users/#{@props.user.login}/projects" className="tabbed-content-tab">Projects</a>
+        <a href="#/TODO/users/#{@props.user.login}/talk" className="tabbed-content-tab"><i className="fa fa-comments"></i></a>
       </div>
 
       <div className="content-container">
-        <Route path="/users/#{@props.user.login}">
-          <Markdown>{@props.user.bio}</Markdown>
-        </Route>
-
-        <Route path="/users/#{@props.user.login}/activity">
-          <p>Timeline of this user’s recent activity</p>
-        </Route>
-
-        <Route path="/users/#{@props.user.login}/collections">
-          <p>Collections this user has created</p>
-        </Route>
-
-        <Route path="/users/#{@props.user.login}/projects">
-          <p>Projects this user has created or has a special role in</p>
-        </Route>
-
-        <Route path="/users/#{@props.user.login}/talk">
-          <p>Your private messages with this user</p>
-        </Route>
+        <Markdown>{@props.user.bio}</Markdown>
+        <hr />
+        <p>Timeline of this user’s recent activity</p>
+        <hr />
+        <p>Collections this user has created</p>
+        <hr />
+        <p>Projects this user has created or has a special role in</p>
+        <hr />
+        <p>Your private messages with this user</p>
       </div>
     </div>
 
@@ -106,16 +94,21 @@ module.exports = React.createClass
   mixins: [PromiseToSetState]
 
   componentDidMount: ->
-    @promiseToSetState user: Promise.resolve usersStore[0]
+    @loadUser @props.params.name
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.route.params.login is @props.route.params.login
-      @promiseToSetState user: Promise.resolve usersStore[0]
+    unless nextProps.params.name is @props.params.name
+      @loadUser nextProps.params.name
+
+  loadUser: (name) ->
+    @promiseToSetState user: apiClient.createType('users').get(display_name: name, 1).then ([user]) ->
+      user
 
   render: ->
-    user = if @state.user instanceof Array
-      @state.user[0]
+    if @state.user?.id?
+      <div>
+        <strong><i className="fa fa-exclamation-triangle"></i> Placeholder</strong>
+        <UserProfile user={@state.user} />
+      </div>
     else
-      @state.user
-
-    <UserProfile login={@props.route.params.login} user={user} section={@props.route.params.section} />
+      null

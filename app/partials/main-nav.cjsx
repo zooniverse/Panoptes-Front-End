@@ -1,9 +1,10 @@
+counterpart = require 'counterpart'
 React = require 'react'
-Translator = require 'react-translator'
-Link = require '../lib/link'
+Translate = require 'react-translate-component'
+{Link} = require 'react-router'
 ZooniverseLogo = require './zooniverse-logo'
 
-Translator.setStrings
+counterpart.registerTranslations 'en',
   nav:
     home: 'Zooniverse'
     projects: 'Projects'
@@ -14,11 +15,8 @@ module.exports = React.createClass
 
   render: ->
     <nav className="main-nav main-header-group">
-      <Link href="/" root={true} className="main-header-item logo">
-        <ZooniverseLogo />
-        &nbsp;
-        <Translator>nav.home</Translator>
+      <Link to="home" className="main-header-item logo">
+        <ZooniverseLogo />&nbsp;<Translate content="nav.home" />
       </Link>
-      <Link href="/projects" className="main-header-item"><Translator>nav.projects</Translator></Link>
-      <Link href="/about" className="main-header-item"><Translator>nav.about</Translator></Link>
+      <Link to="projects" className="main-header-item"><Translate content="nav.projects" /></Link>
     </nav>

@@ -1,42 +1,41 @@
-# Helper for setting state with a promise:
-#   @promiseToSetState foo: getFooReturningPromise()
-#
-# Then test its progress.
-#
-# It's still loading:
-#   @state.foo instanceof Promise
-#
-# It's done, but something bad happened:
-#   @state.foo instanceof Error
-#
-# Otherwise it's ready; do whatever you want with it:
-#   @state.foo?
-
 module.exports =
   getInitialState: ->
-    {} # Let's just ensure that it exists.
+    awaiting: []
+
+  componentWillMount: ->
+    @_statePromises = {}
 
   promiseToSetState: (keysAndPromises, callback) ->
-    loadingState = {}
-    for stateKey, promise of keysAndPromises
-      loadingState[stateKey] = promise
+    for key, promise of keysAndPromises
+      promiseHandler = @_handlePromisedState.bind this, key, promise
+      promise.then promiseHandler.bind this, false
+      promise.catch promiseHandler.bind this, true
+      @_statePromises[key] = promise
 
-    @setState loadingState, =>
-      for stateKey, promise of keysAndPromises
-        promiseHandler = @_handlePromisedState.bind this, stateKey, promise
-        promise.then promiseHandler.bind this, false
-        promise.catch promiseHandler.bind this, true
-
+    {awaiting} = @state
+    if key in awaiting
       callback?()
+    else
+      awaiting.push key
+      @setState {awaiting}, callback
 
-  _handlePromisedState: (stateKey, promise, caught, value) ->
+  _handlePromisedState: (key, promise, caught, value) ->
     # Only change the state if its current value is the same promise that's resolving.
-    samePromise = @state[stateKey] is promise
+    samePromise = @_statePromises[key] is promise
+    delete @_statePromises[key]
+
     if @isMounted() and samePromise
+      newState = {}
+
       if caught and value not instanceof Error
         error = new Error value
-        error.message = value # Override string-only messages. TODO: Maybe this isn't a great idea.
+        error.message = value # Override string-only messages. Maybe this isn't a great idea.
         value = error
-      valueState = {}
-      valueState[stateKey] = value
-      @setState valueState
+
+      newState[key] = value
+
+      {awaiting} = @state
+      awaiting.splice awaiting.indexOf(key), 1
+      newState.awaiting = awaiting
+
+      @setState newState

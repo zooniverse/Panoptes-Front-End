@@ -1,7 +1,13 @@
+counterpart = require 'counterpart'
 React = require 'react'
+Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 ProjectCard = require '../partials/project-card'
+
+counterpart.registerTranslations 'en',
+  projectsPage:
+    title: 'Projects'
 
 Pager = React.createClass
   displayName: 'Pager'
@@ -50,7 +56,7 @@ module.exports = React.createClass
   render: ->
     <div className="projects-page">
       <div className="content-container">
-        <h1>Projects</h1>
+        <Translate component="h1" content="projectsPage.title" />
       </div>
       <hr />
       <div className="content-container">

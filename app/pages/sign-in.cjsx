@@ -1,14 +1,15 @@
+counterpart = require 'counterpart'
 React = require 'react'
-Link = require '../lib/link'
-Route = require '../lib/route'
-SignInForm = require '../partials/sign-in-form'
-RegisterForm = require '../partials/register-form'
-Translator = require 'react-translator'
+Translate = require 'react-translate-component'
+{Link, RouteHandler} = require 'react-router'
 
-Translator.setStrings
+counterpart.registerTranslations 'en',
   signIn:
     withZooniverse: 'Sign in with your Zooniverse account'
     whyHaveAccount: 'Signed-in volunteers lorem ipsum dolor sit amet blah blah blah.'
+    signIn: 'Sign in'
+    register: 'Register'
+    orThirdParty: 'Or sign in with another service'
     withFacebook: 'Sign in with Facebook'
     withTwitter: 'Sign in with Twitter'
     withGoogle: 'Sign in with Google'
@@ -18,38 +19,32 @@ module.exports = React.createClass
 
   render: ->
     <div className="sign-in-page content-container">
-      <Translator tag="h1">signIn.withZooniverse</Translator>
-      <Translator tag="p">signIn.whyHaveAccount</Translator>
+      <Translate component="h1" content="signIn.withZooniverse" />
+      <Translate component="p" content="signIn.whyHaveAccount" />
 
       <div className="columns-container">
         <div className="tabbed-content column" data-side="top">
           <nav className="tabbed-content-tabs">
-            <Link href="/sign-in" root={true} className="tabbed-content-tab">Sign in</Link>
-            <Link href="/sign-in/register" className="tabbed-content-tab">Register</Link>
+            <Link to="sign-in" className="tabbed-content-tab"><Translate content="signIn.signIn" /></Link>
+            <Link to="register" className="tabbed-content-tab"><Translate content="signIn.register" /></Link>
           </nav>
 
-          <Route path="/sign-in" className="content-container">
-            <SignInForm currentLogin={@props.currentLogin} loggingIn={@props.loggingIn} />
-          </Route>
-
-          <Route path="/sign-in/register" className="content-container">
-            <RegisterForm currentLogin={@props.currentLogin} loggingIn={@props.loggingIn} />
-          </Route>
+          <RouteHandler />
         </div>
 
         <hr />
 
         <div className="oauth-providers">
-          <div>Or sign in with another service</div>
+          <Translate content="signIn.orThirdParty" />
           <br />
           <div>
-            <button><Translator>signIn.withFacebook</Translator></button>
+            <button><Translate content="signIn.withFacebook" /></button>
           </div>
           <div>
-            <button><Translator>signIn.withTwitter</Translator></button>
+            <button><Translate content="signIn.withTwitter" /></button>
           </div>
           <div>
-            <button><Translator>signIn.withGoogle</Translator></button>
+            <button><Translate content="signIn.withGoogle" /></button>
           </div>
         </div>
       </div>
