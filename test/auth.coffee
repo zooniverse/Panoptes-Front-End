@@ -23,11 +23,10 @@ test 'Registering an account with no data fails', (t) ->
     .then ->
       t.fail 'Should not have been able to register'
 
-    .catch (errors) ->
-      t.ok errors?.length is 1, 'Should have gotten one error'
-      t.ok errors[0].message.login[0].indexOf('blank') isnt -1, 'Login error should mention "blank"'
-      t.ok errors[0].message.email[0].indexOf('blank') isnt -1, 'Email error should mention "blank"'
-      t.ok errors[0].message.password[0].indexOf('blank') isnt -1, 'Password error should mention "blank"'
+    .catch (error) ->
+      t.ok error.message.match(/^login(.+)blank/mi), 'Login error should mention "blank"'
+      t.ok error.message.match(/^email(.+)blank/mi), 'Email error should mention "blank"'
+      t.ok error.message.match(/^password(.+)blank/mi), 'Password error should mention "blank"'
 
 test 'Registering an account with a short password fails', (t) ->
   SHORT_PASSWORD_REGISTRATION =
@@ -39,9 +38,8 @@ test 'Registering an account with a short password fails', (t) ->
     .then ->
       t.fail 'Should not have been able to register'
 
-    .catch (errors) ->
-      t.ok errors?.length is 1, 'Should have gotten one error'
-      t.ok errors[0].message.password[0].indexOf('short') isnt -1, 'Password error should mention "short"'
+    .catch (error) ->
+      t.ok error.message.match(/^password(.+)short/mi), 'Password error should mention "short"'
 
 test 'Registering a new account works', (t) ->
   GOOD_REGISTRATION =
@@ -51,11 +49,11 @@ test 'Registering a new account works', (t) ->
 
   auth.register GOOD_REGISTRATION
     .then (user) ->
-      t.ok user?, 'Should have gotten a user'
+      t.ok user?, 'Should have gotten the new user'
       t.ok user.display_name is TEST_LOGIN, 'Display name should be whatever login was given'
 
     .catch ->
-      t.fail 'Should have worked'
+      t.fail 'Should have been able to register'
 
 test 'Registering keeps you signed in', (t) ->
   auth.checkCurrent()
@@ -84,10 +82,9 @@ test 'Registering an account with an already used login fails', (t) ->
     .then ->
       t.fail 'Should not have been able to register with a duplicate login'
 
-    .catch (errors) ->
-      t.ok errors?.length is 1, 'Should have gotten one error'
-      t.ok errors[0].message.login[0].indexOf('taken') isnt -1, 'Login error should mention "taken"'
-      t.ok errors[0].message.email[0].indexOf('taken') isnt -1, 'Email error should mention "taken"'
+    .catch (error) ->
+      t.ok error.message.match(/^login(.+)taken/mi), 'Login error should mention "taken"'
+      t.ok error.message.match(/^email(.+)taken/mi), 'Email error should mention "taken"'
 
 test 'Signing in with an unknown login fails', (t) ->
   BAD_LOGIN =
@@ -98,10 +95,9 @@ test 'Signing in with an unknown login fails', (t) ->
     .then ->
       t.fail 'Should not have been able to sign in with a bad login'
 
-    .catch (errors) ->
-      t.ok errors?.length is 1, 'Should have gotten one error'
+    .catch (error) ->
       # NOTE: A bad login should return the same error as a bad password.
-      t.ok errors[0].message.password[0].indexOf('incorrect') isnt -1, 'Password error should mention "incorrect"'
+      t.ok error.message.match(/^invalid(.+)password/mi), 'Error should mention "invalid" and "password"'
 
 test 'Signing in with the wrong password fails', (t) ->
   BAD_PASSWORD =
@@ -112,9 +108,8 @@ test 'Signing in with the wrong password fails', (t) ->
     .then ->
       t.fail 'Should not have been able to sign in with a bad password'
 
-    .catch (errors) ->
-      t.ok errors?.length is 1, 'Should have gotten one error'
-      t.ok errors[0].message.password[0].indexOf('incorrect') isnt -1, 'Password error should mention "incorrect"'
+    .catch (error) ->
+      t.ok error.message.match(/^invalid(.+)password/mi), 'Error should mention "invalid" and "password"'
 
 test 'Signing in with good details works', (t) ->
   GOOD_LOGIN_DETAILS =
@@ -124,25 +119,24 @@ test 'Signing in with good details works', (t) ->
   auth.signIn GOOD_LOGIN_DETAILS
     .then (user) ->
       t.ok user?, 'Should have gotten a user'
-      t.ok user.display_name is TEST_LOGIN, 'Display name should be original'
+      t.ok user.display_name is TEST_LOGIN, 'Display name should be the original'
 
     .catch ->
       t.fail 'Sign in should work'
 
-test 'Deleting an account works', (t) ->
-  auth.checkCurrent().then (user) ->
-    user.delete()
-      .then ->
-        OLD_LOGIN_DETAILS =
-          login: TEST_LOGIN
-          password: TEST_PASSWORD
+test 'Disabling an account works', (t) ->
+  auth.disableAccount()
+    .then ->
+      OLD_LOGIN_DETAILS =
+        login: TEST_LOGIN
+        password: TEST_PASSWORD
 
-        auth.signIn OLD_LOGIN_DETAILS
-          .then (user) ->
-            t.fail 'Should not have been able to sign in to a deleted account'
+      auth.signIn OLD_LOGIN_DETAILS
+        .then (user) ->
+          t.fail 'Should not have been able to sign in to a disabled account'
 
-          .catch ->
-            t.pass 'Could not sign in to a deleted account'
+        .catch ->
+          t.pass 'Could not sign in to a disabled account'
 
-      .catch (errors) ->
-        t.fail 'Failed to delete account'
+    .catch (error) ->
+      t.fail 'Failed to disable account'

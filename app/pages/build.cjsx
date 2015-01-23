@@ -2,7 +2,6 @@ React = require 'react'
 {Link} = require 'react-router'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
-PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
 
 RequiresSession = React.createClass
@@ -34,7 +33,7 @@ module.exports = React.createClass
   renderUser: (user) ->
     <div>
       <p>Projects owned by {user.display_name}:</p>
-      <PromiseRenderer promise={user.attr 'projects'} then={@renderProjectsList}>
+      <PromiseRenderer promise={user.link 'projects'} then={@renderProjectsList}>
         <span>Loading projects...</span>
       </PromiseRenderer>
       <hr />

@@ -24,7 +24,7 @@ Pager = React.createClass
 
   makeRequest: (page) ->
     params = Object.assign {page}, @props?.query
-    apiClient.createType(@props.type).get params, Infinity, @handleResponse
+    apiClient.type(@props.type).get params, Infinity, @handleResponse
 
   handleResponse: (request) ->
     # NOTE: Handling request metadata is currently pretty gnarly.
