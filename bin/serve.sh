@@ -10,7 +10,6 @@ pids=""
 
 ./node_modules/.bin/browserify \
   --debug \
-  --transform envify \
   $(flag_externals require) \
   --outfile "$DEV_DIR/$VENDOR_JS"
 
