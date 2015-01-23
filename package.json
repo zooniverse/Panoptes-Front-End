@@ -1,7 +1,6 @@
 {
-  "name": "panoptes-front-end",
-  "version": "0.0.0",
-  "private": true,
+  "name": "panoptes",
+  "version": "0.0.1",
   "dependencies": {
     "counterpart": "^0.16.4",
     "debounce": "^1.0.0",
@@ -31,6 +30,9 @@
     "uglify-js": "^2.4.16",
     "watchify": "^2.2.1"
   },
+  "peerDependencies": {
+    "coffeeify": "^1.0.0"
+  },
   "scripts": {
     "build": "NODE_ENV=production ./bin/build.sh",
     "check-build-size": "npm run build && cat ./build/main.js | gzip --best | wc -c",
@@ -45,5 +47,10 @@
   "config": {
     "fontAwesomeURL": "http://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.2.0.zip",
     "fallbackPolyfillsURL": "https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6&flags=gated&ua=(MSIE%209.0)"
+  },
+  "browserify": {
+    "transform": [
+      "coffeeify"
+    ]
   }
 }
