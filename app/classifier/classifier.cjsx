@@ -10,8 +10,8 @@ counterpart.registerTranslations 'en',
     next: 'Next'
     finished: 'Finished'
 
-DEV_CLASSIFICATION_DATA = unless process.env.NODE_ENV is 'production'
-  do ->
+unless process.env.NODE_ENV is 'production'
+  DEV_CLASSIFICATION_DATA = do ->
     apiClient = require '../api/client'
 
     # This is just a blank image for testing drawing tools.
@@ -31,6 +31,14 @@ DEV_CLASSIFICATION_DATA = unless process.env.NODE_ENV is 'production'
             {type: 'polygon', value: 'polygon', label: 'Polygon', color: 'red'}
             {type: 'ellipse', value: 'ellipse', label: 'Ellipse', color: 'red'}
           ]
+          next: 'cool'
+        cool:
+          type: 'single'
+          question: 'Is this cool?'
+          answers: [
+            {value: true, label: 'Yeah'}
+            {value: false, label: 'Nah'}
+          ]
 
     subject = apiClient.type('subjects').create
       locations: [{'image/png': DEMO_IMAGE}]
@@ -44,7 +52,12 @@ module.exports = React.createClass
   displayName: 'Classifier'
 
   getDefaultProps: ->
-    DEV_CLASSIFICATION_DATA
+    if process.env.NODE_ENV is 'production'
+      workflow: null
+      subject: null
+      classification: null
+    else
+      DEV_CLASSIFICATION_DATA
 
   getInitialState: ->
     selectedDrawingTool: @getTask()?.tools?[0]
