@@ -41,7 +41,7 @@
     "postinstall": "npm run get-fallback-polyfills && npm run get-font-awesome",
     "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
     "start": "./bin/serve.sh",
-    "test": "browserify ./test/runner.coffee --extension .coffee --transform coffee-reactify --transform envify | testling \"${TESTLING_ARGS:---pass}\" | tap-spec",
+    "test": "browserify ./test/runner.coffee --extension .coffee --transform coffee-reactify --transform envify --ignore-transform coffeeify | testling \"${TESTLING_ARGS:---pass}\" | tap-spec",
     "test-mac": "TESTLING_ARGS=\"-x open --new -a Google\\ Chrome --args --incognito\" npm run test"
   },
   "config": {

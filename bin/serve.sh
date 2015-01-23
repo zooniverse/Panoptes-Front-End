@@ -23,6 +23,7 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
   $(flag_externals external) \
   --extension .cjsx \
   --extension .coffee \
+  --ignore-transform coffeeify \
   --transform coffee-reactify \
   --entry $SRC_JS \
   --outfile $DEV_DIR/$OUT_JS \
