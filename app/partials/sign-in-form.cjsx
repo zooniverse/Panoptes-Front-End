@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-promiseToSetState = require '../lib/promise-to-set-state'
+PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
@@ -18,7 +18,7 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'SignInForm'
 
-  mixins: [promiseToSetState]
+  mixins: [PromiseToSetState]
 
   getInitialState: ->
     user: null

@@ -2,7 +2,6 @@ React = require 'react'
 {Link} = require 'react-router'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
-PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
 
 RequiresSession = React.createClass

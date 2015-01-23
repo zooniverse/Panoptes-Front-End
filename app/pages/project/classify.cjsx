@@ -10,6 +10,11 @@ module.exports = React.createClass
 
   mixins: [PromiseToSetState]
 
+  getInitialState: ->
+    workflow: null
+    subject: null
+    classification: null
+
   componentDidMount: ->
     @switchToProject @props.project
 

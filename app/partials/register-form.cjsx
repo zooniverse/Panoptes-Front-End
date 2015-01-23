@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 apiClient = require '../api/client'
-promiseToSetState = require '../lib/promise-to-set-state'
+PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
 InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
@@ -39,7 +39,15 @@ users = apiClient.type 'users'
 module.exports = React.createClass
   displayName: 'RegisterForm'
 
-  mixins: [promiseToSetState]
+  mixins: [PromiseToSetState]
+
+  getInitialState: ->
+    user: null
+    badLoginChars: null
+    loginConflict: null
+    passwordTooShort: null
+    passwordsDontMatch: null
+    emailConflict: null
 
   componentDidMount: ->
     @handleAuthChange()
@@ -49,8 +57,7 @@ module.exports = React.createClass
     auth.stopListening @handleAuthChange
 
   handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent().catch ->
-      null
+    @promiseToSetState user: auth.checkCurrent()
 
   render: ->
     {badLoginChars, loginConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
@@ -200,8 +207,7 @@ module.exports = React.createClass
       passwordsDontMatch: if exists and asLong then not matches
 
   handleEmailChange: ->
-    @setState
-      emailConflict: null
+    @promiseToSetState emailConflict: Promise.resolve null # Cancel any existing request.
 
     email = @refs.email.getDOMNode().value
     if email.match /.+@.+\..+/
@@ -223,8 +229,8 @@ module.exports = React.createClass
         'Accept': 'application/json'
 
       apiClient.post '/../users', data, headers
-        .catch ({errors}) ->
-          errors?[0]?.message?.email?[0]?.contains('taken') ? false
+        .catch (error) ->
+          error.message.match(/email(.+)taken/mi) ? false
 
   isFormValid: ->
     {badLoginChars, loginConflict, passwordsDontMatch, emailConflict} = @state
@@ -238,10 +244,9 @@ module.exports = React.createClass
     realName = @refs.realName.getDOMNode().value
 
     auth.register {login, password, email, realName}
-      .catch (errors) ->
-        for {message} in errors
-          if message.email?[0].indexOf('taken') isnt -1
-            @setState emailConflict: true
+      .catch (error) ->
+        if error.message.match /email(.+)taken/mi
+          @setState emailConflict: true
 
   handleSignOut: ->
     auth.signOut()
