@@ -1,7 +1,7 @@
 React = require 'react'
 apiClient = require '../../api/client'
 PromiseToSetState = require '../../lib/promise-to-set-state'
-Classifier = require '../../classifier/classifier'
+Classifier = require '../../classifier'
 
 projectStatesInProgress = {}
 
