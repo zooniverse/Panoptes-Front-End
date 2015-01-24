@@ -41,7 +41,7 @@ workflow = apiClient.type('workflows').create
 
 subject = apiClient.type('subjects').create
   locations: [
-    {'image/jpg': 'http://lorempixel.com/100/100/animals/'}
+    {'image/jpg': 'http://lorempixel.com/300/300/animals/'}
     {'image/png': BLANK_IMAGE}
     {'image/png': BLANK_IMAGE}
   ]
@@ -49,8 +49,13 @@ subject = apiClient.type('subjects').create
     annotations: [{
       task: 'draw'
       marks: [{
-        tool: 'point'
+        tool: 0
         x: 50
+        y: 50
+        frame: 0
+      }, {
+        tool: 0
+        x: 150
         y: 50
         frame: 0
       }]

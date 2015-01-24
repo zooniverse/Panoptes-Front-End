@@ -52,7 +52,7 @@ module.exports = React.createClass
 
     <DrawingToolRoot tool={this}>
       <g transform={positionAndRotate}>
-        <Draggable onStart={@props.select} onDrag={@handleMainDrag}>
+        <Draggable onDrag={@handleMainDrag}>
           <ellipse rx={@props.mark.rx} ry={@props.mark.ry} />
         </Draggable>
         <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />

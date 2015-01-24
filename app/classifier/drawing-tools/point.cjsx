@@ -32,7 +32,7 @@ module.exports = React.createClass
       r: RADIUS
 
     <DrawingToolRoot tool={this} transform="translate(#{@props.mark.x}, #{@props.mark.y})">
-      <Draggable onStart={@props.select} onDrag={@handleDrag}>
+      <Draggable onDrag={@handleDrag}>
         <circle {...discStyle} />
       </Draggable>
       <line strokeWidth={CROSSHAIR_WIDTH} x1="0" y1={-CROSSHAIR_SPACE * SELECTED_RADIUS} x2="0" y2={-SELECTED_RADIUS} />
@@ -43,6 +43,7 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   handleDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.y += d.y / @props.scale.vertical
-    @props.classification.emit 'change'
+    @props.classification.update annotations: =>
+      @props.mark.x += d.x / @props.scale.horizontal
+      @props.mark.y += d.y / @props.scale.vertical
+      @props.classification.annotations

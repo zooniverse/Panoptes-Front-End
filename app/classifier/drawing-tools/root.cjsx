@@ -6,25 +6,29 @@ SELECTED_STROKE_WIDTH = 2.5
 module.exports = React.createClass
   displayName: 'DrawingToolRoot'
 
-  render: ->
-    toolProps = @props.tool.props
+  getDefaultProps: ->
+    tool: null
 
+  getInitialState: ->
+    destroying: false
+
+  render: ->
     rootProps =
-      'data-disabled': toolProps.disabled or null
-      'data-selected': toolProps.selected or null
+      'data-disabled': @props.tool.props.disabled or null
+      'data-selected': @props.tool.props.selected or null
       'data-destroying': @props.tool.state?.destroying or null
-      style: color: toolProps.mark._tool.color
+      style: color: @props.tool.props.tool.color
 
     mainStyle =
       fill: 'transparent'
       stroke: 'currentColor'
-      strokeWidth: if toolProps.selected
+      strokeWidth: if @props.tool.props.selected
         SELECTED_STROKE_WIDTH
       else
         STROKE_WIDTH
 
     <g className="drawing-tool" {...rootProps} {...@props}>
-      <g className="drawing-tool-main" {...mainStyle}>
+      <g className="drawing-tool-main" {...mainStyle} onMouseDown={@props.tool.props.select}>
         {@props.children}
       </g>
     </g>

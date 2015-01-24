@@ -53,7 +53,7 @@ module.exports = React.createClass
     ].join '\n'
 
     <DrawingToolRoot tool={this}>
-      <Draggable onStart={@props.select} onDrag={@handleMainDrag}>
+      <Draggable onDrag={@handleMainDrag}>
         <polyline points={points} />
       </Draggable>
 

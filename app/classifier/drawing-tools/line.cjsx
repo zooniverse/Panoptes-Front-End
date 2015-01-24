@@ -27,7 +27,7 @@ module.exports = React.createClass
     <DrawingToolRoot tool={this}>
       <line {...points} />
 
-      <Draggable onStart={@props.select} onDrag={@handleStrokeDrag}>
+      <Draggable onDrag={@handleStrokeDrag}>
         <line {...points} strokeWidth={GRAB_STROKE_WIDTH} strokeOpacity="0" />
       </Draggable>
 

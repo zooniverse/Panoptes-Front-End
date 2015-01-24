@@ -1,14 +1,22 @@
 React = require 'react'
 
 Summary = React.createClass
-  displayName: 'SingleChoiceSummary'
+  displayName: 'MultipleChoiceSummary'
+
+  getDefaultProps: ->
+    task: null
+    annotation: null
 
   render: ->
     <div className="classification-task-summary">
       <div className="question">{@props.task.question}</div>
       <div className="answer">
-        {for index in @props.annotation.answers
-          <div>{@props.task.answers[index].label}</div>}
+        {if @props.annotation.answers.length is 0
+          'No answers'
+        else
+          for index in @props.annotation.answers
+            answer = @props.task.answers[index]
+            <div key={answer.label}>{answer.label}</div>}
       </div>
     </div>
 

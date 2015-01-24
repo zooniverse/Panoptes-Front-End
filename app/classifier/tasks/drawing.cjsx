@@ -1,5 +1,4 @@
 React = require 'react'
-ChangeListener = require '../../components/change-listener'
 
 icons =
   point: <svg className="drawing-tool-icon" viewBox="0 0 100 100">
@@ -29,10 +28,17 @@ icons =
 Summary = React.createClass
   displayName: 'SingleChoiceSummary'
 
+  getDefaultProps: ->
+    task: null
+    annotation: null
+
   render: ->
     <div className="classification-task-summary">
       <div className="question">{@props.task.instruction}</div>
-      <div className="answer">{@props.annotation.marks.length} mark(s)</div>
+      {for tool, i in @props.task.tools
+        <div key={tool.label} className="answer">
+          {tool.label}: {[].concat (mark for mark in @props.annotation.marks when mark.tool is i).length}
+        </div>}
     </div>
 
 module.exports = React.createClass

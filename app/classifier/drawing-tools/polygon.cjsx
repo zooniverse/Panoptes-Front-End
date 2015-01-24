@@ -5,6 +5,7 @@ Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 
 FINISHER_RADIUS = 8
+GRAB_STROKE_WIDTH = 6
 
 DELETE_BUTTON_WEIGHT = 5 # Weight of the second point.
 
@@ -16,6 +17,7 @@ module.exports = React.createClass
 
     defaultValues: ({x, y}) ->
       points: []
+      closed: null
 
     initStart: ({x, y}, mark) ->
       mark.points.push {x, y}
@@ -26,7 +28,7 @@ module.exports = React.createClass
       points: mark.points
 
     isComplete: (mark) ->
-      mark._finished
+      mark.closed?
 
   render: ->
     firstPoint = @props.mark.points[0]
@@ -37,7 +39,7 @@ module.exports = React.createClass
     lastPoint = @props.mark.points[@props.mark.points.length - 1]
 
     points = ([x, y].join ',' for {x, y} in @props.mark.points)
-    if @props.mark._finished
+    if @props.mark.closed
       points.push [firstPoint.x, firstPoint.y].join ','
     points = points.join '\n'
 
@@ -46,8 +48,12 @@ module.exports = React.createClass
       y: (firstPoint.y + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.y)) / DELETE_BUTTON_WEIGHT
 
     <DrawingToolRoot tool={this}>
-      <Draggable onStart={@props.select} onDrag={@handleMainDrag}>
-        <polyline points={points} fill={'none' unless @props.mark._finished} />
+      <Draggable onDrag={@handleMainDrag}>
+        <g>
+          {if @props.mark.closed is false
+            <polyline points={points} fill="none" strokeWidth={GRAB_STROKE_WIDTH} strokeOpacity="0" />}
+          <polyline points={points} fill={'none' unless @props.mark.closed} />
+        </g>
       </Draggable>
 
       <DeleteButton tool={this} x={deleteButtonPosition.x} y={deleteButtonPosition.y} />
@@ -55,16 +61,17 @@ module.exports = React.createClass
       {for {x, y}, i in @props.mark.points
         <DragHandle key={i} x={x} y={y} onDrag={@handleHandleDrag.bind this, i} />}
 
-      {unless @props.mark._finished
+      {unless @props.mark.closed?
         <g>
           {if @props.mark.points.length > 2
             <line className="guideline" x1={lastPoint.x} y1={lastPoint.y} x2={firstPoint.x} y2={firstPoint.y} />}
-          <circle className="clickable" r={FINISHER_RADIUS} cx={firstPoint.x} cy={firstPoint.y} onMouseDown={@handleFinishClick} />
+          <circle className="clickable" r={FINISHER_RADIUS} cx={firstPoint.x} cy={firstPoint.y} onClick={@handleFinishClick.bind this, true} />
+          <circle className="clickable" r={FINISHER_RADIUS} cx={lastPoint.x} cy={lastPoint.y} onClick={@handleFinishClick.bind this, false} />
         </g>}
     </DrawingToolRoot>
 
-  handleFinishClick: ->
-    @props.mark._finished = true
+  handleFinishClick: (closed) ->
+    @props.mark.closed = closed
     @props.classification.emit 'change'
 
   handleMainDrag: (e, d) ->

@@ -3,10 +3,19 @@ React = require 'react'
 Summary = React.createClass
   displayName: 'SingleChoiceSummary'
 
+  getDefaultProps: ->
+    task: null
+    annotation: null
+
   render: ->
     <div className="classification-task-summary">
       <div className="question">{@props.task.question}</div>
-      <div className="answer">{@props.task.answers[@props.annotation.answer]}</div>
+      <div className="answer">
+        {if @props.annotation.answer?
+          @props.task.answers[@props.annotation.answer]
+        else
+          'No answer'}
+      </div>
     </div>
 
 module.exports = React.createClass
