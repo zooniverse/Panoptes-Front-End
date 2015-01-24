@@ -28,22 +28,26 @@ icons =
 module.exports = React.createClass
   displayName: 'DrawingTask'
 
-  render: ->
-    tools = for tool, i in @props.options
-      <label className="workflow-task-answer for-drawing #{tool.type}" key={tool.label}>
-        <input type="radio" data-index={i} checked={tool is @props.value} onChange={@handleChange} />
-        <span className="clickable">
-          {icons[tool.type]} {tool.label}
-        </span>
-      </label>
+  getDefaultProps: ->
+    task: null
+    currentTool: null
 
+  render: ->
     <div className="workflow-task single-choice drawing-task">
-      <div className="question">{@props.question}</div>
-      <div className="answers">{tools}</div>
+      <div className="question">{@props.task.instruction}</div>
+      <div className="answers">
+        {for tool, i in @props.task.tools
+          <label className="workflow-task-answer for-drawing #{tool.type}" key={tool.label}>
+            <input type="radio" data-index={i} checked={tool is @props.currentTool} onChange={@handleChange} />
+            <span className="clickable">
+              {icons[tool.type]} {tool.label}
+            </span>
+          </label>}
+      </div>
     </div>
 
   handleChange: (e) ->
     if e.target.checked
       toolIndex = e.target.dataset.index
-      tool = @props.options[toolIndex]
-      @props.onChange e, tool
+      tool = @props.task.tools[toolIndex]
+      @props.onChange tool

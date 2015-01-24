@@ -1,52 +1,16 @@
-counterpart = require 'counterpart'
 React = require 'react'
-Translate = require 'react-translate-component'
-ChangeListener = require '../components/change-listener'
-SubjectViewer = require './subject-viewer'
-TaskViewer = require './task-viewer'
-
-counterpart.registerTranslations 'en',
-  classifier:
-    next: 'Next'
-    finished: 'Finished'
+Draggable = require '../lib/draggable'
+tasks = require './tasks'
+drawingTools = require './drawing-tools'
 
 unless process.env.NODE_ENV is 'production'
-  DEV_CLASSIFICATION_DATA = do ->
-    apiClient = require '../api/client'
+  mockData = require './mock-data'
 
-    # This is just a blank image for testing drawing tools.
-    DEMO_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
-      'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
-      'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
+DEFAULT_RENDER_METHOD = ->
+  <span>{@type.displayName}</span>
 
-    workflow = apiClient.type('workflows').create
-      first_task: 'draw'
-      tasks:
-        draw:
-          type: 'drawing'
-          tools: [
-            {type: 'point', value: 'point', label: 'Point', color: 'red'}
-            {type: 'line', value: 'line', label: 'Line', color: 'red'}
-            {type: 'rectangle', value: 'rectangle', label: 'Rectangle', color: 'red'}
-            {type: 'polygon', value: 'polygon', label: 'Polygon', color: 'red'}
-            {type: 'ellipse', value: 'ellipse', label: 'Ellipse', color: 'red'}
-          ]
-          next: 'cool'
-        cool:
-          type: 'single'
-          question: 'Is this cool?'
-          answers: [
-            {value: true, label: 'Yeah'}
-            {value: false, label: 'Nah'}
-          ]
-
-    subject = apiClient.type('subjects').create
-      locations: [{'image/png': DEMO_IMAGE}]
-
-    classification = apiClient.type('classifications').create
-      annotations: [{task: 'draw'}]
-
-    {workflow, subject, classification}
+READABLE_FORMATS =
+  image: ['jpg', 'png', 'svg+xml', 'gif']
 
 module.exports = React.createClass
   displayName: 'Classifier'
@@ -57,83 +21,94 @@ module.exports = React.createClass
       subject: null
       classification: null
     else
-      DEV_CLASSIFICATION_DATA
+      mockData
 
   getInitialState: ->
-    selectedDrawingTool: @getTask()?.tools?[0]
-
-  getAnnotation: ->
-    @props.classification.annotations[@props.classification.annotations.length - 1]
-
-  getTask: ->
-    @props.workflow.tasks[@getAnnotation().task]
+    frame: 0
+    currentToolIndex: 0
+    showingSummary: false
+    showingExpertClassification: false
 
   render: ->
-    <ChangeListener target={@props.classification} eventName="change" handler={@renderClassification} />
+    currentClassification = if @state.showingExpertClassification
+      @props.subject.expert_classification_data
+    else
+      @props.classification
 
-  renderClassification: ->
-    annotation = @getAnnotation()
-    task = @props.workflow.tasks[annotation.task]
-    currentTool = @state.selectedDrawingTool
+    currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
+    currentTask = @props.workflow.tasks[currentAnnotation.task]
 
-    <div className="project-classify-page">
-      <button type="button" name="scroll-to-classifier" onClick={@scrollIntoView}>
-        <i className="fa fa-anchor"></i>
-      </button>
-      {@renderSubject annotation, currentTool}
-      {@renderTaskArea annotation, task, currentTool}
-    </div>
+    for mimeType, src of @props.subject.locations[@state.frame]
+      [subjectType, format] = mimeType.split '/'
+      if subjectType of READABLE_FORMATS and format in READABLE_FORMATS[subjectType]
+        subjectSrc = src
+        break
 
-  renderSubject: (annotation, currentTool) ->
-    <div className="subject">
-      <SubjectViewer subject={@props.subject} classification={@props.classification} annotation={annotation} selectedDrawingTool={currentTool} />
-    </div>
+    <div>
+      <div className="subject-area">
+        <div className="subject-container">
+          {switch subjectType
+            when 'image' then <img className="subject" alt="Subject #{@props.subject.id}" src={subjectSrc} />}
+          <svg>
+            {if @state.currentTool? and not @state.showingSummary
+              <rect />}
+            {for {marks} in currentClassification.annotations when marks?
+              <g></g>}
+          </svg>
+        </div>
 
-  renderTaskArea: (annotation, task, currentTool) ->
-    onFirstTask = @props.classification.annotations.length is 1
-    givenAnswers = (answer for answer in [].concat annotation.answer when answer?)
-    answerStillRequired = givenAnswers.length < task.required ? 0
-    nextTaskKey = annotation._answer?.next ? task.next
+        <nav>
+          {unless @props.subject.locations.length is 0
+            for i in [0...@props.subject.locations.length]
+              <button type="button" className="subject-nav-pip" onClick={@handleChangeFrame.bind this, i}>{i}</button>}
+        </nav>
+      </div>
 
-    <div className="classifier-task">
-      <TaskViewer task={task} annotation={annotation} selectedDrawingTool={currentTool} onChange={@handleAnswer} />
+      <div className="task-area">
+        <div className="task-container">
+          {if @state.showingSummary
+            <div className="classification-summary">
+              Thanks!
+              {if @props.subject.expert_classification_data?
+                <div className="has-expert-classification">
+                  {if @showingExpertClassification
+                    <div>This is the expert classification.</div>
+                  else
+                    <div>
+                      This subject has an expert classification. You can see how well you’re doing.
+                      <button type="button">Show me the expert classification</button>
+                    </div>}
+                </div>}
+              <div class="talk-stats">
+                There are no comments on this subject. Be the first!
+              </div>
+            </div>
+          else
+            TaskComponent = tasks[currentTask.type]
+            <TaskComponent task={currentTask} currentTool={@state.currentTool} onChange={@handleTaskChange} />}
+        </div>
 
-      <div className="task-nav">
-        <button className="backward" disabled={onFirstTask} onClick={@previousTask}><i className="fa fa-arrow-left"></i></button>
+        {if @state.showingSummary
+          <nav className="for-summary">
+            <a href="#/todo/talk">Talk</a>
+            <button type="button">Next</button>
+          </nav>
 
-        {if nextTaskKey?
-          <button className="forward" disabled={answerStillRequired} onClick={@loadTask.bind this, nextTaskKey}>
-            <Translate content="classifier.next" />{' '}
-            <i className="fa fa-arrow-right"></i>
-          </button>
         else
-          <button className="forward" disabled={answerStillRequired} onClick={@finishClassification}>
-            <Translate content="classifier.finished" />{' '}
-            <i className="fa fa-check"></i>
-          </button>}
+          <nav className="for-tasks">
+            {firstAnnotation = currentClassification.annotations.indexOf(currentAnnotation) is 0; null}
+            <button type="button" disabled={firstAnnotation || null}>Back</button>
+
+            {nextTask = currentTask.next or currentTask.type is 'single' and currentTask.answers[currentAnnotation.answer].next; null}
+            {if nextTask
+              <button type="button">Next</button>
+            else
+              <button type="button">Done</button>}
+          </nav>}
       </div>
     </div>
 
-  scrollIntoView: (e) ->
-    scrollTo scrollX, e.target.getBoundingClientRect().top
+  handleChangeFrame: (index) ->
+    @setState frame: index
 
-  handleAnswer: (e, answer) ->
-    switch @getTask().type
-      when 'drawing'
-        @setState selectedDrawingTool: answer
-      else
-        @getAnnotation().answer = answer.value
-        @getAnnotation()._answer = answer
-        @props.classification.emit 'change'
-
-  loadTask: (task) ->
-    @props.classification.annotations.push {task}
-    @props.classification.emit 'change'
-
-  previousTask: ->
-    @props.classification.annotations.pop()
-    @props.classification.emit 'change'
-    @setState selectedDrawingTool: @getTask().tools?[0]
-
-  finishClassification: ->
-    @props.onFinishClassification @props.classification
+  handleTaskChange: (data) ->
