@@ -1,21 +1,21 @@
-.classify-content
+.classifier
   display: flex
 
-.project-classify-page
-  display: flex
-  flex: 1
-
-  [name="scroll-to-classifier"]
-    @extends $reset-button
-    font-size: 0.7em
-    position: absolute
-    right: 0
-    top: 0
-
-  > .subject
+  > .subject-area
     flex: 4
+    text-align: center
 
-  > .classifier-task
+  .subject-container
+    color: gray
+
+    .subject
+      max-height: 90vh
+      max-width: 100%
+
+    .marking-initializer
+      cursor: crosshair
+
+  > .task-area
     display: flex
     flex: 1
     flex-direction: column
@@ -45,19 +45,3 @@
 
       &.backward
         flex-grow: 0
-
-.subject-viewer
-  text-align center
-
-.subject-container
-  color: gray
-
-.subject-image
-  max-height: 95vh
-  max-width: 100%
-
-.subject-viewer-svg
-  outline: 1px dashed rgba(yellow, 0.5)
-
-  &[data-tool]
-    cursor: crosshair

@@ -1,4 +1,5 @@
 React = require 'react'
+ChangeListener = require '../../components/change-listener'
 
 icons =
   point: <svg className="drawing-tool-icon" viewBox="0 0 100 100">
@@ -25,29 +26,44 @@ icons =
     <ellipse className="shape" rx="45" ry="30" cx="50" cy="50" transform="rotate(-30, 50, 50)" />
   </svg>
 
+Summary = React.createClass
+  displayName: 'SingleChoiceSummary'
+
+  render: ->
+    <div className="classification-task-summary">
+      <div className="question">{@props.task.instruction}</div>
+      <div className="answer">{@props.annotation.marks.length} mark(s)</div>
+    </div>
+
 module.exports = React.createClass
   displayName: 'DrawingTask'
 
+  statics:
+    Summary: Summary
+
+    getDefaultAnnotation: ->
+      _toolIndex: 0
+      marks: []
+
   getDefaultProps: ->
     task: null
-    currentTool: null
+    annotation: null
 
   render: ->
     <div className="workflow-task single-choice drawing-task">
       <div className="question">{@props.task.instruction}</div>
       <div className="answers">
         {for tool, i in @props.task.tools
-          <label className="workflow-task-answer for-drawing #{tool.type}" key={tool.label}>
-            <input type="radio" data-index={i} checked={tool is @props.currentTool} onChange={@handleChange} />
+          <label key={tool.label} className="workflow-task-answer for-drawing #{tool.type}">
+            <input type="radio" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
             <span className="clickable">
-              {icons[tool.type]} {tool.label}
+              {icons[tool.type]}
+              {tool.label}
             </span>
           </label>}
       </div>
     </div>
 
-  handleChange: (e) ->
+  handleChange: (index, e) ->
     if e.target.checked
-      toolIndex = e.target.dataset.index
-      tool = @props.task.tools[toolIndex]
-      @props.onChange tool
+      @props.annotation.update _toolIndex: index

@@ -1,9 +1,11 @@
-JSONAPIClient = require 'json-api-client'
+JSONAPIClient = {Resource} = require 'json-api-client'
 config = require './config'
 
 apiClient = new JSONAPIClient config.host + '/api',
   'Content-Type': 'application/json'
   'Accept': 'application/vnd.api+json; version=1'
+
+apiClient.type('classifications').Resource = require './classification'
 
 apiClient.handleError = (request) ->
   response = try JSON.parse request.responseText
