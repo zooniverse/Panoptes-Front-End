@@ -11,6 +11,9 @@ module.exports = React.createClass
 
   mixins: [PromiseToSetState]
 
+  getInitialState: ->
+    user: null
+
   componentDidMount: ->
     @handleAuthChange()
     auth.listen @handleAuthChange

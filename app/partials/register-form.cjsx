@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 apiClient = require '../api/client'
-promiseToSetState = require '../lib/promise-to-set-state'
+PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
 InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
@@ -34,12 +34,20 @@ counterpart.registerTranslations 'en',
     alreadySignedIn: 'Already signed in as %(name)s.'
     signOut: 'Sign out'
 
-users = apiClient.createType 'users'
+users = apiClient.type 'users'
 
 module.exports = React.createClass
   displayName: 'RegisterForm'
 
-  mixins: [promiseToSetState]
+  mixins: [PromiseToSetState]
+
+  getInitialState: ->
+    user: null
+    badLoginChars: null
+    loginConflict: null
+    passwordTooShort: null
+    passwordsDontMatch: null
+    emailConflict: null
 
   componentDidMount: ->
     @handleAuthChange()
@@ -49,8 +57,7 @@ module.exports = React.createClass
     auth.stopListening @handleAuthChange
 
   handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent().catch ->
-      null
+    @promiseToSetState user: auth.checkCurrent()
 
   render: ->
     {badLoginChars, loginConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
@@ -70,7 +77,7 @@ module.exports = React.createClass
               <kbd key={char}>{char}</kbd>
             <Translate component="span" className="form-help error" content="registerForm.badChars" chars={chars} />
 
-          else if "loginConflict" in @state.awaiting
+          else if "loginConflict" of @state.pending
             <LoadingIndicator />
           else if loginConflict?
             if loginConflict
@@ -116,7 +123,7 @@ module.exports = React.createClass
         <label>
           <Translate content="registerForm.email" /> <Translate className="form-help" content="registerForm.required" /><br />
           <input type="text" name="email" disabled={@state.user?} ref="email" onChange={@handleEmailChange} />
-          {if 'emailConflict' in @state.awaiting
+          {if 'emailConflict' of @state.pending
             <LoadingIndicator />
           else if emailConflict?
             if emailConflict
@@ -153,11 +160,11 @@ module.exports = React.createClass
       <br />
 
       <div>
-        <button type="submit" disabled={not @isFormValid() or @state.awaiting.length isnt 0 or @state.user?}>
+        <button type="submit" disabled={not @isFormValid() or Object.keys(@state.pending).length isnt 0 or @state.user?}>
           <Translate content="registerForm.register" />
         </button>{' '}
 
-        {if 'user' in @state.awaiting
+        {if 'user' of @state.pending
           <LoadingIndicator />
         else if @state.user?
           <span className="form-help">
@@ -200,8 +207,7 @@ module.exports = React.createClass
       passwordsDontMatch: if exists and asLong then not matches
 
   handleEmailChange: ->
-    @setState
-      emailConflict: null
+    @promiseToSetState emailConflict: Promise.resolve null # Cancel any existing request.
 
     email = @refs.email.getDOMNode().value
     if email.match /.+@.+\..+/
@@ -223,8 +229,8 @@ module.exports = React.createClass
         'Accept': 'application/json'
 
       apiClient.post '/../users', data, headers
-        .catch ({errors}) ->
-          errors?[0]?.message?.email?[0]?.contains('taken') ? false
+        .catch (error) ->
+          error.message.match(/email(.+)taken/mi) ? false
 
   isFormValid: ->
     {badLoginChars, loginConflict, passwordsDontMatch, emailConflict} = @state
@@ -238,10 +244,9 @@ module.exports = React.createClass
     realName = @refs.realName.getDOMNode().value
 
     auth.register {login, password, email, realName}
-      .catch (errors) ->
-        for {message} in errors
-          if message.email?[0].indexOf('taken') isnt -1
-            @setState emailConflict: true
+      .catch (error) ->
+        if error.message.match /email(.+)taken/mi
+          @setState emailConflict: true
 
   handleSignOut: ->
     auth.signOut()

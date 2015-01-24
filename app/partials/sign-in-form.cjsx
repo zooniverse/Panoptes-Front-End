@@ -1,10 +1,12 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-promiseToSetState = require '../lib/promise-to-set-state'
+PromiseToSetState = require '../lib/promise-to-set-state'
+auth = require '../api/auth'
+ChangeListener = require '../components/change-listener'
+PromiseRenderer = require '../components/promise-renderer'
 InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
-auth = require '../api/auth'
 
 counterpart.registerTranslations 'en',
   signInForm:
@@ -12,35 +14,34 @@ counterpart.registerTranslations 'en',
     signOut: 'Sign out'
     userName: 'User name'
     password: 'Password'
-    errors:
-      BAD_PASSWORD: 'Wrong username or password'
-      SERVER_ERROR: 'Something went wrong! Try again later.'
 
 module.exports = React.createClass
   displayName: 'SignInForm'
 
-  mixins: [promiseToSetState]
+  mixins: [PromiseToSetState]
 
-  componentDidMount: ->
-    @handleAuthChange()
-    auth.listen @handleAuthChange
-
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent()
+  getInitialState: ->
+    user: null
 
   render: ->
-    working = @state.user instanceof Promise
-    signedIn = @state.user? and (not @state.errors?) and (not working)
+    # console.log 'SignInForm', 'render', JSON.stringify @state
+    <ChangeListener target={auth} handler={@renderAuth} />
+
+  renderAuth: ->
+    # console.log 'SignInForm', 'renderAuth'
+    <PromiseRenderer promise={auth.checkCurrent()} then={@renderUser} catch={@renderUser} />
+
+  renderUser: (user) ->
+    # console.log 'SignInForm', 'renderUser', user?
+    working = @state.pending.user?
+    signedIn = user? and (not @state.rejected.user?) and (not working)
     disabled = working or signedIn
 
     <InPlaceForm onSubmit={@handleSubmit}>
       <div>
         <label>
           <Translate content="signInForm.userName" /><br />
-          <input type="text" name="login" value={@props.currentLogin?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
+          <input type="text" name="login" value={user?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
         </label>
       </div>
 
@@ -49,7 +50,7 @@ module.exports = React.createClass
       <div>
         <label>
           <Translate content="signInForm.password" /><br />
-          <input type="password" name="password" value={@props.currentLogin?.password} disabled={disabled} ref="password" />
+          <input type="password" name="password" value={user?.password} disabled={disabled} ref="password" />
         </label>
       </div>
 
@@ -61,10 +62,13 @@ module.exports = React.createClass
         </button>
 
         {if signedIn
-          <span className="form-help">Signed in as {@state.user.display_name} <button onClick={@handleSignOut}>Sign out</button></span>}
+          <span className="form-help">
+            Signed in as {user.display_name}
+            <button type="button" onClick={@handleSignOut}>Sign out</button>
+          </span>}
 
-        {if @state.errors?
-          <span className="form-help error">{@state.errors}</span>}
+        {if @state.rejected.user?
+          <span className="form-help error">{@state.rejected.user.message}</span>}
 
         {if working
           <LoadingIndicator />}
@@ -72,17 +76,11 @@ module.exports = React.createClass
     </InPlaceForm>
 
   handleSubmit: ->
-    login = @refs.login.getDOMNode().value
-    password = @refs.password.getDOMNode().value
-
-    auth.signIn {login, password}
-      .then =>
-        @setState errors: null
-
-      .catch (errors) =>
-        @setState errors: errors
+    login = @getDOMNode().querySelector('[name="login"]').value
+    password = @getDOMNode().querySelector('[name="password"]').value
+    @promiseToSetState user: auth.signIn {login, password}
 
   handleSignOut: ->
     auth.signOut().then =>
-      @refs.login.getDOMNode().value = ''
-      @refs.password.getDOMNode().value = ''
+      @getDOMNode().querySelector('[name="login"]').value = ''
+      @getDOMNode().querySelector('[name="password"]').value = ''

@@ -68,10 +68,10 @@ module.exports = React.createClass
       @fetchProject nextProps.params.id
 
   fetchProject: (id) ->
-    @promiseToSetState project: apiClient.createType('projects').get id
+    @promiseToSetState project: apiClient.type('projects').get id
 
   render: ->
-    if @state.project?.id?
+    if @state.project?
       <ProjectPage project={@state.project} />
     else
       null

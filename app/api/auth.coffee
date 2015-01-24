@@ -19,8 +19,8 @@ CSRF_TOKEN_PATTERN = do ->
   ///#{NAME_ATTR}\s*#{CONTENT_ATTR}|#{CONTENT_ATTR}\s*#{NAME_ATTR}///
 
 module.exports = new Model
-  currentUser: null
-  bearerToken: ''
+  _currentUserPromise: null
+  _bearerToken: ''
 
   _getAuthToken: ->
     console?.log 'Getting auth token'
@@ -32,18 +32,14 @@ module.exports = new Model
         authToken
 
       .catch (request) ->
-        # The back end is down or something.
-        try {errors} = JSON.parse request.responseText
-        errors ?= [message: password: ['Could not connect to the server']]
-
-        console?.error 'Failed to get auth token', errors
-        Promise.reject errors
+        console?.error 'Failed to get auth token'
+        client.handleError request
 
   _getBearerToken: ->
     console?.log 'Getting bearer token'
-    if @bearerToken
-      console?.info 'Already had a bearer token', @bearerToken
-      Promise.resolve @bearerToken
+    if @_bearerToken
+      console?.info 'Already had a bearer token', @_bearerToken
+      Promise.resolve @_bearerToken
     else
       data =
         grant_type: 'password'
@@ -52,125 +48,146 @@ module.exports = new Model
       makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS
         .then (request) =>
           response = JSON.parse request.responseText
-          @bearerToken = response.access_token
-          client.headers['Authorization'] = "Bearer #{@bearerToken}"
-          console?.info 'Got bearer token', @bearerToken
-          @bearerToken
+          @_bearerToken = response.access_token
+          client.headers['Authorization'] = "Bearer #{@_bearerToken}"
+          console?.info 'Got bearer token', @_bearerToken
+          @_bearerToken
 
         .catch (request) ->
           # You're probably not signed in.
-          try {errors} = JSON.parse request.responseText
-          console?.error 'Failed to get bearer token', errors
-          Promise.reject errors
+          console?.error 'Failed to get bearer token'
+          client.handleError request
 
   _deleteBearerToken: ->
-    @bearerToken = ''
+    @_bearerToken = ''
     delete client.headers['Authorization']
     console?.log 'Deleted bearer token'
 
-  _getMe: ->
-    client.get('/me').then ([user]) =>
-      user.listen 'delete', [@, '_handleCurrentUserDeletion', user]
-      user
+  _getSession: ->
+    console?.log 'Getting session'
+    client.get '/me'
+      .then ([user]) =>
+        console?.info 'Got session', user.display_name, user.id
+        user
+
+      .catch (error) ->
+        console?.error 'Failed to get session'
+        throw error
 
   register: ({login, email, password}) ->
-    console?.log 'Registering new account', login
-    @update currentUser: @_getAuthToken().then (token) =>
-      data =
-        authenticity_token: token
-        user:
-          login: login
-          email: email
-          password: password
+    @checkCurrent().then (user) =>
+      if user?
+        @signOut().then =>
+          @register {login, email, password}
+      else
+        console?.log 'Registering new account', login
 
-      # This weird URL is actually out of the API, but returns a JSON-API response.
-      client.post '/../users', data, JSON_HEADERS
-        .then =>
-          @_getBearerToken().then =>
-            @_getMe().then (user) =>
-              console?.info 'Registered account', user.display_name
-              user
+        registrationRequest = @_getAuthToken().then (token) =>
+          data =
+            authenticity_token: token
+            user:
+              login: login
+              email: email
+              password: password
 
-        .catch ({errors}) ->
-          console?.error 'Failed to register', errors
-          Promise.reject errors
+          # This weird URL is actually out of the API, but returns a JSON-API response.
+          client.post '/../users', data, JSON_HEADERS
+            .then =>
+              @_getBearerToken().then =>
+                @_getSession().then (user) =>
+                  console?.info 'Registered account', user.display_name, user.id
+                  user
 
-    @currentUser
+            .catch (error) ->
+              console?.error 'Failed to register'
+              throw error
+
+        @update _currentUserPromise: registrationRequest.catch =>
+          null
+
+        registrationRequest
 
   checkCurrent: ->
-    unless @currentUser?
-      console?.log 'Checking for existing session'
-      @update currentUser:
+    unless @_currentUserPromise?
+      console?.log 'Checking current user'
+      @update _currentUserPromise:
         @_getBearerToken()
           .then =>
-            @_getMe().then (user) =>
-              console?.info 'Session exists for', user.display_name
-              user
+            @_getSession()
 
           .catch ->
-            # If you can't get a bearer token, nobody's signed in. This isn't an error.
-            console?.info 'No active session'
+            # Nobody's signed in. This isn't an error.
+            console?.info 'No current user'
             null
 
-    @currentUser
+    @_currentUserPromise
 
   signIn: ({login, password}) ->
-    console?.log 'Signing in', login
-    @update currentUser: @_getAuthToken().then (token) =>
-      data =
-        authenticity_token: token
-        user:
-          login: login
-          password: password
+    @checkCurrent().then (user) =>
+      if user?
+        @signOut().then =>
+          @signIn {login, password}
+      else
+        console?.log 'Signing in', login
 
-      makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS
-        .then (request) =>
-          # The response contains a JSON-API "users" resource.
-          client.processResponseTo request
+        signInRequest = @_getAuthToken().then (token) =>
+          data =
+            authenticity_token: token
+            user:
+              login: login
+              password: password
 
-          @_getBearerToken().then =>
-            @_getMe().then (user) =>
-              console?.info 'Signed in', user.display_name
-              user
+          makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS
+            .then =>
+              @_getBearerToken().then =>
+                @_getSession().then (user) =>
+                  console?.info 'Signed in', user.display_name, user.id
+                  user
 
-        .catch (request) ->
-          if request.status in [401, 0] # The server says 401, but the response object says 0, so who knows?
-            errors = [message: password: ['Login or password was incorrect']]
-          else
-            try {errors} = JSON.parse request.responseText
+            .catch (request) ->
+              console?.error 'Failed to sign in'
+              client.handleError request
 
-          console?.error 'Failed to sign in', errors
-          Promise.reject errors
+        @update _currentUserPromise: signInRequest.catch =>
+          null
 
-    @currentUser
+        signInRequest
+
+  disableAccount: ->
+    console?.log 'Disabling account'
+    @checkCurrent().then (user) =>
+      if user?
+        user.refresh().then =>
+          user.delete().then =>
+            @_deleteBearerToken()
+            @update _currentUserPromise: Promise.resolve null
+            console?.info 'Disabled account'
+            null
+      else
+        throw new Error 'Failed to disable account; not signed in'
 
   signOut: ->
     console?.log 'Signing out'
-    @update currentUser: @_getAuthToken().then (token) =>
-      data =
-        authenticity_token: token
+    @checkCurrent().then (user) =>
+      if user?
+        @_getAuthToken().then (token) =>
+          data =
+            authenticity_token: token
 
-      makeHTTPRequest 'POST', config.host + '/users/sign_out', data, DELETE_METHOD_OVERRIDE_HEADERS
-        .then =>
-          @_deleteBearerToken()
-          console?.info 'Signed out'
-          null
+          makeHTTPRequest 'POST', config.host + '/users/sign_out', data, DELETE_METHOD_OVERRIDE_HEADERS
+            .then =>
+              @_deleteBearerToken()
+              @update _currentUserPromise: Promise.resolve null
+              console?.info 'Signed out'
+              null
 
-        .catch (request) ->
-          try {errors} = JSON.parse request.responseText
-          console?.error 'Failed to sign out', errors
-          Promise.reject errors
-
-    @currentUser
-
-  _handleCurrentUserDeletion: (user) ->
-    console?.log 'Handling account deletion', user.display_name
-    user.stopListening 'delete', [@, '_handleCurrentUserDeletion', user]
-    @_deleteBearerToken()
-    @update currentUser: Promise.resolve null
-
-window?.zooAuth = module.exports
+            .catch (request) ->
+              console?.error 'Failed to sign out'
+              client.handleError request
+      else
+        throw new Error 'Failed to sign out; not signed in'
 
 # For quick debugging:
+window?.zooAuth = module.exports
 window?.log = console?.info.bind console, 'LOG'
 window?.err = console?.error.bind console, 'ERR'

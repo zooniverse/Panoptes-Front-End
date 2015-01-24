@@ -25,6 +25,7 @@ cp -av "$DEV_DIR" "$BUILD_DIR"
   $(flag_externals external) \
   --extension .cjsx \
   --extension .coffee \
+  --ignore-transform coffeeify \
   --transform coffee-reactify \
   --transform envify \
   --entry "$SRC_JS" \
