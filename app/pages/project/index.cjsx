@@ -4,6 +4,7 @@ Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
 apiClient = window.api = require '../../api/client'
 PromiseToSetState = require '../../lib/promise-to-set-state'
+LoadingIndicator = require '../../components/loading-indicator'
 
 counterpart.registerTranslations 'en',
   project:
@@ -74,4 +75,11 @@ module.exports = React.createClass
     if @state.project?
       <ProjectPage project={@state.project} />
     else
-      null
+      <div className="content-container">
+        {if @state.pending.project?
+          <span><LoadingIndicator /> Loading project {@props.params.id}</span>
+        else if @state.rejected.project?
+          <code><i className="fa fa-exclamation-circle" /> {@state.rejected.project.toString()}</code>
+        else
+          null}
+      </div>
