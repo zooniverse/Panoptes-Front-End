@@ -1,9 +1,10 @@
 React = require 'react'
 Draggable = require '../lib/draggable'
+LoadingIndicator = require '../components/loading-indicator'
 drawingTools = require './drawing-tools'
 
 READABLE_FORMATS =
-  image: ['jpg', 'png', 'svg+xml', 'gif']
+  image: ['jpeg', 'png', 'svg+xml', 'gif']
 
 ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'inline-block', position: 'relative'
@@ -75,6 +76,11 @@ module.exports = React.createClass
                 <ToolComponent key={Math.random()} {...toolProps} />}
             </g>}
         </svg>
+
+        {if @props.loading
+          <div className="is-loading">
+            <LoadingIndicator />
+          </div>}
       </div>
 
       <nav className="subject-tools">

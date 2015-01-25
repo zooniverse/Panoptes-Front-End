@@ -33,7 +33,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="workflow-task single-choice">
-      <div className="question">{@props.question}</div>
+      <div className="question">{@props.task.question}</div>
       <div className="answers">
         {for answer, i in @props.task.answers
           <label className="workflow-task-answer" key={answer.label}>

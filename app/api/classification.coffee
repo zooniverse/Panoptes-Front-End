@@ -1,12 +1,15 @@
 {Resource, Model} = require 'json-api-client'
+counterpart = require 'counterpart'
 tasks = require '../classifier/tasks'
 
 module.exports = class extends Resource
   annotations: null
 
   constructor: ->
-    @started_at = (new Date).toISOString()
-    @user_agent = navigator.userAgent
+    @metadata =
+      started_at: (new Date).toISOString()
+      user_agent: navigator.userAgent
+      user_language: counterpart.getLocale()
     @annotations = []
     super
 

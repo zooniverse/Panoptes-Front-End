@@ -18,13 +18,8 @@ module.exports = React.createClass
     classification: classification
 
   getInitialState: ->
-    showingSummary: false
     showingExpertClassification: false
-    selectedExpertAnnotation: null
-
-  componentDidMount: ->
-    if @props.classification.annotations.length is 0
-      @props.classification.annotate @props.workflow.tasks[@props.workflow.first_task].type, @props.workflow.first_task
+    selectedExpertAnnotation: -1
 
   render: ->
     <ChangeListener target={@props.classification} handler={@renderClassifier} />
@@ -43,11 +38,11 @@ module.exports = React.createClass
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
     <div className="classifier">
-      <SubjectViewer subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} />
+      <SubjectViewer subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} loading={@props.loading} />
 
       <div className="task-area">
         <div className="task-container">
-          {if @state.showingSummary
+          {if @props.classification.complete
             <div>
               Thanks!
 
@@ -69,13 +64,16 @@ module.exports = React.createClass
 
           else if currentTask?
             TaskComponent = tasks[currentTask.type]
-            <TaskComponent task={currentTask} annotation={currentAnnotation} onChange={@handleTaskChange} />}
+            <TaskComponent task={currentTask} annotation={currentAnnotation} onChange={@handleTaskChange} />
+
+          else
+            <span><i className="fa fa-exclamation-circle"></i> No task ready</span>}
         </div>
 
-        {if @state.showingSummary
+        {if @props.classification.complete
           <nav className="task-nav for-summary">
             <a href="#/todo/talk">Talk</a>
-            <button type="button" onClick={@props.onClickNext}>Next</button>
+            <button type="button" disabled={@props.loading} onClick={@props.onClickNext}>Next</button>
           </nav>
 
         else if currentTask?
@@ -94,8 +92,13 @@ module.exports = React.createClass
     </div>
 
   completeClassification: ->
-    console?.info 'Completed classification', JSON.stringify @props.classification, null, 2
-    @setState showingSummary: true
+    @props.classification.update
+      complete: true
+      metadata: =>
+        @props.classification.metadata.finished_at = (new Date).toISOString()
+        @props.classification.metadata
+    @props.onComplete?()
+    # @props.classification.save()
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value

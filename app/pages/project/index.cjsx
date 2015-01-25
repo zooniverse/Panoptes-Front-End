@@ -79,7 +79,7 @@ module.exports = React.createClass
         {if @state.pending.project?
           <span><LoadingIndicator /> Loading project {@props.params.id}</span>
         else if @state.rejected.project?
-          <code><i className="fa fa-exclamation-circle" /> {@state.rejected.project.toString()}</code>
+          <code><i className="fa fa-exclamation-circle"></i> {@state.rejected.project.toString()}</code>
         else
           null}
       </div>

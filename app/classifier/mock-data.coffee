@@ -41,9 +41,9 @@ workflow = apiClient.type('workflows').create
 
 subject = apiClient.type('subjects').create
   locations: [
-    {'image/jpg': 'http://lorempixel.com/300/300/animals/'}
-    {'image/png': BLANK_IMAGE}
-    {'image/png': BLANK_IMAGE}
+    {'image/jpeg': 'http://lorempixel.com/400/300/animals/1'}
+    {'image/jpeg': 'http://lorempixel.com/400/300/animals/2'}
+    {'image/jpeg': 'http://lorempixel.com/400/300/animals/3'}
   ]
   expert_classification_data:
     annotations: [{
@@ -68,6 +68,7 @@ subject = apiClient.type('subjects').create
     }]
 
 classification = apiClient.type('classifications').create {}
+classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
 
 module.exports = {workflow, subject, classification}
 window.mockData = module.exports
