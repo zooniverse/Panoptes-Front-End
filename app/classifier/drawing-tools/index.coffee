@@ -3,4 +3,5 @@ module.exports =
   line: require './line'
   polygon: require './polygon'
   rectangle: require './rectangle'
+  circle: require './circle'
   ellipse: require './ellipse'

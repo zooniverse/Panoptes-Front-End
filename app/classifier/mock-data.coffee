@@ -16,6 +16,7 @@ workflow = apiClient.type('workflows').create
         {type: 'line', label: 'Line', color: 'red'}
         {type: 'rectangle', label: 'Rectangle', color: 'red'}
         {type: 'polygon', label: 'Polygon', color: 'red'}
+        {type: 'circle', label: 'Circle', color: 'red'}
         {type: 'ellipse', label: 'Ellipse', color: 'red'}
       ]
       next: 'cool'

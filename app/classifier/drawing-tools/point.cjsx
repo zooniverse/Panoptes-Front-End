@@ -3,7 +3,6 @@ DrawingToolRoot = require './root'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 
-STROKE_WIDTH = 1.5
 RADIUS = 10
 SELECTED_RADIUS = 20
 CROSSHAIR_SPACE = 0.2

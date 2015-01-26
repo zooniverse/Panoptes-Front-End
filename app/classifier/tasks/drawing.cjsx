@@ -21,8 +21,12 @@ icons =
     <polyline className="shape" points="50, 5 90, 90 50, 70 5, 90 50, 5" />
   </svg>
 
+  circle: <svg className="drawing-tool-icon" viewBox="0 0 100 100">
+    <ellipse className="shape" rx="33" ry="33" cx="50" cy="50" />
+  </svg>
+
   ellipse: <svg className="drawing-tool-icon" viewBox="0 0 100 100">
-    <ellipse className="shape" rx="45" ry="30" cx="50" cy="50" transform="rotate(-30, 50, 50)" />
+    <ellipse className="shape" rx="45" ry="25" cx="50" cy="50" transform="rotate(-30, 50, 50)" />
   </svg>
 
 Summary = React.createClass
