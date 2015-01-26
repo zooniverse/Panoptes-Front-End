@@ -42,7 +42,7 @@ module.exports = React.createClass
 
       <div className="task-area">
         <div className="task-container">
-          {if @props.classification.complete
+          {if @props.classification.completed
             <div>
               Thanks!
 
@@ -70,7 +70,7 @@ module.exports = React.createClass
             <span><i className="fa fa-exclamation-circle"></i> No task ready</span>}
         </div>
 
-        {if @props.classification.complete
+        {if @props.classification.completed
           <nav className="task-nav for-summary">
             <a href="#/todo/talk">Talk</a>
             <button type="button" disabled={@props.loading} onClick={@props.onClickNext}>Next</button>
@@ -93,12 +93,11 @@ module.exports = React.createClass
 
   completeClassification: ->
     @props.classification.update
-      complete: true
+      completed: true
       metadata: =>
         @props.classification.metadata.finished_at = (new Date).toISOString()
         @props.classification.metadata
     @props.onComplete?()
-    # @props.classification.save()
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value

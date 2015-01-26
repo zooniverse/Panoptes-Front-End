@@ -57,7 +57,7 @@ module.exports = React.createClass
         links:
           project: @props.project.id
           workflow: workflow.id
-          subject: subject.id
+          set_member_subject: subject.id
       classification.update metadata: ->
         classification.metadata.workflow_version = workflow.version
         classification.metadata
@@ -81,6 +81,8 @@ module.exports = React.createClass
 
   handleClassificationCompletion: ->
     console?.info 'Completed classification', JSON.stringify @state.classification, null, 2
+    @state.classification.save().then ->
+      console?.log 'Saved classification', @state.classification.id
     # TODO: Preload another subject.
 
   loadAnotherSubject: ->
