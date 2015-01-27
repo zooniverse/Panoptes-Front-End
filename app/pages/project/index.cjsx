@@ -3,6 +3,7 @@ React = require 'react'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
 apiClient = window.api = require '../../api/client'
+TitleMixin = require '../../lib/title-mixin'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 
 counterpart.registerTranslations 'en',
@@ -55,7 +56,10 @@ ProjectPage = React.createClass
 module.exports = React.createClass
   displayName: 'ProjectPageContainer'
 
-  mixins: [PromiseToSetState]
+  mixins: [TitleMixin, PromiseToSetState]
+
+  title: ->
+    @state.project?.display_name ? '(Loading)'
 
   getInitialState: ->
     project: null

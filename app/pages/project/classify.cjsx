@@ -1,5 +1,6 @@
 React = require 'react'
 apiClient = require '../../api/client'
+TitleMixin = require '../../lib/title-mixin'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 Classifier = require '../../classifier/classifier'
 
@@ -8,7 +9,9 @@ projectStatesInProgress = {}
 module.exports = React.createClass
   displayName: 'ClassifyPage'
 
-  mixins: [PromiseToSetState]
+  mixins: [TitleMixin, PromiseToSetState]
+
+  title: 'Classify'
 
   getInitialState: ->
     workflow: null
