@@ -28,7 +28,7 @@ routes = <Route handler={App}>
   <Route name="user-profile" path="users/:name" handler={require './pages/user-profile'} />
 
   <Route name="projects" handler={require './pages/projects'} />
-  <Route name="project" path="projects/:id" handler={require './pages/project'}>
+  <Route path="projects/:owner/:display_name" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
     <Route name="project-science-case" path="science-case" handler={require './pages/project/science-case'} />
     <Route name="project-status" path="status" handler={require './pages/project/status'} />
