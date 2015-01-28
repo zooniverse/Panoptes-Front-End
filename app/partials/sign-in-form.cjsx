@@ -78,7 +78,9 @@ module.exports = React.createClass
   handleSubmit: ->
     login = @getDOMNode().querySelector('[name="login"]').value
     password = @getDOMNode().querySelector('[name="password"]').value
-    @promiseToSetState user: auth.signIn {login, password}
+    @promiseToSetState user: auth.signIn({login, password}), =>
+      @props.onSubmit?()
+      @state.pending.user?.then @props.onSuccess, @props.onFailure
 
   handleSignOut: ->
     auth.signOut().then =>

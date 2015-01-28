@@ -1,33 +1,36 @@
 .dialog-underlay
-  background: rgba(black, 0.6)
+  background: linear-gradient(top, rgba(black, 0.6), rgba(gray, 1))
+  color: white
   height: 100%
   left: 0
   position: fixed
   top: 0
   width: 100%
+  z-index: 1
 
 .dialog-content
   background: white
   box-shadow: 0 1px 5px -3px black
+  color: black
   left: 50%
   max-height: 90%
+  max-width: 90%
+  overflow: auto
   position: absolute
   top: 40%
   transform: translate(-50%, -40%)
 
-.alert-dialog-close-button
-  @extends $reset-button
-  background: black
-  border: 1px solid
-  border-radius: 2em
-  box-shadow: 0 1px 1px rgba(black,  0.5)
-  color: white
-  height: 1em
+.dialog-controls
+  font-size: 3em
   line-height: 1
   position: absolute
-  right: -0.3em
-  top: -0.3em
-  width: 1em
+  right: 0.3em
+  text-shadow: 0 1px 1px black
+  top: 0.3em
+  z-index: 1
+
+  button
+    @extends $reset-button
 
 .dialog-actions
   color: white
