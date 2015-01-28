@@ -51,6 +51,7 @@ routes = <Route handler={App}>
   <NotFoundRoute handler={React.createClass render: -> <div className="content-container"><i className="fa fa-frown-o"></i> Not found</div>} />
 
   <Route path="dev/classifier" handler={require './classifier'} />
+  <Route path="dev/aggregate" handler={require './components/aggregate-view'} />
 </Route>
 
 mainContainer = document.createElement 'div'

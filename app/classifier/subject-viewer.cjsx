@@ -4,8 +4,6 @@ Draggable = require '../lib/draggable'
 LoadingIndicator = require '../components/loading-indicator'
 drawingTools = require './drawing-tools'
 
-SVG_STYLE = height: '100%', left: 0, position: 'absolute', top: 0, width: '100%'
-
 module.exports = React.createClass
   displayName: 'SubjectViewer' # TODO: Rename this.
 
@@ -33,7 +31,7 @@ module.exports = React.createClass
 
     <div className="subject-area">
       <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectLoad} onFrameChange={@handleFrameChange}>
-        <svg viewBox={[0, 0, @state.naturalWidth, @state.naturalHeight].join ' '} preserveAspectRatio="none" style={SVG_STYLE}>
+        <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
           {if @props.annotation?._toolIndex?
@@ -64,7 +62,7 @@ module.exports = React.createClass
         </svg>
 
         {if @props.loading
-          <div className="is-loading">
+          <div className="is-loading" style={SubjectViewer.overlayCSS}>
             <LoadingIndicator />
           </div>}
       </SubjectViewer>
