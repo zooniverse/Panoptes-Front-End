@@ -14,13 +14,17 @@ module.exports = React.createClass
     ]
     onDrag: React.PropTypes.func
     onEnd: React.PropTypes.func
+    disabled: React.PropTypes.bool
 
   render: ->
     # NOTE: This won't actually render any new DOM nodes,
     # it just attaches a `mousedown` listener to its child.
-    cloneWithProps @props.children,
-      className: 'draggable'
-      onMouseDown: @handleStart
+    if @props.disabled
+      @props.children
+    else
+      cloneWithProps @props.children,
+        className: 'draggable'
+        onMouseDown: @handleStart
 
   _rememberCoords: (e) ->
     @_previousEventCoords =
@@ -57,5 +61,7 @@ module.exports = React.createClass
     document.removeEventListener 'mouseup', @handleEnd
 
     @props.onEnd? e
+
+    @_previousEventCoords = null
 
     document.body.classList.remove 'dragging'

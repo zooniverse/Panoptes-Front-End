@@ -41,7 +41,7 @@ module.exports = React.createClass
 
           {for annotation, i in @props.classification.annotations when annotation.marks?
             disabled = annotation isnt @props.annotation
-            <g key={i}>
+            <g key={i} className="marks-for-annotation" data-disabled={disabled or null}>
               {for mark, i in annotation.marks
                 tool = @props.workflow.tasks[annotation.task].tools[mark.tool]
 

@@ -12,10 +12,9 @@ module.exports = React.createClass
   render: ->
     Tool = drawingTools[@props.toolDefinition.type]
     <g className="aggregate-mark">
-      <Tool mark={@props.mark} tool={@props.toolDefinition} />
+      <Tool mark={@props.mark} tool={@props.toolDefinition} disabled />
       <g className="source-marks">
         {for mark, i in @props.sourceMarks
-          console.info mark
-          <Tool key={i} mark={mark} tool={@props.toolDefinition} />}
+          <Tool key={i} mark={mark} tool={@props.toolDefinition} disabled />}
       </g>
     </g>

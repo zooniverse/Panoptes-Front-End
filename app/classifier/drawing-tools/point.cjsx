@@ -35,10 +35,13 @@ module.exports = React.createClass
       <line x1={-CROSSHAIR_SPACE * SELECTED_RADIUS} y1="0" x2={-SELECTED_RADIUS} y2="0" strokeWidth={CROSSHAIR_WIDTH} />
       <line x1="0" y1={CROSSHAIR_SPACE * SELECTED_RADIUS} x2="0" y2={SELECTED_RADIUS} strokeWidth={CROSSHAIR_WIDTH} />
       <line x1={CROSSHAIR_SPACE * SELECTED_RADIUS} y1="0" x2={SELECTED_RADIUS} y2="0" strokeWidth={CROSSHAIR_WIDTH} />
-      <Draggable onDrag={@handleDrag}>
+
+      <Draggable onDrag={@handleDrag} disabled={@props.disabled}>
         <circle r={radius} />
       </Draggable>
-      <DeleteButton tool={this} {...@getDeleteButtonPosition()} />
+
+      {if @props.selected
+        <DeleteButton tool={this} {...@getDeleteButtonPosition()} />}
     </DrawingToolRoot>
 
   handleDrag: (e, d) ->

@@ -3,7 +3,6 @@ PromiseToSetState = require '../lib/promise-to-set-state'
 apiClient = require '../api/client'
 SubjectViewer = require './subject-viewer'
 AggregateMark = require '../classifier/drawing-tools/aggregate-mark'
-
 ClassificationSummary = require '../classifier/classification-summary'
 
 module.exports = React.createClass
@@ -38,30 +37,34 @@ module.exports = React.createClass
         subject: classification.link 'subject'
 
   render: ->
-    noErrors = Object.keys(@state.rejected).length is 0
-
-    if noErrors and @state.workflow?
+    if Object.keys(@state.rejected).length is 0
       <div className="aggregate-viewer">
-        <SubjectViewer subject={@state.subject} onLoad={@handleSubjectLoad}>
-          <svg viewBox="0 0 #{@state.naturalWidth} #{@state.naturalHeight}" preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
-            {for annotation, i in @props.aggregate?.annotations ? [] when annotation.marks?
-              task = @state.workflow.tasks[annotation.task]
-              <g key={i} className="annotation">
-                {for aggregateMark, i in annotation.marks
-                  toolDefinition = task.tools[aggregateMark.tool]
-                  sourceMarks = for {classification, annotation, mark} in aggregateMark.sources
-                    @state.classifications[classification].annotations[annotation].marks[mark]
-                  console.log {sourceMarks}
-                  <AggregateMark toolDefinition={toolDefinition} mark={aggregateMark} sourceMarks={sourceMarks} />}
-              </g>}
-          </svg>
-        </SubjectViewer>
+        {if @state.subject?
+          <SubjectViewer subject={@state.subject} onLoad={@handleSubjectLoad}>
+            <svg viewBox="0 0 #{@state.naturalWidth} #{@state.naturalHeight}" preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
+              {if @state.workflow?
+                for annotation, i in @props.aggregate.annotations when annotation.marks?
+                  task = @state.workflow.tasks[annotation.task]
+                  <g key={i} className="annotation">
+                    {for aggregateMark, i in annotation.marks
+                      toolDefinition = task.tools[aggregateMark.tool]
+                      sourceMarks = for {classification, annotation, mark} in aggregateMark.sources
+                        @state.classifications[classification].annotations[annotation].marks[mark]
+                      <AggregateMark toolDefinition={toolDefinition} mark={aggregateMark} sourceMarks={sourceMarks} />}
+                  </g>}
+            </svg>
+          </SubjectViewer>}
+
+        {if @state.workflow?
+          <ClassificationSummary workflow={@state.workflow} classification={@props.aggregate} />}
       </div>
 
     else
       <div>
         {for key, error of @state.rejected
-          <div key={key}><code>{error.toString()}</code></div>}
+          <div key={key}>
+            <i className="fa fa-excalmation-circle"></i> <code>{error.toString()}</code>
+          </div>}
       </div>
 
   handleSubjectLoad: (e) ->
