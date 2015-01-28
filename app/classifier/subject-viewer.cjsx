@@ -1,18 +1,13 @@
 React = require 'react'
+SubjectViewer = require '../components/subject-viewer'
 Draggable = require '../lib/draggable'
 LoadingIndicator = require '../components/loading-indicator'
 drawingTools = require './drawing-tools'
 
-READABLE_FORMATS =
-  image: ['jpeg', 'png', 'svg+xml', 'gif']
-
-ROOT_STYLE = display: 'block'
-CONTAINER_STYLE = display: 'inline-block', position: 'relative'
-SUBJECT_STYLE = display: 'block'
 SVG_STYLE = height: '100%', left: 0, position: 'absolute', top: 0, width: '100%'
 
 module.exports = React.createClass
-  displayName: 'SubjectViewer'
+  displayName: 'SubjectViewer' # TODO: Rename this.
 
   getInitialState: ->
     naturalWidth: 0
@@ -34,19 +29,10 @@ module.exports = React.createClass
     {x, y}
 
   render: ->
-    for mimeType, src of @props.subject.locations[@state.frame]
-      [subjectType, format] = mimeType.split '/'
-      if subjectType of READABLE_FORMATS and format in READABLE_FORMATS[subjectType]
-        subjectSrc = src
-        break
-
     scale = @getScale()
 
-    <div className="subject-area" style={ROOT_STYLE}>
-      <div className="subject-container" style={CONTAINER_STYLE}>
-        {switch subjectType
-          when 'image' then <img className="subject" src={subjectSrc} style={SUBJECT_STYLE} onLoad={@handleSubjctImageLoad} />}
-
+    <div className="subject-area">
+      <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={[0, 0, @state.naturalWidth, @state.naturalHeight].join ' '} preserveAspectRatio="none" style={SVG_STYLE}>
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
@@ -81,19 +67,17 @@ module.exports = React.createClass
           <div className="is-loading">
             <LoadingIndicator />
           </div>}
-      </div>
-
-      <nav className="subject-tools">
-        {unless @props.subject.locations.length is 0
-          for i in [0...@props.subject.locations.length]
-            <button type="button" key={i} className="subject-nav-pip" onClick={@handleChangeFrame.bind this, i}>{i}</button>}
-      </nav>
+      </SubjectViewer>
     </div>
 
-  handleSubjctImageLoad: (e) ->
-    {naturalWidth, naturalHeight} = e.target
-    unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
-      @setState {naturalWidth, naturalHeight}
+  handleSubjectLoad: (e) ->
+    if e.target.tagName.toUpperCase() is 'IMG'
+      {naturalWidth, naturalHeight} = e.target
+      unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
+        @setState {naturalWidth, naturalHeight}
+
+  handleFrameChange: (e, index) ->
+    @setState frame: parseFloat e.target.dataset.index
 
   handleInitStart: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
@@ -156,6 +140,3 @@ module.exports = React.createClass
     unless index is -1
       @props.annotation.marks.splice index, 1
       @props.annotation.marks.push mark
-
-  handleChangeFrame: (index) ->
-    @setState frame: index
