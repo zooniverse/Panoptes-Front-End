@@ -38,9 +38,9 @@ module.exports = React.createClass
     document.addEventListener 'mousemove', @handleDrag
     document.addEventListener 'mouseup', @handleEnd
 
-    # If there's not `onStart`, `onDrag` will be called on start.
+    # If there's no `onStart`, `onDrag` will be called on start.
     startHandler = @props.onStart ? @handleDrag
-    if startHandler # You can set to `false` if you don't want anything to fire.
+    if startHandler # You can set it to `false` if you don't want anything to fire.
       startHandler e
 
   handleDrag: (e) ->
