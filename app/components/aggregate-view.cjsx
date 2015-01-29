@@ -57,7 +57,22 @@ module.exports = React.createClass
           </SubjectViewer>}
 
         {if @state.workflow?
-          <ClassificationSummary workflow={@state.workflow} classification={@props.aggregate} />}
+          <div>
+            Aggregate classification:
+            <ClassificationSummary workflow={@state.workflow} classification={@props.aggregate} />
+          </div>}
+
+        <br />
+        <br />
+
+        {if @state.workflow?
+          for classification in @state.classifications
+            <div key={classification.id}>
+              Classification <code>{classification.id}</code>
+              <ClassificationSummary workflow={@state.workflow} classification={classification} />
+            </div>}
+
+
       </div>
 
     else

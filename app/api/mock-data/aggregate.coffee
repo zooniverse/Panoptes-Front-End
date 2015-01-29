@@ -16,11 +16,11 @@ module.exports = apiClient.type('aggregate').create
       y: 50
       sources: [{
         classification: 0
-        annotation: 1
+        annotation: 2
         mark: 0
       }, {
         classification: 1
-        annotation: 1
+        annotation: 2
         mark: 0
       }]
     }]
