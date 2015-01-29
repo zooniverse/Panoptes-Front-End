@@ -49,7 +49,7 @@ subject = apiClient.type('subjects').create
   expert_classification_data:
     annotations: [{
       task: 'draw'
-      marks: [{
+      value: [{
         tool: 0
         x: 50
         y: 50
@@ -62,10 +62,10 @@ subject = apiClient.type('subjects').create
       }]
     }, {
       task: 'cool'
-      answer: 0
+      value: 0
     }, {
       task: 'features'
-      answers: [0, 2]
+      value: [0, 2]
     }]
 
 classification = apiClient.type('classifications').create {}

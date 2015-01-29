@@ -11,8 +11,8 @@ Summary = React.createClass
     <div className="classification-task-summary">
       <div className="question">{@props.task.question}</div>
       <div className="answer">
-        {if @props.annotation.answer?
-          @props.task.answers[@props.annotation.answer].label
+        {if @props.annotation.value?
+          @props.task.answers[@props.annotation.value].label
         else
           'No answer'}
       </div>
@@ -37,7 +37,7 @@ module.exports = React.createClass
       <div className="answers">
         {for answer, i in @props.task.answers
           <label className="workflow-task-answer" key={answer.label}>
-            <input type="radio" checked={i is @props.annotation.answer} onChange={@handleChange.bind this, i} />
+            <input type="radio" checked={i is @props.annotation.value} onChange={@handleChange.bind this, i} />
             <span className="clickable">{answer.label}</span>
           </label>}
       </div>
@@ -46,4 +46,4 @@ module.exports = React.createClass
   handleChange: (index, e) ->
     if e.target.checked
       @props.annotation.update
-        answer: index
+        value: index

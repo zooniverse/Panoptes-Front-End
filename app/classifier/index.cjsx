@@ -80,8 +80,8 @@ module.exports = React.createClass
           <nav className="task-nav for-classification">
             {firstAnnotation = currentClassification.annotations.indexOf(currentAnnotation) is 0; null}
             <button type="button" disabled={firstAnnotation || null} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
-            {nextTaskKey = currentTask.next or currentTask.type is 'single' and currentTask.answers[currentAnnotation.answer]?.next || null; null}
-            {waitingForAnswer = currentTask.type is 'single' and not currentAnnotation.answer?; null}
+            {nextTaskKey = currentTask.next or currentTask.type is 'single' and currentTask.answers[currentAnnotation.value]?.next || null; null}
+            {waitingForAnswer = currentTask.type is 'single' and not currentAnnotation.value?; null}
             {if nextTaskKey?
               nextTaskType = @props.workflow.tasks[nextTaskKey].type
               <button type="button" disabled={waitingForAnswer} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>

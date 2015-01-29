@@ -39,6 +39,6 @@ module.exports = React.createClass
 
   _destroyMark: ->
     {mark, annotation, classification} = @props.tool.props
-    markIndex = annotation.marks.indexOf mark
-    annotation.marks.splice markIndex, 1
+    markIndex = annotation.value.indexOf mark
+    annotation.value.splice markIndex, 1
     classification.emit 'change'

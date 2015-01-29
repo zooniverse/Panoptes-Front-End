@@ -2,6 +2,12 @@
 counterpart = require 'counterpart'
 tasks = require '../classifier/tasks'
 
+class Annotation extends Model
+  toJSON: ->
+    result = {}
+    result[@task] = @value
+    result
+
 module.exports = class extends Resource
   annotations: null
 
@@ -14,7 +20,7 @@ module.exports = class extends Resource
     super
 
   annotate: (taskType, taskKey) ->
-    annotation = new Model task: taskKey, tasks[taskType].getDefaultAnnotation?()
+    annotation = new Annotation task: taskKey, tasks[taskType].getDefaultAnnotation?()
     annotation.listen [@, 'emit']
 
     @update annotations: =>

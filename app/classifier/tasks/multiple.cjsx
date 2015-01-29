@@ -11,10 +11,10 @@ Summary = React.createClass
     <div className="classification-task-summary">
       <div className="question">{@props.task.question}</div>
       <div className="answer">
-        {if @props.annotation.answers.length is 0
+        {if @props.annotation.value.length is 0
           'No answers'
         else
-          for index in @props.annotation.answers
+          for index in @props.annotation.value
             answer = @props.task.answers[index]
             <div key={answer.label}>{answer.label}</div>}
       </div>
@@ -27,14 +27,14 @@ module.exports = React.createClass
     Summary: Summary
 
     getDefaultAnnotation: ->
-      answers: []
+      value: []
 
   getDefaultProps: ->
     task: null
     annotation: null
 
   render: ->
-    existingAnswers = @props.annotation.answers
+    existingAnswers = @props.annotation.value
 
     <div className="workflow-task multiple-choice-task">
       <div className="question">{@props.task.question}</div>
@@ -47,7 +47,7 @@ module.exports = React.createClass
     </div>
 
   handleChange: (index, e) ->
-    answers = @props.annotation.answers
+    answers = @props.annotation.value
 
     if e.target.checked
       if index not in answers
@@ -57,5 +57,5 @@ module.exports = React.createClass
         indexInAnswers = answers.indexOf index
         answers.splice indexInAnswers, 1
 
-    @props.annotation.update answers: ->
+    @props.annotation.update value: ->
       answers

@@ -41,7 +41,7 @@ Summary = React.createClass
       <div className="question">{@props.task.instruction}</div>
       {for tool, i in @props.task.tools
         <div key={tool.label} className="answer">
-          {tool.label}: {[].concat (mark for mark in @props.annotation.marks when mark.tool is i).length}
+          {tool.label}: {[].concat (mark for mark in @props.annotation.value when mark.tool is i).length}
         </div>}
       {if @props.onToggle?
         <div className="summary-controls">
@@ -60,7 +60,7 @@ module.exports = React.createClass
 
     getDefaultAnnotation: ->
       _toolIndex: 0
-      marks: []
+      value: []
 
   getDefaultProps: ->
     task: null
