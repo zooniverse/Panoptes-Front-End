@@ -6,17 +6,38 @@ Summary = React.createClass
   getDefaultProps: ->
     task: null
     annotation: null
+    expanded: false
+
+  getInitialState: ->
+    expanded: @props.expanded
 
   render: ->
     <div className="classification-task-summary">
-      <div className="question">{@props.task.question}</div>
-      <div className="answer">
-        {if @props.annotation.value.length is 0
-          'No answers'
+      <div className="question">
+        {@props.task.question}
+        {if @state.expanded
+          <button type="button" onClick={@setState.bind this, expanded: false, null}>Less</button>
         else
-          for index in @props.annotation.value
-            answer = @props.task.answers[index]
-            <div key={answer.label}>{answer.label}</div>}
+          <button type="button" onClick={@setState.bind this, expanded: true, null}>More</button>}
+      </div>
+      <div className="answers">
+        {if @state.expanded
+          for answer, i in @props.task.answers
+            <div key={i} className="answer">
+              {if i in @props.annotation.value
+                <i className="fa fa-check-square-o fa-fw"></i>
+              else
+                <i className="fa fa-square-o fa-fw"></i>}
+              {@props.task.answers[i].label}
+            </div>
+        else
+          if @props.annotation.value.length is 0
+            <div className="answer">'No answer'</div>
+          else
+            for index in @props.annotation.value
+              <div key={index} className="answer">
+                {@props.task.answers[index].label}
+              </div>}
       </div>
     </div>
 

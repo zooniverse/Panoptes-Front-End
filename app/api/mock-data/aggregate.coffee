@@ -6,6 +6,9 @@ module.exports = apiClient.type('aggregate').create
     task: 'is_cool'
     value: 0
   }, {
+    task: 'cool_stuff'
+    value: [1]
+  }, {
     task: 'coolest_point'
     value: [{
       tool: 0
@@ -43,6 +46,15 @@ apiClient.type('workflows').create
         label: 'No'
       }]
     }
+    cool_stuff: {
+      type: 'multiple'
+      question: 'What cool stuff is here?'
+      answers: [{
+        label: 'Ice'
+      }, {
+        label: 'Ice cream'
+      }]
+    }
     coolest_point: {
       type: 'drawing'
       instruction: 'Mark the coolest point'
@@ -77,6 +89,9 @@ apiClient.type('classifications').create
     task: 'is_cool'
     value: 0
   }, {
+    task: 'cool_stuff'
+    value: [1]
+  }, {
     task: 'coolest_point'
     value: [{
       tool: 0
@@ -91,6 +106,9 @@ apiClient.type('classifications').create
   annotations: [{
     task: 'is_cool'
     value: 0
+  }, {
+    task: 'cool_stuff'
+    value: [1]
   }, {
     task: 'coolest_point'
     value: [{
