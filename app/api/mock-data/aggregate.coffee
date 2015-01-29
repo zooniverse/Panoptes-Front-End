@@ -62,6 +62,10 @@ apiClient.type('workflows').create
         type: 'point'
         label: 'Coolest point'
         color: 'blue'
+      }, {
+        type: 'rectangle'
+        label: 'Something weird'
+        color: 'green'
       }]
     }
   }
