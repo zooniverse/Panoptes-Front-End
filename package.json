@@ -46,7 +46,7 @@
   },
   "config": {
     "fontAwesomeURL": "https://github.com/FortAwesome/Font-Awesome/blob/8027c940b6/assets/font-awesome-4.2.0.zip?raw=true",
-    "fallbackPolyfillsURL": "https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6&flags=gated&ua=(MSIE%209.0)"
+    "fallbackPolyfillsURL": "https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6,Promise&flags=gated&ua=(MSIE%209.0)"
   },
   "browserify": {
     "transform": [
