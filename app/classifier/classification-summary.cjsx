@@ -16,5 +16,5 @@ module.exports = React.createClass
         for annotation, i in @props.classification.annotations
           task = @props.workflow.tasks[annotation.task]
           SummaryComponent = tasks[task.type].Summary
-          <SummaryComponent key={i} task={task} annotation={annotation} />}
+          <SummaryComponent key={i} task={task} annotation={annotation} onToggle={@props.onToggle} />}
     </div>

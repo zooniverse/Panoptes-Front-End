@@ -43,6 +43,13 @@ Summary = React.createClass
         <div key={tool.label} className="answer">
           {tool.label}: {[].concat (mark for mark in @props.annotation.marks when mark.tool is i).length}
         </div>}
+      {if @props.onToggle?
+        <div className="summary-controls">
+          {if @props.inactive
+            <button type="button"><i className="fa fa-eye fa-fw"></i></button>
+          else
+            <button type="button"><i className="fa fa-eye-slash fa-fw"></i></button>}
+        </div>}
     </div>
 
 module.exports = React.createClass
