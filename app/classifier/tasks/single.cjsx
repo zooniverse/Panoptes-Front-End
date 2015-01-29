@@ -23,7 +23,8 @@ Summary = React.createClass
       <div className="answers">
         {if @state.expanded
           for answer, i in @props.task.answers
-            <div key={i} className="answer">
+            answer._key ?= Math.random()
+            <div key={answer._key} className="answer">
               {if i is @props.annotation.value
                 <i className="fa fa-check-circle-o fa-fw"></i>
               else

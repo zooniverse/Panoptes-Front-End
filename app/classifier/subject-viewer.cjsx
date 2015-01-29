@@ -39,12 +39,14 @@ module.exports = React.createClass
               <rect className="marking-initializer" width="100%" height="100%" fill="transparent" stroke="none" />
             </Draggable>}
 
-          {for annotation, i in @props.classification.annotations
+          {for annotation in @props.classification.annotations
+            annotation._key ?= Math.random()
             disabled = annotation isnt @props.annotation
             task = @props.workflow.tasks[annotation.task]
             if task.type is 'drawing'
-              <g key={i} className="marks-for-annotation" data-disabled={disabled or null}>
-                {for mark, i in annotation.value
+              <g key={annotation._key} className="marks-for-annotation" data-disabled={disabled or null}>
+                {for mark, m in annotation.value
+                  mark._key ?= Math.random()
                   tool = task.tools[mark.tool]
 
                   toolProps =
@@ -54,12 +56,12 @@ module.exports = React.createClass
                     mark: mark
                     scale: scale
                     disabled: disabled
-                    selected: not disabled and i is annotation.value.length - 1
+                    selected: not disabled and m is annotation.value.length - 1
                     select: @selectMark.bind this, mark
                     getEventOffset: @getEventOffset
 
                   ToolComponent = drawingTools[tool.type]
-                  <ToolComponent key={Math.random()} {...toolProps} />}
+                  <ToolComponent key={mark._key} {...toolProps} />}
               </g>}
         </svg>
 

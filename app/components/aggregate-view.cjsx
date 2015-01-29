@@ -43,15 +43,17 @@ module.exports = React.createClass
           <SubjectViewer subject={@state.subject} onLoad={@handleSubjectLoad}>
             <svg viewBox="0 0 #{@state.naturalWidth} #{@state.naturalHeight}" preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
               {if @state.workflow?
-                for annotation, i in @props.aggregate.annotations
+                for annotation in @props.aggregate.annotations
+                  annotation._key ?= Math.random()
                   task = @state.workflow.tasks[annotation.task]
                   if task.type is 'drawing'
-                    <g key={i} className="annotation">
-                      {for aggregateMark, i in annotation.value
+                    <g key={annotation._key} className="marks-for-annotation">
+                      {for aggregateMark in annotation.value
+                        aggregateMark._key ?= Math.random()
                         toolDefinition = task.tools[aggregateMark.tool]
                         sourceMarks = for {classification, annotation, mark} in aggregateMark.sources
                           @state.classifications[classification].annotations[annotation].value[mark]
-                        <AggregateMark toolDefinition={toolDefinition} mark={aggregateMark} sourceMarks={sourceMarks} />}
+                        <AggregateMark key={aggregateMark._key} toolDefinition={toolDefinition} mark={aggregateMark} sourceMarks={sourceMarks} />}
                     </g>}
             </svg>
           </SubjectViewer>}

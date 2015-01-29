@@ -60,8 +60,9 @@ module.exports = React.createClass
         <g>
           <DeleteButton tool={this} x={deleteButtonPosition.x} y={deleteButtonPosition.y} />
 
-          {for {x, y}, i in @props.mark.points
-            <DragHandle key={i} x={x} y={y} onDrag={@handleHandleDrag.bind this, i} />}
+          {for point, i in @props.mark.points
+            point._key ?= Math.random()
+            <DragHandle key={i} x={point.x} y={point.y} onDrag={@handleHandleDrag.bind this, i} />}
 
           {unless @props.mark.closed?
             <g>

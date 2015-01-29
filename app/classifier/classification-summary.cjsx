@@ -13,8 +13,9 @@ module.exports = React.createClass
       {if @props.classification.annotations.length is 0
         'No annotations'
       else
-        for annotation, i in @props.classification.annotations
+        for annotation in @props.classification.annotations
+          annotation._key = Math.random()
           task = @props.workflow.tasks[annotation.task]
           SummaryComponent = tasks[task.type].Summary
-          <SummaryComponent key={i} task={task} annotation={annotation} onToggle={@props.onToggle} />}
+          <SummaryComponent key={annotation._key} task={task} annotation={annotation} onToggle={@props.onToggle} />}
     </div>

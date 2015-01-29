@@ -14,7 +14,8 @@ module.exports = React.createClass
     <g className="aggregate-mark">
       <Tool mark={@props.mark} tool={@props.toolDefinition} disabled />
       <g className="source-marks">
-        {for mark, i in @props.sourceMarks
-          <Tool key={i} mark={mark} tool={@props.toolDefinition} disabled />}
+        {for mark in @props.sourceMarks
+          mark._key ?= Math.random()
+          <Tool key={mark._key} mark={mark} tool={@props.toolDefinition} disabled />}
       </g>
     </g>
