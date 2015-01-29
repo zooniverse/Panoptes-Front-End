@@ -12,7 +12,7 @@ Summary = React.createClass
       <div className="question">{@props.task.question}</div>
       <div className="answer">
         {if @props.annotation.answer?
-          @props.task.answers[@props.annotation.answer]
+          @props.task.answers[@props.annotation.answer].label
         else
           'No answer'}
       </div>
