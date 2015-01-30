@@ -24,6 +24,7 @@ routes = <Route handler={App}>
     <Route name="register" handler={require './partials/register-form'} />
   </Route>
   <Route name="settings" handler={require './pages/settings'} />
+  <Route name="privacy" handler={require './pages/privacy-policy'} />
 
   <Route name="user-profile" path="users/:name" handler={require './pages/user-profile'} />
 
