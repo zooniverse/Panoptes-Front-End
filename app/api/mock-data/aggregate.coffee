@@ -5,9 +5,23 @@ module.exports = apiClient.type('aggregate').create
   annotations: [{
     task: 'is_cool'
     value: 0
+    sources: [{
+      classification: 0
+      annotation: 0
+    }, {
+      classification: 1
+      annotation: 0
+    }]
   }, {
     task: 'cool_stuff'
     value: [1]
+    sources: [{
+      classification: 0
+      annotation: 1
+    }, {
+      classification: 1
+      annotation: 1
+    }]
   }, {
     task: 'coolest_point'
     value: [{
