@@ -1,4 +1,5 @@
 React = require 'react'
+GenericTask = require './generic'
 
 icons =
   point: <svg className="drawing-tool-icon" viewBox="0 0 100 100">
@@ -87,19 +88,17 @@ module.exports = React.createClass
     annotation: null
 
   render: ->
-    <div className="workflow-task single-choice drawing-task">
-      <div className="question">{@props.task.instruction}</div>
-      <div className="answers">
-        {for tool, i in @props.task.tools
-          <label key={tool.label} className="workflow-task-answer for-drawing #{tool.type}">
-            <input type="radio" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
-            <span className="clickable">
-              {icons[tool.type]}
-              {tool.label}
-            </span>
-          </label>}
-      </div>
-    </div>
+    tools = for tool, i in @props.task.tools
+      tool._key ?= Math.random()
+      <label key={tool._key} className="clickable">
+        <input type="radio" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
+        <span>
+          <span style={color: tool.color}>{icons[tool.type]}</span>{' '}
+          {tool.label}
+        </span>
+      </label>
+
+    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} />
 
   handleChange: (index, e) ->
     if e.target.checked

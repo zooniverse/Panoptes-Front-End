@@ -11,13 +11,18 @@ workflow = apiClient.type('workflows').create
     draw:
       type: 'drawing'
       instruction: 'Draw something.'
+      help: '''
+        Do this:
+        * Pick a tool
+        * Draw something
+      '''
       tools: [
         {type: 'point', label: 'Point', color: 'red'}
-        {type: 'line', label: 'Line', color: 'red'}
-        {type: 'rectangle', label: 'Rectangle', color: 'red'}
-        {type: 'polygon', label: 'Polygon', color: 'red'}
-        {type: 'circle', label: 'Circle', color: 'red'}
-        {type: 'ellipse', label: 'Ellipse', color: 'red'}
+        {type: 'line', label: 'Line', color: 'yellow'}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime'}
+        {type: 'polygon', label: 'Polygon', color: 'cyan'}
+        {type: 'circle', label: 'Circle', color: 'blue'}
+        {type: 'ellipse', label: 'Ellipse', color: 'magenta'}
       ]
       next: 'cool'
 

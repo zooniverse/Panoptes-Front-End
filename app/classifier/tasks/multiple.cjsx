@@ -1,4 +1,5 @@
 React = require 'react'
+GenericTask = require './generic'
 
 Summary = React.createClass
   displayName: 'MultipleChoiceSummary'
@@ -56,17 +57,14 @@ module.exports = React.createClass
     annotation: null
 
   render: ->
-    existingAnswers = @props.annotation.value
+    answers = for answer, i in @props.task.answers
+      answer._key ?= Math.random()
+      <label key={answer._key} className="clickable">
+        <input type="checkbox" checked={i in @props.annotation.value} onChange={@handleChange.bind this, i} />
+        <span>{answer.label}</span>
+      </label>
 
-    <div className="workflow-task multiple-choice-task">
-      <div className="question">{@props.task.question}</div>
-      <div className="answers">{for answer, i in @props.task.answers
-        <label className="workflow-task-answer" key={answer.label}>
-          <input type="checkbox" checked={i in existingAnswers} onChange={@handleChange.bind this, i} />
-          <span className="clickable">{answer.label}</span>
-        </label>}
-      </div>
-    </div>
+    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} />
 
   handleChange: (index, e) ->
     answers = @props.annotation.value
@@ -79,5 +77,4 @@ module.exports = React.createClass
         indexInAnswers = answers.indexOf index
         answers.splice indexInAnswers, 1
 
-    @props.annotation.update value: ->
-      answers
+    @props.annotation.update value: answers

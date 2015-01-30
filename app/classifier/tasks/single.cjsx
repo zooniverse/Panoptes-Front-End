@@ -1,4 +1,5 @@
 React = require 'react'
+GenericTask = require './generic'
 
 Summary = React.createClass
   displayName: 'SingleChoiceSummary'
@@ -55,18 +56,15 @@ module.exports = React.createClass
     annotation: null
 
   render: ->
-    <div className="workflow-task single-choice">
-      <div className="question">{@props.task.question}</div>
-      <div className="answers">
-        {for answer, i in @props.task.answers
-          <label className="workflow-task-answer" key={answer.label}>
-            <input type="radio" checked={i is @props.annotation.value} onChange={@handleChange.bind this, i} />
-            <span className="clickable">{answer.label}</span>
-          </label>}
-      </div>
-    </div>
+    answers = for answer, i in @props.task.answers
+      answer._key ?= Math.random()
+      <label key={answer._key} className="clickable">
+        <input type="radio" checked={i is @props.annotation.value} onChange={@handleChange.bind this, i} />
+        <span>{answer.label}</span>
+      </label>
+
+    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} />
 
   handleChange: (index, e) ->
     if e.target.checked
-      @props.annotation.update
-        value: index
+      @props.annotation.update value: index
