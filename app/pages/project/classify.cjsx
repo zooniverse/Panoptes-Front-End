@@ -60,7 +60,7 @@ module.exports = React.createClass
         links:
           project: @props.project.id
           workflow: workflow.id
-          set_member_subject: subject.id
+          subjects: [subject.id]
       classification.update metadata: ->
         classification.metadata.workflow_version = workflow.version
         classification.metadata
