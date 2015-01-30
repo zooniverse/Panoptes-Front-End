@@ -68,7 +68,12 @@ module.exports = React.createClass
           </span>}
 
         {if @state.rejected.user?
-          <span className="form-help error">{@state.rejected.user.message}</span>}
+          <span className="form-help error">
+            {@state.rejected.user.message}
+            <a href="https://www.zooniverse.org/password/reset" target="_blank">
+              <Translate content="registerForm.forgotPassword" />
+            </a>
+          </span>}
 
         {if working
           <LoadingIndicator />}

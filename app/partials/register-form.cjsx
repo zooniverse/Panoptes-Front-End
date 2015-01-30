@@ -62,7 +62,7 @@ module.exports = React.createClass
   render: ->
     {badLoginChars, loginConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
-    forgotPasswordLink = <a href="/todo/account/reset-password?email=#{@refs.email?.getDOMNode().value ? '?'}">
+    forgotPasswordLink = <a href="https://www.zooniverse.org/password/reset" target="_blank">
       <Translate content="registerForm.forgotPassword" />
     </a>
 
