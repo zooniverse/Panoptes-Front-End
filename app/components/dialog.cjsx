@@ -28,11 +28,11 @@ module.exports = React.createClass
   handleKeyDown: (e) ->
     switch e.keyCode
       when ESC_KEY
-        @props.esc? e
+        @props.onEscape? e
 
       when TAB_KEY
-        {shiftKey} = e # React recycles the event object.
-        setTimeout => # Give document.activeElement a cycle to change.
+        {shiftKey} = e # Save this; React recycles the event object.
+        setTimeout => # Give document.activeElement time to change.
           if document.activeElement not in @getDOMNode().querySelectorAll '*'
             if shiftKey
               @focusLast()
@@ -45,4 +45,3 @@ module.exports = React.createClass
   focusLast: ->
     focusables = @getDOMNode().querySelectorAll FOCUSABLES
     focusables[focusables.length - 1]?.focus()
-

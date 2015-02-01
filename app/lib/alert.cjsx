@@ -20,7 +20,7 @@ module.exports = (message) ->
   previousActiveElement = document.activeElement
 
   closeButton = <button onClick={defer.resolve}>&times;</button>
-  React.render <Dialog className="alert" controls={closeButton} esc={defer.resolve}>
+  React.render <Dialog className="alert" controls={closeButton} onEscape={defer.resolve}>
     {message}
   </Dialog>, container
 
