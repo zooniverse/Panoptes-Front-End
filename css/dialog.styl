@@ -1,5 +1,5 @@
 .dialog-underlay
-  background: linear-gradient(top, rgba(black, 0.6), rgba(gray, 1))
+  background: rgba(black, 0.6)
   color: white
   height: 100%
   left: 0
@@ -8,41 +8,38 @@
   width: 100%
   z-index: 1
 
-.dialog-content
+.dialog
   background: white
-  box-shadow: 0 1px 5px -3px black
+  box-shadow: 0 1px 3px -1px black
   color: black
+  display: flex
+  flex-direction: column
   left: 50%
   max-height: 90%
   max-width: 90%
-  overflow: auto
   position: absolute
   top: 40%
   transform: translate(-50%, -40%)
 
 .dialog-controls
-  font-size: 3em
+  height: 0
   line-height: 1
-  position: absolute
-  right: 0.3em
-  text-shadow: 0 1px 1px black
-  top: 0.3em
+  position: relative
   z-index: 1
 
-  button
-    @extends $reset-button
-
-.dialog-actions
-  color: white
-  left: 100%
-  margin-left: 1vw
-  position: absolute
-  top: 0
+  > .wrapper
+    position: absolute
+    right: -0.5em
+    top: -0.5em
 
   button
     @extends $reset-button
-    background: rgba(black, 0.2)
-    border-radius: 50%
-    font-size: 1.5em
-    width: 1.5em
-    height: 1.5em
+    background: gray
+    border-radius: 2em
+    color: white
+    height: 1em
+    width: 1em
+    text-transform: uppercase
+
+.dialog-content
+  overflow: auto

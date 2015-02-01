@@ -13,11 +13,15 @@ module.exports = React.createClass
 
   render: ->
     <div className="dialog-underlay" onKeyDown={@handleKeyDown}>
-      <div className="dialog-content">
-        {@props.children}
-      </div>
-      <div className="dialog-controls">
-        {@props.controls}
+      <div className="dialog">
+        <div className="dialog-controls">
+          <div className="wrapper">{@props.controls}</div>
+        </div>
+        <div className="dialog-content">
+          <div className="wrapper">
+            {@props.children}
+          </div>
+        </div>
       </div>
     </div>
 
