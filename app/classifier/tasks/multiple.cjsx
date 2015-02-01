@@ -1,38 +1,61 @@
 React = require 'react'
 
+Summary = React.createClass
+  displayName: 'MultipleChoiceSummary'
+
+  getDefaultProps: ->
+    task: null
+    annotation: null
+
+  render: ->
+    <div className="classification-task-summary">
+      <div className="question">{@props.task.question}</div>
+      <div className="answer">
+        {if @props.annotation.answers.length is 0
+          'No answers'
+        else
+          for index in @props.annotation.answers
+            answer = @props.task.answers[index]
+            <div key={answer.label}>{answer.label}</div>}
+      </div>
+    </div>
+
 module.exports = React.createClass
   displayName: 'MultipleChoiceTask'
 
+  statics:
+    Summary: Summary
+
+    getDefaultAnnotation: ->
+      answers: []
+
+  getDefaultProps: ->
+    task: null
+    annotation: null
+
   render: ->
-    existingAnswers = @props.value ? []
-    answers = for answer, i in @props.options
-      <label className="workflow-task-answer" key={answer.value}>
-        <input type="checkbox" data-index={i} checked={answer.value in existingAnswers} onChange={@handleChange} />
-        <span className="clickable">{answer.label}</span>
-      </label>
+    existingAnswers = @props.annotation.answers
 
     <div className="workflow-task multiple-choice-task">
-      <div className="question">{@props.question}</div>
-      <div className="answers">{answers}</div>
+      <div className="question">{@props.task.question}</div>
+      <div className="answers">{for answer, i in @props.task.answers
+        <label className="workflow-task-answer" key={answer.label}>
+          <input type="checkbox" checked={i in existingAnswers} onChange={@handleChange.bind this, i} />
+          <span className="clickable">{answer.label}</span>
+        </label>}
+      </div>
     </div>
 
-  handleChange: (e) ->
-    answers = @props.value ? []
-
-    answerIndex = e.target.dataset.index
-    newAnswer = @props.options[answerIndex].value
-
-    # We'll make some effort to preserve the order things were chosen in.
+  handleChange: (index, e) ->
+    answers = @props.annotation.answers
 
     if e.target.checked
-      if newAnswer not in answers
-        answers.push newAnswer
+      if index not in answers
+        answers.push index
     else
-      if newAnswer in answers
-        index = answers.indexOf newAnswer
-        answers.splice index, 1
+      if index in answers
+        indexInAnswers = answers.indexOf index
+        answers.splice indexInAnswers, 1
 
-    if answers.length is 0
-      answers = null
-
-    @props.onChange e, value: answers
+    @props.annotation.update answers: ->
+      answers

@@ -1,21 +1,35 @@
-.classify-content
+.classifier
   display: flex
 
-.project-classify-page
-  display: flex
-  flex: 1
-
-  [name="scroll-to-classifier"]
-    @extends $reset-button
-    font-size: 0.7em
-    position: absolute
-    right: 0
-    top: 0
-
-  > .subject
+  > .subject-area
     flex: 4
+    text-align: center
 
-  > .classifier-task
+  .subject-container
+    color: gray
+
+    .subject
+      max-height: 90vh
+      max-width: 100%
+
+    .marking-initializer
+      cursor: crosshair
+
+    .is-loading
+      align-items: center
+      background: rgba(gray, 0.5)
+      color: white
+      display: flex
+      font-size: 2em
+      height: 100%
+      justify-content: center
+      left: 0
+      min-height: 4em
+      position: absolute
+      top: 0
+      width: 100%
+
+  > .task-area
     display: flex
     flex: 1
     flex-direction: column
@@ -45,22 +59,3 @@
 
       &.backward
         flex-grow: 0
-
-.subject-viewer
-  text-align center
-
-.subject-container
-  color: gray
-
-.subject-image
-  max-height: 95vh
-  max-width: 100%
-
-.subject-viewer-svg
-  outline: 1px dashed rgba(yellow, 0.5)
-
-  &[data-tool]
-    cursor: crosshair
-
-@require "./task-viewer"
-@require "./drawing-tool"
