@@ -1,20 +1,24 @@
 React = require 'react'
+PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 
 module.exports = React.createClass
   displayName: 'ProjectCard'
 
   render: ->
-    {project} = @props
+    <PromiseRenderer promise={@props.project.link 'owner'} then={@renderWithOwner}>
+      {@renderWithOwner()}
+    </PromiseRenderer>
 
-    <Link to="project-home" params={id: project.id} className="project-card">
+  renderWithOwner: (owner) ->
+    <Link to="project-home" params={owner: owner?.login ? 'LOADING', name: @props.project.display_name} className="project-card">
       <div className="media">
-        <img src={project.avatar} className="avatar" />
+        <img src={@props.project.avatar} className="avatar" />
       </div>
 
       <div className="details">
-        <div className="owner">{project.owner_name}</div>
-        <div className="title">{project.display_name}</div>
-        <div className="introduction">{project.introduction}</div>
+        <div className="owner">{owner?.display_name ? 'LOADING'}</div>
+        <div className="title">{@props.project.display_name}</div>
+        <div className="introduction">{@props.project.introduction}</div>
       </div>
     </Link>
