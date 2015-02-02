@@ -22,11 +22,11 @@ module.exports = React.createClass
   render: ->
     <div className="tabbed-content" data-side="top" onSubmit={@handleSubmit}>
       <nav className="tabbed-content-tabs">
-        <button type="button" className="tabbed-content-tab #{'active' if @state.which is 'sign-in'}" onClick={@goTo.bind this, 'sign-in'}>
+        <button type="button" className="tabbed-content-tab #{('active' if @state.which is 'sign-in') ? ''}" onClick={@goTo.bind this, 'sign-in'}>
           <Translate content="signInDialog.signIn" />
         </button>
 
-        <button type="button" className="tabbed-content-tab #{'active' if @state.which is 'register'}" onClick={@goTo.bind this, 'register'}>
+        <button type="button" className="tabbed-content-tab #{('active' if @state.which is 'register') ? ''}" onClick={@goTo.bind this, 'register'}>
           <Translate content="signInDialog.register" />
         </button>
       </nav>
