@@ -1,9 +1,8 @@
 counterpart = require 'counterpart'
 React = require 'react'
+Translate = require 'react-translate-component'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
-Translate = require 'react-translate-component'
-{Link} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   loginBar:
@@ -14,12 +13,11 @@ module.exports = React.createClass
   displayName: 'LoginBar'
 
   render: ->
-    <div className="login-bar main-header-group">
-      <button type="button" className="main-header-item" onClick={@showLoginDialog.bind this, 'sign-in'}>
+    <div className="login-bar">
+      <button type="button" onClick={@showLoginDialog.bind this, 'sign-in'}>
         <Translate content="loginBar.signIn" />
       </button>
-
-      <button type="button" className="main-header-item" onClick={@showLoginDialog.bind this, 'register'}>
+      <button type="button" onClick={@showLoginDialog.bind this, 'register'}>
         <Translate content="loginBar.register" />
       </button>
     </div>

@@ -6,15 +6,10 @@ module.exports = React.createClass
   displayName: 'AccountBar'
 
   render: ->
-    <div className="account-bar main-header-group">
-      <Link to="build" className="main-header-item"><i className="fa fa-flask"></i></Link>
-
-      <div className="main-header-item">
-        <Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link>
-        &nbsp;
-        <span className="pill"><button type="button" onClick={@handleSignOutClick}>Sign out</button></span>
-        <img src={@props.user.avatar} className="account-bar-avatar" />
-      </div>
+    <div className="account-bar">
+      <strong><Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link></strong>{' '}
+      <span className="pill"><button type="button" onClick={@handleSignOutClick}>Sign out</button></span>{' '}
+      <img src={@props.user.avatar} className="account-bar-avatar" />
     </div>
 
   handleSignOutClick: ->

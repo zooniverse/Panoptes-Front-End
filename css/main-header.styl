@@ -1,57 +1,67 @@
 .main-header
-  display: flex
-  flex-wrap: wrap
-  justify-content: space-between
-
-.main-header-group
-  display: flex
-  flex-direction: row
-  flex-wrap: wrap
-  border: 0 solid rgba(FOREGROUND, 0.5)
-  border-bottom-width: 1px
-  border-right-width: 1px
-
-  &:empty
-    flex: 1
-
-.main-header-item
-  @extends $reset-button
-  align-items: center
-  background: rgba(MAIN_HIGHLIGHT, 0)
-  cursor: auto
-  color: MAIN_HIGHLIGHT
-  cursor: normal
-  display: flex
-  padding: 0.5rem 1.5vw 0.2em
-  white-space: nowrap
-
-  &:not(:last-child)
-    border-right: 1px solid rgba(FOREGROUND, 0.5)
-
-  &.logo
-    font-size: 1.3em
-    letter-spacing: 0.05em
-    line-height: 1
-    text-transform: uppercase
-
-  > a
+  a
     color: inherit
     text-decoration: none
 
-a.main-header-item
-  box-shadow: 0 0 0 inset
-  transition: box-shadow 0.2s
+.main-title
+  align-items: baseline
+  background: MAIN_HIGHLIGHT
+  border-bottom: 1px solid rgba(FOREGROUND, 0.3)
+  color: BACKGROUND
+  display: flex
+  justify-content: space-between
+  padding: 0.5em 3vw
 
-  &.active
-    box-shadow: 0 -3px 0 inset
+  .pill
+    background: BACKGROUND
+    color: MAIN_HIGHLIGHT
+    font-smoothing: auto
+
+.main-logo
+  font-family: "Montserrat"
+  font-size: 1.3em
+  font-smoothing: antialiased
+  letter-spacing: 0.05em
+  text-transform: uppercase
+
+  svg
+    vertical-align: -0.15em
 
 .account-bar-avatar
   border-radius: 50%
-  height: 3rem
-  margin: -1.5rem 0 -1.5rem 1vw
+  height: 3em
+  margin: -1.5em 0
   position: relative
-  width: 3rem
+  width: 3em
 
-  &:not([src]),
-  &[src=""]
-    background-stripes: rgba(gray, 0.5) yellow 20px
+.main-nav
+  display: flex
+  flex-wrap: wrap
+  border-bottom: 1px solid rgba(FOREGROUND, 0.3)
+
+  > hr
+    border: 0
+    border-right: 1px solid rgba(FOREGROUND, 0.3)
+    flex: 1 1 auto
+    margin: 0
+
+.main-nav-item
+  padding: 0.5em 3vw
+  border-right: 1px solid rgba(FOREGROUND, 0.3)
+  box-shadow: 0 0 0 MAIN_HIGHLIGHT inset
+
+  &:link:hover
+    background: lighten(MAIN_HIGHLIGHT, 90%)
+
+  &.active
+    box-shadow: 0 -3px 0 MAIN_HIGHLIGHT inset
+    font-weight: bold
+
+  a:hover
+    border-bottom: 1px solid MAIN_HIGHLIGHT
+
+  .minor
+    font-size: 0.7em
+    font-weight: bold
+    letter-spacing: 0.1em
+    text-transform: uppercase

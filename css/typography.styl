@@ -1,7 +1,7 @@
 html
-  background: BACKGROUND
+  background: white
   color: FOREGROUND
-  font: 400 16px/1.5 SANS_SERIF
+  font: 400 15px/1.5 "Open Sans", "Gill Sans", Arial, sans-serif
 
 hr
   border: 0 solid rgba(FOREGROUND, 0.5)
@@ -11,21 +11,53 @@ hr
 a
   color: MAIN_HIGHLIGHT
 
-@keyframes promise-pending-pulse
-  0%
-    opacity: 1
-  100%
-    opacity: 0.5
-
-.promise-pending
-  animation: promise-pending-pulse 0.7s alternate infinite
-  pointer-events: none
-
 .emoji
   max-height: 1em
 
-@require "./headings"
-@require "./tables"
-@require "./forms"
+h1,
+h2,
+h3,
+h4
+  font-smoothing: antialiased
+  font-weight: bold
+  margin: 0
 
-@require "./pill"
+img
+  &:not([src]),
+  &[src=""]
+    background-stripes: rgba(gray, 0.4) rgba(gray, 0.6) 20px
+
+input:not([type="radio"]):not([type="checkbox"]):not([type="file"]),
+textarea
+  @extends $text-input
+
+  &:disabled
+    opacity: 0.5
+
+.form-help
+  color: gray
+  font-size: 0.8em
+
+  &.error
+    color: red
+
+  &.warning
+    color: orange
+
+  &.success
+    color: green
+
+.pill
+  background: MAIN_HIGHLIGHT
+  border-radius: 2em
+  box-sizing: border-box
+  color: white
+  display: inline-block
+  font-size: 0.7em
+  height: 1.2em
+  min-width: 1.2em
+  line-height: 1
+  padding: 0 0.5em
+
+  button
+    @extends $reset-button
