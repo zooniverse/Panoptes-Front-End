@@ -11,17 +11,33 @@ TAB_KEY = 9
 module.exports = React.createClass
   displayName: 'Dialog'
 
-  getInitialState: ->
-    closed: false
+  render: ->
+    <div className="dialog-underlay" onKeyDown={@handleKeyDown}>
+      <div className="dialog">
+        <div className="dialog-controls">
+          <div className="wrapper">{@props.controls}</div>
+        </div>
+        <div className="dialog-content">
+          <div className="wrapper">
+            {@props.children}
+          </div>
+        </div>
+      </div>
+    </div>
 
-  previousActiveElement: null
+  handleKeyDown: (e) ->
+    switch e.keyCode
+      when ESC_KEY
+        @props.onEscape? e
 
-  componentDidMount: ->
-    @previousActiveElement = document.activeElement
-    @focusFirst()
-
-  componentWillUnmount: ->
-    @previousActiveElement?.focus()
+      when TAB_KEY
+        {shiftKey} = e # Save this; React recycles the event object.
+        setTimeout => # Give document.activeElement time to change.
+          if document.activeElement not in @getDOMNode().querySelectorAll '*'
+            if shiftKey
+              @focusLast()
+            else
+              @focusFirst()
 
   focusFirst: ->
     @getDOMNode().querySelector(FOCUSABLES)?.focus()
@@ -29,30 +45,3 @@ module.exports = React.createClass
   focusLast: ->
     focusables = @getDOMNode().querySelectorAll FOCUSABLES
     focusables[focusables.length - 1]?.focus()
-
-  close: ->
-    @setState closed: true, =>
-      @props.onClose?()
-
-  render: ->
-    if @state.closed
-      null
-
-    else
-      <div className="dialog-underlay">
-        <div className="dialog-content" onKeyDown={@handleKeyDown}>
-          {@props.children}
-        </div>
-      </div>
-
-  handleKeyDown: ({keyCode, shiftKey}) ->
-    if keyCode is ESC_KEY
-      @close()
-
-    else if keyCode is TAB_KEY
-      setTimeout => # Give document.activeElement a cycle to change.
-        if document.activeElement not in @getDOMNode().querySelectorAll '*'
-          if shiftKey
-            @focusLast()
-          else
-            @focusFirst()

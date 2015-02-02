@@ -68,7 +68,12 @@ module.exports = React.createClass
           </span>}
 
         {if @state.rejected.user?
-          <span className="form-help error">{@state.rejected.user.message}</span>}
+          <span className="form-help error">
+            {@state.rejected.user.message}
+            <a href="https://www.zooniverse.org/password/reset" target="_blank">
+              <Translate content="registerForm.forgotPassword" />
+            </a>
+          </span>}
 
         {if working
           <LoadingIndicator />}
@@ -78,7 +83,9 @@ module.exports = React.createClass
   handleSubmit: ->
     login = @getDOMNode().querySelector('[name="login"]').value
     password = @getDOMNode().querySelector('[name="password"]').value
-    @promiseToSetState user: auth.signIn {login, password}
+    @promiseToSetState user: auth.signIn({login, password}), =>
+      @props.onSubmit?()
+      @state.pending.user?.then @props.onSuccess, @props.onFailure
 
   handleSignOut: ->
     auth.signOut().then =>
