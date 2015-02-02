@@ -28,7 +28,7 @@ module.exports = React.createClass
     </div>
 
   renderCallToAction: (owner) ->
-    <Link to="project-classify" params={owner: owner.display_name, display_name: @props.project.display_name} className="call-to-action">
+    <Link to="project-classify" params={owner: owner.login, name: @props.project.display_name} className="call-to-action">
       <Translate content="project.home.getStarted" />{' '}
       <i className="fa fa-arrow-circle-right"></i>
     </Link>

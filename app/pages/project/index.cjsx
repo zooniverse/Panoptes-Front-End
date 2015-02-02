@@ -36,8 +36,8 @@ ProjectPage = React.createClass
 
   renderNav: (owner) ->
     params =
-      owner: owner.display_name
-      display_name: @props.project.display_name
+      owner: owner.login
+      name: @props.project.display_name
 
     <nav className="tabbed-content-tabs">
       <Link to="project-home" params={params} className="home tabbed-content-tab">
@@ -69,14 +69,14 @@ module.exports = React.createClass
     project: null
 
   componentDidMount: ->
-    @fetchProject @props.params.owner, @props.params.display_name
+    @fetchProject @props.params.owner, @props.params.name
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.params.owner is @props.params.owner and nextProps.params.display_name is @props.params.display_name
-      @fetchProject nextProps.params.owner, nextProps.params.display_name
+    unless nextProps.params.owner is @props.params.owner and nextProps.params.name is @props.params.name
+      @fetchProject nextProps.params.owner, nextProps.params.name
 
-  fetchProject: (owner, display_name) ->
-    @promiseToSetState project: apiClient.type('projects').get({owner, display_name, include: 'owners'}).then ([project]) ->
+  fetchProject: (owner, name) ->
+    @promiseToSetState project: apiClient.type('projects').get({owner: owner, display_name: name, include: 'owners'}).then ([project]) ->
       project?.refresh()
 
   render: ->
