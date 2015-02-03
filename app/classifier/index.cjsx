@@ -37,6 +37,16 @@ module.exports = React.createClass
 
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
+    onFirstAnnotation = currentClassification.annotations.indexOf(currentAnnotation) is 0
+
+    currentAnswer = currentTask.answers[currentAnnotation.answer]
+    nextTaskKey = if currentAnswer? and currentTask.type is 'single' and 'next' of currentAnswer
+      currentAnswer.next
+    else
+      currentTask.next
+
+    waitingForAnswer = currentTask.type is 'single' and not currentAnnotation.answer?
+
     <div className="classifier">
       <SubjectViewer subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} loading={@props.loading} />
 
@@ -78,10 +88,7 @@ module.exports = React.createClass
 
         else if currentTask?
           <nav className="task-nav for-classification">
-            {firstAnnotation = currentClassification.annotations.indexOf(currentAnnotation) is 0; null}
-            <button type="button" disabled={firstAnnotation || null} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
-            {nextTaskKey = currentTask.next or currentTask.type is 'single' and currentTask.answers[currentAnnotation.answer]?.next || null; null}
-            {waitingForAnswer = currentTask.type is 'single' and not currentAnnotation.answer?; null}
+            <button type="button" disabled={onFirstAnnotation} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
             {if nextTaskKey?
               nextTaskType = @props.workflow.tasks[nextTaskKey].type
               <button type="button" disabled={waitingForAnswer} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
