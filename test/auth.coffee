@@ -13,9 +13,6 @@ test 'Checking the current user initially fails', (t) ->
       else
         t.pass 'Nobody is signed in'
 
-    .catch ->
-      t.fail 'Failed to check current user'
-
 test 'Registering an account with no data fails', (t) ->
   BLANK_REGISTRATION = {}
 
@@ -52,25 +49,16 @@ test 'Registering a new account works', (t) ->
       t.ok user?, 'Should have gotten the new user'
       t.ok user.display_name is TEST_LOGIN, 'Display name should be whatever login was given'
 
-    .catch ->
-      t.fail 'Should have been able to register'
-
 test 'Registering keeps you signed in', (t) ->
   auth.checkCurrent()
     .then (user) ->
       t.ok user?, 'Should have gotten a user'
       t.ok user.display_name is TEST_LOGIN, 'Display name should be whatever login was given'
 
-    .catch ->
-      t.fail 'Somebody should be signed in'
-
 test 'Sign out', (t) ->
   auth.signOut()
     .then ->
       t.pass 'Signed out'
-
-    .catch ->
-      t.fail 'Sign out should work'
 
 test 'Registering an account with an already used login fails', (t) ->
   DUPLICATE_REGISTRATION =
@@ -121,9 +109,6 @@ test 'Signing in with good details works', (t) ->
       t.ok user?, 'Should have gotten a user'
       t.ok user.display_name is TEST_LOGIN, 'Display name should be the original'
 
-    .catch ->
-      t.fail 'Sign in should work'
-
 test 'Disabling an account works', (t) ->
   auth.disableAccount()
     .then ->
@@ -137,6 +122,3 @@ test 'Disabling an account works', (t) ->
 
         .catch ->
           t.pass 'Could not sign in to a disabled account'
-
-    .catch (error) ->
-      t.fail 'Failed to disable account'

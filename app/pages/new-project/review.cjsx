@@ -58,8 +58,8 @@ module.exports = React.createClass
 
   _saveProject: ->
     @setState log: @state.log.concat ['Saving project']
-    {language: primary_language, name: display_name, introduction, description, scienceCase: science_case} = data
-    projectData = {primary_language, display_name, introduction, description, science_case}
+    {language: primary_language, name, introduction, description, scienceCase: science_case} = data
+    projectData = {primary_language, name, introduction, description, science_case, private: true}
 
     project = apiClient.type('projects').create projectData
     project.save()
@@ -88,6 +88,7 @@ module.exports = React.createClass
     @setState log: @state.log.concat ['Saving workflow']
     workflowData =
       display_name: "#{project.display_name} default workflow"
+      first_task: Object.keys(JSON.parse data.tasks)[0]
       tasks: JSON.parse data.tasks
       primary_language: project.available_languages[0]
       links:
