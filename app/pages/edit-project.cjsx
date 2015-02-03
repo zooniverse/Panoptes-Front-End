@@ -22,18 +22,20 @@ ProjectEditor = React.createClass
     </div>
 
   renderAuthTest: ->
-    <PromiseRenderer promise={auth.checkCurrent()} then={@renderPermissions}>
+    currentAndOwner = Promise.all [
+      auth.checkCurrent()
+      @props.project.link 'owner'
+    ]
+
+    <PromiseRenderer promise={currentAndOwner} then={@renderPermissions}>
       <p>Checking permissions...</p>
     </PromiseRenderer>
 
-  renderPermissions: (user) ->
-    if user?
-      if @props.project.id in user.links.projects
-        <ChangeListener target={@props.project} eventName="change" handler={@renderProjectEditor} />
-      else
-        <p>You don’t have permission to edit this project.</p>
+  renderPermissions: ([currentUser, projectOwner]) ->
+    if currentUser is projectOwner
+      <ChangeListener target={@props.project} handler={@renderProjectEditor} />
     else
-      <p>You’re not signed in.</p>
+      <p>You don’t have permission to edit this project.</p>
 
   renderProjectEditor: (project) ->
     {project} = @props
@@ -41,7 +43,6 @@ ProjectEditor = React.createClass
     <div>
       <h2>Workflows</h2>
       {for workflowID in project.links.workflows
-        console.log {project}
         <div key={workflowID}>
           <Link to="edit-workflow" params={id: workflowID}>{workflowID}</Link>
         </div>}
