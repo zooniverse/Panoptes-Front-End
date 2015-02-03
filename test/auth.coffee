@@ -27,7 +27,7 @@ test 'Registering an account with no data fails', (t) ->
 
 test 'Registering an account with a short password fails', (t) ->
   SHORT_PASSWORD_REGISTRATION =
-    login: TEST_LOGIN
+    login: TEST_LOGIN + '_short_password'
     email: TEST_EMAIL
     password: TEST_PASSWORD[0...7] # 8 characters minimum
 
