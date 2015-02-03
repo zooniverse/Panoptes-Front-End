@@ -62,7 +62,7 @@ module.exports = React.createClass
   render: ->
     {badLoginChars, loginConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
-    forgotPasswordLink = <a href="/todo/account/reset-password?email=#{@refs.email?.getDOMNode().value ? '?'}">
+    forgotPasswordLink = <a href="https://www.zooniverse.org/password/reset" target="_blank">
       <Translate content="registerForm.forgotPassword" />
     </a>
 
@@ -70,7 +70,7 @@ module.exports = React.createClass
       <div>
         <label>
           <Translate content="registerForm.userName" /><br />
-          <input type="text" name="login" disabled={@state.user?} ref="login" onChange={@handleLoginChange} autoFocus />
+          <input type="text" name="login" disabled={@state.user?} ref="login" onChange={@handleLoginChange} autoFocus="autofocus" />
 
           {if badLoginChars?.length > 0
             chars = for char in badLoginChars
@@ -243,10 +243,10 @@ module.exports = React.createClass
     email = @refs.email.getDOMNode().value
     realName = @refs.realName.getDOMNode().value
 
+    @props.onSubmit?()
     auth.register {login, password, email, realName}
-      .catch (error) ->
-        if error.message.match /email(.+)taken/mi
-          @setState emailConflict: true
+      .then @props.onSuccess
+      .catch @props.onFailure
 
   handleSignOut: ->
     auth.signOut()

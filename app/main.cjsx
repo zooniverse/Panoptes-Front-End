@@ -24,11 +24,12 @@ routes = <Route handler={App}>
     <Route name="register" handler={require './partials/register-form'} />
   </Route>
   <Route name="settings" handler={require './pages/settings'} />
+  <Route name="privacy" handler={require './pages/privacy-policy'} />
 
   <Route name="user-profile" path="users/:name" handler={require './pages/user-profile'} />
 
   <Route name="projects" handler={require './pages/projects'} />
-  <Route name="project" path="projects/:id" handler={require './pages/project'}>
+  <Route path="projects/:owner/:name" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
     <Route name="project-science-case" path="science-case" handler={require './pages/project/science-case'} />
     <Route name="project-status" path="status" handler={require './pages/project/status'} />
@@ -46,10 +47,12 @@ routes = <Route handler={App}>
     <Route name="new-project-review" path="review" handler={require './pages/new-project/review'} />
   </Route>
   <Route name="edit-project" path="edit-project/:id" handler={require './pages/edit-project'} />
+  <Route name="edit-workflow" path="edit-workflow/:id" handler={require './pages/edit-workflow'} />
 
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={React.createClass render: -> <div className="content-container"><i className="fa fa-frown-o"></i> Not found</div>} />
 
+  <Route path="dev/workflow-tasks-editor" handler={require './components/workflow-tasks-editor'} />
   <Route path="dev/classifier" handler={require './classifier'} />
   <Route path="dev/aggregate" handler={require './components/aggregate-view'} />
 </Route>

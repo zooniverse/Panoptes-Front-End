@@ -84,7 +84,7 @@ module.exports = React.createClass
 
   handleClassificationCompletion: ->
     console?.info 'Completed classification', JSON.stringify @state.classification, null, 2
-    @state.classification.save().then ->
+    @state.classification.save().then =>
       console?.log 'Saved classification', @state.classification.id
     # TODO: Preload another subject.
 
