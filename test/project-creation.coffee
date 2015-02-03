@@ -39,69 +39,69 @@ WORKFLOW_DATA =
       ]
   primary_language: LANGUAGE
 
-projects = apiClient.createType 'projects'
-workflows = apiClient.createType 'workflows'
-subjects = apiClient.createType 'subjects'
-subjectSets = apiClient.createType 'subject_sets'
+projects = apiClient.type 'projects'
+workflows = apiClient.type 'workflows'
+subjects = apiClient.type 'subjects'
+subjectSets = apiClient.type 'subject_sets'
 
 # Save resources in an accessible scope.
 resources = {}
 
+clone = (object) ->
+  JSON.parse JSON.stringify object
+
 test 'Create a temporary user', ->
-  auth.register(USER_DATA).then (user) ->
-    resources.user = user
+  auth.register USER_DATA
 
 test 'Create a project', (t) ->
-  projects.createResource(PROJECT_DATA).save().then (project) ->
+  projects.create(PROJECT_DATA).save().then (project) ->
     resources.project = project
     t.ok project?, 'Responded with a project resource'
     t.ok project?.id, 'Project got an ID'
 
-    project.update
-
 test 'Create a subject set',  (t) ->
-  subjectSetData = Object.create SUBJECT_SET_DATA
+  subjectSetData = clone SUBJECT_SET_DATA
   subjectSetData.links =
     project: resources.project.id
 
-  subjectSets.createResource(subjectSetData).save().then (subjectSet) ->
+  subjectSets.create(subjectSetData).save().then (subjectSet) ->
     resources.subjectSet = subjectSet
     t.ok subjectSet?, 'Responded with a subject set resource'
     t.ok subjectSet?.id, 'Subject set got an ID'
 
-    subjectSet.attr('project').then (subjectSetProject) ->
+    subjectSet.link('project').then (subjectSetProject) ->
       t.ok subjectSetProject?, 'Subject set is linked to a project'
       t.equal subjectSetProject?.id, resources.project.id, 'Subject set project is the one specified'
 
 test 'Create a subject', (t) ->
-  subjectData = Object.create SUBJECT_DATA
+  subjectData = clone SUBJECT_DATA
   subjectData.links =
     project: resources.project.id
 
-  subjects.createResource(subjectData).save().then (subject) ->
+  subjects.create(subjectData).save().then (subject) ->
     resources.subject = subject
     t.ok subject?, 'Responded with a subject'
     t.ok subject?.id?, 'Subject got an ID'
     t.ok subject?.locations[0]['image/jpeg'].indexOf('http') isnt -1, 'Subject got a place to PUT its JPEG'
 
 test 'Create a workflow', (t) ->
-  workflowData = Object.create WORKFLOW_DATA
+  workflowData = clone WORKFLOW_DATA
   workflowData.links =
     project: resources.project.id
     subject_sets: [resources.subjectSet.id]
 
-  workflows.createResource(workflowData).save().then (workflow) ->
+  workflows.create(workflowData).save().then (workflow) ->
     resources.workflow = workflow
     t.ok workflow?, 'Responded with a workflow resource'
     t.ok workflow?.id, 'Workflow got an ID'
 
-    workflow.attr('project').then (workflowProject) ->
+    workflow.link('project').then (workflowProject) ->
       t.ok workflowProject?, 'Workflow is linked to a project'
       t.equal workflowProject?.id, resources.project.id, 'Workflow project is the one specified'
 
-    workflow.attr('subject_sets').then (workflowSubjectSets) ->
-      t.equal workflowSubjectSets?.length, 1, 'Workflow is linked to one subject set'
-      t.equal workflowSubjectSets?[0]?.id, resources.subjectSet.id, 'Workflow subject set is the one specified'
+    workflow.link('subject_sets').then (workflowSubjectSets) ->
+      subjectSetIDs = (id for {id} in workflowSubjectSets)
+      t.ok resources.subjectSet.id in subjectSetIDs, 'The workflow knows about the subject set we created'
 
 test 'Delete temporary user', ->
-  resources.user.delete()
+  auth.disableAccount()

@@ -1,22 +1,49 @@
 React = require 'react'
 
+Summary = React.createClass
+  displayName: 'SingleChoiceSummary'
+
+  getDefaultProps: ->
+    task: null
+    annotation: null
+
+  render: ->
+    <div className="classification-task-summary">
+      <div className="question">{@props.task.question}</div>
+      <div className="answer">
+        {if @props.annotation.answer?
+          @props.task.answers[@props.annotation.answer]
+        else
+          'No answer'}
+      </div>
+    </div>
+
 module.exports = React.createClass
   displayName: 'SingleChoiceTask'
 
-  render: ->
-    answers = for answer, i in @props.options
-      <label className="workflow-task-answer" key={answer.value}>
-        <input type="radio" data-index={i} checked={answer.value is @props.value} onChange={@handleChange} />
-        <span className="clickable">{answer.label}</span>
-      </label>
+  statics:
+    Summary: Summary
 
+    getDefaultAnnotation: ->
+      answer: null
+
+  getDefaultProps: ->
+    task: null
+    annotation: null
+
+  render: ->
     <div className="workflow-task single-choice">
-      <div className="question">{@props.question}</div>
-      <div className="answers">{answers}</div>
+      <div className="question">{@props.task.question}</div>
+      <div className="answers">
+        {for answer, i in @props.task.answers
+          <label className="workflow-task-answer" key={answer.label}>
+            <input type="radio" checked={i is @props.annotation.answer} onChange={@handleChange.bind this, i} />
+            <span className="clickable">{answer.label}</span>
+          </label>}
+      </div>
     </div>
 
-  handleChange: (e) ->
+  handleChange: (index, e) ->
     if e.target.checked
-      answerIndex = e.target.dataset.index
-      answer = @props.options[answerIndex]
-      @props.onChange e, answer
+      @props.annotation.update
+        answer: index

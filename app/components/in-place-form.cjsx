@@ -3,11 +3,14 @@ React = require 'react'
 module.exports = React.createClass
   displayName: 'InPlaceForm'
 
-  overrideSubmit: (e) ->
-    e.preventDefault()
-    @props.onSubmit? e
+  getDefaultProps: ->
+    onSubmit: null
 
   render: ->
-    <form className="in-place-form" onSubmit={@overrideSubmit}>
+    <form className="in-place-form" onSubmit={@handleSubmit}>
       {@props.children}
     </form>
+
+  handleSubmit: (e) ->
+    e.preventDefault()
+    @props.onSubmit? e

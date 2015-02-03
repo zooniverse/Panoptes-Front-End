@@ -93,6 +93,9 @@ module.exports = React.createClass
   displayName: 'UserProfilePage'
   mixins: [PromiseToSetState]
 
+  getInitialState: ->
+    user: null
+
   componentDidMount: ->
     @loadUser @props.params.name
 
@@ -101,11 +104,11 @@ module.exports = React.createClass
       @loadUser nextProps.params.name
 
   loadUser: (name) ->
-    @promiseToSetState user: apiClient.createType('users').get(display_name: name, 1).then ([user]) ->
+    @promiseToSetState user: apiClient.type('users').get(display_name: name).then ([user]) ->
       user
 
   render: ->
-    if @state.user?.id?
+    if @state.user?
       <div>
         <strong><i className="fa fa-exclamation-triangle"></i> Placeholder</strong>
         <UserProfile user={@state.user} />

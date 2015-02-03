@@ -1,23 +1,33 @@
-# Panoptes front end
+# Panoptes (front end)
 
-## Planning
+## Development
 
-**./sitemap.md** should describe the layout of the site in detail.
+Requires Node.js.
 
-## Dev
-
-Dependencies are managed with npm; run `npm install` to get started.
+Run `npm install` to get started.
 
 `npm start` runs **./bin/serve.sh**, which watches the main CoffeeScript and Stylus files and runs a little server out of **./public** on port 3735 (looks like EYES).
 
-`npm run stage` runs **./bin/build.sh** which builds and optimizes the site, and then deploys it to <https://demo.zooniverse.org/panoptes-front-end>.
+`npm run stage` runs **./bin/build.sh** which builds and optimizes the site, and then deploys it to <http://demo.zooniverse.org/panoptes-front-end>.
 
-## Architecture
+All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
-### React
+## Use in custom projects
 
-Everything that renders on the page is a React component. They're fairly organized:
+If you're writing a custom project against the Panoptes API, you can use this module to handle authentication and data access.
 
-**Components** are generic content holders. They have no content of their own.
+```coffee
+panoptes = require 'panoptes'
 
-**Pages** are individual pages on the site.
+panoptes.auth.register {login, password, email}
+panoptes.auth.signOut()
+panoptes.auth.signIn {login, password}
+
+panoptes.api.type('projects').get(SOME_PROJECT_ID).then (project) ->
+  project.update display_name: 'A great project'
+  project.save()
+  project.link('workflows').then (workflows) ->
+    workflows[1].delete()
+```
+
+More at the Panoptes API docs: <http://docs.panoptes.apiary.io/>.

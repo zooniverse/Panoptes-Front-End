@@ -2,7 +2,6 @@ React = require 'react'
 {Link} = require 'react-router'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
-PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
 
 RequiresSession = React.createClass
@@ -34,19 +33,19 @@ module.exports = React.createClass
   renderUser: (user) ->
     <div>
       <p>Projects owned by {user.display_name}:</p>
-      <PromiseRenderer promise={user.attr 'projects'} then={@renderProjectsList}>
+      <PromiseRenderer promise={user.link 'projects'} then={@renderProjectsList.bind this, user}>
         <span>Loading projects...</span>
       </PromiseRenderer>
       <hr />
       <Link to="new-project">Create a new project</Link>
     </div>
 
-  renderProjectsList: (projects) ->
+  renderProjectsList: (user, projects) ->
     items = for project in projects
       <li key={project.id}>
         {project.display_name}&nbsp;
         <Link to="edit-project" params={id: project.id}><i className="fa fa-pencil"></i></Link>&nbsp;
-        <Link to="project-home" params={id: project.id}><i className="fa fa-hand-o-right"></i></Link>
+        <Link to="project-home" params={owner: user.login, name: project.display_name}><i className="fa fa-hand-o-right"></i></Link>
       </li>
 
     <ul>

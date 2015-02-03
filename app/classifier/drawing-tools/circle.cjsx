@@ -1,14 +1,14 @@
 React = require 'react'
+EllipseTool = require './ellipse'
 DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 
 DEFAULT_RADIUS = 10
-DEFAULT_SQUASH = 1 / 2
+DEFAULT_ANGLE = 0
 GUIDE_WIDTH = 1
 GUIDE_DASH = [4, 4]
-DEFAULT_ANGLE = 0
 DELETE_BUTTON_ANGLE = 45
 
 module.exports = React.createClass
@@ -18,15 +18,13 @@ module.exports = React.createClass
     defaultValues: ({x, y}) ->
       x: x
       y: y
-      rx: DEFAULT_RADIUS
-      ry: DEFAULT_RADIUS * DEFAULT_SQUASH
+      r: DEFAULT_RADIUS
       angle: DEFAULT_ANGLE
 
     initMove: ({x, y}, mark) ->
       distance = @getDistance mark.x, mark.y, x, y
       angle = @getAngle mark.x, mark.y, x, y
-      rx: distance
-      ry: distance * DEFAULT_SQUASH
+      r: distance
       angle: angle
 
     getDistance: (x1, y1, x2, y2) ->
@@ -41,8 +39,8 @@ module.exports = React.createClass
 
   getDeletePosition: ->
     theta = (DELETE_BUTTON_ANGLE - @props.mark.angle) * (Math.PI / 180)
-    x: @props.mark.rx * Math.cos theta
-    y: -1 * @props.mark.ry * Math.sin theta
+    x: @props.mark.r * Math.cos theta
+    y: -1 * @props.mark.r * Math.sin theta
 
   render: ->
     positionAndRotate = "
@@ -55,16 +53,12 @@ module.exports = React.createClass
     <DrawingToolRoot tool={this}>
       <g transform={positionAndRotate}>
         {if @props.selected
-          <g>
-            <line x1="0" y1="0" x2={@props.mark.rx} y2="0" strokeWidth={GUIDE_WIDTH} strokeDasharray={GUIDE_DASH} />
-            <line x1="0" y1="0" x2="0" y2={-1 * @props.mark.ry} strokeWidth={GUIDE_WIDTH} strokeDasharray={GUIDE_DASH} />
-          </g>}
+          <line x1="0" y1="0" x2={@props.mark.r} y2="0" strokeWidth={GUIDE_WIDTH} strokeDasharray={GUIDE_DASH} />}
         <Draggable onDrag={@handleMainDrag}>
-          <ellipse rx={@props.mark.rx} ry={@props.mark.ry} />
+          <ellipse rx={@props.mark.r} ry={@props.mark.r} />
         </Draggable>
         <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />
-        <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'x'} x={@props.mark.rx} y={0} />
-        <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'y'} x={0} y={-1 * @props.mark.ry} />
+        <DragHandle onDrag={@handleRadiusHandleDrag} x={@props.mark.r} y={0} />
       </g>
     </DrawingToolRoot>
 
@@ -73,12 +67,10 @@ module.exports = React.createClass
     @props.mark.y += d.y / @props.scale.vertical
     @props.classification.emit 'change'
 
-  handleRadiusHandleDrag: (coord, e, d) ->
+  handleRadiusHandleDrag: (e, d) ->
     {x, y} = @props.getEventOffset e
     r = @constructor.getDistance @props.mark.x, @props.mark.y , x, y
     angle = @constructor.getAngle @props.mark.x, @props.mark.y , x, y
-    @props.mark["r#{coord}"] = r
+    @props.mark.r = r
     @props.mark.angle = angle
-    if coord is 'y'
-      @props.mark.angle -= 90
     @props.classification.emit 'change'

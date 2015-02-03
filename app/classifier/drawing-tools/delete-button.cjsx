@@ -3,7 +3,7 @@ React = require 'react'
 RADIUS = 8
 STROKE_COLOR = 'white'
 FILL_COLOR = 'black'
-STROKE_WIDTH = 2
+STROKE_WIDTH = 1.5
 
 CROSS_PATH = "
   M #{-1 * RADIUS * 0.7 } 0
@@ -12,25 +12,33 @@ CROSS_PATH = "
   L 0 #{RADIUS * 0.7 }
 "
 
+DESTROY_TRANSITION_DURATION = 500
+
 module.exports = React.createClass
   displayName: 'DeleteButton'
 
   getDefaultProps: ->
     x: 0
     y: 0
-    scale:
-      horizontal: 1
-      vertical: 1
     rotate: 0
 
   render: ->
     transform = "
       translate(#{@props.x}, #{@props.y})
-      scale(#{1 / @props.scale.horizontal}, #{1 / @props.scale.vertical})
       rotate(#{@props.rotate})
     "
 
-    <g className="clickable drawing-tool-delete-button" transform={transform} stroke={STROKE_COLOR} strokeWidth={STROKE_WIDTH} onClick={@props.onClick}>
+    <g className="clickable drawing-tool-delete-button" transform={transform} stroke={STROKE_COLOR} strokeWidth={STROKE_WIDTH} onClick={@destroyTool}>
       <circle r={RADIUS} fill={FILL_COLOR} />
       <path d={CROSS_PATH} transform="rotate(45)" />
     </g>
+
+  destroyTool: ->
+    @props.tool.setState destroying: true, =>
+      setTimeout @_destroyMark, DESTROY_TRANSITION_DURATION
+
+  _destroyMark: ->
+    {mark, annotation, classification} = @props.tool.props
+    markIndex = annotation.marks.indexOf mark
+    annotation.marks.splice markIndex, 1
+    classification.emit 'change'

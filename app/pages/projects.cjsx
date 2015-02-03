@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+TitleMixin = require '../lib/title-mixin'
 Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
@@ -24,7 +25,7 @@ Pager = React.createClass
 
   makeRequest: (page) ->
     params = Object.assign {page}, @props?.query
-    apiClient.createType(@props.type).get params, Infinity, @handleResponse
+    apiClient.type(@props.type).get params, Infinity, @handleResponse
 
   handleResponse: (request) ->
     # NOTE: Handling request metadata is currently pretty gnarly.
@@ -52,6 +53,10 @@ Pager = React.createClass
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'
+
+  mixins: [TitleMixin]
+
+  title: 'Projects'
 
   render: ->
     <div className="projects-page">
