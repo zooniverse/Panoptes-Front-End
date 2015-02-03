@@ -29,7 +29,9 @@ module.exports = React.createClass
 
   renderAuth: ->
     # console.log 'SignInForm', 'renderAuth'
-    <PromiseRenderer promise={auth.checkCurrent()} then={@renderUser} catch={@renderUser} />
+    <PromiseRenderer promise={auth.checkCurrent()} then={@renderUser} catch={@renderUser}>
+      <div>Waiting on auth...</div>
+    </PromiseRenderer>
 
   renderUser: (user) ->
     # console.log 'SignInForm', 'renderUser', user?
