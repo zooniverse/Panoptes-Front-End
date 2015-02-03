@@ -34,19 +34,19 @@
     "coffeeify": "^1.0.0"
   },
   "scripts": {
-    "build": "NODE_ENV=production ./bin/build.sh",
+    "build": "NODE_ENV=${NODE_ENV:-production} ./bin/build.sh",
     "check-build-size": "npm run build && cat ./build/{vendor,main}.js | gzip --best | wc -c",
     "get-fallback-polyfills": "curl \"$npm_package_config_fallbackPolyfillsURL\" > ./public/fallback-polyfills.js",
     "get-font-awesome": "rm -rf ./public/font-awesome; curl --location \"$npm_package_config_fontAwesomeURL\" --output ./fa.zip && unzip -q ./fa.zip -d ./fa.tmp && mkdir ./public/font-awesome && mv ./fa.tmp/*/{css,fonts} ./public/font-awesome; rm -rf ./fa.{zip,tmp}",
     "postinstall": "npm run get-fallback-polyfills && npm run get-font-awesome",
-    "stage": "npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
+    "stage": "NODE_ENV=staging npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
     "start": "./bin/serve.sh",
     "test": "browserify ./test/runner.coffee --extension .coffee --extension .cjsx --transform coffee-reactify --transform envify --ignore-transform coffeeify | testling \"${TESTLING_ARGS:---pass}\" | tap-spec",
     "test-mac": "TESTLING_ARGS=\"-x open --new -a Google\\ Chrome --args --incognito\" npm run test"
   },
   "config": {
     "fontAwesomeURL": "https://github.com/FortAwesome/Font-Awesome/blob/8027c940b6/assets/font-awesome-4.2.0.zip?raw=true",
-    "fallbackPolyfillsURL": "https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6&flags=gated&ua=(MSIE%209.0)"
+    "fallbackPolyfillsURL": "https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6,Promise&flags=gated&ua=(MSIE%209.0)"
   },
   "browserify": {
     "transform": [

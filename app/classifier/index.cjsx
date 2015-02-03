@@ -39,13 +39,15 @@ module.exports = React.createClass
 
     onFirstAnnotation = currentClassification.annotations.indexOf(currentAnnotation) is 0
 
-    currentAnswer = currentTask.answers[currentAnnotation.answer]
+    currentAnswer = currentTask.answers[currentAnnotation.value]
     nextTaskKey = if currentAnswer? and currentTask.type is 'single' and 'next' of currentAnswer
       currentAnswer.next
     else
       currentTask.next
 
-    waitingForAnswer = currentTask.type is 'single' and not currentAnnotation.answer?
+    waitingForAnswer = currentTask.type is 'single' and not currentAnnotation.value?
+
+    console.log {currentAnswer}, {nextTaskKey}, {waitingForAnswer}
 
     <div className="classifier">
       <SubjectViewer subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} loading={@props.loading} />
@@ -88,12 +90,12 @@ module.exports = React.createClass
 
         else if currentTask?
           <nav className="task-nav for-classification">
-            <button type="button" disabled={onFirstAnnotation} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
+            <button type="button" disabled={onFirstAnnotation || null} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
             {if nextTaskKey?
               nextTaskType = @props.workflow.tasks[nextTaskKey].type
-              <button type="button" disabled={waitingForAnswer} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
+              <button type="button" disabled={waitingForAnswer || null} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
             else
-              <button type="button" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
+              <button type="button" disabled={waitingForAnswer || null} onClick={@completeClassification}>Done</button>}
           </nav>}
       </div>
     </div>

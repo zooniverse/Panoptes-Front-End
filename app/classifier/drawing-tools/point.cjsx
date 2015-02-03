@@ -25,20 +25,23 @@ module.exports = React.createClass
     y: -SELECTED_RADIUS * Math.sin theta
 
   render: ->
-    discStyle = if @props.selected
-      r: SELECTED_RADIUS
+    radius = if @props.selected
+      SELECTED_RADIUS
     else
-      r: RADIUS
+      RADIUS
 
     <DrawingToolRoot tool={this} transform="translate(#{@props.mark.x}, #{@props.mark.y})">
-      <Draggable onDrag={@handleDrag}>
-        <circle {...discStyle} />
+      <line x1="0" y1={-CROSSHAIR_SPACE * SELECTED_RADIUS} x2="0" y2={-SELECTED_RADIUS} strokeWidth={CROSSHAIR_WIDTH} />
+      <line x1={-CROSSHAIR_SPACE * SELECTED_RADIUS} y1="0" x2={-SELECTED_RADIUS} y2="0" strokeWidth={CROSSHAIR_WIDTH} />
+      <line x1="0" y1={CROSSHAIR_SPACE * SELECTED_RADIUS} x2="0" y2={SELECTED_RADIUS} strokeWidth={CROSSHAIR_WIDTH} />
+      <line x1={CROSSHAIR_SPACE * SELECTED_RADIUS} y1="0" x2={SELECTED_RADIUS} y2="0" strokeWidth={CROSSHAIR_WIDTH} />
+
+      <Draggable onDrag={@handleDrag} disabled={@props.disabled}>
+        <circle r={radius} />
       </Draggable>
-      <line strokeWidth={CROSSHAIR_WIDTH} x1="0" y1={-CROSSHAIR_SPACE * SELECTED_RADIUS} x2="0" y2={-SELECTED_RADIUS} />
-      <line strokeWidth={CROSSHAIR_WIDTH} x1={-CROSSHAIR_SPACE * SELECTED_RADIUS} y1="0" x2={-SELECTED_RADIUS} y2="0" />
-      <line strokeWidth={CROSSHAIR_WIDTH} x1="0" y1={CROSSHAIR_SPACE * SELECTED_RADIUS} x2="0" y2={SELECTED_RADIUS} />
-      <line strokeWidth={CROSSHAIR_WIDTH} x1={CROSSHAIR_SPACE * SELECTED_RADIUS} y1="0" x2={SELECTED_RADIUS} y2="0" />
-      <DeleteButton tool={this} {...@getDeleteButtonPosition()} />
+
+      {if @props.selected
+        <DeleteButton tool={this} {...@getDeleteButtonPosition()} />}
     </DrawingToolRoot>
 
   handleDrag: (e, d) ->

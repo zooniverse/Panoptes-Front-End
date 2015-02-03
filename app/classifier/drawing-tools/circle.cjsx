@@ -50,16 +50,19 @@ module.exports = React.createClass
 
     deletePosition = @getDeletePosition()
 
-    <DrawingToolRoot tool={this}>
-      <g transform={positionAndRotate}>
-        {if @props.selected
-          <line x1="0" y1="0" x2={@props.mark.r} y2="0" strokeWidth={GUIDE_WIDTH} strokeDasharray={GUIDE_DASH} />}
-        <Draggable onDrag={@handleMainDrag}>
-          <ellipse rx={@props.mark.r} ry={@props.mark.r} />
-        </Draggable>
-        <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />
-        <DragHandle onDrag={@handleRadiusHandleDrag} x={@props.mark.r} y={0} />
-      </g>
+    <DrawingToolRoot tool={this} transform={positionAndRotate}>
+      {if @props.selected
+        <line x1="0" y1="0" x2={@props.mark.r} y2="0" strokeWidth={GUIDE_WIDTH} strokeDasharray={GUIDE_DASH} />}
+
+      <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
+        <ellipse rx={@props.mark.r} ry={@props.mark.r} />
+      </Draggable>
+
+      {if @props.selected
+        <g>
+          <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />
+          <DragHandle onDrag={@handleRadiusHandleDrag} x={@props.mark.r} y={0} />
+        </g>}
     </DrawingToolRoot>
 
   handleMainDrag: (e, d) ->

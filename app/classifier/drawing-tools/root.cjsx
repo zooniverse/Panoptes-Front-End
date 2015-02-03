@@ -28,7 +28,7 @@ module.exports = React.createClass
         STROKE_WIDTH
 
     <g className="drawing-tool" {...rootProps} {...@props}>
-      <g className="drawing-tool-main" {...mainStyle} onMouseDown={@props.tool.props.select}>
+      <g className="drawing-tool-main" {...mainStyle} onMouseDown={@props.tool.props.select unless @props.tool.props.disabled}>
         {@props.children}
       </g>
     </g>

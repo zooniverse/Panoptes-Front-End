@@ -48,7 +48,7 @@ module.exports = React.createClass
       y: (firstPoint.y + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.y)) / DELETE_BUTTON_WEIGHT
 
     <DrawingToolRoot tool={this}>
-      <Draggable onDrag={@handleMainDrag}>
+      <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
         <g>
           {if @props.mark.closed is false
             <polyline points={points} fill="none" strokeWidth={GRAB_STROKE_WIDTH} strokeOpacity="0" />}
@@ -56,17 +56,21 @@ module.exports = React.createClass
         </g>
       </Draggable>
 
-      <DeleteButton tool={this} x={deleteButtonPosition.x} y={deleteButtonPosition.y} />
-
-      {for {x, y}, i in @props.mark.points
-        <DragHandle key={i} x={x} y={y} onDrag={@handleHandleDrag.bind this, i} />}
-
-      {unless @props.mark.closed?
+      {if @props.selected
         <g>
-          {if @props.mark.points.length > 2
-            <line className="guideline" x1={lastPoint.x} y1={lastPoint.y} x2={firstPoint.x} y2={firstPoint.y} />}
-          <circle className="clickable" r={FINISHER_RADIUS} cx={firstPoint.x} cy={firstPoint.y} onClick={@handleFinishClick.bind this, true} />
-          <circle className="clickable" r={FINISHER_RADIUS} cx={lastPoint.x} cy={lastPoint.y} onClick={@handleFinishClick.bind this, false} />
+          <DeleteButton tool={this} x={deleteButtonPosition.x} y={deleteButtonPosition.y} />
+
+          {for point, i in @props.mark.points
+            point._key ?= Math.random()
+            <DragHandle key={i} x={point.x} y={point.y} onDrag={@handleHandleDrag.bind this, i} />}
+
+          {unless @props.mark.closed?
+            <g>
+              {if @props.mark.points.length > 2
+                <line className="guideline" x1={lastPoint.x} y1={lastPoint.y} x2={firstPoint.x} y2={firstPoint.y} />}
+              <circle className="clickable" r={FINISHER_RADIUS} cx={firstPoint.x} cy={firstPoint.y} onClick={@handleFinishClick.bind this, true} />
+              <circle className="clickable" r={FINISHER_RADIUS} cx={lastPoint.x} cy={lastPoint.y} onClick={@handleFinishClick.bind this, false} />
+            </g>}
         </g>}
     </DrawingToolRoot>
 

@@ -11,13 +11,18 @@ workflow = apiClient.type('workflows').create
     draw:
       type: 'drawing'
       instruction: 'Draw something.'
+      help: '''
+        Do this:
+        * Pick a tool
+        * Draw something
+      '''
       tools: [
         {type: 'point', label: 'Point', color: 'red'}
-        {type: 'line', label: 'Line', color: 'red'}
-        {type: 'rectangle', label: 'Rectangle', color: 'red'}
-        {type: 'polygon', label: 'Polygon', color: 'red'}
-        {type: 'circle', label: 'Circle', color: 'red'}
-        {type: 'ellipse', label: 'Ellipse', color: 'red'}
+        {type: 'line', label: 'Line', color: 'yellow'}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime'}
+        {type: 'polygon', label: 'Polygon', color: 'cyan'}
+        {type: 'circle', label: 'Circle', color: 'blue'}
+        {type: 'ellipse', label: 'Ellipse', color: 'magenta'}
       ]
       next: 'cool'
 
@@ -49,7 +54,7 @@ subject = apiClient.type('subjects').create
   expert_classification_data:
     annotations: [{
       task: 'draw'
-      marks: [{
+      value: [{
         tool: 0
         x: 50
         y: 50
@@ -62,10 +67,10 @@ subject = apiClient.type('subjects').create
       }]
     }, {
       task: 'cool'
-      answer: 0
+      value: 0
     }, {
       task: 'features'
-      answers: [0, 2]
+      value: [0, 2]
     }]
 
 classification = apiClient.type('classifications').create {}

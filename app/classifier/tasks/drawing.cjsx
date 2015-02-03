@@ -1,4 +1,5 @@
 React = require 'react'
+GenericTask = require './generic'
 
 icons =
   point: <svg className="drawing-tool-icon" viewBox="0 0 100 100">
@@ -35,14 +36,41 @@ Summary = React.createClass
   getDefaultProps: ->
     task: null
     annotation: null
+    expanded: false
+
+  getInitialState: ->
+    expanded: @props.expanded
 
   render: ->
     <div className="classification-task-summary">
-      <div className="question">{@props.task.instruction}</div>
+      <div className="question">
+        {@props.task.instruction}
+        {if @state.expanded
+          <button type="button" onClick={@setState.bind this, expanded: false, null}>Less</button>
+        else
+          <button type="button" onClick={@setState.bind this, expanded: true, null}>More</button>}
+        {if @props.onToggle?
+          if @props.inactive
+            <button type="button"><i className="fa fa-eye fa-fw"></i></button>
+          else
+            <button type="button"><i className="fa fa-eye-slash fa-fw"></i></button>}
+      </div>
+
       {for tool, i in @props.task.tools
-        <div key={tool.label} className="answer">
-          {tool.label}: {[].concat (mark for mark in @props.annotation.marks when mark.tool is i).length}
-        </div>}
+        tool._key ?= Math.random()
+        toolMarks = (mark for mark in @props.annotation.value when mark.tool is i)
+        if @state.expanded or toolMarks.length isnt 0
+          <div key={tool._key} className="answer">
+            {tool.type} <strong>{tool.label}</strong> ({[].concat toolMarks.length})
+            {if @state.expanded
+              for mark, i in toolMarks
+                mark._key ?= Math.random()
+                <div key={mark._key}>
+                  {i + 1}){' '}
+                  {for key, value of mark when key not in ['tool', 'sources'] and key.charAt(0) isnt '_'
+                    <code key={key}><strong>{key}</strong>: {JSON.stringify value}&emsp;</code>}
+                </div>}
+          </div>}
     </div>
 
 module.exports = React.createClass
@@ -53,26 +81,24 @@ module.exports = React.createClass
 
     getDefaultAnnotation: ->
       _toolIndex: 0
-      marks: []
+      value: []
 
   getDefaultProps: ->
     task: null
     annotation: null
 
   render: ->
-    <div className="workflow-task single-choice drawing-task">
-      <div className="question">{@props.task.instruction}</div>
-      <div className="answers">
-        {for tool, i in @props.task.tools
-          <label key={tool.label} className="workflow-task-answer for-drawing #{tool.type}">
-            <input type="radio" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
-            <span className="clickable">
-              {icons[tool.type]}
-              {tool.label}
-            </span>
-          </label>}
-      </div>
-    </div>
+    tools = for tool, i in @props.task.tools
+      tool._key ?= Math.random()
+      <label key={tool._key} className="clickable">
+        <input type="radio" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
+        <span>
+          <span style={color: tool.color}>{icons[tool.type]}</span>{' '}
+          {tool.label}
+        </span>
+      </label>
+
+    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} />
 
   handleChange: (index, e) ->
     if e.target.checked

@@ -27,15 +27,16 @@ module.exports = React.createClass
     <DrawingToolRoot tool={this}>
       <line {...points} />
 
-      <Draggable onDrag={@handleStrokeDrag}>
+      <Draggable onDrag={@handleStrokeDrag} disabled={@props.disabled}>
         <line {...points} strokeWidth={GRAB_STROKE_WIDTH} strokeOpacity="0" />
       </Draggable>
 
-      <DeleteButton tool={this} x={(x1 + x2) / 2} y={(y1 + y2) / 2} />
-
-      {for n in [1..2]
-        coords = x: @props.mark["x#{n}"], y: @props.mark["y#{n}"]
-        <DragHandle key={n} {...coords} onDrag={@handleHandleDrag.bind this, n} />}
+      {if @props.selected
+        <g>
+          <DeleteButton tool={this} x={(x1 + x2) / 2} y={(y1 + y2) / 2} />
+          <DragHandle x={x1} y={y1} onDrag={@handleHandleDrag.bind this, 1} />
+          <DragHandle x={x2} y={y2} onDrag={@handleHandleDrag.bind this, 2} />
+        </g>}
     </DrawingToolRoot>
 
   handleStrokeDrag: (e, d) ->

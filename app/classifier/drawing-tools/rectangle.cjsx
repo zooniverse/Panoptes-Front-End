@@ -53,16 +53,19 @@ module.exports = React.createClass
     ].join '\n'
 
     <DrawingToolRoot tool={this}>
-      <Draggable onDrag={@handleMainDrag}>
+      <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
         <polyline points={points} />
       </Draggable>
 
-      <DeleteButton tool={this} x={x + (width * DELETE_BUTTON_DISTANCE)} y={y} />
+      {if @props.selected
+        <g>
+          <DeleteButton tool={this} x={x + (width * DELETE_BUTTON_DISTANCE)} y={y} />
 
-      <DragHandle x={x} y={y} onDrag={@handleTopLeftDrag} onEnd={@normalizeMark} />
-      <DragHandle x={x + width} y={y} onDrag={@handleTopRightDrag} onEnd={@normalizeMark} />
-      <DragHandle x={x +  width} y={y + height} onDrag={@handleBottomRightDrag} onEnd={@normalizeMark} />
-      <DragHandle x={x} y={y + height} onDrag={@handleBottomLeftDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x} y={y} onDrag={@handleTopLeftDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x + width} y={y} onDrag={@handleTopRightDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x +  width} y={y + height} onDrag={@handleBottomRightDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x} y={y + height} onDrag={@handleBottomLeftDrag} onEnd={@normalizeMark} />
+        </g>}
     </DrawingToolRoot>
 
   handleMainDrag: (e, d) ->
