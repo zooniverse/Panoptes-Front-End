@@ -20,9 +20,9 @@ Summary = React.createClass
       <div className="question">
         {@props.task.question}
         {if @state.expanded
-          <button type="button" onClick={@setState.bind this, expanded: false, null}>Less</button>
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
         else
-          <button type="button" onClick={@setState.bind this, expanded: true, null}>More</button>}
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: true, null}>More</button>}
       </div>
       <div className="answers">
         {if @state.expanded
@@ -35,13 +35,13 @@ Summary = React.createClass
                 <i className="fa fa-circle-o fa-fw"></i>}
               {@props.task.answers[i].label}
             </div>
-        else
+        else if @props.annotation.value?
           <div className="answer">
-            {if @props.annotation.value?
-              @props.task.answers[@props.annotation.value].label
-            else
-              'No answer'}
-          </div>}
+            <i className="fa fa-check-circle-o fa-fw"></i>
+            {@props.task.answers[@props.annotation.value].label}
+          </div>
+        else
+          <div className="answer">No answer</div>}
       </div>
     </div>
 

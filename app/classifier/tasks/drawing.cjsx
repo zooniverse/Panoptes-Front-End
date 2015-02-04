@@ -47,9 +47,9 @@ Summary = React.createClass
       <div className="question">
         {@props.task.instruction}
         {if @state.expanded
-          <button type="button" onClick={@setState.bind this, expanded: false, null}>Less</button>
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
         else
-          <button type="button" onClick={@setState.bind this, expanded: true, null}>More</button>}
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: true, null}>More</button>}
         {if @props.onToggle?
           if @props.inactive
             <button type="button"><i className="fa fa-eye fa-fw"></i></button>

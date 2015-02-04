@@ -18,9 +18,9 @@ Summary = React.createClass
       <div className="question">
         {@props.task.question}
         {if @state.expanded
-          <button type="button" onClick={@setState.bind this, expanded: false, null}>Less</button>
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
         else
-          <button type="button" onClick={@setState.bind this, expanded: true, null}>More</button>}
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: true, null}>More</button>}
       </div>
       <div className="answers">
         {if @state.expanded
@@ -39,6 +39,7 @@ Summary = React.createClass
           else
             for index in @props.annotation.value
               <div key={index} className="answer">
+                <i className="fa fa-check-square-o fa-fw"></i>
                 {@props.task.answers[index].label}
               </div>}
       </div>

@@ -41,8 +41,11 @@ module.exports = React.createClass
 
     tools = switch type
       when 'image'
-        for i in [0...@props.subject?.locations.length ? 0]
-          <button type="button" key={i} className="subject-frame-pip" data-index={i} onClick={@props.onFrameChange}>{i + 1}</button>
+        if @props.subject?.locations.length < 2
+          null
+        else
+          for i in [0...@props.subject?.locations.length ? 0]
+            <button type="button" key={i} className="subject-frame-pip #{if i is @props.frame then 'active' else ''}" data-index={i} onClick={@props.onFrameChange}>{i + 1}</button>
 
     <div className="subject-viewer" style={ROOT_STYLE}>
       <div className="subject-container" style={CONTAINER_STYLE}>
