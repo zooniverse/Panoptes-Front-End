@@ -3,9 +3,10 @@
   flex-wrap: wrap
 
   > .subject-area
-    flex: 1 1 auto
+    flex: 2 1 1%
     margin-bottom: 1em
     max-width: 100%
+    min-width: 20em
     text-align: center
 
   .subject-container
@@ -50,13 +51,15 @@
 
   > .task-area
     display: flex
-    flex: 3 1 20%
+    flex: 1 1 10%
     flex-direction: column
-    padding-left: 1vw
+    margin-bottom: 1em
+    min-width: 15em
+    padding-left: 3vw
 
   .task-container
     border-bottom: 1px solid rgba(gray, 0.5)
-    flex: 1 0 0
+    flex: 1 1 auto
     margin-bottom: 0.5em
     overflow: auto
 
@@ -95,7 +98,7 @@
     flex: 0 0 auto
 
     > :not(:first-child)
-      margin-left: 2vw
+      margin-left: 0.5em
 
     .talk
       @extends $standard-button
