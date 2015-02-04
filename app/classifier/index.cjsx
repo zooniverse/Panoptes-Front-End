@@ -47,8 +47,6 @@ module.exports = React.createClass
 
     waitingForAnswer = currentTask.type is 'single' and not currentAnnotation.value?
 
-    console.log {currentAnswer}, {nextTaskKey}, {waitingForAnswer}
-
     <div className="classifier">
       <SubjectViewer subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} loading={@props.loading} />
 

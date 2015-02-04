@@ -27,12 +27,31 @@
     top: 0
     width: 100%
 
-.project-nav .project-avatar
-  border-radius: 50%
-  height: 4em
-  margin: -2em 1vw -2em -2vw
-  vertical-align: middle
-  width: 4em
+.project-nav
+  .tabbed-content-tab
+    position: relative
+
+  .project-avatar
+    border-radius: 50%
+    height: 4em
+    margin: -2em 1vw -2em -2vw
+    vertical-align: middle
+    width: 4em
+
+.classification-anchor
+  @extends $reset-button
+  display: none
+  left: 50%
+  line-height: 1
+  margin-top: 0.5em
+  padding: 0.5em
+  position: absolute
+  top: 100%
+  transform: translateX(-50%)
+
+  .active &
+    display: inline-block
+
 
 .project-home-page
   display: flex

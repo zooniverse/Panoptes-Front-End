@@ -35,7 +35,7 @@ ProjectPage = React.createClass
     <div className="project-page">
       <div className="project-background" style={backgroundStyle}></div>
       <PromiseRenderer promise={@props.project.link 'owner'} then={@renderNav} />
-      <RouteHandler project={@props.project} />
+      <RouteHandler ref="projectPageContent" project={@props.project} />
     </div>
 
   renderNav: (owner) ->
@@ -59,11 +59,19 @@ ProjectPage = React.createClass
       </Link>
       <Link to="project-classify" params={params} className="classify tabbed-content-tab">
         <Translate content="project.nav.classify" />
+        <button type="button" className="classification-anchor" onClick={@handleAnchorClick}>
+          <i className="fa fa-anchor"></i>
+        </button>
       </Link>
       <Link to="project-talk" params={params} className="tabbed-content-tab">
         <Translate content="project.nav.discuss" />
       </Link>
     </nav>
+
+  handleAnchorClick: ->
+    target = @refs.projectPageContent.getDOMNode()
+    {top} = target.getBoundingClientRect()
+    scrollTo 0, top - ((innerHeight - target.offsetHeight) / 2)
 
 module.exports = React.createClass
   displayName: 'ProjectPageContainer'
