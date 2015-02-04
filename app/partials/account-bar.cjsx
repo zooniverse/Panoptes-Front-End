@@ -7,9 +7,10 @@ module.exports = React.createClass
 
   render: ->
     <div className="account-bar">
+      <img src={@props.user.avatar} className="account-bar-avatar" />{' '}
       <strong><Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link></strong>{' '}
-      <span className="pill"><button type="button" onClick={@handleSignOutClick}>Sign out</button></span>{' '}
-      <img src={@props.user.avatar} className="account-bar-avatar" />
+      <button type="button" className="pill" onClick={@handleSignOutClick}>Sign out</button>{' '}
+      <Link to="settings" className="pill">Settings</Link>
     </div>
 
   handleSignOutClick: ->

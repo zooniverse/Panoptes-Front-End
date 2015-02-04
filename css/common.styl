@@ -1,6 +1,7 @@
 FOREGROUND = #404040
 BACKGROUND = white
-MAIN_HIGHLIGHT = #26baff
+MAIN_HIGHLIGHT = #43bbfd
+SECOND_HIGHLIGHT = #38b978
 
 background-stripes(color1, color2, size)
   background: white linear-gradient(-45deg, color1 25%, color2 25%, color2 50%, color1 50%, color1 75%, color2 75%)
@@ -11,6 +12,7 @@ $reset-button
   border: 0
   color: inherit
   cursor: pointer
+  display: inline-block
   font: inherit
   line-height: inherit
   margin: 0
@@ -20,6 +22,34 @@ $reset-button
   &:disabled
     cursor: inherit
     opacity: 0.5
+
+$standard-button
+  @extends $reset-button
+  background: MAIN_HIGHLIGHT
+  border-radius: 3px
+  padding: 0.5em 3vw
+  text-align: center
+
+  &:hover
+    background: lighten(MAIN_HIGHLIGHT, 20%)
+
+  &:disabled
+    pointer-events: none
+
+$major-button
+  @extends $standard-button
+  background: SECOND_HIGHLIGHT
+  font-weight: bold
+
+  &:hover
+    background: lighten(SECOND_HIGHLIGHT, 20%)
+
+$minor-button
+  @extends $standard-button
+  background: rgba(BACKGROUND, 0.3)
+
+  &:hover
+    background: rgba(BACKGROUND, 0.4)
 
 $text-input
   border: 1px solid gray

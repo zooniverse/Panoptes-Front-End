@@ -3,19 +3,24 @@
     color: inherit
     text-decoration: none
 
+  .on-project-page &
+    opacity: 0.4
+    transition: opacity 0.5s
+
+    &:hover
+      opacity: 1
+
 .main-title
   align-items: baseline
   background: MAIN_HIGHLIGHT
-  border-bottom: 1px solid rgba(FOREGROUND, 0.3)
+  border-bottom: 1px solid rgba(FOREGROUND, 0.5)
   color: BACKGROUND
   display: flex
   justify-content: space-between
   padding: 0.5em 3vw
 
-  .pill
-    background: BACKGROUND
-    color: MAIN_HIGHLIGHT
-    font-smoothing: auto
+  .on-project-page &
+    background: transparent
 
 .main-logo
   font-family: "Montserrat"
@@ -32,29 +37,29 @@
 
 .account-bar-avatar
   border-radius: 50%
-  height: 3em
-  margin: -1.5em 0
-  position: relative
-  width: 3em
+  height: 2em
+  margin: -1em 0
+  vertical-align: middle
+  width: 2em
 
 .main-nav
   display: flex
   flex-wrap: wrap
-  border-bottom: 1px solid rgba(FOREGROUND, 0.3)
+  border-bottom: 1px solid rgba(FOREGROUND, 0.5)
 
   > hr
     border: 0
-    border-right: 1px solid rgba(FOREGROUND, 0.3)
+    border-right: 1px solid rgba(FOREGROUND, 0.5)
     flex: 1 1 auto
     margin: 0
 
 .main-nav-item
   padding: 0.5em 3vw
-  border-right: 1px solid rgba(FOREGROUND, 0.3)
+  border-right: 1px solid rgba(FOREGROUND, 0.5)
   box-shadow: 0 0 0 MAIN_HIGHLIGHT inset
 
   &:link:hover
-    background: lighten(MAIN_HIGHLIGHT, 90%)
+    background: rgba(MAIN_HIGHLIGHT, 0.2)
 
   &.active
     box-shadow: 0 -3px 0 MAIN_HIGHLIGHT inset

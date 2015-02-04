@@ -1,5 +1,8 @@
 React = require 'react'
 GenericTask = require './generic'
+Markdown = require '../../components/markdown'
+
+NOOP = Function.prototype
 
 Summary = React.createClass
   displayName: 'SingleChoiceSummary'
@@ -58,9 +61,9 @@ module.exports = React.createClass
   render: ->
     answers = for answer, i in @props.task.answers
       answer._key ?= Math.random()
-      <label key={answer._key} className="clickable">
+      <label key={answer._key} className="clickable #{if i is @props.annotation.value then 'active' else ''}">
         <input type="radio" checked={i is @props.annotation.value} onChange={@handleChange.bind this, i} />
-        <span>{answer.label}</span>
+        <Markdown>{answer.label}</Markdown>
       </label>
 
     <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} />

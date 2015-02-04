@@ -4,6 +4,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
 apiClient = window.api = require '../../api/client'
+auth = require '../../api/auth'
 TitleMixin = require '../../lib/title-mixin'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 LoadingIndicator = require '../../components/loading-indicator'
@@ -15,6 +16,7 @@ counterpart.registerTranslations 'en',
       status: 'Status'
       team: 'Team'
       classify: 'Classify'
+      discuss: 'Discuss'
 
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
@@ -26,14 +28,14 @@ ProjectPage = React.createClass
     document.documentElement.classList.remove 'on-project-page'
 
   render: ->
-    <div className="project-page tabbed-content" data-side="top" style={backgroundImage: "url(#{@props.project.background_image})" if @props.project.background_image}>
-      <div className="background-darkener"></div>
+    if @props.project.background_image
+      backgroundStyle =
+        backgroundImage = "url('#{@props.project.background_image}')"
 
+    <div className="project-page">
+      <div className="project-background" style={backgroundStyle}></div>
       <PromiseRenderer promise={@props.project.link 'owner'} then={@renderNav} />
-
-      <div className="project-page-content">
-        <RouteHandler project={@props.project} />
-      </div>
+      <RouteHandler project={@props.project} />
     </div>
 
   renderNav: (owner) ->
@@ -41,9 +43,10 @@ ProjectPage = React.createClass
       owner: owner.login
       name: @props.project.display_name
 
-    <nav className="tabbed-content-tabs">
-      <Link to="project-home" params={params} className="home tabbed-content-tab">
-        <h2><img src={@props.project.avatar} className="project-avatar" />{@props.project.display_name}</h2>
+    <nav className="project-nav tabbed-content-tabs">
+      <Link to="project-home" params={params} className="tabbed-content-tab">
+        <img src={@props.project.avatar} className="project-avatar" />
+        {@props.project.display_name}
       </Link>
       <Link to="project-science-case" params={params} className="tabbed-content-tab">
         <Translate content="project.nav.science" />
@@ -58,7 +61,7 @@ ProjectPage = React.createClass
         <Translate content="project.nav.classify" />
       </Link>
       <Link to="project-talk" params={params} className="tabbed-content-tab">
-        <i className="fa fa-comments"></i>
+        <Translate content="project.nav.discuss" />
       </Link>
     </nav>
 
@@ -81,8 +84,12 @@ module.exports = React.createClass
       @fetchProject nextProps.params.owner, nextProps.params.name
 
   fetchProject: (owner, name) ->
-    @promiseToSetState project: apiClient.type('projects').get({owner: owner, display_name: name, include: 'owners'}).then ([project]) ->
-      project?.refresh()
+    @promiseToSetState project: auth.checkCurrent().then ->
+      apiClient.type('projects').get({owner: owner, display_name: name, include: 'owners'}).then ([project]) ->
+        if project?
+          project.refresh()
+        else
+          throw new Error "Couldn't find project #{owner}/#{name}"
 
   render: ->
     if @state.project?
@@ -90,7 +97,7 @@ module.exports = React.createClass
     else if @state.pending.project?
       <div>Loading project</div>
     else if @state.rejected.project?
-      <div>@state.rejected.project.toString()</div>
+      <div>{@state.rejected.project.toString()}</div>
     else
       <div className="content-container">
         {if @state.pending.project?

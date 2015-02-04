@@ -14,21 +14,18 @@ module.exports = React.createClass
   displayName: 'ProjectHomePage'
 
   render: ->
-    <div className="project-home-content">
+    <div className="project-home-page">
       <div className="call-to-action-container content-container">
-        <Markdown className="introduction">{@props.project.introduction}</Markdown>
-        <div>
-          <PromiseRenderer promise={@props.project.link 'owner'} then={@renderCallToAction} />
-        </div>
+        <Markdown className="description">{@props.project.description}</Markdown>
+        <PromiseRenderer promise={@props.project.link 'owner'} then={@renderCallToAction} />
       </div>
-
-      <Markdown className="description content-container">
-        {@props.project.description}
+      <hr />
+      <Markdown className="introduction content-container">
+        {@props.project.introduction}
       </Markdown>
     </div>
 
   renderCallToAction: (owner) ->
     <Link to="project-classify" params={owner: owner.login, name: @props.project.display_name} className="call-to-action">
-      <Translate content="project.home.getStarted" />{' '}
-      <i className="fa fa-arrow-circle-right"></i>
+      <Translate content="project.home.getStarted" />
     </Link>

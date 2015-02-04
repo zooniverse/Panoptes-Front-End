@@ -14,10 +14,10 @@ module.exports = React.createClass
 
   render: ->
     <div className="login-bar">
-      <button type="button" onClick={@showLoginDialog.bind this, 'sign-in'}>
+      <button type="button" className="pill" onClick={@showLoginDialog.bind this, 'sign-in'}>
         <Translate content="loginBar.signIn" />
       </button>&emsp;
-      <button type="button" onClick={@showLoginDialog.bind this, 'register'}>
+      <button type="button" className="pill" onClick={@showLoginDialog.bind this, 'register'}>
         <Translate content="loginBar.register" />
       </button>
     </div>

@@ -39,7 +39,7 @@ module.exports = React.createClass
 
     onFirstAnnotation = currentClassification.annotations.indexOf(currentAnnotation) is 0
 
-    currentAnswer = currentTask.answers[currentAnnotation.value]
+    currentAnswer = currentTask.answers?[currentAnnotation.value]
     nextTaskKey = if currentAnswer? and currentTask.type is 'single' and 'next' of currentAnswer
       currentAnswer.next
     else
@@ -84,18 +84,18 @@ module.exports = React.createClass
 
         {if @props.classification.completed
           <nav className="task-nav for-summary">
-            <a href="#/todo/talk">Talk</a>
-            <button type="button" disabled={@props.loading} onClick={@props.onClickNext}>Next</button>
+            <a className="talk" href="#/todo/talk">Talk</a>
+            <button type="button" className="continue" disabled={@props.loading} onClick={@props.onClickNext}>Next</button>
           </nav>
 
         else if currentTask?
           <nav className="task-nav for-classification">
-            <button type="button" disabled={onFirstAnnotation || null} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
+            <button type="button" className="back" disabled={onFirstAnnotation || null} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
             {if nextTaskKey?
               nextTaskType = @props.workflow.tasks[nextTaskKey].type
-              <button type="button" disabled={waitingForAnswer || null} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
+              <button type="button" className="continue" disabled={waitingForAnswer || null} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
             else
-              <button type="button" disabled={waitingForAnswer || null} onClick={@completeClassification}>Done</button>}
+              <button type="button" className="continue" disabled={waitingForAnswer || null} onClick={@completeClassification}>Done</button>}
           </nav>}
       </div>
     </div>
