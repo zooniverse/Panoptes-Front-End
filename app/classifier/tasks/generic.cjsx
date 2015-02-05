@@ -13,18 +13,18 @@ module.exports = React.createClass
 
   render: ->
     <div className="workflow-task">
-      <div className="question">
-        {@props.question}
-        {if @props.help
-          <button type="button" onClick={@showHelp}>
-            <i className="fa fa-question-circle"></i>
-          </button>}
-      </div>
+      <Markdown className="question">{@props.question}</Markdown>
       <div className="answers">
         {React.Children.map @props.answers, (answer) ->
           cloneWithProps answer,  className: 'workflow-task-answer'}
       </div>
+      {if @props.help
+        <p className="help">
+          <button type="button" className="pill" onClick={@showHelp}>Need some help?</button>
+        </p>}
     </div>
 
   showHelp: ->
-    alert <Markdown>{@props.help}</Markdown>
+    alert <div className="content-container">
+      <Markdown className="classification-task-help">{@props.help}</Markdown>
+    </div>

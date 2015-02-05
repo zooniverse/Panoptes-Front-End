@@ -10,6 +10,7 @@ module.exports = React.createClass
   getInitialState: ->
     naturalWidth: 0
     naturalHeight: 0
+    proportion: 'square'
     frame: 0
 
   getScale: ->
@@ -29,7 +30,7 @@ module.exports = React.createClass
   render: ->
     scale = @getScale()
 
-    <div className="subject-area">
+    <div className="subject-area #{@state.proportion}">
       <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
@@ -76,7 +77,19 @@ module.exports = React.createClass
     if e.target.tagName.toUpperCase() is 'IMG'
       {naturalWidth, naturalHeight} = e.target
       unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
-        @setState {naturalWidth, naturalHeight}
+        proportion = naturalWidth / naturalHeight
+        proportion = if proportion <= 0.4
+          'very-tall'
+        else if 0.4 < proportion <= 0.9
+          'tall'
+        else if 0.9 < proportion <= 1.1
+          'square'
+        else if 1.1 < proportion <= 1.6
+          'wide'
+        else if 1.6 < proportion
+          'very-wide'
+
+        @setState {naturalWidth, naturalHeight, proportion}
 
   handleFrameChange: (e, index) ->
     @setState frame: parseFloat e.target.dataset.index

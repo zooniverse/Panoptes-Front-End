@@ -3,18 +3,33 @@
   flex-wrap: wrap
 
   > .subject-area
-    flex: 2 1 1%
-    margin-bottom: 1em
+    align-items: center
+    justify-content: center
+    display: flex
+    flex: 1 1 40%
+    margin: 0 1.5vw 1em 0
     max-width: 100%
     min-width: 20em
     text-align: center
+
+    &.very-tall
+      flex-basis: 1%
+
+    &.tall
+      flex-basis: 20%
+
+    &.wide
+      flex-basis: 60%
+
+    &.very-wide
+      flex-basis: 80%
 
   .subject-container
     color: gray
 
   .subject
-    border: 1px solid rgba(gray, 0.5)
     border-radius: 5px
+    box-shadow: 0 0 0 1px gray
     max-height: 90vh
     max-width: 100%
 
@@ -51,11 +66,10 @@
 
   > .task-area
     display: flex
-    flex: 1 1 10%
+    flex: 1 1 1%
     flex-direction: column
     margin-bottom: 1em
     min-width: 15em
-    padding-left: 3vw
 
   .task-container
     border-bottom: 1px solid rgba(gray, 0.5)
