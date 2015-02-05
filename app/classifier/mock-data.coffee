@@ -51,6 +51,11 @@ subject = apiClient.type('subjects').create
     {'image/jpeg': 'http://lorempixel.com/400/300/animals/2'}
     {'image/jpeg': 'http://lorempixel.com/400/300/animals/3'}
   ]
+
+  metadata:
+    'Capture date': '5 Feb, 2015'
+    'Region': 'Chicago, IL'
+
   expert_classification_data:
     annotations: [{
       task: 'draw'

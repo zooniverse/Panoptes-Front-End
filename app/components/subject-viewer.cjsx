@@ -1,4 +1,5 @@
 React = require 'react'
+alert = require '../lib/alert'
 
 READABLE_FORMATS =
   image: ['jpeg', 'png', 'svg+xml', 'gif']
@@ -44,8 +45,10 @@ module.exports = React.createClass
         if @props.subject?.locations.length < 2
           null
         else
-          for i in [0...@props.subject?.locations.length ? 0]
-            <button type="button" key={i} className="subject-frame-pip #{if i is @props.frame then 'active' else ''}" data-index={i} onClick={@props.onFrameChange}>{i + 1}</button>
+          <span className="subject-frame-pips">
+            {for i in [0...@props.subject?.locations.length ? 0]
+              <button type="button" key={i} className="subject-frame-pip #{if i is @props.frame then 'active' else ''}" data-index={i} onClick={@props.onFrameChange}>{i + 1}</button>}
+          </span>
 
     <div className="subject-viewer" style={ROOT_STYLE}>
       <div className="subject-container" style={CONTAINER_STYLE}>
@@ -54,6 +57,24 @@ module.exports = React.createClass
       </div>
 
       <div className="subject-tools">
-        {tools}
+        <span></span>
+        <span>{tools}</span>
+        <span>
+          {if @props.subject?.metadata?
+            <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-table fa-fw"></i></button>}
+        </span>
       </div>
+    </div>
+
+  showMetadata: ->
+    # TODO: Sticky popup.
+    alert <div className="content-container">
+      Subject metadata<br />
+      <table>
+        {for key, value of @props.subject?.metadata
+          <tr key={key}>
+            <th>{key}</th>
+            <td><code><pre>{JSON.stringify value, null, 2}</pre></code></td>
+          </tr>}
+      </table>
     </div>
