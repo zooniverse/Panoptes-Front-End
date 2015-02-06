@@ -1,4 +1,5 @@
 React = require 'react'
+PromiseToSetState = require '../lib/promise-to-set-state'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 auth = require '../api/auth'
@@ -8,11 +9,31 @@ apiClient = require '../api/client'
 InPlaceForm = require '../components/in-place-form'
 MarkdownEditor = require '../components/markdown-editor'
 
+HandlePropChanges =
+  componentDidMount: ->
+    for prop, handler of @propChangeHandlers ? {}
+      handler.call this, @props[prop]
+
+  componentWillReceiveProps: (nextProps) ->
+    for prop, handler of @propChangeHandlers ? {}
+      unless nextProps[prop] is @props[prop]
+        handler.call this, nextProps[prop]
+
 ProjectEditPage = React.createClass
   displayName: 'EditProjectPage'
 
+  mixins: [HandlePropChanges, PromiseToSetState]
+
+  getDefaultProps: ->
+    project: null
+
   getInitialState: ->
+    workflows: []
     busy: false
+
+  propChangeHandlers:
+    project: (project) ->
+      @promiseToSetState workflows: project.link 'workflows'
 
   render: ->
     handleProjectChange = handleInputChange.bind @props.project
@@ -41,13 +62,12 @@ ProjectEditPage = React.createClass
                 <MarkdownEditor name="introduction" value={@props.project.introduction} onChange={handleProjectChange} /><br />
 
                 Workflows<br />
-                <PromiseRenderer promise={@props.project.link 'workflows'}>{(error, workflows) =>
-                  if workflows?
-                    <ul>
-                      {for workflow in workflows
-                        <li key={workflow.id}><Link to="edit-workflow" params={id: workflow.id}>{workflow.display_name}</Link></li>}
-                    </ul>
-                }</PromiseRenderer>
+                <ul>
+                  {for workflow in @state.workflows
+                    <ChangeListener key={workflow.id} target={workflow}>{=>
+                      <li><Link to="edit-workflow" params={id: workflow.id}>{workflow.display_name}</Link></li>
+                    }</ChangeListener>}
+                </ul>
 
                 <button type="submit" disabled={@state.busy or not @props.project.hasUnsavedChanges()}>Save</button><br />
                 <button type="button" onClick={@handleDelete}>Delete this project</button><br />
@@ -68,7 +88,6 @@ ProjectEditPage = React.createClass
         @setState busy: false
 
   handleDelete: ->
-    # TODO: Make this nicer.
     if prompt('Enter REALLY to delete this project forever.')?.toUpperCase() is 'REALLY'
       @setState busy: true, =>
         @props.project.delete().then =>
