@@ -4,9 +4,9 @@ module.exports = React.createClass
   displayName: 'PromiseRenderer'
 
   getDefaultProps: ->
-    promise: Promise.reject()
+    promise: null
     pendingClass: 'promise-pending'
-    tag: 'span'
+    tag: 'div'
     then: @::defaultThen
     catch: @::defaultCatch
 
@@ -59,8 +59,14 @@ module.exports = React.createClass
       @renderRejected @state.error
 
     else
-      # Until the initial promise is resolved or rejected, show the given children.
-      @props.children ? null
+      try
+        initialRender = if typeof @props.children is 'function'
+          @props.children()
+        else
+          @props.children
+        initialRender ? null
+      catch error
+        @renderRejected error
 
   componentDidUpdate: (prevProps, prevState) ->
     classList = @getDOMNode()?.classList
@@ -70,10 +76,15 @@ module.exports = React.createClass
       classList?.remove @props.pendingClass
 
   renderResolved: (value) ->
-    if typeof @props.then is 'string'
-      @renderSimpleLookup value, @props.then.split '.'
+    if typeof @props.children is 'function'
+      @props.children(null, value) ? null
+    else if @props.then?
+      if typeof @props.then is 'string'
+        @renderSimpleLookup value, @props.then.split '.'
+      else
+        @props.then.call this, value
     else
-      @props.then.call this, value
+      null
 
   renderSimpleLookup: (value, path) ->
     until path.length is 0
@@ -81,10 +92,15 @@ module.exports = React.createClass
     React.createElement @props.tag, @props, value
 
   renderRejected: (error) ->
-    @props.catch.call this, error
+    if typeof @props.children is 'function'
+      @props.children(error, null) ? null
+    if @props.catch?
+      @props.catch.call this, error
+    else
+      null
 
   defaultThen: (value) ->
     React.createElement @props.tag, @props, value
 
   defaultCatch: (error) ->
-    React.createElement @props.tag, @props, <code>{error.toString()}</code>
+    React.createElement @props.tag, @props, <code className="promise-renderer-error">{error.toString()}</code>
