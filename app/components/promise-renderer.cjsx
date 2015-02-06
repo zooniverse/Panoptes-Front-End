@@ -3,14 +3,11 @@ React = require 'react'
 module.exports = React.createClass
   displayName: 'PromiseRenderer'
 
-  pendingClass: 'promise-pending'
-
-  propTypes:
-    promise: React.PropTypes.instanceOf(Promise).isRequired
-    then: React.PropTypes.func.isRequired
-    catch: React.PropTypes.func
-
   getDefaultProps: ->
+    promise: Promise.reject()
+    pendingClass: 'promise-pending'
+    tag: 'span'
+    then: @::defaultThen
     catch: @::defaultCatch
 
   getInitialState: ->
@@ -32,7 +29,7 @@ module.exports = React.createClass
       pending: true
 
     promise.then (value) =>
-      @safelySetState
+      @safelySetState promise,
         pending: false
         resolved: true
         rejected: false
@@ -40,26 +37,26 @@ module.exports = React.createClass
         error: null
 
     promise.catch (error) =>
-      @safelySetState
+      @safelySetState promise,
         pending: false
         resolved: false
         rejected: true
         value: null
         error: error
 
-  safelySetState: (state) ->
-    if @isMounted()
+  safelySetState: (promise, state) ->
+    if @isMounted() and promise is @props.promise
       @setState state
 
   render: ->
     if @state.resolved
       try
-        @props.then.call this, @state.value
-      catch e
-        @props.catch.call this, e
+        @renderResolved @state.value
+      catch error
+        @renderRejected error
 
     else if @state.rejected
-      @props.catch.call this, @state.error
+      @renderRejected @state.error
 
     else
       # Until the initial promise is resolved or rejected, show the given children.
@@ -68,11 +65,26 @@ module.exports = React.createClass
   componentDidUpdate: (prevProps, prevState) ->
     classList = @getDOMNode()?.classList
     if @state.pending
-      classList?.add @pendingClass
+      classList?.add @props.pendingClass
     else
-      classList?.remove @pendingClass
+      classList?.remove @props.pendingClass
+
+  renderResolved: (value) ->
+    if typeof @props.then is 'string'
+      @renderSimpleLookup value, @props.then.split '.'
+    else
+      @props.then.call this, value
+
+  renderSimpleLookup: (value, path) ->
+    until path.length is 0
+      value = value[path.shift()]
+    React.createElement @props.tag, @props, value
+
+  renderRejected: (error) ->
+    @props.catch.call this, error
+
+  defaultThen: (value) ->
+    React.createElement @props.tag, @props, value
 
   defaultCatch: (error) ->
-    <code>
-      <strong>{error.toString()}</strong>
-    </code>
+    React.createElement @props.tag, @props, <code>{error.toString()}</code>
