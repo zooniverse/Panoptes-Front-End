@@ -99,11 +99,9 @@ module.exports = React.createClass
     </div>
 
   completeClassification: ->
-    @props.classification.update
-      completed: true
-      metadata: =>
-        @props.classification.metadata.finished_at = (new Date).toISOString()
-        @props.classification.metadata
+    @props.classification.update completed: true
+    @props.classification.metadata.finished_at = (new Date).toISOString()
+    @props.classification.update 'metadata'
     @props.onComplete?()
 
   toggleExpertClassification: (value) ->

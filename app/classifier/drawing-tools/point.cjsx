@@ -45,7 +45,6 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   handleDrag: (e, d) ->
-    @props.classification.update annotations: =>
-      @props.mark.x += d.x / @props.scale.horizontal
-      @props.mark.y += d.y / @props.scale.vertical
-      @props.classification.annotations
+    @props.mark.x += d.x / @props.scale.horizontal
+    @props.mark.y += d.y / @props.scale.vertical
+    @props.classification.update 'annotations'

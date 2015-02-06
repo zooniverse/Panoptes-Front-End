@@ -15,7 +15,7 @@ module.exports = class extends Resource
 
   annotate: (taskType, taskKey) ->
     annotation = new Model task: taskKey, tasks[taskType].getDefaultAnnotation?()
-    annotation.listen [@, 'emit']
+    annotation.listen 'change', [@, 'emit', 'change']
 
     @update annotations: =>
       @annotations.push annotation

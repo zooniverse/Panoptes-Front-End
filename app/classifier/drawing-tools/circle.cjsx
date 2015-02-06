@@ -68,7 +68,7 @@ module.exports = React.createClass
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
     @props.mark.y += d.y / @props.scale.vertical
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   handleRadiusHandleDrag: (e, d) ->
     {x, y} = @props.getEventOffset e
@@ -76,4 +76,4 @@ module.exports = React.createClass
     angle = @constructor.getAngle @props.mark.x, @props.mark.y , x, y
     @props.mark.r = r
     @props.mark.angle = angle
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'

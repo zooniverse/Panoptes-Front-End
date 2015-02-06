@@ -67,11 +67,11 @@ module.exports = React.createClass
     for filename in filenames
       delete data.subjects[filename]
     # TODO: Remove them from all the manifests too, so they don't appear to be missing.
-    data.emitChange()
+    data.update 'subjects'
 
   removeManifest: (filename) ->
     delete data.manifests[filename]
-    data.emitChange()
+    data.update 'manifests'
 
   handleSubjectFilesChange: (e) ->
     thingsBeingProcessed = for file in e.target.files
@@ -81,7 +81,7 @@ module.exports = React.createClass
         data.subjects[file.name] = file
 
     Promise.all(thingsBeingProcessed).then =>
-      data.emitChange()
+      data.update 'subjects'
 
   _addManifest: (file) ->
     newlines = /\n|\r\n|\r/

@@ -61,9 +61,8 @@ module.exports = React.createClass
           project: @props.project.id
           workflow: workflow.id
           subjects: [subject.id]
-      classification.update metadata: ->
-        classification.metadata.workflow_version = workflow.version
-        classification.metadata
+      classification.metadata.workflow_version = workflow.version
+      classification.update 'metadata'
       classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
       window.classification = classification
       classification

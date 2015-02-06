@@ -71,31 +71,31 @@ module.exports = React.createClass
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
     @props.mark.y += d.y / @props.scale.vertical
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   handleTopLeftDrag: (e, d) ->
     @props.mark.x += d.x
     @props.mark.y += d.y
     @props.mark.width -= d.x
     @props.mark.height -= d.y
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   handleTopRightDrag: (e, d) ->
     @props.mark.y += d.y
     @props.mark.width += d.x
     @props.mark.height -= d.y
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   handleBottomRightDrag: (e, d) ->
     @props.mark.width += d.x
     @props.mark.height += d.y
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   handleBottomLeftDrag: (e, d) ->
     @props.mark.x += d.x
     @props.mark.width -= d.x
     @props.mark.height += d.y
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   normalizeMark: ->
     if @props.mark.width < 0
@@ -106,4 +106,4 @@ module.exports = React.createClass
       @props.mark.y += @props.mark.height
       @props.mark.height *= -1
 
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'

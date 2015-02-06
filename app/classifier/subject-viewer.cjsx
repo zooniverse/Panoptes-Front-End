@@ -122,7 +122,7 @@ module.exports = React.createClass
       for key, value of initValues
         mark[key] = value
 
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   handleInitDrag: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
@@ -135,7 +135,7 @@ module.exports = React.createClass
       initMoveValues = MarkComponent.initMove mouseCoords, mark, e
       for key, value of initMoveValues
         mark[key] = value
-      @props.classification.emit 'change'
+      @props.classification.update 'annotations'
 
   handleInitRelease: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
@@ -148,7 +148,7 @@ module.exports = React.createClass
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
       for key, value of initReleaseValues
         mark[key] = value
-      @props.classification.emit 'change'
+      @props.classification.update 'annotations'
 
   selectMark: (mark) ->
     index = @props.annotation.value.indexOf mark
