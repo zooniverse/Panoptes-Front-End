@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+ChangeListener = require '../../components/change-listener'
 PromiseRenderer = require '../../components/promise-renderer'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
@@ -21,6 +22,9 @@ counterpart.registerTranslations 'en',
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
 
+  getDefaultProps: ->
+    project: null
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-project-page'
 
@@ -28,45 +32,49 @@ ProjectPage = React.createClass
     document.documentElement.classList.remove 'on-project-page'
 
   render: ->
-    if @props.project.background_image
-      backgroundStyle =
-        backgroundImage = "url('#{@props.project.background_image}')"
+    <ChangeListener target={@props.project}>{=>
+      if @props.project.background_image
+        backgroundStyle =
+          backgroundImage = "url('#{@props.project.background_image}')"
 
-    <div className="project-page">
-      <div className="project-background" style={backgroundStyle}></div>
-      <PromiseRenderer promise={@props.project.link 'owner'} then={@renderNav} />
-      <RouteHandler ref="projectPageContent" project={@props.project} />
-    </div>
+      <div className="project-page">
+        <div className="project-background" style={backgroundStyle}></div>
 
-  renderNav: (owner) ->
-    params =
-      owner: owner.login
-      name: @props.project.display_name
+        <PromiseRenderer promise={@props.project.link 'owner'}>{(error, owner) =>
+          if owner?
+            params =
+              owner: owner.login
+              name: @props.project.display_name
 
-    <nav className="project-nav tabbed-content-tabs">
-      <Link to="project-home" params={params} className="tabbed-content-tab">
-        <img src={@props.project.avatar} className="project-avatar" />
-        {@props.project.display_name}
-      </Link>
-      <Link to="project-science-case" params={params} className="tabbed-content-tab">
-        <Translate content="project.nav.science" />
-      </Link>
-      <Link to="project-status" params={params} className="tabbed-content-tab">
-        <Translate content="project.nav.status" />
-      </Link>
-      <Link to="project-team" params={params} className="tabbed-content-tab">
-        <Translate content="project.nav.team" />
-      </Link>
-      <Link to="project-classify" params={params} className="classify tabbed-content-tab">
-        <Translate content="project.nav.classify" />
-        <button type="button" className="classification-anchor" onClick={@handleAnchorClick}>
-          <i className="fa fa-anchor"></i>
-        </button>
-      </Link>
-      <Link to="project-talk" params={params} className="tabbed-content-tab">
-        <Translate content="project.nav.discuss" />
-      </Link>
-    </nav>
+            <nav className="project-nav tabbed-content-tabs">
+              <Link to="project-home" params={params} className="tabbed-content-tab">
+                <img src={@props.project.avatar} className="project-avatar" />
+                {@props.project.display_name}
+              </Link>
+              <Link to="project-science-case" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.science" />
+              </Link>
+              <Link to="project-status" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.status" />
+              </Link>
+              <Link to="project-team" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.team" />
+              </Link>
+              <Link to="project-classify" params={params} className="classify tabbed-content-tab">
+                <Translate content="project.nav.classify" />
+                <button type="button" className="classification-anchor" onClick={@handleAnchorClick}>
+                  <i className="fa fa-anchor"></i>
+                </button>
+              </Link>
+              <Link to="project-talk" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.discuss" />
+              </Link>
+            </nav>
+        }</PromiseRenderer>
+
+        <RouteHandler project={@props.project} />
+      </div>
+    }</ChangeListener>
 
   handleAnchorClick: ->
     target = @refs.projectPageContent.getDOMNode()
@@ -107,11 +115,4 @@ module.exports = React.createClass
     else if @state.rejected.project?
       <div>{@state.rejected.project.toString()}</div>
     else
-      <div className="content-container">
-        {if @state.pending.project?
-          <span><LoadingIndicator /> Loading project {@props.params.id}</span>
-        else if @state.rejected.project?
-          <code><i className="fa fa-exclamation-circle"></i> {@state.rejected.project.toString()}</code>
-        else
-          null}
-      </div>
+      null

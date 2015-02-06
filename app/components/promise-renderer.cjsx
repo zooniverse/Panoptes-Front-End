@@ -60,11 +60,10 @@ module.exports = React.createClass
 
     else
       try
-        initialRender = if typeof @props.children is 'function'
-          @props.children()
+        if typeof @props.children is 'function'
+          @props.children() ? null
         else
-          @props.children
-        initialRender
+          @props.children ? null
       catch error
         @renderRejected error
 
@@ -77,7 +76,7 @@ module.exports = React.createClass
 
   renderResolved: (value) ->
     if typeof @props.children is 'function'
-      @props.children null, value
+      @props.children(null, value) ? null
     else if @props.then?
       if typeof @props.then is 'string'
         @renderSimpleLookup value, @props.then.split '.'
@@ -91,7 +90,7 @@ module.exports = React.createClass
 
   renderRejected: (error) ->
     if typeof @props.children is 'function'
-      @props.children error, null
+      @props.children(error, null) ? null
     if @props.catch?
       @props.catch.call this, error
 
