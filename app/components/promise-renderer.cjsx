@@ -64,7 +64,7 @@ module.exports = React.createClass
           @props.children()
         else
           @props.children
-        initialRender ? null
+        initialRender
       catch error
         @renderRejected error
 
@@ -77,14 +77,12 @@ module.exports = React.createClass
 
   renderResolved: (value) ->
     if typeof @props.children is 'function'
-      @props.children(null, value) ? null
+      @props.children null, value
     else if @props.then?
       if typeof @props.then is 'string'
         @renderSimpleLookup value, @props.then.split '.'
       else
         @props.then.call this, value
-    else
-      null
 
   renderSimpleLookup: (value, path) ->
     until path.length is 0
@@ -93,11 +91,9 @@ module.exports = React.createClass
 
   renderRejected: (error) ->
     if typeof @props.children is 'function'
-      @props.children(error, null) ? null
+      @props.children error, null
     if @props.catch?
       @props.catch.call this, error
-    else
-      null
 
   defaultThen: (value) ->
     React.createElement @props.tag, @props, value

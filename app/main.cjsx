@@ -61,5 +61,5 @@ mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'
 document.body.appendChild mainContainer
 
-Router.run routes, (Handler, {params}) ->
-  React.render(<Handler params={params} />, mainContainer);
+Router.run routes, (Handler, handlerProps) ->
+  React.render(<Handler {...handlerProps} />, mainContainer);
