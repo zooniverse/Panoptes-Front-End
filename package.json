@@ -2,6 +2,7 @@
   "name": "panoptes",
   "version": "0.0.1",
   "dependencies": {
+    "animated-scrollto": "^1.1.0",
     "counterpart": "^0.16.4",
     "debounce": "^1.0.0",
     "emojify.js": "^0.9.5",

@@ -2,6 +2,7 @@ React = require 'react'
 apiClient = require '../../api/client'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
+animatedScrollTo = require 'animated-scrollto'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 Classifier = require '../../classifier'
 LoadingIndicator = require '../../components/loading-indicator'
@@ -10,11 +11,6 @@ projectStatesInProgress = {}
 
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
-
-  # statics:
-  #   willTransitionTo: ->
-  #     setTimeout =>
-  #       scrollTo scrollX, @getDOMNode().offsetTop
 
   mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
 
@@ -27,6 +23,9 @@ module.exports = React.createClass
 
   propChangeHandlers:
     project: 'switchToProject'
+
+  componentDidMount: ->
+    setTimeout @autoScroll
 
   switchToProject: (project) ->
     unless projectStatesInProgress[project.id]?
@@ -79,6 +78,13 @@ module.exports = React.createClass
       else
         <span><LoadingIndicator /> Loading classification interface</span>}
     </div>
+
+  autoScroll: ->
+    # TODO: Call this on first subject load?
+    if scrollY is 0
+      el = @getDOMNode()
+      space = (innerHeight - el.offsetHeight) / 2
+      animatedScrollTo document.body, el.offsetTop - space, 500
 
   handleClassificationCompletion: ->
     console?.info 'Completed classification', JSON.stringify @state.classification, null, 2
