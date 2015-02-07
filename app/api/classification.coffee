@@ -6,12 +6,13 @@ module.exports = class extends Resource
   annotations: null
 
   constructor: ->
-    @metadata =
-      started_at: (new Date).toISOString()
-      user_agent: navigator.userAgent
-      user_language: counterpart.getLocale()
-    @annotations = []
     super
+    @update
+      annotations: []
+      metadata:
+        started_at: (new Date).toISOString()
+        user_agent: navigator.userAgent
+        user_language: counterpart.getLocale()
 
   annotate: (taskType, taskKey) ->
     annotation = new Model task: taskKey, tasks[taskType].getDefaultAnnotation?()

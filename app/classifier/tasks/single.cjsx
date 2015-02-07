@@ -52,7 +52,7 @@ module.exports = React.createClass
     Summary: Summary
 
     getDefaultAnnotation: ->
-      answer: null
+      value: null
 
   getDefaultProps: ->
     task: null

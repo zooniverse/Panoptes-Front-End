@@ -42,8 +42,6 @@ ProjectPage = React.createClass
 
   render: ->
     <ChangeListener target={@props.project}>{=>
-      console.log 'Rendering project page'
-
       if @props.project.background_image
         backgroundStyle =
           backgroundImage: "url('#{@props.project.background_image}')"

@@ -3,11 +3,13 @@ ChangeListener = require '../components/change-listener'
 SubjectViewer = require './subject-viewer'
 ClassificationSummary = require './classification-summary'
 tasks = require './tasks'
+HandlePropChanges = require '../lib/handle-prop-changes'
+PromiseToSetState = require '../lib/promise-to-set-state'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
 
-module.exports = React.createClass
+Classifier = React.createClass
   displayName: 'Classifier'
 
   getDefaultProps: ->
@@ -105,3 +107,32 @@ module.exports = React.createClass
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
+
+module.exports = React.createClass
+  displayName: 'ClassifierWrapper'
+
+  mixins: [HandlePropChanges, PromiseToSetState]
+
+  getDefaultProps: ->
+    classification: if process.env.NODE_ENV is 'production'
+        null
+      else
+        mockData.classification
+
+  getInitialState: ->
+    workflow: null
+    subject: null
+
+  propChangeHandlers:
+    classification: (classification) ->
+      @promiseToSetState
+        # TODO: These underscored references are temporary stopgaps.
+        workflow: Promise.resolve classification._workflow ? classification.link 'workflow'
+        subject: Promise.resolve classification._subject ? classification.link('subjects').then ([subject]) ->
+          subject
+
+  render: ->
+    if @state.workflow? and @state.subject?
+      <Classifier {...@props} workflow={@state.workflow} subject={@state.subject} />
+    else
+      null
