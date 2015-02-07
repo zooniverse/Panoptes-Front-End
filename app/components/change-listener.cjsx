@@ -36,7 +36,7 @@ module.exports = React.createClass
 
   render: ->
     if typeof @props.children is 'function'
-      @props.children @state.payload...
+      @props.children(@state.payload...) ? null
     else if @props.handler?
       @props.handler @state.payload...
     else

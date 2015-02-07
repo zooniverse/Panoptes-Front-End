@@ -2,7 +2,6 @@ React = require 'react'
 TitleMixin = require '../../lib/title-mixin'
 Markdown = require '../../components/markdown'
 
-
 module.exports = React.createClass
   displayName: 'ProjectScienceCasePage'
 
@@ -12,7 +11,5 @@ module.exports = React.createClass
 
   render: ->
     <div className="project-text-content content-container">
-      <Markdown>
-        {@props.project.science_case}
-      </Markdown>
+      <Markdown>{@props.project.science_case}</Markdown>
     </div>

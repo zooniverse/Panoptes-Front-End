@@ -5,7 +5,5 @@ module.exports = React.createClass
 
   render: ->
     <div className="project-text-content content-container">
-      <div>
-        <p>Discussion boards this project</p>
-      </div>
+      <p>TODO: Project discussion page</p>
     </div>

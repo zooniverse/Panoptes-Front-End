@@ -1,9 +1,8 @@
 counterpart = require 'counterpart'
 React = require 'react'
-PromiseRenderer = require '../../components/promise-renderer'
-Translate = require 'react-translate-component'
 Markdown = require '../../components/markdown'
 {Link} = require 'react-router'
+Translate = require 'react-translate-component'
 
 counterpart.registerTranslations 'en',
   project:
@@ -17,15 +16,13 @@ module.exports = React.createClass
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
         <Markdown className="description">{@props.project.description}</Markdown>
-        <PromiseRenderer promise={@props.project.link 'owner'} then={@renderCallToAction} />
-      </div>
-      <hr />
-      <Markdown className="introduction content-container">
-        {@props.project.introduction}
-      </Markdown>
-    </div>
 
-  renderCallToAction: (owner) ->
-    <Link to="project-classify" params={owner: owner.login, name: @props.project.display_name} className="call-to-action">
-      <Translate content="project.home.getStarted" />
-    </Link>
+        <Link to="project-classify" params={owner: @props.owner.display_name, name: @props.project.display_name} className="call-to-action">
+          <Translate content="project.home.getStarted" />
+        </Link>
+      </div>
+
+      <hr />
+
+      <Markdown className="introduction content-container">{@props.project.introduction}</Markdown>
+    </div>

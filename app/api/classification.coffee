@@ -16,15 +16,10 @@ module.exports = class extends Resource
   annotate: (taskType, taskKey) ->
     annotation = new Model task: taskKey, tasks[taskType].getDefaultAnnotation?()
     annotation.listen 'change', [@, 'emit', 'change']
-
-    @update annotations: =>
-      @annotations.push annotation
-      annotation.listen 'destroy', [@, 'handleAnnotationDestroy', @annotations.indexOf annotation]
-      @annotations
-
+    @annotations.push annotation
+    annotation.listen 'destroy', [@, 'handleAnnotationDestroy', @annotations.indexOf annotation]
+    @update 'annotations'
     annotation
 
   handleAnnotationDestroy: (index) ->
-    @update annotations: =>
-      @annotations.splice index, 1
-      @annotations
+    @update annotations: @annotations.splice index, 1

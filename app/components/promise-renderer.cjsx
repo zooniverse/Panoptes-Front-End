@@ -1,46 +1,39 @@
 React = require 'react'
+HandlePropChanges = require '../lib/handle-prop-changes'
 
 module.exports = React.createClass
   displayName: 'PromiseRenderer'
 
+  mixins: [HandlePropChanges]
+
   getDefaultProps: ->
     promise: null
-    pendingClass: 'promise-pending'
     tag: 'div'
+    pending: @::defaultPending
     then: @::defaultThen
     catch: @::defaultCatch
 
   getInitialState: ->
-    pending: false
-    resolved: false
-    rejected: false
+    state: 'pending'
     value: null
     error: null
 
-  componentDidMount: ->
-    @attachTo @props.promise
-
-  componentWillReceiveProps: (nextProps) ->
-    unless nextProps.promise is @props.promise
-      @attachTo nextProps.promise
+  propChangeHandlers:
+    promise: 'attachTo'
 
   attachTo: (promise) ->
     @setState
-      pending: true
+      state: 'pending'
 
     promise.then (value) =>
       @safelySetState promise,
-        pending: false
-        resolved: true
-        rejected: false
+        state: 'resolved'
         value: value
         error: null
 
     promise.catch (error) =>
       @safelySetState promise,
-        pending: false
-        resolved: false
-        rejected: true
+        state: 'rejected'
         value: null
         error: error
 
@@ -49,53 +42,49 @@ module.exports = React.createClass
       @setState state
 
   render: ->
-    if @state.resolved
-      try
-        @renderResolved @state.value
-      catch error
-        @renderRejected error
+    result = try
+      switch @state.state
+        when 'pending' then @renderPending()
+        when 'resolved' then @renderResolved @state.value
+        when 'rejected' then @renderRejected @state.error
+    catch error
+      @renderRejected error
 
-    else if @state.rejected
-      @renderRejected @state.error
+    result ? null
 
-    else
-      try
-        if typeof @props.children is 'function'
-          @props.children() ? null
-        else
-          @props.children ? null
-      catch error
-        @renderRejected error
-
-  componentDidUpdate: (prevProps, prevState) ->
-    classList = @getDOMNode()?.classList
-    if @state.pending
-      classList?.add @props.pendingClass
-    else
-      classList?.remove @props.pendingClass
+  renderPending: ->
+    if typeof @props.pending is 'string'
+      @defaultPending @props.pending
+    else if @props.pending?
+      @props.pending.call this
 
   renderResolved: (value) ->
     if typeof @props.children is 'function'
-      @props.children(null, value) ? null
+      @props.children(value) ? null
     else if @props.then?
       if typeof @props.then is 'string'
-        @renderSimpleLookup value, @props.then.split '.'
+        @renderSimpleLookup value, @props.then
       else
         @props.then.call this, value
 
   renderSimpleLookup: (value, path) ->
+    path = path.split '.'
     until path.length is 0
       value = value[path.shift()]
     React.createElement @props.tag, @props, value
 
   renderRejected: (error) ->
-    if typeof @props.children is 'function'
-      @props.children(error, null) ? null
-    if @props.catch?
-      @props.catch.call this, error
+    if @props.catch
+      try
+        @props.catch.call this, error
+      catch secondError
+        @defaultCatch secondError
+
+  defaultPending: (message) ->
+    React.createElement @props.tag, @props, message ? 'Loading'
 
   defaultThen: (value) ->
     React.createElement @props.tag, @props, value
 
   defaultCatch: (error) ->
-    React.createElement @props.tag, @props, <code className="promise-renderer-error">{error.toString()}</code>
+    React.createElement @props.tag, @props, error.toString()

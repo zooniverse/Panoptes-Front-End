@@ -22,7 +22,7 @@ module.exports = React.createClass
     <div className="projects-page">
       <div className="content-container">
         <Translate component="h1" content="projectsPage.title" /><br />
-        <PromiseRenderer promise={apiClient.type('projects').get(@props.query ? {})}>{(error, projects) =>
+        <PromiseRenderer promise={apiClient.type('projects').get(@props.query ? {})}>{(projects) =>
           if projects?
             <div>
               <div className="project-card-list">

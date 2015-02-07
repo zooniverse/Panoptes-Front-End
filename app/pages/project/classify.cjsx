@@ -1,6 +1,7 @@
 React = require 'react'
 apiClient = require '../../api/client'
 TitleMixin = require '../../lib/title-mixin'
+HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 Classifier = require '../../classifier'
 LoadingIndicator = require '../../components/loading-indicator'
@@ -8,26 +9,24 @@ LoadingIndicator = require '../../components/loading-indicator'
 projectStatesInProgress = {}
 
 module.exports = React.createClass
-  displayName: 'ClassifyPage'
+  displayName: 'ProjectClassifyPage'
 
-  mixins: [TitleMixin, PromiseToSetState]
+  # statics:
+  #   willTransitionTo: ->
+  #     setTimeout =>
+  #       scrollTo scrollX, @getDOMNode().offsetTop
+
+  mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
 
   title: 'Classify'
-
-  getDefaultProps: ->
-    project: null
 
   getInitialState: ->
     workflow: null
     subject: null
     classification: null
 
-  componentDidMount: ->
-    @switchToProject @props.project
-
-  componentWillReceiveProps: (nextProps) ->
-    unless nextProps.project is @props.project
-      @switchToProject nextProps.project
+  propChangeHandlers:
+    project: 'switchToProject'
 
   switchToProject: (project) ->
     unless projectStatesInProgress[project.id]?
