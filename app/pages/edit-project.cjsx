@@ -29,42 +29,40 @@ ProjectEditPage = React.createClass
   render: ->
     handleProjectChange = handleInputChange.bind @props.project
 
-    <ChangeListener target={auth}>{=>
-      currentAndOwner = Promise.all [
-        auth.checkCurrent()
-        @props.project.link 'owner'
-      ]
+    currentAndOwner = Promise.all [
+      auth.checkCurrent()
+      @props.project.link 'owner'
+    ]
 
-      <PromiseRenderer promise={currentAndOwner}>{([currentUser, projectOwner] = []) =>
-        if projectOwner? and currentUser is projectOwner
-          <ChangeListener target={@props.project}>{=>
-            <InPlaceForm onSubmit={@handleSubmit}>
-              Name<br />
-              <input type="text" name="display_name" value={@props.project.display_name} onChange={handleProjectChange} /><br />
+    <PromiseRenderer promise={currentAndOwner}>{([currentUser, projectOwner] = []) =>
+      if projectOwner? and currentUser is projectOwner
+        <ChangeListener target={@props.project}>{=>
+          <InPlaceForm onSubmit={@handleSubmit}>
+            Name<br />
+            <input type="text" name="display_name" value={@props.project.display_name} onChange={handleProjectChange} /><br />
 
-              Description<br />
-              <MarkdownEditor name="description" value={@props.project.description} onChange={handleProjectChange} /><br />
+            Description<br />
+            <MarkdownEditor name="description" value={@props.project.description} onChange={handleProjectChange} /><br />
 
-              Introduction<br />
-              <MarkdownEditor name="introduction" value={@props.project.introduction} onChange={handleProjectChange} /><br />
+            Introduction<br />
+            <MarkdownEditor name="introduction" value={@props.project.introduction} onChange={handleProjectChange} /><br />
 
-              Workflows<br />
-              <ul>
-                {for workflow in @state.workflows
-                  <ChangeListener key={workflow.id} target={workflow}>{=>
-                    <li><Link to="edit-workflow" params={id: workflow.id}>{workflow.display_name}</Link></li>
-                  }</ChangeListener>}
-              </ul>
+            Workflows<br />
+            <ul>
+              {for workflow in @state.workflows
+                <ChangeListener key={workflow.id} target={workflow}>{=>
+                  <li><Link to="edit-workflow" params={id: workflow.id}>{workflow.display_name}</Link></li>
+                }</ChangeListener>}
+            </ul>
 
-              <button type="submit" disabled={@state.busy or not @props.project.hasUnsavedChanges()}>Save</button><br />
-              <button type="button" onClick={@handleDelete}>Delete this project</button><br />
-            </InPlaceForm>
-          }</ChangeListener>
+            <button type="submit" disabled={@state.busy or not @props.project.hasUnsavedChanges()}>Save</button><br />
+            <button type="button" onClick={@handleDelete}>Delete this project</button><br />
+          </InPlaceForm>
+        }</ChangeListener>
 
-        else
-          <p>Checking permissions</p>
-      }</PromiseRenderer>
-    }</ChangeListener>
+      else
+        <p>Checking permissions</p>
+    }</PromiseRenderer>
 
   handleSubmit: ->
     @setState busy: true
@@ -81,9 +79,12 @@ module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
 
   render: ->
-    getProject = apiClient.type('projects').get(@props.params.id).then (project) ->
-      project.refresh()
+    <ChangeListener target={auth}>{=>
+      getProject = auth.checkCurrent().then =>
+        apiClient.type('projects').get(@props.params.id).then (project) ->
+          project.refresh()
 
-    <PromiseRenderer promise={getProject}>{->
-      <ProjectEditPage project={project} />
-    }</PromiseRenderer>
+      <PromiseRenderer promise={getProject}>{(project) ->
+        <ProjectEditPage project={project} />
+      }</PromiseRenderer>
+    }</ChangeListener>
