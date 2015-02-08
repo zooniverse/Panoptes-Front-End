@@ -1,12 +1,11 @@
 counterpart = require 'counterpart'
 React = require 'react'
-Translate = require 'react-translate-component'
-apiClient = require '../api/client'
 PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
-InPlaceForm = require '../components/in-place-form'
+Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
 debounce = require 'debounce'
+apiClient = require '../api/client'
 
 REMOTE_CHECK_DELAY = 1000
 MIN_PASSWORD_LENGTH = 8
@@ -31,10 +30,8 @@ counterpart.registerTranslations 'en',
     agreeToPrivacyPolicy: 'You agree to our %(link)s.'
     privacyPolicy: 'privacy policy'
     register: 'Register'
-    alreadySignedIn: 'Already signed in as %(name)s.'
+    alreadySignedIn: 'Signed in as %(name)s.'
     signOut: 'Sign out'
-
-users = apiClient.type 'users'
 
 module.exports = React.createClass
   displayName: 'RegisterForm'
@@ -50,8 +47,8 @@ module.exports = React.createClass
     emailConflict: null
 
   componentDidMount: ->
-    @handleAuthChange()
     auth.listen @handleAuthChange
+    @handleAuthChange()
 
   componentWillUnmount: ->
     auth.stopListening @handleAuthChange
@@ -62,102 +59,76 @@ module.exports = React.createClass
   render: ->
     {badLoginChars, loginConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
-    forgotPasswordLink = <a href="https://www.zooniverse.org/password/reset" target="_blank">
-      <Translate content="registerForm.forgotPassword" />
-    </a>
+    <form onSubmit={@handleSubmit}>
+      <label>
+        <Translate content="registerForm.userName" /><br />
+        <input type="text" ref="login" disabled={@state.user?} autoFocus onChange={@handleLoginChange} />{' '}
+        {if badLoginChars?.length > 0
+          chars = for char in badLoginChars
+            <kbd key={char}>{char}</kbd>
+          <Translate className="form-help error" content="registerForm.badChars" chars={chars} />
+        else if "loginConflict" of @state.pending
+          <LoadingIndicator />
+        else if loginConflict?
+          if loginConflict
+            <span className="form-help error">
+              <Translate content="registerForm.loginConflict" />{' '}
+              <a href="https://www.zooniverse.org/password/reset" target="_blank">
+                <Translate content="registerForm.forgotPassword" />
+              </a>
+            </span>
+          else
+            <span className="form-help">
+              <Translate content="registerForm.looksGood" />
+            </span>}
+      </label><br />
 
-    <InPlaceForm onSubmit={@handleSubmit}>
-      <div>
-        <label>
-          <Translate content="registerForm.userName" /><br />
-          <input type="text" name="login" disabled={@state.user?} ref="login" onChange={@handleLoginChange} autoFocus="autofocus" />
+      <label>
+        <Translate content="registerForm.password" /><br />
+        <input type="password" ref="password" disabled={@state.user?} onChange={@handlePasswordChange} />{' '}
+        {if passwordTooShort
+          <Translate className="form-help error" content="registerForm.passwordTooShort" />}
+      </label><br />
 
-          {if badLoginChars?.length > 0
-            chars = for char in badLoginChars
-              <kbd key={char}>{char}</kbd>
-            <Translate component="span" className="form-help error" content="registerForm.badChars" chars={chars} />
+      <label>
+        <Translate content="registerForm.confirmPassword" /><br />
+        <input type="password" ref="confirmedPassword" disabled={@state.user?} onChange={@handlePasswordChange} />{' '}
+        {if passwordsDontMatch?
+          if passwordsDontMatch
+            <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
+          else
+            <Translate className="form-help" content="registerForm.looksGood" />}
+      </label><br />
 
-          else if "loginConflict" of @state.pending
-            <LoadingIndicator />
-          else if loginConflict?
-            if loginConflict
-              <span className="form-help error">
-                <Translate content="registerForm.loginConflict" />{' '}
-                {forgotPasswordLink}
-              </span>
-            else
-              <span className="form-help">
-                <Translate content="registerForm.looksGood" />
-              </span>}
-        </label>
-      </div>
+      <label>
+        <Translate content="registerForm.email" /> <Translate className="form-help" content="registerForm.required" /><br />
+        <input type="text" ref="email" disabled={@state.user?} onChange={@handleEmailChange} />{' '}
+        {if 'emailConflict' of @state.pending
+          <LoadingIndicator />
+        else if emailConflict?
+          if emailConflict
+            <span className="form-help error">
+              <Translate content="registerForm.emailConflict" />{' '}
+              <a href="https://www.zooniverse.org/password/reset" target="_blank">
+                <Translate content="registerForm.forgotPassword" />
+              </a>
+            </span>
+          else
+            <Translate className="form-help" content="registerForm.looksGood" />}
+      </label><br />
 
-      <br />
+      <label>
+        <Translate content="registerForm.realName" /> <Translate className="form-help" content="registerForm.optional" /><br />
+        <input type="text" ref="realName" disabled={@state.user?} /><br />
+        <Translate className="form-help" content="registerForm.whyRealName" />
+      </label><br />
 
-      <div>
-        <label>
-          <Translate content="registerForm.password" /><br />
-          <input type="password" name="password" disabled={@state.user?} ref="password" onChange={@handlePasswordChange} />
-          {if passwordTooShort
-            <Translate className="form-help error" content="registerForm.passwordTooShort" />}
-        </label>
-      </div>
-
-      <br />
-
-      <div>
-        <label>
-          <Translate content="registerForm.confirmPassword" /><br />
-          <input type="password" name="confirmed_password" disabled={@state.user?} ref="confirmedPassword" onChange={@handlePasswordChange} />
-          {if passwordsDontMatch?
-            if passwordsDontMatch
-              <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
-            else
-              <Translate className="form-help" content="registerForm.looksGood" />}
-        </label>
-      </div>
-
-      <br />
-
-      <div>
-        <label>
-          <Translate content="registerForm.email" /> <Translate className="form-help" content="registerForm.required" /><br />
-          <input type="text" name="email" disabled={@state.user?} ref="email" onChange={@handleEmailChange} />
-          {if 'emailConflict' of @state.pending
-            <LoadingIndicator />
-          else if emailConflict?
-            if emailConflict
-              <span className="form-help error">
-                <Translate content="registerForm.emailConflict" />{' '}
-                {forgotPasswordLink}
-              </span>
-            else
-              <Translate className="form-help" content="registerForm.looksGood" />}
-        </label>
-      </div>
-
-      <br />
-
-      <div>
-        <label>
-          <Translate content="registerForm.realName" /> <Translate className="form-help" content="registerForm.optional" /><br />
-          <input type="text" name="real_name" disabled={@state.user?} ref="realName" /><br />
-          <Translate className="form-help" content="registerForm.whyRealName" />
-        </label>
-      </div>
-
-      <br />
-
-      <div>
-        <label>
-          <input type="checkbox" name="agrees_to_privacy_policy" disabled={@state.user?} ref="agreesToPrivacyPolicy" onChange={@forceUpdate.bind this, null} />
-          {privacyPolicyLink = <a href="#/todo/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
-          <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />{' '}
-          <span className="form-help">(required)</span>
-        </label>
-      </div>
-
-      <br />
+      <label>
+        <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
+        {privacyPolicyLink = <a href="#/todo/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
+        <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />{' '}
+        <Translate className="form-help" content="registerForm.required" />
+      </label><br />
 
       <div>
         <button type="submit" disabled={not @isFormValid() or Object.keys(@state.pending).length isnt 0 or @state.user?}>
@@ -172,7 +143,7 @@ module.exports = React.createClass
             <button type="button" onClick={@handleSignOut}><Translate content="registerForm.signOut" /></button>
           </span>}
       </div>
-    </InPlaceForm>
+    </form>
 
   handleLoginChange: ->
     login = @refs.login.getDOMNode().value
@@ -190,7 +161,7 @@ module.exports = React.createClass
 
   debouncedCheckForLoginConflict: null
   checkForLoginConflict: (login) ->
-    @promiseToSetState loginConflict: users.get({login}, 1).then (users) ->
+    @promiseToSetState loginConflict: apiClient.type('users').get({login}, 1).then (users) ->
       users.length isnt 0
 
   handlePasswordChange: ->
@@ -237,7 +208,8 @@ module.exports = React.createClass
     agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
     badLoginChars?.length is 0 and not loginConflict and not passwordsDontMatch and not emailConflict and agreesToPrivacyPolicy
 
-  handleSubmit: ->
+  handleSubmit: (e) ->
+    e.preventDefault()
     login = @refs.login.getDOMNode().value
     password = @refs.password.getDOMNode().value
     email = @refs.email.getDOMNode().value
