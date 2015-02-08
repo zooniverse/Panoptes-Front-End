@@ -1,11 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
-ChangeListener = require '../components/change-listener'
-PromiseRenderer = require '../components/promise-renderer'
-InPlaceForm = require '../components/in-place-form'
 LoadingIndicator = require '../components/loading-indicator'
 
 counterpart.registerTranslations 'en',
@@ -14,82 +10,94 @@ counterpart.registerTranslations 'en',
     signOut: 'Sign out'
     userName: 'User name'
     password: 'Password'
+    incorrectDetails: 'Login or password incorrect'
+    forgotPassword: 'Forget your password?'
 
 module.exports = React.createClass
   displayName: 'SignInForm'
 
-  mixins: [PromiseToSetState]
-
   getInitialState: ->
-    user: null
+    busy: false
+    currentUser: null
+    login: ''
+    password: ''
+    error: null
+
+  componentDidMount: ->
+    auth.listen @handleAuthChange
+    @handleAuthChange()
+
+  componentWillUnmount: ->
+    auth.stopListening @handleAuthChange
+
+  handleAuthChange: ->
+    @setState busy: true, =>
+      auth.checkCurrent().then (currentUser) =>
+        @setState {currentUser}
+        if currentUser?
+          @setState login: currentUser.display_name, password: '********'
+        @setState busy: false
 
   render: ->
-    # console.log 'SignInForm', 'render', JSON.stringify @state
-    <ChangeListener target={auth} handler={@renderAuth} />
+    disabled = @state.currentUser? or @state.busy
 
-  renderAuth: ->
-    # console.log 'SignInForm', 'renderAuth'
-    <PromiseRenderer promise={auth.checkCurrent()} then={@renderUser} catch={@renderUser}>
-      <div>Waiting on auth...</div>
-    </PromiseRenderer>
+    <form onSubmit={@handleSubmit}>
+      <label>
+        <Translate content="signInForm.userName" /><br />
+        <input type="text" name="login" value={@state.login} disabled={disabled} autoFocus onChange={@handleInputChange} />
+      </label><br />
 
-  renderUser: (user) ->
-    # console.log 'SignInForm', 'renderUser', user?
-    working = @state.pending.user?
-    signedIn = user? and (not @state.rejected.user?) and (not working)
-    disabled = working or signedIn
+      <label>
+        <Translate content="signInForm.password" /><br />
+        <input type="password" name="password" value={@state.password} disabled={disabled} onChange={@handleInputChange} />
+      </label><br />
 
-    <InPlaceForm onSubmit={@handleSubmit}>
-      <div>
-        <label>
-          <Translate content="signInForm.userName" /><br />
-          <input type="text" name="login" value={user?.display_name} disabled={disabled} ref="login" autoFocus="autoFocus" />
-        </label>
-      </div>
+      <button type="submit" disabled={disabled or @state.login.length is 0 or @state.password.length is 0}>
+        <Translate content="signInForm.signIn" />
+      </button>{' '}
 
-      <br />
+      {if @state.busy
+        <LoadingIndicator />}
 
-      <div>
-        <label>
-          <Translate content="signInForm.password" /><br />
-          <input type="password" name="password" value={user?.password} disabled={disabled} ref="password" />
-        </label>
-      </div>
+      {if @state.currentUser?
+        <div className="form-help">
+          Signed in as {@state.currentUser.display_name}{' '}
+          <button type="button" onClick={@handleSignOut}>Sign out</button>
+        </div>}
 
-      <br />
+      {if @state.error?
+        <div className="form-help error">
+          {if @state.error.message.match /invalid(.+)password/i
+            <Translate content="signInForm.incorrectDetails" />
+          else
+            <span>{@state.error.toString()}</span>}{' '}
 
-      <div>
-        <button type="submit" disabled={disabled}>
-          <Translate content="signInForm.signIn" />
-        </button>
+          <a href="https://www.zooniverse.org/password/reset" target="_blank">
+            <Translate content="signInForm.forgotPassword" />
+          </a>
+        </div>}
+    </form>
 
-        {if signedIn
-          <span className="form-help">
-            Signed in as {user.display_name}
-            <button type="button" onClick={@handleSignOut}>Sign out</button>
-          </span>}
+  handleInputChange: (e) ->
+    newState = {}
+    newState[e.target.name] = e.target.value
+    @setState newState
 
-        {if @state.rejected.user?
-          <span className="form-help error">
-            {@state.rejected.user.message}
-            <a href="https://www.zooniverse.org/password/reset" target="_blank">
-              <Translate content="registerForm.forgotPassword" />
-            </a>
-          </span>}
-
-        {if working
-          <LoadingIndicator />}
-      </div>
-    </InPlaceForm>
-
-  handleSubmit: ->
-    login = @getDOMNode().querySelector('[name="login"]').value
-    password = @getDOMNode().querySelector('[name="password"]').value
-    @promiseToSetState user: auth.signIn({login, password}), =>
-      @props.onSubmit?()
-      @state.pending.user?.then @props.onSuccess, @props.onFailure
+  handleSubmit: (e) ->
+    e.preventDefault()
+    @setState working: true, =>
+      {login, password} = @state
+      auth.signIn {login, password}
+        .then (user) =>
+          @setState working: false, error: null, =>
+            @props.onSuccess? user
+        .catch (error) =>
+          @setState working: false, error: error, =>
+            @getDOMNode().querySelector('[name="login"]')?.focus()
+            @props.onFailure? error
+      @props.onSubmit? e
 
   handleSignOut: ->
-    auth.signOut().then =>
-      @getDOMNode().querySelector('[name="login"]').value = ''
-      @getDOMNode().querySelector('[name="password"]').value = ''
+    @setState busy: true, =>
+      auth.signOut().then =>
+        @setState busy: false, password: ''
