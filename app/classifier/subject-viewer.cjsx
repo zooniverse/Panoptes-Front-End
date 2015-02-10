@@ -1,11 +1,15 @@
 React = require 'react'
 SubjectViewer = require '../components/subject-viewer'
 Draggable = require '../lib/draggable'
-LoadingIndicator = require '../components/loading-indicator'
 drawingTools = require './drawing-tools'
+
+NOOP = Function.prototype
 
 module.exports = React.createClass
   displayName: 'SubjectViewer' # TODO: Rename this.
+
+  getDefaultProps: ->
+    onLoad: NOOP
 
   getInitialState: ->
     naturalWidth: 0
@@ -31,7 +35,7 @@ module.exports = React.createClass
     scale = @getScale()
 
     <div className="subject-area #{@state.proportion}">
-      <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectLoad} onFrameChange={@handleFrameChange}>
+      <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
@@ -65,15 +69,10 @@ module.exports = React.createClass
                   <ToolComponent key={mark._key} {...toolProps} />}
               </g>}
         </svg>
-
-        {if @props.loading
-          <div className="is-loading" style={SubjectViewer.overlayCSS}>
-            <LoadingIndicator />
-          </div>}
       </SubjectViewer>
     </div>
 
-  handleSubjectLoad: (e) ->
+  handleSubjectFrameLoad: (e) ->
     if e.target.tagName.toUpperCase() is 'IMG'
       {naturalWidth, naturalHeight} = e.target
       unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
@@ -90,9 +89,10 @@ module.exports = React.createClass
           'very-wide'
 
         @setState {naturalWidth, naturalHeight, proportion}
+      @props.onLoad? arguments...
 
-  handleFrameChange: (e, index) ->
-    @setState frame: parseFloat e.target.dataset.index
+  handleFrameChange: (e) ->
+    @setState frame: parseFloat e.target.value
 
   handleInitStart: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]

@@ -6,6 +6,8 @@ tasks = require './tasks'
 HandlePropChanges = require '../lib/handle-prop-changes'
 PromiseToSetState = require '../lib/promise-to-set-state'
 
+NOOP = Function.prototype
+
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
 
@@ -18,6 +20,7 @@ Classifier = React.createClass
     workflow: workflow
     subject: subject
     classification: classification
+    onLoad: NOOP
 
   getInitialState: ->
     showingExpertClassification: false
@@ -48,7 +51,7 @@ Classifier = React.createClass
       waitingForAnswer = currentTask.type is 'single' and not currentAnnotation.value?
 
       <div className="classifier">
-        <SubjectViewer subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} loading={@props.loading} />
+        <SubjectViewer subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} onLoad={@handleSubjectImageLoad} />
 
         <div className="task-area">
           <div className="task-container">
@@ -83,26 +86,29 @@ Classifier = React.createClass
           {if @props.classification.completed
             <nav className="task-nav for-summary">
               <a className="talk" href="#/todo/talk">Talk</a>
-              <button type="button" className="continue" disabled={@props.loading} onClick={@props.onClickNext}>Next</button>
+              <button type="button" className="continue" onClick={@props.onClickNext}>Next</button>
             </nav>
 
           else if currentTask?
             <nav className="task-nav for-classification">
-              <button type="button" className="back" disabled={onFirstAnnotation || null} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
+              <button type="button" className="back" disabled={onFirstAnnotation} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
               {if nextTaskKey?
                 nextTaskType = @props.workflow.tasks[nextTaskKey].type
-                <button type="button" className="continue" disabled={waitingForAnswer || null} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
+                <button type="button" className="continue" disabled={waitingForAnswer} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
               else
-                <button type="button" className="continue" disabled={waitingForAnswer || null} onClick={@completeClassification}>Done</button>}
+                <button type="button" className="continue" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
             </nav>}
         </div>
       </div>
     }</ChangeListener>
 
+  handleSubjectImageLoad: (e) ->
+    @props.onLoad? arguments...
+
   completeClassification: ->
     @props.classification.update completed: true
     @props.classification.metadata.finished_at = (new Date).toISOString()
-    @props.classification.update 'metadata'
+    @props.classification.update 'metadata.finished_at'
     @props.onComplete?()
 
   toggleExpertClassification: (value) ->
@@ -135,4 +141,4 @@ module.exports = React.createClass
     if @state.workflow? and @state.subject?
       <Classifier {...@props} workflow={@state.workflow} subject={@state.subject} />
     else
-      null
+      <span>Loading classifier</span>

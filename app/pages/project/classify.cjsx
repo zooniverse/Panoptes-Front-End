@@ -46,6 +46,7 @@ module.exports = React.createClass
         getSubject = Promise.resolve upcomingSubjects[workflow.id].shift()
 
       if upcomingSubjects[workflow.id].length is 0
+        console.log 'Getting more subjects'
         getSubject ?= apiClient.type('subjects').get({
           project_id: project.id
           workflow_id: workflow.id
@@ -77,18 +78,20 @@ module.exports = React.createClass
       {if @state.classification?
         <Classifier
           classification={@state.classification}
+          onLoad={@scrollIntoView}
           onComplete={@handleClassificationCompletion}
           onClickNext={@loadAnotherSubject} />
       else
         <span><LoadingIndicator /> Loading classification</span>}
     </div>
 
-  scrollIntoView: ->
-    # TODO: Call this on first subject load?
-    if scrollY is 0
-      el = @getDOMNode()
-      space = (innerHeight - el.offsetHeight) / 2
-      animatedScrollTo document.body, el.offsetTop - space, 500
+  scrollIntoView: (e) ->
+    lineHeight = parseFloat getComputedStyle(document.body).lineHeight
+    el = @getDOMNode()
+    space = (innerHeight - el.offsetHeight) / 2
+    idealScrollY = el.offsetTop - space
+    if Math.abs(idealScrollY - scrollY) > lineHeight
+      animatedScrollTo document.body, el.offsetTop - space, 333
 
   handleClassificationCompletion: ->
     console?.info 'Completed classification', JSON.stringify @state.classification, null, 2

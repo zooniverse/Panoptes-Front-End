@@ -107,12 +107,16 @@ module.exports = React.createClass
           if project?
             project.refresh()
           else
+            console.error 'Nope'
             throw new Error "Couldn't find project #{owner}/#{name}"
 
   render: ->
     if @state.project?
       <ProjectPage project={@state.project} />
-    else if @state.rejected.project
-      <p>Error</p>
     else
-      <p>Loading</p>
+      <div className="content-container">
+        {if @state.rejected.project?
+          <p>{@state.rejected.project.toString()}</p>
+        else
+          <p>Loading</p>}
+      </div>

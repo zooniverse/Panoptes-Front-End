@@ -1,5 +1,8 @@
 React = require 'react'
+LoadingIndicator = require '../components/loading-indicator'
 alert = require '../lib/alert'
+
+NOOP = Function.prototype
 
 READABLE_FORMATS =
   image: ['jpeg', 'png', 'svg+xml', 'gif']
@@ -22,23 +25,29 @@ module.exports = React.createClass
   getDefaultProps: ->
     subject: null
     frame: 0
-    # No-op:
-    onFrameChange: Function.prototype
-    onLoad: Function.prototype
+    onFrameChange: NOOP
+    onLoad: NOOP
+
+  getInitialState: ->
+    loading: true
+
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.subject is @props.subject and nextProps.frame is @props.frame
+      @setState loading: true
 
   getReadableLocation: ->
     for mimeType, src of @props.subject?.locations?[@props.frame] ? {}
       [type, format] = mimeType.split '/'
       if type of READABLE_FORMATS and format in READABLE_FORMATS[type]
         break
-    [type, format, src]
+    {type, format, src}
 
   render: ->
-    [type, format, src] = @getReadableLocation()
+    {type, format, src} = @getReadableLocation()
 
-    mainDisplay =switch type
+    mainDisplay = switch type
       when 'image'
-        <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@props.onLoad} />
+        <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleImageLoad} />
 
     tools = switch type
       when 'image'
@@ -47,17 +56,20 @@ module.exports = React.createClass
         else
           <span className="subject-frame-pips">
             {for i in [0...@props.subject?.locations.length ? 0]
-              <button type="button" key={i} className="subject-frame-pip #{if i is @props.frame then 'active' else ''}" data-index={i} onClick={@props.onFrameChange}>{i + 1}</button>}
+              <button type="button" key={i} className="subject-frame-pip #{if i is @props.frame then 'active' else ''}" value={i} onClick={@props.onFrameChange}>{i + 1}</button>}
           </span>
 
     <div className="subject-viewer" style={ROOT_STYLE}>
       <div className="subject-container" style={CONTAINER_STYLE}>
         {mainDisplay}
         {@props.children}
+        {if @state.loading
+          <div className="loading-cover" style={@constructor.overlayStyle}>
+            <LoadingIndicator />
+          </div>}
       </div>
 
       <div className="subject-tools">
-        <span></span>
         <span>{tools}</span>
         <span>
           {if @props.subject?.metadata?
@@ -78,3 +90,7 @@ module.exports = React.createClass
           </tr>}
       </table>
     </div>
+
+  handleImageLoad: (e) ->
+    @setState loading: false
+    @props.onLoad? arguments...
