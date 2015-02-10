@@ -4,7 +4,6 @@ TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 animatedScrollTo = require 'animated-scrollto'
 Classifier = require '../../classifier'
-LoadingIndicator = require '../../components/loading-indicator'
 
 classificationsInProgress = {}
 upcomingSubjects = {}
@@ -74,7 +73,7 @@ module.exports = React.createClass
         classification
 
   render: ->
-    <div className="classify-content content-container">
+    <div className="classify-page content-container">
       {if @state.classification?
         <Classifier
           classification={@state.classification}
@@ -82,7 +81,7 @@ module.exports = React.createClass
           onComplete={@handleClassificationCompletion}
           onClickNext={@loadAnotherSubject} />
       else
-        <span><LoadingIndicator /> Loading classification</span>}
+        <span>Loading classification</span>}
     </div>
 
   scrollIntoView: (e) ->

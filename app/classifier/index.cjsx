@@ -83,14 +83,16 @@ Classifier = React.createClass
               <span><i className="fa fa-exclamation-circle"></i> No task ready</span>}
           </div>
 
+          <hr />
+
           {if @props.classification.completed
-            <nav className="task-nav for-summary">
+            <nav className="task-nav">
               <a className="talk" href="#/todo/talk">Talk</a>
               <button type="button" className="continue" onClick={@props.onClickNext}>Next</button>
             </nav>
 
           else if currentTask?
-            <nav className="task-nav for-classification">
+            <nav className="task-nav">
               <button type="button" className="back" disabled={onFirstAnnotation} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
               {if nextTaskKey?
                 nextTaskType = @props.workflow.tasks[nextTaskKey].type

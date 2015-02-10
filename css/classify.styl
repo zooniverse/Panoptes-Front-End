@@ -1,28 +1,13 @@
 .classifier
   display: flex
   flex-wrap: wrap
+  justify-content: center
 
   > .subject-area
     align-items: center
     justify-content: center
     display: flex
-    flex: 1 1 40%
     margin: 0 1.5vw 1em 0
-    max-width: 100%
-    min-width: 20em
-    text-align: center
-
-    &.very-tall
-      flex-basis: 1%
-
-    &.tall
-      flex-basis: 20%
-
-    &.wide
-      flex-basis: 60%
-
-    &.very-wide
-      flex-basis: 80%
 
   .subject-container
     color: gray
@@ -70,18 +55,8 @@
       background: currentColor
 
   > .task-area
-    display: flex
-    flex: 1 1 1%
-    flex-direction: column
+    flex: 1 0 20em
     margin-bottom: 1em
-    max-height: 95vh
-    min-width: 15em
-
-  .task-container
-    border-bottom: 1px solid rgba(gray, 0.5)
-    flex: 1 1 auto
-    margin-bottom: 0.5em
-    overflow: auto
 
   .clickable
     @extends $minor-button
@@ -115,19 +90,19 @@
 
   .task-nav
     display: flex
-    flex: 0 0 auto
-
-    > :not(:first-child)
-      margin-left: 0.5em
-
-    .talk
-      @extends $standard-button
-      flex: 2 0 auto
+    margin-top: 1em
 
     .back
       @extends $minor-button
-      flex: 1 0 auto
+      flex: 1 0
+
+    .talk
+      @extends $standard-button
+      flex: 2 0
 
     .continue
       @extends $major-button
-      flex: 7 0 auto
+      flex: 3 0
+
+    > :not(:first-child)
+      margin-left: 0.5em
