@@ -23,4 +23,5 @@ module.exports = class extends Resource
     annotation
 
   handleAnnotationDestroy: (index) ->
-    @update annotations: @annotations.splice index, 1
+    @annotations.splice index, 1
+    @update 'annotations'
