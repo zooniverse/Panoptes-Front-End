@@ -11,14 +11,20 @@ module.exports = React.createClass
     </PromiseRenderer>
 
   renderWithOwner: (owner) ->
-    <Link to="project-home" params={owner: owner?.login ? 'LOADING', name: @props.project.display_name} className="project-card">
-      <div className="media">
-        <img src={@props.project.avatar} className="avatar" />
-      </div>
+    linkProps =
+      to: 'project-home'
+      params:
+        owner: owner?.login ? 'LOADING'
+        name: @props.project.display_name
 
+      style:
+        backgroundImage: "url('#{@props.project.avatar}')"
+
+    <Link {...linkProps} className="project-card">
+      <svg className="project-card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
       <div className="details">
+        <div className="name">{@props.project.display_name}</div>
         <div className="owner">{owner?.display_name ? 'LOADING'}</div>
-        <div className="title">{@props.project.display_name}</div>
-        <div className="introduction">{@props.project.introduction}</div>
+        <div className="description">{@props.project.description}</div>
       </div>
     </Link>

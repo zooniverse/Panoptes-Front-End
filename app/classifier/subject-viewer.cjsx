@@ -1,15 +1,20 @@
 React = require 'react'
 SubjectViewer = require '../components/subject-viewer'
 Draggable = require '../lib/draggable'
-LoadingIndicator = require '../components/loading-indicator'
 drawingTools = require './drawing-tools'
+
+NOOP = Function.prototype
 
 module.exports = React.createClass
   displayName: 'SubjectViewer' # TODO: Rename this.
 
+  getDefaultProps: ->
+    onLoad: NOOP
+
   getInitialState: ->
     naturalWidth: 0
     naturalHeight: 0
+    proportion: 'square'
     frame: 0
 
   getScale: ->
@@ -29,8 +34,8 @@ module.exports = React.createClass
   render: ->
     scale = @getScale()
 
-    <div className="subject-area">
-      <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectLoad} onFrameChange={@handleFrameChange}>
+    <div className="subject-area #{@state.proportion}">
+      <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
@@ -64,22 +69,30 @@ module.exports = React.createClass
                   <ToolComponent key={mark._key} {...toolProps} />}
               </g>}
         </svg>
-
-        {if @props.loading
-          <div className="is-loading" style={SubjectViewer.overlayCSS}>
-            <LoadingIndicator />
-          </div>}
       </SubjectViewer>
     </div>
 
-  handleSubjectLoad: (e) ->
+  handleSubjectFrameLoad: (e) ->
     if e.target.tagName.toUpperCase() is 'IMG'
       {naturalWidth, naturalHeight} = e.target
       unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
-        @setState {naturalWidth, naturalHeight}
+        proportion = naturalWidth / naturalHeight
+        proportion = if proportion <= 0.4
+          'very-tall'
+        else if 0.4 < proportion <= 0.9
+          'tall'
+        else if 0.9 < proportion <= 1.1
+          'square'
+        else if 1.1 < proportion <= 1.6
+          'wide'
+        else if 1.6 < proportion
+          'very-wide'
 
-  handleFrameChange: (e, index) ->
-    @setState frame: parseFloat e.target.dataset.index
+        @setState {naturalWidth, naturalHeight, proportion}
+      @props.onLoad? arguments...
+
+  handleFrameChange: (e) ->
+    @setState frame: parseFloat e.target.value
 
   handleInitStart: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
@@ -109,7 +122,7 @@ module.exports = React.createClass
       for key, value of initValues
         mark[key] = value
 
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   handleInitDrag: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
@@ -122,7 +135,7 @@ module.exports = React.createClass
       initMoveValues = MarkComponent.initMove mouseCoords, mark, e
       for key, value of initMoveValues
         mark[key] = value
-      @props.classification.emit 'change'
+      @props.classification.update 'annotations'
 
   handleInitRelease: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
@@ -135,7 +148,7 @@ module.exports = React.createClass
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
       for key, value of initReleaseValues
         mark[key] = value
-      @props.classification.emit 'change'
+      @props.classification.update 'annotations'
 
   selectMark: (mark) ->
     index = @props.annotation.value.indexOf mark

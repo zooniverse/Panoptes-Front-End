@@ -1,12 +1,10 @@
+FOREGROUND = #404040
 BACKGROUND = white
-FOREGROUND = #333
-MAIN_HIGHLIGHT = #f60
-
-SANS_SERIF = Montserrat, "Gill Sans", Arial, sans-serif
-SERIF = "Playfair Display", Georgia, serif
+MAIN_HIGHLIGHT = #43bbfd
+SECOND_HIGHLIGHT = #38b978
 
 background-stripes(color1, color2, size)
-  background: linear-gradient(-45deg, color1 25%, color2 25%, color2 50%, color1 50%, color1 75%, color2 75%)
+  background: white linear-gradient(-45deg, color1 25%, color2 25%, color2 50%, color1 50%, color1 75%, color2 75%)
   background-size: size size
 
 $reset-button
@@ -14,6 +12,7 @@ $reset-button
   border: 0
   color: inherit
   cursor: pointer
+  display: inline-block
   font: inherit
   line-height: inherit
   margin: 0
@@ -23,6 +22,35 @@ $reset-button
   &:disabled
     cursor: inherit
     opacity: 0.5
+
+$standard-button
+  @extends $reset-button
+  background: MAIN_HIGHLIGHT
+  border-radius: 3px
+  padding: 0.5em 1em
+  text-align: center
+
+  &:hover
+    background: lighten(MAIN_HIGHLIGHT, 20%)
+
+  &:disabled
+    pointer-events: none
+
+$major-button
+  @extends $standard-button
+  background: SECOND_HIGHLIGHT
+  font-weight: bold
+
+  &:hover
+    background: lighten(SECOND_HIGHLIGHT, 20%)
+
+$minor-button
+  BACKGROUND = #424242
+  @extends $standard-button
+  background: BACKGROUND
+
+  &:hover
+    background: lighten(BACKGROUND, 20%)
 
 $text-input
   border: 1px solid gray

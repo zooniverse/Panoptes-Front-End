@@ -12,8 +12,25 @@ body
   flex: 1 0 auto
   flex-direction: column
 
-@require "./admin"
-@require "./content-container"
-@require "./tabbed-content"
-@require "./columns"
-@require "./dialog"
+.content-container
+  margin: 1.5em 3vw
+
+.columns-container
+  display: flex
+
+  > :not(:last-child)
+      margin-right: 2.5vw
+
+  > :not(hr)
+    flex: 0 1 auto
+
+  > .column
+    // TODO: Try `flex: 1 1 100%`.
+    flex: 1 1 auto
+    width: 100% // It'll flex with its siblings, so it won't actually be 100% wide.
+
+  > hr
+    border-width: 0 0 0 1px
+    height: auto
+    margin-bottom: 0
+    margin-top: 0

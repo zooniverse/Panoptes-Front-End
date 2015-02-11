@@ -6,6 +6,8 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
 
 workflow = apiClient.type('workflows').create
+  id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
+
   first_task: 'draw'
   tasks:
     draw:
@@ -46,11 +48,18 @@ workflow = apiClient.type('workflows').create
       ]
 
 subject = apiClient.type('subjects').create
+  id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
+
   locations: [
-    {'image/jpeg': 'http://lorempixel.com/400/300/animals/1'}
-    {'image/jpeg': 'http://lorempixel.com/400/300/animals/2'}
-    {'image/jpeg': 'http://lorempixel.com/400/300/animals/3'}
+    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/1'}
+    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/2'}
+    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/3'}
   ]
+
+  metadata:
+    'Capture date': '5 Feb, 2015'
+    'Region': 'Chicago, IL'
+
   expert_classification_data:
     annotations: [{
       task: 'draw'
@@ -73,8 +82,13 @@ subject = apiClient.type('subjects').create
       value: [0, 2]
     }]
 
-classification = apiClient.type('classifications').create {}
+classification = apiClient.type('classifications').create
+  links:
+    workflow: workflow.id
+    subjects: [subject.id]
+  _workflow: workflow # TEMP
+  _subject: subject # TEMP
 classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
 
 module.exports = {workflow, subject, classification}
-window.mockData = module.exports
+window.mockClassifierData = module.exports

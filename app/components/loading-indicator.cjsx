@@ -4,5 +4,7 @@ module.exports = React.createClass
   displayName: 'LoadingIndicator'
 
   render: ->
-    # TODO
-    <i className="fa fa-spin fa-spinner"></i>
+    <span className="loading-indicator">
+      <span className="loading-indicator-icon"></span>{' '}
+      {@props.children}
+    </span>

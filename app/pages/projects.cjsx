@@ -5,51 +5,11 @@ Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 ProjectCard = require '../partials/project-card'
+{Link} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'Projects'
-
-Pager = React.createClass
-  displayName: 'Pager'
-
-  getDefaultProps: ->
-    type: ''
-    query: {}
-    renderItems: null
-
-  getInitialState: ->
-    request: @makeRequest 1
-    page: NaN
-    pageCount: NaN
-
-  makeRequest: (page) ->
-    params = Object.assign {page}, @props?.query
-    apiClient.type(@props.type).get params, Infinity, @handleResponse
-
-  handleResponse: (request) ->
-    # NOTE: Handling request metadata is currently pretty gnarly.
-    {meta} = JSON.parse request.responseText
-    @setState
-      page: meta[@props.type].page
-      pageCount: meta[@props.type].page_count
-
-  goToPage: (page) ->
-    @setState
-      request: @makeRequest page
-
-  render: ->
-    <div className="pager">
-      <PromiseRenderer promise={@state.request} then={@props.renderItems}>
-        <div>Loading <code>{@props.type}</code>...</div>
-      </PromiseRenderer>
-
-      <nav className="pager-navigation">
-        {for page in [1..@state.pageCount]
-          current = page is @state.page
-          <button key={page} disabled={current} onClick={@goToPage.bind this, page}>{page}</button>}
-      </nav>
-    </div>
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'
@@ -61,16 +21,29 @@ module.exports = React.createClass
   render: ->
     <div className="projects-page">
       <div className="content-container">
-        <Translate component="h1" content="projectsPage.title" />
+        <Translate component="h1" content="projectsPage.title" /><br />
+        <PromiseRenderer promise={apiClient.type('projects').get(@props.query ? {})}>{(projects) =>
+          if projects?
+            if projects.length is 0
+              <span>No projects found.</span>
+            else
+              <div>
+                <div className="project-card-list">
+                  {if projects?
+                    for project in projects
+                      <ProjectCard key={project.id} project={project} />}
+                </div>
+                <nav>
+                  {meta = projects[0].getRequestMeta()
+                  if meta?
+                    <nav className="pagination">
+                      {for page in [1..meta.page_count]
+                        <Link to="projects" query={{page}} key={page} className="pill">{page}</Link>}
+                    </nav>}
+                </nav>
+              </div>
+          else
+            <div>Loading projects</div>
+        }</PromiseRenderer>
       </div>
-      <hr />
-      <div className="content-container">
-        <Pager type="projects" renderItems={@renderProjects} />
-      </div>
-    </div>
-
-  renderProjects: (projects) ->
-    <div className="project-card-list">
-      {for project in projects
-        <ProjectCard key={project.id} project={project} />}
     </div>

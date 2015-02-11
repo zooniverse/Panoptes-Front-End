@@ -64,23 +64,22 @@ QuestionTaskEditor = React.createClass
     </div>
 
   handleChangeMultiple: (e) ->
-    @props.workflow.update tasks: =>
-      @props.task.type = if e.target.checked
+    @props.task.type = if e.target.checked
         'multiple'
       else
         'single'
-      @props.workflow.tasks
+    @props.workflow.update 'tasks'
 
   addAnswer: ->
     @props.task.answers ?= []
     @props.task.answers.push
       label: ''
       next: null
-    @props.workflow.emit 'change'
+    @props.workflow.update 'tasks'
 
   removeAnswer: (index) ->
     @props.task.answers.splice index, 1
-    @props.workflow.emit 'change'
+    @props.workflow.update 'tasks'
 
 ToolEditor = React.createClass
   displayName: 'ToolEditor'
@@ -154,11 +153,11 @@ DrawingTaskEditor = React.createClass
       label: ''
       shape: 'point'
       color: null
-    @props.workflow.emit 'change'
+    @props.workflow.update 'tasks'
 
   removeTool: (index) ->
     @props.task.tools.splice index, 1
-    @props.workflow.emit 'change'
+    @props.workflow.update 'tasks'
 
 TaskEditor = React.createClass
   displayName: 'TaskEditor'
@@ -263,7 +262,7 @@ module.exports = React.createClass
     else
       @props.workflow.first_task = newTaskKey
 
-    @props.workflow.emit 'change'
+    @props.workflow.update 'tasks'
 
   removeTask: (taskKey) ->
     for key, task of @props.workflow.tasks
@@ -278,4 +277,4 @@ module.exports = React.createClass
       else
         delete @props.workflow.first_task
     delete @props.workflow.tasks[taskKey]
-    @props.workflow.emit 'change'
+    @props.workflow.update 'tasks'

@@ -16,6 +16,6 @@ module.exports = React.createClass
         for annotation in @props.classification.annotations
           annotation._key = Math.random()
           task = @props.workflow.tasks[annotation.task]
-          SummaryComponent = tasks[task.type].Summary
+          SummaryComponent = tasks[task.type].Summary # TODO: There's a lot of duplicated code in these modules.
           <SummaryComponent key={annotation._key} task={task} annotation={annotation} onToggle={@props.onToggle} />}
     </div>

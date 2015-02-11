@@ -1,12 +1,13 @@
 counterpart = require 'counterpart'
 React = require 'react'
-PromiseRenderer = require '../../components/promise-renderer'
+HandlePropChanges = require '../../lib/handle-prop-changes'
+PromiseToSetState = require '../../lib/promise-to-set-state'
+ChangeListener = require '../../components/change-listener'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
 apiClient = window.api = require '../../api/client'
+auth = require '../../api/auth'
 TitleMixin = require '../../lib/title-mixin'
-PromiseToSetState = require '../../lib/promise-to-set-state'
-LoadingIndicator = require '../../components/loading-indicator'
 
 counterpart.registerTranslations 'en',
   project:
@@ -15,9 +16,23 @@ counterpart.registerTranslations 'en',
       status: 'Status'
       team: 'Team'
       classify: 'Classify'
+      discuss: 'Discuss'
 
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
+
+  mixins: [HandlePropChanges, PromiseToSetState]
+
+  propChangeHandlers:
+    project: (project) ->
+      unless @state.pending.owner?
+        @promiseToSetState owner: project.link 'owner'
+
+  getDefaultProps: ->
+    project: null
+
+  getInitialState: ->
+    owner: null
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-project-page'
@@ -26,77 +41,82 @@ ProjectPage = React.createClass
     document.documentElement.classList.remove 'on-project-page'
 
   render: ->
-    <div className="project-page tabbed-content" data-side="top" style={backgroundImage: "url(#{@props.project.background_image})" if @props.project.background_image}>
-      <div className="background-darkener"></div>
+    <ChangeListener target={@props.project}>{=>
+      if @props.project.background_image
+        backgroundStyle =
+          backgroundImage: "url('#{@props.project.background_image}')"
 
-      <PromiseRenderer promise={@props.project.link 'owner'} then={@renderNav} />
+      <div className="project-page">
+        <div className="project-background" style={backgroundStyle}></div>
 
-      <div className="project-page-content">
-        <RouteHandler project={@props.project} />
+        {if @state.owner?
+          params =
+            owner: @state.owner.display_name
+            name: @props.project.display_name
+
+          <nav className="project-nav tabbed-content-tabs">
+            <Link to="project-home" params={params} className="tabbed-content-tab">
+              <img src={@props.project.avatar} className="project-avatar" />
+              {@props.project.display_name}
+            </Link>
+            <Link to="project-science-case" params={params} className="tabbed-content-tab">
+              <Translate content="project.nav.science" />
+            </Link>
+            <Link to="project-status" params={params} className="tabbed-content-tab">
+              <Translate content="project.nav.status" />
+            </Link>
+            <Link to="project-team" params={params} className="tabbed-content-tab">
+              <Translate content="project.nav.team" />
+            </Link>
+            <Link to="project-classify" params={params} className="classify tabbed-content-tab">
+              <Translate content="project.nav.classify" />
+            </Link>
+            <Link to="project-talk" params={params} className="tabbed-content-tab">
+              <Translate content="project.nav.discuss" />
+            </Link>
+          </nav>}
+
+        {if @state.owner?
+          <RouteHandler project={@props.project} owner={@state.owner} />}
       </div>
-    </div>
-
-  renderNav: (owner) ->
-    params =
-      owner: owner.login
-      name: @props.project.display_name
-
-    <nav className="tabbed-content-tabs">
-      <Link to="project-home" params={params} className="home tabbed-content-tab">
-        <h2><img src={@props.project.avatar} className="project-avatar" />{@props.project.display_name}</h2>
-      </Link>
-      <Link to="project-science-case" params={params} className="tabbed-content-tab">
-        <Translate content="project.nav.science" />
-      </Link>
-      <Link to="project-status" params={params} className="tabbed-content-tab">
-        <Translate content="project.nav.status" />
-      </Link>
-      <Link to="project-team" params={params} className="tabbed-content-tab">
-        <Translate content="project.nav.team" />
-      </Link>
-      <Link to="project-classify" params={params} className="classify tabbed-content-tab">
-        <Translate content="project.nav.classify" />
-      </Link>
-      <Link to="project-talk" params={params} className="tabbed-content-tab">
-        <i className="fa fa-comments"></i>
-      </Link>
-    </nav>
+    }</ChangeListener>
 
 module.exports = React.createClass
-  displayName: 'ProjectPageContainer'
+  displayName: 'ProjectPageWrapper'
 
-  mixins: [TitleMixin, PromiseToSetState]
+  mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
 
   title: ->
     @state.project?.display_name ? '(Loading)'
 
-  getInitialState: ->
-    project: null
-
   componentDidMount: ->
-    @fetchProject @props.params.owner, @props.params.name
+    auth.listen 'change', @fetchProject
 
-  componentWillReceiveProps: (nextProps) ->
-    unless nextProps.params.owner is @props.params.owner and nextProps.params.name is @props.params.name
-      @fetchProject nextProps.params.owner, nextProps.params.name
+  componentWillUnmount: ->
+    auth.stopListening 'change', @fetchProject
 
-  fetchProject: (owner, name) ->
-    @promiseToSetState project: apiClient.type('projects').get({owner: owner, display_name: name, include: 'owners'}).then ([project]) ->
-      project?.refresh()
+  propChangeHandlers:
+    'params.owner': 'fetchProject'
+    'params.name': 'fetchProject'
+
+  fetchProject: ->
+    unless @state.pending.project?
+      @promiseToSetState project: auth.checkCurrent().then =>
+        {owner, name} = @props.params
+        apiClient.type('projects').get({owner: owner, display_name: name}).then ([project]) ->
+          if project?
+            project.refresh()
+          else
+            console.error 'Nope'
+            throw new Error "Couldn't find project #{owner}/#{name}"
 
   render: ->
     if @state.project?
       <ProjectPage project={@state.project} />
-    else if @state.pending.project?
-      <div>Loading project</div>
-    else if @state.rejected.project?
-      <div>@state.rejected.project.toString()</div>
     else
       <div className="content-container">
-        {if @state.pending.project?
-          <span><LoadingIndicator /> Loading project {@props.params.id}</span>
-        else if @state.rejected.project?
-          <code><i className="fa fa-exclamation-circle"></i> {@state.rejected.project.toString()}</code>
+        {if @state.rejected.project?
+          <p>{@state.rejected.project.toString()}</p>
         else
-          null}
+          <p>Loading</p>}
       </div>

@@ -2,6 +2,7 @@
   "name": "panoptes",
   "version": "0.0.1",
   "dependencies": {
+    "animated-scrollto": "^1.1.0",
     "counterpart": "^0.16.4",
     "debounce": "^1.0.0",
     "emojify.js": "^0.9.5",
@@ -39,7 +40,8 @@
     "get-fallback-polyfills": "curl \"$npm_package_config_fallbackPolyfillsURL\" > ./public/fallback-polyfills.js",
     "get-font-awesome": "rm -rf ./public/font-awesome; curl --location \"$npm_package_config_fontAwesomeURL\" --output ./fa.zip && unzip -q ./fa.zip -d ./fa.tmp && mkdir ./public/font-awesome && mv ./fa.tmp/*/{css,fonts} ./public/font-awesome; rm -rf ./fa.{zip,tmp}",
     "postinstall": "npm run get-fallback-polyfills && npm run get-font-awesome",
-    "stage": "NODE_ENV=staging npm run build && publisssh ./build demo.zooniverse.org/panoptes-front-end",
+    "stage": "NODE_ENV=staging npm run build && publisssh ./build \"demo.zooniverse.org/panoptes-front-end/$DEPLOY_SUBDIR\"",
+    "stage-branch": "DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD) npm run stage",
     "start": "./bin/serve.sh",
     "test": "browserify ./test/runner.coffee --extension .coffee --extension .cjsx --transform coffee-reactify --transform envify --ignore-transform coffeeify | testling \"${TESTLING_ARGS:---pass}\" | tap-spec",
     "test-mac": "TESTLING_ARGS=\"-x open --new -a Google\\ Chrome --args --incognito\" npm run test"

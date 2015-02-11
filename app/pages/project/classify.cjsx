@@ -1,93 +1,102 @@
 React = require 'react'
 apiClient = require '../../api/client'
 TitleMixin = require '../../lib/title-mixin'
-PromiseToSetState = require '../../lib/promise-to-set-state'
+HandlePropChanges = require '../../lib/handle-prop-changes'
+animatedScrollTo = require 'animated-scrollto'
 Classifier = require '../../classifier'
-LoadingIndicator = require '../../components/loading-indicator'
 
-projectStatesInProgress = {}
+classificationsInProgress = {}
+upcomingSubjects = {}
 
 module.exports = React.createClass
-  displayName: 'ClassifyPage'
+  displayName: 'ProjectClassifyPage'
 
-  mixins: [TitleMixin, PromiseToSetState]
+  mixins: [TitleMixin, HandlePropChanges]
 
   title: 'Classify'
-
-  getDefaultProps: ->
-    project: null
 
   getInitialState: ->
     workflow: null
     subject: null
     classification: null
 
+  propChangeHandlers:
+    project: 'loadClassificationForProject'
+
   componentDidMount: ->
-    @switchToProject @props.project
+    setTimeout @scrollIntoView
 
-  componentWillReceiveProps: (nextProps) ->
-    unless nextProps.project is @props.project
-      @switchToProject nextProps.project
-
-  switchToProject: (project) ->
-    unless projectStatesInProgress[project.id]?
-      @createNewClassification project
-    @promiseToSetState projectStatesInProgress[project.id]
+  loadClassificationForProject: (project) ->
+    if classificationsInProgress[project.id]?
+      @setState classification: classificationsInProgress[project.id]
+    else
+      @createNewClassification(project).then (classification) =>
+        classificationsInProgress[project.id] = classification
+        @setState classification: classificationsInProgress[project.id]
 
   createNewClassification: (project) ->
-    workflow = @getWorkflow()
-    subject = @getSubject workflow
-    classification = @createClassification workflow, subject
-    projectStatesInProgress[project.id] = {workflow, subject, classification}
-
-  getWorkflow: (index) ->
-    @props.project.link('workflows').then (workflows) ->
+    project.link('workflows').then (workflows) ->
       randomIndex = Math.floor Math.random() * workflows.length
-      workflows[index ? randomIndex]
+      workflow = workflows[randomIndex] # TODO: Choose a specific workflow if query exists.
 
-  getSubject: (workflow) ->
-    workflow.then (workflow) =>
-      apiClient.type('subjects').get({
-        project_id: @props.project.id
-        workflow_id: workflow.id
-        # sort: 'cellect'
-      }, 1).then (subjects) ->
-        subjects[Math.floor Math.random() * subjects.length]
+      upcomingSubjects[workflow.id] ?= []
 
-  createClassification: (workflow, subject) ->
-    Promise.all([workflow, subject]).then ([workflow, subject]) =>
-      classification = apiClient.type('classifications').create
-        links:
-          project: @props.project.id
-          workflow: workflow.id
-          subjects: [subject.id]
-      classification.update metadata: ->
+      unless upcomingSubjects[workflow.id].length is 0
+        getSubject = Promise.resolve upcomingSubjects[workflow.id].shift()
+
+      if upcomingSubjects[workflow.id].length is 0
+        console.log 'Getting more subjects'
+        getSubject ?= apiClient.type('subjects').get({
+          project_id: project.id
+          workflow_id: workflow.id
+          # sort: 'cellect'
+        }).then (subjects) ->
+          upcomingSubjects[workflow.id].push subjects...
+          upcomingSubjects[workflow.id].shift()
+
+      getSubject.then (subject) ->
+        classification = apiClient.type('classifications').create
+          links:
+            project: project.id
+            workflow: workflow.id
+            subjects: [subject.id]
+
         classification.metadata.workflow_version = workflow.version
-        classification.metadata
-      classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
-      window.classification = classification
-      classification
+        classification.update 'metadata'
+
+        # TODO: This is temporary.
+        # Don't rely on these once the back end provides the right links.
+        classification._workflow = workflow
+        classification._subject = subject
+
+        classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
+        classification
 
   render: ->
-    <div className="classify-content content-container">
-      {if @state.workflow? and @state.subject? and @state.classification?
+    <div className="classify-page content-container">
+      {if @state.classification?
         <Classifier
-          workflow={@state.workflow}
-          subject={@state.subject}
           classification={@state.classification}
-          loading={@state.pending.subject?}
+          onLoad={@scrollIntoView}
           onComplete={@handleClassificationCompletion}
           onClickNext={@loadAnotherSubject} />
       else
-        <span><LoadingIndicator /> Loading classification interface</span>}
+        <span>Loading classification</span>}
     </div>
+
+  scrollIntoView: (e) ->
+    lineHeight = parseFloat getComputedStyle(document.body).lineHeight
+    el = @getDOMNode()
+    space = (innerHeight - el.offsetHeight) / 2
+    idealScrollY = el.offsetTop - space
+    if Math.abs(idealScrollY - scrollY) > lineHeight
+      animatedScrollTo document.body, el.offsetTop - space, 333
 
   handleClassificationCompletion: ->
     console?.info 'Completed classification', JSON.stringify @state.classification, null, 2
     @state.classification.save().then =>
       console?.log 'Saved classification', @state.classification.id
-    # TODO: Preload another subject.
 
   loadAnotherSubject: ->
-    projectStatesInProgress[@props.project.id] = null
-    @switchToProject @props.project
+    classificationsInProgress[@props.project.id] = null
+    @loadClassificationForProject @props.project

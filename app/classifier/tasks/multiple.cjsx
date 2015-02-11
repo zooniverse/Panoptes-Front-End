@@ -1,5 +1,6 @@
 React = require 'react'
 GenericTask = require './generic'
+Markdown = require '../../components/markdown'
 
 Summary = React.createClass
   displayName: 'MultipleChoiceSummary'
@@ -17,9 +18,9 @@ Summary = React.createClass
       <div className="question">
         {@props.task.question}
         {if @state.expanded
-          <button type="button" onClick={@setState.bind this, expanded: false, null}>Less</button>
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
         else
-          <button type="button" onClick={@setState.bind this, expanded: true, null}>More</button>}
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: true, null}>More</button>}
       </div>
       <div className="answers">
         {if @state.expanded
@@ -38,6 +39,7 @@ Summary = React.createClass
           else
             for index in @props.annotation.value
               <div key={index} className="answer">
+                <i className="fa fa-check-square-o fa-fw"></i>
                 {@props.task.answers[index].label}
               </div>}
       </div>
@@ -59,9 +61,9 @@ module.exports = React.createClass
   render: ->
     answers = for answer, i in @props.task.answers
       answer._key ?= Math.random()
-      <label key={answer._key} className="clickable">
+      <label key={answer._key} className="clickable #{if i in @props.annotation.value then 'active' else ''}">
         <input type="checkbox" checked={i in @props.annotation.value} onChange={@handleChange.bind this, i} />
-        <span>{answer.label}</span>
+        <Markdown>{answer.label}</Markdown>
       </label>
 
     <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} />

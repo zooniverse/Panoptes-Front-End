@@ -1,48 +1,29 @@
 .project-card-list
   column-width: 20em
-  column-gap: 1.5vw
+  column-gap: 3vw
 
 .project-card
-  color: FOREGROUND
+  background: rgba(gray, 0.5)
+  background-position: 50% 0
+  background-size: cover
+  border: 1px solid lighten(gray, 50%)
+  border-radius: 4px
   vendor("column-break-inside", avoid)
-  background: BACKGROUND
-  display: flex
-  font-size: 0.7rem
-  line-height: 1.2
-  margin-bottom: 1.5vw
+  display: block
+  margin-bottom: 1em
+  overflow: hidden
   text-decoration: none
 
-  &
-    border: 1px solid rgba(black, 0.3)
-    box-shadow: 0 1px 2px -2px black
-    box-sizing: border-box
-    padding: 1em
+  .details
+    background: BACKGROUND
+    color: FOREGROUND
+    padding: 1em 3vw
 
-  .media
-    margin-right: 1vw
+  .name
+    font-size: 1.4em
+    font-weight: bold
     text-align: center
 
-  .avatar
-    border-radius: 50%
-    display: block
-    height: 6vw
-    margin-left: -3vw
-    min-height: 3em
-    min-width: 3em
-    width: 6vw
-
-    &:not([src]),
-    &[src=""]
-      background-stripes: rgba(gray, 0.5) yellow 20px
-
-  .details
-    flex: 1
-
   .owner
-    @extends h3
-
-  .title
-    @extends h2
-
-  .introduction
-    margin-top: 0.5em
+    opacity: 0.5
+    text-align: center

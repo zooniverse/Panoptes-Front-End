@@ -41,4 +41,4 @@ module.exports = React.createClass
     {mark, annotation, classification} = @props.tool.props
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
-    classification.emit 'change'
+    @props.tool.props.classification.update 'annotations'

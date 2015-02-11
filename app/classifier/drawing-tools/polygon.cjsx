@@ -76,15 +76,15 @@ module.exports = React.createClass
 
   handleFinishClick: (closed) ->
     @props.mark.closed = closed
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   handleMainDrag: (e, d) ->
     for point in @props.mark.points
       point.x += d.x
       point.y += d.y
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'
 
   handleHandleDrag: (index, e, d) ->
     @props.mark.points[index].x += d.x
     @props.mark.points[index].y += d.y
-    @props.classification.emit 'change'
+    @props.classification.update 'annotations'

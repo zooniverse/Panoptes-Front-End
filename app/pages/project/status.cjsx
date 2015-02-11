@@ -6,7 +6,5 @@ module.exports = React.createClass
 
   render: ->
     <div className="project-text-content content-container">
-      <div>
-        <hr Dashboard project={@props.project} />
-      </div>
+      <p>TODO: Project status page</p>
     </div>
