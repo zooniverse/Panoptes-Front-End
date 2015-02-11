@@ -47,6 +47,9 @@ ProjectEditPage = React.createClass
             Introduction<br />
             <MarkdownEditor name="introduction" value={@props.project.introduction} onChange={handleProjectChange} /><br />
 
+            Science case<br />
+            <MarkdownEditor name="science_case" value={@props.project.science_case} onChange={handleProjectChange} /><br />
+
             Workflows<br />
             <ul>
               {for workflow in @state.workflows
