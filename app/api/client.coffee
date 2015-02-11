@@ -21,7 +21,7 @@ apiClient.handleError = (request) ->
         ("#{key} #{error}" for key, error of message).join '\n'
     errorMessage = errorMessage.join '\n'
 
-  errorMessage ?= request.responseText.trim() || "#{request.status} #{request.statusText}"
+  errorMessage ?= request.responseText?.trim() || "#{request.status} #{request.statusText}"
   throw new Error errorMessage
 
 module.exports = apiClient

@@ -7,9 +7,10 @@ lookUp = (path, base) ->
 module.exports =
   componentDidMount: ->
     for path, handler of @propChangeHandlers
+      propValue = lookUp path, @props
       if typeof handler is 'string'
         handler = @[handler]
-      handler.call this, lookUp path, @props
+      handler.call this, propValue, @props
 
   componentWillReceiveProps: (nextProps) ->
     for path, handler of @propChangeHandlers
@@ -17,4 +18,4 @@ module.exports =
       unless nextPropValue is lookUp path, @props
         if typeof handler is 'string'
           handler = @[handler]
-        handler.call this, nextPropValue
+        handler.call this, nextPropValue, nextProps
