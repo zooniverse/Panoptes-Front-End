@@ -45,11 +45,12 @@ $major-button
     background: lighten(SECOND_HIGHLIGHT, 20%)
 
 $minor-button
+  BACKGROUND = #424242
   @extends $standard-button
-  background: rgba(BACKGROUND, 0.3)
+  background: BACKGROUND
 
   &:hover
-    background: rgba(BACKGROUND, 0.4)
+    background: lighten(BACKGROUND, 20%)
 
 $text-input
   border: 1px solid gray
