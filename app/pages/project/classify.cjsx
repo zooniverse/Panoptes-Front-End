@@ -2,6 +2,7 @@ React = require 'react'
 apiClient = require '../../api/client'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
+PromiseToSetState = require '../../lib/promise-to-set-state'
 animatedScrollTo = require 'animated-scrollto'
 Classifier = require '../../classifier'
 
@@ -10,92 +11,87 @@ SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
 if SKIP_CELLECT
   console?.warn 'Intelligent subject selection disabled'
 
-classificationsInProgress =
-  byProject: {}
-  byWorkflow: {}
+window.currentWorkflowForProject = {} # Project ID to promised workflow ID, used when no workflow is specified
 
-upcomingSubjects =
-  byWorkflow: {}
+window.currentClassifications =
+  forWorkflow: {} # Workflow ID to a promise for its current classification resource
+
+window.upcomingSubjects =
+  forWorkflow: {}
 
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
 
-  mixins: [TitleMixin, HandlePropChanges]
+  mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
 
   title: 'Classify'
 
   getInitialState: ->
-    target: {}
     workflow: null
     subject: null
     classification: null
 
   propChangeHandlers:
-    project: (project) ->
-      @setTarget {project}
+    project: 'loadClassification'
+    query: 'loadClassification'
 
-    'query.workflow': (workflowID) ->
-      @setTarget {workflowID}
-
-  setTarget: (newTarget) ->
-    for key, value of newTarget
-      @state.target[key] = value
-    @loadClassification()
-
-  loadClassification: ->
-    {project, workflowID} = @state.target
-
-    if workflowID?
-      [from, id] = ['byWorkflow', workflowID]
+  loadClassification: (_, props = @props) ->
+    console.log 'Loading classification!'
+    getWorkflowID = if props.query?.workflow?
+      Promise.resolve props.query.workflow
     else
-      [from, id] = ['byProject', project.id]
+      console.log 'Workflow for project', currentWorkflowForProject[props.project.id]
+      currentWorkflowForProject[props.project.id] ?= @getRandomWorkflowID props.project
+      currentWorkflowForProject[props.project.id]
 
-    if classificationsInProgress[from][id]?
-      @setState classification: classificationsInProgress[from][id]
-    else
-      @createNewClassification().then (classification) =>
-        classificationsInProgress[from][id] = classification
-        @setState classification: classificationsInProgress[from][id]
+    @promiseToSetState classification: getWorkflowID.then (workflowID) =>
+      console.log 'Classification for workflow', currentClassifications.forWorkflow[workflowID]
+      currentClassifications.forWorkflow[workflowID] ?= @createNewClassification props.project, workflowID
+      currentClassifications.forWorkflow[workflowID]
 
-  createNewClassification: (project) ->
-    {project, workflowID} = @state.target
-
-    getWorkflow = project.link('workflows').then (workflows) ->
+  getRandomWorkflowID: (project) ->
+    project.link('workflows').then (workflows) ->
       if workflows.length is 0
-        throw new Error "Project has no workflows."
-      else if workflowID?
-        workflow = (workflow for workflow in workflows when workflow.id is workflowID)[0]
-        unless workflow?
-          throw new Error "Could not find workflow #{workflowID}"
-        workflow
+        throw new Error "No workflows for project #{project.id}"
       else
         randomIndex = Math.floor Math.random() * workflows.length
-        workflows[randomIndex]
+        workflows[randomIndex].id
+
+  createNewClassification: (project, workflowID) ->
+    console.log 'createNewClassification()', arguments
+    getWorkflow = project.link('workflows').then (workflows) ->
+      workflow = (workflow for workflow in workflows when workflow.id is workflowID)[0]
+      unless workflow?
+        throw new Error "No workflow #{workflowID} for project #{project.id}"
+      console.log 'Got workflow', workflow
+      workflow
 
     getSubject = getWorkflow.then (workflow) ->
-      upcomingSubjects.byWorkflow[workflow.id] ?= []
+      upcomingSubjects.forWorkflow[workflow.id] ?= []
 
-      unless upcomingSubjects.byWorkflow[workflow.id].length is 0
-        subject = upcomingSubjects.byWorkflow[workflow.id].shift()
+      unless upcomingSubjects.forWorkflow[workflow.id].length is 0
+        subject = upcomingSubjects.forWorkflow[workflow.id].shift()
 
-      if upcomingSubjects.byWorkflow[workflow.id].length is 0
+      if upcomingSubjects.forWorkflow[workflow.id].length is 0
         fetchSubjects = apiClient.type('subjects').get({
           project_id: project.id
           workflow_id: workflow.id
           sort: 'cellect' unless SKIP_CELLECT
         }).then (subjects) ->
-          upcomingSubjects.byWorkflow[workflow.id].push subjects...
+          upcomingSubjects.forWorkflow[workflow.id].push subjects...
 
         subject ?= fetchSubjects.then ->
-          if upcomingSubjects.byWorkflow[workflow.id].length is 0
+          if upcomingSubjects.forWorkflow[workflow.id].length is 0
             # TODO: If this fails during a random workflow, pick the next workflow.
             throw new Error 'No more subjects'
           else
-            upcomingSubjects.byWorkflow[workflow.id].shift()
+            upcomingSubjects.forWorkflow[workflow.id].shift()
 
+      console.log 'Got subject', subject
       subject
 
     Promise.all([getWorkflow, getSubject]).then ([workflow, subject]) ->
+      console.log 'Creating classification'
       classification = apiClient.type('classifications').create
         links:
           project: project.id
@@ -122,6 +118,8 @@ module.exports = React.createClass
           onLoad={@scrollIntoView}
           onComplete={@handleClassificationCompletion}
           onClickNext={@loadAnotherSubject} />
+      else if @state.rejected.classification?
+        <code>{@state.rejected.classification.toString()}</code>
       else
         <span>Loading classification</span>}
     </div>
@@ -140,5 +138,7 @@ module.exports = React.createClass
       console?.log 'Saved classification', @state.classification.id
 
   loadAnotherSubject: ->
-    classificationsInProgress.byProject[@props.project.id] = null
-    @loadClassification 'byProject', @props.project
+    currentWorkflowForProject[@props.project.id].then (workflowID) =>
+      currentClassifications.forWorkflow[workflowID] = null
+      currentWorkflowForProject[@props.project.id] = null
+    @loadClassification()
