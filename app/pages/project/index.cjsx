@@ -77,7 +77,7 @@ ProjectPage = React.createClass
           </nav>}
 
         {if @state.owner?
-          <RouteHandler project={@props.project} owner={@state.owner} />}
+          <RouteHandler {...@props} owner={@state.owner} />}
       </div>
     }</ChangeListener>
 
@@ -113,7 +113,7 @@ module.exports = React.createClass
     if @state.pending.project?
       <p>Loading project</p>
     else if @state.project?
-      <ProjectPage project={@state.project} />
+      <ProjectPage {...@props} project={@state.project} />
     else if @state.rejected.project?
       <p>{@state.rejected.project.toString()}</p>
     else
