@@ -12,7 +12,16 @@ module.exports = React.createClass
 
   propChangeHandlers:
     project: (project) ->
-      @promiseToSetState workflows: project.link 'workflows'
+      # TODO: Build this kind of caching into json-api-client.
+      if project._workflows?
+        @setState workflows: project._workflows
+      else
+        workflows = project.link 'workflows'
+
+        workflows.then (workflows) =>
+          project._workflows = workflows
+
+        @promiseToSetState {workflows}
 
   getInitialState: ->
     workflows: []
