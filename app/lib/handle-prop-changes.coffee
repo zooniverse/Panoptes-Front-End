@@ -1,3 +1,23 @@
+###
+  React doesn't fire componentWillReceiveProps for a component's initial props.
+  Usually I wish it would.
+
+  React.createClass
+    mixins: [HandlePropChanges]
+
+    propChangeHandlers:
+      foo: (foo, props) ->
+        'This component was mounted with prop foo, or its prop foo changed.'
+
+      'foo.bar.whatever': (whatever, props) ->
+        "You can also watch for nested props."
+
+      andAlso: 'givenString'
+
+      givenString: (propValue, props) ->
+        'You can assign a prop to a method name to call that method.'
+###
+
 lookUp = (path, base) ->
   path = path.split '.'
   until path.length is 0

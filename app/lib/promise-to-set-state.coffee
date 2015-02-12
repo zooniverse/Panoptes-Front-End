@@ -1,3 +1,22 @@
+###
+  This is for when you want to set state after a promise has resolved.
+  It handles pending state and errors automatically.
+
+  React.createClass
+    mixins: [PromiseToSetState]
+
+    componentDidMount: ->
+      @promiseToSetState foo: makeSomeRequest()
+
+    render: ->
+      if @state.foo?
+        <span>Foo is {@state.foo}.</span>
+      else if @state.rejected.foo?
+        <span>{@state.rejected.foo.toString()}</span>
+      else
+        <span>Waiting for foo...</span>
+###
+
 module.exports =
   getInitialState: ->
     pending: {}
