@@ -26,7 +26,7 @@ ProjectPage = React.createClass
   propChangeHandlers:
     project: (project) ->
       unless @state.pending.owner?
-        @promiseToSetState owner: project.link 'owner'
+        @promiseToSetState owner: project.get 'owner'
 
   getDefaultProps: ->
     project: null
@@ -77,7 +77,7 @@ ProjectPage = React.createClass
           </nav>}
 
         {if @state.owner?
-          <RouteHandler project={@props.project} owner={@state.owner} />}
+          <RouteHandler {...@props} owner={@state.owner} />}
       </div>
     }</ChangeListener>
 
@@ -99,24 +99,22 @@ module.exports = React.createClass
     'params.owner': 'fetchProject'
     'params.name': 'fetchProject'
 
-  fetchProject: ->
+  fetchProject: (_, props = @props) ->
     unless @state.pending.project?
+      {owner, name} = props.params
       @promiseToSetState project: auth.checkCurrent().then =>
-        {owner, name} = @props.params
         apiClient.type('projects').get({owner: owner, display_name: name}).then ([project]) ->
           if project?
             project.refresh()
           else
-            console.error 'Nope'
             throw new Error "Couldn't find project #{owner}/#{name}"
 
   render: ->
-    if @state.project?
-      <ProjectPage project={@state.project} />
+    if @state.pending.project?
+      <p>Loading project</p>
+    else if @state.project?
+      <ProjectPage {...@props} project={@state.project} />
+    else if @state.rejected.project?
+      <p>{@state.rejected.project.toString()}</p>
     else
-      <div className="content-container">
-        {if @state.rejected.project?
-          <p>{@state.rejected.project.toString()}</p>
-        else
-          <p>Loading</p>}
-      </div>
+      null

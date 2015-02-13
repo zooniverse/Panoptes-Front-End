@@ -4,15 +4,17 @@ tasks = require '../classifier/tasks'
 
 module.exports = class extends Resource
   annotations: null
+  metadata: null
 
   constructor: ->
     super
     @update
-      annotations: []
-      metadata:
-        started_at: (new Date).toISOString()
-        user_agent: navigator.userAgent
-        user_language: counterpart.getLocale()
+      annotations: @annotations ? []
+      metadata: @metadata ? {}
+    @update
+      'metadata.started_at': (new Date).toISOString()
+      'metadata.user_agent': navigator.userAgent
+      'metadata.user_language': counterpart.getLocale()
 
   annotate: (taskType, taskKey) ->
     annotation = new Model task: taskKey, tasks[taskType].getDefaultAnnotation?()

@@ -2,16 +2,27 @@ React = require 'react'
 apiClient = require '../../api/client'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
+PromiseToSetState = require '../../lib/promise-to-set-state'
 animatedScrollTo = require 'animated-scrollto'
 Classifier = require '../../classifier'
 
-classificationsInProgress = {}
-upcomingSubjects = {}
+SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
+
+if SKIP_CELLECT
+  console?.warn 'Intelligent subject selection disabled'
+
+window.currentWorkflowForProject = {} # Project ID to promised workflow ID, used when no workflow is specified
+
+window.currentClassifications =
+  forWorkflow: {} # Workflow ID to a promise for its current classification resource
+
+window.upcomingSubjects =
+  forWorkflow: {}
 
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
 
-  mixins: [TitleMixin, HandlePropChanges]
+  mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
 
   title: 'Classify'
 
@@ -21,56 +32,81 @@ module.exports = React.createClass
     classification: null
 
   propChangeHandlers:
-    project: 'loadClassificationForProject'
+    project: 'loadClassification'
+    query: 'loadClassification'
 
-  componentDidMount: ->
-    setTimeout @scrollIntoView
-
-  loadClassificationForProject: (project) ->
-    if classificationsInProgress[project.id]?
-      @setState classification: classificationsInProgress[project.id]
+  loadClassification: (_, props = @props) ->
+    console.log 'Loading classification!'
+    getWorkflowID = if props.query?.workflow?
+      Promise.resolve props.query.workflow
     else
-      @createNewClassification(project).then (classification) =>
-        classificationsInProgress[project.id] = classification
-        @setState classification: classificationsInProgress[project.id]
+      console.log 'Workflow for project', currentWorkflowForProject[props.project.id]
+      currentWorkflowForProject[props.project.id] ?= @getRandomWorkflowID props.project
+      currentWorkflowForProject[props.project.id]
 
-  createNewClassification: (project) ->
-    project.link('workflows').then (workflows) ->
-      randomIndex = Math.floor Math.random() * workflows.length
-      workflow = workflows[randomIndex] # TODO: Choose a specific workflow if query exists.
+    @promiseToSetState classification: getWorkflowID.then (workflowID) =>
+      console.log 'Classification for workflow', currentClassifications.forWorkflow[workflowID]
+      currentClassifications.forWorkflow[workflowID] ?= @createNewClassification props.project, workflowID
+      currentClassifications.forWorkflow[workflowID]
 
-      upcomingSubjects[workflow.id] ?= []
+  getRandomWorkflowID: (project) ->
+    project.get('workflows').then (workflows) ->
+      if workflows.length is 0
+        throw new Error "No workflows for project #{project.id}"
+      else
+        randomIndex = Math.floor Math.random() * workflows.length
+        workflows[randomIndex].id
 
-      unless upcomingSubjects[workflow.id].length is 0
-        getSubject = Promise.resolve upcomingSubjects[workflow.id].shift()
+  createNewClassification: (project, workflowID) ->
+    console.log 'createNewClassification()', arguments
+    getWorkflow = project.get('workflows').then (workflows) ->
+      workflow = (workflow for workflow in workflows when workflow.id is workflowID)[0]
+      unless workflow?
+        throw new Error "No workflow #{workflowID} for project #{project.id}"
+      console.log 'Got workflow', workflow
+      workflow
 
-      if upcomingSubjects[workflow.id].length is 0
-        console.log 'Getting more subjects'
-        getSubject ?= apiClient.type('subjects').get({
+    getSubject = getWorkflow.then (workflow) ->
+      upcomingSubjects.forWorkflow[workflow.id] ?= []
+
+      unless upcomingSubjects.forWorkflow[workflow.id].length is 0
+        subject = upcomingSubjects.forWorkflow[workflow.id].shift()
+
+      if upcomingSubjects.forWorkflow[workflow.id].length is 0
+        fetchSubjects = apiClient.type('subjects').get({
           project_id: project.id
           workflow_id: workflow.id
-          # sort: 'cellect'
+          sort: 'cellect' unless SKIP_CELLECT
         }).then (subjects) ->
-          upcomingSubjects[workflow.id].push subjects...
-          upcomingSubjects[workflow.id].shift()
+          upcomingSubjects.forWorkflow[workflow.id].push subjects...
 
-      getSubject.then (subject) ->
-        classification = apiClient.type('classifications').create
-          links:
-            project: project.id
-            workflow: workflow.id
-            subjects: [subject.id]
+        subject ?= fetchSubjects.then ->
+          if upcomingSubjects.forWorkflow[workflow.id].length is 0
+            # TODO: If this fails during a random workflow, pick the next workflow.
+            throw new Error 'No more subjects'
+          else
+            upcomingSubjects.forWorkflow[workflow.id].shift()
 
-        classification.metadata.workflow_version = workflow.version
-        classification.update 'metadata'
+      console.log 'Got subject', subject
+      subject
 
-        # TODO: This is temporary.
-        # Don't rely on these once the back end provides the right links.
-        classification._workflow = workflow
-        classification._subject = subject
+    Promise.all([getWorkflow, getSubject]).then ([workflow, subject]) ->
+      console.log 'Creating classification'
+      classification = apiClient.type('classifications').create
+        links:
+          project: project.id
+          workflow: workflow.id
+          subjects: [subject.id]
+        'metadata.workflow_version': workflow.version
 
-        classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
-        classification
+      # TODO: This is temporary.
+      # Don't rely on these once the back end provides the right links.
+      classification._workflow = workflow
+      classification._subject = subject
+
+      # TODO: This should be handled by the classifier.
+      classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
+      classification
 
   render: ->
     <div className="classify-page content-container">
@@ -80,6 +116,8 @@ module.exports = React.createClass
           onLoad={@scrollIntoView}
           onComplete={@handleClassificationCompletion}
           onClickNext={@loadAnotherSubject} />
+      else if @state.rejected.classification?
+        <code>{@state.rejected.classification.toString()}</code>
       else
         <span>Loading classification</span>}
     </div>
@@ -98,5 +136,7 @@ module.exports = React.createClass
       console?.log 'Saved classification', @state.classification.id
 
   loadAnotherSubject: ->
-    classificationsInProgress[@props.project.id] = null
-    @loadClassificationForProject @props.project
+    currentWorkflowForProject[@props.project.id].then (workflowID) =>
+      currentClassifications.forWorkflow[workflowID] = null
+      currentWorkflowForProject[@props.project.id] = null
+    @loadClassification()

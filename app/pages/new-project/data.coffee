@@ -1,4 +1,4 @@
-Model = require '../../lib/model'
+{Model} = require 'json-api-client'
 
 languages = ['en-us'] # TODO: Where should this live?
 

@@ -6,7 +6,7 @@ module.exports = React.createClass
   displayName: 'ProjectCard'
 
   render: ->
-    <PromiseRenderer promise={@props.project.link 'owner'} then={@renderWithOwner}>
+    <PromiseRenderer promise={@props.project.get 'owner'} then={@renderWithOwner}>
       {@renderWithOwner()}
     </PromiseRenderer>
 
