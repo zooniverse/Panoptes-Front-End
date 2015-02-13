@@ -33,7 +33,7 @@ module.exports = React.createClass
   renderUser: (user) ->
     <div>
       <p>Projects owned by {user.display_name}:</p>
-      <PromiseRenderer promise={user.link 'projects'} then={@renderProjectsList.bind this, user}>
+      <PromiseRenderer promise={user.get 'projects', skipCache: true} then={@renderProjectsList.bind this, user}>
         <span>Loading projects...</span>
       </PromiseRenderer>
       <hr />

@@ -50,7 +50,7 @@ module.exports = React.createClass
       currentClassifications.forWorkflow[workflowID]
 
   getRandomWorkflowID: (project) ->
-    project.link('workflows').then (workflows) ->
+    project.get('workflows').then (workflows) ->
       if workflows.length is 0
         throw new Error "No workflows for project #{project.id}"
       else
@@ -59,7 +59,7 @@ module.exports = React.createClass
 
   createNewClassification: (project, workflowID) ->
     console.log 'createNewClassification()', arguments
-    getWorkflow = project.link('workflows').then (workflows) ->
+    getWorkflow = project.get('workflows').then (workflows) ->
       workflow = (workflow for workflow in workflows when workflow.id is workflowID)[0]
       unless workflow?
         throw new Error "No workflow #{workflowID} for project #{project.id}"
@@ -97,9 +97,7 @@ module.exports = React.createClass
           project: project.id
           workflow: workflow.id
           subjects: [subject.id]
-
-      classification.metadata.workflow_version = workflow.version
-      classification.update 'metadata'
+        'metadata.workflow_version': workflow.version
 
       # TODO: This is temporary.
       # Don't rely on these once the back end provides the right links.

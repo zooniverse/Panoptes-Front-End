@@ -29,12 +29,12 @@ module.exports = React.createClass
       @fetch nextProps.aggregate
 
   fetch: (aggregate) ->
-    classifications = aggregate?.link 'classifications'
+    classifications = aggregate?.get 'classifications'
     @promiseToSetState {classifications}
     classifications.then ([classification]) =>
       @promiseToSetState
-        workflow: classification.link 'workflow'
-        subject: classification.link 'subject'
+        workflow: classification.get 'workflow'
+        subject: classification.get 'subject'
 
   render: ->
     if Object.keys(@state.rejected).length is 0

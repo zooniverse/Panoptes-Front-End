@@ -34,7 +34,7 @@ module.exports = React.createClass
                       <ProjectCard key={project.id} project={project} />}
                 </div>
                 <nav>
-                  {meta = projects[0].getRequestMeta()
+                  {meta = projects[0].getMeta()
                   if meta?
                     <nav className="pagination">
                       {for page in [1..meta.page_count]

@@ -24,14 +24,14 @@ ProjectEditPage = React.createClass
 
   propChangeHandlers:
     project: (project) ->
-      @promiseToSetState workflows: project.link 'workflows'
+      @promiseToSetState workflows: project.get 'workflows', skipCache: true
 
   render: ->
     handleProjectChange = handleInputChange.bind @props.project
 
     currentAndOwner = Promise.all [
       auth.checkCurrent()
-      @props.project.link 'owner'
+      @props.project.get 'owner'
     ]
 
     <PromiseRenderer promise={currentAndOwner}>{([currentUser, projectOwner] = []) =>

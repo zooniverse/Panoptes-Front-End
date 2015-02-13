@@ -108,9 +108,9 @@ Classifier = React.createClass
     @props.onLoad? arguments...
 
   completeClassification: ->
-    @props.classification.update completed: true
-    @props.classification.metadata.finished_at = (new Date).toISOString()
-    @props.classification.update 'metadata.finished_at'
+    @props.classification.update
+      completed: true
+      'metadata.finished_at': (new Date).toISOString()
     @props.onComplete?()
 
   toggleExpertClassification: (value) ->
@@ -135,8 +135,8 @@ module.exports = React.createClass
     classification: (classification) ->
       @promiseToSetState
         # TODO: These underscored references are temporary stopgaps.
-        workflow: Promise.resolve classification._workflow ? classification.link 'workflow'
-        subject: Promise.resolve classification._subject ? classification.link('subjects').then ([subject]) ->
+        workflow: Promise.resolve classification._workflow ? classification.get 'workflow'
+        subject: Promise.resolve classification._subject ? classification.get('subjects').then ([subject]) ->
           subject
 
   render: ->

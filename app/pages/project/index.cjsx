@@ -26,7 +26,7 @@ ProjectPage = React.createClass
   propChangeHandlers:
     project: (project) ->
       unless @state.pending.owner?
-        @promiseToSetState owner: project.link 'owner'
+        @promiseToSetState owner: project.get 'owner'
 
   getDefaultProps: ->
     project: null
