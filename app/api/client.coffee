@@ -21,6 +21,10 @@ apiClient.handleError = (request) ->
         ("#{key} #{error}" for key, error of message).join '\n'
     errorMessage = errorMessage.join '\n'
 
+  # Manually set a reasonable error when we get HTML back (currently 500s will do this).
+  if request.responseText?.indexOf('<!DOCTYPE') isnt -1
+    errorMessage ?= "There was a problem on the server. #{request.responseURL} → #{request.status}"
+
   errorMessage ?= request.responseText?.trim() || "#{request.status} #{request.statusText}"
   throw new Error errorMessage
 
