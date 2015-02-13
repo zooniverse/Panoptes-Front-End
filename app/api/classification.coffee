@@ -4,7 +4,7 @@ tasks = require '../classifier/tasks'
 
 module.exports = class extends Resource
   annotations: null
-  mtadata: null
+  metadata: null
 
   constructor: ->
     super
