@@ -1,16 +1,19 @@
 counterpart = require 'counterpart'
 React = require 'react'
-HandlePropChanges = require '../../lib/handle-prop-changes'
-PromiseToSetState = require '../../lib/promise-to-set-state'
 ChangeListener = require '../../components/change-listener'
+PromiseRenderer = require '../../components/promise-renderer'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
-apiClient = window.api = require '../../api/client'
-auth = require '../../api/auth'
 TitleMixin = require '../../lib/title-mixin'
+HandlePropChanges = require '../../lib/handle-prop-changes'
+PromiseToSetState = require '../../lib/promise-to-set-state'
+auth = require '../../api/auth'
+apiClient = window.api = require '../../api/client'
+LoadingIndicator = require '../../components/loading-indicator'
 
 counterpart.registerTranslations 'en',
   project:
+    loading: 'Loading project'
     nav:
       science: 'Science'
       status: 'Status'
@@ -21,18 +24,8 @@ counterpart.registerTranslations 'en',
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
 
-  mixins: [HandlePropChanges, PromiseToSetState]
-
-  propChangeHandlers:
-    project: (project) ->
-      unless @state.pending.owner?
-        @promiseToSetState owner: project.get 'owner'
-
   getDefaultProps: ->
     project: null
-
-  getInitialState: ->
-    owner: null
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-project-page'
@@ -42,22 +35,21 @@ ProjectPage = React.createClass
 
   render: ->
     <ChangeListener target={@props.project}>{=>
-      if @props.project.background_image
-        backgroundStyle =
-          backgroundImage: "url('#{@props.project.background_image}')"
+      <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
+        if @props.project.background_image
+          backgroundStyle =
+            backgroundImage: "url('#{@props.project.background_image}')"
 
-      <div className="project-page">
-        <div className="project-background" style={backgroundStyle}></div>
+        params =
+          owner: owner.display_name
+          name: @props.project.display_name
 
-        {if @state.owner?
-          params =
-            owner: @state.owner.display_name
-            name: @props.project.display_name
+        <div className="project-page">
+          <div className="project-background" style={backgroundStyle}></div>
 
           <nav className="project-nav tabbed-content-tabs">
             <Link to="project-home" params={params} className="tabbed-content-tab">
-              <img src={@props.project.avatar} className="project-avatar" />
-              {@props.project.display_name}
+              <img src={@props.project.avatar} className="project-avatar" /> {@props.project.display_name}
             </Link>
             <Link to="project-science-case" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.science" />
@@ -74,11 +66,11 @@ ProjectPage = React.createClass
             <Link to="project-talk" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.discuss" />
             </Link>
-          </nav>}
+          </nav>
 
-        {if @state.owner?
-          <RouteHandler {...@props} owner={@state.owner} />}
-      </div>
+          <RouteHandler {...@props} owner={owner} />
+        </div>
+      }</PromiseRenderer>
     }</ChangeListener>
 
 module.exports = React.createClass
@@ -89,32 +81,41 @@ module.exports = React.createClass
   title: ->
     @state.project?.display_name ? '(Loading)'
 
+  getDefaultProps: ->
+    params: null
+
+  getInitialState: ->
+    project: null
+
+  propChangeHandlers:
+    'params.owner': 'fetchProject'
+    'params.name': 'fetchProject'
+
   componentDidMount: ->
     auth.listen 'change', @fetchProject
 
   componentWillUnmount: ->
     auth.stopListening 'change', @fetchProject
 
-  propChangeHandlers:
-    'params.owner': 'fetchProject'
-    'params.name': 'fetchProject'
-
   fetchProject: (_, props = @props) ->
     unless @state.pending.project?
-      {owner, name} = props.params
-      @promiseToSetState project: auth.checkCurrent().then =>
-        apiClient.type('projects').get({owner: owner, display_name: name}).then ([project]) ->
-          if project?
-            project.refresh()
-          else
-            throw new Error "Couldn't find project #{owner}/#{name}"
+      query =
+        owner: props.params.owner
+        display_name: props.params.name
+      @promiseToSetState project: auth.checkCurrent().then ->
+        # TODO: This refresh is a little annoying. Can get the complete resource somehow?
+        apiClient.type('projects').get(query).index(0).refresh().catch ->
+          throw new Error "Couldn't find project #{props.params.owner}/#{props.params.name}"
 
   render: ->
-    if @state.pending.project?
-      <p>Loading project</p>
-    else if @state.project?
-      <ProjectPage {...@props} project={@state.project} />
-    else if @state.rejected.project?
-      <p>{@state.rejected.project.toString()}</p>
+    if @state.project?
+      <ProjectPage project={@state.project} />
     else
-      null
+      <div className="content-container">
+        {if @state.rejected.project?
+          <code>{@state.rejected.project.toString()}</code>
+        else
+          <LoadingIndicator>
+            <Translate content="project.loading" />
+          </LoadingIndicator>}
+      </div>

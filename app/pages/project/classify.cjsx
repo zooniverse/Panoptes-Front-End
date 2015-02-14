@@ -26,6 +26,10 @@ module.exports = React.createClass
 
   title: 'Classify'
 
+  getDefaultProps: ->
+    query: null
+    project: null
+
   getInitialState: ->
     workflow: null
     subject: null
@@ -111,11 +115,7 @@ module.exports = React.createClass
   render: ->
     <div className="classify-page content-container">
       {if @state.classification?
-        <Classifier
-          classification={@state.classification}
-          onLoad={@scrollIntoView}
-          onComplete={@handleClassificationCompletion}
-          onClickNext={@loadAnotherSubject} />
+        <Classifier classification={@state.classification} onLoad={@scrollIntoView} onComplete={@handleCompletion} onClickNext={@loadAnotherSubject} />
       else if @state.rejected.classification?
         <code>{@state.rejected.classification.toString()}</code>
       else
@@ -130,7 +130,7 @@ module.exports = React.createClass
     if Math.abs(idealScrollY - scrollY) > lineHeight
       animatedScrollTo document.body, el.offsetTop - space, 333
 
-  handleClassificationCompletion: ->
+  handleCompletion: ->
     console?.info 'Completed classification', JSON.stringify @state.classification, null, 2
     @state.classification.save().then =>
       console?.log 'Saved classification', @state.classification.id
