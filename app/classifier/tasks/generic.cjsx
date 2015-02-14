@@ -2,6 +2,7 @@ React = require 'react'
 cloneWithProps = require 'react/lib/cloneWithProps'
 alert = require '../../lib/alert'
 Markdown = require '../../components/markdown'
+Tooltip = require '../../components/tooltip'
 
 module.exports = React.createClass
   displayName: 'GenericTask'
@@ -10,6 +11,9 @@ module.exports = React.createClass
     question: ''
     help: ''
     answers: ''
+
+  getInitialState: ->
+    helping: false
 
   render: ->
     <div className="workflow-task">
@@ -20,11 +24,15 @@ module.exports = React.createClass
       </div>
       {if @props.help
         <p className="help">
-          <button type="button" className="pill" onClick={@showHelp}>Need some help?</button>
+          <button type="button" className="pill" onClick={@toggleHelp}>
+            Need some help?
+            {if @state.helping
+              <Tooltip at="middle left">
+                <Markdown className="classification-task-help">{@props.help}</Markdown>
+              </Tooltip>}
+          </button>
         </p>}
     </div>
 
-  showHelp: ->
-    alert <div className="content-container">
-      <Markdown className="classification-task-help">{@props.help}</Markdown>
-    </div>
+  toggleHelp: ->
+    @setState helping: not @state.helping
