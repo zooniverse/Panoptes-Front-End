@@ -74,27 +74,27 @@ module.exports = React.createClass
     @props.onChange e
 
   handleTopLeftDrag: (e, d) ->
-    @props.mark.x += d.x
-    @props.mark.y += d.y
-    @props.mark.width -= d.x
-    @props.mark.height -= d.y
+    @props.mark.x += d.x / @props.scale.horizontal
+    @props.mark.y += d.y / @props.scale.vertical
+    @props.mark.width -= d.x / @props.scale.horizontal
+    @props.mark.height -= d.y / @props.scale.vertical
     @props.onChange e
 
   handleTopRightDrag: (e, d) ->
-    @props.mark.y += d.y
-    @props.mark.width += d.x
-    @props.mark.height -= d.y
+    @props.mark.y += d.y / @props.scale.vertical
+    @props.mark.width += d.x / @props.scale.horizontal
+    @props.mark.height -= d.y / @props.scale.vertical
     @props.onChange e
 
   handleBottomRightDrag: (e, d) ->
-    @props.mark.width += d.x
-    @props.mark.height += d.y
+    @props.mark.width += d.x / @props.scale.horizontal
+    @props.mark.height += d.y / @props.scale.vertical
     @props.onChange e
 
   handleBottomLeftDrag: (e, d) ->
-    @props.mark.x += d.x
-    @props.mark.width -= d.x
-    @props.mark.height += d.y
+    @props.mark.x += d.x / @props.scale.horizontal
+    @props.mark.width -= d.x / @props.scale.horizontal
+    @props.mark.height += d.y / @props.scale.vertical
     @props.onChange e
 
   normalizeMark: ->

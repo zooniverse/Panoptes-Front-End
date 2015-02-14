@@ -70,9 +70,9 @@ subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': 'http://lorempixel.com/500/300/animals/1'}
-    {'image/jpeg': 'http://lorempixel.com/500/300/animals/2'}
-    {'image/jpeg': 'http://lorempixel.com/500/300/animals/3'}
+    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/1'}
+    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/2'}
+    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/3'}
   ]
 
   metadata:

@@ -80,11 +80,11 @@ module.exports = React.createClass
 
   handleMainDrag: (e, d) ->
     for point in @props.mark.points
-      point.x += d.x
-      point.y += d.y
+      point.x += d.x / @props.scale.horizontal
+      point.y += d.y / @props.scale.vertical
     @props.onChange e
 
   handleHandleDrag: (index, e, d) ->
-    @props.mark.points[index].x += d.x
-    @props.mark.points[index].y += d.y
+    @props.mark.points[index].x += d.x / @props.scale.horizontal
+    @props.mark.points[index].y += d.y / @props.scale.vertical
     @props.onChange e
