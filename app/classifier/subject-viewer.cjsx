@@ -2,6 +2,8 @@ React = require 'react'
 SubjectViewer = require '../components/subject-viewer'
 Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
+tasks = require './tasks'
+Tooltip = require '../components/tooltip'
 
 NOOP = Function.prototype
 
@@ -9,12 +11,14 @@ module.exports = React.createClass
   displayName: 'SubjectViewer' # TODO: Rename this.
 
   getDefaultProps: ->
+    classification: null
+    workflow: null
+    annotation: null
     onLoad: NOOP
 
   getInitialState: ->
     naturalWidth: 0
     naturalHeight: 0
-    proportion: 'square'
     frame: 0
 
   getScale: ->
@@ -34,7 +38,7 @@ module.exports = React.createClass
   render: ->
     scale = @getScale()
 
-    <div className="subject-area #{@state.proportion}">
+    <div className="subject-area">
       <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
@@ -70,47 +74,52 @@ module.exports = React.createClass
               </g>}
         </svg>
       </SubjectViewer>
+      {if @props.workflow.tasks[@props.annotation?.task]?.type is 'drawing'
+        selectedMark = @props.annotation.value[@props.annotation.value.length - 1]
+        tool = @props.workflow.tasks[@props.annotation.task].tools[selectedMark?.tool]
+        if tool?.details?
+          <Tooltip at="middle right">
+            {for detailTask, i in tool.details
+              detailTask._key ?= Math.random()
+              TaskComponent = tasks[detailTask.type]
+              <TaskComponent key={detailTask._key} task={detailTask} annotation={selectedMark.details[i]} onChange={=> @props.classification.update 'annotations'} />}
+            <button type="button">Close</button>
+          </Tooltip>}
     </div>
 
   handleSubjectFrameLoad: (e) ->
     if e.target.tagName.toUpperCase() is 'IMG'
       {naturalWidth, naturalHeight} = e.target
       unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
-        proportion = naturalWidth / naturalHeight
-        proportion = if proportion <= 0.4
-          'very-tall'
-        else if 0.4 < proportion <= 0.9
-          'tall'
-        else if 0.9 < proportion <= 1.1
-          'square'
-        else if 1.1 < proportion <= 1.6
-          'wide'
-        else if 1.6 < proportion
-          'very-wide'
-
-        @setState {naturalWidth, naturalHeight, proportion}
+        @setState {naturalWidth, naturalHeight}
       @props.onLoad? arguments...
 
   handleFrameChange: (e) ->
     @setState frame: parseFloat e.target.value
 
   handleInitStart: (e) ->
-    task = @props.workflow.tasks[@props.annotation.task]
+    taskDescription = @props.workflow.tasks[@props.annotation.task]
     mark = @props.annotation.value[@props.annotation.value.length - 1]
 
     markIsComplete = true
     if mark?
-      MarkComponent = drawingTools[task.tools[mark.tool].type]
+      toolDescription = taskDescription.tools[mark.tool]
+      MarkComponent = drawingTools[toolDescription.type]
       if MarkComponent.isComplete?
         markIsComplete = MarkComponent.isComplete mark
 
     mouseCoords = @getEventOffset e
 
     if markIsComplete
+      toolDescription = taskDescription.tools[@props.annotation._toolIndex]
       mark =
         tool: @props.annotation._toolIndex
+      if toolDescription.details?
+        mark.details = for detailTaskDescription in toolDescription.details
+          tasks[detailTaskDescription.type].getDefaultAnnotation()
+
       @props.annotation.value.push mark
-      MarkComponent = drawingTools[task.tools[mark.tool].type]
+      MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
 
       if MarkComponent.defaultValues?
         defaultValues = MarkComponent.defaultValues mouseCoords

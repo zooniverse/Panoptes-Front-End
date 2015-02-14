@@ -2,6 +2,8 @@ React = require 'react'
 GenericTask = require './generic'
 Markdown = require '../../components/markdown'
 
+NOOP = Function.prototype
+
 Summary = React.createClass
   displayName: 'MultipleChoiceSummary'
 
@@ -57,6 +59,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     task: null
     annotation: null
+    onChange: NOOP
 
   render: ->
     answers = for answer, i in @props.task.answers
@@ -79,4 +82,5 @@ module.exports = React.createClass
         indexInAnswers = answers.indexOf index
         answers.splice indexInAnswers, 1
 
-    @props.annotation.update value: answers
+    @props.annotation.value = answers
+    @props.onChange? e

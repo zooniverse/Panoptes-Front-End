@@ -19,7 +19,26 @@ workflow = apiClient.type('workflows').create
         * Draw something
       '''
       tools: [
-        {type: 'point', label: 'Point', color: 'red'}
+        {
+          type: 'point'
+          label: 'Point'
+          color: 'red'
+          details: [{
+            type: 'single'
+            question: 'Cool?'
+            answers: [
+              {label: 'Yeah'}
+              {label: 'Nah'}
+            ]
+          }, {
+            type: 'multiple'
+            question: 'Cool stuff?'
+            answers: [
+              {label: 'Ice'}
+              {label: 'Snow'}
+            ]
+          }]
+        }
         {type: 'line', label: 'Line', color: 'yellow'}
         {type: 'rectangle', label: 'Rectangle', color: 'lime'}
         {type: 'polygon', label: 'Polygon', color: 'cyan'}
@@ -51,9 +70,9 @@ subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/1'}
-    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/2'}
-    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/3'}
+    {'image/jpeg': 'http://lorempixel.com/500/300/animals/1'}
+    {'image/jpeg': 'http://lorempixel.com/500/300/animals/2'}
+    {'image/jpeg': 'http://lorempixel.com/500/300/animals/3'}
   ]
 
   metadata:

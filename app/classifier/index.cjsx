@@ -33,76 +33,72 @@ Classifier = React.createClass
       else
         @props.classification
 
-      currentAnnotation = if @state.showingExpertClassification
-        currentClassification.annotations[@state.selectedExpertAnnotation]
-      else
-        currentClassification.annotations[currentClassification.annotations.length - 1]
-
-      currentTask = @props.workflow.tasks[currentAnnotation?.task]
-
-      onFirstAnnotation = currentClassification.annotations.indexOf(currentAnnotation) is 0
-
-      currentAnswer = currentTask.answers?[currentAnnotation.value]
-      nextTaskKey = if currentAnswer? and currentTask.type is 'single' and 'next' of currentAnswer
-        currentAnswer.next
-      else
-        currentTask.next
-
-      waitingForAnswer = currentTask.type is 'single' and not currentAnnotation.value?
+      if currentClassification is @props.classification and not @props.classification.completed
+        currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
+        currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
       <div className="classifier">
         <SubjectViewer subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} onLoad={@handleSubjectImageLoad} />
 
         <div className="task-area">
-          <div className="task-container">
-            {if @props.classification.completed
-              <div>
-                Thanks!
+          {if currentTask?
+            TaskComponent = tasks[currentTask.type]
 
-                {if @props.subject.expert_classification_data?
-                  <div className="has-expert-classification">
-                    Expert classification available.
-                    {if @state.showingExpertClassification
-                      <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
-                    else
-                      <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
-                  </div>}
+            onFirstAnnotation = currentClassification.annotations.indexOf(currentAnnotation) is 0
 
-                {if @state.showingExpertClassification
-                  'Expert classification:'
-                else
-                  'Your classification:'}
-                <ClassificationSummary workflow={@props.workflow} classification={currentClassification} />
-              </div>
+            if currentTask.type is 'single'
+              currentAnswer = currentTask.answers?[currentAnnotation.value]
+              waitingForAnswer = not currentAnswer
 
-            else if currentTask?
-              TaskComponent = tasks[currentTask.type]
-              <TaskComponent task={currentTask} annotation={currentAnnotation} onChange={@handleTaskChange} />
-
+            nextTaskKey = if currentAnswer? and currentTask.type is 'single' and 'next' of currentAnswer
+              currentAnswer.next
             else
-              <span><i className="fa fa-exclamation-circle"></i> No task ready</span>}
-          </div>
+              currentTask.next
 
-          <hr />
+            <div className="task-container">
+              <TaskComponent task={currentTask} annotation={currentAnnotation} onChange={=> currentClassification.update 'annotations'} />
+              <hr />
+              <nav className="task-nav">
+                <button type="button" className="back" disabled={onFirstAnnotation} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
+                {if nextTaskKey?
+                  nextTaskType = @props.workflow.tasks[nextTaskKey].type
+                  <button type="button" className="continue" disabled={waitingForAnswer} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
+                else
+                  <button type="button" className="continue" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
+              </nav>
+            </div>
 
-          {if @props.classification.completed
-            <nav className="task-nav">
-              <a className="talk" href="#/todo/talk">Talk</a>
-              <button type="button" className="continue" onClick={@props.onClickNext}>Next</button>
-            </nav>
-
-          else if currentTask?
-            <nav className="task-nav">
-              <button type="button" className="back" disabled={onFirstAnnotation} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
-              {if nextTaskKey?
-                nextTaskType = @props.workflow.tasks[nextTaskKey].type
-                <button type="button" className="continue" disabled={waitingForAnswer} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
-              else
-                <button type="button" className="continue" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
-            </nav>}
+          else # Classification is complete.
+            @renderSummary currentClassification}
         </div>
       </div>
     }</ChangeListener>
+
+  renderSummary: (currentClassification) ->
+    <div>
+      Thanks!
+
+      {if @props.subject.expert_classification_data?
+        <div className="has-expert-classification">
+          Expert classification available.
+          {if @state.showingExpertClassification
+            <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
+          else
+            <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
+        </div>}
+
+      {if @state.showingExpertClassification
+        'Expert classification:'
+      else
+        'Your classification:'}
+      <ClassificationSummary workflow={@props.workflow} classification={currentClassification} />
+
+      <hr />
+      <nav className="task-nav">
+        <a className="talk" href="#/todo/talk">Talk</a>
+        <button type="button" className="continue" onClick={@props.onClickNext}>Next</button>
+      </nav>
+    </div>
 
   handleSubjectImageLoad: (e) ->
     @props.onLoad? arguments...

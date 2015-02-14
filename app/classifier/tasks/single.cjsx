@@ -57,6 +57,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     task: null
     annotation: null
+    onChange: NOOP
 
   render: ->
     answers = for answer, i in @props.task.answers
@@ -70,4 +71,6 @@ module.exports = React.createClass
 
   handleChange: (index, e) ->
     if e.target.checked
-      @props.annotation.update value: index
+      @props.annotation.value = index
+      @props.onChange? e
+
