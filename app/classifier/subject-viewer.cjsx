@@ -38,6 +38,10 @@ module.exports = React.createClass
   render: ->
     scale = @getScale()
 
+    updateAnnotations = =>
+      @props.classification.update
+        annotations: @props.classification.annotations
+
     <div className="subject-area">
       <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
@@ -50,30 +54,35 @@ module.exports = React.createClass
 
           {for annotation in @props.classification.annotations
             annotation._key ?= Math.random()
-            disabled = annotation isnt @props.annotation
-            task = @props.workflow.tasks[annotation.task]
-            if task.type is 'drawing'
-              <g key={annotation._key} className="marks-for-annotation" data-disabled={disabled or null}>
+            isPreviousAnnotation = annotation isnt @props.annotation
+            taskDescription = @props.workflow.tasks[annotation.task]
+            if taskDescription.type is 'drawing'
+              <g key={annotation._key} className="marks-for-annotation" data-disabled={isPreviousAnnotation or null}>
                 {for mark, m in annotation.value
                   mark._key ?= Math.random()
-                  tool = task.tools[mark.tool]
+                  toolDescription = taskDescription.tools[mark.tool]
 
-                  toolProps =
-                    classification: @props.classification
-                    annotation: annotation
-                    tool: tool
-                    mark: mark
+                  toolEnv =
                     scale: scale
-                    disabled: disabled
-                    selected: not disabled and m is annotation.value.length - 1
-                    select: @selectMark.bind this, mark
+                    disabled: isPreviousAnnotation
+                    selected: not isPreviousAnnotation and m is annotation.value.length - 1
                     getEventOffset: @getEventOffset
 
-                  ToolComponent = drawingTools[tool.type]
-                  <ToolComponent key={mark._key} {...toolProps} />}
+                  toolProps =
+                    mark: mark
+                    color: toolDescription.color
+
+                  toolMethods =
+                    onChange: updateAnnotations
+                    onSelect: @selectMark.bind this, mark
+                    onDestroy: @destroyMark.bind this, annotation, mark
+
+                  ToolComponent = drawingTools[toolDescription.type]
+                  <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
               </g>}
         </svg>
       </SubjectViewer>
+
       {if @props.workflow.tasks[@props.annotation?.task]?.type is 'drawing'
         selectedMark = @props.annotation.value[@props.annotation.value.length - 1]
         tool = @props.workflow.tasks[@props.annotation.task].tools[selectedMark?.tool]
@@ -82,7 +91,7 @@ module.exports = React.createClass
             {for detailTask, i in tool.details
               detailTask._key ?= Math.random()
               TaskComponent = tasks[detailTask.type]
-              <TaskComponent key={detailTask._key} task={detailTask} annotation={selectedMark.details[i]} onChange={=> @props.classification.update 'annotations'} />}
+              <TaskComponent key={detailTask._key} task={detailTask} annotation={selectedMark.details[i]} onChange={updateAnnotations} />}
             <button type="button">Close</button>
           </Tooltip>}
     </div>
@@ -164,3 +173,8 @@ module.exports = React.createClass
     unless index is -1
       @props.annotation.value.splice index, 1
       @props.annotation.value.push mark
+
+  destroyMark: (annotation, mark) ->
+    markIndex = annotation.value.indexOf mark
+    annotation.value.splice markIndex, 1
+    @props.classification.update 'annotations'

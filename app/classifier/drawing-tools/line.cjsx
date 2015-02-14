@@ -43,9 +43,9 @@ module.exports = React.createClass
     for n in [1..2]
       @props.mark["x#{n}"] += d.x / @props.scale.horizontal
       @props.mark["y#{n}"] += d.y / @props.scale.vertical
-    @props.classification.update 'annotations'
+    @props.onChange e
 
   handleHandleDrag: (n, e, d) ->
     @props.mark["x#{n}"] += d.x / @props.scale.horizontal
     @props.mark["y#{n}"] += d.y / @props.scale.vertical
-    @props.classification.update 'annotations'
+    @props.onChange e

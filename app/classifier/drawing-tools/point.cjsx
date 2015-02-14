@@ -47,4 +47,4 @@ module.exports = React.createClass
   handleDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
     @props.mark.y += d.y / @props.scale.vertical
-    @props.classification.update 'annotations'
+    @props.onChange e

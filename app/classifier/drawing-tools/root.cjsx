@@ -13,22 +13,24 @@ module.exports = React.createClass
     destroying: false
 
   render: ->
+    toolProps = @props.tool.props
+
     rootProps =
-      'data-disabled': @props.tool.props.disabled or null
-      'data-selected': @props.tool.props.selected or null
+      'data-disabled': toolProps.disabled or null
+      'data-selected': toolProps.selected or null
       'data-destroying': @props.tool.state?.destroying or null
-      style: color: @props.tool.props.tool.color
+      style: color: toolProps.color
 
     mainStyle =
       fill: 'transparent'
       stroke: 'currentColor'
-      strokeWidth: if @props.tool.props.selected
+      strokeWidth: if toolProps.selected
         SELECTED_STROKE_WIDTH
       else
         STROKE_WIDTH
 
     <g className="drawing-tool" {...rootProps} {...@props}>
-      <g className="drawing-tool-main" {...mainStyle} onMouseDown={@props.tool.props.select unless @props.tool.props.disabled}>
+      <g className="drawing-tool-main" {...mainStyle} onMouseDown={toolProps.onSelect unless toolProps.disabled}>
         {@props.children}
       </g>
     </g>
