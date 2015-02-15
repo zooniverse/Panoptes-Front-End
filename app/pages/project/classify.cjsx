@@ -1,9 +1,10 @@
 React = require 'react'
-apiClient = require '../../api/client'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
+apiClient = require '../../api/client'
 animatedScrollTo = require 'animated-scrollto'
+counterpart = require 'counterpart'
 Classifier = require '../../classifier'
 
 SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
@@ -97,19 +98,22 @@ module.exports = React.createClass
     Promise.all([getWorkflow, getSubject]).then ([workflow, subject]) ->
       console.log 'Creating classification'
       classification = apiClient.type('classifications').create
+        annotations: []
+        metadata:
+          workflow_version: workflow.version
+          started_at: (new Date).toISOString()
+          user_agent: navigator.userAgent
+          user_language: counterpart.getLocale()
         links:
           project: project.id
           workflow: workflow.id
           subjects: [subject.id]
-        'metadata.workflow_version': workflow.version
 
       # TODO: This is temporary.
       # Don't rely on these once the back end provides the right links.
       classification._workflow = workflow
       classification._subject = subject
 
-      # TODO: This should be handled by the classifier.
-      classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
       classification
 
   render: ->

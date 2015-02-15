@@ -22,6 +22,11 @@ Classifier = React.createClass
     classification: classification
     onLoad: NOOP
 
+  componentDidMount: ->
+    @props.classification.annotations ?= []
+    if @props.classification.annotations.length is 0
+      @addAnnotationForTask @props.workflow.first_task
+
   getInitialState: ->
     showingExpertClassification: false
     selectedExpertAnnotation: -1
@@ -63,8 +68,7 @@ Classifier = React.createClass
               <nav className="task-nav">
                 <button type="button" className="back" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
                 {if nextTaskKey?
-                  nextTaskType = @props.workflow.tasks[nextTaskKey].type
-                  <button type="button" className="continue" disabled={waitingForAnswer} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
+                  <button type="button" className="continue" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, nextTaskKey}>Next</button>
                 else
                   <button type="button" className="continue" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
               </nav>
@@ -108,6 +112,13 @@ Classifier = React.createClass
 
   destroyCurrentAnnotation: ->
     @props.classification.annotations.pop()
+    @props.classification.update 'annotations'
+
+  addAnnotationForTask: (taskKey) ->
+    taskDescription = @props.workflow.tasks[taskKey]
+    annotation = tasks[taskDescription.type].getDefaultAnnotation()
+    annotation.task = taskKey
+    @props.classification.annotations.push annotation
     @props.classification.update 'annotations'
 
   completeClassification: ->

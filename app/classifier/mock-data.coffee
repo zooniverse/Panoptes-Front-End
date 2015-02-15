@@ -102,12 +102,14 @@ subject = apiClient.type('subjects').create
     }]
 
 classification = apiClient.type('classifications').create
+  annotations: []
+  metadata: {}
   links:
+    project: 'NO_PROJECT'
     workflow: workflow.id
     subjects: [subject.id]
   _workflow: workflow # TEMP
   _subject: subject # TEMP
-classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
 
 module.exports = {workflow, subject, classification}
 window.mockClassifierData = module.exports
