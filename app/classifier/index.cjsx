@@ -57,9 +57,11 @@ Classifier = React.createClass
 
             <div className="task-container">
               <TaskComponent task={currentTask} annotation={currentAnnotation} onChange={=> currentClassification.update 'annotations'} />
+
               <hr />
+
               <nav className="task-nav">
-                <button type="button" className="back" disabled={onFirstAnnotation} onClick={currentAnnotation.destroy.bind currentAnnotation}>Back</button>
+                <button type="button" className="back" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
                 {if nextTaskKey?
                   nextTaskType = @props.workflow.tasks[nextTaskKey].type
                   <button type="button" className="continue" disabled={waitingForAnswer} onClick={currentClassification.annotate.bind currentClassification, nextTaskType, nextTaskKey}>Next</button>
@@ -94,6 +96,7 @@ Classifier = React.createClass
       <ClassificationSummary workflow={@props.workflow} classification={currentClassification} />
 
       <hr />
+
       <nav className="task-nav">
         <a className="talk" href="#/todo/talk">Talk</a>
         <button type="button" className="continue" onClick={@props.onClickNext}>Next</button>
@@ -102,6 +105,10 @@ Classifier = React.createClass
 
   handleSubjectImageLoad: (e) ->
     @props.onLoad? arguments...
+
+  destroyCurrentAnnotation: ->
+    @props.classification.annotations.pop()
+    @props.classification.update 'annotations'
 
   completeClassification: ->
     @props.classification.update

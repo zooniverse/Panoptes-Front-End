@@ -17,10 +17,9 @@ module.exports = class extends Resource
       'metadata.user_language': counterpart.getLocale()
 
   annotate: (taskType, taskKey) ->
-    annotation = new Model task: taskKey, tasks[taskType].getDefaultAnnotation?()
-    annotation.listen 'change', [@, 'emit', 'change']
+    annotation = tasks[taskType].getDefaultAnnotation?()
+    annotation.task = taskKey
     @annotations.push annotation
-    annotation.listen 'destroy', [@, 'handleAnnotationDestroy', @annotations.indexOf annotation]
     @update 'annotations'
     annotation
 
