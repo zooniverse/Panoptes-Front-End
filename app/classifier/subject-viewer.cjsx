@@ -20,6 +20,7 @@ module.exports = React.createClass
     naturalWidth: 0
     naturalHeight: 0
     frame: 0
+    selectedMark: null
 
   getScale: ->
     ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
@@ -34,6 +35,10 @@ module.exports = React.createClass
     x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
+
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.annotation is @props.annotation
+      @selectMark null, null
 
   render: ->
     scale = @getScale()
@@ -54,18 +59,18 @@ module.exports = React.createClass
 
           {for annotation in @props.classification.annotations
             annotation._key ?= Math.random()
-            isPreviousAnnotation = annotation isnt @props.annotation
+            isPriorAnnotation = annotation isnt @props.annotation
             taskDescription = @props.workflow.tasks[annotation.task]
             if taskDescription.type is 'drawing'
-              <g key={annotation._key} className="marks-for-annotation" data-disabled={isPreviousAnnotation or null}>
+              <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation or null}>
                 {for mark, m in annotation.value
                   mark._key ?= Math.random()
                   toolDescription = taskDescription.tools[mark.tool]
 
                   toolEnv =
                     scale: scale
-                    disabled: isPreviousAnnotation
-                    selected: not isPreviousAnnotation and m is annotation.value.length - 1
+                    disabled: isPriorAnnotation
+                    selected: mark is @state.selectedMark
                     getEventOffset: @getEventOffset
 
                   toolProps =
@@ -74,7 +79,7 @@ module.exports = React.createClass
 
                   toolMethods =
                     onChange: updateAnnotations
-                    onSelect: @selectMark.bind this, mark
+                    onSelect: @selectMark.bind this, annotation, mark
                     onDestroy: @destroyMark.bind this, annotation, mark
 
                   ToolComponent = drawingTools[toolDescription.type]
@@ -82,17 +87,16 @@ module.exports = React.createClass
               </g>}
         </svg>
 
-        {if @props.workflow.tasks[@props.annotation?.task]?.type is 'drawing'
-          selectedMark = @props.annotation.value[@props.annotation.value.length - 1]
-          tool = @props.workflow.tasks[@props.annotation.task].tools[selectedMark?.tool]
+        {if @props.workflow.tasks[@props.annotation?.task]?.type is 'drawing' and @state.selectedMark in @props.annotation.value
+          tool = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
           if tool?.details?
             <Tooltip at="middle right" from="middle left">
               {for detailTask, i in tool.details
                 detailTask._key ?= Math.random()
                 TaskComponent = tasks[detailTask.type]
-                <TaskComponent key={detailTask._key} task={detailTask} annotation={selectedMark.details[i]} onChange={updateAnnotations} />}
+                <TaskComponent key={detailTask._key} task={detailTask} annotation={@state.selectedMark.details[i]} onChange={updateAnnotations} />}
               <div className="actions">
-                <button type="button" className="standard-button">Close</button>
+                <button type="button" className="standard-button" onClick={@selectMark.bind this, null, null}>Close</button>
               </div>
             </Tooltip>}
       </SubjectViewer>
@@ -110,7 +114,7 @@ module.exports = React.createClass
 
   handleInitStart: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
-    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    mark = @state.selectedMark
 
     markIsComplete = true
     if mark?
@@ -130,6 +134,7 @@ module.exports = React.createClass
           tasks[detailTaskDescription.type].getDefaultAnnotation()
 
       @props.annotation.value.push mark
+      @selectMark @props.annotation, mark
       MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
 
       if MarkComponent.defaultValues?
@@ -170,11 +175,13 @@ module.exports = React.createClass
         mark[key] = value
       @props.classification.update 'annotations'
 
-  selectMark: (mark) ->
-    index = @props.annotation.value.indexOf mark
-    unless index is -1
-      @props.annotation.value.splice index, 1
-      @props.annotation.value.push mark
+  selectMark: (annotation, mark) ->
+    if annotation? and mark?
+      index = annotation.value.indexOf mark
+      unless index is -1
+        annotation.value.splice index, 1
+        annotation.value.push mark
+    @setState selectedMark: mark
 
   destroyMark: (annotation, mark) ->
     markIndex = annotation.value.indexOf mark
