@@ -12,7 +12,7 @@ CROSS_PATH = "
   L 0 #{RADIUS * 0.7 }
 "
 
-DESTROY_TRANSITION_DURATION = 500
+DESTROY_TRANSITION_DURATION = 300
 
 module.exports = React.createClass
   displayName: 'DeleteButton'

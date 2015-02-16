@@ -21,6 +21,7 @@ module.exports = React.createClass
     naturalHeight: 0
     frame: 0
     selectedMark: null
+    detailsTooltipOffset: ''
 
   getScale: ->
     ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
@@ -40,12 +41,11 @@ module.exports = React.createClass
     unless nextProps.annotation is @props.annotation
       @selectMark null, null
 
+  componentDidUpdate: ->
+    setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
+
   render: ->
     scale = @getScale()
-
-    updateAnnotations = =>
-      @props.classification.update
-        annotations: @props.classification.annotations
 
     <div className="subject-area">
       <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
@@ -72,13 +72,14 @@ module.exports = React.createClass
                     disabled: isPriorAnnotation
                     selected: mark is @state.selectedMark
                     getEventOffset: @getEventOffset
+                    ref: 'selectedTool' if mark is @state.selectedMark
 
                   toolProps =
                     mark: mark
                     color: toolDescription.color
 
                   toolMethods =
-                    onChange: updateAnnotations
+                    onChange: @updateAnnotations
                     onSelect: @selectMark.bind this, annotation, mark
                     onDestroy: @destroyMark.bind this, annotation, mark
 
@@ -87,14 +88,22 @@ module.exports = React.createClass
               </g>}
         </svg>
 
-        {if @props.workflow.tasks[@props.annotation?.task]?.type is 'drawing' and @state.selectedMark in @props.annotation.value
-          tool = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
-          if tool?.details?
-            <Tooltip at="middle right" from="middle left">
-              {for detailTask, i in tool.details
+        {if @state.selectedMark? and @refs.selectedTool?
+          toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
+          if toolDescription?.details?
+            offset = [0, 0]
+            [start, end, dimension, offsetIndex] = ['top', 'bottom', 'height', 0] # TODO: Move along the bottom when appropriate.
+            toolRect = @refs.selectedTool.getDOMNode().getBoundingClientRect()
+            sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
+            offsetValue = ((((toolRect[start] + toolRect[end]) / 2) - sizeRect.top) / sizeRect[dimension]) - 0.5
+            offset[offsetIndex] = "#{Math.floor offsetValue * 100}%"
+            offset = offset.join ' '
+
+            <Tooltip ref="detailsTooltip" attachment="middle right" targetAttachment="middle left" targetOffset={offset}>
+              {for detailTask, i in toolDescription.details
                 detailTask._key ?= Math.random()
                 TaskComponent = tasks[detailTask.type]
-                <TaskComponent key={detailTask._key} task={detailTask} annotation={@state.selectedMark.details[i]} onChange={updateAnnotations} />}
+                <TaskComponent key={detailTask._key} task={detailTask} annotation={@state.selectedMark.details[i]} onChange={@updateAnnotations} />}
               <div className="actions">
                 <button type="button" className="standard-button" onClick={@selectMark.bind this, null, null}>Close</button>
               </div>
@@ -111,6 +120,10 @@ module.exports = React.createClass
 
   handleFrameChange: (e) ->
     @setState frame: parseFloat e.target.value
+
+  updateAnnotations: ->
+    @props.classification.update
+      annotations: @props.classification.annotations
 
   handleInitStart: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
@@ -135,7 +148,8 @@ module.exports = React.createClass
 
       @props.annotation.value.push mark
       @selectMark @props.annotation, mark
-      MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
+
+      MarkComponent = drawingTools[toolDescription.type]
 
       if MarkComponent.defaultValues?
         defaultValues = MarkComponent.defaultValues mouseCoords
@@ -147,43 +161,42 @@ module.exports = React.createClass
       for key, value of initValues
         mark[key] = value
 
-    @props.classification.update 'annotations'
+    @updateAnnotations
 
   handleInitDrag: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
-    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    mark = @state.selectedMark
     MarkComponent = drawingTools[task.tools[mark.tool].type]
-
-    mouseCoords = @getEventOffset e
-
     if MarkComponent.initMove?
+      mouseCoords = @getEventOffset e
       initMoveValues = MarkComponent.initMove mouseCoords, mark, e
       for key, value of initMoveValues
         mark[key] = value
-      @props.classification.update 'annotations'
+      @updateAnnotations()
 
   handleInitRelease: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
-    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    mark = @state.selectedMark
     MarkComponent = drawingTools[task.tools[mark.tool].type]
-
-    mouseCoords = @getEventOffset e
-
     if MarkComponent.initRelease?
+      mouseCoords = @getEventOffset e
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
       for key, value of initReleaseValues
         mark[key] = value
-      @props.classification.update 'annotations'
+      @updateAnnotations()
 
   selectMark: (annotation, mark) ->
     if annotation? and mark?
       index = annotation.value.indexOf mark
-      unless index is -1
-        annotation.value.splice index, 1
-        annotation.value.push mark
-    @setState selectedMark: mark
+      annotation.value.splice index, 1
+      annotation.value.push mark
+    @setState selectedMark: mark, =>
+      if mark?.details?
+        @forceUpdate() # Re-render to reposition the details tooltip.
 
   destroyMark: (annotation, mark) ->
+    if mark is @state.selectedMark
+      @setState selectedMark: null
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
-    @props.classification.update 'annotations'
+    @updateAnnotations()

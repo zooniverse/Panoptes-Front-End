@@ -7,8 +7,10 @@ module.exports = React.createClass
   displayName: 'Tooltip'
 
   getDefaultProps: ->
-    at: 'middle center'
-    from: null
+    attachment: 'middle center'
+    targetAttachment: null
+    offset: '0 0'
+    targetOffset: '0 0'
 
   getInitialState: ->
     container = document.createElement 'div'
@@ -22,14 +24,7 @@ module.exports = React.createClass
     @renderTooltip()
 
     @setState
-      tether: new Tether
-        target: @getDOMNode().parentNode
-        targetAttachment: @props.at
-        element: @state.container
-        attachment: @props.from ? DEFAULT_ATTACHMENT_POINT
-        constraints: [
-          {to: 'scrollParent', attachment: 'together'}
-        ]
+      tether: new Tether @getTetherOptions()
       =>
         @state.tether.position()
         @toFront()
@@ -39,8 +34,21 @@ module.exports = React.createClass
     @state.container.parentNode.removeChild @state.container
     @state.tether.destroy()
 
-  componentDidUpdate: (prevProps, prevState) ->
+  componentDidUpdate: ->
     @renderTooltip()
+    @state.tether.setOptions @getTetherOptions()
+    @state.tether.position()
+
+  getTetherOptions: ->
+    element: @state.container
+    target: @getDOMNode().parentNode
+    attachment: @props.attachment
+    targetAttachment: @props.targetAttachment
+    offset: @props.offset
+    targetOffset: @props.targetOffset
+    constraints: [
+      {to: 'window', attachment: 'together', pin: true}
+    ]
 
   render: ->
     <noscript className="tooltip-anchor"></noscript>
