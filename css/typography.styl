@@ -3,10 +3,6 @@ html
   color: FOREGROUND
   font: 400 15px/1.5 "Open Sans", "Gill Sans", Arial, sans-serif
 
-  &.on-project-page
-    background: FOREGROUND
-    color: BACKGROUND
-
 hr
   border: 0 solid rgba(gray, 0.5)
   border-top-width: 1px
@@ -29,7 +25,7 @@ h4
 img
   &:not([src]),
   &[src=""]
-    background-stripes: rgba(gray, 0.4) rgba(gray, 0.6) 20px
+    background-stripes: rgba(gray, 0.4) rgba(gray, 0.6) 15px
 
 input:not([type="radio"]):not([type="checkbox"]):not([type="file"]),
 textarea
@@ -50,11 +46,3 @@ textarea
 
   &.success
     color: green
-
-.pill
-  @extends $reset-button
-  border: 1px solid
-  border-radius: 3px
-  font-size: 0.7em
-  line-height: 1.2
-  padding: 0 0.5em

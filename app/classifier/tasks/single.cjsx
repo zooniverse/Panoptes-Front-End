@@ -62,7 +62,7 @@ module.exports = React.createClass
   render: ->
     answers = for answer, i in @props.task.answers
       answer._key ?= Math.random()
-      <label key={answer._key} className="clickable #{if i is @props.annotation.value then 'active' else ''}">
+      <label key={answer._key} className="minor-button #{if i is @props.annotation.value then 'active' else ''}">
         <input type="radio" checked={i is @props.annotation.value} onChange={@handleChange.bind this, i} />
         <Markdown>{answer.label}</Markdown>
       </label>

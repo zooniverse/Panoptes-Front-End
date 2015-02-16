@@ -94,7 +94,7 @@ module.exports = React.createClass
   render: ->
     tools = for tool, i in @props.task.tools
       tool._key ?= Math.random()
-      <label key={tool._key} className="clickable #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
+      <label key={tool._key} className="minor-button #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
         <span className="drawing-tool-icon" style={color: tool.color}>{icons[tool.type]}</span>{' '}
         <input type="radio" className="drawing-tool-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
         <Markdown>{tool.label}</Markdown>

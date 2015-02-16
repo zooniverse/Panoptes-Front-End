@@ -23,35 +23,6 @@ $reset-button
     cursor: inherit
     opacity: 0.5
 
-$standard-button
-  @extends $reset-button
-  background: MAIN_HIGHLIGHT
-  border-radius: 3px
-  padding: 0.5em 1em
-  text-align: center
-
-  &:hover
-    background: lighten(MAIN_HIGHLIGHT, 20%)
-
-  &:disabled
-    pointer-events: none
-
-$major-button
-  @extends $standard-button
-  background: SECOND_HIGHLIGHT
-  font-weight: bold
-
-  &:hover
-    background: lighten(SECOND_HIGHLIGHT, 20%)
-
-$minor-button
-  BACKGROUND = #424242
-  @extends $standard-button
-  background: BACKGROUND
-
-  &:hover
-    background: lighten(BACKGROUND, 20%)
-
 $text-input
   border: 1px solid gray
   box-shadow: 0 1px 3px rgba(black, 0.2) inset

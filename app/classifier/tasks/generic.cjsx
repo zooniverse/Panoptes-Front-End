@@ -24,7 +24,7 @@ module.exports = React.createClass
       </div>
       {if @props.help
         <p className="help">
-          <button type="button" className="pill" onClick={@toggleHelp}>
+          <button type="button" className="pill-button" onClick={@toggleHelp}>
             Need some help?
             {if @state.helping
               <Tooltip at="middle left">

@@ -66,11 +66,11 @@ Classifier = React.createClass
               <hr />
 
               <nav className="task-nav">
-                <button type="button" className="back" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
+                <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
                 {if nextTaskKey?
-                  <button type="button" className="continue" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, nextTaskKey}>Next</button>
+                  <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, nextTaskKey}>Next</button>
                 else
-                  <button type="button" className="continue" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
+                  <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
               </nav>
             </div>
 
@@ -102,8 +102,8 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
-        <a className="talk" href="#/todo/talk">Talk</a>
-        <button type="button" className="continue" onClick={@props.onClickNext}>Next</button>
+        <a className="talk standard-button" href="#/todo/talk">Talk</a>
+        <button type="button" className="continue major-button" onClick={@props.onClickNext}>Next</button>
       </nav>
     </div>
 
