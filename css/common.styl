@@ -4,8 +4,7 @@ MAIN_HIGHLIGHT = #43bbfd
 SECOND_HIGHLIGHT = #38b978
 
 background-stripes(color1, color2, size)
-  background: white linear-gradient(-45deg, color1 25%, color2 25%, color2 50%, color1 50%, color1 75%, color2 75%)
-  background-size: size size
+  background-image: repeating-linear-gradient(-45deg, color1, color1 size / 2, color2 size / 2, color2 size)
 
 $reset-button
   background: transparent

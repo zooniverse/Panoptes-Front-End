@@ -3,7 +3,6 @@
   column-gap: 3vw
 
 .project-card
-  background: rgba(gray, 0.5)
   background-position: 50% 0
   background-size: cover
   border: 1px solid lighten(gray, 50%)
@@ -13,6 +12,9 @@
   margin-bottom: 1em
   overflow: hidden
   text-decoration: none
+
+  &[data-no-avatar]
+    background-stripes: black yellow 10%
 
   .details
     background: BACKGROUND

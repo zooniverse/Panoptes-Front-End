@@ -18,7 +18,9 @@ module.exports = React.createClass
         name: @props.project.display_name
 
       style:
-        backgroundImage: "url('#{@props.project.avatar}')"
+        backgroundImage: "url('#{@props.project.avatar}')" if @props.project.avatar
+
+      'data-no-avatar': true unless @props.project.avatar
 
     <Link {...linkProps} className="project-card">
       <svg className="project-card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
