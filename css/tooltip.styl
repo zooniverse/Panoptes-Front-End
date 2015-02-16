@@ -1,12 +1,5 @@
 .tooltip
-  .content
-    background: BACKGROUND
-    border: 2px solid MAIN_HIGHLIGHT
-    border-radius: 0.3em
-    box-shadow: 0 3px 2px -2px rgba(black, 0.3)
-    color: FOREGROUND
-    font-size: 0.8em
-    padding: 0.5em 1vw
+  max-width: 25vw
 
   .arrow
     background: MAIN_HIGHLIGHT
@@ -29,3 +22,20 @@
 
     .tether-element-attached-left &
       left: 0
+
+  .content
+    background: BACKGROUND
+    border: 2px solid MAIN_HIGHLIGHT
+    border-radius: 0.3em
+    box-shadow: 0 3px 2px -2px rgba(black, 0.3)
+    color: FOREGROUND
+    font-size: 0.8em
+    max-height: 80vh
+    overflow: auto
+    padding: 0.5em 1vw
+
+  .actions
+    border-top: 1px solid rgba(gray, 0.3)
+    margin-top: 1em
+    padding-top: 0.5em
+    text-align center

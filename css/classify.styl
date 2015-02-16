@@ -76,19 +76,19 @@
       margin-left: 0.5em
 
 .workflow-task
-  .minor-button
-    display: block
+  .answer
+    display: flex
     margin: 0.5em 0
     text-align: left
 
-    > input
+    > input,
+    > .drawing-tool-icon
+      flex-shrink: 0
+      line-height: 1
       margin-right: 0.5em
 
-    > .markdown
-      display: inline-block
-
-      p:first-child:last-child
-        margin: 0
+    > .markdown > p:first-child:last-child
+      margin: 0
 
   .drawing-tool-icon > svg
     fill-opacity: 0.1
@@ -98,3 +98,6 @@
 
   .drawing-tool-input
     display: none
+
+  & + .workflow-task
+    margin-top: 2em

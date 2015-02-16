@@ -1,9 +1,7 @@
 React = require 'react'
 Tether = require 'tether/tether'
 
-COMPLEMENTARY_ATTACHMENTS =
-  'middle left': 'middle right'
-  'middle right': 'middle left'
+DEFAULT_ATTACHMENT_POINT = 'middle center'
 
 module.exports = React.createClass
   displayName: 'Tooltip'
@@ -11,7 +9,6 @@ module.exports = React.createClass
   getDefaultProps: ->
     at: 'middle center'
     from: null
-    offset: '8px'
 
   getInitialState: ->
     container = document.createElement 'div'
@@ -29,13 +26,13 @@ module.exports = React.createClass
         target: @getDOMNode().parentNode
         targetAttachment: @props.at
         element: @state.container
-        attachment: @props.from ? COMPLEMENTARY_ATTACHMENTS[@props.at]
-        targetOffset: "#{@props.offset} #{@props.offset}"
+        attachment: @props.from ? DEFAULT_ATTACHMENT_POINT
         constraints: [
           {to: 'scrollParent', attachment: 'together'}
         ]
       =>
         @state.tether.position()
+        @toFront()
 
   componentWillUnmount: ->
     React.unmountComponentAtNode @state.container

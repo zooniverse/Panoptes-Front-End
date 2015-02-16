@@ -20,7 +20,7 @@ module.exports = React.createClass
       <Markdown className="question">{@props.question}</Markdown>
       <div className="answers">
         {React.Children.map @props.answers, (answer) ->
-          cloneWithProps answer,  className: 'workflow-task-answer'}
+          cloneWithProps answer,  className: 'answer'}
       </div>
       {if @props.help
         <p className="help">

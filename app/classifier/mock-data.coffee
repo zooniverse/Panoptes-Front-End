@@ -27,7 +27,7 @@ workflow = apiClient.type('workflows').create
             type: 'single'
             question: 'Cool?'
             answers: [
-              {label: 'Yeah'}
+              {label: 'Yeah, this is pretty cool, in fact I’m going to write a big long sentence describe just how cool I think it is.'}
               {label: 'Nah'}
             ]
           }, {

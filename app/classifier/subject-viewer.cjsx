@@ -81,19 +81,21 @@ module.exports = React.createClass
                   <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
               </g>}
         </svg>
-      </SubjectViewer>
 
-      {if @props.workflow.tasks[@props.annotation?.task]?.type is 'drawing'
-        selectedMark = @props.annotation.value[@props.annotation.value.length - 1]
-        tool = @props.workflow.tasks[@props.annotation.task].tools[selectedMark?.tool]
-        if tool?.details?
-          <Tooltip at="middle right">
-            {for detailTask, i in tool.details
-              detailTask._key ?= Math.random()
-              TaskComponent = tasks[detailTask.type]
-              <TaskComponent key={detailTask._key} task={detailTask} annotation={selectedMark.details[i]} onChange={updateAnnotations} />}
-            <button type="button">Close</button>
-          </Tooltip>}
+        {if @props.workflow.tasks[@props.annotation?.task]?.type is 'drawing'
+          selectedMark = @props.annotation.value[@props.annotation.value.length - 1]
+          tool = @props.workflow.tasks[@props.annotation.task].tools[selectedMark?.tool]
+          if tool?.details?
+            <Tooltip at="middle right" from="middle left">
+              {for detailTask, i in tool.details
+                detailTask._key ?= Math.random()
+                TaskComponent = tasks[detailTask.type]
+                <TaskComponent key={detailTask._key} task={detailTask} annotation={selectedMark.details[i]} onChange={updateAnnotations} />}
+              <div className="actions">
+                <button type="button" className="standard-button">Close</button>
+              </div>
+            </Tooltip>}
+      </SubjectViewer>
     </div>
 
   handleSubjectFrameLoad: (e) ->
