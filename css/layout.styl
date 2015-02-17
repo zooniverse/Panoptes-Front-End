@@ -17,6 +17,13 @@ body
 
 .columns-container
   display: flex
+  align-items: baseline
+
+  &.inline
+    flex-wrap: wrap
+
+  &.spread
+    justify-content: space-between
 
   > :not(:last-child)
       margin-right: 2.5vw
