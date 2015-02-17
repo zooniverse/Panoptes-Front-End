@@ -21,13 +21,15 @@ module.exports = React.createClass
       'data-destroying': @props.tool.state?.destroying or null
       style: color: toolProps.color
 
+    scale = (toolProps.scale.horizontal + toolProps.scale.vertical) / 2
+
     mainStyle =
       fill: 'transparent'
       stroke: 'currentColor'
       strokeWidth: if toolProps.selected
-        SELECTED_STROKE_WIDTH
+        SELECTED_STROKE_WIDTH / scale
       else
-        STROKE_WIDTH
+        STROKE_WIDTH / scale
 
     <g className="drawing-tool" {...rootProps} {...@props}>
       <g className="drawing-tool-main" {...mainStyle} onMouseDown={toolProps.onSelect unless toolProps.disabled}>

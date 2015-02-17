@@ -31,11 +31,14 @@ module.exports = React.createClass
       mark.closed?
 
   render: ->
+    averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
+    finisherRadius = FINISHER_RADIUS / averageScale
+
     firstPoint = @props.mark.points[0]
     secondPoint = @props.mark.points[1]
     secondPoint ?=
-      x: firstPoint.x + (FINISHER_RADIUS * 2)
-      y: firstPoint.y - (FINISHER_RADIUS * 2)
+      x: firstPoint.x + (finisherRadius * 2)
+      y: firstPoint.y - (finisherRadius * 2)
     lastPoint = @props.mark.points[@props.mark.points.length - 1]
 
     points = ([x, y].join ',' for {x, y} in @props.mark.points)
@@ -51,7 +54,7 @@ module.exports = React.createClass
       <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
         <g>
           {if @props.mark.closed is false
-            <polyline points={points} fill="none" strokeWidth={GRAB_STROKE_WIDTH} strokeOpacity="0" />}
+            <polyline points={points} fill="none" strokeWidth={GRAB_STROKE_WIDTH / averageScale} strokeOpacity="0" />}
           <polyline points={points} fill={'none' unless @props.mark.closed} />
         </g>
       </Draggable>
@@ -62,14 +65,14 @@ module.exports = React.createClass
 
           {for point, i in @props.mark.points
             point._key ?= Math.random()
-            <DragHandle key={i} x={point.x} y={point.y} onDrag={@handleHandleDrag.bind this, i} />}
+            <DragHandle key={i} x={point.x} y={point.y} scale={@props.scale} onDrag={@handleHandleDrag.bind this, i} />}
 
           {unless @props.mark.closed?
             <g>
               {if @props.mark.points.length > 2
                 <line className="guideline" x1={lastPoint.x} y1={lastPoint.y} x2={firstPoint.x} y2={firstPoint.y} />}
-              <circle className="clickable" r={FINISHER_RADIUS} cx={firstPoint.x} cy={firstPoint.y} onClick={@handleFinishClick.bind this, true} />
-              <circle className="clickable" r={FINISHER_RADIUS} cx={lastPoint.x} cy={lastPoint.y} onClick={@handleFinishClick.bind this, false} />
+              <circle className="clickable" r={finisherRadius} cx={firstPoint.x} cy={firstPoint.y} onClick={@handleFinishClick.bind this, true} />
+              <circle className="clickable" r={finisherRadius} cx={lastPoint.x} cy={lastPoint.y} onClick={@handleFinishClick.bind this, false} />
             </g>}
         </g>}
     </DrawingToolRoot>

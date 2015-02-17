@@ -185,7 +185,7 @@ module.exports = React.createClass
       initMoveValues = MarkComponent.initMove mouseCoords, mark, e
       for key, value of initMoveValues
         mark[key] = value
-      @updateAnnotations()
+    @updateAnnotations()
 
   handleInitRelease: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
@@ -196,7 +196,7 @@ module.exports = React.createClass
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
       for key, value of initReleaseValues
         mark[key] = value
-      @updateAnnotations()
+    @updateAnnotations()
 
   selectMark: (annotation, mark) ->
     if annotation? and mark?

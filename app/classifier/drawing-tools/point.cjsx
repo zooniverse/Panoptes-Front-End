@@ -21,20 +21,26 @@ module.exports = React.createClass
 
   getDeleteButtonPosition: ->
     theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)
-    x: SELECTED_RADIUS * Math.cos theta
-    y: -SELECTED_RADIUS * Math.sin theta
+    x: (SELECTED_RADIUS / @props.scale.horizontal) * Math.cos theta
+    y: -1 * (SELECTED_RADIUS / @props.scale.vertical) * Math.sin theta
 
   render: ->
+    averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
+
+    crosshairSpace = CROSSHAIR_SPACE / averageScale
+    crosshairWidth = CROSSHAIR_WIDTH / averageScale
+    selectedRadius = SELECTED_RADIUS / averageScale
+
     radius = if @props.selected
-      SELECTED_RADIUS
+      SELECTED_RADIUS / averageScale
     else
-      RADIUS
+      RADIUS / averageScale
 
     <DrawingToolRoot tool={this} transform="translate(#{@props.mark.x}, #{@props.mark.y})">
-      <line x1="0" y1={-CROSSHAIR_SPACE * SELECTED_RADIUS} x2="0" y2={-SELECTED_RADIUS} strokeWidth={CROSSHAIR_WIDTH} />
-      <line x1={-CROSSHAIR_SPACE * SELECTED_RADIUS} y1="0" x2={-SELECTED_RADIUS} y2="0" strokeWidth={CROSSHAIR_WIDTH} />
-      <line x1="0" y1={CROSSHAIR_SPACE * SELECTED_RADIUS} x2="0" y2={SELECTED_RADIUS} strokeWidth={CROSSHAIR_WIDTH} />
-      <line x1={CROSSHAIR_SPACE * SELECTED_RADIUS} y1="0" x2={SELECTED_RADIUS} y2="0" strokeWidth={CROSSHAIR_WIDTH} />
+      <line x1="0" y1={-1 * crosshairSpace * selectedRadius} x2="0" y2={-1 * selectedRadius} strokeWidth={crosshairWidth} />
+      <line x1={-1 * crosshairSpace * selectedRadius} y1="0" x2={-1 * selectedRadius} y2="0" strokeWidth={crosshairWidth} />
+      <line x1="0" y1={crosshairSpace * selectedRadius} x2="0" y2={selectedRadius} strokeWidth={crosshairWidth} />
+      <line x1={crosshairSpace * selectedRadius} y1="0" x2={selectedRadius} y2="0" strokeWidth={crosshairWidth} />
 
       <Draggable onDrag={@handleDrag} disabled={@props.disabled}>
         <circle r={radius} />
