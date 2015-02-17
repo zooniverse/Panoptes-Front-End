@@ -59,26 +59,36 @@
     margin-bottom: 1em
     max-width: 35em
 
-  .clickable
-    @extends $minor-button
+  .task-nav
+    display: flex
+    margin-top: 1em
 
-    &.active
-      @extends $standard-button
+    .back
+      flex: 1 0
 
-    input
-      margin-right: 0.5em
+    .talk
+      flex: 2 0
 
-    .markdown
-      display: inline-block
+    .continue
+      flex: 3 0
 
-      p:first-child:last-child
-        margin: 0
+    > :not(:first-child)
+      margin-left: 0.5em
 
-  .clickable,
-  .clickable.active
-    display: block
+.workflow-task
+  .answer
+    display: flex
     margin: 0.5em 0
     text-align: left
+
+    > input,
+    > .drawing-tool-icon
+      flex-shrink: 0
+      line-height: 1
+      margin-right: 0.5em
+
+    > .markdown > p:first-child:last-child
+      margin: 0
 
   .drawing-tool-icon > svg
     fill-opacity: 0.1
@@ -89,21 +99,5 @@
   .drawing-tool-input
     display: none
 
-  .task-nav
-    display: flex
-    margin-top: 1em
-
-    .back
-      @extends $minor-button
-      flex: 1 0
-
-    .talk
-      @extends $standard-button
-      flex: 2 0
-
-    .continue
-      @extends $major-button
-      flex: 3 0
-
-    > :not(:first-child)
-      margin-left: 0.5em
+  & + .workflow-task
+    margin-top: 2em

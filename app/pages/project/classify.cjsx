@@ -1,9 +1,10 @@
 React = require 'react'
-apiClient = require '../../api/client'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
+apiClient = require '../../api/client'
 animatedScrollTo = require 'animated-scrollto'
+counterpart = require 'counterpart'
 Classifier = require '../../classifier'
 
 SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
@@ -25,6 +26,10 @@ module.exports = React.createClass
   mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
 
   title: 'Classify'
+
+  getDefaultProps: ->
+    query: null
+    project: null
 
   getInitialState: ->
     workflow: null
@@ -93,29 +98,28 @@ module.exports = React.createClass
     Promise.all([getWorkflow, getSubject]).then ([workflow, subject]) ->
       console.log 'Creating classification'
       classification = apiClient.type('classifications').create
+        annotations: []
+        metadata:
+          workflow_version: workflow.version
+          started_at: (new Date).toISOString()
+          user_agent: navigator.userAgent
+          user_language: counterpart.getLocale()
         links:
           project: project.id
           workflow: workflow.id
           subjects: [subject.id]
-        'metadata.workflow_version': workflow.version
 
       # TODO: This is temporary.
       # Don't rely on these once the back end provides the right links.
       classification._workflow = workflow
       classification._subject = subject
 
-      # TODO: This should be handled by the classifier.
-      classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
       classification
 
   render: ->
     <div className="classify-page content-container">
       {if @state.classification?
-        <Classifier
-          classification={@state.classification}
-          onLoad={@scrollIntoView}
-          onComplete={@handleClassificationCompletion}
-          onClickNext={@loadAnotherSubject} />
+        <Classifier classification={@state.classification} onLoad={@scrollIntoView} onComplete={@handleCompletion} onClickNext={@loadAnotherSubject} />
       else if @state.rejected.classification?
         <code>{@state.rejected.classification.toString()}</code>
       else
@@ -130,13 +134,14 @@ module.exports = React.createClass
     if Math.abs(idealScrollY - scrollY) > lineHeight
       animatedScrollTo document.body, el.offsetTop - space, 333
 
-  handleClassificationCompletion: ->
-    console?.info 'Completed classification', JSON.stringify @state.classification, null, 2
-    @state.classification.save().then =>
-      console?.log 'Saved classification', @state.classification.id
+  handleCompletion: ->
+    console?.info 'Completed classification', @state.classification
+    @state.classification.save().then (classification) =>
+      console?.log 'Saved classification', classification.id
+      classification.uncache()
 
   loadAnotherSubject: ->
     currentWorkflowForProject[@props.project.id].then (workflowID) =>
       currentClassifications.forWorkflow[workflowID] = null
       currentWorkflowForProject[@props.project.id] = null
-    @loadClassification()
+      @loadClassification()

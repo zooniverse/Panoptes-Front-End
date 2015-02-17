@@ -2,6 +2,8 @@ React = require 'react'
 SubjectViewer = require '../components/subject-viewer'
 Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
+tasks = require './tasks'
+Tooltip = require '../components/tooltip'
 
 NOOP = Function.prototype
 
@@ -9,13 +11,17 @@ module.exports = React.createClass
   displayName: 'SubjectViewer' # TODO: Rename this.
 
   getDefaultProps: ->
+    classification: null
+    workflow: null
+    annotation: null
     onLoad: NOOP
 
   getInitialState: ->
     naturalWidth: 0
     naturalHeight: 0
-    proportion: 'square'
     frame: 0
+    selectedMark: null
+    detailsTooltipOffset: ''
 
   getScale: ->
     ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
@@ -31,10 +37,17 @@ module.exports = React.createClass
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
 
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.annotation is @props.annotation
+      @selectMark null, null
+
+  componentDidUpdate: ->
+    setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
+
   render: ->
     scale = @getScale()
 
-    <div className="subject-area #{@state.proportion}">
+    <div className="subject-area">
       <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
@@ -46,29 +59,68 @@ module.exports = React.createClass
 
           {for annotation in @props.classification.annotations
             annotation._key ?= Math.random()
-            disabled = annotation isnt @props.annotation
-            task = @props.workflow.tasks[annotation.task]
-            if task.type is 'drawing'
-              <g key={annotation._key} className="marks-for-annotation" data-disabled={disabled or null}>
+            isPriorAnnotation = annotation isnt @props.annotation
+            taskDescription = @props.workflow.tasks[annotation.task]
+            if taskDescription.type is 'drawing'
+              <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation or null}>
                 {for mark, m in annotation.value
                   mark._key ?= Math.random()
-                  tool = task.tools[mark.tool]
+                  toolDescription = taskDescription.tools[mark.tool]
+
+                  toolEnv =
+                    scale: scale
+                    disabled: isPriorAnnotation
+                    selected: mark is @state.selectedMark
+                    getEventOffset: @getEventOffset
+                    ref: 'selectedTool' if mark is @state.selectedMark
 
                   toolProps =
-                    classification: @props.classification
-                    annotation: annotation
-                    tool: tool
                     mark: mark
-                    scale: scale
-                    disabled: disabled
-                    selected: not disabled and m is annotation.value.length - 1
-                    select: @selectMark.bind this, mark
-                    getEventOffset: @getEventOffset
+                    color: toolDescription.color
 
-                  ToolComponent = drawingTools[tool.type]
-                  <ToolComponent key={mark._key} {...toolProps} />}
+                  toolMethods =
+                    onChange: @updateAnnotations
+                    onSelect: @selectMark.bind this, annotation, mark
+                    onDestroy: @destroyMark.bind this, annotation, mark
+
+                  ToolComponent = drawingTools[toolDescription.type]
+                  <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
               </g>}
         </svg>
+
+        {if @state.selectedMark? and @refs.selectedTool?
+          toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
+          if toolDescription?.details?
+            sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
+            toolRect = @refs.selectedTool.getDOMNode().getBoundingClientRect()
+
+            probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
+            [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
+              ['left', 'right', 'width', 1, 'top center', 'bottom center']
+            else
+              ['top', 'bottom', 'height', 0, 'middle left', 'middle right']
+
+            # NOTE: These offsets aren't perfect, but they're close enough for now.
+
+            arrowStyle = {}
+            toolCenter = ((toolRect[start] + toolRect[end]) / 2) - sizeRect[start]
+            distance = toolCenter / sizeRect[dimension]
+            arrowStyle[start] = "#{distance * 100}%"
+
+            offset = [0, 0]
+            fromCenter = distance - 0.5
+            offset[offsetIndex] = "#{(fromCenter / -2) * 100}%"
+            offset = offset.join ' '
+
+            <Tooltip ref="detailsTooltip" attachment={attachment} targetAttachment={targetAttachment} offset={offset} arrowStyle={arrowStyle} pin={false}>
+              {for detailTask, i in toolDescription.details
+                detailTask._key ?= Math.random()
+                TaskComponent = tasks[detailTask.type]
+                <TaskComponent key={detailTask._key} task={detailTask} annotation={@state.selectedMark.details[i]} onChange={@updateAnnotations} />}
+              <div className="actions">
+                <button type="button" className="standard-button" onClick={@selectMark.bind this, null, null}>Close</button>
+              </div>
+            </Tooltip>}
       </SubjectViewer>
     </div>
 
@@ -76,41 +128,41 @@ module.exports = React.createClass
     if e.target.tagName.toUpperCase() is 'IMG'
       {naturalWidth, naturalHeight} = e.target
       unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
-        proportion = naturalWidth / naturalHeight
-        proportion = if proportion <= 0.4
-          'very-tall'
-        else if 0.4 < proportion <= 0.9
-          'tall'
-        else if 0.9 < proportion <= 1.1
-          'square'
-        else if 1.1 < proportion <= 1.6
-          'wide'
-        else if 1.6 < proportion
-          'very-wide'
-
-        @setState {naturalWidth, naturalHeight, proportion}
+        @setState {naturalWidth, naturalHeight}
       @props.onLoad? arguments...
 
   handleFrameChange: (e) ->
     @setState frame: parseFloat e.target.value
 
+  updateAnnotations: ->
+    @props.classification.update
+      annotations: @props.classification.annotations
+
   handleInitStart: (e) ->
-    task = @props.workflow.tasks[@props.annotation.task]
-    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    taskDescription = @props.workflow.tasks[@props.annotation.task]
+    mark = @state.selectedMark
 
     markIsComplete = true
     if mark?
-      MarkComponent = drawingTools[task.tools[mark.tool].type]
+      toolDescription = taskDescription.tools[mark.tool]
+      MarkComponent = drawingTools[toolDescription.type]
       if MarkComponent.isComplete?
         markIsComplete = MarkComponent.isComplete mark
 
     mouseCoords = @getEventOffset e
 
     if markIsComplete
+      toolDescription = taskDescription.tools[@props.annotation._toolIndex]
       mark =
         tool: @props.annotation._toolIndex
+      if toolDescription.details?
+        mark.details = for detailTaskDescription in toolDescription.details
+          tasks[detailTaskDescription.type].getDefaultAnnotation()
+
       @props.annotation.value.push mark
-      MarkComponent = drawingTools[task.tools[mark.tool].type]
+      @selectMark @props.annotation, mark
+
+      MarkComponent = drawingTools[toolDescription.type]
 
       if MarkComponent.defaultValues?
         defaultValues = MarkComponent.defaultValues mouseCoords
@@ -122,36 +174,42 @@ module.exports = React.createClass
       for key, value of initValues
         mark[key] = value
 
-    @props.classification.update 'annotations'
+    @updateAnnotations
 
   handleInitDrag: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
-    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    mark = @state.selectedMark
     MarkComponent = drawingTools[task.tools[mark.tool].type]
-
-    mouseCoords = @getEventOffset e
-
     if MarkComponent.initMove?
+      mouseCoords = @getEventOffset e
       initMoveValues = MarkComponent.initMove mouseCoords, mark, e
       for key, value of initMoveValues
         mark[key] = value
-      @props.classification.update 'annotations'
+      @updateAnnotations()
 
   handleInitRelease: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
-    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    mark = @state.selectedMark
     MarkComponent = drawingTools[task.tools[mark.tool].type]
-
-    mouseCoords = @getEventOffset e
-
     if MarkComponent.initRelease?
+      mouseCoords = @getEventOffset e
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
       for key, value of initReleaseValues
         mark[key] = value
-      @props.classification.update 'annotations'
+      @updateAnnotations()
 
-  selectMark: (mark) ->
-    index = @props.annotation.value.indexOf mark
-    unless index is -1
-      @props.annotation.value.splice index, 1
-      @props.annotation.value.push mark
+  selectMark: (annotation, mark) ->
+    if annotation? and mark?
+      index = annotation.value.indexOf mark
+      annotation.value.splice index, 1
+      annotation.value.push mark
+    @setState selectedMark: mark, =>
+      if mark?.details?
+        @forceUpdate() # Re-render to reposition the details tooltip.
+
+  destroyMark: (annotation, mark) ->
+    if mark is @state.selectedMark
+      @setState selectedMark: null
+    markIndex = annotation.value.indexOf mark
+    annotation.value.splice markIndex, 1
+    @updateAnnotations()

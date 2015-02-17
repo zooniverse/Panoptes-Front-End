@@ -2,6 +2,8 @@ React = require 'react'
 GenericTask = require './generic'
 Markdown = require '../../components/markdown'
 
+NOOP = Function.prototype
+
 Summary = React.createClass
   displayName: 'MultipleChoiceSummary'
 
@@ -57,11 +59,12 @@ module.exports = React.createClass
   getDefaultProps: ->
     task: null
     annotation: null
+    onChange: NOOP
 
   render: ->
     answers = for answer, i in @props.task.answers
       answer._key ?= Math.random()
-      <label key={answer._key} className="clickable #{if i in @props.annotation.value then 'active' else ''}">
+      <label key={answer._key} className="minor-button #{if i in @props.annotation.value then 'active' else ''}">
         <input type="checkbox" checked={i in @props.annotation.value} onChange={@handleChange.bind this, i} />
         <Markdown>{answer.label}</Markdown>
       </label>
@@ -79,4 +82,5 @@ module.exports = React.createClass
         indexInAnswers = answers.indexOf index
         answers.splice indexInAnswers, 1
 
-    @props.annotation.update value: answers
+    @props.annotation.value = answers
+    @props.onChange? e

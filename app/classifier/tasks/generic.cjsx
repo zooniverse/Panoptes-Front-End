@@ -2,6 +2,7 @@ React = require 'react'
 cloneWithProps = require 'react/lib/cloneWithProps'
 alert = require '../../lib/alert'
 Markdown = require '../../components/markdown'
+Tooltip = require '../../components/tooltip'
 
 module.exports = React.createClass
   displayName: 'GenericTask'
@@ -11,20 +12,27 @@ module.exports = React.createClass
     help: ''
     answers: ''
 
+  getInitialState: ->
+    helping: false
+
   render: ->
     <div className="workflow-task">
       <Markdown className="question">{@props.question}</Markdown>
       <div className="answers">
         {React.Children.map @props.answers, (answer) ->
-          cloneWithProps answer,  className: 'workflow-task-answer'}
+          cloneWithProps answer,  className: 'answer'}
       </div>
       {if @props.help
         <p className="help">
-          <button type="button" className="pill" onClick={@showHelp}>Need some help?</button>
+          <button type="button" className="pill-button" onClick={@toggleHelp}>
+            Need some help?
+            {if @state.helping
+              <Tooltip attachment="middle right" targetAttachment="middle left" >
+                <Markdown className="classification-task-help">{@props.help}</Markdown>
+              </Tooltip>}
+          </button>
         </p>}
     </div>
 
-  showHelp: ->
-    alert <div className="content-container">
-      <Markdown className="classification-task-help">{@props.help}</Markdown>
-    </div>
+  toggleHelp: ->
+    @setState helping: not @state.helping

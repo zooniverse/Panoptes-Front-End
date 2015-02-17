@@ -57,11 +57,12 @@ module.exports = React.createClass
   getDefaultProps: ->
     task: null
     annotation: null
+    onChange: NOOP
 
   render: ->
     answers = for answer, i in @props.task.answers
       answer._key ?= Math.random()
-      <label key={answer._key} className="clickable #{if i is @props.annotation.value then 'active' else ''}">
+      <label key={answer._key} className="minor-button #{if i is @props.annotation.value then 'active' else ''}">
         <input type="radio" checked={i is @props.annotation.value} onChange={@handleChange.bind this, i} />
         <Markdown>{answer.label}</Markdown>
       </label>
@@ -70,4 +71,6 @@ module.exports = React.createClass
 
   handleChange: (index, e) ->
     if e.target.checked
-      @props.annotation.update value: index
+      @props.annotation.value = index
+      @props.onChange? e
+

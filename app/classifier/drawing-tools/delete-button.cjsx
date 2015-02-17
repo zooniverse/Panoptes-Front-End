@@ -12,7 +12,7 @@ CROSS_PATH = "
   L 0 #{RADIUS * 0.7 }
 "
 
-DESTROY_TRANSITION_DURATION = 500
+DESTROY_TRANSITION_DURATION = 300
 
 module.exports = React.createClass
   displayName: 'DeleteButton'
@@ -35,10 +35,4 @@ module.exports = React.createClass
 
   destroyTool: ->
     @props.tool.setState destroying: true, =>
-      setTimeout @_destroyMark, DESTROY_TRANSITION_DURATION
-
-  _destroyMark: ->
-    {mark, annotation, classification} = @props.tool.props
-    markIndex = annotation.value.indexOf mark
-    annotation.value.splice markIndex, 1
-    @props.tool.props.classification.update 'annotations'
+      setTimeout @props.tool.props.onDestroy, DESTROY_TRANSITION_DURATION

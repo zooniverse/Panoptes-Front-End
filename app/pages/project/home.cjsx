@@ -36,7 +36,7 @@ module.exports = React.createClass
         <Markdown className="description">{@props.project.description}</Markdown>
 
         {for workflow in @state.workflows
-          <Link to="project-classify" params={linkParams} query={workflow: workflow.id} key={workflow.id} className="call-to-action">
+          <Link to="project-classify" params={linkParams} query={workflow: workflow.id} key={workflow.id} className="call-to-action standard-button">
             {workflow.display_name}
           </Link>}
       </div>

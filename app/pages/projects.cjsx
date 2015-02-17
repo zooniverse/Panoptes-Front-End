@@ -38,7 +38,7 @@ module.exports = React.createClass
                   if meta?
                     <nav className="pagination">
                       {for page in [1..meta.page_count]
-                        <Link to="projects" query={{page}} key={page} className="pill">{page}</Link>}
+                        <Link to="projects" query={{page}} key={page} className="pill-button">{page}</Link>}
                     </nav>}
                 </nav>
               </div>

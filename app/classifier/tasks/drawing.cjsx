@@ -2,6 +2,8 @@ React = require 'react'
 GenericTask = require './generic'
 Markdown = require '../../components/markdown'
 
+NOOP = Function.prototype
+
 icons =
   point: <svg viewBox="0 0 100 100">
     <circle className="shape" r="30" cx="50" cy="50" />
@@ -87,11 +89,12 @@ module.exports = React.createClass
   getDefaultProps: ->
     task: null
     annotation: null
+    onChange: NOOP
 
   render: ->
     tools = for tool, i in @props.task.tools
       tool._key ?= Math.random()
-      <label key={tool._key} className="clickable #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
+      <label key={tool._key} className="minor-button #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
         <span className="drawing-tool-icon" style={color: tool.color}>{icons[tool.type]}</span>{' '}
         <input type="radio" className="drawing-tool-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
         <Markdown>{tool.label}</Markdown>
@@ -101,4 +104,5 @@ module.exports = React.createClass
 
   handleChange: (index, e) ->
     if e.target.checked
-      @props.annotation.update _toolIndex: index
+      @props.annotation._toolIndex = index
+      @props.onChange? e

@@ -19,7 +19,26 @@ workflow = apiClient.type('workflows').create
         * Draw something
       '''
       tools: [
-        {type: 'point', label: 'Point', color: 'red'}
+        {
+          type: 'point'
+          label: 'Point'
+          color: 'red'
+          details: [{
+            type: 'single'
+            question: 'Cool?'
+            answers: [
+              {label: 'Yeah, this is pretty cool, in fact I’m going to write a big long sentence describe just how cool I think it is.'}
+              {label: 'Nah'}
+            ]
+          }, {
+            type: 'multiple'
+            question: 'Cool stuff?'
+            answers: [
+              {label: 'Ice'}
+              {label: 'Snow'}
+            ]
+          }]
+        }
         {type: 'line', label: 'Line', color: 'yellow'}
         {type: 'rectangle', label: 'Rectangle', color: 'lime'}
         {type: 'polygon', label: 'Polygon', color: 'cyan'}
@@ -83,12 +102,14 @@ subject = apiClient.type('subjects').create
     }]
 
 classification = apiClient.type('classifications').create
+  annotations: []
+  metadata: {}
   links:
+    project: 'NO_PROJECT'
     workflow: workflow.id
     subjects: [subject.id]
   _workflow: workflow # TEMP
   _subject: subject # TEMP
-classification.annotate workflow.tasks[workflow.first_task].type, workflow.first_task
 
 module.exports = {workflow, subject, classification}
 window.mockClassifierData = module.exports

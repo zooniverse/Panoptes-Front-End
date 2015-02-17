@@ -1,7 +1,18 @@
+.on-project-page
+  background: FOREGROUND
+  color: BACKGROUND
+
 .project-page
   display: flex
   flex: 1 0 auto
   flex-direction: column
+
+  .minor-button
+    color: white
+    background: #424242
+
+    &:hover
+      background: lighten(#424242, 20%)
 
 .project-background
   // A custom background-image is provided by the project.
@@ -16,7 +27,7 @@
   z-index: -1
 
   &:not([style*="background-image"])
-    background-stripes: rgba(black, 0.7) rgba(black, 0.8) 100px
+    background-stripes: rgba(black, 0) rgba(white, 0.1) 10%
 
   &::after
     background: radial-gradient(rgba(black, 0.2), rgba(black, 0.8))
@@ -42,20 +53,6 @@
     vertical-align: middle
     width: 4em
 
-.classification-anchor
-  @extends $reset-button
-  display: none
-  left: 50%
-  line-height: 1
-  margin-top: 0.5em
-  padding: 0.5em
-  position: absolute
-  top: 100%
-  transform: translateX(-50%)
-
-  .active &
-    display: inline-block
-
 .project-home-page
   display: flex
   flex-direction: column
@@ -70,9 +67,6 @@
 
   .description
     font-size: 1.5em
-
-  .call-to-action
-    @extends $standard-button
 
   .introduction
     column-width: 30em
