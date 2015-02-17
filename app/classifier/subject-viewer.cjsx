@@ -112,7 +112,7 @@ module.exports = React.createClass
             offset[offsetIndex] = "#{(fromCenter / -2) * 100}%"
             offset = offset.join ' '
 
-            <Tooltip ref="detailsTooltip" attachment={attachment} targetAttachment={targetAttachment} offset={offset} arrowStyle={arrowStyle} pin={false}>
+            <Tooltip ref="detailsTooltip" attachment={attachment} targetAttachment={targetAttachment} offset={offset} arrowStyle={arrowStyle}>
               {for detailTask, i in toolDescription.details
                 detailTask._key ?= Math.random()
                 TaskComponent = tasks[detailTask.type]

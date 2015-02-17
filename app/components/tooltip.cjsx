@@ -11,7 +11,7 @@ module.exports = React.createClass
     targetAttachment: 'middle center'
     offset: '0 0'
     targetOffset: '0 0'
-    pin: true
+    pin: false
     arrowStyle: null
 
   getInitialState: ->
