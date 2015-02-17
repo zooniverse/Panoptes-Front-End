@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ADD ./package.json /src/
 
 RUN apt-get update && apt-get -y upgrade && apt-get clean && \
-    apt-get install -y curl libfreetype6 libfontconfig1 && \
+    apt-get install -y curl libfreetype6 libfontconfig1 git && \
     curl https://deb.nodesource.com/setup | bash - && \
     apt-get install -y nodejs && \
     apt-get clean && \
