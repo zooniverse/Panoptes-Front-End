@@ -136,11 +136,12 @@ module.exports = React.createClass
 
   handleCompletion: ->
     console?.info 'Completed classification', @state.classification
-    @state.classification.save().then =>
-      console?.log 'Saved classification', @state.classification.id
+    @state.classification.save().then (classification) =>
+      console?.log 'Saved classification', classification.id
+      classification.uncache()
 
   loadAnotherSubject: ->
     currentWorkflowForProject[@props.project.id].then (workflowID) =>
       currentClassifications.forWorkflow[workflowID] = null
       currentWorkflowForProject[@props.project.id] = null
-    @loadClassification()
+      @loadClassification()

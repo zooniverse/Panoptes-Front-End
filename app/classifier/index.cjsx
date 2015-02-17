@@ -1,9 +1,9 @@
 React = require 'react'
+HandlePropChanges = require '../lib/handle-prop-changes'
 ChangeListener = require '../components/change-listener'
 SubjectViewer = require './subject-viewer'
 ClassificationSummary = require './classification-summary'
 tasks = require './tasks'
-HandlePropChanges = require '../lib/handle-prop-changes'
 PromiseToSetState = require '../lib/promise-to-set-state'
 
 NOOP = Function.prototype
@@ -14,6 +14,8 @@ unless process.env.NODE_ENV is 'production'
 Classifier = React.createClass
   displayName: 'Classifier'
 
+  mixins: [HandlePropChanges]
+
   getDefaultProps: ->
     unless process.env.NODE_ENV is 'production'
       {workflow, subject, classification} = mockData
@@ -22,10 +24,13 @@ Classifier = React.createClass
     classification: classification
     onLoad: NOOP
 
-  componentDidMount: ->
-    @props.classification.annotations ?= []
-    if @props.classification.annotations.length is 0
-      @addAnnotationForTask @props.workflow.first_task
+  propChangeHandlers:
+    classification: (classification) ->
+      window.classification = classification
+      setTimeout =>
+        classification.annotations ?= []
+        if classification.annotations.length is 0
+          @addAnnotationForTask @props.workflow.first_task
 
   getInitialState: ->
     showingExpertClassification: false
