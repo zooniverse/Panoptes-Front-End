@@ -27,7 +27,7 @@ module.exports = React.createClass
           <button type="button" className="pill-button" onClick={@toggleHelp}>
             Need some help?
             {if @state.helping
-              <Tooltip at="middle left">
+              <Tooltip attachment="middle right" targetAttachment="middle left" >
                 <Markdown className="classification-task-help">{@props.help}</Markdown>
               </Tooltip>}
           </button>

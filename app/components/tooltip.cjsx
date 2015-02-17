@@ -8,7 +8,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     attachment: 'middle center'
-    targetAttachment: null
+    targetAttachment: 'middle center'
     offset: '0 0'
     targetOffset: '0 0'
     pin: true
