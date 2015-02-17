@@ -43,39 +43,46 @@ module.exports = React.createClass
 
     <form onSubmit={@handleSubmit}>
       <label>
-        <Translate content="signInForm.userName" /><br />
-        <input type="text" name="login" value={@state.login} disabled={disabled} autoFocus onChange={@handleInputChange} />
-      </label><br />
+        <Translate content="signInForm.userName" />
+        <input type="text" className="standard-input full" name="login" value={@state.login} disabled={disabled} autoFocus onChange={@handleInputChange} />
+      </label>
+
+      <br />
 
       <label>
         <Translate content="signInForm.password" /><br />
-        <input type="password" name="password" value={@state.password} disabled={disabled} onChange={@handleInputChange} />
-      </label><br />
+        <input type="password" className="standard-input full" name="password" value={@state.password} disabled={disabled} onChange={@handleInputChange} />
+      </label>
 
-      <button type="submit" disabled={disabled or @state.login.length is 0 or @state.password.length is 0}>
+      <p style={textAlign: 'center'}>
+        {if @state.currentUser?
+          <div className="form-help">
+            Signed in as {@state.currentUser.display_name}{' '}
+            <button type="button" className="minor-button" onClick={@handleSignOut}>Sign out</button>
+          </div>
+
+        else if @state.error?
+          <div className="form-help error">
+            {if @state.error.message.match /invalid(.+)password/i
+              <Translate content="signInForm.incorrectDetails" />
+            else
+              <span>{@state.error.toString()}</span>}{' '}
+
+            <a href="https://www.zooniverse.org/password/reset" target="_blank">
+              <Translate content="signInForm.forgotPassword" />
+            </a>
+          </div>
+
+        else if @state.busy
+          <LoadingIndicator />
+
+        else
+          <span>&nbsp;</span>}
+      </p>
+
+      <button type="submit" className="standard-button full" disabled={disabled or @state.login.length is 0 or @state.password.length is 0}>
         <Translate content="signInForm.signIn" />
-      </button>{' '}
-
-      {if @state.busy
-        <LoadingIndicator />}
-
-      {if @state.currentUser?
-        <div className="form-help">
-          Signed in as {@state.currentUser.display_name}{' '}
-          <button type="button" onClick={@handleSignOut}>Sign out</button>
-        </div>}
-
-      {if @state.error?
-        <div className="form-help error">
-          {if @state.error.message.match /invalid(.+)password/i
-            <Translate content="signInForm.incorrectDetails" />
-          else
-            <span>{@state.error.toString()}</span>}{' '}
-
-          <a href="https://www.zooniverse.org/password/reset" target="_blank">
-            <Translate content="signInForm.forgotPassword" />
-          </a>
-        </div>}
+      </button>
     </form>
 
   handleInputChange: (e) ->

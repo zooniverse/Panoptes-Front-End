@@ -4,6 +4,7 @@ PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
+Tooltip = require '../components/tooltip'
 debounce = require 'debounce'
 apiClient = require '../api/client'
 
@@ -12,25 +13,25 @@ MIN_PASSWORD_LENGTH = 8
 
 counterpart.registerTranslations 'en',
   registerForm:
-    required: '(required)'
-    optional: '(optional)'
-    looksGood: 'Looks good.'
+    required: 'Required'
+    looksGood: 'Looks good'
     userName: 'User name'
     badChars: 'Don’t use weird characters: %(chars)s'
-    loginConflict: 'That login is taken.'
-    forgotPassword: 'Forgotten your password?'
+    loginConflict: 'That login is taken'
+    forgotPassword: 'Forget your password?'
     password: 'Password'
-    passwordTooShort: 'Too short.'
+    passwordTooShort: 'Too short'
     confirmPassword: 'Confirm password'
-    passwordsDontMatch: 'These don’t match.'
+    passwordsDontMatch: 'These don’t match'
     email: 'Email address'
-    emailConflict: 'An account with this address already exists.'
+    emailConflict: 'An account with this address already exists'
     realName: 'Real name'
-    whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc.'
-    agreeToPrivacyPolicy: 'You agree to our %(link)s.'
+    why: 'Why?'
+    whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc'
+    agreeToPrivacyPolicy: 'You agree to our %(link)s (required)'
     privacyPolicy: 'privacy policy'
     register: 'Register'
-    alreadySignedIn: 'Signed in as %(name)s.'
+    alreadySignedIn: 'Signed in as %(name)s'
     signOut: 'Sign out'
 
 module.exports = React.createClass
@@ -39,6 +40,7 @@ module.exports = React.createClass
   mixins: [PromiseToSetState]
 
   getInitialState: ->
+    whyRealName: false
     user: null
     badLoginChars: null
     loginConflict: null
@@ -61,87 +63,118 @@ module.exports = React.createClass
 
     <form onSubmit={@handleSubmit}>
       <label>
-        <Translate content="registerForm.userName" /><br />
-        <input type="text" ref="login" disabled={@state.user?} autoFocus onChange={@handleLoginChange} />{' '}
-        {if badLoginChars?.length > 0
-          chars = for char in badLoginChars
-            <kbd key={char}>{char}</kbd>
-          <Translate className="form-help error" content="registerForm.badChars" chars={chars} />
-        else if "loginConflict" of @state.pending
-          <LoadingIndicator />
-        else if loginConflict?
-          if loginConflict
-            <span className="form-help error">
-              <Translate content="registerForm.loginConflict" />{' '}
-              <a href="https://www.zooniverse.org/password/reset" target="_blank">
-                <Translate content="registerForm.forgotPassword" />
-              </a>
-            </span>
+        <span className="columns-container inline spread">
+          <Translate content="registerForm.userName" />
+          {if badLoginChars?.length > 0
+            chars = for char in badLoginChars
+              <kbd key={char}>{char}</kbd>
+            <Translate className="form-help error" content="registerForm.badChars" chars={chars} />
+          else if "loginConflict" of @state.pending
+            <LoadingIndicator />
+          else if loginConflict?
+            if loginConflict
+              <span className="form-help error">
+                <Translate content="registerForm.loginConflict" />{' '}
+                <a href="https://www.zooniverse.org/password/reset" target="_blank">
+                  <Translate content="registerForm.forgotPassword" />
+                </a>
+              </span>
+            else
+              <span className="form-help success">
+                <Translate content="registerForm.looksGood" />
+              </span>}
+        </span>
+        <input type="text" ref="login" className="standard-input full" disabled={@state.user?} autoFocus onChange={@handleLoginChange} />
+      </label>
+
+      <br />
+
+      <label>
+        <span className="columns-container inline spread">
+          <Translate content="registerForm.password" />
+          {if passwordTooShort
+            <Translate className="form-help error" content="registerForm.passwordTooShort" />}
+        </span>
+        <input type="password" ref="password" className="standard-input full" disabled={@state.user?} onChange={@handlePasswordChange} />
+      </label>
+
+      <br />
+
+      <label>
+        <span className="columns-container inline spread">
+          <Translate content="registerForm.confirmPassword" /><br />
+          {if passwordsDontMatch?
+            if passwordsDontMatch
+              <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
+            else
+              <Translate className="form-help success" content="registerForm.looksGood" />}
+        </span>
+        <input type="password" ref="confirmedPassword" className="standard-input full" disabled={@state.user?} onChange={@handlePasswordChange} />
+      </label>
+
+      <br />
+
+      <label>
+        <span className="columns-container inline spread">
+          <Translate content="registerForm.email" />
+          {if 'emailConflict' of @state.pending
+            <LoadingIndicator />
+          else if emailConflict?
+            if emailConflict
+              <span className="form-help error">
+                <Translate content="registerForm.emailConflict" />{' '}
+                <a href="https://www.zooniverse.org/password/reset" target="_blank">
+                  <Translate content="registerForm.forgotPassword" />
+                </a>
+              </span>
+            else
+              <Translate className="form-help success" content="registerForm.looksGood" />
           else
-            <span className="form-help">
-              <Translate content="registerForm.looksGood" />
-            </span>}
-      </label><br />
+            <Translate className="form-help info" content="registerForm.required" />}
+        </span>
+        <input type="text" ref="email" className="standard-input full" disabled={@state.user?} onChange={@handleEmailChange} />
+      </label>
+
+      <br />
 
       <label>
-        <Translate content="registerForm.password" /><br />
-        <input type="password" ref="password" disabled={@state.user?} onChange={@handlePasswordChange} />{' '}
-        {if passwordTooShort
-          <Translate className="form-help error" content="registerForm.passwordTooShort" />}
-      </label><br />
+        <span className="columns-container inline spread">
+          <Translate content="registerForm.realName" />
+          <button type="button" className="secret-button" onClick={@setState.bind this, whyRealName: not @state.whyRealName, null}>
+            <Translate className="form-help info" content="registerForm.why" />
+            {if @state.whyRealName
+              <Tooltip attachment="middle right" targetAttachment="middle left">
+                <Translate content="registerForm.whyRealName" />
+              </Tooltip>}
+          </button>
+        </span>
+        <input type="text" ref="realName" className="standard-input full" disabled={@state.user?} />
+      </label>
 
-      <label>
-        <Translate content="registerForm.confirmPassword" /><br />
-        <input type="password" ref="confirmedPassword" disabled={@state.user?} onChange={@handlePasswordChange} />{' '}
-        {if passwordsDontMatch?
-          if passwordsDontMatch
-            <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
-          else
-            <Translate className="form-help" content="registerForm.looksGood" />}
-      </label><br />
-
-      <label>
-        <Translate content="registerForm.email" /> <Translate className="form-help" content="registerForm.required" /><br />
-        <input type="text" ref="email" disabled={@state.user?} onChange={@handleEmailChange} />{' '}
-        {if 'emailConflict' of @state.pending
-          <LoadingIndicator />
-        else if emailConflict?
-          if emailConflict
-            <span className="form-help error">
-              <Translate content="registerForm.emailConflict" />{' '}
-              <a href="https://www.zooniverse.org/password/reset" target="_blank">
-                <Translate content="registerForm.forgotPassword" />
-              </a>
-            </span>
-          else
-            <Translate className="form-help" content="registerForm.looksGood" />}
-      </label><br />
-
-      <label>
-        <Translate content="registerForm.realName" /> <Translate className="form-help" content="registerForm.optional" /><br />
-        <input type="text" ref="realName" disabled={@state.user?} /><br />
-        <Translate className="form-help" content="registerForm.whyRealName" />
-      </label><br />
+      <br />
 
       <label>
         <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
         {privacyPolicyLink = <a href="#/todo/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
-        <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />{' '}
-        <Translate className="form-help" content="registerForm.required" />
+        <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
       </label><br />
 
-      <div>
-        <button type="submit" disabled={not @isFormValid() or Object.keys(@state.pending).length isnt 0 or @state.user?}>
-          <Translate content="registerForm.register" />
-        </button>{' '}
-
+      <p style={textAlign: 'center'}>
         {if 'user' of @state.pending
           <LoadingIndicator />
         else if @state.user?
-          <span className="form-help">
+          <span className="form-help warning">
             <Translate content="registerForm.alreadySignedIn" name={@state.user.display_name} />{' '}
-            <button type="button" onClick={@handleSignOut}><Translate content="registerForm.signOut" /></button>
-          </span>}
+            <button type="button" className="minor-button" onClick={@handleSignOut}><Translate content="registerForm.signOut" /></button>
+          </span>
+        else
+          <span>&nbsp;</span>}
+      </p>
+
+      <div>
+        <button type="submit" className="standard-button full" disabled={not @isFormValid() or Object.keys(@state.pending).length isnt 0 or @state.user?}>
+          <Translate content="registerForm.register" />
+        </button>
       </div>
     </form>
 

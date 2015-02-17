@@ -1,3 +1,6 @@
+.secret-button
+  @extends $reset-button
+
 .standard-button
   @extends $reset-button
   background: MAIN_HIGHLIGHT
@@ -11,6 +14,10 @@
 
   &:disabled
     pointer-events: none
+
+  &.full
+    display: block
+    width: 100%
 
 .major-button
   @extends .standard-button
