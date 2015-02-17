@@ -135,7 +135,7 @@ module.exports = React.createClass
       animatedScrollTo document.body, el.offsetTop - space, 333
 
   handleCompletion: ->
-    console?.info 'Completed classification', JSON.stringify @state.classification, null, 2
+    console?.info 'Completed classification', @state.classification
     @state.classification.save().then =>
       console?.log 'Saved classification', @state.classification.id
 
