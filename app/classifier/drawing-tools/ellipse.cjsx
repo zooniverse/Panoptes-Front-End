@@ -54,9 +54,10 @@ module.exports = React.createClass
 
     <DrawingToolRoot tool={this} transform={positionAndRotate}>
       {if @props.selected
+        guideWidth = GUIDE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)
         <g>
-          <line x1="0" y1="0" x2={@props.mark.rx} y2="0" strokeWidth={GUIDE_WIDTH} strokeDasharray={GUIDE_DASH} />
-          <line x1="0" y1="0" x2="0" y2={-1 * @props.mark.ry} strokeWidth={GUIDE_WIDTH} strokeDasharray={GUIDE_DASH} />
+          <line x1="0" y1="0" x2={@props.mark.rx} y2="0" strokeWidth={guideWidth} strokeDasharray={GUIDE_DASH} />
+          <line x1="0" y1="0" x2="0" y2={-1 * @props.mark.ry} strokeWidth={guideWidth} strokeDasharray={GUIDE_DASH} />
         </g>}
 
       <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
@@ -66,8 +67,8 @@ module.exports = React.createClass
       {if @props.selected
         <g>
           <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />
-          <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'x'} x={@props.mark.rx} y={0} />
-          <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'y'} x={0} y={-1 * @props.mark.ry} />
+          <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'x'} x={@props.mark.rx} y={0} scale={@props.scale} />
+          <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'y'} x={0} y={-1 * @props.mark.ry} scale={@props.scale} />
         </g>}
     </DrawingToolRoot>
 

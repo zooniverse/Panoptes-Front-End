@@ -26,6 +26,7 @@ module.exports = React.createClass
     transform = "
       translate(#{@props.x}, #{@props.y})
       rotate(#{@props.rotate})
+      scale(#{1 / @props.tool.props.scale.horizontal}, #{1 / @props.tool.props.scale.vertical})
     "
 
     <g className="clickable drawing-tool-delete-button" transform={transform} stroke={STROKE_COLOR} strokeWidth={STROKE_WIDTH} onClick={@destroyTool}>

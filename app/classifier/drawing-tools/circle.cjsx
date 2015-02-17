@@ -52,7 +52,7 @@ module.exports = React.createClass
 
     <DrawingToolRoot tool={this} transform={positionAndRotate}>
       {if @props.selected
-        <line x1="0" y1="0" x2={@props.mark.r} y2="0" strokeWidth={GUIDE_WIDTH} strokeDasharray={GUIDE_DASH} />}
+        <line x1="0" y1="0" x2={@props.mark.r} y2="0" strokeWidth={GUIDE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)} strokeDasharray={GUIDE_DASH} />}
 
       <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
         <ellipse rx={@props.mark.r} ry={@props.mark.r} />
@@ -61,7 +61,7 @@ module.exports = React.createClass
       {if @props.selected
         <g>
           <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />
-          <DragHandle onDrag={@handleRadiusHandleDrag} x={@props.mark.r} y={0} />
+          <DragHandle onDrag={@handleRadiusHandleDrag} x={@props.mark.r} y={0} scale={@props.scale} />
         </g>}
     </DrawingToolRoot>
 

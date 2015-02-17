@@ -61,10 +61,10 @@ module.exports = React.createClass
         <g>
           <DeleteButton tool={this} x={x + (width * DELETE_BUTTON_DISTANCE)} y={y} />
 
-          <DragHandle x={x} y={y} onDrag={@handleTopLeftDrag} onEnd={@normalizeMark} />
-          <DragHandle x={x + width} y={y} onDrag={@handleTopRightDrag} onEnd={@normalizeMark} />
-          <DragHandle x={x +  width} y={y + height} onDrag={@handleBottomRightDrag} onEnd={@normalizeMark} />
-          <DragHandle x={x} y={y + height} onDrag={@handleBottomLeftDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x} y={y} scale={@props.scale} onDrag={@handleTopLeftDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x + width} y={y} scale={@props.scale} onDrag={@handleTopRightDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x +  width} y={y + height} scale={@props.scale} onDrag={@handleBottomRightDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x} y={y + height} scale={@props.scale} onDrag={@handleBottomLeftDrag} onEnd={@normalizeMark} />
         </g>}
     </DrawingToolRoot>
 
