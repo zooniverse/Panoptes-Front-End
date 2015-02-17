@@ -14,7 +14,7 @@ module.exports = React.createClass
     linkProps =
       to: 'project-home'
       params:
-        owner: owner?.login ? 'LOADING'
+        owner: owner?.display_name ? 'LOADING'
         name: @props.project.display_name
 
       style:

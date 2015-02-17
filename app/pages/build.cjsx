@@ -45,7 +45,7 @@ module.exports = React.createClass
       <li key={project.id}>
         {project.display_name}&nbsp;
         <Link to="edit-project" params={id: project.id}><i className="fa fa-pencil"></i></Link>&nbsp;
-        <Link to="project-home" params={owner: user.login, name: project.display_name}><i className="fa fa-hand-o-right"></i></Link>
+        <Link to="project-home" params={owner: user.display_name, name: project.display_name}><i className="fa fa-hand-o-right"></i></Link>
       </li>
 
     <ul>
