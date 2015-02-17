@@ -91,15 +91,28 @@ module.exports = React.createClass
         {if @state.selectedMark? and @refs.selectedTool?
           toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
           if toolDescription?.details?
-            offset = [0, 0]
-            [start, end, dimension, offsetIndex] = ['top', 'bottom', 'height', 0] # TODO: Move along the bottom when appropriate.
-            toolRect = @refs.selectedTool.getDOMNode().getBoundingClientRect()
             sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-            offsetValue = ((((toolRect[start] + toolRect[end]) / 2) - sizeRect.top) / sizeRect[dimension]) - 0.5
-            offset[offsetIndex] = "#{Math.floor offsetValue * 100}%"
+            toolRect = @refs.selectedTool.getDOMNode().getBoundingClientRect()
+
+            probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
+            [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
+              ['left', 'right', 'width', 1, 'top center', 'bottom center']
+            else
+              ['top', 'bottom', 'height', 0, 'middle left', 'middle right']
+
+            # NOTE: These offsets aren't perfect, but they're close enough for now.
+
+            arrowStyle = {}
+            toolCenter = ((toolRect[start] + toolRect[end]) / 2) - sizeRect[start]
+            distance = toolCenter / sizeRect[dimension]
+            arrowStyle[start] = "#{distance * 100}%"
+
+            offset = [0, 0]
+            fromCenter = distance - 0.5
+            offset[offsetIndex] = "#{(fromCenter / -2) * 100}%"
             offset = offset.join ' '
 
-            <Tooltip ref="detailsTooltip" attachment="middle right" targetAttachment="middle left" targetOffset={offset}>
+            <Tooltip ref="detailsTooltip" attachment={attachment} targetAttachment={targetAttachment} offset={offset} arrowStyle={arrowStyle} pin={false}>
               {for detailTask, i in toolDescription.details
                 detailTask._key ?= Math.random()
                 TaskComponent = tasks[detailTask.type]

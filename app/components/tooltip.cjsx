@@ -11,6 +11,8 @@ module.exports = React.createClass
     targetAttachment: null
     offset: '0 0'
     targetOffset: '0 0'
+    pin: true
+    arrowStyle: null
 
   getInitialState: ->
     container = document.createElement 'div'
@@ -47,7 +49,7 @@ module.exports = React.createClass
     offset: @props.offset
     targetOffset: @props.targetOffset
     constraints: [
-      {to: 'window', attachment: 'together', pin: true}
+      {to: 'window', pin: @props.pin}
     ]
 
   render: ->
@@ -55,7 +57,7 @@ module.exports = React.createClass
 
   renderTooltip: ->
     React.render <div className="tooltip" onClick={@toFront}>
-      <div className="arrow"></div>
+      <div className="arrow" style={@props.arrowStyle}></div>
       <div className="content">
         {@props.children}
       </div>
