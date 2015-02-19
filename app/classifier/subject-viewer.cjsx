@@ -174,7 +174,8 @@ module.exports = React.createClass
       for key, value of initValues
         mark[key] = value
 
-    @updateAnnotations
+    setTimeout =>
+      @updateAnnotations()
 
   handleInitDrag: (e) ->
     task = @props.workflow.tasks[@props.annotation.task]
@@ -197,6 +198,8 @@ module.exports = React.createClass
       for key, value of initReleaseValues
         mark[key] = value
     @updateAnnotations()
+    if MarkComponent.initValid? and not MarkComponent.initValid mark
+      @destroyMark @props.annotation, mark
 
   selectMark: (annotation, mark) ->
     if annotation? and mark?
