@@ -5,8 +5,7 @@ DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 
-DEFAULT_RADIUS = 10
-DEFAULT_ANGLE = 0
+MINIMUM_RADIUS = 5
 GUIDE_WIDTH = 1
 GUIDE_DASH = [4, 4]
 DELETE_BUTTON_ANGLE = 45
@@ -18,14 +17,17 @@ module.exports = React.createClass
     defaultValues: ({x, y}) ->
       x: x
       y: y
-      r: DEFAULT_RADIUS
-      angle: DEFAULT_ANGLE
+      r: 0
+      angle: 0
 
     initMove: ({x, y}, mark) ->
       distance = @getDistance mark.x, mark.y, x, y
       angle = @getAngle mark.x, mark.y, x, y
       r: distance
       angle: angle
+
+    initValid: (mark) ->
+      mark.r > MINIMUM_RADIUS
 
     getDistance: (x1, y1, x2, y2) ->
       aSquared = Math.pow x2 - x1, 2

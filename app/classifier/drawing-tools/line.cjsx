@@ -4,6 +4,7 @@ Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 DragHandle = require './drag-handle'
 
+MINIMUM_LENGTH = 5
 GRAB_STROKE_WIDTH = 6
 
 module.exports = React.createClass
@@ -19,6 +20,10 @@ module.exports = React.createClass
     initMove: ({x, y}) ->
       x2: x
       y2: y
+
+    initValid: (mark) ->
+      {x1, y1, x2, y2} = mark
+      DrawingToolRoot.distance(x1, y1, x2, y2) > MINIMUM_LENGTH
 
   render: ->
     {x1, y1, x2, y2} = @props.mark
