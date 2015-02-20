@@ -49,7 +49,7 @@ ProjectPage = React.createClass
 
           <nav className="project-nav tabbed-content-tabs">
             <Link to="project-home" params={params} className="tabbed-content-tab">
-              <img src={@props.project.avatar} className="project-avatar" /> {@props.project.display_name}
+              <img src={@props.project.avatar} className="avatar" /> {@props.project.display_name}
             </Link>
             <Link to="project-science-case" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.science" />
