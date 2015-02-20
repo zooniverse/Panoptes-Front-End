@@ -139,7 +139,7 @@ module.exports = React.createClass
     console?.info 'Completed classification', @state.classification
     @state.classification.save().then (classification) =>
       console?.log 'Saved classification', classification.id
-      classification.uncache()
+      classification.destroy()
 
   loadAnotherSubject: ->
     @getCurrentWorkflowID(@props).then (workflowID) =>
