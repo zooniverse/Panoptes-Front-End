@@ -1,15 +1,27 @@
+counterpart = require 'counterpart'
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
+Translate = require 'react-translate-component'
+
+counterpart.registerTranslations 'en',
+  projectRoles:
+    owner: 'Owner'
+    translator: 'Translator'
 
 ProjectRolesList = React.createClass
   displayName: 'ProjectRolesList'
 
   render: ->
-    <PromiseRenderer promise={@props.project.get('project_roles')}>{(roles) =>
+    <PromiseRenderer promise={@props.project.get('project_roles')}>{(projectRoles) =>
       <ul>
-        {for role in roles
-          <PromiseRenderer key={role.id} promise={role.get('user')}>{(user) =>
-            <li>{user.display_name}: {role.roles.join ', '}</li>
+        {for projectRole in projectRoles then do (projectRole) =>
+          <PromiseRenderer key={projectRole.id} promise={projectRole.get('owner')}>{(user) =>
+            <li>
+              <img src={user.avatar} className="avatar" />{' '}
+              <strong>{user.display_name}</strong>{' '}
+              {for role in projectRole.roles
+                <Translate key={role} content="projectRoles.#{role}" className="project-role #{role}" />}
+            </li>
           }</PromiseRenderer>}
       </ul>
     }</PromiseRenderer>
