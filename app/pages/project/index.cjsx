@@ -16,7 +16,7 @@ counterpart.registerTranslations 'en',
     loading: 'Loading project'
     nav:
       science: 'Science'
-      team: 'Team'
+      results: 'Results'
       classify: 'Classify'
       discuss: 'Discuss'
 
@@ -53,9 +53,10 @@ ProjectPage = React.createClass
             <Link to="project-science-case" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.science" />
             </Link>
-            <Link to="project-team" params={params} className="tabbed-content-tab">
-              <Translate content="project.nav.team" />
-            </Link>
+            {if true or @props.project.results
+              <Link to="project-results" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.results" />
+              </Link>}
             <Link to="project-classify" params={params} className="classify tabbed-content-tab">
               <Translate content="project.nav.classify" />
             </Link>

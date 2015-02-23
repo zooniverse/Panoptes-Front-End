@@ -21,7 +21,7 @@ module.exports = React.createClass
   render: ->
     <div className="project-text-content content-container">
       <div className="columns-container">
-        <Markdown className="column">{@props.project.science_case}</Markdown>
+        <Markdown className="column">{@props.project.science_case || 'This project has no science case yet.'}</Markdown>
         <hr />
         <div>
           <Translate content="projectRoles.title" />
