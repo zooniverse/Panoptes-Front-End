@@ -59,7 +59,7 @@ module.exports = React.createClass
   _saveProject: ->
     @setState log: @state.log.concat ['Saving project']
     {language: primary_language, name, introduction, description, scienceCase: science_case} = data
-    projectData = {primary_language, name, introduction, description, science_case, private: true}
+    projectData = {primary_language, display_name: name, introduction, description, science_case, private: true}
 
     project = apiClient.type('projects').create projectData
     project.save()
