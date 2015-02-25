@@ -61,10 +61,13 @@ ProjectEditPage = React.createClass
 
             Workflows<br />
             <ul>
-              {for workflow in @state.workflows
-                <ChangeListener key={workflow.id} target={workflow}>{=>
-                  <li><Link to="edit-workflow" params={id: workflow.id}>{workflow.display_name}</Link></li>
-                }</ChangeListener>}
+              {if @state.workflows?
+                for workflow in @state.workflows
+                  <ChangeListener key={workflow.id} target={workflow}>{=>
+                    <li><Link to="edit-workflow" params={id: workflow.id}>{workflow.display_name}</Link></li>
+                  }</ChangeListener>
+              else
+                <p>Couldn’t load workflows!</p>}
             </ul>
 
             <p>
