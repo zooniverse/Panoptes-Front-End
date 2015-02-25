@@ -4,6 +4,7 @@ DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 
+MINIMUM_SIZE = 5
 DELETE_BUTTON_DISTANCE = 9 / 10
 
 module.exports = React.createClass
@@ -38,6 +39,9 @@ module.exports = React.createClass
         y = cursor.y
 
       {x, y, width, height}
+
+    initValid: (mark) ->
+      mark.width > MINIMUM_SIZE and mark.height > MINIMUM_SIZE
 
   initCoords: null
 
