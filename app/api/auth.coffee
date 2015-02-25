@@ -156,12 +156,11 @@ module.exports = new Model
     console?.log 'Disabling account'
     @checkCurrent().then (user) =>
       if user?
-        user.refresh().then =>
-          user.delete().then =>
-            @_deleteBearerToken()
-            @update _currentUserPromise: Promise.resolve null
-            console?.info 'Disabled account'
-            null
+        user.delete().then =>
+          @_deleteBearerToken()
+          @update _currentUserPromise: Promise.resolve null
+          console?.info 'Disabled account'
+          null
       else
         throw new Error 'Failed to disable account; not signed in'
 
