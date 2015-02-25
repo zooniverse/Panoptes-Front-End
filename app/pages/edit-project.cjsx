@@ -50,6 +50,15 @@ ProjectEditPage = React.createClass
             Science case<br />
             <MarkdownEditor name="science_case" value={@props.project.science_case} onChange={handleProjectChange} /><br />
 
+            Results<br />
+            <MarkdownEditor name="result" value={@props.project.result} onChange={handleProjectChange} /><br />
+
+            FAQ<br />
+            <MarkdownEditor name="faq" value={@props.project.faq} onChange={handleProjectChange} /><br />
+
+            Education resources<br />
+            <MarkdownEditor name="education_content" value={@props.project.education_content} onChange={handleProjectChange} /><br />
+
             Workflows<br />
             <ul>
               {for workflow in @state.workflows
@@ -57,6 +66,12 @@ ProjectEditPage = React.createClass
                   <li><Link to="edit-workflow" params={id: workflow.id}>{workflow.display_name}</Link></li>
                 }</ChangeListener>}
             </ul>
+
+            <p>
+              <label>
+                <input type="checkbox" name="private" checked={@props.project.private} onChange={handleProjectChange} /> Private
+              </label>
+            </p>
 
             <button type="submit" disabled={@state.busy or not @props.project.hasUnsavedChanges()}>Save</button><br />
             <button type="button" onClick={@handleDelete}>Delete this project</button><br />
