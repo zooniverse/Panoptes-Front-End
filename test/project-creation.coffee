@@ -4,15 +4,15 @@ apiClient = require '../app/api/client'
 
 # We need to be logged in to test this stuff.
 USER_DATA = {}
-USER_DATA.login = 'TEST_' + (new Date).toISOString().replace /\W/g, '_'
-USER_DATA.email = USER_DATA.login.toLowerCase() + '@zooniverse.org'
+USER_DATA.display_name = 'TEST_' + (new Date).toISOString().replace /\W/g, '_'
+USER_DATA.email = USER_DATA.display_name.toLowerCase() + '@zooniverse.org'
 USER_DATA.password = 'p@$$word'
 
 LANGUAGE = 'en-us'
 
 PROJECT_DATA =
   primary_language: LANGUAGE
-  name: "Project Awesome: #{(new Date).toLocaleString()}"
+  display_name: "Project Awesome: #{(new Date).toLocaleString()}"
   introduction: 'Projects. Are they awesome?'
   description: 'Everyone knows projects are awesome. Does the science back it up? Help us test our hypothesis blah blah blah...'
   science_case: 'We hope to prove once and for all the awesomeness of projects. We’ll publish a paper in blah blah blah...'
