@@ -11,5 +11,5 @@ module.exports = React.createClass
 
   render: ->
     <div className="project-text-content content-container">
-      <Markdown>{@props.project.education || 'This project has no educational resources yet.'}</Markdown>
+      <Markdown>{@props.project.education_content || 'This project has no educational resources yet.'}</Markdown>
     </div>

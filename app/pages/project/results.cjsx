@@ -11,5 +11,5 @@ module.exports = React.createClass
 
   render: ->
     <div className="project-text-content content-container">
-      <Markdown>{@props.project.results || 'This project has no results to report yet.'}</Markdown>
+      <Markdown>{@props.project.result || 'This project has no results to report yet.'}</Markdown>
     </div>
