@@ -34,6 +34,7 @@ routes = <Route handler={App}>
     <Route name="project-science-case" path="science-case" handler={require './pages/project/science-case'} />
     <Route name="project-results" path="results" handler={require './pages/project/results'} />
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
+    <Route name="project-faq" path="faq" handler={require './pages/project/faq'} />
     <Route name="project-education" path="education" handler={require './pages/project/education'} />
     <Route name="project-talk" path="talk" handler={require './pages/project/talk'} />
   </Route>

@@ -61,6 +61,10 @@ ProjectPage = React.createClass
             <Link to="project-classify" params={params} className="classify tabbed-content-tab">
               <Translate content="project.nav.classify" />
             </Link>
+            {if @props.project.faq
+              <Link to="project-results" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.results" />
+              </Link>}
             {if @props.project.education_content
               <Link to="project-education" params={params} className="tabbed-content-tab">
                 <Translate content="project.nav.education" />
