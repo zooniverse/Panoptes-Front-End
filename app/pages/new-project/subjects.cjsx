@@ -91,7 +91,7 @@ module.exports = React.createClass
       when 'text/csv' then  ','
       when 'text/tab-separated-values' then '\t'
 
-    listDelimeter = ';'
+    listDelimiter = ';'
 
     new Promise (resolve) =>
       reader = new FileReader
@@ -105,7 +105,7 @@ module.exports = React.createClass
             metadata[key] = metadataInOrder[i]
 
           if metadata.filenames?
-            metadata.filenames = metadata.filenames.split listDelimeter
+            metadata.filenames = metadata.filenames.split listDelimiter
 
           for imageFilename in metadata.filenames
             data.manifests[file.name].push metadata
