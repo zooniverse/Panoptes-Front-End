@@ -14,10 +14,10 @@ RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y nodejs && \
     apt-get clean && \
     npm install && \
-    mkdir -p /build/ && \
     git clone git://github.com/ariya/phantomjs.git && \
     cd phantomjs && \
     git checkout 2.0 && \
-    cd /src/phantomjs && ./build.sh --confirm
+    cd /src/phantomjs && ./build.sh --confirm && \
+    mv bin/phantomjs /usr/bin/ && cd .. && rm -rf phantomjs
 
 ADD . /src/
