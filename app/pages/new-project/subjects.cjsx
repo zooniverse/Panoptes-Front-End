@@ -33,7 +33,7 @@ module.exports = React.createClass
         </tbody>
       </table>
 
-      <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesChange} /></p>
+      <p><input type="file" accept="image/*,text/csv,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesChange} /></p>
       <Link to="new-project-workflow">Next, create a workflow <i className="fa fa-arrow-right"></i></Link>
     </div>
 
