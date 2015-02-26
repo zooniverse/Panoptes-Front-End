@@ -6,13 +6,18 @@ ENV DEBIAN_FRONTEND noninteractive
 
 ADD ./package.json /src/
 
-RUN apt-get update && apt-get -y upgrade && apt-get clean && \
-    apt-get install -y curl libfreetype6 libfontconfig1 git && \
+RUN apt-get update && apt-get -y upgrade && \
+    apt-get install -y curl libfreetype6 libfontconfig1 git g++ flex bison \
+        gperf ruby perl libsqlite3-dev libfontconfig1-dev libicu-dev \
+        libssl-dev libpng-dev libjpeg-dev build-essential python && \
     curl https://deb.nodesource.com/setup | bash - && \
     apt-get install -y nodejs && \
     apt-get clean && \
-    npm install
-ADD https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 /
-RUN tar -xj -C / -f /phantomjs-1.9.8-linux-x86_64.tar.bz2 && ln -s /phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/bin/
+    npm install && \
+    mkdir -p /build/ && \
+    git clone git://github.com/ariya/phantomjs.git && \
+    cd phantomjs && \
+    git checkout 2.0 && \
+    cd /src/phantomjs && ./build.sh --confirm
 
 ADD . /src/
