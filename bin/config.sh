@@ -1,17 +1,17 @@
-export PORT="3735"
+PORT="3735"
 
-export DEV_DIR="public"
-export BUILD_DIR="build"
+DEV_DIR="public"
+BUILD_DIR="build"
 
-export SRC_JS="app/main.cjsx"
-export OUT_JS="main.js"
-export VENDOR_JS="vendor.js"
+SRC_JS="app/main.cjsx"
+OUT_JS="main.js"
+VENDOR_JS="vendor.js"
 
-export SRC_CSS="css/main.styl"
-export OUT_CSS="main.css"
+SRC_CSS="css/main.styl"
+OUT_CSS="main.css"
 
-export SRC_HTML="index.erb"
-export OUT_HTML="index.html"
+SRC_HTML="index.erb"
+OUT_HTML="index.html"
 
 # NOTE: Non-dev dependencies are assumed to be front-end modules.
 externals=$(node -p "Object.keys(require('./package').dependencies).join('\n');")
@@ -24,8 +24,6 @@ function flag_externals {
   done
   echo $out
 }
-
-export flag_externals
 
 function rename_with_hash {
   md5=$(md5 -q "$1")
