@@ -42,8 +42,8 @@ mv -v "$BUILD_DIR/$vendor_js_original" "$BUILD_DIR/$VENDOR_JS"
   --output "$BUILD_DIR/$OUT_JS"
 
 out_js_original=$OUT_JS
-MAIN_JS=$(rename_with_hash "$BUILD_DIR/$OUT_JS")
-mv -v "$BUILD_DIR/$out_js_original" "$BUILD_DIR/$MAIN_JS"
+OUT_JS=$(rename_with_hash "$BUILD_DIR/$OUT_JS")
+mv -v "$BUILD_DIR/$out_js_original" "$BUILD_DIR/$OUT_JS"
 
 ./node_modules/.bin/stylus \
   --use nib \
@@ -64,5 +64,5 @@ rm "$BUILD_DIR/$SRC_HTML"
 
 echo
 echo "$VENDOR_JS:" $(cat "$BUILD_DIR/$VENDOR_JS" | gzip --best | wc -c) "bytes gzipped"
-echo "$MAIN_JS:" $(cat "$BUILD_DIR/$MAIN_JS" | gzip --best | wc -c) "bytes gzipped"
+echo "$OUT_JS:" $(cat "$BUILD_DIR/$OUT_JS" | gzip --best | wc -c) "bytes gzipped"
 echo "$OUT_CSS:" $(cat "$BUILD_DIR/$OUT_CSS" | gzip --best | wc -c) "bytes gzipped"
