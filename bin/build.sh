@@ -21,6 +21,10 @@ cp -av "$DEV_DIR" "$BUILD_DIR"
   --compress \
   --output "$BUILD_DIR/$VENDOR_JS"
 
+vendor_js_original=$VENDOR_JS
+VENDOR_JS=$(rename_with_hash "$BUILD_DIR/$VENDOR_JS")
+mv -v "$BUILD_DIR/$vendor_js_original" "$BUILD_DIR/$VENDOR_JS"
+
 ./node_modules/.bin/browserify \
   $(flag_externals external) \
   --extension .cjsx \
@@ -37,6 +41,10 @@ cp -av "$DEV_DIR" "$BUILD_DIR"
   --compress \
   --output "$BUILD_DIR/$OUT_JS"
 
+out_js_original=$OUT_JS
+MAIN_JS=$(rename_with_hash "$BUILD_DIR/$OUT_JS")
+mv -v "$BUILD_DIR/$out_js_original" "$BUILD_DIR/$MAIN_JS"
+
 ./node_modules/.bin/stylus \
   --use nib \
   --import nib \
@@ -47,7 +55,14 @@ cp -av "$DEV_DIR" "$BUILD_DIR"
   "$BUILD_DIR/$OUT_CSS" \
   "$BUILD_DIR/$OUT_CSS"
 
+out_css_original=$OUT_CSS
+OUT_CSS=$(rename_with_hash "$BUILD_DIR/$OUT_CSS")
+mv -v "$BUILD_DIR/$out_css_original" "$BUILD_DIR/$OUT_CSS"
+
+erb "$BUILD_DIR/$SRC_HTML" > "$BUILD_DIR/$OUT_HTML"
+rm "$BUILD_DIR/$SRC_HTML"
+
 echo
-echo "$BUILD_DIR/$VENDOR_JS:" $(cat "$BUILD_DIR/$VENDOR_JS" | gzip --best | wc -c) "bytes gzipped"
-echo "$BUILD_DIR/$OUT_JS:" $(cat "$BUILD_DIR/$OUT_JS" | gzip --best | wc -c) "bytes gzipped"
-echo "$BUILD_DIR/$OUT_CSS:" $(cat "$BUILD_DIR/$OUT_CSS" | gzip --best | wc -c) "bytes gzipped"
+echo "$VENDOR_JS:" $(cat "$BUILD_DIR/$VENDOR_JS" | gzip --best | wc -c) "bytes gzipped"
+echo "$MAIN_JS:" $(cat "$BUILD_DIR/$MAIN_JS" | gzip --best | wc -c) "bytes gzipped"
+echo "$OUT_CSS:" $(cat "$BUILD_DIR/$OUT_CSS" | gzip --best | wc -c) "bytes gzipped"
