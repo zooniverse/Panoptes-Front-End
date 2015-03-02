@@ -84,10 +84,7 @@ module.exports = new Model
         registrationRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
-            user:
-              display_name: display_name
-              email: email
-              password: password
+            user: {display_name, email, password}
 
           # This weird URL is actually out of the API, but returns a JSON-API response.
           client.post '/../users', data, JSON_HEADERS
@@ -132,9 +129,7 @@ module.exports = new Model
         signInRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
-            user:
-              display_name: display_name
-              password: password
+            user: {display_name, password}
 
           makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS
             .then =>

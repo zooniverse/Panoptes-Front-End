@@ -246,10 +246,13 @@ module.exports = React.createClass
     display_name = @refs.name.getDOMNode().value
     password = @refs.password.getDOMNode().value
     email = @refs.email.getDOMNode().value
-    realName = @refs.realName.getDOMNode().value
+    credited_name = @refs.realName.getDOMNode().value
 
     @props.onSubmit?()
-    auth.register {display_name, password, email, realName}
+    registration = auth.register {display_name, password, email}
+      .then (user) ->
+        user.update({credited_name}).save()
+    registration
       .then @props.onSuccess
       .catch @props.onFailure
 
