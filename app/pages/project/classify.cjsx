@@ -74,7 +74,7 @@ module.exports = React.createClass
 
   createNewClassification: (project, workflowID) ->
     workflow = @getWorkflow project, workflowID
-    subject = workflow.then =>
+    subject = workflow.then (workflow) =>
       @getNextSubject project, workflow
 
     Promise.all([workflow, subject]).then ([workflow, subject]) ->
@@ -111,7 +111,7 @@ module.exports = React.createClass
 
     # Take the next subject in the list, if there are any.
     unless upcomingSubjects.forWorkflow[workflow.id].length is 0
-      subject = upcomingSubjects.forWorkflow[workflow.id].shift()
+      subject = Promise.resolve upcomingSubjects.forWorkflow[workflow.id].shift()
 
     # If there aren't any left (or there weren't any to begin with), refill the list.
     if upcomingSubjects.forWorkflow[workflow.id].length is 0
