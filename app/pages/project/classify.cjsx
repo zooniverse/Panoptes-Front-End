@@ -12,12 +12,19 @@ SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
 if SKIP_CELLECT
   console?.warn 'Intelligent subject selection disabled'
 
-window.currentWorkflowForProject = {} # Project ID to promised workflow ID, used when no workflow is specified
+# Map each project ID to a promise of its last randomly-selected workflow ID.
+# This is to maintain the same random workflow for each project when none is specified by the user.
+currentWorkflowForProject = {}
 
-window.currentClassifications =
-  forWorkflow: {} # Workflow ID to a promise for its current classification resource
+# Map a workflow ID to a promise of its current classification resource
+# This is to maintain the same classification for each workflow.
+# In the future user might be able to specify subject sets, which we'll record here similarly.
+currentClassifications =
+  forWorkflow: {}
 
-window.upcomingSubjects =
+# Quere up subjects to classify here.
+# TODO: Should we clear this on sign-in and -out?
+upcomingSubjects =
   forWorkflow: {}
 
 module.exports = React.createClass
@@ -37,21 +44,23 @@ module.exports = React.createClass
     classification: null
 
   propChangeHandlers:
-    project: 'loadClassification'
-    query: 'loadClassification'
+    project: 'loadAppropriateClassification'
+    query: 'loadAppropriateClassification'
 
-  loadClassification: (_, props = @props) ->
-    console.log 'Loading classification!'
+  loadAppropriateClassification: (_, props = @props) ->
+    # To load the right classification, we'll need to know which workflow the user expects.
     @promiseToSetState classification: @getCurrentWorkflowID(props).then (workflowID) =>
-      console.log 'Classification for workflow', currentClassifications.forWorkflow[workflowID]
+      # Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
       currentClassifications.forWorkflow[workflowID] ?= @createNewClassification props.project, workflowID
       currentClassifications.forWorkflow[workflowID]
 
-  getCurrentWorkflowID: (props)->
+  getCurrentWorkflowID: (props = @props) ->
     getWorkflowID = if props.query?.workflow?
+      # Prefer the workflow specified in the query.
       Promise.resolve props.query.workflow
     else
-      console.log 'Workflow for project', currentWorkflowForProject[props.project.id]
+      # If no workflow is specified, pick a random one and record it for later.
+      # When we send this classification, we'll clear this value to select a new random workflow.
       currentWorkflowForProject[props.project.id] ?= @getRandomWorkflowID props.project
       currentWorkflowForProject[props.project.id]
 
@@ -64,40 +73,11 @@ module.exports = React.createClass
         workflows[randomIndex].id
 
   createNewClassification: (project, workflowID) ->
-    console.log 'createNewClassification()', arguments
-    getWorkflow = project.get('workflows').then (workflows) ->
-      workflow = (workflow for workflow in workflows when workflow.id is workflowID)[0]
-      unless workflow?
-        throw new Error "No workflow #{workflowID} for project #{project.id}"
-      console.log 'Got workflow', workflow
-      workflow
+    workflow = @getWorkflow project, workflowID
+    subject = workflow.then =>
+      @getNextSubject project, workflow
 
-    getSubject = getWorkflow.then (workflow) ->
-      upcomingSubjects.forWorkflow[workflow.id] ?= []
-
-      unless upcomingSubjects.forWorkflow[workflow.id].length is 0
-        subject = upcomingSubjects.forWorkflow[workflow.id].shift()
-
-      if upcomingSubjects.forWorkflow[workflow.id].length is 0
-        fetchSubjects = apiClient.type('subjects').get({
-          project_id: project.id
-          workflow_id: workflow.id
-          sort: 'cellect' unless SKIP_CELLECT
-        }).then (subjects) ->
-          upcomingSubjects.forWorkflow[workflow.id].push subjects...
-
-        subject ?= fetchSubjects.then ->
-          if upcomingSubjects.forWorkflow[workflow.id].length is 0
-            # TODO: If this fails during a random workflow, pick the next workflow.
-            throw new Error 'No more subjects'
-          else
-            upcomingSubjects.forWorkflow[workflow.id].shift()
-
-      console.log 'Got subject', subject
-      subject
-
-    Promise.all([getWorkflow, getSubject]).then ([workflow, subject]) ->
-      console.log 'Creating classification'
+    Promise.all([workflow, subject]).then ([workflow, subject]) ->
       classification = apiClient.type('classifications').create
         annotations: []
         metadata:
@@ -110,17 +90,57 @@ module.exports = React.createClass
           workflow: workflow.id
           subjects: [subject.id]
 
-      # TODO: This is temporary.
-      # Don't rely on these once the back end provides the right links.
+      # If the user hasn't interacted with a classification resource before,
+      # we won't know how to resolve its links, so attach these manually.
       classification._workflow = workflow
       classification._subject = subject
 
       classification
 
+  getWorkflow: (project, workflowID) ->
+    # We could just get the workflow directly, but this way we ensure the workflow belongs to the project.
+    project.get('workflows').then (workflows) ->
+      workflow = (workflow for workflow in workflows when workflow.id is workflowID)[0]
+      unless workflow?
+        throw new Error "No workflow #{workflowID} for project #{project.id}"
+      workflow
+
+  getNextSubject: (project, workflow) ->
+    # Make sure a list of subjects exists for this workflow.
+    upcomingSubjects.forWorkflow[workflow.id] ?= []
+
+    # Take the next subject in the list, if there are any.
+    unless upcomingSubjects.forWorkflow[workflow.id].length is 0
+      subject = upcomingSubjects.forWorkflow[workflow.id].shift()
+
+    # If there aren't any left (or there weren't any to begin with), refill the list.
+    if upcomingSubjects.forWorkflow[workflow.id].length is 0
+      subjectQuery =
+        project_id: project.id
+        workflow_id: workflow.id
+        sort: 'cellect' unless SKIP_CELLECT
+
+      # TODO: If something goes wrong (Cellect is down, etc.), pull a list of subject from somewhere else.
+      fetchSubjects = apiClient.type('subjects').get subjectQuery
+        .then (subjects) ->
+          upcomingSubjects.forWorkflow[workflow.id].push subjects...
+
+      # If we're filling this list for the first time, we won't have a subject selected, so try again.
+      subject ?= fetchSubjects.then ->
+        if upcomingSubjects.forWorkflow[workflow.id].length is 0
+          # TODO: If this fails during a random workflow, pick the next workflow.
+          throw new Error "No subjects available for workflow #{workflow.id}"
+        else
+          upcomingSubjects.forWorkflow[workflow.id].shift()
+
+      # TODO: Pre-load images for the next subject.
+
+    subject
+
   render: ->
     <div className="classify-page content-container">
       {if @state.classification?
-        <Classifier classification={@state.classification} onLoad={@scrollIntoView} onComplete={@handleCompletion} onClickNext={@loadAnotherSubject} />
+        <Classifier {...@props} classification={@state.classification} onLoad={@scrollIntoView} onComplete={@saveClassification} onClickNext={@loadAnotherSubject} />
       else if @state.rejected.classification?
         <code>{@state.rejected.classification.toString()}</code>
       else
@@ -128,6 +148,8 @@ module.exports = React.createClass
     </div>
 
   scrollIntoView: (e) ->
+    # Auto-scroll to the middle of the clasification interface on load.
+    # It's not perfect, but it should make the location of everything more obvious.
     lineHeight = parseFloat getComputedStyle(document.body).lineHeight
     el = @getDOMNode()
     space = (innerHeight - el.offsetHeight) / 2
@@ -135,14 +157,23 @@ module.exports = React.createClass
     if Math.abs(idealScrollY - scrollY) > lineHeight
       animatedScrollTo document.body, el.offsetTop - space, 333
 
-  handleCompletion: ->
+  saveClassification: ->
     console?.info 'Completed classification', @state.classification
     @state.classification.save().then (classification) =>
       console?.log 'Saved classification', classification.id
+      # After saving, remove the classification resource from the local cache.
       classification.destroy()
 
   loadAnotherSubject: ->
     @getCurrentWorkflowID(@props).then (workflowID) =>
+      # Forget the old classification so a new one will load.
       currentClassifications.forWorkflow[workflowID] = null
-      currentWorkflowForProject[@props.project.id] = null
-      @loadClassification()
+      # Forget the old workflow, unless it was specified, so we'll get a random one next time.
+      unless @props.query.workflow
+        currentWorkflowForProject[@props.project.id] = null
+      @loadAppropriateClassification()
+
+# For debugging:
+window.currentWorkflowForProject = currentWorkflowForProject
+window.currentClassifications = currentClassifications
+window.upcomingSubjects = upcomingSubjects
