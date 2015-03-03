@@ -49,13 +49,16 @@ module.exports = React.createClass
 
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
+    # console.log 'Loading appropriate clasification'
     @promiseToSetState classification: @getCurrentWorkflowID(props).then (workflowID) =>
+      # console.log 'Loading clasification for workflow', workflowID
       # Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
       currentClassifications.forWorkflow[workflowID] ?= @createNewClassification props.project, workflowID
       currentClassifications.forWorkflow[workflowID]
 
   getCurrentWorkflowID: (props = @props) ->
     getWorkflowID = if props.query?.workflow?
+      # console.log 'Workflow specified as', props.query.workflow
       # Prefer the workflow specified in the query.
       Promise.resolve props.query.workflow
     else
@@ -70,6 +73,7 @@ module.exports = React.createClass
         throw new Error "No workflows for project #{project.id}"
       else
         randomIndex = Math.floor Math.random() * workflows.length
+        # console.log 'Chose random workflow', workflows[randomIndex].id
         workflows[randomIndex].id
 
   createNewClassification: (project, workflowID) ->
@@ -78,6 +82,7 @@ module.exports = React.createClass
       @getNextSubject project, workflow
 
     Promise.all([workflow, subject]).then ([workflow, subject]) ->
+      # console.log 'Creating a new classification'
       classification = apiClient.type('classifications').create
         annotations: []
         metadata:
@@ -98,6 +103,7 @@ module.exports = React.createClass
       classification
 
   getWorkflow: (project, workflowID) ->
+    # console.log 'Getting workflow', workflowID
     # We could just get the workflow directly, but this way we ensure the workflow belongs to the project.
     project.get('workflows').then (workflows) ->
       workflow = (workflow for workflow in workflows when workflow.id is workflowID)[0]
@@ -106,6 +112,7 @@ module.exports = React.createClass
       workflow
 
   getNextSubject: (project, workflow) ->
+    # console.log 'Getting next subject for', workflow.id
     # Make sure a list of subjects exists for this workflow.
     upcomingSubjects.forWorkflow[workflow.id] ?= []
 
@@ -115,6 +122,7 @@ module.exports = React.createClass
 
     # If there aren't any left (or there weren't any to begin with), refill the list.
     if upcomingSubjects.forWorkflow[workflow.id].length is 0
+      # console.log 'Fetching subjects'
       subjectQuery =
         project_id: project.id
         workflow_id: workflow.id
@@ -135,6 +143,7 @@ module.exports = React.createClass
 
       # TODO: Pre-load images for the next subject.
 
+    # console.log 'Chose a subject'
     subject
 
   render: ->
