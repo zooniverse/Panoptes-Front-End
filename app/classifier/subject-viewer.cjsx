@@ -99,7 +99,7 @@ module.exports = React.createClass
               </Tooltip>}
           </button>
 
-        else or @props.subject.retired
+        else if @props.subject.retired
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
             Retired!
             {if @state.showWarning
