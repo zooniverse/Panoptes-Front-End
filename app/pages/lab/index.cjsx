@@ -1,5 +1,6 @@
 React = require 'react'
 {Link, RouteHandler} = require 'react-router'
+PromiseRenderer = require '../../components/promise-renderer'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
@@ -28,18 +29,31 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-collaborators" params={linkParams}>Collaborators</Link></li>
           <li>
             <header>Workflows</header>
-            <ul>
-              <li><Link to="edit-project-workflow" params={projectID: '2', workflowID: '2'}>Get started</Link></li>
-              <li><button type="button">New workflow</button></li>
-            </ul>
+            <PromiseRenderer promise={@props.project.get 'workflows'}>{(workflows) =>
+              <ul>
+                {for workflow in workflows
+                  workflowLinkParams = Object.create linkParams
+                  workflowLinkParams.workflowID = workflow.id
+                  <li key={workflow.id}>
+                    <Link to="edit-project-workflow" params={workflowLinkParams}>{workflow.display_name}</Link>
+                  </li>}
+                <li><button type="button" disabled>New workflow</button></li>
+              </ul>
+            }</PromiseRenderer>
           </li>
           <li>
             <header>Subject sets</header>
-            <ul>
-              <li><Link to="edit-project-subject-set" params={projectID: '2', subjectSetID: '2'}>Get started expert subjects</Link></li>
-              <li><Link to="edit-project-subject-set" params={projectID: '2', subjectSetID: '2'}>Get started initial subjects</Link></li>
-              <li><button type="button">New subject set</button></li>
-            </ul>
+            <PromiseRenderer promise={@props.project.get 'subject_sets'}>{(subjectSets) =>
+              <ul>
+                {for subjectSet in subjectSets
+                  subjectSetLinkParams = Object.create linkParams
+                  subjectSetLinkParams.subjectSetID = subjectSet.id
+                  <li key={subjectSet.id}>
+                    <Link to="edit-project-subject-set" params={subjectSetLinkParams}>{subjectSet.display_name}</Link>
+                  </li>}
+                <li><button type="button" disabled>New subject set</button></li>
+              </ul>
+            }</PromiseRenderer>
           </li>
         </ul>
       </div>

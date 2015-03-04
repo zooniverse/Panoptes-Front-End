@@ -14,9 +14,6 @@ module.exports = React.createClass
           <input type="text" placeholder="Workflow name" />
         </div>
         <div>
-          (Retirement rules editor)
-        </div>
-        <div>
           Associated subject sets
           <table>
             <tr>

@@ -8,8 +8,14 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      Name<br />
-      <input type="text" placeholder="Subject set name" /><br />
-      (Subject set editor)<br />
-      <input type="file" />
+      <div>
+        Name<br />
+        <input type="text" placeholder="Subject set name" />
+      </div>
+      <div>
+        (Retirement rules editor)
+      </div>
+      <div>
+        (Subject set editor)
+      </div>
     </div>
