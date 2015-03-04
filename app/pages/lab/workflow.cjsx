@@ -1,6 +1,7 @@
 React = require 'react'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
+WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 
@@ -38,7 +39,7 @@ EditWorkflowPage = React.createClass
 
       <div className="column">
         Tasks<br />
-        (Workflow tasks editor)
+        <WorkflowTasksEditor workflow={@props.workflow} />
       </div>
     </div>
 
