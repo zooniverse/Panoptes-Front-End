@@ -92,7 +92,7 @@ module.exports = React.createClass
   render: ->
     if @state.project?
       <ChangeListener target={@state.project}>{=>
-        <EditProjectPage project={@state.project} />
+        <EditProjectPage {...@props} project={@state.project} />
       }</ChangeListener>
     else
       <div className="content-container">
