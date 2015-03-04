@@ -54,6 +54,8 @@ routes = <Route handler={App}>
     <DefaultRoute name="edit-project-details" handler={require './pages/lab/project-details'} />
     <Route name="edit-project-science-case" path="science-case" handler={require './pages/lab/science-case'} />
     <Route name="edit-project-results" path="results" handler={require './pages/lab/results'} />
+    <Route name="edit-project-faq" path="faq" handler={require './pages/lab/faq'} />
+    <Route name="edit-project-education" path="education" handler={require './pages/lab/education'} />
     <Route name="edit-project-collaborators" path="collaborators" handler={require './pages/lab/collaborators'} />
     <Route name="edit-project-workflow" path="workflow/:workflowID" handler={require './pages/lab/workflow'} />
     <Route name="edit-project-subject-set" path="subject-set/:subjectSetID" handler={require './pages/lab/subject-set'} />
