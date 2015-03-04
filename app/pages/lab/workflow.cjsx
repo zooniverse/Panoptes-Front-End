@@ -1,6 +1,8 @@
 React = require 'react'
+handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
+ChangeListener = require '../../components/change-listener'
 
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
@@ -18,7 +20,7 @@ EditWorkflowPage = React.createClass
       <div>
         <div>
           Name<br />
-          <input type="text" placeholder="Workflow name" />
+          <input type="text" name="display_name" value={@props.workflow.display_name} onChange={handleInputChange.bind @props.workflow} />
         </div>
         <div>
           Associated subject sets
@@ -48,5 +50,7 @@ module.exports = React.createClass
 
   render: ->
     <PromiseRenderer promise={apiClient.type('workflows').get @props.params.workflowID}>{(workflow) =>
-      <EditWorkflowPage {...@props} workflow={workflow} />
+      <ChangeListener target={workflow}>{=>
+        <EditWorkflowPage {...@props} workflow={workflow} />
+      }</ChangeListener>
     }</PromiseRenderer>
