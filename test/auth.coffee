@@ -1,8 +1,8 @@
 test = require 'blue-tape'
 auth = require '../app/api/auth'
 
-TEST_LOGIN = 'TEST_' + (new Date).toISOString().replace /\W/g, '_'
-TEST_EMAIL = TEST_LOGIN.toLowerCase() + '@zooniverse.org'
+TEST_NAME = 'TEST_' + (new Date).toISOString().replace /\W/g, '_'
+TEST_EMAIL = TEST_NAME.toLowerCase() + '@zooniverse.org'
 TEST_PASSWORD = 'P@$$wørd'
 
 test 'Checking the current user initially fails', (t) ->
@@ -21,13 +21,13 @@ test 'Registering an account with no data fails', (t) ->
       t.fail 'Should not have been able to register'
 
     .catch (error) ->
-      t.ok error.message.match(/^login(.+)blank/mi), 'Login error should mention "blank"'
+      t.ok error.message.match(/^display_name(.+)blank/mi), 'Display name error should mention "blank"'
       t.ok error.message.match(/^email(.+)blank/mi), 'Email error should mention "blank"'
       t.ok error.message.match(/^password(.+)blank/mi), 'Password error should mention "blank"'
 
 test 'Registering an account with a short password fails', (t) ->
   SHORT_PASSWORD_REGISTRATION =
-    login: TEST_LOGIN + '_short_password'
+    display_name: TEST_NAME + '_short_password'
     email: TEST_EMAIL
     password: TEST_PASSWORD[0...7] # 8 characters minimum
 
@@ -40,43 +40,43 @@ test 'Registering an account with a short password fails', (t) ->
 
 test 'Registering a new account works', (t) ->
   GOOD_REGISTRATION =
-    login: TEST_LOGIN
+    display_name: TEST_NAME
     email: TEST_EMAIL
     password: TEST_PASSWORD
 
   auth.register GOOD_REGISTRATION
     .then (user) ->
       t.ok user?, 'Should have gotten the new user'
-      t.ok user.display_name is TEST_LOGIN, 'Display name should be whatever login was given'
+      t.ok user.display_name is TEST_NAME, 'Display_name should be whatever display_name was given'
 
 test 'Registering keeps you signed in', (t) ->
   auth.checkCurrent()
     .then (user) ->
       t.ok user?, 'Should have gotten a user'
-      t.ok user.display_name is TEST_LOGIN, 'Display name should be whatever login was given'
+      t.ok user.display_name is TEST_NAME, 'Display_name should be whatever display_name was given'
 
 test 'Sign out', (t) ->
   auth.signOut()
     .then ->
       t.pass 'Signed out'
 
-test 'Registering an account with an already used login fails', (t) ->
+test 'Registering an account with an already used display_name fails', (t) ->
   DUPLICATE_REGISTRATION =
-    login: TEST_LOGIN
+    display_name: TEST_NAME
     email: TEST_EMAIL
     password: TEST_PASSWORD
 
   auth.register DUPLICATE_REGISTRATION
     .then ->
-      t.fail 'Should not have been able to register with a duplicate login'
+      t.fail 'Should not have been able to register with a duplicate display_name'
 
     .catch (error) ->
-      t.ok error.message.match(/^login(.+)taken/mi), 'Login error should mention "taken"'
+      t.ok error.message.match(/^display_name(.+)taken/mi), 'Display name error should mention "taken"'
       t.ok error.message.match(/^email(.+)taken/mi), 'Email error should mention "taken"'
 
 test 'Signing in with an unknown login fails', (t) ->
   BAD_LOGIN =
-    login: 'NOT_' + TEST_LOGIN
+    display_name: 'NOT_' + TEST_NAME
     password: TEST_PASSWORD
 
   auth.signIn BAD_LOGIN
@@ -89,7 +89,7 @@ test 'Signing in with an unknown login fails', (t) ->
 
 test 'Signing in with the wrong password fails', (t) ->
   BAD_PASSWORD =
-    login: TEST_LOGIN
+    display_name: TEST_NAME
     password: 'NOT_' + TEST_PASSWORD
 
   auth.signIn BAD_PASSWORD
@@ -101,19 +101,19 @@ test 'Signing in with the wrong password fails', (t) ->
 
 test 'Signing in with good details works', (t) ->
   GOOD_LOGIN_DETAILS =
-    login: TEST_LOGIN
+    display_name: TEST_NAME
     password: TEST_PASSWORD
 
   auth.signIn GOOD_LOGIN_DETAILS
     .then (user) ->
       t.ok user?, 'Should have gotten a user'
-      t.ok user.display_name is TEST_LOGIN, 'Display name should be the original'
+      t.ok user.display_name is TEST_NAME, 'Display name should be the original'
 
 test 'Disabling an account works', (t) ->
   auth.disableAccount()
     .then ->
       OLD_LOGIN_DETAILS =
-        login: TEST_LOGIN
+        display_name: TEST_NAME
         password: TEST_PASSWORD
 
       auth.signIn OLD_LOGIN_DETAILS

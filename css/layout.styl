@@ -17,24 +17,22 @@ body
 
 .columns-container
   display: flex
-  align-items: baseline
 
   &.inline
+    align-items: baseline
     flex-wrap: wrap
 
   &.spread
     justify-content: space-between
 
   > :not(:last-child)
-      margin-right: 2.5vw
+    margin-right: 1.5vw
 
   > :not(hr)
-    flex: 0 1 auto
+    flex: 1 1
 
   > .column
-    // TODO: Try `flex: 1 1 100%`.
-    flex: 1 1 auto
-    width: 100% // It'll flex with its siblings, so it won't actually be 100% wide.
+    flex-grow: 5
 
   > hr
     border-width: 0 0 0 1px
