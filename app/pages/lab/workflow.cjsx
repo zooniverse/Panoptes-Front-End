@@ -12,29 +12,22 @@ EditWorkflowPage = React.createClass
     workflow: null
 
   render: ->
-    projectAndWorkflowSubjectSets = Promise.all [
-      @props.project.get 'subject_sets'
-      @props.workflow.get 'subject_sets'
-    ]
-
     <div className="columns-container">
-      <div>
+      <div className="column">
         <div>
           Name<br />
           <input type="text" name="display_name" value={@props.workflow.display_name} onChange={handleInputChange.bind @props.workflow} />
         </div>
+
         <div>
-          Associated subject sets
-          <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
-            <table>
-              {for subjectSet in projectSubjectSets
-                <tr key={subjectSet.id}>
-                  <td><input type="checkbox" checked={subjectSet in workflowSubjectSets} /></td>
-                  <td>{subjectSet.display_name}</td>
-                </tr>}
-            </table>
-          }</PromiseRenderer>
+          Tasks<br />
+          <ul>
+          {for key, task of @props.workflow.tasks
+            <li key={key} title={key}>{task.question ? task.instruction}</li>}
+          </ul>
         </div>
+
+        {@renderSubjectSets()}
       </div>
 
       <div className="column">
@@ -42,6 +35,32 @@ EditWorkflowPage = React.createClass
         <WorkflowTasksEditor workflow={@props.workflow} />
       </div>
     </div>
+
+  renderSubjectSets: ->
+    projectAndWorkflowSubjectSets = Promise.all [
+      @props.project.get 'subject_sets'
+      @props.workflow.get 'subject_sets'
+    ]
+
+    <div>
+      Associated subject sets
+      <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
+        <table>
+          {for subjectSet in projectSubjectSets
+            <tr key={subjectSet.id}>
+              <td><input type="checkbox" checked={subjectSet in workflowSubjectSets} onChange={@handleSubjectSetToggle.bind this, subjectSet} /></td>
+              <td>{subjectSet.display_name}</td>
+            </tr>}
+        </table>
+      }</PromiseRenderer>
+    </div>
+
+  handleSubjectSetToggle: (subjectSet, e) ->
+    # TODO: This is totally untested; I have no idea if this is right.
+    if e.checked
+      @props.workflow.addLink 'subject_sets', subjectSet.id
+    else
+      @props.workflow.removeLink 'subject_sets', subjectSet.id
 
 module.exports = React.createClass
   displayName: 'EditWorkflowPageWrapper'
