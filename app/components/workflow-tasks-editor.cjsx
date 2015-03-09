@@ -246,8 +246,16 @@ module.exports = React.createClass
     order = []
     key = @props.workflow.first_task
     while key?
-      order.push key
-      key = @props.workflow.tasks[key].next
+      task = @props.workflow.tasks[key]
+      if task.type is 'single'
+        for answer in task.answers when typeof answer.next is 'string'
+          unless answer.next in order
+            order.push answer.next
+
+      unless key in order
+        order.push key
+
+      key = task.next
     order
 
   addNewTask: (type) ->
