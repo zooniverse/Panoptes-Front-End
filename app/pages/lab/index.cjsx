@@ -6,13 +6,21 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 auth = require '../../api/auth'
 apiClient = require '../../api/client'
+counterpart = require 'counterpart'
 ChangeListener = require '../../components/change-listener'
+
+DEFAULT_WORKFLOW_NAME = 'Untitled workflow'
+DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 
 EditProjectPage = React.createClass
   displayName: 'EditProjectPage'
 
   getDefaultProps: ->
     project: id: '2'
+
+  getInitialState: ->
+    creatingWorkflow: false
+    creatingSubjectSet: false
 
   render: ->
     linkParams =
@@ -37,7 +45,7 @@ EditProjectPage = React.createClass
                   <li key={workflow.id}>
                     <Link to="edit-project-workflow" params={workflowLinkParams}>{workflow.display_name}</Link>
                   </li>}
-                <li><button type="button" disabled>New workflow</button></li>
+                <li><button type="button" onClick={@createNewWorkflow}>New workflow</button></li>
               </ul>
             }</PromiseRenderer>
           </li>
@@ -51,7 +59,7 @@ EditProjectPage = React.createClass
                   <li key={subjectSet.id}>
                     <Link to="edit-project-subject-set" params={subjectSetLinkParams}>{subjectSet.display_name}</Link>
                   </li>}
-                <li><button type="button" disabled>New subject set</button></li>
+                <li><button type="button" onClick={@createNewSubjectSet} disabled={@state.creatingSubjectSet}>New subject set</button></li>
               </ul>
             }</PromiseRenderer>
           </li>
@@ -61,6 +69,39 @@ EditProjectPage = React.createClass
         <RouteHandler {...@props} />
       </div>
     </div>
+
+  createNewWorkflow: ->
+    @setState creatingWorkflow: true, =>
+      workflow = apiClient.type('workflows').create
+        display_name: DEFAULT_WORKFLOW_NAME
+        primary_language: counterpart.getLocale()
+        tasks:
+          init:
+            type: 'single'
+            question: 'Is this the first question?'
+            answers: [
+              label: 'Yes'
+            ]
+        first_task: 'init'
+        links:
+          project: @props.project.id
+
+      workflow.save().then =>
+        @props.project.uncacheLink 'workflows'
+        @props.project.refresh(true).then =>
+          @setState creatingWorkflow: false
+
+  createNewSubjectSet: ->
+    @setState creatingSubjectSet: true, =>
+      subjectSet = apiClient.type('subject_sets').create
+        display_name: DEFAULT_SUBJECT_SET_NAME
+        links:
+          project: @props.project.id
+
+      subjectSet.save().then =>
+        @props.project.uncacheLink 'subject_sets'
+        @props.project.refresh(true).then =>
+          @setState creatingSubjectSet: false
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
