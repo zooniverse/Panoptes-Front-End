@@ -61,8 +61,8 @@ EditWorkflowPage = React.createClass
 
   handleSubjectSetToggle: (subjectSet, e) ->
     # TODO: This is totally untested; I have no idea if this is right.
-    if e.checked
-      @props.workflow.addLink 'subject_sets', subjectSet.id
+    if e.target.checked
+      @props.workflow.addLink 'subject_sets', [subjectSet.id]
     else
       @props.workflow.removeLink 'subject_sets', subjectSet.id
 
