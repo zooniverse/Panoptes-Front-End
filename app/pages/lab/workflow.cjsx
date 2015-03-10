@@ -40,15 +40,19 @@ EditWorkflowPage = React.createClass
     projectAndWorkflowSubjectSets = Promise.all [
       @props.project.get 'subject_sets'
       @props.workflow.get 'subject_sets'
+      # TODO: @props.workflow.get 'expert_subject_set'
     ]
 
     <div>
       Associated subject sets
-      <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
+      <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets, expertSubjectSet]) =>
         <table>
           {for subjectSet in projectSubjectSets
+            assigned = subjectSet in workflowSubjectSets
+            cantChange = subjectSet is expertSubjectSet or subjectSet.id is @props.workflow.links.expert_subject_set
+            toggle = @handleSubjectSetToggle.bind this, subjectSet
             <tr key={subjectSet.id}>
-              <td><input type="checkbox" checked={subjectSet in workflowSubjectSets} onChange={@handleSubjectSetToggle.bind this, subjectSet} /></td>
+              <td><input type="checkbox" checked={assigned} disabled={cantChange} onChange={toggle} /></td>
               <td>{subjectSet.display_name}</td>
             </tr>}
         </table>
