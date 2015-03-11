@@ -32,9 +32,10 @@ routes = <Route handler={App}>
   <Route path="projects/:owner/:name" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
     <Route name="project-science-case" path="science-case" handler={require './pages/project/science-case'} />
-    <Route name="project-status" path="status" handler={require './pages/project/status'} />
-    <Route name="project-team" path="team" handler={require './pages/project/team'} />
+    <Route name="project-results" path="results" handler={require './pages/project/results'} />
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
+    <Route name="project-faq" path="faq" handler={require './pages/project/faq'} />
+    <Route name="project-education" path="education" handler={require './pages/project/education'} />
     <Route name="project-talk" path="talk" handler={require './pages/project/talk'} />
   </Route>
 
@@ -53,6 +54,8 @@ routes = <Route handler={App}>
     <DefaultRoute name="edit-project-details" handler={require './pages/lab/project-details'} />
     <Route name="edit-project-science-case" path="science-case" handler={require './pages/lab/science-case'} />
     <Route name="edit-project-results" path="results" handler={require './pages/lab/results'} />
+    <Route name="edit-project-faq" path="faq" handler={require './pages/lab/faq'} />
+    <Route name="edit-project-education" path="education" handler={require './pages/lab/education'} />
     <Route name="edit-project-collaborators" path="collaborators" handler={require './pages/lab/collaborators'} />
     <Route name="edit-project-workflow" path="workflow/:workflowID" handler={require './pages/lab/workflow'} />
     <Route name="edit-project-subject-set" path="subject-set/:subjectSetID" handler={require './pages/lab/subject-set'} />

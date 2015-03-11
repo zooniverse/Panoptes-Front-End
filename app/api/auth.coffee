@@ -73,19 +73,19 @@ module.exports = new Model
         console?.error 'Failed to get session'
         throw error
 
-  register: ({login, email, password}) ->
+  register: ({display_name, email, password}) ->
     @checkCurrent().then (user) =>
       if user?
         @signOut().then =>
-          @register {login, email, password}
+          @register {display_name, email, password}
       else
-        console?.log 'Registering new account', login
+        console?.log 'Registering new account', display_name
 
         registrationRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
             user:
-              login: login
+              display_name: display_name
               email: email
               password: password
 
@@ -121,19 +121,19 @@ module.exports = new Model
 
     @_currentUserPromise
 
-  signIn: ({login, password}) ->
+  signIn: ({display_name, password}) ->
     @checkCurrent().then (user) =>
       if user?
         @signOut().then =>
-          @signIn {login, password}
+          @signIn {display_name, password}
       else
-        console?.log 'Signing in', login
+        console?.log 'Signing in', display_name
 
         signInRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
             user:
-              login: login
+              display_name: display_name
               password: password
 
           makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS
@@ -156,12 +156,11 @@ module.exports = new Model
     console?.log 'Disabling account'
     @checkCurrent().then (user) =>
       if user?
-        user.refresh().then =>
-          user.delete().then =>
-            @_deleteBearerToken()
-            @update _currentUserPromise: Promise.resolve null
-            console?.info 'Disabled account'
-            null
+        user.delete().then =>
+          @_deleteBearerToken()
+          @update _currentUserPromise: Promise.resolve null
+          console?.info 'Disabled account'
+          null
       else
         throw new Error 'Failed to disable account; not signed in'
 
