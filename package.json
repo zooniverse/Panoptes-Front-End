@@ -1,6 +1,6 @@
 {
   "name": "panoptes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "animated-scrollto": "^1.1.0",
     "counterpart": "^0.16.4",
