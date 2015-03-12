@@ -27,4 +27,4 @@ apiClient.handleError = (request) ->
   throw new Error errorMessage
 
 module.exports = apiClient
-window.zooAPI = apiClient
+window?.zooAPI = apiClient
