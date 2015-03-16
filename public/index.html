@@ -20,8 +20,13 @@
     </div>
 
     <script>
-      if (typeof SVGElement === 'undefined') {
-        document.getElementById('old-browser-warning').style.display = '';
+      if (typeof SVGElement === 'undefined' || (new XMLHttpRequest()).withCredentials !== false) {
+        document.write([
+          '<div style="margin: 0.5em 1em;">',
+            'Sorry, your browser appears to be outdated!',
+            '<strong><a href="http://browsehappy.com/">Check out your upgrade options!</a></strong>',
+          '</div>',
+        ].join('\n'));
       }
     </script>
 
