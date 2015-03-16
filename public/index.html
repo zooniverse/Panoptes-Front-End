@@ -12,6 +12,19 @@
   </head>
 
   <body>
+    <div id="old-browser-warning" style="display: none;">
+      <p style="margin: 0.5em 1em;">
+        Sorry, your browser appears to be outdated!
+        <strong><a href="http://browsehappy.com/">Check out your upgrade options!</a></strong>
+      </p>
+    </div>
+
+    <script>
+      if (typeof SVGElement === 'undefined') {
+        document.getElementById('old-browser-warning').style.display = '';
+      }
+    </script>
+
     <i id="font-awesome-test" class="fa" style="opacity: 0; pointer-events: none; position: absolute;"></i>
     <script>
       addEventListener('DOMContentLoaded', function() {
