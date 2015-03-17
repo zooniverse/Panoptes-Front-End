@@ -1,13 +1,13 @@
 {
   "name": "panoptes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "animated-scrollto": "^1.1.0",
     "babyparse": "^0.4.1",
     "counterpart": "^0.16.4",
     "debounce": "^1.0.0",
     "emojify.js": "^0.9.5",
-    "json-api-client": "~0.1.14",
+    "json-api-client": "^0.2.2",
     "lodash.merge": "^2.4.1",
     "marked": "^0.3.2",
     "react": "^0.12.1",
