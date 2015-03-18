@@ -23,7 +23,7 @@ module.exports = new Model
 
   _getAuthToken: ->
     console?.log 'Getting auth token'
-    makeHTTPRequest 'GET', config.host + '/', null, 'Accept': 'text/html'
+    makeHTTPRequest 'GET', config.host + "/?now=#{Date.now()}", null, 'Accept': 'text/html'
       .then (request) ->
         [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
         authToken = authTokenMatch1 ? authTokenMatch2
