@@ -115,7 +115,7 @@ module.exports = React.createClass
 
       subjectData =
         locations: (type for {type} in files)
-        # metadata: metadata
+        metadata: metadata
         links: sharedSubjectLinks
 
       subject = apiClient.type('subjects').create subjectData
