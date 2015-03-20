@@ -128,10 +128,8 @@ module.exports = React.createClass
         workflow_id: workflow.id
         sort: 'cellect' unless SKIP_CELLECT
 
-      # TODO: If something goes wrong (Cellect is down, etc.), pull a list of subject from somewhere else.
-      fetchSubjects = apiClient.type('subjects').get subjectQuery
-        .then (subjects) ->
-          upcomingSubjects.forWorkflow[workflow.id].push subjects...
+      fetchSubjects = apiClient.type('subjects').get(subjectQuery).then (subjects) ->
+        upcomingSubjects.forWorkflow[workflow.id].push subjects...
 
       # If we're filling this list for the first time, we won't have a subject selected, so try again.
       subject ?= fetchSubjects.then ->
