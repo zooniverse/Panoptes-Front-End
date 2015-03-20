@@ -8,7 +8,7 @@ API_HOSTS =
 
 API_APPLICATION_IDS =
   staging: '535759b966935c297be11913acee7a9ca17c025f9f15520e7504728e71110a27'
-  cam: '05fd85e729327b2f71cda394d8e87e042e0b77b05e05280e8246e8bdb05d54ed'
+  cam: '535759b966935c297be11913acee7a9ca17c025f9f15520e7504728e71110a27'
 
 hostFromBrowser = location?.search.match(/\W?panoptes-api-host=([^&]+)/)?[1]
 appFromBrowser = location?.search.match(/\W?panoptes-api-application=([^&]+)/)?[1]
