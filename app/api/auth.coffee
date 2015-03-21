@@ -2,6 +2,7 @@
 config = require './config'
 client = require './client'
 
+# Use this to override the default API-specific headers.
 JSON_HEADERS =
   'Content-Type': 'application/json'
   'Accept': 'application/json'
@@ -17,9 +18,13 @@ CSRF_TOKEN_PATTERN = do ->
   CONTENT_ATTR = '''content=['"](.+)['"]'''
   ///#{NAME_ATTR}\s*#{CONTENT_ATTR}|#{CONTENT_ATTR}\s*#{NAME_ATTR}///
 
+# We don't want to wait until the token is already expired before refreshing it.
+TOKEN_EXPIRATION_ALLOWANCE = 10 * 1000
+
 module.exports = new Model
   _currentUserPromise: null
   _bearerToken: ''
+  _bearerRefreshTimeout: NaN
 
   _getAuthToken: ->
     console?.log 'Getting auth token'
@@ -46,20 +51,45 @@ module.exports = new Model
 
       makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS
         .then (request) =>
-          response = JSON.parse request.responseText
-          @_bearerToken = response.access_token
-          client.headers['Authorization'] = "Bearer #{@_bearerToken}"
-          console?.info 'Got bearer token', @_bearerToken
-          @_bearerToken
+          token = @_handleNewBearerToken request
+          console?.info 'Got bearer token', token[...6]
 
         .catch (request) ->
           # You're probably not signed in.
           console?.error 'Failed to get bearer token'
           client.handleError request
 
+  _handleNewBearerToken: (request) ->
+    response = JSON.parse request.responseText
+
+    @_bearerToken = response.access_token
+    client.headers['Authorization'] = "Bearer #{@_bearerToken}"
+
+    refresh = @_refreshBearerToken.bind this, response.refresh_token
+    timeToRefresh = (response.expires_in * 1000) - TOKEN_EXPIRATION_ALLOWANCE
+    @_bearerRefreshTimeout = setTimeout refresh, timeToRefresh
+
+    @_bearerToken
+
+  _refreshBearerToken: (refreshToken) ->
+    data =
+      grant_type: 'refresh_token'
+      refresh_token: refreshToken
+      client_id: config.clientAppID
+
+    makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS
+      .then (request) =>
+        token = @_handleNewBearerToken request
+        console?.info 'Refreshed bearer token', token[...6]
+
+      .catch (request) ->
+        console?.error 'Failed to refresh bearer token'
+        client.handleError request
+
   _deleteBearerToken: ->
     @_bearerToken = ''
     delete client.headers['Authorization']
+    clearTimeout @_bearerRefreshTimeout
     console?.log 'Deleted bearer token'
 
   _getSession: ->
