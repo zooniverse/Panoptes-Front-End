@@ -32,7 +32,7 @@ module.exports = new Model
       .then (request) ->
         [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
         authToken = authTokenMatch1 ? authTokenMatch2
-        console?.info 'Got auth token', authToken
+        console?.info "Got auth token #{authToken[...6]}..."
         authToken
 
       .catch (request) ->
@@ -52,7 +52,7 @@ module.exports = new Model
       makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS
         .then (request) =>
           token = @_handleNewBearerToken request
-          console?.info 'Got bearer token', token[...6]
+          console?.info "Got bearer token #{token[...6]}..."
 
         .catch (request) ->
           # You're probably not signed in.
@@ -80,7 +80,7 @@ module.exports = new Model
     makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS
       .then (request) =>
         token = @_handleNewBearerToken request
-        console?.info 'Refreshed bearer token', token[...6]
+        console?.info "Refreshed bearer token #{token[...6]}..."
 
       .catch (request) ->
         console?.error 'Failed to refresh bearer token'
