@@ -1,6 +1,7 @@
 React = require 'react'
 {Link, RouteHandler} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
+LoadingIndicator = require '../../components/loading-indicator'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
@@ -19,8 +20,10 @@ EditProjectPage = React.createClass
     project: id: '2'
 
   getInitialState: ->
-    creatingWorkflow: false
-    creatingSubjectSet: false
+    workflowCreationError: null
+    workflowCreationInProgress: false
+    subjectSetCreationError: null
+    subjectSetCreationInProgress: false
 
   render: ->
     linkParams =
@@ -45,7 +48,13 @@ EditProjectPage = React.createClass
                   <li key={workflow.id}>
                     <Link to="edit-project-workflow" params={workflowLinkParams}>{workflow.display_name}</Link>
                   </li>}
-                <li><button type="button" onClick={@createNewWorkflow}>New workflow</button></li>
+                <li>
+                  <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress}>New workflow</button>{' '}
+                  {if @state.workflowCreationInProgress
+                    <LoadingIndicator />}
+                  {if @state.workflowCreationError?
+                    <div className="form-help error">{@state.workflowCreationError.message}</div>}
+                </li>
               </ul>
             }</PromiseRenderer>
           </li>
@@ -59,7 +68,13 @@ EditProjectPage = React.createClass
                   <li key={subjectSet.id}>
                     <Link to="edit-project-subject-set" params={subjectSetLinkParams}>{subjectSet.display_name}</Link>
                   </li>}
-                <li><button type="button" onClick={@createNewSubjectSet} disabled={@state.creatingSubjectSet}>New subject set</button></li>
+                <li>
+                  <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress}>New subject set</button>{' '}
+                  {if @state.subjectSetCreationInProgress
+                    <LoadingIndicator />}
+                  {if @state.subjectSetCreationError?
+                    <div className="form-help error">{@state.subjectSetCreationError.message}</div>}
+                </li>
               </ul>
             }</PromiseRenderer>
           </li>
@@ -71,37 +86,50 @@ EditProjectPage = React.createClass
     </div>
 
   createNewWorkflow: ->
-    @setState creatingWorkflow: true, =>
-      workflow = apiClient.type('workflows').create
-        display_name: DEFAULT_WORKFLOW_NAME
-        primary_language: counterpart.getLocale()
-        tasks:
-          init:
-            type: 'single'
-            question: 'Is this the first question?'
-            answers: [
-              label: 'Yes'
-            ]
-        first_task: 'init'
-        links:
-          project: @props.project.id
+    @setState creatingWorkflow: true
 
-      workflow.save().then =>
+    workflow = apiClient.type('workflows').create
+      display_name: DEFAULT_WORKFLOW_NAME
+      primary_language: counterpart.getLocale()
+      tasks:
+        init:
+          type: 'single'
+          question: 'Is this the first question?'
+          answers: [
+            label: 'Yes'
+          ]
+      first_task: 'init'
+      links:
+        project: @props.project.id
+
+    @setState
+      workflowCreationError: null
+      workflowCreationInProgress: true
+
+    workflow.save()
+      .catch (error) =>
+        @setState workflowCreationError: error
+      .then =>
         @props.project.uncacheLink 'workflows'
-        @props.project.refresh(true).then =>
-          @setState creatingWorkflow: false
+        @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
+        @setState workflowCreationInProgress: false
 
   createNewSubjectSet: ->
-    @setState creatingSubjectSet: true, =>
-      subjectSet = apiClient.type('subject_sets').create
-        display_name: DEFAULT_SUBJECT_SET_NAME
-        links:
-          project: @props.project.id
+    subjectSet = apiClient.type('subject_sets').create
+      display_name: DEFAULT_SUBJECT_SET_NAME
+      links:
+        project: @props.project.id
 
-      subjectSet.save().then =>
+    @setState
+      subjectSetCreationError: null
+      subjectSetCreationInProgress: true
+
+    subjectSet.save()
+      .catch (error) =>
+        @setState subjectSetCreationError: error
+      .then =>
         @props.project.uncacheLink 'subject_sets'
-        @props.project.refresh(true).then =>
-          @setState creatingSubjectSet: false
+        @setState subjectSetCreationInProgress: false
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
