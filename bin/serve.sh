@@ -7,6 +7,7 @@ pids=""
 [[ -f "$DEV_DIR/$VENDOR_JS" ]] && rm "$DEV_DIR/$VENDOR_JS"
 [[ -f "$DEV_DIR/$OUT_JS" ]] && rm "$DEV_DIR/$OUT_JS"
 [[ -f "$DEV_DIR/$OUT_CSS" ]] && rm "$DEV_DIR/$OUT_CSS"
+[[ -f "$DEV_DIR/$OUT_HTML" ]] && rm "$DEV_DIR/$OUT_HTML"
 
 ./node_modules/.bin/browserify \
   --debug \
@@ -42,6 +43,8 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
   --cache "no-cache, must-revalidate" \
   "$DEV_DIR" \
   & pids="$pids $!"
+
+erb "$DEV_DIR/$SRC_HTML" > "$DEV_DIR/$OUT_HTML"
 
 trap 'kill -HUP $pids' INT TERM HUP
 
