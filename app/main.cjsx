@@ -49,7 +49,7 @@ routes = <Route handler={App}>
   <Route name="edit-project" path="edit-project/:id" handler={require './pages/edit-project'} />
   <Route name="edit-workflow" path="edit-workflow/:id" handler={require './pages/edit-workflow'} />
 
-  <Route path="lab" handler={require './pages/lab'} />
+  <Route name="lab" handler={require './pages/lab'} />
   <Route path="lab/:projectID" handler={require './pages/lab/project'}>
     <DefaultRoute name="edit-project-details" handler={require './pages/lab/project-details'} />
     <Route name="edit-project-science-case" path="science-case" handler={require './pages/lab/science-case'} />

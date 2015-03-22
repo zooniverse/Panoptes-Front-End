@@ -1,5 +1,5 @@
 React = require 'react'
-{Link, RouteHandler} = require 'react-router'
+{Navigation, Link, RouteHandler} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 TitleMixin = require '../../lib/title-mixin'
@@ -12,9 +12,12 @@ ChangeListener = require '../../components/change-listener'
 
 DEFAULT_WORKFLOW_NAME = 'Untitled workflow'
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
+DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
 
 EditProjectPage = React.createClass
   displayName: 'EditProjectPage'
+
+  mixins: [Navigation]
 
   getDefaultProps: ->
     project: id: '2'
@@ -24,6 +27,8 @@ EditProjectPage = React.createClass
     workflowCreationInProgress: false
     subjectSetCreationError: null
     subjectSetCreationInProgress: false
+    deletionError: null
+    deletionInProgress: false
 
   render: ->
     linkParams =
@@ -79,6 +84,9 @@ EditProjectPage = React.createClass
             }</PromiseRenderer>
           </li>
         </ul>
+        <button type="button" className="minor-button" onClick={@deleteProject}>Delete this project <LoadingIndicator off={not @state.deletionInProgress} /></button>{' '}
+        {if @state.deletionError?
+          <div className="form-help error">{@state.deletionError.message}</div>}
       </div>
       <div className="column">
         <RouteHandler {...@props} />
@@ -130,6 +138,28 @@ EditProjectPage = React.createClass
       .then =>
         @props.project.uncacheLink 'subject_sets'
         @setState subjectSetCreationInProgress: false
+
+  deleteProject: ->
+    @setState
+      deletionError: null
+
+    confirmed = prompt("""
+      You are about to delete this project and all its data!
+      Enter #{DELETE_CONFIRMATION_PHRASE} to confirm.
+    """) is DELETE_CONFIRMATION_PHRASE
+
+    if confirmed
+      @setState
+        deletionInProgress: true
+
+      this.props.project.delete()
+        .then =>
+          @transitionTo 'lab'
+        .catch (error) =>
+          @setState deletionError: error
+        .then =>
+          if @isMounted()
+            @setState deletionInProgress: false
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
