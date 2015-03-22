@@ -1,38 +1,88 @@
 React = require 'react'
-{Link, RouteHandler} = require 'react-router'
+{Link} = require 'react-router'
+PromiseRenderer = require '../../components/promise-renderer'
+LoadingIndicator = require '../../components/loading-indicator'
+apiClient = require '../../api/client'
+counterpart = require 'counterpart'
+
+RequiresSession = do ->
+  ChangeListener = require '../../components/change-listener'
+  auth = require '../../api/auth'
+  PromiseRenderer = require '../../components/promise-renderer'
+
+  React.createClass
+    displayName: 'RequiresSession'
+
+    render: ->
+      <ChangeListener target={auth} handler={@renderAuth} />
+
+    renderAuth: ->
+      <PromiseRenderer promise={auth.checkCurrent()} then={@renderUser} />
+
+    renderUser: (user) ->
+      if user?
+        @props.render user
+      else
+        <span>You’re not signed in.</span>
+
+sleep = (duration) ->
+  (value) ->
+    new Promise (resolve) ->
+      setTimeout resolve.bind(null, value), duration
 
 module.exports = React.createClass
-  displayName: 'EditProjectIndex'
+  displayName: 'LabIndex'
 
-  getDefaultProps: ->
-    project: id: '2'
+  getInitialState: ->
+    projects: []
+    creationError: null
+    creationInProgress: false
 
   render: ->
-    <div className="columns-container">
-      <div>
-        <ul>
-          <li><Link to="edit-project-details" params={projectID: '2'}>Project details</Link></li>
-          <li><Link to="edit-project-science-case" params={projectID: '2'}>Science case</Link></li>
-          <li><Link to="edit-project-results" params={projectID: '2'}>Results</Link></li>
-          <li><Link to="edit-project-collaborators" params={projectID: '2'}>Collaborators</Link></li>
-          <li>
-            <header>Workflows</header>
-            <ul>
-              <li><Link to="edit-project-workflow" params={projectID: '2', workflowID: '2'}>Get started</Link></li>
-              <li><button type="button">New workflow</button></li>
-            </ul>
-          </li>
-          <li>
-            <header>Subject sets</header>
-            <ul>
-              <li><Link to="edit-project-subject-set" params={projectID: '2', subjectSetID: '2'}>Get started expert subjects</Link></li>
-              <li><Link to="edit-project-subject-set" params={projectID: '2', subjectSetID: '2'}>Get started initial subjects</Link></li>
-              <li><button type="button">New subject set</button></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div className="column">
-        <RouteHandler {...@props} />
-      </div>
+    <div className="content-container">
+      <RequiresSession render={@renderWithSession} />
     </div>
+
+  renderWithSession: (user) ->
+    # TODO: Make this a component instead of a function,
+    # then `user.uncacheLink 'projects'` on mount and on project creation.
+    <div>
+      <p>Projects owned by {user.display_name}:</p>
+      <PromiseRenderer promise={user.get 'projects', skipCache: true} then={@renderProjects.bind this, user} />
+      <br />
+      <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject.bind this, user}>
+        Create a new project{' '}
+        <LoadingIndicator off={not @state.creationInProgress} />
+      </button>&nbsp;
+      {if @state.creationError?
+        <p className="form-help error">{@state.creationError.message}</p>}
+    </div>
+
+  renderProjects: (user, projects) ->
+    <table>
+      {for project in projects
+        <tr key={project.id}>
+          <td>{project.display_name}</td>
+          <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
+          <td><Link to="project-home" params={owner: user.display_name, name: project.display_name} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link></td>
+        </tr>}
+    </table>
+
+  createNewProject: (user) ->
+    project = apiClient.type('projects').create
+      display_name: 'Untitled project'
+      description: 'Description of project'
+      primary_language: counterpart.getLocale()
+      private: true
+
+    @setState
+      creationError: null
+      creationInProgress: true
+
+    project.save()
+      .catch (error) =>
+        @setState creationError: error
+      .then sleep 1100 # Wait for the global request cache to clear (TODO: Cache should really expire on return).
+      .then =>
+        # TODO: user.uncacheLink 'project'
+        @setState creationInProgress: false
