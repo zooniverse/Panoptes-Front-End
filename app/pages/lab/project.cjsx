@@ -54,9 +54,10 @@ EditProjectPage = React.createClass
                     <Link to="edit-project-workflow" params={workflowLinkParams}>{workflow.display_name}</Link>
                   </li>}
                 <li>
-                  <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress}>New workflow</button>{' '}
-                  {if @state.workflowCreationInProgress
-                    <LoadingIndicator />}
+                  <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress}>
+                    New workflow{' '}
+                    <LoadingIndicator off={not @state.workflowCreationInProgress} />
+                  </button>{' '}
                   {if @state.workflowCreationError?
                     <div className="form-help error">{@state.workflowCreationError.message}</div>}
                 </li>
@@ -74,9 +75,10 @@ EditProjectPage = React.createClass
                     <Link to="edit-project-subject-set" params={subjectSetLinkParams}>{subjectSet.display_name}</Link>
                   </li>}
                 <li>
-                  <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress}>New subject set</button>{' '}
-                  {if @state.subjectSetCreationInProgress
-                    <LoadingIndicator />}
+                  <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress}>
+                    New subject set{' '}
+                    <LoadingIndicator off={not @state.subjectSetCreationInProgress} />
+                  </button>{' '}
                   {if @state.subjectSetCreationError?
                     <div className="form-help error">{@state.subjectSetCreationError.message}</div>}
                 </li>
