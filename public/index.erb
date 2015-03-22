@@ -15,6 +15,25 @@
     <!--Last build: <%= Time.now %>-->
     <!--Build env: <%= ENV['NODE_ENV'] %>-->
 
+    <noscript>
+      <p style="text-align: center;">
+        Sorry, it looks like you have JavaScript disabled.
+        <strong><a href="http://enable-javascript.com/">Learn how to enable it.</a></strong>
+      </p>
+    </noscript>
+
+    <script>
+      if (typeof SVGElement === 'undefined' || (new XMLHttpRequest()).withCredentials !== false) {
+        document.write([
+          '<p style="text-align: center;">',
+            'Sorry, it looks like your browser is too old to run this app.',
+            '<strong><a href="http://browsehappy.com/">Check out your upgrade options.</a></strong>',
+            '<small><em><a href="https://www.whatismybrowser.com/guides/why-should-i-update-my-web-browser">Why?</a></em></small>',
+          '</p>',
+        ].join('\n'));
+      }
+    </script>
+
     <i id="font-awesome-test" class="fa" style="opacity: 0; pointer-events: none; position: absolute;"></i>
     <script>
       addEventListener('DOMContentLoaded', function() {
