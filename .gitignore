@@ -1,11 +1,9 @@
 /build
 /node_modules
-/public/.main.js
 /public/font-awesome
 /public/fallback-polyfills.js
-/npm-debug.log
+/public/index.html
 /public/main.css
 /public/main.js
 /public/main.js.map
 /public/vendor.js
-/test/bundle.js

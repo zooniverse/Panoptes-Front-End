@@ -8,10 +8,13 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic" />
-    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./<%= ENV['OUT_CSS'] %>" />
   </head>
 
   <body>
+    <!--Last build: <%= Time.now %>-->
+    <!--Build env: <%= ENV['NODE_ENV'] %>-->
+
     <noscript>
       <p style="text-align: center;">
         Sorry, it looks like you have JavaScript disabled.
@@ -47,7 +50,7 @@
     <script src="https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6,Promise&amp;flags=gated"></script>
     <script>('assign' in Object) || document.write('<script src="./fallback-polyfills.js"></'+'script>');</script>
 
-    <script src="./vendor.js"></script>
-    <script src="./main.js"></script>
+    <script src="./<%= ENV['VENDOR_JS'] %>"></script>
+    <script src="./<%= ENV['OUT_JS'] %>"></script>
   </body>
 </html>
