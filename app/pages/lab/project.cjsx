@@ -17,7 +17,10 @@ DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
 EditProjectPage = React.createClass
   displayName: 'EditProjectPage'
 
-  mixins: [Navigation]
+  mixins: [TitleMixin, Navigation]
+
+  title: ->
+    @props.project.display_name
 
   getDefaultProps: ->
     project: id: '2'
@@ -64,6 +67,7 @@ EditProjectPage = React.createClass
               </ul>
             }</PromiseRenderer>
           </li>
+
           <li>
             <header>Subject sets</header>
             <PromiseRenderer promise={@props.project.get 'subject_sets'}>{(subjectSets) =>
@@ -86,12 +90,15 @@ EditProjectPage = React.createClass
             }</PromiseRenderer>
           </li>
         </ul>
-        <button type="button" className="minor-button" onClick={@deleteProject}>Delete this project <LoadingIndicator off={not @state.deletionInProgress} /></button>{' '}
+
+        <small><button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteProject}>Delete this project <LoadingIndicator off={not @state.deletionInProgress} /></button></small>{' '}
         {if @state.deletionError?
           <div className="form-help error">{@state.deletionError.message}</div>}
       </div>
       <div className="column">
-        <RouteHandler {...@props} />
+        <ChangeListener target={@props.project} handler={=>
+          <RouteHandler {...@props} />
+        } />
       </div>
     </div>
 
@@ -142,8 +149,7 @@ EditProjectPage = React.createClass
         @setState subjectSetCreationInProgress: false
 
   deleteProject: ->
-    @setState
-      deletionError: null
+    @setState deletionError: null
 
     confirmed = prompt("""
       You are about to delete this project and all its data!
@@ -151,8 +157,7 @@ EditProjectPage = React.createClass
     """) is DELETE_CONFIRMATION_PHRASE
 
     if confirmed
-      @setState
-        deletionInProgress: true
+      @setState deletionInProgress: true
 
       this.props.project.delete()
         .then =>
@@ -166,39 +171,25 @@ EditProjectPage = React.createClass
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
 
-  mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
+  mixins: [TitleMixin]
 
-  title: ->
-    "Edit #{@state.project?.display_name ? '(Loading)'}"
+  title: 'Edit'
 
   getDefaultProps: ->
-    params: null
-
-  getInitialState: ->
-    project: null
-
-  propChangeHandlers:
-    'params.projectID': 'fetchProject'
-
-  componentDidMount: ->
-    auth.listen 'change', @fetchProject
-
-  componentWillUnmount: ->
-    auth.stopListening 'change', @fetchProject
-
-  fetchProject: (_, props = @props) ->
-    @promiseToSetState project: auth.checkCurrent().then ->
-      apiClient.type('projects').get props.params.projectID
+    params:
+      projectID: '0'
 
   render: ->
-    if @state.project?
-      <ChangeListener target={@state.project}>{=>
-        <EditProjectPage {...@props} project={@state.project} />
-      }</ChangeListener>
-    else
-      <div className="content-container">
-        {if @state.rejected.project?
-          <code>{@state.rejected.project.toString()}</code>
-        else
-          <code>Loading</code>}
-      </div>
+    getProject = auth.checkCurrent().then =>
+      apiClient.type('projects').get @props.params.projectID
+
+    <ChangeListener target={auth} handler={=>
+      <PromiseRenderer promise={getProject} pending={=>
+        <p className="form-help">Loading project</p>
+      } then={(project) =>
+        @_project = project
+        <EditProjectPage {...@props} project={project} />
+      } catch={(error) =>
+        <p className="form-help error">{error.toString()}</p>
+      } />
+    } />
