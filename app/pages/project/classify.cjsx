@@ -176,7 +176,7 @@ module.exports = React.createClass
       # Forget the old classification so a new one will load.
       currentClassifications.forWorkflow[workflowID] = null
       # Forget the old workflow, unless it was specified, so we'll get a random one next time.
-      unless @props.query.workflow
+      unless @props.query?.workflow?
         currentWorkflowForProject[@props.project.id] = null
       @loadAppropriateClassification()
 
