@@ -1,46 +1,51 @@
 React = require 'react'
-UnsavedChangesWarningMixin = require '../../lib/unsaved-changes-warning-mixin'
-handleInputChange = require '../../lib/handle-input-change'
+BoundResourceMixin = require '../../lib/bound-resource-mixin'
 
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
 
-  mixins: [UnsavedChangesWarningMixin]
+  mixins: [BoundResourceMixin]
+
+  boundResource: 'project'
 
   getDefaultProps: ->
     project: null
 
   render: ->
-    unsavedChanges = @props.project.getChangesSinceSave()
-    handleChange = handleInputChange.bind @props.project
     <div className="columns-container">
-      <div style={opacity: 0.5}>
-        <div>
-          Avatar <button type="button">&times;</button><br />
+      <div>
+        <p>
+          Avatar <button type="button" disabled>&times;</button><br />
           <img src="//placehold.it/100x100.png" /><br />
-          <input type="file" />
-        </div>
-        <div>
-          Background image <button type="button">&times;</button><br />
+          <input type="file" disabled />
+        </p>
+
+        <p>
+          Background image <button type="button" disabled>&times;</button><br />
           <img src="//placehold.it/100x75.png" /><br />
-          <input type="file" />
-        </div>
+          <input type="file" disabled />
+        </p>
       </div>
+
       <div className="column content-container">
-        <div>
+        <p>
           Name<br />
-          <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} onChange={handleChange} />
-        </div>
-        <div>
+          <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} disabled={@state.saveInProgress} onChange={@handleChange} />
+        </p>
+
+        <p>
           Description<br />
-          <textarea className="standard-input full" name="description" value={@props.project.description} row="2" onChange={handleChange} />
-        </div>
-        <div>
+          <textarea className="standard-input full" name="description" value={@props.project.description} row="2" disabled={@state.saveInProgress} onChange={@handleChange} />
+        </p>
+
+        <p>
           Introduction<br />
-          <textarea className="standard-input full" name="introduction" value={@props.project.introduction} rows="5" onChange={handleChange} />
-        </div>
-        <div>
-          <button type="button" className="major-button" disabled={Object.keys(@props.project.getChangesSinceSave()).length is 0} onClick={@props.project.save.bind @props.project}>Save</button>
-        </div>
+          <textarea className="standard-input full" name="introduction" value={@props.project.introduction} rows="10" disabled={@state.saveInProgress} onChange={@handleChange} />
+        </p>
+
+        <p>
+          <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
+          {@renderSaveStatus()}
+        </p>
       </div>
     </div>
