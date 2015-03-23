@@ -1,8 +1,11 @@
 React = require 'react'
+UnsavedChangesWarningMixin = require '../../lib/unsaved-changes-warning-mixin'
 handleInputChange = require '../../lib/handle-input-change'
 
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
+
+  mixins: [UnsavedChangesWarningMixin]
 
   getDefaultProps: ->
     project: null
