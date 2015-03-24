@@ -46,9 +46,16 @@ module.exports = React.createClass
   renderWithSession: (user) ->
     # TODO: Make this a component instead of a function,
     # then `user.uncacheLink 'projects'` on mount and on project creation.
+
+    getProjects = user.get 'projects', skipCache: true
+      .then (projects) ->
+        refreshedProjects = for project in projects
+          project.refresh()
+        Promise.all refreshedProjects
+
     <div>
       <p>Projects owned by {user.display_name}:</p>
-      <PromiseRenderer promise={user.get 'projects', skipCache: true} then={@renderProjects.bind this, user} />
+      <PromiseRenderer promise={getProjects} then={@renderProjects.bind this, user} />
       <br />
       <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject.bind this, user}>
         Create a new project{' '}
