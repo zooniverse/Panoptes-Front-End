@@ -32,6 +32,7 @@ module.exports =
       throw new Error 'Define `Component::boundResource` when using BoundResourceMixin.'
 
   handleChange: ->
+    @setState saved: false
     handleInputChange.apply @_getResource(), arguments
 
   saveResource: ->
