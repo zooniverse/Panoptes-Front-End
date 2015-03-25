@@ -47,7 +47,7 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-education" params={linkParams}>Education</Link></li>
           <li><Link to="edit-project-collaborators" params={linkParams}>Collaborators</Link></li>
           <li>
-            <header>Workflows</header>
+            <header>Workflows <small>TODO</small></header>
             <PromiseRenderer promise={@props.project.get 'workflows'}>{(workflows) =>
               <ul>
                 {for workflow in workflows
@@ -69,7 +69,7 @@ EditProjectPage = React.createClass
           </li>
 
           <li>
-            <header>Subject sets</header>
+            <header>Subject sets <small>TODO</small></header>
             <PromiseRenderer promise={@props.project.get 'subject_sets'}>{(subjectSets) =>
               <ul>
                 {for subjectSet in subjectSets

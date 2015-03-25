@@ -15,13 +15,13 @@ module.exports = React.createClass
     <div className="columns-container">
       <div>
         <p>
-          Avatar <button type="button" disabled>&times;</button><br />
+          Avatar <small>TODO</small> <button type="button" disabled>&times;</button><br />
           <img src="//placehold.it/100x100.png" /><br />
           <input type="file" disabled />
         </p>
 
         <p>
-          Background image <button type="button" disabled>&times;</button><br />
+          Background image <small>TODO</small> <button type="button" disabled>&times;</button><br />
           <img src="//placehold.it/100x75.png" /><br />
           <input type="file" disabled />
         </p>
