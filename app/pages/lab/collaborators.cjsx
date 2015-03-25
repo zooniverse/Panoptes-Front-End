@@ -98,7 +98,7 @@ module.exports = React.createClass
     saving: []
 
   render: ->
-    <div className="content-container">
+    <div>
       <p>Collaborators</p>
       <hr />
       {if @state.error?

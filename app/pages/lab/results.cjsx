@@ -12,7 +12,7 @@ module.exports = React.createClass
     project: null
 
   render: ->
-    <div className="content-container">
+    <div>
       <p>
         Results<br />
         <textarea className="standard-input full" name="result" value={@props.project.result} rows="20" onChange={@handleChange} />

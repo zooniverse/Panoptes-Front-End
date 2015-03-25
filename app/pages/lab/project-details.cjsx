@@ -27,7 +27,7 @@ module.exports = React.createClass
         </p>
       </div>
 
-      <div className="column content-container">
+      <div className="column">
         <p>
           Name<br />
           <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} disabled={@state.saveInProgress} onChange={@handleChange} />

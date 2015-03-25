@@ -8,6 +8,7 @@ module.exports = React.createClass
 
   render: ->
     <div>
+      <small>TODO</small><br />
       Name<br />
       <input type="text" placeholder="Subject set name" /><br />
       (Subject set editor)<br />

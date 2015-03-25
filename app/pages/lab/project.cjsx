@@ -37,26 +37,29 @@ EditProjectPage = React.createClass
     linkParams =
       projectID: @props.project.id
 
-    <div className="columns-container">
+    <div className="columns-container content-container">
       <div>
-        <ul>
-          <li><Link to="edit-project-details" params={linkParams}>Project details</Link></li>
-          <li><Link to="edit-project-science-case" params={linkParams}>Science case</Link></li>
-          <li><Link to="edit-project-results" params={linkParams}>Results</Link></li>
-          <li><Link to="edit-project-faq" params={linkParams}>FAQ</Link></li>
-          <li><Link to="edit-project-education" params={linkParams}>Education</Link></li>
-          <li><Link to="edit-project-collaborators" params={linkParams}>Collaborators</Link></li>
+        <ul className="nav-list">
+          <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
+          <li><Link to="edit-project-details" params={linkParams} className="nav-list-item">Project details</Link></li>
+          <li><Link to="edit-project-science-case" params={linkParams} className="nav-list-item">Science case</Link></li>
+          <li><Link to="edit-project-results" params={linkParams} className="nav-list-item">Results</Link></li>
+          <li><Link to="edit-project-faq" params={linkParams} className="nav-list-item">FAQ</Link></li>
+          <li><Link to="edit-project-education" params={linkParams} className="nav-list-item">Education</Link></li>
+          <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item">Collaborators</Link></li>
+
           <li>
-            <header>Workflows <small>TODO</small></header>
+            <br />
+            <div className="nav-list-header">Workflows</div>
             <PromiseRenderer promise={@props.project.get 'workflows'}>{(workflows) =>
-              <ul>
+              <ul className="nav-list">
                 {for workflow in workflows
                   workflowLinkParams = Object.create linkParams
                   workflowLinkParams.workflowID = workflow.id
                   <li key={workflow.id}>
-                    <Link to="edit-project-workflow" params={workflowLinkParams}>{workflow.display_name}</Link>
+                    <Link to="edit-project-workflow" params={workflowLinkParams} className="nav-list-item">{workflow.display_name}</Link>
                   </li>}
-                <li>
+                <li className="nav-list-item">
                   <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress}>
                     New workflow{' '}
                     <LoadingIndicator off={not @state.workflowCreationInProgress} />
@@ -69,16 +72,17 @@ EditProjectPage = React.createClass
           </li>
 
           <li>
-            <header>Subject sets <small>TODO</small></header>
+            <br />
+            <div className="nav-list-header">Subject sets</div>
             <PromiseRenderer promise={@props.project.get 'subject_sets'}>{(subjectSets) =>
-              <ul>
+              <ul className="nav-list">
                 {for subjectSet in subjectSets
                   subjectSetLinkParams = Object.create linkParams
                   subjectSetLinkParams.subjectSetID = subjectSet.id
                   <li key={subjectSet.id}>
-                    <Link to="edit-project-subject-set" params={subjectSetLinkParams}>{subjectSet.display_name}</Link>
+                    <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item">{subjectSet.display_name}</Link>
                   </li>}
-                <li>
+                <li className="nav-list-item">
                   <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress}>
                     New subject set{' '}
                     <LoadingIndicator off={not @state.subjectSetCreationInProgress} />
@@ -90,11 +94,15 @@ EditProjectPage = React.createClass
             }</PromiseRenderer>
           </li>
         </ul>
+        <br />
 
         <small><button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteProject}>Delete this project <LoadingIndicator off={not @state.deletionInProgress} /></button></small>{' '}
         {if @state.deletionError?
           <div className="form-help error">{@state.deletionError.message}</div>}
       </div>
+
+      <hr />
+
       <div className="column">
         <ChangeListener target={@props.project} handler={=>
           <RouteHandler {...@props} />

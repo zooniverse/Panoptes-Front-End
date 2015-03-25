@@ -9,6 +9,7 @@ module.exports = React.createClass
   render: ->
     <div className="columns-container">
       <div>
+        <small>TODO</small><br />
         <div>
           Name<br />
           <input type="text" placeholder="Workflow name" />
