@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require 'react-router'
+{Link, Navigation} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 apiClient = require '../../api/client'
@@ -32,6 +32,8 @@ sleep = (duration) ->
 
 module.exports = React.createClass
   displayName: 'LabIndex'
+
+  mixins: [Navigation]
 
   getInitialState: ->
     projects: []
@@ -90,6 +92,7 @@ module.exports = React.createClass
       .catch (error) =>
         @setState creationError: error
       .then sleep 1100 # Wait for the global request cache to clear (TODO: Cache should really expire on return).
-      .then =>
+      .then (project) =>
         # TODO: user.uncacheLink 'project'
         @setState creationInProgress: false
+        @transitionTo 'edit-project-details', projectID: project.id
