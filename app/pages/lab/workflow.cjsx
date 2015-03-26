@@ -14,6 +14,7 @@ EditWorkflowPage = React.createClass
   render: ->
     <div className="columns-container">
       <div className="column">
+        <p><small>TODO</small></p>
         <div>
           Name<br />
           <input type="text" name="display_name" value={@props.workflow.display_name} onChange={handleInputChange.bind @props.workflow} />
