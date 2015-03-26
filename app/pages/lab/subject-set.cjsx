@@ -64,6 +64,7 @@ EditSubjectSetPage = React.createClass
 
   render: ->
     <div>
+      <p><small>TODO</small></p>
       <p>
         Name<br />
         <input type="text" name="display_name" value={@props.subjectSet.display_name} onChange={handleInputChange.bind @props.subjectSet} />
