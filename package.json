@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "dependencies": {
     "animated-scrollto": "^1.1.0",
+    "babyparse": "^0.4.1",
     "counterpart": "^0.16.4",
     "debounce": "^1.0.0",
     "json-api-client": "^0.2.2",

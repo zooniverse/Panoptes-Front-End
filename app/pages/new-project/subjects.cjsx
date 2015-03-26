@@ -1,4 +1,5 @@
 React = require 'react'
+Baby = require 'babyparse'
 data = require './data'
 {Link} = require 'react-router'
 
@@ -13,6 +14,7 @@ module.exports = React.createClass
       <p>Now you’ll be able to choose the images you want volunteers to look at (JPEG, PNG, or GIF, please). Optionally, you can include metadata about the images with a manifest file <small>(TODO: describe the manifest)</small>.</p>
       <p>These images will be uploaded during after last step of this process, which could take a long time depending on how many you select. Make sure you’ve got a steady internet connection. You’ll have an opportunity to review and refine your selection here before continuing.</p>
 
+      <h3>Manifests</h3>
       {for manifestFilename of data.manifests
         <span key={manifestFilename}>
           {manifestFilename}
@@ -20,20 +22,14 @@ module.exports = React.createClass
           &emsp;
         </span>}
 
+      <h3>Subjects</h3>
       <table>
-        <thead>
-          <tr>
-            {for column in MANIFEST_COLUMNS
-              <th key={column}>{column}</th>}
-            <th></th>
-          </tr>
-        </thead>
         <tbody>
           {@_renderSubjectRows()}
         </tbody>
       </table>
 
-      <p><input type="file" accept="image/*,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesChange} /></p>
+      <p><input type="file" accept="image/*,text/csv,text/tab-separated-values" multiple="multiple" onChange={@handleSubjectFilesChange} /></p>
       <Link to="new-project-workflow">Next, create a workflow <i className="fa fa-arrow-right"></i></Link>
     </div>
 
@@ -53,12 +49,7 @@ module.exports = React.createClass
             </div>}
           {if manifests and not metadata?
             <div className="form-help warning"><i className="fa fa-exclamation-triangle"></i> Not present in any manifest</div>}
-        </td>
 
-        {for column in MANIFEST_COLUMNS[1...]
-          <td key={column}>{metadata?[column] ? <span className="form-help">?</span>}</td>}
-
-        <td>
           <button onClick={@removeSubjects.bind this, filenames...}>&times;</button>
         </td>
       </tr>
@@ -84,31 +75,32 @@ module.exports = React.createClass
       data.update 'subjects'
 
   _addManifest: (file) ->
-    newlines = /\n|\r\n|\r/
 
-    columnDelimiter = switch file.type
-      # TODO: Parse these files properly.
-      when 'text/csv' then  ','
-      when 'text/tab-separated-values' then '\t'
-
-    listDelimeter = ';'
-
-    new Promise (resolve) =>
+    promise = new Promise (resolve, reject) =>
       reader = new FileReader
       reader.onload = =>
+
         data.manifests[file.name] ?= []
-        for line in reader.result.split newlines when line
-          metadataInOrder = line.split columnDelimiter
 
+        # Parse raw input
+        parsed = Baby.parse reader.result,
+          header: true
+
+        manifest = parsed.data.splice 0
+
+        # Remove any rows with errors
+        for error in parsed.errors
+          if error.code == 'TooFewFields'
+            manifest.splice error.row, 1
+            console?.warn 'Removed row ' + error.row + ', ' + error.message
+
+        # Trim whitespace from keys and values
+        for item in manifest
           metadata = {}
-          for key, i in MANIFEST_COLUMNS when metadataInOrder[i]?
-            metadata[key] = metadataInOrder[i]
-
-          if metadata.filenames?
-            metadata.filenames = metadata.filenames.split listDelimeter
-
-          for imageFilename in metadata.filenames
-            data.manifests[file.name].push metadata
+          for key, value of item
+            metadata[key.trim()] = value.trim()
+          metadata.filenames = [metadata.ThumbURL]
+          data.manifests[file.name].push metadata
 
         resolve()
 
