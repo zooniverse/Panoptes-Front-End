@@ -132,12 +132,15 @@ EditProjectPage = React.createClass
       workflowCreationInProgress: true
 
     workflow.save()
+      .then =>
+        @transitionTo 'edit-project-workflow', projectID: @props.project.id, workflowID: workflow.id
       .catch (error) =>
         @setState workflowCreationError: error
       .then =>
         @props.project.uncacheLink 'workflows'
         @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
-        @setState workflowCreationInProgress: false
+        if @isMounted()
+          @setState workflowCreationInProgress: false
 
   createNewSubjectSet: ->
     subjectSet = apiClient.type('subject_sets').create
@@ -150,11 +153,14 @@ EditProjectPage = React.createClass
       subjectSetCreationInProgress: true
 
     subjectSet.save()
+      .then =>
+        @transitionTo 'edit-project-subject-set', projectID: @props.project.id, subjectSetID: subjectSet.id
       .catch (error) =>
         @setState subjectSetCreationError: error
       .then =>
         @props.project.uncacheLink 'subject_sets'
-        @setState subjectSetCreationInProgress: false
+        if @isMounted()
+          @setState subjectSetCreationInProgress: false
 
   deleteProject: ->
     @setState deletionError: null
