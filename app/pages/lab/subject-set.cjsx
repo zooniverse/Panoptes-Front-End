@@ -5,6 +5,8 @@ apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 Papa = require 'papaparse'
 
+NOOP = Function.prototype
+
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
 INVALID_FILENAME_CHARS = [';'] # TODO: Figure out a good general way to separate filenames.
 
@@ -14,7 +16,7 @@ UploadDropTarget = React.createClass
   getDefaultProps: ->
     accept: 'text/plain'
     multiple: false
-    onSelect: Function.prototype
+    onSelect: NOOP
 
   getInitialState: ->
     dragEntered: false
@@ -32,11 +34,12 @@ UploadDropTarget = React.createClass
 
   render: ->
     style =
-      position: 'relative'
       outline: if @state.dragEntered
         '1px solid green'
       else
         '1px dashed gray'
+      padding: '0.5em 1em'
+      position: 'relative'
 
     <label className="upload-drop-target" style={style} {...@eventsToMakeDropWork()} onDrop={@handleDrop}>
       <input type="file" accept={@props.accept} multiple={@props.multiple} onChange={@handleFileSelection} style={@hiddenInputStyle} />
@@ -57,6 +60,102 @@ UploadDropTarget = React.createClass
 
   handleFileSelection: (e) ->
     @props.onSelect e.target.files
+
+ManifestView = React.createClass
+  displayName: 'ManifestView'
+
+  getDefaultProps: ->
+    name: ''
+    errors: []
+    subjects: []
+    files: {}
+    onRemove: NOOP
+
+  getInitialState: ->
+    showingErrors: false
+    showingMissing: false
+    showingReady: false
+
+  render: ->
+    missingFiles = []
+    subjectsReadyToGo = []
+    subjectsWithMissingFiles = []
+
+    for subject in @props.subjects
+      allLocationsHaveFiles = true
+      for location in subject.locations
+        unless location of @props.files
+          missingFiles.push location
+          allLocationsHaveFiles = false
+      if allLocationsHaveFiles
+        subjectsReadyToGo.push subject
+      else
+        subjectsWithMissingFiles.push subject
+
+    <div className="manifest-view">
+      <div><strong>{@props.name}</strong> ({@props.subjects.length} subjects)</div>
+
+      {unless @props.errors.length is 0
+        <div>
+          <i className="fa fa-exclamation-triangle fa-fw" style={color: 'orange'}></i>
+          {@props.errors.length} parse errors{' '}
+          <button type="button" className="secret-button" onClick={@toggleState.bind this, 'showingErrors'}>
+            <i className="fa fa-eye fa-fw"></i>
+          </button>
+          <br />
+          {if @state.showingErrors
+            <ul>
+              {for {row, message} in @props.errors
+                <li key={row + message}>Row {row}: {message}</li>}
+            </ul>}
+        </div>}
+
+      {unless missingFiles.length is 0
+        <div>
+          <i className="fa fa-exclamation-circle fa-fw" style={color: 'red'}></i>
+          {missingFiles.length} missing files from {subjectsWithMissingFiles.length} subjects{' '}
+          <button type="button" className="secret-button" onClick={@toggleState.bind this, 'showingMissing'}>
+            <i className="fa fa-eye fa-fw"></i>
+          </button>
+          <br />
+          {if @state.showingMissing
+            <ul>
+              {for file, i in missingFiles
+                <li key={i}>{file}</li>}
+            </ul>}
+        </div>}
+
+      <div>
+        <i className="fa fa-thumbs-up fa-fw" style={color: 'green'}></i>
+        {subjectsReadyToGo.length} subjects ready to load{' '}
+        <button type="button" className="secret-button" onClick={@toggleState.bind this, 'showingReady'}>
+          <i className="fa fa-eye fa-fw"></i>
+        </button>
+        {if @state.showingReady
+          <ul>
+            {for {locations, metadata}, i in subjectsReadyToGo
+              <li key={i}>
+                {for location in locations
+                  <div key={location}>{location}</div>}
+                <table>
+                  <tr>
+                    {for key, value of metadata
+                      <th key={key}>{key}</th>}
+                  </tr>
+                  <tr>
+                    {for key, value of metadata
+                      <td key={key}>{value}</td>}
+                  </tr>
+                </table>
+              </li>}
+          </ul>}
+      </div>
+    </div>
+
+  toggleState: (key) ->
+    newState = {}
+    newState[key] = not @state[key]
+    @setState newState
 
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
@@ -91,35 +190,12 @@ EditSubjectSetPage = React.createClass
         <div>TODO: List subjects without a manifest</div>
       else
         <div className="manifests-and-subjects">
-          <div className="manifests-list">
-            Manifests
-            <br />
-            {for name, {subjects, errors} of @state.manifests
-              <div key={name} className="manifest">
-                <strong>{name}</strong> ({subjects.length})
-                {for {row, message} in errors
-                  <div key={row + message} className="form-help error">Error on row {row}: {message}</div>}
-              </div>}
-          </div>
+          Manifests
           <br />
-
-          <div className="subjects-list">
-            Subjects
-            <br />
-            {for name, {subjects} of @state.manifests
-              for {locations, metadata} in subjects
-                <div key={locations.join()} className="subject">
-                  {for file in locations
-                    <div key={file} className="location">
-                      {if file of @state.files
-                        <i className="fa fa-check-circle-o fa-fw"></i>
-                      else
-                        <i className="fa fa-exclamation-circle fa-fw"></i>}
-                      <strong>{locations.join ';'}</strong>
-                    </div>}
-                   <div className="metadata">{JSON.stringify metadata}</div>
-                </div>}
-          </div>
+          <ul>
+            {for name, {errors, subjects} of @state.manifests
+              <li key={name}><ManifestView name={name} errors={errors} subjects={subjects} files={@state.files} /></li>}
+          </ul>
         </div>}
     </div>
 
@@ -166,6 +242,10 @@ EditSubjectSetPage = React.createClass
       if filesInValue?
         filesInMetadata.push filesInValue...
     filesInMetadata
+
+  handleRemoveManifest: (name) ->
+    delete @state.manifests[name]
+    @forceUpdate();
 
 module.exports = React.createClass
   displayName: 'EditSubjectSetPageWrapper'
