@@ -5,11 +5,31 @@ apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 Papa = require 'papaparse'
 {Navigation} = require 'react-router'
+alert = require '../../lib/alert'
+SubjectUploader = require '../../partials/subject-uploader'
 
 NOOP = Function.prototype
 
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
 INVALID_FILENAME_CHARS = [';'] # TODO: Figure out a good general way to separate filenames.
+
+separateSubjects = (subjects, files) ->
+  ready = []
+  incomplete = []
+  missingFiles = []
+
+  for subject in subjects
+    allLocationsHaveFiles = true
+    for location in subject.locations
+      unless location of files
+        missingFiles.push location
+        allLocationsHaveFiles = false
+    if allLocationsHaveFiles
+      ready.push subject
+    else
+      incomplete.push subject
+
+  {ready, incomplete, missingFiles}
 
 UploadDropTarget = React.createClass
   displayName: 'UploadDropTarget'
@@ -78,23 +98,14 @@ ManifestView = React.createClass
     showingReady: false
 
   render: ->
-    missingFiles = []
-    subjectsReadyToGo = []
-    subjectsWithMissingFiles = []
-
-    for subject in @props.subjects
-      allLocationsHaveFiles = true
-      for location in subject.locations
-        unless location of @props.files
-          missingFiles.push location
-          allLocationsHaveFiles = false
-      if allLocationsHaveFiles
-        subjectsReadyToGo.push subject
-      else
-        subjectsWithMissingFiles.push subject
+    {ready, incomplete, missingFiles} = separateSubjects @props.subjects, @props.files
 
     <div className="manifest-view">
-      <div><strong>{@props.name}</strong> ({@props.subjects.length} subjects)</div>
+      <div>
+        <strong>{@props.name}</strong>{' '}
+        ({@props.subjects.length} subjects){' '}
+        <button type="button" onClick={@props.onRemove}>&times;</button>
+      </div>
 
       {unless @props.errors.length is 0
         <div>
@@ -114,7 +125,7 @@ ManifestView = React.createClass
       {unless missingFiles.length is 0
         <div>
           <i className="fa fa-exclamation-circle fa-fw" style={color: 'red'}></i>
-          {missingFiles.length} missing files from {subjectsWithMissingFiles.length} subjects{' '}
+          {missingFiles.length} missing files from {incomplete.length} subjects{' '}
           <button type="button" className="secret-button" onClick={@toggleState.bind this, 'showingMissing'}>
             <i className="fa fa-eye fa-fw"></i>
           </button>
@@ -128,25 +139,22 @@ ManifestView = React.createClass
 
       <div>
         <i className="fa fa-thumbs-up fa-fw" style={color: 'green'}></i>
-        {subjectsReadyToGo.length} subjects ready to load{' '}
+        {ready.length} subjects ready to load{' '}
         <button type="button" className="secret-button" onClick={@toggleState.bind this, 'showingReady'}>
           <i className="fa fa-eye fa-fw"></i>
         </button>
         {if @state.showingReady
           <ul>
-            {for {locations, metadata}, i in subjectsReadyToGo
+            {for {locations, metadata}, i in ready
               <li key={i}>
                 {for location in locations
                   <div key={location}>{location}</div>}
-                <table>
-                  <tr>
-                    {for key, value of metadata
-                      <th key={key}>{key}</th>}
-                  </tr>
-                  <tr>
-                    {for key, value of metadata
-                      <td key={key}>{value}</td>}
-                  </tr>
+                <table className="standard-table">
+                  {for key, value of metadata
+                    <tr key={key}>
+                      <th>{key}</th>
+                      <td key={key}>{value}</td>
+                    </tr>}
                 </table>
               </li>}
           </ul>}
@@ -174,8 +182,6 @@ EditSubjectSetPage = React.createClass
 
   render: ->
     <div>
-      <p><small>TODO</small></p>
-
       <p>
         Name<br />
         <input type="text" name="display_name" value={@props.subjectSet.display_name} onChange={handleInputChange.bind @props.subjectSet} />
@@ -183,9 +189,9 @@ EditSubjectSetPage = React.createClass
 
       <p>Subjects: {@props.subjectSet.set_member_subjects_count}</p>
 
-      <p>
-        (<small>TODO</small> Retirement rules editor)
-      </p>
+      <p>(<small>TODO</small> Retirement rules editor)</p>
+
+      <hr />
 
       <p>
         <UploadDropTarget onSelect={@handleFileSelection}>Add subjects and manifests</UploadDropTarget>
@@ -194,20 +200,29 @@ EditSubjectSetPage = React.createClass
       {if Object.keys(@state.manifests).length is 0
         <div>TODO: List subjects without a manifest</div>
       else
+        subjectsToCreate = 0
+
         <div className="manifests-and-subjects">
-          Manifests
-          <br />
           <ul>
             {for name, {errors, subjects} of @state.manifests
-              <li key={name}><ManifestView name={name} errors={errors} subjects={subjects} files={@state.files} /></li>}
+              {ready} = separateSubjects subjects, @state.files
+              subjectsToCreate += ready.length
+
+              <li key={name}>
+                <ManifestView name={name} errors={errors} subjects={subjects} files={@state.files} onRemove={@handleRemoveManifest.bind this, name} />
+              </li>}
           </ul>
+
+          <button type="button" className="major-button" onClick={@createSubjects}>Upload {subjectsToCreate} new subjects</button>
         </div>}
 
-        <p>
-          <button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteSubjectSet}>Delete</button>
-          {if @state.deletionError?
-            <span className="form-help error">{@state.deletionError.message}</span>}
-        </p>
+      <hr />
+
+      <p>
+        <button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteSubjectSet}>Delete</button>
+        {if @state.deletionError?
+          <span className="form-help error">{@state.deletionError.message}</span>}
+      </p>
     </div>
 
   handleFileSelection: (files) ->
@@ -257,6 +272,14 @@ EditSubjectSetPage = React.createClass
   handleRemoveManifest: (name) ->
     delete @state.manifests[name]
     @forceUpdate();
+
+  createSubjects: ->
+    allSubjects = []
+    for name, {subjects} of @state.manifests
+      {ready} = separateSubjects subjects, @state.files
+      allSubjects.push ready...
+
+    alert <SubjectUploader subjects={allSubjects} files={@state.files} project={@props.project} subjectSet={@props.subjectSet} autoStart />
 
   deleteSubjectSet: ->
     @setState deletionError: null
