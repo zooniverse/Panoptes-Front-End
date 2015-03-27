@@ -32,9 +32,10 @@ routes = <Route handler={App}>
   <Route path="projects/:owner/:name" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
     <Route name="project-science-case" path="science-case" handler={require './pages/project/science-case'} />
-    <Route name="project-status" path="status" handler={require './pages/project/status'} />
-    <Route name="project-team" path="team" handler={require './pages/project/team'} />
+    <Route name="project-results" path="results" handler={require './pages/project/results'} />
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
+    <Route name="project-faq" path="faq" handler={require './pages/project/faq'} />
+    <Route name="project-education" path="education" handler={require './pages/project/education'} />
     <Route name="project-talk" path="talk" handler={require './pages/project/talk'} />
   </Route>
 

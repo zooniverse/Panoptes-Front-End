@@ -10,6 +10,9 @@ export VENDOR_JS="vendor.js"
 export SRC_CSS="css/main.styl"
 export OUT_CSS="main.css"
 
+export SRC_HTML="index.erb"
+export OUT_HTML="index.html"
+
 # NOTE: Non-dev dependencies are assumed to be front-end modules.
 externals=$(node -p "Object.keys(require('./package').dependencies).join('\n');")
 
@@ -22,4 +25,10 @@ function flag_externals {
   echo $out
 }
 
-export flag_externals
+function rename_with_hash {
+  md5=$(md5 -q "$1")
+  fullname=$(basename "$1")
+  filename="${fullname%.*}"
+  extension="${fullname##*.}"
+  echo "$filename.$md5.$extension"
+}

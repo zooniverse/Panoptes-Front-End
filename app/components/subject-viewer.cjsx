@@ -1,11 +1,9 @@
 React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 alert = require '../lib/alert'
+getSubjectLocation = require '../lib/get-subject-location'
 
 NOOP = Function.prototype
-
-READABLE_FORMATS =
-  image: ['jpeg', 'png', 'svg+xml', 'gif']
 
 ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'inline-block', position: 'relative'
@@ -35,15 +33,8 @@ module.exports = React.createClass
     unless nextProps.subject is @props.subject and nextProps.frame is @props.frame
       @setState loading: true
 
-  getReadableLocation: ->
-    for mimeType, src of @props.subject?.locations?[@props.frame] ? {}
-      [type, format] = mimeType.split '/'
-      if type of READABLE_FORMATS and format in READABLE_FORMATS[type]
-        break
-    {type, format, src}
-
   render: ->
-    {type, format, src} = @getReadableLocation()
+    {type, format, src} = getSubjectLocation @props.subject, @props.frame
 
     mainDisplay = switch type
       when 'image'

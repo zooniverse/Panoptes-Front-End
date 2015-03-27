@@ -24,15 +24,16 @@ module.exports = React.createClass
       </div>
       {if @props.help
         <p className="help">
-          <button type="button" className="pill-button" onClick={@toggleHelp}>
-            Need some help?
-            {if @state.helping
-              <Tooltip attachment="middle right" targetAttachment="middle left" >
-                <Markdown className="classification-task-help">{@props.help}</Markdown>
-              </Tooltip>}
-          </button>
+          <br />
+          <small>
+            <strong>
+              <button type="button" className="minor-button" onClick={@showHelp}>
+                Need some help?
+              </button>
+            </strong>
+          </small>
         </p>}
     </div>
 
-  toggleHelp: ->
-    @setState helping: not @state.helping
+  showHelp: ->
+    alert <Markdown className="classification-task-help">{@props.help}</Markdown>

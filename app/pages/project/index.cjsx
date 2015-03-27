@@ -16,9 +16,10 @@ counterpart.registerTranslations 'en',
     loading: 'Loading project'
     nav:
       science: 'Science'
-      status: 'Status'
-      team: 'Team'
+      results: 'Results'
       classify: 'Classify'
+      faq: 'FAQ'
+      education: 'Education'
       discuss: 'Discuss'
 
 ProjectPage = React.createClass
@@ -49,20 +50,26 @@ ProjectPage = React.createClass
 
           <nav className="project-nav tabbed-content-tabs">
             <Link to="project-home" params={params} className="tabbed-content-tab">
-              <img src={@props.project.avatar} className="project-avatar" /> {@props.project.display_name}
+              <img src={@props.project.avatar} className="avatar" /> {@props.project.display_name}
             </Link>
             <Link to="project-science-case" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.science" />
             </Link>
-            <Link to="project-status" params={params} className="tabbed-content-tab">
-              <Translate content="project.nav.status" />
-            </Link>
-            <Link to="project-team" params={params} className="tabbed-content-tab">
-              <Translate content="project.nav.team" />
-            </Link>
+            {if @props.project.result
+              <Link to="project-results" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.results" />
+              </Link>}
             <Link to="project-classify" params={params} className="classify tabbed-content-tab">
               <Translate content="project.nav.classify" />
             </Link>
+            {if @props.project.faq
+              <Link to="project-faq" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.faq" />
+              </Link>}
+            {if @props.project.education_content
+              <Link to="project-education" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.education" />
+              </Link>}
             <Link to="project-talk" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.discuss" />
             </Link>

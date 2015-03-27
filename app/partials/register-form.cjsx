@@ -17,7 +17,7 @@ counterpart.registerTranslations 'en',
     looksGood: 'Looks good'
     userName: 'User name'
     badChars: 'Don’t use weird characters: %(chars)s'
-    loginConflict: 'That login is taken'
+    nameConflict: 'That username is taken'
     forgotPassword: 'Forget your password?'
     password: 'Password'
     passwordTooShort: 'Too short'
@@ -30,6 +30,7 @@ counterpart.registerTranslations 'en',
     whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc'
     agreeToPrivacyPolicy: 'You agree to our %(link)s (required)'
     privacyPolicy: 'privacy policy'
+    okayToEmail: 'It’s okay to send me email every once in a while.'
     register: 'Register'
     alreadySignedIn: 'Signed in as %(name)s'
     signOut: 'Sign out'
@@ -42,8 +43,8 @@ module.exports = React.createClass
   getInitialState: ->
     whyRealName: false
     user: null
-    badLoginChars: null
-    loginConflict: null
+    badNameChars: null
+    nameConflict: null
     passwordTooShort: null
     passwordsDontMatch: null
     emailConflict: null
@@ -59,22 +60,22 @@ module.exports = React.createClass
     @promiseToSetState user: auth.checkCurrent()
 
   render: ->
-    {badLoginChars, loginConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
+    {badNameChars, nameConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
     <form onSubmit={@handleSubmit}>
       <label>
         <span className="columns-container inline spread">
           <Translate content="registerForm.userName" />
-          {if badLoginChars?.length > 0
-            chars = for char in badLoginChars
+          {if badNameChars?.length > 0
+            chars = for char in badNameChars
               <kbd key={char}>{char}</kbd>
             <Translate className="form-help error" content="registerForm.badChars" chars={chars} />
-          else if "loginConflict" of @state.pending
+          else if "nameConflict" of @state.pending
             <LoadingIndicator />
-          else if loginConflict?
-            if loginConflict
+          else if nameConflict?
+            if nameConflict
               <span className="form-help error">
-                <Translate content="registerForm.loginConflict" />{' '}
+                <Translate content="registerForm.nameConflict" />{' '}
                 <a href="https://www.zooniverse.org/password/reset" target="_blank">
                   <Translate content="registerForm.forgotPassword" />
                 </a>
@@ -84,7 +85,7 @@ module.exports = React.createClass
                 <Translate content="registerForm.looksGood" />
               </span>}
         </span>
-        <input type="text" ref="login" className="standard-input full" disabled={@state.user?} autoFocus onChange={@handleLoginChange} />
+        <input type="text" ref="name" className="standard-input full" disabled={@state.user?} autoFocus onChange={@handleNameChange} />
       </label>
 
       <br />
@@ -157,6 +158,14 @@ module.exports = React.createClass
         <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
         {privacyPolicyLink = <a href="#/todo/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
         <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
+      </label>
+
+      <br />
+      <br />
+
+      <label>
+        <input type="checkbox" ref="okayToEmail" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
+        <Translate component="span" content="registerForm.okayToEmail" />
       </label><br />
 
       <p style={textAlign: 'center'}>
@@ -178,23 +187,23 @@ module.exports = React.createClass
       </div>
     </form>
 
-  handleLoginChange: ->
-    login = @refs.login.getDOMNode().value
+  handleNameChange: ->
+    name = @refs.name.getDOMNode().value
 
-    exists = login.length isnt 0
-    badChars = (char for char in login.split('') when char isnt encodeURIComponent char)
+    exists = name.length isnt 0
+    badChars = (char for char in name.split('') when char isnt encodeURIComponent char)
 
     @setState
-      badLoginChars: badChars
-      loginConflict: null
+      badNameChars: badChars
+      nameConflict: null
 
     if exists and badChars.length is 0
-      @debouncedCheckForLoginConflict ?= debounce @checkForLoginConflict, REMOTE_CHECK_DELAY
-      @debouncedCheckForLoginConflict login
+      @debouncedCheckFornameConflict ?= debounce @checkFornameConflict, REMOTE_CHECK_DELAY
+      @debouncedCheckFornameConflict name
 
-  debouncedCheckForLoginConflict: null
-  checkForLoginConflict: (login) ->
-    @promiseToSetState loginConflict: apiClient.type('users').get({login}, 1).then (users) ->
+  debouncedCheckFornameConflict: null
+  checkFornameConflict: (display_name) ->
+    @promiseToSetState nameConflict: apiClient.type('users').get({display_name}).then (users) ->
       users.length isnt 0
 
   handlePasswordChange: ->
@@ -237,19 +246,20 @@ module.exports = React.createClass
           error.message.match(/email(.+)taken/mi) ? false
 
   isFormValid: ->
-    {badLoginChars, loginConflict, passwordsDontMatch, emailConflict} = @state
+    {badNameChars, nameConflict, passwordsDontMatch, emailConflict} = @state
     agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
-    badLoginChars?.length is 0 and not loginConflict and not passwordsDontMatch and not emailConflict and agreesToPrivacyPolicy
+    badNameChars?.length is 0 and not nameConflict and not passwordsDontMatch and not emailConflict and agreesToPrivacyPolicy
 
   handleSubmit: (e) ->
     e.preventDefault()
-    login = @refs.login.getDOMNode().value
+    display_name = @refs.name.getDOMNode().value
     password = @refs.password.getDOMNode().value
     email = @refs.email.getDOMNode().value
     realName = @refs.realName.getDOMNode().value
+    global_email_communication = @refs.okayToEmail.getDOMNode().checked
 
     @props.onSubmit?()
-    auth.register {login, password, email, realName}
+    auth.register {display_name, password, email, global_email_communication}
       .then @props.onSuccess
       .catch @props.onFailure
 

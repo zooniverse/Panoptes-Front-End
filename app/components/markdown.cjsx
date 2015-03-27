@@ -1,8 +1,14 @@
 React = require 'react'
-marked = require 'marked'
-emojify = require 'emojify.js'
+MarkdownIt = require 'markdown-it'
+MarkdownItContainer = require 'markdown-it-container'
 
-EMOJI_ROOT = 'http://www.tortue.me/emoji'
+markdownIt = new MarkdownIt
+markdownIt.use require 'markdown-it-emoji'
+markdownIt.use require 'markdown-it-sub'
+markdownIt.use require 'markdown-it-sup'
+markdownIt.use require 'markdown-it-footnote'
+markdownIt.use MarkdownItContainer, 'partners'
+markdownIt.use MarkdownItContainer, 'attribution'
 
 module.exports = React.createClass
   displayName: 'Markdown'
@@ -10,18 +16,16 @@ module.exports = React.createClass
   propTypes:
     children: React.PropTypes.string
 
-  replaceEmoji: (match, icon) ->
-    "<img class='emoji' src='#{EMOJI_ROOT}/#{icon}.png' alt='#{match}' title='#{match}' />"
+  getDefaultProps: ->
+    tag: 'div'
+    inline: false
 
   render: ->
-    tag = @props.tag ? 'div'
+    markup = if @props.inline
+      markdownIt.renderInline @props.children
+    else
+      markdownIt.render @props.children
 
-    markedOptions =
-      sanitize: true
-      breaks: @props.breaks ? true
-
-    className = @props.className ? ''
-    markup = marked @props.children ? '', markedOptions
-    __html = emojify.replace markup, @replaceEmoji
-
-    React.createElement tag, {className: "markdown #{className}", dangerouslySetInnerHTML: {__html}}
+    React.createElement @props.tag,
+      className: "markdown #{@props.className ? ''}"
+      dangerouslySetInnerHTML: __html: markup

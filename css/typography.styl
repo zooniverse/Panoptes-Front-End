@@ -3,6 +3,23 @@ html
   color: FOREGROUND
   font: 400 15px/1.5 "Open Sans", "Gill Sans", Arial, sans-serif
 
+.attribution
+  font-size: 0.7em
+  opacity: 0.7
+  text-align: center
+
+  &:last-child
+    column-span: all
+
+.partners
+  text-align: center
+
+  &:last-child
+    column-span: all
+
+  img
+    max-width: 100%
+
 hr
   border: 0 solid rgba(gray, 0.5)
   border-top-width: 1px
@@ -25,4 +42,4 @@ h4
 img
   &:not([src]),
   &[src=""]
-    background-stripes: black yellow 20%
+    background-stripes: lighten(MAIN_HIGHLIGHT, 20%) darken(SECOND_HIGHLIGHT, 20%) 20%
