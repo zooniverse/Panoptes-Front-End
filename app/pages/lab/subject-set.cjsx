@@ -4,6 +4,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 Papa = require 'papaparse'
+{Navigation} = require 'react-router'
 
 NOOP = Function.prototype
 
@@ -160,12 +161,16 @@ ManifestView = React.createClass
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
 
+  mixins: [Navigation]
+
   getDefaultProps: ->
     subjectSet: null
 
   getInitialState: ->
     manifests: {}
     files: {}
+    deletionError: null
+    deletionInProgress: false
 
   render: ->
     <div>
@@ -197,6 +202,12 @@ EditSubjectSetPage = React.createClass
               <li key={name}><ManifestView name={name} errors={errors} subjects={subjects} files={@state.files} /></li>}
           </ul>
         </div>}
+
+        <p>
+          <button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteSubjectSet}>Delete</button>
+          {if @state.deletionError?
+            <span className="form-help error">{@state.deletionError.message}</span>}
+        </p>
     </div>
 
   handleFileSelection: (files) ->
@@ -246,6 +257,24 @@ EditSubjectSetPage = React.createClass
   handleRemoveManifest: (name) ->
     delete @state.manifests[name]
     @forceUpdate();
+
+  deleteSubjectSet: ->
+    @setState deletionError: null
+
+    confirmed = confirm 'Really delete this subject set and all its subjects?'
+
+    if confirmed
+      @setState deletionInProgress: true
+
+      this.props.subjectSet.delete()
+        .then =>
+          @props.project.uncacheLink 'subject_sets'
+          @transitionTo 'edit-project-details', projectID: @props.project.id
+        .catch (error) =>
+          @setState deletionError: error
+        .then =>
+          if @isMounted()
+            @setState deletionInProgress: false
 
 module.exports = React.createClass
   displayName: 'EditSubjectSetPageWrapper'
