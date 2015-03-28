@@ -279,7 +279,14 @@ EditSubjectSetPage = React.createClass
       {ready} = separateSubjects subjects, @state.files
       allSubjects.push ready...
 
-    alert <SubjectUploader subjects={allSubjects} files={@state.files} project={@props.project} subjectSet={@props.subjectSet} autoStart />
+    uploadAlert = (resolve) =>
+      <SubjectUploader subjects={allSubjects} files={@state.files} project={@props.project} subjectSet={@props.subjectSet} autoStart onComplete={resolve} />
+
+    startUploading = alert uploadAlert
+      .then =>
+        @setState
+          manifests: {}
+          files: {}
 
   deleteSubjectSet: ->
     @setState deletionError: null

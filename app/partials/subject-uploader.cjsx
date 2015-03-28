@@ -1,6 +1,8 @@
 React = require 'react'
 apiClient = require '../api/client'
 
+NOOP = Function.prototype
+
 TYPES_BY_EXTENSION =
   '.jpg': 'image/jpeg'
   '.jpeg': 'image/jpeg'
@@ -27,6 +29,7 @@ module.exports = React.createClass
     project: null
     subjectSet: null
     autoStart: false
+    onComplete: NOOP
 
   getInitialState: ->
     inProgress: false
@@ -91,7 +94,13 @@ module.exports = React.createClass
     @props.subjectSet.addLink 'subjects', newSubjectIDs
       .then =>
         @state.batch.splice 0
+
+        if @state.current is @props.subjects.length
+          @props.onComplete()
+
       .catch (error) =>
         console.error 'TODO: handle linking error', error
+
       .then =>
-        @setState inProgress: false
+        if @isMounted()
+          @setState inProgress: false
