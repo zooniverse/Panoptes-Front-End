@@ -7,6 +7,7 @@ Papa = require 'papaparse'
 {Navigation} = require 'react-router'
 alert = require '../../lib/alert'
 SubjectUploader = require '../../partials/subject-uploader'
+BoundResourceMixin = require '../../lib/bound-resource-mixin'
 
 NOOP = Function.prototype
 
@@ -30,6 +31,54 @@ separateSubjects = (subjects, files) ->
       incomplete.push subject
 
   {ready, incomplete, missingFiles}
+
+RetirementRulesEditor = React.createClass
+  displayName: 'RetirementRulesEditor'
+
+  getDefaultProps: ->
+    subjectSet: null
+
+  getInitialState: ->
+    saveError: null
+    saveInProgress: false
+
+  defaultCriteria: 'classification_count'
+
+  defaultOptions:
+    classification_count: count: 15
+
+  render: ->
+    criteria = @props.subjectSet.retirement?.criteria ? @defaultCriteria
+    options = @props.subjectSet.retirement?.options ? @defaultOptions[criteria]
+
+    <span className="retirement-rules-editor">
+      <select ref="criteriaSelect" value={criteria} disabled onChange={@handleChangeCriteria}>
+        <option value="classification_count">Classification count</option>
+      </select>{' '}
+
+      {switch criteria
+        when 'classification_count'
+          <input type="number" name="count" value={options.count} data-json-value={true} min="1" max="100" step="1" onChange={@handleChangeOption} />
+        else}
+    </span>
+
+  handleChangeCriteria: (e) ->
+    @props.subjectSet.update
+      'retirement.criteria': e.target.value
+      'retirement.options': @defaultOptions[e.target.value]
+
+  handleChangeOption: (e) ->
+    @props.subjectSet.update 'retirement.criteria': @props.subjectSet.retirement?.criteria ? @defaultCriteria
+    @props.subjectSet.update 'retirement.options': @props.subjectSet.retirement.options ? @defaultOptions[@props.subjectSet.retirement.criteria]
+
+    updateKey = "retirement.options.#{e.target.name}"
+    newOptionsData = {}
+    if e.target.type is 'number'
+      newOptionsData[updateKey] = parseFloat e.target.value
+    else
+      newOptionsData[updateKey] = e.target.value
+
+    @props.subjectSet.update newOptionsData
 
 UploadDropTarget = React.createClass
   displayName: 'UploadDropTarget'
@@ -169,7 +218,9 @@ ManifestView = React.createClass
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
 
-  mixins: [Navigation]
+  mixins: [BoundResourceMixin, Navigation]
+
+  boundResource: 'subjectSet'
 
   getDefaultProps: ->
     subjectSet: null
@@ -182,14 +233,17 @@ EditSubjectSetPage = React.createClass
 
   render: ->
     <div>
-      <p>
-        Name<br />
-        <input type="text" name="display_name" value={@props.subjectSet.display_name} onChange={handleInputChange.bind @props.subjectSet} />
-      </p>
+      <form onSubmit={@handleSubmit}>
+        <p>Name <input type="text" name="display_name" value={@props.subjectSet.display_name} onChange={@handleChange} /></p>
+        <p>Retirement <RetirementRulesEditor subjectSet={@props.subjectSet} /></p>
 
-      <p>Subjects: {@props.subjectSet.set_member_subjects_count}</p>
+        <button type="submit" className="standard-button" disabled={not @props.subjectSet.hasUnsavedChanges()}>Save</button>
+        {@renderSaveStatus()}
+      </form>
 
-      <p>(<small>TODO</small> Retirement rules editor)</p>
+      <hr />
+
+      <p>Subjects: <strong>{@props.subjectSet.set_member_subjects_count}</strong></p>
 
       <hr />
 
@@ -219,11 +273,15 @@ EditSubjectSetPage = React.createClass
       <hr />
 
       <p>
-        <button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteSubjectSet}>Delete</button>
+        <small><button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteSubjectSet}>Delete this subject set</button></small>
         {if @state.deletionError?
           <span className="form-help error">{@state.deletionError.message}</span>}
       </p>
     </div>
+
+  handleSubmit: (e) ->
+    e.preventDefault()
+    @saveResource()
 
   handleFileSelection: (files) ->
     for file in files

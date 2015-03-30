@@ -54,5 +54,7 @@ module.exports =
       <span className="form-help">Saving...</span>
     else if @state.saveError
       <span className="form-help error">{@state.saveError.message}</span>
-    else if @state.saved
+    else if @state.saved and not @_getResource().hasUnsavedChanges()
       <span className="form-help success">Saved!</span>
+    else
+      null

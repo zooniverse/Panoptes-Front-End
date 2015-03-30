@@ -14,14 +14,6 @@ module.exports = (e) ->
   if e.target.dataset.jsonValue
     value = JSON.parse value
 
-  path = e.target.name.split '.'
-  updatedProperty = path[0]
-
-  targetObject = this
-  until path.length is 1
-    targetObject = targetObject[path.shift()]
-  lastKey = path[0]
-
-  targetObject[lastKey] = value
-
-  @update updatedProperty
+  changes = {}
+  changes[e.target.name] = value
+  @update changes
