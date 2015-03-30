@@ -8,6 +8,7 @@ Papa = require 'papaparse'
 alert = require '../../lib/alert'
 SubjectUploader = require '../../partials/subject-uploader'
 BoundResourceMixin = require '../../lib/bound-resource-mixin'
+UploadDropTarget = require '../../components/upload-drop-target'
 
 NOOP = Function.prototype
 
@@ -79,57 +80,6 @@ RetirementRulesEditor = React.createClass
       newOptionsData[updateKey] = e.target.value
 
     @props.subjectSet.update newOptionsData
-
-UploadDropTarget = React.createClass
-  displayName: 'UploadDropTarget'
-
-  getDefaultProps: ->
-    accept: 'text/plain'
-    multiple: false
-    onSelect: NOOP
-
-  getInitialState: ->
-    dragEntered: false
-
-  eventsToMakeDropWork: ->
-    onDragEnter: @handleDrag.bind this, true
-    onDragExit: @handleDrag.bind this, false
-    onDragOver: @handleDrag.bind this, null
-
-  hiddenInputStyle:
-    height: 0
-    opacity: 0
-    position: 'absolute'
-    width: 0
-
-  render: ->
-    style =
-      outline: if @state.dragEntered
-        '1px solid green'
-      else
-        '1px dashed gray'
-      padding: '0.5em 1em'
-      position: 'relative'
-
-    <label className="upload-drop-target" style={style} {...@eventsToMakeDropWork()} onDrop={@handleDrop}>
-      <input type="file" accept={@props.accept} multiple={@props.multiple} onChange={@handleFileSelection} style={@hiddenInputStyle} />
-      {@props.children}
-    </label>
-
-  handleDrag: (enter, e) ->
-    e.stopPropagation()
-    e.preventDefault()
-    if enter?
-      @setState dragEntered: enter
-
-  handleDrop: (e) ->
-    e.stopPropagation()
-    e.preventDefault()
-    @props.onSelect e.dataTransfer.files
-    @setState dragEntered: false
-
-  handleFileSelection: (e) ->
-    @props.onSelect e.target.files
 
 ManifestView = React.createClass
   displayName: 'ManifestView'
@@ -234,7 +184,7 @@ EditSubjectSetPage = React.createClass
   render: ->
     <div>
       <form onSubmit={@handleSubmit}>
-        <p>Name <input type="text" name="display_name" value={@props.subjectSet.display_name} onChange={@handleChange} /></p>
+        <p>Name <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input" onChange={@handleChange} /></p>
         <p>Retirement <RetirementRulesEditor subjectSet={@props.subjectSet} /></p>
 
         <button type="submit" className="standard-button" disabled={not @props.subjectSet.hasUnsavedChanges()}>Save</button>
@@ -248,7 +198,11 @@ EditSubjectSetPage = React.createClass
       <hr />
 
       <p>
-        <UploadDropTarget onSelect={@handleFileSelection}>Add subjects and manifests</UploadDropTarget>
+        <UploadDropTarget onSelect={@handleFileSelection}>
+          Drop manifests and subject data here.<br />
+          Manifests must be <code>.csv</code> or <code>.tsv</code>.<br />
+          Subjects can be any of: {<span key={ext}><code>{ext}</code>{' '}</span> for ext in VALID_SUBJECT_EXTENSIONS}.
+        </UploadDropTarget>
       </p>
 
       {if Object.keys(@state.manifests).length is 0
