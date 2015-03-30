@@ -173,11 +173,20 @@ EditSubjectSetPage = React.createClass
 module.exports = React.createClass
   displayName: 'EditSubjectSetPageWrapper'
 
+  mixins: [BoundResourceMixin]
+
+  boundResource: ->
+    @_subjectSet
+
   getDefaultProps: ->
     params: null
 
   render: ->
     <PromiseRenderer promise={apiClient.type('subject_sets').get @props.params.subjectSetID}>{(subjectSet) =>
+      # Use this for `onTransitionFrom` change test.
+      # This is kinda a hack, but it's fine for now.
+      @_subjectSet = subjectSet
+
       <ChangeListener target={subjectSet}>{=>
         <EditSubjectSetPage {...@props} subjectSet={subjectSet} />
       }</ChangeListener>
