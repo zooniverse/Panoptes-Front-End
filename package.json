@@ -6,6 +6,8 @@
     "counterpart": "^0.16.4",
     "debounce": "^1.0.0",
     "json-api-client": "^0.2.2",
+    "lodash.merge": "^2.4.1",
+    "moment": "^2.9.0",
     "markdown-it": "^4.0.1",
     "markdown-it-container": "^1.0.0",
     "markdown-it-emoji": "^1.0.0",

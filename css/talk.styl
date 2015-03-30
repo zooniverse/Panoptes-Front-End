@@ -1,0 +1,270 @@
+// talk default css rules
+TALK_BACKGROUND = #F2F1F1
+TALK_BORDER_RADIUS = 3px
+TALK_PADDING = 5px
+TALK_MARGIN = 10px auto
+
+.talk-module // shared styles among talk box shaped things
+  background: TALK_BACKGROUND
+  border-radius: TALK_BORDER_RADIUS
+  padding: TALK_PADDING
+  margin: TALK_MARGIN
+  box-sizing: border-box
+  color: black
+
+.talk-text-input // shared styles among talk text inputs
+  border: none
+
+.talk-left-buttons
+  margin: 2px 2px 2px 0
+
+.talk-page-header
+  font-weight: 100
+  text-align: center
+
+.polaroid-border
+  background: #fff
+  padding: 10px 10px 20px 10px
+  margin: 10px
+
+.talk
+  *
+    box-sizing: border-box
+
+  input, textarea
+    border: none
+    font-size: 1.0em
+    font-family: inherit
+
+  button
+    @extend .standard-button
+    padding: 0.2em 0.4em
+    background: LIGHT_GREY
+    font-size: 0.8em
+    border-radius: 3px
+
+  select
+    border: 2px solid LIGHT_GREY
+    background: #fff
+    border-radius: TALK_BORDER_RADIUS
+    font-size: 0.8em
+    padding: 0.2em
+
+  .talk-list-content
+    display: flex
+    section
+      width: 100%
+
+  .talk-sidebar
+    @extend .talk-module
+    width: 300px
+    margin: 10px 0 10px 10px
+
+  .talk-moderation
+    margin-bottom: 10px
+
+    > button
+      border: 1px solid LIGHT_GREY
+      color: LIGHT_GREY
+      background: transparent
+
+      &:hover
+        color: orangered
+
+    .talk-moderation-children
+      p
+        margin: 0
+
+      input
+        width: 50%
+        display: block
+
+      textarea
+        width: 100%
+
+      button
+        margin: 5px 0 10px 0
+
+      &.closed
+        overflow: hidden
+        max-height: 0
+      &.open
+        @extend .talk-module
+        margin-bottom: 10px
+        border-left: 4px solid orangered
+
+  .talk-board
+    .talk-board-new-discussion
+      @extend .talk-module
+      padding: 0px
+      input, h2
+        margin: TALK_PADDING
+      input
+        border: none
+        width: 50%
+
+    .talk-board-discussions
+      width: 80%
+      float: left
+
+  .talk-board-preview
+    @extend .talk-module
+
+  .talk-subject-display
+    @extend .talk-module
+    @extend .polaroid-border
+    display: inline-block
+    text-align: center
+
+    img
+      max-width: 300px
+
+    p
+      margin: 0
+      font-size: 0.8em
+
+    h1
+      font-size: 2.5em
+
+  .talk-discussion-preview
+    @extend .talk-module
+    background: transparent
+    border-radius: 0
+    border-top: 1px solid LIGHT_GREY
+
+    &:last-child
+      border-bottom: 1px solid LIGHT_GREY
+
+    h1
+      font-weight: 100
+    p
+      margin: 0
+    .talk-discussion-preview-author
+      font-size: 0.7em
+      margin-top: 0.3em
+
+  .talk-discussion
+    max-width: 960px
+    margin: 0 auto
+
+    .talk-comment-box
+      width: 80%
+
+  .talk-comment
+    overflow: auto
+
+    .talk-comment-preview-content
+      blockquote
+        opacity: 0.5
+
+  .talk-comment-author
+    @extend .talk-module
+    text-align: center
+    background: transparent
+    font-size: 0.75em
+    color: grey
+    float: left
+    width: 20%
+
+    img
+      border-radius: 50%
+
+    p
+      width: 40%
+      margin: 0 auto
+
+  .talk-comment-body
+    width: 80%
+    float: left
+    @extend .talk-module
+
+    .talk-comment-date
+      margin: 0
+      font-size: 0.6em
+
+    .talk-comment-report-form
+      button
+        display: block
+
+    .talk-comment-links
+      button:not(:last-child)
+        @extend .talk-left-buttons
+
+      .talk-comment-like-button i.upvoted
+        color: MAIN_HIGHLIGHT
+
+  .talk-comment-feedback
+    color: green
+    text-decoration: italic
+
+  .talk-comment-box
+    @extend .talk-module
+    width: 100%
+    overflow: auto
+
+    .talk-comment-focus-image
+      float: left
+      max-width: 150px
+
+    .talk-comment-form
+      float: left
+      width: 100%
+
+      textarea
+        @extend .talk-text-input
+        width: 100%
+        height: 150px
+
+      section button
+        &.active
+          opacity: 0.5
+        &:not(:last-child)
+          @extend .talk-left-buttons
+
+    .talk-comment-buttons-container
+      display: block
+      float: left
+      width: 100%
+
+      button:not(:last-child)
+        @extend .talk-left-buttons
+
+    .talk-comment-children
+      float: left
+      width: 100%
+
+    .talk-comment-image-selector
+      .talk-comment-suggested-images
+        overflow-x: scroll
+        overflow-y: hidden
+        white-space: nowrap
+
+      .talk-comment-image-item
+        @extend .polaroid-border
+        position: relative
+        display: inline-block
+
+        img
+          max-width: 300px
+          display: inline-block
+          vertical-align: top
+
+        .image-card-select
+          position: absolute
+          text-align: center
+          top: 0
+          left: 0
+          right: 0
+          bottom: 0
+
+          button
+            opacity: 0
+            position: absolute
+            transform: translate(-50%, -50%)
+            transition: opacity .25s
+            top: 50%
+
+          &:hover
+            background: rgba(255,255,255,0.5)
+            button
+              opacity: 1
