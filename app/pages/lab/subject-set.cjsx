@@ -8,162 +8,14 @@ Papa = require 'papaparse'
 alert = require '../../lib/alert'
 SubjectUploader = require '../../partials/subject-uploader'
 BoundResourceMixin = require '../../lib/bound-resource-mixin'
+RetirementRulesEditor = require '../../components/retirement-rules-editor'
 UploadDropTarget = require '../../components/upload-drop-target'
+ManifestView = require '../../components/manifest-view'
 
 NOOP = Function.prototype
 
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
 INVALID_FILENAME_CHARS = [';'] # TODO: Figure out a good general way to separate filenames.
-
-separateSubjects = (subjects, files) ->
-  ready = []
-  incomplete = []
-  missingFiles = []
-
-  for subject in subjects
-    allLocationsHaveFiles = true
-    for location in subject.locations
-      unless location of files
-        missingFiles.push location
-        allLocationsHaveFiles = false
-    if allLocationsHaveFiles
-      ready.push subject
-    else
-      incomplete.push subject
-
-  {ready, incomplete, missingFiles}
-
-RetirementRulesEditor = React.createClass
-  displayName: 'RetirementRulesEditor'
-
-  getDefaultProps: ->
-    subjectSet: null
-
-  getInitialState: ->
-    saveError: null
-    saveInProgress: false
-
-  defaultCriteria: 'classification_count'
-
-  defaultOptions:
-    classification_count: count: 15
-
-  render: ->
-    criteria = @props.subjectSet.retirement?.criteria ? @defaultCriteria
-    options = @props.subjectSet.retirement?.options ? @defaultOptions[criteria]
-
-    <span className="retirement-rules-editor">
-      <select ref="criteriaSelect" value={criteria} disabled onChange={@handleChangeCriteria}>
-        <option value="classification_count">Classification count</option>
-      </select>{' '}
-
-      {switch criteria
-        when 'classification_count'
-          <input type="number" name="count" value={options.count} data-json-value={true} min="1" max="100" step="1" onChange={@handleChangeOption} />
-        else}
-    </span>
-
-  handleChangeCriteria: (e) ->
-    @props.subjectSet.update
-      'retirement.criteria': e.target.value
-      'retirement.options': @defaultOptions[e.target.value]
-
-  handleChangeOption: (e) ->
-    @props.subjectSet.update 'retirement.criteria': @props.subjectSet.retirement?.criteria ? @defaultCriteria
-    @props.subjectSet.update 'retirement.options': @props.subjectSet.retirement.options ? @defaultOptions[@props.subjectSet.retirement.criteria]
-
-    updateKey = "retirement.options.#{e.target.name}"
-    newOptionsData = {}
-    if e.target.type is 'number'
-      newOptionsData[updateKey] = parseFloat e.target.value
-    else
-      newOptionsData[updateKey] = e.target.value
-
-    @props.subjectSet.update newOptionsData
-
-ManifestView = React.createClass
-  displayName: 'ManifestView'
-
-  getDefaultProps: ->
-    name: ''
-    errors: []
-    subjects: []
-    files: {}
-    onRemove: NOOP
-
-  getInitialState: ->
-    showingErrors: false
-    showingMissing: false
-    showingReady: false
-
-  render: ->
-    {ready, incomplete, missingFiles} = separateSubjects @props.subjects, @props.files
-
-    <div className="manifest-view">
-      <div>
-        <strong>{@props.name}</strong>{' '}
-        ({@props.subjects.length} subjects){' '}
-        <button type="button" onClick={@props.onRemove}>&times;</button>
-      </div>
-
-      {unless @props.errors.length is 0
-        <div>
-          <i className="fa fa-exclamation-triangle fa-fw" style={color: 'orange'}></i>
-          {@props.errors.length} parse errors{' '}
-          <button type="button" className="secret-button" onClick={@toggleState.bind this, 'showingErrors'}>
-            <i className="fa fa-eye fa-fw"></i>
-          </button>
-          <br />
-          {if @state.showingErrors
-            <ul>
-              {for {row, message} in @props.errors
-                <li key={row + message}>Row {row}: {message}</li>}
-            </ul>}
-        </div>}
-
-      {unless missingFiles.length is 0
-        <div>
-          <i className="fa fa-exclamation-circle fa-fw" style={color: 'red'}></i>
-          {missingFiles.length} missing files from {incomplete.length} subjects{' '}
-          <button type="button" className="secret-button" onClick={@toggleState.bind this, 'showingMissing'}>
-            <i className="fa fa-eye fa-fw"></i>
-          </button>
-          <br />
-          {if @state.showingMissing
-            <ul>
-              {for file, i in missingFiles
-                <li key={i}>{file}</li>}
-            </ul>}
-        </div>}
-
-      <div>
-        <i className="fa fa-thumbs-up fa-fw" style={color: 'green'}></i>
-        {ready.length} subjects ready to load{' '}
-        <button type="button" className="secret-button" onClick={@toggleState.bind this, 'showingReady'}>
-          <i className="fa fa-eye fa-fw"></i>
-        </button>
-        {if @state.showingReady
-          <ul>
-            {for {locations, metadata}, i in ready
-              <li key={i}>
-                {for location in locations
-                  <div key={location}>{location}</div>}
-                <table className="standard-table">
-                  {for key, value of metadata
-                    <tr key={key}>
-                      <th>{key}</th>
-                      <td key={key}>{value}</td>
-                    </tr>}
-                </table>
-              </li>}
-          </ul>}
-      </div>
-    </div>
-
-  toggleState: (key) ->
-    newState = {}
-    newState[key] = not @state[key]
-    @setState newState
 
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
@@ -213,7 +65,7 @@ EditSubjectSetPage = React.createClass
         <div className="manifests-and-subjects">
           <ul>
             {for name, {errors, subjects} of @state.manifests
-              {ready} = separateSubjects subjects, @state.files
+              {ready} = ManifestView.separateSubjects subjects, @state.files
               subjectsToCreate += ready.length
 
               <li key={name}>
@@ -288,7 +140,7 @@ EditSubjectSetPage = React.createClass
   createSubjects: ->
     allSubjects = []
     for name, {subjects} of @state.manifests
-      {ready} = separateSubjects subjects, @state.files
+      {ready} = ManifestView.separateSubjects subjects, @state.files
       allSubjects.push ready...
 
     uploadAlert = (resolve) =>
