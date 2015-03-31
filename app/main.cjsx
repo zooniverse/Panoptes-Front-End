@@ -34,9 +34,13 @@ routes = <Route handler={App}>
     <Route name="project-science-case" path="science-case" handler={require './pages/project/science-case'} />
     <Route name="project-results" path="results" handler={require './pages/project/results'} />
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
+    <Route name="project-talk" path="talk" handler={require './pages/project/talk'}>
+      <DefaultRoute name="project-talk-home" handler={require './talk/home'} />
+      <Route name="project-talk-board" path=":board" handler={require './talk/board'} />
+      <Route name="project-talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
+    </Route>
     <Route name="project-faq" path="faq" handler={require './pages/project/faq'} />
     <Route name="project-education" path="education" handler={require './pages/project/education'} />
-    <Route name="project-talk" path="talk" handler={require './pages/project/talk'} />
   </Route>
 
   <Route name="build" handler={require './pages/build'} />
@@ -49,6 +53,12 @@ routes = <Route handler={App}>
   </Route>
   <Route name="edit-project" path="edit-project/:id" handler={require './pages/edit-project'} />
   <Route name="edit-workflow" path="edit-workflow/:id" handler={require './pages/edit-workflow'} />
+
+  <Route name="talk" path="talk" handler={require './talk'}>
+    <DefaultRoute name="talk-home" handler={require './talk/home'} />
+    <Route name="talk-board" path=":board" handler={require './talk/board'} />
+    <Route name="talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
+  </Route>
 
   <Route name="lab" handler={require './pages/lab'} />
   <Route path="lab/:projectID" handler={require './pages/lab/project'}>
