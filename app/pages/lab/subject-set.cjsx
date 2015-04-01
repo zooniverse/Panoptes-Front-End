@@ -39,47 +39,44 @@ EditSubjectSetPage = React.createClass
         <p>Name <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input" onChange={@handleChange} /></p>
         <p>Retirement <RetirementRulesEditor subjectSet={@props.subjectSet} /></p>
 
-        <button type="submit" className="standard-button" disabled={not @props.subjectSet.hasUnsavedChanges()}>Save</button>
-        {@renderSaveStatus()}
+        <p><button type="submit" className="standard-button" disabled={not @props.subjectSet.hasUnsavedChanges()}>Save changes</button> {@renderSaveStatus()}</p>
       </form>
-
-      <hr />
-
-      <p>Subjects: <strong>{@props.subjectSet.set_member_subjects_count}</strong></p>
 
       <hr />
 
       <p>
         <UploadDropTarget onSelect={@handleFileSelection}>
-          Drop manifests and subject data here.<br />
-          Manifests must be <code>.csv</code> or <code>.tsv</code>.<br />
-          Subjects can be any of: {<span key={ext}><code>{ext}</code>{' '}</span> for ext in VALID_SUBJECT_EXTENSIONS}.
+          <strong>Drag-and-drop manifests and subject images here.</strong><br />
+          Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
+          Subject images can be any of: {<span key={ext}><code>{ext}</code>{' '}</span> for ext in VALID_SUBJECT_EXTENSIONS}.<br />
+          <br />
+          Current selection: <strong>{Object.keys(@state.manifests).length}</strong> manifests, <strong>{Object.keys(@state.files).length}</strong> other files
         </UploadDropTarget>
       </p>
 
-      {if Object.keys(@state.manifests).length is 0
-        <div>TODO: List subjects without a manifest</div>
-      else
-        subjectsToCreate = 0
+      <div className="manifests-and-subjects">
+        <ul>
+          {subjectsToCreate = 0
+          for name, {errors, subjects} of @state.manifests
+            {ready} = ManifestView.separateSubjects subjects, @state.files
+            subjectsToCreate += ready.length
 
-        <div className="manifests-and-subjects">
-          <ul>
-            {for name, {errors, subjects} of @state.manifests
-              {ready} = ManifestView.separateSubjects subjects, @state.files
-              subjectsToCreate += ready.length
+            <li key={name}>
+              <ManifestView name={name} errors={errors} subjects={subjects} files={@state.files} onRemove={@handleRemoveManifest.bind this, name} />
+            </li>}
+        </ul>
 
-              <li key={name}>
-                <ManifestView name={name} errors={errors} subjects={subjects} files={@state.files} onRemove={@handleRemoveManifest.bind this, name} />
-              </li>}
-          </ul>
-
-          <button type="button" className="major-button" onClick={@createSubjects}>Upload {subjectsToCreate} new subjects</button>
-        </div>}
+        <button type="button" className="major-button" disabled={subjectsToCreate is 0} onClick={@createSubjects}>Upload {subjectsToCreate} new subjects</button>
+      </div>
 
       <hr />
 
       <p>
-        <small><button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteSubjectSet}>Delete this subject set</button></small>
+        <small>
+          <button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteSubjectSet}>
+            Delete this subject set and its {@props.subjectSet.set_member_subjects_count} subjects
+          </button>
+        </small>{' '}
         {if @state.deletionError?
           <span className="form-help error">{@state.deletionError.message}</span>}
       </p>
