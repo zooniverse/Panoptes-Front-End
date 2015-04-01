@@ -11,7 +11,7 @@ MarkdownEditor = require '../components/markdown-editor'
 apiClient = require '../api/client'
 
 ProjectEditPage = React.createClass
-  displayName: 'EditProjectPage'
+  displayName: 'EditProject'
 
   mixins: [HandlePropChanges, PromiseToSetState]
 
@@ -97,7 +97,7 @@ ProjectEditPage = React.createClass
         @setState busy: false
 
 module.exports = React.createClass
-  displayName: 'EditProjectPageWrapper'
+  displayName: 'EditProjectWrapper'
 
   render: ->
     <ChangeListener target={auth}>{=>
