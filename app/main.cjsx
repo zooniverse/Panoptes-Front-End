@@ -60,6 +60,18 @@ routes = <Route handler={App}>
     <Route name="talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
   </Route>
 
+  <Route name="lab" handler={require './pages/lab'} />
+  <Route path="lab/:projectID" handler={require './pages/lab/project'}>
+    <DefaultRoute name="edit-project-details" handler={require './pages/lab/project-details'} />
+    <Route name="edit-project-science-case" path="science-case" handler={require './pages/lab/science-case'} />
+    <Route name="edit-project-results" path="results" handler={require './pages/lab/results'} />
+    <Route name="edit-project-faq" path="faq" handler={require './pages/lab/faq'} />
+    <Route name="edit-project-education" path="education" handler={require './pages/lab/education'} />
+    <Route name="edit-project-collaborators" path="collaborators" handler={require './pages/lab/collaborators'} />
+    <Route name="edit-project-workflow" path="workflow/:workflowID" handler={require './pages/lab/workflow'} />
+    <Route name="edit-project-subject-set" path="subject-set/:subjectSetID" handler={require './pages/lab/subject-set'} />
+  </Route>
+
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={React.createClass render: -> <div className="content-container"><i className="fa fa-frown-o"></i> Not found</div>} />
 
