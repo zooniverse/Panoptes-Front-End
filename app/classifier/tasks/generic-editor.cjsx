@@ -28,7 +28,7 @@ module.exports = React.createClass
     definition = @props.workflow.tasks[@props.taskKey]
     handleChange = handleInputChange.bind @props.workflow
 
-    [mainText, choices] = switch definition.type
+    [mainTextKey, choicesKey] = switch definition.type
       when 'single', 'multiple' then ['question', 'answers']
       when 'drawing' then ['instruction', 'tools']
 
@@ -36,7 +36,7 @@ module.exports = React.createClass
       <div className="columns-container">
         <div>
           Main text<br />
-          <textarea name="tasks.#{@props.taskKey}.#{mainText}" value={definition[mainText]} className="standard-input full" onChange={handleChange} />
+          <textarea name="tasks.#{@props.taskKey}.#{mainTextKey}" value={definition[mainTextKey]} className="standard-input full" onChange={handleChange} />
         </div>
 
         <div>
@@ -46,11 +46,11 @@ module.exports = React.createClass
       </div>
 
       Choices{' '}
-      {if choice is 'answers'
+      {if choicesKey is 'answers'
         [<label key="multiple">
           <input type="checkbox" checked={definition.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
           Multiple choice
-        </label>&emsp;
+        </label>
 
         <label key="required">
           <input type="checkbox" name="tasks.#{@props.taskKey}.required" checked={definition.required} onChange={handleChange} />{' '}
@@ -59,22 +59,22 @@ module.exports = React.createClass
       <br />
 
       <div className="workflow-task-editor-choices">
-        {for choice, index in definition[choices]
+        {for choice, index in definition[choicesKey]
           choice._key ?= Math.random()
           <div key={choice._key} className="workflow-choice-editor">
-            <textarea name="tasks.#{@props.taskKey}.#{choices}.#{index}.label" value={choice.label} onChange={handleChange} />
+            <textarea name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.label" value={choice.label} onChange={handleChange} />
             <div className="workflow-choice-settings">
               {switch definition.type
                 when 'single'
                   <div className="workflow-choice-setting">
                     Next task{' '}
-                    <NextTaskSelector workflow={@props.workflow} name="tasks.#{@props.taskKey}.#{choices}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
+                    <NextTaskSelector workflow={@props.workflow} name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
                   </div>
 
                 when 'drawing'
                   [<div key={choice.type} className="workflow-choice-setting">
                     Type{' '}
-                    <select name="tasks.#{@props.taskKey}.#{choices}.#{index}.type" value={choice.type} onChange={handleChange}>
+                    <select name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
                       <option>Point</option>
                       <option disabled>TODO: List available drawing tools.</option>
                     </select>
@@ -82,7 +82,7 @@ module.exports = React.createClass
 
                   <div key={choice.color} className="workflow-choice-setting">
                     Color{' '}
-                    <select name="tasks.#{@props.taskKey}.#{choices}.#{index}.color" value={choice.color} onChange={handleChange}>
+                    <select name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
                       <option value="#ff0000">Red</option>
                       <option value="#ffff00">Yellow</option>
                       <option value="#00ff00">Green</option>
@@ -100,9 +100,9 @@ module.exports = React.createClass
                   </div>]}
 
             </div>
-            <button type="button" onClick={@removeChoice.bind this, choices, index}>Remove choice</button>
+            <button type="button" onClick={@removeChoice.bind this, choicesKey, index}>Remove choice</button>
           </div>}
-        <button type="button" onClick={@addChoice.bind this, choices}>Add</button>
+        <button type="button" onClick={@addChoice.bind this, choicesKey}>Add</button>
       </div>
 
       {unless definition.type is 'single'

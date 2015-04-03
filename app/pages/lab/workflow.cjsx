@@ -24,7 +24,7 @@ EditWorkflowPage = React.createClass
   render: ->
     <div className="columns-container">
       <div className="column">
-        <form onSubmit={@handleSubmit}>
+        <div>
           <div>
             Workflow title
             <br />
@@ -54,8 +54,8 @@ EditWorkflowPage = React.createClass
 
           <br />
 
-          <button type="submit" className="standard-button" disabled={not @props.workflow.hasUnsavedChanges()}>Save changes</button> {@renderSaveStatus()}
-        </form>
+          <button type="button" className="standard-button" disabled={not @props.workflow.hasUnsavedChanges()} onClick={@saveResource}>Save changes</button> {@renderSaveStatus()}
+        </div>
 
         <hr />
 
@@ -108,6 +108,8 @@ EditWorkflowPage = React.createClass
 
     changes = {}
     changes["tasks.#{nextTaskID}"] = tasks[type].getDefaultTask()
+    unless @props.workflow.first_task
+      changes.first_task = nextTaskID
 
     @props.workflow.update changes
     @setState selectedTaskKey: nextTaskID
