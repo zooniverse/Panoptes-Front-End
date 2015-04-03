@@ -53,6 +53,12 @@ module.exports = React.createClass
   statics:
     Summary: Summary
 
+    getDefaultTask: ->
+      type: 'multiple'
+      question: 'Enter a question.'
+      help: ''
+      answers: []
+
     getDefaultAnnotation: ->
       value: []
 

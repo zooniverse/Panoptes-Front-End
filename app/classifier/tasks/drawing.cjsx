@@ -82,6 +82,12 @@ module.exports = React.createClass
   statics:
     Summary: Summary
 
+    getDefaultTask: ->
+      type: 'drawing'
+      instruction: 'Explain what to draw.'
+      help: ''
+      tools: []
+
     getDefaultAnnotation: ->
       _toolIndex: 0
       value: []

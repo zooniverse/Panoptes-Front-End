@@ -51,6 +51,12 @@ module.exports = React.createClass
   statics:
     Summary: Summary
 
+    getDefaultTask: ->
+      type: 'single'
+      question: 'Enter a question.'
+      help: ''
+      answers: []
+
     getDefaultAnnotation: ->
       value: null
 
@@ -73,4 +79,3 @@ module.exports = React.createClass
     if e.target.checked
       @props.annotation.value = index
       @props.onChange? e
-
