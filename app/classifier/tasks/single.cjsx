@@ -1,6 +1,7 @@
 React = require 'react'
-GenericTask = require './generic'
 Markdown = require '../../components/markdown'
+GenericTask = require './generic'
+GenericTaskEditor = require './generic-editor'
 
 NOOP = Function.prototype
 
@@ -49,6 +50,7 @@ module.exports = React.createClass
   displayName: 'SingleChoiceTask'
 
   statics:
+    Editor: GenericTaskEditor
     Summary: Summary
 
     getDefaultTask: ->
