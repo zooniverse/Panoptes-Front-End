@@ -34,7 +34,8 @@ EditWorkflowPage = React.createClass
           <br />
 
           <div>
-            Tasks<br />
+            Tasks
+            <br />
             <div className="nav-list">
               {for key, definition of @props.workflow.tasks
                 classNames = ['nav-list-item']
@@ -54,14 +55,27 @@ EditWorkflowPage = React.createClass
 
           <br />
 
-          <button type="button" className="standard-button" disabled={not @props.workflow.hasUnsavedChanges()} onClick={@saveResource}>Save changes</button> {@renderSaveStatus()}
+          <button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.workflow.hasUnsavedChanges()} onClick={@saveResource}>Save changes</button> {@renderSaveStatus()}
         </div>
 
         <hr />
 
         <div>
-          Associated subject sets<br />
+          Associated subject sets
+          <br />
           {@renderSubjectSets()}
+        </div>
+
+        <hr />
+
+        <div>
+          <small>
+            <button type="button" className="minor-button" disabled={@state.deleteInProgress} onClick={@deleteResource.bind this, @afterDelete}>
+              Delete this workflow
+            </button>
+          </small>{' '}
+          {if @state.deleteError?
+            <span className="form-help error">{@state.deleteError.message}</span>}
         </div>
       </div>
 
@@ -120,6 +134,10 @@ EditWorkflowPage = React.createClass
       @props.workflow.addLink 'subject_sets', [subjectSet.id]
     else
       @props.workflow.removeLink 'subject_sets', subjectSet.id
+
+  afterDelete: ->
+    @props.project.uncacheLink 'workflows'
+    @transitionTo 'edit-project-details', projectID: @props.project.id
 
 module.exports = React.createClass
   displayName: 'EditWorkflowPageWrapper'

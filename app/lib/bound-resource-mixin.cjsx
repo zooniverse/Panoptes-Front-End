@@ -5,16 +5,21 @@ DEFAULT_UNSAVED_CHANGES_WARNING = '''
     **You will lose your unsaved changes.**
   '''
 
+DEFAULT_DELETE_WARNING = '''
+  Do you really want to delete this forever?
+'''
+
 module.exports =
   statics:
     willTransitionFrom: (transition, component) ->
       resource = component._getResource()
 
-      if resource.hasUnsavedChanges()
+      if resource?.hasUnsavedChanges()
         confirmLeave = confirm component.unsavedChangesWarning ? DEFAULT_UNSAVED_CHANGES_WARNING
 
         if confirmLeave
-          resource.refresh()
+          setTimeout ->
+            resource.refresh()
         else
           transition.abort()
 
@@ -22,6 +27,8 @@ module.exports =
     saveError: null
     saveInProgress: false
     saved: false
+    deleteError: null
+    deleteInProgress: false
 
   _getResource: ->
     if typeof @boundResource is 'function'
@@ -58,3 +65,17 @@ module.exports =
       <span className="form-help success">Saved!</span>
     else
       null
+
+  deleteResource: (afterDelete) ->
+    confirmation = confirm @deleteWarning ? DEFAULT_DELETE_WARNING
+    if confirmation
+      @setState
+        deleteError: null
+        deleteInProgress: true
+
+      @_getResource().delete()
+        .catch (error) =>
+          @setState deleteError: error
+        .then =>
+          @setState deleteInProgress: false
+        .then afterDelete
