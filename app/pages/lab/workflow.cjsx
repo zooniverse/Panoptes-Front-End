@@ -34,23 +34,23 @@ EditWorkflowPage = React.createClass
           <br />
 
           <div>
-            Tasks
-            <br />
-            <div className="nav-list">
+            <div className="nav-list standalone">
+              <div className="nav-list-header">
+                Tasks
+              </div>
               {for key, definition of @props.workflow.tasks
-                classNames = ['nav-list-item']
+                classNames = ['secret-button', 'nav-list-item']
                 if key is @state.selectedTaskKey
                   classNames.push 'active'
                 <div key={key}>
                   <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>{definition.question ? definition.instruction}</button>
                 </div>}
-
-              <small>
-                Add
-                <button type="button" onClick={@addNewTask.bind this, 'single'}>Question</button>
-                <button type="button" onClick={@addNewTask.bind this, 'drawing'}>Drawing</button>
-              </small>
             </div>
+            <small>
+              Add
+              <button type="button" onClick={@addNewTask.bind this, 'single'}>Question</button>
+              <button type="button" onClick={@addNewTask.bind this, 'drawing'}>Drawing</button>
+            </small>
           </div>
 
           <br />

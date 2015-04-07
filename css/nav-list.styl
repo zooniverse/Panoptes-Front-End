@@ -5,6 +5,9 @@
   > li
     display: block
 
+  &.standalone
+    border: 1px solid rgba(gray, 0.5)
+
 .nav-list-header
   font-size: 0.7em
   font-weight: bold
@@ -17,9 +20,12 @@
   background: transparent
   border: 0 solid rgba(gray, 0.3)
   border-top-width: 1px
+  box-sizing: border-box
   display: block
   padding: 0.2em 1vw
+  text-align: left
   text-decoration: none
+  width: 100%
 
   &.active
     background: MAIN_HIGHLIGHT
