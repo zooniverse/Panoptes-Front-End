@@ -45,24 +45,29 @@ module.exports = React.createClass
         </div>
       </div>
 
-      Choices{' '}
-      {if choicesKey is 'answers'
-        [<label key="multiple">
-          <input type="checkbox" checked={definition.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
-          Multiple choice
-        </label>
+      <hr />
 
-        <label key="required">
-          <input type="checkbox" name="tasks.#{@props.taskKey}.required" checked={definition.required} onChange={handleChange} />{' '}
-          Required
-        </label>]}
-      <br />
+      <header>
+        <strong>Choices</strong>
+        {' '}
+        {if choicesKey is 'answers'
+          [<label key="multiple" className="pill-button">
+            <input type="checkbox" checked={definition.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
+            Multiple choice
+          </label>
+          {' '}
+          <label key="required" className="pill-button">
+            <input type="checkbox" name="tasks.#{@props.taskKey}.required" checked={definition.required} onChange={handleChange} />{' '}
+            Required
+          </label>]}
+      </header>
 
       <div className="workflow-task-editor-choices">
         {for choice, index in definition[choicesKey]
           choice._key ?= Math.random()
           <div key={choice._key} className="workflow-choice-editor">
-            <textarea name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.label" value={choice.label} onChange={handleChange} />
+            <textarea name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.label" value={choice.label} className="standard-input full" onChange={handleChange} />
+
             <div className="workflow-choice-settings">
               {switch definition.type
                 when 'single'
@@ -98,11 +103,11 @@ module.exports = React.createClass
                   <div key="details" className="workflow-choice-setting">
                     <small className="form-help">TODO: Add a details editor, maybe in a tooltip.</small>
                   </div>]}
-
             </div>
-            <button type="button" onClick={@removeChoice.bind this, choicesKey, index}>Remove choice</button>
+            <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={@removeChoice.bind this, choicesKey, index}>&times;</button>
           </div>}
-        <button type="button" onClick={@addChoice.bind this, choicesKey}>Add</button>
+
+        <button type="button" className="workflow-choice-add-button" title="Add choice" onClick={@addChoice.bind this, choicesKey}>+</button>
       </div>
 
       {unless definition.type is 'single'
