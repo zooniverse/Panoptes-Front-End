@@ -1,6 +1,9 @@
 React = require 'react'
 handleInputChange = require '../../lib/handle-input-change'
+
 drawingTools = require '../drawing-tools'
+
+MAX_TEXT_LENGTH_IN_MENU = 100
 
 NextTaskSelector = React.createClass
   displayName: 'NextTaskSelector'
@@ -12,10 +15,15 @@ NextTaskSelector = React.createClass
     onChange: null
 
   render: ->
+    tasks = require '.' # Work around circular dependency.
+
     <select name={@props.name} value={@props.value} onChange={@props.onChange}>
       <option value="">(End of classification!)</option>
       {for key, definition of @props.workflow.tasks
-        <option key={key}, value={key}>{key}</option>}
+        text = tasks[definition.type].getTaskText definition
+        if text.length > MAX_TEXT_LENGTH_IN_MENU
+          text = text[0...MAX_TEXT_LENGTH_IN_MENU] + '...'
+        <option key={key}, value={key}>{text}</option>}
     </select>
 
 module.exports = React.createClass
@@ -112,10 +120,8 @@ module.exports = React.createClass
 
       {unless definition.type is 'single'
         <div>
-          Next task
-          <NextTaskSelector workflow={@props.workflow} name="tasks.#{@props.taskKey}.next" value={definition.next ? ''} onChange={handleChange} />{' '}
-          {if definition.next is @props.taskKey
-            <span className="form-help warning"><i className="fa fa-exclamation-triangle"></i> Infinite loop</span>}
+          Next task{' '}
+          <NextTaskSelector workflow={@props.workflow} name="tasks.#{@props.taskKey}.next" value={definition.next ? ''} onChange={handleChange} />
         </div>}
 
       <small><button type="button" className="minor-button" onClick={@removeTask}>Remove task</button></small>

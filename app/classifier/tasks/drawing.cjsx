@@ -90,6 +90,9 @@ module.exports = React.createClass
       help: ''
       tools: []
 
+    getTaskText: (task) ->
+      task.instruction
+
     getDefaultAnnotation: ->
       _toolIndex: 0
       value: []

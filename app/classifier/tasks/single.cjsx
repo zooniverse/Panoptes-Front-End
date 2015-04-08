@@ -59,6 +59,9 @@ module.exports = React.createClass
       help: ''
       answers: []
 
+    getTaskText: (task) ->
+      task.question
+
     getDefaultAnnotation: ->
       value: null
 
