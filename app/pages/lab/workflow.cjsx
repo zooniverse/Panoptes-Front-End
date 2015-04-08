@@ -31,13 +31,15 @@ EditWorkflowPage = React.createClass
             <span className="form-label">Workflow title</span>
             <br />
             <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={@handleChange} />
+            <span className="form-help"><small>Version {@props.workflow.version}</small></span>
           </div>
 
           <br />
 
           <div>
             <div className="nav-list standalone">
-              <div className="nav-list-header">Tasks</div>
+              <span className="nav-list-header">Tasks</span>
+              <br />
               {for key, definition of @props.workflow.tasks
                 classNames = ['secret-button', 'nav-list-item']
                 if key is @state.selectedTaskKey
@@ -61,9 +63,10 @@ EditWorkflowPage = React.createClass
             <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'}><strong>Drawing</strong></button>
           </div>
 
-          <br />
+          {unless @props.project.private
+            <p className="form-help warning">You're editing a workflow on a public project. <strong>Please note that any changes will result in the loss of your existing classifications for this workflow!</strong></p>}
 
-          <button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.workflow.hasUnsavedChanges()} data-busy={@state.saveInProgress || null} onClick={@saveResource}>Save changes</button> {@renderSaveStatus()}
+          <p><button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.workflow.hasUnsavedChanges()} data-busy={@state.saveInProgress || null} onClick={@saveResource}>Save changes</button> {@renderSaveStatus()}</p>
         </div>
 
         <hr />
