@@ -1,6 +1,5 @@
 React = require 'react'
 handleInputChange = require '../../lib/handle-input-change'
-
 drawingTools = require '../drawing-tools'
 
 MAX_TEXT_LENGTH_IN_MENU = 100
@@ -88,8 +87,8 @@ module.exports = React.createClass
                   [<div key={choice.type} className="workflow-choice-setting">
                     Type{' '}
                     <select name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
-                      {for toolName of drawingTools
-                        <option value={toolName}>{toolName}</option>}
+                      {for toolKey of drawingTools
+                        <option key={toolKey} value={toolKey}>{toolKey}</option>}
                     </select>
                   </div>
 
