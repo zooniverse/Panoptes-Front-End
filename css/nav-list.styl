@@ -6,15 +6,12 @@
     display: block
 
   &.standalone
-    border: 1px solid rgba(gray, 0.5)
+    border: 1px solid rgba(gray, 0.8)
+    border-radius: 3px
 
 .nav-list-header
-  font-size: 0.7em
-  font-weight: bold
-  letter-spacing: 0.1em
-  padding: 0.2em 1vw
-  opacity: 0.7
-  text-transform: uppercase
+  @extends $generic-heading
+  margin: 0.2em 1vw
 
 .nav-list-item
   background: transparent

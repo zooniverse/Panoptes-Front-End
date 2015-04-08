@@ -35,32 +35,31 @@ module.exports = React.createClass
     <div className="workflow-task-editor #{definition.type}">
       <div className="columns-container">
         <div>
-          Main text<br />
+          <span className="form-label">Main text</span><br />
           <textarea name="tasks.#{@props.taskKey}.#{mainTextKey}" value={definition[mainTextKey]} className="standard-input full" onChange={handleChange} />
         </div>
 
         <div>
-          Help text<br />
+          <span className="form-label">Help text</span><br />
           <textarea name="tasks.#{@props.taskKey}.help" value={definition.help ? ''} className="standard-input full" onChange={handleChange} />
         </div>
       </div>
 
       <hr />
 
-      <header>
-        <strong>Choices</strong>
+      <span className="form-label">Choices</span>
+      {' '}
+      {if choicesKey is 'answers'
+        [<label key="multiple" className="pill-button">
+          <input type="checkbox" checked={definition.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
+          Multiple choice
+        </label>
         {' '}
-        {if choicesKey is 'answers'
-          [<label key="multiple" className="pill-button">
-            <input type="checkbox" checked={definition.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
-            Multiple choice
-          </label>
-          {' '}
-          <label key="required" className="pill-button">
-            <input type="checkbox" name="tasks.#{@props.taskKey}.required" checked={definition.required} onChange={handleChange} />{' '}
-            Required
-          </label>]}
-      </header>
+        <label key="required" className="pill-button">
+          <input type="checkbox" name="tasks.#{@props.taskKey}.required" checked={definition.required} onChange={handleChange} />{' '}
+          Required
+        </label>]}
+        <br />
 
       <div className="workflow-task-editor-choices">
         {for choice, index in definition[choicesKey]
@@ -118,7 +117,7 @@ module.exports = React.createClass
             <span className="form-help warning"><i className="fa fa-exclamation-triangle"></i> Infinite loop</span>}
         </div>}
 
-      <button type="button" onClick={@removeTask}>Remove task</button>
+      <small><button type="button" className="minor-button" onClick={@removeTask}>Remove task</button></small>
     </div>
 
   toggleMultipleChoice: (e) ->

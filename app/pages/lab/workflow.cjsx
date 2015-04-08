@@ -26,9 +26,9 @@ EditWorkflowPage = React.createClass
       <div className="column">
         <div>
           <div>
-            Workflow title
+            <span className="form-label">Workflow title</span>
             <br />
-            <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input" onChange={@handleChange} />
+            <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={@handleChange} />
           </div>
 
           <br />
@@ -61,7 +61,7 @@ EditWorkflowPage = React.createClass
         <hr />
 
         <div>
-          Associated subject sets
+          <span className="form-label">Associated subject sets</span>
           <br />
           {@renderSubjectSets()}
         </div>
