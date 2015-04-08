@@ -1,5 +1,6 @@
 React = require 'react'
 handleInputChange = require '../../lib/handle-input-change'
+drawingTools = require '../drawing-tools'
 
 NextTaskSelector = React.createClass
   displayName: 'NextTaskSelector'
@@ -79,8 +80,8 @@ module.exports = React.createClass
                   [<div key={choice.type} className="workflow-choice-setting">
                     Type{' '}
                     <select name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
-                      <option>Point</option>
-                      <option disabled>TODO: List available drawing tools.</option>
+                      {for toolName of drawingTools
+                        <option value={toolName}>{toolName}</option>}
                     </select>
                   </div>
 
@@ -95,12 +96,12 @@ module.exports = React.createClass
                       <option value="#ff00ff">Magenta</option>
                       <option value="#000000">Black</option>
                       <option value="#ffffff">White</option>
-                      <option disabled>TODO: Use a real color picker.</option>
+                      <option disabled>TODO: Picker</option>
                     </select>
                   </div>
 
                   <div key="details" className="workflow-choice-setting">
-                    <small className="form-help">TODO: Add a details editor, maybe in a tooltip.</small>
+                    <small className="form-help">TODO: Add a details editor, probably in a popup.</small>
                   </div>]}
             </div>
             <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={@removeChoice.bind this, choicesKey, index}>&times;</button>
