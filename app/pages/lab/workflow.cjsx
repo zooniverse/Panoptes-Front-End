@@ -43,14 +43,17 @@ EditWorkflowPage = React.createClass
                 if key is @state.selectedTaskKey
                   classNames.push 'active'
                 <div key={key}>
-                  <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>{definition.question ? definition.instruction}</button>
+                  <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
+                    {definition.question ? definition.instruction}
+                    {if key is @props.workflow.first_task
+                      <em> (first)</em>}
+                  </button>
                 </div>}
             </div>
-            <small>
-              Add
-              <button type="button" onClick={@addNewTask.bind this, 'single'}>Question</button>
-              <button type="button" onClick={@addNewTask.bind this, 'drawing'}>Drawing</button>
-            </small>
+
+            Add{' '}
+            <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'}>Question</button>{' '}
+            <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'}>Drawing</button>
           </div>
 
           <br />
