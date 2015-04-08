@@ -37,25 +37,28 @@ EditWorkflowPage = React.createClass
 
           <div>
             <div className="nav-list standalone">
-              <div className="nav-list-header">
-                Tasks
-              </div>
+              <div className="nav-list-header">Tasks</div>
               {for key, definition of @props.workflow.tasks
                 classNames = ['secret-button', 'nav-list-item']
                 if key is @state.selectedTaskKey
                   classNames.push 'active'
                 <div key={key}>
                   <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
-                    {definition.question ? definition.instruction}
+                    {switch definition.type
+                      when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
+                      when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
+                      when 'drawing' then <i className="fa fa-pencil fa-fw"></i>}
+                    {' '}
+                    {tasks[definition.type].getTaskText definition}
                     {if key is @props.workflow.first_task
                       <em> (first)</em>}
                   </button>
                 </div>}
             </div>
 
-            Add{' '}
-            <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'}>Question</button>{' '}
-            <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'}>Drawing</button>
+            Add task{' '}
+            <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'}><strong>Question</strong></button>{' '}
+            <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'}><strong>Drawing</strong></button>
           </div>
 
           <br />
