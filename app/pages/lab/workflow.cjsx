@@ -58,7 +58,7 @@ EditWorkflowPage = React.createClass
 
           <br />
 
-          <button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.workflow.hasUnsavedChanges()} onClick={@saveResource}>Save changes</button> {@renderSaveStatus()}
+          <button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.workflow.hasUnsavedChanges()} data-busy={@state.saveInProgress || null} onClick={@saveResource}>Save changes</button> {@renderSaveStatus()}
         </div>
 
         <hr />
@@ -73,7 +73,7 @@ EditWorkflowPage = React.createClass
 
         <div>
           <small>
-            <button type="button" className="minor-button" disabled={@state.deleteInProgress} onClick={@deleteResource.bind this, @afterDelete}>
+            <button type="button" className="minor-button" disabled={@state.deleteInProgress} data-busy={@state.deleteInProgress || null} onClick={@deleteResource.bind this, @afterDelete}>
               Delete this workflow
             </button>
           </small>{' '}
