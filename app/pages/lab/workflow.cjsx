@@ -20,6 +20,8 @@ EditWorkflowPage = React.createClass
 
   getInitialState: ->
     selectedTaskKey: @props.workflow.first_task
+    reloadCellectError: false
+    reloadCellectInProgress: false
 
   render: ->
     <div className="columns-container">
@@ -65,8 +67,17 @@ EditWorkflowPage = React.createClass
 
         <div>
           <span className="form-label">Associated subject sets</span>
-          <br />
+          <p className="form-help">NOTE: Assigning subject sets doesn't quite work as expected right now. To-do on the back end.</p>
           {@renderSubjectSets()}
+        </div>
+
+        <hr />
+
+        <div>
+          <button type="button" className="minor-button" disabled={@state.reloadCellectInProgress} data-busy={@state.reloadCellectInProgress || null} onClick={@reloadCellect}>Reload Cellect</button>{' '}
+          {if @state.reloadCellectError
+            <span className="form-help error">There was an error reloading cellect</span>}
+          <p className="form-help">Reload Cellect after you've modified an associated subject set. TODO: Call this automatically when adding to a subject set.</p>
         </div>
 
         <hr />
@@ -82,7 +93,6 @@ EditWorkflowPage = React.createClass
         </div>
       </div>
 
-      <hr />
 
       <div className="column">
         {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
@@ -137,6 +147,17 @@ EditWorkflowPage = React.createClass
       @props.workflow.addLink 'subject_sets', [subjectSet.id]
     else
       @props.workflow.removeLink 'subject_sets', subjectSet.id
+
+  reloadCellect: ->
+    reloadEndpoint = apiClient.root + ['', 'workflows', @props.workflow.id, 'reload_cellect'].join '/'
+    @setState
+      reloadCellectError: false
+      reloadCellectInProgress: true
+    apiClient.post ['', 'workflows', @props.workflow.id, 'reload_cellect'].join '/'
+      .catch (error) =>
+        @setState reloadCellectError: true
+      .then =>
+        @setState reloadCellectInProgress: false
 
   afterDelete: ->
     @props.project.uncacheLink 'workflows'
