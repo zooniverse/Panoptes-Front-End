@@ -64,7 +64,9 @@ module?.exports = React.createClass
       <p>{data.body}</p>
     </div>
 
-  onSubmitMessage: ->
+  onSubmitMessage: (e) ->
+    e.preventDefault()
+
     form = @getDOMNode().querySelector('.new-message-form')
     textarea = form.querySelector('textarea')
     body = textarea.value

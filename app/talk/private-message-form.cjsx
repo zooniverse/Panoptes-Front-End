@@ -25,7 +25,8 @@ module?.exports = React.createClass
         @setState {user}
       .catch (e) -> console.log "error checking current auth inbox", e
 
-  onSubmit: ->
+  onSubmit: (e) ->
+    e.preventDefault()
     form = @getDOMNode().querySelector('.private-message-form')
     textarea = form.querySelector('textarea')
     input = form.querySelector('input')
