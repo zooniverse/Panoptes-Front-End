@@ -103,7 +103,7 @@ EditWorkflowPage = React.createClass
       <div className="column">
         {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
           TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
-          <TaskEditorComponent workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} onChange={@handleTaskChange.bind this, @state.selectedTaskKey} />
+          <TaskEditorComponent workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} onChange={@handleTaskChange.bind this, @state.selectedTaskKey} onDelete={@handleTaskDelete.bind this, @state.selectedTaskKey} />
         else
           <p>Choose a task to edit</p>}
       </div>
@@ -173,6 +173,14 @@ EditWorkflowPage = React.createClass
     changes = {}
     changes["tasks.#{taskKey}.#{path}"] = value
     @props.workflow.update changes
+
+  handleTaskDelete: (taskKey) ->
+    changes = {}
+    changes["tasks.#{taskKey}"] = undefined
+    @props.workflow.update changes
+
+    if @props.workflow.first_task not of @props.workflow.tasks
+      @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
 
 module.exports = React.createClass
   displayName: 'EditWorkflowPageWrapper'

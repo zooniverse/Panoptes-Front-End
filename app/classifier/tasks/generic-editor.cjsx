@@ -1,6 +1,8 @@
 React = require 'react'
 handleInputChange = require '../../lib/handle-input-change'
 drawingTools = require '../drawing-tools'
+alert = require '../../lib/alert'
+DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 
 NOOP = Function.prototype
 
@@ -13,7 +15,8 @@ NextTaskSelector = React.createClass
     workflow: null
     name: ''
     value: ''
-    onChange: null
+    onChange: NOOP
+    onDelete: NOOP
 
   render: ->
     tasks = require '.' # Work around circular dependency.
@@ -78,10 +81,11 @@ module.exports = React.createClass
             <div className="workflow-choice-settings">
               {switch @props.task.type
                 when 'single'
-                  <div className="workflow-choice-setting">
-                    Next task{' '}
-                    <NextTaskSelector workflow={@props.workflow} name="#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={@handleInputChange} />
-                  </div>
+                  if @props.workflow?
+                    <div className="workflow-choice-setting">
+                      Next task{' '}
+                      <NextTaskSelector workflow={@props.workflow} name="#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={@handleInputChange} />
+                    </div>
 
                 when 'drawing'
                   [<div key={choice.type} className="workflow-choice-setting">
@@ -108,7 +112,7 @@ module.exports = React.createClass
                   </div>
 
                   <div key="details" className="workflow-choice-setting">
-                    <small className="form-help">TODO: Add a details editor, probably in a popup.</small>
+                    <button type="button" onClick={@editToolDetails.bind this, @props.task, index}>Set up details ({choice.details?.length ? 0})</button>
                   </div>]}
             </div>
             <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={@removeChoice.bind this, choicesKey, index}>&times;</button>
@@ -117,13 +121,13 @@ module.exports = React.createClass
         <button type="button" className="workflow-choice-add-button" title="Add choice" onClick={@addChoice.bind this, choicesKey}>+</button>
       </div>
 
-      {unless @props.task.type is 'single'
+      {if @props.workflow? and @props.task.type isnt 'single'
         <div>
           Next task{' '}
           <NextTaskSelector workflow={@props.workflow} name="next" value={@props.task.next ? ''} onChange={@handleInputChange} />
         </div>}
 
-      <small><button type="button" className="minor-button" onClick={@removeTask}>Remove task</button></small>
+      <small><button type="button" className="minor-button" onClick={@onDelete}>Remove task</button></small>
     </div>
 
   handleInputChange: (e) ->
@@ -142,33 +146,23 @@ module.exports = React.createClass
 
   addAnswer: ->
     nextIndex = @props.task.answers.length
-
-    changes = {}
     @props.onChange "answers.#{nextIndex}",
       label: 'Enter an answer'
       next: null
 
-    @props.workflow.update changes
-
   addTool: ->
     nextIndex = @props.task.tools.length
-
-    changes = {}
     @props.onChange "tools.#{nextIndex}",
       type: 'point'
       label: 'Tool name'
       color: '#00ff00'
       details: []
 
+  editToolDetails: (task, toolIndex) ->
+    unless @props.task.tools[toolIndex].details?
+      @props.onChange "tools.#{toolIndex}.details", []
+
+    alert <DrawingTaskDetailsEditor workflow={@props.workflow} task={task}, toolIndex={toolIndex} />
 
   removeChoice: (choicesName, index) ->
     @props.onChange "#{choicesName}.#{index}", undefined
-
-  removeTask: -> # TODO: Move this up a level.
-    taskKey = (key for key, definition of @props.workflow.tasks when definition is @props.task)[0]
-    changes = {}
-    changes["tasks.#{taskKey}"] = undefined
-    @props.workflow.update changes
-
-    if @props.workflow.first_task not of @props.workflow.tasks
-      @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
