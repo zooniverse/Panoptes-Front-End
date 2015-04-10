@@ -103,7 +103,7 @@ EditWorkflowPage = React.createClass
       <div className="column">
         {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
           TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
-          <TaskEditorComponent workflow={@props.workflow} taskKey={@state.selectedTaskKey} />
+          <TaskEditorComponent workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} onChange={@handleTaskChange.bind this, @state.selectedTaskKey} />
         else
           <p>Choose a task to edit</p>}
       </div>
@@ -168,6 +168,11 @@ EditWorkflowPage = React.createClass
   afterDelete: ->
     @props.project.uncacheLink 'workflows'
     @transitionTo 'edit-project-details', projectID: @props.project.id
+
+  handleTaskChange: (taskKey, path, value) ->
+    changes = {}
+    changes["tasks.#{taskKey}.#{path}"] = value
+    @props.workflow.update changes
 
 module.exports = React.createClass
   displayName: 'EditWorkflowPageWrapper'

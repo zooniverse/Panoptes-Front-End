@@ -2,6 +2,8 @@ React = require 'react'
 handleInputChange = require '../../lib/handle-input-change'
 drawingTools = require '../drawing-tools'
 
+NOOP = Function.prototype
+
 MAX_TEXT_LENGTH_IN_MENU = 100
 
 NextTaskSelector = React.createClass
@@ -30,26 +32,24 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     workflow: null
-    taskKey: ''
+    task: null
+    onChange: NOOP
 
   render: ->
-    definition = @props.workflow.tasks[@props.taskKey]
-    handleChange = handleInputChange.bind @props.workflow
-
-    [mainTextKey, choicesKey] = switch definition.type
+    [mainTextKey, choicesKey] = switch @props.task.type
       when 'single', 'multiple' then ['question', 'answers']
       when 'drawing' then ['instruction', 'tools']
 
-    <div className="workflow-task-editor #{definition.type}">
+    <div className="workflow-task-editor #{@props.task.type}">
       <div className="columns-container">
         <div>
           <span className="form-label">Main text</span><br />
-          <textarea name="tasks.#{@props.taskKey}.#{mainTextKey}" value={definition[mainTextKey]} className="standard-input full" onChange={handleChange} />
+          <textarea name={mainTextKey} value={@props.task[mainTextKey]} className="standard-input full" onChange={@handleInputChange} />
         </div>
 
         <div>
           <span className="form-label">Help text</span><br />
-          <textarea name="tasks.#{@props.taskKey}.help" value={definition.help ? ''} className="standard-input full" onChange={handleChange} />
+          <textarea name="help" value={@props.task.help ? ''} className="standard-input full" onChange={@handleInputChange} />
         </div>
       </div>
 
@@ -59,34 +59,34 @@ module.exports = React.createClass
       {' '}
       {if choicesKey is 'answers'
         [<label key="multiple" className="pill-button">
-          <input type="checkbox" checked={definition.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
+          <input type="checkbox" checked={@props.task.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
           Multiple choice
         </label>
         {' '}
         <label key="required" className="pill-button">
-          <input type="checkbox" name="tasks.#{@props.taskKey}.required" checked={definition.required} onChange={handleChange} />{' '}
+          <input type="checkbox" name="required" checked={@props.task.required} onChange={@handleInputChange} />{' '}
           Required
         </label>]}
         <br />
 
       <div className="workflow-task-editor-choices">
-        {for choice, index in definition[choicesKey]
+        {for choice, index in @props.task[choicesKey]
           choice._key ?= Math.random()
           <div key={choice._key} className="workflow-choice-editor">
-            <textarea name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.label" value={choice.label} className="standard-input full" onChange={handleChange} />
+            <textarea name="#{choicesKey}.#{index}.label" value={choice.label} className="standard-input full" onChange={@handleInputChange} />
 
             <div className="workflow-choice-settings">
-              {switch definition.type
+              {switch @props.task.type
                 when 'single'
                   <div className="workflow-choice-setting">
                     Next task{' '}
-                    <NextTaskSelector workflow={@props.workflow} name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
+                    <NextTaskSelector workflow={@props.workflow} name="#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={@handleInputChange} />
                   </div>
 
                 when 'drawing'
                   [<div key={choice.type} className="workflow-choice-setting">
                     Type{' '}
-                    <select name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
+                    <select name="#{choicesKey}.#{index}.type" value={choice.type} onChange={@handleInputChange}>
                       {for toolKey of drawingTools
                         <option key={toolKey} value={toolKey}>{toolKey}</option>}
                     </select>
@@ -94,7 +94,7 @@ module.exports = React.createClass
 
                   <div key={choice.color} className="workflow-choice-setting">
                     Color{' '}
-                    <select name="tasks.#{@props.taskKey}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
+                    <select name="#{choicesKey}.#{index}.color" value={choice.color} onChange={@handleInputChange}>
                       <option value="#ff0000">Red</option>
                       <option value="#ffff00">Yellow</option>
                       <option value="#00ff00">Green</option>
@@ -117,24 +117,23 @@ module.exports = React.createClass
         <button type="button" className="workflow-choice-add-button" title="Add choice" onClick={@addChoice.bind this, choicesKey}>+</button>
       </div>
 
-      {unless definition.type is 'single'
+      {unless @props.task.type is 'single'
         <div>
           Next task{' '}
-          <NextTaskSelector workflow={@props.workflow} name="tasks.#{@props.taskKey}.next" value={definition.next ? ''} onChange={handleChange} />
+          <NextTaskSelector workflow={@props.workflow} name="next" value={@props.task.next ? ''} onChange={@handleInputChange} />
         </div>}
 
       <small><button type="button" className="minor-button" onClick={@removeTask}>Remove task</button></small>
     </div>
 
+  handleInputChange: (e) ->
+    @props.onChange e.target.name, e.target.checked ? e.target.value, arguments...
+
   toggleMultipleChoice: (e) ->
-    type = if e.target.checked
+    @props.onChange 'type', if e.target.checked
       'multiple'
     else
       'single'
-
-    changes = {}
-    changes["tasks.#{@props.taskKey}.type"] = type
-    @props.workflow.update changes
 
   addChoice: (type) ->
     switch type
@@ -142,34 +141,33 @@ module.exports = React.createClass
       when 'tools' then @addTool()
 
   addAnswer: ->
-    nextIndex = @props.workflow.tasks[@props.taskKey].answers.length
+    nextIndex = @props.task.answers.length
 
     changes = {}
-    changes["tasks.#{@props.taskKey}.answers.#{nextIndex}"] =
+    @props.onChange "answers.#{nextIndex}",
       label: 'Enter an answer'
       next: null
 
     @props.workflow.update changes
 
   addTool: ->
-    nextIndex = @props.workflow.tasks[@props.taskKey].tools.length
+    nextIndex = @props.task.tools.length
 
     changes = {}
-    changes["tasks.#{@props.taskKey}.tools.#{nextIndex}"] =
+    @props.onChange "tools.#{nextIndex}",
       type: 'point'
       label: 'Tool name'
       color: '#00ff00'
+      details: []
 
-    @props.workflow.update changes
 
   removeChoice: (choicesName, index) ->
-    changes = {}
-    changes["tasks.#{@props.taskKey}.#{choicesName}.#{index}"] = undefined
-    @props.workflow.update changes
+    @props.onChange "#{choicesName}.#{index}", undefined
 
-  removeTask: ->
+  removeTask: -> # TODO: Move this up a level.
+    taskKey = (key for key, definition of @props.workflow.tasks when definition is @props.task)[0]
     changes = {}
-    changes["tasks.#{@props.taskKey}"] = undefined
+    changes["tasks.#{taskKey}"] = undefined
     @props.workflow.update changes
 
     if @props.workflow.first_task not of @props.workflow.tasks
