@@ -64,7 +64,7 @@ EditWorkflowPage = React.createClass
           </div>
 
           {unless @props.project.private
-            <p className="form-help warning">You're editing a workflow on a public project. <strong>Please note that any changes will result in the loss of your existing classifications for this workflow!</strong></p>}
+            <p className="form-help warning">You’re editing a workflow on a public project. <strong>Please note that any changes will result in the loss of your existing classifications for this workflow!</strong></p>}
 
           <p><button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.workflow.hasUnsavedChanges()} data-busy={@state.saveInProgress || null} onClick={@saveResource}>Save changes</button> {@renderSaveStatus()}</p>
         </div>
@@ -73,7 +73,7 @@ EditWorkflowPage = React.createClass
 
         <div>
           <span className="form-label">Associated subject sets</span>
-          <p className="form-help">NOTE: Assigning subject sets doesn't quite work as expected right now. To-do on the back end.</p>
+          <p className="form-help">NOTE: Assigning subject sets doesn’t quite work as expected right now. To-do on the back end.</p>
           {@renderSubjectSets()}
         </div>
 
@@ -83,7 +83,7 @@ EditWorkflowPage = React.createClass
           <button type="button" className="minor-button" disabled={@state.reloadCellectInProgress} data-busy={@state.reloadCellectInProgress || null} onClick={@reloadCellect}>Reload Cellect</button>{' '}
           {if @state.reloadCellectError
             <span className="form-help error">There was an error reloading cellect</span>}
-          <p className="form-help">Reload Cellect after you've modified an associated subject set. TODO: Call this automatically when adding to a subject set.</p>
+          <p className="form-help">Reload Cellect after you’ve modified an associated subject set. TODO: Call this automatically when adding to a subject set.</p>
         </div>
 
         <hr />
