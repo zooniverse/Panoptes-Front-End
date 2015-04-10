@@ -87,10 +87,11 @@ module?.exports = React.createClass
           <h2>Talk Sidebar</h2>
           <p><strong>{@state.discussionsMeta?.count}</strong> Discussions</p>
           <PromiseRenderer promise={talkClient.type('tags').get(section: @props.section)}>{(tags) =>
-            <section>
-              <h3>Latest Tags:</h3>
-              {tags.map(@tag)}
-            </section>
+            if tags.length
+              <section>
+                <h3>Latest Tags:</h3>
+                {tags.map(@tag)}
+              </section>
           }</PromiseRenderer>
         </div>
       </div>
