@@ -172,5 +172,5 @@ module.exports = React.createClass
         @setState saving: @state.saving
 
   handleCollaboratorAddition: ->
-    @project.uncacheLink 'project_roles'
+    @props.project.uncacheLink 'project_roles'
     @forceUpdate()
