@@ -17,25 +17,30 @@ body
 
 .columns-container
   display: flex
-
-  &.inline
-    align-items: baseline
-    flex-wrap: wrap
-
-  &.spread
-    justify-content: space-between
+  flex-wrap: wrap
 
   > :not(:last-child)
     margin-right: 1.5vw
-
-  > :not(hr)
-    flex: 1 1
-
-  > .column
-    flex-grow: 5
 
   > hr
     border-width: 0 0 0 1px
     height: auto
     margin-bottom: 0
     margin-top: 0
+
+  &:not(.inline)
+    > :not(hr)
+      flex: 1 1
+      min-width: 15em
+
+    > .column
+      flex-grow: 5
+
+  &.inline
+    align-items: baseline
+
+    > hr
+      height: 0.8em
+
+  &.spread
+    justify-content: space-between
