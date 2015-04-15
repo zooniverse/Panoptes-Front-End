@@ -28,7 +28,7 @@ module.exports = React.createClass
 
         <p>
           <label>
-            <input type="checkbox" name="private" value={@props.project.private} onChange={@handleChange} />
+            <input type="checkbox" name="private" checked={@props.project.private} onChange={@handleChange} />
             Private project <small className="form-help">TODO: Explain</small>
           </label>
         </p>
