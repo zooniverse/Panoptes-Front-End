@@ -25,6 +25,13 @@ module.exports = React.createClass
           <img src="//placehold.it/100x75.png" /><br />
           <input type="file" disabled />
         </p>
+
+        <p>
+          <label>
+            <input type="checkbox" name="private" value={@props.project.private} onChange={@handleChange} />
+            Private project <small className="form-help">TODO: Explain</small>
+          </label>
+        </p>
       </div>
 
       <div className="column">
