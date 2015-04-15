@@ -15,6 +15,7 @@ NextTaskSelector = React.createClass
     workflow: null
     name: ''
     value: ''
+    isSubtask: false
     onChange: NOOP
     onDelete: NOOP
 
@@ -50,10 +51,11 @@ module.exports = React.createClass
           <textarea name={mainTextKey} value={@props.task[mainTextKey]} className="standard-input full" onChange={@handleInputChange} />
         </div>
 
-        <div>
-          <span className="form-label">Help text</span><br />
-          <textarea name="help" value={@props.task.help ? ''} className="standard-input full" onChange={@handleInputChange} />
-        </div>
+        {unless @props.isSubtask
+          <div>
+            <span className="form-label">Help text</span><br />
+            <textarea name="help" value={@props.task.help ? ''} className="standard-input full" onChange={@handleInputChange} />
+          </div>}
       </div>
 
       <hr />
@@ -81,7 +83,7 @@ module.exports = React.createClass
             <div className="workflow-choice-settings">
               {switch @props.task.type
                 when 'single'
-                  if @props.workflow?
+                  unless @props.isSubtask
                     <div className="workflow-choice-setting">
                       Next task{' '}
                       <NextTaskSelector workflow={@props.workflow} name="#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={@handleInputChange} />
@@ -121,13 +123,13 @@ module.exports = React.createClass
         <button type="button" className="workflow-choice-add-button" title="Add choice" onClick={@addChoice.bind this, choicesKey}>+</button>
       </div>
 
-      {if @props.workflow? and @props.task.type isnt 'single'
+      {unless @props.task.type isnt 'single' or @props.isSubtask
         <div>
           Next task{' '}
           <NextTaskSelector workflow={@props.workflow} name="next" value={@props.task.next ? ''} onChange={@handleInputChange} />
         </div>}
 
-      <small><button type="button" className="minor-button" onClick={@onDelete}>Remove task</button></small>
+      <small><button type="button" className="minor-button" onClick={@props.onDelete}>Remove task</button></small>
     </div>
 
   handleInputChange: (e) ->
@@ -148,7 +150,6 @@ module.exports = React.createClass
     nextIndex = @props.task.answers.length
     @props.onChange "answers.#{nextIndex}",
       label: 'Enter an answer'
-      next: null
 
   addTool: ->
     nextIndex = @props.task.tools.length

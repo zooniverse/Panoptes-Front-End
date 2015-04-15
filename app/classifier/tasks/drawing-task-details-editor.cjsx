@@ -13,23 +13,24 @@ module.exports = React.createClass
     GenericTaskEditor = require './generic-editor' # Work around circular dependency.
     <ChangeListener target={@props.workflow}>{=>
       <div>
-        {@props.task.tools[@props.toolIndex].details?.length}
         {for description, i in @props.task.tools[@props.toolIndex].details
-          <GenericTaskEditor task={description} onChange={@handleTaskChange.bind this, i} onDelete={@handleTaskDelete.bind this, i} />}
+          description._key ?= Math.random()
+          <GenericTaskEditor key={description._key} task={description} isSubtask={true} onChange={@handleTaskChange.bind this, i} onDelete={@handleTaskDelete.bind this, i} />}
         <button type="button" onClick={@handleAddTask}>Add task</button>
       </div>
     }</ChangeListener>
 
   handleAddTask: ->
-    single = require './single'
-    @props.task.tools[@props.toolIndex].details.push single.getDefaultTask()
+    SingleChoiceTask = require './single'
+    @props.task.tools[@props.toolIndex].details.push SingleChoiceTask.getDefaultTask()
     @props.workflow.update 'tasks'
 
-  handleTaskChange: (taskIndex, path, value) ->
+  handleTaskChange: (subtaskIndex, path, value) ->
+    taskKey = (key for key, description of @props.workflow.tasks when description is @props.task)[0]
     changes = {}
-    changes["tasks.#{taskIndex}.#{path}"] = value
+    changes["tasks.#{taskKey}.tools.#{@props.toolIndex}.details.#{subtaskIndex}.#{path}"] = value
     @props.workflow.update changes
 
-  handleTaskDelete: (index) ->
-    changes["tasks.#{taskIndex}"] = undefined
-    @props.workflow.update changes
+  handleTaskDelete: (subtaskIndex) ->
+    @props.task.tools[@props.toolIndex].details.splice subtaskIndex, 1
+    @props.workflow.update 'tasks'
