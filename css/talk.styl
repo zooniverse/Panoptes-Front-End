@@ -22,19 +22,25 @@ TALK_MARGIN = 10px auto
   font-weight: 100
   text-align: center
 
+.talk-form
+  input, textarea
+    border: none
+    font-size: 1.0em
+    font-family: inherit
+    display: block
+
+
 .polaroid-border
   background: #fff
   padding: 10px 10px 20px 10px
   margin: 10px
 
 .talk
+  @extend .talk-form
+
   *
     box-sizing: border-box
 
-  input, textarea
-    border: none
-    font-size: 1.0em
-    font-family: inherit
 
   button
     @extend .standard-button

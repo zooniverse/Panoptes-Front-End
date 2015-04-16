@@ -1,0 +1,21 @@
+// extends ./talk
+
+.inbox
+  .conversation-link
+    @extend .talk-module
+    width: 100%
+
+    a
+      display: block
+
+.inbox-conversation
+  .conversation-message
+    @extend .talk-module
+    strong
+      font-size: 12px
+    p
+      margin: 5px 0
+
+.new-message-form
+  @extend .talk-module
+  @extend .talk-form
