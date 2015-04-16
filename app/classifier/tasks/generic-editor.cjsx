@@ -125,7 +125,7 @@ module.exports = React.createClass
         <button type="button" className="workflow-choice-add-button" title="Add choice" onClick={@addChoice.bind this, choicesKey}>+</button>
       </div>
 
-      {unless @props.task.type isnt 'single' or @props.isSubtask
+      {unless @props.task.type is 'single' or @props.isSubtask
         <div>
           Next task{' '}
           <NextTaskSelector workflow={@props.workflow} name="next" value={@props.task.next ? ''} onChange={@handleInputChange} />
