@@ -75,6 +75,8 @@ module.exports = React.createClass
         <br />
 
       <div className="workflow-task-editor-choices">
+        {if @props.task[choicesKey].length is 0
+          <span className="form-help">No <code>{choicesKey}</code> defined for this task.</span>}
         {for choice, index in @props.task[choicesKey]
           choice._key ?= Math.random()
           <div key={choice._key} className="workflow-choice-editor">
@@ -163,7 +165,8 @@ module.exports = React.createClass
     unless @props.task.tools[toolIndex].details?
       @props.onChange "tools.#{toolIndex}.details", []
 
-    alert <DrawingTaskDetailsEditor workflow={@props.workflow} task={task}, toolIndex={toolIndex} />
+    alert (resolve) =>
+      <DrawingTaskDetailsEditor workflow={@props.workflow} task={task}, toolIndex={toolIndex} onClose={resolve} />
 
   removeChoice: (choicesName, index) ->
     @props.onChange "#{choicesName}.#{index}", undefined

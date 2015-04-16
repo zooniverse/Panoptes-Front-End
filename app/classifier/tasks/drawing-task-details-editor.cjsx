@@ -8,15 +8,26 @@ module.exports = React.createClass
     workflow: null
     task: null
     toolIndex: NaN
+    onClose: null
 
   render: ->
     GenericTaskEditor = require './generic-editor' # Work around circular dependency.
+    details = @props.task.tools[@props.toolIndex].details
     <ChangeListener target={@props.workflow}>{=>
-      <div>
-        {for description, i in @props.task.tools[@props.toolIndex].details
-          description._key ?= Math.random()
-          <GenericTaskEditor key={description._key} task={description} isSubtask={true} onChange={@handleTaskChange.bind this, i} onDelete={@handleTaskDelete.bind this, i} />}
-        <button type="button" onClick={@handleAddTask}>Add task</button>
+      <div className="drawing-task-details-editor">
+        <div className="sub-tasks">
+          {if details.length is 0
+            <span className="form-help">No sub-tasks defined for this tool</span>
+          else
+            for description, i in details
+              description._key ?= Math.random()
+              <GenericTaskEditor key={description._key} task={description} isSubtask={true} onChange={@handleTaskChange.bind this, i} onDelete={@handleTaskDelete.bind this, i} />}
+        </div>
+
+        <div className="commands columns-container">
+          <button type="button" className="standard-button" onClick={@props.onClose}>Close</button>
+          <button type="button" className="major-button" onClick={@handleAddTask}>Add task</button>
+        </div>
       </div>
     }</ChangeListener>
 
