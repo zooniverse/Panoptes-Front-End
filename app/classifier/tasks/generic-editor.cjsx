@@ -75,9 +75,9 @@ module.exports = React.createClass
         <br />
 
       <div className="workflow-task-editor-choices">
-        {if @props.task[choicesKey].length is 0
+        {if @props.task[choicesKey]?.length ? 0 is 0
           <span className="form-help">No <code>{choicesKey}</code> defined for this task.</span>}
-        {for choice, index in @props.task[choicesKey]
+        {for choice, index in @props.task[choicesKey] ? []
           choice._key ?= Math.random()
           <div key={choice._key} className="workflow-choice-editor">
             <textarea name="#{choicesKey}.#{index}.label" value={choice.label} className="standard-input full" onChange={@handleInputChange} />
