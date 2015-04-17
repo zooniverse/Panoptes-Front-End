@@ -5,8 +5,9 @@ apiClient = require '../../api/client'
 POSSIBLE_ROLES = [
   'owner'
   'collaborator'
-  'moderator'
+  'expert'
   'scientist'
+  'moderator'
   'tester'
   'translator'
 ]
