@@ -45,7 +45,7 @@ EditSubjectSetPage = React.createClass
       <hr />
 
       <p>
-        <UploadDropTarget onSelect={@handleFileSelection}>
+        <UploadDropTarget accept="text/csv, text/tab-separated-values, image/*" onSelect={@handleFileSelection}>
           <strong>Drag-and-drop manifests and subject images here.</strong><br />
           Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
           Subject images can be any of: {<span key={ext}><code>{ext}</code>{' '}</span> for ext in VALID_SUBJECT_EXTENSIONS}.<br />
@@ -103,7 +103,7 @@ EditSubjectSetPage = React.createClass
     reader.onload = (e) =>
       # TODO: Look into PapaParse features.
       # Maybe wan we parse the file object directly in a worker.
-      {data, errors} = Papa.parse e.target.result, header: true, dynamicTyping: true
+      {data, errors} = Papa.parse e.target.result.trim(), header: true, dynamicTyping: true
 
       metadatas = for rawData in data
         cleanData = {}

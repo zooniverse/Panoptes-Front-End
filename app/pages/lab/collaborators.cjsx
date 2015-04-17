@@ -5,8 +5,9 @@ apiClient = require '../../api/client'
 POSSIBLE_ROLES = [
   'owner'
   'collaborator'
-  'moderator'
+  'expert'
   'scientist'
+  'moderator'
   'tester'
   'translator'
 ]
@@ -38,7 +39,7 @@ CollaboratorCreator = React.createClass
           <br />
 
           <span className="column columns-container">
-            {for role in POSSIBLE_ROLES
+            {for role in POSSIBLE_ROLES when role isnt 'owner'
               <span key={role}>
                 <label>
                   <input type="checkbox" name="role" value={role} />{' '}
@@ -125,7 +126,7 @@ module.exports = React.createClass
           toggleThisRole = @toggleRole.bind this, projectRoleSet, role
           # TODO: Translate this.
           <label key={role}>
-            <input type="checkbox" name={role} checked={role in projectRoleSet.roles} disabled={projectRoleSet.id in @state.saving} onChange={toggleThisRole} />{' '}
+            <input type="checkbox" name={role} checked={role in projectRoleSet.roles} disabled={role is 'owner' or projectRoleSet.id in @state.saving} onChange={toggleThisRole} />{' '}
             {role[...1].toUpperCase()}{role[1...]}
           </label>}
       </span>
@@ -172,5 +173,5 @@ module.exports = React.createClass
         @setState saving: @state.saving
 
   handleCollaboratorAddition: ->
-    @project.uncacheLink 'project_roles'
+    @props.project.uncacheLink 'project_roles'
     @forceUpdate()
