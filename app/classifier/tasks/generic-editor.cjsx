@@ -75,7 +75,7 @@ module.exports = React.createClass
         <br />
 
       <div className="workflow-task-editor-choices">
-        {if @props.task[choicesKey]?.length ? 0 is 0
+        {if (@props.task[choicesKey]?.length ? 0) is 0 # Work around the empty-array-becomes-null bug on the back end.
           <span className="form-help">No <code>{choicesKey}</code> defined for this task.</span>}
         {for choice, index in @props.task[choicesKey] ? []
           choice._key ?= Math.random()
