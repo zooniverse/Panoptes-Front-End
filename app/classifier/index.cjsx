@@ -60,7 +60,7 @@ Classifier = React.createClass
               currentAnswer = currentTask.answers?[currentAnnotation.value]
               waitingForAnswer = not currentAnswer
 
-            nextTaskKey = if currentAnswer? and currentTask.type is 'single' and 'next' of currentAnswer
+            nextTaskKey = if currentAnswer? and currentTask.type is 'single'
               currentAnswer.next
             else
               currentTask.next
