@@ -15,7 +15,7 @@ ManifestView = require '../../components/manifest-view'
 NOOP = Function.prototype
 
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
-INVALID_FILENAME_CHARS = [';'] # TODO: Figure out a good general way to separate filenames.
+INVALID_FILENAME_CHARS = ['/', '\\', ':']
 
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
@@ -48,7 +48,8 @@ EditSubjectSetPage = React.createClass
         <UploadDropTarget accept="text/csv, text/tab-separated-values, image/*" onSelect={@handleFileSelection}>
           <strong>Drag-and-drop manifests and subject images here.</strong><br />
           Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
-          Subject images can be any of: {<span key={ext}><code>{ext}</code>{' '}</span> for ext in VALID_SUBJECT_EXTENSIONS}.<br />
+          Subject images can be any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '}
+          and may not contain {<span key={char}><code>{char}</code>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}.<br />
           <br />
           Current selection: <strong>{Object.keys(@state.manifests).length}</strong> manifests, <strong>{Object.keys(@state.files).length}</strong> other files
         </UploadDropTarget>

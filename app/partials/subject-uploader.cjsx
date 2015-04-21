@@ -3,11 +3,6 @@ apiClient = require '../api/client'
 
 NOOP = Function.prototype
 
-TYPES_BY_EXTENSION =
-  '.jpg': 'image/jpeg'
-  '.jpeg': 'image/jpeg'
-  '.png': 'image/png'
-
 putFile = (location, file) ->
   new Promise (resolve, reject) =>
     xhr = new XMLHttpRequest
@@ -60,8 +55,7 @@ module.exports = React.createClass
 
     if subjectData? and @state.inProgress
       locationTypes = for filename in subjectData.locations
-        extension = filename.match(/\..+$/)[0]
-        TYPES_BY_EXTENSION[extension]
+        @props.files[filename].type
 
       subject = apiClient.type('subjects').create
         # Locations are sent as a list of mime types.
