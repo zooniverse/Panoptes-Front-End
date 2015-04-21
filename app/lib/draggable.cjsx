@@ -25,6 +25,7 @@ module.exports = React.createClass
       cloneWithProps @props.children,
         className: 'draggable'
         onMouseDown: @handleStart
+        onTouchStart: @handleStart
 
   _rememberCoords: (e) ->
     @_previousEventCoords =
@@ -34,13 +35,19 @@ module.exports = React.createClass
   handleStart: (e) ->
     e.preventDefault()
 
+    [moveEvent, endEvent] = switch e.type
+      when 'mousedown' then ['mousemove', 'mouseup']
+      when 'touchstart' then ['touchmove', 'touchend']
+
+    e = e.touches?[0] ? e
+
     @_rememberCoords e
 
     # Prefix with this class to switch from `cursor:grab` to `cursor:grabbing`.
     document.body.classList.add 'dragging'
 
-    document.addEventListener 'mousemove', @handleDrag
-    document.addEventListener 'mouseup', @handleEnd
+    addEventListener moveEvent, @handleDrag
+    addEventListener endEvent, @handleEnd
 
     # If there's no `onStart`, `onDrag` will be called on start.
     startHandler = @props.onStart ? @handleDrag
@@ -48,6 +55,7 @@ module.exports = React.createClass
       startHandler e
 
   handleDrag: (e) ->
+    e = e.touches?[0] ? e
     d =
       x: e.pageX - @_previousEventCoords.x
       y: e.pageY - @_previousEventCoords.y
@@ -57,8 +65,14 @@ module.exports = React.createClass
     @_rememberCoords e
 
   handleEnd: (e) ->
-    document.removeEventListener 'mousemove', @handleDrag
-    document.removeEventListener 'mouseup', @handleEnd
+    [moveEvent, endEvent] = switch e.type
+      when 'mouseup' then ['mousemove', 'mouseup']
+      when 'touchend' then ['touchmove', 'touchend']
+
+    e = e.touches?[0] ? e
+
+    removeEventListener moveEvent, @handleDrag
+    removeEventListener endEvent, @handleEnd
 
     @props.onEnd? e
 
