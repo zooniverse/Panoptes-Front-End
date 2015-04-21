@@ -36,6 +36,7 @@ module.exports = React.createClass
   mixins: [Navigation]
 
   getInitialState: ->
+    page: 1
     projects: []
     creationError: null
     creationInProgress: false
@@ -49,11 +50,7 @@ module.exports = React.createClass
     # TODO: Make this a component instead of a function,
     # then `user.uncacheLink 'projects'` on mount and on project creation.
 
-    getProjects = user.get 'projects', skipCache: true
-      .then (projects) ->
-        refreshedProjects = for project in projects
-          project.refresh()
-        Promise.all refreshedProjects
+    getProjects = user.get 'projects', page: @state.page
 
     <div>
       <p>Projects owned by {user.display_name}:</p>
@@ -68,18 +65,40 @@ module.exports = React.createClass
     </div>
 
   renderProjects: (user, projects) ->
-    <table>
-      {for project in projects
-        <tr key={project.id}>
-          <td>{project.display_name}</td>
-          <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
-          <td><Link to="project-home" params={owner: user.display_name, name: project.display_name} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link></td>
-        </tr>}
-    </table>
+    console.log('got projects')
+    <div>
+      <table>
+        {for project in projects
+          <tr key={project.id}>
+            <td>{project.display_name}</td>
+            <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
+            <td><Link to="project-home" params={owner: user.display_name, name: project.display_name} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link></td>
+          </tr>}
+      </table>
+
+      {meta = projects[0]?.getMeta()
+      if meta? and meta.page_count isnt 1
+        <nav className="pagination">
+          <label>
+            Page
+            {' '}
+            <select value={@state.page} onChange={@handlePageChange}>
+              {for page in [1..meta.page_count]
+                <option key={page} value={page}>{page}</option>}
+            </select>
+            {' '}
+            of {meta.page_count}
+          </label>
+        </nav>}
+    </div>
+
+  handlePageChange: (e) ->
+    @setState page: e.target.value, =>
+      @forceUpdate()
 
   createNewProject: (user) ->
     project = apiClient.type('projects').create
-      display_name: 'Untitled project'
+      display_name: "Untitled project #{new Date().toISOString()}"
       description: 'Description of project'
       primary_language: counterpart.getLocale()
       private: true
