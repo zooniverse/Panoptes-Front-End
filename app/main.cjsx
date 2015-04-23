@@ -77,7 +77,7 @@ routes = <Route handler={App}>
 
 
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
-  <NotFoundRoute handler={React.createClass render: -> <div className="content-container"><i className="fa fa-frown-o"></i> Not found</div>} />
+  <NotFoundRoute handler={require './pages/not-found'} />
 
   <Route path="dev/workflow-tasks-editor" handler={require './components/workflow-tasks-editor'} />
   <Route path="dev/classifier" handler={require './classifier'} />
