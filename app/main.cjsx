@@ -1,4 +1,5 @@
 React = require 'react'
+React.initializeTouchEvents true
 window.React = React
 Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-router'
 MainHeader = require './partials/main-header'

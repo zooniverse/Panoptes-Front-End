@@ -35,8 +35,11 @@ module.exports = React.createClass
       else
         STROKE_WIDTH / scale
 
+    unless toolProps.disabled
+      startHandler = toolProps.onSelect
+
     <g className="drawing-tool" {...rootProps} {...@props}>
-      <g className="drawing-tool-main" {...mainStyle} onMouseDown={toolProps.onSelect unless toolProps.disabled}>
+      <g className="drawing-tool-main" {...mainStyle} onMouseDown={startHandler} onTouchStart={startHandler}>
         {@props.children}
       </g>
     </g>
