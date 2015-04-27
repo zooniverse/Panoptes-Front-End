@@ -56,11 +56,14 @@ Classifier = React.createClass
 
             onFirstAnnotation = currentClassification.annotations.indexOf(currentAnnotation) is 0
 
-            if currentTask.type is 'single'
-              currentAnswer = currentTask.answers?[currentAnnotation.value]
-              waitingForAnswer = not currentAnswer
+            switch currentTask.type
+              when 'single'
+                currentAnswer = currentTask.answers?[currentAnnotation.value]
+                waitingForAnswer = currentTask.required and not currentAnswer
+              when 'multiple'
+                waitingForAnswer = currentTask.required and currentAnnotation.value.length is 0
 
-            nextTaskKey = if currentAnswer? and currentTask.type is 'single'
+            nextTaskKey = if currentTask.type is 'single' and currentAnswer?
               currentAnswer.next
             else
               currentTask.next
