@@ -7,7 +7,6 @@ module.exports = React.createClass
   _previousEventCoords: null
 
   propTypes:
-    children: React.PropTypes.component.isRequired
     onStart: React.PropTypes.oneOfType [
       React.PropTypes.func
       React.PropTypes.bool
