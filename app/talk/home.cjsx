@@ -5,9 +5,13 @@ module?.exports = React.createClass
   displayName: 'TalkHome'
 
   getSection: ->
-    # Use project id for section for project talks
-    # or 'zooniverse' for global-talk
-    @props.project?.id ? 'zooniverse'
+    # Use "#{project.id}-#{project.name}" for section for project talks
+    # or "zooniverse" for global-talk
+
+    if @props.project?.id
+      "#{@props.project.id}-#{@props.project.title}"
+    else
+      'zooniverse'
 
   render: ->
     <div className="talk-home">

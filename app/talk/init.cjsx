@@ -7,20 +7,19 @@ PromiseRenderer = require '../components/promise-renderer'
 Moderation = require './lib/moderation'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
+ROLES = require './lib/roles'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
 
   getInitialState: ->
     boards: []
-    discussionsMeta: {}
 
   propTypes:
     section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
 
   componentWillMount: ->
     @setBoards()
-    @setDiscussionsMeta()
 
   setBoards: ->
     talkClient.type('boards').get(section: @props.section)
@@ -29,23 +28,21 @@ module?.exports = React.createClass
       .catch (e) =>
         console.log "error getting boards"
 
-  setDiscussionsMeta: ->
-    talkClient.type('discussions').get(section: @props.section)
-      .then (discussions) =>
-        @setState {discussionsMeta: discussions[0]?.getMeta()}
-      .catch (e) =>
-        console.log 'Error setting discussions meta'
-
   onSubmitBoard: (e) ->
     e.preventDefault()
     titleInput = @getDOMNode().querySelector('form input')
     descriptionInput = @getDOMNode().querySelector('form textarea')
 
+    # permissions
+    read = @getDOMNode().querySelector(".roles-read input[name='role-read']:checked").value
+    write = @getDOMNode().querySelector(".roles-write input[name='role-write']:checked").value
+    permissions = {read, write}
+
     title = titleInput.value
     description = descriptionInput.value
     section = @props.section
 
-    board = {title, description, section}
+    board = {title, description, section, permissions}
     return console.log "failed validation" unless title and description and section
 
     talkClient.type('boards').create(board).save()
@@ -63,6 +60,12 @@ module?.exports = React.createClass
   tag: (t, i) ->
     <p>#{t.name}</p>
 
+  roleReadLabel: (data, i) ->
+    <label><input type="radio" name="role-read" value={data}/>{data}</label>
+
+  roleWriteLabel: (data, i) ->
+    <label><input type="radio" name="role-write" value={data}/>{data}</label>
+
   render: ->
     <div className="talk-home">
       <Moderation>
@@ -70,7 +73,15 @@ module?.exports = React.createClass
           <h2>Moderator Zone:</h2>
           <h3>Add a board:</h3>
           <input type="text" ref="boardTitle" placeholder="Board Title"/>
+
           <textarea type="text" ref="boardDescription" placeholder="Board Description"></textarea><br />
+
+          <h4>Can Read:</h4>
+          <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+
+          <h4>Can Write:</h4>
+          <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+
           <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
         </form>
       </Moderation>
@@ -83,9 +94,9 @@ module?.exports = React.createClass
             <p>There are currently no boards.</p>}
         </section>
 
+
         <div className="talk-sidebar">
           <h2>Talk Sidebar</h2>
-          <p><strong>{@state.discussionsMeta?.count}</strong> Discussions</p>
           <PromiseRenderer promise={talkClient.type('tags').get(section: @props.section)}>{(tags) =>
             if tags.length
               <section>
