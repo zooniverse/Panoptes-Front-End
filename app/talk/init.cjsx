@@ -14,14 +14,12 @@ module?.exports = React.createClass
 
   getInitialState: ->
     boards: []
-    discussionsMeta: {}
 
   propTypes:
     section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
 
   componentWillMount: ->
     @setBoards()
-    @setDiscussionsMeta()
 
   setBoards: ->
     talkClient.type('boards').get(section: @props.section)
@@ -29,13 +27,6 @@ module?.exports = React.createClass
         @setState {boards}
       .catch (e) =>
         console.log "error getting boards"
-
-  setDiscussionsMeta: ->
-    talkClient.type('discussions').get(section: @props.section)
-      .then (discussions) =>
-        @setState {discussionsMeta: discussions[0]?.getMeta()}
-      .catch (e) =>
-        console.log 'Error setting discussions meta'
 
   onSubmitBoard: (e) ->
     e.preventDefault()
@@ -106,7 +97,6 @@ module?.exports = React.createClass
 
         <div className="talk-sidebar">
           <h2>Talk Sidebar</h2>
-          <p><strong>{@state.discussionsMeta?.count}</strong> Discussions</p>
           <PromiseRenderer promise={talkClient.type('tags').get(section: @props.section)}>{(tags) =>
             if tags.length
               <section>
