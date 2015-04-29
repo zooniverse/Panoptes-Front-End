@@ -35,9 +35,14 @@ module.exports = React.createClass
       <div className="call-to-action-container content-container">
         <Markdown className="description">{@props.project.description}</Markdown>
 
-        {for workflow in @state.workflows
-          <Link to="project-classify" params={linkParams} query={workflow: workflow.id} key={workflow.id} className="call-to-action standard-button">
-            {workflow.display_name}
+        {if @props.project.configuration?.user_chooses_workflow
+          for workflow in @state.workflows
+            <Link to="project-classify" params={linkParams} query={workflow: workflow.id} key={workflow.id} className="call-to-action standard-button">
+              {workflow.display_name}
+            </Link>
+        else
+          <Link to="project-classify" params={linkParams} className="call-to-action standard-button">
+            Get started!
           </Link>}
       </div>
 
