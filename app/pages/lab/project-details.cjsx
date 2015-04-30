@@ -28,6 +28,13 @@ module.exports = React.createClass
 
         <p>
           <label>
+            <input type="checkbox" name="configuration.user_chooses_workflow" checked={@props.project.configuration?.user_chooses_workflow} onChange={@handleChange} />
+            Volunteers can choose which workflow they work on
+          </label>
+        </p>
+
+        <p>
+          <label>
             <input type="checkbox" name="private" checked={@props.project.private} onChange={@handleChange} />
             Private project <small className="form-help">TODO: Explain</small>
           </label>
