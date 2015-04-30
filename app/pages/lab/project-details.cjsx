@@ -28,7 +28,7 @@ module.exports = React.createClass
 
         <p>
           <label>
-            <input type="checkbox" name="configuration.user_choose_workflow" checked={@props.project.configuration?.user_choose_workflow} onChange={@handleChange} />
+            <input type="checkbox" name="configuration.user_chooses_workflow" checked={@props.project.configuration?.user_chooses_workflow} onChange={@handleChange} />
             Volunteers can choose which workflow they work on
           </label>
         </p>
