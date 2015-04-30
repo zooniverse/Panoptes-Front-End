@@ -16,8 +16,8 @@ module.exports = React.createClass
     classification_count: count: 15
 
   render: ->
-    criteria = @props.subjectSet.retirement?.criteria ? @defaultCriteria
-    options = @props.subjectSet.retirement?.options ? @defaultOptions[criteria]
+    criteria = @props.workflow.retirement?.criteria ? @defaultCriteria
+    options = @props.workflow.retirement?.options ? @defaultOptions[criteria]
 
     <span className="retirement-rules-editor">
       <select ref="criteriaSelect" value={criteria} disabled onChange={@handleChangeCriteria}>
@@ -31,16 +31,16 @@ module.exports = React.createClass
     </span>
 
   handleChangeCriteria: (e) ->
-    @props.subjectSet.update
+    @props.workflow.update
       'retirement.criteria': e.target.value
       'retirement.options': @defaultOptions[e.target.value]
 
   handleChangeOption: (e) ->
-    @props.subjectSet.update
-      'retirement.criteria': @props.subjectSet.retirement?.criteria ? @defaultCriteria
+    @props.workflow.update
+      'retirement.criteria': @props.workflow.retirement?.criteria ? @defaultCriteria
 
-    @props.subjectSet.update
-      'retirement.options': @props.subjectSet.retirement.options ? @defaultOptions[@props.subjectSet.retirement.criteria]
+    @props.workflow.update
+      'retirement.options': @props.workflow.retirement.options ? @defaultOptions[@props.workflow.retirement.criteria]
 
     updateKey = "retirement.options.#{e.target.name}"
     newOptionsData = {}
@@ -49,4 +49,4 @@ module.exports = React.createClass
     else
       e.target.value
 
-    @props.subjectSet.update newOptionsData
+    @props.workflow.update newOptionsData
