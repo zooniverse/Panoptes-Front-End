@@ -33,7 +33,7 @@ module.exports = React.createClass
 
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
-        <Markdown className="description">{@props.project.description}</Markdown>
+        <div className="description">{@props.project.description}</div>
 
         {if @props.project.configuration?.user_chooses_workflow
           for workflow in @state.workflows
