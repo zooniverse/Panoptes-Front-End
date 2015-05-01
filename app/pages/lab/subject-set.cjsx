@@ -8,7 +8,6 @@ Papa = require 'papaparse'
 alert = require '../../lib/alert'
 SubjectUploader = require '../../partials/subject-uploader'
 BoundResourceMixin = require '../../lib/bound-resource-mixin'
-RetirementRulesEditor = require '../../components/retirement-rules-editor'
 UploadDropTarget = require '../../components/upload-drop-target'
 ManifestView = require '../../components/manifest-view'
 
@@ -37,7 +36,6 @@ EditSubjectSetPage = React.createClass
     <div>
       <form onSubmit={@handleSubmit}>
         <p>Name <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input" onChange={@handleChange} /></p>
-        <p>Retirement <RetirementRulesEditor subjectSet={@props.subjectSet} /></p>
 
         <p><button type="submit" className="standard-button" disabled={not @props.subjectSet.hasUnsavedChanges()}>Save changes</button> {@renderSaveStatus()}</p>
       </form>

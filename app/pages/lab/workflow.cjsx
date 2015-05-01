@@ -5,6 +5,7 @@ WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 BoundResourceMixin = require '../../lib/bound-resource-mixin'
+RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {Navigation} = require 'react-router'
 tasks = require '../../classifier/tasks'
 
@@ -80,10 +81,7 @@ EditWorkflowPage = React.createClass
         <hr />
 
         <div>
-          <button type="button" className="minor-button" disabled={@state.reloadCellectInProgress} data-busy={@state.reloadCellectInProgress || null} onClick={@reloadCellect}>Reload Cellect</button>{' '}
-          {if @state.reloadCellectError
-            <span className="form-help error">There was an error reloading cellect</span>}
-          <p className="form-help">Reload Cellect after you’ve modified an associated subject set. TODO: Call this automatically when adding to a subject set.</p>
+          <p>Subject retirement <RetirementRulesEditor workflow={@props.workflow} /></p>
         </div>
 
         <hr />
