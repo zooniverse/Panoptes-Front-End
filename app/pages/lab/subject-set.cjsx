@@ -31,12 +31,18 @@ EditSubjectSetPage = React.createClass
     files: {}
     deletionError: null
     deletionInProgress: false
+    creationSuccesses: []
+    creationErrors: []
 
   render: ->
     <div>
       <form onSubmit={@handleSubmit}>
-        <p>Name <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input" onChange={@handleChange} /></p>
-
+        <p>
+          Name{' '}
+          <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input" onChange={@handleChange} />{' '}
+          <span className="form-help">({@props.subjectSet.set_member_subjects_count} subjects)</span><br />
+          <small className="form-help">A subject set’s name is only seen by the science team.</small>
+        </p>
         <p><button type="submit" className="standard-button" disabled={not @props.subjectSet.hasUnsavedChanges()}>Save changes</button> {@renderSaveStatus()}</p>
       </form>
 
@@ -47,9 +53,7 @@ EditSubjectSetPage = React.createClass
           <strong>Drag-and-drop manifests and subject images here.</strong><br />
           Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
           Subject images can be any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '}
-          and may not contain {<span key={char}><code>{char}</code>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}.<br />
-          <br />
-          Current selection: <strong>{Object.keys(@state.manifests).length}</strong> manifests, <strong>{Object.keys(@state.files).length}</strong> other files
+          and may not contain {<span key={char}><kbd>{char}</kbd>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}.<br />
         </UploadDropTarget>
       </p>
 
@@ -59,13 +63,24 @@ EditSubjectSetPage = React.createClass
           for name, {errors, subjects} of @state.manifests
             {ready} = ManifestView.separateSubjects subjects, @state.files
             subjectsToCreate += ready.length
-
             <li key={name}>
               <ManifestView name={name} errors={errors} subjects={subjects} files={@state.files} onRemove={@handleRemoveManifest.bind this, name} />
             </li>}
         </ul>
 
         <button type="button" className="major-button" disabled={subjectsToCreate is 0} onClick={@createSubjects}>Upload {subjectsToCreate} new subjects</button>
+
+        {unless @state.creationSuccesses.length is 0
+          <div>{@state.creationSuccesses.length} subjects created!</div>}
+
+        {unless @state.creationErrors.length is 0
+          <div>
+            Errors creating subjects:
+            <ul>
+              {for error in @state.creationErrors
+                <li className="form-help error">{error.message}</li>}
+            </ul>
+          </div>}
       </div>
 
       <hr />
@@ -86,6 +101,10 @@ EditSubjectSetPage = React.createClass
     @saveResource()
 
   handleFileSelection: (files) ->
+    @setState
+      creationSuccesses: []
+      creationErrors: []
+
     for file in files
       if file.type in ['text/csv', 'text/tab-separated-values']
         @_addManifest file
@@ -140,11 +159,15 @@ EditSubjectSetPage = React.createClass
       allSubjects.push ready...
 
     uploadAlert = (resolve) =>
-      <SubjectUploader subjects={allSubjects} files={@state.files} project={@props.project} subjectSet={@props.subjectSet} autoStart onComplete={resolve} />
+      <div className="content-container">
+        <SubjectUploader subjects={allSubjects} files={@state.files} project={@props.project} subjectSet={@props.subjectSet} autoStart onComplete={resolve} />
+      </div>
 
     startUploading = alert uploadAlert
-      .then =>
+      .then ({successes, errors}) =>
         @setState
+          creationSuccesses: successes
+          creationErrors: errors
           manifests: {}
           files: {}
 
