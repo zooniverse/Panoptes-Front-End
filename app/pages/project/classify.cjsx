@@ -8,6 +8,7 @@ animatedScrollTo = require 'animated-scrollto'
 counterpart = require 'counterpart'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
+SignInPrompt = require '../../partials/sign-in-prompt'
 
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
@@ -184,12 +185,11 @@ module.exports = React.createClass
 
   maybePromptToSignIn: ->
     auth.checkCurrent().then (user) ->
-      console.log classificationsThisSession, classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER, not user?
       if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not user?
-        alert <div className="content-container">
-          <p><strong>Hey, you’ve done {classificationsThisSession} classifications, but you’re not signed in!</strong></p>
-          <p>Signing in allows us to give you credit for your work, and helps us make better sense of all the data.</p>
-        </div>
+        alert (resolve) ->
+          <SignInPrompt onChoose={resolve}>
+            <p><strong>You’ve done {classificationsThisSession} classifications, but you’re not signed in!</strong></p>
+          </SignInPrompt>
 
   loadAnotherSubject: ->
     @getCurrentWorkflowID(@props).then (workflowID) =>
