@@ -171,7 +171,7 @@ EditSubjectSetPage = React.createClass
       creationSuccesses: []
       creationErrors: []
 
-    for file in files
+    for file in files when file.size isnt 0
       if file.type in ['text/csv', 'text/tab-separated-values']
         @_addManifest file
         gotManifest = true
