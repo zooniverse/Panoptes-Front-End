@@ -147,7 +147,7 @@ module.exports = React.createClass
   render: ->
     <div className="classify-page content-container">
       {if @state.classification?
-        <Classifier {...@props} classification={@state.classification} onLoad={@scrollIntoView} onComplete={@saveClassification} onClickNext={@loadAnotherSubject} />
+        <Classifier {...@props} classification={@state.classification} onLoad={@scrollIntoView unless window.location.hash is "#/"} onComplete={@saveClassification} onClickNext={@loadAnotherSubject} />
       else if @state.rejected.classification?
         <code>{@state.rejected.classification.toString()}</code>
       else
