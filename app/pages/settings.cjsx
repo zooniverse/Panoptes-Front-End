@@ -1,77 +1,61 @@
 React = require 'react'
-promiseToSetState = require '../lib/promise-to-set-state'
+BoundResourceMixin = require '../lib/bound-resource-mixin'
+ChangeListener = require '../components/change-listener'
 auth = require '../api/auth'
-InPlaceForm = require '../components/in-place-form'
+PromiseRenderer = require '../components/promise-renderer'
 
-module.exports = React.createClass
-  displayName: 'SettingsPage'
+UserSettingsPage = React.createClass
+  displayName: 'UserSettingsPage'
 
-  mixins: [promiseToSetState]
+  mixins: [BoundResourceMixin]
 
-  _user: null # This is only used to keep track of user change listeners.
+  boundResource: 'user'
 
-  componentDidMount: ->
-    @handleAuthChange()
-    auth.listen @handleAuthChange
-
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    userPromise = auth.checkCurrent()
-
-    userPromise.then (user) =>
-      unless user is @_user
-        @_user?.stopListening 'change', @handleUserChange
-        @_user = user
-        @_user?.listen 'change', @handleUserChange
-
-    @promiseToSetState user: userPromise
-
-  handleUserChange: ->
-    @forceUpdate()
+  getDefaultProps: ->
+    user: {}
 
   render: ->
-    notSignedIn = not @state.user?
-    loading = @state.user instanceof Promise
-    saveInProgress = @state.saving instanceof Promise
-    disabled = notSignedIn or loading or saveInProgress
+    <div className="content-container">
+      <table className="standard-table full">
+        <tr>
+          <th>Credited name</th>
+          <td>
+            <input type="text" className="standard-input full" name="credited_name" value={@props.user.credited_name} onChange={@handleChange} />
+            <div className="form-help">We’ll use this to give acknowledgement in papers, on posters, etc.</div>
+          </td>
+        </tr>
 
-    <div className="edit-account-page content-container tabbed-content" data-side="left">
-      <div className="tabbed-content-tabs">
-        <a href="/settings" root={true} className="tabbed-content-tab">Profile</a>
-      </div>
+        <tr>
+          <th>Any other stuff?</th>
+          <td>
+            TODO
+          </td>
+        </tr>
+      </table>
 
-      <div className="content-container">
-          <InPlaceForm onSubmit={@saveUser}>
-            <fieldset>
-              <legend>Optional profile details</legend>
-              <table className="for-text-fields">
-                <tr>
-                  <th>Your credited name</th>
-                  <td>
-                    <input type="text" name="credited_name" placeholder="John Smith" value={@state.user?.credited_name} disabled={disabled} onChange={@handleBoundInput} /><br />
-                    <span className="form-help">We’ll use this to give acknowledgement in papers, on posters, etc.</span>
-                  </td>
-                </tr>
-              </table>
-            </fieldset>
+      <p>
+        <button type="button" disabled={@state.saveInProgress or not @props.user.hasUnsavedChanges()} onClick={@saveResource}>Save profile</button>{' '}
+        {@renderSaveStatus()}
+      </p>
 
-            <p><button type="submit" disabled={disabled}>Save profile</button></p>
-          </InPlaceForm>
-      </div>
+      <hr />
+
+      <p><strong>Email preferences</strong></p>
+
+      <p>TODO</p>
     </div>
 
-  handleBoundInput: (e) ->
-    changes = {}
-    changes[e.target.name] = e.target.value
-    @state.user.update changes
+module.exports = React.createClass
+  displayName: 'UserSettingsPageWrapper'
 
-  saveUser: ->
-    save = @state.user.save()
-
-    save.catch ({errors}) ->
-      errorMessage = (message for {message} in errors).join '\n'
-      alert errorMessage # TODO: Something nicer
-
-    @promiseToSetState saving: save
+  render: ->
+    <ChangeListener target={auth} handler={=>
+      <PromiseRenderer promise={auth.checkCurrent()} then={(user) =>
+        if user?
+          <UserSettingsPage user={user} />
+        else
+          <div className="content-container">
+            <p>You’re not signed in.</p>
+          </div>
+      } />
+    } />
