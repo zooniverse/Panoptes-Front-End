@@ -52,7 +52,7 @@ SubjectSetListing = React.createClass
     page: 1
 
   getSubjects: ->
-    getSetMemberSubjects = apiClient.get 'set_member_subjects',
+    getSetMemberSubjects = apiClient.type('set_member_subjects').get
       subject_set_id: @props.subjectSet.id
       include: 'subject'
       page: @state.page
@@ -68,10 +68,13 @@ SubjectSetListing = React.createClass
         <SubjectSetListingData subjects={subjects} />
       } />
       <nav className="pagination">
-        <select value={@state.page} onChange={(e) => @setState page: e.target.value}>
-          {for p in [1..pageCount]
-            <option value={p}>{p}</option>}
-        </select>
+        Page <select value={@state.page} disabled={isNaN pageCount} onChange={(e) => @setState page: e.target.value}>
+          {if isNaN pageCount
+            <option>?</option>
+          else
+            for p in [1..pageCount]
+              <option key={p} value={p}>{p}</option>}
+        </select> of {pageCount || '?'}
       </nav>
     </div>
 
