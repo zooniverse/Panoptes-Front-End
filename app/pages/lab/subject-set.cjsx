@@ -16,6 +16,65 @@ NOOP = Function.prototype
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
 INVALID_FILENAME_CHARS = ['/', '\\', ':']
 
+SubjectSetListingData = React.createClass
+  displayName: 'SubjectSetListing'
+
+  getDefaultProps: ->
+    subjects: []
+    onPreview: Function.prototype # No-op
+    onRemove: Function.prototype
+
+  render: ->
+    <table>
+      {for subject in @props.subjects
+        <tr>
+          <td>
+            <small className="form-help">{subject.id}</small>
+          </td>
+          <td>
+            {for location in subject.locations
+              <div>{JSON.stringify location}</div>}
+          </td>
+          <td>
+            <button type="button" onClick={@props.onPreview}><i className="fa fa-eye fa-fw"></i></button>
+            <button type="button" onClick={@props.onRemove}><i className="fa fa-trash-o fa-fw"></i></button>
+          </td>
+        </tr>}
+    </table>
+
+SubjectSetListing = React.createClass
+  displayName: 'SubjectSetListing'
+
+  getDefaultProps: ->
+    subjectSet: {}
+
+  getInitialState: ->
+    page: 1
+
+  getSubjects: ->
+    getSetMemberSubjects = apiClient.get 'set_member_subjects',
+      subject_set_id: @props.subjectSet.id
+      include: 'subject'
+      page: @state.page
+
+    getSetMemberSubjects.get 'subject'
+
+  render: ->
+    pageCount = NaN
+
+    <div>
+      <PromiseRenderer promise={@getSubjects()} then={(subjects) =>
+        pageCount = subject[0]?.getMeta().page_count ? 1
+        <SubjectSetListingData subjects={subjects} />
+      } />
+      <nav className="pagination">
+        <select value={@state.page} onChange={(e) => @setState page: e.target.value}>
+          {for p in [1..pageCount]
+            <option value={p}>{p}</option>}
+        </select>
+      </nav>
+    </div>
+
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
 
@@ -45,6 +104,10 @@ EditSubjectSetPage = React.createClass
         </p>
         <p><button type="submit" className="standard-button" disabled={not @props.subjectSet.hasUnsavedChanges()}>Save changes</button> {@renderSaveStatus()}</p>
       </form>
+
+      <hr />
+
+      <SubjectSetListing subjectSet={@props.subjectSet} />
 
       <hr />
 
