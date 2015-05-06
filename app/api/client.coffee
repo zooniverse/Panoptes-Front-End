@@ -5,10 +5,10 @@ apiClient = new JSONAPIClient config.host + '/api',
   'Content-Type': 'application/json'
   'Accept': 'application/vnd.api+json; version=1'
 
-apiClient.handleError = (error) ->
-  if 'message' of error
-    throw error
-  else if 'responseText' of error
+apiClient.handleError = (request) ->
+  if 'message' of request
+    throw request
+  else if 'responseText' of request
     response = try JSON.parse request.responseText
     if response?.error?
       errorMessage = response.error
