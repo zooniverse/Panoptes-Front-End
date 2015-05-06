@@ -6,6 +6,7 @@ ChangeListener = require '../../components/change-listener'
 Papa = require 'papaparse'
 {Navigation} = require 'react-router'
 alert = require '../../lib/alert'
+SubjectViewer = require '../../components/subject-viewer'
 SubjectUploader = require '../../partials/subject-uploader'
 BoundResourceMixin = require '../../lib/bound-resource-mixin'
 UploadDropTarget = require '../../components/upload-drop-target'
@@ -16,26 +17,46 @@ NOOP = Function.prototype
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
 INVALID_FILENAME_CHARS = ['/', '\\', ':']
 
-SubjectSetListingData = React.createClass
+SubjectSetListingRow = React.createClass
+  displayName: 'SubjectSetListingRow'
+
+  getDefaultProps: ->
+    subject: {}
+    onPreview: Function.prototype # No-op
+    onRemove: Function.prototype
+
+  getInitialState: ->
+    beingDeleted: false
+
+  render: ->
+    <tr key={@props.subject.id}>
+      <td>
+        <small className="form-help">{@props.subject.id}</small>
+      </td>
+      <td>
+        <button type="button" disabled={@state.beingDeleted} onClick={@props.onPreview.bind null, @props.subject}><i className="fa fa-eye fa-fw"></i></button>
+        <button type="button" disabled={@state.beingDeleted} onClick={@handleRemove}><i className="fa fa-trash-o fa-fw"></i></button>
+      </td>
+    </tr>
+
+  handleRemove: ->
+    @setState beingDeleted: true
+    @props.onRemove @props.subject
+
+SubjectSetListingTable = React.createClass
   displayName: 'SubjectSetListing'
 
   getDefaultProps: ->
     subjects: []
-    onPreview: Function.prototype # No-op
+    onPreview: Function.prototype
     onRemove: Function.prototype
 
   render: ->
     <table>
-      {for subject in @props.subjects
-        <tr key={subject.id}>
-          <td>
-            <small className="form-help">{subject.id}</small>
-          </td>
-          <td>
-            <button type="button" onClick={@props.onPreview}><i className="fa fa-eye fa-fw"></i></button>
-            <button type="button" onClick={@props.onRemove}><i className="fa fa-trash-o fa-fw"></i></button>
-          </td>
-        </tr>}
+      <tbody>
+        {for subject in @props.subjects
+          <SubjectSetListingRow key={subject.id} subject={subject} onPreview={@props.onPreview} onRemove={@props.onRemove} />}
+      </tbody>
     </table>
 
 SubjectSetListing = React.createClass
@@ -63,7 +84,7 @@ SubjectSetListing = React.createClass
 
     <div>
       <PromiseRenderer promise={gettingSubjects} then={(subjects) =>
-        <SubjectSetListingData subjects={subjects} />
+        <SubjectSetListingTable subjects={subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
       } />
       <nav className="pagination">
         Page <select value={@state.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @setState page: e.target.value}>
@@ -75,6 +96,14 @@ SubjectSetListing = React.createClass
         </select> of {@state.pageCount || '?'}
       </nav>
     </div>
+
+  previewSubject: (subject) ->
+    alert <div className="content-container subject-preview">
+      <SubjectViewer subject={subject} />
+    </div>
+
+  removeSubject: (subject) ->
+    @props.subjectSet.removeLink 'subjects', subject.id
 
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
@@ -95,6 +124,7 @@ EditSubjectSetPage = React.createClass
     creationErrors: []
 
   render: ->
+    console.log 'Subject set changes:', @props.subjectSet._changedKeys.slice()
     <div>
       <form onSubmit={@handleSubmit}>
         <p>
