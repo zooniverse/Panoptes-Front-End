@@ -16,20 +16,21 @@ counterpart.registerTranslations 'en',
       title: 'Welcome'
       intro: 'A tagline about the Zooniverse.'
       button: 'Get started!'
-    stats:
-      loading: 'Loading Stats'
+    featuredStats:
       project: 'Project'
       subjects: 'subjects'
       classifications: 'classifications'
+    featuredList:
+      title: 'Try out some of our other projects'
     try:
-      header: 'Want to make your own project?'
+      title: 'Want to make your own project?'
       button: 'Create an account'
 
 module.exports = React.createClass
   displayName: 'HomePage'
 
   getInitialState: ->
-    featuredProjectsIds: ['396', '405', '272', '166']
+    featuredProjectsIds: ['231', '405', '272', '166']
 
   render: ->
     randomFeatured = @getFeaturedProject()
@@ -45,9 +46,9 @@ module.exports = React.createClass
             {if project?
               <div>
                 <div className="secondary-row featured-project-stats">
-                  <h3><Translate component="span" content="home.stats.project" /><span>{" " + project.display_name}</span></h3>
-                  <p><span>{project.subjects_count + " "}</span><Translate component="span" content="home.stats.subjects" /></p>
-                  <p><span>{project.classifications_count + " "}</span><Translate component="span" content="home.stats.classifications" /></p>
+                  <h3><Translate component="span" content="home.featuredStats.project" /><span>{" " + project.display_name}</span></h3>
+                  <p><span>{project.subjects_count + " "}</span><Translate component="span" content="home.featuredStats.subjects" /></p>
+                  <p><span>{project.classifications_count + " "}</span><Translate component="span" content="home.featuredStats.classifications" /></p>
                 </div>
                 <div className="featured-project-classifier">
                   <ProjectClassifyPage project={project} />
@@ -56,16 +57,22 @@ module.exports = React.createClass
             }
         </section>
       }</PromiseRenderer>
-      <PromiseRenderer promise={apiClient.type('projects').get('?launched_approved=true')}>{(projects) =>
-        <section>
+      <PromiseRenderer promise={apiClient.type('projects').get(@state.featuredProjectsIds)}>{(projects) =>
+        <section className="featured-projects">
+          <div className="primary-row">
+            <Translate component="h3" content="home.featuredList.title" />
+          </div>
           {if projects?
-            for project in projects
+            <div className="featured-projects-list content-container">
+            {for project in projects
               <ProjectCard key={project.id} project={project} />
+            }
+            </div>
           }
         </section>
       }</PromiseRenderer>
       <section className="secondary-row call-to-try">
-        <Translate component="h3" content="home.try.header" />
+        <Translate component="h3" content="home.try.title" />
         <button type="button" className="call-to-action standard-button" onClick={@showLoginDialog.bind this, 'register'}>
           <Translate content="home.try.button" />
         </button>
@@ -73,6 +80,7 @@ module.exports = React.createClass
     </div>
 
   getFeaturedProject: ->
+    # This will be changed later to look for launched_approved boolean set to true
     @state.featuredProjectsIds[Math.floor(Math.random()*@state.featuredProjectsIds.length)]
 
   showLoginDialog: (which) ->
