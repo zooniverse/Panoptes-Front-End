@@ -27,13 +27,9 @@ SubjectSetListingData = React.createClass
   render: ->
     <table>
       {for subject in @props.subjects
-        <tr>
+        <tr key={subject.id}>
           <td>
             <small className="form-help">{subject.id}</small>
-          </td>
-          <td>
-            {for location in subject.locations
-              <div>{JSON.stringify location}</div>}
           </td>
           <td>
             <button type="button" onClick={@props.onPreview}><i className="fa fa-eye fa-fw"></i></button>
@@ -50,31 +46,33 @@ SubjectSetListing = React.createClass
 
   getInitialState: ->
     page: 1
+    pageCount: NaN
 
-  getSubjects: ->
-    getSetMemberSubjects = apiClient.type('set_member_subjects').get
+  render: ->
+    gettingSetMemberSubjects = apiClient.type('set_member_subjects').get
       subject_set_id: @props.subjectSet.id
       include: 'subject'
       page: @state.page
 
-    getSetMemberSubjects.get 'subject'
+    gettingSetMemberSubjects.then ([setMemberSubject]) =>
+      newPageCount = setMemberSubject?.getMeta().page_count
+      unless newPageCount is @state.pageCount
+        @setState pageCount: newPageCount
 
-  render: ->
-    pageCount = NaN
+    gettingSubjects = gettingSetMemberSubjects.get 'subject'
 
     <div>
-      <PromiseRenderer promise={@getSubjects()} then={(subjects) =>
-        pageCount = subject[0]?.getMeta().page_count ? 1
+      <PromiseRenderer promise={gettingSubjects} then={(subjects) =>
         <SubjectSetListingData subjects={subjects} />
       } />
       <nav className="pagination">
-        Page <select value={@state.page} disabled={isNaN pageCount} onChange={(e) => @setState page: e.target.value}>
-          {if isNaN pageCount
+        Page <select value={@state.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @setState page: e.target.value}>
+          {if isNaN @state.pageCount
             <option>?</option>
           else
-            for p in [1..pageCount]
+            for p in [1..@state.pageCount]
               <option key={p} value={p}>{p}</option>}
-        </select> of {pageCount || '?'}
+        </select> of {@state.pageCount || '?'}
       </nav>
     </div>
 
