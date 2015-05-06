@@ -98,7 +98,7 @@ module.exports = React.createClass
       # If the user hasn't interacted with a classification resource before,
       # we won't know how to resolve its links, so attach these manually.
       classification._workflow = workflow
-      classification._subject = subject
+      classification._subjects = [subject]
 
       classification
 

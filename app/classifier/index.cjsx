@@ -4,7 +4,6 @@ ChangeListener = require '../components/change-listener'
 SubjectViewer = require './subject-viewer'
 ClassificationSummary = require './classification-summary'
 tasks = require './tasks'
-PromiseToSetState = require '../lib/promise-to-set-state'
 
 NOOP = Function.prototype
 
@@ -141,28 +140,38 @@ Classifier = React.createClass
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
 
-  mixins: [HandlePropChanges, PromiseToSetState]
-
   getDefaultProps: ->
-    classification: if process.env.NODE_ENV is 'production'
-        null
-      else
-        mockData.classification
+    classification: mockData?.classification ? {}
+    onLoad: NOOP
+    onComplete: NOOP
+    onClickNext: NOOP
 
   getInitialState: ->
     workflow: null
     subject: null
 
-  propChangeHandlers:
-    classification: (classification) ->
-      @promiseToSetState
-        # TODO: These underscored references are temporary stopgaps.
-        workflow: Promise.resolve classification._workflow ? classification.get 'workflow'
-        subject: Promise.resolve classification._subject ? classification.get('subjects').then ([subject]) ->
-          subject
+  componentDidMount: ->
+    @loadClassification @props.classification
+
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.classification is @props.classification
+      @loadClassification nextProps.classification
+
+  loadClassification: (classification) ->
+    @setState @getInitialState()
+
+    # TODO: These underscored references are temporary stopgaps.
+
+    Promise.resolve(classification._workflow ? classification.get 'workflow').then (workflow) =>
+      @setState {workflow}
+
+    Promise.resolve(classification._subjects ? classification.get 'subjects').then ([subject]) =>
+      # We'll only handle one subject per classification right now.
+      # TODO: Support multi-subject classifications in the future.
+      @setState {subject}
 
   render: ->
     if @state.workflow? and @state.subject?
-      <Classifier {...@props} workflow={@state.workflow} subject={@state.subject} />
+      <Classifier {...@props} {...@state} />
     else
       <span>Loading classifier</span>
