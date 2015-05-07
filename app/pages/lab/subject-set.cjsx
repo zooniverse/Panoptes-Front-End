@@ -124,13 +124,11 @@ EditSubjectSetPage = React.createClass
     creationErrors: []
 
   render: ->
-    console.log 'Subject set changes:', @props.subjectSet._changedKeys.slice()
     <div>
       <form onSubmit={@handleSubmit}>
         <p>
-          Name{' '}
-          <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input" onChange={@handleChange} />{' '}
-          <span className="form-help">({@props.subjectSet.set_member_subjects_count} subjects)</span><br />
+          Name<br />
+          <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input full" onChange={@handleChange} />
           <small className="form-help">A subject set’s name is only seen by the science team.</small>
         </p>
         <p><button type="submit" className="standard-button" disabled={not @props.subjectSet.hasUnsavedChanges()}>Save changes</button> {@renderSaveStatus()}</p>
@@ -138,6 +136,7 @@ EditSubjectSetPage = React.createClass
 
       <hr />
 
+      This set contains {@props.subjectSet.set_member_subjects_count} subjects:<br />
       <SubjectSetListing subjectSet={@props.subjectSet} />
 
       <hr />
