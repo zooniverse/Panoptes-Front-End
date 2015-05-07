@@ -155,6 +155,7 @@ module.exports = React.createClass
       toolDescription = taskDescription.tools[@props.annotation._toolIndex]
       mark =
         tool: @props.annotation._toolIndex
+        frame: @state.frame
       if toolDescription.details?
         mark.details = for detailTaskDescription in toolDescription.details
           tasks[detailTaskDescription.type].getDefaultAnnotation()
