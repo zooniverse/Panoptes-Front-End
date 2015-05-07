@@ -131,8 +131,8 @@ module.exports = React.createClass
         @setState {naturalWidth, naturalHeight}
       @props.onLoad? arguments...
 
-  handleFrameChange: (e) ->
-    @setState frame: parseFloat e.target.value
+  handleFrameChange: (frame) ->
+    @setState {frame}
 
   updateAnnotations: ->
     @props.classification.update
