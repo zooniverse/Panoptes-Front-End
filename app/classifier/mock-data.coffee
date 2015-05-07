@@ -109,7 +109,7 @@ classification = apiClient.type('classifications').create
     workflow: workflow.id
     subjects: [subject.id]
   _workflow: workflow # TEMP
-  _subject: subject # TEMP
+  _subjects: [subject] # TEMP
 
 module.exports = {workflow, subject, classification}
 window.mockClassifierData = module.exports
