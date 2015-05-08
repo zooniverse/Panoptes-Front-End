@@ -3,6 +3,7 @@ BoundResourceMixin = require '../lib/bound-resource-mixin'
 ChangeListener = require '../components/change-listener'
 auth = require '../api/auth'
 PromiseRenderer = require '../components/promise-renderer'
+ImageSelector = require '../components/image-selector'
 
 UserSettingsPage = React.createClass
   displayName: 'UserSettingsPage'
@@ -18,7 +19,8 @@ UserSettingsPage = React.createClass
     <div>
       <div className="columns-container">
         <div className="content-container">
-          TODO: Avatar
+          Avatar<br />
+          <ImageSelector ratio={1} maxSize={65536} />
         </div>
 
         <hr />
