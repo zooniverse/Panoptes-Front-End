@@ -30,6 +30,8 @@ module.exports = React.createClass
     inProgress: false
     current: 0
     batch: []
+    successes: []
+    errors: []
 
   componentDidMount: ->
     if @props.autoStart
@@ -65,15 +67,15 @@ module.exports = React.createClass
           project: @props.project.id
 
       subject.save()
-        .catch (error) =>
-          console.error 'TODO: Handle subject creation error', error
         .then =>
           uploads = for typeToUploadURL, i in subject.locations
             uploadURL = typeToUploadURL[Object.keys(typeToUploadURL)[0]]
             putFile uploadURL, @props.files[subjectData.locations[i]]
           Promise.all uploads
+        .then (success) =>
+          @state.successes.push success
         .catch (error) =>
-          console.error 'TODO: Handle S3 upload error', error
+          @state.errors.push error
         .then =>
           @state.batch.push subject
           @setState
@@ -90,7 +92,9 @@ module.exports = React.createClass
         @state.batch.splice 0
 
         if @state.current is @props.subjects.length
-          @props.onComplete()
+          @props.onComplete
+            successes: @state.successes
+            errors: @state.errors
 
       .catch (error) =>
         console.error 'TODO: handle linking error', error
