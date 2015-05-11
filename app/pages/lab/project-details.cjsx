@@ -21,11 +21,11 @@ ExternalLinksEditor = React.createClass
           </tr>
         </thead>
         <tbody>
-          {for link, i in @props.project.external_links
+          {for link, i in @props.project.urls
             link._key ?= Math.random()
             <tr key={link._key}>
-              <td><input type="text" name="external_links.#{i}.label" value={link.label} onChange={@handleChange}/></td>
-              <td><input type="text" name="external_links.#{i}.url" value={link.url} onChange={@handleChange}/></td>
+              <td><input type="text" name="urls.#{i}.label" value={link.label} onChange={@handleChange}/></td>
+              <td><input type="text" name="urls.#{i}.url" value={link.url} onChange={@handleChange}/></td>
             </tr>}
         </tbody>
       </table>
@@ -35,7 +35,7 @@ ExternalLinksEditor = React.createClass
 
   handleAddLink: ->
     changes = {}
-    changes["external_links.#{@props.project.external_links.length}"] =
+    changes["urls.#{@props.project.urls.length}"] =
       label: 'Example'
       url: 'https://example.com/'
     @props.project.update changes
