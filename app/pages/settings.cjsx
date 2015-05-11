@@ -36,14 +36,14 @@ UserSettingsPage = React.createClass
                 <div className="form-help">Public; we’ll use this to give acknowledgement in papers, on posters, etc.</div>
               </td>
             </tr>
-
-            <tr>
-              <th>Any other stuff?</th>
-              <td>
-                TODO
-              </td>
-            </tr>
           </table>
+
+          <p>
+            <label>
+              <input type="checkbox" name="global_email_communication" checked={@props.user.global_email_communication} onChange={@handleChange} />{' '}
+              Get general Zooniverse email updates
+            </label>
+          </p>
 
           <p>
             <button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.user.hasUnsavedChanges()} onClick={@saveResource}>Save profile</button>{' '}
@@ -55,15 +55,7 @@ UserSettingsPage = React.createClass
       <hr />
 
       <div className="content-container">
-        <p><strong>Email preferences</strong></p>
-
-        <p>
-          <label>
-            <input type="checkbox" name="global_email_communication" checked={@props.user.global_email_communication} onChange={@handleChange} />{' '}
-            Get general Zooniverse email updates
-          </label>
-        </p>
-
+        <p><strong>Project email preferences</strong></p>
         <table>
           <thead>
             <tr>
