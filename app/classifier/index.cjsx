@@ -62,9 +62,10 @@ Classifier = React.createClass
               when 'multiple'
                 waitingForAnswer = currentTask.required and currentAnnotation.value.length is 0
 
-            nextTaskKey = if currentTask.type is 'single' and currentAnswer?
+            # If the next task key exists, make sure the task it points to actually exists.
+            nextTaskKey = if currentTask.type is 'single' and currentAnswer? and @props.workflow.tasks[currentAnswer.next]?
               currentAnswer.next
-            else
+            else if @props.workflow.tasks[currentTask.next]?
               currentTask.next
 
             <div className="task-container">
