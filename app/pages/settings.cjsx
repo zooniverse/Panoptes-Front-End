@@ -1,5 +1,6 @@
 React = require 'react'
 BoundResourceMixin = require '../lib/bound-resource-mixin'
+handleInputChange = require '../lib/handle-input-change'
 ChangeListener = require '../components/change-listener'
 auth = require '../api/auth'
 PromiseRenderer = require '../components/promise-renderer'
@@ -52,9 +53,38 @@ UserSettingsPage = React.createClass
       </div>
 
       <hr />
+
       <div className="content-container">
         <p><strong>Email preferences</strong></p>
-        <p>TODO</p>
+
+        <p>
+          <label>
+            <input type="checkbox" name="global_email_communication" checked={@props.user.global_email_communication} onChange={@handleChange} />{' '}
+            Get general Zooniverse email updates
+          </label>
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Receive email updates</th>
+            </tr>
+          </thead>
+          <PromiseRenderer promise={@props.user.get 'project_preferences'} pending={=> <tbody></tbody>} then={(projectPreferences) =>
+            <tbody>
+              {for projectPreference in projectPreferences
+                <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} then={(project) =>
+                  <ChangeListener target={projectPreference} handler={=>
+                    <tr>
+                      <td>{project.display_name}</td>
+                      <td><input type="checkbox" name="email_communication" checked={projectPreference.email_communication} onChange={@handleProjectEmailChange.bind this, projectPreference} /></td>
+                    </tr>
+                  } />
+                } />}
+            </tbody>
+          } />
+        </table>
       </div>
     </div>
 
@@ -62,6 +92,10 @@ UserSettingsPage = React.createClass
     apiClient.put @props.user._getURL('avatar'), media: content_type: file.type
       .then =>
         console.log 'Posted image response:', arguments
+
+  handleProjectEmailChange: (projectPreference, args...) ->
+    handleInputChange.apply projectPreference, args
+    projectPreference.save()
 
 module.exports = React.createClass
   displayName: 'UserSettingsPageWrapper'
