@@ -32,6 +32,12 @@ module.exports = React.createClass
   getInitialState: ->
     featuredProjectsIds: ['231', '405', '272', '166']
 
+  componentDidMount: ->
+    document.documentElement.classList.add 'on-home-page'
+
+  componentWillUnmount: ->
+    document.documentElement.classList.remove 'on-home-page'
+
   render: ->
     randomFeatured = @getFeaturedProject()
 
@@ -39,7 +45,7 @@ module.exports = React.createClass
       <section className="hero">
         <Translate component="h1" content="home.hero.title" />
         <Translate component="p" content="home.hero.intro" />
-        <Link to="projects" className="call-to-action standard-button"><Translate content="home.hero.button" /></Link>
+        <Link to="projects" className="call-to-action standard-button hero-button"><Translate content="home.hero.button" /></Link>
       </section>
       <PromiseRenderer promise={apiClient.type('projects').get(randomFeatured)}>{(project) =>
         <section className="featured-project">
