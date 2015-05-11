@@ -1,5 +1,6 @@
 React = require 'react'
 LoadingIndicator = require './loading-indicator'
+toBlob = require 'data-uri-to-blob'
 
 BASE_64_PNG_HEAD = 'data:image/png;base64,'
 BASE_64_JPEG_HEAD = 'data:image/jpeg;base64,'
@@ -113,7 +114,7 @@ module.exports = React.createClass
     # NOTE: In Chrome at least, PNG is always pretty huge.
     # I think it might not be doing any compression or something.
 
-    [url, format, size] = if pngSize < jpegSize
+    [dataURL, format, size] = if pngSize < jpegSize
       [pngURL, 'image/png', pngSize]
     else
       [jpegURL, 'image/jpeg', jpegSize]
@@ -124,4 +125,4 @@ module.exports = React.createClass
     else
       working = false
       @setState {format, size, working}
-      @props.onChange url, format
+      @props.onChange toBlob dataURL

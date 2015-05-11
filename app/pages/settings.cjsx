@@ -4,6 +4,7 @@ ChangeListener = require '../components/change-listener'
 auth = require '../api/auth'
 PromiseRenderer = require '../components/promise-renderer'
 ImageSelector = require '../components/image-selector'
+apiClient = require '../api/client'
 
 UserSettingsPage = React.createClass
   displayName: 'UserSettingsPage'
@@ -20,7 +21,7 @@ UserSettingsPage = React.createClass
       <div className="columns-container">
         <div className="content-container">
           Avatar<br />
-          <ImageSelector ratio={1} maxSize={65536} />
+          <ImageSelector ratio={1} maxSize={65536} onChange={@handleAvatarChange} />
         </div>
 
         <hr />
@@ -56,6 +57,11 @@ UserSettingsPage = React.createClass
         <p>TODO</p>
       </div>
     </div>
+
+  handleAvatarChange: (file) ->
+    apiClient.put @props.user._getURL('avatar'), media: content_type: file.type
+      .then =>
+        console.log 'Posted image response:', arguments
 
 module.exports = React.createClass
   displayName: 'UserSettingsPageWrapper'
