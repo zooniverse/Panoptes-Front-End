@@ -1,6 +1,45 @@
 React = require 'react'
 BoundResourceMixin = require '../../lib/bound-resource-mixin'
 
+ExternalLinksEditor = React.createClass
+  displayName: 'ExternalLinksEditor'
+
+  mixins: [BoundResourceMixin]
+
+  boundResource: 'project'
+
+  getDefaultProps: ->
+    project: {}
+
+  render: ->
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Label</th>
+            <th>URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {for link, i in @props.project.external_links
+            link._key ?= Math.random()
+            <tr key={link._key}>
+              <td><input type="text" name="external_links.#{i}.label" value={link.label} onChange={@handleChange}/></td>
+              <td><input type="text" name="external_links.#{i}.url" value={link.url} onChange={@handleChange}/></td>
+            </tr>}
+        </tbody>
+      </table>
+
+      <button type="button" onClick={@handleAddLink}>Add a link</button>
+    </div>
+
+  handleAddLink: ->
+    changes = {}
+    changes["external_links.#{@props.project.external_links.length}"] =
+      label: 'Example'
+      url: 'https://example.com/'
+    @props.project.update changes
+
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
 
@@ -56,6 +95,11 @@ module.exports = React.createClass
           Introduction<br />
           <textarea className="standard-input full" name="introduction" value={@props.project.introduction} rows="10" disabled={@state.saveInProgress} onChange={@handleChange} />
         </p>
+
+        <div>
+          External links<br />
+          <ExternalLinksEditor project={@props.project} />
+        </div>
 
         <p>
           <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
