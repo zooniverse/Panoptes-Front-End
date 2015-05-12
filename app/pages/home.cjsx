@@ -30,10 +30,8 @@ module.exports = React.createClass
   getInitialState: ->
     featuredProjectsIds: ['231', '405', '272', '166']
 
-  componentWillMount: ->
-    document.addEventListener 'scroll', @onScroll
-
   componentDidMount: ->
+    document.addEventListener 'scroll', @onScroll
     document.documentElement.classList.add 'on-home-page'
 
   componentWillUnmount: ->
@@ -50,17 +48,18 @@ module.exports = React.createClass
         <p className="hero-tagline"><Translate content="home.hero.tagline" /></p>
         <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
       </section>
-      <PromiseRenderer promise={apiClient.type('projects').get(@state.featuredProjectsIds)}>{(projects) =>
-        <section className="featured-projects">
-          {if projects?
-            <div className="featured-projects-list content-container">
-            {for project in projects
-              <ProjectCard key={project.id} project={project} />
-            }
-            </div>
-          }
-        </section>
-      }</PromiseRenderer>
+      <section className="featured-projects">
+        <div className="floating-container" ref="floatingContainer">
+          <PromiseRenderer promise={apiClient.type('projects').get(@state.featuredProjectsIds)}>{(projects) =>
+            if projects?
+              <div className="featured-projects-list content-container">
+              {for project in projects
+                <ProjectCard key={project.id} project={project} />
+              }
+              </div>
+          }</PromiseRenderer>
+        </div>
+      </section>
     </div>
 
   getFeaturedProject: ->
@@ -72,5 +71,9 @@ module.exports = React.createClass
       <LoginDialog which={which} onSuccess={resolve} />
 
   onScroll: (e) ->
-    console.log window.scrollY
+    floatingContainer = React.findDOMNode(@refs.floatingContainer)
 
+    if window.scrollY + window.innerHeight >= 1200
+      floatingContainer.classList.add 'sticky'
+    else
+      floatingContainer.classList.remove 'sticky'

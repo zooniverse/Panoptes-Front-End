@@ -55,8 +55,5 @@ module.exports = React.createClass
           <LoginBar />}
       </div>
 
-
-
-
       <div className="main-header-group"></div>
     </header>

@@ -24,9 +24,22 @@
       &:hover
         background: lighten(#4bb187, 20%)
 
-  .featured-projects-list
-    column-width: 20em
-    column-gap: 3vw
-    margin: 0 auto
-    max-width: 960px
+  .featured-projects
+    height: 1000px
+
+    .floating-container
+      position: fixed
+      top: 95vh
+      width: 100%
+
+    > .sticky
+      position: relative
+      top: 200px
+
+    .featured-projects-list
+      column-width: 20em
+      column-gap: 3vw
+      margin: 0 auto
+      max-width: 960px
+
 
