@@ -5,6 +5,9 @@ auth = require '../api/auth'
 PromiseRenderer = require '../components/promise-renderer'
 ImageSelector = require '../components/image-selector'
 apiClient = require '../api/client'
+putFile = require '../lib/put-file'
+
+MAX_AVATAR_SIZE = 65536
 
 UserSettingsPage = React.createClass
   displayName: 'UserSettingsPage'
@@ -16,12 +19,26 @@ UserSettingsPage = React.createClass
   getDefaultProps: ->
     user: {}
 
+  getInitialState: ->
+    avatarError: null
+
   render: ->
+    getAvatarSrc = @props.user.get 'avatar'
+      .then ([avatar]) ->
+        avatar.src
+      .catch ->
+        ''
+
     <div>
       <div className="columns-container">
         <div className="content-container">
           Avatar<br />
-          <ImageSelector ratio={1} maxSize={65536} onChange={@handleAvatarChange} />
+          <PromiseRenderer promise={getAvatarSrc} then={(avatarSrc) =>
+            placeholder = <div className="form-help content-container">Drop an image here</div>
+            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleAvatarChange} />
+          } />
+          {if @state.avatarError
+            <div className="form-help error">{@state.avatarError.toString()}</div>}
         </div>
 
         <hr />
@@ -59,9 +76,13 @@ UserSettingsPage = React.createClass
     </div>
 
   handleAvatarChange: (file) ->
+    @setState avatarError: null
     apiClient.post @props.user._getURL('avatar'), media: content_type: file.type
-      .then =>
-        console.log 'Posted image response:', arguments
+      .then ([avatar]) =>
+        console.log 'Will put file to', avatar.src
+        putFile avatar.src, file
+      .catch (error) =>
+        @setState avatarError: error
 
 module.exports = React.createClass
   displayName: 'UserSettingsPageWrapper'

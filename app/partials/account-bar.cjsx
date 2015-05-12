@@ -1,4 +1,5 @@
 React = require 'react'
+PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 auth = require '../api/auth'
 talkClient = require '../api/talk'
@@ -24,7 +25,9 @@ module.exports = React.createClass
 
   render: ->
     <div className="account-bar">
-      <img src={@props.user.avatar} className="avatar" />{' '}
+      <PromiseRenderer promise={@props.user.get 'avatar'} then={([avatar]) =>
+        <img src={avatar.src} className="avatar" />
+      } catch={null} />{' '}
       <strong><Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link></strong>&ensp;
       <Link to="inbox"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}"></i></Link>&ensp;
       <Link to="settings"><i className="fa fa-cog"></i></Link>&ensp;

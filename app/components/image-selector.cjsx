@@ -13,6 +13,7 @@ module.exports = React.createClass
     accept: 'image/*'
     maxSize: Infinity # In bytes
     ratio: NaN # Width / height
+    placeholder: ''
     quality: 0.8 # For JPEGs
     minArea: 100 # Stop reducing when there are fewer than this many pixels.
     reductionPerPass: 0.05
@@ -20,12 +21,9 @@ module.exports = React.createClass
 
   getInitialState: ->
     working: false
+    dataURL: ''
     format: ''
     size: NaN
-
-  componentDidMount: ->
-    canvas = @refs.preview.getDOMNode()
-    canvas.height = canvas.width * @props.ratio
 
   render: ->
     <span className="image-uploader" style={
@@ -36,10 +34,13 @@ module.exports = React.createClass
       borderRadius: 5
       position: 'relative'
     }>
-      <canvas ref="preview" style={
-        display: 'block'
-        maxWidth: '100%'
-      } />
+      {if @state.dataURL or @props.defaultValue
+        <img ref="preview" src={@state.dataURL || @props.defaultValue} style={
+          display: 'block'
+          maxWidth: '100%'
+        } />
+      else
+        @props.placeholder}
 
       <input type="file" accept={@props.accept} disabled={@state.working} style={
         cursor: 'pointer'
@@ -78,7 +79,7 @@ module.exports = React.createClass
     reader.readAsDataURL e.target.files[0]
 
   cropImage: (srcImg) ->
-    canvas = @refs.preview.getDOMNode()
+    canvas = document.createElement 'canvas'
     canvas.width = srcImg.naturalWidth
     canvas.height = srcImg.naturalHeight
 
@@ -97,10 +98,10 @@ module.exports = React.createClass
       @reduceImage croppedImg
     croppedImg.src = canvas.toDataURL()
 
-  reduceImage: (img, scale = 1) ->
-    canvas = @refs.preview.getDOMNode()
-    canvas.width = img.naturalWidth * scale
-    canvas.height = img.naturalHeight * scale
+  reduceImage: (img, _scale = 1) ->
+    canvas = document.createElement 'canvas'
+    canvas.width = img.naturalWidth * _scale
+    canvas.height = img.naturalHeight * _scale
 
     ctx = canvas.getContext '2d'
     ctx.drawImage img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, canvas.width, canvas.height
@@ -119,10 +120,11 @@ module.exports = React.createClass
     else
       [jpegURL, 'image/jpeg', jpegSize]
 
+    @setState {dataURL, format, size}
+
     if size > @props.maxSize and canvas.width * canvas.height > @props.minArea
       # Keep trying until it's small enough.
-      @reduceImage img, scale - @props.reductionPerPass
+      @reduceImage img, _scale - @props.reductionPerPass
     else
-      working = false
-      @setState {format, size, working}
+      @setState working: false
       @props.onChange toBlob dataURL
