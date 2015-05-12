@@ -81,6 +81,9 @@ UserSettingsPage = React.createClass
       .then ([avatar]) =>
         console.log 'Will put file to', avatar.src
         putFile avatar.src, file
+      .then =>
+        @props.user.uncacheLink 'avatar'
+        @props.user.emit 'change'
       .catch (error) =>
         @setState avatarError: error
 

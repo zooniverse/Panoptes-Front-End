@@ -1,5 +1,6 @@
 React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
+ChangeListener = require '../components/change-listener'
 {Link} = require 'react-router'
 auth = require '../api/auth'
 talkClient = require '../api/talk'
@@ -24,15 +25,17 @@ module.exports = React.createClass
       .catch (e) -> console.log "e unread messages", e
 
   render: ->
-    <div className="account-bar">
-      <PromiseRenderer promise={@props.user.get 'avatar'} then={([avatar]) =>
-        <img src={avatar.src} className="avatar" />
-      } catch={null} />{' '}
-      <strong><Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link></strong>&ensp;
-      <Link to="inbox"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}"></i></Link>&ensp;
-      <Link to="settings"><i className="fa fa-cog"></i></Link>&ensp;
-      <button type="button" className="pill-button" onClick={@handleSignOutClick}>Sign out</button>
-    </div>
+    <ChangeListener target={@props.user} handler={=>
+      <div className="account-bar">
+        <PromiseRenderer promise={@props.user.get 'avatar'} then={([avatar]) =>
+          <img src={avatar.src} className="avatar" />
+        } catch={null} />{' '}
+        <strong><Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link></strong>&ensp;
+        <Link to="inbox"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}"></i></Link>&ensp;
+        <Link to="settings"><i className="fa fa-cog"></i></Link>&ensp;
+        <button type="button" className="pill-button" onClick={@handleSignOutClick}>Sign out</button>
+      </div>
+    } />
 
   handleSignOutClick: ->
     auth.signOut()
