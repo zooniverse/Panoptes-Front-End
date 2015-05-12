@@ -1,30 +1,32 @@
 .home-page
   .hero
-    background: url(./assets/hero.jpg)
-    padding: 340px 3vw
+    background: url(./assets/hero.jpg) no-repeat top left
+    background-size: cover
+    padding: 332.5px 3vw
     text-align: center
+
+    .hero-title
+      color: #f9f9f9
+      font-weight: 300
+      line-height: 24px
+      padding: 1.5em 0 0.5em
+
+    .hero-tagline
+      color: #f9f9f9
+      margin: 0 auto
+      max-width: 600px
+      padding: 1em 0 6.5em
 
     .hero-button
       background: #4bb187
-      box-sizing: border-box
-      padding: 0.925em 1.4em
-      width: 250px
+      color: #fbfbfb
 
-  .primary-row, .secondary-row
-    padding: 1.5em 3vw
-    text-align: center
-
-  .primary-row
-    background: LIGHT_GREY
-
-  .secondary-row
-    background: FOREGROUND
-    color: white
+      &:hover
+        background: lighten(#4bb187, 20%)
 
   .featured-projects-list
     column-width: 20em
     column-gap: 3vw
+    margin: 0 auto
+    max-width: 960px
 
-  .call-to-try
-    button
-      margin: 1em 0

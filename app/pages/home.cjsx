@@ -13,15 +13,13 @@ LoginDialog = require '../partials/login-dialog'
 counterpart.registerTranslations 'en',
   home:
     hero:
-      title: 'Welcome'
-      intro: 'A tagline about the Zooniverse.'
+      title: 'People-Powered Science'
+      tagline: 'The Zooniverse is a platform for citizen science and an opportunity for anyone to contribute to science.'
       button: 'Get started!'
     featuredStats:
       project: 'Project'
       subjects: 'subjects'
       classifications: 'classifications'
-    featuredList:
-      title: 'Try out some of our other projects'
     try:
       title: 'Want to make your own project?'
       button: 'Create an account'
@@ -32,42 +30,28 @@ module.exports = React.createClass
   getInitialState: ->
     featuredProjectsIds: ['231', '405', '272', '166']
 
+  componentWillMount: ->
+    document.addEventListener 'scroll', @onScroll
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-home-page'
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-home-page'
+    document.removeEventListener 'scroll', @onScroll
 
   render: ->
     randomFeatured = @getFeaturedProject()
 
     <div className="home-page">
-      <section className="hero">
-        <Translate component="h1" content="home.hero.title" />
-        <Translate component="p" content="home.hero.intro" />
-        <Link to="projects" className="call-to-action standard-button hero-button"><Translate content="home.hero.button" /></Link>
+      <section className="hero on-dark">
+        <img src="./assets/zooniverse-logotype.png" alt="Zooniverse" />
+        <h3 className="hero-title"><Translate content="home.hero.title" /></h3>
+        <p className="hero-tagline"><Translate content="home.hero.tagline" /></p>
+        <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
       </section>
-      <PromiseRenderer promise={apiClient.type('projects').get(randomFeatured)}>{(project) =>
-        <section className="featured-project">
-            {if project?
-              <div>
-                <div className="secondary-row featured-project-stats">
-                  <h3><Translate component="span" content="home.featuredStats.project" /><span>{" " + project.display_name}</span></h3>
-                  <p><span>{project.subjects_count + " "}</span><Translate component="span" content="home.featuredStats.subjects" /></p>
-                  <p><span>{project.classifications_count + " "}</span><Translate component="span" content="home.featuredStats.classifications" /></p>
-                </div>
-                <div className="featured-project-classifier">
-                  <ProjectClassifyPage project={project} />
-                </div>
-              </div>
-            }
-        </section>
-      }</PromiseRenderer>
       <PromiseRenderer promise={apiClient.type('projects').get(@state.featuredProjectsIds)}>{(projects) =>
         <section className="featured-projects">
-          <div className="primary-row">
-            <Translate component="h3" content="home.featuredList.title" />
-          </div>
           {if projects?
             <div className="featured-projects-list content-container">
             {for project in projects
@@ -77,12 +61,6 @@ module.exports = React.createClass
           }
         </section>
       }</PromiseRenderer>
-      <section className="secondary-row call-to-try">
-        <Translate component="h3" content="home.try.title" />
-        <button type="button" className="call-to-action standard-button" onClick={@showLoginDialog.bind this, 'register'}>
-          <Translate content="home.try.button" />
-        </button>
-      </section>
     </div>
 
   getFeaturedProject: ->
@@ -92,3 +70,7 @@ module.exports = React.createClass
   showLoginDialog: (which) ->
     alert (resolve) ->
       <LoginDialog which={which} onSuccess={resolve} />
+
+  onScroll: (e) ->
+    console.log window.scrollY
+

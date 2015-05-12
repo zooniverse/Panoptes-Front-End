@@ -24,11 +24,11 @@ module.exports = React.createClass
 
   render: ->
     <div className="account-bar">
-      <img src={@props.user.avatar} className="avatar" />{' '}
-      <strong><Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link></strong>{' '}
+      <strong><Link to="user-profile" params={name: @props.user.display_name}>{@props.user.display_name}</Link></strong>
+      <img src={@props.user.avatar} className="avatar" />
 
       <Link to="inbox"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
-      <button type="button" className="pill-button" onClick={@handleSignOutClick}>Sign out</button>{' '}
+      <button type="button" className="pill-button" onClick={@handleSignOutClick}>Sign out</button>
       <Link to="settings" className="pill-button">Settings</Link>
     </div>
 

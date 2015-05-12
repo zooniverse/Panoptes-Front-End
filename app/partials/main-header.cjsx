@@ -12,8 +12,8 @@ auth = require '../api/auth'
 counterpart.registerTranslations 'en',
   mainNav:
     home: 'Home'
-    about: 'About'
-    projects: 'Projects'
+    discover: 'Discover'
+    learn: 'Learn'
     discuss: 'Discuss'
     lab: 'The lab'
 
@@ -41,21 +41,21 @@ module.exports = React.createClass
         <Link to="home" className="main-logo">
           <ZooniverseLogo /> Zooniverse
         </Link>
-
+        <nav className="main-nav">
+          <Link to="projects" className="main-nav-item"><Translate content="mainNav.discover" /></Link>
+          <a className="main-nav-item"><Translate content="mainNav.learn" /></a>
+          <Link to="talk" className="main-nav-item"><Translate content="mainNav.discuss" /></Link>
+          <hr />
+          {if @state.user?
+            <Link to="lab" className="main-nav-item"><Translate className="minor" content="mainNav.lab" /></Link>}
+        </nav>
         {if @state.user?
           <AccountBar user={@state.user} />
         else
           <LoginBar />}
       </div>
 
-      <nav className="main-nav">
-        <span className="main-nav-item"><Translate content="mainNav.about" /></span>
-        <Link to="projects" className="main-nav-item"><Translate content="mainNav.projects" /></Link>
-        <Link to="talk" className="main-nav-item"><Translate content="mainNav.discuss" /></Link>
-        <hr />
-        {if @state.user?
-          <Link to="lab" className="main-nav-item"><Translate className="minor" content="mainNav.lab" /></Link>}
-      </nav>
+
 
 
       <div className="main-header-group"></div>

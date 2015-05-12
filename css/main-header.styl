@@ -1,4 +1,12 @@
 .main-header
+
+  .on-home-page &
+    position: absolute
+    width: 100%
+
+    .main-nav-item:hover
+      background: rgba(0,0,0,0.2)
+
   a
     color: inherit
     text-decoration: none
@@ -10,11 +18,15 @@
     &:hover
       opacity: 1
 
-  .avatar
-    height: calc(1em + 1.5vw)
-    margin: -4em 0 -3.7em -0.3em
-    vertical-align: middle
-    width: calc(1em + 1.5vw)
+  .account-bar
+    .avatar
+      height: calc(1em + 1.5vw)
+      margin: -4em 0 -3.7em -0.3em
+      vertical-align: middle
+      width: calc(1em + 1.5vw)
+
+    > *:nth-child(n)
+      margin-right: 1.75em
 
 .main-title
   align-items: baseline
@@ -24,14 +36,17 @@
   display: flex
   flex-wrap: wrap
   justify-content: space-between
-  padding: 0.5em 3vw
+  padding: 1em 3vw
 
-  .on-project-page &
+  .on-home-page &
+    border-bottom: none
+
+  .on-project-page &, .on-home-page &
     background: transparent
 
 .main-logo
   font-family: "Montserrat"
-  font-size: 1.3em
+  font-size: 1.9em
   font-smoothing: antialiased
   letter-spacing: 0.05em
   text-transform: uppercase
@@ -41,18 +56,19 @@
 
 .main-nav
   display: flex
+  flex-grow: 1
   flex-wrap: wrap
-  border-bottom: 1px solid rgba(FOREGROUND, 0.3)
+  // border-bottom: 1px solid rgba(FOREGROUND, 0.3)
 
   > hr
     border: 0
-    border-right: 1px solid rgba(FOREGROUND, 0.3)
+    // border-right: 1px solid rgba(FOREGROUND, 0.3)
     flex: 1 1 auto
     margin: 0
 
 .main-nav-item
   padding: 0.5em 3vw
-  border-right: 1px solid rgba(FOREGROUND, 0.3)
+  // border-right: 1px solid rgba(FOREGROUND, 0.3)
   box-shadow: 0 0 0 MAIN_HIGHLIGHT inset
 
   &:link:hover
