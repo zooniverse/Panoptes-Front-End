@@ -59,7 +59,7 @@ UserSettingsPage = React.createClass
     </div>
 
   handleAvatarChange: (file) ->
-    apiClient.put @props.user._getURL('avatar'), media: content_type: file.type
+    apiClient.post @props.user._getURL('avatar'), media: content_type: file.type
       .then =>
         console.log 'Posted image response:', arguments
 
