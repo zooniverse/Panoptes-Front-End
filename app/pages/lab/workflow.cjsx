@@ -54,14 +54,24 @@ EditWorkflowPage = React.createClass
                     {' '}
                     {tasks[definition.type].getTaskText definition}
                     {if key is @props.workflow.first_task
-                      <em> (first)</em>}
+                      <small> <em>(first)</em></small>}
                   </button>
                 </div>}
             </div>
 
-            Add task{' '}
-            <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'}><strong>Question</strong></button>{' '}
-            <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'}><strong>Drawing</strong></button>
+            <div>
+              <small>Add task</small>{' '}
+              <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'}><strong>Question</strong></button>{' '}
+              <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'}><strong>Drawing</strong></button>
+            </div>
+
+            <div>
+              <small>First task</small>{' '}
+              <select name="first_task" value={@props.workflow.first_task} onChange={@handleChange}>
+                {for taskKey, definition of @props.workflow.tasks
+                  <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
+              </select>
+            </div>
           </div>
 
           {unless @props.project.private
