@@ -90,7 +90,7 @@ module.exports = React.createClass
 
         {if @state.selectedMark? and @refs.selectedTool?
           toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
-          if toolDescription?.details?
+          if toolDescription?.details?.length > 0
             sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
             toolRect = @refs.selectedTool.getDOMNode().getBoundingClientRect()
 
