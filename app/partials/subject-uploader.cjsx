@@ -1,19 +1,8 @@
 React = require 'react'
 apiClient = require '../api/client'
+putFile = require '../lib/put-file'
 
 NOOP = Function.prototype
-
-putFile = (location, file) ->
-  new Promise (resolve, reject) =>
-    xhr = new XMLHttpRequest
-    xhr.onreadystatechange = (e) =>
-      if e.target.readyState is e.target.DONE
-        if 200 <= e.target.status < 300
-          resolve e.target
-        else
-          reject e.target
-    xhr.open 'PUT', location
-    xhr.send file
 
 module.exports = React.createClass
   displayName: 'SubjectUploader'
