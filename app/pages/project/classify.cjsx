@@ -6,6 +6,7 @@ apiClient = require '../../api/client'
 animatedScrollTo = require 'animated-scrollto'
 counterpart = require 'counterpart'
 Classifier = require '../../classifier'
+sessionSubjects = require '../../lib/session-subjects'
 
 SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
 
@@ -139,7 +140,9 @@ module.exports = React.createClass
     console?.info 'Completed classification', @state.classification
     @state.classification.save().then (classification) =>
       console?.log 'Saved classification', classification.id
-      classification.destroy()
+      classification.get('subjects').then (subjects) ->
+        sessionSubjects.push (id for {id} in subjects)...
+        classification.destroy()
 
   loadAnotherSubject: ->
     @getCurrentWorkflowID(@props).then (workflowID) =>
