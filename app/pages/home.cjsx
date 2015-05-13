@@ -28,7 +28,7 @@ module.exports = React.createClass
   displayName: 'HomePage'
 
   getInitialState: ->
-    featuredProjectsIds: ['231', '405', '272', '166']
+    featuredProjectsIds: {dev: ['231', '405', '272', '166'], production: []}
 
   componentDidMount: ->
     document.addEventListener 'scroll', @onScroll
@@ -39,7 +39,7 @@ module.exports = React.createClass
     document.removeEventListener 'scroll', @onScroll
 
   render: ->
-    randomFeatured = @getFeaturedProject()
+    featuredProjects = @getFeaturedProjects()
 
     <div className="home-page">
       <section className="hero on-dark">
@@ -50,7 +50,7 @@ module.exports = React.createClass
       </section>
       <section className="featured-projects">
         <div className="floating-container" ref="floatingContainer">
-          <PromiseRenderer promise={apiClient.type('projects').get(@state.featuredProjectsIds)}>{(projects) =>
+          <PromiseRenderer promise={apiClient.type('projects').get(featuredProjects)}>{(projects) =>
             if projects?
               <div className="featured-projects-list content-container">
               {for project in projects
@@ -62,9 +62,10 @@ module.exports = React.createClass
       </section>
     </div>
 
-  getFeaturedProject: ->
-    # This will be changed later to look for launched_approved boolean set to true
-    @state.featuredProjectsIds[Math.floor(Math.random()*@state.featuredProjectsIds.length)]
+  getFeaturedProjects: ->
+    # This will be changed later to look for launched_approved boolean set to true or use a set of hardcoded IDs when in production
+    appState = if window.location.hostname isnt 'www.zooniverse.org' then 'dev' else 'production'
+    @state.featuredProjectsIds[appState]
 
   showLoginDialog: (which) ->
     alert (resolve) ->
@@ -73,6 +74,7 @@ module.exports = React.createClass
   onScroll: (e) ->
     floatingContainer = React.findDOMNode(@refs.floatingContainer)
 
+    #Stick or unstick floating container of featured projects
     if window.scrollY + window.innerHeight >= 1200
       floatingContainer.classList.add 'sticky'
     else

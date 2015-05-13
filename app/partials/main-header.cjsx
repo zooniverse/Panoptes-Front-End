@@ -28,18 +28,37 @@ module.exports = React.createClass
   componentDidMount: ->
     @handleAuthChange()
     auth.listen @handleAuthChange
+    @addEventListeners()
 
   componentWillUnmount: ->
     auth.stopListening @handleAuthChange
+    @removeEventListeners()
+
+  addEventListeners: ->
+    if @checkIfOnHome() then document.addEventListener 'scroll', @onScroll
+    window.addEventListener 'hashchange', @onHashChange
+
+  removeEventListeners: ->
+    document.removeEventListener 'scroll', @onScroll
+    window.removeEventListener 'hashchange', @onHashChange
+
+  onHashChange: ->
+    if @checkIfOnHome()
+      document.addEventListener 'scroll', @onScroll
+    else
+     document.removeEventListener 'scroll', @onScroll
+
+  checkIfOnHome: ->
+    return true if window.location.hash is '#/'
 
   handleAuthChange: ->
     @promiseToSetState user: auth.checkCurrent()
 
   render: ->
     <header className="main-header">
-      <div className="main-title">
+      <div className="main-title" ref="mainTitle">
         <Link to="home" className="main-logo">
-          <ZooniverseLogo /> Zooniverse
+          <ZooniverseLogo />
         </Link>
         <nav className="main-nav">
           <Link to="projects" className="main-nav-item"><Translate content="mainNav.discover" /></Link>
@@ -57,3 +76,13 @@ module.exports = React.createClass
 
       <div className="main-header-group"></div>
     </header>
+
+  onScroll: ->
+    mainTitle = React.findDOMNode(@refs.mainTitle)
+
+    if window.scrollY >= 200
+      mainTitle.classList.add 'sticky'
+
+    if window.scrollY is 0
+      mainTitle.classList.remove 'sticky'
+

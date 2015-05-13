@@ -4,16 +4,6 @@
     position: absolute
     width: 100%
 
-    .main-nav-item:hover
-      background: rgba(0,0,0,0.2)
-
-    .account-bar .account-menu
-      background: white
-      color: COPY
-
-      &:before
-        border-color: #fff transparent
-
   a
     color: inherit
     text-decoration: none
@@ -48,7 +38,7 @@
       display: none
       flex-direction: column
       font-size: 14px
-      margin: 0 1.75em
+      margin: 0 1.60em
       padding: 1.5em
       position: absolute
 
@@ -80,9 +70,29 @@
 
   .on-home-page &
     border-bottom: none
+    transition: background 1s ease
+
+    .main-nav-item:hover
+      background: rgba(0,0,0,0.2)
+
+    .account-bar .account-menu
+      background: white
+      color: COPY
+
+      &:before
+        border-color: #fff transparent
 
   .on-project-page &, .on-home-page &
     background: transparent
+
+  &.sticky
+    background: rgba(0,0,0,0.7)
+    position: fixed
+    width: 100%
+    z-index: 1
+
+    .main-nav-item:hover
+      background: rgba(0,0,0,0.8)
 
 .main-logo
   font-family: "Montserrat"
@@ -98,24 +108,22 @@
   display: flex
   flex-grow: 1
   flex-wrap: wrap
-  // border-bottom: 1px solid rgba(FOREGROUND, 0.3)
+  padding: 0 1em
 
   > hr
     border: 0
-    // border-right: 1px solid rgba(FOREGROUND, 0.3)
     flex: 1 1 auto
     margin: 0
 
 .main-nav-item
   padding: 0.5em 3vw
-  // border-right: 1px solid rgba(FOREGROUND, 0.3)
   box-shadow: 0 0 0 MAIN_HIGHLIGHT inset
 
   &:link:hover
-    background: rgba(MAIN_HIGHLIGHT, 0.2)
+    background: rgba(255,255,255, 0.2)
 
   &.active
-    box-shadow: 0 -3px 0 MAIN_HIGHLIGHT inset
+    box-shadow: 0 -3px 0 white inset
     font-weight: bold
 
   a:hover
