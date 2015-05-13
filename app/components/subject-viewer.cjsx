@@ -1,5 +1,6 @@
 React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
+FavoritesButton = require '../collections/favorites-button'
 alert = require '../lib/alert'
 getSubjectLocation = require '../lib/get-subject-location'
 
@@ -66,6 +67,8 @@ module.exports = React.createClass
           {if @props.subject?.metadata?
             <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-table fa-fw"></i></button>}
         </span>
+        {if @props.subject
+          <FavoritesButton subject={@props.subject} />}
       </div>
     </div>
 

@@ -3,6 +3,7 @@ apiClient = require '../api/client'
 getSubjectLocation = require '../lib/get-subject-location'
 PromiseRenderer = require '../components/promise-renderer'
 loadImage = require '../lib/load-image'
+FavoritesButton = require '../collections/favorites-button'
 
 module?.exports = React.createClass
   displayName: 'TalkSubjectDisplay'
@@ -18,6 +19,7 @@ module?.exports = React.createClass
             <img src={getSubjectLocation(subject).src} />
           </a>
           <p>Subject {subject.id}</p>
+          <FavoritesButton subject={subject} />
         </div>
       }</PromiseRenderer>
     </div>
