@@ -131,8 +131,8 @@ module.exports = React.createClass
         @setState {naturalWidth, naturalHeight}
       @props.onLoad? arguments...
 
-  handleFrameChange: (e) ->
-    @setState frame: parseFloat e.target.value
+  handleFrameChange: (frame) ->
+    @setState {frame}
 
   updateAnnotations: ->
     @props.classification.update
@@ -155,6 +155,7 @@ module.exports = React.createClass
       toolDescription = taskDescription.tools[@props.annotation._toolIndex]
       mark =
         tool: @props.annotation._toolIndex
+        frame: @state.frame
       if toolDescription.details?
         mark.details = for detailTaskDescription in toolDescription.details
           tasks[detailTaskDescription.type].getDefaultAnnotation()
