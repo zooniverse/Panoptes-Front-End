@@ -37,20 +37,21 @@ ProjectPage = React.createClass
   render: ->
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
-        if @props.project.background_image
-          backgroundStyle =
-            backgroundImage: "url('#{@props.project.background_image}')"
-
         params =
           owner: owner.display_name
           name: @props.project.display_name
 
         <div className="project-page">
-          <div className="project-background" style={backgroundStyle}></div>
+          <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
+            <div className="project-background" style={backgroundImage: "url('#{background.src}')"}></div>
+          } catch={null} />
 
           <nav className="project-nav tabbed-content-tabs">
             <Link to="project-home" params={params} className="tabbed-content-tab">
-              <img src={@props.project.avatar} className="avatar" /> {@props.project.display_name}
+              <PromiseRenderer promise={@props.project.get 'avatar'} then={(avatar) =>
+                <img src={avatar.src} className="avatar" />
+              } catch={null} />
+              {@props.project.display_name}
             </Link>
             <Link to="project-science-case" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.science" />
