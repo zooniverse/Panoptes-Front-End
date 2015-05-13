@@ -69,6 +69,6 @@ module.exports = React.createClass
 
     #Stick or unstick floating container of featured projects
     if window.scrollY + window.innerHeight >= 1200
-      floatingContainer.classList.add 'sticky'
+      floatingContainer.classList.add 'featured-projects-sticky'
     else
-      floatingContainer.classList.remove 'sticky'
+      floatingContainer.classList.remove 'featured-projects-sticky'

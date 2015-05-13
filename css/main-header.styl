@@ -19,7 +19,7 @@
     position: relative
 
     .account-info
-      padding-bottom: 1.75em
+      padding-bottom: 1.5em
 
       .avatar
         height: calc(1em + 1.5vw)
@@ -38,7 +38,7 @@
       display: none
       flex-direction: column
       font-size: 14px
-      margin: 0 1.60em
+      margin: 0 1.65em
       padding: 1.5em
       position: absolute
 
@@ -65,7 +65,6 @@
   display: flex
   flex-wrap: wrap
   justify-content: space-between
-  max-height: 60px
   padding: 1em 3vw
 
   .on-home-page &
@@ -85,7 +84,7 @@
   .on-project-page &, .on-home-page &
     background: transparent
 
-  &.sticky
+  &.header-sticky
     background: rgba(0,0,0,0.7)
     position: fixed
     width: 100%
@@ -118,6 +117,7 @@
 .main-nav-item
   padding: 0.5em 3vw
   box-shadow: 0 0 0 MAIN_HIGHLIGHT inset
+  margin: 0.5em 0 0
 
   &:link:hover
     background: rgba(255,255,255, 0.2)

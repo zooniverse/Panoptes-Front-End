@@ -47,6 +47,7 @@ module.exports = React.createClass
       document.addEventListener 'scroll', @onScroll
     else
      document.removeEventListener 'scroll', @onScroll
+     React.findDOMNode(@refs.mainTitle).classList.remove 'header-sticky'
 
   checkIfOnHome: ->
     return true if window.location.hash is '#/'
@@ -81,8 +82,8 @@ module.exports = React.createClass
     mainTitle = React.findDOMNode(@refs.mainTitle)
 
     if window.scrollY >= 200
-      mainTitle.classList.add 'sticky'
+      mainTitle.classList.add 'header-sticky'
 
     if window.scrollY is 0
-      mainTitle.classList.remove 'sticky'
+      mainTitle.classList.remove 'header-sticky'
 
