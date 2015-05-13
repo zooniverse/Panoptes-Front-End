@@ -1,4 +1,6 @@
 React = require 'react'
+PromiseRenderer = require '../components/promise-renderer'
+ChangeListener = require '../components/change-listener'
 {Link} = require 'react-router'
 auth = require '../api/auth'
 talkClient = require '../api/talk'
@@ -32,18 +34,23 @@ module.exports = React.createClass
       .catch (e) -> console.log "e unread messages", e
 
   render: ->
-    <div className="account-bar">
-      <div className="account-info">
-        <span className="display-name"><strong>{@props.user.display_name}</strong></span>
-        <img src={@props.user.avatar} className="avatar" />
-        <Link to="inbox"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
+    <ChangeListener target={@props.user} handler={=>
+      <div className="account-bar">
+        <div className="account-info">
+          <span className="display-name"><strong>{@props.user.display_name}</strong></span>
+          <PromiseRenderer promise={@props.user.get 'avatar'} then={([avatar]) =>
+            <img src={avatar.src} className="avatar" />
+          } catch={null} />{' '}
+          <img src={@props.user.avatar} className="avatar" />
+          <Link to="inbox"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
+        </div>
+        <div className="account-menu" ref="accountMenu">
+          <Link to="user-profile" params={name: @props.user.display_name}><Translate content="accountMenu.profile" /></Link>
+          <Link to="settings"><Translate content="accountMenu.settings" /></Link>
+          <button className="secret-button" type="button" onClick={@handleSignOutClick}><Translate content="accountMenu.signOut" /></button>
+        </div>
       </div>
-      <div className="account-menu" ref="accountMenu">
-        <Link to="user-profile" params={name: @props.user.display_name}><Translate content="accountMenu.profile" /></Link>
-        <Link to="settings"><Translate content="accountMenu.settings" /></Link>
-        <button className="secret-button" type="button" onClick={@handleSignOutClick}><Translate content="accountMenu.signOut" /></button>
-      </div>
-    </div>
+    } />
 
   handleSignOutClick: ->
     auth.signOut()

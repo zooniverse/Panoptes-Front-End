@@ -266,15 +266,16 @@ module.exports = React.createClass
 
   removeTask: (taskKey) ->
     for key, task of @props.workflow.tasks
+      # Remove the task from any task that declares it the next.
       if task.next is taskKey
         delete task.next
-      if task.type in ['single', 'multiple'] and task.answers?
+      if task.answers?
+        # Remove the task from any answer that declares it the next.
         for answer in task.answers when answer.next is taskKey
           delete answer.next
+    # Find a new first task, if we're removing the current one.
     if taskKey is @props.workflow.first_task
-      if @props.workflow.tasks[taskKey].next?
-        @props.workflow.first_task = @props.workflow.tasks[taskKey].next
-      else
-        delete @props.workflow.first_task
+      @props.workflow.update first_task: @props.workflow.tasks[taskKey].next ? Object.keys(@props.workflow.tasks)[0]
+
     delete @props.workflow.tasks[taskKey]
     @props.workflow.update 'tasks'

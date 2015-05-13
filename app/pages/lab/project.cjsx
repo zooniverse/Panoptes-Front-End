@@ -194,16 +194,40 @@ module.exports = React.createClass
       projectID: '0'
 
   render: ->
-    getProject = auth.checkCurrent().then =>
-      apiClient.type('projects').get @props.params.projectID
-
     <ChangeListener target={auth} handler={=>
-      <PromiseRenderer promise={getProject} pending={=>
-        <p className="form-help">Loading project</p>
-      } then={(project) =>
-        @_project = project
-        <EditProjectPage {...@props} project={project} />
-      } catch={(error) =>
-        <p className="form-help error">{error.toString()}</p>
+      <PromiseRenderer promise={auth.checkCurrent()} then={(user) =>
+        if user?
+          getProject = auth.checkCurrent().then =>
+            apiClient.type('projects').get @props.params.projectID
+
+          getOwners = getProject.then (project) =>
+            project.get('project_roles').then (projectRoles) =>
+              owners = for projectRole in projectRoles when 'owner' in projectRole.roles or 'collaborator' in projectRole.roles
+                projectRole.get 'owner'
+              Promise.all owners
+
+          getProjectAndOwners = Promise.all [getProject, getOwners]
+
+          <PromiseRenderer promise={getProjectAndOwners} pending={=>
+            <div className="content-container">
+              <p className="form-help">Loading project</p>
+            </div>
+          } then={([project, owners]) =>
+            console.log user, owners
+            if user in owners
+              <EditProjectPage {...@props} project={project} />
+            else
+              <div className="content-container">
+                <p>You don’t have permission to edit this project.</p>
+              </div>
+          } catch={(error) =>
+            <div className="content-container">
+              <p className="form-help error">{error.toString()}</p>
+            </div>
+          } />
+        else
+          <div className="content-container">
+            <p>You need to be signed in to use the lab.</p>
+          </div>
       } />
     } />
