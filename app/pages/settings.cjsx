@@ -1,77 +1,103 @@
 React = require 'react'
-promiseToSetState = require '../lib/promise-to-set-state'
+BoundResourceMixin = require '../lib/bound-resource-mixin'
+ChangeListener = require '../components/change-listener'
 auth = require '../api/auth'
-InPlaceForm = require '../components/in-place-form'
+PromiseRenderer = require '../components/promise-renderer'
+ImageSelector = require '../components/image-selector'
+apiClient = require '../api/client'
+putFile = require '../lib/put-file'
 
-module.exports = React.createClass
-  displayName: 'SettingsPage'
+MAX_AVATAR_SIZE = 65536
 
-  mixins: [promiseToSetState]
+UserSettingsPage = React.createClass
+  displayName: 'UserSettingsPage'
 
-  _user: null # This is only used to keep track of user change listeners.
+  mixins: [BoundResourceMixin]
 
-  componentDidMount: ->
-    @handleAuthChange()
-    auth.listen @handleAuthChange
+  boundResource: 'user'
 
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
+  getDefaultProps: ->
+    user: {}
 
-  handleAuthChange: ->
-    userPromise = auth.checkCurrent()
-
-    userPromise.then (user) =>
-      unless user is @_user
-        @_user?.stopListening 'change', @handleUserChange
-        @_user = user
-        @_user?.listen 'change', @handleUserChange
-
-    @promiseToSetState user: userPromise
-
-  handleUserChange: ->
-    @forceUpdate()
+  getInitialState: ->
+    avatarError: null
 
   render: ->
-    notSignedIn = not @state.user?
-    loading = @state.user instanceof Promise
-    saveInProgress = @state.saving instanceof Promise
-    disabled = notSignedIn or loading or saveInProgress
+    getAvatarSrc = @props.user.get 'avatar'
+      .then ([avatar]) ->
+        avatar.src
+      .catch ->
+        ''
 
-    <div className="edit-account-page content-container tabbed-content" data-side="left">
-      <div className="tabbed-content-tabs">
-        <a href="/settings" root={true} className="tabbed-content-tab">Profile</a>
+    <div>
+      <div className="columns-container">
+        <div className="content-container">
+          Avatar<br />
+          <PromiseRenderer promise={getAvatarSrc} then={(avatarSrc) =>
+            placeholder = <div className="form-help content-container">Drop an image here</div>
+            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleAvatarChange} />
+          } />
+          {if @state.avatarError
+            <div className="form-help error">{@state.avatarError.toString()}</div>}
+        </div>
+
+        <hr />
+
+        <div className="content-container column">
+          <table className="standard-table full">
+            <tr>
+              <th>Credited name</th>
+              <td>
+                <input type="text" className="standard-input full" name="credited_name" value={@props.user.credited_name} onChange={@handleChange} />
+                <div className="form-help">Public; we’ll use this to give acknowledgement in papers, on posters, etc.</div>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Any other stuff?</th>
+              <td>
+                TODO
+              </td>
+            </tr>
+          </table>
+
+          <p>
+            <button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.user.hasUnsavedChanges()} onClick={@saveResource}>Save profile</button>{' '}
+            {@renderSaveStatus()}
+          </p>
+        </div>
       </div>
 
+      <hr />
       <div className="content-container">
-          <InPlaceForm onSubmit={@saveUser}>
-            <fieldset>
-              <legend>Optional profile details</legend>
-              <table className="for-text-fields">
-                <tr>
-                  <th>Your credited name</th>
-                  <td>
-                    <input type="text" name="credited_name" placeholder="John Smith" value={@state.user?.credited_name} disabled={disabled} onChange={@handleBoundInput} /><br />
-                    <span className="form-help">We’ll use this to give acknowledgement in papers, on posters, etc.</span>
-                  </td>
-                </tr>
-              </table>
-            </fieldset>
-
-            <p><button type="submit" disabled={disabled}>Save profile</button></p>
-          </InPlaceForm>
+        <p><strong>Email preferences</strong></p>
+        <p>TODO</p>
       </div>
     </div>
 
-  handleBoundInput: (e) ->
-    changes = {}
-    changes[e.target.name] = e.target.value
-    @state.user.update changes
+  handleAvatarChange: (file) ->
+    @setState avatarError: null
+    apiClient.post @props.user._getURL('avatar'), media: content_type: file.type
+      .then ([avatar]) =>
+        console.log 'Will put file to', avatar.src
+        putFile avatar.src, file
+      .then =>
+        @props.user.uncacheLink 'avatar'
+        @props.user.emit 'change'
+      .catch (error) =>
+        @setState avatarError: error
 
-  saveUser: ->
-    save = @state.user.save()
+module.exports = React.createClass
+  displayName: 'UserSettingsPageWrapper'
 
-    save.catch ({errors}) ->
-      errorMessage = (message for {message} in errors).join '\n'
-      alert errorMessage # TODO: Something nicer
-
-    @promiseToSetState saving: save
+  render: ->
+    <ChangeListener target={auth} handler={=>
+      <PromiseRenderer promise={auth.checkCurrent()} then={(user) =>
+        if user?
+          <UserSettingsPage user={user} />
+        else
+          <div className="content-container">
+            <p>You’re not signed in.</p>
+          </div>
+      } />
+    } />
