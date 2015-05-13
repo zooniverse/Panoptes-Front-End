@@ -16,13 +16,6 @@ counterpart.registerTranslations 'en',
       title: 'People-Powered Science'
       tagline: 'The Zooniverse is a platform for citizen science and an opportunity for anyone to contribute to science.'
       button: 'Get started!'
-    featuredStats:
-      project: 'Project'
-      subjects: 'subjects'
-      classifications: 'classifications'
-    try:
-      title: 'Want to make your own project?'
-      button: 'Create an account'
 
 module.exports = React.createClass
   displayName: 'HomePage'
