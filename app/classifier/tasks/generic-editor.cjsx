@@ -45,18 +45,16 @@ module.exports = React.createClass
       when 'drawing' then ['instruction', 'tools']
 
     <div className="workflow-task-editor #{@props.task.type}">
-      <div className="columns-container">
-        <div>
-          <span className="form-label">Main text</span><br />
-          <textarea name={mainTextKey} value={@props.task[mainTextKey]} className="standard-input full" onChange={@handleInputChange} />
-        </div>
-
-        {unless @props.isSubtask
-          <div>
-            <span className="form-label">Help text</span><br />
-            <textarea name="help" value={@props.task.help ? ''} className="standard-input full" onChange={@handleInputChange} />
-          </div>}
+      <div>
+        <span className="form-label">Main text</span><br />
+        <textarea name={mainTextKey} value={@props.task[mainTextKey]} className="standard-input full" onChange={@handleInputChange} />
       </div>
+
+      {unless @props.isSubtask
+        <div>
+          <span className="form-label">Help text</span><br />
+          <textarea name="help" value={@props.task.help ? ''} rows={7} className="standard-input full" onChange={@handleInputChange} />
+        </div>}
 
       <hr />
 
@@ -131,7 +129,11 @@ module.exports = React.createClass
           <NextTaskSelector workflow={@props.workflow} name="next" value={@props.task.next ? ''} onChange={@handleInputChange} />
         </div>}
 
-      <small><button type="button" className="minor-button" onClick={@props.onDelete}>Remove task</button></small>
+      <hr />
+
+      <div>
+        <small><button type="button" className="minor-button" onClick={@props.onDelete}>Remove task</button></small>
+      </div>
     </div>
 
   handleInputChange: (e) ->
