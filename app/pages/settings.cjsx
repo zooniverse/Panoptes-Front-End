@@ -23,7 +23,7 @@ UserSettingsPage = React.createClass
     avatarError: null
 
   render: ->
-    getAvatarSrc = @props.user.get 'avatar'
+    @getAvatarSrc ?= @props.user.get 'avatar'
       .then ([avatar]) ->
         avatar.src
       .catch ->
@@ -33,7 +33,7 @@ UserSettingsPage = React.createClass
       <div className="columns-container">
         <div className="content-container">
           Avatar<br />
-          <PromiseRenderer promise={getAvatarSrc} then={(avatarSrc) =>
+          <PromiseRenderer promise={@getAvatarSrc} then={(avatarSrc) =>
             placeholder = <div className="form-help content-container">Drop an image here</div>
             <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleAvatarChange} />
           } />
@@ -83,6 +83,7 @@ UserSettingsPage = React.createClass
         putFile avatar.src, file
       .then =>
         @props.user.uncacheLink 'avatar'
+        @getAvatarSrc = null
         @props.user.emit 'change'
       .catch (error) =>
         @setState avatarError: error

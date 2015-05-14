@@ -23,13 +23,17 @@ module.exports = React.createClass
     backgroundError: null
 
   render: ->
-    getAvatarSrc = @props.project.get 'avatar'
+    # Failures on media GETs are acceptable here,
+    # but the JSON-API lib doesn't cache failed requests,
+    # so do it manually:
+
+    @avatarSrcGet ?= @props.project.get 'avatar'
       .then (avatar) ->
         avatar.src
       .catch ->
         ''
 
-    getBackgroundSrc = @props.project.get 'background'
+    @backgroundSrcGet ?= @props.project.get 'background'
       .then (background) ->
         background.src
       .catch ->
@@ -38,7 +42,7 @@ module.exports = React.createClass
     <div className="columns-container">
       <div>
         Avatar<br />
-        <PromiseRenderer promise={getAvatarSrc} then={(avatarSrc) =>
+        <PromiseRenderer promise={@avatarSrcGet} then={(avatarSrc) =>
           placeholder = <div className="form-help content-container">Drop an avatar image here</div>
           <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
         } />
@@ -48,7 +52,7 @@ module.exports = React.createClass
         <br />
 
         Background image<br />
-        <PromiseRenderer promise={getBackgroundSrc} then={(backgroundSrc) =>
+        <PromiseRenderer promise={@backgroundSrcGet} then={(backgroundSrc) =>
           placeholder = <div className="form-help content-container">Drop a background image here</div>
           <ImageSelector maxSize={MAX_BACKGROUND_SIZE} defaultValue={backgroundSrc} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
         } />
@@ -107,6 +111,7 @@ module.exports = React.createClass
         putFile resource.src, file
       .then =>
         @props.project.uncacheLink type
+        @["#{type}SrcGet"] = null # Uncache the local request so that rerendering makes it again.
         @props.project.emit 'change'
       .catch (error) =>
         newState = {}
