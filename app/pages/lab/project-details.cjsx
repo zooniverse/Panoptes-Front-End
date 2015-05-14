@@ -1,5 +1,12 @@
 React = require 'react'
 BoundResourceMixin = require '../../lib/bound-resource-mixin'
+PromiseRenderer = require '../../components/promise-renderer'
+ImageSelector = require '../../components/image-selector'
+apiClient = require '../../api/client'
+putFile = require '../../lib/put-file'
+
+MAX_AVATAR_SIZE = 64000
+MAX_BACKGROUND_SIZE = 256000
 
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
@@ -11,20 +18,48 @@ module.exports = React.createClass
   getDefaultProps: ->
     project: null
 
+  getInitialState: ->
+    avatarError: null
+    backgroundError: null
+
   render: ->
+    # Failures on media GETs are acceptable here,
+    # but the JSON-API lib doesn't cache failed requests,
+    # so do it manually:
+
+    @avatarSrcGet ?= @props.project.get 'avatar'
+      .then (avatar) ->
+        avatar.src
+      .catch ->
+        ''
+
+    @backgroundSrcGet ?= @props.project.get 'background'
+      .then (background) ->
+        background.src
+      .catch ->
+        ''
+
     <div className="columns-container">
       <div>
-        <p>
-          Avatar <small>TODO</small> <button type="button" disabled>&times;</button><br />
-          <img src="//placehold.it/100x100.png" /><br />
-          <input type="file" disabled />
-        </p>
+        Avatar<br />
+        <PromiseRenderer promise={@avatarSrcGet} then={(avatarSrc) =>
+          placeholder = <div className="form-help content-container">Drop an avatar image here</div>
+          <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
+        } />
+        {if @state.avatarError
+          <div className="form-help error">{@state.avatarError.toString()}</div>}
 
-        <p>
-          Background image <small>TODO</small> <button type="button" disabled>&times;</button><br />
-          <img src="//placehold.it/100x75.png" /><br />
-          <input type="file" disabled />
-        </p>
+        <br />
+
+        Background image<br />
+        <PromiseRenderer promise={@backgroundSrcGet} then={(backgroundSrc) =>
+          placeholder = <div className="form-help content-container">Drop a background image here</div>
+          <ImageSelector maxSize={MAX_BACKGROUND_SIZE} defaultValue={backgroundSrc} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
+        } />
+        {if @state.backgroundError
+          <div className="form-help error">{@state.backgroundError.toString()}</div>}
+
+        <br />
 
         <p>
           <label>
@@ -63,3 +98,22 @@ module.exports = React.createClass
         </p>
       </div>
     </div>
+
+  handleMediaChange: (type, file) ->
+    errorProp = "#{type}Error"
+
+    newState = {}
+    newState[errorProp] = null
+    @setState newState
+
+    apiClient.post @props.project._getURL(type), media: content_type: file.type
+      .then ([resource]) =>
+        putFile resource.src, file
+      .then =>
+        @props.project.uncacheLink type
+        @["#{type}SrcGet"] = null # Uncache the local request so that rerendering makes it again.
+        @props.project.emit 'change'
+      .catch (error) =>
+        newState = {}
+        newState[errorProp] = error
+        @setState newState
