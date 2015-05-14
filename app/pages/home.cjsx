@@ -16,6 +16,34 @@ counterpart.registerTranslations 'en',
       title: 'People-Powered Science'
       tagline: 'The Zooniverse is a platform for citizen science and an opportunity for anyone to contribute to science.'
       button: 'Get started!'
+    about:
+      first:
+        title: 'This is a Heading About Text'
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+          ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+          in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+          sint occaecat cupidatat non proident, sunt in culpa qui officia
+          deserunt mollit anim id est laborum.'
+      second:
+        title: 'This is a Heading About Text'
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+          ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+          in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+          sint occaecat cupidatat non proident, sunt in culpa qui officia
+          deserunt mollit anim id est laborum.'
+      third:
+        title: 'This is a Heading About Text'
+        content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+          ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+          in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+          sint occaecat cupidatat non proident, sunt in culpa qui officia
+          deserunt mollit anim id est laborum.'
 
 module.exports = React.createClass
   displayName: 'HomePage'
@@ -51,6 +79,25 @@ module.exports = React.createClass
               }
               </div>
           }</PromiseRenderer>
+        </div>
+      </section>
+      <section className="about-zooniverse promo">
+        <div className="about-items-list">
+          <div className="about-item">
+            <img src="./assets/home-about1.svg" alt="" />
+            <Translate component="h6" content="home.about.first.title" />
+            <Translate component="p" content="home.about.first.content" />
+          </div>
+          <div className="about-item">
+            <img src="./assets/home-about2.svg" alt="" />
+            <Translate component="h6" content="home.about.second.title" />
+            <Translate component="p" content="home.about.second.content" />
+          </div>
+          <div className="about-item">
+            <img src="./assets/home-about3.svg" alt="" />
+            <Translate component="h6" content="home.about.third.title" />
+            <Translate component="p" content="home.about.third.content" />
+          </div>
         </div>
       </section>
     </div>
