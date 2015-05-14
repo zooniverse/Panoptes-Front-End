@@ -1,6 +1,6 @@
 html
   background: white
-  color: FOREGROUND
+  color: COPY
   font: 400 15px/1.5 "Open Sans", "Gill Sans", Arial, sans-serif
 
 .attribution
@@ -27,6 +27,7 @@ hr
 
 a
   color: MAIN_HIGHLIGHT
+  font-size: 14px
 
 .emoji
   max-height: 1em
@@ -34,10 +35,63 @@ a
 h1,
 h2,
 h3,
-h4
+h4,
+h5,
+h6
+  color: COPY
   font-smoothing: antialiased
   font-weight: bold
   margin: 0
+
+.on-home-page
+  font-size: 10px
+  line-height: 20px
+
+  h1
+    font-size: 50px
+
+  h2
+    font-size: 42px
+
+  h3
+    font-size: 36px
+
+  h4
+    font-size: 30px
+
+  h5
+    font-size: 24px
+
+  h6
+    font-size: 15px
+
+  p
+    color: COPY
+    font-size: 14px
+    font-smoothing: antialiased
+
+  .on-dark
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6
+      color: #fff
+    p
+      color: #c1c1c1
+
+  .promo
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6
+      color: #5a5a5a
+
+    p
+      color: #989898
 
 img
   &:not([src]),

@@ -1,16 +1,18 @@
 .secret-button
   @extends $reset-button
+  font-size: 14px
 
 .standard-button
   @extends $reset-button
-  background: MAIN_HIGHLIGHT
-  border-radius: 3px
+  background: #0072ff
+  border-radius: 4px
   color: white
-  padding: 0.4em 1.4em
+  font-size: 14px
+  padding: 1em
   text-align: center
 
   &:hover
-    background: lighten(MAIN_HIGHLIGHT, 20%)
+    background: lighten(#0072ff, 20%)
 
   &:disabled
     pointer-events: none
@@ -18,6 +20,22 @@
   &.full
     display: block
     width: 100%
+
+  &.x-large
+    font-weight: 700
+    width: 250px
+
+  &.large
+    width: 160px
+
+  &.medium
+    width: 120px
+
+  &.small
+    width: 80px
+
+  &:disabled
+    background: #f2f2f2
 
 .major-button
   @extends .standard-button
@@ -43,7 +61,7 @@
   border-radius: 1em
   box-shadow: 0 0 1px inset
   display: inline-block
-  font-size: 0.7em
+  font-size: 1em
   line-height: 1.2
   padding: 0 0.8em 0 0.5em
   vertical-align: middle
