@@ -54,11 +54,15 @@ EditProjectPage = React.createClass
             <PromiseRenderer promise={@props.project.get 'workflows'}>{(workflows) =>
               <ul className="nav-list">
                 {for workflow in workflows
-                  workflowLinkParams = Object.create linkParams
-                  workflowLinkParams.workflowID = workflow.id
-                  <li key={workflow.id}>
-                    <Link to="edit-project-workflow" params={workflowLinkParams} className="nav-list-item">{workflow.display_name}</Link>
-                  </li>}
+                  renderWorkflowListItem = ->
+                    workflowLinkParams = Object.create linkParams
+                    workflowLinkParams.workflowID = workflow.id
+                    <li key={workflow.id}>
+                      <Link to="edit-project-workflow" params={workflowLinkParams} className="nav-list-item">{workflow.display_name}</Link>
+                    </li>
+
+                  <ChangeListener target={workflow} eventName="save" handler={renderWorkflowListItem} />}
+
                 <li className="nav-list-item">
                   <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress}>
                     New workflow{' '}
@@ -77,11 +81,15 @@ EditProjectPage = React.createClass
             <PromiseRenderer promise={@props.project.get 'subject_sets'}>{(subjectSets) =>
               <ul className="nav-list">
                 {for subjectSet in subjectSets
-                  subjectSetLinkParams = Object.create linkParams
-                  subjectSetLinkParams.subjectSetID = subjectSet.id
-                  <li key={subjectSet.id}>
-                    <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item">{subjectSet.display_name}</Link>
-                  </li>}
+                  renderSubjectSetListItem = ->
+                    subjectSetLinkParams = Object.create linkParams
+                    subjectSetLinkParams.subjectSetID = subjectSet.id
+                    <li key={subjectSet.id}>
+                      <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item">{subjectSet.display_name}</Link>
+                    </li>
+
+                  <ChangeListener target={subjectSet} eventName="save" handler={renderSubjectSetListItem} />}
+
                 <li className="nav-list-item">
                   <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress}>
                     New subject set{' '}
