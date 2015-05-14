@@ -36,4 +36,6 @@ module.exports = React.createClass
     </div>
 
   showHelp: ->
-    alert <Markdown className="classification-task-help">{@props.help}</Markdown>
+    alert <div className="content-container">
+      <Markdown className="classification-task-help">{@props.help}</Markdown>
+    </div>
