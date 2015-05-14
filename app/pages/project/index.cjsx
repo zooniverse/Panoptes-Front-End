@@ -11,6 +11,21 @@ auth = require '../../api/auth'
 apiClient = window.api = require '../../api/client'
 LoadingIndicator = require '../../components/loading-indicator'
 
+SOCIAL_ICONS =
+  'bitbucket.com/': 'bitbucket'
+  'facebook.com/': 'facebook-square'
+  'github.com/': 'github'
+  'pinterest.com/': 'pinterest'
+  'plus.google.com/': 'google-plus'
+  'reddit.com/': 'reddit'
+  'tumblr.com/': 'tumblr'
+  'twitter.com/': 'twitter'
+  'vine.com/': 'vine'
+  'weibo.com/': 'weibo'
+  'wordpress.com/': 'wordpress'
+  'youtu.be/': 'youtube'
+  'youtube.com/': 'youtube'
+
 counterpart.registerTranslations 'en',
   project:
     loading: 'Loading project'
@@ -74,6 +89,16 @@ ProjectPage = React.createClass
             <Link to="project-talk" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.discuss" />
             </Link>
+            {for link, i in @props.project.urls
+              link._key ?= Math.random()
+              {label} = link
+              unless label
+                for pattern, icon of SOCIAL_ICONS
+                  if link.url.indexOf(pattern) isnt -1
+                    socialIcon = icon
+                socialIcon ?= 'globe'
+                label = <i className="fa fa-#{socialIcon} fa-fw fa-2x"></i>
+              <a key={link._key} href={link.url} className="tabbed-content-tab" target="#{@props.project.id}-#{i}">{label}</a>}
           </nav>
 
           <RouteHandler {...@props} owner={owner} />
