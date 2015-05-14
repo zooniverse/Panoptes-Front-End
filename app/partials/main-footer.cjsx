@@ -47,5 +47,10 @@ module.exports = React.createClass
             <a><Translate content="footer.discuss.otherTalk" /></a>
           </div>
         </nav>
+        <div className="social-media">
+          <a href="https://www.facebook.com/therealzooniverse" target="_blank"><i className="fa fa-facebook"></i></a>
+          <a href="https://twitter.com/the_zooniverse" target="_blank"><i className="fa fa-twitter"></i></a>
+          <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank"><i className="fa fa-google-plus"></i></a>
+        </div>
       </div>
     </footer>
