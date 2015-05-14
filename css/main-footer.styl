@@ -1,16 +1,20 @@
 .main-footer
   background: #272727
   color: rgba(255,255,255,0.5)
-  font-size: 0.8em
+  font-size: 10px
+  line-height: 20px
   padding: 6.2em 3vw
 
   .main-footer-flex
     display: flex
+    flex-wrap: wrap
+    justify-content: center
 
   .main-logo
-    font-size: 18px
+    font-size: 1.8em
     font-weight: 700
-    margin-right: 1.5em
+    margin: 0 0 1.5em 0
+    white-space: nowrap
 
     .zooniverse-logo
       font-size: 0.875em
@@ -23,7 +27,11 @@
     .site-map-section
       display: inline-flex
       flex-direction: column
-      margin: 0 4.5em
+      flex-wrap: wrap
+      margin: 0 6.25vw 2.7em 0
+
+      &:first-of-type
+        margin-left: 6.25vw
 
   .social-media
     a
@@ -31,7 +39,7 @@
 
   a
     color: inherit
-    font-size: 14px
+    font-size: 1.4em
     text-decoration: none
 
     &:hover
