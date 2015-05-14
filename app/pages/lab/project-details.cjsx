@@ -60,6 +60,8 @@ module.exports = React.createClass
   getInitialState: ->
     avatarError: null
     backgroundError: null
+    exportRequested: false
+    exportError: null
 
   render: ->
     # Failures on media GETs are acceptable here,
@@ -131,9 +133,28 @@ module.exports = React.createClass
           <textarea className="standard-input full" name="introduction" value={@props.project.introduction} rows="10" disabled={@state.saveInProgress} onChange={@handleChange} />
         </p>
 
+        <hr />
+
         <div>
           External links<br />
           <ExternalLinksEditor project={@props.project} />
+        </div>
+
+        <hr />
+
+        <div>
+          Data export<br />
+          <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request data export</button>{' '}
+          <PromiseRenderer tag="small" promise={apiClient.get @props.project._getURL 'classifications_exports'} then={([others..., mostRecent]) =>
+            <span className="form-help">Most recent: {mostRecent.created_at}</span>
+          } /><br />
+
+          {if @state.exportError?
+            <div className="form-help error">{@state.exportError.toString()}</div>
+          else if @state.exportRequested
+            <div className="form-help success">
+              We’ve received your request, check your email for a link to your data soon!
+            </div>}
         </div>
 
         <p>
@@ -161,3 +182,11 @@ module.exports = React.createClass
         newState = {}
         newState[errorProp] = error
         @setState newState
+
+  requestDataExport: ->
+    @setState exportError: null
+    apiClient.post @props.project._getURL 'classifications_exports'
+      .then =>
+        @setState exportRequested: true
+      .catch (error) =>
+        @setState exportError: error
