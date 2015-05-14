@@ -33,7 +33,6 @@ module?.exports = React.createClass
           </div>
       }</PromiseRenderer>
 
-
       <p>
         <i className="fa fa-user"></i> {resourceCount(@props.data.users_count, "Users")} |&nbsp;
         <i className="fa fa-newspaper-o"></i> {resourceCount(@props.data.discussions_count, "Discussions") } |&nbsp;

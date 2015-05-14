@@ -143,4 +143,3 @@ module?.exports = React.createClass
             onSubmitComment={@onSubmitComment}/>}
       </div>
     </div>
-

@@ -61,6 +61,11 @@ routes = <Route handler={App}>
     <Route name="talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
   </Route>
 
+  <Route name="collections" path="collections" handler={require './collections'}>
+    <DefaultRoute name="collections-index" handler={require './collections/home'} />
+    <Route name="collections-show" path=":collection_id" handler={require './collections/show'} />
+  </Route>
+
   <Route name="lab" handler={require './pages/lab'} />
   <Route path="lab/:projectID" handler={require './pages/lab/project'}>
     <DefaultRoute name="edit-project-details" handler={require './pages/lab/project-details'} />

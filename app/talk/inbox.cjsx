@@ -33,14 +33,12 @@ module?.exports = React.createClass
           @setState {user}, @setConversations
         else
           @setState {user: null} # don't want the callback without a user...
-      .catch (e) -> console.log "error checking current auth inbox", e
 
   setConversations: (page) ->
     talkClient.type('conversations').get({user_id: @state.user.id, page_size: PAGE_SIZE, page,sort: '-updated_at'})
       .then (conversations) =>
         conversationsMeta = conversations[0]?.getMeta()
         @setState {conversations, conversationsMeta}
-      .catch (e) -> console.log "e conversations", e
 
   onPageChange: (page) ->
     @goToPage(page)
@@ -50,7 +48,7 @@ module?.exports = React.createClass
     @setConversations(n)
 
   message: (data, i) ->
-    <p key={i} class>{data.body}</p>
+    <p key={data.id} class>{data.body}</p>
 
   conversationLink: (data, i) ->
     <div className="conversation-link">
