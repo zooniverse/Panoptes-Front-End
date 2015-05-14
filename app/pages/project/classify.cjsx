@@ -1,3 +1,4 @@
+auth = require '../../api/auth'
 React = require 'react'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
@@ -6,11 +7,20 @@ apiClient = require '../../api/client'
 animatedScrollTo = require 'animated-scrollto'
 counterpart = require 'counterpart'
 Classifier = require '../../classifier'
+alert = require '../../lib/alert'
+SignInPrompt = require '../../partials/sign-in-prompt'
+
+PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
 SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
 
 if SKIP_CELLECT
   console?.warn 'Intelligent subject selection disabled'
+
+classificationsThisSession = 0
+
+auth.listen ->
+  classificationsThisSession = 0
 
 # Map each project ID to a promise of its last randomly-selected workflow ID.
 # This is to maintain the same random workflow for each project when none is specified by the user.
@@ -170,6 +180,16 @@ module.exports = React.createClass
       console?.log 'Saved classification', classification.id
       # After saving, remove the classification resource from the local cache.
       classification.destroy()
+    classificationsThisSession += 1
+    @maybePromptToSignIn()
+
+  maybePromptToSignIn: ->
+    auth.checkCurrent().then (user) ->
+      if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not user?
+        alert (resolve) ->
+          <SignInPrompt onChoose={resolve}>
+            <p><strong>You’ve done {classificationsThisSession} classifications, but you’re not signed in!</strong></p>
+          </SignInPrompt>
 
   loadAnotherSubject: ->
     @getCurrentWorkflowID(@props).then (workflowID) =>
