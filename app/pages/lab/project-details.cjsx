@@ -33,6 +33,7 @@ ExternalLinksEditor = React.createClass
             <tr key={link._key}>
               <td><input type="text" name="urls.#{i}.label" value={link.label} onChange={@handleChange}/></td>
               <td><input type="text" name="urls.#{i}.url" value={link.url} onChange={@handleChange}/></td>
+              <td><button type="button" onClick={@handleRemoveLink.bind this, link._key}><i className="fa fa-remove"></i></button></td>
             </tr>}
         </tbody>
       </table>
@@ -45,6 +46,11 @@ ExternalLinksEditor = React.createClass
     changes["urls.#{@props.project.urls.length}"] =
       label: 'Example'
       url: 'https://example.com/'
+    @props.project.update changes
+
+  handleRemoveLink: (linkKey) ->
+    changes = {}
+    changes['urls'] = @props.project.urls.filter((link) -> link._key != linkKey)
     @props.project.update changes
 
 module.exports = React.createClass
