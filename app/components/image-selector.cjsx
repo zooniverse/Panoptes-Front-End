@@ -26,7 +26,7 @@ module.exports = React.createClass
     size: NaN
 
   render: ->
-    <span className="image-uploader" style={
+    <span className="image-selector" style={
       display: 'inline-block'
       minHeight: '1em'
       background: 'rgba(128, 128, 128, 0.2)'
