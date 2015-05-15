@@ -21,8 +21,6 @@ EditWorkflowPage = React.createClass
 
   getInitialState: ->
     selectedTaskKey: @props.workflow.first_task
-    reloadCellectError: false
-    reloadCellectInProgress: false
 
   render: ->
     <div className="columns-container">
@@ -161,17 +159,6 @@ EditWorkflowPage = React.createClass
       @props.workflow.addLink 'subject_sets', [subjectSet.id]
     else
       @props.workflow.removeLink 'subject_sets', subjectSet.id
-
-  reloadCellect: ->
-    reloadEndpoint = apiClient.root + ['', 'workflows', @props.workflow.id, 'reload_cellect'].join '/'
-    @setState
-      reloadCellectError: false
-      reloadCellectInProgress: true
-    apiClient.post ['', 'workflows', @props.workflow.id, 'reload_cellect'].join '/'
-      .catch (error) =>
-        @setState reloadCellectError: true
-      .then =>
-        @setState reloadCellectInProgress: false
 
   afterDelete: ->
     @props.project.uncacheLink 'workflows'
