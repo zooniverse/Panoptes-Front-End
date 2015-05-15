@@ -15,7 +15,9 @@ module?.exports = React.createClass
     favorited: false
 
   promptToSignIn: ->
-    alert <SignInPrompt />
+    alert <SignInPrompt>
+      <p>You must be signed in to save your favorites.</p>
+    </SignInPrompt>
 
   componentWillMount: ->
     # see if the subject is in the project's favorites collection
