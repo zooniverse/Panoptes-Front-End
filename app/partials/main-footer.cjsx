@@ -26,9 +26,11 @@ module.exports = React.createClass
   render: ->
     <footer className="main-footer">
       <div className="centered-grid main-footer-flex">
-        <Link to="home" className="main-logo">
-          Zo<ZooniverseLogo />niverse
-        </Link>
+        <div className="main-logo">
+          <Link to="home" className="main-logo-link">
+            Zo<ZooniverseLogo />niverse
+          </Link>
+        </div>
         <nav className="site-map">
           <div className="site-map-section">
             <Translate component="h6" content="footer.discover.title" />
