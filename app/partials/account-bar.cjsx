@@ -38,7 +38,7 @@ module.exports = React.createClass
       <div className="account-bar">
         <div className="account-info">
           <span className="display-name"><strong>{@props.user.display_name}</strong></span>
-          <PromiseRenderer promise={@props.user.get 'avatar'} then={([avatar]) =>
+          <PromiseRenderer promise={@props.user.get 'avatar'} pending={null} then={([avatar]) =>
             <img src={avatar.src} className="avatar" />
           } catch={null} />{' '}
           <Link to="inbox"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
