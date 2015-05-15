@@ -3,6 +3,7 @@ apiClient = require '../api/client'
 auth = require '../api/auth'
 getFavoritesName = require './get-favorites-name'
 alert = require '../lib/alert'
+SignInPrompt = require '../partials/sign-in-prompt'
 
 module?.exports = React.createClass
   displayName: 'CollectionFavoritesButton'
@@ -12,6 +13,9 @@ module?.exports = React.createClass
 
   getInitialState: ->
     favorited: false
+
+  promptToSignIn: ->
+    alert <SignInPrompt />
 
   componentWillMount: ->
     # see if the subject is in the project's favorites collection
@@ -78,7 +82,7 @@ module?.exports = React.createClass
                     else
                       @createFavorites(user, project)
           else
-            alert(<div className='content-container'>You must be logged in to favorite</div>)
+            @promptToSignIn()
 
   render: ->
     <button
