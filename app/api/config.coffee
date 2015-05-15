@@ -23,4 +23,4 @@ env = envFromBrowser ? envFromShell ? DEFAULT_ENV
 
 module.exports =
   host: hostFromBrowser ? hostFromShell ? API_HOSTS[env]
-  clientAppID: appFromBrowser ? appFromShell ? API_APPLICATION_IDS[env]
+  appID: appFromBrowser ? appFromShell ? API_APPLICATION_IDS[env]
