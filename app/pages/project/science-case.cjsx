@@ -11,6 +11,9 @@ counterpart.registerTranslations 'en',
     owner: 'Owner'
     collaborator: 'Collaborator'
     translator: 'Translator'
+    scientist: 'Scientist'
+    moderator: 'Moderator'
+    tester: 'Tester'
 
 module.exports = React.createClass
   displayName: 'ProjectScienceCasePage'
