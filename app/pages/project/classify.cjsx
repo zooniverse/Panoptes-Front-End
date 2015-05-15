@@ -81,6 +81,7 @@ module.exports = React.createClass
     project.get('workflows').then (workflows) ->
       if workflows.length is 0
         throw new Error "No workflows for project #{project.id}"
+        project.uncacheLink 'workflows'
       else
         randomIndex = Math.floor Math.random() * workflows.length
         # console.log 'Chose random workflow', workflows[randomIndex].id
