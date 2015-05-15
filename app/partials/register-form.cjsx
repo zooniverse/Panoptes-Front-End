@@ -26,7 +26,6 @@ counterpart.registerTranslations 'en',
     email: 'Email address'
     emailConflict: 'An account with this address already exists'
     realName: 'Real name'
-    why: 'Why?'
     whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc'
     agreeToPrivacyPolicy: 'You agree to our %(link)s (required)'
     privacyPolicy: 'privacy policy'
@@ -41,7 +40,6 @@ module.exports = React.createClass
   mixins: [PromiseToSetState]
 
   getInitialState: ->
-    whyRealName: false
     user: null
     badNameChars: null
     nameConflict: null
@@ -141,17 +139,12 @@ module.exports = React.createClass
       <label>
         <span className="columns-container inline spread">
           <Translate content="registerForm.realName" />
-          <button type="button" className="secret-button" onClick={@setState.bind this, whyRealName: not @state.whyRealName, null}>
-            <Translate className="form-help info" content="registerForm.why" />
-            {if @state.whyRealName
-              <Tooltip attachment="middle right" targetAttachment="middle left">
-                <Translate content="registerForm.whyRealName" />
-              </Tooltip>}
-          </button>
         </span>
         <input type="text" ref="realName" className="standard-input full" disabled={@state.user?} />
+        <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
       </label>
 
+      <br />
       <br />
 
       <label>
