@@ -11,7 +11,7 @@ module.exports = React.createClass
   render: ->
     <div className="content-container">
       {@props.children}
-      <p>Signing in allows you t participate in discussions, allows us to give you credit for your work, and helps the science team make the best use of the data you provide.</p>
+      <p>Signing in allows you to participate in discussions, allows us to give you credit for your work, and helps the science team make the best use of the data you provide.</p>
       <p className="columns-container spread inline">
         <span>
           <button type="button" className="minor-button" onClick={@dismiss}>No thanks</button>
