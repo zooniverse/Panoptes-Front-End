@@ -53,12 +53,16 @@ EditProjectPage = React.createClass
             <div className="nav-list-header">Workflows</div>
             <PromiseRenderer promise={@props.project.get 'workflows'}>{(workflows) =>
               <ul className="nav-list">
-                {for workflow in workflows
+                {renderWorkflowListItem = (workflow) ->
                   workflowLinkParams = Object.create linkParams
                   workflowLinkParams.workflowID = workflow.id
                   <li key={workflow.id}>
                     <Link to="edit-project-workflow" params={workflowLinkParams} className="nav-list-item">{workflow.display_name}</Link>
                   </li>}
+
+                {for workflow in workflows
+                  <ChangeListener target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
+
                 <li className="nav-list-item">
                   <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress}>
                     New workflow{' '}
@@ -76,12 +80,16 @@ EditProjectPage = React.createClass
             <div className="nav-list-header">Subject sets</div>
             <PromiseRenderer promise={@props.project.get 'subject_sets'}>{(subjectSets) =>
               <ul className="nav-list">
-                {for subjectSet in subjectSets
+                {renderSubjectSetListItem = (subjectSet) ->
                   subjectSetLinkParams = Object.create linkParams
                   subjectSetLinkParams.subjectSetID = subjectSet.id
                   <li key={subjectSet.id}>
                     <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item">{subjectSet.display_name}</Link>
                   </li>}
+
+                {for subjectSet in subjectSets
+                  <ChangeListener target={subjectSet} eventName="save" handler={renderSubjectSetListItem.bind this, subjectSet} />}
+
                 <li className="nav-list-item">
                   <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress}>
                     New subject set{' '}
