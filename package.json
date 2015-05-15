@@ -6,7 +6,7 @@
     "counterpart": "~0.16.7",
     "data-uri-to-blob": "0.0.4",
     "debounce": "~1.0.0",
-    "json-api-client": "~0.2.6",
+    "json-api-client": "~0.2.7",
     "lodash.merge": "~2.4.1",
     "markdown-it": "~4.0.1",
     "markdown-it-container": "~1.0.0",
