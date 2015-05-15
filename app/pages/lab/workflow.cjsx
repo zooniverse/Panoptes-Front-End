@@ -154,11 +154,18 @@ EditWorkflowPage = React.createClass
     @setState selectedTaskKey: nextTaskID
 
   handleSubjectSetToggle: (subjectSet, e) ->
-    # TODO: This is totally untested; I have no idea if this is right.
-    if e.target.checked
-      @props.workflow.addLink 'subject_sets', [subjectSet.id]
+    shouldAdd = e.target.checked
+
+    ensureSaved = if @props.workflow.hasUnsavedChanges()
+      @props.workflow.save()
     else
-      @props.workflow.removeLink 'subject_sets', subjectSet.id
+      Promise.resolve()
+
+    ensureSaved.then =>
+      if shouldAdd
+        @props.workflow.addLink 'subject_sets', [subjectSet.id]
+      else
+        @props.workflow.removeLink 'subject_sets', subjectSet.id
 
   afterDelete: ->
     @props.project.uncacheLink 'workflows'
