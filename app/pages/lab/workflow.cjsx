@@ -21,8 +21,6 @@ EditWorkflowPage = React.createClass
 
   getInitialState: ->
     selectedTaskKey: @props.workflow.first_task
-    reloadCellectError: false
-    reloadCellectInProgress: false
 
   render: ->
     <div className="columns-container">
@@ -156,22 +154,18 @@ EditWorkflowPage = React.createClass
     @setState selectedTaskKey: nextTaskID
 
   handleSubjectSetToggle: (subjectSet, e) ->
-    # TODO: This is totally untested; I have no idea if this is right.
-    if e.target.checked
-      @props.workflow.addLink 'subject_sets', [subjectSet.id]
-    else
-      @props.workflow.removeLink 'subject_sets', subjectSet.id
+    shouldAdd = e.target.checked
 
-  reloadCellect: ->
-    reloadEndpoint = apiClient.root + ['', 'workflows', @props.workflow.id, 'reload_cellect'].join '/'
-    @setState
-      reloadCellectError: false
-      reloadCellectInProgress: true
-    apiClient.post ['', 'workflows', @props.workflow.id, 'reload_cellect'].join '/'
-      .catch (error) =>
-        @setState reloadCellectError: true
-      .then =>
-        @setState reloadCellectInProgress: false
+    ensureSaved = if @props.workflow.hasUnsavedChanges()
+      @props.workflow.save()
+    else
+      Promise.resolve()
+
+    ensureSaved.then =>
+      if shouldAdd
+        @props.workflow.addLink 'subject_sets', [subjectSet.id]
+      else
+        @props.workflow.removeLink 'subject_sets', subjectSet.id
 
   afterDelete: ->
     @props.project.uncacheLink 'workflows'
