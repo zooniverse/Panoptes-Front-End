@@ -41,12 +41,24 @@ EditProjectPage = React.createClass
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
-          <li><Link to="edit-project-details" params={linkParams} className="nav-list-item">Project details</Link></li>
-          <li><Link to="edit-project-science-case" params={linkParams} className="nav-list-item">Science case</Link></li>
-          <li><Link to="edit-project-results" params={linkParams} className="nav-list-item">Results</Link></li>
-          <li><Link to="edit-project-faq" params={linkParams} className="nav-list-item">FAQ</Link></li>
-          <li><Link to="edit-project-education" params={linkParams} className="nav-list-item">Education</Link></li>
-          <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item">Collaborators</Link></li>
+          <li><Link to="edit-project-details" params={linkParams} className="nav-list-item">
+            Project details
+          </Link></li>
+          <li><Link to="edit-project-science-case" params={linkParams} className="nav-list-item">
+            Science case
+          </Link></li>
+          <li><Link to="edit-project-results" params={linkParams} className="nav-list-item">
+            Results
+          </Link></li>
+          <li><Link to="edit-project-faq" params={linkParams} className="nav-list-item">
+            FAQ
+          </Link></li>
+          <li><Link to="edit-project-education" params={linkParams} className="nav-list-item">
+            Education
+          </Link></li>
+          <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item">
+            Collaborators
+          </Link></li>
 
           <li>
             <br />
@@ -127,7 +139,7 @@ EditProjectPage = React.createClass
       tasks:
         init:
           type: 'single'
-          question: 'Is this the first question?'
+          question: 'Ask your first question here.'
           answers: [
             label: 'Yes'
           ]

@@ -101,7 +101,9 @@ module.exports = React.createClass
   render: ->
     <div>
       <p>Collaborators</p>
+
       <hr />
+
       {if @state.error?
         <p className="form-help error">{@state.error.toString()}</p>}
       <PromiseRenderer promise={@props.project.get 'project_roles'} then={(projectRoleSets) =>
@@ -110,9 +112,44 @@ module.exports = React.createClass
             <PromiseRenderer key={projectRoleSet.id} promise={projectRoleSet.get 'owner'} then={@renderUserRow.bind this, projectRoleSet} />}
         </div>
       } />
+
       <hr />
+
       <p>Add another</p>
       <CollaboratorCreator project={@props.project} onAdd={@handleCollaboratorAddition} />
+
+      <table className="standard-table form-help">
+        <tbody>
+          <tr>
+            <th>Owner</th>
+            <td>The owner is the original project creator. There can be only one.</td>
+          </tr>
+          <tr>
+            <th>Collaborator</th>
+            <td>Collaborators have full access to edit workflows and project content, including deleting some or all of the project. [This last part seems silly, actually.]</td>
+          </tr>
+          <tr>
+            <th>Expert</th>
+            <td>Experts can enter “gold mode” to make authoritative gold standard classifications that will be used to validate data quality.</td>
+          </tr>
+          <tr>
+            <th>Scientist</th>
+            <td>Members of the science team will be marked as scientists on “Talk"</td>
+          </tr>
+          <tr>
+            <th>Moderator</th>
+            <td>Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on “Talk".</td>
+          </tr>
+          <tr>
+            <th>Tester</th>
+            <td>?</td>
+          </tr>
+          <tr>
+            <th>Translator</th>
+            <td>Translators will have access to the translation site?</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
   renderUserRow: (projectRoleSet, user) ->

@@ -23,95 +23,113 @@ EditWorkflowPage = React.createClass
     selectedTaskKey: @props.workflow.first_task
 
   render: ->
-    <div className="columns-container">
-      <div className="column">
-        <div>
+    <div>
+      <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your data, or to mark features in your data, or both. The workflow is where you define those tasks and set out the order in which the volunteers will do them.</p>
+      <div className="columns-container">
+        <div className="column">
           <div>
-            <span className="form-label">Workflow title</span>
-            <br />
-            <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={@handleChange} />
-            <span className="form-help"><small>Version {@props.workflow.version}</small></span>
-          </div>
-
-          <br />
-
-          <div>
-            <div className="nav-list standalone">
-              <span className="nav-list-header">Tasks</span>
+            <div>
+              <span className="form-label">Workflow title</span>
               <br />
-              {for key, definition of @props.workflow.tasks
-                classNames = ['secret-button', 'nav-list-item']
-                if key is @state.selectedTaskKey
-                  classNames.push 'active'
-                <div key={key}>
-                  <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
-                    {switch definition.type
-                      when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
-                      when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
-                      when 'drawing' then <i className="fa fa-pencil fa-fw"></i>}
-                    {' '}
-                    {tasks[definition.type].getTaskText definition}
-                    {if key is @props.workflow.first_task
-                      <small> <em>(first)</em></small>}
-                  </button>
-                </div>}
+              <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={@handleChange} />
+              <small className="form-help">The title of the workflow will be used as the text on the main project page that the user clicks on to start classifying.</small>
             </div>
 
-            <div>
-              <small>Add task</small>{' '}
-              <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'}><strong>Question</strong></button>{' '}
-              <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'}><strong>Drawing</strong></button>
-            </div>
+            <br />
 
             <div>
-              <small>First task</small>{' '}
-              <select name="first_task" value={@props.workflow.first_task} onChange={@handleChange}>
-                {for taskKey, definition of @props.workflow.tasks
-                  <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
-              </select>
+              <div className="nav-list standalone">
+                <span className="nav-list-header">Tasks</span>
+                <br />
+                {for key, definition of @props.workflow.tasks
+                  classNames = ['secret-button', 'nav-list-item']
+                  if key is @state.selectedTaskKey
+                    classNames.push 'active'
+                  <div key={key}>
+                    <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
+                      {switch definition.type
+                        when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
+                        when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
+                        when 'drawing' then <i className="fa fa-pencil fa-fw"></i>}
+                      {' '}
+                      {tasks[definition.type].getTaskText definition}
+                      {if key is @props.workflow.first_task
+                        <small> <em>(first)</em></small>}
+                    </button>
+                  </div>}
+              </div>
+
+              <div>
+                <small>Add task</small>{' '}
+                <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'}><strong>Question</strong></button>{' '}
+                <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'}><strong>Drawing</strong></button>
+              </div>
+
+              <div>
+                <small>First task</small>{' '}
+                <select name="first_task" value={@props.workflow.first_task} onChange={@handleChange}>
+                  {for taskKey, definition of @props.workflow.tasks
+                    <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
+                </select>
+              </div>
             </div>
+
+            <p className="form-help"><small>A task is a unit of work you are asking the classifier to do.</small></p>
+            <p className="form-help"><small>There are 2 kinds of tasks: answering a question, and drawing various marks on an image. Your workflow can include one or both kinds.</small></p>
+            <p className="form-help"><small>A workflow with fewer tasks will be easier for volunteers  to complete. We know from surveys of our volunteers that many people classify in their spare time, and sometimes they only have a few minutes. Longer, more complex workflows mean each classification takes longer, so if your workflow is very long you may lose volunteers.</small></p>
+            <p className="form-help"><small>Try to keep the workflow as simple as possible to achieve your research goals, and definitely try to only request tasks that cannot be accurately accomplished by automated methods.</small></p>
+
+            <hr />
+
+            {unless @props.project.private
+              <p className="form-help warning">You’re editing a workflow on a public project. <strong>Please note that any changes will result in the loss of your existing classifications for this workflow!</strong></p>}
+
+            <p>
+              <button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.workflow.hasUnsavedChanges()} data-busy={@state.saveInProgress || null} onClick={@saveResource}>Save changes</button>{' '}
+              <small className="form-help">Version {@props.workflow.version}</small>
+              {@renderSaveStatus()}
+            </p>
           </div>
 
-          {unless @props.project.private
-            <p className="form-help warning">You’re editing a workflow on a public project. <strong>Please note that any changes will result in the loss of your existing classifications for this workflow!</strong></p>}
+          <hr />
 
-          <p><button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.workflow.hasUnsavedChanges()} data-busy={@state.saveInProgress || null} onClick={@saveResource}>Save changes</button> {@renderSaveStatus()}</p>
+          <div>
+            <span className="form-label">Associated subject sets</span><br />
+            <small className="form-help">Choose the set of subjects you want to use for this workflow.</small>
+            <p className="form-help">NOTE: Assigning subject sets doesn’t quite work as expected right now. To-do on the back end.</p>
+            {@renderSubjectSets()}
+          </div>
+
+          <hr />
+
+          <div>
+            <p>
+              Subject retirement <RetirementRulesEditor workflow={@props.workflow} /><br />
+              <small className="form-help">How many people should classify each subject before it is “done”?</small>
+            </p>
+          </div>
+
+          <hr />
+
+          <div>
+            <small>
+              <button type="button" className="minor-button" disabled={@state.deleteInProgress} data-busy={@state.deleteInProgress || null} onClick={@deleteResource.bind this, @afterDelete}>
+                Delete this workflow
+              </button>
+            </small>{' '}
+            {if @state.deleteError?
+              <span className="form-help error">{@state.deleteError.message}</span>}
+          </div>
         </div>
 
-        <hr />
 
-        <div>
-          <span className="form-label">Associated subject sets</span>
-          <p className="form-help">NOTE: Assigning subject sets doesn’t quite work as expected right now. To-do on the back end.</p>
-          {@renderSubjectSets()}
+        <div className="column">
+          {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
+            TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
+            <TaskEditorComponent workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} onChange={@handleTaskChange.bind this, @state.selectedTaskKey} onDelete={@handleTaskDelete.bind this, @state.selectedTaskKey} />
+          else
+            <p>Choose a task to edit</p>}
         </div>
-
-        <hr />
-
-        <div>
-          <p>Subject retirement <RetirementRulesEditor workflow={@props.workflow} /></p>
-        </div>
-
-        <hr />
-
-        <div>
-          <small>
-            <button type="button" className="minor-button" disabled={@state.deleteInProgress} data-busy={@state.deleteInProgress || null} onClick={@deleteResource.bind this, @afterDelete}>
-              Delete this workflow
-            </button>
-          </small>{' '}
-          {if @state.deleteError?
-            <span className="form-help error">{@state.deleteError.message}</span>}
-        </div>
-      </div>
-
-
-      <div className="column">
-        {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
-          TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
-          <TaskEditorComponent workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} onChange={@handleTaskChange.bind this, @state.selectedTaskKey} onDelete={@handleTaskDelete.bind this, @state.selectedTaskKey} />
-        else
-          <p>Choose a task to edit</p>}
       </div>
     </div>
 

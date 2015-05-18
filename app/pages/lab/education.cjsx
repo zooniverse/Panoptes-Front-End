@@ -13,10 +13,11 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      <p>
-        Educational content<br />
-        <textarea className="standard-input full" name="education_content" value={@props.project.education_content} rows="20" onChange={@handleChange} />
-      </p>
+      <p>Educational content</p>
+      <p className="form-help">If you are a researcher open to collaborating with educators you can state that here, include educational content, and describe how you’d like to help educators use your project.</p>
+      <p className="form-help">Also, if your project is primarily for educational purposes you can describe that here.</p>
+      <p className="form-help">This page renders markdown. Note that this page will not display unless you add content here.</p>
+      <textarea className="standard-input full" name="education_content" value={@props.project.education_content} rows="20" onChange={@handleChange} />
 
       <p>
         <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
