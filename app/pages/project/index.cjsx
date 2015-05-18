@@ -142,7 +142,11 @@ module.exports = React.createClass
 
   render: ->
     if @state.project?
-      <ProjectPage {...@props} project={@state.project} />
+      if @state.project.configuration?.redirect
+        location.replace @state.project.configuration.redirect
+        null
+      else
+        <ProjectPage {...@props} project={@state.project} />
     else
       <div className="content-container">
         {if @state.rejected.project?

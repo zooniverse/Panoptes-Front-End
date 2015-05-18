@@ -122,6 +122,8 @@ module.exports = React.createClass
       </div>
 
       <div className="column">
+        {if @props.project.configuration?.redirect
+          <p className="form-help warning"><strong>Note: users who follow a link to this project will be redirected to <a href={@props.project.configuration.redirect}>{@props.project.configuration.redirect}</a>.</strong> Contact the Zooniverse to change this.</p>}
         <p>
           Name<br />
           <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} disabled={@state.saveInProgress} onChange={@handleChange} />
