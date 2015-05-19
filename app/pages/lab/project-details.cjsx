@@ -96,7 +96,7 @@ module.exports = React.createClass
           {if @state.avatarError
             <div className="form-help error">{@state.avatarError.toString()}</div>}
 
-          <small className="form-help">Pick an avatar for your project. This will represent your project on the Zooniverse home page. It can also be used as your project’s brand. It’s best if it’s recognizable even as a small icon. To add an image, either drag and drop or right click to open your file viewer. For best results, use a square image of not more than X pixels on a side.</small>
+          <small className="form-help">Pick an avatar for your project. This will represent your project on the Zooniverse home page. It can also be used as your project’s brand. It’s best if it’s recognizable even as a small icon. To add an image, either drag and drop or right click to open your file viewer. For best results, use a square image no larger than 50 KB.</small>
 
           <hr />
 
@@ -108,7 +108,7 @@ module.exports = React.createClass
           {if @state.backgroundError
             <div className="form-help error">{@state.backgroundError.toString()}</div>}
 
-          <small className="form-help">This image will be the background for all of your project pages, including your project’s front page, which newcomers will see first. It should be relatively high resolution and you should be able to read text written across it. To add an image, either drag and drop or right click to open your file viewer. For best results, use images of at least [X by Y] pixels.</small>
+          <small className="form-help">This image will be the background for all of your project pages, including your project’s front page, which newcomers will see first. It should be relatively high resolution and you should be able to read text written across it. To add an image, either drag and drop or right click to open your file viewer. For best results, use photographic images of at least one megapixel, no larger than 256 KB.</small>
 
           <hr />
 
