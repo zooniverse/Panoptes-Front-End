@@ -15,8 +15,8 @@ counterpart.registerTranslations 'en',
       ourTeam: 'Our Team'
       education: 'Education'
       privacyPolicy: 'Privacy policy'
-    discuss:
-      title: 'Discuss'
+    talk:
+      title: 'Talk'
       zooTalk: 'Zooniverse Talk'
       otherTalk: 'Other Talk'
 
@@ -44,9 +44,9 @@ module.exports = React.createClass
             <Link to="privacy"><Translate content="footer.learn.privacyPolicy" /></Link>
           </div>
           <div className="site-map-section">
-            <Translate component="h6" content="footer.discuss.title" />
-            <Link to="talk"><Translate content="footer.discuss.zooTalk" /></Link>
-            <a><Translate content="footer.discuss.otherTalk" /></a>
+            <Translate component="h6" content="footer.talk.title" />
+            <Link to="talk"><Translate content="footer.talk.zooTalk" /></Link>
+            <a><Translate content="footer.talk.otherTalk" /></a>
           </div>
         </nav>
         <div className="social-media">

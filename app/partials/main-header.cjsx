@@ -14,7 +14,7 @@ counterpart.registerTranslations 'en',
     home: 'Home'
     discover: 'Discover'
     learn: 'Learn'
-    discuss: 'Discuss'
+    talk: 'Talk'
     lab: 'The lab'
 
 module.exports = React.createClass
@@ -64,7 +64,7 @@ module.exports = React.createClass
         <nav className="main-nav">
           <Link to="projects" className="main-nav-item"><Translate content="mainNav.discover" /></Link>
           <a className="main-nav-item"><Translate content="mainNav.learn" /></a>
-          <Link to="talk" className="main-nav-item"><Translate content="mainNav.discuss" /></Link>
+          <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
           <hr />
           {if @state.user?
             <Link to="lab" className="main-nav-item"><Translate className="minor" content="mainNav.lab" /></Link>}
