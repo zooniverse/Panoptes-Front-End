@@ -146,9 +146,12 @@ module.exports = React.createClass
         <div>
           Data export<br />
           <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request data export</button>{' '}
-          <PromiseRenderer promise={apiClient.get @props.project._getURL 'classifications_exports'} then={([mostRecent]) =>
-            <small className="form-help">Most recent request: {moment(mostRecent.created_at).fromNow()}</small>
-          } catch={null} /><br />
+          <small className="form-help">
+            CSV format available.{' '}
+            <PromiseRenderer promise={apiClient.get @props.project._getURL 'classifications_exports'} then={([mostRecent]) =>
+              <span>Most recent request was made {moment(mostRecent.created_at).fromNow()}.</span>
+            } catch={null} /><br />
+          </small>
 
           {if @state.exportError?
             <div className="form-help error">{@state.exportError.toString()}</div>
