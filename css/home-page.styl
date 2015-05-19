@@ -1,60 +1,104 @@
 .home-page
+  background: #f4f4f4
+
   .hero
+    align-items: center
     background: url(./assets/hero.jpg) no-repeat top left
     background-size: cover
-    padding: 332.5px 3vw
+    display: flex
+    flex-direction: column
+    height: 95vh
+    justify-content: center
+    padding: 0 3vw
     text-align: center
+
+    .hero-logo
+      color: white
+      font-size: 1.8em
+      font-weight: 700
+
+    .zooniverse-logo
+      font-size: 0.875em
+      margin-right: 0.04em
+      vertical-align: -0.10em
 
     .hero-title
       color: #f9f9f9
       font-weight: 300
+      letter-spacing: 0.09em
       line-height: 24px
       padding: 1.5em 0 0.5em
 
     .hero-tagline
       color: #f9f9f9
+      font-size: 1.6em
       margin: 0 auto
       max-width: 600px
       padding: 1em 0 6.5em
 
     .hero-button
-      background: #4bb187
       color: #fbfbfb
+      font-size: 1.6em
+      font-weight: 400
 
       &:hover
         background: lighten(#4bb187, 20%)
 
   .featured-projects
-    padding: 20em 0 0
-
-    .floating-container
-      position: fixed
-      top: 95vh
-      width: 100%
-
-    > .featured-projects-sticky
-      position: relative
-      top: 0px
+    align-items: center
+    display: flex
+    flex-direction: column
+    justify-content: center
+    padding: 8em 0
+    text-align: center
 
     .featured-projects-list
       column-width: 20em
       column-gap: 3vw
-      margin: 0 auto
+      margin: 4.6em 3vw
       max-width: 960px
+      width: 100%
 
   .about-zooniverse
-    padding: 20em 0
+    align-items: center
+    display: flex
+    flex-direction: column
+    padding: 8em 0
+    text-align: center
 
     .about-items-list
-      column-gap: 2.5em
+      column-gap: 0em
       column-width: 29em
-      margin: 0 auto
       max-width: 960px
-      text-align: center
+      width: 100%
 
-      img
-        height: 180px
-        margin-bottom: 4.5em
+      .about-item
+        position: relative
+
+        .plus, .equals
+          margin: 0
+          position: absolute
+          top: 175px
+
+        .plus
+          right: 0
+
+        .equals
+          left: 0
+
+        .about-image
+          max-height: 250px
+          margin: 6em 0 0.5em
+
+        &:first-of-type, &:last-of-type
+          .about-image
+            margin-bottom: 4.5em
+
+        &:first-of-type
+          padding-right: 2em
+
+        &:last-of-type
+          padding-left: 2em
 
 
 
