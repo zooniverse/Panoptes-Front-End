@@ -8,8 +8,10 @@
       font-size: 2.7em
 
   a
-    color: inherit
     text-decoration: none
+
+    &.main-logo
+      color: white
 
   .on-project-page &
     opacity: 0.4
@@ -31,13 +33,16 @@
         width: calc(1em + 1.5vw)
 
       .display-name
+        color: white
         font-size: 14px
         margin-right: 1em
+
+      a
+        color: white
 
     .account-menu
       background: FOREGROUND
       border-radius: 4px
-      color: white
       opacity: 0
       display: flex
       transition: opacity 0.25s ease-out
@@ -56,6 +61,9 @@
         display: block
         left: 5em
         position: absolute
+
+      a
+        color: white
 
     &:hover
       .account-menu
@@ -116,14 +124,14 @@
     margin: 0
 
 .main-nav-item
-  color: rgba(255,255,255,0.5) !important //ugh
+  color: rgba(255,255,255,0.5)
   font-size: 0.9em
   padding: 0.5em 3vw
   margin: 0.5em 0 0
 
   &:link:hover
     background: rgba(255,255,255, 0.2)
-    color: rgba(255,255,255,1) !important
+    color: rgba(255,255,255,1)
 
   &.active
     font-weight: bold
