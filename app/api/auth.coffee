@@ -2,6 +2,7 @@
 config = require './config'
 client = require './client'
 
+# Use this to override the default API-specific headers.
 JSON_HEADERS =
   'Content-Type': 'application/json'
   'Accept': 'application/json'
@@ -17,17 +18,21 @@ CSRF_TOKEN_PATTERN = do ->
   CONTENT_ATTR = '''content=['"](.+)['"]'''
   ///#{NAME_ATTR}\s*#{CONTENT_ATTR}|#{CONTENT_ATTR}\s*#{NAME_ATTR}///
 
+# We don't want to wait until the token is already expired before refreshing it.
+TOKEN_EXPIRATION_ALLOWANCE = 10 * 1000
+
 module.exports = new Model
   _currentUserPromise: null
   _bearerToken: ''
+  _bearerRefreshTimeout: NaN
 
   _getAuthToken: ->
     console?.log 'Getting auth token'
-    makeHTTPRequest 'GET', config.host + '/', null, 'Accept': 'text/html'
+    makeHTTPRequest 'GET', config.host + "/?now=#{Date.now()}", null, 'Accept': 'text/html'
       .then (request) ->
         [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
         authToken = authTokenMatch1 ? authTokenMatch2
-        console?.info 'Got auth token', authToken
+        console?.info "Got auth token #{authToken[...6]}..."
         authToken
 
       .catch (request) ->
@@ -46,20 +51,45 @@ module.exports = new Model
 
       makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS
         .then (request) =>
-          response = JSON.parse request.responseText
-          @_bearerToken = response.access_token
-          client.headers['Authorization'] = "Bearer #{@_bearerToken}"
-          console?.info 'Got bearer token', @_bearerToken
-          @_bearerToken
+          token = @_handleNewBearerToken request
+          console?.info "Got bearer token #{token[...6]}..."
 
         .catch (request) ->
           # You're probably not signed in.
           console?.error 'Failed to get bearer token'
           client.handleError request
 
+  _handleNewBearerToken: (request) ->
+    response = JSON.parse request.responseText
+
+    @_bearerToken = response.access_token
+    client.headers['Authorization'] = "Bearer #{@_bearerToken}"
+
+    refresh = @_refreshBearerToken.bind this, response.refresh_token
+    timeToRefresh = (response.expires_in * 1000) - TOKEN_EXPIRATION_ALLOWANCE
+    @_bearerRefreshTimeout = setTimeout refresh, timeToRefresh
+
+    @_bearerToken
+
+  _refreshBearerToken: (refreshToken) ->
+    data =
+      grant_type: 'refresh_token'
+      refresh_token: refreshToken
+      client_id: config.clientAppID
+
+    makeHTTPRequest 'POST', config.host + '/oauth/token', data, JSON_HEADERS
+      .then (request) =>
+        token = @_handleNewBearerToken request
+        console?.info "Refreshed bearer token #{token[...6]}..."
+
+      .catch (request) ->
+        console?.error 'Failed to refresh bearer token'
+        client.handleError request
+
   _deleteBearerToken: ->
     @_bearerToken = ''
     delete client.headers['Authorization']
+    clearTimeout @_bearerRefreshTimeout
     console?.log 'Deleted bearer token'
 
   _getSession: ->
@@ -73,7 +103,7 @@ module.exports = new Model
         console?.error 'Failed to get session'
         throw error
 
-  register: ({display_name, email, password}) ->
+  register: ({display_name, email, password, global_email_communication}) ->
     @checkCurrent().then (user) =>
       if user?
         @signOut().then =>
@@ -84,10 +114,7 @@ module.exports = new Model
         registrationRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
-            user:
-              display_name: display_name
-              email: email
-              password: password
+            user: {display_name, email, password, global_email_communication}
 
           # This weird URL is actually out of the API, but returns a JSON-API response.
           client.post '/../users', data, JSON_HEADERS
@@ -132,9 +159,7 @@ module.exports = new Model
         signInRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
-            user:
-              display_name: display_name
-              password: password
+            user: {display_name, password}
 
           makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS
             .then =>

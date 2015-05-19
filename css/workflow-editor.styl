@@ -1,74 +1,68 @@
-.workflow-editor
-  .field-label
-    font-size: 0.7em
-    font-weight: bold
-    opacity: 0.8
+.drawing-task-details-editor
+  background: rgba(gray, 0.3)
+  padding: 1em 2.5vw
 
-  .task
+  > .sub-tasks > .workflow-task-editor
     background: white
-    border: 1px solid rgba(gray, 0.5)
     border-radius: 3px
-    margin: 1em 0
-    overflow: hidden
+    box-shadow: 0 1px 1px rgba(black, 0.2)
+    color: black
     padding: 0.5em
-    position: relative
+    margin: 0.5em 0
 
-    &:first-child
-      margin-top: 0
+  > .commands
+    white-space: nowrap
 
-  .controls
-    font-size: 0.7em
-    padding: 0 0.5em
+.workflow-task-editor-choices
+  background: rgba(gray, 0.3)
+  border-radius: 5px
+  box-shadow: 0 1px 1px rgba(black, 0.2) inset
+  margin: 1em 0
+  padding: 0.5em
+  text-align: center
+
+  > :first-child
+    margin-top: 0
+
+  > :last-child
+    margin-bottom: 0
+
+.workflow-choice-editor
+  background: white
+  border-radius: 3px
+  box-shadow: 0 1px 1px rgba(black, 0.2)
+  color: black
+  margin: 0.5em 0
+  padding: 0.5em
+  position: relative
+  text-align: left
+
+  .workflow-choice-remove-button
+    @extends $reset-button
+    background: gray
+    border-radius: 50%
+    box-shadow: 0 1px 1px rgba(black, 0.1)
+    color: white
+    height: 1em
+    line-height: 1
     position: absolute
-    right: 0
-    top: 0
-
-    button
-      @extends $reset-button
-
-  .inline-input
-    border: 1px solid transparent
-    border-radius: 2em
-    cursor: pointer
-    display: inline-block
-    font-size: 0.7em
-    margin: 0 0.5em
-    padding: 0 1em 0 0.5em
+    right: -0.3em
+    top: -0.3em
+    width: 1em
 
     &:hover
-      border-color: rgba(gray, 0.5)
+      background: red
 
-  .answer
-    border: 1px solid rgba(gray, 0.5)
-    border-radius: 3px
-    margin: 0.5em 0
-    padding: 0.5em
-    position: relative
+.workflow-choice-add-button
+  @extends $reset-button
+  background: gray
+  border-radius: 50%
+  box-shadow: 0 1px 1px rgba(black, 0.1)
+  color: white
+  font-size: 2em
+  height: 1em
+  line-height: 1
+  width: 1em
 
-    &:first-child
-      margin-top: 0
-
-  .answer-properties
-    display: flex
-    font-size: 0.7em
-
-    > *
-      flex: 1 1 auto
-      text-align: center
-
-  .adder-container
-    display: flex
-
-  .adder
-    @extends $reset-button
-    border: 1px dashed rgba(gray, 0.5)
-    border-radius: 3px
-    flex: 1 1 auto
-    margin-left: 0.5em
-    padding: 1em 0
-
-    &:first-child
-      margin-left: 0
-
-.workflow-editor-code-view
-  font-size: 0.7em
+  &:hover
+    background: SECOND_HIGHLIGHT

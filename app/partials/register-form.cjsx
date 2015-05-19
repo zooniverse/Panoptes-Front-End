@@ -26,10 +26,10 @@ counterpart.registerTranslations 'en',
     email: 'Email address'
     emailConflict: 'An account with this address already exists'
     realName: 'Real name'
-    why: 'Why?'
     whyRealName: 'We’ll use this to give you credit in scientific papers, posters, etc'
     agreeToPrivacyPolicy: 'You agree to our %(link)s (required)'
     privacyPolicy: 'privacy policy'
+    okayToEmail: 'It’s okay to send me email every once in a while.'
     register: 'Register'
     alreadySignedIn: 'Signed in as %(name)s'
     signOut: 'Sign out'
@@ -40,7 +40,6 @@ module.exports = React.createClass
   mixins: [PromiseToSetState]
 
   getInitialState: ->
-    whyRealName: false
     user: null
     badNameChars: null
     nameConflict: null
@@ -140,23 +139,26 @@ module.exports = React.createClass
       <label>
         <span className="columns-container inline spread">
           <Translate content="registerForm.realName" />
-          <button type="button" className="secret-button" onClick={@setState.bind this, whyRealName: not @state.whyRealName, null}>
-            <Translate className="form-help info" content="registerForm.why" />
-            {if @state.whyRealName
-              <Tooltip attachment="middle right" targetAttachment="middle left">
-                <Translate content="registerForm.whyRealName" />
-              </Tooltip>}
-          </button>
         </span>
         <input type="text" ref="realName" className="standard-input full" disabled={@state.user?} />
+        <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
       </label>
 
+      <br />
       <br />
 
       <label>
         <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
         {privacyPolicyLink = <a href="#/todo/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
         <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
+      </label>
+
+      <br />
+      <br />
+
+      <label>
+        <input type="checkbox" ref="okayToEmail" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
+        <Translate component="span" content="registerForm.okayToEmail" />
       </label><br />
 
       <p style={textAlign: 'center'}>
@@ -247,9 +249,10 @@ module.exports = React.createClass
     password = @refs.password.getDOMNode().value
     email = @refs.email.getDOMNode().value
     realName = @refs.realName.getDOMNode().value
+    global_email_communication = @refs.okayToEmail.getDOMNode().checked
 
     @props.onSubmit?()
-    auth.register {display_name, password, email, realName}
+    auth.register {display_name, password, email, global_email_communication}
       .then @props.onSuccess
       .catch @props.onFailure
 

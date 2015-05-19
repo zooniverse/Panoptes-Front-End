@@ -2,9 +2,23 @@ FOREGROUND = #404040
 BACKGROUND = white
 MAIN_HIGHLIGHT = #43bbfd
 SECOND_HIGHLIGHT = #38b978
+COPY = #646464
+
+LIGHT_GREY = #CBCCCB
+SUCCESS = #009E0C
+FAILURE = #A31400
 
 background-stripes(color1, color2, size)
   background-image: repeating-linear-gradient(-45deg, color1, color1 size / 2, color2 size / 2, color2 size)
+
+// TODO: I really hate this animation.
+@keyframes busy-button-animation
+  from
+    left: 0
+    right: 90%
+  to
+    left: 90%
+    right: 0
 
 $reset-button
   background: transparent
@@ -16,8 +30,26 @@ $reset-button
   line-height: inherit
   margin: 0
   padding: 0
+  position: relative
   text-decoration: none
 
   &:disabled
     cursor: inherit
     opacity: 0.5
+
+  &[data-busy]::after
+    animation: busy-button-animation 1s linear infinite alternate
+    background: linear-gradient(90deg, rgba(gray, 0), rgba(gray, 0.2), rgba(gray, 0))
+    bottom: 0
+    content: ""
+    left: 0
+    position: absolute
+    top: 0
+    right: 0
+
+$generic-heading
+  font-size: 0.7em
+  font-weight: bold
+  letter-spacing: 0.1em
+  opacity: 0.7
+  text-transform: uppercase

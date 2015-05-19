@@ -1,6 +1,7 @@
 React = require 'react'
 GenericTask = require './generic'
 Markdown = require '../../components/markdown'
+GenericTaskEditor = require './generic-editor'
 
 NOOP = Function.prototype
 
@@ -80,7 +81,17 @@ module.exports = React.createClass
   displayName: 'DrawingTask'
 
   statics:
+    Editor: GenericTaskEditor
     Summary: Summary
+
+    getDefaultTask: ->
+      type: 'drawing'
+      instruction: 'Explain what to draw.'
+      help: ''
+      tools: []
+
+    getTaskText: (task) ->
+      task.instruction
 
     getDefaultAnnotation: ->
       _toolIndex: 0

@@ -1,4 +1,5 @@
 React = require 'react'
+React.initializeTouchEvents true
 window.React = React
 Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-router'
 MainHeader = require './partials/main-header'
@@ -34,9 +35,13 @@ routes = <Route handler={App}>
     <Route name="project-science-case" path="science-case" handler={require './pages/project/science-case'} />
     <Route name="project-results" path="results" handler={require './pages/project/results'} />
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
+    <Route name="project-talk" path="talk" handler={require './pages/project/talk'}>
+      <DefaultRoute name="project-talk-home" handler={require './talk/home'} />
+      <Route name="project-talk-board" path=":board" handler={require './talk/board'} />
+      <Route name="project-talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
+    </Route>
     <Route name="project-faq" path="faq" handler={require './pages/project/faq'} />
     <Route name="project-education" path="education" handler={require './pages/project/education'} />
-    <Route name="project-talk" path="talk" handler={require './pages/project/talk'} />
   </Route>
 
   <Route name="build" handler={require './pages/build'} />
@@ -50,8 +55,35 @@ routes = <Route handler={App}>
   <Route name="edit-project" path="edit-project/:id" handler={require './pages/edit-project'} />
   <Route name="edit-workflow" path="edit-workflow/:id" handler={require './pages/edit-workflow'} />
 
+  <Route name="talk" path="talk" handler={require './talk'}>
+    <DefaultRoute name="talk-home" handler={require './talk/home'} />
+    <Route name="talk-board" path=":board" handler={require './talk/board'} />
+    <Route name="talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
+  </Route>
+
+  <Route name="collections" path="collections" handler={require './collections'}>
+    <DefaultRoute name="collections-index" handler={require './collections/home'} />
+    <Route name="collections-show" path=":collection_id" handler={require './collections/show'} />
+  </Route>
+
+  <Route name="lab" handler={require './pages/lab'} />
+  <Route path="lab/:projectID" handler={require './pages/lab/project'}>
+    <DefaultRoute name="edit-project-details" handler={require './pages/lab/project-details'} />
+    <Route name="edit-project-science-case" path="science-case" handler={require './pages/lab/science-case'} />
+    <Route name="edit-project-results" path="results" handler={require './pages/lab/results'} />
+    <Route name="edit-project-faq" path="faq" handler={require './pages/lab/faq'} />
+    <Route name="edit-project-education" path="education" handler={require './pages/lab/education'} />
+    <Route name="edit-project-collaborators" path="collaborators" handler={require './pages/lab/collaborators'} />
+    <Route name="edit-project-workflow" path="workflow/:workflowID" handler={require './pages/lab/workflow'} />
+    <Route name="edit-project-subject-set" path="subject-set/:subjectSetID" handler={require './pages/lab/subject-set'} />
+  </Route>
+
+  <Route name="inbox" handler={require './talk/inbox'} />
+  <Route name="inbox-conversation" path="inbox/:conversation" handler={require './talk/inbox-conversation'} />
+
+
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
-  <NotFoundRoute handler={React.createClass render: -> <div className="content-container"><i className="fa fa-frown-o"></i> Not found</div>} />
+  <NotFoundRoute handler={require './pages/not-found'} />
 
   <Route path="dev/workflow-tasks-editor" handler={require './components/workflow-tasks-editor'} />
   <Route path="dev/classifier" handler={require './classifier'} />

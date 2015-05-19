@@ -1,6 +1,7 @@
 React = require 'react'
-GenericTask = require './generic'
 Markdown = require '../../components/markdown'
+GenericTask = require './generic'
+GenericTaskEditor = require './generic-editor'
 
 NOOP = Function.prototype
 
@@ -49,7 +50,17 @@ module.exports = React.createClass
   displayName: 'SingleChoiceTask'
 
   statics:
+    Editor: GenericTaskEditor
     Summary: Summary
+
+    getDefaultTask: ->
+      type: 'single'
+      question: 'Enter a question.'
+      help: ''
+      answers: []
+
+    getTaskText: (task) ->
+      task.question
 
     getDefaultAnnotation: ->
       value: null
@@ -73,4 +84,3 @@ module.exports = React.createClass
     if e.target.checked
       @props.annotation.value = index
       @props.onChange? e
-

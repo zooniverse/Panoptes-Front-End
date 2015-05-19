@@ -9,7 +9,11 @@ counterpart.registerTranslations 'en',
   projectRoles:
     title: 'The team'
     owner: 'Owner'
+    collaborator: 'Collaborator'
     translator: 'Translator'
+    scientist: 'Scientist'
+    moderator: 'Moderator'
+    tester: 'Tester'
 
 module.exports = React.createClass
   displayName: 'ProjectScienceCasePage'

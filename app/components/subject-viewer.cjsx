@@ -1,15 +1,15 @@
 React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
+FavoritesButton = require '../collections/favorites-button'
 alert = require '../lib/alert'
+getSubjectLocation = require '../lib/get-subject-location'
 
 NOOP = Function.prototype
-
-READABLE_FORMATS =
-  image: ['jpeg', 'png', 'svg+xml', 'gif']
 
 ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'inline-block', position: 'relative'
 SUBJECT_STYLE = display: 'block'
+PLAYING_FRAME_DURATION = 333
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'
@@ -24,26 +24,16 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     subject: null
-    frame: 0
     onFrameChange: NOOP
     onLoad: NOOP
 
   getInitialState: ->
     loading: true
-
-  componentWillReceiveProps: (nextProps) ->
-    unless nextProps.subject is @props.subject and nextProps.frame is @props.frame
-      @setState loading: true
-
-  getReadableLocation: ->
-    for mimeType, src of @props.subject?.locations?[@props.frame] ? {}
-      [type, format] = mimeType.split '/'
-      if type of READABLE_FORMATS and format in READABLE_FORMATS[type]
-        break
-    {type, format, src}
+    playing: false
+    frame: @props.frame ? 0
 
   render: ->
-    {type, format, src} = @getReadableLocation()
+    {type, format, src} = getSubjectLocation @props.subject, @state.frame
 
     mainDisplay = switch type
       when 'image'
@@ -54,12 +44,26 @@ module.exports = React.createClass
         if @props.subject?.locations.length < 2
           null
         else
-          <span className="subject-frame-pips">
-            {for i in [0...@props.subject?.locations.length ? 0]
-              <button type="button" key={i} className="subject-frame-pip #{if i is @props.frame then 'active' else ''}" value={i} onClick={@props.onFrameChange}>{i + 1}</button>}
+          <span>
+            <span className="subject-frame-play-controls">
+              {if @state.playing
+                <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
+                  <i className="fa fa-pause fa-fw"></i>
+                </button>
+              else
+                <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
+                  <i className="fa fa-play fa-fw"></i>
+                </button>}
+            </span>
+            <span className="subject-frame-pips">
+              {for i in [0...@props.subject?.locations.length ? 0]
+                <button type="button" key={i} className="subject-frame-pip #{if i is @state.frame then 'active' else ''}" value={i} onClick={@handleFrameChange.bind this, i}>{i + 1}</button>}
+            </span>
           </span>
 
     <div className="subject-viewer" style={ROOT_STYLE}>
+      {if type is 'image'
+        @hiddenPreloadedImages()}
       <div className="subject-container" style={CONTAINER_STYLE}>
         {mainDisplay}
         {@props.children}
@@ -75,8 +79,41 @@ module.exports = React.createClass
           {if @props.subject?.metadata?
             <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-table fa-fw"></i></button>}
         </span>
+        {if @props.subject
+          <FavoritesButton subject={@props.subject} />}
       </div>
     </div>
+
+  hiddenPreloadedImages: ->
+    # Render this to ensure that all a subject's location images are cached and ready to display.
+    <div style={
+      bottom: 0
+      height: 1
+      opacity: 0.1
+      overflow: 'hidden'
+      position: 'fixed'
+      right: 0
+      width: 1
+    }>
+      {for i in [0...@props.subject.locations.length]
+        {src} = getSubjectLocation @props.subject, i
+        <img key={i} src={src} />}
+    </div>
+
+  setPlaying: (playing) ->
+    @setState {playing}
+    if playing
+      @nextFrame()
+      @_playingInterval = setInterval @nextFrame, PLAYING_FRAME_DURATION
+    else
+      clearInterval @_playingInterval
+
+  nextFrame: ->
+    @handleFrameChange (@state.frame + 1) %% @props.subject.locations.length
+
+  handleFrameChange: (frame) ->
+    @setState {frame}
+    @props.onFrameChange frame
 
   showMetadata: ->
     # TODO: Sticky popup.

@@ -53,10 +53,13 @@ module.exports = React.createClass
     result ? null
 
   renderPending: ->
-    if typeof @props.pending is 'string'
-      @defaultPending @props.pending
-    else if @props.pending?
-      @props.pending.call this
+    if @state.value?
+      @renderResolved @state.value
+    else
+      if typeof @props.pending is 'string'
+        @defaultPending @props.pending
+      else if @props.pending?
+        @props.pending.call this
 
   renderResolved: (value) ->
     if typeof @props.children is 'function'

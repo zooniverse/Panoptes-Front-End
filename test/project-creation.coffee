@@ -75,6 +75,10 @@ test 'Create a subject set',  (t) ->
       t.ok subjectSetProject?, 'Subject set is linked to a project'
       t.equal subjectSetProject?.id, resources.project.id, 'Subject set project is the one specified'
 
+# Change subject set's name
+
+# Change subject set's retirement rules
+
 test 'Create a subject', (t) ->
   subjectData = clone SUBJECT_DATA
   subjectData.links =
@@ -104,6 +108,20 @@ test 'Create a workflow', (t) ->
     workflow.link('subject_sets').then (workflowSubjectSets) ->
       subjectSetIDs = (id for {id} in workflowSubjectSets)
       t.ok resources.subjectSet.id in subjectSetIDs, 'The workflow knows about the subject set we created'
+
+# Workflow should come with an expert subject set
+
+# Change workflow's name
+
+# Add task to workflow
+
+# Create another subject set, link it to the workflow
+
+# Delete link between subject set and workflow, subject set should still exist
+
+# Delete subject set, it should no longer be available
+
+# Delete workflow, it should no longer be available
 
 test 'Delete temporary user', ->
   auth.disableAccount()

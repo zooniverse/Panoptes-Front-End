@@ -4,7 +4,7 @@ apiClient = require '../api/client'
 WorkflowTasksEditor = require '../components/workflow-tasks-editor'
 
 module.exports = React.createClass
-  displayName: 'EditWorkflowPage'
+  displayName: 'EditWorkflow'
 
   getDefaultProps: ->
     params: {}

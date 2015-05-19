@@ -112,7 +112,7 @@ module.exports = React.createClass
 
         {if @state.selectedMark? and @refs.selectedTool?
           toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
-          if toolDescription?.details?
+          if toolDescription?.details?.length > 0
             sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
             toolRect = @refs.selectedTool.getDOMNode().getBoundingClientRect()
 
@@ -156,8 +156,8 @@ module.exports = React.createClass
   toggleWarning: ->
     @setState showWarning: not @state.showWarning
 
-  handleFrameChange: (e) ->
-    @setState frame: parseFloat e.target.value
+  handleFrameChange: (frame) ->
+    @setState {frame}
 
   updateAnnotations: ->
     @props.classification.update
@@ -180,6 +180,7 @@ module.exports = React.createClass
       toolDescription = taskDescription.tools[@props.annotation._toolIndex]
       mark =
         tool: @props.annotation._toolIndex
+        frame: @state.frame
       if toolDescription.details?
         mark.details = for detailTaskDescription in toolDescription.details
           tasks[detailTaskDescription.type].getDefaultAnnotation()

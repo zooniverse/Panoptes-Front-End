@@ -1,6 +1,7 @@
 React = require 'react'
 GenericTask = require './generic'
 Markdown = require '../../components/markdown'
+GenericTaskEditor = require './generic-editor'
 
 NOOP = Function.prototype
 
@@ -51,7 +52,17 @@ module.exports = React.createClass
   displayName: 'MultipleChoiceTask'
 
   statics:
+    Editor: GenericTaskEditor
     Summary: Summary
+
+    getDefaultTask: ->
+      type: 'multiple'
+      question: 'Enter a question.'
+      help: ''
+      answers: []
+
+    getTaskText: (task) ->
+      task.question
 
     getDefaultAnnotation: ->
       value: []

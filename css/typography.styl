@@ -3,6 +3,23 @@ html
   color: FOREGROUND
   font: 400 15px/1.5 "Open Sans", "Gill Sans", Arial, sans-serif
 
+.attribution
+  font-size: 0.7em
+  opacity: 0.7
+  text-align: center
+
+  &:last-child
+    column-span: all
+
+.partners
+  text-align: center
+
+  &:last-child
+    column-span: all
+
+  img
+    max-width: 100%
+
 hr
   border: 0 solid rgba(gray, 0.5)
   border-top-width: 1px
@@ -17,12 +34,75 @@ a
 h1,
 h2,
 h3,
-h4
+h4,
+h5,
+h6
   font-smoothing: antialiased
   font-weight: bold
   margin: 0
 
+.on-home-page
+  font-size: 10px
+  line-height: 20px
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6
+    color: COPY
+
+  h1
+    font-size: 50px
+
+  h2
+    font-size: 42px
+
+  h3
+    font-size: 36px
+
+  h4
+    font-size: 30px
+
+  h5
+    font-size: 24px
+
+  h6
+    font-size: 15px
+
+  p
+    color: COPY
+    font-size: 14px
+    font-smoothing: antialiased
+
+  a
+    font-size: 14px
+
+  .on-dark
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6
+      color: #fff
+    p
+      color: #c1c1c1
+
+  .promo
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6
+      color: #5a5a5a
+
+    p
+      color: #989898
+
 img
   &:not([src]),
   &[src=""]
-    background-stripes: black yellow 20%
+    background-stripes: lighten(MAIN_HIGHLIGHT, 20%) darken(SECOND_HIGHLIGHT, 20%) 20%
