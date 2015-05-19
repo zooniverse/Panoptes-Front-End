@@ -5,7 +5,7 @@ Translate = require 'react-translate-component'
 
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
-ProjectClassifyPage = require './project/classify'
+ZooniverseLogo = require '../partials/zooniverse-logo'
 ProjectCard = require '../partials/project-card'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
@@ -17,33 +17,30 @@ counterpart.registerTranslations 'en',
       tagline: 'The Zooniverse is a platform for citizen science and an opportunity for anyone to contribute to science.'
       button: 'Get started!'
     about:
+      title: 'How does this work?'
+      tagline: 'We use the power of the crowd to process scientific data, and that helps scientists make discoveries!'
       first:
         title: 'This is a Heading About Text'
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
           ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-          in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-          sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.'
+          aliquip ex ea commodo consequat.'
       second:
         title: 'This is a Heading About Text'
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
           ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-          in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-          sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.'
+          aliquip ex ea commodo consequat.'
       third:
         title: 'This is a Heading About Text'
         content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
           ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-          in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-          sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.'
+          aliquip ex ea commodo consequat.'
+    featuredProjects:
+      title: 'Get started on a project right now!'
+      tagline: 'These are just a few of our projects.'
+      button: 'See all projects'
 
 module.exports = React.createClass
   displayName: 'HomePage'
@@ -52,54 +49,58 @@ module.exports = React.createClass
     featuredProjectsIds: {dev: ['231', '405', '272', '166'], production: []}
 
   componentDidMount: ->
-    document.addEventListener 'scroll', @onScroll
     document.documentElement.classList.add 'on-home-page'
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-home-page'
-    document.removeEventListener 'scroll', @onScroll
 
   render: ->
     featuredProjects = @getFeaturedProjects()
 
     <div className="home-page">
       <section className="hero on-dark">
-        <img src="./assets/zooniverse-logotype.png" alt="Zooniverse" />
+        <span className="main-logo hero-logo">Zo<ZooniverseLogo />niverse</span>
         <h3 className="hero-title"><Translate content="home.hero.title" /></h3>
         <p className="hero-tagline"><Translate content="home.hero.tagline" /></p>
         <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
       </section>
-      <section className="featured-projects">
-        <div className="floating-container" ref="floatingContainer">
-          <PromiseRenderer promise={apiClient.type('projects').get(featuredProjects)}>{(projects) =>
-            if projects?
-              <div className="featured-projects-list content-container">
-              {for project in projects
-                <ProjectCard key={project.id} project={project} />
-              }
-              </div>
-          }</PromiseRenderer>
-        </div>
-      </section>
-      <section className="about-zooniverse promo">
+      <section className="about-zooniverse promo content-container">
+        <h5 className="about-title"><Translate content="home.about.title" /></h5>
+        <p className="about-tagline"><Translate content="home.about.tagline" /></p>
         <div className="about-items-list">
           <div className="about-item">
-            <img src="./assets/home-about1.svg" alt="" />
+            <img className="about-image" src="./assets/about1.svg" alt="" />
             <Translate component="h6" content="home.about.first.title" />
             <Translate component="p" content="home.about.first.content" />
+            <img className="plus" src="./assets/plus.svg" />
           </div>
           <div className="about-item">
-            <img src="./assets/home-about2.svg" alt="" />
+            <img className="about-image" src="./assets/about2.svg" alt="" />
             <Translate component="h6" content="home.about.second.title" />
             <Translate component="p" content="home.about.second.content" />
           </div>
           <div className="about-item">
-            <img src="./assets/home-about3.svg" alt="" />
+            <img className="equals" src="./assets/equals.svg" />
+            <img className="about-image" src="./assets/about3.svg" alt="" />
             <Translate component="h6" content="home.about.third.title" />
             <Translate component="p" content="home.about.third.content" />
           </div>
         </div>
       </section>
+      <section className="featured-projects content-container">
+        <Translate component="h5" content="home.featuredProjects.title" />
+        <Translate component="p" content="home.featuredProjects.tagline" />
+        <PromiseRenderer promise={apiClient.type('projects').get(featuredProjects)}>{(projects) =>
+          if projects?
+            <div className="featured-projects-list">
+            {for project in projects
+              <ProjectCard key={project.id} project={project} />
+            }
+            </div>
+        }</PromiseRenderer>
+        <Link to="projects" className="call-to-action standard-button x-large"><Translate content="home.featuredProjects.button" /></Link>
+      </section>
+
     </div>
 
   getFeaturedProjects: ->
@@ -111,11 +112,3 @@ module.exports = React.createClass
     alert (resolve) ->
       <LoginDialog which={which} onSuccess={resolve} />
 
-  onScroll: (e) ->
-    floatingContainer = React.findDOMNode(@refs.floatingContainer)
-
-    #Stick or unstick floating container of featured projects
-    if window.scrollY + window.innerHeight >= 1200
-      floatingContainer.classList.add 'featured-projects-sticky'
-    else
-      floatingContainer.classList.remove 'featured-projects-sticky'
