@@ -4,6 +4,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
+moment = require 'moment'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -145,9 +146,9 @@ module.exports = React.createClass
         <div>
           Data export<br />
           <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request data export</button>{' '}
-          <PromiseRenderer tag="small" promise={apiClient.get @props.project._getURL 'classifications_exports'} then={([others..., mostRecent]) =>
-            <span className="form-help">Most recent: {mostRecent.created_at}</span>
-          } /><br />
+          <PromiseRenderer promise={apiClient.get @props.project._getURL 'classifications_exports'} then={([mostRecent]) =>
+            <small className="form-help">Most recent request: {moment(mostRecent.created_at).fromNow()}</small>
+          } catch={null} /><br />
 
           {if @state.exportError?
             <div className="form-help error">{@state.exportError.toString()}</div>
@@ -185,7 +186,7 @@ module.exports = React.createClass
 
   requestDataExport: ->
     @setState exportError: null
-    apiClient.post @props.project._getURL 'classifications_exports'
+    apiClient.post @props.project._getURL('classifications_exports'), media: content_type: 'text/csv'
       .then =>
         @setState exportRequested: true
       .catch (error) =>
