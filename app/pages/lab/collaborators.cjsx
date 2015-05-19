@@ -3,13 +3,12 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 
 POSSIBLE_ROLES = [
-  'owner'
   'collaborator'
   'expert'
   'scientist'
   'moderator'
   'tester'
-  'translator'
+  # 'translator'
 ]
 
 CollaboratorCreator = React.createClass
@@ -32,10 +31,7 @@ CollaboratorCreator = React.createClass
         <p className="form-help error">{@state.error.toString()}</p>}
       <form style={style}>
         <p>
-          Username
-          <br />
-
-          <input type="text" ref="usernameInput" className="standard-input" />
+          Username: <input type="text" ref="usernameInput" className="standard-input" />
           <br />
 
           <span className="column columns-container">
@@ -70,17 +66,21 @@ CollaboratorCreator = React.createClass
 
     getUser = apiClient.type('users').get display_name: username
       .then ([user]) =>
-        newRoleSet = apiClient.type('project_roles').create
-          roles: roles
-          links:
-            project: @props.project.id
-            user: user.id
+        if user?
+          newRoleSet = apiClient.type('project_roles').create
+            roles: roles
+            links:
+              project: @props.project.id
+              user: user.id
 
-        newRoleSet.save().then =>
-          usernameInput.value = ''
-          for checkbox in checkboxes
-            checkbox.checked = false
-          @props.onAdd? arguments...
+          newRoleSet.save().then =>
+            usernameInput.value = ''
+            for checkbox in checkboxes
+              checkbox.checked = false
+            @props.onAdd? arguments...
+
+        else
+          throw new Error "User '#{username}' doesn't exist"
 
       .catch (error) =>
         @setState error: error
@@ -108,8 +108,11 @@ module.exports = React.createClass
         <p className="form-help error">{@state.error.toString()}</p>}
       <PromiseRenderer promise={@props.project.get 'project_roles'} then={(projectRoleSets) =>
         <div>
-          {for projectRoleSet in projectRoleSets
-            <PromiseRenderer key={projectRoleSet.id} promise={projectRoleSet.get 'owner'} then={@renderUserRow.bind this, projectRoleSet} />}
+          {if projectRoleSets.length > 1
+            for projectRoleSet in projectRoleSets
+              <PromiseRenderer key={projectRoleSet.id} promise={projectRoleSet.get 'owner'} then={@renderUserRow.bind this, projectRoleSet} />
+          else
+            <em className="form-help">None yet</em>}
         </div>
       } />
 
@@ -120,10 +123,6 @@ module.exports = React.createClass
 
       <table className="standard-table form-help">
         <tbody>
-          <tr>
-            <th>Owner</th>
-            <td>The owner is the original project creator. There can be only one.</td>
-          </tr>
           <tr>
             <th>Collaborator</th>
             <td>Collaborators have full access to edit workflows and project content, including deleting some or all of the project. [This last part seems silly, actually.]</td>
@@ -142,32 +141,37 @@ module.exports = React.createClass
           </tr>
           <tr>
             <th>Tester</th>
-            <td>?</td>
+            <td>Testers can access private projects if they’re given the project’s address.</td>
           </tr>
-          <tr>
-            <th>Translator</th>
-            <td>Translators will have access to the translation site?</td>
-          </tr>
+          {if false # Translations are not implemented yet.
+            <tr>
+              <th>Translator</th>
+              <td>Translators will have access to the translation site?</td>
+            </tr>}
         </tbody>
       </table>
     </div>
 
   renderUserRow: (projectRoleSet, user) ->
-    <p>
-      <strong>{user.display_name}</strong>{' '}
-      <button type="button" className="secret-button" onClick={@removeRoleSet.bind this, projectRoleSet}>&times;</button>
-      <br />
+    console.log {user}, 'Owner', @props.owner
+    if 'owner' in projectRoleSet.roles
+      null
+    else
+      <p>
+        <strong>{user.display_name}</strong>{' '}
+        <button type="button" className="secret-button" onClick={@removeRoleSet.bind this, projectRoleSet}>&times;</button>
+        <br />
 
-      <span className="columns-container inline">
-        {for role in POSSIBLE_ROLES
-          toggleThisRole = @toggleRole.bind this, projectRoleSet, role
-          # TODO: Translate this.
-          <label key={role}>
-            <input type="checkbox" name={role} checked={role in projectRoleSet.roles} disabled={role is 'owner' or projectRoleSet.id in @state.saving} onChange={toggleThisRole} />{' '}
-            {role[...1].toUpperCase()}{role[1...]}
-          </label>}
-      </span>
-    </p>
+        <span className="columns-container inline">
+          {for role in POSSIBLE_ROLES
+            toggleThisRole = @toggleRole.bind this, projectRoleSet, role
+            # TODO: Translate this.
+            <label key={role}>
+              <input type="checkbox" name={role} checked={role in projectRoleSet.roles} disabled={role is 'owner' or projectRoleSet.id in @state.saving} onChange={toggleThisRole} />{' '}
+              {role[...1].toUpperCase()}{role[1...]}
+            </label>}
+        </span>
+      </p>
 
   toggleRole: (projectRoleSet, role) ->
     index = projectRoleSet.roles.indexOf role
