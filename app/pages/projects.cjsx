@@ -9,7 +9,7 @@ ProjectCard = require '../partials/project-card'
 
 counterpart.registerTranslations 'en',
   projectsPage:
-    title: 'Projects'
+    title: 'All Projects'
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'
@@ -19,15 +19,18 @@ module.exports = React.createClass
   title: 'Projects'
 
   render: ->
-    <div className="projects-page">
-      <div className="content-container">
+    <div className="all-projects-page">
+      <section className="projects-hero">
         <Translate component="h1" content="projectsPage.title" /><br />
+      </section>
+      <section className="projects-container">
         <PromiseRenderer promise={apiClient.type('projects').get(@props.query ? {})}>{(projects) =>
           if projects?
+            console.log projects
             if projects.length is 0
               <span>No projects found.</span>
             else
-              <div>
+              <div className="content-container">
                 <div className="project-card-list">
                   {if projects?
                     for project in projects
@@ -45,5 +48,5 @@ module.exports = React.createClass
           else
             <div>Loading projects</div>
         }</PromiseRenderer>
-      </div>
+      </section>
     </div>

@@ -2,6 +2,13 @@ React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 
+counterpart = require 'counterpart'
+Translate = require 'react-translate-component'
+
+counterpart.registerTranslations 'en',
+  projectsCard:
+    button: 'Get Started'
+
 module.exports = React.createClass
   displayName: 'ProjectCard'
 
@@ -26,7 +33,7 @@ module.exports = React.createClass
       <svg className="project-card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
       <div className="details">
         <div className="name">{@props.project.display_name}</div>
-        <div className="owner">{owner?.display_name ? 'LOADING'}</div>
-        <div className="description">{@props.project.description}</div>
+        <div className="type">project type</div>
+        <button type="button" className="standard-button"><Translate content="projectsCard.button" /></button>
       </div>
     </Link>
