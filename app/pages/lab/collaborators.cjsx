@@ -2,6 +2,8 @@ React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 
+ID_PREFIX = 'LAB_COLLABORATORS_PAGE_'
+
 POSSIBLE_ROLES = [
   'collaborator'
   'expert'
@@ -10,6 +12,26 @@ POSSIBLE_ROLES = [
   'tester'
   # 'translator'
 ]
+
+ROLES_INFO =
+  collaborator:
+    label: 'Collaborator'
+    description: 'Collaborators have full access to edit workflows and project content, including deleting some or all of the project. [This last part seems silly, actually.]'
+  expert:
+    label: 'Expert'
+    description: 'Experts can enter “gold mode” to make authoritative gold standard classifications that will be used to validate data quality.'
+  scientist:
+    label: 'Scientist'
+    description: 'Members of the science team will be marked as scientists on “Talk"'
+  moderator:
+    label: 'Moderator'
+    description: 'Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on “Talk".'
+  tester:
+    label: 'Tester'
+    description: 'Testers can access private projects if they’re given the project’s address.'
+  translator:
+    label: 'Translator'
+    description: 'Translators will have access to the translation site?'
 
 CollaboratorCreator = React.createClass
   displayName: 'CollaboratorCreator'
@@ -31,20 +53,21 @@ CollaboratorCreator = React.createClass
         <p className="form-help error">{@state.error.toString()}</p>}
       <form style={style}>
         <p>
-          Username: <input type="text" ref="usernameInput" className="standard-input" />
-          <br />
+          Username:&emsp;<input type="text" ref="usernameInput" className="standard-input" />
+        </p>
 
-          <span className="column columns-container">
-            {for role in POSSIBLE_ROLES when role isnt 'owner'
-              <span key={role}>
-                <label>
-                  <input type="checkbox" name="role" value={role} />{' '}
-                  {role[...1].toUpperCase()}{role[1...]}
-                </label>
-              </span>}
-          </span>
-          <br />
+        <table className="standard-table">
+          <tbody>
+            {for role in POSSIBLE_ROLES
+              <tr>
+                <td><input id={ID_PREFIX + role} type="checkbox" name="role" value={role} /></td>
+                <td><strong><label htmlFor={ID_PREFIX + role}>{ROLES_INFO[role].label}</label></strong></td>
+                <td>{ROLES_INFO[role].description}</td>
+              </tr>}
+          </tbody>
+        </table>
 
+        <p>
           <button type="submit" className="major-button" onClick={@handleSubmit}>Add user role</button>
         </p>
       </form>
@@ -100,7 +123,7 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      <p>Collaborators</p>
+      <div className="form-label">Collaborators</div>
 
       <hr />
 
@@ -118,38 +141,8 @@ module.exports = React.createClass
 
       <hr />
 
-      <p>Add another</p>
+      <div className="form-label">Add another</div>
       <CollaboratorCreator project={@props.project} onAdd={@handleCollaboratorAddition} />
-
-      <table className="standard-table form-help">
-        <tbody>
-          <tr>
-            <th>Collaborator</th>
-            <td>Collaborators have full access to edit workflows and project content, including deleting some or all of the project. [This last part seems silly, actually.]</td>
-          </tr>
-          <tr>
-            <th>Expert</th>
-            <td>Experts can enter “gold mode” to make authoritative gold standard classifications that will be used to validate data quality.</td>
-          </tr>
-          <tr>
-            <th>Scientist</th>
-            <td>Members of the science team will be marked as scientists on “Talk"</td>
-          </tr>
-          <tr>
-            <th>Moderator</th>
-            <td>Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on “Talk".</td>
-          </tr>
-          <tr>
-            <th>Tester</th>
-            <td>Testers can access private projects if they’re given the project’s address.</td>
-          </tr>
-          {if false # Translations are not implemented yet.
-            <tr>
-              <th>Translator</th>
-              <td>Translators will have access to the translation site?</td>
-            </tr>}
-        </tbody>
-      </table>
     </div>
 
   renderUserRow: (projectRoleSet, user) ->
