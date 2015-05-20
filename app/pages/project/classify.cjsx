@@ -102,6 +102,7 @@ module.exports = React.createClass
           started_at: (new Date).toISOString()
           user_agent: navigator.userAgent
           user_language: counterpart.getLocale()
+          seen_before: subject.id in sessionSubjects or subject.already_seen
         links:
           project: project.id
           workflow: workflow.id
