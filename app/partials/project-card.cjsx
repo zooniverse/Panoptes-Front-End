@@ -34,6 +34,6 @@ module.exports = React.createClass
       <div className="details">
         <div className="name">{@props.project.display_name}</div>
         <div className="type">project type</div>
-        <button type="button" className="standard-button"><Translate content="projectsCard.button" /></button>
+        <button type="button" className="ghost-button project-card-button"><Translate content="projectsCard.button" /></button>
       </div>
     </Link>

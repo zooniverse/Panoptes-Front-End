@@ -10,6 +10,8 @@ ProjectCard = require '../partials/project-card'
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'All Projects'
+    showing: 'Showing'
+    found: 'found'
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'
@@ -18,19 +20,27 @@ module.exports = React.createClass
 
   title: 'Projects'
 
+  componentDidMount: ->
+    document.documentElement.classList.add 'on-all-projects-page'
+
+  componentWillUnmount: ->
+    document.documentElement.classList.remove 'on-all-projects-page'
+
   render: ->
     <div className="all-projects-page">
       <section className="projects-hero">
-        <Translate component="h1" content="projectsPage.title" /><br />
+        <Translate component="h1" content="projectsPage.title" />
       </section>
       <section className="projects-container">
         <PromiseRenderer promise={apiClient.type('projects').get(@props.query ? {})}>{(projects) =>
           if projects?
-            console.log projects
             if projects.length is 0
               <span>No projects found.</span>
             else
-              <div className="content-container">
+              <div>
+                <div className="project-results-counter">
+                  <p><Translate content='projectsPage.showing' /> {projects.length} <Translate content='projectsPage.found' /></p>
+                </div>
                 <div className="project-card-list">
                   {if projects?
                     for project in projects
