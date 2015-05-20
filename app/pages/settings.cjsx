@@ -10,6 +10,73 @@ putFile = require '../lib/put-file'
 
 MAX_AVATAR_SIZE = 65536
 
+ChangePasswordForm = React.createClass
+  displayName: 'ChangePasswordForm'
+
+  getDefaultProps: ->
+    user: {}
+
+  getInitialState: ->
+    inProgress: false
+    success: false
+    error: null
+
+  render: ->
+    <form onSubmit={@handleSubmit}>
+      <p>
+        <strong>Change your password</strong>
+      </p>
+
+      <table className="standard-table">
+        <tbody>
+          <tr>
+            <td>Current password</td>
+            <td><input type="password" ref="old" className="standard-input" size="20" /></td>
+          </tr>
+          <tr>
+            <td>New password</td>
+            <td><input type="password" ref="new" className="standard-input" size="20" /></td>
+          </tr>
+          <tr>
+            <td>Confirm new password</td>
+            <td><input type="password" ref="confirmation" className="standard-input" size="20" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        <button type="submit" className="standard-button" disabled={@state.inProgress}>Change</button>{' '}
+        {if @state.inProgress
+          <i className="fa fa-spinner fa-spin form-help"></i>
+        else if @state.success
+          <i className="fa fa-check-circle form-help success"></i>
+        else if @state.error
+          <small className="form-help error">{@state.error.toString()}</small>}
+      </p>
+    </form>
+
+  handleSubmit: (e) ->
+    e.preventDefault()
+
+    @setState
+      inProgress: true
+      success: false
+      error: null
+
+    payload =
+      users:
+        current_password: @refs.old.getDOMNode().value
+        password: @refs.new.getDOMNode().value
+        password_confirmation: @refs.confirmation.getDOMNode().value
+
+    apiClient.put '../users', payload
+      .then =>
+        @setState success: true
+      .catch (error) =>
+        @setState {error}
+      .then =>
+        @setState inProgress: false
+
 UserSettingsPage = React.createClass
   displayName: 'UserSettingsPage'
 
@@ -94,6 +161,12 @@ UserSettingsPage = React.createClass
             </tbody>
           } />
         </table>
+      </div>
+
+      <hr />
+
+      <div className="content-container">
+        <ChangePasswordForm {...@props} />
       </div>
     </div>
 
