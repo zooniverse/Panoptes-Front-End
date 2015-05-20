@@ -47,6 +47,7 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-faq" params={linkParams} className="nav-list-item">FAQ</Link></li>
           <li><Link to="edit-project-education" params={linkParams} className="nav-list-item">Education</Link></li>
           <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item">Collaborators</Link></li>
+          <li><Link to="edit-project-media" params={linkParams} className="nav-list-item">Media library</Link></li>
 
           <li>
             <br />
