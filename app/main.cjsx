@@ -20,6 +20,7 @@ App = React.createClass
 routes = <Route handler={App}>
   <DefaultRoute name="home" handler={require './pages/home'} />
 
+  <Route path="reset-password" handler={require './pages/reset-password'} />
   <Route path="account" handler={require './pages/sign-in'}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
     <Route name="register" handler={require './partials/register-form'} />
