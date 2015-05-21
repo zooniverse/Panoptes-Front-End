@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
-ZooniverseLogo = require './zooniverse-logo'
+ZooniverseLogoType = require './zooniverse-logotype'
 
 counterpart.registerTranslations 'en',
   footer:
@@ -28,7 +28,7 @@ module.exports = React.createClass
       <div className="centered-grid main-footer-flex">
         <div className="main-logo">
           <Link to="home" className="main-logo-link">
-            Zo<ZooniverseLogo />niverse
+            <ZooniverseLogoType />
           </Link>
         </div>
         <nav className="site-map">

@@ -5,7 +5,7 @@ Translate = require 'react-translate-component'
 
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
-ZooniverseLogo = require '../partials/zooniverse-logo'
+ZooniverseLogoType = require '../partials/zooniverse-logotype'
 ProjectCard = require '../partials/project-card'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
@@ -13,9 +13,9 @@ LoginDialog = require '../partials/login-dialog'
 counterpart.registerTranslations 'en',
   home:
     hero:
-      title: 'People-Powered Science'
-      tagline: 'The Zooniverse is a platform for citizen science and an opportunity for anyone to contribute to science.'
-      button: 'Get started!'
+      title: 'People-Powered Research'
+      tagline: 'The Zooniverse is the largest platform for real research online, and an opportunity for volunteers around the world to contribute to everything from astronomy to ancient texts, and from particle physics to penguinology.'
+      button: 'Get invovled now!'
     about:
       title: 'How does this work?'
       tagline: 'We use the power of the crowd to process scientific data, and that helps scientists make discoveries!'
@@ -59,7 +59,7 @@ module.exports = React.createClass
 
     <div className="home-page">
       <section className="hero on-dark">
-        <span className="main-logo hero-logo">Zo<ZooniverseLogo />niverse</span>
+        <ZooniverseLogoType />
         <h3 className="hero-title"><Translate content="home.hero.title" /></h3>
         <p className="hero-tagline"><Translate content="home.hero.tagline" /></p>
         <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
