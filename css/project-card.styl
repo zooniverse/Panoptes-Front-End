@@ -11,7 +11,7 @@
   border-radius: 6px
   vendor("column-break-inside", avoid)
   display: block
-  margin-bottom: 1em
+  margin: 0 auto 1em
   max-height: 325px
   max-width: 220px
   overflow: hidden
@@ -19,9 +19,6 @@
 
   &[data-no-avatar]
     background-stripes: black yellow 10%
-
-    .project-card-space-maker
-      height: 150px
 
   .details
     background: BACKGROUND
@@ -38,15 +35,11 @@
     font-size: 0.9em
     font-weight: 400
 
-  .type
+  .type, .owner
     color: #bababa
     flex-grow: 1
     font-size: .8em
     font-style: italic
-
-  .owner
-    opacity: 0.5
-    text-align: center
 
   .project-card-button
     padding: .6em
