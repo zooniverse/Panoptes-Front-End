@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
-ZooniverseLogo = require './zooniverse-logo'
+ZooniverseLogoType = require './zooniverse-logotype'
 
 counterpart.registerTranslations 'en',
   footer:
@@ -15,8 +15,8 @@ counterpart.registerTranslations 'en',
       ourTeam: 'Our Team'
       education: 'Education'
       privacyPolicy: 'Privacy policy'
-    discuss:
-      title: 'Discuss'
+    talk:
+      title: 'Talk'
       zooTalk: 'Zooniverse Talk'
       otherTalk: 'Other Talk'
 
@@ -28,7 +28,7 @@ module.exports = React.createClass
       <div className="centered-grid main-footer-flex">
         <div className="main-logo">
           <Link to="home" className="main-logo-link">
-            Zo<ZooniverseLogo />niverse
+            <ZooniverseLogoType />
           </Link>
         </div>
         <nav className="site-map">
@@ -44,9 +44,9 @@ module.exports = React.createClass
             <Link to="privacy"><Translate content="footer.learn.privacyPolicy" /></Link>
           </div>
           <div className="site-map-section">
-            <Translate component="h6" content="footer.discuss.title" />
-            <Link to="talk"><Translate content="footer.discuss.zooTalk" /></Link>
-            <a><Translate content="footer.discuss.otherTalk" /></a>
+            <Translate component="h6" content="footer.talk.title" />
+            <Link to="talk"><Translate content="footer.talk.zooTalk" /></Link>
+            <a><Translate content="footer.talk.otherTalk" /></a>
           </div>
         </nav>
         <div className="social-media">
