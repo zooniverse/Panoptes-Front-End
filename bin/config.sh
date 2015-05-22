@@ -1,4 +1,4 @@
-export PORT="3735"
+export PORT=${PORT:-3735}
 
 export DEV_DIR="public"
 export BUILD_DIR="build"
