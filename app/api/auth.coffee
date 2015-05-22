@@ -189,6 +189,12 @@ module.exports = new Model
               password_confirmation: replacement
 
           client.put '/../users', data, JSON_HEADERS
+            .then =>
+              @signOut() # Rough, but it'll do for now. Without signing out and back in, the session is lost.
+            .then =>
+              {display_name} = user
+              password = replacement
+              @signIn {display_name, password}
 
       else
         throw new Error 'No signed-in user to change the password for'
