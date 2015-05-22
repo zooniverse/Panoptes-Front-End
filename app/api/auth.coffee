@@ -207,6 +207,17 @@ module.exports = new Model
 
       client.post '/../users/password', data, JSON_HEADERS
 
+  resetPassword: ({password, confirmation, token: resetToken}) ->
+    @_getAuthToken().then (authToken) =>
+      data =
+        authenticity_token: authToken
+        user:
+          password: password
+          password_confirmation: confirmation
+          reset_password_token: resetToken
+
+      client.put '/../users/password', data, JSON_HEADERS
+
   disableAccount: ->
     console?.log 'Disabling account'
     @checkCurrent().then (user) =>

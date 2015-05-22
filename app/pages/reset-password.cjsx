@@ -33,7 +33,15 @@ module.exports = React.createClass
             <input ref="confirmation" type="password" className="standard-input" size="20" />
           </p>
 
-          <p><button type="submit" className="standard-button">Submit</button></p>
+          <p>
+            <button type="submit" className="standard-button">Submit</button>
+            {if @state.inProgress
+              <i className="fa fa-spinner fa-spin form-help"></i>
+            else if @state.resetSuccess
+              <i className="fa fa-check-circle form-help success"></i>
+            else if @state.resetError?
+              <small className="form-help error">{@state.emailError.toString()}</small>}
+          </p>
         </form>
 
       else
@@ -61,13 +69,11 @@ module.exports = React.createClass
       resetSuccess: false
       resetError: null
 
-    payload =
-      users:
-        reset_password_token: @props.query.reset_password_token
-        password: @refs.password.getDOMNode().value
-        password_confirmation: @refs.confirmation.getDOMNode().value
+    token = @props.query.reset_password_token
+    password = @refs.password.getDOMNode().value
+    confirmation = @refs.confirmation.getDOMNode().value
 
-    apiClient.put '../users/password', payload
+    auth.resetPassword {password, confirmation, token}
       .then =>
         @setState resetSuccess: true
       .catch (error) =>
@@ -83,7 +89,9 @@ module.exports = React.createClass
       emailSuccess: false
       emailError: null
 
-    auth.requestPasswordReset email: @refs.email.getDOMNode().value
+    email = @refs.email.getDOMNode().value
+
+    auth.requestPasswordReset {email}
       .then =>
         @setState emailSuccess: true
       .catch (error) =>
