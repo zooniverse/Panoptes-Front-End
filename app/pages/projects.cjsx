@@ -10,8 +10,7 @@ ProjectCard = require '../partials/project-card'
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'All Projects'
-    showing: 'Showing'
-    found: 'found'
+    countMessage: 'Showing %(count)s found'
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'
@@ -39,7 +38,7 @@ module.exports = React.createClass
             else
               <div>
                 <div className="project-results-counter">
-                  <p><Translate content='projectsPage.showing' /> {projects.length} <Translate content='projectsPage.found' /></p>
+                  <Translate count={projects.length} content="projectsPage.countMessage" component="p" />
                 </div>
                 <div className="project-card-list">
                   {if projects?

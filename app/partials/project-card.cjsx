@@ -30,10 +30,10 @@ module.exports = React.createClass
       'data-no-avatar': true unless @props.project.avatar
 
     <Link {...linkProps} className="project-card">
-      <svg className="project-card-space-maker" viewBox="0 0 2 150px" width="100%"></svg>
+      <svg className="project-card-space-maker" viewBox="0 0 2 1" width="100%" height="150px"></svg>
       <div className="details">
         <div className="name">{@props.project.display_name}</div>
         <div className="owner">{owner?.display_name ? 'LOADING'}</div>
-        <button type="button" className="ghost-button project-card-button"><Translate content="projectsCard.button" /></button>
+        <button type="button" tabIndex="-1" className="ghost-button project-card-button"><Translate content="projectsCard.button" /></button>
       </div>
     </Link>
