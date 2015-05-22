@@ -15,7 +15,7 @@ counterpart.registerTranslations 'en',
     hero:
       title: 'People-Powered Research'
       tagline: 'The Zooniverse is the largest platform for real research online, and an opportunity for volunteers around the world to contribute to everything from astronomy to ancient texts, and from particle physics to penguinology.'
-      button: 'Get invovled now!'
+      button: 'Get involved now!'
     about:
       title: 'How does this work?'
       tagline: 'We use the power of the crowd to process scientific data, and that helps scientists make discoveries!'

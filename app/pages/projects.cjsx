@@ -9,7 +9,8 @@ ProjectCard = require '../partials/project-card'
 
 counterpart.registerTranslations 'en',
   projectsPage:
-    title: 'Projects'
+    title: 'All Projects'
+    countMessage: 'Showing %(count)s found'
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'
@@ -18,16 +19,27 @@ module.exports = React.createClass
 
   title: 'Projects'
 
+  componentDidMount: ->
+    document.documentElement.classList.add 'on-all-projects-page'
+
+  componentWillUnmount: ->
+    document.documentElement.classList.remove 'on-all-projects-page'
+
   render: ->
-    <div className="projects-page">
-      <div className="content-container">
-        <Translate component="h1" content="projectsPage.title" /><br />
+    <div className="all-projects-page">
+      <section className="projects-hero">
+        <Translate component="h1" content="projectsPage.title" />
+      </section>
+      <section className="projects-container">
         <PromiseRenderer promise={apiClient.type('projects').get(@props.query ? {})}>{(projects) =>
           if projects?
             if projects.length is 0
               <span>No projects found.</span>
             else
               <div>
+                <div className="project-results-counter">
+                  <Translate count={projects.length} content="projectsPage.countMessage" component="p" />
+                </div>
                 <div className="project-card-list">
                   {if projects?
                     for project in projects
@@ -45,5 +57,5 @@ module.exports = React.createClass
           else
             <div>Loading projects</div>
         }</PromiseRenderer>
-      </div>
+      </section>
     </div>
