@@ -12,6 +12,8 @@ SignInPrompt = require '../../partials/sign-in-prompt'
 
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
+sessionSubjects = require '../../lib/session-subjects'
+
 SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
 
 if SKIP_CELLECT
@@ -179,10 +181,11 @@ module.exports = React.createClass
     console?.info 'Completed classification', @state.classification
     @state.classification.save().then (classification) =>
       console?.log 'Saved classification', classification.id
-      # After saving, remove the classification resource from the local cache.
-      classification.destroy()
-    classificationsThisSession += 1
-    @maybePromptToSignIn()
+      classification.get('subjects').then (subjects) ->
+        sessionSubjects.push (id for {id} in subjects)...
+        classification.destroy()
+      classificationsThisSession += 1
+      @maybePromptToSignIn()
 
   maybePromptToSignIn: ->
     auth.checkCurrent().then (user) ->
