@@ -1,4 +1,5 @@
 React = require 'react'
+auth = require '../api/auth'
 apiClient = require '../api/client'
 
 RequestForm = React.createClass
@@ -40,7 +41,15 @@ module.exports = React.createClass
           <p><strong>So, you’ve forgotten your password.</strong></p>
           <p>It happens to the best of us. Just enter your email address here and we’ll send you a link you can follow to reset it.</p>
           <p><input ref="email" type="email" className="standard-input" defaultValue={@props.query?.email} size="50" /></p>
-          <p><button type="submit" className="standard-button">Submit</button></p>
+          <p>
+            <button type="submit" className="standard-button">Submit</button>{' '}
+            {if @state.inProgress
+              <i className="fa fa-spinner fa-spin form-help"></i>
+            else if @state.emailSuccess
+              <i className="fa fa-check-circle form-help success"></i>
+            else if @state.emailError?
+              <small className="form-help error">{@state.emailError.toString()}</small>}
+          </p>
         </form>}
     </div>
 
@@ -74,11 +83,7 @@ module.exports = React.createClass
       emailSuccess: false
       emailError: null
 
-    payload =
-      users:
-        email: @refs.email.getDOMNode().value
-
-    apiClient.post '../users/password', payload
+    auth.requestPasswordReset email: @refs.email.getDOMNode().value
       .then =>
         @setState emailSuccess: true
       .catch (error) =>
