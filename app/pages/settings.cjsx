@@ -58,18 +58,15 @@ ChangePasswordForm = React.createClass
   handleSubmit: (e) ->
     e.preventDefault()
 
+    current = @refs.old.getDOMNode().value
+    replacement = @refs.new.getDOMNode().value
+
     @setState
       inProgress: true
       success: false
       error: null
 
-    payload =
-      users:
-        current_password: @refs.old.getDOMNode().value
-        password: @refs.new.getDOMNode().value
-        password_confirmation: @refs.confirmation.getDOMNode().value
-
-    apiClient.put '../users', payload
+    auth.changePassword {current, replacement}
       .then =>
         @setState success: true
       .catch (error) =>
