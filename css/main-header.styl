@@ -25,6 +25,7 @@
       opacity: 1
 
   .account-bar
+    font-size: 14px
     position: relative
 
     .account-info
@@ -32,14 +33,16 @@
 
       .avatar
         height: calc(1em + 1.5vw)
-        margin: -4em 1.75em -3.7em -0.3em
+        margin: -4em 0 -3.7em -0.3em
         vertical-align: middle
         width: calc(1em + 1.5vw)
 
       .display-name
         color: white
-        font-size: 14px
         margin-right: 1em
+
+      .message-link
+        margin-left: 1em
 
       a
         color: white
@@ -52,10 +55,10 @@
       transition: opacity 0.25s ease-out
       flex-direction: column
       font-size: 14px
-      margin: 0 1.65em
       padding: 1.5em
       pointer-events: none
       position: absolute
+      right: 23px
 
       &:before
         border: solid
@@ -64,7 +67,7 @@
         top: -0.55em
         content: ""
         display: block
-        left: 5em
+        left: 70%
         position: absolute
 
       a
@@ -121,7 +124,7 @@
   display: flex
   flex-grow: 1
   flex-wrap: wrap
-  padding: 0 1em
+  padding: 0 15px
 
   > hr
     border: 0

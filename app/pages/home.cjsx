@@ -46,7 +46,7 @@ module.exports = React.createClass
   displayName: 'HomePage'
 
   getInitialState: ->
-    featuredProjectsIds: {dev: ['231', '405', '272', '166'], production: []}
+    featuredProjectsIds: {dev: ['231', '405', '272', '76'], production: []}
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-home-page'
