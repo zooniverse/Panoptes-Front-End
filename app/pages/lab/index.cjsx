@@ -50,7 +50,7 @@ module.exports = React.createClass
     # TODO: Make this a component instead of a function,
     # then `user.uncacheLink 'projects'` on mount and on project creation.
 
-    getProjects = user.get 'projects', page: @state.page
+    getProjects = apiClient.type('projects').get current_user_roles: 'owner,collaborator', page: @state.page
 
     <div>
       <p>Projects owned by {user.display_name}:</p>
