@@ -214,7 +214,7 @@ EditSubjectSetPage = React.createClass
     reader.onload = (e) =>
       # TODO: Look into PapaParse features.
       # Maybe wan we parse the file object directly in a worker.
-      {data, errors} = Papa.parse e.target.result.trim(), header: true, dynamicTyping: true
+      {data, errors} = Papa.parse e.target.result.trim(), header: true
 
       metadatas = for rawData in data
         cleanData = {}
