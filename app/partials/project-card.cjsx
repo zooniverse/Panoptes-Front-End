@@ -25,7 +25,7 @@ module.exports = React.createClass
         name: @props.project.display_name
 
       style:
-        backgroundImage: "url('#{@props.project.avatar}')" if @props.project.avatar
+        background: if @props.project.avatar then "url('#{@props.project.avatar}')" else "url('./assets/simple-pattern.jpg') center center repeat"
 
       'data-no-avatar': true unless @props.project.avatar
 
