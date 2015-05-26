@@ -1,8 +1,8 @@
 React = require 'react'
 auth = require '../api/auth'
 apiClient = require '../api/client'
-
-RequestForm = React.createClass
+alert = require '../lib/alert'
+LoginDialog = require '../partials/login-dialog'
 
 module.exports = React.createClass
   displayName: 'ResetPasswordPage'
@@ -34,13 +34,13 @@ module.exports = React.createClass
           </p>
 
           <p>
-            <button type="submit" className="standard-button">Submit</button>
+            <button type="submit" className="standard-button">Submit</button>{' '}
             {if @state.inProgress
               <i className="fa fa-spinner fa-spin form-help"></i>
             else if @state.resetSuccess
               <i className="fa fa-check-circle form-help success"></i>
             else if @state.resetError?
-              <small className="form-help error">{@state.emailError.toString()}</small>}
+              <small className="form-help error">{@state.resetError.toString()}</small>}
           </p>
         </form>
 
@@ -58,6 +58,8 @@ module.exports = React.createClass
             else if @state.emailError?
               <small className="form-help error">{@state.emailError.toString()}</small>}
           </p>
+          {if @state.emailSuccess
+            <p>We’ve just sent you an email with a link to reset your password.</p>}
         </form>}
     </div>
 
@@ -76,6 +78,12 @@ module.exports = React.createClass
     auth.resetPassword {password, confirmation, token}
       .then =>
         @setState resetSuccess: true
+        alert (resolve) ->
+          <LoginDialog onSuccess={=>
+            location.hash = '/' # Sorta hacky.
+            resolve()
+          } />
+        return
       .catch (error) =>
         @setState resetError: error
       .then =>
