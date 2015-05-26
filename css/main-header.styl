@@ -7,7 +7,7 @@
     .main-logo
       font-size: 2.7em
 
-  .on-all-projects-page &
+  .on-secondary-page &
     position: absolute
     width: 100%
 
@@ -25,7 +25,6 @@
       opacity: 1
 
   .account-bar
-    font-size: 14px
     position: relative
 
     .account-info
@@ -33,16 +32,14 @@
 
       .avatar
         height: calc(1em + 1.5vw)
-        margin: -4em 0 -3.7em -0.3em
+        margin: -4em 1.75em -3.7em -0.3em
         vertical-align: middle
         width: calc(1em + 1.5vw)
 
       .display-name
         color: white
+        font-size: 14px
         margin-right: 1em
-
-      .message-link
-        margin-left: 1em
 
       a
         color: white
@@ -55,10 +52,10 @@
       transition: opacity 0.25s ease-out
       flex-direction: column
       font-size: 14px
+      margin: 0 1.65em
       padding: 1.5em
       pointer-events: none
       position: absolute
-      right: 23px
 
       &:before
         border: solid
@@ -67,7 +64,7 @@
         top: -0.55em
         content: ""
         display: block
-        left: 70%
+        left: 5em
         position: absolute
 
       a
@@ -98,7 +95,7 @@
     .main-nav-item:hover
       background: rgba(0,0,0,0.2)
 
-  .on-project-page &, .on-home-page &, .on-all-projects-page &
+  .on-project-page &, .on-home-page &, .on-secondary-page &
     background: transparent
 
   &.header-sticky
@@ -124,7 +121,7 @@
   display: flex
   flex-grow: 1
   flex-wrap: wrap
-  padding: 0 15px
+  padding: 0 1em
 
   > hr
     border: 0
@@ -149,3 +146,16 @@
     font-weight: bold
     letter-spacing: 0.1em
     text-transform: uppercase
+
+.on-secondary-page
+  .secondary-page
+    .hero
+      background-size: cover
+      padding: 9.33em 3vw 4em
+
+      h1
+        color: white
+        font-size: 2.25em
+        font-weight: 400
+        margin: 0 auto
+        max-width: 960px

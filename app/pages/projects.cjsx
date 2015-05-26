@@ -20,14 +20,14 @@ module.exports = React.createClass
   title: 'Projects'
 
   componentDidMount: ->
-    document.documentElement.classList.add 'on-all-projects-page'
+    document.documentElement.classList.add 'on-secondary-page'
 
   componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-all-projects-page'
+    document.documentElement.classList.remove 'on-secondary-page'
 
   render: ->
-    <div className="all-projects-page">
-      <section className="projects-hero">
+    <div className="secondary-page all-projects-page">
+      <section className="hero projects-hero">
         <Translate component="h1" content="projectsPage.title" />
       </section>
       <section className="projects-container">
