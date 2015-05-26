@@ -28,8 +28,8 @@ module.exports = React.createClass
 
   render: ->
     linkParams =
-      owner: @props.owner.display_name
-      name: @props.project.display_name
+      owner: @props.owner.slug
+      name: @props.project.slug
 
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
