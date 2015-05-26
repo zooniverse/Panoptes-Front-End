@@ -53,8 +53,8 @@ ProjectPage = React.createClass
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
         params =
-          owner: owner.display_name
-          name: @props.project.display_name
+          owner: owner.slug
+          name: @props.project.slug
 
         <div className="project-page">
           <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
@@ -134,7 +134,7 @@ module.exports = React.createClass
     unless @state.pending.project?
       query =
         owner: props.params.owner
-        display_name: props.params.name
+        slug: props.params.name
       @promiseToSetState project: auth.checkCurrent().then ->
         # TODO: This refresh is a little annoying. Can get the complete resource somehow?
         apiClient.type('projects').get(query).index(0).refresh().catch ->
