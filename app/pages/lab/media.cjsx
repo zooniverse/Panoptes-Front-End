@@ -29,6 +29,8 @@ MediaItem = React.createClass
           <img ref="img" className="media-item-image" src={@props.medium.src} onLoad={@handleLoad} onError={@handleLoadError} />}
       </span>
       <br />
+      {@props.medium.metadata?.filename ? <i>Untitled</i>}
+      <br />
       {if @state.loading
         <span>Loading...</span>
       if @state.loadError
@@ -89,7 +91,7 @@ MediaUploadArea = React.createClass
         <span>{@state.uploadError.toString()}</span>}
     </span>
 
-  handleImageSelection: (file) ->
+  handleImageSelection: (file, img) ->
     @setState
       uploading: true
       uploadError: null
@@ -98,7 +100,7 @@ MediaUploadArea = React.createClass
       media:
         content_type: file.type
         metadata:
-            filename: file.name
+          filename: img.title
 
     apiClient.post @props.project._getURL('attached_images'), payload
       .then ([media]) =>
