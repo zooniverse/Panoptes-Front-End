@@ -28,7 +28,9 @@ module.exports = React.createClass
   render: ->
     <div className="secondary-page all-projects-page">
       <section className="hero projects-hero">
-        <Translate component="h1" content="projectsPage.title" />
+        <div className="hero-container">
+          <Translate component="h1" content="projectsPage.title" />
+        </div>
       </section>
       <section className="projects-container">
         <PromiseRenderer promise={apiClient.type('projects').get(@props.query ? {})}>{(projects) =>
