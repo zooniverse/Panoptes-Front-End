@@ -46,6 +46,7 @@ module.exports = React.createClass
     passwordTooShort: null
     passwordsDontMatch: null
     emailConflict: null
+    error: null
 
   componentDidMount: ->
     auth.listen @handleAuthChange
@@ -169,6 +170,8 @@ module.exports = React.createClass
             <Translate content="registerForm.alreadySignedIn" name={@state.user.display_name} />{' '}
             <button type="button" className="minor-button" onClick={@handleSignOut}><Translate content="registerForm.signOut" /></button>
           </span>
+        else if @state.error?
+          <span className="form-help error">{@state.error.toString()}</span>
         else
           <span>&nbsp;</span>}
       </p>
@@ -190,9 +193,9 @@ module.exports = React.createClass
       badNameChars: badChars
       nameConflict: null
 
-    if exists and badChars.length is 0
-      @debouncedCheckFornameConflict ?= debounce @checkFornameConflict, REMOTE_CHECK_DELAY
-      @debouncedCheckFornameConflict name
+    # if exists and badChars.length is 0
+    #   @debouncedCheckFornameConflict ?= debounce @checkFornameConflict, REMOTE_CHECK_DELAY
+    #   @debouncedCheckFornameConflict name
 
   debouncedCheckFornameConflict: null
   checkFornameConflict: (display_name) ->
@@ -216,9 +219,9 @@ module.exports = React.createClass
     @promiseToSetState emailConflict: Promise.resolve null # Cancel any existing request.
 
     email = @refs.email.getDOMNode().value
-    if email.match /.+@.+\..+/
-      @debouncedCheckForEmailConflicts ?= debounce @checkForEmailConflicts, REMOTE_CHECK_DELAY
-      @debouncedCheckForEmailConflicts email
+    # if email.match /.+@.+\..+/
+    #   @debouncedCheckForEmailConflicts ?= debounce @checkForEmailConflicts, REMOTE_CHECK_DELAY
+    #   @debouncedCheckForEmailConflicts email
 
   debouncedCheckForEmailConflicts: null
   checkForEmailConflicts: (email) ->
@@ -251,10 +254,14 @@ module.exports = React.createClass
     credited_name = @refs.realName.getDOMNode().value
     global_email_communication = @refs.okayToEmail.getDOMNode().checked
 
+    @setState error: null
     @props.onSubmit?()
     auth.register {display_name, password, email, credited_name, global_email_communication}
-      .then @props.onSuccess
-      .catch @props.onFailure
+      .then =>
+        @props.onSuccess? arguments...
+      .catch (error) =>
+        @setState {error}
+        @props.onFailure? arguments...
 
   handleSignOut: ->
     auth.signOut()
