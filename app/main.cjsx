@@ -20,7 +20,14 @@ App = React.createClass
 routes = <Route handler={App}>
   <DefaultRoute name="home" handler={require './pages/home'} />
 
+  <Route name="about" handler={require './pages/about'} ignoreScrollBehavior>
+    <DefaultRoute name="aboutIndex" handler={require './pages/about'} />
+    <Route name="team" path="team" handler={require './pages/about'} />
+    <Route name="publications" path="publications" handler={require './pages/about'} />
+  </Route>
+
   <Route name="reset-password" handler={require './pages/reset-password'} />
+
   <Route path="account" handler={require './pages/sign-in'}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
     <Route name="register" handler={require './partials/register-form'} />

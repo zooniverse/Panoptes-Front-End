@@ -143,6 +143,8 @@
     color: rgba(255,255,255,1)
 
   &.active
+    color: white
+    border-bottom: solid 2px white
     font-weight: bold
 
   .minor
@@ -155,11 +157,22 @@
   .secondary-page
     .hero
       background-size: cover
-      padding: 9.33em 3vw 4em
+      box-sizing: border-box
+      height: 250px
+      padding: 9em 3vw 1em
 
-      h1
-        color: white
-        font-size: 2.25em
-        font-weight: 400
+      .hero-container
         margin: 0 auto
         max-width: 960px
+
+        h1
+          color: white
+          font-size: 2.25em
+          font-weight: 400
+          margin-bottom: 0.675em
+
+        .hero-nav
+          a
+            @extends .main-nav-item
+            text-decoration: none
+
