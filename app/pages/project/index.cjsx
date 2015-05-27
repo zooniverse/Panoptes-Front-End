@@ -135,10 +135,15 @@ module.exports = React.createClass
       query =
         owner: props.params.owner
         slug: props.params.name
+
       @promiseToSetState project: auth.checkCurrent().then ->
-        # TODO: This refresh is a little annoying. Can get the complete resource somehow?
-        apiClient.type('projects').get(query).index(0).refresh().catch ->
-          throw new Error "Couldn't find project #{props.params.owner}/#{props.params.name}"
+        apiClient.type('projects').get query
+          .catch ->
+            []
+          .then ([project]) ->
+            unless project?
+              throw new Error "Couldn't find project #{props.params.owner}/#{props.params.name}"
+            project
 
   render: ->
     if @state.project?
