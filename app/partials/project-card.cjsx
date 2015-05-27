@@ -21,8 +21,8 @@ module.exports = React.createClass
     linkProps =
       to: 'project-home'
       params:
-        owner: owner?.display_name ? 'LOADING'
-        name: @props.project.display_name
+        owner: owner?.slug ? 'LOADING'
+        name: @props.project.slug
 
       style:
         background: if @props.project.avatar then "url('#{@props.project.avatar}')" else "url('./assets/simple-pattern.jpg') center center repeat"

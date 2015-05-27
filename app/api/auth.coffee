@@ -199,6 +199,25 @@ module.exports = new Model
       else
         throw new Error 'No signed-in user to change the password for'
 
+  requestPasswordReset: ({email}) ->
+    @_getAuthToken().then (token) =>
+      data =
+        authenticity_token: token
+        user: {email}
+
+      client.post '/../users/password', data, JSON_HEADERS
+
+  resetPassword: ({password, confirmation, token: resetToken}) ->
+    @_getAuthToken().then (authToken) =>
+      data =
+        authenticity_token: authToken
+        user:
+          password: password
+          password_confirmation: confirmation
+          reset_password_token: resetToken
+
+      client.put '/../users/password', data, JSON_HEADERS
+
   disableAccount: ->
     console?.log 'Disabling account'
     @checkCurrent().then (user) =>

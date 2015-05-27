@@ -24,6 +24,8 @@ routes = <Route handler={App}>
     <Route name="aboutTeam" path="team" handler={require './pages/about'} />
   </Route>
 
+  <Route name="reset-password" handler={require './pages/reset-password'} />
+
   <Route path="account" handler={require './pages/sign-in'}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
     <Route name="register" handler={require './partials/register-form'} />

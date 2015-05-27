@@ -74,7 +74,7 @@ module.exports = React.createClass
             if nameConflict
               <span className="form-help error">
                 <Translate content="registerForm.nameConflict" />{' '}
-                <a href="https://www.zooniverse.org/password/reset" target="_blank">
+                <a href="#/reset-password" onClick={@props.onSuccess}>
                   <Translate content="registerForm.forgotPassword" />
                 </a>
               </span>
@@ -122,7 +122,7 @@ module.exports = React.createClass
             if emailConflict
               <span className="form-help error">
                 <Translate content="registerForm.emailConflict" />{' '}
-                <a href="https://www.zooniverse.org/password/reset" target="_blank">
+                <a href="#/reset-password" onClick={@props.onSuccess}>
                   <Translate content="registerForm.forgotPassword" />
                 </a>
               </span>
