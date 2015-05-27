@@ -13,7 +13,7 @@ counterpart.registerTranslations 'en',
       ourTeam: 'Our Team'
       careers: 'Careers'
     pageContent:
-      about: '''
+      aboutIndex: '''
         ## What is the Zooniverse?
 
         The Zooniverse is the world's largest and most popular online platform for
@@ -21,7 +21,7 @@ counterpart.registerTranslations 'en',
         volunteers—hundreds of thousands of people around the world who come together to
         assist professional researchers with their data. Our goal is to enable research
         that would not be possible (or practical) otherwise. People-powered research results
-        in new discoveries, datasets useful to the wider research community, and many publications.
+        in new discoveries, datasets useful to the wider research community, and [many publications](./#/about/publications).
 
         ### At the Zooniverse, anyone can be a researcher online.
 
@@ -54,7 +54,7 @@ counterpart.registerTranslations 'en',
         ### Volunteers and professionals make real discoveries together.
 
         Zooniverse projects are constructed with the aim of converting volunteers' efforts into
-        measurable results. These projects have produced a large number of published research papers,
+        measurable results. These projects have produced a large number of [published research papers](./#/about/publications),
         as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have
         even made completely new and scientifically significant discoveries!
 
@@ -67,7 +67,8 @@ counterpart.registerTranslations 'en',
         Many of the most interesting discoveries from Zooniverse projects
         have come from discussion between volunteers and researchers.
         We encourage all users to join the conversation on the discussion boards for more in-depth participation.'''
-      aboutTeam: 'the team!'
+      team: 'the team!'
+      publications: 'publications'
 
 
 module.exports = React.createClass
@@ -96,12 +97,13 @@ module.exports = React.createClass
         <div className="hero-container">
           <Translate content="about.title" component="h1" />
           <nav className="hero-nav">
-            <Link to="about"><Translate content="about.nav.about" /></Link>
-            <Link to="aboutTeam"><Translate content="about.nav.ourTeam" /></Link>
+            <Link to="aboutIndex"><Translate content="about.nav.about" /></Link>
+            <Link to="publications"><Translate content="about.nav.publications" /></Link>
+            <Link to="team"><Translate content="about.nav.ourTeam" /></Link>
           </nav>
         </div>
       </section>
-      <div className="about-page-content content-container">
+      <section className="about-page-content content-container">
         <Markdown>{counterpart "about.pageContent.#{@state.activeTab}"}</Markdown>
-      </div>
+      </section>
     </div>

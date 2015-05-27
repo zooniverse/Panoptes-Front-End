@@ -20,8 +20,10 @@ App = React.createClass
 routes = <Route handler={App}>
   <DefaultRoute name="home" handler={require './pages/home'} />
 
-  <Route name="about" path="about" handler={require './pages/about'} ignoreScrollBehavior>
-    <Route name="aboutTeam" path="team" handler={require './pages/about'} />
+  <Route name="about" handler={require './pages/about'} ignoreScrollBehavior>
+    <DefaultRoute name="aboutIndex" handler={require './pages/about'} />
+    <Route name="team" path="team" handler={require './pages/about'} />
+    <Route name="publications" path="publications" handler={require './pages/about'} />
   </Route>
 
   <Route name="reset-password" handler={require './pages/reset-password'} />
