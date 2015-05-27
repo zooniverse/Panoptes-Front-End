@@ -70,7 +70,6 @@ counterpart.registerTranslations 'en',
       team: 'the team!'
       publications: 'publications'
 
-
 module.exports = React.createClass
   displayName: 'AboutPage'
 
