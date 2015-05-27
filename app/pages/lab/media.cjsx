@@ -6,6 +6,10 @@ putFile = require '../../lib/put-file'
 
 MAX_MEDIA_SIZE = 500000
 
+# For use on click.
+selectTarget = (e) =>
+  e.target.select()
+
 MediaItem = React.createClass
   displayName: 'MediaItem'
 
@@ -42,7 +46,7 @@ MediaItem = React.createClass
       else unless isNaN(@state.width) or isNaN(@state.height)
         <small>{@state.width}&times;{@state.height}</small>}
       <br />
-      <textarea className="media-item-src" defaultValue={@props.medium.src} readOnly />
+      <textarea className="media-item-src" defaultValue="![#{@props.medium.metadata?.filename}](#{@props.medium.src})" readOnly onClick={selectTarget} />
     </span>
 
   handleLoad: ->
