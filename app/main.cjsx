@@ -40,7 +40,11 @@ routes = <Route handler={App}>
   <Route name="settings" handler={require './pages/settings'} />
   <Route name="privacy" handler={require './pages/privacy-policy'} />
 
-  <Route name="user-profile" path="users/:name" handler={require './pages/user-profile'} />
+  <Route name="user-profile" path="users/:name" handler={require './pages/user-profile'}>
+    <DefaultRoute name="user-profile-feed" handler={require './pages/user-profile'} />
+    <Route name="user-profile-stats" path="stats" />
+    <Route name="user-profile-favorites" path="favorites" />
+  </Route>
 
   <Route name="projects" handler={require './pages/projects'} />
   <Route path="projects/:owner/:name" handler={require './pages/project'}>
