@@ -69,6 +69,7 @@ routes = <Route handler={App}>
 
   <Route name="talk" path="talk" handler={require './talk'}>
     <DefaultRoute name="talk-home" handler={require './talk/home'} />
+    <Route name="talk-search" path="search" handler={require './talk/search'} />
     <Route name="talk-board" path=":board" handler={require './talk/board'} />
     <Route name="talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
   </Route>
