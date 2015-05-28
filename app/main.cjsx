@@ -5,6 +5,9 @@ Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-rou
 MainHeader = require './partials/main-header'
 MainFooter = require './partials/main-footer'
 
+logDeployedCommit = require './lib/log-deployed-commit'
+logDeployedCommit()
+
 App = React.createClass
   displayName: 'PanoptesApp'
 
