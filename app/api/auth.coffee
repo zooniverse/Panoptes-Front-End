@@ -103,7 +103,7 @@ module.exports = new Model
         console?.error 'Failed to get session'
         throw error
 
-  register: ({display_name, email, password, credited_name, global_email_communication}) ->
+  register: ({display_name, email, password, credited_name, global_email_communication, project_id}) ->
     @checkCurrent().then (user) =>
       if user?
         @signOut().then =>
@@ -114,7 +114,7 @@ module.exports = new Model
         registrationRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
-            user: {display_name, email, password, credited_name, global_email_communication}
+            user: {display_name, email, password, credited_name, global_email_communication, project_id}
 
           # This weird URL is actually out of the API, but returns a JSON-API response.
           client.post '/../users', data, JSON_HEADERS

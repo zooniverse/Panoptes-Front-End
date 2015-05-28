@@ -39,6 +39,9 @@ module.exports = React.createClass
 
   mixins: [PromiseToSetState]
 
+  getDefaultProps: ->
+    project: {}
+
   getInitialState: ->
     user: null
     badNameChars: null
@@ -240,10 +243,11 @@ module.exports = React.createClass
     email = @refs.email.getDOMNode().value
     credited_name = @refs.realName.getDOMNode().value
     global_email_communication = @refs.okayToEmail.getDOMNode().checked
+    project_id = @props.project?.id
 
     @setState error: null
     @props.onSubmit?()
-    auth.register {display_name, password, email, credited_name, global_email_communication}
+    auth.register {display_name, password, email, credited_name, global_email_communication, project_id}
       .then =>
         @props.onSuccess? arguments...
       .catch (error) =>
