@@ -193,14 +193,14 @@ module.exports = React.createClass
       badNameChars: badChars
       nameConflict: null
 
-    # if exists and badChars.length is 0
-    #   @debouncedCheckFornameConflict ?= debounce @checkFornameConflict, REMOTE_CHECK_DELAY
-    #   @debouncedCheckFornameConflict name
+    if exists and badChars.length is 0
+      @debouncedCheckForNameConflict ?= debounce @checkForNameConflict, REMOTE_CHECK_DELAY
+      @debouncedCheckForNameConflict name
 
-  debouncedCheckFornameConflict: null
-  checkFornameConflict: (display_name) ->
-    @promiseToSetState nameConflict: apiClient.type('users').get({display_name}).then (users) ->
-      users.length isnt 0
+  debouncedCheckForNameConflict: null
+  checkForNameConflict: (username) ->
+    @promiseToSetState nameConflict: auth.register(display_name: username).catch (error) ->
+      error.message.match(/display_name(.+)taken/mi) ? false
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
@@ -219,27 +219,14 @@ module.exports = React.createClass
     @promiseToSetState emailConflict: Promise.resolve null # Cancel any existing request.
 
     email = @refs.email.getDOMNode().value
-    # if email.match /.+@.+\..+/
-    #   @debouncedCheckForEmailConflicts ?= debounce @checkForEmailConflicts, REMOTE_CHECK_DELAY
-    #   @debouncedCheckForEmailConflicts email
+    if email.match /.+@.+\..+/
+      @debouncedCheckForEmailConflict ?= debounce @checkForEmailConflict, REMOTE_CHECK_DELAY
+      @debouncedCheckForEmailConflict email
 
-  debouncedCheckForEmailConflicts: null
-  checkForEmailConflicts: (email) ->
-    # TODO: Is there a nicer way to check for email availability?
-    # This request will always throw because there's no login or password.
-    # We're only concerned with the existence of any "email" error.
-    @promiseToSetState emailConflict: auth._getAuthToken().then (token) ->
-      data =
-        authenticity_token: token
-        user: {email}
-
-      headers =
-        'Content-Type': 'application/json'
-        'Accept': 'application/json'
-
-      apiClient.post '/../users', data, headers
-        .catch (error) ->
-          error.message.match(/email(.+)taken/mi) ? false
+  debouncedCheckForEmailConflict: null
+  checkForEmailConflict: (email) ->
+    @promiseToSetState emailConflict: auth.register({email}).catch (error) ->
+      error.message.match(/email(.+)taken/mi) ? false
 
   isFormValid: ->
     {badNameChars, nameConflict, passwordsDontMatch, emailConflict} = @state
