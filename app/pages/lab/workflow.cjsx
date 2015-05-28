@@ -9,6 +9,8 @@ RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {Navigation} = require 'react-router'
 tasks = require '../../classifier/tasks'
 
+DEMO_SUBJECT_SET_ID = '1166'
+
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
 
@@ -105,7 +107,6 @@ EditWorkflowPage = React.createClass
         </div>
       </div>
 
-
       <div className="column">
         {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
           TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
@@ -119,20 +120,24 @@ EditWorkflowPage = React.createClass
     projectAndWorkflowSubjectSets = Promise.all [
       @props.project.get 'subject_sets'
       @props.workflow.get 'subject_sets'
-      # TODO: @props.workflow.get 'expert_subject_set'
     ]
 
-    <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets, expertSubjectSet]) =>
-      <table>
-        {for subjectSet in projectSubjectSets
-          assigned = subjectSet in workflowSubjectSets
-          cantChange = subjectSet is expertSubjectSet or subjectSet.id is @props.workflow.links.expert_subject_set
-          toggle = @handleSubjectSetToggle.bind this, subjectSet
-          <tr key={subjectSet.id}>
-            <td><input type="checkbox" checked={assigned} disabled={cantChange} onChange={toggle} /></td>
-            <td>{subjectSet.display_name}</td>
-          </tr>}
-      </table>
+    <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
+      <div>
+        <table>
+          <tbody>
+            {for subjectSet in projectSubjectSets
+              assigned = subjectSet in workflowSubjectSets
+              toggle = @handleSubjectSetToggle.bind this, subjectSet
+              <tr key={subjectSet.id}>
+                <td><input type="checkbox" checked={assigned} onChange={toggle} /></td>
+                <td>{subjectSet.display_name}</td>
+              </tr>}
+          </tbody>
+        </table>
+        {if projectSubjectSets.length is 0
+          <button type="button" onClick={@addDemoSubjectSet}>Add an example subject set</button>}
+      </div>
     }</PromiseRenderer>
 
   addNewTask: (type) ->
@@ -166,6 +171,11 @@ EditWorkflowPage = React.createClass
         @props.workflow.addLink 'subject_sets', [subjectSet.id]
       else
         @props.workflow.removeLink 'subject_sets', subjectSet.id
+
+  addDemoSubjectSet: ->
+    @props.project.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
+      .then (subjectSet) =>
+        console.log 'ADDED', subjectSet
 
   afterDelete: ->
     @props.project.uncacheLink 'workflows'
