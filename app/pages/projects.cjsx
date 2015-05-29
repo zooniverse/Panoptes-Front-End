@@ -26,6 +26,13 @@ module.exports = React.createClass
     document.documentElement.classList.remove 'on-secondary-page'
 
   render: ->
+    query = Object.create @props.query ? {}
+    query.private ?= false
+    query.beta ?= true # Temporary
+    query.approved ?= true
+
+    getProjects = apiClient.type('projects').get query
+
     <div className="secondary-page all-projects-page">
       <section className="hero projects-hero">
         <div className="hero-container">
@@ -33,7 +40,7 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="projects-container">
-        <PromiseRenderer promise={apiClient.type('projects').get(@props.query ? {})}>{(projects) =>
+        <PromiseRenderer promise={getProjects}>{(projects) =>
           if projects?
             if projects.length is 0
               <span>No projects found.</span>
