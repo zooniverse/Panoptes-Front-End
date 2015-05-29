@@ -64,7 +64,8 @@ module.exports = React.createClass
         <nav className="main-nav">
           <Link to="projects" className="main-nav-item"><Translate content="mainNav.discover" /></Link>
           <Link to="about" className="main-nav-item"><Translate content="mainNav.learn" /></Link>
-          <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
+          {unless process.env.NODE_ENV is 'production'
+            <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>}
           <hr />
           {if @state.user?
             <Link to="lab" className="main-nav-item"><Translate className="minor" content="mainNav.lab" /></Link>}
@@ -86,4 +87,3 @@ module.exports = React.createClass
 
     if window.scrollY is 0
       mainTitle.classList.remove 'header-sticky'
-

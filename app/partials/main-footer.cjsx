@@ -45,7 +45,8 @@ module.exports = React.createClass
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.talk.title" />
-            <Link to="talk"><Translate content="footer.talk.zooTalk" /></Link>
+            {unless process.env.NODE_ENV is 'production'
+              <Link to="talk"><Translate content="footer.talk.zooTalk" /></Link>}
             <a><Translate content="footer.talk.otherTalk" /></a>
           </div>
         </nav>
