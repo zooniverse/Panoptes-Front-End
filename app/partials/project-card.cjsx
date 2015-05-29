@@ -17,8 +17,8 @@ module.exports = React.createClass
 
     @props.project.get('avatar')
       .then (avatar) =>
-        card.style.background = "url('#{avatar.src}') no-repeat"
-        card.style.backgroundSize = "100% 155px"
+        card.style.backgroundImage = "url('#{avatar.src}')"
+        card.style.backgroundSize = "contain"
       .catch =>
         card.style.background = "url('./assets/simple-pattern.jpg') center center repeat"
 
