@@ -133,7 +133,7 @@ module.exports = React.createClass
             {for medium in media
               <MediaItem key={medium.id} medium={medium} onDelete={@handleChange} />}
           </div>
-        } catch={
+        } catch={=>
           <div>No media</div>
         } />
       </div>
@@ -141,7 +141,7 @@ module.exports = React.createClass
       <hr />
 
       <div className="content-container">
-        <PromiseRenderer promise={@getMedia} then={(media) =>
+        <PromiseRenderer promise={@getMedia.catch -> []} then={(media) =>
           if media.length < MAX_MEDIA_COUNT
             <div>
               Add an image<br />
