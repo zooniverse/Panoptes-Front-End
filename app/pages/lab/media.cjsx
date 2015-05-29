@@ -126,6 +126,7 @@ module.exports = React.createClass
 
     <div className="edit-media-page">
       <div className="content-container">
+        <p><strong>You can add images here to use in your project’s content.</strong> Just copy and paste the image’s Markdown code: <code>![title](url)</code>.</p>
         <PromiseRenderer promise={@getMedia} then={(media) =>
           <div className="media-list">
             {for medium in media
