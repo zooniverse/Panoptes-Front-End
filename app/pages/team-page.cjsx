@@ -12,6 +12,12 @@ counterpart.registerTranslations 'en',
       portsmouth: 'Portsmouth'
       taipei: 'Taipei'
       showAll: 'Show All'
+    content:
+      oxford: ''' '''
+      chicago: ''' '''
+      minnesota: ''' '''
+      portsmouth: ''' '''
+      taipei: ''' '''
 
 module.exports = React.createClass
   displayName: 'TeamPage'
@@ -22,7 +28,7 @@ module.exports = React.createClass
       <aside className="side-bar">
         <nav>
           {for navItem of sideBarNav
-            <button key={navItem} className="secret-button"><Translate content="team.nav.#{navItem}" /></button>
+            <button key={navItem} className="secret-button" onClick={@showPeopleList.bind(null, navItem)}><Translate content="team.nav.#{navItem}" /></button>
           }
         </nav>
       </aside>
@@ -30,3 +36,6 @@ module.exports = React.createClass
 
       </section>
     </div>
+
+  showPeopleList: (navItem) ->
+    console.log navItem
