@@ -131,7 +131,8 @@ module.exports = React.createClass
 
     # Take the next subject in the list, if there are any.
     unless upcomingSubjects.forWorkflow[workflow.id].length is 0
-      subject = Promise.resolve upcomingSubjects.forWorkflow[workflow.id].shift()
+      subjectToLoad = upcomingSubjects.forWorkflow[workflow.id].shift()
+      subject = Promise.resolve subjectToLoad
 
     # If there aren't any left (or there weren't any to begin with), refill the list.
     if upcomingSubjects.forWorkflow[workflow.id].length is 0
@@ -142,7 +143,8 @@ module.exports = React.createClass
         sort: 'cellect' unless SKIP_CELLECT
 
       fetchSubjects = apiClient.type('subjects').get(subjectQuery).then (subjects) ->
-        upcomingSubjects.forWorkflow[workflow.id].push subjects...
+        nonLoadedSubjects = (newSubject for newSubject in subjects when newSubject isnt subjectToLoad)
+        upcomingSubjects.forWorkflow[workflow.id].push nonLoadedSubjects...
 
       # If we're filling this list for the first time, we won't have a subject selected, so try again.
       subject ?= fetchSubjects.then ->
