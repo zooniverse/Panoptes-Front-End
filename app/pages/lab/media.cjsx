@@ -4,6 +4,7 @@ ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
 
+MAX_MEDIA_COUNT = 20
 MAX_MEDIA_SIZE = 500000
 
 # For use on click.
@@ -140,8 +141,15 @@ module.exports = React.createClass
       <hr />
 
       <div className="content-container">
-        Add an image<br />
-        <MediaUploadArea project={@props.project} onUpload={@handleChange} />
+        <PromiseRenderer promise={@getMedia} then={(media) =>
+          if media.length < MAX_MEDIA_COUNT
+            <div>
+              Add an image<br />
+              <MediaUploadArea project={@props.project} onUpload={@handleChange} />
+            </div>
+          else
+            <p>You’ve reached the limit of {MAX_MEDIA_COUNT} images for this project. Delete some images to add new ones.</p>
+        } />
       </div>
     </div>
 
