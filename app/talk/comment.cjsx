@@ -15,6 +15,8 @@ PromiseToSetState = require '../lib/promise-to-set-state'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
 
+DEFAULT_AVATAR = './assets/simple-avatar.jpg'
+
 module?.exports = React.createClass
   displayName: 'TalkComment'
   mixins: [ToggleChildren, Feedback, PromiseToSetState]
@@ -76,7 +78,7 @@ module?.exports = React.createClass
     <div className="talk-comment">
       <div className="talk-comment-author">
         <PromiseRenderer pending={@avatarPending} promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
-          <img src={commentOwner.avatar} alt={commentOwner.display_name}/>
+          <img src={commentOwner.avatar ? DEFAULT_AVATAR} alt={commentOwner.display_name}/>
         }</PromiseRenderer>
 
         <p>

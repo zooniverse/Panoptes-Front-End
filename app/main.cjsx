@@ -77,6 +77,8 @@ routes = <Route handler={App}>
     <Route name="collections-show" path=":collection_id" handler={require './collections/show'} />
   </Route>
 
+  <Route name="subjects" path="subjects/:id" handler = {require './subjects'} />
+
   <Route name="lab" handler={require './pages/lab'} />
   <Route path="lab/:projectID" handler={require './pages/lab/project'}>
     <DefaultRoute name="edit-project-details" handler={require './pages/lab/project-details'} />
