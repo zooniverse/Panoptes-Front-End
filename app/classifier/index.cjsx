@@ -110,7 +110,8 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
-        <a className="talk standard-button" href="#/todo/talk">Talk</a>
+        {unless process.env.NODE_ENV is 'production'
+          <a className="talk standard-button" href="#/todo/talk">Talk</a>}
         <button type="button" className="continue major-button" onClick={@props.onClickNext}>Next</button>
       </nav>
     </div>

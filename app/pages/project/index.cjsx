@@ -89,9 +89,10 @@ ProjectPage = React.createClass
               <Link to="project-education" params={params} className="tabbed-content-tab">
                 <Translate content="project.nav.education" />
               </Link>}
-            <Link to="project-talk" params={params} className="tabbed-content-tab">
-              <Translate content="project.nav.discuss" />
-            </Link>
+            {unless process.env.NODE_ENV is 'production'
+              <Link to="project-talk" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.discuss" />
+              </Link>}
             {for link, i in @props.project.urls
               link._key ?= Math.random()
               {label} = link
