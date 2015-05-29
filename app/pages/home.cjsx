@@ -2,13 +2,17 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
-
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 ZooniverseLogoType = require '../partials/zooniverse-logotype'
 ProjectCard = require '../partials/project-card'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
+
+FEATURED_PRODUCT_IDS = if process.env.NODE_ENV is 'production'
+  ['11', '6', '3']
+else
+  ['231', '405', '272', '76']
 
 counterpart.registerTranslations 'en',
   home:
@@ -45,9 +49,6 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'HomePage'
 
-  getInitialState: ->
-    featuredProjectsIds: {dev: ['231', '405', '272', '76'], production: []}
-
   componentDidMount: ->
     document.documentElement.classList.add 'on-home-page'
 
@@ -55,8 +56,6 @@ module.exports = React.createClass
     document.documentElement.classList.remove 'on-home-page'
 
   render: ->
-    featuredProjects = @getFeaturedProjects()
-
     <div className="home-page">
       <section className="hero on-dark">
         <ZooniverseLogoType />
@@ -90,7 +89,7 @@ module.exports = React.createClass
       <section className="featured-projects content-container">
         <Translate component="h5" content="home.featuredProjects.title" />
         <Translate component="p" content="home.featuredProjects.tagline" />
-        <PromiseRenderer promise={apiClient.type('projects').get(featuredProjects)}>{(projects) =>
+        <PromiseRenderer promise={apiClient.type('projects').get(FEATURED_PRODUCT_IDS)}>{(projects) =>
           if projects?
             <div className="featured-projects-list">
             {for project in projects
@@ -103,12 +102,6 @@ module.exports = React.createClass
 
     </div>
 
-  getFeaturedProjects: ->
-    # This will be changed later to look for launched_approved boolean set to true or use a set of hardcoded IDs when in production
-    appState = if window.location.hostname isnt 'www.zooniverse.org' then 'dev' else 'production'
-    @state.featuredProjectsIds[appState]
-
   showLoginDialog: (which) ->
     alert (resolve) ->
       <LoginDialog which={which} onSuccess={resolve} />
-
