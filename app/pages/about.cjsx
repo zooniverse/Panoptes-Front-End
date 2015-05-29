@@ -3,6 +3,7 @@ React = require 'react'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 Markdown = require '../components/markdown'
+TeamPage = require './team-page'
 
 counterpart.registerTranslations 'en',
   about:
@@ -103,6 +104,10 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="about-page-content content-container">
-        <Markdown>{counterpart "about.pageContent.#{@state.activeTab}"}</Markdown>
+        {if @state.activeTab is 'team'
+          <TeamPage />
+        else
+          <Markdown>{counterpart "about.pageContent.#{@state.activeTab}"}</Markdown>
+        }
       </section>
     </div>
