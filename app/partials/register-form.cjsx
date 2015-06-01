@@ -248,11 +248,11 @@ module.exports = React.createClass
     display_name = @refs.name.getDOMNode().value
     password = @refs.password.getDOMNode().value
     email = @refs.email.getDOMNode().value
-    realName = @refs.realName.getDOMNode().value
+    credited_name = @refs.realName.getDOMNode().value
     global_email_communication = @refs.okayToEmail.getDOMNode().checked
 
     @props.onSubmit?()
-    auth.register {display_name, password, email, global_email_communication}
+    auth.register {display_name, password, email, credited_name, global_email_communication}
       .then @props.onSuccess
       .catch @props.onFailure
 
