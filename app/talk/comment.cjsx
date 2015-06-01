@@ -14,6 +14,7 @@ PromiseToSetState = require '../lib/promise-to-set-state'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
+Avatar = require '../partials/avatar'
 
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
 
@@ -69,16 +70,13 @@ module?.exports = React.createClass
   upvoteCount: ->
     Object.keys(@props.data.upvotes).length
 
-  avatarPending: ->
-    <img alt="loading"/>
-
   render: ->
     feedback = @renderFeedback()
 
     <div className="talk-comment">
       <div className="talk-comment-author">
-        <PromiseRenderer pending={@avatarPending} promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
-          <img src={commentOwner.avatar ? DEFAULT_AVATAR} alt={commentOwner.display_name}/>
+        <PromiseRenderer promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
+          <Avatar user={commentOwner} />
         }</PromiseRenderer>
 
         <p>

@@ -16,8 +16,7 @@ Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
 {Link} = require 'react-router'
 merge = require 'lodash.merge'
-
-DEFAULT_AVATAR = './assets/simple-avatar.jpg'
+Avatar = require '../partials/avatar'
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
@@ -179,7 +178,7 @@ module?.exports = React.createClass
           if user
             <section>
               <div className="talk-comment-author">
-                <img src={user.avatar ? DEFAULT_AVATAR} />
+                <Avatar user={user} />
                 <p>
                   <Link to="user-profile" params={name: user.display_name}>{user.display_name}</Link>
                 </p>
