@@ -89,6 +89,7 @@ routes = <Route handler={App}>
     <Route name="edit-project-media" path="media" handler={require './pages/lab/media'} />
     <Route name="edit-project-workflow" path="workflow/:workflowID" handler={require './pages/lab/workflow'} />
     <Route name="edit-project-subject-set" path="subject-set/:subjectSetID" handler={require './pages/lab/subject-set'} />
+    <Route name="edit-project-visibility" path="visibility" handler={require './pages/lab/visibility'} />
   </Route>
 
   <Route name="inbox" handler={require './talk/inbox'} />
