@@ -67,7 +67,7 @@ module.exports = React.createClass
           {unless process.env.NODE_ENV is 'production'
             <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>}
           <hr />
-          {if @state.user?
+          {if @state.user? and process.env.NODE_ENV isnt 'production'
             <Link to="lab" className="main-nav-item"><Translate className="minor" content="mainNav.lab" /></Link>}
         </nav>
         {if @state.user?
