@@ -6,6 +6,7 @@ getSubjectLocation = require '../lib/get-subject-location'
 FavoritesButton = require '../collections/favorites-button'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
+SubjectViewer = require '../components/subject-viewer'
 NewDiscussionForm = require '../talk/discussion-new-form'
 {Navigation} = require 'react-router'
 
@@ -18,6 +19,10 @@ module?.exports = React.createClass
 
   componentWillMount: ->
     @setSubject()
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.params?.id isnt @props.params?.id
+      @setSubject()
 
   setSubject: ->
     subjectId = @props.params?.id.toString()
@@ -46,9 +51,7 @@ module?.exports = React.createClass
         <section>
           <h1>Subject {subject.id}</h1>
 
-          <img src={getSubjectLocation(subject).src} />
-
-          <div><FavoritesButton subject={subject} /></div>
+          <SubjectViewer subject={subject} />
 
           <PromiseRenderer promise={talkClient.type('comments').get({focus_id: subject.id})}>{(comments) =>
             if comments.length
