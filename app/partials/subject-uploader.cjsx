@@ -31,6 +31,13 @@ module.exports = React.createClass
     <div className="subject-uploader">
       <p>Progress: <strong>{@state.current}</strong> / {@props.subjects.length}</p>
 
+      {unless @state.errors.length is 0
+        <ul>
+          {for error in @state.errors
+            error._key ?= Math.random()
+            <li key={error._key} className="form-help error">{error.toString()}</li>}
+        </ul>}
+
       <p className="columns-container">
         <button type="button" className="standard-button" disabled={not @state.inProgress} onClick={@finish}>Pause</button>
         <button type="button" className="major-button" disabled={@state.inProgress or @state.current is @props.subjects.length} onClick={@start}>Start</button>
@@ -62,11 +69,13 @@ module.exports = React.createClass
             putFile uploadURL, @props.files[subjectData.locations[i]]
           Promise.all uploads
         .then (success) =>
-          @state.successes.push success
+          @setState
+            successes: @state.successes.concat success
+            batch: @state.batch.concat subject
         .catch (error) =>
-          @state.errors.push error
+          @setState
+            errors: @state.errors.concat error
         .then =>
-          @state.batch.push subject
           @setState
             current: @state.current + 1, =>
               @processNext()
@@ -75,19 +84,21 @@ module.exports = React.createClass
       @finish()
 
   finish: ->
-    newSubjectIDs = (id for {id} in @state.batch)
-    @props.subjectSet.addLink 'subjects', newSubjectIDs
-      .then =>
-        @state.batch.splice 0
+    unless @state.batch is 0
+      newSubjectIDs = (id for {id} in @state.batch)
+      @props.subjectSet.addLink 'subjects', newSubjectIDs
+        .then =>
+          @state.batch.splice 0
 
-        if @state.current is @props.subjects.length
-          @props.onComplete
-            successes: @state.successes
-            errors: @state.errors
+          if @state.current is @props.subjects.length
+            @props.onComplete
+              successes: @state.successes
+              errors: @state.errors
 
-      .catch (error) =>
-        console.error 'TODO: handle linking error', error
+        .catch (error) =>
+          @setState
+            errors: @state.errors.concat error
 
-      .then =>
-        if @isMounted()
-          @setState inProgress: false
+        .then =>
+          if @isMounted()
+            @setState inProgress: false
