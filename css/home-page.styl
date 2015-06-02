@@ -3,7 +3,7 @@
 
   .hero
     align-items: center
-    background: url(./assets/hero.jpg) no-repeat top left
+    background: url(./assets/zoohome-hero.jpg) top left no-repeat
     background-size: cover
     color: #f9f9f9
     display: flex
@@ -58,38 +58,33 @@
     text-align: center
 
     .about-items-list
-      column-gap: 0em
-      column-width: 29em
       max-width: 960px
       width: 100%
 
       .about-item
+        display: flex
+        flex-wrap: wrap
+        justify-content: center
+        padding: 7.5em 0
         position: relative
 
-        .plus, .equals
-          margin: 0
-          position: absolute
-          top: 175px
-
-        .plus
-          right: 0
-
-        .equals
-          left: 0
-
-        .about-image
-          max-height: 250px
-          margin: 6em 0 0.5em
-
-        &:first-of-type, &:last-of-type
-          .about-image
-            margin-bottom: 4.5em
-
         &:first-of-type
-          padding-right: 2em
+          padding-top: 15em
 
         &:last-of-type
-          padding-left: 2em
+          padding-bottom: 15em
+
+        .about-image
+          width: 300px
+
+        .about-item-content
+          display: inline-flex
+          flex-basis: 66%
+          flex-direction: column
+          justify-content: center
+          margin: 2em auto
+          text-align: left
+
 
 
 
