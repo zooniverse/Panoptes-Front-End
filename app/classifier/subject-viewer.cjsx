@@ -1,10 +1,12 @@
 React = require 'react'
 SubjectViewer = require '../components/subject-viewer'
+SVGImage = require '../components/svg-image'
 Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
 tasks = require './tasks'
 Tooltip = require '../components/tooltip'
 seenThisSession = require '../lib/seen-this-session'
+getSubjectLocation = require '../lib/get-subject-location'
 
 NOOP = Function.prototype
 
@@ -27,6 +29,8 @@ module.exports = React.createClass
     frame: 0
     selectedMark: null
     detailsTooltipOffset: ''
+    scale: { horizontal: 1, vertical: 1 }
+    viewbox: "0 0 1000 1000"
 
   componentDidMount: ->
     addEventListener 'resize', @handleResize
@@ -44,16 +48,18 @@ module.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.annotation is @props.annotation
       @selectMark null, null
+    @setState scale: @getScale()
 
   componentDidUpdate: ->
     setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
 
   render: ->
-    scale = @state.scale
+    {type, format, src} = getSubjectLocation @props.subject, @state.frame
 
     <div className="subject-area">
       <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
-        <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
+        <svg viewBox={@state.viewbox} preserveAspectRatio="xMidYMid meet" style={SubjectViewer.overlayStyle}>
+          {<SVGImage src={src} width={@state.naturalWidth} height={@state.naturalHeight} /> if type is 'image'}
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
           {if @props.annotation?._toolIndex?
@@ -72,7 +78,7 @@ module.exports = React.createClass
                   toolDescription = taskDescription.tools[mark.tool]
 
                   toolEnv =
-                    scale: scale
+                    scale: @state.scale
                     disabled: isPriorAnnotation
                     selected: mark is @state.selectedMark
                     getEventOffset: @getEventOffset
@@ -154,7 +160,8 @@ module.exports = React.createClass
       if @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
         @handleResize()
       else
-        @setState {naturalWidth, naturalHeight}, @handleResize
+        viewbox = "0 0 #{naturalWidth} #{naturalHeight}"
+        @setState {naturalWidth, naturalHeight, viewbox}, @handleResize
       @props.onLoad? arguments...
 
   handleFrameChange: (frame) ->
