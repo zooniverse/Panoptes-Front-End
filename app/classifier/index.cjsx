@@ -1,7 +1,7 @@
 React = require 'react'
 HandlePropChanges = require '../lib/handle-prop-changes'
 ChangeListener = require '../components/change-listener'
-SubjectViewer = require './subject-viewer'
+SubjectAnnotator = require './subject-annotator'
 ClassificationSummary = require './classification-summary'
 tasks = require './tasks'
 {Link} = require 'react-router'
@@ -48,7 +48,7 @@ Classifier = React.createClass
         currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
       <div className="classifier">
-        <SubjectViewer subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} onLoad={@handleSubjectImageLoad} />
+        <SubjectAnnotator subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} onLoad={@handleSubjectImageLoad} />
 
         <div className="task-area">
           {if currentTask?
