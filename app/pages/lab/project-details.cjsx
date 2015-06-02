@@ -87,7 +87,7 @@ module.exports = React.createClass
       .catch ->
         ''
 
-    @classificationsExportsGet ?= @props.project.get 'classifications_exports'
+    @classificationsExportGet ?= @props.project.get 'classifications_export'
       .catch ->
         []
 
@@ -155,15 +155,19 @@ module.exports = React.createClass
 
         <div>
           Data export<br />
-          <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request data export</button>{' '}
+          <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request new data export</button>{' '}
           <small className="form-help">
-            CSV format available.{' '}
-            <PromiseRenderer promise={@classificationsExportsGet} then={([mostRecent]) =>
+            CSV format.{' '}
+            <PromiseRenderer promise={@classificationsExportGet}>{([mostRecent]) =>
               if mostRecent?
-                <span>Most recent request was made {moment(mostRecent.created_at).fromNow()}.</span>
+                <span>
+                  Most recent data available requested{' '}
+                  <a href={mostRecent.src}>{moment(mostRecent.updated_at).fromNow()}</a>.
+                </span>
               else
                 <span>Never requested.</span>
-            } /><br />
+            }</PromiseRenderer>
+            <br />
           </small>
 
           {if @state.exportError?
@@ -202,9 +206,9 @@ module.exports = React.createClass
 
   requestDataExport: ->
     @setState exportError: null
-    apiClient.post @props.project._getURL('classifications_exports'), media: content_type: 'text/csv'
+    apiClient.post @props.project._getURL('classifications_export'), media: content_type: 'text/csv'
       .then =>
-        @classificationsExportsGet = null
+        @classificationsExportGet = null
         @setState exportRequested: true
       .catch (error) =>
         @setState exportError: error
