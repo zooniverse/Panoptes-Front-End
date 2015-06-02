@@ -13,11 +13,15 @@ module.exports = React.createClass
     height: 0
 
   render: ->
-    imageHTML = "<image xlink:href='#{@props.src}' width='#{@props.width}' height='#{@props.height}' />"
-    <g {...@props} className="svg-image-container" dangerouslySetInnerHTML={__html: imageHTML} />
+    <g {...@props} className="svg-image-container">
+      <image preserveAspectRatio="xMidYMid meet" width={@props.width} height={@props.height} />
+    </g>
 
   componentDidUpdate: ->
     @fixWeirdSize()
+  
+  componentDidMount: ->
+    @setHref()
 
   # This fixes weird behavior observed in Mac Safari 7
   # where the image doesn't get a size on render.
@@ -29,3 +33,7 @@ module.exports = React.createClass
 
     unless image.height is @props.height
       image.setAttribute 'height', @props.height
+  
+  setHref: ->
+    image = @getDOMNode().querySelector 'image'
+    image.setAttributeNS 'http://www.w3.org/1999/xlink', 'href', @props.src
