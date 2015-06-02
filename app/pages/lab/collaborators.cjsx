@@ -1,17 +1,20 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
+UserSearch = require '../../components/user-search'
 apiClient = require '../../api/client'
+talkClient = require '../../api/talk'
 
 ID_PREFIX = 'LAB_COLLABORATORS_PAGE_'
 
-POSSIBLE_ROLES = [
-  'collaborator'
-  'expert'
-  'scientist'
-  'moderator'
-  'tester'
-  # 'translator'
-]
+POSSIBLE_ROLES = {
+  owner: 'admin',
+  collaborator: 'admin',
+  expert: 'team',
+  scientist: 'scientist',
+  moderator: 'moderator',
+  tester: 'team',
+#  translator: 'team',
+}
 
 ROLES_INFO =
   owner:
@@ -56,12 +59,12 @@ CollaboratorCreator = React.createClass
         <p className="form-help error">{@state.error.toString()}</p>}
       <form style={style}>
         <p>
-          Username:&emsp;<input type="text" ref="usernameInput" className="standard-input" />
+          Username:&emsp; <UserSearch />
         </p>
 
         <table className="standard-table">
           <tbody>
-            {for role in POSSIBLE_ROLES
+            {for role, _ of POSSIBLE_ROLES
               <tr>
                 <td><input id={ID_PREFIX + role} type="checkbox" name="role" value={role} /></td>
                 <td><strong><label htmlFor={ID_PREFIX + role}>{ROLES_INFO[role].label}</label></strong></td>
@@ -78,35 +81,41 @@ CollaboratorCreator = React.createClass
 
   handleSubmit: (e) ->
     e.preventDefault()
-
-    usernameInput = @refs.usernameInput.getDOMNode()
     checkboxes = @getDOMNode().querySelectorAll '[name="role"]'
-
-    username = @refs.usernameInput.getDOMNode().value
+    userids = @getDOMNode().querySelector('[name="userids"]')
+    users = userids.value.split(',').map (id) -> parseInt(id)
     roles = for checkbox in checkboxes when checkbox.checked
       checkbox.value
+
+    talkRoles = for role, talkRole of POSSIBLE_ROLES when role in roles
+      talkRole
 
     @setState
       error: null
       creating: true
 
-    getUser = apiClient.type('users').get display_name: username
-      .then ([user]) =>
-        if user?
-          newRoleSet = apiClient.type('project_roles').create
-            roles: roles
-            links:
-              project: @props.project.id
-              user: user.id
+    newRoles = users.reduce(((memo, id) =>
+      newRoleSet = apiClient.type('project_roles').create
+        roles: roles
+        links:
+          project: @props.project.id
+          user: id
 
-          newRoleSet.save().then =>
-            usernameInput.value = ''
-            for checkbox in checkboxes
-              checkbox.checked = false
-            @props.onAdd? arguments...
+      newTalkRoleSets = for role in talkRoles
+        talkClient.type('roles').create
+          name: role
+          section: "#{@props.project.id}-#{@props.project.display_name}"
+          user_id: id
 
-        else
-          throw new Error "User '#{username}' doesn't exist"
+      memo.concat([newRoleSet]).concat(newTalkRoleSets)
+    ), [])
+
+    Promise.all(roleSet.save() for roleSet in newRoles)
+      .then =>
+        userids.value = ''
+        for checkbox in checkboxes
+          checkbox.checked = false
+        @props.onAdd? arguments...
 
       .catch (error) =>
         @setState error: error
@@ -149,7 +158,6 @@ module.exports = React.createClass
     </div>
 
   renderUserRow: (projectRoleSet, user) ->
-    console.log {user}, 'Owner', @props.owner
     if 'owner' in projectRoleSet.roles
       null
     else
@@ -159,7 +167,7 @@ module.exports = React.createClass
         <br />
 
         <span className="columns-container inline">
-          {for role in POSSIBLE_ROLES
+          {for role, _ of POSSIBLE_ROLES
             toggleThisRole = @toggleRole.bind this, projectRoleSet, role
             # TODO: Translate this.
             <label key={role}>

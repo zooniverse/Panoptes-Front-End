@@ -34,6 +34,7 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
   --sourcemap-inline \
   --use nib \
   --import nib \
+  --include-css node_modules/react-select/dist/default.css \
   --out "$DEV_DIR" \
   "$SRC_CSS" \
   & pids="$pids $!"
