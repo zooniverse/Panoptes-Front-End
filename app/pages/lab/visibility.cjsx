@@ -15,7 +15,7 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      <p>Project state and visibility</p>
+      <p className="form-label">Project state and visibility</p>
 
       {if @state.error
         <p className="form-help error">{@state.error.toString()}</p>}
@@ -29,7 +29,7 @@ module.exports = React.createClass
                 Live
               </label>
             </td>
-            <td className="form-help">No workflow changes can be made a "live" project.</td>
+            <td className="form-help">No workflow changes can be made a "live" project. Check this when you’ve finished development or want to apply for a beta test.</td>
           </tr>
 
           <tr>
@@ -44,7 +44,7 @@ module.exports = React.createClass
                 Public
               </label>
             </td>
-            <td className="form-help">Only users with assigned <strong>roles</strong> can view a private project.</td>
+            <td className="form-help">Only users with assigned <strong>roles</strong> can view a private project. Anyone with the URL can access a public project.</td>
           </tr>
 
           <tr>
@@ -52,7 +52,7 @@ module.exports = React.createClass
               <button type="button" className="standard-button full" disabled={not @props.project.live or @state.setting.beta or @props.project.beta} onClick={@set.bind this, 'beta', true}>Apply for beta</button>{' '}
             </td>
             <td className="form-help">
-              <div>Expose this project to beta testers, pending approval.</div>
+              <div>Pending approval, expose this project to users who have opted in to be beta testers.</div>
               {unless @props.project.live
                 <div>Only <strong>live projects</strong> can apply for a beta.</div>}
               {if @props.project.beta_approved
@@ -67,7 +67,7 @@ module.exports = React.createClass
               <button type="button" className="standard-button full" disabled={not @props.project.beta_approved or @state.setting.launch or @props.project.launch} onClick={@set.bind this, 'launch', true}>Apply for full launch</button>
             </td>
             <td className="form-help">
-              <div>Expose this project to the entire Zooniverse, pending approval.</div>
+              <div>Pending approval, expose this project to the entire Zooniverse through the main projects listing.</div>
               {unless @props.project.beta_approved
                 <div>Only <strong>project in beta</strong> can apply for a full launch.</div>}
               {if @props.project.launch_approved
