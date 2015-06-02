@@ -302,3 +302,16 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @updateAnnotations()
+
+  crop: (x = 0, y = 0, width = @state.naturalWidth, height = @state.naturalHeight) ->
+    x = Math.max 0, x
+    y = Math.max 0, y
+    x = Math.min @state.naturalWidth, x
+    y = Math.min @state.naturalHeight, y
+    maxWidth = @state.naturalWidth - x
+    maxHeight = @state.naturalHeight - y
+    width = Math.min maxWidth, width
+    height = Math.min maxHeight, height
+    viewbox = [x,y,width,height].join ' '
+    @setState {viewbox}, @handleResize
+
