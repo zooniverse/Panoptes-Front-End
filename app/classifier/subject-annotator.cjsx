@@ -11,7 +11,7 @@ getSubjectLocation = require '../lib/get-subject-location'
 NOOP = Function.prototype
 
 module.exports = React.createClass
-  displayName: 'SubjectViewer' # TODO: Rename this.
+  displayName: 'SubjectAnnotator'
 
   getDefaultProps: ->
     project: null
