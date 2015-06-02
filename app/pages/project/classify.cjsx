@@ -190,10 +190,10 @@ module.exports = React.createClass
       @maybePromptToSignIn()
 
   maybePromptToSignIn: ->
-    auth.checkCurrent().then (user) ->
+    auth.checkCurrent().then (user) =>
       if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not user?
-        alert (resolve) ->
-          <SignInPrompt onChoose={resolve}>
+        alert (resolve) =>
+          <SignInPrompt project={@props.project} onChoose={resolve}>
             <p><strong>You’ve done {classificationsThisSession} classifications, but you’re not signed in!</strong></p>
           </SignInPrompt>
 

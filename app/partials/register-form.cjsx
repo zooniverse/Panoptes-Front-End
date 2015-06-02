@@ -39,6 +39,9 @@ module.exports = React.createClass
 
   mixins: [PromiseToSetState]
 
+  getDefaultProps: ->
+    project: {}
+
   getInitialState: ->
     user: null
     badNameChars: null
@@ -46,6 +49,7 @@ module.exports = React.createClass
     passwordTooShort: null
     passwordsDontMatch: null
     emailConflict: null
+    error: null
 
   componentDidMount: ->
     auth.listen @handleAuthChange
@@ -169,6 +173,8 @@ module.exports = React.createClass
             <Translate content="registerForm.alreadySignedIn" name={@state.user.display_name} />{' '}
             <button type="button" className="minor-button" onClick={@handleSignOut}><Translate content="registerForm.signOut" /></button>
           </span>
+        else if @state.error?
+          <span className="form-help error">{@state.error.toString()}</span>
         else
           <span>&nbsp;</span>}
       </p>
@@ -191,13 +197,13 @@ module.exports = React.createClass
       nameConflict: null
 
     if exists and badChars.length is 0
-      @debouncedCheckFornameConflict ?= debounce @checkFornameConflict, REMOTE_CHECK_DELAY
-      @debouncedCheckFornameConflict name
+      @debouncedCheckForNameConflict ?= debounce @checkForNameConflict, REMOTE_CHECK_DELAY
+      @debouncedCheckForNameConflict name
 
-  debouncedCheckFornameConflict: null
-  checkFornameConflict: (display_name) ->
-    @promiseToSetState nameConflict: apiClient.type('users').get({display_name}).then (users) ->
-      users.length isnt 0
+  debouncedCheckForNameConflict: null
+  checkForNameConflict: (username) ->
+    @promiseToSetState nameConflict: auth.register(display_name: username).catch (error) ->
+      error.message.match(/display_name(.+)taken/mi) ? false
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
@@ -217,26 +223,13 @@ module.exports = React.createClass
 
     email = @refs.email.getDOMNode().value
     if email.match /.+@.+\..+/
-      @debouncedCheckForEmailConflicts ?= debounce @checkForEmailConflicts, REMOTE_CHECK_DELAY
-      @debouncedCheckForEmailConflicts email
+      @debouncedCheckForEmailConflict ?= debounce @checkForEmailConflict, REMOTE_CHECK_DELAY
+      @debouncedCheckForEmailConflict email
 
-  debouncedCheckForEmailConflicts: null
-  checkForEmailConflicts: (email) ->
-    # TODO: Is there a nicer way to check for email availability?
-    # This request will always throw because there's no login or password.
-    # We're only concerned with the existence of any "email" error.
-    @promiseToSetState emailConflict: auth._getAuthToken().then (token) ->
-      data =
-        authenticity_token: token
-        user: {email}
-
-      headers =
-        'Content-Type': 'application/json'
-        'Accept': 'application/json'
-
-      apiClient.post '/../users', data, headers
-        .catch (error) ->
-          error.message.match(/email(.+)taken/mi) ? false
+  debouncedCheckForEmailConflict: null
+  checkForEmailConflict: (email) ->
+    @promiseToSetState emailConflict: auth.register({email}).catch (error) ->
+      error.message.match(/email(.+)taken/mi) ? false
 
   isFormValid: ->
     {badNameChars, nameConflict, passwordsDontMatch, emailConflict} = @state
@@ -250,11 +243,16 @@ module.exports = React.createClass
     email = @refs.email.getDOMNode().value
     credited_name = @refs.realName.getDOMNode().value
     global_email_communication = @refs.okayToEmail.getDOMNode().checked
+    project_id = @props.project?.id
 
+    @setState error: null
     @props.onSubmit?()
-    auth.register {display_name, password, email, credited_name, global_email_communication}
-      .then @props.onSuccess
-      .catch @props.onFailure
+    auth.register {display_name, password, email, credited_name, global_email_communication, project_id}
+      .then =>
+        @props.onSuccess? arguments...
+      .catch (error) =>
+        @setState {error}
+        @props.onFailure? arguments...
 
   handleSignOut: ->
     auth.signOut()
