@@ -49,6 +49,7 @@ module.exports = React.createClass
     passwordTooShort: null
     passwordsDontMatch: null
     emailConflict: null
+    agreedToPrivacyPolicy: null
     error: null
 
   componentDidMount: ->
@@ -152,7 +153,7 @@ module.exports = React.createClass
       <br />
 
       <label>
-        <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
+        <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@state.user?} onChange={@handlePrivacyPolicyChange} />
         {privacyPolicyLink = <a href="#/todo/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
         <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
       </label>
@@ -231,9 +232,11 @@ module.exports = React.createClass
     @promiseToSetState emailConflict: auth.register({email}).catch (error) ->
       error.message.match(/email(.+)taken/mi) ? false
 
+  handlePrivacyPolicyChange: ->
+    @setState agreesToPrivacyPolicy: @refs.agreesToPrivacyPolicy.getDOMNode().checked
+
   isFormValid: ->
-    {badNameChars, nameConflict, passwordsDontMatch, emailConflict} = @state
-    agreesToPrivacyPolicy = @refs.agreesToPrivacyPolicy?.getDOMNode().checked
+    {badNameChars, nameConflict, passwordsDontMatch, emailConflict, agreesToPrivacyPolicy} = @state
     badNameChars?.length is 0 and not nameConflict and not passwordsDontMatch and not emailConflict and agreesToPrivacyPolicy
 
   handleSubmit: (e) ->
