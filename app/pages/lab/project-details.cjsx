@@ -162,7 +162,7 @@ module.exports = React.createClass
               if mostRecent?
                 <span>
                   Most recent data available requested{' '}
-                  <a href={mostRecent.src}>{moment(mostRecent.created_at).fromNow()}</a>.
+                  <a href={mostRecent.src}>{moment(mostRecent.updated_at).fromNow()}</a>.
                 </span>
               else
                 <span>Never requested.</span>
