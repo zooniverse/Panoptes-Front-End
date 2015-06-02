@@ -94,11 +94,11 @@ module.exports = React.createClass
       <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={@state.viewbox} preserveAspectRatio="xMidYMid meet" style={SubjectViewer.overlayStyle}>
           {<SVGImage src={src} width={@state.naturalWidth} height={@state.naturalHeight} /> if type is 'image'}
-          <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
+          <rect ref="sizeRect" width={@state.naturalWidth} height={@state.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
           {if @props.annotation?._toolIndex?
             <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
-              <rect className="marking-initializer" width="100%" height="100%" fill="transparent" stroke="none" />
+              <rect className="marking-initializer" width={@state.naturalWidth} height={@state.naturalHeight} fill="transparent" stroke="none" />
             </Draggable>}
 
           {for annotation in @props.classification.annotations
