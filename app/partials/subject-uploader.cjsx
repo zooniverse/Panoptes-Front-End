@@ -84,7 +84,7 @@ module.exports = React.createClass
       @finish()
 
   finish: ->
-    unless @state.batch is 0
+    unless @state.batch.length is 0
       newSubjectIDs = (id for {id} in @state.batch)
       @props.subjectSet.addLink 'subjects', newSubjectIDs
         .then =>
