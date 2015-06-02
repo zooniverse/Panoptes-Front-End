@@ -77,7 +77,7 @@ EditProjectPage = React.createClass
                   </li>}
 
                 {for workflow in workflows
-                  <ChangeListener target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
+                  <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
 
                 <li className="nav-list-item">
                   <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
@@ -104,7 +104,7 @@ EditProjectPage = React.createClass
                   </li>}
 
                 {for subjectSet in subjectSets
-                  <ChangeListener target={subjectSet} eventName="save" handler={renderSubjectSetListItem.bind this, subjectSet} />}
+                  <ChangeListener key={subjectSet.id} target={subjectSet} eventName="save" handler={renderSubjectSetListItem.bind this, subjectSet} />}
 
                 <li className="nav-list-item">
                   <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress} title="A subject is an image (or group of images) to be analyzed.">
