@@ -13,7 +13,6 @@ counterpart.registerTranslations 'en',
     settings: 'Settings'
     signOut: 'Sign Out'
 
-
 module.exports = React.createClass
   displayName: 'AccountBar'
 
