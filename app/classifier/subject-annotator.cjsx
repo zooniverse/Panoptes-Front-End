@@ -22,25 +22,30 @@ module.exports = React.createClass
   getInitialState: ->
     naturalWidth: 0
     naturalHeight: 0
-    scale:
-      horizontal: 1
-      vertical: 1
     showWarning: false
     frame: 0
     selectedMark: null
     detailsTooltipOffset: ''
-    scale: { horizontal: 1, vertical: 1 }
     viewbox: "0 0 1000 1000"
+    sizeRect: null
+    toolRect: null
 
   componentDidMount: ->
     addEventListener 'resize', @handleResize
 
   componentWillUnmount: ->
     removeEventListener 'resize', @handleResize
+    
+  getScale: ->
+    ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
+    rect = @state.sizeRect
+    horizontal = (rect?.width || ALMOST_ZERO) / (@state.naturalWidth || ALMOST_ZERO)
+    vertical = (rect?.height || ALMOST_ZERO) / (@state.naturalHeight || ALMOST_ZERO)
+    {horizontal, vertical}
 
   getEventOffset: (e) ->
-    rect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-    scale = @state.scale
+    rect = @state.sizeRect
+    scale = @getScale()
     x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
@@ -48,8 +53,10 @@ module.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.annotation is @props.annotation
       @selectMark null, null
-    @setState scale: @getScale()
-
+    @setState 
+      sizeRect: @refs.sizeRect.getDOMNode().getBoundingClientRect()
+      toolRect: @refs.selectedTool?.getDOMNode().getBoundingClientRect()
+    
   componentDidUpdate: ->
     setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
 
@@ -78,7 +85,7 @@ module.exports = React.createClass
                   toolDescription = taskDescription.tools[mark.tool]
 
                   toolEnv =
-                    scale: @state.scale
+                    scale: @getScale()
                     disabled: isPriorAnnotation
                     selected: mark is @state.selectedMark
                     getEventOffset: @getEventOffset
@@ -118,11 +125,11 @@ module.exports = React.createClass
               </Tooltip>}
           </button>}
 
-        {if @state.selectedMark? and @refs.selectedTool?
+        {if @state.toolRect? and @state.selectedMark?
           toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
           if toolDescription?.details?.length > 0
-            sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-            toolRect = @refs.selectedTool.getDOMNode().getBoundingClientRect()
+            sizeRect = @state.sizeRect
+            toolRect = @state.toolRect
 
             probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
             [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
@@ -175,14 +182,9 @@ module.exports = React.createClass
       annotations: @props.classification.annotations
 
   handleResize: ->
-    ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
-    rect = @refs.sizeRect?.getDOMNode().getBoundingClientRect()
-    scale =
-      horizontal: (rect?.width || ALMOST_ZERO) / (@state.naturalWidth || ALMOST_ZERO)
-      vertical: (rect?.height || ALMOST_ZERO) / (@state.naturalHeight || ALMOST_ZERO)
-
-    unless scale.horizontal is @state.scale.horizontal and scale.vertical is @state.scale.vertical
-      @setState {scale}
+    @setState 
+      sizeRect: @refs.sizeRect.getDOMNode().getBoundingClientRect()
+      toolRect: @refs.selectedTool?.getDOMNode().getBoundingClientRect()
 
   handleInitStart: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
@@ -254,8 +256,7 @@ module.exports = React.createClass
       annotation.value.splice index, 1
       annotation.value.push mark
     @setState selectedMark: mark, =>
-      if mark?.details?
-        @forceUpdate() # Re-render to reposition the details tooltip.
+      @setState toolRect: @refs.selectedTool?.getDOMNode().getBoundingClientRect() # hack to show the details box
 
   destroyMark: (annotation, mark) ->
     if mark is @state.selectedMark
@@ -273,5 +274,8 @@ module.exports = React.createClass
     maxHeight = @state.naturalHeight - y
     width = Math.min maxWidth, width
     height = Math.min maxHeight, height
-    @setState viewbox: [x,y,width,height].join ' '
+    @setState 
+      viewbox: [x,y,width,height].join ' '
+      sizeRect: @refs.sizeRect.getDOMNode().getBoundingClientRect()
+    
 
