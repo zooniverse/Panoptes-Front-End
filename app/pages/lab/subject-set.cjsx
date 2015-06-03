@@ -72,7 +72,6 @@ SubjectSetListing = React.createClass
   render: ->
     gettingSetMemberSubjects = apiClient.type('set_member_subjects').get
       subject_set_id: @props.subjectSet.id
-      include: 'subject'
       page: @state.page
 
     gettingSetMemberSubjects.then ([setMemberSubject]) =>
