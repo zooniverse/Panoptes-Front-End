@@ -33,9 +33,7 @@ module?.exports = React.createClass
       @setQuery(query)
 
   setFocusImage: (recentsData) ->
-    recentsData.get('subject')
-      .then (subject) =>
-        @props.onSelectImage(subject)
+    @props.onSelectImage(recentsData)
 
   imageItem: (data, i) ->
     <div key={data.id} className="talk-comment-image-item">
