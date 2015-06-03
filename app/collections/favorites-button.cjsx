@@ -22,7 +22,7 @@ module?.exports = React.createClass
 
   componentWillMount: ->
     # see if the subject is in the project's favorites collection
-    # to see if it's favoriters
+    # to see if it's favorites
     @props.subject.get('project')
       .then (project) =>
         project_id = project.id.toString()

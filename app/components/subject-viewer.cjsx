@@ -3,6 +3,7 @@ LoadingIndicator = require '../components/loading-indicator'
 FavoritesButton = require '../collections/favorites-button'
 alert = require '../lib/alert'
 getSubjectLocation = require '../lib/get-subject-location'
+CollectionsManagerIcon = require '../collections/manager-icon'
 
 NOOP = Function.prototype
 
@@ -80,7 +81,10 @@ module.exports = React.createClass
             <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-table fa-fw"></i></button>}
         </span>
         {if @props.subject
-          <span><FavoritesButton subject={@props.subject} /></span>}
+          <span>
+            <FavoritesButton subject={@props.subject} />
+            <CollectionsManagerIcon subject={@props.subject} />
+          </span>}
       </div>
     </div>
 

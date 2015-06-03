@@ -38,7 +38,6 @@ module?.exports = React.createClass
     @setData(n)
 
   subject: (d, i) ->
-    # 'http://' may need to prefix some older subjects...
     <img key={d.id} src={getSubjectLocation(d).src} />
 
   render: ->

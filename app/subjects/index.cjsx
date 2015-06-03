@@ -8,6 +8,7 @@ ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 SubjectViewer = require '../components/subject-viewer'
 NewDiscussionForm = require '../talk/discussion-new-form'
+
 {Navigation} = require 'react-router'
 
 module?.exports = React.createClass
@@ -63,7 +64,7 @@ module?.exports = React.createClass
             else
               <p>There are no comments focused on this subject</p>
           }</PromiseRenderer>
-
+          
           <ChangeListener target={authClient}>{=>
             <PromiseRenderer promise={authClient.checkCurrent()}>{(user) =>
               if user?
