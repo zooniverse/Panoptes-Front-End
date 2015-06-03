@@ -46,7 +46,7 @@ module?.exports = React.createClass
   render: ->
     {subject} = @state
 
-    <div className="subject talk content-container">
+    <div className="subject talk">
       {if subject
         <section>
           <h1>Subject {subject.id}</h1>
