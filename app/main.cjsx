@@ -48,6 +48,7 @@ routes = <Route handler={App}>
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
     <Route name="project-talk" path="talk" handler={require './pages/project/talk'}>
       <DefaultRoute name="project-talk-home" handler={require './talk/home'} />
+      <Route name="project-talk-subject" path="subjects/:id" handler={require './subjects'}/>
       <Route name="project-talk-board" path=":board" handler={require './talk/board'} />
       <Route name="project-talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
     </Route>
@@ -76,8 +77,6 @@ routes = <Route handler={App}>
     <DefaultRoute name="collections-index" handler={require './collections/home'} />
     <Route name="collections-show" path=":collection_id" handler={require './collections/show'} />
   </Route>
-
-  <Route name="subjects" path="subjects/:id" handler = {require './subjects'} />
 
   <Route name="lab" handler={require './pages/lab'} />
   <Route path="lab/:projectID" handler={require './pages/lab/project'}>
