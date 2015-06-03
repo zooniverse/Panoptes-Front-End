@@ -49,6 +49,29 @@ module.exports = React.createClass
     x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
+  
+  getDetailsTooltipProps: ->
+    sizeRect = @state.sizeRect
+    toolRect = @state.toolRect
+
+    probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
+    [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
+      ['left', 'right', 'width', 1, 'top center', 'bottom center']
+    else
+      ['top', 'bottom', 'height', 0, 'middle left', 'middle right']
+
+    # NOTE: These offsets aren't perfect, but they're close enough for now.
+
+    arrowStyle = {}
+    toolCenter = ((toolRect[start] + toolRect[end]) / 2) - sizeRect[start]
+    distance = toolCenter / sizeRect[dimension]
+    arrowStyle[start] = "#{distance * 100}%"
+
+    offset = [0, 0]
+    fromCenter = distance - 0.5
+    offset[offsetIndex] = "#{(fromCenter / -2) * 100}%"
+    offset = offset.join ' '
+    {attachment, targetAttachment, offset, arrowStyle}
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.annotation is @props.annotation
@@ -128,28 +151,8 @@ module.exports = React.createClass
         {if @state.toolRect? and @state.selectedMark?
           toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
           if toolDescription?.details?.length > 0
-            sizeRect = @state.sizeRect
-            toolRect = @state.toolRect
 
-            probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
-            [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
-              ['left', 'right', 'width', 1, 'top center', 'bottom center']
-            else
-              ['top', 'bottom', 'height', 0, 'middle left', 'middle right']
-
-            # NOTE: These offsets aren't perfect, but they're close enough for now.
-
-            arrowStyle = {}
-            toolCenter = ((toolRect[start] + toolRect[end]) / 2) - sizeRect[start]
-            distance = toolCenter / sizeRect[dimension]
-            arrowStyle[start] = "#{distance * 100}%"
-
-            offset = [0, 0]
-            fromCenter = distance - 0.5
-            offset[offsetIndex] = "#{(fromCenter / -2) * 100}%"
-            offset = offset.join ' '
-
-            <Tooltip ref="detailsTooltip" attachment={attachment} targetAttachment={targetAttachment} offset={offset} arrowStyle={arrowStyle}>
+            <Tooltip ref="detailsTooltip" {...@getDetailsTooltipProps()}>
               {for detailTask, i in toolDescription.details
                 detailTask._key ?= Math.random()
                 TaskComponent = tasks[detailTask.type]
