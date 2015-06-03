@@ -14,6 +14,7 @@ counterpart.registerTranslations 'en',
     scientist: 'Scientist'
     moderator: 'Moderator'
     tester: 'Tester'
+    expert: 'Expert'
 
 module.exports = React.createClass
   displayName: 'ProjectScienceCasePage'
