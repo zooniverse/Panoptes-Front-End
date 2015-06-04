@@ -142,9 +142,20 @@ module.exports = React.createClass
         workflow_id: workflow.id
         sort: 'cellect' unless SKIP_CELLECT
 
-      fetchSubjects = apiClient.type('subjects').get(subjectQuery).then (subjects) ->
-        nonLoadedSubjects = (newSubject for newSubject in subjects when newSubject isnt subjectToLoad)
-        upcomingSubjects.forWorkflow[workflow.id].push nonLoadedSubjects...
+      fetchSubjects = apiClient.type('subjects').get subjectQuery
+        .catch (error) ->
+          if error.message.indexOf('please try again') is -1
+            throw error
+          else
+            new Promise (resolve, reject) ->
+              fetchSubjectsAgain = ->
+                apiClient.type('subjects').get subjectQuery
+                  .then resolve
+                  .catch reject
+              setTimeout fetchSubjectsAgain, 2000
+        .then (subjects) ->
+          nonLoadedSubjects = (newSubject for newSubject in subjects when newSubject isnt subjectToLoad)
+          upcomingSubjects.forWorkflow[workflow.id].push nonLoadedSubjects...
 
       # If we're filling this list for the first time, we won't have a subject selected, so try again.
       subject ?= fetchSubjects.then ->
