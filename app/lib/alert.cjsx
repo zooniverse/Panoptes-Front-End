@@ -25,9 +25,15 @@ module.exports = (message) ->
   </Dialog>, container
 
   unmount = ->
+    underlay.removeEventListener('click', unmount, false)
+
     React.unmountComponentAtNode container
     container.parentNode.removeChild container
     previousActiveElement?.focus()
+
+  # Close alert if click underlay
+  underlay = container.querySelector('.dialog-underlay')
+  underlay.addEventListener('click', unmount, false)
 
   promise.then unmount, unmount
   promise
