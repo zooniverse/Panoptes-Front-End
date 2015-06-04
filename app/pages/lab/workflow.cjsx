@@ -9,7 +9,10 @@ RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {Navigation} = require 'react-router'
 tasks = require '../../classifier/tasks'
 
-DEMO_SUBJECT_SET_ID = '1166'
+DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
+  '6' # Cats
+else
+  '1166' # Ghosts
 
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
@@ -136,7 +139,10 @@ EditWorkflowPage = React.createClass
           </tbody>
         </table>
         {if projectSubjectSets.length is 0
-          <button type="button" onClick={@addDemoSubjectSet}>Add an example subject set</button>}
+          <p>
+            This project has no subject sets.{' '}
+            <button type="button" onClick={@addDemoSubjectSet}>Add an example subject set</button>
+          </p>}
       </div>
     }</PromiseRenderer>
 
@@ -174,8 +180,10 @@ EditWorkflowPage = React.createClass
 
   addDemoSubjectSet: ->
     @props.project.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
-      .then (subjectSet) =>
-        console.log 'ADDED', subjectSet
+      .then =>
+        @props.project.get 'subject_sets'
+      .then ([subjectSet]) =>
+        @props.workflow.addLink 'subject_sets', [subjectSet.id]
 
   afterDelete: ->
     @props.project.uncacheLink 'workflows'
