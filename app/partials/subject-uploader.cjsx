@@ -90,20 +90,19 @@ module.exports = React.createClass
   finish: ->
     unless @state.batch.length is 0
       newSubjectIDs = (id for {id} in @state.batch)
-      @props.subjectSet.addLink 'subjects', newSubjectIDs
+      linkToSubjectSet = @props.subjectSet.addLink 'subjects', newSubjectIDs
         .then =>
           @state.batch.splice 0
-
-          if @state.current is @props.subjects.length
-            @props.onComplete
-              creates: @state.creates
-              uploads: @state.uploads
-              errors: @state.errors
-
         .catch (error) =>
           @setState
             errors: @state.errors.concat error
 
-        .then =>
-          if @isMounted()
-            @setState inProgress: false
+    linkToSubjectSet ?= Promise.resolve()
+    linkToSubjectSet.then =>
+      if @state.current is @props.subjects.length
+        @props.onComplete
+          creates: @state.creates
+          uploads: @state.uploads
+          errors: @state.errors
+      if @isMounted()
+        @setState inProgress: false
