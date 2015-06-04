@@ -53,9 +53,12 @@ counterpart.registerTranslations 'en',
         Chris is interested in how galaxies form and evolve, how citizen science can change the
         world, and whether the Chicago Fire can get their act together.'''
       chrisSnyder:
-        title: 'Educator'
+        title: 'Project Manager'
         bio: '''Chris Snyder began working on the Zooniverse team in fall 2012 as a web developer. In July 2013,
         he became the technical project manager. He received a degree in computer science from the University of Dayton.'''
+      christopherDoogue:
+        title: ' '
+        bio: ' '
       colemanKrawczyk:
         title: 'Data Scientist'
         bio: '''Coleman is helping to create new data analysis and visualization tools for existing Zooniverse
@@ -128,6 +131,9 @@ counterpart.registerTranslations 'en',
       michaelParrish:
         title: 'Developer'
         bio: '''Software developer at the Zooniverse. Dog, fishing, snakes, and bourbon.'''
+      perryRoper:
+        title: ' '
+        bio: ' '
       rebeccaSmethurst:
         title: 'Researcher'
         bio: '''Becky is an astrophysicist working towards her doctorate in Oxford. She is
@@ -148,13 +154,17 @@ counterpart.registerTranslations 'en',
         bio: '''Sascha joined the Zooniverse team in November 2013 as a front-end developer.
         A former researcher and software developer at NASA Ames, he received degrees in both
         computer science and mechanical engineering.'''
+      simoneDuca:
+        title: ' '
+        bio: ' '
+      veronicaMaidel:
+        title: ' '
+        bio: ' '
       victoriaVanHyning:
         title: 'Researcher'
         bio: '''Victoria is a Digital Humanities postdoc for the Zooniverse. She holds a masters
         in Medieval English literature from Oxford and a PhD in early modern English literature
         from the University of Sheffield. Coffee is her lifeblood.'''
-      portsmouth: ''' '''
-      taipei: ''' '''
 
 teamMembers =
   adamMcMaster:
@@ -224,6 +234,12 @@ teamMembers =
     bio: counterpart "team.content.chrisSnyder.bio"
     image: "http://placehold.it/150x150"
     location: "chicago"
+  christopherDoogue:
+    name: "Christopher Doogue"
+    title: counterpart "team.content.christopherDoogue.title"
+    bio: counterpart "team.content.christopherDoogue.bio"
+    image: "http://placehold.it/150x150"
+    location: "oxford"
   colemanKrawczyk:
     name: "Coleman Krawczyk"
     twitter: "ColemanKrawczyk"
@@ -325,6 +341,12 @@ teamMembers =
     bio: counterpart "team.content.michaelParrish.bio"
     image: "http://placehold.it/150x150"
     location: "chicago"
+  perryRoper:
+    name: "Perry Roper"
+    title: counterpart "team.content.perryRoper.title"
+    bio: counterpart "team.content.perryRoper.bio"
+    image: "http://placehold.it/150x150"
+    location: "oxford"
   rebeccaSmethurst:
     name: "Rebecca Smethurst"
     twitter: "becky1505"
@@ -352,6 +374,18 @@ teamMembers =
     bio: counterpart "team.content.saschaIshikawa.bio"
     image: "http://placehold.it/150x150"
     location: "chicago"
+  simoneDuca:
+    name: "Simone Duca"
+    title: counterpart "team.content.simoneDuca.title"
+    bio: counterpart "team.content.simoneDuca.bio"
+    image: "http://placehold.it/150x150"
+    location: "oxford"
+  veronicaMaidel:
+    name: "Veronica Maidel"
+    title: counterpart "team.content.veronicaMaidel.title"
+    bio: counterpart "team.content.veronicaMaidel.bio"
+    image: "http://placehold.it/150x150"
+    location: "chicago"
   victoriaVanHyning:
     name: "Victoria van Hyning"
     twitter: "VanHyningV"
@@ -365,6 +399,10 @@ module.exports = React.createClass
 
   getInitialState: ->
     currentSort: 'showAll'
+
+  componentDidMount: ->
+    button = React.findDOMNode(@refs.showAll)
+    @updateButtonState button
 
   render: ->
     sideBarNav = counterpart "team.nav"
