@@ -13,6 +13,8 @@ counterpart.registerTranslations 'en',
       taipei: 'Taipei'
       showAll: 'Show All'
     content:
+      header:
+        showAll: 'Zooniverse Team'
       adamMcMaster:
         title: 'Infrastructure Engineer'
         bio: '''Adam is responsible for managing the Zooniverse's web hosting infrastructure.
@@ -415,6 +417,11 @@ module.exports = React.createClass
         </nav>
       </aside>
       <section className="team-member-list">
+        <h2>{if @state.currentSort is 'showAll'
+              <Translate content="team.content.header.showAll" />
+            else
+              @state.currentSort
+        }</h2>
         {for teamMember, details of teamMembers
           if (@state.currentSort is details.location) or (@state.currentSort is 'showAll')
             <div key={teamMember} className="team-member">
