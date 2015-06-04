@@ -14,9 +14,7 @@ module.exports = React.createClass
   render: ->
     <div>
       <p>Results</p>
-      <p className="form-help">Once your project has hit its stride, share the results of your project with your volunteers here.</p>
-      <p className="form-help">This page renders markdown. Note that this page will not display unless you add content here.</p>
-      <textarea className="standard-input full" name="result" value={@props.project.result} rows="20" onChange={@handleChange} />
+      <textarea className="standard-input full" name="result" value={@props.project.result} rows="20" onChange={@handleChange} placeholder="This page renders markdown. Note that this page will not display unless you add content here." />
 
       <p>
         <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}

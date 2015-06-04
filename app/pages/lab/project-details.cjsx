@@ -96,7 +96,7 @@ module.exports = React.createClass
           {if @state.avatarError
             <div className="form-help error">{@state.avatarError.toString()}</div>}
 
-          <small className="form-help">Pick an avatar for your project. This will represent your project on the Zooniverse home page. It can also be used as your project’s brand. It’s best if it’s recognizable even as a small icon. To add an image, either drag and drop or right click to open your file viewer. For best results, use a square image no larger than 50 KB.</small>
+          <small className="form-help">Pick a logo to represent your project. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50 KB.</small>
 
           <hr />
 
@@ -108,7 +108,7 @@ module.exports = React.createClass
           {if @state.backgroundError
             <div className="form-help error">{@state.backgroundError.toString()}</div>}
 
-          <small className="form-help">This image will be the background for all of your project pages, including your project’s front page, which newcomers will see first. It should be relatively high resolution and you should be able to read text written across it. To add an image, either drag and drop or right click to open your file viewer. For best results, use photographic images of at least one megapixel, no larger than 256 KB.</small>
+          <small className="form-help">This image will be the background for all of your project pages, including your project’s front page. To add an image, either drag and drop or right click to open your file viewer. For best results, use good quality images no more than 256 KB.</small>
 
           <hr />
 
@@ -117,14 +117,14 @@ module.exports = React.createClass
               <input type="checkbox" name="configuration.user_chooses_workflow" checked={@props.project.configuration?.user_chooses_workflow} onChange={@handleChange} />
               Volunteers can choose which workflow they work on
             </label><br />
-            <small className="form-help">A workflow is a set of tasks a volunteer completes to create a classification. Your project might have multiple workflows (if you want to set different tasks for different image sets). Check this to let volunteers select which workflow they want to to work on; otherwise, they’ll be served randomly (which is the default).</small>
+            <small className="form-help">If you have multiple workflows, check this to let volunteers select which workflow they want to to work on; otherwise, they’ll be served randomly.</small>
           </p>
 
           <p>
             <label>
               <input type="checkbox" name="private" checked={@props.project.private} onChange={@handleChange} />
               Private project<br />
-              <small className="form-help">On “private” projects, only users with specified project roles can see or classify on the project. We *strongly* recommend you keep your project private while you’re still working out its details. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left). Team members you add can see your project even if it’s private. Once your project is public, anyone with the link can view and classify in it.</small>
+              <small className="form-help">Check “private” so that only users with specified project roles can see or classify on your project. We strongly recommend you keep your project private while you’re still working out its details.</small>
             </label>
           </p>
         </div>
@@ -133,24 +133,24 @@ module.exports = React.createClass
           <p>
             Name<br />
             <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} disabled={@state.saveInProgress} onChange={@handleChange} />
-            <small className="form-help">The project name is the first thing people will see about the project, and it will show up in the project URL. Try to keep it short and sweet.<br />
-            Please note that your project name shouldn’t have any punctuation, as this causes issues with the url.</small>
+            <small className="form-help">The project name is the first thing people will see about the project, and it will show up in the project URL. Try to keep it short and sweet.</small>
           </p>
 
           <p>
             Description<br />
             <textarea className="standard-input full" name="description" value={@props.project.description} row="2" disabled={@state.saveInProgress} onChange={@handleChange} />
-            <small className="form-help">This should be a one-line call to action for your project. This will display on your landing page and, if approved, on the Zooniverse home page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.</small>
+            <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.</small>
           </p>
 
           <p>
             Introduction<br />
             <textarea className="standard-input full" name="introduction" value={@props.project.introduction} rows="10" disabled={@state.saveInProgress} onChange={@handleChange} />
-            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<insert link to best markdown tutorial>), so you can put formatting in it. You can make this longer than the Description, but it’s still probably best to save much longer text for areas like the Science Case or FAQ tabs.</small>
+            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<insert link to best markdown tutorial>), so you can add formatting.</small>
           </p>
 
           <div>
             External links<br />
+            <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and discuss tabs.</small>
             <ExternalLinksEditor project={@props.project} />
           </div>
 

@@ -48,16 +48,14 @@ module.exports = React.createClass
       <div>
         <span className="form-label">Main text</span><br />
         <textarea name={mainTextKey} value={@props.task[mainTextKey]} className="standard-input full" onChange={@handleInputChange} />
-        <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert.</small><br />
-        <small className="form-help">The wording here is very important, because you will in general get what you ask for. Solicit opinions from team members and testers before you make the project public: it often takes a few tries to reach the combination of simplicity and clarity that will guide your volunteers to give you the inputs you need.</small><br />
-        <small className="form-help">You can use markdown in the main text.</small>
+        <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You can use markdown to format this text.</small><br />
       </div><br />
 
       {unless @props.isSubtask
         <div>
           <span className="form-label">Help text</span><br />
           <textarea name="help" value={@props.task.help ? ''} rows={7} className="standard-input full" onChange={@handleInputChange} />
-          <small className="form-help">Add text and images for a pop-up help window. This is shown next to the main text of the task in the main classification interface, when the volunteer clicks a button asking for help. You can use markdown in this text, and link to other images to help illustrate your description. The help text can be as long as you need, but you should try to keep it simple and avoid jargon. One thing that seems to be uniformly useful in the help text is a concise description of *why* you are asking for this particular information.</small>
+          <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
         </div>}
 
       <hr />
@@ -65,7 +63,7 @@ module.exports = React.createClass
       <span className="form-label">Choices</span>
       {' '}
       {if choicesKey is 'answers'
-        multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.\n\nCheck this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
+        multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
         requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
 
         [<label key="multiple" className="pill-button" title={multipleHelp}>
@@ -132,15 +130,12 @@ module.exports = React.createClass
         {switch choicesKey
           when 'answers'
             <div>
-              <small className="form-help">The answers will be displayed next to each checkbox, so this text is as important as the main text and help text for guiding the volunteers.</small>
-              <small className="form-help">In general, having more than 5 answer choices is not advisable. “Overchoice” can lead to confusion and an inability to decide, leading some volunteers to quit and others to ignore all but the first few answers, which might bias your project data.</small>
-              <small className="form-help">If your question is asking the volunteer to describe the intensity of something, try to use an odd number of answers so that there’s a middle choice.</small><br />
+              <small className="form-help">The answers will be displayed next to each checkbox, so this text is as important as the main text and help text for guiding the volunteers. Keep your answers as minimal as possible -- any more than 5 answers can discourage new users.</small><br />
               <small className="form-help">The “Next task” selection describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).</small>
             </div>
           when 'tools'
             <div>
-              <small className="form-help">Select which marks you want for this task, and what to call each of them. The tool name will be displayed on the classification page next to each marking option.</small><br />
-              <small className="form-help">In general, the more complex the marking, the more challenging the data processing. Try to use the simplest tool that will give you the results you need for your research.</small><br />
+              <small className="form-help">Select which marks you want for this task, and what to call each of them. The tool name will be displayed on the classification page next to each marking option. Use the simplest tool that will give you the results you need for your research.</small><br />
               <small className="form-help">*point:* X marks the spot.</small><br />
               <small className="form-help">*line:* a straight line at any angle.</small><br />
               <small className="form-help">*polygon:* an arbitrary shape made of point-to-point lines.</small><br />

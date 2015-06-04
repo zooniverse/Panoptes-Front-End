@@ -24,7 +24,7 @@ EditWorkflowPage = React.createClass
 
   render: ->
     <div>
-      <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your data, or to mark features in your data, or both. The workflow is where you define those tasks and set out the order in which the volunteers will do them.</p>
+      <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       <div className="columns-container">
         <div className="column">
           <div>
@@ -32,7 +32,7 @@ EditWorkflowPage = React.createClass
               <span className="form-label">Workflow title</span>
               <br />
               <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={@handleChange} />
-              <small className="form-help">The title of the workflow will be used as the text on the main project page that the user clicks on to start classifying.</small>
+              <small className="form-help">If you let your volunteers choose which workflow to attempt, this text will appear as an option on the project front page.</small>
             </div>
 
             <br />
@@ -61,8 +61,8 @@ EditWorkflowPage = React.createClass
 
               <div>
                 <small>Add task</small>{' '}
-                <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'}><strong>Question</strong></button>{' '}
-                <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'}><strong>Drawing</strong></button>
+                <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s)."><strong>Question</strong></button>{' '}
+                <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'} title="Marking tasks: the volunteer marks or draws directly on the image(s) using tools that you specify. They can also give sub-classifications for each mark."><strong>Drawing</strong></button>
               </div>
 
               <div>
@@ -74,10 +74,7 @@ EditWorkflowPage = React.createClass
               </div>
             </div>
 
-            <p className="form-help"><small>A task is a unit of work you are asking the classifier to do.</small></p>
-            <p className="form-help"><small>There are 2 kinds of tasks: answering a question, and drawing various marks on an image. Your workflow can include one or both kinds.</small></p>
-            <p className="form-help"><small>A workflow with fewer tasks will be easier for volunteers  to complete. We know from surveys of our volunteers that many people classify in their spare time, and sometimes they only have a few minutes. Longer, more complex workflows mean each classification takes longer, so if your workflow is very long you may lose volunteers.</small></p>
-            <p className="form-help"><small>Try to keep the workflow as simple as possible to achieve your research goals, and definitely try to only request tasks that cannot be accurately accomplished by automated methods.</small></p>
+            <p className="form-help"><small>A task is a unit of work you are asking volunteers to do. You can ask them to answer a question or mark an image. Add a task by clicking the question or marking buttons below.</small></p>
 
             <hr />
 
@@ -89,6 +86,7 @@ EditWorkflowPage = React.createClass
               <small className="form-help">Version {@props.workflow.version}</small>
               {@renderSaveStatus()}
             </p>
+            <p className="form-help"><small>Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by a whole number: 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the version by a decimal, e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data.</small></p>
           </div>
 
           <hr />
@@ -105,7 +103,7 @@ EditWorkflowPage = React.createClass
           <div>
             <p>
               Subject retirement <RetirementRulesEditor workflow={@props.workflow} /><br />
-              <small className="form-help">How many people should classify each subject before it is “done”?</small>
+              <small className="form-help">How many people should classify each subject before it is “done”? Once a subject has reached the retirement limit it will no longer be shown to any volunteers.</small>
             </p>
           </div>
 

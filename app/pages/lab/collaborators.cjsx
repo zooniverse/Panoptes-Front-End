@@ -14,24 +14,27 @@ POSSIBLE_ROLES = [
 ]
 
 ROLES_INFO =
+  owner:
+    label: 'Owner'
+    description: 'The owner is the original project creator. There can be only one.'
   collaborator:
     label: 'Collaborator'
-    description: 'Collaborators have full access to edit workflows and project content, including deleting some or all of the project. [This last part seems silly, actually.]'
+    description: 'Collaborators have full access to edit workflows and project content, including deleting some or all of the project.'
   expert:
     label: 'Expert'
-    description: 'Experts can enter “gold mode” to make authoritative gold standard classifications that will be used to validate data quality.'
+    description: 'Experts can enter "gold mode" to make authoritative gold standard classifications that will be used to validate data quality.'
   scientist:
-    label: 'Scientist'
-    description: 'Members of the science team will be marked as scientists on “Talk"'
+    label: 'Researcher'
+    description: 'Members of the research team will be marked as scientists on "Talk"'
   moderator:
     label: 'Moderator'
-    description: 'Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on “Talk".'
+    description: 'Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on "Talk".'
   tester:
     label: 'Tester'
-    description: 'Testers can access private projects if they’re given the project’s address.'
+    description: 'Testers can view and classify on your project to give feedback while it’s still private. They cannot access the project builder.'
   translator:
     label: 'Translator'
-    description: 'Translators will have access to the translation site?'
+    description: 'Translators will have access to the translation site.'
 
 CollaboratorCreator = React.createClass
   displayName: 'CollaboratorCreator'

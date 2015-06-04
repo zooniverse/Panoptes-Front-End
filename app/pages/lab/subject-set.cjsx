@@ -146,6 +146,7 @@ EditSubjectSetPage = React.createClass
 
       <p>
         <UploadDropTarget accept="text/csv, text/tab-separated-values, image/*" multiple onSelect={@handleFileSelection}>
+          <strong>Manifest files are required.</strong><br />
           <strong>Drag-and-drop manifests and subject images here.</strong><br />
           Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
           Subject images can be any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '}
