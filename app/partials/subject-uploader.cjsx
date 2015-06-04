@@ -19,7 +19,8 @@ module.exports = React.createClass
     inProgress: false
     current: 0
     batch: []
-    successes: []
+    creates: []
+    uploads: []
     errors: []
 
   componentDidMount: ->
@@ -63,14 +64,17 @@ module.exports = React.createClass
           project: @props.project.id
 
       subject.save()
-        .then =>
+        .then (subject) =>
           uploads = for typeToUploadURL, i in subject.locations
             uploadURL = typeToUploadURL[Object.keys(typeToUploadURL)[0]]
             putFile uploadURL, @props.files[subjectData.locations[i]]
-          Promise.all uploads
+          Promise.all(uploads).then (uploads) =>
+            @setState
+              creates: @state.creates.concat subject
+            uploads
         .then (success) =>
           @setState
-            successes: @state.successes.concat success
+            uploads: @state.uploads.concat success
             batch: @state.batch.concat subject
         .catch (error) =>
           @setState
@@ -86,19 +90,19 @@ module.exports = React.createClass
   finish: ->
     unless @state.batch.length is 0
       newSubjectIDs = (id for {id} in @state.batch)
-      @props.subjectSet.addLink 'subjects', newSubjectIDs
+      linkToSubjectSet = @props.subjectSet.addLink 'subjects', newSubjectIDs
         .then =>
           @state.batch.splice 0
-
-          if @state.current is @props.subjects.length
-            @props.onComplete
-              successes: @state.successes
-              errors: @state.errors
-
         .catch (error) =>
           @setState
             errors: @state.errors.concat error
 
-        .then =>
-          if @isMounted()
-            @setState inProgress: false
+    linkToSubjectSet ?= Promise.resolve()
+    linkToSubjectSet.then =>
+      if @state.current is @props.subjects.length
+        @props.onComplete
+          creates: @state.creates
+          uploads: @state.uploads
+          errors: @state.errors
+      if @isMounted()
+        @setState inProgress: false
