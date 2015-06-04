@@ -19,7 +19,8 @@ module.exports = React.createClass
     inProgress: false
     current: 0
     batch: []
-    successes: []
+    creates: []
+    uploads: []
     errors: []
 
   componentDidMount: ->
@@ -63,14 +64,17 @@ module.exports = React.createClass
           project: @props.project.id
 
       subject.save()
-        .then =>
+        .then (subject) =>
           uploads = for typeToUploadURL, i in subject.locations
             uploadURL = typeToUploadURL[Object.keys(typeToUploadURL)[0]]
             putFile uploadURL, @props.files[subjectData.locations[i]]
-          Promise.all uploads
+          Promise.all(uploads).then (uploads) =>
+            @setState
+              creates: @state.creates.concat subject
+            uploads
         .then (success) =>
           @setState
-            successes: @state.successes.concat success
+            uploads: @state.uploads.concat success
             batch: @state.batch.concat subject
         .catch (error) =>
           @setState
@@ -92,7 +96,8 @@ module.exports = React.createClass
 
           if @state.current is @props.subjects.length
             @props.onComplete
-              successes: @state.successes
+              creates: @state.creates
+              uploads: @state.uploads
               errors: @state.errors
 
         .catch (error) =>
