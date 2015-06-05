@@ -41,14 +41,24 @@ EditProjectPage = React.createClass
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
-          <li><Link to="edit-project-details" params={linkParams} className="nav-list-item">Project details</Link></li>
-          <li><Link to="edit-project-science-case" params={linkParams} className="nav-list-item">Science case</Link></li>
-          <li><Link to="edit-project-results" params={linkParams} className="nav-list-item">Results</Link></li>
-          <li><Link to="edit-project-faq" params={linkParams} className="nav-list-item">FAQ</Link></li>
-          <li><Link to="edit-project-education" params={linkParams} className="nav-list-item">Education</Link></li>
-          <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item">Collaborators</Link></li>
-          <li><Link to="edit-project-media" params={linkParams} className="nav-list-item">Media library</Link></li>
-
+          <li><Link to="edit-project-details" params={linkParams} className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
+            Project details
+          </Link></li>
+          <li><Link to="edit-project-science-case" params={linkParams} className="nav-list-item" title="Explain your research to your audience here in as much detail as you’d like.">
+            Science case
+          </Link></li>
+          <li><Link to="edit-project-results" params={linkParams} className="nav-list-item" title="Once your project has hit its stride, share the results of your project with your volunteers here.">
+            Results
+          </Link></li>
+          <li><Link to="edit-project-faq" params={linkParams} className="nav-list-item" title="Add details here about your research, how to classify, and what you plan to do with the classifications.">
+            FAQ
+          </Link></li>
+          <li><Link to="edit-project-education" params={linkParams} className="nav-list-item" title="If you are a researcher open to collaborating with educators, or if your project is primarily for educational purposes, you can describe that here.">
+            Education
+          </Link></li>
+          <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
+            Collaborators
+          </Link></li>
           <li>
             <br />
             <div className="nav-list-header">Workflows</div>
@@ -58,14 +68,14 @@ EditProjectPage = React.createClass
                   workflowLinkParams = Object.create linkParams
                   workflowLinkParams.workflowID = workflow.id
                   <li key={workflow.id}>
-                    <Link to="edit-project-workflow" params={workflowLinkParams} className="nav-list-item">{workflow.display_name}</Link>
+                    <Link to="edit-project-workflow" params={workflowLinkParams} className="nav-list-item" title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">{workflow.display_name}</Link>
                   </li>}
 
                 {for workflow in workflows
                   <ChangeListener target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
 
                 <li className="nav-list-item">
-                  <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress}>
+                  <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
                     New workflow{' '}
                     <LoadingIndicator off={not @state.workflowCreationInProgress} />
                   </button>{' '}
@@ -85,14 +95,14 @@ EditProjectPage = React.createClass
                   subjectSetLinkParams = Object.create linkParams
                   subjectSetLinkParams.subjectSetID = subjectSet.id
                   <li key={subjectSet.id}>
-                    <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item">{subjectSet.display_name}</Link>
+                    <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item" title="A subject is an image (or group of images) to be analyzed.">{subjectSet.display_name}</Link>
                   </li>}
 
                 {for subjectSet in subjectSets
                   <ChangeListener target={subjectSet} eventName="save" handler={renderSubjectSetListItem.bind this, subjectSet} />}
 
                 <li className="nav-list-item">
-                  <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress}>
+                  <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress} title="A subject is an image (or group of images) to be analyzed.">
                     New subject set{' '}
                     <LoadingIndicator off={not @state.subjectSetCreationInProgress} />
                   </button>{' '}
@@ -128,7 +138,7 @@ EditProjectPage = React.createClass
       tasks:
         init:
           type: 'single'
-          question: 'Is this the first question?'
+          question: 'Ask your first question here.'
           answers: [
             label: 'Yes'
           ]
