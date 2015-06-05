@@ -7,6 +7,7 @@ PromiseRenderer = require '../components/promise-renderer'
 Moderation = require './lib/moderation'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
+ProjectLinker = require './lib/project-linker'
 ROLES = require './lib/roles'
 auth = require '../api/auth'
 
@@ -93,6 +94,10 @@ module?.exports = React.createClass
 
         <div className="talk-sidebar">
           <h2>Talk Sidebar</h2>
+
+          <h3>Jump to a project</h3>
+          <ProjectLinker />
+
           <PromiseRenderer promise={talkClient.type('tags').get(section: @props.section)}>{(tags) =>
             if tags.length
               <section>
