@@ -8,13 +8,13 @@ CommentReportForm = require './comment-report-form'
 CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 CommentPreview = require './comment-preview'
-SubjectDisplay = require './subject-display'
 PromiseRenderer = require '../components/promise-renderer'
 PromiseToSetState = require '../lib/promise-to-set-state'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
 Avatar = require '../partials/avatar'
+SubjectViewer = require '../components/subject-viewer'
 
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
 
@@ -92,7 +92,18 @@ module?.exports = React.createClass
             <p className="talk-comment-date">{timestamp(@props.data.created_at)}</p>
 
             {if @props.data.focus_id
-              <SubjectDisplay focusId={@props.data.focus_id} />}
+              <PromiseRenderer
+                promise={
+                  apiClient.type('subjects').get(@props.data.focus_id.toString())
+                }
+                then={(subject) =>
+                  <div className="polaroid-image">
+                    Subject {subject.id}
+                    <SubjectViewer subject={subject} />
+                  </div>
+                }
+                catch={null}
+                />}
 
             <CommentPreview content={@props.data.body} header={null}/>
 
