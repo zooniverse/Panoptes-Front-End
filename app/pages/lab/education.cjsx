@@ -1,23 +1,18 @@
 React = require 'react'
-BoundResourceMixin = require '../../lib/bound-resource-mixin'
+ResourceInput = require '../../components/resource-input'
 
 module.exports = React.createClass
   displayName: 'EditProjectEducation'
 
-  mixins: [BoundResourceMixin]
-
-  boundResource: 'project'
-
   getDefaultProps: ->
-    project: null
+    project: {}
 
   render: ->
     <div>
-      <p>Educational content</p>
-      <textarea className="standard-input full" name="education_content" value={@props.project.education_content} rows="20" onChange={@handleChange} placeholder="This page renders markdown. Note that this page will not display unless you add content here." />
-
       <p>
-        <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
-        {@renderSaveStatus()}
+        <ResourceInput type="textarea" className="standard-input full" resource={@props.project} update="education_content" rows="20" placeholder="This page renders markdown. Note that this page will not display unless you add content here.">
+          <span className="form-label">Educational Content</span>
+          <br />
+        </ResourceInput>
       </p>
     </div>
