@@ -1,6 +1,19 @@
 .form-label
   @extends $generic-heading
 
+.resource-input-label
+  &[data-waiting]
+    background: rgba(gray, 0.1)
+
+  &[data-busy]
+    background: rgba(orange, 0.2)
+
+  &[data-success]
+    background: rgba(lime, 0.2)
+
+  &[data-error]
+    background: rgba(red, 0.2)
+
 .standard-input
   border: 1px solid
   border-radius: 2px

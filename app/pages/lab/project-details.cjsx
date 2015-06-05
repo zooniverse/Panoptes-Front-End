@@ -1,4 +1,5 @@
 React = require 'react'
+ResourceInput = require '../../components/resource-input'
 BoundResourceMixin = require '../../lib/bound-resource-mixin'
 PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
@@ -57,12 +58,8 @@ ExternalLinksEditor = React.createClass
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
 
-  mixins: [BoundResourceMixin]
-
-  boundResource: 'project'
-
   getDefaultProps: ->
-    project: null
+    project: {}
 
   getInitialState: ->
     avatarError: null
@@ -120,30 +117,35 @@ module.exports = React.createClass
           <hr />
 
           <p>
-            <label>
-              <input type="checkbox" name="configuration.user_chooses_workflow" checked={@props.project.configuration?.user_chooses_workflow} onChange={@handleChange} />
+            <ResourceInput type="checkbox" resource={@props.project} update="configuration.user_chooses_workflow">
               Volunteers can choose which workflow they work on
-            </label><br />
+            </ResourceInput><br />
             <small className="form-help">If you have multiple workflows, check this to let volunteers select which workflow they want to to work on; otherwise, they’ll be served randomly.</small>
           </p>
         </div>
 
         <div className="column">
           <p>
-            Name<br />
-            <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} disabled={@state.saveInProgress} onChange={@handleChange} />
+            <ResourceInput className="standard-input full" resource={@props.project} update="display_name">
+              <span className="form-label">Name</span>
+              <br />
+            </ResourceInput>
             <small className="form-help">The project name is the first thing people will see about the project, and it will show up in the project URL. Try to keep it short and sweet.</small>
           </p>
 
           <p>
-            Description<br />
-            <textarea className="standard-input full" name="description" value={@props.project.description} row="2" disabled={@state.saveInProgress} onChange={@handleChange} />
+            <ResourceInput className="standard-input full" resource={@props.project} update="description">
+              <span className="form-label">Description</span>
+              <br />
+            </ResourceInput>
             <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.</small>
           </p>
 
           <p>
-            Introduction<br />
-            <textarea className="standard-input full" name="introduction" value={@props.project.introduction} rows="10" disabled={@state.saveInProgress} onChange={@handleChange} />
+            <ResourceInput type="textarea" className="standard-input full" resource={@props.project} update="introduction">
+              <span className="form-label">Introduction</span>
+              <br />
+            </ResourceInput>
             <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<insert link to best markdown tutorial>), so you can add formatting.</small>
           </p>
 
@@ -185,12 +187,6 @@ module.exports = React.createClass
               We’ve received your request, check your email for a link to your data soon!
             </div>}
         </div>
-
-        <p>
-          <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
-          {@renderSaveStatus()}
-        </p>
-
       </div>
     </div>
 

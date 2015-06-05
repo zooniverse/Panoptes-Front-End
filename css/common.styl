@@ -10,16 +10,23 @@ SUCCESS = #009E0C
 FAILURE = #A31400
 
 background-stripes(color1, color2, size)
-  background-image: repeating-linear-gradient(-45deg, color1, color1 size / 2, color2 size / 2, color2 size)
+  background-image: linear-gradient(
+    45deg,
+    color1 25%,
+    color2 25%,
+    color2 50%,
+    color1 50%,
+    color1 75%,
+    color2 75%,
+    color2
+  )
+  background-size: size size
 
-// TODO: I really hate this animation.
 @keyframes busy-button-animation
   from
-    left: 0
-    right: 90%
+    background-position: 0 0
   to
-    left: 90%
-    right: 0
+    background-position: 1em 0
 
 $reset-button
   background: transparent
@@ -38,15 +45,25 @@ $reset-button
     cursor: inherit
     opacity: 0.5
 
-  &[data-busy]::after
-    animation: busy-button-animation 1s linear infinite alternate
-    background: linear-gradient(90deg, rgba(gray, 0), rgba(gray, 0.2), rgba(gray, 0))
+  &::after
     bottom: 0
     content: ""
     left: 0
     position: absolute
     top: 0
     right: 0
+
+  &[data-busy]::after
+    background-stripes: rgba(gray, 0.5), transparent, 1em
+    animation: busy-button-animation 0.5s linear infinite
+
+  &[data-success]::after
+    background: rgba(lime, 0.2)
+    box-shadow: 0 0 3px lime
+
+  &[data-error]::after
+    background: rgba(red, 0.3)
+    box-shadow: 0 0 3px red
 
 $generic-heading
   font-size: 0.7em
