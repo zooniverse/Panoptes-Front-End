@@ -12,6 +12,12 @@
     justify-content: center
     padding: 0 3vw
     text-align: center
+    
+    @media screen and (max-width: 320px)
+      height: 100% // So content isn't cut off on small mobile screens
+    
+    svg
+      margin-top: 15vh
 
     .hero-title
       color: inherit
@@ -31,6 +37,7 @@
       color: #fbfbfb
       font-size: 1.6em
       font-weight: 400
+      margin-bottom: 3vh
 
       &:hover
         background: lighten(COBOLT_BLUE, 20%)
@@ -49,6 +56,8 @@
     .featured-projects-list
       column-width: 22em
       column-gap: 2.5em
+      display: flex
+      flex-wrap: wrap
       margin: 4.6em 3vw
       max-width: 960px
       width: 100%
@@ -68,12 +77,6 @@
         padding: 17.5em 0
         position: relative
 
-        &:first-of-type
-          padding-top: 15em
-
-        &:last-of-type
-          padding-bottom: 15em
-
         .about-item-wrapper
           display: flex
           flex-wrap: wrap
@@ -90,8 +93,8 @@
             flex-basis: 450px
             flex-direction: column
             justify-content: center
-            margin: 2em auto
-            padding: 0 3vw
+            margin: 2em 0
+            padding: 0 5.5vw
             text-align: left
 
             p
