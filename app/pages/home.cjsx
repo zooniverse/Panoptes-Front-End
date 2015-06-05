@@ -72,7 +72,7 @@ module.exports = React.createClass
           {for item in aboutItems
             <div key={item} className="about-item">
               <div className="about-item-wrapper">
-                <img className="about-image" src="./assets/home-#{item}.gif" alt="" style={backgroundColor: "rgba(0, 0, 0, 0.25)"} />
+                <img className="about-image" src="./assets/home-#{item}.gif" alt="" />
                 <div className="about-item-content">
                   <Translate component="h5" content="home.about.#{item}.title" />
                   <Translate component="p" content="home.about.#{item}.content" />
