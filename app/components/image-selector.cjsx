@@ -26,7 +26,7 @@ module.exports = React.createClass
     size: NaN
 
   render: ->
-    <span className="image-uploader" style={
+    <span className="image-selector" style={
       display: 'inline-block'
       minHeight: '1em'
       background: 'rgba(128, 128, 128, 0.2)'
@@ -65,6 +65,8 @@ module.exports = React.createClass
     </span>
 
   handleChange: (e) ->
+    [file] = e.target.files
+
     @setState
       working: true
       format: ''
@@ -73,10 +75,11 @@ module.exports = React.createClass
     reader = new FileReader
     reader.onload = (e) =>
       img = new Image
+      img.title = file.name
       img.onload = =>
         @cropImage img
       img.src = e.target.result
-    reader.readAsDataURL e.target.files[0]
+    reader.readAsDataURL file
 
   cropImage: (srcImg) ->
     canvas = document.createElement 'canvas'
@@ -94,6 +97,7 @@ module.exports = React.createClass
     ctx.drawImage srcImg, (srcImg.naturalWidth - canvas.width) / -2, (srcImg.naturalHeight - canvas.height) / -2
 
     croppedImg = new Image
+    croppedImg.title = srcImg.title
     croppedImg.onload = =>
       @reduceImage croppedImg
     croppedImg.src = canvas.toDataURL()
@@ -127,4 +131,4 @@ module.exports = React.createClass
       @reduceImage img, _scale - @props.reductionPerPass
     else
       @setState working: false
-      @props.onChange toBlob dataURL
+      @props.onChange toBlob(dataURL), img

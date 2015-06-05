@@ -68,7 +68,7 @@ module.exports = React.createClass
             else
               <span>{@state.error.toString()}</span>}{' '}
 
-            <a href="https://www.zooniverse.org/password/reset" target="_blank">
+            <a href="#/reset-password" onClick={@props.onSuccess}>
               <Translate content="signInForm.forgotPassword" />
             </a>
           </div>

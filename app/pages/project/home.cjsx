@@ -28,14 +28,19 @@ module.exports = React.createClass
 
   render: ->
     linkParams =
-      owner: @props.owner.display_name
-      name: @props.project.display_name
+      owner: @props.owner.slug
+      name: @props.project.slug
 
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
         <div className="description">{@props.project.description}</div>
 
-        {if @props.project.configuration?.user_chooses_workflow
+        {if @props.project.redirect
+          <a href={@props.project.redirect} className="call-to-action standard-button">
+            <strong>Visit the project</strong><br />
+            <small>at {@props.project.redirect}</small>
+          </a>
+        else if @props.project.configuration?.user_chooses_workflow
           for workflow in @state.workflows
             <Link to="project-classify" params={linkParams} query={workflow: workflow.id} key={workflow.id} className="call-to-action standard-button">
               {workflow.display_name}

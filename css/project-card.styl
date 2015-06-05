@@ -1,31 +1,45 @@
 .project-card-list
-  column-width: 20em
-  column-gap: 3vw
+  column-count: 5
+  column-gap: 1.66em
+  column-width: 14.66em
+  max-width: 1200px
+  margin: 0 auto
 
 .project-card
   background-position: 50% 0
   background-size: cover
-  border: 1px solid lighten(gray, 50%)
-  border-radius: 4px
+  border-radius: 6px
   vendor("column-break-inside", avoid)
   display: block
-  margin-bottom: 1em
+  margin: 0 auto 1em
+  max-height: 325px
+  max-width: 220px
   overflow: hidden
-  text-decoration: none
 
-  &[data-no-avatar]
-    background-stripes: black yellow 10%
+  a
+    text-decoration: none
 
   .details
     background: BACKGROUND
+    box-sizing: border-box
     color: FOREGROUND
-    padding: 1em 3vw
+    display: flex
+    flex-direction: column
+    height: 175px
+    padding: 20px
+    text-align: left
 
   .name
-    font-size: 1.4em
-    font-weight: bold
-    text-align: center
+    color: #8a8a8a
+    font-size: 0.9em
+    font-weight: 400
 
-  .owner
-    opacity: 0.5
-    text-align: center
+  .type, .owner
+    color: #bababa
+    flex-grow: 1
+    font-size: .8em
+    font-style: italic
+
+  .project-card-button
+    padding: .6em
+    width: 180px

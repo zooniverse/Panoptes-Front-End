@@ -4,6 +4,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
+moment = require 'moment'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -66,6 +67,8 @@ module.exports = React.createClass
   getInitialState: ->
     avatarError: null
     backgroundError: null
+    exportRequested: false
+    exportError: null
 
   render: ->
     # Failures on media GETs are acceptable here,
@@ -84,6 +87,10 @@ module.exports = React.createClass
       .catch ->
         ''
 
+    @classificationsExportGet ?= @props.project.get 'classifications_export'
+      .catch ->
+        []
+
     <div>
       <p className="form-help">Input the basic information about your project, and set up its home page.</p>
       <div className="columns-container">
@@ -96,7 +103,7 @@ module.exports = React.createClass
           {if @state.avatarError
             <div className="form-help error">{@state.avatarError.toString()}</div>}
 
-          <small className="form-help">Pick a logo to represent your project. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50 KB.</small>
+          <p><small className="form-help">Pick a logo to represent your project. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50 KB.</small></p>
 
           <hr />
 
@@ -108,7 +115,7 @@ module.exports = React.createClass
           {if @state.backgroundError
             <div className="form-help error">{@state.backgroundError.toString()}</div>}
 
-          <small className="form-help">This image will be the background for all of your project pages, including your project’s front page. To add an image, either drag and drop or right click to open your file viewer. For best results, use good quality images no more than 256 KB.</small>
+          <p><small className="form-help">This image will be the background for all of your project pages, including your project’s front page. To add an image, either drag and drop or right click to open your file viewer. For best results, use good quality images no more than 256 KB.</small></p>
 
           <hr />
 
@@ -159,6 +166,39 @@ module.exports = React.createClass
             {@renderSaveStatus()}
           </p>
         </div>
+
+        <hr />
+
+        <div>
+          Data export<br />
+          <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request new data export</button>{' '}
+          <small className="form-help">
+            CSV format.{' '}
+            <PromiseRenderer promise={@classificationsExportGet}>{([mostRecent]) =>
+              if mostRecent?
+                <span>
+                  Most recent data available requested{' '}
+                  <a href={mostRecent.src}>{moment(mostRecent.updated_at).fromNow()}</a>.
+                </span>
+              else
+                <span>Never requested.</span>
+            }</PromiseRenderer>
+            <br />
+          </small>
+
+          {if @state.exportError?
+            <div className="form-help error">{@state.exportError.toString()}</div>
+          else if @state.exportRequested
+            <div className="form-help success">
+              We’ve received your request, check your email for a link to your data soon!
+            </div>}
+        </div>
+
+        <p>
+          <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
+          {@renderSaveStatus()}
+        </p>
+
       </div>
     </div>
 
@@ -180,3 +220,12 @@ module.exports = React.createClass
         newState = {}
         newState[errorProp] = error
         @setState newState
+
+  requestDataExport: ->
+    @setState exportError: null
+    apiClient.post @props.project._getURL('classifications_export'), media: content_type: 'text/csv'
+      .then =>
+        @classificationsExportGet = null
+        @setState exportRequested: true
+      .catch (error) =>
+        @setState exportError: error

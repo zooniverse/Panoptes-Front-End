@@ -9,6 +9,90 @@ apiClient = require '../api/client'
 putFile = require '../lib/put-file'
 
 MAX_AVATAR_SIZE = 65536
+MIN_PASSWORD_LENGTH = 8
+
+ChangePasswordForm = React.createClass
+  displayName: 'ChangePasswordForm'
+
+  getDefaultProps: ->
+    user: {}
+
+  getInitialState: ->
+    old: ''
+    new: ''
+    confirmation: ''
+    inProgress: false
+    success: false
+    error: null
+
+  render: ->
+    <form ref="form" onSubmit={@handleSubmit}>
+      <p>
+        <strong>Change your password</strong>
+      </p>
+
+      <table className="standard-table">
+        <tbody>
+          <tr>
+            <td>Current password</td>
+            <td><input type="password" className="standard-input" size="20" onChange={(e) => @setState old: e.target.value} /></td>
+          </tr>
+          <tr>
+            <td>New password</td>
+            <td>
+              <input type="password" className="standard-input" size="20" onChange={(e) => @setState new: e.target.value} />
+              {if @state.new.length isnt 0 and @tooShort()
+                <small className="form-help error">That’s too short</small>}
+            </td>
+          </tr>
+          <tr>
+            <td>Confirm new password</td>
+            <td>
+              <input type="password" className="standard-input" size="20" onChange={(e) => @setState confirmation: e.target.value} />
+              {if @state.confirmation.length >= @state.new.length - 1 and @doesntMatch()
+                <small className="form-help error">These don’t match</small>}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        <button type="submit" className="standard-button" disabled={not @state.old or not @state.new or @tooShort() or @doesntMatch() or @state.inProgress}>Change</button>{' '}
+
+        {if @state.inProgress
+          <i className="fa fa-spinner fa-spin form-help"></i>
+        else if @state.success
+          <i className="fa fa-check-circle form-help success"></i>
+        else if @state.error
+          <small className="form-help error">{@state.error.toString()}</small>}
+      </p>
+    </form>
+
+  tooShort: ->
+    @state.new.length < MIN_PASSWORD_LENGTH
+
+  doesntMatch: ->
+    @state.new isnt @state.confirmation
+
+  handleSubmit: (e) ->
+    e.preventDefault()
+
+    current = @state.old
+    replacement = @state.new
+
+    @setState
+      inProgress: true
+      success: false
+      error: null
+
+    auth.changePassword {current, replacement}
+      .then =>
+        @setState success: true
+        @refs.form.getDOMNode().reset()
+      .catch (error) =>
+        @setState {error}
+      .then =>
+        @setState inProgress: false
 
 UserSettingsPage = React.createClass
   displayName: 'UserSettingsPage'
@@ -94,6 +178,12 @@ UserSettingsPage = React.createClass
             </tbody>
           } />
         </table>
+      </div>
+
+      <hr />
+
+      <div className="content-container">
+        <ChangePasswordForm {...@props} />
       </div>
     </div>
 

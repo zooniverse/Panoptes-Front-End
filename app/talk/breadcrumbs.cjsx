@@ -17,7 +17,7 @@ module?.exports = React.createClass
         {if params.board?
           <span>
             <Link to="#{@projectPrefix()}talk" params={params}>
-              {if @props.project then params?.name else 'Zooniverse'} Talk
+              {if @props.project then @props.project.display_name else 'Zooniverse'} Talk
             </Link>
             &nbsp;>&nbsp;
           </span>}

@@ -6,6 +6,7 @@ module.exports = React.createClass
   displayName: 'SignInPrompt'
 
   getDefaultProps: ->
+    project: {}
     onChoose: Function.prototype # No-op
 
   render: ->
@@ -28,10 +29,10 @@ module.exports = React.createClass
 
   signIn: ->
     @props.onChoose()
-    alert (resolve) ->
-      <LoginDialog which="sign-in" onSuccess={resolve} />
+    alert (resolve) =>
+      <LoginDialog which="sign-in" project={@props.project} onSuccess={resolve} />
 
   register: ->
     @props.onChoose()
-    alert (resolve) ->
-      <LoginDialog which="register" onSuccess={resolve} />
+    alert (resolve) =>
+      <LoginDialog which="register" project={@props.project} onSuccess={resolve} />

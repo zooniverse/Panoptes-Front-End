@@ -98,22 +98,23 @@ TALK_MARGIN = 10px auto
         margin-bottom: 10px
         border-left: 4px solid orangered
 
-  .talk-board
-    .talk-board-new-discussion
-      @extend .talk-module
-      padding: 0px
-      input, h2
-        margin: TALK_PADDING
-      input
-        border: none
-        width: 50%
+  .talk-board-new-discussion
+    @extend .talk-module
+    padding: 0px
+    input, h2
+      margin: TALK_PADDING
+    input[type='text']
+      border: none
+      width: 50%
 
-    .talk-board-discussions
-      width: 80%
-      float: left
+  .talk-board-discussions
+    width: 80%
+    float: left
 
   .talk-board-preview
     @extend .talk-module
+    p
+      margin: 0.5em 0
 
   .talk-subject-display
     @extend .talk-module
@@ -175,6 +176,7 @@ TALK_MARGIN = 10px auto
 
     img
       border-radius: 50%
+      max-width: 50px
 
     p
       width: 40%

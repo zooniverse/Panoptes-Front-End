@@ -5,6 +5,7 @@ CommentPreview = require './comment-preview'
 CommentHelp = require './comment-help'
 CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
+Loading = require '../components/loading-indicator'
 
 m = require './lib/markdown-insert'
 
@@ -32,6 +33,7 @@ module?.exports = React.createClass
     focusImage: @props.focusImage
     content: @props.content
     reply: ''
+    loading: false
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.reply
@@ -41,11 +43,10 @@ module?.exports = React.createClass
     e.preventDefault()
     textareaValue = @refs.textarea.getDOMNode().value
     return if @props.validationCheck?(textareaValue)
-
+    @setState loading: false
     fullComment = @state.reply.concat(textareaValue)
+
     @props.onSubmitComment?(e, fullComment, @state.focusImage)
-    # optional function called on submit ^
-    # TODO: update this submit stuff for better reuse / prod
 
     @refs.textarea.getDOMNode().value = ""
     @hideChildren()
@@ -105,6 +106,7 @@ module?.exports = React.createClass
       <p key={i} className="talk-validation-error">{message}</p>
 
     feedback = @renderFeedback()
+    loader = if @state.loading then <Loading />
 
     <div className="talk-comment-box">
       <h1>{@props.header}</h1>
@@ -189,6 +191,7 @@ module?.exports = React.createClass
              Cancel
             </button>}
         </section>
+
         {validationErrors}
       </form>
 
@@ -203,6 +206,8 @@ module?.exports = React.createClass
           when 'help'
             <CommentHelp />}
       </div>
+
+      {loader}
     </div>
 
   wrapSelectionIn: (wrapFn, opts = {}) ->

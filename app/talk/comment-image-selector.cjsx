@@ -7,7 +7,7 @@ module?.exports = React.createClass
   displayName: 'TalkCommentImageSelector'
 
   getInitialState: ->
-    recents: []
+    subjects: []
 
   getDefaultProps: ->
     header: "Select a featured image"
@@ -18,32 +18,26 @@ module?.exports = React.createClass
   setRecents: ->
     authClient.checkCurrent()
       .then (user) => user.get('recents')
-        .then (recents) => @setState {recents}
+      .then (subjects) => @setState {subjects}
 
-  queryForImages: (query) ->
-    # this will make a db query and then return array of matching images
-    DEV_IMAGES.filter (img) => img.id.toLowerCase() is query.toLowerCase()
+  setQuery: (id) ->
+    apiClient.type('subjects').get({id: id})
+      .then (subjects) => @setState {subjects}
 
   onSubmitSearch: (e) ->
     e.preventDefault()
-    return @setRecents() # TODO un-disable search (remove this line)
-    ###
-    query = @refs.imageSearch.getDOMNode().value
+    query = @refs.imageSearch.getDOMNode().value.trim()
     if query is ""
-      @setInitialImages()
+      @setRecents()
     else
-      @setState images: @queryForImages(query)
-    ###
+      @setQuery(query)
 
   setFocusImage: (recentsData) ->
-    recentsData.get('subject')
-      .then (subject) =>
-        @props.onSelectImage(subject)
+    @props.onSelectImage(recentsData)
 
   imageItem: (data, i) ->
-    {src} = getSubjectLocation(data)
     <div key={data.id} className="talk-comment-image-item">
-      <img src={'http://' + src} />
+      <img src={getSubjectLocation(data).src} />
       <div className="image-card-select">
         <button onClick={=> @setFocusImage(data)}>Select</button>
       </div>
@@ -60,6 +54,6 @@ module?.exports = React.createClass
       <button className='talk-comment-clear-image-button' onClick={@props.onClearImageClick}>Clear image</button>
 
       <div className="talk-comment-suggested-images">
-        {@state.recents?.map(@imageItem)}
+        {@state.subjects?.map(@imageItem)}
       </div>
     </div>

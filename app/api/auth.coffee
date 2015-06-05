@@ -103,7 +103,7 @@ module.exports = new Model
         console?.error 'Failed to get session'
         throw error
 
-  register: ({display_name, email, password, global_email_communication}) ->
+  register: ({display_name, email, password, credited_name, global_email_communication, project_id}) ->
     @checkCurrent().then (user) =>
       if user?
         @signOut().then =>
@@ -114,7 +114,7 @@ module.exports = new Model
         registrationRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
-            user: {display_name, email, password, global_email_communication}
+            user: {display_name, email, password, credited_name, global_email_communication, project_id}
 
           # This weird URL is actually out of the API, but returns a JSON-API response.
           client.post '/../users', data, JSON_HEADERS
@@ -176,6 +176,47 @@ module.exports = new Model
           null
 
         signInRequest
+
+  changePassword: ({current, replacement}) ->
+    @checkCurrent().then (user) =>
+      if user?
+        @_getAuthToken().then (token) =>
+          data =
+            authenticity_token: token
+            user:
+              current_password: current
+              password: replacement
+              password_confirmation: replacement
+
+          client.put '/../users', data, JSON_HEADERS
+            .then =>
+              @signOut() # Rough, but it'll do for now. Without signing out and back in, the session is lost.
+            .then =>
+              {display_name} = user
+              password = replacement
+              @signIn {display_name, password}
+
+      else
+        throw new Error 'No signed-in user to change the password for'
+
+  requestPasswordReset: ({email}) ->
+    @_getAuthToken().then (token) =>
+      data =
+        authenticity_token: token
+        user: {email}
+
+      client.post '/../users/password', data, JSON_HEADERS
+
+  resetPassword: ({password, confirmation, token: resetToken}) ->
+    @_getAuthToken().then (authToken) =>
+      data =
+        authenticity_token: authToken
+        user:
+          password: password
+          password_confirmation: confirmation
+          reset_password_token: resetToken
+
+      client.put '/../users/password', data, JSON_HEADERS
 
   disableAccount: ->
     console?.log 'Disabling account'

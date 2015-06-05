@@ -12,6 +12,8 @@ SignInPrompt = require '../../partials/sign-in-prompt'
 
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
+sessionSubjects = require '../../lib/session-subjects'
+
 SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
 
 if SKIP_CELLECT
@@ -129,7 +131,8 @@ module.exports = React.createClass
 
     # Take the next subject in the list, if there are any.
     unless upcomingSubjects.forWorkflow[workflow.id].length is 0
-      subject = Promise.resolve upcomingSubjects.forWorkflow[workflow.id].shift()
+      subjectToLoad = upcomingSubjects.forWorkflow[workflow.id].shift()
+      subject = Promise.resolve subjectToLoad
 
     # If there aren't any left (or there weren't any to begin with), refill the list.
     if upcomingSubjects.forWorkflow[workflow.id].length is 0
@@ -139,8 +142,20 @@ module.exports = React.createClass
         workflow_id: workflow.id
         sort: 'cellect' unless SKIP_CELLECT
 
-      fetchSubjects = apiClient.type('subjects').get(subjectQuery).then (subjects) ->
-        upcomingSubjects.forWorkflow[workflow.id].push subjects...
+      fetchSubjects = apiClient.type('subjects').get subjectQuery
+        .catch (error) ->
+          if error.message.indexOf('please try again') is -1
+            throw error
+          else
+            new Promise (resolve, reject) ->
+              fetchSubjectsAgain = ->
+                apiClient.type('subjects').get subjectQuery
+                  .then resolve
+                  .catch reject
+              setTimeout fetchSubjectsAgain, 2000
+        .then (subjects) ->
+          nonLoadedSubjects = (newSubject for newSubject in subjects when newSubject isnt subjectToLoad)
+          upcomingSubjects.forWorkflow[workflow.id].push nonLoadedSubjects...
 
       # If we're filling this list for the first time, we won't have a subject selected, so try again.
       subject ?= fetchSubjects.then ->
@@ -179,16 +194,17 @@ module.exports = React.createClass
     console?.info 'Completed classification', @state.classification
     @state.classification.save().then (classification) =>
       console?.log 'Saved classification', classification.id
-      # After saving, remove the classification resource from the local cache.
-      classification.destroy()
-    classificationsThisSession += 1
-    @maybePromptToSignIn()
+      classification.get('subjects').then (subjects) ->
+        sessionSubjects.push (id for {id} in subjects)...
+        classification.destroy()
+      classificationsThisSession += 1
+      @maybePromptToSignIn()
 
   maybePromptToSignIn: ->
-    auth.checkCurrent().then (user) ->
+    auth.checkCurrent().then (user) =>
       if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not user?
-        alert (resolve) ->
-          <SignInPrompt onChoose={resolve}>
+        alert (resolve) =>
+          <SignInPrompt project={@props.project} onChoose={resolve}>
             <p><strong>You’ve done {classificationsThisSession} classifications, but you’re not signed in!</strong></p>
           </SignInPrompt>
 

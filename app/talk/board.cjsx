@@ -7,6 +7,7 @@ commentValidations = require './lib/comment-validations'
 discussionValidations = require './lib/discussion-validations'
 {getErrors} = require './lib/validations'
 Router = require 'react-router'
+NewDiscussionForm = require './discussion-new-form'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 Paginator = require './lib/paginator'
@@ -23,7 +24,6 @@ module?.exports = React.createClass
     board: {}
     discussionsMeta: {}
     newDiscussionOpen: false
-    discussionValidationErrors: []
 
   componentWillMount: ->
     @setDiscussions()
@@ -51,34 +51,9 @@ module?.exports = React.createClass
     @boardRequest()
       .then (board) => @setState {board}
 
-  onSubmitDiscussion: (e, commentText, focusImage) ->
-    titleInput = @getDOMNode().querySelector('.talk-board-new-discussion input')
-    title = titleInput.value
-
-    return console.log "failed validation" unless title
-
-    authClient.checkCurrent()
-      .then (user) =>
-        user_id = user.id
-        board_id = +@props.params.board
-        body = commentText
-
-        discussion = {title, user_id, board_id, comments: [{user_id, body}]}
-
-        talkClient.type('discussions').create(discussion).save()
-          .then (discussion) =>
-            @setState newDiscussionOpen: false
-            @setDiscussions()
-
-  discussionValidations: (commentBody) ->
-    # TODO: return true if any additional validations fail
-    discussionTitle = @getDOMNode().querySelector('.new-discussion-title').value
-    commentErrors = getErrors(commentBody, commentValidations)
-    discussionErrors = getErrors(discussionTitle, discussionValidations)
-
-    discussionValidationErrors = commentErrors.concat(discussionErrors)
-    @setState {discussionValidationErrors}
-    !!discussionValidationErrors.length
+  onCreateDiscussion: ->
+    @setState newDiscussionOpen: false
+    @setDiscussions()
 
   discussionPreview: (discussion, i) ->
     <DiscussionPreview {...@props} key={i} data={discussion} />
@@ -173,18 +148,9 @@ module?.exports = React.createClass
               </button>
 
               {if @state.newDiscussionOpen
-                <div className="talk-board-new-discussion">
-                  <h2>Create a disussion +</h2>
-                  <input className="new-discussion-title" type="text" placeholder="Discussion Title"/><br/>
-                  <CommentBox
-                    header={null}
-                    validationCheck={@discussionValidations}
-                    validationErrors={@state.discussionValidationErrors}
-                    submitFeedback={"Discussion successfully created"}
-                    placeholder={"Add a comment here to start the discussion. This comment will appear at the start of the discussion."}
-                    onSubmitComment={@onSubmitDiscussion}
-                    submit="Create Discussion"/>
-                 </div>}
+                <NewDiscussionForm
+                  boardId={+@props.params.board}
+                  onCreateDiscussion={@onCreateDiscussion} />}
              </section>
            else
              <p>Please sign in to create discussions</p>

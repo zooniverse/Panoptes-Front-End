@@ -59,7 +59,6 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
             Collaborators
           </Link></li>
-
           <li>
             <br />
             <div className="nav-list-header">Workflows</div>

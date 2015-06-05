@@ -4,6 +4,7 @@ Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
 tasks = require './tasks'
 Tooltip = require '../components/tooltip'
+sessionSubjects = require '../lib/session-subjects'
 
 NOOP = Function.prototype
 
@@ -19,6 +20,7 @@ module.exports = React.createClass
   getInitialState: ->
     naturalWidth: 0
     naturalHeight: 0
+    showWarning: false
     frame: 0
     selectedMark: null
     detailsTooltipOffset: ''
@@ -88,6 +90,26 @@ module.exports = React.createClass
               </g>}
         </svg>
 
+        {if @props.subject.already_seen or @props.subject.id in sessionSubjects
+          <button type="button" className="warning-banner" onClick={@toggleWarning}>
+            Already seen!
+            {if @state.showWarning
+              <Tooltip attachment="top left" targetAttachment="middle right">
+                <p>Our records show that you’ve already seen this image. We might have run out of data for you in this workflow!</p>
+                <p>Try choosing a different workflow or contributing to a different project.</p>
+              </Tooltip>}
+          </button>
+
+        else if @props.subject.retired
+          <button type="button" className="warning-banner" onClick={@toggleWarning}>
+            Retired!
+            {if @state.showWarning
+              <Tooltip attachment="top left" targetAttachment="middle right">
+                <p>This subject already has enough classifications, so yours won’t be used in its analysis!</p>
+                <p>If you’re looking to help, try choosing a different workflow or contributing to a different project.</p>
+              </Tooltip>}
+          </button>}
+
         {if @state.selectedMark? and @refs.selectedTool?
           toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
           if toolDescription?.details?.length > 0
@@ -133,6 +155,9 @@ module.exports = React.createClass
 
   handleFrameChange: (frame) ->
     @setState {frame}
+
+  toggleWarning: ->
+    @setState showWarning: not @state.showWarning
 
   updateAnnotations: ->
     @props.classification.update

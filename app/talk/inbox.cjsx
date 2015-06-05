@@ -64,5 +64,5 @@ module?.exports = React.createClass
          <p>Please sign in to view your inbox</p>}
 
       {@state.conversations?.map(@conversationLink)}
-      <Paginator page={+@state.conversationsMeta.page} onPageChange={@onPageChange} pageCount={@state.conversationsMeta.page_count} />
+      <Paginator page={+@state.conversationsMeta.page} onPageChange={@onPageChange} pageCount={@state.conversationsMeta?.page_count} />
     </div>

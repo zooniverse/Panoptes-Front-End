@@ -53,8 +53,8 @@ ProjectPage = React.createClass
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
         params =
-          owner: owner.display_name
-          name: @props.project.display_name
+          owner: owner.slug
+          name: @props.project.slug
 
         <div className="project-page">
           <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
@@ -75,9 +75,12 @@ ProjectPage = React.createClass
               <Link to="project-results" params={params} className="tabbed-content-tab">
                 <Translate content="project.nav.results" />
               </Link>}
-            <Link to="project-classify" params={params} className="classify tabbed-content-tab">
-              <Translate content="project.nav.classify" />
-            </Link>
+            {if @props.project.redirect
+              <a href={@props.project.redirect} className="tabbed-content-tab">Visit project</a>
+            else
+              <Link to="project-classify" params={params} className="classify tabbed-content-tab">
+                <Translate content="project.nav.classify" />
+              </Link>}
             {if @props.project.faq
               <Link to="project-faq" params={params} className="tabbed-content-tab">
                 <Translate content="project.nav.faq" />
@@ -86,9 +89,10 @@ ProjectPage = React.createClass
               <Link to="project-education" params={params} className="tabbed-content-tab">
                 <Translate content="project.nav.education" />
               </Link>}
-            <Link to="project-talk" params={params} className="tabbed-content-tab">
-              <Translate content="project.nav.discuss" />
-            </Link>
+            {unless process.env.NODE_ENV is 'production'
+              <Link to="project-talk" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.discuss" />
+              </Link>}
             {for link, i in @props.project.urls
               link._key ?= Math.random()
               {label} = link
@@ -134,11 +138,16 @@ module.exports = React.createClass
     unless @state.pending.project?
       query =
         owner: props.params.owner
-        display_name: props.params.name
+        slug: props.params.name
+
       @promiseToSetState project: auth.checkCurrent().then ->
-        # TODO: This refresh is a little annoying. Can get the complete resource somehow?
-        apiClient.type('projects').get(query).index(0).refresh().catch ->
-          throw new Error "Couldn't find project #{props.params.owner}/#{props.params.name}"
+        apiClient.type('projects').get query
+          .catch ->
+            []
+          .then ([project]) ->
+            unless project?
+              throw new Error "Couldn't find project #{props.params.owner}/#{props.params.name}"
+            project
 
   render: ->
     if @state.project?

@@ -16,6 +16,7 @@ Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
 {Link} = require 'react-router'
 merge = require 'lodash.merge'
+Avatar = require '../partials/avatar'
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
@@ -97,7 +98,6 @@ module?.exports = React.createClass
       .then (comment) =>
         @setComments(@state.commentsMeta?.page, => @goToPage(@state.commentsMeta?.page_count))
 
-
   onLikeComment: (commentId) ->
     user = @state.user
 
@@ -178,7 +178,7 @@ module?.exports = React.createClass
           if user
             <section>
               <div className="talk-comment-author">
-                <img src={user.avatar} />
+                <Avatar user={user} />
                 <p>
                   <Link to="user-profile" params={name: user.display_name}>{user.display_name}</Link>
                 </p>

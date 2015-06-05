@@ -50,10 +50,9 @@ module.exports = React.createClass
     # TODO: Make this a component instead of a function,
     # then `user.uncacheLink 'projects'` on mount and on project creation.
 
-    getProjects = user.get 'projects', page: @state.page
+    getProjects = apiClient.type('projects').get current_user_roles: 'owner,collaborator', page: @state.page
 
     <div>
-      <p>Projects owned by {user.display_name}:</p>
       <PromiseRenderer promise={getProjects} then={@renderProjects.bind this, user} />
       <br />
       <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject.bind this, user}>
@@ -68,12 +67,18 @@ module.exports = React.createClass
     console.log('got projects')
     <div>
       <table>
-        {for project in projects
-          <tr key={project.id}>
-            <td>{project.display_name}</td>
-            <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
-            <td><Link to="project-home" params={owner: user.display_name, name: project.display_name} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link></td>
-          </tr>}
+        <tbody>
+          {for project in projects then do (project) =>
+            <tr key={project.id}>
+              <td>{project.display_name}</td>
+              <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
+              <td>
+                <PromiseRenderer promise={project.get 'owner'}>{(owner) =>
+                  <Link to="project-home" params={owner: owner.slug, name: project.slug} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
+                }</PromiseRenderer>
+              </td>
+            </tr>}
+        </tbody>
       </table>
 
       {meta = projects[0]?.getMeta()

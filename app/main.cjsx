@@ -5,6 +5,9 @@ Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-rou
 MainHeader = require './partials/main-header'
 MainFooter = require './partials/main-footer'
 
+logDeployedCommit = require './lib/log-deployed-commit'
+logDeployedCommit()
+
 App = React.createClass
   displayName: 'PanoptesApp'
 
@@ -19,6 +22,14 @@ App = React.createClass
 
 routes = <Route handler={App}>
   <DefaultRoute name="home" handler={require './pages/home'} />
+
+  <Route name="about" handler={require './pages/about'} ignoreScrollBehavior>
+    <DefaultRoute name="aboutIndex" handler={require './pages/about'} />
+    <Route name="team" path="team" handler={require './pages/about'} />
+    <Route name="publications" path="publications" handler={require './pages/about'} />
+  </Route>
+
+  <Route name="reset-password" handler={require './pages/reset-password'} />
 
   <Route path="account" handler={require './pages/sign-in'}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
@@ -37,6 +48,7 @@ routes = <Route handler={App}>
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
     <Route name="project-talk" path="talk" handler={require './pages/project/talk'}>
       <DefaultRoute name="project-talk-home" handler={require './talk/home'} />
+      <Route name="project-talk-subject" path="subjects/:id" handler={require './subjects'}/>
       <Route name="project-talk-board" path=":board" handler={require './talk/board'} />
       <Route name="project-talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
     </Route>
@@ -74,6 +86,7 @@ routes = <Route handler={App}>
     <Route name="edit-project-faq" path="faq" handler={require './pages/lab/faq'} />
     <Route name="edit-project-education" path="education" handler={require './pages/lab/education'} />
     <Route name="edit-project-collaborators" path="collaborators" handler={require './pages/lab/collaborators'} />
+    <Route name="edit-project-media" path="media" handler={require './pages/lab/media'} />
     <Route name="edit-project-workflow" path="workflow/:workflowID" handler={require './pages/lab/workflow'} />
     <Route name="edit-project-subject-set" path="subject-set/:subjectSetID" handler={require './pages/lab/subject-set'} />
   </Route>

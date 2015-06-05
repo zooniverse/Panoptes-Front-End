@@ -15,6 +15,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     which: 'sign-in'
+    project: {}
 
   getInitialState: ->
     which: @props.which
@@ -34,7 +35,7 @@ module.exports = React.createClass
       <div className="content-container">
         {switch @state.which
           when 'sign-in' then <SignInForm onSuccess={@props.onSuccess} />
-          when 'register' then <RegisterForm onSuccess={@props.onSuccess} />}
+          when 'register' then <RegisterForm project={@props.project} onSuccess={@props.onSuccess} />}
       </div>
     </div>
 

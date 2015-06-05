@@ -72,7 +72,6 @@ SubjectSetListing = React.createClass
   render: ->
     gettingSetMemberSubjects = apiClient.type('set_member_subjects').get
       subject_set_id: @props.subjectSet.id
-      include: 'subject'
       page: @state.page
 
     gettingSetMemberSubjects.then ([setMemberSubject]) =>
@@ -120,7 +119,8 @@ EditSubjectSetPage = React.createClass
     files: {}
     deletionError: null
     deletionInProgress: false
-    creationSuccesses: []
+    successfulCreates: []
+    successfulUploads: []
     creationErrors: []
 
   render: ->
@@ -167,8 +167,8 @@ EditSubjectSetPage = React.createClass
 
         <button type="button" className="major-button" disabled={subjectsToCreate is 0} onClick={@createSubjects}>Upload {subjectsToCreate} new subjects</button>
 
-        {unless @state.creationSuccesses.length is 0
-          <div>{@state.creationSuccesses.length} subjects created!</div>}
+        {unless @state.successfulCreates.length is 0
+          <div>{@state.successfulCreates.length} subjects created (with {@state.successfulUploads.length} files uploaded).</div>}
 
         {unless @state.creationErrors.length is 0
           <div>
@@ -199,7 +199,8 @@ EditSubjectSetPage = React.createClass
 
   handleFileSelection: (files) ->
     @setState
-      creationSuccesses: []
+      successfulCreates: []
+      successfulUploads: []
       creationErrors: []
 
     for file in files when file.size isnt 0
@@ -218,7 +219,7 @@ EditSubjectSetPage = React.createClass
     reader.onload = (e) =>
       # TODO: Look into PapaParse features.
       # Maybe wan we parse the file object directly in a worker.
-      {data, errors} = Papa.parse e.target.result.trim(), header: true, dynamicTyping: true
+      {data, errors} = Papa.parse e.target.result.trim(), header: true
 
       metadatas = for rawData in data
         cleanData = {}
@@ -261,9 +262,10 @@ EditSubjectSetPage = React.createClass
       </div>
 
     startUploading = alert uploadAlert
-      .then ({successes, errors}) =>
+      .then ({creates, uploads, errors}) =>
         @setState
-          creationSuccesses: successes
+          successfulCreates: creates
+          successfulUploads: uploads
           creationErrors: errors
           manifests: {}
           files: {}

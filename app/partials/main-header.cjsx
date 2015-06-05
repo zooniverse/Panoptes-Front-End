@@ -14,7 +14,7 @@ counterpart.registerTranslations 'en',
     home: 'Home'
     discover: 'Discover'
     learn: 'Learn'
-    discuss: 'Discuss'
+    talk: 'Talk'
     lab: 'The lab'
 
 module.exports = React.createClass
@@ -63,10 +63,11 @@ module.exports = React.createClass
         </Link>
         <nav className="main-nav">
           <Link to="projects" className="main-nav-item"><Translate content="mainNav.discover" /></Link>
-          <a className="main-nav-item"><Translate content="mainNav.learn" /></a>
-          <Link to="talk" className="main-nav-item"><Translate content="mainNav.discuss" /></Link>
+          <Link to="about" className="main-nav-item"><Translate content="mainNav.learn" /></Link>
+          {unless process.env.NODE_ENV is 'production'
+            <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>}
           <hr />
-          {if @state.user?
+          {if @state.user? and process.env.NODE_ENV isnt 'production'
             <Link to="lab" className="main-nav-item"><Translate className="minor" content="mainNav.lab" /></Link>}
         </nav>
         {if @state.user?
@@ -86,4 +87,3 @@ module.exports = React.createClass
 
     if window.scrollY is 0
       mainTitle.classList.remove 'header-sticky'
-

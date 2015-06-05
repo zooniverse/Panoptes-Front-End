@@ -54,17 +54,18 @@
 
   .standard-button
     @extends $reset-button
-    background: #0072ff
+    background: COBOLT_BLUE
     border-radius: 4px
     color: white
     font-size: 14px
     padding: 1em
 
     &:hover
-      background: lighten(#0072ff, 20%)
+      background: lighten(COBOLT_BLUE, 20%)
 
     &:disabled
       pointer-events: none
+      background: #f2f2f2
 
     &.full
       display: block
@@ -83,5 +84,23 @@
     &.small
       width: 80px
 
-    &:disabled
-      background: #f2f2f2
+    &.project-card-button
+      font-size: 14px
+
+.on-all-projects-page
+  .standard-button .project-card-button
+    font-size: 14px
+
+.ghost-button
+  @extends $reset-button
+  background: transparent
+  border: 3px solid COBOLT_BLUE
+  border-radius: 4px
+  color: COBOLT_BLUE
+  position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
+
+  &:hover
+    background: COBOLT_BLUE
+    color: white
+
+
