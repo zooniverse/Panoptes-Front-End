@@ -142,7 +142,7 @@ module.exports = React.createClass
           </p>
 
           <p>
-            <ResourceInput type="textarea" className="standard-input full" resource={@props.project} update="introduction">
+            <ResourceInput type="textarea" className="standard-input full" resource={@props.project} update="introduction" rows="10">
               <span className="form-label">Introduction</span>
               <br />
             </ResourceInput>
@@ -154,11 +154,6 @@ module.exports = React.createClass
             <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and discuss tabs.</small>
             <ExternalLinksEditor project={@props.project} />
           </div>
-
-          <p>
-            <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
-            {@renderSaveStatus()}
-          </p>
         </div>
 
         <hr />
