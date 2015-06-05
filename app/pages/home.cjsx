@@ -23,7 +23,6 @@ counterpart.registerTranslations 'en',
       astronomy to zoology, and everything in between.'''
       button: 'Get involved now!'
     about:
-      title: 'At the Zooniverse, you can...'
       contribute:
         title: 'Contribute to new research'
         content: '''The Zooniverse lets everyone take part in real, cutting-edge research online in many
@@ -59,6 +58,8 @@ module.exports = React.createClass
     document.documentElement.classList.remove 'on-home-page'
 
   render: ->
+    aboutItems = ['contribute', 'explore', 'collaborate', 'discover']
+
     <div className="home-page">
       <section className="hero on-dark">
         <ZooniverseLogoType />
@@ -66,37 +67,19 @@ module.exports = React.createClass
         <p className="hero-tagline"><Translate content="home.hero.tagline" /></p>
         <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
       </section>
-      <section className="about-zooniverse promo content-container">
-        <h5 className="about-title"><Translate content="home.about.title" /></h5>
+      <section className="about-zooniverse">
         <div className="about-items-list">
-          <div className="about-item">
-            <img className="about-image" src="http://placehold.it/300x300" alt="" />
-            <div className="about-item-content">
-              <Translate component="h6" content="home.about.contribute.title" />
-              <Translate component="p" content="home.about.contribute.content" />
+          {for item in aboutItems
+            <div key={item} className="about-item">
+              <div className="about-item-wrapper">
+                <img className="about-image" src="./assets/home-#{item}.gif" alt="" />
+                <div className="about-item-content">
+                  <Translate component="h5" content="home.about.#{item}.title" />
+                  <Translate component="p" content="home.about.#{item}.content" />
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="about-item">
-            <img className="about-image" src="http://placehold.it/300x300" alt="" />
-            <div className="about-item-content">
-              <Translate component="h6" content="home.about.explore.title" />
-              <Translate component="p" content="home.about.explore.content" />
-            </div>
-          </div>
-          <div className="about-item">
-            <img className="about-image" src="http://placehold.it/300x300" alt="" />
-            <div className="about-item-content">
-              <Translate component="h6" content="home.about.collaborate.title" />
-              <Translate component="p" content="home.about.collaborate.content" />
-            </div>
-          </div>
-          <div className="about-item">
-            <img className="about-image" src="http://placehold.it/300x300" alt="" />
-            <div className="about-item-content">
-              <Translate component="h6" content="home.about.discover.title" />
-              <Translate component="p" content="home.about.discover.content" />
-            </div>
-          </div>
+          }
         </div>
       </section>
       <section className="featured-projects content-container">
