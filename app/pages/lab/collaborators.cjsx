@@ -90,6 +90,11 @@ CollaboratorCreator = React.createClass
     talkRoles = for role, talkRole of POSSIBLE_ROLES when role in roles
       talkRole
 
+    talkRoles = talkRoles.reduce(((memo, role) ->
+      memo.push(role) unless role in memo
+      memo
+    ), [])
+
     @setState
       error: null
       creating: true
@@ -133,6 +138,13 @@ module.exports = React.createClass
     error: null
     saving: []
 
+  fetchAllRoles: ->
+    Promise.all([@props.project.get('project_roles'), talkClient.type('roles').get(section: @talkSection())])
+      .then ([panoptesRoles, talkRoles]) ->
+        for roleSet in panoptesRoles when roleSet.links.owner.type == 'users'
+          roleSet['talk_roles'] = talkRoles.filter((role) -> role.links.user == roleSet.links.owner.id)
+          roleSet
+
   render: ->
     <div>
       <div className="form-label">Collaborators</div>
@@ -141,7 +153,7 @@ module.exports = React.createClass
 
       {if @state.error?
         <p className="form-help error">{@state.error.toString()}</p>}
-      <PromiseRenderer promise={@props.project.get 'project_roles'} then={(projectRoleSets) =>
+      <PromiseRenderer promise={@fetchAllRoles()} then={(projectRoleSets) =>
         <div>
           {if projectRoleSets.length > 1
             for projectRoleSet in projectRoleSets
@@ -180,18 +192,24 @@ module.exports = React.createClass
   toggleRole: (projectRoleSet, role) ->
     index = projectRoleSet.roles.indexOf role
 
-    if index is -1
-      projectRoleSet.roles.push role
-    else
-      projectRoleSet.roles.splice index, 1
-
     @state.saving.push projectRoleSet.id
 
     @setState
       error: null
       saving: @state.saving
 
-    projectRoleSet.update('roles').save()
+    talkRoleAction = if index is -1
+      projectRoleSet.roles.push role
+      talkClient.type('roles').create(
+        user_id: parseInt(projectRoleSet.links.owner.id)
+        section: @talkSection()
+        name: POSSIBLE_ROLES[role]
+      ).save()
+    else
+      projectRoleSet.roles.splice index, 1
+      projectRoleSet.talk_roles.filter((talkRole) -> talkRole.name == POSSIBLE_ROLES[role])[0].delete()
+
+    Promise.all([projectRoleSet.update('roles').save(), talkRoleAction])
       .catch (error) =>
         @setState {error}
       .then =>
@@ -206,7 +224,7 @@ module.exports = React.createClass
       error: null
       saving: @state.saving
 
-    projectRoleSet.delete()
+    Promise.all([projectRoleSet.delete(), talkRole.delete() for talkRole in projectRoleSet.talk_roles])
       .catch (error) =>
         @setState {error}
 
@@ -216,6 +234,9 @@ module.exports = React.createClass
         savingIndex = @state.saving.indexOf projectRoleSet.id
         @state.saving.splice savingIndex, 1
         @setState saving: @state.saving
+
+  talkSection: ->
+    "#{@props.project.id}-#{@props.project.display_name}"
 
   handleCollaboratorAddition: ->
     @props.project.uncacheLink 'project_roles'
