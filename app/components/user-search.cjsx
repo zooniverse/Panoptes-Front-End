@@ -20,5 +20,7 @@ module.exports = React.createClass
     <Select
       multi={true}
       name="userids"
+      placeholder="Username:"
+      searchPromptText="Type to Search Users"
       className="user-search"
       asyncOptions={@searchUsers} />
