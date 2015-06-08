@@ -195,11 +195,8 @@ EditWorkflowPage = React.createClass
         @props.workflow.removeLink 'subject_sets', subjectSet.id
 
   addDemoSubjectSet: ->
-    @props.project.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
-      .then =>
-        @props.project.get 'subject_sets'
-      .then ([subjectSet]) =>
-        @props.workflow.addLink 'subject_sets', [subjectSet.id]
+    @props.project.uncacheLink 'subject_sets'
+    @props.workflow.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
 
   afterDelete: ->
     @props.project.uncacheLink 'workflows'
