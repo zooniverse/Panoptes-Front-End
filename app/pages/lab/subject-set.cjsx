@@ -1,4 +1,5 @@
 React = require 'react'
+ResourceInput = require '../../components/resource-input'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
@@ -107,9 +108,7 @@ SubjectSetListing = React.createClass
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
 
-  mixins: [BoundResourceMixin, Navigation]
-
-  boundResource: 'subjectSet'
+  mixins: [Navigation]
 
   getDefaultProps: ->
     subjectSet: null
@@ -130,11 +129,12 @@ EditSubjectSetPage = React.createClass
 
       <form onSubmit={@handleSubmit}>
         <p>
-          Name<br />
-          <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input full" onChange={@handleChange} />
+          <ResourceInput resource={@props.subjectSet} update="display_name" className="standard-input full">
+            <span className="form-label">Name</span>
+            <br />
+          </ResourceInput>
           <small className="form-help">A subject set’s name is only seen by the science team.</small>
         </p>
-        <p><button type="submit" className="standard-button" disabled={not @props.subjectSet.hasUnsavedChanges()}>Save changes</button> {@renderSaveStatus()}</p>
       </form>
 
       <hr />
