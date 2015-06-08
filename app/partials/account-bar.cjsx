@@ -6,6 +6,7 @@ auth = require '../api/auth'
 talkClient = require '../api/talk'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
+Avatar = require '../partials/avatar'
 
 counterpart.registerTranslations 'en',
   accountMenu:
@@ -37,9 +38,7 @@ module.exports = React.createClass
       <div className="account-bar">
         <div className="account-info">
           <span className="display-name"><strong>{@props.user.display_name}</strong></span>
-          <PromiseRenderer promise={@props.user.get 'avatar'} pending={null} then={([avatar]) =>
-            <img src={avatar.src} alt="account avatar" className="avatar" />
-          } catch={=> <img src="./assets/simple-avatar.jpg" alt="account avatar" className="avatar" />} />
+          <Avatar user={@props.user} />
           <Link to="inbox" className="message-link"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
         </div>
         <div className="account-menu" ref="accountMenu">
