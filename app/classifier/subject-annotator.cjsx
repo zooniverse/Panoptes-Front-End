@@ -12,6 +12,9 @@ NOOP = Function.prototype
 
 module.exports = React.createClass
   displayName: 'SubjectAnnotator'
+  
+  sizeRect: null
+  toolRect: null
 
   getDefaultProps: ->
     classification: null
@@ -27,8 +30,6 @@ module.exports = React.createClass
     selectedMark: null
     detailsTooltipOffset: ''
     viewbox: "0 0 1000 1000"
-    sizeRect: null
-    toolRect: null
 
   componentDidMount: ->
     addEventListener 'resize', @handleResize
@@ -38,21 +39,21 @@ module.exports = React.createClass
     
   getScale: ->
     ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
-    rect = @state.sizeRect
+    rect = @sizeRect
     horizontal = (rect?.width || ALMOST_ZERO) / (@state.naturalWidth || ALMOST_ZERO)
     vertical = (rect?.height || ALMOST_ZERO) / (@state.naturalHeight || ALMOST_ZERO)
     {horizontal, vertical}
 
   getEventOffset: (e) ->
-    rect = @state.sizeRect
+    rect = @sizeRect
     scale = @getScale()
     x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
   
   getDetailsTooltipProps: ->
-    sizeRect = @state.sizeRect
-    toolRect = @state.toolRect
+    sizeRect = @sizeRect
+    toolRect = @toolRect
 
     probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
     [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
@@ -76,12 +77,11 @@ module.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.annotation is @props.annotation
       @selectMark null, null
-    @setState 
-      sizeRect: @refs.sizeRect.getDOMNode().getBoundingClientRect()
-      toolRect: @refs.selectedTool?.getDOMNode().getBoundingClientRect()
     
   componentDidUpdate: ->
     setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
+    @sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
+    @toolRect = @refs.selectedTool?.getDOMNode().getBoundingClientRect()
 
   render: ->
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
@@ -148,7 +148,7 @@ module.exports = React.createClass
               </Tooltip>}
           </button>}
 
-        {if @state.toolRect? and @state.selectedMark?
+        {if @toolRect? and @state.selectedMark?
           toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
           if toolDescription?.details?.length > 0
 
@@ -185,9 +185,8 @@ module.exports = React.createClass
       annotations: @props.classification.annotations
 
   handleResize: ->
-    @setState 
-      sizeRect: @refs.sizeRect.getDOMNode().getBoundingClientRect()
-      toolRect: @refs.selectedTool?.getDOMNode().getBoundingClientRect()
+    @sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
+    @toolRect = @refs.selectedTool?.getDOMNode().getBoundingClientRect()
 
   handleInitStart: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
@@ -259,7 +258,7 @@ module.exports = React.createClass
       annotation.value.splice index, 1
       annotation.value.push mark
     @setState selectedMark: mark, =>
-      @setState toolRect: @refs.selectedTool?.getDOMNode().getBoundingClientRect() # hack to show the details box
+      @forceUpdate() if mark?.details? # hack to show the details box
 
   destroyMark: (annotation, mark) ->
     if mark is @state.selectedMark
@@ -279,6 +278,5 @@ module.exports = React.createClass
     height = Math.min maxHeight, height
     @setState 
       viewbox: [x,y,width,height].join ' '
-      sizeRect: @refs.sizeRect.getDOMNode().getBoundingClientRect()
     
 
