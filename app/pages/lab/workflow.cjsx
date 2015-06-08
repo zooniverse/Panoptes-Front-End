@@ -99,7 +99,6 @@ EditWorkflowPage = React.createClass
           <div>
             <span className="form-label">Associated subject sets</span><br />
             <small className="form-help">Choose the set of subjects you want to use for this workflow.</small>
-            <p className="form-help">NOTE: Assigning subject sets doesn’t quite work as expected right now. To-do on the back end.</p>
             {@renderSubjectSets()}
           </div>
 
