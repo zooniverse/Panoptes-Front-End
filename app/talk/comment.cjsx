@@ -28,6 +28,10 @@ module?.exports = React.createClass
     onDeleteComment: React.PropTypes.func # passed (commentId) on click
     onLikeComment: React.PropTypes.func # passed (commentId) on like
     onClickReply: React.PropTypes.func # passed (user, comment) on click
+    active: React.PropTypes.bool  # optional active switch
+
+  getDefaultProps: ->
+    active: false
 
   getInitialState: ->
     editing: false
@@ -72,8 +76,9 @@ module?.exports = React.createClass
 
   render: ->
     feedback = @renderFeedback()
+    activeClass = if @props.active then 'active' else ''
 
-    <div className="talk-comment">
+    <div className="talk-comment #{activeClass}">
       <div className="talk-comment-author">
         <PromiseRenderer promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
           <Avatar user={commentOwner} />
@@ -138,7 +143,7 @@ module?.exports = React.createClass
 
             <div className="talk-comment-children">
               {switch @state.showing
-                 when 'link' then <CommentLink />
+                 when 'link' then <CommentLink comment={@props.data}/>
                  when 'report' then <CommentReportForm />}
             </div>
           </div>
