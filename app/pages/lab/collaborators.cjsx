@@ -1,17 +1,20 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
+UserSearch = require '../../components/user-search'
 apiClient = require '../../api/client'
+talkClient = require '../../api/talk'
 
 ID_PREFIX = 'LAB_COLLABORATORS_PAGE_'
 
-POSSIBLE_ROLES = [
-  'collaborator'
-  'expert'
-  'scientist'
-  'moderator'
-  'tester'
-  # 'translator'
-]
+POSSIBLE_ROLES = {
+  owner: 'admin',
+  collaborator: 'admin',
+  expert: 'team',
+  scientist: 'scientist',
+  moderator: 'moderator',
+  tester: 'team',
+#  translator: 'team',
+}
 
 ROLES_INFO =
   owner:
@@ -56,12 +59,12 @@ CollaboratorCreator = React.createClass
         <p className="form-help error">{@state.error.toString()}</p>}
       <form style={style}>
         <p>
-          Username:&emsp;<input type="text" ref="usernameInput" className="standard-input" />
+          <UserSearch />
         </p>
 
         <table className="standard-table">
           <tbody>
-            {for role in POSSIBLE_ROLES
+            {for role, _ of POSSIBLE_ROLES
               <tr>
                 <td><input id={ID_PREFIX + role} type="checkbox" name="role" value={role} /></td>
                 <td><strong><label htmlFor={ID_PREFIX + role}>{ROLES_INFO[role].label}</label></strong></td>
@@ -78,35 +81,46 @@ CollaboratorCreator = React.createClass
 
   handleSubmit: (e) ->
     e.preventDefault()
-
-    usernameInput = @refs.usernameInput.getDOMNode()
     checkboxes = @getDOMNode().querySelectorAll '[name="role"]'
-
-    username = @refs.usernameInput.getDOMNode().value
+    userids = @getDOMNode().querySelector('[name="userids"]')
+    users = userids.value.split(',').map (id) -> parseInt(id)
     roles = for checkbox in checkboxes when checkbox.checked
       checkbox.value
+
+    talkRoles = for role, talkRole of POSSIBLE_ROLES when role in roles
+      talkRole
+
+    talkRoles = talkRoles.reduce(((memo, role) ->
+      memo.push(role) unless role in memo
+      memo
+    ), [])
 
     @setState
       error: null
       creating: true
 
-    getUser = apiClient.type('users').get display_name: username
-      .then ([user]) =>
-        if user?
-          newRoleSet = apiClient.type('project_roles').create
-            roles: roles
-            links:
-              project: @props.project.id
-              user: user.id
+    newRoles = users.reduce(((memo, id) =>
+      newRoleSet = apiClient.type('project_roles').create
+        roles: roles
+        links:
+          project: @props.project.id
+          user: id
 
-          newRoleSet.save().then =>
-            usernameInput.value = ''
-            for checkbox in checkboxes
-              checkbox.checked = false
-            @props.onAdd? arguments...
+      newTalkRoleSets = for role in talkRoles
+        talkClient.type('roles').create
+          name: role
+          section: "#{@props.project.id}-#{@props.project.display_name}"
+          user_id: id
 
-        else
-          throw new Error "User '#{username}' doesn't exist"
+      memo.concat([newRoleSet]).concat(newTalkRoleSets)
+    ), [])
+
+    Promise.all(roleSet.save() for roleSet in newRoles)
+      .then =>
+        userids.value = ''
+        for checkbox in checkboxes
+          checkbox.checked = false
+        @props.onAdd? arguments...
 
       .catch (error) =>
         @setState error: error
@@ -124,6 +138,13 @@ module.exports = React.createClass
     error: null
     saving: []
 
+  fetchAllRoles: ->
+    Promise.all([@props.project.get('project_roles'), talkClient.type('roles').get(section: @talkSection())])
+      .then ([panoptesRoles, talkRoles]) ->
+        for roleSet in panoptesRoles when roleSet.links.owner.type == 'users'
+          roleSet['talk_roles'] = talkRoles.filter((role) -> role.links.user == roleSet.links.owner.id)
+          roleSet
+
   render: ->
     <div>
       <div className="form-label">Collaborators</div>
@@ -132,7 +153,7 @@ module.exports = React.createClass
 
       {if @state.error?
         <p className="form-help error">{@state.error.toString()}</p>}
-      <PromiseRenderer promise={@props.project.get 'project_roles'} then={(projectRoleSets) =>
+      <PromiseRenderer promise={@fetchAllRoles()} then={(projectRoleSets) =>
         <div>
           {if projectRoleSets.length > 1
             for projectRoleSet in projectRoleSets
@@ -149,7 +170,6 @@ module.exports = React.createClass
     </div>
 
   renderUserRow: (projectRoleSet, user) ->
-    console.log {user}, 'Owner', @props.owner
     if 'owner' in projectRoleSet.roles
       null
     else
@@ -159,7 +179,7 @@ module.exports = React.createClass
         <br />
 
         <span className="columns-container inline">
-          {for role in POSSIBLE_ROLES
+          {for role, _ of POSSIBLE_ROLES
             toggleThisRole = @toggleRole.bind this, projectRoleSet, role
             # TODO: Translate this.
             <label key={role}>
@@ -172,18 +192,24 @@ module.exports = React.createClass
   toggleRole: (projectRoleSet, role) ->
     index = projectRoleSet.roles.indexOf role
 
-    if index is -1
-      projectRoleSet.roles.push role
-    else
-      projectRoleSet.roles.splice index, 1
-
     @state.saving.push projectRoleSet.id
 
     @setState
       error: null
       saving: @state.saving
 
-    projectRoleSet.update('roles').save()
+    talkRoleAction = if index is -1
+      projectRoleSet.roles.push role
+      talkClient.type('roles').create(
+        user_id: parseInt(projectRoleSet.links.owner.id)
+        section: @talkSection()
+        name: POSSIBLE_ROLES[role]
+      ).save()
+    else
+      projectRoleSet.roles.splice index, 1
+      projectRoleSet.talk_roles.filter((talkRole) -> talkRole.name == POSSIBLE_ROLES[role])[0].delete()
+
+    Promise.all([projectRoleSet.update('roles').save(), talkRoleAction])
       .catch (error) =>
         @setState {error}
       .then =>
@@ -198,7 +224,7 @@ module.exports = React.createClass
       error: null
       saving: @state.saving
 
-    projectRoleSet.delete()
+    Promise.all([projectRoleSet.delete(), talkRole.delete() for talkRole in projectRoleSet.talk_roles])
       .catch (error) =>
         @setState {error}
 
@@ -208,6 +234,9 @@ module.exports = React.createClass
         savingIndex = @state.saving.indexOf projectRoleSet.id
         @state.saving.splice savingIndex, 1
         @setState saving: @state.saving
+
+  talkSection: ->
+    "#{@props.project.id}-#{@props.project.display_name}"
 
   handleCollaboratorAddition: ->
     @props.project.uncacheLink 'project_roles'
