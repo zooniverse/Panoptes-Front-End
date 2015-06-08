@@ -1,4 +1,6 @@
 React = require 'react'
+ResourceInput = require '../../components/resource-input'
+ProgressButton = require '../../components/progress-button'
 handleInputChange = require '../../lib/handle-input-change'
 drawingTools = require '../drawing-tools'
 alert = require '../../lib/alert'
@@ -40,21 +42,28 @@ module.exports = React.createClass
     onChange: NOOP
 
   render: ->
+    taskKey = (key for key, value of @props.workflow.tasks when value is @props.task)[0]
+
     [mainTextKey, choicesKey] = switch @props.task.type
       when 'single', 'multiple' then ['question', 'answers']
       when 'drawing' then ['instruction', 'tools']
 
     <div className="workflow-task-editor #{@props.task.type}">
       <div>
-        <span className="form-label">Main text</span><br />
-        <textarea name={mainTextKey} value={@props.task[mainTextKey]} className="standard-input full" onChange={@handleInputChange} />
+
+        <ResourceInput type="textarea" resource={@props.workflow} update="tasks.#{taskKey}.#{mainTextKey}" className="standard-input full">
+          <span className="form-label">Main text</span>
+          <br />
+        </ResourceInput>
         <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You can use markdown to format this text.</small><br />
       </div><br />
 
       {unless @props.isSubtask
         <div>
-          <span className="form-label">Help text</span><br />
-          <textarea name="help" value={@props.task.help ? ''} rows={7} className="standard-input full" onChange={@handleInputChange} />
+          <ResourceInput type="textarea" resource={@props.workflow} update="tasks.#{taskKey}.help" rows="7" className="standard-input full">
+            <span className="form-label">Help text</span>
+            <br />
+          </ResourceInput>
           <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
         </div>}
 
@@ -66,7 +75,7 @@ module.exports = React.createClass
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
         requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
 
-        [<label key="multiple" className="pill-button" title={multipleHelp}>
+        [<label key="multiple" className="pill-button">
           <input type="checkbox" checked={@props.task.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
           Allow multiple
         </label>

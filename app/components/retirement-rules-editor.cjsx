@@ -4,7 +4,7 @@ module.exports = React.createClass
   displayName: 'RetirementRulesEditor'
 
   getDefaultProps: ->
-    subjectSet: null
+    workflow: null
 
   getInitialState: ->
     saveError: null
@@ -34,6 +34,7 @@ module.exports = React.createClass
     @props.workflow.update
       'retirement.criteria': e.target.value
       'retirement.options': @defaultOptions[e.target.value]
+    @props.workflow.save() # TODO: Look into integrating this with ResourceInput.
 
   handleChangeOption: (e) ->
     @props.workflow.update
@@ -50,3 +51,5 @@ module.exports = React.createClass
       e.target.value
 
     @props.workflow.update newOptionsData
+
+    @props.workflow.save()

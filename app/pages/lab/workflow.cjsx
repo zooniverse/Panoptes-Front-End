@@ -1,4 +1,6 @@
 React = require 'react'
+ResourceInput = require '../../components/resource-input'
+ProgressButton = require '../../components/progress-button'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
@@ -34,9 +36,10 @@ EditWorkflowPage = React.createClass
         <div className="column">
           <div>
             <div>
-              <span className="form-label">Workflow title</span>
-              <br />
-              <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={@handleChange} />
+              <ResourceInput resource={@props.workflow} update="display_name" className="standard-input full">
+                <span className="form-label">Workflow title</span>
+                <br />
+              </ResourceInput>
               <small className="form-help">If you let your volunteers choose which workflow to attempt, this text will appear as an option on the project front page.</small>
             </div>
 
@@ -87,9 +90,7 @@ EditWorkflowPage = React.createClass
               <p className="form-help warning">You’re editing a workflow on a public project. <strong>Please note that any changes will result in the loss of your existing classifications for this workflow!</strong></p>}
 
             <p>
-              <button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.workflow.hasUnsavedChanges()} data-busy={@state.saveInProgress || null} onClick={@saveResource}>Save changes</button>{' '}
               <small className="form-help">Version {@props.workflow.version}</small>
-              {@renderSaveStatus()}
             </p>
             <p className="form-help"><small>Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by a whole number: 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the version by a decimal, e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data.</small></p>
           </div>
@@ -204,7 +205,7 @@ EditWorkflowPage = React.createClass
   handleTaskChange: (taskKey, path, value) ->
     changes = {}
     changes["tasks.#{taskKey}.#{path}"] = value
-    @props.workflow.update changes
+    @props.workflow.update(changes).save()
 
   handleTaskDelete: (taskKey) ->
     changes = {}
