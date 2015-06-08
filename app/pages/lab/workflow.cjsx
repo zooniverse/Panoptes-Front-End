@@ -99,7 +99,6 @@ EditWorkflowPage = React.createClass
           <div>
             <span className="form-label">Associated subject sets</span><br />
             <small className="form-help">Choose the set of subjects you want to use for this workflow.</small>
-            <p className="form-help">NOTE: Assigning subject sets doesn’t quite work as expected right now. To-do on the back end.</p>
             {@renderSubjectSets()}
           </div>
 
@@ -195,11 +194,8 @@ EditWorkflowPage = React.createClass
         @props.workflow.removeLink 'subject_sets', subjectSet.id
 
   addDemoSubjectSet: ->
-    @props.project.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
-      .then =>
-        @props.project.get 'subject_sets'
-      .then ([subjectSet]) =>
-        @props.workflow.addLink 'subject_sets', [subjectSet.id]
+    @props.project.uncacheLink 'subject_sets'
+    @props.workflow.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
 
   afterDelete: ->
     @props.project.uncacheLink 'workflows'
