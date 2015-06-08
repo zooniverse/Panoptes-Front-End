@@ -48,7 +48,7 @@ mv -v "$BUILD_DIR/$out_js_original" "$BUILD_DIR/$OUT_JS"
 ./node_modules/.bin/stylus \
   --use nib \
   --import nib \
-  --include-css node_modules/react-select/dist/default.css \
+  --include-css \
   --out "$BUILD_DIR" \
   "$SRC_CSS"
 

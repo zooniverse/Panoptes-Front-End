@@ -2,6 +2,7 @@ React = require 'react'
 Select = require 'react-select'
 PromiseRenderer = require './promise-renderer'
 apiClient = require '../api/client'
+debounce = require 'debounce'
 
 module.exports = React.createClass
   displayName: 'UserSearch'
@@ -23,4 +24,4 @@ module.exports = React.createClass
       placeholder="Username:"
       searchPromptText="Type to Search Users"
       className="user-search"
-      asyncOptions={@searchUsers} />
+      asyncOptions={debounce(@searchUsers, 200)} />
