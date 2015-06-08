@@ -35,8 +35,8 @@ counterpart.registerTranslations 'en',
         her PhD in Ecology, Evolution, and Behavior at the University of Minnesota in 2014,
         and has since joined the Zooniverse as a Postdoc in Ecology and Citizen Science.'''
       andreaSimenstad:
-        title: ' '
-        bio: ''' '''
+        title: 'Title'
+        bio: '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'''
       brianCarstensen:
         title: 'UX Developer'
         bio: '''Brian Carstensen recently moved from Chicago to Oxford. Brian has a degree
@@ -59,8 +59,8 @@ counterpart.registerTranslations 'en',
         bio: '''Chris Snyder began working on the Zooniverse team in fall 2012 as a web developer. In July 2013,
         he became the technical project manager. He received a degree in computer science from the University of Dayton.'''
       christopherDoogue:
-        title: ' '
-        bio: ' '
+        title: 'Title'
+        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
       colemanKrawczyk:
         title: 'Data Scientist'
         bio: '''Coleman is helping to create new data analysis and visualization tools for existing Zooniverse
@@ -131,16 +131,19 @@ counterpart.registerTranslations 'en',
         Four and Planet Hunters projects. She studies small bodies in the Solar System, exoplanets,
         and Mars. Meg has a fondness for baking, soccer, and champagne.'''
       michaelParrish:
-        title: 'Developer'
+        title: 'Rails/Backend Developer'
         bio: '''Software developer at the Zooniverse. Dog, fishing, snakes, and bourbon.'''
       perryRoper:
-        title: ' '
-        bio: ' '
+        title: 'Title'
+        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
       rebeccaSmethurst:
         title: 'Researcher'
         bio: '''Becky is an astrophysicist working towards her doctorate in Oxford. She is
         interested in how galaxies change over time and how we can track this evolution.
         Happy-go-lucky about outreach, the Zooniverse and everything.'''
+      rogerHutchings:
+        title: 'Title'
+        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
       sandorKruk:
         title: 'Researcher'
         bio: '''Sandor is a graduate student working on his PhD in Astrophysics at Oxford.
@@ -157,11 +160,11 @@ counterpart.registerTranslations 'en',
         A former researcher and software developer at NASA Ames, he received degrees in both
         computer science and mechanical engineering.'''
       simoneDuca:
-        title: ' '
-        bio: ' '
+        title: 'Title'
+        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
       veronicaMaidel:
-        title: ' '
-        bio: ' '
+        title: 'Title'
+        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
       victoriaVanHyning:
         title: 'Researcher'
         bio: '''Victoria is a Digital Humanities postdoc for the Zooniverse. She holds a masters
@@ -174,226 +177,232 @@ teamMembers =
     twitter: "astopy"
     title: counterpart "team.content.adamMcMaster.title"
     bio: counterpart "team.content.adamMcMaster.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/adam.jpg"
     location: "oxford"
   alexBowyer:
     name: "Alex Bowyer"
     twitter: "alexbfree"
     title: counterpart "team.content.alexBowyer.title"
     bio: counterpart "team.content.alexBowyer.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/alex_bowyer.jpg"
     location: "oxford"
   alexWeiksnar:
     name: "Alex Weiksnar"
     title: counterpart "team.content.alexWeiksnar.title"
     bio: counterpart "team.content.alexWeiksnar.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/alex.jpg"
     location: "chicago"
   aliSwanson:
     name: "Ali Swanson"
     twitter: "alicatzoo"
     title: counterpart "team.content.aliSwanson.title"
     bio: counterpart "team.content.aliSwanson.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/ali.jpg"
     location: "oxford"
   andreaSimenstad:
     name: "Andrea Simenstad"
     title: counterpart "team.content.andreaSimenstad.title"
     bio: counterpart "team.content.andreaSimenstad.bio"
-    image: "http://placehold.it/150x150"
+    image: "http://placehold.it/80x80"
     location: "minnesota"
   brianCarstensen:
     name: "Brian Carstensen"
     twitter: "__brian_c__"
     title: counterpart "team.content.brianCarstensen.title"
     bio: counterpart "team.content.brianCarstensen.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/brian.jpg"
     location: "oxford"
   brookeSimmons:
     name: "Brooke Simmons"
     twitter: "vrooje"
     title: counterpart "team.content.brookeSimmons.title"
     bio: counterpart "team.content.brookeSimmons.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/brooke.jpg"
     location: "oxford"
   camAllen:
     name: "Campbell Allen"
     title: counterpart "team.content.camAllen.title"
     bio: counterpart "team.content.camAllen.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/cam.jpg"
     location: "oxford"
   chrisLintott:
     name: "Chris Lintott"
     twitter: "chrislintott"
     title: counterpart "team.content.chrisLintott.title"
     bio: counterpart "team.content.chrisLintott.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/chris-l.png"
     location: "oxford"
   chrisSnyder:
     name: "Chris Snyder"
     twitter: "bumishness"
     title: counterpart "team.content.chrisSnyder.title"
     bio: counterpart "team.content.chrisSnyder.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/chriss.png"
     location: "chicago"
   christopherDoogue:
     name: "Christopher Doogue"
     title: counterpart "team.content.christopherDoogue.title"
     bio: counterpart "team.content.christopherDoogue.bio"
-    image: "http://placehold.it/150x150"
+    image: "http://placehold.it/80x80"
     location: "oxford"
   colemanKrawczyk:
     name: "Coleman Krawczyk"
     twitter: "ColemanKrawczyk"
     title: counterpart "team.content.colemanKrawczyk.title"
     bio: counterpart "team.content.colemanKrawczyk.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/coleman.jpg"
     location: "portsmouth"
   darrenMcRoy:
     name: "Darren McRoy"
     title: counterpart "team.content.darrenMcRoy.title"
     bio: counterpart "team.content.darrenMcRoy.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/darren.jpg"
     location: "chicago"
   edPaget:
     name: "Ed Paget"
     twitter: "edpaget"
     title: counterpart "team.content.edPaget.title"
     bio: counterpart "team.content.edPaget.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/ed.png"
     location: "chicago"
   grantMiller:
     name: "Grant Miller"
     twitter: "mrniaboc"
     title: counterpart "team.content.grantMiller.title"
     bio: counterpart "team.content.grantMiller.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/grant.jpg"
     location: "oxford"
   gregHines:
     name: "Greg Hines"
     title: counterpart "team.content.gregHines.title"
     bio: counterpart "team.content.gregHines.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/greg.jpg"
     location: "oxford"
   heathVanSingel:
     name: "Heath van Singel"
     title: counterpart "team.content.heathVanSingel.title"
     bio: counterpart "team.content.heathVanSingel.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/heath.png"
     location: "chicago"
   jenGupta:
     name: "Jen Gupta"
     twitter: "jen_gupta"
     title: counterpart "team.content.jenGupta.title"
     bio: counterpart "team.content.jenGupta.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/jen_gupta.jpg"
     location: "portsmouth"
   jimODonnell:
     name: "Jim O'Donnell"
     twitter: "pekingspring"
     title: counterpart "team.content.jimODonnell.title"
     bio: counterpart "team.content.jimODonnell.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/jim.jpg"
     location: "oxford"
   julieFeldt:
     name: "Julie Feldt"
     twitter: "JulieAFeldt"
     title: counterpart "team.content.julieFeldt.title"
     bio: counterpart "team.content.julieFeldt.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/julie.png"
     location: "chicago"
   karenMasters:
     name: "Karen Masters"
     twitter: "karenlmasters"
     title: counterpart "team.content.karenMasters.title"
     bio: counterpart "team.content.karenMasters.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/karen.jpg"
     location: "portsmouth"
   kellyBorden:
     name: "Kelly Borden"
     twitter: "BordenKelly"
     title: counterpart "team.content.kellyBorden.title"
     bio: counterpart "team.content.kellyBorden.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/kelly.jpg"
     location: "chicago"
   kyleWillett:
     name: "Kyle Willett"
     twitter: "kwwillett"
     title: counterpart "team.content.kyleWillett.title"
     bio: counterpart "team.content.kyleWillett.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/kyle.jpg"
     location: "minnesota"
   lucyFortson:
     name: "Lucy Fortson"
     title: counterpart "team.content.lucyFortson.title"
     bio: counterpart "team.content.lucyFortson.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/lucy.jpg"
     location: "minnesota"
   megSchwamb:
     name: "Meg Schwamb"
     twitter: "megschwamb"
     title: counterpart "team.content.megSchwamb.title"
     bio: counterpart "team.content.megSchwamb.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/meg.jpg"
     location: "taipei"
   michaelParrish:
     name: "Michael Parrish"
     twitter: "michael_parrish"
     title: counterpart "team.content.michaelParrish.title"
     bio: counterpart "team.content.michaelParrish.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/michael.png"
     location: "chicago"
   perryRoper:
     name: "Perry Roper"
     title: counterpart "team.content.perryRoper.title"
     bio: counterpart "team.content.perryRoper.bio"
-    image: "http://placehold.it/150x150"
+    image: "http://placehold.it/80x80"
     location: "oxford"
   rebeccaSmethurst:
     name: "Rebecca Smethurst"
     twitter: "becky1505"
     title: counterpart "team.content.rebeccaSmethurst.title"
     bio: counterpart "team.content.rebeccaSmethurst.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/becky.jpg"
+    location: "oxford"
+  rogerHutchings:
+    name: "Roger Hutchings"
+    title: counterpart "team.content.rogerHutchings.title"
+    bio: counterpart "team.content.rogerHutchings.bio"
+    image: "http://placehold.it/80x80"
     location: "oxford"
   sandorKruk:
     name: "Sandor Kruk"
     twitter: "kruksandor"
     title: counterpart "team.content.sandorKruk.title"
     bio: counterpart "team.content.sandorKruk.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/sandor.jpg"
     location: "oxford"
   sarahAllen:
     name: "Sarah Allen"
     title: counterpart "team.content.sarahAllen.title"
     bio: counterpart "team.content.sarahAllen.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/sarah.jpg"
     location: "chicago"
   saschaIshikawa:
     name: "Sascha Ishikawa"
     twitter: "sascha_ishikawa"
     title: counterpart "team.content.saschaIshikawa.title"
     bio: counterpart "team.content.saschaIshikawa.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/sascha.png"
     location: "chicago"
   simoneDuca:
     name: "Simone Duca"
     title: counterpart "team.content.simoneDuca.title"
     bio: counterpart "team.content.simoneDuca.bio"
-    image: "http://placehold.it/150x150"
+    image: "http://placehold.it/80x80"
     location: "oxford"
   veronicaMaidel:
     name: "Veronica Maidel"
     title: counterpart "team.content.veronicaMaidel.title"
     bio: counterpart "team.content.veronicaMaidel.bio"
-    image: "http://placehold.it/150x150"
+    image: "http://placehold.it/80x80"
     location: "chicago"
   victoriaVanHyning:
     name: "Victoria van Hyning"
     twitter: "VanHyningV"
     title: counterpart "team.content.victoriaVanHyning.title"
     bio: counterpart "team.content.victoriaVanHyning.bio"
-    image: "http://placehold.it/150x150"
+    image: "./assets/team/victoria.jpg"
     location: "oxford"
 
 module.exports = React.createClass
