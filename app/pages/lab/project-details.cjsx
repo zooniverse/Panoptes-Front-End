@@ -33,9 +33,17 @@ ExternalLinksEditor = React.createClass
           {for link, i in @props.project.urls
             link._key ?= Math.random()
             <tr key={link._key}>
-              <td><input type="text" name="urls.#{i}.label" value={link.label} onChange={@handleChange}/></td>
-              <td><input type="text" name="urls.#{i}.url" value={link.url} onChange={@handleChange}/></td>
-              <td><button type="button" onClick={@handleRemoveLink.bind this, link._key}><i className="fa fa-remove"></i></button></td>
+              <td>
+                <ResourceInput resource={@props.project} update="urls.#{i}.label" />
+              </td>
+              <td>
+                <ResourceInput resource={@props.project} update="urls.#{i}.url" />
+              </td>
+              <td>
+                <button type="button" onClick={@handleRemoveLink.bind this, link}>
+                  <i className="fa fa-remove"></i>
+                </button>
+              </td>
             </tr>}
         </tbody>
       </table>
@@ -50,10 +58,10 @@ ExternalLinksEditor = React.createClass
       url: 'https://example.com/'
     @props.project.update changes
 
-  handleRemoveLink: (linkKey) ->
-    changes = {}
-    changes['urls'] = @props.project.urls.filter((link) -> link._key != linkKey)
-    @props.project.update changes
+  handleRemoveLink: (linkToRemove) ->
+    changes =
+      urls: (link for link in @props.project.urls when link isnt linkToRemove)
+    @props.project.update(changes).save()
 
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
@@ -154,11 +162,9 @@ module.exports = React.createClass
             <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and discuss tabs.</small>
             <ExternalLinksEditor project={@props.project} />
           </div>
-        </div>
 
-        <hr />
+          <hr />
 
-        <div>
           Data export<br />
           <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request new data export</button>{' '}
           <small className="form-help">
