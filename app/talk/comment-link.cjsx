@@ -64,7 +64,9 @@ module?.exports = React.createClass
                   page: pageOfComment,
                   comment: comment.id
                 }
-            <a href={projectCommentUrl}>{projectCommentUrl}</a>
+            <a href={projectCommentUrl}>
+              {@props.children ? projectCommentUrl}
+            </a>
           }</PromiseRenderer>
 
         else
@@ -73,6 +75,8 @@ module?.exports = React.createClass
             @makeHref 'talk-discussion',
               {board: discussion.board_id, discussion: discussion.id},
               {page: pageOfComment, comment: comment.id}
-          <a href={mainTalkCommentUrl}>{mainTalkCommentUrl}</a>
+          <a href={mainTalkCommentUrl}>
+            {@props.children ? mainTalkCommentUrl}
+          </a>
           }
     </div>
