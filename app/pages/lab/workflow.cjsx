@@ -67,15 +67,15 @@ EditWorkflowPage = React.createClass
                   </div>}
               </div>
 
-              <div>
+              <p>
                 <small>Add task</small>{' '}
-                <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s)."><strong>Question</strong></button>{' '}
-                <button type="button" className="pill-button" onClick={@addNewTask.bind this, 'drawing'} title="Marking tasks: the volunteer marks or draws directly on the image(s) using tools that you specify. They can also give sub-classifications for each mark."><strong>Drawing</strong></button>
-              </div>
+                <ProgressButton className="minor-button" onClick={@addNewTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s)."><strong>Question</strong></ProgressButton>{' '}
+                <ProgressButton className="minor-button" onClick={@addNewTask.bind this, 'drawing'} title="Marking tasks: the volunteer marks or draws directly on the image(s) using tools that you specify. They can also give sub-classifications for each mark."><strong>Drawing</strong></ProgressButton>
+              </p>
 
               <div>
                 <small>First task</small>{' '}
-                <select name="first_task" value={@props.workflow.first_task} onChange={@handleChange}>
+                <select name="first_task" value={@props.workflow.first_task} onChange={(e) => @handleChange(e); @props.workflow.save()}>
                   {for taskKey, definition of @props.workflow.tasks
                     <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
                 </select>
@@ -85,9 +85,6 @@ EditWorkflowPage = React.createClass
             <p className="form-help"><small>A task is a unit of work you are asking volunteers to do. You can ask them to answer a question or mark an image. Add a task by clicking the question or marking buttons below.</small></p>
 
             <hr />
-
-            {unless @props.project.private
-              <p className="form-help warning">You’re editing a workflow on a public project. <strong>Please note that any changes will result in the loss of your existing classifications for this workflow!</strong></p>}
 
             <p>
               <small className="form-help">Version {@props.workflow.version}</small>
@@ -128,7 +125,13 @@ EditWorkflowPage = React.createClass
         <div className="column">
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
-            <TaskEditorComponent workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} onChange={@handleTaskChange.bind this, @state.selectedTaskKey} onDelete={@handleTaskDelete.bind this, @state.selectedTaskKey} />
+            <TaskEditorComponent
+              workflow={@props.workflow}
+              task={@props.workflow.tasks[@state.selectedTaskKey]}
+              taskPrefix="tasks.#{@state.selectedTaskKey}"
+              onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
+              onDelete={@handleTaskDelete.bind this, @state.selectedTaskKey}
+            />
           else
             <p>Choose a task to edit</p>}
         </div>
@@ -179,6 +182,7 @@ EditWorkflowPage = React.createClass
 
     @props.workflow.update changes
     @setState selectedTaskKey: nextTaskID
+    @props.workflow.save()
 
   handleSubjectSetToggle: (subjectSet, e) ->
     shouldAdd = e.target.checked
@@ -203,6 +207,7 @@ EditWorkflowPage = React.createClass
     @transitionTo 'edit-project-details', projectID: @props.project.id
 
   handleTaskChange: (taskKey, path, value) ->
+    console?.log 'Handling task change', arguments...
     changes = {}
     changes["tasks.#{taskKey}.#{path}"] = value
     @props.workflow.update(changes).save()
@@ -214,6 +219,8 @@ EditWorkflowPage = React.createClass
 
     if @props.workflow.first_task not of @props.workflow.tasks
       @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
+
+    @props.workflow.save()
 
 module.exports = React.createClass
   displayName: 'EditWorkflowPageWrapper'

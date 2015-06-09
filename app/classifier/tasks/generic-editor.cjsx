@@ -1,4 +1,5 @@
 React = require 'react'
+ChangeListener = require '../../components/change-listener'
 ResourceInput = require '../../components/resource-input'
 ProgressButton = require '../../components/progress-button'
 handleInputChange = require '../../lib/handle-input-change'
@@ -39,19 +40,17 @@ module.exports = React.createClass
   getDefaultProps: ->
     workflow: null
     task: null
+    taskPrefix: ''
     onChange: NOOP
 
   render: ->
-    taskKey = (key for key, value of @props.workflow.tasks when value is @props.task)[0]
-
     [mainTextKey, choicesKey] = switch @props.task.type
       when 'single', 'multiple' then ['question', 'answers']
       when 'drawing' then ['instruction', 'tools']
 
     <div className="workflow-task-editor #{@props.task.type}">
       <div>
-
-        <ResourceInput type="textarea" resource={@props.workflow} update="tasks.#{taskKey}.#{mainTextKey}" className="standard-input full">
+        <ResourceInput type="textarea" resource={@props.workflow} update="#{@props.taskPrefix}.#{mainTextKey}" className="standard-input full">
           <span className="form-label">Main text</span>
           <br />
         </ResourceInput>
@@ -60,7 +59,7 @@ module.exports = React.createClass
 
       {unless @props.isSubtask
         <div>
-          <ResourceInput type="textarea" resource={@props.workflow} update="tasks.#{taskKey}.help" rows="7" className="standard-input full">
+          <ResourceInput type="textarea" resource={@props.workflow} update="#{@props.taskPrefix}.help" rows="7" className="standard-input full">
             <span className="form-label">Help text</span>
             <br />
           </ResourceInput>
@@ -74,6 +73,7 @@ module.exports = React.createClass
       {if choicesKey is 'answers'
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
         requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
+        console?.log @props.task.type, @props.task.required
 
         [<label key="multiple" className="pill-button">
           <input type="checkbox" checked={@props.task.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
@@ -92,7 +92,7 @@ module.exports = React.createClass
         {for choice, index in @props.task[choicesKey] ? []
           choice._key ?= Math.random()
           <div key={choice._key} className="workflow-choice-editor">
-            <textarea name="#{choicesKey}.#{index}.label" value={choice.label} className="standard-input full" onChange={@handleInputChange} />
+            <ResourceInput type="textarea" resource={@props.workflow} update="#{@props.taskPrefix}.#{choicesKey}.#{index}.label" />
 
             <div className="workflow-choice-settings">
               {switch @props.task.type
@@ -171,10 +171,11 @@ module.exports = React.createClass
     @props.onChange e.target.name, e.target.checked ? e.target.value, arguments...
 
   toggleMultipleChoice: (e) ->
-    @props.onChange 'type', if e.target.checked
+    newType = if e.target.checked
       'multiple'
     else
       'single'
+    @props.onChange 'type', newType, arguments...
 
   addChoice: (type) ->
     switch type
@@ -199,7 +200,16 @@ module.exports = React.createClass
       @props.onChange "tools.#{toolIndex}.details", []
 
     alert (resolve) =>
-      <DrawingTaskDetailsEditor workflow={@props.workflow} task={task}, toolIndex={toolIndex} onClose={resolve} />
+      <ChangeListener target={@props.workflow}>{=>
+        <DrawingTaskDetailsEditor
+          workflow={@props.workflow}
+          task={@props.task}
+          toolIndex={toolIndex}
+          details={@props.task.tools[toolIndex].details}
+          toolPath="#{@props.taskPrefix}.tools.#{toolIndex}"
+          onClose={resolve}
+        />
+      }</ChangeListener>
 
   removeChoice: (choicesName, index) ->
     @props.onChange "#{choicesName}.#{index}", undefined
