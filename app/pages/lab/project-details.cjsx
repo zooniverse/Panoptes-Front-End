@@ -126,14 +126,6 @@ module.exports = React.createClass
             </label><br />
             <small className="form-help">If you have multiple workflows, check this to let volunteers select which workflow they want to to work on; otherwise, they’ll be served randomly.</small>
           </p>
-
-          <p>
-            <label>
-              <input type="checkbox" name="private" checked={@props.project.private} onChange={@handleChange} />
-              Private project<br />
-              <small className="form-help">Check “private” so that only users with specified project roles can see or classify on your project. We strongly recommend you keep your project private while you’re still working out its details.</small>
-            </label>
-          </p>
         </div>
 
         <div className="column">
