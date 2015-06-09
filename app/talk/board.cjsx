@@ -113,30 +113,33 @@ module?.exports = React.createClass
     </label>
 
   render: ->
+    {board} = @state
+
     <div className="talk-board">
-      <h1 className="talk-page-header">{@state.board?.title}</h1>
-      <Moderation>
-        <div>
-          <h2>Moderator Zone:</h2>
-          {if @state.board?.title
-            <form className="talk-edit-board-form" onSubmit={@onEditTitle}>
-              <h3>Edit Title:</h3>
-              <input onChange={@onChangeTitle} defaultValue={@state.board?.title}/>
+      <h1 className="talk-page-header">{board?.title}</h1>
+      {if board
+        <Moderation section={board.section}>
+          <div>
+            <h2>Moderator Zone:</h2>
+            {if board?.title
+              <form className="talk-edit-board-form" onSubmit={@onEditTitle}>
+                <h3>Edit Title:</h3>
+                <input onChange={@onChangeTitle} defaultValue={board?.title}/>
 
-              <h4>Can Read:</h4>
-              <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+                <h4>Can Read:</h4>
+                <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
 
-              <h4>Can Write:</h4>
-              <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+                <h4>Can Write:</h4>
+                <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
 
-              <button type="submit">Update</button>
-            </form>}
+                <button type="submit">Update</button>
+              </form>}
 
-          <button onClick={@onClickDeleteBoard}>
-            Delete this board <i className="fa fa-close" />
-          </button>
-        </div>
-      </Moderation>
+            <button onClick={@onClickDeleteBoard}>
+              Delete this board <i className="fa fa-close" />
+            </button>
+          </div>
+        </Moderation>}
 
       <ChangeListener target={authClient}>{=>
         <PromiseRenderer promise={authClient.checkCurrent()}>{(user) =>
@@ -169,7 +172,7 @@ module?.exports = React.createClass
           <h2>Talk Sidebar</h2>
           <section>
             <h3>Description:</h3>
-            <p>{@state.board?.description}</p>
+            <p>{board?.description}</p>
             <h3>Join the Discussion</h3>
             <p>Check out the existing posts or start a new discussion of your own</p>
           </section>
