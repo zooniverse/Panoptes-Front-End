@@ -150,24 +150,27 @@ module?.exports = React.createClass
         @setState {discussion: discussion[0]}
 
   render: ->
+    {discussion} = @state
+
     <div className="talk-discussion">
-      <h1 className="talk-page-header">{@state.discussion?.title}</h1>
+      <h1 className="talk-page-header">{discussion?.title}</h1>
 
-      <Moderation>
-        <div>
-          <h2>Moderator Zone:</h2>
-          {if @state.discussion?.title
-            <form className="talk-edit-discussion-title-form" onSubmit={@onEditTitle}>
-              <h3>Edit Title:</h3>
-              <input onChange={@onChangeTitle} defaultValue={@state.discussion?.title}/>
-              <button type="submit">Update Title</button>
-            </form>}
+      {if discussion
+        <Moderation section={discussion.section}>
+          <div>
+            <h2>Moderator Zone:</h2>
+            {if discussion?.title
+              <form className="talk-edit-discussion-title-form" onSubmit={@onEditTitle}>
+                <h3>Edit Title:</h3>
+                <input onChange={@onChangeTitle} defaultValue={discussion?.title}/>
+                <button type="submit">Update Title</button>
+              </form>}
 
-          <button onClick={@onClickDeleteDiscussion}>
-            Delete this discussion <i className="fa fa-close" />
-          </button>
-        </div>
-      </Moderation>
+            <button onClick={@onClickDeleteDiscussion}>
+              Delete this discussion <i className="fa fa-close" />
+            </button>
+          </div>
+        </Moderation>}
 
       {@state.comments.map(@comment)}
 

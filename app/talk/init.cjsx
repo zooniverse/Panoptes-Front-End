@@ -66,7 +66,7 @@ module?.exports = React.createClass
 
   render: ->
     <div className="talk-home">
-      <Moderation>
+      <Moderation section={@props.section}>
         <form onSubmit={@onSubmitBoard}>
           <h2>Moderator Zone:</h2>
           <h3>Add a board:</h3>
