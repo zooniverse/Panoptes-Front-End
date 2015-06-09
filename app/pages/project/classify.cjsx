@@ -9,10 +9,9 @@ counterpart = require 'counterpart'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
 SignInPrompt = require '../../partials/sign-in-prompt'
+sessionSubjects = require '../../lib/session-subjects'
 
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
-
-sessionSubjects = require '../../lib/session-subjects'
 
 SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
 
@@ -34,7 +33,7 @@ currentWorkflowForProject = {}
 currentClassifications =
   forWorkflow: {}
 
-# Quere up subjects to classify here.
+# Queue up subjects to classify here.
 # TODO: Should we clear this on sign-in and -out?
 upcomingSubjects =
   forWorkflow: {}
@@ -92,7 +91,10 @@ module.exports = React.createClass
   createNewClassification: (project, workflowID) ->
     workflow = @getWorkflow project, workflowID
     subject = workflow.then (workflow) =>
-      @getNextSubject project, workflow
+      workflow.get('subject_sets').then (subjectSets) =>
+        randomIndex = Math.floor Math.random() * subjectSets.length
+        subjectSet = subjectSets[randomIndex]
+        @getNextSubject project, workflow, subjectSet
 
     Promise.all([workflow, subject]).then ([workflow, subject]) ->
       # console.log 'Creating a new classification'
@@ -124,7 +126,7 @@ module.exports = React.createClass
         throw new Error "No workflow #{workflowID} for project #{project.id}"
       workflow
 
-  getNextSubject: (project, workflow) ->
+  getNextSubject: (project, workflow, subjectSet) ->
     # console.log 'Getting next subject for', workflow.id
     # Make sure a list of subjects exists for this workflow.
     upcomingSubjects.forWorkflow[workflow.id] ?= []
@@ -138,9 +140,9 @@ module.exports = React.createClass
     if upcomingSubjects.forWorkflow[workflow.id].length is 0
       # console.log 'Fetching subjects'
       subjectQuery =
-        project_id: project.id
         workflow_id: workflow.id
-        sort: 'cellect' unless SKIP_CELLECT
+        subject_set_id: subjectSet.id
+        sort: 'queued' unless SKIP_CELLECT
 
       fetchSubjects = apiClient.type('subjects').get subjectQuery
         .catch (error) ->
