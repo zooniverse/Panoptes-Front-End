@@ -23,6 +23,9 @@ module?.exports = React.createClass
   componentWillMount: ->
     @setBoards()
 
+  componentWillReceiveProps: ->
+    @setBoards()
+
   setBoards: ->
     auth.checkCurrent().then =>
       talkClient.type('boards').get(section: @props.section)
