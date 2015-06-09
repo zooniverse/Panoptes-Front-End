@@ -18,6 +18,8 @@ Moderation = require './lib/moderation'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 
+PAGE_SIZE = 3
+
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
   mixins: [Router.Navigation, PromiseToSetState]
@@ -50,7 +52,7 @@ module?.exports = React.createClass
 
   commentsRequest: (page) ->
     {board, discussion} = @props.params
-    talkClient.type('comments').get({discussion_id: discussion, page_size: 3, page})
+    talkClient.type('comments').get({discussion_id: discussion, page_size: PAGE_SIZE, page})
 
   discussionsRequest: ->
     {discussion} = @props.params
@@ -65,7 +67,8 @@ module?.exports = React.createClass
 
   setDiscussion: ->
     @discussionsRequest()
-      .then (discussion) => @setState {discussion: discussion[0]}
+      .then (discussion) =>
+        @setState {discussion: discussion[0]}
 
   onUpdateComment: (textContent, focusImage, commentId) ->
     {discussion} = @props.params
@@ -119,6 +122,7 @@ module?.exports = React.createClass
     <Comment
       key={data.id}
       data={data}
+      active={+data.id is +@props.query?.comment}
       user={@state.user}
       onClickReply={@onClickReply}
       onLikeComment={@onLikeComment}
