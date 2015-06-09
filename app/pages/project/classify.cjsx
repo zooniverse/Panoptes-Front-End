@@ -91,9 +91,15 @@ module.exports = React.createClass
   createNewClassification: (project, workflowID) ->
     workflow = @getWorkflow project, workflowID
     subject = workflow.then (workflow) =>
-      workflow.get('subject_sets').then (subjectSets) =>
-        randomIndex = Math.floor Math.random() * subjectSets.length
-        subjectSet = subjectSets[randomIndex]
+      # A subject set is only specified if the workflow is grouped.
+      getSubjectSet = if workflow.grouped
+        workflow.get('subject_sets').then (subjectSets) =>
+          randomIndex = Math.floor Math.random() * subjectSets.length
+          subjectSets[randomIndex]
+      else
+        Promise.resolve()
+
+      getSubjectSet.then (subjectSet) =>
         @getNextSubject project, workflow, subjectSet
 
     Promise.all([workflow, subject]).then ([workflow, subject]) ->
@@ -141,8 +147,9 @@ module.exports = React.createClass
       # console.log 'Fetching subjects'
       subjectQuery =
         workflow_id: workflow.id
-        subject_set_id: subjectSet.id
         sort: 'queued' unless SKIP_CELLECT
+      if subjectSet?
+        subjectQuery.subject_set_id = subjectSet.id
 
       fetchSubjects = apiClient.type('subjects').get subjectQuery
         .catch (error) ->
