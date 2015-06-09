@@ -10,8 +10,10 @@ module.exports = React.createClass
   displayName: "TalkSearchResult"
 
   render: ->
+    discussion = @props.data.discussion
+
     <div className="talk-search-result">
-      <CommentLink {...@props.data} />
+      <CommentLink comment={@props.data}>Comment #{discussion.links.comments.indexOf(@props.data.id.toString()) + 1} in {discussion.title}</CommentLink>
       <CommentPreview content={@props.data.body} header={null} />
-      <DiscussionPreview data={@props.data.discussion} />
+      <DiscussionPreview data={discussion} />
     </div>
