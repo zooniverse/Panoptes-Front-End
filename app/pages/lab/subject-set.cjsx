@@ -1,5 +1,5 @@
 React = require 'react'
-ResourceInput = require '../../components/resource-input'
+AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
@@ -9,7 +9,6 @@ Papa = require 'papaparse'
 alert = require '../../lib/alert'
 SubjectViewer = require '../../components/subject-viewer'
 SubjectUploader = require '../../partials/subject-uploader'
-BoundResourceMixin = require '../../lib/bound-resource-mixin'
 UploadDropTarget = require '../../components/upload-drop-target'
 ManifestView = require '../../components/manifest-view'
 
@@ -129,10 +128,11 @@ EditSubjectSetPage = React.createClass
 
       <form onSubmit={@handleSubmit}>
         <p>
-          <ResourceInput resource={@props.subjectSet} update="display_name" className="standard-input full">
+          <AutoSave resource={@props.subjectSet}>
             <span className="form-label">Name</span>
             <br />
-          </ResourceInput>
+            <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input full" onChange={handleInputChange.bind @props.subjectSet} />
+          </AutoSave>
           <small className="form-help">A subject set’s name is only seen by the science team.</small>
         </p>
       </form>
@@ -291,20 +291,11 @@ EditSubjectSetPage = React.createClass
 module.exports = React.createClass
   displayName: 'EditSubjectSetPageWrapper'
 
-  mixins: [BoundResourceMixin]
-
-  boundResource: ->
-    @_subjectSet
-
   getDefaultProps: ->
     params: null
 
   render: ->
     <PromiseRenderer promise={apiClient.type('subject_sets').get @props.params.subjectSetID}>{(subjectSet) =>
-      # Use this for `onTransitionFrom` change test.
-      # This is kinda a hack, but it's fine for now.
-      @_subjectSet = subjectSet
-
       <ChangeListener target={subjectSet}>{=>
         <EditSubjectSetPage {...@props} subjectSet={subjectSet} />
       }</ChangeListener>
