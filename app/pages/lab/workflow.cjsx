@@ -6,10 +6,10 @@ PromiseRenderer = require '../../components/promise-renderer'
 WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
-BoundResourceMixin = require '../../lib/bound-resource-mixin'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {Navigation} = require 'react-router'
 tasks = require '../../classifier/tasks'
+AutoSave = require '../../components/auto-save'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -19,9 +19,7 @@ else
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
 
-  mixins: [BoundResourceMixin, Navigation]
-
-  boundResource: 'workflow'
+  mixins: [Navigation]
 
   getDefaultProps: ->
     workflow: null
@@ -35,13 +33,12 @@ EditWorkflowPage = React.createClass
       <div className="columns-container">
         <div className="column">
           <div>
-            <div>
-              <ResourceInput resource={@props.workflow} update="display_name" className="standard-input full">
-                <span className="form-label">Workflow title</span>
-                <br />
-              </ResourceInput>
-              <small className="form-help">If you let your volunteers choose which workflow to attempt, this text will appear as an option on the project front page.</small>
-            </div>
+            <AutoSave tag="label" resource={@props.workflow}>
+              <span className="form-label">Workflow title</span>
+              <br />
+              <input type="text" name="display_name" value={@props.workflow.display_name} className="standard-input full" onChange={handleInputChange.bind @props.workflow} />
+            </AutoSave>
+            <small className="form-help">If you let your volunteers choose which workflow to attempt, this text will appear as an option on the project front page.</small>
 
             <br />
 
@@ -69,17 +66,25 @@ EditWorkflowPage = React.createClass
 
               <p>
                 <small>Add task</small>{' '}
-                <ProgressButton className="minor-button" onClick={@addNewTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s)."><strong>Question</strong></ProgressButton>{' '}
-                <ProgressButton className="minor-button" onClick={@addNewTask.bind this, 'drawing'} title="Marking tasks: the volunteer marks or draws directly on the image(s) using tools that you specify. They can also give sub-classifications for each mark."><strong>Drawing</strong></ProgressButton>
+                <AutoSave resource={@props.workflow}>
+                  <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s).">
+                    <strong>Question</strong>
+                  </button>
+                </AutoSave>{' '}
+                <AutoSave resource={@props.workflow}>
+                  <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'drawing'} title="Marking tasks: the volunteer marks or draws directly on the image(s) using tools that you specify. They can also give sub-classifications for each mark.">
+                    <strong>Drawing</strong>
+                  </button>
+                </AutoSave>
               </p>
 
-              <div>
+              <AutoSave tag="div" resource={@props.workflow}>
                 <small>First task</small>{' '}
-                <select name="first_task" value={@props.workflow.first_task} onChange={(e) => @handleChange(e); @props.workflow.save()}>
+                <select name="first_task" value={@props.workflow.first_task} onChange={handleInputChange.bind @props.workflow}>
                   {for taskKey, definition of @props.workflow.tasks
                     <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
                 </select>
-              </div>
+              </AutoSave>
             </div>
 
             <p className="form-help"><small>A task is a unit of work you are asking volunteers to do. You can ask them to answer a question or mark an image. Add a task by clicking the question or marking buttons below.</small></p>
@@ -102,18 +107,19 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          <div>
-            <p>
-              Subject retirement <RetirementRulesEditor workflow={@props.workflow} /><br />
-              <small className="form-help">How many people should classify each subject before it is “done”? Once a subject has reached the retirement limit it will no longer be shown to any volunteers.</small>
-            </p>
-          </div>
+          <p>
+            <AutoSave resource={@props.workflow}>
+              Subject retirement <RetirementRulesEditor workflow={@props.workflow} />
+            </AutoSave>
+            <br />
+            <small className="form-help">How many people should classify each subject before it is “done”? Once a subject has reached the retirement limit it will no longer be shown to any volunteers.</small>
+          </p>
 
           <hr />
 
           <div>
             <small>
-              <button type="button" className="minor-button" disabled={@state.deleteInProgress} data-busy={@state.deleteInProgress || null} onClick={@deleteResource.bind this, @afterDelete}>
+              <button type="button" className="minor-button" disabled={@state.deleteInProgress} data-busy={@state.deleteInProgress || null} onClick={@handleDelete}>
                 Delete this workflow
               </button>
             </small>{' '}
@@ -129,7 +135,6 @@ EditWorkflowPage = React.createClass
               workflow={@props.workflow}
               task={@props.workflow.tasks[@state.selectedTaskKey]}
               taskPrefix="tasks.#{@state.selectedTaskKey}"
-              onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
               onDelete={@handleTaskDelete.bind this, @state.selectedTaskKey}
             />
           else
@@ -182,7 +187,6 @@ EditWorkflowPage = React.createClass
 
     @props.workflow.update changes
     @setState selectedTaskKey: nextTaskID
-    @props.workflow.save()
 
   handleSubjectSetToggle: (subjectSet, e) ->
     shouldAdd = e.target.checked
@@ -202,15 +206,16 @@ EditWorkflowPage = React.createClass
     @props.project.uncacheLink 'subject_sets'
     @props.workflow.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
 
-  afterDelete: ->
-    @props.project.uncacheLink 'workflows'
-    @transitionTo 'edit-project-details', projectID: @props.project.id
+  handleDelete: ->
+    @props.workflow.delete().then =>
+      @props.project.uncacheLink 'workflows'
+      @transitionTo 'edit-project-details', projectID: @props.project.id
 
   handleTaskChange: (taskKey, path, value) ->
     console?.log 'Handling task change', arguments...
     changes = {}
     changes["tasks.#{taskKey}.#{path}"] = value
-    @props.workflow.update(changes).save()
+    @props.workflow.update changes
 
   handleTaskDelete: (taskKey) ->
     changes = {}
@@ -220,23 +225,17 @@ EditWorkflowPage = React.createClass
     if @props.workflow.first_task not of @props.workflow.tasks
       @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
 
-    @props.workflow.save()
-
 module.exports = React.createClass
   displayName: 'EditWorkflowPageWrapper'
 
-  mixins: [BoundResourceMixin]
-
-  boundResource: ->
-    @_workflow
-
   getDefaultProps: ->
-    params: null
+    params:
+      workflowID: ''
 
   render: ->
     <PromiseRenderer promise={apiClient.type('workflows').get @props.params.workflowID}>{(workflow) =>
-      @_workflow = workflow
       <ChangeListener target={workflow}>{=>
+        console.log 'Workflow changed', JSON.stringify workflow
         <EditWorkflowPage {...@props} workflow={workflow} />
       }</ChangeListener>
     }</PromiseRenderer>
