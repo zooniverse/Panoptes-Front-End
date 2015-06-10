@@ -41,6 +41,7 @@ EditProjectPage = React.createClass
       <div>
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
+
           <li><Link to="edit-project-details" params={linkParams} className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
             Project details
           </Link></li>
@@ -59,6 +60,10 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
             Collaborators
           </Link></li>
+          <li><Link to="edit-project-visibility" params={linkParams} className="nav-list-item">
+            Visibility
+          </Link></li>
+
           <li>
             <br />
             <div className="nav-list-header">Workflows</div>
@@ -72,7 +77,7 @@ EditProjectPage = React.createClass
                   </li>}
 
                 {for workflow in workflows
-                  <ChangeListener target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
+                  <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
 
                 <li className="nav-list-item">
                   <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
@@ -99,7 +104,7 @@ EditProjectPage = React.createClass
                   </li>}
 
                 {for subjectSet in subjectSets
-                  <ChangeListener target={subjectSet} eventName="save" handler={renderSubjectSetListItem.bind this, subjectSet} />}
+                  <ChangeListener key={subjectSet.id} target={subjectSet} eventName="save" handler={renderSubjectSetListItem.bind this, subjectSet} />}
 
                 <li className="nav-list-item">
                   <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress} title="A subject is an image (or group of images) to be analyzed.">
