@@ -1,6 +1,4 @@
 React = require 'react'
-ResourceInput = require '../../components/resource-input'
-ProgressButton = require '../../components/progress-button'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 WorkflowTasksEditor = require '../../components/workflow-tasks-editor'

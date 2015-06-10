@@ -1,7 +1,6 @@
 React = require 'react'
 ChangeListener = require '../../components/change-listener'
 AutoSave = require '../../components/auto-save'
-ResourceInput = require '../../components/resource-input'
 handleInputChange = require '../../lib/handle-input-change'
 drawingTools = require '../drawing-tools'
 alert = require '../../lib/alert'
