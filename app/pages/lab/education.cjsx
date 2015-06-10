@@ -1,5 +1,6 @@
 React = require 'react'
-ResourceInput = require '../../components/resource-input'
+AutoSave = require '../../components/auto-save'
+handleInputChange = require '../../lib/handle-input-change'
 
 module.exports = React.createClass
   displayName: 'EditProjectEducation'
@@ -10,9 +11,10 @@ module.exports = React.createClass
   render: ->
     <div>
       <p>
-        <ResourceInput type="textarea" className="standard-input full" resource={@props.project} update="education_content" rows="20" placeholder="This page renders markdown. Note that this page will not display unless you add content here.">
+        <AutoSave resource={@props.project}>
           <span className="form-label">Educational Content</span>
           <br />
-        </ResourceInput>
+          <textarea className="standard-input full" name="education_content" value={@props.project.education_content} rows="20" onChange={handleInputChange.bind @props.project} />
+        </AutoSave>
       </p>
     </div>

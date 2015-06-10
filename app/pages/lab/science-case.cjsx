@@ -1,5 +1,6 @@
 React = require 'react'
-ResourceInput = require '../../components/resource-input'
+AutoSave = require '../../components/auto-save'
+handleInputChange = require '../../lib/handle-input-change'
 
 module.exports = React.createClass
   displayName: 'EditProjectScienceCase'
@@ -11,9 +12,10 @@ module.exports = React.createClass
     <div>
       <p className="form-help">This page is for you to describe your research motivations and goals to the volunteers. Feel free to add detail, but try to avoid jargon. This page renders markdown, so you can format it and add images (externally hosted for now) and links. The site will show your team members with their profile pictures and roles to the side of the text.</p>
       <p>
-        <ResourceInput type="textarea" className="standard-input full" resource={@props.project} update="science_case" rows="20">
+        <AutoSave resource={@props.project}>
           <span className="form-label">Science case</span>
           <br />
-        </ResourceInput>
+          <textarea className="standard-input full" name="science_case" value={@props.project.science_case} rows="20" onChange={handleInputChange.bind @props.project} />
+        </AutoSave>
       </p>
     </div>
