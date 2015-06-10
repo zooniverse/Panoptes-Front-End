@@ -1,6 +1,6 @@
 React = require 'react'
-ResourceInput = require '../../components/resource-input'
-BoundResourceMixin = require '../../lib/bound-resource-mixin'
+AutoSave = require '../../components/auto-save'
+handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
@@ -12,10 +12,6 @@ MAX_BACKGROUND_SIZE = 256000
 
 ExternalLinksEditor = React.createClass
   displayName: 'ExternalLinksEditor'
-
-  mixins: [BoundResourceMixin]
-
-  boundResource: 'project'
 
   getDefaultProps: ->
     project: {}
@@ -32,23 +28,27 @@ ExternalLinksEditor = React.createClass
         <tbody>
           {for link, i in @props.project.urls
             link._key ?= Math.random()
-            <tr key={link._key}>
+            <AutoSave key={link._key} tag="tr" resource={@props.project}>
               <td>
-                <ResourceInput resource={@props.project} update="urls.#{i}.label" />
+                <input type="text" name="urls.#{i}.label" value={@props.project.urls[i].label} onChange={handleInputChange.bind @props.project} />
               </td>
               <td>
-                <ResourceInput resource={@props.project} update="urls.#{i}.url" />
+                <input type="text" name="urls.#{i}.url" value={@props.project.urls[i].url} onChange={handleInputChange.bind @props.project} />
               </td>
               <td>
-                <button type="button" onClick={@handleRemoveLink.bind this, link}>
-                  <i className="fa fa-remove"></i>
-                </button>
+                <AutoSave resource={@props.project}>
+                  <button type="button" onClick={@handleRemoveLink.bind this, link}>
+                    <i className="fa fa-remove"></i>
+                  </button>
+                </AutoSave>
               </td>
-            </tr>}
+            </AutoSave>}
         </tbody>
       </table>
 
-      <button type="button" onClick={@handleAddLink}>Add a link</button>
+      <AutoSave resource={@props.project}>
+        <button type="button" onClick={@handleAddLink}>Add a link</button>
+      </AutoSave>
     </div>
 
   handleAddLink: ->
@@ -61,7 +61,7 @@ ExternalLinksEditor = React.createClass
   handleRemoveLink: (linkToRemove) ->
     changes =
       urls: (link for link in @props.project.urls when link isnt linkToRemove)
-    @props.project.update(changes).save()
+    @props.project.update changes
 
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
@@ -125,35 +125,40 @@ module.exports = React.createClass
           <hr />
 
           <p>
-            <ResourceInput type="checkbox" resource={@props.project} update="configuration.user_chooses_workflow">
+            <AutoSave tag="label" resource={@props.project}>
+              <input type="checkbox" name="configuration.user_chooses_workflow" value={@props.project.configuration?.user_chooses_workflow} onChange={handleInputChange.bind @props.project} />{' '}
               Volunteers can choose which workflow they work on
-            </ResourceInput><br />
+            </AutoSave>
+            <br />
             <small className="form-help">If you have multiple workflows, check this to let volunteers select which workflow they want to to work on; otherwise, they’ll be served randomly.</small>
           </p>
         </div>
 
         <div className="column">
           <p>
-            <ResourceInput className="standard-input full" resource={@props.project} update="display_name">
+            <AutoSave resource={@props.project}>
               <span className="form-label">Name</span>
               <br />
-            </ResourceInput>
+              <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
             <small className="form-help">The project name is the first thing people will see about the project, and it will show up in the project URL. Try to keep it short and sweet.</small>
           </p>
 
           <p>
-            <ResourceInput className="standard-input full" resource={@props.project} update="description">
+            <AutoSave resource={@props.project}>
               <span className="form-label">Description</span>
               <br />
-            </ResourceInput>
+              <input className="standard-input full" name="description" value={@props.project.description} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
             <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.</small>
           </p>
 
           <p>
-            <ResourceInput type="textarea" className="standard-input full" resource={@props.project} update="introduction" rows="10">
+            <AutoSave resource={@props.project}>
               <span className="form-label">Introduction</span>
               <br />
-            </ResourceInput>
+              <textarea className="standard-input full" name="introduction" rows="10" value={@props.project.introduction} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
             <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<insert link to best markdown tutorial>), so you can add formatting.</small>
           </p>
 
