@@ -210,6 +210,13 @@ EditSubjectSetPage = React.createClass
       else if file.type.indexOf('image/') is 0
         @state.files[file.name] = file
         gotFile = true
+      else if file.type? # When Windows fails to detect MIME type and returns an empty string for file.type
+        allowedFileExts = ['csv', 'tsv']
+        ext = file.name.split('.').pop()
+        if allowedFileExts.indexOf(ext) > -1
+          @_addManifest file
+          gotManifest = true
+
 
       if gotFile and not gotManifest
         @forceUpdate()
