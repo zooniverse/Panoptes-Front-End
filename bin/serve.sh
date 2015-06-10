@@ -40,6 +40,7 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
   & pids="$pids $!"
 
 ./node_modules/.bin/static \
+  --host-address "$HOST" \
   --port "$PORT" \
   --cache "no-cache, must-revalidate" \
   "$DEV_DIR" \
