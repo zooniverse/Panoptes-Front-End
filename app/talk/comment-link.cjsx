@@ -52,7 +52,7 @@ module?.exports = React.createClass
 
           <PromiseRenderer promise={Promise.all [project, owner]}>{([project, owner]) =>
             projectCommentUrl =
-              window.location.origin +
+              window.location.origin + window.location.pathname +
               @makeHref 'project-talk-discussion',
                 {
                   board: discussion.board_id,
@@ -71,7 +71,7 @@ module?.exports = React.createClass
 
         else
           mainTalkCommentUrl =
-            window.location.origin +
+            window.location.origin + window.location.pathname +
             @makeHref 'talk-discussion',
               {board: discussion.board_id, discussion: discussion.id},
               {page: pageOfComment, comment: comment.id}
