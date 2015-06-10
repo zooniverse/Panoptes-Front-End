@@ -29,20 +29,15 @@ UserProfilePage = React.createClass
   getInitialState: ->
     user: null
 
+  getInitialState: ->
+    user: null
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
 
     apiClient.type('users').get(slug: @props.params.name)
       .then (user) =>
         @setState user: user[0]
-
-    apiClient.type('users').get(slug: @props.params.name).get('profile_header')
-      .then (header) =>
-        console.log 'header', header
-      .catch (error) =>
-        console.error 'error', error
-
-    @toggleComponent @props.routes[@props.routes.length - 1].name
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
@@ -68,7 +63,7 @@ UserProfilePage = React.createClass
               if user?
                 <span>
                   <Link to="inbox"><Translate content="profile.nav.messages" /></Link>
-                  <Link to="settings"><Translate content="profile.nav.settings" /></Link>
+                  <Link to="settings-home" params={name: @props.params.name}><Translate content="profile.nav.settings" /></Link>
                 </span>
             }</PromiseRenderer>
           </nav>
