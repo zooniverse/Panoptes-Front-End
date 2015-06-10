@@ -1,13 +1,12 @@
 React = require 'react'
-BoundResourceMixin = require '../lib/bound-resource-mixin'
-AutoSave = require '../components/auto-save'
-handleInputChange = require '../lib/handle-input-change'
-ChangeListener = require '../components/change-listener'
-auth = require '../api/auth'
-PromiseRenderer = require '../components/promise-renderer'
-ImageSelector = require '../components/image-selector'
-apiClient = require '../api/client'
-putFile = require '../lib/put-file'
+BoundResourceMixin = require '../../lib/bound-resource-mixin'
+handleInputChange = require '../../lib/handle-input-change'
+ChangeListener = require '../../components/change-listener'
+auth = require '../../api/auth'
+PromiseRenderer = require '../../components/promise-renderer'
+ImageSelector = require '../../components/image-selector'
+apiClient = require '../../api/client'
+putFile = require '../../lib/put-file'
 
 MAX_AVATAR_SIZE = 65536
 MIN_PASSWORD_LENGTH = 8

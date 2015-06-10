@@ -1,10 +1,10 @@
 counterpart = require 'counterpart'
 React = require 'react'
-PrivateMessageForm = require '../talk/private-message-form'
-PromiseRenderer = require '../components/promise-renderer'
-authClient = require '../api/auth'
-apiClient = require '../api/client'
-ChangeListener = require '../components/change-listener'
+PrivateMessageForm = require '../../talk/private-message-form'
+PromiseRenderer = require '../../components/promise-renderer'
+authClient = require '../../api/auth'
+apiClient = require '../../api/client'
+ChangeListener = require '../../components/change-listener'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 
@@ -21,8 +21,15 @@ counterpart.registerTranslations 'en',
 UserProfilePage = React.createClass
   displayName: 'UserProfilePage'
 
+  getInitialState: ->
+    user: null
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
+
+    apiClient.type('users').get(slug: @props.params.name)
+      .then (user) =>
+        @setState user: user[0]
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
@@ -35,7 +42,7 @@ UserProfilePage = React.createClass
             if user?
               <Translate name={user.display_name} content="profile.title" component="h1" />
             else
-              <h1>{#TODO fetch user name}</h1>
+              <h1>{@state.user.display_name}</h1>
           }</PromiseRenderer>
           <nav className="hero-nav">
             <Link to="user-profile-feed" params={name: @props.params.name}><Translate content="profile.nav.feed" /></Link>
@@ -45,7 +52,7 @@ UserProfilePage = React.createClass
               if user?
                 <span>
                   <Link to="inbox"><Translate content="profile.nav.messages" /></Link>
-                  <Link to="settings"><Translate content="profile.nav.settings" /></Link>
+                  <Link to="settings-home" params={name: @props.params.name}><Translate content="profile.nav.settings" /></Link>
                 </span>
             }</PromiseRenderer>
           </nav>
