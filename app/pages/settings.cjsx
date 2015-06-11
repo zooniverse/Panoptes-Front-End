@@ -1,5 +1,6 @@
 React = require 'react'
 BoundResourceMixin = require '../lib/bound-resource-mixin'
+AutoSave = require '../components/auto-save'
 handleInputChange = require '../lib/handle-input-change'
 ChangeListener = require '../components/change-listener'
 auth = require '../api/auth'
@@ -97,10 +98,6 @@ ChangePasswordForm = React.createClass
 UserSettingsPage = React.createClass
   displayName: 'UserSettingsPage'
 
-  mixins: [BoundResourceMixin]
-
-  boundResource: 'user'
-
   getDefaultProps: ->
     user: {}
 
@@ -129,26 +126,22 @@ UserSettingsPage = React.createClass
         <hr />
 
         <div className="content-container column">
-          <table className="standard-table full">
-            <tr>
-              <th>Credited name</th>
-              <td>
-                <input type="text" className="standard-input full" name="credited_name" value={@props.user.credited_name} onChange={@handleChange} />
-                <div className="form-help">Public; we’ll use this to give acknowledgement in papers, on posters, etc.</div>
-              </td>
-            </tr>
-          </table>
-
           <p>
-            <label>
-              <input type="checkbox" name="global_email_communication" checked={@props.user.global_email_communication} onChange={@handleChange} />{' '}
-              Get general Zooniverse email updates
-            </label>
+            <AutoSave resource={@props.user}>
+              <span className="form-label">Credited name</span>
+              <br />
+              <input type="text" className="standard-input full" name="credited_name" value={@props.user.credited_name} onChange={handleInputChange.bind @props.user} />
+            </AutoSave>
+            <span className="form-help">Public; we’ll use this to give acknowledgement in papers, on posters, etc.</span>
           </p>
 
           <p>
-            <button type="button" className="standard-button" disabled={@state.saveInProgress or not @props.user.hasUnsavedChanges()} onClick={@saveResource}>Save profile</button>{' '}
-            {@renderSaveStatus()}
+            <AutoSave resource={@props.user}>
+              <label>
+                <input type="checkbox" name="global_email_communication" checked={@props.user.global_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
+                Get general Zooniverse email updates
+              </label>
+            </AutoSave>
           </p>
         </div>
       </div>
@@ -211,7 +204,9 @@ module.exports = React.createClass
     <ChangeListener target={auth} handler={=>
       <PromiseRenderer promise={auth.checkCurrent()} then={(user) =>
         if user?
-          <UserSettingsPage user={user} />
+          <ChangeListener target={user} handler={=>
+            <UserSettingsPage user={user} />
+          } />
         else
           <div className="content-container">
             <p>You’re not signed in.</p>

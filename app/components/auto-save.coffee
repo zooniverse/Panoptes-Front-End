@@ -38,7 +38,7 @@ module.exports = React.createClass
 
   handleChange: (e) ->
     e.persist()
-    console?.log 'AutoSave::handleChange', e
+    # console?.log 'AutoSave::handleChange', e
     delay = if @isTextInput e.target
       @props.keyboardDelay
     else
@@ -48,13 +48,13 @@ module.exports = React.createClass
   handleClick: (e) ->
     if e.target.tagName is 'BUTTON'
       e.persist()
-      console?.log 'AutoSave::handleClick', e
+      # console?.log 'AutoSave::handleClick', e
       @saveResourceAfter @props.immediateDelay
 
   handleBlur: (e) ->
     if @isTextInput e.target
       e.persist()
-      console?.log 'AutoSave::handleBlur', e
+      # console?.log 'AutoSave::handleBlur', e
       delay = if @state.saving?
         @props.keyboardDelay
       else
