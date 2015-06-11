@@ -8,6 +8,7 @@ ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 SubjectViewer = require '../components/subject-viewer'
 NewDiscussionForm = require '../talk/discussion-new-form'
+CommentLink = require '../talk/comment-link'
 {Navigation} = require 'react-router'
 
 module?.exports = React.createClass
@@ -31,11 +32,13 @@ module?.exports = React.createClass
         @setState {subject}
 
   comment: (data, i) ->
-    <div key={data.id} className="talk-module">
-      <strong>{data.user_display_name}</strong>
-      <br />
-      <span>{data.body}</span>
-    </div>
+    <CommentLink key={data.id} comment={data}>
+      <div className="talk-module">
+        <strong>{data.user_display_name}</strong>
+        <br />
+        <span>{data.body}</span>
+      </div>
+    </CommentLink>
 
   onCreateDiscussion: (discussion) ->
     projectId = discussion.section.split('-')[0] # string
@@ -57,7 +60,6 @@ module?.exports = React.createClass
             if comments.length
               <div>
                 <h2>Comments mentioning this subject:</h2>
-                <p style={color:"red"}>Todo link to thread/comment</p>
                 <div>{comments.map(@comment)}</div>
               </div>
             else
