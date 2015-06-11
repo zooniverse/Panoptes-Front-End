@@ -10,6 +10,7 @@ module.exports = React.createClass
     className: 'auto-save'
     resource: null
     keyboardDelay: 10 * 1000
+    immediateDelay: 0
     resetDelay: 2 * 1000
 
   getInitialState: ->
@@ -41,14 +42,14 @@ module.exports = React.createClass
     delay = if @isTextInput e.target
       @props.keyboardDelay
     else
-      0
+      @props.immediateDelay
     @saveResourceAfter delay
 
   handleClick: (e) ->
     if e.target.tagName is 'BUTTON'
       e.persist()
       console?.log 'AutoSave::handleClick', e
-      @saveResourceAfter 0
+      @saveResourceAfter @props.immediateDelay
 
   handleBlur: (e) ->
     if @isTextInput e.target
@@ -57,7 +58,7 @@ module.exports = React.createClass
       delay = if @state.saving?
         @props.keyboardDelay
       else
-        0
+        @props.immediateDelay
       @saveResourceAfter delay
 
   saveResourceAfter: (delay) ->
