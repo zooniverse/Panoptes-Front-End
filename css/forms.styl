@@ -6,7 +6,8 @@
     background: rgba(gray, 0.05)
 
   &[data-busy]
-    background: rgba(orange, 0.2)
+    background-stripes: rgba(gray, 0.3), transparent, 1em
+    animation: busy-animation 1s linear infinite
 
   &[data-success]
     background: rgba(lime, 0.2)

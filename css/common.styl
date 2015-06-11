@@ -22,7 +22,7 @@ background-stripes(color1, color2, size)
   )
   background-size: size size
 
-@keyframes busy-button-animation
+@keyframes busy-animation
   from
     background-position: 0 0
   to
@@ -45,25 +45,15 @@ $reset-button
     cursor: inherit
     opacity: 0.5
 
-  &::after
+  &[data-busy]::after
+    animation: busy-button-animation 1s linear infinite alternate
+    background: linear-gradient(90deg, rgba(gray, 0), rgba(gray, 0.2), rgba(gray, 0))
     bottom: 0
     content: ""
     left: 0
     position: absolute
     top: 0
     right: 0
-
-  &[data-busy]::after
-    background-stripes: rgba(gray, 0.5), transparent, 1em
-    animation: busy-button-animation 0.5s linear infinite
-
-  &[data-success]::after
-    background: rgba(lime, 0.2)
-    box-shadow: 0 0 3px lime
-
-  &[data-error]::after
-    background: rgba(red, 0.3)
-    box-shadow: 0 0 3px red
 
 $generic-heading
   font-size: 0.7em
