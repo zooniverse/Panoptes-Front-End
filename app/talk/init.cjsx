@@ -10,6 +10,7 @@ PromiseRenderer = require '../components/promise-renderer'
 ProjectLinker = require './lib/project-linker'
 ROLES = require './lib/roles'
 auth = require '../api/auth'
+{Link} = require 'react-router'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
@@ -59,7 +60,7 @@ module?.exports = React.createClass
     <BoardPreview {...@props} key={i} data={data} />
 
   tag: (t, i) ->
-    <p key={i}>#{t.name}</p>
+    <span><Link key={i} query={query: t.name} to="talk-search">#{t.name}</Link>{' '}</span>
 
   roleReadLabel: (data, i) ->
     <label key={i}><input type="radio" name="role-read" value={data}/>{data}</label>
