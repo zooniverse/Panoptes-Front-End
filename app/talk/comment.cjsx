@@ -28,7 +28,7 @@ module?.exports = React.createClass
     onDeleteComment: React.PropTypes.func # passed (commentId) on click
     onLikeComment: React.PropTypes.func # passed (commentId) on like
     onClickReply: React.PropTypes.func # passed (user, comment) on click
-    active: React.PropTypes.bool  # optional active switch
+    active: React.PropTypes.bool  # optional active switch: scroll window to comment and apply styling
 
   getDefaultProps: ->
     active: false
@@ -36,6 +36,10 @@ module?.exports = React.createClass
   getInitialState: ->
     editing: false
     commentValidationErrors: []
+
+  componentDidMount: ->
+    if @props.active
+      React.findDOMNode(@).scrollIntoView()
 
   onClickReply: (e) ->
     @props.onClickReply(@props.user, @props.data)
