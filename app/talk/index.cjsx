@@ -18,9 +18,15 @@ module?.exports = React.createClass
       <h1>Talk!</h1>
       <TalkBreadcrumbs {...@props} />
 
-      <form onSubmit={ @onSearchSubmit }>
-        <input type="text" defaultValue={@props.query?.query || 'search'} ref="talkSearchInput" />
-        <button type="submit">Search</button>
+      <form className="talk-search-form" onSubmit={ @onSearchSubmit }>
+        <input type="text"
+          defaultValue={@props.query?.query}
+          placeholder="Search the Zooniverse..."
+          ref="talkSearchInput">
+        </input>
+        <button type="submit">
+          <i className="fa fa-search" />
+        </button>
       </form>
 
       <RouteHandler {...@props} section={@state.currentSection} />

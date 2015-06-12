@@ -29,6 +29,27 @@ TALK_MARGIN = 10px auto
     font-family: inherit
     display: block
 
+.talk-search-form
+  position: relative
+  max-width: 250px
+  overflow: auto
+
+  input[type='text']
+    float: left
+    width: 80%
+    border: 1px solid TALK_BACKGROUND
+    border-right: none
+    height: 100%
+    border-radius: TALK_BORDER_RADIUS 0 0 TALK_BORDER_RADIUS
+
+  button[type='submit']
+    position: absolute
+    background: TALK_BACKGROUND
+    width: 20%
+    color: COPY
+    height: 100%
+    border-radius: 0 TALK_BORDER_RADIUS TALK_BORDER_RADIUS 0
+
 .polaroid-image
   background: #fff
   padding: 10px 10px 20px 10px
