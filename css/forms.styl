@@ -1,6 +1,20 @@
 .form-label
   @extends $generic-heading
 
+.auto-save
+  &[data-waiting]
+    background: rgba(gray, 0.05)
+
+  &[data-busy]
+    background-stripes: rgba(gray, 0.3), transparent, 1em
+    animation: busy-animation 1s linear infinite
+
+  &[data-success]
+    background: rgba(lime, 0.2)
+
+  &[data-error]
+    background: rgba(red, 0.2)
+
 .standard-input
   border: 1px solid
   border-radius: 2px

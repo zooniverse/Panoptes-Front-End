@@ -4,7 +4,7 @@ module.exports = React.createClass
   displayName: 'RetirementRulesEditor'
 
   getDefaultProps: ->
-    subjectSet: null
+    workflow: null
 
   getInitialState: ->
     saveError: null

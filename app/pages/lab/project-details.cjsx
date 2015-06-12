@@ -1,5 +1,6 @@
 React = require 'react'
-BoundResourceMixin = require '../../lib/bound-resource-mixin'
+AutoSave = require '../../components/auto-save'
+handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
@@ -11,10 +12,6 @@ MAX_BACKGROUND_SIZE = 256000
 
 ExternalLinksEditor = React.createClass
   displayName: 'ExternalLinksEditor'
-
-  mixins: [BoundResourceMixin]
-
-  boundResource: 'project'
 
   getDefaultProps: ->
     project: {}
@@ -31,15 +28,27 @@ ExternalLinksEditor = React.createClass
         <tbody>
           {for link, i in @props.project.urls
             link._key ?= Math.random()
-            <tr key={link._key}>
-              <td><input type="text" name="urls.#{i}.label" value={link.label} onChange={@handleChange}/></td>
-              <td><input type="text" name="urls.#{i}.url" value={link.url} onChange={@handleChange}/></td>
-              <td><button type="button" onClick={@handleRemoveLink.bind this, link._key}><i className="fa fa-remove"></i></button></td>
-            </tr>}
+            <AutoSave key={link._key} tag="tr" resource={@props.project}>
+              <td>
+                <input type="text" name="urls.#{i}.label" value={@props.project.urls[i].label} onChange={handleInputChange.bind @props.project} />
+              </td>
+              <td>
+                <input type="text" name="urls.#{i}.url" value={@props.project.urls[i].url} onChange={handleInputChange.bind @props.project} />
+              </td>
+              <td>
+                <AutoSave resource={@props.project}>
+                  <button type="button" onClick={@handleRemoveLink.bind this, link}>
+                    <i className="fa fa-remove"></i>
+                  </button>
+                </AutoSave>
+              </td>
+            </AutoSave>}
         </tbody>
       </table>
 
-      <button type="button" onClick={@handleAddLink}>Add a link</button>
+      <AutoSave resource={@props.project}>
+        <button type="button" onClick={@handleAddLink}>Add a link</button>
+      </AutoSave>
     </div>
 
   handleAddLink: ->
@@ -49,20 +58,16 @@ ExternalLinksEditor = React.createClass
       url: 'https://example.com/'
     @props.project.update changes
 
-  handleRemoveLink: (linkKey) ->
-    changes = {}
-    changes['urls'] = @props.project.urls.filter((link) -> link._key != linkKey)
+  handleRemoveLink: (linkToRemove) ->
+    changes =
+      urls: (link for link in @props.project.urls when link isnt linkToRemove)
     @props.project.update changes
 
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
 
-  mixins: [BoundResourceMixin]
-
-  boundResource: 'project'
-
   getDefaultProps: ->
-    project: null
+    project: {}
 
   getInitialState: ->
     avatarError: null
@@ -120,30 +125,40 @@ module.exports = React.createClass
           <hr />
 
           <p>
-            <label>
-              <input type="checkbox" name="configuration.user_chooses_workflow" checked={@props.project.configuration?.user_chooses_workflow} onChange={@handleChange} />
+            <AutoSave tag="label" resource={@props.project}>
+              <input type="checkbox" name="configuration.user_chooses_workflow" value={@props.project.configuration?.user_chooses_workflow} onChange={handleInputChange.bind @props.project} />{' '}
               Volunteers can choose which workflow they work on
-            </label><br />
+            </AutoSave>
+            <br />
             <small className="form-help">If you have multiple workflows, check this to let volunteers select which workflow they want to to work on; otherwise, they’ll be served randomly.</small>
           </p>
         </div>
 
         <div className="column">
           <p>
-            Name<br />
-            <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} disabled={@state.saveInProgress} onChange={@handleChange} />
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Name</span>
+              <br />
+              <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
             <small className="form-help">The project name is the first thing people will see about the project, and it will show up in the project URL. Try to keep it short and sweet.</small>
           </p>
 
           <p>
-            Description<br />
-            <textarea className="standard-input full" name="description" value={@props.project.description} row="2" disabled={@state.saveInProgress} onChange={@handleChange} />
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Description</span>
+              <br />
+              <input className="standard-input full" name="description" value={@props.project.description} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
             <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.</small>
           </p>
 
           <p>
-            Introduction<br />
-            <textarea className="standard-input full" name="introduction" value={@props.project.introduction} rows="10" disabled={@state.saveInProgress} onChange={@handleChange} />
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Introduction</span>
+              <br />
+              <textarea className="standard-input full" name="introduction" rows="10" value={@props.project.introduction} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
             <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<insert link to best markdown tutorial>), so you can add formatting.</small>
           </p>
 
@@ -153,15 +168,8 @@ module.exports = React.createClass
             <ExternalLinksEditor project={@props.project} />
           </div>
 
-          <p>
-            <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
-            {@renderSaveStatus()}
-          </p>
-        </div>
+          <hr />
 
-        <hr />
-
-        <div>
           Data export<br />
           <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request new data export</button>{' '}
           <small className="form-help">
@@ -185,12 +193,6 @@ module.exports = React.createClass
               We’ve received your request, check your email for a link to your data soon!
             </div>}
         </div>
-
-        <p>
-          <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
-          {@renderSaveStatus()}
-        </p>
-
       </div>
     </div>
 
