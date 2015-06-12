@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 
 module.exports = React.createClass
-  displayName: 'Favorites'
+  displayName: 'UserFeed'
 
   render: ->
-    <div>Favorites</div>
+    <div>User profile feed</div>

@@ -9,6 +9,7 @@ apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
 
 MAX_AVATAR_SIZE = 65536
+MAX_HEADER_SIZE = 256000
 MIN_PASSWORD_LENGTH = 8
 
 ChangePasswordForm = React.createClass
@@ -102,11 +103,18 @@ UserSettingsPage = React.createClass
 
   getInitialState: ->
     avatarError: null
+    headerError: null
 
   render: ->
     @getAvatarSrc ?= @props.user.get 'avatar'
       .then ([avatar]) ->
         avatar.src
+      .catch ->
+        ''
+
+    @getHeaderSrc ?= @props.user.get 'header'
+      .then (header) ->
+        header.src
       .catch ->
         ''
 
@@ -116,10 +124,20 @@ UserSettingsPage = React.createClass
           Avatar<br />
           <PromiseRenderer promise={@getAvatarSrc} then={(avatarSrc) =>
             placeholder = <div className="form-help content-container">Drop an image here</div>
-            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleAvatarChange} />
+            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'avatar')} />
           } />
           {if @state.avatarError
             <div className="form-help error">{@state.avatarError.toString()}</div>}
+        </div>
+
+        <div className="content-container">
+          Profile Header<br />
+          <PromiseRenderer promise={@getHeaderSrc} then={(headerSrc) =>
+            placeholder = <div className="form-help content-container">Drop an image here</div>
+            <ImageSelector maxSize={MAX_HEADER_SIZE} defaultValue={headerSrc} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'header')} />
+          } />
+          {if @state.headerError
+            <div className="form-help error">{@state.headerError.toString()}</div>}
         </div>
 
         <hr />
@@ -186,18 +204,24 @@ UserSettingsPage = React.createClass
       </div>
     </div>
 
-  handleAvatarChange: (file) ->
-    @setState avatarError: null
-    apiClient.post @props.user._getURL('avatar'), media: content_type: file.type
-      .then ([avatar]) =>
-        console.log 'Will put file to', avatar.src
-        putFile avatar.src, file
+  handleMediaChange: (type, file) ->
+    errorProp = "#{type}Error"
+
+    newState = {}
+    newState[errorProp] = null
+    @setState newState, -> console.log 'state', @state
+
+    apiClient.post @props.user._getURL(type), media: content_type: file.type
+      .then ([resource]) =>
+        putFile resource.src, file
       .then =>
-        @props.user.uncacheLink 'avatar'
-        @getAvatarSrc = null
+        @props.user.uncacheLink type
+        @["#{type}SrcGet"] = null # Uncache the local request so that rerendering makes it again.
         @props.user.emit 'change'
       .catch (error) =>
-        @setState avatarError: error
+        newState = {}
+        newState[errorProp] = error
+        @setState newState
 
   handleProjectEmailChange: (projectPreference, args...) ->
     handleInputChange.apply projectPreference, args

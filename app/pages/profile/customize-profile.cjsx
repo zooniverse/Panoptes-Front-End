@@ -9,8 +9,8 @@ ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
 
-CustomizeProfile = React.createClass
+module.exports = React.createClass
   displayName: 'CustomizeProfile'
 
   render: ->
-    <div></div>
+    <div>Customize</div>

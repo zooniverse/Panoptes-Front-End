@@ -38,15 +38,12 @@ routes = <Route handler={App}>
     <Route name="register" handler={require './partials/register-form'} />
   </Route>
   <Route name="privacy" handler={require './pages/privacy-policy'} />
+  <Route name="settings" path="settings" handler={require './pages/profile/settings'} />
 
   <Route name="user-profile" path="users/:name" handler={require './pages/profile/user-profile'}>
     <DefaultRoute name="user-profile-feed" handler={require './pages/profile/user-profile'} />
     <Route name="user-profile-stats" path="stats" handler={require './pages/profile/stats'} />
     <Route name="user-profile-favorites" path="favorites" handler={require './pages/profile/favorites'} />
-    <Route name="settings" path="settings" handler={require './pages/profile/settings'}>
-      <DefaultRoute name="settings-home" handler={require './pages/profile/settings'} />
-      <Route name="settings-customize-profile" path="customize" handler={require './pages/profile/customize-profile'} />
-    </Route>
   </Route>
 
   <Route name="projects" handler={require './pages/projects'} />

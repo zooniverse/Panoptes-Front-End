@@ -1,8 +1,8 @@
 counterpart = require 'counterpart'
 React = require 'react'
 
-Stats = React.createClass
+module.exports = React.createClass
   displayName: 'Stats'
 
   render: ->
-    <div></div>
+    <div>Stats</div>
