@@ -31,7 +31,7 @@ module?.exports = React.createClass
 
   setDiscussion: ->
     {comment} = @props
-    talkClient.type('discussions').get(comment.discussion_id.toString())
+    talkClient.type('discussions').get(comment.discussion_id.toString(), {})
       .then (discussion) => @setState {discussion}
 
   projectComment: ->
