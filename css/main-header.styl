@@ -1,11 +1,10 @@
 .main-header
+  font-size: 10px
+  line-height: 20px
 
   .on-home-page &
     position: absolute
     width: 100%
-
-    .main-logo
-      font-size: 2.7em
 
   .on-secondary-page &
     position: absolute
@@ -16,6 +15,7 @@
 
     &.main-logo
       color: white
+      font-size: 2.7em
 
   .on-project-page &
     opacity: 0.4
@@ -24,12 +24,16 @@
     &:hover
       opacity: 1
 
+  .login-bar
+    font-size: 1.4em
+
   .account-bar
-    font-size: 14px
+    font-size: 1.4em
     position: relative
+    top: .75em
 
     .account-info
-      padding-bottom: 15px
+      padding-bottom: 1.25em
 
       .avatar
         height: calc(1em + 1.5vw)
@@ -39,10 +43,10 @@
 
       .display-name
         color: white
-        margin-right: 1em
+        margin-right: 1.4em
 
       .message-link
-        margin-left: 1em
+        margin-left: 1.4em
 
       a
         color: white
@@ -58,7 +62,7 @@
       padding: 1.5em
       pointer-events: none
       position: absolute
-      right: 23px
+      right: 2em
       white-space: no-wrap
 
       &:before
@@ -80,14 +84,14 @@
         pointer-events: auto
 
 .main-title
-  align-items: baseline
+  align-items: center
   background: #0072ff
   box-sizing: border-box
   color: BACKGROUND
   display: flex
   flex-wrap: wrap
   justify-content: space-between
-  padding: 10px 3vw
+  padding: 1em 3vw
 
   .on-home-page &
     border-bottom: none
@@ -113,7 +117,7 @@
 
 .main-logo
   font-family: "Montserrat"
-  font-size: 1.8em
+  font-size: 2.7em
   font-smoothing: antialiased
   letter-spacing: 0.05em
   text-transform: uppercase
@@ -125,7 +129,7 @@
   display: flex
   flex-grow: 1
   flex-wrap: wrap
-  padding: 0 15px
+  padding: 0 1.5em
 
   > hr
     border: 0
@@ -134,9 +138,9 @@
 
 .main-nav-item
   color: rgba(255,255,255,0.5)
-  font-size: 0.9em
-  padding: 0.5em 3vw
-  margin: 0.5em 0 0
+  font-size: 1.4em
+  padding: 7.5px 3vw
+  margin: 2.5px 0 0
 
   &:link:hover
     background: rgba(255,255,255, 0.2)
@@ -148,7 +152,7 @@
     font-weight: bold
 
   .minor
-    font-size: 0.7em
+    font-size: 10px
     font-weight: bold
     letter-spacing: 0.1em
     text-transform: uppercase
