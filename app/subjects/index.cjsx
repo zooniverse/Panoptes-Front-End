@@ -72,7 +72,7 @@ module?.exports = React.createClass
                 {# these wrapping promises ensure that there are boards for a project}
                 {# & could be removed if a default board is put in place}
                 <PromiseRenderer promise={subject.get('project')}>{(project) =>
-                  <PromiseRenderer promise={talkClient.type('boards').get(section: "#{project.id}-#{project.title}")}>{(boards) =>
+                  <PromiseRenderer promise={talkClient.type('boards').get(section: "project-#{project.id}")}>{(boards) =>
                     if boards?.length
                       <NewDiscussionForm
                         focusImage={subject}
