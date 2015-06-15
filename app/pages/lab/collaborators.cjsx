@@ -236,7 +236,7 @@ module.exports = React.createClass
         @setState saving: @state.saving
 
   talkSection: ->
-    "#{@props.project.id}-#{@props.project.display_name}"
+    "project-#{@props.project.id}"
 
   handleCollaboratorAddition: ->
     @props.project.uncacheLink 'project_roles'

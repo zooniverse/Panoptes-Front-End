@@ -69,7 +69,7 @@ module?.exports = React.createClass
         <h2>Create a disussion +</h2>
         {if not @props.boardId
           <PromiseRenderer promise={@props.focusImage.get('project')}>{(project) =>
-            <PromiseRenderer promise={talkClient.type('boards').get(section: "#{project.id}-#{project.title}")}>{(boards) =>
+            <PromiseRenderer promise={talkClient.type('boards').get(section: "project-#{project.id}")}>{(boards) =>
               <div>
                 <h2>Board</h2>
                 {boards.map @boardRadio}
