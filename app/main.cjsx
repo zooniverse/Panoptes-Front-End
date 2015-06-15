@@ -26,7 +26,7 @@ routes = <Route handler={App}>
   <Route name="about" handler={require './pages/about'} ignoreScrollBehavior>
     <DefaultRoute name="aboutIndex" handler={require './pages/about'} />
     <Route name="team" path="team" handler={require './pages/team-page'} />
-    <Route name="publications" path="publications" handler={require './pages/about'} />
+    <Route name="publications" path="publications" handler={require './pages/publications-page'} />
   </Route>
 
   <Route name="reset-password" handler={require './pages/reset-password'} />

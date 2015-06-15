@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-Markdown = require '../components/markdown'
+AboutSideBar = require '../partials/about-side-bar'
 
 counterpart.registerTranslations 'en',
   team:
@@ -35,8 +35,8 @@ counterpart.registerTranslations 'en',
         her PhD in Ecology, Evolution, and Behavior at the University of Minnesota in 2014,
         and has since joined the Zooniverse as a Postdoc in Ecology and Citizen Science.'''
       andreaSimenstad:
-        title: 'Title'
-        bio: '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'''
+        title: 'Developer'
+        bio: '''Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.'''
       brianCarstensen:
         title: 'UX Developer'
         bio: '''Brian Carstensen recently moved from Chicago to Oxford. Brian has a degree
@@ -59,8 +59,8 @@ counterpart.registerTranslations 'en',
         bio: '''Chris Snyder began working on the Zooniverse team in fall 2012 as a web developer. In July 2013,
         he became the technical project manager. He received a degree in computer science from the University of Dayton.'''
       christopherDoogue:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        title: 'Project Assistant'
+        bio: '''Chris has been happily supporting the Zooniverse Oxford team since Sep. 2014. He has been with the Department of Astrophysics for over 2 years administratively supporting various projects. A former trained actor, he has the ability to look like he's smiling in the face of adversity!'''
       colemanKrawczyk:
         title: 'Data Scientist'
         bio: '''Coleman is helping to create new data analysis and visualization tools for existing Zooniverse
@@ -133,9 +133,6 @@ counterpart.registerTranslations 'en',
       michaelParrish:
         title: 'Rails/Backend Developer'
         bio: '''Software developer at the Zooniverse. Dog, fishing, snakes, and bourbon.'''
-      perryRoper:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
       rebeccaSmethurst:
         title: 'Researcher'
         bio: '''Becky is an astrophysicist working towards her doctorate in Oxford. She is
@@ -160,11 +157,11 @@ counterpart.registerTranslations 'en',
         A former researcher and software developer at NASA Ames, he received degrees in both
         computer science and mechanical engineering.'''
       simoneDuca:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        title: 'Web Developer'
+        bio: '''Simone is a front end web developer at the Zooniverse. He has a Phd in logic and philosophy from Bristol and loves cooking.'''
       veronicaMaidel:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        title: 'Data Scientist'
+        bio: '''Veronica is a Data Scientist who works on discovering patterns in Zooniverse data, by manipulating it and using it to create machine learning models. She received a PhD in Information Science and Technology from Syracuse University.'''
       victoriaVanHyning:
         title: 'Researcher'
         bio: '''Victoria is a Digital Humanities postdoc for the Zooniverse. She holds a masters
@@ -346,12 +343,6 @@ teamMembers =
     bio: counterpart "team.content.michaelParrish.bio"
     image: "./assets/team/michael.png"
     location: "chicago"
-  perryRoper:
-    name: "Perry Roper"
-    title: counterpart "team.content.perryRoper.title"
-    bio: counterpart "team.content.perryRoper.bio"
-    image: "http://placehold.it/80x80"
-    location: "oxford"
   rebeccaSmethurst:
     name: "Rebecca Smethurst"
     twitter: "becky1505"
@@ -411,20 +402,10 @@ module.exports = React.createClass
   getInitialState: ->
     currentSort: 'showAll'
 
-  componentDidMount: ->
-    button = React.findDOMNode(@refs.showAll)
-    @updateButtonState button
-
   render: ->
-    sideBarNav = counterpart "team.nav"
-    <div className="team-page">
-      <aside className="side-bar">
-        <nav ref="sideBarNav">
-          {for navItem of sideBarNav
-            <button key={navItem} ref={navItem} className="secret-button" onClick={@showPeopleList.bind(null, navItem)}><Translate content="team.nav.#{navItem}" /></button>
-          }
-        </nav>
-      </aside>
+    sideBarNavList = counterpart "team.nav"
+    <div className="team-page secondary-page-copy">
+      <AboutSideBar showList={@showPeopleList} sideBarNav={sideBarNavList} currentSort={@state.currentSort} translations={counterpart "team"} />
       <section className="team-member-list">
         <h2>{if @state.currentSort is 'showAll'
               <Translate content="team.content.header.showAll" />
@@ -436,7 +417,7 @@ module.exports = React.createClass
             <div key={teamMember} className="team-member">
               <img src={details.image} alt="#{details.name}" />
               <div className="team-member-details">
-                <h4>{details.name}, {details.title} {if details.twitter then <a href="http://twitter.com/#{details.twitter}" target="_blank"><i className="fa fa-twitter"></i></a> }</h4>
+                <h3>{details.name}, {details.title} {if details.twitter then <a href="http://twitter.com/#{details.twitter}" target="_blank"><i className="fa fa-twitter"></i></a> }</h3>
                 <p>{details.bio}</p>
               </div>
             </div>
@@ -446,11 +427,6 @@ module.exports = React.createClass
 
   showPeopleList: (navItem) ->
     currentButton = React.findDOMNode(@refs[navItem])
-    @setState currentSort: navItem, @updateButtonState(currentButton)
+    @setState currentSort: navItem
 
-  updateButtonState: (currentButton) ->
-    buttons = React.findDOMNode(@refs.sideBarNav).childNodes
-    for button in buttons
-      button.classList.remove 'active'
-    currentButton.classList.add 'active'
 
