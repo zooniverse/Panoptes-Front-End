@@ -20,21 +20,23 @@ module.exports = React.createClass
   getInitialState: ->
     naturalWidth: 0
     naturalHeight: 0
+    scale:
+      horizontal: 1
+      vertical: 1
     showWarning: false
     frame: 0
     selectedMark: null
     detailsTooltipOffset: ''
 
-  getScale: ->
-    ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
-    rect = @refs.sizeRect?.getDOMNode().getBoundingClientRect()
-    horizontal = (rect?.width || ALMOST_ZERO) / (@state.naturalWidth || ALMOST_ZERO)
-    vertical = (rect?.height || ALMOST_ZERO) / (@state.naturalHeight || ALMOST_ZERO)
-    {horizontal, vertical}
+  componentDidMount: ->
+    addEventListener 'resize', @handleResize
+
+  componentWillUnmount: ->
+    removeEventListener 'resize', @handleResize
 
   getEventOffset: (e) ->
     rect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-    scale = @getScale()
+    scale = @state.scale
     x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
@@ -47,7 +49,7 @@ module.exports = React.createClass
     setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
 
   render: ->
-    scale = @getScale()
+    scale = @state.scale
 
     <div className="subject-area">
       <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
@@ -149,8 +151,10 @@ module.exports = React.createClass
   handleSubjectFrameLoad: (e) ->
     if e.target.tagName.toUpperCase() is 'IMG'
       {naturalWidth, naturalHeight} = e.target
-      unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
-        @setState {naturalWidth, naturalHeight}
+      if @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
+        @handleResize()
+      else
+        @setState {naturalWidth, naturalHeight}, @handleResize
       @props.onLoad? arguments...
 
   handleFrameChange: (frame) ->
@@ -162,6 +166,16 @@ module.exports = React.createClass
   updateAnnotations: ->
     @props.classification.update
       annotations: @props.classification.annotations
+
+  handleResize: ->
+    ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
+    rect = @refs.sizeRect?.getDOMNode().getBoundingClientRect()
+    scale =
+      horizontal: (rect?.width || ALMOST_ZERO) / (@state.naturalWidth || ALMOST_ZERO)
+      vertical: (rect?.height || ALMOST_ZERO) / (@state.naturalHeight || ALMOST_ZERO)
+
+    unless scale.horizontal is @state.scale.horizontal and scale.vertical is @state.scale.vertical
+      @setState {scale}
 
   handleInitStart: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
