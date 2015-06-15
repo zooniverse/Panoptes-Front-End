@@ -53,7 +53,7 @@ ProjectPage = React.createClass
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
         params =
-          owner: owner.slug
+          owner: owner.login
           name: @props.project.slug
 
         <div className="project-page">

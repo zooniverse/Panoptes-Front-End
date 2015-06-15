@@ -42,7 +42,7 @@ module.exports = React.createClass
           <Link to="inbox" className="message-link"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
         </div>
         <div className="account-menu" ref="accountMenu">
-          <Link to="user-profile" params={name: @props.user.display_name}><Translate content="accountMenu.profile" /></Link>
+          <Link to="user-profile" params={name: @props.user.login}><Translate content="accountMenu.profile" /></Link>
           <Link to="settings"><Translate content="accountMenu.settings" /></Link>
           <button className="secret-button" type="button" onClick={@handleSignOutClick}><Translate content="accountMenu.signOut" /></button>
         </div>

@@ -44,7 +44,7 @@ module?.exports = React.createClass
     projectId = discussion.section.split('-')[0] # string
     apiClient.type('projects').get(projectId).then (project) =>
       project.get('owner').then (owner) =>
-        @transitionTo('project-talk-discussion', {owner: owner.slug, name: project.slug, board: discussion.board_id, discussion: discussion.id})
+        @transitionTo('project-talk-discussion', {owner: owner.login, name: project.slug, board: discussion.board_id, discussion: discussion.id})
 
   render: ->
     {subject} = @state

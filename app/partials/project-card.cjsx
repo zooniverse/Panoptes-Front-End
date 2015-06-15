@@ -28,7 +28,7 @@ module.exports = React.createClass
         linkProps =
           to: 'project-home'
           params:
-            owner: owner?.slug ? 'LOADING'
+            owner: owner?.login ? 'LOADING'
             name: @props.project.slug
 
         <Link {...linkProps}>

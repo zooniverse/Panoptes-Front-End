@@ -57,7 +57,7 @@ module?.exports = React.createClass
                 {
                   board: discussion.board_id,
                   discussion: discussion.id,
-                  owner: owner.slug,
+                  owner: owner.login,
                   name: project.slug
                 }
                 {
