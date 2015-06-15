@@ -182,7 +182,7 @@ module.exports = React.createClass
           toggleThisRole = @toggleRole.bind this, projectRoleSet, role
           # TODO: Translate this.
           <label key={role}>
-            <input type="checkbox" name={role} checked={role in projectRoleSet.roles} disabled={role is 'owner' or projectRoleSet.id in @state.saving or 'owner' in projectRoleSet.roles} onChange={toggleThisRole} />{' '}
+            <input type="checkbox" name={role} checked={role in projectRoleSet.roles} disabled={role is 'owner' or projectRoleSet.id in @state.saving} onChange={toggleThisRole} />{' '}
             {ROLES_INFO[role].label}
           </label>}
       </span>
