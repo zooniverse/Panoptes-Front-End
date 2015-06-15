@@ -1,7 +1,7 @@
 React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
-
+apiClient = require '../api/client'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 
@@ -11,6 +11,9 @@ counterpart.registerTranslations 'en',
 
 module.exports = React.createClass
   displayName: 'ProjectCard'
+
+  projectOwner: ->
+    apiClient.type(@props.project.links.owner.type).get(@props.project.links.owner.id)
 
   componentDidMount: ->
     card = @refs.projectCard.getDOMNode()
@@ -24,7 +27,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="project-card" ref="projectCard">
-      <PromiseRenderer promise={@props.project.get 'owner'} pending={null}>{(owner) =>
+      <PromiseRenderer promise={@projectOwner()} pending={null}>{(owner) =>
         linkProps =
           to: 'project-home'
           params:

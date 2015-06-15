@@ -30,6 +30,7 @@ module.exports = React.createClass
     query.private ?= false
     query.beta ?= true # Temporary
     query.approved ?= true
+    query.include ?= 'owners,avatar'
 
     getProjects = apiClient.type('projects').get query
 
