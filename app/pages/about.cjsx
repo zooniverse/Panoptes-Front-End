@@ -4,6 +4,7 @@ Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 Markdown = require '../components/markdown'
 TeamPage = require './team-page'
+PublicationsPage = require './publications-page'
 
 counterpart.registerTranslations 'en',
   about:
@@ -68,8 +69,6 @@ counterpart.registerTranslations 'en',
         Many of the most interesting discoveries from Zooniverse projects
         have come from discussion between volunteers and researchers.
         We encourage all users to join the conversation on the discussion boards for more in-depth participation.'''
-      team: 'the team!'
-      publications: 'publications'
 
 module.exports = React.createClass
   displayName: 'AboutPage'
@@ -90,7 +89,6 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
-  # May pull out hero and nav section out into its own reusable component
   render: ->
     <div className="secondary-page about-page">
       <section className="hero about-hero">
@@ -104,10 +102,13 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="about-page-content content-container">
-        {if @state.activeTab is 'team'
-          <TeamPage />
-        else
-          <Markdown>{counterpart "about.pageContent.#{@state.activeTab}"}</Markdown>
+        {switch @state.activeTab
+          when 'team'
+            <TeamPage />
+          when 'publications'
+            <PublicationsPage />
+          else
+            <Markdown>{counterpart "about.pageContent.#{@state.activeTab}"}</Markdown>
         }
       </section>
     </div>

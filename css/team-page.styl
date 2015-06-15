@@ -2,28 +2,6 @@
   display: flex
   flex-flow: row wrap
 
-  .side-bar
-    flex: 0 1 190px
-
-    nav
-      align-items: flex-start
-      display: inline-flex
-      flex-direction: column
-      flex-wrap: wrap
-      margin-top: 0.5em
-
-      @media screen and (max-width: 400px)
-        flex-direction: row
-
-      button
-        color: #5a5a5a
-        font-size: 0.9em
-        margin: 0.5em 0.5em 1.5em
-        outline: none
-
-        &.active
-          font-weight: 700
-
   .team-member-list
     flex: 2 1 80%
 
@@ -32,7 +10,7 @@
 
     .team-member
       display: flex
-      margin: 1em 0
+      margin: 1.5em 0
 
       img
         width: 80px
@@ -40,4 +18,4 @@
 
       .team-member-details
         flex-basis: 75%
-        margin: 0 1em
+        margin: 0 1.5em

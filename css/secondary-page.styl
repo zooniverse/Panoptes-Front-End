@@ -1,8 +1,30 @@
 .secondary-page
-  .markdown
-    font-size: 10px
-    line-height: 20px
+  font-size: 10px
+  line-height: 20px
 
+  .secondary-page-side-bar
+    flex: 0 1 190px
+
+    nav
+      align-items: flex-start
+      display: inline-flex
+      flex-direction: column
+      flex-wrap: wrap
+      margin-top: 0.75em
+
+      @media screen and (max-width: 400px)
+        flex-direction: row
+
+      .side-bar-button
+        color: #5a5a5a
+        font-size: 14px
+        margin: 6.75px 6.75px 20.25px
+        outline: none
+
+        &.active
+          font-weight: 700
+
+  .markdown, .secondary-page-copy
     h2, h3
       color: #5a5a5a
 
@@ -15,5 +37,5 @@
     p
       color: #989898
       font-size: 1.4em
-      margin: 1.5em 0
+      margin: 1em 0
       max-width: 700px
