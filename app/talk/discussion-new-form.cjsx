@@ -7,6 +7,7 @@ talkClient = require '../api/talk'
 authClient = require '../api/auth'
 Loading = require '../components/loading-indicator'
 PromiseRenderer = require '../components/promise-renderer'
+projectSection = require '../talk/lib/project-section'
 merge = require 'lodash.merge'
 
 module?.exports = React.createClass
@@ -68,13 +69,11 @@ module?.exports = React.createClass
       <div className="talk-board-new-discussion">
         <h2>Create a disussion +</h2>
         {if not @props.boardId
-          <PromiseRenderer promise={@props.focusImage.get('project')}>{(project) =>
-            <PromiseRenderer promise={talkClient.type('boards').get(section: "project-#{project.id}")}>{(boards) =>
-              <div>
-                <h2>Board</h2>
-                {boards.map @boardRadio}
-              </div>
-            }</PromiseRenderer>
+          <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(@props.focusImage))}>{(boards) =>
+            <div>
+              <h2>Board</h2>
+              {boards.map @boardRadio}
+            </div>
           }</PromiseRenderer>
           }
         <input

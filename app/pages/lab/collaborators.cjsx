@@ -3,6 +3,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 UserSearch = require '../../components/user-search'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
+projectSection = require '../../talk/lib/project-section'
 
 ID_PREFIX = 'LAB_COLLABORATORS_PAGE_'
 
@@ -109,7 +110,7 @@ CollaboratorCreator = React.createClass
       newTalkRoleSets = for role in talkRoles
         talkClient.type('roles').create
           name: role
-          section: "#{@props.project.id}-#{@props.project.display_name}"
+          section: projectSection(@props.project)
           user_id: id
 
       memo.concat([newRoleSet]).concat(newTalkRoleSets)
@@ -236,7 +237,7 @@ module.exports = React.createClass
         @setState saving: @state.saving
 
   talkSection: ->
-    "project-#{@props.project.id}"
+    projectSection(@props.project)
 
   handleCollaboratorAddition: ->
     @props.project.uncacheLink 'project_roles'
