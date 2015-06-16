@@ -22,12 +22,6 @@ module.exports = React.createClass
     else
       'All'
 
-  imagePromise: (resource) ->
-    if @props.imageProperty?
-      resource.get(@props.imageProperty)
-    else
-      Promise.reject("No image property")
-
   render: ->
     <div className="secondary-page all-resources-page">
       <section className={"hero #{@props.heroClass}"}>
@@ -49,7 +43,7 @@ module.exports = React.createClass
                    <OwnedCard
                      key={resource.id}
                      resource={resource}
-                     imagePromise={@imagePromise(resource)}
+                     imagePromise={@props.imagePromise(resource)}
                      linkTo={@props.cardLink}
                      translationObjectName={@props.translationObjectName}/>}
               </div>

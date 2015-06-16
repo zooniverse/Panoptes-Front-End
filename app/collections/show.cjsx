@@ -36,8 +36,8 @@ module?.exports = React.createClass
     @transitionTo(@props.path, @props.params, {page: n})
     @setData(n)
 
-  subject: (d, i) ->
-    <SubjectViewer subject=d />
+  subject: (sub) ->
+    <SubjectViewer subject={sub} />
 
   render: ->
     <div className="collections-show">

@@ -25,6 +25,10 @@ module.exports = React.createClass
 
     apiClient.type('projects').get query
 
+  imagePromise: (project) ->
+    project.get('avatar')
+      .then (avatar) -> avatar.src
+
   render: ->
     <OwnedCardList
       translationObjectName="projectsPage"
@@ -32,4 +36,4 @@ module.exports = React.createClass
       linkTo="projects"
       cardLink="project-home"
       heroClass="projects-hero"
-      imageProperty="avatar" />
+      imagePromise={@imagePromise} />

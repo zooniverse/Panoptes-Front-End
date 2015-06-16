@@ -37,6 +37,13 @@ module.exports = React.createClass
 
   title: 'Collections'
 
+  imagePromise: (collection) ->
+    apiClient.type('subjects').get(collection_id: collection.id, page_size: 1)
+    .index(0)
+    .then (subject) ->
+      firstKey = Object.keys(subject.locations[0])[0]
+      subject.locations[0][firstKey]
+
   listCollections: ->
     query = Object.create @props.query ? {}
     query.owner = @props.params.owner if @props.params?.owner?
@@ -52,4 +59,5 @@ module.exports = React.createClass
       heroNav={<CollectionsNav />}
       heroClass="collections-hero"
       ownerName={@props.params?.owner}
+      imagePromise={@imagePromise}
       cardLink="collection-show" />

@@ -12,8 +12,8 @@ module.exports = React.createClass
     card = @refs.ownedCard.getDOMNode()
 
     @props.imagePromise
-      .then (image) =>
-        card.style.backgroundImage = "url('#{image.src}')"
+      .then (src) =>
+        card.style.backgroundImage = "url('#{src}')"
         card.style.backgroundSize = "contain"
       .catch =>
         card.style.background = "url('./assets/simple-pattern.jpg') center center repeat"
