@@ -76,7 +76,7 @@ module?.exports = React.createClass
                   <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project))}>{(boards) =>
                     if boards?.length
                       <NewDiscussionForm
-                        focusImage={subject}
+                        subject={subject}
                         onCreateDiscussion={@onCreateDiscussion} />
                   }</PromiseRenderer>
                 }</PromiseRenderer>
