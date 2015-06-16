@@ -19,8 +19,8 @@ module?.exports = React.createClass
   replaceSymbols: (string) ->
     string
       .replace(/@(\w+)/g, "<a href='#/users/$1'>$1</a>") # user mentions
-      .replace(/\^([A-Za-z]+[0-9]+)/g, "<a href='http://www.zooniverse.org/subjects/$1'>$1</a>") # subject mentions
-      .replace(/\#(\w+)/g, "<a href='http://www.zooniverse.org/tags/$1'>#$1</a>") # hashtags
+      .replace(/\^([0-9]+)/g, "<a href='#/subjects/$1'>Subject $1</a>") # subject mentions
+      .replace(/\#(\w+)/g, "<a href='#/talk/search?query=$1'>#$1</a>") # hashtags
 
   markdownify: (input) ->
     markdownIt.render(input)
