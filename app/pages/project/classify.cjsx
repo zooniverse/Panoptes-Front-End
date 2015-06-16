@@ -9,7 +9,7 @@ counterpart = require 'counterpart'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
 SignInPrompt = require '../../partials/sign-in-prompt'
-sessionSubjects = require '../../lib/session-subjects'
+seenThisSession = require '../../lib/seen-this-session'
 
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
@@ -203,8 +203,11 @@ module.exports = React.createClass
     console?.info 'Completed classification', @state.classification
     @state.classification.save().then (classification) =>
       console?.log 'Saved classification', classification.id
-      classification.get('subjects').then (subjects) ->
-        sessionSubjects.push (id for {id} in subjects)...
+      Promise.all([
+        classification.get 'workflow'
+        classification.get 'subjects'
+      ]).then ([workflow, subjects]) ->
+        seenThisSession.add workflow, subjects
         classification.destroy()
       classificationsThisSession += 1
       @maybePromptToSignIn()
