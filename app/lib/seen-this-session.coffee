@@ -11,6 +11,6 @@ module.exports =
       subjectsSeenThisSession.push "#{workflow.id}/#{subject.id}"
 
   check: (workflow, subject) ->
-    "#{workflow.id}/#{subject.id}" in seenThisSession
+    "#{workflow.id}/#{subject.id}" in subjectsSeenThisSession
 
 window?.subjectsSeenThisSession = subjectsSeenThisSession
