@@ -187,6 +187,7 @@ module.exports = React.createClass
   handleResize: ->
     @sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
     @toolRect = @refs.selectedTool?.getDOMNode().getBoundingClientRect()
+    @forceUpdate()
 
   handleInitStart: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
