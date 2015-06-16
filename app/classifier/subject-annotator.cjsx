@@ -39,21 +39,21 @@ module.exports = React.createClass
     
   getScale: ->
     ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
-    rect = @sizeRect
+    rect = @sizeRect?.getBoundingClientRect()
     horizontal = (rect?.width || ALMOST_ZERO) / (@state.naturalWidth || ALMOST_ZERO)
     vertical = (rect?.height || ALMOST_ZERO) / (@state.naturalHeight || ALMOST_ZERO)
     {horizontal, vertical}
 
   getEventOffset: (e) ->
-    rect = @sizeRect
+    rect = @sizeRect?.getBoundingClientRect()
     scale = @getScale()
     x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
   
   getDetailsTooltipProps: ->
-    sizeRect = @sizeRect
-    toolRect = @toolRect
+    sizeRect = @sizeRect?.getBoundingClientRect()
+    toolRect = @toolRect?.getBoundingClientRect()
 
     probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
     [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
@@ -80,8 +80,8 @@ module.exports = React.createClass
     
   componentDidUpdate: ->
     setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
-    @sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-    @toolRect = @refs.selectedTool?.getDOMNode().getBoundingClientRect()
+    @sizeRect = @refs.sizeRect.getDOMNode()
+    @toolRect = @refs.selectedTool?.getDOMNode()
 
   render: ->
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
@@ -185,8 +185,8 @@ module.exports = React.createClass
       annotations: @props.classification.annotations
 
   handleResize: ->
-    @sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-    @toolRect = @refs.selectedTool?.getDOMNode().getBoundingClientRect()
+    @sizeRect = @refs.sizeRect.getDOMNode()
+    @toolRect = @refs.selectedTool?.getDOMNode()
     @forceUpdate()
 
   handleInitStart: (e) ->
