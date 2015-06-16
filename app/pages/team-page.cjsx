@@ -139,8 +139,8 @@ counterpart.registerTranslations 'en',
         interested in how galaxies change over time and how we can track this evolution.
         Happy-go-lucky about outreach, the Zooniverse and everything.'''
       rogerHutchings:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        title: 'Developer'
+        bio: '''Roger builds front end interfaces for the Zooniverse, and enjoys coding, music and rebuilding motorbikes in his spare time.'''
       sandorKruk:
         title: 'Researcher'
         bio: '''Sandor is a graduate student working on his PhD in Astrophysics at Oxford.
@@ -200,7 +200,7 @@ teamMembers =
     name: "Andrea Simenstad"
     title: counterpart "team.content.andreaSimenstad.title"
     bio: counterpart "team.content.andreaSimenstad.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/andrea.jpg"
     location: "minnesota"
   brianCarstensen:
     name: "Brian Carstensen"
@@ -240,7 +240,7 @@ teamMembers =
     name: "Christopher Doogue"
     title: counterpart "team.content.christopherDoogue.title"
     bio: counterpart "team.content.christopherDoogue.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/chris-d.jpg"
     location: "oxford"
   colemanKrawczyk:
     name: "Coleman Krawczyk"
@@ -354,7 +354,7 @@ teamMembers =
     name: "Roger Hutchings"
     title: counterpart "team.content.rogerHutchings.title"
     bio: counterpart "team.content.rogerHutchings.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/roger.jpg"
     location: "oxford"
   sandorKruk:
     name: "Sandor Kruk"
@@ -380,13 +380,13 @@ teamMembers =
     name: "Simone Duca"
     title: counterpart "team.content.simoneDuca.title"
     bio: counterpart "team.content.simoneDuca.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/simone.jpg"
     location: "oxford"
   veronicaMaidel:
     name: "Veronica Maidel"
     title: counterpart "team.content.veronicaMaidel.title"
     bio: counterpart "team.content.veronicaMaidel.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/veronica.jpg"
     location: "chicago"
   victoriaVanHyning:
     name: "Victoria van Hyning"
