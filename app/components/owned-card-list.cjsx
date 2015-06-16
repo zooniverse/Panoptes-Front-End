@@ -16,11 +16,25 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
+  userForTitle: ->
+    if @props.ownerName
+      "#{@props.ownerName}'s"
+    else
+      'All'
+
+  imagePromise: (resource) ->
+    if @props.imageProperty?
+      resource.get(@props.imageProperty)
+    else
+      Promise.reject("No image property")
+
   render: ->
     <div className="secondary-page all-resources-page">
-      <section className="hero projects-hero">
+      <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
-          <Translate component="h1" content={"#{@props.translationObjectName}.title"} />
+          <Translate component="h1" user={@userForTitle()} content={"#{@props.translationObjectName}.title"} />
+          {if @props.heroNav?
+            @props.heroNav}
         </div>
       </section>
       <section className="resources-container">
@@ -35,7 +49,7 @@ module.exports = React.createClass
                    <OwnedCard
                      key={resource.id}
                      resource={resource}
-                     imagePromise={resource.get(@props.imageProperty)}
+                     imagePromise={@imagePromise(resource)}
                      linkTo={@props.cardLink}
                      translationObjectName={@props.translationObjectName}/>}
               </div>
@@ -47,7 +61,7 @@ module.exports = React.createClass
                   </nav>}
               </nav>
             </div>
-          else if ownedResources?.length = 0
+          else if ownedResources?.length is 0
             <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" />
           else
             <Translate content="#{@props.translationObjectName}.loadMessage" component="div" />

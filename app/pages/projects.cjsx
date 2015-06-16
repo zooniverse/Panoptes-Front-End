@@ -31,4 +31,5 @@ module.exports = React.createClass
       listPromise={@listProjects()}
       linkTo="projects"
       cardLink="project-home"
+      heroClass="projects-hero"
       imageProperty="avatar" />

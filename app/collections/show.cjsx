@@ -2,8 +2,8 @@ React = require 'react'
 PromiseToSetState = require '../lib/promise-to-set-state'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
-getSubjectLocation = require '../lib/get-subject-location'
 Paginator = require '../talk/lib/paginator'
+SubjectViewer = require '../components/subject-viewer'
 {Navigation} = require 'react-router'
 
 module?.exports = React.createClass
@@ -11,43 +11,41 @@ module?.exports = React.createClass
   mixins: [Navigation, PromiseToSetState]
 
   getInitialState: ->
-    subjects: []
-    subjectsMeta: {}
-    collection: {}
+    subjects: null
+    collection: null
+    page: null
 
   componentWillMount: ->
     @setData(1) # start on page 1
 
-  subjectsRequest: (page) ->
-    collection_id = @props.params?.collection_id
-    apiClient.type('subjects').get({page, collection_id})
+  subjectsRequest: ->
+    # TODO Fix this on the backend should be able to do @state.collection.get('subjects')
+    apiClient.type('subjects').get(collection_id: @state.collection.id, page: @state.page)
 
   collectionRequest: ->
-    apiClient.type('collections').get({id: +@props.params?.collection_id}).index(0)
+    console.log(@props.params)
+    apiClient.type('collections').get(owner: @props.params?.owner, slug: @props.params?.name)
+      .index(0)
 
   setData: (page) ->
-    @subjectsRequest(page).then (subjects) =>
-      @setState {subjectsMeta: subjects[0]?.getMeta()}, =>
-        @promiseToSetState {
-          collection: @collectionRequest()
-          subjects: @subjectsRequest(page)
-          }
+    @collectionRequest().then (collection) =>
+      @setState {collection: collection, page: page}, =>
+        @subjectsRequest().then (subjects) => @setState subjects: subjects
 
   goToPage: (n) ->
     @transitionTo(@props.path, @props.params, {page: n})
     @setData(n)
 
   subject: (d, i) ->
-    <img key={d.id} src={getSubjectLocation(d).src} />
+    <SubjectViewer subject=d />
 
   render: ->
     <div className="collections-show">
-      Collection Show:
-      <section>{@state.collection?.display_name}</section>
-      <section>{@state.subjects.map(@subject)}</section>
+      <h1>{@state.collection?.display_name}</h1>
+      <section>{@state.subjects?.map(@subject)}</section>
 
       <Paginator
-        page={+@state.subjectsMeta.page}
+        page={@state.page}
         onPageChange={@goToPage}
-        pageCount={@state.subjectsMeta?.page_count} />
+        pageCount={@state.subjects?[0].getMeta()?.page_count} />
     </div>

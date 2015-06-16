@@ -7,5 +7,4 @@ module?.exports = React.createClass
   render: ->
     <div className="collections content-container">
       <h1>Collections</h1>
-      <RouteHandler {...@props} />
     </div>
