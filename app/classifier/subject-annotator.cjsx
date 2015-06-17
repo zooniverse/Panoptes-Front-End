@@ -7,6 +7,7 @@ tasks = require './tasks'
 Tooltip = require '../components/tooltip'
 seenThisSession = require '../lib/seen-this-session'
 getSubjectLocation = require '../lib/get-subject-location'
+config = require '../api/config'
 
 NOOP = Function.prototype
 
@@ -75,7 +76,7 @@ module.exports = React.createClass
     {attachment, targetAttachment, offset, arrowStyle}
 
   componentWillReceiveProps: (nextProps) ->
-    @horribleRetinasHack nextProps if nextProps.workflow.id == '1039'
+    @horribleRetinasHack nextProps if nextProps.workflow.id is config.retinaWorkflowId
     unless nextProps.annotation is @props.annotation
       @selectMark null, null
     

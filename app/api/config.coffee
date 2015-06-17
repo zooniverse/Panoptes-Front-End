@@ -14,6 +14,10 @@ TALK_HOSTS =
   production: 'https://talk.zooniverse.org'
   staging: 'https://talk-staging.zooniverse.org'
 
+RETINA_WORKFLOW_IDS =
+  production: 'TODO'
+  staging: '1039'
+
 hostFromBrowser = location?.search.match(/\W?panoptes-api-host=([^&]+)/)?[1]
 appFromBrowser = location?.search.match(/\W?panoptes-api-application=([^&]+)/)?[1]
 talkFromBrowser = location?.search.match(/\W?talk-host=([^&]+)/)?[1]
@@ -31,3 +35,4 @@ module.exports =
   host: hostFromBrowser ? hostFromShell ? API_HOSTS[env]
   clientAppID: appFromBrowser ? appFromShell ? API_APPLICATION_IDS[env]
   talkHost:  talkFromBrowser ? talkFromShell ? TALK_HOSTS[env]
+  retinaWorkflowId: RETINA_WORKFLOW_IDS[env]
