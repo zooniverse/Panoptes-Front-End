@@ -13,6 +13,7 @@ PromiseToSetState = require '../lib/promise-to-set-state'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
+talkClient = require '../api/talk'
 Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
 
@@ -85,7 +86,13 @@ module?.exports = React.createClass
     <div className="talk-comment #{activeClass}">
       <div className="talk-comment-author">
         <PromiseRenderer promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
-          <Avatar user={commentOwner} />
+          <div>
+            <Avatar user={commentOwner} />
+            <PromiseRenderer promise={talkClient.type('roles').get(id: @props.data.user_id, section: @props.data.section)}>{(roles) =>
+              console.log(commentOwner.display_name, roles, @props.data.section)
+              <p>Print roles to screen here</p>
+            }</PromiseRenderer>
+          </div>
         }</PromiseRenderer>
 
         <p>
