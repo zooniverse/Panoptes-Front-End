@@ -24,7 +24,7 @@ CollectionsNav = React.createClass
     <nav className="hero-nav">
       <PromiseRenderer promise={auth.checkCurrent()}>{(user) ->
         if user?
-          <Link to="collections-user" params={{owner: user.slug}}>
+          <Link to="collections-user" params={{owner: user.login}}>
             <Translate content="collectionsPage.myCollections" />
           </Link>
       }</PromiseRenderer>

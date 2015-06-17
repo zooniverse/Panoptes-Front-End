@@ -35,7 +35,7 @@ module?.exports = React.createClass
 
     user_id = @state.user.id
 
-    apiClient.type('users').get(display_name: @props.params.name).index(0)
+    apiClient.type('users').get(login: @props.params.name).index(0)
       .then (user) =>
         recipient_ids = [+user.id] # must be array
         conversation = {title, body, user_id, recipient_ids}

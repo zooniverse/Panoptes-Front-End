@@ -19,7 +19,7 @@ module.exports = React.createClass
   getInitialState: ->
     busy: false
     currentUser: null
-    display_name: ''
+    login: ''
     password: ''
     error: null
 
@@ -35,7 +35,7 @@ module.exports = React.createClass
       auth.checkCurrent().then (currentUser) =>
         @setState {currentUser}
         if currentUser?
-          @setState display_name: currentUser.display_name, password: '********'
+          @setState login: currentUser.login, password: '********'
         @setState busy: false
 
   render: ->
@@ -44,7 +44,7 @@ module.exports = React.createClass
     <form onSubmit={@handleSubmit}>
       <label>
         <Translate content="signInForm.userName" />
-        <input type="text" className="standard-input full" name="display_name" value={@state.display_name} disabled={disabled} autoFocus onChange={@handleInputChange} />
+        <input type="text" className="standard-input full" name="login" value={@state.login} disabled={disabled} autoFocus onChange={@handleInputChange} />
       </label>
 
       <br />
@@ -57,7 +57,7 @@ module.exports = React.createClass
       <p style={textAlign: 'center'}>
         {if @state.currentUser?
           <div className="form-help">
-            Signed in as {@state.currentUser.display_name}{' '}
+            Signed in as {@state.currentUser.login}{' '}
             <button type="button" className="minor-button" onClick={@handleSignOut}>Sign out</button>
           </div>
 
@@ -80,7 +80,7 @@ module.exports = React.createClass
           <span>&nbsp;</span>}
       </p>
 
-      <button type="submit" className="standard-button full" disabled={disabled or @state.display_name.length is 0 or @state.password.length is 0}>
+      <button type="submit" className="standard-button full" disabled={disabled or @state.login.length is 0 or @state.password.length is 0}>
         <Translate content="signInForm.signIn" />
       </button>
     </form>
@@ -93,14 +93,14 @@ module.exports = React.createClass
   handleSubmit: (e) ->
     e.preventDefault()
     @setState working: true, =>
-      {display_name, password} = @state
-      auth.signIn {display_name, password}
+      {login, password} = @state
+      auth.signIn {login, password}
         .then (user) =>
           @setState working: false, error: null, =>
             @props.onSuccess? user
         .catch (error) =>
           @setState working: false, error: error, =>
-            @getDOMNode().querySelector('[name="display_name"]')?.focus()
+            @getDOMNode().querySelector('[name="login"]')?.focus()
             @props.onFailure? error
       @props.onSubmit? e
 

@@ -4,8 +4,8 @@ apiClient = require '../app/api/client'
 
 # We need to be logged in to test this stuff.
 USER_DATA = {}
-USER_DATA.display_name = 'TEST_' + (new Date).toISOString().replace /\W/g, '_'
-USER_DATA.email = USER_DATA.display_name.toLowerCase() + '@zooniverse.org'
+USER_DATA.login = 'TEST_' + (new Date).toISOString().replace /\W/g, '_'
+USER_DATA.email = USER_DATA.login.toLowerCase() + '@zooniverse.org'
 USER_DATA.password = 'p@$$word'
 
 LANGUAGE = 'en-us'
@@ -124,4 +124,5 @@ test 'Create a workflow', (t) ->
 # Delete workflow, it should no longer be available
 
 test 'Delete temporary user', ->
+  auth._currentUserPromise = null
   auth.disableAccount()

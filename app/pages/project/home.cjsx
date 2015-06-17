@@ -28,7 +28,7 @@ module.exports = React.createClass
 
   render: ->
     linkParams =
-      owner: @props.owner.slug
+      owner: @props.owner.login
       name: @props.project.slug
 
     <div className="project-home-page">
