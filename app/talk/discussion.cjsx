@@ -70,13 +70,13 @@ module?.exports = React.createClass
       .then (discussion) =>
         @setState {discussion: discussion[0]}
 
-  onUpdateComment: (textContent, focusImage, commentId) ->
+  onUpdateComment: (textContent, subject, commentId) ->
     {discussion} = @props.params
     commentToUpdate = talkClient.type('comments').get(id: commentId)
 
     discussion_id = +discussion
     body = textContent
-    focus_id = +focusImage?.id ? null
+    focus_id = +subject?.id ? null
     comment = merge {}, {discussion_id, body}, ({focus_id} if !!focus_id)
 
     commentToUpdate.update(comment).save()
@@ -89,12 +89,12 @@ module?.exports = React.createClass
       talkClient.type('comments').get(id: commentId).delete()
         .then (deleted) => @setComments()
 
-  onSubmitComment: (e, textContent, focusImage) ->
+  onSubmitComment: (e, textContent, subject) ->
     {discussion} = @props.params
     user_id = @state.user.id
     discussion_id = +discussion
     body = textContent
-    focus_id = +focusImage?.id ? null
+    focus_id = +subject?.id ? null
     comment = merge {}, {user_id, discussion_id, body}, ({focus_id} if !!focus_id)
 
     talkClient.type('comments').create(comment).save()

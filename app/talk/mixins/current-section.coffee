@@ -1,9 +1,10 @@
 React = require 'react'
+projectSection = require '../lib/project-section'
 
 module.exports =
   getInitialState: ->
     currentSection = if @props.project?.id
-      "#{@props.project.id}-#{@props.project.title}"
+      projectSection(@props.project)
     else
       'zooniverse'
 

@@ -18,7 +18,7 @@ module?.exports = React.createClass
     header: React.PropTypes.string
     placeholder: React.PropTypes.string
     submitFeedback: React.PropTypes.string
-    onSubmitComment: React.PropTypes.func # called on submit and passed (e, textarea-content, focusImage)
+    onSubmitComment: React.PropTypes.func # called on submit and passed (e, textarea-content, subject)
     onCancelClick: React.PropTypes.func # adds cancel button and calls callback on click if supplied
 
   getDefaultProps: ->
@@ -27,10 +27,10 @@ module?.exports = React.createClass
     placeholder: "Type your comment here"
     submitFeedback: "Comment Successfully Submitted"
     content: null
-    focusImage: null
+    subject: null
 
   getInitialState: ->
-    focusImage: @props.focusImage
+    subject: @props.subject
     content: @props.content
     reply: ''
     loading: false
@@ -46,7 +46,7 @@ module?.exports = React.createClass
     @setState loading: false
     fullComment = @state.reply.concat(textareaValue)
 
-    @props.onSubmitComment?(e, fullComment, @state.focusImage)
+    @props.onSubmitComment?(e, fullComment, @state.subject)
 
     @refs.textarea.getDOMNode().value = ""
     @hideChildren()
@@ -93,10 +93,10 @@ module?.exports = React.createClass
     @wrapLinesIn(m.numberedList, ensureNewLine: true, incrementLines: true)
 
   onSelectImage: (imageData) ->
-    @setState focusImage: imageData
+    @setState subject: imageData
 
   onClearImageClick: (e) ->
-    @setState focusImage: null
+    @setState subject: null
 
   onInputChange: ->
     @setState content: @refs.textarea.getDOMNode().value
@@ -111,8 +111,8 @@ module?.exports = React.createClass
     <div className="talk-comment-box">
       <h1>{@props.header}</h1>
 
-      {if @state.focusImage
-        <img className="talk-comment-focus-image" src={getSubjectLocation(@state.focusImage).src} />}
+      {if @state.subject
+        <img className="talk-comment-focus-image" src={getSubjectLocation(@state.subject).src} />}
 
       {feedback}
 
@@ -200,7 +200,7 @@ module?.exports = React.createClass
           when 'image-selector'
             <CommentImageSelector
               onSelectImage={@onSelectImage}
-              onClearImageClick= {@onClearImageClick}/>
+              onClearImageClick={@onClearImageClick}/>
           when 'preview'
             <CommentPreview content={@state.content} />
           when 'help'
