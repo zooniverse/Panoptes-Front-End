@@ -8,6 +8,12 @@ Translate = require 'react-translate-component'
 module.exports = React.createClass
   displayName: 'OwnedCard'
 
+  propTypes:
+    resource: React.PropTypes.object.isRequired
+    imagePromise: React.PropTypes.object.isRequired
+    linkTo: React.PropTypes.string.isRequired
+    translationObjectName: React.PropTypes.string.isRequired
+
   componentDidMount: ->
     card = @refs.ownedCard.getDOMNode()
 

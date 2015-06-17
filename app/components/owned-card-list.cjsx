@@ -10,6 +10,15 @@ OwnedCard = require '../partials/owned-card'
 module.exports = React.createClass
   displayName: 'OwnedCardList'
 
+  propTypes:
+    imagePromise: React.PropTypes.func.isRequired
+    listPromise: React.PropTypes.object.isRequired
+    cardLink: React.PropTypes.string.isRequired
+    translationObjectName: React.PropTypes.string.isRequired
+    ownerName: React.PropTypes.string
+    heroClass: React.PropTypes.string
+    heroNav: React.PropTypes.node
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
 
