@@ -14,8 +14,8 @@ module.exports = React.createClass
     linkTo: React.PropTypes.string.isRequired
     translationObjectName: React.PropTypes.string.isRequired
 
-  projectOwner: ->
-    apiClient.type(@props.project.links.owner.type).get(@props.project.links.owner.id)
+  resourceOwner: ->
+    apiClient.type(@props.resource.links.owner.type).get(@props.resource.links.owner.id)
 
   componentDidMount: ->
     card = @refs.ownedCard.getDOMNode()
@@ -29,7 +29,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="card" ref="ownedCard">
-      <PromiseRenderer promise={@projectOwner()} pending={null}>{(owner) =>
+      <PromiseRenderer promise={@resourceOwner()} pending={null}>{(owner) =>
         linkProps =
           to: @props.linkTo
           params:
