@@ -9,6 +9,7 @@ PromiseRenderer = require '../components/promise-renderer'
 SubjectViewer = require '../components/subject-viewer'
 NewDiscussionForm = require '../talk/discussion-new-form'
 CommentLink = require '../talk/comment-link'
+projectSection = require '../talk/lib/project-section'
 {Navigation} = require 'react-router'
 
 module?.exports = React.createClass
@@ -72,10 +73,10 @@ module?.exports = React.createClass
                 {# these wrapping promises ensure that there are boards for a project}
                 {# & could be removed if a default board is put in place}
                 <PromiseRenderer promise={subject.get('project')}>{(project) =>
-                  <PromiseRenderer promise={talkClient.type('boards').get(section: "project-#{project.id}")}>{(boards) =>
+                  <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project))}>{(boards) =>
                     if boards?.length
                       <NewDiscussionForm
-                        focusImage={subject}
+                        subject={subject}
                         onCreateDiscussion={@onCreateDiscussion} />
                   }</PromiseRenderer>
                 }</PromiseRenderer>

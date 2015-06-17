@@ -7,6 +7,7 @@ talkClient = require '../api/talk'
 authClient = require '../api/auth'
 Loading = require '../components/loading-indicator'
 PromiseRenderer = require '../components/promise-renderer'
+projectSection = require '../talk/lib/project-section'
 merge = require 'lodash.merge'
 
 module?.exports = React.createClass
@@ -15,7 +16,7 @@ module?.exports = React.createClass
   propTypes:
     boardId: React.PropTypes.number
     onCreateDiscussion: React.PropTypes.func
-    focusImage: React.PropTypes.object # subject response for focus image
+    subject: React.PropTypes.object # subject response
 
   getInitialState: ->
     discussionValidationErrors: []
@@ -31,7 +32,7 @@ module?.exports = React.createClass
     @setState {discussionValidationErrors}
     !!discussionValidationErrors.length
 
-  onSubmitDiscussion: (e, commentText, focusImage) ->
+  onSubmitDiscussion: (e, commentText, subject) ->
     @setState loading: true
     form = @getDOMNode().querySelector('.talk-board-new-discussion')
     titleInput = form.querySelector('input[type="text"]')
@@ -42,7 +43,7 @@ module?.exports = React.createClass
         user_id = user.id
         board_id = @props.boardId ? +form.querySelector('label > input[type="radio"]:checked').value
         body = commentText
-        focus_id = +@props.focusImage?.id
+        focus_id = +@props.subject?.id
 
         comments = [merge({}, {user_id, body}, ({focus_id} if !!focus_id))]
         discussion = {title, user_id, board_id, comments}
@@ -68,8 +69,8 @@ module?.exports = React.createClass
       <div className="talk-board-new-discussion">
         <h2>Create a disussion +</h2>
         {if not @props.boardId
-          <PromiseRenderer promise={@props.focusImage.get('project')}>{(project) =>
-            <PromiseRenderer promise={talkClient.type('boards').get(section: "project-#{project.id}")}>{(boards) =>
+          <PromiseRenderer promise={@props.subject.get('project')}>{(project) =>
+            <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project))}>{(boards) =>
               <div>
                 <h2>Board</h2>
                 {boards.map @boardRadio}
@@ -89,7 +90,7 @@ module?.exports = React.createClass
           placeholder={"""Add a comment here to start the discussion.
           This comment will appear at the start of the discussion."""}
           onSubmitComment={@onSubmitDiscussion}
-          focusImage={@props.focusImage}
+          subject={@props.subject}
           submit="Create Discussion"/>
         {if @state.loading then <Loading />}
       </div>
