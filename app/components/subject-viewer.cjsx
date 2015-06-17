@@ -10,7 +10,7 @@ NOOP = Function.prototype
 ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'inline-block', position: 'relative'
 SUBJECT_STYLE = display: 'block'
-PLAYING_FRAME_DURATION = 333
+PLAYING_FRAME_DURATION = 667
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'
