@@ -8,21 +8,37 @@ PromiseRenderer = require '../components/promise-renderer'
 counterpart.registerTranslations 'en',
   publications:
     nav:
-      space: 'Space'
-      climate: 'Climate'
-      humanities: 'Humanities'
-      nature: 'Nature'
-      biology: 'Biology'
-      physics: 'Physics'
-      meta: 'Meta'
-      showAll: 'Show All'
+      showAll:
+        title: 'Show All'
+      space:
+        title: 'Space'
+        projects:
+          galaxyZoo: 'Galaxy Zoo'
+          solarStormWatch: 'Solar Storm Watch'
+          galaxyZooSupernova: 'Galaxy Zoo - Supernova'
+          planetHunters: 'Planet Hunters'
+          milkyWayProject: 'Milky Way Project'
+      climate:
+        title: 'Climate'
+        projects:
+          cycloneCenter: 'Cyclone Center'
+      humanities:
+        title: 'Humanities'
+      nature:
+        title: 'Nature'
+      biology:
+        title: 'Biology'
+      physics:
+        title: 'Physics'
+      meta:
+        title: 'Meta'
     content:
-      header:
-        showAll: 'All Publications'
+      header: 'All Publications'
 
 publicationCategories =
   space: [
     {slug: "galaxy-zoo"
+    nav: "galaxyZoo"
     publications: [
       {citation: "Galaxy Zoo: the effect of bar-driven fueling on the presence of an active galactic nucleus in disc galaxies, Galloway+ 2015."
       href: "http://arxiv.org/abs/1502.01033"},
@@ -122,6 +138,7 @@ publicationCategories =
       href: "http://adsabs.harvard.edu/abs/2008MNRAS.389.1179L"}]
     },
     {slug: "solar-stormwatch"
+    nav: "solarStormWatch"
     publications: [
       {citation: "Observational Tracking of the 2D Structure of Coronal Mass Ejections Between the Sun and 1 AU, Savani+ 2015."
       href: "http://arxiv.org/abs/1503.08774"},
@@ -133,6 +150,7 @@ publicationCategories =
       href: "http://adsabs.harvard.edu/abs/2012MNRAS.420.1355D"}]
     },
     {slug: "galaxy-zoo-supernova"
+    nav: "galaxyZooSupernova"
     publications: [
       {citation: "Five New Outbursting AM CVn Systems Discovered by the Palomar Transient Factory, Levitan+ 2012."
       href: "http://adsabs.harvard.edu/abs/2012arXiv1212.5312L"},
@@ -167,6 +185,7 @@ publicationCategories =
       href: "http://adsabs.harvard.edu/abs/2012ApJ...754..129S"}]
     },
     {name: "Milky Way Project"
+    nav: "milkyWayProject"
     publications: [
       {citation: "The Milky Way Project: What are Yellowballs?, Kerton+ 2015."
       href: "http://arxiv.org/abs/1502.01388v1"}]
@@ -174,6 +193,7 @@ publicationCategories =
   ],
   climate: [
     {slug: "cyclone-center"
+    nav: "cycloneCenter"
     publications: [
       {citation: "Cyclone Center: Can Citizen Scientists Improve Tropical Cyclone Intensity Records?, Hennon+ 2014."
       href: "http://journals.ametsoc.org/doi/abs/10.1175/BAMS-D-13-00152.1"}
@@ -197,20 +217,16 @@ module.exports = React.createClass
     currentSort: 'showAll'
 
   render: ->
-    sideBarNavList = counterpart "publications.nav"
     <div className="publications-page secondary-page-copy">
-      <AboutSideBar showList={@showPublicationsList} sideBarNav={sideBarNavList} currentSort={@state.currentSort} translations={counterpart "publications"} />
+      <AboutSideBar showList={@showPublicationsList} sideBarNav={counterpart "publications.nav"} subNav={true} currentSort={@state.currentSort} translations={counterpart "publications"} />
       <section className="publications-content">
-        <h2>{if @state.currentSort is 'showAll'
-              <Translate content="publications.content.header.showAll" />
-            else
-              @state.currentSort
-        }</h2>
+        <h2><Translate content="publications.content.header" /></h2>
         {for category, projects of publicationCategories
           if (@state.currentSort is category) or (@state.currentSort is 'showAll')
+            console.log 'state', @state.currentSort
             <ul key={category} className="publications-list">
               {for project in projects
-                <div key={project.slug}>
+                <div key={project.slug || project.name} style={@filterProjects(project.nav) unless (@state.currentSort is category) or (@state.currentSort is 'showAll')}>
                   <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug)} pending={null} catch={null}>{([fetchedProject]) =>
                     if fetchedProject?
                       <h3 className="project-name">{fetchedProject.display_name}</h3>
@@ -235,6 +251,7 @@ module.exports = React.createClass
     </div>
 
   showPublicationsList: (navItem) ->
+    console.log 'clicky', navItem
     currentButton = React.findDOMNode(@refs[navItem])
     @setState currentSort: navItem
 
@@ -242,3 +259,8 @@ module.exports = React.createClass
     apiClient.type('projects').get(slug: project.slug).get('avatar')
       .then (avatar) => @avatarSrc = avatar.src
     @avatarSrc
+
+  filterProjects: (filter) ->
+    hide = display: "none"
+    unless filter is @state.currentSort
+      hide
