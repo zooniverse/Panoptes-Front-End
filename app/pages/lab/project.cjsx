@@ -60,6 +60,9 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
             Collaborators
           </Link></li>
+          <li><Link to="edit-project-media" params={linkParams} className="nav-list-item" title="Add any images you’d like to use in this project’s introduction, science case, results, FAQ, or education content pages.">
+            Media
+          </Link></li>
           <li><Link to="edit-project-visibility" params={linkParams} className="nav-list-item">
             Visibility
           </Link></li>
