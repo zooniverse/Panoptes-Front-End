@@ -111,6 +111,7 @@ module.exports = React.createClass
           started_at: (new Date).toISOString()
           user_agent: navigator.userAgent
           user_language: counterpart.getLocale()
+          utc_offset: ((new Date).getTimezoneOffset() * 60).toString() # In seconds
         links:
           project: project.id
           workflow: workflow.id
