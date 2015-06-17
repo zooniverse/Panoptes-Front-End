@@ -405,7 +405,7 @@ module.exports = React.createClass
   render: ->
     sideBarNavList = counterpart "team.nav"
     <div className="team-page secondary-page-copy">
-      <AboutSideBar showList={@showPeopleList} sideBarNav={sideBarNavList} currentSort={@state.currentSort} translations={counterpart "team"} />
+      <AboutSideBar showList={@showPeopleList} sideBarNav={sideBarNavList} subNav={false} currentSort={@state.currentSort} translations={counterpart "team"} />
       <section className="team-member-list">
         <h2>{if @state.currentSort is 'showAll'
               <Translate content="team.content.header.showAll" />
