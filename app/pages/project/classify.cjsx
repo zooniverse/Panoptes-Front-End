@@ -45,6 +45,7 @@ emptySubjectQueue = ->
     queue.splice 0
 
 auth.listen 'change', emptySubjectQueue
+apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
