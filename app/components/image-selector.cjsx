@@ -18,6 +18,7 @@ module.exports = React.createClass
     minArea: 100 # Stop reducing when there are fewer than this many pixels.
     reductionPerPass: 0.05
     onChange: Function.prototype # No-op
+    maxComponentWidth: 200
 
   getInitialState: ->
     working: false
@@ -32,6 +33,7 @@ module.exports = React.createClass
       background: 'rgba(128, 128, 128, 0.2)'
       border: '1px solid rgba(128, 128, 128, 0.4)'
       borderRadius: 5
+      maxWidth: @props.maxComponentWidth
       position: 'relative'
     }>
       {if @state.dataURL or @props.defaultValue
