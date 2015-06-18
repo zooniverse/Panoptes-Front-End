@@ -1,5 +1,6 @@
 React = require 'react'
 BoundResourceMixin = require '../../lib/bound-resource-mixin'
+AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
 ChangeListener = require '../../components/change-listener'
 auth = require '../../api/auth'

@@ -18,7 +18,7 @@ counterpart.registerTranslations 'en',
     nav:
       feed: "Feed"
       stats: "Stats"
-      favorites: "Favorites"
+      collections: "Collections"
       messages: "Messages"
       settings: "Settings"
 
@@ -66,7 +66,7 @@ UserProfilePage = React.createClass
           <nav className="hero-nav">
             <Link to="user-profile-feed" params={name: @props.params.name} onClick={@onClickLink.bind(null, 'user-profile-feed')}><Translate content="profile.nav.feed" /></Link>
             <Link to="user-profile-stats" params={name: @props.params.name} onClick={@onClickLink.bind(null, 'user-profile-stats')}><Translate content="profile.nav.stats" /></Link>
-            <Link to="user-profile-favorites" params={name: @props.params.name} onClick={@onClickLink.bind(null, 'user-profile-favorites')}><Translate content="profile.nav.favorites" /></Link>
+            <Link to="collections-user" params={owner: @props.params.name}><Translate content="profile.nav.collections" /></Link>
             <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(user) =>
               if user?
                 <span>
