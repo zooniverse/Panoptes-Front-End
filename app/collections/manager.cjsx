@@ -2,78 +2,50 @@ React = require 'react'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 auth = require '../api/auth'
+CollectionsCreateForm = require './create-form'
+CollectionSearch = require '../components/collection-search'
 
 module?.exports = React.createClass
   displayName: 'CollectionsManager'
 
   getInitialState: ->
+    error: null
     collections: []
+
+  getDefaultProps: ->
+    project: null
 
   propTypes:
     subject: React.PropTypes.object
+    project: React.PropTypes.object
 
-  componentWillMount: ->
-    @setCollections()
-
-  setCollections: ->
-    auth.checkCurrent().then (user) =>
-      @props.subject.get('project').then (project) =>
-        user.get('collections', {project_id: project.id})
-          .then (collections) =>
-            @setState {collections}
-
-  setCollectionMembership: (collection, subject, bool) ->
-    if bool
-      collection.addLink('subjects', [subject.id.toString()])
-    else
-      collection.removeLink('subjects', [subject.id.toString()])
-
-  onSubmitNewCollection: (e) ->
-    e.preventDefault()
-    nameInput = @refs.newCollectionName.getDOMNode()
-
-    @props.subject.get('project').then (project) =>
-      auth.checkCurrent().then (user) =>
-        display_name = nameInput.value
-        owner = {id: user.id.toString(), type: "users"}
-        project = project.id.toString()
-        links = {owner, project}
-        collection = {display_name, links}
-        nameInput.value = ''
-
-        apiClient.type('collections').create(collection).save()
-          .then (collection) =>
-            @setCollectionMembership(collection, @props.subject, true)
-              .then @setCollections
-
-  collection: (data, i) ->
-    <PromiseRenderer promise={apiClient.type('subjects').get({collection_id: data.id, id: @props.subject.id}).index(0)}>{(subject) =>
-      <p>
-        <label key={data.i}>
-          <input type="checkbox" onChange={=>
-            @setCollectionMembership(data, @props.subject, !subject)
-              .then @setCollections
-          } checked={!!subject}/>
-          {data.display_name}
-        </label>
-      </p>
-    }</PromiseRenderer>
+  addToCollections: ->
+    console.log(@refs.search, @refs.search.selected, @refs.search.value)
+    #promises = for collection in @refs.search.selectedOptions
+      #collection.addLink('subjects', [@props.subject.id])
+    #Promise.all(promises)
+      #.then =>
+        #@props.onSuccess()
+      #.catch (error) =>
+        #@setState {error}
 
   render: ->
     <div className="collections-manager">
-      <h1>Subject {@props.subject.id} Collections</h1>
+      <h1>Add Subject to a Collection</h1>
 
-      <section>
-       {if @state.collections.length
-          @state.collections.map(@collection)
-        else
-          <p>You have not started any collections for this project.</p>}
-      </section>
+      <div>
+        {if @state.error?
+          <div className="form-help error">{@state.error.toString()}</div>}
+        <CollectionSearch
+          ref="search"
+          multi={true}
+          project={@props.project}
+          user={@props.user} />
+        <button type="button" className="standard-button search-button" onClick={@addToCollections}>
+          Add
+        </button>
+      </div>
 
-      <form onSubmit={@onSubmitNewCollection}>
-        <input
-          type="text"
-          ref="newCollectionName"
-          placeholder="Start a new collection"/>
-      </form>
+      <div className="form-help">Or Create a new Collection</div>
+      <CollectionsCreateForm project={@props.project?.id} subject={@props.subject.id} />
     </div>

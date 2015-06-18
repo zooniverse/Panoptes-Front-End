@@ -84,7 +84,7 @@ module.exports = React.createClass
           {if @props.subject
             <span>
               <FavoritesButton project={@props.project} subject={@props.subject} />
-              <CollectionsManagerIcon subject={@props.subject} />
+              <CollectionsManagerIcon project={@props.project} subject={@props.subject} />
             </span>}
         </span>
       </div>
