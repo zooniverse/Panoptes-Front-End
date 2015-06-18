@@ -21,5 +21,5 @@ module?.exports = React.createClass
       </Link>
       <p><i className="fa fa-user"></i> {resourceCount(@props.data.users_count, "Users")} |&nbsp;
       <i className="fa fa-comment"></i> {resourceCount(@props.data.comments_count, "Comments")} </p>
-      <p className="talk-discussion-preview-author">Started by <Link to="user-profile" params={name: @props.data.user_display_name}>{@props.data.user_display_name}</Link> on {timestamp(@props.data.created_at)}</p>
+      <p className="talk-discussion-preview-author">Started by <Link to="user-profile" params={name: @props.data.user_login}>{@props.data.user_display_name}</Link> on {timestamp(@props.data.created_at)}</p>
     </div>

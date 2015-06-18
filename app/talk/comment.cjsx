@@ -96,7 +96,7 @@ module?.exports = React.createClass
         }</PromiseRenderer>
 
         <p>
-          <Link to="user-profile" params={name: @props.data.user_display_name}>{@props.data.user_display_name}</Link>
+          <Link to="user-profile" params={name: @props.data.user_login}>{@props.data.user_display_name}</Link>
         </p>
       </div>
 

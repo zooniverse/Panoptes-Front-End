@@ -17,6 +17,9 @@ NOOP = Function.prototype
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
 INVALID_FILENAME_CHARS = ['/', '\\', ':']
 
+announceSetChange = ->
+  apiClient.type('subject_sets').emit 'add-or-remove'
+
 SubjectSetListingRow = React.createClass
   displayName: 'SubjectSetListingRow'
 
@@ -102,7 +105,8 @@ SubjectSetListing = React.createClass
     </div>
 
   removeSubject: (subject) ->
-    @props.subjectSet.removeLink 'subjects', subject.id
+    @props.subjectSet.removeLink('subjects', subject.id).then =>
+      announceSetChange()
 
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
@@ -276,6 +280,7 @@ EditSubjectSetPage = React.createClass
           creationErrors: errors
           manifests: {}
           files: {}
+        announceSetChange()
 
   deleteSubjectSet: ->
     @setState deletionError: null
@@ -287,6 +292,7 @@ EditSubjectSetPage = React.createClass
 
       this.props.subjectSet.delete()
         .then =>
+          announceSetChange()
           @props.project.uncacheLink 'subject_sets'
           @transitionTo 'edit-project-details', projectID: @props.project.id
         .catch (error) =>

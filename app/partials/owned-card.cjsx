@@ -33,7 +33,7 @@ module.exports = React.createClass
         linkProps =
           to: @props.linkTo
           params:
-            owner: owner?.slug ? 'LOADING'
+            owner: owner?.login ? 'LOADING'
             name: @props.resource.slug
 
         <Link {...linkProps}>

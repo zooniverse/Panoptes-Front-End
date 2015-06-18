@@ -187,7 +187,7 @@ module?.exports = React.createClass
               <div className="talk-comment-author">
                 <Avatar user={user} />
                 <p>
-                  <Link to="user-profile" params={name: user.display_name}>{user.display_name}</Link>
+                  <Link to="user-profile" params={name: user.login}>{user.display_name}</Link>
                 </p>
               </div>
 

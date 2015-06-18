@@ -111,7 +111,8 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
-        <Link to="project-talk-subject" params={owner: @props.owner.slug, name: @props.project.slug, id: @props.subject.id} className="talk standard-button">Talk</Link>
+        {if @props.owner? and @props.project?
+          <Link to="project-talk-subject" params={owner: @props.owner.login, name: @props.project.slug, id: @props.subject.id} className="talk standard-button">Talk</Link>}
         <button type="button" className="continue major-button" onClick={@props.onClickNext}>Next</button>
       </nav>
     </div>

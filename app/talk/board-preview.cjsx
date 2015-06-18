@@ -29,7 +29,7 @@ module?.exports = React.createClass
             Latest Discussion:&nbsp;
             <Link to="talk-discussion" params={board: discussion.board_id, discussion: discussion.id}>{discussion.title}</Link>
             <span> by </span>
-            <Link to="user-profile" params={name: discussion.user_display_name}>{discussion.user_display_name}</Link>
+            <Link to="user-profile" params={name: discussion.user_login}>{discussion.user_display_name}</Link>
           </div>
       }</PromiseRenderer>
 

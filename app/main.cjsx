@@ -74,9 +74,10 @@ routes = <Route handler={App}>
     <Route name="talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
   </Route>
 
-  <Route name="collections" path="collections" handler={require './pages/collections'} />
-  <Route name="collections-user" path="collections/:owner" handler={require './pages/collections'} />
-  <Route name="collection-show" path="collections/:owner/:name" handler={require './collections/show'} />
+  <Route name="collections" path="collections" handler={require './pages/collections'}>
+    <Route name="collections-user" path=":owner" handler={require './pages/collections'} />
+    <Route name="collection-show" path=":owner/:name" handler={require './collections/show'} />
+  </Route>
 
   <Route name="lab" handler={require './pages/lab'} />
   <Route path="lab/:projectID" handler={require './pages/lab/project'}>

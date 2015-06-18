@@ -171,7 +171,7 @@ module.exports = React.createClass
           <LoadingIndicator />
         else if @state.user?
           <span className="form-help warning">
-            <Translate content="registerForm.alreadySignedIn" name={@state.user.display_name} />{' '}
+            <Translate content="registerForm.alreadySignedIn" name={@state.user.login} />{' '}
             <button type="button" className="minor-button" onClick={@handleSignOut}><Translate content="registerForm.signOut" /></button>
           </span>
         else if @state.error?
@@ -203,8 +203,8 @@ module.exports = React.createClass
 
   debouncedCheckForNameConflict: null
   checkForNameConflict: (username) ->
-    @promiseToSetState nameConflict: auth.register(display_name: username).catch (error) ->
-      error.message.match(/display_name(.+)taken/mi) ? false
+    @promiseToSetState nameConflict: auth.register(login: username).catch (error) ->
+      error.message.match(/login(.+)taken/mi) ? false
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
@@ -241,7 +241,7 @@ module.exports = React.createClass
 
   handleSubmit: (e) ->
     e.preventDefault()
-    display_name = @refs.name.getDOMNode().value
+    login = @refs.name.getDOMNode().value
     password = @refs.password.getDOMNode().value
     email = @refs.email.getDOMNode().value
     credited_name = @refs.realName.getDOMNode().value
@@ -250,7 +250,7 @@ module.exports = React.createClass
 
     @setState error: null
     @props.onSubmit?()
-    auth.register {display_name, password, email, credited_name, global_email_communication, project_id}
+    auth.register {login, password, email, credited_name, global_email_communication, project_id}
       .then =>
         @props.onSuccess? arguments...
       .catch (error) =>

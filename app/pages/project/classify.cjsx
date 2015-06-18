@@ -34,9 +34,18 @@ currentClassifications =
   forWorkflow: {}
 
 # Queue up subjects to classify here.
-# TODO: Should we clear this on sign-in and -out?
 upcomingSubjects =
   forWorkflow: {}
+
+emptySubjectQueue = ->
+  console?.log 'Emptying upcoming subjects queue'
+  for workflowID, queue of upcomingSubjects.forWorkflow
+    for subject in queue
+      subject.destroy()
+    queue.splice 0
+
+auth.listen 'change', emptySubjectQueue
+apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
@@ -111,6 +120,7 @@ module.exports = React.createClass
           started_at: (new Date).toISOString()
           user_agent: navigator.userAgent
           user_language: counterpart.getLocale()
+          utc_offset: ((new Date).getTimezoneOffset() * 60).toString() # In seconds
         links:
           project: project.id
           workflow: workflow.id
