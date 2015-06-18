@@ -1,8 +1,8 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-apiClient = require '../api/client'
-PromiseRenderer = require '../components/promise-renderer'
+apiClient = require '../../api/client'
+PromiseRenderer = require '../../components/promise-renderer'
 
 counterpart.registerTranslations 'en',
   publications:
@@ -269,8 +269,10 @@ module.exports = React.createClass
     currentSort: 'showAll'
 
   componentDidMount: ->
-    button = React.findDOMNode(@refs.showAll)
-    @updateButtonState button
+    document.documentElement.classList.add 'on-secondary-page'
+
+  componentWillUnmount: ->
+    document.documentElement.classList.remove 'on-secondary-page'
 
   render: ->
     sideBarNav = counterpart "publications.nav"
@@ -278,7 +280,7 @@ module.exports = React.createClass
       <aside className="secondary-page-side-bar">
         <nav ref="sideBarNav">
           {for navItem of sideBarNav
-            <button key={navItem} ref={navItem} className="secret-button side-bar-button" onClick={@showPublicationsList.bind(null, navItem)}><Translate content="publications.nav.#{navItem}" /></button>}
+            <button key={navItem} ref={navItem} className="secret-button side-bar-button" style={fontWeight: 700 if @state.currentSort is navItem} onClick={@showPublicationsList.bind(null, navItem)}><Translate content="publications.nav.#{navItem}" /></button>}
         </nav>
       </aside>
       <section className="publications-content">
@@ -301,7 +303,7 @@ module.exports = React.createClass
                   project.publications.map (publication) =>
                     i = Math.random()
                     <li key="publication-#{i}" className="publication-item">
-                      <img src={if projectAvatar? then projectAvatar else "./assets/simple-pattern.jpg"} alt="Project avatar" />
+                      {projectAvatar}
                       <div className="citation">
                         <p>
                           <cite>{publication.citation}</cite><br />
@@ -316,16 +318,10 @@ module.exports = React.createClass
     </div>
 
   showPublicationsList: (navItem) ->
-    currentButton = React.findDOMNode(@refs[navItem])
-    @setState currentSort: navItem, -> @updateButtonState(currentButton)
-
-  updateButtonState: (currentButton) ->
-    buttons = React.findDOMNode(@refs.sideBarNav).childNodes
-    for button in buttons
-      button.classList.remove 'active'
-    currentButton.classList.add 'active'
+    @setState currentSort: navItem
 
   getAvatar: (project) ->
-    apiClient.type('projects').get(slug: project.slug).get('avatar')
-      .then (avatar) => @avatarSrc = avatar.src
-    @avatarSrc
+    <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug).get('avatar')} pending={null}
+      catch={=> <img src="./assets/simple-pattern.jpg" />}
+      then={([avatar]) =>
+        <img src={avatar.src} alt="Project Avatar" />} />

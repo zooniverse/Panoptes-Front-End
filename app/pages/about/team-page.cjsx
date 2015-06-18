@@ -402,8 +402,10 @@ module.exports = React.createClass
     currentSort: 'showAll'
 
   componentDidMount: ->
-    button = React.findDOMNode(@refs.showAll)
-    @updateButtonState button
+    document.documentElement.classList.add 'on-secondary-page'
+
+  componentWillUnmount: ->
+    document.documentElement.classList.remove 'on-secondary-page'
 
   render: ->
     sideBarNav = counterpart "team.nav"
@@ -411,7 +413,7 @@ module.exports = React.createClass
       <aside className="secondary-page-side-bar">
         <nav ref="sideBarNav">
           {for navItem of sideBarNav
-            <button key={navItem} ref={navItem} className="secret-button side-bar-button" onClick={@showPeopleList.bind(null, navItem)}><Translate content="team.nav.#{navItem}" /></button>}
+            <button key={navItem} ref={navItem} className="secret-button side-bar-button" style={fontWeight: 700 if @state.currentSort is navItem} onClick={@showPeopleList.bind(null, navItem)}><Translate content="team.nav.#{navItem}" /></button>}
         </nav>
       </aside>
       <section className="team-member-list">
@@ -434,11 +436,4 @@ module.exports = React.createClass
     </div>
 
   showPeopleList: (navItem) ->
-    currentButton = React.findDOMNode(@refs[navItem])
-    @setState currentSort: navItem, -> @updateButtonState(currentButton)
-
-  updateButtonState: (currentButton) ->
-    buttons = React.findDOMNode(@refs.sideBarNav).childNodes
-    for button in buttons
-      button.classList.remove 'active'
-    currentButton.classList.add 'active'
+    @setState currentSort: navItem
