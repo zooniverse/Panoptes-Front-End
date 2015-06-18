@@ -20,37 +20,65 @@ module.exports = React.createClass
   getInitialState: ->
     naturalWidth: 0
     naturalHeight: 0
-    scale:
-      horizontal: 1
-      vertical: 1
     showWarning: false
     frame: 0
     selectedMark: null
     detailsTooltipOffset: ''
+    sizeRect: null
+    toolRect: null
 
   componentDidMount: ->
     addEventListener 'resize', @handleResize
 
   componentWillUnmount: ->
     removeEventListener 'resize', @handleResize
+    
+  getScale: ->
+    ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
+    rect = @state.sizeRect
+    horizontal = (rect?.width || ALMOST_ZERO) / (@state.naturalWidth || ALMOST_ZERO)
+    vertical = (rect?.height || ALMOST_ZERO) / (@state.naturalHeight || ALMOST_ZERO)
+    {horizontal, vertical}
 
   getEventOffset: (e) ->
     rect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-    scale = @state.scale
+    scale = @getScale()
     x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
+  
+  getDetailsTooltipProps: ->
+    sizeRect = @state.sizeRect
+    toolRect = @state.toolRect
+
+    probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
+    [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
+      ['left', 'right', 'width', 1, 'top center', 'bottom center']
+    else
+      ['top', 'bottom', 'height', 0, 'middle left', 'middle right']
+
+    # NOTE: These offsets aren't perfect, but they're close enough for now.
+
+    arrowStyle = {}
+    toolCenter = ((toolRect[start] + toolRect[end]) / 2) - sizeRect[start]
+    distance = toolCenter / sizeRect[dimension]
+    arrowStyle[start] = "#{distance * 100}%"
+
+    offset = [0, 0]
+    fromCenter = distance - 0.5
+    offset[offsetIndex] = "#{(fromCenter / -2) * 100}%"
+    offset = offset.join ' '
+    {attachment, targetAttachment, offset, arrowStyle}
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.annotation is @props.annotation
       @selectMark null, null
+    @handleResize()
 
   componentDidUpdate: ->
     setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
 
   render: ->
-    scale = @state.scale
-
     <div className="subject-area">
       <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
@@ -70,9 +98,8 @@ module.exports = React.createClass
                 {for mark, m in annotation.value
                   mark._key ?= Math.random()
                   toolDescription = taskDescription.tools[mark.tool]
-
                   toolEnv =
-                    scale: scale
+                    scale: @getScale()
                     disabled: isPriorAnnotation
                     selected: mark is @state.selectedMark
                     getEventOffset: @getEventOffset
@@ -112,31 +139,11 @@ module.exports = React.createClass
               </Tooltip>}
           </button>}
 
-        {if @state.selectedMark? and @refs.selectedTool?
+        {if @state.toolRect? and @state.selectedMark?
           toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
           if toolDescription?.details?.length > 0
-            sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-            toolRect = @refs.selectedTool.getDOMNode().getBoundingClientRect()
 
-            probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
-            [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
-              ['left', 'right', 'width', 1, 'top center', 'bottom center']
-            else
-              ['top', 'bottom', 'height', 0, 'middle left', 'middle right']
-
-            # NOTE: These offsets aren't perfect, but they're close enough for now.
-
-            arrowStyle = {}
-            toolCenter = ((toolRect[start] + toolRect[end]) / 2) - sizeRect[start]
-            distance = toolCenter / sizeRect[dimension]
-            arrowStyle[start] = "#{distance * 100}%"
-
-            offset = [0, 0]
-            fromCenter = distance - 0.5
-            offset[offsetIndex] = "#{(fromCenter / -2) * 100}%"
-            offset = offset.join ' '
-
-            <Tooltip ref="detailsTooltip" attachment={attachment} targetAttachment={targetAttachment} offset={offset} arrowStyle={arrowStyle}>
+            <Tooltip ref="detailsTooltip" {...@getDetailsTooltipProps()}>
               {for detailTask, i in toolDescription.details
                 detailTask._key ?= Math.random()
                 TaskComponent = tasks[detailTask.type]
@@ -168,14 +175,9 @@ module.exports = React.createClass
       annotations: @props.classification.annotations
 
   handleResize: ->
-    ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
-    rect = @refs.sizeRect?.getDOMNode().getBoundingClientRect()
-    scale =
-      horizontal: (rect?.width || ALMOST_ZERO) / (@state.naturalWidth || ALMOST_ZERO)
-      vertical: (rect?.height || ALMOST_ZERO) / (@state.naturalHeight || ALMOST_ZERO)
-
-    unless scale.horizontal is @state.scale.horizontal and scale.vertical is @state.scale.vertical
-      @setState {scale}
+    @setState
+      sizeRect: @refs.sizeRect.getDOMNode().getBoundingClientRect()
+      toolRect: @refs.selectedTool?.getDOMNode().getBoundingClientRect()
 
   handleInitStart: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
@@ -247,8 +249,7 @@ module.exports = React.createClass
       annotation.value.splice index, 1
       annotation.value.push mark
     @setState selectedMark: mark, =>
-      if mark?.details?
-        @forceUpdate() # Re-render to reposition the details tooltip.
+      @handleResize() if mark?.details? # hack to show the details box
 
   destroyMark: (annotation, mark) ->
     if mark is @state.selectedMark
