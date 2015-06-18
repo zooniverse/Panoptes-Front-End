@@ -1,44 +1,25 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-AboutSideBar = require '../partials/about-side-bar'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 
 counterpart.registerTranslations 'en',
   publications:
     nav:
-      showAll:
-        title: 'Show All'
-      space:
-        title: 'Space'
-        projects:
-          galaxyZoo: 'Galaxy Zoo'
-          solarStormWatch: 'Solar Storm Watch'
-          galaxyZooSupernova: 'Galaxy Zoo - Supernova'
-          planetHunters: 'Planet Hunters'
-          milkyWayProject: 'Milky Way Project'
-      climate:
-        title: 'Climate'
-        projects:
-          cycloneCenter: 'Cyclone Center'
-      humanities:
-        title: 'Humanities'
-      nature:
-        title: 'Nature'
-      biology:
-        title: 'Biology'
-      physics:
-        title: 'Physics'
-      meta:
-        title: 'Meta'
+      showAll: 'Show All'
+      space: 'Space'
+      climate: 'Climate'
+      humanities: 'Humanities'
+      nature: 'Nature'
+      meta: 'Meta'
     content:
-      header: 'All Publications'
+      header:
+        showAll: 'All Publications'
 
 publicationCategories =
   space: [
     {slug: "galaxy-zoo"
-    nav: "galaxyZoo"
     publications: [
       {citation: "Galaxy Zoo: the effect of bar-driven fueling on the presence of an active galactic nucleus in disc galaxies, Galloway+ 2015."
       href: "http://arxiv.org/abs/1502.01033"},
@@ -138,7 +119,6 @@ publicationCategories =
       href: "http://adsabs.harvard.edu/abs/2008MNRAS.389.1179L"}]
     },
     {slug: "solar-stormwatch"
-    nav: "solarStormWatch"
     publications: [
       {citation: "Observational Tracking of the 2D Structure of Coronal Mass Ejections Between the Sun and 1 AU, Savani+ 2015."
       href: "http://arxiv.org/abs/1503.08774"},
@@ -150,7 +130,6 @@ publicationCategories =
       href: "http://adsabs.harvard.edu/abs/2012MNRAS.420.1355D"}]
     },
     {slug: "galaxy-zoo-supernova"
-    nav: "galaxyZooSupernova"
     publications: [
       {citation: "Five New Outbursting AM CVn Systems Discovered by the Palomar Transient Factory, Levitan+ 2012."
       href: "http://adsabs.harvard.edu/abs/2012arXiv1212.5312L"},
@@ -184,31 +163,104 @@ publicationCategories =
       {citation: "Planet Hunters: Assessing the Kepler Inventory of Short-period Planets, Schwamb+ 2012."
       href: "http://adsabs.harvard.edu/abs/2012ApJ...754..129S"}]
     },
-    {name: "Milky Way Project"
-    nav: "milkyWayProject"
+    {slug: "milky-way-project"
     publications: [
       {citation: "The Milky Way Project: What are Yellowballs?, Kerton+ 2015."
-      href: "http://arxiv.org/abs/1502.01388v1"}]
+      href: "http://arxiv.org/abs/1502.01388v1"},
+      {citation: "The Milky Way Project: Leveraging Citizen Science and Machine Learning to Detect Interstellar Bubbles, Beaumont+ 2014."
+      href: "http://arxiv.org/abs/1406.2692"},
+      {citation: "The Milky Way Project: A Statistical Study of Massive Star Formation Associated with Infrared Bubbles, Kendrew+ 2012."
+      href: "http://adsabs.harvard.edu/abs/2012ApJ...755...71K"},
+      {citation: "The Milky Way Project First Data Release: a bubblier Galactic disc, Simpson+ 2012."
+      href: "http://mnras.oxfordjournals.org/content/424/4/2442.abstract?sid=4a445f2b-71d6-4865-9e64-3aba88192f61"}]
+    },
+    {slug: "ice-hunters"
+    publications: [
+      {citation: "2011 HM102: Discovery of a High-Inclination L5 Neptune Trojan in the Search for a post-Pluto New Horizons Target, Parker+ 2012.",
+      href: "http://arxiv.org/abs/1210.4549"}]
+    },
+    {slug: "andromeda-project"
+    publications: [
+      {citation: "PHAT Stellar Cluster Survey. II. Andromeda Project Cluster Catalog, Johnson+ 2015."
+      href: "http://arxiv.org/abs/1501.04966"}]
+    },
+    {slug: "space-warps"
+    publications: [
+      {citation: "The Red Radio Ring: a gravitationally lensed hyperluminous infrared radio galaxy at z=2.553 discovered through citizen science, Geach+ 2015."
+      href: "http://arxiv.org/pdf/1503.05824v1.pdf"},
+      {citation: "Gravitational lens modelling in a citizen science context, Küng+ 2015."
+      href: "http://arxiv.org/pdf/1502.00008v1.pdf"}]
+    },
+    {slug: "snapshot-supernova"
+    publications: [
+      {citation: "ATel #7254: PESSTO spectroscopic classification of optical transients, Campbell+ 2015."
+      href: "http://www.astronomerstelegram.org/?read=7254"},
+      {citation: "ATel #7261: PESSTO spectroscopic classification of optical transients, Cartier+ 2015."
+      href: "http://www.astronomerstelegram.org/?read=7261"}]
     }
   ],
   climate: [
     {slug: "cyclone-center"
-    nav: "cycloneCenter"
     publications: [
       {citation: "Cyclone Center: Can Citizen Scientists Improve Tropical Cyclone Intensity Records?, Hennon+ 2014."
       href: "http://journals.ametsoc.org/doi/abs/10.1175/BAMS-D-13-00152.1"}
     ]}
   ],
-  # humanities: [
-  #   ],
-  # nature: [
-  #   ],
+  humanities: [
+    {slug: "ancient-lives"
+    publications: [
+      {citation: "P.Oxy 5156, Plutarch Moralia 660C, 661B-C (Quaestiones Convivales IV PR., 1.2), in The Oxyrhynchus Papyri Vol. 78, Brusuelas 2013."}]}
+    ],
+  nature: [
+    {slug: "whale-fm"
+    publications: [
+      {citation: "Classification of large acoustic datasets using machine learning and crowdsourcing: Application to whale calls, Shamir+ 2014."
+      href: "http://scitation.aip.org/content/asa/journal/jasa/135/2/10.1121/1.4861348"},
+      {citation: "Repeated call types in short-finned pilot whales, Globicephala macrorhynchus, Sayigh+ 2012."
+      href: "http://onlinelibrary.wiley.com/doi/10.1111/j.1748-7692.2012.00577.x/abstract"}]
+    },
+    {slug: "snapshot-serengeti"
+    publications: [
+      {citation: "Applying a random encounter model to estimate lion density from camera traps in Serengeti National Park, Tanzania, Cusack+ 2015."
+      href: "http://onlinelibrary.wiley.com/doi/10.1002/jwmg.902/full"},
+      {citation: "Snapshot Serengeti, high-frequency annotated camera trap images of 40 mammalian species in an African savanna, Swanson+ 2015."
+      href: "http://www.nature.com/articles/sdata201526"
+      }]
+    }
+  ],
   # biology: [
   #   ],
   # physics: [
   #   ],
-  # meta: [
-  #   ]
+  meta: [
+    {name: "Meta Studies"
+    publications: [
+      {citation: "Designing for Dabblers and Deterring Drop-Outs in Citizen Science, Eveleigh+ 2014."
+      href: "http://discovery.ucl.ac.uk/1418573/1/p2985-eveleigh.pdf"}
+      {citation: "Playing with science: gamised aspects of gamification found on the Online Citizen Science Project - Zooniverse, Greenhill+ 2014."
+      href: "https://www.escholar.manchester.ac.uk/uk-ac-man-scw:254358"}
+      {citation: "Why Won’t Alien’s Talk to Us: Content and Community Dynamics in Online Citizen Science, Luczak-Roesch+ 2014."
+      href: "http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/view/8092"}
+      {citation: "Volunteers’ Engagement in Human Computation Astronomy Projects, Ponciano+ 2014."
+      href: "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&arnumber=6728933"}
+      {citation: "Zooniverse: Observing the World’s Largest Citizen Science Platform, Simpson+ 2014."
+      href: "http://wow.oerc.ox.ac.uk/wow-2014-papers/zooniverse-observing-the-world2019s-largest-citizen-science-platform/view"}
+      {citation: '''“I want to be a Captain! I want to be a Captain!": Gamification in the Old Weather citizen science project., Eveleigh+ 2013.'''
+      href: "http://discovery.ucl.ac.uk/1412171/"}
+      {citation: "Creativity in citizen cyberscience: All for one and one for all, Jennett+ 2013."
+      href: "http://ac.aup.fr/~croda/tclab/creativity&attention2013Material/CharleneJennett.pdf"}
+      {citation: "Learning by volunteer computing, thinking and gaming: What and how are volunteers learning by participating in Virtual Citizen Science?, Kloetzer+ 2013."
+      href: "http://ebwb.hu-berlin.de/aktuelles/esrea/conference-programme/esrea-book-of-abstracts"}
+      {citation: "Measuring the Conceptual Understandings of Citizen Scientists Participating in Zooniverse Projects: A First Approach, Prather+ 2013."
+      href: "http://www.portico.org/Portico/#!journalAUSimpleView/tab=PDF?cs=ISSN_15391515?ct=E-Journal%20Content?auId=ark:/27927/pgg3ztfcwj0"}
+      {citation: "Galaxy Zoo: Motivations of Citizen Scientists, Raddick+ 2013."
+      href: "http://arxiv.org/abs/1303.6886"}
+      {citation: "Galaxy Zoo: Morphological Classification and Citizen Science, Forston+ 2012."
+      href: "http://labs.adsabs.harvard.edu/adsabs/abs/2012amld.book..213F/"}
+      {citation: "Galaxy Zoo: Exploring the Motivations of Citizen Science Volunteers, Raddick+ 2010."
+      href: "http://adsabs.harvard.edu/abs/2010AEdRv...9a0103R"}]
+    }
+  ]
 
 module.exports = React.createClass
   displayName: 'PublicationsPage'
@@ -216,22 +268,35 @@ module.exports = React.createClass
   getInitialState: ->
     currentSort: 'showAll'
 
+  componentDidMount: ->
+    button = React.findDOMNode(@refs.showAll)
+    @updateButtonState button
+
   render: ->
+    sideBarNav = counterpart "publications.nav"
     <div className="publications-page secondary-page-copy">
-      <AboutSideBar showList={@showPublicationsList} sideBarNav={counterpart "publications.nav"} subNav={true} currentSort={@state.currentSort} translations={counterpart "publications"} />
+      <aside className="secondary-page-side-bar">
+        <nav ref="sideBarNav">
+          {for navItem of sideBarNav
+            <button key={navItem} ref={navItem} className="secret-button side-bar-button" onClick={@showPublicationsList.bind(null, navItem)}><Translate content="publications.nav.#{navItem}" /></button>}
+        </nav>
+      </aside>
       <section className="publications-content">
-        <h2><Translate content="publications.content.header" /></h2>
+        <h2>{if @state.currentSort is 'showAll'
+              <Translate content="publications.content.header.showAll" />
+            else
+              @state.currentSort
+        }</h2>
         {for category, projects of publicationCategories
           if (@state.currentSort is category) or (@state.currentSort is 'showAll')
-            console.log 'state', @state.currentSort
             <ul key={category} className="publications-list">
               {for project in projects
-                <div key={project.slug || project.name} style={@filterProjects(project.nav) unless (@state.currentSort is category) or (@state.currentSort is 'showAll')}>
+                <div key={project.name || project.slug}>
                   <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug)} pending={null} catch={null}>{([fetchedProject]) =>
                     if fetchedProject?
                       <h3 className="project-name">{fetchedProject.display_name}</h3>
                   }</PromiseRenderer>
-                  {if project.name then <h3 className="project-name">{project.name}</h3>}<span className="publication-count">{' '}({project.publications.length})</span>
+                  {if project.name? then <h3 className="project-name">{project.name}</h3>}<span className="publication-count">{' '}({project.publications.length})</span>
                   {projectAvatar = @getAvatar(project)
                   project.publications.map (publication) =>
                     i = Math.random()
@@ -240,7 +305,7 @@ module.exports = React.createClass
                       <div className="citation">
                         <p>
                           <cite>{publication.citation}</cite><br />
-                          <a href={publication.href} target="_blank">Available here.</a>
+                          {if publication.href? then <a href={publication.href} target="_blank">Available here.</a>}
                         </p>
                       </div>
                     </li>}
@@ -251,16 +316,16 @@ module.exports = React.createClass
     </div>
 
   showPublicationsList: (navItem) ->
-    console.log 'clicky', navItem
     currentButton = React.findDOMNode(@refs[navItem])
-    @setState currentSort: navItem
+    @setState currentSort: navItem, -> @updateButtonState(currentButton)
+
+  updateButtonState: (currentButton) ->
+    buttons = React.findDOMNode(@refs.sideBarNav).childNodes
+    for button in buttons
+      button.classList.remove 'active'
+    currentButton.classList.add 'active'
 
   getAvatar: (project) ->
     apiClient.type('projects').get(slug: project.slug).get('avatar')
       .then (avatar) => @avatarSrc = avatar.src
     @avatarSrc
-
-  filterProjects: (filter) ->
-    hide = display: "none"
-    unless filter is @state.currentSort
-      hide
