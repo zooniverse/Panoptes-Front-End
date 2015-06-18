@@ -67,7 +67,7 @@ module?.exports = React.createClass
   render: ->
     <div className="discussion-new-form">
       <div className="talk-board-new-discussion">
-        <h2>Create a disussion +</h2>
+        <h2>Create a discussion +</h2>
         {if not @props.boardId
           <PromiseRenderer promise={@props.subject.get('project')}>{(project) =>
             <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project))}>{(boards) =>
