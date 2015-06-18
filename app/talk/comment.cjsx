@@ -16,6 +16,7 @@ apiClient = require '../api/client'
 talkClient = require '../api/talk'
 Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
+DisplayRoles = require './lib/display-roles'
 
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
 
@@ -86,18 +87,16 @@ module?.exports = React.createClass
     <div className="talk-comment #{activeClass}">
       <div className="talk-comment-author">
         <PromiseRenderer promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
-          <div>
-            <Avatar user={commentOwner} />
-            <PromiseRenderer promise={talkClient.type('roles').get(id: @props.data.user_id, section: @props.data.section)}>{(roles) =>
-              console.log(commentOwner.display_name, roles, @props.data.section)
-              <p>Print roles to screen here</p>
-            }</PromiseRenderer>
-          </div>
+          <Avatar user={commentOwner} />
         }</PromiseRenderer>
 
         <p>
           <Link to="user-profile" params={name: @props.data.user_login}>{@props.data.user_display_name}</Link>
         </p>
+
+        <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.data.user_id, section: ['zooniverse', @props.data.section])}>{(roles) =>
+          <DisplayRoles roles={roles} section={@props.data.section} />
+        }</PromiseRenderer>
       </div>
 
       <div className="talk-comment-body">
