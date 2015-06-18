@@ -18,15 +18,12 @@ module?.exports = React.createClass
 
   replaceSymbols: (string) ->
     string
-      # subjects scoped to a specific project : owner-slug/project-slug^subject_id
+      # subjects in a specific project : owner-slug/project-slug^subject_id
       # \b[\w-]+\b is hyphen boundary for slugs
       .replace(/@(\b[\w-]+\b)\/(\b[\w-]+\b)\^([0-9]+)/g, "<a href='#/projects/$1/$2/talk/subjects/$3'>$1/$2 - Subject $3</a>")
 
       # user mentions : @username
       .replace(/@(\b[\w-]+\b)/g, "<a href='#/users/$1'>$1</a>")
-
-      # subject mentions : ^subject_id
-      .replace(/\^([0-9]+)/g, "<a href='#/subjects/$1'>Subject $1</a>")
 
       # hashtags #tagname
       .replace(/\#(\w+)/g, "<a href='#/talk/search?query=$1'>#$1</a>")

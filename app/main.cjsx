@@ -96,8 +96,6 @@ routes = <Route handler={App}>
   <Route name="inbox" handler={require './talk/inbox'} />
   <Route name="inbox-conversation" path="inbox/:conversation" handler={require './talk/inbox-conversation'} />
 
-  <Route name="subjects" path="subjects/:id" handler={require "./subjects/redirect-to-project"}/>
-
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={require './pages/not-found'} />
 
