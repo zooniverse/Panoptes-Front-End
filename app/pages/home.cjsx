@@ -6,8 +6,6 @@ apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 ZooniverseLogoType = require '../partials/zooniverse-logotype'
 OwnedCard = require '../partials/owned-card'
-alert = require '../lib/alert'
-LoginDialog = require '../partials/login-dialog'
 
 FEATURED_PRODUCT_IDS = if process.env.NODE_ENV is 'production'
   ['11', '6', '3']

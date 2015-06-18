@@ -4,6 +4,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 apiClient = require '../../api/client'
 counterpart = require 'counterpart'
+LandingPage = require './landing-page'
 
 RequiresSession = do ->
   ChangeListener = require '../../components/change-listener'
@@ -23,7 +24,7 @@ RequiresSession = do ->
       if user?
         @props.render user
       else
-        <span>You’re not signed in.</span>
+        <LandingPage user={user} />
 
 sleep = (duration) ->
   (value) ->
@@ -42,7 +43,7 @@ module.exports = React.createClass
     creationInProgress: false
 
   render: ->
-    <div className="content-container">
+    <div>
       <RequiresSession render={@renderWithSession} />
     </div>
 
@@ -52,7 +53,7 @@ module.exports = React.createClass
 
     getProjects = apiClient.type('projects').get current_user_roles: 'owner,collaborator', page: @state.page
 
-    <div>
+    <div className="content-container">
       <PromiseRenderer promise={getProjects} then={@renderProjects.bind this, user} />
       <br />
       <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject.bind this, user}>

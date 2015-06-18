@@ -1,0 +1,41 @@
+.landing-page
+  align-items: center
+  background: url(./assets/builder-landing.jpg) center center no-repeat
+  color: #f9f9f9
+  display: flex
+  flex-direction: column
+  height: 100vh
+  justify-content: center
+  padding: 2.5em 3vw
+
+  @media screen and (max-width: 400px)
+    height: 100% // So content isn't cut off on small mobile screens
+
+    svg
+      margin-top: 15vh
+
+  .landing-title
+    color: inherit
+    font-weight: 300
+    line-height: 40px
+    padding: 1.5em 0 0.5em
+
+  .landing-tagline
+    color: inherit
+    font-size: 1.6em
+    line-height: 22px
+    margin: 0 auto
+    max-width: 600px
+    padding: 1em 0 6.5em
+
+  .landing-button
+    box-sizing: border-box
+    color: #fbfbfb
+    font-size: 1.6em
+    font-weight: 400
+    margin-bottom: 3vh
+    padding: 1em 0
+    width: 250px
+
+    &:hover
+      background: lighten(COBOLT_BLUE, 20%)
