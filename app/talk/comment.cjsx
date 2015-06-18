@@ -24,7 +24,7 @@ module?.exports = React.createClass
 
   propTypes:
     data: React.PropTypes.object
-    onUpdateComment: React.PropTypes.func # passed (textContent, focusImage, commentId) on update submit
+    onUpdateComment: React.PropTypes.func # passed (textContent, subject, commentId) on update submit
     onDeleteComment: React.PropTypes.func # passed (commentId) on click
     onLikeComment: React.PropTypes.func # passed (commentId) on like
     onClickReply: React.PropTypes.func # passed (user, comment) on click
@@ -60,9 +60,9 @@ module?.exports = React.createClass
   onCancelClick: (e) ->
     @setState editing: false
 
-  onSubmitComment: (e, textContent, focusImage) ->
+  onSubmitComment: (e, textContent, subject) ->
     # update comment here...
-    @props.onUpdateComment?(textContent, focusImage, @props.data.id)
+    @props.onUpdateComment?(textContent, subject, @props.data.id)
     @setState editing: false
     @setFeedback "Comment Updated"
 
@@ -89,7 +89,7 @@ module?.exports = React.createClass
         }</PromiseRenderer>
 
         <p>
-          <Link to="user-profile" params={name: @props.data.user_display_name}>{@props.data.user_display_name}</Link>
+          <Link to="user-profile" params={name: @props.data.user_login}>{@props.data.user_display_name}</Link>
         </p>
       </div>
 

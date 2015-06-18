@@ -5,7 +5,7 @@ Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 ZooniverseLogoType = require '../partials/zooniverse-logotype'
-ProjectCard = require '../partials/project-card'
+OwnedCard = require '../partials/owned-card'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
 
@@ -89,7 +89,9 @@ module.exports = React.createClass
           if projects?
             <div className="featured-projects-list">
             {for project in projects
-              <ProjectCard key={project.id} project={project} />
+              avatarSrc = project.get('avatar').then (avatar) ->
+                avatar.src
+              <OwnedCard key={project.id} resource={project} linkTo="project-home" translationObjectName="projectsPage" imagePromise={avatarSrc} />
             }
             </div>
         }</PromiseRenderer>

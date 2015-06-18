@@ -3,6 +3,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 UserSearch = require '../../components/user-search'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
+projectSection = require '../../talk/lib/project-section'
 
 ID_PREFIX = 'LAB_COLLABORATORS_PAGE_'
 
@@ -66,7 +67,7 @@ CollaboratorCreator = React.createClass
           <tbody>
             {for role, _ of POSSIBLE_ROLES
               <tr>
-                <td><input id={ID_PREFIX + role} type="checkbox" name="role" value={role} /></td>
+                <td><input id={ID_PREFIX + role} type="checkbox" name="role" value={role} disabled={role is 'owner'}/></td>
                 <td><strong><label htmlFor={ID_PREFIX + role}>{ROLES_INFO[role].label}</label></strong></td>
                 <td>{ROLES_INFO[role].description}</td>
               </tr>}
@@ -109,7 +110,7 @@ CollaboratorCreator = React.createClass
       newTalkRoleSets = for role in talkRoles
         talkClient.type('roles').create
           name: role
-          section: "#{@props.project.id}-#{@props.project.display_name}"
+          section: projectSection(@props.project)
           user_id: id
 
       memo.concat([newRoleSet]).concat(newTalkRoleSets)
@@ -155,8 +156,10 @@ module.exports = React.createClass
         <p className="form-help error">{@state.error.toString()}</p>}
       <PromiseRenderer promise={@fetchAllRoles()} then={(projectRoleSets) =>
         <div>
+          {ownerSet = projectRoleSets.filter((set) -> 'owner' in set.roles)[0]
+          <PromiseRenderer key={ownerSet.id} promise={ownerSet.get 'owner'} then={@renderUserRow.bind this, ownerSet} />}
           {if projectRoleSets.length > 1
-            for projectRoleSet in projectRoleSets
+            for projectRoleSet in projectRoleSets when 'owner' not in projectRoleSet.roles
               <PromiseRenderer key={projectRoleSet.id} promise={projectRoleSet.get 'owner'} then={@renderUserRow.bind this, projectRoleSet} />
           else
             <em className="form-help">None yet</em>}
@@ -170,24 +173,21 @@ module.exports = React.createClass
     </div>
 
   renderUserRow: (projectRoleSet, user) ->
-    if 'owner' in projectRoleSet.roles
-      null
-    else
-      <p>
-        <strong>{user.display_name}</strong>{' '}
-        <button type="button" className="secret-button" onClick={@removeRoleSet.bind this, projectRoleSet}>&times;</button>
-        <br />
+    <p>
+      <strong>{user.display_name}</strong>{' '}
+      <button type="button" className="secret-button" onClick={@removeRoleSet.bind this, projectRoleSet}>&times;</button>
+      <br />
 
-        <span className="columns-container inline">
-          {for role, _ of POSSIBLE_ROLES
-            toggleThisRole = @toggleRole.bind this, projectRoleSet, role
-            # TODO: Translate this.
-            <label key={role}>
-              <input type="checkbox" name={role} checked={role in projectRoleSet.roles} disabled={role is 'owner' or projectRoleSet.id in @state.saving} onChange={toggleThisRole} />{' '}
-              {role[...1].toUpperCase()}{role[1...]}
-            </label>}
-        </span>
-      </p>
+      <span className="columns-container inline">
+        {for role, _ of POSSIBLE_ROLES
+          toggleThisRole = @toggleRole.bind this, projectRoleSet, role
+          # TODO: Translate this.
+          <label key={role}>
+            <input type="checkbox" name={role} checked={role in projectRoleSet.roles} disabled={role is 'owner' or projectRoleSet.id in @state.saving} onChange={toggleThisRole} />{' '}
+            {ROLES_INFO[role].label}
+          </label>}
+      </span>
+    </p>
 
   toggleRole: (projectRoleSet, role) ->
     index = projectRoleSet.roles.indexOf role
@@ -236,7 +236,7 @@ module.exports = React.createClass
         @setState saving: @state.saving
 
   talkSection: ->
-    "project-#{@props.project.id}"
+    projectSection(@props.project)
 
   handleCollaboratorAddition: ->
     @props.project.uncacheLink 'project_roles'

@@ -12,7 +12,7 @@ module.exports = React.createClass
       apiClient.type('users').get display_name: value, page_size: 10
         .then (users) =>
           opts = for user in users
-            { value: user.id, label: user.display_name }
+            { value: user.id, label: "@#{ user.login }: #{ user.display_name }" }
           callback null, {
             options: opts
           }

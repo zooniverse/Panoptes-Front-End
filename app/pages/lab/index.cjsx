@@ -74,7 +74,7 @@ module.exports = React.createClass
               <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
               <td>
                 <PromiseRenderer promise={project.get 'owner'}>{(owner) =>
-                  <Link to="project-home" params={owner: owner.slug, name: project.slug} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
+                  <Link to="project-home" params={owner: owner.login, name: project.slug} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
                 }</PromiseRenderer>
               </td>
             </tr>}

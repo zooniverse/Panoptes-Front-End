@@ -18,7 +18,7 @@ module?.exports = React.createClass
     apiClient.type('projects').get(projectId.toString()).then (project) =>
       project.get('owner').then (owner) =>
         @transitionTo 'project-talk', 
-          owner: owner.slug
+          owner: owner.login
           name: project.slug
 
   setProjects: (metadata) ->

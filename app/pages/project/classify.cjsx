@@ -9,7 +9,7 @@ counterpart = require 'counterpart'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
 SignInPrompt = require '../../partials/sign-in-prompt'
-sessionSubjects = require '../../lib/session-subjects'
+seenThisSession = require '../../lib/seen-this-session'
 
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
@@ -34,9 +34,18 @@ currentClassifications =
   forWorkflow: {}
 
 # Queue up subjects to classify here.
-# TODO: Should we clear this on sign-in and -out?
 upcomingSubjects =
   forWorkflow: {}
+
+emptySubjectQueue = ->
+  console?.log 'Emptying upcoming subjects queue'
+  for workflowID, queue of upcomingSubjects.forWorkflow
+    for subject in queue
+      subject.destroy()
+    queue.splice 0
+
+auth.listen 'change', emptySubjectQueue
+apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
@@ -111,6 +120,7 @@ module.exports = React.createClass
           started_at: (new Date).toISOString()
           user_agent: navigator.userAgent
           user_language: counterpart.getLocale()
+          utc_offset: ((new Date).getTimezoneOffset() * 60).toString() # In seconds
         links:
           project: project.id
           workflow: workflow.id
@@ -203,8 +213,11 @@ module.exports = React.createClass
     console?.info 'Completed classification', @state.classification
     @state.classification.save().then (classification) =>
       console?.log 'Saved classification', classification.id
-      classification.get('subjects').then (subjects) ->
-        sessionSubjects.push (id for {id} in subjects)...
+      Promise.all([
+        classification.get 'workflow'
+        classification.get 'subjects'
+      ]).then ([workflow, subjects]) ->
+        seenThisSession.add workflow, subjects
         classification.destroy()
       classificationsThisSession += 1
       @maybePromptToSignIn()

@@ -4,7 +4,7 @@ Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
 tasks = require './tasks'
 Tooltip = require '../components/tooltip'
-sessionSubjects = require '../lib/session-subjects'
+seenThisSession = require '../lib/seen-this-session'
 
 NOOP = Function.prototype
 
@@ -92,7 +92,7 @@ module.exports = React.createClass
               </g>}
         </svg>
 
-        {if @props.subject.already_seen or @props.subject.id in sessionSubjects
+        {if @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
             Already seen!
             {if @state.showWarning

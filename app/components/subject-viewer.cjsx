@@ -10,7 +10,6 @@ NOOP = Function.prototype
 ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'inline-block', position: 'relative'
 SUBJECT_STYLE = display: 'block'
-PLAYING_FRAME_DURATION = 333
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'
@@ -25,6 +24,8 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     subject: null
+    playFrameDuration: 667
+    playIterations: 3
     onFrameChange: NOOP
     onLoad: NOOP
 
@@ -108,9 +109,13 @@ module.exports = React.createClass
     @setState {playing}
     if playing
       @nextFrame()
-      @_playingInterval = setInterval @nextFrame, PLAYING_FRAME_DURATION
+      @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
+
+      autoStopDelay = @props.subject.locations.length * @props.playFrameDuration * @props.playIterations
+      @_autoStop = setTimeout @setPlaying.bind(this, false), autoStopDelay
     else
       clearInterval @_playingInterval
+      clearTimeout @_autoStop
 
   nextFrame: ->
     @handleFrameChange (@state.frame + 1) %% @props.subject.locations.length

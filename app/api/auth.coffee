@@ -96,32 +96,32 @@ module.exports = new Model
     console?.log 'Getting session'
     client.get '/me'
       .then ([user]) =>
-        console?.info 'Got session', user.display_name, user.id
+        console?.info 'Got session', user.login, user.id
         user
 
       .catch (error) ->
         console?.error 'Failed to get session'
         throw error
 
-  register: ({display_name, email, password, credited_name, global_email_communication, project_id}) ->
+  register: ({login, email, password, credited_name, global_email_communication, project_id}) ->
     @checkCurrent().then (user) =>
       if user?
         @signOut().then =>
-          @register {display_name, email, password}
+          @register {login, email, password}
       else
-        console?.log 'Registering new account', display_name
+        console?.log 'Registering new account', login
 
         registrationRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
-            user: {display_name, email, password, credited_name, global_email_communication, project_id}
+            user: {login, email, password, credited_name, global_email_communication, project_id}
 
           # This weird URL is actually out of the API, but returns a JSON-API response.
           client.post '/../users', data, JSON_HEADERS
             .then =>
               @_getBearerToken().then =>
                 @_getSession().then (user) =>
-                  console?.info 'Registered account', user.display_name, user.id
+                  console?.info 'Registered account', user.login, user.id
                   user
 
             .catch (error) ->
@@ -148,24 +148,24 @@ module.exports = new Model
 
     @_currentUserPromise
 
-  signIn: ({display_name, password}) ->
+  signIn: ({login, password}) ->
     @checkCurrent().then (user) =>
       if user?
         @signOut().then =>
-          @signIn {display_name, password}
+          @signIn {login, password}
       else
-        console?.log 'Signing in', display_name
+        console?.log 'Signing in', login
 
         signInRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
-            user: {display_name, password}
+            user: {login, password}
 
           makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS
             .then =>
               @_getBearerToken().then =>
                 @_getSession().then (user) =>
-                  console?.info 'Signed in', user.display_name, user.id
+                  console?.info 'Signed in', user.login, user.id
                   user
 
             .catch (request) ->
@@ -192,9 +192,9 @@ module.exports = new Model
             .then =>
               @signOut() # Rough, but it'll do for now. Without signing out and back in, the session is lost.
             .then =>
-              {display_name} = user
+              {login} = user
               password = replacement
-              @signIn {display_name, password}
+              @signIn {login, password}
 
       else
         throw new Error 'No signed-in user to change the password for'

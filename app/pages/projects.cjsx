@@ -1,16 +1,14 @@
 counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
-Translate = require 'react-translate-component'
 apiClient = require '../api/client'
-PromiseRenderer = require '../components/promise-renderer'
-ProjectCard = require '../partials/project-card'
-{Link} = require 'react-router'
+OwnedCardList = require '../components/owned-card-list'
 
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'All Projects'
     countMessage: 'Showing %(count)s found'
+    button: 'Get Started'
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'
@@ -19,52 +17,24 @@ module.exports = React.createClass
 
   title: 'Projects'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
-  render: ->
+  listProjects: ->
     query = Object.create @props.query ? {}
     query.private ?= false
     query.beta ?= true # Temporary
     query.approved ?= true
+    query.include ?= 'owners,avatar'
 
-    getProjects = apiClient.type('projects').get query
+    apiClient.type('projects').get query
 
-    <div className="secondary-page all-projects-page">
-      <section className="hero projects-hero">
-        <div className="hero-container">
-          <Translate component="h1" content="projectsPage.title" />
-        </div>
-      </section>
-      <section className="projects-container">
-        <PromiseRenderer promise={getProjects}>{(projects) =>
-          if projects?
-            if projects.length is 0
-              <span>No projects found.</span>
-            else
-              <div>
-                <div className="project-results-counter">
-                  <Translate count={projects.length} content="projectsPage.countMessage" component="p" />
-                </div>
-                <div className="project-card-list">
-                  {if projects?
-                    for project in projects
-                      <ProjectCard key={project.id} project={project} />}
-                </div>
-                <nav>
-                  {meta = projects[0].getMeta()
-                  if meta?
-                    <nav className="pagination">
-                      {for page in [1..meta.page_count]
-                        <Link to="projects" query={{page}} key={page} className="pill-button">{page}</Link>}
-                    </nav>}
-                </nav>
-              </div>
-          else
-            <div>Loading projects</div>
-        }</PromiseRenderer>
-      </section>
-    </div>
+  imagePromise: (project) ->
+    project.get('avatar')
+      .then (avatar) -> avatar.src
+
+  render: ->
+    <OwnedCardList
+      translationObjectName="projectsPage"
+      listPromise={@listProjects()}
+      linkTo="projects"
+      cardLink="project-home"
+      heroClass="projects-hero"
+      imagePromise={@imagePromise} />
