@@ -1,17 +1,16 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-AboutSideBar = require '../partials/about-side-bar'
 
 counterpart.registerTranslations 'en',
   team:
     nav:
+      showAll: 'Show All'
       oxford: 'Oxford'
       chicago: 'Chicago'
       minnesota: 'Minnesota'
       portsmouth: 'Portsmouth'
       taipei: 'Taipei'
-      showAll: 'Show All'
     content:
       header:
         showAll: 'Zooniverse Team'
@@ -402,10 +401,19 @@ module.exports = React.createClass
   getInitialState: ->
     currentSort: 'showAll'
 
+  componentDidMount: ->
+    button = React.findDOMNode(@refs.showAll)
+    @updateButtonState button
+
   render: ->
-    sideBarNavList = counterpart "team.nav"
+    sideBarNav = counterpart "team.nav"
     <div className="team-page secondary-page-copy">
-      <AboutSideBar showList={@showPeopleList} sideBarNav={sideBarNavList} subNav={false} currentSort={@state.currentSort} translations={counterpart "team"} />
+      <aside className="secondary-page-side-bar">
+        <nav ref="sideBarNav">
+          {for navItem of sideBarNav
+            <button key={navItem} ref={navItem} className="secret-button side-bar-button" onClick={@showPeopleList.bind(null, navItem)}><Translate content="team.nav.#{navItem}" /></button>}
+        </nav>
+      </aside>
       <section className="team-member-list">
         <h2>{if @state.currentSort is 'showAll'
               <Translate content="team.content.header.showAll" />
@@ -427,6 +435,10 @@ module.exports = React.createClass
 
   showPeopleList: (navItem) ->
     currentButton = React.findDOMNode(@refs[navItem])
-    @setState currentSort: navItem
+    @setState currentSort: navItem, -> @updateButtonState(currentButton)
 
-
+  updateButtonState: (currentButton) ->
+    buttons = React.findDOMNode(@refs.sideBarNav).childNodes
+    for button in buttons
+      button.classList.remove 'active'
+    currentButton.classList.add 'active'
