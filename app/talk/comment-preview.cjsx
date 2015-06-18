@@ -18,9 +18,15 @@ module?.exports = React.createClass
 
   replaceSymbols: (string) ->
     string
-      .replace(/@(\w+)/g, "<a href='#/users/$1'>$1</a>") # user mentions
-      .replace(/\^([A-Za-z]+[0-9]+)/g, "<a href='http://www.zooniverse.org/subjects/$1'>$1</a>") # subject mentions
-      .replace(/\#(\w+)/g, "<a href='http://www.zooniverse.org/tags/$1'>#$1</a>") # hashtags
+      # subjects in a specific project : owner-slug/project-slug^subject_id
+      # \b[\w-]+\b is hyphen boundary for slugs
+      .replace(/@(\b[\w-]+\b)\/(\b[\w-]+\b)\^([0-9]+)/g, "<a href='#/projects/$1/$2/talk/subjects/$3'>$1/$2 - Subject $3</a>")
+
+      # user mentions : @username
+      .replace(/@(\b[\w-]+\b)/g, "<a href='#/users/$1'>$1</a>")
+
+      # hashtags #tagname
+      .replace(/\#(\w+)/g, "<a href='#/talk/search?query=$1'>#$1</a>")
 
   markdownify: (input) ->
     markdownIt.render(input)
