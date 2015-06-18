@@ -89,7 +89,9 @@ module.exports = React.createClass
           if projects?
             <div className="featured-projects-list">
             {for project in projects
-              <OwnedCard key={project.id} resource={project} linkTo="project-home" translationObjectName="projectsPage" imagePromise={project.get 'avatar'}/>
+              avatarSrc = project.get('avatar').then (avatar) ->
+                avatar.src
+              <OwnedCard key={project.id} resource={project} linkTo="project-home" translationObjectName="projectsPage" imagePromise={avatarSrc} />
             }
             </div>
         }</PromiseRenderer>
