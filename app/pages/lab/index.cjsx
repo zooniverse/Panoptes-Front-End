@@ -55,9 +55,39 @@ module.exports = React.createClass
 
     <PromiseRenderer promise={getProjects} pending={null}>{(projects) =>
       if projects.length > 0
-        renderProjects = @renderProjects.bind this, user
         <div className="content-container">
-          {renderProjects}
+          {console.log('got projects')}
+          <div>
+            <table>
+              <tbody>
+                {for project in projects then do (project) =>
+                  <tr key={project.id}>
+                    <td>{project.display_name}</td>
+                    <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
+                    <td>
+                      <PromiseRenderer promise={project.get 'owner'}>{(owner) =>
+                        <Link to="project-home" params={owner: owner.login, name: project.slug} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
+                      }</PromiseRenderer>
+                    </td>
+                  </tr>}
+              </tbody>
+            </table>
+
+            {meta = projects[0]?.getMeta()
+            if meta? and meta.page_count isnt 1
+              <nav className="pagination">
+                <label>
+                  Page
+                  {' '}
+                  <select value={@state.page} onChange={@handlePageChange}>
+                    {for page in [1..meta.page_count]
+                      <option key={page} value={page}>{page}</option>}
+                  </select>
+                  {' '}
+                  of {meta.page_count}
+                </label>
+              </nav>}
+          </div>
           <br />
           <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject.bind this, user}>
             Create a new project{' '}
@@ -69,40 +99,6 @@ module.exports = React.createClass
       else
         <LandingPage user={user} />
     }</PromiseRenderer>
-
-  renderProjects: (user, projects) ->
-    console.log('got projects')
-    <div>
-      <table>
-        <tbody>
-          {for project in projects then do (project) =>
-            <tr key={project.id}>
-              <td>{project.display_name}</td>
-              <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
-              <td>
-                <PromiseRenderer promise={project.get 'owner'}>{(owner) =>
-                  <Link to="project-home" params={owner: owner.login, name: project.slug} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
-                }</PromiseRenderer>
-              </td>
-            </tr>}
-        </tbody>
-      </table>
-
-      {meta = projects[0]?.getMeta()
-      if meta? and meta.page_count isnt 1
-        <nav className="pagination">
-          <label>
-            Page
-            {' '}
-            <select value={@state.page} onChange={@handlePageChange}>
-              {for page in [1..meta.page_count]
-                <option key={page} value={page}>{page}</option>}
-            </select>
-            {' '}
-            of {meta.page_count}
-          </label>
-        </nav>}
-    </div>
 
   handlePageChange: (e) ->
     @setState page: e.target.value, =>
