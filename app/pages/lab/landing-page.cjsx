@@ -42,6 +42,5 @@ module.exports = React.createClass
     </div>
 
   showLoginDialog: (which) ->
-    event.preventDefault()
     alert (resolve) ->
       <LoginDialog which={which} onSuccess={resolve} />
