@@ -1,17 +1,16 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-Markdown = require '../components/markdown'
 
 counterpart.registerTranslations 'en',
   team:
     nav:
+      showAll: 'Show All'
       oxford: 'Oxford'
       chicago: 'Chicago'
       minnesota: 'Minnesota'
       portsmouth: 'Portsmouth'
       taipei: 'Taipei'
-      showAll: 'Show All'
     content:
       header:
         showAll: 'Zooniverse Team'
@@ -35,8 +34,8 @@ counterpart.registerTranslations 'en',
         her PhD in Ecology, Evolution, and Behavior at the University of Minnesota in 2014,
         and has since joined the Zooniverse as a Postdoc in Ecology and Citizen Science.'''
       andreaSimenstad:
-        title: 'Title'
-        bio: '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'''
+        title: 'Developer'
+        bio: '''Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.'''
       brianCarstensen:
         title: 'UX Developer'
         bio: '''Brian Carstensen recently moved from Chicago to Oxford. Brian has a degree
@@ -59,8 +58,8 @@ counterpart.registerTranslations 'en',
         bio: '''Chris Snyder began working on the Zooniverse team in fall 2012 as a web developer. In July 2013,
         he became the technical project manager. He received a degree in computer science from the University of Dayton.'''
       christopherDoogue:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        title: 'Project Assistant'
+        bio: '''Chris has been happily supporting the Zooniverse Oxford team since Sep. 2014. He has been with the Department of Astrophysics for over 2 years administratively supporting various projects. A former trained actor, he has the ability to look like he's smiling in the face of adversity!'''
       colemanKrawczyk:
         title: 'Data Scientist'
         bio: '''Coleman is helping to create new data analysis and visualization tools for existing Zooniverse
@@ -133,17 +132,14 @@ counterpart.registerTranslations 'en',
       michaelParrish:
         title: 'Rails/Backend Developer'
         bio: '''Software developer at the Zooniverse. Dog, fishing, snakes, and bourbon.'''
-      perryRoper:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
       rebeccaSmethurst:
         title: 'Researcher'
         bio: '''Becky is an astrophysicist working towards her doctorate in Oxford. She is
         interested in how galaxies change over time and how we can track this evolution.
         Happy-go-lucky about outreach, the Zooniverse and everything.'''
       rogerHutchings:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        title: 'Developer'
+        bio: '''Roger builds front end interfaces for the Zooniverse, and enjoys coding, music and rebuilding motorbikes in his spare time.'''
       sandorKruk:
         title: 'Researcher'
         bio: '''Sandor is a graduate student working on his PhD in Astrophysics at Oxford.
@@ -160,11 +156,11 @@ counterpart.registerTranslations 'en',
         A former researcher and software developer at NASA Ames, he received degrees in both
         computer science and mechanical engineering.'''
       simoneDuca:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        title: 'Web Developer'
+        bio: '''Simone is a front end web developer at the Zooniverse. He has a Phd in logic and philosophy from Bristol and loves cooking.'''
       veronicaMaidel:
-        title: 'Title'
-        bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+        title: 'Data Scientist'
+        bio: '''Veronica is a Data Scientist who works on discovering patterns in Zooniverse data, by manipulating it and using it to create machine learning models. She received a PhD in Information Science and Technology from Syracuse University.'''
       victoriaVanHyning:
         title: 'Researcher'
         bio: '''Victoria is a Digital Humanities postdoc for the Zooniverse. She holds a masters
@@ -203,7 +199,7 @@ teamMembers =
     name: "Andrea Simenstad"
     title: counterpart "team.content.andreaSimenstad.title"
     bio: counterpart "team.content.andreaSimenstad.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/andrea.jpg"
     location: "minnesota"
   brianCarstensen:
     name: "Brian Carstensen"
@@ -243,7 +239,7 @@ teamMembers =
     name: "Christopher Doogue"
     title: counterpart "team.content.christopherDoogue.title"
     bio: counterpart "team.content.christopherDoogue.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/chris-d.jpg"
     location: "oxford"
   colemanKrawczyk:
     name: "Coleman Krawczyk"
@@ -346,12 +342,6 @@ teamMembers =
     bio: counterpart "team.content.michaelParrish.bio"
     image: "./assets/team/michael.png"
     location: "chicago"
-  perryRoper:
-    name: "Perry Roper"
-    title: counterpart "team.content.perryRoper.title"
-    bio: counterpart "team.content.perryRoper.bio"
-    image: "http://placehold.it/80x80"
-    location: "oxford"
   rebeccaSmethurst:
     name: "Rebecca Smethurst"
     twitter: "becky1505"
@@ -363,7 +353,7 @@ teamMembers =
     name: "Roger Hutchings"
     title: counterpart "team.content.rogerHutchings.title"
     bio: counterpart "team.content.rogerHutchings.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/roger.jpg"
     location: "oxford"
   sandorKruk:
     name: "Sandor Kruk"
@@ -389,13 +379,13 @@ teamMembers =
     name: "Simone Duca"
     title: counterpart "team.content.simoneDuca.title"
     bio: counterpart "team.content.simoneDuca.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/simone.jpg"
     location: "oxford"
   veronicaMaidel:
     name: "Veronica Maidel"
     title: counterpart "team.content.veronicaMaidel.title"
     bio: counterpart "team.content.veronicaMaidel.bio"
-    image: "http://placehold.it/80x80"
+    image: "./assets/team/veronica.jpg"
     location: "chicago"
   victoriaVanHyning:
     name: "Victoria van Hyning"
@@ -412,17 +402,18 @@ module.exports = React.createClass
     currentSort: 'showAll'
 
   componentDidMount: ->
-    button = React.findDOMNode(@refs.showAll)
-    @updateButtonState button
+    document.documentElement.classList.add 'on-secondary-page'
+
+  componentWillUnmount: ->
+    document.documentElement.classList.remove 'on-secondary-page'
 
   render: ->
     sideBarNav = counterpart "team.nav"
-    <div className="team-page">
-      <aside className="side-bar">
+    <div className="team-page secondary-page-copy">
+      <aside className="secondary-page-side-bar">
         <nav ref="sideBarNav">
           {for navItem of sideBarNav
-            <button key={navItem} ref={navItem} className="secret-button" onClick={@showPeopleList.bind(null, navItem)}><Translate content="team.nav.#{navItem}" /></button>
-          }
+            <button key={navItem} ref={navItem} className="secret-button side-bar-button" style={fontWeight: 700 if @state.currentSort is navItem} onClick={@showPeopleList.bind(null, navItem)}><Translate content="team.nav.#{navItem}" /></button>}
         </nav>
       </aside>
       <section className="team-member-list">
@@ -436,7 +427,7 @@ module.exports = React.createClass
             <div key={teamMember} className="team-member">
               <img src={details.image} alt="#{details.name}" />
               <div className="team-member-details">
-                <h4>{details.name}, {details.title} {if details.twitter then <a href="http://twitter.com/#{details.twitter}" target="_blank"><i className="fa fa-twitter"></i></a> }</h4>
+                <h3>{details.name}, {details.title} {if details.twitter then <a href="http://twitter.com/#{details.twitter}" target="_blank"><i className="fa fa-twitter"></i></a> }</h3>
                 <p>{details.bio}</p>
               </div>
             </div>
@@ -445,12 +436,4 @@ module.exports = React.createClass
     </div>
 
   showPeopleList: (navItem) ->
-    currentButton = React.findDOMNode(@refs[navItem])
-    @setState currentSort: navItem, @updateButtonState(currentButton)
-
-  updateButtonState: (currentButton) ->
-    buttons = React.findDOMNode(@refs.sideBarNav).childNodes
-    for button in buttons
-      button.classList.remove 'active'
-    currentButton.classList.add 'active'
-
+    @setState currentSort: navItem
