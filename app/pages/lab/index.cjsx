@@ -53,16 +53,22 @@ module.exports = React.createClass
 
     getProjects = apiClient.type('projects').get current_user_roles: 'owner,collaborator', page: @state.page
 
-    <div className="content-container">
-      <PromiseRenderer promise={getProjects} then={@renderProjects.bind this, user} />
-      <br />
-      <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject.bind this, user}>
-        Create a new project{' '}
-        <LoadingIndicator off={not @state.creationInProgress} />
-      </button>&nbsp;
-      {if @state.creationError?
-        <p className="form-help error">{@state.creationError.message}</p>}
-    </div>
+    <PromiseRenderer promise={getProjects} pending={null}>{(projects) =>
+      if projects.length > 0
+        renderProjects = @renderProjects.bind this, user
+        <div className="content-container">
+          {renderProjects}
+          <br />
+          <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject.bind this, user}>
+            Create a new project{' '}
+            <LoadingIndicator off={not @state.creationInProgress} />
+          </button>&nbsp;
+          {if @state.creationError?
+            <p className="form-help error">{@state.creationError.message}</p>}
+        </div>
+      else
+        <LandingPage user={user} />
+    }</PromiseRenderer>
 
   renderProjects: (user, projects) ->
     console.log('got projects')
