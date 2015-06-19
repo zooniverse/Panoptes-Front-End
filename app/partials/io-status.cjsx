@@ -24,28 +24,22 @@ module.exports = React.createClass
     writes: @props.target.writes
 
   componentDidMount: ->
-    console.log 'IOStatus componentDidMount'
     @props.target.listen 'change', @handleTargetChange
 
   componentWillReceiveProps: (nextProps) ->
-    console.log 'IOStatus componentWillReceiveProps'
     @props.target.stopListening 'change', @handleTargetChange
     nextProps.target.listen 'change', @handleTargetChange
 
   componentWillUnmount: ->
-    console.log 'IOStatus componentWillUnmount'
     @props.target.stopListening 'change', @handleTargetChange
 
   handleTargetChange: ->
     setTimeout => # TODO: I have no idea why this is necessary.
       {reads, writes} = @props.target
-      console.log 'IOStatus handleTargetChange', this, {reads, writes}
       @setState {reads, writes}
 
   render: ->
     {reads, writes} = @state
-
-    console.log 'IOStatus render', {reads, writes}
 
     rootStyle =
       pointerEvents: 'none'
