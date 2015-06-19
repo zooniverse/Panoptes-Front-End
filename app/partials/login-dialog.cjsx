@@ -3,6 +3,7 @@ React = require 'react'
 Translate = require 'react-translate-component'
 SignInForm = require './sign-in-form'
 RegisterForm = require './register-form'
+LoginChangeForm = require './login-change-form'
 auth = require '../api/auth'
 
 counterpart.registerTranslations 'en',
@@ -34,10 +35,19 @@ module.exports = React.createClass
 
       <div className="content-container">
         {switch @state.which
-          when 'sign-in' then <SignInForm onSuccess={@props.onSuccess} />
+          when 'login-change' then <LoginChangeForm user={@state.user} onSuccess={@props.onSuccess} />
+          when 'sign-in' then <SignInForm onSuccess={@onSuccessOrLoginChange} />
           when 'register' then <RegisterForm project={@props.project} onSuccess={@props.onSuccess} />}
       </div>
     </div>
 
   goTo: (which) ->
     @setState {which}
+
+  onSuccessOrLoginChange: (user) ->
+    if user.login_prompt
+      @setState {which: 'login-change', user: user}
+    else
+      @props.onSuccess(user)
+
+
