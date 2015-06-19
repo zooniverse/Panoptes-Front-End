@@ -17,6 +17,7 @@ Moderation = require './lib/moderation'
 {Link} = require 'react-router'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
+DisplayRoles = require './lib/display-roles'
 
 PAGE_SIZE = 3
 
@@ -182,13 +183,16 @@ module?.exports = React.createClass
 
       <ChangeListener target={authClient}>{=>
         <PromiseRenderer promise={authClient.checkCurrent()}>{(user) =>
-          if user
+          if user?
             <section>
               <div className="talk-comment-author">
                 <Avatar user={user} />
                 <p>
                   <Link to="user-profile" params={name: user.login}>{user.display_name}</Link>
                 </p>
+                <PromiseRenderer promise={talkClient.type('roles').get(user_id: user.id, section: ['zooniverse', discussion.section])}>{(roles) =>
+                  <DisplayRoles roles={roles} section={discussion.section} />
+                }</PromiseRenderer>
               </div>
 
               <CommentBox

@@ -13,8 +13,10 @@ PromiseToSetState = require '../lib/promise-to-set-state'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
+talkClient = require '../api/talk'
 Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
+DisplayRoles = require './lib/display-roles'
 
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
 
@@ -91,6 +93,10 @@ module?.exports = React.createClass
         <p>
           <Link to="user-profile" params={name: @props.data.user_login}>{@props.data.user_display_name}</Link>
         </p>
+
+        <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.data.user_id, section: ['zooniverse', @props.data.section])}>{(roles) =>
+          <DisplayRoles roles={roles} section={@props.data.section} />
+        }</PromiseRenderer>
       </div>
 
       <div className="talk-comment-body">
