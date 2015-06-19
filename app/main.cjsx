@@ -14,12 +14,12 @@ App = React.createClass
 
   render: ->
     <div className="panoptes-main">
+      <IOStatus />
       <MainHeader />
       <div className="main-content">
         <RouteHandler {...@props} />
       </div>
       <MainFooter />
-      <IOStatus />
     </div>
 
 routes = <Route handler={App}>
