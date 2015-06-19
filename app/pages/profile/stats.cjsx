@@ -5,4 +5,4 @@ module.exports = React.createClass
   displayName: 'Stats'
 
   render: ->
-    <div>Stats</div>
+    <div className="user-profile-stats content-container">Stats</div>

@@ -5,4 +5,4 @@ module.exports = React.createClass
   displayName: 'UserFeed'
 
   render: ->
-    <div>User profile feed</div>
+    <div className="user-profile-feed content-container">User profile feed</div>

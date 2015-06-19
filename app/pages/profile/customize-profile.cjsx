@@ -1,16 +1,69 @@
-counterpart = require 'counterpart'
 React = require 'react'
-BoundResourceMixin = require '../../lib/bound-resource-mixin'
-handleInputChange = require '../../lib/handle-input-change'
-ChangeListener = require '../../components/change-listener'
-auth = require '../../api/auth'
 PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
 
+MAX_AVATAR_SIZE = 65536
+MAX_HEADER_SIZE = 256000
+
 module.exports = React.createClass
-  displayName: 'CustomizeProfile'
+  displayName: 'CustomizeProfilePage'
+
+  getInitialState: ->
+    avatarError: null
+    headerError: null
 
   render: ->
-    <div>Customize</div>
+    @getAvatarSrc ?= @props.user.get 'avatar'
+      .then ([avatar]) ->
+        avatar.src
+      .catch ->
+        ''
+
+    @getHeaderSrc ?= @props.user.get 'header'
+      .then (header) ->
+        header.src
+      .catch ->
+        ''
+
+    <div className="customize-profile-tab columns-container">
+      <div className="content-container profile-avatar-selector">
+        <p>Change avatar</p>
+        <PromiseRenderer promise={@getAvatarSrc} then={(avatarSrc) =>
+          placeholder = <div className="form-help content-container">Drop an image here</div>
+          <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'avatar')} />
+        } />
+        {if @state.avatarError
+          <div className="form-help error">{@state.avatarError.toString()}</div>}
+      </div>
+
+      <div className="content-container profile-header-selector">
+        <p>Change profile header</p>
+        <PromiseRenderer promise={@getHeaderSrc} then={(headerSrc) =>
+          placeholder = <div className="form-help content-container">Drop an image here</div>
+          <ImageSelector maxSize={MAX_HEADER_SIZE} defaultValue={headerSrc} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'header')} />
+        } />
+        {if @state.headerError
+          <div className="form-help error">{@state.headerError.toString()}</div>}
+      </div>
+    </div>
+
+  handleMediaChange: (type, file) ->
+    errorProp = "#{type}Error"
+
+    newState = {}
+    newState[errorProp] = null
+    @setState newState
+
+    apiClient.post @props.user._getURL(type), media: content_type: file.type
+      .then ([resource]) =>
+        putFile resource.src, file
+      .then =>
+        @props.user.uncacheLink type
+        @["#{type}SrcGet"] = null # Uncache the local request so that rerendering makes it again.
+        @props.user.emit 'change'
+      .catch (error) =>
+        newState = {}
+        newState[errorProp] = error
+        @setState newState
