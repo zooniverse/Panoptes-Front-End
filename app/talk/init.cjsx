@@ -63,10 +63,10 @@ module?.exports = React.createClass
     <span><Link key={i} query={query: t.name} to="talk-search">#{t.name}</Link>{' '}</span>
 
   roleReadLabel: (data, i) ->
-    <label key={i}><input type="radio" name="role-read" value={data}/>{data}</label>
+    <label key={i}><input type="radio" name="role-read" defaultChecked={i is ROLES.length-1} value={data}/>{data}</label>
 
   roleWriteLabel: (data, i) ->
-    <label key={i}><input type="radio" name="role-write" value={data}/>{data}</label>
+    <label key={i}><input type="radio" name="role-write" defaultChecked={i is ROLES.length-1}value={data}/>{data}</label>
 
   render: ->
     <div className="talk-home">
@@ -76,7 +76,7 @@ module?.exports = React.createClass
           <h3>Add a board:</h3>
           <input type="text" ref="boardTitle" placeholder="Board Title"/>
 
-          <textarea type="text" ref="boardDescription" placeholder="Board Description"></textarea><br />
+          <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
 
           <h4>Can Read:</h4>
           <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
