@@ -67,18 +67,20 @@ module?.exports = React.createClass
   onPageChange: (page) ->
     @goToPage(page)
 
-  onEditTitle: (e) ->
+  onEditBoard: (e) ->
     e.preventDefault()
     form = React.findDOMNode(@).querySelector('.talk-edit-board-form')
 
     input = form.querySelector('input')
     title = input.value
 
+    description = form.querySelector('textarea').value
+
     # permissions
     read = form.querySelector(".roles-read input[name='role-read']:checked").value
     write = form.querySelector(".roles-write input[name='role-write']:checked").value
     permissions = {read, write}
-    board = {title, permissions}
+    board = {title, permissions, description}
 
     @boardRequest().update(board).save()
       .then (board) => @setState {board}
@@ -122,9 +124,12 @@ module?.exports = React.createClass
           <div>
             <h2>Moderator Zone:</h2>
             {if board?.title
-              <form className="talk-edit-board-form" onSubmit={@onEditTitle}>
+              <form className="talk-edit-board-form" onSubmit={@onEditBoard}>
                 <h3>Edit Title:</h3>
-                <input onChange={@onChangeTitle} defaultValue={board?.title}/>
+                <input defaultValue={board?.title}/>
+
+                <h3>Edit Description</h3>
+                <textarea defaultValue={board?.description}></textarea>
 
                 <h4>Can Read:</h4>
                 <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
