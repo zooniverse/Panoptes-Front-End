@@ -203,7 +203,7 @@ module?.exports = React.createClass
                 header={null} />
             </section>
           else
-            <p>Please sign in to contribute to the disucssion</p>
+            <p>Please sign in to contribute to the discussion</p>
         }</PromiseRenderer>
       }</ChangeListener>
     </div>
