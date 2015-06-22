@@ -6,6 +6,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     target: apiClient
+    confirmation: 'Some data hasn’t finished syncing, please wait just a second!'
     style:
       background: 'rgba(0, 0, 0, 0.5)'
       borderRadius: '0 0 0.3em 0.3em'
@@ -25,6 +26,7 @@ module.exports = React.createClass
 
   componentDidMount: ->
     @props.target.listen 'change', @handleTargetChange
+    addEventListener 'beforeunload', @handlePageExit
 
   componentWillReceiveProps: (nextProps) ->
     @props.target.stopListening 'change', @handleTargetChange
@@ -32,6 +34,7 @@ module.exports = React.createClass
 
   componentWillUnmount: ->
     @props.target.stopListening 'change', @handleTargetChange
+    removeEventListener 'beforeunload', @handlePageExit
 
   handleTargetChange: ->
     setTimeout => # TODO: I have no idea why this is necessary.
@@ -66,3 +69,8 @@ module.exports = React.createClass
         </span>
       </span>
     </span>
+
+  handlePageExit: (e) ->
+    unless @state.writes is 0
+      e.returnValue = @props.confirmation
+      @props.confirmation
