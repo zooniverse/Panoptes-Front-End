@@ -19,11 +19,10 @@ module.exports = React.createClass
   title: 'Projects'
 
   listProjects: ->
-    query = Object.create @props.query ? {}
-    query.private ?= false
-    query.beta ?= true # Temporary
-    query.approved ?= true
-    query.include ?= 'owners,avatar'
+    query =
+      launch_approved: true
+      include:'owners,avatar'
+    Object.assign query, @props.query
 
     apiClient.type('projects').get query
 
