@@ -8,12 +8,14 @@ counterpart.registerTranslations 'en',
   footer:
     discover:
       title: 'Discover'
-      projectList: 'Project List'
+      projectList: 'Projects'
+      collectionList: 'Collections'
     learn:
       title: 'Learn'
       aboutUs: 'About Us'
       ourTeam: 'Our Team'
       education: 'Education'
+      publications: 'Publications'
       privacyPolicy: 'Privacy policy'
     talk:
       title: 'Talk'
@@ -35,18 +37,18 @@ module.exports = React.createClass
           <div className="site-map-section">
             <Translate component="h6" content="footer.discover.title" />
             <Link to="projects"><Translate content="footer.discover.projectList" /></Link>
+            <Link to="collections"><Translate content="footer.discover.collectionList" /></Link>
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.learn.title" />
-            <a><Translate content="footer.learn.aboutUs" /></a>
-            <a><Translate content="footer.learn.ourTeam" /></a>
-            <a><Translate content="footer.learn.education" /></a>
+            <Link to="about"><Translate content="footer.learn.aboutUs" /></Link>
+            <Link to="about-team"><Translate content="footer.learn.ourTeam" /></Link>
+            <Link to="about-publications"><Translate content="footer.learn.publications" /></Link>
             <Link to="privacy"><Translate content="footer.learn.privacyPolicy" /></Link>
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.talk.title" />
             <Link to="talk"><Translate content="footer.talk.zooTalk" /></Link>
-            <a><Translate content="footer.talk.otherTalk" /></a>
           </div>
         </nav>
         <div className="social-media">
