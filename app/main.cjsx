@@ -4,6 +4,7 @@ window.React = React
 Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-router'
 MainHeader = require './partials/main-header'
 MainFooter = require './partials/main-footer'
+IOStatus = require './partials/io-status'
 
 logDeployedCommit = require './lib/log-deployed-commit'
 logDeployedCommit()
@@ -13,6 +14,7 @@ App = React.createClass
 
   render: ->
     <div className="panoptes-main">
+      <IOStatus />
       <MainHeader />
       <div className="main-content">
         <RouteHandler {...@props} />
