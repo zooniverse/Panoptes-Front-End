@@ -30,6 +30,9 @@ module.exports = React.createClass
     isComplete: (mark) ->
       mark.closed
 
+    forceComplete: (mark) ->
+      mark.closed = true
+
   render: ->
     averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
     finisherRadius = FINISHER_RADIUS / averageScale

@@ -5,6 +5,7 @@ SubjectViewer = require './subject-viewer'
 ClassificationSummary = require './classification-summary'
 tasks = require './tasks'
 {Link} = require 'react-router'
+drawingTools = require './drawing-tools'
 
 NOOP = Function.prototype
 
@@ -15,6 +16,8 @@ Classifier = React.createClass
   displayName: 'Classifier'
 
   mixins: [HandlePropChanges]
+
+  _lastAnnotationAndTool: ''
 
   getDefaultProps: ->
     unless process.env.NODE_ENV is 'production'
@@ -70,7 +73,7 @@ Classifier = React.createClass
               currentTask.next
 
             <div className="task-container">
-              <TaskComponent task={currentTask} annotation={currentAnnotation} onChange={=> currentClassification.update 'annotations'} />
+              <TaskComponent task={currentTask} annotation={currentAnnotation} onChange={@updateAnnotations.bind this, currentClassification} />
 
               <hr />
 
@@ -119,6 +122,28 @@ Classifier = React.createClass
 
   handleSubjectImageLoad: (e) ->
     @props.onLoad? arguments...
+
+  updateAnnotations: (classification) ->
+    classification.update 'annotations'
+    @checkToolChange classification
+
+  checkToolChange: (classification) ->
+    lastAnnotationIndex = classification.annotations.length - 1
+    lastAnnotation = classification.annotations[lastAnnotationIndex]
+
+    toolIdentifier = "#{lastAnnotationIndex}-#{lastAnnotation._toolIndex}"
+
+    if Array.isArray(lastAnnotation.value) and toolIdentifier isnt @_lastAnnotationAndTool
+      @handleToolChange lastAnnotation, @_lastAnnotationAndTool.split('-').pop() ? '-1'
+      @_lastAnnotationAndTool = toolIdentifier
+
+  handleToolChange: (annotation, oldToolIndex) ->
+    lastMark = annotation.value[annotation.value.length - 1]
+    if lastMark?
+      ToolComponent = drawingTools[@props.workflow.tasks[annotation.task].tools[oldToolIndex].type]
+      if ToolComponent?
+        if ToolComponent.isComplete? and not ToolComponent.isComplete lastMark
+          ToolComponent.forceComplete? lastMark
 
   destroyCurrentAnnotation: ->
     @props.classification.annotations.pop()
