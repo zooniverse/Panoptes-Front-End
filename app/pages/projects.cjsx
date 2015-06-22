@@ -9,6 +9,7 @@ counterpart.registerTranslations 'en',
     title: 'All Projects'
     countMessage: 'Showing %(count)s found'
     button: 'Get Started'
+    notFoundMessage: 'Sorry, no projects found'
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'
