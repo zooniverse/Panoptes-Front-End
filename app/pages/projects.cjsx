@@ -20,6 +20,7 @@ module.exports = React.createClass
 
   listProjects: ->
     query =
+      live: true
       launch_approved: true
       include:'owners,avatar'
     Object.assign query, @props.query
