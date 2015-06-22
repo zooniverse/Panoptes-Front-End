@@ -60,9 +60,15 @@ module?.exports = React.createClass
 
   onClickDeleteBoard: ->
     if window.confirm("Are you sure that you want to delete this board? All of the comments and discussions will be lost forever.")
-      @boardRequest().delete()
-        .then (deleted) =>
-          @transitionTo('talk')
+      {owner, name} = @props.params
+      if @state.board.section is 'zooniverse'
+        @boardRequest().delete()
+          .then =>
+            @transitionTo('talk')
+      else
+        @boardRequest().delete()
+          .then =>
+            @transitionTo('project-talk', {owner: owner, name: name})
 
   onPageChange: (page) ->
     @goToPage(page)
