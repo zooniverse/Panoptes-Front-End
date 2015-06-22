@@ -142,6 +142,13 @@ UserSettingsPage = React.createClass
                 Get general Zooniverse email updates
               </label>
             </AutoSave>
+            <br />
+            <AutoSave resource={@props.user}>
+              <label>
+                <input type="checkbox" name="beta_email_communication" checked={@props.user.beta_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
+                Get beta project email updates
+              </label>
+            </AutoSave>
           </p>
         </div>
       </div>

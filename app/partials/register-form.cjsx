@@ -30,6 +30,7 @@ counterpart.registerTranslations 'en',
     agreeToPrivacyPolicy: 'You agree to our %(link)s (required)'
     privacyPolicy: 'privacy policy'
     okayToEmail: 'It’s okay to send me email every once in a while.'
+    betaTester: 'I’d like to help test new projects, and be emailed when they’re available.'
     register: 'Register'
     alreadySignedIn: 'Signed in as %(name)s'
     signOut: 'Sign out'
@@ -166,6 +167,11 @@ module.exports = React.createClass
         <Translate component="span" content="registerForm.okayToEmail" />
       </label><br />
 
+      <label>
+        <input type="checkbox" ref="betaTester" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
+        <Translate component="span" content="registerForm.betaTester" />
+      </label><br />
+
       <p style={textAlign: 'center'}>
         {if 'user' of @state.pending
           <LoadingIndicator />
@@ -246,11 +252,12 @@ module.exports = React.createClass
     email = @refs.email.getDOMNode().value
     credited_name = @refs.realName.getDOMNode().value
     global_email_communication = @refs.okayToEmail.getDOMNode().checked
+    beta_email_communication = @refs.betaTester.getDOMNode().checked
     project_id = @props.project?.id
 
     @setState error: null
     @props.onSubmit?()
-    auth.register {login, password, email, credited_name, global_email_communication, project_id}
+    auth.register {login, password, email, credited_name, global_email_communication, project_id, beta_email_communication}
       .then =>
         @props.onSuccess? arguments...
       .catch (error) =>
