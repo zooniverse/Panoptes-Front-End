@@ -44,8 +44,9 @@ module?.exports = React.createClass
         board_id = @props.boardId ? +form.querySelector('label > input[type="radio"]:checked').value
         body = commentText
         focus_id = +@props.subject?.id
+        focus_type = 'Subject' if !!focus_id
 
-        comments = [merge({}, {user_id, body}, ({focus_id} if !!focus_id))]
+        comments = [merge({}, {user_id, body}, ({focus_id, focus_type} if !!focus_id))]
         discussion = {title, user_id, board_id, comments}
 
         talkClient.type('discussions').create(discussion).save()

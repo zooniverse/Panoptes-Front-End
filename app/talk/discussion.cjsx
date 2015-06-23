@@ -78,7 +78,8 @@ module?.exports = React.createClass
     discussion_id = +discussion
     body = textContent
     focus_id = +subject?.id ? null
-    comment = merge {}, {discussion_id, body}, ({focus_id} if !!focus_id)
+    focus_type = 'Subject' if !!focus_id
+    comment = merge {}, {discussion_id, body}, ({focus_id, focus_type} if !!focus_id)
 
     commentToUpdate.update(comment).save()
       .then (comment) =>
@@ -96,7 +97,8 @@ module?.exports = React.createClass
     discussion_id = +discussion
     body = textContent
     focus_id = +subject?.id ? null
-    comment = merge {}, {user_id, discussion_id, body}, ({focus_id} if !!focus_id)
+    focus_type = 'Subject' if !!focus_id
+    comment = merge {}, {user_id, discussion_id, body}, ({focus_id, focus_type} if !!focus_id)
 
     talkClient.type('comments').create(comment).save()
       .then (comment) =>
