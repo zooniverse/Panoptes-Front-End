@@ -77,7 +77,9 @@ module.exports = React.createClass
           <LoadingIndicator />
 
         else
-          <span>&nbsp;</span>}
+          <a href="#/reset-password" onClick={@props.onSuccess}>
+            <Translate content="signInForm.forgotPassword" />
+          </a>}
       </p>
 
       <button type="submit" className="standard-button full" disabled={disabled or @state.login.length is 0 or @state.password.length is 0}>
