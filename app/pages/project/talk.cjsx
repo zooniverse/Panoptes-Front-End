@@ -2,11 +2,11 @@ React = require 'react'
 {RouteHandler, Navigation} = require 'react-router'
 TalkInit = require '../../talk/init'
 TalkBreadcrumbs = require '../../talk/breadcrumbs'
-CurrentSection = require '../../talk/mixins/current-section' # @state.currentSection
+projectSection = require '../../talk/lib/project-section'
 
 module.exports = React.createClass
   displayName: 'ProjectTalkPage'
-  mixins: [CurrentSection, Navigation]
+  mixins: [Navigation]
 
   onSearchSubmit: (e) ->
     e.preventDefault()
@@ -28,5 +28,5 @@ module.exports = React.createClass
         </button>
       </form>
 
-      <RouteHandler {...@props} section={@state.currentSection}/>
+      <RouteHandler {...@props} section={projectSection(@props.project)}/>
     </div>
