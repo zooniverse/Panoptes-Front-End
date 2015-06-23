@@ -3,11 +3,11 @@ React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
 TalkBreadcrumbs = require './breadcrumbs.cjsx'
 talkClient = require '../api/talk'
-CurrentSection = require './mixins/current-section'
+currentSection = require './lib/current-section'
 
 module?.exports = React.createClass
   displayName: 'Talk'
-  mixins: [Navigation, CurrentSection]
+  mixins: [Navigation]
 
   onSearchSubmit: (e) ->
     e.preventDefault()
@@ -29,5 +29,5 @@ module?.exports = React.createClass
         </button>
       </form>
 
-      <RouteHandler {...@props} section={@state.currentSection} />
+      <RouteHandler {...@props} section={currentSection(@props.project)} />
     </div>
