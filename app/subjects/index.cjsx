@@ -58,7 +58,7 @@ module?.exports = React.createClass
 
           <SubjectViewer subject={subject} />
 
-          <PromiseRenderer promise={talkClient.type('comments').get({focus_id: subject.id})}>{(comments) =>
+          <PromiseRenderer promise={talkClient.type('comments').get({focus_id: subject.id, focus_type: 'Subject'})}>{(comments) =>
             if comments.length
               <div>
                 <h2>Comments mentioning this subject:</h2>
