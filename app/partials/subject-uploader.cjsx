@@ -77,6 +77,8 @@ module.exports = React.createClass
             uploads: @state.uploads.concat success
             batch: @state.batch.concat subject
         .catch (error) =>
+          subject.delete()
+
           @setState
             errors: @state.errors.concat error
         .then =>
