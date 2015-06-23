@@ -44,6 +44,9 @@ module.exports = React.createClass
       firstKey = Object.keys(subject.locations[0])[0]
       subject.locations[0][firstKey]
 
+  cardLink: (collection) ->
+    'collection-show'
+
   listCollections: ->
     query = Object.create @props.query ? {}
     query.owner = @props.params.owner if @props.params?.owner?
@@ -60,4 +63,4 @@ module.exports = React.createClass
       heroClass="collections-hero"
       ownerName={@props.params?.owner}
       imagePromise={@imagePromise}
-      cardLink="collection-show" />
+      cardLink={@cardLink} />

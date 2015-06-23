@@ -30,11 +30,15 @@ module.exports = React.createClass
     project.get('avatar')
       .then (avatar) -> avatar.src
 
+  cardLink: (project) ->
+    link = project.redirect
+    link ?= 'project-home'
+
   render: ->
     <OwnedCardList
       translationObjectName="projectsPage"
       listPromise={@listProjects()}
       linkTo="projects"
-      cardLink="project-home"
+      cardLink={@cardLink}
       heroClass="projects-hero"
       imagePromise={@imagePromise} />

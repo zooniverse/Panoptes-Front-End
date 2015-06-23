@@ -5,6 +5,21 @@ apiClient = require '../api/client'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 
+FlexibleLink = React.createClass
+  displayName: 'FlexibleLink'
+
+  propTypes:
+    to: React.PropTypes.string.isRequired
+
+  isExternal: ->
+    @props.to.indexOf('http') > -1
+
+  render: ->
+    if @isExternal()
+      <a href={@props.to}>{@props.children}</a>
+    else
+      <Link {...@props}>{@props.children}</Link>
+
 module.exports = React.createClass
   displayName: 'OwnedCard'
 
@@ -36,13 +51,13 @@ module.exports = React.createClass
             owner: owner?.login ? 'LOADING'
             name: @props.resource.slug
 
-        <Link {...linkProps}>
+        <FlexibleLink {...linkProps}>
           <svg className="card-space-maker" viewBox="0 0 2 1" width="100%" height="150px"></svg>
           <div className="details">
             <div className="name">{@props.resource.display_name}</div>
             <div className="owner">{owner?.display_name ? 'LOADING'}</div>
             <button type="button" tabIndex="-1" className="ghost-button card-button"><Translate content={"#{@props.translationObjectName}.button"} /></button>
           </div>
-        </Link>
+        </FlexibleLink>
       }</PromiseRenderer>
     </div>

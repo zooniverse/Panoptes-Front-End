@@ -53,7 +53,7 @@ module.exports = React.createClass
                      key={resource.id}
                      resource={resource}
                      imagePromise={@props.imagePromise(resource)}
-                     linkTo={@props.cardLink}
+                     linkTo={@props.cardLink(resource)}
                      translationObjectName={@props.translationObjectName}/>}
               </div>
               <nav>
