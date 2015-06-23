@@ -32,7 +32,10 @@ module.exports = React.createClass
       <h3 className="landing-title"><Translate content="landing.title" /></h3>
       <p className="landing-tagline"><Translate content="landing.content" /></p>
       {if @props.user?
-        <Link to="build" className="call-to-action standard-button landing-button" onClick={unless @props.user? then @showLoginDialog}><Translate content="landing.buttons.getStarted" /></Link>
+        # The parent index component is passed down so we can use its createNewProject method. This needs some refactoring.
+        <button type="button" className="call-to-action standard-button landing-button" onClick={@props.parentIndex.createNewProject}>
+          <Translate content="landing.buttons.getStarted" />
+        </button>
       else
         <button type="button" className="call-to-action standard-button landing-button" onClick={@showLoginDialog.bind this, 'sign-in'}>
           <Translate content="landing.buttons.signIn" />

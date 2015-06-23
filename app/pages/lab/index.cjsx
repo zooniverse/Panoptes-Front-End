@@ -24,7 +24,7 @@ RequiresSession = do ->
       if user?
         @props.render user
       else
-        <LandingPage user={user} />
+        <LandingPage user={user} parentIndex={this} />
 
 sleep = (duration) ->
   (value) ->
@@ -97,7 +97,7 @@ module.exports = React.createClass
             <p className="form-help error">{@state.creationError.message}</p>}
         </div>
       else
-        <LandingPage user={user} />
+        <LandingPage user={user} parentIndex={this} />
     }</PromiseRenderer>
 
   handlePageChange: (e) ->

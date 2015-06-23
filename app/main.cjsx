@@ -68,17 +68,6 @@ routes = <Route handler={App}>
     <Route name="project-education" path="education" handler={require './pages/project/education'} />
   </Route>
 
-  <Route name="build" handler={require './pages/build'} />
-  <Route name="new-project" path="build/new-project" handler={require './pages/new-project'}>
-    <DefaultRoute name="new-project-general" handler={require './pages/new-project/general'} />
-    <Route name="new-project-science-case" path="science-case" handler={require './pages/new-project/science-case'} />
-    <Route name="new-project-subjects" path="subjects" handler={require './pages/new-project/subjects'} />
-    <Route name="new-project-workflow" path="workflow" handler={require './pages/new-project/workflow'} />
-    <Route name="new-project-review" path="review" handler={require './pages/new-project/review'} />
-  </Route>
-  <Route name="edit-project" path="edit-project/:id" handler={require './pages/edit-project'} />
-  <Route name="edit-workflow" path="edit-workflow/:id" handler={require './pages/edit-workflow'} />
-
   <Route name="talk" path="talk" handler={require './talk'}>
     <DefaultRoute name="talk-home" handler={require './talk/init'} />
     <Route name="talk-search" path="search" handler={require './talk/search'} />
