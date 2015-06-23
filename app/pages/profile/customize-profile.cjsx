@@ -16,18 +16,17 @@ module.exports = React.createClass
 
   render: ->
     @getAvatarSrc ?= @props.user.get 'avatar'
-      .then (avatar) ->
+      .then ([avatar]) ->
         avatar.src
       .catch ->
         ''
 
     @getHeaderSrc ?= @props.user.get 'profile_header'
-      .then (header) ->
+      .then ([header]) ->
         header.src
       .catch ->
         ''
 
-    console.log("HERE")
     <div className="customize-profile-tab columns-container">
       <div className="content-container profile-avatar-selector">
         <p>Change avatar</p>
@@ -43,7 +42,7 @@ module.exports = React.createClass
         <p>Change profile header</p>
         <PromiseRenderer promise={@getHeaderSrc}>{(headerSrc) =>
           placeholder = <div className="form-help content-container">Drop an image here</div>
-          <ImageSelector maxSize={MAX_HEADER_SIZE} defaultValue={headerSrc} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'header')} />
+          <ImageSelector maxSize={MAX_HEADER_SIZE} defaultValue={headerSrc} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'profile_header')} />
         }</PromiseRenderer>
         {if @state.headerError
           <div className="form-help error">{@state.headerError.toString()}</div>}
