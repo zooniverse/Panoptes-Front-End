@@ -2,6 +2,7 @@ React = require 'react'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
+parseSection = require '../talk/lib/parse-section'
 {Link, Navigation} = require 'react-router'
 
 PAGE_SIZE = 3
@@ -46,8 +47,9 @@ module?.exports = React.createClass
         pageOfComment = getPageOfComment(comment, discussion, PAGE_SIZE)
 
         if @projectComment()
-          projectId = discussion.section.split('-')[0]
+          projectId = parseSection(discussion.section)
           project = apiClient.type('projects').get(projectId)
+
           owner = project.then (project) => project.get('owner')
 
           <PromiseRenderer promise={Promise.all [project, owner]}>{([project, owner]) =>
