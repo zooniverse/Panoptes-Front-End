@@ -190,7 +190,7 @@ module?.exports = React.createClass
                 <p>
                   <Link to="user-profile" params={name: user.login}>{user.display_name}</Link>
                 </p>
-                <PromiseRenderer promise={talkClient.type('roles').get(user_id: user.id, section: ['zooniverse', discussion.section])}>{(roles) =>
+                <PromiseRenderer promise={talkClient.type('roles').get(user_id: user.id, section: ['zooniverse', discussion.section], is_shown: true)}>{(roles) =>
                   <DisplayRoles roles={roles} section={discussion.section} />
                 }</PromiseRenderer>
               </div>
