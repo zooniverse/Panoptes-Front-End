@@ -14,6 +14,9 @@ module?.exports = React.createClass
   componentWillMount: ->
     @setProjects()
 
+  shouldComponentUpdate: (nextProps, nextState) ->
+    nextState.projects isnt @state.projects
+
   goToProjectTalk: (projectId) ->
     apiClient.type('projects').get(projectId.toString()).then (project) =>
       project.get('owner').then (owner) =>
