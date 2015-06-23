@@ -13,7 +13,7 @@ module.exports = React.createClass
   propTypes:
     imagePromise: React.PropTypes.func.isRequired
     listPromise: React.PropTypes.object.isRequired
-    cardLink: React.PropTypes.string.isRequired
+    cardLink: React.PropTypes.func.isRequired
     translationObjectName: React.PropTypes.string.isRequired
     ownerName: React.PropTypes.string
     heroClass: React.PropTypes.string
@@ -53,7 +53,7 @@ module.exports = React.createClass
                      key={resource.id}
                      resource={resource}
                      imagePromise={@props.imagePromise(resource)}
-                     linkTo={@props.cardLink}
+                     linkTo={@props.cardLink(resource)}
                      translationObjectName={@props.translationObjectName}/>}
               </div>
               <nav>
