@@ -28,6 +28,8 @@ Classifier = React.createClass
     onLoad: NOOP
 
   propChangeHandlers:
+    subject: ->
+      @setState subjectLoading: true
     classification: (classification) ->
       window.classification = classification
       setTimeout =>
@@ -36,6 +38,7 @@ Classifier = React.createClass
           @addAnnotationForTask @props.workflow.first_task
 
   getInitialState: ->
+    subjectLoading: false
     showingExpertClassification: false
     selectedExpertAnnotation: -1
 
@@ -72,7 +75,11 @@ Classifier = React.createClass
             else if @props.workflow.tasks[currentTask.next]?
               currentTask.next
 
-            <div className="task-container">
+            disabledStyle =
+              opacity: 0.5
+              pointerEvents: 'none'
+
+            <div className="task-container" style={disabledStyle if @state.subjectLoading}>
               <TaskComponent task={currentTask} annotation={currentAnnotation} onChange={@updateAnnotations.bind this, currentClassification} />
 
               <hr />
@@ -121,6 +128,7 @@ Classifier = React.createClass
     </div>
 
   handleSubjectImageLoad: (e) ->
+    @setState subjectLoading: false
     @props.onLoad? arguments...
 
   updateAnnotations: (classification) ->
