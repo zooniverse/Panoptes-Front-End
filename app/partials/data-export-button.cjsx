@@ -12,15 +12,13 @@ module.exports = React.createClass
     exportError: null
 
   exportGet: ->
-    @props.project.get @props.exportType
-      .catch ->
-        []
+    @_exportsGet or= @props.project.get(@props.exportType).catch( -> [])
 
   requestDataExport: ->
     @setState exportError: null
     apiClient.post @props.project._getURL(@props.exportType), media: content_type: 'text/csv'
       .then =>
-        @classificationsExportGet = null
+        @_exportsGet = null
         @setState exportRequested: true
       .catch (error) =>
         @setState exportError: error
