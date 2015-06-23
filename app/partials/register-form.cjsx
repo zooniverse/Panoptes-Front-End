@@ -161,7 +161,7 @@ module.exports = React.createClass
       <br />
 
       <label>
-        <input type="checkbox" ref="okayToEmail" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
+        <input type="checkbox" ref="okayToEmail" defaultChecked={true} disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
         <Translate component="span" content="registerForm.okayToEmail" />
       </label><br />
 
