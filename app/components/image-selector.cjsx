@@ -4,14 +4,6 @@ toBlob = require 'data-uri-to-blob'
 
 BASE_64_EXPANSION = 3 / 4
 
-DEFAULT_STYLE =
-  display: 'inline-block'
-  minHeight: '1em'
-  background: 'rgba(128, 128, 128, 0.2)'
-  border: '1px solid rgba(128, 128, 128, 0.4)'
-  borderRadius: 5
-  position: 'relative'
-
 module.exports = React.createClass
   displayName: 'ImageSelector'
 
