@@ -50,19 +50,25 @@ module?.exports = React.createClass
   message: (data, i) ->
     <p key={data.id} class>{data.body}</p>
 
-  conversationLink: (data, i) ->
-    <div className="conversation-link">
-      <Link to="inbox-conversation" params={conversation: data.id}>
-        {data.title}
+  conversationLink: (conversation, i) ->
+    unread = conversation.is_unread
+    <div className="conversation-link #{if unread then 'unread' else ''}">
+      <Link to="inbox-conversation" params={conversation: conversation.id}>
+        {if unread
+          <i className="fa fa-comments-o"/>}
+        {conversation.title}
       </Link>
     </div>
 
   render: ->
+    {conversations, user} = @state
     <div className="inbox content-container">
       <h1>Inbox</h1>
-      {if not @state.user
-         <p>Please sign in to view your inbox</p>}
-
-      {@state.conversations?.map(@conversationLink)}
-      <Paginator page={+@state.conversationsMeta.page} onPageChange={@onPageChange} pageCount={@state.conversationsMeta?.page_count} />
+      {if not user
+         <p>Please sign in to view your inbox</p>
+      else if conversations?.length
+        <div>
+          {conversations?.map(@conversationLink)}
+          <Paginator page={+@state.conversationsMeta.page} onPageChange={@onPageChange} pageCount={@state.conversationsMeta?.page_count} />
+        </div>}
     </div>
