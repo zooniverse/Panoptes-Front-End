@@ -16,11 +16,11 @@ counterpart.registerTranslations 'en',
     required: 'Required'
     looksGood: 'Looks good'
     userName: 'User name'
-    badChars: 'Don’t use weird characters: %(chars)s'
+    badChars: "Only letters, numbers, '.', '_', and '-'."
     nameConflict: 'That username is taken'
     forgotPassword: 'Forget your password?'
     password: 'Password'
-    passwordTooShort: 'Too short'
+    passwordTooShort: 'Must be at least 8 characters'
     confirmPassword: 'Confirm password'
     passwordsDontMatch: 'These don’t match'
     email: 'Email address'
@@ -71,9 +71,7 @@ module.exports = React.createClass
         <span className="columns-container inline spread">
           <Translate content="registerForm.userName" />
           {if badNameChars?.length > 0
-            chars = for char in badNameChars
-              <kbd key={char}>{char}</kbd>
-            <Translate className="form-help error" content="registerForm.badChars" chars={chars} />
+            <Translate className="form-help error" content="registerForm.badChars" />
           else if "nameConflict" of @state.pending
             <LoadingIndicator />
           else if nameConflict?
@@ -111,7 +109,7 @@ module.exports = React.createClass
           {if passwordsDontMatch?
             if passwordsDontMatch
               <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
-            else
+            else if not passwordTooShort
               <Translate className="form-help success" content="registerForm.looksGood" />}
         </span>
         <input type="password" ref="confirmedPassword" className="standard-input full" disabled={@state.user?} onChange={@handlePasswordChange} />
@@ -163,7 +161,7 @@ module.exports = React.createClass
       <br />
 
       <label>
-        <input type="checkbox" ref="okayToEmail" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
+        <input type="checkbox" ref="okayToEmail" defaultChecked={true} disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
         <Translate component="span" content="registerForm.okayToEmail" />
       </label><br />
 
@@ -197,11 +195,12 @@ module.exports = React.createClass
     name = @refs.name.getDOMNode().value
 
     exists = name.length isnt 0
-    badChars = (char for char in name.split('') when char isnt encodeURIComponent char)
+    badChars = (char for char in name.split('') when char.match(/[\w\-\']/) is null)
 
     @setState
       badNameChars: badChars
       nameConflict: null
+      nameExists: exists
 
     if exists and badChars.length is 0
       @debouncedCheckForNameConflict ?= debounce @checkForNameConflict, REMOTE_CHECK_DELAY
@@ -242,8 +241,8 @@ module.exports = React.createClass
     @setState agreesToPrivacyPolicy: @refs.agreesToPrivacyPolicy.getDOMNode().checked
 
   isFormValid: ->
-    {badNameChars, nameConflict, passwordsDontMatch, emailConflict, agreesToPrivacyPolicy} = @state
-    badNameChars?.length is 0 and not nameConflict and not passwordsDontMatch and not emailConflict and agreesToPrivacyPolicy
+    {badNameChars, nameConflict, passwordsDontMatch, emailConflict, agreesToPrivacyPolicy, nameExists} = @state
+    badNameChars?.length is 0 and not nameConflict and not passwordsDontMatch and not emailConflict and nameExists and agreesToPrivacyPolicy
 
   handleSubmit: (e) ->
     e.preventDefault()
