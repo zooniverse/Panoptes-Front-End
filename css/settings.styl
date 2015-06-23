@@ -1,0 +1,52 @@
+.settings-page
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: center
+  margin: 3em auto
+  max-width: 960px
+
+  h2
+    flex: 1 1 100%
+    font-size: 2.4em
+    font-weight: 400
+
+  .settings-side-bar
+    border-right: solid thin rgba(0, 0, 0, 0.15)
+
+    .settings-button
+      color: #5a5a5a
+      font-size: 1.4em
+      margin: 0 0 2.025em
+      outline: none
+
+      &.active
+        font-weight: 700
+
+  .settings-content
+    display: inline-flex
+    flex-wrap: wrap
+    margin-top: 5em
+
+    .settings-tab-content
+      flex: 2 1 80%
+      font-size: 15px
+      line-height: 1.5
+
+      .customize-profile-tab
+        flex-direction: column
+
+        p
+          color: rgba(100, 100, 100, 0.5)
+          font-size: 0.8em
+          margin: 1em 0
+
+        .profile-header-selector
+          .image-selector
+            height: 150px
+            max-width: 540px
+            width: 100%
+
+            .form-help
+              line-height: 7em
+              text-align: center

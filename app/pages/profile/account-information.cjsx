@@ -1,15 +1,10 @@
 React = require 'react'
-BoundResourceMixin = require '../lib/bound-resource-mixin'
-AutoSave = require '../components/auto-save'
-handleInputChange = require '../lib/handle-input-change'
-ChangeListener = require '../components/change-listener'
-auth = require '../api/auth'
-PromiseRenderer = require '../components/promise-renderer'
-ImageSelector = require '../components/image-selector'
-apiClient = require '../api/client'
-putFile = require '../lib/put-file'
+AutoSave = require '../../components/auto-save'
+PromiseRenderer = require '../../components/promise-renderer'
+ChangeListener = require '../../components/change-listener'
+handleInputChange = require '../../lib/handle-input-change'
+auth = require '../../api/auth'
 
-MAX_AVATAR_SIZE = 65536
 MIN_PASSWORD_LENGTH = 8
 
 ChangePasswordForm = React.createClass
@@ -95,38 +90,22 @@ ChangePasswordForm = React.createClass
       .then =>
         @setState inProgress: false
 
-UserSettingsPage = React.createClass
-  displayName: 'UserSettingsPage'
-
-  getDefaultProps: ->
-    user: {}
-
-  getInitialState: ->
-    avatarError: null
+module.exports = React.createClass
+  displayName: "AccountInformationPage"
 
   render: ->
-    @getAvatarSrc ?= @props.user.get 'avatar'
-      .then ([avatar]) ->
-        avatar.src
-      .catch ->
-        ''
-
-    <div>
+    <div className="account-information-tab">
       <div className="columns-container">
-        <div className="content-container">
-          Avatar<br />
-          <PromiseRenderer promise={@getAvatarSrc} then={(avatarSrc) =>
-            placeholder = <div className="form-help content-container">Drop an image here</div>
-            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleAvatarChange} />
-          } />
-          {if @state.avatarError
-            <div className="form-help error">{@state.avatarError.toString()}</div>}
-        </div>
-
-        <hr />
-
         <div className="content-container column">
           <p>
+            <AutoSave resource={@props.user}>
+              <span className="form-label">Display name</span>
+              <br />
+              <input type="text" className="standard-input full" name="display_name" value={@props.user.display_name} onChange={handleInputChange.bind @props.user} />
+            </AutoSave>
+            <span className="form-help">How you’re name will appear to other uses in Talk and on your Profile Page</span>
+            <br />
+
             <AutoSave resource={@props.user}>
               <span className="form-label">Credited name</span>
               <br />
@@ -187,36 +166,6 @@ UserSettingsPage = React.createClass
       </div>
     </div>
 
-  handleAvatarChange: (file) ->
-    @setState avatarError: null
-    apiClient.post @props.user._getURL('avatar'), media: content_type: file.type
-      .then ([avatar]) =>
-        console.log 'Will put file to', avatar.src
-        putFile avatar.src, file
-      .then =>
-        @props.user.uncacheLink 'avatar'
-        @getAvatarSrc = null
-        @props.user.emit 'change'
-      .catch (error) =>
-        @setState avatarError: error
-
   handleProjectEmailChange: (projectPreference, args...) ->
     handleInputChange.apply projectPreference, args
     projectPreference.save()
-
-module.exports = React.createClass
-  displayName: 'UserSettingsPageWrapper'
-
-  render: ->
-    <ChangeListener target={auth} handler={=>
-      <PromiseRenderer promise={auth.checkCurrent()} then={(user) =>
-        if user?
-          <ChangeListener target={user} handler={=>
-            <UserSettingsPage user={user} />
-          } />
-        else
-          <div className="content-container">
-            <p>You’re not signed in.</p>
-          </div>
-      } />
-    } />

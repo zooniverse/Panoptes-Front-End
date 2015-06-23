@@ -37,10 +37,19 @@ routes = <Route handler={App}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
     <Route name="register" handler={require './partials/register-form'} />
   </Route>
-  <Route name="settings" handler={require './pages/settings'} />
   <Route name="privacy" handler={require './pages/privacy-policy'} />
 
-  <Route name="user-profile" path="users/:name" handler={require './pages/user-profile'} />
+  <Route name="user-profile" path="users/:name" handler={require './pages/profile'}>
+    <DefaultRoute name="user-profile-feed" handler={require './pages/profile/feed'} />
+    <Route name="user-profile-stats" path="stats" handler={require './pages/profile/stats'} />
+ </Route>
+
+  <Route name="inbox" handler={require './talk/inbox'} />
+  <Route name="inbox-conversation" path="inbox/:conversation" handler={require './talk/inbox-conversation'} />
+  <Route name="settings" path="settings" handler={require './pages/profile/settings'}>
+    <DefaultRoute name="settings-account-information" handler={require './pages/profile/account-information'} />
+    <Route path="customize" name="settings-customize-profile" handler={require './pages/profile/customize-profile' } />
+  </Route>
 
   <Route name="projects" handler={require './pages/projects'} />
   <Route path="projects/:owner/:name" handler={require './pages/project'}>
@@ -95,9 +104,6 @@ routes = <Route handler={App}>
     <Route name="edit-project-subject-set" path="subject-set/:subjectSetID" handler={require './pages/lab/subject-set'} />
     <Route name="edit-project-visibility" path="visibility" handler={require './pages/lab/visibility'} />
   </Route>
-
-  <Route name="inbox" handler={require './talk/inbox'} />
-  <Route name="inbox-conversation" path="inbox/:conversation" handler={require './talk/inbox-conversation'} />
 
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={require './pages/not-found'} />
