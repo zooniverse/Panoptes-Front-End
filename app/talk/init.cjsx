@@ -11,12 +11,14 @@ ProjectLinker = require './lib/project-linker'
 ROLES = require './lib/roles'
 auth = require '../api/auth'
 {Link} = require 'react-router'
+Loading = require '../components/loading-indicator'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
 
   getInitialState: ->
     boards: []
+    loading: true
 
   propTypes:
     section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
@@ -31,7 +33,7 @@ module?.exports = React.createClass
     auth.checkCurrent().then =>
       talkClient.type('boards').get(section: @props.section)
         .then (boards) =>
-          @setState {boards}
+          @setState {boards, loading: false}
 
   onSubmitBoard: (e) ->
     e.preventDefault()
@@ -90,10 +92,12 @@ module?.exports = React.createClass
 
       <div className="talk-list-content">
         <section>
-          {if @state.boards.length
-            @state.boards.map(@boardPreview)
-           else
-            <p>There are currently no boards.</p>}
+          {if @state.loading
+            <Loading />
+           else if @state.boards?.length is 0
+            <p>There are currently no boards.</p>
+           else if @state.boards?.length
+             @state.boards.map(@boardPreview)}
         </section>
 
         <div className="talk-sidebar">
