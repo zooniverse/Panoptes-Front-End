@@ -4,48 +4,107 @@ talkClient = require '../api/talk'
 apiClient = require '../api/client'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
-{Navigation} = require 'react-router'
+PromiseRenderer = require '../components/promise-renderer'
+{Link, RouteHandler} = require 'react-router'
+Translate = require 'react-translate-component'
+counterpart = require 'counterpart'
+Avatar = require '../partials/avatar'
+auth = require '../api/auth'
+LoadingIndicator = require '../components/loading-indicator'
+HandlePropChanges = require '../lib/handle-prop-changes'
+TitleMixin = require '../lib/title-mixin'
 
-module?.exports = React.createClass
-  displayName: 'CollectionShow'
-  mixins: [Navigation, PromiseToSetState]
+counterpart.registerTranslations 'en',
+  collectionPage:
+    settings: 'Settings'
+    collaborators: 'Collaborators'
+    talk: 'Talk'
+    loading: 'Loading'
 
-  getInitialState: ->
-    subjects: null
+CollectionPage = React.createClass
+  displayName: 'CollectionPage'
+
+  getDefaultProps: ->
     collection: null
-    page: null
 
-  componentWillMount: ->
-    @setData(1) # start on page 1
+  componentDidMount: ->
+    document.documentElement.classList.add 'on-collection-page'
 
-  subjectsRequest: ->
-    # TODO Fix this on the backend should be able to do @state.collection.get('subjects')
-    apiClient.type('subjects').get(collection_id: @state.collection.id, page: @state.page)
-
-  collectionRequest: ->
-    console.log(@props.params)
-    apiClient.type('collections').get(owner: @props.params?.owner, slug: @props.params?.name)
-      .index(0)
-
-  setData: (page) ->
-    @collectionRequest().then (collection) =>
-      @setState {collection: collection, page: page}, =>
-        @subjectsRequest().then (subjects) => @setState subjects: subjects
-
-  goToPage: (n) ->
-    @transitionTo(@props.path, @props.params, {page: n})
-    @setData(n)
-
-  subject: (sub) ->
-    <SubjectViewer subject={sub} />
+  componentWillUnmount: ->
+    document.documentElement.classList.remove 'on-collection-page'
 
   render: ->
-    <div className="collections-show">
-      <h1>{@state.collection?.display_name}</h1>
-      <section>{@state.subjects?.map(@subject)}</section>
+     <PromiseRenderer promise={@props.collection.get 'owner'}>{(owner) =>
+       params =
+         owner: owner.login or owner.name
+         name: @props.collection.slug
 
-      <Paginator
-        page={@state.page}
-        onPageChange={@goToPage}
-        pageCount={@state.subjects?[0].getMeta()?.page_count} />
-    </div>
+       <div className="collections-page">
+         <nav className="collection-nav tabbed-content-tabs">
+           <Link to="collection-show-list" params={params} className="tabbed-content-tab">
+             <Avatar user={owner} />
+             {@props.collection.display_name}
+           </Link>
+           <Link to="collection-settings" params={params} className="tabbed-content-tab">
+             <Translate content="collectionPage.settings" />
+           </Link>
+           <Link to="collection-collaborators" params={params} className="tabbed-content-tab">
+             <Translate content="collectionPage.collaborators" />
+           </Link>
+           <Link to="collection-talk" params={params} className="tabbed-content-tab" style={pointerEvents: 'none', opacity: 0.7}>
+             <Translate content="collectionPage.talk" />
+           </Link>
+         </nav>
+         <div className="collection-container">
+           <RouteHandler collection={@props.collection} />
+         </div>
+       </div>
+    }</PromiseRenderer>
+
+module.exports = React.createClass
+  displayName: 'CollectionPageWrapper'
+
+  mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
+
+  title: ->
+    @state.collection?.display_name ? '(Loading)'
+
+  getDefaultProps: ->
+    params: null
+
+  getInitialState: ->
+    collection: null
+
+  propChangeHandlers:
+    'params.owner': 'fetchCollection'
+    'params.name': 'fetchCollection'
+
+  fetchCollection: ->
+    @promiseToSetState collection: auth.checkCurrent().then =>
+      apiClient.type('collections')
+        .get(owner: @props.params?.owner, slug: @props.params?.name, include: 'owner')
+        .catch ->
+          []
+        .then ([collection]) =>
+          unless collection?
+            throw new Error "Couldn't find collection #{@props.params.owner}/#{@props.params.name}"
+          collection
+
+  componentDidMount: ->
+    auth.listen 'change', @fetchCollection
+
+  componentWillUnmount: ->
+    auth.stopListening 'change', @fetchCollection
+
+  render: ->
+    if @state.collection?
+      <CollectionPage {...@props} collection={@state.collection} />
+    else
+      <div className="content-container">
+        {if @state.rejected.collection?
+          <code>{@state.rejected.collection.toString()}</code>
+        else
+          <LoadingIndicator>
+            <Translate content="collectionPage.loading" />
+          </LoadingIndicator>}
+      </div>
