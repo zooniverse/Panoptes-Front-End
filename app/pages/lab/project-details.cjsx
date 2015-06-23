@@ -5,10 +5,16 @@ PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
-moment = require 'moment'
+counterpart = require 'counterpart'
+DataExportButton = require '../../partials/data-export-button'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
+
+counterpart.registerTranslations 'en',
+  projectDetails:
+    classificationExport: "Request new classification export"
+    subjectExport: "Request new subject export"
 
 ExternalLinksEditor = React.createClass
   displayName: 'ExternalLinksEditor'
@@ -72,8 +78,6 @@ module.exports = React.createClass
   getInitialState: ->
     avatarError: null
     backgroundError: null
-    exportRequested: false
-    exportError: null
     currentSlug: @props.project.slug
     currentName: @props.project.display_name
 
@@ -105,11 +109,6 @@ module.exports = React.createClass
         background.src
       .catch ->
         ''
-
-    @classificationsExportGet ?= @props.project.get 'classifications_export'
-      .catch ->
-        []
-
     <div>
       <p className="form-help">Input the basic information about your project, and set up its home page.</p>
       <div className="columns-container">
@@ -194,27 +193,14 @@ module.exports = React.createClass
           <hr />
 
           Data export<br />
-          <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request new data export</button>{' '}
-          <small className="form-help">
-            CSV format.{' '}
-            <PromiseRenderer promise={@classificationsExportGet}>{([mostRecent]) =>
-              if mostRecent?
-                <span>
-                  Most recent data available requested{' '}
-                  <a href={mostRecent.src}>{moment(mostRecent.updated_at).fromNow()}</a>.
-                </span>
-              else
-                <span>Never requested.</span>
-            }</PromiseRenderer>
-            <br />
-          </small>
-
-          {if @state.exportError?
-            <div className="form-help error">{@state.exportError.toString()}</div>
-          else if @state.exportRequested
-            <div className="form-help success">
-              We’ve received your request, check your email for a link to your data soon!
-            </div>}
+          <DataExportButton
+            project={@props.project}
+            buttonKey="projectDetails.classificationExport"
+            exportType="classifications_export"  />
+          <DataExportButton
+            project={@props.project}
+            buttonKey="projectDetails.subjectExport"
+            exportType="subjects_export"  />
         </div>
       </div>
     </div>
@@ -237,12 +223,3 @@ module.exports = React.createClass
         newState = {}
         newState[errorProp] = error
         @setState newState
-
-  requestDataExport: ->
-    @setState exportError: null
-    apiClient.post @props.project._getURL('classifications_export'), media: content_type: 'text/csv'
-      .then =>
-        @classificationsExportGet = null
-        @setState exportRequested: true
-      .catch (error) =>
-        @setState exportError: error
