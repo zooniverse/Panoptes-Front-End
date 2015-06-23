@@ -10,6 +10,7 @@ SubjectViewer = require '../components/subject-viewer'
 NewDiscussionForm = require '../talk/discussion-new-form'
 CommentLink = require '../talk/comment-link'
 projectSection = require '../talk/lib/project-section'
+parseSection = require '../talk/lib/parse-section'
 {Navigation} = require 'react-router'
 
 module?.exports = React.createClass
@@ -42,7 +43,7 @@ module?.exports = React.createClass
     </CommentLink>
 
   onCreateDiscussion: (discussion) ->
-    projectId = discussion.section.split('-')[0] # string
+    projectId = parseSection(discussion.section)
     apiClient.type('projects').get(projectId).then (project) =>
       project.get('owner').then (owner) =>
         @transitionTo('project-talk-discussion', {owner: owner.login, name: project.slug, board: discussion.board_id, discussion: discussion.id})
