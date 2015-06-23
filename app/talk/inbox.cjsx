@@ -7,6 +7,7 @@ PromiseRenderer = require '../components/promise-renderer'
 PromiseToSetState = require '../lib/promise-to-set-state'
 Paginator = require './lib/paginator'
 Router = {Link} = require 'react-router'
+Loading = require '../components/loading-indicator'
 
 PAGE_SIZE = 10
 
@@ -18,6 +19,7 @@ module?.exports = React.createClass
     user: null
     conversations: []
     conversationsMeta: {}
+    loading: true
 
   componentDidMount: ->
     @handleAuthChange()
@@ -38,7 +40,7 @@ module?.exports = React.createClass
     talkClient.type('conversations').get({user_id: @state.user.id, page_size: PAGE_SIZE, page,sort: '-updated_at'})
       .then (conversations) =>
         conversationsMeta = conversations[0]?.getMeta()
-        @setState {conversations, conversationsMeta}
+        @setState {conversations, conversationsMeta, loading: false}
 
   onPageChange: (page) ->
     @goToPage(page)
@@ -61,11 +63,16 @@ module?.exports = React.createClass
     </div>
 
   render: ->
-    {conversations, user} = @state
+    {conversations, user, loading} = @state
     <div className="inbox content-container">
       <h1>Inbox</h1>
-      {if not user
-         <p>Please sign in to view your inbox</p>
+
+      {if loading
+        <Loading />
+      else if not user
+        <p>Please sign in to view your inbox</p>
+      else if conversations?.length is 0
+        <p>You have not started any private conversations yet</p>
       else if conversations?.length
         <div>
           {conversations?.map(@conversationLink)}
