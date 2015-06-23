@@ -2,7 +2,7 @@ React = require 'react'
 {RouteHandler, Navigation} = require 'react-router'
 TalkInit = require '../../talk/init'
 TalkBreadcrumbs = require '../../talk/breadcrumbs'
-currentSection = require '../../talk/lib/current-section'
+projectSection = require '../../talk/lib/project-section'
 
 module.exports = React.createClass
   displayName: 'ProjectTalkPage'
@@ -28,5 +28,5 @@ module.exports = React.createClass
         </button>
       </form>
 
-      <RouteHandler {...@props} section={currentSection(@props.project)}/>
+      <RouteHandler {...@props} section={projectSection(@props.project)}/>
     </div>

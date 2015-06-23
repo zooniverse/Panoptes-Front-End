@@ -3,7 +3,6 @@ React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
 TalkBreadcrumbs = require './breadcrumbs.cjsx'
 talkClient = require '../api/talk'
-currentSection = require './lib/current-section'
 
 module?.exports = React.createClass
   displayName: 'Talk'
@@ -29,5 +28,5 @@ module?.exports = React.createClass
         </button>
       </form>
 
-      <RouteHandler {...@props} section={currentSection(@props.project)} />
+      <RouteHandler {...@props} section={'zooniverse'} />
     </div>
