@@ -78,7 +78,12 @@ routes = <Route handler={App}>
 
   <Route name="collections" path="collections" handler={require './pages/collections'}>
     <Route name="collections-user" path=":owner" handler={require './pages/collections'} />
-    <Route name="collection-show" path=":owner/:name" handler={require './collections/show'} />
+  </Route>
+  <Route name="collection-show" path="coolections/:owner/:name" handler={require './collections/show'}>
+    <DefaultRoute name="collection-show-list" handler={require './collections/show-list'} />
+    <Route name="collection-settings" path="settings" handler={require './collections/settings'} />
+    <Route name="collection-collaborators" path="collaborators" handler={require './collections/collaborators'} />
+    <Route name="collection-talk" path="talk" handler={require './collections/show-list'} />
   </Route>
 
   <Route name="lab" handler={require './pages/lab'} />

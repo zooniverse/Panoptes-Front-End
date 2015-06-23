@@ -31,10 +31,7 @@ module?.exports = React.createClass
     @setPage(selectedPage)
 
   pageOption: (n, i) ->
-    <option
-      key={i}
-      value={n}
-      selected={if @props.page is n then true else false}>
+    <option key={i} value={n}>
       {n}
     </option>
 
@@ -49,7 +46,7 @@ module?.exports = React.createClass
 
       <div className="paginator-page-selector">
         Page&nbsp;
-        <select onChange={@onSelectPage} ref="pageSelect">
+        <select value={@props.page} onChange={@onSelectPage} ref="pageSelect">
           {[1..@props.pageCount].map(@pageOption)}
         </select> of {@props.pageCount}
       </div>

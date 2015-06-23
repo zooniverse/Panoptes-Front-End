@@ -1,8 +1,47 @@
-.collections
-  .collections-show
-    img
-      max-width: 250px
+.collections-page
+  display: flex
+  flex: 1 0 auto
+  flex-direction: column
 
+  .collection-container
+    padding: 0 3vw
+
+  .collection-settings-tab
+    max-width: 800px
+    margin: 0 auto
+
+  .collections-show
+    section
+      flex-wrap: wrap
+      max-width: 1200px
+      margin: 0 auto
+
+      .subject-viewer
+        width: 18em
+        border: 1px solid #cdcdcd
+        border-radius: 5px
+        overflow: hidden
+        margin: 0 1.66em 1.66em 0
+        text-align: center
+        display: inline-block
+      
+    img
+      width: 100%
+      max-height: 250px
+
+.collection-nav
+  margin-left: 0
+  margin-top: 2em
+  text-align: left
+
+  .tabbed-content-tab
+    position: relative
+
+  .avatar
+    height: 4em
+    vertical-align: middle
+    margin: -2em 1vw -2em 0px
+ 
 .collections-manager
   section
     max-height: 350px

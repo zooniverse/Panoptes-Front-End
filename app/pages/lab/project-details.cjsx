@@ -7,6 +7,7 @@ apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
+DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -78,20 +79,6 @@ module.exports = React.createClass
   getInitialState: ->
     avatarError: null
     backgroundError: null
-    currentSlug: @props.project.slug
-    currentName: @props.project.display_name
-
-  projectUrl: ->
-    @props.project.get('owner')
-      .then (owner) =>
-        "#/projects/#{owner.login or owner.name}/#{@props.project.slug}"
-
-  undoNameChange: ->
-    @props.project.update display_name: @state.currentName
-    @props.project.save()
-
-  warnURLChange: ->
-    @props.project.slug isnt @state.currentSlug and @state.currentSlug.match(/untitled-project/i) is null
 
   render: ->
     # Failures on media GETs are acceptable here,
@@ -148,23 +135,7 @@ module.exports = React.createClass
         </div>
 
         <div className="column">
-          <p>
-            <AutoSave resource={@props.project}>
-              <span className="form-label">Name</span>
-              <br />
-              <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} onChange={handleInputChange.bind @props.project} disabled={@props.project.live}/>
-            </AutoSave>
-            {if @warnURLChange()
-              <small className="form-help">You’re changing the url of your project. Users with bookmarks and links in talk will no longer work. <button type="button" onClick={@undoNameChange}>Undo</button></small>
-            }
-            <PromiseRenderer promise={@projectUrl()} pending={null}>{(url) =>
-              <small className="form-help">{
-                if @props.project.live
-                  "You cannot change a live project's name."
-                else
-                  "The project name is the first thing people will see about the project, and it will show up in the project URL. Try to keep it short and sweet."}
-            Your project’s URL is <a href={url}>{url}</a></small>}</PromiseRenderer>
-          </p>
+          <DisplayNameSlugEditor resource={@props.project} resourceType="project" />
 
           <p>
             <AutoSave resource={@props.project}>
