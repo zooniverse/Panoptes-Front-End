@@ -26,42 +26,36 @@ module.exports = React.createClass
     size: NaN
 
   render: ->
-    <span className="image-selector" style={
-      display: 'inline-block'
-      minHeight: '1em'
-      background: 'rgba(128, 128, 128, 0.2)'
-      border: '1px solid rgba(128, 128, 128, 0.4)'
-      borderRadius: 5
-      position: 'relative'
-    }>
-      {if @state.dataURL or @props.defaultValue
-        <img ref="preview" src={@state.dataURL || @props.defaultValue} style={
-          display: 'block'
-          maxWidth: '100%'
-        } />
-      else
-        @props.placeholder}
+    <span className="image-selector">
+      <div className="image-selector-content">
+        <div>
+          {if @state.dataURL or @props.defaultValue
+            <img ref="preview" src={@state.dataURL || @props.defaultValue} style={display: 'block'} />
+          else
+            @props.placeholder}
 
-      <input type="file" accept={@props.accept} disabled={@state.working} style={
-        cursor: 'pointer'
-        height: '100%'
-        left: 0
-        position: 'absolute'
-        opacity: 0
-        top: 0
-        width: '100%'
-      } onChange={@handleChange} />
+          <input type="file" accept={@props.accept} disabled={@state.working} style={
+            cursor: 'pointer'
+            height: '100%'
+            left: 0
+            position: 'absolute'
+            opacity: 0
+            top: 0
+            width: '100%'
+          } onChange={@handleChange} />
 
-      {if @state.working
-        <span style={
-          fontSize: '2em'
-          left: '50%'
-          position: 'absolute'
-          top: '50%'
-          transform: 'translate(-50%, -50%)'
-        }>
-          <LoadingIndicator />
-        </span>}
+          {if @state.working
+            <span style={
+              fontSize: '2em'
+              left: '50%'
+              position: 'absolute'
+              top: '50%'
+              transform: 'translate(-50%, -50%)'
+            }>
+              <LoadingIndicator />
+            </span>}
+        </div>
+      </div>
     </span>
 
   handleChange: (e) ->
