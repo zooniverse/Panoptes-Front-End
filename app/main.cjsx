@@ -42,9 +42,13 @@ routes = <Route handler={App}>
   <Route name="user-profile" path="users/:name" handler={require './pages/profile'}>
     <DefaultRoute name="user-profile-feed" handler={require './pages/profile/feed'} />
     <Route name="user-profile-stats" path="stats" handler={require './pages/profile/stats'} />
-    <Route name="inbox" handler={require './talk/inbox'} />
-    <Route name="inbox-conversation" path="inbox/:conversation" handler={require './talk/inbox-conversation'} />
-    <Route name="settings" path="settings" handler={require './pages/profile/settings'} />
+ </Route>
+
+  <Route name="inbox" handler={require './talk/inbox'} />
+  <Route name="inbox-conversation" path="inbox/:conversation" handler={require './talk/inbox-conversation'} />
+  <Route name="settings" path="settings" handler={require './pages/profile/settings'}>
+    <DefaultRoute name="settings-account-information" handler={require './pages/profile/account-information'} />
+    <Route path="customize" name="settings-customize-profile" handler={require './pages/profile/customize-profile' } />
   </Route>
 
   <Route name="projects" handler={require './pages/projects'} />

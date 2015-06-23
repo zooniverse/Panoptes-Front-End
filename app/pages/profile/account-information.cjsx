@@ -99,6 +99,14 @@ module.exports = React.createClass
         <div className="content-container column">
           <p>
             <AutoSave resource={@props.user}>
+              <span className="form-label">Display name</span>
+              <br />
+              <input type="text" className="standard-input full" name="display_name" value={@props.user.display_name} onChange={handleInputChange.bind @props.user} />
+            </AutoSave>
+            <span className="form-help">How you’re name will appear to other uses in Talk and on your Profile Page</span>
+            <br />
+
+            <AutoSave resource={@props.user}>
               <span className="form-label">Credited name</span>
               <br />
               <input type="text" className="standard-input full" name="credited_name" value={@props.user.credited_name} onChange={handleInputChange.bind @props.user} />
@@ -111,6 +119,13 @@ module.exports = React.createClass
               <label>
                 <input type="checkbox" name="global_email_communication" checked={@props.user.global_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
                 Get general Zooniverse email updates
+              </label>
+            </AutoSave>
+            <br />
+            <AutoSave resource={@props.user}>
+              <label>
+                <input type="checkbox" name="beta_email_communication" checked={@props.user.beta_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
+                Get beta project email updates
               </label>
             </AutoSave>
           </p>

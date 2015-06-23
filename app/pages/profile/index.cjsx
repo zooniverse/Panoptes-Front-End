@@ -47,8 +47,8 @@ UserProfilePage = React.createClass
             <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(user) =>
               if user?
                 <span>
-                  <Link to="inbox" params={name: @props.params.name}><Translate content="profile.nav.messages" /></Link>
-                  <Link to="settings" params={name: @props.params.name}><Translate content="profile.nav.settings" /></Link>
+                  <Link to="inbox"><Translate content="profile.nav.messages" /></Link>
+                  <Link to="settings"><Translate content="profile.nav.settings" /></Link>
                 </span>
             }</PromiseRenderer>
           </nav>
@@ -57,7 +57,7 @@ UserProfilePage = React.createClass
       <section className="user-profile-content">
         <RouteHandler />
         <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(user) =>
-          if user?.display_name isnt @props.params?.name
+          if user?.login isnt @props.params?.name
             <PrivateMessageForm {...@props} />
         }</PromiseRenderer>
       </section>
