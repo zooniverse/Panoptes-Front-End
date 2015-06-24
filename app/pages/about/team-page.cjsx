@@ -125,6 +125,11 @@ counterpart.registerTranslations 'en',
         bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota.
         After helping bring the Zooniverse to the Adler, she now both researches AGN and helps
         develop long-term preservation plans for our projects and data.'''
+      martenVeldthuis:
+        title: 'Developer'
+        bio: '''Marten joined the development team at the Zooniverse in 2015. He has a degree in
+        computer science and enjoys crafting maintainable software. Marten learned about orbital
+        mechanics from Kerbal Space Program, and feels like he's therefore basically an astrophysicist.'''
       megSchwamb:
         title: 'Researcher'
         bio: '''Meg is a planetary scientist and astronomer involved in the Zooniverse's Planet
@@ -329,6 +334,13 @@ teamMembers =
     bio: counterpart "team.content.lucyFortson.bio"
     image: "./assets/team/lucy.jpg"
     location: "minnesota"
+  martenVeldthuis:
+    name: "Marten Veldthuis"
+    twitter: "mveldth"
+    title: counterpart "team.content.martenVeldthuis.title"
+    bio: counterpart "team.content.martenVeldthuis.bio"
+    image: "./assets/team/marten.jpg"
+    location: "oxford"
   megSchwamb:
     name: "Meg Schwamb"
     twitter: "megschwamb"
