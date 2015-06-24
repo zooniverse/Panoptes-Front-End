@@ -89,6 +89,9 @@ module?.exports = React.createClass
         className="favorites-button"
         type="button"
         onClick={@toggleFavorite}>
-        <i className={"fa fa-heart#{if favorited then '' else '-o'}"} />
+        <i className="
+          fa fa-heart#{if favorited then '' else '-o'}
+          #{if favorited then 'favorited' else ''}
+        " />
       </button>
     }</PromiseRenderer>

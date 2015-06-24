@@ -1,5 +1,6 @@
 React = require 'react'
 MarkdownIt = require 'markdown-it'
+{State} = require 'react-router'
 
 markdownIt = MarkdownIt()
   .use require 'markdown-it-emoji'
@@ -8,6 +9,7 @@ markdownIt = MarkdownIt()
 
 module?.exports = React.createClass
   displayName: 'TalkCommentPreview'
+  mixins: [State]
 
   propTypes:
     content: React.PropTypes.string
@@ -17,6 +19,7 @@ module?.exports = React.createClass
     header: "Preview"
 
   replaceSymbols: (string) ->
+    {owner, name} = @getParams()
     string
       # subjects in a specific project : owner-slug/project-slug^subject_id
       # \b[\w-]+\b is hyphen boundary for slugs
@@ -26,7 +29,11 @@ module?.exports = React.createClass
       .replace(/@(\b[\w-]+\b)/g, "<a href='#/users/$1'>$1</a>")
 
       # hashtags #tagname
-      .replace(/\#(\w+)/g, "<a href='#/talk/search?query=$1'>#$1</a>")
+      .replace /\#(\w+)/g, (fullTag, tagName) ->
+        if owner and name
+          "<a href='#/projects/#{owner}/#{name}/talk/search?query=#{tagName}'>#{fullTag}</a>"
+        else
+          "<a href='#/talk/search?query=#{tagName}'>#{fullTag}</a>"
 
   markdownify: (input) ->
     markdownIt.render(input)
