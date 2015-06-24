@@ -12,6 +12,7 @@ module.exports = React.createClass
   displayName: 'SubjectViewer' # TODO: Rename this.
 
   getDefaultProps: ->
+    project: null
     classification: null
     workflow: null
     annotation: null
@@ -32,7 +33,7 @@ module.exports = React.createClass
 
   componentWillUnmount: ->
     removeEventListener 'resize', @handleResize
-    
+
   getScale: ->
     ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
     rect = @state.sizeRect
@@ -46,7 +47,7 @@ module.exports = React.createClass
     x = (e.pageX - pageXOffset - rect.left) / scale.horizontal
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
-  
+
   getDetailsTooltipProps: ->
     sizeRect = @state.sizeRect
     toolRect = @state.toolRect
@@ -80,7 +81,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="subject-area">
-      <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
+      <SubjectViewer project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
