@@ -157,6 +157,8 @@ COPY_GREY_LIGHT = #afaeae
     h1 a
       color: COPY
       text-decoration: none
+      &:hover
+        color: MAIN_HIGHLIGHT
     p
       margin: 0 0 5px 0
       color: COPY_GREY_MID
@@ -177,6 +179,8 @@ COPY_GREY_LIGHT = #afaeae
     a:nth-child(1)
       color: black
       text-decoration: none
+      &:hover
+        color: MAIN_HIGHLIGHT
     .avatar
       height: 2em
       vertical-align: -0.5em
@@ -212,6 +216,8 @@ COPY_GREY_LIGHT = #afaeae
 
     h1
       font-weight: 100
+      a
+        text-decoration: none
     p
       margin: 0
     .talk-discussion-preview-author
@@ -264,7 +270,10 @@ COPY_GREY_LIGHT = #afaeae
 
     .user-mention-name
       color: COPY_GREY_LIGHT
-      font-size: 0.7em
+      font-size: 0.8em
+
+    .project-role
+      font-size: 0.5em
 
   .talk-comment-body
     width: 80%
