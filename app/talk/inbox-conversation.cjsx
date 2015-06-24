@@ -76,11 +76,11 @@ module?.exports = React.createClass
         textarea.value = ''
 
   render: ->
-    <div className="inbox-conversation content-container">
+    <div className="talk inbox-conversation content-container">
       <h1>{@state.conversation?.title}</h1>
       {@state.messages.map(@message)}
       <form onSubmit={@onSubmitMessage} className="new-message-form">
-        <textarea placeholder=""></textarea>
+        <textarea placeholder="Type a message here"></textarea>
         <button type="submit">Send</button>
       </form>
     </div>
