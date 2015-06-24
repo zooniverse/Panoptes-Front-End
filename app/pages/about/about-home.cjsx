@@ -22,7 +22,7 @@ With our wide-ranging and ever-expanding suite of projects, covering many discip
 
     The major challenge of 21st century research is dealing with the flood of information we can now collect about the world around us. Computers can help, but in many fields the human ability for pattern recognition—and our ability to be surprised—makes us superior. With the help of Zooniverse volunteers, researchers can analyze their information more quickly and accurately than would otherwise be possible, saving time and resources, advancing the ability of computers to do the same tasks, and leading to faster progress and understanding of the world, getting to exciting results more quickly.
 
-Our projects apply the philosophy of the “wisdom of crowds.” Combining the classifications of many individual users produces accurate and usable data with a measurable estimate of error—exactly what’s needed to make progress in these fields of research.
+Our projects combine contributions from many individual volunteers, relying on a version of the ‘wisdom of crowds’ to produce reliable and accurate data. By having many people look at the data we often can also estimate how likely we are to make an error. The product of a Zooniverse projects is often exactly what’s needed to make progress in many fields of research.
 
     ### Volunteers and professionals make real discoveries together
 
