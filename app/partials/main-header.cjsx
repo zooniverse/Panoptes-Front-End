@@ -12,8 +12,8 @@ auth = require '../api/auth'
 counterpart.registerTranslations 'en',
   mainNav:
     home: 'Home'
-    discover: 'Discover'
-    learn: 'Learn'
+    projects: 'Projects'
+    about: 'About'
     collect: 'Collect'
     talk: 'Talk'
     lab: 'Build a project'
@@ -63,8 +63,8 @@ module.exports = React.createClass
           <ZooniverseLogo />
         </Link>
         <nav className="main-nav">
-          <Link to="projects" className="main-nav-item"><Translate content="mainNav.discover" /></Link>
-          <Link to="about" className="main-nav-item"><Translate content="mainNav.learn" /></Link>
+          <Link to="projects" className="main-nav-item"><Translate content="mainNav.projects" /></Link>
+          <Link to="about" className="main-nav-item"><Translate content="mainNav.about" /></Link>
           <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
           <Link to="collections" className="main-nav-item"><Translate content="mainNav.collect" /></Link>
           <hr />
