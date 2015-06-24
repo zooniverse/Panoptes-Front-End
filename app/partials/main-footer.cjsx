@@ -45,6 +45,7 @@ module.exports = React.createClass
             <Link to="about-team"><Translate content="footer.learn.ourTeam" /></Link>
             <Link to="about-publications"><Translate content="footer.learn.publications" /></Link>
             <Link to="privacy"><Translate content="footer.learn.privacyPolicy" /></Link>
+            <a href="http://jobs.zooniverse.org/">Jobs</a>
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.talk.title" />
