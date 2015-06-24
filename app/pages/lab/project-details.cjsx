@@ -188,7 +188,7 @@ module.exports = React.createClass
             <AutoSave resource={@props.project}>
               <span className="form-label">Workflow Description</span>
               <br />
-              <textarea className="standard-input full" name="description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
+              <textarea className="standard-input full" name="workflow_description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do.</small>
           </p>
