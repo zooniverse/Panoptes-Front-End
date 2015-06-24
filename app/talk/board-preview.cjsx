@@ -38,7 +38,7 @@ module?.exports = React.createClass
                 </Link>
               }</PromiseRenderer>{' '}
 
-              <Link to="talk-discussion" params={board: discussion.board_id, discussion: discussion.id}>{discussion.title}</Link>{' '}
+              <Link to="#{@projectPrefix()}talk-discussion" params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}>{discussion.title}</Link>{' '}
               <span>{timeAgo(discussion.updated_at)}</span>
             </div>
         }</PromiseRenderer>
