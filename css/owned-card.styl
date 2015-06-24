@@ -16,6 +16,8 @@
   max-width: 220px
   overflow: hidden
 
+  svg
+    height: 150px
   a
     text-decoration: none
 
@@ -41,5 +43,27 @@
     font-style: italic
 
   .card-button
-    padding: .6em
+    background: COBOLT_BLUE
+    padding: 0.6em
     width: 180px
+    position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
+
+    &:hover
+      background: lighten(COBOLT_BLUE, 20%)
+
+.project-card
+  max-height: 445px
+
+  svg
+    height: 220px
+
+  .details
+    height: 200px
+    justify-content: space-between
+
+  .description
+    color: #8a8a8a
+    font-size: 0.8em
+    height: 100px
+    margin: 1em 0
+    overflow: hidden
