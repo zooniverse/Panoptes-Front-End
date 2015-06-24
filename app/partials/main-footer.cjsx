@@ -16,6 +16,7 @@ counterpart.registerTranslations 'en',
       ourTeam: 'Our Team'
       education: 'Education'
       publications: 'Publications'
+      contact: 'Contact Us'
       privacyPolicy: 'Privacy policy'
     talk:
       title: 'Talk'
@@ -44,6 +45,7 @@ module.exports = React.createClass
             <Link to="about"><Translate content="footer.learn.aboutUs" /></Link>
             <Link to="about-team"><Translate content="footer.learn.ourTeam" /></Link>
             <Link to="about-publications"><Translate content="footer.learn.publications" /></Link>
+            <Link to="about-contact"><Translate content="footer.learn.contact" /></Link>
             <Link to="privacy"><Translate content="footer.learn.privacyPolicy" /></Link>
             <a href="http://jobs.zooniverse.org/">Jobs</a>
           </div>
