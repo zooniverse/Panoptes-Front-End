@@ -9,7 +9,7 @@ module.exports = React.createClass
 
   searchUsers: (value, callback) ->
     unless value is ''
-      apiClient.type('users').get display_name: value, page_size: 10
+      apiClient.type('users').get display_name: "#{value}*", page_size: 10
         .then (users) =>
           opts = for user in users
             { value: user.id, label: "@#{ user.login }: #{ user.display_name }" }

@@ -47,7 +47,9 @@ counterpart.registerTranslations 'en',
         science can be applied to other non-traditional problems.'
       camAllen:
         title: 'Developer'
-        bio: '''Web developer for the Zooniverse, enjoys building things on the internet while listening to funky tunes'''
+        bio: '''Responsible for building the Zooniverse's API infrastructure.
+        Cam considers himself a music and fine wine connoisseur - others do not.
+        In his space time he enjoys playing an obscure form of rugby.'''
       chrisLintott:
         title: 'Zooniverse PI'
         bio: '''Astronomer and founder of both Galaxy Zoo and the Zooniverse that grew from it,
@@ -76,9 +78,8 @@ counterpart.registerTranslations 'en',
         He previously worked as a freelance programmer and photographer. Ed graduated from
         Northwestern University with a major in Radio/TV/Film.'''
       grantMiller:
-        title: 'Community Manager'
-        bio: '''A former exoplanetary scientist, Grant is now responsible for looking after
-        the interests of our volunteers. He is also behind the Zooniverse's presence on
+        title: 'Communications Lead'
+        bio: '''A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
         social media and publishes the Daily Zooniverse blog.'''
       gregHines:
         title: 'Data Scientist'
@@ -124,6 +125,11 @@ counterpart.registerTranslations 'en',
         bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota.
         After helping bring the Zooniverse to the Adler, she now both researches AGN and helps
         develop long-term preservation plans for our projects and data.'''
+      martenVeldthuis:
+        title: 'Developer'
+        bio: '''Marten joined the development team at the Zooniverse in 2015. He has a degree in
+        computer science and enjoys crafting maintainable software. Marten learned about orbital
+        mechanics from Kerbal Space Program, and feels like he's therefore basically an astrophysicist.'''
       megSchwamb:
         title: 'Researcher'
         bio: '''Meg is a planetary scientist and astronomer involved in the Zooniverse's Planet
@@ -328,6 +334,13 @@ teamMembers =
     bio: counterpart "team.content.lucyFortson.bio"
     image: "./assets/team/lucy.jpg"
     location: "minnesota"
+  martenVeldthuis:
+    name: "Marten Veldthuis"
+    twitter: "mveldth"
+    title: counterpart "team.content.martenVeldthuis.title"
+    bio: counterpart "team.content.martenVeldthuis.bio"
+    image: "./assets/team/marten.jpg"
+    location: "oxford"
   megSchwamb:
     name: "Meg Schwamb"
     twitter: "megschwamb"
@@ -392,7 +405,7 @@ teamMembers =
     twitter: "VanHyningV"
     title: counterpart "team.content.victoriaVanHyning.title"
     bio: counterpart "team.content.victoriaVanHyning.bio"
-    image: "./assets/team/victoria.jpg"
+    image: "./assets/team/victoria.JPG"
     location: "oxford"
 
 module.exports = React.createClass
