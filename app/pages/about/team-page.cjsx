@@ -76,9 +76,8 @@ counterpart.registerTranslations 'en',
         He previously worked as a freelance programmer and photographer. Ed graduated from
         Northwestern University with a major in Radio/TV/Film.'''
       grantMiller:
-        title: 'Community Manager'
-        bio: '''A former exoplanetary scientist, Grant is now responsible for looking after
-        the interests of our volunteers. He is also behind the Zooniverse's presence on
+        title: 'Communications Lead'
+        bio: '''A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
         social media and publishes the Daily Zooniverse blog.'''
       gregHines:
         title: 'Data Scientist'
