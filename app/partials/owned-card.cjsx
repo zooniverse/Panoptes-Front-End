@@ -42,6 +42,8 @@ module.exports = React.createClass
       .catch =>
         card.style.background = "url('./assets/simple-pattern.jpg') center center repeat"
 
+    card.classList.add 'project-card' if @props.resource.description?
+
   render: ->
     <div className="card" ref="ownedCard">
       <PromiseRenderer promise={@resourceOwner()} pending={null}>{(owner) =>
@@ -52,11 +54,12 @@ module.exports = React.createClass
             name: @props.resource.slug
 
         <FlexibleLink {...linkProps}>
-          <svg className="card-space-maker" viewBox="0 0 2 1" width="100%" height="150px"></svg>
+          <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
           <div className="details">
             <div className="name">{@props.resource.display_name}</div>
-            <div className="owner">{owner?.display_name ? 'LOADING'}</div>
-            <button type="button" tabIndex="-1" className="ghost-button card-button"><Translate content={"#{@props.translationObjectName}.button"} /></button>
+            {<div className="owner">{owner?.display_name ? 'LOADING'}</div> if document.location.hash is "#/collections"}
+            {<div className="description">{@props.resource.description}</div> if @props.resource.description?}
+            <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"#{@props.translationObjectName}.button"} /></button>
           </div>
         </FlexibleLink>
       }</PromiseRenderer>
