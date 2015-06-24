@@ -21,31 +21,60 @@ counterpart.registerTranslations 'en',
 UserProfilePage = React.createClass
   displayName: 'UserProfilePage'
 
-  getInitialState: ->
-    user: null
-
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
+
+    @getUser()
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.params.name isnt @props.params.name
+      @getUser()
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
+  getUser: ->
+    authClient.checkCurrent()
+      .then (currentUser) =>
+        if currentUser? and currentUser.display_name is @props.params.name
+          @getProfileHeader(currentUser)
+        else
+          apiClient.type('users').get(login: @props.params.name)
+            .then ([fetchedUser]) =>
+              @getProfileHeader(fetchedUser)
+
+  getProfileHeader: (user) ->
+    profileHero = React.findDOMNode(@refs.userProfileHero)
+
+    user.get('profile_header')
+      .then ([profile_header]) ->
+        profileHero.style.backgroundImage = "url(#{profile_header.src})"
+      .catch ->
+        profileHero.style.backgroundImage = ''
+        profileHero.style.backgroundColor = "#0072ff"
+
   render: ->
     <div className="secondary-page user-profile">
-      {#TODO fetch user header background}
-      <section className="hero user-profile-hero">
-        <div className="hero-container" ref="heroContainer">
-          <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(user) =>
-            if user?
-              <Translate name={user.display_name} content="profile.title" component="h1" />
-              {#TODO add else statement and promise renderer to get user.display_name}
+      <section className="hero user-profile-hero" ref="userProfileHero">
+        <div className="overlay"></div>
+        <div className="hero-container">
+          <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(currentUser) =>
+            if currentUser? and currentUser.display_name is @props.params.name
+              <Translate name={currentUser.display_name} content="profile.title" component="h1" />
+            else
+              <PromiseRenderer
+                promise={apiClient.type('users').get(login: @props.params?.name)}
+                pending={null}
+                then={([fetchedUser]) =>
+                  <h1>{fetchedUser.display_name}</h1>}
+              />
           }</PromiseRenderer>
           <nav className="hero-nav">
             <Link to="user-profile-feed" params={name: @props.params.name}><Translate content="profile.nav.feed" /></Link>
             <Link to="user-profile-stats" params={name: @props.params.name}><Translate content="profile.nav.stats" /></Link>
             <Link to="collections-user" params={owner: @props.params.name}><Translate content="profile.nav.collections" /></Link>
-            <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(user) =>
-              if user?
+            <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(currentUser) =>
+              if currentUser?
                 <span>
                   <Link to="inbox"><Translate content="profile.nav.messages" /></Link>
                   <Link to="settings"><Translate content="profile.nav.settings" /></Link>
@@ -54,6 +83,7 @@ UserProfilePage = React.createClass
           </nav>
         </div>
       </section>
+
       <section className="user-profile-content">
         <RouteHandler />
         <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(user) =>
