@@ -35,7 +35,7 @@ counterpart.registerTranslations 'en',
       classify: 'Classify'
       faq: 'FAQ'
       education: 'Education'
-      discuss: 'Discuss'
+      talk: 'Talk'
 
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
@@ -90,7 +90,7 @@ ProjectPage = React.createClass
                 <Translate content="project.nav.education" />
               </Link>}
             <Link to="project-talk" params={params} className="tabbed-content-tab">
-              <Translate content="project.nav.discuss" />
+              <Translate content="project.nav.talk" />
             </Link>
             {for link, i in @props.project.urls
               link._key ?= Math.random()

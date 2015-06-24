@@ -195,7 +195,7 @@ module.exports = React.createClass
 
           <div>
             External links<br />
-            <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and discuss tabs.</small>
+            <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and talk tabs.</small>
             <ExternalLinksEditor project={@props.project} />
           </div>
 
