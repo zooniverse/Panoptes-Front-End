@@ -26,9 +26,15 @@ EditWorkflowPage = React.createClass
     selectedTaskKey: @props.workflow.first_task
 
   render: ->
+    disabledStyle =
+      opacity: 0.4
+      pointerEvents: 'none'
+
     <div>
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
-      <div className="columns-container">
+      {if @props.project.live
+        <p className="form-help warning"><strong>You cannot edit a project’s workflows once it’s gone live.</strong></p>}
+      <div className="columns-container" style={disabledStyle if @props.project.live}>
         <div className="column">
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
