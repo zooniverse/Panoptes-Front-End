@@ -13,6 +13,7 @@ counterpart.registerTranslations 'en',
       publications: 'Publications'
       ourTeam: 'Our Team'
       careers: 'Careers'
+      contact: 'Contact Us'
 
 module.exports = React.createClass
   displayName: 'AboutPage'
@@ -32,6 +33,7 @@ module.exports = React.createClass
             <Link to="about-home"><Translate content="about.nav.about" /></Link>
             <Link to="about-publications"><Translate content="about.nav.publications" /></Link>
             <Link to="about-team"><Translate content="about.nav.ourTeam" /></Link>
+            <Link to="about-contact"><Translate content="about.nav.contact" /></Link>
           </nav>
         </div>
       </section>
