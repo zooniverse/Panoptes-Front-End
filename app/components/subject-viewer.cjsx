@@ -28,6 +28,7 @@ module.exports = React.createClass
     playIterations: 3
     onFrameChange: NOOP
     onLoad: NOOP
+    defaultStyle: true
 
   getInitialState: ->
     loading: true
@@ -63,7 +64,7 @@ module.exports = React.createClass
             </span>
           </span>
 
-    <div className="subject-viewer" style={ROOT_STYLE}>
+    <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
       {if type is 'image'
         @hiddenPreloadedImages()}
       <div className="subject-container" style={CONTAINER_STYLE}>
