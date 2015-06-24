@@ -21,18 +21,17 @@ counterpart.registerTranslations 'en',
     about:
       contribute:
         title: 'Contribute to new research'
-        content: '''The Zooniverse lets everyone take part in real, cutting-edge research in many fields across the sciences, humanities, and more. There’s no previous experience required; just pick a project and get started right away.'''
+        content: '''The Zooniverse lets everyone take part in real, cutting-edge research in many fields across the sciences, humanities, and more. There’s no previous experience required; just pick a project and [get started right away](./#/projects).'''
       explore:
         title: 'Explore incredible worlds'
         content: '''Astronomical marvels, exotic wildlife in their natural habitats, original historical documents: just a few of the fascinating things you’ll get to experience in the Zooniverse. In many cases, you’ll literally be seeing things no one has seen before.'''
       collaborate:
         title: 'Collaborate with researchers'
-        content:'''Professional researchers and volunteers share our discussion boards, using them to explore and analyse project data. Much of the most exciting research produced by the Zooniverse originates from these partnerships.'''
+        content:'''Professional researchers and volunteers share our [discussion boards](./#/talk), using them to explore and analyse project data. Much of the most exciting research produced by the Zooniverse originates from these partnerships.'''
       discover:
         title: 'Discover, teach, and learn'
         content: '''Our platform offers many opportunities for education, from using projects
-        in classrooms to sharing information between volunteers. You can even use the Project
-        Builder to create your very own Zooniverse project!'''
+        in classrooms to sharing information between volunteers. You can even use the [Zooniverse Project Builder](./#/lab) to create your very own project!'''
     featuredProjects:
       title: 'Get started on a project right now!'
       button: 'See all projects'
