@@ -391,7 +391,7 @@ teamMembers =
     twitter: "VanHyningV"
     title: counterpart "team.content.victoriaVanHyning.title"
     bio: counterpart "team.content.victoriaVanHyning.bio"
-    image: "./assets/team/victoria.jpg"
+    image: "./assets/team/victoria.JPG"
     location: "oxford"
 
 module.exports = React.createClass
