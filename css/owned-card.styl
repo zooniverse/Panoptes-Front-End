@@ -4,6 +4,9 @@
   column-width: 14.66em
   max-width: 1200px
   margin: 0 auto
+  // Added styles below to fix Chrome bug: https://code.google.com/p/chromium/issues/detail?id=297782
+  overflow: hidden
+  position: relative
 
 .card
   background-position: 50% 0
@@ -55,7 +58,7 @@
   max-height: 445px
 
   svg
-    height: 220px
+    height: 210px
 
   .details
     height: 200px
