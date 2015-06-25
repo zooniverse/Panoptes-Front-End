@@ -5,6 +5,7 @@ Translate = require 'react-translate-component'
 ZooniverseLogoType = require '../../partials/zooniverse-logotype'
 alert = require '../../lib/alert'
 LoginDialog = require '../../partials/login-dialog'
+Markdown = require '../../components/markdown'
 
 counterpart.registerTranslations 'en',
   landing:
@@ -30,7 +31,7 @@ module.exports = React.createClass
     <div className="landing-page">
       <ZooniverseLogoType />
       <h3 className="landing-title"><Translate content="landing.title" /></h3>
-      <p className="landing-tagline"><Translate content="landing.content" /></p>
+      <div className="landing-tagline"><Markdown>{counterpart "landing.content"}</Markdown></div>
       {if @props.user?
         # The parent index component is passed down so we can use its createNewProject method. This needs some refactoring.
         <button type="button" className="call-to-action standard-button landing-button" onClick={@props.parentIndex.createNewProject}>
