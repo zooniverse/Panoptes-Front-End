@@ -25,9 +25,11 @@ module?.exports = React.createClass
         selectedProject = project
         break
 
-    @transitionTo 'project-talk', 
-      owner: project.links.owner.login
-      name: project.slug
+    apiClient.type('users').get(project.links.owner.id)
+      .then (user) =>
+        @transitionTo 'project-talk', 
+          owner: user.login
+          name: project.slug
 
   setProjects: (metadata) ->
     query =
