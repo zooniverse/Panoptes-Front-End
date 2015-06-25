@@ -62,7 +62,11 @@ module?.exports = React.createClass
     <BoardPreview {...@props} key={i} data={data} />
 
   tag: (t, i) ->
-    <span><Link key={i} query={query: t.name} to="talk-search">#{t.name}</Link>{' '}</span>
+    {owner, name} = @props.params
+    if owner and name
+      <span><Link key={i} params={{owner, name}} query={query: t.name} to="project-talk-search">#{t.name}</Link>{' '}</span>
+    else
+      <span><Link key={i} query={query: t.name} to="talk-search">#{t.name}</Link>{' '}</span>
 
   roleReadLabel: (data, i) ->
     <label key={i}><input type="radio" name="role-read" defaultChecked={i is ROLES.length-1} value={data}/>{data}</label>
