@@ -16,34 +16,24 @@ counterpart.registerTranslations 'en',
   home:
     hero:
       title: 'People-Powered Research'
-      tagline: '''The Zooniverse is the largest online platform for collaborative volunteer research,
-      and an opportunity for people around the world to contribute to real discoveries in fields from
-      astronomy to zoology, and everything in between.'''
+      tagline: '''The Zooniverse provides opportunities for people around the world to contribute to real discoveries in fields ranging from astronomy to zoology. Welcome to the largest online platform for collaborative volunteer research.'''
       button: 'Get involved now!'
     about:
       contribute:
         title: 'Contribute to new research'
-        content: '''The Zooniverse lets everyone take part in real, cutting-edge research online in many
-        fields across the sciences, humanities, and more. There's no previous experience required;
-        just pick a project and get started right away.'''
+        content: '''The Zooniverse lets everyone take part in real, cutting-edge research in many fields across the sciences, humanities, and more. There’s no previous experience required; just pick a project and [get started right away](./#/projects).'''
       explore:
         title: 'Explore incredible worlds'
-        content: '''Astronomical marvels, exotic wildlife in their natural habitats, original historical
-        documents—these are just a few of the fascinating things you’ll get to experience.
-        In many cases, you'll be seeing things no one has seen before.'''
+        content: '''Astronomical marvels, exotic wildlife in their natural habitats, original historical documents: just a few of the fascinating things you’ll get to experience in the Zooniverse. In many cases, you’ll literally be seeing things no one has seen before.'''
       collaborate:
         title: 'Collaborate with researchers'
-        content:'''Professional researchers and volunteers work together on our discussion boards
-        to explore and analyse project data. Much of the most exciting research produced by
-        the Zooniverse originates from these partnerships.'''
+        content:'''Professional researchers and volunteers share our [discussion boards](./#/talk), using them to explore and analyse project data. Much of the most exciting research produced by the Zooniverse originates from these partnerships.'''
       discover:
         title: 'Discover, teach, and learn'
         content: '''Our platform offers many opportunities for education, from using projects
-        in classrooms to sharing information between volunteers. You can even use the Project
-        Builder to create your very own Zooniverse project!'''
+        in classrooms to sharing information between volunteers. You can even use the [Zooniverse Project Builder](./#/lab) to create your very own project!'''
     featuredProjects:
       title: 'Get started on a project right now!'
-      tagline: 'These are just a few of our projects.'
       button: 'See all projects'
 
 module.exports = React.createClass
@@ -82,7 +72,6 @@ module.exports = React.createClass
       </section>
       <section className="featured-projects content-container">
         <Translate component="h5" content="home.featuredProjects.title" />
-        <Translate component="p" content="home.featuredProjects.tagline" />
         <PromiseRenderer promise={apiClient.type('projects').get(FEATURED_PRODUCT_IDS)}>{(projects) =>
           if projects?
             <div className="featured-projects-list">
