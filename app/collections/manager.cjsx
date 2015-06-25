@@ -20,18 +20,21 @@ module?.exports = React.createClass
     project: React.PropTypes.object
 
   addToCollections: ->
-    console.log(@refs.search, @refs.search.selected, @refs.search.value)
-    #promises = for collection in @refs.search.selectedOptions
-      #collection.addLink('subjects', [@props.subject.id])
-    #Promise.all(promises)
-      #.then =>
-        #@props.onSuccess()
-      #.catch (error) =>
-        #@setState {error}
+    options = @refs.search.options()
+    return unless options
+
+    promises = for { collection } in options
+      collection.addLink('subjects', [@props.subject.id])
+
+    Promise.all(promises)
+      .then =>
+        @props.onSuccess()
+      .catch (error) =>
+        @setState { error }
 
   render: ->
     <div className="collections-manager">
-      <h1>Add Subject to a Collection</h1>
+      <h1>Add Subject to Collection</h1>
 
       <div>
         {if @state.error?
@@ -40,12 +43,15 @@ module?.exports = React.createClass
           ref="search"
           multi={true}
           project={@props.project}
-          user={@props.user} />
-        <button type="button" className="standard-button search-button" onClick={@addToCollections}>
+          user={@props.user}
+          onChange={@handleChange} />
+        <button type="button" className="standard-button search-button" disabled={if @state.hasCollectionSelected then true else false} onClick={@addToCollections}>
           Add
         </button>
       </div>
 
+      <hr />
+
       <div className="form-help">Or Create a new Collection</div>
-      <CollectionsCreateForm project={@props.project?.id} subject={@props.subject.id} />
+      <CollectionsCreateForm project={@props.project?.id} subject={@props.subject.id} onSubmit={@props.onSuccess} />
     </div>

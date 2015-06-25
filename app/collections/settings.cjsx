@@ -39,12 +39,12 @@ module.exports = React.createClass
         <span className="form-label">Visibility</span>
         <p>
           <label style={whiteSpace: 'nowrap'}>
-            <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} disabled={not allowed or @state.setting.private} onChange={@set.bind this, 'private', true} />
+            <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} onChange={@set.bind this, 'private', true} />
             Private
           </label>
           &emsp;
           <label style={whiteSpace: 'nowrap'}>
-            <input type="radio" name="private" value={false} data-json-value={true} checked={not @props.collection.private} disabled={not allowed or @state.setting.private} onChange={@set.bind this, 'private', false} />
+            <input type="radio" name="private" value={false} data-json-value={true} checked={not @props.collection.private} onChange={@set.bind this, 'private', false} />
             Public
           </label>
         </p>

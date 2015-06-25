@@ -34,31 +34,43 @@ CollectionPage = React.createClass
     document.documentElement.classList.remove 'on-collection-page'
 
   render: ->
-     <PromiseRenderer promise={@props.collection.get 'owner'}>{(owner) =>
-       params =
-         owner: owner.login or owner.name
-         name: @props.collection.slug
+    userAndOwner = Promise.all [
+      auth.checkCurrent(),
+      @props.collection.get 'owner'
+    ]
 
-       <div className="collections-page">
-         <nav className="collection-nav tabbed-content-tabs">
-           <Link to="collection-show-list" params={params} className="tabbed-content-tab">
-             <Avatar user={owner} />
-             {@props.collection.display_name}
-           </Link>
-           <Link to="collection-settings" params={params} className="tabbed-content-tab">
-             <Translate content="collectionPage.settings" />
-           </Link>
-           <Link to="collection-collaborators" params={params} className="tabbed-content-tab">
-             <Translate content="collectionPage.collaborators" />
-           </Link>
-           <Link to="collection-talk" params={params} className="tabbed-content-tab" style={pointerEvents: 'none', opacity: 0.7}>
-             <Translate content="collectionPage.talk" />
-           </Link>
-         </nav>
-         <div className="collection-container">
-           <RouteHandler collection={@props.collection} />
-         </div>
-       </div>
+    <PromiseRenderer promise={userAndOwner}>{([user, owner] = []) =>
+      params =
+        owner: owner.login or owner.name
+        name: @props.collection.slug
+
+      isOwner = user.id is owner.id
+
+      <div className="collections-page">
+        <nav className="collection-nav tabbed-content-tabs">
+          <Link to="collection-show-list" params={params} className="tabbed-content-tab">
+            <Avatar user={owner} />
+            {@props.collection.display_name}
+          </Link>
+
+          {if isOwner
+            <Link to="collection-settings" params={params} className="tabbed-content-tab">
+              <Translate content="collectionPage.settings" />
+            </Link>}
+
+          {if isOwner
+            <Link to="collection-collaborators" params={params} className="tabbed-content-tab">
+              <Translate content="collectionPage.collaborators" />
+            </Link>}
+
+          <Link to="collection-talk" params={params} className="tabbed-content-tab" style={pointerEvents: 'none', opacity: 0.7}>
+            <Translate content="collectionPage.talk" />
+          </Link>
+        </nav>
+        <div className="collection-container">
+          <RouteHandler collection={@props.collection} />
+        </div>
+      </div>
     }</PromiseRenderer>
 
 module.exports = React.createClass

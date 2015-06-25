@@ -20,15 +20,23 @@ module.exports = React.createClass
     query.project_id = @props.project.id if @props.project?
 
     apiClient.type('collections').get query
-      .then (collections) =>
-        opts = for col in collections
-          { value: col.id, label: col.display_name, collection: col}
+      .then (collections) ->
+        opts = collections.map (collection) -> {
+          value: collection.id,
+          label: collection.display_name
+          collection: collection
+        }
+
         callback null, {
           options: opts
         }
 
+  options: ->
+    return @refs.collectionSelect.state.options
+
   render: ->
     <Select
+      ref="collectionSelect"
       multi={@props.multi}
       name="colids"
       placeholder="Collection Name"

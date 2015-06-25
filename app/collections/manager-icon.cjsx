@@ -15,7 +15,7 @@ module?.exports = React.createClass
   toggleCollectionsManagerPopup: (user) ->
     alert (resolve) =>
       <div className="content-container">
-        <CollectionsManager user={user} project={@props.project} subject={@props.subject} />
+        <CollectionsManager user={user} project={@props.project} subject={@props.subject} onSuccess={resolve} />
       </div>
 
   render: ->

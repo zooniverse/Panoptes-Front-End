@@ -17,11 +17,14 @@ module?.exports = React.createClass
 
   onSubmit: (e) ->
     e.preventDefault()
+
     displayName = React.findDOMNode(@refs.name).value
     notPublic = React.findDOMNode(@refs.private).checked
+
     links = {}
     links.project = +@props.project if @props.project?
     links.subjects = [+@props.subject] if @props.subject?
+
     collection = {
       display_name: displayName
       private: notPublic
@@ -29,23 +32,32 @@ module?.exports = React.createClass
     }
 
     apiClient.type('collections').create(collection).save()
+      .catch (e) =>
+        @setState error: e
       .then (collection) =>
         @refs.name.value = ''
         @refs.private.value = true
-        @props.onSumbit(collection)
-      .catch (e) =>
-        @setState error: e
+        @props.onSubmit collection
 
   render: ->
     <div>
-      <form onSubmit={@onSubmit} className='collections-create-form'>
+      <form onSubmit={@onSubmit} className="collections-create-form">
         {if @state.error?
-          <div className="form-help error">{@state.error.toString()}</div>}
-        <input ref="name" placeholder="Collection Name" />
-        <label>
-          <input ref="private" type="checkbox" defaultChecked={true}/>
-          <Translate content="collectionCreateForm.private" />
-        </label>
-        <button type="submit"><Translate content="collectionCreateForm.submit" /></button>
+          apiError = @state.error.toString()
+          errorMessage = switch
+            when apiError.indexOf('Must be unique') then 'You can\'t name two collections the same thing!'
+            else 'There was a problem creating your collection.'
+
+          <div className="form-help error">{errorMessage}</div>}
+        <input className="collection-name-input" ref="name" placeholder="Collection Name" />
+        <div className="collection-create-form-actions">
+          <label>
+            <input ref="private" type="checkbox" defaultChecked={true}/>
+            <Translate content="collectionCreateForm.private" />
+          </label>
+          <div className="submit-button-container">
+            <button type="submit"><Translate content="collectionCreateForm.submit" /></button>
+          </div>
+        </div>
       </form>
     </div>
