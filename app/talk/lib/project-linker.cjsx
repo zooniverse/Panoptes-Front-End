@@ -18,12 +18,8 @@ module?.exports = React.createClass
     nextState.projects isnt @state.projects
 
   goToProjectTalk: (projectId) ->
-    selectedProject = null
-
     for project in @state.projects
-      if project.id is projectId
-        selectedProject = project
-        break
+      break if project.id is projectId
 
     apiClient.type('users').get(project.links.owner.id)
       .then (user) =>
