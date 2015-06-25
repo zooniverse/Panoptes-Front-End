@@ -43,9 +43,14 @@ module.exports = React.createClass
       <section className="resources-container">
         <PromiseRenderer promise={@props.listPromise}>{(ownedResources) =>
           if ownedResources?.length > 0
+            meta = ownedResources[0].getMeta()
             <div>
               <div className="resource-results-counter">
-                <Translate count={ownedResources.length} content="#{@props.translationObjectName}.countMessage" component="p" />
+                {if meta
+                  pageStart = meta.page * meta.page_size - meta.page_size + 1
+                  pageEnd = Math.min(meta.page * meta.page_size, meta.count)
+                  count = meta.count
+                  <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />}
               </div>
               <div className="card-list">
                 {for resource in ownedResources
@@ -57,7 +62,7 @@ module.exports = React.createClass
                      translationObjectName={@props.translationObjectName}/>}
               </div>
               <nav>
-                {if meta = ownedResources[0].getMeta()
+                {if meta
                   <nav className="pagination">
                     {for page in [1..meta.page_count]
                       <Link to={@props.linkTo} query={{page}} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.hash is "#/#{@props.linkTo}"}>{page}</Link>}
