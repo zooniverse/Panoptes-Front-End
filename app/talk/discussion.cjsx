@@ -19,7 +19,7 @@ merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 DisplayRoles = require './lib/display-roles'
 
-PAGE_SIZE = 3
+PAGE_SIZE = 10
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
@@ -192,6 +192,7 @@ module?.exports = React.createClass
                 <p>
                   <Link to="user-profile" params={name: user.login}>{user.display_name}</Link>
                 </p>
+                <div className="user-mention-name">@{user.login}</div>
                 <PromiseRenderer promise={talkClient.type('roles').get(user_id: user.id, section: ['zooniverse', discussion.section], is_shown: true)}>{(roles) =>
                   <DisplayRoles roles={roles} section={discussion.section} />
                 }</PromiseRenderer>

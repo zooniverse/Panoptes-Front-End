@@ -5,7 +5,7 @@ PromiseRenderer = require '../components/promise-renderer'
 parseSection = require '../talk/lib/parse-section'
 {Link, Navigation} = require 'react-router'
 
-PAGE_SIZE = 3
+PAGE_SIZE = 10
 
 getPageOfComment = (comment, discussion, pageSize) ->
   # comment resource, discussion resource, integer
