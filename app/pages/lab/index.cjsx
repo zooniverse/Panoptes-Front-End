@@ -93,6 +93,7 @@ module.exports = React.createClass
             Create a new project{' '}
             <LoadingIndicator off={not @state.creationInProgress} />
           </button>&nbsp;
+          <Link to="lab-policies">Project building policies</Link>
           {if @state.creationError?
             <p className="form-help error">{@state.creationError.message}</p>}
         </div>
