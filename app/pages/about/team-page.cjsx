@@ -121,10 +121,8 @@ counterpart.registerTranslations 'en',
         been getting more into data science). He works on both Galaxy Zoo and Radio Galaxy Zoo,
         as well as developing advanced tools for the volunteers.'''
       lucyFortson:
-        title: 'CSA Project Manager'
-        bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota.
-        After helping bring the Zooniverse to the Adler, she now both researches AGN and helps
-        develop long-term preservation plans for our projects and data.'''
+        title: 'Zooniverse Director'
+        bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota. One of the Zooniverse co-founders, she helps with project wrangling (aka management) and strategic planning while trying to squeeze a bit of galaxy evolution science in.'''
       martenVeldthuis:
         title: 'Developer'
         bio: '''Marten joined the development team at the Zooniverse in 2015. He has a degree in
@@ -330,6 +328,7 @@ teamMembers =
     location: "minnesota"
   lucyFortson:
     name: "Lucy Fortson"
+    twitter: "lucyfortson"
     title: counterpart "team.content.lucyFortson.title"
     bio: counterpart "team.content.lucyFortson.bio"
     image: "./assets/team/lucy.jpg"
