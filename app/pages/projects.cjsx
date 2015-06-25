@@ -7,7 +7,7 @@ OwnedCardList = require '../components/owned-card-list'
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'All Projects'
-    countMessage: 'Showing %(count)s found'
+    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found'
     button: 'Get Started'
     notFoundMessage: 'Sorry, no projects found'
 
