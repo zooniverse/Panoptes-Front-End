@@ -16,6 +16,8 @@ counterpart.registerTranslations 'en',
     about: 'About'
     collect: 'Collect'
     talk: 'Talk'
+    daily: 'Daily Zooniverse'
+    blog: 'Blog'
     lab: 'Build a project'
 
 module.exports = React.createClass
@@ -67,6 +69,8 @@ module.exports = React.createClass
           <Link to="about" className="main-nav-item"><Translate content="mainNav.about" /></Link>
           <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
           <Link to="collections" className="main-nav-item"><Translate content="mainNav.collect" /></Link>
+          <a href="http://daily.zooniverse.org/" className="main-nav-item" target="_blank"><Translate content="mainNav.daily" /></a>
+          <a href="http://blog.zooniverse.org/"  className="main-nav-item" target="_blank"><Translate content="mainNav.blog" /></a>
           <hr />
           <Link to="lab" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
         </nav>

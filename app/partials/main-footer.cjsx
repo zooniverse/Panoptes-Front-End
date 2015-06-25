@@ -21,7 +21,8 @@ counterpart.registerTranslations 'en',
     talk:
       title: 'Talk'
       zooTalk: 'Zooniverse Talk'
-      otherTalk: 'Other Talk'
+      daily: 'Daily Zooniverse'
+      blog: 'Blog'
 
 module.exports = React.createClass
   displayName: 'MainFooter'
@@ -52,6 +53,8 @@ module.exports = React.createClass
           <div className="site-map-section">
             <Translate component="h6" content="footer.talk.title" />
             <Link to="talk"><Translate content="footer.talk.zooTalk" /></Link>
+            <a href="http://daily.zooniverse.org/" target="_blank"><Translate content="footer.talk.daily" /></a>
+            <a href="http://blog.zooniverse.org/" target="_blank"><Translate content="footer.talk.blog" /></a>
           </div>
         </nav>
         <div className="social-media">
