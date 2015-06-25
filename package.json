@@ -49,7 +49,7 @@
     "get-font-awesome": "rm -rf ./public/font-awesome; curl --location \"$npm_package_config_fontAwesomeURL\" --output ./fa.zip && unzip -q ./fa.zip -d ./fa.tmp && mkdir ./public/font-awesome && mv ./fa.tmp/*/{css,fonts} ./public/font-awesome; rm -rf ./fa.{zip,tmp}",
     "postinstall": "npm run get-fallback-polyfills && npm run get-font-awesome",
     "preview": "npm run build && publisssh ./build zooniverse-static/preview.zooniverse.org/panoptes",
-    "deploy": "npm run build && publisssh ./build zooniverse-static/zooniverse.org",
+    "deploy": "npm run build && publisssh ./build zooniverse-static/www.zooniverse.org",
     "stage": "NODE_ENV=staging npm run build && publisssh ./build \"demo.zooniverse.org/panoptes-front-end/$DEPLOY_SUBDIR\"",
     "stage-branch": "DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD) npm run stage",
     "start": "./bin/serve.sh",
