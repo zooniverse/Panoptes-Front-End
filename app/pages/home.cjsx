@@ -8,7 +8,7 @@ ZooniverseLogoType = require '../partials/zooniverse-logotype'
 OwnedCard = require '../partials/owned-card'
 
 FEATURED_PRODUCT_IDS = if process.env.NODE_ENV is 'production'
-  ['11', '6', '3']
+  ['11', '6', '3', '17']
 else
   ['231', '405', '272', '76']
 
