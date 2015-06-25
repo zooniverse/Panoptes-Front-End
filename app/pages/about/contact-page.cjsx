@@ -17,7 +17,7 @@ counterpart.registerTranslations 'en',
       reply to all of the emails we receive.
 
       If you are interested in collaborating with the Zooniverse, for instance on a
-      custom-built project, you should [fill out this form](). (Note that our [Project Builder](#/lab)
+      custom-built project, you should [fill out this form](https://docs.google.com/a/zooniverse.org/forms/d/1NCx8V_XPQMwtY4oPu_sq47cOfPTQX0F7FLffg6KaMek/viewform). (Note that our [Project Builder](#/lab)
       offers an effective way to set up a new project without needing to contact the team!)
 
       For press inquires, please contact the Zooniverse director Chris Lintott at
