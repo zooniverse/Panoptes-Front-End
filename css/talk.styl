@@ -4,6 +4,7 @@ TALK_BORDER = #F2F1F1
 TALK_BORDER_RADIUS = 6px
 TALK_PADDING = 5px
 TALK_MARGIN = 10px auto
+TALK_BREAKPOINT = 670px
 
 COPY_GREY_DARK = #404040
 COPY_GREY_MID = #898989
@@ -76,6 +77,9 @@ COPY_GREY_LIGHT = #afaeae
   *
     box-sizing: border-box
 
+  a
+    color: COBOLT_BLUE
+
   button
     @extend .standard-button
     @extend .talk-module
@@ -98,11 +102,17 @@ COPY_GREY_LIGHT = #afaeae
     display: flex
     section
       width: 100%
+    @media screen and (max-width: TALK_BREAKPOINT)
+      display: block
 
   .talk-sidebar
     @extend .talk-module
     width: 300px
     margin: 10px 0 10px 10px
+
+    @media screen and (max-width: TALK_BREAKPOINT)
+      margin: 0
+      width: 100%
 
   .talk-moderation
     margin-bottom: 10px
@@ -137,6 +147,10 @@ COPY_GREY_LIGHT = #afaeae
         @extend .talk-module
         margin-bottom: 10px
         border-left: 4px solid orangered
+
+  .talk-board
+    .talk-page-header
+      text-align: left
 
   .talk-board-new-discussion
     @extend .talk-module
@@ -216,8 +230,11 @@ COPY_GREY_LIGHT = #afaeae
 
     h1
       font-weight: 100
+      font-size: 1.25em
       a
         text-decoration: none
+        &:hover
+          text-decoration: underline
     p
       margin: 0
     .talk-discussion-preview-author
