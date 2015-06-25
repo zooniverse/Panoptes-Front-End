@@ -122,7 +122,7 @@ counterpart.registerTranslations 'en',
         as well as developing advanced tools for the volunteers.'''
       lucyFortson:
         title: 'Zooniverse Director'
-        bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota. One of the Zooniverse co-founders, she helps with project wrangling (aka management) and strategic planning while trying to squeeze a bit of galaxy evolution science in.'''
+        bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota. One of the University of Minnesota Zooniverse co-founders, she helps with project wrangling (aka management) and strategic planning while trying to squeeze a bit of galaxy evolution science in.'''
       martenVeldthuis:
         title: 'Developer'
         bio: '''Marten joined the development team at the Zooniverse in 2015. He has a degree in
