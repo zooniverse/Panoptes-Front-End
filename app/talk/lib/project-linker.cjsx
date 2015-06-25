@@ -25,7 +25,11 @@ module?.exports = React.createClass
           name: project.slug
 
   setProjects: (metadata) ->
-    apiClient.type('projects').get()
+    query =
+      launch_approved: true
+      include: 'owners'
+
+    apiClient.type('projects').get(query)
       .then (projects) =>
         @setState {projects, loading: false}
 
