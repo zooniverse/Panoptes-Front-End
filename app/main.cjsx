@@ -94,7 +94,7 @@ routes = <Route handler={App}>
     <Route name="edit-project-subject-set" path="subject-set/:subjectSetID" handler={require './pages/lab/subject-set'} />
     <Route name="edit-project-visibility" path="visibility" handler={require './pages/lab/visibility'} />
   </Route>
-  <Route name="lab-policies" path="lab-policies" handler={require './pages/lab/builder-policies'} />
+  <Route name="lab-policies" path="lab-policies" handler={require './pages/lab/lab-policies'} />
 
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={require './pages/not-found'} />
