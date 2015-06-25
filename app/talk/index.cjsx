@@ -14,7 +14,7 @@ module?.exports = React.createClass
 
   render: ->
     <div className="talk content-container">
-      <h1>Talk!</h1>
+      <h1>Zooniverse Talk</h1>
       <TalkBreadcrumbs {...@props} />
 
       <form className="talk-search-form" onSubmit={ @onSearchSubmit }>

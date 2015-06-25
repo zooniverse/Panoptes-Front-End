@@ -1,16 +1,22 @@
 // talk default css rules
-TALK_BACKGROUND = #F2F1F1
-TALK_BORDER_RADIUS = 3px
+TALK_BACKGROUND = #f7f7f7
+TALK_BORDER = #F2F1F1
+TALK_BORDER_RADIUS = 6px
 TALK_PADDING = 5px
 TALK_MARGIN = 10px auto
+
+COPY_GREY_DARK = #404040
+COPY_GREY_MID = #898989
+COPY_GREY_LIGHT = #afaeae
 
 .talk-module // shared styles among talk box shaped things
   background: TALK_BACKGROUND
   border-radius: TALK_BORDER_RADIUS
+  border: 2px solid TALK_BORDER
   padding: TALK_PADDING
   margin: TALK_MARGIN
   box-sizing: border-box
-  color: black
+  color: COPY
 
 .talk-text-input // shared styles among talk text inputs
   border: none
@@ -38,9 +44,12 @@ TALK_MARGIN = 10px auto
   input[type='text']
     float: left
     width: 80%
-    border: 1px solid TALK_BACKGROUND
+    border: 2px solid TALK_BACKGROUND
     border-right: none
+    font-style: italic
     height: 100%
+    line-height: 28px
+    padding-left: 5px
     border-radius: TALK_BORDER_RADIUS 0 0 TALK_BORDER_RADIUS
 
   button[type='submit']
@@ -49,7 +58,11 @@ TALK_MARGIN = 10px auto
     width: 20%
     color: COPY
     height: 100%
+    border-left: none
+    border-color: TALK_BACKGROUND
     border-radius: 0 TALK_BORDER_RADIUS TALK_BORDER_RADIUS 0
+    &:hover
+      background: MAIN_HIGHLIGHT
 
 .polaroid-image
   background: #fff
@@ -58,17 +71,21 @@ TALK_MARGIN = 10px auto
 
 .talk
   @extend .talk-form
+  color: COPY_GREY_DARK
 
   *
     box-sizing: border-box
 
-
   button
     @extend .standard-button
+    @extend .talk-module
     padding: 0.2em 0.4em
-    background: LIGHT_GREY
     font-size: 0.8em
-    border-radius: 3px
+    margin: 0
+
+    &:hover
+      color: white
+      border-color: MAIN_HIGHLIGHT
 
   select
     border: 2px solid LIGHT_GREY
@@ -91,12 +108,13 @@ TALK_MARGIN = 10px auto
     margin-bottom: 10px
 
     > button
-      border: 1px solid LIGHT_GREY
-      color: LIGHT_GREY
+      color: COPY_GREY_LIGHT
       background: transparent
 
       &:hover
-        color: orangered
+        color: white
+        background: lighten(orangered, 10%)
+        border-color: orangered
 
     .talk-moderation-children
       p
@@ -135,8 +153,37 @@ TALK_MARGIN = 10px auto
 
   .talk-board-preview
     @extend .talk-module
+    overflow: auto
+    h1 a
+      color: COPY
+      text-decoration: none
+      &:hover
+        color: MAIN_HIGHLIGHT
     p
-      margin: 0.5em 0
+      margin: 0 0 5px 0
+      color: COPY_GREY_MID
+
+  .preview-content
+    width: 80%
+    float: left
+  .preview-stats
+    width: 20%
+    float: left
+    margin-top: 5px
+    p i
+      width: 1em
+      text-align: center
+
+  .talk-discussion-link
+    color: COPY_GREY_LIGHT
+    a:nth-child(1)
+      color: black
+      text-decoration: none
+      &:hover
+        color: MAIN_HIGHLIGHT
+    .avatar
+      height: 2em
+      vertical-align: -0.5em
 
   .talk-subject-display
     @extend .talk-module
@@ -160,13 +207,17 @@ TALK_MARGIN = 10px auto
     @extend .talk-module
     background: transparent
     border-radius: 0
+    border: none
     border-top: 1px solid LIGHT_GREY
+    overflow: auto
 
     &:last-child
       border-bottom: 1px solid LIGHT_GREY
 
     h1
       font-weight: 100
+      a
+        text-decoration: none
     p
       margin: 0
     .talk-discussion-preview-author
@@ -202,18 +253,27 @@ TALK_MARGIN = 10px auto
     @extend .talk-module
     text-align: center
     background: transparent
+    border: none
     color: grey
     float: left
     width: 20%
-
-    .avatar
-      border-radius: 50%
-      height: 50px
 
     p
       word-wrap: break-word
       width: 60%
       margin: 0 auto 2px auto
+      line-height: 1em
+
+    .avatar
+      border-radius: 50%
+      height: 50px
+
+    .user-mention-name
+      color: COPY_GREY_LIGHT
+      font-size: 0.8em
+
+    .project-role
+      font-size: 0.5em
 
   .talk-comment-body
     width: 80%
@@ -262,6 +322,10 @@ TALK_MARGIN = 10px auto
           opacity: 0.5
         &:not(:last-child)
           @extend .talk-left-buttons
+
+        &[type='submit']:hover
+          background-color: SUCCESS
+          border-color: darken(SUCCESS, 10%)
 
     .talk-comment-buttons-container
       display: block

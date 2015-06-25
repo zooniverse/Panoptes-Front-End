@@ -64,7 +64,7 @@ module?.exports = React.createClass
 
   render: ->
     {conversations, user, loading} = @state
-    <div className="inbox content-container">
+    <div className="talk inbox content-container">
       <h1>Inbox</h1>
 
       {if loading

@@ -60,7 +60,7 @@ module.exports = React.createClass
                 {if meta = ownedResources[0].getMeta()
                   <nav className="pagination">
                     {for page in [1..meta.page_count]
-                      <Link to={@props.linkTo} query={{page}} key={page} className="pill-button">{page}</Link>}
+                      <Link to={@props.linkTo} query={{page}} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.hash is "#/#{@props.linkTo}"}>{page}</Link>}
                   </nav>}
               </nav>
             </div>

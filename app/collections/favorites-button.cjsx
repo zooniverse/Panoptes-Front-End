@@ -4,14 +4,23 @@ auth = require '../api/auth'
 getFavoritesName = require './get-favorites-name'
 alert = require '../lib/alert'
 SignInPrompt = require '../partials/sign-in-prompt'
+PromiseRenderer = require '../components/promise-renderer'
 
 module?.exports = React.createClass
   displayName: 'CollectionFavoritesButton'
 
   propTypes:
     subject: React.PropTypes.object # a subject response from panoptes
+    project: React.PropTypes.object # a project response from panoptes
+
+  getDefaultProps: ->
+    subject: null
+    project: null
 
   getInitialState: ->
+    favoritesPromise: null
+    favoritedPromise: null
+    favorites: {}
     favorited: false
 
   promptToSignIn: ->
@@ -20,77 +29,69 @@ module?.exports = React.createClass
         <p>You must be signed in to save your favorites.</p>
       </SignInPrompt>
 
+  findFavoriteCollection: ->
+    apiClient.type('collections').get({project_id: @props.project?.id, favorite: true})
+      .then ([favorites]) -> if favorites? then favorites else null
+
+  findSubjectInCollection: (favorites) ->
+    if favorites?
+      favorites.get('subjects', id: @props.subject.id)
+        .then ([subject]) -> subject?
+    else
+      Promise.resolve(false)
+
   componentWillMount: ->
     # see if the subject is in the project's favorites collection
     # to see if it's favorites
-    @props.subject.get('project')
-      .then (project) =>
-        project_id = project.id.toString()
-        apiClient.type('projects').get(project_id)
-          .then (project) =>
-            display_name = getFavoritesName(project)
+    favoritesPromise = @findFavoriteCollection()
+    favoritedPromise = favoritesPromise.then (favs) => @findSubjectInCollection(favs)
 
-            apiClient.type('collections').get({project_id, display_name}).index(0)
-              .then (favorites) =>
-                if !!favorites
-                  apiClient.type('subjects').get(collection_id: favorites.id, id: @props.subject.id).index(0)
-                    .then (subject) =>
-                      @setState favorited: !!subject
+    @setState {favoritesPromise, favoritedPromise}
 
   addSubjectTo: (collection) ->
     collection.addLink('subjects', [@props.subject.id.toString()])
-      .then (collection) => @setState favorited: true
+      .then (collection) => @setState favoritedPromise: Promise.resolve(true)
 
   removeSubjectFrom: (collection) ->
     collection.removeLink('subjects', [@props.subject.id.toString()])
-      .then (collection) => @setState favorited: false
+      .then (collection) => @setState favoritedPromise: Promise.resolve(false)
 
-  createFavorites: (user, project) ->
-    project_id = project.id.toString()
-    apiClient.type('projects').get(project_id)
-      .then (project) =>
-        display_name = getFavoritesName(project)
-        project = @props.subject.links.project
+  createFavorites: (user) ->
+    display_name = getFavoritesName(@props.project)
+    project = @props.project?.id
+    subjects = [@props.subject.id]
+    favorite = true
 
-        owner = {id: user.id.toString(), type: "users"} #--> must supply type
-        links = {project, owner}
-        collection = {display_name, links}
+    links = {subjects}
+    links.project = project if project?
+    collection = {favorite, display_name, links}
 
-        apiClient.type('collections').create(collection).save()
-          .then (favorites) =>
-            @addSubjectTo(favorites)
+    apiClient.type('collections').create(collection).save().then =>
+      @setState favoritedPromise: Promise.resolve(true)
 
   toggleFavorite: ->
-    project_id = @props.subject.links.project.toString()
-
-    @props.subject.get('project')
-      .then (project) =>
-        project_id = project.id.toString()
-        auth.checkCurrent().then (user) =>
-          if user?
-            apiClient.type('projects').get(project_id)
-              .then (project) =>
-                display_name = getFavoritesName(project)
-                # check for a favorites collection in project first
-                apiClient.type('collections').get({project_id, display_name}).index(0)
-                  .then (favorites) =>
-                    # try to request subject from favorites collection, otherwise create it
-                    if !!favorites
-                      apiClient.type('subjects').get(collection_id: favorites.id, id: @props.subject.id).index(0)
-                        .then (subject) =>
-                          if subject
-                            @removeSubjectFrom(favorites)
-                          else
-                            @addSubjectTo(favorites)
-                    else
-                      @createFavorites(user, project)
-          else
-            @promptToSignIn()
+    auth.checkCurrent().then (user) =>
+      if user?
+        Promise.all([@state.favoritesPromise, @state.favoritedPromise])
+          .then ([favorites, favorited])=>
+            if not favorites?
+              @createFavorites(user)
+            else if favorited
+              @removeSubjectFrom(favorites)
+            else
+              @addSubjectTo(favorites)
+      else
+        @promptToSignIn()
 
   render: ->
-    <button
-      className="favorites-button"
-      type="button"
-      onClick={@toggleFavorite}>
-      <i className="fa fa-heart#{if @state.favorited then '' else '-o'}" />
-    </button>
+    <PromiseRenderer promise={@state.favoritedPromise}>{(favorited) =>
+      <button
+        className="favorites-button"
+        type="button"
+        onClick={@toggleFavorite}>
+        <i className="
+          fa fa-heart#{if favorited then '' else '-o'}
+          #{if favorited then 'favorited' else ''}
+        " />
+      </button>
+    }</PromiseRenderer>

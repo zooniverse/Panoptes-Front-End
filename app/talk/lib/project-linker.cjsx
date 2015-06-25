@@ -18,21 +18,26 @@ module?.exports = React.createClass
     nextState.projects isnt @state.projects
 
   goToProjectTalk: (projectId) ->
-    apiClient.type('projects').get(projectId.toString()).then (project) =>
-      project.get('owner').then (owner) =>
-        @transitionTo 'project-talk', 
-          owner: owner.login
-          name: project.slug
+    for project in @state.projects
+      break if project.id is projectId
+
+    project.get('owner').then (owner) =>
+      @transitionTo 'project-talk', 
+        owner: user.login
+        name: project.slug
 
   setProjects: (metadata) ->
-    apiClient.type('projects').get()
+    query =
+      launch_approved: true
+      include: 'owners'
+
+    apiClient.type('projects').get(query)
       .then (projects) =>
         @setState {projects, loading: false}
 
-  onChangeSelect: (e) ->
-    projectsSelect = React.findDOMNode(@).querySelector('select')
-    projectId = projectsSelect.options[projectsSelect.selectedIndex].value
-    @goToProjectTalk(projectId)
+  onChangeSelect: ->
+    projectsSelect = React.findDOMNode @.refs.projectsSelect
+    @goToProjectTalk projectsSelect.value
 
   projectOption: (d, i) ->
     <option key={d.id} value={d.id}>
@@ -45,7 +50,7 @@ module?.exports = React.createClass
 
     else if @state.projects.length
       <div className="project-linker">
-        <select onChange={@onChangeSelect}>
+        <select onChange={@onChangeSelect} ref="projectsSelect">
           {@state.projects.map(@projectOption)}
         </select>
       </div>

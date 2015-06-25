@@ -184,9 +184,18 @@ module.exports = React.createClass
             <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<insert link to best markdown tutorial>), so you can add formatting.</small>
           </p>
 
+          <p>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Workflow Description</span>
+              <br />
+              <textarea className="standard-input full" name="workflow_description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
+            <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do.</small>
+          </p>
+
           <div>
             External links<br />
-            <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and discuss tabs.</small>
+            <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and talk tabs.</small>
             <ExternalLinksEditor project={@props.project} />
           </div>
 
