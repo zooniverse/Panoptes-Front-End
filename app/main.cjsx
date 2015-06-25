@@ -29,6 +29,7 @@ routes = <Route handler={App}>
     <DefaultRoute name="about-home" handler={require './pages/about/about-home'} />
     <Route name="about-team" path="team" handler={require './pages/about/team-page'} />
     <Route name="about-publications" path="publications" handler={require './pages/about/publications-page'} />
+    <Route name="about-education" path="education" handler={require './pages/about/education-page'} />
     <Route name="about-contact" path="contact" handler={require './pages/about/contact-page'} />
   </Route>
 
