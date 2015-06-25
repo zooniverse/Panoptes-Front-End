@@ -72,7 +72,6 @@ module.exports = React.createClass
       </section>
       <section className="featured-projects content-container">
         <Translate component="h5" content="home.featuredProjects.title" />
-        <Translate component="p" content="home.featuredProjects.tagline" />
         <PromiseRenderer promise={apiClient.type('projects').get(FEATURED_PRODUCT_IDS)}>{(projects) =>
           if projects?
             <div className="featured-projects-list">
