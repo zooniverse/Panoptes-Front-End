@@ -2,9 +2,10 @@ counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require '../api/client'
-auth = require '../api/auth'
+authClient = require '../api/auth'
 OwnedCardList = require '../components/owned-card-list'
 PromiseRenderer = require '../components/promise-renderer'
+ChangeListener = require '../components/change-listener'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 
@@ -22,7 +23,7 @@ CollectionsNav = React.createClass
 
   render: ->
     <nav className="hero-nav">
-      <PromiseRenderer promise={auth.checkCurrent()}>{(user) ->
+      <PromiseRenderer promise={authClient.checkCurrent()}>{(user) ->
         if user?
           <Link to="collections-user" params={{owner: user.login}}>
             <Translate content="collectionsPage.myCollections" />
@@ -30,7 +31,7 @@ CollectionsNav = React.createClass
       }</PromiseRenderer>
     </nav>
 
-module.exports = React.createClass
+CollectionsPage = React.createClass
   displayName: 'CollectionsPage'
 
   mixins: [TitleMixin]
@@ -64,3 +65,12 @@ module.exports = React.createClass
       ownerName={@props.params?.owner}
       imagePromise={@imagePromise}
       cardLink={@cardLink} />
+
+module.exports = React.createClass
+  displayName: 'CollectionsPageWrapper'
+
+  render: ->
+    <ChangeListener target={authClient} handler={=>
+      <CollectionsPage {...@props} />
+    }/>
+

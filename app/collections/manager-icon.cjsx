@@ -12,10 +12,10 @@ module?.exports = React.createClass
   getDefaultProps: ->
     subject: React.PropTypes.object
 
-  toggleCollectionsManagerPopup: ->
+  toggleCollectionsManagerPopup: (user) ->
     alert (resolve) =>
       <div className="content-container">
-        <CollectionsManager subject={@props.subject} />
+        <CollectionsManager user={user} project={@props.project} subject={@props.subject} onSuccess={resolve} />
       </div>
 
   render: ->
@@ -24,7 +24,7 @@ module?.exports = React.createClass
         if user?
           <button
             className="collections-manager-icon"
-            onClick={@toggleCollectionsManagerPopup}>
+            onClick={@toggleCollectionsManagerPopup.bind this, user}>
             <i className="fa fa-list" />
           </button>
       }</PromiseRenderer>
