@@ -19,7 +19,7 @@ merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 DisplayRoles = require './lib/display-roles'
 
-PAGE_SIZE = 3
+PAGE_SIZE = 10
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
