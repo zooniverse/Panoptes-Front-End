@@ -7,11 +7,11 @@ ZooniverseLogoType = require './zooniverse-logotype'
 counterpart.registerTranslations 'en',
   footer:
     discover:
-      title: 'Discover'
+      title: 'Projects'
       projectList: 'Projects'
       collectionList: 'Collections'
     learn:
-      title: 'Learn'
+      title: 'About'
       aboutUs: 'About Us'
       ourTeam: 'Our Team'
       education: 'Education'
