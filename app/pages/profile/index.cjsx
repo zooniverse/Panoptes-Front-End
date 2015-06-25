@@ -70,8 +70,6 @@ UserProfilePage = React.createClass
               />
           }</PromiseRenderer>
           <nav className="hero-nav">
-            <Link to="user-profile-feed" params={name: @props.params.name}><Translate content="profile.nav.feed" /></Link>
-            <Link to="user-profile-stats" params={name: @props.params.name}><Translate content="profile.nav.stats" /></Link>
             <Link to="collections-user" params={owner: @props.params.name}><Translate content="profile.nav.collections" /></Link>
             <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(currentUser) =>
               if currentUser?
@@ -85,11 +83,7 @@ UserProfilePage = React.createClass
       </section>
 
       <section className="user-profile-content">
-        <RouteHandler />
-        <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(user) =>
-          if user?.login isnt @props.params?.name
-            <PrivateMessageForm {...@props} />
-        }</PromiseRenderer>
+        <RouteHandler params={@props.params} />
       </section>
     </div>
 
