@@ -70,8 +70,6 @@ UserProfilePage = React.createClass
               />
           }</PromiseRenderer>
           <nav className="hero-nav">
-            <Link to="user-profile-feed" params={name: @props.params.name}><Translate content="profile.nav.feed" /></Link>
-            <Link to="user-profile-stats" params={name: @props.params.name}><Translate content="profile.nav.stats" /></Link>
             <Link to="collections-user" params={owner: @props.params.name}><Translate content="profile.nav.collections" /></Link>
             <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(currentUser) =>
               if currentUser?
