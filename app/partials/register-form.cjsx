@@ -153,7 +153,7 @@ module.exports = React.createClass
 
       <label>
         <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@state.user?} onChange={@handlePrivacyPolicyChange} />
-        {privacyPolicyLink = <a href="#/todo/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
+        {privacyPolicyLink = <a target="_blank" href="#/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
         <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
       </label>
 
