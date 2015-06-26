@@ -14,8 +14,7 @@ module?.exports = React.createClass
     page: 1 # start on page 1
 
   subjectsRequest: ->
-    # TODO Fix this on the backend should be able to do @state.collection.get('subjects')
-    apiClient.type('subjects').get(collection_id: @props.collection.id, page: @state.page)
+    @props.collection.get("subjects", page: @state.page)
 
   goToPage: (n) ->
     @transitionTo(@props.path, @props.params, {page: n})
