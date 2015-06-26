@@ -31,6 +31,7 @@ module?.exports = React.createClass
     commentsMeta: {}
     user: null
     commentValidationErrors: []
+    isUpdatingTitle: false
 
   componentDidMount: ->
     @handleAuthChange()
@@ -148,36 +149,65 @@ module?.exports = React.createClass
     @setState {commentValidationErrors}
     !!commentValidationErrors.length
 
-  onEditTitle: (e) ->
-    input = document.querySelector('.talk-edit-discussion-title-form input')
-    title = input.value
+  toggleUpdateDiscussion: ->
+    @setState isUpdatingTitle: !@state.isUpdatingTitle
 
+  onModeratorEditTitle: (e) ->
+    e.preventDefault()
+    @updateTitle React.findDOMNode(@refs.moderatorEditTitleInput).value
+
+  onOwnerEditTitle: (e) ->
+    e.preventDefault()
+    @updateTitle React.findDOMNode(@refs.ownerEditTitleInput).value
+
+  updateTitle: (title) ->
     @discussionsRequest().update({title}).save()
       .then (discussion) =>
-        @setState {discussion: discussion[0]}
+        @setState
+          discussion: discussion[0]
+          isUpdatingTitle: false
 
   render: ->
     {discussion} = @state
+    discussionOwnerId = discussion?.user_id?.toString()
+    userId = @state.user?.id?.toString()
 
     <div className="talk-discussion">
       <h1 className="talk-page-header">{discussion?.title}</h1>
 
       {if discussion
-        <Moderation section={discussion.section}>
-          <div>
-            <h2>Moderator Zone:</h2>
-            {if discussion?.title
-              <form className="talk-edit-discussion-title-form" onSubmit={@onEditTitle}>
-                <h3>Edit Title:</h3>
-                <input onChange={@onChangeTitle} defaultValue={discussion?.title}/>
-                <button type="submit">Update Title</button>
-              </form>}
+        <div>
+          <Moderation section={discussion.section}>
+            <div>
+              <h2>Moderator Zone:</h2>
+              {if discussion?.title
+                <form className="talk-edit-discussion-title-form" onSubmit={@onModeratorEditTitle}>
+                  <h3>Edit Title:</h3>
+                  <input ref="moderatorEditTitleInput" defaultValue={discussion?.title}/>
+                  <button type="submit">Update Title</button>
+                </form>}
 
-            <button onClick={@onClickDeleteDiscussion}>
-              Delete this discussion <i className="fa fa-close" />
-            </button>
-          </div>
-        </Moderation>}
+              <button onClick={@onClickDeleteDiscussion}>
+                Delete this discussion <i className="fa fa-close" />
+              </button>
+            </div>
+          </Moderation>
+
+          {if userId is discussionOwnerId
+            style = 
+              display: if @state.isUpdatingTitle then 'block' else 'none'
+
+            <div className="talk-update-discussion-container">
+              <button className="talk-update-discussion-toggle" type="button" onClick={@toggleUpdateDiscussion}>{if @state.isUpdatingTitle then 'Cancel' else 'Update Discussion'}</button>
+              <div className="talk-update-discussion-form-container" style={style}>
+                <form className="talk-edit-discussion-title-form" onSubmit={@onOwnerEditTitle}>
+                  <h3>Edit Title:</h3>
+                  <input ref="ownerEditTitleInput" defaultValue={discussion?.title}/>
+                  <button type="submit">Update Title</button>
+                </form>
+              </div>
+            </div>}
+        </div>}
 
       {@state.comments.map(@comment)}
 
