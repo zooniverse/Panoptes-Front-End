@@ -2,6 +2,7 @@ React = require 'react'
 apiClient = require '../../api/client'
 {Navigation} = require 'react-router'
 Loading = require '../../components/loading-indicator'
+FEATURED_PRODUCT_IDS = require '../../lib/featured-projects'
 
 module?.exports = React.createClass
   displayName: 'ProjectLinker'
@@ -23,13 +24,16 @@ module?.exports = React.createClass
 
     project.get('owner').then (owner) =>
       @transitionTo 'project-talk', 
-        owner: user.login
+        owner: owner.login
         name: project.slug
 
   setProjects: (metadata) ->
-    query =
-      launch_approved: true
-      include: 'owners'
+    # query =
+    #   launch_approved: true
+    #   include: 'owners'
+
+    # For launch, since I can't filter by if a project has a redirect or not.
+    query = FEATURED_PRODUCT_IDS
 
     apiClient.type('projects').get(query)
       .then (projects) =>
