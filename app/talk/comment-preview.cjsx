@@ -2,7 +2,7 @@ React = require 'react'
 MarkdownIt = require 'markdown-it'
 {State} = require 'react-router'
 
-markdownIt = MarkdownIt()
+markdownIt = MarkdownIt({linkify: true, breaks: true})
   .use require 'markdown-it-emoji'
   .use require 'markdown-it-sub'
   .use require 'markdown-it-sup'
