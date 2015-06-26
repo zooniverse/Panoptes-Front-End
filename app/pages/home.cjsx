@@ -6,11 +6,7 @@ apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 ZooniverseLogoType = require '../partials/zooniverse-logotype'
 OwnedCard = require '../partials/owned-card'
-
-FEATURED_PRODUCT_IDS = if process.env.NODE_ENV is 'production'
-  ['11', '6', '3', '17']
-else
-  ['231', '405', '272', '76']
+FEATURED_PRODUCT_IDS = require '../lib/featured-projects'
 
 counterpart.registerTranslations 'en',
   home:
