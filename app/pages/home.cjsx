@@ -7,6 +7,7 @@ PromiseRenderer = require '../components/promise-renderer'
 ZooniverseLogoType = require '../partials/zooniverse-logotype'
 OwnedCard = require '../partials/owned-card'
 FEATURED_PRODUCT_IDS = require '../lib/featured-projects'
+Markdown = require '../components/markdown'
 
 counterpart.registerTranslations 'en',
   home:
@@ -59,7 +60,7 @@ module.exports = React.createClass
                 <img className="about-image" src="./assets/home-#{item}.gif" alt="" />
                 <div className="about-item-content">
                   <Translate component="h5" content="home.about.#{item}.title" />
-                  <Translate component="p" content="home.about.#{item}.content" />
+                  <Markdown>{counterpart "home.about.#{item}.content"}</Markdown>
                 </div>
               </div>
             </div>
