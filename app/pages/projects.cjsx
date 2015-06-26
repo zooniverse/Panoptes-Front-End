@@ -31,8 +31,12 @@ module.exports = React.createClass
       .then (avatar) -> avatar.src
 
   cardLink: (project) ->
-    link = project.redirect
-    link ?= 'project-home'
+    link = if !!project.redirect
+      project.redirect
+    else
+      'project-home'
+
+    return link
 
   render: ->
     <OwnedCardList
