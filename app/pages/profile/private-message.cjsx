@@ -22,7 +22,7 @@ module.exports = React.createClass
     }</PromiseRenderer>
 
   redirectToMessages: ->
-    @transitionTo 'inbox'
+    @replaceWith 'inbox'
 
   redirectToCollections: ->
     @transitionTo 'collections-user', owner: @props.params?.name
