@@ -44,7 +44,8 @@ module?.exports = React.createClass
       React.findDOMNode(@).scrollIntoView()
 
   onClickReply: (e) ->
-    @props.onClickReply(@props.user, @props.data)
+    apiClient.type('users').get(id: @props.data.user_id).index(0).then (commentOwner) =>
+      @props.onClickReply(commentOwner, @props.data)
 
   onClickLink: (e) ->
     @toggleComponent('link')
