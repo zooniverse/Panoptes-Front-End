@@ -133,7 +133,6 @@ module?.exports = React.createClass
         <div className="talk-sidebar">
           <h2>Talk Sidebar</h2>
 
-          <h3>Jump to a project</h3>
           <ProjectLinker />
 
           <PromiseRenderer promise={talkClient.type('tags').get(section: @props.section)}>{(tags) =>

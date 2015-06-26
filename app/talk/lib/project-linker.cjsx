@@ -54,7 +54,8 @@ module?.exports = React.createClass
 
     else if @state.projects.length
       <div className="project-linker">
-        <select onChange={@onChangeSelect} ref="projectsSelect">
+        <select onChange={@onChangeSelect} defaultValue="defaultValue" ref="projectsSelect">
+          <option key={Math.random()}  value="defaultValue" disabled>Jump to a project</option>
           {@state.projects.map(@projectOption)}
         </select>
       </div>
