@@ -86,7 +86,7 @@ module.exports = React.createClass
   onScroll: ->
     mainTitle = React.findDOMNode(@refs.mainTitle)
 
-    if window.scrollY >= 200
+    if window.scrollY >= 1
       mainTitle.classList.add 'header-sticky'
 
     if window.scrollY is 0
