@@ -14,6 +14,9 @@ DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
 else
   '1166' # Ghosts
 
+# This is mostly arbitrary
+MAXIMUM_FIRST_QUESTION_SELECT_LABEL_LENGTH = 50
+
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
 
@@ -86,7 +89,11 @@ EditWorkflowPage = React.createClass
                 <small>First task</small>{' '}
                 <select name="first_task" value={@props.workflow.first_task} onChange={handleInputChange.bind @props.workflow}>
                   {for taskKey, definition of @props.workflow.tasks
-                    <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
+                    label = tasks[definition.type].getTaskText definition
+                    if label.length > MAXIMUM_FIRST_QUESTION_SELECT_LABEL_LENGTH
+                      label = label.slice(0, MAXIMUM_FIRST_QUESTION_SELECT_LABEL_LENGTH) + '...'
+
+                    <option key={taskKey} value={taskKey}>{label}</option>}
                 </select>
               </AutoSave>
             </div>
