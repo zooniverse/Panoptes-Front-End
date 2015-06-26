@@ -13,6 +13,7 @@ PromiseRenderer = require '../components/promise-renderer'
 Paginator = require './lib/paginator'
 Moderation = require './lib/moderation'
 ROLES = require './lib/roles'
+Loading = require '../components/loading-indicator'
 merge = require 'lodash.merge'
 
 module?.exports = React.createClass
@@ -24,6 +25,7 @@ module?.exports = React.createClass
     board: {}
     discussionsMeta: {}
     newDiscussionOpen: false
+    loading: true
 
   componentWillMount: ->
     @setDiscussions()
@@ -34,6 +36,7 @@ module?.exports = React.createClass
     @setDiscussions(n)
 
   discussionsRequest: (page) ->
+    @setState loading: true
     board_id = +@props.params.board
     talkClient.type('discussions').get({board_id, page_size: 5, page})
 
@@ -41,7 +44,7 @@ module?.exports = React.createClass
     @discussionsRequest(page)
       .then (discussions) =>
         discussionsMeta = discussions[0]?.getMeta()
-        @setState {discussions, discussionsMeta}
+        @setState {discussions, discussionsMeta, loading: false}
 
   boardRequest: ->
     id = @props.params.board.toString()
@@ -173,7 +176,9 @@ module?.exports = React.createClass
 
       <div className="talk-list-content">
         <section>
-          {if @state.discussions.length
+          {if @state.loading
+            <Loading />
+           else if @state.discussions?.length
             @state.discussions.map(@discussionPreview)
            else
             <p>There are currently no discussions in this board.</p>}
