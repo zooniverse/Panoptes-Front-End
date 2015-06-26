@@ -84,7 +84,7 @@ module.exports = React.createClass
         @defaultCatch secondError
 
   defaultPending: (message) ->
-    React.createElement @props.tag, @props, message ? 'Loading'
+    React.createElement @props.tag, @props, message ? null
 
   defaultThen: (value) ->
     React.createElement @props.tag, @props, value
