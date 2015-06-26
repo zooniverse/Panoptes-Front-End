@@ -312,6 +312,21 @@ COPY_GREY_LIGHT = #afaeae
       .talk-comment-like-button i.upvoted
         color: MAIN_HIGHLIGHT
 
+  .inbox-form
+    input[type='text']
+      width: 50%
+    textarea
+      width: 100%
+      margin: 5px 0
+    button[type='submit']
+      background: SUCCESS
+      border: SUCCESS
+      color: white
+      &:hover
+        background: darken(SUCCESS, 10%)
+        border: darken(SUCCESS, 10%)
+
+
   .talk-comment-feedback
     color: green
     text-decoration: italic
