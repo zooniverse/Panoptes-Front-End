@@ -11,7 +11,11 @@ NewDiscussionForm = require '../talk/discussion-new-form'
 CommentLink = require '../talk/comment-link'
 projectSection = require '../talk/lib/project-section'
 parseSection = require '../talk/lib/parse-section'
+QuickSubjectCommentForm= require '../talk/quick-subject-comment-form'
 {Navigation} = require 'react-router'
+
+indexOf = (elem) ->
+  (elem while elem = elem.previousSibling).length
 
 module?.exports = React.createClass
   displayName: 'Subject'
@@ -19,6 +23,7 @@ module?.exports = React.createClass
 
   getInitialState: ->
     subject: null
+    tab: 0
 
   componentWillMount: ->
     @setSubject()
@@ -70,15 +75,39 @@ module?.exports = React.createClass
 
           <ChangeListener target={authClient}>{=>
             <PromiseRenderer promise={authClient.checkCurrent()}>{(user) =>
-              if user?
+              if user
                 {# these wrapping promises ensure that there are boards for a project}
                 {# & could be removed if a default board is put in place}
+                {# TODO remove subject.get('project'), replace with params but browser freezes on get to projects with slug}
                 <PromiseRenderer promise={subject.get('project')}>{(project) =>
                   <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project))}>{(boards) =>
                     if boards?.length
-                      <NewDiscussionForm
-                        subject={subject}
-                        onCreateDiscussion={@onCreateDiscussion} />
+                      <div>
+                        <div className="tabbed-content">
+                          <div className="tabbed-content-tabs">
+                            <div className="subject-page-tabs">
+                              <div className="tabbed-content-tab #{if @state.tab is 0 then 'active' else ''}" onClick={=> @setState({tab: 0})}>
+                                <span>Add a note about this subject</span>
+                              </div>
+
+                              <div className="tabbed-content-tab #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
+                                <span>or Start a new discussion</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          {if @state.tab is 0
+                            <QuickSubjectCommentForm subject={subject} user={user} />
+                           else if @state.tab is 1
+                            <NewDiscussionForm
+                              subject={subject}
+                              onCreateDiscussion={@onCreateDiscussion} />
+                              }
+                        </div>
+                      </div>
+                    else
+                      <p>There are no discussion boards setup for this project yet. Check back soon!</p>
                   }</PromiseRenderer>
                 }</PromiseRenderer>
             }</PromiseRenderer>

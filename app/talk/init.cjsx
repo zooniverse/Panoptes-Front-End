@@ -13,6 +13,9 @@ auth = require '../api/auth'
 {Link} = require 'react-router'
 Loading = require '../components/loading-indicator'
 
+DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
+DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
+
 module?.exports = React.createClass
   displayName: 'TalkInit'
 
@@ -74,24 +77,47 @@ module?.exports = React.createClass
   roleWriteLabel: (data, i) ->
     <label key={i}><input type="radio" name="role-write" defaultChecked={i is ROLES.length-1}value={data}/>{data}</label>
 
+  createSubjectDefaultBoard: ->
+    board = {
+      title: DEFAULT_BOARD_TITLE,
+      description: DEFAULT_BOARD_DESCRIPTION
+      subject_default: true,
+      permissions: {read: 'all', write: 'all'}
+      section: @props.section
+      }
+
+    talkClient.type('boards').create(board).save()
+      .then (board) =>
+        console.log "board", board
+        @setBoards()
+
   render: ->
     <div className="talk-home">
       <Moderation section={@props.section}>
-        <form onSubmit={@onSubmitBoard}>
+        <div>
           <h2>Moderator Zone:</h2>
-          <h3>Add a board:</h3>
-          <input type="text" ref="boardTitle" placeholder="Board Title"/>
+          {if @props.section isnt 'zooniverse'
+            <PromiseRenderer promise={talkClient.type('boards').get({section: @props.section, subject_default: true}).index(0)}>{(defaultBoard) =>
+              if not defaultBoard?
+                <button onClick={@createSubjectDefaultBoard}><i className="fa fa-photo" /> Activate Talk Subject Comments Board</button>
+            }</PromiseRenderer>
+            }
 
-          <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
+          <form onSubmit={@onSubmitBoard}>
+            <h3>Add a board:</h3>
+            <input type="text" ref="boardTitle" placeholder="Board Title"/>
 
-          <h4>Can Read:</h4>
-          <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+            <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
 
-          <h4>Can Write:</h4>
-          <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+            <h4>Can Read:</h4>
+            <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
 
-          <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
-        </form>
+            <h4>Can Write:</h4>
+            <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+
+            <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
+          </form>
+        </div>
       </Moderation>
 
       <div className="talk-list-content">

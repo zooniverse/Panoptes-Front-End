@@ -72,7 +72,7 @@ module?.exports = React.createClass
       else if not user
         <p>Please sign in to view your inbox</p>
       else if conversations?.length is 0
-        <p>You have not started any private conversations yet</p>
+        <p>You have not started any private conversations yet. Send users private messages by visiting their profile page.'</p>
       else if conversations?.length
         <div>
           {conversations?.map(@conversationLink)}

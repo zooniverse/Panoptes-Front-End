@@ -44,7 +44,8 @@ module?.exports = React.createClass
       React.findDOMNode(@).scrollIntoView()
 
   onClickReply: (e) ->
-    @props.onClickReply(@props.user, @props.data)
+    apiClient.type('users').get(id: @props.data.user_id).index(0).then (commentOwner) =>
+      @props.onClickReply(commentOwner, @props.data)
 
   onClickLink: (e) ->
     @toggleComponent('link')
@@ -138,9 +139,7 @@ module?.exports = React.createClass
               <button className="talk-comment-link-button" onClick={@onClickLink}>
                 <i className="fa fa-link" /> Link
               </button>
-              <button className="talk-comment-report-button" onClick={@onClickReport}>
-                <i className="fa fa-warning" /> Report
-              </button>
+              {#TODO <button className="talk-comment-report-button" onClick={@onClickReport}><i className="fa fa-warning" /> Report</button>#}
               {if +@props.data?.user_id is +@props.user?.id
                 <span>
                   <button className="talk-comment-edit-button" onClick={@onClickEdit}>
