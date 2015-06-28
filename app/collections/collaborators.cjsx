@@ -194,7 +194,6 @@ module.exports = React.createClass
     ]
 
     promise.then ([roleSets, owner]) =>
-      console.log roleSets, owner
       @setState { roleSets, owner }, callback
 
   handleCollaboratorChange: ->
