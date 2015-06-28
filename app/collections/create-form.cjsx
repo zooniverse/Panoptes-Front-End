@@ -56,7 +56,7 @@ module?.exports = React.createClass
         <input className="collection-name-input" ref="name" onChange={@handleNameInputChange} placeholder="Collection Name" />
         <div className="collection-create-form-actions">
           <label>
-            <input ref="private" type="checkbox" defaultChecked={true}/>
+            <input ref="private" type="checkbox" defaultChecked={false}/>
             <Translate content="collectionCreateForm.private" />
           </label>
           <div className="submit-button-container">
