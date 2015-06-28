@@ -1,4 +1,6 @@
 React = require 'react'
+counterpart = require 'counterpart'
+ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 UserSearch = require '../components/user-search'
 apiClient = require '../api/client'
@@ -16,7 +18,7 @@ POSSIBLE_ROLES = [
 ROLES_INFO =
   owner:
     label: "Owner"
-    description: "The colleciton creator. There can only be one."
+    description: "The collection creator. There can only be one."
   collaborator:
     label: "Collaborator"
     description: "Collaborators have full access to add and remove subjects from the collection."
@@ -41,7 +43,15 @@ RoleCreator = React.createClass
 
     <div>
       {if @state.error?
-        <p className="form-help error">{@state.error.toString()}</p>}
+        rawErrorMessage = @state.error.toString()
+
+        errorMessage = switch
+          when rawErrorMessage.indexOf('No User with id')
+            'That user doesn\'t exist!'
+          else
+            'Error adding user.'
+
+        <p className="form-help error">{errorMessage}</p>}
       <form style={style}>
         <p>
           <UserSearch />
@@ -101,48 +111,67 @@ RoleRow = React.createClass
 
   getDefaultProps: ->
     roleSet: null
+    onRemove: Function.prototype
 
   getInitialState: ->
     saving: null
+    owner: null
 
-  removeRoleSet: ->
-    @props.roleSet.destroy()
+  componentDidMount: ->
+    @props.roleSet.get('owner')
+      .then (owner) =>
+        @setState { owner }
 
-  toggleThisRole: (role) ->
-    index = @props.roleSet.roles.indexOf role
+  removeRoles: ->
+    @updateRoles [], @props.onRemove
 
-    @setState
-      saving: true
+  toggleRole: (role) ->
+    currentRoles = @props.roleSet.roles
 
-    if index is -1
-      @props.roleSet.roles.push role
+    if role in currentRoles
+      index = currentRoles.indexOf role
+      currentRoles.splice index, 1
     else
-      @props.roleSet.roles.splice index, 1
+      currentRoles.push role
 
-    @props.roleSet.save()
+    if currentRoles.length
+      @updateRoles currentRoles
+    else
+      @removeRoles()
+
+  updateRoles: (newRoles = [], callback = ->) ->
+    @setState saving: true 
+
+    promise = if newRoles.length > 0
+      @props.roleSet.update({ roles: newRoles }).save()
+    else
+      @props.roleSet.delete()
+
+    promise
       .catch (error) =>
-        @setState {error}
+        @setState { error }
       .then =>
-        @state.saving = false
-        @setState saving: @state.saving
+        callback =>
+          @setState saving: false
 
   render: ->
-    <PromiseRenderer promise={@props.roleSet.get 'owner'}>{(owner) =>
-      <p>
-        <strong>{owner.display_name}</strong>{' '}
-        <button type="button" className="secret-button" onClick={@removeRoleSet}>&times;</button>
-        <br />
+    { owner } = @state 
 
-        <span className="columns-container inline">
-          {for role in POSSIBLE_ROLES
-            # TODO: Translate this.
-            <label key={role}>
-              <input type="checkbox" name={role} checked={role in @props.roleSet.roles} disabled={role is 'owner' or @state.saving} onChange={@toggleThisRole.bind this, role} />{' '}
-              {ROLES_INFO[role].label}
-            </label>}
-        </span>
-      </p>
-    }</PromiseRenderer>
+    <p>
+      {if owner
+        <strong>{owner.login}</strong>}
+      
+      <button type="button" className="pill-button" onClick={@removeRoles}>Remove</button>
+      <br />
+
+      <span className="columns-container inline">
+        {for role in POSSIBLE_ROLES
+          <label key={role}>
+            <input type="checkbox" name={role} checked={role in @props.roleSet.roles} disabled={role is 'owner' or @state.saving} onChange={@toggleRole.bind this, role} />{' '}
+            {ROLES_INFO[role].label}
+          </label>}
+      </span>
+    </p>
 
 module.exports = React.createClass
   displayName: "CollectionCollaborators"
@@ -152,32 +181,47 @@ module.exports = React.createClass
 
   getInitialState: ->
     error: null
+    owner: null
+    roleSets: []
 
-  getRoles: ->
-    apiClient.type('collection_roles').get(collection_id: @props.collection.id)
+  componentDidMount: ->
+    @update()
+
+  update: (callback = ->) ->
+    promise = Promise.all [
+      apiClient.type('collection_roles').get(collection_id: @props.collection.id),
+      @props.collection.get('owner')
+    ]
+
+    promise.then ([roleSets, owner]) =>
+      console.log roleSets, owner
+      @setState { roleSets, owner }, callback
+
+  handleCollaboratorChange: ->
+    @props.collection.uncacheLink 'collection_roles'
+    @update()
 
   render: ->
+    { roleSets, owner } = @state
+
     <div className="collection-settings-tab">
       {if @state.error?
         <p className="form-help error">{@state.error.toString()}</p>}
-      <PromiseRenderer promise={@getRoles()}>{(roleSets) =>
+
+      {if roleSets.length is 1
+        <div className="helpful-tip">None yet, add some with the form below.</div>}
+
+      {if owner and roleSets.length > 1
         <div>
-          {ownerSet = roleSets.filter((set) -> 'owner' in set.roles)[0]
-          <RoleRow key={ownerSet.id} roleSet={ownerSet} />}
-          {if roleSets.length > 1
-            for roleSet in roleSets when 'owner' not in roleSet.roles
-              <RoleRow key={roleSet.id} roleSet={roleSet} />
-          else
-            <em className="form-help">None yet</em>}
-        </div>
-      }</PromiseRenderer>
+          {for roleSet in roleSets
+            continue if owner.id is roleSet.links.owner.id
+            <RoleRow roleSet={roleSet} onRemove={@handleCollaboratorChange} />}
+        </div>}
 
+      <br />
       <hr />
+      <br />
 
-      <div className="form-label">Add another</div>
-      <RoleCreator collection={@props.collection} onAdd={@handleCollaboratorAddition} />
+      <div className="form-label">Add a collaborator</div>
+      <RoleCreator collection={@props.collection} onAdd={@handleCollaboratorChange} />
     </div>
-
-  handleCollaboratorAddition: ->
-    @props.collection.uncacheLink 'collection_roles'
-    @forceUpdate()
