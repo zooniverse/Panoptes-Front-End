@@ -14,6 +14,7 @@ module?.exports = React.createClass
 
   getInitialState: ->
     error: null
+    collectionNameLength: 0
 
   onSubmit: (e) ->
     e.preventDefault()
@@ -39,6 +40,9 @@ module?.exports = React.createClass
         @refs.private.value = true
         @props.onSubmit collection
 
+  handleNameInputChange: ->
+    @setState collectionNameLength: React.findDOMNode(@refs.name).value.length
+
   render: ->
     <div>
       <form onSubmit={@onSubmit} className="collections-create-form">
@@ -49,14 +53,17 @@ module?.exports = React.createClass
             else 'There was a problem creating your collection.'
 
           <div className="form-help error">{errorMessage}</div>}
-        <input className="collection-name-input" ref="name" placeholder="Collection Name" />
+        <input className="collection-name-input" ref="name" onChange={@handleNameInputChange} placeholder="Collection Name" />
         <div className="collection-create-form-actions">
           <label>
             <input ref="private" type="checkbox" defaultChecked={true}/>
             <Translate content="collectionCreateForm.private" />
           </label>
           <div className="submit-button-container">
-            <button type="submit"><Translate content="collectionCreateForm.submit" /></button>
+            {if @state.collectionNameLength is 0
+              <button type="submit" disabled><Translate content="collectionCreateForm.submit" /></button>
+            else
+              <button type="submit"><Translate content="collectionCreateForm.submit" /></button>}
           </div>
         </div>
       </form>
