@@ -5,7 +5,7 @@ auth = require '../api/auth'
 apiClient = require '../api/client'
 alert = require '../lib/alert'
 SetToggle = require '../lib/set-toggle'
-PromiseRenderer = require '../components/promise-renderer'
+ChangeListener = require '../components/change-listener'
 
 CollectionDeleteDialog = React.createClass
   displayName: 'CollectionDeleteDialog'
@@ -80,32 +80,32 @@ module.exports = React.createClass
       </div>
 
   render: ->
-    <PromiseRenderer promise={@checkUserRole()}>{(allowed) =>
-      <div className="collection-settings-tab">
-        <DisplayNameSlugEditor resource={@props.collection} resourceType="collection" disabled={not allowed} />
+    <div className="collection-settings-tab">
+      <ChangeListener target={@props.collection}>{=>
+        <DisplayNameSlugEditor resource={@props.collection} resourceType="collection" />
+      }</ChangeListener>
+      
+      <hr />
 
-        <hr />
+      <span className="form-label">Visibility</span>
+      <p>
+        <label style={whiteSpace: 'nowrap'}>
+          <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} onChange={@set.bind this, 'private', true} />
+          Private
+        </label>
+        &emsp;
+        <label style={whiteSpace: 'nowrap'}>
+          <input type="radio" name="private" value={false} data-json-value={true} checked={not @props.collection.private} onChange={@set.bind this, 'private', false} />
+          Public
+        </label>
+      </p>
 
-        <span className="form-label">Visibility</span>
-        <p>
-          <label style={whiteSpace: 'nowrap'}>
-            <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} onChange={@set.bind this, 'private', true} />
-            Private
-          </label>
-          &emsp;
-          <label style={whiteSpace: 'nowrap'}>
-            <input type="radio" name="private" value={false} data-json-value={true} checked={not @props.collection.private} onChange={@set.bind this, 'private', false} />
-            Public
-          </label>
-        </p>
+      <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
 
-        <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
+      <hr />
 
-        <hr />
-
-        <div className="form-label">Delete this Collection</div>
-        <div className="delete-container">
-          <button className="error major-button" type="button" onClick={@confirmDelete}>Delete</button>
-        </div>
+      <div className="form-label">Delete this Collection</div>
+      <div className="delete-container">
+        <button className="error major-button" type="button" onClick={@confirmDelete}>Delete</button>
       </div>
-    }</PromiseRenderer>
+    </div>
