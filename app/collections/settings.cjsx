@@ -7,6 +7,41 @@ alert = require '../lib/alert'
 SetToggle = require '../lib/set-toggle'
 PromiseRenderer = require '../components/promise-renderer'
 
+CollectionDeleteDialog = React.createClass
+  displayName: 'CollectionDeleteDialog'
+
+  getDefaultProps: ->
+    collection: null
+    onComplete: Function.prototype
+
+  getInitialState: ->
+    isDeleting: false
+
+  deleteCollection:  ->
+    @setState isDeleting: true
+
+    @props.collection.delete()
+      .then =>
+        @props.onComplete()
+
+  render: ->
+    <div>
+      <p>Are you sure you want to delete this collection? This action is irreversible!</p>
+
+      {if @state.isDeleting
+        <div>
+          <button className="major-button" disabled><i className="fa fa-spinner" /></button>
+          {' '}
+        </div>}
+
+      {if !@state.isDeleting
+        <div>
+          <button className="major-button" onClick={@deleteCollection}>Yes, delete it!</button>
+          {' '}
+          <button className="minor-button" onClick={@props.onComplete}>No, don't delete it.</button>
+        </div>}
+    </div>
+
 module.exports = React.createClass
   displayName: "CollectionSettings"
   mixins: [Navigation, SetToggle]
@@ -20,6 +55,15 @@ module.exports = React.createClass
     setting:
       private: false
 
+  componentDidMount: ->
+    @props.collection.listen 'delete', @redirect
+
+  componentDidUnMount: ->
+    @props.collection.stopListening 'delete'
+
+  redirect: ->
+    @transitionTo 'collections'
+
   checkUserRole: ->
     auth.checkCurrent().then (user) =>
       if user
@@ -29,19 +73,10 @@ module.exports = React.createClass
           .then ([roles]) ->
             roles?
 
-  deleteCollection: (callback = ->) ->
-    @props.collection.delete()
-      .then =>
-        callback?()
-        @transitionTo 'collections'
-
   confirmDelete: ->
     alert (resolve) =>
       <div className="confirm-delete-dialog content-container">
-        <p>Are you sure you want to delete this collection? This action is irreversible!</p>
-        <button className="major-button" onClick={@deleteCollection.bind(this, resolve)}>Yes, delete it!</button>
-        {' '}
-        <button className="minor-button" onClick={resolve}>No, don't delete it.</button>
+        <CollectionDeleteDialog {...@props} onComplete={resolve} />
       </div>
 
   render: ->
