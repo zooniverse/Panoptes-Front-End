@@ -148,6 +148,27 @@ COPY_GREY_LIGHT = #afaeae
         margin-bottom: 10px
         border-left: 4px solid orangered
 
+      .talk-sticky-list
+        ul
+          list-style: none
+          margin: 0
+          padding: 0
+
+          li
+            display: block
+            padding: 5px
+            cursor: move
+            cursor: -webkit-grab
+            cursor: -moz-grab
+            cursor: grab
+
+            &:before
+              margin: 0 5px 0 0
+
+            &.talk-sticky-placeholder
+              background: MAIN_HIGHLIGHT
+              color: white
+
   .talk-board
     .talk-page-header
       text-align: left
@@ -219,11 +240,17 @@ COPY_GREY_LIGHT = #afaeae
 
   .talk-discussion-preview
     @extend .talk-module
+    position: relative
     background: transparent
     border-radius: 0
     border: none
     border-top: 1px solid LIGHT_GREY
     overflow: auto
+
+    .talk-sticky-pin
+      color: #FF4642
+      margin: 0 10px 0 0
+      font-weight: 600
 
     &:last-child
       border-bottom: 1px solid LIGHT_GREY
@@ -391,6 +418,12 @@ COPY_GREY_LIGHT = #afaeae
             background: rgba(255,255,255,0.5)
             button
               opacity: 1
+
+  .talk-edit-discussion-form
+    .toggle-sticky
+      display: block
+      font-weight: bold
+      margin: 10px 0
 
   .talk-search-result
     background: rgba(TALK_BACKGROUND, 0.5)

@@ -18,6 +18,7 @@ module?.exports = React.createClass
     <div className="talk-discussion-preview">
       <div className="preview-content">
         <h1>
+          {<i className="fa fa-thumb-tack talk-sticky-pin"></i> if @props.data.sticky}
           <Link to="#{@projectPrefix()}talk-discussion" params={merge({}, {board: @props.data.board_id, discussion: @props.data.id}, @props.params)}>
             {@props.data.title}
           </Link>

@@ -48,7 +48,12 @@ module?.exports = React.createClass
                   <i className="fa fa-#{if @state.open then 'close' else 'warning'}" /> Moderator Controls
                 </button>
                 <div className="talk-moderation-children #{if @state.open then 'open' else 'closed'}">
-                  {@props.children}
+                  {
+                    if @state.open
+                      @props.children
+                    else
+                      null
+                  }
                 </div>
               </div>
           }</PromiseRenderer>
