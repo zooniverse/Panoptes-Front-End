@@ -94,4 +94,7 @@ module.exports = React.createClass
     </footer>
 
   toggleAdminMode: (e) ->
-    apiClient.update 'params.admin': e.target.checked or undefined
+    apiClient.update 'params.admin': if e.target.checked
+      true
+    else
+      undefined
