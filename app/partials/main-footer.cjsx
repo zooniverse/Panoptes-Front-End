@@ -27,6 +27,33 @@ counterpart.registerTranslations 'en',
       daily: 'Daily Zooniverse'
       blog: 'Blog'
 
+AdminToggle = React.createClass
+  getInitialState: ->
+    checked: false
+
+  componentDidMount: ->
+    apiClient.listen 'change', @handleClientChange
+
+  componentWillUnmount: ->
+    apiClient.stopListening 'change', @handleClientChange
+
+  handleClientChange: ->
+    checked = apiClient.params.admin ? false
+    unless @state.checked is checked
+      @setState {checked}
+
+  render: ->
+    <label>
+      <input type="checkbox" checked={@state.checked} onChange={@toggleAdminMode} />{' '}
+      <Translate content="footer.adminMode" />
+    </label>
+
+  toggleAdminMode: (e) ->
+    apiClient.update 'params.admin': if e.target.checked
+      true
+    else
+      undefined
+
 module.exports = React.createClass
   displayName: 'MainFooter'
 
@@ -35,19 +62,14 @@ module.exports = React.createClass
 
   componentDidMount: ->
     auth.listen 'change', @handleAuthChange
-    apiClient.listen 'change', @handleClientChange
     @handleAuthChange()
 
   componentWillUnmount: ->
     auth.stopListening 'change', @handleAuthChange
-    apiClient.stopListening 'change', @handleClientChange
 
   handleAuthChange: ->
     auth.checkCurrent().then (user) =>
       @setState {user}
-
-  handleClientChange: ->
-    @forceUpdate()
 
   render: ->
     <footer className="main-footer">
@@ -58,10 +80,7 @@ module.exports = React.createClass
           </Link>
           <br />
           {if @state.user?.admin or @state.user?.id is '3' # brian-testing
-            <label>
-              <input type="checkbox" checked={apiClient.params.admin} onChange={@toggleAdminMode} />{' '}
-              <Translate content="footer.adminMode" />
-            </label>}
+            <AdminToggle />}
         </div>
         <nav className="site-map">
           <div className="site-map-section">
@@ -92,9 +111,3 @@ module.exports = React.createClass
         </div>
       </div>
     </footer>
-
-  toggleAdminMode: (e) ->
-    apiClient.update 'params.admin': if e.target.checked
-      true
-    else
-      undefined
