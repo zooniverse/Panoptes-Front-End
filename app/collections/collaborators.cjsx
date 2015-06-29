@@ -16,7 +16,7 @@ POSSIBLE_ROLES = [
 ROLES_INFO =
   owner:
     label: "Owner"
-    description: "The colleciton creator. There can only be one."
+    description: "The collection creator. There can only be one."
   collaborator:
     label: "Collaborator"
     description: "Collaborators have full access to add and remove subjects from the collection."

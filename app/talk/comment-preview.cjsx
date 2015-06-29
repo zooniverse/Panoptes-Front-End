@@ -2,7 +2,7 @@ React = require 'react'
 MarkdownIt = require 'markdown-it'
 {State} = require 'react-router'
 
-markdownIt = MarkdownIt()
+markdownIt = MarkdownIt({linkify: true, breaks: true})
   .use require 'markdown-it-emoji'
   .use require 'markdown-it-sub'
   .use require 'markdown-it-sup'
@@ -26,10 +26,10 @@ module?.exports = React.createClass
       .replace(/@(\b[\w-]+\b)\/(\b[\w-]+\b)\^([0-9]+)/g, "<a href='#/projects/$1/$2/talk/subjects/$3'>$1/$2 - Subject $3</a>")
 
       # user mentions : @username
-      .replace(/@(\b[\w-]+\b)/g, "<a href='#/users/$1'>$1</a>")
+      .replace(/\B@(\b[\w-]+\b)/g, "<a href='#/users/$1'>$1</a>")
 
       # hashtags #tagname
-      .replace /\#(\w+)/g, (fullTag, tagName) ->
+      .replace /\B\#(\w+)/g, (fullTag, tagName) ->
         if owner and name
           "<a href='#/projects/#{owner}/#{name}/talk/search?query=#{tagName}'>#{fullTag}</a>"
         else
