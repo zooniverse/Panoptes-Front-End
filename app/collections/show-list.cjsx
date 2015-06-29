@@ -26,13 +26,16 @@ module?.exports = React.createClass
   render: ->
     <div className="collections-show">
       <PromiseRenderer promise={@subjectsRequest()}>{(subjects) =>
-        <div>
-          <section>{subjects?.map(@subject)}</section>
+        if subjects.length > 0
+          <div>
+            <div className="collection-subjects-list">{subjects.map(@subject)}</div>
 
-          <Paginator
-            page={@state.page}
-            onPageChange={@goToPage}
-            pageCount={subjects?[0].getMeta()?.page_count} />
-        </div>
+            <Paginator
+              page={@state.page}
+              onPageChange={@goToPage}
+              pageCount={subjects[0].getMeta()?.page_count} />
+          </div>
+        else
+          <p>No subjects in this collection.</p>
       }</PromiseRenderer>
     </div>

@@ -44,7 +44,7 @@ CollectionPage = React.createClass
         owner: owner.login or owner.name
         name: @props.collection.slug
 
-      isOwner = user.id is owner.id
+      isOwner = user?.id is owner.id
 
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
