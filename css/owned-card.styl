@@ -1,7 +1,8 @@
 .card-list
-  column-count: 5
-  column-gap: 1.66em
-  column-width: 14.66em
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  justify-content: center
   max-width: 1200px
   margin: 0 auto
   text-align: center
@@ -13,9 +14,8 @@
   background-position: 50% 0
   background-size: cover
   border-radius: 6px
-  vendor("column-break-inside", avoid)
   display: inline-block
-  margin: 0 auto 1em
+  margin: 0 0.5em 1em
   max-height: 325px
   max-width: 220px
   overflow: hidden
