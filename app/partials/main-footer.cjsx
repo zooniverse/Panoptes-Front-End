@@ -3,9 +3,12 @@ React = require 'react'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 ZooniverseLogoType = require './zooniverse-logotype'
+auth = require '../api/auth'
+apiClient = require '../api/client'
 
 counterpart.registerTranslations 'en',
   footer:
+    adminMode: 'Admin mode'
     discover:
       title: 'Projects'
       projectList: 'Projects'
@@ -27,6 +30,25 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'MainFooter'
 
+  getInitialState: ->
+    user: null
+
+  componentDidMount: ->
+    auth.listen 'change', @handleAuthChange
+    apiClient.listen 'change', @handleClientChange
+    @handleAuthChange()
+
+  componentWillUnmount: ->
+    auth.stopListening 'change', @handleAuthChange
+    apiClient.stopListening 'change', @handleClientChange
+
+  handleAuthChange: ->
+    auth.checkCurrent().then (user) =>
+      @setState {user}
+
+  handleClientChange: ->
+    @forceUpdate()
+
   render: ->
     <footer className="main-footer">
       <div className="centered-grid main-footer-flex">
@@ -34,6 +56,12 @@ module.exports = React.createClass
           <Link to="home" className="main-logo-link">
             <ZooniverseLogoType />
           </Link>
+          <br />
+          {if @state.user?.admin or @state.user?.id is '3' # brian-testing
+            <label>
+              <input type="checkbox" checked={apiClient.params.admin} onChange={@toggleAdminMode} />{' '}
+              <Translate content="footer.adminMode" />
+            </label>}
         </div>
         <nav className="site-map">
           <div className="site-map-section">
@@ -64,3 +92,6 @@ module.exports = React.createClass
         </div>
       </div>
     </footer>
+
+  toggleAdminMode: (e) ->
+    apiClient.update 'params.admin': e.target.checked or undefined
