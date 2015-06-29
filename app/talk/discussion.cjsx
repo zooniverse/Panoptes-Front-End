@@ -148,11 +148,12 @@ module?.exports = React.createClass
     @setState {commentValidationErrors}
     !!commentValidationErrors.length
 
-  onEditTitle: (e) ->
-    input = document.querySelector('.talk-edit-discussion-title-form input')
-    title = input.value
-
-    @discussionsRequest().update({title}).save()
+  onEditSubmit: (e) ->
+    e.preventDefault()
+    form = document.querySelector('.talk-edit-discussion-form')
+    title = form.querySelector('[name="title"]').value
+    sticky = form.querySelector('[name="sticky"]').checked
+    @discussionsRequest().update({title, sticky}).save()
       .then (discussion) =>
         @setState {discussion: discussion[0]}
 
@@ -167,10 +168,13 @@ module?.exports = React.createClass
           <div>
             <h2>Moderator Zone:</h2>
             {if discussion?.title
-              <form className="talk-edit-discussion-title-form" onSubmit={@onEditTitle}>
+              <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
                 <h3>Edit Title:</h3>
-                <input onChange={@onChangeTitle} defaultValue={discussion?.title}/>
-                <button type="submit">Update Title</button>
+                <input name="title" defaultValue={discussion?.title}/>
+                <label className="toggle-sticky">Sticky:
+                  <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
+                </label>
+                <button type="submit">Update</button>
               </form>}
 
             <button onClick={@onClickDeleteDiscussion}>

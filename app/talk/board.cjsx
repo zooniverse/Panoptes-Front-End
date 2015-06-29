@@ -12,6 +12,7 @@ ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 Paginator = require './lib/paginator'
 Moderation = require './lib/moderation'
+StickyDiscussionList = require './sticky-discussion-list'
 ROLES = require './lib/roles'
 Loading = require '../components/loading-indicator'
 merge = require 'lodash.merge'
@@ -152,6 +153,8 @@ module?.exports = React.createClass
             <button onClick={@onClickDeleteBoard}>
               Delete this board <i className="fa fa-close" />
             </button>
+
+            <StickyDiscussionList board={board} />
           </div>
         </Moderation>}
 
