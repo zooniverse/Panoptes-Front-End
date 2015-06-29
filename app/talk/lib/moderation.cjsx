@@ -47,7 +47,7 @@ module?.exports = React.createClass
                 <button onClick={@toggleModeration}>
                   <i className="fa fa-#{if @state.open then 'close' else 'warning'}" /> Moderator Controls
                 </button>
-                <div className="talk-moderation-children">
+                <div className="talk-moderation-children #{if @state.open then 'open' else 'closed'}">
                   {
                     if @state.open
                       @props.children
