@@ -31,16 +31,21 @@ module?.exports = React.createClass
 
         <PromiseRenderer promise={talkClient.type('discussions').get({board_id: @props.data.id}).index(0)}>{(discussion) =>
           if discussion?
-            <div className="talk-discussion-link">
-              <PromiseRenderer promise={apiClient.type('users').get(discussion.user_id.toString())}>{(user) =>
-                <Link className="user-profile-link" to="user-profile" params={name: discussion.user_login}>
-                  <Avatar user={user} />{' '}{discussion.user_display_name}
-                </Link>
-              }</PromiseRenderer>{' '}
+            comments = discussion.links.comments
+            lastCommentId = comments[comments.length-1]
 
-              <Link to="#{@projectPrefix()}talk-discussion" params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}>{discussion.title}</Link>{' '}
-              <span>{timeAgo(discussion.updated_at)}</span>
-            </div>
+            <PromiseRenderer promise={talkClient.type('comments').get(lastCommentId)}>{(comment) =>
+              <div className="talk-discussion-link">
+                <PromiseRenderer promise={apiClient.type('users').get(comment.user_id.toString())}>{(user) =>
+                  <Link className="user-profile-link" to="user-profile" params={name: user.login}>
+                    <Avatar user={user} />{' '}{user.display_name}
+                  </Link>
+                }</PromiseRenderer>{' '}
+
+                <Link to="#{@projectPrefix()}talk-discussion" params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}>{discussion.title}</Link>{' '}
+                <span>{timeAgo(discussion.updated_at)}</span>
+              </div>
+            }</PromiseRenderer>
         }</PromiseRenderer>
       </div>
 
