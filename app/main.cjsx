@@ -101,6 +101,7 @@ routes = <Route handler={App}>
     <Route name="edit-project-visibility" path="visibility" handler={require './pages/lab/visibility'} />
   </Route>
   <Route name="lab-policies" path="lab-policies" handler={require './pages/lab/lab-policies'} />
+  <Route name="lab-how-to" path="lab-how-to" handler={require './pages/lab/how-to-page'} />
 
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={require './pages/not-found'} />
