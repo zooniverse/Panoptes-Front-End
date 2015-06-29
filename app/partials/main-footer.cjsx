@@ -3,9 +3,12 @@ React = require 'react'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 ZooniverseLogoType = require './zooniverse-logotype'
+auth = require '../api/auth'
+apiClient = require '../api/client'
 
 counterpart.registerTranslations 'en',
   footer:
+    adminMode: 'Admin mode'
     discover:
       title: 'Projects'
       projectList: 'Projects'
@@ -24,8 +27,49 @@ counterpart.registerTranslations 'en',
       daily: 'Daily Zooniverse'
       blog: 'Blog'
 
+AdminToggle = React.createClass
+  getInitialState: ->
+    checked: false
+
+  componentDidMount: ->
+    apiClient.listen 'change', @handleClientChange
+
+  componentWillUnmount: ->
+    apiClient.stopListening 'change', @handleClientChange
+
+  handleClientChange: ->
+    checked = apiClient.params.admin ? false
+    unless @state.checked is checked
+      @setState {checked}
+
+  render: ->
+    <label>
+      <input type="checkbox" checked={@state.checked} onChange={@toggleAdminMode} />{' '}
+      <Translate content="footer.adminMode" />
+    </label>
+
+  toggleAdminMode: (e) ->
+    apiClient.update 'params.admin': if e.target.checked
+      true
+    else
+      undefined
+
 module.exports = React.createClass
   displayName: 'MainFooter'
+
+  getInitialState: ->
+    user: null
+
+  componentDidMount: ->
+    auth.listen 'change', @handleAuthChange
+    @handleAuthChange()
+
+  componentWillUnmount: ->
+    auth.stopListening 'change', @handleAuthChange
+
+  handleAuthChange: ->
+    auth.checkCurrent().then (user) =>
+      @setState {user}
 
   render: ->
     <footer className="main-footer">
@@ -34,6 +78,9 @@ module.exports = React.createClass
           <Link to="home" className="main-logo-link">
             <ZooniverseLogoType />
           </Link>
+          <br />
+          {if @state.user?.admin or @state.user?.id is '3' # brian-testing
+            <AdminToggle />}
         </div>
         <nav className="site-map">
           <div className="site-map-section">

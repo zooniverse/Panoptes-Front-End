@@ -1,8 +1,8 @@
 .main-footer
   background: #272727
-  color: rgba(255,255,255,0.5)
+  color: rgba(white, 0.5)
   display: flex
-  font-size: 10px
+  font-size: 14px
   justify-content: center
   line-height: 20px
   padding: 3em 3vw
@@ -12,7 +12,17 @@
     text-decoration: none
 
     &:hover
-      color: rgba(255,255,255,0.75)
+      color: rgba(white, 0.75)
+
+  .main-logo
+    margin-bottom: 2.7em
+
+  .main-logo-link
+    color: rgba(white, 0.25)
+    font-size: 18px
+
+    &:hover
+      color: rgba(white, 0.4)
 
   .main-footer-flex
     display: flex
@@ -21,44 +31,27 @@
     max-width: 960px
     width: 100%
 
-  .main-logo
-    color: white
-    font-weight: 700
-    margin: 0 0 1.5em 0
-    opacity: 0.5
-    white-space: nowrap
-
-    .main-logo-link
-      color: white
-      font-size: 18px
-      opacity: 0.5
-
-      &:hover
-       opacity: 0.75
-
   .site-map
     display: inline-flex
     flex: 1 0 700px
     justify-content: center
 
-    .site-map-section
-      display: inline-flex
-      flex-direction: column
-      flex-wrap: wrap
-      font-size: 1.4em
-      margin: 0 6.25vw 2.7em 0
+  .site-map-section
+    display: inline-flex
+    flex-direction: column
+    flex-wrap: wrap
+    margin: 0 6.25vw 2.7em 0
 
-      &:first-of-type
-        margin-left: 6.25vw
+    &:first-of-type
+      margin-left: 6.25vw
 
-      h6
-        color: COPY
-        font-size: 15px
+    h6
+      color: COPY
+      font-size: inherit
 
-      a
-        white-space: nowrap
-        
+    a
+      white-space: nowrap
+
   .social-media
     a
-      font-size: 14px
       margin: 0.5em
