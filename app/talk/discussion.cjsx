@@ -118,7 +118,11 @@ module?.exports = React.createClass
 
   onClickReply: (user, comment) ->
     # TODO: provide link to user / comment
-    reply = "> In reply to #{user.display_name}'s comment: \n#{comment.body}\n\n"
+    quotedComment = comment.body.split("\n")
+      .map (line) -> "> #{line}"
+      .join("\n")
+
+    reply = "> In reply to #{user.display_name}'s comment: \n#{quotedComment}\n\n"
     @setState {reply}
 
   comment: (data, i) ->
