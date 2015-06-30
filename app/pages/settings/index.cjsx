@@ -4,8 +4,6 @@ auth = require '../../api/auth'
 PromiseRenderer = require '../../components/promise-renderer'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
-AccountInformation = require './account-information'
-CustomizeProfile = require './customize-profile'
 {Link, RouteHandler} = require 'react-router'
 
 counterpart.registerTranslations 'en',
@@ -28,12 +26,12 @@ UserSettingsPage = React.createClass
         <div className="settings-content">
           <aside className="secondary-page-side-bar settings-side-bar">
             <nav>
-              <Link to="settings-account-information"
+              <Link to="settings"
                 type="button"
                 className="secret-button settings-button" >
                 <Translate content="userSettingsPage.nav.accountInformation" />
               </Link>
-              <Link to="settings-customize-profile"
+              <Link to="settings-profile"
                 type="button"
                 className="secret-button settings-button" >
                 <Translate content="userSettingsPage.nav.customizeProfile" />

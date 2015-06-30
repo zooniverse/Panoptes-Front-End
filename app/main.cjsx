@@ -48,9 +48,10 @@ routes = <Route handler={App}>
 
   <Route name="inbox" handler={require './talk/inbox'} />
   <Route name="inbox-conversation" path="inbox/:conversation" handler={require './talk/inbox-conversation'} />
-  <Route name="settings" path="settings" handler={require './pages/profile/settings'}>
-    <DefaultRoute name="settings-account-information" handler={require './pages/profile/account-information'} />
-    <Route path="customize" name="settings-customize-profile" handler={require './pages/profile/customize-profile' } />
+
+  <Route name="settings" handler={require './pages/settings'}>
+    <DefaultRoute handler={require './pages/settings/account'} />
+    <Route name="settings-profile" path="profile" handler={require './pages/settings/profile' } />
   </Route>
 
   <Route name="projects" handler={require './pages/projects'} />
