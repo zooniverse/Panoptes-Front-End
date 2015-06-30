@@ -8,6 +8,7 @@ PromiseToSetState = require '../lib/promise-to-set-state'
 Paginator = require './lib/paginator'
 Router = {Link} = require 'react-router'
 Loading = require '../components/loading-indicator'
+InboxForm = require './inbox-form'
 
 PAGE_SIZE = 10
 
@@ -78,4 +79,11 @@ module?.exports = React.createClass
           {conversations?.map(@conversationLink)}
           <Paginator page={+@state.conversationsMeta.page} onPageChange={@onPageChange} pageCount={@state.conversationsMeta?.page_count} />
         </div>}
+
+      {if user?
+        <div>
+          <h1>Send a message</h1>
+          <InboxForm user={user} />
+        </div>}
+
     </div>
