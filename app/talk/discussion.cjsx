@@ -83,7 +83,7 @@ module?.exports = React.createClass
 
     commentToUpdate.update(comment).save()
       .then (comment) =>
-        @setComments()
+        @setComments(@state.commentsMeta?.page)
 
   onDeleteComment: (commentId) ->
     {board, discussion} = @props.params
