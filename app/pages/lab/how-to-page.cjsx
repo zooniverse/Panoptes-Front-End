@@ -20,7 +20,7 @@ counterpart.registerTranslations 'en',
       then click the "Build a Project" button in the top right. Here you can see all of the projects you own and
       collaborate on. Click on "Create a project" to start building.
 
-      [![Project Builder screenshot](./assets/how-to-lab/how-to-2.jpg)](./assets/how-to-lab/how-to-3.jpg)
+      [![Project Builder screenshot](./assets/how-to-lab/how-to-2.jpg)](./assets/how-to-lab/how-to-2.jpg)
 
       **Start building:** Now you're in the Project Builder itself. This is where the magic happens.
       On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are
@@ -30,7 +30,7 @@ counterpart.registerTranslations 'en',
       of tasks that you ask volunteers to do, and subjects are the things (usually images)
       that volunteers do those tasks on.
 
-      [![Project details editor screenshot](./assets/how-to-lab/how-to-3.jpg)](./assets/how-to-lab/how-to-2.jpg)
+      [![Project details editor screenshot](./assets/how-to-lab/how-to-3.jpg)](./assets/how-to-lab/how-to-3.jpg)
 
       ### Define your project.
 
@@ -46,17 +46,17 @@ counterpart.registerTranslations 'en',
       This is where you build the tasks that volunteers actually do. When you first get to this page,
       you'll see there is a sample task (specifically a question) already in place.
 
-      [![Project workflow editor screenshot](./assets/how-to-lab/how-to-4.jpg)](./assets/how-to-lab/how-to-3.jpg)
+      [![Project workflow editor screenshot](./assets/how-to-lab/how-to-4.jpg)](./assets/how-to-lab/how-to-4.jpg)
 
       We want to create this:
 
-      [![Project workflow example](./assets/how-to-lab/how-to-5.jpg)](./assets/how-to-lab/how-to-4.jpg)
+      [![Project workflow example](./assets/how-to-lab/how-to-5.jpg)](./assets/how-to-lab/how-to-5.jpg)
 
       We'll start by replacing the sample text with our question, which asks people how many cats are in the
       image. We add more answers using the "+" button under the "Yes" answer. Use the screenshot below to fill
       in the workflow details (you may need to zoom in!)
 
-      [![Project workflow editing screenshot](./assets/how-to-lab/how-to-6.jpg)](./assets/how-to-lab/how-to-5.jpg)
+      [![Project workflow editing screenshot](./assets/how-to-lab/how-to-6.jpg)](./assets/how-to-lab/how-to-6.jpg)
 
       We added both text and images into the _Help Text_ box using the markdown language ([learn more about markdown](http://markdownlivepreview.com)).
 
@@ -227,7 +227,7 @@ counterpart.registerTranslations 'en',
 
       Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project before it's public).
 
-      [![Project collaborator editor screenshot](./assets/how-to-lab/how-to-13.jpg)](./assets/how-to-lab/how-to-13/jpg)
+      [![Project collaborator editor screenshot](./assets/how-to-lab/how-to-13.jpg)](./assets/how-to-lab/how-to-13.jpg)
 
       _Owner_: The owner is the original project creator. There can be only one.
 
