@@ -21,7 +21,8 @@
     "react-router": "~0.13.2",
     "react-select": "edpaget/react-select#close-after-click",
     "react-translate-component": "~0.9.0",
-    "tether": "HubSpot/tether#df8cd44"
+    "tether": "HubSpot/tether#df8cd44",
+    "twemoji": "^1.4.1"
   },
   "devDependencies": {
     "blue-tape": "~0.1.7",

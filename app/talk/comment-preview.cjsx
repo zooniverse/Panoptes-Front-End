@@ -1,6 +1,7 @@
 React = require 'react'
 MarkdownIt = require 'markdown-it'
 {State} = require 'react-router'
+twemoji = require 'twemoji'
 
 markdownIt = MarkdownIt({linkify: true, breaks: true})
   .use require 'markdown-it-emoji'
@@ -38,8 +39,11 @@ module?.exports = React.createClass
   markdownify: (input) ->
     markdownIt.render(input)
 
+  emojify: (input) ->
+    twemoji.parse(input)
+
   render: ->
-    html = @replaceSymbols(@markdownify(@props.content ? ''))
+    html = @replaceSymbols(@emojify(@markdownify(@props.content ? '')))
 
     <div className='talk-comment-preview'>
       <h1>{@props.header}</h1>
