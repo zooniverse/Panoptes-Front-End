@@ -20,7 +20,7 @@ counterpart.registerTranslations 'en',
       then click the "Build a Project" button in the top right. Here you can see all of the projects you own and
       collaborate on. Click on "Create a project" to start building.
 
-      ![Project Builder screenshot](./assets/how-to-lab/how-to-2.jpg)
+      [![Project Builder screenshot](./assets/how-to-lab/how-to-2.jpg)](./assets/how-to-lab/how-to-3.jpg)
 
       **Start building:** Now you're in the Project Builder itself. This is where the magic happens.
       On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are
