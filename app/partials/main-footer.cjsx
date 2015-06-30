@@ -12,19 +12,21 @@ counterpart.registerTranslations 'en',
       title: 'Projects'
       projectList: 'Projects'
       collectionList: 'Collections'
-    learn:
+    about:
       title: 'About'
       aboutUs: 'About Us'
       ourTeam: 'Our Team'
       education: 'Education'
       publications: 'Publications'
-      contact: 'Contact Us'
-      privacyPolicy: 'Privacy policy'
     talk:
       title: 'Talk'
       zooTalk: 'Zooniverse Talk'
       daily: 'Daily Zooniverse'
       blog: 'Blog'
+    boilerplate:
+      contact: 'Contact Us'
+      jobs: 'Jobs'
+      privacyPolicy: 'Privacy policy'
 
 AdminToggle = React.createClass
   getInitialState: ->
@@ -74,13 +76,12 @@ module.exports = React.createClass
             <Link to="collections"><Translate content="footer.discover.collectionList" /></Link>
           </div>
           <div className="site-map-section">
-            <Translate component="h6" content="footer.learn.title" />
-            <Link to="about"><Translate content="footer.learn.aboutUs" /></Link>
-            <Link to="about-team"><Translate content="footer.learn.ourTeam" /></Link>
-            <Link to="about-publications"><Translate content="footer.learn.publications" /></Link>
-            <Link to="about-contact"><Translate content="footer.learn.contact" /></Link>
-            <Link to="privacy"><Translate content="footer.learn.privacyPolicy" /></Link>
-            <a href="http://jobs.zooniverse.org/">Jobs</a>
+            <Translate component="h6" content="footer.about.title" />
+            <Link to="about"><Translate content="footer.about.aboutUs" /></Link>
+            <Link to="about-education"><Translate content="footer.about.education" /></Link>
+            <Link to="about-team"><Translate content="footer.about.ourTeam" /></Link>
+            <Link to="about-publications"><Translate content="footer.about.publications" /></Link>
+            <Link to="about-contact"><Translate content="footer.boilerplate.contact" /></Link>
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.talk.title" />
@@ -93,6 +94,13 @@ module.exports = React.createClass
           <a href="https://www.facebook.com/therealzooniverse" target="_blank"><i className="fa fa-facebook"></i></a>
           <a href="https://twitter.com/the_zooniverse" target="_blank"><i className="fa fa-twitter"></i></a>
           <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank"><i className="fa fa-google-plus"></i></a>
+        </div>
+      </div>
+      <div className="footer-sole">
+        <div className="centered-grid footer-sole-links">
+          <Link to="privacy"><Translate content="footer.boilerplate.privacyPolicy" /></Link>
+          <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
+          <a href="http://jobs.zooniverse.org/"><Translate content="footer.boilerplate.jobs" /></a>
         </div>
       </div>
     </footer>

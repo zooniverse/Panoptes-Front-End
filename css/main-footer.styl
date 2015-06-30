@@ -1,11 +1,14 @@
+MAIN_FOOTER_BACKGROUND = #272727
+FOOTER_TEXT_COLOR = rgba(white, 0.5)
+
 .main-footer
-  background: #272727
-  color: rgba(white, 0.5)
+  background: MAIN_FOOTER_BACKGROUND
+  color: FOOTER_TEXT_COLOR
   display: flex
+  flex-direction: column
   font-size: 14px
   justify-content: center
   line-height: 20px
-  padding: 3em 3vw
 
   a
     color: inherit
@@ -55,3 +58,16 @@
   .social-media
     a
       margin: 0.5em
+
+  .footer-sole
+    background: darken(MAIN_FOOTER_BACKGROUND, 20%)
+
+  .footer-sole-links
+    color: darken(FOOTER_TEXT_COLOR, 30%)
+    font-size: 0.9em
+
+    a
+      font-size: inherit
+
+    .footer-sole-links-separator
+      margin: 0 1em
