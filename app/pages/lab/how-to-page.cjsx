@@ -16,9 +16,9 @@ counterpart.registerTranslations 'en',
 
       ### Getting Started
 
-      To get started building, go to http://preview.zooniverse.org/panoptes/#/lab and log in to your Zooniverse account,
-      then click the "Build a Project" button in the top right. This is the Project Builder home page.
-      You can see all of the projects you own and collaborate on. Click on "Create a project" to start building.
+      To get started building, go to [the Project Builder home page](./#/lab) and log in to your Zooniverse account,
+      then click the "Build a Project" button in the top right. Here you can see all of the projects you own and
+      collaborate on. Click on "Create a project" to start building.
 
       ![Project Builder screenshot](./assets/how-to-lab/how-to-2.jpg)
 
