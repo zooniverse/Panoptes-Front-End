@@ -66,7 +66,7 @@ module?.exports = React.createClass
     textarea = form.querySelector('textarea')
     body = textarea.value
     user_id = +@state.user.id
-    conversation_id = @state.conversation.id
+    conversation_id = +@state.conversation.id
 
     message = {user_id, body, conversation_id}
 
