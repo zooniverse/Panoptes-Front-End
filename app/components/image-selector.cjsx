@@ -55,17 +55,20 @@ module.exports = React.createClass
     </span>
 
   handleChange: (e) ->
-    [file] = e.target.files
+    if e.target.files.length is 0
+      @setState dataURL: ''
+    else
+      [file] = e.target.files
+      @setState working: true
 
-    @setState working: true
-
-    reader = new FileReader
-    reader.onload = (e) =>
-      img = new Image
-      img.onload = =>
-        @cropImage img, file
-      img.src = e.target.result
-    reader.readAsDataURL file
+      reader = new FileReader
+      reader.onload = (e) =>
+        img = new Image
+        img.onload = =>
+          @cropImage img, file
+        img.src = e.target.result
+      console.log {file}
+      reader.readAsDataURL file
 
   cropImage: (srcImg, srcFile) ->
     canvas = document.createElement 'canvas'
