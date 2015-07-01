@@ -20,39 +20,64 @@ module.exports = React.createClass
   getInitialState: ->
     working: false
     dataURL: ''
+    rootWidth: NaN
+
+  componentDidMount: ->
+    addEventListener 'resize', @updateWidth
+    @updateWidth()
+
+  componentWillUnmount: ->
+    removeEventListener 'resize', @updateWidth
 
   render: ->
-    <span className="image-selector">
-      <div className="image-selector-content">
-        <div>
-          {if @state.dataURL or @props.defaultValue
-            <img ref="preview" src={@state.dataURL || @props.defaultValue} style={display: 'block'} />
-          else
-            @props.placeholder}
+    <span className="image-selector" style={
+      display: 'block'
+      width: @state.rootWidth || 'auto'
+      position: 'relative'
+    }>
+      {if @state.dataURL or @props.defaultValue
+        <img className="image-selector-preview" src={@state.dataURL || @props.defaultValue} style={
+          display: 'block'
+          maxWidth: '100%'
+        } />
+      else
+        @props.placeholder}
 
-          <input type="file" accept={@props.accept} disabled={@state.working} style={
-            cursor: 'pointer'
-            height: '100%'
-            left: 0
-            position: 'absolute'
-            opacity: 0
-            top: 0
-            width: '100%'
-          } onChange={@handleChange} />
+      <input type="file" accept={@props.accept} disabled={@state.working} style={
+        cursor: 'pointer'
+        height: '100%'
+        left: 0
+        position: 'absolute'
+        opacity: 0
+        top: 0
+        width: '100%'
+      } onChange={@handleChange} />
 
-          {if @state.working
-            <span style={
-              fontSize: '2em'
-              left: '50%'
-              position: 'absolute'
-              top: '50%'
-              transform: 'translate(-50%, -50%)'
-            }>
-              <LoadingIndicator />
-            </span>}
-        </div>
-      </div>
+      {if @state.working
+        <span style={
+          fontSize: '2em'
+          left: '50%'
+          position: 'absolute'
+          top: '50%'
+          transform: 'translate(-50%, -50%)'
+        }>
+          <LoadingIndicator />
+        </span>}
     </span>
+
+  updateWidth: ->
+    imageSelectorPreviews = document.getElementsByClassName 'image-selector-preview'
+
+    for img in imageSelectorPreviews
+      img.dataset.displayWas = img.style.display
+      img.style.display = 'none'
+
+    @setState rootWidth: NaN, =>
+      @setState rootWidth: @getDOMNode().clientWidth
+
+      for img in imageSelectorPreviews
+        img.style.display = img.dataset.displayWas
+        delete img.dataset.displayWas
 
   handleChange: (e) ->
     if e.target.files.length is 0

@@ -36,7 +36,7 @@ module.exports = React.createClass
         <PromiseRenderer promise={@avatarGet}>{(avatar) =>
           <div>
             <p className="form-help">Drop an image here (square, less than {Math.floor MAX_AVATAR_SIZE / 1000} KB)</p>
-            <div style={maxWidth: '10em'}>
+            <div style={width: '20vw'}>
               <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatar?.src} onChange={@handleMediaChange.bind(this, 'avatar')} />
             </div>
           </div>
@@ -50,7 +50,7 @@ module.exports = React.createClass
         <PromiseRenderer promise={@headerGet}>{(header) =>
           <div>
             <p className="form-help">Drop an image here (any dimensions, less than {Math.floor MAX_HEADER_SIZE / 1000} KB)</p>
-            <div style={maxWidth: '20em'}>
+            <div style={width: '40vw'}>
               <ImageSelector maxSize={MAX_HEADER_SIZE} defaultValue={header?.src} onChange={@handleMediaChange.bind(this, 'profile_header')} />
             </div>
           </div>
