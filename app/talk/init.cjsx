@@ -5,13 +5,12 @@ authClient = require '../api/auth'
 ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 Moderation = require './lib/moderation'
-ChangeListener = require '../components/change-listener'
-PromiseRenderer = require '../components/promise-renderer'
 ProjectLinker = require './lib/project-linker'
 ROLES = require './lib/roles'
 auth = require '../api/auth'
 {Link} = require 'react-router'
 Loading = require '../components/loading-indicator'
+PopularTags = require './popular-tags'
 
 DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
 DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
@@ -63,13 +62,6 @@ module?.exports = React.createClass
 
   boardPreview: (data, i) ->
     <BoardPreview {...@props} key={i} data={data} />
-
-  tag: (t, i) ->
-    {owner, name} = @props.params
-    if owner and name
-      <span><Link key={i} params={{owner, name}} query={query: t.name} to="project-talk-search">#{t.name}</Link>{' '}</span>
-    else
-      <span><Link key={i} query={query: t.name} to="talk-search">#{t.name}</Link>{' '}</span>
 
   roleReadLabel: (data, i) ->
     <label key={i}><input type="radio" name="role-read" defaultChecked={i is ROLES.length-1} value={data}/>{data}</label>
@@ -135,13 +127,12 @@ module?.exports = React.createClass
 
           <ProjectLinker />
 
-          <PromiseRenderer promise={talkClient.type('tags').get(section: @props.section)}>{(tags) =>
-            if tags.length
-              <section>
-                <h3>Latest Tags:</h3>
-                {tags.map(@tag)}
-              </section>
-          }</PromiseRenderer>
+          <section>
+            <PopularTags
+              header={<h3>Popular Tags:</h3>}
+              section={@props.section}
+              params={@props.params} />
+          </section>
         </div>
       </div>
     </div>

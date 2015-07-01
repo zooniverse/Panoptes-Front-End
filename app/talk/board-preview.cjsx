@@ -36,7 +36,7 @@ module?.exports = React.createClass
 
             <PromiseRenderer promise={talkClient.type('comments').get(lastCommentId)}>{(comment) =>
               <div className="talk-discussion-link">
-                <PromiseRenderer promise={apiClient.type('users').get(comment.user_id.toString())}>{(user) =>
+                <PromiseRenderer promise={apiClient.type('users').get(comment.user_id)}>{(user) =>
                   <Link className="user-profile-link" to="user-profile" params={name: user.login}>
                     <Avatar user={user} />{' '}{user.display_name}
                   </Link>
