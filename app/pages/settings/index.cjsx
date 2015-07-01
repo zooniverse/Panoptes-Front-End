@@ -12,6 +12,7 @@ counterpart.registerTranslations 'en',
     nav:
       accountInformation: "Account Information"
       customizeProfile: "Customize Profile"
+      email: "Email"
 
 UserSettingsPage = React.createClass
   displayName: 'UserSettingsPage'
@@ -31,10 +32,15 @@ UserSettingsPage = React.createClass
                 className="secret-button settings-button" >
                 <Translate content="userSettingsPage.nav.accountInformation" />
               </Link>
-              <Link to="settings-profile"
+              <Link to="profile-settings"
                 type="button"
                 className="secret-button settings-button" >
                 <Translate content="userSettingsPage.nav.customizeProfile" />
+              </Link>
+              <Link to="email-settings"
+                type="button"
+                className="secret-button settings-button" >
+                <Translate content="userSettingsPage.nav.email" />
               </Link>
             </nav>
           </aside>
