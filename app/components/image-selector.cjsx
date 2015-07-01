@@ -92,7 +92,6 @@ module.exports = React.createClass
         img.onload = =>
           @cropImage img, file
         img.src = e.target.result
-      console.log {file}
       reader.readAsDataURL file
 
   cropImage: (srcImg, srcFile) ->
