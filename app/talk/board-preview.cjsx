@@ -32,7 +32,7 @@ module?.exports = React.createClass
         <PromiseRenderer promise={talkClient.type('discussions').get({board_id: @props.data.id}).index(0)}>{(discussion) =>
           if discussion?
             <div className="talk-discussion-link">
-              <PromiseRenderer promise={apiClient.type('users').get(discussion.user_id.toString())}>{(user) =>
+              <PromiseRenderer promise={apiClient.type('users').get(discussion.user_id)}>{(user) =>
                 <Link className="user-profile-link" to="user-profile" params={name: discussion.user_login}>
                   <Avatar user={user} />{' '}{discussion.user_display_name}
                 </Link>

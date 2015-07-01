@@ -75,7 +75,7 @@ module.exports = React.createClass
         discussionRequests = []
         for comment in searches
           do (comment) ->
-            discussionRequests.push talkClient.type('discussions').get(comment.discussion_id.toString()).then (discussionResult) ->
+            discussionRequests.push talkClient.type('discussions').get(comment.discussion_id).then (discussionResult) ->
               comment.discussion = discussionResult
 
         Promise.all(discussionRequests).then =>

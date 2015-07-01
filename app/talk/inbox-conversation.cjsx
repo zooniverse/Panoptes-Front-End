@@ -52,7 +52,7 @@ module?.exports = React.createClass
 
   message: (data, i) ->
     <div className="conversation-message" key={data.id}>
-      <PromiseRenderer promise={apiClient.type('users').get(data.user_id.toString())}>{(commentOwner) =>
+      <PromiseRenderer promise={apiClient.type('users').get(data.user_id)}>{(commentOwner) =>
         <strong><Link to="user-profile" params={name: commentOwner.login}>{commentOwner.display_name}</Link></strong>
       }</PromiseRenderer>
 
