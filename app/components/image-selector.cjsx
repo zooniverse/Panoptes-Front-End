@@ -30,8 +30,7 @@ module.exports = React.createClass
     removeEventListener 'resize', @updateWidth
 
   render: ->
-    <span className="image-selector" style={
-      display: 'block'
+    <div className="image-selector" style={
       width: @state.rootWidth || 'auto'
       position: 'relative'
     }>
@@ -63,7 +62,7 @@ module.exports = React.createClass
         }>
           <LoadingIndicator />
         </span>}
-    </span>
+    </div>
 
   updateWidth: ->
     imageSelectorPreviews = document.getElementsByClassName 'image-selector-preview'

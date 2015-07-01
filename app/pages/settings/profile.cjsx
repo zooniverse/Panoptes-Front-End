@@ -34,10 +34,11 @@ module.exports = React.createClass
       <div className="content-container">
         <h3>Change avatar</h3>
         <PromiseRenderer promise={@avatarGet}>{(avatar) =>
+          placeholder = <p className="content-container">Drop an image here (or click to select).</p>
           <div>
             <p className="form-help">Drop an image here (square, less than {Math.floor MAX_AVATAR_SIZE / 1000} KB)</p>
             <div style={width: '20vw'}>
-              <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatar?.src} onChange={@handleMediaChange.bind(this, 'avatar')} />
+              <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'avatar')} />
             </div>
           </div>
         }</PromiseRenderer>
@@ -48,10 +49,11 @@ module.exports = React.createClass
       <div className="content-container">
         <h3>Change profile header</h3>
         <PromiseRenderer promise={@headerGet}>{(header) =>
+          placeholder = <p className="content-container">Drop an image here (or click to select).</p>
           <div>
             <p className="form-help">Drop an image here (any dimensions, less than {Math.floor MAX_HEADER_SIZE / 1000} KB)</p>
             <div style={width: '40vw'}>
-              <ImageSelector maxSize={MAX_HEADER_SIZE} defaultValue={header?.src} onChange={@handleMediaChange.bind(this, 'profile_header')} />
+              <ImageSelector maxSize={MAX_HEADER_SIZE} defaultValue={header?.src} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'profile_header')} />
             </div>
           </div>
         }</PromiseRenderer>
