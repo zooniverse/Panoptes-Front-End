@@ -7,11 +7,13 @@ module?.exports = React.createClass
     pageCount: React.PropTypes.number
     page: React.PropTypes.number                  # page number
     onPageChange: React.PropTypes.func.isRequired # passed (page) on change
-    firstAndLast: React.PropTypes.bool            # Optional, add 'first' & 'last' buttons
+    firstAndLast: React.PropTypes.bool            # optional, add 'first' & 'last' buttons
+    scrollOnChange: React.PropTypes.bool          # optional, scroll to top of page on change
 
   getDefaultProps: ->
     page: 1
     firstAndLast: true
+    scrollOnChange: true
 
   setPage: (activePage) ->
     @props.onPageChange(activePage)
@@ -31,6 +33,7 @@ module?.exports = React.createClass
   onSelectPage: (e) ->
     selectedPage = +@refs.pageSelect.getDOMNode().value
     @setPage(selectedPage)
+    window.scrollTo(0,0) if @props.scrollOnChange
 
   pageOption: (n, i) ->
     <option key={i} value={n}>
