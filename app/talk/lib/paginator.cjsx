@@ -5,11 +5,13 @@ module?.exports = React.createClass
 
   propTypes:
     pageCount: React.PropTypes.number
-    page: React.PropTypes.number # page number
+    page: React.PropTypes.number                  # page number
     onPageChange: React.PropTypes.func.isRequired # passed (page) on change
+    firstAndLast: React.PropTypes.bool            # Optional, add 'first' & 'last' buttons
 
   getDefaultProps: ->
     page: 1
+    firstAndLast: true
 
   setPage: (activePage) ->
     @props.onPageChange(activePage)
@@ -36,25 +38,43 @@ module?.exports = React.createClass
     </option>
 
   render: ->
+    {page, pageCount} = @props
+
     <div className="paginator">
+      {if @props.firstAndLast
+        <button
+          className="paginator-first"
+          onClick={=> @setPage(1)}
+          disabled={page is 1}>
+          <i className="fa fa-fast-backward" /> First
+        </button>}
+
       <button
         className="paginator-prev"
         onClick={@onClickPrev}
-        disabled={if @props.page is 1 then true else false}>
+        disabled={page is 1}>
         <i className="fa fa-long-arrow-left" /> Previous
       </button>
 
       <div className="paginator-page-selector">
         Page&nbsp;
-        <select value={@props.page} onChange={@onSelectPage} ref="pageSelect">
-          {[1..@props.pageCount].map(@pageOption)}
-        </select> of {@props.pageCount}
+        <select value={page} onChange={@onSelectPage} ref="pageSelect">
+          {[1..pageCount].map(@pageOption)}
+        </select> of {pageCount}
       </div>
 
       <button
         className="paginator-next"
         onClick={@onClickNext}
-        disabled={if @props.page is @props.pageCount then true else false}>
+        disabled={page is pageCount}>
         Next <i className="fa fa-long-arrow-right" />
       </button>
+
+      {if @props.firstAndLast
+        <button
+          className="paginator-last"
+          onClick={=> @setPage(pageCount)}
+          disabled={page is pageCount}>
+          Last <i className="fa fa-fast-forward" />
+        </button>}
     </div>
