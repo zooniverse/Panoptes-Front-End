@@ -9,6 +9,7 @@ merge = require 'lodash.merge'
 getPageOfComment = require './lib/get-page-of-comment'
 {getErrors} = require './lib/validations'
 commentValidations = require './lib/comment-validations'
+talkConfig = require './config'
 
 BOARD_TITLE = 'Notes'            # Name of board to put subject comments
 BOARD_DESCRIPTION = 'General comment threads about individual subjects'
@@ -16,7 +17,7 @@ BOARD_DESCRIPTION = 'General comment threads about individual subjects'
 defaultDiscussionTitle = (subject) ->
   "Subject #{subject.id}"
 
-PAGE_SIZE = 10
+PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkQuickSubjectCommentForm'

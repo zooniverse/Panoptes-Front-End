@@ -18,8 +18,9 @@ Moderation = require './lib/moderation'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 DisplayRoles = require './lib/display-roles'
+talkConfig = require './config'
 
-PAGE_SIZE = 10
+PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'

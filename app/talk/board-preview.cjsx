@@ -8,6 +8,7 @@ PromiseRenderer = require '../components/promise-renderer'
 apiClient = require '../api/client'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
+getPageOfComment = require './lib/get-page-of-comment'
 
 module?.exports = React.createClass
   displayName: 'TalkBoardDisplay'
@@ -36,14 +37,15 @@ module?.exports = React.createClass
 
             <PromiseRenderer promise={talkClient.type('comments').get(lastCommentId)}>{(comment) =>
               <div className="talk-discussion-link">
-                <PromiseRenderer promise={apiClient.type('users').get(comment.user_id.toString())}>{(user) =>
+                <PromiseRenderer promise={apiClient.type('users').get(comment.user_id.toString(), {})}>{(user) =>
                   <Link className="user-profile-link" to="user-profile" params={name: user.login}>
                     <Avatar user={user} />{' '}{user.display_name}
                   </Link>
                 }</PromiseRenderer>{' '}
 
-                <Link to="#{@projectPrefix()}talk-discussion" params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}>{discussion.title}</Link>{' '}
+                  <Link to="#{@projectPrefix()}talk-discussion" params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)} query={page: getPageOfComment(comment, discussion, 10)}>{discussion.title}</Link>{' '}
                 <span>{timeAgo(discussion.updated_at)}</span>
+
               </div>
             }</PromiseRenderer>
         }</PromiseRenderer>
