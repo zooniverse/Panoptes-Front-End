@@ -147,7 +147,7 @@ counterpart.registerTranslations 'en',
       You'll need to have all of your images in a single folder along with a manifest. The manifest file lists
       all the images we want to upload and links each image to additional information, also called metadata,
       such as date, time, and photographer. Read more about the manifest in the subsequent "Details" sections,
-      but for now we've done this for you in the ["Kitteh" folder]([https://drive.google.com/folderview?id=0B9JCiuF48lmgfndFZjdhTVRtcHEtQ3haY2ZYQjFmMW4wb0VWdnpiakZ4OVIyWlRjdXpiTVk&usp=sharing]).
+      but for now we've done this for you in the ["Kitteh" folder](https://drive.google.com/folderview?id=0B9JCiuF48lmgfndFZjdhTVRtcHEtQ3haY2ZYQjFmMW4wb0VWdnpiakZ4OVIyWlRjdXpiTVk&usp=sharing).
 
       Click on the "Upload Subjects" box and navigate to the "Kitteh" folder you downloaded. The easiest thing
       to do is simply hit _cmd + a_ (on Mac, or _ctrl + a_ on Windows) to select everything in that folder.
