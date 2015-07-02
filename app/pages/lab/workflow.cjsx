@@ -127,7 +127,7 @@ EditWorkflowPage = React.createClass
               viewParams = owner: owner.login, name: @props.project.slug
               viewQuery = workflow: @props.workflow.id
               viewHref = @makeHref 'project-classify', viewParams, viewQuery
-              <a href={viewHref} className="standard-button" target="view-workflow">View this workflow</a>
+              <a href={viewHref} className="standard-button" target="_blank">View this workflow</a>
             }</PromiseRenderer>
           </div>
 
