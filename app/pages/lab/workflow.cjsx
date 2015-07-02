@@ -216,7 +216,6 @@ EditWorkflowPage = React.createClass
       @transitionTo 'edit-project-details', projectID: @props.project.id
 
   handleTaskChange: (taskKey, path, value) ->
-    console?.log 'Handling task change', arguments...
     changes = {}
     changes["tasks.#{taskKey}.#{path}"] = value
     @props.workflow.update changes
@@ -239,7 +238,6 @@ module.exports = React.createClass
   render: ->
     <PromiseRenderer promise={apiClient.type('workflows').get @props.params.workflowID}>{(workflow) =>
       <ChangeListener target={workflow}>{=>
-        console.log 'Workflow changed', JSON.stringify workflow
         <EditWorkflowPage {...@props} workflow={workflow} />
       }</ChangeListener>
     }</PromiseRenderer>
