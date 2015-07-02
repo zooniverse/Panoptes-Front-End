@@ -1,6 +1,7 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
 UserSearch = require '../../components/user-search'
+authClient = require '../../api/auth'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
 projectSection = require '../../talk/lib/project-section'
@@ -141,8 +142,28 @@ module.exports = React.createClass
           roleSet['talk_roles'] = talkRoles.filter((role) -> role.links.user == roleSet.links.owner.id)
           roleSet
 
+  fetchUserAndProjectOwner: ->
+    Promise.all [
+      authClient.checkCurrent(),
+      @props.project.get('owner')
+    ]
+
   render: ->
     <div>
+      <div className="form-label">Project Owner</div>
+      <PromiseRenderer promise={@fetchUserAndProjectOwner()} then={([user, projectOwner] = []) =>
+        projectOwnerMessage = if user.id is projectOwner.id
+          {'You are the project owner.'}
+        else
+          projectOwner.display_name + ' is the project owner.'
+
+        <p>
+          {projectOwnerMessage}
+        </p>
+      } />
+
+      <br />
+
       <div className="form-label">Collaborators</div>
 
       <hr />
