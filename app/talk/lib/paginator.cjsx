@@ -17,6 +17,7 @@ module?.exports = React.createClass
 
   setPage: (activePage) ->
     @props.onPageChange(activePage)
+    window.scrollTo(0,0) if @props.scrollOnChange
 
   onClickNext: ->
     {pageCount, page} = @props
@@ -33,7 +34,6 @@ module?.exports = React.createClass
   onSelectPage: (e) ->
     selectedPage = +@refs.pageSelect.getDOMNode().value
     @setPage(selectedPage)
-    window.scrollTo(0,0) if @props.scrollOnChange
 
   pageOption: (n, i) ->
     <option key={i} value={n}>
