@@ -122,6 +122,18 @@ EditWorkflowPage = React.createClass
           <hr />
 
           <div>
+            <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
+              # React-router completely overrides clicking on links. Unbelievable.
+              viewParams = owner: owner.login, name: @props.project.slug
+              viewQuery = workflow: @props.workflow.id
+              viewHref = @makeHref 'project-classify', viewParams, viewQuery
+              <a href={viewHref} className="standard-button" target="view-workflow">View this workflow</a>
+            }</PromiseRenderer>
+          </div>
+
+          <hr />
+
+          <div>
             <small>
               <button type="button" className="minor-button" disabled={@state.deleteInProgress} data-busy={@state.deleteInProgress || null} onClick={@handleDelete}>
                 Delete this workflow
