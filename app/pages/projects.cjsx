@@ -20,8 +20,9 @@ module.exports = React.createClass
 
   listProjects: ->
     query =
-      launch_approved: true
       include:'owners,avatar'
+    if !apiClient.params.admin
+      query.launch_approved = true
     Object.assign query, @props.query
 
     apiClient.type('projects').get query
