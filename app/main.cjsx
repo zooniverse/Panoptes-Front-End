@@ -35,6 +35,8 @@ routes = <Route handler={App}>
 
   <Route name="reset-password" handler={require './pages/reset-password'} />
 
+  <Route name="unsubscribe" handler={require './pages/unsubscribe'} />
+
   <Route path="account" handler={require './pages/sign-in'}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
     <Route name="register" handler={require './partials/register-form'} />
