@@ -32,10 +32,12 @@ module?.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     @fetchCollectionSubjects pick nextProps.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
-  fetchCollectionSubjects: (query) ->
+  fetchCollectionSubjects: (query = null) ->
     @setState
       errorThrown: false
       isLoading: true
+
+    query ?= @props.query
 
     defaultQuery =
       page: 1
@@ -57,9 +59,20 @@ module?.exports = React.createClass
     nextQuery = Object.assign @props.query, { page }
     @transitionTo @getPath(), @props.params, nextQuery
 
+  handleDeleteSubject: (subject) ->
+    @props.collection.removeLink 'subjects', [subject.id.toString()]
+      .then =>
+        @fetchCollectionSubjects()
+
   render: ->
-    subjectNode = (subject) ->
-      <SubjectViewer defaultStyle={false} key={subject.id} subject={subject} />
+    subjectNode = (subject) =>
+      <div className="collection-subject-viewer" key={subject.id}>
+        <SubjectViewer defaultStyle={false} subject={subject}>
+          <button type="button" className="collection-subject-viewer-delete-button" onClick={@handleDeleteSubject.bind @, subject}>
+            <i className="fa fa-close" />
+          </button>
+        </SubjectViewer>
+      </div>
 
     <div className="collections-show">
       {if @state.isLoading

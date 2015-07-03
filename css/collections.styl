@@ -15,18 +15,34 @@
     max-width: 1200px
     margin: 0 auto
 
-    .subject-viewer
+    .collection-subject-viewer
       width: 18em
       border: 1px solid #cdcdcd
       border-radius: 5px
-      overflow: hidden
       margin: 0 1.66em 1.66em 0
       text-align: center
       display: inline-block
-      
+      position: relative
+
     img
       width: 100%
       max-height: 250px
+
+    .collection-subject-viewer-delete-button
+      background: white
+      border: none
+      border-bottom-left-radius: 50%
+      cursor: pointer
+      display: flex
+      height: 1.3em
+      margin-left: -2px
+      position: absolute
+      right: -0.3em
+      top: -0.3em
+      width: 1.3em
+
+      &:hover
+        color: red
 
   .helpful-tip
     color: #777
@@ -45,11 +61,11 @@
     height: 4em
     vertical-align: middle
     margin: -2em 1vw -2em 0px
- 
+
 .collections-manager
   h1
     margin-bottom: 20px
-    
+
   .collection-search
     display: inline-block
     width: 70%
@@ -61,7 +77,7 @@
     float: right
 
 .collections-create-form
-  
+
   .collection-name-input
     border: 1px solid #cccccc
     border-color: #d9d9d9 #cccccc #b3b3b3
@@ -84,7 +100,3 @@
 
     button
       @extends .standard-button
-
-
-
-    
