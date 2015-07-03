@@ -251,6 +251,13 @@ module.exports = new Model
       else
         throw new Error 'Failed to sign out; not signed in'
 
+  unsubscribeEmail: ({email}) ->
+    @_getAuthToken().then (token) =>
+      data =
+        authenticity_token: token
+        email: email
+
+      client.post '/../unsubscribe', data, JSON_HEADERS
 # For quick debugging:
 window?.zooAuth = module.exports
 window?.log = console?.info.bind console, 'LOG'
