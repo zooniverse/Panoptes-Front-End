@@ -54,7 +54,7 @@ module?.exports = React.createClass
                   if discussion?
                     user_id = @props.user?.id
                     body = commentText
-                    discussion_id = discussion.id
+                    discussion_id = +discussion.id
 
                     comment = merge {}, {user_id, discussion_id, body}
 
