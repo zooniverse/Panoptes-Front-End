@@ -6,6 +6,7 @@ counterpart = require 'counterpart'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 Paginator = require '../talk/lib/paginator'
+PromiseRenderer = require '../components/promise-renderer'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
 
@@ -20,12 +21,6 @@ module?.exports = React.createClass
   displayName: 'CollectionShowList'
   mixins: [Router.Navigation, Router.State]
 
-  getInitialState: ->
-    errorThrown: false
-    isLoading: true
-    pageCount: 0
-    subjects: []
-
   componentDidMount: ->
     @fetchCollectionSubjects pick @props.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
@@ -33,10 +28,6 @@ module?.exports = React.createClass
     @fetchCollectionSubjects pick nextProps.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
   fetchCollectionSubjects: (query = null) ->
-    @setState
-      errorThrown: false
-      isLoading: true
-
     query ?= @props.query
 
     defaultQuery =
@@ -46,14 +37,7 @@ module?.exports = React.createClass
     query = Object.assign defaultQuery, query
     @props.collection.get 'subjects', query
       .then (subjects) =>
-        newState =
-          subjects: subjects
-          pageCount: subjects[0]?.getMeta().page_count || 0
-        @setState newState
-      .catch =>
-        @setState errorThrown: true
-      .then =>
-        @setState isLoading: false
+        return subjects
 
   onPageChange: (page) ->
     nextQuery = Object.assign @props.query, { page }
@@ -62,7 +46,8 @@ module?.exports = React.createClass
   handleDeleteSubject: (subject) ->
     @props.collection.removeLink 'subjects', [subject.id.toString()]
       .then =>
-        @fetchCollectionSubjects()
+        @props.collection.uncacheLink 'subjects'
+        @forceUpdate()
 
   render: ->
     subjectNode = (subject) =>
@@ -74,23 +59,30 @@ module?.exports = React.createClass
         </SubjectViewer>
       </div>
 
-    <div className="collections-show">
-      {if @state.isLoading
-        <Loading />}
+    pendingFunc = ->
+      <Loading />
 
-      {if @state.errorThrown
-        <Translate component="p" className="form-help error" content="collectionSubjectListPage.error" />}
+    catchFunc = ->
+      <Translate component="p" className="form-help error" content="collectionSubjectListPage.error" />
 
-      {if @state.subjects.length is 0 && !@state.isLoading && !@state.errorThrown
-        <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
+    thenFunc = (subjects) =>
+      <div className="collections-show">
+        {if subjects.length is 0
+          <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
 
-      {if @state.subjects.length > 0 && !@state.isLoading
-        <div>
-          <div className="collection-subjects-list">{@state.subjects.map(subjectNode)}</div>
+        {if subjects.length > 0
+          <div>
+            <div className="collection-subjects-list">{subjects.map(subjectNode)}</div>
 
-          <Paginator
-            page={+@props.query.page}
-            onPageChange={@onPageChange}
-            pageCount={@state.pageCount} />
-        </div>}
-    </div>
+            <Paginator
+              page={+@props.query.page}
+              onPageChange={@onPageChange}
+              pageCount={subjects[0].getMeta().page_count} />
+          </div>}
+      </div>
+
+    <PromiseRenderer
+      promise={@fetchCollectionSubjects()}
+      pending={pendingFunc}
+      catch={catchFunc}
+      then={thenFunc} />
