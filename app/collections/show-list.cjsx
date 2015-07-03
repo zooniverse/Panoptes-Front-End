@@ -1,41 +1,83 @@
 React = require 'react'
+Router = require 'react-router'
+pick = require 'lodash.pick'
+Translate = require 'react-translate-component'
+counterpart = require 'counterpart'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
-PromiseRenderer = require '../components/promise-renderer'
-{Navigation} = require 'react-router'
+Loading = require '../components/loading-indicator'
+
+VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
+
+counterpart.registerTranslations 'en',
+  collectionSubjectListPage:
+    error: 'There was an error listing this collection.'
+    noSubjects: 'No subjects in this collection.'
 
 module?.exports = React.createClass
   displayName: 'CollectionShowList'
-  mixins: [Navigation]
+  mixins: [Router.Navigation, Router.State]
 
   getInitialState: ->
-    page: 1 # start on page 1
+    errorThrown: false
+    isLoading: true
+    pageCount: 0
+    subjects: []
 
-  subjectsRequest: ->
-    @props.collection.get("subjects", page: @state.page)
+  componentDidMount: ->
+    @fetchCollectionSubjects pick @props.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
-  goToPage: (n) ->
-    @transitionTo(@props.path, @props.params, {page: n})
-    @setState(page: n)
+  componentWillReceiveProps: (nextProps) ->
+    @fetchCollectionSubjects pick nextProps.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
-  subject: (sub) ->
-    <SubjectViewer defaultStyle={false} key={sub.id} subject={sub} />
+  fetchCollectionSubjects: (query) ->
+    @setState
+      errorThrown: false
+      isLoading: true
+
+    defaultQuery =
+      page: 1
+      page_size: 12
+
+    query = Object.assign defaultQuery, query
+    @props.collection.get 'subjects', query
+      .then (subjects) =>
+        newState =
+          subjects: subjects
+          pageCount: subjects[0]?.getMeta().page_count || 0
+        @setState newState
+      .catch =>
+        @setState errorThrown: true
+      .then =>
+        @setState isLoading: false
+
+  onPageChange: (page) ->
+    nextQuery = Object.assign @props.query, { page }
+    @transitionTo @getPath(), @props.params, nextQuery
 
   render: ->
-    <div className="collections-show">
-      <PromiseRenderer promise={@subjectsRequest()}>{(subjects) =>
-        if subjects.length > 0
-          <div>
-            <div className="collection-subjects-list">{subjects.map(@subject)}</div>
+    subjectNode = (subject) ->
+      <SubjectViewer defaultStyle={false} key={subject.id} subject={subject} />
 
-            <Paginator
-              page={@state.page}
-              onPageChange={@goToPage}
-              pageCount={subjects[0].getMeta()?.page_count} />
-          </div>
-        else
-          <p>No subjects in this collection.</p>
-      }</PromiseRenderer>
+    <div className="collections-show">
+      {if @state.isLoading
+        <Loading />}
+
+      {if @state.errorThrown
+        <Translate component="p" className="form-help error" content="collectionSubjectListPage.error" />}
+
+      {if @state.subjects.length is 0 && !@state.isLoading && !@state.errorThrown
+        <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
+
+      {if @state.subjects.length > 0 && !@state.isLoading
+        <div>
+          <div className="collection-subjects-list">{@state.subjects.map(subjectNode)}</div>
+
+          <Paginator
+            page={+@props.query.page}
+            onPageChange={@onPageChange}
+            pageCount={@state.pageCount} />
+        </div>}
     </div>
