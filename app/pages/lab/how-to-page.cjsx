@@ -223,6 +223,18 @@ counterpart.registerTranslations 'en',
 
       _Education_: If you are a researcher open to collaborating with educators you can state that here, include educational content, and describe how you'd like to help educators use your project. Also, if your project is primarily for educational purposes you can describe that here. This page will only display if you add content to it.
 
+      ### DETAILS - Media
+      
+      You can upload your own media to your project (such as example images for your help pages) so  you can link to it without an external host. To start uploading, drop an image into the box (or click it to bring up your file browser and select a file).
+      
+      Once the image has uploaded, it will appear above the "Add an image" box. You can then copy the markdown text beneath the image into your project, or add another image.
+      
+      Currently there is a limit of 20 uploaded images per project.
+      
+      ### DETAILS - Visibility
+      
+      This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](#/lab-policies).
+      
       ### DETAILS - Collaborators
 
       Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project before it's public).
