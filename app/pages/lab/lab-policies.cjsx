@@ -15,11 +15,11 @@ counterpart.registerTranslations 'en',
       Firstly, **Public Projects**.
 
       Got your own crowd? Want only members of your collaboration to sort through your data? Then you can simply
-      share the URL with those you want to take part. There is a limit of 10,000 subjects per project - contact us
+      share the URL with those you want to take part. There is a limit of 10,000 subjects per project - [contact us](#/about/contact)
       if you'd like to host more. NOTE: This upload limit applies to all projects initially.
 
       _If you're planning a big public launch, or you think your project might attract significant attention, you
-      should still let us know so we can support you properly. Otherwise you can get on with using your project._
+      should still [let us know](#/about/contact) so we can support you properly. Otherwise you can get on with using your project._
 
       For project teams who want to work with the established, ever-keen Zooniverse community, the first step is
       to turn your project into a **Beta Project**. You can do this from the main interface. Clicking the "_Apply for beta_"
@@ -49,7 +49,7 @@ counterpart.registerTranslations 'en',
       with their community, on the discussion forums and elsewhere.
 
       _If you'd like your project to launch on a particular day, perhaps to coincide with a press release,
-      please get in [touch](#/about/contact)._
+      please [get in touch](#/about/contact)._
 
       ### Rules and Regulations
 
@@ -61,7 +61,7 @@ counterpart.registerTranslations 'en',
       - The content is likely to cause offense, or is suitable only for an adult audience.
       - The copyright on material uploaded to the site is not clear; please only use content you have the right to use!
 
-      If in doubt - please get in touch.
+      If in doubt - please [get in touch](#/about/contact).
 
       We're keen to find out how people want to use our platform, and at present it’s free to use. If you want more
       than the standard 10,000 subjects per user, are likely to want more than 100GB of space for those
@@ -69,7 +69,7 @@ counterpart.registerTranslations 'en',
 
       We do, however, reserve the right to have the final say on which projects appear on the main
       page and which are promoted to the Zooniverse community. In particular, if you have a project
-      that is very close to an existing Zooniverse project, please get in touch to discuss the situation;
+      that is very close to an existing Zooniverse project, please [get in touch](#/about/contact) to discuss the situation;
       it is in no-one's interest to, for example, have seventeen different galaxy classification projects
       competing for attention.
 
