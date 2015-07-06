@@ -127,8 +127,16 @@ Classifier = React.createClass
       </nav>
     </div>
 
-  handleSubjectImageLoad: (e) ->
+  handleSubjectImageLoad: (e, frameIndex) ->
     @setState subjectLoading: false
+
+    {naturalWidth, naturalHeight, clientWidth, clientHeight} = e.target
+
+    changes = {}
+    changes["metadata.dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
+
+    @props.classification.update changes
+
     @props.onLoad? arguments...
 
   updateAnnotations: (classification) ->

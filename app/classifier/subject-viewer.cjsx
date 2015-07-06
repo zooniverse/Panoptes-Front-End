@@ -163,7 +163,7 @@ module.exports = React.createClass
         @handleResize()
       else
         @setState {naturalWidth, naturalHeight}, @handleResize
-      @props.onLoad? arguments...
+      @props.onLoad? e, @state.frame
 
   handleFrameChange: (frame) ->
     @setState {frame}
