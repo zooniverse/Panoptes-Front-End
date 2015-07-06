@@ -34,6 +34,7 @@ module?.exports = React.createClass
     content: @props.content
     reply: ''
     loading: false
+    error: ''
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.reply
@@ -48,12 +49,12 @@ module?.exports = React.createClass
 
     @props.onSubmitComment?(e, fullComment, @state.subject)
       .then =>
-        @refs.textarea.getDOMNode().value = ""
+        @refs.textarea.getDOMNode().value = ''
         @hideChildren()
-        @setState content: ""
+        @setState content: '', error: ''
         @setFeedback @props.submitFeedback
       .catch (e) =>
-        @setFeedback(e.message)
+        @setState(error: e.message)
 
   onPreviewClick: (e) ->
     @toggleComponent('preview')
@@ -115,8 +116,6 @@ module?.exports = React.createClass
 
       {if @state.subject
         <img className="talk-comment-focus-image" src={getSubjectLocation(@state.subject).src} />}
-
-      {feedback}
 
       <div className="talk-comment-buttons-container">
         <button title="link"className='talk-comment-insert-link-button' onClick={@onInsertLinkClick}>
@@ -194,7 +193,12 @@ module?.exports = React.createClass
             </button>}
         </section>
 
-        {validationErrors}
+        {feedback}
+
+        <div className="submit-error">
+          {validationErrors}
+          {@state.error ? null}
+        </div>
       </form>
 
       <div className="talk-comment-children">
