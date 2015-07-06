@@ -64,10 +64,10 @@ module?.exports = React.createClass
     @setState editing: false
 
   onSubmitComment: (e, textContent, subject) ->
-    # update comment here...
     @props.onUpdateComment?(textContent, subject, @props.data.id)
-    @setState editing: false
-    @setFeedback "Comment Updated"
+      .then =>
+        @setState editing: false
+        @setFeedback "Comment Updated"
 
   commentValidations: (commentBody) ->
     console.log "validating comment", commentBody
@@ -163,7 +163,7 @@ module?.exports = React.createClass
             content={@props.data.body}
             validationCheck={@commentValidations}
             validationErrors={@state.commentValidationErrors}
-            submitFeedback={"Comment will update here..."}
+            submitFeedback={"Updated!"}
             submit={"Update Comment"}
             onCancelClick={@onCancelClick}
             onSubmitComment={@onSubmitComment}/>}

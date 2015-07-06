@@ -18,7 +18,7 @@ module?.exports = React.createClass
     header: React.PropTypes.string
     placeholder: React.PropTypes.string
     submitFeedback: React.PropTypes.string
-    onSubmitComment: React.PropTypes.func # called on submit and passed (e, textarea-content, subject)
+    onSubmitComment: React.PropTypes.func # called on submit and passed (e, textarea-content, subject), expected to return something thenable
     onCancelClick: React.PropTypes.func # adds cancel button and calls callback on click if supplied
 
   getDefaultProps: ->
@@ -47,11 +47,13 @@ module?.exports = React.createClass
     fullComment = @state.reply.concat(textareaValue)
 
     @props.onSubmitComment?(e, fullComment, @state.subject)
-
-    @refs.textarea.getDOMNode().value = ""
-    @hideChildren()
-    @setState content: ""
-    @setFeedback @props.submitFeedback
+      .then =>
+        @refs.textarea.getDOMNode().value = ""
+        @hideChildren()
+        @setState content: ""
+        @setFeedback @props.submitFeedback
+      .catch (e) =>
+        @setFeedback(e.message)
 
   onPreviewClick: (e) ->
     @toggleComponent('preview')
