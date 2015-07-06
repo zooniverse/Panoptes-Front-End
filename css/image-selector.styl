@@ -1,36 +1,5 @@
 .image-selector
-  display: inline-block
-  background: rgba(128, 128, 128, 0.2)
-  border: 1px solid rgba(128, 128, 128, 0.4)
+  background: rgba(gray, 0.2)
+  border: 1px solid rgba(gray, 0.4)
   border-radius: 5px
-  position: relative
   overflow: hidden
-  width: 100%
-  
-  &:before
-    content: ""
-    display: block
-    padding-top: 100%
-
-  .image-selector-content
-    position:  absolute
-    top: 0
-    left: 0
-    bottom: 0
-    right: 0
-
-    div
-      display: table
-      width: 100%
-      height: 100%
-
-      .form-help
-        display: table-cell
-        text-align: center
-        vertical-align: middle
-
-      img
-        height: inherit
-        width: inherit
-        
-  

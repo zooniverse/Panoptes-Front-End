@@ -94,7 +94,7 @@ module.exports = React.createClass
             <LoadingIndicator off={not @state.creationInProgress} />
           </button>&nbsp;
           <Link className="standard-button" to="lab-policies">Project building policies</Link>&nbsp;
-          <a className="standard-button" href="https://docs.google.com/document/d/1EpiOJFMGFzIq34NXkRvsO8-Hixl4MzxvwPm0_aiF9xo/edit#heading=h.gjdgxs" target="_blank">How to build a project</a>
+          <Link className="standard-button" to="lab-how-to">How to build a project</Link>
           {if @state.creationError?
             <p className="form-help error">{@state.creationError.message}</p>}
         </div>

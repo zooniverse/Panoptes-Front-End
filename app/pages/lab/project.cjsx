@@ -63,7 +63,7 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-media" params={linkParams} className="nav-list-item" title="Add any images you’d like to use in this project’s introduction, science case, results, FAQ, or education content pages.">
             Media
           </Link></li>
-          <li><Link to="edit-project-visibility" params={linkParams} className="nav-list-item">
+          <li><Link to="edit-project-visibility" params={linkParams} className="nav-list-item" title="Decide whether your project is public and whether it's ready to go live.">
             Visibility
           </Link></li>
 
@@ -240,7 +240,6 @@ module.exports = React.createClass
               <p className="form-help">Loading project</p>
             </div>
           } then={([project, owners]) =>
-            console.log user, owners
             if user in owners
               <EditProjectPage {...@props} project={project} />
             else

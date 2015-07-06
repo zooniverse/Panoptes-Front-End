@@ -13,7 +13,7 @@ module.exports = React.createClass
     discussion = @props.data.discussion
 
     <div className="talk-search-result">
-      <CommentLink comment={@props.data}>Comment #{discussion.links.comments.indexOf(@props.data.id.toString()) + 1} in {discussion.title}</CommentLink>
+      <CommentLink comment={@props.data}>Comment #{discussion.links.comments.indexOf(@props.data.id) + 1} in {discussion.title}</CommentLink>
       <CommentPreview content={@props.data.body} header={null} />
       <DiscussionPreview data={discussion} />
     </div>

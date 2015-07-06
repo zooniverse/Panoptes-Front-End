@@ -111,7 +111,7 @@ module?.exports = React.createClass
             {if @props.data.focus_id
               <PromiseRenderer
                 promise={
-                  apiClient.type('subjects').get(@props.data.focus_id.toString())
+                  apiClient.type('subjects').get(@props.data.focus_id)
                 }
                 then={(subject) =>
                   <div className="polaroid-image">

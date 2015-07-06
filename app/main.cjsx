@@ -35,6 +35,8 @@ routes = <Route handler={App}>
 
   <Route name="reset-password" handler={require './pages/reset-password'} />
 
+  <Route name="unsubscribe" handler={require './pages/unsubscribe'} />
+
   <Route path="account" handler={require './pages/sign-in'}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
     <Route name="register" handler={require './partials/register-form'} />
@@ -48,9 +50,11 @@ routes = <Route handler={App}>
 
   <Route name="inbox" handler={require './talk/inbox'} />
   <Route name="inbox-conversation" path="inbox/:conversation" handler={require './talk/inbox-conversation'} />
-  <Route name="settings" path="settings" handler={require './pages/profile/settings'}>
-    <DefaultRoute name="settings-account-information" handler={require './pages/profile/account-information'} />
-    <Route path="customize" name="settings-customize-profile" handler={require './pages/profile/customize-profile' } />
+
+  <Route path="settings" handler={require './pages/settings'}>
+    <DefaultRoute name="settings" handler={require './pages/settings/account'} />
+    <Route name="profile-settings" path="profile" handler={require './pages/settings/profile' } />
+    <Route name="email-settings" path="email" handler={require './pages/settings/email' } />
   </Route>
 
   <Route name="projects" handler={require './pages/projects'} />
@@ -101,6 +105,7 @@ routes = <Route handler={App}>
     <Route name="edit-project-visibility" path="visibility" handler={require './pages/lab/visibility'} />
   </Route>
   <Route name="lab-policies" path="lab-policies" handler={require './pages/lab/lab-policies'} />
+  <Route name="lab-how-to" path="lab-how-to" handler={require './pages/lab/how-to-page'} />
 
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={require './pages/not-found'} />

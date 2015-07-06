@@ -108,7 +108,7 @@ module?.exports = React.createClass
   onLikeComment: (commentId) ->
     user = @state.user
 
-    talkClient.type('comments').get(commentId.toString())
+    talkClient.type('comments').get(commentId)
       .then (comment) =>
         return alert("Hey you can't upvote your own comment!") if +user.id is +comment.user_id
 

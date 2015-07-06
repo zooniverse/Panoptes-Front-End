@@ -85,25 +85,23 @@ module.exports = React.createClass
     # but the JSON-API lib doesn't cache failed requests,
     # so do it manually:
 
-    @avatarSrcGet ?= @props.project.get 'avatar'
-      .then (avatar) ->
-        avatar.src
+    @avatarGet ?= @props.project.get 'avatar'
       .catch ->
-        ''
+        null
 
-    @backgroundSrcGet ?= @props.project.get 'background'
-      .then (background) ->
-        background.src
+    @backgroundGet ?= @props.project.get 'background'
       .catch ->
-        ''
+        null
+
     <div>
       <p className="form-help">Input the basic information about your project, and set up its home page.</p>
       <div className="columns-container">
         <div>
           Avatar<br />
-          <PromiseRenderer promise={@avatarSrcGet} then={(avatarSrc) =>
+          <PromiseRenderer promise={@avatarGet} then={(avatar) =>
+            console.log 'Avatar is', avatar
             placeholder = <div className="form-help content-container">Drop an avatar image here</div>
-            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
+            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
           } />
           {if @state.avatarError
             <div className="form-help error">{@state.avatarError.toString()}</div>}
@@ -113,9 +111,10 @@ module.exports = React.createClass
           <hr />
 
           Background image<br />
-          <PromiseRenderer promise={@backgroundSrcGet} then={(backgroundSrc) =>
+          <PromiseRenderer promise={@backgroundGet} then={(background) =>
+            console.log 'Background is', background
             placeholder = <div className="form-help content-container">Drop a background image here</div>
-            <ImageSelector maxSize={MAX_BACKGROUND_SIZE} defaultValue={backgroundSrc} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
+            <ImageSelector maxSize={MAX_BACKGROUND_SIZE} defaultValue={background?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
           } />
           {if @state.backgroundError
             <div className="form-help error">{@state.backgroundError.toString()}</div>}
@@ -152,7 +151,7 @@ module.exports = React.createClass
               <br />
               <textarea className="standard-input full" name="introduction" rows="10" value={@props.project.introduction} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
-            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<insert link to best markdown tutorial>), so you can add formatting.</small>
+            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<a href="http://markdownlivepreview.com/" target="_blank">learn more about markdown</a>), so you can add formatting.</small>
           </p>
 
           <p>
@@ -197,8 +196,10 @@ module.exports = React.createClass
         putFile resource.src, file
       .then =>
         @props.project.uncacheLink type
-        @["#{type}SrcGet"] = null # Uncache the local request so that rerendering makes it again.
-        @props.project.emit 'change'
+        @["#{type}Get"] = null # Uncache the local request so that rerendering makes it again.
+        @props.project.refresh() # Update the resource's links.
+      .then =>
+        @props.project.emit 'change' # Re-render
       .catch (error) =>
         newState = {}
         newState[errorProp] = error
