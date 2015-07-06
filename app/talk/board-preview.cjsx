@@ -9,6 +9,9 @@ apiClient = require '../api/client'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 getPageOfComment = require './lib/get-page-of-comment'
+config = require './config'
+
+PAGE_SIZE = config.boardPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkBoardDisplay'
@@ -43,7 +46,7 @@ module?.exports = React.createClass
                   </Link>
                 }</PromiseRenderer>{' '}
 
-                  <Link to="#{@projectPrefix()}talk-discussion" params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)} query={page: getPageOfComment(comment, discussion, 10)}>{discussion.title}</Link>{' '}
+                <Link to="#{@projectPrefix()}talk-discussion" params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)} query={page: getPageOfComment(comment, discussion, PAGE_SIZE)}>{discussion.title}</Link>{' '}
                 <span>{timeAgo(discussion.updated_at)}</span>
 
               </div>
