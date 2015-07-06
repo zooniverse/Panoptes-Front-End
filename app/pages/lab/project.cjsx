@@ -240,7 +240,6 @@ module.exports = React.createClass
               <p className="form-help">Loading project</p>
             </div>
           } then={([project, owners]) =>
-            console.log user, owners
             if user in owners
               <EditProjectPage {...@props} project={project} />
             else
