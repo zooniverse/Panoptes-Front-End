@@ -168,6 +168,10 @@ Classifier = React.createClass
     @props.classification.update
       completed: true
       'metadata.finished_at': (new Date).toISOString()
+      'metadata.viewport':
+        width: innerWidth
+        height: innerHeight
+
     @props.onComplete?()
 
   toggleExpertClassification: (value) ->
