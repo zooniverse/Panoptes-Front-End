@@ -1,6 +1,7 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
 UserSearch = require '../../components/user-search'
+authClient = require '../../api/auth'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
 projectSection = require '../../talk/lib/project-section'
@@ -8,19 +9,14 @@ projectSection = require '../../talk/lib/project-section'
 ID_PREFIX = 'LAB_COLLABORATORS_PAGE_'
 
 POSSIBLE_ROLES = {
-  owner: 'admin',
   collaborator: 'admin',
   expert: 'team',
   scientist: 'scientist',
   moderator: 'moderator',
-  tester: 'team',
-#  translator: 'team',
+  tester: 'team'
 }
 
 ROLES_INFO =
-  owner:
-    label: 'Owner'
-    description: 'The owner is the original project creator. There can be only one.'
   collaborator:
     label: 'Collaborator'
     description: 'Collaborators have full access to edit workflows and project content, including deleting some or all of the project.'
@@ -65,8 +61,8 @@ CollaboratorCreator = React.createClass
 
         <table className="standard-table">
           <tbody>
-            {for role, _ of POSSIBLE_ROLES
-              <tr>
+            {for role, label of POSSIBLE_ROLES
+              <tr key={role + '-' + label}>
                 <td><input id={ID_PREFIX + role} type="checkbox" name="role" value={role} disabled={role is 'owner'}/></td>
                 <td><strong><label htmlFor={ID_PREFIX + role}>{ROLES_INFO[role].label}</label></strong></td>
                 <td>{ROLES_INFO[role].description}</td>
@@ -146,18 +142,37 @@ module.exports = React.createClass
           roleSet['talk_roles'] = talkRoles.filter((role) -> role.links.user == roleSet.links.owner.id)
           roleSet
 
+  fetchUserAndProjectOwner: ->
+    Promise.all [
+      authClient.checkCurrent(),
+      @props.project.get('owner')
+    ]
+
   render: ->
     <div>
+      <div className="form-label">Project Owner</div>
+      <PromiseRenderer promise={@fetchUserAndProjectOwner()} then={([user, projectOwner] = []) =>
+        projectOwnerMessage = if user.id is projectOwner.id
+          {'You are the project owner.'}
+        else
+          projectOwner.display_name + ' is the project owner.'
+
+        <p>
+          {projectOwnerMessage}
+        </p>
+      } />
+
+      <br />
+
       <div className="form-label">Collaborators</div>
 
       <hr />
 
       {if @state.error?
         <p className="form-help error">{@state.error.toString()}</p>}
+
       <PromiseRenderer promise={@fetchAllRoles()} then={(projectRoleSets) =>
         <div>
-          {ownerSet = projectRoleSets.filter((set) -> 'owner' in set.roles)[0]
-          <PromiseRenderer key={ownerSet.id} promise={ownerSet.get 'owner'} then={@renderUserRow.bind this, ownerSet} />}
           {if projectRoleSets.length > 1
             for projectRoleSet in projectRoleSets when 'owner' not in projectRoleSet.roles
               <PromiseRenderer key={projectRoleSet.id} promise={projectRoleSet.get 'owner'} then={@renderUserRow.bind this, projectRoleSet} />
@@ -207,7 +222,9 @@ module.exports = React.createClass
       ).save()
     else
       projectRoleSet.roles.splice index, 1
-      projectRoleSet.talk_roles.filter((talkRole) -> talkRole.name == POSSIBLE_ROLES[role])[0].delete()
+      filteredRoles = projectRoleSet.talk_roles.filter (talkRole) ->
+        talkRole.name is POSSIBLE_ROLES[role]
+      filteredRoles[0]?.delete()
 
     Promise.all([projectRoleSet.update('roles').save(), talkRoleAction])
       .catch (error) =>
