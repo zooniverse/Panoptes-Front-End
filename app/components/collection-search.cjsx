@@ -16,7 +16,7 @@ module.exports = React.createClass
     query =
       page_size: 10
       current_user_roles: 'owner,collaborator'
-    query.display_name = "#{value}*" unless value is ''
+    query.search = "#{value}" unless value is ''
     query.project_id = @props.project.id if @props.project?
 
     apiClient.type('collections').get query
