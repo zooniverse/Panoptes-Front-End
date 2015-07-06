@@ -27,7 +27,7 @@ function flag_externals {
 }
 
 function rename_with_hash {
-  md5=$(md5 -q "$1")
+  md5=$($(which md5sum || which md5) -q "$1")
   fullname=$(basename "$1")
   filename="${fullname%.*}"
   extension="${fullname##*.}"
