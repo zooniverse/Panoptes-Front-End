@@ -133,7 +133,7 @@ Classifier = React.createClass
     {naturalWidth, naturalHeight, clientWidth, clientHeight} = e.target
 
     changes = {}
-    changes["metadata.dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
+    changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
 
     @props.classification.update changes
 
