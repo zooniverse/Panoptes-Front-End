@@ -1,41 +1,98 @@
 React = require 'react'
-talkClient = require '../api/talk'
+Router = require 'react-router'
+intersection = require 'lodash.intersection'
+pick = require 'lodash.pick'
+Translate = require 'react-translate-component'
+counterpart = require 'counterpart'
 apiClient = require '../api/client'
 Paginator = require '../talk/lib/paginator'
-SubjectViewer = require '../components/subject-viewer'
 PromiseRenderer = require '../components/promise-renderer'
-{Navigation} = require 'react-router'
+SubjectViewer = require '../components/subject-viewer'
+Loading = require '../components/loading-indicator'
+
+VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
+
+counterpart.registerTranslations 'en',
+  collectionSubjectListPage:
+    error: 'There was an error listing this collection.'
+    noSubjects: 'No subjects in this collection.'
 
 module?.exports = React.createClass
   displayName: 'CollectionShowList'
-  mixins: [Navigation]
+  mixins: [Router.Navigation, Router.State]
 
-  getInitialState: ->
-    page: 1 # start on page 1
+  componentDidMount: ->
+    @fetchCollectionSubjects pick @props.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
-  subjectsRequest: ->
-    @props.collection.get("subjects", page: @state.page)
+  componentWillReceiveProps: (nextProps) ->
+    @fetchCollectionSubjects pick nextProps.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
-  goToPage: (n) ->
-    @transitionTo(@props.path, @props.params, {page: n})
-    @setState(page: n)
+  fetchCollectionSubjects: (query = null) ->
+    query ?= @props.query
 
-  subject: (sub) ->
-    <SubjectViewer defaultStyle={false} key={sub.id} subject={sub} />
+    defaultQuery =
+      page: 1
+      page_size: 12
+
+    query = Object.assign defaultQuery, query
+    return @props.collection.get 'subjects', query
+
+  onPageChange: (page) ->
+    nextQuery = Object.assign @props.query, { page }
+    @transitionTo @getPath(), @props.params, nextQuery
+
+  handleDeleteSubject: (subject) ->
+    @props.collection.removeLink 'subjects', [subject.id.toString()]
+      .then =>
+        @props.collection.uncacheLink 'subjects'
+        @forceUpdate()
+
+  isOwnerOrCollaborator: ->
+    collaboratorOrOwnerRoles = @props.roles.filter (collectionRoles) ->
+      intersection(['owner', 'collaborator'], collectionRoles.roles).length
+
+    hasPermission = false
+    collaboratorOrOwnerRoles.forEach (roleSet) =>
+      if roleSet.links.owner.id is @props.user?.id
+        hasPermission = true
+
+    return hasPermission
 
   render: ->
-    <div className="collections-show">
-      <PromiseRenderer promise={@subjectsRequest()}>{(subjects) =>
-        if subjects.length > 0
+    subjectNode = (subject) =>
+      <div className="collection-subject-viewer" key={subject.id}>
+        <SubjectViewer defaultStyle={false} subject={subject}>
+          {if @isOwnerOrCollaborator()
+            <button type="button" className="collection-subject-viewer-delete-button" onClick={@handleDeleteSubject.bind @, subject}>
+              <i className="fa fa-close" />
+            </button>}
+        </SubjectViewer>
+      </div>
+
+    pendingFunc = ->
+      <Loading />
+
+    catchFunc = ->
+      <Translate component="p" className="form-help error" content="collectionSubjectListPage.error" />
+
+    thenFunc = (subjects) =>
+      <div className="collections-show">
+        {if subjects.length is 0
+          <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
+
+        {if subjects.length > 0
           <div>
-            <div className="collection-subjects-list">{subjects.map(@subject)}</div>
+            <div className="collection-subjects-list">{subjects.map(subjectNode)}</div>
 
             <Paginator
-              page={@state.page}
-              onPageChange={@goToPage}
-              pageCount={subjects[0].getMeta()?.page_count} />
-          </div>
-        else
-          <p>No subjects in this collection.</p>
-      }</PromiseRenderer>
-    </div>
+              page={+@props.query.page}
+              onPageChange={@onPageChange}
+              pageCount={subjects[0].getMeta().page_count} />
+          </div>}
+      </div>
+
+    <PromiseRenderer
+      promise={@fetchCollectionSubjects()}
+      pending={pendingFunc}
+      catch={catchFunc}
+      then={thenFunc} />

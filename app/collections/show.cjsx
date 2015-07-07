@@ -1,6 +1,6 @@
 React = require 'react'
-PromiseToSetState = require '../lib/promise-to-set-state'
 talkClient = require '../api/talk'
+auth = require '../api/auth'
 apiClient = require '../api/client'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
@@ -9,8 +9,7 @@ PromiseRenderer = require '../components/promise-renderer'
 Translate = require 'react-translate-component'
 counterpart = require 'counterpart'
 Avatar = require '../partials/avatar'
-auth = require '../api/auth'
-LoadingIndicator = require '../components/loading-indicator'
+Loading = require '../components/loading-indicator'
 HandlePropChanges = require '../lib/handle-prop-changes'
 TitleMixin = require '../lib/title-mixin'
 
@@ -19,7 +18,8 @@ counterpart.registerTranslations 'en',
     settings: 'Settings'
     collaborators: 'Collaborators'
     talk: 'Talk'
-    loading: 'Loading'
+  collectionsPageWrapper:
+    error: 'There was an error retrieving this collection.'
 
 CollectionPage = React.createClass
   displayName: 'CollectionPage'
@@ -68,7 +68,7 @@ CollectionPage = React.createClass
           </Link>
         </nav>
         <div className="collection-container">
-          <RouteHandler collection={@props.collection} />
+          <RouteHandler user={@props.user} collection={@props.collection} roles={@props.roles} />
         </div>
       </div>
     }</PromiseRenderer>
@@ -76,7 +76,7 @@ CollectionPage = React.createClass
 module.exports = React.createClass
   displayName: 'CollectionPageWrapper'
 
-  mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
+  mixins: [TitleMixin, HandlePropChanges]
 
   title: ->
     @state.collection?.display_name ? '(Loading)'
@@ -86,21 +86,35 @@ module.exports = React.createClass
 
   getInitialState: ->
     collection: null
+    user: null
+    roles: null
+    error: false
+    loading: false
 
   propChangeHandlers:
     'params.owner': 'fetchCollection'
     'params.name': 'fetchCollection'
 
   fetchCollection: ->
-    @promiseToSetState collection: auth.checkCurrent().then =>
+    @setState loading: true
+
+    auth.checkCurrent().then (user) =>
       apiClient.type('collections')
         .get(owner: @props.params?.owner, slug: @props.params?.name, include: 'owner')
-        .catch ->
-          []
         .then ([collection]) =>
-          unless collection?
-            throw new Error "Couldn't find collection #{@props.params.owner}/#{@props.params.name}"
-          collection
+          unless collection then @setState error: true
+
+          apiClient.type('collection_roles')
+            .get(collection_id: collection.id)
+            .then (roles) =>
+              @setState
+                collection: collection
+                user: user
+                roles: roles
+        .catch =>
+          @setState error: true
+        .then =>
+          @setState loading: false
 
   componentDidMount: ->
     auth.listen 'change', @fetchCollection
@@ -109,14 +123,13 @@ module.exports = React.createClass
     auth.stopListening 'change', @fetchCollection
 
   render: ->
-    if @state.collection?
-      <CollectionPage {...@props} collection={@state.collection} />
-    else
-      <div className="content-container">
-        {if @state.rejected.collection?
-          <code>{@state.rejected.collection.toString()}</code>
-        else
-          <LoadingIndicator>
-            <Translate content="collectionPage.loading" />
-          </LoadingIndicator>}
-      </div>
+    <div className="cotent-container">
+      {if @state.collection
+        <CollectionPage {...@props} user={@state.user} collection={@state.collection} roles={@state.roles} />}
+
+      {if @state.error
+        <Translate compontent="p" content="collectionsPageWrapper.error" />}
+
+      {if @state.loading
+        <Loading />}
+    </div>

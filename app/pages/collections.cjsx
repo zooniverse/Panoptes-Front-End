@@ -73,4 +73,3 @@ module.exports = React.createClass
     <ChangeListener target={authClient} handler={=>
       <CollectionsPage {...@props} />
     }/>
-
