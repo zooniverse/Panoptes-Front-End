@@ -12,11 +12,12 @@ ClassificationsRibbon = React.createClass
 
   getProjectColor: (name) ->
     characters = name.split ''
-    code = [0, characters...].reduce (code, character) ->
-      return code + character.charCodeAt 0
-    # Square the number so that e.g. "a" and "b" aren't so close.
-    hue = Math.pow(code, 2) % 360
-    "hsl(#{hue}, 100%, 50%)"
+    hue = [0, characters...].reduce (code, character) ->
+      # Square the number so that e.g. "a" and "b" aren't so close.
+      return code + Math.pow character.charCodeAt(0), 2
+    saturation = 50 + (hue % 50)
+    hue %= 360
+    "hsl(#{hue}, #{saturation}%, 50%)"
 
   render: ->
     if @props.projects.length is 0
