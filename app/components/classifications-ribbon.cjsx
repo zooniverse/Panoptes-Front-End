@@ -55,8 +55,8 @@ ClassificationsRibbon = React.createClass
             band}
 
         {unless others.length is 0
-          othersWidth =
-          <rect fill="gray" fillOpacity="0.5" stroke="none" x={lastX} y="0" width="1" height="1">
+          othersWidth = 1 - lastX
+          <rect fill="gray" fillOpacity="0.5" stroke="none" x={lastX} y="0" width={othersWidth} height="1">
             <title>
               {("#{project}: #{classifications ? '?'}" for {project, classifications} in others).join '\n'}
             </title>
