@@ -40,11 +40,17 @@ module?.exports = React.createClass
   componentWillUnmount: ->
     authClient.stopListening @handleAuthChange
 
+  componentDidUpdate: ->
+    @scrollToBottomOfDiscussion() if @props.query?.scrollToLastComment
+
   handleAuthChange: ->
     @promiseToSetState user: authClient.checkCurrent()
 
   goToPage: (n) ->
-    @transitionTo(@props.path, @props.params, {page: n})
+    {owner, name} = @props.params
+    projectPrefix = if (owner and name) then 'project-' else ''
+    @transitionTo("#{projectPrefix}talk-discussion", @props.params, {page: n})
+
     @setComments(n)
 
   componentWillMount: ->
@@ -66,6 +72,9 @@ module?.exports = React.createClass
         commentsMeta = comments[0]?.getMeta()
         @setState {comments, commentsMeta}, =>
           callback?()
+
+  scrollToBottomOfDiscussion: ->
+    React.findDOMNode(@)?.scrollIntoView(false)
 
   setDiscussion: ->
     @discussionsRequest()
