@@ -127,8 +127,16 @@ Classifier = React.createClass
       </nav>
     </div>
 
-  handleSubjectImageLoad: (e) ->
+  handleSubjectImageLoad: (e, frameIndex) ->
     @setState subjectLoading: false
+
+    {naturalWidth, naturalHeight, clientWidth, clientHeight} = e.target
+
+    changes = {}
+    changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
+
+    @props.classification.update changes
+
     @props.onLoad? arguments...
 
   updateAnnotations: (classification) ->
@@ -168,6 +176,10 @@ Classifier = React.createClass
     @props.classification.update
       completed: true
       'metadata.finished_at': (new Date).toISOString()
+      'metadata.viewport':
+        width: innerWidth
+        height: innerHeight
+
     @props.onComplete?()
 
   toggleExpertClassification: (value) ->
