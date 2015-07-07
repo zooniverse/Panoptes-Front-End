@@ -14,20 +14,30 @@ TALK_HOSTS =
   production: 'https://talk.zooniverse.org'
   staging: 'https://talk-staging.zooniverse.org'
 
+SUGAR_HOSTS =
+  production: 'https://notifications.zooniverse.org'
+  staging: 'https://notifications-staging.zooniverse.org'
+
 hostFromBrowser = location?.search.match(/\W?panoptes-api-host=([^&]+)/)?[1]
 appFromBrowser = location?.search.match(/\W?panoptes-api-application=([^&]+)/)?[1]
 talkFromBrowser = location?.search.match(/\W?talk-host=([^&]+)/)?[1]
+sugarFromBrowser = location?.search.match(/\W?sugar-host=([^&]+)/)?[1]
 
 hostFromShell = process.env.PANOPTES_API_HOST
 appFromShell = process.env.PANOPTES_API_APPLICATION
 talkFromShell = process.env.TALK_HOST
+sugarFromShell = process.env.SUGAR_HOST
 
 envFromBrowser = location?.search.match(/\W?env=(\w+)/)?[1]
 envFromShell = process.env.NODE_ENV
 
 env = envFromBrowser ? envFromShell ? DEFAULT_ENV
 
+isDevelopment = env isnt 'production'
+
 module.exports =
   host: hostFromBrowser ? hostFromShell ? API_HOSTS[env]
   clientAppID: appFromBrowser ? appFromShell ? API_APPLICATION_IDS[env]
-  talkHost:  talkFromBrowser ? talkFromShell ? TALK_HOSTS[env]
+  talkHost: talkFromBrowser ? talkFromShell ? TALK_HOSTS[env]
+  sugarHost: sugarFromBrowser ? sugarFromShell ? SUGAR_HOSTS[env]
+  isDevelopment: isDevelopment

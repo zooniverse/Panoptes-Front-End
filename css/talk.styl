@@ -109,10 +109,36 @@ COPY_GREY_LIGHT = #afaeae
     @extend .talk-module
     width: 300px
     margin: 10px 0 10px 10px
+    overflow: hidden
+    white-space: pre-wrap
 
     @media screen and (max-width: TALK_BREAKPOINT)
       margin: 0
       width: 100%
+
+    section
+      margin: 5px 0
+
+    .talk-active-users
+      position: relative
+
+      ul
+        list-style: none
+        margin: 0
+        padding: 0
+        width: 100%
+
+        li
+          display: inline-block
+          max-width: 45%
+          margin: 0 5px
+          overflow: hidden
+          white-space: nowrap
+          text-overflow: ellipsis
+
+      .paginator
+        .paginator-first, .paginator-page-selector, .paginator-last
+          display: none
 
   .talk-moderation
     margin-bottom: 10px
