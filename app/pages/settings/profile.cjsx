@@ -3,6 +3,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
+ClassificationsRibbon = require '../../components/classifications-ribbon'
 
 MAX_AVATAR_SIZE = 65536
 MAX_HEADER_SIZE = 256000
@@ -31,6 +32,18 @@ module.exports = React.createClass
         null
 
     <div>
+      <div className="content-container">
+        <h3>Classifications ribbon</h3>
+        <p><ClassificationsRibbon user={@props.user} /></p>
+        <p>
+          <label>
+            <input type="checkbox" disabled />{' '}
+            Display my ribbon publicly <small>(coming soon!)</small>
+          </label>
+        </p>
+        <p className="form-help">Your ribbon shows your classifications per project.</p>
+      </div>
+      <hr />
       <div className="content-container">
         <h3>Change avatar</h3>
         <PromiseRenderer promise={@avatarGet}>{(avatar) =>
