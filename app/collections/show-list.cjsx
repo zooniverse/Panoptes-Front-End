@@ -1,5 +1,6 @@
 React = require 'react'
 Router = require 'react-router'
+intersection = require 'lodash.intersection'
 pick = require 'lodash.pick'
 Translate = require 'react-translate-component'
 counterpart = require 'counterpart'
@@ -34,9 +35,7 @@ module?.exports = React.createClass
       page_size: 12
 
     query = Object.assign defaultQuery, query
-    @props.collection.get 'subjects', query
-      .then (subjects) =>
-        return subjects
+    return @props.collection.get 'subjects', query
 
   onPageChange: (page) ->
     nextQuery = Object.assign @props.query, { page }
@@ -48,13 +47,25 @@ module?.exports = React.createClass
         @props.collection.uncacheLink 'subjects'
         @forceUpdate()
 
+  isOwnerOrCollaborator: ->
+    collaboratorOrOwnerRoles = @props.roles.filter (collectionRoles) ->
+      intersection(['owner', 'collaborator'], collectionRoles.roles).length
+
+    hasPermission = false
+    collaboratorOrOwnerRoles.forEach (roleSet) =>
+      if roleSet.links.owner.id is @props.user?.id
+        hasPermission = true
+
+    return hasPermission
+
   render: ->
     subjectNode = (subject) =>
       <div className="collection-subject-viewer" key={subject.id}>
         <SubjectViewer defaultStyle={false} subject={subject}>
-          <button type="button" className="collection-subject-viewer-delete-button" onClick={@handleDeleteSubject.bind @, subject}>
-            <i className="fa fa-close" />
-          </button>
+          {if @isOwnerOrCollaborator()
+            <button type="button" className="collection-subject-viewer-delete-button" onClick={@handleDeleteSubject.bind @, subject}>
+              <i className="fa fa-close" />
+            </button>}
         </SubjectViewer>
       </div>
 

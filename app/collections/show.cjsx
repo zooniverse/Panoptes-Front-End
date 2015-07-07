@@ -68,7 +68,7 @@ CollectionPage = React.createClass
           </Link>
         </nav>
         <div className="collection-container">
-          <RouteHandler collection={@props.collection} />
+          <RouteHandler user={@props.user} collection={@props.collection} roles={@props.roles} />
         </div>
       </div>
     }</PromiseRenderer>
@@ -92,7 +92,7 @@ module.exports = React.createClass
     'params.name': 'fetchCollection'
 
   fetchCollection: ->
-    @promiseToSetState collection: auth.checkCurrent().then =>
+    auth.checkCurrent().then (user) =>
       apiClient.type('collections')
         .get(owner: @props.params?.owner, slug: @props.params?.name, include: 'owner')
         .catch ->
@@ -100,7 +100,15 @@ module.exports = React.createClass
         .then ([collection]) =>
           unless collection?
             throw new Error "Couldn't find collection #{@props.params.owner}/#{@props.params.name}"
-          collection
+          apiClient.type('collection_roles')
+            .get(collection_id: collection.id)
+            .catch ->
+              []
+            .then (roles) =>
+              @setState
+                collection: collection
+                user: user
+                roles: roles
 
   componentDidMount: ->
     auth.listen 'change', @fetchCollection
@@ -110,7 +118,7 @@ module.exports = React.createClass
 
   render: ->
     if @state.collection?
-      <CollectionPage {...@props} collection={@state.collection} />
+      <CollectionPage {...@props} user={@state.user} collection={@state.collection} roles={@state.roles} />
     else
       <div className="content-container">
         {if @state.rejected.collection?
