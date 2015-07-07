@@ -121,6 +121,7 @@ module.exports = React.createClass
           user_agent: navigator.userAgent
           user_language: counterpart.getLocale()
           utc_offset: ((new Date).getTimezoneOffset() * 60).toString() # In seconds
+          subject_dimensions: (null for location in subject.locations)
         links:
           project: project.id
           workflow: workflow.id
