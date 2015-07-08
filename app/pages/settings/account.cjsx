@@ -111,29 +111,6 @@ module.exports = React.createClass
             </AutoSave>
             <span className="form-help">Public; we’ll use this to give acknowledgement in papers, on posters, etc.</span>
           </p>
-
-          <p>
-            <AutoSave resource={@props.user}>
-              <label>
-                <input type="checkbox" name="global_email_communication" checked={@props.user.global_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
-                Get general Zooniverse email updates
-              </label>
-            </AutoSave>
-            <br />
-            <AutoSave resource={@props.user}>
-              <label>
-                <input type="checkbox" name="project_email_communication" checked={@props.user.project_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
-                Get email updates from the Projects you classify on
-              </label>
-            </AutoSave>
-            <br />
-            <AutoSave resource={@props.user}>
-              <label>
-                <input type="checkbox" name="beta_email_communication" checked={@props.user.beta_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
-                Get beta project email updates
-              </label>
-            </AutoSave>
-          </p>
         </div>
       </div>
 
