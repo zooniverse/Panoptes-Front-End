@@ -257,7 +257,8 @@ module.exports = new Model
         authenticity_token: token
         email: email
 
-      client.post '/../unsubscribe', data, JSON_HEADERS
+      makeHTTPRequest 'POST', config.host + '/unsubscribe', data, JSON_HEADERS
+
 # For quick debugging:
 window?.zooAuth = module.exports
 window?.log = console?.info.bind console, 'LOG'
