@@ -2,10 +2,11 @@ React = require 'react'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
-parseSection = require '../talk/lib/parse-section'
+parseSection = require './lib/parse-section'
+talkConfig = require './config'
 {Link, Navigation} = require 'react-router'
 
-PAGE_SIZE = 10
+PAGE_SIZE = talkConfig.discussionPageSize
 
 getPageOfComment = require './lib/get-page-of-comment'
 

@@ -18,8 +18,9 @@ Moderation = require './lib/moderation'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 DisplayRoles = require './lib/display-roles'
+talkConfig = require './config'
 
-PAGE_SIZE = 10
+PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
@@ -33,6 +34,7 @@ module?.exports = React.createClass
     commentValidationErrors: []
 
   componentDidMount: ->
+    @shouldScrollToBottom = true if @props.query?.scrollToLastComment
     @handleAuthChange()
     authClient.listen @handleAuthChange
 
@@ -43,7 +45,10 @@ module?.exports = React.createClass
     @promiseToSetState user: authClient.checkCurrent()
 
   goToPage: (n) ->
-    @transitionTo(@props.path, @props.params, {page: n})
+    {owner, name} = @props.params
+    projectPrefix = if (owner and name) then 'project-' else ''
+    @transitionTo("#{projectPrefix}talk-discussion", @props.params, {page: n})
+
     @setComments(n)
 
   componentWillMount: ->
@@ -64,7 +69,13 @@ module?.exports = React.createClass
       .then (comments) =>
         commentsMeta = comments[0]?.getMeta()
         @setState {comments, commentsMeta}, =>
+          if @shouldScrollToBottom and comments.length
+            @scrollToBottomOfDiscussion()
+            @shouldScrollToBottom = false
           callback?()
+
+  scrollToBottomOfDiscussion: ->
+    React.findDOMNode(@)?.scrollIntoView(false)
 
   setDiscussion: ->
     @discussionsRequest()

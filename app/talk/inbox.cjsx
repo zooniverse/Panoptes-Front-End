@@ -9,8 +9,9 @@ Paginator = require './lib/paginator'
 Router = {Link} = require 'react-router'
 Loading = require '../components/loading-indicator'
 InboxForm = require './inbox-form'
+talkConfig = require './config'
 
-PAGE_SIZE = 10
+PAGE_SIZE = talkConfig.inboxPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkInbox'

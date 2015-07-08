@@ -16,6 +16,9 @@ StickyDiscussionList = require './sticky-discussion-list'
 ROLES = require './lib/roles'
 Loading = require '../components/loading-indicator'
 merge = require 'lodash.merge'
+talkConfig = require './config'
+
+PAGE_SIZE = talkConfig.pageSize
 
 module?.exports = React.createClass
   displayName: 'TalkBoard'
@@ -39,7 +42,7 @@ module?.exports = React.createClass
   discussionsRequest: (page) ->
     @setState loading: true
     board_id = +@props.params.board
-    talkClient.type('discussions').get({board_id, page_size: 5, page})
+    talkClient.type('discussions').get({board_id, page_size: PAGE_SIZE, page})
 
   setDiscussions: (page = 1) ->
     @discussionsRequest(page)
