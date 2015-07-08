@@ -18,7 +18,7 @@ module?.exports = React.createClass
     header: React.PropTypes.string
     placeholder: React.PropTypes.string
     submitFeedback: React.PropTypes.string
-    onSubmitComment: React.PropTypes.func # called on submit and passed (e, textarea-content, subject)
+    onSubmitComment: React.PropTypes.func # called on submit and passed (e, textarea-content, subject), expected to return something thenable
     onCancelClick: React.PropTypes.func # adds cancel button and calls callback on click if supplied
 
   getDefaultProps: ->
@@ -34,6 +34,7 @@ module?.exports = React.createClass
     content: @props.content
     reply: ''
     loading: false
+    error: ''
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.reply
@@ -47,11 +48,13 @@ module?.exports = React.createClass
     fullComment = @state.reply.concat(textareaValue)
 
     @props.onSubmitComment?(e, fullComment, @state.subject)
-
-    @refs.textarea.getDOMNode().value = ""
-    @hideChildren()
-    @setState content: ""
-    @setFeedback @props.submitFeedback
+      .then =>
+        @refs.textarea.getDOMNode().value = ''
+        @hideChildren()
+        @setState content: '', error: ''
+        @setFeedback @props.submitFeedback
+      .catch (e) =>
+        @setState(error: e.message)
 
   onPreviewClick: (e) ->
     @toggleComponent('preview')
@@ -113,8 +116,6 @@ module?.exports = React.createClass
 
       {if @state.subject
         <img className="talk-comment-focus-image" src={getSubjectLocation(@state.subject).src} />}
-
-      {feedback}
 
       <div className="talk-comment-buttons-container">
         <button title="link"className='talk-comment-insert-link-button' onClick={@onInsertLinkClick}>
@@ -192,7 +193,12 @@ module?.exports = React.createClass
             </button>}
         </section>
 
-        {validationErrors}
+        {feedback}
+
+        <div className="submit-error">
+          {validationErrors}
+          {@state.error ? null}
+        </div>
       </form>
 
       <div className="talk-comment-children">

@@ -83,7 +83,7 @@ module?.exports = React.createClass
                         @transitionTo('project-talk-discussion', {owner: owner, name: project.slug, board: discussion.board_id, discussion: discussion.id})
 
             else
-              console.log "no default board setup for this project"
+              throw new Error("A board for subject comments has not been setup for this project yet.")
 
 
   render: ->
