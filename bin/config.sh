@@ -27,7 +27,7 @@ function flag_externals {
 }
 
 function rename_with_hash {
-  if which md5sum
+  if hash md5sum 2>/dev/null
     then checksum=$(md5sum "$1" | cut -d " " -f 1)
     else checksum=$(md5 -q "$1")
   fi
