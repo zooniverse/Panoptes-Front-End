@@ -35,22 +35,20 @@ module.exports = React.createClass
       .catch (e) -> console.log "e unread messages", e
 
   render: ->
-    <ChangeListener target={@props.user} handler={=>
-      <div className="account-bar">
-        <div className="account-info">
-          <span className="display-name"><strong>{@props.user.display_name}</strong></span>
-          <Avatar user={@props.user} />
-          <Link to="inbox" params={name: @props.user.login} className="message-link"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
-        </div>
-        <div className="account-menu" ref="accountMenu">
-          <Link to="settings" params={name: @props.user.login}><Translate content="accountMenu.settings" /></Link>
-          <Link to="collections-user" params={{owner: @props.user.login}}>
-            <Translate content="accountMenu.collections" />
-          </Link>
-          <button className="secret-button sign-out-button" type="button" onClick={@handleSignOutClick}><Translate content="accountMenu.signOut" /></button>
-        </div>
+    <div className="account-bar">
+      <div className="account-info">
+        <span className="display-name"><strong>{@props.user.display_name}</strong></span>
+        <Avatar user={@props.user} />
+        <Link to="inbox" params={name: @props.user.login} className="message-link"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
       </div>
-    } />
+      <div className="account-menu" ref="accountMenu">
+        <Link to="settings" params={name: @props.user.login}><Translate content="accountMenu.settings" /></Link>
+        <Link to="collections-user" params={{owner: @props.user.login}}>
+          <Translate content="accountMenu.collections" />
+        </Link>
+        <button className="secret-button sign-out-button" type="button" onClick={@handleSignOutClick}><Translate content="accountMenu.signOut" /></button>
+      </div>
+    </div>
 
   handleSignOutClick: ->
     auth.signOut()

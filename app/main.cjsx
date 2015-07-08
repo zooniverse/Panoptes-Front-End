@@ -6,20 +6,41 @@ MainHeader = require './partials/main-header'
 MainFooter = require './partials/main-footer'
 IOStatus = require './partials/io-status'
 
+auth = require './api/auth'
+api = require './api/client'
+
 logDeployedCommit = require './lib/log-deployed-commit'
 logDeployedCommit()
 
 App = React.createClass
   displayName: 'PanoptesApp'
 
+  getInitialState: ->
+    user: null
+    initialLoadComplete: false
+
+  componentDidMount: ->
+    auth.listen 'change', @handleAuthChange
+    @handleAuthChange()
+
+  componentWillUnmount: ->
+    auth.stopListening 'change', @handleAuthChange
+
+  handleAuthChange: ->
+    auth.checkCurrent().then (user) =>
+      @setState
+        user: user
+        initialLoadComplete: true
+
   render: ->
     <div className="panoptes-main">
       <IOStatus />
-      <MainHeader />
+      <MainHeader user={@state.user} />
       <div className="main-content">
-        <RouteHandler {...@props} />
+        {if @state.initialLoadComplete
+          <RouteHandler {...@props} user={@state.user} />}
       </div>
-      <MainFooter />
+      <MainFooter user={@state.user} />
     </div>
 
 routes = <Route handler={App}>

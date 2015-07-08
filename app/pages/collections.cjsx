@@ -2,7 +2,6 @@ counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require '../api/client'
-authClient = require '../api/auth'
 OwnedCardList = require '../components/owned-card-list'
 PromiseRenderer = require '../components/promise-renderer'
 ChangeListener = require '../components/change-listener'
@@ -23,12 +22,10 @@ CollectionsNav = React.createClass
 
   render: ->
     <nav className="hero-nav">
-      <PromiseRenderer promise={authClient.checkCurrent()}>{(user) ->
-        if user?
-          <Link to="collections-user" params={{owner: user.login}}>
-            <Translate content="collectionsPage.myCollections" />
-          </Link>
-      }</PromiseRenderer>
+      {if @props.user?
+        <Link to="collections-user" params={{owner: @props.user.login}}>
+          <Translate content="collectionsPage.myCollections" />
+        </Link>}
     </nav>
 
 CollectionsPage = React.createClass
@@ -42,6 +39,8 @@ CollectionsPage = React.createClass
     apiClient.type('subjects').get(collection_id: collection.id, page_size: 1)
     .index(0)
     .then (subject) ->
+      # Fixes an error thrown for a subject without a location
+      unless subject then return 'https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150'
       firstKey = Object.keys(subject.locations[0])[0]
       subject.locations[0][firstKey]
 
@@ -49,6 +48,7 @@ CollectionsPage = React.createClass
     'collection-show'
 
   listCollections: ->
+    console.log 'listing collections'
     query = Object.create @props.query ? {}
     query.owner = @props.params.owner if @props.params?.owner?
     query.include = 'owner'
@@ -70,6 +70,4 @@ module.exports = React.createClass
   displayName: 'CollectionsPageWrapper'
 
   render: ->
-    <ChangeListener target={authClient} handler={=>
-      <CollectionsPage {...@props} />
-    }/>
+    <CollectionsPage {...@props} />

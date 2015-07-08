@@ -7,7 +7,6 @@ LoadingIndicator = require '../components/loading-indicator'
 AccountBar = require './account-bar'
 LoginBar = require './login-bar'
 PromiseToSetState = require '../lib/promise-to-set-state'
-auth = require '../api/auth'
 
 counterpart.registerTranslations 'en',
   mainNav:
@@ -23,18 +22,10 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'MainHeader'
 
-  mixins: [PromiseToSetState]
-
-  getInitialState: ->
-    user: null
-
   componentDidMount: ->
-    @handleAuthChange()
-    auth.listen @handleAuthChange
     @addEventListeners()
 
   componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
     @removeEventListeners()
 
   addEventListeners: ->
@@ -55,9 +46,6 @@ module.exports = React.createClass
   checkIfOnHome: ->
     return true if window.location.hash is '#/'
 
-  handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent()
-
   render: ->
     <header className="main-header">
       <div className="main-title" ref="mainTitle">
@@ -74,8 +62,8 @@ module.exports = React.createClass
           <hr />
           <Link to="lab" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
         </nav>
-        {if @state.user?
-          <AccountBar user={@state.user} />
+        {if @props.user?
+          <AccountBar {...@props} />
         else
           <LoginBar />}
       </div>

@@ -35,7 +35,7 @@ module.exports = React.createClass
 
       <div className="content-container">
         {switch @state.which
-          when 'login-change' then <LoginChangeForm user={@state.user} onSuccess={@props.onSuccess} />
+          when 'login-change' then <LoginChangeForm user={@props.user} onSuccess={@props.onSuccess} />
           when 'sign-in' then <SignInForm onSuccess={@onSuccessOrLoginChange} />
           when 'register' then <RegisterForm project={@props.project} onSuccess={@props.onSuccess} />}
       </div>
@@ -46,8 +46,6 @@ module.exports = React.createClass
 
   onSuccessOrLoginChange: (user) ->
     if user.login_prompt
-      @setState {which: 'login-change', user: user}
+      @setState {which: 'login-change'}
     else
-      @props.onSuccess(user)
-
-
+      @props.onSuccess()

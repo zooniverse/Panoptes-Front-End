@@ -23,5 +23,5 @@ module.exports = React.createClass
     </div>
 
   showLoginDialog: (which) ->
-    alert (resolve) ->
-      <LoginDialog which={which} onSuccess={resolve} />
+    alert (resolve) =>
+      <LoginDialog user={@props.user} which={which} onSuccess={resolve} />
