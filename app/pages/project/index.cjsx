@@ -9,6 +9,7 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 auth = require '../../api/auth'
 apiClient = window.api = require '../../api/client'
+require '../../api/sugar'
 LoadingIndicator = require '../../components/loading-indicator'
 
 SOCIAL_ICONS =
@@ -44,9 +45,11 @@ ProjectPage = React.createClass
     project: null
 
   componentDidMount: ->
+    sugarClient.subscribeTo "project-#{ @props.project.id }"
     document.documentElement.classList.add 'on-project-page'
 
   componentWillUnmount: ->
+    sugarClient.unsubscribeFrom "project-#{ @props.project.id }"
     document.documentElement.classList.remove 'on-project-page'
 
   render: ->

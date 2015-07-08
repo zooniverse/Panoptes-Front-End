@@ -1,5 +1,6 @@
 React = require 'react'
 BoardPreview = require './board-preview'
+ActiveUsers = require './active-users'
 talkClient = require '../api/talk'
 authClient = require '../api/auth'
 ChangeListener = require '../components/change-listener'
@@ -11,6 +12,7 @@ auth = require '../api/auth'
 {Link} = require 'react-router'
 Loading = require '../components/loading-indicator'
 PopularTags = require './popular-tags'
+require '../api/sugar'
 
 DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
 DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
@@ -27,6 +29,10 @@ module?.exports = React.createClass
 
   componentWillMount: ->
     @setBoards()
+    sugarClient.subscribeTo @props.section
+
+  componentWillUnmount: ->
+    sugarClient.unsubscribeFrom @props.section
 
   componentWillReceiveProps: ->
     @setBoards()
@@ -132,6 +138,10 @@ module?.exports = React.createClass
               header={<h3>Popular Tags:</h3>}
               section={@props.section}
               params={@props.params} />
+          </section>
+
+          <section>
+            <ActiveUsers section={@props.section} />
           </section>
         </div>
       </div>
