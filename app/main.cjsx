@@ -44,7 +44,8 @@ routes = <Route handler={App}>
   <Route name="privacy" handler={require './pages/privacy-policy'} />
 
   <Route name="user-profile" path="users/:name" handler={require './pages/profile'}>
-    <DefaultRoute name="user-profile-private-message" handler={require './pages/profile/private-message'} />
+    <DefaultRoute name="user-profile-feed" handler={require './pages/profile/feed'} />
+    <Route name="user-profile-private-message" handler={require './pages/profile/private-message'} />
     <Route name="user-profile-stats" path="stats" handler={require './pages/profile/stats'} />
  </Route>
 
