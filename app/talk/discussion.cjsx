@@ -34,14 +34,12 @@ module?.exports = React.createClass
     commentValidationErrors: []
 
   componentDidMount: ->
+    @shouldScrollToBottom = true if @props.query?.scrollToLastComment
     @handleAuthChange()
     authClient.listen @handleAuthChange
 
   componentWillUnmount: ->
     authClient.stopListening @handleAuthChange
-
-  componentDidUpdate: ->
-    @scrollToBottomOfDiscussion() if @props.query?.scrollToLastComment
 
   handleAuthChange: ->
     @promiseToSetState user: authClient.checkCurrent()
@@ -71,6 +69,9 @@ module?.exports = React.createClass
       .then (comments) =>
         commentsMeta = comments[0]?.getMeta()
         @setState {comments, commentsMeta}, =>
+          if @shouldScrollToBottom and comments.length
+            @scrollToBottomOfDiscussion()
+            @shouldScrollToBottom = false
           callback?()
 
   scrollToBottomOfDiscussion: ->
