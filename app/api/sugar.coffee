@@ -6,7 +6,7 @@ SugarClient = require 'sugar-client'
 SugarClient.Primus = require 'sugar-client/primus'
 SugarClient.host = config.sugarHost
 
-sugarApiClient = new JSONAPIClient config.sugarHost,
+window.sugarApiClient = new JSONAPIClient config.sugarHost,
   'Content-Type': 'application/json'
   'Accept': 'application/json'
 
@@ -16,10 +16,10 @@ authClient.listen 'change', ->
   authClient.checkCurrent()
     .then (user) ->
       if user and authClient._bearerToken
-        window.sugarClient.userId = user.id
-        window.sugarClient.authToken = authClient._bearerToken
+        sugarClient.userId = user.id
+        sugarClient.authToken = authClient._bearerToken
 
-        if config.isDevelopment
+        if process.env.NODE_ENV isnt 'production'
           sugarClient.on 'response', (args...) ->
             console.log '[SUGAR RESPONSE] ', args...
 
@@ -29,4 +29,6 @@ authClient.listen 'change', ->
     .catch (e) ->
       throw new Error "Failed to checkCurrent auth from sugar client"
 
-module.exports = window.sugarApiClient = sugarApiClient
+module.exports =
+  socketApi: sugarClient
+  api: sugarApiClient

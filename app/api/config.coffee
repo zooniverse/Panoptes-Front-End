@@ -33,11 +33,8 @@ envFromShell = process.env.NODE_ENV
 
 env = envFromBrowser ? envFromShell ? DEFAULT_ENV
 
-isDevelopment = env isnt 'production'
-
 module.exports =
   host: hostFromBrowser ? hostFromShell ? API_HOSTS[env]
   clientAppID: appFromBrowser ? appFromShell ? API_APPLICATION_IDS[env]
   talkHost: talkFromBrowser ? talkFromShell ? TALK_HOSTS[env]
   sugarHost: sugarFromBrowser ? sugarFromShell ? SUGAR_HOSTS[env]
-  isDevelopment: isDevelopment

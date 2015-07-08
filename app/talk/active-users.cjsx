@@ -1,6 +1,6 @@
 React = require 'react'
 talkClient = require '../api/talk'
-sugarApiClient = require '../api/sugar'
+require '../api/sugar'
 apiClient = require '../api/client'
 {Link} = require 'react-router'
 Paginator = require './lib/paginator'
@@ -93,6 +93,6 @@ module?.exports = React.createClass
         {@state.users.map(@userLink)}
       </ul>
       {if @state.pageCount > 1
-        <Paginator page={+@state.page} onPageChange={@onPageChange} pageCount={@state.pageCount} scrollOnChange=false />
+        <Paginator page={+@state.page} onPageChange={@onPageChange} pageCount={@state.pageCount} scrollOnChange={false} />
       }
     </div>
