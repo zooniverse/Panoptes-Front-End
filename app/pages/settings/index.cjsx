@@ -55,15 +55,9 @@ module.exports = React.createClass
   displayName: 'UserSettingsPageWrapper'
 
   render: ->
-    <ChangeListener target={auth} handler={=>
-      <PromiseRenderer promise={auth.checkCurrent()} then={(user) =>
-        if user?
-          <ChangeListener target={user} handler={=>
-            <UserSettingsPage user={user} />
-          } />
-        else
-          <div className="content-container">
-            <p>You’re not signed in.</p>
-          </div>
-      } />
-    } />
+    if @props.user?
+      <UserSettingsPage {...@props} />
+    else
+      <div className="content-container">
+        <p>You’re not signed in.</p>
+      </div>

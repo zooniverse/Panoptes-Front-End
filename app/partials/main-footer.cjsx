@@ -3,7 +3,6 @@ React = require 'react'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 ZooniverseLogoType = require './zooniverse-logotype'
-auth = require '../api/auth'
 apiClient = require '../api/client'
 
 counterpart.registerTranslations 'en',
@@ -57,20 +56,6 @@ AdminToggle = React.createClass
 module.exports = React.createClass
   displayName: 'MainFooter'
 
-  getInitialState: ->
-    user: null
-
-  componentDidMount: ->
-    auth.listen 'change', @handleAuthChange
-    @handleAuthChange()
-
-  componentWillUnmount: ->
-    auth.stopListening 'change', @handleAuthChange
-
-  handleAuthChange: ->
-    auth.checkCurrent().then (user) =>
-      @setState {user}
-
   render: ->
     <footer className="main-footer">
       <div className="centered-grid main-footer-flex">
@@ -79,7 +64,7 @@ module.exports = React.createClass
             <ZooniverseLogoType />
           </Link>
           <br />
-          {if @state.user?.admin or @state.user?.id is '3' # brian-testing
+          {if @props.user?.admin or @props.user?.id is '3' # brian-testing
             <AdminToggle />}
         </div>
         <nav className="site-map">
