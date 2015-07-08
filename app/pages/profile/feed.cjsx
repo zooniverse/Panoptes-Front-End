@@ -10,6 +10,10 @@ CommentLink = React.createClass
     comment: null
 
   getInitialState: ->
+    project: null
+    owner: null
+    discussion: null
+    board: null
     href: '#'
 
   componentDidMount: ->
@@ -20,25 +24,43 @@ CommentLink = React.createClass
       @getCommentHREF(nextProps.comment)
 
   getCommentHREF: (comment) ->
-    console.log 'sec', comment.section.split('-')
-    projectID = comment.section.split('-')[1]
-
     @setState({href: '#'})
+    [rootType, rootID] = comment.section.split('-')
     talkClient.type('discussions').get(comment.discussion_id).then (discussion) =>
+      @setState({discussion})
       talkClient.type('boards').get(discussion.board_id).then (board) =>
-        if projectID?
-          apiClient.type('projects').get(projectID).then (project) =>
-            project.get('owner').then (owner) =>
-              @setState({href: "#/projects/#{owner.login}/#{project.slug}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"})
+        @setState({board})
+        href = if rootID?
+          if rootType is 'project'
+            # TODO: Focus
+            apiClient.type('projects').get(rootID).then (project) =>
+              @setState({project})
+              project.get('owner').then (owner) =>
+                @setState({owner})
+                "#/projects/#{owner.login}/#{project.slug}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         else
-          @setState({href: "#/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"})
+          Promise.resolve "#/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
+        href.then (href) =>
+          @setState({href})
 
   render: ->
-    <a href={@state.href}>
+    <a href={@state.href} style={color: 'inherit', textDecoration: 'inherit'}>
       <header>
-        <span title={moment(@props.comment.created_at).toISOString()}>{moment(@props.comment.created_at).fromNow()}</span>{' '}
+        <small>
+          <span title={moment(@props.comment.created_at).toISOString()}>{moment(@props.comment.created_at).fromNow()}</span> in{' '}
+          {if @state.project? and @state.owner
+            <span>
+              <strong className="project">{@state.owner.display_name}/{@state.project.display_name}</strong>
+              ➞
+            </span>}
+          <strong className="board">{@state.board?.title}</strong>
+          ➞
+          <strong className="discussion">{@state.discussion?.title}</strong>
+        </small>
       </header>
-      <div className="content-container">{@props.comment.body}</div>
+      {# TODO: Markdown}
+      <div className="">{@props.comment.body}</div>
+      <hr />
     </a>
 
 module.exports = React.createClass
@@ -76,11 +98,35 @@ module.exports = React.createClass
       {if @state.comments?.length is 0
         <p className="form-help">No recent comments</p>
       else if @state.comments?
-        # TODO: Pagination.
-        for comment in @state.comments
-          <CommentLink key={comment.id} comment={comment} />
+        meta = @state.comments[0].getMeta()
+        <div>
+          <h2>Recent comments</h2>
+
+          {for comment in @state.comments
+            <CommentLink key={comment.id} comment={comment} />}
+
+          <select value={@props.query.page} disabled={meta.page_count is 1} onChange={@handlePageChange}>
+            {for page in [1..meta.page_count]
+              <option key={page}>{page}</option>}
+          </select>
+        </div>
       else if @state.error?
         <p className="form-help error">{@state.error.toString()}</p>
       else
         null}
     </div>
+
+  changeSearchString: (search = '', changes) ->
+    params = {}
+    for keyValue in search.slice(1).split('&')
+      [key, value] = keyValue.split('=')
+      params[key] = value
+    for key, value of changes
+      params[key] = value
+    "?#{([key, value].join('=') for key, value of params).join('&')}"
+
+  handlePageChange: (e) ->
+    [beforeQ, afterQ] = location.hash.split('?')
+    oldSearch = '?' + afterQ
+    newSearch = @changeSearchString(oldSearch, {page: e.target.value})
+    location.hash = beforeQ + newSearch

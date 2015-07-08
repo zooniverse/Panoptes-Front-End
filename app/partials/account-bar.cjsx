@@ -43,6 +43,7 @@ module.exports = React.createClass
           <Link to="inbox" params={name: @props.user.login} className="message-link"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
         </div>
         <div className="account-menu" ref="accountMenu">
+          <Link to="user-profile" params={name: @props.user.login}><Translate content="accountMenu.profile" /></Link>
           <Link to="settings" params={name: @props.user.login}><Translate content="accountMenu.settings" /></Link>
           <Link to="collections-user" params={{owner: @props.user.login}}>
             <Translate content="accountMenu.collections" />

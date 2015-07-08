@@ -11,7 +11,7 @@ counterpart.registerTranslations 'en',
   profile:
     title: "Hi, %(name)s!"
     nav:
-      feed: "Feed"
+      comments: "Recent comments"
       stats: "Stats"
       collections: "Collections"
       messages: "Messages"
@@ -56,6 +56,10 @@ UserProfilePage = React.createClass
         <div className="hero-container">
           <h1>{@props.user.display_name}</h1>
           <nav className="hero-nav">
+            <Link to="user-profile" params={name: @props.user.login}>
+              <Translate content="profile.nav.comments" />
+            </Link>
+            {' '}
             <Link to="collections-user" params={owner: @props.user.login}>
               <Translate content="profile.nav.collections" />
             </Link>
