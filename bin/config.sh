@@ -28,7 +28,7 @@ function flag_externals {
 
 function rename_with_hash {
   if which md5sum
-    then checksum=$(md5sum --quiet "$1")
+    then checksum=$(md5sum "$1" | cut -d " " -f 1)
     else checksum=$(md5 -q "$1")
   fi
   fullname=$(basename "$1")
