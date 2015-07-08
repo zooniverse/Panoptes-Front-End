@@ -97,5 +97,5 @@ module?.exports = React.createClass
         placeholder={"Add a note about this subject."}
         onSubmitComment={@onSubmitComment}
         subject={@props.subject}
-        submit="Add Your Comment"/>
+        submit="Add Your comment"/>
     </div>
