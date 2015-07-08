@@ -51,10 +51,7 @@ module.exports = React.createClass
           <input ref="email" type="email" required onChange={@handleEmailChange} className="standard-input" defaultValue={@props.query?.email} size="50" />
         </p>
         <p>
-          {if @state.emailIsValid
-            <button type="submit" className="standard-button">Submit</button>
-          else
-            <button type="submit" className="standard-button" disabled>Submit</button>}
+          <button type="submit" className="standard-button" disabled={!@state.emailIsValid || @state.emailSuccess}>Submit</button>
 
           {' '}
 
