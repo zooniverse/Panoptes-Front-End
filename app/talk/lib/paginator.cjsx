@@ -1,5 +1,20 @@
 React = require 'react'
 
+changeSearchString = (searchString, changes) ->
+  params = {}
+  for keyValue in searchString.slice(1).split('&')
+    [key, value] = keyValue.split('=')
+    params[key] = value
+  for key, value of changes
+    params[key] = value
+  "?#{([key, value].join('=') for key, value of params when value?).join('&')}"
+
+updatePageQueryParam = (page) ->
+  [beforeQuestionMark, afterQuestionMark] = location.hash.split('?')
+  oldSearch = '?' + afterQuestionMark
+  newSearch = changeSearchString(oldSearch, {page})
+  location.hash = beforeQuestionMark + newSearch
+
 module?.exports = React.createClass
   displayName: 'Paginator'
 
@@ -12,6 +27,7 @@ module?.exports = React.createClass
 
   getDefaultProps: ->
     page: 1
+    onPageChange: updatePageQueryParam
     firstAndLast: true
     scrollOnChange: true
 
