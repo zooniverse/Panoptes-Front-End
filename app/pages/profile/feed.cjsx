@@ -3,6 +3,7 @@ moment = require 'moment'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
 Markdown = require '../../components/markdown'
+Paginator = require '../../talk/lib/paginator'
 
 CommentLink = React.createClass
   displayName: 'CommentLink'
@@ -108,28 +109,10 @@ module.exports = React.createClass
           {for comment in @state.comments
             <CommentLink key={comment.id} comment={comment} />}
 
-          <select value={@props.query.page} disabled={meta.page_count is 1} onChange={@handlePageChange}>
-            {for page in [1..meta.page_count]
-              <option key={page}>{page}</option>}
-          </select>
+          <Paginator pageCount={meta.page_count} page={meta.page} />
         </div>
       else if @state.error?
         <p className="form-help error">{@state.error.toString()}</p>
       else
         null}
     </div>
-
-  changeSearchString: (search = '', changes) ->
-    params = {}
-    for keyValue in search.slice(1).split('&')
-      [key, value] = keyValue.split('=')
-      params[key] = value
-    for key, value of changes
-      params[key] = value
-    "?#{([key, value].join('=') for key, value of params).join('&')}"
-
-  handlePageChange: (e) ->
-    [beforeQ, afterQ] = location.hash.split('?')
-    oldSearch = '?' + afterQ
-    newSearch = @changeSearchString(oldSearch, {page: e.target.value})
-    location.hash = beforeQ + newSearch
