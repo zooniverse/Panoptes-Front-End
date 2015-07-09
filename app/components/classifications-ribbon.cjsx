@@ -84,7 +84,7 @@ module.exports = React.createClass
     unless nextProps.user is @props.user
       @getClassificationCounts @props.user
 
-  getClassificationCounts: (user, _page = 1) ->
+  getClassificationCounts: (user) ->
     @setState loading: true
     @getAllProjectPreferences(user).then (preferences) =>
       projects = for preference in preferences
