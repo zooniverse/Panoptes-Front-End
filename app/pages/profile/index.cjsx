@@ -2,8 +2,8 @@ counterpart = require 'counterpart'
 React = require 'react'
 PrivateMessageForm = require '../../talk/private-message-form'
 PromiseRenderer = require '../../components/promise-renderer'
-authClient = require '../../api/auth'
 apiClient = require '../../api/client'
+auth = require '../../api/auth'
 ChangeListener = require '../../components/change-listener'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
@@ -12,78 +12,75 @@ counterpart.registerTranslations 'en',
   profile:
     title: "Hi, %(name)s!"
     nav:
-      feed: "Feed"
+      comments: "Recent comments"
       stats: "Stats"
       collections: "Collections"
-      messages: "Messages"
+      message: "Message"
       settings: "Settings"
 
 UserProfilePage = React.createClass
   displayName: 'UserProfilePage'
 
+  getDefaultProps: ->
+    user: null
+
+  getInitialState: ->
+    profileHeader: null
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
-
-    @getUser()
+    @getProfileHeader(@props.user)
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.params.name isnt @props.params.name
-      @getUser()
+    unless nextProps.user is @props.user
+      @getProfileHeader(nextProps.user)
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
-  getUser: ->
-    authClient.checkCurrent()
-      .then (currentUser) =>
-        if currentUser? and currentUser.display_name is @props.params.name
-          @getProfileHeader(currentUser)
-        else
-          apiClient.type('users').get(login: @props.params.name)
-            .then ([fetchedUser]) =>
-              @getProfileHeader(fetchedUser)
-
   getProfileHeader: (user) ->
-    profileHero = React.findDOMNode(@refs.userProfileHero)
-
-    user.get('profile_header')
-      .then ([profile_header]) ->
-        profileHero.style.backgroundImage = "url(#{profile_header.src})"
-      .catch ->
-        profileHero.style.backgroundImage = ''
-        profileHero.style.backgroundColor = "#0072ff"
+    # TODO: Why's this return an array?
+    # The user should have an ID in its links.
+    @props.user.get('profile_header')
+      .catch =>
+        []
+      .then ([profileHeader]) =>
+        @setState({profileHeader})
 
   render: ->
+    if @state.profileHeader?
+      headerStyle = backgroundImage: "url(#{@state.profileHeader.src})"
+
     <div className="secondary-page user-profile">
-      <section className="hero user-profile-hero" ref="userProfileHero">
+      <section className="hero user-profile-hero" style={headerStyle}>
         <div className="overlay"></div>
         <div className="hero-container">
-          <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(currentUser) =>
-            if currentUser? and currentUser.display_name is @props.params.name
-              <Translate name={currentUser.display_name} content="profile.title" component="h1" />
-            else
-              <PromiseRenderer
-                promise={apiClient.type('users').get(login: @props.params?.name)}
-                pending={null}
-                then={([fetchedUser]) =>
-                  <h1>{fetchedUser.display_name}</h1>}
-              />
-          }</PromiseRenderer>
+          <h1>{@props.user.display_name}</h1>
           <nav className="hero-nav">
-            <Link to="collections-user" params={owner: @props.params.name}><Translate content="profile.nav.collections" /></Link>
-            <PromiseRenderer promise={authClient.checkCurrent()} pending={null}>{(currentUser) =>
-              if currentUser?
-                <span>
-                  <Link to="inbox"><Translate content="profile.nav.messages" /></Link>
-                  <Link to="settings"><Translate content="profile.nav.settings" /></Link>
-                </span>
-            }</PromiseRenderer>
+            <Link to="user-profile" params={name: @props.user.login}>
+              <Translate content="profile.nav.comments" />
+            </Link>
+            {' '}
+            <Link to="collections-user" params={owner: @props.user.login}>
+              <Translate content="profile.nav.collections" />
+            </Link>
+            {' '}
+            <ChangeListener target={auth}>{=>
+              <PromiseRenderer promise={auth.checkCurrent()}>{(user) =>
+                if user is @props.user
+                  null
+                else
+                  <Link to="user-profile-private-message" params={name: @props.user.login}>
+                    <Translate content="profile.nav.message" />
+                  </Link>
+              }</PromiseRenderer>
+            }</ChangeListener>
           </nav>
         </div>
       </section>
 
       <section className="user-profile-content">
-        <RouteHandler params={@props.params} />
+        <RouteHandler {...@props} />
       </section>
     </div>
 
@@ -91,6 +88,9 @@ module.exports = React.createClass
   displayName: 'UserProfilePageWrapper'
 
   render: ->
-    <ChangeListener target={authClient} handler={=>
-      <UserProfilePage params={@props.params} />
-    }/>
+    <PromiseRenderer promise={apiClient.type('users').get({login: @props.params.name})} then={([user]) =>
+      if user?
+        <UserProfilePage user={user} />
+      else
+        <p>Sorry, we couldn’t find any user going by <strong>{@props.params.name}</strong>.</p>
+    } />
