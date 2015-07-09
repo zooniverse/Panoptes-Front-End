@@ -73,7 +73,6 @@ ProjectPage = React.createClass
             </Link>
             <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
               pageTitles = pages.reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
-              console.log(pageTitles)
               <span>
                 {if pageTitles.result
                   <Link to="project-results" params={params} className="tabbed-content-tab">
