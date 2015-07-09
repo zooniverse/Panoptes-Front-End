@@ -74,24 +74,29 @@ ProjectPage = React.createClass
             <Link to="project-science-case" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.science" />
             </Link>
-            {if @props.project.result
-              <Link to="project-results" params={params} className="tabbed-content-tab">
-                <Translate content="project.nav.results" />
-              </Link>}
-            {if @props.project.redirect
-              <a href={@props.project.redirect} className="tabbed-content-tab">Visit project</a>
-            else
-              <Link to="project-classify" params={params} className="classify tabbed-content-tab">
-                <Translate content="project.nav.classify" />
-              </Link>}
-            {if @props.project.faq
-              <Link to="project-faq" params={params} className="tabbed-content-tab">
-                <Translate content="project.nav.faq" />
-              </Link>}
-            {if @props.project.education_content
-              <Link to="project-education" params={params} className="tabbed-content-tab">
-                <Translate content="project.nav.education" />
-              </Link>}
+            <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
+              pageTitles = pages.reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
+              <span>
+                {if pageTitles.result
+                  <Link to="project-results" params={params} className="tabbed-content-tab">
+                    {pageTitles.result}
+                  </Link>}
+                {if @props.project.redirect
+                  <a href={@props.project.redirect} className="tabbed-content-tab">Visit project</a>
+                else
+                  <Link to="project-classify" params={params} className="classify tabbed-content-tab">
+                    <Translate content="project.nav.classify" />
+                  </Link>}
+                {if pageTitles.faq
+                  <Link to="project-faq" params={params} className="tabbed-content-tab">
+                    {pageTitles.faq}
+                  </Link>}
+                {if pageTitles.education
+                  <Link to="project-education" params={params} className="tabbed-content-tab">
+                    {pageTitles.education}
+                  </Link>}
+              </span>
+            }</PromiseRenderer>
             <Link to="project-talk" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.talk" />
             </Link>

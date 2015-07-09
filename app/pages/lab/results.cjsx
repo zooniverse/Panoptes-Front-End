@@ -1,6 +1,5 @@
 React = require 'react'
-AutoSave = require '../../components/auto-save'
-handleInputChange = require '../../lib/handle-input-change'
+ProjectPageEditor = require '../../partials/project-page-editor'
 
 module.exports = React.createClass
   displayName: 'EditProjectResults'
@@ -10,11 +9,5 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      <p>
-        <AutoSave resource={@props.project}>
-          <span className="form-label">Results</span>
-          <br />
-          <textarea className="standard-input full" name="result" value={@props.project.result} rows="20" onChange={handleInputChange.bind @props.project} />
-        </AutoSave>
-      </p>
+      <ProjectPageEditor project={@props.project} page="result" pageTitle="Result" />
     </div>

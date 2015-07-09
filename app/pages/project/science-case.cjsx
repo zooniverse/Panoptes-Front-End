@@ -26,7 +26,14 @@ module.exports = React.createClass
   render: ->
     <div className="project-text-content content-container">
       <div className="columns-container">
-        <Markdown className="column">{@props.project.science_case || 'This project has no science case yet.'}</Markdown>
+        <PromiseRenderer promise={@props.project.get('pages', url_key: "science_case").index(0)}>{(science_case) =>
+          <Markdown className="column">{
+            if science_case?.content
+              science_case?.content
+            else
+              'This project has no science case yet.'
+          }</Markdown>
+        }</PromiseRenderer>
         <hr />
         <div>
           <Translate content="projectRoles.title" />
