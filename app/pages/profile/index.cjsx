@@ -3,6 +3,7 @@ React = require 'react'
 PrivateMessageForm = require '../../talk/private-message-form'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
+auth = require '../../api/auth'
 ChangeListener = require '../../components/change-listener'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
@@ -14,7 +15,7 @@ counterpart.registerTranslations 'en',
       comments: "Recent comments"
       stats: "Stats"
       collections: "Collections"
-      messages: "Messages"
+      message: "Message"
       settings: "Settings"
 
 UserProfilePage = React.createClass
@@ -63,6 +64,17 @@ UserProfilePage = React.createClass
             <Link to="collections-user" params={owner: @props.user.login}>
               <Translate content="profile.nav.collections" />
             </Link>
+            {' '}
+            <ChangeListener target={auth}>{=>
+              <PromiseRenderer promise={auth.checkCurrent()}>{(user) =>
+                if user is @props.user
+                  null
+                else
+                  <Link to="user-profile-private-message" params={name: @props.user.login}>
+                    <Translate content="profile.nav.message" />
+                  </Link>
+              }</PromiseRenderer>
+            }</ChangeListener>
           </nav>
         </div>
       </section>

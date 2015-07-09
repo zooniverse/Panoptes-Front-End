@@ -50,7 +50,7 @@ CommentLink = React.createClass
           <span title={moment(@props.comment.created_at).toISOString()}>{moment(@props.comment.created_at).fromNow()}</span> in{' '}
           {if @state.project? and @state.owner
             <span>
-              <strong className="project">{@state.owner.display_name}/{@state.project.display_name}</strong>
+              <strong className="project" title="#{@state.owner.display_name}/#{@state.project.display_name}">{@state.project.display_name}</strong>
               ➞
             </span>}
           <strong className="board">{@state.board?.title}</strong>
