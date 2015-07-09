@@ -2,6 +2,7 @@ React = require 'react'
 moment = require 'moment'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
+Markdown = require '../../components/markdown'
 
 CommentLink = React.createClass
   displayName: 'CommentLink'
@@ -44,24 +45,26 @@ CommentLink = React.createClass
           @setState({href})
 
   render: ->
-    <a href={@state.href} style={color: 'inherit', textDecoration: 'inherit'}>
+    <div className="profile-feed-comment-link">
       <header>
-        <small>
-          <span title={moment(@props.comment.created_at).toISOString()}>{moment(@props.comment.created_at).fromNow()}</span> in{' '}
+        <span className="comment-timestamp"title={moment(@props.comment.created_at).toISOString()}>
+          {moment(@props.comment.created_at).fromNow()}
+        </span>{' '}
+        in{' '}
+        <a href={@state.href}>
           {if @state.project? and @state.owner
             <span>
-              <strong className="project" title="#{@state.owner.display_name}/#{@state.project.display_name}">{@state.project.display_name}</strong>
+              <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.project.display_name}">{@state.project.display_name}</strong>
               ➞
             </span>}
-          <strong className="board">{@state.board?.title}</strong>
+          <strong className="comment-board">{@state.board?.title}</strong>
           ➞
-          <strong className="discussion">{@state.discussion?.title}</strong>
-        </small>
+          <strong className="comment-discussion">{@state.discussion?.title}</strong>
+        </a>
       </header>
-      {# TODO: Markdown}
-      <div className="">{@props.comment.body}</div>
-      <hr />
-    </a>
+
+      <Markdown className="comment-body" content={@props.comment.body} />
+    </div>
 
 module.exports = React.createClass
   displayName: 'UserProfileFeed'
