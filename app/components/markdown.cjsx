@@ -27,7 +27,8 @@ module.exports = React.createClass
     inline: false
 
   replaceSymbols: (input) ->
-    {owner, name} = @getParams()
+    # Catch getParams in case we're in a non-routed context like an alert
+    {owner, name} = try @getParams() catch _ then [null, null]
 
     input
       # subjects in a specific project : owner-slug/project-slug^subject_id
