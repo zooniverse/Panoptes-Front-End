@@ -16,6 +16,7 @@ counterpart.registerTranslations 'en',
       stats: "Stats"
       collections: "Collections"
       message: "Message"
+      stats: "Your stats"
       settings: "Settings"
 
 UserProfilePage = React.createClass
@@ -67,12 +68,16 @@ UserProfilePage = React.createClass
             {' '}
             <ChangeListener target={auth}>{=>
               <PromiseRenderer promise={auth.checkCurrent()}>{(user) =>
-                if user is @props.user
-                  null
-                else
-                  <Link to="user-profile-private-message" params={name: @props.user.login}>
-                    <Translate content="profile.nav.message" />
-                  </Link>
+                <span>
+                  {if user is @props.user
+                    <Link to="user-profile-stats" params={name: @props.user.login}>
+                      <Translate content="profile.nav.stats" />
+                    </Link>
+                  else
+                    <Link to="user-profile-private-message" params={name: @props.user.login}>
+                      <Translate content="profile.nav.message" />
+                    </Link>}
+                </span>
               }</PromiseRenderer>
             }</ChangeListener>
           </nav>

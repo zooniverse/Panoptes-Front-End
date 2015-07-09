@@ -7,7 +7,7 @@ ClassificationsRibbon = React.createClass
     projects: for i in [0...20]
       {project: "Project #{i}", classifications: Math.floor Math.random() * 100}
     cutoff: 1 / 50
-    width: '20em'
+    width: '100%'
     height: '1em'
 
   getProjectColor: (name) ->
@@ -39,7 +39,7 @@ ClassificationsRibbon = React.createClass
       others = []
 
       lastX = 0
-      <svg className="user-classifications-ribbon" width={@props.width} height={@props.height} viewBox="0 0 1 1" preserveAspectRatio="none">
+      <svg className="user-classifications-ribbon" width={@props.width} height={@props.height} viewBox="0 0 1 1" preserveAspectRatio="none" style={display: 'block'}>
         {for {project, classifications}, i in @props.projects
           width = (classifications ? 1) / totalClassifications
           if width < @props.cutoff
