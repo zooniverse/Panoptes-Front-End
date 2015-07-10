@@ -21,14 +21,12 @@ ClassificationsRibbon = React.createClass
 
   render: ->
     if @props.projects.length is 0
-      <span className="user-classifications-ribbon-empty" style={
-        background: 'rgba(128, 128, 128, 0.2)'
-        color: 'gray'
-        display: 'inline-block'
+      <span className="classifications-ribbon-empty" style={
+        display: 'block'
         width: @props.width
         height: @props.height
       }>
-        No classifications yet
+        <span className="empty">No classifications yet</span>
       </span>
 
     else
@@ -39,7 +37,7 @@ ClassificationsRibbon = React.createClass
       others = []
 
       lastX = 0
-      <svg className="user-classifications-ribbon" width={@props.width} height={@props.height} viewBox="0 0 1 1" preserveAspectRatio="none" style={display: 'block'}>
+      <svg className="classifications-ribbon" width={@props.width} height={@props.height} viewBox="0 0 1 1" preserveAspectRatio="none" style={display: 'block'}>
         {for {project, classifications}, i in @props.projects
           width = (classifications ? 1) / totalClassifications
           if width < @props.cutoff
