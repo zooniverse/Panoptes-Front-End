@@ -47,6 +47,7 @@ routes = <Route handler={App}>
     <DefaultRoute name="user-profile" handler={require './pages/profile/feed'} />
     <Route name="user-profile-private-message" path="message" handler={require './pages/profile/private-message'} />
     <Route name="user-profile-stats" path="stats" handler={require './pages/profile/stats'} />
+    <Route name="moderations" handler={require './talk/moderations'} />
  </Route>
 
   <Route name="inbox" handler={require './talk/inbox'} />

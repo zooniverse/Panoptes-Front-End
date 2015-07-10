@@ -7,6 +7,7 @@ auth = require '../../api/auth'
 ChangeListener = require '../../components/change-listener'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
+talkClient = require '../../api/talk'
 
 counterpart.registerTranslations 'en',
   profile:
@@ -16,8 +17,14 @@ counterpart.registerTranslations 'en',
       stats: "Stats"
       collections: "Collections"
       message: "Message"
+      moderation: "Moderation"
       stats: "Your stats"
       settings: "Settings"
+
+userIsModeratorAnywhere = (roles) ->
+  roles
+    .filter (role) -> ['admin', 'moderator'].indexOf(role.name) isnt -1
+    .length > 0
 
 UserProfilePage = React.createClass
   displayName: 'UserProfilePage'
@@ -77,6 +84,13 @@ UserProfilePage = React.createClass
                     <Link to="user-profile-private-message" params={name: @props.user.login}>
                       <Translate content="profile.nav.message" />
                     </Link>}
+
+                  <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.user.id)}>{(roles) =>
+                    if userIsModeratorAnywhere(roles) and (user is @props.user)
+                      <Link to="moderations" params={name: @props.user.login}>
+                        <Translate content="profile.nav.moderation" />
+                      </Link>
+                  }</PromiseRenderer>
                 </span>
               }</PromiseRenderer>
             }</ChangeListener>
