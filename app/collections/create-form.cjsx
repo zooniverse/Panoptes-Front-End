@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require '../api/client'
-auth = require '../api/auth'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 

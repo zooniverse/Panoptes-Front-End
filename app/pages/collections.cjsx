@@ -3,8 +3,6 @@ React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require '../api/client'
 OwnedCardList = require '../components/owned-card-list'
-PromiseRenderer = require '../components/promise-renderer'
-ChangeListener = require '../components/change-listener'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 
@@ -22,7 +20,7 @@ CollectionsNav = React.createClass
 
   render: ->
     <nav className="hero-nav">
-      {if @props.user?
+      {if @props.user
         <Link to="collections-user" params={{owner: @props.user.login}}>
           <Translate content="collectionsPage.myCollections" />
         </Link>}
@@ -30,9 +28,7 @@ CollectionsNav = React.createClass
 
 CollectionsPage = React.createClass
   displayName: 'CollectionsPage'
-
   mixins: [TitleMixin]
-
   title: 'Collections'
 
   imagePromise: (collection) ->
@@ -48,7 +44,6 @@ CollectionsPage = React.createClass
     'collection-show'
 
   listCollections: ->
-    console.log 'listing collections'
     query = Object.create @props.query ? {}
     query.owner = @props.params.owner if @props.params?.owner?
     query.include = 'owner'
@@ -56,18 +51,15 @@ CollectionsPage = React.createClass
     apiClient.type('collections').get query
 
   render: ->
-    <OwnedCardList
-      translationObjectName="collectionsPage"
-      listPromise={@listCollections()}
-      linkTo="collections"
-      heroNav={<CollectionsNav />}
-      heroClass="collections-hero"
-      ownerName={@props.params?.owner}
-      imagePromise={@imagePromise}
-      cardLink={@cardLink} />
+    listProps =
+      translationObjectName: 'collectionsPage'
+      listPromise: @listCollections()
+      linkTo: 'collections'
+      heroNav: <CollectionsNav user={@props.user} />
+      ownerName: @props.params?.owner
+      imagePromise: @imagePromise
+      cardLink: @cardLink
 
-module.exports = React.createClass
-  displayName: 'CollectionsPageWrapper'
+    <OwnedCardList {...listProps} />
 
-  render: ->
-    <CollectionsPage {...@props} />
+module.exports = CollectionsPage

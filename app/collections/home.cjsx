@@ -15,7 +15,7 @@ module?.exports = React.createClass
 
   render: ->
     <div className="collections-home">
-      {if @props.user?
+      {if @props.user
         <PromiseRenderer promise={@props.user.get('collections')}>{(collections) =>
           <div>
             <CollectionCreateForm />
