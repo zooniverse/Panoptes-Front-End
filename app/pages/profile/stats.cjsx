@@ -52,7 +52,7 @@ module.exports = React.createClass
   render: ->
     <div className="content-container">
       <h3>Your contribution stats</h3>
-      <p className="form-help">Only you can see your stats.</p>
+      <p className="form-help">Users can only view their own stats.</p>
       <ChangeListener target={auth} handler={=>
         <PromiseRenderer promise={auth.checkCurrent()} then={(currentUser) =>
           if currentUser is @props.user
