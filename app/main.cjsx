@@ -114,6 +114,7 @@ routes = <Route handler={App}>
   <Route path="dev/workflow-tasks-editor" handler={require './components/workflow-tasks-editor'} />
   <Route path="dev/classifier" handler={require './classifier'} />
   <Route path="dev/aggregate" handler={require './components/aggregate-view'} />
+  <Route path="dev/ribbon" handler={require './components/classifications-ribbon'} />
 </Route>
 
 mainContainer = document.createElement 'div'
