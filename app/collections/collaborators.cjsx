@@ -53,9 +53,9 @@ RoleCreator = React.createClass
 
         <p className="form-help error">{errorMessage}</p>}
       <form style={style}>
-        <p>
+        <div>
           <UserSearch />
-        </p>
+        </div>
 
         <table className="standard-table">
           <tbody>

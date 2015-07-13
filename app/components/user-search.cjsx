@@ -25,6 +25,6 @@ module.exports = React.createClass
       name="userids"
       placeholder="Username:"
       searchPromptText="Type to search Users"
-      className="user-search"
+      className="search standard-input"
       closeAfterClick={true}
       asyncOptions={debounce(@searchUsers, 200)} />
