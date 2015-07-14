@@ -31,7 +31,7 @@ counterpart.registerTranslations 'en',
   project:
     loading: 'Loading project'
     nav:
-      science: 'Science'
+      research: 'Research'
       results: 'Results'
       classify: 'Classify'
       faq: 'FAQ'
@@ -71,8 +71,8 @@ ProjectPage = React.createClass
               } catch={null} />
               {@props.project.display_name}
             </Link>
-            <Link to="project-science-case" params={params} className="tabbed-content-tab">
-              <Translate content="project.nav.science" />
+            <Link to="project-research" params={params} className="tabbed-content-tab">
+              <Translate content="project.nav.research" />
             </Link>
             <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
               pageTitles = pages.reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})

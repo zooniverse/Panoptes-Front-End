@@ -45,8 +45,8 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-details" params={linkParams} className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
             Project details
           </Link></li>
-          <li><Link to="edit-project-science-case" params={linkParams} className="nav-list-item" title="Explain your research to your audience here in as much detail as you’d like.">
-            Science case
+          <li><Link to="edit-project-research" params={linkParams} className="nav-list-item" title="Explain your research to your audience here in as much detail as you’d like.">
+            Research
           </Link></li>
           <li><Link to="edit-project-results" params={linkParams} className="nav-list-item" title="Once your project has hit its stride, share the results of your project with your volunteers here.">
             Results
