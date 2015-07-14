@@ -64,6 +64,31 @@ workflow = apiClient.type('workflows').create
             pa: ['so']
             co: ['gr']
 
+      questionsOrder: ['ho', 'be']
+      questions:
+        ho:
+          multiple: false
+          label: 'How many?'
+          answersOrder: ['one', 'two', 'many']
+          answers:
+            one:
+              label: '1'
+            two:
+              label: '2'
+            many:
+              label: '3+'
+        be:
+          multiple: true
+          label: 'Any activity?'
+          answersOrder: ['mo', 'ea', 'in']
+          answers:
+            mo:
+              label: 'Moving'
+            ea:
+              label: 'Eating'
+            in:
+              label: 'Interacting'
+
     draw:
       type: 'drawing'
       instruction: 'Draw something.'
