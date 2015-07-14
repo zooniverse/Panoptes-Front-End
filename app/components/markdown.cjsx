@@ -35,7 +35,13 @@ module.exports = React.createClass
       # \b[\w-]+\b is hyphen boundary for slugs
       .replace /@(\b[\w-]+\b)\/(\b[\w-]+\b)\^([0-9]+)/g, "<a href='#/projects/$1/$2/talk/subjects/$3'>$1/$2 - Subject $3</a>"
 
-      # user mentions : @username
+      .replace(/\^([0-9]+)/g, (_, subjectID) ->
+        if owner and name
+          "<a href='#/projects/#{owner}/#{name}/talk/subjects/#{subjectID}'>#{owner}/#{name} - Subject #{subjectID}</a>"
+        else
+          subjectID)
+
+     # user mentions : @username
       .replace /\B@(\b[\w-]+\b)/g, "<a href='#/users/$1'>@$1</a>"
 
       # hashtags #tagname
