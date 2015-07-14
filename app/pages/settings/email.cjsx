@@ -12,7 +12,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="content-container">
-      <p><strong>Project email preferences</strong></p>
+      <p><strong>Zooniverse email preferences</strong></p>
       <p>
         <AutoSave resource={@props.user}>
           <label>
@@ -35,6 +35,7 @@ module.exports = React.createClass
           </label>
         </AutoSave>
       </p>
+      <p><strong>Project email preferences</strong></p>
       <table>
         <thead>
           <tr>
