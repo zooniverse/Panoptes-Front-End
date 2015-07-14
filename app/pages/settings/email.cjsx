@@ -1,4 +1,5 @@
 React = require 'react'
+AutoSave = require '../../components/auto-save'
 PromiseRenderer = require '../../components/promise-renderer'
 ChangeListener = require '../../components/change-listener'
 handleInputChange = require '../../lib/handle-input-change'
@@ -11,6 +12,36 @@ module.exports = React.createClass
 
   render: ->
     <div className="content-container">
+      <p>
+        <AutoSave resource={@props.user}>
+          <span className="form-label">Email address</span>
+          <br />
+          <input type="text" className="standard-input full" name="email" value={@props.user.email} onChange={handleInputChange.bind @props.user} />
+        </AutoSave>
+      </p>
+      <p><strong>Zooniverse email preferences</strong></p>
+      <p>
+        <AutoSave resource={@props.user}>
+          <label>
+            <input type="checkbox" name="global_email_communication" checked={@props.user.global_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
+            Get general Zooniverse email updates
+          </label>
+        </AutoSave>
+        <br />
+        <AutoSave resource={@props.user}>
+          <label>
+            <input type="checkbox" name="project_email_communication" checked={@props.user.project_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
+            Get email updates from the Projects you classify on
+          </label>
+        </AutoSave>
+        <br />
+        <AutoSave resource={@props.user}>
+          <label>
+            <input type="checkbox" name="beta_email_communication" checked={@props.user.beta_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
+            Get beta project email updates
+          </label>
+        </AutoSave>
+      </p>
       <p><strong>Project email preferences</strong></p>
       <table>
         <thead>
