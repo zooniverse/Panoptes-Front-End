@@ -144,14 +144,15 @@ Classifier = React.createClass
     @checkToolChange classification
 
   checkToolChange: (classification) ->
-    lastAnnotationIndex = classification.annotations.length - 1
-    lastAnnotation = classification.annotations[lastAnnotationIndex]
+    if @props.workflow.tasks[annotation.task].type is 'drawing'
+      lastAnnotationIndex = classification.annotations.length - 1
+      lastAnnotation = classification.annotations[lastAnnotationIndex]
 
-    toolIdentifier = "#{lastAnnotationIndex}-#{lastAnnotation._toolIndex}"
+      toolIdentifier = "#{lastAnnotationIndex}-#{lastAnnotation._toolIndex}"
 
-    if Array.isArray(lastAnnotation.value) and toolIdentifier isnt @_lastAnnotationAndTool
-      @handleToolChange lastAnnotation, @_lastAnnotationAndTool.split('-').pop() ? '-1'
-      @_lastAnnotationAndTool = toolIdentifier
+      if Array.isArray(lastAnnotation.value) and toolIdentifier isnt @_lastAnnotationAndTool
+        @handleToolChange lastAnnotation, @_lastAnnotationAndTool.split('-').pop() ? '-1'
+        @_lastAnnotationAndTool = toolIdentifier
 
   handleToolChange: (annotation, oldToolIndex) ->
     lastMark = annotation.value[annotation.value.length - 1]
