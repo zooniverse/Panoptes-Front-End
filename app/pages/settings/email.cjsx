@@ -12,6 +12,13 @@ module.exports = React.createClass
 
   render: ->
     <div className="content-container">
+      <p>
+        <AutoSave resource={@props.user}>
+          <span className="form-label">Email address</span>
+          <br />
+          <input type="text" className="standard-input full" name="email" value={@props.user.email} onChange={handleInputChange.bind @props.user} />
+        </AutoSave>
+      </p>
       <p><strong>Zooniverse email preferences</strong></p>
       <p>
         <AutoSave resource={@props.user}>
