@@ -8,8 +8,62 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'draw'
+  first_task: 'survey'
   tasks:
+    survey:
+      type: 'survey'
+      characteristicsOrder: ['pa', 'co']
+      characteristics:
+        pa:
+          label: 'Pattern'
+          valuesOrder: ['so', 'sp', 'st', 'ba']
+          values:
+            so:
+              label: 'Solid'
+            sp:
+              label: 'Spots'
+            st:
+              label: 'Stripes'
+            ba:
+              label: 'Bands'
+        co:
+          label: 'Color'
+          valuesOrder: ['wh', 'ta', 're', 'br', 'bl', 'gr']
+          values:
+            wh:
+              label: 'White'
+            ta:
+              label: 'Tan'
+            re:
+              label: 'Red'
+            br:
+              label: 'Brown'
+            bl:
+              label: 'Black'
+            gr:
+              label: 'Green'
+
+      choicesOrder: ['aa', 'ar', 'to']
+      choices:
+        aa:
+          label: 'Aardvark'
+          description: 'Basically a long-nose rabbit'
+          characteristics:
+            pa: ['so']
+            co: ['ta', 'br']
+        ar:
+          label: 'Armadillo'
+          description: 'A little rolly dude'
+          characteristics:
+            pa: ['so', 'st']
+            co: ['ta', 'br']
+        to:
+          label: 'Tortoise'
+          description: 'Little green house with legs'
+          characteristics:
+            pa: ['so']
+            co: ['gr']
+
     draw:
       type: 'drawing'
       instruction: 'Draw something.'
