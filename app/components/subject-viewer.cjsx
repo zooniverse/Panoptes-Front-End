@@ -129,8 +129,9 @@ module.exports = React.createClass
   showMetadata: ->
     # TODO: Sticky popup.
     alert <div className="content-container">
-      Subject metadata<br />
-      <table>
+      <header className="form-label" style={textAlign: 'center'}>Subject metadata</header>
+      <hr />
+      <table className="standard-table">
         {for key, value of @props.subject?.metadata when key.charAt(0) isnt '_'
           <tr key={key}>
             <th>{key}</th>
