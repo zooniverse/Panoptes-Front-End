@@ -55,9 +55,9 @@ CollaboratorCreator = React.createClass
       {if @state.error?
         <p className="form-help error">{@state.error.toString()}</p>}
       <form style={style}>
-        <p>
+        <div>
           <UserSearch />
-        </p>
+        </div>
 
         <table className="standard-table">
           <tbody>
