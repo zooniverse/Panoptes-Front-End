@@ -132,7 +132,7 @@ module.exports = React.createClass
       <header className="form-label" style={textAlign: 'center'}>Subject metadata</header>
       <hr />
       <table className="standard-table">
-        {for key, value of @props.subject?.metadata when key.charAt(0) isnt '_'
+        {for key, value of @props.subject?.metadata when key.charAt(0) isnt '#' and key[...2] isnt '//'
           <tr key={key}>
             <th>{key}</th>
             <Markdown tag="td" content={value} inline />
