@@ -85,7 +85,7 @@ UserProfilePage = React.createClass
                       <Translate content="profile.nav.message" />
                     </Link>}
 
-                  <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.user.id)}>{(roles) =>
+                  <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.user.id, page_size: 100)}>{(roles) =>
                     if userIsModeratorAnywhere(roles) and (user is @props.user)
                       <Link to="moderations" params={name: @props.user.login}>
                         <Translate content="profile.nav.moderation" />
