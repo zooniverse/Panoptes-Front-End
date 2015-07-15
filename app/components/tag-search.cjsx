@@ -21,6 +21,11 @@ module.exports = React.createClass
             options: opts
           }
 
+  saveCurrent: ({target}) ->
+    value = target.value
+    unless value is ''
+      @refs.tagSearch.addValue(value)
+
   handleInputChange: ({target}) ->
     value = target.value
     if value.slice("-1") is ","
@@ -36,6 +41,7 @@ module.exports = React.createClass
       placeholder="Tags:"
       className="search standard-input"
       closeAfterClick={false}
+      onBlur={@saveCurrent}
       onChange={@props.onChange}
       onInputChange={@handleInputChange}
       asyncOptions={debounce(@searchTags, 200)} />
