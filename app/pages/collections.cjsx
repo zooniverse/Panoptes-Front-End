@@ -71,6 +71,8 @@ module.exports = React.createClass
   displayName: 'CollectionsPageWrapper'
 
   render: ->
-    <ChangeListener target={authClient} handler={=>
-      <CollectionsPage {...@props} />
-    }/>
+    <ChangeListener target={authClient}>{ =>
+      <PromiseRenderer pending={null} promise={authClient.checkCurrent()}>{ (user) =>
+        <CollectionsPage user={user} {...@props} />
+      }</PromiseRenderer>
+    }</ChangeListener>
