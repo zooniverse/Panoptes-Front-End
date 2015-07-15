@@ -66,6 +66,16 @@ ChoiceDetails = React.createClass
   getInitialState: ->
     answers: {}
 
+  allFilledIn: ->
+    requiredIDs = for questionID in @props.task.questionsOrder
+      question = @props.task.questions[questionID]
+      if question.multiple
+        # Multiple-allowed questions aren't required.
+        continue
+      else
+        questionID
+    (true for id in requiredIDs when id not of @state.answers).length is 0
+
   render: ->
     choice = @props.task.choices[@props.choiceID]
     <div className="survey-choice-details">
@@ -91,7 +101,7 @@ ChoiceDetails = React.createClass
             </label>}
         </div>}
       <button type="button" onClick={@props.onCancel}>Cancel</button>
-      <button type="button" onClick={@handleIdentification}>Identify</button>
+      <button type="button" disabled={not @allFilledIn()} onClick={@handleIdentification}>Identify</button>
     </div>
 
   handleAnswer: (questionID, answerID, e) ->
