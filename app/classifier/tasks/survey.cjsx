@@ -2,25 +2,25 @@ React = require 'react'
 
 Summary = React.createClass
   displayName: 'SurveySummary'
+
   render: ->
-    null
+    <div>TODO: Survey summary</div>
 
 Chooser = React.createClass
   displayName: 'Chooser'
 
   getDefaultProps: ->
     task: null
-    onChoose: Function.prototype
-
-  getInitialState: ->
     filters: {}
+    onFilter: Function.prototype
+    onChoose: Function.prototype
 
   getFilteredChoices: ->
     for choiceID in @props.task.choicesOrder
       choice = @props.task.choices[choiceID]
       rejected = false
-      for filterID, filterValue of @state.filters
-        if filterValue not in choice.characteristics[filterID]
+      for characteristicID, valueID of @props.filters
+        if valueID not in choice.characteristics[characteristicID]
           rejected = true
           break
       if rejected
@@ -35,7 +35,7 @@ Chooser = React.createClass
         <div key={characteristicID}>
           <label>
             {characteristic.label}{' '}
-            <select value={@state.filters[characteristicID] ? ''} onChange={@handleFilter.bind this, characteristicID}>
+            <select value={@props.filters[characteristicID] ? ''} onChange={@handleFilter.bind this, characteristicID}>
               <option value="">(Any)</option>
               {for valueID in characteristic.valuesOrder
                 value = characteristic.values[valueID]
@@ -52,12 +52,7 @@ Chooser = React.createClass
     </div>
 
   handleFilter: (characteristicID, e) ->
-    value = e.target.value
-    if e.target.value is ''
-      delete @state.filters[characteristicID]
-    else
-      @state.filters[characteristicID] = value
-    @setState filters: @state.filters
+    @props.onFilter characteristicID, e.target.value
 
 ChoiceDetails = React.createClass
   displayName: 'ChoiceDetails'
@@ -140,24 +135,39 @@ module.exports = React.createClass
     onChange: Function.prototype
 
   getInitialState: ->
+    filters: {}
     selectedChoiceID: ''
 
   render: ->
     <div className="survey-task">
       {if @state.selectedChoiceID is ''
-        <Chooser task={@props.task} onChoose={@handleChoice} />
+        <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} />
       else
         <ChoiceDetails task={@props.task} choiceID={@state.selectedChoiceID} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
     </div>
 
+  handleFilter: (characteristicID, valueID) ->
+    if valueID is ''
+      delete @state.filters[characteristicID]
+    else
+      @state.filters[characteristicID] = valueID
+    @setState filters: @state.filters
+
   handleChoice: (choiceID) ->
     @setState selectedChoiceID: choiceID
+
+  clearFilters: ->
+    @setState filters: {}
 
   clearSelection: ->
     @setState selectedChoiceID: ''
 
   handleAnnotation: (choice, details, e) ->
-    @clearSelection()
+    filters = JSON.parse JSON.stringify @state.filters
+
     @props.annotation.value ?= []
-    @props.annotation.value.push {choice, details}
+    @props.annotation.value.push {choice, details, filters}
     @props.onChange e
+
+    @clearFilters()
+    @clearSelection()
