@@ -30,9 +30,11 @@ module.exports = React.createClass
 
   componentDidMount: ->
     addEventListener 'resize', @handleResize
+    addEventListener 'scroll', @handleResize
 
   componentWillUnmount: ->
     removeEventListener 'resize', @handleResize
+    removeEventListener 'scroll', @handleResize
 
   getScale: ->
     ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
@@ -100,6 +102,7 @@ module.exports = React.createClass
                   mark._key ?= Math.random()
                   toolDescription = taskDescription.tools[mark.tool]
                   toolEnv =
+                    containerRect: @state.sizeRect
                     scale: @getScale()
                     disabled: isPriorAnnotation
                     selected: mark is @state.selectedMark
