@@ -9,6 +9,8 @@ module?.exports = React.createClass
 
   propTypes:
     comment: React.PropTypes.object
+
+  getInitialState: ->
     error: ''
 
   onSubmit: (e) ->
