@@ -102,8 +102,9 @@ EditProjectPage = React.createClass
                 {renderSubjectSetListItem = (subjectSet) ->
                   subjectSetLinkParams = Object.create linkParams
                   subjectSetLinkParams.subjectSetID = subjectSet.id
+                  subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>
                   <li key={subjectSet.id}>
-                    <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item" title="A subject is an image (or group of images) to be analyzed.">{subjectSet.display_name}</Link>
+                    <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item" title="A subject is an image (or group of images) to be analyzed.">{subjectSetListLabel}</Link>
                   </li>}
 
                 {for subjectSet in subjectSets

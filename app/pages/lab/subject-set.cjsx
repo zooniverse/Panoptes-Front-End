@@ -135,7 +135,7 @@ EditSubjectSetPage = React.createClass
           <AutoSave resource={@props.subjectSet}>
             <span className="form-label">Name</span>
             <br />
-            <input type="text" name="display_name" value={@props.subjectSet.display_name} className="standard-input full" onChange={handleInputChange.bind @props.subjectSet} />
+            <input type="text" name="display_name" placeholder="Subject Set Name" value={@props.subjectSet.display_name} className="standard-input full" onChange={handleInputChange.bind @props.subjectSet} />
           </AutoSave>
           <small className="form-help">A subject set’s name is only seen by the research team.</small>
         </p>
