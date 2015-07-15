@@ -2,6 +2,7 @@ React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 FavoritesButton = require '../collections/favorites-button'
 alert = require '../lib/alert'
+Markdown = require '../components/markdown'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 
@@ -133,7 +134,7 @@ module.exports = React.createClass
         {for key, value of @props.subject?.metadata when key.charAt(0) isnt '_'
           <tr key={key}>
             <th>{key}</th>
-            <td><code><pre>{JSON.stringify value, null, 2}</pre></code></td>
+            <Markdown tag="td" content={value} inline />
           </tr>}
       </table>
     </div>
