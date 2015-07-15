@@ -49,9 +49,10 @@ CollectionsPage = React.createClass
     'collection-show'
 
   listCollections: ->
-    query = Object.create @props.query ? {}
+    query = {}
     query.owner = @props.params.owner if @props.params?.owner?
     query.include = 'owner'
+    Object.assign query, @props.query
 
     apiClient.type('collections').get query
 
