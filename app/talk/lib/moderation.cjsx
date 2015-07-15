@@ -41,7 +41,7 @@ module?.exports = React.createClass
     <ChangeListener target={authClient}>{=>
       <PromiseRenderer pending={null} promise={authClient.checkCurrent()}>{(user) =>
         if user?
-          <PromiseRenderer pending={null} promise={talkClient.type('roles').get(user_id: user.id)}>{(roles) =>
+          <PromiseRenderer pending={null} promise={talkClient.type('roles').get(user_id: user.id, page_size: 100)}>{(roles) =>
             if userIsModerator(user, roles, section)
               <div className="talk-moderation">
                 <button onClick={@toggleModeration}>

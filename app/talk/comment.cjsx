@@ -96,7 +96,7 @@ module?.exports = React.createClass
           <div className="user-mention-name">@{@props.data.user_login}</div>
         </p>
 
-        <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.data.user_id, section: ['zooniverse', @props.data.section], is_shown: true)}>{(roles) =>
+        <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.data.user_id, section: ['zooniverse', @props.data.section], is_shown: true, page_size: 100)}>{(roles) =>
           <DisplayRoles roles={roles} section={@props.data.section} />
         }</PromiseRenderer>
       </div>

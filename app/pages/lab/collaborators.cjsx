@@ -136,7 +136,7 @@ module.exports = React.createClass
     saving: []
 
   fetchAllRoles: ->
-    Promise.all([@props.project.get('project_roles'), talkClient.type('roles').get(section: @talkSection())])
+    Promise.all([@props.project.get('project_roles'), talkClient.type('roles').get(section: @talkSection(), page_size: 100)])
       .then ([panoptesRoles, talkRoles]) ->
         for roleSet in panoptesRoles when roleSet.links.owner.type == 'users'
           roleSet['talk_roles'] = talkRoles.filter((role) -> role.links.user == roleSet.links.owner.id)
