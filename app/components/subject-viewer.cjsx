@@ -130,7 +130,7 @@ module.exports = React.createClass
     alert <div className="content-container">
       Subject metadata<br />
       <table>
-        {for key, value of @props.subject?.metadata
+        {for key, value of @props.subject?.metadata when key.charAt(0) isnt '_'
           <tr key={key}>
             <th>{key}</th>
             <td><code><pre>{JSON.stringify value, null, 2}</pre></code></td>
