@@ -9,6 +9,7 @@ Paginator = require '../talk/lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
+{Link} = require 'react-router'
 
 VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
 
@@ -58,6 +59,18 @@ module?.exports = React.createClass
 
     return hasPermission
 
+  fetchProjectOwner: (subject) ->
+    projectRequest = if @props.collection.links.project?
+      @props.collection.get('project')
+    else
+      subject.get('project')
+
+    projectRequest.then (project) ->
+      project.get('owner')
+        .then (owner) ->
+          ownerName = owner.login or owner.name
+          {owner: ownerName, name: project.slug, id: subject.id}
+
   render: ->
     subjectNode = (subject) =>
       <div className="collection-subject-viewer" key={subject.id}>
@@ -66,13 +79,18 @@ module?.exports = React.createClass
             <button type="button" className="collection-subject-viewer-delete-button" onClick={@handleDeleteSubject.bind @, subject}>
               <i className="fa fa-close" />
             </button>}
+          <PromiseRenderer promise={@fetchProjectOwner(subject)}>{ (params) =>
+            <Link className="subject-link" to="project-talk-subject" params={params}>
+              <span></span>
+            </Link>
+          }</PromiseRenderer>
         </SubjectViewer>
       </div>
 
     pendingFunc = ->
       <Loading />
 
-    catchFunc = ->
+    catchFunc = (e) ->
       <Translate component="p" className="form-help error" content="collectionSubjectListPage.error" />
 
     thenFunc = (subjects) =>
