@@ -43,6 +43,9 @@ module?.exports = React.createClass
         .then (moderations) =>
           moderationsMeta = moderations[0]?.getMeta()
           @setState {user, moderations, moderationsMeta, loading: false}
+        .catch (e) =>
+          @setState {loading: false}
+          throw new Error(e)
 
   updateModeration: (moderation, action) ->
     if ['destroy', 'ignore', 'watch', 'open'].indexOf(action) is -1
@@ -105,24 +108,23 @@ module?.exports = React.createClass
 
     <div className="talk moderations content-container">
 
-      {if moderations?.length > 0
-        <section>
-          <button
-            key='all-reports'
-            onClick={=> @setState filter: null, @setModerations}
-            className={if @state.filter is null then 'active' else ''}>
-            All reports
-          </button>
+      <section>
+        <button
+          key='all-reports'
+          onClick={=> @setState filter: null, @setModerations}
+          className={if @state.filter is null then 'active' else ''}>
+          All reports
+        </button>
 
-          {['opened', 'ignored', 'closed'].map (action) =>
-            <button
-              key={action}
-              onClick={=> @setState {filter: action}, @setModerations}
-              className={if @state.filter is action then 'active' else ''}>
-              {action}
-            </button>
-            }
-        </section>}
+        {['opened', 'ignored', 'closed'].map (action) =>
+          <button
+            key={action}
+            onClick={=> @setState {filter: action}, @setModerations}
+            className={if @state.filter is action then 'active' else ''}>
+            {action}
+          </button>
+          }
+      </section>
 
       {if @state.loading
          <Loading />
@@ -132,7 +134,7 @@ module?.exports = React.createClass
          <p>There are not currently any reports that require moderation.</p>
          }
 
-      {if +@state.moderationsMeta.page_count > 1
+      {if +@state.moderationsMeta?.page_count > 1
         <Paginator
           page={@state.moderationsMeta.page}
           pageCount={@state.moderationsMeta.page_count} />
