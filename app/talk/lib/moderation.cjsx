@@ -26,6 +26,7 @@ module?.exports = React.createClass
 
   propTypes:
     section: React.PropTypes.string.isRequired # talk section
+    user: React.PropTypes.object.isRequired
 
   getInitialState: ->
     open: false

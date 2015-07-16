@@ -86,32 +86,33 @@ module?.exports = React.createClass
 
   render: ->
     <div className="talk-home">
-      <Moderation section={@props.section}>
-        <div>
-          <h2>Moderator Zone:</h2>
-          {if @props.section isnt 'zooniverse'
-            <PromiseRenderer promise={talkClient.type('boards').get({section: @props.section, subject_default: true}).index(0)}>{(defaultBoard) =>
-              if not defaultBoard?
-                <button onClick={@createSubjectDefaultBoard}><i className="fa fa-photo" /> Activate Talk Subject Comments Board</button>
-            }</PromiseRenderer>
-            }
+      {if @props.user?
+        <Moderation section={@props.section} user={@props.user}>
+          <div>
+            <h2>Moderator Zone:</h2>
+            {if @props.section isnt 'zooniverse'
+              <PromiseRenderer promise={talkClient.type('boards').get({section: @props.section, subject_default: true}).index(0)}>{(defaultBoard) =>
+                if not defaultBoard?
+                  <button onClick={@createSubjectDefaultBoard}><i className="fa fa-photo" /> Activate Talk Subject Comments Board</button>
+              }</PromiseRenderer>
+              }
 
-          <form onSubmit={@onSubmitBoard}>
-            <h3>Add a board:</h3>
-            <input type="text" ref="boardTitle" placeholder="Board Title"/>
+            <form onSubmit={@onSubmitBoard}>
+              <h3>Add a board:</h3>
+              <input type="text" ref="boardTitle" placeholder="Board Title"/>
 
-            <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
+              <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
 
-            <h4>Can Read:</h4>
-            <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+              <h4>Can Read:</h4>
+              <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
 
-            <h4>Can Write:</h4>
-            <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+              <h4>Can Write:</h4>
+              <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
 
-            <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
-          </form>
-        </div>
-      </Moderation>
+              <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
+            </form>
+          </div>
+        </Moderation>}
 
       <div className="talk-list-content">
         <section>
