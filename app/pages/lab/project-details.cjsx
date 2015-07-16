@@ -8,6 +8,7 @@ putFile = require '../../lib/put-file'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
+TagSearch = require '../../components/tag-search'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -125,7 +126,8 @@ module.exports = React.createClass
 
           <p>
             <AutoSave tag="label" resource={@props.project}>
-              <input type="checkbox" name="configuration.user_chooses_workflow" value={@props.project.configuration?.user_chooses_workflow} onChange={handleInputChange.bind @props.project} />{' '}
+              {checked = @props.project.configuration?.user_chooses_workflow}
+              <input type="checkbox" name="configuration.user_chooses_workflow" defaultChecked={checked} defaultValue={checked} onChange={handleInputChange.bind @props.project} />{' '}
               Volunteers can choose which workflow they work on
             </AutoSave>
             <br />
@@ -164,6 +166,15 @@ module.exports = React.createClass
           </p>
 
           <div>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Tags</span>
+              <br />
+              <TagSearch name="tags" multi={true} value={@props.project.tags} onChange={@handleTagChange} />
+            </AutoSave>
+            <small className="form-help">Enter a list of tags separated by commas, to help users find your project.</small>
+          </div>
+
+          <div>
             External links<br />
             <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and talk tabs.</small>
             <ExternalLinksEditor project={@props.project} />
@@ -183,6 +194,14 @@ module.exports = React.createClass
         </div>
       </div>
     </div>
+
+  handleTagChange: (value) ->
+    event =
+      target:
+        value: if value is '' then [] else value.split(',')
+        name: 'tags'
+        dataset: {}
+    handleInputChange.call @props.project, event
 
   handleMediaChange: (type, file) ->
     errorProp = "#{type}Error"

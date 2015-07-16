@@ -1,7 +1,6 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
 UserSearch = require '../../components/user-search'
-authClient = require '../../api/auth'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
 projectSection = require '../../talk/lib/project-section'
@@ -55,9 +54,9 @@ CollaboratorCreator = React.createClass
       {if @state.error?
         <p className="form-help error">{@state.error.toString()}</p>}
       <form style={style}>
-        <p>
+        <div>
           <UserSearch />
-        </p>
+        </div>
 
         <table className="standard-table">
           <tbody>
@@ -136,23 +135,17 @@ module.exports = React.createClass
     saving: []
 
   fetchAllRoles: ->
-    Promise.all([@props.project.get('project_roles'), talkClient.type('roles').get(section: @talkSection())])
+    Promise.all([@props.project.get('project_roles'), talkClient.type('roles').get(section: @talkSection(), page_size: 100)])
       .then ([panoptesRoles, talkRoles]) ->
         for roleSet in panoptesRoles when roleSet.links.owner.type == 'users'
           roleSet['talk_roles'] = talkRoles.filter((role) -> role.links.user == roleSet.links.owner.id)
           roleSet
 
-  fetchUserAndProjectOwner: ->
-    Promise.all [
-      authClient.checkCurrent(),
-      @props.project.get('owner')
-    ]
-
   render: ->
     <div>
       <div className="form-label">Project Owner</div>
-      <PromiseRenderer promise={@fetchUserAndProjectOwner()} then={([user, projectOwner] = []) =>
-        projectOwnerMessage = if user.id is projectOwner.id
+      <PromiseRenderer promise={@props.project.get('owner')} then={(projectOwner) =>
+        projectOwnerMessage = if @props.user.id is projectOwner.id
           {'You are the project owner.'}
         else
           projectOwner.display_name + ' is the project owner.'

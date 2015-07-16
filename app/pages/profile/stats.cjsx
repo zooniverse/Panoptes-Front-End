@@ -1,8 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
 ClassificationsRibbon = require '../../components/classifications-ribbon'
-auth = require '../../api/auth'
-ChangeListener = require '../../components/change-listener'
 PromiseRenderer = require '../../components/promise-renderer'
 
 ProjectIcon = React.createClass
@@ -53,30 +51,26 @@ module.exports = React.createClass
     <div className="content-container">
       <h3>Your contribution stats</h3>
       <p className="form-help">Users can only view their own stats.</p>
-      <ChangeListener target={auth} handler={=>
-        <PromiseRenderer promise={auth.checkCurrent()} then={(currentUser) =>
-          if currentUser is @props.user
-            # TODO: Braces after "style" here confuse coffee-reactify. That's really annoying.
-            centered = textAlign: 'center'
-            <div style=centered>
-              <p><ClassificationsRibbon user={@props.user} /></p>
-              <PromiseRenderer promise={ClassificationsRibbon::getAllProjectPreferences @props.user} then={(projectPreferences) =>
-                <div>
-                  {projectPreferences.map (projectPreference) =>
-                    <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} catch={null} then={(project) =>
-                      if project?
-                        <span>
-                          <ProjectIcon project={project} badge={projectPreference.activity_count} />
-                          &ensp;
-                        </span>
-                      else
-                        null
-                    } />}
-                </div>
-              } />
+      {if @props.profileUser is @props.user
+        # TODO: Braces after "style" here confuse coffee-reactify. That's really annoying.
+        centered = textAlign: 'center'
+        <div style=centered>
+          <p><ClassificationsRibbon user={@props.profileUser} /></p>
+          <PromiseRenderer promise={ClassificationsRibbon::getAllProjectPreferences @props.profileUser} then={(projectPreferences) =>
+            <div>
+              {projectPreferences.map (projectPreference) =>
+                <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} catch={null} then={(project) =>
+                  if project?
+                    <span>
+                      <ProjectIcon project={project} badge={projectPreference.activity_count} />
+                      &ensp;
+                    </span>
+                  else
+                    null
+                } />}
             </div>
-          else
-            <p>Sorry, we can’t show you stats for {@props.user.display_name}.</p>
-        } />
-      } />
+          } />
+        </div>
+      else
+        <p>Sorry, we can’t show you stats for {@props.user.display_name}.</p>}
     </div>

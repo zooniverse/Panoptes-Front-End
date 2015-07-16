@@ -3,14 +3,10 @@ Comment = require './comment'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
-SubjectDisplay = require './subject-display'
 Router = require 'react-router'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
 Paginator = require './lib/paginator'
-ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
-PromiseToSetState = require '../lib/promise-to-set-state'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
@@ -24,25 +20,16 @@ PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
-  mixins: [Router.Navigation, PromiseToSetState]
+  mixins: [Router.Navigation]
 
   getInitialState: ->
     comments: []
     discussion: {}
     commentsMeta: {}
-    user: null
     commentValidationErrors: []
 
   componentDidMount: ->
     @shouldScrollToBottom = true if @props.query?.scrollToLastComment
-    @handleAuthChange()
-    authClient.listen @handleAuthChange
-
-  componentWillUnmount: ->
-    authClient.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    @promiseToSetState user: authClient.checkCurrent()
 
   goToPage: (n) ->
     {owner, name} = @props.params
@@ -104,7 +91,7 @@ module?.exports = React.createClass
 
   onSubmitComment: (e, textContent, subject) ->
     {discussion} = @props.params
-    user_id = @state.user.id
+    user_id = @props.user.id
     discussion_id = +discussion
     body = textContent
     focus_id = +subject?.id ? null
@@ -116,13 +103,11 @@ module?.exports = React.createClass
         @setComments(@state.commentsMeta?.page, => @goToPage(@state.commentsMeta?.page_count))
 
   onLikeComment: (commentId) ->
-    user = @state.user
-
     talkClient.type('comments').get(commentId)
       .then (comment) =>
-        return alert("Hey you can't upvote your own comment!") if +user.id is +comment.user_id
+        return alert("Hey you can't upvote your own comment!") if +@props.user.id is +comment.user_id
 
-        voteUrl = (comment.href + if upvotedByCurrentUser(user, comment) then '/remove_upvote' else '/upvote')
+        voteUrl = (comment.href + if upvotedByCurrentUser(@props.user, comment) then '/remove_upvote' else '/upvote')
         talkClient.request('put', voteUrl, null, {})
           .then (voted) =>
             @setComments(@state.commentsMeta?.page)
@@ -141,7 +126,7 @@ module?.exports = React.createClass
       key={data.id}
       data={data}
       active={+data.id is +@props.query?.comment}
-      user={@state.user}
+      user={@props.user}
       onClickReply={@onClickReply}
       onLikeComment={@onLikeComment}
       onUpdateComment={@onUpdateComment}
@@ -178,8 +163,8 @@ module?.exports = React.createClass
     <div className="talk-discussion">
       <h1 className="talk-page-header">{discussion?.title}</h1>
 
-      {if discussion
-        <Moderation section={discussion.section}>
+      {if discussion && @props.user?
+        <Moderation section={discussion.section} user={@props.user}>
           <div>
             <h2>Moderator Zone:</h2>
             {if discussion?.title
@@ -202,30 +187,26 @@ module?.exports = React.createClass
 
       <Paginator page={+@state.commentsMeta.page} onPageChange={@onPageChange} pageCount={@state.commentsMeta.page_count} />
 
-      <ChangeListener target={authClient}>{=>
-        <PromiseRenderer promise={authClient.checkCurrent()}>{(user) =>
-          if user?
-            <section>
-              <div className="talk-comment-author">
-                <Avatar user={user} />
-                <p>
-                  <Link to="user-profile" params={name: user.login}>{user.display_name}</Link>
-                </p>
-                <div className="user-mention-name">@{user.login}</div>
-                <PromiseRenderer promise={talkClient.type('roles').get(user_id: user.id, section: ['zooniverse', discussion.section], is_shown: true)}>{(roles) =>
-                  <DisplayRoles roles={roles} section={discussion.section} />
-                }</PromiseRenderer>
-              </div>
+      {if @props.user?
+        <section>
+          <div className="talk-comment-author">
+            <Avatar user={@props.user} />
+            <p>
+              <Link to="user-profile" params={name: @props.user.login}>{@props.user.display_name}</Link>
+            </p>
+            <div className="user-mention-name">@{@props.user.login}</div>
+            <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.user.id, section: ['zooniverse', discussion.section], is_shown: true, page_size: 100)}>{(roles) =>
+              <DisplayRoles roles={roles} section={discussion.section} />
+            }</PromiseRenderer>
+          </div>
 
-              <CommentBox
-                validationCheck={@commentValidations}
-                validationErrors={@state.commentValidationErrors}
-                onSubmitComment={@onSubmitComment}
-                reply={@state.reply}
-                header={null} />
-            </section>
-          else
-            <p>Please sign in to contribute to the discussion</p>
-        }</PromiseRenderer>
-      }</ChangeListener>
+          <CommentBox
+            validationCheck={@commentValidations}
+            validationErrors={@state.commentValidationErrors}
+            onSubmitComment={@onSubmitComment}
+            reply={@state.reply}
+            header={null} />
+        </section>
+      else
+        <p>Please sign in to contribute to the discussion</p>}
     </div>

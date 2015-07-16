@@ -2,6 +2,7 @@ React = require 'react'
 React.initializeTouchEvents true
 window.React = React
 Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-router'
+auth = require './api/auth'
 MainHeader = require './partials/main-header'
 MainFooter = require './partials/main-footer'
 IOStatus = require './partials/io-status'
@@ -12,14 +13,32 @@ logDeployedCommit()
 App = React.createClass
   displayName: 'PanoptesApp'
 
+  getInitialState: ->
+    user: null
+    initialLoadComplete: false
+
+  componentDidMount: ->
+    auth.listen 'change', @handleAuthChange
+    @handleAuthChange()
+
+  componentWillUnmount: ->
+    auth.stopListening 'change', @handleAuthChange
+
+  handleAuthChange: ->
+    auth.checkCurrent().then (user) =>
+      @setState
+        user: user
+        initialLoadComplete: true
+
   render: ->
     <div className="panoptes-main">
       <IOStatus />
-      <MainHeader />
+      <MainHeader user={@state.user} />
       <div className="main-content">
-        <RouteHandler {...@props} />
+        {if @state.initialLoadComplete
+          <RouteHandler {...@props} user={@state.user} />}
       </div>
-      <MainFooter />
+      <MainFooter user={@state.user} />
     </div>
 
 routes = <Route handler={App}>
@@ -62,7 +81,7 @@ routes = <Route handler={App}>
   <Route name="projects" handler={require './pages/projects'} />
   <Route path="projects/:owner/:name" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
-    <Route name="project-science-case" path="science-case" handler={require './pages/project/science-case'} />
+    <Route name="project-research" path="research" handler={require './pages/project/research'} />
     <Route name="project-results" path="results" handler={require './pages/project/results'} />
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
     <Route name="project-talk" path="talk" handler={require './pages/project/talk'}>
@@ -96,7 +115,7 @@ routes = <Route handler={App}>
   <Route name="lab" handler={require './pages/lab'} />
   <Route path="lab/:projectID" handler={require './pages/lab/project'}>
     <DefaultRoute name="edit-project-details" handler={require './pages/lab/project-details'} />
-    <Route name="edit-project-science-case" path="science-case" handler={require './pages/lab/science-case'} />
+    <Route name="edit-project-research" path="research" handler={require './pages/lab/research'} />
     <Route name="edit-project-results" path="results" handler={require './pages/lab/results'} />
     <Route name="edit-project-faq" path="faq" handler={require './pages/lab/faq'} />
     <Route name="edit-project-education" path="education" handler={require './pages/lab/education'} />

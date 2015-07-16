@@ -57,7 +57,7 @@ module?.exports = React.createClass
 
         <h2>Message:</h2>
         <input placeholder="Subject" type="text" ref="subject"/>
-        <textarea placeholder="Type your message here" ref="message"/>
+        <textarea rows={8} placeholder="Type your message here" ref="message"/>
         <div>{validationErrors}</div>
         <button type="submit">Send</button>
       </form>

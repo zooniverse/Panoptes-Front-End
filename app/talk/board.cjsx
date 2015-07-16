@@ -1,15 +1,12 @@
 React = require 'react'
 DiscussionPreview = require './discussion-preview'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 discussionValidations = require './lib/discussion-validations'
 {getErrors} = require './lib/validations'
 Router = require 'react-router'
 NewDiscussionForm = require './discussion-new-form'
-ChangeListener = require '../components/change-listener'
-PromiseRenderer = require '../components/promise-renderer'
 Paginator = require './lib/paginator'
 Moderation = require './lib/moderation'
 StickyDiscussionList = require './sticky-discussion-list'
@@ -132,8 +129,8 @@ module?.exports = React.createClass
 
     <div className="talk-board">
       <h1 className="talk-page-header">{board?.title}</h1>
-      {if board
-        <Moderation section={board.section}>
+      {if board && @props.user?
+        <Moderation section={board.section} user={@props.user}>
           <div>
             <h2>Moderator Zone:</h2>
             {if board?.title
@@ -161,24 +158,21 @@ module?.exports = React.createClass
           </div>
         </Moderation>}
 
-      <ChangeListener target={authClient}>{=>
-        <PromiseRenderer promise={authClient.checkCurrent()}>{(user) =>
-          if user?
-            <section>
-              <button onClick={@onClickNewDiscussion}>
-                <i className="fa fa-#{if @state.newDiscussionOpen then 'close' else 'plus'}" />&nbsp;
-                New Discussion
-              </button>
+      {if @props.user?
+        <section>
+          <button onClick={@onClickNewDiscussion}>
+            <i className="fa fa-#{if @state.newDiscussionOpen then 'close' else 'plus'}" />&nbsp;
+            New Discussion
+          </button>
 
-              {if @state.newDiscussionOpen
-                <NewDiscussionForm
-                  boardId={+@props.params.board}
-                  onCreateDiscussion={@onCreateDiscussion} />}
-             </section>
-           else
-             <p>Please sign in to create discussions</p>
-        }</PromiseRenderer>
-      }</ChangeListener>
+          {if @state.newDiscussionOpen
+            <NewDiscussionForm
+              boardId={+@props.params.board}
+              onCreateDiscussion={@onCreateDiscussion}
+              user={@props.user} />}
+         </section>
+       else
+         <p>Please sign in to create discussions</p>}
 
       <div className="talk-list-content">
         <section>

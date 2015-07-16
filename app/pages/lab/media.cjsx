@@ -4,7 +4,7 @@ ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
 
-MAX_MEDIA_COUNT = 20
+MAX_MEDIA_COUNT = 30
 MAX_MEDIA_SIZE = 500000
 
 # For use on click.
@@ -123,7 +123,7 @@ module.exports = React.createClass
     project: {}
 
   render: ->
-    @getMedia ?= apiClient.get @props.project._getURL 'attached_images'
+    @getMedia ?= apiClient.get @props.project._getURL('attached_images'), page_size: MAX_MEDIA_COUNT
 
     <div className="edit-media-page">
       <div className="content-container">

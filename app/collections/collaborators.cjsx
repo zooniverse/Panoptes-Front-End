@@ -1,7 +1,5 @@
 React = require 'react'
 counterpart = require 'counterpart'
-ChangeListener = require '../components/change-listener'
-PromiseRenderer = require '../components/promise-renderer'
 UserSearch = require '../components/user-search'
 apiClient = require '../api/client'
 counterpart = require 'counterpart'
@@ -53,9 +51,9 @@ RoleCreator = React.createClass
 
         <p className="form-help error">{errorMessage}</p>}
       <form style={style}>
-        <p>
+        <div>
           <UserSearch />
-        </p>
+        </div>
 
         <table className="standard-table">
           <tbody>
@@ -140,7 +138,7 @@ RoleRow = React.createClass
       @removeRoles()
 
   updateRoles: (newRoles = [], callback = ->) ->
-    @setState saving: true 
+    @setState saving: true
 
     promise = if newRoles.length > 0
       @props.roleSet.update({ roles: newRoles }).save()
@@ -155,12 +153,12 @@ RoleRow = React.createClass
           @setState saving: false
 
   render: ->
-    { owner } = @state 
+    { owner } = @state
 
     <p>
       {if owner
         <strong>{owner.login}</strong>}
-      
+
       <button type="button" className="pill-button" onClick={@removeRoles}>Remove</button>
       <br />
 

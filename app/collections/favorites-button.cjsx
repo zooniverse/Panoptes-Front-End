@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require '../api/client'
-auth = require '../api/auth'
 getFavoritesName = require './get-favorites-name'
 alert = require '../lib/alert'
 SignInPrompt = require '../partials/sign-in-prompt'
@@ -12,10 +11,12 @@ module?.exports = React.createClass
   propTypes:
     subject: React.PropTypes.object # a subject response from panoptes
     project: React.PropTypes.object # a project response from panoptes
+    user: React.PropTypes.object
 
   getDefaultProps: ->
     subject: null
     project: null
+    user: null
 
   getInitialState: ->
     favoritesPromise: null
@@ -56,7 +57,7 @@ module?.exports = React.createClass
     collection.removeLink('subjects', [@props.subject.id.toString()])
       .then (collection) => @setState favoritedPromise: Promise.resolve(false)
 
-  createFavorites: (user) ->
+  createFavorites: ->
     display_name = getFavoritesName(@props.project)
     project = @props.project?.id
     subjects = [@props.subject.id]
@@ -70,18 +71,17 @@ module?.exports = React.createClass
       @setState favoritedPromise: Promise.resolve(true)
 
   toggleFavorite: ->
-    auth.checkCurrent().then (user) =>
-      if user?
-        Promise.all([@state.favoritesPromise, @state.favoritedPromise])
-          .then ([favorites, favorited])=>
-            if not favorites?
-              @createFavorites(user)
-            else if favorited
-              @removeSubjectFrom(favorites)
-            else
-              @addSubjectTo(favorites)
-      else
-        @promptToSignIn()
+    if @props.user?
+      Promise.all([@state.favoritesPromise, @state.favoritedPromise])
+        .then ([favorites, favorited])=>
+          if not favorites?
+            @createFavorites()
+          else if favorited
+            @removeSubjectFrom(favorites)
+          else
+            @addSubjectTo(favorites)
+    else
+      @promptToSignIn()
 
   render: ->
     <PromiseRenderer promise={@state.favoritedPromise}>{(favorited) =>

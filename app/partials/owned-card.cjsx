@@ -59,6 +59,7 @@ module.exports = React.createClass
             <div className="name">{@props.resource.display_name}</div>
             {<div className="owner">{owner?.display_name ? 'LOADING'}</div> if document.location.hash is "#/collections"}
             {<div className="description">{@props.resource.description}</div> if @props.resource.description?}
+            {<div className="private"><i className="fa fa-lock"></i> Private</div> if @props.resource.private}
             <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"#{@props.translationObjectName}.button"} /></button>
           </div>
         </FlexibleLink>

@@ -4,18 +4,38 @@
   .conversation-link
     @extend .talk-module
     width: 100%
+    > div
+      display: inline-block
+      width: 20%
+      font-size: 12px
+      word-wrap: break-word
+      color: lighten(COPY, 30%)
 
-    a
-      display: block
+      strong a
+        display: inline
+        color: COPY
+        font-style: normal
 
+      > div
+        font-style: italic
+
+    > a
+      vertical-align: calc(50%)
+
+    > div
     i
       margin-right: TALK_PADDING
 
 .inbox-conversation
   .conversation-message
     @extend .talk-module
-    strong
-      font-size: 12px
+    span
+      strong
+        font-size: 12px
+      span
+        float: right
+        font-size: 10px
+        font-style: italic
     p
       margin: 5px 0
 

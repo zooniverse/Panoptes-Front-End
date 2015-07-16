@@ -54,7 +54,7 @@ Classifier = React.createClass
         currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
       <div className="classifier">
-        <SubjectViewer project={@props.project} subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} onLoad={@handleSubjectImageLoad} />
+        <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} workflow={@props.workflow} classification={currentClassification} annotation={currentAnnotation} onLoad={@handleSubjectImageLoad} />
 
         <div className="task-area">
           {if currentTask?

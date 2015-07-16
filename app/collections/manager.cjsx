@@ -1,7 +1,5 @@
 React = require 'react'
 apiClient = require '../api/client'
-PromiseRenderer = require '../components/promise-renderer'
-auth = require '../api/auth'
 CollectionsCreateForm = require './create-form'
 CollectionSearch = require '../components/collection-search'
 

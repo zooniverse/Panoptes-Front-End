@@ -1,7 +1,6 @@
 React = require 'react'
 {Navigation} = require 'react-router'
 DisplayNameSlugEditor = require '../partials/display-name-slug-editor'
-auth = require '../api/auth'
 apiClient = require '../api/client'
 alert = require '../lib/alert'
 SetToggle = require '../lib/set-toggle'
@@ -65,13 +64,12 @@ module.exports = React.createClass
     @transitionTo 'collections'
 
   checkUserRole: ->
-    auth.checkCurrent().then (user) =>
-      if user
-        apiClient.type('collection_roles').get(collection_id: @props.collection.id, user_id: user?.id)
-          .catch ->
-            []
-          .then ([roles]) ->
-            roles?
+    if @props.user?
+      apiClient.type('collection_roles').get(collection_id: @props.collection.id, user_id: @props.user.id)
+        .catch ->
+          []
+        .then ([roles]) ->
+          roles?
 
   confirmDelete: ->
     alert (resolve) =>
@@ -84,7 +82,7 @@ module.exports = React.createClass
       <ChangeListener target={@props.collection}>{=>
         <DisplayNameSlugEditor resource={@props.collection} resourceType="collection" />
       }</ChangeListener>
-      
+
       <hr />
 
       <span className="form-label">Visibility</span>

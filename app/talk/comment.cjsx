@@ -9,7 +9,6 @@ CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 CommentPreview = require './comment-preview'
 PromiseRenderer = require '../components/promise-renderer'
-PromiseToSetState = require '../lib/promise-to-set-state'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
@@ -22,7 +21,7 @@ DEFAULT_AVATAR = './assets/simple-avatar.jpg'
 
 module?.exports = React.createClass
   displayName: 'TalkComment'
-  mixins: [ToggleChildren, Feedback, PromiseToSetState]
+  mixins: [ToggleChildren, Feedback]
 
   propTypes:
     data: React.PropTypes.object # Comment resource
@@ -96,7 +95,7 @@ module?.exports = React.createClass
           <div className="user-mention-name">@{@props.data.user_login}</div>
         </p>
 
-        <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.data.user_id, section: ['zooniverse', @props.data.section], is_shown: true)}>{(roles) =>
+        <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.data.user_id, section: ['zooniverse', @props.data.section], is_shown: true, page_size: 100)}>{(roles) =>
           <DisplayRoles roles={roles} section={@props.data.section} />
         }</PromiseRenderer>
       </div>
@@ -167,6 +166,7 @@ module?.exports = React.createClass
             submitFeedback={"Updated!"}
             submit={"Update Comment"}
             onCancelClick={@onCancelClick}
-            onSubmitComment={@onSubmitComment}/>}
+            onSubmitComment={@onSubmitComment}
+            user={@props.user} />}
       </div>
     </div>

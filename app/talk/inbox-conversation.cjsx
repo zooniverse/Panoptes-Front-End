@@ -1,40 +1,32 @@
 React = require 'react'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
+HandlePropChanges = require '../lib/handle-prop-changes'
 {Link} = require 'react-router'
+{timestamp} = require './lib/time'
 
 module?.exports = React.createClass
   displayName: 'InboxConversation'
+  mixins: [HandlePropChanges]
 
   getInitialState: ->
     messages: []
     messagesMeta: {}
     conversation: {}
-    user: null
+    recipients: []
 
-  componentWillMount: ->
-    @handleAuthChange()
-    authClient.listen @handleAuthChange
-
-  componentWillUnmount: ->
-    authClient.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    authClient.checkCurrent()
-      .then (user) =>
-        if user?
-          @setState {user}, @setConversation
-        else
-          @setState {user: null} # don't want the callback without a user...
+  propChangeHandlers:
+    user: 'setConversation'
 
   setConversation: ->
     conversation_id = @props.params?.conversation?.toString()
     # skip cache so messages marked as unread
-    talkClient.type('conversations').get(conversation_id, {})
+    talkClient.type('conversations').get(conversation_id, {include: 'users'})
       .then (conversation) =>
-        @setState {conversation}, @setMessagesMeta
+        apiClient.type('users').get(conversation.links.users)
+          .then (recipients) =>
+            @setState {conversation, recipients}, @setMessagesMeta
 
   setMessagesMeta: ->
     conversation_id = +@props.params.conversation
@@ -53,7 +45,10 @@ module?.exports = React.createClass
   message: (data, i) ->
     <div className="conversation-message" key={data.id}>
       <PromiseRenderer promise={apiClient.type('users').get(data.user_id)}>{(commentOwner) =>
-        <strong><Link to="user-profile" params={name: commentOwner.login}>{commentOwner.display_name}</Link></strong>
+        <span>
+          <strong><Link to="user-profile" params={name: commentOwner.login}>{commentOwner.display_name}</Link></strong>{' '}
+          <span>{timestamp(data.updated_at)}</span>
+        </span>
       }</PromiseRenderer>
 
       <p>{data.body}</p>
@@ -65,7 +60,7 @@ module?.exports = React.createClass
     form = @getDOMNode().querySelector('.new-message-form')
     textarea = form.querySelector('textarea')
     body = textarea.value
-    user_id = +@state.user.id
+    user_id = +@props.user.id
     conversation_id = +@state.conversation.id
 
     message = {user_id, body, conversation_id}
@@ -78,7 +73,20 @@ module?.exports = React.createClass
   render: ->
     <div className="talk inbox-conversation content-container">
       <h1>{@state.conversation?.title}</h1>
-      {@state.messages.map(@message)}
+      {if @state.recipients.length
+        <div>
+          In this conversation:{' '}
+          {@state.recipients.map (user, i) =>
+            <span key={user.id}>
+              <Link to="user-profile" params={name: user.login}>
+                {user.display_name}
+              </Link>{', ' unless i is @state.recipients.length-1}
+            </span>
+            }
+        </div>
+        }
+
+      <div>{@state.messages.map(@message)}</div>
       <form onSubmit={@onSubmitMessage} className="new-message-form">
         <textarea placeholder="Type a message here"></textarea>
         <button type="submit">Send</button>

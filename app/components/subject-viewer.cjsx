@@ -2,6 +2,7 @@ React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 FavoritesButton = require '../collections/favorites-button'
 alert = require '../lib/alert'
+Markdown = require '../components/markdown'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 
@@ -24,6 +25,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     subject: null
+    user: null
     playFrameDuration: 667
     playIterations: 3
     onFrameChange: NOOP
@@ -81,10 +83,10 @@ module.exports = React.createClass
         <span>
           {if @props.subject?.metadata?
             <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-table fa-fw"></i></button>}
-          {if @props.subject
+          {if @props.subject? && @props.user?
             <span>
-              <FavoritesButton project={@props.project} subject={@props.subject} />
-              <CollectionsManagerIcon project={@props.project} subject={@props.subject} />
+              <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />
+              <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
             </span>}
         </span>
       </div>
@@ -128,12 +130,13 @@ module.exports = React.createClass
   showMetadata: ->
     # TODO: Sticky popup.
     alert <div className="content-container">
-      Subject metadata<br />
-      <table>
-        {for key, value of @props.subject?.metadata
+      <header className="form-label" style={textAlign: 'center'}>Subject metadata</header>
+      <hr />
+      <table className="standard-table">
+        {for key, value of @props.subject?.metadata when key.charAt(0) isnt '#' and key[...2] isnt '//'
           <tr key={key}>
             <th>{key}</th>
-            <td><code><pre>{JSON.stringify value, null, 2}</pre></code></td>
+            <Markdown tag="td" content={value} inline />
           </tr>}
       </table>
     </div>
