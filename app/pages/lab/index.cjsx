@@ -13,71 +13,72 @@ sleep = (duration) ->
 
 module.exports = React.createClass
   displayName: 'LabIndex'
-
   mixins: [Navigation]
 
   getInitialState: ->
     page: 1
-    projects: []
     creationError: null
     creationInProgress: false
 
+  fetchProjects: ->
+    projectsQuery =
+      current_user_roles: 'owner,collaborator',
+      page: @state.page
+      skipCache: true
+
+    apiClient.type('projects').get projectsQuery
+
   render: ->
-    <div>
-      {if @props.user?
-        projectsQuery =
-          current_user_roles: 'owner,collaborator',
-          page: @state.page
+    if @props.user?
+      <PromiseRenderer promise={@fetchProjects()}>{(projects) =>
+        if projects.length > 0
+          <div className="content-container">
+            <div>
+              <table>
+                <tbody>
+                  {for project in projects then do (project) =>
+                    <tr key={project.id}>
+                      <td>{project.display_name}</td>
+                      <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
+                      <td>
+                        <PromiseRenderer promise={project.get 'owner'}>{(owner) =>
+                          <Link to="project-home" params={owner: owner.login, name: project.slug} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
+                        }</PromiseRenderer>
+                      </td>
+                    </tr>}
+                </tbody>
+              </table>
 
-        <PromiseRenderer promise={apiClient.type('projects').get(projectsQuery)} pending={null}>{(projects) =>
-          if projects.length > 0
-            <div className="content-container">
-              <div>
-                <table>
-                  <tbody>
-                    {for project in projects then do (project) =>
-                      <tr key={project.id}>
-                        <td>{project.display_name}</td>
-                        <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
-                        <td>
-                          <PromiseRenderer promise={project.get 'owner'}>{(owner) =>
-                            <Link to="project-home" params={owner: owner.login, name: project.slug} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
-                          }</PromiseRenderer>
-                        </td>
-                      </tr>}
-                  </tbody>
-                </table>
-
-                {meta = projects[0]?.getMeta()
-                if meta? and meta.page_count isnt 1
-                  <nav className="pagination">
-                    <label>
-                      Page
-                      {' '}
-                      <select value={@state.page} onChange={@handlePageChange}>
-                        {for page in [1..meta.page_count]
-                          <option key={page} value={page}>{page}</option>}
-                      </select>
-                      {' '}
-                      of {meta.page_count}
-                    </label>
-                  </nav>}
-              </div>
-              <br />
-              <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject}>
-                Create a new project{' '}
-                <LoadingIndicator off={not @state.creationInProgress} />
-              </button>&nbsp;
-              <Link className="standard-button" to="lab-policies">Project building policies</Link>&nbsp;
-              <Link className="standard-button" to="lab-how-to">How to build a project</Link>
-              {if @state.creationError?
-                <p className="form-help error">{@state.creationError.message}</p>}
+              {meta = projects[0]?.getMeta()
+              if meta? and meta.page_count isnt 1
+                <nav className="pagination">
+                  <label>
+                    Page
+                    {' '}
+                    <select value={@state.page} onChange={@handlePageChange}>
+                      {for page in [1..meta.page_count]
+                        <option key={page} value={page}>{page}</option>}
+                    </select>
+                    {' '}
+                    of {meta.page_count}
+                  </label>
+                </nav>}
             </div>
-          else
-            <LandingPage user={@props.user} parentIndex={this} />
-        }</PromiseRenderer>
-      }
-    </div>
+            <br />
+            <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject}>
+              Create a new project{' '}
+              <LoadingIndicator off={not @state.creationInProgress} />
+            </button>&nbsp;
+            <Link className="standard-button" to="lab-policies">Project building policies</Link>&nbsp;
+            <Link className="standard-button" to="lab-how-to">How to build a project</Link>
+            {if @state.creationError?
+              <p className="form-help error">{@state.creationError.message}</p>}
+          </div>
+        else
+          <LandingPage user={@props.user} parentIndex={this} />
+      }</PromiseRenderer>
+    else
+      <LandingPage parentIndex={this} />
 
   handlePageChange: (e) ->
     @setState page: e.target.value, =>

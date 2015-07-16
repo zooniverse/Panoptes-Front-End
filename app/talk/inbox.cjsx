@@ -2,7 +2,6 @@ React = require 'react'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
-HandlePropChanges = require '../lib/handle-prop-changes'
 Paginator = require './lib/paginator'
 Router = {Link} = require 'react-router'
 Loading = require '../components/loading-indicator'
@@ -14,21 +13,17 @@ PAGE_SIZE = talkConfig.inboxPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkInbox'
-  mixins: [Router.Navigation, HandlePropChanges]
-
-  propChangeHandlers:
-    user: 'setConversations'
-
-  getInitialState: ->
-    conversations: []
-    conversationsMeta: {}
-    loading: true
+  mixins: [Router.Navigation]
 
   setConversations: (page) ->
-    talkClient.type('conversations').get({user_id: @props.user.id, page_size: PAGE_SIZE, page, sort: '-updated_at', include: 'users'})
-      .then (conversations) =>
-        conversationsMeta = conversations[0]?.getMeta()
-        @setState {conversations, conversationsMeta, loading: false}
+    conversationsQuery =
+      user_id: @props.user.id
+      page_size: PAGE_SIZE
+      page: page
+      sort: '-updated_at'
+      include: 'users'
+
+    talkClient.type('conversations').get conversationsQuery
 
   onPageChange: (page) ->
     @goToPage(page)
@@ -61,25 +56,27 @@ module?.exports = React.createClass
     </div>
 
   render: ->
-    {conversations, loading} = @state
     <div className="talk inbox content-container">
-      <h1>Inbox</h1>
-
-      {if loading
-        <Loading />
-      else if not @props.user
+      {unless @props.user?
         <p>Please sign in to view your inbox</p>
-      else if conversations?.length is 0
-        <p>You have not started any private conversations yet. Send users private messages by visiting their profile page.</p>
-      else if conversations?.length
-        <div>
-          {conversations?.map(@conversationLink)}
-          <Paginator page={+@state.conversationsMeta.page} onPageChange={@onPageChange} pageCount={@state.conversationsMeta?.page_count} />
-        </div>}
+      else
+        <PromiseRenderer promise={@setConversations()} pending={-><Loading />}>{(conversations = []) =>
+          <div>
+            <h1>Inbox</h1>
 
-      {if @props.user?
-        <div>
-          <h1>Send a message</h1>
-          <InboxForm user={@props.user} />
-        </div>}
+            {if conversations.length is 0
+              <p>You have not started any private conversations yet. Send users private messages by visiting their profile page.</p>
+            else
+              conversationsMeta = conversations[0].getMeta()
+              <div>
+                <div>{conversations.map(@conversationLink)}</div>
+                <Paginator page={+conversationsMeta.page} onPageChange={@onPageChange} pageCount={+conversationsMeta.page_count} />
+              </div>}
+
+            <div>
+              <h1>Send a message</h1>
+              <InboxForm user={@props.user} />
+            </div>
+          </div>
+        }</PromiseRenderer>}
     </div>

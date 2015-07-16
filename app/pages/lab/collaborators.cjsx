@@ -144,7 +144,7 @@ module.exports = React.createClass
   render: ->
     <div>
       <div className="form-label">Project Owner</div>
-      <PromiseRenderer promise={@props.project.get('owner')} then={(owner) =>
+      <PromiseRenderer promise={@props.project.get('owner')} then={(projectOwner) =>
         projectOwnerMessage = if @props.user.id is projectOwner.id
           {'You are the project owner.'}
         else
