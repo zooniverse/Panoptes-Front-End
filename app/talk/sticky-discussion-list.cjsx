@@ -1,5 +1,3 @@
-ChangeListener = require '../components/change-listener'
-PromiseRenderer = require '../components/promise-renderer'
 talkClient = require '../api/talk'
 
 placeholder = document.createElement 'li'

@@ -1,10 +1,8 @@
 React = require 'react'
 apiClient = require '../api/client'
-authClient = require '../api/auth'
 talkClient = require '../api/talk'
 getSubjectLocation = require '../lib/get-subject-location'
 FavoritesButton = require '../collections/favorites-button'
-ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
 SubjectViewer = require '../components/subject-viewer'
 NewDiscussionForm = require '../talk/discussion-new-form'
@@ -73,45 +71,41 @@ module?.exports = React.createClass
               <p>There are no comments focused on this subject</p>
           }</PromiseRenderer>
 
-          <ChangeListener target={authClient}>{=>
-            <PromiseRenderer promise={authClient.checkCurrent()}>{(user) =>
-              if user
-                {# these wrapping promises ensure that there are boards for a project}
-                {# & could be removed if a default board is put in place}
-                {# TODO remove subject.get('project'), replace with params but browser freezes on get to projects with slug}
-                <PromiseRenderer promise={subject.get('project')}>{(project) =>
-                  <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project))}>{(boards) =>
-                    if boards?.length
-                      <div>
-                        <div className="tabbed-content">
-                          <div className="tabbed-content-tabs">
-                            <div className="subject-page-tabs">
-                              <div className="tabbed-content-tab #{if @state.tab is 0 then 'active' else ''}" onClick={=> @setState({tab: 0})}>
-                                <span>Add a note about this subject</span>
-                              </div>
+          {if @props.user
+            {# these wrapping promises ensure that there are boards for a project}
+            {# & could be removed if a default board is put in place}
+            {# TODO remove subject.get('project'), replace with params but browser freezes on get to projects with slug}
+            <PromiseRenderer promise={subject.get('project')}>{(project) =>
+              <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project))}>{(boards) =>
+                if boards?.length
+                  <div>
+                    <div className="tabbed-content">
+                      <div className="tabbed-content-tabs">
+                        <div className="subject-page-tabs">
+                          <div className="tabbed-content-tab #{if @state.tab is 0 then 'active' else ''}" onClick={=> @setState({tab: 0})}>
+                            <span>Add a note about this subject</span>
+                          </div>
 
-                              <div className="tabbed-content-tab #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
-                                <span>or Start a new discussion</span>
-                              </div>
-                            </div>
+                          <div className="tabbed-content-tab #{if @state.tab is 1 then 'active' else ''}" onClick={=> @setState({tab: 1})}>
+                            <span>or Start a new discussion</span>
                           </div>
                         </div>
-                        <div>
-                          {if @state.tab is 0
-                            <QuickSubjectCommentForm subject={subject} user={user} />
-                           else if @state.tab is 1
-                            <NewDiscussionForm
-                              subject={subject}
-                              onCreateDiscussion={@onCreateDiscussion} />
-                              }
-                        </div>
                       </div>
-                    else
-                      <p>There are no discussion boards setup for this project yet. Check back soon!</p>
-                  }</PromiseRenderer>
-                }</PromiseRenderer>
-            }</PromiseRenderer>
-          }</ChangeListener>
+                    </div>
+                    <div>
+                      {if @state.tab is 0
+                        <QuickSubjectCommentForm subject={subject} user={user} />
+                       else if @state.tab is 1
+                        <NewDiscussionForm
+                          subject={subject}
+                          onCreateDiscussion={@onCreateDiscussion} />
+                          }
+                    </div>
+                  </div>
+                else
+                  <p>There are no discussion boards setup for this project yet. Check back soon!</p>
+              }</PromiseRenderer>
+            }</PromiseRenderer>}
         </section>
         }
     </div>

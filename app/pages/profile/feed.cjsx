@@ -70,8 +70,10 @@ CommentLink = React.createClass
 module.exports = React.createClass
   displayName: 'UserProfileFeed'
 
+  propTypes:
+    user: React.PropTypes.object
+
   getDefaultProps: ->
-    user: null
     query:
       page: 1
 
@@ -80,11 +82,11 @@ module.exports = React.createClass
     error: null
 
   componentDidMount: ->
-    @getComments(@props.user, @props.query.page)
+    @getComments(@props.profileUser, @props.query.page)
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps is @props.user and nextProps.query.page is @props.query.page
-      @getComments(nextProps.user, nextProps.query.page)
+    unless nextProps is @props.profileUser and nextProps.query.page is @props.query.page
+      @getComments(nextProps.profileUser, nextProps.query.page)
 
   getComments: (user, page) ->
     @setState({

@@ -4,8 +4,6 @@ PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
-PromiseToSetState = require '../../lib/promise-to-set-state'
-auth = require '../../api/auth'
 apiClient = require '../../api/client'
 counterpart = require 'counterpart'
 ChangeListener = require '../../components/change-listener'
@@ -212,9 +210,7 @@ EditProjectPage = React.createClass
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
-
   mixins: [TitleMixin]
-
   title: 'Edit'
 
   getDefaultProps: ->
@@ -222,39 +218,34 @@ module.exports = React.createClass
       projectID: '0'
 
   render: ->
-    <ChangeListener target={auth} handler={=>
-      <PromiseRenderer promise={auth.checkCurrent()} then={(user) =>
-        if user?
-          getProject = auth.checkCurrent().then =>
-            apiClient.type('projects').get @props.params.projectID
+    if @props.user?
+      getProject = apiClient.type('projects').get @props.params.projectID
 
-          getOwners = getProject.then (project) =>
-            project.get('project_roles').then (projectRoles) =>
-              owners = for projectRole in projectRoles when 'owner' in projectRole.roles or 'collaborator' in projectRole.roles
-                projectRole.get 'owner'
-              Promise.all owners
+      getOwners = getProject.then (project) =>
+        project.get('project_roles').then (projectRoles) =>
+          owners = for projectRole in projectRoles when 'owner' in projectRole.roles or 'collaborator' in projectRole.roles
+            projectRole.get 'owner'
+          Promise.all owners
 
-          getProjectAndOwners = Promise.all [getProject, getOwners]
+      getProjectAndOwners = Promise.all [getProject, getOwners]
 
-          <PromiseRenderer promise={getProjectAndOwners} pending={=>
-            <div className="content-container">
-              <p className="form-help">Loading project</p>
-            </div>
-          } then={([project, owners]) =>
-            if user in owners
-              <EditProjectPage {...@props} project={project} />
-            else
-              <div className="content-container">
-                <p>You don’t have permission to edit this project.</p>
-              </div>
-          } catch={(error) =>
-            <div className="content-container">
-              <p className="form-help error">{error.toString()}</p>
-            </div>
-          } />
+      <PromiseRenderer promise={getProjectAndOwners} pending={=>
+        <div className="content-container">
+          <p className="form-help">Loading project</p>
+        </div>
+      } then={([project, owners]) =>
+        if @props.user in owners
+          <EditProjectPage {...@props} project={project} />
         else
           <div className="content-container">
-            <p>You need to be signed in to use the lab.</p>
+            <p>You don’t have permission to edit this project.</p>
           </div>
+      } catch={(error) =>
+        <div className="content-container">
+          <p className="form-help error">{error.toString()}</p>
+        </div>
       } />
-    } />
+    else
+      <div className="content-container">
+        <p>You need to be signed in to use the lab.</p>
+      </div>

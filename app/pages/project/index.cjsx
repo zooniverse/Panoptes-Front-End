@@ -6,8 +6,6 @@ Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
-PromiseToSetState = require '../../lib/promise-to-set-state'
-auth = require '../../api/auth'
 apiClient = window.api = require '../../api/client'
 require '../../api/sugar'
 LoadingIndicator = require '../../components/loading-indicator'
@@ -119,14 +117,14 @@ ProjectPage = React.createClass
 
 module.exports = React.createClass
   displayName: 'ProjectPageWrapper'
-
-  mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
+  mixins: [TitleMixin, HandlePropChanges]
 
   title: ->
     @state.project?.display_name ? '(Loading)'
 
   getDefaultProps: ->
     params: null
+    user: null
 
   getInitialState: ->
     project: null
@@ -134,37 +132,25 @@ module.exports = React.createClass
   propChangeHandlers:
     'params.owner': 'fetchProject'
     'params.name': 'fetchProject'
-
-  componentDidMount: ->
-    auth.listen 'change', @fetchProject
-
-  componentWillUnmount: ->
-    auth.stopListening 'change', @fetchProject
+    'user': 'fetchProject'
 
   fetchProject: (_, props = @props) ->
-    unless @state.pending.project?
-      query =
-        owner: props.params.owner
-        slug: props.params.name
+    @setState error: false
+    query =
+      owner: props.params.owner
+      slug: props.params.name
 
-      @promiseToSetState project: auth.checkCurrent().then ->
-        apiClient.type('projects').get query
-          .catch ->
-            []
-          .then ([project]) ->
-            unless project?
-              throw new Error "Couldn't find project #{props.params.owner}/#{props.params.name}"
-            project
+    apiClient.type('projects').get query
+      .then ([project]) =>
+        @setState { project }
+      .catch =>
+        @setState error: true
 
   render: ->
-    if @state.project?
-      <ProjectPage {...@props} project={@state.project} />
-    else
-      <div className="content-container">
-        {if @state.rejected.project?
-          <code>{@state.rejected.project.toString()}</code>
-        else
-          <LoadingIndicator>
-            <Translate content="project.loading" />
-          </LoadingIndicator>}
-      </div>
+    <div className="project-page-wrapper">
+      {if @state.error
+        <p>There was an error retrieving the project.</p>}
+
+      {if @state.project? && !@state.error
+        <ProjectPage {...@props} project={@state.project} />}
+    </div>

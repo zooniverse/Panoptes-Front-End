@@ -4,7 +4,6 @@ Translate = require 'react-translate-component'
 SignInForm = require './sign-in-form'
 RegisterForm = require './register-form'
 LoginChangeForm = require './login-change-form'
-auth = require '../api/auth'
 
 counterpart.registerTranslations 'en',
   signInDialog:
@@ -35,8 +34,8 @@ module.exports = React.createClass
 
       <div className="content-container">
         {switch @state.which
-          when 'login-change' then <LoginChangeForm user={@state.user} onSuccess={@props.onSuccess} />
-          when 'sign-in' then <SignInForm onSuccess={@onSuccessOrLoginChange} />
+          when 'login-change' then <LoginChangeForm user={@props.user} onSuccess={@props.onSuccess} />
+          when 'sign-in' then <SignInForm user={@props.user} onSuccess={@onSuccessOrLoginChange} />
           when 'register' then <RegisterForm project={@props.project} onSuccess={@props.onSuccess} />}
       </div>
     </div>
@@ -49,5 +48,3 @@ module.exports = React.createClass
       @setState {which: 'login-change', user: user}
     else
       @props.onSuccess(user)
-
-

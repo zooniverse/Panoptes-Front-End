@@ -18,46 +18,30 @@ module.exports = React.createClass
 
   getInitialState: ->
     busy: false
-    currentUser: null
     login: ''
     password: ''
     error: null
 
-  componentDidMount: ->
-    auth.listen @handleAuthChange
-    @handleAuthChange()
-
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    @setState busy: true, =>
-      auth.checkCurrent().then (currentUser) =>
-        @setState {currentUser}
-        if currentUser?
-          @setState login: currentUser.login, password: '********'
-        @setState busy: false
-
   render: ->
-    disabled = @state.currentUser? or @state.busy
+    disabled = @props.user? or @state.busy
 
     <form onSubmit={@handleSubmit}>
       <label>
         <Translate content="signInForm.userName" />
-        <input type="text" className="standard-input full" name="login" value={@state.login} disabled={disabled} autoFocus onChange={@handleInputChange} />
+        <input type="text" className="standard-input full" name="login" value={@props.user?.login} disabled={disabled} autoFocus onChange={@handleInputChange} />
       </label>
 
       <br />
 
       <label>
         <Translate content="signInForm.password" /><br />
-        <input type="password" className="standard-input full" name="password" value={@state.password} disabled={disabled} onChange={@handleInputChange} />
+        <input type="password" className="standard-input full" name="password" value={@props.user?.password} disabled={disabled} onChange={@handleInputChange} />
       </label>
 
       <p style={textAlign: 'center'}>
-        {if @state.currentUser?
+        {if @props.user?
           <div className="form-help">
-            Signed in as {@state.currentUser.login}{' '}
+            Signed in as {@props.user.login}{' '}
             <button type="button" className="minor-button" onClick={@handleSignOut}>Sign out</button>
           </div>
 

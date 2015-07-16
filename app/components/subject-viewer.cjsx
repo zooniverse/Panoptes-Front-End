@@ -25,6 +25,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     subject: null
+    user: null
     playFrameDuration: 667
     playIterations: 3
     onFrameChange: NOOP
@@ -82,10 +83,10 @@ module.exports = React.createClass
         <span>
           {if @props.subject?.metadata?
             <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-table fa-fw"></i></button>}
-          {if @props.subject
+          {if @props.subject? && @props.user?
             <span>
-              <FavoritesButton project={@props.project} subject={@props.subject} />
-              <CollectionsManagerIcon project={@props.project} subject={@props.subject} />
+              <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />
+              <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
             </span>}
         </span>
       </div>

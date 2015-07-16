@@ -1,6 +1,5 @@
 React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
-{makeHTTPRequest} = require 'json-api-client'
 {Link} = require 'react-router'
 
 module?.exports = React.createClass

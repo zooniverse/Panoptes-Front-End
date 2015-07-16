@@ -1,35 +1,23 @@
 React = require 'react'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
+HandlePropChanges = require '../lib/handle-prop-changes'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
 
 module?.exports = React.createClass
   displayName: 'InboxConversation'
+  mixins: [HandlePropChanges]
 
   getInitialState: ->
     messages: []
     messagesMeta: {}
     conversation: {}
-    user: null
     recipients: []
 
-  componentWillMount: ->
-    @handleAuthChange()
-    authClient.listen @handleAuthChange
-
-  componentWillUnmount: ->
-    authClient.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    authClient.checkCurrent()
-      .then (user) =>
-        if user?
-          @setState {user}, @setConversation
-        else
-          @setState {user: null} # don't want the callback without a user...
+  propChangeHandlers:
+    user: 'setConversation'
 
   setConversation: ->
     conversation_id = @props.params?.conversation?.toString()
@@ -72,7 +60,7 @@ module?.exports = React.createClass
     form = @getDOMNode().querySelector('.new-message-form')
     textarea = form.querySelector('textarea')
     body = textarea.value
-    user_id = +@state.user.id
+    user_id = +@props.user.id
     conversation_id = +@state.conversation.id
 
     message = {user_id, body, conversation_id}
@@ -89,7 +77,7 @@ module?.exports = React.createClass
         <div>
           In this conversation:{' '}
           {@state.recipients.map (user, i) =>
-            <span>
+            <span key={user.id}>
               <Link to="user-profile" params={name: user.login}>
                 {user.display_name}
               </Link>{', ' unless i is @state.recipients.length-1}

@@ -1,5 +1,4 @@
 React = require 'react'
-ChangeListener = require '../../components/change-listener'
 
 module.exports = React.createClass
   displayName: 'DrawingTaskDetailsEditor'

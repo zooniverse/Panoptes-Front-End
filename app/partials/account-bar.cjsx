@@ -1,6 +1,4 @@
 React = require 'react'
-PromiseRenderer = require '../components/promise-renderer'
-ChangeListener = require '../components/change-listener'
 {Link} = require 'react-router'
 auth = require '../api/auth'
 talkClient = require '../api/talk'
@@ -21,6 +19,9 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'AccountBar'
 
+  propTypes:
+    user: React.PropTypes.object.isRequired
+
   getInitialState: ->
     unread: false
     expanded: false
@@ -39,9 +40,8 @@ module.exports = React.createClass
       .catch (e) -> console.log "e unread messages", e
 
   render: ->
-    <ChangeListener target={@props.user}>{=>
-      <div className="account-bar" onKeyDown={@navigateMenu}>
-        <div className="account-info">
+      <div className="account-bar">
+        <div className="account-info" onKeyDown={@navigateMenu}>
           <button aria-expanded={@state.expanded} aria-haspopup="true" className="secret-button display-name" onClick={@toggleAccountMenu}>
             <strong>{@props.user.display_name}</strong>
           </button>
@@ -57,14 +57,13 @@ module.exports = React.createClass
           <button className="secret-button sign-out-button" type="button" onClick={@handleSignOutClick}><Translate content="accountMenu.signOut" /></button>
         </div>
       </div>
-    }</ChangeListener>
 
   handleSignOutClick: ->
     auth.signOut()
 
   toggleAccountMenu: ->
     @setState expanded: !@state.expanded
-  
+
   navigateMenu: (e) ->
     return unless @state.expanded
     focusables = [@getDOMNode().querySelector 'button']

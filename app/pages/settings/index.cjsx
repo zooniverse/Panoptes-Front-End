@@ -1,7 +1,4 @@
 React = require 'react'
-ChangeListener = require '../../components/change-listener'
-auth = require '../../api/auth'
-PromiseRenderer = require '../../components/promise-renderer'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
@@ -55,15 +52,11 @@ module.exports = React.createClass
   displayName: 'UserSettingsPageWrapper'
 
   render: ->
-    <ChangeListener target={auth} handler={=>
-      <PromiseRenderer promise={auth.checkCurrent()} then={(user) =>
-        if user?
-          <ChangeListener target={user} handler={=>
-            <UserSettingsPage user={user} />
-          } />
-        else
-          <div className="content-container">
-            <p>You’re not signed in.</p>
-          </div>
-      } />
-    } />
+    <div>
+      {if @props.user?
+        <UserSettingsPage user={@props.user} />
+      else
+        <div className="content-container">
+          <p>You’re not signed in.</p>
+        </div>}
+    </div>

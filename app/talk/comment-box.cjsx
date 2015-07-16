@@ -15,6 +15,7 @@ module?.exports = React.createClass
 
   propTypes:
     submit: React.PropTypes.string
+    user: React.PropTypes.string
     header: React.PropTypes.string
     placeholder: React.PropTypes.string
     submitFeedback: React.PropTypes.string
@@ -28,6 +29,7 @@ module?.exports = React.createClass
     submitFeedback: "Comment Successfully Submitted"
     content: null
     subject: null
+    user: null
 
   getInitialState: ->
     subject: @props.subject
@@ -206,7 +208,8 @@ module?.exports = React.createClass
           when 'image-selector'
             <CommentImageSelector
               onSelectImage={@onSelectImage}
-              onClearImageClick={@onClearImageClick}/>
+              onClearImageClick={@onClearImageClick}
+              user={@props.user} />
           when 'preview'
             <CommentPreview content={@state.content} />
           when 'help'
