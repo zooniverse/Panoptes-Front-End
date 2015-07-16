@@ -15,7 +15,7 @@ module?.exports = React.createClass
 
   propTypes:
     submit: React.PropTypes.string
-    user: React.PropTypes.string
+    user: React.PropTypes.object
     header: React.PropTypes.string
     placeholder: React.PropTypes.string
     submitFeedback: React.PropTypes.string
