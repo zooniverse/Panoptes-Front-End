@@ -23,25 +23,14 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'MainHeader'
 
-  mixins: [PromiseToSetState]
-
-  getInitialState: ->
+  getDefaultProps: ->
     user: null
 
   componentDidMount: ->
-    @handleAuthChange()
-    auth.listen @handleAuthChange
-    @addEventListeners()
-
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
-    @removeEventListeners()
-
-  addEventListeners: ->
     if @checkIfOnHome() then document.addEventListener 'scroll', @onScroll
     window.addEventListener 'hashchange', @onHashChange
 
-  removeEventListeners: ->
+  componentWillUnmount: ->
     document.removeEventListener 'scroll', @onScroll
     window.removeEventListener 'hashchange', @onHashChange
 
@@ -54,9 +43,6 @@ module.exports = React.createClass
 
   checkIfOnHome: ->
     return true if window.location.hash is '#/'
-
-  handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent()
 
   render: ->
     <header className="main-header">
@@ -74,8 +60,8 @@ module.exports = React.createClass
           <hr />
           <Link to="lab" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
         </nav>
-        {if @state.user?
-          <AccountBar user={@state.user} />
+        {if @props.user?
+          <AccountBar user={@props.user} />
         else
           <LoginBar />}
       </div>

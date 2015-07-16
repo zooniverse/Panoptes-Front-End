@@ -1,8 +1,6 @@
 React = require 'react'
 {RouteHandler, Link, Navigation} = require 'react-router'
-PromiseRenderer = require '../components/promise-renderer'
 TalkBreadcrumbs = require './breadcrumbs.cjsx'
-talkClient = require '../api/talk'
 
 module?.exports = React.createClass
   displayName: 'Talk'

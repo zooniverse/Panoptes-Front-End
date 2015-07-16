@@ -19,7 +19,10 @@ module?.exports = React.createClass
             <img src={getSubjectLocation(subject).src} />
           </a>
           <p>Subject {subject.id}</p>
-          <FavoritesButton subject={subject} />
+
+          {if @props.user?
+            <FavoritesButton subject={subject} user={user} />}
+
         </div>
       }</PromiseRenderer>
     </div>

@@ -4,7 +4,6 @@ CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 discussionValidations = require './lib/discussion-validations'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
 Loading = require '../components/loading-indicator'
 PromiseRenderer = require '../components/promise-renderer'
 projectSection = require '../talk/lib/project-section'
@@ -38,22 +37,20 @@ module?.exports = React.createClass
     titleInput = form.querySelector('input[type="text"]')
     title = titleInput.value
 
-    authClient.checkCurrent()
-      .then (user) =>
-        user_id = user.id
-        board_id = @props.boardId ? +form.querySelector('label > input[type="radio"]:checked').value
-        body = commentText
-        focus_id = +@props.subject?.id
-        focus_type = 'Subject' if !!focus_id
+    user_id = @props.user.id
+    board_id = @props.boardId ? +form.querySelector('label > input[type="radio"]:checked').value
+    body = commentText
+    focus_id = +@props.subject?.id
+    focus_type = 'Subject' if !!focus_id
 
-        comments = [merge({}, {user_id, body}, ({focus_id, focus_type} if !!focus_id))]
-        discussion = {title, user_id, board_id, comments}
+    comments = [merge({}, {user_id, body}, ({focus_id, focus_type} if !!focus_id))]
+    discussion = {title, user_id, board_id, comments}
 
-        talkClient.type('discussions').create(discussion).save()
-          .then (discussion) =>
-            @setState loading: false
-            titleInput.value = ''
-            @props.onCreateDiscussion?(discussion)
+    talkClient.type('discussions').create(discussion).save()
+      .then (discussion) =>
+        @setState loading: false
+        titleInput.value = ''
+        @props.onCreateDiscussion?(discussion)
 
   boardRadio: (board, i) ->
     <label key={board.id}>
