@@ -150,16 +150,17 @@ module.exports = new Model
 
   signIn: ({login, password}) ->
     @checkCurrent().then (user) =>
+      remember_me = true
       if user?
         @signOut().then =>
-          @signIn {login, password}
+          @signIn {login, password, remember_me}
       else
         console?.log 'Signing in', login
 
         signInRequest = @_getAuthToken().then (token) =>
           data =
             authenticity_token: token
-            user: {login, password}
+            user: {login, password, remember_me}
 
           makeHTTPRequest 'POST', config.host + '/users/sign_in', data, JSON_HEADERS
             .then =>
