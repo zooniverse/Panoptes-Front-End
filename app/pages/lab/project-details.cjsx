@@ -127,7 +127,7 @@ module.exports = React.createClass
           <p>
             <AutoSave tag="label" resource={@props.project}>
               {checked = @props.project.configuration?.user_chooses_workflow}
-              <input type="checkbox" name="configuration.user_chooses_workflow" checked={checked} value={checked} onChange={handleInputChange.bind @props.project} />{' '}
+              <input type="checkbox" name="configuration.user_chooses_workflow" defaultChecked={checked} defaultValue={checked} onChange={handleInputChange.bind @props.project} />{' '}
               Volunteers can choose which workflow they work on
             </AutoSave>
             <br />
