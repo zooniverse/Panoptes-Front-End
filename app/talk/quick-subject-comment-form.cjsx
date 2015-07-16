@@ -91,6 +91,7 @@ module?.exports = React.createClass
     <div className="quick-subject-comment-form talk-module">
       <h1>Leave a note about this subject</h1>
       <CommentBox
+        user={@props.user}
         header={null}
         validationCheck={@commentErrors}
         validationErrors={@state.commentValidationErrors}
