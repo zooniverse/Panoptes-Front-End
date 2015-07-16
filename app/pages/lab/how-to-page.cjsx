@@ -77,7 +77,7 @@ counterpart.registerTranslations 'en',
 
           And here are some examples of not-cats (you can ignore these):
 
-          ![A sample of things that are not cats.](http://zooniverse-resources.s3.amazonaws.com/bigblogfiles/cat_demo/notcats.png)"
+          ![A sample of things that are not cats.](http://zooniverse-resources.s3.amazonaws.com/bigblogfiles/cat_demo/notcats.png)
 
       We can set subsequent tasks to depend on the answer to this question. Right now we haven't made any other tasks,
       so the only option is "End of Classification." Once we create more tasks, we'll go back through and link them.
@@ -144,10 +144,11 @@ counterpart.registerTranslations 'en',
       Get started uploading a set of subjects for your project by clicking on the "New Subject Set" button on
       the left hand side of the screen. That will bring you to the _Subject Uploader_.
 
-      You'll need to have all of your images in a single folder along with a manifest. The manifest file lists
-      all the images we want to upload and links each image to additional information, also called metadata,
-      such as date, time, and photographer. Read more about the manifest in the subsequent "Details" sections,
-      but for now we've done this for you in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
+      It's easiest if you have all of your images in a single folder along with a manifest file, and you will 
+      upload both at the same time. The manifest file lists all the images we want to upload and links each 
+      image to additional information, also called metadata, such as date, time, and photographer. There is more 
+      information about the manifest in the "Details" section below, but for now you can see an example manifest 
+      file in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
 
       Click on the "Upload Subjects" box and navigate to the "Kitteh" folder you downloaded. The easiest thing
       to do is simply hit _cmd + a_ (on Mac, or _ctrl + a_ on Windows) to select everything in that folder.
@@ -255,13 +256,50 @@ counterpart.registerTranslations 'en',
 
       _Translator_: Translators will have access to the project builder as well as the translation site, so they can translate all of your project text into a different language.
 
-      ### DETAILS - Subject sets and manifest details:
+      ### DETAILS - Subject sets and manifest details, a.k.a. "What is a manifest?"
 
-      The manifest should have one row per subject, with columns for _SubjectID_, _FileName_, and whatever other metadata you would like to include.
+      *The condensed answer:*
+      
+      A manifest is a file that tells our software how to combine the images you have into units of data (subjects) to be classified. The manifest also allows you to link your classifications back to the rest of your data. A manifest is formatted as a CSV file with 1 line per subject, with a unique identifier and the names of images to be associated with a subject on each row (with additional information often included in other fields as well). There is an example in the "Kitteh" zip file.
 
-      If you want to make subjects with multiple images, then create a column for each filename (_Filename1_, _Filename2_, etc.). Note that drawing tasks do not work on multi-image subjects.
+      *The full answer:*
+       
+      What we call a "manifest" is really just a plain text file with a specific format to each line.
 
-      We recommend that you create a unique identifier per subject before uploading to the Zooniverse, so that you have a secure way of linking the data we provide back to the rest of your metadata. Note that all filenames for subjects you upload will need to be unique!
+      To understand the format, let's start with the first few lines from the Kitteh Zoo manifest:
+
+          subject_id,image_name_1,origin,link,attribution,license,#secret_description
+          1,6672150457_420d61007d_b.jpg,Flickr,https://www.flickr.com/photos/aigle_dore/6672150457,Moyan Brenn,Creative Commons - share adapt attribute,sleepy striped kitteh is unsuspecting of paparazzi
+          2,8300920648_d4a21bba59_z,Flickr,https://www.flickr.com/photos/aigle_dore/8300920648,Moyan Brenn,Creative Commons - share adapt attribute,grandfather kitteh has ear hair. a lot of it
+          3,6713782851_82fc8c73e5_z.jpg,Flickr,https://www.flickr.com/photos/hellie55/6713782851,hehaden,Creative Commons - share adapt attribute,juvenile kittehs practice break-in at the catnip factory
+
+      The first line of the file is a header line that specifies the name of each of the manifest fields. In this case, our manifest has 7 fields (or columns), called "subject_id", "image_name", "origin", "link", "attribution", "license" and “#secret_description”. They are separated by commas: this is what's known as a "comma separated values" file, or CSV file. 
+
+      After the first line, each row of the file contains information about 1 subject. The first field, corresponding with the "subject_id" header, is a unique number that identifies the subject. The second field, which aligns with the "image_name" header, contains the name of the image that's associated with that subject. These 2 fields are critically important: the image name is obviously important, and a unique identifier is important for matching your classifications to the rest of your data.
+
+      All the other fields are optional, but in general having more information in the manifest is better. Most projects include additional information in the manifest that helps them match the classifications and subjects to the other data they need for their research. The additional information in the manifest can also be made available to volunteers as they classify (some very keen volunteers find this extremely useful). Any fields with names that begin with “#” or “//” will *not* be shown to volunteers, such as the “#secret_description” field in Kitteh Zoo. These hidden fields will still be returned to you in the classification file, so you can use these to include information helpful to your research without worrying about whether it might affect the classifications themselves. Information in fields that *don’t* begin with either “#” or “//” will be accessible to volunteers.
+
+      For now, let’s assume you’re just including the bare minimum of information, like:
+
+          id,image
+          1,kitteh_in_box.jpg
+          2,kitteh_stalking.jpg
+          3,kitteh_losing_balance.jpg
+
+      Note the field names have changed from the previous example. That's because, aside from marking whether a field is hidden or not, it doesn't actually matter to the Zooniverse what the fields are called (or what order they’re in), so you can name and order them according to whatever works best for your project.
+
+      Using a manifest CSV file also makes it very easy to create subjects with multiple images:
+
+          id,image1,image2
+          1,kitteh_in_box.jpg,kitteh_eating_box.jpg
+          2,kitteh_stalking.jpg,kitteh_pounced.jpg
+          3,kitteh_losing_balance.jpg,kitteh_falling_off_sofa.jpg
+
+      If you upload this manifest plus the 6 images named in it, the Zooniverse software will create 3 subjects with 2 images each. When these subjects come up in the classification interface, volunteers will be able to flash between the images or switch between them manually.
+
+      You can create a manifest file in a simple text editor (such as TextEdit or Notepad), although this method is prone to errors like missed or extra commas. People often find it easiest to create manifest files using spreadsheet software such as Google Sheets, iWork Numbers or Microsoft Excel. Creating and maintaining a manifest using a spreadsheet makes the manifest easy to read, and you can export it to CSV format when you're ready to upload your subjects. You can also open existing CSV files in spreadsheet software.
+
+      *Note:* if you have a large subject set it may be cumbersome to manually create a manifest. We suggest using a command-line or other tool to copy-paste a directory list of files into a spreadsheet to help you get started.
     '''
 
 module.exports = React.createClass
