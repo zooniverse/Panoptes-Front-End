@@ -43,7 +43,9 @@ module?.exports = React.createClass
           {users.map (user, i) =>
             <div key={user.id}>
               <strong><Link key={user.id} to="user-profile" params={name: user.login}>{user.display_name}</Link></strong>
-              <div>{timeAgo(conversation.updated_at)}</div>{', ' if i isnt (users.length-1)}
+                <PromiseRenderer promise={conversation.get('messages', {page_size: 1, sort: '-created_at'})}>{(messages) =>
+                  <div>{timeAgo(messages[0].updated_at)}{', ' if i isnt (users.length-1)}</div>
+                }</PromiseRenderer>
             </div>}
         </div>
       }</PromiseRenderer>
