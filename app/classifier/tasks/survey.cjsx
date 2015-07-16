@@ -1,4 +1,5 @@
 React = require 'react'
+Dropdown = require '../../components/dropdown'
 
 Summary = React.createClass
   displayName: 'SurveySummary'
@@ -36,10 +37,10 @@ Chooser = React.createClass
           <label>
             {characteristic.label}{' '}
             <select value={@props.filters[characteristicID] ? ''} onChange={@handleFilter.bind this, characteristicID}>
-              <option value="">(Any)</option>
               {for valueID in characteristic.valuesOrder
                 value = characteristic.values[valueID]
                 <option value={valueID}>{value.label}</option>}
+              <option value="">(Any)</option>
             </select>
           </label>
         </div>}
@@ -87,8 +88,8 @@ ImageFlipper = React.createClass
   handleFrameChange: (frame) ->
     @setState {frame}
 
-ChoiceDetails = React.createClass
-  displayName: 'ChoiceDetails'
+Choice = React.createClass
+  displayName: 'Choice'
 
   getDefaultProps: ->
     task: null
@@ -111,29 +112,31 @@ ChoiceDetails = React.createClass
 
   render: ->
     choice = @props.task.choices[@props.choiceID]
-    <div className="survey-choice-details">
+    <div className="survey-choice">
       {unless choice.images.length is 0
         <ImageFlipper images={choice.images} />}
-      <div>{choice.label}</div>
-      <div>{choice.description}</div>
+      <div className="survey-choice-label">{choice.label}</div>
+      <div className="survey-choice-description">{choice.description}</div>
       {for questionID in @props.task.questionsOrder
         question = @props.task.questions[questionID]
         inputType = if question.multiple
           'checkbox'
         else
           'radio'
-        <div key={questionID}>
-          {question.label}{' '}
+        <div key={questionID} className="survey-choice-question">
+          {question.label}
           {for answerID in question.answersOrder
             answer = question.answers[answerID]
             isChecked = if question.multiple
               answerID in (@state.answers[questionID] ? [])
             else
               answerID is @state.answers[questionID]
-            <label key={answerID}>
-              <input type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />{' '}
-              {answer.label}
-            </label>}
+            <span key={answerID}>
+              <label className="survey-choice-answer" data-multiple={question.multiple}>
+                <input type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />{' '}
+                {answer.label}
+              </label>
+            </span>}
         </div>}
       <button type="button" onClick={@props.onCancel}>Cancel</button>
       <button type="button" disabled={not @allFilledIn()} onClick={@handleIdentification}>Identify</button>
@@ -188,7 +191,7 @@ module.exports = React.createClass
       {if @state.selectedChoiceID is ''
         <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} />
       else
-        <ChoiceDetails task={@props.task} choiceID={@state.selectedChoiceID} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
+        <Choice task={@props.task} choiceID={@state.selectedChoiceID} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
     </div>
 
   handleFilter: (characteristicID, valueID) ->
