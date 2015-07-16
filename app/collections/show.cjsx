@@ -1,6 +1,5 @@
 React = require 'react'
 talkClient = require '../api/talk'
-auth = require '../api/auth'
 apiClient = require '../api/client'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
@@ -34,17 +33,12 @@ CollectionPage = React.createClass
     document.documentElement.classList.remove 'on-collection-page'
 
   render: ->
-    userAndOwner = Promise.all [
-      auth.checkCurrent(),
-      @props.collection.get 'owner'
-    ]
-
-    <PromiseRenderer promise={userAndOwner}>{([user, owner] = []) =>
+    <PromiseRenderer promise={@props.collection.get('owner')}>{(owner) =>
       params =
         owner: owner.login or owner.name
         name: @props.collection.slug
 
-      isOwner = user?.id is owner.id
+      isOwner = @props.user?.id is owner.id
 
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
@@ -86,7 +80,6 @@ module.exports = React.createClass
 
   getInitialState: ->
     collection: null
-    user: null
     roles: null
     error: false
     loading: false
@@ -94,38 +87,35 @@ module.exports = React.createClass
   propChangeHandlers:
     'params.owner': 'fetchCollection'
     'params.name': 'fetchCollection'
+    'user': 'fetchCollection'
 
   fetchCollection: ->
-    @setState loading: true
+    @setState
+      error: false
+      loading: true
 
-    auth.checkCurrent().then (user) =>
-      apiClient.type('collections')
-        .get(owner: @props.params?.owner, slug: @props.params?.name, include: 'owner')
-        .then ([collection]) =>
-          unless collection then @setState error: true
+    apiClient.type('collections')
+      .get(owner: @props.params?.owner, slug: @props.params?.name, include: 'owner')
+      .then ([collection]) =>
+        unless collection then @setState error: true
 
-          apiClient.type('collection_roles')
-            .get(collection_id: collection.id)
-            .then (roles) =>
-              @setState
-                collection: collection
-                user: user
-                roles: roles
-        .catch =>
-          @setState error: true
-        .then =>
-          @setState loading: false
-
-  componentDidMount: ->
-    auth.listen 'change', @fetchCollection
-
-  componentWillUnmount: ->
-    auth.stopListening 'change', @fetchCollection
+        apiClient.type('collection_roles')
+          .get(collection_id: collection.id)
+          .then (roles) =>
+            @setState
+              collection: collection
+              roles: roles
+      .catch =>
+        @setState
+          error: true
+          collection: null
+      .then =>
+        @setState loading: false
 
   render: ->
     <div className="cotent-container">
       {if @state.collection
-        <CollectionPage {...@props} user={@state.user} collection={@state.collection} roles={@state.roles} />}
+        <CollectionPage {...@props} collection={@state.collection} roles={@state.roles} />}
 
       {if @state.error
         <Translate compontent="p" content="collectionsPageWrapper.error" />}

@@ -61,7 +61,7 @@ module?.exports = React.createClass
   render: ->
     subjectNode = (subject) =>
       <div className="collection-subject-viewer" key={subject.id}>
-        <SubjectViewer defaultStyle={false} subject={subject}>
+        <SubjectViewer defaultStyle={false} subject={subject} user={@props.user}>
           {if @isOwnerOrCollaborator()
             <button type="button" className="collection-subject-viewer-delete-button" onClick={@handleDeleteSubject.bind @, subject}>
               <i className="fa fa-close" />

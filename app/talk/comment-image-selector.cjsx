@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require '../api/client'
-authClient = require '../api/auth'
 getSubjectLocation = require '../lib/get-subject-location'
 
 module?.exports = React.createClass
@@ -16,8 +15,7 @@ module?.exports = React.createClass
     @setRecents()
 
   setRecents: ->
-    authClient.checkCurrent()
-      .then (user) => user.get('recents')
+    @props.user.get('recents')
       .then (subjects) => @setState {subjects}
 
   setQuery: (id) ->

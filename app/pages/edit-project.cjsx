@@ -2,7 +2,6 @@ React = require 'react'
 HandlePropChanges = require '../lib/handle-prop-changes'
 PromiseToSetState = require '../lib/promise-to-set-state'
 ChangeListener = require '../components/change-listener'
-auth = require '../api/auth'
 PromiseRenderer = require '../components/promise-renderer'
 InPlaceForm = require '../components/in-place-form'
 handleInputChange = require '../lib/handle-input-change'
@@ -29,12 +28,7 @@ ProjectEditPage = React.createClass
   render: ->
     handleProjectChange = handleInputChange.bind @props.project
 
-    currentAndOwner = Promise.all [
-      auth.checkCurrent()
-      @props.project.get 'owner'
-    ]
-
-    <PromiseRenderer promise={currentAndOwner}>{([currentUser, projectOwner] = []) =>
+    <PromiseRenderer promise={@props.project.get('owner')}>{(owner) =>
       if projectOwner? and currentUser is projectOwner
         <ChangeListener target={@props.project}>{=>
           <InPlaceForm onSubmit={@handleSubmit}>
@@ -99,13 +93,11 @@ ProjectEditPage = React.createClass
 module.exports = React.createClass
   displayName: 'EditProjectWrapper'
 
-  render: ->
-    <ChangeListener target={auth}>{=>
-      getProject = auth.checkCurrent().then =>
-        apiClient.type('projects').get(@props.params.id).then (project) ->
-          project.refresh()
+  getProject: ->
+    apiClient.type('projects').get(@props.params.id).then (project) ->
+      project.refresh()
 
-      <PromiseRenderer promise={getProject}>{(project) ->
-        <ProjectEditPage project={project} />
-      }</PromiseRenderer>
-    }</ChangeListener>
+  render: ->
+    <PromseRenderer promise={@getProject()}>{(project) ->
+      <ProjectEditPage project={project} />
+    }</PromiseRenderer>

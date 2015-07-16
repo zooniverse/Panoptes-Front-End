@@ -2,13 +2,11 @@ React = require 'react'
 BoardPreview = require './board-preview'
 ActiveUsers = require './active-users'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
-ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
+HandlePropChanges = require '../lib/handle-prop-changes'
 Moderation = require './lib/moderation'
 ProjectLinker = require './lib/project-linker'
 ROLES = require './lib/roles'
-auth = require '../api/auth'
 {Link} = require 'react-router'
 Loading = require '../components/loading-indicator'
 PopularTags = require './popular-tags'
@@ -19,29 +17,28 @@ DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
+  mixins: [HandlePropChanges]
+
+  propTypes:
+    section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
+
+  propChangeHandlers:
+    'section': 'setBoards'
 
   getInitialState: ->
     boards: []
     loading: true
 
-  propTypes:
-    section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
-
   componentWillMount: ->
-    @setBoards()
     sugarClient.subscribeTo @props.section
 
   componentWillUnmount: ->
     sugarClient.unsubscribeFrom @props.section
 
-  componentWillReceiveProps: ->
-    @setBoards()
-
   setBoards: ->
-    auth.checkCurrent().then =>
-      talkClient.type('boards').get(section: @props.section)
-        .then (boards) =>
-          @setState {boards, loading: false}
+    talkClient.type('boards').get(section: @props.section)
+      .then (boards) =>
+        @setState {boards, loading: false}
 
   onSubmitBoard: (e) ->
     e.preventDefault()
@@ -76,17 +73,15 @@ module?.exports = React.createClass
     <label key={i}><input type="radio" name="role-write" defaultChecked={i is ROLES.length-1}value={data}/>{data}</label>
 
   createSubjectDefaultBoard: ->
-    board = {
+    board =
       title: DEFAULT_BOARD_TITLE,
       description: DEFAULT_BOARD_DESCRIPTION
       subject_default: true,
       permissions: {read: 'all', write: 'all'}
       section: @props.section
-      }
 
     talkClient.type('boards').create(board).save()
-      .then (board) =>
-        console.log "board", board
+      .then =>
         @setBoards()
 
   render: ->

@@ -9,7 +9,6 @@ CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 CommentPreview = require './comment-preview'
 PromiseRenderer = require '../components/promise-renderer'
-PromiseToSetState = require '../lib/promise-to-set-state'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
@@ -22,7 +21,7 @@ DEFAULT_AVATAR = './assets/simple-avatar.jpg'
 
 module?.exports = React.createClass
   displayName: 'TalkComment'
-  mixins: [ToggleChildren, Feedback, PromiseToSetState]
+  mixins: [ToggleChildren, Feedback]
 
   propTypes:
     data: React.PropTypes.object
@@ -70,7 +69,6 @@ module?.exports = React.createClass
         @setFeedback "Comment Updated"
 
   commentValidations: (commentBody) ->
-    console.log "validating comment", commentBody
     commentValidationErrors = getErrors(commentBody, commentValidations)
     @setState {commentValidationErrors}
     !!commentValidationErrors.length
@@ -166,6 +164,7 @@ module?.exports = React.createClass
             submitFeedback={"Updated!"}
             submit={"Update Comment"}
             onCancelClick={@onCancelClick}
-            onSubmitComment={@onSubmitComment}/>}
+            onSubmitComment={@onSubmitComment}
+            user={@props.user} />}
       </div>
     </div>

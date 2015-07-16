@@ -1,10 +1,8 @@
 React = require 'react'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
 apiClient = require '../api/client'
-ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
-PromiseToSetState = require '../lib/promise-to-set-state'
+HandlePropChanges = require '../lib/handle-prop-changes'
 Paginator = require './lib/paginator'
 Router = {Link} = require 'react-router'
 Loading = require '../components/loading-indicator'
@@ -16,31 +14,18 @@ PAGE_SIZE = talkConfig.inboxPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkInbox'
-  mixins: [Router.Navigation, PromiseToSetState]
+  mixins: [Router.Navigation, HandlePropChanges]
+
+  propChangeHandlers:
+    user: 'setConversations'
 
   getInitialState: ->
-    user: null
     conversations: []
     conversationsMeta: {}
     loading: true
 
-  componentDidMount: ->
-    @handleAuthChange()
-    authClient.listen @handleAuthChange
-
-  componentWillUnmount: ->
-    authClient.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    authClient.checkCurrent()
-      .then (user) =>
-        if user?
-          @setState {user}, @setConversations
-        else
-          @setState {user: null} # don't want the callback without a user...
-
   setConversations: (page) ->
-    talkClient.type('conversations').get({user_id: @state.user.id, page_size: PAGE_SIZE, page, sort: '-updated_at', include: 'users'})
+    talkClient.type('conversations').get({user_id: @props.user.id, page_size: PAGE_SIZE, page, sort: '-updated_at', include: 'users'})
       .then (conversations) =>
         conversationsMeta = conversations[0]?.getMeta()
         @setState {conversations, conversationsMeta, loading: false}
@@ -58,10 +43,10 @@ module?.exports = React.createClass
   conversationLink: (conversation, i) ->
     unread = conversation.is_unread
     <div className="conversation-link #{if unread then 'unread' else ''}" key={conversation.id}>
-      <PromiseRenderer promise={apiClient.type('users').get(conversation.links.users.filter (userId) => userId isnt @state.user.id)}>{(users) =>
+      <PromiseRenderer promise={apiClient.type('users').get(conversation.links.users.filter (userId) => userId isnt @props.user.id)}>{(users) =>
         <div>
           {users.map (user, i) =>
-            <div>
+            <div key={user.id}>
               <strong><Link key={user.id} to="user-profile" params={name: user.login}>{user.display_name}</Link></strong>
               <div>{timeAgo(conversation.updated_at)}</div>{', ' if i isnt (users.length-1)}
             </div>}
@@ -76,13 +61,13 @@ module?.exports = React.createClass
     </div>
 
   render: ->
-    {conversations, user, loading} = @state
+    {conversations, loading} = @state
     <div className="talk inbox content-container">
       <h1>Inbox</h1>
 
       {if loading
         <Loading />
-      else if not user
+      else if not @props.user
         <p>Please sign in to view your inbox</p>
       else if conversations?.length is 0
         <p>You have not started any private conversations yet. Send users private messages by visiting their profile page.</p>
@@ -92,10 +77,9 @@ module?.exports = React.createClass
           <Paginator page={+@state.conversationsMeta.page} onPageChange={@onPageChange} pageCount={@state.conversationsMeta?.page_count} />
         </div>}
 
-      {if user?
+      {if @props.user?
         <div>
           <h1>Send a message</h1>
-          <InboxForm user={user} />
+          <InboxForm user={@props.user} />
         </div>}
-
     </div>
