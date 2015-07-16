@@ -47,23 +47,25 @@ workflow = apiClient.type('workflows').create
       choices:
         aa:
           label: 'Aardvark'
+          description: 'Basically a long-nose rabbit'
           images: [
             '//placehold.it/640x480.png'
             '//placehold.it/640x480.png'
           ]
-          description: 'Basically a long-nose rabbit'
           characteristics:
             pa: ['so']
             co: ['ta', 'br']
         ar:
           label: 'Armadillo'
           description: 'A little rolly dude'
+          images: []
           characteristics:
             pa: ['so', 'st']
             co: ['ta', 'br']
         to:
           label: 'Tortoise'
           description: 'Little green house with legs'
+          images: []
           characteristics:
             pa: ['so']
             co: ['gr']
@@ -153,9 +155,9 @@ subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/1'}
-    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/2'}
-    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/3'}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/1500/1000/animals/1' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/1500/1000/animals/2' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/1500/1000/animals/3' else BLANK_IMAGE}
   ]
 
   metadata:

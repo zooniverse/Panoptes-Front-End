@@ -4,6 +4,7 @@ Menu = React.createClass
   displayName: 'DropdownMenu'
 
   getDefaultProps: ->
+    anchor: null
     onClickAway: Function.prototype
 
   containerStyle:
@@ -13,6 +14,9 @@ Menu = React.createClass
     position: 'fixed'
     right: 0
     top: 0
+
+  componentDidMount: ->
+    @reposition()
 
   render: ->
     <div className="dropdown-menu-container" style={@containerStyle} onClick={@handleClickAway}>
@@ -24,6 +28,9 @@ Menu = React.createClass
   handleClickAway: (e) ->
     if e.target is @getDOMNode()
       @props.onClickAway arguments...
+
+  reposition: ->
+    console.log @props.anchor
 
 module.exports = React.createClass
   displayName: 'Dropdown'
@@ -52,7 +59,7 @@ module.exports = React.createClass
 
     @setState {root}
 
-    React.render <Menu onClickAway={@close}>
+    React.render <Menu anchor={@getDOMNode()} onClickAway={@close}>
       {@props.children}
     </Menu>, root
 

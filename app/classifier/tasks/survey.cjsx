@@ -33,16 +33,20 @@ Chooser = React.createClass
     <div className="survey-chooser">
       {for characteristicID in @props.task.characteristicsOrder
         characteristic = @props.task.characteristics[characteristicID]
+        label = <span>
+          {characteristic.label}
+          {if characteristicID of @props.filters
+            '*'}
+        </span>
         <div key={characteristicID}>
-          <label>
-            {characteristic.label}{' '}
-            <select value={@props.filters[characteristicID] ? ''} onChange={@handleFilter.bind this, characteristicID}>
-              {for valueID in characteristic.valuesOrder
-                value = characteristic.values[valueID]
-                <option value={valueID}>{value.label}</option>}
-              <option value="">(Any)</option>
-            </select>
-          </label>
+          <Dropdown ref="#{characteristicID}-dropdown" label={label}>
+            {for valueID in characteristic.valuesOrder
+              value = characteristic.values[valueID]
+              <button type="button" disabled={valueID is @props.filters[characteristicID]} onClick={@handleFilter.bind this, characteristicID, valueID}>
+                {value.label}
+              </button>}
+            <button type="button" disabled={characteristicID not of @props.filters} onClick={@handleFilter.bind this, characteristicID, undefined}><i className="fa fa-ban"> Any</i></button>
+          </Dropdown>
         </div>}
 
       {for choiceID in @getFilteredChoices()
@@ -52,8 +56,10 @@ Chooser = React.createClass
         </div>}
     </div>
 
-  handleFilter: (characteristicID, e) ->
-    @props.onFilter characteristicID, e.target.value
+  handleFilter: (characteristicID, valueID) ->
+    @props.onFilter characteristicID, valueID
+    setTimeout => # No idea!
+      @refs["#{characteristicID}-dropdown"].close()
 
 ImageFlipper = React.createClass
   displayName: 'ImageFlipper'
@@ -195,10 +201,10 @@ module.exports = React.createClass
     </div>
 
   handleFilter: (characteristicID, valueID) ->
-    if valueID is ''
-      delete @state.filters[characteristicID]
-    else
+    if valueID?
       @state.filters[characteristicID] = valueID
+    else
+      delete @state.filters[characteristicID]
     @setState filters: @state.filters
 
   handleChoice: (choiceID) ->
