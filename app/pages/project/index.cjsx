@@ -75,7 +75,7 @@ ProjectPage = React.createClass
               <Translate content="project.nav.research" />
             </Link>
             <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
-              pageTitles = pages.reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
+              pageTitles = pages.filter((page) -> page.content isnt '' and page.content?).reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
               <span>
                 {if pageTitles.result
                   <Link to="project-results" params={params} className="tabbed-content-tab">
