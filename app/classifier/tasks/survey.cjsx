@@ -54,6 +54,39 @@ Chooser = React.createClass
   handleFilter: (characteristicID, e) ->
     @props.onFilter characteristicID, e.target.value
 
+ImageFlipper = React.createClass
+  displayName: 'ImageFlipper'
+
+  getDefaultProps: ->
+    images: []
+
+  getInitialState: ->
+    frame: 0
+
+  PRELOAD_STYLE:
+    height: 0
+    overflow: 'hidden'
+    position: 'fixed'
+    right: 0
+    width: 0
+
+  render: ->
+    <div className="image-flipper">
+      {@renderPreload()}
+      <img src={@props.images[@state.frame]} />
+      {for index in [0...@props.images.length]
+        <button type="button" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>}
+    </div>
+
+  renderPreload: ->
+    <div style={@PRELOAD_STYLE}>
+      {for image in @props.images
+        <img src={image} />}
+    </div>
+
+  handleFrameChange: (frame) ->
+    @setState {frame}
+
 ChoiceDetails = React.createClass
   displayName: 'ChoiceDetails'
 
@@ -79,6 +112,8 @@ ChoiceDetails = React.createClass
   render: ->
     choice = @props.task.choices[@props.choiceID]
     <div className="survey-choice-details">
+      {unless choice.images.length is 0
+        <ImageFlipper images={choice.images} />}
       <div>{choice.label}</div>
       <div>{choice.description}</div>
       {for questionID in @props.task.questionsOrder

@@ -47,6 +47,10 @@ workflow = apiClient.type('workflows').create
       choices:
         aa:
           label: 'Aardvark'
+          images: [
+            '//placehold.it/640x480.png'
+            '//placehold.it/640x480.png'
+          ]
           description: 'Basically a long-nose rabbit'
           characteristics:
             pa: ['so']
