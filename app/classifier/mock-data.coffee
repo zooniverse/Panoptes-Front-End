@@ -20,28 +20,38 @@ workflow = apiClient.type('workflows').create
           values:
             so:
               label: 'Solid'
+              image: '//placehold.it/64.png?text=Solid'
             sp:
               label: 'Spots'
+              image: '//placehold.it/64.png?text=Spots'
             st:
               label: 'Stripes'
+              image: '//placehold.it/64.png?text=Stripes'
             ba:
               label: 'Bands'
+              image: '//placehold.it/64.png?text=Bands'
         co:
           label: 'Color'
           valuesOrder: ['wh', 'ta', 're', 'br', 'bl', 'gr']
           values:
             wh:
               label: 'White'
+              image: '//placehold.it/64.png?text=White'
             ta:
               label: 'Tan'
+              image: '//placehold.it/64.png?text=Tan'
             re:
               label: 'Red'
+              image: '//placehold.it/64.png?text=Red'
             br:
               label: 'Brown'
+              image: '//placehold.it/64.png?text=Brown'
             bl:
               label: 'Black'
+              image: '//placehold.it/64.png?text=Black'
             gr:
               label: 'Green'
+              image: '//placehold.it/64.png?text=Green'
 
       choicesOrder: ['aa', 'ar', 'to']
       choices:
@@ -49,8 +59,8 @@ workflow = apiClient.type('workflows').create
           label: 'Aardvark'
           description: 'Basically a long-nose rabbit'
           images: [
-            '//placehold.it/640x480.png'
-            '//placehold.it/640x480.png'
+            '//placehold.it/320x240.png?text=Aardvark 1'
+            '//placehold.it/320x240.png?text=Aardvark 2'
           ]
           characteristics:
             pa: ['so']
@@ -58,14 +68,20 @@ workflow = apiClient.type('workflows').create
         ar:
           label: 'Armadillo'
           description: 'A little rolly dude'
-          images: []
+          images: [
+            '//placehold.it/320x240.png?text=Armadillo 1'
+            '//placehold.it/320x240.png?text=Armadillo 2'
+          ]
           characteristics:
             pa: ['so', 'st']
             co: ['ta', 'br']
         to:
           label: 'Tortoise'
           description: 'Little green house with legs'
-          images: []
+          images: [
+            '//placehold.it/320x240.png?text=Tortoise 1'
+            '//placehold.it/320x240.png?text=Tortoise 2'
+          ]
           characteristics:
             pa: ['so']
             co: ['gr']

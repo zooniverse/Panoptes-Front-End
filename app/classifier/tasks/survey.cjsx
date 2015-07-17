@@ -31,47 +31,68 @@ Chooser = React.createClass
 
   render: ->
     <div className="survey-chooser">
-      {for characteristicID in @props.task.characteristicsOrder
-        characteristic = @props.task.characteristics[characteristicID]
+      <div className="characteristics">
+        {for characteristicID in @props.task.characteristicsOrder
+          characteristic = @props.task.characteristics[characteristicID]
+          selectedValue = characteristic.values[@props.filters[characteristicID]]
 
-        label = <span>
-          {characteristic.label}
-          {if characteristicID of @props.filters
-            '*'}
-        </span>
+          label = <span className="characteristic-button" data-is-active={selectedValue? || null}>
+            <span className="characteristic-label">{selectedValue?.label ? characteristic.label}</span>
+          </span>
 
-        hasBeenAutoFocused = false
+          hasBeenAutoFocused = false
 
-        <div key={characteristicID}>
-          <DropdownForm ref="#{characteristicID}-dropdown" label={label}>
-            {for valueID in characteristic.valuesOrder
-              value = characteristic.values[valueID]
+          <span key={characteristicID}>
+            <DropdownForm ref="#{characteristicID}-dropdown" label={label}>
+              {for valueID in characteristic.valuesOrder
+                value = characteristic.values[valueID]
 
-              disabled = valueID is @props.filters[characteristicID]
-              autoFocus = not disabled and not hasBeenAutoFocused
+                disabled = valueID is @props.filters[characteristicID]
+                autoFocus = not disabled and not hasBeenAutoFocused
 
-              if autoFocus
-                hasBeenAutoFocused = true
+                if autoFocus
+                  hasBeenAutoFocused = true
 
-              <button type="submit" disabled={disabled} autoFocus={autoFocus} onClick={@handleFilter.bind this, characteristicID, valueID}>
-                {value.label}
-              </button>}
+                <span key={valueID}>
+                  <button type="submit" className="characteristic-value-button" disabled={disabled} autoFocus={autoFocus} onClick={@handleFilter.bind this, characteristicID, valueID}>
+                    {if value.image?
+                      <img src={value.image} className="characteristic-value-icon" />}
+                    <div className="characteristic-value-label">{value.label}</div>
+                  </button>
+                  {' '}
+                </span>}
 
-            <button type="submit" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
-              <i className="fa fa-ban"> Any</i>
-            </button>
-          </DropdownForm>
-        </div>}
+              &ensp;
+              <button type="submit" className="characteristic-clear-button" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
+                <i className="fa fa-ban"> Any</i>
+              </button>
+            </DropdownForm>
+            {' '}
+          </span>}
 
-      {for choiceID in @getFilteredChoices()
-        choice = @props.task.choices[choiceID]
-        <div key={choiceID}>
-          <button type="button" onClick={@props.onChoose.bind this, choiceID}>{choice.label}</button>
-        </div>}
+        &ensp;
+        <button type="button" className="characteristic-clear-button" disabled={Object.keys(@props.filters).length is 0} onClick={@handleClearFilters}>
+          <i className="fa fa-ban"> Clear</i>
+        </button>
+      </div>
+
+      <div className="choices">
+        {for choiceID in @getFilteredChoices()
+          choice = @props.task.choices[choiceID]
+          <button key={choiceID} type="button" onClick={@props.onChoose.bind this, choiceID}>
+            {unless choice.images.length is 0
+              <img src={choice.images[0]} className="choice-thumbnail" style={maxHeight: '2em'} />}
+            <div className="choice-label">{choice.label}</div>
+          </button>}
+      </div>
     </div>
 
   handleFilter: (characteristicID, valueID) ->
     @props.onFilter characteristicID, valueID
+
+  handleClearFilters: ->
+    for characteristicID in @props.task.characteristicsOrder
+      @props.onFilter characteristicID, undefined
 
 ImageFlipper = React.createClass
   displayName: 'ImageFlipper'

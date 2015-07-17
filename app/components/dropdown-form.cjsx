@@ -6,7 +6,6 @@ DropdownForm = React.createClass
   displayName: 'DropdownForm'
 
   getDefaultProps: ->
-    className: ''
     anchor: null
     required: false
     onSubmit: Function.prototype
@@ -24,16 +23,20 @@ DropdownForm = React.createClass
 
   componentDidMount: ->
     @reposition()
-    addEventListener 'resize', @reposition
     addEventListener 'scroll', @reposition
+    addEventListener 'resize', @reposition
+    for img in @getDOMNode().querySelectorAll 'img'
+      img.addEventListener 'load', @reposition
     addEventListener 'keydown', @handleGlobalKeyDown
 
   componentWillUnmount: ->
-    removeEventListener 'resize', @reposition
     removeEventListener 'scroll', @reposition
+    removeEventListener 'resize', @reposition
+    for img in @getDOMNode().querySelectorAll 'img'
+      img.removeEventListener 'load', @reposition
     removeEventListener 'keydown', @handleGlobalKeyDown
 
-  reposition: ->
+  reposition: (e) ->
     form = @refs.form.getDOMNode()
     anchorRect = @props.anchor.getBoundingClientRect()
 
@@ -52,8 +55,8 @@ DropdownForm = React.createClass
         @props.onCancel arguments...
 
   render: ->
-    <div className="dropdown-form-underlay #{@props.className}" style={@underlayStyle} onClick={@handleUnderlayClick}>
-      <form ref="form" className="dropdown-form #{@props.className}" style={@formStyle} onSubmit={@handleSubmit}>
+    <div className="dropdown-form-underlay" style={@underlayStyle} onClick={@handleUnderlayClick}>
+      <form ref="form" className="dropdown-form" style={@formStyle} onSubmit={@handleSubmit}>
         {@props.children}
       </form>
     </div>
@@ -68,11 +71,10 @@ DropdownForm = React.createClass
         @props.onCancel arguments...
 
 module.exports = React.createClass
-  displayName: 'DropdownFormTrigger'
+  displayName: 'DropdownFormButton'
 
   getDefaultProps: ->
     tag: 'button'
-    className: ''
     label: '···'
     required: false
     onClick: Function.prototype
@@ -92,7 +94,7 @@ module.exports = React.createClass
 
     @setState {root}
 
-    React.render <DropdownForm className={@props.className} anchor={@getDOMNode()} required={@props.required} onSubmit={@handleSubmit} onCancel={@handleCancel}>
+    React.render <DropdownForm anchor={@getDOMNode()} required={@props.required} onSubmit={@handleSubmit} onCancel={@handleCancel}>
       {@props.children}
     </DropdownForm>, root
 
@@ -105,7 +107,7 @@ module.exports = React.createClass
 
   render: ->
     React.createElement @props.tag,
-      className: "dropdown-form-button #{@props.className}"
+      className: "dropdown-form-button"
       onClick: @handleClick
       'data-is-open': @state.root? || null
       @props.label
