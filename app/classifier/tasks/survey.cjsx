@@ -1,5 +1,5 @@
 React = require 'react'
-Dropdown = require '../../components/dropdown'
+DropdownForm = require '../../components/dropdown-form'
 
 Summary = React.createClass
   displayName: 'SurveySummary'
@@ -39,14 +39,14 @@ Chooser = React.createClass
             '*'}
         </span>
         <div key={characteristicID}>
-          <Dropdown ref="#{characteristicID}-dropdown" label={label}>
+          <DropdownForm ref="#{characteristicID}-dropdown" label={label}>
             {for valueID in characteristic.valuesOrder
               value = characteristic.values[valueID]
-              <button type="button" disabled={valueID is @props.filters[characteristicID]} onClick={@handleFilter.bind this, characteristicID, valueID}>
+              <button type="submit" disabled={valueID is @props.filters[characteristicID]} onClick={@handleFilter.bind this, characteristicID, valueID}>
                 {value.label}
               </button>}
-            <button type="button" disabled={characteristicID not of @props.filters} onClick={@handleFilter.bind this, characteristicID, undefined}><i className="fa fa-ban"> Any</i></button>
-          </Dropdown>
+            <button type="submit" disabled={characteristicID not of @props.filters} onClick={@handleFilter.bind this, characteristicID, undefined}><i className="fa fa-ban"> Any</i></button>
+          </DropdownForm>
         </div>}
 
       {for choiceID in @getFilteredChoices()
@@ -58,8 +58,6 @@ Chooser = React.createClass
 
   handleFilter: (characteristicID, valueID) ->
     @props.onFilter characteristicID, valueID
-    setTimeout => # No idea!
-      @refs["#{characteristicID}-dropdown"].close()
 
 ImageFlipper = React.createClass
   displayName: 'ImageFlipper'
