@@ -7,6 +7,7 @@ DropdownForm = React.createClass
 
   getDefaultProps: ->
     anchor: null
+    required: false
     onSubmit: Function.prototype
     onCancel: Function.prototype
 
@@ -29,8 +30,9 @@ DropdownForm = React.createClass
     console.log 'Will anchor to', @props.anchor
 
   handleGlobalKeyDown: (e) ->
-    if e.which is ESC_KEY
-      @props.onCancel arguments...
+    unless @props.required
+      if e.which is ESC_KEY
+        @props.onCancel arguments...
 
   render: ->
     <div className="dropdown-form-underlay" style={@underlayStyle} onClick={@handleUnderlayClick}>
@@ -44,8 +46,9 @@ DropdownForm = React.createClass
     @props.onSubmit arguments...
 
   handleUnderlayClick: (e) ->
-    if e.target is @getDOMNode()
-      @props.onCancel arguments...
+    unless @props.required
+      if e.target is @getDOMNode()
+        @props.onCancel arguments...
 
 module.exports = React.createClass
   displayName: 'DropdownFormTrigger'
@@ -72,7 +75,7 @@ module.exports = React.createClass
 
     @setState {root}
 
-    React.render <DropdownForm anchor={@getDOMNode()} onSubmit={@handleSubmit} onCancel={@handleCancel}>
+    React.render <DropdownForm anchor={@getDOMNode()} required={@props.required} onSubmit={@handleSubmit} onCancel={@handleCancel}>
       {@props.children}
     </DropdownForm>, root
 
@@ -98,6 +101,5 @@ module.exports = React.createClass
     @props.onSubmit arguments...
 
   handleCancel: ->
-    unless @props.required
-      @close()
-      @props.onCancel arguments...
+    @close()
+    @props.onCancel arguments...
