@@ -1,5 +1,7 @@
 React = require 'react'
 
+ESC_KEY = 27
+
 DropdownForm = React.createClass
   displayName: 'DropdownForm'
 
@@ -18,9 +20,17 @@ DropdownForm = React.createClass
 
   componentDidMount: ->
     @reposition()
+    addEventListener 'keydown', @handleGlobalKeyDown
+
+  componentWillUnmount: ->
+    removeEventListener 'keydown', @handleGlobalKeyDown
 
   reposition: ->
     console.log 'Will anchor to', @props.anchor
+
+  handleGlobalKeyDown: (e) ->
+    if e.which is ESC_KEY
+      @props.onCancel arguments...
 
   render: ->
     <div className="dropdown-form-underlay" style={@underlayStyle} onClick={@handleUnderlayClick}>
