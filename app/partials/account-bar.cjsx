@@ -40,8 +40,8 @@ module.exports = React.createClass
       .catch (e) -> console.log "e unread messages", e
 
   render: ->
-      <div className="account-bar">
-        <div className="account-info" onKeyDown={@navigateMenu}>
+      <div className="account-bar" onKeyDown={@navigateMenu}>
+        <div className="account-info">
           <button aria-expanded={@state.expanded} aria-haspopup="true" className="secret-button display-name" onClick={@toggleAccountMenu}>
             <strong>{@props.user.display_name}</strong>
           </button>
