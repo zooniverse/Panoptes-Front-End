@@ -13,7 +13,6 @@ DropdownForm = React.createClass
     onCancel: Function.prototype
 
   underlayStyle:
-    background: 'rgba(127, 127, 127, 0.1)'
     bottom: 0
     left: 0
     position: 'fixed'
@@ -22,7 +21,6 @@ DropdownForm = React.createClass
 
   formStyle:
     position: 'absolute'
-    marginTop: '5px'
 
   componentDidMount: ->
     @reposition()
@@ -54,7 +52,7 @@ DropdownForm = React.createClass
         @props.onCancel arguments...
 
   render: ->
-    <div className="dropdown-form-underlay" style={@underlayStyle} onClick={@handleUnderlayClick}>
+    <div className="dropdown-form-underlay #{@props.className}" style={@underlayStyle} onClick={@handleUnderlayClick}>
       <form ref="form" className="dropdown-form #{@props.className}" style={@formStyle} onSubmit={@handleSubmit}>
         {@props.children}
       </form>
@@ -94,7 +92,7 @@ module.exports = React.createClass
 
     @setState {root}
 
-    React.render <DropdownForm anchor={@getDOMNode()} required={@props.required} onSubmit={@handleSubmit} onCancel={@handleCancel}>
+    React.render <DropdownForm className={@props.className} anchor={@getDOMNode()} required={@props.required} onSubmit={@handleSubmit} onCancel={@handleCancel}>
       {@props.children}
     </DropdownForm>, root
 
@@ -106,7 +104,7 @@ module.exports = React.createClass
 
   render: ->
     React.createElement @props.tag,
-      className: "dropdown-form-label #{@props.className}"
+      className: "dropdown-form-button #{@props.className}"
       onClick: @handleClick
       'data-is-open': @state.root? || null
       @props.label
