@@ -33,19 +33,33 @@ Chooser = React.createClass
     <div className="survey-chooser">
       {for characteristicID in @props.task.characteristicsOrder
         characteristic = @props.task.characteristics[characteristicID]
+
         label = <span>
           {characteristic.label}
           {if characteristicID of @props.filters
             '*'}
         </span>
+
+        hasBeenAutoFocused = false
+
         <div key={characteristicID}>
           <DropdownForm ref="#{characteristicID}-dropdown" label={label}>
             {for valueID in characteristic.valuesOrder
               value = characteristic.values[valueID]
-              <button type="submit" disabled={valueID is @props.filters[characteristicID]} onClick={@handleFilter.bind this, characteristicID, valueID}>
+
+              disabled = valueID is @props.filters[characteristicID]
+              autoFocus = not disabled and not hasBeenAutoFocused
+
+              if autoFocus
+                hasBeenAutoFocused = true
+
+              <button type="submit" disabled={disabled} autoFocus={autoFocus} onClick={@handleFilter.bind this, characteristicID, valueID}>
                 {value.label}
               </button>}
-            <button type="submit" disabled={characteristicID not of @props.filters} onClick={@handleFilter.bind this, characteristicID, undefined}><i className="fa fa-ban"> Any</i></button>
+
+            <button type="submit" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
+              <i className="fa fa-ban"> Any</i>
+            </button>
           </DropdownForm>
         </div>}
 

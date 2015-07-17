@@ -97,6 +97,7 @@ module.exports = React.createClass
     </DropdownForm>, root
 
   close: ->
+    @getDOMNode().focus()
     if @state.root?
       React.unmountComponentAtNode @state.root
       @state.root.parentNode.removeChild @state.root
