@@ -94,9 +94,10 @@ module?.exports = React.createClass
                     </div>
                     <div>
                       {if @state.tab is 0
-                        <QuickSubjectCommentForm subject={subject} user={user} />
+                        <QuickSubjectCommentForm subject={subject} user={@props.user} />
                        else if @state.tab is 1
                         <NewDiscussionForm
+                          user={@props.user}
                           subject={subject}
                           onCreateDiscussion={@onCreateDiscussion} />
                           }
