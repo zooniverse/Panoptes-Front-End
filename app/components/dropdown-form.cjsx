@@ -6,6 +6,7 @@ DropdownForm = React.createClass
   displayName: 'DropdownForm'
 
   getDefaultProps: ->
+    className: ''
     anchor: null
     required: false
     onSubmit: Function.prototype
@@ -19,15 +20,33 @@ DropdownForm = React.createClass
     right: 0
     top: 0
 
+  formStyle:
+    position: 'absolute'
+    marginTop: '5px'
+
   componentDidMount: ->
     @reposition()
+    addEventListener 'resize', @reposition
+    addEventListener 'scroll', @reposition
     addEventListener 'keydown', @handleGlobalKeyDown
 
   componentWillUnmount: ->
+    removeEventListener 'resize', @reposition
+    removeEventListener 'scroll', @reposition
     removeEventListener 'keydown', @handleGlobalKeyDown
 
   reposition: ->
-    console.log 'Will anchor to', @props.anchor
+    form = @refs.form.getDOMNode()
+    anchorRect = @props.anchor.getBoundingClientRect()
+
+    top = anchorRect.bottom
+
+    left = anchorRect.left - ((form.offsetWidth - @props.anchor.offsetWidth) / 2)
+    left = Math.max left, 0
+    left = Math.min left, innerWidth - form.offsetWidth
+
+    form.style.top = "#{top}px"
+    form.style.left = "#{left}px"
 
   handleGlobalKeyDown: (e) ->
     unless @props.required
@@ -36,7 +55,7 @@ DropdownForm = React.createClass
 
   render: ->
     <div className="dropdown-form-underlay" style={@underlayStyle} onClick={@handleUnderlayClick}>
-      <form className="dropdown-form" onSubmit={@handleSubmit}>
+      <form ref="form" className="dropdown-form #{@props.className}" style={@formStyle} onSubmit={@handleSubmit}>
         {@props.children}
       </form>
     </div>
@@ -55,7 +74,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     tag: 'button'
-    className: 'dropdown-form-label'
+    className: ''
     label: '···'
     required: false
     onClick: Function.prototype
@@ -87,7 +106,7 @@ module.exports = React.createClass
 
   render: ->
     React.createElement @props.tag,
-      className: @props.className
+      className: "dropdown-form-label #{@props.className}"
       onClick: @handleClick
       'data-is-open': @state.root? || null
       @props.label
