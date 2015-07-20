@@ -320,6 +320,14 @@ COPY_GREY_LIGHT = #afaeae
     .talk-comment-box
       width: 80%
 
+    &-locked
+      color: FAILURE
+
+    &-comments
+      &.locked
+        pointer-events: none
+        opacity: 0.6
+
   .talk-comment
     overflow: auto
 
@@ -496,7 +504,7 @@ COPY_GREY_LIGHT = #afaeae
 
 
   .talk-edit-discussion-form
-    .toggle-sticky
+    .toggle
       display: block
       font-weight: bold
       margin: 10px 0

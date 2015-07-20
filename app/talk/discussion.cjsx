@@ -153,9 +153,15 @@ module?.exports = React.createClass
     form = document.querySelector('.talk-edit-discussion-form')
     title = form.querySelector('[name="title"]').value
     sticky = form.querySelector('[name="sticky"]').checked
-    @discussionsRequest().update({title, sticky}).save()
+    locked = form.querySelector('[name="locked"]').checked
+    @discussionsRequest().update({title, sticky, locked}).save()
       .then (discussion) =>
         @setState {discussion: discussion[0]}
+
+  lockedMessage: ->
+    <div className="talk-discussion-locked">
+      <i className="fa fa-lock"></i> This discussion has been Locked and is read-only
+    </div>
 
   render: ->
     {discussion} = @state
@@ -171,8 +177,11 @@ module?.exports = React.createClass
               <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
                 <h3>Edit Title:</h3>
                 <input name="title" defaultValue={discussion?.title}/>
-                <label className="toggle-sticky">Sticky:
+                <label className="toggle">Sticky:
                   <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
+                </label>
+                <label className="toggle">Locked:
+                  <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
                 </label>
                 <button type="submit">Update</button>
               </form>}
@@ -183,11 +192,19 @@ module?.exports = React.createClass
           </div>
         </Moderation>}
 
-      {@state.comments.map(@comment)}
+      {if discussion?.locked
+        @lockedMessage()
+        }
+
+      <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
+        {@state.comments.map(@comment)}
+      </div>
 
       <Paginator page={+@state.commentsMeta.page} onPageChange={@onPageChange} pageCount={@state.commentsMeta.page_count} />
 
-      {if @props.user?
+      {if discussion?.locked
+        @lockedMessage()
+      else if @props.user?
         <section>
           <div className="talk-comment-author">
             <Avatar user={@props.user} />
