@@ -15,7 +15,6 @@ PROJECT_DATA =
   display_name: "Project Awesome: #{(new Date).toLocaleString()}"
   introduction: 'Projects. Are they awesome?'
   description: 'Everyone knows projects are awesome. Does the science back it up? Help us test our hypothesis blah blah blah...'
-  science_case: 'We hope to prove once and for all the awesomeness of projects. We’ll publish a paper in blah blah blah...'
   private: true
 
 SUBJECT_SET_DATA =
