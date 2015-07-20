@@ -2,10 +2,11 @@ React = require 'react'
 
 NOOP = Function.prototype
 
-separateSubjects = (subjects, files) ->
+separateSubjects = (subjects, files, tooBig) ->
   ready = []
   incomplete = []
   missingFiles = []
+  tooBigFiles = []
 
   for subject in subjects
     allLocationsHaveFiles = true
@@ -13,12 +14,14 @@ separateSubjects = (subjects, files) ->
       unless location of files
         missingFiles.push location
         allLocationsHaveFiles = false
+      if location of tooBig
+        tooBigFiles.push location
     if allLocationsHaveFiles
       ready.push subject
     else
       incomplete.push subject
 
-  {ready, incomplete, missingFiles}
+  {ready, incomplete, missingFiles, tooBigFiles}
 
 module.exports = React.createClass
   displayName: 'ManifestView'
@@ -31,6 +34,7 @@ module.exports = React.createClass
     errors: []
     subjects: []
     files: {}
+    tooBigFiles: {}
     onRemove: NOOP
 
   getInitialState: ->
@@ -39,7 +43,7 @@ module.exports = React.createClass
     showingReady: false
 
   render: ->
-    {ready, incomplete, missingFiles} = separateSubjects @props.subjects, @props.files
+    {ready, incomplete, missingFiles, tooBigFiles} = separateSubjects @props.subjects, @props.files, @props.tooBigFiles
 
     <div className="manifest-view">
       <div>
@@ -74,7 +78,7 @@ module.exports = React.createClass
           {if @state.showingMissing
             <ul>
               {for file, i in missingFiles
-                <li key={i}>{file}</li>}
+                <li key={i}>{file}{' is too large' if file in tooBigFiles}</li>}
             </ul>}
         </div>}
 

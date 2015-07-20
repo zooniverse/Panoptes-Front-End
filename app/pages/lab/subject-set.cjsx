@@ -16,6 +16,7 @@ NOOP = Function.prototype
 
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
 INVALID_FILENAME_CHARS = ['/', '\\', ':']
+MAX_FILE_SIZE = 600000
 
 announceSetChange = ->
   apiClient.type('subject_sets').emit 'add-or-remove'
@@ -118,6 +119,7 @@ EditSubjectSetPage = React.createClass
 
   getInitialState: ->
     manifests: {}
+    tooBigFiles: {}
     files: {}
     deletionError: null
     deletionInProgress: false
@@ -154,8 +156,8 @@ EditSubjectSetPage = React.createClass
           <strong>Manifest files are required.</strong><br />
           <strong>Drag-and-drop or click to upload manifests and subject images here.</strong><br />
           Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
-          Subject images can be any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '}
-          and may not contain {<span key={char}><kbd>{char}</kbd>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}.<br />
+          Subject images can be up to {MAX_FILE_SIZE/1000}KB and any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '} 
+          and may not contain {<span key={char}><kbd>{char}</kbd>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}<br />
         </UploadDropTarget>
       </p>
 
@@ -163,10 +165,10 @@ EditSubjectSetPage = React.createClass
         <ul>
           {subjectsToCreate = 0
           for name, {errors, subjects} of @state.manifests
-            {ready} = ManifestView.separateSubjects subjects, @state.files
+            {ready} = ManifestView.separateSubjects subjects, @state.files, @state.tooBigFiles
             subjectsToCreate += ready.length
             <li key={name}>
-              <ManifestView name={name} errors={errors} subjects={subjects} files={@state.files} onRemove={@handleRemoveManifest.bind this, name} />
+              <ManifestView name={name} errors={errors} tooBigFiles={@state.tooBigFiles} subjects={subjects} files={@state.files} onRemove={@handleRemoveManifest.bind this, name} />
             </li>}
         </ul>
 
@@ -213,8 +215,12 @@ EditSubjectSetPage = React.createClass
         @_addManifest file
         gotManifest = true
       else if file.type.indexOf('image/') is 0
-        @state.files[file.name] = file
-        gotFile = true
+        if file.size < MAX_FILE_SIZE
+          @state.files[file.name] = file
+          gotFile = true
+        else
+          @state.tooBigFiles[file.name] = file
+          gotFile = true
       else if file.type? # When Windows fails to detect MIME type and returns an empty string for file.type
         allowedFileExts = ['csv', 'tsv']
         ext = file.name.split('.').pop()
