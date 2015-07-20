@@ -30,14 +30,14 @@ Chooser = React.createClass
         choiceID
 
   render: ->
-    <div className="survey-chooser">
-      <div className="survey-characteristics">
+    <div className="survey-task-chooser">
+      <div className="survey-task-chooser-characteristics">
         {for characteristicID in @props.task.characteristicsOrder
           characteristic = @props.task.characteristics[characteristicID]
           selectedValue = characteristic.values[@props.filters[characteristicID]]
 
-          label = <span className="survey-characteristic-button" data-is-active={selectedValue? || null}>
-            <span className="survey-characteristic-label">{selectedValue?.label ? characteristic.label}</span>
+          label = <span className="survey-task-chooser-characteristic" data-is-active={selectedValue? || null}>
+            <span className="survey-task-chooser-characteristic-label">{selectedValue?.label ? characteristic.label}</span>
           </span>
 
           hasBeenAutoFocused = false
@@ -54,16 +54,16 @@ Chooser = React.createClass
                   hasBeenAutoFocused = true
 
                 <span key={valueID}>
-                  <button type="submit" className="survey-characteristic-value-button" disabled={disabled} autoFocus={autoFocus} onClick={@handleFilter.bind this, characteristicID, valueID}>
+                  <button type="submit" className="survey-task-chooser-characteristic-value" disabled={disabled} autoFocus={autoFocus} onClick={@handleFilter.bind this, characteristicID, valueID}>
                     {if value.image?
-                      <img src={value.image} className="survey-characteristic-value-icon" />}
-                    <div className="survey-characteristic-value-label">{value.label}</div>
+                      <img src={value.image} className="survey-task-chooser-characteristic-value-icon" />}
+                    <div className="survey-task-chooser-characteristic-value-label">{value.label}</div>
                   </button>
                   {' '}
                 </span>}
 
               &ensp;
-              <button type="submit" className="survey-characteristic-clear-button" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
+              <button type="submit" className="survey-task-chooser-characteristic-clear-button" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
                 <i className="fa fa-ban"> Any</i>
               </button>
             </DropdownForm>
@@ -71,19 +71,19 @@ Chooser = React.createClass
           </span>}
 
         &ensp;
-        <button type="button" className="survey-characteristic-clear-button" disabled={Object.keys(@props.filters).length is 0} onClick={@handleClearFilters}>
+        <button type="button" className="survey-task-chooser-characteristic-clear-button" disabled={Object.keys(@props.filters).length is 0} onClick={@handleClearFilters}>
           <i className="fa fa-ban"> Clear</i>
         </button>
       </div>
 
-      <div className="survey-choices">
+      <div className="survey-task-chooser-choices">
         {for choiceID in @getFilteredChoices()
           choice = @props.task.choices[choiceID]
           <span key={choiceID}>
-            <button type="button" className="survey-choice-button" onClick={@props.onChoose.bind this, choiceID}>
+            <button type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind this, choiceID}>
               {unless choice.images.length is 0
-                <img src={choice.images[0]} className="survey-choice-thumbnail" />}
-              <div className="survey-choice-label">{choice.label}</div>
+                <img src={choice.images[0]} className="survey-task-chooser-choice-thumbnail" />}
+              <div className="survey-task-chooser-choice-label">{choice.label}</div>
             </button>
             {' '}
           </span>}
@@ -114,13 +114,13 @@ ImageFlipper = React.createClass
     width: 0
 
   render: ->
-    <span className="survey-image-flipper">
+    <span className="survey-task-image-flipper">
       {@renderPreload()}
-      <img src={@props.images[@state.frame]} className="survey-image-flipper-image" />
-      <span className="survey-image-flipper-pips">
+      <img src={@props.images[@state.frame]} className="survey-task-image-flipper-image" />
+      <span className="survey-task-image-flipper-pips">
         {for index in [0...@props.images.length]
           <span>
-            <button type="button" className="survey-image-flipper-pip" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>
+            <button type="button" className="survey-task-image-flipper-pip" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>
             {' '}
           </span>}
       </span>
@@ -159,18 +159,18 @@ Choice = React.createClass
 
   render: ->
     choice = @props.task.choices[@props.choiceID]
-    <div className="survey-choice">
+    <div className="survey-task-choice">
       {unless choice.images.length is 0
         <ImageFlipper images={choice.images} />}
-      <div className="survey-choice-label">{choice.label}</div>
-      <div className="survey-choice-description">{choice.description}</div>
+      <div className="survey-task-choice-label">{choice.label}</div>
+      <div className="survey-task-choice-description">{choice.description}</div>
       {for questionID in @props.task.questionsOrder
         question = @props.task.questions[questionID]
         inputType = if question.multiple
           'checkbox'
         else
           'radio'
-        <div key={questionID} className="survey-choice-question" data-multiple={question.multiple || null}>
+        <div key={questionID} className="survey-task-choice-question" data-multiple={question.multiple || null}>
           {question.label}
           {' '}
           {for answerID in question.answersOrder
@@ -180,7 +180,7 @@ Choice = React.createClass
             else
               answerID is @state.answers[questionID]
             <span key={answerID}>
-              <label className="survey-choice-answer" data-checked={isChecked || null}>
+              <label className="survey-task-choice-answer" data-checked={isChecked || null}>
                 <input type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
                 {answer.label}
               </label>

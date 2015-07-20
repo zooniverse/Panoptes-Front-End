@@ -1,62 +1,62 @@
-.survey-chooser
+.survey-task-chooser
   font-size: 12px
 
-  .survey-characteristics
-    background: rgba(gray, 0.4)
-    border-radius: 5px 5px 0 0
-    padding: 3px
+.survey-task-chooser-characteristics
+  background: rgba(gray, 0.4)
+  border-radius: 5px 5px 0 0
+  padding: 3px
 
-  .survey-choices
-    background: rgba(gray, 0.2)
-    padding: 3px
+.survey-task-chooser-characteristic
+  background: white
+  border-radius: 3px
+  color: black
+  padding: 0 0.5em
 
-  .survey-characteristic-button
-    background: white
-    border-radius: 3px
-    color: black
-    padding: 0 0.5em
+.survey-task-chooser-characteristic-value
+  @extends $reset-button
 
-  .survey-characteristic-value-button
-    @extends $reset-button
+.survey-task-chooser-characteristic-value-icon
+  border-radius: 3px
+  display: block
 
-  .survey-characteristic-value-icon
-    border-radius: 3px
-    display: block
+.survey-task-chooser-characteristic-clear-button
+  @extends $reset-button
 
-  .survey-characteristic-clear-button
-    @extends $reset-button
+.survey-task-chooser-choices
+  background: rgba(gray, 0.2)
+  padding: 3px
 
-  .survey-choice-button
-    @extends $reset-button
-    background: white
-    border-radius: 3px
-    color: black
-    padding: 0.5em
+.survey-task-chooser-choice
+  @extends $reset-button
+  background: white
+  border-radius: 3px
+  color: black
+  padding: 0 0.5em
 
-  .survey-choice-thumbnail
-    border-radius: 3px
-    display: inline-block
-    height: 1em
+.survey-task-chooser-choice-thumbnail
+  border-radius: 3px
+  display: inline-block
+  height: 1em
 
-  .survey-choice-label
-    display: inline-block
+.survey-task-chooser-choice-label
+  display: inline-block
 
-.survey-image-flipper
+.survey-task-image-flipper
   display: block
   position: relative
 
-.survey-image-flipper-image
+.survey-task-image-flipper-image
   border-radius: 5px
   display: block
   width: 100%
 
-.survey-image-flipper-pips
+.survey-task-image-flipper-pips
   bottom: 10px
   left: 50%
   position: absolute
   transform: translateX(-50%)
 
-.survey-image-flipper-pip
+.survey-task-image-flipper-pip
   @extends $reset-button
   background: black
   border: 2px solid
@@ -67,34 +67,34 @@
   text-indent: 1em
   width: 1em
 
-.survey-choice
+.survey-task-choice
   font-size: 14px
 
-  .survey-choice-label
+.survey-task-choice-label
+  font-weight: bold
+  margin: 0.5em 0
+
+.survey-task-choice-description
+  margin: 0.5em 0
+
+.survey-task-choice-question
+  font-size: 12px
+  margin: 0.5em 0
+
+  &:not([data-multiple])
     font-weight: bold
-    margin: 0.5em 0
 
-  .survey-choice-description
-    margin: 0.5em 0
+.survey-task-choice-answer
+  background: white
+  border: 2px solid rgba(gray, 0.2)
+  border-radius: 3px
+  color: black
+  cursor: pointer
+  padding: 0 0.3em
 
-  .survey-choice-question
-    font-size: 12px
-    margin: 0.5em 0
+  &[data-checked]
+    background: MAIN_HIGHLIGHT
+    color: white
 
-    &:not([data-multiple])
-      font-weight: bold
-
-  .survey-choice-answer
-    background: white
-    border: 2px solid rgba(gray, 0.2)
-    border-radius: 3px
-    color: black
-    cursor: pointer
-    padding: 0 0.3em
-
-    &[data-checked]
-      background: MAIN_HIGHLIGHT
-      color: white
-
-    > input
-      display: none
+  > input
+    display: none
