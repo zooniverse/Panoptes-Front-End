@@ -10,33 +10,91 @@
     background: rgba(gray, 0.2)
     padding: 3px
 
-.survey-characteristic-button
-  background: white
-  border-radius: 3px
-  color: black
-  padding: 0 0.5em
+  .survey-characteristic-button
+    background: white
+    border-radius: 3px
+    color: black
+    padding: 0 0.5em
 
-.survey-characteristic-value-button
-  @extends $reset-button
+  .survey-characteristic-value-button
+    @extends $reset-button
 
-.survey-characteristic-value-icon
-  border-radius: 3px
+  .survey-characteristic-value-icon
+    border-radius: 3px
+    display: block
+
+  .survey-characteristic-clear-button
+    @extends $reset-button
+
+  .survey-choice-button
+    @extends $reset-button
+    background: white
+    border-radius: 3px
+    color: black
+    padding: 0.5em
+
+  .survey-choice-thumbnail
+    border-radius: 3px
+    display: inline-block
+    height: 1em
+
+  .survey-choice-label
+    display: inline-block
+
+.survey-image-flipper
   display: block
+  position: relative
 
-.survey-characteristic-clear-button
+.survey-image-flipper-image
+  border-radius: 5px
+  display: block
+  width: 100%
+
+.survey-image-flipper-pips
+  bottom: 10px
+  left: 50%
+  position: absolute
+  transform: translateX(-50%)
+
+.survey-image-flipper-pip
   @extends $reset-button
-
-.survey-choice-button
-  @extends $reset-button
-  background: white
-  border-radius: 3px
-  color: black
-  padding: 0.5em
-
-.survey-choice-thumbnail
-  border-radius: 3px
+  background: black
+  border: 2px solid
+  border-radius: 50%
+  color: white
   height: 1em
-  display: inline-block
+  overflow: hidden
+  text-indent: 1em
+  width: 1em
 
-.survey-choice-label
-  display: inline-block
+.survey-choice
+  font-size: 14px
+
+  .survey-choice-label
+    font-weight: bold
+    margin: 0.5em 0
+
+  .survey-choice-description
+    margin: 0.5em 0
+
+  .survey-choice-question
+    font-size: 12px
+    margin: 0.5em 0
+
+    &:not([data-multiple])
+      font-weight: bold
+
+  .survey-choice-answer
+    background: white
+    border: 2px solid rgba(gray, 0.2)
+    border-radius: 3px
+    color: black
+    cursor: pointer
+    padding: 0 0.3em
+
+    &[data-checked]
+      background: MAIN_HIGHLIGHT
+      color: white
+
+    > input
+      display: none

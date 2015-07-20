@@ -114,12 +114,17 @@ ImageFlipper = React.createClass
     width: 0
 
   render: ->
-    <div className="image-flipper">
+    <span className="survey-image-flipper">
       {@renderPreload()}
-      <img src={@props.images[@state.frame]} />
-      {for index in [0...@props.images.length]
-        <button type="button" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>}
-    </div>
+      <img src={@props.images[@state.frame]} className="survey-image-flipper-image" />
+      <span className="survey-image-flipper-pips">
+        {for index in [0...@props.images.length]
+          <span>
+            <button type="button" className="survey-image-flipper-pip" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>
+            {' '}
+          </span>}
+      </span>
+    </span>
 
   renderPreload: ->
     <div style={@PRELOAD_STYLE}>
@@ -165,8 +170,9 @@ Choice = React.createClass
           'checkbox'
         else
           'radio'
-        <div key={questionID} className="survey-choice-question">
+        <div key={questionID} className="survey-choice-question" data-multiple={question.multiple || null}>
           {question.label}
+          {' '}
           {for answerID in question.answersOrder
             answer = question.answers[answerID]
             isChecked = if question.multiple
@@ -174,14 +180,18 @@ Choice = React.createClass
             else
               answerID is @state.answers[questionID]
             <span key={answerID}>
-              <label className="survey-choice-answer" data-multiple={question.multiple}>
-                <input type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />{' '}
+              <label className="survey-choice-answer" data-checked={isChecked || null}>
+                <input type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
                 {answer.label}
               </label>
+              {' '}
             </span>}
         </div>}
-      <button type="button" onClick={@props.onCancel}>Cancel</button>
-      <button type="button" disabled={not @allFilledIn()} onClick={@handleIdentification}>Identify</button>
+      <div style={textAlign: 'center'}>
+        <button type="button" className="minor-button" onClick={@props.onCancel}>Cancel</button>
+        {' '}
+        <button type="button" className="standard-button" disabled={not @allFilledIn()} onClick={@handleIdentification}>Identify</button>
+      </div>
     </div>
 
   handleAnswer: (questionID, answerID, e) ->
