@@ -28,6 +28,7 @@ SOCIAL_ICONS =
 counterpart.registerTranslations 'en',
   project:
     loading: 'Loading project'
+    disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
     nav:
       research: 'Research'
       results: 'Results'
@@ -111,6 +112,9 @@ ProjectPage = React.createClass
           </nav>
 
           <RouteHandler {...@props} owner={owner} />
+          {unless @props.project.launch_approved or @props.project.beta_approved
+            <Translate className="project-disclaimer" content="project.disclaimer" component="p" />
+          }
         </div>
       }</PromiseRenderer>
     }</ChangeListener>
