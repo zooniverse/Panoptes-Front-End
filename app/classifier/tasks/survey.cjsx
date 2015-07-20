@@ -1,5 +1,6 @@
 React = require 'react'
 DropdownForm = require '../../components/dropdown-form'
+Markdown = require '../../components/markdown'
 
 Summary = React.createClass
   displayName: 'SurveySummary'
@@ -35,15 +36,14 @@ Chooser = React.createClass
         {for characteristicID in @props.task.characteristicsOrder
           characteristic = @props.task.characteristics[characteristicID]
           selectedValue = characteristic.values[@props.filters[characteristicID]]
-
-          label = <span className="survey-task-chooser-characteristic" data-is-active={selectedValue? || null}>
-            <span className="survey-task-chooser-characteristic-label">{selectedValue?.label ? characteristic.label}</span>
-          </span>
-
           hasBeenAutoFocused = false
 
           <span key={characteristicID}>
-            <DropdownForm ref="#{characteristicID}-dropdown" label={label}>
+            <DropdownForm ref="#{characteristicID}-dropdown" label={
+              <span className="survey-task-chooser-characteristic" data-is-active={selectedValue? || null}>
+                <span className="survey-task-chooser-characteristic-label">{selectedValue?.label ? characteristic.label}</span>
+              </span>
+            }>
               {for valueID in characteristic.valuesOrder
                 value = characteristic.values[valueID]
 
@@ -141,6 +141,7 @@ Choice = React.createClass
   getDefaultProps: ->
     task: null
     choiceID: ''
+    onSwitch: Function.prototype
     onConfirm: Function.prototype
     onCancel: Function.prototype
 
@@ -164,6 +165,23 @@ Choice = React.createClass
         <ImageFlipper images={choice.images} />}
       <div className="survey-task-choice-label">{choice.label}</div>
       <div className="survey-task-choice-description">{choice.description}</div>
+      {unless choice.confusionsOrder.length is 0
+        <div className="survey-task-choice-confusions">
+          Often confused with
+          {' '}
+          {for otherChoiceID in choice.confusionsOrder
+            <span>
+              <DropdownForm label={
+                <span className="survey-task-choice-confusion">
+                  {@props.task.choices[otherChoiceID].label}
+                </span>
+              }>
+                <Markdown content={choice.confusions[otherChoiceID]} />
+                <button type="button" onClick={@props.onSwitch.bind this, otherChoiceID}>I think it’s this</button>
+              </DropdownForm>
+              {' '}
+            </span>}
+        </div>}
       {for questionID in @props.task.questionsOrder
         question = @props.task.questions[questionID]
         inputType = if question.multiple
@@ -243,7 +261,7 @@ module.exports = React.createClass
       {if @state.selectedChoiceID is ''
         <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} />
       else
-        <Choice task={@props.task} choiceID={@state.selectedChoiceID} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
+        <Choice task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
     </div>
 
   handleFilter: (characteristicID, valueID) ->

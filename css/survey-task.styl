@@ -1,3 +1,8 @@
+$survey-task-pill-button
+  border: 1px solid rgba(gray, 0.5)
+  border-radius: 3px
+  padding: 0 0.4em
+
 .survey-task-chooser
   font-size: 12px
 
@@ -77,20 +82,20 @@
 .survey-task-choice-description
   margin: 0.5em 0
 
-.survey-task-choice-question
-  font-size: 12px
+.survey-task-choice-confusions
+  font-size: 0.8em
   margin: 0.5em 0
 
-  &:not([data-multiple])
-    font-weight: bold
+.survey-task-choice-confusion
+  @extends $survey-task-pill-button
+
+.survey-task-choice-question
+  font-size: 0.8em
+  margin: 0.5em 0
 
 .survey-task-choice-answer
-  background: white
-  border: 2px solid rgba(gray, 0.2)
-  border-radius: 3px
-  color: black
+  @extends $survey-task-pill-button
   cursor: pointer
-  padding: 0 0.3em
 
   &[data-checked]
     background: MAIN_HIGHLIGHT

@@ -65,6 +65,10 @@ workflow = apiClient.type('workflows').create
           characteristics:
             pa: ['so']
             co: ['ta', 'br']
+          confusionsOrder: ['ar']
+          confusions:
+            ar: 'They both start with “A”, so _some_ **dummies** get these two mixed up.'
+
         ar:
           label: 'Armadillo'
           description: 'A little rolly dude'
@@ -75,6 +79,9 @@ workflow = apiClient.type('workflows').create
           characteristics:
             pa: ['so', 'st']
             co: ['ta', 'br']
+          confusionsOrder: []
+          confusions: {}
+
         to:
           label: 'Tortoise'
           description: 'Little green house with legs'
@@ -85,6 +92,8 @@ workflow = apiClient.type('workflows').create
           characteristics:
             pa: ['so']
             co: ['gr']
+          confusionsOrder: []
+          confusions: {}
 
       questionsOrder: ['ho', 'be']
       questions:
