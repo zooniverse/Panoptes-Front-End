@@ -2,6 +2,8 @@ React = require 'react'
 DropdownForm = require '../../components/dropdown-form'
 Markdown = require '../../components/markdown'
 
+THUMBNAIL_BREAKPOINTS = [20, 10, 5, 0]
+
 Summary = React.createClass
   displayName: 'SurveySummary'
 
@@ -31,6 +33,12 @@ Chooser = React.createClass
         choiceID
 
   render: ->
+    filteredChoices = @getFilteredChoices()
+
+    for point in THUMBNAIL_BREAKPOINTS
+      if filteredChoices.length <= point
+        breakpoint = point
+
     <div className="survey-task-chooser">
       <div className="survey-task-chooser-characteristics">
         {for characteristicID in @props.task.characteristicsOrder
@@ -64,29 +72,36 @@ Chooser = React.createClass
 
               &ensp;
               <button type="submit" className="survey-task-chooser-characteristic-clear-button" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
-                <i className="fa fa-ban"> Any</i>
+                <i className="fa fa-ban"></i> Any
               </button>
             </DropdownForm>
             {' '}
           </span>}
-
-        &ensp;
-        <button type="button" className="survey-task-chooser-characteristic-clear-button" disabled={Object.keys(@props.filters).length is 0} onClick={@handleClearFilters}>
-          <i className="fa fa-ban"> Clear</i>
-        </button>
       </div>
 
-      <div className="survey-task-chooser-choices">
-        {for choiceID in @getFilteredChoices()
-          choice = @props.task.choices[choiceID]
-          <span key={choiceID}>
-            <button type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind this, choiceID}>
-              {unless choice.images.length is 0
-                <img src={choice.images[0]} className="survey-task-chooser-choice-thumbnail" />}
-              <div className="survey-task-chooser-choice-label">{choice.label}</div>
-            </button>
-            {' '}
-          </span>}
+      <div className="survey-task-chooser-choices" data-breakpoint={breakpoint}>
+        {if filteredChoices.length is 0
+          <div>
+            <em>No matches.</em>
+          </div>
+        else
+          for choiceID in filteredChoices
+            choice = @props.task.choices[choiceID]
+            <span key={choiceID}>
+              <button type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind this, choiceID}>
+                {unless choice.images.length is 0
+                  <img src={choice.images[0]} className="survey-task-chooser-choice-thumbnail" />}
+                <div className="survey-task-chooser-choice-label">{choice.label}</div>
+              </button>
+              {' '}
+            </span>}
+        <div>
+          Showing {filteredChoices.length} of {@props.task.choicesOrder.length}.
+          {' '}
+          <button type="button" className="survey-task-chooser-characteristic-clear-button" disabled={Object.keys(@props.filters).length is 0} onClick={@handleClearFilters}>
+            <i className="fa fa-ban"></i> Clear filters
+          </button>
+        </div>
       </div>
     </div>
 
@@ -177,7 +192,11 @@ Choice = React.createClass
                 </span>
               }>
                 <Markdown content={choice.confusions[otherChoiceID]} />
-                <button type="button" onClick={@props.onSwitch.bind this, otherChoiceID}>I think it’s this</button>
+                <div style={textAlign: 'center'}>
+                  <button type="button" className="standard-button" onClick={@props.onSwitch.bind this, otherChoiceID}>I think it’s this</button>
+                  {' '}
+                  <button type="submit" className="major-button">Dismiss</button>
+                </div>
               </DropdownForm>
               {' '}
             </span>}
