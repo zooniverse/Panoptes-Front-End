@@ -60,7 +60,7 @@ module?.exports = React.createClass
     @setDiscussions()
 
   discussionPreview: (discussion, i) ->
-    <DiscussionPreview {...@props} key={i} data={discussion} />
+    <DiscussionPreview {...@props} key={i} discussion={discussion} />
 
   onClickDeleteBoard: ->
     if window.confirm("Are you sure that you want to delete this board? All of the comments and discussions will be lost forever.")

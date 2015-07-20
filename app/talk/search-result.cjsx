@@ -20,7 +20,7 @@ module.exports = React.createClass
       <CommentLink comment={@props.data}>Comment #{discussion.links.comments.indexOf(@props.data.id) + 1} in {discussion.title}</CommentLink>
       <CommentPreview content={@props.data.body} header={null} />
       {if section is 'zooniverse'
-        <DiscussionPreview data={discussion} />
+        <DiscussionPreview discussion={discussion} />
       else
         <PromiseRenderer promise={apiClient.type('projects').get(section)}>{(project) =>
           <DiscussionPreview data={discussion} project={project} />

@@ -237,14 +237,26 @@ COPY_GREY_LIGHT = #afaeae
 
   .talk-discussion-link
     color: COPY_GREY_LIGHT
-    a:nth-child(1)
-      color: black
-      text-decoration: none
-      &:hover
-        color: MAIN_HIGHLIGHT
+
     .avatar
       height: 2em
       vertical-align: -0.5em
+
+    a
+      text-decoration: none
+
+    span a
+      color: black
+      &:hover
+        color: COBOLT_BLUE
+
+    a:last-child
+      color: COPY
+      font-style: italic
+      text-decoration: underline
+
+      &:hover
+        color: COBOLT_BLUE
 
   .talk-subject-display
     @extend .talk-module
@@ -272,6 +284,13 @@ COPY_GREY_LIGHT = #afaeae
     border: none
     border-top: 1px solid LIGHT_GREY
     overflow: auto
+
+    .talk-discussion-link
+      font-size: 0.9em
+
+      .avatar
+        height: 1.5em
+        vertical-align: -25%
 
     .talk-sticky-pin
       color: #FF4642
