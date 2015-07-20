@@ -1,23 +1,42 @@
 .survey-chooser
   font-size: 12px
 
-  .characteristics
+  .survey-characteristics
     background: rgba(gray, 0.4)
     border-radius: 5px 5px 0 0
     padding: 3px
 
-  .choices
+  .survey-choices
     background: rgba(gray, 0.2)
     padding: 3px
 
-.characteristic-value-button,
-.characteristic-clear-button
-  @extends $reset-button
-
-.characteristic-button
+.survey-characteristic-button
   background: white
   border-radius: 3px
   color: black
+  padding: 0 0.5em
 
-.characteristic-value-icon
+.survey-characteristic-value-button
+  @extends $reset-button
+
+.survey-characteristic-value-icon
+  border-radius: 3px
   display: block
+
+.survey-characteristic-clear-button
+  @extends $reset-button
+
+.survey-choice-button
+  @extends $reset-button
+  background: white
+  border-radius: 3px
+  color: black
+  padding: 0.5em
+
+.survey-choice-thumbnail
+  border-radius: 3px
+  height: 1em
+  display: inline-block
+
+.survey-choice-label
+  display: inline-block
