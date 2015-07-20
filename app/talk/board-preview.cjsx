@@ -32,7 +32,7 @@ module?.exports = React.createClass
       </div>
 
       <div className="preview-stats">
-        <p><i className="fa fa-user"></i> {resourceCount(@props.data.users_count, "Users")}</p>
+        <p><i className="fa fa-user"></i> {resourceCount(@props.data.users_count, "Participants")}</p>
         <p><i className="fa fa-newspaper-o"></i> {resourceCount(@props.data.discussions_count, "Discussions") }</p>
 
         <p><i className="fa fa-comment"></i> {resourceCount(@props.data.comments_count, "Comments")}</p>
