@@ -1,6 +1,7 @@
 React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
+ChangeListener = require '../../components/change-listener'
 {Link, RouteHandler} = require 'react-router'
 
 counterpart.registerTranslations 'en',
@@ -54,7 +55,9 @@ module.exports = React.createClass
   render: ->
     <div>
       {if @props.user?
-        <UserSettingsPage user={@props.user} />
+        <ChangeListener target={@props.user}>{ =>
+          <UserSettingsPage user={@props.user} />
+        }</ChangeListener>
       else
         <div className="content-container">
           <p>You’re not signed in.</p>
