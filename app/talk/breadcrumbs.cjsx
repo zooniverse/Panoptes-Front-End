@@ -1,16 +1,18 @@
 React = require 'react'
-{Link} = require 'react-router'
+{Link, Navigation} = require 'react-router'
 PromiseRenderer = require '../components/promise-renderer'
 merge = require 'lodash.merge'
 
 module?.exports = React.createClass
   displayName: 'TalkBreadcrumbs'
+  mixins: [Navigation]
 
   projectPrefix: ->
     if @props.project then 'project-' else ''
 
   crumbCatch: (e) ->
-    <span>...</span>
+    if e.message.indexOf('not allowed to show') isnt -1
+      @replaceWith("talk-not-found")
 
   render: ->
     params = @props.params
