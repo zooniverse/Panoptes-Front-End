@@ -82,6 +82,9 @@ module.exports = React.createClass
     setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
 
   render: ->
+    currentTaskDescription = @props.workflow.tasks[@props.annotation?.task]
+    currentTaskComponent = tasks[currentTaskDescription?.type]
+
     <div className="subject-area">
       <SubjectViewer project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
@@ -157,7 +160,38 @@ module.exports = React.createClass
               </div>
             </Tooltip>}
       </SubjectViewer>
+
+      {if currentTaskComponent is tasks.survey
+        @renderSurveyAnnotation()}
     </div>
+
+  renderSurveyAnnotation: ->
+    taskDescription = @props.workflow.tasks[@props.annotation?.task]
+
+    <div>
+      {for identification, i in @props.annotation.value
+        identification._key ?= Math.random()
+
+        answersByQuestion = taskDescription.questionsOrder.map (questionID) ->
+          if questionID of identification.details
+            answerLabels = [].concat(identification.details[questionID]).map (answerID) ->
+              taskDescription.questions[questionID].answers[answerID].label
+            answerLabels.join ', '
+        answersList = answersByQuestion.filter(Boolean).join '; '
+
+        <span key={identification._key}>
+          <span className="survey-identification-proxy" title={answersList}>
+            {taskDescription.choices[identification.choice].label}
+            {' '}
+            <button type="button" className="survey-identification-remove" title="Remove" onClick={@handleSurveyAnnotationRemoval}>&times;</button>
+          </span>
+          {' '}
+        </span>}
+    </div>
+
+  handleSurveyAnnotationRemoval: (index) ->
+    @props.annotation.value.splice index, 1
+    @updateAnnotations()
 
   handleSubjectFrameLoad: (e) ->
     if e.target.tagName.toUpperCase() is 'IMG'
