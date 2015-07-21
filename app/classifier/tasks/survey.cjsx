@@ -87,7 +87,7 @@ Chooser = React.createClass
         else
           for choiceID, i in filteredChoices
             choice = @props.task.choices[choiceID]
-            <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind this, choiceID}>
+            <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
               {unless choice.images.length is 0
                   <img src={choice.images[0]} className="survey-task-chooser-choice-thumbnail" />}
               <div className="survey-task-chooser-choice-label">{choice.label}</div>
@@ -131,7 +131,7 @@ ImageFlipper = React.createClass
       <img src={@props.images[@state.frame]} className="survey-task-image-flipper-image" />
       <span className="survey-task-image-flipper-pips">
         {for index in [0...@props.images.length]
-          <span>
+          <span key={@props.images[index]}>
             <button type="button" className="survey-task-image-flipper-pip" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>
             {' '}
           </span>}
@@ -141,7 +141,7 @@ ImageFlipper = React.createClass
   renderPreload: ->
     <div style={@PRELOAD_STYLE}>
       {for image in @props.images
-        <img src={image} />}
+        <img src={image} key={image} />}
     </div>
 
   handleFrameChange: (frame) ->
@@ -182,7 +182,7 @@ Choice = React.createClass
           Often confused with
           {' '}
           {for otherChoiceID in choice.confusionsOrder
-            <span>
+            <span key={otherChoiceID}>
               <DropdownForm label={
                 <span className="survey-task-choice-confusion">
                   {@props.task.choices[otherChoiceID].label}
@@ -190,7 +190,7 @@ Choice = React.createClass
               }>
                 <Markdown content={choice.confusions[otherChoiceID]} />
                 <div style={textAlign: 'center'}>
-                  <button type="button" className="standard-button" onClick={@props.onSwitch.bind this, otherChoiceID}>I think it’s this</button>
+                  <button type="button" className="standard-button" onClick={@props.onSwitch.bind null, otherChoiceID}>I think it’s this</button>
                   {' '}
                   <button type="submit" className="major-button">Dismiss</button>
                 </div>
