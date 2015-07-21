@@ -29,7 +29,23 @@ $survey-task-pill-button
 
 .survey-task-chooser-choices
   background: rgba(gray, 0.2)
+  display: flex
+  flex-wrap: wrap
   padding: 3px
+
+  > *
+    flex-grow: 1
+
+  &[data-breakpoint="Infinity"] > *,
+  &[data-breakpoint="40"] > *
+    flex-basis: 30%
+
+  &[data-breakpoint="20"] > *,
+  &[data-breakpoint="10"] > *
+    flex-basis: 50%
+
+  &[data-breakpoint="5"] > *
+    flex-basis: 100%
 
 .survey-task-chooser-choice
   @extends $reset-button
@@ -42,6 +58,18 @@ $survey-task-pill-button
   border-radius: 3px
   display: inline-block
   height: 1em
+
+  [data-breakpoint="Infinity"] &
+    display: none
+
+  [data-breakpoint="20"] &
+    height: 2em
+
+  [data-breakpoint="10"] &
+    height: 4em
+
+  [data-breakpoint="5"] &
+    height: 8em
 
 .survey-task-chooser-choice-label
   display: inline-block

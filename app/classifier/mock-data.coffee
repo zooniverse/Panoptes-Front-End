@@ -53,7 +53,7 @@ workflow = apiClient.type('workflows').create
               label: 'Green'
               image: '//placehold.it/64.png?text=Green'
 
-      choicesOrder: ['aa', 'ar', 'to']
+      choicesOrder: ['aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to']
       choices:
         aa:
           label: 'Aardvark'

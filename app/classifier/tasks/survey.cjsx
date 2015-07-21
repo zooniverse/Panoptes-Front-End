@@ -2,7 +2,7 @@ React = require 'react'
 DropdownForm = require '../../components/dropdown-form'
 Markdown = require '../../components/markdown'
 
-THUMBNAIL_BREAKPOINTS = [20, 10, 5, 0]
+THUMBNAIL_BREAKPOINTS = [Infinity, 40, 20, 10, 5, 0]
 
 Summary = React.createClass
   displayName: 'SurveySummary'
@@ -85,16 +85,13 @@ Chooser = React.createClass
             <em>No matches.</em>
           </div>
         else
-          for choiceID in filteredChoices
+          for choiceID, i in filteredChoices
             choice = @props.task.choices[choiceID]
-            <span key={choiceID}>
-              <button type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind this, choiceID}>
-                {unless choice.images.length is 0
-                  <img src={choice.images[0]} className="survey-task-chooser-choice-thumbnail" />}
-                <div className="survey-task-chooser-choice-label">{choice.label}</div>
-              </button>
-              {' '}
-            </span>}
+            <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind this, choiceID}>
+              {unless choice.images.length is 0
+                <img src={choice.images[0]} className="survey-task-chooser-choice-thumbnail" />}
+              <div className="survey-task-chooser-choice-label">{choice.label}</div>
+            </button>}
         <div>
           Showing {filteredChoices.length} of {@props.task.choicesOrder.length}.
           {' '}
