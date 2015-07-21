@@ -173,8 +173,8 @@ module.exports = React.createClass
         identification._key ?= Math.random()
 
         answersByQuestion = taskDescription.questionsOrder.map (questionID) ->
-          if questionID of identification.details
-            answerLabels = [].concat(identification.details[questionID]).map (answerID) ->
+          if questionID of identification.answers
+            answerLabels = [].concat(identification.answers[questionID]).map (answerID) ->
               taskDescription.questions[questionID].answers[answerID].label
             answerLabels.join ', '
         answersList = answersByQuestion.filter(Boolean).join '; '

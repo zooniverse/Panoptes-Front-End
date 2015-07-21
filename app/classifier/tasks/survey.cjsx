@@ -296,11 +296,11 @@ module.exports = React.createClass
   clearSelection: ->
     @setState selectedChoiceID: ''
 
-  handleAnnotation: (choice, details, e) ->
+  handleAnnotation: (choice, answers, e) ->
     filters = JSON.parse JSON.stringify @state.filters
 
     @props.annotation.value ?= []
-    @props.annotation.value.push {choice, details, filters}
+    @props.annotation.value.push {choice, answers, filters}
     @props.onChange e
 
     @clearFilters()
