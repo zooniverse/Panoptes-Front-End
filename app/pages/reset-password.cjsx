@@ -47,7 +47,7 @@ module.exports = React.createClass
         @setState inProgress: false
 
   handleEmailChange: ->
-    @setState { emailIsValid: findDOMNode(@refs.email).checkValidity() }
+    @setState { emailIsValid: findDOMNode(@refs.email)?.checkValidity() }
 
   handleEmailSubmit: (e) ->
     e.preventDefault()
