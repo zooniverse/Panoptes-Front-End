@@ -42,7 +42,7 @@ module?.exports = React.createClass
       </div>
       <div className="preview-stats">
         <p>
-          <i className="fa fa-user"></i> {resourceCount(discussion.users_count, "Users")}
+          <i className="fa fa-user"></i> {resourceCount(discussion.users_count, "Participants")}
         </p>
         <p>
           <i className="fa fa-comment"></i> {resourceCount(discussion.comments_count, "Comments")}
