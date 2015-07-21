@@ -1,4 +1,5 @@
 React = require 'react'
+ChangeListener = require './change-listener'
 
 module.exports = React.createClass
   displayName: 'RetirementRulesEditor'
@@ -16,19 +17,21 @@ module.exports = React.createClass
     classification_count: count: 15
 
   render: ->
-    criteria = @props.workflow.retirement?.criteria ? @defaultCriteria
-    options = @props.workflow.retirement?.options ? @defaultOptions[criteria]
+    <ChangeListener target={@props.workflow}>{ =>
+      criteria = @props.workflow.retirement?.criteria ? @defaultCriteria
+      options = @props.workflow.retirement?.options ? @defaultOptions[criteria]
 
-    <span className="retirement-rules-editor">
-      <select ref="criteriaSelect" value={criteria} disabled onChange={@handleChangeCriteria}>
-        <option value="classification_count">Classification count</option>
-      </select>{' '}
+      <span className="retirement-rules-editor">
+        <select ref="criteriaSelect" value={criteria} disabled onChange={@handleChangeCriteria}>
+          <option value="classification_count">Classification count</option>
+        </select>{' '}
 
-      {switch criteria
-        when 'classification_count'
-          <input type="number" name="count" value={options.count} min="1" max="100" step="1" onChange={@handleChangeOption} />
-        else}
-    </span>
+        {switch criteria
+          when 'classification_count'
+            <input type="number" name="count" value={options.count} min="1" max="100" step="1" onChange={@handleChangeOption} />
+          else}
+      </span>
+    }</ChangeListener>
 
   handleChangeCriteria: (e) ->
     @props.workflow.update
