@@ -53,7 +53,7 @@ workflow = apiClient.type('workflows').create
               label: 'Green'
               image: '//placehold.it/64.png?text=Green'
 
-      choicesOrder: ['aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to']
+      choicesOrder: ['aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar']
       choices:
         aa:
           label: 'Aardvark'
@@ -83,7 +83,7 @@ workflow = apiClient.type('workflows').create
           confusions: {}
 
         to:
-          label: 'Tortoise'
+          label: 'Tortoise, the longest-named animal in the whole entire world'
           description: 'Little green house with legs'
           images: [
             '//placehold.it/320x240.png?text=Tortoise 1'

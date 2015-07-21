@@ -89,16 +89,16 @@ Chooser = React.createClass
             choice = @props.task.choices[choiceID]
             <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind this, choiceID}>
               {unless choice.images.length is 0
-                <img src={choice.images[0]} className="survey-task-chooser-choice-thumbnail" />}
+                  <img src={choice.images[0]} className="survey-task-chooser-choice-thumbnail" />}
               <div className="survey-task-chooser-choice-label">{choice.label}</div>
             </button>}
-        <div>
-          Showing {filteredChoices.length} of {@props.task.choicesOrder.length}.
-          {' '}
-          <button type="button" className="survey-task-chooser-characteristic-clear-button" disabled={Object.keys(@props.filters).length is 0} onClick={@handleClearFilters}>
-            <i className="fa fa-ban"></i> Clear filters
-          </button>
-        </div>
+      </div>
+      <div style={textAlign: 'center'}>
+        Showing {filteredChoices.length} of {@props.task.choicesOrder.length}.
+        &ensp;
+        <button type="button" className="survey-task-chooser-characteristic-clear-button" disabled={Object.keys(@props.filters).length is 0} onClick={@handleClearFilters}>
+          <i className="fa fa-ban"></i> Clear filters
+        </button>
       </div>
     </div>
 
