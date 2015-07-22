@@ -135,7 +135,8 @@ module?.exports = React.createClass
       @discussionsRequest().delete()
         .then (deleted) =>
           @setComments(@props.query.page)
-          @transitionTo('talk')
+          {owner, name} = @props.params
+          if (owner and name) then @transitionTo('project-talk', {owner, name}) else @transitionTo('talk')
 
   commentValidations: (commentBody) ->
     # TODO: return true if any additional validations fail
