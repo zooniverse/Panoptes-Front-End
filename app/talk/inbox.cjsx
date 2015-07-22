@@ -15,11 +15,18 @@ module?.exports = React.createClass
   displayName: 'TalkInbox'
   mixins: [Router.Navigation]
 
+  getDefaultProps: ->
+    query: page: 1
+
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.query.page is @props.query.page
+      @setConversations(nextProps.query.page)
+
   setConversations: (page) ->
     conversationsQuery =
       user_id: @props.user.id
       page_size: PAGE_SIZE
-      page: page
+      page: @props.query.page
       sort: '-updated_at'
       include: 'users'
 
@@ -72,7 +79,9 @@ module?.exports = React.createClass
               conversationsMeta = conversations[0].getMeta()
               <div>
                 <div>{conversations.map(@conversationLink)}</div>
-                <Paginator page={+conversationsMeta.page} onPageChange={@onPageChange} pageCount={+conversationsMeta.page_count} />
+                <Paginator
+                  page={+conversationsMeta.page}
+                  pageCount={+conversationsMeta.page_count} />
               </div>}
 
             <div>
