@@ -25,7 +25,7 @@ module?.exports = React.createClass
 
         <p>{@props.data.description}</p>
 
-        <PromiseRenderer promise={talkClient.type('discussions').get({board_id: @props.data.id}).index(0)}>{(discussion) =>
+        <PromiseRenderer promise={talkClient.type('discussions').get({board_id: @props.data.id, sort_linked_comments: 'created_at'}).index(0)}>{(discussion) =>
           if discussion?
             <LatestCommentLink {...@props} title={true} project={@props.project} discussion={discussion} />
         }</PromiseRenderer>
