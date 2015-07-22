@@ -19,6 +19,7 @@ module.exports = React.createClass
 
   componentDidUpdate: ->
     @fixWeirdSize()
+    @setHref()
   
   componentDidMount: ->
     @setHref()
