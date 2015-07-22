@@ -28,30 +28,28 @@ module?.exports = React.createClass
     commentsMeta: {}
     commentValidationErrors: []
 
+  getDefaultProps: ->
+    query: page: 1
+
+  componentWillReceiveProps: (nextProps) ->
+    if @props.params.discussion isnt nextProps.params.discussion
+      @setDiscussion(nextProps.params.discussion)
+        .then => @setComments(nextProps.query.page ? 1)
+    else if nextProps.query.page isnt @props.query.page
+      @setComments(nextProps.query.page ? 1)
+
   componentDidMount: ->
     @shouldScrollToBottom = true if @props.query?.scrollToLastComment
 
-  goToPage: (n) ->
-    {owner, name} = @props.params
-    projectPrefix = if (owner and name) then 'project-' else ''
-    @transitionTo("#{projectPrefix}talk-discussion", @props.params, {page: n})
-
-    @setComments(n)
-
   componentWillMount: ->
     @setDiscussion()
-    page = @props.query?.page ? 1
-    @setComments(page)
+    @setComments(@props.query.page ? 1)
 
   commentsRequest: (page) ->
     {board, discussion} = @props.params
     talkClient.type('comments').get({discussion_id: discussion, page_size: PAGE_SIZE, page})
 
-  discussionsRequest: ->
-    {discussion} = @props.params
-    talkClient.type('discussions').get({id: discussion})
-
-  setComments: (page = 1, callback) ->
+  setComments: (page = @props.query?.page) ->
     @commentsRequest(page)
       .then (comments) =>
         commentsMeta = comments[0]?.getMeta()
@@ -59,13 +57,15 @@ module?.exports = React.createClass
           if @shouldScrollToBottom and comments.length
             @scrollToBottomOfDiscussion()
             @shouldScrollToBottom = false
-          callback?()
 
   scrollToBottomOfDiscussion: ->
     React.findDOMNode(@)?.scrollIntoView(false)
 
-  setDiscussion: ->
-    @discussionsRequest()
+  discussionsRequest: (discussion = @props.params.discussion) ->
+    talkClient.type('discussions').get({id: discussion})
+
+  setDiscussion: (discussion = @props.params.discussion) ->
+    @discussionsRequest(discussion)
       .then (discussion) =>
         @setState {discussion: discussion[0]}
 
@@ -81,13 +81,13 @@ module?.exports = React.createClass
 
     commentToUpdate.update(comment).save()
       .then (comment) =>
-        @setComments(@state.commentsMeta?.page)
+        @setComments(@props.query.page)
 
   onDeleteComment: (commentId) ->
     {board, discussion} = @props.params
     if window.confirm("Are you sure that you want to delete this comment?")
       talkClient.type('comments').get(id: commentId).delete()
-        .then (deleted) => @setComments()
+        .then (deleted) => @setComments(@props.query.page)
 
   onSubmitComment: (e, textContent, subject) ->
     {discussion} = @props.params
@@ -100,7 +100,7 @@ module?.exports = React.createClass
 
     talkClient.type('comments').create(comment).save()
       .then (comment) =>
-        @setComments(@state.commentsMeta?.page, => @goToPage(@state.commentsMeta?.page_count))
+        @setComments(@state.commentsMeta?.page_count)
 
   onLikeComment: (commentId) ->
     talkClient.type('comments').get(commentId)
@@ -110,7 +110,7 @@ module?.exports = React.createClass
         voteUrl = (comment.href + if upvotedByCurrentUser(@props.user, comment) then '/remove_upvote' else '/upvote')
         talkClient.request('put', voteUrl, null, {})
           .then (voted) =>
-            @setComments(@state.commentsMeta?.page)
+            @setComments(@props.query.page)
 
   onClickReply: (user, comment) ->
     # TODO: provide link to user / comment
@@ -132,15 +132,13 @@ module?.exports = React.createClass
       onUpdateComment={@onUpdateComment}
       onDeleteComment={@onDeleteComment}/>
 
-  onPageChange: (page) ->
-    @goToPage(page)
-
   onClickDeleteDiscussion: ->
     if window.confirm("Are you sure that you want to delete this discussions? All of the comments and discussions will be lost forever.")
       @discussionsRequest().delete()
         .then (deleted) =>
-          @setComments()
-          @transitionTo('talk')
+          @setComments(@props.query.page)
+          {owner, name} = @props.params
+          if (owner and name) then @transitionTo('project-talk', {owner, name}) else @transitionTo('talk')
 
   commentValidations: (commentBody) ->
     # TODO: return true if any additional validations fail
@@ -200,7 +198,7 @@ module?.exports = React.createClass
         {@state.comments.map(@comment)}
       </div>
 
-      <Paginator page={+@state.commentsMeta.page} onPageChange={@onPageChange} pageCount={@state.commentsMeta.page_count} />
+      <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
 
       {if discussion?.locked
         @lockedMessage()
