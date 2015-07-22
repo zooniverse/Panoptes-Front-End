@@ -32,7 +32,10 @@ module?.exports = React.createClass
     query: page: 1
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.query.page is @props.query.page
+    if @props.params.discussion isnt nextProps.params.discussion
+      @setDiscussion(nextProps.params.discussion)
+        .then => @setComments(nextProps.query.page ? 1)
+    else if nextProps.query.page isnt @props.query.page
       @setComments(nextProps.query.page ? 1)
 
   componentDidMount: ->
@@ -46,10 +49,6 @@ module?.exports = React.createClass
     {board, discussion} = @props.params
     talkClient.type('comments').get({discussion_id: discussion, page_size: PAGE_SIZE, page})
 
-  discussionsRequest: ->
-    {discussion} = @props.params
-    talkClient.type('discussions').get({id: discussion})
-
   setComments: (page = @props.query?.page) ->
     @commentsRequest(page)
       .then (comments) =>
@@ -62,8 +61,11 @@ module?.exports = React.createClass
   scrollToBottomOfDiscussion: ->
     React.findDOMNode(@)?.scrollIntoView(false)
 
-  setDiscussion: ->
-    @discussionsRequest()
+  discussionsRequest: (discussion = @props.params.discussion) ->
+    talkClient.type('discussions').get({id: discussion})
+
+  setDiscussion: (discussion = @props.params.discussion) ->
+    @discussionsRequest(discussion)
       .then (discussion) =>
         @setState {discussion: discussion[0]}
 
