@@ -35,7 +35,7 @@ SubjectSetListingRow = React.createClass
   render: ->
     <tr key={@props.subject.id}>
       <td>
-        <small className="form-help">{@props.subject.id}</small>
+        <small className="form-help">{@props.subject.id}{"- #{@props.subject.metadata.Filename}" if @props.subject.metadata.Filename?}</small>
       </td>
       <td>
         <button type="button" disabled={@state.beingDeleted} onClick={@props.onPreview.bind null, @props.subject}><i className="fa fa-eye fa-fw"></i></button>
