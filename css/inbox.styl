@@ -1,6 +1,10 @@
 // extends ./talk
 
 .inbox
+  max-width: 800px
+  width: 100%
+  margin: 2em auto
+  
   .conversation-link
     @extend .talk-module
     width: 100%
@@ -27,6 +31,10 @@
       margin-right: TALK_PADDING
 
 .inbox-conversation
+  max-width: 800px
+  width: 100%
+  margin: 2em auto
+  
   .conversation-message
     @extend .talk-module
     span
@@ -42,5 +50,6 @@
 .new-message-form
   @extend .talk-module
   @extend .talk-form
+  
   textarea
     width: 100%

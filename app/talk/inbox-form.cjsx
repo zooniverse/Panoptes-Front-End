@@ -5,6 +5,7 @@ UserSearch = require '../components/user-search'
 {getErrors} = require './lib/validations'
 subjectValidations = require './lib/message-subject-validations'
 messageValidations = require './lib/message-validations'
+CommentBox = require './comment-box'
 
 module?.exports = React.createClass
   displayName: 'InboxForm'
@@ -25,40 +26,39 @@ module?.exports = React.createClass
     @setState {validationErrors}
     !!validationErrors.length
 
-  onSubmitMessage: (e) ->
-    e.preventDefault()
-    form = findDOMNode(@refs.form)
-
-    recipient_ids = form.querySelector('[name="userids"]')
-      .value.split(',').map (id) -> parseInt(id)
+  onSubmitMessage: (_, body) ->
+    recipient_ids = @getDOMNode().querySelector('[name="userids"]').value
+      .split(',').map (id) -> parseInt(id)
       .filter(Number)
 
     title = findDOMNode(@refs.subject).value
-    body = findDOMNode(@refs.message).value
     user_id = @props.user.id
 
-    conversation = {title, body, user_id, recipient_ids}
+    errored = @validations(body, title, recipient_ids)
+    return errored if errored
 
-    errors = @validations(body, title, recipient_ids)
-    return errors if errors
+    conversation = {title, body, user_id, recipient_ids}
 
     talkClient.type('conversations').create(conversation).save()
       .then (conversation) =>
         @transitionTo('inbox-conversation', {conversation: conversation.id})
 
   render: ->
-    validationErrors = @state.validationErrors.map (message, i) =>
-      <p key={i} className="talk-validation-error">{message}</p>
-
     <div className="inbox-form talk-module">
-      <form onSubmit={@onSubmitMessage} className="talk-form talk-moderation-children" ref="form">
+      <div className="talk-form talk-moderation-children">
         <h2>To:</h2>
         <UserSearch multi={false} />
 
         <h2>Message:</h2>
         <input placeholder="Subject" type="text" ref="subject"/>
-        <textarea rows={8} placeholder="Type your message here" ref="message"/>
-        <div>{validationErrors}</div>
-        <button type="submit">Send</button>
-      </form>
+        <CommentBox
+          user={@props.user}
+          header={null}
+          content=""
+          validationCheck={ -> false }
+          validationErrors={@state.validationErrors}
+          submitFeedback={"Sent!"}
+          onSubmitComment={@onSubmitMessage}
+          submit={"Send Message"} />
+      </div>
     </div>
