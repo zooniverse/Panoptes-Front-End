@@ -23,7 +23,7 @@ module.exports = React.createClass
         <DiscussionPreview discussion={discussion} />
       else
         <PromiseRenderer promise={apiClient.type('projects').get(section)}>{(project) =>
-          <DiscussionPreview data={discussion} project={project} />
+          <DiscussionPreview discussion={discussion} project={project} />
         }</PromiseRenderer>
         }
     </div>
