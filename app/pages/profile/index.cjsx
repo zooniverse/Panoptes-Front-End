@@ -19,11 +19,6 @@ counterpart.registerTranslations 'en',
       stats: "Your stats"
       settings: "Settings"
 
-userIsModeratorAnywhere = (roles) ->
-  roles
-    .filter (role) -> ['admin', 'moderator'].indexOf(role.name) isnt -1
-    .length > 0
-
 UserProfilePage = React.createClass
   displayName: 'UserProfilePage'
 
@@ -82,12 +77,6 @@ UserProfilePage = React.createClass
                   <Translate content="profile.nav.message" />
                 </Link>}
 
-              <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.user.id, page_size: 100)}>{(roles) =>
-                if userIsModeratorAnywhere(roles) and (@props.user is @props.profileUser)
-                  <Link to="moderations" params={name: @props.user.login}>
-                    <Translate content="profile.nav.moderation" />
-                  </Link>
-              }</PromiseRenderer>
             </span>
           </nav>
         </div>

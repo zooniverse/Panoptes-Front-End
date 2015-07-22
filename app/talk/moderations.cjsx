@@ -12,6 +12,7 @@ Loading = require '../components/loading-indicator'
 PAGE_SIZE = require('./config').moderationsPageSize
 {Navigation} = require 'react-router'
 merge = require 'lodash.merge'
+projectSection = require './lib/project-section'
 
 module?.exports = React.createClass
   displayName: 'TalkModerations'
@@ -37,9 +38,22 @@ module?.exports = React.createClass
 
   setModerations: (page) ->
     @setState loading: true
+    {owner, name} = @props.params
+
+    if (owner and name)
+      apiClient.type('projects').get(owner: owner, slug: name).then ([project]) =>
+        @setModerationsForSection(page, projectSection(project))
+    else
+      @setModerationsForSection(page, 'zooniverse')
+
+  setModerationsForSection: (page, section) ->
+    moderationParams = merge {},
+      {page: page, page_size: PAGE_SIZE},
+      if @state.filter? then {state: @state.filter} else {},
+      if section then {section} else {}
 
     auth.checkCurrent().then (user) => if user?
-      talkClient.type('moderations').get(merge {}, {page: page, page_size: PAGE_SIZE}, if @state.filter? then {state: @state.filter} else {})
+      talkClient.type('moderations').get(moderationParams)
         .then (moderations) =>
           moderationsMeta = moderations[0]?.getMeta()
           @setState {user, moderations, moderationsMeta, loading: false}
@@ -106,7 +120,7 @@ module?.exports = React.createClass
   render: ->
     {moderations} = @state
 
-    <div className="talk moderations content-container">
+    <div className="talk moderations">
 
       <section>
         <button
