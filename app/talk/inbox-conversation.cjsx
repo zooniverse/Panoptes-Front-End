@@ -3,6 +3,8 @@ talkClient = require '../api/talk'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 HandlePropChanges = require '../lib/handle-prop-changes'
+Markdown = require '../components/markdown'
+CommentBox = require './comment-box'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
 
@@ -51,15 +53,11 @@ module?.exports = React.createClass
         </span>
       }</PromiseRenderer>
 
-      <p>{data.body}</p>
+      <Markdown>{data.body}</Markdown>
     </div>
 
-  onSubmitMessage: (e) ->
-    e.preventDefault()
-
-    form = @getDOMNode().querySelector('.new-message-form')
-    textarea = form.querySelector('textarea')
-    body = textarea.value
+  onSubmitMessage: (_, textContent) ->
+    body = textContent
     user_id = +@props.user.id
     conversation_id = +@state.conversation.id
 
@@ -68,7 +66,6 @@ module?.exports = React.createClass
     talkClient.type('messages').create(message).save()
       .then (message) =>
         @setConversation()
-        textarea.value = ''
 
   render: ->
     <div className="talk inbox-conversation content-container">
@@ -87,8 +84,13 @@ module?.exports = React.createClass
         }
 
       <div>{@state.messages.map(@message)}</div>
-      <form onSubmit={@onSubmitMessage} className="new-message-form">
-        <textarea placeholder="Type a message here"></textarea>
-        <button type="submit">Send</button>
-      </form>
+      <CommentBox
+        header={"Send a message..."}
+        content=""
+        submitFeedback={'Sent!'}
+        submit={"Send"}
+        onSubmitComment={@onSubmitMessage}
+        validationCheck={ -> false }
+        validationErrors={[]}
+        user={@props.user} />
     </div>
