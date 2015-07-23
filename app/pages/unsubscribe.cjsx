@@ -43,27 +43,33 @@ module.exports = React.createClass
 
   render: ->
     <div className="centered-grid">
-      <form onSubmit={@handleEmailSubmit}>
-        <p><strong>Unsubscribe from all Zooniverse emails.</strong></p>
-        <p>We get it, no one like keep getting email they don't want.</p>
-        <p>Just enter your email address here and we'll <b>unsubscribe you from all</b> our email lists.</p>
-        <p>
-          <input ref="email" type="email" required onChange={@handleEmailChange} className="standard-input" defaultValue={@props.query?.email} size="50" />
-        </p>
-        <p>
-          <button type="submit" className="standard-button" disabled={!@state.emailIsValid || @state.emailSuccess}>Submit</button>
+      { if @props.query?.processed
+        <div>
+          <p><strong>Your unsubscribe request was successfully processed.</strong></p>
+          <p>If you change your mind, just visit your <a href="#/settings">account settings</a> page to update your email preferences.</p>
+        </div>
+      else
+        <form onSubmit={@handleEmailSubmit}>
+          <p><strong>Unsubscribe from all Zooniverse emails.</strong></p>
+          <p>We get it, no one like keep getting email they don't want.</p>
+          <p>Just enter your email address here and we'll <b>unsubscribe you from all</b> our email lists.</p>
+          <p>
+            <input ref="email" type="email" required onChange={@handleEmailChange} className="standard-input" defaultValue={@props.query?.email} size="50" />
+          </p>
+          <p>
+            <button type="submit" className="standard-button" disabled={!@state.emailIsValid || @state.emailSuccess}>Submit</button>
 
-          {' '}
+            {' '}
 
-          {if @state.inProgress
-            <i className="fa fa-spinner fa-spin form-help"></i>
-          else if @state.emailSuccess
-            <i className="fa fa-check-circle form-help success"></i>}
-        </p>
+            {if @state.inProgress
+              <i className="fa fa-spinner fa-spin form-help"></i>
+            else if @state.emailSuccess
+              <i className="fa fa-check-circle form-help success"></i>}
+          </p>
 
-        {if @state.emailSuccess
-          <p>You've been unsubscribed!</p>
-        else if @state.emailError
-          <small className="form-help error">There was an error unsubscribing your email.</small>}
-      </form>
+          {if @state.emailSuccess
+            <p>You've been unsubscribed!</p>
+          else if @state.emailError
+            <small className="form-help error">There was an error unsubscribing your email.</small>}
+        </form>}
     </div>
