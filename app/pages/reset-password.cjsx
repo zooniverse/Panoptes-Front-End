@@ -47,7 +47,7 @@ module.exports = React.createClass
         @setState inProgress: false
 
   handleEmailChange: ->
-    @setState { emailIsValid: findDOMNode(@refs.email).checkValidity() }
+    @setState { emailIsValid: findDOMNode(@refs.email)?.checkValidity() }
 
   handleEmailSubmit: (e) ->
     e.preventDefault()
@@ -70,29 +70,32 @@ module.exports = React.createClass
   render: ->
     <div className="centered-grid">
       {if @props.query?.reset_password_token?
-        <form onSubmit={@handleResetSubmit}>
-          <p>Go ahead and enter a new password, then you can get back to doing some science.</p>
+        if @state.resetSuccess
+          <p>You have successfully reset your password, please login to get started.</p>
+        else
+          <form onSubmit={@handleResetSubmit}>
+            <p>Go ahead and enter a new password, then you can get back to doing some research.</p>
 
-          <p>
-            New password:<br />
-            <input ref="password" type="password" className="standard-input" size="20" />
-          </p>
+            <p>
+              New password:<br />
+              <input ref="password" type="password" className="standard-input" size="20" />
+            </p>
 
-          <p>
-            Again, to confirm:<br />
-            <input ref="confirmation" type="password" className="standard-input" size="20" />
-          </p>
+            <p>
+              Again, to confirm:<br />
+              <input ref="confirmation" type="password" className="standard-input" size="20" />
+            </p>
 
-          <p>
-            <button type="submit" className="standard-button">Submit</button>{' '}
-            {if @state.inProgress
-              <i className="fa fa-spinner fa-spin form-help"></i>
-            else if @state.resetSuccess
-              <i className="fa fa-check-circle form-help success"></i>
-            else if @state.resetError?
-              <small className="form-help error">{@state.resetError.toString()}</small>}
-          </p>
-        </form>
+            <p>
+              <button type="submit" className="standard-button" disabled={@state.resetError || @state.resetSuccess}>Submit</button>{' '}
+              {if @state.inProgress
+                <i className="fa fa-spinner fa-spin form-help"></i>
+              else if @state.resetSuccess
+                <i className="fa fa-check-circle form-help success"></i>
+              else if @state.resetError?
+                <small className="form-help error">Something went wrong, please try and reset your password via email again. {@state.resetError.toString()}</small>}
+            </p>
+          </form>
 
       else
         <form onSubmit={@handleEmailSubmit}>
@@ -102,10 +105,7 @@ module.exports = React.createClass
             <input ref="email" type="email" required onChange={@handleEmailChange} className="standard-input" defaultValue={@props.query?.email} size="50" />
           </p>
           <p>
-            {if @state.emailIsValid
-              <button type="submit" className="standard-button">Submit</button>
-            else
-              <button type="submit" className="standard-button" disabled>Submit</button>}
+            <button type="submit" className="standard-button" disabled={!@state.emailIsValid}>Submit</button>
 
             {' '}
 

@@ -81,6 +81,7 @@ module?.exports = React.createClass
           type="text"
           placeholder="Discussion Title"/>
         <CommentBox
+          user={@props.user}
           header={null}
           validationCheck={@discussionValidations}
           validationErrors={@state.discussionValidationErrors}

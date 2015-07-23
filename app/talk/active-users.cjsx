@@ -88,7 +88,7 @@ module?.exports = React.createClass
 
   render: ->
     <div className="talk-active-users">
-      <h3>{@state.total} Active Users:</h3>
+      <h3>{@state.total} Active Participants:</h3>
       <ul>
         {@state.users.map(@userLink)}
       </ul>

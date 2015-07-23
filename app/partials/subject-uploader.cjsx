@@ -25,7 +25,6 @@ module.exports = React.createClass
 
   componentDidMount: ->
     if @props.autoStart
-      console.log 'Auto-starting'
       @start()
 
   render: ->

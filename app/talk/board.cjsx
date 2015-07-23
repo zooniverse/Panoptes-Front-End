@@ -16,7 +16,7 @@ Loading = require '../components/loading-indicator'
 merge = require 'lodash.merge'
 talkConfig = require './config'
 
-PAGE_SIZE = talkConfig.pageSize
+PAGE_SIZE = talkConfig.boardPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkBoard'
@@ -29,20 +29,23 @@ module?.exports = React.createClass
     newDiscussionOpen: false
     loading: true
 
-  componentWillMount: ->
-    @setDiscussions()
-    @setBoard()
+  getDefaultProps: ->
+    query: page: 1
 
-  goToPage: (n) ->
-    @transitionTo(@props.pathname, @props.params, {page: n})
-    @setDiscussions(n)
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.query.page is @props.query.page
+      @setDiscussions(nextProps.query.page ? 1)
+
+  componentWillMount: ->
+    @setDiscussions(@props.query.page ? 1)
+    @setBoard()
 
   discussionsRequest: (page) ->
     @setState loading: true
     board_id = +@props.params.board
-    talkClient.type('discussions').get({board_id, page_size: PAGE_SIZE, page})
+    talkClient.type('discussions').get({board_id, page_size: PAGE_SIZE, sort_linked_comments: 'created_at', page})
 
-  setDiscussions: (page = 1) ->
+  setDiscussions: (page = @props.query.page) ->
     @discussionsRequest(page)
       .then (discussions) =>
         discussionsMeta = discussions[0]?.getMeta()
@@ -61,7 +64,7 @@ module?.exports = React.createClass
     @setDiscussions()
 
   discussionPreview: (discussion, i) ->
-    <DiscussionPreview {...@props} key={i} data={discussion} />
+    <DiscussionPreview {...@props} key={i} discussion={discussion} />
 
   onClickDeleteBoard: ->
     if window.confirm("Are you sure that you want to delete this board? All of the comments and discussions will be lost forever.")
@@ -74,9 +77,6 @@ module?.exports = React.createClass
         @boardRequest().delete()
           .then =>
             @transitionTo('project-talk', {owner: owner, name: name})
-
-  onPageChange: (page) ->
-    @goToPage(page)
 
   onEditBoard: (e) ->
     e.preventDefault()
@@ -208,5 +208,5 @@ module?.exports = React.createClass
         </div>
       </div>
 
-      <Paginator page={+@state.discussionsMeta?.page} onPageChange={@onPageChange} pageCount={@state.discussionsMeta?.page_count} />
+      <Paginator page={+@state.discussionsMeta?.page} pageCount={@state.discussionsMeta?.page_count} />
     </div>

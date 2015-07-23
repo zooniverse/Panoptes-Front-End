@@ -15,11 +15,18 @@ module?.exports = React.createClass
   displayName: 'TalkInbox'
   mixins: [Router.Navigation]
 
+  getDefaultProps: ->
+    query: page: 1
+
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.query.page is @props.query.page
+      @setConversations(nextProps.query.page)
+
   setConversations: (page) ->
     conversationsQuery =
       user_id: @props.user.id
       page_size: PAGE_SIZE
-      page: page
+      page: @props.query.page
       sort: '-updated_at'
       include: 'users'
 
@@ -43,7 +50,9 @@ module?.exports = React.createClass
           {users.map (user, i) =>
             <div key={user.id}>
               <strong><Link key={user.id} to="user-profile" params={name: user.login}>{user.display_name}</Link></strong>
-              <div>{timeAgo(conversation.updated_at)}</div>{', ' if i isnt (users.length-1)}
+                <PromiseRenderer promise={conversation.get('messages', {page_size: 1, sort: '-created_at'})}>{(messages) =>
+                  <div>{timeAgo(messages[0].updated_at)}{', ' if i isnt (users.length-1)}</div>
+                }</PromiseRenderer>
             </div>}
         </div>
       }</PromiseRenderer>
@@ -70,7 +79,9 @@ module?.exports = React.createClass
               conversationsMeta = conversations[0].getMeta()
               <div>
                 <div>{conversations.map(@conversationLink)}</div>
-                <Paginator page={+conversationsMeta.page} onPageChange={@onPageChange} pageCount={+conversationsMeta.page_count} />
+                <Paginator
+                  page={+conversationsMeta.page}
+                  pageCount={+conversationsMeta.page_count} />
               </div>}
 
             <div>
