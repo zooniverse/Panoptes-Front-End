@@ -1,4 +1,5 @@
 React = require 'react'
+{Link} = require 'react-router'
 DiscussionPreview = require './discussion-preview'
 talkClient = require '../api/talk'
 CommentBox = require './comment-box'
@@ -133,6 +134,18 @@ module?.exports = React.createClass
         <Moderation section={board.section} user={@props.user}>
           <div>
             <h2>Moderator Zone:</h2>
+
+            <Link
+              to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
+              params={
+                if (@props.params?.owner and @props.params?.name)
+                  {owner: @props.params.owner, name: @props.params.name}
+                else
+                  {}
+              }>
+              View Reported Comments
+            </Link>
+
             {if board?.title
               <form className="talk-edit-board-form" onSubmit={@onEditBoard}>
                 <h3>Edit Title:</h3>

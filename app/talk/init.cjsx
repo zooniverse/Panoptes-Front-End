@@ -97,6 +97,17 @@ module?.exports = React.createClass
               }</PromiseRenderer>
               }
 
+            <Link
+              to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
+              params={
+                if (@props.params?.owner and @props.params?.name)
+                  {owner: @props.params.owner, name: @props.params.name}
+                else
+                  {}
+              }>
+              View Reported Comments
+            </Link>
+
             <form onSubmit={@onSubmitBoard}>
               <h3>Add a board:</h3>
               <input type="text" ref="boardTitle" placeholder="Board Title"/>
