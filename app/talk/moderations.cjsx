@@ -13,6 +13,7 @@ PAGE_SIZE = require('./config').moderationsPageSize
 {Navigation} = require 'react-router'
 merge = require 'lodash.merge'
 projectSection = require './lib/project-section'
+userIsModerator = require './lib/user-is-moderator'
 
 module?.exports = React.createClass
   displayName: 'TalkModerations'
@@ -119,38 +120,51 @@ module?.exports = React.createClass
 
   render: ->
     {moderations} = @state
+    {owner, name} = @props.params
 
-    <div className="talk moderations">
+    if @props.user?
+      rolesPromise = talkClient.type('roles').get(user_id: @props.user.id, page_size: 100)
+      projectPromise = Promise.resolve if (project? and owner?) then apiClient.type('projects').get(owner: owner, slug: name).index(0) else false
 
-      <section>
-        <button
-          key='all-reports'
-          onClick={=> @setState filter: null, @setModerations}
-          className={if @state.filter is null then 'active' else ''}>
-          All reports
-        </button>
+      <PromiseRenderer promise={Promise.all [rolesPromise, projectPromise]}>{([roles, project]) =>
+        section = if !!project then projectSection(project) else 'zooniverse'
 
-        {['opened', 'ignored', 'closed'].map (action) =>
-          <button
-            key={action}
-            onClick={=> @setState {filter: action}, @setModerations}
-            className={if @state.filter is action then 'active' else ''}>
-            {action}
-          </button>
-          }
-      </section>
+        if userIsModerator(@props.user, roles, section)
+          <div className="talk moderations">
+            <section>
+              <button
+                key='all-reports'
+                onClick={=> @setState filter: null, @setModerations}
+                className={if @state.filter is null then 'active' else ''}>
+                All reports
+              </button>
 
-      {if @state.loading
-         <Loading />
-       else if moderations?.length > 0
-         <div>{moderations?.map(@moderation)}</div>
-       else
-         <p>There are not currently any reports that require moderation.</p>
-         }
+              {['opened', 'ignored', 'closed'].map (action) =>
+                <button
+                  key={action}
+                  onClick={=> @setState {filter: action}, @setModerations}
+                  className={if @state.filter is action then 'active' else ''}>
+                  {action}
+                </button>
+                }
+            </section>
 
-      {if +@state.moderationsMeta?.page_count > 1
-        <Paginator
-          page={@state.moderationsMeta.page}
-          pageCount={@state.moderationsMeta.page_count} />
-        }
-    </div>
+            {if @state.loading
+               <Loading />
+             else if moderations?.length > 0
+               <div>{moderations?.map(@moderation)}</div>
+             else
+               <p>There are not currently any reports that require moderation.</p>
+               }
+
+            {if +@state.moderationsMeta?.page_count > 1
+              <Paginator
+                page={@state.moderationsMeta.page}
+                pageCount={@state.moderationsMeta.page_count} />
+              }
+          </div>
+        else
+          <p>You must be a moderator to view this page</p>
+      }</PromiseRenderer>
+    else
+      <p>You must be logged in to view this page</p>
