@@ -1,25 +1,7 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
 talkClient = require '../../api/talk'
-
-intersect = (arr1, arr2) ->
-  arr1.filter (n) -> arr2.indexOf(n) isnt -1
-
-userIsZooniverseAdmin = (usersRoles) ->
-  zooniverseAdminRoles = usersRoles.filter (role) ->
-    role.section is 'zooniverse' and role.name is 'admin'
-  zooniverseAdminRoles.length > 0
-
-userIsModerator = (user, roles, section) -> # User response, Roles Response, Talk Section
-  return true if userIsZooniverseAdmin(roles)
-
-  allowedModerationRoles = ['admin', 'moderator']
-
-  moderationRoles = roles
-    .filter (role) -> role.section is section
-    .map (role) -> role.name
-
-  intersect(moderationRoles, allowedModerationRoles).length > 0
+userIsModerator = require './user-is-moderator'
 
 module?.exports = React.createClass
   displayName: 'Moderation'

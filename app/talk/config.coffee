@@ -5,3 +5,5 @@ module?.exports =
   inboxPageSize: 10
 
   boardPageSize: 10
+
+  moderationsPageSize: 20

@@ -87,6 +87,7 @@ routes = <Route handler={App}>
       <DefaultRoute name="project-talk-home" handler={require './talk/init'} />
       <Route name="project-talk-not-found" path="not-found" handler={require './pages/not-found'} />
       <Route name="project-talk-search" path="search" handler={require './talk/search'}/>
+      <Route name="project-talk-moderations" path="moderations" handler={require './talk/moderations'}/>
       <Route name="project-talk-subject" path="subjects/:id" handler={require './subjects'}/>
       <Route name="project-talk-board" path=":board" handler={require './talk/board'} />
       <Route name="project-talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
@@ -97,6 +98,7 @@ routes = <Route handler={App}>
 
   <Route name="talk" path="talk" handler={require './talk'}>
     <DefaultRoute name="talk-home" handler={require './talk/init'} />
+    <Route name="talk-moderations" path="moderations" handler={require './talk/moderations'} />
     <Route name="talk-not-found" path="not-found" handler={require './pages/not-found'} />
     <Route name="talk-search" path="search" handler={require './talk/search'} />
     <Route name="talk-board" path=":board" handler={require './talk/board'} />

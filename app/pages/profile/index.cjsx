@@ -5,6 +5,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
+talkClient = require '../../api/talk'
 
 counterpart.registerTranslations 'en',
   profile:
@@ -14,6 +15,7 @@ counterpart.registerTranslations 'en',
       stats: "Stats"
       collections: "Collections"
       message: "Message"
+      moderation: "Moderation"
       stats: "Your stats"
       settings: "Settings"
 
@@ -64,6 +66,7 @@ UserProfilePage = React.createClass
               <Translate content="profile.nav.collections" />
             </Link>
             {' '}
+
             <span>
               {if @props.user is @props.profileUser
                 <Link to="user-profile-stats" params={name: @props.profileUser.login}>
@@ -73,6 +76,7 @@ UserProfilePage = React.createClass
                 <Link to="user-profile-private-message" params={name: @props.profileUser.login}>
                   <Translate content="profile.nav.message" />
                 </Link>}
+
             </span>
           </nav>
         </div>

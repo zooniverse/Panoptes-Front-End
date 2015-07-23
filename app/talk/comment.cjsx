@@ -24,12 +24,13 @@ module?.exports = React.createClass
   mixins: [ToggleChildren, Feedback]
 
   propTypes:
-    data: React.PropTypes.object
+    data: React.PropTypes.object # Comment resource
     onUpdateComment: React.PropTypes.func # passed (textContent, subject, commentId) on update submit
     onDeleteComment: React.PropTypes.func # passed (commentId) on click
     onLikeComment: React.PropTypes.func # passed (commentId) on like
     onClickReply: React.PropTypes.func # passed (user, comment) on click
     active: React.PropTypes.bool  # optional active switch: scroll window to comment and apply styling
+    user: React.PropTypes.object  # Current user
 
   getDefaultProps: ->
     active: false
@@ -137,7 +138,8 @@ module?.exports = React.createClass
               <button className="talk-comment-link-button" onClick={@onClickLink}>
                 <i className="fa fa-link" /> Link
               </button>
-              {#TODO <button className="talk-comment-report-button" onClick={@onClickReport}><i className="fa fa-warning" /> Report</button>#}
+              {if @props.user?
+                <button className="talk-comment-report-button" onClick={@onClickReport}><i className="fa fa-warning" /> Report</button>}
               {if +@props.data?.user_id is +@props.user?.id
                 <span>
                   <button className="talk-comment-edit-button" onClick={@onClickEdit}>
@@ -152,7 +154,7 @@ module?.exports = React.createClass
             <div className="talk-comment-children">
               {switch @state.showing
                  when 'link' then <CommentLink comment={@props.data}/>
-                 when 'report' then <CommentReportForm />}
+                 when 'report' then <CommentReportForm comment={@props.data} />}
             </div>
           </div>
         else
