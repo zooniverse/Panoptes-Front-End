@@ -115,7 +115,7 @@ module?.exports = React.createClass
                 then={(subject) =>
                   <div className="polaroid-image">
                     Subject {subject.id}
-                    <SubjectViewer subject={subject} />
+                    <SubjectViewer subject={subject} user={@props.user} />
                   </div>
                 }
                 catch={null}
