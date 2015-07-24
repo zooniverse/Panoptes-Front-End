@@ -3,6 +3,8 @@ AutoSave = require '../components/auto-save'
 handleInputChange = require '../lib/handle-input-change'
 apiClient = require '../api/client'
 PromiseToSetState = require '../lib/promise-to-set-state'
+MarkdownEditor = require '../components/markdown-editor'
+ChangeListener = require '../components/change-listener'
 
 module.exports = React.createClass
   displayName: 'ProjectPageEditor'
@@ -41,11 +43,13 @@ module.exports = React.createClass
          <AutoSave resource={@state.pageContent}>
            <span className="form-label">{@props.pageTitle}</span>
            <br />
-           <textarea
-             className="standard-input full"
-             name="content"
-             defaultValue={@state.pageContent.content}
-             rows="20"
-             onChange={handleInputChange.bind @state.pageContent} />
+           <ChangeListener target={@state.pageContent}>{ =>
+             <MarkdownEditor
+               className="full"
+               name="content"
+               value={@state.pageContent.content}
+               rows="20"
+               onChange={handleInputChange.bind @state.pageContent} />
+           }</ChangeListener>
          </AutoSave>}
     </p>

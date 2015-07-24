@@ -4,6 +4,8 @@ alert = require '../lib/alert'
 NOOP = Function.prototype
 m = require '../lib/markdown-insert'
 
+DEFAULT_MARKDOWN_HELP = <p className="markdown-editor-help"><a href="http://markdownlivepreview.com/" target="_blank">Learn more about markdown</a></p>
+
 module.exports = React.createClass
   displayName: 'MarkdownEditor'
 
@@ -109,7 +111,7 @@ module.exports = React.createClass
     @setState previewing: not @state.previewing
 
   handleHelpRequest: ->
-    alert @props.helpText
+    alert @props.helpText or DEFAULT_MARKDOWN_HELP
 
   wrapSelectionIn: (wrapFn, opts = {}) ->
     # helper to call markdown-insert functions on the textarea

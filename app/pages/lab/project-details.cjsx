@@ -9,6 +9,7 @@ counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
+MarkdownEditor = require '../../components/markdown-editor'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -151,9 +152,9 @@ module.exports = React.createClass
             <AutoSave resource={@props.project}>
               <span className="form-label">Introduction</span>
               <br />
-              <textarea className="standard-input full" name="introduction" rows="10" value={@props.project.introduction} onChange={handleInputChange.bind @props.project} />
+              <MarkdownEditor className="full" name="introduction" rows="10" value={@props.project.introduction} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
-            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<a href="http://markdownlivepreview.com/" target="_blank">learn more about markdown</a>), so you can add formatting.</small>
+            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page.</small>
           </p>
 
           <p>
@@ -171,7 +172,7 @@ module.exports = React.createClass
               <br />
               <TagSearch name="tags" multi={true} value={@props.project.tags} onChange={@handleTagChange} />
             </AutoSave>
-            <small className="form-help">Enter a list of tags separated by commas, to help users find your project.</small>
+            <small className="form-help">Enter a list of tags separated by commas to help users find your project.</small>
           </div>
 
           <div>
