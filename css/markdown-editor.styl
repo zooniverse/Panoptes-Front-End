@@ -1,15 +1,21 @@
 .markdown-editor
   display: inline-block
-  position: relative
 
   &.full
+    width: 100%
+
+.editor-area
+  position: relative
+  display: inline-block
+
+.full
+  .editor-area
     width: 100%
 
 .markdown-editor-input
   @extends .standard-input
   display: block
   font-family: Courier, monospace
-  padding-right: 1.5em // Leave room for the controls.
   position: relative
   width: 100%
 
@@ -18,7 +24,7 @@
   border: 1px solid rgba(gray, 0.2)
   left: 0
   overflow: auto
-  padding: 0.3em 1em 0.5em 0.5em
+  padding: 0 1em 0 0.5em
   position: absolute
   right: 0
   top: 0
@@ -30,12 +36,7 @@
     margin-bottom: 0
 
 .markdown-editor-controls
-  font-size: small
-  position: absolute
-  right: 0.2em
-  text-align: center
-  top: 0.1em
-  z-index: 1
+  float: right
 
   button
     @extends $reset-button
