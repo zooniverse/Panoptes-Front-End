@@ -26,7 +26,6 @@ module.exports = React.createClass
     @wrapSelectionIn(m.imageLink)
 
   onBoldClick: (e) ->
-    console.log(e)
     @wrapSelectionIn(m.bold)
 
   onItalicClick: (e) ->
@@ -100,12 +99,22 @@ module.exports = React.createClass
       </div>
 
       <div className="editor-area">
-        <textarea ref="textarea" className="markdown-editor-input" name={@props.name} placeholder={@props.placeholder} value={@props.value} rows={@props.rows} cols={@props.cols} onChange={@props.onChange} />
+        <textarea ref="textarea" className="markdown-editor-input" name={@props.name} placeholder={@props.placeholder} value={@props.value} rows={@props.rows} cols={@props.cols} onChange={@onInputChange} />
 
         <Markdown className="markdown-editor-preview">{@props.value}</Markdown>
       </div>
 
     </div>
+
+  onInputChange: (e) ->
+    value = e?.target?.value or @refs.textarea.getDOMNode().value
+    event =
+      target:
+        name: @props.name
+        value: value
+        type: 'textarea'
+        dataset: {}
+    @props.onChange(event)
 
   handlePreviewToggle: (e) ->
     @setState previewing: not @state.previewing
