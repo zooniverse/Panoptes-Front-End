@@ -46,17 +46,17 @@ module?.exports = React.createClass
     e.preventDefault()
     textareaValue = @refs.textarea.getDOMNode().value
     return if @props.validationCheck?(textareaValue)
-    @setState loading: false
+    @setState loading: true
     fullComment = @state.reply.concat(textareaValue)
 
     @props.onSubmitComment?(e, fullComment, @state.subject)
       .then =>
         @refs.textarea.getDOMNode().value = ''
         @hideChildren()
-        @setState content: '', error: ''
+        @setState content: '', error: '', loading: false
         @setFeedback @props.submitFeedback
       .catch (e) =>
-        @setState(error: e.message)
+        @setState(error: e.message, loading: false)
 
   onPreviewClick: (e) ->
     @toggleComponent('preview')
