@@ -194,6 +194,8 @@ module?.exports = React.createClass
         @lockedMessage()
         }
 
+      <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
+
       <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
         {@state.comments.map(@comment)}
       </div>
