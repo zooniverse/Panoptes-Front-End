@@ -54,34 +54,34 @@ module.exports = React.createClass
 
     <div className={['markdown-editor', @props.className].join ' '} data-previewing={@state.previewing or null}>
       <div className="talk-comment-buttons-container">
-        <button title="link"className='talk-comment-insert-link-button' onClick={@onInsertLinkClick}>
+        <button type="button" title="link"className='talk-comment-insert-link-button' onClick={@onInsertLinkClick}>
           <i className="fa fa-link"></i>
         </button>
-        <button title="image" className='talk-comment-insert-image-button' onClick={@onInsertImageClick}>
+        <button type="button" title="image" className='talk-comment-insert-image-button' onClick={@onInsertImageClick}>
           <i className="fa fa-image"></i>
         </button>
-        <button title="bold" className='talk-comment-bold-button' onClick={@onBoldClick}>
+        <button type="button" title="bold" className='talk-comment-bold-button' onClick={@onBoldClick}>
           <i className="fa fa-bold"></i>
         </button>
-        <button title="italic" className='talk-comment-italic-button' onClick={@onItalicClick}>
+        <button type="button" title="italic" className='talk-comment-italic-button' onClick={@onItalicClick}>
           <i className="fa fa-italic"></i>
         </button>
-        <button title="block quote" className='talk-comment-insert-quote-button' onClick={@onQuoteClick}>
+        <button type="button" title="block quote" className='talk-comment-insert-quote-button' onClick={@onQuoteClick}>
           <i className="fa fa-quote-left"></i> <i className="fa fa-quote-right"></i>
         </button>
-        <button title="heading" className='talk-comment-heading-button' onClick={@onHeadingClick}>
+        <button type="button" title="heading" className='talk-comment-heading-button' onClick={@onHeadingClick}>
           <i className="fa fa-header"></i>
         </button>
-        <button title="horizontal rule" className='talk-comment-hr-button' onClick={@onHorizontalRuleClick}>
+        <button type="button" title="horizontal rule" className='talk-comment-hr-button' onClick={@onHorizontalRuleClick}>
           <i className="fa fa-arrows-h"></i>
         </button>
-        <button title="strikethrough" className='talk-comment-strikethrough-button' onClick={@onStrikethroughClick}>
+        <button type="button" title="strikethrough" className='talk-comment-strikethrough-button' onClick={@onStrikethroughClick}>
           <i className="fa fa-strikethrough"></i>
         </button>
-        <button title="bulleted list" className='talk-comment-bullet-button' onClick={@onBulletClick}>
+        <button type="button" title="bulleted list" className='talk-comment-bullet-button' onClick={@onBulletClick}>
           <i className="fa fa-list"></i>
         </button>
-        <button title="numbered list" className='talk-comment-number-button' onClick={@onNumberClick}>
+        <button type="button" title="numbered list" className='talk-comment-number-button' onClick={@onNumberClick}>
           <i className="fa fa-list-ol"></i>
         </button>
         <span className="markdown-editor-controls">
