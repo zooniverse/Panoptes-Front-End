@@ -247,3 +247,4 @@ module?.exports = React.createClass
 
     m.insertAtCursor(formattedText, textarea, cursor, opts)
     @onInputChange()
+

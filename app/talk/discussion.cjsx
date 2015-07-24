@@ -1,4 +1,4 @@
-React = require 'react'
+React = {findDOMNode} = require 'react'
 Comment = require './comment'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
@@ -125,6 +125,8 @@ module?.exports = React.createClass
 
     reply = "> In reply to #{user.display_name}'s comment: \n#{quotedComment}\n\n"
     @setState {reply}
+
+    findDOMNode(@).scrollIntoView(false)
 
   comment: (data, i) ->
     <Comment
