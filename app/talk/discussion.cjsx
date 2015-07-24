@@ -15,6 +15,8 @@ merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 DisplayRoles = require './lib/display-roles'
 talkConfig = require './config'
+SignInPrompt = require '../partials/sign-in-prompt'
+alert = require '../lib/alert'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -30,6 +32,9 @@ module?.exports = React.createClass
 
   getDefaultProps: ->
     query: page: 1
+
+  promptToSignIn: ->
+    alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
   componentWillReceiveProps: (nextProps) ->
     if @props.params.discussion isnt nextProps.params.discussion
@@ -226,5 +231,5 @@ module?.exports = React.createClass
             header={null} />
         </section>
       else
-        <p>Please sign in to contribute to the discussion</p>}
+        <p>Please <span className="sign-in" onClick={@promptToSignIn}>sign in</span> to contribute to the discussion</p>}
     </div>
