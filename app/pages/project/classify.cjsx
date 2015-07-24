@@ -88,7 +88,7 @@ module.exports = React.createClass
       currentWorkflowForProject[props.project.id]
 
   getRandomWorkflowID: (project) ->
-    project.get('workflows').then (workflows) ->
+    project.get('workflows', active: true).then (workflows) ->
       if workflows.length is 0
         throw new Error "No workflows for project #{project.id}"
         project.uncacheLink 'workflows'
