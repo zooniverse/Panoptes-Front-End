@@ -30,10 +30,10 @@ module?.exports = React.createClass
     loading: true
 
   componentWillMount: ->
-    sugarClient.subscribeTo @props.section
+    sugarClient.subscribeTo('zooniverse') if @props.section is 'zooniverse'
 
   componentWillUnmount: ->
-    sugarClient.unsubscribeFrom @props.section
+    sugarClient.unsubscribeFrom('zooniverse') if @props.section is 'zooniverse'
 
   setBoards: ->
     talkClient.type('boards').get(section: @props.section)
