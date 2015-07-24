@@ -31,6 +31,7 @@ module.exports = React.createClass
   componentDidMount: ->
     addEventListener 'resize', @handleResize
     addEventListener 'scroll', @handleResize
+    @setState alreadySeen: @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
 
   componentWillUnmount: ->
     removeEventListener 'resize', @handleResize
@@ -126,7 +127,7 @@ module.exports = React.createClass
               </g>}
         </svg>
 
-        {if @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
+        {if @state.alreadySeen 
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
             Already seen!
             {if @state.showWarning
