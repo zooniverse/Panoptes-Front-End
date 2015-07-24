@@ -82,7 +82,7 @@ module.exports = React.createClass
         <span>{tools}</span>
         <span>
           {if @props.subject?.metadata?
-            <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-table fa-fw"></i></button>}
+            <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
           {if @props.subject? && @props.user?
             <span>
               <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />
