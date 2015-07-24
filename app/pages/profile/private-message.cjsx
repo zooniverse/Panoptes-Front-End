@@ -5,7 +5,7 @@ module.exports = React.createClass
   displayName: 'PrivateMessagePage'
 
   render: ->
-    <div>
+    <div className="private-message-page">
       {if @props.user?
         <div className="content-container">
           <h2>
