@@ -7,10 +7,6 @@ JSON_HEADERS =
   'Content-Type': 'application/json'
   'Accept': 'application/json'
 
-# PhantomJS doesn't send any data with DELETE, so fake it here.
-DELETE_METHOD_OVERRIDE_HEADERS = Object.create JSON_HEADERS
-DELETE_METHOD_OVERRIDE_HEADERS['X-HTTP-Method-Override'] = 'DELETE'
-
 # This will match the CSRF token in a string of HTML.
 # TODO: Get JSON instead.
 CSRF_TOKEN_PATTERN = do ->
@@ -236,10 +232,11 @@ module.exports = new Model
     @checkCurrent().then (user) =>
       if user?
         @_getAuthToken().then (token) =>
-          data =
-            authenticity_token: token
 
-          makeHTTPRequest 'POST', config.host + '/users/sign_out', data, DELETE_METHOD_OVERRIDE_HEADERS
+          deleteHeaders = Object.create JSON_HEADERS
+          deleteHeaders["X-CSRF-Token"] = token
+
+          makeHTTPRequest 'DELETE', config.host + '/users/sign_out', null, deleteHeaders
             .then =>
               @_deleteBearerToken()
               @update _currentUserPromise: Promise.resolve null
