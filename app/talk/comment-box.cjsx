@@ -88,7 +88,7 @@ module?.exports = React.createClass
             <CommentPreview header={null} content={@state.reply}/>
           </div>}
 
-        <MarkdownEditor className="full" value={@state.content} onChange={@onInputChange} helpText={<CommentHelp />}/>
+        <MarkdownEditor placeholder={@props.placeholder} className="full" value={@state.content} onChange={@onInputChange} helpText={<CommentHelp />}/>
 
         <section>
           <button
