@@ -20,7 +20,7 @@ ChangePasswordForm = React.createClass
     error: null
 
   render: ->
-    <form ref="form" onSubmit={@handleSubmit}>
+    <form ref="form" method="POST" onSubmit={@handleSubmit}>
       <p>
         <strong>Change your password</strong>
       </p>

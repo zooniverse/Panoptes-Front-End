@@ -25,7 +25,7 @@ module.exports = React.createClass
   render: ->
     disabled = @props.user? or @state.busy
 
-    <form onSubmit={@handleSubmit}>
+    <form method="POST" onSubmit={@handleSubmit}>
       <label>
         <Translate content="signInForm.userName" />
         <input type="text" className="standard-input full" name="login" value={@props.user?.login} disabled={disabled} autoFocus onChange={@handleInputChange} />

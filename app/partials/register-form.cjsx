@@ -54,7 +54,7 @@ module.exports = React.createClass
   render: ->
     {badNameChars, nameConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
-    <form onSubmit={@handleSubmit}>
+    <form method="POST" onSubmit={@handleSubmit}>
       <label>
         <span className="columns-container inline spread">
           <Translate content="registerForm.userName" />
