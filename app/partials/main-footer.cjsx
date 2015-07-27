@@ -29,8 +29,13 @@ counterpart.registerTranslations 'en',
       privacyPolicy: 'Privacy policy'
 
 AdminToggle = React.createClass
+  displayName: 'AdminToggle'
+
   getInitialState: ->
-    checked: false
+    adminFlag = localStorage.getItem('adminFlag') || undefined
+    apiClient.update 'params.admin': adminFlag
+
+    checked: if adminFlag then adminFlag else false
 
   componentDidMount: ->
     apiClient.listen 'change', @handleClientChange
@@ -40,20 +45,23 @@ AdminToggle = React.createClass
 
   handleClientChange: ->
     checked = apiClient.params.admin ? false
-    unless @state.checked is checked
-      @setState {checked}
 
-  render: ->
-    <label>
-      <input type="checkbox" checked={@state.checked} onChange={@toggleAdminMode} />{' '}
-      <Translate content="footer.adminMode" />
-    </label>
+    unless @state.checked is checked
+      localStorage.setItem 'adminFlag', checked
+      @setState {checked}
 
   toggleAdminMode: (e) ->
     apiClient.update 'params.admin': if e.target.checked
       true
     else
       undefined
+
+  render: ->
+    classes = 'admin-toggle ' + (if @state.checked then 'in-admin-mode' else '')
+    <label className={classes}>
+      <input type="checkbox" checked={@state.checked} onChange={@toggleAdminMode} />{' '}
+      <Translate content="footer.adminMode" />
+    </label>
 
 module.exports = React.createClass
   displayName: 'MainFooter'
@@ -66,7 +74,7 @@ module.exports = React.createClass
             <ZooniverseLogoType />
           </Link>
           <br />
-          {if @props.user?.admin or @props.user?.id is '3' # brian-testing
+          {if @props.user?.admin
             <AdminToggle />}
         </div>
         <nav className="site-map">
