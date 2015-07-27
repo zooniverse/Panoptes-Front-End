@@ -54,7 +54,7 @@ module?.exports = React.createClass
   render: ->
     {subject} = @state
 
-    <div className="subject talk">
+    <div className="subject-page talk">
       {if subject
         <section>
           <h1>Subject {subject.id}</h1>
