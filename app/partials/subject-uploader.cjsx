@@ -52,6 +52,15 @@ module.exports = React.createClass
     subjectData = @props.subjects[@state.current]
 
     if subjectData? and @state.inProgress
+      filesByType = {}
+      locationTypes = []
+    
+      for filename in subjectData.locations
+        type = @props.files[filename].type
+        locationTypes.push type
+        filesByType[type] ?= []
+        filesByType[type].push @props.files[filename]
+        
       locationTypes = for filename in subjectData.locations
         @props.files[filename].type
 
@@ -64,9 +73,11 @@ module.exports = React.createClass
 
       subject.save()
         .then (subject) =>
-          uploads = for typeToUploadURL, i in subject.locations
-            uploadURL = typeToUploadURL[Object.keys(typeToUploadURL)[0]]
-            putFile uploadURL, @props.files[subjectData.locations[i]]
+          uploads = for location in subject.locations
+            type = Object.keys(location)[0]
+            uploadURL = location[type]
+            file = filesByType[type].shift()
+            putFile uploadURL, file
           Promise.all(uploads).then (uploads) =>
             @setState
               creates: @state.creates.concat subject
