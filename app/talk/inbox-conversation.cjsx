@@ -68,29 +68,32 @@ module?.exports = React.createClass
         @setConversation()
 
   render: ->
-    <div className="talk inbox-conversation content-container">
-      <h1>{@state.conversation?.title}</h1>
-      {if @state.recipients.length
-        <div>
-          In this conversation:{' '}
-          {@state.recipients.map (user, i) =>
-            <span key={user.id}>
-              <Link to="user-profile" params={name: user.login}>
-                {user.display_name}
-              </Link>{', ' unless i is @state.recipients.length-1}
-            </span>
-            }
-        </div>
-        }
+    if @props.user
+      <div className="talk inbox-conversation content-container">
+        <h1>{@state.conversation?.title}</h1>
+        {if @state.recipients.length
+          <div>
+            In this conversation:{' '}
+            {@state.recipients.map (user, i) =>
+              <span key={user.id}>
+                <Link to="user-profile" params={name: user.login}>
+                  {user.display_name}
+                </Link>{', ' unless i is @state.recipients.length-1}
+              </span>
+              }
+          </div>
+          }
 
-      <div>{@state.messages.map(@message)}</div>
-      <CommentBox
-        header={"Send a message..."}
-        content=""
-        submitFeedback={'Sent!'}
-        submit={"Send"}
-        onSubmitComment={@onSubmitMessage}
-        validationCheck={ -> false }
-        validationErrors={[]}
-        user={@props.user} />
-    </div>
+        <div>{@state.messages.map(@message)}</div>
+        <CommentBox
+          header={"Send a message..."}
+          content=""
+          submitFeedback={'Sent!'}
+          submit={"Send"}
+          onSubmitComment={@onSubmitMessage}
+          validationCheck={ -> false }
+          validationErrors={[]}
+          user={@props.user} />
+      </div>
+    else
+      <div className="content-container">You are not permitted to view this conversation.</div>
