@@ -83,7 +83,9 @@ module?.exports =
     input.value = begInputValue + midInputValue + endInputValue
 
     # set cursor back to a meaningful location for continued typing
+    {scrollTop} = input
     input.focus()
+    input.scrollTop = scrollTop
     input.setSelectionRange?(newSelectionStart, newSelectionEnd)
 
   incrementedListItems: (previousText, text) -> # TODO: limit prev lines length
