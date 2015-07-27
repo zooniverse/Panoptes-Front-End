@@ -73,7 +73,7 @@ module.exports = React.createClass
         if @state.resetSuccess
           <p>You have successfully reset your password, please login to get started.</p>
         else
-          <form onSubmit={@handleResetSubmit}>
+          <form method="POST" onSubmit={@handleResetSubmit}>
             <p>Go ahead and enter a new password, then you can get back to doing some research.</p>
 
             <p>
