@@ -22,7 +22,7 @@ PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
-  mixins: [Router.Navigation]
+  mixins: [Router.Navigation, Router.State]
 
   getInitialState: ->
     comments: []
@@ -47,8 +47,17 @@ module?.exports = React.createClass
     @shouldScrollToBottom = true if @props.query?.scrollToLastComment
 
   componentWillMount: ->
-    @setDiscussion()
-    @setComments(@props.query.page ? 1)
+    @setDiscussion().then =>
+      if commentId = @props.query?.comment
+        comments = @state.discussion.links.comments
+        commentNumber = comments.indexOf(commentId) + 1
+        page = Math.ceil commentNumber / PAGE_SIZE
+
+        if page isnt @props.query.page
+          @props.query.page = page
+          @transitionTo @getPath(), @props.params, @props.query
+
+      @setComments(@props.query.page ? 1)
 
   commentsRequest: (page) ->
     {board, discussion} = @props.params
@@ -67,7 +76,7 @@ module?.exports = React.createClass
     React.findDOMNode(@)?.scrollIntoView(false)
 
   discussionsRequest: (discussion = @props.params.discussion) ->
-    talkClient.type('discussions').get({id: discussion})
+    talkClient.type('discussions').get({id: discussion, sort_linked_comments: 'created_at'})
 
   setDiscussion: (discussion = @props.params.discussion) ->
     @discussionsRequest(discussion)
