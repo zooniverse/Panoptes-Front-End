@@ -39,13 +39,7 @@ module?.exports = React.createClass
 
   setModerations: (page) ->
     @setState loading: true
-    {owner, name} = @props.params
-
-    if (owner and name)
-      apiClient.type('projects').get(owner: owner, slug: name).then ([project]) =>
-        @setModerationsForSection(page, projectSection(project))
-    else
-      @setModerationsForSection(page, 'zooniverse')
+    @setModerationsForSection(page, @props.section)
 
   setModerationsForSection: (page, section) ->
     moderationParams = merge {},
@@ -123,13 +117,9 @@ module?.exports = React.createClass
     {owner, name} = @props.params
 
     if @props.user?
-      rolesPromise = talkClient.type('roles').get(user_id: @props.user.id, page_size: 100)
-      projectPromise = Promise.resolve if (project? and owner?) then apiClient.type('projects').get(owner: owner, slug: name).index(0) else false
-
-      <PromiseRenderer promise={Promise.all [rolesPromise, projectPromise]}>{([roles, project]) =>
-        section = if !!project then projectSection(project) else 'zooniverse'
-
-        if userIsModerator(@props.user, roles, section)
+      roles = talkClient.type('roles').get(user_id: @props.user.id, page_size: 100)
+      <PromiseRenderer promise={roles}>{(roles) =>
+        if userIsModerator(@props.user, roles, @props.section)
           <div className="talk moderations">
             <section>
               <button
