@@ -165,7 +165,7 @@ module?.exports = React.createClass
             type="button"
             className="talk-comment-image-select-button #{if @state.showing is 'image-selector' then 'active' else ''}"
             onClick={@onImageSelectClick}>
-            Featured Image
+            Linked Image
             {if @state.showing is 'image-selector' then <span>&nbsp;<i className="fa fa-close" /></span>}
           </button>
 

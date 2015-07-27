@@ -9,7 +9,7 @@ module?.exports = React.createClass
     subjects: []
 
   getDefaultProps: ->
-    header: "Select a featured image"
+    header: "Select a linked image"
 
   componentWillMount: ->
     @setRecents()
