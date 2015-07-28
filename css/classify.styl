@@ -1,12 +1,15 @@
 .classifier
   display: flex
-  flex-wrap: wrap
   justify-content: center
+
+  @media (max-width: 900px) // This is between iPad landscape and portrait.
+    flex-wrap: wrap
 
   > .subject-area
     align-items: center
     justify-content: center
     display: flex
+    flex-shrink: 1
     flex-direction: column
     margin: 0 1.5vw 1em 0
     min-width: 0
@@ -73,9 +76,10 @@
     transform: rotate(-15deg)
 
   > .task-area
-    flex: 1 0 15em
+    flex: 1 1
     margin-bottom: 1em
-    max-width: 35em
+    max-width: 60ch
+    min-width: 30ch
 
   .task-nav
     display: flex
