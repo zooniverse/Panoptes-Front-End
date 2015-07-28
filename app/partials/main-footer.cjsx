@@ -47,7 +47,11 @@ AdminToggle = React.createClass
     checked = apiClient.params.admin ? false
 
     unless @state.checked is checked
-      localStorage.setItem 'adminFlag', checked
+      if checked
+        localStorage.setItem 'adminFlag', checked
+      else
+        localStorage.removeItem 'adminFlag'
+
       @setState {checked}
 
   toggleAdminMode: (e) ->
