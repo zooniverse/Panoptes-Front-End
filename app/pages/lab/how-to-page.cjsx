@@ -16,35 +16,21 @@ counterpart.registerTranslations 'en',
 
       ### Getting Started
 
-      To get started building, go to [the Project Builder home page](./#/lab) and log in to your Zooniverse account,
-      then click the "Build a Project" button in the top right. Here you can see all of the projects you own and
-      collaborate on. Click on "Create a project" to start building.
+      To get started building, go to [the Project Builder home page](./#/lab) and log in to your Zooniverse account, then click the "Build a Project" button in the top right. Here you can see all of the projects you own and collaborate on. Click on "Create a project" to start building.
 
       [![Project Builder screenshot](./assets/how-to-lab/how-to-2.jpg)](./assets/how-to-lab/how-to-2.jpg)
 
-      **Start building:** Now you're in the Project Builder itself. This is where the magic happens.
-      On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are
-      terms you'll see a lot, and they have specific meanings in the Zooniverse.  Project is pretty
-      self-explanatory; Galaxy Zoo, Penguin Watch, and of course, Kitteh Zoo, are all examples of
-      Zooniverse projects that you could build using the project builder. A workflow is the sequence
-      of tasks that you ask volunteers to do, and subjects are the things (usually images)
-      that volunteers do those tasks on.
+      **Start building:** Now you're in the Project Builder itself. This is where the magic happens. On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are terms you'll see a lot, and they have specific meanings in the Zooniverse.  Project is pretty self-explanatory; Galaxy Zoo, Penguin Watch, and of course, Kitteh Zoo, are all examples of Zooniverse projects that you could build using the project builder. A workflow is the sequence of tasks that you ask volunteers to do, and subjects are the things (usually images) that volunteers do those tasks on.
 
       [![Project details editor screenshot](./assets/how-to-lab/how-to-3.jpg)](./assets/how-to-lab/how-to-3.jpg)
 
       ### Define your project.
 
-      The first thing you'll want to do is fill in some basic information about your project on the
-      Project Details page. Just click and type in the relevant boxes. We've added a short description
-      that will be formatted using the markdown language. The avatar and background image for
-      Kitteh Zoo are in this folder. Download these images to your computer. Now add these images by
-      dragging and dropping or by right clicking on the relevant boxes (like in the image above).
-      You can come back and add more details at any time while building your project.
+      The first thing you'll want to do is fill in some basic information about your project on the Project Details page. Just click and type in the relevant boxes. We've added a short description that will be formatted using the markdown language. The avatar and background image for Kitteh Zoo are in this folder. Download these images to your computer. Now add these images by dragging and dropping or by right clicking on the relevant boxes (like in the image above). You can come back and add more details at any time while building your project.
 
       ### Building a workflow
 
-      This is where you build the tasks that volunteers actually do. When you first get to this page,
-      you'll see there is a sample task (specifically a question) already in place.
+      This is where you build the tasks that volunteers actually do. When you first get to this page, you'll see there is a sample task (specifically a question) already in place.
 
       [![Project workflow editor screenshot](./assets/how-to-lab/how-to-4.jpg)](./assets/how-to-lab/how-to-4.jpg)
 
@@ -52,9 +38,7 @@ counterpart.registerTranslations 'en',
 
       [![Project workflow example](./assets/how-to-lab/how-to-5.jpg)](./assets/how-to-lab/how-to-5.jpg)
 
-      We'll start by replacing the sample text with our question, which asks people how many cats are in the
-      image. We add more answers using the "+" button under the "Yes" answer. Use the screenshot below to fill
-      in the workflow details (you may need to zoom in!)
+      We'll start by replacing the sample text with our question, which asks people how many cats are in the image. We add more answers using the "+" button under the "Yes" answer. Use the screenshot below to fill in the workflow details (you may need to zoom in!)
 
       [![Project workflow editing screenshot](./assets/how-to-lab/how-to-6.jpg)](./assets/how-to-lab/how-to-6.jpg)
 
@@ -79,92 +63,53 @@ counterpart.registerTranslations 'en',
 
           ![A sample of things that are not cats.](http://zooniverse-resources.s3.amazonaws.com/bigblogfiles/cat_demo/notcats.png)
 
-      We can set subsequent tasks to depend on the answer to this question. Right now we haven't made any other tasks,
-      so the only option is "End of Classification." Once we create more tasks, we'll go back through and link them.
-      Note that this question is _required_ (people can't move on until they've answered it) and only one answer is allowed.
+      We can set subsequent tasks to depend on the answer to this question. Right now we haven't made any other tasks, so the only option is "End of Classification." Once we create more tasks, we'll go back through and link them. Note that this question is _required_ (people can't move on until they've answered it) and only one answer is allowed.
 
-      Now we want to draw circles around the cat's faces and mark a point on their tails. Why? Because we can.
-      (For your own project you'd obviously want to think carefully about the reasons for adding tasks to a workflow,
-      and what you want to get from the answers/marks.)
+      Now we want to draw circles around the cat's faces and mark a point on their tails. Why? Because we can. (For your own project you'd obviously want to think carefully about the reasons for adding tasks to a workflow, and what you want to get from the answers/marks.)
 
       [![Project workflow task editing screenshot](./assets/how-to-lab/how-to-7.jpg)](./assets/how-to-lab/how-to-7.jpg)
 
-      So under the _Task_ list, we'll click on **drawing**. We're asking folks to draw (with ellipses) around the cats'
-      faces, as well as mark their tail tips with a point. We've changed the color on the Cattail points so they
-      stand out more too. As usual, the main text gives people basic instructions on what we want, and the help
-      text provides some more explanation on how to do the task.
+      So under the _Task_ list, we'll click on **drawing**. We're asking folks to draw (with ellipses) around the cats' faces, as well as mark their tail tips with a point. We've changed the color on the Cattail points so they stand out more too. As usual, the main text gives people basic instructions on what we want, and the help text provides some more explanation on how to do the task.
 
-      In addition to marking all the cat faces, we want to know just how cute they are. So every time someone
-      marks a cat-face, we've added a pop-up question to ask just that. Add this question by clicking on
-      the _sub-tasks_ button below the _Type_ and _Color_ task specifications.
+      In addition to marking all the cat faces, we want to know just how cute they are. So every time someone marks a cat-face, we've added a pop-up question to ask just that. Add this question by clicking on the _sub-tasks_ button below the _Type_ and _Color_ task specifications.
 
       [![Project workflow task details editing screenshot](./assets/how-to-lab/how-to-8.jpg)](./assets/how-to-lab/how-to-8.jpg)
 
-      When building your own project, you can combine any number of tasks in any order. You can start with a
-      drawing task instead of a question. You can add sub-tasks for any drawing tool you make.
+      When building your own project, you can combine any number of tasks in any order. You can start with a drawing task instead of a question. You can add sub-tasks for any drawing tool you make.
 
-      In general, keep in mind that people are more likely to complete more classifications if the
-      workflow is short and simple. Try to keep the workflow as simple as possible to achieve your
-      research goals, and definitely try to only request tasks that cannot be accurately accomplished by automated methods.
+      In general, keep in mind that people are more likely to complete more classifications if the workflow is short and simple. Try to keep the workflow as simple as possible to achieve your research goals, and definitely try to only request tasks that cannot be accurately accomplished by automated methods.
 
       ### Linking the workflow together
 
-      Now that all the tasks have been created, we've got to string them together by specifying what happens _next_.
-      Right now, this means you kind of need to work backwards. The drawing task is the last task in this workflow,
-      so we'll leave the "Next Task" button as the default "end of classification." But we'll have to go back to our first question.
+      Now that all the tasks have been created, we've got to string them together by specifying what happens _next_. Right now, this means you kind of need to work backwards. The drawing task is the last task in this workflow, so we'll leave the "Next Task" button as the default "end of classification." But we'll have to go back to our first question.
 
-      The first question, "How many cats are in this image?" only allows one answer, so you can specify the next task depending
-      on the answer.  If folks say "None" for the number of cats, the classification ends. But if they say there's at least one
-      cat, then they go on to the next question.
+      The first question, "How many cats are in this image?" only allows one answer, so you can specify the next task depending on the answer.  If folks say "None" for the number of cats, the classification ends. But if they say there's at least one cat, then they go on to the next question.
 
       [![Project workflow task editing screenshot](./assets/how-to-lab/how-to-9.jpg)](./assets/how-to-lab/how-to-9.jpg)
 
       ### Upload subjects
 
-      To really get started building a project, you need images to work with. Normally you would add your own
-      images by clicking on the "New Subject Set" button on the left hand side of the screen. This is one of
-      the trickier steps in project creation -- for the purposes of this tutorial you can simply copy the
-      Kitteh Zoo subject set, but check out the next section "Uploading subjects -- the nitty gritty" if you
-      want to practice the full approach. To do this go to the workflow you created and under the
-      _associated subject_ set section click on _add an example subject set_. You should now see the 'kittehs' subject set selected.
+      To really get started building a project, you need images to work with. Normally you would add your own images by clicking on the "New Subject Set" button on the left hand side of the screen. This is one of the trickier steps in project creation -- for the purposes of this tutorial you can simply copy the Kitteh Zoo subject set, but check out the next section "Uploading subjects -- the nitty gritty" if you want to practice the full approach. To do this go to the workflow you created and under the _associated subject_ set section click on _add an example subject set_. You should now see the 'kittehs' subject set selected.
 
       [![Project workflow task editing screenshot](./assets/how-to-lab/how-to-10.jpg)](./assets/how-to-lab/how-to-10.jpg)
 
       **CONGRATULATIONS!**
 
-      You should have successfully created Kitteh Zoo! To view it, got back to the _Build a Project_ page
-      (by clicking the button in the top right of the page) and then click on the view button next to the
-      new project you have just made.
+      You should have successfully created Kitteh Zoo! To view it, got back to the _Build a Project_ page (by clicking the button in the top right of the page) and then click on the view button next to the new project you have just made.
 
       [![Project list screenshot](./assets/how-to-lab/how-to-11.jpg)](./assets/how-to-lab/how-to-11.jpg)
 
       ### Uploading subjects - the Nitty Gritty
 
-      When you actually build your own project, there won't be an example set of images already loaded for you.
-      Get started uploading a set of subjects for your project by clicking on the "New Subject Set" button on
-      the left hand side of the screen. That will bring you to the _Subject Uploader_.
+      When you actually build your own project, there won't be an example set of images already loaded for you. Get started uploading a set of subjects for your project by clicking on the "New Subject Set" button on the left hand side of the screen. That will bring you to the _Subject Uploader_.
 
-      It's easiest if you have all of your images in a single folder along with a manifest file, and you will 
-      upload both at the same time. The manifest file lists all the images we want to upload and links each 
-      image to additional information, also called metadata, such as date, time, and photographer. There is more 
-      information about the manifest in the "Details" section below, but for now you can see an example manifest 
-      file in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
+      It's easiest if you have all of your images in a single folder along with a manifest file, and you will upload both at the same time. The manifest file lists all the images we want to upload and links each  image to additional information, also called metadata, such as date, time, and photographer. There is more information about the manifest in the "Details" section below, but for now you can see an example manifest file in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
 
-      Click on the "Upload Subjects" box and navigate to the "Kitteh" folder you downloaded. The easiest thing
-      to do is simply hit _cmd + a_ (on Mac, or _ctrl + a_ on Windows) to select everything in that folder.
-      Note that the subject uploader ignores the excel file and the other folders. Click "open" to select
-      those images and the manifest file for upload. The project uploader now indicates that the
-      "Cat project manifest.csv" has 29 subjects for upload.
+      Click on the "Upload Subjects" box and navigate to the "Kitteh" folder you downloaded. The easiest thing to do is simply hit _cmd + a_ (on Mac, or _ctrl + a_ on Windows) to select everything in that folder. Note that the subject uploader ignores the excel file and the other folders. Click "open" to select those images and the manifest file for upload. The project uploader now indicates that the "Cat project manifest.csv" has 29 subjects for upload.
 
-      Click "Upload" to start the process. It might take a little while, but when everything is uploaded,
-      you'll see a list of all of the subjects. The numbers to the left are unique identifiers for each subject,
-      and the icons to the right let you preview or delete each subject.
+      Click "Upload" to start the process. It might take a little while, but when everything is uploaded, you'll see a list of all of the subjects. The numbers to the left are unique identifiers for each subject, and the icons to the right let you preview or delete each subject.
 
-      Subject sets can be pretty powerful, and sometimes complex. You can have a single subject set that you
-      add to over time, or have multiple subject sets, say, from different years or places. You can have
-      different subject sets for different workflows, but you don't have to. You can even have multiple
-      images in a given subject. For more details and advice on creating and structuring subject sets
-      and associated manifests, check out the details section below.
+      Subject sets can be pretty powerful, and sometimes complex. You can have a single subject set that you add to over time, or have multiple subject sets, say, from different years or places. You can have different subject sets for different workflows, but you don't have to. You can even have multiple images in a given subject. For more details and advice on creating and structuring subject sets and associated manifests, check out the details section below.
 
       ### PROJECT BUILDER'S MANUAL – THE DETAILS
 
