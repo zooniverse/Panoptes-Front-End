@@ -16,6 +16,7 @@ talkClient = require '../api/talk'
 Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
 DisplayRoles = require './lib/display-roles'
+merge = require 'lodash.merge'
 
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
 
@@ -80,6 +81,17 @@ module?.exports = React.createClass
   upvoteCount: ->
     Object.keys(@props.data.upvotes).length
 
+  commentSubjectTitle: (comment, subject) ->
+    {owner, name} = @props.params
+    if (comment.focus_type is 'Subject') and (owner and name)
+      <Link
+        to="project-talk-subject"
+        params={merge {id: comment.focus_id}, {owner, name}}>
+        Subject {subject.id}
+      </Link>
+    else
+      <span>Subject {subject.id}</span>
+
   render: ->
     feedback = @renderFeedback()
     activeClass = if @props.active then 'active' else ''
@@ -114,7 +126,7 @@ module?.exports = React.createClass
                 }
                 then={(subject) =>
                   <div className="polaroid-image">
-                    Subject {subject.id}
+                    {@commentSubjectTitle(@props.data, subject)}
                     <SubjectViewer subject={subject} user={@props.user} />
                   </div>
                 }
