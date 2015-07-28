@@ -48,7 +48,8 @@ module?.exports = React.createClass
 
   componentWillMount: ->
     @setDiscussion().then =>
-      if commentId = @props.query?.comment
+      if @props.query?.comment
+        commentId = @props.query?.comment
         comments = @state.discussion.links.comments
         commentNumber = comments.indexOf(commentId) + 1
         page = Math.ceil commentNumber / PAGE_SIZE
