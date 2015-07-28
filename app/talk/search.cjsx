@@ -114,8 +114,8 @@ module.exports = React.createClass
           </div>
 
           <div className="talk-search-results">
-            {@state.results.map (result, i) ->
-              <TalkSearchResult data={result} key={i} />}
+            {@state.results.map (result, i) =>
+              <TalkSearchResult {...@props} data={result} key={i} />}
             <Paginator page={+@state.resultsMeta.page} onPageChange={@onPageChange} pageCount={@state.resultsMeta.page_count} />
           </div>
         </div>}
