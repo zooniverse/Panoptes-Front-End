@@ -14,9 +14,9 @@ formTalkSearchParams = (object) ->
 
   for key, val of object
     if Array.isArray(val)
-      params.push "#{key}[]=#{val}"
+      params.push "#{key}[]=#{window.encodeURIComponent val}"
     else
-      params.push "#{key}=#{val}"
+      params.push "#{key}=#{window.encodeURIComponent val}"
 
   return params.join '&'
 
