@@ -18,6 +18,11 @@ DropdownForm = React.createClass
     right: 0
     top: 0
 
+  pointerStyle:
+    bottom: '100%'
+    position: 'absolute'
+    transform: 'translate(-50%, -50%) rotate(45deg)'
+
   formStyle:
     position: 'absolute'
 
@@ -38,16 +43,20 @@ DropdownForm = React.createClass
 
   reposition: (e) ->
     form = @refs.form.getDOMNode()
+    pointer = @refs.pointer.getDOMNode()
     anchorRect = @props.anchor.getBoundingClientRect()
-
-    top = anchorRect.bottom
 
     left = anchorRect.left - ((form.offsetWidth - @props.anchor.offsetWidth) / 2)
     left = Math.max left, 0
     left = Math.min left, innerWidth - form.offsetWidth
 
-    form.style.top = "#{top}px"
+    top = anchorRect.bottom
+
     form.style.left = "#{left}px"
+    form.style.top = "#{top}px"
+
+    pointer.style.left = "#{anchorRect.left + (@props.anchor.offsetWidth / 2)}px"
+    pointer.style.top = "#{top + parseFloat(getComputedStyle(form).marginTop)}px"
 
   handleGlobalKeyDown: (e) ->
     unless @props.required
@@ -56,7 +65,8 @@ DropdownForm = React.createClass
 
   render: ->
     <div className="dropdown-form-underlay" style={@underlayStyle} onClick={@handleUnderlayClick}>
-      <form ref="form" className="dropdown-form" style={@formStyle} onSubmit={@handleSubmit}>
+      <div ref="pointer" className="dropdown-form-pointer" style={@pointerStyle}></div>
+      <form ref="form" className="dropdown-form" style={@formStyle} action="POST" onSubmit={@handleSubmit}>
         {@props.children}
       </form>
     </div>
