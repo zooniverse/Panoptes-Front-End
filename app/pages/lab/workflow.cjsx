@@ -123,19 +123,18 @@ EditWorkflowPage = React.createClass
           <hr />
 
           <div style={pointerEvents: 'all'}>
-            <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
-              # React-router completely overrides clicking on links. Unbelievable.
-              viewParams = owner: owner.login, name: @props.project.slug
-              viewQuery = workflow: @props.workflow.id
-              currentLocation = location.origin + location.pathname + location.search
-              currentLocation += if location.search is ''
-                '?'
-              else
-                '&'
-              currentLocation += "reload=#{@state.forceReloader}"
-              viewHash = @makeHref 'project-classify', viewParams, viewQuery
-              <a href={currentLocation + viewHash} className="standard-button" target="from-lab" onClick={@handleViewClick}>View this workflow</a>
-            }</PromiseRenderer>
+            [owner, name] = @props.slug.split('/')
+            # React-router completely overrides clicking on links. Unbelievable.
+            viewParams = owner: owner, name: name
+            viewQuery = workflow: @props.workflow.id
+            currentLocation = location.origin + location.pathname + location.search
+            currentLocation += if location.search is ''
+              '?'
+            else
+              '&'
+            currentLocation += "reload=#{@state.forceReloader}"
+            viewHash = @makeHref 'project-classify', viewParams, viewQuery
+            <a href={currentLocation + viewHash} className="standard-button" target="from-lab" onClick={@handleViewClick}>View this workflow</a>
           </div>
 
           <hr />

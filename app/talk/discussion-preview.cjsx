@@ -24,11 +24,10 @@ module?.exports = React.createClass
             </Link>
 
           else if @props.project # otherwise fetch from project
-            <PromiseRenderer promise={@props.project.get('owner')}>{(owner) =>
-              <Link to="project-talk-discussion" params={board: discussion.board_id, discussion: discussion.id, owner: owner.login, name: @props.project.slug}>
-                {discussion.title}
-              </Link>
-            }</PromiseRenderer>
+            [owner, name] = @props.project.slug.split('/')
+            <Link to="project-talk-discussion" params={board: discussion.board_id, discussion: discussion.id, owner: owner, name: name}>
+              {discussion.title}
+            </Link>
 
           else # link to zooniverse main talk
             <Link to="talk-discussion" params={board: discussion.board_id, discussion: discussion.id}>

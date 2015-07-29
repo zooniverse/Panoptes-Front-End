@@ -34,9 +34,8 @@ CollectionPage = React.createClass
 
   render: ->
     <PromiseRenderer promise={@props.collection.get('owner')}>{(owner) =>
-      params =
-        owner: owner.login or owner.name
-        name: @props.collection.slug
+      [owner, name] = @props.collection.split('/')
+      params = {owner, name}
 
       isOwner = @props.user?.id is owner.id
 
@@ -95,7 +94,7 @@ module.exports = React.createClass
       loading: true
 
     apiClient.type('collections')
-      .get(owner: @props.params?.owner, slug: @props.params?.name, include: 'owner')
+      .get(slug: @props.params.owner + '/' + @props.params.name, include: 'owner')
       .then ([collection]) =>
         unless collection then @setState error: true
 

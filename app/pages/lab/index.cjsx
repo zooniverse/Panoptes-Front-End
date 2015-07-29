@@ -37,13 +37,12 @@ module.exports = React.createClass
               <table>
                 <tbody>
                   {for project in projects then do (project) =>
+                    [owner, name] = project.slug.split('/')
                     <tr key={project.id}>
                       <td>{project.display_name}</td>
                       <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
                       <td>
-                        <PromiseRenderer promise={project.get 'owner'}>{(owner) =>
-                          <Link to="project-home" params={owner: owner.login, name: project.slug} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
-                        }</PromiseRenderer>
+                        <Link to="project-home" params={owner: owner, name: name} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
                       </td>
                     </tr>}
                 </tbody>

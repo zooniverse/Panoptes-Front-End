@@ -33,7 +33,8 @@ ProjectIcon = React.createClass
         @setState {avatar}
 
   render: ->
-    <Link to="project-home" params={owner: @state.owner?.login ? '...', name: @props.project.slug} className="stats-project-icon">
+    [owner, name] = @props.project.slug.split('/')
+    <Link to="project-home" params={owner: owner, name: name} className="stats-project-icon">
       <img src={@state.avatar?.src ? @props.defaultAvatarSrc} />
       <div className="label">
         <span className="owner">{@state.owner?.display_name}</span><br />
