@@ -34,8 +34,8 @@ CollectionPage = React.createClass
 
   render: ->
     <PromiseRenderer promise={@props.collection.get('owner')}>{(owner) =>
-      [owner, name] = @props.collection.split('/')
-      params = {owner, name}
+      [ownerName, name] = @props.collection.slug.split('/')
+      params = {owner: ownerName, name: name}
 
       isOwner = @props.user?.id is owner.id
 
