@@ -27,9 +27,8 @@ module.exports = React.createClass
     workflows: []
 
   render: ->
-    linkParams =
-      owner: @props.owner.login
-      name: @props.project.slug
+    [owner, name] = @props.project.slug.split('/')
+    linkParams = {owner, name}
 
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
