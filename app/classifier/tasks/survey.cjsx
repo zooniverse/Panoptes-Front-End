@@ -224,7 +224,7 @@ Choice = React.createClass
                 <span className="survey-task-choice-confusion">
                   {otherChoice.label}
                 </span>
-              } style={maxWidth: '50vw'}>
+              } style={maxWidth: '60ch'}>
                 <ImageFlipper images={@props.task.images[filename] for filename in otherChoice.images} />
                 <Markdown content={choice.confusions[otherChoiceID]} />
                 <div style={textAlign: 'center'}>
