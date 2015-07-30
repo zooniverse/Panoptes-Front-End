@@ -54,9 +54,8 @@ ProjectPage = React.createClass
   render: ->
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
-        params =
-          owner: owner.login
-          name: @props.project.slug
+        [ownerName, name] = @props.project.slug.split('/')
+        params = {owner: ownerName, name: name}
 
         <div className="project-page">
           <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
@@ -141,8 +140,7 @@ module.exports = React.createClass
   fetchProject: (_, props = @props) ->
     @setState error: false
     query =
-      owner: props.params.owner
-      slug: props.params.name
+      slug: props.params.owner + '/' + props.params.name
 
     apiClient.type('projects').get query
       .then ([project]) =>

@@ -66,10 +66,8 @@ module?.exports = React.createClass
       subject.get('project')
 
     projectRequest.then (project) ->
-      project.get('owner')
-        .then (owner) ->
-          ownerName = owner.login or owner.name
-          {owner: ownerName, name: project.slug, id: subject.id}
+      [owner, name] = project.slug.split('/')
+      {owner: owner, name: name, id: subject.id}
 
   render: ->
     subjectNode = (subject) =>

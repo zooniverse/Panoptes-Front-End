@@ -19,7 +19,7 @@ counterpart.registerTranslations 'en',
 
 publicationCategories =
   space: [
-    {slug: "galaxy-zoo"
+    {slug: "zooniverse/galaxy-zoo"
     publications: [
       {citation: "Galaxy Zoo: the effect of bar-driven fueling on the presence of an active galactic nucleus in disc galaxies, Galloway+ 2015."
       href: "http://arxiv.org/abs/1502.01033"},
@@ -118,7 +118,7 @@ publicationCategories =
       {citation: "Galaxy Zoo: morphologies derived from visual inspection of galaxies from the Sloan Digital Sky Survey, Lintott+ 2008."
       href: "http://adsabs.harvard.edu/abs/2008MNRAS.389.1179L"}]
     },
-    {slug: "solar-stormwatch"
+    {slug: "zooniverse/solar-stormwatch"
     publications: [
       {citation: "Observational Tracking of the 2D Structure of Coronal Mass Ejections Between the Sun and 1 AU, Savani+ 2015."
       href: "http://arxiv.org/abs/1503.08774"},
@@ -129,7 +129,7 @@ publicationCategories =
       {citation: "The distribution of interplanetary dust between 0.96 and 1.04 au as inferred from impacts on the STEREO spacecraft observed by the heliospheric imagers, Davis+ 2012."
       href: "http://adsabs.harvard.edu/abs/2012MNRAS.420.1355D"}]
     },
-    {slug: "galaxy-zoo-supernova"
+    {slug: "zooniverse/galaxy-zoo-supernova"
     publications: [
       {citation: "Five New Outbursting AM CVn Systems Discovered by the Palomar Transient Factory, Levitan+ 2012."
       href: "http://adsabs.harvard.edu/abs/2012arXiv1212.5312L"},
@@ -142,7 +142,7 @@ publicationCategories =
       {citation: "Galaxy Zoo: Supernovae, Smith+ 2011."
       href: "http://adsabs.harvard.edu/abs/2011MNRAS.412.1309S"}]
     },
-    {slug: "planet-hunters"
+    {slug: "zooniverse/planet-hunters"
     publications: [
       {citation: "GALEX J194419.33+491257.0: An unusually active SU UMa-type dwarf nova with a very short orbital period in the Kepler data, Kato & Osaki 2014."
       href: "http://adsabs.harvard.edu/doi/10.1093/pasj/psu025"},
@@ -163,7 +163,7 @@ publicationCategories =
       {citation: "Planet Hunters: Assessing the Kepler Inventory of Short-period Planets, Schwamb+ 2012."
       href: "http://adsabs.harvard.edu/abs/2012ApJ...754..129S"}]
     },
-    {slug: "milky-way-project"
+    {slug: "zooniverse/milky-way-project"
     publications: [
       {citation: "The Milky Way Project: What are Yellowballs?, Kerton+ 2015."
       href: "http://arxiv.org/abs/1502.01388v1"},
@@ -174,24 +174,24 @@ publicationCategories =
       {citation: "The Milky Way Project First Data Release: a bubblier Galactic disc, Simpson+ 2012."
       href: "http://mnras.oxfordjournals.org/content/424/4/2442.abstract?sid=4a445f2b-71d6-4865-9e64-3aba88192f61"}]
     },
-    {slug: "ice-hunters"
+    {slug: "zooniverse/ice-hunters"
     publications: [
       {citation: "2011 HM102: Discovery of a High-Inclination L5 Neptune Trojan in the Search for a post-Pluto New Horizons Target, Parker+ 2012.",
       href: "http://arxiv.org/abs/1210.4549"}]
     },
-    {slug: "andromeda-project"
+    {slug: "zooniverse/andromeda-project"
     publications: [
       {citation: "PHAT Stellar Cluster Survey. II. Andromeda Project Cluster Catalog, Johnson+ 2015."
       href: "http://arxiv.org/abs/1501.04966"}]
     },
-    {slug: "space-warps"
+    {slug: "zooniverse/space-warps"
     publications: [
       {citation: "The Red Radio Ring: a gravitationally lensed hyperluminous infrared radio galaxy at z=2.553 discovered through citizen science, Geach+ 2015."
       href: "http://arxiv.org/pdf/1503.05824v1.pdf"},
       {citation: "Gravitational lens modelling in a citizen science context, Küng+ 2015."
       href: "http://arxiv.org/pdf/1502.00008v1.pdf"}]
     },
-    {slug: "snapshot-supernova"
+    {slug: "zooniverse/snapshot-supernova"
     publications: [
       {citation: "ATel #7254: PESSTO spectroscopic classification of optical transients, Campbell+ 2015."
       href: "http://www.astronomerstelegram.org/?read=7254"},
@@ -200,26 +200,26 @@ publicationCategories =
     }
   ],
   climate: [
-    {slug: "cyclone-center"
+    {slug: "zooniverse/cyclone-center"
     publications: [
       {citation: "Cyclone Center: Can Citizen Scientists Improve Tropical Cyclone Intensity Records?, Hennon+ 2014."
       href: "http://journals.ametsoc.org/doi/abs/10.1175/BAMS-D-13-00152.1"}
     ]}
   ],
   humanities: [
-    {slug: "ancient-lives"
+    {slug: "zooniverse/ancient-lives"
     publications: [
       {citation: "P.Oxy 5156, Plutarch Moralia 660C, 661B-C (Quaestiones Convivales IV PR., 1.2), in The Oxyrhynchus Papyri Vol. 78, Brusuelas 2013."}]}
     ],
   nature: [
-    {slug: "whale-fm"
+    {slug: "zooniverse/whale-fm"
     publications: [
       {citation: "Classification of large acoustic datasets using machine learning and crowdsourcing: Application to whale calls, Shamir+ 2014."
       href: "http://scitation.aip.org/content/asa/journal/jasa/135/2/10.1121/1.4861348"},
       {citation: "Repeated call types in short-finned pilot whales, Globicephala macrorhynchus, Sayigh+ 2012."
       href: "http://onlinelibrary.wiley.com/doi/10.1111/j.1748-7692.2012.00577.x/abstract"}]
     },
-    {slug: "snapshot-serengeti"
+    {slug: "zooniverse/snapshot-serengeti"
     publications: [
       {citation: "Applying a random encounter model to estimate lion density from camera traps in Serengeti National Park, Tanzania, Cusack+ 2015."
       href: "http://onlinelibrary.wiley.com/doi/10.1002/jwmg.902/full"},
