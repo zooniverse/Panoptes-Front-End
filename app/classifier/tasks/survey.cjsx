@@ -158,6 +158,7 @@ ImageFlipper = React.createClass
     width: 0
 
   render: ->
+    console.log(@props.images);
     <span className="survey-task-image-flipper">
       {@renderPreload()}
       <img src={@props.images[@state.frame]} className="survey-task-image-flipper-image" />
@@ -207,7 +208,7 @@ Choice = React.createClass
     choice = @props.task.choices[@props.choiceID]
     <div className="survey-task-choice">
       {unless choice.images.length is 0
-        <ImageFlipper images={choice.images} />}
+        <ImageFlipper images={@props.task.images[filename] for filename in choice.images} />}
 
       <div className="survey-task-choice-label">{choice.label}</div>
       <div className="survey-task-choice-description">{choice.description}</div>
@@ -217,12 +218,14 @@ Choice = React.createClass
           Often confused with
           {' '}
           {for otherChoiceID in choice.confusionsOrder
+            otherChoice = @props.task.choices[otherChoiceID]
             <span key={otherChoiceID}>
               <DropdownForm label={
                 <span className="survey-task-choice-confusion">
-                  {@props.task.choices[otherChoiceID].label}
+                  {otherChoice.label}
                 </span>
-              }>
+              } style={maxWidth: '50vw'}>
+                <ImageFlipper images={@props.task.images[filename] for filename in otherChoice.images} />
                 <Markdown content={choice.confusions[otherChoiceID]} />
                 <div style={textAlign: 'center'}>
                   <button type="button" className="standard-button" onClick={@props.onSwitch.bind null, otherChoiceID}>I think it’s this</button>
