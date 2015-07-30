@@ -179,12 +179,20 @@ EditWorkflowPage = React.createClass
         <div className="column">
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
-            <TaskEditorComponent
-              workflow={@props.workflow}
-              task={@props.workflow.tasks[@state.selectedTaskKey]}
-              taskPrefix="tasks.#{@state.selectedTaskKey}"
-              onDelete={@handleTaskDelete.bind this, @state.selectedTaskKey}
-            />
+            <div>
+              <TaskEditorComponent
+                workflow={@props.workflow}
+                task={@props.workflow.tasks[@state.selectedTaskKey]}
+                taskPrefix="tasks.#{@state.selectedTaskKey}"
+              />
+              <hr />
+              <br />
+              <AutoSave resource={@props.workflow}>
+                <small>
+                  <button type="button" onClick={@handleTaskDelete.bind this, @state.selectedTaskKey}>Delete this task</button>
+                </small>
+              </AutoSave>
+            </div>
           else
             <p>Choose a task to edit</p>}
         </div>
@@ -268,13 +276,14 @@ EditWorkflowPage = React.createClass
     setTimeout =>
       @setState forceReloader: @state.forceReloader + 1
 
-  handleTaskDelete: (taskKey) ->
-    changes = {}
-    changes["tasks.#{taskKey}"] = undefined
-    @props.workflow.update changes
+  handleTaskDelete: (taskKey, e) ->
+    if e.shiftKey or confirm 'Really delete this task?'
+      changes = {}
+      changes["tasks.#{taskKey}"] = undefined
+      @props.workflow.update changes
 
-    if @props.workflow.first_task not of @props.workflow.tasks
-      @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
+      if @props.workflow.first_task not of @props.workflow.tasks
+        @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
 
 module.exports = React.createClass
   displayName: 'EditWorkflowPageWrapper'

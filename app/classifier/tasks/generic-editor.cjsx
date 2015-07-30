@@ -156,16 +156,6 @@ module.exports = React.createClass
             <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleChange} />
           </AutoSave>
         </div>}
-
-      <hr />
-
-      <div>
-        <AutoSave resource={@props.workflow}>
-          <small>
-            <button type="button" className="minor-button" onClick={@props.onDelete}>Remove task</button>
-          </small>
-        </AutoSave>
-      </div>
     </div>
 
   toggleMultipleChoice: (e) ->
