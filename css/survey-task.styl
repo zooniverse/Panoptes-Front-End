@@ -26,58 +26,56 @@ $survey-task-pill-button
   font-size: 12px
 
 .survey-task-chooser-characteristics
-  background: rgba(gray, 0.4)
-  border-radius: 5px 5px 0 0
-  padding: 3px
+  display: flex
+
+  > *
+    flex-grow: 1
+    margin: 0 2px 2px 0
 
 .survey-task-chooser-characteristic
-  background: white
-  border-radius: 3px
-  color: black
-  padding: 0 0.5em
+  color: white
+  display: block
+  text-transform: uppercase
 
 .survey-task-chooser-characteristic-value
   @extends $reset-button
+  margin: 0 0.6em
 
 .survey-task-chooser-characteristic-value-icon
   border-radius: 3px
   display: block
-
-.survey-task-chooser-characteristic-clear-button
-  @extends $reset-button
+  margin: 0 auto
+  max-height: 3em
 
 .survey-task-chooser-choices
-  background: rgba(gray, 0.2)
   display: flex
   flex-wrap: wrap
-  padding: 3px
 
   > *
-    flex-grow: 1
+    flex-grow: 0
+    margin: 0 2px 2px 0
 
   &[data-breakpoint="Infinity"] > *,
   &[data-breakpoint="40"] > *
-    flex-basis: 30%
+    flex-basis: calc(33.33% - 2px)
 
   &[data-breakpoint="20"] > *,
   &[data-breakpoint="10"] > *
-    flex-basis: 45%
+    flex-basis: calc(50% - 2px)
 
   &[data-breakpoint="5"] > *
-    flex-basis: 95%
+    flex-basis: calc(100% - 2px)
 
 .survey-task-chooser-choice
   @extends $reset-button
   align-items: center
   background: white
-  border-radius: 3px
   color: black
   display: flex
-  margin: 1px
   text-align: left
 
   > *
-    margin: 0.4em
+    margin: 0.3em 0.6em
 
 .survey-task-chooser-choice-thumbnail
   border-radius: 3px
@@ -103,6 +101,9 @@ $survey-task-pill-button
   [data-breakpoint="5"] &
     font-size: 1.5em
 
+.survey-task-chooser-characteristic-clear-button
+  @extends $reset-button
+
 .survey-task-image-flipper
   display: block
   position: relative
@@ -113,7 +114,7 @@ $survey-task-pill-button
   width: 100%
 
 .survey-task-image-flipper-pips
-  bottom: 10px
+  bottom: 0
   left: 50%
   position: absolute
   transform: translateX(-50%)
@@ -130,7 +131,11 @@ $survey-task-pill-button
   width: 1em
 
 .survey-task-choice
+  background white
+  border-radius: 5px
+  color: black
   font-size: 14px
+  padding: 1em
 
 .survey-task-choice-label
   font-weight: bold

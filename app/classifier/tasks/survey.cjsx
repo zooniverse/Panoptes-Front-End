@@ -7,8 +7,43 @@ THUMBNAIL_BREAKPOINTS = [Infinity, 40, 20, 10, 5, 0]
 Summary = React.createClass
   displayName: 'SurveySummary'
 
+  getDefaultProps: ->
+    task: null
+    annotation: null
+    expanded: false
+
+  getInitialState: ->
+    expanded: @props.expanded
+
   render: ->
-    <div>TODO: Survey summary</div>
+    <div className="classification-task-summary">
+      <div className="question">
+        Survey of {@props.task.choicesOrder.length}
+        {if @state.expanded
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
+        else
+          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: true, null}>More</button>}
+      </div>
+      <div className="answers">
+        <div className="answer">
+          {@props.annotation.value.length} identifications
+        </div>
+        {if @state.expanded
+          choiceSummaries = for identification in @props.annotation.value
+            choice = @props.task.choices[identification.choice]
+            allAnswers = for questionID in @props.task.questionsOrder when questionID of identification.answers
+              answerLabels = for answerID in [].concat identification.answers[questionID]
+                @props.task.questions[questionID].answers[answerID].label
+              answerLabels.join ', '
+
+            "#{choice.label}: #{allAnswers.join '; '}"
+
+          for choiceSummary, i in choiceSummaries
+            <div key={i} className="answer">
+              {choiceSummary}
+            </div>}
+      </div>
+    </div>
 
 Chooser = React.createClass
   displayName: 'Chooser'
@@ -46,37 +81,34 @@ Chooser = React.createClass
           selectedValue = characteristic.values[@props.filters[characteristicID]]
           hasBeenAutoFocused = false
 
-          <span key={characteristicID}>
-            <DropdownForm ref="#{characteristicID}-dropdown" label={
-              <span className="survey-task-chooser-characteristic" data-is-active={selectedValue? || null}>
-                <span className="survey-task-chooser-characteristic-label">{selectedValue?.label ? characteristic.label}</span>
-              </span>
-            }>
-              {for valueID in characteristic.valuesOrder
-                value = characteristic.values[valueID]
+          <DropdownForm key={characteristicID} ref="#{characteristicID}-dropdown" className="survey-task-chooser-characteristic-menu" label={
+            <span className="survey-task-chooser-characteristic" data-is-active={selectedValue? || null}>
+              <span className="survey-task-chooser-characteristic-label">{selectedValue?.label ? characteristic.label}</span>
+            </span>
+          }>
+            {for valueID in characteristic.valuesOrder
+              value = characteristic.values[valueID]
 
-                disabled = valueID is @props.filters[characteristicID]
-                autoFocus = not disabled and not hasBeenAutoFocused
+              disabled = valueID is @props.filters[characteristicID]
+              autoFocus = not disabled and not hasBeenAutoFocused
 
-                if autoFocus
-                  hasBeenAutoFocused = true
+              if autoFocus
+                hasBeenAutoFocused = true
 
-                <span key={valueID}>
-                  <button type="submit" className="survey-task-chooser-characteristic-value" disabled={disabled} autoFocus={autoFocus} onClick={@handleFilter.bind this, characteristicID, valueID}>
-                    {if value.image?
-                      <img src={value.image} className="survey-task-chooser-characteristic-value-icon" />}
-                    <div className="survey-task-chooser-characteristic-value-label">{value.label}</div>
-                  </button>
-                  {' '}
-                </span>}
+              <span key={valueID}>
+                <button type="submit" className="survey-task-chooser-characteristic-value" disabled={disabled} autoFocus={autoFocus} onClick={@handleFilter.bind this, characteristicID, valueID}>
+                  {if value.image?
+                    <img src={@props.task.images[value.image]} className="survey-task-chooser-characteristic-value-icon" />}
+                  <div className="survey-task-chooser-characteristic-value-label">{value.label}</div>
+                </button>
+                {' '}
+              </span>}
 
-              &ensp;
-              <button type="submit" className="survey-task-chooser-characteristic-clear-button" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
-                <i className="fa fa-ban"></i> Any
-              </button>
-            </DropdownForm>
-            {' '}
-          </span>}
+            &ensp;
+            <button type="submit" className="survey-task-chooser-characteristic-clear-button" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
+              <i className="fa fa-ban"></i> Any
+            </button>
+          </DropdownForm>}
       </div>
 
       <div className="survey-task-chooser-choices" data-breakpoint={breakpoint}>
@@ -130,11 +162,12 @@ ImageFlipper = React.createClass
       {@renderPreload()}
       <img src={@props.images[@state.frame]} className="survey-task-image-flipper-image" />
       <span className="survey-task-image-flipper-pips">
-        {for index in [0...@props.images.length]
-          <span key={@props.images[index]}>
-            <button type="button" className="survey-task-image-flipper-pip" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>
-            {' '}
-          </span>}
+        {unless @props.images.length is 1
+          for index in [0...@props.images.length]
+            <span key={@props.images[index]}>
+              <button type="button" className="survey-task-image-flipper-pip" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>
+              {' '}
+            </span>}
       </span>
     </span>
 
@@ -175,8 +208,10 @@ Choice = React.createClass
     <div className="survey-task-choice">
       {unless choice.images.length is 0
         <ImageFlipper images={choice.images} />}
+
       <div className="survey-task-choice-label">{choice.label}</div>
       <div className="survey-task-choice-description">{choice.description}</div>
+
       {unless choice.confusionsOrder.length is 0
         <div className="survey-task-choice-confusions">
           Often confused with
@@ -198,6 +233,9 @@ Choice = React.createClass
               {' '}
             </span>}
         </div>}
+
+      <hr />
+
       {for questionID in @props.task.questionsOrder
         question = @props.task.questions[questionID]
         inputType = if question.multiple
@@ -221,10 +259,16 @@ Choice = React.createClass
               {' '}
             </span>}
         </div>}
+
+      {unless @props.task.questionsOrder.lengths is 0
+        <hr />}
+
       <div style={textAlign: 'center'}>
         <button type="button" className="minor-button" onClick={@props.onCancel}>Cancel</button>
         {' '}
-        <button type="button" className="standard-button" disabled={not @allFilledIn()} onClick={@handleIdentification}>Identify</button>
+        <button type="button" className="standard-button" disabled={not @allFilledIn()} onClick={@handleIdentification}>
+          <strong>Identify</strong>
+        </button>
       </div>
     </div>
 
@@ -249,16 +293,21 @@ module.exports = React.createClass
   displayName: 'SurveyTask'
 
   statics:
-    Editor: null
+    Editor: require './survey-editor'
     Summary: Summary
 
     getDefaultTask: ->
       type: 'survey'
-      characteristics: []
-      choices: []
+      characteristicsOrder: []
+      characteristics: {}
+      choicesOrder: []
+      choices: {}
+      questionsOrder: []
+      questions: {}
+      images: {}
 
     getTaskText: (task) ->
-      '(Survey)'
+      "Survey of #{task.choicesOrder.length} choices"
 
     getDefaultAnnotation: ->
       value: []

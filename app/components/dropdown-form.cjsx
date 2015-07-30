@@ -25,7 +25,7 @@ module.exports = React.createClass
 
     @setState {root}
 
-    React.render <ModalForm anchor={@getDOMNode()} required={@props.required} onSubmit={@handleSubmit} onCancel={@handleCancel}>
+    React.render <ModalForm className={@props.className} anchor={@getDOMNode()} required={@props.required} style={@props.style} onSubmit={@handleSubmit} onCancel={@handleCancel}>
       {@props.children}
     </ModalForm>, root
 
