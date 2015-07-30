@@ -54,9 +54,8 @@ ProjectPage = React.createClass
   render: ->
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
-        params =
-          owner: owner.login or owner.name
-          name: @props.project.slug
+        [ownerName, name] = @props.project.slug.split('/')
+        params = {owner: ownerName, name: name}
 
         <div className="project-page">
           <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
