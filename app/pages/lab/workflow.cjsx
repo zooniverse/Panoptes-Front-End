@@ -26,6 +26,17 @@ EditWorkflowPage = React.createClass
     selectedTaskKey: @props.workflow.first_task
     forceReloader: 0
 
+  workflowLink: ->
+    [owner, name] = @props.project.slug.split('/')
+    # React-router completely overrides clicking on links. Unbelievable.
+    viewParams = owner: owner, name: name
+    viewQuery = workflow: @props.workflow.id
+    currentLocation = location.origin + location.pathname + location.search
+    currentLocation += if location.search is '' then '?' else '&'
+    currentLocation += "reload=#{@state.forceReloader}"
+    viewHash = @makeHref 'project-classify', viewParams, viewQuery
+    currentLocation + viewHash
+
   render: ->
     disabledStyle =
       opacity: 0.4
@@ -123,18 +134,7 @@ EditWorkflowPage = React.createClass
           <hr />
 
           <div style={pointerEvents: 'all'}>
-            [owner, name] = @props.slug.split('/')
-            # React-router completely overrides clicking on links. Unbelievable.
-            viewParams = owner: owner, name: name
-            viewQuery = workflow: @props.workflow.id
-            currentLocation = location.origin + location.pathname + location.search
-            currentLocation += if location.search is ''
-              '?'
-            else
-              '&'
-            currentLocation += "reload=#{@state.forceReloader}"
-            viewHash = @makeHref 'project-classify', viewParams, viewQuery
-            <a href={currentLocation + viewHash} className="standard-button" target="from-lab" onClick={@handleViewClick}>View this workflow</a>
+            <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>View this workflow</a>
           </div>
 
           <hr />
