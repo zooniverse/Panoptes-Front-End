@@ -45,7 +45,7 @@ module.exports = React.createClass
       .replace /\B@(\b[\w-]+\b)/g, "<a href='#/users/$1'>@$1</a>"
 
       # hashtags #tagname
-      .replace /\B\#(\w+)/g, (fullTag, tagName) ->
+      .replace /(?!\B.*\/)\B#(\b[\w+-\/]+\b)/g, (fullTag, tagName) ->
         if owner and name
           "<a href='#/projects/#{owner}/#{name}/talk/search?query=#{tagName}'>#{fullTag}</a>"
         else
