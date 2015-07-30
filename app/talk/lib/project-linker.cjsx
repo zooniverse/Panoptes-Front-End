@@ -22,7 +22,7 @@ module?.exports = React.createClass
     for project in @state.projects
       break if project.id is projectId
 
-    [owner, name] = project.slug
+    [owner, name] = project.slug.split('/')
     @transitionTo 'project-talk',
       owner: owner
       name: name
