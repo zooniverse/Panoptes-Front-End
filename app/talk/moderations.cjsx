@@ -95,7 +95,7 @@ module?.exports = React.createClass
             .map (action) =>
               if action is 'destroy'
                 <button key={action} className="moderations-#{action}" onClick={=>
-                  if window.confirm("Are you sure that you want to destroy the reported comment?")
+                  if window.confirm("Are you sure that you want to delete the reported comment?")
                     @updateModeration(moderation, action)
                 }>{action}</button>
               else
