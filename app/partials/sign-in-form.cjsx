@@ -8,7 +8,7 @@ counterpart.registerTranslations 'en',
   signInForm:
     signIn: 'Sign in'
     signOut: 'Sign out'
-    userName: 'User name'
+    userName: 'User name or Email Address'
     password: 'Password'
     incorrectDetails: 'Username or password incorrect'
     forgotPassword: 'Forget your password?'
