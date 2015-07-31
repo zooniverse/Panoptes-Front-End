@@ -92,7 +92,9 @@ module.exports = React.createClass
 
       <div>
         <span className="form-label">Survey images</span>{' '}
-        <MediaArea resource={@props.workflow} metadata={prefix: @props.taskPrefix} onAdd={@handleImageAdd} onDelete={@handleImageDelete} />
+        <MediaArea resource={@props.workflow} metadata={prefix: @props.taskPrefix} style={
+          maxHeight: '90vh'
+        } onAdd={@handleImageAdd} onDelete={@handleImageDelete} />
       </div>
 
       <hr />

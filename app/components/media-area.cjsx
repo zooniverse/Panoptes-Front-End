@@ -129,7 +129,7 @@ module.exports = React.createClass
     <PromiseRenderer promise={@cachedMediaRequest}>{(media) =>
       media = [].concat(media).filter @filterOnMetadata
 
-      <div className="media-area" style={position: 'relative'}>
+      <div className={"media-area #{@props.className}".trim()} style={Object.assign position: 'relative', @props.style}>
         <FileDropTarget style={
           bottom: '3px'
           left: '3px'
