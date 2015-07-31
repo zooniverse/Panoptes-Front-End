@@ -40,7 +40,7 @@ module?.exports = React.createClass
     {name, owner} = @getParams() # of project, maybe better to pass in as prop later
 
     # get project
-    apiClient.type('projects').get({slug: name})
+    apiClient.type('projects').get({slug: owner + '/' + name})
       .then ([project]) =>
         section = projectSection(project)
 
@@ -62,7 +62,7 @@ module?.exports = React.createClass
                     talkClient.type('comments').create(comment).save()
                       .then (comment) =>
                         pageOfComment = getPageOfComment(comment, discussion, PAGE_SIZE)
-                        @transitionTo('project-talk-discussion', {owner: owner, name: project.slug, board: discussion.board_id, discussion: discussion.id}, {page: pageOfComment, comment: comment.id})
+                        @transitionTo('project-talk-discussion', {owner: owner, name: name, board: discussion.board_id, discussion: discussion.id}, {page: pageOfComment, comment: comment.id})
 
                   else
                     focus_id = +@props.subject?.id
@@ -81,7 +81,7 @@ module?.exports = React.createClass
                       }
                     talkClient.type('discussions').create(discussion).save()
                       .then (discussion) =>
-                        @transitionTo('project-talk-discussion', {owner: owner, name: project.slug, board: discussion.board_id, discussion: discussion.id})
+                        @transitionTo('project-talk-discussion', {owner: owner, name: name, board: discussion.board_id, discussion: discussion.id})
 
             else
               throw new Error("A board for subject comments has not been setup for this project yet.")
