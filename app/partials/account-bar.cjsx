@@ -46,7 +46,7 @@ module.exports = React.createClass
             <strong>{@props.user.display_name}</strong>
           </button>
           <Avatar user={@props.user} />
-          <Link to="inbox" params={name: @props.user.login} className="message-link"><i className="fa fa-envelope#{if @state.unread then '' else '-o'}" /> </Link>
+          <Link to="inbox" params={name: @props.user.login} className="message-link"><i className="fa fa-envelope#{if @state.unread then ' unread' else '-o'}" /> </Link>
         </div>
         <div aria-hidden={!@state.expanded} aria-label="account menu" className="account-menu" ref="accountMenu">
           <Link to="user-profile" params={name: @props.user.login}><Translate content="accountMenu.profile" /></Link>

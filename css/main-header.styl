@@ -53,7 +53,18 @@
 
       .message-link
         margin-left: 1.4em
+        position: relative
 
+        i.unread
+          &:after // red dot for unreads
+            content: ''
+            background: FAILURE
+            height: 0.5em
+            width: 0.5em
+            position: absolute
+            top: 0
+            left: calc(1em - 0.25em)
+            border-radius: 50%
       a
         color: white
 
