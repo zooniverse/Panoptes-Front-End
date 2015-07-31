@@ -19,6 +19,7 @@ module.exports = React.createClass
 
   getInitialState: ->
     importErrors: []
+    resettingMedia: false
 
   getDefaultProps: ->
     workflow: null
@@ -92,10 +93,20 @@ module.exports = React.createClass
 
       <div>
         <span className="form-label">Survey images</span>{' '}
-        <MediaArea resource={@props.workflow} metadata={prefix: @props.taskPrefix} style={
-          maxHeight: '90vh'
-        } onAdd={@handleImageAdd} onDelete={@handleImageDelete} />
+        <AutoSave resource={@props.workflow}>
+          <button type="button" disabled={@state.resettingMedia} onClick={@resetMedia}>Delete all</button>
+          {if @state.resettingMedia
+            <i className="fa fa-spinner fa-spin"></i>}
+        </AutoSave>
       </div>
+
+      <MediaArea
+        resource={@props.workflow}
+        metadata={prefix: @props.taskPrefix}
+        style={maxHeight: '90vh'}
+        onAdd={@handleImageAdd}
+        onDelete={@handleImageDelete}
+      />
 
       <hr />
 
@@ -115,6 +126,7 @@ module.exports = React.createClass
           <button type="button" onClick={@resetTask}>Delete all</button>
         </AutoSave>
       </div>
+
       {for choiceID in @props.task.choicesOrder
         choice = @props.task.choices[choiceID]
         <Details key={choiceID} className="survey-task-editor-choice" summary={
@@ -331,13 +343,20 @@ module.exports = React.createClass
         questions: {}
       @props.workflow.update 'tasks'
 
-  resetImages: ->
-    # TODO: Removes the links.
-    # TODO: Delete the orphaned resources.
-    # Object.assign @props.task,
-    #   images: {}
-    # @props.workflow.update 'tasks'
-    alert 'TODO.'
+  resetMedia: (e) ->
+    if e.shiftKey or confirm 'Really delete all the images from this task? This might take a while...'
+      @setState resettingMedia: true
+      errors = 0
+      massDelete = @props.workflow.get('attached_images', page_size: 200).then (workflowImages) =>
+        taskImages = workflowImages.filter (image) =>
+          image.metadata.prefix is @props.taskPrefix
+        Promise.all taskImages.map (image) =>
+          image.delete().catch =>
+            errors += 1
+      massDelete.then =>
+        @setState resettingMedia: false
+        if errors isnt 0
+          alert "There were #{errors} errors deleting all those resources. Try again to get the rest."
 
   handleImportError: (error, file, row) ->
     @state.importErrors.push {error, file, row}
