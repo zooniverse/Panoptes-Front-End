@@ -63,7 +63,7 @@ module.exports = React.createClass
           <AutoSave resource={@props.workflow}>
             <span className="form-label">Help text</span>
             <br />
-            <textarea  name="#{@props.taskPrefix}.help" value={@props.task.help} rows="7" className="standard-input full" onChange={handleChange} />
+            <textarea  name="#{@props.taskPrefix}.help" value={@props.task.help ? ""} rows="7" className="standard-input full" onChange={handleChange} />
           </AutoSave>
           <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
         </div>}
