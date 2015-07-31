@@ -21,10 +21,10 @@ module?.exports = React.createClass
     <div className="talk-discussion-preview">
       <div className="preview-content">
 
-        <PromiseRenderer promise={talkClient.type('comments').get(discussion.links.comments[0])}>{(comment) =>
+        <PromiseRenderer catch={null} promise={talkClient.type('comments').get(discussion.links.comments[0])}>{(comment) =>
           if comment.focus_id and (comment.focus_type is 'Subject')
             <div className="subject-preview">
-              <PromiseRenderer promise={apiClient.type('subjects').get(comment.focus_id)}>{(subject) =>
+              <PromiseRenderer catch={null} promise={apiClient.type('subjects').get(comment.focus_id)}>{(subject) =>
                 <Thumbnail src={getSubjectLocation(subject).src} width={100} />
               }</PromiseRenderer>
             </div>
