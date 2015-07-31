@@ -119,6 +119,8 @@ workflow = apiClient.type('workflows').create
               label: 'Eating'
             in:
               label: 'Interacting'
+
+      images: {}
       # next: 'draw'
 
     draw:
