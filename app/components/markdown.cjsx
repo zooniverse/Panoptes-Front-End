@@ -61,7 +61,11 @@ module.exports = React.createClass
       markdownIt.render input
 
   render: ->
-    html = @replaceSymbols(@emojify(@markdownify(@props.children ? @props.content)))
+    try
+      html = @replaceSymbols(@emojify(@markdownify(@props.children ? @props.content)))
+    catch e
+      console.log e.message
+      html = @props.children ? @props.content
 
     React.createElement @props.tag,
       className: "markdown #{@props.className ? ''}"
