@@ -239,12 +239,13 @@ module.exports = React.createClass
     email = @refs.email.getDOMNode().value
     credited_name = @refs.realName.getDOMNode().value
     global_email_communication = @refs.okayToEmail.getDOMNode().checked
+    project_email_communication = global_email_communication
     beta_email_communication = @refs.betaTester.getDOMNode().checked
     project_id = @props.project?.id
 
     @setState error: null
     @props.onSubmit?()
-    auth.register {login, password, email, credited_name, global_email_communication, project_id, beta_email_communication}
+    auth.register {login, password, email, credited_name, project_email_communication, global_email_communication, project_id, beta_email_communication}
       .then =>
         @props.onSuccess? arguments...
       .catch (error) =>
