@@ -1,0 +1,73 @@
+.media-area
+  background: rgba(gray, 0.1)
+  border: 1px solid rgba(gray, 0.2)
+  border-radius: 5px
+  padding: 0.5em 0.5em 1em
+  text-align: center
+
+.file-drop-target
+  border: 2px dashed transparent
+  border-radius: 3px
+
+  &[data-can-drop]
+    border-color: MAIN_HIGHLIGHT
+
+.media-area-list
+  align-items: baseline
+  display: flex
+  flex-wrap: wrap
+  justify-content: center
+  margin: 0
+  padding: 0
+
+.media-area-item
+  display: block
+  flex-basis: 25ch
+  margin: 1px
+  padding: 0.5em
+
+.media-icon
+  font-size: 12px
+  text-align: center
+
+.media-icon-thumbnail
+  box-shadow: 0 3px 10px -3px rgba(black, 0.5)
+
+.media-icon-thumbnail-container
+  display: inline-block
+  position: relative
+
+.media-icon-delete-button
+  @extends $reset-button
+  background: gray
+  border-radius: 50%
+  color: white
+  font-size: 16px
+  height: 1em
+  line-height: 1
+  position: absolute
+  right: -0.5em
+  top: -0.3em
+  width: 1em
+
+.media-icon-thumbnail
+  font-size: 12px
+
+.media-icon-markdown
+  border: 0
+  background: transparent
+  color: inherit
+  font: inherit
+  font-size: 10px
+  height: 4.2em
+  white-space: pre
+  width: 100%
+
+.media-area-add-button
+  border: 2px dashed
+  border-radius: 5px
+  color: MAIN_HIGHLIGHT
+  display: inline-block
+
+  &:active
+    color: black

@@ -1,0 +1,75 @@
+.card-list
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  justify-content: center
+  max-width: 1200px
+  margin: 0 auto
+  text-align: center
+  // Added styles below to fix Chrome bug: https://code.google.com/p/chromium/issues/detail?id=297782
+  overflow: hidden
+  position: relative
+
+.card
+  background-position: 50% 0
+  background-size: cover
+  border-radius: 6px
+  display: inline-block
+  margin: 0 0.5em 1em
+  max-height: 325px
+  max-width: 220px
+  overflow: hidden
+  text-align: left
+
+  svg
+    height: 150px
+  a
+    text-decoration: none
+
+  .details
+    background: BACKGROUND
+    box-sizing: border-box
+    color: FOREGROUND
+    display: flex
+    flex-direction: column
+    height: 175px
+    padding: 20px
+    text-align: left
+
+  .name
+    color: #000000
+    font-size: 0.9em
+    font-weight: 400
+    text-align: center
+
+  .type, .owner
+    color: #bababa
+    flex-grow: 1
+    font-size: .8em
+    font-style: italic
+
+  .card-button
+    background: COBOLT_BLUE
+    padding: 0.6em
+    width: 180px
+    position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
+
+    &:hover
+      background: lighten(COBOLT_BLUE, 20%)
+
+.project-card
+  max-height: 445px
+
+  svg
+    height: 215px
+
+  .details
+    height: 200px
+    justify-content: space-between
+
+  .description
+    color: #616161
+    font-size: 0.8em
+    height: 100px
+    margin: 0.8em 0
+    overflow: hidden

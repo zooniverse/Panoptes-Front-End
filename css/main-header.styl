@@ -1,35 +1,45 @@
 .main-header
+  font-size: 10px
+  line-height: 20px
+
+  &:hover
+    z-index: 1
 
   .on-home-page &
     position: absolute
     width: 100%
-
-    .main-logo
-      font-size: 2.7em
+    z-index: 1
 
   .on-secondary-page &
     position: absolute
     width: 100%
+    z-index: 1
 
   a
     text-decoration: none
 
     &.main-logo
       color: white
+      font-size: 2.7em
 
   .on-project-page &
     opacity: 0.4
+    position: relative
     transition: opacity 0.5s
 
     &:hover
       opacity: 1
 
+  .login-bar
+    font-size: 1.4em
+
   .account-bar
-    font-size: 14px
+    font-size: 1.4em
     position: relative
+    top: .75em
 
     .account-info
-      padding-bottom: 15px
+      padding-bottom: 1.25em
 
       .avatar
         height: calc(1em + 1.5vw)
@@ -39,11 +49,22 @@
 
       .display-name
         color: white
-        margin-right: 1em
+        margin-right: 1.4em
 
       .message-link
-        margin-left: 1em
+        margin-left: 1.4em
+        position: relative
 
+        i.unread
+          &:after // red dot for unreads
+            content: ''
+            background: FAILURE
+            height: 0.5em
+            width: 0.5em
+            position: absolute
+            top: 0
+            left: calc(1em - 0.25em)
+            border-radius: 50%
       a
         color: white
 
@@ -58,7 +79,7 @@
       padding: 1.5em
       pointer-events: none
       position: absolute
-      right: 23px
+      right: 2em
       white-space: no-wrap
 
       &:before
@@ -74,20 +95,27 @@
       a
         color: white
 
+      .sign-out-button
+        text-align: left
+
     &:hover
       .account-menu
         opacity: 1
         pointer-events: auto
+    
+    .account-menu[aria-hidden=false]
+      opacity: 1
+      pointer-events: auto
 
 .main-title
-  align-items: baseline
+  align-items: center
   background: #0072ff
   box-sizing: border-box
   color: BACKGROUND
   display: flex
   flex-wrap: wrap
   justify-content: space-between
-  padding: 10px 3vw
+  padding: 1em 3vw
 
   .on-home-page &
     border-bottom: none
@@ -99,7 +127,7 @@
     .main-nav-item:hover
       background: rgba(0,0,0,0.2)
 
-  .on-project-page &, .on-home-page &, .on-secondary-page &
+  .on-project-page &, .on-home-page &, .on-secondary-page &, .on-landing-page &
     background: transparent
 
   &.header-sticky
@@ -111,21 +139,21 @@
     .main-nav-item:hover
       background: rgba(0,0,0,0.8)
 
-.main-logo
-  font-family: "Montserrat"
-  font-size: 1.8em
-  font-smoothing: antialiased
-  letter-spacing: 0.05em
-  text-transform: uppercase
+  .main-logo
+    font-family: "Montserrat"
+    font-size: 2.7em
+    font-smoothing: antialiased
+    letter-spacing: 0.05em
+    text-transform: uppercase
 
   svg
     vertical-align: -0.30em
 
 .main-nav
   display: flex
-  flex-grow: 1
+  flex: 1 0 auto
   flex-wrap: wrap
-  padding: 0 15px
+  padding: 0 1.5em
 
   > hr
     border: 0
@@ -134,9 +162,9 @@
 
 .main-nav-item
   color: rgba(255,255,255,0.5)
-  font-size: 0.9em
-  padding: 0.5em 3vw
-  margin: 0.5em 0 0
+  font-size: 1.4em
+  padding: 7.5px 2vw
+  margin: 2.5px 0 0
 
   &:link:hover
     background: rgba(255,255,255, 0.2)
@@ -148,7 +176,7 @@
     font-weight: bold
 
   .minor
-    font-size: 0.7em
+    font-size: 10px
     font-weight: bold
     letter-spacing: 0.1em
     text-transform: uppercase
@@ -159,7 +187,7 @@
       background-size: cover
       box-sizing: border-box
       height: 250px
-      padding: 9em 3vw 1em
+      padding: 13.5em 3vw 1em
 
       .hero-container
         margin: 0 auto
@@ -167,12 +195,12 @@
 
         h1
           color: white
-          font-size: 2.25em
+          font-size: 3.375em
           font-weight: 400
-          margin-bottom: 0.675em
+          line-height: 1.5em
+          margin-bottom: 0.75em
 
         .hero-nav
           a
             @extends .main-nav-item
             text-decoration: none
-

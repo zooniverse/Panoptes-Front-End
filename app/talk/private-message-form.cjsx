@@ -1,57 +1,43 @@
 React = require 'react'
 apiClient = require '../api/client'
-authClient = require '../api/auth'
 talkClient = require '../api/talk'
 Router = require 'react-router'
+CommentBox = require './comment-box'
 
 module?.exports = React.createClass
   displayName: 'PrivateMessageForm'
-
   mixins: [Router.Navigation]
 
-  getInitialState: ->
-    user: null
-
-  componentWillMount: ->
-    @handleAuthChange()
-    authClient.listen @handleAuthChange
-
-  componentWillUnmount: ->
-    authClient.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    authClient.checkCurrent()
-      .then (user) =>
-        @setState {user}
-
-  onSubmit: (e) ->
-    e.preventDefault()
-    form = @getDOMNode().querySelector('.private-message-form')
-    textarea = form.querySelector('textarea')
-    input = form.querySelector('input')
+  onSubmitMessage: (_, body) ->
+    pm = @getDOMNode().querySelector('.private-message-form')
+    input = pm.querySelector('input')
 
     title = input.value
-    body = textarea.value
+    user_id = @props.user.id
 
-    user_id = @state.user.id
-
-    apiClient.type('users').get(display_name: @props.params.name).index(0)
+    apiClient.type('users').get(login: @props.params.name).index(0)
       .then (user) =>
         recipient_ids = [+user.id] # must be array
         conversation = {title, body, user_id, recipient_ids}
 
       .then (conversation) =>
-        console.log "conversation", conversation
         talkClient.type('conversations').create(conversation).save()
           .then (conversation) =>
             @transitionTo('inbox-conversation', {conversation: conversation.id})
 
   render: ->
     <div className="talk talk-module">
-      {if @state.user
-        <form className="private-message-form" onSubmit={@onSubmit}>
+      {if @props.user
+        <div className="private-message-form">
           <input placeholder="Subject" />
-          <textarea placeholder="Type your message here"></textarea>
-          <button>Send</button>
-        </form>}
+          <CommentBox
+            header={null}
+            user={@props.user}
+            content=""
+            validationCheck={ -> false }
+            validationErrors={[]}
+            submitFeedback={"Sent!"}
+            onSubmitComment={@onSubmitMessage}
+            submit={"Send Message"} />
+        </div>}
     </div>

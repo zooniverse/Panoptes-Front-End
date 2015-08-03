@@ -1,0 +1,44 @@
+hover-button(color)
+  background: color
+  border-color: darken(color, 5%)
+  &:hover
+    background: lighten(color, 5%)
+    border-color: color
+
+.moderations
+  section button
+    text-transform: capitalize
+
+    &:not(:last-child)
+      margin-right: 5px
+
+    &.active
+      opacity: 0.5
+      pointer-events: none
+
+  .moderations-actions-buttons
+    text-align: right
+    text-transform: capitalize
+
+    p
+      margin: 0
+
+      strong
+        text-transform: capitalize
+
+    > button
+      color: white
+      &:not(:last-child)
+        margin-right: 5px
+
+      &.moderations-ignore
+        hover-button: WARNING
+
+      &.moderations-destroy
+        hover-button: FAILURE
+
+      &.moderations-watch
+        hover-button: COBOLT_BLUE
+
+      &.moderations-open
+        hover-button: SUCCESS

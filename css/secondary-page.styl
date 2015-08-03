@@ -1,22 +1,62 @@
 .secondary-page
-  .markdown
-    font-size: 10px
-    line-height: 20px
+  font-size: 10px
+  line-height: 20px
 
-    h2, h3
+  .secondary-page-side-bar
+    flex: 0 1 190px
+
+    nav
+      align-items: flex-start
+      display: inline-flex
+      flex-direction: column
+      flex-wrap: wrap
+      margin-top: 0.75em
+
+      @media screen and (max-width: 400px)
+        flex-direction: row
+
+      .side-bar-button
+        color: #5a5a5a
+        font-size: 14px
+        margin: 6.75px 6.75px 20.25px
+        outline: none
+
+        &.active
+          font-weight: 700
+
+  .markdown, .secondary-page-copy
+
+    .publications-page
+      line-height: initial
+
+    h1, h2, h3
       color: #5a5a5a
 
     h2
       font-size: 2.4em
+      line-height: 26px
 
     h3
       font-size: 1.4em
 
-    p
+    p, li
       color: #989898
-      font-size: 1.4em
-      margin: 1.5em 0
+      margin: 1em 0
       max-width: 700px
 
-  .publications-page
-    line-height: initial
+      ul > li
+        font-size: 14px
+
+      img
+        max-width: 100%
+
+    pre
+      background-color: #E8E8E8
+      border-radius: 4px
+      padding: 1em
+
+
+.centered-grid
+  margin: 0 auto
+  max-width: 960px
+  padding: 40px 3vw

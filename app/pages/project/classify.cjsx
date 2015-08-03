@@ -9,7 +9,7 @@ counterpart = require 'counterpart'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
 SignInPrompt = require '../../partials/sign-in-prompt'
-sessionSubjects = require '../../lib/session-subjects'
+seenThisSession = require '../../lib/seen-this-session'
 
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
@@ -34,9 +34,18 @@ currentClassifications =
   forWorkflow: {}
 
 # Queue up subjects to classify here.
-# TODO: Should we clear this on sign-in and -out?
 upcomingSubjects =
   forWorkflow: {}
+
+emptySubjectQueue = ->
+  console?.log 'Emptying upcoming subjects queue'
+  for workflowID, queue of upcomingSubjects.forWorkflow
+    for subject in queue
+      subject.destroy()
+    queue.splice 0
+
+auth.listen 'change', emptySubjectQueue
+apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
@@ -79,7 +88,7 @@ module.exports = React.createClass
       currentWorkflowForProject[props.project.id]
 
   getRandomWorkflowID: (project) ->
-    project.get('workflows').then (workflows) ->
+    project.get('workflows', active: true).then (workflows) ->
       if workflows.length is 0
         throw new Error "No workflows for project #{project.id}"
         project.uncacheLink 'workflows'
@@ -111,6 +120,8 @@ module.exports = React.createClass
           started_at: (new Date).toISOString()
           user_agent: navigator.userAgent
           user_language: counterpart.getLocale()
+          utc_offset: ((new Date).getTimezoneOffset() * 60).toString() # In seconds
+          subject_dimensions: (null for location in subject.locations)
         links:
           project: project.id
           workflow: workflow.id
@@ -203,19 +214,21 @@ module.exports = React.createClass
     console?.info 'Completed classification', @state.classification
     @state.classification.save().then (classification) =>
       console?.log 'Saved classification', classification.id
-      classification.get('subjects').then (subjects) ->
-        sessionSubjects.push (id for {id} in subjects)...
+      Promise.all([
+        classification.get 'workflow'
+        classification.get 'subjects'
+      ]).then ([workflow, subjects]) ->
+        seenThisSession.add workflow, subjects
         classification.destroy()
       classificationsThisSession += 1
       @maybePromptToSignIn()
 
   maybePromptToSignIn: ->
-    auth.checkCurrent().then (user) =>
-      if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not user?
-        alert (resolve) =>
-          <SignInPrompt project={@props.project} onChoose={resolve}>
-            <p><strong>You’ve done {classificationsThisSession} classifications, but you’re not signed in!</strong></p>
-          </SignInPrompt>
+    if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not @props.user?
+      alert (resolve) =>
+        <SignInPrompt project={@props.project} onChoose={resolve}>
+          <p><strong>You’ve done {classificationsThisSession} classifications, but you’re not signed in!</strong></p>
+        </SignInPrompt>
 
   loadAnotherSubject: ->
     @getCurrentWorkflowID(@props).then (workflowID) =>

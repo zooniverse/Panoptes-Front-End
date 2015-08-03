@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require '../api/client'
-authClient = require '../api/auth'
 getSubjectLocation = require '../lib/get-subject-location'
 
 module?.exports = React.createClass
@@ -10,14 +9,13 @@ module?.exports = React.createClass
     subjects: []
 
   getDefaultProps: ->
-    header: "Select a featured image"
+    header: "Select a linked image"
 
   componentWillMount: ->
     @setRecents()
 
   setRecents: ->
-    authClient.checkCurrent()
-      .then (user) => user.get('recents')
+    @props.user.get('recents')
       .then (subjects) => @setState {subjects}
 
   setQuery: (id) ->
@@ -32,8 +30,8 @@ module?.exports = React.createClass
     else
       @setQuery(query)
 
-  setFocusImage: (recentsData) ->
-    @props.onSelectImage(recentsData)
+  setFocusImage: (subject) ->
+    @props.onSelectImage(subject)
 
   imageItem: (data, i) ->
     <div key={data.id} className="talk-comment-image-item">

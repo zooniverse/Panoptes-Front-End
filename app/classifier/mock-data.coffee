@@ -8,8 +8,118 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'draw'
+  first_task: 'survey'
   tasks:
+    survey:
+      type: 'survey'
+      characteristicsOrder: ['pa', 'co']
+      characteristics:
+        pa:
+          label: 'Pattern'
+          valuesOrder: ['so', 'sp', 'st', 'ba']
+          values:
+            so:
+              label: 'Solid'
+              image: '//placehold.it/64.png?text=Solid'
+            sp:
+              label: 'Spots'
+              image: '//placehold.it/64.png?text=Spots'
+            st:
+              label: 'Stripes'
+              image: '//placehold.it/64.png?text=Stripes'
+            ba:
+              label: 'Bands'
+              image: '//placehold.it/64.png?text=Bands'
+        co:
+          label: 'Color'
+          valuesOrder: ['wh', 'ta', 're', 'br', 'bl', 'gr']
+          values:
+            wh:
+              label: 'White'
+              image: '//placehold.it/64.png?text=White'
+            ta:
+              label: 'Tan'
+              image: '//placehold.it/64.png?text=Tan'
+            re:
+              label: 'Red'
+              image: '//placehold.it/64.png?text=Red'
+            br:
+              label: 'Brown'
+              image: '//placehold.it/64.png?text=Brown'
+            bl:
+              label: 'Black'
+              image: '//placehold.it/64.png?text=Black'
+            gr:
+              label: 'Green'
+              image: '//placehold.it/64.png?text=Green'
+
+      choicesOrder: ['aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar']
+      choices:
+        aa:
+          label: 'Aardvark'
+          description: 'Basically a long-nose rabbit'
+          images: [
+            '//placehold.it/320x240.png?text=Aardvark 1'
+            '//placehold.it/320x240.png?text=Aardvark 2'
+          ]
+          characteristics:
+            pa: ['so']
+            co: ['ta', 'br']
+          confusionsOrder: ['ar']
+          confusions:
+            ar: 'They both start with “A”, so _some_ **dummies** get these two mixed up.'
+
+        ar:
+          label: 'Armadillo'
+          description: 'A little rolly dude'
+          images: [
+            '//placehold.it/320x240.png?text=Armadillo 1'
+            '//placehold.it/320x240.png?text=Armadillo 2'
+          ]
+          characteristics:
+            pa: ['so', 'st']
+            co: ['ta', 'br']
+          confusionsOrder: []
+          confusions: {}
+
+        to:
+          label: 'Tortoise, the longest-named animal in the whole entire world'
+          description: 'Little green house with legs'
+          images: [
+            '//placehold.it/320x240.png?text=Tortoise 1'
+            '//placehold.it/320x240.png?text=Tortoise 2'
+          ]
+          characteristics:
+            pa: ['so']
+            co: ['gr']
+          confusionsOrder: []
+          confusions: {}
+
+      questionsOrder: ['ho', 'be']
+      questions:
+        ho:
+          multiple: false
+          label: 'How many?'
+          answersOrder: ['one', 'two', 'many']
+          answers:
+            one:
+              label: '1'
+            two:
+              label: '2'
+            many:
+              label: '3+'
+        be:
+          multiple: true
+          label: 'Any activity?'
+          answersOrder: ['mo', 'ea', 'in']
+          answers:
+            mo:
+              label: 'Moving'
+            ea:
+              label: 'Eating'
+            in:
+              label: 'Interacting'
+
     draw:
       type: 'drawing'
       instruction: 'Draw something.'
@@ -70,9 +180,9 @@ subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/1'}
-    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/2'}
-    {'image/jpeg': 'http://lorempixel.com/1500/1000/animals/3'}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/150/100/animals/1' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/150/100/animals/2' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/150/100/animals/3' else BLANK_IMAGE}
   ]
 
   metadata:

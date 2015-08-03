@@ -1,0 +1,162 @@
+$survey-task-pill-button
+  border: 1px solid rgba(gray, 0.5)
+  border-radius: 3px
+  padding: 0 0.4em
+
+.survey-identification-proxy
+  background: goldenrod
+  border-radius: 3px
+  color: white
+  display: inline-block
+  font-size: 10px
+  font-weight: bold
+  padding: 0 0.5em
+
+.survey-identification-remove
+  @extends $reset-button
+  border-radius: 50%
+  box-shadow:
+    0.5px 1px 0 rgba(black, 0.3) inset,
+    0.5px 1px 0 rgba(white, 0.5)
+  height: 1em
+  line-height: 1
+  width: 1em
+
+.survey-task-chooser
+  font-size: 12px
+
+.survey-task-chooser-characteristics
+  background: rgba(gray, 0.4)
+  border-radius: 5px 5px 0 0
+  padding: 3px
+
+.survey-task-chooser-characteristic
+  background: white
+  border-radius: 3px
+  color: black
+  padding: 0 0.5em
+
+.survey-task-chooser-characteristic-value
+  @extends $reset-button
+
+.survey-task-chooser-characteristic-value-icon
+  border-radius: 3px
+  display: block
+
+.survey-task-chooser-characteristic-clear-button
+  @extends $reset-button
+
+.survey-task-chooser-choices
+  background: rgba(gray, 0.2)
+  display: flex
+  flex-wrap: wrap
+  padding: 3px
+
+  > *
+    flex-grow: 1
+
+  &[data-breakpoint="Infinity"] > *,
+  &[data-breakpoint="40"] > *
+    flex-basis: 30%
+
+  &[data-breakpoint="20"] > *,
+  &[data-breakpoint="10"] > *
+    flex-basis: 45%
+
+  &[data-breakpoint="5"] > *
+    flex-basis: 95%
+
+.survey-task-chooser-choice
+  @extends $reset-button
+  align-items: center
+  background: white
+  border-radius: 3px
+  color: black
+  display: flex
+  margin: 1px
+  text-align: left
+
+  > *
+    margin: 0.4em
+
+.survey-task-chooser-choice-thumbnail
+  border-radius: 3px
+  display: inline-block
+  vertical-align: middle
+
+  [data-breakpoint="Infinity"] &,
+  [data-breakpoint="40"] &
+    display: none
+
+  [data-breakpoint="20"] &
+    height: 2em
+
+  [data-breakpoint="10"] &
+    height: 4em
+
+  [data-breakpoint="5"] &
+    height: 8em
+
+.survey-task-chooser-choice-label
+  display: inline-block
+
+  [data-breakpoint="5"] &
+    font-size: 1.5em
+
+.survey-task-image-flipper
+  display: block
+  position: relative
+
+.survey-task-image-flipper-image
+  border-radius: 5px
+  display: block
+  width: 100%
+
+.survey-task-image-flipper-pips
+  bottom: 10px
+  left: 50%
+  position: absolute
+  transform: translateX(-50%)
+
+.survey-task-image-flipper-pip
+  @extends $reset-button
+  background: black
+  border: 2px solid
+  border-radius: 50%
+  color: white
+  height: 1em
+  overflow: hidden
+  text-indent: 1em
+  width: 1em
+
+.survey-task-choice
+  font-size: 14px
+
+.survey-task-choice-label
+  font-weight: bold
+  margin: 0.5em 0
+
+.survey-task-choice-description
+  margin: 0.5em 0
+
+.survey-task-choice-confusions
+  font-size: 0.8em
+  margin: 0.5em 0
+
+.survey-task-choice-confusion
+  @extends $survey-task-pill-button
+
+.survey-task-choice-question
+  font-size: 0.8em
+  margin: 0.5em 0
+
+.survey-task-choice-answer
+  @extends $survey-task-pill-button
+  cursor: pointer
+
+  &[data-checked]
+    background: MAIN_HIGHLIGHT
+    color: white
+
+  > input
+    display: none

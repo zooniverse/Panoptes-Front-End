@@ -2,6 +2,7 @@ React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 FavoritesButton = require '../collections/favorites-button'
 alert = require '../lib/alert'
+Markdown = require '../components/markdown'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 
@@ -10,7 +11,6 @@ NOOP = Function.prototype
 ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'inline-block', position: 'relative'
 SUBJECT_STYLE = display: 'block'
-PLAYING_FRAME_DURATION = 333
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'
@@ -25,8 +25,12 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     subject: null
+    user: null
+    playFrameDuration: 667
+    playIterations: 3
     onFrameChange: NOOP
     onLoad: NOOP
+    defaultStyle: true
 
   getInitialState: ->
     loading: true
@@ -62,7 +66,7 @@ module.exports = React.createClass
             </span>
           </span>
 
-    <div className="subject-viewer" style={ROOT_STYLE}>
+    <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
       {if type is 'image'
         @hiddenPreloadedImages()}
       <div className="subject-container" style={CONTAINER_STYLE}>
@@ -78,11 +82,11 @@ module.exports = React.createClass
         <span>{tools}</span>
         <span>
           {if @props.subject?.metadata?
-            <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-table fa-fw"></i></button>}
-          {if @props.subject
+            <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
+          {if @props.subject? && @props.user?
             <span>
-              <FavoritesButton subject={@props.subject} />
-              <CollectionsManagerIcon subject={@props.subject} />
+              <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />
+              <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
             </span>}
         </span>
       </div>
@@ -108,9 +112,13 @@ module.exports = React.createClass
     @setState {playing}
     if playing
       @nextFrame()
-      @_playingInterval = setInterval @nextFrame, PLAYING_FRAME_DURATION
+      @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
+
+      autoStopDelay = @props.subject.locations.length * @props.playFrameDuration * @props.playIterations
+      @_autoStop = setTimeout @setPlaying.bind(this, false), autoStopDelay
     else
       clearInterval @_playingInterval
+      clearTimeout @_autoStop
 
   nextFrame: ->
     @handleFrameChange (@state.frame + 1) %% @props.subject.locations.length
@@ -122,12 +130,13 @@ module.exports = React.createClass
   showMetadata: ->
     # TODO: Sticky popup.
     alert <div className="content-container">
-      Subject metadata<br />
-      <table>
-        {for key, value of @props.subject?.metadata
+      <header className="form-label" style={textAlign: 'center'}>Subject metadata</header>
+      <hr />
+      <table className="standard-table">
+        {for key, value of @props.subject?.metadata when key.charAt(0) isnt '#' and key[...2] isnt '//'
           <tr key={key}>
             <th>{key}</th>
-            <td><code><pre>{JSON.stringify value, null, 2}</pre></code></td>
+            <Markdown tag="td" content={value} inline />
           </tr>}
       </table>
     </div>

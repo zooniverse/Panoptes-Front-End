@@ -1,16 +1,23 @@
 // talk default css rules
-TALK_BACKGROUND = #F2F1F1
-TALK_BORDER_RADIUS = 3px
+TALK_BACKGROUND = #f7f7f7
+TALK_BORDER = #F2F1F1
+TALK_BORDER_RADIUS = 6px
 TALK_PADDING = 5px
 TALK_MARGIN = 10px auto
+TALK_BREAKPOINT = 670px
+
+COPY_GREY_DARK = #404040
+COPY_GREY_MID = #898989
+COPY_GREY_LIGHT = #afaeae
 
 .talk-module // shared styles among talk box shaped things
   background: TALK_BACKGROUND
   border-radius: TALK_BORDER_RADIUS
+  border: 2px solid TALK_BORDER
   padding: TALK_PADDING
   margin: TALK_MARGIN
   box-sizing: border-box
-  color: black
+  color: COPY
 
 .talk-text-input // shared styles among talk text inputs
   border: none
@@ -29,6 +36,35 @@ TALK_MARGIN = 10px auto
     font-family: inherit
     display: block
 
+.talk-search-form
+  position: relative
+  max-width: 250px
+  overflow: auto
+  margin-bottom: 10px
+
+  input[type='text']
+    float: left
+    width: 80%
+    border: 2px solid TALK_BACKGROUND
+    border-right: none
+    font-style: italic
+    height: 100%
+    line-height: 28px
+    padding-left: 5px
+    border-radius: TALK_BORDER_RADIUS 0 0 TALK_BORDER_RADIUS
+
+  button[type='submit']
+    position: absolute
+    background: TALK_BACKGROUND
+    width: 20%
+    color: COPY
+    height: 100%
+    border-left: none
+    border-color: TALK_BACKGROUND
+    border-radius: 0 TALK_BORDER_RADIUS TALK_BORDER_RADIUS 0
+    &:hover
+      background: MAIN_HIGHLIGHT
+
 .polaroid-image
   background: #fff
   padding: 10px 10px 20px 10px
@@ -36,17 +72,24 @@ TALK_MARGIN = 10px auto
 
 .talk
   @extend .talk-form
+  color: COPY_GREY_DARK
 
   *
     box-sizing: border-box
 
+  a
+    color: COBOLT_BLUE
 
   button
     @extend .standard-button
+    @extend .talk-module
     padding: 0.2em 0.4em
-    background: LIGHT_GREY
     font-size: 0.8em
-    border-radius: 3px
+    margin: 0
+
+    &:hover
+      color: white
+      border-color: MAIN_HIGHLIGHT
 
   select
     border: 2px solid LIGHT_GREY
@@ -55,26 +98,63 @@ TALK_MARGIN = 10px auto
     font-size: 0.8em
     padding: 0.2em
 
+
+  .polaroid-image
+    max-width: 640px
+
   .talk-list-content
     display: flex
     section
       width: 100%
+    @media screen and (max-width: TALK_BREAKPOINT)
+      display: block
 
   .talk-sidebar
     @extend .talk-module
     width: 300px
     margin: 10px 0 10px 10px
+    overflow: hidden
+    white-space: pre-wrap
+
+    @media screen and (max-width: TALK_BREAKPOINT)
+      margin: 0
+      width: 100%
+
+    section
+      margin: 5px 0
+
+    .talk-active-users
+      position: relative
+
+      ul
+        list-style: none
+        margin: 0
+        padding: 0
+        width: 100%
+
+        li
+          display: inline-block
+          max-width: 45%
+          margin: 0 5px
+          overflow: hidden
+          white-space: nowrap
+          text-overflow: ellipsis
+
+      .paginator
+        .paginator-first, .paginator-page-selector, .paginator-last
+          display: none
 
   .talk-moderation
     margin-bottom: 10px
 
     > button
-      border: 1px solid LIGHT_GREY
-      color: LIGHT_GREY
+      color: COPY_GREY_LIGHT
       background: transparent
 
       &:hover
-        color: orangered
+        color: white
+        background: lighten(orangered, 10%)
+        border-color: orangered
 
     .talk-moderation-children
       p
@@ -98,6 +178,31 @@ TALK_MARGIN = 10px auto
         margin-bottom: 10px
         border-left: 4px solid orangered
 
+      .talk-sticky-list
+        ul
+          list-style: none
+          margin: 0
+          padding: 0
+
+          li
+            display: block
+            padding: 5px
+            cursor: move
+            cursor: -webkit-grab
+            cursor: -moz-grab
+            cursor: grab
+
+            &:before
+              margin: 0 5px 0 0
+
+            &.talk-sticky-placeholder
+              background: MAIN_HIGHLIGHT
+              color: white
+
+  .talk-board
+    .talk-page-header
+      text-align: left
+
   .talk-board-new-discussion
     @extend .talk-module
     padding: 0px
@@ -113,38 +218,81 @@ TALK_MARGIN = 10px auto
 
   .talk-board-preview
     @extend .talk-module
+    overflow: auto
+    h1 a
+      color: COPY
+      text-decoration: none
+      &:hover
+        color: MAIN_HIGHLIGHT
     p
-      margin: 0.5em 0
+      margin: 0 0 5px 0
+      color: COPY_GREY_MID
 
-  .talk-subject-display
-    @extend .talk-module
-    @extend .polaroid-image
+  .preview-content
+    width: 80%
+    float: left
+  .preview-stats
+    width: 20%
+    float: left
+    margin-top: 5px
+    p i
+      width: 1em
+      text-align: center
 
-    display: inline-block
-    text-align: center
-    background: white
+  .talk-discussion-link
+    color: COPY_GREY_LIGHT
 
-    img
-      max-width: 300px
+    .avatar
+      height: 2em
+      vertical-align: -0.5em
 
-    p
-      margin: 0
-      font-size: 0.8em
+    a
+      text-decoration: none
 
-    h1
-      font-size: 2.5em
+    span a
+      color: black
+      &:hover
+        color: COBOLT_BLUE
+
+    a:last-child
+      color: COPY
+      font-style: italic
+      text-decoration: underline
+
+      &:hover
+        color: COBOLT_BLUE
 
   .talk-discussion-preview
     @extend .talk-module
+    position: relative
     background: transparent
     border-radius: 0
+    border: none
     border-top: 1px solid LIGHT_GREY
+    overflow: auto
+
+    .talk-discussion-link
+      font-size: 0.9em
+
+      .avatar
+        height: 1.5em
+        vertical-align: -25%
+
+    .talk-sticky-pin
+      color: #FF4642
+      margin: 0 10px 0 0
+      font-weight: 600
 
     &:last-child
       border-bottom: 1px solid LIGHT_GREY
 
     h1
       font-weight: 100
+      font-size: 1.25em
+      a
+        text-decoration: none
+        &:hover
+          text-decoration: underline
     p
       margin: 0
     .talk-discussion-preview-author
@@ -154,9 +302,23 @@ TALK_MARGIN = 10px auto
   .talk-discussion
     max-width: 960px
     margin: 0 auto
-
     .talk-comment-box
       width: 80%
+
+    > p
+      text-align: center
+      > span.sign-in
+        text-decoration: underline
+        color: MAIN_HIGHLIGHT
+        cursor: pointer
+
+    &-locked
+      color: FAILURE
+
+    &-comments
+      &.locked
+        pointer-events: none
+        opacity: 0.6
 
   .talk-comment
     overflow: auto
@@ -166,8 +328,10 @@ TALK_MARGIN = 10px auto
         background-color: gold
 
     .talk-comment-preview-content
-      blockquote
+      > blockquote
         opacity: 0.5
+      img
+        max-width: 100%
     .subject-container
       max-width: 100%
       img
@@ -180,18 +344,27 @@ TALK_MARGIN = 10px auto
     @extend .talk-module
     text-align: center
     background: transparent
-    font-size: 0.75em
+    border: none
     color: grey
     float: left
     width: 20%
+
+    p
+      word-wrap: break-word
+      width: 60%
+      margin: 0 auto 2px auto
+      line-height: 1em
 
     .avatar
       border-radius: 50%
       height: 50px
 
-    p
-      width: 40%
-      margin: 0 auto
+    .user-mention-name
+      color: COPY_GREY_LIGHT
+      font-size: 0.8em
+
+    .project-role
+      font-size: 0.5em
 
   .talk-comment-body
     width: 80%
@@ -212,6 +385,21 @@ TALK_MARGIN = 10px auto
 
       .talk-comment-like-button i.upvoted
         color: MAIN_HIGHLIGHT
+
+  .inbox-form
+    input[type='text']
+      width: 50%
+    textarea
+      width: 100%
+      margin: 5px 0
+    button[type='submit']
+      background: SUCCESS
+      border: SUCCESS
+      color: white
+      &:hover
+        background: darken(SUCCESS, 10%)
+        border: darken(SUCCESS, 10%)
+
 
   .talk-comment-feedback
     color: green
@@ -235,11 +423,25 @@ TALK_MARGIN = 10px auto
         width: 100%
         height: 150px
 
+      section
+        text-align: right
+        margin-top: 5px
+
       section button
+        display: inline
         &.active
           opacity: 0.5
         &:not(:last-child)
           @extend .talk-left-buttons
+          margin-right: 5px
+
+        &[type='submit']
+          color: white
+          background-color: SUCCESS
+          border-color: darken(SUCCESS, 10%)
+          &:hover
+            background-color: lighten(SUCCESS, 10%)
+            border-color: SUCCESS
 
     .talk-comment-buttons-container
       display: block
@@ -289,7 +491,26 @@ TALK_MARGIN = 10px auto
             button
               opacity: 1
 
+    .submit-error
+      color: FAILURE
+
+
+  .talk-edit-discussion-form
+    .toggle
+      display: block
+      font-weight: bold
+      margin: 10px 0
+
   .talk-search-result
     background: rgba(TALK_BACKGROUND, 0.5)
     margin: TALK_MARGIN
     padding: TALK_PADDING
+
+  .private-message-form input
+    margin-left: 5px
+    width: 50%
+    border: none
+    font-size: 1em
+
+.talk-comment-help
+  margin: 2em

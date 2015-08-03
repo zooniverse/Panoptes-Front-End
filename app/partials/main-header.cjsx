@@ -12,33 +12,25 @@ auth = require '../api/auth'
 counterpart.registerTranslations 'en',
   mainNav:
     home: 'Home'
-    discover: 'Discover'
-    learn: 'Learn'
+    projects: 'Projects'
+    about: 'About'
+    collect: 'Collect'
     talk: 'Talk'
+    daily: 'Daily Zooniverse'
+    blog: 'Blog'
     lab: 'Build a project'
 
 module.exports = React.createClass
   displayName: 'MainHeader'
 
-  mixins: [PromiseToSetState]
-
-  getInitialState: ->
+  getDefaultProps: ->
     user: null
 
   componentDidMount: ->
-    @handleAuthChange()
-    auth.listen @handleAuthChange
-    @addEventListeners()
-
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
-    @removeEventListeners()
-
-  addEventListeners: ->
     if @checkIfOnHome() then document.addEventListener 'scroll', @onScroll
     window.addEventListener 'hashchange', @onHashChange
 
-  removeEventListeners: ->
+  componentWillUnmount: ->
     document.removeEventListener 'scroll', @onScroll
     window.removeEventListener 'hashchange', @onHashChange
 
@@ -52,9 +44,6 @@ module.exports = React.createClass
   checkIfOnHome: ->
     return true if window.location.hash is '#/'
 
-  handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent()
-
   render: ->
     <header className="main-header">
       <div className="main-title" ref="mainTitle">
@@ -62,16 +51,17 @@ module.exports = React.createClass
           <ZooniverseLogo />
         </Link>
         <nav className="main-nav">
-          <Link to="projects" className="main-nav-item"><Translate content="mainNav.discover" /></Link>
-          <Link to="about" className="main-nav-item"><Translate content="mainNav.learn" /></Link>
-          {unless process.env.NODE_ENV is 'production'
-            <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>}
+          <Link to="projects" className="main-nav-item"><Translate content="mainNav.projects" /></Link>
+          <Link to="about" className="main-nav-item"><Translate content="mainNav.about" /></Link>
+          <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
+          <Link to="collections" className="main-nav-item"><Translate content="mainNav.collect" /></Link>
+          <a href="http://daily.zooniverse.org/" className="main-nav-item" target="_blank"><Translate content="mainNav.daily" /></a>
+          <a href="http://blog.zooniverse.org/"  className="main-nav-item" target="_blank"><Translate content="mainNav.blog" /></a>
           <hr />
-          {if @state.user?
-            <Link to="lab" className="main-nav-item"><Translate className="minor" content="mainNav.lab" /></Link>}
+          <Link to="lab" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
         </nav>
-        {if @state.user?
-          <AccountBar user={@state.user} />
+        {if @props.user?
+          <AccountBar user={@props.user} />
         else
           <LoginBar />}
       </div>
@@ -82,7 +72,7 @@ module.exports = React.createClass
   onScroll: ->
     mainTitle = React.findDOMNode(@refs.mainTitle)
 
-    if window.scrollY >= 200
+    if window.scrollY >= 1
       mainTitle.classList.add 'header-sticky'
 
     if window.scrollY is 0

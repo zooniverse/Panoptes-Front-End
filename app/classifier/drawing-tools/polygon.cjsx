@@ -30,6 +30,21 @@ module.exports = React.createClass
     isComplete: (mark) ->
       mark.closed
 
+    forceComplete: (mark) ->
+      mark.closed = true
+
+  componentWillMount: ->
+    @setState
+      mouseX: @props.mark.points[0].x
+      mouseY: @props.mark.points[0].y
+      mouseWithinViewer: true
+
+  componentDidMount: ->
+    document.addEventListener 'mousemove', @handleMouseMove
+
+  componentWillUnmount: ->
+    document.removeEventListener 'mousemove', @handleMouseMove
+
   render: ->
     averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
     finisherRadius = FINISHER_RADIUS / averageScale
@@ -59,7 +74,10 @@ module.exports = React.createClass
         <g>
           <DeleteButton tool={this} x={deleteButtonPosition.x} y={deleteButtonPosition.y} />
 
-          {if not @props.mark.closed and  @props.mark.points.length > 2
+          {if not @props.mark.closed and @props.mark.points.length and @state.mouseWithinViewer
+            <line className="guideline" x1={lastPoint.x} y1={lastPoint.y} x2={@state.mouseX} y2={@state.mouseY} />}
+
+          {if not @props.mark.closed and @props.mark.points.length > 2
             <line className="guideline" x1={lastPoint.x} y1={lastPoint.y} x2={firstPoint.x} y2={firstPoint.y} />}
 
           {for point, i in @props.mark.points
@@ -73,7 +91,25 @@ module.exports = React.createClass
         </g>}
     </DrawingToolRoot>
 
+  handleMouseMove: (e) ->
+    xPos = e.pageX - pageXOffset
+    yPos = e.pageY - pageYOffset
+
+    mouseWithinViewer = if xPos < @props.containerRect.left || xPos > @props.containerRect.right
+      false
+    else if yPos < @props.containerRect.top || yPos > @props.containerRect.bottom
+      false
+    else
+      true
+
+    @setState
+      mouseX: (xPos - @props.containerRect.left) / @props.scale.horizontal
+      mouseY: (yPos - @props.containerRect.top) / @props.scale.vertical
+      mouseWithinViewer: mouseWithinViewer
+
   handleFinishClick: ->
+    document.removeEventListener 'mousemove', @handleMouseMove
+
     @props.mark.closed = true
     @props.onChange()
 
