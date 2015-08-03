@@ -8,7 +8,7 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'survey'
+  first_task: 'draw'
   tasks:
     survey:
       type: 'survey'
@@ -53,7 +53,7 @@ workflow = apiClient.type('workflows').create
               label: 'Green'
               image: '//placehold.it/64.png?text=Green'
 
-      choicesOrder: ['aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar']
+      choicesOrder: ['aa', 'ar', 'to']
       choices:
         aa:
           label: 'Aardvark'
@@ -83,7 +83,7 @@ workflow = apiClient.type('workflows').create
           confusions: {}
 
         to:
-          label: 'Tortoise, the longest-named animal in the whole entire world'
+          label: 'Tortoise'
           description: 'Little green house with legs'
           images: [
             '//placehold.it/320x240.png?text=Tortoise 1'
