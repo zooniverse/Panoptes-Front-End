@@ -1,36 +1,44 @@
 React = require 'react'
 BoardPreview = require './board-preview'
+ActiveUsers = require './active-users'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
-ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
+HandlePropChanges = require '../lib/handle-prop-changes'
 Moderation = require './lib/moderation'
-ChangeListener = require '../components/change-listener'
-PromiseRenderer = require '../components/promise-renderer'
 ProjectLinker = require './lib/project-linker'
 ROLES = require './lib/roles'
-auth = require '../api/auth'
+{Link} = require 'react-router'
+Loading = require '../components/loading-indicator'
+PopularTags = require './popular-tags'
+require '../api/sugar'
+
+DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
+DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
-
-  getInitialState: ->
-    boards: []
+  mixins: [HandlePropChanges]
 
   propTypes:
     section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
 
-  componentWillMount: ->
-    @setBoards()
+  propChangeHandlers:
+    'section': 'setBoards'
 
-  componentWillReceiveProps: ->
-    @setBoards()
+  getInitialState: ->
+    boards: []
+    loading: true
+
+  componentWillMount: ->
+    sugarClient.subscribeTo('zooniverse') if @props.section is 'zooniverse'
+
+  componentWillUnmount: ->
+    sugarClient.unsubscribeFrom('zooniverse') if @props.section is 'zooniverse'
 
   setBoards: ->
-    auth.checkCurrent().then =>
-      talkClient.type('boards').get(section: @props.section)
-        .then (boards) =>
-          @setState {boards}
+    talkClient.type('boards').get(section: @props.section)
+      .then (boards) =>
+        @setState {boards, loading: false}
 
   onSubmitBoard: (e) ->
     e.preventDefault()
@@ -58,56 +66,90 @@ module?.exports = React.createClass
   boardPreview: (data, i) ->
     <BoardPreview {...@props} key={i} data={data} />
 
-  tag: (t, i) ->
-    <p key={i}>#{t.name}</p>
-
   roleReadLabel: (data, i) ->
-    <label key={i}><input type="radio" name="role-read" value={data}/>{data}</label>
+    <label key={i}><input type="radio" name="role-read" defaultChecked={i is ROLES.length-1} value={data}/>{data}</label>
 
   roleWriteLabel: (data, i) ->
-    <label key={i}><input type="radio" name="role-write" value={data}/>{data}</label>
+    <label key={i}><input type="radio" name="role-write" defaultChecked={i is ROLES.length-1}value={data}/>{data}</label>
+
+  createSubjectDefaultBoard: ->
+    board =
+      title: DEFAULT_BOARD_TITLE,
+      description: DEFAULT_BOARD_DESCRIPTION
+      subject_default: true,
+      permissions: {read: 'all', write: 'all'}
+      section: @props.section
+
+    talkClient.type('boards').create(board).save()
+      .then =>
+        @setBoards()
 
   render: ->
     <div className="talk-home">
-      <Moderation section={@props.section}>
-        <form onSubmit={@onSubmitBoard}>
-          <h2>Moderator Zone:</h2>
-          <h3>Add a board:</h3>
-          <input type="text" ref="boardTitle" placeholder="Board Title"/>
+      {if @props.user?
+        <Moderation section={@props.section} user={@props.user}>
+          <div>
+            <h2>Moderator Zone:</h2>
+            {if @props.section isnt 'zooniverse'
+              <PromiseRenderer promise={talkClient.type('boards').get({section: @props.section, subject_default: true}).index(0)}>{(defaultBoard) =>
+                if not defaultBoard?
+                  <button onClick={@createSubjectDefaultBoard}><i className="fa fa-photo" /> Activate Talk Subject Comments Board</button>
+              }</PromiseRenderer>
+              }
 
-          <textarea type="text" ref="boardDescription" placeholder="Board Description"></textarea><br />
+            <Link
+              to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
+              params={
+                if (@props.params?.owner and @props.params?.name)
+                  {owner: @props.params.owner, name: @props.params.name}
+                else
+                  {}
+              }>
+              View Reported Comments
+            </Link>
 
-          <h4>Can Read:</h4>
-          <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+            <form onSubmit={@onSubmitBoard}>
+              <h3>Add a board:</h3>
+              <input type="text" ref="boardTitle" placeholder="Board Title"/>
 
-          <h4>Can Write:</h4>
-          <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+              <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
 
-          <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
-        </form>
-      </Moderation>
+              <h4>Can Read:</h4>
+              <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+
+              <h4>Can Write:</h4>
+              <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+
+              <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
+            </form>
+          </div>
+        </Moderation>}
 
       <div className="talk-list-content">
         <section>
-          {if @state.boards.length
-            @state.boards.map(@boardPreview)
-           else
-            <p>There are currently no boards.</p>}
+          {if @state.loading
+            <Loading />
+           else if @state.boards?.length is 0
+            <p>There are currently no boards.</p>
+           else if @state.boards?.length
+             @state.boards.map(@boardPreview)}
         </section>
 
         <div className="talk-sidebar">
           <h2>Talk Sidebar</h2>
 
-          <h3>Jump to a project</h3>
           <ProjectLinker />
 
-          <PromiseRenderer promise={talkClient.type('tags').get(section: @props.section)}>{(tags) =>
-            if tags.length
-              <section>
-                <h3>Latest Tags:</h3>
-                {tags.map(@tag)}
-              </section>
-          }</PromiseRenderer>
+          <section>
+            <PopularTags
+              header={<h3>Popular Tags:</h3>}
+              section={@props.section}
+              params={@props.params} />
+          </section>
+
+          <section>
+            <ActiveUsers section={@props.section} />
+          </section>
         </div>
       </div>
     </div>

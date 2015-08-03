@@ -4,9 +4,9 @@ CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 discussionValidations = require './lib/discussion-validations'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
 Loading = require '../components/loading-indicator'
 PromiseRenderer = require '../components/promise-renderer'
+projectSection = require '../talk/lib/project-section'
 merge = require 'lodash.merge'
 
 module?.exports = React.createClass
@@ -15,7 +15,7 @@ module?.exports = React.createClass
   propTypes:
     boardId: React.PropTypes.number
     onCreateDiscussion: React.PropTypes.func
-    focusImage: React.PropTypes.object # subject response for focus image
+    subject: React.PropTypes.object # subject response
 
   getInitialState: ->
     discussionValidationErrors: []
@@ -31,27 +31,26 @@ module?.exports = React.createClass
     @setState {discussionValidationErrors}
     !!discussionValidationErrors.length
 
-  onSubmitDiscussion: (e, commentText, focusImage) ->
+  onSubmitDiscussion: (e, commentText, subject) ->
     @setState loading: true
     form = @getDOMNode().querySelector('.talk-board-new-discussion')
     titleInput = form.querySelector('input[type="text"]')
     title = titleInput.value
 
-    authClient.checkCurrent()
-      .then (user) =>
-        user_id = user.id
-        board_id = @props.boardId ? +form.querySelector('label > input[type="radio"]:checked').value
-        body = commentText
-        focus_id = +@props.focusImage?.id
+    user_id = @props.user.id
+    board_id = @props.boardId ? +form.querySelector('label > input[type="radio"]:checked').value
+    body = commentText
+    focus_id = +@props.subject?.id
+    focus_type = 'Subject' if !!focus_id
 
-        comments = [merge({}, {user_id, body}, ({focus_id} if !!focus_id))]
-        discussion = {title, user_id, board_id, comments}
+    comments = [merge({}, {user_id, body}, ({focus_id, focus_type} if !!focus_id))]
+    discussion = {title, user_id, board_id, comments}
 
-        talkClient.type('discussions').create(discussion).save()
-          .then (discussion) =>
-            @setState loading: false
-            titleInput.value = ''
-            @props.onCreateDiscussion?(discussion)
+    talkClient.type('discussions').create(discussion).save()
+      .then (discussion) =>
+        @setState loading: false
+        titleInput.value = ''
+        @props.onCreateDiscussion?(discussion)
 
   boardRadio: (board, i) ->
     <label key={board.id}>
@@ -66,10 +65,10 @@ module?.exports = React.createClass
   render: ->
     <div className="discussion-new-form">
       <div className="talk-board-new-discussion">
-        <h2>Create a disussion +</h2>
+        <h2>Create a discussion +</h2>
         {if not @props.boardId
-          <PromiseRenderer promise={@props.focusImage.get('project')}>{(project) =>
-            <PromiseRenderer promise={talkClient.type('boards').get(section: "#{project.id}-#{project.title}")}>{(boards) =>
+          <PromiseRenderer promise={@props.subject.get('project')}>{(project) =>
+            <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project))}>{(boards) =>
               <div>
                 <h2>Board</h2>
                 {boards.map @boardRadio}
@@ -82,6 +81,7 @@ module?.exports = React.createClass
           type="text"
           placeholder="Discussion Title"/>
         <CommentBox
+          user={@props.user}
           header={null}
           validationCheck={@discussionValidations}
           validationErrors={@state.discussionValidationErrors}
@@ -89,7 +89,7 @@ module?.exports = React.createClass
           placeholder={"""Add a comment here to start the discussion.
           This comment will appear at the start of the discussion."""}
           onSubmitComment={@onSubmitDiscussion}
-          focusImage={@props.focusImage}
+          subject={@props.subject}
           submit="Create Discussion"/>
         {if @state.loading then <Loading />}
       </div>

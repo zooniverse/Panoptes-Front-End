@@ -4,7 +4,7 @@ Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
 tasks = require './tasks'
 Tooltip = require '../components/tooltip'
-sessionSubjects = require '../lib/session-subjects'
+seenThisSession = require '../lib/seen-this-session'
 
 NOOP = Function.prototype
 
@@ -12,6 +12,7 @@ module.exports = React.createClass
   displayName: 'SubjectViewer' # TODO: Rename this.
 
   getDefaultProps: ->
+    project: null
     classification: null
     workflow: null
     annotation: null
@@ -24,10 +25,21 @@ module.exports = React.createClass
     frame: 0
     selectedMark: null
     detailsTooltipOffset: ''
+    sizeRect: null
+    toolRect: null
+
+  componentDidMount: ->
+    addEventListener 'resize', @handleResize
+    addEventListener 'scroll', @handleResize
+    @setState alreadySeen: @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
+
+  componentWillUnmount: ->
+    removeEventListener 'resize', @handleResize
+    removeEventListener 'scroll', @handleResize
 
   getScale: ->
     ALMOST_ZERO = 0.01 # Prevent divide-by-zero errors when there is no image.
-    rect = @refs.sizeRect?.getDOMNode().getBoundingClientRect()
+    rect = @state.sizeRect
     horizontal = (rect?.width || ALMOST_ZERO) / (@state.naturalWidth || ALMOST_ZERO)
     vertical = (rect?.height || ALMOST_ZERO) / (@state.naturalHeight || ALMOST_ZERO)
     {horizontal, vertical}
@@ -39,18 +51,43 @@ module.exports = React.createClass
     y = (e.pageY - pageYOffset - rect.top) / scale.vertical
     {x, y}
 
+  getDetailsTooltipProps: ->
+    sizeRect = @state.sizeRect
+    toolRect = @state.toolRect
+
+    probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
+    [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
+      ['left', 'right', 'width', 1, 'top center', 'bottom center']
+    else
+      ['top', 'bottom', 'height', 0, 'middle left', 'middle right']
+
+    # NOTE: These offsets aren't perfect, but they're close enough for now.
+
+    arrowStyle = {}
+    toolCenter = ((toolRect[start] + toolRect[end]) / 2) - sizeRect[start]
+    distance = toolCenter / sizeRect[dimension]
+    arrowStyle[start] = "#{distance * 100}%"
+
+    offset = [0, 0]
+    fromCenter = distance - 0.5
+    offset[offsetIndex] = "#{(fromCenter / -2) * 100}%"
+    offset = offset.join ' '
+    {attachment, targetAttachment, offset, arrowStyle}
+
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.annotation is @props.annotation
       @selectMark null, null
+    @handleResize()
 
   componentDidUpdate: ->
     setTimeout (=> @refs.detailsTooltip?.forceUpdate()), 100
 
   render: ->
-    scale = @getScale()
+    currentTaskDescription = @props.workflow.tasks[@props.annotation?.task]
+    currentTaskComponent = tasks[currentTaskDescription?.type]
 
     <div className="subject-area">
-      <SubjectViewer subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
+      <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
           <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
@@ -68,9 +105,9 @@ module.exports = React.createClass
                 {for mark, m in annotation.value
                   mark._key ?= Math.random()
                   toolDescription = taskDescription.tools[mark.tool]
-
                   toolEnv =
-                    scale: scale
+                    containerRect: @state.sizeRect
+                    scale: @getScale()
                     disabled: isPriorAnnotation
                     selected: mark is @state.selectedMark
                     getEventOffset: @getEventOffset
@@ -90,7 +127,7 @@ module.exports = React.createClass
               </g>}
         </svg>
 
-        {if @props.subject.already_seen or @props.subject.id in sessionSubjects
+        {if @state.alreadySeen 
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
             Already seen!
             {if @state.showWarning
@@ -110,31 +147,11 @@ module.exports = React.createClass
               </Tooltip>}
           </button>}
 
-        {if @state.selectedMark? and @refs.selectedTool?
+        {if @state.toolRect? and @state.selectedMark?
           toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
           if toolDescription?.details?.length > 0
-            sizeRect = @refs.sizeRect.getDOMNode().getBoundingClientRect()
-            toolRect = @refs.selectedTool.getDOMNode().getBoundingClientRect()
 
-            probablyCentered = 0.15 > Math.abs (sizeRect.left - (innerWidth - sizeRect.right)) / innerWidth
-            [start, end, dimension, offsetIndex, attachment, targetAttachment] = if probablyCentered
-              ['left', 'right', 'width', 1, 'top center', 'bottom center']
-            else
-              ['top', 'bottom', 'height', 0, 'middle left', 'middle right']
-
-            # NOTE: These offsets aren't perfect, but they're close enough for now.
-
-            arrowStyle = {}
-            toolCenter = ((toolRect[start] + toolRect[end]) / 2) - sizeRect[start]
-            distance = toolCenter / sizeRect[dimension]
-            arrowStyle[start] = "#{distance * 100}%"
-
-            offset = [0, 0]
-            fromCenter = distance - 0.5
-            offset[offsetIndex] = "#{(fromCenter / -2) * 100}%"
-            offset = offset.join ' '
-
-            <Tooltip ref="detailsTooltip" attachment={attachment} targetAttachment={targetAttachment} offset={offset} arrowStyle={arrowStyle}>
+            <Tooltip ref="detailsTooltip" {...@getDetailsTooltipProps()}>
               {for detailTask, i in toolDescription.details
                 detailTask._key ?= Math.random()
                 TaskComponent = tasks[detailTask.type]
@@ -144,14 +161,47 @@ module.exports = React.createClass
               </div>
             </Tooltip>}
       </SubjectViewer>
+
+      {if currentTaskComponent is tasks.survey
+        @renderSurveyAnnotation()}
     </div>
+
+  renderSurveyAnnotation: ->
+    taskDescription = @props.workflow.tasks[@props.annotation?.task]
+
+    <div>
+      {for identification, i in @props.annotation.value
+        identification._key ?= Math.random()
+
+        answersByQuestion = taskDescription.questionsOrder.map (questionID) ->
+          if questionID of identification.answers
+            answerLabels = [].concat(identification.answers[questionID]).map (answerID) ->
+              taskDescription.questions[questionID].answers[answerID].label
+            answerLabels.join ', '
+        answersList = answersByQuestion.filter(Boolean).join '; '
+
+        <span key={identification._key}>
+          <span className="survey-identification-proxy" title={answersList}>
+            {taskDescription.choices[identification.choice].label}
+            {' '}
+            <button type="button" className="survey-identification-remove" title="Remove" onClick={@handleSurveyAnnotationRemoval}>&times;</button>
+          </span>
+          {' '}
+        </span>}
+    </div>
+
+  handleSurveyAnnotationRemoval: (index) ->
+    @props.annotation.value.splice index, 1
+    @updateAnnotations()
 
   handleSubjectFrameLoad: (e) ->
     if e.target.tagName.toUpperCase() is 'IMG'
       {naturalWidth, naturalHeight} = e.target
-      unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
-        @setState {naturalWidth, naturalHeight}
-      @props.onLoad? arguments...
+      if @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
+        @handleResize()
+      else
+        @setState {naturalWidth, naturalHeight}, @handleResize
+      @props.onLoad? e, @state.frame
 
   handleFrameChange: (frame) ->
     @setState {frame}
@@ -162,6 +212,11 @@ module.exports = React.createClass
   updateAnnotations: ->
     @props.classification.update
       annotations: @props.classification.annotations
+
+  handleResize: ->
+    @setState
+      sizeRect: @refs.sizeRect.getDOMNode().getBoundingClientRect()
+      toolRect: @refs.selectedTool?.getDOMNode().getBoundingClientRect()
 
   handleInitStart: (e) ->
     taskDescription = @props.workflow.tasks[@props.annotation.task]
@@ -233,8 +288,7 @@ module.exports = React.createClass
       annotation.value.splice index, 1
       annotation.value.push mark
     @setState selectedMark: mark, =>
-      if mark?.details?
-        @forceUpdate() # Re-render to reposition the details tooltip.
+      @handleResize() if mark?.details? # hack to show the details box
 
   destroyMark: (annotation, mark) ->
     if mark is @state.selectedMark

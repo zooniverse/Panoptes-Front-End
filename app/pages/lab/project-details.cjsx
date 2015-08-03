@@ -1,20 +1,26 @@
 React = require 'react'
-BoundResourceMixin = require '../../lib/bound-resource-mixin'
+AutoSave = require '../../components/auto-save'
+handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
-moment = require 'moment'
+counterpart = require 'counterpart'
+DataExportButton = require '../../partials/data-export-button'
+DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
+TagSearch = require '../../components/tag-search'
+MarkdownEditor = require '../../components/markdown-editor'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
 
+counterpart.registerTranslations 'en',
+  projectDetails:
+    classificationExport: "Request new classification export"
+    subjectExport: "Request new subject export"
+
 ExternalLinksEditor = React.createClass
   displayName: 'ExternalLinksEditor'
-
-  mixins: [BoundResourceMixin]
-
-  boundResource: 'project'
 
   getDefaultProps: ->
     project: {}
@@ -31,15 +37,27 @@ ExternalLinksEditor = React.createClass
         <tbody>
           {for link, i in @props.project.urls
             link._key ?= Math.random()
-            <tr key={link._key}>
-              <td><input type="text" name="urls.#{i}.label" value={link.label} onChange={@handleChange}/></td>
-              <td><input type="text" name="urls.#{i}.url" value={link.url} onChange={@handleChange}/></td>
-              <td><button type="button" onClick={@handleRemoveLink.bind this, link._key}><i className="fa fa-remove"></i></button></td>
-            </tr>}
+            <AutoSave key={link._key} tag="tr" resource={@props.project}>
+              <td>
+                <input type="text" name="urls.#{i}.label" value={@props.project.urls[i].label} onChange={handleInputChange.bind @props.project} />
+              </td>
+              <td>
+                <input type="text" name="urls.#{i}.url" value={@props.project.urls[i].url} onChange={handleInputChange.bind @props.project} />
+              </td>
+              <td>
+                <AutoSave resource={@props.project}>
+                  <button type="button" onClick={@handleRemoveLink.bind this, link}>
+                    <i className="fa fa-remove"></i>
+                  </button>
+                </AutoSave>
+              </td>
+            </AutoSave>}
         </tbody>
       </table>
 
-      <button type="button" onClick={@handleAddLink}>Add a link</button>
+      <AutoSave resource={@props.project}>
+        <button type="button" onClick={@handleAddLink}>Add a link</button>
+      </AutoSave>
     </div>
 
   handleAddLink: ->
@@ -49,56 +67,43 @@ ExternalLinksEditor = React.createClass
       url: 'https://example.com/'
     @props.project.update changes
 
-  handleRemoveLink: (linkKey) ->
-    changes = {}
-    changes['urls'] = @props.project.urls.filter((link) -> link._key != linkKey)
+  handleRemoveLink: (linkToRemove) ->
+    changes =
+      urls: (link for link in @props.project.urls when link isnt linkToRemove)
     @props.project.update changes
 
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
 
-  mixins: [BoundResourceMixin]
-
-  boundResource: 'project'
-
   getDefaultProps: ->
-    project: null
+    project: {}
 
   getInitialState: ->
     avatarError: null
     backgroundError: null
-    exportRequested: false
-    exportError: null
 
   render: ->
     # Failures on media GETs are acceptable here,
     # but the JSON-API lib doesn't cache failed requests,
     # so do it manually:
 
-    @avatarSrcGet ?= @props.project.get 'avatar'
-      .then (avatar) ->
-        avatar.src
+    @avatarGet ?= @props.project.get 'avatar'
       .catch ->
-        ''
+        null
 
-    @backgroundSrcGet ?= @props.project.get 'background'
-      .then (background) ->
-        background.src
+    @backgroundGet ?= @props.project.get 'background'
       .catch ->
-        ''
-
-    @classificationsExportGet ?= @props.project.get 'classifications_export'
-      .catch ->
-        []
+        null
 
     <div>
       <p className="form-help">Input the basic information about your project, and set up its home page.</p>
       <div className="columns-container">
         <div>
           Avatar<br />
-          <PromiseRenderer promise={@avatarSrcGet} then={(avatarSrc) =>
+          <PromiseRenderer promise={@avatarGet} then={(avatar) =>
+            console.log 'Avatar is', avatar
             placeholder = <div className="form-help content-container">Drop an avatar image here</div>
-            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatarSrc} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
+            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
           } />
           {if @state.avatarError
             <div className="form-help error">{@state.avatarError.toString()}</div>}
@@ -108,9 +113,10 @@ module.exports = React.createClass
           <hr />
 
           Background image<br />
-          <PromiseRenderer promise={@backgroundSrcGet} then={(backgroundSrc) =>
+          <PromiseRenderer promise={@backgroundGet} then={(background) =>
+            console.log 'Background is', background
             placeholder = <div className="form-help content-container">Drop a background image here</div>
-            <ImageSelector maxSize={MAX_BACKGROUND_SIZE} defaultValue={backgroundSrc} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
+            <ImageSelector maxSize={MAX_BACKGROUND_SIZE} defaultValue={background?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
           } />
           {if @state.backgroundError
             <div className="form-help error">{@state.backgroundError.toString()}</div>}
@@ -120,79 +126,83 @@ module.exports = React.createClass
           <hr />
 
           <p>
-            <label>
-              <input type="checkbox" name="configuration.user_chooses_workflow" checked={@props.project.configuration?.user_chooses_workflow} onChange={@handleChange} />
+            <AutoSave tag="label" resource={@props.project}>
+              {checked = @props.project.configuration?.user_chooses_workflow}
+              <input type="checkbox" name="configuration.user_chooses_workflow" defaultChecked={checked} defaultValue={checked} onChange={handleInputChange.bind @props.project} />{' '}
               Volunteers can choose which workflow they work on
-            </label><br />
+            </AutoSave>
+            <br />
             <small className="form-help">If you have multiple workflows, check this to let volunteers select which workflow they want to to work on; otherwise, they’ll be served randomly.</small>
           </p>
         </div>
 
         <div className="column">
-          <p>
-            Name<br />
-            <input type="text" className="standard-input full" name="display_name" value={@props.project.display_name} disabled={@state.saveInProgress} onChange={@handleChange} />
-            <small className="form-help">The project name is the first thing people will see about the project, and it will show up in the project URL. Try to keep it short and sweet.</small>
-          </p>
+          <DisplayNameSlugEditor resource={@props.project} resourceType="project" />
 
           <p>
-            Description<br />
-            <textarea className="standard-input full" name="description" value={@props.project.description} row="2" disabled={@state.saveInProgress} onChange={@handleChange} />
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Description</span>
+              <br />
+              <input className="standard-input full" name="description" value={@props.project.description} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
             <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.</small>
           </p>
 
           <p>
-            Introduction<br />
-            <textarea className="standard-input full" name="introduction" value={@props.project.introduction} rows="10" disabled={@state.saveInProgress} onChange={@handleChange} />
-            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. Note this field renders markdown (<insert link to best markdown tutorial>), so you can add formatting.</small>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Introduction</span>
+              <br />
+              <MarkdownEditor className="full" name="introduction" rows="10" value={@props.project.introduction} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
+            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page.</small>
+          </p>
+
+          <p>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Workflow Description</span>
+              <br />
+              <textarea className="standard-input full" name="workflow_description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
+            <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do.</small>
           </p>
 
           <div>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Tags</span>
+              <br />
+              <TagSearch name="tags" multi={true} value={@props.project.tags} onChange={@handleTagChange} />
+            </AutoSave>
+            <small className="form-help">Enter a list of tags separated by commas to help users find your project.</small>
+          </div>
+
+          <div>
             External links<br />
-            <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and discuss tabs.</small>
+            <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and talk tabs.</small>
             <ExternalLinksEditor project={@props.project} />
           </div>
 
-          <p>
-            <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
-            {@renderSaveStatus()}
-          </p>
-        </div>
+          <hr />
 
-        <hr />
-
-        <div>
           Data export<br />
-          <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>Request new data export</button>{' '}
-          <small className="form-help">
-            CSV format.{' '}
-            <PromiseRenderer promise={@classificationsExportGet}>{([mostRecent]) =>
-              if mostRecent?
-                <span>
-                  Most recent data available requested{' '}
-                  <a href={mostRecent.src}>{moment(mostRecent.updated_at).fromNow()}</a>.
-                </span>
-              else
-                <span>Never requested.</span>
-            }</PromiseRenderer>
-            <br />
-          </small>
-
-          {if @state.exportError?
-            <div className="form-help error">{@state.exportError.toString()}</div>
-          else if @state.exportRequested
-            <div className="form-help success">
-              We’ve received your request, check your email for a link to your data soon!
-            </div>}
+          <DataExportButton
+            project={@props.project}
+            buttonKey="projectDetails.classificationExport"
+            exportType="classifications_export"  />
+          <DataExportButton
+            project={@props.project}
+            buttonKey="projectDetails.subjectExport"
+            exportType="subjects_export"  />
         </div>
-
-        <p>
-          <button type="button" className="major-button" disabled={@state.saveInProgress or not @props.project.hasUnsavedChanges()} onClick={@saveResource}>Save</button>{' '}
-          {@renderSaveStatus()}
-        </p>
-
       </div>
     </div>
+
+  handleTagChange: (value) ->
+    event =
+      target:
+        value: if value is '' then [] else value.split(',')
+        name: 'tags'
+        dataset: {}
+    handleInputChange.call @props.project, event
 
   handleMediaChange: (type, file) ->
     errorProp = "#{type}Error"
@@ -206,18 +216,11 @@ module.exports = React.createClass
         putFile resource.src, file
       .then =>
         @props.project.uncacheLink type
-        @["#{type}SrcGet"] = null # Uncache the local request so that rerendering makes it again.
-        @props.project.emit 'change'
+        @["#{type}Get"] = null # Uncache the local request so that rerendering makes it again.
+        @props.project.refresh() # Update the resource's links.
+      .then =>
+        @props.project.emit 'change' # Re-render
       .catch (error) =>
         newState = {}
         newState[errorProp] = error
         @setState newState
-
-  requestDataExport: ->
-    @setState exportError: null
-    apiClient.post @props.project._getURL('classifications_export'), media: content_type: 'text/csv'
-      .then =>
-        @classificationsExportGet = null
-        @setState exportRequested: true
-      .catch (error) =>
-        @setState exportError: error

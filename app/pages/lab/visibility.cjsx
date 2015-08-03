@@ -1,4 +1,5 @@
 React = require 'react'
+SetToggle = require '../../lib/set-toggle'
 
 module.exports = React.createClass
   displayName: 'EditProjectVisibility'
@@ -12,6 +13,10 @@ module.exports = React.createClass
       private: false
       beta_requested: false
       launch_requested: false
+
+  mixins: [SetToggle]
+
+  setterProperty: 'project'
 
   render: ->
     looksDisabled =
@@ -92,18 +97,3 @@ module.exports = React.createClass
         </div>
       </div>
     </div>
-
-  set: (property, value) ->
-    @state.error = null
-    @state.setting[property] = true
-    @forceUpdate()
-
-    changes = {}
-    changes[property] = value
-
-    @props.project.update(changes).save()
-      .catch (error) =>
-        @setState {error}
-      .then =>
-        @state.setting[property] = false
-        @forceUpdate()

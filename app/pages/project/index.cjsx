@@ -6,9 +6,8 @@ Translate = require 'react-translate-component'
 {Link, RouteHandler} = require 'react-router'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
-PromiseToSetState = require '../../lib/promise-to-set-state'
-auth = require '../../api/auth'
 apiClient = window.api = require '../../api/client'
+require '../../api/sugar'
 LoadingIndicator = require '../../components/loading-indicator'
 
 SOCIAL_ICONS =
@@ -29,13 +28,14 @@ SOCIAL_ICONS =
 counterpart.registerTranslations 'en',
   project:
     loading: 'Loading project'
+    disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
     nav:
-      science: 'Science'
+      research: 'Research'
       results: 'Results'
       classify: 'Classify'
       faq: 'FAQ'
       education: 'Education'
-      discuss: 'Discuss'
+      talk: 'Talk'
 
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
@@ -44,17 +44,18 @@ ProjectPage = React.createClass
     project: null
 
   componentDidMount: ->
+    sugarClient.subscribeTo "project-#{ @props.project.id }"
     document.documentElement.classList.add 'on-project-page'
 
   componentWillUnmount: ->
+    sugarClient.unsubscribeFrom "project-#{ @props.project.id }"
     document.documentElement.classList.remove 'on-project-page'
 
   render: ->
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
-        params =
-          owner: owner.slug
-          name: @props.project.slug
+        [ownerName, name] = @props.project.slug.split('/')
+        params = {owner: ownerName, name: name}
 
         <div className="project-page">
           <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
@@ -68,31 +69,35 @@ ProjectPage = React.createClass
               } catch={null} />
               {@props.project.display_name}
             </Link>
-            <Link to="project-science-case" params={params} className="tabbed-content-tab">
-              <Translate content="project.nav.science" />
+            <Link to="project-research" params={params} className="tabbed-content-tab">
+              <Translate content="project.nav.research" />
             </Link>
-            {if @props.project.result
-              <Link to="project-results" params={params} className="tabbed-content-tab">
-                <Translate content="project.nav.results" />
-              </Link>}
-            {if @props.project.redirect
-              <a href={@props.project.redirect} className="tabbed-content-tab">Visit project</a>
-            else
-              <Link to="project-classify" params={params} className="classify tabbed-content-tab">
-                <Translate content="project.nav.classify" />
-              </Link>}
-            {if @props.project.faq
-              <Link to="project-faq" params={params} className="tabbed-content-tab">
-                <Translate content="project.nav.faq" />
-              </Link>}
-            {if @props.project.education_content
-              <Link to="project-education" params={params} className="tabbed-content-tab">
-                <Translate content="project.nav.education" />
-              </Link>}
-            {unless process.env.NODE_ENV is 'production'
-              <Link to="project-talk" params={params} className="tabbed-content-tab">
-                <Translate content="project.nav.discuss" />
-              </Link>}
+            <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
+              pageTitles = pages.filter((page) -> page.content isnt '' and page.content?).reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
+              <span>
+                {if pageTitles.result
+                  <Link to="project-results" params={params} className="tabbed-content-tab">
+                    {pageTitles.result}
+                  </Link>}
+                {if @props.project.redirect
+                  <a href={@props.project.redirect} className="tabbed-content-tab">Visit project</a>
+                else
+                  <Link to="project-classify" params={params} className="classify tabbed-content-tab">
+                    <Translate content="project.nav.classify" />
+                  </Link>}
+                {if pageTitles.faq
+                  <Link to="project-faq" params={params} className="tabbed-content-tab">
+                    {pageTitles.faq}
+                  </Link>}
+                {if pageTitles.education
+                  <Link to="project-education" params={params} className="tabbed-content-tab">
+                    {pageTitles.education}
+                  </Link>}
+              </span>
+            }</PromiseRenderer>
+            <Link to="project-talk" params={params} className="tabbed-content-tab">
+              <Translate content="project.nav.talk" />
+            </Link>
             {for link, i in @props.project.urls
               link._key ?= Math.random()
               {label} = link
@@ -106,20 +111,23 @@ ProjectPage = React.createClass
           </nav>
 
           <RouteHandler {...@props} owner={owner} />
+          {unless @props.project.launch_approved or @props.project.beta_approved
+            <Translate className="project-disclaimer" content="project.disclaimer" component="p" />
+          }
         </div>
       }</PromiseRenderer>
     }</ChangeListener>
 
 module.exports = React.createClass
   displayName: 'ProjectPageWrapper'
-
-  mixins: [TitleMixin, HandlePropChanges, PromiseToSetState]
+  mixins: [TitleMixin, HandlePropChanges]
 
   title: ->
     @state.project?.display_name ? '(Loading)'
 
   getDefaultProps: ->
     params: null
+    user: null
 
   getInitialState: ->
     project: null
@@ -127,37 +135,24 @@ module.exports = React.createClass
   propChangeHandlers:
     'params.owner': 'fetchProject'
     'params.name': 'fetchProject'
-
-  componentDidMount: ->
-    auth.listen 'change', @fetchProject
-
-  componentWillUnmount: ->
-    auth.stopListening 'change', @fetchProject
+    'user': 'fetchProject'
 
   fetchProject: (_, props = @props) ->
-    unless @state.pending.project?
-      query =
-        owner: props.params.owner
-        slug: props.params.name
+    @setState error: false
+    query =
+      slug: props.params.owner + '/' + props.params.name
 
-      @promiseToSetState project: auth.checkCurrent().then ->
-        apiClient.type('projects').get query
-          .catch ->
-            []
-          .then ([project]) ->
-            unless project?
-              throw new Error "Couldn't find project #{props.params.owner}/#{props.params.name}"
-            project
+    apiClient.type('projects').get query
+      .then ([project]) =>
+        @setState { project }
+      .catch =>
+        @setState error: true
 
   render: ->
-    if @state.project?
-      <ProjectPage {...@props} project={@state.project} />
-    else
-      <div className="content-container">
-        {if @state.rejected.project?
-          <code>{@state.rejected.project.toString()}</code>
-        else
-          <LoadingIndicator>
-            <Translate content="project.loading" />
-          </LoadingIndicator>}
-      </div>
+    <div className="project-page-wrapper">
+      {if @state.error
+        <p>There was an error retrieving the project.</p>}
+
+      {if @state.project? && !@state.error
+        <ProjectPage {...@props} project={@state.project} />}
+    </div>

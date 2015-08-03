@@ -25,7 +25,6 @@ module.exports = React.createClass
 
   componentDidMount: ->
     if @props.autoStart
-      console.log 'Auto-starting'
       @start()
 
   render: ->
@@ -77,6 +76,8 @@ module.exports = React.createClass
             uploads: @state.uploads.concat success
             batch: @state.batch.concat subject
         .catch (error) =>
+          subject.delete()
+
           @setState
             errors: @state.errors.concat error
         .then =>

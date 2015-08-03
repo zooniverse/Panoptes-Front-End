@@ -16,11 +16,11 @@ counterpart.registerTranslations 'en',
     required: 'Required'
     looksGood: 'Looks good'
     userName: 'User name'
-    badChars: 'Don’t use weird characters: %(chars)s'
+    badChars: "Only letters, numbers, '.', '_', and '-'."
     nameConflict: 'That username is taken'
     forgotPassword: 'Forget your password?'
     password: 'Password'
-    passwordTooShort: 'Too short'
+    passwordTooShort: 'Must be at least 8 characters'
     confirmPassword: 'Confirm password'
     passwordsDontMatch: 'These don’t match'
     email: 'Email address'
@@ -30,20 +30,19 @@ counterpart.registerTranslations 'en',
     agreeToPrivacyPolicy: 'You agree to our %(link)s (required)'
     privacyPolicy: 'privacy policy'
     okayToEmail: 'It’s okay to send me email every once in a while.'
+    betaTester: 'I’d like to help test new projects, and be emailed when they’re available.'
     register: 'Register'
     alreadySignedIn: 'Signed in as %(name)s'
     signOut: 'Sign out'
 
 module.exports = React.createClass
   displayName: 'RegisterForm'
-
   mixins: [PromiseToSetState]
 
   getDefaultProps: ->
     project: {}
 
   getInitialState: ->
-    user: null
     badNameChars: null
     nameConflict: null
     passwordTooShort: null
@@ -52,27 +51,15 @@ module.exports = React.createClass
     agreedToPrivacyPolicy: null
     error: null
 
-  componentDidMount: ->
-    auth.listen @handleAuthChange
-    @handleAuthChange()
-
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    @promiseToSetState user: auth.checkCurrent()
-
   render: ->
     {badNameChars, nameConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
-    <form onSubmit={@handleSubmit}>
+    <form method="POST" onSubmit={@handleSubmit}>
       <label>
         <span className="columns-container inline spread">
           <Translate content="registerForm.userName" />
           {if badNameChars?.length > 0
-            chars = for char in badNameChars
-              <kbd key={char}>{char}</kbd>
-            <Translate className="form-help error" content="registerForm.badChars" chars={chars} />
+            <Translate className="form-help error" content="registerForm.badChars" />
           else if "nameConflict" of @state.pending
             <LoadingIndicator />
           else if nameConflict?
@@ -88,7 +75,7 @@ module.exports = React.createClass
                 <Translate content="registerForm.looksGood" />
               </span>}
         </span>
-        <input type="text" ref="name" className="standard-input full" disabled={@state.user?} autoFocus onChange={@handleNameChange} />
+        <input type="text" ref="name" className="standard-input full" disabled={@props.user?} autoFocus onChange={@handleNameChange} />
       </label>
 
       <br />
@@ -99,7 +86,7 @@ module.exports = React.createClass
           {if passwordTooShort
             <Translate className="form-help error" content="registerForm.passwordTooShort" />}
         </span>
-        <input type="password" ref="password" className="standard-input full" disabled={@state.user?} onChange={@handlePasswordChange} />
+        <input type="password" ref="password" className="standard-input full" disabled={@props.user?} onChange={@handlePasswordChange} />
       </label>
 
       <br />
@@ -110,10 +97,10 @@ module.exports = React.createClass
           {if passwordsDontMatch?
             if passwordsDontMatch
               <Translate className="form-help error" content="registerForm.passwordsDontMatch" />
-            else
+            else if not passwordTooShort
               <Translate className="form-help success" content="registerForm.looksGood" />}
         </span>
-        <input type="password" ref="confirmedPassword" className="standard-input full" disabled={@state.user?} onChange={@handlePasswordChange} />
+        <input type="password" ref="confirmedPassword" className="standard-input full" disabled={@state.props?} onChange={@handlePasswordChange} />
       </label>
 
       <br />
@@ -136,7 +123,7 @@ module.exports = React.createClass
           else
             <Translate className="form-help info" content="registerForm.required" />}
         </span>
-        <input type="text" ref="email" className="standard-input full" disabled={@state.user?} onChange={@handleEmailChange} />
+        <input type="text" ref="email" className="standard-input full" disabled={@state.props?} onChange={@handleEmailChange} />
       </label>
 
       <br />
@@ -145,7 +132,7 @@ module.exports = React.createClass
         <span className="columns-container inline spread">
           <Translate content="registerForm.realName" />
         </span>
-        <input type="text" ref="realName" className="standard-input full" disabled={@state.user?} />
+        <input type="text" ref="realName" className="standard-input full" disabled={@props.user?} />
         <Translate component="span" className="form-help info" content="registerForm.whyRealName" />
       </label>
 
@@ -153,8 +140,8 @@ module.exports = React.createClass
       <br />
 
       <label>
-        <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@state.user?} onChange={@handlePrivacyPolicyChange} />
-        {privacyPolicyLink = <a href="#/todo/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
+        <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@props.user?} onChange={@handlePrivacyPolicyChange} />
+        {privacyPolicyLink = <a target="_blank" href="#/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
         <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
       </label>
 
@@ -162,16 +149,21 @@ module.exports = React.createClass
       <br />
 
       <label>
-        <input type="checkbox" ref="okayToEmail" disabled={@state.user?} onChange={@forceUpdate.bind this, null} />
+        <input type="checkbox" ref="okayToEmail" defaultChecked={true} disabled={@props.user?} onChange={@forceUpdate.bind this, null} />
         <Translate component="span" content="registerForm.okayToEmail" />
+      </label><br />
+
+      <label>
+        <input type="checkbox" ref="betaTester" disabled={@props.user?} onChange={@forceUpdate.bind this, null} />
+        <Translate component="span" content="registerForm.betaTester" />
       </label><br />
 
       <p style={textAlign: 'center'}>
         {if 'user' of @state.pending
           <LoadingIndicator />
-        else if @state.user?
+        else if @props.user?
           <span className="form-help warning">
-            <Translate content="registerForm.alreadySignedIn" name={@state.user.display_name} />{' '}
+            <Translate content="registerForm.alreadySignedIn" name={@props.user.login} />{' '}
             <button type="button" className="minor-button" onClick={@handleSignOut}><Translate content="registerForm.signOut" /></button>
           </span>
         else if @state.error?
@@ -181,7 +173,7 @@ module.exports = React.createClass
       </p>
 
       <div>
-        <button type="submit" className="standard-button full" disabled={not @isFormValid() or Object.keys(@state.pending).length isnt 0 or @state.user?}>
+        <button type="submit" className="standard-button full" disabled={not @isFormValid() or Object.keys(@state.pending).length isnt 0 or @props.user?}>
           <Translate content="registerForm.register" />
         </button>
       </div>
@@ -191,11 +183,12 @@ module.exports = React.createClass
     name = @refs.name.getDOMNode().value
 
     exists = name.length isnt 0
-    badChars = (char for char in name.split('') when char isnt encodeURIComponent char)
+    badChars = (char for char in name.split('') when char.match(/[\w\-\']/) is null)
 
     @setState
       badNameChars: badChars
       nameConflict: null
+      nameExists: exists
 
     if exists and badChars.length is 0
       @debouncedCheckForNameConflict ?= debounce @checkForNameConflict, REMOTE_CHECK_DELAY
@@ -203,8 +196,8 @@ module.exports = React.createClass
 
   debouncedCheckForNameConflict: null
   checkForNameConflict: (username) ->
-    @promiseToSetState nameConflict: auth.register(display_name: username).catch (error) ->
-      error.message.match(/display_name(.+)taken/mi) ? false
+    @promiseToSetState nameConflict: auth.register(login: username).catch (error) ->
+      error.message.match(/login(.+)taken/mi) ? false
 
   handlePasswordChange: ->
     password = @refs.password.getDOMNode().value
@@ -236,21 +229,23 @@ module.exports = React.createClass
     @setState agreesToPrivacyPolicy: @refs.agreesToPrivacyPolicy.getDOMNode().checked
 
   isFormValid: ->
-    {badNameChars, nameConflict, passwordsDontMatch, emailConflict, agreesToPrivacyPolicy} = @state
-    badNameChars?.length is 0 and not nameConflict and not passwordsDontMatch and not emailConflict and agreesToPrivacyPolicy
+    {badNameChars, nameConflict, passwordsDontMatch, emailConflict, agreesToPrivacyPolicy, nameExists} = @state
+    badNameChars?.length is 0 and not nameConflict and not passwordsDontMatch and not emailConflict and nameExists and agreesToPrivacyPolicy
 
   handleSubmit: (e) ->
     e.preventDefault()
-    display_name = @refs.name.getDOMNode().value
+    login = @refs.name.getDOMNode().value
     password = @refs.password.getDOMNode().value
     email = @refs.email.getDOMNode().value
     credited_name = @refs.realName.getDOMNode().value
     global_email_communication = @refs.okayToEmail.getDOMNode().checked
+    project_email_communication = global_email_communication
+    beta_email_communication = @refs.betaTester.getDOMNode().checked
     project_id = @props.project?.id
 
     @setState error: null
     @props.onSubmit?()
-    auth.register {display_name, password, email, credited_name, global_email_communication, project_id}
+    auth.register {login, password, email, credited_name, project_email_communication, global_email_communication, project_id, beta_email_communication}
       .then =>
         @props.onSuccess? arguments...
       .catch (error) =>

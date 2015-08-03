@@ -4,8 +4,6 @@ PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
-PromiseToSetState = require '../../lib/promise-to-set-state'
-auth = require '../../api/auth'
 apiClient = require '../../api/client'
 counterpart = require 'counterpart'
 ChangeListener = require '../../components/change-listener'
@@ -45,8 +43,8 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-details" params={linkParams} className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
             Project details
           </Link></li>
-          <li><Link to="edit-project-science-case" params={linkParams} className="nav-list-item" title="Explain your research to your audience here in as much detail as you’d like.">
-            Science case
+          <li><Link to="edit-project-research" params={linkParams} className="nav-list-item" title="Explain your research to your audience here in as much detail as you’d like.">
+            Research
           </Link></li>
           <li><Link to="edit-project-results" params={linkParams} className="nav-list-item" title="Once your project has hit its stride, share the results of your project with your volunteers here.">
             Results
@@ -60,7 +58,10 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
             Collaborators
           </Link></li>
-          <li><Link to="edit-project-visibility" params={linkParams} className="nav-list-item">
+          <li><Link to="edit-project-media" params={linkParams} className="nav-list-item" title="Add any images you’d like to use in this project’s introduction, science case, results, FAQ, or education content pages.">
+            Media
+          </Link></li>
+          <li><Link to="edit-project-visibility" params={linkParams} className="nav-list-item" title="Decide whether your project is public and whether it's ready to go live.">
             Visibility
           </Link></li>
 
@@ -80,7 +81,7 @@ EditProjectPage = React.createClass
                   <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
 
                 <li className="nav-list-item">
-                  <button type="button" onClick={@createNewWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
+                  <button type="button" onClick={@createNewWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
                     New workflow{' '}
                     <LoadingIndicator off={not @state.workflowCreationInProgress} />
                   </button>{' '}
@@ -99,8 +100,9 @@ EditProjectPage = React.createClass
                 {renderSubjectSetListItem = (subjectSet) ->
                   subjectSetLinkParams = Object.create linkParams
                   subjectSetLinkParams.subjectSetID = subjectSet.id
+                  subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>
                   <li key={subjectSet.id}>
-                    <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item" title="A subject is an image (or group of images) to be analyzed.">{subjectSet.display_name}</Link>
+                    <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item" title="A subject is an image (or group of images) to be analyzed.">{subjectSetListLabel}</Link>
                   </li>}
 
                 {for subjectSet in subjectSets
@@ -208,9 +210,7 @@ EditProjectPage = React.createClass
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
-
   mixins: [TitleMixin]
-
   title: 'Edit'
 
   getDefaultProps: ->
@@ -218,40 +218,34 @@ module.exports = React.createClass
       projectID: '0'
 
   render: ->
-    <ChangeListener target={auth} handler={=>
-      <PromiseRenderer promise={auth.checkCurrent()} then={(user) =>
-        if user?
-          getProject = auth.checkCurrent().then =>
-            apiClient.type('projects').get @props.params.projectID
+    if @props.user?
+      getProject = apiClient.type('projects').get @props.params.projectID
 
-          getOwners = getProject.then (project) =>
-            project.get('project_roles').then (projectRoles) =>
-              owners = for projectRole in projectRoles when 'owner' in projectRole.roles or 'collaborator' in projectRole.roles
-                projectRole.get 'owner'
-              Promise.all owners
+      getOwners = getProject.then (project) =>
+        project.get('project_roles').then (projectRoles) =>
+          owners = for projectRole in projectRoles when 'owner' in projectRole.roles or 'collaborator' in projectRole.roles
+            projectRole.get 'owner'
+          Promise.all owners
 
-          getProjectAndOwners = Promise.all [getProject, getOwners]
+      getProjectAndOwners = Promise.all [getProject, getOwners]
 
-          <PromiseRenderer promise={getProjectAndOwners} pending={=>
-            <div className="content-container">
-              <p className="form-help">Loading project</p>
-            </div>
-          } then={([project, owners]) =>
-            console.log user, owners
-            if user in owners
-              <EditProjectPage {...@props} project={project} />
-            else
-              <div className="content-container">
-                <p>You don’t have permission to edit this project.</p>
-              </div>
-          } catch={(error) =>
-            <div className="content-container">
-              <p className="form-help error">{error.toString()}</p>
-            </div>
-          } />
+      <PromiseRenderer promise={getProjectAndOwners} pending={=>
+        <div className="content-container">
+          <p className="form-help">Loading project</p>
+        </div>
+      } then={([project, owners]) =>
+        if @props.user in owners
+          <EditProjectPage {...@props} project={project} />
         else
           <div className="content-container">
-            <p>You need to be signed in to use the lab.</p>
+            <p>You don’t have permission to edit this project.</p>
           </div>
+      } catch={(error) =>
+        <div className="content-container">
+          <p className="form-help error">{error.toString()}</p>
+        </div>
       } />
-    } />
+    else
+      <div className="content-container">
+        <p>You need to be signed in to use the lab.</p>
+      </div>

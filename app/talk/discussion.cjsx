@@ -1,143 +1,165 @@
-React = require 'react'
+React = {findDOMNode} = require 'react'
 Comment = require './comment'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
-SubjectDisplay = require './subject-display'
 Router = require 'react-router'
 talkClient = require '../api/talk'
-authClient = require '../api/auth'
 Paginator = require './lib/paginator'
-ChangeListener = require '../components/change-listener'
 PromiseRenderer = require '../components/promise-renderer'
-PromiseToSetState = require '../lib/promise-to-set-state'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
 {Link} = require 'react-router'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
+DisplayRoles = require './lib/display-roles'
+talkConfig = require './config'
+SignInPrompt = require '../partials/sign-in-prompt'
+alert = require '../lib/alert'
 
-PAGE_SIZE = 3
+PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
-  mixins: [Router.Navigation, PromiseToSetState]
+  mixins: [Router.Navigation, Router.State]
 
   getInitialState: ->
     comments: []
     discussion: {}
     commentsMeta: {}
-    user: null
     commentValidationErrors: []
 
+  getDefaultProps: ->
+    query: page: 1
+
+  promptToSignIn: ->
+    alert (resolve) -> <SignInPrompt onChoose={resolve} />
+
+  componentWillReceiveProps: (nextProps) ->
+    if @props.params.discussion isnt nextProps.params.discussion
+      @setDiscussion(nextProps.params.discussion)
+        .then => @setComments(nextProps.query.page ? 1)
+    else if nextProps.query.page isnt @props.query.page
+      @setComments(nextProps.query.page ? 1)
+
   componentDidMount: ->
-    @handleAuthChange()
-    authClient.listen @handleAuthChange
-
-  componentWillUnmount: ->
-    authClient.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    @promiseToSetState user: authClient.checkCurrent()
-
-  goToPage: (n) ->
-    @transitionTo(@props.path, @props.params, {page: n})
-    @setComments(n)
+    @shouldScrollToBottom = true if @props.query?.scrollToLastComment
 
   componentWillMount: ->
-    @setDiscussion()
-    page = @props.query?.page ? 1
-    @setComments(page)
+    @setDiscussion().then =>
+      if @props.query?.comment
+        commentId = @props.query?.comment
+        comments = @state.discussion.links.comments
+        commentNumber = comments.indexOf(commentId) + 1
+        page = Math.ceil commentNumber / PAGE_SIZE
+
+        if page isnt @props.query.page
+          @props.query.page = page
+          @transitionTo @getPath(), @props.params, @props.query
+
+      @setComments(@props.query.page ? 1)
 
   commentsRequest: (page) ->
     {board, discussion} = @props.params
     talkClient.type('comments').get({discussion_id: discussion, page_size: PAGE_SIZE, page})
 
-  discussionsRequest: ->
-    {discussion} = @props.params
-    talkClient.type('discussions').get({id: discussion})
-
-  setComments: (page = 1, callback) ->
+  setComments: (page = @props.query?.page) ->
     @commentsRequest(page)
       .then (comments) =>
         commentsMeta = comments[0]?.getMeta()
         @setState {comments, commentsMeta}, =>
-          callback?()
+          if @shouldScrollToBottom and comments.length
+            @scrollToBottomOfDiscussion()
+            @shouldScrollToBottom = false
 
-  setDiscussion: ->
-    @discussionsRequest()
+  scrollToBottomOfDiscussion: ->
+    React.findDOMNode(@)?.scrollIntoView(false)
+
+  discussionsRequest: (discussion = @props.params.discussion) ->
+    talkClient.type('discussions').get({id: discussion, sort_linked_comments: 'created_at'})
+
+  setDiscussion: (discussion = @props.params.discussion) ->
+    @discussionsRequest(discussion)
       .then (discussion) =>
         @setState {discussion: discussion[0]}
 
-  onUpdateComment: (textContent, focusImage, commentId) ->
+  onUpdateComment: (textContent, subject, commentId) ->
     {discussion} = @props.params
     commentToUpdate = talkClient.type('comments').get(id: commentId)
 
     discussion_id = +discussion
     body = textContent
-    focus_id = +focusImage?.id ? null
-    comment = merge {}, {discussion_id, body}, ({focus_id} if !!focus_id)
+    focus_id = +subject?.id ? null
+    focus_type = 'Subject' if !!focus_id
+    comment = merge {}, {discussion_id, body}, ({focus_id, focus_type} if !!focus_id)
 
     commentToUpdate.update(comment).save()
       .then (comment) =>
-        @setComments()
+        @setComments(@props.query.page)
 
   onDeleteComment: (commentId) ->
     {board, discussion} = @props.params
     if window.confirm("Are you sure that you want to delete this comment?")
       talkClient.type('comments').get(id: commentId).delete()
-        .then (deleted) => @setComments()
+        .then (deleted) => @setComments(@props.query.page)
 
-  onSubmitComment: (e, textContent, focusImage) ->
+  onSubmitComment: (e, textContent, subject) ->
     {discussion} = @props.params
-    user_id = @state.user.id
+    user_id = @props.user.id
     discussion_id = +discussion
     body = textContent
-    focus_id = +focusImage?.id ? null
-    comment = merge {}, {user_id, discussion_id, body}, ({focus_id} if !!focus_id)
+    focus_id = +subject?.id ? null
+    focus_type = 'Subject' if !!focus_id
+    comment = merge {}, {user_id, discussion_id, body}, ({focus_id, focus_type} if !!focus_id)
 
     talkClient.type('comments').create(comment).save()
       .then (comment) =>
-        @setComments(@state.commentsMeta?.page, => @goToPage(@state.commentsMeta?.page_count))
+        @setComments(@state.commentsMeta?.page_count)
 
   onLikeComment: (commentId) ->
-    user = @state.user
-
-    talkClient.type('comments').get(commentId.toString())
+    talkClient.type('comments').get(commentId)
       .then (comment) =>
-        return alert("Hey you can't upvote your own comment!") if +user.id is +comment.user_id
+        return alert("Hey you can't upvote your own comment!") if +@props.user.id is +comment.user_id
 
-        voteUrl = (comment.href + if upvotedByCurrentUser(user, comment) then '/remove_upvote' else '/upvote')
+        voteUrl = (comment.href + if upvotedByCurrentUser(@props.user, comment) then '/remove_upvote' else '/upvote')
         talkClient.request('put', voteUrl, null, {})
           .then (voted) =>
-            @setComments(@state.commentsMeta?.page)
+            @setComments(@props.query.page)
 
   onClickReply: (user, comment) ->
     # TODO: provide link to user / comment
-    reply = "> In reply to #{user.display_name}'s comment: \n#{comment.body}\n\n"
-    @setState {reply}
+    if (not @props.user)
+      @promptToSignIn()
+    else
+      quotedComment = comment.body.split("\n")
+        .map (line) -> "> #{line}"
+        .join("\n")
+
+      reply = "> In reply to #{user.display_name}'s comment: \n#{quotedComment}\n\n"
+      @setState {reply}
+
+    findDOMNode(@).scrollIntoView(false)
 
   comment: (data, i) ->
     <Comment
+      {...@props}
       key={data.id}
       data={data}
       active={+data.id is +@props.query?.comment}
-      user={@state.user}
+      user={@props.user}
       onClickReply={@onClickReply}
       onLikeComment={@onLikeComment}
       onUpdateComment={@onUpdateComment}
       onDeleteComment={@onDeleteComment}/>
 
-  onPageChange: (page) ->
-    @goToPage(page)
-
   onClickDeleteDiscussion: ->
     if window.confirm("Are you sure that you want to delete this discussions? All of the comments and discussions will be lost forever.")
       @discussionsRequest().delete()
         .then (deleted) =>
-          @setComments()
-          @transitionTo('talk')
+          @setComments(@props.query.page)
+          {owner, name} = @props.params
+          if (owner and name) then @transitionTo('project-talk', {owner, name}) else @transitionTo('talk')
 
   commentValidations: (commentBody) ->
     # TODO: return true if any additional validations fail
@@ -145,13 +167,20 @@ module?.exports = React.createClass
     @setState {commentValidationErrors}
     !!commentValidationErrors.length
 
-  onEditTitle: (e) ->
-    input = document.querySelector('.talk-edit-discussion-title-form input')
-    title = input.value
-
-    @discussionsRequest().update({title}).save()
+  onEditSubmit: (e) ->
+    e.preventDefault()
+    form = document.querySelector('.talk-edit-discussion-form')
+    title = form.querySelector('[name="title"]').value
+    sticky = form.querySelector('[name="sticky"]').checked
+    locked = form.querySelector('[name="locked"]').checked
+    @discussionsRequest().update({title, sticky, locked}).save()
       .then (discussion) =>
         @setState {discussion: discussion[0]}
+
+  lockedMessage: ->
+    <div className="talk-discussion-locked">
+      <i className="fa fa-lock"></i> This discussion has been Locked and is read-only
+    </div>
 
   render: ->
     {discussion} = @state
@@ -159,15 +188,21 @@ module?.exports = React.createClass
     <div className="talk-discussion">
       <h1 className="talk-page-header">{discussion?.title}</h1>
 
-      {if discussion
-        <Moderation section={discussion.section}>
+      {if discussion && @props.user?
+        <Moderation section={discussion.section} user={@props.user}>
           <div>
             <h2>Moderator Zone:</h2>
             {if discussion?.title
-              <form className="talk-edit-discussion-title-form" onSubmit={@onEditTitle}>
+              <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
                 <h3>Edit Title:</h3>
-                <input onChange={@onChangeTitle} defaultValue={discussion?.title}/>
-                <button type="submit">Update Title</button>
+                <input name="title" defaultValue={discussion?.title}/>
+                <label className="toggle">Sticky:
+                  <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
+                </label>
+                <label className="toggle">Locked:
+                  <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
+                </label>
+                <button type="submit">Update</button>
               </form>}
 
             <button onClick={@onClickDeleteDiscussion}>
@@ -176,30 +211,41 @@ module?.exports = React.createClass
           </div>
         </Moderation>}
 
-      {@state.comments.map(@comment)}
+      {if discussion?.locked
+        @lockedMessage()
+        }
 
-      <Paginator page={+@state.commentsMeta.page} onPageChange={@onPageChange} pageCount={@state.commentsMeta.page_count} />
+      <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
 
-      <ChangeListener target={authClient}>{=>
-        <PromiseRenderer promise={authClient.checkCurrent()}>{(user) =>
-          if user
-            <section>
-              <div className="talk-comment-author">
-                <Avatar user={user} />
-                <p>
-                  <Link to="user-profile" params={name: user.display_name}>{user.display_name}</Link>
-                </p>
-              </div>
+      <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
+        {@state.comments.map(@comment)}
+      </div>
 
-              <CommentBox
-                validationCheck={@commentValidations}
-                validationErrors={@state.commentValidationErrors}
-                onSubmitComment={@onSubmitComment}
-                reply={@state.reply}
-                header={null} />
-            </section>
-          else
-            <p>Please sign in to contribute to the disucssion</p>
-        }</PromiseRenderer>
-      }</ChangeListener>
+      <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
+
+      {if discussion?.locked
+        @lockedMessage()
+      else if @props.user?
+        <section>
+          <div className="talk-comment-author">
+            <Avatar user={@props.user} />
+            <p>
+              <Link to="user-profile" params={name: @props.user.login}>{@props.user.display_name}</Link>
+            </p>
+            <div className="user-mention-name">@{@props.user.login}</div>
+            <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.user.id, section: ['zooniverse', discussion.section], is_shown: true, page_size: 100)}>{(roles) =>
+              <DisplayRoles roles={roles} section={discussion.section} />
+            }</PromiseRenderer>
+          </div>
+
+          <CommentBox
+            user={@props.user}
+            validationCheck={@commentValidations}
+            validationErrors={@state.commentValidationErrors}
+            onSubmitComment={@onSubmitComment}
+            reply={@state.reply}
+            header={null} />
+        </section>
+      else
+        <p>Please <span className="sign-in" onClick={@promptToSignIn}>sign in</span> to contribute to the discussion</p>}
     </div>

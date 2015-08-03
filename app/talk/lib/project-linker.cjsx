@@ -2,6 +2,7 @@ React = require 'react'
 apiClient = require '../../api/client'
 {Navigation} = require 'react-router'
 Loading = require '../../components/loading-indicator'
+FEATURED_PRODUCT_IDS = require '../../lib/featured-projects'
 
 module?.exports = React.createClass
   displayName: 'ProjectLinker'
@@ -14,22 +15,33 @@ module?.exports = React.createClass
   componentWillMount: ->
     @setProjects()
 
+  shouldComponentUpdate: (nextProps, nextState) ->
+    nextState.projects isnt @state.projects
+
   goToProjectTalk: (projectId) ->
-    apiClient.type('projects').get(projectId.toString()).then (project) =>
-      project.get('owner').then (owner) =>
-        @transitionTo 'project-talk', 
-          owner: owner.slug
-          name: project.slug
+    for project in @state.projects
+      break if project.id is projectId
+
+    [owner, name] = project.slug.split('/')
+    @transitionTo 'project-talk',
+      owner: owner
+      name: name
 
   setProjects: (metadata) ->
-    apiClient.type('projects').get()
+    # query =
+    #   launch_approved: true
+    #   include: 'owners'
+
+    # For launch, since I can't filter by if a project has a redirect or not.
+    query = FEATURED_PRODUCT_IDS
+
+    apiClient.type('projects').get(query)
       .then (projects) =>
         @setState {projects, loading: false}
 
-  onChangeSelect: (e) ->
-    projectsSelect = React.findDOMNode(@).querySelector('select')
-    projectId = projectsSelect.options[projectsSelect.selectedIndex].value
-    @goToProjectTalk(projectId)
+  onChangeSelect: ->
+    projectsSelect = React.findDOMNode @.refs.projectsSelect
+    @goToProjectTalk projectsSelect.value
 
   projectOption: (d, i) ->
     <option key={d.id} value={d.id}>
@@ -42,7 +54,8 @@ module?.exports = React.createClass
 
     else if @state.projects.length
       <div className="project-linker">
-        <select onChange={@onChangeSelect}>
+        <select onChange={@onChangeSelect} defaultValue="defaultValue" ref="projectsSelect">
+          <option key={Math.random()}  value="defaultValue" disabled>Jump to a project</option>
           {@state.projects.map(@projectOption)}
         </select>
       </div>

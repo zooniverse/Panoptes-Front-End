@@ -1,16 +1,10 @@
 React = require 'react'
-talkClient = require '../api/talk'
-apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
+parseSection = require './lib/parse-section'
+talkConfig = require './config'
 {Link, Navigation} = require 'react-router'
 
-PAGE_SIZE = 3
-
-getPageOfComment = (comment, discussion, pageSize) ->
-  # comment resource, discussion resource, integer
-  comments = discussion.links.comments
-  commentNumber = comments.indexOf(comment.id.toString()) + 1
-  Math.ceil commentNumber / pageSize
+PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkCommentLink'
@@ -23,60 +17,41 @@ module?.exports = React.createClass
   getDefaultProps: ->
     pageSize: PAGE_SIZE
 
-  getInitialState: ->
-    discussion: {}
-
-  componentWillMount: ->
-    @setDiscussion()
-
-  setDiscussion: ->
-    {comment} = @props
-    talkClient.type('discussions').get(comment.discussion_id.toString())
-      .then (discussion) => @setState {discussion}
-
   projectComment: ->
+    console.log @props.comment.section, 'zooniverse'
     @props.comment.section isnt 'zooniverse'
 
-  render: ->
-    {discussion} = @state
+  projectCommentUrl: ->
     {comment} = @props
+    [ownerName, projectName] = comment.project_slug.split('/')
+    href = @makeHref 'project-talk-discussion',
+      {
+        board: comment.board_id,
+        discussion: comment.discussion_id,
+        owner: ownerName,
+        name: projectName
+      },
+      {
+        comment: comment.id
+      }
+    window.location.origin + window.location.pathname + href
 
+  mainTalkCommentUrl: ->
+    {comment} = @props
+    window.location.origin + window.location.pathname +
+    @makeHref 'talk-discussion',
+      {board: comment.board_id, discussion: comment.discussion_id},
+      {comment: comment.id}
+
+  render: ->
     <div className="talk-comment-link">
-      {if discussion?.id        # Wait for discussion to be set
-        pageOfComment = getPageOfComment(comment, discussion, PAGE_SIZE)
+      {if @projectComment()
+        <a href={@projectCommentUrl()}>
+          {@props.children ? @projectCommentUrl()}
+        </a>
 
-        if @projectComment()
-          projectId = discussion.section.split('-')[0]
-          project = apiClient.type('projects').get(projectId)
-          owner = project.then (project) => project.get('owner')
-
-          <PromiseRenderer promise={Promise.all [project, owner]}>{([project, owner]) =>
-            projectCommentUrl =
-              window.location.origin +
-              @makeHref 'project-talk-discussion',
-                {
-                  board: discussion.board_id,
-                  discussion: discussion.id,
-                  owner: owner.slug,
-                  name: project.slug
-                }
-                {
-                  page: pageOfComment,
-                  comment: comment.id
-                }
-            <a href={projectCommentUrl}>
-              {@props.children ? projectCommentUrl}
-            </a>
-          }</PromiseRenderer>
-
-        else
-          mainTalkCommentUrl =
-            window.location.origin +
-            @makeHref 'talk-discussion',
-              {board: discussion.board_id, discussion: discussion.id},
-              {page: pageOfComment, comment: comment.id}
-          <a href={mainTalkCommentUrl}>
-            {@props.children ? mainTalkCommentUrl}
-          </a>
-          }
+      else
+        <a href={@mainTalkCommentUrl()}>
+          {@props.children ? @mainTalkCommentUrl()}
+        </a>}
     </div>

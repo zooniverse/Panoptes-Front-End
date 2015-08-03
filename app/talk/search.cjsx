@@ -14,9 +14,9 @@ formTalkSearchParams = (object) ->
 
   for key, val of object
     if Array.isArray(val)
-      params.push "#{key}[]=#{val}"
+      params.push "#{key}[]=#{window.encodeURIComponent val}"
     else
-      params.push "#{key}=#{val}"
+      params.push "#{key}=#{window.encodeURIComponent val}"
 
   return params.join '&'
 
@@ -75,7 +75,7 @@ module.exports = React.createClass
         discussionRequests = []
         for comment in searches
           do (comment) ->
-            discussionRequests.push talkClient.type('discussions').get(comment.discussion_id.toString()).then (discussionResult) ->
+            discussionRequests.push talkClient.type('discussions').get(comment.discussion_id, {sort_linked_comments: 'created_at'}).then (discussionResult) ->
               comment.discussion = discussionResult
 
         Promise.all(discussionRequests).then =>
@@ -114,8 +114,8 @@ module.exports = React.createClass
           </div>
 
           <div className="talk-search-results">
-            {@state.results.map (result, i) ->
-              <TalkSearchResult data={result} key={i} />}
+            {@state.results.map (result, i) =>
+              <TalkSearchResult {...@props} data={result} key={i} />}
             <Paginator page={+@state.resultsMeta.page} onPageChange={@onPageChange} pageCount={@state.resultsMeta.page_count} />
           </div>
         </div>}

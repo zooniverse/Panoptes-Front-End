@@ -1,14 +1,9 @@
 JSONAPIClient = {Resource} = require 'json-api-client'
+config = require './config'
 apiClient = require './client'
 authClient = require './auth'
 
-# Staging:
-# https://talk-staging.zooniverse.org
-
-# Local:
-# http://127.0.0.1:3000
-
-talkClient = new JSONAPIClient 'https://talk-staging.zooniverse.org',
+talkClient = new JSONAPIClient config.talkHost,
   'Content-Type': 'application/json'
   'Accept': 'application/json'
 

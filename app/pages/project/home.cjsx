@@ -16,7 +16,7 @@ module.exports = React.createClass
       if project._workflows?
         @setState workflows: project._workflows
       else
-        workflows = project.get 'workflows'
+        workflows = project.get 'workflows', active: true
 
         workflows.then (workflows) =>
           project._workflows = workflows
@@ -27,13 +27,14 @@ module.exports = React.createClass
     workflows: []
 
   render: ->
-    linkParams =
-      owner: @props.owner.slug
-      name: @props.project.slug
+    [owner, name] = @props.project.slug.split('/')
+    linkParams = {owner, name}
 
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
         <div className="description">{@props.project.description}</div>
+        {if @props.project.workflow_description? and @props.project.workflow_description isnt ''
+          <div className="workflow-description">{@props.project.workflow_description}</div>}
 
         {if @props.project.redirect
           <a href={@props.project.redirect} className="call-to-action standard-button">
@@ -52,5 +53,8 @@ module.exports = React.createClass
       </div>
 
       <hr />
-      <Markdown className="introduction content-container">{@props.project.introduction ? ''}</Markdown>
+      <div className="introduction content-container">
+        <h3 className="about-project">About {@props.project.display_name}</h3>
+        <Markdown>{@props.project.introduction ? ''}</Markdown>
+      </div>
     </div>

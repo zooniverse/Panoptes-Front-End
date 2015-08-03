@@ -8,7 +8,7 @@ counterpart.registerTranslations 'en',
   signInForm:
     signIn: 'Sign in'
     signOut: 'Sign out'
-    userName: 'User name'
+    userName: 'User name or Email Address'
     password: 'Password'
     incorrectDetails: 'Username or password incorrect'
     forgotPassword: 'Forget your password?'
@@ -18,46 +18,30 @@ module.exports = React.createClass
 
   getInitialState: ->
     busy: false
-    currentUser: null
-    display_name: ''
+    login: ''
     password: ''
     error: null
 
-  componentDidMount: ->
-    auth.listen @handleAuthChange
-    @handleAuthChange()
-
-  componentWillUnmount: ->
-    auth.stopListening @handleAuthChange
-
-  handleAuthChange: ->
-    @setState busy: true, =>
-      auth.checkCurrent().then (currentUser) =>
-        @setState {currentUser}
-        if currentUser?
-          @setState display_name: currentUser.display_name, password: '********'
-        @setState busy: false
-
   render: ->
-    disabled = @state.currentUser? or @state.busy
+    disabled = @props.user? or @state.busy
 
-    <form onSubmit={@handleSubmit}>
+    <form method="POST" onSubmit={@handleSubmit}>
       <label>
         <Translate content="signInForm.userName" />
-        <input type="text" className="standard-input full" name="display_name" value={@state.display_name} disabled={disabled} autoFocus onChange={@handleInputChange} />
+        <input type="text" className="standard-input full" name="login" value={@props.user?.login} disabled={disabled} autoFocus onChange={@handleInputChange} />
       </label>
 
       <br />
 
       <label>
         <Translate content="signInForm.password" /><br />
-        <input type="password" className="standard-input full" name="password" value={@state.password} disabled={disabled} onChange={@handleInputChange} />
+        <input type="password" className="standard-input full" name="password" value={@props.user?.password} disabled={disabled} onChange={@handleInputChange} />
       </label>
 
       <p style={textAlign: 'center'}>
-        {if @state.currentUser?
+        {if @props.user?
           <div className="form-help">
-            Signed in as {@state.currentUser.display_name}{' '}
+            Signed in as {@props.user.login}{' '}
             <button type="button" className="minor-button" onClick={@handleSignOut}>Sign out</button>
           </div>
 
@@ -77,10 +61,12 @@ module.exports = React.createClass
           <LoadingIndicator />
 
         else
-          <span>&nbsp;</span>}
+          <a href="#/reset-password" onClick={@props.onSuccess}>
+            <Translate content="signInForm.forgotPassword" />
+          </a>}
       </p>
 
-      <button type="submit" className="standard-button full" disabled={disabled or @state.display_name.length is 0 or @state.password.length is 0}>
+      <button type="submit" className="standard-button full" disabled={disabled or @state.login.length is 0 or @state.password.length is 0}>
         <Translate content="signInForm.signIn" />
       </button>
     </form>
@@ -93,14 +79,14 @@ module.exports = React.createClass
   handleSubmit: (e) ->
     e.preventDefault()
     @setState working: true, =>
-      {display_name, password} = @state
-      auth.signIn {display_name, password}
+      {login, password} = @state
+      auth.signIn {login, password}
         .then (user) =>
           @setState working: false, error: null, =>
             @props.onSuccess? user
         .catch (error) =>
           @setState working: false, error: error, =>
-            @getDOMNode().querySelector('[name="display_name"]')?.focus()
+            @getDOMNode().querySelector('[name="login"]')?.focus()
             @props.onFailure? error
       @props.onSubmit? e
 

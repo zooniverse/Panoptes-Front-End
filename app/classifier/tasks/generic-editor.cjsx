@@ -1,4 +1,6 @@
 React = require 'react'
+ChangeListener = require '../../components/change-listener'
+AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
 drawingTools = require '../drawing-tools'
 alert = require '../../lib/alert'
@@ -17,7 +19,6 @@ NextTaskSelector = React.createClass
     value: ''
     isSubtask: false
     onChange: NOOP
-    onDelete: NOOP
 
   render: ->
     tasks = require '.' # Work around circular dependency.
@@ -37,24 +38,33 @@ module.exports = React.createClass
   getDefaultProps: ->
     workflow: null
     task: null
-    onChange: NOOP
+    taskPrefix: ''
 
   render: ->
+    handleChange = handleInputChange.bind @props.workflow
+
     [mainTextKey, choicesKey] = switch @props.task.type
       when 'single', 'multiple' then ['question', 'answers']
       when 'drawing' then ['instruction', 'tools']
 
     <div className="workflow-task-editor #{@props.task.type}">
       <div>
-        <span className="form-label">Main text</span><br />
-        <textarea name={mainTextKey} value={@props.task[mainTextKey]} className="standard-input full" onChange={@handleInputChange} />
+        <AutoSave resource={@props.workflow}>
+          <span className="form-label">Main text</span>
+          <br />
+          <textarea name="#{@props.taskPrefix}.#{mainTextKey}" value={@props.task[mainTextKey]} className="standard-input full" onChange={handleChange} />
+        </AutoSave>
         <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You can use markdown to format this text.</small><br />
-      </div><br />
+      </div>
+      <br />
 
       {unless @props.isSubtask
         <div>
-          <span className="form-label">Help text</span><br />
-          <textarea name="help" value={@props.task.help ? ''} rows={7} className="standard-input full" onChange={@handleInputChange} />
+          <AutoSave resource={@props.workflow}>
+            <span className="form-label">Help text</span>
+            <br />
+            <textarea  name="#{@props.taskPrefix}.help" value={@props.task.help ? ""} rows="7" className="standard-input full" onChange={handleChange} />
+          </AutoSave>
           <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
         </div>}
 
@@ -66,14 +76,18 @@ module.exports = React.createClass
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
         requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
 
-        [<label key="multiple" className="pill-button" title={multipleHelp}>
-          <input type="checkbox" checked={@props.task.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
-          Allow multiple
+        [<label key="multiple" className="pill-button">
+          <AutoSave resource={@props.workflow}>
+            <input type="checkbox" checked={@props.task.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
+            Allow multiple
+          </AutoSave>
         </label>
         {' '}
         <label key="required" className="pill-button" title={requiredHelp}>
-          <input type="checkbox" name="required" checked={@props.task.required} onChange={@handleInputChange} />{' '}
-          Required
+          <AutoSave resource={@props.workflow}>
+            <input type="checkbox" name="#{@props.taskPrefix}.required" checked={@props.task.required} onChange={handleChange} />{' '}
+            Required
+          </AutoSave>
         </label>]}
         <br />
 
@@ -83,39 +97,47 @@ module.exports = React.createClass
         {for choice, index in @props.task[choicesKey] ? []
           choice._key ?= Math.random()
           <div key={choice._key} className="workflow-choice-editor">
-            <textarea name="#{choicesKey}.#{index}.label" value={choice.label} className="standard-input full" onChange={@handleInputChange} />
+            <AutoSave resource={@props.workflow}>
+              <textarea name="#{@props.taskPrefix}.#{choicesKey}.#{index}.label" value={choice.label} onChange={handleChange} />
+            </AutoSave>
 
             <div className="workflow-choice-settings">
               {switch @props.task.type
                 when 'single'
                   unless @props.isSubtask
                     <div className="workflow-choice-setting">
-                      Next task{' '}
-                      <NextTaskSelector workflow={@props.workflow} name="#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={@handleInputChange} />
+                      <AutoSave resource={@props.workflow}>
+                        Next task{' '}
+                        <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
+                      </AutoSave>
                     </div>
 
                 when 'drawing'
-                  [<div key={choice.type} className="workflow-choice-setting">
-                    Type{' '}
-                    <select name="#{choicesKey}.#{index}.type" value={choice.type} onChange={@handleInputChange}>
-                      {for toolKey of drawingTools
-                        <option key={toolKey} value={toolKey}>{toolKey}</option>}
-                    </select>
+                  [<div key="type" className="workflow-choice-setting">
+                    <AutoSave resource={@props.workflow}>
+                      Type{' '}
+                      <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
+                        {for toolKey of drawingTools
+                          <option key={toolKey} value={toolKey}>{toolKey}</option>}
+                      </select>
+                    </AutoSave>
                   </div>
 
-                  <div key={choice.color} className="workflow-choice-setting">
-                    Color{' '}
-                    <select name="#{choicesKey}.#{index}.color" value={choice.color} onChange={@handleInputChange}>
-                      <option value="#ff0000">Red</option>
-                      <option value="#ffff00">Yellow</option>
-                      <option value="#00ff00">Green</option>
-                      <option value="#00ffff">Cyan</option>
-                      <option value="#0000ff">Blue</option>
-                      <option value="#ff00ff">Magenta</option>
-                      <option value="#000000">Black</option>
-                      <option value="#ffffff">White</option>
-                      <option disabled>TODO: Picker</option>
-                    </select>
+                  <div key="color" className="workflow-choice-setting">
+                    <AutoSave resource={@props.workflow}>
+                      Color{' '}
+                      <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
+                        <option value="#ff0000">Red</option>
+                        <option value="#ffff00">Yellow</option>
+                        <option value="#00ff00">Green</option>
+                        <option value="#00ffff">Cyan</option>
+                        <option value="#0000ff">Blue</option>
+                        <option value="#ff00ff">Magenta</option>
+                        <option value="#000000">Black</option>
+                        <option value="#ffffff">White</option>
+                        <option disabled>TODO: Picker</option>
+                      </select>
+                    </AutoSave>
                   </div>
 
                   <div key="details" className="workflow-choice-setting">
@@ -123,10 +145,17 @@ module.exports = React.createClass
                     <small className="form-help">Ask users a question about what they’ve just drawn.</small>
                   </div>]}
             </div>
-            <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={@removeChoice.bind this, choicesKey, index}>&times;</button>
+
+            <AutoSave resource={@props.workflow}>
+              <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={@removeChoice.bind this, choicesKey, index}>&times;</button>
+            </AutoSave>
           </div>}
 
-        <button type="button" className="workflow-choice-add-button" title="Add choice" onClick={@addChoice.bind this, choicesKey}>+</button><br />
+        <AutoSave resource={@props.workflow}>
+          <button type="button" className="workflow-choice-add-button" title="Add choice" onClick={@addChoice.bind this, choicesKey}>+</button>
+        </AutoSave>
+        <br />
+
         {switch choicesKey
           when 'answers'
             <div>
@@ -147,25 +176,30 @@ module.exports = React.createClass
 
       {unless @props.task.type is 'single' or @props.isSubtask
         <div>
-          Next task{' '}
-          <NextTaskSelector workflow={@props.workflow} name="next" value={@props.task.next ? ''} onChange={@handleInputChange} />
+          <AutoSave resource={@props.workflow}>
+            Next task{' '}
+            <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleChange} />
+          </AutoSave>
         </div>}
 
       <hr />
 
       <div>
-        <small><button type="button" className="minor-button" onClick={@props.onDelete}>Remove task</button></small>
+        <AutoSave resource={@props.workflow}>
+          <small>
+            <button type="button" className="minor-button" onClick={@props.onDelete}>Remove task</button>
+          </small>
+        </AutoSave>
       </div>
     </div>
 
-  handleInputChange: (e) ->
-    @props.onChange e.target.name, e.target.checked ? e.target.value, arguments...
-
   toggleMultipleChoice: (e) ->
-    @props.onChange 'type', if e.target.checked
+    newType = if e.target.checked
       'multiple'
     else
       'single'
+    @props.task.type = newType
+    @props.workflow.update 'tasks'
 
   addChoice: (type) ->
     switch type
@@ -173,24 +207,33 @@ module.exports = React.createClass
       when 'tools' then @addTool()
 
   addAnswer: ->
-    nextIndex = @props.task.answers.length
-    @props.onChange "answers.#{nextIndex}",
+    @props.task.answers.push
       label: 'Enter an answer'
+    @props.workflow.update 'tasks'
 
   addTool: ->
-    nextIndex = @props.task.tools.length
-    @props.onChange "tools.#{nextIndex}",
+    @props.task.tools.push
       type: 'point'
       label: 'Tool name'
       color: '#00ff00'
       details: []
+    @props.workflow.update 'tasks'
 
   editToolDetails: (task, toolIndex) ->
-    unless @props.task.tools[toolIndex].details?
-      @props.onChange "tools.#{toolIndex}.details", []
+    @props.task.tools[toolIndex].details ?= []
 
     alert (resolve) =>
-      <DrawingTaskDetailsEditor workflow={@props.workflow} task={task}, toolIndex={toolIndex} onClose={resolve} />
+      <ChangeListener target={@props.workflow}>{=>
+        <DrawingTaskDetailsEditor
+          workflow={@props.workflow}
+          task={@props.task}
+          toolIndex={toolIndex}
+          details={@props.task.tools[toolIndex].details}
+          toolPath="#{@props.taskPrefix}.tools.#{toolIndex}"
+          onClose={resolve}
+        />
+      }</ChangeListener>
 
   removeChoice: (choicesName, index) ->
-    @props.onChange "#{choicesName}.#{index}", undefined
+    @props.task[choicesName].splice index, 1
+    @props.workflow.update 'tasks'
