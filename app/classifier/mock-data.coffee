@@ -8,10 +8,11 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'draw'
+  first_task: 'survey'
   tasks:
     survey:
       type: 'survey'
+      required: true
       characteristicsOrder: ['pa', 'co']
       characteristics:
         pa:
@@ -142,8 +143,11 @@ workflow = apiClient.type('workflows').create
       images: {}
       # next: 'draw'
 
+      next: 'draw'
+
     draw:
       type: 'drawing'
+      required: 3
       instruction: 'Draw something.'
       help: '''
         Do this:

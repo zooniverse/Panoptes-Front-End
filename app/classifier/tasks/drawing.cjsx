@@ -97,6 +97,14 @@ module.exports = React.createClass
       _toolIndex: 0
       value: []
 
+    isMarkComplete: (tool, mark) ->
+      # TODO: See below.
+
+    isAnnotationComplete: (task, annotation) ->
+      # TODO: Check details per mark.
+      # Also use that to disable closing the tooltip.
+      annotation.value.length >= task.required
+
   getDefaultProps: ->
     task: null
     annotation: null

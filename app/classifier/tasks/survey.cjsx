@@ -313,6 +313,11 @@ module.exports = React.createClass
     getDefaultAnnotation: ->
       value: []
 
+    isAnnotationComplete: (task, annotation) ->
+      # Booleans compare to numbers as expected: true = 1, false = 0.
+      annotation.value.length >= task.required and not annotation._choiceInProgress
+
+
   getDefaultProps: ->
     task: null
     annotation: null
@@ -338,13 +343,17 @@ module.exports = React.createClass
     @setState filters: @state.filters
 
   handleChoice: (choiceID) ->
+    @props.annotation._choiceInProgress = true
     @setState selectedChoiceID: choiceID
+    @props.onChange()
 
   clearFilters: ->
     @setState filters: {}
 
   clearSelection: ->
+    @props.annotation._choiceInProgress = false
     @setState selectedChoiceID: ''
+    @props.onChange()
 
   handleAnnotation: (choice, answers, e) ->
     filters = JSON.parse JSON.stringify @state.filters

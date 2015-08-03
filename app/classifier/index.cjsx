@@ -54,6 +54,7 @@ Classifier = React.createClass
         @props.subject.expert_classification_data
       else
         @props.classification
+      window.classification = currentClassification
 
       if currentClassification is @props.classification and not @props.classification.completed
         currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
@@ -84,12 +85,8 @@ Classifier = React.createClass
 
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
-    switch TaskComponent
-      when tasks.single
-        currentAnswer = task.answers?[annotation.value]
-        waitingForAnswer = task.required and not currentAnswer
-      when tasks.multiple
-        waitingForAnswer = task.required and annotation.value.length is 0
+    if TaskComponent.isAnnotationComplete?
+      waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation
 
     # If the next task key exists, make sure the task it points to actually exists.
     nextTaskKey = if TaskComponent is tasks.single and currentAnswer? and @props.workflow.tasks[currentAnswer.next]?
