@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require '../api/client'
-getPageOfComment = require './lib/get-page-of-comment'
 {timeAgo} = require './lib/time'
 Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
@@ -27,31 +26,29 @@ module?.exports = React.createClass
     {discussion} = @props
 
     <div className="talk-latest-comment-link">
-      <PromiseRenderer promise={discussion.get('comments', {page_size: 1, sort: '-created_at'}).index(0)}>{(comment) =>
-        <div className="talk-discussion-link">
-          <PromiseRenderer promise={apiClient.type('users').get(comment.user_id, {})}>{(user) =>
-            <Link className="user-profile-link" to="user-profile" params={name: user.login}>
-              <Avatar user={user} />{' '}{user.display_name}
-            </Link>
-          }</PromiseRenderer>{' '}
-
-          {if @props.title
-            <span>
-              <Link
-                to="#{@projectPrefix()}talk-discussion"
-                params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
-                query={page: getPageOfComment(comment, discussion, PAGE_SIZE), scrollToLastComment: true}>
-                {discussion.title}
-              </Link>{' '}
-            </span>
-            }
-
-          <Link
-            to="#{@projectPrefix()}talk-discussion"
-            params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
-            query={page: getPageOfComment(comment, discussion, PAGE_SIZE), scrollToLastComment: true}>
-            {timeAgo(comment.updated_at)}
+      <div className="talk-discussion-link">
+        <PromiseRenderer promise={apiClient.type('users').get(discussion.latest_comment.user_id, {})}>{(user) =>
+          <Link className="user-profile-link" to="user-profile" params={name: user.login}>
+            <Avatar user={user} />{' '}{user.display_name}
           </Link>
-        </div>
-      }</PromiseRenderer>
+        }</PromiseRenderer>{' '}
+
+        {if discussion.title
+          <span>
+            <Link
+              to="#{@projectPrefix()}talk-discussion"
+              params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
+              query={comment: discussion.latest_comment.id}>
+              {discussion.title}
+            </Link>{' '}
+          </span>
+          }
+
+        <Link
+          to="#{@projectPrefix()}talk-discussion"
+          params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
+          query={comment: discussion.latest_comment.id}>
+          {timeAgo(discussion.latest_comment.updated_at)}
+        </Link>
+      </div>
     </div>

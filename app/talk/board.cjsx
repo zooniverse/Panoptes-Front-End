@@ -43,7 +43,7 @@ module?.exports = React.createClass
   discussionsRequest: (page) ->
     @setState loading: true
     board_id = +@props.params.board
-    talkClient.type('discussions').get({board_id, page_size: PAGE_SIZE, sort_linked_comments: 'created_at', page})
+    talkClient.type('discussions').get({board_id, page_size: PAGE_SIZE, page})
 
   setDiscussions: (page = @props.query.page) ->
     @discussionsRequest(page)
