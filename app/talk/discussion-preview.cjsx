@@ -4,6 +4,10 @@ resourceCount = require './lib/resource-count'
 {State} = require 'react-router'
 PromiseRenderer = require '../components/promise-renderer'
 LatestCommentLink = require './latest-comment-link'
+Thumbnail = require '../components/thumbnail'
+apiClient = require '../api/client'
+talkClient = require '../api/talk'
+getSubjectLocation = require '../lib/get-subject-location'
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussionPreview'
@@ -16,6 +20,18 @@ module?.exports = React.createClass
 
     <div className="talk-discussion-preview">
       <div className="preview-content">
+
+        <PromiseRenderer catch={null} promise={talkClient.type('comments').get(discussion.links.comments[0])}>{(comment) =>
+          if comment.focus_id and (comment.focus_type is 'Subject')
+            <div className="subject-preview">
+              <PromiseRenderer catch={null} promise={apiClient.type('subjects').get(comment.focus_id)}>{(subject) =>
+                <Thumbnail src={getSubjectLocation(subject).src} width={100} />
+              }</PromiseRenderer>
+            </div>
+          else
+            null
+        }</PromiseRenderer>
+
         <h1>
           {<i className="fa fa-thumb-tack talk-sticky-pin"></i> if discussion.sticky}
           {if params?.owner and params?.name # get from url if possible
