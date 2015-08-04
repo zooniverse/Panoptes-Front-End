@@ -1,7 +1,7 @@
 React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
   howToPage:

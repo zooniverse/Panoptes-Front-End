@@ -1,5 +1,5 @@
 React = require 'react'
-Markdown = require '../components/markdown'
+{Markdown} = require 'markdownz'
 
 module?.exports = React.createClass
   displayName: 'TalkCommentPreview'
