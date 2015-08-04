@@ -17,12 +17,13 @@ counterpart.registerTranslations 'en',
       reply to all of the emails we receive.
 
       If you are interested in collaborating with the Zooniverse, for instance on a
-      custom-built project, you should [fill out this form](https://docs.google.com/a/zooniverse.org/forms/d/1NCx8V_XPQMwtY4oPu_sq47cOfPTQX0F7FLffg6KaMek/viewform). (Note that our [Project Builder](#/lab)
+      custom-built project, please email [collab@zooniverse.org](mailto:collab@zooniverse.org)
+      (Note that our [Project Builder](#/lab)
       offers an effective way to set up a new project without needing to contact the team!)
 
-      For press inquires, please contact the Zooniverse director Chris Lintott at
-      [chris@zooniverse.org](mailto:chris@zooniverse.org) or +44 (0) 7808 167288, or Zooniverse community builder
-      Darren McRoy at [darren@zooniverse.org](mailto:darren@zooniverse.org) or +1 312 542 2200.
+      For press inquires, please contact the Zooniverse directors Chris Lintott at
+      [chris@zooniverse.org](mailto:chris@zooniverse.org) or +44 (0) 7808 167288 or 
+      Laura Trouille at [trouille@zooniverse.org](mailto:trouille@zooniverse.org) or +1 312 322 0820.
 
       If you want to keep up to date with what's going on across the Zooniverse and our
       latest results, check out the [Daily Zooniverse](http://daily.zooniverse.org/) or the main [Zooniverse blog](http://blog.zooniverse.org/).
