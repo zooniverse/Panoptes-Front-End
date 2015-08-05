@@ -3,7 +3,7 @@ React = require 'react'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 {RouteHandler} = require 'react-router'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
   about:

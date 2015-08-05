@@ -2,7 +2,7 @@ React = require 'react'
 moment = require 'moment'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 Paginator = require '../../talk/lib/paginator'
 CommentLink = require './comment-link'
 

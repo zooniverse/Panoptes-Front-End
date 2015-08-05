@@ -1,5 +1,5 @@
 React = require 'react'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 GenericTask = require './generic'
 GenericTaskEditor = require './generic-editor'
 

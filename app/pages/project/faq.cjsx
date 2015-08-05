@@ -1,6 +1,6 @@
 React = require 'react'
 TitleMixin = require '../../lib/title-mixin'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 PromiseRenderer = require '../../components/promise-renderer'
 
 module.exports = React.createClass

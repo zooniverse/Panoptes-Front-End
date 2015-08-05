@@ -10,12 +10,7 @@
     "lodash.intersection": "~3.2.0",
     "lodash.merge": "~2.4.1",
     "lodash.pick": "~3.1.0",
-    "markdown-it": "~4.0.1",
-    "markdown-it-container": "~1.0.0",
-    "markdown-it-emoji": "~1.0.0",
-    "markdown-it-footnote": "~1.0.0",
-    "markdown-it-sub": "~1.0.0",
-    "markdown-it-sup": "~1.0.0",
+    "markdownz": "^1.0.0",
     "moment": "~2.9.0",
     "papaparse": "mholt/PapaParse#cada171",
     "react": "~0.13.2",
@@ -24,8 +19,7 @@
     "react-select": "marten/react-select#close-after-click",
     "react-translate-component": "~0.9.0",
     "sugar-client": "^1.0.1",
-    "tether": "HubSpot/tether#df8cd44",
-    "twemoji": "^1.4.1"
+    "tether": "HubSpot/tether#df8cd44"
   },
   "devDependencies": {
     "blue-tape": "~0.1.10",
