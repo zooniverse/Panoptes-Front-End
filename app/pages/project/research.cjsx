@@ -3,7 +3,7 @@ React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
 Translate = require 'react-translate-component'
 TitleMixin = require '../../lib/title-mixin'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
   projectRoles:

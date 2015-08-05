@@ -2,7 +2,7 @@ React = require 'react'
 moment = require 'moment'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 PAGE_SIZE = require('../../talk/config').discussionPageSize
 
 module?.exports = React.createClass

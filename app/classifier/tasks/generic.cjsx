@@ -1,7 +1,7 @@
 React = require 'react'
 cloneWithProps = require 'react/lib/cloneWithProps'
 alert = require '../../lib/alert'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 Tooltip = require '../../components/tooltip'
 
 module.exports = React.createClass

@@ -1,5 +1,5 @@
 React = require 'react'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 PromiseRenderer = require '../../components/promise-renderer'

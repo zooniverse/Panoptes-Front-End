@@ -6,7 +6,8 @@ CommentHelp = require './comment-help'
 CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
 Loading = require '../components/loading-indicator'
-MarkdownEditor = require '../components/markdown-editor'
+alert = require '../lib/alert'
+{MarkdownEditor} = require 'markdownz'
 
 module?.exports = React.createClass
   displayName: 'Commentbox'
@@ -88,7 +89,7 @@ module?.exports = React.createClass
             <CommentPreview header={null} content={@state.reply}/>
           </div>}
 
-        <MarkdownEditor placeholder={@props.placeholder} className="full" value={@state.content} onChange={@onInputChange} helpText={<CommentHelp />}/>
+        <MarkdownEditor placeholder={@props.placeholder} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <CommentHelp /> }/>
 
         <section>
           <button
