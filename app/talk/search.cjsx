@@ -72,16 +72,9 @@ module.exports = React.createClass
       .then(status)
       .then (response) -> return response.json()
       .then ({ searches, meta }) =>
-        discussionRequests = []
-        for comment in searches
-          do (comment) ->
-            discussionRequests.push talkClient.type('discussions').get(comment.discussion_id, {sort_linked_comments: 'created_at'}).then (discussionResult) ->
-              comment.discussion = discussionResult
-
-        Promise.all(discussionRequests).then =>
-          @setState
-            results: searches
-            resultsMeta: meta.searches
+        @setState
+          results: searches
+          resultsMeta: meta.searches
       .catch =>
         @setState errorThrown: true
       .then =>

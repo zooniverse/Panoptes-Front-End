@@ -1,10 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
-{timestamp, timeAgo} = require './lib/time'
 resourceCount = require './lib/resource-count'
-talkClient = require '../api/talk'
-PromiseRenderer = require '../components/promise-renderer'
-apiClient = require '../api/client'
 LatestCommentLink = require './latest-comment-link'
 merge = require 'lodash.merge'
 
@@ -24,11 +20,7 @@ module?.exports = React.createClass
         </h1>
 
         <p>{@props.data.description}</p>
-
-        <PromiseRenderer promise={talkClient.type('discussions').get({board_id: @props.data.id, sort: '-updated_at', sort_linked_comments: 'created_at'}).index(0)}>{(discussion) =>
-          if discussion?
-            <LatestCommentLink {...@props} title={true} project={@props.project} discussion={discussion} />
-        }</PromiseRenderer>
+        <LatestCommentLink {...@props} title={true} project={@props.project} discussion={@props.data.latest_discussion} comment={@props.comment} />
       </div>
 
       <div className="preview-stats">
