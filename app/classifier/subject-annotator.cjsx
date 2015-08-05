@@ -24,6 +24,7 @@ module.exports = React.createClass
     naturalWidth: 0
     naturalHeight: 0
     viewbox: "0 0 0 0"
+    align: "xMidYMid"
     showWarning: false
     frame: 0
     selectedMark: null
@@ -92,7 +93,7 @@ module.exports = React.createClass
 
     <div className="subject-area">
       <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
-        <svg viewBox={@state.viewbox} preserveAspectRatio="xMidYMid meet" style={SubjectViewer.overlayStyle}>
+        <svg viewBox={@state.viewbox} preserveAspectRatio="#{@state.align} meet" style={SubjectViewer.overlayStyle}>
           {<SVGImage src={src} width={@state.naturalWidth} height={@state.naturalHeight} /> if type is 'image'}
           <rect ref="sizeRect" width={@state.naturalWidth} height={@state.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
@@ -313,5 +314,17 @@ module.exports = React.createClass
     width = Math.min maxWidth, width
     height = Math.min maxHeight, height
     viewbox = [x,y,width,height].join ' '
-    @setState {viewbox}, @handleResize
+    align = @align x, y, width, height
+    @setState {viewbox, align}, @handleResize
+  
+  align: (x = 0, y = 0, width = @state.naturalWidth, height = @state.naturalHeight) ->
+    aspect = width / height
+    subject_aspect = @state.naturalWidth / @state.naturalHeight
+    align = 'xMidYMid'
+    align = 'xMinYMid' if x < width and aspect < (.5 * subject_aspect)
+    align = 'xMaxYMid' if (x + width) > (@state.naturalWidth - width) and aspect < (.5 * subject_aspect)
+    align = 'xMidYMin' if y < height and aspect > (2 * subject_aspect)
+    align = 'xMidYMax' if (y + height) > (@state.naturalHeight - height) and aspect > (2 * subject_aspect)
+    
+    align
 
