@@ -22,12 +22,20 @@ module?.exports = React.createClass
   projectPrefix: ->
     if @props.project then 'project-' else ''
 
+  lastPage: ->
+    Math.ceil @props.discussion.comments_count / PAGE_SIZE
+
   render: ->
     {discussion} = @props
+    comment = @props.comment or discussion.latest_comment
+    linkQuery = if @props.comment
+      comment: comment.id
+    else
+      scrollToLastComment: true, page: @lastPage()
 
     <div className="talk-latest-comment-link">
       <div className="talk-discussion-link">
-        <PromiseRenderer promise={apiClient.type('users').get(discussion.latest_comment.user_id, {})}>{(user) =>
+        <PromiseRenderer promise={apiClient.type('users').get(comment.user_id, {})}>{(user) =>
           <Link className="user-profile-link" to="user-profile" params={name: user.login}>
             <Avatar user={user} />{' '}{user.display_name}
           </Link>
@@ -38,7 +46,7 @@ module?.exports = React.createClass
             <Link
               to="#{@projectPrefix()}talk-discussion"
               params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
-              query={comment: discussion.latest_comment.id}>
+              query={linkQuery}>
               {discussion.title}
             </Link>{' '}
           </span>
@@ -47,8 +55,8 @@ module?.exports = React.createClass
         <Link
           to="#{@projectPrefix()}talk-discussion"
           params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
-          query={comment: discussion.latest_comment.id}>
-          {timeAgo(discussion.latest_comment.updated_at)}
+          query={linkQuery}>
+          {timeAgo(comment.created_at)}
         </Link>
       </div>
     </div>

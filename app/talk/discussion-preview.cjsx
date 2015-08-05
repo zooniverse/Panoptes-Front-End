@@ -36,7 +36,7 @@ module?.exports = React.createClass
             }
         </h1>
 
-        <LatestCommentLink {...@props} project={@props.project} discussion={discussion} />
+        <LatestCommentLink {...@props} project={@props.project} discussion={discussion} comment={@props.comment} />
 
       </div>
       <div className="preview-stats">

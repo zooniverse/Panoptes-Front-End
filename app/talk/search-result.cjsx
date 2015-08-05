@@ -29,9 +29,9 @@ module.exports = React.createClass
       <CommentLink comment={comment}>{comment.discussion_title}</CommentLink>
       <CommentPreview content={comment.body} header={null} />
       {if section is 'zooniverse'
-        <DiscussionPreview {...@props} discussion={discussion} />
+        <DiscussionPreview {...@props} discussion={discussion} comment={comment} />
       else
         [owner, name] = comment.project_slug.split('/')
-        <DiscussionPreview {...@props} discussion={discussion} owner={owner} name={name} />
+        <DiscussionPreview {...@props} discussion={discussion} owner={owner} name={name} comment={comment} />
       }
     </div>

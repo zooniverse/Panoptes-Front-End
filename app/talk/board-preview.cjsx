@@ -20,7 +20,7 @@ module?.exports = React.createClass
         </h1>
 
         <p>{@props.data.description}</p>
-        <LatestCommentLink {...@props} title={true} project={@props.project} discussion={@props.data.latest_discussion} />
+        <LatestCommentLink {...@props} title={true} project={@props.project} discussion={@props.data.latest_discussion} comment={@props.comment} />
       </div>
 
       <div className="preview-stats">
