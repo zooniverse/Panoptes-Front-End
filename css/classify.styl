@@ -76,10 +76,10 @@
     transform: rotate(-15deg)
 
   > .task-area
-    flex: 1 1
+    // We want this fixed at 50h, but don't completely disable flex-shrink because
+    // when it wraps to its own line it shouldn't be cropped by small windows.
+    flex: 0 0.01 50ch
     margin-bottom: 1em
-    max-width: 60ch
-    min-width: 30ch
 
   .task-nav
     display: flex
