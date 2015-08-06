@@ -180,9 +180,9 @@ subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/150/100/animals/1' else BLANK_IMAGE}
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/150/100/animals/2' else BLANK_IMAGE}
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/150/100/animals/3' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/900/600/animals/1' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/900/600/animals/2' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/900/600/animals/3' else BLANK_IMAGE}
   ]
 
   metadata:
