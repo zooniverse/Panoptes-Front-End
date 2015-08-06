@@ -1,5 +1,6 @@
 React = require 'react'
 SubjectViewer = require '../components/subject-viewer'
+SVG = require '../components/svg'
 SVGImage = require '../components/svg-image'
 Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
@@ -23,8 +24,6 @@ module.exports = React.createClass
   getInitialState: ->
     naturalWidth: 0
     naturalHeight: 0
-    viewbox: "0 0 0 0"
-    align: "xMidYMid"
     showWarning: false
     frame: 0
     selectedMark: null
@@ -93,7 +92,7 @@ module.exports = React.createClass
 
     <div className="subject-area">
       <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
-        <svg viewBox={@state.viewbox} preserveAspectRatio="#{@state.align} meet" style={SubjectViewer.overlayStyle}>
+        <SVG ref="markingSurface" style={SubjectViewer.overlayStyle} naturalWidth={@state.naturalWidth} naturalHeight={@state.naturalHeight} handleResize={@handleResize}>
           {<SVGImage src={src} width={@state.naturalWidth} height={@state.naturalHeight} /> if type is 'image'}
           <rect ref="sizeRect" width={@state.naturalWidth} height={@state.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
@@ -131,7 +130,7 @@ module.exports = React.createClass
                   ToolComponent = drawingTools[toolDescription.type]
                   <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
               </g>}
-        </svg>
+        </SVG>
 
         {if @state.alreadySeen 
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
@@ -206,8 +205,9 @@ module.exports = React.createClass
       if @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
         @handleResize()
       else
-        viewbox = "0 0 #{naturalWidth} #{naturalHeight}"
-        @setState {naturalWidth, naturalHeight, viewbox}, @handleResize
+        @setState {naturalWidth, naturalHeight}, ->
+          @refs.markingSurface.crop()
+          @handleResize()
       @props.onLoad? e, @state.frame
 
   handleFrameChange: (frame) ->
@@ -304,27 +304,4 @@ module.exports = React.createClass
     annotation.value.splice markIndex, 1
     @updateAnnotations()
 
-  crop: (x = 0, y = 0, width = @state.naturalWidth, height = @state.naturalHeight) ->
-    x = Math.max 0, x
-    y = Math.max 0, y
-    x = Math.min @state.naturalWidth, x
-    y = Math.min @state.naturalHeight, y
-    maxWidth = @state.naturalWidth - x
-    maxHeight = @state.naturalHeight - y
-    width = Math.min maxWidth, width
-    height = Math.min maxHeight, height
-    viewbox = [x,y,width,height].join ' '
-    align = @align x, y, width, height
-    @setState {viewbox, align}, @handleResize
-  
-  align: (x = 0, y = 0, width = @state.naturalWidth, height = @state.naturalHeight) ->
-    aspect = width / height
-    subject_aspect = @state.naturalWidth / @state.naturalHeight
-    align = 'xMidYMid'
-    align = 'xMinYMid' if x < width and aspect < (.5 * subject_aspect)
-    align = 'xMaxYMid' if (x + width) > (@state.naturalWidth - width) and aspect < (.5 * subject_aspect)
-    align = 'xMidYMin' if y < height and aspect > (2 * subject_aspect)
-    align = 'xMidYMax' if (y + height) > (@state.naturalHeight - height) and aspect > (2 * subject_aspect)
-    
-    align
 
