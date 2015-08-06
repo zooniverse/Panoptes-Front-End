@@ -34,6 +34,10 @@ icons =
     <ellipse className="shape" rx="45" ry="25" cx="50" cy="50" transform="rotate(-30, 50, 50)" />
   </svg>
 
+  crop: <svg viewBox="0 0 100 100">
+    <rect className="shape" x="10" y="30" width="80" height="40" />
+  </svg>
+
 Summary = React.createClass
   displayName: 'SingleChoiceSummary'
 

@@ -6,7 +6,7 @@ module.exports = React.createClass
   getInitialState: ->
     align: 'xMidYMid'
     viewbox: ''
-  
+
   render: ->
     <svg viewBox={@state.viewbox} preserveAspectRatio="#{@state.align} meet" style={@props.style}>
       {@props.children}
