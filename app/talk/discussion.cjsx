@@ -77,7 +77,7 @@ module?.exports = React.createClass
     React.findDOMNode(@)?.scrollIntoView(false)
 
   discussionsRequest: (discussion = @props.params.discussion) ->
-    talkClient.type('discussions').get({id: discussion})
+    talkClient.type('discussions').get({id: discussion, sort_linked_comments: 'created_at'})
 
   setDiscussion: (discussion = @props.params.discussion) ->
     @discussionsRequest(discussion)
