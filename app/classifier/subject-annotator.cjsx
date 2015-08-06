@@ -1,15 +1,18 @@
 React = require 'react'
 SubjectViewer = require '../components/subject-viewer'
+SVG = require '../components/svg'
+SVGImage = require '../components/svg-image'
 Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
 tasks = require './tasks'
 Tooltip = require '../components/tooltip'
 seenThisSession = require '../lib/seen-this-session'
+getSubjectLocation = require '../lib/get-subject-location'
 
 NOOP = Function.prototype
 
 module.exports = React.createClass
-  displayName: 'SubjectViewer' # TODO: Rename this.
+  displayName: 'SubjectAnnotator'
 
   getDefaultProps: ->
     project: null
@@ -85,15 +88,17 @@ module.exports = React.createClass
   render: ->
     currentTaskDescription = @props.workflow.tasks[@props.annotation?.task]
     currentTaskComponent = tasks[currentTaskDescription?.type]
+    {type, format, src} = getSubjectLocation @props.subject, @state.frame
 
     <div className="subject-area">
       <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
-        <svg viewBox={"0 0 #{@state.naturalWidth} #{@state.naturalHeight}"} preserveAspectRatio="none" style={SubjectViewer.overlayStyle}>
-          <rect ref="sizeRect" width="100%" height="100%" fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
+        <SVG ref="markingSurface" style={SubjectViewer.overlayStyle} naturalWidth={@state.naturalWidth} naturalHeight={@state.naturalHeight} handleResize={@handleResize}>
+          {<SVGImage src={src} width={@state.naturalWidth} height={@state.naturalHeight} /> if type is 'image'}
+          <rect ref="sizeRect" width={@state.naturalWidth} height={@state.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
           {if @props.annotation?._toolIndex?
             <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
-              <rect className="marking-initializer" width="100%" height="100%" fill="transparent" stroke="none" />
+              <rect className="marking-initializer" width={@state.naturalWidth} height={@state.naturalHeight} fill="transparent" stroke="none" />
             </Draggable>}
 
           {for annotation in @props.classification.annotations
@@ -125,7 +130,7 @@ module.exports = React.createClass
                   ToolComponent = drawingTools[toolDescription.type]
                   <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
               </g>}
-        </svg>
+        </SVG>
 
         {if @state.alreadySeen 
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
@@ -200,7 +205,9 @@ module.exports = React.createClass
       if @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
         @handleResize()
       else
-        @setState {naturalWidth, naturalHeight}, @handleResize
+        @setState {naturalWidth, naturalHeight}, ->
+          @refs.markingSurface.crop()
+          @handleResize()
       @props.onLoad? e, @state.frame
 
   handleFrameChange: (frame) ->
@@ -296,3 +303,5 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @updateAnnotations()
+
+
