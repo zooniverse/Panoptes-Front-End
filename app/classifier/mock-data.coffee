@@ -95,9 +95,10 @@ workflow = apiClient.type('workflows').create
           confusionsOrder: []
           confusions: {}
 
-      questionsOrder: ['ho', 'be']
+      questionsOrder: ['ho', 'be', 'in', 'hr']
       questions:
         ho:
+          required: true
           multiple: false
           label: 'How many?'
           answersOrder: ['one', 'two', 'many']
@@ -109,6 +110,7 @@ workflow = apiClient.type('workflows').create
             many:
               label: '3+'
         be:
+          required: true
           multiple: true
           label: 'Any activity?'
           answersOrder: ['mo', 'ea', 'in']
@@ -119,6 +121,23 @@ workflow = apiClient.type('workflows').create
               label: 'Eating'
             in:
               label: 'Interacting'
+        in:
+          required: false
+          label: 'Any injuries?'
+          answersOrder: ['y', 'n']
+          answers:
+            y:
+              label: 'Yep'
+            n:
+              label: 'Nope'
+        hr:
+          required: false
+          multiple: true
+          label: 'Horns toggle'
+          answersOrder: ['y']
+          answers:
+            y:
+              label: 'Present'
 
       images: {}
       # next: 'draw'

@@ -158,7 +158,6 @@ ImageFlipper = React.createClass
     width: 0
 
   render: ->
-    console.log(@props.images);
     <span className="survey-task-image-flipper">
       {@renderPreload()}
       <img src={@props.images[@state.frame]} className="survey-task-image-flipper-image" />
@@ -195,14 +194,13 @@ Choice = React.createClass
     answers: {}
 
   allFilledIn: ->
-    requiredIDs = for questionID in @props.task.questionsOrder
+    for questionID in @props.task.questionsOrder
       question = @props.task.questions[questionID]
-      if question.multiple
-        # Multiple-allowed questions aren't required.
-        continue
-      else
-        questionID
-    (true for id in requiredIDs when id not of @state.answers).length is 0
+      if question.required
+        answer = @state.answers[questionID]
+        if (not answer?) or (question.multiple and answer.length is 0)
+          return false
+    true
 
   render: ->
     choice = @props.task.choices[@props.choiceID]
