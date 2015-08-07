@@ -54,7 +54,6 @@ Classifier = React.createClass
         @props.subject.expert_classification_data
       else
         @props.classification
-      window.classification = currentClassification
 
       if currentClassification is @props.classification and not @props.classification.completed
         currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
