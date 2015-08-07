@@ -132,7 +132,7 @@ module.exports = React.createClass
               </g>}
         </SVG>
 
-        {if @state.alreadySeen 
+        {if @state.alreadySeen
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
             Already seen!
             {if @state.showWarning
@@ -153,7 +153,8 @@ module.exports = React.createClass
           </button>}
 
         {if @state.toolRect? and @state.selectedMark?
-          toolDescription = @props.workflow.tasks[@props.annotation.task].tools[@state.selectedMark.tool]
+          taskDescription = @props.workflow.tasks[@props.annotation.task]
+          toolDescription = taskDescription.tools[@state.selectedMark.tool]
           if toolDescription?.details?.length > 0
 
             <Tooltip ref="detailsTooltip" {...@getDetailsTooltipProps()}>
@@ -162,7 +163,7 @@ module.exports = React.createClass
                 TaskComponent = tasks[detailTask.type]
                 <TaskComponent key={detailTask._key} task={detailTask} annotation={@state.selectedMark.details[i]} onChange={@updateAnnotations} />}
               <div className="actions">
-                <button type="button" className="standard-button" onClick={@selectMark.bind this, null, null}>Close</button>
+                <button type="button" className="standard-button" disabled={not tasks[taskDescription.type].areMarksComplete(taskDescription, @props.annotation)} onClick={@selectMark.bind this, null, null}>Close</button>
               </div>
             </Tooltip>}
       </SubjectViewer>
@@ -303,5 +304,3 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @updateAnnotations()
-
-
