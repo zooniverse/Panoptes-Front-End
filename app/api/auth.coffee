@@ -7,13 +7,6 @@ JSON_HEADERS =
   'Content-Type': 'application/json'
   'Accept': 'application/json'
 
-# This will match the CSRF token in a string of HTML.
-# TODO: Get JSON instead.
-CSRF_TOKEN_PATTERN = do ->
-  NAME_ATTR = '''name=['"]csrf-token['"]'''
-  CONTENT_ATTR = '''content=['"](.+)['"]'''
-  ///#{NAME_ATTR}\s*#{CONTENT_ATTR}|#{CONTENT_ATTR}\s*#{NAME_ATTR}///
-
 # We don't want to wait until the token is already expired before refreshing it.
 TOKEN_EXPIRATION_ALLOWANCE = 10 * 1000
 
@@ -24,10 +17,9 @@ module.exports = new Model
 
   _getAuthToken: ->
     console?.log 'Getting auth token'
-    makeHTTPRequest 'GET', config.host + "/users/sign_in/?now=#{Date.now()}", null, 'Accept': 'text/html'
+    makeHTTPRequest 'GET', config.host + "/users/sign_in/?now=#{Date.now()}", null, JSON_HEADERS
       .then (request) ->
-        [_, authTokenMatch1, authTokenMatch2] = request.responseText.match CSRF_TOKEN_PATTERN
-        authToken = authTokenMatch1 ? authTokenMatch2
+        authToken = request.getResponseHeader 'X-CSRF-Token'
         console?.info "Got auth token #{authToken[...6]}..."
         authToken
 
