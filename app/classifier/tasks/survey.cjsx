@@ -121,7 +121,7 @@ Chooser = React.createClass
             choice = @props.task.choices[choiceID]
             <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
               {unless choice.images.length is 0
-                  <img src={choice.images[0]} className="survey-task-chooser-choice-thumbnail" />}
+                  <img src={@props.task.images[choice.images[0]]} className="survey-task-chooser-choice-thumbnail" />}
               <div className="survey-task-chooser-choice-label">{choice.label}</div>
             </button>}
       </div>
