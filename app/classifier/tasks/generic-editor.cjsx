@@ -172,6 +172,7 @@ module.exports = React.createClass
       when 'tools' then @addTool()
 
   addAnswer: ->
+    @props.task.answers ?= []
     @props.task.answers.push
       label: 'Enter an answer'
     @props.workflow.update 'tasks'

@@ -87,9 +87,9 @@ Classifier = React.createClass
               <nav className="task-nav">
                 <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
                 {if nextTaskKey
-                  <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, nextTaskKey}>Next</button>
+                  <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, nextTaskKey, currentClassification}>Next</button>
                 else
-                  <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
+                  <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification.bind this, currentClassification}>Done</button>}
               </nav>
             </div>
 
@@ -151,12 +151,15 @@ Classifier = React.createClass
       toolIdentifier = "#{lastAnnotationIndex}-#{lastAnnotation._toolIndex}"
 
       if Array.isArray(lastAnnotation.value) and toolIdentifier isnt @_lastAnnotationAndTool
-        @handleToolChange lastAnnotation, @_lastAnnotationAndTool.split('-').pop() ? '-1'
+        index = @_lastAnnotationAndTool.split('-').pop() ? '-1'
+        index = if index? and index isnt "" then index else 'last'
+        @handleToolChange lastAnnotation, index
         @_lastAnnotationAndTool = toolIdentifier
 
   handleToolChange: (annotation, oldToolIndex) ->
     lastMark = annotation.value[annotation.value.length - 1]
     if lastMark?
+      oldToolIndex = @props.workflow.tasks[annotation.task].tools.length - 1 if oldToolIndex is 'last'
       ToolComponent = drawingTools[@props.workflow.tasks[annotation.task].tools[oldToolIndex].type]
       if ToolComponent?
         if ToolComponent.isComplete? and not ToolComponent.isComplete lastMark
@@ -166,14 +169,16 @@ Classifier = React.createClass
     @props.classification.annotations.pop()
     @props.classification.update 'annotations'
 
-  addAnnotationForTask: (taskKey) ->
+  addAnnotationForTask: (taskKey, current) ->
+    @updateAnnotations(current)  if current?
     taskDescription = @props.workflow.tasks[taskKey]
     annotation = tasks[taskDescription.type].getDefaultAnnotation()
     annotation.task = taskKey
     @props.classification.annotations.push annotation
     @props.classification.update 'annotations'
 
-  completeClassification: ->
+  completeClassification: (current) ->
+    @updateAnnotations(current) if current?
     @props.classification.update
       completed: true
       'metadata.finished_at': (new Date).toISOString()
