@@ -42,9 +42,11 @@ $reset-button
   position: relative
   text-decoration: none
 
-  &:disabled
+  &:disabled,
+  &[data-disabled]
     cursor: inherit
     opacity: 0.3
+    pointer-events: none
 
   &[data-busy]::after
     animation: busy-button-animation 1s linear infinite alternate

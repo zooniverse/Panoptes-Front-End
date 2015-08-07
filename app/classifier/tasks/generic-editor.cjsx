@@ -5,32 +5,7 @@ handleInputChange = require '../../lib/handle-input-change'
 drawingTools = require '../drawing-tools'
 alert = require '../../lib/alert'
 DrawingTaskDetailsEditor = require './drawing-task-details-editor'
-
-NOOP = Function.prototype
-
-MAX_TEXT_LENGTH_IN_MENU = 100
-
-NextTaskSelector = React.createClass
-  displayName: 'NextTaskSelector'
-
-  getDefaultProps: ->
-    workflow: null
-    name: ''
-    value: ''
-    isSubtask: false
-    onChange: NOOP
-
-  render: ->
-    tasks = require '.' # Work around circular dependency.
-
-    <select name={@props.name} value={@props.value} onChange={@props.onChange}>
-      <option value="">(End of classification!)</option>
-      {for key, definition of @props.workflow.tasks
-        text = tasks[definition.type].getTaskText definition
-        if text.length > MAX_TEXT_LENGTH_IN_MENU
-          text = text[0...MAX_TEXT_LENGTH_IN_MENU] + '...'
-        <option key={key}, value={key}>{text}</option>}
-    </select>
+NextTaskSelector = require './next-task-selector'
 
 module.exports = React.createClass
   displayName: 'GenericTaskEditor'
@@ -181,16 +156,6 @@ module.exports = React.createClass
             <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleChange} />
           </AutoSave>
         </div>}
-
-      <hr />
-
-      <div>
-        <AutoSave resource={@props.workflow}>
-          <small>
-            <button type="button" className="minor-button" onClick={@props.onDelete}>Remove task</button>
-          </small>
-        </AutoSave>
-      </div>
     </div>
 
   toggleMultipleChoice: (e) ->

@@ -189,7 +189,7 @@ module.exports = React.createClass
           <span className="survey-identification-proxy" title={answersList}>
             {taskDescription.choices[identification.choice].label}
             {' '}
-            <button type="button" className="survey-identification-remove" title="Remove" onClick={@handleSurveyAnnotationRemoval}>&times;</button>
+            <button type="button" className="survey-identification-remove" title="Remove" onClick={@handleSurveyAnnotationRemoval.bind this, i}>&times;</button>
           </span>
           {' '}
         </span>}

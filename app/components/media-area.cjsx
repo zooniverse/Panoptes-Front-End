@@ -97,6 +97,7 @@ module.exports = React.createClass
     resource: null
     link: 'attached_images'
     pageSize: 200
+    metadata: {}
     onAdd: Function.prototype
     onDelete: Function.prototype
 
@@ -110,18 +111,25 @@ module.exports = React.createClass
     lineHeight: '100px'
     width: '100px'
 
+  filterOnMetadata: (resource) ->
+    passes = true
+    for key, value of @props.metadata
+      unless resource.metadata[key] is value
+        passes = false
+        break
+    passes
+
   render: ->
     window.lastRenderedMediaArea = this
-    console.log('Pending', @state.pendingFiles.length, @state.pendingFiles);
 
     @cachedMediaRequest = @props.resource.get @props.link, page_size: @props.pageSize
       .catch ->
         []
 
     <PromiseRenderer promise={@cachedMediaRequest}>{(media) =>
-      media = [].concat media
+      media = [].concat(media).filter @filterOnMetadata
 
-      <div className="media-area" style={position: 'relative'}>
+      <div className={"media-area #{@props.className}".trim()} style={Object.assign position: 'relative', @props.style}>
         <FileDropTarget style={
           bottom: '3px'
           left: '3px'
@@ -213,6 +221,8 @@ module.exports = React.createClass
         content_type: file.type
         metadata:
           filename: file.name
+
+    Object.assign payload.media.metadata, @props.metadata
 
     apiClient.post @props.resource._getURL(@props.link), payload
       .then (media) =>
