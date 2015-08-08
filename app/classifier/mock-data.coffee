@@ -8,7 +8,7 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'draw'
+  first_task: 'cool'
   tasks:
     survey:
       type: 'survey'
@@ -188,10 +188,9 @@ workflow = apiClient.type('workflows').create
       type: 'single'
       question: 'Is this cool?'
       answers: [
-        {label: 'Yeah'}
-        {label: 'Nah'}
+        {label: 'Yeah', next: 'features'}
+        {label: 'Nah', next: null}
       ]
-      next: 'features'
 
     features:
       type: 'multiple'
