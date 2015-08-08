@@ -68,8 +68,8 @@ module.exports = React.createClass
       value: []
 
     isAnnotationComplete: (task, annotation) ->
-      # Booleans compare to numbers as expected: true = 1, false = 0.
-      annotation.value.length >= task.required
+      # Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
+      annotation.value.length >= (task.required ? 0)
 
   getDefaultProps: ->
     task: null
