@@ -87,8 +87,10 @@ Classifier = React.createClass
     if TaskComponent.isAnnotationComplete?
       waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation
 
+    if TaskComponent is tasks.single
+      currentAnswer = task.answers?[annotation.value]
     # If the next task key exists, make sure the task it points to actually exists.
-    nextTaskKey = if TaskComponent is tasks.single and currentAnswer? and @props.workflow.tasks[currentAnswer.next]?
+    nextTaskKey = if currentAnswer? and @props.workflow.tasks[currentAnswer.next]?
       currentAnswer.next
     else if @props.workflow.tasks[task.next]?
       task.next
@@ -170,7 +172,7 @@ Classifier = React.createClass
   handleToolChange: (annotation, oldToolIndex) ->
     lastMark = annotation.value[annotation.value.length - 1]
     if lastMark?
-      ToolComponent = drawingTools[@props.workflow.tasks[annotation.task].tools[oldToolIndex].type]
+      ToolComponent = drawingTools[@props.workflow.tasks[annotation.task].tools[oldToolIndex]?.type]
       if ToolComponent?
         if ToolComponent.isComplete? and not ToolComponent.isComplete lastMark
           ToolComponent.forceComplete? lastMark

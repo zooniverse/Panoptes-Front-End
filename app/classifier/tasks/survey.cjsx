@@ -315,8 +315,7 @@ module.exports = React.createClass
 
     isAnnotationComplete: (task, annotation) ->
       # Booleans compare to numbers as expected: true = 1, false = 0.
-      annotation.value.length >= task.required and not annotation._choiceInProgress
-
+      annotation.value.length >= (task.required ? 0) and not annotation._choiceInProgress
 
   getDefaultProps: ->
     task: null
