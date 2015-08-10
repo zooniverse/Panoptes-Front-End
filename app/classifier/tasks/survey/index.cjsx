@@ -3,6 +3,7 @@ Editor = require './editor'
 Summary = require './summary'
 Chooser = require './chooser'
 Choice = require './choice'
+AnnotationView = require './annotation-view'
 
 module.exports = React.createClass
   displayName: 'SurveyTask'
@@ -10,6 +11,7 @@ module.exports = React.createClass
   statics:
     Editor: Editor
     Summary: Summary
+    AfterSubject: AnnotationView
 
     getDefaultTask: ->
       type: 'survey'

@@ -90,7 +90,17 @@ module.exports = React.createClass
     currentTaskComponent = tasks[currentTaskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
 
+    if currentTaskComponent?
+      {BeforeSubject, AfterSubject} = currentTaskComponent
+      hookProps =
+        task: currentTaskDescription
+        classification: @props.classification
+        annotation: @props.annotation
+
     <div className="subject-area">
+      {if BeforeSubject?
+        <BeforeSubject {...hookProps} />}
+
       <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <SVG ref="markingSurface" style={SubjectViewer.overlayStyle} naturalWidth={@state.naturalWidth} naturalHeight={@state.naturalHeight} handleResize={@handleResize}>
           {<SVGImage src={src} width={@state.naturalWidth} height={@state.naturalHeight} /> if type is 'image'}
@@ -168,8 +178,8 @@ module.exports = React.createClass
             </Tooltip>}
       </SubjectViewer>
 
-      {if currentTaskComponent is tasks.survey
-        @renderSurveyAnnotation()}
+      {if AfterSubject?
+        <AfterSubject {...hookProps} />}
     </div>
 
   renderSurveyAnnotation: ->
