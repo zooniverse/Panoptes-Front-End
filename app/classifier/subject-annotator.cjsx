@@ -90,7 +90,17 @@ module.exports = React.createClass
     currentTaskComponent = tasks[currentTaskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
 
+    if currentTaskComponent?
+      {BeforeSubject, AfterSubject} = currentTaskComponent
+      hookProps =
+        task: currentTaskDescription
+        classification: @props.classification
+        annotation: @props.annotation
+
     <div className="subject-area">
+      {if BeforeSubject?
+        <BeforeSubject {...hookProps} />}
+
       <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
         <SVG ref="markingSurface" style={SubjectViewer.overlayStyle} naturalWidth={@state.naturalWidth} naturalHeight={@state.naturalHeight} handleResize={@handleResize}>
           {<SVGImage src={src} width={@state.naturalWidth} height={@state.naturalHeight} /> if type is 'image'}
@@ -168,37 +178,9 @@ module.exports = React.createClass
             </Tooltip>}
       </SubjectViewer>
 
-      {if currentTaskComponent is tasks.survey
-        @renderSurveyAnnotation()}
+      {if AfterSubject?
+        <AfterSubject {...hookProps} />}
     </div>
-
-  renderSurveyAnnotation: ->
-    taskDescription = @props.workflow.tasks[@props.annotation?.task]
-
-    <div>
-      {for identification, i in @props.annotation.value
-        identification._key ?= Math.random()
-
-        answersByQuestion = taskDescription.questionsOrder.map (questionID) ->
-          if questionID of identification.answers
-            answerLabels = [].concat(identification.answers[questionID]).map (answerID) ->
-              taskDescription.questions[questionID].answers[answerID].label
-            answerLabels.join ', '
-        answersList = answersByQuestion.filter(Boolean).join '; '
-
-        <span key={identification._key}>
-          <span className="survey-identification-proxy" title={answersList}>
-            {taskDescription.choices[identification.choice].label}
-            {' '}
-            <button type="button" className="survey-identification-remove" title="Remove" onClick={@handleSurveyAnnotationRemoval.bind this, i}>&times;</button>
-          </span>
-          {' '}
-        </span>}
-    </div>
-
-  handleSurveyAnnotationRemoval: (index) ->
-    @props.annotation.value.splice index, 1
-    @updateAnnotations()
 
   handleSubjectFrameLoad: (e) ->
     if e.target.tagName.toUpperCase() is 'IMG'
