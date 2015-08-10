@@ -17,6 +17,7 @@ DisplayRoles = require './lib/display-roles'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
+merge = require 'lodash.merge'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -170,12 +171,18 @@ module?.exports = React.createClass
   onEditSubmit: (e) ->
     e.preventDefault()
     form = document.querySelector('.talk-edit-discussion-form')
+    boardSelect = form.querySelector('select')
+
     title = form.querySelector('[name="title"]').value
     sticky = form.querySelector('[name="sticky"]').checked
     locked = form.querySelector('[name="locked"]').checked
-    @discussionsRequest().update({title, sticky, locked}).save()
+    board_id = boardSelect.options[boardSelect.selectedIndex].value
+
+    @discussionsRequest().update({title, sticky, locked, board_id}).save()
       .then (discussion) =>
-        @setState {discussion: discussion[0]}
+        {owner, name} = @props.params
+        discussionRoute = if (owner and name) then 'project-talk-discussion' else 'talk-discussion'
+        @transitionTo discussionRoute, merge(@props.params, board: board_id), @props.query
 
   lockedMessage: ->
     <div className="talk-discussion-locked">
@@ -202,6 +209,18 @@ module?.exports = React.createClass
                 <label className="toggle">Locked:
                   <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
                 </label>
+
+                <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
+                  <div>
+                    <p><strong>Board:</strong></p>
+                    <select onChange={@onChangeSelect}>
+                      {boards.map (board, i) =>
+                        <option key={board.id} value={board.id} selected={board.id is discussion.board_id}>{board.title}</option>
+                        }
+                    </select>
+                  </div>
+                }</PromiseRenderer>
+
                 <button type="submit">Update</button>
               </form>}
 
