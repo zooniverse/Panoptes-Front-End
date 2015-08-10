@@ -24,12 +24,12 @@ module.exports = React.createClass
           <span className="survey-identification-proxy" title={answersList}>
             {@props.task.choices[identification.choice].label}
             {' '}
-            <button type="button" className="survey-identification-remove" title="Remove" onClick={@handleSurveyAnnotationRemoval.bind this, i}>&times;</button>
+            <button type="button" className="survey-identification-remove" title="Remove" onClick={@handleRemove.bind this, i}>&times;</button>
           </span>
           {' '}
         </span>}
     </div>
 
-  handleSurveyAnnotationRemoval: (index) ->
+  handleRemove: (index) ->
     @props.annotation.value.splice index, 1
     @props.classification.update 'annotations'

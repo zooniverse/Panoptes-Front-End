@@ -182,34 +182,6 @@ module.exports = React.createClass
         <AfterSubject {...hookProps} />}
     </div>
 
-  renderSurveyAnnotation: ->
-    taskDescription = @props.workflow.tasks[@props.annotation?.task]
-
-    <div>
-      {for identification, i in @props.annotation.value
-        identification._key ?= Math.random()
-
-        answersByQuestion = taskDescription.questionsOrder.map (questionID) ->
-          if questionID of identification.answers
-            answerLabels = [].concat(identification.answers[questionID]).map (answerID) ->
-              taskDescription.questions[questionID].answers[answerID].label
-            answerLabels.join ', '
-        answersList = answersByQuestion.filter(Boolean).join '; '
-
-        <span key={identification._key}>
-          <span className="survey-identification-proxy" title={answersList}>
-            {taskDescription.choices[identification.choice].label}
-            {' '}
-            <button type="button" className="survey-identification-remove" title="Remove" onClick={@handleSurveyAnnotationRemoval.bind this, i}>&times;</button>
-          </span>
-          {' '}
-        </span>}
-    </div>
-
-  handleSurveyAnnotationRemoval: (index) ->
-    @props.annotation.value.splice index, 1
-    @updateAnnotations()
-
   handleSubjectFrameLoad: (e) ->
     if e.target.tagName.toUpperCase() is 'IMG'
       {naturalWidth, naturalHeight} = e.target
