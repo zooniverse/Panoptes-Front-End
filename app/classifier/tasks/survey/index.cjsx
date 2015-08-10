@@ -1,5 +1,5 @@
 React = require 'react'
-DropdownForm = require '../../components/dropdown-form'
+DropdownForm = require '../../../components/dropdown-form'
 {Markdown} = require 'markdownz'
 
 THUMBNAIL_BREAKPOINTS = [Infinity, 40, 20, 10, 5, 0]
@@ -294,7 +294,7 @@ module.exports = React.createClass
   displayName: 'SurveyTask'
 
   statics:
-    Editor: require './survey-editor'
+    Editor: require './editor'
     Summary: Summary
 
     getDefaultTask: ->
