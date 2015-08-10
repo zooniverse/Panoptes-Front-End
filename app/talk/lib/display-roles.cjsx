@@ -15,6 +15,10 @@ roleDisplayName = (role, section) ->
   else if (role.section is section) # other current section roles
     role.name
 
+uniqueRoles = (roles) ->
+  roleSections = roles.map((role) -> role.section)
+  roles.filter((role) -> roleSections.indexOf(role.section) isnt -1)
+
 DisplayRoles = React.createClass
   displayName: 'TalkDisplayRoles'
 
@@ -30,7 +34,7 @@ DisplayRoles = React.createClass
 
   render: ->
     <div className="talk-display-roles">
-      {@props.roles.map(@role)}
+      {uniqueRoles(@props.roles).map(@role)}
     </div>
 
 module?.exports = DisplayRoles
