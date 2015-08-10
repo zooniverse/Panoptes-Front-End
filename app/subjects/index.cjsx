@@ -11,9 +11,14 @@ projectSection = require '../talk/lib/project-section'
 parseSection = require '../talk/lib/parse-section'
 QuickSubjectCommentForm= require '../talk/quick-subject-comment-form'
 {Navigation} = require 'react-router'
+alert = require '../lib/alert'
+SignInPrompt = require '../partials/sign-in-prompt'
 
 indexOf = (elem) ->
   (elem while elem = elem.previousSibling).length
+
+promptToSignIn = ->
+  alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 module?.exports = React.createClass
   displayName: 'Subject'
@@ -106,7 +111,9 @@ module?.exports = React.createClass
                 else
                   <p>There are no discussion boards setup for this project yet. Check back soon!</p>
               }</PromiseRenderer>
-            }</PromiseRenderer>}
+            }</PromiseRenderer>
+          else
+            <p>Please <span className="sign-in" onClick={promptToSignIn}>sign in</span> to conttribute to subject discussions</p>}
         </section>
         }
     </div>
