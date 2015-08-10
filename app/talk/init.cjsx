@@ -24,6 +24,7 @@ module?.exports = React.createClass
 
   propChangeHandlers:
     'section': 'setBoards'
+    'user': 'setBoards'
 
   getInitialState: ->
     boards: []
