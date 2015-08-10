@@ -19,6 +19,7 @@ module?.exports = React.createClass
   render: ->
     <button
       className="collections-manager-icon"
+      title="Collect"
       onClick={@toggleCollectionsManagerPopup}>
       <i className="fa fa-list" />
     </button>
