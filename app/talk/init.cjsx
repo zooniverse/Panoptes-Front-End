@@ -36,8 +36,8 @@ module?.exports = React.createClass
   componentWillUnmount: ->
     sugarClient.unsubscribeFrom('zooniverse') if @props.section is 'zooniverse'
 
-  setBoards: ->
-    talkClient.type('boards').get(section: @props.section)
+  setBoards: (propValue, props = @props) ->
+    talkClient.type('boards').get(section: props.section)
       .then (boards) =>
         @setState {boards, loading: false}
 
