@@ -97,7 +97,7 @@ module?.exports = React.createClass
                 <button key={action} className="moderations-#{action}" onClick={=>
                   if window.confirm("Are you sure that you want to delete the reported comment?")
                     @updateModeration(moderation, action)
-                }>{action}</button>
+                }>Delete</button>
               else
                 <button key={action} className="moderations-#{action}" onClick={=> @updateModeration(moderation, action)}>{action}</button>
           }
