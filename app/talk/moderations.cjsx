@@ -24,7 +24,7 @@ module?.exports = React.createClass
     moderationsMeta: {}
     user: null
     loading: true
-    filter: null
+    filter: 'opened' # default to show open reports
 
   getDefaultProps: ->
     query:
