@@ -1,7 +1,7 @@
 DEFAULT_ENV = 'staging'
 
 API_HOSTS =
-  production: 'https://panoptes.zooniverse.org'
+  production: 'https://www.zooniverse.org'
   staging: 'https://panoptes-staging.zooniverse.org'
   cam: 'http://172.17.2.87:3000'
 
