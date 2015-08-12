@@ -42,7 +42,7 @@ module?.exports = React.createClass
       @setDiscussion(nextProps.params.discussion)
         .then => @setComments(nextProps.query.page ? 1)
     else if nextProps.query.page isnt @props.query.page
-      @setComments(nextProps.query.page ? 1)
+      @setComments(nextProps.query.page)
 
   componentDidMount: ->
     @shouldScrollToBottom = true if @props.query?.scrollToLastComment
