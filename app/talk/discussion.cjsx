@@ -202,7 +202,7 @@ module?.exports = React.createClass
             {if discussion?.title
               <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
                 <h3>Edit Title:</h3>
-                <input name="title" defaultValue={discussion?.title}/>
+                <input name="title" type="text" defaultValue={discussion?.title}/>
                 <label className="toggle">Sticky:
                   <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
                 </label>
