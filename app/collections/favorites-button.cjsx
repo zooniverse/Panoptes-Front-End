@@ -88,6 +88,7 @@ module?.exports = React.createClass
       <button
         className="favorites-button"
         type="button"
+        title={if favorited then 'Unfavorite' else 'Favorite'}
         onClick={@toggleFavorite}>
         <i className="
           fa fa-heart#{if favorited then '' else '-o'}
