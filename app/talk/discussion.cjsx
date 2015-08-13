@@ -74,6 +74,11 @@ module?.exports = React.createClass
             @scrollToBottomOfDiscussion()
             @shouldScrollToBottom = false
 
+  setCommentsMeta: (page = @props.query?.page) ->
+    @commentsRequest(page).then (comments) =>
+      commentsMeta = comments[0]?.getMeta()
+      @setState {commentsMeta}
+
   scrollToBottomOfDiscussion: ->
     React.findDOMNode(@)?.scrollIntoView(false)
 
@@ -116,7 +121,8 @@ module?.exports = React.createClass
 
     talkClient.type('comments').create(comment).save()
       .then (comment) =>
-        @setComments(@state.commentsMeta?.page_count)
+        @setCommentsMeta().then =>
+          @setComments(@state.commentsMeta?.page_count)
 
   onLikeComment: (commentId) ->
     talkClient.type('comments').get(commentId)
