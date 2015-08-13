@@ -4,8 +4,8 @@ SubjectAnnotator = require './subject-annotator'
 ClassificationSummary = require './classification-summary'
 {Link} = require 'react-router'
 tasks = require './tasks'
-drawingTools = require './drawing-tools'
 {getSessionID} = require '../lib/session'
+preloadSubject = require '../lib/preload-subject'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -13,15 +13,13 @@ unless process.env.NODE_ENV is 'production'
 Classifier = React.createClass
   displayName: 'Classifier'
 
-  _lastAnnotationAndTool: ''
-
   getDefaultProps: ->
     user: null
     if mockData?
       {workflow, subject, classification} = mockData
-    workflow: workflow
-    subject: subject
-    classification: classification
+    workflow: workflow ? null
+    subject: subject ? null
+    classification: classification ? null
     onLoad: Function.prototype
 
   getInitialState: ->
@@ -41,24 +39,30 @@ Classifier = React.createClass
 
   loadSubject: (subject) ->
     @setState subjectLoading: true
-    # TODO: Pre-cache subject images here and change loading state back.
+    preloadSubject subject
+      .then =>
+        if @props.subject is subject # The subject could have changed while we were loading.
+          @setState subjectLoading: false
+          @props.onLoad?()
 
   prepareToClassify: (classification) ->
     setTimeout => # TODO: Why is this here?
       classification.annotations ?= []
       if classification.annotations.length is 0
-        @addAnnotationForTask @props.workflow.first_task
+        @addAnnotationForTask classification, @props.workflow.first_task
 
   render: ->
     <ChangeListener target={@props.classification}>{=>
-      currentClassification = if @state.showingExpertClassification
-        @props.subject.expert_classification_data
+      if @state.showingExpertClassification
+        currentClassification = @props.subject.expert_classification_data
       else
-        @props.classification
+        currentClassification = @props.classification
+        unless @props.classification.completed
+          currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
+          currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
-      if currentClassification is @props.classification and not @props.classification.completed
-        currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
-        currentTask = @props.workflow.tasks[currentAnnotation?.task]
+      # This is just easy access for debugging.
+      window.classification = currentClassification
 
       <div className="classifier">
         <SubjectAnnotator
@@ -83,11 +87,14 @@ Classifier = React.createClass
   renderTask: (classification, annotation, task) ->
     TaskComponent = tasks[task.type]
 
+    # Should we disabled the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
+    # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
       waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation
 
+    # Each answer of a single-answer task can have its own `next` key to override the task's.
     if TaskComponent is tasks.single
       currentAnswer = task.answers?[annotation.value]
       nextTaskKey = currentAnswer?.next
@@ -98,6 +105,7 @@ Classifier = React.createClass
       nextTaskKey = ''
 
     # TODO: Actually disable things that should be.
+    # For now we'll just make them non-mousable.
     disabledStyle =
       opacity: 0.5
       pointerEvents: 'none'
@@ -110,7 +118,7 @@ Classifier = React.createClass
       <nav className="task-nav">
         <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
         {if nextTaskKey
-          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, nextTaskKey}>Next</button>
+          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
         else
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
       </nav>
@@ -145,49 +153,28 @@ Classifier = React.createClass
       </nav>
     </div>
 
+  # Whenever a subject image is loaded in the annotator, record its size at that time.
   handleSubjectImageLoad: (e, frameIndex) ->
-    @setState subjectLoading: false
-
     {naturalWidth, naturalHeight, clientWidth, clientHeight} = e.target
-
     changes = {}
     changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
-
     @props.classification.update changes
 
-    @props.onLoad? arguments...
-
-  updateAnnotations: (classification) ->
-    classification.update 'annotations'
-    @checkToolChange classification
-
-  checkToolChange: (classification) ->
-    lastAnnotationIndex = classification.annotations.length - 1
-    lastAnnotation = classification.annotations[lastAnnotationIndex]
-    if @props.workflow.tasks[lastAnnotation.task].type is 'drawing'
-      toolIdentifier = "#{lastAnnotationIndex}-#{lastAnnotation._toolIndex}"
-
-      if Array.isArray(lastAnnotation.value) and toolIdentifier isnt @_lastAnnotationAndTool
-        @handleToolChange lastAnnotation, @_lastAnnotationAndTool.split('-').pop() ? '-1'
-        @_lastAnnotationAndTool = toolIdentifier
-
-  handleToolChange: (annotation, oldToolIndex) ->
-    lastMark = annotation.value[annotation.value.length - 1]
-    if lastMark?
-      ToolComponent = drawingTools[@props.workflow.tasks[annotation.task].tools[oldToolIndex]?.type]
-      if ToolComponent?
-        if ToolComponent.isComplete? and not ToolComponent.isComplete lastMark
-          ToolComponent.forceComplete? lastMark
-
-  destroyCurrentAnnotation: ->
-    @props.classification.annotations.pop()
+  # This is passed as a generic change handler to the tasks
+  updateAnnotations: ->
     @props.classification.update 'annotations'
 
-  addAnnotationForTask: (taskKey) ->
+  # Next (or start):
+  addAnnotationForTask: (classification, taskKey) ->
     taskDescription = @props.workflow.tasks[taskKey]
     annotation = tasks[taskDescription.type].getDefaultAnnotation()
     annotation.task = taskKey
-    @props.classification.annotations.push annotation
+    classification.annotations.push annotation
+    classification.update 'annotations'
+
+  # Back up:
+  destroyCurrentAnnotation: ->
+    @props.classification.annotations.pop()
     @props.classification.update 'annotations'
 
   completeClassification: ->
@@ -198,12 +185,10 @@ Classifier = React.createClass
       'metadata.viewport':
         width: innerWidth
         height: innerHeight
-
     @props.onComplete?()
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
-
 
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'

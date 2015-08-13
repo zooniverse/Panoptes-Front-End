@@ -1,7 +1,9 @@
 React = require 'react'
-GenericTaskEditor = require './generic-editor'
+GenericTaskEditor = require '../generic-editor'
 Summary = require './summary'
-GenericTask = require './generic'
+MarkingInitializer = require './marking-initializer'
+MarkingsRenderer = require './markings-renderer'
+GenericTask = require '../generic'
 {Markdown} = require 'markdownz'
 icons = require './icons'
 
@@ -13,6 +15,8 @@ module.exports = React.createClass
   statics:
     Editor: GenericTaskEditor
     Summary: Summary
+    InsideSubject: MarkingInitializer
+    PersistInsideSubject: MarkingsRenderer
 
     getDefaultTask: ->
       type: 'drawing'
@@ -28,7 +32,7 @@ module.exports = React.createClass
       value: []
 
     areMarksComplete: (task, annotation) ->
-      tasks = require './index' # Circular
+      tasks = require '..' # Circular
       for mark in annotation.value
         toolDescription = task.tools[mark.tool]
         for detail, i in toolDescription.details when detail.required

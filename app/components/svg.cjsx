@@ -6,12 +6,12 @@ module.exports = React.createClass
   getInitialState: ->
     align: 'xMidYMid'
     viewbox: ''
-  
+
   render: ->
-    <svg viewBox={@state.viewbox} preserveAspectRatio="#{@state.align} meet" style={@props.style}>
+    <svg viewBox={@state.viewbox || null} preserveAspectRatio="#{@state.align} meet" style={@props.style}>
       {@props.children}
     </svg>
-  
+
   crop: (x = 0, y = 0, width = @props.naturalWidth, height = @props.naturalHeight) ->
     x = Math.max 0, x
     y = Math.max 0, y
@@ -24,7 +24,7 @@ module.exports = React.createClass
     viewbox = [x,y,width,height].join ' '
     align = @align x, y, width, height
     @setState {viewbox, align}, @props.handleResize
-  
+
   align: (x = 0, y = 0, width = @props.naturalWidth, height = @props.naturalHeight) ->
     aspect = width / height
     subject_aspect = @props.naturalWidth / @props.naturalHeight
