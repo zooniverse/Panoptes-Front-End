@@ -224,6 +224,11 @@ COPY_GREY_LIGHT = #afaeae
   .talk-board-preview
     @extend .talk-module
     overflow: auto
+    position: relative
+
+    &.private
+      background: white
+
     h1 a
       color: COPY
       text-decoration: none
@@ -232,6 +237,13 @@ COPY_GREY_LIGHT = #afaeae
     p
       margin: 0 0 5px 0
       color: COPY_GREY_MID
+
+    .board-locked
+      font-size: 12px
+      color: FAILURE
+      position: absolute
+      top: TALK_PADDING
+      right: TALK_PADDING
 
   .preview-content
     width: 80%
