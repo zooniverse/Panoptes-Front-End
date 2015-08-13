@@ -7,6 +7,34 @@ alert = require '../../lib/alert'
 DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
 
+DrawingToolsEditor = React.createClass
+  displayName: 'DrawingToolsEditor'
+  
+  getInitialState: ->
+    drawingTools: drawingTools
+  
+  componentWillMount: ->
+    delete drawingTools.crop
+    @setState drawingTools
+    @props.workflow.get 'project'
+      .then (project) =>
+        project.get 'owner'
+          .then (owner) =>
+            drawingTools.crop = require '../drawing-tools/rectangle' if owner.display_name is 'aliburchard'
+            @setState drawingTools
+            
+  
+  render: ->
+    <div key="type" className="workflow-choice-setting">
+      <AutoSave resource={@props.workflow}>
+        Type{' '}
+        <select name="#{@props.name}" value={@props.value} onChange={@props.onChange}>
+          {for toolKey of @state.drawingTools
+            <option key={toolKey} value={toolKey}>{toolKey}</option>}
+        </select>
+      </AutoSave>
+    </div>
+
 module.exports = React.createClass
   displayName: 'GenericTaskEditor'
 
@@ -88,15 +116,7 @@ module.exports = React.createClass
                     </div>
 
                 when 'drawing'
-                  [<div key="type" className="workflow-choice-setting">
-                    <AutoSave resource={@props.workflow}>
-                      Type{' '}
-                      <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
-                        {for toolKey of drawingTools
-                          <option key={toolKey} value={toolKey}>{toolKey}</option>}
-                      </select>
-                    </AutoSave>
-                  </div>
+                  [<DrawingToolsEditor project={@props.project} workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange} />
 
                   <div key="color" className="workflow-choice-setting">
                     <AutoSave resource={@props.workflow}>
