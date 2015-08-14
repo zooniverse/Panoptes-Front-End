@@ -84,6 +84,12 @@ module?.exports = React.createClass
       <h1>Comment {comment.id} Reports</h1>
       <ul>{moderation.reports.map(@report)}</ul>
 
+      <span>Reported comment by:{' '}
+        <Link to='user-profile' params={name: comment.user_login}>
+          {comment.user_display_name}
+        </Link>:
+      </span>
+
       <CommentLink comment={comment} />
 
       <div className="moderations-actions-buttons">
