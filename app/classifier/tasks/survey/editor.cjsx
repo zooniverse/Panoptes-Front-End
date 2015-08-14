@@ -221,7 +221,7 @@ module.exports = React.createClass
         cleanValue = value.trim?()
 
         if key.indexOf('=') is -1
-          cleanKey = cleanKey.toLowerCase()
+          cleanKey = cleanKey.toLowerCase().replace /\s+/g, '_'
         else
           cleanValue = @determineBoolean cleanValue
 
@@ -247,22 +247,25 @@ module.exports = React.createClass
     @props.task.choices[choiceID] ?=
       label: name
       description: ''
+      noQuestions: false
       image: []
       characteristics: {}
       confusionsOrder: []
       confusions: {}
+    @props.task.choices[choiceID]
 
-  addChoice: ({name, description, images, __parsedExtra}) ->
+  addChoice: ({name, description, no_questions, images, __parsedExtra}) ->
     unless name?
       throw new Error 'Choices require a "name" column.'
-    choiceID = @makeID name
-    @ensureChoice name
-    @props.task.choices[choiceID].label = name
+    choice = @ensureChoice name
+    choice.label = name
     if description?
-      @props.task.choices[choiceID].description = description
+      choice.description = description
+    if no_questions?
+      choice.noQuestions = @determineBoolean no_questions
     if images?
       images = images.split(/\s*,\s*/).concat(__parsedExtra ? []).filter Boolean
-      @props.task.choices[choiceID].images = images
+      choice.images = images
 
   addCharacteristics: (row) ->
     unless row.name?
