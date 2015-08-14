@@ -21,13 +21,14 @@ module?.exports = React.createClass
 
     <div className="talk-discussion-preview">
       <div className="preview-content">
-        {if comment.focus_id and (comment.focus_type is 'Subject')
+
+        {if discussion.focus_id and (discussion.focus_type is 'Subject')
           <div className="subject-preview">
-            <PromiseRenderer catch={null} promise={apiClient.type('subjects').get(comment.focus_id)}>{(subject) =>
+            <PromiseRenderer catch={null} promise={apiClient.type('subjects').get(discussion.focus_id)}>{(subject) =>
               <Thumbnail src={getSubjectLocation(subject).src} width={100} />
             }</PromiseRenderer>
           </div>
-        }
+          }
 
         <h1>
           {<i className="fa fa-thumb-tack talk-sticky-pin"></i> if discussion.sticky}
