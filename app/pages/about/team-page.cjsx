@@ -120,6 +120,9 @@ counterpart.registerTranslations 'en',
         bio: '''Kyle is an astronomer who studies galaxies, masers, and black holes (although he's
         been getting more into data science). He works on both Galaxy Zoo and Radio Galaxy Zoo,
         as well as developing advanced tools for the volunteers.'''
+      lauraTrouille:
+        title: 'Adler Planetarium Zooniverse Director'
+        bio: '''In July 2015, Laura became Director of Citizen Science at the Adler Planetarium and co-lead of the Zooniverse. While earning her Ph.D. in astronomy in 2010 studying galaxy evolution, she embodied cosmic collisions as a roller derby queen aptly named ‘The Big Bang’.'''
       lucyFortson:
         title: 'University of Minnesota Zooniverse Director'
         bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota. One of the Zooniverse
@@ -328,6 +331,13 @@ teamMembers =
     bio: counterpart "team.content.kyleWillett.bio"
     image: "./assets/team/kyle.jpg"
     location: "minnesota"
+  lauraTrouille:
+    name: "Laura Trouille"
+    twitter: "windycityastro"
+    title: counterpart "team.content.lauraTrouille.title"
+    bio: counterpart "team.content.lauraTrouille.bio"
+    image: "./assets/team/laura.jpg"
+    location: "chicago"
   lucyFortson:
     name: "Lucy Fortson"
     twitter: "lucyfortson"
