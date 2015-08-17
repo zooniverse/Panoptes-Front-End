@@ -77,22 +77,27 @@ $survey-task-pill-button
     margin: 0.3em 0.6em
 
 .survey-task-chooser-choice-thumbnail
+  background-size: cover
+  background-position: 50% 50%
   border-radius: 3px
   display: inline-block
   vertical-align: middle
 
-  [data-breakpoint="Infinity"] &,
-  [data-breakpoint="40"] &
+  [data-breakpoint="Infinity"] &-container,
+  [data-breakpoint="40"] &-container
     display: none
 
   [data-breakpoint="20"] &
-    height: 2em
+    height: 1.5em
+    width: 2em
 
   [data-breakpoint="10"] &
-    height: 4em
+    height: 3em
+    width: 4em
 
   [data-breakpoint="5"] &
-    height: 8em
+    height: 6em
+    width: 8em
 
 .survey-task-chooser-choice-label
   display: inline-block

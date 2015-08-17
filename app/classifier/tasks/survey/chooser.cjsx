@@ -79,8 +79,10 @@ module.exports = React.createClass
             choice = @props.task.choices[choiceID]
             <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
               {unless choice.images.length is 0
-                  <img src={@props.task.images[choice.images[0]]} className="survey-task-chooser-choice-thumbnail" />}
-              <div className="survey-task-chooser-choice-label">{choice.label}</div>
+                <span className="survey-task-chooser-choice-thumbnail-container">
+                  <span className="survey-task-chooser-choice-thumbnail" style={backgroundImage: "url(#{@props.task.images[choice.images[0]]})"}></span>
+                </span>}
+              <span className="survey-task-chooser-choice-label">{choice.label}</span>
             </button>}
       </div>
       <div style={textAlign: 'center'}>
