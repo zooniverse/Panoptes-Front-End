@@ -12,6 +12,9 @@ counterpart.registerTranslations 'en',
       title: 'Projects'
       projectList: 'Projects'
       collectionList: 'Collections'
+      projectBuilder: 'Build a Project'
+      howToGuide: 'How to Build'
+      projectBuilderPolicies: 'Project Policies'
     about:
       title: 'About'
       aboutUs: 'About Us'
@@ -86,6 +89,9 @@ module.exports = React.createClass
             <Translate component="h6" content="footer.discover.title" />
             <Link to="projects"><Translate content="footer.discover.projectList" /></Link>
             <Link to="collections"><Translate content="footer.discover.collectionList" /></Link>
+            <Link to="lab"><Translate content="footer.discover.projectBuilder" /></Link>
+            <Link to="lab-how-to"><Translate content="footer.discover.howToGuide" /></Link>
+            <Link to="lab-policies"><Translate content="footer.discover.projectBuilderPolicies" /></Link>
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.about.title" />
