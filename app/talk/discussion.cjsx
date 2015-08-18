@@ -31,6 +31,7 @@ module?.exports = React.createClass
     commentsMeta: {}
     commentValidationErrors: []
     editingTitle: false
+    reply: ''
 
   getDefaultProps: ->
     query: page: 1
@@ -124,6 +125,7 @@ module?.exports = React.createClass
       .then (comment) =>
         @setCommentsMeta().then =>
           @setComments(@state.commentsMeta?.page_count)
+          @setState {reply: ''}
 
   onLikeComment: (commentId) ->
     talkClient.type('comments').get(commentId)
@@ -145,7 +147,7 @@ module?.exports = React.createClass
         .join("\n")
 
       reply = "> In reply to #{user.display_name}'s comment: \n#{quotedComment}\n\n"
-      @setState {reply}
+      @setState {reply}, => @setState {reply: ''}
 
     findDOMNode(@).scrollIntoView(false)
 
