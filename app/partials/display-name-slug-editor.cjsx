@@ -20,7 +20,7 @@ module.exports = React.createClass
   resourceURL: ->
     @props.resource.get('owner')
       .then (owner) =>
-        "#/#{@props.resourceType}s/#{owner.login or owner.name}/#{@props.resource.slug}"
+        "#/#{@props.resourceType}s/#{@props.resource.slug}"
 
   undoNameChange: ->
     @props.resource.update display_name: @state.currentName
