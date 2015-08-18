@@ -30,6 +30,7 @@ module?.exports = React.createClass
     discussion: {}
     commentsMeta: {}
     commentValidationErrors: []
+    editingTitle: false
 
   getDefaultProps: ->
     query: page: 1
@@ -195,11 +196,38 @@ module?.exports = React.createClass
       <i className="fa fa-lock"></i> This discussion has been Locked and is read-only
     </div>
 
+  onClickEditTitle: ->
+    @setState {editingTitle: not @state.editingTitle}
+
+  onChangeTitle: (e) ->
+    e.preventDefault()
+    title = findDOMNode(@refs.editTitle).value
+    @discussionsRequest().update({title}).save()
+      .then (discussion) =>
+        @setState {editingTitle: false}
+        @setDiscussion()
+      .catch (e) =>
+        @setState {editingTitle: false}
+
   render: ->
     {discussion} = @state
 
     <div className="talk-discussion">
-      <h1 className="talk-page-header">{discussion?.title}</h1>
+      {if not @state.editingTitle
+        <h1 className="talk-page-header">
+          {discussion?.title}
+
+          {if discussion?.user_id is @props.user.id
+            <span>
+              {' '}<i className="fa fa-pencil" title="Edit Title" onClick={@onClickEditTitle}/>
+            </span>
+            }
+        </h1>
+      else
+        <h1>
+          <input ref="editTitle" type="text" defaultValue={discussion?.title} onBlur={@onChangeTitle}/>
+        </h1>
+        }
 
       {if discussion && @props.user?
         <Moderation section={discussion.section} user={@props.user}>

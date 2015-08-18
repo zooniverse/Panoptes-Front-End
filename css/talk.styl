@@ -326,6 +326,7 @@ COPY_GREY_LIGHT = #afaeae
   .talk-discussion
     max-width: 960px
     margin: 0 auto
+
     .talk-comment-box
       width: 80%
 
@@ -339,6 +340,15 @@ COPY_GREY_LIGHT = #afaeae
       &.locked
         pointer-events: none
         opacity: 0.6
+    h1
+      input
+        margin: 0 auto
+        text-align: center
+        width: 100%
+        border: 1px solid FOREGROUND
+        border-radius: TALK_BORDER_RADIUS
+      i
+        font-size: 12px
 
   .talk-comment
     overflow: auto
