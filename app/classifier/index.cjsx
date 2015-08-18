@@ -89,11 +89,12 @@ Classifier = React.createClass
 
     if TaskComponent is tasks.single
       currentAnswer = task.answers?[annotation.value]
-    # If the next task key exists, make sure the task it points to actually exists.
-    nextTaskKey = if currentAnswer? and @props.workflow.tasks[currentAnswer.next]?
-      currentAnswer.next
-    else if @props.workflow.tasks[task.next]?
-      task.next
+      nextTaskKey = currentAnswer?.next
+    else
+      nextTaskKey = task.next
+
+    unless @props.workflow.tasks[nextTaskKey]?
+      nextTaskKey = ''
 
     # TODO: Actually disable things that should be.
     disabledStyle =
