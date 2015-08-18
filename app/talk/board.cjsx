@@ -15,6 +15,10 @@ ROLES = require './lib/roles'
 Loading = require '../components/loading-indicator'
 merge = require 'lodash.merge'
 talkConfig = require './config'
+SignInPrompt = require '../partials/sign-in-prompt'
+alert = require '../lib/alert'
+
+promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 PAGE_SIZE = talkConfig.boardPageSize
 
@@ -185,7 +189,7 @@ module?.exports = React.createClass
               user={@props.user} />}
          </section>
        else
-         <p>Please sign in to create discussions</p>}
+         <p>Please <span className="sign-in" onClick={promptToSignIn}>sign in</span> to create discussions</p>}
 
       <div className="talk-list-content">
         <section>
