@@ -128,7 +128,7 @@ module?.exports = React.createClass
   onLikeComment: (commentId) ->
     talkClient.type('comments').get(commentId)
       .then (comment) =>
-        return alert("Hey you can't upvote your own comment!") if +@props.user.id is +comment.user_id
+        return alert("Hey you can't upvote your own comment!") if +@props.user?.id is +comment.user_id
 
         voteUrl = (comment.href + if upvotedByCurrentUser(@props.user, comment) then '/remove_upvote' else '/upvote')
         talkClient.request('put', voteUrl, null, {})
@@ -217,7 +217,7 @@ module?.exports = React.createClass
         <h1 className="talk-page-header">
           {discussion?.title}
 
-          {if discussion?.user_id is @props.user.id
+          {if discussion?.user_id is @props.user?.id
             <span>
               {' '}<i className="fa fa-pencil" title="Edit Title" onClick={@onClickEditTitle}/>
             </span>
