@@ -21,6 +21,7 @@
     "react-select": "marten/react-select#close-after-click",
     "react-translate-component": "~0.9.0",
     "sugar-client": "^1.0.1",
+    "superagent": "^1.3.0",
     "tether": "HubSpot/tether#df8cd44"
   },
   "devDependencies": {

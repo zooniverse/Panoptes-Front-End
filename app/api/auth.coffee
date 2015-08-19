@@ -18,8 +18,8 @@ module.exports = new Model
   _getAuthToken: ->
     console?.log 'Getting auth token'
     makeHTTPRequest 'GET', config.host + "/users/sign_in/?now=#{Date.now()}", null, JSON_HEADERS
-      .then (request) ->
-        authToken = request.getResponseHeader 'X-CSRF-Token'
+      .then (resp) ->
+        authToken = resp.headers['x-csrf-token']
         console?.info "Got auth token #{authToken[...6]}..."
         authToken
 
@@ -47,8 +47,8 @@ module.exports = new Model
           console?.error 'Failed to get bearer token'
           client.handleError request
 
-  _handleNewBearerToken: (request) ->
-    response = JSON.parse request.responseText
+  _handleNewBearerToken: (resp) ->
+    response = resp.body
 
     @_bearerToken = response.access_token
     client.headers['Authorization'] = "Bearer #{@_bearerToken}"
