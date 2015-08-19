@@ -31,6 +31,7 @@ module.exports = React.createClass
   componentDidMount: ->
     addEventListener 'resize', @updateSize
     # addEventListener 'scroll', @updateSize
+    @updateSize()
     @setState alreadySeen: @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
 
   componentWillUnmount: ->
@@ -50,8 +51,6 @@ module.exports = React.createClass
     scale = @getScale()
     x = (e.pageX - pageXOffset - @state.sizeRect?.left) / scale.horizontal || 0
     y = (e.pageY - pageYOffset - @state.sizeRect?.top) / scale.vertical || 0
-    console.log 'x', x
-    console.log 'y', y
     {x, y}
 
   render: ->

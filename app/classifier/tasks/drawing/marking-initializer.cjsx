@@ -41,7 +41,6 @@ module.exports = React.createClass
           tasks[detailTaskDescription.type].getDefaultAnnotation()
 
       @props.annotation.value.push mark
-      @selectMark @props.annotation, mark
 
       MarkComponent = drawingTools[toolDescription.type]
 
@@ -55,44 +54,37 @@ module.exports = React.createClass
       for key, value of initValues
         mark[key] = value
 
-    setTimeout =>
-      @props.classification.update 'annotations'
+    @props.classification.update 'annotations'
 
   handleInitDrag: (e) ->
-    console.log 'INIT DRAG'
-    return
-    task = @props.workflow.tasks[@props.annotation.task]
-    mark = @state.selectedMark
-    MarkComponent = drawingTools[task.tools[mark.tool].type]
+    taskDescription = @props.workflow.tasks[@props.annotation.task]
+    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
+
     if MarkComponent.initMove?
       mouseCoords = @props.getEventOffset e
       initMoveValues = MarkComponent.initMove mouseCoords, mark, e
       for key, value of initMoveValues
         mark[key] = value
-    @updateAnnotations()
+
+    @props.classification.update 'annotations'
 
   handleInitRelease: (e) ->
-    console.log 'INIT RELEASE'
-    return
-    task = @props.workflow.tasks[@props.annotation.task]
-    mark = @state.selectedMark
-    MarkComponent = drawingTools[task.tools[mark.tool].type]
+    taskDescription = @props.workflow.tasks[@props.annotation.task]
+    mark = @props.annotation.value[@props.annotation.value.length - 1]
+    MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
+
     if MarkComponent.initRelease?
       mouseCoords = @props.getEventOffset e
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
       for key, value of initReleaseValues
         mark[key] = value
-    @updateAnnotations()
-    if MarkComponent.initValid? and not MarkComponent.initValid mark
-      @destroyMark @props.annotation, mark
 
-  selectMark: (annotation, mark) ->
-    if annotation? and mark?
-      index = annotation.value.indexOf mark
-      annotation.value.splice index, 1
-      annotation.value.push mark
-    # @setState selectedMark: mark, =>
-    #   @handleResize() if mark?.details? # hack to show the details box
+    @props.classification.update 'annotations'
+
+    if MarkComponent.initValid?
+      unless MarkComponent.initValid mark
+        @destroyMark @props.annotation, mark
 
   destroyMark: (annotation, mark) ->
     if mark is @state.selectedMark

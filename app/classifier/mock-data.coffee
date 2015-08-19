@@ -176,11 +176,11 @@ workflow = apiClient.type('workflows').create
             ]
           }]
         }
-        {type: 'line', label: 'Line', color: 'yellow'}
-        {type: 'rectangle', label: 'Rectangle', color: 'lime'}
-        {type: 'polygon', label: 'Polygon', color: 'cyan'}
-        {type: 'circle', label: 'Circle', color: 'blue'}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta'}
+        {type: 'line', label: 'Line', color: 'yellow', details: []}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: []}
+        {type: 'polygon', label: 'Polygon', color: 'cyan', details: []}
+        {type: 'circle', label: 'Circle', color: 'blue', details: []}
+        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: []}
       ]
       next: 'cool'
 
@@ -206,9 +206,9 @@ subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/100/75/animals/1' else BLANK_IMAGE}
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/100/75/animals/2' else BLANK_IMAGE}
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/100/75/animals/3' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
   ]
 
   metadata:

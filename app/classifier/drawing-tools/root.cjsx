@@ -1,4 +1,5 @@
 React = require 'react'
+AnchoredModalForm = require 'modal-form/anchored'
 
 STROKE_WIDTH = 1.5
 SELECTED_STROKE_WIDTH = 2.5
@@ -42,4 +43,16 @@ module.exports = React.createClass
       <g className="drawing-tool-main" {...mainStyle} onMouseDown={startHandler} onTouchStart={startHandler}>
         {@props.children}
       </g>
+
+      {if toolProps.selected and toolProps.details? and toolProps.details.length isnt 0
+        tasks = require '../tasks'
+        <AnchoredModalForm ref="detailsForm">
+          {for detailTask, i in toolProps.details
+            detailTask._key ?= Math.random()
+            TaskComponent = tasks[detailTask.type]
+            <TaskComponent key={detailTask._key} task={detailTask} annotation={toolProps.mark.details[i]} onChange={toolProps.onChange} />}
+        </AnchoredModalForm>}
     </g>
+
+  componentDidUpdate: ->
+    this.refs.detailsForm?.reposition()
