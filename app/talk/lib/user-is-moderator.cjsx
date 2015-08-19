@@ -1,10 +1,7 @@
+userIsZooniverseAdmin = require './user-is-zooniverse-admin'
+
 intersect = (arr1, arr2) ->
   arr1.filter (n) -> arr2.indexOf(n) isnt -1
-
-userIsZooniverseAdmin = (usersRoles) ->
-  zooniverseAdminRoles = usersRoles.filter (role) ->
-    role.section is 'zooniverse' and role.name is 'admin'
-  zooniverseAdminRoles.length > 0
 
 userIsModerator = (user, roles, section) -> # User response, Roles Response, Talk Section
   return true if userIsZooniverseAdmin(roles)
