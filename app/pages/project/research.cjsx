@@ -27,7 +27,7 @@ module.exports = React.createClass
     <div className="project-text-content content-container">
       <div className="columns-container">
         <PromiseRenderer promise={@props.project.get('pages', url_key: "science_case").index(0)}>{(science_case) =>
-          <Markdown className="column">{
+          <Markdown project={@props.project} className="column">{
             if science_case?.content
               science_case?.content
             else

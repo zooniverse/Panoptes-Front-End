@@ -295,6 +295,7 @@ module?.exports = React.createClass
 
           <CommentBox
             user={@props.user}
+            project={@props.project}
             validationCheck={@commentValidations}
             validationErrors={@state.commentValidationErrors}
             onSubmitComment={@onSubmitComment}
