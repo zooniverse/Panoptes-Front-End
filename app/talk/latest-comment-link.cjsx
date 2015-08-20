@@ -42,7 +42,7 @@ module?.exports = React.createClass
           </Link>
         }</PromiseRenderer>{' '}
 
-        {if discussion.title
+        {if discussion.title and @props.title
           <span>
             <Link
               to="#{@projectPrefix()}talk-discussion"
