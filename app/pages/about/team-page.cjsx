@@ -20,9 +20,9 @@ counterpart.registerTranslations 'en',
         He has a computer science degree and has worked in web hosting and development for many years.
         He's also working on a degree in astronomy with the OU.'''
       alexBowyer:
-        title: 'UX Developer'
+        title: 'Web Science Architect'
         bio: '''Alex mostly works remotely for Zooniverse from his home in Northumberland.
-        He's a web developer specializing in user experience, has a computer science degree,
+        He's a software architect designing and running Zooniverse experiments. He has a computer science degree,
         and has developed software & websites at large enterprises and startups.'''
       alexWeiksnar:
         title: 'Developer'
