@@ -65,8 +65,12 @@ module.exports = Router.create <Route handler={require './partials/app'}>
     <Route name="talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
   </Route>
 
-  <Route name="collections" path="collections" handler={require './pages/collections'}>
-    <Route name="collections-user" path=":owner" handler={require './pages/collections'} />
+  <Route name="favorites" path="favorites" handler={require('./pages/collections').FavoritesList}>
+    <Route name="favorites-user" path=":owner" handler={require('./pages/collections').FavoritesList} />
+  </Route>
+
+  <Route name="collections" path="collections" handler={require('./pages/collections').CollectionsList}>
+    <Route name="collections-user" path=":owner" handler={require('./pages/collections').CollectionsList} />
   </Route>
   <Route name="collection-show" path="collections/:owner/:name" handler={require './collections/show'}>
     <DefaultRoute name="collection-show-list" handler={require './collections/show-list'} />

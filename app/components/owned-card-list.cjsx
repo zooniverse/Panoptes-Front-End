@@ -32,7 +32,6 @@ module.exports = React.createClass
       'All'
 
   render: ->
-    
     <div className="secondary-page all-resources-page">
       <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
