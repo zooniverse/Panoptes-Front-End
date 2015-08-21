@@ -12,6 +12,20 @@ module.exports = React.createClass
 
   getInitialState: ->
     selection: null
+    oldSetOfMarks: []
+
+  componentWillReceiveProps: (nextProps) ->
+    # Automatically select new marks.
+    newSetOfMarks = []
+    annotations = nextProps.classification?.annotations ? []
+    annotation = annotations[annotations.length - 1]
+    taskDescription = @props.workflow?.tasks[annotation.task]
+    if taskDescription?.type is 'drawing' and Array.isArray annotation.value
+      for mark in annotation.value
+        newSetOfMarks.push mark
+        if mark not in @state.oldSetOfMarks
+          @setState selection: mark
+    @setState oldSetOfMarks: newSetOfMarks
 
   render: ->
     <g>
@@ -29,17 +43,19 @@ module.exports = React.createClass
                 containerRect: {} # TODO
                 scale: @props.scale
                 disabled: isPriorAnnotation
-                selected: mark is annotation.value[annotation.value.length - 1] and not isPriorAnnotation
+                selected: mark is @state.selection and not isPriorAnnotation
                 getEventOffset: @props.getEventOffset
 
               toolProps =
+                classification: @props.classification
                 mark: mark
                 details: toolDescription.details
                 color: toolDescription.color
 
               toolMethods =
-                onChange: @props.classification.update.bind @props.classification, 'annotations'
+                onChange: @handleChange
                 onSelect: @handleSelect.bind this, annotation, mark
+                onDeselect: @handleDeselect
                 onDestroy: @handleDestroy.bind this, annotation, mark
 
               ToolComponent = drawingTools[toolDescription.type]
@@ -47,12 +63,18 @@ module.exports = React.createClass
           </g>}
     </g>
 
+  handleChange: ->
+    @props.classification.update 'annotations'
+
   handleSelect: (annotation, mark) ->
     @setState selection: mark
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     annotation.value.push mark
     @props.classification.update 'annotations'
+
+  handleDeselect: ->
+    @setState selection: null
 
   handleDestroy: (annotation, mark) ->
     if mark is @state.selection

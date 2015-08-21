@@ -35,7 +35,7 @@ module.exports = React.createClass
       tasks = require '..' # Circular
       for mark in annotation.value
         toolDescription = task.tools[mark.tool]
-        for detail, i in toolDescription.details when detail.required
+        for detail, i in toolDescription.details ? [] when detail.required
           subAnnotation = mark.details[i]
           DetailTaskComponent = tasks[detail.type]
           if DetailTaskComponent.isAnnotationComplete?
