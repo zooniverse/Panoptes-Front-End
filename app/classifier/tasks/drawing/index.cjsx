@@ -23,6 +23,13 @@ module.exports = React.createClass
       help: ''
       tools: []
 
+    getTaskText: (task) ->
+      task.instruction
+
+    getDefaultAnnotation: ->
+      _toolIndex: 0
+      value: []
+
     onLeaveAnnotation: (task, annotation) ->
       for mark in annotation.value
         toolDescription = task.tools[mark.tool]
@@ -30,13 +37,6 @@ module.exports = React.createClass
         if ToolComponent.isComplete? and ToolComponent.forceComplete?
             unless ToolComponent.isComplete mark
               ToolComponent.forceComplete mark
-
-    getTaskText: (task) ->
-      task.instruction
-
-    getDefaultAnnotation: ->
-      _toolIndex: 0
-      value: []
 
     areMarksComplete: (task, annotation) ->
       tasks = require '..' # Circular
