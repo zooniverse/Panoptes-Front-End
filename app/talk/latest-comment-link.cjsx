@@ -27,8 +27,9 @@ module?.exports = React.createClass
 
   render: ->
     {discussion} = @props
-    return <div /> unless discussion
-    comment = @props.comment or discussion.latest_comment
+    comment = @props.comment ? discussion?.latest_comment
+    return <div /> unless (discussion and comment)
+
     linkQuery = if @props.comment
       comment: comment.id
     else
