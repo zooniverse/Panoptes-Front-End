@@ -30,13 +30,25 @@ module.exports = React.createClass
 
   componentDidMount: ->
     addEventListener 'resize', @updateSize
-    # addEventListener 'scroll', @updateSize
     @updateSize()
     @setState alreadySeen: @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
 
   componentWillUnmount: ->
     removeEventListener 'resize', @updateSize
-    # removeEventListener 'scroll', @updateSize
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.annotation isnt @props.annotation
+      @handleAnnotationChange @props.annotation, nextProps.annotation
+
+  handleAnnotationChange: (oldAnnotation, currentAnnotation) ->
+    if oldAnnotation?
+      # console.log 'Old annotation was', oldAnnotation
+      lastTask = @props.workflow.tasks[oldAnnotation.task]
+      LastTaskComponent = tasks[lastTask.type]
+      if LastTaskComponent.onLeaveAnnotation?
+        LastTaskComponent.onLeaveAnnotation lastTask, oldAnnotation
+    # if currentAnnotation?
+    #   console.log 'Annotation is now', currentAnnotation
 
   updateSize: ->
     @setState

@@ -6,8 +6,7 @@ MarkingsRenderer = require './markings-renderer'
 GenericTask = require '../generic'
 {Markdown} = require 'markdownz'
 icons = require './icons'
-
-NOOP = Function.prototype
+drawingTools = require '../../drawing-tools'
 
 module.exports = React.createClass
   displayName: 'DrawingTask'
@@ -23,6 +22,14 @@ module.exports = React.createClass
       instruction: 'Explain what to draw.'
       help: ''
       tools: []
+
+    onLeaveAnnotation: (task, annotation) ->
+      for mark in annotation.value
+        toolDescription = task.tools[mark.tool]
+        ToolComponent = drawingTools[toolDescription.type]
+        if ToolComponent.isComplete? and ToolComponent.forceComplete?
+            unless ToolComponent.isComplete mark
+              ToolComponent.forceComplete mark
 
     getTaskText: (task) ->
       task.instruction
@@ -50,7 +57,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     task: null
     annotation: null
-    onChange: NOOP
+    onChange: Function.prototype
 
   render: ->
     tools = for tool, i in @props.task.tools
