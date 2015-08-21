@@ -43,7 +43,7 @@ module.exports = React.createClass
               toolDescription = taskDescription.tools[mark.tool]
 
               toolEnv =
-                containerRect: {} # TODO
+                containerRect: @props.containerRect
                 scale: @props.scale
                 disabled: isPriorAnnotation
                 selected: mark is @state.selection and not isPriorAnnotation

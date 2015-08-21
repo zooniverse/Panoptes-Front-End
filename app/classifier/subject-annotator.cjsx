@@ -67,6 +67,7 @@ module.exports = React.createClass
         annotation: @props.annotation
         frame: @state.frame
         scale: @getScale()
+        containerRect: @state.sizeRect
         getEventOffset: this.getEventOffset
 
     <div className="subject-area">
