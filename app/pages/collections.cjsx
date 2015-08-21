@@ -14,6 +14,7 @@ counterpart.registerTranslations 'en',
     loadMessage: 'Loading Collections'
     notFoundMessage: 'No Collections Found'
     myCollections: 'My Collections'
+    favorites: 'My Favorites'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
@@ -24,12 +25,14 @@ CollectionsNav = React.createClass
         <Link to="collections-user" params={{owner: @props.user.login}}>
           <Translate content="collectionsPage.myCollections" />
         </Link>}
+      {if @props.user?
+        <Link to="favorites-user" params={{owner: @props.user.login}}>
+          <Translate content="collectionsPage.favorites" />
+        </Link>}
     </nav>
 
-module.exports = React.createClass
-  displayName: 'CollectionsPage'
-  mixins: [TitleMixin]
-  title: 'Collections'
+List = React.createClass
+  displayName: 'List'
 
   imagePromise: (collection) ->
     apiClient.type('subjects').get(collection_id: collection.id, page_size: 1)
@@ -45,6 +48,7 @@ module.exports = React.createClass
     query = {}
     query.owner = @props.params.owner if @props.params?.owner?
     query.include = 'owner'
+    query.favorite = @props.favorite
     Object.assign query, @props.query
 
     apiClient.type('collections').get query
@@ -59,3 +63,23 @@ module.exports = React.createClass
       ownerName={@props.params?.owner}
       imagePromise={@imagePromise}
       cardLink={@cardLink} />
+
+FavoritesList = React.createClass
+  displayName: 'FavoritesPage'
+  mixins: [TitleMixin]
+  title: 'Favorites'
+
+  render: ->
+    props = Object.assign({}, @props, {favorite: true})
+    <List {...props} />
+
+CollectionsList = React.createClass
+  displayName: 'CollectionsPage'
+  mixins: [TitleMixin]
+  title: 'Collections'
+
+  render: ->
+    props = Object.assign({}, @props, {favorite: false})
+    <List {...props} />
+
+module.exports = {FavoritesList, CollectionsList}

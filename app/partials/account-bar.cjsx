@@ -15,6 +15,7 @@ counterpart.registerTranslations 'en',
     settings: 'Settings'
     signOut: 'Sign Out'
     collections: 'Collections'
+    favorites: 'Favorites'
 
 module.exports = React.createClass
   displayName: 'AccountBar'
@@ -53,6 +54,9 @@ module.exports = React.createClass
           <Link to="settings" params={name: @props.user.login}><Translate content="accountMenu.settings" /></Link>
           <Link to="collections-user" params={{owner: @props.user.login}}>
             <Translate content="accountMenu.collections" />
+          </Link>
+          <Link to="favorites-user" params={{owner: @props.user.login}}>
+            <Translate content="accountMenu.favorites" />
           </Link>
           <button className="secret-button sign-out-button" type="button" onClick={@handleSignOutClick}><Translate content="accountMenu.signOut" /></button>
         </div>
