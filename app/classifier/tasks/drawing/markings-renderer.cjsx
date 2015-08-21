@@ -15,16 +15,19 @@ module.exports = React.createClass
     oldSetOfMarks: []
 
   componentWillReceiveProps: (nextProps) ->
-    # Automatically select new marks.
     newSetOfMarks = []
-    annotations = nextProps.classification?.annotations ? []
-    annotation = annotations[annotations.length - 1]
-    taskDescription = @props.workflow?.tasks[annotation.task]
-    if taskDescription?.type is 'drawing' and Array.isArray annotation.value
-      for mark in annotation.value
-        newSetOfMarks.push mark
-        if mark not in @state.oldSetOfMarks
-          @setState selection: mark
+    if nextProps.annotation is @props.annotation
+      # Automatically select new marks.
+      annotations = nextProps.classification?.annotations ? []
+      annotation = annotations[annotations.length - 1]
+      taskDescription = @props.workflow?.tasks[annotation.task]
+      if taskDescription?.type is 'drawing' and Array.isArray annotation.value
+        for mark in annotation.value
+          newSetOfMarks.push mark
+          if mark not in @state.oldSetOfMarks
+            @setState selection: mark
+    else
+      @setState selection: null
     @setState oldSetOfMarks: newSetOfMarks
 
   render: ->

@@ -67,7 +67,7 @@ module.exports = React.createClass
         annotation: @props.annotation
         frame: @state.frame
         scale: @getScale()
-        getEventOffset: this.getEventOffset.bind this
+        getEventOffset: this.getEventOffset
 
     <div className="subject-area">
       {if BeforeSubject?
