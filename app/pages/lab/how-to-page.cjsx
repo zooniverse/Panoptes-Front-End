@@ -26,7 +26,7 @@ counterpart.registerTranslations 'en',
 
       ### Define your project.
 
-      The first thing you'll want to do is fill in some basic information about your project on the Project Details page. Just click and type in the relevant boxes. We've added a short description that will be formatted using the markdown language. The avatar and background image for Kitteh Zoo are in this folder. Download these images to your computer. Now add these images by dragging and dropping or by right clicking on the relevant boxes (like in the image above). You can come back and add more details at any time while building your project.
+      The first thing you'll want to do is fill in some basic information about your project on the Project Details page. Just click and type in the relevant boxes. We've added a short description that will be formatted using the markdown language. The avatar and background image for Kitteh Zoo are in this folder. Download these images to your computer. Now add these images by dragging and dropping or by clicking on the relevant boxes (like in the image above). You can come back and add more details at any time while building your project.
 
       ### Building a workflow
 
@@ -142,9 +142,9 @@ counterpart.registerTranslations 'en',
 
       _Name_: The project name is the first thing people will see and it will show up in the project URL. Try to keep it short and sweet.
 
-      _Avatar_: Pick an avatar image for your project. This will represent your project on the Zooniverse home page. It can also be used as your project's brand. It's best if it's recognizable even as a small icon. To add an image, either drag and drop or right click to open your file viewer. For best results, use a square image of not more than 50KB, but at minimum 100x100 pixels.
+      _Avatar_: Pick an avatar image for your project. This will represent your project on the Zooniverse home page. It can also be used as your project's brand. It's best if it's recognizable even as a small icon. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50KB, but at minimum 100x100 pixels.
 
-      _Background_: This image will be the background for all of your project pages, including your project's front page, which newcomers will see first. It should be relatively high resolution and you should be able to read text written across it. To add an image, either drag and drop or right click to open your file viewer. For best results, use images of at least 1 megapixel, no larger than 256 KB. Most people's screens are not much bigger than 1300 pixels across and 750 pixels high, so if your image is a lot bigger than this you may find it doesn't look the way you expect. Feel free to experiment with different sizes on a "typical" desktop, laptop or mobile screen.
+      _Background_: This image will be the background for all of your project pages, including your project's front page, which newcomers will see first. It should be relatively high resolution and you should be able to read text written across it. To add an image, either drag and drop or click to open your file viewer. For best results, use images of at least 1 megapixel, no larger than 256 KB. Most people's screens are not much bigger than 1300 pixels across and 750 pixels high, so if your image is a lot bigger than this you may find it doesn't look the way you expect. Feel free to experiment with different sizes on a "typical" desktop, laptop or mobile screen.
 
       _Description_: This should be a one-line call to action for your project. This will display on your landing page and, if approved, on the Zooniverse home page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.
 
