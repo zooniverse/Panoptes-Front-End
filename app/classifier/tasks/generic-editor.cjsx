@@ -56,7 +56,7 @@ module.exports = React.createClass
 
     <div className="workflow-task-editor #{@props.task.type}">
       <div>
-        <AutoSave resource={@props.workflow}>
+        <AutoSave resource={@props.workflow} tag="label">
           <span className="form-label">Main text</span>
           <br />
           <textarea name="#{@props.taskPrefix}.#{mainTextKey}" value={@props.task[mainTextKey]} className="standard-input full" onChange={handleChange} />
@@ -67,7 +67,7 @@ module.exports = React.createClass
 
       {unless @props.isSubtask
         <div>
-          <AutoSave resource={@props.workflow}>
+          <AutoSave resource={@props.workflow} tag="label">
             <span className="form-label">Help text</span>
             <br />
             <textarea  name="#{@props.taskPrefix}.help" value={@props.task.help ? ""} rows="7" className="standard-input full" onChange={handleChange} />
@@ -104,7 +104,7 @@ module.exports = React.createClass
         {for choice, index in @props.task[choicesKey] ? []
           choice._key ?= Math.random()
           <div key={choice._key} className="workflow-choice-editor">
-            <AutoSave resource={@props.workflow}>
+            <AutoSave resource={@props.workflow} tag="label">
               <textarea name="#{@props.taskPrefix}.#{choicesKey}.#{index}.label" value={choice.label} onChange={handleChange} />
             </AutoSave>
 
@@ -113,7 +113,7 @@ module.exports = React.createClass
                 when 'single'
                   unless @props.isSubtask
                     <div className="workflow-choice-setting">
-                      <AutoSave resource={@props.workflow}>
+                      <AutoSave resource={@props.workflow} tag="label">
                         Next task{' '}
                         <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
                       </AutoSave>
@@ -123,7 +123,7 @@ module.exports = React.createClass
                   [<FilteredToolsPicker key="type" project={@props.project} workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange} />
 
                   <div key="color" className="workflow-choice-setting">
-                    <AutoSave resource={@props.workflow}>
+                    <AutoSave resource={@props.workflow} tag="label">
                       Color{' '}
                       <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
                         <option value="#ff0000">Red</option>
@@ -175,7 +175,7 @@ module.exports = React.createClass
 
       {unless @props.task.type is 'single' or @props.isSubtask
         <div>
-          <AutoSave resource={@props.workflow}>
+          <AutoSave resource={@props.workflow} tag="label">
             Next task{' '}
             <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleChange} />
           </AutoSave>
