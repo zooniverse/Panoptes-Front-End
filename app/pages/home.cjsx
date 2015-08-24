@@ -27,8 +27,7 @@ counterpart.registerTranslations 'en',
         content:'''Professional researchers and volunteers share our [discussion boards](./#/talk), using them to explore and analyse project data. Much of the most exciting research produced by the Zooniverse originates from these partnerships.'''
       discover:
         title: 'Discover, teach, and learn'
-        content: '''Our platform offers many opportunities for education, from using projects
-        in classrooms to sharing information between volunteers. You can even use the [Zooniverse Project Builder](./#/lab) to create your very own project!'''
+        content: '''Our platform offers many opportunities for education, from using projects in classrooms to sharing information between volunteers. You can even use the [Zooniverse Project Builder](./#/lab) to create your very own project!'''
     featuredProjects:
       title: 'Get started on a project right now!'
       button: 'See all projects'
