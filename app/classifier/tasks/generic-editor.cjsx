@@ -2,31 +2,24 @@ React = require 'react'
 ChangeListener = require '../../components/change-listener'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-drawingTools = require '../drawing-tools'
+generalTools = require '../drawing-tools/general'
 alert = require '../../lib/alert'
 DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
 
-DrawingToolsEditor = React.createClass
-  displayName: 'DrawingToolsEditor'
+FilteredToolsPicker = React.createClass
+  displayName: 'FilteredToolsPicker'
   
   getInitialState: ->
-    drawingTools: drawingTools
+    drawingTools: generalTools
   
   componentWillMount: ->
-    delete drawingTools.crop
-    @setState drawingTools
     @props.workflow.get 'project'
-      .then (project) =>
-        project.get 'owner'
-          .then (owner) =>
-            drawingTools.crop = require '../drawing-tools/rectangle' if owner.display_name is 'aliburchard'
-            @setState drawingTools
-            
-  
+      .then @getFilteredTools
+
   render: ->
-    <div key="type" className="workflow-choice-setting">
-      <AutoSave resource={@props.workflow}>
+    <div className="workflow-choice-setting">
+      <AutoSave resource={@props.workflow} tag="label">
         Type{' '}
         <select name="#{@props.name}" value={@props.value} onChange={@props.onChange}>
           {for toolKey of @state.drawingTools
@@ -34,6 +27,17 @@ DrawingToolsEditor = React.createClass
         </select>
       </AutoSave>
     </div>
+  
+  getFilteredTools: (project) ->
+    drawingTools = @state.drawingTools
+    if @filterCondition project
+      experimentalTools = require '../drawing-tools/experimental'
+      drawingTools[tool] = component for tool, component of experimentalTools
+      @setState {drawingTools}
+  
+  filterCondition: (project) ->
+    project.display_name is 'iEye'
+    
 
 module.exports = React.createClass
   displayName: 'GenericTaskEditor'
@@ -116,7 +120,7 @@ module.exports = React.createClass
                     </div>
 
                 when 'drawing'
-                  [<DrawingToolsEditor project={@props.project} workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange} />
+                  [<FilteredToolsPicker key="type" project={@props.project} workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange} />
 
                   <div key="color" className="workflow-choice-setting">
                     <AutoSave resource={@props.workflow}>

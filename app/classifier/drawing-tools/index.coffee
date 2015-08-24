@@ -1,8 +1,6 @@
-module.exports =
-  point: require './point'
-  line: require './line'
-  polygon: require './polygon'
-  rectangle: require './rectangle'
-  circle: require './circle'
-  ellipse: require './ellipse'
-  crop: require './rectangle'
+drawingTools = require './general'
+experimentalTools = require './experimental'
+
+drawingTools[tool] = component for tool, component of experimentalTools
+
+module.exports = drawingTools
