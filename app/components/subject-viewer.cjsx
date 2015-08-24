@@ -31,6 +31,7 @@ module.exports = React.createClass
     onFrameChange: NOOP
     onLoad: NOOP
     defaultStyle: true
+    project: null
 
   getInitialState: ->
     loading: true
@@ -83,7 +84,7 @@ module.exports = React.createClass
         <span>
           {if @props.subject?.metadata?
             <button type="button" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
-          {if @props.subject? && @props.user?
+          {if @props.subject? and @props.user? and @props.project?
             <span>
               <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />
               <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
