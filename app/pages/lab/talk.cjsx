@@ -26,6 +26,7 @@ module?.exports = React.createClass
   board: (board, i) ->
     <li key={board.id}>
       {board.title}{if board.subject_default then ' (Subject Default)' else ''}
+      <ul><li style={listStyleType: 'none', opacity: 0.5}>{board.description}</li></ul>
     </li>
 
   render: ->
