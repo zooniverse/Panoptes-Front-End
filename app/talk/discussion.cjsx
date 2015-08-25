@@ -314,5 +314,5 @@ module?.exports = React.createClass
             header={null} />
         </section>
       else
-        <p>Please <span className="link-style" onClick={@promptToSignIn}>sign in</span> to contribute to the discussion</p>}
+        <p>Please <button className="link-style" type="button" onClick={@promptToSignIn}>sign in</button> to contribute to the discussion</p>}
     </div>

@@ -71,7 +71,7 @@ module?.exports = React.createClass
   render: ->
     <div className="talk inbox content-container">
       {unless @props.user?
-        <p>Please <span className="link-style" onClick={promptToSignIn}>sign in</span> to view your inbox</p>
+        <p>Please <button className="link-style" type="button" onClick={promptToSignIn}>sign in</button> to view your inbox</p>
       else
         <PromiseRenderer promise={@setConversations()} pending={-><Loading />}>{(conversations = []) =>
           <div>
