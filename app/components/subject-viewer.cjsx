@@ -43,7 +43,11 @@ module.exports = React.createClass
 
     mainDisplay = switch type
       when 'image'
-        <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleImageLoad} />
+        <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
+      when 'video'
+        <video src={src} type={"#{type}/#{format}"} controls onLoad={@handleLoad}>
+          Your browser does not support the video format. Please upgrade your browser.
+        </video>
 
     tools = switch type
       when 'image'
@@ -51,6 +55,7 @@ module.exports = React.createClass
           null
         else
           <span>
+          {unless @props.subject?.locations.indexOf "video/mp4"
             <span className="subject-frame-play-controls">
               {if @state.playing
                 <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
@@ -60,11 +65,7 @@ module.exports = React.createClass
                 <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
                   <i className="fa fa-play fa-fw"></i>
                 </button>}
-            </span>
-            <span className="subject-frame-pips">
-              {for i in [0...@props.subject?.locations.length ? 0]
-                <button type="button" key={i} className="subject-frame-pip #{if i is @state.frame then 'active' else ''}" value={i} onClick={@handleFrameChange.bind this, i}>{i + 1}</button>}
-            </span>
+            </span>}
           </span>
 
     <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
@@ -81,6 +82,13 @@ module.exports = React.createClass
 
       <div className="subject-tools">
         <span>{tools}</span>
+        {if @props.subject?.locations.length >= 2
+          <span>
+            <span className="subject-frame-pips">
+              {for i in [0...@props.subject?.locations.length ? 0]
+                <button type="button" key={i} className="subject-frame-pip #{if i is @state.frame then 'active' else ''}" value={i} onClick={@handleFrameChange.bind this, i}>{i + 1}</button>}
+            </span>
+        </span>}
         <span>
           {if @props.subject?.metadata?
             <button type="button" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
@@ -142,6 +150,6 @@ module.exports = React.createClass
       </table>
     </div>
 
-  handleImageLoad: (e) ->
+  handleLoad: (e) ->
     @setState loading: false
     @props.onLoad? arguments...
