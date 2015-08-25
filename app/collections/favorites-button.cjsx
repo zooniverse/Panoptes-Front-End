@@ -73,7 +73,7 @@ module?.exports = React.createClass
   toggleFavorite: ->
     if @props.user?
       Promise.all([@state.favoritesPromise, @state.favoritedPromise])
-        .then ([favorites, favorited])=>
+        .then ([favorites, favorited]) =>
           if not favorites?
             @createFavorites()
           else if favorited

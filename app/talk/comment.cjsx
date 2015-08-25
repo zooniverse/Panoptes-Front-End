@@ -127,7 +127,7 @@ module?.exports = React.createClass
                 then={(subject) =>
                   <div className="polaroid-image">
                     {@commentSubjectTitle(@props.data, subject)}
-                    <SubjectViewer subject={subject} user={@props.user} />
+                    <SubjectViewer subject={subject} user={@props.user} project={@props.project}/>
                   </div>
                 }
                 catch={null}
