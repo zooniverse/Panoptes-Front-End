@@ -49,7 +49,7 @@ counterpart.registerTranslations 'en',
         title: 'Developer'
         bio: '''Responsible for building the Zooniverse's API infrastructure.
         Cam considers himself a music and fine wine connoisseur - others do not.
-        In his space time he enjoys playing an obscure form of rugby.'''
+        In his spare time he enjoys playing an obscure form of rugby.'''
       chrisLintott:
         title: 'Zooniverse PI'
         bio: '''Astronomer and founder of both Galaxy Zoo and the Zooniverse that grew from it,
