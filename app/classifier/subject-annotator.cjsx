@@ -61,8 +61,8 @@ module.exports = React.createClass
 
   getEventOffset: (e) ->
     scale = @getScale()
-    x = (e.pageX - pageXOffset - @state.sizeRect?.left) / scale.horizontal || 0
-    y = (e.pageY - pageYOffset - @state.sizeRect?.top) / scale.vertical || 0
+    x = (e.pageX - @state.sizeRect?.left) / scale.horizontal || 0
+    y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
 
   render: ->
