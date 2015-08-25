@@ -60,9 +60,9 @@ module?.exports = React.createClass
               }
 
             <ZooniverseTeam user={@props.user} section={@props.section}>
-              <span className="link-style" onClick={=> alert (resolve) -> <AddZooTeamForm/>}>
+              <button className="link-style" type="button" onClick={=> alert (resolve) -> <AddZooTeamForm/>}>
                 Invite someone to the Zooniverse team
-              </span>
+              </button>
             </ZooniverseTeam>
 
             <Link

@@ -86,7 +86,7 @@ COPY_GREY_LIGHT = #afaeae
     &:hover
       color: MAIN_HIGHLIGHT
 
-  button
+  button:not(.link-style)
     @extend .standard-button
     @extend .talk-module
     padding: 0.2em 0.4em
@@ -107,10 +107,13 @@ COPY_GREY_LIGHT = #afaeae
   .talk-main-link a
     @extend .talk .heading-link
 
-  .link-style
+  button.link-style
+    @extend $reset-button
     text-decoration: underline
     color: COBOLT_BLUE
-    cursor: pointer
+    &::-moz-focus-inner
+      border: 0
+      padding: 0
 
   .polaroid-image
     max-width: 640px
