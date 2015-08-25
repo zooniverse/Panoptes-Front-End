@@ -11,6 +11,9 @@ ROLES = require './lib/roles'
 Loading = require '../components/loading-indicator'
 PopularTags = require './popular-tags'
 require '../api/sugar'
+ZooniverseTeam = require './lib/zoo-team.cjsx'
+alert = require '../lib/alert'
+AddZooTeamForm = require './add-zoo-team-form'
 
 DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
 DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
@@ -91,12 +94,19 @@ module?.exports = React.createClass
         <Moderation section={@props.section} user={@props.user}>
           <div>
             <h2>Moderator Zone:</h2>
+
             {if @props.section isnt 'zooniverse'
               <PromiseRenderer promise={talkClient.type('boards').get({section: @props.section, subject_default: true}).index(0)}>{(defaultBoard) =>
                 if not defaultBoard?
                   <button onClick={@createSubjectDefaultBoard}><i className="fa fa-photo" /> Activate Talk Subject Comments Board</button>
               }</PromiseRenderer>
               }
+
+            <ZooniverseTeam user={@props.user} section={@props.section}>
+              <span className="link-style" onClick={=> alert (resolve) -> <AddZooTeamForm/>}>
+                Invite someone to the Zooniverse team
+              </span>
+            </ZooniverseTeam>
 
             <Link
               to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
