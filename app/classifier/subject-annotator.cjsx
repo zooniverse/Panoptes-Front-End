@@ -87,7 +87,7 @@ module.exports = React.createClass
         <BeforeSubject {...hookProps} />}
 
       <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
-        <SVG ref="markingSurface" style={SubjectViewer.overlayStyle} naturalWidth={@state.naturalWidth} naturalHeight={@state.naturalHeight} handleResize={@updateSize}>
+        <SVG ref="markingSurface" style={SubjectViewer.overlayStyle} naturalWidth={@state.naturalWidth} naturalHeight={@state.naturalHeight} onResize={@updateSize}>
           <rect ref="sizeRect" width={@state.naturalWidth} height={@state.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
           {if type is 'image'
