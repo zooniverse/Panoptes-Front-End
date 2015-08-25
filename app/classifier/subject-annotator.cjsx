@@ -131,7 +131,7 @@ module.exports = React.createClass
       {naturalWidth, naturalHeight} = e.target
       unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
         @setState {naturalWidth, naturalHeight}, ->
-          # @refs.markingSurface.crop()
+          @refs.markingSurface.crop()
           @updateSize()
 
   handleFrameChange: (frame) ->
