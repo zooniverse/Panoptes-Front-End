@@ -9,7 +9,7 @@ NON_MODAL_STYLE =
   bottom: null
   height: 0
   right: null
-  width: 0
+  width: '100%' # `0` makes for too-skinny children.
 
 module.exports = React.createClass
   displayName: 'DrawingToolRoot'
