@@ -20,7 +20,8 @@ module.exports = React.createClass
     # Automatically select new marks.
     annotations = nextProps.classification?.annotations ? []
     annotation = annotations[annotations.length - 1]
-    taskDescription = @props.workflow?.tasks[annotation.task]
+    if annotation?
+      taskDescription = @props.workflow?.tasks[annotation.task]
     if taskDescription?.type is 'drawing' and Array.isArray annotation.value
       for mark in annotation.value
         newSetOfMarks.push mark
