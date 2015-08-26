@@ -26,6 +26,16 @@ module.exports = React.createClass
   handlePreferenceChange: (preference, event) ->
     preference.update(email_digest: event.target.value).save()
 
+  talkPreferenceOption: (preference, digest) ->
+    <td className="option">
+      <input type="radio"
+        name={preference.category}
+        value="{digest}"
+        checked={preference.email_digest is digest}
+        onChange={@handlePreferenceChange.bind this, preference}
+      />
+    </td>
+
   render: ->
     <div className="content-container">
       <p>
@@ -75,11 +85,11 @@ module.exports = React.createClass
             {for preference in @sortPreferences(preferences) when preference.category isnt 'system' then do (preference) =>
               <ChangeListener key={preference.id} target={preference} handler={=>
                 <tr>
-                  <td className="label">{@nameOfPreference(preference)}</td>
-                  <td className="option"><input type="radio" name={preference.category} value="immediate" checked={preference.email_digest is 'immediate'} onChange={@handlePreferenceChange.bind this, preference} /></td>
-                  <td className="option"><input type="radio" name={preference.category} value="daily" checked={preference.email_digest is 'daily'} onChange={@handlePreferenceChange.bind this, preference} /></td>
-                  <td className="option"><input type="radio" name={preference.category} value="weekly" checked={preference.email_digest is 'weekly'} onChange={@handlePreferenceChange.bind this, preference} /></td>
-                  <td className="option"><input type="radio" name={preference.category} value="never" checked={preference.email_digest is 'never'} onChange={@handlePreferenceChange.bind this, preference} /></td>
+                  <td>{@nameOfPreference(preference)}</td>
+                  {@talkPreferenceOption preference, 'immediate'}
+                  {@talkPreferenceOption preference, 'daily'}
+                  {@talkPreferenceOption preference, 'weekly'}
+                  {@talkPreferenceOption preference, 'never'}
                 </tr>
               } />
             }
