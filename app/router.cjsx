@@ -2,7 +2,7 @@ Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-rou
 React = require 'react'
 
 module.exports = Router.create <Route handler={require './partials/app'}>
-   <DefaultRoute name="home" handler={require './pages/home'} />
+  <DefaultRoute name="home" handler={require './pages/home'} />
 
   <Route name="about" path="about" handler={require './pages/about'} ignoreScrollBehavior>
     <DefaultRoute name="about-home" handler={require './pages/about/about-home'} />
@@ -16,7 +16,7 @@ module.exports = Router.create <Route handler={require './partials/app'}>
 
   <Route name="unsubscribe" handler={require './pages/unsubscribe'} />
 
-  <Route path="account" handler={require './pages/sign-in'}>
+  <Route path="accounts?" handler={require './pages/sign-in'}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
     <Route name="register" handler={require './partials/register-form'} />
   </Route>

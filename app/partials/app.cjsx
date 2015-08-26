@@ -4,6 +4,7 @@ IOStatus = require './io-status'
 MainHeader = require './main-header'
 {RouteHandler} = require 'react-router'
 MainFooter = require './main-footer'
+{generateSessionID} = require '../lib/session'
 
 module.exports = React.createClass
   displayName: 'PanoptesApp'
@@ -14,6 +15,7 @@ module.exports = React.createClass
 
   componentDidMount: ->
     auth.listen 'change', @handleAuthChange
+    generateSessionID()
     @handleAuthChange()
 
   componentWillUnmount: ->

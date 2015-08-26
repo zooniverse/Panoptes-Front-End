@@ -1,5 +1,6 @@
 READABLE_FORMATS =
   image: ['jpeg', 'png', 'svg+xml', 'gif']
+  video: ['mp4']
 
 module.exports = (subject, frame) ->
   frame ?= Math.floor Object.keys(subject.locations).length / 2

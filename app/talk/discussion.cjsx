@@ -191,9 +191,12 @@ module?.exports = React.createClass
 
     @discussionsRequest().update({title, sticky, locked, board_id}).save()
       .then (discussion) =>
-        {owner, name} = @props.params
-        discussionRoute = if (owner and name) then 'project-talk-discussion' else 'talk-discussion'
-        @transitionTo discussionRoute, merge(@props.params, board: board_id), @props.query
+        if discussion[0].board_id isnt board_id
+          {owner, name} = @props.params
+          discussionRoute = if (owner and name) then 'project-talk-discussion' else 'talk-discussion'
+          @transitionTo discussionRoute, merge(@props.params, board: board_id), @props.query
+        else
+          @setDiscussion()
 
   lockedMessage: ->
     <div className="talk-discussion-locked">
