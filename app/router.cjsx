@@ -16,7 +16,7 @@ module.exports = Router.create <Route handler={require './partials/app'}>
 
   <Route name="unsubscribe" handler={require './pages/unsubscribe'} />
 
-  <Route path="account" handler={require './pages/sign-in'}>
+  <Route path="accounts?" handler={require './pages/sign-in'}>
     <Route name="sign-in" handler={require './partials/sign-in-form'} />
     <Route name="register" handler={require './partials/register-form'} />
   </Route>
