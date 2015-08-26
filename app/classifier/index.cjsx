@@ -5,6 +5,7 @@ ClassificationSummary = require './classification-summary'
 {Link} = require 'react-router'
 tasks = require './tasks'
 drawingTools = require './drawing-tools'
+{getSessionID} = require '../lib/session'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -192,6 +193,7 @@ Classifier = React.createClass
   completeClassification: ->
     @props.classification.update
       completed: true
+      'metadata.session': getSessionID()
       'metadata.finished_at': (new Date).toISOString()
       'metadata.viewport':
         width: innerWidth
