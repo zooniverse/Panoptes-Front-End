@@ -46,6 +46,7 @@ module.exports = React.createClass
            <br />
            <ChangeListener target={@state.pageContent}>{ =>
              <MarkdownEditor
+               project={@props.project}
                onHelp={markdownHelp}
                className="full"
                name="content"

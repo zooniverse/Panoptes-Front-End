@@ -154,6 +154,7 @@ module?.exports = React.createClass
   comment: (data, i) ->
     <Comment
       {...@props}
+      project={@props.project}
       key={data.id}
       data={data}
       active={+data.id is +@props.query?.comment}
@@ -299,6 +300,7 @@ module?.exports = React.createClass
 
           <CommentBox
             user={@props.user}
+            project={@props.project}
             validationCheck={@commentValidations}
             validationErrors={@state.commentValidationErrors}
             onSubmitComment={@onSubmitComment}

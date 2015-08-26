@@ -1,7 +1,6 @@
 React = require 'react'
 ToggleChildren = require './mixins/toggle-children'
 Feedback = require './mixins/feedback'
-CommentPreview = require './comment-preview'
 CommentHelp = require './comment-help'
 CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
@@ -82,7 +81,7 @@ module?.exports = React.createClass
         <img className="talk-comment-focus-image" src={getSubjectLocation(@state.subject).src} />}
 
       <form className="talk-comment-form" onSubmit={@onSubmitComment}>
-        <MarkdownEditor placeholder={@props.placeholder} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <CommentHelp /> }/>
+        <MarkdownEditor placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <CommentHelp /> }/>
 
         <section>
           <button
