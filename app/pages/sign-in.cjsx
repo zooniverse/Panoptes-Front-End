@@ -7,7 +7,7 @@ Translate = require 'react-translate-component'
 counterpart.registerTranslations 'en',
   signIn:
     withZooniverse: 'Sign in with your Zooniverse account'
-    whyHaveAccount: 'Signed-in volunteers lorem ipsum dolor sit amet blah blah blah.'
+    whyHaveAccount: 'Signed-in volunteers can keep track of their work and will be credited in any resulting publications.'
     signIn: 'Sign in'
     register: 'Register'
     orThirdParty: 'Or sign in with another service'
