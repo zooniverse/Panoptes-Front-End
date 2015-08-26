@@ -1,10 +1,10 @@
 React = require 'react'
 DiscussionPreview = require './discussion-preview'
 CommentLink = require './comment-link'
-CommentPreview = require './comment-preview'
 PromiseRenderer = require '../components/promise-renderer'
 parseSection = require './lib/parse-section'
 apiClient = require '../api/client'
+{Markdown} = require 'markdownz'
 
 # This isn't very reuseable as it's prop is a comment resource with it's
 # linked discussion added on. Probably a better way to approach this.
@@ -27,7 +27,7 @@ module.exports = React.createClass
 
     <div className="talk-search-result talk-module">
       <CommentLink comment={comment}>{comment.discussion_title}</CommentLink>
-      <CommentPreview content={comment.body} header={null} />
+      <Markdown content={comment.body} />
       {if section is 'zooniverse'
         <DiscussionPreview {...@props} discussion={discussion} comment={comment} />
       else

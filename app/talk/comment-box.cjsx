@@ -1,7 +1,6 @@
 React = require 'react'
 ToggleChildren = require './mixins/toggle-children'
 Feedback = require './mixins/feedback'
-CommentPreview = require './comment-preview'
 CommentHelp = require './comment-help'
 CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
