@@ -3,6 +3,9 @@ React = require 'react'
 module.exports = React.createClass
   displayName: 'SVG'
 
+  getDefaultProps: ->
+    viewBox: null
+
   getInitialState: ->
     align: 'xMidYMid'
     viewBox: ''
@@ -11,11 +14,12 @@ module.exports = React.createClass
     @crop()
 
   render: ->
-    <svg viewBox={@state.viewBox || null} preserveAspectRatio="#{@state.align} meet" style={@props.style}>
+    <svg viewBox={@props.viewBox} preserveAspectRatio="#{@state.align} meet" style={@props.style}>
       {@props.children}
     </svg>
 
   crop: (x = 0, y = 0, width = @props.naturalWidth, height = @props.naturalHeight) ->
+    return
     x = Math.max 0, x
     y = Math.max 0, y
     x = Math.min @props.naturalWidth, x
@@ -29,6 +33,7 @@ module.exports = React.createClass
     @setState {viewBox, align}, @props.onResize
 
   align: (x = 0, y = 0, width = @props.naturalWidth, height = @props.naturalHeight) ->
+    return
     aspect = width / height
     subjectAspect = @props.naturalWidth / @props.naturalHeight
     ratio = aspect / subjectAspect

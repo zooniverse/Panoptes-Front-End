@@ -75,6 +75,8 @@ module.exports = React.createClass
     TaskComponent = tasks[taskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
 
+    svgProps = {}
+
     if TaskComponent?
       {BeforeSubject, InsideSubject, AfterSubject} = TaskComponent
       hookProps =
@@ -87,12 +89,16 @@ module.exports = React.createClass
         containerRect: @state.sizeRect
         getEventOffset: this.getEventOffset
 
+      for task, Component of tasks when Component.getSVGProps?
+        for key, value of Component.getSVGProps hookProps
+          svgProps[key] = value
+
     <div className="subject-area">
       {if BeforeSubject?
         <BeforeSubject {...hookProps} />}
 
       <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
-        <SVG ref="markingSurface" style={SubjectViewer.overlayStyle} naturalWidth={@state.naturalWidth} naturalHeight={@state.naturalHeight} onResize={@updateSize}>
+        <SVG ref="markingSurface" style={SubjectViewer.overlayStyle} naturalWidth={@state.naturalWidth} naturalHeight={@state.naturalHeight} onResize={@updateSize} {...svgProps}>
           <rect ref="sizeRect" width={@state.naturalWidth} height={@state.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
           {if type is 'image'
