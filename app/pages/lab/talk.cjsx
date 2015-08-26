@@ -1,4 +1,4 @@
-React = require 'react'
+React = {findDOMNode} = require 'react'
 talkClient = require '../../api/talk'
 CreateSubjectDefaultButton = require '../../talk/lib/create-subject-default-button'
 CreateBoardForm = require '../../talk/lib/create-board-form'
@@ -12,6 +12,7 @@ module?.exports = React.createClass
 
   getInitialState: ->
     boards: []
+    editingBoard: null
 
   section: ->
     projectSection(@props.project)
@@ -23,9 +24,43 @@ module?.exports = React.createClass
     talkClient.type('boards').get({section: @section()})
       .then (boards) => @setState {boards}
 
+  onClickEditTitle: (e, board) ->
+    e.preventDefault()
+    titleInput = findDOMNode(@refs["board-title-#{board.id}"])
+    title = titleInput.value
+
+    descriptionTextarea = findDOMNode(@refs["board-description-#{board.id}"])
+    description = descriptionTextarea.value
+
+    talkClient.type('boards').get(board.id).update({title, description}).save().then =>
+      @setState({editingBoard: null}, @setBoards)
+
+  onClickDeleteBoard: (e, board) ->
+    e.preventDefault()
+    if window.confirm("Are you sure that you want to delete the #{board.title} board? All of it's content will be lost forever")
+      talkClient.type('boards').get(board.id).delete().then @setBoards
+
   board: (board, i) ->
     <li key={board.id}>
-      {board.title}{if board.subject_default then ' (Subject Default)' else ''}
+
+      {if @state.editingBoard is board.id
+        <div className="talk-module talk-form">
+          <span>Title</span>
+          <input ref={"board-title-#{board.id}"} type="text" defaultValue={board.title}/>
+          <div>Description</div>
+          <textarea ref={"board-description-#{board.id}"} defaultValue={board.description}/>
+          <button type="button" onClick={=> @setState({editingBoard: null})}>Cancel</button>
+          <button type="button" onClick={(e) => @onClickEditTitle(e, board)}>Submit</button>
+        </div>
+      else
+        <span>
+          <span>{board.title}{if board.subject_default then ' (Subject Default)' else ''}{' '}</span>
+          <i className="fa fa-pencil" title="Edit Title" onClick={=> @setState {editingBoard: if @state.editingBoard then null else board.id}}/>{' '}
+          <i className="fa fa-close" title="Delete" onClick={(e) => @onClickDeleteBoard(e, board)} />
+        </span>
+
+        }
+
       <ul><li style={listStyleType: 'none', opacity: 0.5}>{board.description}</li></ul>
     </li>
 
