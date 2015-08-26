@@ -78,6 +78,7 @@ module.exports = React.createClass
     {attachment, targetAttachment, offset, arrowStyle}
 
   componentWillReceiveProps: (nextProps) ->
+    @onNewTask nextProps unless nextProps.annotation?.task is @props.annotation?.task
     unless nextProps.annotation is @props.annotation
       @selectMark null, null
     @handleResize()
@@ -286,3 +287,14 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @updateAnnotations()
+
+  onNewTask: ({annotation}) ->
+    
+    cropTask = key for key, task of @props.workflow.tasks when task.tools?[0].type is 'crop'
+    rectangle = annotation.value[0] for annotation in @props.classification.annotations when annotation.task is cropTask
+    
+    unless annotation?.task is cropTask
+      @refs.markingSurface.crop rectangle.x, rectangle.y, rectangle.width, rectangle.height if rectangle?
+    else
+      @refs.markingSurface.crop()
+

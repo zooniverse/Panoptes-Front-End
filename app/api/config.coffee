@@ -14,9 +14,11 @@ TALK_HOSTS =
   production: 'https://talk.zooniverse.org'
   staging: 'https://talk-staging.zooniverse.org'
 
+
 SUGAR_HOSTS =
   production: 'https://notifications.zooniverse.org'
   staging: 'https://notifications-staging.zooniverse.org'
+
 
 hostFromBrowser = location?.search.match(/\W?panoptes-api-host=([^&]+)/)?[1]
 appFromBrowser = location?.search.match(/\W?panoptes-api-application=([^&]+)/)?[1]
@@ -38,3 +40,4 @@ module.exports =
   clientAppID: appFromBrowser ? appFromShell ? API_APPLICATION_IDS[env]
   talkHost: talkFromBrowser ? talkFromShell ? TALK_HOSTS[env]
   sugarHost: sugarFromBrowser ? sugarFromShell ? SUGAR_HOSTS[env]
+

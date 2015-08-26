@@ -2,10 +2,42 @@ React = require 'react'
 ChangeListener = require '../../components/change-listener'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-drawingTools = require '../drawing-tools'
+generalTools = require '../drawing-tools/general'
 alert = require '../../lib/alert'
 DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
+
+FilteredToolsPicker = React.createClass
+  displayName: 'FilteredToolsPicker'
+  
+  getInitialState: ->
+    drawingTools: generalTools
+  
+  componentWillMount: ->
+    @props.workflow.get 'project'
+      .then @getFilteredTools
+
+  render: ->
+    <div className="workflow-choice-setting">
+      <AutoSave resource={@props.workflow} tag="label">
+        Type{' '}
+        <select name="#{@props.name}" value={@props.value} onChange={@props.onChange}>
+          {for toolKey of @state.drawingTools
+            <option key={toolKey} value={toolKey}>{toolKey}</option>}
+        </select>
+      </AutoSave>
+    </div>
+  
+  getFilteredTools: (project) ->
+    drawingTools = @state.drawingTools
+    if @filterCondition project
+      experimentalTools = require '../drawing-tools/experimental'
+      drawingTools[tool] = component for tool, component of experimentalTools
+      @setState {drawingTools}
+  
+  filterCondition: (project) ->
+    project.display_name is 'iEye'
+    
 
 module.exports = React.createClass
   displayName: 'GenericTaskEditor'
@@ -24,7 +56,7 @@ module.exports = React.createClass
 
     <div className="workflow-task-editor #{@props.task.type}">
       <div>
-        <AutoSave resource={@props.workflow}>
+        <AutoSave resource={@props.workflow} tag="label">
           <span className="form-label">Main text</span>
           <br />
           <textarea name="#{@props.taskPrefix}.#{mainTextKey}" value={@props.task[mainTextKey]} className="standard-input full" onChange={handleChange} />
@@ -35,7 +67,7 @@ module.exports = React.createClass
 
       {unless @props.isSubtask
         <div>
-          <AutoSave resource={@props.workflow}>
+          <AutoSave resource={@props.workflow} tag="label">
             <span className="form-label">Help text</span>
             <br />
             <textarea  name="#{@props.taskPrefix}.help" value={@props.task.help ? ""} rows="7" className="standard-input full" onChange={handleChange} />
@@ -72,7 +104,7 @@ module.exports = React.createClass
         {for choice, index in @props.task[choicesKey] ? []
           choice._key ?= Math.random()
           <div key={choice._key} className="workflow-choice-editor">
-            <AutoSave resource={@props.workflow}>
+            <AutoSave resource={@props.workflow} tag="label">
               <textarea name="#{@props.taskPrefix}.#{choicesKey}.#{index}.label" value={choice.label} onChange={handleChange} />
             </AutoSave>
 
@@ -81,25 +113,17 @@ module.exports = React.createClass
                 when 'single'
                   unless @props.isSubtask
                     <div className="workflow-choice-setting">
-                      <AutoSave resource={@props.workflow}>
+                      <AutoSave resource={@props.workflow} tag="label">
                         Next task{' '}
                         <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
                       </AutoSave>
                     </div>
 
                 when 'drawing'
-                  [<div key="type" className="workflow-choice-setting">
-                    <AutoSave resource={@props.workflow}>
-                      Type{' '}
-                      <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
-                        {for toolKey of drawingTools
-                          <option key={toolKey} value={toolKey}>{toolKey}</option>}
-                      </select>
-                    </AutoSave>
-                  </div>
+                  [<FilteredToolsPicker key="type" project={@props.project} workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange} />
 
                   <div key="color" className="workflow-choice-setting">
-                    <AutoSave resource={@props.workflow}>
+                    <AutoSave resource={@props.workflow} tag="label">
                       Color{' '}
                       <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
                         <option value="#ff0000">Red</option>
@@ -151,7 +175,7 @@ module.exports = React.createClass
 
       {unless @props.task.type is 'single' or @props.isSubtask
         <div>
-          <AutoSave resource={@props.workflow}>
+          <AutoSave resource={@props.workflow} tag="label">
             Next task{' '}
             <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleChange} />
           </AutoSave>
