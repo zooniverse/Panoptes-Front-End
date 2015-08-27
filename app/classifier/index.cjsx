@@ -46,10 +46,9 @@ Classifier = React.createClass
           @props.onLoad?()
 
   prepareToClassify: (classification) ->
-    setTimeout => # TODO: Why is this here?
-      classification.annotations ?= []
-      if classification.annotations.length is 0
-        @addAnnotationForTask classification, @props.workflow.first_task
+    classification.annotations ?= []
+    if classification.annotations.length is 0
+      @addAnnotationForTask classification, @props.workflow.first_task
 
   render: ->
     <ChangeListener target={@props.classification}>{=>
