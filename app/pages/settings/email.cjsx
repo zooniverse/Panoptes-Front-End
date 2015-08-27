@@ -1,4 +1,5 @@
 React = require 'react'
+talkClient = require '../../api/talk'
 AutoSave = require '../../components/auto-save'
 PromiseRenderer = require '../../components/promise-renderer'
 ChangeListener = require '../../components/change-listener'
@@ -9,6 +10,31 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     user: null
+
+  nameOfPreference: (preference) ->
+    switch preference.category
+      when 'participating_discussions' then "When discussions I'm participating in are updated"
+      when 'followed_discussions' then "When discussions I'm following are updated"
+      when 'mentions' then "When I'm mentioned"
+      when 'messages' then 'When I receive a private message'
+
+  sortPreferences: (preferences) ->
+    order = ['participating_discussions', 'followed_discussions', 'mentions', 'messages']
+    preferences.sort (a, b) ->
+      order.indexOf(a.category) > order.indexOf(b.category)
+
+  handlePreferenceChange: (preference, event) ->
+    preference.update(email_digest: event.target.value).save()
+
+  talkPreferenceOption: (preference, digest) ->
+    <td className="option">
+      <input type="radio"
+        name={preference.category}
+        value={digest}
+        checked={preference.email_digest is digest}
+        onChange={@handlePreferenceChange.bind this, preference}
+      />
+    </td>
 
   render: ->
     <div className="content-container">
@@ -42,6 +68,35 @@ module.exports = React.createClass
           </label>
         </AutoSave>
       </p>
+
+      <p><strong>Talk email preferences</strong></p>
+      <table className="talk-email-preferences">
+        <thead>
+          <tr>
+            <th>Send me an email</th>
+            <th>Immediately</th>
+            <th>Daily</th>
+            <th>Weekly</th>
+            <th>Never</th>
+          </tr>
+        </thead>
+        <PromiseRenderer promise={talkClient.type('subscription_preferences').get()} pending={-> <tbody></tbody>} then={(preferences) =>
+          <tbody>
+            {for preference in @sortPreferences(preferences) when preference.category isnt 'system' then do (preference) =>
+              <ChangeListener key={preference.id} target={preference} handler={=>
+                <tr>
+                  <td>{@nameOfPreference(preference)}</td>
+                  {@talkPreferenceOption preference, 'immediate'}
+                  {@talkPreferenceOption preference, 'daily'}
+                  {@talkPreferenceOption preference, 'weekly'}
+                  {@talkPreferenceOption preference, 'never'}
+                </tr>
+              } />
+            }
+          </tbody>
+        } />
+      </table>
+
       <p><strong>Project email preferences</strong></p>
       <table>
         <thead>
