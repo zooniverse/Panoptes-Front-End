@@ -7,11 +7,14 @@ module.exports = React.createClass
   displayName: 'DataExportButton'
 
   getInitialState: ->
+    isAvailable: null
     exportRequested: false
     exportError: null
 
   exportGet: ->
-    @_exportsGet or= talkClient.type('data_requests').get section: @section(), kind: @props.exportType
+    @_exportsGet or= talkClient.type('data_requests').get(section: @section(), kind: @props.exportType).then (requests) =>
+      @setState(isAvailable: true) if requests.length > 0
+      requests
 
   section: ->
     "project-#{ @props.project.id }"
@@ -27,7 +30,7 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>
+      <button type="button" disabled={@state.exportRequested or @state.isAvailable} onClick={@requestDataExport}>
         {@props.label}
       </button> {' '}
       <small className="form-help">
