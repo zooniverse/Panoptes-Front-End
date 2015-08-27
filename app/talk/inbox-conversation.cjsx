@@ -69,8 +69,9 @@ module?.exports = React.createClass
 
   handleDelete: (e) ->
     e.preventDefault()
-    @state.conversation.delete().then =>
-      @transitionTo 'inbox'
+    if confirm 'Are you sure you want to archive this conversation?'
+      @state.conversation.delete().then =>
+        @transitionTo 'inbox'
 
   render: ->
     if @props.user
@@ -88,7 +89,7 @@ module?.exports = React.createClass
               }
           </div>
           }
-        <button className="delete-conversation" onClick={@handleDelete}>Delete this conversation</button>
+        <button className="delete-conversation" onClick={@handleDelete}>Archive this conversation</button>
         <div>{@state.messages.map(@message)}</div>
         <CommentBox
           header={"Send a message..."}
