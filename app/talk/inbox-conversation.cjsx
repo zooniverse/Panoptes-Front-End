@@ -5,12 +5,12 @@ PromiseRenderer = require '../components/promise-renderer'
 HandlePropChanges = require '../lib/handle-prop-changes'
 {Markdown} = require 'markdownz'
 CommentBox = require './comment-box'
-{Link} = require 'react-router'
+{Link, Navigation} = require 'react-router'
 {timestamp} = require './lib/time'
 
 module?.exports = React.createClass
   displayName: 'InboxConversation'
-  mixins: [HandlePropChanges]
+  mixins: [HandlePropChanges, Navigation]
 
   getInitialState: ->
     messages: []
@@ -67,6 +67,11 @@ module?.exports = React.createClass
       .then (message) =>
         @setConversation()
 
+  handleDelete: (e) ->
+    e.preventDefault()
+    @state.conversation.delete().then =>
+      @transitionTo 'inbox'
+
   render: ->
     if @props.user
       <div className="talk inbox-conversation content-container">
@@ -83,7 +88,7 @@ module?.exports = React.createClass
               }
           </div>
           }
-
+        <button className="delete-conversation" onClick={@handleDelete}>Delete this conversation</button>
         <div>{@state.messages.map(@message)}</div>
         <CommentBox
           header={"Send a message..."}
