@@ -30,7 +30,7 @@ module.exports = React.createClass
     <td className="option">
       <input type="radio"
         name={preference.category}
-        value="{digest}"
+        value={digest}
         checked={preference.email_digest is digest}
         onChange={@handlePreferenceChange.bind this, preference}
       />
