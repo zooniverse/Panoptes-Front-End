@@ -18,6 +18,7 @@ talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
 merge = require 'lodash.merge'
+FollowDiscussion = require './follow-discussion'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -274,6 +275,10 @@ module?.exports = React.createClass
       {if discussion?.locked
         @lockedMessage()
         }
+
+      {if discussion and @props.user
+        <FollowDiscussion user={@props.user} discussion={discussion} />
+      }
 
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
 
