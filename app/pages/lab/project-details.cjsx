@@ -7,6 +7,7 @@ apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
+TalkDataExportButton = require '../../talk/data-export-button'
 DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor} = require 'markdownz'
@@ -193,6 +194,15 @@ module.exports = React.createClass
             project={@props.project}
             buttonKey="projectDetails.subjectExport"
             exportType="subjects_export"  />
+
+          <TalkDataExportButton
+            project={@props.project}
+            exportType="comments"
+            label="Request new Talk comments export" />
+          <TalkDataExportButton
+            project={@props.project}
+            exportType="tags"
+            label="Request new Talk tags export" />
         </div>
       </div>
     </div>
