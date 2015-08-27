@@ -51,8 +51,13 @@ module.exports = React.createClass
     #   console.log 'Annotation is now', currentAnnotation
 
   updateSize: ->
-    @setState
-      sizeRect: @refs.sizeRect?.getDOMNode().getBoundingClientRect()
+    clientRect = @refs.sizeRect?.getDOMNode().getBoundingClientRect() # Read only
+    {left, right, top, bottom, width, height} = clientRect
+    left += scrollX
+    right += scrollX
+    top += scrollY
+    bottom += scrollY
+    @setState sizeRect: {left, right, top, bottom, width, height}
 
   getScale: ->
     horizontal = @state.sizeRect?.width / @state.naturalWidth || 0
