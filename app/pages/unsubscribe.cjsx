@@ -51,7 +51,7 @@ module.exports = React.createClass
       else
         <form onSubmit={@handleEmailSubmit}>
           <p><strong>Unsubscribe from all Zooniverse emails.</strong></p>
-          <p>We get it, no one like keep getting email they don't want.</p>
+          <p>We get it - no one likes to keep receiving email they don't want.</p>
           <p>Just enter your email address here and we'll <b>unsubscribe you from all</b> our email lists.</p>
           <p>
             <input ref="email" type="email" required onChange={@handleEmailChange} className="standard-input" defaultValue={@props.query?.email} size="50" />
