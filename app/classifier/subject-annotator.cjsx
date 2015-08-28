@@ -1,6 +1,5 @@
 React = require 'react'
 SubjectViewer = require '../components/subject-viewer'
-SVG = require '../components/svg'
 SVGImage = require '../components/svg-image'
 Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
@@ -49,6 +48,8 @@ module.exports = React.createClass
         LastTaskComponent.onLeaveAnnotation lastTask, oldAnnotation
     # if currentAnnotation?
     #   console.log 'Annotation is now', currentAnnotation
+    setTimeout => # Wait a tick for the annotation to load.
+      @updateSize()
 
   updateSize: ->
     clientRect = @refs.sizeRect?.getDOMNode().getBoundingClientRect() # Read only
@@ -66,6 +67,7 @@ module.exports = React.createClass
 
   getEventOffset: (e) ->
     scale = @getScale()
+    console?.log 'Subject scale is', JSON.stringify scale
     x = (e.pageX - @state.sizeRect?.left) / scale.horizontal || 0
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
@@ -74,6 +76,13 @@ module.exports = React.createClass
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
+
+    svgStyle = {}
+    if type is 'image'
+      # Images are rendered again within the SVG itself.
+      # When cropped right next to the edge of the image,
+      # the original tag can show through, so fill the SVG to cover it.
+      svgStyle.background = 'black'
 
     svgProps = {}
 
@@ -86,6 +95,8 @@ module.exports = React.createClass
         annotation: @props.annotation
         frame: @state.frame
         scale: @getScale()
+        naturalWidth: @state.naturalWidth
+        naturalHeight: @state.naturalHeight
         containerRect: @state.sizeRect
         getEventOffset: this.getEventOffset
 
@@ -98,7 +109,7 @@ module.exports = React.createClass
         <BeforeSubject {...hookProps} />}
 
       <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
-        <SVG ref="markingSurface" style={SubjectViewer.overlayStyle} naturalWidth={@state.naturalWidth} naturalHeight={@state.naturalHeight} onResize={@updateSize} {...svgProps}>
+        <svg style={Object.assign {}, SubjectViewer.overlayStyle, svgStyle} viewBox="0 0 #{@state.naturalWidth} #{@state.naturalHeight}" {...svgProps}>
           <rect ref="sizeRect" width={@state.naturalWidth} height={@state.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
           {if type is 'image'
@@ -109,7 +120,7 @@ module.exports = React.createClass
 
           {for anyTaskName, {PersistInsideSubject} of tasks when PersistInsideSubject?
             <PersistInsideSubject key={anyTaskName} {...hookProps} />}
-        </SVG>
+        </svg>
 
         {if @state.alreadySeen
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
@@ -138,12 +149,10 @@ module.exports = React.createClass
 
   handleSubjectFrameLoad: (e) ->
     @props.onLoad? e, @state.frame
-    if e?.target?.tagName.toUpperCase() is 'IMG'
-      {naturalWidth, naturalHeight} = e.target
-      unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
-        @setState {naturalWidth, naturalHeight}, ->
-          @refs.markingSurface.crop()
-          @updateSize()
+    {naturalWidth, naturalHeight} = e.target
+    unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
+      @setState {naturalWidth, naturalHeight}, =>
+        @updateSize()
 
   handleFrameChange: (frame) ->
     @setState {frame}

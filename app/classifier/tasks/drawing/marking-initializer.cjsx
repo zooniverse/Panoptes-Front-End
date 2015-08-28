@@ -13,7 +13,7 @@ module.exports = React.createClass
 
   render: ->
     <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
-      <rect className="marking-initializer" width="100%" height="100%" fill="transparent" stroke="none" />
+      <rect className="marking-initializer" width={@props.naturalWidth} height={@props.naturalHeight} fill="transparent" stroke="none" />
     </Draggable>
 
   handleInitStart: (e) ->

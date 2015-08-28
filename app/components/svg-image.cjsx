@@ -1,40 +1,33 @@
 React = require 'react'
 
-# React.DOM doesn't include an SVG <image> tag
-# (because of its namespaced `xlink:href` attribute, I think),
-# so this fakes one by wrapping it in a <g>.
+# JSX doesn't support the namespaced `xlink:href` attribute,
+# so we'll pass `src` instead and set it manually.
 
 module.exports = React.createClass
   displayName: 'SVGImage'
 
-  getDefaultProps: ->
-    src: ''
-    width: 0
-    height: 0
-
-  render: ->
-    <g {...@props} className="svg-image-container">
-      <image preserveAspectRatio="xMidYMid meet" width={@props.width} height={@props.height} />
-    </g>
-
-  componentDidUpdate: ->
-    @fixWeirdSize()
-    @setHref()
-  
   componentDidMount: ->
     @setHref()
+    @fixWeirdSize()
+
+  render: ->
+    <image ref="image" {...@props} />
+
+  componentDidUpdate: ->
+    @setHref()
+    @fixWeirdSize()
 
   # This fixes weird behavior observed in Mac Safari 7
   # where the image doesn't get a size on render.
   fixWeirdSize: ->
-    image = @getDOMNode().querySelector 'image'
+    image = React.findDOMNode @refs.image
 
-    unless image.width is @props.width
+    if @props.width? and image.width isnt @props.width
       image.setAttribute 'width', @props.width
 
-    unless image.height is @props.height
+    if @props.height? and image.height isnt @props.height
       image.setAttribute 'height', @props.height
-  
+
   setHref: ->
-    image = @getDOMNode().querySelector 'image'
+    image = React.findDOMNode @refs.image
     image.setAttributeNS 'http://www.w3.org/1999/xlink', 'href', @props.src

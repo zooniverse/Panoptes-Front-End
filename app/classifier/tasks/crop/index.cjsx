@@ -2,11 +2,11 @@ React = require 'react'
 CropInitializer = require './initializer'
 
 module.exports = React.createClass
-  displayName: 'SingleChoiceTask'
+  displayName: 'CropTask'
 
   statics:
     getSVGProps: ({workflow, classification, annotation}) ->
-      tasks = require './index'
+      tasks = require '../index'
       [previousCropAnnotation] = classification.annotations.filter (anAnnotation) =>
         taskDescription = workflow.tasks[anAnnotation.task]
         TaskComponent = tasks[taskDescription.type]

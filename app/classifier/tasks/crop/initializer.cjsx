@@ -8,16 +8,18 @@ module.exports = React.createClass
   render: ->
     <g>
       <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag}>
-        <rect x="0" y="0" width="100%" height="100%" fill="rgba(0, 0, 0, 0.2)" stroke="0"></rect>
+        <rect x="0" y="0" width="100%" height="100%" fill="rgba(0, 0, 0, 0.2)"></rect>
       </Draggable>
+
       {if @props.annotation.value?
         {x, y, width, height} = @props.annotation.value
+
         <g>
           <g fill="rgba(0, 0, 0, 0.5)" stroke="none" style={pointerEvents: 'none'}>
             <rect x="0" y="0" width={x} height="100%"></rect>
-            <rect x={x + width} y="0" width={@props.containerRect.width - (x + width)} height="100%"></rect>
+            <rect x={x + width} y="0" width={(@props.containerRect.width / @props.scale.horizontal) - (x + width)} height="100%"></rect>
             <rect x={x} y="0" width={width} height={y}></rect>
-            <rect x={x} y={y + height} width={width} height={@props.containerRect.height - (y + height)}></rect>
+            <rect x={x} y={y + height} width={width} height={(@props.containerRect.height / @props.scale.vertical) - (y + height)}></rect>
           </g>
 
           <rect x={x} y="-10" width={width} height="110%" fill="none" stroke="rgba(127, 127, 127, 0.5)" strokeWidth={1 / @props.scale.horizontal}></rect>
@@ -44,8 +46,8 @@ module.exports = React.createClass
 
   handleInitDrag: (e) ->
     {x, y} = @props.getEventOffset e
-    x = Math.max 0, Math.min x, @props.containerRect.width
-    y = Math.max 0, Math.min y, @props.containerRect.height
+    x = Math.max 0, Math.min x, (@props.containerRect.width / @props.scale.horizontal)
+    y = Math.max 0, Math.min y, (@props.containerRect.height / @props.scale.vertical)
     {_start} = @props.annotation.value
     @props.annotation.value.x = Math.min _start.x, x
     @props.annotation.value.y = Math.min _start.y, y
@@ -54,8 +56,8 @@ module.exports = React.createClass
     @props.classification.update 'annotation'
 
   handleBoxDrag: (e, d) ->
-    maxX = @props.containerRect.width - @props.annotation.value.width
-    maxY = @props.containerRect.height - @props.annotation.value.height
+    maxX = (@props.containerRect.width / @props.scale.horizontal) - @props.annotation.value.width
+    maxY = (@props.containerRect.height / @props.scale.vertical) - @props.annotation.value.height
     @props.annotation.value.x = Math.max 0, Math.min maxX, @props.annotation.value.x + d.x
     @props.annotation.value.y = Math.max 0, Math.min maxY, @props.annotation.value.y + d.y
     @props.classification.update 'annotations'
@@ -68,8 +70,9 @@ module.exports = React.createClass
 
   handleDragNear: (coord, e) ->
     dimension = {x: 'width', y: 'height'}[coord]
+    direction = {x: 'horizontal', y: 'vertical'}[coord]
     mouse = @props.getEventOffset e
-    mouse[coord] = Math.max 0, Math.min mouse[coord], @props.containerRect[dimension]
+    mouse[coord] = Math.max 0, Math.min mouse[coord], @props.containerRect[dimension] / @props.scale[direction]
     {_start} = @props.annotation.value
     diff = _start.mouse[coord] - mouse[coord]
     @props.annotation.value[coord] = Math.min _start.mouse[coord] + _start.rect[dimension], mouse[coord]
@@ -78,8 +81,9 @@ module.exports = React.createClass
 
   handleDragFar: (coord, e) ->
     dimension = {x: 'width', y: 'height'}[coord]
+    direction = {x: 'horizontal', y: 'vertical'}[coord]
     mouse = @props.getEventOffset e
-    mouse[coord] = Math.max 0, Math.min mouse[coord], @props.containerRect[dimension]
+    mouse[coord] = Math.max 0, Math.min mouse[coord], @props.containerRect[dimension] / @props.scale[direction]
     {_start} = @props.annotation.value
     diff = _start.mouse[coord] - mouse[coord]
     @props.annotation.value[coord] = Math.min _start.rect[coord], mouse[coord]
