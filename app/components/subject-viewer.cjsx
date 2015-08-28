@@ -8,6 +8,15 @@ CollectionsManagerIcon = require '../collections/manager-icon'
 
 NOOP = Function.prototype
 
+subjectHasMixedLocationTypes = (subject) ->
+  allTypes = []
+  (subject?.locations ? []).forEach (location) ->
+    Object.keys(location).forEach (typeAndFormat) ->
+      type = typeAndFormat.split('/')[0]
+      unless type in allTypes
+        allTypes.push type
+  allTypes.length > 1
+
 ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'inline-block', position: 'relative'
 SUBJECT_STYLE = display: 'block'
@@ -51,21 +60,18 @@ module.exports = React.createClass
 
     tools = switch type
       when 'image'
-        if @props.subject?.locations.length < 2
+        if @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
           null
         else
-          <span>
-          {unless @props.subject?.locations.indexOf "video/mp4"
-            <span className="subject-frame-play-controls">
-              {if @state.playing
-                <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
-                  <i className="fa fa-pause fa-fw"></i>
-                </button>
-              else
-                <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
-                  <i className="fa fa-play fa-fw"></i>
-                </button>}
-            </span>}
+          <span className="subject-frame-play-controls">
+            {if @state.playing
+              <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
+                <i className="fa fa-pause fa-fw"></i>
+              </button>
+            else
+              <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
+                <i className="fa fa-play fa-fw"></i>
+              </button>}
           </span>
 
     <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
