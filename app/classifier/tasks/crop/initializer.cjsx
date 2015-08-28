@@ -8,7 +8,7 @@ module.exports = React.createClass
   render: ->
     <g>
       <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag}>
-        <rect x="0" y="0" width="100%" height="100%" fill="rgba(0, 0, 0, 0.2)"></rect>
+        <rect x="0" y="0" width="100%" height="100%" fill="rgba(0, 0, 0, 0.001)"></rect>
       </Draggable>
 
       {if @props.annotation.value?
