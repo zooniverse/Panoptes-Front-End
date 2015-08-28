@@ -1,4 +1,5 @@
 @require "./user-profile-header"
+@require './talk'
 
 .user-profile
   background-color: #fbfbfb
@@ -26,3 +27,12 @@
   .private-message-page
     max-width: 800px
     margin: 0 auto
+
+    .block-user
+      .block-button
+        @extend .talk button
+
+      .description
+        display: inline-block
+        margin: auto 10px
+        color: #989898
