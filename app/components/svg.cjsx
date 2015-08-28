@@ -5,13 +5,16 @@ module.exports = React.createClass
 
   getInitialState: ->
     align: 'xMidYMid'
-    viewbox: ''
-  
+    viewBox: ''
+
+  componentDidMount: ->
+    @crop()
+
   render: ->
-    <svg viewBox={@state.viewbox} preserveAspectRatio="#{@state.align} meet" style={@props.style}>
+    <svg viewBox={@state.viewBox || null} preserveAspectRatio="#{@state.align} meet" style={@props.style}>
       {@props.children}
     </svg>
-  
+
   crop: (x = 0, y = 0, width = @props.naturalWidth, height = @props.naturalHeight) ->
     x = Math.max 0, x
     y = Math.max 0, y
@@ -21,17 +24,17 @@ module.exports = React.createClass
     maxHeight = @props.naturalHeight - y
     width = Math.min maxWidth, width
     height = Math.min maxHeight, height
-    viewbox = [x,y,width,height].join ' '
+    viewBox = [x, y, width, height].join ' '
     align = @align x, y, width, height
-    @setState {viewbox, align}, @props.handleResize
-  
+    @setState {viewBox, align}, @props.onResize
+
   align: (x = 0, y = 0, width = @props.naturalWidth, height = @props.naturalHeight) ->
     aspect = width / height
-    subject_aspect = @props.naturalWidth / @props.naturalHeight
-    ratio = aspect / subject_aspect
+    subjectAspect = @props.naturalWidth / @props.naturalHeight
+    ratio = aspect / subjectAspect
     align = switch
-      when ratio < .5 and x < width then 'xMinYMid'
-      when ratio < .5 and (x + width) > (@props.naturalWidth - width) then 'xMaxYMid'
+      when ratio < 0.5 and x < width then 'xMinYMid'
+      when ratio < 0.5 and (x + width) > (@props.naturalWidth - width) then 'xMaxYMid'
       when ratio > 2 and y < height then 'xMidYMin'
       when ratio > 2 and (y + height) > (@props.naturalHeight - height) then 'xMidYMax'
       else 'xMidYMid'

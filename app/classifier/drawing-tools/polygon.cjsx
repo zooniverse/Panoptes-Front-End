@@ -92,8 +92,8 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   handleMouseMove: (e) ->
-    xPos = e.pageX - pageXOffset
-    yPos = e.pageY - pageYOffset
+    xPos = e.pageX
+    yPos = e.pageY
 
     mouseWithinViewer = if xPos < @props.containerRect.left || xPos > @props.containerRect.right
       false
