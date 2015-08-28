@@ -1,7 +1,6 @@
 React = require 'react'
 PrivateMessageForm = require '../../talk/private-message-form'
 talkClient = require '../../api/talk'
-PromiseRenderer = require '../../components/promise-renderer'
 
 module.exports = React.createClass
   displayName: 'PrivateMessagePage'
