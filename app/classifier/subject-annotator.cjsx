@@ -53,10 +53,10 @@ module.exports = React.createClass
   updateSize: ->
     clientRect = @refs.sizeRect?.getDOMNode().getBoundingClientRect() # Read only
     {left, right, top, bottom, width, height} = clientRect
-    left += scrollX
-    right += scrollX
-    top += scrollY
-    bottom += scrollY
+    left += pageXOffset
+    right += pageXOffset
+    top += pageYOffset
+    bottom += pageYOffset
     @setState sizeRect: {left, right, top, bottom, width, height}
 
   getScale: ->
