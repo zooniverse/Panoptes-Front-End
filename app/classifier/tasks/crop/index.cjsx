@@ -40,7 +40,7 @@ module.exports = React.createClass
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help}>
       <p>
-        <button type="button" onClick={@handleClear}>Clear current crop</button>
+        <button type="button" disabled={not @props.annotation.value?} onClick={@handleClear}>Clear current crop</button>
       </p>
     </GenericTask>
 
