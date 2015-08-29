@@ -35,12 +35,6 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'HomePage'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-home-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-home-page'
-
   render: ->
     aboutItems = ['contribute', 'explore', 'collaborate', 'discover']
 

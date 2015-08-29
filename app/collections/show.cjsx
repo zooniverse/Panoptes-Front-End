@@ -26,12 +26,6 @@ CollectionPage = React.createClass
   getDefaultProps: ->
     collection: null
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-collection-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-collection-page'
-
   render: ->
     <PromiseRenderer promise={@props.collection.get('owner')}>{(owner) =>
       [ownerName, name] = @props.collection.slug.split('/')

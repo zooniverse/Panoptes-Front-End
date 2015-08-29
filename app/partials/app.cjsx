@@ -6,6 +6,28 @@ MainHeader = require './main-header'
 MainFooter = require './main-footer'
 {generateSessionID} = require '../lib/session'
 
+mainClassNames = # routeName: cssClass
+  'home': 'on-home-page'
+  'project': 'on-project-page'
+  'about': 'on-secondary-page'
+  'projects': 'on-secondary-page'
+  'user-profile': 'on-secondary-page'
+  'favorites': 'on-secondary-page'
+  'collections': 'on-secondary-page'
+  'lab-landing-page': 'on-secondary-page on-landing-page'
+
+routeInCurrentRoutes = (routes, routeName) ->
+  routeNames = routes.map (route) -> route.name
+  routeNames.indexOf(routeName) isnt -1
+
+appClassNames = (routes) ->
+  Object.keys(mainClassNames).reduce((classList, routeName) ->
+    if routeInCurrentRoutes(routes, routeName)
+      classList.concat(mainClassNames[routeName])
+    else
+      classList
+  , []).join(' ')
+
 module.exports = React.createClass
   displayName: 'PanoptesApp'
 
@@ -28,7 +50,7 @@ module.exports = React.createClass
         initialLoadComplete: true
 
   render: ->
-    <div className="panoptes-main">
+    <div className="panoptes-main #{appClassNames(@props.routes)}">
       <IOStatus />
       <MainHeader user={@state.user} />
       <div className="main-content">

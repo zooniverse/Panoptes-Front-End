@@ -4,7 +4,6 @@ PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 apiClient = require '../../api/client'
 counterpart = require 'counterpart'
-LandingPage = require './landing-page'
 
 sleep = (duration) ->
   (value) ->
@@ -19,6 +18,9 @@ module.exports = React.createClass
     page: 1
     creationError: null
     creationInProgress: false
+
+  componentWillMount: ->
+    @transitionTo('lab-landing-page') unless @props.user
 
   fetchProjects: ->
     projectsQuery =
@@ -77,7 +79,7 @@ module.exports = React.createClass
           <LandingPage user={@props.user} parentIndex={this} />
       }</PromiseRenderer>
     else
-      <LandingPage parentIndex={this} />
+      null
 
   handlePageChange: (e) ->
     @setState page: e.target.value, =>
