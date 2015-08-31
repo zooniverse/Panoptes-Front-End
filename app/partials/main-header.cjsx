@@ -42,7 +42,7 @@ module.exports = React.createClass
      React.findDOMNode(@refs.mainTitle).classList.remove 'header-sticky'
 
   checkIfOnHome: ->
-    return true if window.location.hash is '#/'
+    return true if window.location is '/'
 
   render: ->
     <header className="main-header">

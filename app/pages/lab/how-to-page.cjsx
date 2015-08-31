@@ -10,13 +10,13 @@ counterpart.registerTranslations 'en',
 
       **So you want to build a project using the Zooniverse Project Builder?**
       This tutorial will help walk you through the process, using Kitteh Zoo as an example.
-      You can [explore the actual project](https://www.zooniverse.org/#/projects/vrooje/kitteh-zoo).
+      You can [explore the actual project](https://www.zooniverse.org/projects/vrooje/kitteh-zoo).
 
       [![Kitteh Zoo screenshot](./assets/how-to-lab/how-to-1.jpg)](./assets/how-to-lab/how-to-1.jpg)
 
       ### Getting Started
 
-      To get started building, go to [the Project Builder home page](./#/lab) and log in to your Zooniverse account, then click the "Build a Project" button in the top right. Here you can see all of the projects you own and collaborate on. Click on "Create a project" to start building.
+      To get started building, go to [the Project Builder home page](/lab) and log in to your Zooniverse account, then click the "Build a Project" button in the top right. Here you can see all of the projects you own and collaborate on. Click on "Create a project" to start building.
 
       [![Project Builder screenshot](./assets/how-to-lab/how-to-2.jpg)](./assets/how-to-lab/how-to-2.jpg)
 
@@ -179,7 +179,7 @@ counterpart.registerTranslations 'en',
       
       ### DETAILS - Visibility
       
-      This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](#/lab-policies).
+      This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](/lab-policies).
       
       ### DETAILS - Collaborators
 

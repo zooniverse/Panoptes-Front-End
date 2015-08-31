@@ -8,7 +8,7 @@ counterpart.registerTranslations 'en',
    pageContent: '''
     ## What is the Zooniverse?
 
-    The Zooniverse is the world’s largest and most popular platform for people-powered research. This research is made possible by volunteers—hundreds of thousands of people around the world who come together to assist professional researchers. Our goal is to enable research that would not be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community, and [many publications](./#/about/publications).
+    The Zooniverse is the world’s largest and most popular platform for people-powered research. This research is made possible by volunteers—hundreds of thousands of people around the world who come together to assist professional researchers. Our goal is to enable research that would not be possible, or practical, otherwise. Zooniverse research results in new discoveries, datasets useful to the wider research community, and [many publications](/about/publications).
 
     ### At the Zooniverse, anyone can be a researcher
 
@@ -27,7 +27,7 @@ Our projects combine contributions from many individual volunteers, relying on a
     ### Volunteers and professionals make real discoveries together
 
     Zooniverse projects are constructed with the aim of converting volunteers' efforts into
-    measurable results. These projects have produced a large number of [published research papers](./#/about/publications),
+    measurable results. These projects have produced a large number of [published research papers](/about/publications),
     as well as several open-source sets of analyzed data. In some cases, Zooniverse volunteers have even made completely unexpected and scientifically significant discoveries.
 
 A significant amount of this research takes place on the Zooniverse discussion boards, where volunteers can work together with each other and with the research teams. These boards are integrated with each project to allow for everything from quick hashtagging to in-depth collaborative analysis. There is also a central Zooniverse board for general chat and discussion about Zooniverse-wide matters.
