@@ -8,7 +8,7 @@ module.exports = React.createClass
   render: ->
     <g>
       <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag}>
-        <rect x="0" y="0" width="100%" height="100%" fill="rgba(0, 0, 0, 0.001)"></rect>
+        <rect x="0" y="0" width="100%" height="100%" fill="rgba(0, 0, 0, 0.001)" style={cursor: 'crosshair'}></rect>
       </Draggable>
 
       {if @props.annotation.value?
@@ -26,14 +26,14 @@ module.exports = React.createClass
           <rect x="-10" y={y} width="110%" height={height} fill="none" stroke="rgba(127, 127, 127, 0.5)" strokeWidth={1 / @props.scale.vertical}></rect>
 
           <Draggable onDrag={@handleBoxDrag}>
-            <rect x={x} y={y} width={width} height={height} fill="rgba(255, 255, 255, 0.001)" stroke="black" strokeWidth={1 / @props.scale.horizontal}></rect>
+            <rect x={x} y={y} width={width} height={height} fill="rgba(255, 255, 255, 0.001)" stroke="black" strokeWidth={1 / @props.scale.horizontal} style={cursor: 'move'}></rect>
           </Draggable>
 
           <g style={color: 'white'}>
-            <DragHandle x={x} y={y + (height / 2)} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragNear.bind this, 'x'}  />
-            <DragHandle x={x + width} y={y + (height / 2)} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragFar.bind this, 'x'} />
-            <DragHandle x={x + (width / 2)} y={y} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragNear.bind this, 'y'} />
-            <DragHandle x={x + (width / 2)} y={y + height} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragFar.bind this, 'y'} />
+            <DragHandle x={x} y={y + (height / 2)} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragNear.bind this, 'x'}  style={cursor: 'ew-resize'} />
+            <DragHandle x={x + width} y={y + (height / 2)} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragFar.bind this, 'x'} style={cursor: 'ew-resize'} />
+            <DragHandle x={x + (width / 2)} y={y} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragNear.bind this, 'y'} style={cursor: 'ns-resize'} />
+            <DragHandle x={x + (width / 2)} y={y + height} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragFar.bind this, 'y'} style={cursor: 'ns-resize'} />
           </g>
         </g>}
     </g>
