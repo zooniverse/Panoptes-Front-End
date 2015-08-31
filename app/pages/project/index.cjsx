@@ -37,6 +37,14 @@ counterpart.registerTranslations 'en',
       education: 'Education'
       talk: 'Talk'
 
+ProjectAvatar = React.createClass
+  displayName: 'ProjectAvatar'
+
+  render: ->
+    <PromiseRenderer promise={@props.project.get 'avatar'} then={(avatar) =>
+      <img src={avatar.src} className="avatar" />
+    } catch={null} />
+
 ProjectPage = React.createClass
   displayName: 'ProjectPage'
 
@@ -51,6 +59,10 @@ ProjectPage = React.createClass
     sugarClient.unsubscribeFrom "project-#{ @props.project.id }"
     document.documentElement.classList.remove 'on-project-page'
 
+  getPageTitles: (page) ->
+    page.filter((page) -> page.content isnt '' and page.content?)
+      .reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
+
   render: ->
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
@@ -63,38 +75,46 @@ ProjectPage = React.createClass
           } catch={null} />
 
           <nav className="project-nav tabbed-content-tabs">
-            <Link to="project-home" params={params} className="tabbed-content-tab">
-              <PromiseRenderer promise={@props.project.get 'avatar'} then={(avatar) =>
-                <img src={avatar.src} className="avatar" />
-              } catch={null} />
-              {@props.project.display_name}
-            </Link>
-            <Link to="project-research" params={params} className="tabbed-content-tab">
-              <Translate content="project.nav.research" />
-            </Link>
-            <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
-              pageTitles = pages.filter((page) -> page.content isnt '' and page.content?).reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
-              <span>
-                {if pageTitles.result
-                  <Link to="project-results" params={params} className="tabbed-content-tab">
-                    {pageTitles.result}
-                  </Link>}
-                {if @props.project.redirect
-                  <a href={@props.project.redirect} className="tabbed-content-tab">Visit project</a>
-                else
-                  <Link to="project-classify" params={params} className="classify tabbed-content-tab">
-                    <Translate content="project.nav.classify" />
-                  </Link>}
-                {if pageTitles.faq
-                  <Link to="project-faq" params={params} className="tabbed-content-tab">
-                    {pageTitles.faq}
-                  </Link>}
-                {if pageTitles.education
-                  <Link to="project-education" params={params} className="tabbed-content-tab">
-                    {pageTitles.education}
-                  </Link>}
-              </span>
-            }</PromiseRenderer>
+            {if @props.project.redirect
+              <a target="_blank" href={@props.project.redirect} className="tabbed-content-tab">
+                <ProjectAvatar project={@props.project} />
+                Visit {@props.project.title}
+              </a>
+            else
+              <Link to="project-home" params={params} className="tabbed-content-tab">
+                <ProjectAvatar project={@props.project} />
+                {@props.project.display_name}
+              </Link>}
+            {unless @props.project.redirect
+              <Link to="project-research" params={params} className="tabbed-content-tab">
+                <Translate content="project.nav.research" />
+              </Link>}
+            {if @props.project.redirect
+              <a target="_blank" href={"#{@props.project.redirect}/#/classify"} className="tabbed-content-tab">
+                <Translate content="project.nav.classify" />
+              </a>
+            else
+              <Link to="project-classify" params={params} className="classify tabbed-content-tab">
+                <Translate content="project.nav.classify" />
+              </Link>}
+            {unless @props.project.redirect
+              <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
+                pageTitles = @getPageTitles(pages)
+                <span>
+                  {if pageTitles.result
+                    <Link to="project-results" params={params} className="tabbed-content-tab">
+                      {pageTitles.result}
+                    </Link>}
+                  {if pageTitles.faq
+                    <Link to="project-faq" params={params} className="tabbed-content-tab">
+                      {pageTitles.faq}
+                    </Link>}
+                  {if pageTitles.education
+                    <Link to="project-education" params={params} className="tabbed-content-tab">
+                      {pageTitles.education}
+                    </Link>}
+                </span>
+              }</PromiseRenderer>}
             <Link to="project-talk" params={params} className="tabbed-content-tab">
               <Translate content="project.nav.talk" />
             </Link>
