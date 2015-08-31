@@ -5,6 +5,7 @@ talkClient = require '../api/talk'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 Avatar = require '../partials/avatar'
+TriggeredModalForm = require 'modal-form/triggered'
 
 UP = 38
 DOWN = 40
@@ -43,22 +44,41 @@ module.exports = React.createClass
   render: ->
       <div className="account-bar" onKeyDown={@navigateMenu}>
         <div className="account-info">
-          <button aria-expanded={@state.expanded} aria-haspopup="true" className="secret-button display-name" onClick={@toggleAccountMenu}>
-            <strong>{@props.user.display_name}</strong>
-          </button>
-          <Avatar user={@props.user} />
+          <TriggeredModalForm ref="accountMenu" className="account-menu" triggerClassName="secret-button" trigger={
+            <span>
+              <strong>{@props.user.display_name}</strong>{' '}
+              <Avatar user={@props.user} />
+            </span>
+          }>
+            <div onClick={=> this.refs.accountMenu.close()}>
+              <Link to="user-profile" params={name: @props.user.login} autoFocus>
+                <i className="fa fa-user fa-fw"></i>{' '}
+                <Translate content="accountMenu.profile" />
+              </Link>
+              <br />
+              <Link to="settings" params={name: @props.user.login}>
+                <i className="fa fa-cogs fa-fw"></i>{' '}
+                <Translate content="accountMenu.settings" />
+              </Link>
+              <br />
+              <Link to="collections-user" params={{owner: @props.user.login}}>
+                <i className="fa fa-image fa-fw"></i>{' '}
+                <Translate content="accountMenu.collections" />
+              </Link>
+              <br />
+              <Link to="favorites-user" params={{owner: @props.user.login}}>
+                <i className="fa fa-star fa-fw"></i>{' '}
+                <Translate content="accountMenu.favorites" />
+              </Link>
+              <br />
+              <button type="button" className="secret-button sign-out-button" onClick={@handleSignOutClick}>
+                <i className="fa fa-sign-out fa-fw"></i>{' '}
+                <Translate content="accountMenu.signOut" />
+              </button>
+            </div>
+          </TriggeredModalForm>{' '}
+
           <Link to="inbox" params={name: @props.user.login} className="message-link"><i className="fa fa-envelope#{if @state.unread then ' unread' else '-o'}" /> </Link>
-        </div>
-        <div aria-hidden={!@state.expanded} aria-label="account menu" className="account-menu" ref="accountMenu">
-          <Link to="user-profile" params={name: @props.user.login}><Translate content="accountMenu.profile" /></Link>
-          <Link to="settings" params={name: @props.user.login}><Translate content="accountMenu.settings" /></Link>
-          <Link to="collections-user" params={{owner: @props.user.login}}>
-            <Translate content="accountMenu.collections" />
-          </Link>
-          <Link to="favorites-user" params={{owner: @props.user.login}}>
-            <Translate content="accountMenu.favorites" />
-          </Link>
-          <button className="secret-button sign-out-button" type="button" onClick={@handleSignOutClick}><Translate content="accountMenu.signOut" /></button>
         </div>
       </div>
 

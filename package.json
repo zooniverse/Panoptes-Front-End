@@ -11,7 +11,7 @@
     "lodash.merge": "~2.4.1",
     "lodash.pick": "~3.1.0",
     "markdownz": "^2.0.0",
-    "modal-form": "~0.1.0",
+    "modal-form": "~0.2.0",
     "moment": "~2.9.0",
     "papaparse": "mholt/PapaParse#cada171",
     "react": "~0.13.2",
