@@ -66,7 +66,7 @@ module.exports = React.createClass
             if nameConflict
               <span className="form-help error">
                 <Translate content="registerForm.nameConflict" />{' '}
-                <a href="#/reset-password" onClick={@props.onSuccess}>
+                <a href="/reset-password" onClick={@props.onSuccess}>
                   <Translate content="registerForm.forgotPassword" />
                 </a>
               </span>
@@ -114,7 +114,7 @@ module.exports = React.createClass
             if emailConflict
               <span className="form-help error">
                 <Translate content="registerForm.emailConflict" />{' '}
-                <a href="#/reset-password" onClick={@props.onSuccess}>
+                <a href="/reset-password" onClick={@props.onSuccess}>
                   <Translate content="registerForm.forgotPassword" />
                 </a>
               </span>
@@ -141,7 +141,7 @@ module.exports = React.createClass
 
       <label>
         <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@props.user?} onChange={@handlePrivacyPolicyChange} />
-        {privacyPolicyLink = <a target="_blank" href="#/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
+        {privacyPolicyLink = <a target="_blank" href="/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
         <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
       </label>
 
