@@ -6,7 +6,6 @@ parseSection = require './lib/parse-section'
 projectSection = require './lib/project-section'
 {State, Navigation} = require 'react-router'
 merge = require 'lodash.merge'
-getPageOfComment = require './lib/get-page-of-comment'
 {getErrors} = require './lib/validations'
 commentValidations = require './lib/comment-validations'
 talkConfig = require './config'
@@ -61,8 +60,7 @@ module?.exports = React.createClass
 
                     talkClient.type('comments').create(comment).save()
                       .then (comment) =>
-                        pageOfComment = getPageOfComment(comment, discussion, PAGE_SIZE)
-                        @transitionTo('project-talk-discussion', {owner: owner, name: name, board: discussion.board_id, discussion: discussion.id}, {page: pageOfComment, comment: comment.id})
+                        @transitionTo('project-talk-discussion', {owner: owner, name: name, board: discussion.board_id, discussion: discussion.id}, {comment: comment.id})
 
                   else
                     focus_id = +@props.subject?.id
@@ -96,7 +94,7 @@ module?.exports = React.createClass
         validationCheck={@commentErrors}
         validationErrors={@state.commentValidationErrors}
         submitFeedback={"Comment successfully added"}
-        placeholder={"Add a note about this subject."}
+        placeholder={"Add a note about this subject, or mark with a #hashtag"}
         onSubmitComment={@onSubmitComment}
         subject={@props.subject}
         submit="Add Your comment"/>

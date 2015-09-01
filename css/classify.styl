@@ -7,7 +7,6 @@
 
   > .subject-area
     align-items: center
-    justify-content: center
     display: flex
     flex-shrink: 1
     flex-direction: column
@@ -76,10 +75,9 @@
     transform: rotate(-15deg)
 
   > .task-area
-    flex: 1 1
+    flex: 0 0 50ch
     margin-bottom: 1em
-    max-width: 60ch
-    min-width: 30ch
+    max-width: 100%
 
   .task-nav
     display: flex
@@ -122,6 +120,7 @@
     height: 1.5em
     stroke: currentColor
     stroke-width: 5
+    width: 1.5em
 
   .drawing-tool-input
     display: none

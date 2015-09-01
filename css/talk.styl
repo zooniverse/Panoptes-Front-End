@@ -99,6 +99,11 @@ COPY_GREY_LIGHT = #afaeae
     padding: 0.2em
 
 
+  .link-style
+    text-decoration: underline
+    color: COBOLT_BLUE
+    cursor: pointer
+
   .polaroid-image
     max-width: 640px
 
@@ -219,6 +224,11 @@ COPY_GREY_LIGHT = #afaeae
   .talk-board-preview
     @extend .talk-module
     overflow: auto
+    position: relative
+
+    &.private
+      background: white
+
     h1 a
       color: COPY
       text-decoration: none
@@ -228,9 +238,22 @@ COPY_GREY_LIGHT = #afaeae
       margin: 0 0 5px 0
       color: COPY_GREY_MID
 
+    .board-locked
+      font-size: 12px
+      color: FAILURE
+      position: absolute
+      top: TALK_PADDING
+      right: TALK_PADDING
+
   .preview-content
     width: 80%
     float: left
+
+    .subject-preview
+      display: inline-block
+      float: left
+      margin-right: 5px
+
   .preview-stats
     width: 20%
     float: left
@@ -295,6 +318,7 @@ COPY_GREY_LIGHT = #afaeae
           text-decoration: underline
     p
       margin: 0
+
     .talk-discussion-preview-author
       font-size: 0.7em
       margin-top: 0.3em
@@ -302,15 +326,12 @@ COPY_GREY_LIGHT = #afaeae
   .talk-discussion
     max-width: 960px
     margin: 0 auto
+
     .talk-comment-box
       width: 80%
 
     > p
       text-align: center
-      > span.sign-in
-        text-decoration: underline
-        color: MAIN_HIGHLIGHT
-        cursor: pointer
 
     &-locked
       color: FAILURE
@@ -319,15 +340,32 @@ COPY_GREY_LIGHT = #afaeae
       &.locked
         pointer-events: none
         opacity: 0.6
+    h1
+      input
+        margin: 0 auto
+        text-align: center
+        width: 100%
+        border: 1px solid FOREGROUND
+        border-radius: TALK_BORDER_RADIUS
+      i
+        font-size: 12px
+
+    .talk-discussion-follow
+      margin: 10px auto
+
+      .description
+        display: inline-block
+        margin: auto 10px
+        color: #989898
 
   .talk-comment
     overflow: auto
 
     &.active
       .talk-comment-body
-        background-color: gold
+        border-color: MAIN_HIGHLIGHT
 
-    .talk-comment-preview-content
+    .markdown
       > blockquote
         opacity: 0.5
       img
@@ -385,6 +423,10 @@ COPY_GREY_LIGHT = #afaeae
 
       .talk-comment-like-button i.upvoted
         color: MAIN_HIGHLIGHT
+
+  &.inbox-conversation
+    .delete-conversation
+      margin: 10px 0
 
   .inbox-form
     input[type='text']
@@ -491,9 +533,8 @@ COPY_GREY_LIGHT = #afaeae
             button
               opacity: 1
 
-    .submit-error
-      color: FAILURE
-
+  .submit-error
+    color: FAILURE
 
   .talk-edit-discussion-form
     .toggle

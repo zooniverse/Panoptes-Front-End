@@ -20,9 +20,9 @@ counterpart.registerTranslations 'en',
         He has a computer science degree and has worked in web hosting and development for many years.
         He's also working on a degree in astronomy with the OU.'''
       alexBowyer:
-        title: 'UX Developer'
+        title: 'Web Science Architect'
         bio: '''Alex mostly works remotely for Zooniverse from his home in Northumberland.
-        He's a web developer specializing in user experience, has a computer science degree,
+        He's a software architect designing and running Zooniverse experiments. He has a computer science degree,
         and has developed software & websites at large enterprises and startups.'''
       alexWeiksnar:
         title: 'Developer'
@@ -49,7 +49,7 @@ counterpart.registerTranslations 'en',
         title: 'Developer'
         bio: '''Responsible for building the Zooniverse's API infrastructure.
         Cam considers himself a music and fine wine connoisseur - others do not.
-        In his space time he enjoys playing an obscure form of rugby.'''
+        In his spare time he enjoys playing an obscure form of rugby.'''
       chrisLintott:
         title: 'Zooniverse PI'
         bio: '''Astronomer and founder of both Galaxy Zoo and the Zooniverse that grew from it,
@@ -120,6 +120,9 @@ counterpart.registerTranslations 'en',
         bio: '''Kyle is an astronomer who studies galaxies, masers, and black holes (although he's
         been getting more into data science). He works on both Galaxy Zoo and Radio Galaxy Zoo,
         as well as developing advanced tools for the volunteers.'''
+      lauraTrouille:
+        title: 'Adler Planetarium Zooniverse Director'
+        bio: '''In July 2015, Laura became Director of Citizen Science at the Adler Planetarium and co-lead of the Zooniverse. While earning her Ph.D. in astronomy in 2010 studying galaxy evolution, she embodied cosmic collisions as a roller derby queen aptly named ‘The Big Bang’.'''
       lucyFortson:
         title: 'University of Minnesota Zooniverse Director'
         bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota. One of the Zooniverse
@@ -328,6 +331,13 @@ teamMembers =
     bio: counterpart "team.content.kyleWillett.bio"
     image: "./assets/team/kyle.jpg"
     location: "minnesota"
+  lauraTrouille:
+    name: "Laura Trouille"
+    twitter: "windycityastro"
+    title: counterpart "team.content.lauraTrouille.title"
+    bio: counterpart "team.content.lauraTrouille.bio"
+    image: "./assets/team/laura.jpg"
+    location: "chicago"
   lucyFortson:
     name: "Lucy Fortson"
     twitter: "lucyfortson"

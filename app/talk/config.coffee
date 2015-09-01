@@ -1,6 +1,6 @@
 module?.exports =
 
-  discussionPageSize: 10
+  discussionPageSize: 20
 
   inboxPageSize: 10
 

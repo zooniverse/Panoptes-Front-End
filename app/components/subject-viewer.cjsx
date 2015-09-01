@@ -2,11 +2,20 @@ React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 FavoritesButton = require '../collections/favorites-button'
 alert = require '../lib/alert'
-Markdown = require '../components/markdown'
+{Markdown} = require 'markdownz'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 
 NOOP = Function.prototype
+
+subjectHasMixedLocationTypes = (subject) ->
+  allTypes = []
+  (subject?.locations ? []).forEach (location) ->
+    Object.keys(location).forEach (typeAndFormat) ->
+      type = typeAndFormat.split('/')[0]
+      unless type in allTypes
+        allTypes.push type
+  allTypes.length > 1
 
 ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'inline-block', position: 'relative'
@@ -31,6 +40,7 @@ module.exports = React.createClass
     onFrameChange: NOOP
     onLoad: NOOP
     defaultStyle: true
+    project: null
 
   getInitialState: ->
     loading: true
@@ -42,28 +52,26 @@ module.exports = React.createClass
 
     mainDisplay = switch type
       when 'image'
-        <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleImageLoad} />
+        <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
+      when 'video'
+        <video src={src} type={"#{type}/#{format}"} controls onLoad={@handleLoad}>
+          Your browser does not support the video format. Please upgrade your browser.
+        </video>
 
     tools = switch type
       when 'image'
-        if @props.subject?.locations.length < 2
+        if @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
           null
         else
-          <span>
-            <span className="subject-frame-play-controls">
-              {if @state.playing
-                <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
-                  <i className="fa fa-pause fa-fw"></i>
-                </button>
-              else
-                <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
-                  <i className="fa fa-play fa-fw"></i>
-                </button>}
-            </span>
-            <span className="subject-frame-pips">
-              {for i in [0...@props.subject?.locations.length ? 0]
-                <button type="button" key={i} className="subject-frame-pip #{if i is @state.frame then 'active' else ''}" value={i} onClick={@handleFrameChange.bind this, i}>{i + 1}</button>}
-            </span>
+          <span className="subject-frame-play-controls">
+            {if @state.playing
+              <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
+                <i className="fa fa-pause fa-fw"></i>
+              </button>
+            else
+              <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
+                <i className="fa fa-play fa-fw"></i>
+              </button>}
           </span>
 
     <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
@@ -80,10 +88,17 @@ module.exports = React.createClass
 
       <div className="subject-tools">
         <span>{tools}</span>
+        {if @props.subject?.locations.length >= 2
+          <span>
+            <span className="subject-frame-pips">
+              {for i in [0...@props.subject?.locations.length ? 0]
+                <button type="button" key={i} className="subject-frame-pip #{if i is @state.frame then 'active' else ''}" value={i} onClick={@handleFrameChange.bind this, i}>{i + 1}</button>}
+            </span>
+        </span>}
         <span>
           {if @props.subject?.metadata?
-            <button type="button" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
-          {if @props.subject? && @props.user?
+            <button type="button" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
+          {if @props.subject? and @props.user? and @props.project?
             <span>
               <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />
               <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
@@ -141,6 +156,6 @@ module.exports = React.createClass
       </table>
     </div>
 
-  handleImageLoad: (e) ->
+  handleLoad: (e) ->
     @setState loading: false
     @props.onLoad? arguments...

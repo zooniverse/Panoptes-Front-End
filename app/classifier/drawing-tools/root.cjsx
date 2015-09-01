@@ -1,7 +1,15 @@
 React = require 'react'
+AnchoredModalForm = require 'modal-form/anchored'
+ChangeListener = require '../../components/change-listener'
 
 STROKE_WIDTH = 1.5
 SELECTED_STROKE_WIDTH = 2.5
+
+NON_MODAL_STYLE =
+  bottom: null
+  height: 0
+  right: null
+  width: '100%' # `0` makes for too-skinny children.
 
 module.exports = React.createClass
   displayName: 'DrawingToolRoot'
@@ -42,4 +50,21 @@ module.exports = React.createClass
       <g className="drawing-tool-main" {...mainStyle} onMouseDown={startHandler} onTouchStart={startHandler}>
         {@props.children}
       </g>
+
+      {if toolProps.selected and toolProps.details? and toolProps.details.length isnt 0
+        tasks = require '../tasks'
+        <AnchoredModalForm ref="detailsForm" underlayStyle={NON_MODAL_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
+          {for detailTask, i in toolProps.details
+            detailTask._key ?= Math.random()
+            TaskComponent = tasks[detailTask.type]
+            <TaskComponent key={detailTask._key} task={detailTask} annotation={toolProps.mark.details[i]} onChange={toolProps.onChange} />}
+          <hr />
+          <p style={textAlign: 'center'}>
+            <button type="submit" className="standard-button">OK</button>
+          </p>
+        </AnchoredModalForm>}
     </g>
+
+  handleDetailsFormClose: ->
+    # TODO: Check if the details tasks are complete.
+    @props.tool.props.onDeselect?()

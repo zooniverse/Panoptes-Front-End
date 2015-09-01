@@ -8,12 +8,14 @@ Moderation = require './lib/moderation'
 ProjectLinker = require './lib/project-linker'
 ROLES = require './lib/roles'
 {Link} = require 'react-router'
+CreateSubjectDefaultButton = require './lib/create-subject-default-button'
+CreateBoardForm = require './lib/create-board-form'
 Loading = require '../components/loading-indicator'
 PopularTags = require './popular-tags'
 require '../api/sugar'
-
-DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
-DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
+ZooniverseTeam = require './lib/zoo-team.cjsx'
+alert = require '../lib/alert'
+AddZooTeamForm = require './add-zoo-team-form'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
@@ -24,6 +26,7 @@ module?.exports = React.createClass
 
   propChangeHandlers:
     'section': 'setBoards'
+    'user': 'setBoards'
 
   getInitialState: ->
     boards: []
@@ -35,54 +38,13 @@ module?.exports = React.createClass
   componentWillUnmount: ->
     sugarClient.unsubscribeFrom('zooniverse') if @props.section is 'zooniverse'
 
-  setBoards: ->
-    talkClient.type('boards').get(section: @props.section)
+  setBoards: (propValue, props = @props) ->
+    talkClient.type('boards').get(section: props.section)
       .then (boards) =>
         @setState {boards, loading: false}
 
-  onSubmitBoard: (e) ->
-    e.preventDefault()
-    titleInput = @getDOMNode().querySelector('form input')
-    descriptionInput = @getDOMNode().querySelector('form textarea')
-
-    # permissions
-    read = @getDOMNode().querySelector(".roles-read input[name='role-read']:checked").value
-    write = @getDOMNode().querySelector(".roles-write input[name='role-write']:checked").value
-    permissions = {read, write}
-
-    title = titleInput.value
-    description = descriptionInput.value
-    section = @props.section
-
-    board = {title, description, section, permissions}
-    return console.log "failed validation" unless title and description and section
-
-    talkClient.type('boards').create(board).save()
-      .then (board) =>
-        titleInput.value = ''
-        descriptionInput.value = ''
-        @setBoards()
-
   boardPreview: (data, i) ->
     <BoardPreview {...@props} key={i} data={data} />
-
-  roleReadLabel: (data, i) ->
-    <label key={i}><input type="radio" name="role-read" defaultChecked={i is ROLES.length-1} value={data}/>{data}</label>
-
-  roleWriteLabel: (data, i) ->
-    <label key={i}><input type="radio" name="role-write" defaultChecked={i is ROLES.length-1}value={data}/>{data}</label>
-
-  createSubjectDefaultBoard: ->
-    board =
-      title: DEFAULT_BOARD_TITLE,
-      description: DEFAULT_BOARD_DESCRIPTION
-      subject_default: true,
-      permissions: {read: 'all', write: 'all'}
-      section: @props.section
-
-    talkClient.type('boards').create(board).save()
-      .then =>
-        @setBoards()
 
   render: ->
     <div className="talk-home">
@@ -90,12 +52,18 @@ module?.exports = React.createClass
         <Moderation section={@props.section} user={@props.user}>
           <div>
             <h2>Moderator Zone:</h2>
+
             {if @props.section isnt 'zooniverse'
-              <PromiseRenderer promise={talkClient.type('boards').get({section: @props.section, subject_default: true}).index(0)}>{(defaultBoard) =>
-                if not defaultBoard?
-                  <button onClick={@createSubjectDefaultBoard}><i className="fa fa-photo" /> Activate Talk Subject Comments Board</button>
-              }</PromiseRenderer>
+              <CreateSubjectDefaultButton
+                section={@props.section}
+                onCreateBoard={=> @setBoards()} />
               }
+
+            <ZooniverseTeam user={@props.user} section={@props.section}>
+              <span className="link-style" onClick={=> alert (resolve) -> <AddZooTeamForm/>}>
+                Invite someone to the Zooniverse team
+              </span>
+            </ZooniverseTeam>
 
             <Link
               to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
@@ -108,20 +76,7 @@ module?.exports = React.createClass
               View Reported Comments
             </Link>
 
-            <form onSubmit={@onSubmitBoard}>
-              <h3>Add a board:</h3>
-              <input type="text" ref="boardTitle" placeholder="Board Title"/>
-
-              <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
-
-              <h4>Can Read:</h4>
-              <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
-
-              <h4>Can Write:</h4>
-              <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
-
-              <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
-            </form>
+            <CreateBoardForm section={@props.section} onSubmitBoard={=> @setBoards()}/>
           </div>
         </Moderation>}
 

@@ -10,7 +10,7 @@ pids=""
 [[ -f "$DEV_DIR/$OUT_HTML" ]] && rm "$DEV_DIR/$OUT_HTML"
 
 ./node_modules/.bin/browserify \
-  --debug \
+  $([[ -z $DEBUG ]] || echo '--debug') \
   $(flag_externals require) \
   --outfile "$DEV_DIR/$VENDOR_JS"
 
@@ -19,7 +19,7 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
 ./node_modules/.bin/watchify \
   --delay 0 \
   --verbose \
-  --debug \
+  $([[ -z $DEBUG ]] || echo '--debug') \
   $(flag_externals external) \
   --extension .cjsx \
   --extension .coffee \

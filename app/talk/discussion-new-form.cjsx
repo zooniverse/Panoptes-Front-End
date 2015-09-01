@@ -7,7 +7,6 @@ talkClient = require '../api/talk'
 Loading = require '../components/loading-indicator'
 PromiseRenderer = require '../components/promise-renderer'
 projectSection = require '../talk/lib/project-section'
-merge = require 'lodash.merge'
 
 module?.exports = React.createClass
   displayName: 'DiscussionNewForm'
@@ -40,10 +39,15 @@ module?.exports = React.createClass
     user_id = @props.user.id
     board_id = @props.boardId ? +form.querySelector('label > input[type="radio"]:checked').value
     body = commentText
-    focus_id = +@props.subject?.id
+    focus_id = subject?.id
     focus_type = 'Subject' if !!focus_id
 
-    comments = [merge({}, {user_id, body}, ({focus_id, focus_type} if !!focus_id))]
+    comment = if !!focus_id
+      {user_id, body, focus_id, focus_type}
+    else
+      {user_id, body}
+
+    comments = [comment]
     discussion = {title, user_id, board_id, comments}
 
     talkClient.type('discussions').create(discussion).save()

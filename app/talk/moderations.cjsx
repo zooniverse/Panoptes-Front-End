@@ -1,10 +1,10 @@
-React = require 'react'
+React = {findDOMNode} = require 'react'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 auth = require '../api/auth'
 PromiseRenderer = require '../components/promise-renderer'
 ChangeListener = require '../components/change-listener'
-Markdown = require '../components/markdown'
+{Markdown} = require 'markdownz'
 CommentLink = require '../pages/profile/comment-link'
 Paginator = require './lib/paginator'
 Loading = require '../components/loading-indicator'
@@ -15,6 +15,13 @@ merge = require 'lodash.merge'
 projectSection = require './lib/project-section'
 userIsModerator = require './lib/user-is-moderator'
 
+actionTaken =
+  destroy: 'Deleted'
+  open: 'Opened'
+  close: 'Closed'
+  ignore: 'Ignored'
+  watch: 'Watched'
+
 module?.exports = React.createClass
   displayName: 'TalkModerations'
   mixins: [Navigation]
@@ -24,18 +31,17 @@ module?.exports = React.createClass
     moderationsMeta: {}
     user: null
     loading: true
-    filter: null
 
   getDefaultProps: ->
     query:
       page: 1
 
   componentDidMount: ->
+    @props.query.state or= 'opened'
     @setModerations(@props.query.page)
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.query.page is @props.query.page
-      @setModerations(nextProps.query.page)
+    @setModerations(nextProps.query.page)
 
   setModerations: (page) ->
     @setState loading: true
@@ -43,8 +49,7 @@ module?.exports = React.createClass
 
   setModerationsForSection: (page, section) ->
     moderationParams = merge {},
-      {page: page, page_size: PAGE_SIZE},
-      if @state.filter? then {state: @state.filter} else {},
+      {page: page, page_size: PAGE_SIZE, state: @props.query.state},
       if section then {section} else {}
 
     auth.checkCurrent().then (user) => if user?
@@ -60,15 +65,20 @@ module?.exports = React.createClass
     if ['destroy', 'ignore', 'watch', 'open'].indexOf(action) is -1
       throw new Error("Moderation update action must be one of ['destroy', 'ignore', 'watch', 'open']")
 
+    textarea = findDOMNode(@).querySelector('.textarea-container textarea')
+    message = textarea.value ? null
+
     updateParams =
       actions: [{
         user_id: @state.user.id
         action: action
-        message: "#{action}ing"
+        message: message
         }]
 
     moderation.update(updateParams).save()
-      .then (updatedModeration) => @setModerations()
+      .then (updatedModeration) =>
+        textarea.value = ''
+        @setModerations()
 
   report: (report, i) ->
     <div key={report.id}>
@@ -84,10 +94,29 @@ module?.exports = React.createClass
       <h1>Comment {comment.id} Reports</h1>
       <ul>{moderation.reports.map(@report)}</ul>
 
+      <span>Reported comment by:{' '}
+        <Link to='user-profile' params={name: comment.user_login}>
+          {comment.user_display_name}
+        </Link>:
+      </span>
+
       <CommentLink comment={comment} />
 
       <div className="moderations-actions-buttons">
         <p>Status: <strong>{moderation.state}</strong></p>
+
+        {if moderation.actions.length
+          <div>
+            {moderation.actions.map(@action)}
+          </div>
+          }
+
+        {if moderation.state isnt 'closed'
+          <div className="textarea-container">
+            <textarea placeholder="Optional message" />
+          </div>
+          }
+
         {if moderation.state isnt 'closed'
           comment.moderatable_actions
             .filter (action) =>
@@ -97,20 +126,36 @@ module?.exports = React.createClass
                 <button key={action} className="moderations-#{action}" onClick={=>
                   if window.confirm("Are you sure that you want to delete the reported comment?")
                     @updateModeration(moderation, action)
-                }>{action}</button>
+                }>Delete</button>
               else
                 <button key={action} className="moderations-#{action}" onClick={=> @updateModeration(moderation, action)}>{action}</button>
           }
-
       </div>
     </div>
+
+  action: (action, i) ->
+    <PromiseRenderer promise={apiClient.type('users').get(action.user_id.toString())}>{(user) =>
+      <div>
+        {actionTaken[action.action] ? action.action} by <Link to="user-profile" params={name: user.login}>{user.display_name}</Link>
+        {if action.message
+          <div><i className="fa fa-quote-left"/> {action.message} <i className="fa fa-quote-right"/></div>
+          }
+      </div>
+    }</PromiseRenderer>
 
   moderation: (moderation, i) ->
     <div key={moderation.id} className="talk-module">
       <PromiseRenderer promise={talkClient.type('comments').get(moderation.target_id)}>{(comment) =>
-        <div>{@comment(comment, moderation)}</div>
+        <div>
+          {@comment(comment, moderation)}
+        </div>
       }</PromiseRenderer>
     </div>
+
+  filterByAction: (action) ->
+    {owner, name} = @props.params
+    route = if (owner and name) then 'project-talk-moderations' else 'talk-moderations'
+    @transitionTo(route, @props.params, merge(@props.query, state: action))
 
   render: ->
     {moderations} = @state
@@ -124,16 +169,16 @@ module?.exports = React.createClass
             <section>
               <button
                 key='all-reports'
-                onClick={=> @setState filter: null, @setModerations}
-                className={if @state.filter is null then 'active' else ''}>
+                onClick={=> @filterByAction('all')}
+                className={if @props.query.state is 'all' then 'active' else ''}>
                 All reports
               </button>
 
               {['opened', 'ignored', 'closed'].map (action) =>
                 <button
                   key={action}
-                  onClick={=> @setState {filter: action}, @setModerations}
-                  className={if @state.filter is action then 'active' else ''}>
+                  onClick={=> @filterByAction(action)}
+                  className={if @props.query.state is action then 'active' else ''}>
                   {action}
                 </button>
                 }

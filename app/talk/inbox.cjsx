@@ -8,8 +8,12 @@ Loading = require '../components/loading-indicator'
 InboxForm = require './inbox-form'
 talkConfig = require './config'
 {timeAgo} = require './lib/time'
+SignInPrompt = require '../partials/sign-in-prompt'
+alert = require '../lib/alert'
 
 PAGE_SIZE = talkConfig.inboxPageSize
+
+promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 module?.exports = React.createClass
   displayName: 'TalkInbox'
@@ -67,7 +71,7 @@ module?.exports = React.createClass
   render: ->
     <div className="talk inbox content-container">
       {unless @props.user?
-        <p>Please sign in to view your inbox</p>
+        <p>Please <span className="link-style" onClick={promptToSignIn}>sign in</span> to view your inbox</p>
       else
         <PromiseRenderer promise={@setConversations()} pending={-><Loading />}>{(conversations = []) =>
           <div>

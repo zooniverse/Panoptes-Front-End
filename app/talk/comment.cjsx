@@ -7,7 +7,6 @@ CommentBox = require './comment-box'
 CommentReportForm = require './comment-report-form'
 CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
-CommentPreview = require './comment-preview'
 PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
@@ -17,7 +16,7 @@ Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
 DisplayRoles = require './lib/display-roles'
 merge = require 'lodash.merge'
-
+{Markdown} = require 'markdownz'
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
 
 module?.exports = React.createClass
@@ -127,13 +126,13 @@ module?.exports = React.createClass
                 then={(subject) =>
                   <div className="polaroid-image">
                     {@commentSubjectTitle(@props.data, subject)}
-                    <SubjectViewer subject={subject} user={@props.user} />
+                    <SubjectViewer subject={subject} user={@props.user} project={@props.project}/>
                   </div>
                 }
                 catch={null}
                 />}
 
-            <CommentPreview content={@props.data.body} header={null}/>
+            <Markdown content={@props.data.body} project={@props.project} header={null}/>
 
             <div className="talk-comment-links">
               <button className="talk-comment-like-button" onClick={@onClickLike}>

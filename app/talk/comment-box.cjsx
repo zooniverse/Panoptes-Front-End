@@ -1,12 +1,12 @@
 React = require 'react'
 ToggleChildren = require './mixins/toggle-children'
 Feedback = require './mixins/feedback'
-CommentPreview = require './comment-preview'
 CommentHelp = require './comment-help'
 CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
 Loading = require '../components/loading-indicator'
-MarkdownEditor = require '../components/markdown-editor'
+alert = require '../lib/alert'
+{MarkdownEditor} = require 'markdownz'
 
 module?.exports = React.createClass
   displayName: 'Commentbox'
@@ -26,7 +26,7 @@ module?.exports = React.createClass
     header: "Add to the discussion +"
     placeholder: "Type your comment here"
     submitFeedback: "Comment Successfully Submitted"
-    content: null
+    content: ''
     subject: null
     user: null
 
@@ -38,17 +38,16 @@ module?.exports = React.createClass
     error: ''
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.reply
-      @setState {reply: nextProps.reply}
+    if nextProps.reply and (@state.content.indexOf(nextProps.reply) is -1)
+      @setState {content: (nextProps.reply + @state.content)}
 
   onSubmitComment: (e) ->
     e.preventDefault()
     textareaValue = @state.content
     return if @props.validationCheck?(textareaValue)
     @setState loading: true
-    fullComment = @state.reply.concat(textareaValue)
 
-    @props.onSubmitComment?(e, fullComment, @state.subject)
+    @props.onSubmitComment?(e, textareaValue, @state.subject)
       .then =>
         @hideChildren()
         @setState subject: null, content: '', error: '', loading: false
@@ -82,13 +81,7 @@ module?.exports = React.createClass
         <img className="talk-comment-focus-image" src={getSubjectLocation(@state.subject).src} />}
 
       <form className="talk-comment-form" onSubmit={@onSubmitComment}>
-        {if @state.reply
-          <div>
-            <button onClick={=> @setState({reply: ''})}>&times; Remove reply</button>
-            <CommentPreview header={null} content={@state.reply}/>
-          </div>}
-
-        <MarkdownEditor placeholder={@props.placeholder} className="full" value={@state.content} onChange={@onInputChange} helpText={<CommentHelp />}/>
+        <MarkdownEditor placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <CommentHelp /> }/>
 
         <section>
           <button

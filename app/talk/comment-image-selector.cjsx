@@ -15,7 +15,7 @@ module?.exports = React.createClass
     @setRecents()
 
   setRecents: ->
-    @props.user.get('recents')
+    @props.user.get('recents', {sort: '-created_at'})
       .then (subjects) => @setState {subjects}
 
   setQuery: (id) ->

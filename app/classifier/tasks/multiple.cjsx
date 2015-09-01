@@ -1,6 +1,6 @@
 React = require 'react'
 GenericTask = require './generic'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 GenericTaskEditor = require './generic-editor'
 
 NOOP = Function.prototype
@@ -66,6 +66,10 @@ module.exports = React.createClass
 
     getDefaultAnnotation: ->
       value: []
+
+    isAnnotationComplete: (task, annotation) ->
+      # Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
+      annotation.value.length >= (task.required ? 0)
 
   getDefaultProps: ->
     task: null

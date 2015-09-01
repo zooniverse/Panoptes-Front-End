@@ -11,14 +11,14 @@ module?.exports = React.createClass
     params: React.PropTypes.object.isRequired # URL params
 
   tagsRequest: ->
-    talkClient.type('tags/popular').get section: @props.section, limit: 10
+    talkClient.type('tags/popular').get section: @props.section, limit: 20, page_size: 20
 
   tag: (tag, i) ->
     {owner, name} = @props.params
     if owner and name
-      <span key={i}><Link params={{owner, name}} query={query: tag.name} to="project-talk-search">#{tag.name}</Link>{' '}</span>
+      <div key={tag.id}><Link params={{owner, name}} query={query: tag.name} to="project-talk-search">#{tag.name}</Link>{' '}</div>
     else
-      <span key={i}><Link query={query: tag.name} to="talk-search">#{tag.name}</Link>{' '}</span>
+      <div key={tag.id}><Link query={query: tag.name} to="talk-search">#{tag.name}</Link>{' '}</div>
 
   render: ->
     <div className="talk-popular-tags">
@@ -26,7 +26,7 @@ module?.exports = React.createClass
         if tags?.length
           <div>
             {@props.header ? null}
-            {tags.map(@tag)}
+            <section>{tags.map(@tag)}</section>
           </div>
       }</PromiseRenderer>
     </div>

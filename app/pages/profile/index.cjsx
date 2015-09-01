@@ -14,6 +14,7 @@ counterpart.registerTranslations 'en',
       comments: "Recent comments"
       stats: "Stats"
       collections: "Collections"
+      favorites: "Favorites"
       message: "Message"
       moderation: "Moderation"
       stats: "Your stats"
@@ -64,6 +65,10 @@ UserProfilePage = React.createClass
             {' '}
             <Link to="collections-user" params={owner: @props.profileUser.login}>
               <Translate content="profile.nav.collections" />
+            </Link>
+            {' '}
+            <Link to="favorites-user" params={owner: @props.profileUser.login}>
+              <Translate content="profile.nav.favorites" />
             </Link>
             {' '}
 

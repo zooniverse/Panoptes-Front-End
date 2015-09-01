@@ -33,16 +33,20 @@ ProjectIcon = React.createClass
         @setState {avatar}
 
   render: ->
-    [owner, name] = @props.project.slug.split('/')
-    <Link to="project-home" params={owner: owner, name: name} className="stats-project-icon">
-      <img src={@state.avatar?.src ? @props.defaultAvatarSrc} />
-      <div className="label">
+    content = [
+      <img key="image" src={@state.avatar?.src ? @props.defaultAvatarSrc} />
+      <div key="label" className="label">
         <span className="owner">{@state.owner?.display_name}</span><br />
         <span className="display-name"><strong>{@props.project.display_name}</strong></span>
       </div>
-      {if @props.badge
-        <div className="badge">{@props.badge}</div>}
-    </Link>
+      <div key="badge" className="badge">{@props.badge}</div> if @props.badge
+    ]
+
+    if !!@props.project.redirect
+      <a href={@props.project.redirect} className="stats-project-icon">{content}</a>
+    else
+      [owner, name] = @props.project.slug.split '/'
+      <Link to="project-home" params={owner: owner, name: name} className="stats-project-icon">{content}</Link>
 
 module.exports = React.createClass
   getDefaultProps: ->

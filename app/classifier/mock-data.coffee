@@ -8,10 +8,17 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'survey'
+  first_task: 'crop'
   tasks:
+    crop:
+      type: 'crop'
+      instruction: 'Drag out a box around the face.'
+      help: 'The face is the thing with the nose.'
+      next: 'draw'
+
     survey:
       type: 'survey'
+      required: true
       characteristicsOrder: ['pa', 'co']
       characteristics:
         pa:
@@ -53,7 +60,7 @@ workflow = apiClient.type('workflows').create
               label: 'Green'
               image: '//placehold.it/64.png?text=Green'
 
-      choicesOrder: ['aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar', 'to', 'aa', 'ar']
+      choicesOrder: ['aa', 'ar', 'to']
       choices:
         aa:
           label: 'Aardvark'
@@ -83,7 +90,7 @@ workflow = apiClient.type('workflows').create
           confusions: {}
 
         to:
-          label: 'Tortoise, the longest-named animal in the whole entire world'
+          label: 'Tortoise'
           description: 'Little green house with legs'
           images: [
             '//placehold.it/320x240.png?text=Tortoise 1'
@@ -95,9 +102,10 @@ workflow = apiClient.type('workflows').create
           confusionsOrder: []
           confusions: {}
 
-      questionsOrder: ['ho', 'be']
+      questionsOrder: ['ho', 'be', 'in', 'hr']
       questions:
         ho:
+          required: true
           multiple: false
           label: 'How many?'
           answersOrder: ['one', 'two', 'many']
@@ -109,6 +117,7 @@ workflow = apiClient.type('workflows').create
             many:
               label: '3+'
         be:
+          required: true
           multiple: true
           label: 'Any activity?'
           answersOrder: ['mo', 'ea', 'in']
@@ -119,9 +128,32 @@ workflow = apiClient.type('workflows').create
               label: 'Eating'
             in:
               label: 'Interacting'
+        in:
+          required: false
+          label: 'Any injuries?'
+          answersOrder: ['y', 'n']
+          answers:
+            y:
+              label: 'Yep'
+            n:
+              label: 'Nope'
+        hr:
+          required: false
+          multiple: true
+          label: 'Horns toggle'
+          answersOrder: ['y']
+          answers:
+            y:
+              label: 'Present'
+
+      images: {}
+      # next: 'draw'
+
+      next: 'draw'
 
     draw:
       type: 'drawing'
+      required: true
       instruction: 'Draw something.'
       help: '''
         Do this:
@@ -135,9 +167,10 @@ workflow = apiClient.type('workflows').create
           color: 'red'
           details: [{
             type: 'single'
+            required: true
             question: 'Cool?'
             answers: [
-              {label: 'Yeah, this is pretty cool, in fact I’m going to write a big long sentence describe just how cool I think it is.'}
+              {label: 'Yeah'}
               {label: 'Nah'}
             ]
           }, {
@@ -149,11 +182,11 @@ workflow = apiClient.type('workflows').create
             ]
           }]
         }
-        {type: 'line', label: 'Line', color: 'yellow'}
-        {type: 'rectangle', label: 'Rectangle', color: 'lime'}
-        {type: 'polygon', label: 'Polygon', color: 'cyan'}
-        {type: 'circle', label: 'Circle', color: 'blue'}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta'}
+        {type: 'line', label: 'Line', color: 'yellow', details: []}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: []}
+        {type: 'polygon', label: 'Polygon', color: 'cyan', details: []}
+        {type: 'circle', label: 'Circle', color: 'blue', details: []}
+        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: []}
       ]
       next: 'cool'
 
@@ -161,10 +194,9 @@ workflow = apiClient.type('workflows').create
       type: 'single'
       question: 'Is this cool?'
       answers: [
-        {label: 'Yeah'}
-        {label: 'Nah'}
+        {label: 'Yeah', next: 'features'}
+        {label: 'Nah', next: null}
       ]
-      next: 'features'
 
     features:
       type: 'multiple'
@@ -180,9 +212,9 @@ subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/150/100/animals/1' else BLANK_IMAGE}
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/150/100/animals/2' else BLANK_IMAGE}
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/150/100/animals/3' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
   ]
 
   metadata:

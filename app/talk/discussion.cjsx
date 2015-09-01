@@ -17,6 +17,8 @@ DisplayRoles = require './lib/display-roles'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
+merge = require 'lodash.merge'
+FollowDiscussion = require './follow-discussion'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -29,6 +31,8 @@ module?.exports = React.createClass
     discussion: {}
     commentsMeta: {}
     commentValidationErrors: []
+    editingTitle: false
+    reply: ''
 
   getDefaultProps: ->
     query: page: 1
@@ -41,7 +45,7 @@ module?.exports = React.createClass
       @setDiscussion(nextProps.params.discussion)
         .then => @setComments(nextProps.query.page ? 1)
     else if nextProps.query.page isnt @props.query.page
-      @setComments(nextProps.query.page ? 1)
+      @setComments(nextProps.query.page)
 
   componentDidMount: ->
     @shouldScrollToBottom = true if @props.query?.scrollToLastComment
@@ -72,6 +76,11 @@ module?.exports = React.createClass
           if @shouldScrollToBottom and comments.length
             @scrollToBottomOfDiscussion()
             @shouldScrollToBottom = false
+
+  setCommentsMeta: (page = @props.query?.page) ->
+    @commentsRequest(page).then (comments) =>
+      commentsMeta = comments[0]?.getMeta()
+      @setState {commentsMeta}
 
   scrollToBottomOfDiscussion: ->
     React.findDOMNode(@)?.scrollIntoView(false)
@@ -115,12 +124,14 @@ module?.exports = React.createClass
 
     talkClient.type('comments').create(comment).save()
       .then (comment) =>
-        @setComments(@state.commentsMeta?.page_count)
+        @setCommentsMeta().then =>
+          @setComments(@state.commentsMeta?.page_count)
+          @setState {reply: ''}
 
   onLikeComment: (commentId) ->
     talkClient.type('comments').get(commentId)
       .then (comment) =>
-        return alert("Hey you can't upvote your own comment!") if +@props.user.id is +comment.user_id
+        return alert("Hey you can't upvote your own comment!") if +@props.user?.id is +comment.user_id
 
         voteUrl = (comment.href + if upvotedByCurrentUser(@props.user, comment) then '/remove_upvote' else '/upvote')
         talkClient.request('put', voteUrl, null, {})
@@ -137,17 +148,19 @@ module?.exports = React.createClass
         .join("\n")
 
       reply = "> In reply to #{user.display_name}'s comment: \n#{quotedComment}\n\n"
-      @setState {reply}
+      @setState {reply}, => @setState {reply: ''}
 
     findDOMNode(@).scrollIntoView(false)
 
   comment: (data, i) ->
     <Comment
       {...@props}
+      project={@props.project}
       key={data.id}
       data={data}
       active={+data.id is +@props.query?.comment}
       user={@props.user}
+      project={@props.project}
       onClickReply={@onClickReply}
       onLikeComment={@onLikeComment}
       onUpdateComment={@onUpdateComment}
@@ -170,23 +183,59 @@ module?.exports = React.createClass
   onEditSubmit: (e) ->
     e.preventDefault()
     form = document.querySelector('.talk-edit-discussion-form')
+    boardSelect = form.querySelector('select')
+
     title = form.querySelector('[name="title"]').value
     sticky = form.querySelector('[name="sticky"]').checked
     locked = form.querySelector('[name="locked"]').checked
-    @discussionsRequest().update({title, sticky, locked}).save()
+    board_id = boardSelect.options[boardSelect.selectedIndex].value
+
+    @discussionsRequest().update({title, sticky, locked, board_id}).save()
       .then (discussion) =>
-        @setState {discussion: discussion[0]}
+        if discussion[0].board_id isnt board_id
+          {owner, name} = @props.params
+          discussionRoute = if (owner and name) then 'project-talk-discussion' else 'talk-discussion'
+          @transitionTo discussionRoute, merge(@props.params, board: board_id), @props.query
+        else
+          @setDiscussion()
 
   lockedMessage: ->
     <div className="talk-discussion-locked">
       <i className="fa fa-lock"></i> This discussion has been Locked and is read-only
     </div>
 
+  onClickEditTitle: ->
+    @setState {editingTitle: not @state.editingTitle}
+
+  onChangeTitle: (e) ->
+    e.preventDefault()
+    title = findDOMNode(@refs.editTitle).value
+    @discussionsRequest().update({title}).save()
+      .then (discussion) =>
+        @setState {editingTitle: false}
+        @setDiscussion()
+      .catch (e) =>
+        @setState {editingTitle: false}
+
   render: ->
     {discussion} = @state
 
     <div className="talk-discussion">
-      <h1 className="talk-page-header">{discussion?.title}</h1>
+      {if not @state.editingTitle
+        <h1 className="talk-page-header">
+          {discussion?.title}
+
+          {if discussion?.user_id is @props.user?.id
+            <span>
+              {' '}<i className="fa fa-pencil" title="Edit Title" onClick={@onClickEditTitle}/>
+            </span>
+            }
+        </h1>
+      else
+        <h1>
+          <input ref="editTitle" type="text" defaultValue={discussion?.title} onBlur={@onChangeTitle}/>
+        </h1>
+        }
 
       {if discussion && @props.user?
         <Moderation section={discussion.section} user={@props.user}>
@@ -195,13 +244,25 @@ module?.exports = React.createClass
             {if discussion?.title
               <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
                 <h3>Edit Title:</h3>
-                <input name="title" defaultValue={discussion?.title}/>
+                <input name="title" type="text" defaultValue={discussion?.title}/>
                 <label className="toggle">Sticky:
                   <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
                 </label>
                 <label className="toggle">Locked:
                   <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
                 </label>
+
+                <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
+                  <div>
+                    <p><strong>Board:</strong></p>
+                    <select onChange={@onChangeSelect}>
+                      {boards.map (board, i) =>
+                        <option key={board.id} value={board.id} selected={board.id is discussion.board_id}>{board.title}</option>
+                        }
+                    </select>
+                  </div>
+                }</PromiseRenderer>
+
                 <button type="submit">Update</button>
               </form>}
 
@@ -214,6 +275,10 @@ module?.exports = React.createClass
       {if discussion?.locked
         @lockedMessage()
         }
+
+      {if discussion and @props.user
+        <FollowDiscussion user={@props.user} discussion={discussion} />
+      }
 
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
 
@@ -240,6 +305,7 @@ module?.exports = React.createClass
 
           <CommentBox
             user={@props.user}
+            project={@props.project}
             validationCheck={@commentValidations}
             validationErrors={@state.commentValidationErrors}
             onSubmitComment={@onSubmitComment}
@@ -247,5 +313,5 @@ module?.exports = React.createClass
             header={null} />
         </section>
       else
-        <p>Please <span className="sign-in" onClick={@promptToSignIn}>sign in</span> to contribute to the discussion</p>}
+        <p>Please <span className="link-style" onClick={@promptToSignIn}>sign in</span> to contribute to the discussion</p>}
     </div>

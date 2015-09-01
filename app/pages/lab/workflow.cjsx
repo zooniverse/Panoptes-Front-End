@@ -1,6 +1,7 @@
 React = require 'react'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
+DropdownForm = require '../../components/dropdown-form'
 WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
@@ -38,6 +39,8 @@ EditWorkflowPage = React.createClass
     currentLocation + viewHash
 
   render: ->
+    window.editingWorkflow = @props.workflow
+
     disabledStyle =
       opacity: 0.4
       pointerEvents: 'none'
@@ -71,7 +74,8 @@ EditWorkflowPage = React.createClass
                       {switch definition.type
                         when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
                         when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
-                        when 'drawing' then <i className="fa fa-pencil fa-fw"></i>}
+                        when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
+                        when 'survey' then <i className="fa fa-binoculars fa-fw"></i>}
                       {' '}
                       {tasks[definition.type].getTaskText definition}
                       {if key is @props.workflow.first_task
@@ -81,17 +85,39 @@ EditWorkflowPage = React.createClass
               </div>
 
               <p>
-                <small>Add task</small>{' '}
-                <AutoSave resource={@props.workflow}>
-                  <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s).">
-                    <strong>Question</strong>
-                  </button>
-                </AutoSave>{' '}
-                <AutoSave resource={@props.workflow}>
-                  <button type="button" className="minor-button" onClick={@addNewTask.bind this, 'drawing'} title="Marking tasks: the volunteer marks or draws directly on the image(s) using tools that you specify. They can also give sub-classifications for each mark.">
-                    <strong>Drawing</strong>
-                  </button>
-                </AutoSave>
+                <DropdownForm label={
+                  <span className="standard-button">
+                    <i className="fa fa-plus-circle"></i>{' '}
+                    Add a task
+                  </span>
+                }>
+                  <AutoSave resource={@props.workflow}>
+                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s).">
+                      <i className="fa fa-question-circle fa-2x"></i>
+                      <br />
+                      <small><strong>Question</strong></small>
+                    </button>
+                  </AutoSave>{' '}
+                  <AutoSave resource={@props.workflow}>
+                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'drawing'} title="Marking tasks: the volunteer marks or draws directly on the image(s) using tools that you specify. They can also give sub-classifications for each mark.">
+                      <i className="fa fa-pencil fa-2x"></i>
+                      <br />
+                      <small><strong>Drawing</strong></small>
+                    </button>
+                  </AutoSave>{' '}
+                  <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
+                    if owner.admin
+                      <AutoSave resource={@props.workflow}>
+                        <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
+                          <i className="fa fa-binoculars fa-2x"></i>
+                          <br />
+                          <small><strong>Survey</strong></small>
+                        </button>
+                      </AutoSave>
+                    else
+                      null
+                  }</PromiseRenderer>
+                </DropdownForm>
               </p>
 
               <AutoSave tag="div" resource={@props.workflow}>
@@ -153,12 +179,20 @@ EditWorkflowPage = React.createClass
         <div className="column">
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
-            <TaskEditorComponent
-              workflow={@props.workflow}
-              task={@props.workflow.tasks[@state.selectedTaskKey]}
-              taskPrefix="tasks.#{@state.selectedTaskKey}"
-              onDelete={@handleTaskDelete.bind this, @state.selectedTaskKey}
-            />
+            <div>
+              <TaskEditorComponent
+                workflow={@props.workflow}
+                task={@props.workflow.tasks[@state.selectedTaskKey]}
+                taskPrefix="tasks.#{@state.selectedTaskKey}"
+              />
+              <hr />
+              <br />
+              <AutoSave resource={@props.workflow}>
+                <small>
+                  <button type="button" onClick={@handleTaskDelete.bind this, @state.selectedTaskKey}>Delete this task</button>
+                </small>
+              </AutoSave>
+            </div>
           else
             <p>Choose a task to edit</p>}
         </div>
@@ -242,13 +276,14 @@ EditWorkflowPage = React.createClass
     setTimeout =>
       @setState forceReloader: @state.forceReloader + 1
 
-  handleTaskDelete: (taskKey) ->
-    changes = {}
-    changes["tasks.#{taskKey}"] = undefined
-    @props.workflow.update changes
+  handleTaskDelete: (taskKey, e) ->
+    if e.shiftKey or confirm 'Really delete this task?'
+      changes = {}
+      changes["tasks.#{taskKey}"] = undefined
+      @props.workflow.update changes
 
-    if @props.workflow.first_task not of @props.workflow.tasks
-      @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
+      if @props.workflow.first_task not of @props.workflow.tasks
+        @props.workflow.update first_task: Object.keys(@props.workflow.tasks)[0] ? ''
 
 module.exports = React.createClass
   displayName: 'EditWorkflowPageWrapper'

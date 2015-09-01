@@ -3,3 +3,4 @@ module.exports =
   multiple: require './multiple'
   drawing: require './drawing'
   survey: require './survey'
+  crop: require './crop'

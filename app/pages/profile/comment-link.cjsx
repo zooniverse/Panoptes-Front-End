@@ -2,8 +2,7 @@ React = require 'react'
 moment = require 'moment'
 apiClient = require '../../api/client'
 talkClient = require '../../api/talk'
-Markdown = require '../../components/markdown'
-getPageOfComment = require '../../talk/lib/get-page-of-comment'
+{Markdown} = require 'markdownz'
 PAGE_SIZE = require('../../talk/config').discussionPageSize
 
 module?.exports = React.createClass
@@ -32,7 +31,6 @@ module?.exports = React.createClass
 
     talkClient.type('discussions').get(comment.discussion_id).then (discussion) =>
       @setState({discussion})
-      page = getPageOfComment(comment, discussion, PAGE_SIZE)
 
       talkClient.type('boards').get(discussion.board_id).then (board) =>
         @setState({board})
@@ -44,9 +42,9 @@ module?.exports = React.createClass
               project.get('owner').then (owner) =>
                 @setState({owner})
                 [owner, name] = project.slug.split('/')
-                "#/projects/#{owner}/#{name}/talk/#{board.id}/#{discussion.id}?page=#{page}/comment=#{comment.id}"
+                "#/projects/#{owner}/#{name}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         else
-          Promise.resolve "#/talk/#{board.id}/#{discussion.id}?page=#{page}&comment=#{comment.id}"
+          Promise.resolve "#/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         href.then (href) =>
           @setState({href})
 

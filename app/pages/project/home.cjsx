@@ -1,5 +1,5 @@
 React = require 'react'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 PromiseRenderer = require '../../components/promise-renderer'
@@ -55,6 +55,6 @@ module.exports = React.createClass
       <hr />
       <div className="introduction content-container">
         <h3 className="about-project">About {@props.project.display_name}</h3>
-        <Markdown>{@props.project.introduction ? ''}</Markdown>
+        <Markdown project={@props.project}>{@props.project.introduction ? ''}</Markdown>
       </div>
     </div>

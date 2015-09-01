@@ -3,8 +3,9 @@ AutoSave = require '../components/auto-save'
 handleInputChange = require '../lib/handle-input-change'
 apiClient = require '../api/client'
 PromiseToSetState = require '../lib/promise-to-set-state'
-MarkdownEditor = require '../components/markdown-editor'
+{MarkdownEditor} = require 'markdownz'
 ChangeListener = require '../components/change-listener'
+markdownHelp = require ('../lib/markdown-help')
 
 module.exports = React.createClass
   displayName: 'ProjectPageEditor'
@@ -45,6 +46,8 @@ module.exports = React.createClass
            <br />
            <ChangeListener target={@state.pageContent}>{ =>
              <MarkdownEditor
+               project={@props.project}
+               onHelp={markdownHelp}
                className="full"
                name="content"
                value={@state.pageContent.content}

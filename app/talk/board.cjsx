@@ -15,6 +15,10 @@ ROLES = require './lib/roles'
 Loading = require '../components/loading-indicator'
 merge = require 'lodash.merge'
 talkConfig = require './config'
+SignInPrompt = require '../partials/sign-in-prompt'
+alert = require '../lib/alert'
+
+promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 PAGE_SIZE = talkConfig.boardPageSize
 
@@ -43,7 +47,7 @@ module?.exports = React.createClass
   discussionsRequest: (page) ->
     @setState loading: true
     board_id = +@props.params.board
-    talkClient.type('discussions').get({board_id, page_size: PAGE_SIZE, sort_linked_comments: 'created_at', page})
+    talkClient.type('discussions').get({board_id, page_size: PAGE_SIZE, page})
 
   setDiscussions: (page = @props.query.page) ->
     @discussionsRequest(page)
@@ -185,7 +189,7 @@ module?.exports = React.createClass
               user={@props.user} />}
          </section>
        else
-         <p>Please sign in to create discussions</p>}
+         <p>Please <span className="link-style" onClick={promptToSignIn}>sign in</span> to create discussions</p>}
 
       <div className="talk-list-content">
         <section>

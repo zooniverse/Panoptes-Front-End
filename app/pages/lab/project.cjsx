@@ -64,6 +64,9 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-visibility" params={linkParams} className="nav-list-item" title="Decide whether your project is public and whether it's ready to go live.">
             Visibility
           </Link></li>
+          <li><Link to="edit-project-talk" params={linkParams} className="nav-list-item" title="Setup project specific discussion boards">
+            Talk
+          </Link></li>
 
           <li>
             <br />

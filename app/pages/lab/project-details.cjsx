@@ -9,7 +9,8 @@ counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
-MarkdownEditor = require '../../components/markdown-editor'
+{MarkdownEditor} = require 'markdownz'
+markdownHelp = require '../../lib/markdown-help'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -121,7 +122,7 @@ module.exports = React.createClass
           {if @state.backgroundError
             <div className="form-help error">{@state.backgroundError.toString()}</div>}
 
-          <p><small className="form-help">This image will be the background for all of your project pages, including your project’s front page. To add an image, either drag and drop or right click to open your file viewer. For best results, use good quality images no more than 256 KB.</small></p>
+          <p><small className="form-help">This image will be the background for all of your project pages, including your project’s front page. To add an image, either drag and drop or left click to open your file viewer. For best results, use good quality images no more than 256 KB.</small></p>
 
           <hr />
 
@@ -152,7 +153,7 @@ module.exports = React.createClass
             <AutoSave resource={@props.project}>
               <span className="form-label">Introduction</span>
               <br />
-              <MarkdownEditor className="full" name="introduction" rows="10" value={@props.project.introduction} onChange={handleInputChange.bind @props.project} />
+              <MarkdownEditor className="full" name="introduction" rows="10" value={@props.project.introduction} project={@props.project} onChange={handleInputChange.bind @props.project} onHelp={markdownHelp}/>
             </AutoSave>
             <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page.</small>
           </p>

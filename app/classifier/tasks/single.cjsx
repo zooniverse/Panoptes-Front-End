@@ -1,5 +1,5 @@
 React = require 'react'
-Markdown = require '../../components/markdown'
+{Markdown} = require 'markdownz'
 GenericTask = require './generic'
 GenericTaskEditor = require './generic-editor'
 
@@ -64,6 +64,9 @@ module.exports = React.createClass
 
     getDefaultAnnotation: ->
       value: null
+
+    isAnnotationComplete: (task, annotation) ->
+      annotation.value? or not task.required
 
   getDefaultProps: ->
     task: null

@@ -31,7 +31,8 @@ module?.exports = React.createClass
       </SignInPrompt>
 
   findFavoriteCollection: ->
-    apiClient.type('collections').get({project_id: @props.project?.id, favorite: true})
+    apiClient.type('collections')
+      .get({project_id: @props.project?.id, favorite: true, owner: @props.user.login})
       .then ([favorites]) -> if favorites? then favorites else null
 
   findSubjectInCollection: (favorites) ->
@@ -73,7 +74,7 @@ module?.exports = React.createClass
   toggleFavorite: ->
     if @props.user?
       Promise.all([@state.favoritesPromise, @state.favoritedPromise])
-        .then ([favorites, favorited])=>
+        .then ([favorites, favorited]) =>
           if not favorites?
             @createFavorites()
           else if favorited
@@ -88,6 +89,7 @@ module?.exports = React.createClass
       <button
         className="favorites-button"
         type="button"
+        title={if favorited then 'Unfavorite' else 'Favorite'}
         onClick={@toggleFavorite}>
         <i className="
           fa fa-heart#{if favorited then '' else '-o'}
