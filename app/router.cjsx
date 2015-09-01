@@ -45,11 +45,13 @@ module.exports = Router.create <Route handler={require './partials/app'}>
     <Route name="project-classify" path="classify" handler={require './pages/project/classify'} />
     <Route name="project-talk" path="talk" handler={require './pages/project/talk'}>
       <DefaultRoute name="project-talk-home" handler={require './talk/init'} />
+      <Route name="project-talk-recents" path="recents" handler={require './talk/recents'} />
       <Route name="project-talk-not-found" path="not-found" handler={require './pages/not-found'} />
       <Route name="project-talk-search" path="search" handler={require './talk/search'}/>
       <Route name="project-talk-moderations" path="moderations" handler={require './talk/moderations'}/>
       <Route name="project-talk-subject" path="subjects/:id" handler={require './subjects'}/>
       <Route name="project-talk-board" path=":board" handler={require './talk/board'} />
+      <Route name="project-talk-board-recents" path="recents/:board" handler={require './talk/recents'} />
       <Route name="project-talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
     </Route>
     <Route name="project-faq" path="faq" handler={require './pages/project/faq'} />
@@ -58,10 +60,12 @@ module.exports = Router.create <Route handler={require './partials/app'}>
 
   <Route name="talk" path="talk" handler={require './talk'}>
     <DefaultRoute name="talk-home" handler={require './talk/init'} />
+    <Route name="talk-recents" path="recents" handler={require './talk/recents'} />
     <Route name="talk-moderations" path="moderations" handler={require './talk/moderations'} />
     <Route name="talk-not-found" path="not-found" handler={require './pages/not-found'} />
     <Route name="talk-search" path="search" handler={require './talk/search'} />
     <Route name="talk-board" path=":board" handler={require './talk/board'} />
+    <Route name="talk-board-recents" path="recents/:board" handler={require './talk/recents'} />
     <Route name="talk-discussion" path=":board/:discussion" handler={require './talk/discussion'} />
   </Route>
 
