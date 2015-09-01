@@ -10,7 +10,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     question: ''
     help: ''
-    answers: ''
+    answers: []
 
   getInitialState: ->
     helping: false
@@ -18,6 +18,7 @@ module.exports = React.createClass
   render: ->
     <div className="workflow-task">
       <Markdown className="question">{@props.question}</Markdown>
+      {@props.children}
       <div className="answers">
         {React.Children.map @props.answers, (answer) ->
           cloneWithProps answer,  className: 'answer'}

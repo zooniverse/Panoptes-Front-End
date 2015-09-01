@@ -8,7 +8,7 @@ module.exports = React.createClass
   displayName: 'DragHandle'
 
   render: ->
-    style =
+    styleProps =
       fill: 'currentColor'
       stroke: 'transparent'
       strokeWidth: OVERSHOOT
@@ -18,5 +18,5 @@ module.exports = React.createClass
       """
 
     <Draggable onStart={@props.onStart} onDrag={@props.onDrag} onEnd={@props.onEnd}>
-      <circle className="drag-handle" r={RADIUS} {...style} />
+      <circle className="drag-handle" r={RADIUS} {...styleProps} style={@props.style} />
     </Draggable>
