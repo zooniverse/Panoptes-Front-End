@@ -8,8 +8,14 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'draw'
+  first_task: 'crop'
   tasks:
+    crop:
+      type: 'crop'
+      instruction: 'Drag out a box around the face.'
+      help: 'The face is the thing with the nose.'
+      next: 'draw'
+
     survey:
       type: 'survey'
       required: true
