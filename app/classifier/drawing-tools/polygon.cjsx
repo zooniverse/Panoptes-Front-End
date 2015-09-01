@@ -32,6 +32,7 @@ module.exports = React.createClass
 
     forceComplete: (mark) ->
       mark.closed = true
+      mark.auto_closed = true
 
   componentWillMount: ->
     @setState
