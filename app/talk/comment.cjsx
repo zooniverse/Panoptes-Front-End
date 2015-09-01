@@ -116,6 +116,8 @@ module?.exports = React.createClass
 
         {if not @state.editing
           <div className="talk-comment-content">
+            {if @props.title
+              <div className="talk-comment-title">{@props.title}</div>}
             <p className="talk-comment-date">{timestamp(@props.data.created_at)}</p>
 
             {if @props.data.focus_id

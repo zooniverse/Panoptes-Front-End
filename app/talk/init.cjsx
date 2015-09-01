@@ -105,6 +105,16 @@ module?.exports = React.createClass
           <section>
             <ActiveUsers section={@props.section} />
           </section>
+
+          <section>
+            <h3>
+              {if @props.section is 'zooniverse'
+                <Link className="heading-link" to="talk-recents" {...@props}>Recent Comments</Link>
+              else
+                <Link className="heading-link" to="project-talk-recents" {...@props}>Recent Comments</Link>
+              }
+            </h3>
+          </section>
         </div>
       </div>
     </div>

@@ -209,6 +209,16 @@ module?.exports = React.createClass
             <h3>Join the Discussion</h3>
             <p>Check out the existing posts or start a new discussion of your own</p>
           </section>
+
+          <section>
+            <h3>
+              {if @props.section is 'zooniverse'
+                <Link className="heading-link" to="talk-board-recents" {...@props}>Recent Comments</Link>
+              else
+                <Link className="heading-link" to="project-talk-board-recents" {...@props}>Recent Comments</Link>
+              }
+            </h3>
+          </section>
         </div>
       </div>
 
