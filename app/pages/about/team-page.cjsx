@@ -21,7 +21,7 @@ counterpart.registerTranslations 'en',
         He's also working on a degree in astronomy with the OU.'''
       alexBowyer:
         title: 'Web Science Architect'
-        bio: '''Alex mostly works remotely for Zooniverse from his home in Northumberland.
+        bio: '''Alex works remotely for Zooniverse from his home in Northumberland.
         He's a software architect designing and running Zooniverse experiments. He has a computer science degree,
         and has developed software & websites at large enterprises and startups.'''
       alexWeiksnar:
