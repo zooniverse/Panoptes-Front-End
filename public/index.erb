@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat&amp;text=ZOONIVERSE">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic" />
-    <link rel="stylesheet" href="./<%= ENV['OUT_CSS'] %>" />
+    <link rel="stylesheet" href="/<%= ENV['OUT_CSS'] %>" />
     <meta name="google-site-verification" content="bcDZuAlk550Gho9TJsiyHFj_PzVXVkkVvGB13YWFtUo" />
   </head>
 
@@ -51,7 +51,7 @@
         var testIcon = document.getElementById('font-awesome-test');
         var testIconFontFamily = getComputedStyle(testIcon).fontFamily;
         if (testIconFontFamily !== 'FontAwesome') {
-          var fallbackLinkTag = '<link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css" />';
+          var fallbackLinkTag = '<link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css" />';
           document.head.insertAdjacentHTML('beforeEnd', fallbackLinkTag);
         }
         testIcon.parentNode.removeChild(testIcon);
@@ -59,9 +59,9 @@
     </script>
 
     <script src="https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6,Promise,fetch&amp;flags=gated"></script>
-    <script>('assign' in Object) || document.write('<script src="./fallback-polyfills.js"></'+'script>');</script>
+    <script>('assign' in Object) || document.write('<script src="/fallback-polyfills.js"></'+'script>');</script>
 
-    <script src="./<%= ENV['VENDOR_JS'] %>"></script>
-    <script src="./<%= ENV['OUT_JS'] %>"></script>
+    <script src="/<%= ENV['VENDOR_JS'] %>"></script>
+    <script src="/<%= ENV['OUT_JS'] %>"></script>
   </body>
 </html>
