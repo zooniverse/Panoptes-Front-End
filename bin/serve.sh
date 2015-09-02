@@ -25,6 +25,7 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
   --extension .coffee \
   --ignore-transform coffeeify \
   --transform coffee-reactify \
+  --transform envify \
   --entry $SRC_JS \
   --outfile $DEV_DIR/$OUT_JS \
   & pids="$pids $!"
@@ -38,7 +39,6 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
   --out "$DEV_DIR" \
   "$SRC_CSS" \
   & pids="$pids $!"
-
 
 ./bin/server.js \
   & pids="$pids $!"

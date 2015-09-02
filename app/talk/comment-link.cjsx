@@ -21,6 +21,9 @@ module?.exports = React.createClass
     console.log @props.comment.section, 'zooniverse'
     @props.comment.section isnt 'zooniverse'
 
+  pathname: ->
+    if process.env.NON_ROOT == 'true' then window.location.pathname else ''
+
   projectCommentUrl: ->
     {comment} = @props
     [ownerName, projectName] = comment.project_slug.split('/')
@@ -34,11 +37,11 @@ module?.exports = React.createClass
       {
         comment: comment.id
       }
-    window.location.origin + window.location.pathname + href
+    window.location.origin + @pathname() + href
 
   mainTalkCommentUrl: ->
     {comment} = @props
-    window.location.origin + window.location.pathname +
+    window.location.origin + @pathname()
     @makeHref 'talk-discussion',
       {board: comment.board_id, discussion: comment.discussion_id},
       {comment: comment.id}
