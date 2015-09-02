@@ -50,7 +50,7 @@ module.exports = React.createClass
               <Avatar user={@props.user} />
             </span>
           }>
-            <div onClick={=> this.refs.accountMenu.close()}>
+            <div>
               <Link to="user-profile" params={name: @props.user.login} autoFocus>
                 <i className="fa fa-user fa-fw"></i>{' '}
                 <Translate content="accountMenu.profile" />
