@@ -21,7 +21,7 @@ module?.exports = React.createClass
     params = @props.params
     onBoard = params.board?
     onDiscussion = onBoard and params.discussion?
-    onRecents = @props.path.match /recents/
+    onRecents = @props.path.match /\/talk\/recents/
 
     <div className="talk-breadcrumbs">
       <div className="talk-breadcrumbs">
