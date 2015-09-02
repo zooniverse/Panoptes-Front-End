@@ -1,7 +1,8 @@
 Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-router'
 React = require 'react'
 
-module.exports = Router.create <Route handler={require './partials/app'}>
+routes =
+<Route handler={require './partials/app'}>
   <DefaultRoute name="home" handler={require './pages/home'} />
 
   <Route name="about" path="about" handler={require './pages/about'} ignoreScrollBehavior>
@@ -104,3 +105,5 @@ module.exports = Router.create <Route handler={require './partials/app'}>
   <Route path="dev/aggregate" handler={require './components/aggregate-view'} />
   <Route path="dev/ribbon" handler={require './components/classifications-ribbon'} />
 </Route>
+
+module.exports = Router.create { location: Router.HistoryLocation, routes: routes }
