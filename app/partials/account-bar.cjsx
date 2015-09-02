@@ -70,7 +70,7 @@ module.exports = React.createClass
                 <i className="fa fa-star fa-fw"></i>{' '}
                 <Translate content="accountMenu.favorites" />
               </Link>
-              <br />
+              <hr />
               <button type="button" className="secret-button sign-out-button" onClick={@handleSignOutClick}>
                 <i className="fa fa-sign-out fa-fw"></i>{' '}
                 <Translate content="accountMenu.signOut" />
