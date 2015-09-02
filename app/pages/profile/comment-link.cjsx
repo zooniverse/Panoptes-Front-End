@@ -16,7 +16,7 @@ module?.exports = React.createClass
     owner: null
     discussion: null
     board: null
-    href: '#'
+    href: ''
 
   componentDidMount: ->
     @getCommentHREF(@props.comment)
@@ -26,7 +26,6 @@ module?.exports = React.createClass
       @getCommentHREF(nextProps.comment)
 
   getCommentHREF: (comment) ->
-    @setState({href: '#'})
     [rootType, rootID] = comment.section.split('-')
 
     talkClient.type('discussions').get(comment.discussion_id).then (discussion) =>

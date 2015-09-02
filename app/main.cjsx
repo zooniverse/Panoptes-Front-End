@@ -6,6 +6,10 @@ router = require './router'
 mainContainer = document.createElement 'div'
 mainContainer.id = 'panoptes-main-container'
 document.body.appendChild mainContainer
+
+if process.env.NON_ROOT isnt 'true' and location.hash isnt ""
+  location.pathname = location.hash.slice(1)
+
 router.run (Handler, handlerProps) ->
   React.render(<Handler {...handlerProps} />, mainContainer);
 
