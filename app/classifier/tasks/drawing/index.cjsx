@@ -30,13 +30,16 @@ module.exports = React.createClass
       _toolIndex: 0
       value: []
 
-    onLeaveAnnotation: (task, annotation) ->
+    closeAllMarks: (task, annotation) ->
       for mark in annotation.value
         toolDescription = task.tools[mark.tool]
         ToolComponent = drawingTools[toolDescription.type]
         if ToolComponent.isComplete? and ToolComponent.forceComplete?
             unless ToolComponent.isComplete mark
               ToolComponent.forceComplete mark
+
+    onLeaveAnnotation: (task, annotation) ->
+      @closeAllMarks task, annotation
 
     areMarksComplete: (task, annotation) ->
       tasks = require '..' # Circular
@@ -74,6 +77,7 @@ module.exports = React.createClass
     <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} />
 
   handleChange: (index, e) ->
+    @constructor.closeAllMarks @props.task, @props.annotation
     if e.target.checked
       @props.annotation._toolIndex = index
       @props.onChange? e
