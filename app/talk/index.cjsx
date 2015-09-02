@@ -12,7 +12,11 @@ module?.exports = React.createClass
 
   render: ->
     <div className="talk content-container">
-      <h1>Zooniverse Talk</h1>
+      <h1 className="talk-main-link">
+        <Link to="talk" params={@props.params}>
+          Zooniverse Talk
+        </Link>
+      </h1>
       <TalkBreadcrumbs {...@props} />
 
       <form className="talk-search-form" onSubmit={ @onSearchSubmit }>

@@ -80,6 +80,12 @@ COPY_GREY_LIGHT = #afaeae
   a
     color: COBOLT_BLUE
 
+  .heading-link
+    color: COPY
+    text-decoration: none
+    &:hover
+      color: MAIN_HIGHLIGHT
+
   button
     @extend .standard-button
     @extend .talk-module
@@ -98,6 +104,8 @@ COPY_GREY_LIGHT = #afaeae
     font-size: 0.8em
     padding: 0.2em
 
+  .talk-main-link a
+    @extend .talk .heading-link
 
   .link-style
     text-decoration: underline
@@ -127,6 +135,11 @@ COPY_GREY_LIGHT = #afaeae
 
     section
       margin: 5px 0
+
+    .sidebar-link
+      text-decoration: none
+      &:hover
+        text-decoration: underline
 
     .talk-active-users
       position: relative
@@ -442,6 +455,13 @@ COPY_GREY_LIGHT = #afaeae
         background: darken(SUCCESS, 10%)
         border: darken(SUCCESS, 10%)
 
+  .talk-recents
+    .talk-discussion-comments
+      max-width: 960px
+      margin: 0 auto
+
+      .talk-comment-links
+        display: none
 
   .talk-comment-feedback
     color: green
