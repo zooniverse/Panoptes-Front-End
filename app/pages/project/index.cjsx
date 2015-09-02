@@ -59,7 +59,7 @@ ProjectPage = React.createClass
           <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
             <div className="project-background" style={backgroundImage: "url('#{background.src}')"}></div>
           } catch={=>
-            <div className="project-background" style={background: 'transparent'}></div>
+            <div className="project-background" style={background: '#404040'}></div>
           } />
 
           <nav className="project-nav tabbed-content-tabs">
