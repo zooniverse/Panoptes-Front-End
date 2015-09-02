@@ -64,6 +64,7 @@ routes =
     <Route name="talk-recents" path="recents/?" handler={require './talk/recents'} />
     <Route name="talk-not-found" path="not-found/?" handler={require './pages/not-found'} />
     <Route name="talk-search" path="search/?" handler={require './talk/search'} />
+    <Route name="talk-moderations" path="moderations/?" handler={require './talk/moderations'} />
     <Route name="talk-board" path=":board/?" handler={require './talk/board'} />
     <Route name="talk-board-recents" path="recents/:board/?" handler={require './talk/recents'} />
     <Route name="talk-discussion" path=":board/:discussion/?" handler={require './talk/discussion'} />
