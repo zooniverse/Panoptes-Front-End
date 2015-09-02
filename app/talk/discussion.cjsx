@@ -60,7 +60,8 @@ module?.exports = React.createClass
 
         if page isnt @props.query.page
           @props.query.page = page
-          @replaceWith @getPath(), @props.params, @props.query
+          [path, _] = @getPath().split('?')
+          @replaceWith path, @props.params, @props.query
 
       @setComments(@props.query.page ? 1)
 

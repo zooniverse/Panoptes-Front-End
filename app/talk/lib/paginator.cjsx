@@ -1,19 +1,26 @@
 React = require 'react'
+{Navigation} = require 'react-router'
 
 changeSearchString = (searchString, changes) ->
   params = {}
-  for keyValue in searchString.slice(1).split('&')
-    [key, value] = keyValue.split('=')
-    params[key] = value
+  if searchString isnt ""
+    for keyValue in searchString.slice(1).split('&')
+      [key, value] = keyValue.split('=')
+      params[key] = value
   for key, value of changes
     params[key] = value
-  "?#{([key, value].join('=') for key, value of params when value?).join('&')}"
+  params
 
 updatePageQueryParam = (page) ->
-  [beforeQuestionMark, afterQuestionMark] = location.hash.split('?')
-  oldSearch = '?' + afterQuestionMark
-  newSearch = changeSearchString(oldSearch, {page})
-  location.hash = beforeQuestionMark + newSearch
+  if process.env.NON_ROOT == 'true'
+    [beforeQuestionMark, afterQuestionMark] = location.hash.split('?')
+    oldSearch = '?' + afterQuestionMark
+    newSearch = changeSearchString(oldSearch, {page})
+    newSearch = "?#{([key, value].join('=') for key, value of newSearch when value?).join('&')}"
+    location.hash = beforeQuestionMark + newSearch
+  else
+    newSearch = changeSearchString(location.search, {page})
+    @transitionTo(location.pathname, {}, newSearch)
 
 module?.exports = React.createClass
   displayName: 'Paginator'
@@ -31,8 +38,10 @@ module?.exports = React.createClass
     firstAndLast: true
     scrollOnChange: true
 
+  mixins: [Navigation]
+
   setPage: (activePage) ->
-    @props.onPageChange(activePage)
+    @props.onPageChange.call(this, activePage)
     window.scrollTo(0,0) if @props.scrollOnChange
 
   onClickNext: ->
