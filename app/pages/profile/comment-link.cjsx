@@ -16,7 +16,7 @@ module?.exports = React.createClass
     owner: null
     discussion: null
     board: null
-    href: '#'
+    href: ''
 
   componentDidMount: ->
     @getCommentHREF(@props.comment)
@@ -26,7 +26,6 @@ module?.exports = React.createClass
       @getCommentHREF(nextProps.comment)
 
   getCommentHREF: (comment) ->
-    @setState({href: '#'})
     [rootType, rootID] = comment.section.split('-')
 
     talkClient.type('discussions').get(comment.discussion_id).then (discussion) =>
@@ -42,9 +41,9 @@ module?.exports = React.createClass
               project.get('owner').then (owner) =>
                 @setState({owner})
                 [owner, name] = project.slug.split('/')
-                "#/projects/#{owner}/#{name}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
+                "/projects/#{owner}/#{name}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         else
-          Promise.resolve "#/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
+          Promise.resolve "/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         href.then (href) =>
           @setState({href})
 

@@ -31,7 +31,8 @@ module?.exports = React.createClass
       </SignInPrompt>
 
   findFavoriteCollection: ->
-    apiClient.type('collections').get({project_id: @props.project?.id, favorite: true})
+    apiClient.type('collections')
+      .get({project_id: @props.project?.id, favorite: true, owner: @props.user.login})
       .then ([favorites]) -> if favorites? then favorites else null
 
   findSubjectInCollection: (favorites) ->

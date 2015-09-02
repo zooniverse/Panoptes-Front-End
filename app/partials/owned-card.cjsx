@@ -58,7 +58,7 @@ module.exports = React.createClass
         <div className="details">
           <div className="name">{@props.resource.display_name}</div>
           <PromiseRenderer promise={@props.resource.get('owner')}>{ (owner) ->
-            if document.location.hash is "#/collections"
+            if document.location.hash is "/collections"
               <div className="owner">{owner?.display_name ? 'LOADING'}</div>
           }</PromiseRenderer>
           {<div className="description">{@props.resource.description}</div> if @props.resource.description?}

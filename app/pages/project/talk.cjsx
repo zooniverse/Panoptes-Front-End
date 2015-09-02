@@ -1,5 +1,5 @@
 React = require 'react'
-{RouteHandler, Navigation} = require 'react-router'
+{RouteHandler, Navigation, Link} = require 'react-router'
 TalkInit = require '../../talk/init'
 TalkBreadcrumbs = require '../../talk/breadcrumbs'
 projectSection = require '../../talk/lib/project-section'
@@ -16,6 +16,11 @@ module.exports = React.createClass
   render: ->
     <div className="project-text-content talk project">
       <div className="content-container">
+        <h1 className="talk-main-link">
+          <Link to="project-talk" params={@props.params}>
+            {@props.project.display_name} Talk
+          </Link>
+        </h1>
         <TalkBreadcrumbs {...@props} />
 
         <form className="talk-search-form" onSubmit={@onSearchSubmit}>
