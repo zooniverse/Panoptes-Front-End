@@ -41,7 +41,7 @@ module?.exports = React.createClass
 
   mainTalkCommentUrl: ->
     {comment} = @props
-    window.location.origin + @pathname()
+    window.location.origin + @pathname() +
     @makeHref 'talk-discussion',
       {board: comment.board_id, discussion: comment.discussion_id},
       {comment: comment.id}
