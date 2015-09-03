@@ -24,6 +24,9 @@ module.exports = React.createClass
   propTypes:
     user: React.PropTypes.object.isRequired
 
+  getDefaultProps: ->
+    focusablesSelector: 'a[href], button'
+
   getInitialState: ->
     unread: false
     expanded: false
@@ -44,28 +47,25 @@ module.exports = React.createClass
   render: ->
       <div className="account-bar" onKeyDown={@navigateMenu}>
         <div className="account-info">
-          <TriggeredModalForm ref="accountMenu" className="account-menu" triggerClassName="secret-button" trigger={
-            <span>
+          <TriggeredModalForm ref="accountMenuButton" className="account-menu" triggerClassName="secret-button" trigger={
+            <span aria-haspopup="true" aria-expanded={@state.expanded}>
               <strong>{@props.user.display_name}</strong>{' '}
               <Avatar user={@props.user} />
             </span>
-          }>
-            <div>
-              <Link to="user-profile" params={name: @props.user.login} autoFocus>
+          } onClick={@handleTogglingAccountMenu} onCancel={@handleTogglingAccountMenu}>
+            <div ref="accountMenu" onKeyDown={@navigateMenu}>
+              <Link to="user-profile" params={name: @props.user.login}>
                 <i className="fa fa-user fa-fw"></i>{' '}
                 <Translate content="accountMenu.profile" />
               </Link>
-              <br />
               <Link to="settings" params={name: @props.user.login}>
                 <i className="fa fa-cogs fa-fw"></i>{' '}
                 <Translate content="accountMenu.settings" />
               </Link>
-              <br />
               <Link to="collections-user" params={{owner: @props.user.login}}>
                 <i className="fa fa-image fa-fw"></i>{' '}
                 <Translate content="accountMenu.collections" />
               </Link>
-              <br />
               <Link to="favorites-user" params={{owner: @props.user.login}}>
                 <i className="fa fa-star fa-fw"></i>{' '}
                 <Translate content="accountMenu.favorites" />
@@ -85,20 +85,28 @@ module.exports = React.createClass
   handleSignOutClick: ->
     auth.signOut()
 
-  toggleAccountMenu: ->
-    @setState expanded: !@state.expanded
+  handleTogglingAccountMenu: ->
+    setTimeout => # Wait for the state change to take place.
+      @setState expanded: @refs.accountMenuButton.state.open
+      if @refs.accountMenuButton.state.open
+        # React's `autoFocus` apparently doesn't work on <a> tags.
+        @refs.accountMenu.getDOMNode().querySelector(@props.focusablesSelector)?.focus()
+      else
+        @refs.accountMenuButton.getDOMNode().focus()
 
   navigateMenu: (e) ->
-    return unless @state.expanded
-    focusables = [@getDOMNode().querySelector 'button']
-    focusables.push control for control in @getDOMNode().querySelectorAll '.account-menu button, .account-menu a[href]'
-    focus_index = i for control, i in focusables when control == document.activeElement
-    switch e.which
-      when UP
-        new_index = Math.max 0, focus_index - 1
-        focusables[new_index].focus()
-        e.preventDefault()
-      when DOWN
-        new_index = Math.min focusables.length - 1, focus_index + 1
-        focusables[new_index].focus()
-        e.preventDefault()
+    if @state.expanded
+      focusables = @refs.accountMenu.getDOMNode().querySelectorAll @props.focusablesSelector
+
+      for control, i in focusables when control is document.activeElement
+        focusIndex = i
+
+      switch e.which
+        when UP
+          newIndex = Math.max 0, focusIndex - 1
+          focusables[newIndex]?.focus()
+          e.preventDefault()
+        when DOWN
+          newIndex = Math.min focusables.length - 1, focusIndex + 1
+          focusables[newIndex]?.focus()
+          e.preventDefault()
