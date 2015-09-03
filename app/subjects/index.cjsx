@@ -113,7 +113,7 @@ module?.exports = React.createClass
               }</PromiseRenderer>
             }</PromiseRenderer>
           else
-            <p>Please <span className="link-style" onClick={promptToSignIn}>sign in</span> to contribute to subject discussions</p>}
+            <p>Please <button className="link-style" type="button" onClick={promptToSignIn}>sign in</button> to contribute to subject discussions</p>}
         </section>
         }
     </div>

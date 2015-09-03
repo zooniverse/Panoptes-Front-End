@@ -189,7 +189,7 @@ module?.exports = React.createClass
               user={@props.user} />}
          </section>
        else
-         <p>Please <span className="link-style" onClick={promptToSignIn}>sign in</span> to create discussions</p>}
+         <p>Please <button className="link-style" type="button" onClick={promptToSignIn}>sign in</button> to create discussions</p>}
 
       <div className="talk-list-content">
         <section>
