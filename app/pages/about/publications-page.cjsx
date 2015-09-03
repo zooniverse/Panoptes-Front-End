@@ -268,12 +268,6 @@ module.exports = React.createClass
   getInitialState: ->
     currentSort: 'showAll'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   render: ->
     sideBarNav = counterpart "publications.nav"
     <div className="publications-page secondary-page-copy">

@@ -19,12 +19,6 @@ module.exports = React.createClass
     heroClass: React.PropTypes.string
     heroNav: React.PropTypes.node
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   userForTitle: ->
     if @props.ownerName
       "#{@props.ownerName}'s"

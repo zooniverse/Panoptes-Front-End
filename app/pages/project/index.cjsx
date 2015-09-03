@@ -53,11 +53,9 @@ ProjectPage = React.createClass
 
   componentDidMount: ->
     sugarClient.subscribeTo "project-#{ @props.project.id }"
-    document.documentElement.classList.add 'on-project-page'
 
   componentWillUnmount: ->
     sugarClient.unsubscribeFrom "project-#{ @props.project.id }"
-    document.documentElement.classList.remove 'on-project-page'
 
   getPageTitles: (page) ->
     page.filter((page) -> page.content isnt '' and page.content?)
@@ -72,7 +70,9 @@ ProjectPage = React.createClass
         <div className="project-page">
           <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
             <div className="project-background" style={backgroundImage: "url('#{background.src}')"}></div>
-          } catch={null} />
+          } catch={=>
+            <div className="project-background" style={background: '#404040'}></div>
+          } />
 
           <nav className="project-nav tabbed-content-tabs">
             {if @props.project.redirect

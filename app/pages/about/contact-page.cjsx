@@ -22,11 +22,5 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'ContactPage'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   render: ->
     <Markdown>{counterpart "contactPage.content"}</Markdown>

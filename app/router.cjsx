@@ -39,7 +39,7 @@ routes =
   </Route>
 
   <Route name="projects" path="projects/?" handler={require './pages/projects'} />
-  <Route path="projects/:owner/:name/?" handler={require './pages/project'}>
+  <Route path="projects/:owner/:name/?" name="project" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
     <Route name="project-research" path="research/?" handler={require './pages/project/research'} />
     <Route name="project-results" path="results/?" handler={require './pages/project/results'} />
@@ -100,6 +100,7 @@ routes =
   </Route>
   <Route name="lab-policies" path="lab-policies/?" handler={require './pages/lab/lab-policies'} />
   <Route name="lab-how-to" path="lab-how-to/?" handler={require './pages/lab/how-to-page'} />
+  <Route name="lab-landing-page" path="build-a-project/?" handler={require './pages/lab/landing-page'} />
 
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={require './pages/not-found'} />

@@ -77,7 +77,7 @@ module.exports = React.createClass
           <LandingPage user={@props.user} parentIndex={this} />
       }</PromiseRenderer>
     else
-      <LandingPage parentIndex={this} />
+      <LandingPage />
 
   handlePageChange: (e) ->
     @setState page: e.target.value, =>

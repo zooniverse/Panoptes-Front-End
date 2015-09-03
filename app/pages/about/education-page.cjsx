@@ -31,11 +31,5 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'EducationPage'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   render: ->
     <Markdown>{counterpart "educationPage.content"}</Markdown>

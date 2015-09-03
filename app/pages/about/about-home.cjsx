@@ -37,11 +37,5 @@ Many of the most interesting discoveries from Zooniverse projects have come from
 module.exports = React.createClass
   displayName: 'AboutHome'
 
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
   render: ->
     <Markdown>{counterpart "aboutHome.pageContent"}</Markdown>

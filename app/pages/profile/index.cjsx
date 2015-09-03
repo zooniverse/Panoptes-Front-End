@@ -30,15 +30,11 @@ UserProfilePage = React.createClass
     profileHeader: null
 
   componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
     @getProfileHeader(@props.profileUser)
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.profileUser is @props.profileUser
       @getProfileHeader(nextProps.profileUser)
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
 
   getProfileHeader: (user) ->
     # TODO: Why's this return an array?
