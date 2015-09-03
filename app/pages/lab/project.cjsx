@@ -67,6 +67,9 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-talk" params={linkParams} className="nav-list-item" title="Setup project specific discussion boards">
             Talk
           </Link></li>
+          <li><Link to="get-data-exports" params={linkParams} className="nav-list-item" title="Get your project's data exports">
+            Data Exports
+          </Link></li>
 
           <li>
             <br />
