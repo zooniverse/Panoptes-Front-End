@@ -6,8 +6,6 @@ ImageSelector = require '../../components/image-selector'
 apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
 counterpart = require 'counterpart'
-DataExportButton = require '../../partials/data-export-button'
-TalkDataExportButton = require '../../talk/data-export-button'
 DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor} = require 'markdownz'
@@ -15,11 +13,6 @@ markdownHelp = require '../../lib/markdown-help'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
-
-counterpart.registerTranslations 'en',
-  projectDetails:
-    classificationExport: "Request new classification export"
-    subjectExport: "Request new subject export"
 
 ExternalLinksEditor = React.createClass
   displayName: 'ExternalLinksEditor'
@@ -182,27 +175,6 @@ module.exports = React.createClass
             <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and talk tabs.</small>
             <ExternalLinksEditor project={@props.project} />
           </div>
-
-          <hr />
-
-          Data export<br />
-          <DataExportButton
-            project={@props.project}
-            buttonKey="projectDetails.classificationExport"
-            exportType="classifications_export"  />
-          <DataExportButton
-            project={@props.project}
-            buttonKey="projectDetails.subjectExport"
-            exportType="subjects_export"  />
-
-          <TalkDataExportButton
-            project={@props.project}
-            exportType="comments"
-            label="Request new Talk comments export" />
-          <TalkDataExportButton
-            project={@props.project}
-            exportType="tags"
-            label="Request new Talk tags export" />
         </div>
       </div>
     </div>

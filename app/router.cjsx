@@ -97,6 +97,7 @@ routes =
     <Route name="edit-project-subject-set" path="subject-set/:subjectSetID/?" handler={require './pages/lab/subject-set'} />
     <Route name="edit-project-visibility" path="visibility/?" handler={require './pages/lab/visibility'} />
     <Route name="edit-project-talk" path="talk/?" handler={require './pages/lab/talk'} />
+    <Route name="get-data-exports" path="data-exports" handler={require './pages/lab/data-dumps'} />
   </Route>
   <Route name="lab-policies" path="lab-policies/?" handler={require './pages/lab/lab-policies'} />
   <Route name="lab-how-to" path="lab-how-to/?" handler={require './pages/lab/how-to-page'} />
