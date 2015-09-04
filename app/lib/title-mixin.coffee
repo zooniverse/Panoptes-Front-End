@@ -1,6 +1,6 @@
 MAIN_SEPARATOR = ' » '
 SUFFIX_SEPARATOR = ' \u2014 ' # Em dash
-SUFFIX = document.title
+SUFFIX = document?.title
 
 titleSegments = []
 
@@ -26,4 +26,4 @@ module.exports =
       @title
 
     mainTitle = titleSegments.filter(Boolean).join MAIN_SEPARATOR
-    document.title = [mainTitle, SUFFIX].filter(Boolean).join SUFFIX_SEPARATOR
+    document?.title = [mainTitle, SUFFIX].filter(Boolean).join SUFFIX_SEPARATOR

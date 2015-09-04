@@ -4,10 +4,15 @@
   "dependencies": {
     "@edpaget/react-router": "^0.13.6",
     "animated-scrollto": "~1.1.0",
+    "babel": "^5.8.23",
+    "coffee-react": "^4.0.0",
     "counterpart": "~0.16.7",
     "data-uri-to-blob": "0.0.4",
     "debounce": "~1.0.0",
+    "document-shim": "^1.0.0",
     "drag-reorderable": "~0.0.1",
+    "ejs": "^2.3.3",
+    "express": "^4.13.3",
     "json-api-client": "~0.4.0",
     "lodash.intersection": "~3.2.0",
     "lodash.merge": "~2.4.1",
@@ -16,12 +21,14 @@
     "modal-form": "~1.1.0",
     "moment": "~2.9.0",
     "papaparse": "mholt/PapaParse#cada171",
+    "primus": "^3.2.2",
     "react": "~0.13.2",
     "react-interpolate-component": "~0.7.1",
     "react-select": "marten/react-select#close-after-click",
     "react-translate-component": "~0.9.0",
     "sugar-client": "^1.0.1",
-    "tether": "HubSpot/tether#df8cd44"
+    "tether": "HubSpot/tether#df8cd44",
+    "window-shim": "^1.0.0"
   },
   "devDependencies": {
     "blue-tape": "~0.1.10",

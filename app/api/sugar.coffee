@@ -1,34 +1,35 @@
 JSONAPIClient = {Resource} = require 'json-api-client'
 authClient = require './auth'
 config = require './config'
-
 SugarClient = require 'sugar-client'
-SugarClient.Primus = require 'sugar-client/primus'
-SugarClient.host = config.sugarHost
 
-window.sugarApiClient = new JSONAPIClient config.sugarHost,
-  'Content-Type': 'application/json'
-  'Accept': 'application/json'
+if window.navigator?
+  SugarClient.Primus = require 'sugar-client/primus'
+  SugarClient.host = config.sugarHost
 
-window.sugarClient = new SugarClient()
+  window.sugarApiClient = new JSONAPIClient config.sugarHost,
+    'Content-Type': 'application/json'
+    'Accept': 'application/json'
 
-authClient.listen 'change', ->
-  authClient.checkCurrent()
-    .then (user) ->
-      if user and authClient._bearerToken
-        sugarClient.userId = user.id
-        sugarClient.authToken = authClient._bearerToken
+  window.sugarClient = new SugarClient()
 
-        if process.env.NODE_ENV isnt 'production'
-          sugarClient.on 'response', (args...) ->
-            console.log '[SUGAR RESPONSE] ', args...
+  authClient.listen 'change', ->
+    authClient.checkCurrent()
+      .then (user) ->
+        if user and authClient._bearerToken
+          sugarClient.userId = user.id
+          sugarClient.authToken = authClient._bearerToken
 
-        sugarClient.connect()
-      else
-        window.sugarClient?.disconnect()
-    .catch (e) ->
-      throw new Error "Failed to checkCurrent auth from sugar client"
+          if process.env.NODE_ENV isnt 'production'
+            sugarClient.on 'response', (args...) ->
+              console.log '[SUGAR RESPONSE] ', args...
 
-module.exports =
-  socketApi: sugarClient
-  api: sugarApiClient
+          sugarClient.connect()
+        else
+          window?.sugarClient?.disconnect()
+      .catch (e) ->
+        throw new Error "Failed to checkCurrent auth from sugar client"
+
+  module.exports = {sugarClient, sugarApiClient}
+else
+  module.exports = {}

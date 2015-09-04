@@ -13,7 +13,7 @@ seenThisSession = require '../../lib/seen-this-session'
 
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
-SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
+SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
 
 if SKIP_CELLECT
   console?.warn 'Intelligent subject selection disabled'

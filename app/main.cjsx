@@ -1,18 +1,23 @@
 React = require 'react'
-window.React = React
+Router = require '@edpaget/react-router'
+
 React.initializeTouchEvents true
 
-router = require './router'
-mainContainer = document.createElement 'div'
-mainContainer.id = 'panoptes-main-container'
-document.body.appendChild mainContainer
+routes = require './router'
 
-if process.env.NON_ROOT isnt 'true' and location.hash isnt ""
+if process.env.NON_ROOT isnt 'true' and location? and location.hash isnt ""
   location.pathname = location.hash.slice(1)
+
+location = if process.env.NON_ROOT == "true"
+    null
+  else
+    Router.HistoryLocation
+
+router = Router.create {location, routes}
 
 router.run (Handler, handlerProps) ->
   window.dispatchEvent new CustomEvent 'locationchange'
-  React.render(<Handler {...handlerProps} />, mainContainer);
+  React.render(<Handler {...handlerProps} />, document.getElementById("panoptes-main-container"));
 
 logDeployedCommit = require './lib/log-deployed-commit'
 logDeployedCommit()

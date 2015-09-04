@@ -212,7 +212,7 @@ module.exports = React.createClass
       reader.readAsText file
 
   parseFileContent: (content) ->
-    {errors, data} = Papa.parse content.trim(), header: true
+    {errors, data} = Papa?.parse content.trim(), header: true
 
     cleanRows = for row in data
       clean = {}

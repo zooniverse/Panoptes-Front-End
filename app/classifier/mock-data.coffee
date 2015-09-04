@@ -212,9 +212,9 @@ subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
-    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
+    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
+    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
+    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
   ]
 
   metadata:
@@ -254,4 +254,4 @@ classification = apiClient.type('classifications').create
   _subjects: [subject] # TEMP
 
 module.exports = {workflow, subject, classification}
-window.mockClassifierData = module.exports
+window?.mockClassifierData = module.exports
