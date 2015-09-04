@@ -29,7 +29,6 @@ module.exports = React.createClass
 
   getInitialState: ->
     unread: false
-    expanded: false
 
   componentDidMount: ->
     window.addEventListener 'hashchange', @setUnread
@@ -45,33 +44,36 @@ module.exports = React.createClass
       .catch (e) -> console.log "e unread messages", e
 
   render: ->
-      <div className="account-bar" onKeyDown={@navigateMenu}>
+      <div className="account-bar">
         <div className="account-info">
-          <TriggeredModalForm ref="accountMenuButton" className="account-menu" triggerClassName="secret-button" trigger={
-            <span aria-haspopup="true" aria-expanded={@state.expanded}>
+          <TriggeredModalForm ref="accountMenuButton" className="account-menu" trigger={
+            <span>
               <strong>{@props.user.display_name}</strong>{' '}
               <Avatar user={@props.user} />
             </span>
-          } onClick={@handleTogglingAccountMenu} onCancel={@handleTogglingAccountMenu}>
-            <div ref="accountMenu" onKeyDown={@navigateMenu}>
-              <Link to="user-profile" params={name: @props.user.login}>
+          } triggerProps={
+            className: 'secret-button',
+            onClick: @handleAccountMenuOpen
+          }>
+            <div ref="accountMenu" role="menu" className="secret-list" onKeyDown={@navigateMenu}>
+              <Link role="menuitem" to="user-profile" params={name: @props.user.login}>
                 <i className="fa fa-user fa-fw"></i>{' '}
                 <Translate content="accountMenu.profile" />
               </Link>
-              <Link to="settings" params={name: @props.user.login}>
+              <Link role="menuitem" to="settings" params={name: @props.user.login}>
                 <i className="fa fa-cogs fa-fw"></i>{' '}
                 <Translate content="accountMenu.settings" />
               </Link>
-              <Link to="collections-user" params={{owner: @props.user.login}}>
+              <Link role="menuitem" to="collections-user" params={{owner: @props.user.login}}>
                 <i className="fa fa-image fa-fw"></i>{' '}
                 <Translate content="accountMenu.collections" />
               </Link>
-              <Link to="favorites-user" params={{owner: @props.user.login}}>
+              <Link role="menuitem" to="favorites-user" params={{owner: @props.user.login}}>
                 <i className="fa fa-star fa-fw"></i>{' '}
                 <Translate content="accountMenu.favorites" />
               </Link>
               <hr />
-              <button type="button" className="secret-button sign-out-button" onClick={@handleSignOutClick}>
+              <button role="menuitem" type="button" className="secret-button sign-out-button" onClick={@handleSignOutClick}>
                 <i className="fa fa-sign-out fa-fw"></i>{' '}
                 <Translate content="accountMenu.signOut" />
               </button>
@@ -82,31 +84,27 @@ module.exports = React.createClass
         </div>
       </div>
 
-  handleSignOutClick: ->
-    auth.signOut()
-
-  handleTogglingAccountMenu: ->
+  handleAccountMenuOpen: ->
     setTimeout => # Wait for the state change to take place.
-      @setState expanded: @refs.accountMenuButton.state.open
       if @refs.accountMenuButton.state.open
         # React's `autoFocus` apparently doesn't work on <a> tags.
         @refs.accountMenu.getDOMNode().querySelector(@props.focusablesSelector)?.focus()
-      else
-        @refs.accountMenuButton.getDOMNode().focus()
 
   navigateMenu: (e) ->
-    if @state.expanded
-      focusables = @refs.accountMenu.getDOMNode().querySelectorAll @props.focusablesSelector
+    focusables = @refs.accountMenu.getDOMNode().querySelectorAll @props.focusablesSelector
 
-      for control, i in focusables when control is document.activeElement
-        focusIndex = i
+    for control, i in focusables when control is document.activeElement
+      focusIndex = i
 
-      switch e.which
-        when UP
-          newIndex = Math.max 0, focusIndex - 1
-          focusables[newIndex]?.focus()
-          e.preventDefault()
-        when DOWN
-          newIndex = Math.min focusables.length - 1, focusIndex + 1
-          focusables[newIndex]?.focus()
-          e.preventDefault()
+    switch e.which
+      when UP
+        newIndex = Math.max 0, focusIndex - 1
+        focusables[newIndex]?.focus()
+        e.preventDefault()
+      when DOWN
+        newIndex = Math.min focusables.length - 1, focusIndex + 1
+        focusables[newIndex]?.focus()
+        e.preventDefault()
+
+  handleSignOutClick: ->
+    auth.signOut()
