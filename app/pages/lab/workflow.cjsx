@@ -28,15 +28,11 @@ EditWorkflowPage = React.createClass
     forceReloader: 0
 
   workflowLink: ->
+    router = require '../../router'
     [owner, name] = @props.project.slug.split('/')
-    # React-router completely overrides clicking on links. Unbelievable.
-    viewParams = owner: owner, name: name
-    viewQuery = workflow: @props.workflow.id
-    currentLocation = location.origin + location.pathname + location.search
-    currentLocation += if location.search is '' then '?' else '&'
-    currentLocation += "reload=#{@state.forceReloader}"
-    viewHash = @makeHref 'project-classify', viewParams, viewQuery
-    currentLocation + viewHash
+    viewParams = {owner, name}
+    viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
+    router.makeHref 'project-classify', viewParams, viewQuery
 
   render: ->
     window.editingWorkflow = @props.workflow
