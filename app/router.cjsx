@@ -17,9 +17,9 @@ routes =
 
   <Route name="unsubscribe" path="unsubscribe/?" handler={require './pages/unsubscribe'} />
 
-  <Route path="accounts?" handler={require './pages/sign-in'}>
-    <Route name="sign-in/?" handler={require './partials/sign-in-form'} />
-    <Route name="register/?" handler={require './partials/register-form'} />
+  <Route path="accounts" handler={require './pages/sign-in'}>
+    <Route name="sign-in" path="sign-in/?" handler={require './partials/sign-in-form'} />
+    <Route name="register" path="register/?" handler={require './partials/register-form'} />
   </Route>
   <Route name="privacy" path="privacy/?" handler={require './pages/privacy-policy'} />
 
