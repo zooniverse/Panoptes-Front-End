@@ -85,7 +85,8 @@ module.exports = React.createClass
 
   goToPage: (n) ->
     nextQuery = Object.assign @props.query, {page: n}
-    @transitionTo @props.path, @props.params, nextQuery
+
+    @transitionTo location.pathname, @props.params, nextQuery
 
   render: ->
     numberOfResults = @state.results.length
