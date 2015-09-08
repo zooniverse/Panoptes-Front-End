@@ -1,4 +1,5 @@
 React = require 'react'
+AutoSave = require '../../components/auto-save'
 
 module.exports = React.createClass
   displayName: 'DrawingTaskDetailsEditor'
@@ -21,15 +22,19 @@ module.exports = React.createClass
         else
           for subtask, i in @props.details
             subtask._key ?= Math.random()
-            <GenericTaskEditor
-              key={subtask._key}
-              workflow={@props.workflow}
-              task={subtask}
-              taskPrefix="#{@props.toolPath}.details.#{i}"
-              isSubtask={true}
-              onChange={@handleSubtaskChange.bind this, i}
-              onDelete={@handleSubtaskDelete.bind this, i}
-            />}
+            <div key={subtask._key} className="drawing-task-details-editor-subtask-wrapper">
+              <GenericTaskEditor
+                workflow={@props.workflow}
+                task={subtask}
+                taskPrefix="#{@props.toolPath}.details.#{i}"
+                isSubtask={true}
+                onChange={@handleSubtaskChange.bind this, i}
+                onDelete={@handleSubtaskDelete.bind this, i}
+              />
+              <AutoSave resource={@props.workflow}>
+                <button type="button" className="subtask-delete" aria-label="Remove subtask" title="Remove subtask" onClick={@handleSubtaskDelete.bind this, i}>&times;</button>
+              </AutoSave>
+            </div>}
       </div>
 
       <div className="commands columns-container">
