@@ -82,7 +82,7 @@ module.exports = React.createClass
         </thead>
         <PromiseRenderer promise={talkClient.type('subscription_preferences').get()} pending={-> <tbody></tbody>} then={(preferences) =>
           <tbody>
-            {for preference in @sortPreferences(preferences) when preference.category isnt 'system' then do (preference) =>
+            {for preference in @sortPreferences(preferences) when preference.category isnt 'system' and preference.category isnt 'moderation_reports' then do (preference) =>
               <ChangeListener key={preference.id} target={preference} handler={=>
                 <tr>
                   <td>{@nameOfPreference(preference)}</td>
