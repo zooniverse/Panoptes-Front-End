@@ -40,6 +40,7 @@ module.exports = React.createClass
             <span>
               Most recent data available requested {moment(mostRecent.created_at).fromNow()}:{' '}
               <a href={mostRecent.url}>Download</a>.
+              Available until {moment(mostRecent.expires_at).calendar()}.
             </span>
           else if mostRecent?
             <span>
