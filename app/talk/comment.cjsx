@@ -38,14 +38,14 @@ module?.exports = React.createClass
   getInitialState: ->
     editing: false
     commentValidationErrors: []
+    replies: []
 
   componentDidMount: ->
     if @props.active
       React.findDOMNode(@).scrollIntoView()
 
   onClickReply: (e) ->
-    apiClient.type('users').get(id: @props.data.user_id).index(0).then (commentOwner) =>
-      @props.onClickReply(commentOwner, @props.data)
+    @props.onClickReply(@props.data)
 
   onClickLink: (e) ->
     @toggleComponent('link')
@@ -91,6 +91,35 @@ module?.exports = React.createClass
     else
       <span>Subject {subject.id}</span>
 
+  flashHighlightedComment: (commentId) ->
+    reply = React.findDOMNode(@refs["comment-reply-#{commentId}"])
+    reply.classList.add('highlighted')
+    window.setTimeout((=> reply.classList.remove('highlighted')), 500)
+
+  onClickRenderReplies: (e, comment) ->
+    if @state.replies.map((c) -> c.id).indexOf(comment.reply_id) isnt -1
+      @flashHighlightedComment(comment.reply_id)
+    else
+      talkClient.type('comments').get(comment.reply_id)
+        .then (comment) =>
+          @setState replies: [comment].concat(@state.replies)
+
+  replyLine: (comment) ->
+    <div key={comment.id} className="comment-reply-line" ref="comment-reply-#{comment.id}">
+      <p>
+        <Link to="user-profile" params={name: comment.user_login}>{comment.user_display_name}</Link>
+        {if comment.reply_id
+          <span>
+            {' '}in reply to <Link to="user-profile" params={name: comment.reply_user_login}>{comment.reply_user_display_name}</Link>'s{' '}
+            <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, comment)}>
+              comment
+            </button>
+          </span>
+          }
+      </p>
+      <Markdown project={@props.project} content={comment.body} />
+    </div>
+
   render: ->
     feedback = @renderFeedback()
     activeClass = if @props.active then 'active' else ''
@@ -112,6 +141,21 @@ module?.exports = React.createClass
       </div>
 
       <div className="talk-comment-body">
+        {if @props.data.reply_id
+          <div className="talk-comment-reply">
+            {if @state.replies.length
+              <div>
+                <button type="button" className="clear-replies" onClick={=> @setState(replies: [])}><i className="fa fa-close" /> Clear Replies</button>
+                <div>{@state.replies.map(@replyLine)}</div>
+              </div>
+              }
+
+            In reply to <Link to="user-profile" params={name: @props.data.reply_user_login}>{@props.data.reply_user_display_name}</Link>'s{' '}
+
+            <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, @props.data)}>comment</button>
+          </div>
+          }
+
         {feedback}
 
         {if not @state.editing
