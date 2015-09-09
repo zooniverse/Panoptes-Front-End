@@ -9,23 +9,6 @@ Loading = require '../components/loading-indicator'
 TALK_SEARCH_ERROR_MESSAGE = 'There was an error with your search. Please try again.'
 VALID_SEARCH_PARAMS = ['page', 'page_size', 'query', 'types', 'section']
 
-formTalkSearchParams = (object) ->
-  params = []
-
-  for key, val of object
-    if Array.isArray(val)
-      params.push "#{key}[]=#{window.encodeURIComponent val}"
-    else
-      params.push "#{key}=#{window.encodeURIComponent val}"
-
-  return params.join '&'
-
-status = (response) ->
-  if (response.status >= 200 && response.status < 300)
-    return response
-
-  throw new Error
-
 filterObjectKeys = (object, validKeys) ->
   newObject = {}
 
@@ -65,20 +48,14 @@ module.exports = React.createClass
 
     paramsToUse = Object.assign defaultParams, params
 
-    params = formTalkSearchParams paramsToUse
-    url = talkClient.root + "/searches?" + params
-
-    fetch url, { method: 'get' }, talkClient.headers
-      .then(status)
-      .then (response) -> return response.json()
-      .then ({ searches, meta }) =>
-        @setState
-          results: searches
-          resultsMeta: meta.searches
-      .catch =>
-        @setState errorThrown: true
-      .then =>
-        @setState isLoading: false
+    talkClient.type('searches').get(paramsToUse).then (searches) =>
+      @setState
+        results: searches
+        resultsMeta: searches[0]?.getMeta('searches')
+    .catch (e) =>
+      @setState errorThrown: true
+    .then =>
+      @setState isLoading: false
 
   onPageChange: (page) ->
     @goToPage page
