@@ -63,6 +63,9 @@ ProjectPage = React.createClass
     page.filter((page) -> page.content isnt '' and page.content?)
       .reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
 
+  redirect_classify_link: (redirect) ->
+    "#{redirect.replace(/\/?#?\/+$/, "")}/#/classify"
+
   render: ->
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
@@ -90,7 +93,7 @@ ProjectPage = React.createClass
                 <Translate content="project.nav.research" />
               </Link>}
             {if @props.project.redirect
-              <a target="_blank" href={"#{@props.project.redirect}/#/classify"} className="tabbed-content-tab">
+              <a target="_blank" href={@redirect_classify_link(@props.project.redirect)} className="tabbed-content-tab">
                 <Translate content="project.nav.classify" />
               </a>
             else
