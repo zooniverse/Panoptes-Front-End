@@ -16,10 +16,11 @@ module.exports = React.createClass
       when 'participating_discussions' then "When discussions I'm participating in are updated"
       when 'followed_discussions' then "When discussions I'm following are updated"
       when 'mentions' then "When I'm mentioned"
+      when 'group_mentions' then "When I'm mentioned by group (@admins, @team, etc)"
       when 'messages' then 'When I receive a private message'
 
   sortPreferences: (preferences) ->
-    order = ['participating_discussions', 'followed_discussions', 'mentions', 'messages']
+    order = ['participating_discussions', 'followed_discussions', 'mentions', 'group_mentions', 'messages']
     preferences.sort (a, b) ->
       order.indexOf(a.category) > order.indexOf(b.category)
 
