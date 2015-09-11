@@ -172,9 +172,7 @@ to squeeze a bit of galaxy evolution science in.'''
         bio: '''Veronica is a Data Scientist who works on discovering patterns in Zooniverse data, by manipulating it and using it to create machine learning models. She received a PhD in Information Science and Technology from Syracuse University.'''
       victoriaVanHyning:
         title: 'Researcher'
-        bio: '''Victoria is a Digital Humanities postdoc for the Zooniverse. She holds a masters
-        in Medieval English literature from Oxford and a PhD in early modern English literature
-        from the University of Sheffield. Coffee is her lifeblood.'''
+        bio: '''Victoria is a British Academy postdoctoral fellow in English at Oxford, and is the humanities PI at Zooniverse. She works on Science Gossip, Annotate, and Shakespeare's World and more. Coffee is her lifeblood.'''
 
 teamMembers =
   adamMcMaster:
