@@ -241,15 +241,20 @@ COPY_GREY_LIGHT = #afaeae
     @extend .talk-module
     overflow: auto
     position: relative
+    &:hover
+      background: darken(TALK_BACKGROUND, 2%)
 
     &.private
       background: white
+      &:hover
+        background: darken(white, 2%)
 
     h1 a
       color: COPY
       text-decoration: none
       &:hover
         color: MAIN_HIGHLIGHT
+        text-decoration: underline
     p
       margin: 0 0 5px 0
       color: COPY_GREY_MID
