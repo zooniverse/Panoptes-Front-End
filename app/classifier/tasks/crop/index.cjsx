@@ -1,11 +1,16 @@
 React = require 'react'
 CropInitializer = require './initializer'
 GenericTask = require '../generic'
+GenericEditor = require '../generic-editor'
+Summary = require './summary'
 
 module.exports = React.createClass
   displayName: 'CropTask'
 
   statics:
+    Editor: GenericEditor
+    Summary: Summary
+
     getSVGProps: ({workflow, classification, annotation}) ->
       tasks = require '../index'
       [previousCropAnnotation] = classification.annotations.filter (anAnnotation) =>

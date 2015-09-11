@@ -21,6 +21,7 @@ module.exports = React.createClass
     [mainTextKey, choicesKey] = switch @props.task.type
       when 'single', 'multiple' then ['question', 'answers']
       when 'drawing' then ['instruction', 'tools']
+      when 'crop' then ['instruction']
 
     <div className="workflow-task-editor #{@props.task.type}">
       <div>
@@ -66,88 +67,89 @@ module.exports = React.createClass
         </label>]}
         <br />
 
-      <div className="workflow-task-editor-choices">
-        {if (@props.task[choicesKey]?.length ? 0) is 0 # Work around the empty-array-becomes-null bug on the back end.
-          <span className="form-help">No <code>{choicesKey}</code> defined for this task.</span>}
-        {for choice, index in @props.task[choicesKey] ? []
-          choice._key ?= Math.random()
-          <div key={choice._key} className="workflow-choice-editor">
-            <AutoSave resource={@props.workflow}>
-              <textarea name="#{@props.taskPrefix}.#{choicesKey}.#{index}.label" value={choice.label} onChange={handleChange} />
-            </AutoSave>
+      {if choicesKey?
+        <div className="workflow-task-editor-choices">
+          {if (@props.task[choicesKey]?.length ? 0) is 0 # Work around the empty-array-becomes-null bug on the back end.
+            <span className="form-help">No <code>{choicesKey}</code> defined for this task.</span>}
+          {for choice, index in @props.task[choicesKey] ? []
+            choice._key ?= Math.random()
+            <div key={choice._key} className="workflow-choice-editor">
+              <AutoSave resource={@props.workflow}>
+                <textarea name="#{@props.taskPrefix}.#{choicesKey}.#{index}.label" value={choice.label} onChange={handleChange} />
+              </AutoSave>
 
-            <div className="workflow-choice-settings">
-              {switch @props.task.type
-                when 'single'
-                  unless @props.isSubtask
-                    <div className="workflow-choice-setting">
+              <div className="workflow-choice-settings">
+                {switch @props.task.type
+                  when 'single'
+                    unless @props.isSubtask
+                      <div className="workflow-choice-setting">
+                        <AutoSave resource={@props.workflow}>
+                          Next task{' '}
+                          <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
+                        </AutoSave>
+                      </div>
+
+                  when 'drawing'
+                    [<div key="type" className="workflow-choice-setting">
                       <AutoSave resource={@props.workflow}>
-                        Next task{' '}
-                        <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.#{choicesKey}.#{index}.next" value={choice.next ? ''} onChange={handleChange} />
+                        Type{' '}
+                        <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
+                          {for toolKey of drawingTools
+                            <option key={toolKey} value={toolKey}>{toolKey}</option>}
+                        </select>
                       </AutoSave>
                     </div>
 
-                when 'drawing'
-                  [<div key="type" className="workflow-choice-setting">
-                    <AutoSave resource={@props.workflow}>
-                      Type{' '}
-                      <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
-                        {for toolKey of drawingTools
-                          <option key={toolKey} value={toolKey}>{toolKey}</option>}
-                      </select>
-                    </AutoSave>
-                  </div>
+                    <div key="color" className="workflow-choice-setting">
+                      <AutoSave resource={@props.workflow}>
+                        Color{' '}
+                        <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
+                          <option value="#ff0000">Red</option>
+                          <option value="#ffff00">Yellow</option>
+                          <option value="#00ff00">Green</option>
+                          <option value="#00ffff">Cyan</option>
+                          <option value="#0000ff">Blue</option>
+                          <option value="#ff00ff">Magenta</option>
+                          <option value="#000000">Black</option>
+                          <option value="#ffffff">White</option>
+                          <option disabled>TODO: Picker</option>
+                        </select>
+                      </AutoSave>
+                    </div>
 
-                  <div key="color" className="workflow-choice-setting">
-                    <AutoSave resource={@props.workflow}>
-                      Color{' '}
-                      <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                        <option value="#ff0000">Red</option>
-                        <option value="#ffff00">Yellow</option>
-                        <option value="#00ff00">Green</option>
-                        <option value="#00ffff">Cyan</option>
-                        <option value="#0000ff">Blue</option>
-                        <option value="#ff00ff">Magenta</option>
-                        <option value="#000000">Black</option>
-                        <option value="#ffffff">White</option>
-                        <option disabled>TODO: Picker</option>
-                      </select>
-                    </AutoSave>
-                  </div>
+                    <div key="details" className="workflow-choice-setting">
+                      <button type="button" onClick={@editToolDetails.bind this, @props.task, index}>Sub-tasks ({choice.details?.length ? 0})</button>{' '}
+                      <small className="form-help">Ask users a question about what they’ve just drawn.</small>
+                    </div>]}
+              </div>
 
-                  <div key="details" className="workflow-choice-setting">
-                    <button type="button" onClick={@editToolDetails.bind this, @props.task, index}>Sub-tasks ({choice.details?.length ? 0})</button>{' '}
-                    <small className="form-help">Ask users a question about what they’ve just drawn.</small>
-                  </div>]}
-            </div>
-
-            <AutoSave resource={@props.workflow}>
-              <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={@removeChoice.bind this, choicesKey, index}>&times;</button>
-            </AutoSave>
-          </div>}
-
-        <AutoSave resource={@props.workflow}>
-          <button type="button" className="workflow-choice-add-button" title="Add choice" onClick={@addChoice.bind this, choicesKey}>+</button>
-        </AutoSave>
-        <br />
-
-        {switch choicesKey
-          when 'answers'
-            <div>
-              <small className="form-help">The answers will be displayed next to each checkbox, so this text is as important as the main text and help text for guiding the volunteers. Keep your answers as minimal as possible -- any more than 5 answers can discourage new users.</small><br />
-              <small className="form-help">The “Next task” selection describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).</small>
-            </div>
-          when 'tools'
-            <div>
-              <small className="form-help">Select which marks you want for this task, and what to call each of them. The tool name will be displayed on the classification page next to each marking option. Use the simplest tool that will give you the results you need for your research.</small><br />
-              <small className="form-help">*point:* X marks the spot.</small><br />
-              <small className="form-help">*line:* a straight line at any angle.</small><br />
-              <small className="form-help">*polygon:* an arbitrary shape made of point-to-point lines.</small><br />
-              <small className="form-help">*rectangle:* a box of any size and length-width ratio; this tool *cannot* be rotated.</small><br />
-              <small className="form-help">*circle:* a point and a radius.</small><br />
-              <small className="form-help">*ellipse:* an oval of any size and axis ratio; this tool *can* be rotated.</small><br />
+              <AutoSave resource={@props.workflow}>
+                <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={@removeChoice.bind this, choicesKey, index}>&times;</button>
+              </AutoSave>
             </div>}
-      </div>
+
+          <AutoSave resource={@props.workflow}>
+            <button type="button" className="workflow-choice-add-button" title="Add choice" onClick={@addChoice.bind this, choicesKey}>+</button>
+          </AutoSave>
+          <br />
+
+          {switch choicesKey
+            when 'answers'
+              <div>
+                <small className="form-help">The answers will be displayed next to each checkbox, so this text is as important as the main text and help text for guiding the volunteers. Keep your answers as minimal as possible -- any more than 5 answers can discourage new users.</small><br />
+                <small className="form-help">The “Next task” selection describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).</small>
+              </div>
+            when 'tools'
+              <div>
+                <small className="form-help">Select which marks you want for this task, and what to call each of them. The tool name will be displayed on the classification page next to each marking option. Use the simplest tool that will give you the results you need for your research.</small><br />
+                <small className="form-help">*point:* X marks the spot.</small><br />
+                <small className="form-help">*line:* a straight line at any angle.</small><br />
+                <small className="form-help">*polygon:* an arbitrary shape made of point-to-point lines.</small><br />
+                <small className="form-help">*rectangle:* a box of any size and length-width ratio; this tool *cannot* be rotated.</small><br />
+                <small className="form-help">*circle:* a point and a radius.</small><br />
+                <small className="form-help">*ellipse:* an oval of any size and axis ratio; this tool *can* be rotated.</small><br />
+              </div>}
+        </div>}
 
       {unless @props.task.type is 'single' or @props.isSubtask
         <div>
