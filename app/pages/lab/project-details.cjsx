@@ -40,11 +40,9 @@ ExternalLinksEditor = React.createClass
                 <input type="text" name="urls.#{i}.url" value={@props.project.urls[i].url} onChange={handleInputChange.bind @props.project} />
               </td>
               <td>
-                <AutoSave resource={@props.project}>
-                  <button type="button" onClick={@handleRemoveLink.bind this, link}>
-                    <i className="fa fa-remove"></i>
-                  </button>
-                </AutoSave>
+                <button type="button" onClick={@handleRemoveLink.bind this, link}>
+                  <i className="fa fa-remove"></i>
+                </button>
               </td>
             </AutoSave>}
         </tbody>
