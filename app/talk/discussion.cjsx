@@ -238,7 +238,7 @@ module?.exports = React.createClass
         </h1>
         }
 
-      {if discussion && @props.user?
+      {if discussion and @props.user?
         <Moderation section={discussion.section} user={@props.user}>
           <div>
             <h2>Moderator Zone:</h2>

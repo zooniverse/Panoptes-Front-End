@@ -12,7 +12,11 @@ module?.exports = React.createClass
     followed: null
     participating: false
 
-  componentWillReceiveProps: (nextProps)->
+  componentWillMount: ->
+    {discussion} = @props
+    @getSubscriptionsFor(discussion.id) if discussion
+
+  componentWillReceiveProps: (nextProps) ->
     discussionId = nextProps.discussion?.id
     @getSubscriptionsFor(discussionId) if discussionId and discussionId isnt @props.discussion?.id
 
