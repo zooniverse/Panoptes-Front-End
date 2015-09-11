@@ -420,10 +420,30 @@ COPY_GREY_LIGHT = #afaeae
     .project-role
       font-size: 0.5em
 
+  .talk-comment-reply
+    padding: TALK_PADDING
+    background: TALK_BORDER
+    border-radius: TALK_BORDER_RADIUS TALK_BORDER_RADIUS 0 0
+    margin: (-1 * TALK_PADDING) (-1 * TALK_PADDING) 0 (-1 * TALK_PADDING)
+    > button
+      border-color: darken(TALK_BORDER, 5%)
+
+    .clear-replies
+      float: right
+
+    .comment-reply-line
+      .markdown
+        transition: background 0.25s
+
+      &.highlighted
+        .markdown
+          background: rgba(0,0,0, 0.09)
+
   .talk-comment-body
+    @extend .talk-module
     width: 80%
     float: left
-    @extend .talk-module
+    position: relative
 
     .talk-comment-date
       margin: 0

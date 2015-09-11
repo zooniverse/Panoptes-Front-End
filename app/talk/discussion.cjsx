@@ -32,7 +32,7 @@ module?.exports = React.createClass
     commentsMeta: {}
     commentValidationErrors: []
     editingTitle: false
-    reply: ''
+    reply: null
 
   getDefaultProps: ->
     query: page: 1
@@ -114,20 +114,25 @@ module?.exports = React.createClass
       talkClient.type('comments').get(id: commentId).delete()
         .then (deleted) => @setComments(@props.query.page)
 
-  onSubmitComment: (e, textContent, subject) ->
+  onSubmitComment: (e, textContent, subject, reply) ->
     {discussion} = @props.params
     user_id = @props.user.id
     discussion_id = +discussion
     body = textContent
     focus_id = +subject?.id ? null
+    reply_id = reply.comment.id if reply
     focus_type = 'Subject' if !!focus_id
-    comment = merge {}, {user_id, discussion_id, body}, ({focus_id, focus_type} if !!focus_id)
+
+    comment = merge {},
+      {user_id, discussion_id, body},
+      {focus_id, focus_type} if !!focus_id,
+      {reply_id} if reply
 
     talkClient.type('comments').create(comment).save()
       .then (comment) =>
         @setCommentsMeta().then =>
           @setComments(@state.commentsMeta?.page_count)
-          @setState {reply: ''}
+          @setState {reply: null}
 
   onLikeComment: (commentId) ->
     talkClient.type('comments').get(commentId)
@@ -139,17 +144,11 @@ module?.exports = React.createClass
           .then (voted) =>
             @setComments(@props.query.page)
 
-  onClickReply: (user, comment) ->
-    # TODO: provide link to user / comment
+  onClickReply: (comment) ->
     if (not @props.user)
       @promptToSignIn()
     else
-      quotedComment = comment.body.split("\n")
-        .map (line) -> "> #{line}"
-        .join("\n")
-
-      reply = "> In reply to #{user.display_name}'s comment: \n#{quotedComment}\n\n"
-      @setState {reply}, => @setState {reply: ''}
+      @setState reply: comment: comment
 
     findDOMNode(@).scrollIntoView(false)
 
@@ -311,6 +310,7 @@ module?.exports = React.createClass
             validationErrors={@state.commentValidationErrors}
             onSubmitComment={@onSubmitComment}
             reply={@state.reply}
+            onClickClearReply={=> @setState({reply: null})}
             header={null} />
         </section>
       else
