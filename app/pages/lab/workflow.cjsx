@@ -71,7 +71,8 @@ EditWorkflowPage = React.createClass
                         when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
                         when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
                         when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
-                        when 'survey' then <i className="fa fa-binoculars fa-fw"></i>}
+                        when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
+                        when 'crop' then <i className="fa fa-crop fa-fw"></i>}
                       {' '}
                       {tasks[definition.type].getTaskText definition}
                       {if key is @props.workflow.first_task
@@ -102,14 +103,23 @@ EditWorkflowPage = React.createClass
                     </button>
                   </AutoSave>{' '}
                   <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
-                    if owner.admin
-                      <AutoSave resource={@props.workflow}>
-                        <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
-                          <i className="fa fa-binoculars fa-2x"></i>
-                          <br />
-                          <small><strong>Survey</strong></small>
-                        </button>
-                      </AutoSave>
+                    if owner.admin or owner.display_name is 'brian-testing'
+                      <span>
+                        <AutoSave resource={@props.workflow}>
+                          <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
+                            <i className="fa fa-binoculars fa-2x"></i>
+                            <br />
+                            <small><strong>Survey</strong></small>
+                          </button>
+                        </AutoSave>{' '}
+                        <AutoSave resource={@props.workflow}>
+                          <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">
+                            <i className="fa fa-crop fa-2x"></i>
+                            <br />
+                            <small><strong>Crop</strong></small>
+                          </button>
+                        </AutoSave>
+                      </span>
                     else
                       null
                   }</PromiseRenderer>
