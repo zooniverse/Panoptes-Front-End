@@ -13,7 +13,10 @@ module?.exports = React.createClass
     loading: true
 
   componentWillMount: ->
-    @setProjects()
+    if @props.user
+      @setProjectsFromPreferences(@props.user)
+    else
+      @setProjectsLaunchApproved()
 
   shouldComponentUpdate: (nextProps, nextState) ->
     nextState.projects isnt @state.projects
@@ -27,25 +30,32 @@ module?.exports = React.createClass
       owner: owner
       name: name
 
-  setProjects: (metadata) ->
-    # query =
-    #   launch_approved: true
-    #   include: 'owners'
+  filterNonRedirected: (projects) ->
+    projects.filter (p) -> p and (not p.redirect)
 
-    # For launch, since I can't filter by if a project has a redirect or not.
-    query = FEATURED_PRODUCT_IDS
+  setProjectsFromPreferences: (user) ->
+    user.get('project_preferences').then (preferences) =>
+      projectsPromise = preferences.map (pref) =>
+        apiClient.type('projects')
+          .get(pref.links.project)
+          .catch -> false
 
-    apiClient.type('projects').get(query)
+      Promise.all(projectsPromise)
+        .then (projects) =>
+          @setState {projects: @filterNonRedirected(projects), loading: false}
+
+  setProjectsLaunchApproved: ->
+    apiClient.type('projects').get(launch_approved: true)
       .then (projects) =>
-        @setState {projects, loading: false}
+        @setState {projects: @filterNonRedirected(projects), loading: false}
 
   onChangeSelect: ->
     projectsSelect = React.findDOMNode @.refs.projectsSelect
     @goToProjectTalk projectsSelect.value
 
-  projectOption: (d, i) ->
-    <option key={d.id} value={d.id}>
-      {d.display_name}
+  projectOption: (project, i) ->
+    <option key={project.id} value={project.id}>
+      {project.display_name}
     </option>
     
   render: ->
