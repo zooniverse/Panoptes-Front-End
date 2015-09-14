@@ -35,7 +35,9 @@ counterpart.registerTranslations 'en',
       button: 'See all projects'
     recentProjects:
       title: "Welcome back! Jump into one of your recent projects..."
+      altTitle: "Welcome! Jump into a new project..."
       button: 'See all your projects'
+      altButton: 'See all our projects'
 
 FeaturedProjects = React.createClass
   displayName: "FeaturedProjects"
@@ -75,22 +77,38 @@ module.exports = React.createClass
         <ZooniverseLogoType />
         {if @props.user
           <PromiseRenderer promise={@lastFourProjects()}>{(projectPreferences) =>
-            <div className="recent-projects">
-              <Translate component="h5" content="home.recentProjects.title" />
-              <div className="recent-projects-list">
-                {projectPreferences.map (projectPreference) =>
-                  <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} catch={null} then={(project) =>
-                    if project?
-                      <div>
-                        <ProjectIcon project={project} badge={projectPreference.activity_count} />
-                        &ensp;
-                      </div>
-                    else
-                      null
-                  } />}
+            console.log(projectPreferences)
+            if projectPreferences.length > 0
+              <div className="recent-projects">
+                <Translate component="h5" content="home.recentProjects.title" />
+                <div className="recent-projects-list">
+                  {projectPreferences.map (projectPreference) =>
+                    <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} catch={null} then={(project) =>
+                      if project?
+                        <div>
+                          <ProjectIcon project={project} badge={projectPreference.activity_count} />
+                          &ensp;
+                        </div>
+                      else
+                        null
+                    } />}
+                </div>
+                <Link to="user-profile-stats" params={{name: @props.user.login}} className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
               </div>
-            <Link to="user-profile-stats" params={{name: @props.user.login}} className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
-            </div>
+            else
+              <div className="recent-projects">
+                <Translate component="h5" content="home.recentProjects.altTitle" />
+                <PromiseRenderer promise={apiClient.type('projects').get(launch_approved: true, page_size: 4)}>{(projects) =>
+                  <div className="recent-projects-list">
+                    {projects.map (project) ->
+                      <div>
+                        <ProjectIcon key={project.id} project={project} />
+                        &ensp;
+                      </div>}
+                  </div>
+                }</PromiseRenderer>
+                <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.recentProjects.altButton" /></Link>
+              </div>
           }</PromiseRenderer>
          else
           <div>
