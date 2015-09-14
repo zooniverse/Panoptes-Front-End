@@ -10,7 +10,9 @@ module?.exports = React.createClass
 
   getInitialState: ->
     followed: null
+    followedDigest: null
     participating: false
+    participatingDigest: null
 
   componentWillMount: ->
     {discussion} = @props
@@ -18,6 +20,7 @@ module?.exports = React.createClass
 
   componentWillReceiveProps: (nextProps) ->
     discussionId = nextProps.discussion?.id
+    @getPreferences()
     @getSubscriptionsFor(discussionId) if discussionId and discussionId isnt @props.discussion?.id
 
   toggleFollowed: (e) ->
@@ -56,6 +59,18 @@ module?.exports = React.createClass
     else
       "Subscribe to receive notifications for updates to this discussion"
 
+  digestText: (category) ->
+    digest = @state["#{ category }Digest"]
+    if digest then "(#{ digest } email)" else ''
+
+  getPreferences: ->
+    talkClient.type('subscription_preferences').get().then (preferences) =>
+      newState = { }
+      for preference in preferences
+        newState.followedDigest = preference.email_digest if preference.category is 'followed_discussions'
+        newState.participatingDigest = preference.email_digest if preference.category is 'participating_discussions'
+      @setState newState
+
   getSubscriptionsFor: (id) ->
     talkClient.type('subscriptions').get
       source_id: id
@@ -77,12 +92,12 @@ module?.exports = React.createClass
           {if @state.participating
             <div>
               <button onClick={@toggleParticipating}>{ @buttonLabel() }</button>
-              <p className="description">You're receiving notifications from this discussion because you've joined it</p>
+              <p className="description">You're receiving notifications from this discussion because you've joined it {@digestText 'participating'}</p>
             </div>
           else
             <div>
               <button onClick={@toggleFollowed}>{@buttonLabel()}</button>
-              <p className="description">{@followedText()}</p>
+              <p className="description">{@followedText()} {@digestText 'followed'}</p>
             </div>
           }
         </div>
