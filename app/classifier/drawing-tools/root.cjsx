@@ -1,5 +1,5 @@
 React = require 'react'
-AnchoredModalForm = require 'modal-form/anchored'
+StickyModalForm = require 'modal-form/sticky'
 ChangeListener = require '../../components/change-listener'
 
 STROKE_WIDTH = 1.5
@@ -53,7 +53,7 @@ module.exports = React.createClass
 
       {if toolProps.selected and toolProps.details? and toolProps.details.length isnt 0
         tasks = require '../tasks'
-        <AnchoredModalForm ref="detailsForm" underlayStyle={NON_MODAL_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
+        <StickyModalForm ref="detailsForm" underlayStyle={NON_MODAL_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
           {for detailTask, i in toolProps.details
             detailTask._key ?= Math.random()
             TaskComponent = tasks[detailTask.type]
@@ -62,7 +62,7 @@ module.exports = React.createClass
           <p style={textAlign: 'center'}>
             <button type="submit" className="standard-button">OK</button>
           </p>
-        </AnchoredModalForm>}
+        </StickyModalForm>}
     </g>
 
   handleDetailsFormClose: ->

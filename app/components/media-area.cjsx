@@ -1,7 +1,7 @@
 React = require 'react'
 Thumbnail = require './thumbnail'
 PromiseRenderer = require './promise-renderer'
-DropdownForm = require './dropdown-form'
+TriggeredModalForm = require 'modal-form/triggered'
 FileButton = require './file-button'
 apiClient = require '../api/client'
 putFile = require '../lib/put-file'
@@ -64,7 +64,7 @@ MediaIcon = React.createClass
   render: ->
     <div className="media-icon" style={opacity: 0.5 if @state.deleting}>
       <div className="media-icon-thumbnail-container">
-        <DropdownForm label={
+        <TriggeredModalForm trigger={
           <Thumbnail className="media-icon-thumbnail" src={@props.resource.src} height={@props.height} style={position: 'relative'} />
         }>
           <div className="content-container">
@@ -73,7 +73,7 @@ MediaIcon = React.createClass
               maxWidth: '60vw'
             } />
           </div>
-        </DropdownForm>
+        </TriggeredModalForm>
         <button type="button" className="media-icon-delete-button" disabled={@state.deleting} onClick={@handleDelete}>&times;</button>
       </div>
       <div className="media-icon-label" style={position: 'relative'}>{@props.resource.metadata.filename}</div>

@@ -1,5 +1,5 @@
 React = require 'react'
-DropdownForm = require '../../../components/dropdown-form'
+TriggeredModalForm = require 'modal-form/triggered'
 {Markdown} = require 'markdownz'
 
 ImageFlipper = React.createClass
@@ -80,7 +80,7 @@ module.exports = React.createClass
           {for otherChoiceID in choice.confusionsOrder
             otherChoice = @props.task.choices[otherChoiceID]
             <span key={otherChoiceID}>
-              <DropdownForm label={
+              <TriggeredModalForm trigger={
                 <span className="survey-task-choice-confusion">
                   {otherChoice.label}
                 </span>
@@ -92,7 +92,7 @@ module.exports = React.createClass
                   {' '}
                   <button type="submit" className="major-button">Dismiss</button>
                 </div>
-              </DropdownForm>
+              </TriggeredModalForm>
               {' '}
             </span>}
         </div>}

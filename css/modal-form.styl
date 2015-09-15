@@ -1,17 +1,18 @@
-.dropdown-form-button
+.modal-form-trigger
   @extends $reset-button
 
-.dropdown-form-underlay
+.modal-form-underlay
   background: rgba(gray, 0.2)
 
-.dropdown-form-pointer
+.modal-form-pointer
   background: white
   box-shadow: 0 0 5px rgba(black 0.3)
   height: 1em
   transform: translateX(0.3em) rotate(45deg)
   width: 1em
+  z-index: -1
 
-.dropdown-form
+.modal-form
   background: white
   border-radius: 3px
   box-shadow: 0 5px 15px -5px rgba(black, 0.5)

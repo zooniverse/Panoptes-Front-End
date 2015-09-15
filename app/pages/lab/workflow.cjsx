@@ -1,7 +1,7 @@
 React = require 'react'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
-DropdownForm = require '../../components/dropdown-form'
+TriggeredModalForm = require 'modal-form/triggered'
 WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
@@ -82,7 +82,7 @@ EditWorkflowPage = React.createClass
               </div>
 
               <p>
-                <DropdownForm label={
+                <TriggeredModalForm trigger={
                   <span className="standard-button">
                     <i className="fa fa-plus-circle"></i>{' '}
                     Add a task
@@ -123,7 +123,7 @@ EditWorkflowPage = React.createClass
                     else
                       null
                   }</PromiseRenderer>
-                </DropdownForm>
+                </TriggeredModalForm>
               </p>
 
               <AutoSave tag="div" resource={@props.workflow}>
