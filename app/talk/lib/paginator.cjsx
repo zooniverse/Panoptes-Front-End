@@ -20,7 +20,7 @@ updatePageQueryParam = (page) ->
     location.hash = beforeQuestionMark + newSearch
   else
     newSearch = changeSearchString(location.search, {page})
-    @transitionTo(@getPath(), {}, newSearch)
+    @transitionTo(location.pathname, {}, newSearch)
 
 module?.exports = React.createClass
   displayName: 'Paginator'
