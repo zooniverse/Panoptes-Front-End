@@ -77,7 +77,6 @@ module.exports = React.createClass
         <ZooniverseLogoType />
         {if @props.user
           <PromiseRenderer promise={@lastFourProjects()}>{(projectPreferences) =>
-            console.log(projectPreferences)
             if projectPreferences.length > 0
               <div className="recent-projects">
                 <Translate component="h5" content="home.recentProjects.title" />
