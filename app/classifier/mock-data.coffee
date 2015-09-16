@@ -14,7 +14,7 @@ workflow = apiClient.type('workflows').create
       type: 'crop'
       instruction: 'Drag out a box around the face.'
       help: 'The face is the thing with the nose.'
-      next: 'draw'
+      next: 'survey'
 
     survey:
       type: 'survey'

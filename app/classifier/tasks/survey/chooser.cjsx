@@ -1,5 +1,5 @@
 React = require 'react'
-DropdownForm = require '../../../components/dropdown-form'
+TriggeredModalForm = require 'modal-form/triggered'
 
 THUMBNAIL_BREAKPOINTS = [Infinity, 40, 20, 10, 5, 0]
 
@@ -39,7 +39,7 @@ module.exports = React.createClass
           selectedValue = characteristic.values[@props.filters[characteristicID]]
           hasBeenAutoFocused = false
 
-          <DropdownForm key={characteristicID} ref="#{characteristicID}-dropdown" className="survey-task-chooser-characteristic-menu" label={
+          <TriggeredModalForm key={characteristicID} ref="#{characteristicID}-dropdown" className="survey-task-chooser-characteristic-menu" trigger={
             <span className="survey-task-chooser-characteristic" data-is-active={selectedValue? || null}>
               <span className="survey-task-chooser-characteristic-label">{selectedValue?.label ? characteristic.label}</span>
             </span>
@@ -66,7 +66,7 @@ module.exports = React.createClass
             <button type="submit" className="survey-task-chooser-characteristic-clear-button" disabled={characteristicID not of @props.filters} autoFocus={not hasBeenAutoFocused} onClick={@handleFilter.bind this, characteristicID, undefined}>
               <i className="fa fa-ban"></i> Any
             </button>
-          </DropdownForm>}
+          </TriggeredModalForm>}
       </div>
 
       <div className="survey-task-chooser-choices" data-breakpoint={breakpoint}>

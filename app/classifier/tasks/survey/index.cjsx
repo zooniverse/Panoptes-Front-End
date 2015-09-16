@@ -51,11 +51,12 @@ module.exports = React.createClass
     </div>
 
   handleFilter: (characteristicID, valueID) ->
-    if valueID?
-      @state.filters[characteristicID] = valueID
-    else
-      delete @state.filters[characteristicID]
-    @setState filters: @state.filters
+    setTimeout =>
+      if valueID?
+        @state.filters[characteristicID] = valueID
+      else
+        delete @state.filters[characteristicID]
+      @setState filters: @state.filters
 
   handleChoice: (choiceID) ->
     @props.annotation._choiceInProgress = true
