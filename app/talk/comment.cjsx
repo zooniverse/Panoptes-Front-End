@@ -123,8 +123,9 @@ module?.exports = React.createClass
   render: ->
     feedback = @renderFeedback()
     activeClass = if @props.active then 'active' else ''
+    isDeleted = if @props.data.is_deleted then 'deleted' else ''
 
-    <div className="talk-comment #{activeClass}">
+    <div className="talk-comment #{activeClass} #{isDeleted}">
       <div className="talk-comment-author">
         <PromiseRenderer promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
           <Avatar user={commentOwner} />
