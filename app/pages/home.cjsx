@@ -8,6 +8,7 @@ ZooniverseLogoType = require '../partials/zooniverse-logotype'
 OwnedCard = require '../partials/owned-card'
 FEATURED_PRODUCT_IDS = require '../lib/featured-projects'
 {Markdown} = require 'markdownz'
+ProjectIcon = require '../components/project-icon'
 
 counterpart.registerTranslations 'en',
   home:
@@ -30,7 +31,31 @@ counterpart.registerTranslations 'en',
         content: '''Our platform offers many opportunities for education, from using projects in classrooms to sharing information between volunteers. You can even use the [Zooniverse Project Builder](/lab) to create your very own project!'''
     featuredProjects:
       title: 'Get started on a project right now!'
+      loggedTitle: 'Get started on a new project right now!'
       button: 'See all projects'
+    recentProjects:
+      title: "Welcome back! Jump into one of your recent projects..."
+      altTitle: "Welcome! Jump into a new project..."
+      button: 'See all your projects'
+      altButton: 'See all our projects'
+
+FeaturedProjects = React.createClass
+  displayName: "FeaturedProjects"
+
+  render: ->
+    <div className="featured-projects">
+      <PromiseRenderer promise={apiClient.type('projects').get(FEATURED_PRODUCT_IDS)}>{(projects) =>
+        if projects?
+          <div className="featured-projects-list">
+          {for project in projects
+            avatarSrc = project.get('avatar').then (avatar) ->
+              avatar.src
+            <OwnedCard key={project.id} resource={project} linkTo="project-home" translationObjectName="projectsPage" imagePromise={avatarSrc} />
+          }
+          </div>
+      }</PromiseRenderer>
+      <Link to="projects" className="call-to-action standard-button x-large"><Translate content="home.featuredProjects.button" /></Link>
+    </div>
 
 module.exports = React.createClass
   displayName: 'HomePage'
@@ -41,46 +66,80 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-home-page'
 
+  lastFourProjects: ->
+    @props.user.get("project_preferences", page_size: 4, sort: '+updated_at')
+
   render: ->
     aboutItems = ['contribute', 'explore', 'collaborate', 'discover']
 
     <div className="home-page">
       <section className="hero on-dark">
         <ZooniverseLogoType />
-        <h3 className="hero-title"><Translate content="home.hero.title" /></h3>
-        <p className="hero-tagline"><Translate content="home.hero.tagline" /></p>
-        <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
+        {if @props.user
+          <PromiseRenderer promise={@lastFourProjects()}>{(projectPreferences) =>
+            console.log(projectPreferences)
+            if projectPreferences.length > 0
+              <div className="recent-projects">
+                <Translate component="h5" content="home.recentProjects.title" />
+                <div className="recent-projects-list">
+                  {projectPreferences.map (projectPreference) =>
+                    <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} catch={null} then={(project) =>
+                      if project?
+                        <div>
+                          <ProjectIcon project={project} badge={projectPreference.activity_count} />
+                          &ensp;
+                        </div>
+                      else
+                        null
+                    } />}
+                </div>
+                <Link to="user-profile-stats" params={{name: @props.user.login}} className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
+              </div>
+            else
+              <div className="recent-projects">
+                <Translate component="h5" content="home.recentProjects.altTitle" />
+                <PromiseRenderer promise={apiClient.type('projects').get(launch_approved: true, page_size: 4)}>{(projects) =>
+                  <div className="recent-projects-list">
+                    {projects.map (project) ->
+                      <div>
+                        <ProjectIcon key={project.id} project={project} />
+                        &ensp;
+                      </div>}
+                  </div>
+                }</PromiseRenderer>
+                <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.recentProjects.altButton" /></Link>
+              </div>
+          }</PromiseRenderer>
+         else
+          <div>
+            <h3 className="hero-title"><Translate content="home.hero.title" /></h3>
+            <p className="hero-tagline"><Translate content="home.hero.tagline" /></p>
+            <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
+          </div>}
       </section>
-      <section className="about-zooniverse">
-        <div className="about-items-list">
-          {for item in aboutItems
-            <div key={item} className="about-item">
-              <div className="about-item-wrapper">
-                <img className="about-image" src="./assets/home-#{item}.gif" alt="" />
-                <div className="about-item-content">
-                  <Translate component="h5" content="home.about.#{item}.title" />
-                  <Markdown>{counterpart "home.about.#{item}.content"}</Markdown>
+      {unless @props.user?
+        <section className="about-zooniverse">
+          <div className="about-items-list">
+            {for item in aboutItems
+              <div key={item} className="about-item">
+                <div className="about-item-wrapper">
+                  <img className="about-image" src="./assets/home-#{item}.gif" alt="" />
+                  <div className="about-item-content">
+                    <Translate component="h5" content="home.about.#{item}.title" />
+                    <Markdown>{counterpart "home.about.#{item}.content"}</Markdown>
+                  </div>
                 </div>
               </div>
-            </div>
-          }
-        </div>
-      </section>
-      <section className="featured-projects content-container">
-        <Translate component="h5" content="home.featuredProjects.title" />
-        <PromiseRenderer promise={apiClient.type('projects').get(FEATURED_PRODUCT_IDS)}>{(projects) =>
-          if projects?
-            <div className="featured-projects-list">
-            {for project in projects
-              avatarSrc = project.get('avatar').then (avatar) ->
-                avatar.src
-              <OwnedCard key={project.id} resource={project} linkTo="project-home" translationObjectName="projectsPage" imagePromise={avatarSrc} />
             }
-            </div>
-        }</PromiseRenderer>
-        <Link to="projects" className="call-to-action standard-button x-large"><Translate content="home.featuredProjects.button" /></Link>
+          </div>
+        </section>}
+      <section className="featured-projects content-container">
+        {if @props.user?
+           <Translate component="h5" content="home.featuredProjects.loggedTitle" />
+         else
+           <Translate component="h5" content="home.featuredProjects.title" />}
+        <FeaturedProjects />
       </section>
-
     </div>
 
   showLoginDialog: (which) ->
