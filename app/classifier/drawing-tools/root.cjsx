@@ -65,6 +65,9 @@ module.exports = React.createClass
         </StickyModalForm>}
     </g>
 
+  componentDidUpdate: ->
+    this.refs.detailsForm?.reposition()
+
   handleDetailsFormClose: ->
     # TODO: Check if the details tasks are complete.
     @props.tool.props.onDeselect?()
