@@ -80,7 +80,9 @@ module.exports = React.createClass
             </div>
           </TriggeredModalForm>{' '}
 
-          <Link to="inbox" params={name: @props.user.login} className="message-link"><i className="fa fa-envelope#{if @state.unread then ' unread' else '-o'}" /> </Link>
+          <Link to="inbox" params={name: @props.user.login} className="message-link" aria-label="Inbox #{if @state.unread then 'with unread messages' else ''}">
+            <i className="fa fa-envelope#{if @state.unread then ' unread' else '-o'}" />
+          </Link>
         </div>
       </div>
 
