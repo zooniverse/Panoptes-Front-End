@@ -1,8 +1,14 @@
 React = require 'react'
 apiClient = require '../../api/client'
-{Navigation} = require 'react-router'
+{Navigation, Link} = require 'react-router'
 Loading = require '../../components/loading-indicator'
 FEATURED_PRODUCT_IDS = require '../../lib/featured-projects'
+Paginator = require './paginator'
+
+take = (n, arr) -> arr.slice(0, n)
+
+filterNonRedirected = (projects) ->
+  projects.filter (p) -> p and (not p.redirect?)
 
 module?.exports = React.createClass
   displayName: 'ProjectLinker'
@@ -10,65 +16,81 @@ module?.exports = React.createClass
 
   getInitialState: ->
     projects: []
+    projectsMeta: {}
     loading: true
+    open: false
 
   componentWillMount: ->
-    if @props.user
-      @setProjectsFromPreferences(@props.user)
-    else
-      @setProjectsLaunchApproved()
+    @loadMoreProjects()
+
+  loadMoreProjects: (page = 1, newProjects = [], load = 10) ->
+    apiClient.type('projects').get({
+      launch_approved: true,
+      page: page,
+      page_size: 20
+    })
+    .then (projects) =>
+      projectsMeta = projects[0]?.getMeta()
+      newProjects = newProjects.concat(filterNonRedirected(projects))
+
+      if projectsMeta.page is projectsMeta.page_count
+        return {projectsMeta}
+      else if newProjects.length < load
+        @loadMoreProjects((page + 1), newProjects)
+      else
+        return {projects: @state.projects.concat(take(load, newProjects)), projectsMeta}
+
+    .then(@setState.bind(this))
 
   shouldComponentUpdate: (nextProps, nextState) ->
-    nextState.projects isnt @state.projects
+    (nextState.projects.length > @state.projects.length) or
+    (nextState.open isnt @state.open) or
+    (nextState.projectsMeta isnt @state.projectsMeta)
 
-  goToProjectTalk: (projectId) ->
-    for project in @state.projects
-      break if project.id is projectId
-
+  projectLink: (project, i) ->
     [owner, name] = project.slug.split('/')
-    @transitionTo 'project-talk',
-      owner: owner
-      name: name
 
-  filterNonRedirected: (projects) ->
-    projects.filter (p) -> p and (not p.redirect)
+    <div key={project.id}>
+      {if project.redirect?
+        <a href={project.redirect} title={project.redirect}>{project.display_name}</a>
+      else
+        <Link to="project-talk" params={{owner, name}}>
+          {project.display_name}
+        </Link>
+        }
+    </div>
 
-  setProjectsFromPreferences: (user) ->
-    user.get('project_preferences').then (preferences) =>
-      projectsPromise = preferences.map (pref) =>
-        apiClient.type('projects')
-          .get(pref.links.project)
-          .catch -> false
+  onClickLoadMore: (e) ->
+    @loadMoreProjects(@state.projectsMeta.next_page)
 
-      Promise.all(projectsPromise)
-        .then (projects) =>
-          @setState {projects: @filterNonRedirected(projects), loading: false}
-
-  setProjectsLaunchApproved: ->
-    apiClient.type('projects').get(launch_approved: true)
-      .then (projects) =>
-        @setState {projects: @filterNonRedirected(projects), loading: false}
-
-  onChangeSelect: ->
-    projectsSelect = React.findDOMNode @.refs.projectsSelect
-    @goToProjectTalk projectsSelect.value
-
-  projectOption: (project, i) ->
-    <option key={project.id} value={project.id}>
-      {project.display_name}
-    </option>
-    
   render: ->
-    if @state.loading
-      <Loading />
+    <div>
+      <button onClick={=> @setState({open: not @state.open})}>
+        {if @state.open
+          <span><i className="fa fa-close" /> Collapse Projects</span>
+        else
+          <span>Change projects</span>
+          }
+      </button>
 
-    else if @state.projects.length
-      <div className="project-linker">
-        <select onChange={@onChangeSelect} defaultValue="defaultValue" ref="projectsSelect">
-          <option key={Math.random()}  value="defaultValue" disabled>Jump to a project</option>
-          {@state.projects.map(@projectOption)}
-        </select>
-      </div>
+      {if @state.open
+        if @state.loading
+          <Loading />
 
-    else
-      <p>Error retreiving projects list.</p>
+        <div className="project-linker">
+          <div><Link to="talk">Zooniverse Talk</Link></div>
+
+          <div>{@state.projects?.map(@projectLink)}</div>
+
+          {if @state.projectsMeta?.page isnt @state.projectsMeta?.page_count
+            <button
+              type="button"
+              onClick={@onClickLoadMore}>
+              Load more <i className="fa fa-arrow-down" />
+            </button>
+          else
+            <hr />
+            }
+        </div>
+        }
+    </div>
