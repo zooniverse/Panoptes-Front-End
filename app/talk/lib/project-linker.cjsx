@@ -21,7 +21,7 @@ module?.exports = React.createClass
     open: false
 
   componentWillMount: ->
-    @loadMoreProjects()
+    @loadMoreProjects().then(@setState.bind(this))
 
   loadMoreProjects: (page = 1, newProjects = [], load = 10) ->
     apiClient.type('projects').get({
@@ -33,14 +33,10 @@ module?.exports = React.createClass
       projectsMeta = projects[0]?.getMeta()
       newProjects = newProjects.concat(filterNonRedirected(projects))
 
-      if projectsMeta.page is projectsMeta.page_count
-        return {projectsMeta}
-      else if newProjects.length < load
+      if (newProjects.length < load) and (projectsMeta.page < projectsMeta.page_count)
         @loadMoreProjects((page + 1), newProjects)
       else
         return {projects: @state.projects.concat(take(load, newProjects)), projectsMeta}
-
-    .then(@setState.bind(this))
 
   shouldComponentUpdate: (nextProps, nextState) ->
     (nextState.projects.length > @state.projects.length) or
@@ -61,7 +57,7 @@ module?.exports = React.createClass
     </div>
 
   onClickLoadMore: (e) ->
-    @loadMoreProjects(@state.projectsMeta.next_page)
+    @loadMoreProjects(@state.projectsMeta.next_page).then(@setState.bind(this))
 
   render: ->
     <div>
