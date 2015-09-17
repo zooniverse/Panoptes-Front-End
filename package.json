@@ -6,6 +6,7 @@
     "counterpart": "~0.16.7",
     "data-uri-to-blob": "0.0.4",
     "debounce": "~1.0.0",
+    "history-events": "~1.0.4",
     "json-api-client": "~0.4.0",
     "lodash.intersection": "~3.2.0",
     "lodash.merge": "~2.4.1",

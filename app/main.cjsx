@@ -1,3 +1,5 @@
+historyEvents = require 'history-events'
+
 React = require 'react'
 window.React = React
 React.initializeTouchEvents true
