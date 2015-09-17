@@ -31,11 +31,13 @@ module?.exports = React.createClass
     onPageChange: React.PropTypes.func.isRequired # passed (page) on change
     firstAndLast: React.PropTypes.bool            # optional, add 'first' & 'last' buttons
     scrollOnChange: React.PropTypes.bool          # optional, scroll to top of page on change
+    pageSelector: React.PropTypes.bool # show page selector?
 
   getDefaultProps: ->
     page: 1
     onPageChange: updatePageQueryParam
     firstAndLast: true
+    pageSelector: true
     scrollOnChange: true
 
   mixins: [Navigation]
@@ -84,12 +86,14 @@ module?.exports = React.createClass
         <i className="fa fa-long-arrow-left" /> Previous
       </button>
 
-      <div className="paginator-page-selector">
-        Page&nbsp;
-        <select value={page} onChange={@onSelectPage} ref="pageSelect">
-          {[1..pageCount].map(@pageOption)}
-        </select> of {pageCount}
-      </div>
+      {if @props.pageSelector
+        <div className="paginator-page-selector">
+          Page&nbsp;
+          <select value={page} onChange={@onSelectPage} ref="pageSelect">
+            {[1..pageCount].map(@pageOption)}
+          </select> of {pageCount}
+        </div>
+        }
 
       <button
         className="paginator-next"

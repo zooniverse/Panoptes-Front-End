@@ -93,6 +93,6 @@ module?.exports = React.createClass
         {@state.users.map(@userLink)}
       </ul>
       {if @state.pageCount > 1
-        <Paginator page={+@state.page} onPageChange={@onPageChange} pageCount={@state.pageCount} scrollOnChange={false} />
+        <Paginator page={+@state.page} onPageChange={@onPageChange} pageCount={@state.pageCount} scrollOnChange={false} firstAndLast={false} pageSelector={false} />
       }
     </div>
