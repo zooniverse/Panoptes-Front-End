@@ -121,6 +121,7 @@ module?.exports = React.createClass
     </div>
 
   render: ->
+    isFirstSubjectComment = @props.index is 0 and @props.data.discussion_subject_default
     feedback = @renderFeedback()
     activeClass = if @props.active then 'active' else ''
     isDeleted = if @props.data.is_deleted then 'deleted' else ''
@@ -165,7 +166,7 @@ module?.exports = React.createClass
               <div className="talk-comment-title">{@props.title}</div>}
             <p className="talk-comment-date">{timestamp(@props.data.created_at)}</p>
 
-            {if @props.data.focus_id
+            {if @props.data.focus_id and isFirstSubjectComment
               <PromiseRenderer
                 promise={
                   apiClient.type('subjects').get(@props.data.focus_id)

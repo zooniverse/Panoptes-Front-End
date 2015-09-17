@@ -157,6 +157,7 @@ module?.exports = React.createClass
       {...@props}
       project={@props.project}
       key={data.id}
+      index={i}
       data={data}
       active={+data.id is +@props.query?.comment}
       user={@props.user}
