@@ -121,7 +121,18 @@ module?.exports = React.createClass
     </div>
 
   render: ->
-    isFirstSubjectComment = @props.index is 0 and @props.data.discussion_subject_default
+    # When the discussion is about a focus and this is the first comment on the page
+    isFirstSubjectComment = @props.index is 0 and @props.data.discussion_focus_id
+
+    # When the discussion is about a focus, but this comment is about a different focus
+    isDifferentFocus = @props.data.focus_id and @props.data.focus_id isnt @props.data.discussion_focus_id
+
+    # Render the focus if
+    #   - it's not a focused discussion and this comment has a focus
+    #   - it's a focused discussion and this is the first comment
+    #   - it's a focused discussion and this comment is about a different focus
+    shouldRenderFocus = @props.data.focus_id and (isFirstSubjectComment or isDifferentFocus)
+
     feedback = @renderFeedback()
     activeClass = if @props.active then 'active' else ''
     isDeleted = if @props.data.is_deleted then 'deleted' else ''
@@ -166,7 +177,7 @@ module?.exports = React.createClass
               <div className="talk-comment-title">{@props.title}</div>}
             <p className="talk-comment-date">{timestamp(@props.data.created_at)}</p>
 
-            {if @props.data.focus_id and isFirstSubjectComment
+            {if shouldRenderFocus
               <PromiseRenderer
                 promise={
                   apiClient.type('subjects').get(@props.data.focus_id)
