@@ -28,11 +28,11 @@ module.exports = React.createClass
     expanded: false
 
   componentDidMount: ->
-    window.addEventListener 'hashchange', @setUnread
+    window.addEventListener 'locationchange', @setUnread
     @setUnread()
 
   componentWillUnmount: ->
-    window.removeEventListener 'hashchange', @setUnread
+    window.removeEventListener 'locationchange', @setUnread
 
   setUnread: ->
     talkClient.type('conversations').get({user_id: @props.user.id, unread: true, page_size: 1})

@@ -11,6 +11,7 @@ if process.env.NON_ROOT isnt 'true' and location.hash isnt ""
   location.pathname = location.hash.slice(1)
 
 router.run (Handler, handlerProps) ->
+  window.dispatchEvent new Event 'locationchange'
   React.render(<Handler {...handlerProps} />, mainContainer);
 
 logDeployedCommit = require './lib/log-deployed-commit'
