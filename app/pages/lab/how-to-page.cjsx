@@ -12,17 +12,17 @@ counterpart.registerTranslations 'en',
       This tutorial will help walk you through the process, using Kitteh Zoo as an example.
       You can [explore the actual project](https://www.zooniverse.org/projects/vrooje/kitteh-zoo).
 
-      [![Kitteh Zoo screenshot](./assets/how-to-lab/how-to-1.jpg)](./assets/how-to-lab/how-to-1.jpg)
+      [![Kitteh Zoo screenshot](/assets/how-to-lab/how-to-1.jpg)](/assets/how-to-lab/how-to-1.jpg)
 
       ### Getting Started
 
       To get started building, go to [the Project Builder home page](/lab) and log in to your Zooniverse account, then click the "Build a Project" button in the top right. Here you can see all of the projects you own and collaborate on. Click on "Create a project" to start building.
 
-      [![Project Builder screenshot](./assets/how-to-lab/how-to-2.jpg)](./assets/how-to-lab/how-to-2.jpg)
+      [![Project Builder screenshot](/assets/how-to-lab/how-to-2.jpg)](/assets/how-to-lab/how-to-2.jpg)
 
       **Start building:** Now you're in the Project Builder itself. This is where the magic happens. On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are terms you'll see a lot, and they have specific meanings in the Zooniverse.  Project is pretty self-explanatory; Galaxy Zoo, Penguin Watch, and of course, Kitteh Zoo, are all examples of Zooniverse projects that you could build using the project builder. A workflow is the sequence of tasks that you ask volunteers to do, and subjects are the things (usually images) that volunteers do those tasks on.
 
-      [![Project details editor screenshot](./assets/how-to-lab/how-to-3.jpg)](./assets/how-to-lab/how-to-3.jpg)
+      [![Project details editor screenshot](/assets/how-to-lab/how-to-3.jpg)](/assets/how-to-lab/how-to-3.jpg)
 
       ### Define your project.
 
@@ -32,15 +32,15 @@ counterpart.registerTranslations 'en',
 
       This is where you build the tasks that volunteers actually do. When you first get to this page, you'll see there is a sample task (specifically a question) already in place.
 
-      [![Project workflow editor screenshot](./assets/how-to-lab/how-to-4.jpg)](./assets/how-to-lab/how-to-4.jpg)
+      [![Project workflow editor screenshot](/assets/how-to-lab/how-to-4.jpg)](/assets/how-to-lab/how-to-4.jpg)
 
       We want to create this:
 
-      [![Project workflow example](./assets/how-to-lab/how-to-5.jpg)](./assets/how-to-lab/how-to-5.jpg)
+      [![Project workflow example](/assets/how-to-lab/how-to-5.jpg)](/assets/how-to-lab/how-to-5.jpg)
 
       We'll start by replacing the sample text with our question, which asks people how many cats are in the image. We add more answers using the "+" button under the "Yes" answer. Use the screenshot below to fill in the workflow details (you may need to zoom in!)
 
-      [![Project workflow editing screenshot](./assets/how-to-lab/how-to-6.jpg)](./assets/how-to-lab/how-to-6.jpg)
+      [![Project workflow editing screenshot](/assets/how-to-lab/how-to-6.jpg)](/assets/how-to-lab/how-to-6.jpg)
 
       We added both text and images into the _Help Text_ box using the markdown language ([learn more about markdown](http://markdownlivepreview.com)).
 
@@ -67,13 +67,13 @@ counterpart.registerTranslations 'en',
 
       Now we want to draw circles around the cat's faces and mark a point on their tails. Why? Because we can. (For your own project you'd obviously want to think carefully about the reasons for adding tasks to a workflow, and what you want to get from the answers/marks.)
 
-      [![Project workflow task editing screenshot](./assets/how-to-lab/how-to-7.jpg)](./assets/how-to-lab/how-to-7.jpg)
+      [![Project workflow task editing screenshot](/assets/how-to-lab/how-to-7.jpg)](/assets/how-to-lab/how-to-7.jpg)
 
       So under the _Task_ list, we'll click on **drawing**. We're asking folks to draw (with ellipses) around the cats' faces, as well as mark their tail tips with a point. We've changed the color on the Cattail points so they stand out more too. As usual, the main text gives people basic instructions on what we want, and the help text provides some more explanation on how to do the task.
 
       In addition to marking all the cat faces, we want to know just how cute they are. So every time someone marks a cat-face, we've added a pop-up question to ask just that. Add this question by clicking on the _sub-tasks_ button below the _Type_ and _Color_ task specifications.
 
-      [![Project workflow task details editing screenshot](./assets/how-to-lab/how-to-8.jpg)](./assets/how-to-lab/how-to-8.jpg)
+      [![Project workflow task details editing screenshot](/assets/how-to-lab/how-to-8.jpg)](/assets/how-to-lab/how-to-8.jpg)
 
       When building your own project, you can combine any number of tasks in any order. You can start with a drawing task instead of a question. You can add sub-tasks for any drawing tool you make.
 
@@ -85,19 +85,19 @@ counterpart.registerTranslations 'en',
 
       The first question, "How many cats are in this image?" only allows one answer, so you can specify the next task depending on the answer.  If folks say "None" for the number of cats, the classification ends. But if they say there's at least one cat, then they go on to the next question.
 
-      [![Project workflow task editing screenshot](./assets/how-to-lab/how-to-9.jpg)](./assets/how-to-lab/how-to-9.jpg)
+      [![Project workflow task editing screenshot](/assets/how-to-lab/how-to-9.jpg)](/assets/how-to-lab/how-to-9.jpg)
 
       ### Upload subjects
 
       To really get started building a project, you need images to work with. Normally you would add your own images by clicking on the "New Subject Set" button on the left hand side of the screen. This is one of the trickier steps in project creation -- for the purposes of this tutorial you can simply copy the Kitteh Zoo subject set, but check out the next section "Uploading subjects -- the nitty gritty" if you want to practice the full approach. To do this go to the workflow you created and under the _associated subject_ set section click on _add an example subject set_. You should now see the 'kittehs' subject set selected.
 
-      [![Project workflow task editing screenshot](./assets/how-to-lab/how-to-10.jpg)](./assets/how-to-lab/how-to-10.jpg)
+      [![Project workflow task editing screenshot](/assets/how-to-lab/how-to-10.jpg)](/assets/how-to-lab/how-to-10.jpg)
 
       **CONGRATULATIONS!**
 
       You should have successfully created Kitteh Zoo! To view it, got back to the _Build a Project_ page (by clicking the button in the top right of the page) and then click on the view button next to the new project you have just made.
 
-      [![Project list screenshot](./assets/how-to-lab/how-to-11.jpg)](./assets/how-to-lab/how-to-11.jpg)
+      [![Project list screenshot](/assets/how-to-lab/how-to-11.jpg)](/assets/how-to-lab/how-to-11.jpg)
 
       ### Uploading subjects - the Nitty Gritty
 
@@ -159,7 +159,7 @@ counterpart.registerTranslations 'en',
 
       _Research Case, FAQ, Results, and Education_: These pages are where you really get to share all the cool things about your project. All of these pages use Markdown (see link above) to format text and display images.
 
-      [![Project additional content editor screenshot](./assets/how-to-lab/how-to-12.jpg)](./assets/how-to-lab/how-to-12.jpg)
+      [![Project additional content editor screenshot](/assets/how-to-lab/how-to-12.jpg)](/assets/how-to-lab/how-to-12.jpg)
 
       _Research case_: Explain your research to your audience here in as much detail as you'd like. This page displays no matter what, since explaining your motivation to volunteers is critical for the success of your project!
 
@@ -170,22 +170,22 @@ counterpart.registerTranslations 'en',
       _Education_: If you are a researcher open to collaborating with educators you can state that here, include educational content, and describe how you'd like to help educators use your project. Also, if your project is primarily for educational purposes you can describe that here. This page will only display if you add content to it.
 
       ### DETAILS - Media
-      
+
       You can upload your own media to your project (such as example images for your help pages) so  you can link to it without an external host. To start uploading, drop an image into the box (or click it to bring up your file browser and select a file).
-      
+
       Once the image has uploaded, it will appear above the "Add an image" box. You can then copy the markdown text beneath the image into your project, or add another image.
-      
+
       Currently there is a limit of 20 uploaded images per project.
-      
+
       ### DETAILS - Visibility
-      
+
       This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](/lab-policies).
-      
+
       ### DETAILS - Collaborators
 
       Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project before it's public).
 
-      [![Project collaborator editor screenshot](./assets/how-to-lab/how-to-13.jpg)](./assets/how-to-lab/how-to-13.jpg)
+      [![Project collaborator editor screenshot](/assets/how-to-lab/how-to-13.jpg)](/assets/how-to-lab/how-to-13.jpg)
 
       _Owner_: The owner is the original project creator. There can be only one.
 
@@ -204,11 +204,11 @@ counterpart.registerTranslations 'en',
       ### DETAILS - Subject sets and manifest details, a.k.a. "What is a manifest?"
 
       *The condensed answer:*
-      
+
       A manifest is a file that tells our software how to combine the images you have into units of data (subjects) to be classified. The manifest also allows you to link your classifications back to the rest of your data. A manifest is formatted as a CSV file with 1 line per subject, with a unique identifier and the names of images to be associated with a subject on each row (with additional information often included in other fields as well). There is an example in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
 
       *The full answer:*
-       
+
       What we call a "manifest" is really just a plain text file with a specific format to each line.
 
       To understand the format, let's start with the first few lines from the Kitteh Zoo manifest:
@@ -218,7 +218,7 @@ counterpart.registerTranslations 'en',
           2,8300920648_d4a21bba59_z,Flickr,https://www.flickr.com/photos/aigle_dore/8300920648,Moyan Brenn,Creative Commons - share adapt attribute,grandfather kitteh has ear hair. a lot of it
           3,6713782851_82fc8c73e5_z.jpg,Flickr,https://www.flickr.com/photos/hellie55/6713782851,hehaden,Creative Commons - share adapt attribute,juvenile kittehs practice break-in at the catnip factory
 
-      The first line of the file is a header line that specifies the name of each of the manifest fields. In this case, our manifest has 7 fields (or columns), called "subject\_id", "image\_name", "origin", "link", "attribution", "license" and “#secret\_description”. They are separated by commas: this is what's known as a "comma separated values" file, or CSV file. 
+      The first line of the file is a header line that specifies the name of each of the manifest fields. In this case, our manifest has 7 fields (or columns), called "subject\_id", "image\_name", "origin", "link", "attribution", "license" and “#secret\_description”. They are separated by commas: this is what's known as a "comma separated values" file, or CSV file.
 
       After the first line, each row of the file contains information about 1 subject. The first field, corresponding with the "subject\_id" header, is a unique number that identifies the subject. The second field, which aligns with the "image\_name" header, contains the name of the image that's associated with that subject. These 2 fields are critically important: the image name is obviously important, and a unique identifier is important for matching your classifications to the rest of your data.
 
