@@ -31,6 +31,7 @@ module?.exports = React.createClass
     onClickReply: React.PropTypes.func # passed (user, comment) on click
     active: React.PropTypes.bool  # optional active switch: scroll window to comment and apply styling
     user: React.PropTypes.object  # Current user
+    index: React.PropTypes.number # The index of the comment in a discussion
 
   getDefaultProps: ->
     active: false
@@ -121,6 +122,9 @@ module?.exports = React.createClass
     </div>
 
   render: ->
+    # When the comment isn't in a discussion
+    isInDiscussion = @props.index
+
     # When the discussion is about a focus and this is the first comment on the page
     isFirstSubjectComment = @props.index is 0 and @props.data.discussion_focus_id
 
@@ -128,10 +132,14 @@ module?.exports = React.createClass
     isDifferentFocus = @props.data.focus_id and @props.data.focus_id isnt @props.data.discussion_focus_id
 
     # Render the focus if
+    #   - it's not in a discussion
     #   - it's not a focused discussion and this comment has a focus
     #   - it's a focused discussion and this is the first comment
     #   - it's a focused discussion and this comment is about a different focus
     shouldRenderFocus = @props.data.focus_id and (isFirstSubjectComment or isDifferentFocus)
+
+    # Always render the focus outside of a discussion
+    shouldRenderFocus = true unless isInDiscussion
 
     feedback = @renderFeedback()
     activeClass = if @props.active then 'active' else ''
