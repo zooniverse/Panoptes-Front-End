@@ -28,13 +28,13 @@ module.exports = React.createClass
 
   componentDidMount: ->
     if @checkIfOnHome() then document.addEventListener 'scroll', @onScroll
-    window.addEventListener 'pagechange', @onPageChange
+    window.addEventListener 'locationchange', @onLocationChange
 
   componentWillUnmount: ->
     document.removeEventListener 'scroll', @onScroll
-    window.removeEventListener 'pagechange', @onPageChange
+    window.removeEventListener 'locationchange', @onLocationChange
 
-  onPageChange: ->
+  onLocationChange: ->
     if @checkIfOnHome()
       document.addEventListener 'scroll', @onScroll
     else
