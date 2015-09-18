@@ -6,6 +6,7 @@ ClassificationSummary = require './classification-summary'
 tasks = require './tasks'
 {getSessionID} = require '../lib/session'
 preloadSubject = require '../lib/preload-subject'
+startTutorial = require '../lib/start-tutorial'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -79,6 +80,8 @@ Classifier = React.createClass
             @renderTask currentClassification, currentAnnotation, currentTask
           else # Classification is complete.
             @renderSummary currentClassification}
+          {if @props.project.configuration.tutorial?
+            <button type="button" onClick={startTutorial.bind(null, @props.project)}>Tutorial</button>}
         </div>
       </div>
     }</ChangeListener>
