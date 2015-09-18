@@ -6,13 +6,17 @@ module.exports = React.createClass
     defaultStep: 0
 
   getInitialState: ->
+    render: false
     step: @props.defaultStep
+
+  componentDidMount: ->
+    @refs.swiper.swipe.setup()
 
   render: ->
     childrenCount = React.Children.count @props.children
 
     <div className="step-through" {...@props}>
-      <ReactSwipe ref="swiper" startSlide={@state.step} continuous={false} callback={@handleStep.bind this, childrenCount}>
+      <ReactSwipe ref="swiper" className="step-through-content" startSlide={@state.step} continuous={false} callback={@handleStep.bind this, childrenCount}>
         {@props.children}
       </ReactSwipe>
 
@@ -21,7 +25,7 @@ module.exports = React.createClass
         <span className="step-through-pips">
           {for i in [0..childrenCount - 1]
             <label key={i} title="Step #{i + 1}">
-              <input type="radio" aria-label="Step #{i + 1} of #{childrenCount}" checked={i is @state.step} autoFocus={i is @state.step} onChange={@goTo.bind this, i} />{' '}
+              <input type="radio" aria-label="Step #{i + 1} of #{childrenCount}" checked={i is @state.step} autoFocus={i is @state.step} onChange={@goTo.bind this, i} />
               <span className="step-through-pip-label">{i + 1}</span>{' '}
             </label>}
         </span>

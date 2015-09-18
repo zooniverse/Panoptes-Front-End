@@ -9,6 +9,7 @@ preloadSubject = require '../lib/preload-subject'
 PromiseRenderer = require '../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
 isAdmin = require '../lib/is-admin'
+startTutorial = require '../lib/start-tutorial'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -82,6 +83,8 @@ Classifier = React.createClass
             @renderTask currentClassification, currentAnnotation, currentTask
           else # Classification is complete.
             @renderSummary currentClassification}
+          {if @props.project.configuration.tutorial?
+            <button type="button" onClick={startTutorial.bind(null, @props.project)}>Tutorial</button>}
         </div>
       </div>
     }</ChangeListener>

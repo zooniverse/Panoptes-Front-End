@@ -6,22 +6,22 @@ VIDEO_EXTENSIONS = ['mp4']
 
 module.exports = React.createClass
   getDefaultProps: ->
-    media: ''
+    src: ''
 
   render: ->
-    mediaExtension = @props.media.split('.').pop().toLowerCase()
+    srcExtension = @props.src.split('.').pop().toLowerCase()
 
     <div className="media-card" {...@props}>
-      {if @props.media
+      {if @props.src
         <div className="media-card-header">
-          {if mediaExtension in IMAGE_EXTENSIONS
-            <img className="media-card-media" src={@props.media} />
-          else if mediaExtension in VIDEO_EXTENSIONS
-            <video className="media-card-media" src={@props.media}>
+          {if srcExtension in IMAGE_EXTENSIONS
+            <img className="media-card-media" src={@props.src} />
+          else if srcExtension in VIDEO_EXTENSIONS
+            <video className="media-card-media" src={@props.src}>
               <p>Your browser does not support this video format.</p>
             </video>
           else
-            console.warn "Not sure how to render media #{@props.media}"
+            console.warn "Not sure how to render #{@props.src}"
             null}
         </div>}
 
