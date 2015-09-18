@@ -2,9 +2,6 @@
   font-size: 10px
   line-height: 20px
 
-  &:hover
-    z-index: 1
-
   .on-home-page &
     position: absolute
     width: 100%
@@ -43,7 +40,6 @@
 
       .avatar
         height: calc(1em + 1.5vw)
-        margin: -4em 0 -3.7em -0.3em
         vertical-align: middle
         width: calc(1em + 1.5vw)
 
@@ -67,45 +63,6 @@
             border-radius: 50%
       a
         color: white
-
-    .account-menu
-      background: FOREGROUND
-      border-radius: 4px
-      opacity: 0
-      display: flex
-      transition: opacity 0.25s ease-out
-      flex-direction: column
-      font-size: 14px
-      padding: 1.5em
-      pointer-events: none
-      position: absolute
-      right: 2em
-      white-space: no-wrap
-
-      &:before
-        border: solid
-        border-color: FOREGROUND transparent
-        border-width: 0 0.6em 0.6em 0.6em
-        top: -0.55em
-        content: ""
-        display: block
-        left: 70%
-        position: absolute
-
-      a
-        color: white
-
-      .sign-out-button
-        text-align: left
-
-    &:hover
-      .account-menu
-        opacity: 1
-        pointer-events: auto
-    
-    .account-menu[aria-hidden=false]
-      opacity: 1
-      pointer-events: auto
 
 .main-title
   align-items: center
