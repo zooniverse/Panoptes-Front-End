@@ -11,6 +11,7 @@ projectSection = require '../talk/lib/project-section'
 parseSection = require '../talk/lib/parse-section'
 QuickSubjectCommentForm= require '../talk/quick-subject-comment-form'
 {Navigation} = require 'react-router'
+{Markdown} = require 'markdownz'
 alert = require '../lib/alert'
 SignInPrompt = require '../partials/sign-in-prompt'
 
@@ -46,7 +47,7 @@ module?.exports = React.createClass
       <div className="talk-module">
         <strong>{data.user_display_name}</strong>
         <br />
-        <span>{data.body}</span>
+        <Markdown project={@props.project}>{data.body}</Markdown>
       </div>
     </CommentLink>
 
