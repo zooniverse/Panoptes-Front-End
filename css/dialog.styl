@@ -25,7 +25,7 @@
   position: absolute
   top: 40%
   transform: translate(-50%, -40%)
-
+    
 .dialog-controls
   height: 0
   line-height: 1
@@ -47,8 +47,15 @@
       opacity: 1
 
 .dialog-content
-  overflow: auto
+  overflow: hidden
   max-width: 800px
 
+  &:hover
+    overflow: auto
+    padding-right: 0.1px // Hack to get this to work
+    
+  .content-container
+    margin-right: calc(3vw + 15px) // Give room for the scroll bar
+    
   img
     max-width: 100%
