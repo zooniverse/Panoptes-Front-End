@@ -27,7 +27,8 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      <p className="form-help">Get your project's data exports</p>
+      <p className="form-label">Project data exports</p>
+      <p className="form-help">Please note that the Zooniverse will process at most 1 of each export within a 24 hour period</p>
       <div className="columns-container">
         <div>
           Project Data<br />
