@@ -294,11 +294,13 @@ module.exports = React.createClass
             <ul key={category} className="publications-list">
               {for project in projects
                 <div key={project.name || project.slug}>
-                  <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug)} pending={null} catch={null}>{([fetchedProject]) =>
-                    if fetchedProject?
-                      <h3 className="project-name">{fetchedProject.display_name}</h3>
-                  }</PromiseRenderer>
-                  {if project.name? then <h3 className="project-name">{project.name}</h3>}<span className="publication-count">{' '}({project.publications.length})</span>
+                  <div>
+                    <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug)} pending={null} catch={null}>{([fetchedProject]) =>
+                      if fetchedProject?
+                        <h3 className="project-name">{fetchedProject.display_name}</h3>
+                    }</PromiseRenderer>
+                    {if project.name? then <h3 className="project-name">{project.name}</h3>}<span className="publication-count">{' '}({project.publications.length})</span>
+                  </div>
                   {projectAvatar = @getAvatar(project)
                   project.publications.map (publication) =>
                     i = Math.random()
