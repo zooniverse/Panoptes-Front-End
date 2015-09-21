@@ -5,8 +5,17 @@ Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 merge = require 'lodash.merge'
+{Markdown} = require 'markdownz'
 
-PAGE_SIZE = require('./config.coffee').discussionPageSize
+PAGE_SIZE = require('./config').discussionPageSize
+
+truncate = (string, ending = '', length = 80) ->
+  string.trim().slice(0, (length - ending.length)) + ending
+
+latestCommentPreview = (discussion) ->
+  container = document.createElement('span')
+  React.render(<Markdown content={discussion.latest_comment?.body} />, container)
+  truncate(container.textContent, '...')
 
 module?.exports = React.createClass
   displayName: 'TalkLatestCommentComment'
@@ -15,9 +24,11 @@ module?.exports = React.createClass
     project: React.PropTypes.object
     discussion: React.PropTypes.object
     title: React.PropTypes.bool
+    preview: React.PropTypes.bool
 
   getDefaultProps: ->
     title: false
+    preview: false
 
   projectPrefix: ->
     if @props.project then 'project-' else ''
@@ -60,5 +71,9 @@ module?.exports = React.createClass
           query={linkQuery}>
           {timeAgo(comment.created_at)}
         </Link>
+
+        {if @props.preview
+          <span>{' '}{latestCommentPreview(discussion)}</span>
+          }
       </div>
     </div>
