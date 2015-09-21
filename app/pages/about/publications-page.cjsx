@@ -322,6 +322,6 @@ module.exports = React.createClass
 
   getAvatar: (project) ->
     <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug).get('avatar')} pending={null}
-      catch={=> <img src="./assets/simple-pattern.jpg" />}
+      catch={=> <img src="/assets/simple-pattern.jpg" />}
       then={([avatar]) =>
         <img src={avatar.src} alt="Project Avatar" />} />
