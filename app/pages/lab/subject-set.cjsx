@@ -21,6 +21,10 @@ MAX_FILE_SIZE = 600000
 announceSetChange = ->
   apiClient.type('subject_sets').emit 'add-or-remove'
 
+isAdmin = ->
+  console.log(localStorage.getItem('adminFlag') || false)
+  localStorage.getItem('adminFlag') || false
+
 SubjectSetListingRow = React.createClass
   displayName: 'SubjectSetListingRow'
 
@@ -152,7 +156,7 @@ EditSubjectSetPage = React.createClass
       <hr />
 
       <p>
-        <UploadDropTarget accept="text/csv, text/tab-separated-values, image/*" multiple onSelect={@handleFileSelection}>
+        <UploadDropTarget accept={"text/csv, text/tab-separated-values, image/*#{", video/*" if isAdmin()}"} multiple onSelect={@handleFileSelection}>
           <strong>Drag-and-drop or click to upload manifests and subject images here.</strong><br />
           Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
           Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers.<br />
@@ -214,8 +218,8 @@ EditSubjectSetPage = React.createClass
       if file.type in ['text/csv', 'text/tab-separated-values']
         @_addManifest file
         gotManifest = true
-      else if file.type.indexOf('image/') is 0
-        if file.size < MAX_FILE_SIZE
+      else if file.type.indexOf('image/') is 0 or (isAdmin() and file.type.indexOf('video/') is 0)
+        if file.size < MAX_FILE_SIZE or isAdmin()
           @state.files[file.name] = file
           gotFile = true
         else
@@ -247,7 +251,6 @@ EditSubjectSetPage = React.createClass
     reader.readAsText file
 
   subjectsFromManifest: (data, errors, fileName) ->
-    console.log(data, errors, fileName)
     metadatas = for rawData in data
       cleanData = {}
       for key, value of rawData
@@ -261,12 +264,14 @@ EditSubjectSetPage = React.createClass
         subjects.push {locations, metadata}
 
     @state.manifests[fileName] = {errors, subjects}
+    console.log(@state.manifests)
     @forceUpdate()
 
   _findFilesInMetadata: (metadata) ->
     filesInMetadata = []
     for key, value of metadata
-      filesInValue = value.match? ///([^#{INVALID_FILENAME_CHARS.join ''}]+(?:#{VALID_SUBJECT_EXTENSIONS.join '|'}))///gi
+      extensions = if isAdmin() then '' else "(?:#{VALID_SUBJECT_EXTENSIONS.join '|'})"
+      filesInValue = value.match? ///([^#{INVALID_FILENAME_CHARS.join ''}]+#{extensions})///gi
       if filesInValue?
         filesInMetadata.push filesInValue...
     filesInMetadata
