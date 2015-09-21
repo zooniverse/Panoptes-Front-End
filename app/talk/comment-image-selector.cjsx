@@ -16,11 +16,15 @@ module?.exports = React.createClass
 
   setRecents: ->
     @props.user.get('recents', {sort: '-created_at'})
-      .then (subjects) => @setState {subjects}
+      .then (subjects) =>
+        subject.type = 'recent' for subject in subjects
+        @setState {subjects}
 
   setQuery: (id) ->
     apiClient.type('subjects').get({id: id})
-      .then (subjects) => @setState {subjects}
+      .then (subjects) =>
+        subject.type = 'subject' for subject in subjects
+        @setState {subjects}
 
   onSubmitSearch: (e) ->
     e.preventDefault()
@@ -30,9 +34,12 @@ module?.exports = React.createClass
     else
       @setQuery(query)
 
-  setFocusImage: (recent) ->
-    recent.get('subject').then (subject) =>
-      @props.onSelectImage(subject)
+  setFocusImage: (image) ->
+    if image.type is 'subject'
+      @props.onSelectImage image
+    else if image.type is 'recent'
+      image.get('subject').then (subject) =>
+        @props.onSelectImage subject
 
   imageItem: (data, i) ->
     <div key={data.id} className="talk-comment-image-item">
