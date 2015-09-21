@@ -8,7 +8,7 @@ Paginator = require './paginator'
 take = (n, arr) -> arr.slice(0, n)
 
 filterNonRedirected = (projects) ->
-  projects.filter (p) -> p and (not p.redirect?)
+  projects.filter (p) -> p and (not p.redirect)
 
 module?.exports = React.createClass
   displayName: 'ProjectLinker'
