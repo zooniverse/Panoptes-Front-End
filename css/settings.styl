@@ -1,4 +1,4 @@
-.settings-page
+.settings-page, .admin-page
   display: flex
   flex-direction: column
   flex-wrap: wrap
@@ -11,10 +11,10 @@
     font-size: 2.4em
     font-weight: 400
 
-  .settings-side-bar
+  .settings-side-bar, .admin-side-bar
     border-right: solid thin rgba(0, 0, 0, 0.15)
 
-    .settings-button
+    .settings-button, .admin-button
       color: #5a5a5a
       font-size: 1.4em
       margin: 0 0 2.025em
@@ -23,15 +23,37 @@
       &.active
         font-weight: 700
 
-  .settings-content
+  .settings-content, .admin-content
     display: inline-flex
     flex-wrap: wrap
     margin-top: 5em
 
-    .settings-tab-content
+    .settings-tab-content, .admin-tab-content
       flex: 2 1 80%
       font-size: 15px
       line-height: 1.5
+
+      .project-status-filters
+        padding-left: 2em
+
+        a
+          text-decoration: none
+          margin-right: 0.5em
+
+      .project-status-list
+        padding: 2em
+        display: flex
+        flex-wrap: wrap
+
+        .stats-project-icon
+          margin-right: .5em
+
+      .project-status
+        padding-left: 2em
+
+        ul
+          list-style-type: none
+          padding: 0
 
       .talk-email-preferences
         th
@@ -58,3 +80,5 @@
             height: 150px
             max-width: 540px
             width: 100%
+
+    

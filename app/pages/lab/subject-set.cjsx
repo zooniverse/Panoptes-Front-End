@@ -11,6 +11,7 @@ SubjectViewer = require '../../components/subject-viewer'
 SubjectUploader = require '../../partials/subject-uploader'
 UploadDropTarget = require '../../components/upload-drop-target'
 ManifestView = require '../../components/manifest-view'
+isAdmin = require '../../lib/is-admin'
 
 NOOP = Function.prototype
 
@@ -20,10 +21,6 @@ MAX_FILE_SIZE = 600000
 
 announceSetChange = ->
   apiClient.type('subject_sets').emit 'add-or-remove'
-
-isAdmin = ->
-  console.log(localStorage.getItem('adminFlag') || false)
-  localStorage.getItem('adminFlag') || false
 
 SubjectSetListingRow = React.createClass
   displayName: 'SubjectSetListingRow'

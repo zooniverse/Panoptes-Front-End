@@ -8,6 +8,7 @@ AccountBar = require './account-bar'
 LoginBar = require './login-bar'
 PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
+isAdmin = require '../lib/is-admin'
 
 counterpart.registerTranslations 'en',
   mainNav:
@@ -19,6 +20,7 @@ counterpart.registerTranslations 'en',
     daily: 'Daily Zooniverse'
     blog: 'Blog'
     lab: 'Build a project'
+    admin: 'Admin'
 
 module.exports = React.createClass
   displayName: 'MainHeader'
@@ -59,6 +61,8 @@ module.exports = React.createClass
           <a href="http://blog.zooniverse.org/"  className="main-nav-item" target="_blank"><Translate content="mainNav.blog" /></a>
           <hr />
           <Link to="lab" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
+          {if isAdmin()
+            <Link to="admin" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.admin" /></Link>}
         </nav>
         {if @props.user?
           <AccountBar user={@props.user} />

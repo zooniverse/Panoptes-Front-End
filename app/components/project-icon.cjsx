@@ -8,6 +8,7 @@ module.exports = React.createClass
     project: null
     badge: ''
     defaultAvatarSrc: '/assets/simple-avatar.jpg'
+    onClick: null
 
   getInitialState: ->
     href: ''
@@ -40,8 +41,11 @@ module.exports = React.createClass
       <div key="badge" className="badge">{@props.badge}</div> if @props.badge
     ]
 
-    if !!@props.project.redirect
-      <a href={@props.project.redirect} className="stats-project-icon">{content}</a>
+    if @props.linkTo
+      if !!@props.project.redirect
+        <a href={@props.project.redirect} className="stats-project-icon">{content}</a>
+      else
+        [owner, name] = @props.project.slug.split '/'
+        <Link to="project-home" params={owner: owner, name: name} className="stats-project-icon">{content}</Link>
     else
-      [owner, name] = @props.project.slug.split '/'
-      <Link to="project-home" params={owner: owner, name: name} className="stats-project-icon">{content}</Link>
+      <span className="stats-project-icon">{content}</span>
