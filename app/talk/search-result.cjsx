@@ -27,7 +27,7 @@ module.exports = React.createClass
 
     <div className="talk-search-result talk-module">
       <CommentLink comment={comment}>{comment.discussion_title}</CommentLink>
-      <Markdown content={comment.body} />
+      <Markdown content={comment.body} project={@props.project} />
       {if section is 'zooniverse'
         <DiscussionPreview {...@props} discussion={discussion} comment={comment} />
       else
