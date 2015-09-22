@@ -22,11 +22,7 @@ module.exports = React.createClass
 
     query[@props.query.filterBy] = true unless query.slug?
 
-    apiClient.type('projects').get(query).then (projects) =>
-      projects
-
-  toggleActive: (project, e) ->
-    e.preventDefault()
+    apiClient.type('projects').get(query)
 
   render: ->
     <div className="project-status-page">
@@ -49,9 +45,10 @@ module.exports = React.createClass
                 </Link>
               </div>}
           </div>
-          <Paginator
-            page={+@props.query.page}
-            pageCount={projects[0].getMeta().page_count} />
+          {if projects
+            <Paginator
+              page={+@props.query.page}
+              pageCount={projects[0].getMeta().page_count} />}
         </div>
       }</PromiseRenderer>
     </div>
