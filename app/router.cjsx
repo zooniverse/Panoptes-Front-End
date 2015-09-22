@@ -102,6 +102,12 @@ routes =
   <Route name="lab-policies" path="lab-policies/?" handler={require './pages/lab/lab-policies'} />
   <Route name="lab-how-to" path="lab-how-to/?" handler={require './pages/lab/how-to-page'} />
 
+  <Route name="admin" path="admin/?" handler={require './pages/admin'}>
+    <DefaultRoute name="admin-create" handler={require './pages/admin/create'} />
+    <Route name="admin-project-list" path="project_status/?" handler={require './pages/admin/project-status-list'} />
+    <Route name="admin-project-status" path="project_status/:owner/:name/?" handler={require './pages/admin/project-status'} />
+  </Route>
+
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={require './pages/not-found'} />
 

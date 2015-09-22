@@ -1,4 +1,4 @@
 apiClient = require '../api/client'
 
-module.exports =  ->
+module.exports = ->
   !!apiClient.params.admin
