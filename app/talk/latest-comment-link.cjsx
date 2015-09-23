@@ -10,6 +10,7 @@ merge = require 'lodash.merge'
 PAGE_SIZE = require('./config').discussionPageSize
 
 truncate = (string, ending = '', length = 80) ->
+  return string if string.trim().length <= length
   string.trim().slice(0, (length - ending.length)) + ending
 
 latestCommentText = (discussion) ->
@@ -67,6 +68,7 @@ module?.exports = React.createClass
 
         <Link
           to="#{@projectPrefix()}talk-discussion"
+          className="latest-comment-time"
           params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
           query={linkQuery}>
           {timeAgo(comment.created_at)}
