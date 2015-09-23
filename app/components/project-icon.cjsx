@@ -9,6 +9,7 @@ module.exports = React.createClass
     badge: ''
     defaultAvatarSrc: '/assets/simple-avatar.jpg'
     onClick: null
+    linkTo: true
 
   getInitialState: ->
     href: ''
