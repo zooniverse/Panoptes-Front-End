@@ -4,6 +4,7 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 PromiseRenderer = require '../../components/promise-renderer'
 {Link} = require 'react-router'
+ProjectMetadata = require './metadata'
 
 module.exports = React.createClass
   displayName: 'ProjectHomePage'
@@ -57,4 +58,6 @@ module.exports = React.createClass
         <h3 className="about-project">About {@props.project.display_name}</h3>
         <Markdown project={@props.project}>{@props.project.introduction ? ''}</Markdown>
       </div>
+
+      <ProjectMetadata project={@props.project} />
     </div>
