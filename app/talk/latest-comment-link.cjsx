@@ -5,8 +5,18 @@ Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 merge = require 'lodash.merge'
+{Markdown} = require 'markdownz'
 
-PAGE_SIZE = require('./config.coffee').discussionPageSize
+PAGE_SIZE = require('./config').discussionPageSize
+
+truncate = (string, ending = '', length = 80) ->
+  return string if string.trim().length <= length
+  string.trim().slice(0, (length - ending.length)) + ending
+
+latestCommentText = (discussion) ->
+  container = document.createElement('span')
+  React.render(<Markdown content={discussion.latest_comment?.body} />, container)
+  container.textContent
 
 module?.exports = React.createClass
   displayName: 'TalkLatestCommentComment'
@@ -15,9 +25,11 @@ module?.exports = React.createClass
     project: React.PropTypes.object
     discussion: React.PropTypes.object
     title: React.PropTypes.bool
+    preview: React.PropTypes.bool
 
   getDefaultProps: ->
     title: false
+    preview: false
 
   projectPrefix: ->
     if @props.project then 'project-' else ''
@@ -56,9 +68,21 @@ module?.exports = React.createClass
 
         <Link
           to="#{@projectPrefix()}talk-discussion"
+          className="latest-comment-time"
           params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
           query={linkQuery}>
           {timeAgo(comment.created_at)}
         </Link>
+
+        {if @props.preview
+          <Link
+            className="latest-comment-preview-link"
+            to="#{@projectPrefix()}talk-discussion"
+            params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
+            query={linkQuery}>
+
+            {' '}{truncate(latestCommentText(discussion), '...')}
+          </Link>
+          }
       </div>
     </div>
