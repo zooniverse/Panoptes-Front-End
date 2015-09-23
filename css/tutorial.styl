@@ -1,13 +1,6 @@
 .modal-form.tutorial-dialog
   padding: 0
 
-  .media-card-media
-    display: block
-    max-width: 100%
-
-  .media-card-content
-    @extends .content-container
-
 .tutorial-steps
   display: flex
   flex-direction: column
@@ -22,16 +15,32 @@
   > .step-through-controls
     text-align: center
 
-    > button
-      @extends $reset-button
-      vertical-align: middle
+.media-card.tutorial-step
+  > .media-card-content
+    @extends .content-container
 
-.step-through-pips input
+.media-card-media
+  display: block
+  max-width: 100%
+
+.step-through-direction
+  @extends $reset-button
+  vertical-align: middle
+
+.step-through-pips
+  margin: 0 0.4em
+
+.step-through-pip
+  cursor: pointer
+  padding: 0.2em 0.4em
+
+.step-through-pip-input
+  cursor: pointer
   position: absolute
-  visibility: hidden
+  opacity: 0
 
-.step-through-pip-label
-  border: 0.2em solid gray
+.step-through-pip-number
+  border: 0.2em solid
   border-radius: 50%
   cursor: pointer
   display: inline-block
@@ -40,6 +49,9 @@
   text-indent: 2em
   vertical-align: middle
   width: 0.5em
+
+  :focus + &
+    box-shadow: 0 0 1px 1px MAIN_HIGHLIGHT
 
   :checked + &
     background: currentColor

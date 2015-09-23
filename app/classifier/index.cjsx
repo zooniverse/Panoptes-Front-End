@@ -83,7 +83,7 @@ Classifier = React.createClass
             @renderTask currentClassification, currentAnnotation, currentTask
           else # Classification is complete.
             @renderSummary currentClassification}
-          {if @props.project.configuration.tutorial?
+          {if @props.project?.configuration.tutorial?
             <button type="button" onClick={startTutorial.bind(null, @props.project)}>Tutorial</button>}
         </div>
       </div>

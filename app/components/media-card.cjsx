@@ -11,7 +11,7 @@ module.exports = React.createClass
   render: ->
     srcExtension = @props.src.split('.').pop().toLowerCase()
 
-    <div className="media-card" {...@props}>
+    <div {...@props} className={"media-card #{@props.className}".trim()}>
       {if @props.src
         <div className="media-card-header">
           {if srcExtension in IMAGE_EXTENSIONS
