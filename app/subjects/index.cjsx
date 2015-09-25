@@ -69,7 +69,7 @@ module?.exports = React.createClass
         <section>
           <h1>Subject {subject.id}</h1>
 
-          <SubjectViewer subject={subject} user={@props.user}/>
+          <SubjectViewer subject={subject} user={@props.user} project={@props.project}/>
 
           <PromiseRenderer promise={talkClient.type('comments').get({focus_id: subject.id, focus_type: 'Subject'})}>{(comments) =>
             if comments.length
