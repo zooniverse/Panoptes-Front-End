@@ -38,6 +38,33 @@ ProjectToggle = React.createClass
       </label>
     </span>
 
+WorkflowToggle = React.createClass
+  displayName: "WorkflowToggle"
+
+  mixins: [SetToggle]
+
+  getDefaultProps: ->
+    workflow: null
+    project: null
+    field: null
+
+  getInitialState: ->
+    error: null
+    setting: {}
+
+  setterProperty: 'workflow'
+
+  render: ->
+    workflow = @props.workflow
+    setting = workflow[@props.field]
+    <span>
+      { workflow.id } - { workflow.display_name}:
+      <label style={whiteSpace: 'nowrap'}>
+        <input type="checkbox" name={@props.field} value={setting} checked={setting} onChange={@set.bind this, @props.field, not setting} />
+        Active
+      </label>
+    </span>
+
 ProjectStatus = React.createClass
   displayName: "ProjectStatus"
 
@@ -57,6 +84,20 @@ ProjectStatus = React.createClass
           <li>Launch Requested: <ProjectToggle project={@props.project} field="launch_requested" /></li>
           <li>Launch Approved: <ProjectToggle project={@props.project} field="launch_approved" /></li>
         </ul>
+        <h4>Workflow Settings</h4>
+        <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
+          if workflows.length is 0
+            <div className="workflow-status-list">No workflows found</div>
+          else
+            <div className="workflow-status-list">
+              <ul>
+                {workflows.map (workflow) =>
+                  <li key={workflow.id}>
+                    <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
+                  </li>}
+              </ul>
+           </div>
+        }</PromiseRenderer>
         <hr />
         <h4>Recent Status Changes</h4>
         <PromiseRenderer promise={@props.project.get 'versions', page_size: 10}>{ (versions) =>
