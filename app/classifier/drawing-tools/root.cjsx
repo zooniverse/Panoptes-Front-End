@@ -5,11 +5,12 @@ ChangeListener = require '../../components/change-listener'
 STROKE_WIDTH = 1.5
 SELECTED_STROKE_WIDTH = 2.5
 
-NON_MODAL_STYLE =
-  bottom: null
-  height: 0
-  right: null
-  width: '100%' # `0` makes for too-skinny children.
+SEMI_MODAL_FORM_STYLE =
+  pointerEvents: 'all'
+
+SEMI_MODAL_UNDERLAY_STYLE =
+  pointerEvents: 'none'
+  backgroundColor: 'rgba(0, 0, 0, 0.3)'
 
 module.exports = React.createClass
   displayName: 'DrawingToolRoot'
@@ -53,7 +54,6 @@ module.exports = React.createClass
 
       {if toolProps.selected and toolProps.details? and toolProps.details.length isnt 0
         tasks = require '../tasks'
-        <StickyModalForm ref="detailsForm" underlayStyle={NON_MODAL_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
 
         detailsAreComplete = toolProps.details.every (detailTask, i) =>
           TaskComponent = tasks[detailTask.type]
@@ -62,6 +62,7 @@ module.exports = React.createClass
           else
             true
 
+        <StickyModalForm ref="detailsForm" style={SEMI_MODAL_FORM_STYLE} underlayStyle={SEMI_MODAL_UNDERLAY_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
           {for detailTask, i in toolProps.details
             detailTask._key ?= Math.random()
             TaskComponent = tasks[detailTask.type]
