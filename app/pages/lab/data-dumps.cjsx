@@ -12,6 +12,7 @@ counterpart.registerTranslations 'en',
     subjectExport: "Request new subject export"
     workflowExport: "Request new workflow export"
     workflowContentsExport: "Request new workflow contents export"
+    aggregationExport: "Request new aggregation export"
     commentsExport: "Request new talk comments export"
     tagsExport: "Request new talk tags export"
 
@@ -55,6 +56,13 @@ module.exports = React.createClass
               project={@props.project}
               buttonKey="projectDetails.workflowContentsExport"
               exportType="workflow_contents_export"  />
+          </p>
+          <p>
+            <DataExportButton
+              project={@props.project}
+              buttonKey="projectDetails.aggregationExport"
+              contentType="application/x-gzip"
+              exportType="aggregations_export"  />
           </p>
           <hr />
 

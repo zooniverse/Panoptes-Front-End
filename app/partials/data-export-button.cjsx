@@ -14,9 +14,12 @@ module.exports = React.createClass
   exportGet: ->
     @_exportsGet or= @props.project.get(@props.exportType).catch( -> [])
 
+  exportContentType: ->
+    @props.contentType or 'text/csv'
+
   requestDataExport: ->
     @setState exportError: null
-    apiClient.post @props.project._getURL(@props.exportType), media: content_type: 'text/csv'
+    apiClient.post @props.project._getURL(@props.exportType), media: content_type: @exportContentType()
       .then =>
         @_exportsGet = null
         @setState exportRequested: true
