@@ -81,7 +81,7 @@ module.exports = React.createClass
         <Markdown>{answer.label}</Markdown>
       </label>
 
-    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} />
+    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
 
   handleChange: (index, e) ->
     if e.target.checked
