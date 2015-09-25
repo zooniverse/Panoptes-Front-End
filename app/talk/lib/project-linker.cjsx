@@ -47,7 +47,7 @@ module?.exports = React.createClass
     [owner, name] = project.slug.split('/')
 
     <div key={project.id}>
-      {if project.redirect?
+      {if project.redirect
         <a href={project.redirect} title={project.redirect}>{project.display_name}</a>
       else
         <Link to="project-talk" params={{owner, name}}>
