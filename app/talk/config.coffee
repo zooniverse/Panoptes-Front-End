@@ -7,3 +7,5 @@ module?.exports =
   boardPageSize: 10
 
   moderationsPageSize: 20
+
+  recentsPageSize: 20

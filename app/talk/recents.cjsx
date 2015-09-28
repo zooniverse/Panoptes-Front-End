@@ -33,6 +33,7 @@ module?.exports = React.createClass
       # Occurs before the dom has rendered (default: true)
       true
 
+    params.page_size = talkConfig.recentsPageSize
     params.subject_default = false unless showNotes or @props.params.board
 
     if @props.params.board
