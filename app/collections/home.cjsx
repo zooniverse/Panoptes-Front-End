@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 CollectionCreateForm = require './create-form'
 PromiseRenderer = require '../components/promise-renderer'
 

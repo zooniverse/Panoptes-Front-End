@@ -3,14 +3,14 @@ Comment = require './comment'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
-Router = require 'react-router'
+Router = require '@edpaget/react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 DisplayRoles = require './lib/display-roles'
@@ -61,8 +61,7 @@ module?.exports = React.createClass
 
         if page isnt @props.query.page
           @props.query.page = page
-          [path, _] = @getPath().split('?')
-          @replaceWith path, @props.params, @props.query
+          @replaceWith @getPath(), @props.params, @props.query
 
       @setComments(@props.query.page ? 1)
 

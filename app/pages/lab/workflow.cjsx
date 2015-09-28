@@ -6,7 +6,7 @@ WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
-{Navigation} = require 'react-router'
+{Navigation} = require '@edpaget/react-router'
 tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 

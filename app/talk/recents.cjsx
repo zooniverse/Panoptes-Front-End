@@ -1,6 +1,6 @@
 React = require 'react'
 Comment = require './comment'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 Loading = require '../components/loading-indicator'

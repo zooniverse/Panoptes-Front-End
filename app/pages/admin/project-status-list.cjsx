@@ -3,7 +3,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 Paginator = require '../../talk/lib/paginator'
 ProjectIcon = require '../../components/project-icon'
-{Navigation, Link} = require 'react-router'
+{Navigation, Link} = require '@edpaget/react-router'
 
 module.exports = React.createClass
   displayName: "ProjectStatusPage"

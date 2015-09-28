@@ -4,7 +4,7 @@ PrivateMessageForm = require '../../talk/private-message-form'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 Translate = require 'react-translate-component'
-{Link, RouteHandler} = require 'react-router'
+{Link, RouteHandler} = require '@edpaget/react-router'
 talkClient = require '../../api/talk'
 
 counterpart.registerTranslations 'en',
