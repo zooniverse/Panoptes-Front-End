@@ -63,6 +63,7 @@ module?.exports = React.createClass
 
   onSelectImage: (imageData) ->
     @setState subject: imageData
+    @hideChildren()
 
   onClearImageClick: (e) ->
     @setState subject: null
