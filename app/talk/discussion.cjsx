@@ -264,9 +264,9 @@ module?.exports = React.createClass
                   <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
                     <div>
                       <p><strong>Board:</strong></p>
-                      <select onChange={@onChangeSelect}>
+                      <select value={discussion.board_id}>
                         {boards.map (board, i) =>
-                          <option key={board.id} value={board.id} selected={board.id is discussion.board_id}>{board.title}</option>
+                          <option key={board.id} value={board.id}>{board.title}</option>
                           }
                       </select>
                     </div>
