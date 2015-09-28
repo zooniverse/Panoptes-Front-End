@@ -35,20 +35,23 @@ module.exports = React.createClass
       </nav>
 
       <PromiseRenderer promise={@getProjects()}>{(projects) =>
-        <div>
-          <div className="project-status-list">
-            {projects.map (project) =>
-              [owner, name] = project.slug.split('/')
-              <div key={project.id}>
-                <Link to="admin-project-status"  params={{owner, name}}>
-                  <ProjectIcon linkTo={false} project={project} />
-                </Link>
-              </div>}
-          </div>
-          {if projects
-            <Paginator
-              page={+@props.query.page}
-              pageCount={projects[0].getMeta().page_count} />}
-        </div>
+        if projects.length is 0
+          <div className="project-status-list">No projects found for this filter</div>
+         else
+           <div>
+             <div className="project-status-list">
+               {projects.map (project) =>
+                 [owner, name] = project.slug.split('/')
+                 <div key={project.id}>
+                   <Link to="admin-project-status" params={{owner, name}}>
+                     <ProjectIcon linkTo={false} project={project} />
+                   </Link>
+                 </div>}
+             </div>
+             <Paginator
+               page={+@props.query.page}
+               pageCount={projects[0]?.getMeta().page_count} />
+            </div>
+
       }</PromiseRenderer>
     </div>
