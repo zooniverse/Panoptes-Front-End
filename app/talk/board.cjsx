@@ -32,6 +32,7 @@ module?.exports = React.createClass
     discussionsMeta: {}
     newDiscussionOpen: false
     loading: true
+    moderationOpen: false
 
   getDefaultProps: ->
     query: page: 1
@@ -135,45 +136,54 @@ module?.exports = React.createClass
     <div className="talk-board">
       <h1 className="talk-page-header">{board?.title}</h1>
       {if board && @props.user?
-        <Moderation section={board.section} user={@props.user}>
-          <div>
-            <h2>Moderator Zone:</h2>
-
-            <Link
-              to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
-              params={
-                if (@props.params?.owner and @props.params?.name)
-                  {owner: @props.params.owner, name: @props.params.name}
-                else
-                  {}
-              }>
-              View Reported Comments
-            </Link>
-
-            {if board?.title
-              <form className="talk-edit-board-form" onSubmit={@onEditBoard}>
-                <h3>Edit Title:</h3>
-                <input defaultValue={board?.title}/>
-
-                <h3>Edit Description</h3>
-                <textarea defaultValue={board?.description}></textarea>
-
-                <h4>Can Read:</h4>
-                <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
-
-                <h4>Can Write:</h4>
-                <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
-
-                <button type="submit">Update</button>
-              </form>}
-
-            <button onClick={@onClickDeleteBoard}>
-              Delete this board <i className="fa fa-close" />
+        <div className="talk-moderation">
+          <Moderation user={@props.user} section={@props.section}>
+            <button onClick={=> @setState moderationOpen: !@state.moderationOpen}>
+              <i className="fa fa-#{if @state.moderationOpen then 'close' else 'warning'}" /> Moderator Controls
             </button>
+          </Moderation>
 
-            <StickyDiscussionList board={board} />
-          </div>
-        </Moderation>}
+          {if @state.moderationOpen
+            <div className="talk-moderation-children talk-module">
+              <h2>Moderator Zone:</h2>
+
+              <Link
+                to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
+                params={
+                  if (@props.params?.owner and @props.params?.name)
+                    {owner: @props.params.owner, name: @props.params.name}
+                  else
+                    {}
+                }>
+                View Reported Comments
+              </Link>
+
+              {if board?.title
+                <form className="talk-edit-board-form" onSubmit={@onEditBoard}>
+                  <h3>Edit Title:</h3>
+                  <input defaultValue={board?.title}/>
+
+                  <h3>Edit Description</h3>
+                  <textarea defaultValue={board?.description}></textarea>
+
+                  <h4>Can Read:</h4>
+                  <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+
+                  <h4>Can Write:</h4>
+                  <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+
+                  <button type="submit">Update</button>
+                </form>}
+
+              <button onClick={@onClickDeleteBoard}>
+                Delete this board <i className="fa fa-close" />
+              </button>
+
+              <StickyDiscussionList board={board} />
+            </div>
+          }
+        </div>
+        }
 
       {if @props.user?
         <section>
