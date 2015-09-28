@@ -17,6 +17,7 @@ module?.exports = React.createClass
           Zooniverse Talk
         </Link>
       </h1>
+
       <TalkBreadcrumbs {...@props} />
 
       <form className="talk-search-form" onSubmit={ @onSearchSubmit }>

@@ -31,6 +31,7 @@ module?.exports = React.createClass
   getInitialState: ->
     boards: []
     loading: true
+    moderationOpen: false
 
   componentWillMount: ->
     sugarClient.subscribeTo('zooniverse') if @props.section is 'zooniverse'
@@ -49,36 +50,45 @@ module?.exports = React.createClass
   render: ->
     <div className="talk-home">
       {if @props.user?
-        <Moderation section={@props.section} user={@props.user}>
-          <div>
-            <h2>Moderator Zone:</h2>
+        <div className="talk-moderation">
+          <Moderation user={@props.user} section={@props.section}>
+            <button onClick={=> @setState moderationOpen: !@state.moderationOpen}>
+              <i className="fa fa-#{if @state.moderationOpen then 'close' else 'warning'}" /> Moderator Controls
+            </button>
+          </Moderation>
 
-            {if @props.section isnt 'zooniverse'
-              <CreateSubjectDefaultButton
-                section={@props.section}
-                onCreateBoard={=> @setBoards()} />
-              }
+          {if @state.moderationOpen
+            <div className="talk-moderation-children talk-module">
+              <h2>Moderator Zone:</h2>
 
-            <ZooniverseTeam user={@props.user} section={@props.section}>
-              <button className="link-style" type="button" onClick={=> alert (resolve) -> <AddZooTeamForm/>}>
-                Invite someone to the Zooniverse team
-              </button>
-            </ZooniverseTeam>
+              {if @props.section isnt 'zooniverse'
+                <CreateSubjectDefaultButton
+                  section={@props.section}
+                  onCreateBoard={=> @setBoards()} />
+                }
 
-            <Link
-              to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
-              params={
-                if (@props.params?.owner and @props.params?.name)
-                  {owner: @props.params.owner, name: @props.params.name}
-                else
-                  {}
-              }>
-              View Reported Comments
-            </Link>
+              <ZooniverseTeam user={@props.user} section={@props.section}>
+                <button className="link-style" type="button" onClick={=> alert (resolve) -> <AddZooTeamForm/>}>
+                  Invite someone to the Zooniverse team
+                </button>
+              </ZooniverseTeam>
 
-            <CreateBoardForm section={@props.section} onSubmitBoard={=> @setBoards()}/>
-          </div>
-        </Moderation>}
+              <Link
+                to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
+                params={
+                  if (@props.params?.owner and @props.params?.name)
+                    {owner: @props.params.owner, name: @props.params.name}
+                  else
+                    {}
+                }>
+                View Reported Comments
+              </Link>
+
+              <CreateBoardForm section={@props.section} onSubmitBoard={=> @setBoards()}/>
+            </div>
+            }
+        </div>
+        }
 
       <div className="talk-list-content">
         <section>

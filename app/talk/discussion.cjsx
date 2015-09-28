@@ -33,6 +33,7 @@ module?.exports = React.createClass
     commentValidationErrors: []
     editingTitle: false
     reply: null
+    moderationOpen: false
 
   getDefaultProps: ->
     query: page: 1
@@ -239,39 +240,48 @@ module?.exports = React.createClass
         }
 
       {if discussion and @props.user?
-        <Moderation section={discussion.section} user={@props.user}>
-          <div>
-            <h2>Moderator Zone:</h2>
-            {if discussion?.title
-              <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
-                <h3>Edit Title:</h3>
-                <input name="title" type="text" defaultValue={discussion?.title}/>
-                <label className="toggle">Sticky:
-                  <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
-                </label>
-                <label className="toggle">Locked:
-                  <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
-                </label>
-
-                <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
-                  <div>
-                    <p><strong>Board:</strong></p>
-                    <select onChange={@onChangeSelect}>
-                      {boards.map (board, i) =>
-                        <option key={board.id} value={board.id} selected={board.id is discussion.board_id}>{board.title}</option>
-                        }
-                    </select>
-                  </div>
-                }</PromiseRenderer>
-
-                <button type="submit">Update</button>
-              </form>}
-
-            <button onClick={@onClickDeleteDiscussion}>
-              Delete this discussion <i className="fa fa-close" />
+        <div className="talk-moderation">
+          <Moderation user={@props.user} section={@props.section}>
+            <button onClick={=> @setState moderationOpen: !@state.moderationOpen}>
+              <i className="fa fa-#{if @state.moderationOpen then 'close' else 'warning'}" /> Moderator Controls
             </button>
-          </div>
-        </Moderation>}
+          </Moderation>
+
+          {if @state.moderationOpen
+            <div className="talk-moderation-children talk-module">
+              <h2>Moderator Zone:</h2>
+              {if discussion?.title
+                <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
+                  <h3>Edit Title:</h3>
+                  <input name="title" type="text" defaultValue={discussion?.title}/>
+                  <label className="toggle">Sticky:
+                    <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
+                  </label>
+                  <label className="toggle">Locked:
+                    <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
+                  </label>
+
+                  <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
+                    <div>
+                      <p><strong>Board:</strong></p>
+                      <select onChange={@onChangeSelect}>
+                        {boards.map (board, i) =>
+                          <option key={board.id} value={board.id} selected={board.id is discussion.board_id}>{board.title}</option>
+                          }
+                      </select>
+                    </div>
+                  }</PromiseRenderer>
+
+                  <button type="submit">Update</button>
+                </form>}
+
+              <button onClick={@onClickDeleteDiscussion}>
+                Delete this discussion <i className="fa fa-close" />
+              </button>
+            </div>
+          }
+        </div>
+      }
 
       {if discussion?.locked
         @lockedMessage()
