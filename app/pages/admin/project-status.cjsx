@@ -65,6 +65,45 @@ WorkflowToggle = React.createClass
       </label>
     </span>
 
+ProjectRedirectToggle = React.createClass
+  displayName: "ProjectRedirectToggle"
+
+  mixins: [SetToggle]
+
+  getDefaultProps: ->
+    project: null
+    field: null
+    validUrlRegex: /https?:\/\/[\w-]+(\.[\w-]*)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?/
+    invalidUrl: "invalidUrl"
+
+  getInitialState: ->
+    error: null
+    setting: {}
+
+  setterProperty: 'project'
+
+  updateRedirect:  ->
+    redirect_url = this.refs.redirectUrl.getDOMNode().value
+    if redirect_url?.match(@props.validUrlRegex)
+      @set @props.field, redirect_url
+    else if redirect_url == ""
+      @set @props.field, redirect_url
+    else
+      @state.error = @props.invalidUrl
+    @forceUpdate()
+
+  validUrlMessage: ->
+    if @state.error == @props.invalidUrl
+      "Invalid URL - must be in https?://format"
+
+  render: ->
+    project = @props.project
+    setting = project[@props.field]
+    <div>
+      <input type="text" ref="redirectUrl" defaultValue={setting} placeholder="No external redirect." onBlur={this.updateRedirect} />
+      <span>{ @validUrlMessage() }</span>
+    </div>
+
 ProjectStatus = React.createClass
   displayName: "ProjectStatus"
 
@@ -83,6 +122,7 @@ ProjectStatus = React.createClass
           <li>Beta Approved: <ProjectToggle project={@props.project} field="beta_approved" /></li>
           <li>Launch Requested: <ProjectToggle project={@props.project} field="launch_requested" /></li>
           <li>Launch Approved: <ProjectToggle project={@props.project} field="launch_approved" /></li>
+          <li>Redirect URL: <ProjectRedirectToggle project={@props.project} field="redirect" /></li>
         </ul>
         <h4>Workflow Settings</h4>
         <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
