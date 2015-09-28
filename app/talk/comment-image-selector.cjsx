@@ -25,6 +25,7 @@ module?.exports = React.createClass
       .then (subjects) =>
         subject.type = 'subject' for subject in subjects
         @setState {subjects}
+        @setFocusImage(subjects[0]) if subjects?.length is 1
 
   onSubmitSearch: (e) ->
     e.preventDefault()
@@ -53,8 +54,9 @@ module?.exports = React.createClass
     <div className="talk-comment-image-selector">
       <h1>{@props.header}</h1>
 
-      <form onSubmit={@onSubmitSearch}>
+      <form onSubmit={@onSubmitSearch} className="talk-form talk-search-form">
         <input ref="imageSearch" type="search" placeholder="Search by ID"/>
+        <button type="submit">Search</button>
       </form>
 
       <button className='talk-comment-clear-image-button' onClick={@props.onClearImageClick}>Clear image</button>
