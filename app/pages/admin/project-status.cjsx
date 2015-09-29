@@ -6,6 +6,8 @@ SetToggle = require '../../lib/set-toggle'
 moment = require 'moment'
 ChangeListener = require '../../components/change-listener'
 ProjectIcon = require '../../components/project-icon'
+AutoSave = require '../../components/auto-save'
+handleInputChange = require '../../lib/handle-input-change'
 
 ProjectToggle = React.createClass
   displayName: "ProjectToggle"
@@ -72,22 +74,16 @@ ProjectRedirectToggle = React.createClass
 
   getDefaultProps: ->
     project: null
-    field: null
     validUrlRegex: /https?:\/\/[\w-]+(\.[\w-]*)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?/
     invalidUrl: "invalidUrl"
 
   getInitialState: ->
     error: null
-    setting: {}
-
-  setterProperty: 'project'
 
   updateRedirect:  ->
-    redirect_url = this.refs.redirectUrl.getDOMNode().value
-    if redirect_url?.match(@props.validUrlRegex)
-      @set @props.field, redirect_url
-    else if redirect_url == ""
-      @set @props.field, redirect_url
+    _redirectUrl = this.refs.redirectUrl.getDOMNode().value
+    if _redirectUrl?.match(@props.validUrlRegex)
+      handleInputChange.bind @props.project
     else
       @state.error = @props.invalidUrl
     @forceUpdate()
@@ -97,11 +93,12 @@ ProjectRedirectToggle = React.createClass
       "Invalid URL - must be in https?://format"
 
   render: ->
-    project = @props.project
-    setting = project[@props.field]
     <div>
-      <input type="text" ref="redirectUrl" defaultValue={setting} placeholder="No external redirect." onBlur={this.updateRedirect} />
-      <span>{ @validUrlMessage() }</span>
+      <AutoSave resource={@props.project}>
+        <span className="form-label">Redirect URL:</span>
+        <input type="text" name="redirect" ref="redirectUrl" value={@props.project.redirect} placeholder="External redirect" onBlur={@updateRedirect} onChange={handleInputChange.bind @props.project} />
+        <span>{ @validUrlMessage() }</span>
+      </AutoSave>
     </div>
 
 ProjectStatus = React.createClass
@@ -122,7 +119,7 @@ ProjectStatus = React.createClass
           <li>Beta Approved: <ProjectToggle project={@props.project} field="beta_approved" /></li>
           <li>Launch Requested: <ProjectToggle project={@props.project} field="launch_requested" /></li>
           <li>Launch Approved: <ProjectToggle project={@props.project} field="launch_approved" /></li>
-          <li>Redirect URL: <ProjectRedirectToggle project={@props.project} field="redirect" /></li>
+          <li><br /><ProjectRedirectToggle project={@props.project} /></li>
         </ul>
         <h4>Workflow Settings</h4>
         <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
