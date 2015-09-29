@@ -6,6 +6,7 @@ ClassificationSummary = require './classification-summary'
 tasks = require './tasks'
 {getSessionID} = require '../lib/session'
 preloadSubject = require '../lib/preload-subject'
+PromiseRenderer = require '../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
 
 unless process.env.NODE_ENV is 'production'
@@ -81,39 +82,51 @@ Classifier = React.createClass
           else # Classification is complete.
             @renderSummary currentClassification}
 
-          {if @props.project? and currentTask? and true # User is an owner or expert
-            <div>
-              <hr />
-              <p className="gold-standard-controls">
-                <strong>Expert classification options</strong><br />
+          {if @props.project? and currentTask?
+            checkUserExpertise = @props.project.get 'project_roles'
+              .then (projectRoles) =>
+                expertRoles = projectRoles.filter (role) =>
+                  'expert' in role.roles
+                Promise.all expertRoles.map (role) =>
+                  role.get 'owner'
+              .then (expertUsers) =>
+                @props.user in expertUsers
 
-                <label>
-                  <input type="radio" name="expert-options" value="gold_standard" checked={@props.classification.metadata.gold_standard} onChange={@handleExpertOptionsChange} />{' '}
-                  Gold standard
-                </label>{' '}
-                <TriggeredModalForm trigger={
-                  <i className="fa fa-question-circle"></i>
-                }>
-                  <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
-                </TriggeredModalForm>
-                <br />
+            <PromiseRenderer promise={checkUserExpertise}>{(userIsExpert) =>
+              if userIsExpert
+                <div>
+                  <hr />
+                  <p className="gold-standard-controls">
+                    <strong>Expert classification options</strong><br />
 
-                <label>
-                  <input type="radio" name="expert-options" value="throwaway" checked={@props.classification.metadata.throwaway} onChange={@handleExpertOptionsChange} />{' '}
-                  Demo/throwaway
-                </label>{' '}
-                <TriggeredModalForm trigger={
-                  <i className="fa fa-question-circle"></i>
-                }>
-                  <p>A "demo" classification won’t be counted during aggregation. Use this to give quick demos of your project without </p>
-                </TriggeredModalForm>
-                <br />
-                <label>
-                  <input type="radio" name="expert-options" checked={not (@props.classification.metadata.gold_standard or @props.classification.metadata.throwaway)} onChange={@handleExpertOptionsChange} />{' '}
-                  Normal
-                </label>
-              </p>
-            </div>}
+                    <label>
+                      <input type="radio" name="expert-options" value="gold_standard" checked={@props.classification.metadata.gold_standard} onChange={@handleExpertOptionsChange} />{' '}
+                      Gold standard
+                    </label>{' '}
+                    <TriggeredModalForm trigger={
+                      <i className="fa fa-question-circle"></i>
+                    }>
+                      <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
+                    </TriggeredModalForm>
+                    <br />
+
+                    <label>
+                      <input type="radio" name="expert-options" value="throwaway" checked={@props.classification.metadata.throwaway} onChange={@handleExpertOptionsChange} />{' '}
+                      Demo/throwaway
+                    </label>{' '}
+                    <TriggeredModalForm trigger={
+                      <i className="fa fa-question-circle"></i>
+                    }>
+                      <p>A "demo" classification won’t be counted during aggregation. Use this to give quick demos of your project without </p>
+                    </TriggeredModalForm>
+                    <br />
+                    <label>
+                      <input type="radio" name="expert-options" checked={not (@props.classification.metadata.gold_standard or @props.classification.metadata.throwaway)} onChange={@handleExpertOptionsChange} />{' '}
+                      Normal
+                    </label>
+                  </p>
+                </div>
+            }</PromiseRenderer>}
         </div>
       </div>
     }</ChangeListener>
