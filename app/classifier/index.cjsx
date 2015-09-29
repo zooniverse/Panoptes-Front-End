@@ -6,6 +6,7 @@ ClassificationSummary = require './classification-summary'
 tasks = require './tasks'
 {getSessionID} = require '../lib/session'
 preloadSubject = require '../lib/preload-subject'
+TriggeredModalForm = require 'modal-form/triggered'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -79,6 +80,40 @@ Classifier = React.createClass
             @renderTask currentClassification, currentAnnotation, currentTask
           else # Classification is complete.
             @renderSummary currentClassification}
+
+          {if @props.project? and currentTask? and true # User is an owner or expert
+            <div>
+              <hr />
+              <p className="gold-standard-controls">
+                <strong>Expert classification options</strong><br />
+
+                <label>
+                  <input type="radio" name="expert-options" value="gold_standard" checked={@props.classification.metadata.gold_standard} onChange={@handleExpertOptionsChange} />{' '}
+                  Gold standard
+                </label>{' '}
+                <TriggeredModalForm trigger={
+                  <i className="fa fa-question-circle"></i>
+                }>
+                  <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
+                </TriggeredModalForm>
+                <br />
+
+                <label>
+                  <input type="radio" name="expert-options" value="throwaway" checked={@props.classification.metadata.throwaway} onChange={@handleExpertOptionsChange} />{' '}
+                  Demo/throwaway
+                </label>{' '}
+                <TriggeredModalForm trigger={
+                  <i className="fa fa-question-circle"></i>
+                }>
+                  <p>A "demo" classification won’t be counted during aggregation. Use this to give quick demos of your project without </p>
+                </TriggeredModalForm>
+                <br />
+                <label>
+                  <input type="radio" name="expert-options" checked={not (@props.classification.metadata.gold_standard or @props.classification.metadata.throwaway)} onChange={@handleExpertOptionsChange} />{' '}
+                  Normal
+                </label>
+              </p>
+            </div>}
         </div>
       </div>
     }</ChangeListener>
@@ -119,7 +154,13 @@ Classifier = React.createClass
         {if nextTaskKey
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
         else
-          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
+          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
+            {if @props.classification.metadata.gold_standard
+              <i className="fa fa-star fa-fw"></i>
+            else if @props.classification.metadata.throwaway
+              <i className="fa fa-trash fa-fw"></i>}
+            Done
+          </button>}
       </nav>
     </div>
 
@@ -185,6 +226,19 @@ Classifier = React.createClass
         width: innerWidth
         height: innerHeight
     @props.onComplete?()
+
+  handleExpertOptionsChange: ->
+    element = React.findDOMNode this
+    goldStandardCheckbox = element.querySelector '[name="expert-options"][value="gold_standard"]'
+    throwawayCheckbox = element.querySelector '[name="expert-options"][value="throwaway"]'
+
+    @props.classification.update
+      'metadata.gold_standard': goldStandardCheckbox.checked
+      'metadata.throwaway': throwawayCheckbox.checked
+
+    @props.onChangeExpertOptions
+      newClassificationsAreGoldStandard: @props.classification.metadata.gold_standard
+      newClassificationsAreThrowaway: @props.classification.metadata.throwaway
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value

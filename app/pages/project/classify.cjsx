@@ -62,6 +62,8 @@ module.exports = React.createClass
     workflow: null
     subject: null
     classification: null
+    newClassificationsAreGoldStandard: false
+    newClassificationsAreThrowaway: false
 
   propChangeHandlers:
     project: 'loadAppropriateClassification'
@@ -69,9 +71,9 @@ module.exports = React.createClass
 
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
-    # console.log 'Loading appropriate clasification'
+    # console.log 'Loading appropriate classification'
     @promiseToSetState classification: @getCurrentWorkflowID(props).then (workflowID) =>
-      # console.log 'Loading clasification for workflow', workflowID
+      # console.log 'Loading classification for workflow', workflowID
       # Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
       currentClassifications.forWorkflow[workflowID] ?= @createNewClassification props.project, workflowID
       currentClassifications.forWorkflow[workflowID]
@@ -111,7 +113,7 @@ module.exports = React.createClass
       getSubjectSet.then (subjectSet) =>
         @getNextSubject project, workflow, subjectSet
 
-    Promise.all([workflow, subject]).then ([workflow, subject]) ->
+    Promise.all([workflow, subject]).then ([workflow, subject]) =>
       # console.log 'Creating a new classification'
       classification = apiClient.type('classifications').create
         annotations: []
@@ -122,6 +124,8 @@ module.exports = React.createClass
           user_language: counterpart.getLocale()
           utc_offset: ((new Date).getTimezoneOffset() * 60).toString() # In seconds
           subject_dimensions: (null for location in subject.locations)
+          gold_standard: @state.newClassificationsAreGoldStandard
+          throwaway: @state.newClassificationsAreThrowaway
         links:
           project: project.id
           workflow: workflow.id
@@ -193,7 +197,14 @@ module.exports = React.createClass
   render: ->
     <div className="classify-page content-container">
       {if @state.classification?
-        <Classifier {...@props} classification={@state.classification} onLoad={@scrollIntoView} onComplete={@saveClassification} onClickNext={@loadAnotherSubject} />
+        <Classifier
+          {...@props}
+          classification={@state.classification}
+          onLoad={@scrollIntoView}
+          onComplete={@saveClassification}
+          onClickNext={@loadAnotherSubject}
+          onChangeExpertOptions={@handleExpertOptionsChange}
+        />
       else if @state.rejected.classification?
         <code>{@state.rejected.classification.toString()}</code>
       else
@@ -201,7 +212,7 @@ module.exports = React.createClass
     </div>
 
   scrollIntoView: (e) ->
-    # Auto-scroll to the middle of the clasification interface on load.
+    # Auto-scroll to the middle of the classification interface on load.
     # It's not perfect, but it should make the location of everything more obvious.
     lineHeight = parseFloat getComputedStyle(document.body).lineHeight
     el = @getDOMNode()
@@ -222,6 +233,9 @@ module.exports = React.createClass
         classification.destroy()
       classificationsThisSession += 1
       @maybePromptToSignIn()
+
+  handleExpertOptionsChange: (options) ->
+    @setState options
 
   maybePromptToSignIn: ->
     if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not @props.user?
