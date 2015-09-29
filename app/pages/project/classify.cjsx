@@ -62,8 +62,6 @@ module.exports = React.createClass
     workflow: null
     subject: null
     classification: null
-    newClassificationsAreGoldStandard: false
-    newClassificationsAreThrowaway: false
 
   propChangeHandlers:
     project: 'loadAppropriateClassification'
@@ -117,6 +115,7 @@ module.exports = React.createClass
       # console.log 'Creating a new classification'
       classification = apiClient.type('classifications').create
         annotations: []
+        gold_standard: false
         metadata:
           workflow_version: workflow.version
           started_at: (new Date).toISOString()
@@ -124,8 +123,6 @@ module.exports = React.createClass
           user_language: counterpart.getLocale()
           utc_offset: ((new Date).getTimezoneOffset() * 60).toString() # In seconds
           subject_dimensions: (null for location in subject.locations)
-          gold_standard: @state.newClassificationsAreGoldStandard
-          throwaway: @state.newClassificationsAreThrowaway
         links:
           project: project.id
           workflow: workflow.id
@@ -203,7 +200,6 @@ module.exports = React.createClass
           onLoad={@scrollIntoView}
           onComplete={@saveClassification}
           onClickNext={@loadAnotherSubject}
-          onChangeExpertOptions={@handleExpertOptionsChange}
         />
       else if @state.rejected.classification?
         <code>{@state.rejected.classification.toString()}</code>
@@ -233,9 +229,6 @@ module.exports = React.createClass
         classification.destroy()
       classificationsThisSession += 1
       @maybePromptToSignIn()
-
-  handleExpertOptionsChange: (options) ->
-    @setState options
 
   maybePromptToSignIn: ->
     if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not @props.user?

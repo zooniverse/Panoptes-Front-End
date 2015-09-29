@@ -97,10 +97,15 @@ Classifier = React.createClass
                 <div>
                   <hr />
                   <p className="gold-standard-controls">
-                    <strong>Expert classification options</strong><br />
+                    <strong>Expert classification options:</strong><br />
 
                     <label>
-                      <input type="radio" name="expert-options" value="gold_standard" checked={@props.classification.metadata.gold_standard} onChange={@handleExpertOptionsChange} />{' '}
+                      <input type="radio" name="expert-options" checked={not @props.classification.gold_standard} onChange={@handleExpertOptionsChange} />{' '}
+                      Normal
+                    </label>
+                    <br />
+                    <label>
+                      <input type="radio" name="expert-options" value="gold_standard" checked={@props.classification.gold_standard} onChange={@handleExpertOptionsChange} />{' '}
                       Gold standard
                     </label>{' '}
                     <TriggeredModalForm trigger={
@@ -108,22 +113,6 @@ Classifier = React.createClass
                     }>
                       <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
                     </TriggeredModalForm>
-                    <br />
-
-                    <label>
-                      <input type="radio" name="expert-options" value="throwaway" checked={@props.classification.metadata.throwaway} onChange={@handleExpertOptionsChange} />{' '}
-                      Demo/throwaway
-                    </label>{' '}
-                    <TriggeredModalForm trigger={
-                      <i className="fa fa-question-circle"></i>
-                    }>
-                      <p>A "throwaway" classification will be stored, but it won’t be counted during aggregation. Use this to give quick demos of your project without throwing off your data.</p>
-                    </TriggeredModalForm>
-                    <br />
-                    <label>
-                      <input type="radio" name="expert-options" checked={not (@props.classification.metadata.gold_standard or @props.classification.metadata.throwaway)} onChange={@handleExpertOptionsChange} />{' '}
-                      Normal
-                    </label>
                   </p>
                 </div>
             }</PromiseRenderer>}
@@ -168,10 +157,8 @@ Classifier = React.createClass
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
         else
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
-            {if @props.classification.metadata.gold_standard
-              <i className="fa fa-star fa-fw"></i>
-            else if @props.classification.metadata.throwaway
-              <i className="fa fa-trash fa-fw"></i>}
+            {if @props.classification.gold_standard
+              <i className="fa fa-star fa-fw"></i>}
             Done
           </button>}
       </nav>
@@ -243,15 +230,7 @@ Classifier = React.createClass
   handleExpertOptionsChange: ->
     element = React.findDOMNode this
     goldStandardCheckbox = element.querySelector '[name="expert-options"][value="gold_standard"]'
-    throwawayCheckbox = element.querySelector '[name="expert-options"][value="throwaway"]'
-
-    @props.classification.update
-      'metadata.gold_standard': goldStandardCheckbox.checked
-      'metadata.throwaway': throwawayCheckbox.checked
-
-    @props.onChangeExpertOptions
-      newClassificationsAreGoldStandard: @props.classification.metadata.gold_standard
-      newClassificationsAreThrowaway: @props.classification.metadata.throwaway
+    @props.classification.update gold_standard: goldStandardCheckbox.checked
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
