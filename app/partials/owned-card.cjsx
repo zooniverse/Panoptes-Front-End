@@ -1,6 +1,6 @@
 React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 apiClient = require '../api/client'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'

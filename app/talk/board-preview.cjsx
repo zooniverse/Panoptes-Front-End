@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
 merge = require 'lodash.merge'

@@ -2,7 +2,7 @@ React = require 'react'
 auth = require '../api/auth'
 IOStatus = require './io-status'
 MainHeader = require './main-header'
-{RouteHandler} = require 'react-router'
+{RouteHandler} = require '@edpaget/react-router'
 MainFooter = require './main-footer'
 {generateSessionID} = require '../lib/session'
 

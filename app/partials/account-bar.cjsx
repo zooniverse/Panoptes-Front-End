@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 auth = require '../api/auth'
 talkClient = require '../api/talk'
 counterpart = require 'counterpart'

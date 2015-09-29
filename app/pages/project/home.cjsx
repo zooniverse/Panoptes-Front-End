@@ -3,8 +3,8 @@ React = require 'react'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 PromiseRenderer = require '../../components/promise-renderer'
-{Link} = require 'react-router'
 ProjectMetadata = require './metadata'
+{Link} = require '@edpaget/react-router'
 
 module.exports = React.createClass
   displayName: 'ProjectHomePage'

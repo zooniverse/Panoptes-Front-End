@@ -5,7 +5,7 @@ Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 
 module.exports = React.createClass
   displayName: 'OwnedCardList'

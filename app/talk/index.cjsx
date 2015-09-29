@@ -1,5 +1,5 @@
 React = require 'react'
-{RouteHandler, Link, Navigation} = require 'react-router'
+{RouteHandler, Link, Navigation} = require '@edpaget/react-router'
 TalkBreadcrumbs = require './breadcrumbs.cjsx'
 
 module?.exports = React.createClass
