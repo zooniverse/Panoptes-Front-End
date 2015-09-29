@@ -365,10 +365,6 @@ COPY_GREY_LIGHT = #afaeae
     &-locked
       color: FAILURE
 
-    &-comments
-      &.locked
-        pointer-events: none
-        opacity: 0.6
     h1
       input
         margin: 0 auto
@@ -479,6 +475,10 @@ COPY_GREY_LIGHT = #afaeae
     .talk-comment-links
       button:not(:last-child)
         @extend .talk-left-buttons
+
+      &.locked
+        pointer-events: none
+        opacity: 0.3
 
       .talk-comment-like-button i.upvoted
         color: MAIN_HIGHLIGHT

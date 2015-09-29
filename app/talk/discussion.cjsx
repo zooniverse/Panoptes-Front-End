@@ -161,6 +161,7 @@ module?.exports = React.createClass
       data={data}
       active={+data.id is +@props.query?.comment}
       user={@props.user}
+      locked={@state.discussion?.locked}
       project={@props.project}
       onClickReply={@onClickReply}
       onLikeComment={@onLikeComment}
