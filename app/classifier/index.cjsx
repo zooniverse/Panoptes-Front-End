@@ -117,7 +117,7 @@ Classifier = React.createClass
                     <TriggeredModalForm trigger={
                       <i className="fa fa-question-circle"></i>
                     }>
-                      <p>A "demo" classification won’t be counted during aggregation. Use this to give quick demos of your project without </p>
+                      <p>A "throwaway" classification will be stored, but it won’t be counted during aggregation. Use this to give quick demos of your project without throwing off your data.</p>
                     </TriggeredModalForm>
                     <br />
                     <label>
