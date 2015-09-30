@@ -9,6 +9,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     contentType: 'text/csv'
+    newFeature: false
 
   getInitialState: ->
     exportRequested: false
@@ -32,9 +33,15 @@ module.exports = React.createClass
   pending: (exported) ->
     exported?
 
+  buttonClass: ->
+    if @props.newFeature
+      "standard-button"
+    else
+      ""
+
   render: ->
     <div>
-      <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>
+      <button className={@buttonClass()} type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>
         <Translate content={@props.buttonKey} />
       </button> {' '}
       <small className="form-help">
