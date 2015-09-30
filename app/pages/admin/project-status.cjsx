@@ -6,6 +6,8 @@ SetToggle = require '../../lib/set-toggle'
 moment = require 'moment'
 ChangeListener = require '../../components/change-listener'
 ProjectIcon = require '../../components/project-icon'
+AutoSave = require '../../components/auto-save'
+handleInputChange = require '../../lib/handle-input-change'
 
 ProjectToggle = React.createClass
   displayName: "ProjectToggle"
@@ -65,6 +67,60 @@ WorkflowToggle = React.createClass
       </label>
     </span>
 
+ProjectRedirectToggle = React.createClass
+  displayName: "ProjectRedirectToggle"
+
+  mixins: [SetToggle]
+
+  getDefaultProps: ->
+    project: null
+    validUrlRegex: /https?:\/\/[\w-]+(\.[\w-]*)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?/
+    invalidUrl: "invalidUrl"
+
+  getInitialState: ->
+    error: null
+
+  updateRedirect:  (e) ->
+    _redirectUrl = this.refs.redirectUrl.getDOMNode().value
+    if _redirectUrl?.match(@props.validUrlRegex) || _redirectUrl == ""
+      handleInputChange.call(@props.project, e)
+    else
+      @setState(error: @props.invalidUrl)
+
+  validUrlMessage: ->
+    if @state.error == @props.invalidUrl
+      "Invalid URL - must be in https?://format"
+
+  render: ->
+    <div>
+      <AutoSave resource={@props.project}>
+        <span className="form-label">Redirect URL:</span>
+        <input type="text" name="redirect" ref="redirectUrl" value={@props.project.redirect} placeholder="External redirect" onBlur={@updateRedirect} onChange={handleInputChange.bind @props.project} />
+        <span>{ @validUrlMessage() }</span>
+      </AutoSave>
+    </div>
+
+VersionList = React.createClass
+  displayName: "VersionList"
+
+  getDefaultProps: ->
+    project: null
+
+  render: ->
+    <PromiseRenderer promise={@props.project.get 'versions'}>{ (versions) =>
+      vs = versions.sort()
+      <ul className="project-status-changes">
+        {vs.map (version) =>
+          key = Object.keys(version.changeset)[0]
+          from = version.changeset[key][0].toString()
+          to = version.changeset[key][1].toString()
+          m = moment(version.created_at)
+          <PromiseRenderer key={version.id} promise={apiClient.type('users').get(version.whodunnit)} >{ (user) =>
+            <li>{user.display_name} changed {key} from {from} to {to} {m.fromNow()}</li>
+          }</PromiseRenderer>}
+      </ul>
+    }</PromiseRenderer>
+
 ProjectStatus = React.createClass
   displayName: "ProjectStatus"
 
@@ -83,6 +139,7 @@ ProjectStatus = React.createClass
           <li>Beta Approved: <ProjectToggle project={@props.project} field="beta_approved" /></li>
           <li>Launch Requested: <ProjectToggle project={@props.project} field="launch_requested" /></li>
           <li>Launch Approved: <ProjectToggle project={@props.project} field="launch_approved" /></li>
+          <li><br /><ProjectRedirectToggle project={@props.project} /></li>
         </ul>
         <h4>Workflow Settings</h4>
         <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
@@ -100,19 +157,7 @@ ProjectStatus = React.createClass
         }</PromiseRenderer>
         <hr />
         <h4>Recent Status Changes</h4>
-        <PromiseRenderer promise={@props.project.get 'versions', page_size: 10}>{ (versions) =>
-          vs = versions.sort()
-          <ul className="project-status-changes">
-            {vs.map (version) =>
-              key = Object.keys(version.changeset)[0]
-              from = version.changeset[key][0].toString()
-              to = version.changeset[key][1].toString()
-              m = moment(version.created_at)
-              <PromiseRenderer key={version.id} promise={apiClient.type('users').get(version.whodunnit)} >{ (user) =>
-                <li>{user.display_name} changed {key} from {from} to {to} {m.fromNow()}</li>
-              }</PromiseRenderer>}
-          </ul>
-        }</PromiseRenderer>
+        <VersionList project={@props.project} />
       </div>
     }</ChangeListener>
 
