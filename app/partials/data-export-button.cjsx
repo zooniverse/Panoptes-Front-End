@@ -33,15 +33,11 @@ module.exports = React.createClass
   pending: (exported) ->
     exported?
 
-  buttonClass: ->
-    if @props.newFeature
-      "standard-button"
-    else
-      ""
-
   render: ->
     <div>
-      <button className={@buttonClass()} type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>
+      { if @props.newFeature
+        <i className="fa fa-cog fa-lg fa-fw"></i> }
+      <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>
         <Translate content={@props.buttonKey} />
       </button> {' '}
       <small className="form-help">
