@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 
 module.exports = React.createClass
   displayName: 'ProjectIcon'

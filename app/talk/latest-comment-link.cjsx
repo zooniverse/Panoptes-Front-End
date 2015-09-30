@@ -3,7 +3,7 @@ apiClient = require '../api/client'
 {timeAgo} = require './lib/time'
 Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 merge = require 'lodash.merge'
 {Markdown} = require 'markdownz'
 

@@ -1,6 +1,6 @@
 React = require 'react'
 Comment = require './comment'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 Loading = require '../components/loading-indicator'
@@ -33,6 +33,7 @@ module?.exports = React.createClass
       # Occurs before the dom has rendered (default: true)
       true
 
+    params.page_size = talkConfig.recentsPageSize
     params.subject_default = false unless showNotes or @props.params.board
 
     if @props.params.board

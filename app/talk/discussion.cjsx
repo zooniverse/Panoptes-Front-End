@@ -3,14 +3,14 @@ Comment = require './comment'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
-Router = require 'react-router'
+Router = require '@edpaget/react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 DisplayRoles = require './lib/display-roles'
@@ -33,6 +33,7 @@ module?.exports = React.createClass
     commentValidationErrors: []
     editingTitle: false
     reply: null
+    moderationOpen: false
 
   getDefaultProps: ->
     query: page: 1
@@ -60,8 +61,7 @@ module?.exports = React.createClass
 
         if page isnt @props.query.page
           @props.query.page = page
-          [path, _] = @getPath().split('?')
-          @replaceWith path, @props.params, @props.query
+          @replaceWith @getPath(), @props.params, @props.query
 
       @setComments(@props.query.page ? 1)
 
@@ -161,6 +161,7 @@ module?.exports = React.createClass
       data={data}
       active={+data.id is +@props.query?.comment}
       user={@props.user}
+      locked={@state.discussion?.locked}
       project={@props.project}
       onClickReply={@onClickReply}
       onLikeComment={@onLikeComment}
@@ -239,39 +240,48 @@ module?.exports = React.createClass
         }
 
       {if discussion and @props.user?
-        <Moderation section={discussion.section} user={@props.user}>
-          <div>
-            <h2>Moderator Zone:</h2>
-            {if discussion?.title
-              <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
-                <h3>Edit Title:</h3>
-                <input name="title" type="text" defaultValue={discussion?.title}/>
-                <label className="toggle">Sticky:
-                  <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
-                </label>
-                <label className="toggle">Locked:
-                  <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
-                </label>
-
-                <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
-                  <div>
-                    <p><strong>Board:</strong></p>
-                    <select onChange={@onChangeSelect}>
-                      {boards.map (board, i) =>
-                        <option key={board.id} value={board.id} selected={board.id is discussion.board_id}>{board.title}</option>
-                        }
-                    </select>
-                  </div>
-                }</PromiseRenderer>
-
-                <button type="submit">Update</button>
-              </form>}
-
-            <button onClick={@onClickDeleteDiscussion}>
-              Delete this discussion <i className="fa fa-close" />
+        <div className="talk-moderation">
+          <Moderation user={@props.user} section={@props.section}>
+            <button onClick={=> @setState moderationOpen: !@state.moderationOpen}>
+              <i className="fa fa-#{if @state.moderationOpen then 'close' else 'warning'}" /> Moderator Controls
             </button>
-          </div>
-        </Moderation>}
+          </Moderation>
+
+          {if @state.moderationOpen
+            <div className="talk-moderation-children talk-module">
+              <h2>Moderator Zone:</h2>
+              {if discussion?.title
+                <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
+                  <h3>Edit Title:</h3>
+                  <input name="title" type="text" defaultValue={discussion?.title}/>
+                  <label className="toggle">Sticky:
+                    <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
+                  </label>
+                  <label className="toggle">Locked:
+                    <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
+                  </label>
+
+                  <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
+                    <div>
+                      <p><strong>Board:</strong></p>
+                      <select value={discussion.board_id}>
+                        {boards.map (board, i) =>
+                          <option key={board.id} value={board.id}>{board.title}</option>
+                          }
+                      </select>
+                    </div>
+                  }</PromiseRenderer>
+
+                  <button type="submit">Update</button>
+                </form>}
+
+              <button onClick={@onClickDeleteDiscussion}>
+                Delete this discussion <i className="fa fa-close" />
+              </button>
+            </div>
+          }
+        </div>
+      }
 
       {if discussion?.locked
         @lockedMessage()

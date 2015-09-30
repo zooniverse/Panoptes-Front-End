@@ -5,10 +5,12 @@ apiClient = require '../../api/client'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 TalkDataExportButton = require '../../talk/data-export-button'
+isAdmin = require '../../lib/is-admin'
 
 counterpart.registerTranslations 'en',
   projectDetails:
     classificationExport: "Request new classification export"
+    aggregationExport: "Request new aggregation export"
     subjectExport: "Request new subject export"
     workflowExport: "Request new workflow export"
     workflowContentsExport: "Request new workflow contents export"
@@ -56,6 +58,14 @@ module.exports = React.createClass
               buttonKey="projectDetails.workflowContentsExport"
               exportType="workflow_contents_export"  />
           </p>
+          {if isAdmin()
+             <p>
+              <DataExportButton
+                project={@props.project}
+                buttonKey="projectDetails.aggregationExport"
+                contentType="application/x-gzip"
+                exportType="aggregations_export"  />
+            </p>}
           <hr />
 
           Talk Data<br />

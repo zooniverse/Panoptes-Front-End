@@ -1,8 +1,8 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-{Link} = require 'react-router'
-{RouteHandler} = require 'react-router'
+{Link} = require '@edpaget/react-router'
+{RouteHandler} = require '@edpaget/react-router'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',

@@ -1,5 +1,5 @@
 React = require 'react'
-{Navigation, Link, RouteHandler} = require 'react-router'
+{Navigation, Link, RouteHandler} = require '@edpaget/react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 TitleMixin = require '../../lib/title-mixin'

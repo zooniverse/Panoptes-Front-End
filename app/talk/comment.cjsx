@@ -8,7 +8,7 @@ CommentReportForm = require './comment-report-form'
 CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 PromiseRenderer = require '../components/promise-renderer'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
 talkClient = require '../api/talk'
@@ -32,9 +32,11 @@ module?.exports = React.createClass
     active: React.PropTypes.bool  # optional active switch: scroll window to comment and apply styling
     user: React.PropTypes.object  # Current user
     index: React.PropTypes.number # The index of the comment in a discussion
+    locked: React.PropTypes.bool  # disable action buttons
 
   getDefaultProps: ->
     active: false
+    locked: false
 
   getInitialState: ->
     editing: false
@@ -196,7 +198,7 @@ module?.exports = React.createClass
 
             <Markdown content={@props.data.body} project={@props.project} header={null}/>
 
-            <div className="talk-comment-links">
+            <div className="talk-comment-links #{if @props.locked then 'locked' else ''}">
               <button className="talk-comment-like-button" onClick={@onClickLike}>
                 {if upvotedByCurrentUser(@props.user, @props.data)
                   <i className="fa fa-thumbs-up upvoted" />

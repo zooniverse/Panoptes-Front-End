@@ -1,5 +1,5 @@
 React = require 'react'
-{ Navigation } = require 'react-router'
+{ Navigation } = require '@edpaget/react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 TalkSearchResult = require './search-result'

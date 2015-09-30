@@ -1,4 +1,4 @@
-Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-router'
+Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require '@edpaget/react-router'
 React = require 'react'
 
 routes =

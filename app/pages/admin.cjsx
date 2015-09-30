@@ -2,7 +2,7 @@ React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 ChangeListener = require '../components/change-listener'
-{Link, RouteHandler} = require 'react-router'
+{Link, RouteHandler} = require '@edpaget/react-router'
 
 counterpart.registerTranslations 'en',
   userAdminPage:

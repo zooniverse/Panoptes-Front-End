@@ -30,7 +30,7 @@ COPY_GREY_LIGHT = #afaeae
   text-align: center
 
 .talk-form
-  input[type='text'], textarea
+  input[type='text'], input[type='search'], textarea
     border: none
     font-size: 1.0em
     font-family: inherit
@@ -42,7 +42,7 @@ COPY_GREY_LIGHT = #afaeae
   overflow: auto
   margin-bottom: 10px
 
-  input[type='text']
+  input[type='text'], input[type='search']
     float: left
     width: 80%
     border: 2px solid TALK_BACKGROUND
@@ -365,10 +365,6 @@ COPY_GREY_LIGHT = #afaeae
     &-locked
       color: FAILURE
 
-    &-comments
-      &.locked
-        pointer-events: none
-        opacity: 0.6
     h1
       input
         margin: 0 auto
@@ -479,6 +475,10 @@ COPY_GREY_LIGHT = #afaeae
     .talk-comment-links
       button:not(:last-child)
         @extend .talk-left-buttons
+
+      &.locked
+        pointer-events: none
+        opacity: 0.3
 
       .talk-comment-like-button i.upvoted
         color: MAIN_HIGHLIGHT
@@ -596,16 +596,20 @@ COPY_GREY_LIGHT = #afaeae
           bottom: 0
 
           button
-            opacity: 0
             position: absolute
             transform: translate(-50%, -50%)
             transition: opacity .25s
             top: 50%
-
-          &:hover
-            background: rgba(255,255,255,0.5)
-            button
+            opacity: 0.8
+            &:hover
               opacity: 1
+      form
+        input[type='search']
+          border-color: white
+        button[type='submit']
+          border-color: transparent
+          background: lighten(MAIN_HIGHLIGHT, 5%)
+          color: white
 
   .submit-error
     color: FAILURE

@@ -1,5 +1,5 @@
 React = require 'react'
-{Navigation} = require 'react-router'
+{Navigation} = require '@edpaget/react-router'
 
 changeSearchString = (searchString, changes) ->
   params = {}

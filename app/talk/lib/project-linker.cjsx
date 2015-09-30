@@ -1,6 +1,6 @@
 React = require 'react'
 apiClient = require '../../api/client'
-{Navigation, Link} = require 'react-router'
+{Navigation, Link} = require '@edpaget/react-router'
 Loading = require '../../components/loading-indicator'
 FEATURED_PRODUCT_IDS = require '../../lib/featured-projects'
 Paginator = require './paginator'
@@ -47,7 +47,7 @@ module?.exports = React.createClass
     [owner, name] = project.slug.split('/')
 
     <div key={project.id}>
-      {if project.redirect?
+      {if project.redirect
         <a href={project.redirect} title={project.redirect}>{project.display_name}</a>
       else
         <Link to="project-talk" params={{owner, name}}>

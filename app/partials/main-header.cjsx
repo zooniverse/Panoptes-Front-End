@@ -1,6 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 ZooniverseLogo = require './zooniverse-logo'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
