@@ -69,9 +69,9 @@ module.exports = React.createClass
 
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
-    # console.log 'Loading appropriate clasification'
+    # console.log 'Loading appropriate classification'
     @promiseToSetState classification: @getCurrentWorkflowID(props).then (workflowID) =>
-      # console.log 'Loading clasification for workflow', workflowID
+      # console.log 'Loading classification for workflow', workflowID
       # Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
       currentClassifications.forWorkflow[workflowID] ?= @createNewClassification props.project, workflowID
       currentClassifications.forWorkflow[workflowID]
@@ -111,10 +111,11 @@ module.exports = React.createClass
       getSubjectSet.then (subjectSet) =>
         @getNextSubject project, workflow, subjectSet
 
-    Promise.all([workflow, subject]).then ([workflow, subject]) ->
+    Promise.all([workflow, subject]).then ([workflow, subject]) =>
       # console.log 'Creating a new classification'
       classification = apiClient.type('classifications').create
         annotations: []
+        gold_standard: false
         metadata:
           workflow_version: workflow.version
           started_at: (new Date).toISOString()
@@ -193,7 +194,13 @@ module.exports = React.createClass
   render: ->
     <div className="classify-page content-container">
       {if @state.classification?
-        <Classifier {...@props} classification={@state.classification} onLoad={@scrollIntoView} onComplete={@saveClassification} onClickNext={@loadAnotherSubject} />
+        <Classifier
+          {...@props}
+          classification={@state.classification}
+          onLoad={@scrollIntoView}
+          onComplete={@saveClassification}
+          onClickNext={@loadAnotherSubject}
+        />
       else if @state.rejected.classification?
         <code>{@state.rejected.classification.toString()}</code>
       else
@@ -201,7 +208,7 @@ module.exports = React.createClass
     </div>
 
   scrollIntoView: (e) ->
-    # Auto-scroll to the middle of the clasification interface on load.
+    # Auto-scroll to the middle of the classification interface on load.
     # It's not perfect, but it should make the location of everything more obvious.
     lineHeight = parseFloat getComputedStyle(document.body).lineHeight
     el = @getDOMNode()

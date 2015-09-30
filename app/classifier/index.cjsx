@@ -6,6 +6,8 @@ ClassificationSummary = require './classification-summary'
 tasks = require './tasks'
 {getSessionID} = require '../lib/session'
 preloadSubject = require '../lib/preload-subject'
+PromiseRenderer = require '../components/promise-renderer'
+TriggeredModalForm = require 'modal-form/triggered'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -79,6 +81,41 @@ Classifier = React.createClass
             @renderTask currentClassification, currentAnnotation, currentTask
           else # Classification is complete.
             @renderSummary currentClassification}
+
+          {if @props.project? and currentTask?
+            checkUserExpertise = @props.project.get 'project_roles'
+              .then (projectRoles) =>
+                expertRoles = projectRoles.filter (role) =>
+                  'expert' in role.roles
+                Promise.all expertRoles.map (role) =>
+                  role.get 'owner'
+              .then (expertUsers) =>
+                @props.user in expertUsers
+
+            <PromiseRenderer promise={checkUserExpertise}>{(userIsExpert) =>
+              if userIsExpert
+                <div>
+                  <hr />
+                  <p className="gold-standard-controls">
+                    <strong>Expert classification options:</strong><br />
+
+                    <label>
+                      <input type="radio" name="expert-options" checked={not @props.classification.gold_standard} onChange={@handleExpertOptionsChange} />{' '}
+                      Normal
+                    </label>
+                    <br />
+                    <label>
+                      <input type="radio" name="expert-options" value="gold_standard" checked={@props.classification.gold_standard} onChange={@handleExpertOptionsChange} />{' '}
+                      Gold standard
+                    </label>{' '}
+                    <TriggeredModalForm trigger={
+                      <i className="fa fa-question-circle"></i>
+                    }>
+                      <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
+                    </TriggeredModalForm>
+                  </p>
+                </div>
+            }</PromiseRenderer>}
         </div>
       </div>
     }</ChangeListener>
@@ -119,7 +156,11 @@ Classifier = React.createClass
         {if nextTaskKey
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
         else
-          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
+          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
+            {if @props.classification.gold_standard
+              <i className="fa fa-star fa-fw"></i>}
+            Done
+          </button>}
       </nav>
     </div>
 
@@ -185,6 +226,11 @@ Classifier = React.createClass
         width: innerWidth
         height: innerHeight
     @props.onComplete?()
+
+  handleExpertOptionsChange: ->
+    element = React.findDOMNode this
+    goldStandardCheckbox = element.querySelector '[name="expert-options"][value="gold_standard"]'
+    @props.classification.update gold_standard: goldStandardCheckbox.checked
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
