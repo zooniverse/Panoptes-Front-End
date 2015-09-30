@@ -8,6 +8,7 @@ tasks = require './tasks'
 preloadSubject = require '../lib/preload-subject'
 PromiseRenderer = require '../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
+isAdmin = require '../lib/is-admin'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -201,7 +202,7 @@ Classifier = React.createClass
                 set.concat next
 
       <PromiseRenderer promise={getUserRoles}>{(userRoles) =>
-        if 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
+        if isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
           <TriggeredModalForm trigger={
             <i className="fa fa-cog fa-fw"></i>
           }>
@@ -218,7 +219,7 @@ Classifier = React.createClass
                 </TriggeredModalForm>
               </p>}
 
-              {if 'owner' in userRoles or 'collaborator' in userRoles
+              {if isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles
                 <p>
                   <label>
                     <input type="checkbox" checked={@props.demoMode} onChange={@handleDemoModeChange} />{' '}
