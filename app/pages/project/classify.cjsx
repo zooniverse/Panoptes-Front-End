@@ -47,6 +47,9 @@ emptySubjectQueue = ->
 auth.listen 'change', emptySubjectQueue
 apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 
+# Store this externally to persist during the session.
+sessionDemoMode = false
+
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
 
@@ -62,6 +65,7 @@ module.exports = React.createClass
     workflow: null
     subject: null
     classification: null
+    demoMode: sessionDemoMode
 
   propChangeHandlers:
     project: 'loadAppropriateClassification'
@@ -198,6 +202,8 @@ module.exports = React.createClass
           {...@props}
           classification={@state.classification}
           onLoad={@scrollIntoView}
+          demoMode={@state.demoMode}
+          onChangeDemoMode={@handleDemoModeChange}
           onComplete={@saveClassification}
           onClickNext={@loadAnotherSubject}
         />
@@ -217,16 +223,28 @@ module.exports = React.createClass
     if Math.abs(idealScrollY - scrollY) > lineHeight
       animatedScrollTo document.body, el.offsetTop - space, 333
 
+  handleDemoModeChange: (newDemoMode) ->
+    sessionDemoMode = newDemoMode
+    @setState demoMode: sessionDemoMode
+
   saveClassification: ->
     console?.info 'Completed classification', @state.classification
-    @state.classification.save().then (classification) =>
-      console?.log 'Saved classification', classification.id
-      Promise.all([
-        classification.get 'workflow'
-        classification.get 'subjects'
-      ]).then ([workflow, subjects]) ->
-        seenThisSession.add workflow, subjects
-        classification.destroy()
+    savingClassification = if @state.demoMode
+      Promise.resolve @state.classification
+    else
+      @state.classification.save()
+
+    savingClassification.then (classification) =>
+      if @state.demoMode
+        console?.log 'Demo mode: Did NOT save classification'
+      else
+        console?.log 'Saved classification', classification.id
+        Promise.all([
+          classification.get 'workflow'
+          classification.get 'subjects'
+        ]).then ([workflow, subjects]) ->
+          seenThisSession.add workflow, subjects
+          classification.destroy()
       classificationsThisSession += 1
       @maybePromptToSignIn()
 
