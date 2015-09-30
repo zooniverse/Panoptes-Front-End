@@ -82,7 +82,7 @@ ProjectRedirectToggle = React.createClass
 
   updateRedirect:  (e) ->
     _redirectUrl = this.refs.redirectUrl.getDOMNode().value
-    if _redirectUrl?.match(@props.validUrlRegex)
+    if _redirectUrl?.match(@props.validUrlRegex) || _redirectUrl == ""
       handleInputChange.call(@props.project, e)
     else
       @setState(error: @props.invalidUrl)
