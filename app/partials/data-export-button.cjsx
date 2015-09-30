@@ -9,6 +9,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     contentType: 'text/csv'
+    newFeature: false
 
   getInitialState: ->
     exportRequested: false
@@ -34,6 +35,8 @@ module.exports = React.createClass
 
   render: ->
     <div>
+      { if @props.newFeature
+        <i className="fa fa-cog fa-lg fa-fw"></i> }
       <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>
         <Translate content={@props.buttonKey} />
       </button> {' '}
