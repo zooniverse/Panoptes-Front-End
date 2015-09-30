@@ -16,6 +16,7 @@ require '../api/sugar'
 ZooniverseTeam = require './lib/zoo-team.cjsx'
 alert = require '../lib/alert'
 AddZooTeamForm = require './add-zoo-team-form'
+DragReorderable = require 'drag-reorderable'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
@@ -46,6 +47,46 @@ module?.exports = React.createClass
 
   boardPreview: (data, i) ->
     <BoardPreview {...@props} key={i} data={data} />
+
+  boardOrders: ->
+    <DragReorderable
+      tag='ul'
+      className='talk-reorder-boards'
+      items={@state.boards}
+      render={@boardOrderItem}
+      onChange={@boardOrderChanged}
+    />
+
+  boardOrderItem: (board, i) ->
+    <li key={board.id}>
+      <i className="fa fa-bars bars" />{board.title}
+    </li>
+
+  boardOrderChanged: (boards) ->
+    @setState boards: boards
+    @updateBoardOrder(boards).then =>
+      @setBoards()
+
+  updateBoardOrder: (boards) ->
+    boardsById = { }
+    boardsById[board.id] = board for board in boards
+
+    idsBefore = (board.id for board in @state.boards)
+    idsAfter = (board.id for board in boards)
+
+    changes = { }
+    changes[id] = i for id, i in idsAfter when id isnt idsBefore[i]
+
+    return Promise.resolve() if changes.length < 1
+    Promise.all Object.keys(changes).map (id) =>
+      boardsById[id].update(position: changes[id]).save()
+
+  clearBoardOrder: ->
+    Promise.all @state.boards.map (board) =>
+      board.update(position: 0).save()
+    .then =>
+      @setState loading: true
+      @setBoards()
 
   render: ->
     <div className="talk-home">
@@ -85,6 +126,10 @@ module?.exports = React.createClass
               </Link>
 
               <CreateBoardForm section={@props.section} onSubmitBoard={=> @setBoards()}/>
+
+              <h3>Reorder Boards:</h3>
+              {@boardOrders()}
+              <button onClick={@clearBoardOrder}>Order by activity</button>
             </div>
             }
         </div>
