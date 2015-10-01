@@ -47,6 +47,9 @@ emptySubjectQueue = ->
 auth.listen 'change', emptySubjectQueue
 apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 
+# Store this externally to persist during the session.
+sessionDemoMode = false
+
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
 
@@ -62,6 +65,7 @@ module.exports = React.createClass
     workflow: null
     subject: null
     classification: null
+    demoMode: sessionDemoMode
 
   propChangeHandlers:
     project: 'loadAppropriateClassification'
@@ -69,9 +73,9 @@ module.exports = React.createClass
 
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
-    # console.log 'Loading appropriate clasification'
+    # console.log 'Loading appropriate classification'
     @promiseToSetState classification: @getCurrentWorkflowID(props).then (workflowID) =>
-      # console.log 'Loading clasification for workflow', workflowID
+      # console.log 'Loading classification for workflow', workflowID
       # Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
       currentClassifications.forWorkflow[workflowID] ?= @createNewClassification props.project, workflowID
       currentClassifications.forWorkflow[workflowID]
@@ -111,10 +115,11 @@ module.exports = React.createClass
       getSubjectSet.then (subjectSet) =>
         @getNextSubject project, workflow, subjectSet
 
-    Promise.all([workflow, subject]).then ([workflow, subject]) ->
+    Promise.all([workflow, subject]).then ([workflow, subject]) =>
       # console.log 'Creating a new classification'
       classification = apiClient.type('classifications').create
         annotations: []
+        gold_standard: false
         metadata:
           workflow_version: workflow.version
           started_at: (new Date).toISOString()
@@ -193,7 +198,15 @@ module.exports = React.createClass
   render: ->
     <div className="classify-page content-container">
       {if @state.classification?
-        <Classifier {...@props} classification={@state.classification} onLoad={@scrollIntoView} onComplete={@saveClassification} onClickNext={@loadAnotherSubject} />
+        <Classifier
+          {...@props}
+          classification={@state.classification}
+          onLoad={@scrollIntoView}
+          demoMode={@state.demoMode}
+          onChangeDemoMode={@handleDemoModeChange}
+          onComplete={@saveClassification}
+          onClickNext={@loadAnotherSubject}
+        />
       else if @state.rejected.classification?
         <code>{@state.rejected.classification.toString()}</code>
       else
@@ -201,7 +214,7 @@ module.exports = React.createClass
     </div>
 
   scrollIntoView: (e) ->
-    # Auto-scroll to the middle of the clasification interface on load.
+    # Auto-scroll to the middle of the classification interface on load.
     # It's not perfect, but it should make the location of everything more obvious.
     lineHeight = parseFloat getComputedStyle(document.body).lineHeight
     el = @getDOMNode()
@@ -210,16 +223,28 @@ module.exports = React.createClass
     if Math.abs(idealScrollY - scrollY) > lineHeight
       animatedScrollTo document.body, el.offsetTop - space, 333
 
+  handleDemoModeChange: (newDemoMode) ->
+    sessionDemoMode = newDemoMode
+    @setState demoMode: sessionDemoMode
+
   saveClassification: ->
     console?.info 'Completed classification', @state.classification
-    @state.classification.save().then (classification) =>
-      console?.log 'Saved classification', classification.id
-      Promise.all([
-        classification.get 'workflow'
-        classification.get 'subjects'
-      ]).then ([workflow, subjects]) ->
-        seenThisSession.add workflow, subjects
-        classification.destroy()
+    savingClassification = if @state.demoMode
+      Promise.resolve @state.classification
+    else
+      @state.classification.save()
+
+    savingClassification.then (classification) =>
+      if @state.demoMode
+        console?.log 'Demo mode: Did NOT save classification'
+      else
+        console?.log 'Saved classification', classification.id
+        Promise.all([
+          classification.get 'workflow'
+          classification.get 'subjects'
+        ]).then ([workflow, subjects]) ->
+          seenThisSession.add workflow, subjects
+          classification.destroy()
       classificationsThisSession += 1
       @maybePromptToSignIn()
 

@@ -69,6 +69,10 @@ module.exports = React.createClass
     numberOfResults = @state.results.length
 
     <div className="talk-search">
+      <button  className="link-style" type="button" onClick={@goBack}>
+        <i className="fa fa-backward" /> Back
+      </button>
+
       {if @state.isLoading
         <Loading />}
 
