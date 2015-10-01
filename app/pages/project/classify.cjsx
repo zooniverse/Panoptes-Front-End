@@ -119,7 +119,6 @@ module.exports = React.createClass
       # console.log 'Creating a new classification'
       classification = apiClient.type('classifications').create
         annotations: []
-        # gold_standard: false
         metadata:
           workflow_version: workflow.version
           started_at: (new Date).toISOString()
