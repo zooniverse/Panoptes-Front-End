@@ -3,9 +3,12 @@
   z-index: 1
 
 .dialog-underlay
+  align-items: center
   background: rgba(black, 0.6)
   color: white
+  display: flex
   height: 100%
+  justify-content: center
   left: 0
   position: fixed
   top: 0
@@ -18,13 +21,9 @@
   color: black
   display: flex
   flex-direction: column
-  left: 50%
   max-height: 90%
   max-width: 100%
   overflow: auto
-  position: absolute
-  top: 40%
-  transform: translate(-50%, -40%)
 
 .dialog-controls
   height: 0
@@ -42,9 +41,13 @@
     font-size: 2em
     opacity: 0.8
     padding: 0 0.2em
-
+    
     &:hover
       opacity: 1
+      
+    &[aria-label="Close"]
+      color: white
+      position: fixed
 
 .dialog-content
   overflow: auto
