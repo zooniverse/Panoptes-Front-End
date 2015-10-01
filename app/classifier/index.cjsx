@@ -151,7 +151,7 @@ Classifier = React.createClass
             <strong>Gold standard mode:</strong>
             <br />
             Please ensure this classification is completely accurate.{' '}
-            <button type="button" className="secret-button" onClick={@props.classification.update.bind @props.classification, gold_standard: false}>
+            <button type="button" className="secret-button" onClick={@props.classification.update.bind @props.classification, gold_standard: undefined}>
               <u>Disable</u>
             </button>
           </small>
@@ -269,7 +269,7 @@ Classifier = React.createClass
     @props.onComplete?()
 
   handleGoldStandardChange: (e) ->
-    @props.classification.update gold_standard: e.target.checked
+    @props.classification.update gold_standard: e.target.checked || undefined # Delete the whole key.
 
   handleDemoModeChange: (e) ->
     @props.onChangeDemoMode e.target.checked
