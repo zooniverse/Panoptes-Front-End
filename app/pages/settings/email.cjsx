@@ -11,6 +11,9 @@ module.exports = React.createClass
   getDefaultProps: ->
     user: null
 
+  getInitialState: ->
+    page: 1
+
   nameOfPreference: (preference) ->
     switch preference.category
       when 'participating_discussions' then "When discussions I'm participating in are updated"
@@ -106,7 +109,8 @@ module.exports = React.createClass
             <th>Project</th>
           </tr>
         </thead>
-        <PromiseRenderer promise={@props.user.get 'project_preferences'} pending={=> <tbody></tbody>} then={(projectPreferences) =>
+        <PromiseRenderer promise={@props.user.get 'project_preferences', page: @state.page} pending={=> <tbody></tbody>} then={(projectPreferences) =>
+          meta = projectPreferences[0].getMeta()
           <tbody>
             {for projectPreference in projectPreferences then do (projectPreference) =>
               <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} then={(project) =>
@@ -117,6 +121,17 @@ module.exports = React.createClass
                   </tr>
                 } />
               } />}
+            <tr>
+              <td colSpan="2">
+                {if meta?
+                  <nav className="pagination">
+                    Page <select value={@state.page} disabled={meta.page_count < 2} onChange={(e) => @setState page: e.target.value}>
+                      {for p in [1..meta.page_count]
+                        <option key={p} value={p}>{p}</option>}
+                    </select> of {meta.page_count || '?'}
+                  </nav>}
+              </td>
+            </tr>
           </tbody>
         } />
       </table>
