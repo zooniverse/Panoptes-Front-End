@@ -5,8 +5,8 @@ apiClient = new JSONAPIClient config.host + '/api',
   'Content-Type': 'application/json'
   'Accept': 'application/vnd.api+json; version=1'
 
-apiClient.handleError = (response) ->
-  responseText = try JSON.parse response.text
+apiClient.handleError = (error) ->
+  responseText = try JSON.parse error.text
 
   if responseText?.error?
     errorMessage = responseText.error
@@ -21,10 +21,10 @@ apiClient.handleError = (response) ->
     errorMessage = errorMessage.join '\n'
 
   # Manually set a reasonable error when we get HTML back (currently 500s will do this).
-  if response.text?.indexOf('<!DOCTYPE') isnt -1
-    errorMessage ?= "There was a problem on the server. #{response.error?.url} → #{response.status}"
+  if error.text?.indexOf('<!DOCTYPE') isnt -1
+    errorMessage ?= "There was a problem on the server. #{error.error?.url} → #{error.status}"
 
-  errorMessage ?= response.responseText?.trim() || "#{response.status} #{response.statusText}"
+  errorMessage ?= response.responseText?.trim() || "#{error.status} #{error.statusText}"
   throw new Error errorMessage
 
 module.exports = apiClient
