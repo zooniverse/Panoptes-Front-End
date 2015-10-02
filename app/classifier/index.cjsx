@@ -9,7 +9,7 @@ preloadSubject = require '../lib/preload-subject'
 PromiseRenderer = require '../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
 isAdmin = require '../lib/is-admin'
-tutorial = require '../lib/tutorial'
+Tutorial = require '../lib/tutorial'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -34,11 +34,11 @@ Classifier = React.createClass
   componentDidMount: ->
     @loadSubject @props.subject
     @prepareToClassify @props.classification
-    tutorial.startIfNecessary @props.user, @props.project
+    Tutorial.startIfNecessary @props.user, @props.project
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
-      tutorial.startIfNecessary nextProps.user, nextProps.project
+      Tutorial.startIfNecessary nextProps.user, nextProps.project
     if nextProps.subject isnt @props.subject
       @loadSubject subject
     if nextProps.classification isnt @props.classification
@@ -87,7 +87,7 @@ Classifier = React.createClass
           else # Classification is complete.
             @renderSummary currentClassification}
           {if @props.project?.configuration.tutorial?
-            <button type="button" onClick={tutorial.start.bind(null, @props.user, @props.project)}>Tutorial</button>}
+            <button type="button" onClick={Tutorial.start.bind(Tutorial, @props.user, @props.project)}>Tutorial</button>}
         </div>
       </div>
     }</ChangeListener>
