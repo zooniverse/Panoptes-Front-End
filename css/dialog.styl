@@ -46,12 +46,14 @@
       opacity: 1
       
     &[aria-label="Close"]
-      color: white
-      position: fixed
+      @media screen and (min-width: 768px)  
+        color: white
+        position: fixed
 
 .dialog-content
   overflow: auto
   max-width: 800px
+  width: 100%
 
   img
     max-width: 100%
