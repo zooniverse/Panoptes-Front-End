@@ -86,8 +86,6 @@ Classifier = React.createClass
             @renderTask currentClassification, currentAnnotation, currentTask
           else # Classification is complete.
             @renderSummary currentClassification}
-          {if @props.project?.configuration.tutorial?
-            <button type="button" onClick={Tutorial.start.bind(Tutorial, @props.user, @props.project)}>Tutorial</button>}
         </div>
       </div>
     }</ChangeListener>
@@ -124,13 +122,18 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
+        {if @props.project?.configuration.tutorial?
+          <button type="button" className="secret-button" title="Project tutorial" aria-label="Show the project tutorial" onClick={Tutorial.start.bind(Tutorial, @props.user, @props.project)}>
+            <i className="fa fa-graduation-cap fa-fw" />
+          </button>}
+
         <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
         {if nextTaskKey
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
         else
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
             {if @props.demoMode
-              <i className="fa fa-trash"></i>
+              <i className="fa fa-trash fa-fw"></i>
             else if @props.classification.gold_standard
               <i className="fa fa-star fa-fw"></i>}
             {' '}Done
