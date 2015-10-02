@@ -24,7 +24,7 @@ apiClient.handleError = (error) ->
   if error.text?.indexOf('<!DOCTYPE') isnt -1
     errorMessage ?= "There was a problem on the server. #{error.error?.url} → #{error.status}"
 
-  errorMessage ?= response.responseText?.trim() || "#{error.status} #{error.statusText}"
+  errorMessage ?= error.text?.trim() || "#{error.status} #{error.statusText}"
   throw new Error errorMessage
 
 module.exports = apiClient
