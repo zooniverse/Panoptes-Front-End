@@ -12,7 +12,7 @@ counterpart.registerTranslations 'en',
 
       Firstly, **Public Projects**.
 
-      Got your own crowd? Want only members of your collaboration to sort through your data? Then you can simply share the URL with those you want to take part. There is a limit of 10,000 subjects per project - [contact us](/about/contact) if you'd like to host more. NOTE: This upload limit applies to all projects initially.
+      Got your own crowd? Want only members of your collaboration to sort through your data? Then you can simply share the URL with those you want to take part. There is a limit of 10,000 subjects per user - [contact us](/about/contact) if you'd like to host more. NOTE: This upload limit applies to all users initially.
 
       _If you're planning a big public launch, or you think your project might attract significant attention, you should still [let us know](/about/contact) so we can support you properly. Otherwise you can get on with using your project._
 
