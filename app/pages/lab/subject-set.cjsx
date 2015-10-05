@@ -15,7 +15,7 @@ isAdmin = require '../../lib/is-admin'
 
 NOOP = Function.prototype
 
-VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
+VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg']
 INVALID_FILENAME_CHARS = ['/', '\\', ':']
 MAX_FILE_SIZE = 600000
 
