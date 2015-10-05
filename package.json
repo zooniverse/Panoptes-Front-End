@@ -53,7 +53,7 @@
     "stage": "NON_ROOT=true NODE_ENV=staging npm run build && publisssh ./build \"demo.zooniverse.org/panoptes-front-end/$DEPLOY_SUBDIR\"",
     "stage-branch": "NON_ROOT=true DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD) npm run stage",
     "start": "./bin/serve.sh",
-    "test": "browserify ./test/runner.coffee --extension .coffee --extension .cjsx --transform coffee-reactify --transform envify --ignore-transform coffeeify | testling \"${TESTLING_ARGS:---pass}\" | tap-spec",
+    "test": "node node_modules/browserify/bin/cmd ./test/runner.coffee --extension .coffee --extension .cjsx --transform coffee-reactify --transform envify --ignore-transform coffeeify|node node_modules/testling/bin/cmd \"${TESTLING_ARGS:---pass}\" | node node_modules/tap-spec/bin/cmd",
     "test-mac": "TESTLING_ARGS=\"-x open --new -a Google\\ Chrome --args --incognito\" npm run test"
   },
   "config": {
