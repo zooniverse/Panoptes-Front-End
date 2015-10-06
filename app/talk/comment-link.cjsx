@@ -18,7 +18,6 @@ module?.exports = React.createClass
     pageSize: PAGE_SIZE
 
   projectComment: ->
-    console.log @props.comment.section, 'zooniverse'
     @props.comment.section isnt 'zooniverse'
 
   pathname: ->
