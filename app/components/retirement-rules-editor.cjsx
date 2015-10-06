@@ -34,11 +34,17 @@ module.exports = React.createClass
     }</ChangeListener>
 
   handleChangeCriteria: (e) ->
+    if @props.workflow.retirement?.classification_count?
+      delete @props.workflow.retirement.classification_count
+
     @props.workflow.update
       'retirement.criteria': e.target.value
       'retirement.options': @defaultOptions[e.target.value]
 
   handleChangeOption: (e) ->
+    if @props.workflow.retirement?.classification_count?
+      delete @props.workflow.retirement.classification_count
+
     @props.workflow.update
       'retirement.criteria': @props.workflow.retirement?.criteria ? @defaultCriteria
 
