@@ -1,10 +1,12 @@
+React = require 'react'
 talkClient = require '../api/talk'
-
-placeholder = document.createElement 'li'
-placeholder.className = 'talk-sticky-placeholder fa fa-bars'
 
 module?.exports = React.createClass
   displayName: 'StickyDiscussionList'
+
+  placeholder: ->
+    @placeholder or= document.getElementById("talk-sticky-placeholder")
+    @placeholder
 
   getInitialState: ->
     data: []
@@ -42,7 +44,7 @@ module?.exports = React.createClass
   start: (e) ->
     @dragged = e.currentTarget
     @first = @last = false
-    placeholder.innerHTML = @dragged.innerHTML
+    @placeholder().innerHTML = @dragged.innerHTML
 
   dragEnd: (e) ->
     @end e
@@ -53,8 +55,8 @@ module?.exports = React.createClass
 
   end: (e) ->
     @dragged.style.display = 'block'
-    @dragged.parentNode.removeChild placeholder
-    placeholder.dataset.content = ''
+    @dragged.parentNode.removeChild @placeholder()
+    @placeholder().dataset.content = ''
     @swap()
 
   dragMove: (e) ->
@@ -62,7 +64,7 @@ module?.exports = React.createClass
     @dragged.style.display = 'none'
     return if e.target.className is 'placeholder'
     @over = e.target
-    e.target.parentNode.insertBefore placeholder, e.target
+    e.target.parentNode.insertBefore @placeholder(), e.target
 
   touchMove: (e) ->
     e.preventDefault()
@@ -74,17 +76,17 @@ module?.exports = React.createClass
     @over = target if target
     offset = touch.clientY - @startY
     try
-      @dragged.parentNode.insertBefore placeholder, target
+      @dragged.parentNode.insertBefore @placeholder(), target
       @first = @last = false
     catch
       if offset > 0
         # insert after last item
         @last = true
-        @dragged.parentNode.insertBefore placeholder, null
+        @dragged.parentNode.insertBefore @placeholder(), null
       else
         # insert before first item
         @first = true
-        @dragged.parentNode.insertBefore placeholder, @dragged.parentNode.children[0]
+        @dragged.parentNode.insertBefore @placeholder(), @dragged.parentNode.children[0]
 
     @translate touch.target, offset
 

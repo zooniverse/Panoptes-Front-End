@@ -40,10 +40,8 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
   "$SRC_CSS" \
   & pids="$pids $!"
 
-./bin/server.js \
+node start.js \
   & pids="$pids $!"
-
-erb "$DEV_DIR/$SRC_HTML" > "$DEV_DIR/$OUT_HTML"
 
 trap 'kill -HUP $pids' INT TERM HUP
 

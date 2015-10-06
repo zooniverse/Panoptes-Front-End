@@ -11,7 +11,7 @@ export VENDOR_JS="vendor.js"
 export SRC_CSS="css/main.styl"
 export OUT_CSS="main.css"
 
-export SRC_HTML="index.erb"
+export SRC_HTML="./views/index.ejs"
 export OUT_HTML="index.html"
 
 # NOTE: Non-dev dependencies are assumed to be front-end modules.

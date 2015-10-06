@@ -1,7 +1,7 @@
 Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require '@edpaget/react-router'
 React = require 'react'
 
-routes =
+module.exports =
 <Route handler={require './partials/app'}>
   <DefaultRoute name="home" handler={require './pages/home'} />
 
@@ -117,9 +117,3 @@ routes =
   <Route path="dev/ribbon" handler={require './components/classifications-ribbon'} />
 </Route>
 
-location = if process.env.NON_ROOT == "true"
-    null
-  else
-    Router.HistoryLocation
-
-module.exports = Router.create { location, routes }

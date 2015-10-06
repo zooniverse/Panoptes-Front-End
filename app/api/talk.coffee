@@ -21,5 +21,5 @@ authClient.listen 'change', ->
 # talkClient.headers = apiClient.headers
 talkClient.handleError = apiClient.handleError
 
-window.talkClient = talkClient
+window?.talkClient = talkClient
 module.exports = talkClient
