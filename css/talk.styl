@@ -292,6 +292,9 @@ COPY_GREY_LIGHT = #afaeae
       width: 1em
       text-align: center
 
+  .hidden-markdown
+    display: none
+
   .talk-discussion-link
     color: COPY_GREY_LIGHT
 
@@ -646,3 +649,29 @@ COPY_GREY_LIGHT = #afaeae
 
 .talk-comment-help
   margin: 2em
+
+.talk.notifications
+  .title
+    margin-top: 0
+
+  .bottom
+    border-top: 1px solid LIGHT_GREY
+    padding: 5px
+
+    .time-ago
+      @extend .talk .talk-discussion-link .latest-comment-time
+      font-size: 0.9em
+
+  .talk-discussion-preview
+    border-bottom: none
+    margin: auto
+
+    h1, .preview-stats, .latest-comment-preview-link
+      display: none
+
+  .message-link
+    display: block
+    text-decoration: none
+
+    &:hover
+      text-decoration: underline

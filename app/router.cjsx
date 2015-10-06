@@ -44,6 +44,7 @@ routes =
     <Route name="project-research" path="research/?" handler={require './pages/project/research'} />
     <Route name="project-results" path="results/?" handler={require './pages/project/results'} />
     <Route name="project-classify" path="classify/?" handler={require './pages/project/classify'} />
+    <Route name="project-notifications" path="notifications/?" handler={require './pages/notifications'} />
     <Route name="project-talk" path="talk/?" handler={require './pages/project/talk'}>
       <DefaultRoute name="project-talk-home" handler={require './talk/init'} />
       <Route name="project-talk-recents" path="recents/?" handler={require './talk/recents'} />
@@ -58,6 +59,8 @@ routes =
     <Route name="project-faq" path="faq/?" handler={require './pages/project/faq'} />
     <Route name="project-education" path="education/?" handler={require './pages/project/education'} />
   </Route>
+
+  <Route name="notifications" path="notifications/?" handler={require './pages/notifications'} />
 
   <Route name="talk" path="talk/?" handler={require './talk'}>
     <DefaultRoute name="talk-home" handler={require './talk/init'} />
