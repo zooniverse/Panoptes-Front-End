@@ -14,6 +14,8 @@ QuickSubjectCommentForm= require '../talk/quick-subject-comment-form'
 {Markdown} = require 'markdownz'
 alert = require '../lib/alert'
 SignInPrompt = require '../partials/sign-in-prompt'
+Comment = require '../talk/comment'
+Paginator = require '../talk/lib/paginator'
 
 indexOf = (elem) ->
   (elem while elem = elem.previousSibling).length
@@ -28,28 +30,38 @@ module?.exports = React.createClass
   getInitialState: ->
     subject: null
     tab: 0
+    comments: []
+    commentsMeta: {}
+
+  getDefaultProps: ->
+    query: page: 1
 
   componentWillMount: ->
-    @setSubject()
+    @setSubject().then(@setComments)
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.params?.id isnt @props.params?.id
-      @setSubject()
+      @setSubject().then(@setComments)
+
+    if nextProps.query.page isnt @props.query.page
+      @setComments(@state.subject, nextProps.query.page)
 
   setSubject: ->
     subjectId = @props.params?.id.toString()
     apiClient.type('subjects').get(subjectId)
       .then (subject) =>
         @setState {subject}
+        subject
 
-  comment: (data, i) ->
-    <CommentLink key={data.id} comment={data}>
-      <div className="talk-module">
-        <strong>{data.user_display_name}</strong>
-        <br />
-        <Markdown project={@props.project}>{data.body}</Markdown>
-      </div>
-    </CommentLink>
+  setComments: (subject = @state.subject, page = @props.query.page ? 1) ->
+    talkClient.type('comments')
+      .get({focus_id: subject.id, focus_type: 'Subject', page})
+      .then (comments) =>
+        commentsMeta = comments[0]?.getMeta()
+        @setState {comments, commentsMeta}
+
+  comment: (comment, i) ->
+    <Comment key={comment.id} data={comment} locked={true} linked={true} />
 
   onCreateDiscussion: (discussion) ->
     projectId = parseSection(discussion.section)
@@ -62,7 +74,7 @@ module?.exports = React.createClass
     <Link to="project-classify" params={{owner, name}}>{text}</Link>
 
   render: ->
-    {subject} = @state
+    {subject, comments, commentsMeta} = @state
 
     <div className="subject-page talk">
       {if subject
@@ -71,15 +83,18 @@ module?.exports = React.createClass
 
           <SubjectViewer subject={subject} user={@props.user} project={@props.project}/>
 
-          <PromiseRenderer promise={talkClient.type('comments').get({focus_id: subject.id, focus_type: 'Subject'})}>{(comments) =>
-            if comments.length
-              <div>
-                <h2>Comments mentioning this subject:</h2>
-                <div>{comments.map(@comment)}</div>
-              </div>
-            else
-              <p>There are no comments focused on this subject</p>
-          }</PromiseRenderer>
+          {if comments?.length
+            <div>
+              <h2>Comments mentioning this subject:</h2>
+              <div>{comments.map(@comment)}</div>
+
+              <Paginator
+                page={+commentsMeta?.page}
+                pageCount={+commentsMeta?.page_count}
+              />
+            </div>
+          else
+            <p>There are no comments focused on this subject</p>}
 
           {if @props.user
             {# TODO remove subject.get('project'), replace with params but browser freezes on get to projects with slug}

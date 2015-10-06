@@ -33,10 +33,12 @@ module?.exports = React.createClass
     user: React.PropTypes.object  # Current user
     index: React.PropTypes.number # The index of the comment in a discussion
     locked: React.PropTypes.bool  # disable action buttons
+    linked: React.PropTypes.bool
 
   getDefaultProps: ->
     active: false
     locked: false
+    linked: false
 
   getInitialState: ->
     editing: false
@@ -197,6 +199,14 @@ module?.exports = React.createClass
                 />}
 
             <Markdown content={@props.data.body} project={@props.project} header={null}/>
+
+            {if @props.linked
+              <div style={textAlign: "right"}>
+                <CommentLink comment={@props.data}>
+                  <i className="fa fa-comments-o"/> View the discussion
+                </CommentLink>
+              </div>
+              }
 
             <div className="talk-comment-links #{if @props.locked then 'locked' else ''}">
               <button className="talk-comment-like-button" onClick={@onClickLike}>
