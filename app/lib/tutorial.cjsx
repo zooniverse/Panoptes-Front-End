@@ -1,3 +1,4 @@
+React = require 'react'
 Dialog = require 'modal-form/dialog'
 StepThrough = require '../components/step-through'
 MediaCard = require '../components/media-card'
