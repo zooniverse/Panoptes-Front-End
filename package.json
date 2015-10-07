@@ -21,7 +21,6 @@
     "modal-form": "~1.1.0",
     "moment": "~2.9.0",
     "papaparse": "mholt/PapaParse#cada171",
-    "primus": "^3.2.2",
     "react": "~0.13.2",
     "react-interpolate-component": "~0.7.1",
     "react-select": "marten/react-select#close-after-click",
@@ -31,6 +30,7 @@
     "window-shim": "^1.0.0"
   },
   "devDependencies": {
+    "babelify": "^6.3.0",
     "blue-tape": "~0.1.10",
     "browserify": "~11.0.1",
     "coffee-reactify": "~4.0.0",
@@ -39,6 +39,7 @@
     "envify": "~3.4.0",
     "es6-promise": "~2.3.0",
     "function-bind": "~1.0.2",
+    "lessify": "^1.0.1",
     "nib": "~1.1.0",
     "node-static": "~0.7.7",
     "publisssh": "~1.0.0",

@@ -21,7 +21,9 @@ function flag_externals {
   out=""
   for module in $externals; do
     # Symlinked modules are assumed to be in development and aren't externalized.
-    [[ -L "node_modules/$module" ]] || out="$out --$1 $module"
+    if [[ "$module" != "express" && "$module" != "ejs" && "$module" != "babel" && "$module" != "coffee-react" ]]; then
+      [[ -L "node_modules/$module" ]] || out="$out --$1 $module"
+    fi
   done
   echo $out
 }
