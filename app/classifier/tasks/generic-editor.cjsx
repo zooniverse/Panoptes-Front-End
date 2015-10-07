@@ -104,6 +104,7 @@ module.exports = React.createClass
                       <AutoSave resource={@props.workflow}>
                         Color{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
+                          <!-- TODO Color picker instead of fixed choices -->
                           <option value="#ff0000">Red</option>
                           <option value="#ffff00">Yellow</option>
                           <option value="#00ff00">Green</option>
@@ -112,7 +113,6 @@ module.exports = React.createClass
                           <option value="#ff00ff">Magenta</option>
                           <option value="#000000">Black</option>
                           <option value="#ffffff">White</option>
-                          <option disabled>TODO: Picker</option>
                         </select>
                       </AutoSave>
                     </div>
