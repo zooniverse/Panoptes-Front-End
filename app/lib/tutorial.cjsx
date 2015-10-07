@@ -70,12 +70,15 @@ module.exports = React.createClass
         step._key ?= Math.random()
         <MediaCard key={step._key} className="tutorial-step" src={step.media}>
           <Markdown>{step.content}</Markdown>
-          {if i is @props.steps.length - 1
-            <div>
-              <hr key="hr" />
-              <p key="p" style={textAlign: 'center'}>
-                <button type="submit" className="major-button">Let’s go!</button>
-              </p>
-            </div>}
+          <hr key="hr" />
+          <p key="p" style={textAlign: 'center'}>
+            {if i is @props.steps.length - 1
+              <button type="submit" className="major-button">Let’s go!</button>
+            else
+              <button type="button" className="standard-button" onClick={@handleNextClick}>Continue</button>}
+          </p>
         </MediaCard>}
     </StepThrough>
+
+  handleNextClick: ->
+    @refs.stepThrough.goNext()
