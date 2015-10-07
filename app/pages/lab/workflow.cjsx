@@ -28,11 +28,10 @@ EditWorkflowPage = React.createClass
     forceReloader: 0
 
   workflowLink: ->
-    router = require '../../router'
     [owner, name] = @props.project.slug.split('/')
     viewParams = {owner, name}
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
-    router.makeHref 'project-classify', viewParams, viewQuery
+    @makeHref 'project-classify', viewParams, viewQuery
 
   render: ->
     window.editingWorkflow = @props.workflow
