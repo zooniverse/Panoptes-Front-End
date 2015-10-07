@@ -97,13 +97,15 @@ module?.exports = React.createClass
           <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
 
         {if subjects.length > 0
+          meta = subjects[0].getMeta()
+
           <div>
             <div className="collection-subjects-list">{subjects.map(subjectNode)}</div>
 
             <Paginator
-              page={+@props.query.page}
+              page={meta.page}
               onPageChange={@onPageChange}
-              pageCount={subjects[0].getMeta().page_count} />
+              pageCount={meta.page_count} />
           </div>}
       </div>
 
