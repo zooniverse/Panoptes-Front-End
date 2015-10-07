@@ -37,6 +37,11 @@ module?.exports = React.createClass
       loading = false
       @setState {loading, notifications, meta}
 
+  paginator: ->
+    <div className="centering">
+      <Paginator page={+@state.meta.page} pageCount={@state.meta.page_count} />
+    </div>
+
   render: ->
     <div className="talk notifications">
       <div className="content-container">
@@ -44,17 +49,24 @@ module?.exports = React.createClass
           <ChangeListener target={@props.user}>{ =>
             if @state.loading
               <Loading />
-            else
+            else if @state.notifications?.length > 0
               <div>
-                <Paginator page={+@state.meta.page} pageCount={@state.meta.page_count} />
+                {@paginator()}
                 <div className="list">
                   {for notification in @state.notifications
                     <Notification notification={notification} key={notification.id} user={@props.user} />
                   }
                 </div>
+                {@paginator()}
+              </div>
+            else
+              <div className="centering talk-module">
+                <p>You have no notifiations</p>
               </div>
           }</ChangeListener>
         else
-          <p>You're not signed in.</p>}
+          <div className="centering talk-module">
+            <p>You're not signed in.</p>
+          </div>}
       </div>
     </div>

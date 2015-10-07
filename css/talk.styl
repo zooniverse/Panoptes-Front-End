@@ -651,8 +651,20 @@ COPY_GREY_LIGHT = #afaeae
   margin: 2em
 
 .talk.notifications
+  .centering
+    text-align: center
+
+  .talk-module
+    background-color: TALK_BACKGROUND
+    opacity: 0.97
+
   &.unread .talk-module
     border-color: MAIN_HIGHLIGHT
+
+  .paginator
+    @extend .talk-module
+    display: inline-block
+    opacity: 0.97
 
   .title
     margin-top: 0
