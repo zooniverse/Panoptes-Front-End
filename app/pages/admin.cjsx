@@ -8,7 +8,7 @@ counterpart.registerTranslations 'en',
   userAdminPage:
     header: "Admin"
     nav:
-      createAdmin: "Manage Administrators"
+      createAdmin: "Manage Users"
       projectStatus: "Set Project Status"
 
 AdminPage = React.createClass
