@@ -30,7 +30,7 @@ module.exports = React.createClass
 
     start: (user, project) ->
       # TODO: `project.get('tutorial')`
-      getSteps = Promise.resolve project.configuration.tutorial ? []
+      getSteps = Promise.resolve project.configuration?.tutorial ? []
 
       doingTutorial = getSteps.then (steps) =>
         unless steps.length is 0
