@@ -28,8 +28,12 @@ module?.exports = React.createClass
     @getNotifications(nextProps.query.page) if pageChanged or userChanged
 
   getNotifications: (page = @props.query.page) ->
-    talkClient.type('notifications').get(page: page).then (notifications) =>
-      meta = notifications[0].getMeta()
+    page or= 1
+    query = {page}
+    query.section = "project-#{ @props.project.id }" if @props.project
+    query.section = @props.params.section if @props.params.section
+    talkClient.type('notifications').get(query).then (notifications) =>
+      meta = notifications[0]?.getMeta() or { }
       loading = false
       @setState {loading, notifications, meta}
 

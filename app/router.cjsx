@@ -61,6 +61,7 @@ routes =
   </Route>
 
   <Route name="notifications" path="notifications/?" handler={require './pages/notifications'} />
+  <Route name="section-notifications" path=":section/notifications/?" handler={require './pages/notifications'} />
 
   <Route name="talk" path="talk/?" handler={require './talk'}>
     <DefaultRoute name="talk-home" handler={require './talk/init'} />
