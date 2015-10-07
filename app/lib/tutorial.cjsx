@@ -29,7 +29,7 @@ module.exports = React.createClass
           true
 
     start: (user, project) ->
-      # TODO: Fetch steps here, make sure they're in order.
+      # TODO: `project.get('tutorial')`
       getSteps = Promise.resolve project.configuration.tutorial ? []
 
       doingTutorial = getSteps.then (steps) =>
