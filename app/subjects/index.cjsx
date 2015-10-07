@@ -55,7 +55,7 @@ module?.exports = React.createClass
 
   setComments: (subject = @state.subject, page = @props.query.page ? 1) ->
     talkClient.type('comments')
-      .get({focus_id: subject.id, focus_type: 'Subject', page})
+      .get({focus_id: subject.id, focus_type: 'Subject', page, sort: '-created_at'})
       .then (comments) =>
         commentsMeta = comments[0]?.getMeta()
         @setState {comments, commentsMeta}
