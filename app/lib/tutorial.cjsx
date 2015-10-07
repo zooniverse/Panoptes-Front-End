@@ -56,6 +56,11 @@ module.exports = React.createClass
           if completed is false
             @start user, project
 
+  propTypes:
+    steps: React.PropTypes.arrayOf React.PropTypes.shape
+      media: React.PropTypes.string
+      content: React.PropTypes.string
+
   getDefaultProps: ->
     steps: []
 
