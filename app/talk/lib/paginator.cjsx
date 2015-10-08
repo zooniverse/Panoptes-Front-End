@@ -50,12 +50,14 @@ module?.exports = React.createClass
 
   onClickNext: ->
     {pageCount, page} = @props
+    @props.onClickNext?()
 
     nextPage = if page is pageCount then pageCount else page + 1
     @setPage(nextPage)
 
   onClickPrev: ->
     {pageCount, page} = @props
+    @props.onClickPrev?()
 
     prevPage = if page is 1 then page else page - 1
     @setPage(prevPage)

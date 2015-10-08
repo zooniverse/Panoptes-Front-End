@@ -23,6 +23,10 @@ module?.exports = React.createClass
   componentWillMount: ->
     @getNotifications() if @props.user
 
+  componentWillUnmount: ->
+    @markAsRead('first')()
+    @markAsRead('last')()
+
   componentWillReceiveProps: (nextProps) ->
     pageChanged = nextProps.query.page isnt @props.query.page
     userChanged = nextProps.user and nextProps.user isnt @props.user
@@ -36,6 +40,7 @@ module?.exports = React.createClass
     talkClient.type('notifications').get(query).then (newNotifications) =>
       meta = newNotifications[0]?.getMeta() or { }
       notifications = @state.notifications or newNotifications
+      meta.notificationIds = (n.id for n in newNotifications)
 
       {firstMeta, lastMeta} = @state
 
@@ -47,10 +52,17 @@ module?.exports = React.createClass
         notifications.unshift newNotifications...
       else
         firstMeta = lastMeta = meta
-        notifications = newNotifications
 
       loading = false
       @setState {loading, notifications, firstMeta, lastMeta}
+
+  markAsRead: (meta)->
+    =>
+      ids = @state["#{ meta }Meta"].notificationIds
+      setTimeout =>
+        talkClient.put '/notifications/read', id: ids.join(',')
+        for notification in @state.notifications when notification.id in ids
+          notification.update delivered: true
 
   render: ->
     <div className="talk notifications">
@@ -68,7 +80,8 @@ module?.exports = React.createClass
                       scrollOnChange={false}
                       firstAndLast={false}
                       pageSelector={false}
-                      previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>} />
+                      previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>}
+                      onClickPrev={@markAsRead 'first'} />
                   </div>}
 
                 <div className="list">
@@ -85,7 +98,8 @@ module?.exports = React.createClass
                     scrollOnChange={false}
                     firstAndLast={false}
                     pageSelector={false}
-                    nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>} />
+                    nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>}
+                    onClickNext={@markAsRead 'last'} />
                 </div>
               </div>
             else if @state.notifications?.length is 0
