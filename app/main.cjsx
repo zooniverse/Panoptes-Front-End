@@ -5,8 +5,8 @@ React.initializeTouchEvents true
 
 routes = require './router'
 
-if process.env.NON_ROOT isnt 'true' and location? and location.hash isnt ""
-  location.pathname = location.hash.slice(1)
+if process.env.NON_ROOT isnt 'true' and window.location? and window.location.hash isnt ""
+  window.location.pathname = window.location.hash.slice(1)
 
 location = if process.env.NON_ROOT == "true"
     null
