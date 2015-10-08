@@ -24,7 +24,6 @@ module?.exports = React.createClass
     if @state.comment
      <Comment
        data={@state.comment}
-       key={"comment-#{ @state.comment.id }"}
        user={@props.user}
        project={@props.project} />
     else

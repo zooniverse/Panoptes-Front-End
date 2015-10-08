@@ -43,7 +43,7 @@ module?.exports = React.createClass
     path = if notification.project_id then 'project-talk-moderations' else 'talk-moderations'
 
     if @state.moderation
-      <div className="moderation talk-module" key={"moderation-#{ @state.moderation.id }"}>
+      <div className="moderation talk-module">
         <div className="title">
           <Link to={path} {...@props}>{notification.message}</Link>
         </div>

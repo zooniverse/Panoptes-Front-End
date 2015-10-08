@@ -28,7 +28,7 @@ module?.exports = React.createClass
   render: ->
     notification = @props.notification
     if @state.message
-      <div className="conversation-message talk-module" key={"message-#{ @state.message.id }"}>
+      <div className="conversation-message talk-module">
         <Link to="inbox-conversation" {...@props} params={conversation: notification.source.conversation_id} className="message-link">
           {notification.message}{' '}
           in {@state.conversation.title}
