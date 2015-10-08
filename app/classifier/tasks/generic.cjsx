@@ -26,7 +26,7 @@ module.exports = React.createClass
       </div>
 
       {if @props.required
-        <div>
+        <div className="required-task-warning">
           <p>
             <small>
               <strong>This step is required.</strong>
