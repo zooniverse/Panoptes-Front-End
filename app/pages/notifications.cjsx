@@ -18,7 +18,6 @@ module?.exports = React.createClass
   getInitialState: ->
     firstMeta: { }
     lastMeta: { }
-    loading: true
 
   componentWillMount: ->
     @getNotifications() if @props.user
@@ -53,8 +52,7 @@ module?.exports = React.createClass
       else
         firstMeta = lastMeta = meta
 
-      loading = false
-      @setState {loading, notifications, firstMeta, lastMeta}
+      @setState {notifications, firstMeta, lastMeta}
 
   markAsRead: (meta)->
     =>
