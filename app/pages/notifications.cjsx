@@ -16,7 +16,8 @@ module?.exports = React.createClass
     query: page: 1
 
   getInitialState: ->
-    meta: { }
+    firstMeta: { }
+    lastMeta: { }
     loading: true
 
   componentWillMount: ->
@@ -32,37 +33,67 @@ module?.exports = React.createClass
     query = {page}
     query.section = "project-#{ @props.project.id }" if @props.project
     query.section = @props.params.section if @props.params.section
-    talkClient.type('notifications').get(query).then (notifications) =>
-      meta = notifications[0]?.getMeta() or { }
-      loading = false
-      @setState {loading, notifications, meta}
+    talkClient.type('notifications').get(query).then (newNotifications) =>
+      meta = newNotifications[0]?.getMeta() or { }
+      notifications = @state.notifications or newNotifications
 
-  paginator: ->
-    <div className="centering">
-      <Paginator page={+@state.meta.page} pageCount={@state.meta.page_count} />
-    </div>
+      {firstMeta, lastMeta} = @state
+
+      if meta.page > @state.lastMeta.page
+        lastMeta = meta
+        notifications.push newNotifications...
+      else if meta.page < @state.firstMeta.page
+        firstMeta = meta
+        notifications.unshift newNotifications...
+      else
+        firstMeta = lastMeta = meta
+        notifications = newNotifications
+
+      loading = false
+      @setState {loading, notifications, firstMeta, lastMeta}
 
   render: ->
     <div className="talk notifications">
       <div className="content-container">
         {if @props.user?
           <ChangeListener target={@props.user}>{ =>
-            if @state.loading
-              <Loading />
-            else if @state.notifications?.length > 0
+            if @state.notifications?.length > 0
               <div>
-                {@paginator()}
+                {if @state.firstMeta.page > 1
+                  <div className="centering">
+                    <Paginator
+                      className="newer"
+                      page={+@state.firstMeta.page}
+                      pageCount={@state.firstMeta.page_count}
+                      scrollOnChange={false}
+                      firstAndLast={false}
+                      pageSelector={false}
+                      previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>} />
+                  </div>}
+
                 <div className="list">
                   {for notification in @state.notifications
                     <Notification notification={notification} key={notification.id} user={@props.user} />
                   }
                 </div>
-                {@paginator()}
+
+                <div className="centering">
+                  <Paginator
+                    className="older"
+                    page={+@state.lastMeta.page}
+                    pageCount={@state.lastMeta.page_count}
+                    scrollOnChange={false}
+                    firstAndLast={false}
+                    pageSelector={false}
+                    nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>} />
+                </div>
               </div>
-            else
+            else if @state.notifications?.length is 0
               <div className="centering talk-module">
                 <p>You have no notifiations</p>
               </div>
+            else
+              <Loading />
           }</ChangeListener>
         else
           <div className="centering talk-module">

@@ -658,13 +658,19 @@ COPY_GREY_LIGHT = #afaeae
     background-color: TALK_BACKGROUND
     opacity: 0.97
 
-  &.unread .talk-module
+  .notification.unread .talk-module
     border-color: MAIN_HIGHLIGHT
 
   .paginator
     @extend .talk-module
     display: inline-block
     opacity: 0.97
+
+    &.older .paginator-prev
+      display: none
+
+    &.newer .paginator-next
+      display: none
 
   .title
     margin-top: 0
