@@ -17,10 +17,15 @@ userIsModerator = require './lib/user-is-moderator'
 
 actionTaken =
   destroy: 'Deleted'
+  destroyed: 'Deleted'
   open: 'Opened'
-  close: 'Closed'
+  opened: 'Opened'
+  close: 'Deleted'
+  closed: 'Deleted'
   ignore: 'Ignored'
+  ignored: 'Ignored'
   watch: 'Watched'
+  watched: 'Watched'
 
 module?.exports = React.createClass
   displayName: 'TalkModerations'
@@ -103,7 +108,7 @@ module?.exports = React.createClass
       <CommentLink comment={comment} />
 
       <div className="moderations-actions-buttons">
-        <p>Status: <strong>{moderation.state}</strong></p>
+        <p>Status: <strong>{actionTaken[moderation.state] ? moderation.state}</strong></p>
 
         {if moderation.actions.length
           <div>
@@ -179,7 +184,7 @@ module?.exports = React.createClass
                   key={action}
                   onClick={=> @filterByAction(action)}
                   className={if @props.query.state is action then 'active' else ''}>
-                  {action}
+                  {actionTaken[action] ? action}
                 </button>
                 }
             </section>
