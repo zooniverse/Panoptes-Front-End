@@ -1,7 +1,5 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
 talkClient = require '../../api/talk'
-apiClient = require '../../api/client'
 Loading = require '../../components/loading-indicator'
 Comment = require '../../talk/search-result'
 

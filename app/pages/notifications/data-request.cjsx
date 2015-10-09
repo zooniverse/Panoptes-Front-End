@@ -1,6 +1,4 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
-talkClient = require '../../api/talk'
 apiClient =  require '../../api/client'
 moment = require 'moment'
 

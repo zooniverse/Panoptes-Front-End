@@ -1,5 +1,4 @@
 React = require 'react'
-talkClient = require '../../api/talk'
 CommentNotification = require './comment'
 DataRequestNotification = require './data-request'
 MessageNotification = require './message'
