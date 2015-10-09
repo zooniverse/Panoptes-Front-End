@@ -59,15 +59,20 @@ module?.exports = React.createClass
 
       @setState {notifications, firstMeta, lastMeta}
 
-  markAsRead: (meta)->
+  markAsRead: (meta) ->
     =>
       ids = @state["#{ meta }Meta"].notificationIds
       ids = (id for id in ids when not @state.notificationsMap[id].delivered)
       return if ids.length is 0
-      setTimeout =>
-        talkClient.put '/notifications/read', id: ids.join(',')
-        for notification in @state.notifications when notification.id in ids
-          notification.update delivered: true
+      talkClient.put '/notifications/read', id: ids.join(',')
+      for notification in @state.notifications when notification.id in ids
+        notification.update delivered: true
+
+  markAllAsRead: ->
+    talkClient.put '/notifications/read'
+    for notification in @state.notifications
+      notification.update delivered: true
+    @forceUpdate()
 
   title: ->
     if @props.project
@@ -88,18 +93,24 @@ module?.exports = React.createClass
           <ChangeListener target={@props.user}>{ =>
             if @state.notifications?.length > 0
               <div>
-                {if @state.firstMeta.page > 1
                   <div className="centering">
-                    <Paginator
-                      className="newer"
-                      page={+@state.firstMeta.page}
-                      pageCount={@state.firstMeta.page_count}
-                      scrollOnChange={false}
-                      firstAndLast={false}
-                      pageSelector={false}
-                      previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>}
-                      onClickPrev={@markAsRead 'first'} />
-                  </div>}
+                    <div className="talk-module inline-block">
+                      {if @state.firstMeta.page > 1
+                        <Paginator
+                          className="newer inline-block"
+                          page={+@state.firstMeta.page}
+                          pageCount={@state.firstMeta.page_count}
+                          scrollOnChange={false}
+                          firstAndLast={false}
+                          pageSelector={false}
+                          previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>}
+                          onClickPrev={@markAsRead 'first'} />}
+
+                      <button onClick={@markAllAsRead}>
+                        Mark all as read
+                      </button>
+                    </div>
+                  </div>
 
                 <div className="list">
                   {for notification in @state.notifications

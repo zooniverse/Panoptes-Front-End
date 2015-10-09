@@ -653,6 +653,9 @@ COPY_GREY_LIGHT = #afaeae
   .centering
     text-align: center
 
+  .inline-block
+    display: inline-block
+
   .talk-module
     background-color: TALK_BACKGROUND
     opacity: 0.97
@@ -668,15 +671,17 @@ COPY_GREY_LIGHT = #afaeae
     transition: border-color 1s ease
 
   .paginator
-    @extend .talk-module
-    display: inline-block
     opacity: 0.97
 
     &.older .paginator-prev
       display: none
 
-    &.newer .paginator-next
-      display: none
+    &.newer
+      .paginator-prev
+        margin-right: 10px
+
+      .paginator-next
+        display: none
 
   .title
     margin-top: 0
