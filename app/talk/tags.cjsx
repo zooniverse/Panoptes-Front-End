@@ -1,0 +1,73 @@
+React = require 'react'
+{ Navigation } = require '@edpaget/react-router'
+talkClient = require '../api/talk'
+apiClient = require '../api/client'
+Paginator = require './lib/paginator'
+SubjectViewer = require '../components/subject-viewer'
+resourceCount = require './lib/resource-count'
+Loading = require '../components/loading-indicator'
+
+module.exports = React.createClass
+  displayName: 'TalkTags'
+  mixins: [Navigation]
+
+  getInitialState: ->
+    tags: null
+    meta: { }
+
+  componentDidMount: ->
+    @getTags()
+
+  componentWillReceiveProps: (nextProps) ->
+    pageChanged = nextProps.query.page isnt @props.query.page
+    @getTags(nextProps.query.page) if pageChanged
+
+  getTags: (page = @props.query.page) ->
+    name = @props.params.tag
+    page or= 1
+    taggable_type = 'Subject'
+    section = "project-#{ @props.project.id }"
+
+    talkClient.type('tags/popular').get({page, taggable_type, section, name}).then (tags) =>
+      meta = tags[0]?.getMeta()
+      Promise.all tags.map (tag) =>
+        apiClient.type('subjects').get(tag.taggable_id.toString()).then (subject) =>
+          taggable_id = subject.id
+          talkClient.type('tags/popular').get({taggable_type, taggable_id}).then (subjectTags) =>
+            tag.update {subject, subjectTags}
+      .then (tags) =>
+        @setState {tags, meta}
+
+  render: ->
+    <div className="talk-search">
+      <h1>Subjects tagged with #{@props.params.tag}</h1>
+
+      <button className="link-style" type="button" onClick={@goBack}>
+        <i className="fa fa-backward" /> Back
+      </button>
+
+      {if @state.tags?.length > 0
+        <div className="talk-search-container">
+          <div className="talk-search-counts">
+            Your search returned {resourceCount @state.meta.count, 'tags'}.
+          </div>
+
+          <div className="talk-search-results">
+            {for tag in @state.tags
+              <div className="tagged-subject">
+                <SubjectViewer subject={tag.subject} user={@props.user} project={@props.project}/>
+                <ul className="tag-list">
+                  {for subjectTag in tag.subjectTags
+                    <li key={"tag-#{ tag.id }-#{ subjectTag.id }"}>{subjectTag.name}</li>}
+                </ul>
+              </div>
+            }
+            <Paginator page={+@state.meta.page} pageCount={@state.meta.page_count} />
+          </div>
+        </div>
+      else if @state.tags
+        <p>No tags found.</p>
+      else
+        <Loading />
+      }
+    </div>

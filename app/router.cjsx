@@ -52,6 +52,7 @@ module.exports =
       <Route name="project-talk-moderations" path="moderations/?" handler={require './talk/moderations'}/>
       <Route name="project-talk-subject" path="subjects/:id/?" handler={require './subjects'}/>
       <Route name="project-talk-board-recents" path="recents/:board/?" handler={require './talk/recents'} />
+      <Route name="project-talk-tags" path="tags/:tag/?" handler={require './talk/tags'} />
       <Route name="project-talk-board" path=":board/?" handler={require './talk/board'} />
       <Route name="project-talk-discussion" path=":board/:discussion/?" handler={require './talk/discussion'} />
     </Route>
