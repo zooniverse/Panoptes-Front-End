@@ -24,7 +24,7 @@ ROLES_INFO =
     description: 'Experts can enter "gold mode" to make authoritative gold standard classifications that will be used to validate data quality.'
   scientist:
     label: 'Researcher'
-    description: 'Members of the research team will be marked as scientists on "Talk"'
+    description: 'Members of the research team will be marked as researchers on "Talk"'
   moderator:
     label: 'Moderator'
     description: 'Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on "Talk".'
