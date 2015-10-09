@@ -21,6 +21,7 @@ counterpart.registerTranslations 'en',
     blog: 'Blog'
     lab: 'Build a project'
     admin: 'Admin'
+    notifications: 'Notifications'
 
 module.exports = React.createClass
   displayName: 'MainHeader'
@@ -56,6 +57,7 @@ module.exports = React.createClass
           <Link to="projects" className="main-nav-item"><Translate content="mainNav.projects" /></Link>
           <Link to="about" className="main-nav-item"><Translate content="mainNav.about" /></Link>
           <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
+          <Link to="notifications" className="main-nav-item"><Translate content="mainNav.notifications" /></Link>
           <Link to="collections" className="main-nav-item"><Translate content="mainNav.collect" /></Link>
           <a href="http://daily.zooniverse.org/" className="main-nav-item" target="_blank"><Translate content="mainNav.daily" /></a>
           <a href="http://blog.zooniverse.org/"  className="main-nav-item" target="_blank"><Translate content="mainNav.blog" /></a>

@@ -164,9 +164,15 @@ module?.exports = React.createClass
           <section>
             <h3>
               {if @props.section is 'zooniverse'
-                <Link className="sidebar-link" to="talk-recents" {...@props}>Recent Comments</Link>
+                <span>
+                  <Link className="sidebar-link" to="talk-recents" {...@props}>Recent Comments</Link>
+                  <Link className="sidebar-link" to="section-notifications" user={@props.user} params={section: @props.section}>Zooniverse Notifications</Link>
+                </span>
               else
-                <Link className="sidebar-link" to="project-talk-recents" {...@props}>Recent Comments</Link>
+                <span>
+                  <Link className="sidebar-link" to="project-talk-recents" {...@props}>Recent Comments</Link>
+                  <Link className="sidebar-link" to="project-notifications" {...@props}>{@props.project.display_name} Notifications</Link>
+                </span>
               }
             </h3>
           </section>
