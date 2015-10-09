@@ -11,7 +11,7 @@ counterpart.registerTranslations 'en',
     owner: 'Owner'
     collaborator: 'Collaborator'
     translator: 'Translator'
-    scientist: 'Scientist'
+    scientist: 'Researcher'
     moderator: 'Moderator'
     tester: 'Tester'
     expert: 'Expert'
