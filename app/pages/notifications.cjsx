@@ -57,7 +57,7 @@ module?.exports = React.createClass
       else
         firstMeta = lastMeta = meta
 
-      @setState {notifications, firstMeta, lastMeta}
+      @setState {notifications, notificationsMap, firstMeta, lastMeta}
 
   markAsRead: (meta) ->
     =>
