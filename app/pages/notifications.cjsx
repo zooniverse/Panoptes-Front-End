@@ -18,6 +18,7 @@ module?.exports = React.createClass
   getInitialState: ->
     firstMeta: { }
     lastMeta: { }
+    notificationsMap: { }
 
   componentWillMount: ->
     @getNotifications() if @props.user
@@ -40,6 +41,10 @@ module?.exports = React.createClass
       meta = newNotifications[0]?.getMeta() or { }
       notifications = @state.notifications or newNotifications
       meta.notificationIds = (n.id for n in newNotifications)
+      notificationsMap = @state.notificationsMap
+
+      for notification in newNotifications
+        notificationsMap[notification.id] = notification
 
       {firstMeta, lastMeta} = @state
 
@@ -57,6 +62,8 @@ module?.exports = React.createClass
   markAsRead: (meta)->
     =>
       ids = @state["#{ meta }Meta"].notificationIds
+      ids = (id for id in ids when not @state.notificationsMap[id].delivered)
+      return if ids.length is 0
       setTimeout =>
         talkClient.put '/notifications/read', id: ids.join(',')
         for notification in @state.notifications when notification.id in ids
