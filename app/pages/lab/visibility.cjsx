@@ -63,18 +63,18 @@ module.exports = React.createClass
         <p>
           <button type="button" className="standard-button" disabled={@props.project.private or not @props.project.live or @state.setting.beta_requested or @props.project.beta_requested} onClick={@set.bind this, 'beta_requested', true}>Apply for review</button>{' '}
           {if @props.project.private
-            <span>Only <strong>public projects</strong> can apply for a beta.</span>
+            <span>Only <strong>public projects</strong> can apply for review.</span>
           else if not @props.project.live
-            <span>Only <strong>live projects</strong> can apply for a beta.</span>
+            <span>Only <strong>live projects</strong> can apply for review.</span>
           else if @props.project.beta_requested
-            <span>Beta status has been applied for. <button type="button" disabled={@state.setting.beta_requested} onClick={@set.bind this, 'beta_requested', false}>Cancel application</button></span>}
+            <span>Review status has been applied for. <button type="button" disabled={@state.setting.beta_requested} onClick={@set.bind this, 'beta_requested', false}>Cancel application</button></span>}
         </p>
 
         <p className="form-help">Pending approval, expose this project to users who have opted in to help test new projects.</p>
 
         {if @props.project.beta_approved
           <p>
-            Beta status for this project has been approved. To end the beta test and make changes, switch back to <em>development</em> mode.
+            Review status for this project has been approved. To end the review and make changes, switch back to <em>development</em> mode.
             {unless @props.project.launch_requested or @props.project.launch_approved
               <span>If you’re ready to launch this project, see the next section.</span>}
           </p>}
@@ -86,7 +86,7 @@ module.exports = React.createClass
             <button type="button" className="standard-button" disabled={not @props.project.beta_approved or @state.setting.launch_requested or @props.project.launch_requested} onClick={@set.bind this, 'launch_requested', true}>Apply for full launch</button>{' '}
 
             {unless @props.project.beta_approved
-              <span>Only <strong>projects in beta</strong> can apply for a full launch.</span>}
+              <span>Only <strong>projects in review</strong> can apply for a full launch.</span>}
             {if @props.project.launch_approved
               <span>This project is available to the whole Zooniverse!</span>
             else if @props.project.launch_requested
