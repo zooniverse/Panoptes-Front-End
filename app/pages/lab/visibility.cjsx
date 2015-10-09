@@ -61,7 +61,7 @@ module.exports = React.createClass
         <hr />
 
         <p>
-          <button type="button" className="standard-button" disabled={@props.project.private or not @props.project.live or @state.setting.beta_requested or @props.project.beta_requested} onClick={@set.bind this, 'beta_requested', true}>Apply for beta</button>{' '}
+          <button type="button" className="standard-button" disabled={@props.project.private or not @props.project.live or @state.setting.beta_requested or @props.project.beta_requested} onClick={@set.bind this, 'beta_requested', true}>Apply for review</button>{' '}
           {if @props.project.private
             <span>Only <strong>public projects</strong> can apply for a beta.</span>
           else if not @props.project.live
