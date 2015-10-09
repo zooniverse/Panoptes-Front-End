@@ -14,6 +14,7 @@ PAGE_SIZE = require('./config').moderationsPageSize
 merge = require 'lodash.merge'
 projectSection = require './lib/project-section'
 userIsModerator = require './lib/user-is-moderator'
+moment = require 'moment'
 
 actionTaken =
   destroy: 'Deleted'
@@ -103,8 +104,7 @@ module?.exports = React.createClass
       <CommentLink comment={comment} />
 
       <div className="moderations-actions-buttons">
-        <p>Status: <strong>{moderation.state}</strong></p>
-
+        <p>Status: <strong>{moderation.state}</strong> {moment(moderation.created_at).fromNow()}</p>
         {if moderation.actions.length
           <div>
             {moderation.actions.map(@action)}
