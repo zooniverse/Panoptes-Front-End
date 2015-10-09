@@ -1,3 +1,4 @@
+React = require 'react'
 alert = require('./alert')
 
 module.exports = ->
