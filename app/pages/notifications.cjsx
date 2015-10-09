@@ -62,9 +62,21 @@ module?.exports = React.createClass
         for notification in @state.notifications when notification.id in ids
           notification.update delivered: true
 
+  title: ->
+    if @props.project
+      "#{ @props.project.display_name } Notifications"
+    else if @props.params.section
+      "#{ @props.params.section } Notifications"
+    else
+      'Notifications'
+
   render: ->
     <div className="talk notifications">
       <div className="content-container">
+        <h1 className={"centering title #{ if @props.project then 'talk-module' else '' }"}>
+          {@title()}
+        </h1>
+
         {if @props.user?
           <ChangeListener target={@props.user}>{ =>
             if @state.notifications?.length > 0
