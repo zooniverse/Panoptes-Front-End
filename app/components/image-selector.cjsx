@@ -1,6 +1,6 @@
 React = require 'react'
 LoadingIndicator = require './loading-indicator'
-toBlob = require 'data-uri-to-blob'
+toBlob = require 'data-uri-to-blob' if window.navigator?
 
 BASE_64_EXPANSION = 3 / 4
 

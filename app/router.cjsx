@@ -1,7 +1,7 @@
 Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require '@edpaget/react-router'
 React = require 'react'
 
-routes =
+module.exports =
 <Route handler={require './partials/app'}>
   <DefaultRoute name="home" handler={require './pages/home'} />
 
@@ -107,7 +107,7 @@ routes =
   <Route name="lab-how-to" path="lab-how-to/?" handler={require './pages/lab/how-to-page'} />
 
   <Route name="admin" path="admin/?" handler={require './pages/admin'}>
-    <DefaultRoute name="admin-create" handler={require './pages/admin/create'} />
+    <DefaultRoute name="admin-user-search" handler={require './pages/admin/user-settings'} />
     <Route name="admin-project-list" path="project_status/?" handler={require './pages/admin/project-status-list'} />
     <Route name="admin-project-status" path="project_status/:owner/:name/?" handler={require './pages/admin/project-status'} />
   </Route>
@@ -121,9 +121,3 @@ routes =
   <Route path="dev/ribbon" handler={require './components/classifications-ribbon'} />
 </Route>
 
-location = if process.env.NON_ROOT == "true"
-    null
-  else
-    Router.HistoryLocation
-
-module.exports = Router.create { location, routes }

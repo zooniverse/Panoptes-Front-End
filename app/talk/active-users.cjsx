@@ -1,6 +1,6 @@
 React = require 'react'
 talkClient = require '../api/talk'
-require '../api/sugar'
+{sugarClient} = require '../api/sugar'
 apiClient = require '../api/client'
 {Link} = require '@edpaget/react-router'
 Paginator = require './lib/paginator'

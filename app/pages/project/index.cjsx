@@ -7,7 +7,7 @@ Translate = require 'react-translate-component'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = window.api = require '../../api/client'
-require '../../api/sugar'
+{sugarClient} = require '../../api/sugar'
 LoadingIndicator = require '../../components/loading-indicator'
 
 SOCIAL_ICONS =
@@ -52,11 +52,11 @@ ProjectPage = React.createClass
     project: null
 
   componentDidMount: ->
-    sugarClient.subscribeTo "project-#{ @props.project.id }"
+    sugarClient?.subscribeTo "project-#{ @props.project.id }"
     document.documentElement.classList.add 'on-project-page'
 
   componentWillUnmount: ->
-    sugarClient.unsubscribeFrom "project-#{ @props.project.id }"
+    sugarClient?.unsubscribeFrom "project-#{ @props.project.id }"
     document.documentElement.classList.remove 'on-project-page'
 
   getPageTitles: (page) ->

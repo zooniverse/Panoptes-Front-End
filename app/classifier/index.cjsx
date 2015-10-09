@@ -9,6 +9,7 @@ preloadSubject = require '../lib/preload-subject'
 PromiseRenderer = require '../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
 isAdmin = require '../lib/is-admin'
+Tutorial = require '../lib/tutorial'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -33,8 +34,11 @@ Classifier = React.createClass
   componentDidMount: ->
     @loadSubject @props.subject
     @prepareToClassify @props.classification
+    Tutorial.startIfNecessary @props.user, @props.project
 
   componentWillReceiveProps: (nextProps) ->
+    if nextProps.project isnt @props.project or nextProps.user isnt @props.user
+      Tutorial.startIfNecessary nextProps.user, nextProps.project
     if nextProps.subject isnt @props.subject
       @loadSubject subject
     if nextProps.classification isnt @props.classification
@@ -118,13 +122,18 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
+        {if @props.project?.configuration?.tutorial? # TODO: The tutorial will eventually be linked from `project.get('tutorial')`.
+          <button type="button" className="secret-button" title="Project tutorial" aria-label="Show the project tutorial" onClick={Tutorial.start.bind(Tutorial, @props.user, @props.project)}>
+            <i className="fa fa-graduation-cap fa-fw" />
+          </button>}
+
         <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
         {if nextTaskKey
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
         else
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
             {if @props.demoMode
-              <i className="fa fa-trash"></i>
+              <i className="fa fa-trash fa-fw"></i>
             else if @props.classification.gold_standard
               <i className="fa fa-star fa-fw"></i>}
             {' '}Done

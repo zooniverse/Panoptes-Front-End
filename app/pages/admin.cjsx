@@ -8,7 +8,7 @@ counterpart.registerTranslations 'en',
   userAdminPage:
     header: "Admin"
     nav:
-      createAdmin: "Manage Administrators"
+      createAdmin: "Manage Users"
       projectStatus: "Set Project Status"
 
 AdminPage = React.createClass
@@ -48,7 +48,7 @@ module.exports = React.createClass
       <ChangeListener target={@props.user}>{ =>
         if @props.user?
           if @props.user.admin?
-            <AdminPage />
+            <AdminPage user={@props.user}/>
           else
             <div className="content-container">
               <p>You're not an administrator</p>

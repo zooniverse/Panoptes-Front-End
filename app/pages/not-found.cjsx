@@ -5,7 +5,7 @@ module.exports = React.createClass
 
   componentDidMount: ->
     # Here's a workaround until the router supports optional trailing slashes.
-    if location.hash.charAt(location.hash.length - 1) is '/'
+    if location?.hash.charAt(location.hash.length - 1) is '/'
       location.hash = location.hash[...-1]
 
   render: ->
