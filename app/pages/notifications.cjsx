@@ -132,7 +132,7 @@ module?.exports = React.createClass
               </div>
             else if @state.notifications?.length is 0
               <div className="centering talk-module">
-                <p>You have no notifiations</p>
+                <p>You have no notifications</p>
               </div>
             else
               <Loading />
