@@ -83,7 +83,7 @@ module?.exports = React.createClass
       <p>2. Add any additional discussion boards</p>
 
       <div className="talk-module">
-        <CreateBoardForm section={@section()} onSubmitBoard={=> @setBoards()}/>
+        <CreateBoardForm section={@section()} user={@props.user} onSubmitBoard={=> @setBoards()}/>
       </div>
 
       <p>Your Project's Discussion Boards</p>
