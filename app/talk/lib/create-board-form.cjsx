@@ -2,15 +2,42 @@ React = require 'react'
 ROLES = require './roles'
 talkClient = require '../../api/talk'
 
+getUserRoleNames =  (user, section) ->
+  talkClient.type('roles').get
+    user_id: user.id,
+    section: ['zooniverse', section],
+    page_size: 100
+  .then (roles) ->
+    roles.map (role) -> role.name
+
+roleRankText =
+  <span>
+    Roles rank from most private to least private in the order: <strong>{ROLES.join(' > ')}</strong>
+  </span>
+
 module?.exports = React.createClass
   displayName: 'CreateBoardForm'
 
   propTypes:
     section: React.PropTypes.string
     onSubmitBoard: React.PropTypes.func
+    user: React.PropTypes.object
 
   getInitialState: ->
     error: ''
+    admin: false
+
+  componentWillMount: ->
+    @setAdmin()
+
+  setAdmin: ->
+    {user, section} = @props
+    getUserRoleNames(user, section).then (roleNames) =>
+      admin = roleNames.indexOf('admin') isnt -1
+      @setState {admin}
+
+  roleNames: (admin) ->
+    if admin then ROLES else ROLES.filter (role) -> role isnt 'admin'
 
   onSubmitBoard: (e) ->
     e.preventDefault()
@@ -52,11 +79,16 @@ module?.exports = React.createClass
 
       <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
 
-      <h4>Can Read:</h4>
-      <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+      <div>
+        {roleRankText}
+        <h4>Can Read:</h4>
+        <span>Users of this status or lower will be able to read content in this board</span>
+        <div className="roles-read">{@roleNames(@state.admin).map(@roleReadLabel)}</div>
 
-      <h4>Can Write:</h4>
-      <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+        <h4>Can Write:</h4>
+        <span>Users of this status or lower will be able to post content in this board</span>
+        <div className="roles-write">{@roleNames(@state.admin).map(@roleWriteLabel)}</div>
+      </div>
 
       <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
       {if @state.error
