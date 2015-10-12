@@ -119,7 +119,10 @@ CollaboratorCreator = React.createClass
         @props.onAdd? arguments...
 
       .catch (error) =>
-        @setState error: error
+        if error.message.match /not allowed to create this role/i
+          error.message = 'Your account status on this project is still being setup. Please try again later.'
+
+        @setState {error}
 
       .then =>
         @setState creating: false
