@@ -2,15 +2,41 @@ React = require 'react'
 ROLES = require './roles'
 talkClient = require '../../api/talk'
 
+getUserRoleNames =  (user, section) ->
+  talkClient.type('roles').get
+    user_id: user.id,
+    section: ['zooniverse', section],
+    page_size: 100
+  .then (roles) ->
+    roles.map (role) -> role.name
+
+mostPowerfulRole = (roleNames, rolesList) ->
+  ROLES.filter((role) ->
+    roleNames.indexOf(role) isnt -1
+  )[0]
+
 module?.exports = React.createClass
   displayName: 'CreateBoardForm'
 
   propTypes:
     section: React.PropTypes.string
     onSubmitBoard: React.PropTypes.func
+    user: React.PropTypes.object
 
   getInitialState: ->
     error: ''
+    mostPowerfulRole: null      # name of most powerful role
+
+  componentWillMount: ->
+    @setMostPowerfulRole()
+
+  setMostPowerfulRole: ->
+    {user, section} = @props
+    getUserRoleNames(user, section).then (roleNames) =>
+      @setState mostPowerfulRole: mostPowerfulRole(roleNames)
+
+  roleDisplayLabels: (mostPowerfulRole) ->
+    ROLES.slice(ROLES.indexOf(mostPowerfulRole), ROLES.length)
 
   onSubmitBoard: (e) ->
     e.preventDefault()
@@ -52,11 +78,16 @@ module?.exports = React.createClass
 
       <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
 
-      <h4>Can Read:</h4>
-      <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+      {if @state.mostPowerfulRole
+        roleNames = @roleDisplayLabels(@state.mostPowerfulRole)
+        <div>
+          <h4>Can Read:</h4>
+          <div className="roles-read">{roleNames.map(@roleReadLabel)}</div>
 
-      <h4>Can Write:</h4>
-      <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+          <h4>Can Write:</h4>
+          <div className="roles-write">{roleNames.map(@roleWriteLabel)}</div>
+        </div>
+      }
 
       <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
       {if @state.error

@@ -125,7 +125,10 @@ module?.exports = React.createClass
                 View Reported Comments
               </Link>
 
-              <CreateBoardForm section={@props.section} onSubmitBoard={=> @setBoards()}/>
+              <CreateBoardForm
+                section={@props.section}
+                user={@props.user}
+                onSubmitBoard={=> @setBoards()}/>
 
               <h3>Reorder Boards:</h3>
               {@boardOrders()}
