@@ -1,5 +1,5 @@
 React = require 'react'
-{ Navigation } = require '@edpaget/react-router'
+{Link,Navigation} = require '@edpaget/react-router'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 Paginator = require './lib/paginator'
@@ -54,11 +54,20 @@ module.exports = React.createClass
 
           <div className="talk-search-results">
             {for tag in @state.tags
-              <div className="tagged-subject">
+              <div className="tagged-subject talk-search-result talk-module" key="tag-#{ tag.id }">
                 <SubjectViewer subject={tag.subject} user={@props.user} project={@props.project}/>
                 <ul className="tag-list">
                   {for subjectTag in tag.subjectTags
-                    <li key={"tag-#{ tag.id }-#{ subjectTag.id }"}>{subjectTag.name}</li>}
+                    <li key={"tag-#{ tag.id }-#{ subjectTag.id }"}>
+                      <Link to="project-talk-tags"
+                        {...@props}
+                        params={
+                          owner: @props.params.owner
+                          name: @props.params.name
+                          tag: subjectTag.name}>
+                        #{subjectTag.name}
+                      </Link>
+                    </li>}
                 </ul>
               </div>
             }
