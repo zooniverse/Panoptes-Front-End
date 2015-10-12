@@ -57,6 +57,7 @@ module?.exports = React.createClass
       {page: page, page_size: PAGE_SIZE, state: @props.query.state},
       if section then {section} else {}
 
+    delete moderationParams.state if moderationParams.state is 'all'
     auth.checkCurrent().then (user) => if user?
       talkClient.type('moderations').get(moderationParams)
         .then (moderations) =>
@@ -148,9 +149,15 @@ module?.exports = React.createClass
       </div>
     }</PromiseRenderer>
 
+  moderatedComment: (moderation) ->
+    if moderation.destroyed_target
+      Promise.resolve moderation.destroyed_target
+    else
+      talkClient.type('comments').get moderation.target_id
+
   moderation: (moderation, i) ->
     <div key={moderation.id} className="talk-module">
-      <PromiseRenderer promise={talkClient.type('comments').get(moderation.target_id)}>{(comment) =>
+      <PromiseRenderer promise={@moderatedComment moderation}>{(comment) =>
         <div>
           {@comment(comment, moderation)}
         </div>
