@@ -2,14 +2,6 @@ React = require 'react'
 ROLES = require './roles'
 talkClient = require '../../api/talk'
 
-intersperse = (arr, item) ->
-  arr.reduce((acc, x, i) ->
-    if arr.length - 1 isnt i
-      acc.concat(x, item)
-    else
-      acc.concat(x)
-  , [])
-
 getUserRoleNames =  (user, section) ->
   talkClient.type('roles').get
     user_id: user.id,
@@ -18,17 +10,9 @@ getUserRoleNames =  (user, section) ->
   .then (roles) ->
     roles.map (role) -> role.name
 
-mostPowerfulRole = (roleNames, rolesList) ->
-  # rolesList = sorted list of role names by power
-  rolesList.filter((role) ->
-    roleNames.indexOf(role) isnt -1
-  )[0]
-
 roleRankText =
   <span>
-    Roles rank from most private to least private in the order: <strong>{
-      intersperse(ROLES, ' > ')
-    }</strong>
+    Roles rank from most private to least private in the order: <strong>{ROLES.join(' > ')}</strong>
   </span>
 
 module?.exports = React.createClass
@@ -41,18 +25,19 @@ module?.exports = React.createClass
 
   getInitialState: ->
     error: ''
-    mostPowerfulRole: null      # name of most powerful role
+    admin: false
 
   componentWillMount: ->
-    @setMostPowerfulRole()
+    @setAdmin()
 
-  setMostPowerfulRole: ->
+  setAdmin: ->
     {user, section} = @props
     getUserRoleNames(user, section).then (roleNames) =>
-      @setState mostPowerfulRole: mostPowerfulRole(roleNames, ROLES)
+      admin = roleNames.indexOf('admin') isnt -1
+      @setState {admin}
 
-  roleDisplayLabels: (mostPowerfulRole) ->
-    ROLES.slice(ROLES.indexOf(mostPowerfulRole), ROLES.length)
+  roleNames: (admin) ->
+    if admin then ROLES else ROLES.filter (role) -> role isnt 'admin'
 
   onSubmitBoard: (e) ->
     e.preventDefault()
@@ -94,19 +79,16 @@ module?.exports = React.createClass
 
       <textarea ref="boardDescription" placeholder="Board Description"></textarea><br />
 
-      {if @state.mostPowerfulRole
-        roleNames = @roleDisplayLabels(@state.mostPowerfulRole)
-        <div>
-          {roleRankText}
-          <h4>Can Read:</h4>
-          <span>Users of this status or lower will be able to read content in this board</span>
-          <div className="roles-read">{roleNames.map(@roleReadLabel)}</div>
+      <div>
+        {roleRankText}
+        <h4>Can Read:</h4>
+        <span>Users of this status or lower will be able to read content in this board</span>
+        <div className="roles-read">{@roleNames(@state.admin).map(@roleReadLabel)}</div>
 
-          <h4>Can Write:</h4>
-          <span>Users of this status or lower will be able to post content in this board</span>
-          <div className="roles-write">{roleNames.map(@roleWriteLabel)}</div>
-        </div>
-      }
+        <h4>Can Write:</h4>
+        <span>Users of this status or lower will be able to post content in this board</span>
+        <div className="roles-write">{@roleNames(@state.admin).map(@roleWriteLabel)}</div>
+      </div>
 
       <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
       {if @state.error
