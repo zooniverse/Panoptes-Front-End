@@ -7,6 +7,7 @@ projectSection = require '../../talk/lib/project-section'
 
 module.exports = React.createClass
   displayName: 'ProjectTalkPage'
+
   render: ->
     <div className="project-text-content talk project">
       <div className="content-container">

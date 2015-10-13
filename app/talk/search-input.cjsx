@@ -13,11 +13,16 @@ module?.exports = React.createClass
   onSearchSubmit: (e) ->
     e.preventDefault()
     {owner, name} = @props.params
+    inputValue = @searchInput().value
 
     if owner and name
-      @transitionTo 'project-talk-search', @props.params, query: @searchInput().value
+      if inputValue.match(/\#[-\w\d]{3,40}/) # searches for #hashtags
+        @transitionTo 'project-talk-tags',
+          owner: owner, name: name, tag: inputValue.slice(1, inputValue.length)
+      else
+        @transitionTo 'project-talk-search', @props.params, query: inputValue
     else
-      @transitionTo 'talk-search', {}, {query: @searchInput().value}
+      @transitionTo 'talk-search', {}, {query: inputValue}
 
   searchInput: ->
     React.findDOMNode(@refs.talkSearchInput)
