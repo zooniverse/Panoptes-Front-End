@@ -1,6 +1,6 @@
 React = require 'react'
 
-IMAGE_EXTENSIONS = ['gif', 'jpg', 'png', 'svg']
+IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'svg']
 
 VIDEO_EXTENSIONS = ['mp4']
 
@@ -9,6 +9,7 @@ module.exports = React.createClass
     src: ''
 
   render: ->
+    console.log 'src', @props.src
     srcExtension = @props.src.split('.').pop().toLowerCase()
 
     <div {...@props} className={"media-card #{@props.className}".trim()}>

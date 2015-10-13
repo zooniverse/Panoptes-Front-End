@@ -34,18 +34,26 @@ module.exports = React.createClass
       apiClient.type('tutorials').get project_id: project.id
         .then ([tutorial]) =>
           if tutorial? and tutorial.steps.length isnt 0
-            TutorialComponent = this
-            Dialog.alert <TutorialComponent steps={tutorial.steps} />, className: 'tutorial-dialog'
+            tutorial.get 'attached_images'
               .catch =>
-                null # We don't really care if the user canceled or completed the tutorial.
-              .then =>
-                now = new Date().toISOString()
-                if user?
-                  user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
-                    projectPreferences.update 'preferences.tutorial_completed_at': now
-                    projectPreferences.save()
-                else
-                  completedThisSession[project.id] = now
+                []
+              .then (mediaResources) =>
+                mediaByID = {}
+                for mediaResource in mediaResources
+                  mediaByID[mediaResource.id] = mediaResource
+
+                TutorialComponent = this
+                Dialog.alert <TutorialComponent steps={tutorial.steps} media={mediaByID} />, className: 'tutorial-dialog'
+                  .catch =>
+                    null # We don't really care if the user canceled or completed the tutorial.
+                  .then =>
+                    now = new Date().toISOString()
+                    if user?
+                      user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
+                        projectPreferences.update 'preferences.tutorial_completed_at': now
+                        projectPreferences.save()
+                    else
+                      completedThisSession[project.id] = now
 
     startIfNecessary: (user, project) ->
       @checkIfCompleted user, project
@@ -60,12 +68,13 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     steps: []
+    media: {}
 
   render: ->
     <StepThrough ref="stepThrough" className="tutorial-steps">
       {for step, i in @props.steps
         step._key ?= Math.random()
-        <MediaCard key={step._key} className="tutorial-step" src={step.media}>
+        <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>
           <Markdown>{step.content}</Markdown>
           <hr key="hr" />
           <p key="p" style={textAlign: 'center'}>
