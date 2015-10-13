@@ -8,12 +8,16 @@ debounce = require 'debounce'
 TutorialStepEditor = React.createClass
   getDefaultProps: ->
     step: null
+    media: null
 
     onChange: ->
       console.log 'TutorialStepEditor onChange', arguments
 
     onMediaSelect: ->
       console.log 'TutorialStepEditor onMediaSelect', arguments
+
+    onMediaClear: ->
+      console.log 'TutorialStepEditor onMediaClear', arguments
 
     onRemove: ->
       console.log 'TutorialStepEditor onRemove', arguments
@@ -25,16 +29,12 @@ TutorialStepEditor = React.createClass
       </header>
       <div>
         <header>Media</header>
-        {if @props.step.media
+        {if @props.media?
           <div>
-            #{@props.step.media}
-            <button type="button" disabled>Clear media</button>
-          </div>
-        else
-          <div>
-            <small>(None)</small>
+            <img src={@props.media.src} style={maxWidth: '100%'} />
+            <button type="button" className="minor-button" onClick={@props.onMediaClear}>Clear media</button>
           </div>}
-        <FileButton onSelect={@handleMediaChange}>Select</FileButton>
+        <FileButton className="standard-button" onSelect={@handleMediaChange}>Select</FileButton>
       </div>
       <div>
         <header>Content</header>
@@ -51,7 +51,8 @@ TutorialStepEditor = React.createClass
 
 TutorialEditor = React.createClass
   getDefaultProps: ->
-    tutorial: []
+    tutorial: null
+    media: null
 
     onStepAdd: ->
       console.log 'TutorialEditor onStepAdd', arguments
@@ -79,7 +80,9 @@ TutorialEditor = React.createClass
             <TutorialStepEditor
               key={step._key}
               step={step}
+              media={@props.media?[step.media]}
               onMediaSelect={@props.onMediaSelect.bind null, i}
+              onMediaClear={@props.onMediaClear.bind null, i}
               onChange={@props.onStepChange.bind null, i}
               onRemove={@props.onStepRemove.bind null, i}
             />}
@@ -99,20 +102,37 @@ TutorialEditorController = React.createClass
     onDelete: ->
       console.log 'TutorialEditorController onDelete', arguments
 
+  getInitialState: ->
+    media: {}
+
   componentDidMount: ->
+    @fetchMediaFor @props.tutorial
     @_boundForceUpdate = @forceUpdate.bind this
     @props.tutorial.listen @_boundForceUpdate
 
   componentWillUnmount: ->
     @props.tutorial.stopListening @_boundForceUpdate
-    @_boundForceUpdate = null
+
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.tutorial is @props.tutorial
+      @fetchMediaFor nextProps.tutorial
+
+  fetchMediaFor: (tutorial) ->
+    tutorial.get 'attached_images', {}
+      .then (mediaResources) =>
+        mediaByID = {}
+        for mediaResource in mediaResources
+          mediaByID[mediaResource.id] = mediaResource
+        @setState media: mediaByID
 
   render: ->
     <TutorialEditor
       tutorial={@props.tutorial}
+      media={@state.media}
       onStepAdd={@handleAddStep}
       onStepRemove={@handleStepRemove}
       onMediaSelect={@handleStepMediaChange}
+      onMediaClear={@handleStepMediaClear}
       onStepChange={@handleStepChange}
     />
 
@@ -121,22 +141,27 @@ TutorialEditorController = React.createClass
       media: ''
       content: ''
     @props.tutorial.update 'steps'
-    @saveTutorial()
+    @props.tutorial.save()
 
   handleStepRemove: (index) ->
+    @handleStepMediaClear index
+
     changes = {}
     changes["steps.#{index}"] = undefined
-    # TODO: Delete step's media.
     @props.tutorial.update changes
+
     if @props.tutorial.steps.length is 0
       @props.tutorial.delete()
         .then =>
           @props.onDelete()
     else
-      @saveTutorial()
+      @props.tutorial.save()
+        .then =>
+          @fetchMediaFor @props.tutorial
 
   handleStepMediaChange: (index, file) ->
-    # TODO: Delete previous media.
+    @handleStepMediaClear index
+
     payload =
       media:
         content_type: file.type
@@ -146,13 +171,23 @@ TutorialEditorController = React.createClass
     apiClient.post @props.tutorial._getURL('attached_images'), payload
       .then (media) =>
         media = [].concat(media)[0]
-        if media?
-          changes = {}
-          changes["steps.#{index}.media"] = media.id
-          @props.tutorial.update changes
-          @saveTutorial()
+        putFile media.src, file
+          .then =>
+            changes = {}
+            changes["steps.#{index}.media"] = media.id
+            @props.tutorial.update changes
+            @props.tutorial.save()
+              .then =>
+                @fetchMediaFor @props.tutorial
       .catch (error) =>
         console.error error
+
+  handleStepMediaClear: (index) ->
+    @state.media[@props.tutorial.steps[index].media]?.delete()
+    changes = {}
+    changes["steps.#{index}.media"] = undefined
+    @props.tutorial.update changes
+    @props.tutorial.save()
 
   handleStepChange: (index, key, value) ->
     changes = {}
@@ -218,7 +253,6 @@ TutorialEditorFetcher = React.createClass
 
   componentWillUnmount: ->
     @props.project.stopListening @_boundForceUpdate
-    @_boundForceUpdate = null
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.project is @props.project
@@ -241,7 +275,7 @@ TutorialEditorFetcher = React.createClass
 
   render: ->
     if @state.loading
-      <p>Loading...</p>
+      <p>Loading tutorial...</p>
     else if @state.error?
       <p>{@state.error.toString()}</p>
     else if @state.tutorial?
