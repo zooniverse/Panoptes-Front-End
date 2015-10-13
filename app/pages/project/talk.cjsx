@@ -4,6 +4,7 @@ TalkInit = require '../../talk/init'
 TalkBreadcrumbs = require '../../talk/breadcrumbs'
 TalkSearchInput = require '../../talk/search-input'
 projectSection = require '../../talk/lib/project-section'
+TalkFootnote = require '../../talk/footnote'
 
 module.exports = React.createClass
   displayName: 'ProjectTalkPage'
@@ -20,5 +21,7 @@ module.exports = React.createClass
         <TalkSearchInput {...@props} />
 
         <RouteHandler {...@props} section={projectSection(@props.project)}/>
+
+        <TalkFootnote />
       </div>
     </div>
