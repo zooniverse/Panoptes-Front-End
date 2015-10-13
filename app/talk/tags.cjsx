@@ -49,12 +49,22 @@ module.exports = React.createClass
       {if @state.tags?.length > 0
         <div className="talk-search-container">
           <div className="talk-search-counts">
-            Your search returned {resourceCount @state.meta.count, 'tags'}.
+            Your search returned {resourceCount @state.meta.count, 'subjects'}.
           </div>
 
           <div className="talk-search-results">
             {for tag in @state.tags
               <div className="tagged-subject talk-search-result talk-module" key="tag-#{ tag.id }">
+                <p>
+                  <Link to="project-talk-subject"
+                    {...@props}
+                    params={
+                      owner: @props.params.owner
+                      name: @props.params.name
+                      id: tag.subject.id}>
+                    Subject {tag.subject.id}
+                  </Link>
+                </p>
                 <SubjectViewer subject={tag.subject} user={@props.user} project={@props.project}/>
                 <ul className="tag-list">
                   {for subjectTag in tag.subjectTags
