@@ -20,10 +20,12 @@ module.exports = React.createClass
 
   componentWillReceiveProps: (nextProps) ->
     pageChanged = nextProps.query.page isnt @props.query.page
-    @getTags(nextProps.query.page) if pageChanged
+    differentTag = nextProps.params.tag isnt @props.params.tag
 
-  getTags: (page = @props.query.page) ->
-    name = @props.params.tag
+    if pageChanged or differentTag
+      @getTags(nextProps.query.page, nextProps.params.tag)
+
+  getTags: (page = @props.query.page, name = @props.params.tag) ->
     page or= 1
     taggable_type = 'Subject'
     section = "project-#{ @props.project.id }"
