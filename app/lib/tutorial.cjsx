@@ -3,8 +3,10 @@ Dialog = require 'modal-form/dialog'
 StepThrough = require '../components/step-through'
 MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
+apiClient = require '../api/client'
 
 completedThisSession = {}
+window?.tutorialsCompletedThisSession = completedThisSession
 
 module.exports = React.createClass
   displayName: 'Tutorial'
@@ -24,31 +26,26 @@ module.exports = React.createClass
         if isNaN completedAt.valueOf()
           false
         else
-          # TODO: Check if the completion date is greater than the most recent tutorial_step's modified_at date.
+          # TODO: Check if the completion date is greater than the tutorial's modified_at date.
           # Return `null` to mean "Completed, but not with the most recent version".
           true
 
     start: (user, project) ->
-      # TODO: `project.get('tutorial')`
-      getSteps = Promise.resolve project.configuration?.tutorial ? []
-
-      doingTutorial = getSteps.then (steps) =>
-        unless steps.length is 0
-          Tutorial = this
-          Dialog.alert <Tutorial steps={steps} />, className: 'tutorial-dialog'
-
-      # We don't really care if the user canceled or completed the tutorial.
-      doneDoingTutorial = doingTutorial.catch =>
-        null
-
-      doneDoingTutorial.then =>
-        now = new Date().toISOString()
-        if user?
-          user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
-            projectPreferences.update 'preferences.tutorial_completed_at': now
-            projectPreferences.save()
-        else
-          completedThisSession[project.id] = now
+      apiClient.type('tutorials').get project_id: project.id
+        .then ([tutorial]) =>
+          if tutorial? and tutorial.steps.length isnt 0
+            TutorialComponent = this
+            Dialog.alert <TutorialComponent steps={tutorial.steps} />, className: 'tutorial-dialog'
+              .catch =>
+                null # We don't really care if the user canceled or completed the tutorial.
+              .then =>
+                now = new Date().toISOString()
+                if user?
+                  user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
+                    projectPreferences.update 'preferences.tutorial_completed_at': now
+                    projectPreferences.save()
+                else
+                  completedThisSession[project.id] = now
 
     startIfNecessary: (user, project) ->
       @checkIfCompleted user, project

@@ -5,17 +5,6 @@ FileButton = require '../../components/file-button'
 {MarkdownEditor} = require 'markdownz'
 debounce = require 'debounce'
 
-apiClient.type('tutorials').create
-  id: 'DEV_TUTORIAL'
-  steps: [{
-    media: ''
-    content: 'This is the first step.'
-  }, {
-    media: ''
-    content: 'And this is the second step.'
-  }]
-
-
 TutorialStepEditor = React.createClass
   getDefaultProps: ->
     step: null
@@ -38,17 +27,17 @@ TutorialStepEditor = React.createClass
         <header>Media</header>
         {if @props.step.media
           <div>
-            <img src={@props.step.media} />
-            <button type="button">Clear media</button>
+            #{@props.step.media}
+            <button type="button" disabled>Clear media</button>
           </div>
         else
-          <small>(None)</small>}
-        <br />
+          <div>
+            <small>(None)</small>
+          </div>}
         <FileButton onSelect={@handleMediaChange}>Select</FileButton>
       </div>
       <div>
         <header>Content</header>
-        <br />
         <MarkdownEditor value={@props.step.content} onChange={@handleContentChange} />
       </div>
     </div>
@@ -137,6 +126,7 @@ TutorialEditorController = React.createClass
   handleStepRemove: (index) ->
     changes = {}
     changes["steps.#{index}"] = undefined
+    # TODO: Delete step's media.
     @props.tutorial.update changes
     if @props.tutorial.steps.length is 0
       @props.tutorial.delete()
@@ -146,6 +136,7 @@ TutorialEditorController = React.createClass
       @saveTutorial()
 
   handleStepMediaChange: (index, file) ->
+    # TODO: Delete previous media.
     payload =
       media:
         content_type: file.type
@@ -261,5 +252,6 @@ TutorialEditorFetcher = React.createClass
 
   handleTutorialCreateOrDelete: ->
     @fetchTutorialFor @props.project
+
 
 module.exports = TutorialEditorFetcher

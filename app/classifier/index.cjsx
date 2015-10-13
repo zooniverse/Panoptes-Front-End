@@ -122,7 +122,7 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
-        {if @props.project?.configuration?.tutorial? # TODO: The tutorial will eventually be linked from `project.get('tutorial')`.
+        {if false # TODO: Determine if the project has a tutorial.
           <button type="button" className="secret-button" title="Project tutorial" aria-label="Show the project tutorial" onClick={Tutorial.start.bind(Tutorial, @props.user, @props.project)}>
             <i className="fa fa-graduation-cap fa-fw" />
           </button>}
