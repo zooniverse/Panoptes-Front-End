@@ -2,6 +2,7 @@ React = require 'react'
 {RouteHandler, Link} = require '@edpaget/react-router'
 TalkBreadcrumbs = require './breadcrumbs.cjsx'
 TalkSearchInput = require './search-input'
+TalkFootnote = require './footnote'
 
 module?.exports = React.createClass
   displayName: 'Talk'
@@ -19,4 +20,6 @@ module?.exports = React.createClass
       <TalkSearchInput {...@props} placeholder={'Search the Zooniverse...'} />
 
       <RouteHandler {...@props} section={'zooniverse'} />
+
+      <TalkFootnote />
     </div>
