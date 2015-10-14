@@ -1,6 +1,7 @@
 React = require 'react'
 ROLES = require './roles'
 talkClient = require '../../api/talk'
+SingleSubmitButton = require '../../components/single-submit-button'
 
 getUserRoleNames =  (user, section) ->
   talkClient.type('roles').get
@@ -90,7 +91,7 @@ module?.exports = React.createClass
         <div className="roles-write">{@roleNames(@state.admin).map(@roleWriteLabel)}</div>
       </div>
 
-      <button type="submit"><i className="fa fa-plus-circle" /> Create Board</button>
+      <SingleSubmitButton type="submit" onClick={@onSubmitBoard}><i className="fa fa-plus-circle" /> Create Board</SingleSubmitButton>
       {if @state.error
         <p className="submit-error">{@state.error}</p>}
     </form>

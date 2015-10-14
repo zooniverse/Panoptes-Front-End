@@ -11,6 +11,7 @@ ROLES = require './lib/roles'
 CreateSubjectDefaultButton = require './lib/create-subject-default-button'
 CreateBoardForm = require './lib/create-board-form'
 Loading = require '../components/loading-indicator'
+SingleSubmitButton = require '../components/single-submit-button'
 PopularTags = require './popular-tags'
 {sugarClient} = require '../api/sugar'
 ZooniverseTeam = require './lib/zoo-team.cjsx'
@@ -132,7 +133,7 @@ module?.exports = React.createClass
 
               <h3>Reorder Boards:</h3>
               {@boardOrders()}
-              <button onClick={@clearBoardOrder}>Order by activity</button>
+              <SingleSubmitButton onClick={@clearBoardOrder}>Order by activity</SingleSubmitButton>
             </div>
             }
         </div>
