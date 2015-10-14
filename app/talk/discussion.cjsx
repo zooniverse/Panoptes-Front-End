@@ -19,6 +19,9 @@ SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
 merge = require 'lodash.merge'
 FollowDiscussion = require './follow-discussion'
+PopularTags = require './popular-tags'
+ActiveUsers = require './active-users'
+ProjectLinker = require './lib/project-linker'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -293,8 +296,32 @@ module?.exports = React.createClass
 
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
 
-      <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
-        {@state.comments.map(@comment)}
+      <div className="talk-list-content">
+        <section>
+          <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
+            {@state.comments.map(@comment)}
+          </div>
+        </section>
+
+        <div className="talk-sidebar">
+          <section>
+            <section>
+              <PopularTags
+                header={<h3>Popular Tags:</h3>}
+                section={@props.section}
+                params={@props.params} />
+            </section>
+
+            <section>
+              <ActiveUsers section={@props.section} />
+            </section>
+
+            <section>
+              <h3>Projects:</h3>
+              <p><ProjectLinker user={@props.user} /></p>
+            </section>
+          </section>
+        </div>
       </div>
 
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
