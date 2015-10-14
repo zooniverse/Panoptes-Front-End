@@ -305,21 +305,19 @@ module?.exports = React.createClass
 
         <div className="talk-sidebar">
           <section>
-            <section>
-              <PopularTags
-                header={<h3>Popular Tags:</h3>}
-                section={@props.section}
-                params={@props.params} />
-            </section>
+            <PopularTags
+              header={<h3>Popular Tags:</h3>}
+              section={@props.section}
+              params={@props.params} />
+          </section>
 
-            <section>
-              <ActiveUsers section={@props.section} />
-            </section>
+          <section>
+            <ActiveUsers section={@props.section} />
+          </section>
 
-            <section>
-              <h3>Projects:</h3>
-              <p><ProjectLinker user={@props.user} /></p>
-            </section>
+          <section>
+            <h3>Projects:</h3>
+            <p><ProjectLinker user={@props.user} /></p>
           </section>
         </div>
       </div>
