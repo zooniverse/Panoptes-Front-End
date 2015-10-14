@@ -185,7 +185,9 @@ module?.exports = React.createClass
         </div>
         }
 
-      {if @props.user?
+      {if @state.board.subject_default
+        <span></span>
+      else if @props.user?
         <section>
           <button onClick={@onClickNewDiscussion}>
             <i className="fa fa-#{if @state.newDiscussionOpen then 'close' else 'plus'}" />&nbsp;
