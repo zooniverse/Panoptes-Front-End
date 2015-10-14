@@ -149,9 +149,15 @@ module?.exports = React.createClass
         </section>
 
         <div className="talk-sidebar">
-          <h2>Talk Sidebar</h2>
-
-          <ProjectLinker user={@props.user} />
+          <section>
+            <h3>
+              {if @props.section is 'zooniverse'
+                <Link className="sidebar-link" to="talk-recents" {...@props}>Recent Comments</Link>
+              else
+                <Link className="sidebar-link" to="project-talk-recents" {...@props}>Recent Comments</Link>
+              }
+            </h3>
+          </section>
 
           <section>
             <PopularTags
@@ -165,13 +171,8 @@ module?.exports = React.createClass
           </section>
 
           <section>
-            <h3>
-              {if @props.section is 'zooniverse'
-                <Link className="sidebar-link" to="talk-recents" {...@props}>Recent Comments</Link>
-              else
-                <Link className="sidebar-link" to="project-talk-recents" {...@props}>Recent Comments</Link>
-              }
-            </h3>
+            <h3>Projects:</h3>
+            <p><ProjectLinker user={@props.user} /></p>
           </section>
         </div>
       </div>
