@@ -12,7 +12,6 @@ CreateSubjectDefaultButton = require './lib/create-subject-default-button'
 CreateBoardForm = require './lib/create-board-form'
 Loading = require '../components/loading-indicator'
 PopularTags = require './popular-tags'
-{sugarClient} = require '../api/sugar'
 ZooniverseTeam = require './lib/zoo-team.cjsx'
 alert = require '../lib/alert'
 AddZooTeamForm = require './add-zoo-team-form'
@@ -33,12 +32,6 @@ module?.exports = React.createClass
     boards: []
     loading: true
     moderationOpen: false
-
-  componentWillMount: ->
-    sugarClient?.subscribeTo('zooniverse') if @props.section is 'zooniverse'
-
-  componentWillUnmount: ->
-    sugarClient?.unsubscribeFrom('zooniverse') if @props.section is 'zooniverse'
 
   setBoards: (propValue, props = @props) ->
     talkClient.type('boards').get(section: props.section)

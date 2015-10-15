@@ -3,9 +3,16 @@ React = require 'react'
 TalkBreadcrumbs = require './breadcrumbs.cjsx'
 TalkSearchInput = require './search-input'
 TalkFootnote = require './footnote'
+{sugarClient} = require '../api/sugar'
 
 module?.exports = React.createClass
   displayName: 'Talk'
+
+  componentWillMount: ->
+    sugarClient.subscribeTo @props.section or 'zooniverse'
+
+  componentWillUnmount: ->
+    sugarClient.unsubscribeFrom @props.section or 'zooniverse'
 
   render: ->
     <div className="talk content-container">
