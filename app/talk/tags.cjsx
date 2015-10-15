@@ -6,6 +6,9 @@ Paginator = require './lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
 resourceCount = require './lib/resource-count'
 Loading = require '../components/loading-indicator'
+PopularTags = require './popular-tags'
+ActiveUsers = require './active-users'
+ProjectLinker = require './lib/project-linker'
 
 module.exports = React.createClass
   displayName: 'TalkTags'
@@ -55,34 +58,57 @@ module.exports = React.createClass
           </div>
 
           <div className="talk-search-results">
-            {for tag in @state.tags
-              <div className="tagged-subject talk-search-result talk-module" key="tag-#{ tag.id }">
-                <p>
-                  <Link to="project-talk-subject"
-                    {...@props}
-                    params={
-                      owner: @props.params.owner
-                      name: @props.params.name
-                      id: tag.subject.id}>
-                    Subject {tag.subject.id}
-                  </Link>
-                </p>
-                <SubjectViewer subject={tag.subject} user={@props.user} project={@props.project}/>
-                <ul className="tag-list">
-                  {for subjectTag in tag.subjectTags
-                    <li key={"tag-#{ tag.id }-#{ subjectTag.id }"}>
-                      <Link to="project-talk-tags"
+            <div className="talk-list-content">
+              <section>
+                {for tag in @state.tags
+                  <div className="tagged-subject talk-search-result talk-module" key="tag-#{ tag.id }">
+                    <p>
+                      <Link to="project-talk-subject"
                         {...@props}
                         params={
                           owner: @props.params.owner
                           name: @props.params.name
-                          tag: subjectTag.name}>
-                        #{subjectTag.name}
+                          id: tag.subject.id}>
+                        Subject {tag.subject.id}
                       </Link>
-                    </li>}
-                </ul>
+                    </p>
+                    <SubjectViewer subject={tag.subject} user={@props.user} project={@props.project}/>
+                    <ul className="tag-list">
+                      {for subjectTag in tag.subjectTags
+                        <li key={"tag-#{ tag.id }-#{ subjectTag.id }"}>
+                          <Link to="project-talk-tags"
+                            {...@props}
+                            params={
+                              owner: @props.params.owner
+                              name: @props.params.name
+                              tag: subjectTag.name}>
+                            #{subjectTag.name}
+                          </Link>
+                        </li>}
+                    </ul>
+                  </div>
+                }
+              </section>
+
+              <div className="talk-sidebar">
+                <section>
+                  <PopularTags
+                    header={<h3>Popular Tags:</h3>}
+                    section={@props.section}
+                    params={@props.params} />
+                </section>
+
+                <section>
+                  <ActiveUsers section={@props.section} />
+                </section>
+
+                <section>
+                  <h3>Projects:</h3>
+                  <p><ProjectLinker user={@props.user} /></p>
+                </section>
               </div>
-            }
+            </div>
+
             <Paginator page={+@state.meta.page} pageCount={@state.meta.page_count} />
           </div>
         </div>

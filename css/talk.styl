@@ -27,7 +27,6 @@ COPY_GREY_LIGHT = #afaeae
 
 .talk-page-header
   font-weight: 100
-  text-align: center
 
 .talk-form
   input[type='text'], input[type='search'], textarea
@@ -121,12 +120,15 @@ COPY_GREY_LIGHT = #afaeae
   .talk-list-content
     display: flex
     section
+      min-width: 1px
       width: 100%
     @media screen and (max-width: TALK_BREAKPOINT)
       display: block
 
   .talk-sidebar
     @extend .talk-module
+    flex-shrink: 0
+    min-width: 1px
     width: 300px
     margin: 10px 0 10px 10px
     overflow: hidden
@@ -366,9 +368,6 @@ COPY_GREY_LIGHT = #afaeae
       margin-top: 0.3em
 
   .talk-discussion
-    max-width: 960px
-    margin: 0 auto
-
     .talk-comment-box
       width: 80%
 
