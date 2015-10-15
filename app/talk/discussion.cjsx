@@ -194,7 +194,7 @@ module?.exports = React.createClass
 
     @discussionsRequest().update({title, sticky, locked, board_id}).save()
       .then (discussion) =>
-        if discussion[0].board_id isnt board_id
+        if discussion[0].board_id isnt @props.params.board
           {owner, name} = @props.params
           discussionRoute = if (owner and name) then 'project-talk-discussion' else 'talk-discussion'
           @transitionTo discussionRoute, merge(@props.params, board: board_id), @props.query
@@ -264,7 +264,7 @@ module?.exports = React.createClass
                   <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
                     <div>
                       <p><strong>Board:</strong></p>
-                      <select value={discussion.board_id}>
+                      <select defaultValue={discussion.board_id}>
                         {boards.map (board, i) =>
                           <option key={board.id} value={board.id}>{board.title}</option>
                           }
