@@ -3,6 +3,7 @@ DiscussionPreview = require './discussion-preview'
 CommentLink = require './comment-link'
 PromiseRenderer = require '../components/promise-renderer'
 parseSection = require './lib/parse-section'
+CommentContextIcon = require './lib/comment-context-icon'
 apiClient = require '../api/client'
 {Markdown} = require 'markdownz'
 
@@ -26,6 +27,7 @@ module.exports = React.createClass
     section = parseSection(comment.section)
 
     <div className="talk-search-result talk-module">
+      <CommentContextIcon comment={comment}></CommentContextIcon>
       <CommentLink comment={comment}>{comment.discussion_title}</CommentLink>
       <Markdown content={comment.body} project={@props.project} />
       {if section is 'zooniverse'

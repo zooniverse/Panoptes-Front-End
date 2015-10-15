@@ -15,6 +15,7 @@ talkClient = require '../api/talk'
 Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
 DisplayRoles = require './lib/display-roles'
+CommentContextIcon = require './lib/comment-context-icon'
 merge = require 'lodash.merge'
 {Markdown} = require 'markdownz'
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
@@ -161,6 +162,7 @@ module?.exports = React.createClass
       </div>
 
       <div className="talk-comment-body">
+        <CommentContextIcon comment={@props.data}></CommentContextIcon>
         {if @props.data.reply_id
           <div className="talk-comment-reply">
             {if @state.replies.length
