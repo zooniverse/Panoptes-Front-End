@@ -44,6 +44,7 @@ EditWorkflowPage = React.createClass
       pointerEvents: 'none'
 
     <div className="edit-workflow-page">
+      <h3>{@props.workflow.display_name} #{@props.workflow.id}</h3>
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       {if @props.project.live
         <p className="form-help warning"><strong>You cannot edit a project’s workflows once it’s gone live.</strong></p>}
