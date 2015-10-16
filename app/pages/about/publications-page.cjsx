@@ -244,7 +244,7 @@ publicationCategories =
       {citation: "Volunteers’ Engagement in Human Computation Astronomy Projects, Ponciano+ 2014."
       href: "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&arnumber=6728933"}
       {citation: "Zooniverse: Observing the World’s Largest Citizen Science Platform, Simpson+ 2014."
-      href: "http://wow.oerc.ox.ac.uk/wow-2014-papers/zooniverse-observing-the-world2019s-largest-citizen-science-platform/view"}
+      href: "http://dl.acm.org/citation.cfm?id=2579215"}
       {citation: '''“I want to be a Captain! I want to be a Captain!": Gamification in the Old Weather citizen science project., Eveleigh+ 2013.'''
       href: "http://discovery.ucl.ac.uk/1412171/"}
       {citation: "Creativity in citizen cyberscience: All for one and one for all, Jennett+ 2013."
