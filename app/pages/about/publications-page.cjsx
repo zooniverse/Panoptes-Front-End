@@ -144,6 +144,8 @@ publicationCategories =
     },
     {slug: "zooniverse/planet-hunters"
     publications: [
+      {citation: "Planet Hunters. X. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
+      href: "http://arxiv.org/pdf/1509.03622v1.pdf"},
       {citation: "GALEX J194419.33+491257.0: An unusually active SU UMa-type dwarf nova with a very short orbital period in the Kepler data, Kato & Osaki 2014."
       href: "http://adsabs.harvard.edu/doi/10.1093/pasj/psu025"},
       {citation: "Planet Hunters. VI. An Independent Characterization of KOI-351 and Several Long Period Planet Candidates from the Kepler Archival Data, Schmitt+ 2014."
