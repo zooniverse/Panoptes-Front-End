@@ -1,6 +1,7 @@
 React = require 'react'
 apiClient = require '../api/client'
 getSubjectLocation = require '../lib/get-subject-location'
+SingleSubmitButton = require '../components/single-submit-button'
 
 module?.exports = React.createClass
   displayName: 'TalkCommentImageSelector'
@@ -19,6 +20,7 @@ module?.exports = React.createClass
       .then (subjects) =>
         subject.type = 'recent' for subject in subjects
         @setState {subjects}
+      .catch =>
 
   setQuery: (id) ->
     apiClient.type('subjects').get({id: id})
@@ -26,6 +28,7 @@ module?.exports = React.createClass
         subject.type = 'subject' for subject in subjects
         @setState {subjects}
         @setFocusImage(subjects[0]) if subjects?.length is 1
+      .catch =>
 
   onSubmitSearch: (e) ->
     e.preventDefault()
@@ -56,7 +59,7 @@ module?.exports = React.createClass
 
       <form onSubmit={@onSubmitSearch} className="talk-form talk-search-form">
         <input ref="imageSearch" type="search" placeholder="Search by ID"/>
-        <button type="submit">Search</button>
+        <SingleSubmitButton type="submit" onClick={@onSubmitSearch}>Search</SingleSubmitButton>
       </form>
 
       <button className='talk-comment-clear-image-button' onClick={@props.onClearImageClick}>Clear image</button>

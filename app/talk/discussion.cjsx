@@ -7,6 +7,7 @@ Router = require '@edpaget/react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
+SingleSubmitButton = require '../components/single-submit-button'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
@@ -275,12 +276,12 @@ module?.exports = React.createClass
                     </div>
                   }</PromiseRenderer>
 
-                  <button type="submit">Update</button>
+                  <SingleSubmitButton type="submit" onClick={@onEditSubmit}>Update</SingleSubmitButton>
                 </form>}
 
-              <button onClick={@onClickDeleteDiscussion}>
+              <SingleSubmitButton onClick={@onClickDeleteDiscussion}>
                 Delete this discussion <i className="fa fa-close" />
-              </button>
+              </SingleSubmitButton>
             </div>
           }
         </div>

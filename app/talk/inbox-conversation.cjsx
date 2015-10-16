@@ -2,6 +2,7 @@ React = require 'react'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
+SingleSubmitButton = require '../components/single-submit-button'
 HandlePropChanges = require '../lib/handle-prop-changes'
 {Markdown} = require 'markdownz'
 CommentBox = require './comment-box'
@@ -89,7 +90,7 @@ module?.exports = React.createClass
               }
           </div>
           }
-        <button className="delete-conversation" onClick={@handleDelete}>Archive this conversation</button>
+        <SingleSubmitButton className="delete-conversation" onClick={@handleDelete}>Archive this conversation</SingleSubmitButton>
         <div>{@state.messages.map(@message)}</div>
         <CommentBox
           header={"Send a message..."}

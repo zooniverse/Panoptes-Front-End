@@ -13,6 +13,7 @@ Moderation = require './lib/moderation'
 StickyDiscussionList = require './sticky-discussion-list'
 ROLES = require './lib/roles'
 Loading = require '../components/loading-indicator'
+SingleSubmitButton = require '../components/single-submit-button'
 merge = require 'lodash.merge'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
@@ -176,12 +177,12 @@ module?.exports = React.createClass
                   <h4>Can Write:</h4>
                   <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
 
-                  <button type="submit">Update</button>
+                  <SingleSubmitButton type="submit" onClick={@onEditBoard}>Update</SingleSubmitButton>
                 </form>}
 
-              <button onClick={@onClickDeleteBoard}>
+              <SingleSubmitButton onClick={@onClickDeleteBoard}>
                 Delete this board <i className="fa fa-close" />
-              </button>
+              </SingleSubmitButton>
 
               <StickyDiscussionList board={board} />
             </div>
