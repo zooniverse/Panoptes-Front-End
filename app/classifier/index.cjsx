@@ -215,7 +215,7 @@ Classifier = React.createClass
           <TriggeredModalForm trigger={
             <i className="fa fa-cog fa-fw"></i>
           }>
-            {if 'expert' in userRoles
+            {if 'owner' in userRoles or 'expert' in userRoles
               <p>
                 <label>
                   <input type="checkbox" checked={@props.classification.gold_standard} onChange={@handleGoldStandardChange} />{' '}
