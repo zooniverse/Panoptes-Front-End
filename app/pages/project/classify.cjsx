@@ -11,6 +11,8 @@ alert = require '../../lib/alert'
 SignInPrompt = require '../../partials/sign-in-prompt'
 seenThisSession = require '../../lib/seen-this-session'
 
+FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
+
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
 SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
@@ -60,6 +62,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     query: null
     project: null
+    simulateSaveFailure: (location?.search ? '').indexOf('simulate-classification-save-failure') isnt -1
 
   getInitialState: ->
     workflow: null
@@ -230,22 +233,58 @@ module.exports = React.createClass
     console?.info 'Completed classification', @state.classification
     savingClassification = if @state.demoMode
       Promise.resolve @state.classification
+    else if @props.simulateSaveFailure
+      Promise.reject new Error 'Simulated failure of classification save'
     else
       @state.classification.save()
 
-    savingClassification.then (classification) =>
-      if @state.demoMode
-        console?.log 'Demo mode: Did NOT save classification'
-      else
-        console?.log 'Saved classification', classification.id
-        Promise.all([
-          classification.get 'workflow'
-          classification.get 'subjects'
-        ]).then ([workflow, subjects]) ->
-          seenThisSession.add workflow, subjects
-          classification.destroy()
+    savingClassification
+      .then (classification) =>
+        if @state.demoMode
+          console?.log 'Demo mode: Did NOT save classification'
+        else
+          console?.log 'Saved classification', classification.id
+          Promise.all([
+            classification.get 'workflow'
+            classification.get 'subjects'
+          ]).then ([workflow, subjects]) ->
+            seenThisSession.add workflow, subjects
+            classification.destroy()
+        @saveAllQueuedClassifications()
+      .catch (error) =>
+        console?.warn 'Failed to save classification:', error
+        @queueClassification @state.classification
+
       classificationsThisSession += 1
       @maybePromptToSignIn()
+
+  queueClassification: (classification) ->
+    queue = JSON.parse localStorage.getItem FAILED_CLASSIFICATION_QUEUE_NAME
+    queue ?= []
+    queue.push classification
+    try
+      localStorage.setItem FAILED_CLASSIFICATION_QUEUE_NAME, JSON.stringify queue
+      console?.info 'Queued classifications:', queue.length
+    catch error
+      console?.error 'Failed to queue classification:', error
+
+  saveAllQueuedClassifications: ->
+    queue = JSON.parse localStorage.getItem FAILED_CLASSIFICATION_QUEUE_NAME
+    if queue? and queue.length isnt 0
+      console?.log 'Saving queued classifications:', queue.length
+      for classificationData in queue then do (classificationData) =>
+        apiClient.type('classifications').create(classificationData).save()
+          .then (actualClassification) =>
+            actualClassification.destroy()
+            indexInQueue = queue.indexOf classificationData
+            queue.splice indexInQueue, 1
+            try
+              localStorage.setItem FAILED_CLASSIFICATION_QUEUE_NAME, JSON.stringify queue
+              console?.info 'Saved a queued classification, remaining:', queue.length
+            catch error
+              console?.error 'Failed to update classification queue:', error
+          .catch (error) =>
+            console?.error 'Failed to save a queued classification:', error
 
   maybePromptToSignIn: ->
     if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not @props.user?
