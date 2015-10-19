@@ -81,7 +81,11 @@ module?.exports = React.createClass
         <section>
           <h1>Subject {subject.id}</h1>
 
-          <SubjectViewer subject={subject} user={@props.user} project={@props.project}/>
+          <SubjectViewer
+            subject={subject}
+            user={@props.user}
+            project={@props.project}
+            linkToFullImage={true}/>
 
           {if comments?.length
             <div>
