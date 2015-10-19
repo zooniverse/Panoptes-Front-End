@@ -77,6 +77,7 @@ module?.exports = React.createClass
   render: ->
     if @props.user
       <div className="talk inbox-conversation content-container">
+        <Link to="inbox">Back to Inbox</Link>
         <h1>{@state.conversation?.title}</h1>
         {if @state.recipients.length
           <div>
