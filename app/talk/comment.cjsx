@@ -195,7 +195,11 @@ module?.exports = React.createClass
                 then={(subject) =>
                   <div className="polaroid-image">
                     {@commentSubjectTitle(@props.data, subject)}
-                    <SubjectViewer subject={subject} user={@props.user} project={@props.project}/>
+                    <SubjectViewer
+                      subject={subject}
+                      user={@props.user}
+                      project={@props.project}
+                      linkToFullImage={true}/>
                   </div>
                 }
                 catch={null}
