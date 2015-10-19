@@ -49,7 +49,7 @@ module.exports = React.createClass
       page: 1
       page_size: 10
 
-    paramsToUse = Object.assign defaultParams, params
+    paramsToUse = Object.assign {}, defaultParams, params
 
     talkClient.type('searches').get(paramsToUse).then (searches) =>
       @setState
@@ -64,7 +64,7 @@ module.exports = React.createClass
     @goToPage page
 
   goToPage: (n) ->
-    nextQuery = Object.assign @props.query, {page: n}
+    nextQuery = Object.assign {}, @props.query, {page: n}
 
     @transitionTo location.pathname, @props.params, nextQuery
 
