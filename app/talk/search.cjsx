@@ -35,7 +35,8 @@ module.exports = React.createClass
     @runSearchQuery filterObjectKeys @props.query, VALID_SEARCH_PARAMS
 
   componentWillReceiveProps: (nextProps) ->
-    @runSearchQuery filterObjectKeys nextProps.query, VALID_SEARCH_PARAMS
+    if @props.query isnt nextProps.query
+      @runSearchQuery filterObjectKeys nextProps.query, VALID_SEARCH_PARAMS
 
   runSearchQuery: (params) ->
     @setState
@@ -112,7 +113,7 @@ module.exports = React.createClass
 
               <section>
                 <h3>Projects:</h3>
-                <p><ProjectLinker user={@props.user} /></p>
+                <p><ProjectLinker /></p>
               </section>
             </div>
           </div>

@@ -1,9 +1,8 @@
 React = require 'react'
 apiClient = require '../../api/client'
-{Navigation, Link} = require '@edpaget/react-router'
+{Link} = require '@edpaget/react-router'
 Loading = require '../../components/loading-indicator'
 FEATURED_PRODUCT_IDS = require '../../lib/featured-projects'
-Paginator = require './paginator'
 
 take = (n, arr) -> arr.slice(0, n)
 
@@ -12,7 +11,6 @@ filterNonRedirected = (projects) ->
 
 module?.exports = React.createClass
   displayName: 'ProjectLinker'
-  mixins: [Navigation]
 
   getInitialState: ->
     projects: []
