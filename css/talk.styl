@@ -114,6 +114,9 @@ COPY_GREY_LIGHT = #afaeae
       border: 0
       padding: 0
 
+  .project-role
+    background: transparent
+
   .polaroid-image
     max-width: 640px
 
@@ -257,6 +260,7 @@ COPY_GREY_LIGHT = #afaeae
     @extend .talk-module
     overflow: auto
     position: relative
+    color: COPY_GREY_MID
     &:hover
       background: darken(TALK_BACKGROUND, 2%)
 
@@ -273,7 +277,6 @@ COPY_GREY_LIGHT = #afaeae
         text-decoration: underline
     p
       margin: 0 0 5px 0
-      color: COPY_GREY_MID
 
     .board-locked
       font-size: 12px
