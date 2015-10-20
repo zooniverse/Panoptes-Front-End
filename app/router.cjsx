@@ -99,6 +99,8 @@ module.exports =
     <Route name="edit-project-collaborators" path="collaborators/?" handler={require './pages/lab/collaborators'} />
     <Route name="edit-project-media" path="media/?" handler={require './pages/lab/media'} />
     <Route name="edit-project-workflow" path="workflow/:workflowID/?" handler={require './pages/lab/workflow'} />
+    <Route name="edit-project-workflow-visualization" path="workflow/:workflowID/visualize/?" handler={require './pages/lab/workflow-viewer'} />
+    <Route name="edit-project-workflow-visualisation" path="workflow/:workflowID/visualise/?" handler={require './pages/lab/workflow-viewer'} />
     <Route name="edit-project-subject-set" path="subject-set/:subjectSetID/?" handler={require './pages/lab/subject-set'} />
     <Route name="edit-project-visibility" path="visibility/?" handler={require './pages/lab/visibility'} />
     <Route name="edit-project-talk" path="talk/?" handler={require './pages/lab/talk'} />
