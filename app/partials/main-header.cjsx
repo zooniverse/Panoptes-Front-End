@@ -9,6 +9,8 @@ LoginBar = require './login-bar'
 PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require '../api/auth'
 isAdmin = require '../lib/is-admin'
+TriggeredModalForm = require 'modal-form/triggered'
+debounce = require 'debounce'
 
 counterpart.registerTranslations 'en',
   mainNav:
@@ -23,19 +25,31 @@ counterpart.registerTranslations 'en',
     admin: 'Admin'
     notifications: 'Notifications'
 
+MOBILE_WIDTH = 875 # px
+
 module.exports = React.createClass
   displayName: 'MainHeader'
 
   getDefaultProps: ->
     user: null
 
+  getInitialState: ->
+    mobile: @isMobile()
+
   componentDidMount: ->
     if @checkIfOnHome() then document.addEventListener 'scroll', @onScroll
     window.addEventListener 'locationchange', @onLocationChange
+    window.addEventListener 'resize', debounce(@onResize, 100)
 
   componentWillUnmount: ->
     document.removeEventListener 'scroll', @onScroll
-    window.removeEventListener 'locationchange', @onLocationChange
+    window.removeEventListener 'resize', debounce(@onResize, 100)
+
+  isMobile: ->
+    window?.innerWidth < MOBILE_WIDTH ? false
+
+  onResize: ->
+    @setState mobile: @isMobile()
 
   onLocationChange: ->
     if @checkIfOnHome()
@@ -45,31 +59,52 @@ module.exports = React.createClass
      React.findDOMNode(@refs.mainTitle).classList.remove 'header-sticky'
 
   checkIfOnHome: ->
-    return true if window.location is '/'
+    window.location is '/'
+
+  mobileClass: ->
+    if @state.mobile then 'mobile' else ''
+
+  links: ->
+    <nav className="main-nav #{@mobileClass()}">
+      <Link to="projects" className="main-nav-item"><Translate content="mainNav.projects" /></Link>
+      <Link to="about" className="main-nav-item"><Translate content="mainNav.about" /></Link>
+      <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
+      <Link to="notifications" className="main-nav-item"><Translate content="mainNav.notifications" /></Link>
+      <Link to="collections" className="main-nav-item"><Translate content="mainNav.collect" /></Link>
+      <a href="http://daily.zooniverse.org/" className="main-nav-item" target="_blank"><Translate content="mainNav.daily" /></a>
+      <a href="http://blog.zooniverse.org/"  className="main-nav-item" target="_blank"><Translate content="mainNav.blog" /></a>
+      <hr />
+      <Link to="lab" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
+      {if isAdmin()
+        <Link to="admin" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.admin" /></Link>}
+    </nav>
 
   render: ->
-    <header className="main-header">
+    {mobile} = @state
+
+    <header className="main-header #{@mobileClass()}">
       <div className="main-title" ref="mainTitle">
         <Link to="home" className="main-logo">
           <ZooniverseLogo />
         </Link>
-        <nav className="main-nav">
-          <Link to="projects" className="main-nav-item"><Translate content="mainNav.projects" /></Link>
-          <Link to="about" className="main-nav-item"><Translate content="mainNav.about" /></Link>
-          <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
-          <Link to="notifications" className="main-nav-item"><Translate content="mainNav.notifications" /></Link>
-          <Link to="collections" className="main-nav-item"><Translate content="mainNav.collect" /></Link>
-          <a href="http://daily.zooniverse.org/" className="main-nav-item" target="_blank"><Translate content="mainNav.daily" /></a>
-          <a href="http://blog.zooniverse.org/"  className="main-nav-item" target="_blank"><Translate content="mainNav.blog" /></a>
-          <hr />
-          <Link to="lab" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
-          {if isAdmin()
-            <Link to="admin" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.admin" /></Link>}
-        </nav>
+
+        {if not mobile
+          <span>{@links()}</span>}
+
         {if @props.user?
           <AccountBar user={@props.user} />
         else
           <LoginBar />}
+
+        {if mobile
+          <TriggeredModalForm
+            triggerProps={className: "hamburger-modal-trigger"}
+            trigger={
+              <span><img src="/assets/hamburger.svg" alt="Navigation Icon"/></span>
+            }>
+            {@links()}
+          </TriggeredModalForm>}
+
       </div>
 
       <div className="main-header-group"></div>
