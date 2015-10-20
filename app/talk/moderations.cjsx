@@ -14,13 +14,19 @@ PAGE_SIZE = require('./config').moderationsPageSize
 merge = require 'lodash.merge'
 projectSection = require './lib/project-section'
 userIsModerator = require './lib/user-is-moderator'
+moment = require 'moment'
 
 actionTaken =
   destroy: 'Deleted'
+  destroyed: 'Deleted'
   open: 'Opened'
-  close: 'Closed'
+  opened: 'Opened'
+  close: 'Deleted'
+  closed: 'Deleted'
   ignore: 'Ignored'
+  ignored: 'Ignored'
   watch: 'Watched'
+  watched: 'Watched'
 
 module?.exports = React.createClass
   displayName: 'TalkModerations'
@@ -52,6 +58,7 @@ module?.exports = React.createClass
       {page: page, page_size: PAGE_SIZE, state: @props.query.state},
       if section then {section} else {}
 
+    delete moderationParams.state if moderationParams.state is 'all'
     auth.checkCurrent().then (user) => if user?
       talkClient.type('moderations').get(moderationParams)
         .then (moderations) =>
@@ -103,7 +110,7 @@ module?.exports = React.createClass
       <CommentLink comment={comment} />
 
       <div className="moderations-actions-buttons">
-        <p>Status: <strong>{moderation.state}</strong></p>
+        <p>Status: <strong>{actionTaken[moderation.state] ? moderation.state}</strong> {moment(moderation.created_at).fromNow()}</p>
 
         {if moderation.actions.length
           <div>
@@ -143,9 +150,15 @@ module?.exports = React.createClass
       </div>
     }</PromiseRenderer>
 
+  moderatedComment: (moderation) ->
+    if moderation.destroyed_target
+      Promise.resolve moderation.destroyed_target
+    else
+      talkClient.type('comments').get moderation.target_id
+
   moderation: (moderation, i) ->
     <div key={moderation.id} className="talk-module">
-      <PromiseRenderer promise={talkClient.type('comments').get(moderation.target_id)}>{(comment) =>
+      <PromiseRenderer promise={@moderatedComment moderation}>{(comment) =>
         <div>
           {@comment(comment, moderation)}
         </div>
@@ -179,7 +192,7 @@ module?.exports = React.createClass
                   key={action}
                   onClick={=> @filterByAction(action)}
                   className={if @props.query.state is action then 'active' else ''}>
-                  {action}
+                  {actionTaken[action] ? action}
                 </button>
                 }
             </section>

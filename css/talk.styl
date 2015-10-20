@@ -27,7 +27,6 @@ COPY_GREY_LIGHT = #afaeae
 
 .talk-page-header
   font-weight: 100
-  text-align: center
 
 .talk-form
   input[type='text'], input[type='search'], textarea
@@ -121,12 +120,19 @@ COPY_GREY_LIGHT = #afaeae
   .talk-list-content
     display: flex
     section
+      min-width: 1px
       width: 100%
     @media screen and (max-width: TALK_BREAKPOINT)
       display: block
 
+  .talk-comment-context-icon
+    float: right
+    padding: TALK_PADDING
+
   .talk-sidebar
     @extend .talk-module
+    flex-shrink: 0
+    min-width: 1px
     width: 300px
     margin: 10px 0 10px 10px
     overflow: hidden
@@ -331,6 +337,14 @@ COPY_GREY_LIGHT = #afaeae
       &:hover
         color: COBOLT_BLUE
 
+  .talk-latest-comment-link
+    .talk-display-roles
+      display: inline
+
+      p
+        display: inline
+        margin-right: 5px
+
   .talk-discussion-preview
     @extend .talk-module
     position: relative
@@ -370,9 +384,6 @@ COPY_GREY_LIGHT = #afaeae
       margin-top: 0.3em
 
   .talk-discussion
-    max-width: 960px
-    margin: 0 auto
-
     .talk-comment-box
       width: 80%
 
@@ -408,6 +419,11 @@ COPY_GREY_LIGHT = #afaeae
         border-color: MAIN_HIGHLIGHT
 
     &.deleted
+      opacity: 0.5
+
+      .talk-comment-author img
+        height: 25px
+
       .polaroid-image, .talk-comment-links, .talk-comment-children
         display: none
 
@@ -641,11 +657,30 @@ COPY_GREY_LIGHT = #afaeae
     margin: TALK_MARGIN
     padding: TALK_PADDING
 
+    .subject-container, .subject-viewer
+      max-width: 640px
+
+      img
+        max-width: 100%
+
+    .tag-list
+      padding: 0 TALK_PADDING
+
+      li
+        list-style: none outside none
+        display: inline-block
+        margin: 0 TALK_PADDING
+
   .private-message-form input
     margin-left: 5px
     width: 50%
     border: none
     font-size: 1em
+
+  .talk-footnote
+    margin: 50px auto
+    text-align: center
+    max-width: 600px
 
 .talk-comment-help
   margin: 2em
@@ -667,7 +702,7 @@ COPY_GREY_LIGHT = #afaeae
 
   .notification.unread .talk-module
     border-color: MAIN_HIGHLIGHT
-  
+
   .notification .talk-module
     transition: border-color 1s ease
 

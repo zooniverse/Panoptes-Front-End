@@ -67,6 +67,34 @@ WorkflowToggle = React.createClass
       </label>
     </span>
 
+ProjectExperimentalFeatures = React.createClass
+  displayName: "ProjectExperimentalFeatures"
+
+  getDefaultProps: ->
+    project: null
+
+  setting: (task) ->
+    task in (@props.project?.experimental_tools or [])
+
+  updateTasks: (task) ->
+    tools = @props.project.experimental_tools or []
+    if task in tools
+      tools.splice(tools.indexOf(task), 1)
+    else
+      tools = tools.concat([task])
+    @props.project.update({experimental_tools: tools})
+
+  render: ->
+    <div>
+      <AutoSave resource={@props.project}>
+        {["survey", "crop"].map (task) =>
+          <label key={task}>
+            <input type="checkbox" name={task} checked={@setting(task)} onChange={@updateTasks.bind @, task} />
+            {task.charAt(0).toUpperCase() + task.slice(1)}
+          </label>}
+      </AutoSave>
+    </div>
+
 ProjectRedirectToggle = React.createClass
   displayName: "ProjectRedirectToggle"
 
@@ -94,7 +122,6 @@ ProjectRedirectToggle = React.createClass
   render: ->
     <div>
       <AutoSave resource={@props.project}>
-        <span className="form-label">Redirect URL:</span>
         <input type="text" name="redirect" ref="redirectUrl" value={@props.project.redirect} placeholder="External redirect" onBlur={@updateRedirect} onChange={handleInputChange.bind @props.project} />
         <span>{ @validUrlMessage() }</span>
       </AutoSave>
@@ -131,7 +158,7 @@ ProjectStatus = React.createClass
     <ChangeListener target={@props.project}>{ =>
       <div className="project-status">
         <ProjectIcon project={@props.project} />
-        <h4>Settings</h4>
+        <h4>Visibility Settings</h4>
         <ul>
           <li>Private: <ProjectToggle project={@props.project} field="private" trueLabel="Private" falseLabel="Public" /></li>
           <li>Live: <ProjectToggle project={@props.project} field="live" trueLabel="Live" falseLabel="Development" /></li>
@@ -139,8 +166,11 @@ ProjectStatus = React.createClass
           <li>Beta Approved: <ProjectToggle project={@props.project} field="beta_approved" /></li>
           <li>Launch Requested: <ProjectToggle project={@props.project} field="launch_requested" /></li>
           <li>Launch Approved: <ProjectToggle project={@props.project} field="launch_approved" /></li>
-          <li><br /><ProjectRedirectToggle project={@props.project} /></li>
         </ul>
+        <h4>Project Redirect</h4>
+        <ProjectRedirectToggle project={@props.project} />
+        <h4>Experimental Features</h4>
+        <ProjectExperimentalFeatures project={@props.project} />
         <h4>Workflow Settings</h4>
         <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
           if workflows.length is 0

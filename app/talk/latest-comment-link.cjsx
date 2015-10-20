@@ -1,6 +1,7 @@
 React = require 'react'
 apiClient = require '../api/client'
 {timeAgo} = require './lib/time'
+DisplayRoles = require './lib/display-roles'
 Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
 {Link} = require '@edpaget/react-router'
@@ -68,6 +69,10 @@ module?.exports = React.createClass
           </Link>}
 
         {' '}
+
+        <PromiseRenderer promise={talkClient.type('roles').get(user_id: comment.user_id, section: ['zooniverse', comment.section], is_shown: true, page_size: 100)}>{(roles) =>
+          <DisplayRoles roles={roles} section={comment.section} />
+        }</PromiseRenderer>
 
         {if discussion.title and @props.title
           <span>

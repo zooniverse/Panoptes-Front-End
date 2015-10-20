@@ -52,11 +52,11 @@ ProjectPage = React.createClass
     project: null
 
   componentDidMount: ->
-    sugarClient?.subscribeTo "project-#{ @props.project.id }"
+    sugarClient.subscribeTo "project-#{ @props.project.id }"
     document.documentElement.classList.add 'on-project-page'
 
   componentWillUnmount: ->
-    sugarClient?.unsubscribeFrom "project-#{ @props.project.id }"
+    sugarClient.unsubscribeFrom "project-#{ @props.project.id }"
     document.documentElement.classList.remove 'on-project-page'
 
   getPageTitles: (page) ->

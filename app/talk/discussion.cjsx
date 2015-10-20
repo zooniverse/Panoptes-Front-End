@@ -7,6 +7,7 @@ Router = require '@edpaget/react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
+SingleSubmitButton = require '../components/single-submit-button'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
@@ -19,6 +20,9 @@ SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
 merge = require 'lodash.merge'
 FollowDiscussion = require './follow-discussion'
+PopularTags = require './popular-tags'
+ActiveUsers = require './active-users'
+ProjectLinker = require './lib/project-linker'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -194,7 +198,7 @@ module?.exports = React.createClass
 
     @discussionsRequest().update({title, sticky, locked, board_id}).save()
       .then (discussion) =>
-        if discussion[0].board_id isnt board_id
+        if discussion[0].board_id isnt @props.params.board
           {owner, name} = @props.params
           discussionRoute = if (owner and name) then 'project-talk-discussion' else 'talk-discussion'
           @transitionTo discussionRoute, merge(@props.params, board: board_id), @props.query
@@ -264,7 +268,7 @@ module?.exports = React.createClass
                   <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
                     <div>
                       <p><strong>Board:</strong></p>
-                      <select value={discussion.board_id}>
+                      <select defaultValue={discussion.board_id}>
                         {boards.map (board, i) =>
                           <option key={board.id} value={board.id}>{board.title}</option>
                           }
@@ -272,12 +276,12 @@ module?.exports = React.createClass
                     </div>
                   }</PromiseRenderer>
 
-                  <button type="submit">Update</button>
+                  <SingleSubmitButton type="submit" onClick={@onEditSubmit}>Update</SingleSubmitButton>
                 </form>}
 
-              <button onClick={@onClickDeleteDiscussion}>
+              <SingleSubmitButton onClick={@onClickDeleteDiscussion}>
                 Delete this discussion <i className="fa fa-close" />
-              </button>
+              </SingleSubmitButton>
             </div>
           }
         </div>
@@ -293,8 +297,30 @@ module?.exports = React.createClass
 
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
 
-      <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
-        {@state.comments.map(@comment)}
+      <div className="talk-list-content">
+        <section>
+          <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
+            {@state.comments.map(@comment)}
+          </div>
+        </section>
+
+        <div className="talk-sidebar">
+          <section>
+            <PopularTags
+              header={<h3>Popular Tags:</h3>}
+              section={@props.section}
+              params={@props.params} />
+          </section>
+
+          <section>
+            <ActiveUsers section={@props.section} />
+          </section>
+
+          <section>
+            <h3>Projects:</h3>
+            <p><ProjectLinker user={@props.user} /></p>
+          </section>
+        </div>
       </div>
 
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />

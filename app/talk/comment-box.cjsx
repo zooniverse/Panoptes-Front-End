@@ -5,6 +5,7 @@ CommentHelp = require './comment-help'
 CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
 Loading = require '../components/loading-indicator'
+SingleSubmitButton = require '../components/single-submit-button'
 alert = require '../lib/alert'
 {Markdown, MarkdownEditor} = require 'markdownz'
 
@@ -104,7 +105,7 @@ module?.exports = React.createClass
             {if @state.showing is 'image-selector' then <span>&nbsp;<i className="fa fa-close" /></span>}
           </button>
 
-        <button type="submit" className='talk-comment-submit-button'>{@props.submit}</button>
+        <SingleSubmitButton type="submit" onClick={@onSubmitComment} className='talk-comment-submit-button'>{@props.submit}</SingleSubmitButton>
           {if @props.onCancelClick
             <button
               type="button"

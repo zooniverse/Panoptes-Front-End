@@ -2,6 +2,7 @@ React = require 'react'
 talkClient = require '../../api/talk'
 projectSection = require './project-section'
 PromiseRenderer = require '../../components/promise-renderer'
+SingleSubmitButton = require '../../components/single-submit-button'
 
 DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
 DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
@@ -38,7 +39,7 @@ module?.exports = React.createClass
           <i className="fa fa-check" /> Subject Default Board Setup
         </div>
       else
-        <button type="button" onClick={@createSubjectDefaultBoard}>
+        <SingleSubmitButton type="button" onClick={@createSubjectDefaultBoard}>
           <i className="fa fa-photo" /> Activate Talk Subject Comments Board
-        </button>
+        </SingleSubmitButton>
     }</PromiseRenderer>

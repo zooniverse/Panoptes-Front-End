@@ -11,8 +11,8 @@ ROLES = require './lib/roles'
 CreateSubjectDefaultButton = require './lib/create-subject-default-button'
 CreateBoardForm = require './lib/create-board-form'
 Loading = require '../components/loading-indicator'
+SingleSubmitButton = require '../components/single-submit-button'
 PopularTags = require './popular-tags'
-{sugarClient} = require '../api/sugar'
 ZooniverseTeam = require './lib/zoo-team.cjsx'
 alert = require '../lib/alert'
 AddZooTeamForm = require './add-zoo-team-form'
@@ -33,12 +33,6 @@ module?.exports = React.createClass
     boards: []
     loading: true
     moderationOpen: false
-
-  componentWillMount: ->
-    sugarClient?.subscribeTo('zooniverse') if @props.section is 'zooniverse'
-
-  componentWillUnmount: ->
-    sugarClient?.unsubscribeFrom('zooniverse') if @props.section is 'zooniverse'
 
   setBoards: (propValue, props = @props) ->
     talkClient.type('boards').get(section: props.section)
@@ -125,11 +119,14 @@ module?.exports = React.createClass
                 View Reported Comments
               </Link>
 
-              <CreateBoardForm section={@props.section} onSubmitBoard={=> @setBoards()}/>
+              <CreateBoardForm
+                section={@props.section}
+                user={@props.user}
+                onSubmitBoard={=> @setBoards()}/>
 
               <h3>Reorder Boards:</h3>
               {@boardOrders()}
-              <button onClick={@clearBoardOrder}>Order by activity</button>
+              <SingleSubmitButton onClick={@clearBoardOrder}>Order by activity</SingleSubmitButton>
             </div>
             }
         </div>
@@ -146,9 +143,15 @@ module?.exports = React.createClass
         </section>
 
         <div className="talk-sidebar">
-          <h2>Talk Sidebar</h2>
-
-          <ProjectLinker user={@props.user} />
+          <section>
+            <h3>
+              {if @props.section is 'zooniverse'
+                <Link className="sidebar-link" to="talk-recents" {...@props}>Recent Comments</Link>
+              else
+                <Link className="sidebar-link" to="project-talk-recents" {...@props}>Recent Comments</Link>
+              }
+            </h3>
+          </section>
 
           <section>
             <PopularTags
@@ -162,19 +165,8 @@ module?.exports = React.createClass
           </section>
 
           <section>
-            <h3>
-              {if @props.section is 'zooniverse'
-                <span>
-                  <Link className="sidebar-link" to="talk-recents" {...@props}>Recent Comments</Link>
-                  <Link className="sidebar-link" to="section-notifications" user={@props.user} params={section: @props.section}>Zooniverse Notifications</Link>
-                </span>
-              else
-                <span>
-                  <Link className="sidebar-link" to="project-talk-recents" {...@props}>Recent Comments</Link>
-                  <Link className="sidebar-link" to="project-notifications" {...@props}>{@props.project.display_name} Notifications</Link>
-                </span>
-              }
-            </h3>
+            <h3>Projects:</h3>
+            <p><ProjectLinker user={@props.user} /></p>
           </section>
         </div>
       </div>

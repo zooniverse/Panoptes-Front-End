@@ -14,7 +14,9 @@ apiClient = require '../api/client'
 talkClient = require '../api/talk'
 Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
+SingleSubmitButton = require '../components/single-submit-button'
 DisplayRoles = require './lib/display-roles'
+CommentContextIcon = require './lib/comment-context-icon'
 merge = require 'lodash.merge'
 {Markdown} = require 'markdownz'
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
@@ -161,6 +163,7 @@ module?.exports = React.createClass
       </div>
 
       <div className="talk-comment-body">
+        <CommentContextIcon comment={@props.data}></CommentContextIcon>
         {if @props.data.reply_id
           <div className="talk-comment-reply">
             {if @state.replies.length
@@ -192,7 +195,11 @@ module?.exports = React.createClass
                 then={(subject) =>
                   <div className="polaroid-image">
                     {@commentSubjectTitle(@props.data, subject)}
-                    <SubjectViewer subject={subject} user={@props.user} project={@props.project}/>
+                    <SubjectViewer
+                      subject={subject}
+                      user={@props.user}
+                      project={@props.project}
+                      linkToFullImage={true}/>
                   </div>
                 }
                 catch={null}
@@ -209,13 +216,13 @@ module?.exports = React.createClass
               }
 
             <div className="talk-comment-links #{if @props.locked then 'locked' else ''}">
-              <button className="talk-comment-like-button" onClick={@onClickLike}>
+              <SingleSubmitButton className="talk-comment-like-button" onClick={@onClickLike}>
                 {if upvotedByCurrentUser(@props.user, @props.data)
                   <i className="fa fa-thumbs-up upvoted" />
                 else
                   <i className="fa fa-thumbs-o-up" />}
                 &nbsp;{@upvoteCount()}
-              </button>
+              </SingleSubmitButton>
 
               <button className="talk-comment-reply-button" onClick={@onClickReply}>
                 <i className="fa fa-reply" /> Reply
@@ -230,9 +237,9 @@ module?.exports = React.createClass
                   <button className="talk-comment-edit-button" onClick={@onClickEdit}>
                     <i className="fa fa-pencil" /> Edit
                   </button>
-                  <button className="talk-comment-delete-button" onClick={@onClickDelete}>
+                  <SingleSubmitButton className="talk-comment-delete-button" onClick={@onClickDelete}>
                     <i className="fa fa-remove" /> Delete
-                  </button>
+                  </SingleSubmitButton>
                 </span>}
             </div>
 

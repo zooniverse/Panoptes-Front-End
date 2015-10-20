@@ -5,6 +5,9 @@ Paginator = require './lib/paginator'
 TalkSearchResult = require './search-result'
 resourceCount = require './lib/resource-count'
 Loading = require '../components/loading-indicator'
+PopularTags = require './popular-tags'
+ActiveUsers = require './active-users'
+ProjectLinker = require './lib/project-linker'
 
 TALK_SEARCH_ERROR_MESSAGE = 'There was an error with your search. Please try again.'
 VALID_SEARCH_PARAMS = ['page', 'page_size', 'query', 'types', 'section']
@@ -32,7 +35,8 @@ module.exports = React.createClass
     @runSearchQuery filterObjectKeys @props.query, VALID_SEARCH_PARAMS
 
   componentWillReceiveProps: (nextProps) ->
-    @runSearchQuery filterObjectKeys nextProps.query, VALID_SEARCH_PARAMS
+    if @props.query isnt nextProps.query
+      @runSearchQuery filterObjectKeys nextProps.query, VALID_SEARCH_PARAMS
 
   runSearchQuery: (params) ->
     @setState
@@ -46,7 +50,7 @@ module.exports = React.createClass
       page: 1
       page_size: 10
 
-    paramsToUse = Object.assign defaultParams, params
+    paramsToUse = Object.assign {}, defaultParams, params
 
     talkClient.type('searches').get(paramsToUse).then (searches) =>
       @setState
@@ -61,7 +65,7 @@ module.exports = React.createClass
     @goToPage page
 
   goToPage: (n) ->
-    nextQuery = Object.assign @props.query, {page: n}
+    nextQuery = Object.assign {}, @props.query, {page: n}
 
     @transitionTo location.pathname, @props.params, nextQuery
 
@@ -88,10 +92,30 @@ module.exports = React.createClass
             Your search returned {resourceCount @state.resultsMeta.count, 'results'}.
           </div>
 
-          <div className="talk-search-results">
-            {@state.results.map (result, i) =>
-              <TalkSearchResult {...@props} data={result} key={i} />}
-            <Paginator page={+@state.resultsMeta.page} onPageChange={@onPageChange} pageCount={@state.resultsMeta.page_count} />
+          <div className="talk-list-content">
+            <section className="talk-search-results">
+              {@state.results.map (result, i) =>
+                <TalkSearchResult {...@props} data={result} key={i} />}
+              <Paginator page={+@state.resultsMeta.page} onPageChange={@onPageChange} pageCount={@state.resultsMeta.page_count} />
+            </section>
+
+            <div className="talk-sidebar">
+              <section>
+                <PopularTags
+                  header={<h3>Popular Tags:</h3>}
+                  section={@props.section}
+                  params={@props.params} />
+              </section>
+
+              <section>
+                <ActiveUsers section={@props.section} />
+              </section>
+
+              <section>
+                <h3>Projects:</h3>
+                <p><ProjectLinker /></p>
+              </section>
+            </div>
           </div>
         </div>}
     </div>

@@ -115,7 +115,8 @@
       margin-left: 0.5em
       opacity: 0.7
 
-  .modal-form & .required-task-warning
+  // Only show the "required" warning when a task is outside the normal flow.
+  .classifier > .task-area & .required-task-warning
     display: none
 
   .drawing-tool-icon > svg

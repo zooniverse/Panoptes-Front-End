@@ -1,5 +1,6 @@
 React = require 'react'
 talkClient = require '../api/talk'
+SingleSubmitButton = require '../components/single-submit-button'
 
 module?.exports = React.createClass
   displayName: 'FollowDiscussion'
@@ -91,12 +92,12 @@ module?.exports = React.createClass
         <div>
           {if @state.participating
             <div>
-              <button onClick={@toggleParticipating}>{ @buttonLabel() }</button>
+              <SingleSubmitButton onClick={@toggleParticipating}>{ @buttonLabel() }</SingleSubmitButton>
               <p className="description">You're receiving notifications from this discussion because you've joined it {@digestText 'participating'}</p>
             </div>
           else
             <div>
-              <button onClick={@toggleFollowed}>{@buttonLabel()}</button>
+              <SingleSubmitButton onClick={@toggleFollowed}>{@buttonLabel()}</SingleSubmitButton>
               <p className="description">{@followedText()} {@digestText 'followed'}</p>
             </div>
           }

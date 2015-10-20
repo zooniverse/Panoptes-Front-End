@@ -14,6 +14,8 @@ export OUT_CSS="main.css"
 export SRC_HTML="./views/index.ejs"
 export OUT_HTML="index.html"
 
+export HEAD_COMMIT=$(git rev-parse HEAD)
+
 # NOTE: Non-dev dependencies are assumed to be front-end modules.
 externals=$(node -p "Object.keys(require('./package').dependencies).join('\n');")
 

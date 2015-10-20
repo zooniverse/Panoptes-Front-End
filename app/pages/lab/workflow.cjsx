@@ -33,6 +33,9 @@ EditWorkflowPage = React.createClass
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
     @makeHref 'project-classify', viewParams, viewQuery
 
+  canUseTask: (project, task)->
+    task in project.experimental_tools
+
   render: ->
     window.editingWorkflow = @props.workflow
 
@@ -41,6 +44,7 @@ EditWorkflowPage = React.createClass
       pointerEvents: 'none'
 
     <div className="edit-workflow-page">
+      <h3>{@props.workflow.display_name} #{@props.workflow.id}</h3>
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       {if @props.project.live
         <p className="form-help warning"><strong>You cannot edit a project’s workflows once it’s gone live.</strong></p>}
@@ -101,27 +105,22 @@ EditWorkflowPage = React.createClass
                       <small><strong>Drawing</strong></small>
                     </button>
                   </AutoSave>{' '}
-                  <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
-                    if owner.admin or owner.display_name is 'brian-testing'
-                      <span>
-                        <AutoSave resource={@props.workflow}>
-                          <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
-                            <i className="fa fa-binoculars fa-2x"></i>
-                            <br />
-                            <small><strong>Survey</strong></small>
-                          </button>
-                        </AutoSave>{' '}
-                        <AutoSave resource={@props.workflow}>
-                          <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">
-                            <i className="fa fa-crop fa-2x"></i>
-                            <br />
-                            <small><strong>Crop</strong></small>
-                          </button>
-                        </AutoSave>
-                      </span>
-                    else
-                      null
-                  }</PromiseRenderer>
+                  {if @canUseTask(@props.project, "survey")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
+                        <i className="fa fa-binoculars fa-2x"></i>
+                        <br />
+                        <small><strong>Survey</strong></small>
+                      </button>
+                    </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "crop")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">
+                        <i className="fa fa-crop fa-2x"></i>
+                        <br />
+                        <small><strong>Crop</strong></small>
+                      </button>
+                    </AutoSave>}
                 </TriggeredModalForm>
               </p>
 

@@ -12,6 +12,7 @@ module?.exports = React.createClass
 
   getInitialState: ->
     error: ''
+    submitted: false
 
   onSubmit: (e) ->
     e.preventDefault()
@@ -29,7 +30,7 @@ module?.exports = React.createClass
     talkClient.type('moderations').create(moderation).save()
       .then (moderation) =>
         @setFeedback 'Report submitted. Thank you!'
-        comment.value = ''
+        @setState submitted: true
       .catch (e) =>
         @setState error: e.message
 
@@ -42,8 +43,9 @@ module?.exports = React.createClass
       {if error
         <p className='submit-error'>{error}</p>}
 
-      <form className="talk-comment-report-form-form" onSubmit={@onSubmit}>
-        <textarea ref="textarea" placeholder="Why are you reporting this comment?"></textarea>
-        <button type="submit">Report</button>
-      </form>
+      {unless @state.submitted
+        <form className="talk-comment-report-form-form" onSubmit={@onSubmit}>
+          <textarea ref="textarea" placeholder="Why are you reporting this comment?"></textarea>
+          <button type="submit">Report</button>
+        </form>}
     </div>

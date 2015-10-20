@@ -13,12 +13,13 @@ module?.exports = React.createClass
   tagsRequest: ->
     talkClient.type('tags/popular').get section: @props.section, limit: 20, page_size: 20
 
-  tag: (tag, i) ->
+  tag: (talkTag, i) ->
+    tag = talkTag.name
     {owner, name} = @props.params
     if owner and name
-      <div key={tag.id}><Link params={{owner, name}} query={query: tag.name} to="project-talk-search">#{tag.name}</Link>{' '}</div>
+      <div key={talkTag.id}><Link params={{owner, name, tag}} to="project-talk-tags">#{tag}</Link>{' '}</div>
     else
-      <div key={tag.id}><Link query={query: tag.name} to="talk-search">#{tag.name}</Link>{' '}</div>
+      <div key={talkTag.id}><Link query={query: tag} to="talk-search">#{tag}</Link>{' '}</div>
 
   render: ->
     <div className="talk-popular-tags">
