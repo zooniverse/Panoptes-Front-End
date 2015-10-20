@@ -39,6 +39,8 @@ module?.exports = React.createClass
     firstAndLast: true
     pageSelector: true
     scrollOnChange: true
+    previousLabel: <span><i className="fa fa-long-arrow-left" /> Previous</span>
+    nextLabel: <span>Next <i className="fa fa-long-arrow-right" /></span>
 
   mixins: [Navigation]
 
@@ -48,12 +50,14 @@ module?.exports = React.createClass
 
   onClickNext: ->
     {pageCount, page} = @props
+    @props.onClickNext?()
 
     nextPage = if page is pageCount then pageCount else page + 1
     @setPage(nextPage)
 
   onClickPrev: ->
     {pageCount, page} = @props
+    @props.onClickPrev?()
 
     prevPage = if page is 1 then page else page - 1
     @setPage(prevPage)
@@ -70,7 +74,7 @@ module?.exports = React.createClass
   render: ->
     {page, pageCount} = @props
 
-    <div className="paginator">
+    <div className="paginator #{ @props.className }">
       {if @props.firstAndLast
         <button
           className="paginator-first"
@@ -83,7 +87,7 @@ module?.exports = React.createClass
         className="paginator-prev"
         onClick={@onClickPrev}
         disabled={page is 1}>
-        <i className="fa fa-long-arrow-left" /> Previous
+        {@props.previousLabel}
       </button>
 
       {if @props.pageSelector
@@ -99,7 +103,7 @@ module?.exports = React.createClass
         className="paginator-next"
         onClick={@onClickNext}
         disabled={page is pageCount}>
-        Next <i className="fa fa-long-arrow-right" />
+        {@props.nextLabel}
       </button>
 
       {if @props.firstAndLast

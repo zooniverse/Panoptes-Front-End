@@ -25,15 +25,11 @@ module.exports = React.createClass
     comment = @props.data
     discussion = @discussionFromComment comment
     section = parseSection(comment.section)
+    [owner, name] = comment.project_slug?.split('/') or []
 
     <div className="talk-search-result talk-module">
       <CommentContextIcon comment={comment}></CommentContextIcon>
       <CommentLink comment={comment}>{comment.discussion_title}</CommentLink>
       <Markdown content={comment.body} project={@props.project} />
-      {if section is 'zooniverse'
-        <DiscussionPreview {...@props} discussion={discussion} comment={comment} />
-      else
-        [owner, name] = comment.project_slug.split('/')
-        <DiscussionPreview {...@props} discussion={discussion} owner={owner} name={name} comment={comment} />
-      }
+      <DiscussionPreview {...@props} discussion={discussion} owner={owner} name={name} comment={comment} />
     </div>

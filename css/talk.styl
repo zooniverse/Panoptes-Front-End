@@ -146,6 +146,7 @@ COPY_GREY_LIGHT = #afaeae
       margin: 5px 0
 
     .sidebar-link
+      display: block
       text-decoration: none
       &:hover
         text-decoration: underline
@@ -297,6 +298,9 @@ COPY_GREY_LIGHT = #afaeae
     p i
       width: 1em
       text-align: center
+
+  .hidden-markdown
+    display: none
 
   .talk-discussion-link
     color: COPY_GREY_LIGHT
@@ -681,3 +685,61 @@ COPY_GREY_LIGHT = #afaeae
 .talk-comment-help
   margin: 2em
 
+.talk.notifications
+  .centering
+    text-align: center
+
+  .inline-block
+    display: inline-block
+
+  .talk-module
+    background-color: TALK_BACKGROUND
+    opacity: 0.97
+
+  .title
+    color: COPY
+    text-transform: capitalize
+
+  .notification.unread .talk-module
+    border-color: MAIN_HIGHLIGHT
+
+  .notification .talk-module
+    transition: border-color 1s ease
+
+  .paginator
+    opacity: 0.97
+
+    &.older .paginator-prev
+      display: none
+
+    &.newer
+      .paginator-prev
+        margin-right: 10px
+
+      .paginator-next
+        display: none
+
+  .title
+    margin-top: 0
+
+  .bottom
+    border-top: 1px solid LIGHT_GREY
+    padding: 5px
+
+    .time-ago
+      @extend .talk .talk-discussion-link .latest-comment-time
+      font-size: 0.9em
+
+  .talk-discussion-preview
+    border-bottom: none
+    margin: auto
+
+    h1, .preview-stats, .latest-comment-preview-link
+      display: none
+
+  .message-link
+    display: block
+    text-decoration: none
+
+    &:hover
+      text-decoration: underline
