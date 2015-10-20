@@ -7,6 +7,7 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = require '../../api/client'
 counterpart = require 'counterpart'
 ChangeListener = require '../../components/change-listener'
+Router = require '@edpaget/react-router'
 
 DEFAULT_WORKFLOW_NAME = 'Untitled workflow'
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
@@ -216,8 +217,16 @@ EditProjectPage = React.createClass
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
-  mixins: [TitleMixin]
+  mixins: [TitleMixin, Router.Navigation]
   title: 'Edit'
+
+  componentDidMount: ->
+    unless @props.user
+      @transitionTo "lab"
+
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.user
+      @transitionTo "lab"
 
   getDefaultProps: ->
     params:

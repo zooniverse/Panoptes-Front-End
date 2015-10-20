@@ -6,7 +6,6 @@ counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 Avatar = require '../partials/avatar'
 TriggeredModalForm = require 'modal-form/triggered'
-Router = require '@edpaget/react-router'
 
 UP = 38
 DOWN = 40
@@ -21,7 +20,6 @@ counterpart.registerTranslations 'en',
 
 module.exports = React.createClass
   displayName: 'AccountBar'
-  mixins: [Router.Navigation, Router.State]
 
   propTypes:
     user: React.PropTypes.object.isRequired
@@ -112,6 +110,3 @@ module.exports = React.createClass
 
   handleSignOutClick: ->
     auth.signOut()
-
-    if @getPathname().indexOf("lab") > -1 and @getParams()?
-      @transitionTo "lab" 
