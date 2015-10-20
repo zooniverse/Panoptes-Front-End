@@ -32,12 +32,9 @@ module?.exports = React.createClass
     userChanged = nextProps.user and nextProps.user isnt @props.user
     @getNotifications(nextProps.query.page) if pageChanged or userChanged
 
-  getNotifications: (page = @props.query.page) ->
-    page or= 1
-    query = {page}
-    query.section = "project-#{ @props.project.id }" if @props.project
-    query.section = @props.params.section if @props.params.section
-    talkClient.type('notifications').get(query).then (newNotifications) =>
+  getNotifications: (page) ->
+    @getUnreadCount()
+    talkClient.type('notifications').get(@notificationsQuery(page)).then (newNotifications) =>
       meta = newNotifications[0]?.getMeta() or { }
       notifications = @state.notifications or newNotifications
       meta.notificationIds = (n.id for n in newNotifications)
@@ -59,6 +56,18 @@ module?.exports = React.createClass
 
       @setState {notifications, notificationsMap, firstMeta, lastMeta}
 
+  notificationsQuery: (page = @props.query.page, options = { }) ->
+    page or= 1
+    query = Object.assign { }, options, {page}
+    query.section = "project-#{ @props.project.id }" if @props.project
+    query.section = @props.params.section if @props.params.section
+    query
+
+  getUnreadCount: ->
+    talkClient.type('notifications').get(@notificationsQuery(1, page_size: 1, delivered: false)).then (notifications) =>
+      unreadCount = notifications[0]?.getMeta()?.count or 0
+      @setState {unreadCount}
+
   markAsRead: (meta) ->
     =>
       ids = @state["#{ meta }Meta"].notificationIds
@@ -72,7 +81,7 @@ module?.exports = React.createClass
     talkClient.put '/notifications/read'
     for notification in @state.notifications
       notification.update delivered: true
-    @forceUpdate()
+    @setState unreadCount: 0
 
   title: ->
     if @props.project
@@ -85,7 +94,7 @@ module?.exports = React.createClass
   render: ->
     <div className="talk notifications">
       <div className="content-container">
-        <h1 className={"centering title #{ if @props.project then 'talk-module' else '' }"}>
+        <h1 className={"title #{ if @props.project then 'talk-module' else '' }"}>
           {@title()}
         </h1>
 
@@ -93,24 +102,31 @@ module?.exports = React.createClass
           <ChangeListener target={@props.user}>{ =>
             if @state.notifications?.length > 0
               <div>
-                  <div className="centering">
-                    <div className="talk-module inline-block">
-                      {if @state.firstMeta.page > 1
-                        <Paginator
-                          className="newer inline-block"
-                          page={+@state.firstMeta.page}
-                          pageCount={@state.firstMeta.page_count}
-                          scrollOnChange={false}
-                          firstAndLast={false}
-                          pageSelector={false}
-                          previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>}
-                          onClickPrev={@markAsRead 'first'} />}
+                  <p>
+                    You have{' '}
+                    {if @state.unreadCount is 0 then 'no' else @state.unreadCount}{' '}
+                    unread notifications
+                  </p>
+                  {if @state.firstMeta.page > 1 or @state.unreadCount > 0
+                    <div className="centering">
+                      <div className="talk-module inline-block">
+                        {if @state.firstMeta.page > 1
+                          <Paginator
+                            className="newer inline-block"
+                            page={+@state.firstMeta.page}
+                            pageCount={@state.firstMeta.page_count}
+                            scrollOnChange={false}
+                            firstAndLast={false}
+                            pageSelector={false}
+                            previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>}
+                            onClickPrev={@markAsRead 'first'} />}
 
-                      <button onClick={@markAllAsRead}>
-                        Mark all as read
-                      </button>
-                    </div>
-                  </div>
+                        {if @state.unreadCount > 0
+                          <button onClick={@markAllAsRead}>
+                            Mark all as read
+                          </button>}
+                      </div>
+                    </div>}
 
                 <div className="list">
                   {for notification in @state.notifications
