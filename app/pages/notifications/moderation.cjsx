@@ -41,11 +41,12 @@ module?.exports = React.createClass
   render: ->
     notification = @props.notification
     path = if notification.project_id then 'project-talk-moderations' else 'talk-moderations'
+    [owner, name] = notification.project_slug.split('/') if notification.project_slug
 
     if @state.moderation
       <div className="moderation talk-module">
         <div className="title">
-          <Link to={path} {...@props}>{notification.message}</Link>
+          <Link to={path} {...@props} params={{owner, name}}>{notification.message}</Link>
         </div>
 
         <Markdown>{@state.comment.body}</Markdown>
@@ -72,7 +73,7 @@ module?.exports = React.createClass
 
           {' '}
 
-          <Link to={path} {...@props}>
+          <Link to={path} {...@props} params={{owner, name}}>
             {notification.message}{' '}
             {moment(notification.created_at).fromNow()}
           </Link>
