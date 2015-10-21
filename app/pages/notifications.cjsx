@@ -24,8 +24,9 @@ module?.exports = React.createClass
     @getNotifications() if @props.user
 
   componentWillUnmount: ->
-    @markAsRead('first')()
-    @markAsRead('last')()
+    if @props.user
+      @markAsRead('first')()
+      @markAsRead('last')()
 
   componentWillReceiveProps: (nextProps) ->
     pageChanged = nextProps.query.page isnt @props.query.page
