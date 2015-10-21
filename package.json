@@ -17,6 +17,7 @@
     "lodash.intersection": "~3.2.0",
     "lodash.merge": "~2.4.1",
     "lodash.pick": "~3.1.0",
+    "lodash.uniq": "^3.2.2",
     "markdownz": "^3.0.0",
     "modal-form": "~1.1.0",
     "moment": "~2.9.0",
@@ -27,8 +28,8 @@
     "react-swipe": "~2.3.0",
     "react-translate-component": "~0.9.0",
     "sugar-client": "^1.0.1",
-    "tether": "HubSpot/tether#df8cd44",
     "swipe-js-iso": "~2.0.1",
+    "tether": "HubSpot/tether#df8cd44",
     "window-shim": "^1.0.0"
   },
   "devDependencies": {
