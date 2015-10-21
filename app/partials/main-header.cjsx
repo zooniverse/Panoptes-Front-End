@@ -11,6 +11,7 @@ auth = require '../api/auth'
 isAdmin = require '../lib/is-admin'
 TriggeredModalForm = require 'modal-form/triggered'
 debounce = require 'debounce'
+HamburgerIcon = require '../partials/hamburger-icon'
 
 counterpart.registerTranslations 'en',
   mainNav:
@@ -99,9 +100,7 @@ module.exports = React.createClass
         {if mobile
           <TriggeredModalForm
             triggerProps={className: "hamburger-modal-trigger"}
-            trigger={
-              <span><img src="/assets/hamburger.svg" alt="Navigation Icon"/></span>
-            }>
+            trigger={<HamburgerIcon />}>
             {@links()}
           </TriggeredModalForm>}
 
