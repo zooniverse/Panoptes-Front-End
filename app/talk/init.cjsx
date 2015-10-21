@@ -17,6 +17,7 @@ ZooniverseTeam = require './lib/zoo-team.cjsx'
 alert = require '../lib/alert'
 AddZooTeamForm = require './add-zoo-team-form'
 DragReorderable = require 'drag-reorderable'
+Paginator = require './lib/paginator'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
@@ -31,13 +32,22 @@ module?.exports = React.createClass
 
   getInitialState: ->
     boards: []
+    boardsMeta: {}
     loading: true
     moderationOpen: false
 
+  getDefaultProps: ->
+    query: page: 1
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.query.page isnt @props.query.page
+      @setBoards({}, nextProps)
+
   setBoards: (propValue, props = @props) ->
-    talkClient.type('boards').get(section: props.section)
+    talkClient.type('boards').get(section: props.section, page_size: 20, page: props.query.page)
       .then (boards) =>
-        @setState {boards, loading: false}
+        boardsMeta = boards[0]?.getMeta()
+        @setState {boards, boardsMeta, loading: false}
 
   boardPreview: (data, i) ->
     <BoardPreview {...@props} key={i} data={data} />
@@ -170,4 +180,10 @@ module?.exports = React.createClass
           </section>
         </div>
       </div>
+
+      {if +@state.boardsMeta?.page_count > 1
+        <Paginator
+          page={+@state.boardsMeta?.page}
+          pageCount={+@state.boardsMeta?.page_count} />}
+
     </div>
