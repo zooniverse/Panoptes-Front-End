@@ -17,9 +17,9 @@ module?.exports = React.createClass
     tag = talkTag.name
     {owner, name} = @props.params
     if owner and name
-      <div key={talkTag.id}><Link params={{owner, name, tag}} to="project-talk-tags">#{tag}</Link>{' '}</div>
+      <div key={talkTag.id} className="truncated"><Link params={{owner, name, tag}} to="project-talk-tags">#{tag}</Link>{' '}</div>
     else
-      <div key={talkTag.id}><Link query={query: tag} to="talk-search">#{tag}</Link>{' '}</div>
+      <div key={talkTag.id} className="truncated"><Link query={query: tag} to="talk-search">#{tag}</Link>{' '}</div>
 
   render: ->
     <div className="talk-popular-tags">

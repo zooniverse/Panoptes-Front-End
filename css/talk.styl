@@ -114,6 +114,10 @@ COPY_GREY_LIGHT = #afaeae
       border: 0
       padding: 0
 
+  .truncated
+    overflow: hidden
+    text-overflow: ellipsis
+
   .project-role
     background: transparent
 
@@ -136,14 +140,15 @@ COPY_GREY_LIGHT = #afaeae
     @extend .talk-module
     flex-shrink: 0
     min-width: 1px
+    max-width: 300px
     width: 300px
     margin: 10px 0 10px 10px
-    overflow: hidden
     white-space: pre-wrap
 
     @media screen and (max-width: TALK_BREAKPOINT)
       margin: 0
       width: 100%
+      max-width: 100%
 
     section
       margin: 5px 0
