@@ -77,6 +77,12 @@ module.exports = React.createClass
         <CollectionDeleteDialog {...@props} onComplete={resolve} />
       </div>
 
+  public_collection: ->
+    if @props.collection.private?
+      not @props.collection.private
+    else
+      @props.collection.private
+
   render: ->
     <div className="collection-settings-tab">
       <ChangeListener target={@props.collection}>{=>
