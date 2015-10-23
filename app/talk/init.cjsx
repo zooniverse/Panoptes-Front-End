@@ -18,6 +18,7 @@ alert = require '../lib/alert'
 AddZooTeamForm = require './add-zoo-team-form'
 DragReorderable = require 'drag-reorderable'
 Paginator = require './lib/paginator'
+SidebarNotifications = require './lib/sidebar-notifications'
 
 module?.exports = React.createClass
   displayName: 'TalkInit'
@@ -153,6 +154,8 @@ module?.exports = React.createClass
         </section>
 
         <div className="talk-sidebar">
+          <SidebarNotifications {...@props} params={@props.params} />
+
           <section>
             <h3>
               {if @props.section is 'zooniverse'

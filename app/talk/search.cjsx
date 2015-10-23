@@ -8,6 +8,7 @@ Loading = require '../components/loading-indicator'
 PopularTags = require './popular-tags'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
+SidebarNotifications = require './lib/sidebar-notifications'
 
 TALK_SEARCH_ERROR_MESSAGE = 'There was an error with your search. Please try again.'
 VALID_SEARCH_PARAMS = ['page', 'page_size', 'query', 'types', 'section']
@@ -100,6 +101,8 @@ module.exports = React.createClass
             </section>
 
             <div className="talk-sidebar">
+              <SidebarNotifications {...@props} params={@props.params} />
+
               <section>
                 <PopularTags
                   header={<h3>Popular Tags:</h3>}
