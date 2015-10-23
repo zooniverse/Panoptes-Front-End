@@ -19,6 +19,7 @@ module?.exports = React.createClass
       mentionable_id: @props.subject.id
       mentionable_type: 'Subject'
       sort: '-created_at'
+      page_size: 20
       include: 'comment'
 
     talkClient.type('mentions').get(query).then (mentions) =>
