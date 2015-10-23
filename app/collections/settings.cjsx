@@ -6,6 +6,7 @@ alert = require '../lib/alert'
 SetToggle = require '../lib/set-toggle'
 CollectionRole = require '../lib/collection-role'
 ChangeListener = require '../components/change-listener'
+PromiseRenderer = require '../components/promise-renderer'
 
 CollectionDeleteDialog = React.createClass
   displayName: 'CollectionDeleteDialog'
@@ -77,37 +78,39 @@ module.exports = React.createClass
       @props.collection.private
 
   render: ->
-    if @hasSettingsRole()
-      <div className="collection-settings-tab">
-        <ChangeListener target={@props.collection}>{=>
-          <DisplayNameSlugEditor resource={@props.collection} resourceType="collection" />
-        }</ChangeListener>
+    <PromiseRenderer promise={@hasSettingsRole()}>{(hasSettingsRole) =>
+      if hasSettingsRole
+        <div className="collection-settings-tab">
+          <ChangeListener target={@props.collection}>{=>
+            <DisplayNameSlugEditor resource={@props.collection} resourceType="collection" />
+          }</ChangeListener>
 
-        <hr />
+          <hr />
 
-        <span className="form-label">Visibility</span>
-        <p>
-          <label style={whiteSpace: 'nowrap'}>
-            <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} onChange={@set.bind this, 'private', true} />
-            Private
-          </label>
-          &emsp;
-          <label style={whiteSpace: 'nowrap'}>
-            <input type="radio" name="private" value={false} data-json-value={true} checked={@publicCollection()} onChange={@set.bind this, 'private', false} />
-            Public
-          </label>
-        </p>
+          <span className="form-label">Visibility</span>
+          <p>
+            <label style={whiteSpace: 'nowrap'}>
+              <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} onChange={@set.bind this, 'private', true} />
+              Private
+            </label>
+            &emsp;
+            <label style={whiteSpace: 'nowrap'}>
+              <input type="radio" name="private" value={false} data-json-value={true} checked={@publicCollection()} onChange={@set.bind this, 'private', false} />
+              Public
+            </label>
+          </p>
 
-        <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
+          <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
 
-        <hr />
+          <hr />
 
-        <div className="form-label">Delete this Collection</div>
-        <div className="delete-container">
-          <button className="error major-button" type="button" onClick={@confirmDelete}>Delete</button>
+          <div className="form-label">Delete this Collection</div>
+          <div className="delete-container">
+            <button className="error major-button" type="button" onClick={@confirmDelete}>Delete</button>
+          </div>
         </div>
-      </div>
-    else
-      <div className="collection-settings-tab">
-        <p>Not allowed to edit this collection</p>
-      </div>
+      else
+        <div className="collection-settings-tab">
+          <p>Not allowed to edit this collection</p>
+        </div>
+    }</PromiseRenderer>
