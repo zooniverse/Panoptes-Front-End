@@ -46,7 +46,7 @@ module?.exports = React.createClass
       Please{' '}
       <button className="link-style" type="button" onClick={@popup}>
         sign in
-      </button>
+      </button>{' '}
       to contribute to subject discussions
     </p>
 
