@@ -97,16 +97,13 @@ TutorialEditorController = React.createClass
   getDefaultProps: ->
     project: null
     tutorial: null
+    media: {}
     delayBeforeSave: 5000
 
     onDelete: ->
       console.log 'TutorialEditorController onDelete', arguments
 
-  getInitialState: ->
-    media: {}
-
   componentDidMount: ->
-    @fetchMediaFor @props.tutorial
     @_boundForceUpdate = @forceUpdate.bind this
     @props.tutorial.listen @_boundForceUpdate
 
@@ -117,26 +114,18 @@ TutorialEditorController = React.createClass
     unless nextProps.tutorial is @props.tutorial
       @fetchMediaFor nextProps.tutorial
 
-  fetchMediaFor: (tutorial) ->
-    tutorial.get 'attached_images', {}
-      .then (mediaResources) =>
-        mediaByID = {}
-        for mediaResource in mediaResources
-          mediaByID[mediaResource.id] = mediaResource
-        @setState media: mediaByID
-
   render: ->
     <TutorialEditor
       tutorial={@props.tutorial}
-      media={@state.media}
-      onStepAdd={@handleAddStep}
+      media={@props.media}
+      onStepAdd={@handleStepAdd}
       onStepRemove={@handleStepRemove}
       onMediaSelect={@handleStepMediaChange}
       onMediaClear={@handleStepMediaClear}
       onStepChange={@handleStepChange}
     />
 
-  handleAddStep: ->
+  handleStepAdd: ->
     @props.tutorial.steps.push
       media: ''
       content: ''
@@ -214,7 +203,7 @@ TutorialCreator = React.createClass
 
   render: ->
     <div>
-      <p>This project doesn’t have a tutorial yet.</p>
+      <p>This project doesn’t have a tutorial.</p>
       {if @state.error?
           <p>{@state.error.toString()}</p>}
       <p>
@@ -245,6 +234,7 @@ TutorialEditorFetcher = React.createClass
     loading: false
     error: null
     tutorial: null
+    media: {}
 
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
@@ -265,13 +255,22 @@ TutorialEditorFetcher = React.createClass
       loading: true
       error: null
       tutorial: null
-    apiClient.type('tutorials').get project_id: @props.project?.id
+    apiClient.type('tutorials').get project_id: project.id
       .then ([tutorial]) =>
+        @fetchMediaFor tutorial
         @setState {tutorial}
       .catch (error) =>
         @setState {error}
       .then =>
         @setState loading: false
+
+  fetchMediaFor: (tutorial) ->
+    tutorial.get 'attached_images', {} # Prevent caching.
+      .then (mediaResources) =>
+        media = {}
+        for mediaResource in mediaResources
+          media[mediaResource.id] = mediaResource
+        @setState {media}
 
   render: ->
     if @state.loading
@@ -280,12 +279,16 @@ TutorialEditorFetcher = React.createClass
       <p>{@state.error.toString()}</p>
     else if @state.tutorial?
       window?.editingTutorial = @state.tutorial
-      <TutorialEditorController project={@props.project} tutorial={@state.tutorial} onDelete={@handleTutorialCreateOrDelete} />
+      <TutorialEditorController
+        project={@props.project}
+        tutorial={@state.tutorial}
+        media={@state.media}
+        onDelete={@handleTutorialCreateOrDelete}
+      />
     else
       <TutorialCreator project={@props.project} onCreate={@handleTutorialCreateOrDelete} />
 
   handleTutorialCreateOrDelete: ->
     @fetchTutorialFor @props.project
-
 
 module.exports = TutorialEditorFetcher
