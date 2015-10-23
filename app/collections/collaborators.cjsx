@@ -217,7 +217,7 @@ module.exports = React.createClass
             <div>
               {for roleSet in roleSets
                 continue if owner.id is roleSet.links.owner.id
-                <RoleRow roleSet={roleSet} onRemove={@handleCollaboratorChange} />}
+                <RoleRow key={roleSet.id} roleSet={roleSet} onRemove={@handleCollaboratorChange} />}
             </div>}
 
           <br />
