@@ -40,3 +40,5 @@ module?.exports = React.createClass
             <Comment key={mention.comment.id} data={mention.comment} locked={true} linked={true} />}
         </div>
       </div>
+    else
+      <span></span>
