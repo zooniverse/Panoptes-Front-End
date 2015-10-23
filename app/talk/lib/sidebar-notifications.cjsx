@@ -32,7 +32,7 @@ module?.exports = React.createClass
       'Notifications'
 
   render: ->
-    return unless @props.user and @state.unreadCount?
+    return null unless @props.user and @state.unreadCount?
 
     {project, user} = @props
     {section, owner, name} = @props.params
