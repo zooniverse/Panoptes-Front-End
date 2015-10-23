@@ -9,24 +9,21 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
   font-size: 14px
   justify-content: center
   line-height: 20px
-  overflow: auto
 
   a
     color: inherit
     text-decoration: none
 
     &:hover
-      color: rgba(white, 0.75)
-
-  .main-logo
-    margin-bottom: 2.7em
+      color: white
 
   .main-logo-link
     color: rgba(white, 0.25)
     font-size: 18px
+    margin-bottom: 2.7em
 
     &:hover
-      color: rgba(white, 0.4)
+      color: white
 
   .main-footer-flex
     display: flex
@@ -34,31 +31,23 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
     justify-content: center
     max-width: 960px
     width: 100%
-    
-    @media screen and (max-width: 768px)
-      box-sizing: border-box
 
   .site-map
-    display: inline-flex
+    display: flex
     flex: 1 0 auto
-    justify-content: center
+    justify-content: space-around
 
   .site-map-section
-    display: inline-flex
+    display: flex
     flex-direction: column
-    flex-wrap: wrap
-    margin: 0 6.25vw 2.7em 0
-
-    &:first-of-type
-      margin-left: 6.25vw
 
     h6
       color: COPY
       font-size: inherit
 
     a
-      white-space: nowrap
       display: block
+      white-space: nowrap
 
   .social-media
     a
