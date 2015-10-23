@@ -43,10 +43,10 @@ module?.exports = React.createClass
             <Comment key={comment.id} data={comment} locked={true} linked={true} />}
         </div>
 
-        <Paginator
-          page={+@state.meta.page}
-          pageCount={+@state.meta.page_count}
-        />
+        {if +@state.meta.page_count > 1
+          <Paginator
+            page={+@state.meta.page}
+            pageCount={+@state.meta.page_count} />}
       </div>
     else
       <p>There are no comments yet</p>
