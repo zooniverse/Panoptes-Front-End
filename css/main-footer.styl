@@ -19,7 +19,7 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
       color: rgba(white, 0.75)
 
   .main-logo
-    margin-bottom: 2.7em
+    margin: 0 6.25vw 2.7em 0
 
   .main-logo-link
     color: rgba(white, 0.25)
@@ -39,18 +39,12 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
       box-sizing: border-box
 
   .site-map
-    display: inline-flex
-    flex: 1 0 auto
+    display: flex
+    flex-wrap: wrap
     justify-content: center
 
   .site-map-section
-    display: inline-flex
-    flex-direction: column
-    flex-wrap: wrap
     margin: 0 6.25vw 2.7em 0
-
-    &:first-of-type
-      margin-left: 6.25vw
 
     h6
       color: COPY
@@ -61,8 +55,12 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
       display: block
 
   .social-media
+    display: block
+    // flex-basis: 100px
+    text-align: center
     a
       margin: 0.5em
+      display: inline-block
 
   .footer-sole
     background: darken(MAIN_FOOTER_BACKGROUND, 20%)
