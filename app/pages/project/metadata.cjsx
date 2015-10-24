@@ -18,7 +18,7 @@ module?.exports = React.createClass
       <div className="project-metadata-stats">
         <div className="project-metadata-stat">
           <div>{project.classifiers_count}</div>
-          <div>Volunteers</div>
+          <div>Registered Volunteers</div>
         </div>
 
         <div className="project-metadata-stat">
