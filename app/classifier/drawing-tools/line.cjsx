@@ -17,9 +17,15 @@ module.exports = React.createClass
       x2: x
       y2: y
 
+    initStart: ->
+      _inProgress: true
+
     initMove: ({x, y}) ->
       x2: x
       y2: y
+
+    initRelease: ->
+      _inProgress: false
 
     initValid: (mark) ->
       {x1, y1, x2, y2} = mark

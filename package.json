@@ -19,7 +19,7 @@
     "lodash.pick": "~3.1.0",
     "lodash.uniq": "^3.2.2",
     "markdownz": "^3.0.0",
-    "modal-form": "~1.1.0",
+    "modal-form": "~1.2.0",
     "moment": "~2.9.0",
     "papaparse": "mholt/PapaParse#cada171",
     "react": "~0.13.2",
