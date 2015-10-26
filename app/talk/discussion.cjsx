@@ -23,6 +23,7 @@ FollowDiscussion = require './follow-discussion'
 PopularTags = require './popular-tags'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
+SidebarNotifications = require './lib/sidebar-notifications'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -305,6 +306,8 @@ module?.exports = React.createClass
         </section>
 
         <div className="talk-sidebar">
+          <SidebarNotifications {...@props} params={@props.params} />
+
           <section>
             <PopularTags
               header={<h3>Popular Tags:</h3>}

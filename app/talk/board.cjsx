@@ -21,6 +21,7 @@ alert = require '../lib/alert'
 PopularTags = require './popular-tags'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
+SidebarNotifications = require './lib/sidebar-notifications'
 
 promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
@@ -219,6 +220,8 @@ module?.exports = React.createClass
         </section>
 
         <div className="talk-sidebar">
+          <SidebarNotifications {...@props} params={@props.params} />
+
           <section>
             <h3>
               {if @props.section is 'zooniverse'
