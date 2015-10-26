@@ -5,10 +5,27 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
   'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
 
+MISC_DETAILS = [{
+  type: 'single'
+  required: true
+  question: 'Cool?'
+  answers: [
+    {label: 'Yeah'}
+    {label: 'Nah'}
+  ]
+}, {
+  type: 'multiple'
+  question: 'Cool stuff?'
+  answers: [
+    {label: 'Ice'}
+    {label: 'Snow'}
+  ]
+}]
+
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'crop'
+  first_task: 'draw'
   tasks:
     crop:
       type: 'crop'
@@ -161,32 +178,12 @@ workflow = apiClient.type('workflows').create
         * Draw something
       '''
       tools: [
-        {
-          type: 'point'
-          label: 'Point'
-          color: 'red'
-          details: [{
-            type: 'single'
-            required: true
-            question: 'Cool?'
-            answers: [
-              {label: 'Yeah'}
-              {label: 'Nah'}
-            ]
-          }, {
-            type: 'multiple'
-            question: 'Cool stuff?'
-            answers: [
-              {label: 'Ice'}
-              {label: 'Snow'}
-            ]
-          }]
-        }
-        {type: 'line', label: 'Line', color: 'yellow', details: []}
-        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: []}
-        {type: 'polygon', label: 'Polygon', color: 'cyan', details: []}
-        {type: 'circle', label: 'Circle', color: 'blue', details: []}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: []}
+        {type: 'point', label: 'Point', color: 'red', details: MISC_DETAILS}
+        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DETAILS}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DETAILS}
+        {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DETAILS}
+        {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DETAILS}
+        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DETAILS}
       ]
       next: 'cool'
 

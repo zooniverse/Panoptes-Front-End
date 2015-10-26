@@ -16,7 +16,7 @@ isAdmin = require '../../lib/is-admin'
 NOOP = Function.prototype
 
 VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg']
-INVALID_FILENAME_CHARS = ['/', '\\', ':']
+INVALID_FILENAME_CHARS = ['/', '\\', ':', ',']
 MAX_FILE_SIZE = 600000
 
 announceSetChange = ->
@@ -273,7 +273,7 @@ EditSubjectSetPage = React.createClass
   _findFilesInMetadata: (metadata) ->
     filesInMetadata = []
     for key, value of metadata
-      extensions = if isAdmin() then '' else "(?:#{VALID_SUBJECT_EXTENSIONS.join '|'})"
+      extensions = if isAdmin() then '\\.\\w{2,4}' else "(?:#{VALID_SUBJECT_EXTENSIONS.join '|'})"
       filesInValue = value.match? ///([^#{INVALID_FILENAME_CHARS.join ''}]+#{extensions})///gi
       if filesInValue?
         filesInMetadata.push filesInValue...

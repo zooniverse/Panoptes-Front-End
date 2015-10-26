@@ -21,7 +21,7 @@ module.exports = React.createClass
 
     initStart: ({x, y}, mark) ->
       @initCoords = {x, y}
-      {x, y}
+      {x, y, _inProgress: true}
 
     initMove: (cursor, mark) ->
       if cursor.x > @initCoords.x
@@ -39,6 +39,9 @@ module.exports = React.createClass
         y = cursor.y
 
       {x, y, width, height}
+
+    initRelease: ->
+      _inProgress: false
 
     initValid: (mark) ->
       mark.width > MINIMUM_SIZE and mark.height > MINIMUM_SIZE

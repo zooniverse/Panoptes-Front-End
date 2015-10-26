@@ -52,7 +52,7 @@ module.exports = React.createClass
         {@props.children}
       </g>
 
-      {if toolProps.selected and toolProps.details? and toolProps.details.length isnt 0
+      {if toolProps.selected and not toolProps.mark._inProgress and toolProps.details? and toolProps.details.length isnt 0
         tasks = require '../tasks'
 
         detailsAreComplete = toolProps.details.every (detailTask, i) =>
