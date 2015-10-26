@@ -120,6 +120,8 @@ publicationCategories =
     },
     {slug: "zooniverse/solar-stormwatch"
     publications: [
+      {citation: "Differences between the CME fronts tracked by an expert, an automated algorithm, and the Solar Stormwatch project, Barnard+ 2015."
+      href: "http://onlinelibrary.wiley.com/doi/10.1002/2015SW001280/full"},
       {citation: "Observational Tracking of the 2D Structure of Coronal Mass Ejections Between the Sun and 1 AU, Savani+ 2015."
       href: "http://arxiv.org/abs/1503.08774"},
       {citation: "Validation of a priori CME arrival predictions made using real-time heliospheric imager observations, Tucker-Hood+ 2015."
