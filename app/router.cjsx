@@ -121,5 +121,4 @@ module.exports =
   <Route path="dev/classifier" handler={require './classifier'} />
   <Route path="dev/aggregate" handler={require './components/aggregate-view'} />
   <Route path="dev/ribbon" handler={require './components/classifications-ribbon'} />
-  <Route path="dev/tutorial-editor" handler={require './pages/lab/tutorial'} />
 </Route>

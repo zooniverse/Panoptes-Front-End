@@ -76,8 +76,8 @@ module.exports = React.createClass
         step._key ?= Math.random()
         <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>
           <Markdown>{step.content}</Markdown>
-          <hr key="hr" />
-          <p key="p" style={textAlign: 'center'}>
+          <hr />
+          <p style={textAlign: 'center'}>
             {if i is @props.steps.length - 1
               <button type="submit" className="major-button">Let’s go!</button>
             else
