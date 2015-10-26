@@ -8,6 +8,7 @@ ProjectLinker = require '../talk/lib/project-linker'
 SubjectCommentForm = require './comment-form'
 SubjectCommentList = require './comment-list'
 SubjectDiscussionList = require './discussion-list'
+SubjectMentionList = require './mention-list'
 
 module?.exports = React.createClass
   displayName: 'Subject'
@@ -42,6 +43,7 @@ module?.exports = React.createClass
 
               <SubjectCommentList subject={@state.subject} {...@props} />
               <SubjectDiscussionList subject={@state.subject} {...@props} />
+              <SubjectMentionList subject={@state.subject} {...@props} />
               <SubjectCommentForm subject={@state.subject} {...@props} />
             </div>}
         </section>
