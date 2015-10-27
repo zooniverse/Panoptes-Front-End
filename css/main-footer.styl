@@ -9,13 +9,18 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
   font-size: 14px
   justify-content: center
   line-height: 20px
+  overflow: auto
 
   a
     color: inherit
     text-decoration: none
 
     &:hover
-      color: white
+      color: rgba(white, 0.75)
+
+  .main-logo
+    margin: 0 6.25vw 2.7em 0
+    color: white
 
   .main-logo-link
     color: rgba(white, 0.25)
@@ -34,11 +39,13 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
 
   .site-map
     display: flex
-    flex: 1 0 auto
-    justify-content: space-around
+    flex-wrap: wrap
+    justify-content: center
 
   .site-map-section
     display: flex
+    margin: 0 6.25vw 2.7em 0
+    flex: 1 0 auto
     flex-direction: column
 
     h6
@@ -50,8 +57,12 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
       white-space: nowrap
 
   .social-media
+    display: block
+    // flex-basis: 100px
+    text-align: center
     a
       margin: 0.5em
+      display: inline-block
 
   .footer-sole
     background: darken(MAIN_FOOTER_BACKGROUND, 20%)
