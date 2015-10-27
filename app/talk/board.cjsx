@@ -77,7 +77,8 @@ module?.exports = React.createClass
     <DiscussionPreview {...@props} key={i} discussion={discussion} />
 
   onClickDeleteBoard: ->
-    if window.confirm("Are you sure that you want to delete this board? All of the comments and discussions will be lost forever.")
+    projectName = @state.board.title.toLowerCase()
+    if window.prompt("Are you sure that you want to delete this board? All of the comments and discussions will be lost forever. Type \"#{projectName}\" below to confirm:") is projectName
       {owner, name} = @props.params
       if @state.board.section is 'zooniverse'
         @boardRequest().delete()
