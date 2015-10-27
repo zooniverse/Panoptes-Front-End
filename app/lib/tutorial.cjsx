@@ -3,8 +3,10 @@ Dialog = require 'modal-form/dialog'
 StepThrough = require '../components/step-through'
 MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
+apiClient = require '../api/client'
 
 completedThisSession = {}
+window?.tutorialsCompletedThisSession = completedThisSession
 
 module.exports = React.createClass
   displayName: 'Tutorial'
@@ -24,31 +26,34 @@ module.exports = React.createClass
         if isNaN completedAt.valueOf()
           false
         else
-          # TODO: Check if the completion date is greater than the most recent tutorial_step's modified_at date.
+          # TODO: Check if the completion date is greater than the tutorial's modified_at date.
           # Return `null` to mean "Completed, but not with the most recent version".
           true
 
     start: (user, project) ->
-      # TODO: `project.get('tutorial')`
-      getSteps = Promise.resolve project.configuration?.tutorial ? []
+      apiClient.type('tutorials').get project_id: project.id
+        .then ([tutorial]) =>
+          if tutorial? and tutorial.steps.length isnt 0
+            tutorial.get 'attached_images'
+              .catch =>
+                []
+              .then (mediaResources) =>
+                mediaByID = {}
+                for mediaResource in mediaResources
+                  mediaByID[mediaResource.id] = mediaResource
 
-      doingTutorial = getSteps.then (steps) =>
-        unless steps.length is 0
-          Tutorial = this
-          Dialog.alert <Tutorial steps={steps} />, className: 'tutorial-dialog'
-
-      # We don't really care if the user canceled or completed the tutorial.
-      doneDoingTutorial = doingTutorial.catch =>
-        null
-
-      doneDoingTutorial.then =>
-        now = new Date().toISOString()
-        if user?
-          user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
-            projectPreferences.update 'preferences.tutorial_completed_at': now
-            projectPreferences.save()
-        else
-          completedThisSession[project.id] = now
+                TutorialComponent = this
+                Dialog.alert <TutorialComponent steps={tutorial.steps} media={mediaByID} />, className: 'tutorial-dialog'
+                  .catch =>
+                    null # We don't really care if the user canceled or completed the tutorial.
+                  .then =>
+                    now = new Date().toISOString()
+                    if user?
+                      user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
+                        projectPreferences.update 'preferences.tutorial_completed_at': now
+                        projectPreferences.save()
+                    else
+                      completedThisSession[project.id] = now
 
     startIfNecessary: (user, project) ->
       @checkIfCompleted user, project
@@ -63,15 +68,16 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     steps: []
+    media: {}
 
   render: ->
     <StepThrough ref="stepThrough" className="tutorial-steps">
       {for step, i in @props.steps
         step._key ?= Math.random()
-        <MediaCard key={step._key} className="tutorial-step" src={step.media}>
+        <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>
           <Markdown>{step.content}</Markdown>
-          <hr key="hr" />
-          <p key="p" style={textAlign: 'center'}>
+          <hr />
+          <p style={textAlign: 'center'}>
             {if i is @props.steps.length - 1
               <button type="submit" className="major-button">Let’s go!</button>
             else

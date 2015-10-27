@@ -103,6 +103,7 @@ module.exports =
     <Route name="edit-project-visibility" path="visibility/?" handler={require './pages/lab/visibility'} />
     <Route name="edit-project-talk" path="talk/?" handler={require './pages/lab/talk'} />
     <Route name="get-data-exports" path="data-exports" handler={require './pages/lab/data-dumps'} />
+    <Route name="edit-project-tutorial" path="tutorial" handler={require './pages/lab/tutorial'} />
   </Route>
   <Route name="lab-policies" path="lab-policies/?" handler={require './pages/lab/lab-policies'} />
   <Route name="lab-how-to" path="lab-how-to/?" handler={require './pages/lab/how-to-page'} />
@@ -121,4 +122,3 @@ module.exports =
   <Route path="dev/aggregate" handler={require './components/aggregate-view'} />
   <Route path="dev/ribbon" handler={require './components/classifications-ribbon'} />
 </Route>
-

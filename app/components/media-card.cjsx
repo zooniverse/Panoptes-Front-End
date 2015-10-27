@@ -1,6 +1,6 @@
 React = require 'react'
 
-IMAGE_EXTENSIONS = ['gif', 'jpg', 'png', 'svg']
+IMAGE_EXTENSIONS = ['gif', 'jpeg', 'jpg', 'png', 'svg']
 
 VIDEO_EXTENSIONS = ['mp4']
 

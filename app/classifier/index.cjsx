@@ -8,6 +8,7 @@ tasks = require './tasks'
 preloadSubject = require '../lib/preload-subject'
 PromiseRenderer = require '../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
+TutorialButton = require './tutorial-button'
 isAdmin = require '../lib/is-admin'
 Tutorial = require '../lib/tutorial'
 
@@ -122,11 +123,7 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
-        {if @props.project?.configuration?.tutorial? # TODO: The tutorial will eventually be linked from `project.get('tutorial')`.
-          <button type="button" className="secret-button" title="Project tutorial" aria-label="Show the project tutorial" onClick={Tutorial.start.bind(Tutorial, @props.user, @props.project)}>
-            <i className="fa fa-graduation-cap fa-fw" />
-          </button>}
-
+        <TutorialButton user={@props.user} project={@props.project} />
         <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
         {if nextTaskKey
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
