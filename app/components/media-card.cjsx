@@ -9,7 +9,6 @@ module.exports = React.createClass
     src: ''
 
   render: ->
-    console.log 'src', @props.src
     srcExtension = @props.src.split('.').pop().toLowerCase()
 
     <div {...@props} className={"media-card #{@props.className}".trim()}>

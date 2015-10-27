@@ -18,7 +18,7 @@ module.exports = React.createClass
       @fetchTutorialFor nextProps.project
 
   fetchTutorialFor: (project) ->
-    apiClient.type('tutorials').get project_id: @props.project.id
+    apiClient.type('tutorials').get project_id: project.id
       .then ([tutorial]) =>
         @setState {tutorial}
 
