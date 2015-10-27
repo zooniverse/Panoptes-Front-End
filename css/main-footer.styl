@@ -20,13 +20,15 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
 
   .main-logo
     margin: 0 6.25vw 2.7em 0
+    color: white
 
   .main-logo-link
     color: rgba(white, 0.25)
     font-size: 18px
+    margin-bottom: 2.7em
 
     &:hover
-      color: rgba(white, 0.4)
+      color: white
 
   .main-footer-flex
     display: flex
@@ -34,9 +36,6 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
     justify-content: center
     max-width: 960px
     width: 100%
-    
-    @media screen and (max-width: 768px)
-      box-sizing: border-box
 
   .site-map
     display: flex
@@ -44,15 +43,18 @@ FOOTER_TEXT_COLOR = rgba(white, 0.5)
     justify-content: center
 
   .site-map-section
+    display: flex
     margin: 0 6.25vw 2.7em 0
+    flex: 1 0 auto
+    flex-direction: column
 
     h6
       color: COPY
       font-size: inherit
 
     a
-      white-space: nowrap
       display: block
+      white-space: nowrap
 
   .social-media
     display: block
