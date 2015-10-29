@@ -1,5 +1,5 @@
 React = require 'react'
-{RouteHandler, Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 TalkBreadcrumbs = require './breadcrumbs.cjsx'
 TalkSearchInput = require './search-input'
 TalkFootnote = require './footnote'
@@ -17,7 +17,7 @@ module?.exports = React.createClass
   render: ->
     <div className="talk content-container">
       <h1 className="talk-main-link">
-        <Link to="talk" params={@props.params}>
+        <Link to="/talk" params={@props.params}>
           Zooniverse Talk
         </Link>
       </h1>
@@ -26,7 +26,7 @@ module?.exports = React.createClass
 
       <TalkSearchInput {...@props} placeholder={'Search the Zooniverse...'} />
 
-      <RouteHandler {...@props} section={'zooniverse'} />
+      {React.cloneElement @props.children, {section: 'zooniverse', user: @props.user}}
 
       <TalkFootnote />
     </div>

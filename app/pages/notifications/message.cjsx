@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 {Markdown} = require 'markdownz'
 moment = require 'moment'
 talkClient = require '../../api/talk'
@@ -29,7 +29,7 @@ module?.exports = React.createClass
     notification = @props.notification
     if @state.message
       <div className="conversation-message talk-module">
-        <Link to="inbox-conversation" {...@props} params={conversation: notification.source.conversation_id} className="message-link">
+        <Link to="/inbox/#{notification.source.conversation_id}" {...@props} className="message-link">
           {notification.message}{' '}
           in {@state.conversation.title}
         </Link>
@@ -37,7 +37,7 @@ module?.exports = React.createClass
         <Markdown>{@state.message.body}</Markdown>
 
         <div className="bottom">
-          <Link className="user-profile-link" to="user-profile" params={name: @state.messageUser.login}>
+          <Link className="user-profile-link" to="/users/#{@state.messageUser.login}">
             <Avatar user={@state.messageUser} />{' '}{@state.messageUser.display_name}
           </Link>{' '}
           <Link to="inbox-conversation" {...@props} params={conversation: notification.source.conversation_id} className="time-ago">

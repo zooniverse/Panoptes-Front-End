@@ -13,30 +13,29 @@ module.exports = React.createClass
     user: React.PropTypes.object
 
   getDefaultProps: ->
-    query:
-      page: 1
+    location: query: page: 1
 
   getInitialState: ->
     comments: null
     error: null
 
   componentDidMount: ->
-    @getComments(@props.profileUser, @props.query.page)
+    @getComments(@props.profileUser, @props.location.query.page)
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps is @props.profileUser and nextProps.query.page is @props.query.page
-      @getComments(nextProps.profileUser, nextProps.query.page)
+    unless nextProps is @props.profileUser and nextProps.location.query.page is @props.location.query.page
+      @getComments(nextProps.profileUser, nextProps.location.query.page)
 
   getComments: (user, page) ->
-    @setState({
+    @setState {
       comments: null
       error: null
-    })
-    talkClient.type('comments').get({user_id: user.id, page: page, sort: '-created_at'})
-      .catch (error) =>
-        @setState({error})
-      .then (comments) =>
-        @setState({comments})
+    }, =>
+      talkClient.type('comments').get({user_id: user.id, page: page, sort: '-created_at'})
+        .catch (error) =>
+          @setState({error})
+        .then (comments) =>
+          @setState({comments})
 
   render: ->
     <div className="content-container">

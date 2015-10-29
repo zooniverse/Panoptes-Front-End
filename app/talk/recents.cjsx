@@ -1,6 +1,6 @@
 React = require 'react'
 Comment = require './comment'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 Loading = require '../components/loading-indicator'
@@ -15,11 +15,11 @@ module?.exports = React.createClass
     loading: true
 
   getDefaultProps: ->
-    query: page: 1
+    location: query: page: 1
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.query.page isnt @props.query.page
-      @getComments nextProps.query.page
+    if nextProps.location.query.page isnt @props.location.query.page
+      @getComments nextProps.location.query.page
 
   componentWillMount: ->
     @getComments()
@@ -28,7 +28,7 @@ module?.exports = React.createClass
     params = sort: '-created_at', page: page
 
     showNotes = if @refs.showNotes
-      @refs.showNotes.getDOMNode().checked
+      @refs.showNotes.checked
     else
       # Occurs before the dom has rendered (default: true)
       true
@@ -44,7 +44,7 @@ module?.exports = React.createClass
       params.section = 'zooniverse'
     params
 
-  getComments: (page = @props.query.page) ->
+  getComments: (page = @props.location.query.page) ->
     talkClient.type('comments').get(@commentParams(page)).then (comments) =>
       meta = comments[0].getMeta()
       boardTitle = comments[0].board_title if @props.params.board
@@ -57,19 +57,12 @@ module?.exports = React.createClass
   commentTitle: (comment) ->
     <span>
       {if @props.params.owner and @props.params.name
-        <Link to="project-talk-discussion" params={
-          board: comment.board_id,
-          discussion: comment.discussion_id,
-          owner: @props.params.owner,
-          name: @props.params.name
-        } query={comment: comment.id}>
+        {owner, name} = @props.params
+        <Link to="/projects/#{owner}/#{name}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}">
           {comment.discussion_title} on {comment.board_title}
         </Link>
       else
-        <Link to="talk-discussion" params={
-          board: comment.board_id,
-          discussion: comment.discussion_id
-          } query={comment: comment.id}>
+        <Link to="/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}">
           {comment.discussion_title} on {comment.board_title}
         </Link>
         }

@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 
 THREE_DAYS = 3 * 24 * 60 * 60 * 1000
 
@@ -69,7 +69,7 @@ module.exports = React.createClass
         {if @state.hasResultsPage
           [owner, name] = @props.project.slug.split '/'
           <strong>
-            <Link to="project-results" params={{owner, name}}>See the results</Link>
+            <Link to="/projects/#{owner}/#{name}/results">See the results</Link>
           </strong>}{' '}
           <small>
             or{' '}

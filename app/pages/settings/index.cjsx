@@ -2,7 +2,7 @@ React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 ChangeListener = require '../../components/change-listener'
-{Link, RouteHandler} = require '@edpaget/react-router'
+{Link, IndexLink} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   userSettingsPage:
@@ -25,25 +25,28 @@ UserSettingsPage = React.createClass
         <div className="settings-content">
           <aside className="secondary-page-side-bar settings-side-bar">
             <nav>
-              <Link to="settings"
+              <IndexLink to="/settings"
                 type="button"
+                activeClassName="active"
                 className="secret-button settings-button" >
                 <Translate content="userSettingsPage.nav.accountInformation" />
-              </Link>
-              <Link to="profile-settings"
+              </IndexLink>
+              <Link to="/settings/profile"
                 type="button"
+                activeClassName="active"
                 className="secret-button settings-button" >
                 <Translate content="userSettingsPage.nav.customizeProfile" />
               </Link>
-              <Link to="email-settings"
+              <Link to="/settings/email"
                 type="button"
+                activeClassName="active"
                 className="secret-button settings-button" >
                 <Translate content="userSettingsPage.nav.email" />
               </Link>
             </nav>
           </aside>
           <section className="settings-tab-content">
-            <RouteHandler user={@props.user} />
+            {React.cloneElement @props.children, @props}
           </section>
         </div>
       </div>
@@ -56,7 +59,7 @@ module.exports = React.createClass
     <div>
       {if @props.user?
         <ChangeListener target={@props.user}>{ =>
-          <UserSettingsPage user={@props.user} />
+          <UserSettingsPage {...@props} user={@props.user} />
         }</ChangeListener>
       else
         <div className="content-container">

@@ -1,9 +1,11 @@
 React = require 'react'
-Router = require '@edpaget/react-router'
-
-React.initializeTouchEvents true
+ReactDOM = {render} = require 'react-dom'
+{Router, Route, Link} = require 'react-router'
+createBrowserHistory = require 'history/lib/createBrowserHistory'
+routes = require './router'
 
 routes = require './router'
+history = createBrowserHistory()
 
 if process.env.NON_ROOT isnt 'true' and window.location? and window.location.hash isnt ""
   window.location.pathname = window.location.hash.slice(1)
@@ -13,11 +15,8 @@ location = if process.env.NON_ROOT == "true"
   else
     Router.HistoryLocation
 
-router = Router.create {location, routes}
-
-router.run (Handler, handlerProps) ->
-  window.dispatchEvent new CustomEvent 'locationchange'
-  React.render(<Handler {...handlerProps} />, document.getElementById("panoptes-main-container"));
+render <Router history={history}>{routes}</Router>,
+  document.getElementById('panoptes-main-container')
 
 logDeployedCommit = require './lib/log-deployed-commit'
 logDeployedCommit()

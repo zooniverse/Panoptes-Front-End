@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 LoadingIndicator = require './loading-indicator'
 toBlob = require 'data-uri-to-blob' if window.navigator?
 
@@ -71,7 +72,7 @@ module.exports = React.createClass
       img.style.display = 'none'
 
     @setState rootWidth: NaN, =>
-      @setState rootWidth: @getDOMNode().clientWidth
+      @setState rootWidth: ReactDOM.findDOMNode(@).clientWidth
 
       for img in imageSelectorPreviews
         img.style.display = img.dataset.displayWas

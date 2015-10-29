@@ -1,9 +1,10 @@
-React = {findDOMNode} = require 'react'
+React = require 'react'
+ReactDOM = require 'react-dom'
 Comment = require './comment'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
-Router = require '@edpaget/react-router'
+Router = {History} = require 'react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
@@ -11,7 +12,7 @@ SingleSubmitButton = require '../components/single-submit-button'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 DisplayRoles = require './lib/display-roles'
@@ -29,7 +30,7 @@ PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkDiscussion'
-  mixins: [Router.Navigation, Router.State]
+  mixins: [History]
 
   getInitialState: ->
     comments: []
@@ -41,7 +42,7 @@ module?.exports = React.createClass
     moderationOpen: false
 
   getDefaultProps: ->
-    query: page: 1
+    location: query: page: 1
 
   promptToSignIn: ->
     alert (resolve) -> <SignInPrompt onChoose={resolve} />
@@ -49,32 +50,32 @@ module?.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     if @props.params.discussion isnt nextProps.params.discussion
       @setDiscussion(nextProps.params.discussion)
-        .then => @setComments(nextProps.query.page ? 1)
-    else if nextProps.query.page isnt @props.query.page
-      @setComments(nextProps.query.page)
+        .then => @setComments(nextProps.location.query.page ? 1)
+    else if nextProps.location.query.page isnt @props.location.query.page
+      @setComments(nextProps.location.query.page)
 
   componentDidMount: ->
-    @shouldScrollToBottom = true if @props.query?.scrollToLastComment
+    @shouldScrollToBottom = true if @props.location.query?.scrollToLastComment
 
   componentWillMount: ->
     @setDiscussion().then =>
-      if @props.query?.comment
-        commentId = @props.query?.comment
+      if @props.location.query?.comment
+        commentId = @props.location.query.comment
         comments = @state.discussion.links.comments
         commentNumber = comments.indexOf(commentId) + 1
         page = Math.ceil commentNumber / PAGE_SIZE
 
-        if page isnt @props.query.page
-          @props.query.page = page
-          @replaceWith @getPath(), @props.params, @props.query
+        if page isnt @props.location.query.page
+          @props.location.query.page = page
+          @history.replaceState(null, @props.location.pathname, @props.location.query)
 
-      @setComments(@props.query.page ? 1)
+      @setComments(@props.location.query.page ? 1)
 
   commentsRequest: (page) ->
     {board, discussion} = @props.params
     talkClient.type('comments').get({discussion_id: discussion, page_size: PAGE_SIZE, page})
 
-  setComments: (page = @props.query?.page) ->
+  setComments: (page = @props.location.query?.page) ->
     @commentsRequest(page)
       .then (comments) =>
         commentsMeta = comments[0]?.getMeta()
@@ -83,13 +84,13 @@ module?.exports = React.createClass
             @scrollToBottomOfDiscussion()
             @shouldScrollToBottom = false
 
-  setCommentsMeta: (page = @props.query?.page) ->
+  setCommentsMeta: (page = @props.location.query?.page) ->
     @commentsRequest(page).then (comments) =>
       commentsMeta = comments[0]?.getMeta()
       @setState {commentsMeta}
 
   scrollToBottomOfDiscussion: ->
-    React.findDOMNode(@)?.scrollIntoView(false)
+    ReactDOM.findDOMNode(@)?.scrollIntoView(false)
 
   discussionsRequest: (discussion = @props.params.discussion) ->
     talkClient.type('discussions').get({id: discussion, sort_linked_comments: 'created_at'})
@@ -111,13 +112,13 @@ module?.exports = React.createClass
 
     commentToUpdate.update(comment).save()
       .then (comment) =>
-        @setComments(@props.query.page)
+        @setComments(@props.location.query.page)
 
   onDeleteComment: (commentId) ->
     {board, discussion} = @props.params
     if window.confirm("Are you sure that you want to delete this comment?")
       talkClient.type('comments').get(id: commentId).delete()
-        .then (deleted) => @setComments(@props.query.page)
+        .then (deleted) => @setComments(@props.location.query.page)
 
   onSubmitComment: (e, textContent, subject, reply) ->
     {discussion} = @props.params
@@ -147,7 +148,7 @@ module?.exports = React.createClass
         voteUrl = (comment.href + if upvotedByCurrentUser(@props.user, comment) then '/remove_upvote' else '/upvote')
         talkClient.request('put', voteUrl, null, {})
           .then (voted) =>
-            @setComments(@props.query.page)
+            @setComments(@props.location.query.page)
 
   onClickReply: (comment) ->
     if (not @props.user)
@@ -155,7 +156,7 @@ module?.exports = React.createClass
     else
       @setState reply: comment: comment
 
-    findDOMNode(@).scrollIntoView(false)
+    ReactDOM.findDOMNode(@).scrollIntoView(false)
 
   comment: (data, i) ->
     <Comment
@@ -164,7 +165,7 @@ module?.exports = React.createClass
       key={data.id}
       index={i}
       data={data}
-      active={+data.id is +@props.query?.comment}
+      active={+data.id is +@props.location.query?.comment}
       user={@props.user}
       locked={@state.discussion?.locked}
       project={@props.project}
@@ -178,9 +179,12 @@ module?.exports = React.createClass
     if window.prompt("Are you sure that you want to delete this discussion? All of the comments and discussions will be lost forever. Please type \"#{deletePhrase}\" in the box below to confirm:") is deletePhrase
       @discussionsRequest().delete()
         .then (deleted) =>
-          @setComments(@props.query.page)
+          @setComments(@props.location.query.page)
           {owner, name} = @props.params
-          if (owner and name) then @transitionTo('project-talk', {owner, name}) else @transitionTo('talk')
+          if (owner and name)
+            @history.pushState(null, "/projects/#{owner}/#{name}/talk")
+          else
+            @history.pushState(null, "/talk")
 
   commentValidations: (commentBody) ->
     # TODO: return true if any additional validations fail
@@ -202,8 +206,11 @@ module?.exports = React.createClass
       .then (discussion) =>
         if discussion[0].board_id isnt @props.params.board
           {owner, name} = @props.params
-          discussionRoute = if (owner and name) then 'project-talk-discussion' else 'talk-discussion'
-          @transitionTo discussionRoute, merge(@props.params, board: board_id), @props.query
+
+          if (owner and name)
+            @history.pushState(null, "/projects/#{owner}/#{name}/talk/#{board_id}/#{}", @props.location.query)
+          else
+            @history.pushState(null, "/talk/#{board_id}/", @props.location.query)
         else
           @setDiscussion()
 
@@ -217,7 +224,7 @@ module?.exports = React.createClass
 
   onChangeTitle: (e) ->
     e.preventDefault()
-    title = findDOMNode(@refs.editTitle).value
+    title = @refs.editTitle.value
     @discussionsRequest().update({title}).save()
       .then (discussion) =>
         @setState {editingTitle: false}
@@ -322,7 +329,7 @@ module?.exports = React.createClass
 
           <section>
             <h3>Projects:</h3>
-            <p><ProjectLinker user={@props.user} /></p>
+            <ProjectLinker user={@props.user} />
           </section>
         </div>
       </div>
@@ -336,7 +343,7 @@ module?.exports = React.createClass
           <div className="talk-comment-author">
             <Avatar user={@props.user} />
             <p>
-              <Link to="user-profile" params={name: @props.user.login}>{@props.user.display_name}</Link>
+              <Link to="/users/#{@props.user.login}">{@props.user.display_name}</Link>
             </p>
             <div className="user-mention-name">@{@props.user.login}</div>
             <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.user.id, section: ['zooniverse', discussion.section], is_shown: true, page_size: 100)}>{(roles) =>

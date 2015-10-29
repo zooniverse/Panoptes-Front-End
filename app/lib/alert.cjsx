@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 Dialog = require '../components/dialog'
 
 module.exports = (message) ->
@@ -20,12 +21,12 @@ module.exports = (message) ->
   previousActiveElement = document.activeElement
 
   closeButton = <button aria-label='Close' onClick={defer.resolve}>&times;</button>
-  React.render <Dialog className="alert" controls={closeButton} onEscape={defer.resolve}>
+  ReactDOM.render <Dialog className="alert" controls={closeButton} onEscape={defer.resolve}>
     {message}
   </Dialog>, container
 
   unmount = ->
-    React.unmountComponentAtNode container
+    ReactDOM.unmountComponentAtNode container
     container.parentNode.removeChild container
     previousActiveElement?.focus()
 

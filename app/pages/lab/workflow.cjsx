@@ -7,7 +7,7 @@ WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
-{Navigation} = require '@edpaget/react-router'
+{History} = require 'react-router'
 tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
@@ -36,7 +36,7 @@ EXAMPLE_GOLD_STANDARD_DATA = '''
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
 
-  mixins: [Navigation]
+  mixins: [History]
 
   getDefaultProps: ->
     workflow: null
@@ -48,9 +48,8 @@ EditWorkflowPage = React.createClass
 
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
-    viewParams = {owner, name}
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
-    @makeHref 'project-classify', viewParams, viewQuery
+    @history.createHref("/projects/#{owner}/#{name}/classify", viewQuery)
 
   canUseTask: (project, task)->
     task in project.experimental_tools
@@ -328,7 +327,7 @@ EditWorkflowPage = React.createClass
   handleDelete: ->
     @props.workflow.delete().then =>
       @props.project.uncacheLink 'workflows'
-      @transitionTo 'edit-project-details', projectID: @props.project.id
+      @history.pushState(null, "/lab/#{@props.project.id}")
 
   handleTaskChange: (taskKey, path, value) ->
     changes = {}

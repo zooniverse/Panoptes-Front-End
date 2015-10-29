@@ -2,13 +2,11 @@ React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
 parseSection = require './lib/parse-section'
 talkConfig = require './config'
-{Link, Navigation} = require '@edpaget/react-router'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkCommentLink'
-  mixins: [Navigation]
 
   propTypes:
     comment: React.PropTypes.object  # Comment resource
@@ -26,24 +24,13 @@ module?.exports = React.createClass
   projectCommentUrl: ->
     {comment} = @props
     [ownerName, projectName] = comment.project_slug.split('/')
-    href = @makeHref 'project-talk-discussion',
-      {
-        board: comment.board_id,
-        discussion: comment.discussion_id,
-        owner: ownerName,
-        name: projectName
-      },
-      {
-        comment: comment.id
-      }
+    href= "projects/#{ownerName}/#{projectName}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
     window.location.origin + @pathname() + href
 
   mainTalkCommentUrl: ->
     {comment} = @props
     window.location.origin + @pathname() +
-    @makeHref 'talk-discussion',
-      {board: comment.board_id, discussion: comment.discussion_id},
-      {comment: comment.id}
+    "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
 
   render: ->
     <div className="talk-comment-link">

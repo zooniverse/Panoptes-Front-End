@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 {Markdown} = require 'markdownz'
 moment = require 'moment'
 talkClient = require '../../api/talk'
@@ -56,7 +56,7 @@ module?.exports = React.createClass
           {for report, i in @state.reports
             <div key={"#{ @state.moderation.id }-report-#{ i }"}>
               <li>
-                <Link className="user-profile-link" to="user-profile" params={name: report.user.login}>
+                <Link className="user-profile-link" to="/users/#{report.user.login}">
                   <Avatar user={report.user} />{' '}{report.user.display_name}
                 </Link>
                 {': '}
@@ -67,7 +67,7 @@ module?.exports = React.createClass
 
         <div className="bottom">
           {if @state.commentUser
-            <Link className="user-profile-link" to="user-profile" params={name: @state.commentUser.login}>
+            <Link className="user-profile-link" to="/users/@state.commentUser.login">
               <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
             </Link>}
 

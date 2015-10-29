@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 ZooniverseLogo = require './zooniverse-logo'
 
 counterpart.registerTranslations 'en',

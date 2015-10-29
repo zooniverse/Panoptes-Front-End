@@ -1,6 +1,6 @@
 React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 
 module?.exports = React.createClass
   displayName: 'TalkPopularTags'
@@ -26,9 +26,9 @@ module?.exports = React.createClass
     tag = talkTag.name
     {owner, name} = @props.params
     if owner and name
-      <div key={talkTag.id} className="truncated"><Link params={{owner, name, tag}} to="project-talk-tags">#{tag}</Link>{' '}</div>
+      <div key={talkTag.id} className="truncated"><Link to="/projects/#{owner}/#{name}/talk/tags/#{tag}">#{tag}</Link>{' '}</div>
     else
-      <div key={talkTag.id} className="truncated"><Link query={query: tag} to="talk-search">#{tag}</Link>{' '}</div>
+      <div key={talkTag.id} className="truncated"><Link to="/talk/search/?query=#{tag}">#{tag}</Link>{' '}</div>
 
   render: ->
     <div className="talk-popular-tags">

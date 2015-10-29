@@ -1,5 +1,4 @@
 React = require 'react'
-Router = require '@edpaget/react-router'
 intersection = require 'lodash.intersection'
 pick = require 'lodash.pick'
 Translate = require 'react-translate-component'
@@ -9,7 +8,7 @@ Paginator = require '../talk/lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
-{Link} = require '@edpaget/react-router'
+{Link, History} = require 'react-router'
 
 VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
 
@@ -20,27 +19,29 @@ counterpart.registerTranslations 'en',
 
 module?.exports = React.createClass
   displayName: 'CollectionShowList'
-  mixins: [Router.Navigation, Router.State]
+  mixins: [History]
 
   componentDidMount: ->
-    @fetchCollectionSubjects pick @props.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
+    @fetchCollectionSubjects pick @props.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
   componentWillReceiveProps: (nextProps) ->
-    @fetchCollectionSubjects pick nextProps.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
+    @fetchCollectionSubjects pick nextProps.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
   fetchCollectionSubjects: (query = null) ->
-    query ?= @props.query
+    query ?= @props.location.query
 
     defaultQuery =
       page: 1
       page_size: 12
 
-    query = Object.assign defaultQuery, query
+    query = Object.assign {}, defaultQuery, query
     return @props.collection.get 'subjects', query
 
   onPageChange: (page) ->
-    nextQuery = Object.assign @props.query, { page }
-    @transitionTo @getPath(), @props.params, nextQuery
+    nextQuery = Object.assign {}, @props.location.query, { page }
+    currentPath = @props.location.pathname
+
+    @history.pushState(null, @history.createHref(currentPath, nextQuery))
 
   handleDeleteSubject: (subject) ->
     @props.collection.removeLink 'subjects', [subject.id.toString()]

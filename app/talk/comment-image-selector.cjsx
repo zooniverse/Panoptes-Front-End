@@ -32,7 +32,7 @@ module?.exports = React.createClass
 
   onSubmitSearch: (e) ->
     e.preventDefault()
-    query = @refs.imageSearch.getDOMNode().value.trim()
+    query = @refs.imageSearch.value.trim()
     if query is ""
       @setRecents()
     else

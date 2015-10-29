@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 
 module.exports = React.createClass
   displayName: 'ProjectIcon'
@@ -47,6 +47,6 @@ module.exports = React.createClass
         <a href={@props.project.redirect} className="stats-project-icon">{content}</a>
       else
         [owner, name] = @props.project.slug.split '/'
-        <Link to="project-home" params={owner: owner, name: name} className="stats-project-icon">{content}</Link>
+        <Link to="/projects/#{owner}/#{name}" className="stats-project-icon">{content}</Link>
     else
       <span className="stats-project-icon">{content}</span>

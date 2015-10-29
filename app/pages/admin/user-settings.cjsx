@@ -1,8 +1,9 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 UserSearch = require '../../components/user-search'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
-{Navigation, Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 moment = require 'moment'
 ChangeListener = require '../../components/change-listener'
 AutoSave = require '../../components/auto-save'
@@ -72,7 +73,7 @@ UserLimitToggle = React.createClass
       String(n) == limit and n >= 0
 
   updateLimit: (e) ->
-    _subject_limit = this.refs.subjectLimit.getDOMNode().value
+    _subject_limit = this.refs.subjectLimit.value
     if @validLimit(_subject_limit)
       handleInputChange.call(@props.editUser, e)
     else
@@ -102,7 +103,7 @@ module.exports = React.createClass
 
   listUsers: (e) ->
     e.preventDefault()
-    userSelect = @getDOMNode().querySelector('[name="userids"]')
+    userSelect = ReactDOM.findDOMNode(@).querySelector('[name="userids"]')
     userId = userSelect.value
     if userId?
       this.setState({userId: userId});

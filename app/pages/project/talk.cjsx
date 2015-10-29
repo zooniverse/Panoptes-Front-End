@@ -1,5 +1,5 @@
 React = require 'react'
-{RouteHandler, Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 TalkInit = require '../../talk/init'
 TalkBreadcrumbs = require '../../talk/breadcrumbs'
 TalkSearchInput = require '../../talk/search-input'
@@ -10,10 +10,12 @@ module.exports = React.createClass
   displayName: 'ProjectTalkPage'
 
   render: ->
+    [owner, name] = @props.project.slug.split('/')
+
     <div className="project-text-content talk project">
       <div className="content-container">
         <h1 className="talk-main-link">
-          <Link to="project-talk" params={@props.params}>
+          <Link to="/projects/#{owner}/#{name}/talk">
             {@props.project.display_name} Talk
           </Link>
         </h1>
@@ -21,7 +23,7 @@ module.exports = React.createClass
 
         <TalkSearchInput {...@props} />
 
-        <RouteHandler {...@props} section={projectSection(@props.project)}/>
+        {React.cloneElement @props.children, {section: projectSection(@props.project), project: @props.project, user: @props.user}}
 
         <TalkFootnote />
       </div>

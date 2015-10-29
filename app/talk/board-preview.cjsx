@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
 merge = require 'lodash.merge'
@@ -13,6 +13,17 @@ module?.exports = React.createClass
   private: ->
     @props.data.permissions.read isnt 'all'
 
+  boardLink: ->
+    {owner, name} = @props.params
+    boardId = @props.data.id
+
+    if @props.project
+      <Link to="/projects/#{owner}/#{name}/talk/#{boardId}">
+        {@props.data.title}
+      </Link>
+    else
+      <Link to="/talk/#{boardId}">{@props.data.title}</Link>
+
   render: ->
     <div className="talk-board-preview #{if @private() then 'private' else 'all'}">
       {if @private()
@@ -21,9 +32,7 @@ module?.exports = React.createClass
 
       <div className="preview-content">
         <h1>
-          <Link to="#{if @props.project then 'project-' else ''}talk-board" params={merge({}, {board: @props.data.id}, @props.params)}>
-             {@props.data.title}
-          </Link>
+          {@boardLink()}
         </h1>
 
         <p>{@props.data.description}</p>
