@@ -138,7 +138,8 @@ EditSubjectSetPage = React.createClass
       <h3>{@props.subjectSet.display_name} #{@props.subjectSet.id}</h3>
       <p className="form-help">A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the “manifest”) defining their properties, and the images themselves.</p>
       <p className="form-help">Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it’s best to just have all their subjects in 1 set, but not all.</p>
-      <p className="form-help">{@subjectLimitMessage(@props.project.subjects_count, @props.user)} We recommend uploading subjects in batches of 500 - 1,000 at a time.</p>
+      <p className="form-help">{@subjectLimitMessage(@props.project.subjects_count, @props.user)} </p>
+      <p className="form-help"><strong>We strongly recommend uploading subjects in batches of 500 - 1,000 at a time.</strong></p>
 
       <form onSubmit={@handleSubmit}>
         <p>
@@ -162,7 +163,7 @@ EditSubjectSetPage = React.createClass
         <UploadDropTarget accept={"text/csv, text/tab-separated-values, image/*#{if isAdmin() then ', video/*' else ''}"} multiple onSelect={@handleFileSelection}>
           <strong>Drag-and-drop or click to upload manifests and subject images here.</strong><br />
           Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
-          Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers.<br />
+          Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers in the main classification interface or in the Talk discussion tool.<br />
           Subject images can be up to {MAX_FILE_SIZE/1000}KB and any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '}
           and may not contain {<span key={char}><kbd>{char}</kbd>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}<br />
         </UploadDropTarget>
