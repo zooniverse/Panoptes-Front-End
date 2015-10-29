@@ -9,6 +9,12 @@ ProjectIcon = require '../../components/project-icon'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
 
+EXPERIMENTAL_FEATURES = [
+  'survey'
+  'crop'
+  'tutorial'
+]
+
 ProjectToggle = React.createClass
   displayName: "ProjectToggle"
 
@@ -87,7 +93,7 @@ ProjectExperimentalFeatures = React.createClass
   render: ->
     <div>
       <AutoSave resource={@props.project}>
-        {["survey", "crop"].map (task) =>
+        {EXPERIMENTAL_FEATURES.map (task) =>
           <label key={task}>
             <input type="checkbox" name={task} checked={@setting(task)} onChange={@updateTasks.bind @, task} />
             {task.charAt(0).toUpperCase() + task.slice(1)}

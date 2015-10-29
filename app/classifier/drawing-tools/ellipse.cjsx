@@ -21,12 +21,18 @@ module.exports = React.createClass
       ry: 0
       angle: 0
 
+    initStart: ->
+      _inProgress: true
+
     initMove: ({x, y}, mark) ->
       distance = @getDistance mark.x, mark.y, x, y
       angle = @getAngle mark.x, mark.y, x, y
       rx: distance
       ry: distance * DEFAULT_SQUASH
       angle: angle
+
+    initRelease: ->
+      _inProgress: false
 
     initValid: (mark) ->
       mark.rx > MINIMUM_RADIUS
