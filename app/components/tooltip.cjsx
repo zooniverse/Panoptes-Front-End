@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 Tether = require 'tether/tether' if window.document
 
 DEFAULT_ATTACHMENT_POINT = 'middle center'
@@ -33,7 +34,7 @@ module.exports = React.createClass
           @toFront()
 
   componentWillUnmount: ->
-    React.unmountComponentAtNode @state.container
+    ReactDOM.unmountComponentAtNode @state.container
     @state.container.parentNode.removeChild @state.container
     @state.tether?.destroy()
 
@@ -44,7 +45,7 @@ module.exports = React.createClass
 
   getTetherOptions: ->
     element: @state.container
-    target: @getDOMNode().parentNode
+    target: ReactDOM.findDOMNode(@).parentNode
     attachment: @props.attachment
     targetAttachment: @props.targetAttachment
     offset: @props.offset
@@ -57,7 +58,7 @@ module.exports = React.createClass
     <noscript className="tooltip-anchor"></noscript>
 
   renderTooltip: ->
-    React.render <div className="tooltip" onClick={@toFront}>
+    ReactDOM.render <div className="tooltip" onClick={@toFront}>
       <div className="arrow" style={@props.arrowStyle}></div>
       <div className="content">
         {@props.children}

@@ -4,7 +4,7 @@ apiClient = require '../api/client'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
 PromiseRenderer = require '../components/promise-renderer'
-{Link, RouteHandler} = require '@edpaget/react-router'
+{IndexLink, Link} = require 'react-router'
 Translate = require 'react-translate-component'
 counterpart = require 'counterpart'
 Avatar = require '../partials/avatar'
@@ -40,23 +40,23 @@ CollectionPage = React.createClass
 
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
-          <Link to="collection-show-list" params={params} className="tabbed-content-tab">
+          <IndexLink to="/collections/#{ownerName}/#{name}" activeClassName="active" className="tabbed-content-tab">
             <Avatar user={owner} />
             {@props.collection.display_name}
-          </Link>
+          </IndexLink>
 
           {if isOwner
-            <Link to="collection-settings" params={params} className="tabbed-content-tab">
+            <Link to="/collections/#{ownerName}/#{name}/settings" activeClassName="active" className="tabbed-content-tab">
               <Translate content="collectionPage.settings" />
             </Link>}
 
           {if isOwner
-            <Link to="collection-collaborators" params={params} className="tabbed-content-tab">
+            <Link to="/collections/#{ownerName}/#{name}/collaborators" params={params} activeClassName="active" className="tabbed-content-tab">
               <Translate content="collectionPage.collaborators" />
             </Link>}
         </nav>
-        <div className="collection-container">
-          <RouteHandler user={@props.user} collection={@props.collection} roles={@props.roles} />
+        <div className="collection-container talk">
+          {React.cloneElement @props.children, {user: @props.user, collection: @props.collection, roles: @props.roles}}
         </div>
       </div>
     }</PromiseRenderer>
@@ -107,7 +107,7 @@ module.exports = React.createClass
         @setState loading: false
 
   render: ->
-    <div className="cotent-container">
+    <div className="content-container">
       {if @state.collection
         <CollectionPage {...@props} collection={@state.collection} roles={@state.roles} />}
 

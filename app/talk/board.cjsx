@@ -1,12 +1,12 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+ReactDOM = require 'react-dom'
+{Link, History} = require 'react-router'
 DiscussionPreview = require './discussion-preview'
 talkClient = require '../api/talk'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 discussionValidations = require './lib/discussion-validations'
 {getErrors} = require './lib/validations'
-Router = require '@edpaget/react-router'
 NewDiscussionForm = require './discussion-new-form'
 Paginator = require './lib/paginator'
 Moderation = require './lib/moderation'
@@ -29,7 +29,7 @@ PAGE_SIZE = talkConfig.boardPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkBoard'
-  mixins: [Router.Navigation]
+  mixins: [History]
 
   getInitialState: ->
     discussions: []
@@ -40,14 +40,14 @@ module?.exports = React.createClass
     moderationOpen: false
 
   getDefaultProps: ->
-    query: page: 1
+    location: query: page: 1
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.query.page is @props.query.page
-      @setDiscussions(nextProps.query.page ? 1)
+    unless nextProps.location.query.page is @props.location.query.page
+      @setDiscussions(nextProps.location.query.page ? 1)
 
   componentWillMount: ->
-    @setDiscussions(@props.query.page ? 1)
+    @setDiscussions(@props.location.query.page ? 1)
     @setBoard()
 
   discussionsRequest: (page) ->
@@ -55,7 +55,7 @@ module?.exports = React.createClass
     board_id = +@props.params.board
     talkClient.type('discussions').get({board_id, page_size: PAGE_SIZE, page})
 
-  setDiscussions: (page = @props.query.page) ->
+  setDiscussions: (page = @props.location.query.page) ->
     @discussionsRequest(page)
       .then (discussions) =>
         discussionsMeta = discussions[0]?.getMeta()
@@ -83,15 +83,15 @@ module?.exports = React.createClass
       if @state.board.section is 'zooniverse'
         @boardRequest().delete()
           .then =>
-            @transitionTo('talk')
+            @history.pushState(null, "/talk")
       else
         @boardRequest().delete()
           .then =>
-            @transitionTo('project-talk', {owner: owner, name: name})
+            @history.pushState(null, "/projects/#{owner}/#{name}/talk")
 
   onEditBoard: (e) ->
     e.preventDefault()
-    form = React.findDOMNode(@).querySelector('.talk-edit-board-form')
+    form = ReactDOM.findDOMNode(@).querySelector('.talk-edit-board-form')
 
     input = form.querySelector('input')
     title = input.value
@@ -154,16 +154,11 @@ module?.exports = React.createClass
             <div className="talk-moderation-children talk-module">
               <h2>Moderator Zone:</h2>
 
-              <Link
-                to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
-                params={
-                  if (@props.params?.owner and @props.params?.name)
-                    {owner: @props.params.owner, name: @props.params.name}
-                  else
-                    {}
-                }>
-                View Reported Comments
-              </Link>
+                {if @props.section isnt 'zooniverse'
+                  <Link to="/projects/#{@props.params?.owner}/#{@props.params?.name}/talk/moderations">View Reported Comments</Link>
+                else
+                  <Link to="/talk/moderations">View Reported Comments</Link>
+                  }
 
               {if board?.title
                 <form className="talk-edit-board-form" onSubmit={@onEditBoard}>
@@ -197,7 +192,7 @@ module?.exports = React.createClass
       else if @props.user?
         <section>
           <button onClick={@onClickNewDiscussion}>
-            <i className="fa fa-#{if @state.newDiscussionOpen then 'close' else 'plus'}" />&nbsp;
+            <i className="fa fa-#{if @state.newDiscussionOpen then 'close' else 'plus'}" />{' '}
             New Discussion
           </button>
 
@@ -226,10 +221,11 @@ module?.exports = React.createClass
           <section>
             <h3>
               {if @props.section is 'zooniverse'
-                <Link className="sidebar-link" to="talk-board-recents" {...@props}>Recent Comments</Link>
+                <Link className="sidebar-link" to="/talk/recents/#{@props.params.board}">Recent Comments</Link>
               else
-                <Link className="sidebar-link" to="project-talk-board-recents" {...@props}>Recent Comments</Link>
-              }
+                <Link className="sidebar-link" to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents/#{@props.params.board}">
+                  Recent Comments
+                </Link>}
             </h3>
           </section>
 

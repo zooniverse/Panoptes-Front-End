@@ -11,16 +11,16 @@ module?.exports = React.createClass
     @getComments()
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.query.page isnt @props.query.page
-      @getComments nextProps.query.page
+    if nextProps.location.query.page isnt @props.location.query.page
+      @getComments nextProps.location.query.page
 
   getDefaultProps: ->
-    query: page: 1
+    location: query: page: 1
 
   getInitialState: ->
     meta: { }
 
-  getComments: (page = @props.query.page) ->
+  getComments: (page = @props.location.query.page) ->
     query =
       section: @props.section
       focus_id: @props.subject.id

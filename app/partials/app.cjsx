@@ -2,7 +2,6 @@ React = require 'react'
 auth = require '../api/auth'
 IOStatus = require './io-status'
 MainHeader = require './main-header'
-{RouteHandler} = require '@edpaget/react-router'
 MainFooter = require './main-footer'
 {generateSessionID} = require '../lib/session'
 
@@ -33,7 +32,7 @@ module.exports = React.createClass
       <MainHeader user={@state.user} />
       <div className="main-content">
         {if @state.initialLoadComplete
-          <RouteHandler {...@props} user={@state.user} />}
+          React.cloneElement @props.children, {user: @state.user}}
       </div>
       <MainFooter user={@state.user} />
     </div>

@@ -7,7 +7,7 @@ HandlePropChanges = require '../lib/handle-prop-changes'
 Moderation = require './lib/moderation'
 ProjectLinker = require './lib/project-linker'
 ROLES = require './lib/roles'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 CreateSubjectDefaultButton = require './lib/create-subject-default-button'
 CreateBoardForm = require './lib/create-board-form'
 Loading = require '../components/loading-indicator'
@@ -38,14 +38,14 @@ module?.exports = React.createClass
     moderationOpen: false
 
   getDefaultProps: ->
-    query: page: 1
+    location: query: page: 1
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.query.page isnt @props.query.page
+    if nextProps.location.query.page isnt @props.location.query.page
       @setBoards({}, nextProps)
 
   setBoards: (propValue, props = @props) ->
-    talkClient.type('boards').get(section: props.section, page_size: 20, page: props.query.page)
+    talkClient.type('boards').get(section: props.section, page_size: 20, page: props.location.query.page)
       .then (boards) =>
         boardsMeta = boards[0]?.getMeta()
         @setState {boards, boardsMeta, loading: false}
@@ -118,17 +118,13 @@ module?.exports = React.createClass
                   Invite someone to the Zooniverse team
                 </button>
               </ZooniverseTeam>
-
-              <Link
-                to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
-                params={
-                  if (@props.params?.owner and @props.params?.name)
-                    {owner: @props.params.owner, name: @props.params.name}
-                  else
-                    {}
-                }>
-                View Reported Comments
-              </Link>
+                {if @props.section isnt 'zooniverse'
+                  <Link to="/projects/#{@props.params?.owner}/#{@props.params?.name}/talk/moderations">
+                    View Reported Comments
+                  </Link>
+                else
+                  <Link to="/talk/moderations">View Reported Comments</Link>
+                  }
 
               <CreateBoardForm
                 section={@props.section}
@@ -159,9 +155,9 @@ module?.exports = React.createClass
           <section>
             <h3>
               {if @props.section is 'zooniverse'
-                <Link className="sidebar-link" to="talk-recents" {...@props}>Recent Comments</Link>
+                <Link className="sidebar-link" to="/talk/recents" {...@props}>Recent Comments</Link>
               else
-                <Link className="sidebar-link" to="project-talk-recents" {...@props}>Recent Comments</Link>
+                <Link className="sidebar-link" to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents" {...@props}>Recent Comments</Link>
               }
             </h3>
           </section>
@@ -179,7 +175,7 @@ module?.exports = React.createClass
 
           <section>
             <h3>Projects:</h3>
-            <p><ProjectLinker user={@props.user} /></p>
+            <div><ProjectLinker user={@props.user} /></div>
           </section>
         </div>
       </div>

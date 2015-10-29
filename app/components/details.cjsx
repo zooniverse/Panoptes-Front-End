@@ -28,7 +28,7 @@ module.exports = React.createClass
       @toggle()
 
   handleSummaryKeyPress: (e) ->
-    if document.activeElement is @refs.summary.getDOMNode()
+    if document.activeElement is @refs.summary
       if e.which in [ENTER_KEY, SPACE_KEY]
         e.preventDefault()
         @toggle()

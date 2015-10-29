@@ -1,4 +1,4 @@
-React = {findDOMNode} = require 'react'
+React = require 'react'
 Feedback = require './mixins/feedback'
 talkClient = require '../api/talk'
 
@@ -16,7 +16,7 @@ module?.exports = React.createClass
 
   onSubmit: (e) ->
     e.preventDefault()
-    comment = findDOMNode(@refs.textarea)
+    comment = @refs.textarea
 
     moderation =
       section: @props.comment.section

@@ -180,7 +180,7 @@ module.exports = React.createClass
     </form>
 
   handleNameChange: ->
-    name = @refs.name.getDOMNode().value
+    name = @refs.name.value
 
     exists = name.length isnt 0
     badChars = (char for char in name.split('') when char.match(/[\w\-\']/) is null)
@@ -200,8 +200,8 @@ module.exports = React.createClass
       error.message.match(/login(.+)taken/mi) ? false
 
   handlePasswordChange: ->
-    password = @refs.password.getDOMNode().value
-    confirmedPassword = @refs.confirmedPassword.getDOMNode().value
+    password = @refs.password.value
+    confirmedPassword = @refs.confirmedPassword.value
 
     exists = password.length isnt 0
     longEnough = password.length >= MIN_PASSWORD_LENGTH
@@ -215,7 +215,7 @@ module.exports = React.createClass
   handleEmailChange: ->
     @promiseToSetState emailConflict: Promise.resolve null # Cancel any existing request.
 
-    email = @refs.email.getDOMNode().value
+    email = @refs.email.value
     if email.match /.+@.+\..+/
       @debouncedCheckForEmailConflict ?= debounce @checkForEmailConflict, REMOTE_CHECK_DELAY
       @debouncedCheckForEmailConflict email
@@ -226,21 +226,20 @@ module.exports = React.createClass
       error.message.match(/email(.+)taken/mi) ? false
 
   handlePrivacyPolicyChange: ->
-    @setState agreesToPrivacyPolicy: @refs.agreesToPrivacyPolicy.getDOMNode().checked
-
+    @setState agreesToPrivacyPolicy: @refs.agreesToPrivacyPolicy.checked
   isFormValid: ->
     {badNameChars, nameConflict, passwordsDontMatch, emailConflict, agreesToPrivacyPolicy, nameExists} = @state
     badNameChars?.length is 0 and not nameConflict and not passwordsDontMatch and not emailConflict and nameExists and agreesToPrivacyPolicy
 
   handleSubmit: (e) ->
     e.preventDefault()
-    login = @refs.name.getDOMNode().value
-    password = @refs.password.getDOMNode().value
-    email = @refs.email.getDOMNode().value
-    credited_name = @refs.realName.getDOMNode().value
-    global_email_communication = @refs.okayToEmail.getDOMNode().checked
+    login = @refs.name.value
+    password = @refs.password.value
+    email = @refs.email.value
+    credited_name = @refs.realName.value
+    global_email_communication = @refs.okayToEmail.checked
     project_email_communication = global_email_communication
-    beta_email_communication = @refs.betaTester.getDOMNode().checked
+    beta_email_communication = @refs.betaTester.checked
     project_id = @props.project?.id
 
     @setState error: null

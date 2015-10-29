@@ -59,7 +59,7 @@ module.exports = React.createClass
             Allow multiple
           </AutoSave>
         </label>
-        {' '}
+        ' '
         <label key="required" className="pill-button" title={requiredHelp}>
           <AutoSave resource={@props.workflow}>
             <input type="checkbox" name="#{@props.taskPrefix}.required" checked={@props.task.required} onChange={handleChange} />{' '}

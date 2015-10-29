@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 ToggleChildren = require './mixins/toggle-children'
 commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
@@ -8,7 +9,7 @@ CommentReportForm = require './comment-report-form'
 CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 PromiseRenderer = require '../components/promise-renderer'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
 talkClient = require '../api/talk'
@@ -49,7 +50,7 @@ module?.exports = React.createClass
 
   componentDidMount: ->
     if @props.active
-      React.findDOMNode(@).scrollIntoView()
+      ReactDOM.findDOMNode(@).scrollIntoView()
 
   onClickReply: (e) ->
     @props.onClickReply(@props.data)
@@ -91,16 +92,14 @@ module?.exports = React.createClass
   commentSubjectTitle: (comment, subject) ->
     {owner, name} = @props.params
     if (comment.focus_type is 'Subject') and (owner and name)
-      <Link
-        to="project-talk-subject"
-        params={merge {id: comment.focus_id}, {owner, name}}>
+      <Link to="/projects/#{owner}/#{name}/talk/subjects/#{comment.focus_id}">
         Subject {subject.id}
       </Link>
     else
       <span>Subject {subject.id}</span>
 
   flashHighlightedComment: (commentId) ->
-    reply = React.findDOMNode(@refs["comment-reply-#{commentId}"])
+    reply = @refs["comment-reply-#{commentId}"]
     reply.classList.add('highlighted')
     window.setTimeout((=> reply.classList.remove('highlighted')), 500)
 
@@ -115,10 +114,10 @@ module?.exports = React.createClass
   replyLine: (comment) ->
     <div key={comment.id} className="comment-reply-line" ref="comment-reply-#{comment.id}">
       <p>
-        <Link to="user-profile" params={name: comment.user_login}>{comment.user_display_name}</Link>
+        <Link to="/users/#{comment.user_login}">{comment.user_display_name}</Link>
         {if comment.reply_id
           <span>
-            {' '}in reply to <Link to="user-profile" params={name: comment.reply_user_login}>{comment.reply_user_display_name}</Link>'s{' '}
+            {' '}in reply to <Link to="/users/#{comment.reply_user_login}">{comment.reply_user_display_name}</Link>'s{' '}
             <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, comment)}>
               comment
             </button>
@@ -154,7 +153,7 @@ module?.exports = React.createClass
         }</PromiseRenderer>
 
         <p>
-          <Link to="user-profile" params={name: @props.data.user_login}>{@props.data.user_display_name}</Link>
+          <Link to="/users/#{@props.data.user_login}">{@props.data.user_display_name}</Link>
           <div className="user-mention-name">@{@props.data.user_login}</div>
         </p>
 
@@ -174,7 +173,7 @@ module?.exports = React.createClass
               </div>
               }
 
-            In reply to <Link to="user-profile" params={name: @props.data.reply_user_login}>{@props.data.reply_user_display_name}</Link>'s{' '}
+            In reply to <Link to="/users/#{@props.data.reply_user_login}">{@props.data.reply_user_display_name}</Link>'s{' '}
 
             <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, @props.data)}>comment</button>
           </div>

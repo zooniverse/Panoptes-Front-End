@@ -1,6 +1,6 @@
 React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 apiClient = require '../api/client'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
@@ -33,7 +33,7 @@ module.exports = React.createClass
     apiClient.type(@props.resource.links.owner.type).get(@props.resource.links.owner.id)
 
   componentDidMount: ->
-    card = @refs.ownedCard.getDOMNode()
+    card = @refs.ownedCard
 
     @props.imagePromise
       .then (src) =>

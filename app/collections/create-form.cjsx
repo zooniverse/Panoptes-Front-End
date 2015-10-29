@@ -18,8 +18,8 @@ module?.exports = React.createClass
   onSubmit: (e) ->
     e.preventDefault()
 
-    displayName = React.findDOMNode(@refs.name).value
-    notPublic = React.findDOMNode(@refs.private).checked
+    displayName = @refs.name.value
+    notPublic = @refs.private.checked
 
     links = {}
     links.project = +@props.project if @props.project?
@@ -40,7 +40,7 @@ module?.exports = React.createClass
         @props.onSubmit collection
 
   handleNameInputChange: ->
-    @setState collectionNameLength: React.findDOMNode(@refs.name).value.length
+    @setState collectionNameLength: @refs.name.value.length
 
   render: ->
     <div>

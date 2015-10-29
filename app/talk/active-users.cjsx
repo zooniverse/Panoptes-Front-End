@@ -2,7 +2,7 @@ React = require 'react'
 talkClient = require '../api/talk'
 {sugarClient} = require '../api/sugar'
 apiClient = require '../api/client'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 Paginator = require './lib/paginator'
 
 module?.exports = React.createClass
@@ -83,7 +83,7 @@ module?.exports = React.createClass
 
   userLink: (user) ->
     <li key={user.id}>
-      <Link to="user-profile" params={name: user.login} title="#{user.display_name}'s profile">{user.display_name}</Link>
+      <Link to="/users/#{user.login}" title="#{user.display_name}'s profile">{user.display_name}</Link>
     </li>
 
   render: ->

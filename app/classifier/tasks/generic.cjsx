@@ -1,5 +1,4 @@
 React = require 'react'
-cloneWithProps = require 'react/lib/cloneWithProps'
 alert = require '../../lib/alert'
 {Markdown} = require 'markdownz'
 Tooltip = require '../../components/tooltip'
@@ -22,7 +21,7 @@ module.exports = React.createClass
       {@props.children}
       <div className="answers">
         {React.Children.map @props.answers, (answer) ->
-          cloneWithProps answer,  className: 'answer'}
+          React.cloneElement answer, {className: "answer #{answer.props.className}"}}
       </div>
 
       {if @props.required

@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 ZooniverseLogoType = require '../partials/zooniverse-logotype'
@@ -48,9 +48,11 @@ FeaturedProjects = React.createClass
         if projects?
           <div className="featured-projects-list">
           {for project in projects
+            [owner, name] = project.slug.split('/')
+
             avatarSrc = project.get('avatar').then (avatar) ->
               avatar.src
-            <OwnedCard key={project.id} resource={project} linkTo="project-home" translationObjectName="projectsPage" imagePromise={avatarSrc} />
+            <OwnedCard key={project.id} resource={project} linkTo="/projects/#{owner}/#{name}" translationObjectName="projectsPage" imagePromise={avatarSrc} />
           }
           </div>
       }</PromiseRenderer>
@@ -92,7 +94,7 @@ module.exports = React.createClass
                         null
                     } />}
                 </div>
-                <Link to="user-profile-stats" params={{name: @props.user.login}} className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
+                <Link to="/users/#{@props.user.login}/stats" className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
               </div>
             else
               <div className="recent-projects">

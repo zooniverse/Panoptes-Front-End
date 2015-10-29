@@ -4,7 +4,7 @@ testClassificationQuality = require '../lib/test-classification-quality'
 ChangeListener = require '../components/change-listener'
 SubjectAnnotator = require './subject-annotator'
 ClassificationSummary = require './classification-summary'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 tasks = require './tasks'
 {getSessionID} = require '../lib/session'
 preloadSubject = require '../lib/preload-subject'
@@ -230,7 +230,7 @@ Classifier = React.createClass
       <nav className="task-nav">
         {if @props.owner? and @props.project?
           [ownerName, name] = @props.project.slug.split('/')
-          <Link onClick={@props.onClickNext} to="project-talk-subject" params={owner: ownerName, name: name, id: @props.subject.id} className="talk standard-button">Talk</Link>}
+          <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
         <button type="button" className="continue major-button" onClick={@props.onClickNext}>Next</button>
         {@renderExpertOptions()}
       </nav>

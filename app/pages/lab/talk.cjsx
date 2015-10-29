@@ -1,4 +1,4 @@
-React = {findDOMNode} = require 'react'
+React = require 'react'
 talkClient = require '../../api/talk'
 CreateSubjectDefaultButton = require '../../talk/lib/create-subject-default-button'
 CreateBoardForm = require '../../talk/lib/create-board-form'
@@ -26,10 +26,10 @@ module?.exports = React.createClass
 
   onClickEditTitle: (e, board) ->
     e.preventDefault()
-    titleInput = findDOMNode(@refs["board-title-#{board.id}"])
+    titleInput = @refs["board-title-#{board.id}"]
     title = titleInput.value
 
-    descriptionTextarea = findDOMNode(@refs["board-description-#{board.id}"])
+    descriptionTextarea = @refs["board-description-#{board.id}"]
     description = descriptionTextarea.value
 
     talkClient.type('boards').get(board.id).update({title, description}).save().then =>

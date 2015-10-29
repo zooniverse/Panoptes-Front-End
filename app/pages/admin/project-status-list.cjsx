@@ -3,12 +3,12 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 Paginator = require '../../talk/lib/paginator'
 ProjectIcon = require '../../components/project-icon'
-{Navigation, Link} = require '@edpaget/react-router'
+{History, Link} = require 'react-router'
 
 module.exports = React.createClass
   displayName: "ProjectStatusPage"
 
-  mixins: [Navigation]
+  mixins: [History]
 
   getProjects: ->
     query =
@@ -16,11 +16,11 @@ module.exports = React.createClass
       sort: '+updated_at'
       include: 'avatar'
 
-    Object.assign query, @props.query
+    Object.assign query, @props.location.query
 
     delete query.filterBy
 
-    query[@props.query.filterBy] = true unless query.slug?
+    query[@props.location.query.filterBy] = true unless query.slug?
 
     apiClient.type('projects').get(query)
 
@@ -49,7 +49,7 @@ module.exports = React.createClass
                  </div>}
              </div>
              <Paginator
-               page={+@props.query.page}
+               page={+@props.location.query.page}
                pageCount={projects[0]?.getMeta().page_count} />
             </div>
 

@@ -20,7 +20,7 @@ module.exports = React.createClass
   # This fixes weird behavior observed in Mac Safari 7
   # where the image doesn't get a size on render.
   fixWeirdSize: ->
-    image = React.findDOMNode @refs.image
+    image = @refs.image
 
     if @props.width? and image.width isnt @props.width
       image.setAttribute 'width', @props.width
@@ -29,5 +29,5 @@ module.exports = React.createClass
       image.setAttribute 'height', @props.height
 
   setHref: ->
-    image = React.findDOMNode @refs.image
+    image = @refs.image
     image.setAttributeNS 'http://www.w3.org/1999/xlink', 'href', @props.src

@@ -1,5 +1,5 @@
 React = require 'react'
-{Navigation} = require '@edpaget/react-router'
+{History} = require 'react-router'
 
 changeSearchString = (searchString, changes) ->
   params = {}
@@ -20,7 +20,7 @@ updatePageQueryParam = (page) ->
     location.hash = beforeQuestionMark + newSearch
   else
     newSearch = changeSearchString(location.search, {page})
-    @transitionTo(location.pathname, {}, newSearch)
+    @history.pushState(null, location.pathname, newSearch)
 
 module?.exports = React.createClass
   displayName: 'Paginator'
@@ -42,7 +42,7 @@ module?.exports = React.createClass
     previousLabel: <span><i className="fa fa-long-arrow-left" /> Previous</span>
     nextLabel: <span>Next <i className="fa fa-long-arrow-right" /></span>
 
-  mixins: [Navigation]
+  mixins: [History]
 
   setPage: (activePage) ->
     @props.onPageChange.call(this, activePage)
@@ -63,7 +63,7 @@ module?.exports = React.createClass
     @setPage(prevPage)
 
   onSelectPage: (e) ->
-    selectedPage = +@refs.pageSelect.getDOMNode().value
+    selectedPage = +@refs.pageSelect.value
     @setPage(selectedPage)
 
   pageOption: (n, i) ->

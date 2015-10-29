@@ -1,11 +1,13 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+ReactDOM = require 'react-dom'
+{Link, History} = require 'react-router'
 auth = require '../api/auth'
 talkClient = require '../api/talk'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 Avatar = require '../partials/avatar'
 TriggeredModalForm = require 'modal-form/triggered'
+PassHistoryContext = require '../components/pass-history-context'
 
 UP = 38
 DOWN = 40
@@ -20,6 +22,7 @@ counterpart.registerTranslations 'en',
 
 module.exports = React.createClass
   displayName: 'AccountBar'
+  mixins: [History]
 
   propTypes:
     user: React.PropTypes.object.isRequired
@@ -41,34 +44,35 @@ module.exports = React.createClass
     talkClient.type('conversations').get({user_id: @props.user.id, unread: true, page_size: 1})
       .then (conversations) =>
         @setState {unread: !!conversations.length}
-      .catch (e) -> console.log "e unread messages", e
+      .catch (e) -> throw new Error(e)
 
   render: ->
-      <div className="account-bar">
-        <div className="account-info">
-          <TriggeredModalForm ref="accountMenuButton" className="account-menu" trigger={
-            <span>
-              <strong>{@props.user.display_name}</strong>{' '}
-              <Avatar user={@props.user} />
-            </span>
-          } triggerProps={
-            className: 'secret-button',
-            onClick: @handleAccountMenuOpen
-          }>
+    <div className="account-bar">
+      <div className="account-info">
+        <TriggeredModalForm ref="accountMenuButton" className="account-menu" trigger={
+          <span>
+            <strong>{@props.user.display_name}</strong>{' '}
+            <Avatar user={@props.user} />
+          </span>
+        } triggerProps={
+          className: 'secret-button',
+          onClick: @handleAccountMenuOpen
+        }>
+          <PassHistoryContext {...@props} context={history: @history}>
             <div ref="accountMenu" role="menu" className="secret-list" onKeyDown={@navigateMenu}>
-              <Link role="menuitem" to="user-profile" params={name: @props.user.login}>
+              <Link role="menuitem" to="/users/#{@props.user.login}">
                 <i className="fa fa-user fa-fw"></i>{' '}
                 <Translate content="accountMenu.profile" />
               </Link>
-              <Link role="menuitem" to="settings" params={name: @props.user.login}>
+              <Link role="menuitem" to="/settings">
                 <i className="fa fa-cogs fa-fw"></i>{' '}
                 <Translate content="accountMenu.settings" />
               </Link>
-              <Link role="menuitem" to="collections-user" params={{owner: @props.user.login}}>
+              <Link role="menuitem" to="/collections/#{@props.user.login}">
                 <i className="fa fa-image fa-fw"></i>{' '}
                 <Translate content="accountMenu.collections" />
               </Link>
-              <Link role="menuitem" to="favorites-user" params={{owner: @props.user.login}}>
+              <Link role="menuitem" to="/favorites/#{@props.user.login}">
                 <i className="fa fa-star fa-fw"></i>{' '}
                 <Translate content="accountMenu.favorites" />
               </Link>
@@ -78,22 +82,23 @@ module.exports = React.createClass
                 <Translate content="accountMenu.signOut" />
               </button>
             </div>
-          </TriggeredModalForm>{' '}
+          </PassHistoryContext>
+        </TriggeredModalForm>{' '}
 
-          <Link to="inbox" params={name: @props.user.login} className="message-link" aria-label="Inbox #{if @state.unread then 'with unread messages' else ''}">
-            <i className="fa fa-envelope#{if @state.unread then ' unread' else '-o'}" />
-          </Link>
-        </div>
+        <Link to="/inbox" className="message-link" aria-label="Inbox #{if @state.unread then 'with unread messages' else ''}">
+          <i className="fa fa-envelope#{if @state.unread then ' unread' else '-o'}" />
+        </Link>
       </div>
+    </div>
 
   handleAccountMenuOpen: ->
     setTimeout => # Wait for the state change to take place.
       if @refs.accountMenuButton.state.open
         # React's `autoFocus` apparently doesn't work on <a> tags.
-        @refs.accountMenu.getDOMNode().querySelector(@props.focusablesSelector)?.focus()
+        @refs.accountMenu.querySelector(@props.focusablesSelector)?.focus()
 
   navigateMenu: (e) ->
-    focusables = @refs.accountMenu.getDOMNode().querySelectorAll @props.focusablesSelector
+    focusables = @refs.accountMenu.querySelectorAll @props.focusablesSelector
 
     for control, i in focusables when control is document.activeElement
       focusIndex = i

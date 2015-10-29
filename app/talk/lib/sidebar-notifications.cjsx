@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 talkClient = require '../../api/talk'
 resourceCount = require './resource-count'
 formatNumber = require './format-number'
@@ -44,10 +44,10 @@ module?.exports = React.createClass
     <section className="talk-sidebar-notifications">
       <h3>
         {if project
-          <Link to="project-notifications" {...linkProps} params={linkParams} className="sidebar-link">{@label()}</Link>
+          <Link to="/projects/#{owner}/#{name}/notifications" {...linkProps} className="sidebar-link">{@label()}</Link>
         else if section
-          <Link to="section-notifications" {...linkProps} params={linkParams} className="sidebar-link">{@label()}</Link>
+          <Link to="/#{section}/notifications" {...linkProps} className="sidebar-link">{@label()}</Link>
         else
-          <Link to="notifications" {...linkProps} className="sidebar-link">{@label()}</Link>}
+          <Link to="/notifications" {...linkProps} className="sidebar-link">{@label()}</Link>}
       </h3>
     </section>

@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+ReactDOM = require 'react-dom'
 Translate = require 'react-translate-component'
 auth = require '../api/auth'
 LoadingIndicator = require '../components/loading-indicator'
@@ -86,7 +87,7 @@ module.exports = React.createClass
             @props.onSuccess? user
         .catch (error) =>
           @setState working: false, error: error, =>
-            @getDOMNode().querySelector('[name="login"]')?.focus()
+            ReactDOM.findDOMNode(@).querySelector('[name="login"]')?.focus()
             @props.onFailure? error
       @props.onSubmit? e
 

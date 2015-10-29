@@ -82,7 +82,7 @@ ChangePasswordForm = React.createClass
     auth.changePassword {current, replacement}
       .then =>
         @setState success: true
-        @refs.form.getDOMNode().reset()
+        @refs.form.reset()
       .catch (error) =>
         @setState {error}
       .then =>

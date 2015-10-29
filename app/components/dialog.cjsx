@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 
 FOCUSABLES = "a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]"
 
@@ -32,7 +33,7 @@ module.exports = React.createClass
 
       when TAB_KEY
         {shiftKey} = e # Save this; React recycles the event object.
-        focusables = @getDOMNode().querySelectorAll FOCUSABLES
+        focusables = ReactDOM.findDOMNode(@).querySelectorAll FOCUSABLES
         if shiftKey and document.activeElement == focusables[0]
           focusables[focusables.length - 1]?.focus()
           e.preventDefault()

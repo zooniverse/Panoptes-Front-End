@@ -5,7 +5,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 Papa = require 'papaparse'
-{Navigation} = require '@edpaget/react-router'
+{History} = require 'react-router'
 alert = require '../../lib/alert'
 SubjectViewer = require '../../components/subject-viewer'
 SubjectUploader = require '../../partials/subject-uploader'
@@ -113,7 +113,7 @@ SubjectSetListing = React.createClass
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
 
-  mixins: [Navigation]
+  mixins: [History]
 
   getDefaultProps: ->
     subjectSet: null
@@ -317,7 +317,7 @@ EditSubjectSetPage = React.createClass
         .then =>
           announceSetChange()
           @props.project.uncacheLink 'subject_sets'
-          @transitionTo 'edit-project-details', projectID: @props.project.id
+          @history.pushState(null, "/lab/#{@props.project.id}")
         .catch (error) =>
           @setState deletionError: error
         .then =>

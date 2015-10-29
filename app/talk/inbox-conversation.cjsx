@@ -6,12 +6,12 @@ SingleSubmitButton = require '../components/single-submit-button'
 HandlePropChanges = require '../lib/handle-prop-changes'
 {Markdown} = require 'markdownz'
 CommentBox = require './comment-box'
-{Link, Navigation} = require '@edpaget/react-router'
+{Link, History} = require 'react-router'
 {timestamp} = require './lib/time'
 
 module?.exports = React.createClass
   displayName: 'InboxConversation'
-  mixins: [HandlePropChanges, Navigation]
+  mixins: [HandlePropChanges, History]
 
   getInitialState: ->
     messages: []
@@ -49,7 +49,7 @@ module?.exports = React.createClass
     <div className="conversation-message" key={data.id}>
       <PromiseRenderer promise={apiClient.type('users').get(data.user_id)}>{(commentOwner) =>
         <span>
-          <strong><Link to="user-profile" params={name: commentOwner.login}>{commentOwner.display_name}</Link></strong>{' '}
+          <strong><Link to="/users/#{commentOwner.login}">{commentOwner.display_name}</Link></strong>{' '}
           <span>{timestamp(data.updated_at)}</span>
         </span>
       }</PromiseRenderer>
@@ -72,19 +72,19 @@ module?.exports = React.createClass
     e.preventDefault()
     if confirm 'Are you sure you want to archive this conversation?'
       @state.conversation.delete().then =>
-        @transitionTo 'inbox'
+        @history.pushState(null, '/inbox')
 
   render: ->
     if @props.user
       <div className="talk inbox-conversation content-container">
-        <Link to="inbox">Back to Inbox</Link>
+        <Link to="/inbox">Back to Inbox</Link>
         <h1>{@state.conversation?.title}</h1>
         {if @state.recipients.length
           <div>
             In this conversation:{' '}
             {@state.recipients.map (user, i) =>
               <span key={user.id}>
-                <Link to="user-profile" params={name: user.login}>
+                <Link to="/users/#{user.login}">
                   {user.display_name}
                 </Link>{', ' unless i is @state.recipients.length-1}
               </span>

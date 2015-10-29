@@ -2,7 +2,7 @@ React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 SetToggle = require '../../lib/set-toggle'
-{Navigation, Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 moment = require 'moment'
 ChangeListener = require '../../components/change-listener'
 ProjectIcon = require '../../components/project-icon'
@@ -116,7 +116,7 @@ ProjectRedirectToggle = React.createClass
     error: null
 
   updateRedirect:  (e) ->
-    _redirectUrl = this.refs.redirectUrl.getDOMNode().value
+    _redirectUrl = this.refs.redirectUrl.value
     if _redirectUrl?.match(@props.validUrlRegex) || _redirectUrl == ""
       handleInputChange.call(@props.project, e)
     else

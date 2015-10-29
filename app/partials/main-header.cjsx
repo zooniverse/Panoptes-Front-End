@@ -1,6 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 ZooniverseLogo = require './zooniverse-logo'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
@@ -57,7 +57,7 @@ module.exports = React.createClass
       document.addEventListener 'scroll', @onScroll
     else
      document.removeEventListener 'scroll', @onScroll
-     React.findDOMNode(@refs.mainTitle).classList.remove 'header-sticky'
+     @refs.mainTitle.classList.remove 'header-sticky'
 
   checkIfOnHome: ->
     window.location is '/'
@@ -67,15 +67,15 @@ module.exports = React.createClass
 
   links: ->
     <nav className="main-nav #{@mobileClass()}">
-      <Link to="projects" className="main-nav-item"><Translate content="mainNav.projects" /></Link>
-      <Link to="about" className="main-nav-item"><Translate content="mainNav.about" /></Link>
-      <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
-      <Link to="notifications" className="main-nav-item"><Translate content="mainNav.notifications" /></Link>
-      <Link to="collections" className="main-nav-item"><Translate content="mainNav.collect" /></Link>
+      <Link to={"/projects"} className="main-nav-item" activeClassName="active"><Translate content="mainNav.projects" /></Link>
+      <Link to={"/about"} className="main-nav-item" activeClassName="active"><Translate content="mainNav.about" /></Link>
+      <Link to={"/talk"} className="main-nav-item" activeClassName="active"><Translate content="mainNav.talk" /></Link>
+      <Link to={"/notifications"} className="main-nav-item" activeClassName="active"><Translate content="mainNav.notifications" /></Link>
+      <Link to={"/collections"} className="main-nav-item" activeClassName="active"><Translate content="mainNav.collect" /></Link>
       <hr />
-      <Link to="lab" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
+      <Link to={"/lab"} activeClassName="active" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
       {if isAdmin()
-        <Link to="admin" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.admin" /></Link>}
+        <Link to={"/admin"} className="main-nav-item nav-build" activeClassName="active"><Translate className="minor" content="mainNav.admin" /></Link>}
       <TriggeredModalForm triggerProps={title: "Other Links"}trigger={<span className="main-nav-item"><i style={verticalAlign: 'middle'} className="fa fa-globe" /></span>}>
         <div className="modal-nav-links">
           <a href="http://daily.zooniverse.org/" className="main-nav-item" target="_blank"><Translate content="mainNav.daily" /></a>
@@ -115,7 +115,7 @@ module.exports = React.createClass
     </header>
 
   onScroll: ->
-    mainTitle = React.findDOMNode(@refs.mainTitle)
+    mainTitle = @refs.mainTitle
 
     if window.scrollY >= 1
       mainTitle.classList.add 'header-sticky'

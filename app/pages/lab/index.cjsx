@@ -1,5 +1,5 @@
 React = require 'react'
-{Link, Navigation} = require '@edpaget/react-router'
+{Link, History} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 apiClient = require '../../api/client'
@@ -13,7 +13,7 @@ sleep = (duration) ->
 
 module.exports = React.createClass
   displayName: 'LabIndex'
-  mixins: [Navigation]
+  mixins: [History]
 
   getInitialState: ->
     page: 1
@@ -40,9 +40,9 @@ module.exports = React.createClass
                     [owner, name] = project.slug.split('/')
                     <tr key={project.id}>
                       <td>{project.display_name}</td>
-                      <td><Link to="edit-project-details" params={projectID: project.id} className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
+                      <td><Link to="/lab/#{project.id}" className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
                       <td>
-                        <Link to="project-home" params={owner: owner, name: name} className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
+                        <Link to="projects/#{owner}/#{name}" className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
                       </td>
                     </tr>}
                 </tbody>
@@ -68,8 +68,8 @@ module.exports = React.createClass
               Create a new project{' '}
               <LoadingIndicator off={not @state.creationInProgress} />
             </button>&nbsp;
-            <Link className="standard-button" to="lab-policies">Project building policies</Link>&nbsp;
-            <Link className="standard-button" to="lab-how-to">How to build a project</Link>
+            <Link className="standard-button" to="/lab-policies">Project building policies</Link>&nbsp;
+            <Link className="standard-button" to="/lab-how-to">How to build a project</Link>
             {if @state.creationError?
               <p className="form-help error">{@state.creationError.message}</p>}
           </div>
@@ -101,4 +101,4 @@ module.exports = React.createClass
       .then (project) =>
         # TODO: user.uncacheLink 'project'
         @setState creationInProgress: false
-        @transitionTo 'edit-project-details', projectID: project.id
+        @history.pushState(null, "/lab/#{project.id}")

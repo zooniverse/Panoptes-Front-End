@@ -1,15 +1,16 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 apiClient = require '../api/client'
 talkClient = require '../api/talk'
-Router = require '@edpaget/react-router'
+{History} = require 'react-router'
 CommentBox = require './comment-box'
 
 module?.exports = React.createClass
   displayName: 'PrivateMessageForm'
-  mixins: [Router.Navigation]
+  mixins: [History]
 
   onSubmitMessage: (_, body) ->
-    pm = @getDOMNode().querySelector('.private-message-form')
+    pm = ReactDOM.findDOMNode(@).querySelector('.private-message-form')
     input = pm.querySelector('input')
 
     title = input.value
@@ -23,7 +24,7 @@ module?.exports = React.createClass
       .then (conversation) =>
         talkClient.type('conversations').create(conversation).save()
           .then (conversation) =>
-            @transitionTo('inbox-conversation', {conversation: conversation.id})
+            @history.pushState(null, "/inbox/#{conversation.id}")
 
   render: ->
     <div className="talk talk-module">

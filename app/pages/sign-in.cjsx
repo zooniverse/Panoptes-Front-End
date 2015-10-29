@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 Translate = require 'react-translate-component'
-{Link, RouteHandler} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   signIn:
@@ -34,7 +34,7 @@ module.exports = React.createClass
             <Link to="register" className="tabbed-content-tab"><Translate content="signIn.register" /></Link>
           </nav>
 
-          <RouteHandler />
+          {@props.children}
         </div>
 
         <hr />

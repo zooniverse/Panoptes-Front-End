@@ -2,7 +2,7 @@ React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 ChangeListener = require '../components/change-listener'
-{Link, RouteHandler} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   userAdminPage:
@@ -21,12 +21,12 @@ AdminPage = React.createClass
         <div className="admin-content">
           <aside className="secondary-page-side-bar admin-side-bar">
             <nav>
-              <Link to="admin"
+              <Link to="/admin"
                 type="button"
                 className="secret-button admin-button" >
                 <Translate content="userAdminPage.nav.createAdmin" />
               </Link>
-              <Link to="admin-project-list"
+              <Link to="/admin/project_status"
                 type="button"
                 className="secret-button admin-button" >
                 <Translate content="userAdminPage.nav.projectStatus" />
@@ -34,7 +34,7 @@ AdminPage = React.createClass
             </nav>
           </aside>
           <section className="admin-tab-content">
-            <RouteHandler user={@props.user} />
+            React.cloneElement @props.children, {user: @props.user}
           </section>
         </div>
       </div>

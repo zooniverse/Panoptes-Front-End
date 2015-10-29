@@ -1,5 +1,5 @@
 React = require 'react'
-{Navigation} = require '@edpaget/react-router'
+{History} = require 'react-router'
 DisplayNameSlugEditor = require '../partials/display-name-slug-editor'
 apiClient = require '../api/client'
 alert = require '../lib/alert'
@@ -45,7 +45,7 @@ CollectionDeleteDialog = React.createClass
 
 module.exports = React.createClass
   displayName: "CollectionSettings"
-  mixins: [Navigation, SetToggle, CollectionRole]
+  mixins: [History, SetToggle, CollectionRole]
   setterProperty: 'collection'
 
   getDefaultProps: ->
@@ -63,7 +63,7 @@ module.exports = React.createClass
     @props.collection.stopListening 'delete'
 
   redirect: ->
-    @transitionTo 'collections'
+    @history.pushState(null, "/collections")
 
   confirmDelete: ->
     alert (resolve) =>
