@@ -43,7 +43,7 @@ module.exports = React.createClass
 
       <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
 
-      <hr />
+      <hr/>
 
       <label style={whiteSpace: 'nowrap'}>
         <input type="radio" name="live" value={true} data-json-value={true} checked={not @props.project.live} disabled={@state.setting.live} onChange={@set.bind this, 'live', false} />
