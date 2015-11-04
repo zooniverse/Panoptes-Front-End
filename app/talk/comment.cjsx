@@ -61,6 +61,7 @@ module?.exports = React.createClass
     @toggleComponent('report')
 
   onClickEdit: (e) ->
+    React.findDOMNode(@).scrollIntoView()
     @setState editing: true
     @removeFeedback()
 
