@@ -33,6 +33,27 @@ module.exports = React.createClass
       # Booleans compare to numbers as expected: true = 1, false = 0.
       annotation.value.length >= (task.required ? 0) and not annotation._choiceInProgress
 
+    testAnnotationQuality: (unknown, knownGood) ->
+      # NOTE: Currently only choices (not answers) are compared.
+      unknownChoices = unknown.values.map ({choice}) ->
+        choice
+      knownGoodChoices = knownGood.values.map ({choice}) ->
+        choice
+      total = 0
+      matches = 0
+      unknownChoices.forEach (choice) ->
+        total += 1
+        if choice in knownGoodChoices
+          matches += 1
+      knownGoodChoices.forEach (choice) ->
+        total += 1
+        if choice in unknownChoices
+          matches += 1
+      if total is 0
+        1
+      else
+        matches / total
+
   getDefaultProps: ->
     task: null
     annotation: null

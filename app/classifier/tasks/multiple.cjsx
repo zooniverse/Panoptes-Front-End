@@ -71,6 +71,22 @@ module.exports = React.createClass
       # Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
       annotation.value.length >= (task.required ? 0)
 
+    testAnnotationQuality: (unknown, knownGood) ->
+      total = 0
+      matches = 0
+      unknown.value.forEach (value) ->
+        total += 1
+        if value in knownGood.value
+          matches += 1
+      knownGood.value.forEach (value) ->
+        total += 1
+        if value in unknown.value
+          matches += 1
+      if total is 0
+        1
+      else
+        matches / total
+
   getDefaultProps: ->
     task: null
     annotation: null
