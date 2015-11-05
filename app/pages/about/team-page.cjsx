@@ -269,7 +269,7 @@ teamMembers =
     image: "/assets/team/ed.png"
     location: "chicago"
   grantMiller:
-    name: "Grant Miller"
+    name: "Grant Robert MacKinnon Miller"
     twitter: "mrniaboc"
     title: counterpart "team.content.grantMiller.title"
     bio: counterpart "team.content.grantMiller.bio"
