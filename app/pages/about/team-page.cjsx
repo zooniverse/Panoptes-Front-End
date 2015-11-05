@@ -55,10 +55,6 @@ counterpart.registerTranslations 'en',
         bio: '''Astronomer and founder of both Galaxy Zoo and the Zooniverse that grew from it,
         Chris is interested in how galaxies form and evolve, how citizen science can change the
         world, and whether the Chicago Fire can get their act together.'''
-      chrisSnyder:
-        title: 'Project Manager'
-        bio: '''Chris Snyder began working on the Zooniverse team in fall 2012 as a web developer. In July 2013,
-        he became the technical project manager. He received a degree in computer science from the University of Dayton.'''
       christopherDoogue:
         title: 'Project Assistant'
         bio: '''Chris has been happily supporting the Zooniverse Oxford team since Sep. 2014. He has been with the Department of Astrophysics for over 2 years administratively supporting various projects. A former trained actor, he has the ability to look like he's smiling in the face of adversity!'''
@@ -72,11 +68,6 @@ counterpart.registerTranslations 'en',
         bio: '''Darren (DZM) serves as a liaison to the Zooniverse community and assists with strategic
         content for projects. A Northwestern University graduate in journalism, he is also a golf addict,
         amateur author, and hopeless animal lover.'''
-      edPaget:
-        title: 'Developer'
-        bio: '''Ed Paget joined Adler's Zooniverse Team as a software developer in August 2012.
-        He previously worked as a freelance programmer and photographer. Ed graduated from
-        Northwestern University with a major in Radio/TV/Film.'''
       grantMiller:
         title: 'Communications Lead'
         bio: '''A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
@@ -86,11 +77,6 @@ counterpart.registerTranslations 'en',
         bio: '''Greg uses machine learning and statistics to help projects analyse the volunteer
         classifications. He has a PhD in Computer Science from the University of Waterloo, Canada.
         In his spare time, Greg loves to eat pancakes with real maple syrup and run ultramarathons.'''
-      heathVanSingel:
-        title: 'Designer'
-        bio: '''Heath is the UX/UI Designer for projects at the Zooniverse where he works to craft
-        thoughtful and engaging user experiences. Apart from design Heath also enjoys illustration,
-        a good sci-fi or fantasy novel, and trips back to Michigan.'''
       jimODonnell:
         title: 'UX Developer'
         bio: '''Professional cynic but his heart's not in it. Web developer for the Zooniverse,
@@ -235,13 +221,6 @@ teamMembers =
     bio: counterpart "team.content.chrisLintott.bio"
     image: "/assets/team/chris-l.png"
     location: "oxford"
-  chrisSnyder:
-    name: "Chris Snyder"
-    twitter: "bumishness"
-    title: counterpart "team.content.chrisSnyder.title"
-    bio: counterpart "team.content.chrisSnyder.bio"
-    image: "/assets/team/chriss.png"
-    location: "chicago"
   christopherDoogue:
     name: "Christopher Doogue"
     title: counterpart "team.content.christopherDoogue.title"
@@ -261,13 +240,6 @@ teamMembers =
     bio: counterpart "team.content.darrenMcRoy.bio"
     image: "/assets/team/darren.jpg"
     location: "chicago"
-  edPaget:
-    name: "Ed Paget"
-    twitter: "edpaget"
-    title: counterpart "team.content.edPaget.title"
-    bio: counterpart "team.content.edPaget.bio"
-    image: "/assets/team/ed.png"
-    location: "chicago"
   grantMiller:
     name: "Grant Robert MacKinnon Miller"
     twitter: "mrniaboc"
@@ -281,12 +253,6 @@ teamMembers =
     bio: counterpart "team.content.gregHines.bio"
     image: "/assets/team/greg.jpg"
     location: "oxford"
-  heathVanSingel:
-    name: "Heath van Singel"
-    title: counterpart "team.content.heathVanSingel.title"
-    bio: counterpart "team.content.heathVanSingel.bio"
-    image: "/assets/team/heath.png"
-    location: "chicago"
   jenGupta:
     name: "Jen Gupta"
     twitter: "jen_gupta"
