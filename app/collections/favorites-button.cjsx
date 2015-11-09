@@ -65,7 +65,7 @@ module?.exports = React.createClass
     favorite = true
 
     links = {subjects}
-    links.project = project if project?
+    links.projects = [ project ] if project?
     collection = {favorite, display_name, links}
 
     apiClient.type('collections').create(collection).save().then =>
