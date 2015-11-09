@@ -1,4 +1,5 @@
 React = require 'react'
+apiClient = require '../api/client'
 ChangeListener = require '../components/change-listener'
 SubjectAnnotator = require './subject-annotator'
 ClassificationSummary = require './classification-summary'
@@ -29,6 +30,7 @@ Classifier = React.createClass
 
   getInitialState: ->
     subjectLoading: false
+    expertClassification: null
     showingExpertClassification: false
     selectedExpertAnnotation: -1
 
@@ -38,7 +40,7 @@ Classifier = React.createClass
     Tutorial.startIfNecessary @props.user, @props.project
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.project isnt @props.project or nextProps.user isnt @props.user
+    if nextProps.project isnt @props.project or nextProps.user isnt @props.users
       Tutorial.startIfNecessary nextProps.user, nextProps.project
     if nextProps.subject isnt @props.subject
       @loadSubject subject
@@ -46,12 +48,41 @@ Classifier = React.createClass
       @prepareToClassify nextProps.classification
 
   loadSubject: (subject) ->
-    @setState subjectLoading: true
+    @setState
+      subjectLoading: true
+      expertClassification: null
+      showingExpertClassification: false
+      selectedExpertAnnotation: -1
+
+    @getExpertClassification @props.workflow, @props.subject
+
     preloadSubject subject
       .then =>
         if @props.subject is subject # The subject could have changed while we were loading.
           @setState subjectLoading: false
           @props.onLoad?()
+
+  getExpertClassification: (workflow, subject) ->
+    awaitExpertClassification = Promise.resolve do =>
+      if subject is mockData?.subject
+        subject.expert_classification_data
+      else
+        # TODO!
+        # apiClient.type('classifications').get({
+        #   gold_standard: true
+        #   workflow_id: workflow.id
+        #   subject_ids: [subject.id]
+        # })
+        #   .catch ->
+        #     []
+        #   .then ([expertClassification]) ->
+        #     expertClassification
+        null
+
+    awaitExpertClassification.then (expertClassification) =>
+      if @props.workflow is workflow and @props.subject is subject
+        window.expertClassification = expertClassification
+        @setState {expertClassification}
 
   prepareToClassify: (classification) ->
     classification.annotations ?= []
@@ -61,7 +92,7 @@ Classifier = React.createClass
   render: ->
     <ChangeListener target={@props.classification}>{=>
       if @state.showingExpertClassification
-        currentClassification = @props.subject.expert_classification_data
+        currentClassification = @state.expertClassification
       else
         currentClassification = @props.classification
         unless @props.classification.completed
@@ -168,7 +199,7 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {if @props.subject.expert_classification_data?
+      {if @state.expertClassification?
         <div className="has-expert-classification">
           Expert classification available.
           {if @state.showingExpertClassification
