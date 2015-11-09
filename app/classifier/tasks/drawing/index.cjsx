@@ -57,6 +57,9 @@ module.exports = React.createClass
       # Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
       @areMarksComplete(task, annotation) and annotation.value.length >= (task.required ? 0)
 
+    testAnnotationQuality: (unknown, knownGood) ->
+      0.5 # TODO!
+
   getDefaultProps: ->
     task: null
     annotation: null

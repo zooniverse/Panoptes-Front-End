@@ -1,5 +1,6 @@
 React = require 'react'
 apiClient = require '../api/client'
+testClassificationQuality = require '../lib/test-classification-quality'
 ChangeListener = require '../components/change-listener'
 SubjectAnnotator = require './subject-annotator'
 ClassificationSummary = require './classification-summary'
@@ -31,6 +32,7 @@ Classifier = React.createClass
   getInitialState: ->
     subjectLoading: false
     expertClassification: null
+    classificationQuality: NaN
     showingExpertClassification: false
     selectedExpertAnnotation: -1
 
@@ -51,6 +53,7 @@ Classifier = React.createClass
     @setState
       subjectLoading: true
       expertClassification: null
+      classificationQuality: NaN
       showingExpertClassification: false
       selectedExpertAnnotation: -1
 
@@ -303,6 +306,11 @@ Classifier = React.createClass
       'metadata.viewport':
         width: innerWidth
         height: innerHeight
+
+    if @state.expertClassification?
+      classificationQuality = testClassificationQuality @props.classification, @state.expertClassification, @props.workflow
+      console.log 'Classification quality', classificationQuality
+
     @props.onComplete?()
 
   handleGoldStandardChange: (e) ->
