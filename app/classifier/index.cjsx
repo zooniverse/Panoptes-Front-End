@@ -27,6 +27,7 @@ Classifier = React.createClass
     workflow: workflow ? null
     subject: subject ? null
     classification: classification ? null
+    goodClassificationCutoff: 0.5
     onLoad: Function.prototype
 
   getInitialState: ->
@@ -204,18 +205,30 @@ Classifier = React.createClass
 
       {if @state.expertClassification?
         <div className="has-expert-classification">
-          Expert classification available.
+          Expert classification available.{' '}
           {if @state.showingExpertClassification
             <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
           else
             <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
+
+          {unless isNaN @state.classificationQuality
+            qualityString = (@state.classificationQuality * 100).toString().split('.')[0] + '%'
+            <div>Looks like you matched about <strong>{qualityString}</strong>.</div>}
+          {if @state.classificationQuality < @props.goodClassificationCutoff
+            <div>Keep at it, all classifications are useful!!</div>}
+          {if @state.classificationQuality > @props.goodClassificationCutoff
+            <div>Keep up the good work!</div>}
         </div>}
 
-      {if @state.showingExpertClassification
-        'Expert classification:'
-      else
-        'Your classification:'}
-      <ClassificationSummary workflow={@props.workflow} classification={classification} />
+      <div>
+        <strong>
+          {if @state.showingExpertClassification
+            'Expert classification:'
+          else
+            'Your classification:'}
+        </strong>
+        <ClassificationSummary workflow={@props.workflow} classification={classification} />
+      </div>
 
       <hr />
 
@@ -310,6 +323,7 @@ Classifier = React.createClass
     if @state.expertClassification?
       classificationQuality = testClassificationQuality @props.classification, @state.expertClassification, @props.workflow
       console.log 'Classification quality', classificationQuality
+      @setState {classificationQuality}
 
     @props.onComplete?()
 

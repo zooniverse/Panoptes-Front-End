@@ -88,21 +88,22 @@ module.exports = React.createClass
 
     if TaskComponent?
       {BeforeSubject, InsideSubject, AfterSubject} = TaskComponent
-      hookProps =
-        workflow: @props.workflow
-        task: taskDescription
-        classification: @props.classification
-        annotation: @props.annotation
-        frame: @state.frame
-        scale: @getScale()
-        naturalWidth: @state.naturalWidth
-        naturalHeight: @state.naturalHeight
-        containerRect: @state.sizeRect
-        getEventOffset: this.getEventOffset
 
-      for task, Component of tasks when Component.getSVGProps?
-        for key, value of Component.getSVGProps hookProps
-          svgProps[key] = value
+    hookProps =
+      workflow: @props.workflow
+      task: taskDescription
+      classification: @props.classification
+      annotation: @props.annotation
+      frame: @state.frame
+      scale: @getScale()
+      naturalWidth: @state.naturalWidth
+      naturalHeight: @state.naturalHeight
+      containerRect: @state.sizeRect
+      getEventOffset: this.getEventOffset
+
+    for task, Component of tasks when Component.getSVGProps?
+      for key, value of Component.getSVGProps hookProps
+        svgProps[key] = value
 
     <div className="subject-area">
       {if BeforeSubject?
