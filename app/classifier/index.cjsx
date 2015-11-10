@@ -12,8 +12,8 @@ TutorialButton = require './tutorial-button'
 isAdmin = require '../lib/is-admin'
 Tutorial = require '../lib/tutorial'
 
-# unless process.env.NODE_ENV is 'production'
-mockData = require './mock-data'
+unless process.env.NODE_ENV is 'production'
+  mockData = require './mock-data'
 
 Classifier = React.createClass
   displayName: 'Classifier'
@@ -312,8 +312,7 @@ module.exports = React.createClass
     # TODO: These underscored references are temporary stopgaps.
 
     Promise.resolve(classification._workflow ? classification.get 'workflow').then (workflow) =>
-      # @setState {workflow} # disable for now --STI
-      @setState workflow: mockData.workflow # hard-code mock data --STI
+      @setState {workflow}
 
     Promise.resolve(classification._subjects ? classification.get 'subjects').then ([subject]) =>
       # We'll only handle one subject per classification right now.

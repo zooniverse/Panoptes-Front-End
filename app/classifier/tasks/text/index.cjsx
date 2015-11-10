@@ -19,30 +19,18 @@ Summary = React.createClass
   render: ->
     <div className="classification-task-summary">
       <div className="question">
-        {@props.task.question}
+        {@props.task.instruction}
         {if @state.expanded
           <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
         else
           <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: true, null}>More</button>}
       </div>
       <div className="answers">
-        {if @state.expanded
-          for answer, i in @props.task.answers
-            answer._key ?= Math.random()
-            <div key={answer._key} className="answer">
-              {if i is @props.annotation.value
-                <i className="fa fa-check-circle-o fa-fw"></i>
-              else
-                <i className="fa fa-circle-o fa-fw"></i>}
-              <Markdown>{@props.task.answers[i].label}</Markdown>
-            </div>
-        else if @props.annotation.value?
-          <div className="answer">
-            <i className="fa fa-check-circle-o fa-fw"></i>
-            <Markdown>{@props.task.answers[@props.annotation.value].label}</Markdown>
-          </div>
-        else
-          <div className="answer">No answer</div>}
+      {if @props.annotation.value?
+        <div className="answer">
+          <i className="fa fa-check-circle-o fa-fw"></i>
+          <Markdown>{@props.annotation.value}</Markdown>
+        </div>}
       </div>
     </div>
 
@@ -54,13 +42,13 @@ module.exports = React.createClass
     Summary: Summary
 
     getDefaultTask: ->
-      type: 'single'
-      question: 'Enter a question.'
+      type: 'text'
+      instruction: 'Enter an instruction.'
       help: ''
       answers: []
 
     getTaskText: (task) ->
-      task.question
+      task.instruction
 
     getDefaultAnnotation: ->
       value: null
@@ -74,17 +62,13 @@ module.exports = React.createClass
     onChange: NOOP
 
   render: ->
-    # answers = for answer, i in @props.task.answers
-    answers = {}
-    #   answer._key ?= Math.random()
-    _key = Math.random()
-    <label key={_key} className="minor-button">
-      <Markdown>BLAH</Markdown><input type="text" onChange={@handleChange} />
-    </label>
+    answers =
+      <label className="answer">
+        <textarea ref="textInput" onChange={@handleChange} />
+      </label>
 
-    # <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
+    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={answers} required={@props.task.required} />
 
   handleChange: (index, e) ->
-    if e.target.checked
-      @props.annotation.value = index
-      @props.onChange? e
+    @props.annotation.value = @refs.textInput.getDOMNode().value
+    @props.onChange? e
