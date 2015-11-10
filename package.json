@@ -29,6 +29,7 @@
     "react-translate-component": "~0.9.0",
     "sugar-client": "~1.0.1",
     "swipe-js-iso": "~2.0.1",
+    "test-shape-closeness": "0.0.1",
     "tether": "HubSpot/tether#df8cd44",
     "window-shim": "~1.0.0"
   },

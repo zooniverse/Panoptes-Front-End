@@ -48,13 +48,11 @@ workflow = apiClient.type('workflows').create
         **Example**: If you see a bee, then type "Bee"
       '''
 
-
       next: 'draw'
-
     draw:
       type: 'drawing'
       required: true
-      instruction: 'Draw something.'
+      instruction: 'Drop points on the rhino eyeballs.'
       help: '''
         Do this:
         * Pick a tool
@@ -68,7 +66,7 @@ workflow = apiClient.type('workflows').create
         {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DETAILS}
         {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DETAILS}
       ]
-      next: null
+      next: 'cool'
 
     crop:
       type: 'crop'
@@ -239,13 +237,13 @@ subject = apiClient.type('subjects').create
       task: 'draw'
       value: [{
         tool: 0
-        x: 50
-        y: 50
+        x: 207
+        y: 134
         frame: 0
       }, {
         tool: 0
-        x: 150
-        y: 50
+        x: 295
+        y: 97
         frame: 0
       }]
     }, {

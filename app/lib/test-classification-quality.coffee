@@ -13,7 +13,7 @@ module.exports = (unknown, knownGood, workflow) ->
         taskDescription = workflow.tasks[annotation.task]
         TaskComponent = tasks[taskDescription.type]
 
-        quality += TaskComponent.testAnnotationQuality annotation, correspondingKnownGoodAnnotation
+        quality += TaskComponent.testAnnotationQuality annotation, correspondingKnownGoodAnnotation, workflow
       else
         differentTree = true
 
