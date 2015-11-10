@@ -34,12 +34,12 @@ Summary = React.createClass
                 <i className="fa fa-check-circle-o fa-fw"></i>
               else
                 <i className="fa fa-circle-o fa-fw"></i>}
-              <Markdown>{@props.task.answers[i].label}</Markdown>
+              <Markdown tag="span" inline={true}>{@props.task.answers[i].label}</Markdown>
             </div>
         else if @props.annotation.value?
           <div className="answer">
             <i className="fa fa-check-circle-o fa-fw"></i>
-            <Markdown>{@props.task.answers[@props.annotation.value].label}</Markdown>
+            <Markdown tag="span" inline={true}>{@props.task.answers[@props.annotation.value].label}</Markdown>
           </div>
         else
           <div className="answer">No answer</div>}
