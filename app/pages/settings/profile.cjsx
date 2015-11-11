@@ -18,13 +18,12 @@ module.exports = React.createClass
     headerError: null
 
   render: ->
-    @avatarGet ?= @props.user.get 'avatar'
+    @avatarGet ?= @props.user.get 'avatar', {}
       .then ([avatar]) ->
         avatar
       .catch ->
         null
-
-    @headerGet ?= @props.user.get 'profile_header'
+    @profile_headerGet ?= @props.user.get 'profile_header', {}
       .then ([header]) ->
         header
       .catch ->
@@ -40,6 +39,9 @@ module.exports = React.createClass
             <div style={width: '20vw'}>
               <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'avatar')} />
             </div>
+            <div>
+              <button type="button" disabled={avatar is null} onClick={@handleMediaClear.bind(this, 'avatar')}>Clear avatar</button>
+            </div>
           </div>
         }</PromiseRenderer>
         {if @state.avatarError
@@ -48,12 +50,15 @@ module.exports = React.createClass
       <hr />
       <div className="content-container">
         <h3>Change profile header</h3>
-        <PromiseRenderer promise={@headerGet}>{(header) =>
+        <PromiseRenderer promise={@profile_headerGet}>{(header) =>
           placeholder = <p className="content-container">Drop an image here (or click to select).</p>
           <div>
             <p className="form-help">Drop an image here (any dimensions, less than {Math.floor MAX_HEADER_SIZE / 1000} KB)</p>
             <div style={width: '40vw'}>
               <ImageSelector maxSize={MAX_HEADER_SIZE} defaultValue={header?.src} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'profile_header')} />
+            </div>
+            <div>
+              <button type="button" disabled={header is null} onClick={@handleMediaClear.bind(this, 'profile_header')}>Clear header</button>
             </div>
           </div>
         }</PromiseRenderer>
@@ -73,9 +78,26 @@ module.exports = React.createClass
       .then ([resource]) =>
         putFile resource.src, file
       .then =>
-        @props.user.uncacheLink type
         @["#{type}Get"] = null # Uncache the local request so that rerendering makes it again.
-        @props.user.emit 'change'
+        @forceUpdate()
+      .catch (error) =>
+        newState = {}
+        newState[errorProp] = error
+        @setState newState
+
+  handleMediaClear: (type) ->
+    errorProp = "#{type}Error"
+
+    newState = {}
+    newState[errorProp] = null
+    @setState newState
+
+    @["#{type}Get"]
+      .then (resource) =>
+        resource?.delete()
+      .then =>
+        @["#{type}Get"] = null
+        @forceUpdate()
       .catch (error) =>
         newState = {}
         newState[errorProp] = error
