@@ -37,7 +37,7 @@ module.exports = React.createClass
           <div>
             <p className="form-help">Drop an image here (square, less than {Math.floor MAX_AVATAR_SIZE / 1000} KB)</p>
             <div style={width: '20vw'}>
-              <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'avatar')} />
+              <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'avatar')} />
             </div>
             <div>
               <button type="button" disabled={avatar is null} onClick={@handleMediaClear.bind(this, 'avatar')}>Clear avatar</button>
@@ -55,7 +55,7 @@ module.exports = React.createClass
           <div>
             <p className="form-help">Drop an image here (any dimensions, less than {Math.floor MAX_HEADER_SIZE / 1000} KB)</p>
             <div style={width: '40vw'}>
-              <ImageSelector maxSize={MAX_HEADER_SIZE} defaultValue={header?.src} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'profile_header')} />
+              <ImageSelector maxSize={MAX_HEADER_SIZE} src={header?.src} placeholder={placeholder} onChange={@handleMediaChange.bind(this, 'profile_header')} />
             </div>
             <div>
               <button type="button" disabled={header is null} onClick={@handleMediaClear.bind(this, 'profile_header')}>Clear header</button>
