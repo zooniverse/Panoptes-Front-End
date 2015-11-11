@@ -130,9 +130,23 @@ EditProjectPage = React.createClass
               </ul>
             }</PromiseRenderer>
           </li>
-        </ul>
-        <br />
 
+          <li>
+            <br />
+            <div className="nav-list-header">Need some help?</div>
+            <ul className="nav-list">
+              <li>
+                <Link className="nav-list-item" to="lab-how-to">Read a tutorial</Link>
+              </li>
+              <li>
+                <a href="https://www.zooniverse.org/talk/18/" className="nav-list-item">Ask for help on talk</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <br />
+        <div className="nav-list-header">Other actions</div>
         <small><button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteProject}>Delete this project <LoadingIndicator off={not @state.deletionInProgress} /></button></small>{' '}
         {if @state.deletionError?
           <div className="form-help error">{@state.deletionError.message}</div>}
