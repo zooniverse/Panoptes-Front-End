@@ -75,7 +75,8 @@ EditWorkflowPage = React.createClass
                         when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
                         when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
                         when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
-                        when 'crop' then <i className="fa fa-crop fa-fw"></i>}
+                        when 'crop' then <i className="fa fa-crop fa-fw"></i>
+                        when 'text' then <i className="fa fa-file-text fa-fw"></i>}
                       {' '}
                       {tasks[definition.type].getTaskText definition}
                       {if key is @props.workflow.first_task
@@ -105,6 +106,14 @@ EditWorkflowPage = React.createClass
                       <small><strong>Drawing</strong></small>
                     </button>
                   </AutoSave>{' '}
+                  {if @canUseTask(@props.project, "text")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
+                        <i className="fa fa-pencil fa-2x"></i>
+                        <br />
+                        <small><strong>Text</strong></small>
+                      </button>
+                    </AutoSave>}
                   {if @canUseTask(@props.project, "survey")
                     <AutoSave resource={@props.workflow}>
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
@@ -112,7 +121,7 @@ EditWorkflowPage = React.createClass
                         <br />
                         <small><strong>Survey</strong></small>
                       </button>
-                    </AutoSave>}{' '}
+                    </AutoSave>}
                   {if @canUseTask(@props.project, "crop")
                     <AutoSave resource={@props.workflow}>
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">
