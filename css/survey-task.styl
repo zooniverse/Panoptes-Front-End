@@ -131,7 +131,15 @@ $survey-task-pill-button
 
   &[data-breakpoint="5"] > *
     flex-basis: calc(100% - 2px)
-      
+    
+  &[data-breakpoint="40"],
+  &[data-breakpoint="20"],
+  &[data-breakpoint="10"],
+  &[data-breakpoint="5"]
+    .survey-task-chooser-choice
+      align-items: center
+      justify-content: flex-start 
+        
 .survey-task-chooser-choice
   @extends $reset-button
   background: rgba(64, 64, 64, 1)
@@ -173,9 +181,6 @@ $survey-task-pill-button
 
   [data-breakpoint="5"] &
     font-size: 1.5em
-    
-  @media screen and (max-width: 768px)
-    white-space: nowrap
 
 .survey-task-chooser-characteristic-clear-button
   @extends $reset-button
