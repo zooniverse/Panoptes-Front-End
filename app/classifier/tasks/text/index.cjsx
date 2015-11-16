@@ -56,7 +56,7 @@ module.exports = React.createClass
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <label className="answer">
-        <textarea className="standard-input full" rows="5" ref="textInput" onChange={@handleChange} />
+        <textarea className="standard-input full" rows="5" ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
       </label>
     </GenericTask>
 
