@@ -1,6 +1,5 @@
 .main-header
-  font-size: 10px
-  line-height: 20px
+  font-size: 14px
 
   .on-home-page &
     position: absolute
@@ -17,7 +16,6 @@
 
     &.main-logo
       color: white
-      font-size: 2.7em
 
   .on-project-page &
     opacity: 0.4
@@ -28,13 +26,11 @@
       opacity: 1
 
   .login-bar
-    font-size: 1.4em
 
     > *
       margin: 0 0 0 1em
 
   .account-bar
-    font-size: 1.4em
     position: relative
     top: .75em
 
@@ -79,7 +75,7 @@
   display: flex
   flex-wrap: wrap
   justify-content: space-between
-  padding: 1em 3vw
+  padding: 10px 3vw
 
   .on-home-page &
     border-bottom: none
@@ -105,13 +101,13 @@
 
   .main-logo
     font-family: "Montserrat"
-    font-size: 2.7em
+    font-size: 2em
     font-smoothing: antialiased
     letter-spacing: 0.05em
     text-transform: uppercase
 
   svg
-    vertical-align: -0.30em
+    vertical-align: sub
 
 .main-nav
   display: flex
@@ -133,7 +129,6 @@
 
 .main-nav-item
   color: rgba(255,255,255,0.5)
-  font-size: 1.4em
   padding: 7.5px 2vw
   margin: 2.5px 0 0
 
@@ -157,8 +152,10 @@
     .hero
       background-size: cover
       box-sizing: border-box
-      height: 250px
-      padding: 13.5em 3vw 1em
+      min-height: 250px
+      overflow: auto
+      background-color: COBOLT_BLUE
+      padding: 140px 3vw 5px 3vw
 
       .hero-container
         margin: 0 auto
@@ -166,17 +163,20 @@
 
         h1
           color: white
-          font-size: 3.375em
+          font-size: 2.5em
           font-weight: 400
-          line-height: 1.5em
-          margin-bottom: 0.75em
+          margin-bottom: 1em
 
         .hero-nav
           a
             @extends .main-nav-item
+            font-size: 14px
+            line-height: 3em
             text-decoration: none
 
 .modal-nav-links
-  > a
+  .main-nav-item
     display: block
     color: COPY
+    &:hover
+      color: COPY
