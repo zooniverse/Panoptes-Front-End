@@ -13,23 +13,16 @@ Summary = React.createClass
     annotation: null
     expanded: false
 
-  getInitialState: ->
-    expanded: @props.expanded
-
   render: ->
     <div className="classification-task-summary">
       <div className="question">
         {@props.task.instruction}
-        {if @state.expanded
-          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
-        else
-          <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: true, null}>More</button>}
       </div>
       <div className="answers">
       {if @props.annotation.value?
         <div className="answer">
           <i className="fa fa-check-circle-o fa-fw"></i>
-          <Markdown>{@props.annotation.value}</Markdown>
+          {@props.annotation.value}
         </div>}
       </div>
     </div>
@@ -45,13 +38,12 @@ module.exports = React.createClass
       type: 'text'
       instruction: 'Enter an instruction.'
       help: ''
-      answers: []
 
     getTaskText: (task) ->
       task.instruction
 
     getDefaultAnnotation: ->
-      value: null
+      value: ''
 
     isAnnotationComplete: (task, annotation) ->
       annotation.value? or not task.required
@@ -62,13 +54,12 @@ module.exports = React.createClass
     onChange: NOOP
 
   render: ->
-    answers =
+    <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <label className="answer">
-        <textarea ref="textInput" onChange={@handleChange} />
+        <textarea className="standard-input full" rows="5" ref="textInput" onChange={@handleChange} />
       </label>
-
-    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={answers} required={@props.task.required} />
+    </GenericTask>
 
   handleChange: (index, e) ->
-    @props.annotation.value = @refs.textInput.getDOMNode().value
+    @props.annotation.value = React.findDOMNode(@refs.textInput).value
     @props.onChange? e
