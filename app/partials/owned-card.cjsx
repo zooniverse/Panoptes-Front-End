@@ -56,7 +56,7 @@ module.exports = React.createClass
       <FlexibleLink {...linkProps}>
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
-          <div className="name">{@props.resource.display_name}</div>
+          <div className="name"><span>{@props.resource.display_name}</span></div>
           <PromiseRenderer promise={@props.resource.get('owner')}>{ (owner) ->
             if document.location.hash is "/collections"
               <div className="owner">{owner?.display_name ? 'LOADING'}</div>
