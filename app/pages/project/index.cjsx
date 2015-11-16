@@ -54,7 +54,7 @@ ProjectPage = React.createClass
     project: null
 
   getInitialState: ->
-    showingSpottersGuide: false
+    showingSpottersGuide: true
 
   componentDidMount: ->
     sugarClient.subscribeTo "project-#{ @props.project.id }"
@@ -146,8 +146,10 @@ ProjectPage = React.createClass
             <Pullout className="spotters-guide-pullout" side="right" open={@state.showingSpottersGuide}>
               <button type="button" className="spotters-guide-pullout-toggle" onClick={=>
                 @setState showingSpottersGuide: not @state.showingSpottersGuide
-              }>Spotter’s guide</button>
-              <SpottersGuide />
+              }>
+                <strong>Spotter’s guide</strong>
+              </button>
+              <SpottersGuide items={@props.project.spotters_guide} />
             </Pullout>}
         </div>
       }</PromiseRenderer>
