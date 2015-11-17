@@ -22,6 +22,7 @@ module.exports = React.createClass
       when 'single', 'multiple' then ['question', 'answers']
       when 'drawing' then ['instruction', 'tools']
       when 'crop' then ['instruction']
+      when 'text' then ['instruction']
 
     <div className="workflow-task-editor #{@props.task.type}">
       <div>

@@ -20,13 +20,56 @@ MISC_DETAILS = [{
     {label: 'Ice'}
     {label: 'Snow'}
   ]
+}, {
+  type: 'text'
+  required: true
+  instruction: 'Any additional comments?'
 }]
 
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'draw'
+  first_task: 'cool'
   tasks:
+
+    cool:
+      type: 'single'
+      question: 'Is there anything here?'
+      answers: [
+        {label: 'Yeah', next: 'transcribe'}
+        {label: 'Nah', next: null}
+      ]
+
+    transcribe:
+      type: 'text'
+      required: true
+      instruction: 'Please describe what you see.'
+      help: '''
+        **Example**: If you see a bee, then type "Bee"
+      '''
+
+
+      next: 'draw'
+
+    draw:
+      type: 'drawing'
+      required: true
+      instruction: 'Draw something.'
+      help: '''
+        Do this:
+        * Pick a tool
+        * Draw something
+      '''
+      tools: [
+        {type: 'point', label: 'Point', color: 'red', details: MISC_DETAILS}
+        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DETAILS}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DETAILS}
+        {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DETAILS}
+        {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DETAILS}
+        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DETAILS}
+      ]
+      next: null
+
     crop:
       type: 'crop'
       instruction: 'Drag out a box around the face.'
@@ -167,33 +210,6 @@ workflow = apiClient.type('workflows').create
       # next: 'draw'
 
       next: 'draw'
-
-    draw:
-      type: 'drawing'
-      required: true
-      instruction: 'Draw something.'
-      help: '''
-        Do this:
-        * Pick a tool
-        * Draw something
-      '''
-      tools: [
-        {type: 'point', label: 'Point', color: 'red', details: MISC_DETAILS}
-        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DETAILS}
-        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DETAILS}
-        {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DETAILS}
-        {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DETAILS}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DETAILS}
-      ]
-      next: 'cool'
-
-    cool:
-      type: 'single'
-      question: 'Is this cool?'
-      answers: [
-        {label: 'Yeah', next: 'features'}
-        {label: 'Nah', next: null}
-      ]
 
     features:
       type: 'multiple'
