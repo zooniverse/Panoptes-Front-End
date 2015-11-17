@@ -46,7 +46,7 @@ module.exports = React.createClass
       value: ''
 
     isAnnotationComplete: (task, annotation) ->
-      annotation.value? or not task.required
+      annotation.value isnt '' or not task.required
 
   getDefaultProps: ->
     task: null
