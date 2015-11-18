@@ -58,7 +58,6 @@
     "get-fallback-polyfills": "curl \"$npm_package_config_fallbackPolyfillsURL\" > ./public/fallback-polyfills.js",
     "get-font-awesome": "rm -rf ./public/font-awesome; curl --location \"$npm_package_config_fontAwesomeURL\" --output ./fa.zip && unzip -q ./fa.zip -d ./fa.tmp && mkdir ./public/font-awesome && mv ./fa.tmp/*/{css,fonts} ./public/font-awesome; rm -rf ./fa.{zip,tmp}",
     "postinstall": "npm run get-fallback-polyfills && npm run get-font-awesome",
-    "preview": "npm run build && publisssh ./build zooniverse-static/preview.zooniverse.org/panoptes",
     "deploy": "npm run build && publisssh ./build zooniverse-static/www.zooniverse.org/$DEPLOY_SUBDIR",
     "deploy-branch": "NON_ROOT=true DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD) npm run deploy",
     "stage": "NON_ROOT=true NODE_ENV=staging npm run build && publisssh ./build \"zooniverse-static/preview.zooniverse.org/panoptes-front-end/$DEPLOY_SUBDIR\"",
