@@ -35,6 +35,10 @@ SpottersGuideEditor = React.createClass
     guide.listen @_forceUpdate
     @_oldGuide = guide
 
+  replaceArticles: (articles) ->
+    @props.guide.update items: articles
+    @save()
+
   editArticle: (index) ->
     @setState editing: index
 
@@ -74,6 +78,7 @@ SpottersGuideEditor = React.createClass
         </header>
         <ArticleList
           articles={@props.guide.items}
+          onReorder={@replaceArticles}
           onAddArticle={@appendArticle}
           onRemoveArticle={@removeArticle}
           onSelectArticle={@editArticle}
