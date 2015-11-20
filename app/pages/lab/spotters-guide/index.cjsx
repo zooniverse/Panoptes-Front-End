@@ -3,13 +3,11 @@ React = require 'react'
 ArticleList = require './article-list'
 Dialog = require 'modal-form/dialog'
 ArticleEditor = require './article-editor'
-
-DEFAULT_ARTICLE =
-  title: 'Title'
-  content: 'Content'
+actions = require './actions'
 
 unless process.env.NODE_ENV is 'production'
   DEV_GUIDE = apiClient.type('field_guides').create
+    id: 'DEV_GUIDE'
     items: [{
       title: 'Hey',
       content: 'Spot this.'
@@ -18,12 +16,13 @@ unless process.env.NODE_ENV is 'production'
 SpottersGuideEditor = React.createClass
   getDefaultProps: ->
     guide: DEV_GUIDE
+    actions: actions
 
   getInitialState: ->
     editing: null
 
   componentDidMount: ->
-      @attachTo @props.guide
+    @attachTo @props.guide
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.guide is @props.guide
@@ -35,40 +34,8 @@ SpottersGuideEditor = React.createClass
     guide.listen @_forceUpdate
     @_oldGuide = guide
 
-  replaceArticles: (articles) ->
-    @props.guide.update items: articles
-    @save()
-
   editArticle: (index) ->
     @setState editing: index
-
-  updateArticle: (index, changes) ->
-    @props.guide.update _busy: true
-    for key, value of changes
-      @props.guide.items[index][key] = value
-    @props.guide.update 'items'
-    @save().then =>
-      @editArticle null
-
-  appendArticle: ->
-    @props.guide.update _busy: true
-    @props.guide.items.push Object.assign {}, DEFAULT_ARTICLE
-    @props.guide.update 'items'
-    @save()
-
-  removeArticle: (index) ->
-    @props.guide.update _busy: true
-    @props.guide.items.splice index, 1
-    @props.guide.update 'items'
-    @save()
-
-  save: ->
-    new Promise (resolve) =>
-      @props.guide.update _busy: true
-      setTimeout (=>
-        @props.guide.update _busy: false
-        resolve()
-      ), 1000
 
   render: ->
     <div>
@@ -78,9 +45,9 @@ SpottersGuideEditor = React.createClass
         </header>
         <ArticleList
           articles={@props.guide.items}
-          onReorder={@replaceArticles}
-          onAddArticle={@appendArticle}
-          onRemoveArticle={@removeArticle}
+          onReorder={@props.actions.replaceItems.bind null, @props.guide.id}
+          onAddArticle={@props.actions.appendItem.bind null, @props.guide.id}
+          onRemoveArticle={@props.actions.removeItem.bind null, @props.guide.id}
           onSelectArticle={@editArticle}
         />
       </div>
@@ -97,7 +64,7 @@ SpottersGuideEditor = React.createClass
             content={article.content}
             working={@props.guide._busy}
             onCancel={@editArticle.bind this, null}
-            onSubmit={@updateArticle.bind this, @state.editing}
+            onSubmit={@props.actions.updateItem.bind null, @props.guide.id, @state.editing}
           />
         </Dialog>}
     </div>
