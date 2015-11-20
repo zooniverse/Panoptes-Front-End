@@ -76,7 +76,7 @@ EditWorkflowPage = React.createClass
                         when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
                         when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'crop' then <i className="fa fa-crop fa-fw"></i>
-                        when 'text' then <i className="fa fa-file-text fa-fw"></i>}
+                        when 'text' then <i className="fa fa-file-text-o fa-fw"></i>}
                       {' '}
                       {tasks[definition.type].getTaskText definition}
                       {if key is @props.workflow.first_task
@@ -109,7 +109,7 @@ EditWorkflowPage = React.createClass
                   {if @canUseTask(@props.project, "text")
                     <AutoSave resource={@props.workflow}>
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
-                        <i className="fa fa-pencil fa-2x"></i>
+                        <i className="fa fa-file-text-o fa-2x"></i>
                         <br />
                         <small><strong>Text</strong></small>
                       </button>

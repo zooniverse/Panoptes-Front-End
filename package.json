@@ -13,6 +13,7 @@
     "drag-reorderable": "~0.0.1",
     "ejs": "~2.3.3",
     "express": "~4.13.3",
+    "fast-levenshtein": "~1.0.7",
     "json-api-client": "~0.4.0",
     "lodash.intersection": "~3.2.0",
     "lodash.merge": "~2.4.1",
