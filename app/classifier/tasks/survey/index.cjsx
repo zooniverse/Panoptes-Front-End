@@ -35,9 +35,9 @@ module.exports = React.createClass
 
     testAnnotationQuality: (unknown, knownGood) ->
       # NOTE: Currently only choices (not answers) are compared.
-      unknownChoices = unknown.values.map ({choice}) ->
+      unknownChoices = unknown.value.map ({choice}) ->
         choice
-      knownGoodChoices = knownGood.values.map ({choice}) ->
+      knownGoodChoices = knownGood.value.map ({choice}) ->
         choice
       total = 0
       matches = 0
