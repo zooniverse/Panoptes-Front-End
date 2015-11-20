@@ -1,11 +1,11 @@
 apiClient = require '../api/client'
 
-# This is just a blank image for testing drawing tools.
+# This is just a blank image for testing drawing tools while offline.
 BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
   'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
 
-MISC_DETAILS = [{
+MISC_DRAWING_DETAILS = [{
   type: 'single'
   required: true
   question: 'Cool?'
@@ -22,33 +22,53 @@ MISC_DETAILS = [{
   ]
 }, {
   type: 'text'
-  required: true
   instruction: 'Any additional comments?'
 }]
 
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'cool'
-  tasks:
+  first_task: 'init'
 
-    cool:
+  tasks:
+    init:
       type: 'single'
-      question: 'Is there anything here?'
+      question: 'Where shall we start?'
       answers: [
-        {label: 'Yeah', next: 'transcribe'}
-        {label: 'Nah', next: null}
+        {label: 'Crop the image', next: 'crop'}
+        {label: 'Enter some text', next: 'write'}
+        {label: 'Multi-answer question', next: 'features'}
+        {label: 'Draw stuff', next: 'draw'}
+        {label: 'Survey the image', next: 'survey'}
+        {label: 'We’re done here.', next: null}
       ]
 
-    transcribe:
+    crop:
+      type: 'crop'
+      instruction: 'Drag out a box around the face.'
+      help: 'The face is the thing with the nose.'
+      next: 'write'
+
+    write:
       type: 'text'
       required: true
       instruction: 'Please describe what you see.'
       help: '''
         **Example**: If you see a bee, then type "Bee"
       '''
+      next: 'features'
 
+    features:
+      type: 'multiple'
+      question: 'What **cool** features are present?'
+      answers: [
+        {label: 'Cold water'}
+        {label: 'Snow'}
+        {label: 'Ice'}
+        {label: 'Sunglasses'}
+      ]
       next: 'draw'
+
     draw:
       type: 'drawing'
       required: true
@@ -59,24 +79,17 @@ workflow = apiClient.type('workflows').create
         * Draw something
       '''
       tools: [
-        {type: 'point', label: 'Point', color: 'red', details: MISC_DETAILS}
-        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DETAILS}
-        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DETAILS}
-        {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DETAILS}
-        {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DETAILS}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DETAILS}
+        {type: 'point', label: 'Point', color: 'red', details: MISC_DRAWING_DETAILS}
+        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DRAWING_DETAILS}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DRAWING_DETAILS}
+        {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
+        {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
+        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DRAWING_DETAILS}
       ]
-      next: 'cool'
-
-    crop:
-      type: 'crop'
-      instruction: 'Drag out a box around the face.'
-      help: 'The face is the thing with the nose.'
       next: 'survey'
 
     survey:
       type: 'survey'
-      required: true
       characteristicsOrder: ['pa', 'co']
       characteristics:
         pa:
@@ -205,19 +218,7 @@ workflow = apiClient.type('workflows').create
               label: 'Present'
 
       images: {}
-      # next: 'draw'
-
-      next: 'draw'
-
-    features:
-      type: 'multiple'
-      question: 'What cool features are present?'
-      answers: [
-        {label: 'Cold water'}
-        {label: 'Snow'}
-        {label: 'Ice'}
-        {label: 'Sunglasses'}
-      ]
+      next: 'init'
 
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
@@ -234,7 +235,24 @@ subject = apiClient.type('subjects').create
 
   expert_classification_data:
     annotations: [{
-      task: 'draw'
+      task: 'init',
+      value: 0
+    }, {
+      task: 'crop',
+      value: {
+        x: 10,
+        y: 10,
+        width: 300,
+        height: 222
+      }
+    }, {
+      task: 'write',
+      value: 'Rhinos'
+    }, {
+      task: 'features',
+      value: [0, 2]
+    }, {
+      task: 'draw',
       value: [{
         tool: 0
         x: 207
@@ -247,11 +265,11 @@ subject = apiClient.type('subjects').create
         frame: 0
       }]
     }, {
-      task: 'cool'
-      value: 0
+      task: 'survey',
+      value: []
     }, {
-      task: 'features'
-      value: [0, 2]
+      task: 'init',
+      value: 5
     }]
 
 classification = apiClient.type('classifications').create
