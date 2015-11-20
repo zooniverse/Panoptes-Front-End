@@ -90,6 +90,23 @@ workflow = apiClient.type('workflows').create
 
     survey:
       type: 'survey'
+      images:
+        aa1: '//placehold.it/64.png?text=AA1'
+        aa2: '//placehold.it/64.png?text=AA2'
+        ar1: '//placehold.it/64.png?text=AR1'
+        ar2: '//placehold.it/64.png?text=AR2'
+        to1: '//placehold.it/64.png?text=TO1'
+        to2: '//placehold.it/64.png?text=TO2'
+        so: '//placehold.it/48.png?text=so'
+        sp: '//placehold.it/48.png?text=sp'
+        st: '//placehold.it/48.png?text=st'
+        ba: '//placehold.it/48.png?text=ba'
+        wh: '//placehold.it/48.png?text=wh'
+        ta: '//placehold.it/48.png?text=ta'
+        re: '//placehold.it/48.png?text=re'
+        br: '//placehold.it/48.png?text=br'
+        bl: '//placehold.it/48.png?text=bl'
+        gr: '//placehold.it/48.png?text=gr'
       characteristicsOrder: ['pa', 'co']
       characteristics:
         pa:
@@ -98,38 +115,38 @@ workflow = apiClient.type('workflows').create
           values:
             so:
               label: 'Solid'
-              image: '//placehold.it/64.png?text=Solid'
+              image: 'so'
             sp:
               label: 'Spots'
-              image: '//placehold.it/64.png?text=Spots'
+              image: 'sp'
             st:
               label: 'Stripes'
-              image: '//placehold.it/64.png?text=Stripes'
+              image: 'st'
             ba:
               label: 'Bands'
-              image: '//placehold.it/64.png?text=Bands'
+              image: 'ba'
         co:
           label: 'Color'
           valuesOrder: ['wh', 'ta', 're', 'br', 'bl', 'gr']
           values:
             wh:
               label: 'White'
-              image: '//placehold.it/64.png?text=White'
+              image: 'wh'
             ta:
               label: 'Tan'
-              image: '//placehold.it/64.png?text=Tan'
+              image: 'ta'
             re:
               label: 'Red'
-              image: '//placehold.it/64.png?text=Red'
+              image: 're'
             br:
               label: 'Brown'
-              image: '//placehold.it/64.png?text=Brown'
+              image: 'br'
             bl:
               label: 'Black'
-              image: '//placehold.it/64.png?text=Black'
+              image: 'bl'
             gr:
               label: 'Green'
-              image: '//placehold.it/64.png?text=Green'
+              image: 'gr'
 
       choicesOrder: ['aa', 'ar', 'to']
       choices:
@@ -137,8 +154,8 @@ workflow = apiClient.type('workflows').create
           label: 'Aardvark'
           description: 'Basically a long-nose rabbit'
           images: [
-            '//placehold.it/320x240.png?text=Aardvark 1'
-            '//placehold.it/320x240.png?text=Aardvark 2'
+            'aa1'
+            'aa2'
           ]
           characteristics:
             pa: ['so']
@@ -151,8 +168,8 @@ workflow = apiClient.type('workflows').create
           label: 'Armadillo'
           description: 'A little rolly dude'
           images: [
-            '//placehold.it/320x240.png?text=Armadillo 1'
-            '//placehold.it/320x240.png?text=Armadillo 2'
+            'ar1'
+            'ar2'
           ]
           characteristics:
             pa: ['so', 'st']
@@ -164,8 +181,8 @@ workflow = apiClient.type('workflows').create
           label: 'Tortoise'
           description: 'Little green house with legs'
           images: [
-            '//placehold.it/320x240.png?text=Tortoise 1'
-            '//placehold.it/320x240.png?text=Tortoise 2'
+            'to1'
+            'to2'
           ]
           characteristics:
             pa: ['so']
@@ -216,8 +233,6 @@ workflow = apiClient.type('workflows').create
           answers:
             y:
               label: 'Present'
-
-      images: {}
       next: 'init'
 
 subject = apiClient.type('subjects').create
