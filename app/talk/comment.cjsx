@@ -61,6 +61,7 @@ module?.exports = React.createClass
     @toggleComponent('report')
 
   onClickEdit: (e) ->
+    React.findDOMNode(@).scrollIntoView()
     @setState editing: true
     @removeFeedback()
 
@@ -221,7 +222,8 @@ module?.exports = React.createClass
                   <i className="fa fa-thumbs-up upvoted" />
                 else
                   <i className="fa fa-thumbs-o-up" />}
-                &nbsp;{@upvoteCount()}
+                {' '}Helpful{' '}
+                ({@upvoteCount()})
               </SingleSubmitButton>
 
               <button className="talk-comment-reply-button" onClick={@onClickReply}>

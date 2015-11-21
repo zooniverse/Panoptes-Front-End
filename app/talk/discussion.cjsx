@@ -174,7 +174,8 @@ module?.exports = React.createClass
       onDeleteComment={@onDeleteComment}/>
 
   onClickDeleteDiscussion: ->
-    if window.confirm("Are you sure that you want to delete this discussions? All of the comments and discussions will be lost forever.")
+    deletePhrase = 'delete'
+    if window.prompt("Are you sure that you want to delete this discussion? All of the comments and discussions will be lost forever. Please type \"#{deletePhrase}\" in the box below to confirm:") is deletePhrase
       @discussionsRequest().delete()
         .then (deleted) =>
           @setComments(@props.query.page)

@@ -72,12 +72,16 @@ module.exports = React.createClass
       <Link to="talk" className="main-nav-item"><Translate content="mainNav.talk" /></Link>
       <Link to="notifications" className="main-nav-item"><Translate content="mainNav.notifications" /></Link>
       <Link to="collections" className="main-nav-item"><Translate content="mainNav.collect" /></Link>
-      <a href="http://daily.zooniverse.org/" className="main-nav-item" target="_blank"><Translate content="mainNav.daily" /></a>
-      <a href="http://blog.zooniverse.org/"  className="main-nav-item" target="_blank"><Translate content="mainNav.blog" /></a>
       <hr />
       <Link to="lab" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.lab" /></Link>
       {if isAdmin()
         <Link to="admin" className="main-nav-item nav-build"><Translate className="minor" content="mainNav.admin" /></Link>}
+      <TriggeredModalForm triggerProps={title: "Other Links"}trigger={<span className="main-nav-item"><i style={verticalAlign: 'middle'} className="fa fa-globe" /></span>}>
+        <div className="modal-nav-links">
+          <a href="http://daily.zooniverse.org/" className="main-nav-item" target="_blank"><Translate content="mainNav.daily" /></a>
+          <a href="http://blog.zooniverse.org/"  className="main-nav-item" target="_blank"><Translate content="mainNav.blog" /></a>
+        </div>
+      </TriggeredModalForm>
     </nav>
 
   render: ->
@@ -96,6 +100,7 @@ module.exports = React.createClass
           <AccountBar user={@props.user} />
         else
           <LoginBar />}
+
 
         {if mobile
           <TriggeredModalForm

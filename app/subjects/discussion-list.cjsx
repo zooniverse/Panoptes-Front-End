@@ -32,6 +32,7 @@ module?.exports = React.createClass
         <div>
           {for discussion in @state.discussions
             <DiscussionPreview
+              {...@props}
               key={"discussion-#{ discussion.id }"}
               discussion={discussion}
               locked={true}

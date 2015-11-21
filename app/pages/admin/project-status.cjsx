@@ -13,6 +13,7 @@ EXPERIMENTAL_FEATURES = [
   'survey'
   'crop'
   'tutorial'
+  'text'
 ]
 
 ProjectToggle = React.createClass
