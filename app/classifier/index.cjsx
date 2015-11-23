@@ -43,7 +43,7 @@ Classifier = React.createClass
     Tutorial.startIfNecessary @props.user, @props.project
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.project isnt @props.project or nextProps.user isnt @props.users
+    if nextProps.project isnt @props.project or nextProps.user isnt @props.user
       Tutorial.startIfNecessary nextProps.user, nextProps.project
     if nextProps.subject isnt @props.subject
       @loadSubject subject
