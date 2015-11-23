@@ -68,22 +68,17 @@ Classifier = React.createClass
 
   getExpertClassification: (workflow, subject) ->
     awaitExpertClassification = Promise.resolve do =>
-      if subject is mockData?.subject
-        subject.expert_classification_data
-      else
-        # TODO!
-        # apiClient.type('classifications').get({
-        #   gold_standard: true
-        #   workflow_id: workflow.id
-        #   subject_ids: [subject.id]
-        # })
-        #   .catch ->
-        #     []
-        #   .then ([expertClassification]) ->
-        #     expertClassification
-        null
+      apiClient.get('/classifications/gold_standard', {
+        workflow_id: workflow.id,
+        subject_ids: [subject.id]
+      })
+        .catch ->
+          []
+        .then ([expertClassification]) ->
+          expertClassification
 
     awaitExpertClassification.then (expertClassification) =>
+      expertClassification ?= subject.expert_classification_data?[workflow.id]
       if @props.workflow is workflow and @props.subject is subject
         window.expertClassification = expertClassification
         @setState {expertClassification}
