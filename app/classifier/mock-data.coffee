@@ -7,7 +7,6 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
 
 MISC_DRAWING_DETAILS = [{
   type: 'single'
-  required: true
   question: 'Cool?'
   answers: [
     {label: 'Yeah'}
@@ -45,14 +44,14 @@ workflow = apiClient.type('workflows').create
 
     crop:
       type: 'crop'
-      instruction: 'Drag out a box around the face.'
-      help: 'The face is the thing with the nose.'
+      instruction: 'Drag out a box around the smaller rhino.'
+      help: 'That’s the adorable one.'
       next: 'write'
 
     write:
       type: 'text'
       required: true
-      instruction: 'Please describe what you see.'
+      instruction: 'What’s the name of this animal? Is it a rhino?'
       help: '''
         **Example**: If you see a bee, then type "Bee"
       '''
@@ -60,7 +59,7 @@ workflow = apiClient.type('workflows').create
 
     features:
       type: 'multiple'
-      question: 'What **cool** features are present?'
+      question: 'What **cool** features are present? The first two?'
       answers: [
         {label: 'Cold water'}
         {label: 'Snow'}
@@ -72,7 +71,7 @@ workflow = apiClient.type('workflows').create
     draw:
       type: 'drawing'
       required: true
-      instruction: 'Drop points on the rhino eyeballs.'
+      instruction: 'Drop a point on the rhino eyeball.'
       help: '''
         Do this:
         * Pick a tool
@@ -228,7 +227,7 @@ workflow = apiClient.type('workflows').create
         hr:
           required: false
           multiple: true
-          label: 'Horns toggle'
+          label: 'Horns (toggle)'
           answersOrder: ['y']
           answers:
             y:
@@ -249,43 +248,46 @@ subject = apiClient.type('subjects').create
     'Region': 'Chicago, IL'
 
   expert_classification_data:
-    annotations: [{
-      task: 'init',
-      value: 0
-    }, {
-      task: 'crop',
-      value: {
-        x: 10,
-        y: 10,
-        width: 300,
-        height: 222
-      }
-    }, {
-      task: 'write',
-      value: 'Rhinos'
-    }, {
-      task: 'features',
-      value: [0, 2]
-    }, {
-      task: 'draw',
-      value: [{
-        tool: 0
-        x: 207
-        y: 134
-        frame: 0
+    MOCK_WORKFLOW_FOR_CLASSIFIER: apiClient.type('classifications').create
+      annotations: [{
+        task: 'init'
+        value: 0
       }, {
-        tool: 0
-        x: 295
-        y: 97
-        frame: 0
+        task: 'crop'
+        value: {
+          x: 20
+          y: 57
+          width: 224
+          height: 142
+        }
+      }, {
+        task: 'write'
+        value: 'Rhino'
+      }, {
+        task: 'features'
+        value: [0, 1]
+      }, {
+        task: 'draw'
+        value: [{
+          tool: 0
+          frame: 0
+          x: 207
+          y: 134
+          details: [{
+            value: 0
+          }, {
+            value: []
+          }, {
+            value: ''
+          }]
+        }]
+      }, {
+        task: 'survey'
+        value: []
+      }, {
+        task: 'init'
+        value: 5
       }]
-    }, {
-      task: 'survey',
-      value: []
-    }, {
-      task: 'init',
-      value: 5
-    }]
 
 classification = apiClient.type('classifications').create
   annotations: []
