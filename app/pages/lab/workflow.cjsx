@@ -2,6 +2,7 @@ React = require 'react'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
+ModalFormDialog = require 'modal-form/dialog'
 WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
@@ -9,6 +10,8 @@ RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {Navigation} = require '@edpaget/react-router'
 tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
+FileButton = require '../../components/file-button'
+GoldStandardImporter = require './gold-standard-importer'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -25,6 +28,7 @@ EditWorkflowPage = React.createClass
 
   getInitialState: ->
     selectedTaskKey: @props.workflow.first_task
+    goldStandardFilesToImport: null
     forceReloader: 0
 
   workflowLink: ->
@@ -172,6 +176,14 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
+          <p>
+            <FileButton className="standard-button" accept="application/json" multiple onSelect={@handleGoldStandardDataImport}>Import gold standard classifications</FileButton>
+            <br />
+            <small className="form-help">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</small>
+          </p>
+
+          <hr />
+
           <div style={pointerEvents: 'all'}>
             <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>View this workflow</a>
           </div>
@@ -210,6 +222,15 @@ EditWorkflowPage = React.createClass
             <p>Choose a task to edit</p>}
         </div>
       </div>
+      {if @state.goldStandardFilesToImport?
+        <ModalFormDialog required>
+          <GoldStandardImporter
+            project={@props.project}
+            workflow={@props.workflow}
+            files={@state.goldStandardFilesToImport}
+            onClose={@handleGoldStandardImportClose}
+          />
+        </ModalFormDialog>}
     </div>
 
   renderSubjectSets: ->
@@ -284,6 +305,12 @@ EditWorkflowPage = React.createClass
     changes = {}
     changes["tasks.#{taskKey}.#{path}"] = value
     @props.workflow.update changes
+
+  handleGoldStandardDataImport: (e) ->
+    @setState goldStandardFilesToImport: e.target.files
+
+  handleGoldStandardImportClose: ->
+    @setState goldStandardFilesToImport: null
 
   handleViewClick: ->
     setTimeout =>
