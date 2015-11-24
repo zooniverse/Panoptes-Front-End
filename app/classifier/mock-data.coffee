@@ -29,7 +29,7 @@ MISC_DETAILS = [{
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'cool'
+  first_task: 'survey'
   tasks:
 
     cool:
@@ -162,6 +162,9 @@ workflow = apiClient.type('workflows').create
           confusionsOrder: []
           confusions: {}
 
+      questionsMap:
+        ar: ['be', 'in']
+        to: ['ho', 'in', 'be', 'hr', 'bt']
       questionsOrder: ['ho', 'be', 'in', 'hr']
       questions:
         ho:
@@ -205,6 +208,16 @@ workflow = apiClient.type('workflows').create
           answers:
             y:
               label: 'Present'
+        bt:
+          required: false
+          multiple: false
+          label: 'Are tortoises awesome'
+          answersOrder: ['y','Y']
+          answers:
+            y:
+              label: 'Yes'
+            Y:
+              label: 'HECK YES'
 
       images: {}
       # next: 'draw'
