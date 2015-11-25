@@ -1,7 +1,11 @@
 React = require 'react'
 apiClient = require '../../api/client'
+counterpart = require 'counterpart'
 
 module.exports = React.createClass
+  IN_PROGRESS: 'IN_PROGRESS'
+  SUCCESSFUL: 'SUCCESSFUL'
+
   getDefaultProps: ->
     project: null
     workflow: null
@@ -11,7 +15,7 @@ module.exports = React.createClass
   getInitialState: ->
     classificationsByFile: {}
     errorsByFile: {}
-    inProgress: {}
+    progress: {}
 
   componentDidMount: ->
     @parseFiles @props.files
@@ -24,7 +28,7 @@ module.exports = React.createClass
     @setState
       classificationsByFile: {}
       errorsByFile: {}
-      inProgress: {}
+      progress: null
     Array::forEach.call files, (file) =>
       reader = new FileReader
       reader.onload = @handleFileRead.bind this, file
@@ -39,29 +43,40 @@ module.exports = React.createClass
       @setState errorsByFile: @state.errorsByFile
 
   startImport: ->
-    for fileName, classifications of @state.classificationsByFile
+    @setState
+      progress: {}
+    Object.keys(@state.classificationsByFile).forEach (fileName) =>
+      classifications = @state.classificationsByFile[fileName]
       [Promise.resolve(), classifications...].reduce (awaitPreviousSave, classification, i1) =>
         i = i1 - 1 # Array::reduce starts at 1.
+        stateKey = fileName + i
         awaitPreviousSave.then =>
-          @state.inProgress[fileName + i] = true
-          @setState inProgress: @state.inProgress
-          @importClassification classification
-            .then =>
-              @state.inProgress[fileName + i] = false
-            .catch (error) =>
-              @state.inProgress[fileName + i] = {error}
-            .then =>
-              @setState inProgress: @state.inProgress
+          @importClassification classification, stateKey
 
-  importClassification: (classification) ->
+  importClassification: (classification, stateKey) ->
+    @state.progress[stateKey] = @IN_PROGRESS
+    @setState progress: @state.progress
+
     data = JSON.parse JSON.stringify classification
     Object.assign data,
       gold_standard: true
-    Object.assign data.links,
-      project: @props.project.id
-      workflow: @props.workflow.id
-    console.log JSON.parse JSON.stringify apiClient.type('classifications').create(data)#.save()
-    Promise.resolve()
+      links: Object.assign data.links,
+        project: @props.project.id
+        workflow: @props.workflow.id
+      metadata: Object.assign {}, data.metadata,
+        user_agent: 'Importer'
+        workflow_version: @props.workflow.version
+        user_language: counterpart.getLocale()
+        started_at: new Date().toISOString()
+        finished_at: new Date().toISOString()
+
+    apiClient.type('classifications').create(data).save()
+      .then =>
+        @state.progress[stateKey] = @SUCCESSFUL
+      .catch (creationError) =>
+        @state.progress[stateKey] = creationError
+      .then =>
+        @setState progress: @state.progress
 
   render: ->
     classificationsCount = 0
@@ -82,13 +97,16 @@ module.exports = React.createClass
             else if @state.classificationsByFile[file.name]?.length > 0
               <ul>
                 {@state.classificationsByFile[file.name].map (classification, i) =>
-                  progress = @state.inProgress[file.name + i]
+                  progress = @state.progress[file.name + i]
                   <li>
                     {classification.links.subjects.join ', '}{' '}
                     {if progress? then switch progress
-                      when true then '· · ·'
-                      when false then 'OK'
-                      else progress.toString()}
+                      when @IN_PROGRESS then <i className="fa fa-spinner fa-spin"></i>
+                      when @SUCCESSFUL then <i className="fa fa-check-circle"></i>
+                      else <span>
+                        <i className="fa fa-exclamation-circle"></i>{' '}
+                        progress.toString()
+                      </span>}
                   </li>}
               </ul>}
           </li>}
@@ -96,6 +114,6 @@ module.exports = React.createClass
 
       <p>
         <button type="button" className="minor-button" onClick={@props.onClose}>Close</button>{' '}
-        <button type="button" className="major-button" disabled={classificationsCount is 0} onClick={@startImport}>Import {classificationsCount}</button>
+        <button type="button" className="major-button" disabled={classificationsCount is 0 or @state.progress?} onClick={@startImport}>Import {classificationsCount}</button>
       </p>
     </div>
