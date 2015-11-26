@@ -14,7 +14,6 @@ module.exports = React.createClass
   defaultLayout: 'grid2'
 
   render: ->
-    console.log @props.workflow.config
     multiImageLayout = @props.workflow.multi_image_layout ? @defaultLayout
     <ChangeListener target={@props.workflow}>{ =>
       <div className="multi-image-subject-layout-editor">
@@ -30,4 +29,4 @@ module.exports = React.createClass
   handleSelectLayout: (e) ->
     layout = e.target.value
     @props.workflow.update
-      'config.multi_image_layout': layout
+      'configuration.multi_image_layout': layout
