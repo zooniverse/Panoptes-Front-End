@@ -41,7 +41,7 @@ module.exports = React.createClass
         taskDescription = @props.workflow.tasks[annotation.task]
         if taskDescription.type is 'drawing'
           <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
-            {for mark in annotation.value
+            {for mark in annotation.value when mark.frame is @props.frame
               mark._key ?= Math.random()
               toolDescription = taskDescription.tools[mark.tool]
 
