@@ -131,7 +131,7 @@ module.exports = React.createClass
 
       <div className="subject-tools">
         <span>{tools}</span>
-        {if @props.subject?.locations.length >= 2
+        {if @props.subject?.locations.length >= 2 and @state.inFlipbookMode
           <span>
             <span className="subject-frame-pips">
               {for i in [0...@props.subject?.locations.length ? 0]
