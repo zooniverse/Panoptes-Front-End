@@ -5,7 +5,6 @@ alert = require '../lib/alert'
 {Markdown} = require 'markdownz'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
-FrameAnnotator = require '../classifier/frame-annotator'
 
 NOOP = Function.prototype
 
@@ -43,7 +42,7 @@ module.exports = React.createClass
     defaultStyle: true
     project: null
     linkToFullImage: false
-    frameWrapper: FrameAnnotator
+    frameWrapper: null
 
   getInitialState: ->
     loading: true
