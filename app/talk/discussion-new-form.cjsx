@@ -72,7 +72,7 @@ module?.exports = React.createClass
         <h2>Create a discussion +</h2>
         {if not @props.boardId
           <PromiseRenderer promise={@props.subject.get('project')}>{(project) =>
-            <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project))}>{(boards) =>
+            <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project), subject_default: false)}>{(boards) =>
               <div>
                 <h2>Board</h2>
                 {boards.map @boardRadio}
