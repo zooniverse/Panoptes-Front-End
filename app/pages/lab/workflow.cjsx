@@ -18,6 +18,21 @@ DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
 else
   '1166' # Ghosts
 
+EXAMPLE_GOLD_STANDARD_DATA = '''
+  [{
+    "links": {
+      "subjects": ["123"]
+    },
+    "annotations": [{
+      task: "T1",
+      value: 3
+    }, {
+      task: "T2",
+      value: "The value"
+    }, ...]
+  }, ...]
+'''
+
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
 
@@ -179,7 +194,11 @@ EditWorkflowPage = React.createClass
           <p>
             <FileButton className="standard-button" accept="application/json" multiple onSelect={@handleGoldStandardDataImport}>Import gold standard classifications</FileButton>
             <br />
-            <small className="form-help">Import gold standard classifications to provide some feedback for volunteers. After they classify, they’ll be able to compare their own classification to the gold standard data to make sure they’re on the right track.</small>
+            <small className="form-help">Import gold standard classifications to provide some feedback for volunteers. After they classify, they’ll be able to compare their own classification to the gold standard data to make sure they’re on the right track.</small>{' '}
+            <TriggeredModalForm trigger={<i className="fa fa-question-circle"></i>}>
+              <p>Gold standard classificaitons should be in the form:</p>
+              <pre>{EXAMPLE_GOLD_STANDARD_DATA}</pre>
+            </TriggeredModalForm>
           </p>
 
           <hr />
