@@ -179,7 +179,7 @@ EditWorkflowPage = React.createClass
           <p>
             <FileButton className="standard-button" accept="application/json" multiple onSelect={@handleGoldStandardDataImport}>Import gold standard classifications</FileButton>
             <br />
-            <small className="form-help">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</small>
+            <small className="form-help">Import gold standard classifications to provide some feedback for volunteers. After they classify, they’ll be able to compare their own classification to the gold standard data to make sure they’re on the right track.</small>
           </p>
 
           <hr />
