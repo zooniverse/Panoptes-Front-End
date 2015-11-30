@@ -87,7 +87,7 @@ module.exports = React.createClass
       <header>Import gold standard classifications</header>
       <ul>
         {Array::map.call @props.files, (file) =>
-          <li>
+          <li key={file.name}>
             <header>{file.name}</header>
             {if @state.errorsByFile[file.name]?
               <strong>
@@ -97,8 +97,9 @@ module.exports = React.createClass
             else if @state.classificationsByFile[file.name]?.length > 0
               <ul>
                 {@state.classificationsByFile[file.name].map (classification, i) =>
-                  progress = @state.progress[file.name + i]
-                  <li>
+                  stateKey = file.name + i
+                  progress = @state.progress?[stateKey]
+                  <li key={stateKey}>
                     {classification.links.subjects.join ', '}{' '}
                     {if progress? then switch progress
                       when @IN_PROGRESS then <i className="fa fa-spinner fa-spin"></i>
