@@ -15,7 +15,8 @@ module.exports = React.createClass
 
   searchCollections: (value, callback) ->
     query =
-      page_size: 10
+      page_size: 20
+      favorite: false
       current_user_roles: 'owner,collaborator'
     query.search = "#{value}" unless value is ''
 
