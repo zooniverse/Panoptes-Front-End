@@ -9,7 +9,6 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = window.api = require '../../api/client'
 {sugarClient} = require '../../api/sugar'
 LoadingIndicator = require '../../components/loading-indicator'
-FinishedBanner = require './finished-banner'
 
 SOCIAL_ICONS =
   'bitbucket.com/': 'bitbucket'
@@ -133,8 +132,6 @@ ProjectPage = React.createClass
                 label = <i className="fa fa-#{socialIcon} fa-fw fa-2x"></i>
               <a key={link._key} href={link.url} className="tabbed-content-tab" target="#{@props.project.id}-#{i}">{label}</a>}
           </nav>
-
-          <FinishedBanner project={@props.project} />
 
           <RouteHandler {...@props} owner={owner} />
           {unless @props.project.launch_approved or @props.project.beta_approved
