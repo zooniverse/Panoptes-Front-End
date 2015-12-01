@@ -23,7 +23,7 @@ ArticleEditor = React.createClass
     <form method="POST" onSubmit={@submit}>
       <label>
         Title<br />
-        <input type="text" ref="titleInput" defaultValue={@props.title} disabled={@props.working} />
+        <input type="text" ref="titleInput" defaultValue={@props.title} disabled={@props.working} autoFocus />
       </label>
       <br />
 

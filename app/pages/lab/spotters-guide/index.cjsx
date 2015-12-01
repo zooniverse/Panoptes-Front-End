@@ -15,39 +15,72 @@ unless process.env.NODE_ENV is 'production'
 
 SpottersGuideEditor = React.createClass
   getDefaultProps: ->
-    guide: DEV_GUIDE
+    project: null
     actions: actions
 
   getInitialState: ->
+    guide: null
     editing: null
 
   componentDidMount: ->
-    @attachTo @props.guide
+    @loadGuide @props.project
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.guide is @props.guide
-      @attachTo nextProps.guide
+    unless nextProps.project is @props.project
+      @loadGuide nextProps.project
 
-  attachTo: (guide) ->
-    @_oldGuide?.stopListening @_forceUpdate
+  loadGuide: (project) ->
+    apiClient.type('field_guides').get project_id: project.id
+      .then ([guide]) =>
+        @listenTo guide
+        @setState {guide}
+
+  listenTo: (guide) ->
     @_forceUpdate ?= @forceUpdate.bind this
-    guide.listen @_forceUpdate
-    @_oldGuide = guide
+    @_currentGuide?.stopListening @_forceUpdate
+    guide?.listen @_forceUpdate
+    @_currentGuide = guide
+
+  createArticle: ->
+    @props.actions.appendItem @state.guide.id
+      .then =>
+        @editArticle @state.guide.items.length - 1
 
   editArticle: (index) ->
     @setState editing: index
 
+  handleArticleSave: (newData) ->
+    @props.actions.updateItem @state.guide.id, @state.editing, newData
+      .then =>
+        @editArticle null
+
   render: ->
     <div>
+      <header>
+        <strong>Spotter’s guide</strong>
+      </header>
+      {if @state.guide?
+        @renderEditor()
+      else
+        @renderCreator()}
+    </div>
+
+  renderCreator: ->
+    <div>
+      <p>
+        This project doesn’t have a field guide yet.{' '}
+        <button type="button" onClick={@props.actions.createGuide.bind null, @props.project.id}>Create one!</button>
+      </p>
+    </div>
+
+  renderEditor: ->
+    <div>
       <div>
-        <header>
-          <strong>Spotter’s guide</strong>
-        </header>
         <ArticleList
-          articles={@props.guide.items}
-          onReorder={@props.actions.replaceItems.bind null, @props.guide.id}
-          onAddArticle={@props.actions.appendItem.bind null, @props.guide.id}
-          onRemoveArticle={@props.actions.removeItem.bind null, @props.guide.id}
+          articles={@state.guide.items}
+          onReorder={@props.actions.replaceItems.bind null, @state.guide.id}
+          onAddArticle={@createArticle}
+          onRemoveArticle={@props.actions.removeItem.bind null, @state.guide.id}
           onSelectArticle={@editArticle}
         />
       </div>
@@ -57,14 +90,14 @@ SpottersGuideEditor = React.createClass
       </div>
 
       {if @state.editing?
-        article = @props.guide.items[@state.editing]
+        article = @state.guide.items[@state.editing]
         <Dialog component="div" required>
           <ArticleEditor
             title={article.title}
             content={article.content}
-            working={@props.guide._busy}
+            working={@state.guide._busy}
             onCancel={@editArticle.bind this, null}
-            onSubmit={@props.actions.updateItem.bind null, @props.guide.id, @state.editing}
+            onSubmit={@handleArticleSave}
           />
         </Dialog>}
     </div>
