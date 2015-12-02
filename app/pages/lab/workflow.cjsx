@@ -180,6 +180,18 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
+          <div>
+            <AutoSave resource={@props.workflow}>
+              <span className="form-label">Classification summaries</span><br />
+              <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
+              <br />
+              <input type="checkbox" id="hide_classification_summaries" onChange={@handleSetHideClassificationSummaries} defaultChecked={@props.workflow.configuration?.hide_classification_summaries} />
+              <label htmlFor="hide_classification_summaries">Hide classification summaries</label>
+            </AutoSave>
+          </div>
+
+          <hr />
+
           <p>
             <AutoSave resource={@props.workflow}>
               Subject retirement <RetirementRulesEditor workflow={@props.workflow} />
@@ -305,6 +317,10 @@ EditWorkflowPage = React.createClass
 
     @props.workflow.update changes
     @setState selectedTaskKey: nextTaskID
+
+  handleSetHideClassificationSummaries: (e) ->
+    @props.workflow.update
+      'configuration.hide_classification_summaries': e.target.checked
 
   handleSubjectSetToggle: (subjectSet, e) ->
     shouldAdd = e.target.checked
