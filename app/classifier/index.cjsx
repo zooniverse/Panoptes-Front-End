@@ -29,6 +29,7 @@ Classifier = React.createClass
     classification: classification ? null
     goodClassificationCutoff: 0.5
     onLoad: Function.prototype
+    showClassificationSummaries: false
 
   getInitialState: ->
     subjectLoading: false
@@ -89,6 +90,7 @@ Classifier = React.createClass
       @addAnnotationForTask classification, @props.workflow.first_task
 
   render: ->
+
     <ChangeListener target={@props.classification}>{=>
       if @state.showingExpertClassification
         currentClassification = @state.expertClassification
@@ -115,7 +117,7 @@ Classifier = React.createClass
         <div className="task-area">
           {if currentTask?
             @renderTask currentClassification, currentAnnotation, currentTask
-          else # Classification is complete.
+          else if @props.showClassificationSummaries # Classification is complete; show summary if enabled
             @renderSummary currentClassification}
         </div>
       </div>
@@ -321,6 +323,10 @@ Classifier = React.createClass
       @setState {classificationQuality}
 
     @props.onComplete?()
+
+    # If task summaries disabled, skip to next classification now
+    if not @props.showClassificationSummaries
+      @props.onClickNext?()
 
   handleGoldStandardChange: (e) ->
     @props.classification.update gold_standard: e.target.checked || undefined # Delete the whole key.
