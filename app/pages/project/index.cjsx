@@ -9,8 +9,7 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = window.api = require '../../api/client'
 {sugarClient} = require '../../api/sugar'
 LoadingIndicator = require '../../components/loading-indicator'
-Pullout = require 'react-pullout'
-SpottersGuide = require '../../components/spotters-guide'
+PotentialSpottersGuide = require './potential-spotters-guide.cjsx'
 
 SOCIAL_ICONS =
   'bitbucket.com/': 'bitbucket'
@@ -142,15 +141,7 @@ ProjectPage = React.createClass
           {unless @props.project.launch_approved or @props.project.beta_approved
             <Translate className="project-disclaimer" content="project.disclaimer" component="p" />}
 
-          {if true or project.spotters_guide
-            <Pullout className="spotters-guide-pullout" side="right" open={@state.showingSpottersGuide}>
-              <button type="button" className="spotters-guide-pullout-toggle" onClick={=>
-                @setState showingSpottersGuide: not @state.showingSpottersGuide
-              }>
-                <strong>Spotter’s guide</strong>
-              </button>
-              <SpottersGuide items={@props.project.spotters_guide} />
-            </Pullout>}
+          <PotentialSpottersGuide project={@props.project} />
         </div>
       }</PromiseRenderer>
     }</ChangeListener>
