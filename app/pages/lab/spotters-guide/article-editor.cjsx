@@ -23,27 +23,26 @@ ArticleEditor = React.createClass
     <form method="POST" onSubmit={@submit}>
       <label>
         Title<br />
-        <input type="text" ref="titleInput" defaultValue={@props.title} disabled={@props.working} autoFocus />
+        <input type="text" ref="titleInput" className="standard-input full" defaultValue={@props.title} disabled={@props.working} autoFocus />
       </label>
       <br />
 
       <label>
-        Content<br />
-        <textarea ref="contentInput" defaultValue={@props.content} disabled={@props.working} />
+        Content <small>TODO: Markdown editor</small><br />
+        <textarea ref="contentInput" className="standard-input full" defaultValue={@props.content} disabled={@props.working} rows="10" cols="100"/>
       </label>
-
-      <hr />
+      <br />
 
       <label>
-        <button type="button" disabled={@props.working} onClick={@cancel}>Cancel</button>
+        <button type="button" className="minor-button" disabled={@props.working} onClick={@cancel}>Cancel</button>
       </label>{' '}
 
       <label>
-        <button type="submit" disabled={@props.working}>Done</button>
+        <button type="submit" className="major-button" disabled={@props.working}>Done</button>
       </label>{' '}
 
       {if @props.working
-        <strong>···</strong>}
+        <strong>· · ·</strong>}
     </form>
 
 module.exports = ArticleEditor
