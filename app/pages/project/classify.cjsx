@@ -6,6 +6,7 @@ PromiseToSetState = require '../../lib/promise-to-set-state'
 apiClient = require '../../api/client'
 animatedScrollTo = require 'animated-scrollto'
 counterpart = require 'counterpart'
+FinishedBanner = require './finished-banner'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
 SignInPrompt = require '../../partials/sign-in-prompt'
@@ -199,6 +200,8 @@ module.exports = React.createClass
 
   render: ->
     <div className="classify-page content-container">
+      <FinishedBanner project={@props.project} />
+
       {if @state.classification?
         <Classifier
           {...@props}
