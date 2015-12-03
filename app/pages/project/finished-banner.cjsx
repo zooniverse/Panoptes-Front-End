@@ -1,9 +1,12 @@
 React = require 'react'
 {Link} = require '@edpaget/react-router'
 
+THREE_DAYS = 3 * 24 * 60 * 60 * 1000
+
 module.exports = React.createClass
   getDefaultProps: ->
     project: null
+    dismissFor: THREE_DAYS
 
   getInitialState: ->
     projectIsComplete: false
@@ -47,16 +50,29 @@ module.exports = React.createClass
         page.url_key is 'result'
       resultsPages[0]?
 
+  hide: ->
+    dismissals = JSON.parse(localStorage.getItem 'finished-project-dismissals') ? {}
+    dismissals[@props.project.id] = Date.now()
+    localStorage.setItem 'finished-project-dismissals', JSON.stringify dismissals
+    @forceUpdate()
+
   render: ->
-    if @state.projectIsComplete
+    dismissals = JSON.parse(localStorage.getItem 'finished-project-dismissals') ? {}
+    recentlyDismissed = Date.now() - dismissals[@props.project.id] < @props.dismissFor
+
+    if recentlyDismissed or not @state.projectIsComplete
+      null
+    else
       <div className="project-finished-banner">
         <strong>Great work!</strong>{' '}
-        Looks like this project is out of data at the moment!{' '}
+        Looks like this project is out of data at the moment!<br />
         {if @state.hasResultsPage
           [owner, name] = @props.project.slug.split '/'
           <strong>
-            <Link to="project-results" params={{owner, name}}>See the results.</Link>
-          </strong>}
+            <Link to="project-results" params={{owner, name}}>See the results</Link>
+          </strong>}{' '}
+          <small>
+            or{' '}
+            <button type="button" className="secret-button" onClick={@hide}><u>dismiss this message</u></button>
+          </small>
       </div>
-    else
-      null
