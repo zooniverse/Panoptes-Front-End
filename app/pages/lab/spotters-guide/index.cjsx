@@ -50,7 +50,15 @@ SpottersGuideEditor = React.createClass
     @setState editing: index
 
   handleArticleSave: (newData) ->
-    @props.actions.updateItem @state.guide.id, @state.editing, newData
+    {icon, title, content} = newData
+
+    if icon?
+      if icon is ArticleEditor.SHOULD_REMOVE_ICON
+        console.log 'TODO: remove icon'
+      else
+        console.log 'TODO: handle new icon', icon
+
+    @props.actions.updateItem @state.guide.id, @state.editing, {title, content}
       .then =>
         @editArticle null
 

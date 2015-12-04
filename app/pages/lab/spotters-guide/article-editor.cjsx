@@ -1,12 +1,46 @@
 React = require 'react'
+FileButton = require '../../../components/file-button'
 
 ArticleEditor = React.createClass
+  statics:
+    SHOULD_REMOVE_ICON: {}
+
   getDefaultProps: ->
+    iconSrc: ''
     title: ''
     content: ''
     working: false
 
+  getInitialState: ->
+    newIconFile: null
+    newIconDataURL: ''
+
+  chooseIcon: (e) ->
+    newIconFile = e?.target?.files?[0]
+    if newIconFile?
+      @loadImageAsDataURL(newIconFile).then (newIconDataURL) =>
+        @setState {newIconFile, newIconDataURL}
+    else
+      @resetIcon()
+
+  loadImageAsDataURL: (file) ->
+    new Promise (resolve) ->
+      reader = new FileReader
+      reader.onload = (e) =>
+        resolve e.target.result
+      reader.readAsDataURL file
+
+  resetIcon: ->
+    @setState
+      newIconFile: null
+      newIconDataURL: ''
+
+  removeIcon: ->
+    @resetIcon()
+    @setState newIconFile: @constructor.SHOULD_REMOVE_ICON
+
   getData: ->
+    icon: @state.newIconFile
     title: React.findDOMNode(this.refs.titleInput).value
     content: React.findDOMNode(this.refs.contentInput).value
 
@@ -21,28 +55,51 @@ ArticleEditor = React.createClass
 
   render: ->
     <form method="POST" onSubmit={@submit}>
-      <label>
-        Title<br />
-        <input type="text" ref="titleInput" className="standard-input full" defaultValue={@props.title} disabled={@props.working} autoFocus />
-      </label>
-      <br />
+      <p>
+        <FileButton accept="image/*" onSelect={@chooseIcon}>
+          {if @props.iconSrc
+            <img src={@props.iconSrc} style={maxHeight: '3em', maxWidth: '3em'} />
+          else if @state.newIconDataURL
+            <img src={@state.newIconDataURL} style={maxHeight: '3em', maxWidth: '3em'} />
+          else
+            <small className="standard-button">No icon chosen</small>}
+        </FileButton>{' '}
 
-      <label>
-        Content <small>TODO: Markdown editor</small><br />
-        <textarea ref="contentInput" className="standard-input full" defaultValue={@props.content} disabled={@props.working} rows="10" cols="100"/>
-      </label>
-      <br />
+        <small>
+          {if @state.newIconFile?
+            <button type="button" className="minor-button" onClick={@resetIcon}>Reset</button>
+          else if @props.iconSrc
+            <button type="button" className="minor-button" onClick={@removeIcon}>Clear</button>}
+        </small>
+      </p>
 
-      <label>
-        <button type="button" className="minor-button" disabled={@props.working} onClick={@cancel}>Cancel</button>
-      </label>{' '}
+      <p>
+        <label>
+          Title<br />
+          <input type="text" ref="titleInput" className="standard-input full" defaultValue={@props.title} disabled={@props.working} autoFocus />
+        </label>
+      </p>
 
-      <label>
-        <button type="submit" className="major-button" disabled={@props.working}>Done</button>
-      </label>{' '}
+      <p>
+        <label>
+          Content <small>TODO: Markdown editor</small>
+          <br />
+          <textarea ref="contentInput" className="standard-input full" defaultValue={@props.content} disabled={@props.working} rows="10" cols="100"/>
+        </label>
+      </p>
 
-      {if @props.working
-        <strong>· · ·</strong>}
+      <p>
+        <label>
+          <button type="button" className="minor-button" disabled={@props.working} onClick={@cancel}>Cancel</button>
+        </label>{' '}
+
+        <label>
+          <button type="submit" className="major-button" disabled={@props.working}>Done</button>
+        </label>{' '}
+
+        {if @props.working
+          <strong>· · ·</strong>}
+      </p>
     </form>
 
 module.exports = ArticleEditor
