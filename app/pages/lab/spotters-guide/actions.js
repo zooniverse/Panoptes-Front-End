@@ -56,13 +56,45 @@ var actions = {
     });
   },
 
-  clearItemIcon: function(guideID, itemIndex) {},
+  removeItemIcon: function(guideID, itemIndex) {
+    return guides.get(guideID).then(function(guide) {
+      guide.update({
+        _busy: true
+      });
+
+      guide.get('attached_images').then(function(images) {
+        var matchedImage = images.filter(function(image) {
+          return image.id === guide.items[itemIndex].icon;
+        })[0];
+
+        var changes = {};
+        changes['items.' + itemIndex + '.icon'] = ''
+        guide.update(changes);
+
+        return Promise.all([
+          matchedImage.delete(),
+          guide.save()
+        ]).then(function() {
+          guide.update({
+            _busy: false
+          });
+        });
+      });
+    });
+  },
 
   setItemIcon: function(guideID, itemIndex, iconFile) {
     return guides.get(guideID).then(function(guide) {
       guide.update({
         _busy: true
       });
+
+      var awaitPossibleRemoval;
+      if (guide.items[itemIndex].icon) {
+        awaitPossibleRemoval = actions.removeItemIcon(guideID, itemIndex);
+      } else {
+        awaitPossibleRemoval = Promise.resolve();
+      }
 
       var attachedImagesURL = guide._getURL('attached_images');
 
@@ -75,18 +107,20 @@ var actions = {
         }
       };
 
-      return apiClient.post(attachedImagesURL, payload).then(function(media) {
-        media = [].concat(media)[0];
-        return putFile(media.src, iconFile).then(function() {
-          var changes = {}
-          changes['items.' + itemIndex + '.icon'] = media.id;
-          guide.update(changes);
+      return awaitPossibleRemoval.then(function() {
+        apiClient.post(attachedImagesURL, payload).then(function(media) {
+          media = [].concat(media)[0];
+          return putFile(media.src, iconFile).then(function() {
+            var changes = {}
+            changes['items.' + itemIndex + '.icon'] = media.id;
+            guide.update(changes);
 
-          return guide.save().then(function() {
-            guide.update({
-              _busy: false
+            return guide.save().then(function() {
+              guide.update({
+                _busy: false
+              });
+              return guide;
             });
-            return guide;
           });
         });
       });

@@ -61,7 +61,7 @@ SpottersGuideEditor = React.createClass
 
     awaitIconAction = if icon?
       if icon is ArticleEditor.SHOULD_REMOVE_ICON
-        console.log 'TODO: remove icon'
+        @props.actions.removeItemIcon @state.guide.id, @state.editing
       else
         @props.actions.setItemIcon @state.guide.id, @state.editing, icon
     else
