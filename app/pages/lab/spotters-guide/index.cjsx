@@ -34,19 +34,23 @@ SpottersGuideEditor = React.createClass
     apiClient.type('field_guides').get project_id: project.id
       .then ([guide]) =>
         @listenTo guide
+        @fetchIcons guide
         @setState {guide}
-        guide.get 'attached_images'
-          .then (images) =>
-            icons = {}
-            images.forEach (image) ->
-              icons[image.id] = image
-            @setState {icons}
 
   listenTo: (guide) ->
     @_forceUpdate ?= @forceUpdate.bind this
     @_currentGuide?.stopListening @_forceUpdate
     guide?.listen @_forceUpdate
     @_currentGuide = guide
+
+  fetchIcons: (guide) ->
+    guide.uncacheLink 'attached_images'
+    guide.get 'attached_images'
+      .then (images) =>
+        icons = {}
+        images.forEach (image) ->
+          icons[image.id] = image
+        @setState {icons}
 
   createArticle: ->
     @props.actions.appendItem @state.guide.id
@@ -70,6 +74,8 @@ SpottersGuideEditor = React.createClass
     awaitIconAction.then =>
       @props.actions.updateItem @state.guide.id, @state.editing, {title, content}
         .then =>
+          if icon?
+            @fetchIcons @state.guide
           @editArticle null
 
   render: ->
