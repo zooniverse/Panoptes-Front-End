@@ -4,6 +4,7 @@ Summary = require './summary'
 MarkingInitializer = require './marking-initializer'
 MarkingsRenderer = require './markings-renderer'
 GenericTask = require '../generic'
+testShapeCloseness = require 'test-shape-closeness'
 {Markdown} = require 'markdownz'
 icons = require './icons'
 drawingTools = require '../../drawing-tools'
@@ -56,6 +57,20 @@ module.exports = React.createClass
     isAnnotationComplete: (task, annotation) ->
       # Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
       @areMarksComplete(task, annotation) and annotation.value.length >= (task.required ? 0)
+
+    testAnnotationQuality: (unknown, knownGood, workflow) ->
+      unknownTaskDescription = workflow.tasks[unknown.task]
+      unknownShapes = unknown.value.map (annotationShape) ->
+        toolDescription = unknownTaskDescription.tools[annotationShape.tool]
+        Object.assign {}, annotationShape, type: toolDescription.type
+
+      knownGoodTaskDescription = workflow.tasks[knownGood.task]
+      knownGoodShapes = knownGood.value.map (annotationShape) ->
+        toolDescription = knownGoodTaskDescription.tools[annotationShape.tool]
+        Object.assign {}, annotationShape, type: toolDescription.type
+
+      # TODO: This doesn't factor in details tasks at all.
+      testShapeCloseness unknownShapes.concat knownGoodShapes
 
   getDefaultProps: ->
     task: null

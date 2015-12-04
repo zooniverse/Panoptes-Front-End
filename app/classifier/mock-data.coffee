@@ -1,13 +1,12 @@
 apiClient = require '../api/client'
 
-# This is just a blank image for testing drawing tools.
+# This is just a blank image for testing drawing tools while offline.
 BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
   'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
 
-MISC_DETAILS = [{
+MISC_DRAWING_DETAILS = [{
   type: 'single'
-  required: true
   question: 'Cool?'
   answers: [
     {label: 'Yeah'}
@@ -22,63 +21,91 @@ MISC_DETAILS = [{
   ]
 }, {
   type: 'text'
-  required: true
   instruction: 'Any additional comments?'
 }]
 
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'cool'
-  tasks:
+  first_task: 'init'
 
-    cool:
+  tasks:
+    init:
       type: 'single'
-      question: 'Is there anything here?'
+      question: 'Where shall we start?'
       answers: [
-        {label: 'Yeah', next: 'transcribe'}
-        {label: 'Nah', next: null}
+        {label: 'Crop the image', next: 'crop'}
+        {label: 'Enter some text', next: 'write'}
+        {label: 'Multi-answer question', next: 'features'}
+        {label: 'Draw stuff', next: 'draw'}
+        {label: 'Survey the image', next: 'survey'}
+        {label: 'We’re done here.', next: null}
       ]
 
-    transcribe:
+    crop:
+      type: 'crop'
+      instruction: 'Drag out a box around the smaller rhino.'
+      help: 'That’s the adorable one.'
+      next: 'write'
+
+    write:
       type: 'text'
       required: true
-      instruction: 'Please describe what you see.'
+      instruction: 'What’s the name of this animal? Is it a rhino?'
       help: '''
         **Example**: If you see a bee, then type "Bee"
       '''
+      next: 'features'
 
-
+    features:
+      type: 'multiple'
+      question: 'What **cool** features are present? The first two?'
+      answers: [
+        {label: 'Cold water'}
+        {label: 'Snow'}
+        {label: 'Ice'}
+        {label: 'Sunglasses'}
+      ]
       next: 'draw'
 
     draw:
       type: 'drawing'
       required: true
-      instruction: 'Draw something.'
+      instruction: 'Drop a point on the rhino eyeball.'
       help: '''
         Do this:
         * Pick a tool
         * Draw something
       '''
       tools: [
-        {type: 'point', label: 'Point', color: 'red', details: MISC_DETAILS}
-        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DETAILS}
-        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DETAILS}
-        {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DETAILS}
-        {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DETAILS}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DETAILS}
+        {type: 'point', label: 'Point', color: 'red', details: MISC_DRAWING_DETAILS}
+        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DRAWING_DETAILS}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DRAWING_DETAILS}
+        {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
+        {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
+        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DRAWING_DETAILS}
       ]
-      next: null
-
-    crop:
-      type: 'crop'
-      instruction: 'Drag out a box around the face.'
-      help: 'The face is the thing with the nose.'
       next: 'survey'
 
     survey:
       type: 'survey'
-      required: true
+      images:
+        aa1: '//placehold.it/64.png?text=AA1'
+        aa2: '//placehold.it/64.png?text=AA2'
+        ar1: '//placehold.it/64.png?text=AR1'
+        ar2: '//placehold.it/64.png?text=AR2'
+        to1: '//placehold.it/64.png?text=TO1'
+        to2: '//placehold.it/64.png?text=TO2'
+        so: '//placehold.it/48.png?text=so'
+        sp: '//placehold.it/48.png?text=sp'
+        st: '//placehold.it/48.png?text=st'
+        ba: '//placehold.it/48.png?text=ba'
+        wh: '//placehold.it/48.png?text=wh'
+        ta: '//placehold.it/48.png?text=ta'
+        re: '//placehold.it/48.png?text=re'
+        br: '//placehold.it/48.png?text=br'
+        bl: '//placehold.it/48.png?text=bl'
+        gr: '//placehold.it/48.png?text=gr'
       characteristicsOrder: ['pa', 'co']
       characteristics:
         pa:
@@ -87,38 +114,38 @@ workflow = apiClient.type('workflows').create
           values:
             so:
               label: 'Solid'
-              image: '//placehold.it/64.png?text=Solid'
+              image: 'so'
             sp:
               label: 'Spots'
-              image: '//placehold.it/64.png?text=Spots'
+              image: 'sp'
             st:
               label: 'Stripes'
-              image: '//placehold.it/64.png?text=Stripes'
+              image: 'st'
             ba:
               label: 'Bands'
-              image: '//placehold.it/64.png?text=Bands'
+              image: 'ba'
         co:
           label: 'Color'
           valuesOrder: ['wh', 'ta', 're', 'br', 'bl', 'gr']
           values:
             wh:
               label: 'White'
-              image: '//placehold.it/64.png?text=White'
+              image: 'wh'
             ta:
               label: 'Tan'
-              image: '//placehold.it/64.png?text=Tan'
+              image: 'ta'
             re:
               label: 'Red'
-              image: '//placehold.it/64.png?text=Red'
+              image: 're'
             br:
               label: 'Brown'
-              image: '//placehold.it/64.png?text=Brown'
+              image: 'br'
             bl:
               label: 'Black'
-              image: '//placehold.it/64.png?text=Black'
+              image: 'bl'
             gr:
               label: 'Green'
-              image: '//placehold.it/64.png?text=Green'
+              image: 'gr'
 
       choicesOrder: ['aa', 'ar', 'to']
       choices:
@@ -126,8 +153,8 @@ workflow = apiClient.type('workflows').create
           label: 'Aardvark'
           description: 'Basically a long-nose rabbit'
           images: [
-            '//placehold.it/320x240.png?text=Aardvark 1'
-            '//placehold.it/320x240.png?text=Aardvark 2'
+            'aa1'
+            'aa2'
           ]
           characteristics:
             pa: ['so']
@@ -140,8 +167,8 @@ workflow = apiClient.type('workflows').create
           label: 'Armadillo'
           description: 'A little rolly dude'
           images: [
-            '//placehold.it/320x240.png?text=Armadillo 1'
-            '//placehold.it/320x240.png?text=Armadillo 2'
+            'ar1'
+            'ar2'
           ]
           characteristics:
             pa: ['so', 'st']
@@ -153,8 +180,8 @@ workflow = apiClient.type('workflows').create
           label: 'Tortoise'
           description: 'Little green house with legs'
           images: [
-            '//placehold.it/320x240.png?text=Tortoise 1'
-            '//placehold.it/320x240.png?text=Tortoise 2'
+            'to1'
+            'to2'
           ]
           characteristics:
             pa: ['so']
@@ -200,26 +227,12 @@ workflow = apiClient.type('workflows').create
         hr:
           required: false
           multiple: true
-          label: 'Horns toggle'
+          label: 'Horns (toggle)'
           answersOrder: ['y']
           answers:
             y:
               label: 'Present'
-
-      images: {}
-      # next: 'draw'
-
-      next: 'draw'
-
-    features:
-      type: 'multiple'
-      question: 'What cool features are present?'
-      answers: [
-        {label: 'Cold water'}
-        {label: 'Snow'}
-        {label: 'Ice'}
-        {label: 'Sunglasses'}
-      ]
+      next: 'init'
 
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
@@ -235,26 +248,46 @@ subject = apiClient.type('subjects').create
     'Region': 'Chicago, IL'
 
   expert_classification_data:
-    annotations: [{
-      task: 'draw'
-      value: [{
-        tool: 0
-        x: 50
-        y: 50
-        frame: 0
+    MOCK_WORKFLOW_FOR_CLASSIFIER: apiClient.type('classifications').create
+      annotations: [{
+        task: 'init'
+        value: 0
       }, {
-        tool: 0
-        x: 150
-        y: 50
-        frame: 0
+        task: 'crop'
+        value: {
+          x: 20
+          y: 57
+          width: 224
+          height: 142
+        }
+      }, {
+        task: 'write'
+        value: 'Rhino'
+      }, {
+        task: 'features'
+        value: [0, 1]
+      }, {
+        task: 'draw'
+        value: [{
+          tool: 0
+          frame: 0
+          x: 207
+          y: 134
+          details: [{
+            value: 0
+          }, {
+            value: []
+          }, {
+            value: ''
+          }]
+        }]
+      }, {
+        task: 'survey'
+        value: []
+      }, {
+        task: 'init'
+        value: 5
       }]
-    }, {
-      task: 'cool'
-      value: 0
-    }, {
-      task: 'features'
-      value: [0, 2]
-    }]
 
 classification = apiClient.type('classifications').create
   annotations: []
