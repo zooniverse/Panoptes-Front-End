@@ -5,6 +5,7 @@ DragReorderable = require 'drag-reorderable'
 ArticleList = React.createClass
   getDefaultProps: ->
     articles: []
+    icons: {}
     onReorder: ->
     onSelectArticle: ->
     onAddArticle: ->
@@ -14,6 +15,7 @@ ArticleList = React.createClass
     article._key ?= Math.random()
     <li key={article._key}>
       <ArticleListItem
+        icon={@props.icons[article.icon]?.src}
         title={article.title}
         onClick={@props.onSelectArticle.bind null, i}
       />

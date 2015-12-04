@@ -6,7 +6,7 @@ ArticleEditor = React.createClass
     SHOULD_REMOVE_ICON: {}
 
   getDefaultProps: ->
-    iconSrc: ''
+    icon: ''
     title: ''
     content: ''
     working: false
@@ -57,10 +57,10 @@ ArticleEditor = React.createClass
     <form method="POST" onSubmit={@submit}>
       <p>
         <FileButton accept="image/*" onSelect={@chooseIcon}>
-          {if @props.iconSrc
-            <img src={@props.iconSrc} style={maxHeight: '3em', maxWidth: '3em'} />
-          else if @state.newIconDataURL
+          {if @state.newIconDataURL
             <img src={@state.newIconDataURL} style={maxHeight: '3em', maxWidth: '3em'} />
+          else if @props.icon and @state.newIconFile isnt @constructor.SHOULD_REMOVE_ICON
+            <img src={@props.icon} style={maxHeight: '3em', maxWidth: '3em'} />
           else
             <small className="standard-button">No icon chosen</small>}
         </FileButton>{' '}
@@ -68,7 +68,7 @@ ArticleEditor = React.createClass
         <small>
           {if @state.newIconFile?
             <button type="button" className="minor-button" onClick={@resetIcon}>Reset</button>
-          else if @props.iconSrc
+          else if @props.icon
             <button type="button" className="minor-button" onClick={@removeIcon}>Clear</button>}
         </small>
       </p>

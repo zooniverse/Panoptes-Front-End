@@ -20,6 +20,7 @@ SpottersGuideEditor = React.createClass
 
   getInitialState: ->
     guide: null
+    icons: {}
     editing: null
 
   componentDidMount: ->
@@ -34,6 +35,12 @@ SpottersGuideEditor = React.createClass
       .then ([guide]) =>
         @listenTo guide
         @setState {guide}
+        guide.get 'attached_images'
+          .then (images) =>
+            icons = {}
+            images.forEach (image) ->
+              icons[image.id] = image
+            @setState {icons}
 
   listenTo: (guide) ->
     @_forceUpdate ?= @forceUpdate.bind this
@@ -52,15 +59,18 @@ SpottersGuideEditor = React.createClass
   handleArticleSave: (newData) ->
     {icon, title, content} = newData
 
-    if icon?
+    awaitIconAction = if icon?
       if icon is ArticleEditor.SHOULD_REMOVE_ICON
         console.log 'TODO: remove icon'
       else
-        console.log 'TODO: handle new icon', icon
+        @props.actions.setItemIcon @state.guide.id, @state.editing, icon
+    else
+      Promise.resolve()
 
-    @props.actions.updateItem @state.guide.id, @state.editing, {title, content}
-      .then =>
-        @editArticle null
+    awaitIconAction.then =>
+      @props.actions.updateItem @state.guide.id, @state.editing, {title, content}
+        .then =>
+          @editArticle null
 
   render: ->
     <div>
@@ -82,10 +92,12 @@ SpottersGuideEditor = React.createClass
     </div>
 
   renderEditor: ->
+    window.editingGuide = @state.guide
     <div>
       <div>
         <ArticleList
           articles={@state.guide.items}
+          icons={@state.icons}
           onReorder={@props.actions.replaceItems.bind null, @state.guide.id}
           onAddArticle={@createArticle}
           onRemoveArticle={@props.actions.removeItem.bind null, @state.guide.id}
@@ -101,6 +113,7 @@ SpottersGuideEditor = React.createClass
         article = @state.guide.items[@state.editing]
         <Dialog component="div" required>
           <ArticleEditor
+            icon={@state.icons[article.icon]?.src}
             title={article.title}
             content={article.content}
             working={@state.guide._busy}

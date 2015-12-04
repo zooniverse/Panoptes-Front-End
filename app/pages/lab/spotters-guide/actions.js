@@ -1,4 +1,5 @@
 var apiClient = require('../../../api/client');
+var putFile = require('../../../lib/put-file');
 
 var projects = apiClient.type('projects');
 var guides = apiClient.type('field_guides');
@@ -52,6 +53,43 @@ var actions = {
         _busy: false
       });
       return guide;
+    });
+  },
+
+  clearItemIcon: function(guideID, itemIndex) {},
+
+  setItemIcon: function(guideID, itemIndex, iconFile) {
+    return guides.get(guideID).then(function(guide) {
+      guide.update({
+        _busy: true
+      });
+
+      var attachedImagesURL = guide._getURL('attached_images');
+
+      var payload = {
+        media: {
+          content_type: iconFile.type,
+          metadata: {
+            filename: iconFile.name
+          }
+        }
+      };
+
+      return apiClient.post(attachedImagesURL, payload).then(function(media) {
+        media = [].concat(media)[0];
+        return putFile(media.src, iconFile).then(function() {
+          var changes = {}
+          changes['items.' + itemIndex + '.icon'] = media.id;
+          guide.update(changes);
+
+          return guide.save().then(function() {
+            guide.update({
+              _busy: false
+            });
+            return guide;
+          });
+        });
+      });
     });
   },
 
