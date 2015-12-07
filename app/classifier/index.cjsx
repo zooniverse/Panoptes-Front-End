@@ -153,7 +153,6 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
-        <TutorialButton user={@props.user} project={@props.project} />
         <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
         {if nextTaskKey
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
@@ -165,6 +164,7 @@ Classifier = React.createClass
               <i className="fa fa-star fa-fw"></i>}
             {' '}Done
           </button>}
+        <TutorialButton user={@props.user} project={@props.project} />
         {@renderExpertOptions()}
       </nav>
 
