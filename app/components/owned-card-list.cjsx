@@ -37,15 +37,15 @@ module.exports = React.createClass
     else
       'All'
 
-  listQuery: (discipline) ->
-    query = Object.assign({}, @props.listQuery)
-    if !!discipline
-      query.tags = discipline
-    query
-
   filterDiscipline: (discipline) ->
     @setState tagFilter: discipline
-    @setState listPromise: apiClient.type('projects').get @listQuery(discipline)
+    query =
+      include:'avatar'
+    if !apiClient.params.admin
+      query.launch_approved = true
+    if discipline
+      query.tags = discipline
+    @setState listPromise: apiClient.type('projects').get query
 
   render: ->
     <div className="secondary-page all-resources-page">
