@@ -109,6 +109,7 @@ module.exports = React.createClass
   createNewClassification: (project, workflowID) ->
     workflow = @getWorkflow project, workflowID
     subject = workflow.then (workflow) =>
+      @setState {workflow}
       # A subject set is only specified if the workflow is grouped.
       getSubjectSet = if workflow.grouped
         workflow.get('subject_sets').then (subjectSets) =>
@@ -210,7 +211,7 @@ module.exports = React.createClass
           onLoad={@scrollIntoView}
           demoMode={@state.demoMode}
           onChangeDemoMode={@handleDemoModeChange}
-          onComplete={@saveClassification}
+          onComplete={if @state.workflow?.configuration?.hide_classification_summaries then @saveClassificationAndLoadAnotherSubject else @saveClassification}
           onClickNext={@loadAnotherSubject}
         />
       else if @state.rejected.classification?
@@ -232,6 +233,10 @@ module.exports = React.createClass
   handleDemoModeChange: (newDemoMode) ->
     sessionDemoMode = newDemoMode
     @setState demoMode: sessionDemoMode
+
+  saveClassificationAndLoadAnotherSubject: ->
+    @saveClassification()
+    @loadAnotherSubject()
 
   saveClassification: ->
     console?.info 'Completed classification', @state.classification
