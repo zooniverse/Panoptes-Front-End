@@ -61,7 +61,6 @@ module.exports = React.createClass
       query.tags = discipline
     @setState listPromise: apiClient.type('projects').get query
 
-
   render: ->
     <div className="secondary-page all-resources-page">
       <section className={"hero #{@props.heroClass}"}>
