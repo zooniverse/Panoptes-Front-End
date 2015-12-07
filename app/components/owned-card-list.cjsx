@@ -35,9 +35,6 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
-  getInitialState: ->
-    currentPage: null
-
   userForTitle: ->
     if @props.ownerName
       "#{@props.ownerName}'s"
