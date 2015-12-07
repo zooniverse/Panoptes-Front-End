@@ -36,7 +36,7 @@ module?.exports = React.createClass
 
   linkToClassifier: (text) ->
     [owner, name] = @props.project.slug.split('/')
-    <Link to="project-classify" params={{owner, name}}>{text}</Link>
+    <Link to={"/projects/#{owner}/#{name}/classify"}>{text}</Link>
 
   popup: ->
     alert (resolve) -> <SignInPrompt onChoose={resolve} />

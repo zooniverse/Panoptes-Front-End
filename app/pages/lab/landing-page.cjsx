@@ -42,7 +42,7 @@ module.exports = React.createClass
           <Translate content="landing.buttons.signIn" />
         </button>
       }
-      <Link to="projects" className="call-to-action standard-button landing-button"><Translate content="landing.buttons.backToProjects" /></Link>
+      <Link to="/projects" className="call-to-action standard-button landing-button"><Translate content="landing.buttons.backToProjects" /></Link>
     </div>
 
   showLoginDialog: (which) ->

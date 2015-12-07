@@ -17,9 +17,7 @@ module?.exports = React.createClass
   render: ->
     <div className="talk content-container">
       <h1 className="talk-main-link">
-        <Link to="/talk" params={@props.params}>
-          Zooniverse Talk
-        </Link>
+        <Link to="/talk">Zooniverse Talk</Link>
       </h1>
 
       <TalkBreadcrumbs {...@props} />

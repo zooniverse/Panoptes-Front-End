@@ -82,13 +82,13 @@ module.exports = React.createClass
               </section>
 
               <div className="talk-sidebar">
-                <SidebarNotifications {...@props} params={@props.params} />
+                <SidebarNotifications {...@props} />
 
                 <section>
                   <PopularTags
                     header={<h3>Popular Tags:</h3>}
                     section={@props.section}
-                    params={@props.params} />
+                    project={@props.project} />
                 </section>
 
                 <section>

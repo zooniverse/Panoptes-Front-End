@@ -56,7 +56,7 @@ FeaturedProjects = React.createClass
           }
           </div>
       }</PromiseRenderer>
-      <Link to="projects" className="call-to-action standard-button x-large"><Translate content="home.featuredProjects.button" /></Link>
+      <Link to="/projects" className="call-to-action standard-button x-large"><Translate content="home.featuredProjects.button" /></Link>
     </div>
 
 module.exports = React.createClass
@@ -108,14 +108,14 @@ module.exports = React.createClass
                       </div>}
                   </div>
                 }</PromiseRenderer>
-                <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.recentProjects.altButton" /></Link>
+                <Link to="/projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.recentProjects.altButton" /></Link>
               </div>
           }</PromiseRenderer>
          else
           <div>
             <h3 className="hero-title"><Translate content="home.hero.title" /></h3>
             <p className="hero-tagline"><Translate content="home.hero.tagline" /></p>
-            <Link to="projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
+            <Link to="/projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
           </div>}
       </section>
       {unless @props.user?

@@ -51,7 +51,7 @@ CollectionPage = React.createClass
             </Link>}
 
           {if isOwner
-            <Link to="/collections/#{ownerName}/#{name}/collaborators" params={params} activeClassName="active" className="tabbed-content-tab">
+            <Link to="/collections/#{ownerName}/#{name}/collaborators" activeClassName="active" className="tabbed-content-tab">
               <Translate content="collectionPage.collaborators" />
             </Link>}
         </nav>

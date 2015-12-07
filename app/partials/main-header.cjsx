@@ -1,6 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
-{Link} = require 'react-router'
+{IndexLink, Link} = require 'react-router'
 ZooniverseLogo = require './zooniverse-logo'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
@@ -89,9 +89,9 @@ module.exports = React.createClass
 
     <header className="main-header #{@mobileClass()}">
       <div className="main-title" ref="mainTitle">
-        <Link to="home" className="main-logo">
+        <IndexLink to="/" className="main-logo">
           <ZooniverseLogo />
-        </Link>
+        </IndexLink>
 
         {if not mobile
           <span>{@links()}</span>}

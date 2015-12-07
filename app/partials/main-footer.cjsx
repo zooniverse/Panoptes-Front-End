@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-{Link} = require 'react-router'
+{IndexLink, Link} = require 'react-router'
 ZooniverseLogoType = require './zooniverse-logotype'
 apiClient = require '../api/client'
 
@@ -77,9 +77,9 @@ module.exports = React.createClass
     <footer className="main-footer">
       <div className="centered-grid main-footer-flex">
         <div className="main-logo">
-          <Link to="home" className="main-logo-link">
+          <IndexLink to="/" className="main-logo-link">
             <ZooniverseLogoType />
-          </Link>
+          </IndexLink>
           <br />
           {if @props.user?.admin
             <AdminToggle />}
@@ -103,7 +103,7 @@ module.exports = React.createClass
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.talk.title" />
-            <Link to="talk"><Translate content="footer.talk.zooTalk" /></Link>
+            <Link to="/talk"><Translate content="footer.talk.zooTalk" /></Link>
             <a href="http://daily.zooniverse.org/" target="_blank"><Translate content="footer.talk.daily" /></a>
             <a href="http://blog.zooniverse.org/" target="_blank"><Translate content="footer.talk.blog" /></a>
           </div>
@@ -117,7 +117,7 @@ module.exports = React.createClass
       </div>
       <div className="footer-sole">
         <div className="centered-grid footer-sole-links">
-          <Link to="privacy"><Translate content="footer.boilerplate.privacyPolicy" /></Link>
+          <Link to="/privacy"><Translate content="footer.boilerplate.privacyPolicy" /></Link>
           <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
           <a href="http://jobs.zooniverse.org/"><Translate content="footer.boilerplate.jobs" /></a>
         </div>

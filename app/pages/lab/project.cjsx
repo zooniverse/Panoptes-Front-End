@@ -135,7 +135,7 @@ EditProjectPage = React.createClass
             <div className="nav-list-header">Need some help?</div>
             <ul className="nav-list">
               <li>
-                <Link className="nav-list-item" to="lab-how-to">Read a tutorial</Link>
+                <Link className="nav-list-item" to="/lab-how-to">Read a tutorial</Link>
               </li>
               <li>
                 <a href="https://www.zooniverse.org/talk/18/" className="nav-list-item">Ask for help on talk</a>
