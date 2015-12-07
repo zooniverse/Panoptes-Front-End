@@ -5,6 +5,7 @@ Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
+{DISCIPLINES} = require '../components/disciplines'
 {Link} = require 'react-router'
 
 module.exports = React.createClass
@@ -31,21 +32,6 @@ module.exports = React.createClass
     else
       'All'
 
-  getDisciplines: -> [
-   'astronomy',
-   'physics',
-   'nature',
-   'biology',
-   'climate',
-   'history',
-   'literature',
-   'arts',
-   'language',
-   'medicine',
-   'social science',
-   'humanitarian'
-  ]
-
   getResourceList: (discipline,ownedResources) ->
     for resource in ownedResources[..4]
       <OwnedCard
@@ -70,11 +56,11 @@ module.exports = React.createClass
             meta = ownedResources[0].getMeta()
             <div>
               <div className="discipline-list">
-                {for discipline in @getDisciplines()
+                {for discipline in DISCIPLINES
                   <div className="discipline-section">
-                    <h2 className="discipline-title">{discipline}</h2>
+                    <h2 className="discipline-title">{discipline.label}</h2>
                     <div className="card-list">
-                      {@getResourceList(discipline,ownedResources)}
+                      {@getResourceList(discipline.value,ownedResources)}
                     </div>
                   </div>
                 }

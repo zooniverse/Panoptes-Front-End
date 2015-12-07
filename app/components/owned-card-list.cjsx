@@ -7,6 +7,7 @@ PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
 Select = require 'react-select'
 {Link} = require '@edpaget/react-router'
+{DISCIPLINES} = require '../components/disciplines'
 
 module.exports = React.createClass
   displayName: 'OwnedCardList'
@@ -36,21 +37,6 @@ module.exports = React.createClass
     else
       'All'
 
-  disciplines: -> [
-    { value: 'arts', label: 'Arts' },
-    { value: 'astronomy', label: 'Astronomy' },
-    { value: 'biology', label: 'Biology' },
-    { value: 'climate', label: 'Climate' },
-    { value: 'history', label: 'History' },
-    { value: 'humanitarian', label: 'Humanitarian' },
-    { value: 'language', label: 'Language' },
-    { value: 'literature', label: 'Literature' },
-    { value: 'medicine', label: 'Medicine' },
-    { value: 'nature', label: 'Nature' },
-    { value: 'physics', label: 'Physics' },
-    { value: 'social science', label: 'Social Science' }
-  ]
-
   filterDiscipline: (discipline) ->
     @setState tagFilter: discipline
     query =
@@ -74,10 +60,10 @@ module.exports = React.createClass
         <Select
           ref="disciplineSelect"
           name="disciplines"
-          placeholder="Filter by disciplines"
+          placeholder="Filter by discipline"
           className="discipline-filter"
           value={@state.tagFilter}
-          options={@disciplines()}
+          options={DISCIPLINES}
           onChange={@filterDiscipline} />
 
         <PromiseRenderer promise={@state.listPromise}>{(ownedResources) =>
