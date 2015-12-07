@@ -40,7 +40,7 @@ module?.exports = React.createClass
           <Link className="user-profile-link" to="/users/#{@state.messageUser.login}">
             <Avatar user={@state.messageUser} />{' '}{@state.messageUser.display_name}
           </Link>{' '}
-          <Link to="inbox-conversation" {...@props} params={conversation: notification.source.conversation_id} className="time-ago">
+          <Link to={"/inbox/#{notification.source.conversation_id}"} {...@props} className="time-ago">
             {moment(@state.message.created_at).fromNow()}
           </Link>
         </div>

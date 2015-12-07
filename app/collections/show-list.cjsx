@@ -79,7 +79,7 @@ module?.exports = React.createClass
               <i className="fa fa-close" />
             </button>}
           <PromiseRenderer promise={@fetchProjectOwner(subject)}>{ (params) =>
-            <Link className="subject-link" to="project-talk-subject" params={params}>
+            <Link className="subject-link" to={"/projects/#{params.owner}/#{params.name}/talk/subjects/#{subject.id}"}>
               <span></span>
             </Link>
           }</PromiseRenderer>

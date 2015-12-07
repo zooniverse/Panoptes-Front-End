@@ -8,7 +8,6 @@ module?.exports = React.createClass
   propTypes:
     header: React.PropTypes.object             # Optional header ex: <h1>Tags</h1>
     section: React.PropTypes.string.isRequired # Talk section
-    params: React.PropTypes.object.isRequired # URL params
 
   tagsRequest: ->
     query =
@@ -24,9 +23,8 @@ module?.exports = React.createClass
 
   tag: (talkTag, i) ->
     tag = talkTag.name
-    {owner, name} = @props.params
-    if owner and name
-      <div key={talkTag.id} className="truncated"><Link to="/projects/#{owner}/#{name}/talk/tags/#{tag}">#{tag}</Link>{' '}</div>
+    if @props.project
+      <div key={talkTag.id} className="truncated"><Link to="/projects/#{@props.project.slug}/talk/tags/#{tag}">#{tag}</Link>{' '}</div>
     else
       <div key={talkTag.id} className="truncated"><Link to="/talk/search/?query=#{tag}">#{tag}</Link>{' '}</div>
 

@@ -30,7 +30,6 @@ module.exports = React.createClass
 
   render: ->
     [owner, name] = @props.project.slug.split('/')
-    linkParams = {owner, name}
 
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
@@ -47,11 +46,11 @@ module.exports = React.createClass
           </a>
         else if @props.project.configuration?.user_chooses_workflow
           for workflow in @state.workflows
-            <Link to="project-classify" params={linkParams} query={workflow: workflow.id} key={workflow.id} className="call-to-action standard-button">
+            <Link to={"/projects/#{owner}/#{name}/classify?workflow=#{workflow.id}"} key={workflow.id} className="call-to-action standard-button">
               {workflow.display_name}
             </Link>
         else
-          <Link to="project-classify" params={linkParams} className="call-to-action standard-button">
+          <Link to={"/projects/#{owner}/#{name}/classify"} className="call-to-action standard-button">
             Get started!
           </Link>}
       </div>

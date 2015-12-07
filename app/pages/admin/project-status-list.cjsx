@@ -27,11 +27,11 @@ module.exports = React.createClass
   render: ->
     <div className="project-status-page">
       <nav className="project-status-filters">
-        <Link to="admin-project-list">All</Link>
-        <Link to="admin-project-list" query={filterBy: 'launch_approved'}>Launch Approved</Link>
-        <Link to="admin-project-list" query={filterBy: 'launch_requested'}>Launch Requested</Link>
-        <Link to="admin-project-list" query={filterBy: 'beta_approved'}>Beta Approved</Link>
-        <Link to="admin-project-list" query={filterBy: 'beta_requested'}>Beta Requested</Link>
+        <Link to="/admin/project_status">All</Link>
+        <Link to="/admin/project_status?filterBy=launch_approved">Launch Approved</Link>
+        <Link to="/admin/project_status?filterBy=launch_requested">Launch Requested</Link>
+        <Link to="/admin/project_status?filterBy=beta_approved">Beta Approved</Link>
+        <Link to="/admin/project_status?filterBy=beta_requested">Beta Requested</Link>
       </nav>
 
       <PromiseRenderer promise={@getProjects()}>{(projects) =>
@@ -43,7 +43,7 @@ module.exports = React.createClass
                {projects.map (project) =>
                  [owner, name] = project.slug.split('/')
                  <div key={project.id}>
-                   <Link to="admin-project-status" params={{owner, name}}>
+                   <Link to={"/admin/project_status/{owner}/{name}"}>
                      <ProjectIcon linkTo={false} project={project} />
                    </Link>
                  </div>}
