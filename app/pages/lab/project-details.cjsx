@@ -9,7 +9,8 @@ counterpart = require 'counterpart'
 DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor} = require 'markdownz'
-markdownHelp = require '../../lib/markdown-help'
+MarkdownHelp = require '../../partials/markdown-help'
+alert = require('../../lib/alert')
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -143,7 +144,7 @@ module.exports = React.createClass
             <AutoSave resource={@props.project}>
               <span className="form-label">Introduction</span>
               <br />
-              <MarkdownEditor className="full" name="introduction" rows="10" value={@props.project.introduction} project={@props.project} onChange={handleInputChange.bind @props.project} onHelp={markdownHelp}/>
+              <MarkdownEditor className="full" name="introduction" rows="10" value={@props.project.introduction} project={@props.project} onChange={handleInputChange.bind @props.project} onHelp={-> alert <MarkdownHelp/>}/>
             </AutoSave>
             <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page.</small>
           </p>

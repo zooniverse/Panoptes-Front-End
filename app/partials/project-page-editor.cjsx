@@ -5,7 +5,8 @@ apiClient = require '../api/client'
 PromiseToSetState = require '../lib/promise-to-set-state'
 {MarkdownEditor} = require 'markdownz'
 ChangeListener = require '../components/change-listener'
-markdownHelp = require ('../lib/markdown-help')
+MarkdownHelp = require ('../partials/markdown-help')
+alert = require('../lib/alert')
 
 module.exports = React.createClass
   displayName: 'ProjectPageEditor'
@@ -47,7 +48,7 @@ module.exports = React.createClass
            <ChangeListener target={@state.pageContent}>{ =>
              <MarkdownEditor
                project={@props.project}
-               onHelp={markdownHelp}
+               onHelp={-> alert <MarkdownHelp />}
                className="full"
                name="content"
                value={@state.pageContent.content}

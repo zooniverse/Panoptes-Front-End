@@ -1,7 +1,7 @@
 React = require 'react'
 ToggleChildren = require './mixins/toggle-children'
 Feedback = require './mixins/feedback'
-CommentHelp = require './comment-help'
+MarkdownHelp = require '../partials/markdown-help'
 CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
 Loading = require '../components/loading-indicator'
@@ -95,7 +95,7 @@ module?.exports = React.createClass
 
       <form className="talk-comment-form" onSubmit={@onSubmitComment}>
 
-        <MarkdownEditor placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <CommentHelp /> }/>
+        <MarkdownEditor placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <MarkdownHelp talk={true} title={<h1>Guide to commenting in Talk</h1>}/> }/>
         <section>
           <button
             type="button"

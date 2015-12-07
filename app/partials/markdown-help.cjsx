@@ -1,14 +1,58 @@
 React = require 'react'
 {Markdown} = require 'markdownz'
 
+TalkMarkdownHelp = React.createClass
+  render: ->
+    <div>
+      <tr>
+        <th colSpan="3">Zooniverse Hashtags, Users and Subjects</th>
+      </tr>
+      <tr>
+        <td>Add a Hashtag</td>
+        <td colSpan="2">#hashtag</td>
+      </tr>
+      <tr>
+        <td>Mention User</td>
+        <td colSpan="2">@user</td>
+      </tr>
+      <tr>
+        <td>Mention Subject<br/>(project Talk)</td>
+        <td colSpan="2">^S<subject_id><br/>e.g. ^S830273</td>
+      </tr>
+      <tr>
+        <td>Mention Subject<br/>(any Talk)</td>
+        <td colSpan="2">@owner/project^S<subject_id><br/>e.g. @zooniverse/wildcam-gorongosa^S830273</td>
+      </tr>
+      <tr>
+        <td>Mention<br/>Project Teams</td>
+        <td colSpan="2">
+          @admins - mention the project administrators<br/>
+          @moderators - mention the project moderators<br/>
+          @researchers or @scientists - mention the project researchers<br/>
+          @team - mention the entire Zooniverse team
+        </td>
+      </tr>
+      <tr>
+        <th colSpan="3">Adding Emoji to Posts</th>
+      </tr>
+      <tr>
+        <td>Complete<br/>Emoji List</td>
+        <td colSpan="2"><a href="http://www.emoji-cheat-sheet.com/" target="_blank">use this website for all supported emoji</a></td>
+      </tr>
+    </div>
+
 module?.exports = React.createClass
-  displayName: 'TalkCommentHelp'
+  displayName: 'MarkdownHelp'
+
+  getDefaultProps: ->
+    talk: false
+    title: <h1>Guide to using Markdown</h1>
 
   render: ->
-    <div className="talk-comment-help">
+    <div className="markdown-editor-help">
       <table border="1">
         <tr>
-          <th colSpan="3"><h1>Guide to commenting on talk</h1></th>
+          <th colSpan="3">{@props.title}</th>
         </tr>
         <tr>
           <th colSpan="3"><p>Talk comments are written in <a href='http://daringfireball.net/projects/markdown/basics' target="_blank">Markdown</a>.</p></th>
@@ -165,40 +209,12 @@ module?.exports = React.createClass
           <td colSpan="2"><a href="http://www.tablesgenerator.com/markdown_tables" target="_blank">use this website to generate markdown tables</a></td>
         </tr>
         <tr>
-          <th colSpan="3">Zooniverse Hashtags, Users and Subjects</th>
+          <td>URL Shortening</td>
+          <td colSpan="2">URLs can be written as /projects/username/projectname and /projects/username/projectname/pagename, omitting the "https://www.zooniverse.org."</td>
         </tr>
-        <tr>
-          <td>Add a Hashtag</td>
-          <td colSpan="2">#hashtag</td>
-        </tr>
-        <tr>
-          <td>Mention User</td>
-          <td colSpan="2">@user</td>
-        </tr>
-        <tr>
-          <td>Mention Subject<br/>(project Talk)</td>
-          <td colSpan="2">^S<subject_id><br/>e.g. ^S830273</td>
-        </tr>
-        <tr>
-          <td>Mention Subject<br/>(any Talk)</td>
-          <td colSpan="2">@owner/project^S<subject_id><br/>e.g. @zooniverse/wildcam-gorongosa^S830273</td>
-        </tr>
-        <tr>
-          <td>Mention<br/>Project Teams</td>
-          <td colSpan="2">
-            @admins - mention the project administrators<br/>
-            @moderators - mention the project moderators<br/>
-            @researchers or @scientists - mention the project researchers<br/>
-            @team - mention the entire Zooniverse team
-          </td>
-        </tr>
-        <tr>
-          <th colSpan="3">Adding Emoji to Posts</th>
-        </tr>
-        <tr>
-          <td>Complete<br/>Emoji List</td>
-          <td colSpan="2"><a href="http://www.emoji-cheat-sheet.com/" target="_blank">use this website for all supported emoji</a></td>
-        </tr>
+        {if @props.talk
+          <TalkMarkdownHelp />
+        }
       </table>
         <tr>
           <tfoot colSpan="3"><br/>If you need any more help formatting posts, please ask on the <a href="https://www.zooniverse.org/talk/">Zooniverse Talk</a> boards!</tfoot>
