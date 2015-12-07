@@ -37,18 +37,18 @@ module.exports = React.createClass
       'All'
 
   disciplines: -> [
+    { value: 'arts', label: 'Arts' },
     { value: 'astronomy', label: 'Astronomy' },
-    { value: 'physics', label: 'Physics' },
-    { value: 'nature', label: 'Nature' },
     { value: 'biology', label: 'Biology' },
     { value: 'climate', label: 'Climate' },
     { value: 'history', label: 'History' },
-    { value: 'literature', label: 'Literature' },
-    { value: 'arts', label: 'Arts' },
-    { value: 'language', label: 'Language' },
-    { value: 'medicine', label: 'Medicine' },
-    { value: 'social science', label: 'Social Science' },
     { value: 'humanitarian', label: 'Humanitarian' },
+    { value: 'language', label: 'Language' },
+    { value: 'literature', label: 'Literature' },
+    { value: 'medicine', label: 'Medicine' },
+    { value: 'nature', label: 'Nature' },
+    { value: 'physics', label: 'Physics' },
+    { value: 'social science', label: 'Social Science' }
   ]
 
   filterDiscipline: (discipline) ->
