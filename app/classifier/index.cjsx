@@ -275,10 +275,6 @@ Classifier = React.createClass
         height: innerHeight
     @props.onComplete?()
 
-    # If task summaries disabled, skip to next classification now
-    if @props.workflow.configuration?.hide_classification_summaries
-      @props.onClickNext?()
-
   handleGoldStandardChange: (e) ->
     @props.classification.update gold_standard: e.target.checked || undefined # Delete the whole key.
 
