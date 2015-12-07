@@ -74,8 +74,11 @@ module.exports = React.createClass
   routeToProject: (projectID) ->
     apiClient.type('projects').get(projectID)
       .then (project) =>
-        [owner, name] = project.slug.split('/')
-        @transitionTo 'project-home', owner: owner, name: name
+        if project.redirect?
+          window.location.href = project.redirect
+        else
+          [owner, name] = project.slug.split('/')
+          @transitionTo 'project-home', owner: owner, name: name
 
   render: ->
     <div className="secondary-page all-resources-page">
