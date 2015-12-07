@@ -4,13 +4,16 @@ TitleMixin = require '../lib/title-mixin'
 Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
+ChangeListener = require '../components/change-listener'
 OwnedCard = require '../partials/owned-card'
 Select = require 'react-select'
-{Link} = require '@edpaget/react-router'
 {DISCIPLINES} = require '../components/disciplines'
+{Link, State, Navigation} = require '@edpaget/react-router'
+debounce = require 'debounce'
 
 module.exports = React.createClass
   displayName: 'OwnedCardList'
+  mixins: [State, Navigation]
 
   propTypes:
     imagePromise: React.PropTypes.func.isRequired
@@ -27,9 +30,13 @@ module.exports = React.createClass
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
+    @setState currentPage: @currentPage()
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
+
+  getInitialState: ->
+    currentPage: null
 
   userForTitle: ->
     if @props.ownerName
@@ -46,6 +53,31 @@ module.exports = React.createClass
     if discipline
       query.tags = discipline
     @setState listPromise: apiClient.type('projects').get query
+
+  searchProjectName: (value, callback) ->
+    unless value is ''
+      apiClient.type('projects').get(search: "#{value}", page_size: 10)
+        .then (projects) =>
+          opts = projects.map (project) ->
+            {
+              value: project.id,
+              label: project.display_name,
+              project: project
+            }
+
+          callback null, {
+            options: opts
+          }
+
+  currentPage: ->
+    routes = @getRoutes()
+    routes[routes.length - 1].name
+
+  routeToProject: (projectID) ->
+    apiClient.type('projects').get(projectID)
+      .then (project) =>
+        [owner, name] = project.slug.split('/')
+        @transitionTo 'project-home', owner: owner, name: name
 
   render: ->
     <div className="secondary-page all-resources-page">
@@ -76,6 +108,17 @@ module.exports = React.createClass
                   pageEnd = Math.min(meta.page * meta.page_size, meta.count)
                   count = meta.count
                   <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />}
+                {if @state.currentPage is 'projects'
+                  <Select 
+                    multi={false}
+                    name="resourcesid"
+                    placeholder="Project Name:"
+                    searchPromptText="Search by a project name"
+                    closeAfterClick={true}
+                    asyncOptions={debounce(@searchProjectName, 200)} 
+                    onChange={@routeToProject}
+                    className="search project-search standard-input"
+                  />}
               </div>
               <div className="card-list">
                 {for resource in ownedResources
