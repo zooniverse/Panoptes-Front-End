@@ -136,6 +136,9 @@ Classifier = React.createClass
               <i className="fa fa-star fa-fw"></i>}
             {' '}Done
           </button>}
+        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
+          [ownerName, name] = @props.project.slug.split('/')
+          <Link onClick={@completeClassification} to="project-talk-subject" params={owner: ownerName, name: name, id: @props.subject.id} className="talk standard-button">Done &amp; Talk</Link>}
         {@renderExpertOptions()}
       </nav>
 
