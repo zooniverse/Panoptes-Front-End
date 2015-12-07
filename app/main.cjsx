@@ -10,6 +10,9 @@ history = createBrowserHistory()
 if process.env.NON_ROOT isnt 'true' and window.location? and window.location.hash isnt ""
   window.location.pathname = window.location.hash.slice(1)
 
+history.listen (location) ->
+  window.dispatchEvent new CustomEvent 'locationchange'
+
 location = if process.env.NON_ROOT == "true"
     null
   else
