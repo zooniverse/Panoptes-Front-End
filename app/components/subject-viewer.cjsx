@@ -58,7 +58,7 @@ module.exports = React.createClass
       when 'image'
         <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
       when 'video'
-        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} controls>
+        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"}>
           Your browser does not support the video format. Please upgrade your browser.
         </video>
 
@@ -69,14 +69,25 @@ module.exports = React.createClass
         else
           <span className="subject-frame-play-controls">
             {if @state.playing
-              <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
+              <button type="button" className="secret-button" aria-label="Pause" onClick={@setPlaying.bind this, false}>
                 <i className="fa fa-pause fa-fw"></i>
               </button>
             else
-              <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
+              <button type="button" className="secret-button" aria-label="Play" onClick={@setPlaying.bind this, true}>
                 <i className="fa fa-play fa-fw"></i>
               </button>}
           </span>
+      when 'video'
+        <span className="subject-frame-play-controls">
+          {if @state.playing
+            <button type="button" className="secret-button" aria-label="Pause" onClick={@playVideo.bind this, false}>
+              <i className="fa fa-pause fa-fw"></i>
+            </button>
+          else
+            <button type="button" className="secret-button" aria-label="Play" onClick={@playVideo.bind this, true}>
+              <i className="fa fa-play fa-fw"></i>
+            </button>}
+        </span>
 
     <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
       {if type is 'image'
@@ -165,6 +176,15 @@ module.exports = React.createClass
         </tbody>
       </table>
     </div>
+
+  playVideo: (playing) ->
+    player = @refs.videoPlayer?.getDOMNode()
+    return unless player?
+    @setState {playing}
+    if playing
+      player.play()
+    else
+      player.pause()
 
   handleLoad: (e) ->
     @setState loading: false
