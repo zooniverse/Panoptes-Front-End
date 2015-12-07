@@ -47,6 +47,9 @@ module.exports = React.createClass
     loading: true
     playing: false
     frame: @props.frame ? 0
+  
+  componentDidMount: ->
+    @refs.videoPlayer?.getDOMNode().addEventListener 'canplaythrough', @handleLoad
 
   render: ->
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
@@ -55,7 +58,7 @@ module.exports = React.createClass
       when 'image'
         <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
       when 'video'
-        <video src={src} type={"#{type}/#{format}"} controls onLoad={@handleLoad}>
+        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} controls>
           Your browser does not support the video format. Please upgrade your browser.
         </video>
 
@@ -163,4 +166,5 @@ module.exports = React.createClass
 
   handleLoad: (e) ->
     @setState loading: false
+    @refs.videoPlayer?.getDOMNode().removeEventListener 'canplaythrough', @handleLoad
     @props.onLoad? arguments...
