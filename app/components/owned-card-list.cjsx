@@ -27,6 +27,7 @@ module.exports = React.createClass
   getInitialState: ->
     listPromise: @props.listPromise
     tagFiler: ""
+    currentPage: null
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
