@@ -32,7 +32,7 @@ module?.exports = React.createClass
 
   findFavoriteCollection: ->
     apiClient.type('collections')
-      .get({project_id: @props.project?.id, favorite: true, owner: @props.user.login})
+      .get({project_ids: @props.project?.id, favorite: true, owner: @props.user.login})
       .then ([favorites]) -> if favorites? then favorites else null
 
   findSubjectInCollection: (favorites) ->
@@ -65,7 +65,7 @@ module?.exports = React.createClass
     favorite = true
 
     links = {subjects}
-    links.project = project if project?
+    links.projects = [ project ] if project?
     collection = {favorite, display_name, links}
 
     apiClient.type('collections').create(collection).save().then =>

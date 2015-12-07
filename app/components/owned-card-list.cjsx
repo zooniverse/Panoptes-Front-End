@@ -5,7 +5,7 @@ Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 
 module.exports = React.createClass
   displayName: 'OwnedCardList'
@@ -65,7 +65,7 @@ module.exports = React.createClass
                 {if meta
                   <nav className="pagination">
                     {for page in [1..meta.page_count]
-                      <Link to={@props.linkTo} query={{page}} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.hash is "/#{@props.linkTo}"}>{page}</Link>}
+                      <Link to={@props.linkTo} query={{page}} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.search is ""}>{page}</Link>}
                   </nav>}
               </nav>
             </div>

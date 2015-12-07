@@ -1,5 +1,5 @@
 React = require 'react'
-{Navigation, Link, RouteHandler} = require 'react-router'
+{Navigation, Link, RouteHandler} = require '@edpaget/react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 TitleMixin = require '../../lib/title-mixin'
@@ -7,6 +7,7 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = require '../../api/client'
 counterpart = require 'counterpart'
 ChangeListener = require '../../components/change-listener'
+Router = require '@edpaget/react-router'
 
 DEFAULT_WORKFLOW_NAME = 'Untitled workflow'
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
@@ -58,6 +59,10 @@ EditProjectPage = React.createClass
           <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
             Collaborators
           </Link></li>
+          {if 'tutorial' in (@props.project.experimental_tools ? [])
+            <li><Link to="edit-project-tutorial" params={linkParams} className="nav-list-item" title="Create a pop-up tutorial for your project’s classification interface">
+              Tutorial
+            </Link></li>}
           <li><Link to="edit-project-media" params={linkParams} className="nav-list-item" title="Add any images you’d like to use in this project’s introduction, science case, results, FAQ, or education content pages.">
             Media
           </Link></li>
@@ -125,9 +130,23 @@ EditProjectPage = React.createClass
               </ul>
             }</PromiseRenderer>
           </li>
-        </ul>
-        <br />
 
+          <li>
+            <br />
+            <div className="nav-list-header">Need some help?</div>
+            <ul className="nav-list">
+              <li>
+                <Link className="nav-list-item" to="lab-how-to">Read a tutorial</Link>
+              </li>
+              <li>
+                <a href="https://www.zooniverse.org/talk/18/" className="nav-list-item">Ask for help on talk</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <br />
+        <div className="nav-list-header">Other actions</div>
         <small><button type="button" className="minor-button" disabled={@state.deletionInProgress} onClick={@deleteProject}>Delete this project <LoadingIndicator off={not @state.deletionInProgress} /></button></small>{' '}
         {if @state.deletionError?
           <div className="form-help error">{@state.deletionError.message}</div>}
@@ -216,8 +235,16 @@ EditProjectPage = React.createClass
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
-  mixins: [TitleMixin]
+  mixins: [TitleMixin, Router.Navigation]
   title: 'Edit'
+
+  componentDidMount: ->
+    unless @props.user
+      @transitionTo "lab"
+
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.user
+      @transitionTo "lab"
 
   getDefaultProps: ->
     params:

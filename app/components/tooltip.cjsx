@@ -1,5 +1,5 @@
 React = require 'react'
-Tether = require 'tether/tether'
+Tether = require 'tether/tether' if window.document
 
 DEFAULT_ATTACHMENT_POINT = 'middle center'
 
@@ -25,21 +25,22 @@ module.exports = React.createClass
   componentDidMount: ->
     @renderTooltip()
 
-    @setState
-      tether: new Tether @getTetherOptions()
-      =>
-        @state.tether.position()
-        @toFront()
+    if Tether?
+      @setState
+        tether: new Tether @getTetherOptions()
+        =>
+          @state.tether.position()
+          @toFront()
 
   componentWillUnmount: ->
     React.unmountComponentAtNode @state.container
     @state.container.parentNode.removeChild @state.container
-    @state.tether.destroy()
+    @state.tether?.destroy()
 
   componentDidUpdate: ->
     @renderTooltip()
-    @state.tether.setOptions @getTetherOptions()
-    @state.tether.position()
+    @state.tether?.setOptions @getTetherOptions()
+    @state.tether?.position()
 
   getTetherOptions: ->
     element: @state.container

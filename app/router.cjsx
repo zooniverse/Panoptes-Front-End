@@ -1,7 +1,7 @@
-Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require 'react-router'
+Router = {RouteHandler, DefaultRoute, Route, NotFoundRoute} = require '@edpaget/react-router'
 React = require 'react'
 
-routes =
+module.exports =
 <Route handler={require './partials/app'}>
   <DefaultRoute name="home" handler={require './pages/home'} />
 
@@ -39,12 +39,12 @@ routes =
   </Route>
 
   <Route name="projects" path="projects/?" handler={require './pages/projects'} />
-    <Route name="disciplines" path="projects/disciplines?" handler={require './pages/projects-disciplines'} />
   <Route path="projects/:owner/:name/?" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
     <Route name="project-research" path="research/?" handler={require './pages/project/research'} />
     <Route name="project-results" path="results/?" handler={require './pages/project/results'} />
     <Route name="project-classify" path="classify/?" handler={require './pages/project/classify'} />
+    <Route name="project-notifications" path="notifications/?" handler={require './pages/notifications'} />
     <Route name="project-talk" path="talk/?" handler={require './pages/project/talk'}>
       <DefaultRoute name="project-talk-home" handler={require './talk/init'} />
       <Route name="project-talk-recents" path="recents/?" handler={require './talk/recents'} />
@@ -53,12 +53,16 @@ routes =
       <Route name="project-talk-moderations" path="moderations/?" handler={require './talk/moderations'}/>
       <Route name="project-talk-subject" path="subjects/:id/?" handler={require './subjects'}/>
       <Route name="project-talk-board-recents" path="recents/:board/?" handler={require './talk/recents'} />
+      <Route name="project-talk-tags" path="tags/:tag/?" handler={require './talk/tags'} />
       <Route name="project-talk-board" path=":board/?" handler={require './talk/board'} />
       <Route name="project-talk-discussion" path=":board/:discussion/?" handler={require './talk/discussion'} />
     </Route>
     <Route name="project-faq" path="faq/?" handler={require './pages/project/faq'} />
     <Route name="project-education" path="education/?" handler={require './pages/project/education'} />
   </Route>
+
+  <Route name="notifications" path="notifications/?" handler={require './pages/notifications'} />
+  <Route name="section-notifications" path=":section/notifications/?" handler={require './pages/notifications'} />
 
   <Route name="talk" path="talk/?" handler={require './talk'}>
     <DefaultRoute name="talk-home" handler={require './talk/init'} />
@@ -99,9 +103,16 @@ routes =
     <Route name="edit-project-visibility" path="visibility/?" handler={require './pages/lab/visibility'} />
     <Route name="edit-project-talk" path="talk/?" handler={require './pages/lab/talk'} />
     <Route name="get-data-exports" path="data-exports" handler={require './pages/lab/data-dumps'} />
+    <Route name="edit-project-tutorial" path="tutorial" handler={require './pages/lab/tutorial'} />
   </Route>
   <Route name="lab-policies" path="lab-policies/?" handler={require './pages/lab/lab-policies'} />
   <Route name="lab-how-to" path="lab-how-to/?" handler={require './pages/lab/how-to-page'} />
+
+  <Route name="admin" path="admin/?" handler={require './pages/admin'}>
+    <DefaultRoute name="admin-user-search" handler={require './pages/admin/user-settings'} />
+    <Route name="admin-project-list" path="project_status/?" handler={require './pages/admin/project-status-list'} />
+    <Route name="admin-project-status" path="project_status/:owner/:name/?" handler={require './pages/admin/project-status'} />
+  </Route>
 
   <Route path="todo/?*" handler={React.createClass render: -> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <NotFoundRoute handler={require './pages/not-found'} />
@@ -111,10 +122,3 @@ routes =
   <Route path="dev/aggregate" handler={require './components/aggregate-view'} />
   <Route path="dev/ribbon" handler={require './components/classifications-ribbon'} />
 </Route>
-
-location = if process.env.NON_ROOT == "true"
-    null
-  else
-    Router.HistoryLocation
-
-module.exports = Router.create { location, routes }

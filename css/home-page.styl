@@ -8,14 +8,12 @@
     color: #f9f9f9
     display: flex
     flex-direction: column
-    height: 95vh
+    min-height: 800px
     justify-content: center
     padding: 0 3vw
     text-align: center
 
     @media screen and (max-width: 400px)
-      height: 100% // So content isn't cut off on small mobile screens
-
       svg
         margin-top: 15vh
 
@@ -43,7 +41,7 @@
       &:hover
         background: lighten(COBOLT_BLUE, 20%)
 
-  .featured-projects
+  .featured-projects, .recent-projects
     align-items: center
     display: flex
     flex-direction: column
@@ -54,7 +52,7 @@
     h5
       font-weight: 300
 
-    .featured-projects-list
+    .featured-projects-list, .recent-projects-list
       column-width: 22em
       column-gap: 2.5em
       display: flex
@@ -62,6 +60,13 @@
       margin: 4.6em 3vw
       max-width: 960px
       width: 100%
+      justify-content: center
+
+    .recent-projects-list
+      justify-content: center
+
+  .recent-projects
+    padding: 2.5em 0
 
   .about-zooniverse
     align-items: center
@@ -103,8 +108,3 @@
 
             p
               color: #5a5a5a
-
-
-
-
-

@@ -1,7 +1,7 @@
 React = {findDOMNode} = require 'react'
 talkClient = require '../api/talk'
 UserSearch = require '../components/user-search'
-{Navigation} = require 'react-router'
+{Navigation} = require '@edpaget/react-router'
 {getErrors} = require './lib/validations'
 subjectValidations = require './lib/message-subject-validations'
 messageValidations = require './lib/message-validations'

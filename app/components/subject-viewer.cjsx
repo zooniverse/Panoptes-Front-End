@@ -41,6 +41,7 @@ module.exports = React.createClass
     onLoad: NOOP
     defaultStyle: true
     project: null
+    linkToFullImage: false
 
   getInitialState: ->
     loading: true
@@ -103,6 +104,10 @@ module.exports = React.createClass
               <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />
               <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
             </span>}
+          {if type is 'image' and @props.linkToFullImage
+            <a href={src} title="Subject Image" target="_blank">
+              <button type="button"><i className="fa fa-photo" /></button>
+            </a>}
         </span>
       </div>
     </div>

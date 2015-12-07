@@ -1,0 +1,59 @@
+.modal-form.tutorial-dialog
+  border-radius: 8px
+  max-width: 400px
+  padding: 0 0 1.5em
+
+.tutorial-steps
+  display: flex
+  flex-direction: column
+  max-height: 95vh
+  max-width: 95vw
+  width: 50ch
+
+  > .step-through-content
+    // TODO: I'd rather the header media not scroll.
+    overflow-y: auto !important // Override swipe library setting.
+
+  > .step-through-controls
+    text-align: center
+
+.media-card.tutorial-step
+  > .media-card-content
+    @extends .content-container
+
+.media-card-media
+  display: block
+  max-width: 100%
+
+.step-through-direction
+  @extends $reset-button
+  vertical-align: middle
+
+.step-through-pips
+  margin: 0 0.4em
+
+.step-through-pip
+  cursor: pointer
+  padding: 0.2em 0.4em
+
+.step-through-pip-input
+  cursor: pointer
+  position: absolute
+  opacity: 0
+
+.step-through-pip-number
+  border: 0.2em solid
+  border-radius: 50%
+  cursor: pointer
+  display: inline-block
+  height: 0.5em
+  overflow: hidden
+  text-indent: 2em
+  vertical-align: middle
+  width: 0.5em
+
+  :focus + &
+    box-shadow: 0 0 1px 1px MAIN_HIGHLIGHT
+
+  :checked + &
+    background: currentColor

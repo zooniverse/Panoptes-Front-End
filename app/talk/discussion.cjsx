@@ -3,14 +3,15 @@ Comment = require './comment'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
-Router = require 'react-router'
+Router = require '@edpaget/react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
+SingleSubmitButton = require '../components/single-submit-button'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
 {timestamp} = require './lib/time'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 merge = require 'lodash.merge'
 Avatar = require '../partials/avatar'
 DisplayRoles = require './lib/display-roles'
@@ -19,6 +20,10 @@ SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
 merge = require 'lodash.merge'
 FollowDiscussion = require './follow-discussion'
+PopularTags = require './popular-tags'
+ActiveUsers = require './active-users'
+ProjectLinker = require './lib/project-linker'
+SidebarNotifications = require './lib/sidebar-notifications'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -32,7 +37,8 @@ module?.exports = React.createClass
     commentsMeta: {}
     commentValidationErrors: []
     editingTitle: false
-    reply: ''
+    reply: null
+    moderationOpen: false
 
   getDefaultProps: ->
     query: page: 1
@@ -60,8 +66,7 @@ module?.exports = React.createClass
 
         if page isnt @props.query.page
           @props.query.page = page
-          [path, _] = @getPath().split('?')
-          @replaceWith path, @props.params, @props.query
+          @replaceWith @getPath(), @props.params, @props.query
 
       @setComments(@props.query.page ? 1)
 
@@ -114,20 +119,25 @@ module?.exports = React.createClass
       talkClient.type('comments').get(id: commentId).delete()
         .then (deleted) => @setComments(@props.query.page)
 
-  onSubmitComment: (e, textContent, subject) ->
+  onSubmitComment: (e, textContent, subject, reply) ->
     {discussion} = @props.params
     user_id = @props.user.id
     discussion_id = +discussion
     body = textContent
     focus_id = +subject?.id ? null
+    reply_id = reply.comment.id if reply
     focus_type = 'Subject' if !!focus_id
-    comment = merge {}, {user_id, discussion_id, body}, ({focus_id, focus_type} if !!focus_id)
+
+    comment = merge {},
+      {user_id, discussion_id, body},
+      {focus_id, focus_type} if !!focus_id,
+      {reply_id} if reply
 
     talkClient.type('comments').create(comment).save()
       .then (comment) =>
         @setCommentsMeta().then =>
           @setComments(@state.commentsMeta?.page_count)
-          @setState {reply: ''}
+          @setState {reply: null}
 
   onLikeComment: (commentId) ->
     talkClient.type('comments').get(commentId)
@@ -139,17 +149,11 @@ module?.exports = React.createClass
           .then (voted) =>
             @setComments(@props.query.page)
 
-  onClickReply: (user, comment) ->
-    # TODO: provide link to user / comment
+  onClickReply: (comment) ->
     if (not @props.user)
       @promptToSignIn()
     else
-      quotedComment = comment.body.split("\n")
-        .map (line) -> "> #{line}"
-        .join("\n")
-
-      reply = "> In reply to #{user.display_name}'s comment: \n#{quotedComment}\n\n"
-      @setState {reply}, => @setState {reply: ''}
+      @setState reply: comment: comment
 
     findDOMNode(@).scrollIntoView(false)
 
@@ -158,9 +162,11 @@ module?.exports = React.createClass
       {...@props}
       project={@props.project}
       key={data.id}
+      index={i}
       data={data}
       active={+data.id is +@props.query?.comment}
       user={@props.user}
+      locked={@state.discussion?.locked}
       project={@props.project}
       onClickReply={@onClickReply}
       onLikeComment={@onLikeComment}
@@ -168,7 +174,8 @@ module?.exports = React.createClass
       onDeleteComment={@onDeleteComment}/>
 
   onClickDeleteDiscussion: ->
-    if window.confirm("Are you sure that you want to delete this discussions? All of the comments and discussions will be lost forever.")
+    deletePhrase = 'delete'
+    if window.prompt("Are you sure that you want to delete this discussion? All of the comments and discussions will be lost forever. Please type \"#{deletePhrase}\" in the box below to confirm:") is deletePhrase
       @discussionsRequest().delete()
         .then (deleted) =>
           @setComments(@props.query.page)
@@ -193,7 +200,7 @@ module?.exports = React.createClass
 
     @discussionsRequest().update({title, sticky, locked, board_id}).save()
       .then (discussion) =>
-        if discussion[0].board_id isnt board_id
+        if discussion[0].board_id isnt @props.params.board
           {owner, name} = @props.params
           discussionRoute = if (owner and name) then 'project-talk-discussion' else 'talk-discussion'
           @transitionTo discussionRoute, merge(@props.params, board: board_id), @props.query
@@ -238,40 +245,49 @@ module?.exports = React.createClass
         </h1>
         }
 
-      {if discussion && @props.user?
-        <Moderation section={discussion.section} user={@props.user}>
-          <div>
-            <h2>Moderator Zone:</h2>
-            {if discussion?.title
-              <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
-                <h3>Edit Title:</h3>
-                <input name="title" type="text" defaultValue={discussion?.title}/>
-                <label className="toggle">Sticky:
-                  <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
-                </label>
-                <label className="toggle">Locked:
-                  <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
-                </label>
-
-                <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
-                  <div>
-                    <p><strong>Board:</strong></p>
-                    <select onChange={@onChangeSelect}>
-                      {boards.map (board, i) =>
-                        <option key={board.id} value={board.id} selected={board.id is discussion.board_id}>{board.title}</option>
-                        }
-                    </select>
-                  </div>
-                }</PromiseRenderer>
-
-                <button type="submit">Update</button>
-              </form>}
-
-            <button onClick={@onClickDeleteDiscussion}>
-              Delete this discussion <i className="fa fa-close" />
+      {if discussion and @props.user?
+        <div className="talk-moderation">
+          <Moderation user={@props.user} section={@props.section}>
+            <button onClick={=> @setState moderationOpen: !@state.moderationOpen}>
+              <i className="fa fa-#{if @state.moderationOpen then 'close' else 'warning'}" /> Moderator Controls
             </button>
-          </div>
-        </Moderation>}
+          </Moderation>
+
+          {if @state.moderationOpen
+            <div className="talk-moderation-children talk-module">
+              <h2>Moderator Zone:</h2>
+              {if discussion?.title
+                <form className="talk-edit-discussion-form" onSubmit={@onEditSubmit}>
+                  <h3>Edit Title:</h3>
+                  <input name="title" type="text" defaultValue={discussion?.title}/>
+                  <label className="toggle">Sticky:
+                    <input name="sticky" type="checkbox" defaultChecked={discussion?.sticky}/>
+                  </label>
+                  <label className="toggle">Locked:
+                    <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
+                  </label>
+
+                  <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
+                    <div>
+                      <p><strong>Board:</strong></p>
+                      <select defaultValue={discussion.board_id}>
+                        {boards.map (board, i) =>
+                          <option key={board.id} value={board.id}>{board.title}</option>
+                          }
+                      </select>
+                    </div>
+                  }</PromiseRenderer>
+
+                  <SingleSubmitButton type="submit" onClick={@onEditSubmit}>Update</SingleSubmitButton>
+                </form>}
+
+              <SingleSubmitButton onClick={@onClickDeleteDiscussion}>
+                Delete this discussion <i className="fa fa-close" />
+              </SingleSubmitButton>
+            </div>
+          }
+        </div>
+      }
 
       {if discussion?.locked
         @lockedMessage()
@@ -283,8 +299,32 @@ module?.exports = React.createClass
 
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
 
-      <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
-        {@state.comments.map(@comment)}
+      <div className="talk-list-content">
+        <section>
+          <div className="talk-discussion-comments #{if discussion?.locked then 'locked' else ''}">
+            {@state.comments.map(@comment)}
+          </div>
+        </section>
+
+        <div className="talk-sidebar">
+          <SidebarNotifications {...@props} params={@props.params} />
+
+          <section>
+            <PopularTags
+              header={<h3>Popular Tags:</h3>}
+              section={@props.section}
+              params={@props.params} />
+          </section>
+
+          <section>
+            <ActiveUsers section={@props.section} />
+          </section>
+
+          <section>
+            <h3>Projects:</h3>
+            <p><ProjectLinker user={@props.user} /></p>
+          </section>
+        </div>
       </div>
 
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
@@ -311,6 +351,7 @@ module?.exports = React.createClass
             validationErrors={@state.commentValidationErrors}
             onSubmitComment={@onSubmitComment}
             reply={@state.reply}
+            onClickClearReply={=> @setState({reply: null})}
             header={null} />
         </section>
       else

@@ -1,15 +1,16 @@
 React = require 'react'
-AnchoredModalForm = require 'modal-form/anchored'
+StickyModalForm = require 'modal-form/sticky'
 ChangeListener = require '../../components/change-listener'
 
 STROKE_WIDTH = 1.5
 SELECTED_STROKE_WIDTH = 2.5
 
-NON_MODAL_STYLE =
-  bottom: null
-  height: 0
-  right: null
-  width: '100%' # `0` makes for too-skinny children.
+SEMI_MODAL_FORM_STYLE =
+  pointerEvents: 'all'
+
+SEMI_MODAL_UNDERLAY_STYLE =
+  pointerEvents: 'none'
+  backgroundColor: 'rgba(0, 0, 0, 0.3)'
 
 module.exports = React.createClass
   displayName: 'DrawingToolRoot'
@@ -51,19 +52,30 @@ module.exports = React.createClass
         {@props.children}
       </g>
 
-      {if toolProps.selected and toolProps.details? and toolProps.details.length isnt 0
+      {if toolProps.selected and not toolProps.mark._inProgress and toolProps.details? and toolProps.details.length isnt 0
         tasks = require '../tasks'
-        <AnchoredModalForm ref="detailsForm" underlayStyle={NON_MODAL_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
+
+        detailsAreComplete = toolProps.details.every (detailTask, i) =>
+          TaskComponent = tasks[detailTask.type]
+          if TaskComponent.isAnnotationComplete?
+            TaskComponent.isAnnotationComplete detailTask, toolProps.mark.details[i]
+          else
+            true
+
+        <StickyModalForm ref="detailsForm" style={SEMI_MODAL_FORM_STYLE} underlayStyle={SEMI_MODAL_UNDERLAY_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
           {for detailTask, i in toolProps.details
             detailTask._key ?= Math.random()
             TaskComponent = tasks[detailTask.type]
             <TaskComponent key={detailTask._key} task={detailTask} annotation={toolProps.mark.details[i]} onChange={toolProps.onChange} />}
           <hr />
           <p style={textAlign: 'center'}>
-            <button type="submit" className="standard-button">OK</button>
+            <button type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
           </p>
-        </AnchoredModalForm>}
+        </StickyModalForm>}
     </g>
+
+  componentDidUpdate: ->
+    this.refs.detailsForm?.reposition()
 
   handleDetailsFormClose: ->
     # TODO: Check if the details tasks are complete.

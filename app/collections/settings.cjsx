@@ -1,10 +1,12 @@
 React = require 'react'
-{Navigation} = require 'react-router'
+{Navigation} = require '@edpaget/react-router'
 DisplayNameSlugEditor = require '../partials/display-name-slug-editor'
 apiClient = require '../api/client'
 alert = require '../lib/alert'
 SetToggle = require '../lib/set-toggle'
+CollectionRole = require '../lib/collection-role'
 ChangeListener = require '../components/change-listener'
+PromiseRenderer = require '../components/promise-renderer'
 
 CollectionDeleteDialog = React.createClass
   displayName: 'CollectionDeleteDialog'
@@ -43,7 +45,7 @@ CollectionDeleteDialog = React.createClass
 
 module.exports = React.createClass
   displayName: "CollectionSettings"
-  mixins: [Navigation, SetToggle]
+  mixins: [Navigation, SetToggle, CollectionRole]
   setterProperty: 'collection'
 
   getDefaultProps: ->
@@ -63,47 +65,52 @@ module.exports = React.createClass
   redirect: ->
     @transitionTo 'collections'
 
-  checkUserRole: ->
-    if @props.user?
-      apiClient.type('collection_roles').get(collection_id: @props.collection.id, user_id: @props.user.id)
-        .catch ->
-          []
-        .then ([roles]) ->
-          roles?
-
   confirmDelete: ->
     alert (resolve) =>
       <div className="confirm-delete-dialog content-container">
         <CollectionDeleteDialog {...@props} onComplete={resolve} />
       </div>
 
+  publicCollection: ->
+    if @props.collection.private?
+      not @props.collection.private
+    else
+      @props.collection.private
+
   render: ->
-    <div className="collection-settings-tab">
-      <ChangeListener target={@props.collection}>{=>
-        <DisplayNameSlugEditor resource={@props.collection} resourceType="collection" />
-      }</ChangeListener>
+    <PromiseRenderer promise={@hasSettingsRole()}>{(hasSettingsRole) =>
+      if hasSettingsRole
+        <div className="collection-settings-tab">
+          <ChangeListener target={@props.collection}>{=>
+            <DisplayNameSlugEditor resource={@props.collection} resourceType="collection" />
+          }</ChangeListener>
 
-      <hr />
+          <hr />
 
-      <span className="form-label">Visibility</span>
-      <p>
-        <label style={whiteSpace: 'nowrap'}>
-          <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} onChange={@set.bind this, 'private', true} />
-          Private
-        </label>
-        &emsp;
-        <label style={whiteSpace: 'nowrap'}>
-          <input type="radio" name="private" value={false} data-json-value={true} checked={not @props.collection.private} onChange={@set.bind this, 'private', false} />
-          Public
-        </label>
-      </p>
+          <span className="form-label">Visibility</span>
+          <p>
+            <label style={whiteSpace: 'nowrap'}>
+              <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} onChange={@set.bind this, 'private', true} />
+              Private
+            </label>
+            &emsp;
+            <label style={whiteSpace: 'nowrap'}>
+              <input type="radio" name="private" value={false} data-json-value={true} checked={@publicCollection()} onChange={@set.bind this, 'private', false} />
+              Public
+            </label>
+          </p>
 
-      <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
+          <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
 
-      <hr />
+          <hr />
 
-      <div className="form-label">Delete this Collection</div>
-      <div className="delete-container">
-        <button className="error major-button" type="button" onClick={@confirmDelete}>Delete</button>
-      </div>
-    </div>
+          <div className="form-label">Delete this Collection</div>
+          <div className="delete-container">
+            <button className="error major-button" type="button" onClick={@confirmDelete}>Delete</button>
+          </div>
+        </div>
+      else
+        <div className="collection-settings-tab">
+          <p>Not allowed to edit this collection</p>
+        </div>
+    }</PromiseRenderer>

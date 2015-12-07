@@ -5,10 +5,12 @@ apiClient = require '../../api/client'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 TalkDataExportButton = require '../../talk/data-export-button'
+isAdmin = require '../../lib/is-admin'
 
 counterpart.registerTranslations 'en',
   projectDetails:
     classificationExport: "Request new classification export"
+    aggregationExport: "Experimental - Request new aggregation export"
     subjectExport: "Request new subject export"
     workflowExport: "Request new workflow export"
     workflowContentsExport: "Request new workflow contents export"
@@ -27,7 +29,8 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      <p className="form-help">Get your project's data exports</p>
+      <p className="form-label">Project data exports</p>
+      <p className="form-help">Please note that the Zooniverse will process at most 1 of each export within a 24 hour period and some exports may take a long time to process. We will email you when they are ready.</p>
       <div className="columns-container">
         <div>
           Project Data<br />
@@ -54,6 +57,14 @@ module.exports = React.createClass
               project={@props.project}
               buttonKey="projectDetails.workflowContentsExport"
               exportType="workflow_contents_export"  />
+          </p>
+           <p>
+            <DataExportButton
+              project={@props.project}
+              buttonKey="projectDetails.aggregationExport"
+              contentType="application/x-gzip"
+              exportType="aggregations_export"
+              newFeature=true />
           </p>
           <hr />
 

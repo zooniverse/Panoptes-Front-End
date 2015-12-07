@@ -19,6 +19,9 @@ COPY_GREY_LIGHT = #afaeae
   box-sizing: border-box
   color: COPY
 
+  img
+    max-width: 100%
+
 .talk-text-input // shared styles among talk text inputs
   border: none
 
@@ -27,10 +30,9 @@ COPY_GREY_LIGHT = #afaeae
 
 .talk-page-header
   font-weight: 100
-  text-align: center
 
 .talk-form
-  input[type='text'], textarea
+  input[type='text'], input[type='search'], textarea
     border: none
     font-size: 1.0em
     font-family: inherit
@@ -42,7 +44,7 @@ COPY_GREY_LIGHT = #afaeae
   overflow: auto
   margin-bottom: 10px
 
-  input[type='text']
+  input[type='text'], input[type='search']
     float: left
     width: 80%
     border: 2px solid TALK_BACKGROUND
@@ -115,31 +117,47 @@ COPY_GREY_LIGHT = #afaeae
       border: 0
       padding: 0
 
+  .truncated
+    overflow: hidden
+    text-overflow: ellipsis
+
+  .project-role
+    background: transparent
+
   .polaroid-image
     max-width: 640px
 
   .talk-list-content
     display: flex
     section
+      min-width: 1px
       width: 100%
     @media screen and (max-width: TALK_BREAKPOINT)
       display: block
 
+  .talk-comment-context-icon
+    float: right
+    padding: TALK_PADDING
+
   .talk-sidebar
     @extend .talk-module
+    flex-shrink: 0
+    min-width: 1px
+    max-width: 300px
     width: 300px
     margin: 10px 0 10px 10px
-    overflow: hidden
     white-space: pre-wrap
 
     @media screen and (max-width: TALK_BREAKPOINT)
       margin: 0
       width: 100%
+      max-width: 100%
 
     section
       margin: 5px 0
 
     .sidebar-link
+      display: block
       text-decoration: none
       &:hover
         text-decoration: underline
@@ -160,10 +178,6 @@ COPY_GREY_LIGHT = #afaeae
           overflow: hidden
           white-space: nowrap
           text-overflow: ellipsis
-
-      .paginator
-        .paginator-first, .paginator-page-selector, .paginator-last
-          display: none
 
   .talk-moderation
     margin-bottom: 10px
@@ -220,6 +234,19 @@ COPY_GREY_LIGHT = #afaeae
               background: MAIN_HIGHLIGHT
               color: white
 
+      .talk-reorder-boards
+        padding: 30px 0 30px 40px
+        margin: 0
+
+        li, .bars
+          cursor: default
+
+        li
+          list-style: none outside none
+
+          .bars
+            margin-right: 5px
+
   .talk-board
     .talk-page-header
       text-align: left
@@ -241,18 +268,23 @@ COPY_GREY_LIGHT = #afaeae
     @extend .talk-module
     overflow: auto
     position: relative
+    color: COPY_GREY_MID
+    &:hover
+      background: darken(TALK_BACKGROUND, 2%)
 
     &.private
       background: white
+      &:hover
+        background: darken(white, 2%)
 
     h1 a
       color: COPY
       text-decoration: none
       &:hover
         color: MAIN_HIGHLIGHT
+        text-decoration: underline
     p
       margin: 0 0 5px 0
-      color: COPY_GREY_MID
 
     .board-locked
       font-size: 12px
@@ -278,8 +310,23 @@ COPY_GREY_LIGHT = #afaeae
       width: 1em
       text-align: center
 
+  .hidden-markdown
+    display: none
+
   .talk-discussion-link
     color: COPY_GREY_LIGHT
+
+    word-wrap: break-word
+    overflow: hidden
+    text-overflow: ellipsis
+
+    .latest-comment-preview-link
+      text-decoration: none
+      color: COPY_GREY_LIGHT
+      font-style: normal
+
+      &:hover
+        text-decoration: underline
 
     .avatar
       height: 2em
@@ -293,13 +340,21 @@ COPY_GREY_LIGHT = #afaeae
       &:hover
         color: COBOLT_BLUE
 
-    a:last-child
+    .latest-comment-time
       color: COPY
       font-style: italic
       text-decoration: underline
 
       &:hover
         color: COBOLT_BLUE
+
+  .talk-latest-comment-link
+    .talk-display-roles
+      display: inline
+
+      p
+        display: inline
+        margin-right: 5px
 
   .talk-discussion-preview
     @extend .talk-module
@@ -340,9 +395,6 @@ COPY_GREY_LIGHT = #afaeae
       margin-top: 0.3em
 
   .talk-discussion
-    max-width: 960px
-    margin: 0 auto
-
     .talk-comment-box
       width: 80%
 
@@ -352,10 +404,6 @@ COPY_GREY_LIGHT = #afaeae
     &-locked
       color: FAILURE
 
-    &-comments
-      &.locked
-        pointer-events: none
-        opacity: 0.6
     h1
       input
         margin: 0 auto
@@ -381,11 +429,25 @@ COPY_GREY_LIGHT = #afaeae
       .talk-comment-body
         border-color: MAIN_HIGHLIGHT
 
+    &.deleted
+      opacity: 0.5
+
+      .talk-comment-author img
+        height: 25px
+
+      .polaroid-image, .talk-comment-links, .talk-comment-children
+        display: none
+
     .markdown
       > blockquote
         opacity: 0.5
+
+      > pre
+        white-space: pre-line
+
       img
         max-width: 100%
+
     .subject-container
       max-width: 100%
       img
@@ -420,10 +482,31 @@ COPY_GREY_LIGHT = #afaeae
     .project-role
       font-size: 0.5em
 
+  .talk-comment-reply
+    padding: TALK_PADDING
+    background: TALK_BORDER
+    border-radius: TALK_BORDER_RADIUS TALK_BORDER_RADIUS 0 0
+    margin: (-1 * TALK_PADDING) (-1 * TALK_PADDING) 0 (-1 * TALK_PADDING)
+    > button
+      border-color: darken(TALK_BORDER, 5%)
+
+    .clear-replies
+      float: right
+
+    .comment-reply-line
+      .markdown
+        transition: background 0.25s
+
+      &.highlighted
+        .markdown
+          background: rgba(0,0,0, 0.09)
+
   .talk-comment-body
+    @extend .talk-module
     width: 80%
     float: left
-    @extend .talk-module
+    position: relative
+    overflow: auto
 
     .talk-comment-date
       margin: 0
@@ -436,6 +519,9 @@ COPY_GREY_LIGHT = #afaeae
     .talk-comment-links
       button:not(:last-child)
         @extend .talk-left-buttons
+
+      &.locked
+        display: none
 
       .talk-comment-like-button i.upvoted
         color: MAIN_HIGHLIGHT
@@ -465,6 +551,14 @@ COPY_GREY_LIGHT = #afaeae
 
       .talk-comment-links
         display: none
+
+    .talk-subject-default-toggle
+      display: block
+      margin-bottom: 10px
+
+      label, input
+        font-size: 0.5em
+        cursor: pointer
 
   .talk-comment-feedback
     color: green
@@ -545,16 +639,20 @@ COPY_GREY_LIGHT = #afaeae
           bottom: 0
 
           button
-            opacity: 0
             position: absolute
             transform: translate(-50%, -50%)
             transition: opacity .25s
             top: 50%
-
-          &:hover
-            background: rgba(255,255,255,0.5)
-            button
+            opacity: 0.8
+            &:hover
               opacity: 1
+      form
+        input[type='search']
+          border-color: white
+        button[type='submit']
+          border-color: transparent
+          background: lighten(MAIN_HIGHLIGHT, 5%)
+          color: white
 
   .submit-error
     color: FAILURE
@@ -570,11 +668,94 @@ COPY_GREY_LIGHT = #afaeae
     margin: TALK_MARGIN
     padding: TALK_PADDING
 
+    .subject-container, .subject-viewer
+      max-width: 640px
+
+      img
+        max-width: 100%
+
+    .tag-list
+      padding: 0 TALK_PADDING
+
+      li
+        list-style: none outside none
+        display: inline-block
+        margin: 0 TALK_PADDING
+
   .private-message-form input
     margin-left: 5px
     width: 50%
     border: none
     font-size: 1em
 
+  .talk-footnote
+    margin: 50px auto
+    text-align: center
+    max-width: 600px
+
 .talk-comment-help
   margin: 2em
+  table
+    border-collapse: collapse
+  td
+    border: 1px solid black
+    padding: 10px
+
+.talk.notifications
+  .centering
+    text-align: center
+
+  .inline-block
+    display: inline-block
+
+  .talk-module
+    background-color: TALK_BACKGROUND
+    opacity: 0.97
+
+  .title
+    color: COPY
+    text-transform: capitalize
+
+  .notification.unread .talk-module
+    border-color: MAIN_HIGHLIGHT
+
+  .notification .talk-module
+    transition: border-color 1s ease
+
+  .paginator
+    opacity: 0.97
+
+    &.older .paginator-prev
+      display: none
+
+    &.newer
+      .paginator-prev
+        margin-right: 10px
+
+      .paginator-next
+        display: none
+
+  .title
+    margin-top: 0
+
+  .bottom
+    border-top: 1px solid LIGHT_GREY
+    padding: 5px
+
+    .time-ago
+      @extend .talk .talk-discussion-link .latest-comment-time
+      font-size: 0.9em
+
+  .talk-discussion-preview
+    border-bottom: none
+    margin: auto
+
+    h1, .preview-stats, .latest-comment-preview-link
+      display: none
+
+  .message-link
+    display: block
+    text-decoration: none
+
+    &:hover
+      text-decoration: underline

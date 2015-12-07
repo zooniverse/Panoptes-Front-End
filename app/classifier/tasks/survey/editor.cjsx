@@ -2,7 +2,7 @@ React = require 'react'
 FileButton = require '../../../components/file-button'
 alert = require '../../../lib/alert'
 Details = require '../../../components/details'
-DropdownForm = require '../../../components/dropdown-form'
+TriggeredModalForm = require 'modal-form/triggered'
 surveyEditorHelp = require './editor-help'
 AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
@@ -33,43 +33,43 @@ module.exports = React.createClass
       <p><span className="form-label">Import task data</span></p>
       <div className="columns-container" style={marginBottom: '0.2em'}>
         <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addChoice}>Add choices CSV</FileButton>
-        <DropdownForm label={
+        <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
           </span>
         }>
           {surveyEditorHelp.choices}
-        </DropdownForm>
+        </TriggeredModalForm>
       </div>
       <div className="columns-container" style={marginBottom: '0.2em'}>
         <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addCharacteristics}>Add characteristics CSV</FileButton>
-        <DropdownForm label={
+        <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
           </span>
         }>
           {surveyEditorHelp.characteristics}
-        </DropdownForm>
+        </TriggeredModalForm>
       </div>
       <div className="columns-container" style={marginBottom: '0.2em'}>
         <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addConfusion}>Add confused pairs CSV</FileButton>
-        <DropdownForm label={
+        <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
           </span>
         }>
           {surveyEditorHelp.confusions}
-        </DropdownForm>
+        </TriggeredModalForm>
       </div>
       <div className="columns-container" style={marginBottom: '0.2em'}>
         <FileButton className="major-button column" multiple onSelect={@handleFiles.bind this, @addQuestion}>Add questions CSV</FileButton>
-        <DropdownForm label={
+        <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
           </span>
         }>
           {surveyEditorHelp.questions}
-        </DropdownForm>
+        </TriggeredModalForm>
       </div>
 
       <hr />
@@ -212,7 +212,7 @@ module.exports = React.createClass
       reader.readAsText file
 
   parseFileContent: (content) ->
-    {errors, data} = Papa.parse content.trim(), header: true
+    {errors, data} = Papa?.parse content.trim(), header: true
 
     cleanRows = for row in data
       clean = {}

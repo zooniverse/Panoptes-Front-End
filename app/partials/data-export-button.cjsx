@@ -7,6 +7,10 @@ Translate = require 'react-translate-component'
 module.exports = React.createClass
   displayName: 'DataExportButton'
 
+  getDefaultProps: ->
+    contentType: 'text/csv'
+    newFeature: false
+
   getInitialState: ->
     exportRequested: false
     exportError: null
@@ -16,25 +20,37 @@ module.exports = React.createClass
 
   requestDataExport: ->
     @setState exportError: null
-    apiClient.post @props.project._getURL(@props.exportType), media: content_type: 'text/csv'
+    apiClient.post @props.project._getURL(@props.exportType), media: content_type: @props.contentType
       .then =>
         @_exportsGet = null
         @setState exportRequested: true
       .catch (error) =>
         @setState exportError: error
 
+  recentAndReady: (exported) ->
+    exported? and (exported.metadata.state is 'ready' or not exported.metadata.state?)
+
+  pending: (exported) ->
+    exported?
+
   render: ->
     <div>
+      { if @props.newFeature
+        <i className="fa fa-cog fa-lg fa-fw"></i> }
       <button type="button" disabled={@state.exportRequested} onClick={@requestDataExport}>
         <Translate content={@props.buttonKey} />
       </button> {' '}
       <small className="form-help">
         CSV format.{' '}
         <PromiseRenderer promise={@exportGet()}>{([mostRecent]) =>
-          if mostRecent?
+          if @recentAndReady(mostRecent)
             <span>
               Most recent data available requested{' '}
               <a href={mostRecent.src}>{moment(mostRecent.updated_at).fromNow()}</a>.
+            </span>
+          else if @pending(mostRecent)
+            <span>
+              Processing your request.
             </span>
           else
             <span>Never requested.</span>

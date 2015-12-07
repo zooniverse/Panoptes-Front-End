@@ -8,13 +8,15 @@ CommentReportForm = require './comment-report-form'
 CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 PromiseRenderer = require '../components/promise-renderer'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 {timestamp} = require './lib/time'
 apiClient = require '../api/client'
 talkClient = require '../api/talk'
 Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
+SingleSubmitButton = require '../components/single-submit-button'
 DisplayRoles = require './lib/display-roles'
+CommentContextIcon = require './lib/comment-context-icon'
 merge = require 'lodash.merge'
 {Markdown} = require 'markdownz'
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
@@ -31,21 +33,26 @@ module?.exports = React.createClass
     onClickReply: React.PropTypes.func # passed (user, comment) on click
     active: React.PropTypes.bool  # optional active switch: scroll window to comment and apply styling
     user: React.PropTypes.object  # Current user
+    index: React.PropTypes.number # The index of the comment in a discussion
+    locked: React.PropTypes.bool  # disable action buttons
+    linked: React.PropTypes.bool
 
   getDefaultProps: ->
     active: false
+    locked: false
+    linked: false
 
   getInitialState: ->
     editing: false
     commentValidationErrors: []
+    replies: []
 
   componentDidMount: ->
     if @props.active
       React.findDOMNode(@).scrollIntoView()
 
   onClickReply: (e) ->
-    apiClient.type('users').get(id: @props.data.user_id).index(0).then (commentOwner) =>
-      @props.onClickReply(commentOwner, @props.data)
+    @props.onClickReply(@props.data)
 
   onClickLink: (e) ->
     @toggleComponent('link')
@@ -54,6 +61,7 @@ module?.exports = React.createClass
     @toggleComponent('report')
 
   onClickEdit: (e) ->
+    React.findDOMNode(@).scrollIntoView()
     @setState editing: true
     @removeFeedback()
 
@@ -91,11 +99,55 @@ module?.exports = React.createClass
     else
       <span>Subject {subject.id}</span>
 
+  flashHighlightedComment: (commentId) ->
+    reply = React.findDOMNode(@refs["comment-reply-#{commentId}"])
+    reply.classList.add('highlighted')
+    window.setTimeout((=> reply.classList.remove('highlighted')), 500)
+
+  onClickRenderReplies: (e, comment) ->
+    if @state.replies.map((c) -> c.id).indexOf(comment.reply_id) isnt -1
+      @flashHighlightedComment(comment.reply_id)
+    else
+      talkClient.type('comments').get(comment.reply_id)
+        .then (comment) =>
+          @setState replies: [comment].concat(@state.replies)
+
+  replyLine: (comment) ->
+    <div key={comment.id} className="comment-reply-line" ref="comment-reply-#{comment.id}">
+      <p>
+        <Link to="user-profile" params={name: comment.user_login}>{comment.user_display_name}</Link>
+        {if comment.reply_id
+          <span>
+            {' '}in reply to <Link to="user-profile" params={name: comment.reply_user_login}>{comment.reply_user_display_name}</Link>'s{' '}
+            <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, comment)}>
+              comment
+            </button>
+          </span>
+          }
+      </p>
+      <Markdown project={@props.project} content={comment.body} />
+    </div>
+
+  # Render the focus if the comment has a focus AND
+  #   - it's not in a discussion (recents) OR
+  #   - it's a focused discussion and this is the first comment OR
+  #   - it's not a focused discussion OR
+  #   - it's a focused discussion and this comment's focus is different
+  shouldShowFocus: ->
+    return false unless @props.data.focus_id
+
+    notInDiscussion = not @props.index
+    isFirstSubjectComment = @props.index is 0 and @props.data.discussion_focus_id
+    isDifferentFocus = @props.data.focus_id isnt @props.data.discussion_focus_id
+
+    notInDiscussion or isFirstSubjectComment or isDifferentFocus
+
   render: ->
     feedback = @renderFeedback()
     activeClass = if @props.active then 'active' else ''
+    isDeleted = if @props.data.is_deleted then 'deleted' else ''
 
-    <div className="talk-comment #{activeClass}">
+    <div className="talk-comment #{activeClass} #{isDeleted}">
       <div className="talk-comment-author">
         <PromiseRenderer promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
           <Avatar user={commentOwner} />
@@ -112,6 +164,22 @@ module?.exports = React.createClass
       </div>
 
       <div className="talk-comment-body">
+        <CommentContextIcon comment={@props.data}></CommentContextIcon>
+        {if @props.data.reply_id
+          <div className="talk-comment-reply">
+            {if @state.replies.length
+              <div>
+                <button type="button" className="clear-replies" onClick={=> @setState(replies: [])}><i className="fa fa-close" /> Clear Replies</button>
+                <div>{@state.replies.map(@replyLine)}</div>
+              </div>
+              }
+
+            In reply to <Link to="user-profile" params={name: @props.data.reply_user_login}>{@props.data.reply_user_display_name}</Link>'s{' '}
+
+            <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, @props.data)}>comment</button>
+          </div>
+          }
+
         {feedback}
 
         {if not @state.editing
@@ -120,7 +188,7 @@ module?.exports = React.createClass
               <div className="talk-comment-title">{@props.title}</div>}
             <p className="talk-comment-date">{timestamp(@props.data.created_at)}</p>
 
-            {if @props.data.focus_id
+            {if @shouldShowFocus()
               <PromiseRenderer
                 promise={
                   apiClient.type('subjects').get(@props.data.focus_id)
@@ -128,7 +196,11 @@ module?.exports = React.createClass
                 then={(subject) =>
                   <div className="polaroid-image">
                     {@commentSubjectTitle(@props.data, subject)}
-                    <SubjectViewer subject={subject} user={@props.user} project={@props.project}/>
+                    <SubjectViewer
+                      subject={subject}
+                      user={@props.user}
+                      project={@props.project}
+                      linkToFullImage={true}/>
                   </div>
                 }
                 catch={null}
@@ -136,14 +208,23 @@ module?.exports = React.createClass
 
             <Markdown content={@props.data.body} project={@props.project} header={null}/>
 
-            <div className="talk-comment-links">
-              <button className="talk-comment-like-button" onClick={@onClickLike}>
+            {if @props.linked
+              <div style={textAlign: "right"}>
+                <CommentLink comment={@props.data}>
+                  <i className="fa fa-comments-o"/> View the discussion
+                </CommentLink>
+              </div>
+              }
+
+            <div className="talk-comment-links #{if @props.locked then 'locked' else ''}">
+              <SingleSubmitButton className="talk-comment-like-button" onClick={@onClickLike}>
                 {if upvotedByCurrentUser(@props.user, @props.data)
                   <i className="fa fa-thumbs-up upvoted" />
                 else
                   <i className="fa fa-thumbs-o-up" />}
-                &nbsp;{@upvoteCount()}
-              </button>
+                {' '}Helpful{' '}
+                ({@upvoteCount()})
+              </SingleSubmitButton>
 
               <button className="talk-comment-reply-button" onClick={@onClickReply}>
                 <i className="fa fa-reply" /> Reply
@@ -158,9 +239,9 @@ module?.exports = React.createClass
                   <button className="talk-comment-edit-button" onClick={@onClickEdit}>
                     <i className="fa fa-pencil" /> Edit
                   </button>
-                  <button className="talk-comment-delete-button" onClick={@onClickDelete}>
+                  <SingleSubmitButton className="talk-comment-delete-button" onClick={@onClickDelete}>
                     <i className="fa fa-remove" /> Delete
-                  </button>
+                  </SingleSubmitButton>
                 </span>}
             </div>
 

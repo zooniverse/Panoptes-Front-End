@@ -5,8 +5,9 @@ CommentHelp = require './comment-help'
 CommentImageSelector = require './comment-image-selector'
 getSubjectLocation = require '../lib/get-subject-location'
 Loading = require '../components/loading-indicator'
+SingleSubmitButton = require '../components/single-submit-button'
 alert = require '../lib/alert'
-{MarkdownEditor} = require 'markdownz'
+{Markdown, MarkdownEditor} = require 'markdownz'
 
 module?.exports = React.createClass
   displayName: 'Commentbox'
@@ -33,13 +34,13 @@ module?.exports = React.createClass
   getInitialState: ->
     subject: @props.subject
     content: @props.content
-    reply: ''
+    reply: null
     loading: false
     error: ''
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.reply and (@state.content.indexOf(nextProps.reply) is -1)
-      @setState {content: (nextProps.reply + @state.content)}
+    if nextProps.reply isnt @props.reply
+      @setState {reply: nextProps.reply}
 
   onSubmitComment: (e) ->
     e.preventDefault()
@@ -47,7 +48,7 @@ module?.exports = React.createClass
     return if @props.validationCheck?(textareaValue)
     @setState loading: true
 
-    @props.onSubmitComment?(e, textareaValue, @state.subject)
+    @props.onSubmitComment?(e, textareaValue, @state.subject, @state.reply)
       .then =>
         @hideChildren()
         @setState subject: null, content: '', error: '', loading: false
@@ -63,6 +64,7 @@ module?.exports = React.createClass
 
   onSelectImage: (imageData) ->
     @setState subject: imageData
+    @hideChildren()
 
   onClearImageClick: (e) ->
     @setState subject: null
@@ -75,14 +77,25 @@ module?.exports = React.createClass
     loader = if @state.loading then <Loading />
 
     <div className="talk-comment-box">
+
+      {if @props.reply
+        <div className="talk-comment-reply">
+          <div style={color: '#afaeae'}>
+            In reply to {@props.reply.comment.user_display_name}'s comment:
+          </div>
+          <Markdown project={@props.project}>{@props.reply.comment.body}</Markdown>
+          <button type="button" onClick={@props.onClickClearReply}><i className="fa fa-close" /> Clear Reply</button>
+        </div>
+        }
+
       <h1>{@props.header}</h1>
 
       {if @state.subject
         <img className="talk-comment-focus-image" src={getSubjectLocation(@state.subject).src} />}
 
       <form className="talk-comment-form" onSubmit={@onSubmitComment}>
-        <MarkdownEditor placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <CommentHelp /> }/>
 
+        <MarkdownEditor placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <CommentHelp /> }/>
         <section>
           <button
             type="button"
@@ -92,7 +105,7 @@ module?.exports = React.createClass
             {if @state.showing is 'image-selector' then <span>&nbsp;<i className="fa fa-close" /></span>}
           </button>
 
-        <button type="submit" className='talk-comment-submit-button'>{@props.submit}</button>
+        <SingleSubmitButton type="submit" onClick={@onSubmitComment} className='talk-comment-submit-button'>{@props.submit}</SingleSubmitButton>
           {if @props.onCancelClick
             <button
               type="button"

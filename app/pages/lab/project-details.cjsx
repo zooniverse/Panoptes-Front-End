@@ -40,11 +40,9 @@ ExternalLinksEditor = React.createClass
                 <input type="text" name="urls.#{i}.url" value={@props.project.urls[i].url} onChange={handleInputChange.bind @props.project} />
               </td>
               <td>
-                <AutoSave resource={@props.project}>
-                  <button type="button" onClick={@handleRemoveLink.bind this, link}>
-                    <i className="fa fa-remove"></i>
-                  </button>
-                </AutoSave>
+                <button type="button" onClick={@handleRemoveLink.bind this, link}>
+                  <i className="fa fa-remove"></i>
+                </button>
               </td>
             </AutoSave>}
         </tbody>
@@ -96,9 +94,8 @@ module.exports = React.createClass
         <div>
           Avatar<br />
           <PromiseRenderer promise={@avatarGet} then={(avatar) =>
-            console.log 'Avatar is', avatar
             placeholder = <div className="form-help content-container">Drop an avatar image here</div>
-            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} defaultValue={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
+            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
           } />
           {if @state.avatarError
             <div className="form-help error">{@state.avatarError.toString()}</div>}
@@ -109,9 +106,8 @@ module.exports = React.createClass
 
           Background image<br />
           <PromiseRenderer promise={@backgroundGet} then={(background) =>
-            console.log 'Background is', background
             placeholder = <div className="form-help content-container">Drop a background image here</div>
-            <ImageSelector maxSize={MAX_BACKGROUND_SIZE} defaultValue={background?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
+            <ImageSelector maxSize={MAX_BACKGROUND_SIZE} src={background?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
           } />
           {if @state.backgroundError
             <div className="form-help error">{@state.backgroundError.toString()}</div>}

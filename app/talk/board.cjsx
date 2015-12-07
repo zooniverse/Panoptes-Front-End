@@ -1,22 +1,27 @@
 React = require 'react'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 DiscussionPreview = require './discussion-preview'
 talkClient = require '../api/talk'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 discussionValidations = require './lib/discussion-validations'
 {getErrors} = require './lib/validations'
-Router = require 'react-router'
+Router = require '@edpaget/react-router'
 NewDiscussionForm = require './discussion-new-form'
 Paginator = require './lib/paginator'
 Moderation = require './lib/moderation'
 StickyDiscussionList = require './sticky-discussion-list'
 ROLES = require './lib/roles'
 Loading = require '../components/loading-indicator'
+SingleSubmitButton = require '../components/single-submit-button'
 merge = require 'lodash.merge'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
+PopularTags = require './popular-tags'
+ActiveUsers = require './active-users'
+ProjectLinker = require './lib/project-linker'
+SidebarNotifications = require './lib/sidebar-notifications'
 
 promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
@@ -32,6 +37,7 @@ module?.exports = React.createClass
     discussionsMeta: {}
     newDiscussionOpen: false
     loading: true
+    moderationOpen: false
 
   getDefaultProps: ->
     query: page: 1
@@ -71,7 +77,8 @@ module?.exports = React.createClass
     <DiscussionPreview {...@props} key={i} discussion={discussion} />
 
   onClickDeleteBoard: ->
-    if window.confirm("Are you sure that you want to delete this board? All of the comments and discussions will be lost forever.")
+    projectName = @state.board.title.toLowerCase()
+    if window.prompt("Are you sure that you want to delete this board? All of the comments and discussions will be lost forever. Type \"#{projectName}\" below to confirm:") is projectName
       {owner, name} = @props.params
       if @state.board.section is 'zooniverse'
         @boardRequest().delete()
@@ -134,48 +141,60 @@ module?.exports = React.createClass
 
     <div className="talk-board">
       <h1 className="talk-page-header">{board?.title}</h1>
+      <p>{board?.description}</p>
       {if board && @props.user?
-        <Moderation section={board.section} user={@props.user}>
-          <div>
-            <h2>Moderator Zone:</h2>
-
-            <Link
-              to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
-              params={
-                if (@props.params?.owner and @props.params?.name)
-                  {owner: @props.params.owner, name: @props.params.name}
-                else
-                  {}
-              }>
-              View Reported Comments
-            </Link>
-
-            {if board?.title
-              <form className="talk-edit-board-form" onSubmit={@onEditBoard}>
-                <h3>Edit Title:</h3>
-                <input defaultValue={board?.title}/>
-
-                <h3>Edit Description</h3>
-                <textarea defaultValue={board?.description}></textarea>
-
-                <h4>Can Read:</h4>
-                <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
-
-                <h4>Can Write:</h4>
-                <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
-
-                <button type="submit">Update</button>
-              </form>}
-
-            <button onClick={@onClickDeleteBoard}>
-              Delete this board <i className="fa fa-close" />
+        <div className="talk-moderation">
+          <Moderation user={@props.user} section={@props.section}>
+            <button onClick={=> @setState moderationOpen: !@state.moderationOpen}>
+              <i className="fa fa-#{if @state.moderationOpen then 'close' else 'warning'}" /> Moderator Controls
             </button>
+          </Moderation>
 
-            <StickyDiscussionList board={board} />
-          </div>
-        </Moderation>}
+          {if @state.moderationOpen
+            <div className="talk-moderation-children talk-module">
+              <h2>Moderator Zone:</h2>
 
-      {if @props.user?
+              <Link
+                to="#{if @props.section isnt 'zooniverse' then 'project-' else ''}talk-moderations"
+                params={
+                  if (@props.params?.owner and @props.params?.name)
+                    {owner: @props.params.owner, name: @props.params.name}
+                  else
+                    {}
+                }>
+                View Reported Comments
+              </Link>
+
+              {if board?.title
+                <form className="talk-edit-board-form" onSubmit={@onEditBoard}>
+                  <h3>Edit Title:</h3>
+                  <input defaultValue={board?.title}/>
+
+                  <h3>Edit Description</h3>
+                  <textarea defaultValue={board?.description}></textarea>
+
+                  <h4>Can Read:</h4>
+                  <div className="roles-read">{ROLES.map(@roleReadLabel)}</div>
+
+                  <h4>Can Write:</h4>
+                  <div className="roles-write">{ROLES.map(@roleWriteLabel)}</div>
+
+                  <SingleSubmitButton type="submit" onClick={@onEditBoard}>Update</SingleSubmitButton>
+                </form>}
+
+              <SingleSubmitButton onClick={@onClickDeleteBoard}>
+                Delete this board <i className="fa fa-close" />
+              </SingleSubmitButton>
+
+              <StickyDiscussionList board={board} />
+            </div>
+          }
+        </div>
+        }
+
+      {if @state.board.subject_default
+        <span></span>
+      else if @props.user?
         <section>
           <button onClick={@onClickNewDiscussion}>
             <i className="fa fa-#{if @state.newDiscussionOpen then 'close' else 'plus'}" />&nbsp;
@@ -202,12 +221,32 @@ module?.exports = React.createClass
         </section>
 
         <div className="talk-sidebar">
-          <h2>Talk Sidebar</h2>
+          <SidebarNotifications {...@props} params={@props.params} />
+
           <section>
-            <h3>Description:</h3>
-            <p>{board?.description}</p>
-            <h3>Join the Discussion</h3>
-            <p>Check out the existing posts or start a new discussion of your own</p>
+            <h3>
+              {if @props.section is 'zooniverse'
+                <Link className="sidebar-link" to="talk-board-recents" {...@props}>Recent Comments</Link>
+              else
+                <Link className="sidebar-link" to="project-talk-board-recents" {...@props}>Recent Comments</Link>
+              }
+            </h3>
+          </section>
+
+          <section>
+            <PopularTags
+              header={<h3>Popular Tags:</h3>}
+              section={@props.section}
+              params={@props.params} />
+          </section>
+
+          <section>
+            <ActiveUsers section={@props.section} />
+          </section>
+
+          <section>
+            <h3>Projects:</h3>
+            <p><ProjectLinker user={@props.user} /></p>
           </section>
 
           <section>

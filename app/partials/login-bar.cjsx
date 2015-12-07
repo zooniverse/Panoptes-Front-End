@@ -16,7 +16,7 @@ module.exports = React.createClass
     <div className="login-bar">
       <button type="button" className="secret-button" onClick={@showLoginDialog.bind this, 'sign-in'}>
         <Translate content="loginBar.signIn" />
-      </button>&emsp;
+      </button>
       <button type="button" className="secret-button" onClick={@showLoginDialog.bind this, 'register'}>
         <Translate content="loginBar.register" />
       </button>

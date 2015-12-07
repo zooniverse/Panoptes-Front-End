@@ -1,9 +1,5 @@
 .main-header
-  font-size: 10px
-  line-height: 20px
-
-  &:hover
-    z-index: 1
+  font-size: 14px
 
   .on-home-page &
     position: absolute
@@ -20,7 +16,6 @@
 
     &.main-logo
       color: white
-      font-size: 2.7em
 
   .on-project-page &
     opacity: 0.4
@@ -31,10 +26,11 @@
       opacity: 1
 
   .login-bar
-    font-size: 1.4em
+
+    > *
+      margin: 0 0 0 1em
 
   .account-bar
-    font-size: 1.4em
     position: relative
     top: .75em
 
@@ -43,7 +39,6 @@
 
       .avatar
         height: calc(1em + 1.5vw)
-        margin: -4em 0 -3.7em -0.3em
         vertical-align: middle
         width: calc(1em + 1.5vw)
 
@@ -68,44 +63,9 @@
       a
         color: white
 
-    .account-menu
-      background: FOREGROUND
-      border-radius: 4px
-      opacity: 0
-      display: flex
-      transition: opacity 0.25s ease-out
-      flex-direction: column
-      font-size: 14px
-      padding: 1.5em
-      pointer-events: none
-      position: absolute
-      right: 2em
-      white-space: no-wrap
-
-      &:before
-        border: solid
-        border-color: FOREGROUND transparent
-        border-width: 0 0.6em 0.6em 0.6em
-        top: -0.55em
-        content: ""
-        display: block
-        left: 70%
-        position: absolute
-
-      a
-        color: white
-
-      .sign-out-button
-        text-align: left
-
-    &:hover
-      .account-menu
-        opacity: 1
-        pointer-events: auto
-    
-    .account-menu[aria-hidden=false]
-      opacity: 1
-      pointer-events: auto
+  .hamburger-modal-trigger
+    width: 30px
+    height: 25px
 
 .main-title
   align-items: center
@@ -115,7 +75,7 @@
   display: flex
   flex-wrap: wrap
   justify-content: space-between
-  padding: 1em 3vw
+  padding: 10px 3vw
 
   .on-home-page &
     border-bottom: none
@@ -141,13 +101,13 @@
 
   .main-logo
     font-family: "Montserrat"
-    font-size: 2.7em
+    font-size: 2em
     font-smoothing: antialiased
     letter-spacing: 0.05em
     text-transform: uppercase
 
   svg
-    vertical-align: -0.30em
+    vertical-align: sub
 
 .main-nav
   display: flex
@@ -160,9 +120,15 @@
     flex: 1 1 auto
     margin: 0
 
+  &.mobile .main-nav-item
+    color: black
+    width: 100%
+
+    &:hover
+      color: MAIN_HIGHLIGHT
+
 .main-nav-item
   color: rgba(255,255,255,0.5)
-  font-size: 1.4em
   padding: 7.5px 2vw
   margin: 2.5px 0 0
 
@@ -186,8 +152,10 @@
     .hero
       background-size: cover
       box-sizing: border-box
-      height: 250px
-      padding: 13.5em 3vw 1em
+      min-height: 250px
+      overflow: auto
+      background-color: COBOLT_BLUE
+      padding: 140px 3vw 5px 3vw
 
       .hero-container
         margin: 0 auto
@@ -195,12 +163,20 @@
 
         h1
           color: white
-          font-size: 3.375em
+          font-size: 2.5em
           font-weight: 400
-          line-height: 1.5em
-          margin-bottom: 0.75em
+          margin-bottom: 1em
 
         .hero-nav
           a
             @extends .main-nav-item
+            font-size: 14px
+            line-height: 3em
             text-decoration: none
+
+.modal-nav-links
+  .main-nav-item
+    display: block
+    color: COPY
+    &:hover
+      color: COPY

@@ -30,6 +30,7 @@ module.exports = React.createClass
   imagePromise: (project) ->
     project.get('avatar')
       .then (avatar) -> avatar.src
+      .catch -> '/assets/simple-avatar.jpg'
 
   cardLink: (project) ->
     link = if !!project.redirect

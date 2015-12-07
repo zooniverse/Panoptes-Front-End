@@ -6,14 +6,17 @@ PromiseToSetState = require '../../lib/promise-to-set-state'
 apiClient = require '../../api/client'
 animatedScrollTo = require 'animated-scrollto'
 counterpart = require 'counterpart'
+FinishedBanner = require './finished-banner'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
 SignInPrompt = require '../../partials/sign-in-prompt'
 seenThisSession = require '../../lib/seen-this-session'
 
+FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
+
 PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
-SKIP_CELLECT = location.search.match(/\Wcellect=0(?:\W|$)/)?
+SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
 
 if SKIP_CELLECT
   console?.warn 'Intelligent subject selection disabled'
@@ -47,6 +50,9 @@ emptySubjectQueue = ->
 auth.listen 'change', emptySubjectQueue
 apiClient.type('subject_sets').listen 'add-or-remove', emptySubjectQueue
 
+# Store this externally to persist during the session.
+sessionDemoMode = false
+
 module.exports = React.createClass
   displayName: 'ProjectClassifyPage'
 
@@ -57,11 +63,13 @@ module.exports = React.createClass
   getDefaultProps: ->
     query: null
     project: null
+    simulateSaveFailure: (location?.search ? '').indexOf('simulate-classification-save-failure') isnt -1
 
   getInitialState: ->
     workflow: null
     subject: null
     classification: null
+    demoMode: sessionDemoMode
 
   propChangeHandlers:
     project: 'loadAppropriateClassification'
@@ -69,9 +77,9 @@ module.exports = React.createClass
 
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
-    # console.log 'Loading appropriate clasification'
+    # console.log 'Loading appropriate classification'
     @promiseToSetState classification: @getCurrentWorkflowID(props).then (workflowID) =>
-      # console.log 'Loading clasification for workflow', workflowID
+      # console.log 'Loading classification for workflow', workflowID
       # Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
       currentClassifications.forWorkflow[workflowID] ?= @createNewClassification props.project, workflowID
       currentClassifications.forWorkflow[workflowID]
@@ -111,7 +119,7 @@ module.exports = React.createClass
       getSubjectSet.then (subjectSet) =>
         @getNextSubject project, workflow, subjectSet
 
-    Promise.all([workflow, subject]).then ([workflow, subject]) ->
+    Promise.all([workflow, subject]).then ([workflow, subject]) =>
       # console.log 'Creating a new classification'
       classification = apiClient.type('classifications').create
         annotations: []
@@ -192,8 +200,18 @@ module.exports = React.createClass
 
   render: ->
     <div className="classify-page content-container">
+      <FinishedBanner project={@props.project} />
+
       {if @state.classification?
-        <Classifier {...@props} classification={@state.classification} onLoad={@scrollIntoView} onComplete={@saveClassification} onClickNext={@loadAnotherSubject} />
+        <Classifier
+          {...@props}
+          classification={@state.classification}
+          onLoad={@scrollIntoView}
+          demoMode={@state.demoMode}
+          onChangeDemoMode={@handleDemoModeChange}
+          onComplete={@saveClassification}
+          onClickNext={@loadAnotherSubject}
+        />
       else if @state.rejected.classification?
         <code>{@state.rejected.classification.toString()}</code>
       else
@@ -201,7 +219,7 @@ module.exports = React.createClass
     </div>
 
   scrollIntoView: (e) ->
-    # Auto-scroll to the middle of the clasification interface on load.
+    # Auto-scroll to the middle of the classification interface on load.
     # It's not perfect, but it should make the location of everything more obvious.
     lineHeight = parseFloat getComputedStyle(document.body).lineHeight
     el = @getDOMNode()
@@ -210,18 +228,66 @@ module.exports = React.createClass
     if Math.abs(idealScrollY - scrollY) > lineHeight
       animatedScrollTo document.body, el.offsetTop - space, 333
 
+  handleDemoModeChange: (newDemoMode) ->
+    sessionDemoMode = newDemoMode
+    @setState demoMode: sessionDemoMode
+
   saveClassification: ->
     console?.info 'Completed classification', @state.classification
-    @state.classification.save().then (classification) =>
-      console?.log 'Saved classification', classification.id
-      Promise.all([
-        classification.get 'workflow'
-        classification.get 'subjects'
-      ]).then ([workflow, subjects]) ->
-        seenThisSession.add workflow, subjects
-        classification.destroy()
+    savingClassification = if @state.demoMode
+      Promise.resolve @state.classification
+    else if @props.simulateSaveFailure
+      Promise.reject new Error 'Simulated failure of classification save'
+    else
+      @state.classification.save()
+
+    savingClassification
+      .then (classification) =>
+        if @state.demoMode
+          console?.log 'Demo mode: Did NOT save classification'
+        else
+          console?.log 'Saved classification', classification.id
+          Promise.all([
+            classification.get 'workflow'
+            classification.get 'subjects'
+          ]).then ([workflow, subjects]) ->
+            seenThisSession.add workflow, subjects
+            classification.destroy()
+        @saveAllQueuedClassifications()
+      .catch (error) =>
+        console?.warn 'Failed to save classification:', error
+        @queueClassification @state.classification
+
       classificationsThisSession += 1
       @maybePromptToSignIn()
+
+  queueClassification: (classification) ->
+    queue = JSON.parse localStorage.getItem FAILED_CLASSIFICATION_QUEUE_NAME
+    queue ?= []
+    queue.push classification
+    try
+      localStorage.setItem FAILED_CLASSIFICATION_QUEUE_NAME, JSON.stringify queue
+      console?.info 'Queued classifications:', queue.length
+    catch error
+      console?.error 'Failed to queue classification:', error
+
+  saveAllQueuedClassifications: ->
+    queue = JSON.parse localStorage.getItem FAILED_CLASSIFICATION_QUEUE_NAME
+    if queue? and queue.length isnt 0
+      console?.log 'Saving queued classifications:', queue.length
+      for classificationData in queue then do (classificationData) =>
+        apiClient.type('classifications').create(classificationData).save()
+          .then (actualClassification) =>
+            actualClassification.destroy()
+            indexInQueue = queue.indexOf classificationData
+            queue.splice indexInQueue, 1
+            try
+              localStorage.setItem FAILED_CLASSIFICATION_QUEUE_NAME, JSON.stringify queue
+              console?.info 'Saved a queued classification, remaining:', queue.length
+            catch error
+              console?.error 'Failed to update classification queue:', error
+          .catch (error) =>
+            console?.error 'Failed to save a queued classification:', error
 
   maybePromptToSignIn: ->
     if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not @props.user?

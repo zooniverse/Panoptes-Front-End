@@ -1,10 +1,19 @@
-.subject-page
+.talk .subject-page
   margin: 0 auto
-  max-width: 800px
   .subject-container
     width: 100%
     img
       max-width: 100%
+
+  .talk-discussion-preview
+    .subject-preview
+      display: none
+
+  .talk-comment-box
+    .talk-comment-focus-image
+
+    .talk-comment-form .talk-comment-image-select-button
+      display: none
 
   .talk-comment-link
     a
@@ -14,3 +23,24 @@
       .talk-module
         background-color: darken(TALK_BACKGROUND, 10%)
         border-color: darken(TALK_BACKGROUND, 20%)
+
+  .subject-collection-list
+    .subject-collection-list-container
+      display: flex
+      flex-flow: row wrap
+      justify-content: space-between
+
+      .collection-preview
+        @extend .talk-module
+        display: inline-block
+        margin: TALK_PADDING
+
+        .title
+          margin: TALK_PADDING 0
+
+        .subject-previews > div
+          display: flex
+          align-items: baseline
+
+          img
+            margin: 0 TALK_PADDING

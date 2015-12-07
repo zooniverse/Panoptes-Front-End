@@ -120,6 +120,8 @@ publicationCategories =
     },
     {slug: "zooniverse/solar-stormwatch"
     publications: [
+      {citation: "Differences between the CME fronts tracked by an expert, an automated algorithm, and the Solar Stormwatch project, Barnard+ 2015."
+      href: "http://onlinelibrary.wiley.com/doi/10.1002/2015SW001280/full"},
       {citation: "Observational Tracking of the 2D Structure of Coronal Mass Ejections Between the Sun and 1 AU, Savani+ 2015."
       href: "http://arxiv.org/abs/1503.08774"},
       {citation: "Validation of a priori CME arrival predictions made using real-time heliospheric imager observations, Tucker-Hood+ 2015."
@@ -144,6 +146,8 @@ publicationCategories =
     },
     {slug: "zooniverse/planet-hunters"
     publications: [
+      {citation: "Planet Hunters. X. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
+      href: "http://arxiv.org/pdf/1509.03622v1.pdf"},
       {citation: "GALEX J194419.33+491257.0: An unusually active SU UMa-type dwarf nova with a very short orbital period in the Kepler data, Kato & Osaki 2014."
       href: "http://adsabs.harvard.edu/doi/10.1093/pasj/psu025"},
       {citation: "Planet Hunters. VI. An Independent Characterization of KOI-351 and Several Long Period Planet Candidates from the Kepler Archival Data, Schmitt+ 2014."
@@ -244,7 +248,7 @@ publicationCategories =
       {citation: "Volunteers’ Engagement in Human Computation Astronomy Projects, Ponciano+ 2014."
       href: "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&arnumber=6728933"}
       {citation: "Zooniverse: Observing the World’s Largest Citizen Science Platform, Simpson+ 2014."
-      href: "http://wow.oerc.ox.ac.uk/wow-2014-papers/zooniverse-observing-the-world2019s-largest-citizen-science-platform/view"}
+      href: "http://dl.acm.org/citation.cfm?id=2579215"}
       {citation: '''“I want to be a Captain! I want to be a Captain!": Gamification in the Old Weather citizen science project., Eveleigh+ 2013.'''
       href: "http://discovery.ucl.ac.uk/1412171/"}
       {citation: "Creativity in citizen cyberscience: All for one and one for all, Jennett+ 2013."
@@ -294,11 +298,13 @@ module.exports = React.createClass
             <ul key={category} className="publications-list">
               {for project in projects
                 <div key={project.name || project.slug}>
-                  <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug)} pending={null} catch={null}>{([fetchedProject]) =>
-                    if fetchedProject?
-                      <h3 className="project-name">{fetchedProject.display_name}</h3>
-                  }</PromiseRenderer>
-                  {if project.name? then <h3 className="project-name">{project.name}</h3>}<span className="publication-count">{' '}({project.publications.length})</span>
+                  <div>
+                    <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug)} pending={null} catch={null}>{([fetchedProject]) =>
+                      if fetchedProject?
+                        <h3 className="project-name">{fetchedProject.display_name}</h3>
+                    }</PromiseRenderer>
+                    {if project.name? then <h3 className="project-name">{project.name}</h3>}<span className="publication-count">{' '}({project.publications.length})</span>
+                  </div>
                   {projectAvatar = @getAvatar(project)
                   project.publications.map (publication) =>
                     i = Math.random()
@@ -322,6 +328,6 @@ module.exports = React.createClass
 
   getAvatar: (project) ->
     <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug).get('avatar')} pending={null}
-      catch={=> <img src="./assets/simple-pattern.jpg" />}
+      catch={=> <img src="/assets/simple-pattern.jpg" />}
       then={([avatar]) =>
         <img src={avatar.src} alt="Project Avatar" />} />

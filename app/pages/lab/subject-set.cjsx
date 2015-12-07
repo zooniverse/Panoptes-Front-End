@@ -5,18 +5,19 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 Papa = require 'papaparse'
-{Navigation} = require 'react-router'
+{Navigation} = require '@edpaget/react-router'
 alert = require '../../lib/alert'
 SubjectViewer = require '../../components/subject-viewer'
 SubjectUploader = require '../../partials/subject-uploader'
 UploadDropTarget = require '../../components/upload-drop-target'
 ManifestView = require '../../components/manifest-view'
+isAdmin = require '../../lib/is-admin'
 
 NOOP = Function.prototype
 
-VALID_SUBJECT_EXTENSIONS = ['.jpg', '.png', '.gif', '.svg']
-INVALID_FILENAME_CHARS = ['/', '\\', ':']
-MAX_FILE_SIZE = 600000
+VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg']
+INVALID_FILENAME_CHARS = ['/', '\\', ':', ',']
+MAX_FILE_SIZE = 600 * 1024
 
 announceSetChange = ->
   apiClient.type('subject_sets').emit 'add-or-remove'
@@ -127,11 +128,18 @@ EditSubjectSetPage = React.createClass
     successfulUploads: []
     creationErrors: []
 
+  subjectLimitMessage: (project_subject_count, user) ->
+    "The project has " + project_subject_count + " uploaded subjects. " +
+    "You have uploaded " + user.uploaded_subjects_count + " subjects from an " +
+    "allowance of " + user.max_subjects + "."
+
   render: ->
     <div>
+      <h3>{@props.subjectSet.display_name} #{@props.subjectSet.id}</h3>
       <p className="form-help">A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the “manifest”) defining their properties, and the images themselves.</p>
       <p className="form-help">Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it’s best to just have all their subjects in 1 set, but not all.</p>
-      <p className="form-help">You can upload up to 10,000 subjects. We recommend uploading subjects in batches of 500 - 1,000 at a time.</p>
+      <p className="form-help">{@subjectLimitMessage(@props.project.subjects_count, @props.user)} </p>
+      <p className="form-help"><strong>We strongly recommend uploading subjects in batches of 500 - 1,000 at a time.</strong></p>
 
       <form onSubmit={@handleSubmit}>
         <p>
@@ -152,11 +160,11 @@ EditSubjectSetPage = React.createClass
       <hr />
 
       <p>
-        <UploadDropTarget accept="text/csv, text/tab-separated-values, image/*" multiple onSelect={@handleFileSelection}>
+        <UploadDropTarget accept={"text/csv, text/tab-separated-values, image/*#{if isAdmin() then ', video/*' else ''}"} multiple onSelect={@handleFileSelection}>
           <strong>Drag-and-drop or click to upload manifests and subject images here.</strong><br />
           Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
-          Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers.<br />
-          Subject images can be up to {MAX_FILE_SIZE/1000}KB and any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '} 
+          Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers in the main classification interface or in the Talk discussion tool.<br />
+          Subject images can be up to {MAX_FILE_SIZE / 1024}KB and any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '}
           and may not contain {<span key={char}><kbd>{char}</kbd>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}<br />
         </UploadDropTarget>
       </p>
@@ -214,8 +222,8 @@ EditSubjectSetPage = React.createClass
       if file.type in ['text/csv', 'text/tab-separated-values']
         @_addManifest file
         gotManifest = true
-      else if file.type.indexOf('image/') is 0
-        if file.size < MAX_FILE_SIZE
+      else if file.type.indexOf('image/') is 0 or (isAdmin() and file.type.indexOf('video/') is 0)
+        if file.size < MAX_FILE_SIZE or isAdmin()
           @state.files[file.name] = file
           gotFile = true
         else
@@ -242,12 +250,11 @@ EditSubjectSetPage = React.createClass
     reader.onload = (e) =>
       # TODO: Look into PapaParse features.
       # Maybe wan we parse the file object directly in a worker.
-      {data, errors} = Papa.parse e.target.result.trim(), header: true
+      {data, errors} = Papa?.parse e.target.result.trim(), header: true
       @subjectsFromManifest(data, errors, file.name)
     reader.readAsText file
 
   subjectsFromManifest: (data, errors, fileName) ->
-    console.log(data, errors, fileName)
     metadatas = for rawData in data
       cleanData = {}
       for key, value of rawData
@@ -261,12 +268,14 @@ EditSubjectSetPage = React.createClass
         subjects.push {locations, metadata}
 
     @state.manifests[fileName] = {errors, subjects}
+    console.log(@state.manifests)
     @forceUpdate()
 
   _findFilesInMetadata: (metadata) ->
     filesInMetadata = []
     for key, value of metadata
-      filesInValue = value.match? ///([^#{INVALID_FILENAME_CHARS.join ''}]+(?:#{VALID_SUBJECT_EXTENSIONS.join '|'}))///gi
+      extensions = if isAdmin() then '\\.\\w{2,4}' else "(?:#{VALID_SUBJECT_EXTENSIONS.join '|'})"
+      filesInValue = value.match? ///([^#{INVALID_FILENAME_CHARS.join ''}]+#{extensions})///gi
       if filesInValue?
         filesInMetadata.push filesInValue...
     filesInMetadata

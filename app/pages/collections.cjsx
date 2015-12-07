@@ -4,7 +4,7 @@ TitleMixin = require '../lib/title-mixin'
 apiClient = require '../api/client'
 OwnedCardList = require '../components/owned-card-list'
 Translate = require 'react-translate-component'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 
 counterpart.registerTranslations 'en',
   collectionsPage:

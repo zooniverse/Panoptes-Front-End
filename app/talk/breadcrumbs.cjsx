@@ -1,5 +1,5 @@
 React = require 'react'
-{Link, Navigation} = require 'react-router'
+{Link, Navigation} = require '@edpaget/react-router'
 PromiseRenderer = require '../components/promise-renderer'
 merge = require 'lodash.merge'
 

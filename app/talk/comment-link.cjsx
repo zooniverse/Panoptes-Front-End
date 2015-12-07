@@ -2,7 +2,7 @@ React = require 'react'
 PromiseRenderer = require '../components/promise-renderer'
 parseSection = require './lib/parse-section'
 talkConfig = require './config'
-{Link, Navigation} = require 'react-router'
+{Link, Navigation} = require '@edpaget/react-router'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -18,7 +18,6 @@ module?.exports = React.createClass
     pageSize: PAGE_SIZE
 
   projectComment: ->
-    console.log @props.comment.section, 'zooniverse'
     @props.comment.section isnt 'zooniverse'
 
   pathname: ->

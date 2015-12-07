@@ -3,7 +3,9 @@ React = require 'react'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 PromiseRenderer = require '../../components/promise-renderer'
-{Link} = require 'react-router'
+FinishedBanner = require './finished-banner'
+ProjectMetadata = require './metadata'
+{Link} = require '@edpaget/react-router'
 
 module.exports = React.createClass
   displayName: 'ProjectHomePage'
@@ -32,6 +34,8 @@ module.exports = React.createClass
 
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
+        <FinishedBanner project={@props.project} />
+
         <div className="description">{@props.project.description}</div>
         {if @props.project.workflow_description? and @props.project.workflow_description isnt ''
           <div className="workflow-description">{@props.project.workflow_description}</div>}
@@ -57,4 +61,6 @@ module.exports = React.createClass
         <h3 className="about-project">About {@props.project.display_name}</h3>
         <Markdown project={@props.project}>{@props.project.introduction ? ''}</Markdown>
       </div>
+
+      <ProjectMetadata project={@props.project} />
     </div>

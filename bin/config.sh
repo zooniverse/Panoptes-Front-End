@@ -11,8 +11,10 @@ export VENDOR_JS="vendor.js"
 export SRC_CSS="css/main.styl"
 export OUT_CSS="main.css"
 
-export SRC_HTML="index.erb"
+export SRC_HTML="./views/index.ejs"
 export OUT_HTML="index.html"
+
+export HEAD_COMMIT=$(git rev-parse HEAD)
 
 # NOTE: Non-dev dependencies are assumed to be front-end modules.
 externals=$(node -p "Object.keys(require('./package').dependencies).join('\n');")
@@ -21,7 +23,9 @@ function flag_externals {
   out=""
   for module in $externals; do
     # Symlinked modules are assumed to be in development and aren't externalized.
-    [[ -L "node_modules/$module" ]] || out="$out --$1 $module"
+    if [[ "$module" != "express" && "$module" != "ejs" && "$module" != "babel" && "$module" != "coffee-react" ]]; then
+      [[ -L "node_modules/$module" ]] || out="$out --$1 $module"
+    fi
   done
   echo $out
 }

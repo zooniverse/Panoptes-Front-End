@@ -1,7 +1,7 @@
 React = require 'react'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 resourceCount = require './lib/resource-count'
-{State} = require 'react-router'
+{State} = require '@edpaget/react-router'
 PromiseRenderer = require '../components/promise-renderer'
 LatestCommentLink = require './latest-comment-link'
 Thumbnail = require '../components/thumbnail'
@@ -50,7 +50,7 @@ module?.exports = React.createClass
             }
         </h1>
 
-        <LatestCommentLink {...@props} project={@props.project} discussion={discussion} comment={@props.comment} />
+        <LatestCommentLink {...@props} project={@props.project} discussion={discussion} comment={@props.comment} preview={true} />
 
       </div>
       <div className="preview-stats">
