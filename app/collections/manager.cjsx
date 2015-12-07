@@ -18,10 +18,10 @@ module?.exports = React.createClass
     project: React.PropTypes.object
 
   addToCollections: ->
-    options = @refs.search.options()
-    return unless options
+    collections = @refs.search.getSelected()
+    return unless collections.length > 0
 
-    promises = for { collection } in options
+    promises = for { collection } in collections
       collection.addLink('subjects', [@props.subject.id])
 
     Promise.all(promises)
@@ -41,7 +41,6 @@ module?.exports = React.createClass
           ref="search"
           multi={true}
           project={@props.project}
-          user={@props.user}
           onChange={@handleChange} />
         <button type="button" className="standard-button search-button" disabled={if @state.hasCollectionSelected then true else false} onClick={@addToCollections}>
           Add

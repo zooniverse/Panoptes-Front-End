@@ -4,7 +4,7 @@ apiClient = require '../api/client'
 Paginator = require '../talk/lib/paginator'
 SubjectViewer = require '../components/subject-viewer'
 PromiseRenderer = require '../components/promise-renderer'
-{Link, RouteHandler} = require 'react-router'
+{Link, RouteHandler} = require '@edpaget/react-router'
 Translate = require 'react-translate-component'
 counterpart = require 'counterpart'
 Avatar = require '../partials/avatar'
@@ -16,7 +16,6 @@ counterpart.registerTranslations 'en',
   collectionPage:
     settings: 'Settings'
     collaborators: 'Collaborators'
-    talk: 'Talk'
   collectionsPageWrapper:
     error: 'There was an error retrieving this collection.'
 
@@ -55,10 +54,6 @@ CollectionPage = React.createClass
             <Link to="collection-collaborators" params={params} className="tabbed-content-tab">
               <Translate content="collectionPage.collaborators" />
             </Link>}
-
-          <Link to="collection-talk" params={params} className="tabbed-content-tab" style={pointerEvents: 'none', opacity: 0.7}>
-            <Translate content="collectionPage.talk" />
-          </Link>
         </nav>
         <div className="collection-container">
           <RouteHandler user={@props.user} collection={@props.collection} roles={@props.roles} />

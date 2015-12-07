@@ -1,11 +1,18 @@
 React = require 'react'
+apiClient = require '../api/client'
+testClassificationQuality = require '../lib/test-classification-quality'
 ChangeListener = require '../components/change-listener'
 SubjectAnnotator = require './subject-annotator'
 ClassificationSummary = require './classification-summary'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 tasks = require './tasks'
 {getSessionID} = require '../lib/session'
 preloadSubject = require '../lib/preload-subject'
+PromiseRenderer = require '../components/promise-renderer'
+TriggeredModalForm = require 'modal-form/triggered'
+TutorialButton = require './tutorial-button'
+isAdmin = require '../lib/is-admin'
+Tutorial = require '../lib/tutorial'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -20,30 +27,61 @@ Classifier = React.createClass
     workflow: workflow ? null
     subject: subject ? null
     classification: classification ? null
+    goodClassificationCutoff: 0.5
     onLoad: Function.prototype
 
   getInitialState: ->
     subjectLoading: false
+    expertClassification: null
+    classificationQuality: NaN
     showingExpertClassification: false
     selectedExpertAnnotation: -1
 
   componentDidMount: ->
     @loadSubject @props.subject
     @prepareToClassify @props.classification
+    Tutorial.startIfNecessary @props.user, @props.project
 
   componentWillReceiveProps: (nextProps) ->
+    if nextProps.project isnt @props.project or nextProps.user isnt @props.user
+      Tutorial.startIfNecessary nextProps.user, nextProps.project
     if nextProps.subject isnt @props.subject
       @loadSubject subject
     if nextProps.classification isnt @props.classification
       @prepareToClassify nextProps.classification
 
   loadSubject: (subject) ->
-    @setState subjectLoading: true
+    @setState
+      subjectLoading: true
+      expertClassification: null
+      classificationQuality: NaN
+      showingExpertClassification: false
+      selectedExpertAnnotation: -1
+
+    @getExpertClassification @props.workflow, @props.subject
+
     preloadSubject subject
       .then =>
         if @props.subject is subject # The subject could have changed while we were loading.
           @setState subjectLoading: false
           @props.onLoad?()
+
+  getExpertClassification: (workflow, subject) ->
+    awaitExpertClassification = Promise.resolve do =>
+      apiClient.get('/classifications/gold_standard', {
+        workflow_id: workflow.id,
+        subject_ids: [subject.id]
+      })
+        .catch ->
+          []
+        .then ([expertClassification]) ->
+          expertClassification
+
+    awaitExpertClassification.then (expertClassification) =>
+      expertClassification ?= subject.expert_classification_data?[workflow.id]
+      if @props.workflow is workflow and @props.subject is subject
+        window.expertClassification = expertClassification
+        @setState {expertClassification}
 
   prepareToClassify: (classification) ->
     classification.annotations ?= []
@@ -53,7 +91,7 @@ Classifier = React.createClass
   render: ->
     <ChangeListener target={@props.classification}>{=>
       if @state.showingExpertClassification
-        currentClassification = @props.subject.expert_classification_data
+        currentClassification = @state.expertClassification
       else
         currentClassification = @props.classification
         unless @props.classification.completed
@@ -115,32 +153,77 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
+        <TutorialButton user={@props.user} project={@props.project} />
         <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
         {if nextTaskKey
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
         else
-          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>Done</button>}
+          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
+            {if @props.demoMode
+              <i className="fa fa-trash fa-fw"></i>
+            else if @props.classification.gold_standard
+              <i className="fa fa-star fa-fw"></i>}
+            {' '}Done
+          </button>}
+        {@renderExpertOptions()}
       </nav>
+
+      {if @props.demoMode
+        <p style={textAlign: 'center'}>
+          <i className="fa fa-trash"></i>{' '}
+          <small>
+            <strong>Demo mode:</strong>
+            <br />
+            No classifications are being recorded.{' '}
+            <button type="button" className="secret-button" onClick={@props.onChangeDemoMode.bind null, false}>
+              <u>Disable</u>
+            </button>
+          </small>
+        </p>
+      else if @props.classification.gold_standard
+        <p style={textAlign: 'center'}>
+          <i className="fa fa-star"></i>{' '}
+          <small>
+            <strong>Gold standard mode:</strong>
+            <br />
+            Please ensure this classification is completely accurate.{' '}
+            <button type="button" className="secret-button" onClick={@props.classification.update.bind @props.classification, gold_standard: undefined}>
+              <u>Disable</u>
+            </button>
+          </small>
+        </p>}
     </div>
 
   renderSummary: (classification) ->
     <div>
       Thanks!
 
-      {if @props.subject.expert_classification_data?
+      {if @state.expertClassification?
         <div className="has-expert-classification">
-          Expert classification available.
+          Expert classification available.{' '}
           {if @state.showingExpertClassification
             <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
           else
             <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
+
+          {unless true or isNaN @state.classificationQuality
+            qualityString = (@state.classificationQuality * 100).toString().split('.')[0] + '%'
+            <div>Looks like you matched about <strong>{qualityString}</strong>.</div>}
+          {if @state.classificationQuality < @props.goodClassificationCutoff
+            <div>Keep at it, all classifications are useful!</div>}
+          {if @state.classificationQuality > @props.goodClassificationCutoff
+            <div>Keep up the good work!</div>}
         </div>}
 
-      {if @state.showingExpertClassification
-        'Expert classification:'
-      else
-        'Your classification:'}
-      <ClassificationSummary workflow={@props.workflow} classification={classification} />
+      <div>
+        <strong>
+          {if @state.showingExpertClassification
+            'Expert classification:'
+          else
+            'Your classification:'}
+        </strong>
+        <ClassificationSummary workflow={@props.workflow} classification={classification} />
+      </div>
 
       <hr />
 
@@ -149,8 +232,55 @@ Classifier = React.createClass
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@props.onClickNext} to="project-talk-subject" params={owner: ownerName, name: name, id: @props.subject.id} className="talk standard-button">Talk</Link>}
         <button type="button" className="continue major-button" onClick={@props.onClickNext}>Next</button>
+        {@renderExpertOptions()}
       </nav>
     </div>
+
+  renderExpertOptions: ->
+    if @props.project?
+      getUserRoles = @props.project.get 'project_roles'
+        .then (projectRoles) =>
+          getProjectRoleHavers = Promise.all projectRoles.map (projectRole) =>
+            projectRole.get 'owner'
+          getProjectRoleHavers
+            .then (projectRoleHavers) =>
+              (projectRoles[i].roles for user, i in projectRoleHavers when user is @props.user)
+            .then (setsOfUserRoles) =>
+              [[], setsOfUserRoles...].reduce (set, next) =>
+                set.concat next
+
+      <PromiseRenderer promise={getUserRoles}>{(userRoles) =>
+        if isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
+          <TriggeredModalForm trigger={
+            <i className="fa fa-cog fa-fw"></i>
+          }>
+            {if 'owner' in userRoles or 'expert' in userRoles
+              <p>
+                <label>
+                  <input type="checkbox" checked={@props.classification.gold_standard} onChange={@handleGoldStandardChange} />{' '}
+                  Gold standard mode
+                </label>{' '}
+                <TriggeredModalForm trigger={
+                  <i className="fa fa-question-circle"></i>
+                }>
+                  <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
+                </TriggeredModalForm>
+              </p>}
+
+              {if isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles
+                <p>
+                  <label>
+                    <input type="checkbox" checked={@props.demoMode} onChange={@handleDemoModeChange} />{' '}
+                    Demo mode
+                  </label>{' '}
+                  <TriggeredModalForm trigger={
+                    <i className="fa fa-question-circle"></i>
+                  }>
+                    <p>In demo mode, classifications <strong>will not be saved</strong>. Use this for quick, inaccurate demos of the classification interface.</p>
+                  </TriggeredModalForm>
+                </p>}
+          </TriggeredModalForm>
+      }</PromiseRenderer>
 
   # Whenever a subject image is loaded in the annotator, record its size at that time.
   handleSubjectImageLoad: (e, frameIndex) ->
@@ -184,7 +314,19 @@ Classifier = React.createClass
       'metadata.viewport':
         width: innerWidth
         height: innerHeight
+
+    if @state.expertClassification?
+      classificationQuality = testClassificationQuality @props.classification, @state.expertClassification, @props.workflow
+      console.log 'Classification quality', classificationQuality
+      @setState {classificationQuality}
+
     @props.onComplete?()
+
+  handleGoldStandardChange: (e) ->
+    @props.classification.update gold_standard: e.target.checked || undefined # Delete the whole key.
+
+  handleDemoModeChange: (e) ->
+    @props.onChangeDemoMode e.target.checked
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value

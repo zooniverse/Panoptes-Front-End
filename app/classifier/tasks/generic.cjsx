@@ -10,6 +10,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     question: ''
     help: ''
+    required: false
     answers: []
 
   getInitialState: ->
@@ -23,17 +24,31 @@ module.exports = React.createClass
         {React.Children.map @props.answers, (answer) ->
           cloneWithProps answer,  className: 'answer'}
       </div>
+
+      {if @props.required
+        <div className="required-task-warning">
+          <p>
+            <small>
+              <strong>This step is required.</strong>
+              <br />
+              If you’re not allowed to continue, make sure it’s complete.
+            </small>
+          </p>
+        </div>}
+
       {if @props.help
-        <p className="help">
-          <br />
-          <small>
-            <strong>
-              <button type="button" className="minor-button" onClick={@showHelp}>
-                Need some help?
-              </button>
-            </strong>
-          </small>
-        </p>}
+        <div>
+          <hr />
+          <p>
+            <small>
+              <strong>
+                <button type="button" className="minor-button" onClick={@showHelp}>
+                  Need some help?
+                </button>
+              </strong>
+            </small>
+          </p>
+        </div>}
     </div>
 
   showHelp: ->

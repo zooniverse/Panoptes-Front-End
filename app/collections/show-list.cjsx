@@ -1,5 +1,5 @@
 React = require 'react'
-Router = require 'react-router'
+Router = require '@edpaget/react-router'
 intersection = require 'lodash.intersection'
 pick = require 'lodash.pick'
 Translate = require 'react-translate-component'
@@ -9,7 +9,7 @@ Paginator = require '../talk/lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 
 VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
 
@@ -97,13 +97,15 @@ module?.exports = React.createClass
           <Translate component="p" content="collectionSubjectListPage.noSubjects" />}
 
         {if subjects.length > 0
+          meta = subjects[0].getMeta()
+
           <div>
             <div className="collection-subjects-list">{subjects.map(subjectNode)}</div>
 
             <Paginator
-              page={+@props.query.page}
+              page={meta.page}
               onPageChange={@onPageChange}
-              pageCount={subjects[0].getMeta().page_count} />
+              pageCount={meta.page_count} />
           </div>}
       </div>
 

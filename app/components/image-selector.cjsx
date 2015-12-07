@@ -1,6 +1,6 @@
 React = require 'react'
 LoadingIndicator = require './loading-indicator'
-toBlob = require 'data-uri-to-blob'
+toBlob = require 'data-uri-to-blob' if window.navigator?
 
 BASE_64_EXPANSION = 3 / 4
 
@@ -11,7 +11,7 @@ module.exports = React.createClass
     accept: 'image/*'
     maxSize: Infinity # In bytes
     ratio: NaN # Width / height
-    defaultValue: ''
+    src: ''
     placeholder: ''
     minArea: 300 # Stop reducing when there are fewer than this many pixels.
     reductionPerPass: 0.05
@@ -19,7 +19,6 @@ module.exports = React.createClass
 
   getInitialState: ->
     working: false
-    dataURL: ''
     rootWidth: NaN
 
   componentDidMount: ->
@@ -34,8 +33,8 @@ module.exports = React.createClass
       width: @state.rootWidth || 'auto'
       position: 'relative'
     }>
-      {if @state.dataURL or @props.defaultValue
-        <img className="image-selector-preview" src={@state.dataURL || @props.defaultValue} style={
+      {if @props.src
+        <img className="image-selector-preview" src={@props.src} style={
           display: 'block'
           maxWidth: '100%'
         } />
@@ -79,9 +78,7 @@ module.exports = React.createClass
         delete img.dataset.displayWas
 
   handleChange: (e) ->
-    if e.target.files.length is 0
-      @setState dataURL: ''
-    else
+    unless e.target.files.length is 0
       [file] = e.target.files
       @setState working: true
 
@@ -122,7 +119,6 @@ module.exports = React.createClass
     ctx.drawImage img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, canvas.width, canvas.height
 
     dataURL = canvas.toDataURL srcFile.type
-    @setState {dataURL}
 
     try
       size = dataURL.split(';base64,')[1].length * BASE_64_EXPANSION
@@ -138,7 +134,6 @@ module.exports = React.createClass
 
     catch
       @setState
-        dataURL: ''
         working: false
 
       alert 'Error reducing image. Try a smaller one.'
