@@ -5,6 +5,7 @@ Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
+Select = require 'react-select'
 {Link} = require '@edpaget/react-router'
 
 module.exports = React.createClass
@@ -19,6 +20,10 @@ module.exports = React.createClass
     heroClass: React.PropTypes.string
     heroNav: React.PropTypes.node
 
+  getInitialState: ->
+    listPromise: @props.listPromise
+    tagFiler: ""
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
 
@@ -31,6 +36,32 @@ module.exports = React.createClass
     else
       'All'
 
+  disciplines: -> [
+    { value: 'astronomy', label: 'Astronomy' },
+    { value: 'physics', label: 'Physics' },
+    { value: 'nature', label: 'Nature' },
+    { value: 'biology', label: 'Biology' },
+    { value: 'climate', label: 'Climate' },
+    { value: 'history', label: 'History' },
+    { value: 'literature', label: 'Literature' },
+    { value: 'arts', label: 'Arts' },
+    { value: 'language', label: 'Language' },
+    { value: 'medicine', label: 'Medicine' },
+    { value: 'social science', label: 'Social Science' },
+    { value: 'humanitarian', label: 'Humanitarian' },
+  ]
+
+  filterDiscipline: (discipline) ->
+    @setState tagFilter: discipline
+    query =
+      include:'avatar'
+    if !apiClient.params.admin
+      query.launch_approved = true
+    if discipline
+      query.tags = discipline
+    @setState listPromise: apiClient.type('projects').get query
+
+
   render: ->
     <div className="secondary-page all-resources-page">
       <section className={"hero #{@props.heroClass}"}>
@@ -41,7 +72,16 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="resources-container">
-        <PromiseRenderer promise={@props.listPromise}>{(ownedResources) =>
+        <Select
+          ref="disciplineSelect"
+          name="disciplines"
+          placeholder="Filter by disciplines"
+          className="discipline-filter"
+          value={@state.tagFilter}
+          options={@disciplines()}
+          onChange={@filterDiscipline} />
+
+        <PromiseRenderer promise={@state.listPromise}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
             <div>
