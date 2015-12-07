@@ -39,6 +39,7 @@ routes =
   </Route>
 
   <Route name="projects" path="projects/?" handler={require './pages/projects'} />
+    <Route name="disciplines" path="projects/disciplines?" handler={require './pages/projects-disciplines'} />
   <Route path="projects/:owner/:name/?" handler={require './pages/project'}>
     <DefaultRoute name="project-home" handler={require './pages/project/home'} />
     <Route name="project-research" path="research/?" handler={require './pages/project/research'} />
