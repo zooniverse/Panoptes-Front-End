@@ -53,7 +53,7 @@ module.exports = React.createClass
         name: name
 
     <FlexibleLink {...linkProps}>
-      <div className="card" ref="ownedCard" tabIndex="0">
+      <div className="card" ref="ownedCard">
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.resource.display_name}</span></div>
@@ -67,4 +67,3 @@ module.exports = React.createClass
         </div>
       </div>
     </FlexibleLink>
-
