@@ -1,111 +1,24 @@
 apiClient = require '../api/client'
 
-# This is just a blank image for testing drawing tools while offline.
+# This is just a blank image for testing drawing tools.
 BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
   'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
 
-MISC_DRAWING_DETAILS = [{
-  type: 'single'
-  question: 'Cool?'
-  answers: [
-    {label: 'Yeah'}
-    {label: 'Nah'}
-  ]
-}, {
-  type: 'multiple'
-  question: 'Cool stuff?'
-  answers: [
-    {label: 'Ice'}
-    {label: 'Snow'}
-  ]
-}, {
-  type: 'text'
-  instruction: 'Any additional comments?'
-}]
-
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
-  first_task: 'init'
-
+  first_task: 'crop'
   tasks:
-    init:
-      type: 'single'
-      question: 'Where shall we start?'
-      answers: [
-        {label: 'Crop the image', next: 'crop'}
-        {label: 'Enter some text', next: 'write'}
-        {label: 'Multi-answer question', next: 'features'}
-        {label: 'Draw stuff', next: 'draw'}
-        {label: 'Survey the image', next: 'survey'}
-        {label: 'We’re done here.', next: null}
-      ]
-
     crop:
       type: 'crop'
-      instruction: 'Drag out a box around the smaller rhino.'
-      help: 'That’s the adorable one.'
-      next: 'write'
-
-    write:
-      type: 'text'
-      required: true
-      instruction: 'What’s the name of this animal? Is it a rhino?'
-      help: '''
-        **Example**: If you see a bee, then type "Bee"
-      '''
-      next: 'features'
-
-    features:
-      type: 'multiple'
-      question: 'What **cool** features are present? The first two?'
-      answers: [
-        {label: 'Cold water'}
-        {label: 'Snow'}
-        {label: 'Ice'}
-        {label: 'Sunglasses'}
-      ]
+      instruction: 'Drag out a box around the face.'
+      help: 'The face is the thing with the nose.'
       next: 'draw'
-
-    draw:
-      type: 'drawing'
-      required: true
-      instruction: 'Drop a point on the rhino eyeball.'
-      help: '''
-        Do this:
-        * Pick a tool
-        * Draw something
-      '''
-      tools: [
-        {type: 'point', label: 'Point', color: 'red', details: MISC_DRAWING_DETAILS}
-        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DRAWING_DETAILS}
-        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DRAWING_DETAILS}
-        {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
-        {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DRAWING_DETAILS}
-      ]
-      next: 'survey'
 
     survey:
       type: 'survey'
-      images:
-        aa1: '//placehold.it/64.png?text=AA1'
-        aa2: '//placehold.it/64.png?text=AA2'
-        ar1: '//placehold.it/64.png?text=AR1'
-        ar2: '//placehold.it/64.png?text=AR2'
-        to1: '//placehold.it/64.png?text=TO1'
-        to2: '//placehold.it/64.png?text=TO2'
-        so: '//placehold.it/48.png?text=so'
-        sp: '//placehold.it/48.png?text=sp'
-        st: '//placehold.it/48.png?text=st'
-        ba: '//placehold.it/48.png?text=ba'
-        wh: '//placehold.it/48.png?text=wh'
-        ta: '//placehold.it/48.png?text=ta'
-        re: '//placehold.it/48.png?text=re'
-        br: '//placehold.it/48.png?text=br'
-        bl: '//placehold.it/48.png?text=bl'
-        gr: '//placehold.it/48.png?text=gr'
+      required: true
       characteristicsOrder: ['pa', 'co']
       characteristics:
         pa:
@@ -114,38 +27,38 @@ workflow = apiClient.type('workflows').create
           values:
             so:
               label: 'Solid'
-              image: 'so'
+              image: '//placehold.it/64.png?text=Solid'
             sp:
               label: 'Spots'
-              image: 'sp'
+              image: '//placehold.it/64.png?text=Spots'
             st:
               label: 'Stripes'
-              image: 'st'
+              image: '//placehold.it/64.png?text=Stripes'
             ba:
               label: 'Bands'
-              image: 'ba'
+              image: '//placehold.it/64.png?text=Bands'
         co:
           label: 'Color'
           valuesOrder: ['wh', 'ta', 're', 'br', 'bl', 'gr']
           values:
             wh:
               label: 'White'
-              image: 'wh'
+              image: '//placehold.it/64.png?text=White'
             ta:
               label: 'Tan'
-              image: 'ta'
+              image: '//placehold.it/64.png?text=Tan'
             re:
               label: 'Red'
-              image: 're'
+              image: '//placehold.it/64.png?text=Red'
             br:
               label: 'Brown'
-              image: 'br'
+              image: '//placehold.it/64.png?text=Brown'
             bl:
               label: 'Black'
-              image: 'bl'
+              image: '//placehold.it/64.png?text=Black'
             gr:
               label: 'Green'
-              image: 'gr'
+              image: '//placehold.it/64.png?text=Green'
 
       choicesOrder: ['aa', 'ar', 'to']
       choices:
@@ -153,8 +66,8 @@ workflow = apiClient.type('workflows').create
           label: 'Aardvark'
           description: 'Basically a long-nose rabbit'
           images: [
-            'aa1'
-            'aa2'
+            '//placehold.it/320x240.png?text=Aardvark 1'
+            '//placehold.it/320x240.png?text=Aardvark 2'
           ]
           characteristics:
             pa: ['so']
@@ -167,8 +80,8 @@ workflow = apiClient.type('workflows').create
           label: 'Armadillo'
           description: 'A little rolly dude'
           images: [
-            'ar1'
-            'ar2'
+            '//placehold.it/320x240.png?text=Armadillo 1'
+            '//placehold.it/320x240.png?text=Armadillo 2'
           ]
           characteristics:
             pa: ['so', 'st']
@@ -180,8 +93,8 @@ workflow = apiClient.type('workflows').create
           label: 'Tortoise'
           description: 'Little green house with legs'
           images: [
-            'to1'
-            'to2'
+            '//placehold.it/320x240.png?text=Tortoise 1'
+            '//placehold.it/320x240.png?text=Tortoise 2'
           ]
           characteristics:
             pa: ['so']
@@ -227,20 +140,81 @@ workflow = apiClient.type('workflows').create
         hr:
           required: false
           multiple: true
-          label: 'Horns (toggle)'
+          label: 'Horns toggle'
           answersOrder: ['y']
           answers:
             y:
               label: 'Present'
-      next: 'init'
+
+      images: {}
+      # next: 'draw'
+
+      next: 'draw'
+
+    draw:
+      type: 'drawing'
+      required: true
+      instruction: 'Draw something.'
+      help: '''
+        Do this:
+        * Pick a tool
+        * Draw something
+      '''
+      tools: [
+        {
+          type: 'point'
+          label: 'Point'
+          color: 'red'
+          details: [{
+            type: 'single'
+            required: true
+            question: 'Cool?'
+            answers: [
+              {label: 'Yeah'}
+              {label: 'Nah'}
+            ]
+          }, {
+            type: 'multiple'
+            question: 'Cool stuff?'
+            answers: [
+              {label: 'Ice'}
+              {label: 'Snow'}
+            ]
+          }]
+        }
+        {type: 'line', label: 'Line', color: 'yellow', details: []}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: []}
+        {type: 'polygon', label: 'Polygon', color: 'cyan', details: []}
+        {type: 'circle', label: 'Circle', color: 'blue', details: []}
+        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: []}
+      ]
+      next: 'cool'
+
+    cool:
+      type: 'single'
+      question: 'Is this cool?'
+      answers: [
+        {label: 'Yeah', next: 'features'}
+        {label: 'Nah', next: null}
+      ]
+
+    features:
+      type: 'multiple'
+      question: 'What cool features are present?'
+      answers: [
+        {label: 'Cold water'}
+        {label: 'Snow'}
+        {label: 'Ice'}
+        {label: 'Sunglasses'}
+      ]
 
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
-    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
-    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
+    {'image/jpeg': if navigator.onLine then 'http://lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
   ]
 
   metadata:
@@ -248,46 +222,26 @@ subject = apiClient.type('subjects').create
     'Region': 'Chicago, IL'
 
   expert_classification_data:
-    MOCK_WORKFLOW_FOR_CLASSIFIER: apiClient.type('classifications').create
-      annotations: [{
-        task: 'init'
-        value: 0
+    annotations: [{
+      task: 'draw'
+      value: [{
+        tool: 0
+        x: 50
+        y: 50
+        frame: 0
       }, {
-        task: 'crop'
-        value: {
-          x: 20
-          y: 57
-          width: 224
-          height: 142
-        }
-      }, {
-        task: 'write'
-        value: 'Rhino'
-      }, {
-        task: 'features'
-        value: [0, 1]
-      }, {
-        task: 'draw'
-        value: [{
-          tool: 0
-          frame: 0
-          x: 207
-          y: 134
-          details: [{
-            value: 0
-          }, {
-            value: []
-          }, {
-            value: ''
-          }]
-        }]
-      }, {
-        task: 'survey'
-        value: []
-      }, {
-        task: 'init'
-        value: 5
+        tool: 0
+        x: 150
+        y: 50
+        frame: 0
       }]
+    }, {
+      task: 'cool'
+      value: 0
+    }, {
+      task: 'features'
+      value: [0, 2]
+    }]
 
 classification = apiClient.type('classifications').create
   annotations: []
@@ -300,4 +254,4 @@ classification = apiClient.type('classifications').create
   _subjects: [subject] # TEMP
 
 module.exports = {workflow, subject, classification}
-window?.mockClassifierData = module.exports
+window.mockClassifierData = module.exports

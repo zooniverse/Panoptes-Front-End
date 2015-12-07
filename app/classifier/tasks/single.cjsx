@@ -34,12 +34,12 @@ Summary = React.createClass
                 <i className="fa fa-check-circle-o fa-fw"></i>
               else
                 <i className="fa fa-circle-o fa-fw"></i>}
-              <Markdown tag="span" inline={true}>{@props.task.answers[i].label}</Markdown>
+              {@props.task.answers[i].label}
             </div>
         else if @props.annotation.value?
           <div className="answer">
             <i className="fa fa-check-circle-o fa-fw"></i>
-            <Markdown tag="span" inline={true}>{@props.task.answers[@props.annotation.value].label}</Markdown>
+            {@props.task.answers[@props.annotation.value].label}
           </div>
         else
           <div className="answer">No answer</div>}
@@ -68,12 +68,6 @@ module.exports = React.createClass
     isAnnotationComplete: (task, annotation) ->
       annotation.value? or not task.required
 
-    testAnnotationQuality: (unknown, knownGood) ->
-      if unknown.value is knownGood.value
-        1
-      else
-        0
-
   getDefaultProps: ->
     task: null
     annotation: null
@@ -87,7 +81,7 @@ module.exports = React.createClass
         <Markdown>{answer.label}</Markdown>
       </label>
 
-    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
+    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} />
 
   handleChange: (index, e) ->
     if e.target.checked

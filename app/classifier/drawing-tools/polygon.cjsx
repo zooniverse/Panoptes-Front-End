@@ -22,7 +22,6 @@ module.exports = React.createClass
     initStart: ({x, y}, mark) ->
       mark.points.push {x, y}
       points: mark.points
-      _inProgress: true
 
     initMove: ({x, y}, mark) ->
       mark.points[mark.points.length - 1] = {x, y}
@@ -113,7 +112,6 @@ module.exports = React.createClass
     document.removeEventListener 'mousemove', @handleMouseMove
 
     @props.mark.closed = true
-    @props.mark._inProgress = false
     @props.onChange()
 
   handleMainDrag: (e, d) ->

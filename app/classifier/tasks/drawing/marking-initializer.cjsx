@@ -87,8 +87,8 @@ module.exports = React.createClass
         @destroyMark @props.annotation, mark
 
   destroyMark: (annotation, mark) ->
-    if mark is @state?.selectedMark
+    if mark is @state.selectedMark
       @setState selectedMark: null
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
-    @props.classification.update 'annotations'
+    @updateAnnotations()

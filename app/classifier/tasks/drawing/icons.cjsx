@@ -1,5 +1,3 @@
-React = require 'react'
-
 module.exports =
   point: <svg viewBox="0 0 100 100">
     <circle className="shape" r="30" cx="50" cy="50" />

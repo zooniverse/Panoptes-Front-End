@@ -16,14 +16,8 @@ module.exports = React.createClass
     defaultValues: ({x, y}) ->
       {x, y}
 
-    initStart: ->
-      _inProgress: true
-
     initMove: ({x, y}) ->
       {x, y}
-
-    initRelease: ->
-      _inProgress: false
 
   getDeleteButtonPosition: ->
     theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)

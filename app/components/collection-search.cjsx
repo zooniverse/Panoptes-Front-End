@@ -8,51 +8,40 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     multi: false
+    favorite: false
+    user: null
     project: null
-
-  getInitialState: ->
-    collections: []
 
   searchCollections: (value, callback) ->
     query =
-      page_size: 20
-      favorite: false
+      page_size: 10
       current_user_roles: 'owner,collaborator'
     query.search = "#{value}" unless value is ''
+    query.project_id = @props.project.id if @props.project?
 
     apiClient.type('collections').get query
       .then (collections) ->
-
-        opts = collections.map (collection) ->
-          {
-            value: collection.id,
-            label: collection.display_name,
-            collection: collection
-          }
+        opts = collections.map (collection) -> {
+          value: collection.id,
+          label: collection.display_name
+          collection: collection
+        }
 
         callback null, {
           options: opts
         }
 
-  addSelected:(collIds) ->
-    options = @refs.collectionSelect.state.options
-    lastId = collIds.split(",").slice(-1)[0]
-    collection = options.filter (col) ->
-      col.value == lastId
-    @setState({ collections: @state.collections.slice().concat(collection), value: collIds })
-
-  getSelected: ->
-    @state.collections
+  options: ->
+    return @refs.collectionSelect.state.options
 
   render: ->
     <Select
       ref="collectionSelect"
       multi={@props.multi}
-      name="collids"
-      value={this.state.value}
+      name="colids"
       placeholder="Collection Name"
       searchPromptText="Type to search Collections"
       className="collection-search"
       closeAfterClick={true}
-      onChange={@addSelected}
+      onChange={@props.onChange}
       asyncOptions={debounce(@searchCollections, 200)} />

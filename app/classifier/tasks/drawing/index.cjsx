@@ -4,7 +4,6 @@ Summary = require './summary'
 MarkingInitializer = require './marking-initializer'
 MarkingsRenderer = require './markings-renderer'
 GenericTask = require '../generic'
-testShapeCloseness = require 'test-shape-closeness'
 {Markdown} = require 'markdownz'
 icons = require './icons'
 drawingTools = require '../../drawing-tools'
@@ -89,7 +88,7 @@ module.exports = React.createClass
           <span className="tool-count">({count})</span>}
       </label>
 
-    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} />
+    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} />
 
   handleChange: (index, e) ->
     @constructor.closeAllMarks @props.task, @props.annotation

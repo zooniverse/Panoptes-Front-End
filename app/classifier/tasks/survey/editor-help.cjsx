@@ -1,5 +1,3 @@
-React = require 'react'
-
 module.exports =
   choices: <div className="content-container">
     <p>User-identifiable <strong>choices</strong>, with these headers:</p>

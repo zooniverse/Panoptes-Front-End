@@ -248,16 +248,6 @@ module?.exports = React.createClass
             <h3>Projects:</h3>
             <p><ProjectLinker user={@props.user} /></p>
           </section>
-
-          <section>
-            <h3>
-              {if @props.section is 'zooniverse'
-                <Link className="sidebar-link" to="talk-board-recents" {...@props}>Recent Comments</Link>
-              else
-                <Link className="sidebar-link" to="project-talk-board-recents" {...@props}>Recent Comments</Link>
-              }
-            </h3>
-          </section>
         </div>
       </div>
 
