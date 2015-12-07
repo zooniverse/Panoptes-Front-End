@@ -46,9 +46,6 @@ module.exports = React.createClass
    'humanitarian'
   ]
 
-  testFun: (p) ->
-    "hi"
-
   getResourceList: (discipline,ownedResources) ->
     for resource in ownedResources[..4]
       <OwnedCard
