@@ -117,10 +117,9 @@ module.exports =
   </Route>
 
   <Route path="todo" component={-> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
-  <Route path="*" component={require './pages/not-found'} />
-
   <Route path="dev/workflow-tasks-editor" component={require './components/workflow-tasks-editor'} />
   <Route path="dev/classifier" component={require './classifier'} />
   <Route path="dev/aggregate" component={require './components/aggregate-view'} />
   <Route path="dev/ribbon" component={require './components/classifications-ribbon'} />
+  <Route path="*" component={require './pages/not-found'} />
 </Route>
