@@ -5,8 +5,33 @@ Translate = require 'react-translate-component'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
+Select = require 'react-select'
+{Link} = require '@edpaget/react-router'
 {DISCIPLINES} = require '../components/disciplines'
-{Link} = require 'react-router'
+
+DisciplineSectionRenderer = React.createClass
+  displayName: 'DisciplineSectionRenderer'
+
+  render: ->
+    console.log @props.discipline
+    <PromiseRenderer promise={@props.getListPromiseFunction(@props.discipline.value)}>{(ownedResources) =>
+      if ownedResources?.length > 0
+        meta = ownedResources[0].getMeta()
+        <div className="discipline-section">
+          <h2 className="discipline-title">{@props.discipline.label}</h2>
+          <div className="card-list">
+          {
+            for resource in ownedResources
+              <OwnedCard
+                key={resource.id}
+                resource={resource}
+                imagePromise={@props.imagePromise(resource)}
+                linkTo={@props.cardLink(resource)}
+                translationObjectName={@props.translationObjectName}/>
+          }
+          </div>
+        </div>}
+    </PromiseRenderer>
 
 module.exports = React.createClass
   displayName: 'OwnedCardList'
@@ -20,6 +45,10 @@ module.exports = React.createClass
     heroClass: React.PropTypes.string
     heroNav: React.PropTypes.node
 
+  getInitialState: ->
+    listPromise: @props.listPromise
+    tagFiler: ""
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
 
@@ -32,14 +61,14 @@ module.exports = React.createClass
     else
       'All'
 
-  getResourceList: (discipline,ownedResources) ->
-    for resource in ownedResources[..4]
-      <OwnedCard
-        key={resource.id}
-        resource={resource}
-        imagePromise={@props.imagePromise(resource)}
-        linkTo={@props.cardLink(resource)}
-        translationObjectName={@props.translationObjectName}/>
+  getListPromise: (discipline) ->
+    query =
+      include:'avatar'
+    if !apiClient.params.admin
+      query.launch_approved = true
+    if !!discipline
+      query.tags = discipline
+    apiClient.type('projects').get query
 
   render: ->
     <div className="secondary-page all-resources-page">
@@ -51,25 +80,10 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="resources-container">
-        <PromiseRenderer promise={@props.listPromise}>{(ownedResources) =>
-          if ownedResources?.length > 0
-            meta = ownedResources[0].getMeta()
-            <div>
-              <div className="discipline-list">
-                {for discipline in DISCIPLINES
-                  <div className="discipline-section">
-                    <h2 className="discipline-title">{discipline.label}</h2>
-                    <div className="card-list">
-                      {@getResourceList(discipline.value,ownedResources)}
-                    </div>
-                  </div>
-                }
-              </div>
-            </div>
-          else if ownedResources?.length is 0
-            <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" />
-          else
-            <Translate content="#{@props.translationObjectName}.loadMessage" component="div" />
-        }</PromiseRenderer>
+        <div className="discipline-list">
+        {for discipline in DISCIPLINES
+          <DisciplineSectionRenderer discipline={discipline} getListPromiseFunction={@getListPromise} {...@props} />
+        }
+        </div>
       </section>
     </div>
