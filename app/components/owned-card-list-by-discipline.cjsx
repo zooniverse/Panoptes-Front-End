@@ -18,7 +18,7 @@ DisciplineSectionRenderer = React.createClass
       if ownedResources?.length > 0
         meta = ownedResources[0].getMeta()
         <div className="discipline-section">
-          <h2 className="discipline-title">{@props.discipline.label}</h2>
+          <img src={"/assets/project-pages/"+@props.discipline.value+".svg"}/><h2 className="discipline-title">{@props.discipline.label}</h2>
           <div className="card-list">
           {
             for resource in ownedResources
