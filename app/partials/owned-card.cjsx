@@ -52,11 +52,11 @@ module.exports = React.createClass
         owner: owner
         name: name
 
-    <div className="card" ref="ownedCard">
-      <FlexibleLink {...linkProps}>
+    <FlexibleLink {...linkProps}>
+      <div className="card" ref="ownedCard">
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
-          <div className="name">{@props.resource.display_name}</div>
+          <div className="name"><span>{@props.resource.display_name}</span></div>
           <PromiseRenderer promise={@props.resource.get('owner')}>{ (owner) ->
             if document.location.hash is "/collections"
               <div className="owner">{owner?.display_name ? 'LOADING'}</div>
@@ -65,5 +65,5 @@ module.exports = React.createClass
           {<div className="private"><i className="fa fa-lock"></i> Private</div> if @props.resource.private}
           <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"#{@props.translationObjectName}.button"} /></button>
         </div>
-      </FlexibleLink>
-    </div>
+      </div>
+    </FlexibleLink>
