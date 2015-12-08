@@ -21,7 +21,7 @@ module.exports = React.createClass
       @props.children
     else
       React.cloneElement @props.children,
-        className: 'draggable'
+        className: [@props.children.props.className, 'draggable'].filter(Boolean).join ' '
         onMouseDown: @handleStart
         onTouchStart: @handleStart
 
