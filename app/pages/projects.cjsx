@@ -3,11 +3,12 @@ React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require '../api/client'
 OwnedCardList = require '../components/owned-card-list'
+{Link} = require '@edpaget/react-router'
 
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'All Projects'
-    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found'
+    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found.'
     button: 'Get Started'
     notFoundMessage: 'Sorry, no projects found'
 

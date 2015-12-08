@@ -14,21 +14,6 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'ProjectsPage'
 
-  DISCIPLINES: [
-   'astronomy',
-   'physics',
-   'nature',
-   'biology',
-   'climate',
-   'history',
-   'literature',
-   'arts',
-   'language',
-   'medicine',
-   'social science',
-   'humanitarian'
-  ]
-
   mixins: [TitleMixin]
 
   title: 'Projects'

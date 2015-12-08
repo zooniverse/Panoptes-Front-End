@@ -12,12 +12,21 @@
     .resource-results-counter
       color: rgba(100, 100, 100, 0.5)
       font-weight: 700
+      position: relative
       text-align: center
 
       p
         font-size: 14px
         margin: 0
         padding: 2.33em 0
+
+      p.showing-with-link-para
+        padding-top: 20px
+        padding-bottom: 20px
+
+      a.view-by-discipline-link
+        margin: 15px
+        display: inline-block
 
   .pagination
     padding: 2.33em 0
@@ -29,5 +38,17 @@
 
     .active
       border: 2px solid
+      
+  .project-search
+    max-width: 250px
+    position: absolute
+    right: 1.75em
+    text-align: left
+    top: 1.33em
+    width: 100%
+    
+    @media screen and (max-width: 1024px)
+      position: relative
+      margin: 0 auto 2.33em
 
 
