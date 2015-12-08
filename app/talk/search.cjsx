@@ -116,7 +116,7 @@ module.exports = React.createClass
 
               <section>
                 <h3>Projects:</h3>
-                <p><ProjectLinker /></p>
+                <ProjectLinker />
               </section>
             </div>
           </div>

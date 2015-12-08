@@ -152,10 +152,10 @@ module?.exports = React.createClass
           <Avatar user={commentOwner} />
         }</PromiseRenderer>
 
-        <p>
+        <div>
           <Link to="/users/#{@props.data.user_login}">{@props.data.user_display_name}</Link>
           <div className="user-mention-name">@{@props.data.user_login}</div>
-        </p>
+        </div>
 
         <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.data.user_id, section: ['zooniverse', @props.data.section], is_shown: true, page_size: 100)}>{(roles) =>
           <DisplayRoles roles={roles} section={@props.data.section} />
