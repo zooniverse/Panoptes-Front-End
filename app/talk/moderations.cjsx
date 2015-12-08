@@ -88,7 +88,7 @@ module?.exports = React.createClass
         @setModerations()
 
   report: (report, i) ->
-    <div key={report.id}>
+    <div key={"report-#{i}"}>
       <PromiseRenderer promise={apiClient.type('users').get(report.user_id.toString())}>{(user) =>
         <li>
           <Link to="/users/#{user.login}">{user.display_name}</Link>: {report.message}
@@ -97,7 +97,7 @@ module?.exports = React.createClass
     </div>
 
   comment: (comment, moderation) ->
-    <div key={comment.id}>
+    <div key={"comment-#{comment.id}"}>
       <h1>Comment {comment.id} Reports</h1>
       <ul>{moderation.reports.map(@report)}</ul>
 
@@ -130,12 +130,12 @@ module?.exports = React.createClass
               (moderation.state.indexOf(action) is -1) and (action isnt 'report')
             .map (action) =>
               if action is 'destroy'
-                <button key={action} className="moderations-#{action}" onClick={=>
+                <button key={"action-#{comment.id}-#{action}"} className="moderations-#{action}" onClick={=>
                   if window.confirm("Are you sure that you want to delete the reported comment?")
                     @updateModeration(moderation, action)
                 }>Delete</button>
               else
-                <button key={action} className="moderations-#{action}" onClick={=> @updateModeration(moderation, action)}>{action}</button>
+                <button key={"action-#{comment.id}-#{action}"} className="moderations-#{action}" onClick={=> @updateModeration(moderation, action)}>{action}</button>
           }
       </div>
     </div>
@@ -157,7 +157,7 @@ module?.exports = React.createClass
       talkClient.type('comments').get moderation.target_id
 
   moderation: (moderation, i) ->
-    <div key={moderation.id} className="talk-module">
+    <div key={"moderation-#{moderation.id}"} className="talk-module">
       <PromiseRenderer promise={@moderatedComment moderation}>{(comment) =>
         <div>
           {@comment(comment, moderation)}
