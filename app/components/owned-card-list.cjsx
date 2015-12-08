@@ -108,9 +108,8 @@ module.exports = React.createClass
                   pageStart = meta.page * meta.page_size - meta.page_size + 1
                   pageEnd = Math.min(meta.page * meta.page_size, meta.count)
                   count = meta.count
-                  <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />
-                  <Link to='disciplines' className="view-by-discipline-link">View by discipline</Link>}
-                {if @state.currentPage is 'projects'
+                  <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" /><Link to='disciplines' className="view-by-discipline-link">View by discipline</Link></p>}
+              {if @state.currentPage is 'projects'
                   <Select 
                     multi={false}
                     name="resourcesid"
