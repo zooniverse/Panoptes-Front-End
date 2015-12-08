@@ -107,7 +107,6 @@ module.exports = React.createClass
                   count = meta.count
                   <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />
                   <Link to='disciplines' className="view-by-discipline-link">View by discipline</Link>}
-                  <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />}
                 {if @state.currentPage is 'projects'
                   <Select 
                     multi={false}
