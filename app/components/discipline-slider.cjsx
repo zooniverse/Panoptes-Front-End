@@ -13,7 +13,7 @@ module.exports = React.createClass
 
   render: ->
     console.log "RENDERING DISCIPLINES SLIDER"
-    <StepThrough >
+    <StepThrough className={"media-discipline"} >
       {for filter, i in @props.filterCards
         filter._key ?= Math.random()
         <MediaCard className={"media-discipline-card"} key={filter.label } src={"/assets/project-pages/#{filter.value}.svg"} >
