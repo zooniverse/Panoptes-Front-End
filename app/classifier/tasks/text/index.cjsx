@@ -2,6 +2,7 @@ React = require 'react'
 {Markdown} = require 'markdownz'
 GenericTask = require '../generic'
 GenericTaskEditor = require '../generic-editor'
+levenshtein = require 'fast-levenshtein'
 
 NOOP = Function.prototype
 
@@ -21,8 +22,7 @@ Summary = React.createClass
       <div className="answers">
       {if @props.annotation.value?
         <div className="answer">
-          <i className="fa fa-check-circle-o fa-fw"></i>
-          {@props.annotation.value}
+          “<code>{@props.annotation.value}</code>”
         </div>}
       </div>
     </div>
@@ -47,6 +47,11 @@ module.exports = React.createClass
 
     isAnnotationComplete: (task, annotation) ->
       annotation.value isnt '' or not task.required
+
+    testAnnotationQuality: (unknown, knownGood) ->
+      distance = levenshtein.get unknown.value.toLowerCase(), knownGood.value.toLowerCase()
+      length = Math.max unknown.value.length, knownGood.value.length
+      (length - distance) / length
 
   getDefaultProps: ->
     task: null

@@ -1,4 +1,6 @@
 React = require 'react'
+apiClient = require '../api/client'
+testClassificationQuality = require '../lib/test-classification-quality'
 ChangeListener = require '../components/change-listener'
 SubjectAnnotator = require './subject-annotator'
 ClassificationSummary = require './classification-summary'
@@ -25,10 +27,13 @@ Classifier = React.createClass
     workflow: workflow ? null
     subject: subject ? null
     classification: classification ? null
+    goodClassificationCutoff: 0.5
     onLoad: Function.prototype
 
   getInitialState: ->
     subjectLoading: false
+    expertClassification: null
+    classificationQuality: NaN
     showingExpertClassification: false
     selectedExpertAnnotation: -1
 
@@ -46,12 +51,37 @@ Classifier = React.createClass
       @prepareToClassify nextProps.classification
 
   loadSubject: (subject) ->
-    @setState subjectLoading: true
+    @setState
+      subjectLoading: true
+      expertClassification: null
+      classificationQuality: NaN
+      showingExpertClassification: false
+      selectedExpertAnnotation: -1
+
+    @getExpertClassification @props.workflow, @props.subject
+
     preloadSubject subject
       .then =>
         if @props.subject is subject # The subject could have changed while we were loading.
           @setState subjectLoading: false
           @props.onLoad?()
+
+  getExpertClassification: (workflow, subject) ->
+    awaitExpertClassification = Promise.resolve do =>
+      apiClient.get('/classifications/gold_standard', {
+        workflow_id: workflow.id,
+        subject_ids: [subject.id]
+      })
+        .catch ->
+          []
+        .then ([expertClassification]) ->
+          expertClassification
+
+    awaitExpertClassification.then (expertClassification) =>
+      expertClassification ?= subject.expert_classification_data?[workflow.id]
+      if @props.workflow is workflow and @props.subject is subject
+        window.expertClassification = expertClassification
+        @setState {expertClassification}
 
   prepareToClassify: (classification) ->
     classification.annotations ?= []
@@ -61,7 +91,7 @@ Classifier = React.createClass
   render: ->
     <ChangeListener target={@props.classification}>{=>
       if @state.showingExpertClassification
-        currentClassification = @props.subject.expert_classification_data
+        currentClassification = @state.expertClassification
       else
         currentClassification = @props.classification
         unless @props.classification.completed
@@ -168,20 +198,32 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {if @props.subject.expert_classification_data?
+      {if @state.expertClassification?
         <div className="has-expert-classification">
-          Expert classification available.
+          Expert classification available.{' '}
           {if @state.showingExpertClassification
             <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
           else
             <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
+
+          {unless true or isNaN @state.classificationQuality
+            qualityString = (@state.classificationQuality * 100).toString().split('.')[0] + '%'
+            <div>Looks like you matched about <strong>{qualityString}</strong>.</div>}
+          {if @state.classificationQuality < @props.goodClassificationCutoff
+            <div>Keep at it, all classifications are useful!</div>}
+          {if @state.classificationQuality > @props.goodClassificationCutoff
+            <div>Keep up the good work!</div>}
         </div>}
 
-      {if @state.showingExpertClassification
-        'Expert classification:'
-      else
-        'Your classification:'}
-      <ClassificationSummary workflow={@props.workflow} classification={classification} />
+      <div>
+        <strong>
+          {if @state.showingExpertClassification
+            'Expert classification:'
+          else
+            'Your classification:'}
+        </strong>
+        <ClassificationSummary workflow={@props.workflow} classification={classification} />
+      </div>
 
       <hr />
 
@@ -272,6 +314,12 @@ Classifier = React.createClass
       'metadata.viewport':
         width: innerWidth
         height: innerHeight
+
+    if @state.expertClassification?
+      classificationQuality = testClassificationQuality @props.classification, @state.expertClassification, @props.workflow
+      console.log 'Classification quality', classificationQuality
+      @setState {classificationQuality}
+
     @props.onComplete?()
 
   handleGoldStandardChange: (e) ->

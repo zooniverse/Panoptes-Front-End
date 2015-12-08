@@ -2,13 +2,12 @@ counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require '../api/client'
-OwnedCardList = require '../components/owned-card-list'
-{Link} = require '@edpaget/react-router'
+OwnedCardList = require '../components/owned-card-list-by-discipline'
 
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'All Projects'
-    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found.'
+    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found'
     button: 'Get Started'
     notFoundMessage: 'Sorry, no projects found'
 
@@ -19,20 +18,18 @@ module.exports = React.createClass
 
   title: 'Projects'
 
-  listQuery: ->
+  listProjects: ->
     query =
       include:'avatar'
     if !apiClient.params.admin
       query.launch_approved = true
     Object.assign query, @props.query
 
-  listProjects: ->
-    apiClient.type('projects').get @listQuery()
+    apiClient.type('projects').get query
 
   imagePromise: (project) ->
     project.get('avatar')
       .then (avatar) -> avatar.src
-      .catch -> '/assets/simple-avatar.jpg'
 
   cardLink: (project) ->
     link = if !!project.redirect
@@ -46,7 +43,6 @@ module.exports = React.createClass
     <OwnedCardList
       translationObjectName="projectsPage"
       listPromise={@listProjects()}
-      listQuery={@listQuery()}
       linkTo="projects"
       cardLink={@cardLink}
       heroClass="projects-hero"
