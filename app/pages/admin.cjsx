@@ -2,7 +2,7 @@ React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 ChangeListener = require '../components/change-listener'
-{Link} = require 'react-router'
+{IndexLink, Link} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   userAdminPage:
@@ -21,20 +21,22 @@ AdminPage = React.createClass
         <div className="admin-content">
           <aside className="secondary-page-side-bar admin-side-bar">
             <nav>
-              <Link to="/admin"
+              <IndexLink to="/admin"
                 type="button"
-                className="secret-button admin-button" >
+                className="secret-button admin-button"
+                activeClassName="active">
                 <Translate content="userAdminPage.nav.createAdmin" />
-              </Link>
+              </IndexLink>
               <Link to="/admin/project_status"
                 type="button"
-                className="secret-button admin-button" >
+                className="secret-button admin-button"
+                activeClassName="active">
                 <Translate content="userAdminPage.nav.projectStatus" />
               </Link>
             </nav>
           </aside>
           <section className="admin-tab-content">
-            React.cloneElement @props.children, {user: @props.user}
+            {React.cloneElement @props.children, @props}
           </section>
         </div>
       </div>
@@ -48,7 +50,7 @@ module.exports = React.createClass
       <ChangeListener target={@props.user}>{ =>
         if @props.user?
           if @props.user.admin?
-            <AdminPage user={@props.user}/>
+            <AdminPage {...@props} />
           else
             <div className="content-container">
               <p>You're not an administrator</p>
