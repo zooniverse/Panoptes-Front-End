@@ -10,6 +10,8 @@ DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor} = require 'markdownz'
 markdownHelp = require '../../lib/markdown-help'
+{DISCIPLINES} = require '../../components/disciplines'
+Select = require 'react-select'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -72,8 +74,21 @@ module.exports = React.createClass
     project: {}
 
   getInitialState: ->
+    {disciplineTagList, otherTagList} = @splitTags()
     avatarError: null
     backgroundError: null
+    disciplineTagList: disciplineTagList
+    otherTagList: otherTagList
+
+  splitTags: (kind) ->
+    disciplineTagList = []
+    otherTagList = []
+    for t in @props.project.tags
+      if DISCIPLINES.some((el) -> el.value == t)
+        disciplineTagList.push(t)
+      else
+        otherTagList.push(t)
+    {disciplineTagList, otherTagList}
 
   render: ->
     # Failures on media GETs are acceptable here,
@@ -159,9 +174,23 @@ module.exports = React.createClass
 
           <div>
             <AutoSave resource={@props.project}>
-              <span className="form-label">Tags</span>
+            <span className="form-label">Discipline Tag</span>
+            <br />
+            <Select
+              ref="disciplineSelect"
+              name="disciplines"
+              placeholder="Add Discipline Tag"
+              className="discipline-tag"
+              value={@state.disciplineTagList}
+              options={DISCIPLINES}
+              multi={true}
+              onChange={@handleDisciplineTagChange} />
               <br />
-              <TagSearch name="tags" multi={true} value={@props.project.tags} onChange={@handleTagChange} />
+              </AutoSave>
+              <AutoSave resource={@props.project}>
+              <span className="form-label">Other Tags</span>
+              <br />
+              <TagSearch name="tags" multi={true} value={@state.otherTagList} onChange={@handleOtherTagChange} />
             </AutoSave>
             <small className="form-help">Enter a list of tags separated by commas to help users find your project.</small>
           </div>
@@ -175,10 +204,22 @@ module.exports = React.createClass
       </div>
     </div>
 
+  handleDisciplineTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState disciplineTagList: newTags
+    allTags = newTags.concat @state.otherTagList
+    @handleTagChange(allTags)
+
+  handleOtherTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState otherTagList: newTags
+    allTags = @state.disciplineTagList.concat newTags
+    @handleTagChange(allTags)
+
   handleTagChange: (value) ->
     event =
       target:
-        value: if value is '' then [] else value.split(',')
+        value: value
         name: 'tags'
         dataset: {}
     handleInputChange.call @props.project, event
