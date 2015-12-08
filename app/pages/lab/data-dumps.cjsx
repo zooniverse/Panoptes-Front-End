@@ -28,59 +28,59 @@ module.exports = React.createClass
     backgroundError: null
 
   render: ->
-    <div>
+    <div className="data-exports">
       <p className="form-label">Project data exports</p>
       <p className="form-help">Please note that the Zooniverse will process at most 1 of each export within a 24 hour period and some exports may take a long time to process. We will email you when they are ready.</p>
       <div className="columns-container">
         <div>
           Project Data<br />
-          <p>
+          <div className="row">
             <DataExportButton
               project={@props.project}
               buttonKey="projectDetails.classificationExport"
               exportType="classifications_export"  />
-          </p>
-          <p>
+          </div>
+          <div className="row">
             <DataExportButton
               project={@props.project}
               buttonKey="projectDetails.subjectExport"
               exportType="subjects_export"  />
-          </p>
-          <p>
+          </div>
+          <div className="row">
             <DataExportButton
               project={@props.project}
               buttonKey="projectDetails.workflowExport"
               exportType="workflows_export"  />
-          </p>
-          <p>
+          </div>
+          <div className="row">
             <DataExportButton
               project={@props.project}
               buttonKey="projectDetails.workflowContentsExport"
               exportType="workflow_contents_export"  />
-          </p>
-           <p>
+          </div>
+           <div className="row">
             <DataExportButton
               project={@props.project}
               buttonKey="projectDetails.aggregationExport"
               contentType="application/x-gzip"
               exportType="aggregations_export"
               newFeature=true />
-          </p>
+          </div>
           <hr />
 
           Talk Data<br />
-          <p>
+          <div className="row">
             <TalkDataExportButton
               project={@props.project}
               exportType="comments"
               label="Request new Talk comments export" />
-          </p>
-          <p>
+          </div>
+          <div className="row">
             <TalkDataExportButton
               project={@props.project}
               exportType="tags"
               label="Request new Talk tags export" />
-          </p>
+          </div>
         </div>
       </div>
     </div>

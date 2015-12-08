@@ -140,14 +140,14 @@ module.exports = React.createClass
             <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.</small>
           </p>
 
-          <p>
+          <div>
             <AutoSave resource={@props.project}>
               <span className="form-label">Introduction</span>
               <br />
               <MarkdownEditor className="full" name="introduction" rows="10" value={@props.project.introduction} project={@props.project} onChange={handleInputChange.bind @props.project} onHelp={-> alert <MarkdownHelp/>}/>
             </AutoSave>
             <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page.</small>
-          </p>
+          </div>
 
           <p>
             <AutoSave resource={@props.project}>
