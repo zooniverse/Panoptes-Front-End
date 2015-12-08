@@ -10,6 +10,7 @@ Select = require 'react-select'
 {DISCIPLINES} = require '../components/disciplines'
 {Link, State, Navigation} = require '@edpaget/react-router'
 debounce = require 'debounce'
+DisciplineSlider = require '../components/discipline-slider'
 
 module.exports = React.createClass
   displayName: 'OwnedCardList'
@@ -81,6 +82,7 @@ module.exports = React.createClass
           @transitionTo 'project-home', owner: owner, name: name
 
   render: ->
+    console.log "RENDERING OWNED CARD LIST"
     <div className="secondary-page all-resources-page">
       <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
@@ -90,6 +92,7 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="resources-container">
+        <DisciplineSlider />
         <Select
           ref="disciplineSelect"
           name="disciplines"
