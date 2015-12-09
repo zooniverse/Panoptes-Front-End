@@ -42,6 +42,7 @@ module.exports = React.createClass
 
   render: ->
     <OwnedCardList
+      {...@props}
       translationObjectName="projectsPage"
       listPromise={@listProjects()}
       linkTo="projects"

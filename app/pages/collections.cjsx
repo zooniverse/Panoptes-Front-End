@@ -61,6 +61,7 @@ List = React.createClass
 
   render: ->
     <OwnedCardList
+      {...@props}
       translationObjectName="collectionsPage"
       listPromise={@listCollections()}
       linkTo="collections"
