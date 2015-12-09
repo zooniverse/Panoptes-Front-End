@@ -8,6 +8,7 @@ ChangeListener = require '../components/change-listener'
 OwnedCard = require '../partials/owned-card'
 Select = require 'react-select'
 {DISCIPLINES} = require '../components/disciplines'
+{PROJECT_SORTS} = require '../components/project-sorts'
 {Link, State, Navigation} = require '@edpaget/react-router'
 debounce = require 'debounce'
 
@@ -26,8 +27,9 @@ module.exports = React.createClass
 
   getInitialState: ->
     listPromise: @props.listPromise
-    tagFiler: ""
+    tagFilter: ''
     currentPage: null
+    sortOrder: ''
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
@@ -42,15 +44,20 @@ module.exports = React.createClass
     else
       'All'
 
+  buildQuery: (query) ->
+    query = query || {}
+    query.sort = encodeURIComponent(@state.sortOrder) if @state.sortOrder
+    query.tags = @state.tagFilter if @state.tagFilter
+#    query.launch_approved = true if !apiClient.params.admin
+    return query
+
+  setSort: (newSort) ->
+    @setState sortOrder: newSort, ->
+      @setState listPromise: apiClient.type('projects').get @buildQuery (include: 'avatar')
+
   filterDiscipline: (discipline) ->
-    @setState tagFilter: discipline
-    query =
-      include:'avatar'
-    if !apiClient.params.admin
-      query.launch_approved = true
-    if discipline
-      query.tags = discipline
-    @setState listPromise: apiClient.type('projects').get query
+    @setState tagFilter: discipline, ->
+      @setState listPromise: apiClient.type('projects').get @buildQuery (include: 'avatar')
 
   searchProjectName: (value, callback) ->
     unless value is ''
@@ -110,16 +117,31 @@ module.exports = React.createClass
                   count = meta.count
                   <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" /><Link to='disciplines' className="view-by-discipline-link">View by discipline</Link></p>}
               {if @state.currentPage is 'projects'
-                  <Select 
-                    multi={false}
-                    name="resourcesid"
-                    placeholder="Project Name:"
-                    searchPromptText="Search by a project name"
-                    closeAfterClick={true}
-                    asyncOptions={debounce(@searchProjectName, 200)} 
-                    onChange={@routeToProject}
-                    className="search project-search standard-input"
-                  />}
+                <Select 
+                  multi={false}
+                  name="resourcesid"
+                  placeholder="Project Name:"
+                  searchPromptText="Search by a project name"
+                  closeAfterClick={true}
+                  asyncOptions={debounce(@searchProjectName, 200)} 
+                  onChange={@routeToProject}
+                  className="search project-search standard-input"
+                />
+              }
+
+              {if @state.currentPage is 'projects'
+                <Select
+                  multi={false}
+                  name="sort_order"
+                  placeholder="Sort By:"
+                  searchPromptText="Select a sort order"
+                  closeAfterClick={true}
+                  className='standard-input search project-sort'
+                  value={@state.sortOrder}
+                  options={PROJECT_SORTS}
+                  onChange={@setSort} />
+              }
+
               </div>
               <div className="card-list">
                 {for resource in ownedResources
