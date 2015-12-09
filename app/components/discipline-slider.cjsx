@@ -7,19 +7,24 @@ MediaCard = require '../components/media-card'
 module.exports = React.createClass
   displayName: 'DisciplineSlider'
 
+  propTypes:
+    selectedDiscipline: React.PropTypes.string
+
   getDefaultProps: ->
     filterCards: DISCIPLINES
 
 
-  render: ->
-    <StepThrough className={"media-discipline"} >
-      {for filter, i in @props.filterCards
-        filter._key ?= Math.random()
-        <MediaCard className={"media-discipline-card"} key={filter.label } src={"/assets/project-pages/#{filter.value}.svg"} >
 
-        </MediaCard>
+  render: ->
+    <div className={"filter"}>
+      {for filter, i in @props.filterCards
+        <div className={"discipline discipline-#{filter.value}"} >
+          <span key={i} className="icon icon-#{filter.value}"></span>
+          <p>{filter.label}</p>
+        </div>
       }
-    </StepThrough>
+    </div>
+
 
 
 
