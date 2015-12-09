@@ -47,11 +47,11 @@ module.exports = React.createClass
       progress: {}
     Object.keys(@state.classificationsByFile).forEach (fileName) =>
       classifications = @state.classificationsByFile[fileName]
-      [Promise.resolve(), classifications...].reduce (awaitPreviousSave, classification, i1) =>
-        i = i1 - 1 # Array::reduce starts at 1.
+      classifications.reduce ((awaitPreviousSave, classification, i) =>
         stateKey = fileName + i
         awaitPreviousSave.then =>
           @importClassification classification, stateKey
+      ), Promise.resolve()
 
   importClassification: (classification, stateKey) ->
     @state.progress[stateKey] = @IN_PROGRESS

@@ -250,6 +250,7 @@ EditWorkflowPage = React.createClass
             <p>Choose a task to edit</p>}
         </div>
       </div>
+
       {if @state.goldStandardFilesToImport?
         <ModalFormDialog required>
           <GoldStandardImporter
