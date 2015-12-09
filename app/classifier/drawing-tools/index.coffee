@@ -5,4 +5,4 @@ module.exports =
   rectangle: require './rectangle'
   circle: require './circle'
   ellipse: require './ellipse'
-  curve: require './curve'
+  polygonCurve: require './poly-curve'

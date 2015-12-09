@@ -29,7 +29,7 @@ module.exports =
     <ellipse className="shape" rx="45" ry="25" cx="50" cy="50" transform="rotate(-30, 50, 50)" />
   </svg>
 
-  curve: <svg viewBox="0 0 100 100">
+  polygonCurve: <svg viewBox="0 0 100 100">
     <path d="M90 90 Q 10 50 90 10" fill={'none'} />
     <path d="M90 90 L 10 50 L 90 10" strokeDasharray={[10, 10]} fill={'none'} />
   </svg>

@@ -14,7 +14,7 @@ DEFAULT_CURVE = {x: 0.5, y: 0}
 DELETE_BUTTON_WEIGHT = 2 # Weight of the second point.
 
 module.exports = React.createClass
-  displayName: 'CurveTool'
+  displayName: 'PolyCurveTool'
 
   statics:
     initCoords: null
@@ -26,16 +26,8 @@ module.exports = React.createClass
     initStart: (newPoint, mark) ->
       if mark.points.length > 0
         lastEnd = mark.points[-1..][0]
-        cp = @toImageFrame(lastEnd, newPoint, DEFAULT_CURVE)
-        mark.points.push cp
-      ###
-      else if mark.points.length > 0
-        # make the new control point in the same relitive position as the previous one
-        [lastStart, lastControl, lastEnd] = mark.points[-3..]
-        cpPrime = @toLineFrame(lastStart, lastEnd, lastControl)
-        cp = @toImageFrame(lastEnd, newPoint, cpPrime)
-        mark.points.push cp
-      ###
+        controlPoint = @toImageFrame(lastEnd, newPoint, DEFAULT_CURVE)
+        mark.points.push controlPoint
       mark.points.push newPoint
       points: mark.points
 
@@ -109,17 +101,11 @@ module.exports = React.createClass
           svgPath += "Q #{lastPoint.x} #{lastPoint.y} #{firstPoint.x} #{firstPoint.y}"
           svgPathHelpers += "L #{lastPoint.x} #{lastPoint.y} L #{firstPoint.x} #{firstPoint.y}"
     if not @props.mark.closed and @state.mouseWithinViewer and points.length
-      #if points.length == 1
       lastEnd = lastPoint
-      cpPrime = DEFAULT_CURVE
-      ###
-      else
-        [lastStart, lastControl, lastEnd] = points[-3..]
-        cpPrime = @constructor.toLineFrame(lastStart, lastEnd, lastControl)
-      ###
+      controlPointPrime = DEFAULT_CURVE
       newPoint ={x: @state.mouseX, y: @state.mouseY}
-      cp = @constructor.toImageFrame(lastEnd, newPoint, cpPrime)
-      svgPathGuide = "M#{lastEnd.x} #{lastEnd.y} Q #{cp.x} #{cp.y} #{newPoint.x} #{newPoint.y}"
+      controlPoint = @constructor.toImageFrame(lastEnd, newPoint, controlPointPrime)
+      svgPathGuide = "M#{lastEnd.x} #{lastEnd.y} Q #{controlPoint.x} #{controlPoint.y} #{newPoint.x} #{newPoint.y}"
 
     <DrawingToolRoot tool={this}>
       <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
@@ -170,10 +156,9 @@ module.exports = React.createClass
   handleFinishClick: ->
     firstPoint = @props.mark.points[0]
     [lastStart, lastControl, lastEnd] = @props.mark.points[-3..]
-    #cpPrime = @constructor.toLineFrame(lastStart, lastEnd, lastControl)
-    cpPrime = DEFAULT_CURVE
-    cp = @constructor.toImageFrame(lastEnd, firstPoint, cpPrime)
-    @props.mark.points.push cp
+    controlPointPrime = DEFAULT_CURVE
+    controlPoint = @constructor.toImageFrame(lastEnd, firstPoint, controlPointPrime)
+    @props.mark.points.push controlPoint
     document.removeEventListener 'mousemove', @handleMouseMove
 
     @props.mark.closed = true
