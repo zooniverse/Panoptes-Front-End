@@ -1,10 +1,21 @@
 .spotters-guide-pullout
-  background: rgba(black, 0.8)
-  color: white
-  font-size: 12px
-  padding: 1em 2em
-  max-width: 40vw
+  background: rgba(white, 0.95)
+  box-shadow: 0 0 15px rgba(black, 0.3)
+  color: black
+  font-size: 14px
+  width: 40vw
   transition: transform 150ms ease
+
+  > header
+    background: black
+    color: white
+    letter-spacing: 0.2ch
+    padding: 1em
+    text-align: center
+    text-transform: uppercase
+
+  img
+    max-width: 100%
 
 .spotters-guide-pullout-toggle
   @extends $reset-button
@@ -20,3 +31,61 @@
   transform: rotate(-90deg) translateX(50%)
   transform-origin: right bottom
   white-space: nowrap
+
+.spotters-guide
+  position: relative
+
+.spotters-guide-back-button
+  @extends $reset-button
+  position: absolute
+  left: 1.4em
+  top: 0.7em
+
+  &[disabled]
+    display: none
+
+.spotters-guide-item
+  > header
+    margin: 1em 0
+
+    &:empty
+      display: none
+
+.spotters-guide-item-icon-container
+  text-align: center
+
+.spotters-guide-item-icon
+  border-radius: 50%
+
+.spotters-guide-item-title-container
+  font-size: 2em
+  text-align: center
+
+.spotters-guide-item-content-container
+  padding: 0 2em
+
+.spotters-guide-menu
+  margin: 0
+  padding: 0
+
+  > li
+    display: block
+
+.spotters-guide-menu-item
+  @extends $reset-button
+  display: block
+  padding: 0.8em 1.6em
+  text-align: left
+  width: 100%
+
+  :nth-child(even) > &
+    background: rgba(MAIN_HIGHLIGHT, 0.3)
+
+.spotters-guide-menu-item-icon
+  border-radius: 50%
+  background: rgba(gray, 0.3)
+  vertical-align: middle
+  margin-right: 1em
+
+.spotters-guide-menu-item-title
+  font-weight: bold

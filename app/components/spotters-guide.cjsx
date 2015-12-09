@@ -1,10 +1,15 @@
 React = require 'react'
 {Markdown} = require 'markdownz'
+CroppedImage = require './cropped-image'
 
 module.exports = React.createClass
   getDefaultProps: ->
+    title: null
+    content: null
     items: []
+    icons: {}
     defaultSelection: [] # Path by indices of selected content, e.g. `[0, 1]`.
+    breadcrumbs: false
 
   getInitialState: ->
     selection: @props.defaultSelection
@@ -21,27 +26,46 @@ module.exports = React.createClass
         jumpBack = @cutSelection.bind this, i + 1
         isCurrent = i is trail.length - 1
         <li key={i}>
-          <button type="button" className="spotters-guide-breadcrumb" onClick={jumpBack} disabled={isCurrent}>{item.title}</button>
+          <button type="button" className="spotters-guide-breadcrumb" onClick={jumpBack} disabled={isCurrent}>
+            {item.title}
+          </button>
         </li>}
     </ul>
 
-  renderItem: ({content, items}) ->
-    <div className="spotters-guide-content">
+  renderItem: ({icon, title, content, items}) ->
+    <div className="spotters-guide-item">
+      <header>
+        {if icon?
+          <div className="spotters-guide-item-icon-container">
+            <CroppedImage className="spotters-guide-item-icon" src={@props.icons[icon].src} aspectRatio={1} width="6em" height="6em" />
+          </div>}
+        {if title?
+          <div className="spotters-guide-item-title-container">
+            <Markdown content={title} inline />
+          </div>}
+      </header>
       {if content?
-        <Markdown content={content} />}
+        <div className="spotters-guide-item-content-container">
+          <Markdown content={content} />
+        </div>}
       {if items?.length > 0
         <ul className="spotters-guide-menu">
           {items.map (item, i) =>
             goTo = @pushSelection.bind this, i
             <li key={i}>
-              <button type="button" className="spotters-guide-menu-item" onClick={goTo}>{item.title}</button>
+              <button type="button" className="spotters-guide-menu-item" onClick={goTo}>
+                <CroppedImage className="spotters-guide-menu-item-icon" src={@props.icons[item.icon]?.src} aspectRatio={1} width="4em" height="4em" />
+                <span className="spotters-guide-menu-item-title">
+                  {item.title}
+                </span>
+              </button>
             </li>}
         </ul>}
     </div>
 
   render: ->
-    {title, content, items} = @props
-    implicitRootItem = {title, content, items}
+    {icon, title, content, items} = @props
+    implicitRootItem = {icon, title, content, items}
 
     if implicitRootItem.items?.length is 1
       implicitRootItem = implicitRootItem.items[0]
@@ -57,8 +81,9 @@ module.exports = React.createClass
 
     <div className="spotters-guide">
       <header>
-        <button type="button" onClick={levelUp} disabled={atRoot}>◀</button>
-        {@renderBreadcrumbs selectionTrail}
+        <button type="button" className="spotters-guide-back-button" disabled={atRoot} onClick={levelUp}>◀</button>
+        {if @props.breadcrumbs
+          @renderBreadcrumbs selectionTrail}
       </header>
 
       {@renderItem selectedItem}

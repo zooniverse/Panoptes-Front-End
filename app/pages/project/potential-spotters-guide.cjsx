@@ -9,7 +9,8 @@ module.exports = React.createClass
 
   getInitialState: ->
     guide: null
-    revealed: false
+    icons: {}
+    revealed: true
 
   componentDidMount: ->
     @fetchGuide @props.project
@@ -21,10 +22,16 @@ module.exports = React.createClass
   fetchGuide: (project) ->
     @setState
       guide: null
+      icons: {}
       revealed: false
     apiClient.type('field_guides').get project_id: project.id
       .then ([guide]) =>
         @setState {guide}
+        guide.get('attached_images').then (images) =>
+          icons = {}
+          for image in images
+            icons[image.id] = image
+          @setState {icons}
 
   render: ->
     if @state.guide?
@@ -34,7 +41,8 @@ module.exports = React.createClass
         }>
           <strong>Spotter’s guide</strong>
         </button>
-        <SpottersGuide items={@state.guide.items} />
+        <header>Field guide</header>
+        <SpottersGuide items={@state.guide.items} icons={@state.icons} />
       </Pullout>
     else
       null
