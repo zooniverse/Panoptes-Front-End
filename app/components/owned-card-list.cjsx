@@ -8,6 +8,7 @@ ChangeListener = require '../components/change-listener'
 OwnedCard = require '../partials/owned-card'
 Select = require 'react-select'
 {DISCIPLINES} = require '../components/disciplines'
+{PROJECT_SORTS} = require '../components/project-sorts'
 {Link, State, Navigation} = require '@edpaget/react-router'
 debounce = require 'debounce'
 DisciplineSlider = require '../components/discipline-slider'
@@ -27,12 +28,15 @@ module.exports = React.createClass
 
   getInitialState: ->
     listPromise: @props.listPromise
-    tagFiler: ""
+    tagFilter: ''
     currentPage: null
+    sort: ''
+    page: 1
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
     @setState currentPage: @currentPage()
+    @readQuery
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
@@ -43,15 +47,47 @@ module.exports = React.createClass
     else
       'All'
 
+  readQuery: () ->
+    {sort, page, discipline} = @context.router.getCurrentQuery()
+    @setState sort: sort if sort?
+    @setState page: page if page?
+    @setState tags: discipline if discipline?
+
+  buildQuery: (query) ->
+    newQuery = newQuery || {}
+    newQuery.include = 'avatar'
+    newQuery.sort = @state.sort if @state.sort
+    newQuery.tags = @state.tagFilter if @state.tagFilter
+    newQuery.page = @state.page if @state.page != 1
+    newQuery.launch_approved = true if !apiClient.params.admin
+    for own key of query
+      newQuery[key] = query[key]
+
+    return newQuery
+
+  computeQueryString: (query) ->
+    query = @buildQuery query
+    accum = []
+    query = @buildQuery null
+    for own key of query
+      accum.push([key, '=', query[key]].join(''))
+    return accum.join('&')
+
+  setPage: (page) ->
+    @setState page: page, ->
+      @setState listPromise: apiClient.type('projects').get @buildQuery null
+      #window.location.search = @computeQueryString null
+
+  setSort: (newSort) ->
+    @setState sort: newSort, ->
+      @setState listPromise: apiClient.type('projects').get @buildQuery null
+      #window.location.search = @computeQueryString null
+
+
   filterDiscipline: (discipline) ->
-    @setState tagFilter: discipline
-    query =
-      include:'avatar'
-    if !apiClient.params.admin
-      query.launch_approved = true
-    if discipline
-      query.tags = discipline
-    @setState listPromise: apiClient.type('projects').get query
+    @setState tagFilter: discipline, ->
+      @setState listPromise: apiClient.type('projects').get @buildQuery null
+      #window.location.search = @computeQueryString null
 
   searchProjectName: (value, callback) ->
     unless value is ''
@@ -111,17 +147,31 @@ module.exports = React.createClass
                   pageEnd = Math.min(meta.page * meta.page_size, meta.count)
                   count = meta.count
                   <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" /><Link to='disciplines' className="view-by-discipline-link">View by discipline</Link></p>}
-              {if @state.currentPage is 'projects'
-                  <Select 
-                    multi={false}
-                    name="resourcesid"
-                    placeholder="Project Name:"
-                    searchPromptText="Search by a project name"
-                    closeAfterClick={true}
-                    asyncOptions={debounce(@searchProjectName, 200)} 
-                    onChange={@routeToProject}
-                    className="search project-search standard-input"
-                  />}
+                    {if @state.currentPage is 'projects'
+                      <Select 
+                        multi={false}
+                        name="resourcesid"
+                        placeholder="Project Name:"
+                        searchPromptText="Search by a project name"
+                        closeAfterClick={true}
+                        asyncOptions={debounce(@searchProjectName, 200)} 
+                        onChange={@routeToProject}
+                        className="search project-search standard-input"
+                      />
+                    }
+
+                    {if @state.currentPage is 'projects'
+                      <Select
+                        multi={false}
+                        name="sort_order"
+                        placeholder="Sort By:"
+                        searchPromptText="Select a sort order"
+                        closeAfterClick={true}
+                        className='standard-input search project-sort'
+                        value={@state.sort}
+                        options={PROJECT_SORTS}
+                        onChange={@setSort} />
+                    }
               </div>
               <div className="card-list">
                 {for resource in ownedResources
@@ -136,7 +186,7 @@ module.exports = React.createClass
                 {if meta
                   <nav className="pagination">
                     {for page in [1..meta.page_count]
-                      <Link to={@props.linkTo} query={{page}} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.search is ""}>{page}</Link>}
+                      <Link to={@props.linkTo} query={@buildQuery (page: page)} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.search is ""}>{page}</Link>}
                   </nav>}
               </nav>
             </div>
