@@ -47,14 +47,14 @@ ArticleEditor = React.createClass
   cancel: ->
     @props.onCancel? arguments...
 
-  submit: (e) ->
+  save: (e) ->
     e.preventDefault()
     e.stopPropagation()
     data = @getData()
-    @props.onSubmit? data, arguments...
+    @props.onSave? data, arguments...
 
   render: ->
-    <form method="POST" onSubmit={@submit}>
+    <div>
       <p>
         <FileButton accept="image/*" onSelect={@chooseIcon}>
           {if @state.newIconDataURL
@@ -94,12 +94,12 @@ ArticleEditor = React.createClass
         </label>{' '}
 
         <label>
-          <button type="submit" className="major-button" disabled={@props.working}>Done</button>
+          <button type="button" className="major-button" disabled={@props.working} onClick={@save}>Done</button>
         </label>{' '}
 
         {if @props.working
           <strong>· · ·</strong>}
       </p>
-    </form>
+    </div>
 
 module.exports = ArticleEditor

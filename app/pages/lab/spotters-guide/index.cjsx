@@ -117,14 +117,14 @@ SpottersGuideEditor = React.createClass
 
       {if @state.editing?
         article = @state.guide.items[@state.editing]
-        <Dialog component="div" required>
+        <Dialog required>
           <ArticleEditor
             icon={@state.icons[article.icon]?.src}
             title={article.title}
             content={article.content}
             working={@state.guide._busy}
             onCancel={@editArticle.bind this, null}
-            onSubmit={@handleArticleSave}
+            onSave={@handleArticleSave}
           />
         </Dialog>}
     </div>
