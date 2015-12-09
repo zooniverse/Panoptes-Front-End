@@ -54,9 +54,18 @@ module.exports = React.createClass
   getInitialState: ->
     answers: {}
 
+  getQuestions: (task, choiceID) ->
+    unless task.choices[choiceID].noQuestions
+      questionSet = task.questionsOrder
+      if task.questionsMap?
+        if task.questionsMap[choiceID]
+          questionSet = task.questionsMap[choiceID]
+      return questionSet
+    return []
+
   allFilledIn: ->
     unless @props.task.choices[@props.choiceID].noQuestions
-      for questionID in @props.task.questionsOrder
+      for questionID in @getQuestions(@props.task, @props.choiceID)
         question = @props.task.questions[questionID]
         if question.required
           answer = @state.answers[questionID]
@@ -66,6 +75,7 @@ module.exports = React.createClass
 
   render: ->
     choice = @props.task.choices[@props.choiceID]
+    choiceQuestions = @getQuestions(@props.task, @props.choiceID)
     <div className="survey-task-choice">
       {unless choice.images.length is 0
         <ImageFlipper images={@props.task.images[filename] for filename in choice.images} />}
@@ -100,7 +110,7 @@ module.exports = React.createClass
         <hr />
 
         {unless choice.noQuestions
-          for questionID in @props.task.questionsOrder
+          for questionID in choiceQuestions
             question = @props.task.questions[questionID]
             inputType = if question.multiple
               'checkbox'
