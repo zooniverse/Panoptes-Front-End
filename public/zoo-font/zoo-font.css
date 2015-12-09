@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: "zoo-font";
-  src: url("./zoo-font_a08eef3114c8513492d3338556e27348.eot");
-  src: url("./zoo-font_a08eef3114c8513492d3338556e27348.eot?#iefix") format("embedded-opentype"),
-       url("./zoo-font_a08eef3114c8513492d3338556e27348.woff") format("woff"),
-       url("./zoo-font_a08eef3114c8513492d3338556e27348.ttf") format("truetype"),
-       url("./zoo-font_a08eef3114c8513492d3338556e27348.svg#zoo-font") format("svg");
+  src: url("./zoo-font_1fb9a20bd641d80612372957211fb220.eot");
+  src: url("./zoo-font_1fb9a20bd641d80612372957211fb220.eot?#iefix") format("embedded-opentype"),
+       url("./zoo-font_1fb9a20bd641d80612372957211fb220.woff") format("woff"),
+       url("./zoo-font_1fb9a20bd641d80612372957211fb220.ttf") format("truetype"),
+       url("./zoo-font_1fb9a20bd641d80612372957211fb220.svg#zoo-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -16,25 +16,25 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "zoo-font";
-    src: url("./zoo-font_a08eef3114c8513492d3338556e27348.svg#zoo-font") format("svg");
+    src: url("./zoo-font_1fb9a20bd641d80612372957211fb220.svg#zoo-font") format("svg");
   }
 }
 
 [data-icon]:before { content: attr(data-icon); }
 
 [data-icon]:before,
-.icon-art:before,
-.icon-astro:before,
+.icon-arts:before,
+.icon-astronomy:before,
 .icon-biology:before,
 .icon-climate:before,
 .icon-history:before,
 .icon-humanitarian:before,
 .icon-language:before,
 .icon-literature:before,
-.icon-medical:before,
+.icon-medicine:before,
 .icon-nature:before,
 .icon-physics:before,
-.icon-social:before,
+.icon-social-science:before,
 .icon-zooniverse-logo:before {
   display: inline-block;
   font-family: "zoo-font";
@@ -50,16 +50,16 @@
   font-smoothing: antialiased;
 }
 
-.icon-art:before { content: "\f122"; }
-.icon-astro:before { content: "\f123"; }
+.icon-arts:before { content: "\f12e"; }
+.icon-astronomy:before { content: "\f12f"; }
 .icon-biology:before { content: "\f124"; }
 .icon-climate:before { content: "\f125"; }
 .icon-history:before { content: "\f126"; }
 .icon-humanitarian:before { content: "\f127"; }
 .icon-language:before { content: "\f128"; }
 .icon-literature:before { content: "\f129"; }
-.icon-medical:before { content: "\f12a"; }
+.icon-medicine:before { content: "\f130"; }
 .icon-nature:before { content: "\f12b"; }
 .icon-physics:before { content: "\f12c"; }
-.icon-social:before { content: "\f12d"; }
+.icon-social-science:before { content: "\f131"; }
 .icon-zooniverse-logo:before { content: "\f121"; }
