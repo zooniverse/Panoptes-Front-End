@@ -12,7 +12,6 @@ module.exports = React.createClass
 
 
   render: ->
-    console.log "RENDERING DISCIPLINES SLIDER"
     <StepThrough className={"media-discipline"} >
       {for filter, i in @props.filterCards
         filter._key ?= Math.random()

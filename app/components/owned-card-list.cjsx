@@ -82,7 +82,6 @@ module.exports = React.createClass
           @transitionTo 'project-home', owner: owner, name: name
 
   render: ->
-    console.log "RENDERING OWNED CARD LIST"
     <div className="secondary-page all-resources-page">
       <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
