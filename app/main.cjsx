@@ -1,11 +1,15 @@
 React = require 'react'
 ReactDOM = {render} = require 'react-dom'
 {Router, Route, Link} = require 'react-router'
+{useBasename} = require 'history'
 createBrowserHistory = require 'history/lib/createBrowserHistory'
 routes = require './router'
 
 routes = require './router'
-history = createBrowserHistory()
+
+basename = if process.env.DEPLOY_SUBDIR? then "/panoptes-front-end/#{process.env.DEPLOY_SUBDIR}/" else ''
+
+history = useBasename(createBrowserHistory)({basename})
 
 if process.env.NON_ROOT isnt 'true' and window.location? and window.location.hash isnt ""
   window.location.pathname = window.location.hash.slice(1)
