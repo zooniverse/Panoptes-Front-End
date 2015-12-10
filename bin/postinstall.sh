@@ -9,5 +9,5 @@ rm -rf ./public/font-awesome
 curl --location "$FONT_AWESOME_URL" --output ./.font-awesome.zip
 unzip -q ./.font-awesome.zip -d ./.font-awesome.tmp
 mkdir ./public/font-awesome
-mv ./.font-awesome.tmp/*/{css,fonts} ./public/.font-awesome
+mv ./.font-awesome.tmp/*/{css,fonts} ./public/font-awesome
 rm -rf ./.font-awesome.{zip,tmp}
