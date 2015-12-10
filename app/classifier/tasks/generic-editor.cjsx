@@ -7,7 +7,7 @@ alert = require '../../lib/alert'
 DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
 {MarkdownEditor} = require 'markdownz'
-markdownHelp = require ('../../lib/markdown-help')
+MarkdownHelp = require '../../partials/markdown-help'
 
 module.exports = React.createClass
   displayName: 'GenericTaskEditor'
@@ -42,7 +42,7 @@ module.exports = React.createClass
           <AutoSave resource={@props.workflow}>
             <span className="form-label">Help text</span>
             <br />
-            <MarkdownEditor name="#{@props.taskPrefix}.help" onHelp={markdownHelp} value={@props.task.help ? ""} rows="7" className="full" onChange={handleChange} />
+            <MarkdownEditor name="#{@props.taskPrefix}.help" onHelp={-> alert <MarkdownHelp/>} value={@props.task.help ? ""} rows="7" className="full" onChange={handleChange} />
           </AutoSave>
           <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
         </div>}
