@@ -47,9 +47,17 @@ module.exports = React.createClass
     loading: true
     playing: false
     frame: @props.frame ? 0
+    time: 0
   
   componentDidMount: ->
-    @refs.videoPlayer?.addEventListener 'canplaythrough', @handleLoad
+    player = @refs.videoPlayer?.getDOMNode()
+    player?.addEventListener 'canplaythrough', @handleLoad
+    player?.addEventListener 'ended', @endVideo
+    player?.addEventListener 'timeupdate', @updateScrubber
+  
+  componentDidUpdate: ->
+    player = @refs.videoPlayer?.getDOMNode()
+    player?.currentTime = @state.time
 
   render: ->
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
@@ -78,15 +86,19 @@ module.exports = React.createClass
               </button>}
           </span>
       when 'video'
-        <span className="subject-frame-play-controls">
-          {if @state.playing
-            <button type="button" className="secret-button" aria-label="Pause" onClick={@playVideo.bind this, false}>
-              <i className="fa fa-pause fa-fw"></i>
-            </button>
-          else
-            <button type="button" className="secret-button" aria-label="Play" onClick={@playVideo.bind this, true}>
-              <i className="fa fa-play fa-fw"></i>
-            </button>}
+        <span>
+          <span className="subject-frame-play-controls">
+            {if @state.playing
+              <button type="button" className="secret-button" aria-label="Pause" onClick={@playVideo.bind this, false}>
+                <i className="fa fa-pause fa-fw"></i>
+              </button>
+            else
+              <button type="button" className="secret-button" aria-label="Play" onClick={@playVideo.bind this, true}>
+                <i className="fa fa-play fa-fw"></i>
+              </button>}
+          </span>
+          <progress ref="videoScrubber" value="0" min="0" value={@state.time} style={width: '80%'} onClick={@seekVideo}>
+          </progress>
         </span>
 
     <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
@@ -102,7 +114,7 @@ module.exports = React.createClass
       </div>
 
       <div className="subject-tools">
-        <span>{tools}</span>
+        <span style={width: '80%'}>{tools}</span>
         {if @props.subject?.locations.length >= 2
           <span>
             <span className="subject-frame-pips">
@@ -185,6 +197,27 @@ module.exports = React.createClass
       player.play()
     else
       player.pause()
+      time = player.currentTime
+      @setState {time}
+  
+  seekVideo: (e) ->
+    player = @refs.videoPlayer?.getDOMNode()
+    scrubber = @refs.videoScrubber?.getDOMNode()
+    pos = (e.pageX  - (scrubber.offsetLeft + scrubber.offsetParent.offsetLeft)) / scrubber.offsetWidth
+    time = pos * player.duration
+    @setState {time}
+  
+  endVideo: (e) ->
+    player = @refs.videoPlayer?.getDOMNode()
+    playing = false
+    time = 0
+    @setState {playing, time}
+  
+  updateScrubber: (e) ->
+    player = @refs.videoPlayer?.getDOMNode()
+    scrubber = @refs.videoScrubber?.getDOMNode()
+    scrubber.setAttribute 'max', player.duration unless scrubber.getAttribute 'max'
+    scrubber.value = player.currentTime
 
   handleLoad: (e) ->
     @setState loading: false
