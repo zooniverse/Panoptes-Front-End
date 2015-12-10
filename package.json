@@ -56,7 +56,7 @@
   },
   "scripts": {
     "build": "NODE_ENV=${NODE_ENV:-production} ./bin/build.sh",
-    "check-build-size": "npm run build && cat ./build/{vendor,main}.js | gzip --best | wc -c",
+    "check-build-size": "npm run build && cat ./build/vendor.*.js ./build/main.*.js | gzip --best | wc -c",
     "postinstall": "./bin/postinstall.sh",
     "deploy": "npm run build && publisssh ./build zooniverse-static/www.zooniverse.org/$DEPLOY_SUBDIR",
     "deploy-branch": "NON_ROOT=true DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD) npm run deploy",
