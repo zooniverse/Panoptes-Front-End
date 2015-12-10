@@ -11,10 +11,10 @@ GUIDE_DASH = [4, 4]
 # fraction of line lenght along (x) and perpendicular (y) to the line to place control point
 DEFAULT_CURVE = {x: 0.5, y: 0}
 
-DELETE_BUTTON_WEIGHT = 2 # Weight of the second point.
+DELETE_BUTTON_WEIGHT = 0.75 # fraction of line lenght to place delete button
 
 module.exports = React.createClass
-  displayName: 'PolyCurveTool'
+  displayName: 'BezierCurveTool'
 
   statics:
     initCoords: null
@@ -61,6 +61,17 @@ module.exports = React.createClass
       x: (dx * control.x) - (dy * control.y) + start.x
       y: (dy * control.x) + (dx * control.y) + start.y
 
+    positionAlongCurve: (start, end, control, t) ->
+      # t is how far along the curve you want the pont
+      # t is in the range [0,1]
+      # if control is undefined just return the point t along the line between start and end
+      if control?
+        x: (1 - t) * (1 - t) * start.x + 2 * (1 - t) * t * control.x + t * t * end.x
+        y: (1 - t) * (1 - t) * start.y + 2 * (1 - t) * t * control.y + t * t * end.y
+      else
+        x: (1 - t) * start.x + t * end.x
+        y: (1 - t) * start.y + t * end.y
+
   componentWillMount: ->
     @setState
       mouseX: @props.mark.points[0].x
@@ -80,15 +91,15 @@ module.exports = React.createClass
     guideWidth = GUIDE_WIDTH / averageScale
 
     firstPoint = points[0]
-    secondPoint = points[1]
+    firstControlPoint = points[1]
+    secondPoint = points[2]
     secondPoint ?=
       x: firstPoint.x + (finisherRadius * 2)
       y: firstPoint.y - (finisherRadius * 2)
     lastPoint = points[points.length - 1]
 
     deleteButtonPosition =
-      x: (firstPoint.x + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.x)) / DELETE_BUTTON_WEIGHT
-      y: (firstPoint.y + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.y)) / DELETE_BUTTON_WEIGHT
+      @constructor.positionAlongCurve(firstPoint, secondPoint, firstControlPoint , DELETE_BUTTON_WEIGHT)
 
     svgPath = "M#{firstPoint.x} #{firstPoint.y} "
     svgPathHelpers = "M#{firstPoint.x} #{firstPoint.y} "
