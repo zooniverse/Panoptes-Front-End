@@ -11,5 +11,3 @@ unzip -q ./.font-awesome.zip -d ./.font-awesome.tmp
 mkdir ./public/font-awesome
 mv ./.font-awesome.tmp/*/{css,fonts} ./public/font-awesome
 rm -rf ./.font-awesome.{zip,tmp}
-
-cp ./node_modules/jsplumb/dist/js/jsPlumb-1.7.9-min.js ./public/jsPlumb.min.js
