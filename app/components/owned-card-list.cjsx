@@ -132,7 +132,7 @@ module.exports = React.createClass
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
             <div>
-              <div className="resource-results-counter">
+              <div className="resource-results-counter card-list">
                 {if meta
                   pageStart = meta.page * meta.page_size - meta.page_size + 1
                   pageEnd = Math.min(meta.page * meta.page_size, meta.count)
