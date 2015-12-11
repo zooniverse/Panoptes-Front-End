@@ -15,7 +15,14 @@ module.exports = React.createClass
   defaultMode: 'flipbook_and_separate'
 
   componentDidMount: ->
-    # Set relevant layout radio as checked. Must be a better way to do this, but setting defaultChecked on the radios in render() didn't seem to work
+    @updateRadios()
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.workflow
+      @updateRadios()
+
+  # Set relevant layout radio as checked. Must be a better way to do this, but setting defaultChecked on the radios in render() didn't seem to work
+  updateRadios: () ->
     layout = @props.workflow.configuration?.multi_image_layout or @defaultLayout
     @getDOMNode().querySelector('input[type="radio"][value="'+layout+'"]')?.defaultChecked = true;
 
