@@ -24,7 +24,9 @@ DISCIPLINE_COLOR_SOCIAL_SCIENCE = #7EA8CE
     height: 3em
     border-radius: 1em
     padding: .5em
-  
+    color: #006DFF
+    background-color: #FFFFFF
+
     .icon
       font-size: 50px
       width: 1.5em
@@ -36,49 +38,61 @@ DISCIPLINE_COLOR_SOCIAL_SCIENCE = #7EA8CE
       margin-bottom: 0px
       font-size: 14px
 
-  .discipline-arts
+  .discipline-arts:hover
     background-color: DISCIPLINE_COLOR_ARTS
       
   .discipline-astronomy
-    background-color: DISCIPLINE_COLOR_ASTRONOMY
     min-width: 4em
-
     .icon
       margin-left: -0.6em
-      
+
+  .discipline-astronomy:hover
+    background-color: DISCIPLINE_COLOR_ASTRONOMY
+
   .discipline-biology
+    .icon
+      margin-left:0.3em
+
+  .discipline-biology:hover
     background-color: DISCIPLINE_COLOR_BIOLOGY
 
-    .icon
-      margin-left: 0.3em
-      
-  .discipline-climate
+  .discipline-climate:hover
     background-color: DISCIPLINE_COLOR_CLIMATE
       
-  .discipline-history
+  .discipline-history:hover
     background-color: DISCIPLINE_COLOR_HISTORY
       
-  .discipline-humanitarian
+  .discipline-humanitarian:hover
     background-color: DISCIPLINE_COLOR_HUMANITARIAN
       
   .discipline-language
-    background-color: DISCIPLINE_COLOR_LANGUAGE
     min-width: 4em
 
     .icon
-      margin-left:-1em
-      
-  .discipline-literature
+      margin-left: -1em
+
+  .discipline-language:hover
+    background-color: DISCIPLINE_COLOR_LANGUAGE
+
+  .discipline-literature:hover
     background-color: DISCIPLINE_COLOR_LITERATURE
       
-  .discipline-medicine
+  .discipline-medicine:hover
     background-color: DISCIPLINE_COLOR_MEDICINE
-      
+
   .discipline-nature
+    .icon
+      margin-left: -0.4em
+
+  .discipline-nature:hover
     background-color: DISCIPLINE_COLOR_NATURE
       
-  .discipline-physics
+  .discipline-physics:hover
     background-color: DISCIPLINE_COLOR_PHYSICS
       
-  .discipline-social-science
+  .discipline-social-science:hover
     background-color: DISCIPLINE_COLOR_SOCIAL_SCIENCE
+
+  .discipline:hover
+    color: #FFFFFF
+    cursor: pointer
