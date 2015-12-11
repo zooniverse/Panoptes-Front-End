@@ -16,14 +16,6 @@ module.exports = React.createClass
   render: ->
     <div>
       <Filmstrip increment={350} />
-      <div className={"filter"}>
-        {for filter, i in @props.filterCards
-          <div className={"discipline discipline-#{filter.value}"} >
-            <span key={i} className="icon icon-#{filter.value}"></span>
-            <p>{filter.label}</p>
-          </div>
-        }
-      </div>
     </div>
 
 
