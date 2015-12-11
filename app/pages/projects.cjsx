@@ -40,6 +40,9 @@ module.exports = React.createClass
 
     return link
 
+  onPageChange: (page) ->
+    window.scrollTo 0, 0
+
   render: ->
     <OwnedCardList
       translationObjectName="projectsPage"
@@ -47,4 +50,5 @@ module.exports = React.createClass
       linkTo="projects"
       cardLink={@cardLink}
       heroClass="projects-hero"
-      imagePromise={@imagePromise} />
+      imagePromise={@imagePromise}
+      onPageChange={@onPageChange} />
