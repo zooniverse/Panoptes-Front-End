@@ -42,7 +42,7 @@ module.exports = React.createClass
                       <td>{project.display_name}</td>
                       <td><Link to="/lab/#{project.id}" className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
                       <td>
-                        <Link to="projects/#{owner}/#{name}" className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
+                        <Link to="/projects/#{owner}/#{name}" className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
                       </td>
                     </tr>}
                 </tbody>
