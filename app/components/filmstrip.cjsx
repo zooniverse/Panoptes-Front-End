@@ -8,6 +8,7 @@ module.exports = React.createClass
 
   propTypes:
     increment: React.PropTypes.number
+    filterOption: React.PropTypes.func
 
   getDefaultProps: ->
     filterCards: DISCIPLINES
@@ -46,12 +47,12 @@ module.exports = React.createClass
 			<div className='viewport' ref='viewport'>
 				<div className='strip' ref='strip' style={left: @state.scrollPos}>
 			      <div className={"filter"}>
-			        <div className="discipline discipline-all">
+			        <div className="discipline discipline-all" onClick={@props.filterOption.bind this, ""} >
 			          <p>All<br/>Disciplines</p>
 			        </div>
 			        {for filter, i in @props.filterCards
 			          filterName = filter.value.replace(" ", "-")
-			          <div className={"discipline discipline-#{filterName}"} >
+			          <div className={"discipline discipline-#{filterName}"} onClick={@props.filterOption.bind this, filter.value} >
 			            <span key={i} className="icon icon-#{filterName}"></span>
 			            <p>{filter.label}</p>
 			          </div>
