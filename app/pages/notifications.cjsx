@@ -13,7 +13,7 @@ module?.exports = React.createClass
     user: React.PropTypes.object
 
   getDefaultProps: ->
-    query: page: 1
+    location: query: page: 1
 
   getInitialState: ->
     firstMeta: { }
@@ -29,9 +29,9 @@ module?.exports = React.createClass
       @markAsRead('last')()
 
   componentWillReceiveProps: (nextProps) ->
-    pageChanged = nextProps.query.page isnt @props.query.page
+    pageChanged = nextProps.location.query.page isnt @props.location.query.page
     userChanged = nextProps.user and nextProps.user isnt @props.user
-    @getNotifications(nextProps.query.page) if pageChanged or userChanged
+    @getNotifications(nextProps.location.query.page) if pageChanged or userChanged
 
   getNotifications: (page) ->
     @getUnreadCount()
@@ -57,7 +57,7 @@ module?.exports = React.createClass
 
       @setState {notifications, notificationsMap, firstMeta, lastMeta}
 
-  notificationsQuery: (page = @props.query.page, options = { }) ->
+  notificationsQuery: (page = @props.location.query.page, options = { }) ->
     page or= 1
     query = Object.assign { }, options, {page}
     query.section = "project-#{ @props.project.id }" if @props.project

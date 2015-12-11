@@ -1,4 +1,4 @@
-React = { findDOMNode } = require 'react'
+React = require 'react'
 auth = require '../api/auth'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
@@ -7,7 +7,7 @@ module.exports = React.createClass
   displayName: 'UnsubscribeFromEmailsPage'
 
   getDefaultProps: ->
-    query: {}
+    location: query: {}
 
   getInitialState: ->
     inProgress: false
@@ -21,7 +21,7 @@ module.exports = React.createClass
     @handleEmailChange()
 
   handleEmailChange: ->
-    @setState { emailIsValid: findDOMNode(@refs.email).checkValidity() }
+    @setState { emailIsValid: @refs.email.checkValidity() }
 
   handleEmailSubmit: (e) ->
     e.preventDefault()
@@ -31,7 +31,7 @@ module.exports = React.createClass
       emailSuccess: false
       emailError: false
 
-    email = findDOMNode(@refs.email).value
+    email = @refs.email.value
 
     auth.unsubscribeEmail {email}
       .then =>
@@ -43,7 +43,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="centered-grid">
-      { if @props.query?.processed
+      {if @props.location.query?.processed
         <div>
           <p><strong>Your unsubscribe request was successfully processed.</strong></p>
           <p>If you change your mind, just visit your <a href="/settings">account settings</a> page to update your email preferences.</p>
@@ -54,7 +54,7 @@ module.exports = React.createClass
           <p>We get it - no one likes to keep receiving email they don't want.</p>
           <p>Just enter your email address here and we'll <b>unsubscribe you from all</b> our email lists.</p>
           <p>
-            <input ref="email" type="email" required onChange={@handleEmailChange} className="standard-input" defaultValue={@props.query?.email} size="50" />
+            <input ref="email" type="email" required onChange={@handleEmailChange} className="standard-input" defaultValue={@props.location.query?.email} size="50" />
           </p>
           <p>
             <button type="submit" className="standard-button" disabled={!@state.emailIsValid || @state.emailSuccess}>Submit</button>

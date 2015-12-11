@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 PromiseRenderer = require '../../components/promise-renderer'
 UserSearch = require '../../components/user-search'
 apiClient = require '../../api/client'
@@ -77,8 +78,9 @@ CollaboratorCreator = React.createClass
 
   handleSubmit: (e) ->
     e.preventDefault()
-    checkboxes = @getDOMNode().querySelectorAll '[name="role"]'
-    userids = @getDOMNode().querySelector('[name="userids"]')
+    node = ReactDOM.findDOMNode(@)
+    checkboxes = node.querySelectorAll '[name="role"]'
+    userids = node.querySelector('[name="userids"]')
     users = userids.value.split(',').map (id) -> parseInt(id)
     roles = for checkbox in checkboxes when checkbox.checked
       checkbox.value
@@ -149,7 +151,7 @@ module.exports = React.createClass
       <div className="form-label">Project Owner</div>
       <PromiseRenderer promise={@props.project.get('owner')} then={(projectOwner) =>
         projectOwnerMessage = if @props.user.id is projectOwner.id
-          {'You are the project owner.'}
+          'You are the project owner.'
         else
           projectOwner.display_name + ' is the project owner.'
 

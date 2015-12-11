@@ -1,5 +1,5 @@
 React = require 'react'
-{Link,Navigation} = require '@edpaget/react-router'
+{Link, History} = require 'react-router'
 talkClient = require '../api/talk'
 apiClient = require '../api/client'
 Paginator = require './lib/paginator'
@@ -13,7 +13,7 @@ SidebarNotifications = require './lib/sidebar-notifications'
 
 module.exports = React.createClass
   displayName: 'TalkTags'
-  mixins: [Navigation]
+  mixins: [History]
 
   getInitialState: ->
     tags: null
@@ -23,13 +23,13 @@ module.exports = React.createClass
     @getTags()
 
   componentWillReceiveProps: (nextProps) ->
-    pageChanged = nextProps.query.page isnt @props.query.page
+    pageChanged = nextProps.location.query.page isnt @props.location.query.page
     differentTag = nextProps.params.tag isnt @props.params.tag
 
     if pageChanged or differentTag
-      @getTags(nextProps.query.page, nextProps.params.tag)
+      @getTags(nextProps.location.query.page, nextProps.params.tag)
 
-  getTags: (page = @props.query.page, name = @props.params.tag) ->
+  getTags: (page = @props.location.query.page, name = @props.params.tag) ->
     page or= 1
     taggable_type = 'Subject'
     section = "project-#{ @props.project.id }"
@@ -48,7 +48,7 @@ module.exports = React.createClass
     <div className="talk-search">
       <h1>Subjects tagged with #{@props.params.tag}</h1>
 
-      <button className="link-style" type="button" onClick={@goBack}>
+      <button className="link-style" type="button" onClick={@history.goBack}>
         <i className="fa fa-backward" /> Back
       </button>
 
@@ -64,12 +64,7 @@ module.exports = React.createClass
                 {for tag in @state.tags
                   <div className="tagged-subject talk-search-result talk-module" key="tag-#{ tag.id }">
                     <p>
-                      <Link to="project-talk-subject"
-                        {...@props}
-                        params={
-                          owner: @props.params.owner
-                          name: @props.params.name
-                          id: tag.subject.id}>
+                      <Link to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/subjects/#{tag.subject.id}">
                         Subject {tag.subject.id}
                       </Link>
                     </p>
@@ -77,12 +72,7 @@ module.exports = React.createClass
                     <ul className="tag-list">
                       {for subjectTag in tag.subjectTags
                         <li key={"tag-#{ tag.id }-#{ subjectTag.id }"}>
-                          <Link to="project-talk-tags"
-                            {...@props}
-                            params={
-                              owner: @props.params.owner
-                              name: @props.params.name
-                              tag: subjectTag.name}>
+                          <Link to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/tags/#{subjectTag.name}" {...@props}>
                             #{subjectTag.name}
                           </Link>
                         </li>}
@@ -92,13 +82,13 @@ module.exports = React.createClass
               </section>
 
               <div className="talk-sidebar">
-                <SidebarNotifications {...@props} params={@props.params} />
+                <SidebarNotifications {...@props} />
 
                 <section>
                   <PopularTags
                     header={<h3>Popular Tags:</h3>}
                     section={@props.section}
-                    params={@props.params} />
+                    project={@props.project} />
                 </section>
 
                 <section>
@@ -107,7 +97,7 @@ module.exports = React.createClass
 
                 <section>
                   <h3>Projects:</h3>
-                  <p><ProjectLinker user={@props.user} /></p>
+                  <ProjectLinker user={@props.user} />
                 </section>
               </div>
             </div>

@@ -1,5 +1,4 @@
 React = require 'react'
-cloneWithProps = require 'react/lib/cloneWithProps'
 
 module.exports = React.createClass
   displayName: 'Draggable'
@@ -21,8 +20,8 @@ module.exports = React.createClass
     if @props.disabled
       @props.children
     else
-      cloneWithProps @props.children,
-        className: 'draggable'
+      React.cloneElement @props.children,
+        className: [@props.children.props.className, 'draggable'].filter(Boolean).join ' '
         onMouseDown: @handleStart
         onTouchStart: @handleStart
 

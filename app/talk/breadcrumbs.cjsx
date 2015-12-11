@@ -1,33 +1,38 @@
 React = require 'react'
-{Link, Navigation} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 PromiseRenderer = require '../components/promise-renderer'
 merge = require 'lodash.merge'
 
 module?.exports = React.createClass
   displayName: 'TalkBreadcrumbs'
-  mixins: [Navigation]
-
-  projectPrefix: ->
-    if @props.project then 'project-' else ''
 
   crumbCatch: (e) ->
     if e.message.indexOf('not allowed to show') isnt -1
-      @replaceWith("talk-not-found")
+      @history.replaceState(null, "/talk/not-found")
 
   boardLink: (board) ->
-    <Link to="#{@projectPrefix()}talk-board" params={merge({}, {board: board.id}, @props.params)}>{board.title}</Link>
+    <Link to="#{@rootTalkPath()}/#{board.id}">
+      {board.title}
+    </Link>
+
+  rootTalkPath: ->
+    if @props.project
+      [owner, name] = @props.project.slug.split('/')
+      "/projects/#{owner}/#{name}/talk"
+    else
+      "/talk"
 
   render: ->
     params = @props.params
     onBoard = params.board?
     onDiscussion = onBoard and params.discussion?
-    onRecents = @props.path.match /\/talk\/recents/
+    onRecents = @props.route.path.match /\/talk\/recents/
 
     <div className="talk-breadcrumbs">
       <div className="talk-breadcrumbs">
         {if onBoard or onRecents
           <span>
-            <Link to="#{@projectPrefix()}talk" params={params}>
+            <Link to={@rootTalkPath()}>
               {if @props.project then @props.project.display_name else 'Zooniverse'} Talk
             </Link>
             {if onBoard

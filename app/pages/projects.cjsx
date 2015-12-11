@@ -19,13 +19,12 @@ module.exports = React.createClass
   title: 'Projects'
 
   listProjects: ->
-    query =
-      include:'avatar'
+    query = {include: 'avatar'}
+
     if !apiClient.params.admin
       query.launch_approved = true
-    Object.assign query, @props.query
 
-    apiClient.type('projects').get query
+    apiClient.type('projects').get Object.assign {}, query, @props.location.query
 
   imagePromise: (project) ->
     project.get('avatar')
@@ -36,12 +35,14 @@ module.exports = React.createClass
     link = if !!project.redirect
       project.redirect
     else
-      'project-home'
+      [owner, name] = project.slug.split('/')
+      "/projects/#{owner}/#{name}"
 
     return link
 
   render: ->
     <OwnedCardList
+      {...@props}
       translationObjectName="projectsPage"
       listPromise={@listProjects()}
       linkTo="projects"

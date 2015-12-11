@@ -4,7 +4,7 @@ apiClient = require '../api/client'
 DisplayRoles = require './lib/display-roles'
 Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 merge = require 'lodash.merge'
 {Markdown} = require 'markdownz'
 
@@ -44,8 +44,19 @@ module?.exports = React.createClass
       @setState {commentUser}
 
   componentDidMount: ->
-    latestCommentText = @refs?.markdownText?.getDOMNode()?.textContent
+    latestCommentText = @refs?.markdownText?.textContent
     @setState({latestCommentText}) if latestCommentText
+
+  discussionLink: (childtext, className = '') ->
+    if @props.params?.owner and @props.params?.name
+      {owner, name} = @props.params
+      <Link className={className} to="/projects/#{owner}/#{name}/talk/#{@props.discussion.board_id}/#{@props.discussion.id}">
+        {childtext}
+      </Link>
+    else
+      <Link className={className} to="/talk/#{@props.discussion.board_id}/#{@props.discussion.id}">
+        {childtext}
+      </Link>
 
   render: ->
     {discussion} = @props
@@ -64,7 +75,7 @@ module?.exports = React.createClass
         </div>
 
         {if @state.commentUser?
-          <Link className="user-profile-link" to="user-profile" params={name: @state.commentUser.login}>
+          <Link className="user-profile-link" to="/users/#{@state.commentUser.login}">
             <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
           </Link>}
 
@@ -74,34 +85,15 @@ module?.exports = React.createClass
           <DisplayRoles roles={roles} section={comment.section} />
         }</PromiseRenderer>
 
-        {if discussion.title and @props.title
-          <span>
-            <Link
-              to="#{@projectPrefix()}talk-discussion"
-              params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
-              query={linkQuery}>
-              {discussion.title}
-            </Link>{' '}
-          </span>
-          }
+        <span>
+          {if discussion.title and @props.title
+            @discussionLink(discussion.title)}{' '}
+        </span>
 
-        <Link
-          to="#{@projectPrefix()}talk-discussion"
-          className="latest-comment-time"
-          params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
-          query={linkQuery}>
-          {timeAgo(comment.created_at)}
-        </Link>
+        {@discussionLink(timeAgo(comment.created_at), "latest-comment-time")}
 
         {if @props.preview
-          <Link
-            className="latest-comment-preview-link"
-            to="#{@projectPrefix()}talk-discussion"
-            params={merge({}, {board: discussion.board_id, discussion: discussion.id}, @props.params)}
-            query={linkQuery}>
+          @discussionLink(" #{truncate(@state.latestCommentText, '...')}", "latest-comment-preview-link")}
 
-            {' '}{truncate(@state.latestCommentText, '...')}
-          </Link>
-          }
       </div>
     </div>

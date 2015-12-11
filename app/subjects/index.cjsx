@@ -56,7 +56,7 @@ module?.exports = React.createClass
               section={@props.section}
               type="Subject"
               id={@props.params.id}
-              params={@props.params} />
+              project={@props.project} />
           </section>
 
           <section>
@@ -65,7 +65,7 @@ module?.exports = React.createClass
 
           <section>
             <h3>Projects:</h3>
-            <p><ProjectLinker user={@props.user} /></p>
+            <ProjectLinker user={@props.user} />
           </section>
         </div>
       </div>

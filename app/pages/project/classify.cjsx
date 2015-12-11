@@ -1,5 +1,6 @@
 auth = require '../../api/auth'
 React = require 'react'
+ReactDOM = require 'react-dom'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
@@ -85,10 +86,10 @@ module.exports = React.createClass
       currentClassifications.forWorkflow[workflowID]
 
   getCurrentWorkflowID: (props = @props) ->
-    getWorkflowID = if props.query?.workflow?
+    getWorkflowID = if props.location.query?.workflow?
       # console.log 'Workflow specified as', props.query.workflow
       # Prefer the workflow specified in the query.
-      Promise.resolve props.query.workflow
+      Promise.resolve props.location.query.workflow
     else
       # If no workflow is specified, pick a random one and record it for later.
       # When we send this classification, we'll clear this value to select a new random workflow.
@@ -222,11 +223,11 @@ module.exports = React.createClass
     # Auto-scroll to the middle of the classification interface on load.
     # It's not perfect, but it should make the location of everything more obvious.
     lineHeight = parseFloat getComputedStyle(document.body).lineHeight
-    el = @getDOMNode()
-    space = (innerHeight - el.offsetHeight) / 2
-    idealScrollY = el.offsetTop - space
+    node = ReactDOM.findDOMNode(@)
+    space = (innerHeight - node.offsetHeight) / 2
+    idealScrollY = node.offsetTop - space
     if Math.abs(idealScrollY - scrollY) > lineHeight
-      animatedScrollTo document.body, el.offsetTop - space, 333
+      animatedScrollTo document.body, node.offsetTop - space, 333
 
   handleDemoModeChange: (newDemoMode) ->
     sessionDemoMode = newDemoMode
@@ -301,7 +302,7 @@ module.exports = React.createClass
       # Forget the old classification so a new one will load.
       currentClassifications.forWorkflow[workflowID] = null
       # Forget the old workflow, unless it was specified, so we'll get a random one next time.
-      unless @props.query?.workflow?
+      unless @props.location.query?.workflow?
         currentWorkflowForProject[@props.project.id] = null
       @loadAppropriateClassification()
 

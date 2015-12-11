@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 apiClient = require '../api/client'
 Loading = require '../components/loading-indicator'
 Thumbnail = require '../components/thumbnail'
@@ -27,20 +27,18 @@ module?.exports = React.createClass
     apiClient.type('subjects').get(query).then (subjects) =>
       @setState {subjects}
 
-  collectionParams: ->
-    [owner, name] = @props.collection.slug.split('/')
-    {owner, name}
-
   render: ->
+    [owner, name] = @props.collection.slug.split('/')
+
     <div className="collection-preview">
       <div className="collection">
         <p className="title">
-          <Link to="collection-show" params={@collectionParams()}>
+          <Link to="/collections/#{owner}/#{name}">
             {@props.collection.display_name}
           </Link>
           {' '}by{' '}
           {if @state.owner
-            <Link className="user-profile-link" to="user-profile" params={name: @state.owner.login}>
+            <Link className="user-profile-link" to="/users/#{@state.owner.login}">
               <Avatar user={@state.owner} />{' '}{@state.owner.display_name}
             </Link>}
         </p>

@@ -49,7 +49,7 @@ module.exports = React.createClass
     frame: @props.frame ? 0
   
   componentDidMount: ->
-    @refs.videoPlayer?.getDOMNode().addEventListener 'canplaythrough', @handleLoad
+    @refs.videoPlayer?.addEventListener 'canplaythrough', @handleLoad
 
   render: ->
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
@@ -156,15 +156,17 @@ module.exports = React.createClass
       <header className="form-label" style={textAlign: 'center'}>Subject metadata</header>
       <hr />
       <table className="standard-table">
-        {for key, value of @props.subject?.metadata when key.charAt(0) isnt '#' and key[...2] isnt '//'
-          <tr key={key}>
-            <th>{key}</th>
-            <Markdown tag="td" content={value} inline />
-          </tr>}
+        <tbody>
+          {for key, value of @props.subject?.metadata when key.charAt(0) isnt '#' and key[...2] isnt '//'
+            <tr key={key}>
+              <th>{key}</th>
+              <Markdown tag="td" content={value} inline />
+            </tr>}
+        </tbody>
       </table>
     </div>
 
   handleLoad: (e) ->
     @setState loading: false
-    @refs.videoPlayer?.getDOMNode().removeEventListener 'canplaythrough', @handleLoad
+    @refs.videoPlayer?.removeEventListener 'canplaythrough', @handleLoad
     @props.onLoad? arguments...

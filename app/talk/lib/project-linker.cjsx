@@ -1,6 +1,6 @@
 React = require 'react'
 apiClient = require '../../api/client'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 Loading = require '../../components/loading-indicator'
 FEATURED_PRODUCT_IDS = require '../../lib/featured-projects'
 
@@ -18,7 +18,7 @@ module?.exports = React.createClass
     loading: true
     open: false
 
-  componentWillMount: ->
+  componentDidMount: ->
     @loadMoreProjects().then(@setState.bind(this))
 
   loadMoreProjects: (page = 1, newProjects = [], load = 10) ->
@@ -48,7 +48,7 @@ module?.exports = React.createClass
       {if project.redirect
         <a href={project.redirect} title={project.redirect}>{project.display_name}</a>
       else
-        <Link to="project-talk" params={{owner, name}}>
+        <Link to="/projects/#{owner}/#{name}">
           {project.display_name}
         </Link>
         }
@@ -72,7 +72,7 @@ module?.exports = React.createClass
           <Loading />
 
         <div className="project-linker">
-          <div><Link to="talk">Zooniverse Talk</Link></div>
+          <div><Link to="/talk">Zooniverse Talk</Link></div>
 
           <div>{@state.projects?.map(@projectLink)}</div>
 

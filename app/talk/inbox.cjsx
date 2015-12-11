@@ -3,7 +3,7 @@ talkClient = require '../api/talk'
 apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 Paginator = require './lib/paginator'
-Router = {Link} = require '@edpaget/react-router'
+{Link, History} = require 'react-router'
 Loading = require '../components/loading-indicator'
 InboxForm = require './inbox-form'
 talkConfig = require './config'
@@ -17,20 +17,20 @@ promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 module?.exports = React.createClass
   displayName: 'TalkInbox'
-  mixins: [Router.Navigation]
+  mixins: [History]
 
   getDefaultProps: ->
-    query: page: 1
+    location: query: page: 1
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.query.page is @props.query.page
-      @setConversations(nextProps.query.page)
+    unless nextProps.location.query.page is @props.location.query.page
+      @setConversations(nextProps.location.query.page)
 
   setConversations: (page) ->
     conversationsQuery =
       user_id: @props.user.id
       page_size: PAGE_SIZE
-      page: @props.query.page
+      page: @props.location.query.page
       sort: '-updated_at'
       include: 'users'
 
@@ -40,7 +40,7 @@ module?.exports = React.createClass
     @goToPage(page)
 
   goToPage: (n) ->
-    @transitionTo(@props.path, @props.params, {page: n})
+    @history.pushState(null, "/inbox?page=#{n}")
     @setConversations(n)
 
   message: (data, i) ->
@@ -53,7 +53,7 @@ module?.exports = React.createClass
         <div>
           {users.map (user, i) =>
             <div key={user.id}>
-              <strong><Link key={user.id} to="user-profile" params={name: user.login}>{user.display_name}</Link></strong>
+              <strong><Link key={user.id} to="/users/#{user.login}">{user.display_name}</Link></strong>
                 <PromiseRenderer promise={conversation.get('messages', {page_size: 1, sort: '-created_at'})}>{(messages) =>
                   <div>{timeAgo(messages[0].updated_at)}{', ' if i isnt (users.length-1)}</div>
                 }</PromiseRenderer>
@@ -61,7 +61,7 @@ module?.exports = React.createClass
         </div>
       }</PromiseRenderer>
 
-      <Link to="inbox-conversation" params={conversation: conversation.id}>
+      <Link to="/inbox/#{conversation.id}">
         {if unread
           <i className="fa fa-comments-o"/>}
         {conversation.title}

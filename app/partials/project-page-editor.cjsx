@@ -36,7 +36,7 @@ module.exports = React.createClass
     @promiseToSetState pageContent: @fetchOrCreate()
 
   render: ->
-    <p>
+    <div>
       {if @state.pending.pageContent?
          <div>Loading</div>
        else if @state.rejected.pageContent?
@@ -56,4 +56,4 @@ module.exports = React.createClass
                onChange={handleInputChange.bind @state.pageContent} />
            }</ChangeListener>
          </AutoSave>}
-    </p>
+    </div>

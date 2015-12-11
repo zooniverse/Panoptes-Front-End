@@ -4,7 +4,7 @@ PrivateMessageForm = require '../../talk/private-message-form'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 Translate = require 'react-translate-component'
-{Link, RouteHandler} = require '@edpaget/react-router'
+{Link, IndexLink} = require 'react-router'
 talkClient = require '../../api/talk'
 
 counterpart.registerTranslations 'en',
@@ -59,36 +59,35 @@ UserProfilePage = React.createClass
         <div className="hero-container">
           <h1>{@props.profileUser.display_name}</h1>
           <nav className="hero-nav">
-            <Link to="user-profile" params={name: @props.profileUser.login}>
+            <IndexLink to="/users/#{@props.profileUser.login}" activeClassName="active">
               <Translate content="profile.nav.comments" />
-            </Link>
+            </IndexLink>
             {' '}
-            <Link to="collections-user" params={owner: @props.profileUser.login}>
+            <Link to="/collections/#{@props.profileUser.login}" activeClassName="active">
               <Translate content="profile.nav.collections" />
             </Link>
             {' '}
-            <Link to="favorites-user" params={owner: @props.profileUser.login}>
+            <Link to="/favorites/#{@props.profileUser.login}" activeClassName="active">
               <Translate content="profile.nav.favorites" />
             </Link>
             {' '}
 
             <span>
               {if @props.user is @props.profileUser
-                <Link to="user-profile-stats" params={name: @props.profileUser.login}>
+                <Link to="/users/#{@props.profileUser.login}/stats" activeClassName="active">
                   <Translate content="profile.nav.stats" />
                 </Link>
               else
-                <Link to="user-profile-private-message" params={name: @props.profileUser.login}>
+                <Link to="/users/#{@props.profileUser.login}/message" activeClassName="active">
                   <Translate content="profile.nav.message" />
                 </Link>}
-
             </span>
           </nav>
         </div>
       </section>
 
       <section className="user-profile-content">
-        <RouteHandler {...@props} />
+        {React.cloneElement(@props.children, @props)}
       </section>
     </div>
 
@@ -98,7 +97,7 @@ module.exports = React.createClass
   render: ->
     <PromiseRenderer promise={apiClient.type('users').get({login: @props.params.name})} then={([profileUser]) =>
       if profileUser?
-        <UserProfilePage profileUser={profileUser} user={@props.user} />
+        <UserProfilePage {...@props} profileUser={profileUser} user={@props.user} />
       else
         <p>Sorry, we couldn’t find any user going by <strong>{@props.params.name}</strong>.</p>
     } />

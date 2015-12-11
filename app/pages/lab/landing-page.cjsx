@@ -1,7 +1,7 @@
 React = require 'react'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 ZooniverseLogoType = require '../../partials/zooniverse-logotype'
 alert = require '../../lib/alert'
 LoginDialog = require '../../partials/login-dialog'
@@ -42,7 +42,7 @@ module.exports = React.createClass
           <Translate content="landing.buttons.signIn" />
         </button>
       }
-      <Link to="projects" className="call-to-action standard-button landing-button"><Translate content="landing.buttons.backToProjects" /></Link>
+      <Link to="/projects" className="call-to-action standard-button landing-button"><Translate content="landing.buttons.backToProjects" /></Link>
     </div>
 
   showLoginDialog: (which) ->

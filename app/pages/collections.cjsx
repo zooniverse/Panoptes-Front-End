@@ -4,7 +4,7 @@ TitleMixin = require '../lib/title-mixin'
 apiClient = require '../api/client'
 OwnedCardList = require '../components/owned-card-list'
 Translate = require 'react-translate-component'
-{Link} = require '@edpaget/react-router'
+{Link, IndexLink} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   collectionsPage:
@@ -15,18 +15,23 @@ counterpart.registerTranslations 'en',
     notFoundMessage: 'No Collections Found'
     myCollections: 'My Collections'
     favorites: 'My Favorites'
+    all: 'All'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
 
   render: ->
     <nav className="hero-nav">
+      <IndexLink to="/collections" activeClassName="active">
+        <Translate content="collectionsPage.all" />
+      </IndexLink>
+
       {if @props.user?
-        <Link to="collections-user" params={{owner: @props.user.login}}>
+        <Link to="/collections/#{@props.user.login}" activeClassName="active">
           <Translate content="collectionsPage.myCollections" />
         </Link>}
       {if @props.user?
-        <Link to="favorites-user" params={{owner: @props.user.login}}>
+        <Link to="/favorites/#{@props.user.login}" activeClassName="active">
           <Translate content="collectionsPage.favorites" />
         </Link>}
     </nav>
@@ -42,19 +47,21 @@ List = React.createClass
         subject.locations[0][firstKey]
 
   cardLink: (collection) ->
-    'collection-show'
+    [owner, name] = collection.slug.split('/')
+    "/collections/#{owner}/#{name}"
 
   listCollections: ->
     query = {}
     query.owner = @props.params.owner if @props.params?.owner?
     query.include = 'owner'
     query.favorite = @props.favorite
-    Object.assign query, @props.query
+    Object.assign query, @props.location.query
 
     apiClient.type('collections').get query
 
   render: ->
     <OwnedCardList
+      {...@props}
       translationObjectName="collectionsPage"
       listPromise={@listCollections()}
       linkTo="collections"

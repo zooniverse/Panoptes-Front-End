@@ -36,8 +36,8 @@ module?.exports = React.createClass
       <div>
         <h2>Mentions:</h2>
         <div>
-          {for mention in @state.mentions
-            <Comment key={"mention-#{mention.comment.id}"} data={mention.comment} locked={true} linked={true} />}
+          {for mention, i in @state.mentions
+            <Comment key={"mention-#{mention.comment.id}-#{i}"} data={mention.comment} locked={true} linked={true} />}
         </div>
       </div>
     else

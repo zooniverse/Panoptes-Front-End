@@ -4,7 +4,7 @@ talkClient = require '../api/talk'
 apiClient = require '../api/client'
 parseSection = require './lib/parse-section'
 projectSection = require './lib/project-section'
-{State, Navigation} = require '@edpaget/react-router'
+{State, History} = require 'react-router'
 merge = require 'lodash.merge'
 {getErrors} = require './lib/validations'
 commentValidations = require './lib/comment-validations'
@@ -20,7 +20,7 @@ PAGE_SIZE = talkConfig.discussionPageSize
 
 module?.exports = React.createClass
   displayName: 'TalkQuickSubjectCommentForm'
-  mixins: [State, Navigation]
+  mixins: [State, History]
 
   propTypes:
     subject: React.PropTypes.object
@@ -60,8 +60,7 @@ module?.exports = React.createClass
 
                     talkClient.type('comments').create(comment).save()
                       .then (comment) =>
-                        @transitionTo('project-talk-discussion', {owner: owner, name: name, board: discussion.board_id, discussion: discussion.id}, {comment: comment.id})
-
+                        @history.pushState(null, "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}?comment=#{comment.id}")
                   else
                     focus_id = +@props.subject?.id
                     focus_type = 'Subject' if !!focus_id
@@ -79,7 +78,7 @@ module?.exports = React.createClass
                       }
                     talkClient.type('discussions').create(discussion).save()
                       .then (discussion) =>
-                        @transitionTo('project-talk-discussion', {owner: owner, name: name, board: discussion.board_id, discussion: discussion.id})
+                        @history.pushState(null, "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}")
 
             else
               throw new Error("A board for subject comments has not been setup for this project yet.")

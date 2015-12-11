@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 Translate = require 'react-translate-component'
-{Link, RouteHandler} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   signIn:
@@ -30,11 +30,11 @@ module.exports = React.createClass
       <div className="columns-container">
         <div className="tabbed-content column" data-side="top">
           <nav className="tabbed-content-tabs">
-            <Link to="sign-in" className="tabbed-content-tab"><Translate content="signIn.signIn" /></Link>
-            <Link to="register" className="tabbed-content-tab"><Translate content="signIn.register" /></Link>
+            <Link to="/accounts/sign-in" className="tabbed-content-tab"><Translate content="signIn.signIn" /></Link>
+            <Link to="/accounts/register" className="tabbed-content-tab"><Translate content="signIn.register" /></Link>
           </nav>
 
-          <RouteHandler />
+          {@props.children}
         </div>
 
         <hr />

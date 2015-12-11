@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 CommentBox = require './comment-box'
 {getErrors} = require './lib/validations'
 commentValidations = require './lib/comment-validations'
@@ -21,7 +22,7 @@ module?.exports = React.createClass
     loading: false
 
   discussionValidations: (commentBody) ->
-    discussionTitle = @getDOMNode().querySelector('.new-discussion-title').value
+    discussionTitle = ReactDOM.findDOMNode(@).querySelector('.new-discussion-title').value
     commentErrors = getErrors(commentBody, commentValidations)
     discussionErrors = getErrors(discussionTitle, discussionValidations)
 
@@ -32,7 +33,7 @@ module?.exports = React.createClass
 
   onSubmitDiscussion: (e, commentText, subject) ->
     @setState loading: true
-    form = @getDOMNode().querySelector('.talk-board-new-discussion')
+    form = ReactDOM.findDOMNode(@).querySelector('.talk-board-new-discussion')
     titleInput = form.querySelector('input[type="text"]')
     title = titleInput.value
 

@@ -1,5 +1,5 @@
 React = require 'react'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 {Markdown} = require 'markdownz'
 moment = require 'moment'
 talkClient = require '../../api/talk'
@@ -40,13 +40,13 @@ module?.exports = React.createClass
 
   render: ->
     notification = @props.notification
-    path = if notification.project_id then 'project-talk-moderations' else 'talk-moderations'
     [owner, name] = notification.project_slug.split('/') if notification.project_slug
+    path = if notification.project_id then "/projects/#{owner}/#{name}/talk/moderations" else '/talk/moderations'
 
     if @state.moderation
       <div className="moderation talk-module">
         <div className="title">
-          <Link to={path} {...@props} params={{owner, name}}>{notification.message}</Link>
+          <Link to={path} {...@props}>{notification.message}</Link>
         </div>
 
         <Markdown>{@state.comment.body}</Markdown>
@@ -56,7 +56,7 @@ module?.exports = React.createClass
           {for report, i in @state.reports
             <div key={"#{ @state.moderation.id }-report-#{ i }"}>
               <li>
-                <Link className="user-profile-link" to="user-profile" params={name: report.user.login}>
+                <Link className="user-profile-link" to="/users/#{report.user.login}">
                   <Avatar user={report.user} />{' '}{report.user.display_name}
                 </Link>
                 {': '}
@@ -67,13 +67,13 @@ module?.exports = React.createClass
 
         <div className="bottom">
           {if @state.commentUser
-            <Link className="user-profile-link" to="user-profile" params={name: @state.commentUser.login}>
+            <Link className="user-profile-link" to="/users/@state.commentUser.login">
               <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
             </Link>}
 
           {' '}
 
-          <Link to={path} {...@props} params={{owner, name}}>
+          <Link to={path} {...@props}>
             {notification.message}{' '}
             {moment(notification.created_at).fromNow()}
           </Link>

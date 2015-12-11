@@ -1,5 +1,5 @@
 React = require 'react'
-{Navigation, Link, RouteHandler} = require '@edpaget/react-router'
+{History, Link, IndexLink} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
 TitleMixin = require '../../lib/title-mixin'
@@ -7,7 +7,7 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = require '../../api/client'
 counterpart = require 'counterpart'
 ChangeListener = require '../../components/change-listener'
-Router = require '@edpaget/react-router'
+Router = require 'react-router'
 
 DEFAULT_WORKFLOW_NAME = 'Untitled workflow'
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
@@ -16,7 +16,7 @@ DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
 EditProjectPage = React.createClass
   displayName: 'EditProjectPage'
 
-  mixins: [TitleMixin, Navigation]
+  mixins: [TitleMixin, History]
 
   title: ->
     @props.project.display_name
@@ -32,6 +32,9 @@ EditProjectPage = React.createClass
     deletionError: null
     deletionInProgress: false
 
+  labPath: (postFix = '') ->
+    "/lab/#{@props.project.id}#{postFix}"
+
   render: ->
     linkParams =
       projectID: @props.project.id
@@ -41,38 +44,38 @@ EditProjectPage = React.createClass
         <ul className="nav-list">
           <li><div className="nav-list-header">Project #{@props.project.id}</div></li>
 
-          <li><Link to="edit-project-details" params={linkParams} className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
+          <li><IndexLink to={@labPath()} activeClassName='active' className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
             Project details
-          </Link></li>
-          <li><Link to="edit-project-research" params={linkParams} className="nav-list-item" title="Explain your research to your audience here in as much detail as you’d like.">
+          </IndexLink></li>
+          <li><Link to={@labPath('/research')} activeClassName='active' className="nav-list-item" title="Explain your research to your audience here in as much detail as you’d like.">
             Research
           </Link></li>
-          <li><Link to="edit-project-results" params={linkParams} className="nav-list-item" title="Once your project has hit its stride, share the results of your project with your volunteers here.">
+          <li><Link to={@labPath('/results')} activeClassName='active' className="nav-list-item" title="Once your project has hit its stride, share the results of your project with your volunteers here.">
             Results
           </Link></li>
-          <li><Link to="edit-project-faq" params={linkParams} className="nav-list-item" title="Add details here about your research, how to classify, and what you plan to do with the classifications.">
+          <li><Link to={@labPath('/faq')} activeClassName='active' className="nav-list-item" title="Add details here about your research, how to classify, and what you plan to do with the classifications.">
             FAQ
           </Link></li>
-          <li><Link to="edit-project-education" params={linkParams} className="nav-list-item" title="If you are a researcher open to collaborating with educators, or if your project is primarily for educational purposes, you can describe that here.">
+          <li><Link to={@labPath('/education')} activeClassName='active' className="nav-list-item" title="If you are a researcher open to collaborating with educators, or if your project is primarily for educational purposes, you can describe that here.">
             Education
           </Link></li>
-          <li><Link to="edit-project-collaborators" params={linkParams} className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
+          <li><Link to={@labPath('/collaborators')} activeClassName='active' className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
             Collaborators
           </Link></li>
           {if 'tutorial' in (@props.project.experimental_tools ? [])
-            <li><Link to="edit-project-tutorial" params={linkParams} className="nav-list-item" title="Create a pop-up tutorial for your project’s classification interface">
+            <li><Link to={@labPath('/tutorial')} activeClassName='active' className="nav-list-item" title="Create a pop-up tutorial for your project’s classification interface">
               Tutorial
             </Link></li>}
-          <li><Link to="edit-project-media" params={linkParams} className="nav-list-item" title="Add any images you’d like to use in this project’s introduction, science case, results, FAQ, or education content pages.">
+          <li><Link to={@labPath('/media')} activeClassName='active' className="nav-list-item" title="Add any images you’d like to use in this project’s introduction, science case, results, FAQ, or education content pages.">
             Media
           </Link></li>
-          <li><Link to="edit-project-visibility" params={linkParams} className="nav-list-item" title="Decide whether your project is public and whether it's ready to go live.">
+          <li><Link to={@labPath('/visibility')} activeClassName='active' className="nav-list-item" title="Decide whether your project is public and whether it's ready to go live.">
             Visibility
           </Link></li>
-          <li><Link to="edit-project-talk" params={linkParams} className="nav-list-item" title="Setup project specific discussion boards">
+          <li><Link to={@labPath('/talk')} activeClassName='active' className="nav-list-item" title="Setup project specific discussion boards">
             Talk
           </Link></li>
-          <li><Link to="get-data-exports" params={linkParams} className="nav-list-item" title="Get your project's data exports">
+          <li><Link to={@labPath('/data-exports')} activeClassName='active' className="nav-list-item" title="Get your project's data exports">
             Data Exports
           </Link></li>
 
@@ -82,10 +85,8 @@ EditProjectPage = React.createClass
             <PromiseRenderer promise={@props.project.get 'workflows'}>{(workflows) =>
               <ul className="nav-list">
                 {renderWorkflowListItem = (workflow) ->
-                  workflowLinkParams = Object.create linkParams
-                  workflowLinkParams.workflowID = workflow.id
                   <li key={workflow.id}>
-                    <Link to="edit-project-workflow" params={workflowLinkParams} className="nav-list-item" title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">{workflow.display_name}</Link>
+                    <Link to={@labPath("/workflow/#{workflow.id}")} activeClassName="active" className="nav-list-item" title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">{workflow.display_name}</Link>
                   </li>}
 
                 {for workflow in workflows
@@ -109,11 +110,9 @@ EditProjectPage = React.createClass
             <PromiseRenderer promise={@props.project.get 'subject_sets'}>{(subjectSets) =>
               <ul className="nav-list">
                 {renderSubjectSetListItem = (subjectSet) ->
-                  subjectSetLinkParams = Object.create linkParams
-                  subjectSetLinkParams.subjectSetID = subjectSet.id
                   subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>
                   <li key={subjectSet.id}>
-                    <Link to="edit-project-subject-set" params={subjectSetLinkParams} className="nav-list-item" title="A subject is an image (or group of images) to be analyzed.">{subjectSetListLabel}</Link>
+                    <Link to={@labPath("/subject-set/#{subjectSet.id}")} activeClassName="active" className="nav-list-item" title="A subject is an image (or group of images) to be analyzed.">{subjectSetListLabel}</Link>
                   </li>}
 
                 {for subjectSet in subjectSets
@@ -136,7 +135,7 @@ EditProjectPage = React.createClass
             <div className="nav-list-header">Need some help?</div>
             <ul className="nav-list">
               <li>
-                <Link className="nav-list-item" to="lab-how-to">Read a tutorial</Link>
+                <Link className="nav-list-item" to="/lab-how-to">Read a tutorial</Link>
               </li>
               <li>
                 <a href="https://www.zooniverse.org/talk/18/" className="nav-list-item">Ask for help on talk</a>
@@ -156,7 +155,7 @@ EditProjectPage = React.createClass
 
       <div className="column">
         <ChangeListener target={@props.project} handler={=>
-          <RouteHandler {...@props} />
+          React.cloneElement(@props.children, @props)
         } />
       </div>
     </div>
@@ -184,7 +183,7 @@ EditProjectPage = React.createClass
 
     workflow.save()
       .then =>
-        @transitionTo 'edit-project-workflow', projectID: @props.project.id, workflowID: workflow.id
+        @history.pushState(null, "/lab/#{@props.project.id}/workflow/#{workflow.id}")
       .catch (error) =>
         @setState workflowCreationError: error
       .then =>
@@ -205,7 +204,7 @@ EditProjectPage = React.createClass
 
     subjectSet.save()
       .then =>
-        @transitionTo 'edit-project-subject-set', projectID: @props.project.id, subjectSetID: subjectSet.id
+        @history.pushState(null, "/lab/#{@props.project.id}/subject-set/#{subjectSet.id}")
       .catch (error) =>
         @setState subjectSetCreationError: error
       .then =>
@@ -226,7 +225,7 @@ EditProjectPage = React.createClass
 
       this.props.project.delete()
         .then =>
-          @transitionTo 'lab'
+          @history.pushState(null, "/lab")
         .catch (error) =>
           @setState deletionError: error
         .then =>
@@ -235,16 +234,16 @@ EditProjectPage = React.createClass
 
 module.exports = React.createClass
   displayName: 'EditProjectPageWrapper'
-  mixins: [TitleMixin, Router.Navigation]
+  mixins: [TitleMixin, History]
   title: 'Edit'
 
   componentDidMount: ->
     unless @props.user
-      @transitionTo "lab"
+      @history.pushState(null, "/lab")
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.user
-      @transitionTo "lab"
+      @history.pushState(null, "/lab")
 
   getDefaultProps: ->
     params:

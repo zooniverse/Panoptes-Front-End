@@ -1,4 +1,4 @@
-React = { findDOMNode } = require 'react'
+React = require 'react'
 auth = require '../api/auth'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
@@ -28,9 +28,9 @@ module.exports = React.createClass
       resetSuccess: false
       resetError: null
 
-    token = @props.query.reset_password_token
-    password = findDOMNode(@refs.password).value
-    confirmation = findDOMNode(@refs.confirmation).value
+    token = @props.location.query.reset_password_token
+    password = @refs.password.value
+    confirmation = @refs.confirmation.value
 
     auth.resetPassword {password, confirmation, token}
       .then =>
@@ -47,7 +47,7 @@ module.exports = React.createClass
         @setState inProgress: false
 
   handleEmailChange: ->
-    @setState { emailIsValid: findDOMNode(@refs.email)?.checkValidity() }
+    @setState { emailIsValid: @refs.email?.checkValidity() }
 
   handleEmailSubmit: (e) ->
     e.preventDefault()
@@ -57,7 +57,7 @@ module.exports = React.createClass
       emailSuccess: false
       emailError: false
 
-    email = findDOMNode(@refs.email).value
+    email = @refs.email.value
 
     auth.requestPasswordReset {email}
       .then =>
@@ -69,7 +69,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="centered-grid">
-      {if @props.query?.reset_password_token?
+      {if @props.location.query?.reset_password_token?
         if @state.resetSuccess
           <p>You have successfully reset your password, please login to get started.</p>
         else
@@ -102,7 +102,7 @@ module.exports = React.createClass
           <p><strong>So, you’ve forgotten your password.</strong></p>
           <p>It happens to the best of us. Just enter your email address here and we’ll send you a link you can follow to reset it.</p>
           <p>
-            <input ref="email" type="email" required onChange={@handleEmailChange} className="standard-input" defaultValue={@props.query?.email} size="50" />
+            <input ref="email" type="email" required onChange={@handleEmailChange} className="standard-input" defaultValue={@props.location.query?.email} size="50" />
           </p>
           <p>
             <button type="submit" className="standard-button" disabled={!@state.emailIsValid}>Submit</button>

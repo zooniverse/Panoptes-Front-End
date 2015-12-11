@@ -1,7 +1,8 @@
-React = {findDOMNode} = require 'react'
+React = require 'react'
+ReactDOM = require 'react-dom'
 talkClient = require '../api/talk'
 UserSearch = require '../components/user-search'
-{Navigation} = require '@edpaget/react-router'
+{History} = require 'react-router'
 {getErrors} = require './lib/validations'
 subjectValidations = require './lib/message-subject-validations'
 messageValidations = require './lib/message-validations'
@@ -9,7 +10,7 @@ CommentBox = require './comment-box'
 
 module?.exports = React.createClass
   displayName: 'InboxForm'
-  mixins: [Navigation]
+  mixins: [History]
 
   propTypes:
     user: React.PropTypes.object
@@ -27,11 +28,11 @@ module?.exports = React.createClass
     !!validationErrors.length
 
   onSubmitMessage: (_, body) ->
-    recipient_ids = @getDOMNode().querySelector('[name="userids"]').value
+    recipient_ids = ReactDOM.findDOMNode(@).querySelector('[name="userids"]').value
       .split(',').map (id) -> parseInt(id)
       .filter(Number)
 
-    title = findDOMNode(@refs.subject).value
+    title = @refs.subject.value
     user_id = @props.user.id
 
     errored = @validations(body, title, recipient_ids)
@@ -41,7 +42,7 @@ module?.exports = React.createClass
 
     talkClient.type('conversations').create(conversation).save()
       .then (conversation) =>
-        @transitionTo('inbox-conversation', {conversation: conversation.id})
+        @history.pushState(null, "/inbox/#{conversation.id}")
 
   render: ->
     <div className="inbox-form talk-module">

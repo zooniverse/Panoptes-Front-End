@@ -3,12 +3,12 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require '../../api/client'
 Paginator = require '../../talk/lib/paginator'
 ProjectIcon = require '../../components/project-icon'
-{Navigation, Link} = require '@edpaget/react-router'
+{History, Link} = require 'react-router'
 
 module.exports = React.createClass
   displayName: "ProjectStatusPage"
 
-  mixins: [Navigation]
+  mixins: [History]
 
   getProjects: ->
     query =
@@ -16,22 +16,22 @@ module.exports = React.createClass
       sort: '+updated_at'
       include: 'avatar'
 
-    Object.assign query, @props.query
+    Object.assign query, @props.location.query
 
     delete query.filterBy
 
-    query[@props.query.filterBy] = true unless query.slug?
+    query[@props.location.query.filterBy] = true unless query.slug?
 
     apiClient.type('projects').get(query)
 
   render: ->
     <div className="project-status-page">
       <nav className="project-status-filters">
-        <Link to="admin-project-list">All</Link>
-        <Link to="admin-project-list" query={filterBy: 'launch_approved'}>Launch Approved</Link>
-        <Link to="admin-project-list" query={filterBy: 'launch_requested'}>Launch Requested</Link>
-        <Link to="admin-project-list" query={filterBy: 'beta_approved'}>Beta Approved</Link>
-        <Link to="admin-project-list" query={filterBy: 'beta_requested'}>Beta Requested</Link>
+        <Link to="/admin/project_status">All</Link>
+        <Link to="/admin/project_status?filterBy=launch_approved">Launch Approved</Link>
+        <Link to="/admin/project_status?filterBy=launch_requested">Launch Requested</Link>
+        <Link to="/admin/project_status?filterBy=beta_approved">Beta Approved</Link>
+        <Link to="/admin/project_status?filterBy=beta_requested">Beta Requested</Link>
       </nav>
 
       <PromiseRenderer promise={@getProjects()}>{(projects) =>
@@ -43,13 +43,13 @@ module.exports = React.createClass
                {projects.map (project) =>
                  [owner, name] = project.slug.split('/')
                  <div key={project.id}>
-                   <Link to="admin-project-status" params={{owner, name}}>
+                   <Link to={"/admin/project_status/{owner}/{name}"}>
                      <ProjectIcon linkTo={false} project={project} />
                    </Link>
                  </div>}
              </div>
              <Paginator
-               page={+@props.query.page}
+               page={+@props.location.query.page}
                pageCount={projects[0]?.getMeta().page_count} />
             </div>
 

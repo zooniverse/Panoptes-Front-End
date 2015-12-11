@@ -3,7 +3,7 @@ React = require 'react'
 ChangeListener = require '../../components/change-listener'
 PromiseRenderer = require '../../components/promise-renderer'
 Translate = require 'react-translate-component'
-{Link, RouteHandler} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = window.api = require '../../api/client'
@@ -70,7 +70,7 @@ ProjectPage = React.createClass
     <ChangeListener target={@props.project}>{=>
       <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
         [ownerName, name] = @props.project.slug.split('/')
-        params = {owner: ownerName, name: name}
+        projectPath = "/projects/#{ownerName}/#{name}"
 
         <div className="project-page">
           <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
@@ -84,12 +84,12 @@ ProjectPage = React.createClass
                 Visit {@props.project.title}
               </a>
             else
-              <Link to="project-home" params={params} className="tabbed-content-tab">
+              <Link to="#{projectPath}/home" activeClassName="active" className="tabbed-content-tab">
                 <ProjectAvatar project={@props.project} />
                 {@props.project.display_name}
               </Link>}
             {unless @props.project.redirect
-              <Link to="project-research" params={params} className="tabbed-content-tab">
+              <Link to="#{projectPath}/research" activeClassName="active" className="tabbed-content-tab">
                 <Translate content="project.nav.research" />
               </Link>}
             {if @props.project.redirect
@@ -97,7 +97,7 @@ ProjectPage = React.createClass
                 <Translate content="project.nav.classify" />
               </a>
             else
-              <Link to="project-classify" params={params} className="classify tabbed-content-tab">
+              <Link to="#{projectPath}/classify" activeClassName="active" className="classify tabbed-content-tab">
                 <Translate content="project.nav.classify" />
               </Link>}
             {unless @props.project.redirect
@@ -105,20 +105,20 @@ ProjectPage = React.createClass
                 pageTitles = @getPageTitles(pages)
                 <span>
                   {if pageTitles.result
-                    <Link to="project-results" params={params} className="tabbed-content-tab">
+                    <Link to="#{projectPath}/results" activeClassName="active"className="tabbed-content-tab">
                       {pageTitles.result}
                     </Link>}
                   {if pageTitles.faq
-                    <Link to="project-faq" params={params} className="tabbed-content-tab">
+                    <Link to="#{projectPath}/faq" activeClassName="active" className="tabbed-content-tab">
                       {pageTitles.faq}
                     </Link>}
                   {if pageTitles.education
-                    <Link to="project-education" params={params} className="tabbed-content-tab">
+                    <Link to="#{projectPath}/education" activeClassName="active" className="tabbed-content-tab">
                       {pageTitles.education}
                     </Link>}
                 </span>
               }</PromiseRenderer>}
-            <Link to="project-talk" params={params} className="tabbed-content-tab">
+            <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab">
               <Translate content="project.nav.talk" />
             </Link>
             {for link, i in @props.project.urls
@@ -133,7 +133,7 @@ ProjectPage = React.createClass
               <a key={link._key} href={link.url} className="tabbed-content-tab" target="#{@props.project.id}-#{i}">{label}</a>}
           </nav>
 
-          <RouteHandler {...@props} owner={owner} />
+          {React.cloneElement(@props.children, {owner: owner, project: @props.project, user: @props.user})}
           {unless @props.project.launch_approved or @props.project.beta_approved
             <Translate className="project-disclaimer" content="project.disclaimer" component="p" />
           }

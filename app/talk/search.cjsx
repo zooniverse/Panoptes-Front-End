@@ -1,5 +1,5 @@
 React = require 'react'
-{ Navigation } = require '@edpaget/react-router'
+{History} = require 'react-router'
 talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 TalkSearchResult = require './search-result'
@@ -24,7 +24,7 @@ filterObjectKeys = (object, validKeys) ->
 
 module.exports = React.createClass
   displayName: 'TalkSearch'
-  mixins: [Navigation]
+  mixins: [History]
 
   getInitialState: ->
     errorThrown: false
@@ -33,11 +33,11 @@ module.exports = React.createClass
     resultsMeta: {}
 
   componentDidMount: ->
-    @runSearchQuery filterObjectKeys @props.query, VALID_SEARCH_PARAMS
+    @runSearchQuery filterObjectKeys @props.location.query, VALID_SEARCH_PARAMS
 
   componentWillReceiveProps: (nextProps) ->
-    if @props.query isnt nextProps.query
-      @runSearchQuery filterObjectKeys nextProps.query, VALID_SEARCH_PARAMS
+    if @props.location.query isnt nextProps.location.query
+      @runSearchQuery filterObjectKeys nextProps.location.query, VALID_SEARCH_PARAMS
 
   runSearchQuery: (params) ->
     @setState
@@ -66,15 +66,15 @@ module.exports = React.createClass
     @goToPage page
 
   goToPage: (n) ->
-    nextQuery = Object.assign {}, @props.query, {page: n}
+    nextQuery = Object.assign {}, @props.location.query, {page: n}
 
-    @transitionTo location.pathname, @props.params, nextQuery
+    @history.pushState(null, location.pathname, nextQuery)
 
   render: ->
     numberOfResults = @state.results.length
 
     <div className="talk-search">
-      <button  className="link-style" type="button" onClick={@goBack}>
+      <button  className="link-style" type="button" onClick={@history.goBack}>
         <i className="fa fa-backward" /> Back
       </button>
 
@@ -101,13 +101,13 @@ module.exports = React.createClass
             </section>
 
             <div className="talk-sidebar">
-              <SidebarNotifications {...@props} params={@props.params} />
+              <SidebarNotifications {...@props} />
 
               <section>
                 <PopularTags
                   header={<h3>Popular Tags:</h3>}
                   section={@props.section}
-                  params={@props.params} />
+                  project={@props.project} />
               </section>
 
               <section>
@@ -116,7 +116,7 @@ module.exports = React.createClass
 
               <section>
                 <h3>Projects:</h3>
-                <p><ProjectLinker /></p>
+                <ProjectLinker />
               </section>
             </div>
           </div>

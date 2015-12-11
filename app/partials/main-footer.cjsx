@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-{Link} = require '@edpaget/react-router'
+{IndexLink, Link} = require 'react-router'
 ZooniverseLogoType = require './zooniverse-logotype'
 apiClient = require '../api/client'
 
@@ -77,9 +77,9 @@ module.exports = React.createClass
     <footer className="main-footer">
       <div className="centered-grid main-footer-flex">
         <div className="main-logo">
-          <Link to="home" className="main-logo-link">
+          <IndexLink to="/" className="main-logo-link">
             <ZooniverseLogoType />
-          </Link>
+          </IndexLink>
           <br />
           {if @props.user?.admin
             <AdminToggle />}
@@ -87,23 +87,23 @@ module.exports = React.createClass
         <nav className="site-map">
           <div className="site-map-section">
             <Translate component="h6" content="footer.discover.title" />
-            <Link to="projects"><Translate content="footer.discover.projectList" /></Link>
-            <Link to="collections"><Translate content="footer.discover.collectionList" /></Link>
-            <Link to="lab"><Translate content="footer.discover.projectBuilder" /></Link>
-            <Link to="lab-how-to"><Translate content="footer.discover.howToGuide" /></Link>
-            <Link to="lab-policies"><Translate content="footer.discover.projectBuilderPolicies" /></Link>
+            <Link to="/projects"><Translate content="footer.discover.projectList" /></Link>
+            <Link to="/collections"><Translate content="footer.discover.collectionList" /></Link>
+            <Link to="/lab"><Translate content="footer.discover.projectBuilder" /></Link>
+            <Link to="/lab-how-to"><Translate content="footer.discover.howToGuide" /></Link>
+            <Link to="/lab-policies"><Translate content="footer.discover.projectBuilderPolicies" /></Link>
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.about.title" />
-            <Link to="about"><Translate content="footer.about.aboutUs" /></Link>
-            <Link to="about-education"><Translate content="footer.about.education" /></Link>
-            <Link to="about-team"><Translate content="footer.about.ourTeam" /></Link>
-            <Link to="about-publications"><Translate content="footer.about.publications" /></Link>
-            <Link to="about-contact"><Translate content="footer.boilerplate.contact" /></Link>
+            <Link to="/about"><Translate content="footer.about.aboutUs" /></Link>
+            <Link to="/about/education"><Translate content="footer.about.education" /></Link>
+            <Link to="/about/team"><Translate content="footer.about.ourTeam" /></Link>
+            <Link to="/about/publications"><Translate content="footer.about.publications" /></Link>
+            <Link to="/about/contact"><Translate content="footer.boilerplate.contact" /></Link>
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.talk.title" />
-            <Link to="talk"><Translate content="footer.talk.zooTalk" /></Link>
+            <Link to="/talk"><Translate content="footer.talk.zooTalk" /></Link>
             <a href="http://daily.zooniverse.org/" target="_blank"><Translate content="footer.talk.daily" /></a>
             <a href="http://blog.zooniverse.org/" target="_blank"><Translate content="footer.talk.blog" /></a>
           </div>
@@ -117,7 +117,7 @@ module.exports = React.createClass
       </div>
       <div className="footer-sole">
         <div className="centered-grid footer-sole-links">
-          <Link to="privacy"><Translate content="footer.boilerplate.privacyPolicy" /></Link>
+          <Link to="/privacy"><Translate content="footer.boilerplate.privacyPolicy" /></Link>
           <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
           <a href="http://jobs.zooniverse.org/"><Translate content="footer.boilerplate.jobs" /></a>
         </div>

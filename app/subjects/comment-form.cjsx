@@ -1,5 +1,5 @@
 React = require 'react'
-{Navigation, Link} = require '@edpaget/react-router'
+{History, Link} = require 'react-router'
 talkClient = require '../api/talk'
 NewDiscussionForm = require '../talk/discussion-new-form'
 QuickSubjectCommentForm= require '../talk/quick-subject-comment-form'
@@ -10,7 +10,7 @@ alert = require '../lib/alert'
 
 module?.exports = React.createClass
   displayName: 'SubjectCommentForm'
-  mixins: [Navigation]
+  mixins: [History]
 
   componentWillMount: ->
     Promise.all([@getBoards(), @getSubjectDefaultBoard()]).then =>
@@ -32,11 +32,11 @@ module?.exports = React.createClass
     {owner, name} = @props.params
     board = createdDiscussion.board_id
     discussion = createdDiscussion.id
-    @transitionTo 'project-talk-discussion', {owner, name, board, discussion}
+    @history.pushState(null, "/projects/#{owner}/#{name}/talk/#{board}/#{discussion}")
 
   linkToClassifier: (text) ->
     [owner, name] = @props.project.slug.split('/')
-    <Link to="project-classify" params={{owner, name}}>{text}</Link>
+    <Link to={"/projects/#{owner}/#{name}/classify"}>{text}</Link>
 
   popup: ->
     alert (resolve) -> <SignInPrompt onChoose={resolve} />
