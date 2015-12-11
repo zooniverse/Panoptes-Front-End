@@ -4,4 +4,4 @@ WORKDIR /src/
 
 ADD . /src/
 
-RUN npm install
+RUN npm install --unsafe-perm
