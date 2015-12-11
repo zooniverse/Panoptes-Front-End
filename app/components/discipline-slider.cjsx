@@ -16,10 +16,12 @@ module.exports = React.createClass
 
 
   render: ->
+
     <div className={"filter"}>
       {for filter, i in @props.filterCards
-        <div className={"discipline discipline-#{filter.value}"} >
-          <span key={i} className="icon icon-#{filter.value}"></span>
+        filterName = filter.value.replace(" ", "-")
+        <div className={"discipline discipline-#{filterName}"} >
+          <span key={i} className="icon icon-#{filterName}"></span>
           <p>{filter.label}</p>
         </div>
       }
