@@ -15,6 +15,8 @@ TriggeredModalForm = require 'modal-form/triggered'
 TutorialButton = require './tutorial-button'
 isAdmin = require '../lib/is-admin'
 Tutorial = require '../lib/tutorial'
+workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
+workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
@@ -115,6 +117,8 @@ Classifier = React.createClass
           annotation={currentAnnotation}
           onLoad={@handleSubjectImageLoad}
           frameWrapper={FrameAnnotator}
+          allowFlipbook={workflowAllowsFlipbook @props.workflow}
+          allowSeparateFrames={workflowAllowsSeparateFrames @props.workflow}
         />
 
         <div className="task-area">
