@@ -31,6 +31,9 @@ module.exports = React.createClass
     else
       'All'
 
+  onPageChange: (page) ->
+    @props.onPageChange? page
+
   render: ->
     <div className="secondary-page all-resources-page">
       <section className={"hero #{@props.heroClass}"}>
@@ -65,7 +68,7 @@ module.exports = React.createClass
                 {if meta
                   <nav className="pagination">
                     {for page in [1..meta.page_count]
-                      <Link to={@props.linkTo} query={{page}} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.search is ""}>{page}</Link>}
+                      <Link onClick={@onPageChange.bind this, page} to={@props.linkTo} query={{page}} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.search is ""}>{page}</Link>}
                   </nav>}
               </nav>
             </div>
