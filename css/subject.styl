@@ -6,6 +6,26 @@
     .subject-frame-pip
       &.active
         font-weight: 700
+  
+  .video-speed
+    white-space: nowrap
+    display: inline-block
+    padding: .3em 0
+    line-height: .8
+    vertical-align: middle
+
+    label
+      overflow: hidden
+      padding: 0 .3em
+
+      input[type=radio]
+        position: absolute
+        left: -50px
+        height: 0
+        width: 0
+  
+        &:checked + span
+          color: MAIN_HIGHLIGHT
 
 .subject
   .subject-tools

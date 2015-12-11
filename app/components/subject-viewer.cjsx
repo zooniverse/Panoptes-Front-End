@@ -48,6 +48,7 @@ module.exports = React.createClass
     playing: false
     frame: @props.frame ? 0
     time: 0
+    playbackRate: 1
   
   componentDidMount: ->
     player = @refs.videoPlayer?.getDOMNode()
@@ -58,6 +59,7 @@ module.exports = React.createClass
   componentDidUpdate: ->
     player = @refs.videoPlayer?.getDOMNode()
     player?.currentTime = @state.time
+    player?.playbackRate = @state.playbackRate
 
   render: ->
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
@@ -99,6 +101,17 @@ module.exports = React.createClass
           </span>
           <progress ref="videoScrubber" value="0" min="0" value={@state.time} style={width: '80%'} onClick={@seekVideo}>
           </progress>
+          <span className="video-speed">
+          Speed:
+            {for rate, i in [0.25, 0.5, 1]
+              <label key="rate-#{i}" className="secret-button">
+                <input type="radio" name="playbackRate" value={rate} checked={rate == @state.playbackRate} onChange={@setPlayRate} />
+                <span>
+                  {rate}&times;
+                </span>
+              </label>
+            }
+          </span>
         </span>
 
     <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
@@ -199,6 +212,12 @@ module.exports = React.createClass
       player.pause()
       time = player.currentTime
       @setState {time}
+  
+  setPlayRate: (e) ->
+    playbackRate = parseFloat e.currentTarget.value
+    player = @refs.videoPlayer?.getDOMNode()
+    time = player?.currentTime
+    @setState {time, playbackRate}
   
   seekVideo: (e) ->
     player = @refs.videoPlayer?.getDOMNode()
