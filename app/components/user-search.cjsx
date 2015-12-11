@@ -10,7 +10,9 @@ module.exports = React.createClass
     multi: true
 
   searchUsers: (value, callback) ->
-    unless value is ''
+    if value is ''
+      callback null, {}
+    else
       apiClient.type('users').get search: "#{value}", page_size: 10
         .then (users) =>
           opts = for user in users
