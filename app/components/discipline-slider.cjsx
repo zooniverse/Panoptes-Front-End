@@ -18,6 +18,9 @@ module.exports = React.createClass
   render: ->
 
     <div className={"filter"}>
+      <div className="discipline discipline-all">
+        <p>All<br/>Disciplines</p>
+      </div>
       {for filter, i in @props.filterCards
         filterName = filter.value.replace(" ", "-")
         <div className={"discipline discipline-#{filterName}"} >
