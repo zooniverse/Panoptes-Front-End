@@ -27,7 +27,6 @@ module.exports = React.createClass
     filterName.replace(/\s+/g,'-')
 
   selectFilter: (filterName) ->
-    console.log(filterName)
     @props.filterOption filterName
     @setState(selectedFilter: @mangleFilterName(filterName))
 
