@@ -163,15 +163,20 @@ module.exports = React.createClass
 
   renderFrame: (type, format, src, frame) ->
     FrameWrapper = @props.frameWrapper
-    <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions[src]?.width} naturalHeight={@state.frameDimensions[src]?.height} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation}>
-      {switch type
-        when 'image'
-          <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
-        when 'video'
-          <video src={src} type={"#{type}/#{format}"} controls onLoad={@handleLoad}>
-            Your browser does not support the video format. Please upgrade your browser.
-          </video>}
-    </FrameWrapper>
+    frameDisplay = switch type
+      when 'image'
+        <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
+      when 'video'
+        <video src={src} type={"#{type}/#{format}"} controls onLoad={@handleLoad}>
+          Your browser does not support the video format. Please upgrade your browser.
+        </video>
+
+    if FrameWrapper
+      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions[src]?.width} naturalHeight={@state.frameDimensions[src]?.height} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation}>
+        {frameDisplay}
+      </FrameWrapper>
+    else
+      frameDisplay
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
