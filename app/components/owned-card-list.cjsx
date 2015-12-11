@@ -127,16 +127,7 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="resources-container">
-        <DisciplineSlider />
-        <Select
-          ref="disciplineSelect"
-          name="disciplines"
-          placeholder="Filter by discipline"
-          className="discipline-filter"
-          value={@state.tagFilter}
-          options={DISCIPLINES}
-          onChange={@filterDiscipline} />
-
+        <DisciplineSlider filterDiscipline={@filterDiscipline} />
         <PromiseRenderer promise={@state.listPromise}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
