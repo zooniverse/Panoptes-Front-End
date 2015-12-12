@@ -55,7 +55,7 @@ module?.exports = React.createClass
 
   quickComment: ->
     if @state.subjectDefaultBoard
-      <QuickSubjectCommentForm subject={@props.subject} user={@props.user} />
+      <QuickSubjectCommentForm {...@props} subject={@props.subject} user={@props.user} />
     else
       <p>
         There is no default board for subject comments setup yet, Please{' '}

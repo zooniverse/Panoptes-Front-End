@@ -36,7 +36,7 @@ module?.exports = React.createClass
 
   onSubmitComment: (e, commentText, subject) ->
     e.preventDefault()
-    {name, owner} = @getParams() # of project, maybe better to pass in as prop later
+    {name, owner} = @props.params
 
     # get project
     apiClient.type('projects').get({slug: owner + '/' + name})
