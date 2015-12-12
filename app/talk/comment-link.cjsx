@@ -24,7 +24,7 @@ module?.exports = React.createClass
   projectCommentUrl: ->
     {comment} = @props
     [ownerName, projectName] = comment.project_slug.split('/')
-    href= "projects/#{ownerName}/#{projectName}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    href = "/projects/#{ownerName}/#{projectName}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
     window.location.origin + @pathname() + href
 
   mainTalkCommentUrl: ->
