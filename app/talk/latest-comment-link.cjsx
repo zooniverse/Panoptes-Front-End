@@ -4,7 +4,7 @@ apiClient = require '../api/client'
 DisplayRoles = require './lib/display-roles'
 Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
-{Link} = require 'react-router'
+{Link, History} = require 'react-router'
 merge = require 'lodash.merge'
 {Markdown} = require 'markdownz'
 
@@ -16,6 +16,7 @@ truncate = (string = '', ending = '', length = 80) ->
 
 module?.exports = React.createClass
   displayName: 'TalkLatestCommentComment'
+  mixins: [History]
 
   propTypes:
     project: React.PropTypes.object
@@ -47,14 +48,14 @@ module?.exports = React.createClass
     latestCommentText = @refs?.markdownText?.textContent
     @setState({latestCommentText}) if latestCommentText
 
-  discussionLink: (childtext, className = '') ->
+  discussionLink: (childtext = '', query = {}, className = '') ->
     if @props.params?.owner and @props.params?.name
       {owner, name} = @props.params
-      <Link className={className} to="/projects/#{owner}/#{name}/talk/#{@props.discussion.board_id}/#{@props.discussion.id}">
+      <Link className={className} to={@history.createHref("/projects/#{owner}/#{name}/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
         {childtext}
       </Link>
     else
-      <Link className={className} to="/talk/#{@props.discussion.board_id}/#{@props.discussion.id}">
+      <Link className={className} to={@history.createHref("/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
         {childtext}
       </Link>
 
@@ -87,13 +88,13 @@ module?.exports = React.createClass
 
         <span>
           {if discussion.title and @props.title
-            @discussionLink(discussion.title)}{' '}
+            @discussionLink(discussion.title, linkQuery)}{' '}
         </span>
 
-        {@discussionLink(timeAgo(comment.created_at), "latest-comment-time")}
+        {@discussionLink(timeAgo(comment.created_at), linkQuery, "latest-comment-time")}
 
         {if @props.preview
-          @discussionLink(" #{truncate(@state.latestCommentText, '...')}", "latest-comment-preview-link")}
+          @discussionLink(" #{truncate(@state.latestCommentText, '...')}", linkQuery, "latest-comment-preview-link")}
 
       </div>
     </div>
