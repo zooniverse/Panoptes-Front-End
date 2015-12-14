@@ -26,8 +26,7 @@ module.exports = React.createClass
     unless value is ''
       @refs.tagSearch.addValue(value)
 
-  handleInputChange: ({target}) ->
-    value = target.value
+  handleInputChange: (value) ->
     if value.slice("-1") is ","
       @refs.tagSearch.addValue(value.slice(0, -1))
 
