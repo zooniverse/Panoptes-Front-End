@@ -50,16 +50,8 @@ module.exports = React.createClass
     time: 0
     playbackRate: 1
   
-  componentDidMount: ->
-    player = @refs.videoPlayer?.getDOMNode()
-    player?.addEventListener 'canplaythrough', @handleLoad
-    player?.addEventListener 'ended', @endVideo
-    player?.addEventListener 'timeupdate', @updateScrubber
-  
   componentDidUpdate: ->
-    player = @refs.videoPlayer?.getDOMNode()
-    player?.currentTime = @state.time
-    player?.playbackRate = @state.playbackRate
+    @refs.videoPlayer?.playbackRate = @state.playbackRate
 
   render: ->
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
@@ -68,7 +60,7 @@ module.exports = React.createClass
       when 'image'
         <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
       when 'video'
-        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"}>
+        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} onCanPlayThrough={@handleLoad} onEnded={@endVideo} onTimeUpdate={@updateScrubber}>
           Your browser does not support the video format. Please upgrade your browser.
         </video>
 
@@ -203,42 +195,35 @@ module.exports = React.createClass
     </div>
 
   playVideo: (playing) ->
-    player = @refs.videoPlayer?.getDOMNode()
+    player = @refs.videoPlayer
     return unless player?
     @setState {playing}
     if playing
       player.play()
     else
       player.pause()
-      time = player.currentTime
-      @setState {time}
   
   setPlayRate: (e) ->
     playbackRate = parseFloat e.currentTarget.value
-    player = @refs.videoPlayer?.getDOMNode()
-    time = player?.currentTime
-    @setState {time, playbackRate}
+    @setState {playbackRate}
   
   seekVideo: (e) ->
-    player = @refs.videoPlayer?.getDOMNode()
-    scrubber = @refs.videoScrubber?.getDOMNode()
+    player = @refs.videoPlayer
+    scrubber = @refs.videoScrubber
     pos = (e.pageX  - (scrubber.offsetLeft + scrubber.offsetParent.offsetLeft)) / scrubber.offsetWidth
     time = pos * player.duration
-    @setState {time}
+    player.currentTime = time
   
   endVideo: (e) ->
-    player = @refs.videoPlayer?.getDOMNode()
     playing = false
-    time = 0
-    @setState {playing, time}
+    @setState {playing}
   
   updateScrubber: (e) ->
-    player = @refs.videoPlayer?.getDOMNode()
-    scrubber = @refs.videoScrubber?.getDOMNode()
+    player = @refs.videoPlayer
+    scrubber = @refs.videoScrubber
     scrubber.setAttribute 'max', player.duration unless scrubber.getAttribute 'max'
     scrubber.value = player.currentTime
 
   handleLoad: (e) ->
     @setState loading: false
-    @refs.videoPlayer?.removeEventListener 'canplaythrough', @handleLoad
     @props.onLoad? arguments...
