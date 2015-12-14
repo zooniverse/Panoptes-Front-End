@@ -11,23 +11,20 @@ module.exports = React.createClass
 
   searchTags: (value, callback) ->
     if value is ''
-      callback null, { options: [] }
+      { options: [] }
     else
       apiClient.type('tags').get search: "#{value}", page_size: 10
         .then (tags) =>
           opts = for tag in tags
             { value: tag.name, label: tag.name }
-          callback null, {
-            options: opts
-          }
+          { options: opts }
 
   saveCurrent: ({target}) ->
     value = target.value
     unless value is ''
       @refs.tagSearch.addValue(value)
 
-  handleInputChange: ({target}) ->
-    value = target.value
+  handleInputChange: (value) ->
     if value.slice("-1") is ","
       @refs.tagSearch.addValue(value.slice(0, -1))
 
