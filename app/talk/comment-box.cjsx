@@ -95,7 +95,7 @@ module?.exports = React.createClass
 
       <form className="talk-comment-form" onSubmit={@onSubmitComment}>
 
-        <MarkdownEditor placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <MarkdownHelp talk={true} title={<h1>Guide to commenting in Talk</h1>}/> }/>
+        <MarkdownEditor previewing={@state.loading} placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <MarkdownHelp talk={true} title={<h1>Guide to commenting in Talk</h1>}/> }/>
         <section>
           <button
             type="button"
