@@ -11,7 +11,7 @@ module.exports = React.createClass
 
   searchTags: (value, callback) ->
     if value is ''
-      { options: [] }
+      callback null, {}
     else
       apiClient.type('tags').get search: "#{value}", page_size: 10
         .then (tags) =>

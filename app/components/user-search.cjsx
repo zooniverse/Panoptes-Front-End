@@ -11,7 +11,7 @@ module.exports = React.createClass
 
   searchUsers: (value, callback) ->
     if value is ''
-      {}
+      callback null, {}
     else
       apiClient.type('users').get search: "#{value}", page_size: 10
         .then (users) =>
