@@ -22,14 +22,12 @@ module.exports = React.createClass
     query = {include: 'avatar'}
 
     if !apiClient.params.admin
-      query.launch_approved = true
+      query.homepage = true
 
     apiClient.type('projects').get Object.assign {}, query, @props.location.query
 
   imagePromise: (project) ->
-    project.get('avatar')
-      .then (avatar) -> avatar.src
-      .catch -> '/assets/simple-avatar.jpg'
+    Promise.resolve project.avatar_src or '/assets/simple-avatar.jpg'
 
   cardLink: (project) ->
     link = if !!project.redirect
@@ -48,4 +46,5 @@ module.exports = React.createClass
       linkTo="projects"
       cardLink={@cardLink}
       heroClass="projects-hero"
-      imagePromise={@imagePromise} />
+      imagePromise={@imagePromise}
+      skipOwner={true} />
