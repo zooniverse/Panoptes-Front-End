@@ -24,8 +24,8 @@ module.exports = React.createClass
 
   render: ->
     if @state.tutorial? and @state.tutorial.steps.length isnt 0
-      <button type="button" className="secret-button" title="Project tutorial" aria-label="Show the project tutorial" onClick={Tutorial.start.bind(Tutorial, @props.user, @props.project)}>
-        <i className="fa fa-graduation-cap fa-fw" />
+      <button type="button" {...@props} onClick={Tutorial.start.bind(Tutorial, @props.user, @props.project)}>
+        {@props.children}
       </button>
     else
       null
