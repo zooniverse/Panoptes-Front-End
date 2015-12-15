@@ -43,7 +43,7 @@ module.exports = React.createClass
                {projects.map (project) =>
                  [owner, name] = project.slug.split('/')
                  <div key={project.id}>
-                   <Link to={"/admin/project_status/{owner}/{name}"}>
+                   <Link to={"/admin/project_status/#{owner}/#{name}"}>
                      <ProjectIcon linkTo={false} project={project} />
                    </Link>
                  </div>}
