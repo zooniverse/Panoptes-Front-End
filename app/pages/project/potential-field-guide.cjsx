@@ -33,16 +33,16 @@ module.exports = React.createClass
             icons[image.id] = image
           @setState {icons}
 
+  toggleFieldGuide: ->
+    @setState revealed: not @state.revealed
+
   render: ->
     if @state.guide?
       <Pullout className="field-guide-pullout" side="right" open={@state.revealed}>
-        <button type="button" className="field-guide-pullout-toggle" onClick={=>
-          @setState revealed: not @state.revealed
-        }>
+        <button type="button" className="field-guide-pullout-toggle" onClick={@toggleFieldGuide}>
           <strong>Field guide</strong>
         </button>
-        <header>Field guide</header>
-        <FieldGuide items={@state.guide.items} icons={@state.icons} />
+        <FieldGuide items={@state.guide.items} icons={@state.icons} onClickClose={@toggleFieldGuide} />
       </Pullout>
     else
       null

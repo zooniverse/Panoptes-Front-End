@@ -3,20 +3,10 @@
   bottom: 3vh !important // Override default
   box-shadow: 0 0 15px rgba(black, 0.3)
   color: black
-  display: flex
-  flex-direction: column
   font-size: 14px
   transition: transform 150ms ease
   width: 40vw
   top: 3vh !important // Override default
-
-  > header
-    background: black
-    color: white
-    letter-spacing: 0.2ch
-    padding: 1em
-    text-align: center
-    text-transform: uppercase
 
   img
     max-width: 100%
@@ -37,19 +27,30 @@
   white-space: nowrap
 
 .field-guide
-  overflow: auto
-  position: relative
+  display: flex
+  flex-direction: column
+  max-height: 100%
 
-.field-guide-back-button
+  > header
+    background: black
+    color: white
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    letter-spacing: 0.2ch
+    padding: 1em
+    text-align: center
+    text-transform: uppercase
+
+.field-guide-header-button
   @extends $reset-button
-  position: absolute
-  left: 1.4em
-  top: 0.7em
 
   &[disabled]
-    display: none
+    visibility: hidden
 
 .field-guide-item
+  overflow: auto
+
   > header
     margin: 1em 0
 

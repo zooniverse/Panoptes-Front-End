@@ -10,6 +10,7 @@ module.exports = React.createClass
     icons: {}
     defaultSelection: [] # Path by indices of selected content, e.g. `[0, 1]`.
     breadcrumbs: false
+    onClickClose: ->
 
   getInitialState: ->
     selection: @props.defaultSelection
@@ -20,17 +21,17 @@ module.exports = React.createClass
   pushSelection: (index) ->
     @setState selection: [].concat @state.selection, index
 
-  renderBreadcrumbs: (trail) ->
-    <ul className="field-guide-breadcrumbs">
-      {trail.map (item, i) =>
-        jumpBack = @cutSelection.bind this, i + 1
-        isCurrent = i is trail.length - 1
-        <li key={i}>
-          <button type="button" className="field-guide-breadcrumb" onClick={jumpBack} disabled={isCurrent}>
-            {item.title}
-          </button>
-        </li>}
-    </ul>
+  # renderBreadcrumbs: (trail) ->
+  #   <ul className="field-guide-breadcrumbs">
+  #     {trail.map (item, i) =>
+  #       jumpBack = @cutSelection.bind this, i + 1
+  #       isCurrent = i is trail.length - 1
+  #       <li key={i}>
+  #         <button type="button" className="field-guide-breadcrumb" onClick={jumpBack} disabled={isCurrent}>
+  #           {item.title}
+  #         </button>
+  #       </li>}
+  #   </ul>
 
   renderItem: ({icon, title, content, items}) ->
     <div className="field-guide-item">
@@ -81,9 +82,13 @@ module.exports = React.createClass
 
     <div className="field-guide">
       <header>
-        <button type="button" className="field-guide-back-button" disabled={atRoot} onClick={levelUp}>◀</button>
-        {if @props.breadcrumbs
-          @renderBreadcrumbs selectionTrail}
+        <button type="button" className="field-guide-header-button" disabled={atRoot} onClick={levelUp}>
+          <i className="fa fa-chevron-left fa-fw"></i>
+        </button>
+        <strong>Field Guide</strong>
+        <button type="button" className="field-guide-header-button" onClick={@props.onClickClose}>
+          <i className="fa fa-times fa-fw"></i>
+        </button>
       </header>
 
       {@renderItem selectedItem}
