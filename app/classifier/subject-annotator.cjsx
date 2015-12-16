@@ -151,6 +151,8 @@ module.exports = React.createClass
   handleSubjectFrameLoad: (e) ->
     @props.onLoad? e, @state.frame
     {naturalWidth, naturalHeight} = e.target
+    naturalWidth ?= e.target.offsetWidth
+    naturalHeight ?= e.target.offsetHeight
     unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
       @setState {naturalWidth, naturalHeight}, =>
         @updateSize()

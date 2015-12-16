@@ -47,9 +47,11 @@ module.exports = React.createClass
     loading: true
     playing: false
     frame: @props.frame ? 0
+    time: 0
+    playbackRate: 1
   
-  componentDidMount: ->
-    @refs.videoPlayer?.addEventListener 'canplaythrough', @handleLoad
+  componentDidUpdate: ->
+    @refs.videoPlayer?.playbackRate = @state.playbackRate
 
   render: ->
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
@@ -58,7 +60,7 @@ module.exports = React.createClass
       when 'image'
         <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
       when 'video'
-        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} controls>
+        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} onCanPlayThrough={@handleLoad} onEnded={@endVideo} onTimeUpdate={@updateScrubber}>
           Your browser does not support the video format. Please upgrade your browser.
         </video>
 
@@ -69,14 +71,40 @@ module.exports = React.createClass
         else
           <span className="subject-frame-play-controls">
             {if @state.playing
-              <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
+              <button type="button" className="secret-button" aria-label="Pause" onClick={@setPlaying.bind this, false}>
                 <i className="fa fa-pause fa-fw"></i>
               </button>
             else
-              <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
+              <button type="button" className="secret-button" aria-label="Play" onClick={@setPlaying.bind this, true}>
                 <i className="fa fa-play fa-fw"></i>
               </button>}
           </span>
+      when 'video'
+        <span>
+          <span className="subject-frame-play-controls">
+            {if @state.playing
+              <button type="button" className="secret-button" aria-label="Pause" onClick={@playVideo.bind this, false}>
+                <i className="fa fa-pause fa-fw"></i>
+              </button>
+            else
+              <button type="button" className="secret-button" aria-label="Play" onClick={@playVideo.bind this, true}>
+                <i className="fa fa-play fa-fw"></i>
+              </button>}
+          </span>
+          <progress ref="videoScrubber" value="0" min="0" value={@state.time} style={width: '80%'} onClick={@seekVideo}>
+          </progress>
+          <span className="video-speed">
+          Speed:
+            {for rate, i in [0.25, 0.5, 1]
+              <label key="rate-#{i}" className="secret-button">
+                <input type="radio" name="playbackRate" value={rate} checked={rate == @state.playbackRate} onChange={@setPlayRate} />
+                <span>
+                  {rate}&times;
+                </span>
+              </label>
+            }
+          </span>
+        </span>
 
     <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
       {if type is 'image'
@@ -91,7 +119,7 @@ module.exports = React.createClass
       </div>
 
       <div className="subject-tools">
-        <span>{tools}</span>
+        <span style={width: '80%'}>{tools}</span>
         {if @props.subject?.locations.length >= 2
           <span>
             <span className="subject-frame-pips">
@@ -166,7 +194,36 @@ module.exports = React.createClass
       </table>
     </div>
 
+  playVideo: (playing) ->
+    player = @refs.videoPlayer
+    return unless player?
+    @setState {playing}
+    if playing
+      player.play()
+    else
+      player.pause()
+  
+  setPlayRate: (e) ->
+    playbackRate = parseFloat e.currentTarget.value
+    @setState {playbackRate}
+  
+  seekVideo: (e) ->
+    player = @refs.videoPlayer
+    scrubber = @refs.videoScrubber
+    pos = (e.pageX  - (scrubber.offsetLeft + scrubber.offsetParent.offsetLeft)) / scrubber.offsetWidth
+    time = pos * player.duration
+    player.currentTime = time
+  
+  endVideo: (e) ->
+    playing = false
+    @setState {playing}
+  
+  updateScrubber: (e) ->
+    player = @refs.videoPlayer
+    scrubber = @refs.videoScrubber
+    scrubber.setAttribute 'max', player.duration unless scrubber.getAttribute 'max'
+    scrubber.value = player.currentTime
+
   handleLoad: (e) ->
     @setState loading: false
-    @refs.videoPlayer?.removeEventListener 'canplaythrough', @handleLoad
     @props.onLoad? arguments...
