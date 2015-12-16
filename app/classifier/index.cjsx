@@ -171,6 +171,7 @@ Classifier = React.createClass
           <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Done &amp; Talk</Link>}
 
         <TutorialButton user={@props.user} project={@props.project} />
+
         {@renderExpertOptions()}
       </nav>
 
