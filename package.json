@@ -29,7 +29,7 @@
     "react": "~0.14.1",
     "react-dom": "^0.14.1",
     "react-interpolate-component": "~0.8.0",
-    "react-pullout": "0.0.3",
+    "react-pullout": "~1.0.1",
     "react-swipe": "~3.0.0",
     "react-translate-component": "~0.10.0",
     "react-router": "~1.0.0",
