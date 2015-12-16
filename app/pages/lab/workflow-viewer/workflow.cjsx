@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 {Task, StartEndNode} = require './task.cjsx'
 
 DETACHABLE = false
@@ -161,14 +162,14 @@ module.exports = React.createClass
           else
             previousY = 0
           for pt of @state.previousTask[t]
-            previousY += parseFloat(React.findDOMNode(@refs[pt]).style.top)
+            previousY += parseFloat(ReactDOM.findDOMNode(@refs[pt]).style.top)
             N += 1
           previousY /= N
           if previousY > posY
             posY = previousY
         @refs[t].moveMe({left: posX, top: posY})
         # calculate new y position
-        DOMNode = React.findDOMNode(@refs[t])
+        DOMNode = ReactDOM.findDOMNode(@refs[t])
         posY += DOMNode.offsetHeight + 40
         # calculate next x position
         w = DOMNode.offsetWidth

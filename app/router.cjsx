@@ -101,8 +101,8 @@ module.exports =
     <Route path="collaborators" component={require './pages/lab/collaborators'} />
     <Route path="media" component={require './pages/lab/media'} />
     <Route path="workflow/:workflowID" component={require './pages/lab/workflow'} />
-    <Route path="workflow/:workflowID/visualize" handler={require './pages/lab/workflow-viewer'} />
-    <Route path="workflow/:workflowID/visualise" handler={require './pages/lab/workflow-viewer'} />
+    <Route path="workflow/:workflowID/visualize" component={require './pages/lab/workflow-viewer'} />
+    <Route path="workflow/:workflowID/visualise" component={require './pages/lab/workflow-viewer'} />
     <Route path="subject-set/:subjectSetID" component={require './pages/lab/subject-set'} />
     <Route path="visibility" component={require './pages/lab/visibility'} />
     <Route path="talk" component={require './pages/lab/talk'} />

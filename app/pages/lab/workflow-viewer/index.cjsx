@@ -3,12 +3,12 @@ apiClient = require '../../../api/client'
 PromiseRenderer = require '../../../components/promise-renderer'
 ChangeListener = require '../../../components/change-listener'
 WorkflowNodes = require './workflow'
-{Navigation} = require '@edpaget/react-router'
+{History, Navigation} = require 'react-router'
 
 WorkflowVis = React.createClass
   displayName: 'WorkflowVis'
 
-  mixins: [Navigation]
+  mixins: [History, Navigation]
 
   getInitialState: ->
     # make a new jsPlumb instance each time component is mounted
@@ -19,9 +19,8 @@ WorkflowVis = React.createClass
 
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
-    viewParams = {owner, name}
     viewQuery = workflow: @props.workflow.id, reload: 0
-    @makeHref 'project-classify', viewParams, viewQuery
+    @history.createHref("/projects/#{owner}/#{name}/classify", viewQuery)
 
   render: ->
     <div>

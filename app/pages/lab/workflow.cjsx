@@ -7,13 +7,11 @@ WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
-{History} = require 'react-router'
+{History, Navigation, Link} = require 'react-router'
 tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 GoldStandardImporter = require './gold-standard-importer'
-{Navigation, Link} = require '@edpaget/react-router'
-visualize = require './workflow-viewer'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -235,7 +233,7 @@ EditWorkflowPage = React.createClass
           <hr />
 
           <div style={pointerEvents: 'all'}>
-            <Link to="edit-project-workflow-visualization" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
+            <Link to="/lab/#{@props.project.id}/workflow/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
           </div>
 
           <hr />

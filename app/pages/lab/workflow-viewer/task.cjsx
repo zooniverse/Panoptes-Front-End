@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 Resizable = require 'react-component-resizable'
 {TaskName, RequireBox, HelpButton} = require './task-helpers'
 AnswerList = require './answers'
@@ -35,7 +36,7 @@ Task = React.createClass
     style
 
   componentDidMount: ->
-    me = React.findDOMNode(@)
+    me = ReactDOM.findDOMNode(@)
     # make node draggable using jsPlumb
     dragOptions =
       handle: '.drag-handel'
@@ -126,7 +127,7 @@ Task = React.createClass
 
   # get css style to use
   updateStyle: ->
-    me = React.findDOMNode(@)
+    me = ReactDOM.findDOMNode(@)
     style =
       left: me.style.left
       top: me.style.top
@@ -163,7 +164,7 @@ Task = React.createClass
 
   # set positon
   moveMe: (position) ->
-    me = React.findDOMNode(@)
+    me = ReactDOM.findDOMNode(@)
     me.style.left = position.left + 'px'
     me.style.top = position.top + 'px'
     if position.width?
@@ -207,7 +208,7 @@ Task = React.createClass
     timer = setTimeout(@onResizeStop, 150)
 
   onResizeStop: (e) ->
-    me = React.findDOMNode(@)
+    me = ReactDOM.findDOMNode(@)
     @updateEndpoints()
     width = @state.width
     width.val = @validWidth(me.style.width, 'int')
@@ -277,7 +278,7 @@ StartEndNode = React.createClass
     @props.onMove(@props.type)
 
   moveMe: (position) ->
-    me = React.findDOMNode(@)
+    me = ReactDOM.findDOMNode(@)
     style =
       left: position.left + ''
       top: position.top + ''
@@ -304,7 +305,7 @@ StartEndNode = React.createClass
     @updateStyle()
 
   updateStyle: ->
-    me = React.findDOMNode(@)
+    me = ReactDOM.findDOMNode(@)
     style =
       left: me.style.left
       top: me.style.top
