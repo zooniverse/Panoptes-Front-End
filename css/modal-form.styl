@@ -19,5 +19,27 @@
   color: black
   font-size: 14px
   margin: 0.5em 3vw
-  overflow: auto
   padding: 0.5em 1em
+
+.modal-dialog-toolbar
+  bottom: 100%
+  margin-bottom: 0.5em
+  position: absolute
+  right: 0
+
+.modal-dialog-toolbar-button
+  @extends $reset-button
+  background: rgba(black, 0.5)
+  border-radius: 2em
+  color: white
+  height: 1em
+  font-size: 2em
+  line-height: 1
+  min-width: 1em
+  text-shadow: 0 2px 4px black
+
+  &:hover
+    background: rgba(black, 0.8)
+
+  &:active
+    background: black

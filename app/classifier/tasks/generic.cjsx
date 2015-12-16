@@ -42,7 +42,7 @@ module.exports = React.createClass
             <small>
               <strong>
                 <button type="button" className="minor-button" onClick={@showHelp}>
-                  Need some help?
+                  Need some help with this task?
                 </button>
               </strong>
             </small>

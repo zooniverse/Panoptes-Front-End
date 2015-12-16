@@ -43,7 +43,11 @@ module.exports = React.createClass
                   mediaByID[mediaResource.id] = mediaResource
 
                 TutorialComponent = this
-                Dialog.alert <TutorialComponent steps={tutorial.steps} media={mediaByID} />, className: 'tutorial-dialog'
+                Dialog.alert(<TutorialComponent steps={tutorial.steps} media={mediaByID} />, {
+                  className: 'tutorial-dialog',
+                  required: true,
+                  closeButton: true
+                })
                   .catch =>
                     null # We don't really care if the user canceled or completed the tutorial.
                   .then =>

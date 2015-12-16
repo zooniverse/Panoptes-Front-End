@@ -165,15 +165,21 @@ Classifier = React.createClass
               <i className="fa fa-star fa-fw"></i>}
             {' '}Done
           </button>}
-
         {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Done &amp; Talk</Link>}
-
-        <TutorialButton user={@props.user} project={@props.project} />
-
         {@renderExpertOptions()}
       </nav>
+
+      <p>
+        <small>
+          <strong>
+            <TutorialButton className="minor-button" user={@props.user} project={@props.project} title="Project tutorial" aria-label="Show the project tutorial" style={marginTop: '2em'}>
+              Show the project tutorial
+            </TutorialButton>
+          </strong>
+        </small>
+      </p>
 
       {if @props.demoMode
         <p style={textAlign: 'center'}>
