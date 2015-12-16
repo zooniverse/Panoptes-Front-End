@@ -89,6 +89,7 @@ Classifier = React.createClass
       @addAnnotationForTask classification, @props.workflow.first_task
 
   render: ->
+
     <ChangeListener target={@props.classification}>{=>
       if @state.showingExpertClassification
         currentClassification = @state.expertClassification
@@ -115,7 +116,7 @@ Classifier = React.createClass
         <div className="task-area">
           {if currentTask?
             @renderTask currentClassification, currentAnnotation, currentTask
-          else # Classification is complete.
+          else if not @props.workflow.configuration?.hide_classification_summaries # Classification is complete; show summary if enabled
             @renderSummary currentClassification}
         </div>
       </div>
@@ -164,7 +165,13 @@ Classifier = React.createClass
               <i className="fa fa-star fa-fw"></i>}
             {' '}Done
           </button>}
+
+        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
+          [ownerName, name] = @props.project.slug.split('/')
+          <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Done &amp; Talk</Link>}
+
         <TutorialButton user={@props.user} project={@props.project} />
+
         {@renderExpertOptions()}
       </nav>
 
