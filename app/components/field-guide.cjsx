@@ -21,41 +21,41 @@ module.exports = React.createClass
     @setState selection: [].concat @state.selection, index
 
   renderBreadcrumbs: (trail) ->
-    <ul className="spotters-guide-breadcrumbs">
+    <ul className="field-guide-breadcrumbs">
       {trail.map (item, i) =>
         jumpBack = @cutSelection.bind this, i + 1
         isCurrent = i is trail.length - 1
         <li key={i}>
-          <button type="button" className="spotters-guide-breadcrumb" onClick={jumpBack} disabled={isCurrent}>
+          <button type="button" className="field-guide-breadcrumb" onClick={jumpBack} disabled={isCurrent}>
             {item.title}
           </button>
         </li>}
     </ul>
 
   renderItem: ({icon, title, content, items}) ->
-    <div className="spotters-guide-item">
+    <div className="field-guide-item">
       <header>
         {if icon?
-          <div className="spotters-guide-item-icon-container">
-            <CroppedImage className="spotters-guide-item-icon" src={@props.icons[icon].src} aspectRatio={1} width="6em" height="6em" />
+          <div className="field-guide-item-icon-container">
+            <CroppedImage className="field-guide-item-icon" src={@props.icons[icon].src} aspectRatio={1} width="6em" height="6em" />
           </div>}
         {if title?
-          <div className="spotters-guide-item-title-container">
+          <div className="field-guide-item-title-container">
             <Markdown content={title} inline />
           </div>}
       </header>
       {if content?
-        <div className="spotters-guide-item-content-container">
+        <div className="field-guide-item-content-container">
           <Markdown content={content} />
         </div>}
       {if items?.length > 0
-        <ul className="spotters-guide-menu">
+        <ul className="field-guide-menu">
           {items.map (item, i) =>
             goTo = @pushSelection.bind this, i
             <li key={i}>
-              <button type="button" className="spotters-guide-menu-item" onClick={goTo}>
-                <CroppedImage className="spotters-guide-menu-item-icon" src={@props.icons[item.icon]?.src} aspectRatio={1} width="4em" height="4em" />
-                <span className="spotters-guide-menu-item-title">
+              <button type="button" className="field-guide-menu-item" onClick={goTo}>
+                <CroppedImage className="field-guide-menu-item-icon" src={@props.icons[item.icon]?.src} aspectRatio={1} width="4em" height="4em" />
+                <span className="field-guide-menu-item-title">
                   {item.title}
                 </span>
               </button>
@@ -79,9 +79,9 @@ module.exports = React.createClass
     levelUp = @cutSelection.bind this, selectionTrail.length - 1
     atRoot = @state.selection.length is 0
 
-    <div className="spotters-guide">
+    <div className="field-guide">
       <header>
-        <button type="button" className="spotters-guide-back-button" disabled={atRoot} onClick={levelUp}>◀</button>
+        <button type="button" className="field-guide-back-button" disabled={atRoot} onClick={levelUp}>◀</button>
         {if @props.breadcrumbs
           @renderBreadcrumbs selectionTrail}
       </header>

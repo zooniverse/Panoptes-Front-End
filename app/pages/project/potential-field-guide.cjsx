@@ -1,7 +1,7 @@
 React = require 'react'
 apiClient = require '../../api/client'
 Pullout = require 'react-pullout'
-SpottersGuide = require '../../components/spotters-guide'
+FieldGuide = require '../../components/field-guide'
 
 module.exports = React.createClass
   getDefaultProps: ->
@@ -35,14 +35,14 @@ module.exports = React.createClass
 
   render: ->
     if @state.guide?
-      <Pullout className="spotters-guide-pullout" side="right" open={@state.revealed}>
-        <button type="button" className="spotters-guide-pullout-toggle" onClick={=>
+      <Pullout className="field-guide-pullout" side="right" open={@state.revealed}>
+        <button type="button" className="field-guide-pullout-toggle" onClick={=>
           @setState revealed: not @state.revealed
         }>
-          <strong>Spotter’s guide</strong>
+          <strong>Field guide</strong>
         </button>
         <header>Field guide</header>
-        <SpottersGuide items={@state.guide.items} icons={@state.icons} />
+        <FieldGuide items={@state.guide.items} icons={@state.icons} />
       </Pullout>
     else
       null

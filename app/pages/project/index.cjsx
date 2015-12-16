@@ -9,7 +9,7 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = window.api = require '../../api/client'
 {sugarClient} = require '../../api/sugar'
 LoadingIndicator = require '../../components/loading-indicator'
-PotentialSpottersGuide = require './potential-spotters-guide.cjsx'
+PotentialFieldGuide = require './potential-field-guide'
 
 SOCIAL_ICONS =
   'bitbucket.com/': 'bitbucket'
@@ -51,9 +51,6 @@ ProjectPage = React.createClass
 
   getDefaultProps: ->
     project: null
-
-  getInitialState: ->
-    showingSpottersGuide: true
 
   componentDidMount: ->
     sugarClient.subscribeTo "project-#{ @props.project.id }"
@@ -141,7 +138,7 @@ ProjectPage = React.createClass
           {unless @props.project.launch_approved or @props.project.beta_approved
             <Translate className="project-disclaimer" content="project.disclaimer" component="p" />}
 
-          <PotentialSpottersGuide project={@props.project} />
+          <PotentialFieldGuide project={@props.project} />
         </div>
       }</PromiseRenderer>
     }</ChangeListener>
