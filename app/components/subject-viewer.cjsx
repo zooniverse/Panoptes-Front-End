@@ -47,9 +47,11 @@ module.exports = React.createClass
     loading: true
     playing: false
     frame: @props.frame ? 0
-    time: 0
     playbackRate: 1
   
+  componentDidMount: ->
+    @refs.videoScrubber?.value = 0
+    
   componentDidUpdate: ->
     @refs.videoPlayer?.playbackRate = @state.playbackRate
 
@@ -80,7 +82,7 @@ module.exports = React.createClass
               </button>}
           </span>
       when 'video'
-        <span>
+        <span className="subject-video-controls">
           <span className="subject-frame-play-controls">
             {if @state.playing
               <button type="button" className="secret-button" aria-label="Pause" onClick={@playVideo.bind this, false}>
@@ -91,8 +93,7 @@ module.exports = React.createClass
                 <i className="fa fa-play fa-fw"></i>
               </button>}
           </span>
-          <progress ref="videoScrubber" value="0" min="0" value={@state.time} style={width: '80%'} onClick={@seekVideo}>
-          </progress>
+          <input type="range" className="video-scrubber" ref="videoScrubber" min="0" step="any" onChange={@seekVideo} />
           <span className="video-speed">
           Speed:
             {for rate, i in [0.25, 0.5, 1]
@@ -119,7 +120,7 @@ module.exports = React.createClass
       </div>
 
       <div className="subject-tools">
-        <span style={width: '80%'}>{tools}</span>
+        <span>{tools}</span>
         {if @props.subject?.locations.length >= 2
           <span>
             <span className="subject-frame-pips">
@@ -210,8 +211,7 @@ module.exports = React.createClass
   seekVideo: (e) ->
     player = @refs.videoPlayer
     scrubber = @refs.videoScrubber
-    pos = (e.pageX  - (scrubber.offsetLeft + scrubber.offsetParent.offsetLeft)) / scrubber.offsetWidth
-    time = pos * player.duration
+    time = scrubber.value
     player.currentTime = time
   
   endVideo: (e) ->
