@@ -245,7 +245,7 @@ Task = React.createClass
         required_box = undefined
 
     inputs = @getInputs()
-    <Resizable className={box_class} style={@state.style} id={@props.plumbId} ref={@props.plumbId} embedCss={false} onResize={@onResize}>
+    <Resizable className={box_class} style={clone(@state.style)} id={@props.plumbId} ref={@props.plumbId} embedCss={false} onResize={@onResize}>
       <div className='drag-handel'>
         <span className='box-head noselect'>
           {"Sub-" if @state.task.subtask}{"Task #{@props.taskKey.substr(1)}: #{@state.task.type.charAt(0).toUpperCase()}#{@state.task.type.substr(1)}"}
@@ -330,6 +330,10 @@ StartEndNode = React.createClass
       {@props.type.charAt(0).toUpperCase() + @props.type.slice(1)}
     </div>
 #
+
+# A function to clone JSON object
+clone = (obj) ->
+  return JSON.parse(JSON.stringify(obj))
 
 module.exports = {
   Task
