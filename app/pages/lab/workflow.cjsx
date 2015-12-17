@@ -45,6 +45,8 @@ EditWorkflowPage = React.createClass
     selectedTaskKey: @props.workflow.first_task
     goldStandardFilesToImport: null
     forceReloader: 0
+    deletionInProgress: false
+    deletionError: null
 
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
@@ -234,12 +236,12 @@ EditWorkflowPage = React.createClass
 
           <div>
             <small>
-              <button type="button" className="minor-button" disabled={@state.deleteInProgress} data-busy={@state.deleteInProgress || null} onClick={@handleDelete}>
+              <button type="button" className="minor-button" disabled={@state.deletionInProgress} data-busy={@state.deletionInProgress || null} onClick={@handleDelete}>
                 Delete this workflow
               </button>
             </small>{' '}
-            {if @state.deleteError?
-              <span className="form-help error">{@state.deleteError.message}</span>}
+            {if @state.deletionError?
+              <span className="form-help error">{@state.deletionError.message}</span>}
           </div>
         </div>
 
@@ -344,9 +346,21 @@ EditWorkflowPage = React.createClass
     @props.workflow.addLink 'subject_sets', [DEMO_SUBJECT_SET_ID]
 
   handleDelete: ->
-    @props.workflow.delete().then =>
-      @props.project.uncacheLink 'workflows'
-      @history.pushState(null, "/lab/#{@props.project.id}")
+    @setState deletionError: null
+
+    confirmed = confirm 'Really delete this workflow and all its tasks?'
+
+    if confirmed
+      @setState deletionInProgress: true
+
+      @props.workflow.delete().then =>
+        @props.project.uncacheLink 'workflows'
+        @history.pushState(null, "/lab/#{@props.project.id}")
+      .catch (error) =>
+        @setState deletionError: error
+      .then =>
+        if @isMounted()
+          @setState deletionInProgress: false
 
   handleTaskChange: (taskKey, path, value) ->
     changes = {}
