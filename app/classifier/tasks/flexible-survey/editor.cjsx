@@ -13,6 +13,7 @@ PromiseRenderer = require '../../../components/promise-renderer'
 Papa = require 'papaparse'
 apiClient = require '../../../api/client'
 putFile = require '../../../lib/put-file'
+Utility = require 'utility'
 
 module.exports = React.createClass
   displayName: 'SurveyTaskEditor'

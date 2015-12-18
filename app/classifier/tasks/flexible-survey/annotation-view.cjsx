@@ -13,6 +13,7 @@ module.exports = React.createClass
       {for identification, i in @props.annotation.value
         identification._key ?= Math.random()
 
+        #TODO: ARB: what is happening here
         answersByQuestion = @props.task.questionsOrder.map (questionID) =>
           if questionID of identification.answers
             answerLabels = [].concat(identification.answers[questionID]).map (answerID) =>

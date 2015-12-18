@@ -1,6 +1,7 @@
 React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
 {Markdown} = require 'markdownz'
+Utility = require 'utility'
 
 ImageFlipper = React.createClass
   displayName: 'ImageFlipper'
@@ -42,7 +43,7 @@ ImageFlipper = React.createClass
     @setState {frame}
 
 module.exports = React.createClass
-  displayName: 'Choice'
+  displayName: 'FlexibleChoice'
 
   getDefaultProps: ->
     task: null
@@ -55,13 +56,12 @@ module.exports = React.createClass
     answers: {}
 
   allFilledIn: ->
-    unless @props.task.choices[@props.choiceID].noQuestions
-      for questionID in @props.task.questionsOrder
-        question = @props.task.questions[questionID]
-        if question.required
-          answer = @state.answers[questionID]
-          if (not answer?) or (question.multiple and answer.length is 0)
-            return false
+    for questionID in Utility.getQuestionIDs(@props.task, @props.choiceID)
+      question = @props.task.questions[questionID]
+      if question.required
+        answer = @state.answers[questionID]
+        if (not answer?) or (question.multiple and answer.length is 0)
+          return false
     true
 
   render: ->
@@ -100,7 +100,7 @@ module.exports = React.createClass
         <hr />
 
         {unless choice.noQuestions
-          for questionID in @props.task.questionsOrder
+          for questionID in Utility.getQuestionIDs(@props.task, @props.choiceID)
             question = @props.task.questions[questionID]
             inputType = if question.multiple
               'checkbox'
@@ -123,7 +123,7 @@ module.exports = React.createClass
                 </span>}
             </div>}
 
-        {unless choice.noQuestions or @props.task.questionsOrder.lengths is 0
+        {unless choice.noQuestions or Utility.getQuestionIDs(@props.task, @props.choiceID).lengths is 0
           <hr />}
       </div>
       <div style={textAlign: 'center'}>

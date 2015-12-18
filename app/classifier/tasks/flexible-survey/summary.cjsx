@@ -1,7 +1,8 @@
 React = require 'react'
+Utility = require 'utility'
 
 module.exports = React.createClass
-  displayName: 'SurveySummary'
+  displayName: 'FlexibleSurveySummary'
 
   getDefaultProps: ->
     task: null
@@ -27,7 +28,7 @@ module.exports = React.createClass
         {if @state.expanded
           choiceSummaries = for identification in @props.annotation.value
             choice = @props.task.choices[identification.choice]
-            allAnswers = for questionID in @props.task.questionsOrder when questionID of identification.answers
+            allAnswers = for questionID in Utility.getQuestionIDs(@props.task, identification.choice) when questionID of identification.answers
               answerLabels = for answerID in [].concat identification.answers[questionID]
                 @props.task.questions[questionID].answers[answerID].label
               answerLabels.join ', '
