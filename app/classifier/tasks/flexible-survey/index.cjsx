@@ -14,7 +14,7 @@ module.exports = React.createClass
     AfterSubject: AnnotationView
 
     getDefaultTask: ->
-      type: 'survey'
+      type: 'flexibleSurvey'
       characteristicsOrder: []
       characteristics: {}
       choicesOrder: []

@@ -234,6 +234,7 @@ module.exports = React.createClass
         <button type="button" className="adder" onClick={@addNewTask.bind this, 'single'}>Question</button>
         <button type="button" className="adder" onClick={@addNewTask.bind this, 'drawing'}>Marking</button>
         <button type="button" className="adder" onClick={@addNewTask.bind this, 'survey'} disabled>Image survey</button>
+        <button type="button" className="adder" onClick={@addNewTask.bind this, 'flexibleSurvey'} disabled>Flexible Image Survey</button>
       </div>
     </div>
 

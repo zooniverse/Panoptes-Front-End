@@ -95,6 +95,7 @@ EditWorkflowPage = React.createClass
                         when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
                         when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
                         when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
+                        when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'crop' then <i className="fa fa-crop fa-fw"></i>
                         when 'text' then <i className="fa fa-file-text-o fa-fw"></i>}
                       {' '}
@@ -137,6 +138,14 @@ EditWorkflowPage = React.createClass
                   {if @canUseTask(@props.project, "survey")
                     <AutoSave resource={@props.workflow}>
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
+                        <i className="fa fa-binoculars fa-2x"></i>
+                        <br />
+                        <small><strong>Survey</strong></small>
+                      </button>
+                    </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "flexible-survey")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'flexibleSurvey'} title="Flexible Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them. The questions may vary based on the object they identify.">
                         <i className="fa fa-binoculars fa-2x"></i>
                         <br />
                         <small><strong>Survey</strong></small>
