@@ -341,7 +341,7 @@ module.exports = React.createClass
       answersOrder: []
       answers: {}
 
-    for answer in answers.split(/\s*,\s*/).concat(__parsedExtra ? []).filter Boolean
+    for answer in answers.split(/;/).concat(__parsedExtra ? []).filter Boolean
       answerID = @makeID answer
       @props.task.questions[questionID].answersOrder.push answerID
       @props.task.questions[questionID].answers[answerID] =
