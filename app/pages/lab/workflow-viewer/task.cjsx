@@ -237,14 +237,27 @@ Task = React.createClass
       helpButton = <HelpButton workflow={@props.workflow} taskKey={@props.taskKey} zIndex={@state.style.zIndex} />
     #helpButton = @state.task.subtask ? undefined : <HelpButton workflow={@props.workflow} taskKey={@props.taskKey} zIndex={@state.style.zIndex} />
     box_class += "#{@state.task.type}-box"
-    if @state.task.type == 'drawing'
-      required_box = undefined
+    switch @state.task.type
+      when 'single'
+        icon = <i className="fa fa-dot-circle-o fa-fw"></i>
+      when 'multiple'
+        icon = <i className="fa fa-check-square-o fa-fw"></i>
+      when 'drawing'
+        icon = <i className="fa fa-pencil fa-fw"></i>
+      when 'survey'
+        icon = <i className="fa fa-binoculars fa-fw"></i>
+      when 'crop'
+        icon = <i className="fa fa-crop fa-fw"></i>
+      when 'text'
+        icon = <i className="fa fa-file-text-o fa-fw"></i>
+      else
+        icon = undefined
 
     inputs = @getInputs()
     <Resizable className={box_class} style={clone(@state.style)} id={@props.plumbId} ref={@props.plumbId} embedCss={false} onResize={@onResize}>
       <div className='drag-handel'>
         <span className='box-head noselect'>
-          {"Sub-" if @state.task.subtask}{"Task #{@props.taskKey.substr(1)}: #{@state.task.type.charAt(0).toUpperCase()}#{@state.task.type.substr(1)}"}
+          {"Sub-" if @state.task.subtask}{"Task #{@props.taskKey.substr(1)}: "}{icon}{" #{@state.task.type.charAt(0).toUpperCase()}#{@state.task.type.substr(1)}"}
         </span>
         <br />
       </div>
