@@ -11,10 +11,11 @@ AnswerItem = React.createClass
   displayName: 'AnswerItem'
 
   render: ->
+    icon = undefined
     if @props.inputs.type == 'drawing'
       icon = <span className='drawing-tool-icon-vis' style={color: @props.inputs.item.color}>{icons[@props.inputs.item.type]}</span>
-    else
-      icon = undefined
+    else if (@props.inputs.type == 'survey') and (@props.inputs.item.images.length > 0)
+      icon = <span className="survey-task-chooser-choice-thumbnail-container"><img src={@props.inputs.images[@props.inputs.item.images[0]]} alt={@props.inputs.item.label} className="survey-task-chooser-characteristic-value-icon" /></span>
     <li className='answer-item' id={@props.inputs.listId}>
       <div className='lab'>
         {icon}
@@ -32,10 +33,17 @@ module.exports = React.createClass
   displayName: 'AnswerList'
 
   createAnswers: ->
-    if @props.task.type == 'drawing'
-      items = @props.task.tools
-    else
-      items = @props.task.answers
+    switch @props.task.type
+      when 'drawing'
+        items = @props.task.tools
+      when 'survey'
+        items = {}
+        idx = 0
+        for order in @props.task.choicesOrder
+          items[idx] = @props.task.choices[order]
+          idx += 1
+      else
+        items = @props.task.answers
     answers = []
     for idx, item of items
       inputs =
@@ -43,6 +51,7 @@ module.exports = React.createClass
         item: item
         listId: @props.inputs.uuid.get(idx)
         type: @props.task.type
+        images: @props.task.images
       answers.push(<AnswerItem jp={@props.jp} key={"Al_#{idx}"} inputs={inputs} eps={@props.inputs.eps} />)
     answers
 
