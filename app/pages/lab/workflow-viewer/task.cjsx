@@ -59,19 +59,20 @@ Task = React.createClass
       if (@state.task.type != 'multiple')
         uuids = []
         uuid = 0
-        if @state.task.type == 'single'
-          L = Object.keys(@state.task.answers).length
-        else
-          L = Object.keys(@state.task.tools).length
-        for idx in [0...L]
-          id = @getUuid(idx, uuid, uuids)
-          uuids.push(id)
-          uuid +=1
-          switch @state.task.type
-            when 'single' then ep = @props.jp.addEndpoint(id, jsPlumbStyle.commonA, {uuid: id})
-            when 'drawing' then ep = @props.jp.addEndpoint(id, jsPlumbStyle.commonAOpen, {uuid: id})
-          ep.canvas.style['z-index'] = @state.style.zIndex
-          eps.push(ep)
+        if @state.task.type in ['single', 'multiple', 'drawing']
+          if @state.task.type == 'single'
+            L = Object.keys(@state.task.answers).length
+          else
+            L = Object.keys(@state.task.tools).length
+          for idx in [0...L]
+            id = @getUuid(idx, uuid, uuids)
+            uuids.push(id)
+            uuid +=1
+            switch @state.task.type
+              when 'single' then ep = @props.jp.addEndpoint(id, jsPlumbStyle.commonA, {uuid: id})
+              when 'drawing' then ep = @props.jp.addEndpoint(id, jsPlumbStyle.commonAOpen, {uuid: id})
+            ep.canvas.style['z-index'] = @state.style.zIndex
+            eps.push(ep)
         @setUuid(null, uuid, uuids)
       if @state.task.type != 'single'
         ep = @props.jp.addEndpoint(@props.plumbId+'_name', jsPlumbStyle.commonA, {uuid: @props.plumbId + '_next'})
@@ -235,14 +236,9 @@ Task = React.createClass
     if not @state.task.subtask and @state.task.help
       helpButton = <HelpButton workflow={@props.workflow} taskKey={@props.taskKey} zIndex={@state.style.zIndex} />
     #helpButton = @state.task.subtask ? undefined : <HelpButton workflow={@props.workflow} taskKey={@props.taskKey} zIndex={@state.style.zIndex} />
-    switch @state.task.type
-      when 'single'
-        box_class += 'question-box'
-      when 'multiple'
-        box_class += 'multi-box'
-      when 'drawing'
-        box_class += 'drawing-box'
-        required_box = undefined
+    box_class += "#{@state.task.type}-box"
+    if @state.task.type == 'drawing'
+      required_box = undefined
 
     inputs = @getInputs()
     <Resizable className={box_class} style={clone(@state.style)} id={@props.plumbId} ref={@props.plumbId} embedCss={false} onResize={@onResize}>
@@ -326,7 +322,7 @@ StartEndNode = React.createClass
 
   render: ->
     classString = 'box-end noselect ' + @props.type
-    <div className={classString} id={@props.type} style={@state.style}>
+    <div className={classString} id={@props.type} style={clone(@state.style)}>
       {@props.type.charAt(0).toUpperCase() + @props.type.slice(1)}
     </div>
 #

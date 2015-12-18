@@ -26,6 +26,11 @@ module.exports = React.createClass
     dict[key] ?= {}
     dict[key][value] = value
 
+  addConnection: (c, id, nextTask, previousTask) ->
+    @props.jp.connect({uuids: c, detachable: DETACHABLE})
+    @appendToDict(nextTask, id, c[1])
+    @appendToDict(previousTask, c[1], id)
+
   componentDidMount: ->
     nextTask = {}
     previousTask = {}
@@ -40,38 +45,29 @@ module.exports = React.createClass
           if task.subtask
             if task.next?
               c = ["#{id}_next", task.next]
-              @props.jp.connect({uuids: c, detachable: DETACHABLE})
-              @appendToDict(nextTask, id, c[1])
-              @appendToDict(previousTask, c[1], id)
+              @addConnection(c, id, nextTask, previousTask)
           else
             for a, adx in task.answers
               c = ["#{id}_answer_#{adx}", a.next ? 'end']
-              @props.jp.connect({uuids: c, detachable: DETACHABLE})
-              @appendToDict(nextTask, id, c[1])
-              @appendToDict(previousTask, c[1], id)
+              @addConnection(c, id, nextTask, previousTask)
         when 'multiple'
           if task.subtask
             if task.next?
               c = ["#{id}_next", task.next]
-              @props.jp.connect({uuids: c, detachable: DETACHABLE})
-              @appendToDict(nextTask, id, c[1])
-              @appendToDict(previousTask, c[1], id)
+              @addConnection(c, id, nextTask, previousTask)
           else
             c = ["#{id}_next", task.next ? 'end']
-            @props.jp.connect({uuids: c, detachable: DETACHABLE})
-            @appendToDict(nextTask, id, c[1])
-            @appendToDict(previousTask, c[1], id)
+            @addConnection(c, id, nextTask, previousTask)
         when 'drawing'
           c = ["#{id}_next", task.next ? 'end']
-          @props.jp.connect({uuids: c, detachable: DETACHABLE})
-          @appendToDict(nextTask, id, c[1])
-          @appendToDict(previousTask, c[1], id)
+          @addConnection(c, id, nextTask, previousTask)
           for a, adx in task.tools
             if a.details[0]?
               c = ["#{id}_answer_#{adx}", a.details[0]]
-              @props.jp.connect({uuids: c, detachable: DETACHABLE})
-              @appendToDict(nextTask, id, c[1])
-              @appendToDict(previousTask, c[1], id)
+              @addConnection(c, id, nextTask, previousTask)
+        else
+          c=["#{id}_next", task.next ? 'end']
+          @addConnection(c, id, nextTask, previousTask)
       nextTask[id] ?= {'end': 'end'}
     @setState({nextTask: nextTask, previousTask: previousTask})
     #@sortTasks(connections)
@@ -92,7 +88,7 @@ module.exports = React.createClass
     keys = []
     taskStateSet = {}
     workflow = {}
-    initialTask = undefined
+    initialTask = @props.workflow.first_task
     #L = Object.keys(@props.workflow.tasks).length
     L = 0
     for k, v of @props.workflow.tasks
@@ -104,7 +100,8 @@ module.exports = React.createClass
           ct += 1
           tmp = 'T' + ct
         k = tmp
-        initialTask = k
+        if initialTask == 'init'
+          initialTask = k
       keys.push(k)
       taskStateSet[k] = false
       # clone the workflow so it does not overwrite the original (will update the API after re-formatting)
