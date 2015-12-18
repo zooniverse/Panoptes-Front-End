@@ -102,12 +102,14 @@ module.exports =
           <th>Multiple</th>
           <th>Required</th>
           <th>Answers</th>
+          <th>Names</th>
         </tr>
         <tr className="form-label">
           <td>The question to ask</td>
           <td>Can the user select multiple answers? <code>Y</code> or <code>N</code></td>
           <td>Is an answer required? <code>Y</code> or <code>N</code></td>
           <td>The answers, <code>,</code>-separated</td>
+          <td>The choices, <code>;</code>-separated, to which this question should apply</td>
         </tr>
         <tr>
           <td>Is this an example question?</td>
