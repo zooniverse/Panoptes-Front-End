@@ -7,7 +7,7 @@ WorkflowTasksEditor = require '../../components/workflow-tasks-editor'
 apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
-{History, Navigation, Link} = require 'react-router'
+{History} = require 'react-router'
 tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
@@ -229,13 +229,7 @@ EditWorkflowPage = React.createClass
           <hr />
 
           <div style={pointerEvents: 'all'}>
-            <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>Test this workflow</a>
-          </div>
-
-          <hr />
-
-          <div style={pointerEvents: 'all'}>
-            <Link to="/lab/#{@props.project.id}/workflow/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
+            <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>View this workflow</a>
           </div>
 
           <hr />
