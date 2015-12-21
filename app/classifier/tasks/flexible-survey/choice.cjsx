@@ -1,7 +1,7 @@
 React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
 {Markdown} = require 'markdownz'
-Utility = require 'utility'
+Utility = require './utility'
 
 ImageFlipper = React.createClass
   displayName: 'ImageFlipper'

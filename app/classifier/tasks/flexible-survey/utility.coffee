@@ -1,4 +1,4 @@
-utility:
+module.exports = 
   getQuestionIDs: (task, choiceID) ->
     return [] if task.choices[choiceID].noQuestions?
     return task.questionsOrder unless task.questionsMap? and choiceID in task.questionsMap
@@ -6,5 +6,3 @@ utility:
   getQuestions: (task, choiceID) ->
     @getQuestionIDs(task, choiceID).map (idx ->
       task.questions[idx])
-
-module.exports = utility

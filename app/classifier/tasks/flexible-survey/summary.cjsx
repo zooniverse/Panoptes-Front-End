@@ -1,5 +1,5 @@
 React = require 'react'
-Utility = require 'utility'
+Utility = require './utility'
 
 module.exports = React.createClass
   displayName: 'FlexibleSurveySummary'

@@ -13,7 +13,7 @@ PromiseRenderer = require '../../../components/promise-renderer'
 Papa = require 'papaparse'
 apiClient = require '../../../api/client'
 putFile = require '../../../lib/put-file'
-Utility = require 'utility'
+Utility = require './utility'
 
 module.exports = React.createClass
   displayName: 'FlexibleSurveyTaskEditor'
@@ -314,8 +314,12 @@ module.exports = React.createClass
     unless answers?
       throw new Error 'Questions require a "answers" column'
 
-    choices = if name? name.split ';' else null
-    questionID = if question? @makeID question else null
+    choices = null
+    questionId = null
+    if(name?)
+      choices = name.split(/\s*;s*/)
+    if(question?)
+      questionId = @makeID question
 
     # don't put it in the default questionsOrder if we've specified choices it should map to
     unless choices? or questionID in @props.task.questionsOrder
