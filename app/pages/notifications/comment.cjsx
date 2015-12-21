@@ -20,10 +20,12 @@ module?.exports = React.createClass
 
   render: ->
     if @state.comment
-     <Comment
-       data={@state.comment}
-       user={@props.user}
-       project={@props.project} />
+      <div className="talk-comment">
+        <Comment
+          data={@state.comment}
+          user={@props.user}
+          project={@props.project} />
+      </div>
     else
       <div className="talk-module">
         <Loading />
