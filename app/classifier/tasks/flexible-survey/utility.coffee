@@ -1,7 +1,7 @@
-module.exports = 
+module.exports =
   getQuestionIDs: (task, choiceID) ->
-    return [] if task.choices[choiceID].noQuestions?
-    return task.questionsOrder unless task.questionsMap? and choiceID in task.questionsMap
+    return [] if task.choices[choiceID].noQuestions
+    return task.questionsOrder unless task.questionsMap? and choiceID of task.questionsMap
     task.questionsMap[choiceID]
   getQuestions: (task, choiceID) ->
     @getQuestionIDs(task, choiceID).map (idx ->

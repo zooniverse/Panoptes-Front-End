@@ -6,7 +6,7 @@ Choice = require './choice'
 AnnotationView = require './annotation-view'
 
 module.exports = React.createClass
-  displayName: 'SurveyTask'
+  displayName: 'FlexibleSurveyTask'
 
   statics:
     Editor: Editor
@@ -24,7 +24,7 @@ module.exports = React.createClass
       images: {}
 
     getTaskText: (task) ->
-      "Survey of #{task.choicesOrder.length} choices"
+      "Flexible survey of #{task.choicesOrder.length} choices"
 
     getDefaultAnnotation: ->
       value: []

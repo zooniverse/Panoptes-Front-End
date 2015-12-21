@@ -148,7 +148,7 @@ EditWorkflowPage = React.createClass
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'flexibleSurvey'} title="Flexible Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them. The questions may vary based on the object they identify.">
                         <i className="fa fa-binoculars fa-2x"></i>
                         <br />
-                        <small><strong>Survey</strong></small>
+                        <small><strong>Flex Survey</strong></small>
                       </button>
                     </AutoSave>}{' '}
                   {if @canUseTask(@props.project, "crop")

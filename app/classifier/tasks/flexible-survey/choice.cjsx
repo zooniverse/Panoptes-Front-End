@@ -123,7 +123,7 @@ module.exports = React.createClass
                 </span>}
             </div>}
 
-        {unless choice.noQuestions or Utility.getQuestionIDs(@props.task, @props.choiceID).lengths is 0
+        {unless choice.noQuestions or Utility.getQuestionIDs(@props.task, @props.choiceID).length is 0
           <hr />}
       </div>
       <div style={textAlign: 'center'}>

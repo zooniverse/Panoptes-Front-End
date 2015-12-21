@@ -315,11 +315,11 @@ module.exports = React.createClass
       throw new Error 'Questions require a "answers" column'
 
     choices = null
-    questionId = null
-    if(name?)
+    questionID = null
+    if(!!name)
       choices = name.split(/\s*;s*/)
-    if(question?)
-      questionId = @makeID question
+    if(!!question)
+      questionID = @makeID question
 
     # don't put it in the default questionsOrder if we've specified choices it should map to
     unless choices? or questionID in @props.task.questionsOrder
@@ -327,11 +327,12 @@ module.exports = React.createClass
 
     # if we specified mapped choices, create those entries instead
     if choices?
-      task.questionsMap ?= {}
+      @props.task.questionsMap ?= {}
       for choice in choices
+        continue unless !!choice
         choiceID = @makeID choice
-        task.questionsMap[choiceID] ?= []
-        task.questionsMap[choiceID].push[questionID]
+        @props.task.questionsMap[choiceID] ?= []
+        @props.task.questionsMap[choiceID].push questionID if questionID?
 
     # we only can get here if the question stuff is empty and the names are not empty
     # that means there will be no questions for this choice, so we don't need to actually
