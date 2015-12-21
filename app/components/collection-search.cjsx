@@ -10,9 +10,6 @@ module.exports = React.createClass
     multi: false
     project: null
 
-  getInitialState: ->
-    collections: []
-
   searchCollections: (value, callback) ->
     query =
       page_size: 20
@@ -34,25 +31,16 @@ module.exports = React.createClass
           options: opts
         }
 
-  addSelected:(collIds) ->
-    options = @refs.collectionSelect.state.options
-    lastId = collIds.split(",").slice(-1)[0]
-    collection = options.filter (col) ->
-      col.value == lastId
-    @setState({ collections: @state.collections.slice().concat(collection), value: collIds })
-
   getSelected: ->
-    @state.collections
+    @refs.collectionSelect.state.values
 
   render: ->
     <Select
       ref="collectionSelect"
       multi={@props.multi}
       name="collids"
-      value={this.state.value}
       placeholder="Collection Name"
       searchPromptText="Type to search Collections"
       className="collection-search"
       closeAfterClick={true}
-      onChange={@addSelected}
       asyncOptions={debounce(@searchCollections, 200)} />
