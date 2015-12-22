@@ -189,6 +189,9 @@ workflow = apiClient.type('workflows').create
           confusionsOrder: []
           confusions: {}
 
+      questionsMap:
+        ar: ['ho', 'be']
+        to: ['ho', 'be', 'in', 'bt']
       questionsOrder: ['ho', 'be', 'in', 'hr']
       questions:
         ho:
@@ -232,6 +235,17 @@ workflow = apiClient.type('workflows').create
           answers:
             y:
               label: 'Present'
+        bt:
+          required: true
+          multiple: false
+          label: 'Are tortoises awesome?'
+          answersOrder: ['y','Y']
+          answers:
+            y:
+              label: 'yes'
+            Y:
+              label: 'HECK YES'
+
       next: 'init'
 
 subject = apiClient.type('subjects').create
