@@ -76,6 +76,13 @@ module.exports = React.createClass
     project: 'loadAppropriateClassification'
     query: 'loadAppropriateClassification'
 
+  componentDidMount: () ->
+    @getCurrentWorkflowID().then (id) =>
+      @getWorkflow @props.project, id
+        .then (workflow) =>
+          @setState
+            workflow: workflow
+
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
     # console.log 'Loading appropriate classification'
@@ -236,7 +243,7 @@ module.exports = React.createClass
 
   saveClassificationAndLoadAnotherSubject: ->
     @saveClassification()
-    @loadAnotherSubject()
+      .then @loadAnotherSubject()
 
   saveClassification: ->
     console?.info 'Completed classification', @state.classification
@@ -266,6 +273,8 @@ module.exports = React.createClass
 
       classificationsThisSession += 1
       @maybePromptToSignIn()
+
+    return savingClassification
 
   queueClassification: (classification) ->
     queue = JSON.parse localStorage.getItem FAILED_CLASSIFICATION_QUEUE_NAME
