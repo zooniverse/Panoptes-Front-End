@@ -2,13 +2,12 @@ counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require '../api/client'
-OwnedCardList = require '../components/owned-card-list'
-{Link} = require 'react-router'
+OwnedCardList = require '../components/owned-card-list-by-discipline'
 
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'All Projects'
-    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found.'
+    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found'
     button: 'Get Started'
     notFoundMessage: 'Sorry, no projects found'
 
@@ -20,30 +19,28 @@ module.exports = React.createClass
   title: 'Projects'
 
   listProjects: ->
-    query = {include: 'avatar'}
-
+    query =
+      include:'avatar'
     if !apiClient.params.admin
       query.launch_approved = true
+    Object.assign query, @props.query
 
-    apiClient.type('projects').get Object.assign {}, query, @props.location.query
+    apiClient.type('projects').get query
 
   imagePromise: (project) ->
     project.get('avatar')
       .then (avatar) -> avatar.src
-      .catch -> '/assets/simple-avatar.jpg'
 
   cardLink: (project) ->
     link = if !!project.redirect
       project.redirect
     else
-      [owner, name] = project.slug.split('/')
-      "/projects/#{owner}/#{name}"
+      'project-home'
 
     return link
 
   render: ->
     <OwnedCardList
-      {...@props}
       translationObjectName="projectsPage"
       listPromise={@listProjects()}
       linkTo="projects"
