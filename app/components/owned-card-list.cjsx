@@ -20,6 +20,12 @@ module.exports = React.createClass
     heroNav: React.PropTypes.node
     skipOwner: React.PropTypes.bool
 
+  getInitialState: ->
+    listPromise: @props.listPromise
+    tagFilter: ''
+    currentPage: null
+    sortOrder: ''
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
 
@@ -44,16 +50,28 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="resources-container">
-        <PromiseRenderer promise={@props.listPromise}>{(ownedResources) =>
+        <DisciplineSlider filterDiscipline={@filterDiscipline} />
+        <PromiseRenderer promise={@state.listPromise}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
             <div>
-              <div className="resource-results-counter">
+              <div className="resource-results-counter card-list">
                 {if meta
                   pageStart = meta.page * meta.page_size - meta.page_size + 1
                   pageEnd = Math.min(meta.page * meta.page_size, meta.count)
                   count = meta.count
                   <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />}
+                {if @state.currentPage is 'projects'
+                  <Select 
+                    multi={false}
+                    name="resourcesid"
+                    placeholder="Project Name:"
+                    searchPromptText="Search by a project name"
+                    closeAfterClick={true}
+                    asyncOptions={debounce(@searchProjectName, 200)} 
+                    onChange={@routeToProject}
+                    className="search project-search standard-input"
+                  />}
               </div>
               <div className="card-list">
                 {for resource in ownedResources

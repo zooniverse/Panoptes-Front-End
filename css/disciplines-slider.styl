@@ -1,0 +1,156 @@
+DISCIPLINE_COLOR_ALL = #0072FF
+DISCIPLINE_COLOR_LANGUAGE = #9DDDF9
+DISCIPLINE_COLOR_ASTRONOMY = #512BAD
+DISCIPLINE_COLOR_NATURE = #46D178
+DISCIPLINE_COLOR_PHYSICS = #F27441
+DISCIPLINE_COLOR_CLIMATE = #A1BFBE
+DISCIPLINE_COLOR_LITERATURE = #EADF5C
+DISCIPLINE_COLOR_BIOLOGY = #18807F
+DISCIPLINE_COLOR_HUMANITARIAN = #C46FC6
+DISCIPLINE_COLOR_MEDICINE = #EF4343
+DISCIPLINE_COLOR_HISTORY = #F9DB46
+DISCIPLINE_COLOR_SOCIAL_SCIENCE = #7EA8CE
+
+.filter
+  display: flex;
+
+  .discipline
+    margin: 0.28em
+    color: white 
+    text-align: center
+    width: 4em
+    font-size:25px
+    min-width: 4em
+    height: 3em
+    border-radius: 1em
+    padding: .5em
+    color: #006DFF
+    background-color: #FFFFFF
+
+    .icon
+      font-size: 50px
+      width: 1.5em
+      height: 2em
+      margin: 0 auto
+
+    p
+      margin-top: 0.333em
+      margin-bottom: 0px
+      font-size: 14px
+
+  .discipline-all
+    p
+      margin-top: 15px
+
+  .discipline-all:hover
+    background-color: DISCIPLINE_COLOR_ALL
+
+  .discipline-all.active
+    background-color: DISCIPLINE_COLOR_ALL
+
+  .discipline-arts:hover
+    background-color: DISCIPLINE_COLOR_ARTS
+
+  .discipline-arts.active
+    background-color: DISCIPLINE_COLOR_ARTS
+
+  .discipline-astronomy
+    min-width: 4em
+    .icon
+      margin-left: -0.6em
+
+  .discipline-astronomy:hover
+    background-color: DISCIPLINE_COLOR_ASTRONOMY
+
+  .discipline-astronomy.active
+    background-color: DISCIPLINE_COLOR_ASTRONOMY
+
+  .discipline-biology
+    .icon
+      margin-left:0.3em
+
+  .discipline-biology:hover
+    background-color: DISCIPLINE_COLOR_BIOLOGY
+
+  .discipline-biology.active
+    background-color: DISCIPLINE_COLOR_BIOLOGY
+
+  .discipline-climate:hover
+    background-color: DISCIPLINE_COLOR_CLIMATE
+
+  .discipline-climate.active
+    background-color: DISCIPLINE_COLOR_CLIMATE
+
+  .discipline-history
+    .icon
+      margin-left: 0.1em
+
+  .discipline-history:hover
+    background-color: DISCIPLINE_COLOR_HISTORY
+
+  .discipline-history.active
+    background-color: DISCIPLINE_COLOR_HISTORY
+
+  .discipline-humanitarian:hover
+    background-color: DISCIPLINE_COLOR_HUMANITARIAN
+
+  .discipline-humanitarian.active
+    background-color: DISCIPLINE_COLOR_HUMANITARIAN
+
+  .discipline-language
+    min-width: 4em
+
+    .icon
+      margin-left: -1em
+
+  .discipline-language:hover
+    background-color: DISCIPLINE_COLOR_LANGUAGE
+
+  .discipline-language.active
+    background-color: DISCIPLINE_COLOR_LANGUAGE
+
+  .discipline-literature:hover
+    background-color: DISCIPLINE_COLOR_LITERATURE
+
+  .discipline-literature.active
+    background-color: DISCIPLINE_COLOR_LITERATURE
+
+  .discipline-medicine:hover
+    background-color: DISCIPLINE_COLOR_MEDICINE
+
+  .discipline-medicine.active
+    background-color: DISCIPLINE_COLOR_MEDICINE
+
+  .discipline-nature
+    .icon
+      margin-left: -0.4em
+
+  .discipline-nature:hover
+    background-color: DISCIPLINE_COLOR_NATURE
+
+  .discipline-nature.active
+    background-color: DISCIPLINE_COLOR_NATURE
+
+  .discipline-physics:hover
+    background-color: DISCIPLINE_COLOR_PHYSICS
+
+  .discipline-physics.active
+    background-color: DISCIPLINE_COLOR_PHYSICS
+
+  .discipline-social-science.active
+    background-color: DISCIPLINE_COLOR_SOCIAL_SCIENCE
+
+  .discipline-social-science
+    .icon
+      margin-left: -0.3em;
+
+  .discipline-social-science:hover
+    background-color: DISCIPLINE_COLOR_SOCIAL_SCIENCE
+
+  .discipline.active
+    color: #FFFFFF
+    cursor: pointer
+
+  .discipline:hover
+    color: #FFFFFF
+    cursor: pointer
