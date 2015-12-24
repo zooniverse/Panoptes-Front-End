@@ -6,7 +6,7 @@ apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
 Select = require 'react-select'
-{Link} = require '@edpaget/react-router'
+{Link} = require 'react-router'
 {DISCIPLINES} = require '../components/disciplines'
 
 DisciplineSectionRenderer = React.createClass
