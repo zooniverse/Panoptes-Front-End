@@ -2,11 +2,11 @@ counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 Translate = require 'react-translate-component'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
 Select = require 'react-select'
-{Link} = require 'react-router'
+{Link} = require '@edpaget/react-router'
 {DISCIPLINES} = require '../components/disciplines'
 
 DisciplineSectionRenderer = React.createClass

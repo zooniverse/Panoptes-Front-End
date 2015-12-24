@@ -52,6 +52,7 @@ module.exports =
       <IndexRoute component={require './pages/project/home'} />
       <Route name="disciplines" path="projects/disciplines?" handler={require './pages/projects-disciplines'} />
       <Route path="home" component={require './pages/project/home'} />
+      <Route name="disciplines" path="projects/disciplines?" handler={require './pages/projects-disciplines'} />
       <Route path="research" component={require './pages/project/research'} />
       <Route path="results" component={require './pages/project/results'} />
       <Route path="classify" component={require './pages/project/classify'} />

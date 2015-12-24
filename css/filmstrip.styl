@@ -1,41 +1,35 @@
 .filmstrip
 	padding: 0
-	display: flex
-	margin-bottom: 1.5em
-	max-width: 1200px
+	max-width: 1240px
 	margin: 0 auto
+	display: flex
 
-.filmstrip__nav-btn
+.navButton 
 	border: 0
-	margin: 0
+	margin: 0 
 	height: 100%
+
+.viewport 
+	overflow-x: hidden 
+	position: relative
+	width: 100%
+
+.strip 
+	position: absolute
+	top: 0
+	left: 0
+	white-space: nowrap
+	display: flex
+
+	-webkit-transition-property: left
+	transition-property: left
+	transition-duration: 0.4s
+	transition-timing-function: ease
+
+.navButton
 	background-color: transparent
 	width: 40px
 	color: #006dff
 	font-weight: bold
 	font-size: 24pt
 	cursor: pointer
-	&:focus
-	&:active
-		outline: 0
-
-.filmstrip__viewport
-	overflow-x: hidden
-	position: relative
-	width: 100%
-
-.filmstrip__strip
-	position: absolute
-	top: 0
-	left: 0
-	white-space: nowrap
-	display: flex
-	margin-left: -0.28em
-
-	-webkit-transition-property: left
-	transition-property: left
-	transition-duration: 0.4s
-	transition-timing-function: ease
-	ul
-		padding: 0
-		list-style-type: none

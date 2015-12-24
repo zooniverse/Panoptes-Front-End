@@ -23,19 +23,19 @@
 [data-icon]:before { content: attr(data-icon); }
 
 [data-icon]:before,
-.filmstrip--disciplines__discipline-card__icon-arts:before,
-.filmstrip--disciplines__discipline-card__icon-astronomy:before,
-.filmstrip--disciplines__discipline-card__icon-biology:before,
-.filmstrip--disciplines__discipline-card__icon-climate:before,
-.filmstrip--disciplines__discipline-card__icon-history:before,
-.filmstrip--disciplines__discipline-card__icon-humanitarian:before,
-.filmstrip--disciplines__discipline-card__icon-language:before,
-.filmstrip--disciplines__discipline-card__icon-literature:before,
-.filmstrip--disciplines__discipline-card__icon-medicine:before,
-.filmstrip--disciplines__discipline-card__icon-nature:before,
-.filmstrip--disciplines__discipline-card__icon-physics:before,
-.filmstrip--disciplines__discipline-card__icon-social-science:before,
-.filmstrip--disciplines__discipline-card__icon-zooniverse-logo:before {
+.icon-arts:before,
+.icon-astronomy:before,
+.icon-biology:before,
+.icon-climate:before,
+.icon-history:before,
+.icon-humanitarian:before,
+.icon-language:before,
+.icon-literature:before,
+.icon-medicine:before,
+.icon-nature:before,
+.icon-physics:before,
+.icon-social-science:before,
+.icon-zooniverse-logo:before {
   display: inline-block;
   font-family: "zoo-font";
   font-style: normal;
@@ -50,16 +50,16 @@
   font-smoothing: antialiased;
 }
 
-.filmstrip--disciplines__discipline-card__icon-arts:before { content: "\f12e"; }
-.filmstrip--disciplines__discipline-card__icon-astronomy:before { content: "\f12f"; }
-.filmstrip--disciplines__discipline-card__icon-biology:before { content: "\f124"; }
-.filmstrip--disciplines__discipline-card__icon-climate:before { content: "\f125"; }
-.filmstrip--disciplines__discipline-card__icon-history:before { content: "\f126"; }
-.filmstrip--disciplines__discipline-card__icon-humanitarian:before { content: "\f127"; }
-.filmstrip--disciplines__discipline-card__icon-language:before { content: "\f128"; }
-.filmstrip--disciplines__discipline-card__icon-literature:before { content: "\f129"; }
-.filmstrip--disciplines__discipline-card__icon-medicine:before { content: "\f130"; }
-.filmstrip--disciplines__discipline-card__icon-nature:before { content: "\f12b"; }
-.filmstrip--disciplines__discipline-card__icon-physics:before { content: "\f12c"; }
-.filmstrip--disciplines__discipline-card__icon-social-science:before { content: "\f131"; }
-.filmstrip--disciplines__discipline-card__icon-zooniverse-logo:before { content: "\f121"; }
+.icon-arts:before { content: "\f12e"; }
+.icon-astronomy:before { content: "\f12f"; }
+.icon-biology:before { content: "\f124"; }
+.icon-climate:before { content: "\f125"; }
+.icon-history:before { content: "\f126"; }
+.icon-humanitarian:before { content: "\f127"; }
+.icon-language:before { content: "\f128"; }
+.icon-literature:before { content: "\f129"; }
+.icon-medicine:before { content: "\f130"; }
+.icon-nature:before { content: "\f12b"; }
+.icon-physics:before { content: "\f12c"; }
+.icon-social-science:before { content: "\f131"; }
+.icon-zooniverse-logo:before { content: "\f121"; }

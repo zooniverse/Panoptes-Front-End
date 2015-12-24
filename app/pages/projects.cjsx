@@ -3,10 +3,7 @@ React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list'
-{Link, Router} = require 'react-router'
-Filmstrip = require '../components/filmstrip'
-{PROJECT_SORTS} = require '../components/project-sorts'
-{ProjectFilteringInterface} = require '../components/project-card-list'
+{Link} = require 'react-router'
 
 counterpart.registerTranslations 'en',
   projectsPage:
@@ -15,43 +12,45 @@ counterpart.registerTranslations 'en',
     button: 'Get Started'
     notFoundMessage: 'Sorry, no projects found'
 
-ProjectsPage = React.createClass
+module.exports = React.createClass
   displayName: 'ProjectsPage'
-  title: 'Projects'
 
   mixins: [TitleMixin]
 
-  contextTypes:
-    location: React.PropTypes.object
-    history: React.PropTypes.object
+  title: 'Projects'
 
-  apiOpts:
-    include: 'avatar'
-    cards: 'true'
-    launch_approved: !apiClient.params.admin
+  listProjects: ->
+    query = {include: 'avatar'}
+    query.cards = true
 
-  emptyPromise:
-    then: ->
-    catch: ->
+    if !apiClient.params.admin
+      query.launch_approved = true
 
-  getDefaultProps: ->
-    location:
-      query:
-        discipline: ProjectFilteringInterface.defaultProps.discipline
-        page: ProjectFilteringInterface.defaultProps.page
-        sort: ProjectFilteringInterface.defaultProps.sort
+    apiClient.type('projects').get Object.assign {}, query, @props.location.query
 
-  updateQuery: (newParams) ->
-    query = Object.assign {}, @props.location.query, newParams
-    for key, value of query
-      if value is ''
-        delete query[key]
-    newLocation = Object.assign {}, @props.location, {query}
-    @props.history.replace newLocation
+  imagePromise: (project) ->
+    src = if project.avatar_src
+      "//#{ project.avatar_src }"
+    else
+      './assets/simple-avatar.jpg'
+    Promise.resolve src
+
+  cardLink: (project) ->
+    link = if !!project.redirect
+      project.redirect
+    else
+      [owner, name] = project.slug.split('/')
+      "/projects/#{owner}/#{name}"
+
+    return link
 
   render: ->
-    {discipline, page, sort} = @props.location.query
-    listingProps = {discipline, page, sort}
-    <ProjectFilteringInterface {...listingProps} onChangeQuery={@updateQuery} />
-
-module.exports = ProjectsPage
+    <OwnedCardList
+      {...@props}
+      translationObjectName="projectsPage"
+      listPromise={@listProjects()}
+      linkTo="projects"
+      cardLink={@cardLink}
+      heroClass="projects-hero"
+      imagePromise={@imagePromise}
+      skipOwner={true} />

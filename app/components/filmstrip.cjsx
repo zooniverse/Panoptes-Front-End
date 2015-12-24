@@ -1,5 +1,5 @@
 React = require 'react'
-{Link, State, Navigation} = require 'react-router'
+{Link, State, Navigation} = require '@edpaget/react-router'
 {DISCIPLINES} = require './disciplines'
 
 module.exports = React.createClass
@@ -7,14 +7,14 @@ module.exports = React.createClass
   displayName: 'Filmstrip'
 
   propTypes:
-    increment: React.PropTypes.number.isRequired
-    onChange: React.PropTypes.func.isRequired
+    increment: React.PropTypes.number
 
   getDefaultProps: ->
     filterCards: DISCIPLINES
 
   getInitialState: ->
     scrollPos: 0
+    selectedFilter: ''
 
   scrollLeft: ->
     @adjustPos(-@props.increment)
@@ -26,21 +26,17 @@ module.exports = React.createClass
     filterName.replace(/\s+/g,'-')
 
   selectFilter: (filterName) ->
-    @props.onChange filterName
+    @props.filterOption filterName
+    @setState(selectedFilter: @mangleFilterName(filterName))
 
   calculateClasses: (filterName)->
     filterName = @mangleFilterName(filterName)
-
-    list = ['filmstrip--disciplines__discipline-card']
-    list.push "filmstrip--disciplines__discipline-card--discipline-#{filterName}"
-
-    if(@props.selectedFilter == filterName)
-      list.push 'filmstrip--disciplines__discipline-card--active'
-    if(!@props.selectedFilter? && filterName == 'all')
-      list.push 'filmstrip--disciplines__discipline-card--active'
-    if(@props.selectedFilter == '' && filterName == 'all')
-      list.push 'filmstrip--disciplines__discipline-card--active'
-
+    list = ['discipline']
+    list.push "discipline-#{filterName}"
+    if(@state.selectedFilter == filterName)
+      list.push 'active'
+    if(@state.selectedFilter == '' && filterName == 'all')
+      list.push 'active'
     return list.join ' '
 
   adjustPos: (increment) ->
@@ -59,31 +55,27 @@ module.exports = React.createClass
     @setState scrollPos: newPos
 
   componentDidMount: ->
-    @strip = @refs.strip
-    @viewport = @refs.viewport
-    @refs.filmstrip.style.height = @strip.getBoundingClientRect().height + 'px'
+    @strip = @refs.strip.getDOMNode()
+    @viewport = @refs.viewport.getDOMNode()
+    @refs.filmstrip.getDOMNode().style.height = @strip.getBoundingClientRect().height + 'px'
 
-  render: -> <div className='filmstrip filmstrip--disciplines' ref='filmstrip'>
-      <button className='filmstrip__nav-btn' onClick={@scrollLeft} role="presentation" aria-hidden="true" aria-label="Scroll Left">&lt;</button>
-      <div className='filmstrip__viewport' ref='viewport'>
-        <div className='filmstrip__strip' ref='strip' style={left: @state.scrollPos}>
-            <ul>
-              <li>
-                <button className={@calculateClasses('all')} onClick={@selectFilter.bind this, ''} >
-                  <p>All<br/>Disciplines</p>
-                </button>
-              </li>
-              {for filter, i in @props.filterCards
-                filterName = filter.value.replace(' ', '-')
-                <li key={i}>
-                  <button key={i} className={@calculateClasses(filter.value)} onClick={@selectFilter.bind this, filter.value} >
-                    <span key={i} className="filmstrip--disciplines__discipline-card__icon filmstrip--disciplines__discipline-card__icon-#{filterName}"></span>
-                    <p>{filter.label}</p>
-                  </button>
-                </li>
-              }
-            </ul>
-        </div>
-      </div>
-      <button className='filmstrip__nav-btn' onClick={@scrollRight} role="presentation" aria-hidden="true" aria-label="Scroll Right">&gt;</button>
-    </div>
+  render: -> <div className='filmstrip' ref='filmstrip'>
+			<button className='prevNav navButton' onClick={@scrollLeft}>&lt;</button>
+			<div className='viewport' ref='viewport'>
+				<div className='strip' ref='strip' style={left: @state.scrollPos}>
+			      <div className={"filter"}>
+			        <div className={@calculateClasses('all')} onClick={@selectFilter.bind this, ''} >
+			          <p>All<br/>Disciplines</p>
+			        </div>
+			        {for filter, i in @props.filterCards
+			          filterName = filter.value.replace(' ', '-')
+			          <div className={@calculateClasses(filter.value)} onClick={@selectFilter.bind this, filter.value} >
+			            <span key={i} className="icon icon-#{filterName}"></span>
+			            <p>{filter.label}</p>
+			          </div>
+			        }
+			      </div>
+				</div>
+			</div>
+			<button className='nextNav navButton' onClick={@scrollRight}>&gt;</button>
+		</div>
