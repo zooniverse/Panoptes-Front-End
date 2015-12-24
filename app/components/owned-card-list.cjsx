@@ -6,6 +6,7 @@ apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
 {Link} = require 'react-router'
+DisciplineSlider = require './discipline-slider'
 
 module.exports = React.createClass
   displayName: 'OwnedCardList'
@@ -30,6 +31,16 @@ module.exports = React.createClass
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
+
+  filterDiscipline: (discipline) ->
+    @setState tagFilter: discipline
+    query =
+      include:'avatar'
+    if !apiClient.params.admin
+      query.launch_approved = true
+    if discipline
+      query.tags = discipline
+    @setState listPromise: apiClient.type('projects').get query
 
   userForTitle: ->
     if @props.ownerName
@@ -61,13 +72,13 @@ module.exports = React.createClass
                   count = meta.count
                   <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />}
                 {if @state.currentPage is 'projects'
-                  <Select 
+                  <Select
                     multi={false}
                     name="resourcesid"
                     placeholder="Project Name:"
                     searchPromptText="Search by a project name"
                     closeAfterClick={true}
-                    asyncOptions={debounce(@searchProjectName, 200)} 
+                    asyncOptions={debounce(@searchProjectName, 200)}
                     onChange={@routeToProject}
                     className="search project-search standard-input"
                   />}
