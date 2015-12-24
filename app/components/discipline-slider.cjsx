@@ -14,24 +14,5 @@ module.exports = React.createClass
   getDefaultProps: ->
     filterCards: DISCIPLINES
 
-
-
   render: ->
-    <div className={"filter"}>
-      <div className="discipline discipline-all" onClick={@props.filterDiscipline.bind this, ""} > 
-        <p>All<br/>Disciplines</p>
-      </div>
-      {for filter, i in @props.filterCards
-        filterName = filter.value.replace(" ", "-")
-        <div className={"discipline discipline-#{filterName}"} onClick={@props.filterDiscipline.bind this, filter.value}  >
-          <span key={i} className="icon icon-#{filterName}"></span>
-          <p>{filter.label}</p>
-        </div>
-      }
-    </div>
-
-
-
-
-
-
+    <Filmstrip increment={350} filterOption={@props.filterDiscipline}/>
