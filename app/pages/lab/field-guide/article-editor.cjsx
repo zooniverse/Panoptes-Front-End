@@ -1,5 +1,7 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 FileButton = require '../../../components/file-button'
+{MarkdownEditor} = require 'markdownz'
 
 ArticleEditor = React.createClass
   statics:
@@ -14,6 +16,7 @@ ArticleEditor = React.createClass
   getInitialState: ->
     newIconFile: null
     newIconDataURL: ''
+    content: @props.content
 
   chooseIcon: (e) ->
     newIconFile = e?.target?.files?[0]
@@ -41,8 +44,8 @@ ArticleEditor = React.createClass
 
   getData: ->
     icon: @state.newIconFile
-    title: React.findDOMNode(this.refs.titleInput).value
-    content: React.findDOMNode(this.refs.contentInput).value
+    title: ReactDOM.findDOMNode(this.refs.titleInput).value
+    content: @state.content
 
   cancel: ->
     @props.onCancel? arguments...
@@ -80,13 +83,10 @@ ArticleEditor = React.createClass
         </label>
       </p>
 
-      <p>
-        <label>
-          Content <small>TODO: Markdown editor</small>
-          <br />
-          <textarea ref="contentInput" className="standard-input full" defaultValue={@props.content} disabled={@props.working} rows="10" cols="100"/>
-        </label>
-      </p>
+      Content
+      <br />
+      <MarkdownEditor ref="contentInput" value={@state.content} disabled={@props.working} rows="10" cols="100" onChange={@handleContentChange} />
+      <br />
 
       <p>
         <label>
@@ -101,5 +101,8 @@ ArticleEditor = React.createClass
           <strong>· · ·</strong>}
       </p>
     </div>
+
+  handleContentChange: (e) ->
+    @setState content: e.target.value
 
 module.exports = ArticleEditor
