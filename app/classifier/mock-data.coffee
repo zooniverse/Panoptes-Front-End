@@ -39,6 +39,7 @@ workflow = apiClient.type('workflows').create
         {label: 'Multi-answer question', next: 'features'}
         {label: 'Draw stuff', next: 'draw'}
         {label: 'Survey the image', next: 'survey'}
+        {label: 'Selection', next: 'selection'}
         {label: 'We’re done here.', next: null}
       ]
 
@@ -56,6 +57,46 @@ workflow = apiClient.type('workflows').create
         **Example**: If you see a bee, then type "Bee"
       '''
       next: 'features'
+
+    selection:
+      type: 'selection'
+      required: true
+      instruction: 'Choose a date from the dropdowns'
+      help: 'Click on the menus to view the available options'
+      answersOrder: [
+        'roman', 'month', 'year'
+      ]
+      answers:
+        roman:
+          title: "Roman Numeral"
+          values: [
+            {value: '1', label: 'I'}
+            {value: '2', label: 'II'}
+            {value: '3', label: 'III'}
+          ]
+        month:
+          title: "Month"
+          values: [
+            {value: 'jan', label: 'Janurary'}
+            {value: 'feb', label: 'Feburary'}
+            {value: 'mar', label: 'March'}
+            {value: 'apr', label: 'April'}
+            {value: 'may', label: 'May'}
+            {value: 'jun', label: 'June'}
+            {value: 'jul', label: 'July'}
+            {value: 'aug', label: 'August'}
+            {value: 'sep', label: 'September'}
+            {value: 'oct', label: 'October'}
+            {value: 'nov', label: 'November'}
+            {value: 'dec', label: 'December'}
+          ]
+        year:
+          title: "Year"
+          values: [
+            {value: '1949', label: '1949'}
+            {value: '1950', label: '1950'}
+            {value: '1951', label: '1951'}
+          ]
 
     features:
       type: 'multiple'
@@ -315,3 +356,4 @@ classification = apiClient.type('classifications').create
 
 module.exports = {workflow, subject, classification}
 window?.mockClassifierData = module.exports
+
