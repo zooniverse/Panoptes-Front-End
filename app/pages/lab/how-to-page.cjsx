@@ -175,8 +175,6 @@ counterpart.registerTranslations 'en',
 
       Once the image has uploaded, it will appear above the "Add an image" box. You can then copy the markdown text beneath the image into your project, or add another image.
 
-      Currently there is a limit of 20 uploaded images per project.
-
       ### DETAILS - Visibility
 
       This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](/lab-policies).
