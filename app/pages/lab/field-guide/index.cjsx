@@ -13,7 +13,7 @@ unless process.env.NODE_ENV is 'production'
       content: 'Spot this.'
     }]
 
-SpottersGuideEditor = React.createClass
+FieldGuideEditor = React.createClass
   getDefaultProps: ->
     project: null
     actions: actions
@@ -81,7 +81,7 @@ SpottersGuideEditor = React.createClass
   render: ->
     <div>
       <header>
-        <strong>Spotter’s guide</strong>
+        <strong>Field guide</strong>
       </header>
       {if @state.guide?
         @renderEditor()
@@ -129,4 +129,4 @@ SpottersGuideEditor = React.createClass
         </Dialog>}
     </div>
 
-module.exports = SpottersGuideEditor
+module.exports = FieldGuideEditor
