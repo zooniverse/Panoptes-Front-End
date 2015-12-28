@@ -59,7 +59,7 @@ ArticleListItem = React.createClass
     onClick: ->
 
   render: ->
-    <button type="button" onClick={@props.onClick}>
+    <button type="button" className="field-guide-editor-item" onClick={@props.onClick}>
       {if @props.icon
         <CroppedImage src={@props.icon} aspectRatio={1} width="3em" height="3em" style={borderRadius: '50%', verticalAlign: 'middle'} />}
       {@props.title}

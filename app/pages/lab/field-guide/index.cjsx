@@ -99,7 +99,7 @@ FieldGuideEditor = React.createClass
 
   renderEditor: ->
     window.editingGuide = @state.guide
-    <div>
+    <div className="field-guide-editor">
       <div>
         <ArticleList
           articles={@state.guide.items}

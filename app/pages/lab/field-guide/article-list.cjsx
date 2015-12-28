@@ -13,7 +13,7 @@ ArticleList = React.createClass
 
   renderArticle: (article, i) ->
     article._key ?= Math.random()
-    <li key={article._key}>
+    <li key={article._key} className="field-guide-article-list-item-container">
       <ArticleListItem
         icon={@props.icons[article.icon]?.src}
         title={article.title}
