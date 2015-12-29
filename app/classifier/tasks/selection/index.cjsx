@@ -61,14 +61,17 @@ module?.exports = React.createClass
       <div className="selection-task">
 
         {selectBoxes.map (name, i) =>
-          <select key={i} defaultValue="" ref="select-#{name}" onChange={@onChangeSelect.bind(@, selectBoxes)}>
-            <option key="_title" value="" disabled>{answers[name].title}</option>
+          <div>
+            <div>{answers[name].title}</div>
+            <select key={i} defaultValue={@props.annotation.value[name] ? ""} ref="select-#{name}" onChange={@onChangeSelect.bind(@, selectBoxes)}>
+              <option key="_title" value="" disabled>--</option>
 
-            {answers[name].values.map (option, i) =>
-              <option key={i} value={option.value}>
-                {option.label}
-              </option>}
-          </select>
+              {answers[name].values.map (option, i) =>
+                <option key={i} value={option.value}>
+                  {option.label}
+                </option>}
+            </select>
+          </div>
           }
 
       </div>

@@ -2,6 +2,10 @@ React = require 'react'
 DragReorderable = require 'drag-reorderable'
 TriggeredModalForm = require 'modal-form/triggered'
 
+AutoSave = require '../../../components/auto-save'
+handleInputChange = require '../../../lib/handle-input-change'
+NextTaskSelector = require '../next-task-selector'
+
 module?.exports = React.createClass
   displayName: 'SelectionEditor'
 
@@ -175,4 +179,12 @@ module?.exports = React.createClass
 
         <button type="button" onClick={@onClickSaveWorkflow}><i className="fa fa-save" /> Save Workflow</button>
       </div>
+
+      <hr/>
+
+      <AutoSave resource={@props.workflow}>
+        <span className="form-label">Next task</span>
+        <br />
+        <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
+      </AutoSave>
     </div>
