@@ -1,4 +1,4 @@
-stored = sessionStorage.getItem('session_id')
+stored = sessionStorage?.getItem('session_id')
 
 generateSessionID = () ->
   sha2 = require('crypto').createHash('sha256')
