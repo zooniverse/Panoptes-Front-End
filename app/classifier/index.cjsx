@@ -322,7 +322,7 @@ Classifier = React.createClass
   completeClassification: ->
     @props.classification.update
       completed: true
-      'metadata.session': getSessionID().id
+      'metadata.session': getSessionID()
       'metadata.finished_at': (new Date).toISOString()
       'metadata.viewport':
         width: innerWidth
