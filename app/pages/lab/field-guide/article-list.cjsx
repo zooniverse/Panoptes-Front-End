@@ -19,7 +19,7 @@ ArticleList = React.createClass
         title={article.title}
         onClick={@props.onSelectArticle.bind null, i}
       />
-      <button type="button" className="field-guide-editor-article-list-item-remove-button" title="Remove" onClick={@props.onRemoveArticle.bind null, i}>
+      <button type="button" className="field-guide-editor-article-list-item-remove-button" title="Remove this entry" onClick={@props.onRemoveArticle.bind null, i}>
         <i className="fa fa-trash-o fa-fw"></i>
       </button>
     </li>
@@ -27,7 +27,9 @@ ArticleList = React.createClass
   render: ->
     <div>
       <DragReorderable tag="ul" className="field-guide-editor-article-list" items={@props.articles} render={@renderArticle} onChange={@props.onReorder} />
-      <button type="button" title="Add" onClick={@props.onAddArticle}>+</button>
+      <p style={textAlign: 'center'}>
+        <button type="button" className="standard-button" onClick={@props.onAddArticle}>Add an entry</button>
+      </p>
     </div>
 
 module.exports = ArticleList

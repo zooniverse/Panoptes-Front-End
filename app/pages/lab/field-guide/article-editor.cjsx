@@ -59,13 +59,18 @@ ArticleEditor = React.createClass
   render: ->
     <div>
       <p>
+        <span className="form-label">Icon</span>
+        <br />
         <FileButton accept="image/*" onSelect={@chooseIcon}>
           {if @state.newIconDataURL
-            <img src={@state.newIconDataURL} style={maxHeight: '3em', maxWidth: '3em'} />
+            iconSrc = @state.newIconDataURL
           else if @props.icon and @state.newIconFile isnt @constructor.SHOULD_REMOVE_ICON
-            <img src={@props.icon} style={maxHeight: '3em', maxWidth: '3em'} />
+            iconSrc = @props.icon
+
+          if iconSrc?
+            <img src={iconSrc} style={maxHeight: '3em', maxWidth: '3em', verticalAlign: 'middle'} />
           else
-            <small className="standard-button">No icon chosen</small>}
+            <small className="standard-button">Choose an icon</small>}
         </FileButton>{' '}
 
         <small>
@@ -78,12 +83,13 @@ ArticleEditor = React.createClass
 
       <p>
         <label>
-          Title<br />
+          <span className="form-label">Title</span>
+          <br />
           <input type="text" ref="titleInput" className="standard-input full" defaultValue={@props.title} disabled={@props.working} autoFocus />
         </label>
       </p>
 
-      Content
+      <span className="form-label">Content</span>
       <br />
       <MarkdownEditor ref="contentInput" value={@state.content} disabled={@props.working} rows="10" cols="100" onChange={@handleContentChange} />
       <br />

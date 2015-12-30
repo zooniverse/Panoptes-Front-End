@@ -1,9 +1,13 @@
 .field-guide-editor
   [draggable]
+    cursor: -moz-grab
     cursor: -webkit-grab
+    cursor: move
 
     [data-drag-reorderable-dragging] &
+      cursor: -moz-grabbing
       cursor: -webkit-grabbing
+      cursor: move
 
 .field-guide-editor-article-list
   border: 1px solid rgba(gray, 0.3)
@@ -19,6 +23,8 @@
 
 .field-guide-editor-article-button
   @extends $reset-button
+  align-items: center
+  display: flex
   flex-grow: 1
   padding: 0.5em 1em
   text-align: left
@@ -29,6 +35,12 @@
   &:active
     background: MAIN_HIGHLIGHT
     color: white
+
+.field-guide-editor-article-button-icon
+  background: rgba(gray, 0.2)
+  box-shadow: 0 1px 3px rgba(gray, 0.2) inset
+  flex-shrink: 0
+  margin-right: 0.5em
 
 .field-guide-editor-article-button-title
   font-weight: bold

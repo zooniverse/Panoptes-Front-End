@@ -22,11 +22,16 @@ CroppedImage = React.createClass
       @loadImage nextProps.src
 
   loadImage: (src) ->
-    img = new Image
-    img.onload = =>
-      {naturalWidth, naturalHeight} = img
-      @setState {naturalWidth, naturalHeight}
-    img.src = src
+    if src?
+      img = new Image
+      img.onload = =>
+        {naturalWidth, naturalHeight} = img
+        @setState {naturalWidth, naturalHeight}
+      img.src = src
+    else
+      @setState
+        naturalWidth: 0
+        naturalHeight: 0
 
   render: ->
     min = Math.min @state.naturalWidth, @state.naturalHeight
@@ -42,7 +47,7 @@ CroppedImage = React.createClass
     x = (@state.naturalWidth - width) / 2
     y = (@state.naturalHeight - height) / 2
 
-    <svg viewBox="#{x} #{y} #{width} #{height}" width={@props.width} height={@props.height} {...@props}>
+    <svg viewBox="#{x} #{y} #{width} #{height}" {...@props}>
       <image ref="image" x="0" y="0" />
     </svg>
 
@@ -59,9 +64,8 @@ ArticleListItem = React.createClass
     onClick: ->
 
   render: ->
-    iconSrc = @props.icon ? '//placehold.it/64.png'
     <button type="button" className="field-guide-editor-article-button" onClick={@props.onClick}>
-      <CroppedImage className="field-guide-editor-article-button-icon" src={iconSrc} aspectRatio={1} width="3em" height="3em" style={borderRadius: '50%', verticalAlign: 'middle'} />{' '}
+      <CroppedImage className="field-guide-editor-article-button-icon" src={@props.icon} aspectRatio={1} width="3em" height="3em" style={borderRadius: '50%', verticalAlign: 'middle'} />{' '}
       <span className="field-guide-editor-article-button-title">{@props.title}</span>
     </button>
 
