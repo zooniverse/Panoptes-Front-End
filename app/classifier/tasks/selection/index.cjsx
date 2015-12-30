@@ -66,9 +66,9 @@ module?.exports = React.createClass
             <select key={i} defaultValue={@props.annotation.value[name] ? ""} ref="select-#{name}" onChange={@onChangeSelect.bind(@, selectBoxes)}>
               <option key="_title" value="" disabled>--</option>
 
-              {answers[name].values.map (option, i) =>
-                <option key={i} value={option.value}>
-                  {option.label}
+              {answers[name].values.map (value, i) =>
+                <option key={i} value={value}>
+                  {value}
                 </option>}
             </select>
           </div>

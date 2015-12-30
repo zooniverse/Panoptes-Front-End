@@ -30,18 +30,21 @@ module?.exports = React.createClass
     @props.task.answers[@state.selectBox]?.values
 
   addAnswer: (answerKey, answer) ->
-    if not answer.title?
-      throw new Error('Answers must have a title key')
+    if (not answer.title) or (not answerKey)
+      return window.alert('Answers must have a Key and Title')
+
+    if Object.keys(@props.task.answers).indexOf(answerKey) isnt -1
+      return window.alert('Answer keys must be unique')
 
     @props.task.answers[answerKey] = answer
     @props.task.answersOrder = @props.task.answersOrder.concat(answerKey)
     @updateTasks()
 
   addAnswerValue: (answerKey, answer) ->
-    if not answer.title? and not answer.label?
-      throw new Error('Answer values must have title and label keys')
+    if not answer
+      return window.alert('Please supply an answer')
 
-    if @selectedValues().map((answer) -> answer.value).indexOf(answer.value) isnt -1
+    if @selectedValues().indexOf(answer) isnt -1
       return window.alert('Answer values must be unique to each option')
 
     @props.task.answers[answerKey].values?.push(answer)
@@ -58,11 +61,8 @@ module?.exports = React.createClass
     @refs.answerTitle.value = ''
 
   onClickAddAnswerValue: (e) ->
-    newAnswerValue = {value: @refs.answerValueKey.value, label: @refs.answerValueLabel.value}
-    @addAnswerValue(@refs.selectBox.value, newAnswerValue)
-
-    @refs.answerValueKey.value = ''
-    @refs.answerValueLabel.value = ''
+    @addAnswerValue(@refs.selectBox.value, @refs.answerValue.value)
+    @refs.answerValue.value = ''
 
   onClickSaveWorkflow: (e) ->
     if window.confirm('Are you sure that you would like to save these changes?')
@@ -73,9 +73,12 @@ module?.exports = React.createClass
 
   onClickDeleteSelectBox: (e) ->
     if window.confirm('Are you sure that you would like to delete this select box?')
+      @props.task.answersOrder = @props.task.answersOrder.filter (answer) => answer isnt @refs.selectBox.value
       delete @props.task.answers[@refs.selectBox.value]
-      @updateTasks()
-      @props.workflow.save()
+
+      @setState {selectBox: ''}, =>
+        @updateTasks()
+        @props.workflow.save()
 
   onChangeAnswersOrder: (answersOrder) ->
     @props.task.answersOrder = answersOrder
@@ -145,10 +148,11 @@ module?.exports = React.createClass
           {if @state.selectBox
             <div>
               <ul>
-                {@selectedValues().map (select, i) =>
+                {@selectedValues().map (value, i) =>
                   <li key={i}>
-                    {select.value}: {select.label}{' '}
-                    <button onClick={@onClickDeleteSelectOption.bind(this, select)} title="Delete">
+                    {value}{' '}
+
+                    <button onClick={@onClickDeleteSelectOption.bind(this, value)} title="Delete">
                       <i className="fa fa-close" />
                     </button>
                   </li>}
@@ -156,15 +160,10 @@ module?.exports = React.createClass
 
               <div className="selection-option">
                 <label>
-                  Key <input ref="answerValueKey"></input>
+                  Value <input ref="answerValue"></input>
                 </label>{' '}
 
-                <label>
-                  Value <input ref="answerValueLabel"></input>
-                </label>
-
                 <TriggeredModalForm trigger={<i className="fa fa-question-circle"></i>}>
-                  <p><strong>Keys</strong> are used as a unique identifier to store values of the select box</p>
                   <p><strong>Values</strong> are what will be displayed to users as options within the select box</p>
                 </TriggeredModalForm>
               </div>

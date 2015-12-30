@@ -70,32 +70,32 @@ workflow = apiClient.type('workflows').create
         roman:
           title: "Roman Numeral"
           values: [
-            {value: '1', label: 'I'}
-            {value: '2', label: 'II'}
-            {value: '3', label: 'III'}
+            'I'
+            'II'
+            'III'
           ]
         month:
           title: "Month"
           values: [
-            {value: 'jan', label: 'Janurary'}
-            {value: 'feb', label: 'Feburary'}
-            {value: 'mar', label: 'March'}
-            {value: 'apr', label: 'April'}
-            {value: 'may', label: 'May'}
-            {value: 'jun', label: 'June'}
-            {value: 'jul', label: 'July'}
-            {value: 'aug', label: 'August'}
-            {value: 'sep', label: 'September'}
-            {value: 'oct', label: 'October'}
-            {value: 'nov', label: 'November'}
-            {value: 'dec', label: 'December'}
+            'Janurary'
+            'Feburary'
+            'March'
+            'April'
+            'May'
+            'June'
+            'July'
+            'August'
+            'September'
+            'October'
+            'November'
+            'December'
           ]
         year:
           title: "Year"
           values: [
-            {value: '1949', label: '1949'}
-            {value: '1950', label: '1950'}
-            {value: '1951', label: '1951'}
+            '1949'
+            '1950'
+            '1951'
           ]
 
     features:
