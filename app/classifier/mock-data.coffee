@@ -39,6 +39,7 @@ workflow = apiClient.type('workflows').create
         {label: 'Multi-answer question', next: 'features'}
         {label: 'Draw stuff', next: 'draw'}
         {label: 'Survey the image', next: 'survey'}
+        {label: 'Selection', next: 'selection'}
         {label: 'We’re done here.', next: null}
       ]
 
@@ -56,6 +57,46 @@ workflow = apiClient.type('workflows').create
         **Example**: If you see a bee, then type "Bee"
       '''
       next: 'features'
+
+    selection:
+      type: 'selection'
+      required: true
+      instruction: 'Choose a date from the dropdowns'
+      help: 'Click on the menus to view the available options'
+      answersOrder: [
+        'roman', 'month', 'year'
+      ]
+      answers:
+        roman:
+          title: "Roman Numeral"
+          values: [
+            'I'
+            'II'
+            'III'
+          ]
+        month:
+          title: "Month"
+          values: [
+            'Janurary'
+            'Feburary'
+            'March'
+            'April'
+            'May'
+            'June'
+            'July'
+            'August'
+            'September'
+            'October'
+            'November'
+            'December'
+          ]
+        year:
+          title: "Year"
+          values: [
+            '1949'
+            '1950'
+            '1951'
+          ]
 
     features:
       type: 'multiple'
@@ -315,3 +356,4 @@ classification = apiClient.type('classifications').create
 
 module.exports = {workflow, subject, classification}
 window?.mockClassifierData = module.exports
+

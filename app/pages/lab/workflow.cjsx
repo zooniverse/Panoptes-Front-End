@@ -97,6 +97,7 @@ EditWorkflowPage = React.createClass
                         when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'crop' then <i className="fa fa-crop fa-fw"></i>
+                        when 'selection' then <i className="fa fa-list fa-fw"></i>
                         when 'text' then <i className="fa fa-file-text-o fa-fw"></i>}
                       {' '}
                       {tasks[definition.type].getTaskText definition}
@@ -157,6 +158,15 @@ EditWorkflowPage = React.createClass
                         <i className="fa fa-crop fa-2x"></i>
                         <br />
                         <small><strong>Crop</strong></small>
+                      </button>
+                    </AutoSave>}{' '}
+
+                  {if @canUseTask(@props.project, "selection")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'selection'} title="Select choices from a dropdown menu">
+                        <i className="fa fa-align-justify fa-2x"></i>
+                        <br />
+                        <small><strong>Selection</strong></small>
                       </button>
                     </AutoSave>}{' '}
                 </TriggeredModalForm>
@@ -221,7 +231,7 @@ EditWorkflowPage = React.createClass
             <br />
             <small className="form-help">Import gold standard classifications to improve the quality of automatic aggregations and optionally provide classification feedback for volunteers.</small>{' '}
             <TriggeredModalForm trigger={<i className="fa fa-question-circle"></i>}>
-              <p>Gold standard classificaitons should be in the form:</p>
+              <p>Gold standard classifications should be in the form:</p>
               <pre>{EXAMPLE_GOLD_STANDARD_DATA}</pre>
             </TriggeredModalForm>
           </p>

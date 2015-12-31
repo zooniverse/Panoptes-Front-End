@@ -15,7 +15,8 @@ EXPERIMENTAL_FEATURES = [
   'crop'
   'tutorial'
   'text',
-  'hide classification summaries'
+  'hide classification summaries',
+  'selection'
 ]
 
 ProjectToggle = React.createClass
