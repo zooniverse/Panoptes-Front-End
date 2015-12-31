@@ -27,4 +27,5 @@ module.exports = React.createClass
       searchPromptText="Type to search Users"
       className="search standard-input"
       closeAfterClick={true}
-      asyncOptions={debounce(@searchUsers, 200)} />
+      matchProp={'label'}
+      asyncOptions={@searchUsers} />
