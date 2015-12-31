@@ -24,10 +24,6 @@ counterpart.registerTranslations 'en',
         bio: '''Alex works remotely for Zooniverse from his home in Northumberland.
         He's a software architect designing and running Zooniverse experiments. He has a computer science degree,
         and has developed software & websites at large enterprises and startups.'''
-      alexWeiksnar:
-        title: 'Developer'
-        bio: '''Alex previously attended University of Miami, where he studied Psychology,
-        Biology, and English. Alex enjoys reading, coding, and sailing in his free time.'''
       aliSwanson:
         title: 'Researcher'
         bio: '''Ali spent most of her PhD chasing lions around the Serengeti. She finished
@@ -175,12 +171,6 @@ teamMembers =
     bio: counterpart "team.content.alexBowyer.bio"
     image: "/assets/team/alex_bowyer.jpg"
     location: "oxford"
-  alexWeiksnar:
-    name: "Alex Weiksnar"
-    title: counterpart "team.content.alexWeiksnar.title"
-    bio: counterpart "team.content.alexWeiksnar.bio"
-    image: "/assets/team/alex.jpg"
-    location: "chicago"
   aliSwanson:
     name: "Ali Swanson"
     twitter: "alicatzoo"
