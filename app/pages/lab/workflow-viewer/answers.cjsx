@@ -14,7 +14,7 @@ AnswerItem = React.createClass
     icon = undefined
     if @props.inputs.type == 'drawing'
       icon = <span className='drawing-tool-icon-vis' style={color: @props.inputs.item.color}>{icons[@props.inputs.item.type]}</span>
-    else if (@props.inputs.type == 'survey') and (@props.inputs.item.images.length > 0)
+    else if ((@props.inputs.type == 'survey') or (@props.inputs.type == 'flexibleSurvey')) and (@props.inputs.item.images.length > 0)
       icon = <span className="survey-task-chooser-choice-thumbnail-container"><img src={@props.inputs.images[@props.inputs.item.images[0]]} alt={@props.inputs.item.label} className="survey-task-chooser-characteristic-value-icon" /></span>
     <li className='answer-item' id={@props.inputs.listId}>
       <div className='lab'>
@@ -37,6 +37,12 @@ module.exports = React.createClass
       when 'drawing'
         items = @props.task.tools
       when 'survey'
+        items = {}
+        idx = 0
+        for order in @props.task.choicesOrder
+          items[idx] = @props.task.choices[order]
+          idx += 1
+      when 'flexibleSurvey'
         items = {}
         idx = 0
         for order in @props.task.choicesOrder
