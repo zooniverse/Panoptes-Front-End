@@ -274,7 +274,7 @@ EditSubjectSetPage = React.createClass
   _findFilesInMetadata: (metadata) ->
     filesInMetadata = []
     for key, value of metadata
-      extensions = if isAdmin() then '\\.\\D\\w{2,3}' else "(?:#{VALID_SUBJECT_EXTENSIONS.join '|'})"
+      extensions = if isAdmin() then '\\.\\D\\w{2,4}' else "(?:#{VALID_SUBJECT_EXTENSIONS.join '|'})"
       filesInValue = value.match? ///([^#{INVALID_FILENAME_CHARS.join ''}]+#{extensions})///gi
       if filesInValue?
         filesInMetadata.push filesInValue...
