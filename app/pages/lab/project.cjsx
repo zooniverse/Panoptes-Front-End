@@ -254,7 +254,7 @@ module.exports = React.createClass
       getProject = apiClient.type('projects').get @props.params.projectID
 
       getOwners = getProject.then (project) =>
-        project.get('project_roles').then (projectRoles) =>
+        project.get('project_roles', page_size: 100).then (projectRoles) =>
           owners = for projectRole in projectRoles when 'owner' in projectRole.roles or 'collaborator' in projectRole.roles
             projectRole.get 'owner'
           Promise.all owners
