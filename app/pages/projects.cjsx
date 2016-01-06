@@ -22,7 +22,7 @@ module.exports = React.createClass
     query = {include: 'avatar'}
 
     if !apiClient.params.admin
-      query.homepage = true
+      query.simple = true
 
     apiClient.type('projects').get Object.assign {}, query, @props.location.query
 
