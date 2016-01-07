@@ -18,6 +18,7 @@ module.exports = React.createClass
     ownerName: React.PropTypes.string
     heroClass: React.PropTypes.string
     heroNav: React.PropTypes.node
+    skipOwner: React.PropTypes.bool
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
@@ -61,7 +62,8 @@ module.exports = React.createClass
                      resource={resource}
                      imagePromise={@props.imagePromise(resource)}
                      linkTo={@props.cardLink(resource)}
-                     translationObjectName={@props.translationObjectName}/>}
+                     translationObjectName={@props.translationObjectName}
+                     skipOwner={@props.skipOwner} />}
               </div>
               <nav>
                 {if meta
