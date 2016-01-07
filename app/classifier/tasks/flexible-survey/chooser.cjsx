@@ -25,10 +25,6 @@ module.exports = React.createClass
       else
         choiceID
 
-  isAnnotationComplete: (task, annotation) ->
-    annotation.value? annotation.value.length > 0
-    false
-
   render: ->
     filteredChoices = @getFilteredChoices()
 
