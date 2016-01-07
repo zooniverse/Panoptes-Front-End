@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 apiClient = require '../../api/client'
-PromiseRenderer = require '../../components/promise-renderer'
+Loading = require '../../components/loading-indicator'
 
 counterpart.registerTranslations 'en',
   publications:
@@ -273,10 +273,23 @@ module.exports = React.createClass
     currentSort: 'showAll'
 
   componentDidMount: ->
+    @loadProjects()
     document.documentElement.classList.add 'on-secondary-page'
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
+
+  projectSlugs: ->
+    slugs = []
+    for category, list of publicationCategories
+      slugs = slugs.concat(project.slug for project in list when project.slug)
+    slugs
+
+  loadProjects: ->
+    apiClient.type('projects').get(slug: @projectSlugs(), cards: true).then (projects) =>
+      projectMap = { }
+      projectMap[project.slug] = project for project in projects
+      @setState projects: projectMap
 
   render: ->
     sideBarNav = counterpart "publications.nav"
@@ -293,41 +306,43 @@ module.exports = React.createClass
             else
               @state.currentSort
         }</h2>
-        {for category, projects of publicationCategories
-          if (@state.currentSort is category) or (@state.currentSort is 'showAll')
-            <ul key={category} className="publications-list">
-              {for project in projects
-                <div key={project.name || project.slug}>
-                  <div>
-                    <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug)} pending={null} catch={null}>{([fetchedProject]) =>
-                      if fetchedProject?
-                        <h3 className="project-name">{fetchedProject.display_name}</h3>
-                    }</PromiseRenderer>
-                    {if project.name? then <h3 className="project-name">{project.name}</h3>}<span className="publication-count">{' '}({project.publications.length})</span>
+        {if @state.projects
+          for category, projects of publicationCategories
+            if (@state.currentSort is category) or (@state.currentSort is 'showAll')
+              <ul key={category} className="publications-list">
+                {for projectListing in projects
+                  project = @state.projects[projectListing.slug]
+                  <div key={projectListing.name or project.slug}>
+                    <div>
+                      <h3 className="project-name">
+                        {if project then project.display_name else projectListing.name}
+                      </h3>
+                      <span className="publication-count">{' '}({projectListing.publications.length})</span>
+                    </div>
+                    {projectListing.publications.map (publication) =>
+                      i = Math.random()
+                      <li key="publication-#{i}" className="publication-item">
+                        {@avatarFor(project)}
+                        <div className="citation">
+                          <p>
+                            <cite>{publication.citation}</cite><br />
+                            {if publication.href? then <a href={publication.href} target="_blank">Available here.</a>}
+                          </p>
+                        </div>
+                      </li>}
                   </div>
-                  {projectAvatar = @getAvatar(project)
-                  project.publications.map (publication) =>
-                    i = Math.random()
-                    <li key="publication-#{i}" className="publication-item">
-                      {projectAvatar}
-                      <div className="citation">
-                        <p>
-                          <cite>{publication.citation}</cite><br />
-                          {if publication.href? then <a href={publication.href} target="_blank">Available here.</a>}
-                        </p>
-                      </div>
-                    </li>}
-                </div>
-            }</ul>
-        }
+              }</ul>
+        else
+          <Loading />}
       </section>
     </div>
 
   showPublicationsList: (navItem) ->
     @setState currentSort: navItem
 
-  getAvatar: (project) ->
-    <PromiseRenderer promise={apiClient.type('projects').get(slug: project.slug).get('avatar')} pending={null}
-      catch={=> <img src="/assets/simple-pattern.jpg" />}
-      then={([avatar]) =>
-        <img src={avatar.src} alt="Project Avatar" />} />
+  avatarFor: (project) ->
+    src = if project?.avatar_src
+      "//#{ project.avatar_src }"
+    else
+      '/assets/simple-avatar.jpg'
+    <img src={src} alt="Project Avatar" />
