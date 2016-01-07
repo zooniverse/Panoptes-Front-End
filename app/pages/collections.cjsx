@@ -52,8 +52,10 @@ List = React.createClass
 
   listCollections: ->
     query = {}
-    query.owner = @props.params.owner if @props.params?.owner?
-    query.include = 'owner'
+    if @props.params?.owner?
+      query.owner = @props.params.owner
+      query.include = 'owner'
+
     query.favorite = @props.favorite
     Object.assign query, @props.location.query
 
@@ -68,6 +70,7 @@ List = React.createClass
       heroNav={<CollectionsNav user={@props.user} />}
       heroClass="collections-hero"
       ownerName={@props.params?.owner}
+      skipOwner={!@props.params?.owner}
       imagePromise={@imagePromise}
       cardLink={@cardLink} />
 
