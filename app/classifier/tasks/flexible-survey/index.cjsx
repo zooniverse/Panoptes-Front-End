@@ -30,8 +30,7 @@ module.exports = React.createClass
       value: []
 
     isAnnotationComplete: (task, annotation) ->
-      annotation.value? annotation.value.length > 0 and not annotation._choiceInProgress
-      false
+      annotation.value?.length > 0 and not annotation._choiceInProgress
 
     testAnnotationQuality: (unknown, knownGood) ->
       # NOTE: Currently only choices (not answers) are compared.
