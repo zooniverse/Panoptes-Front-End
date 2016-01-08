@@ -27,7 +27,11 @@ module.exports = React.createClass
     apiClient.type('projects').get Object.assign {}, query, @props.location.query
 
   imagePromise: (project) ->
-    Promise.resolve project.avatar_src or '/assets/simple-avatar.jpg'
+    src = if project.avatar_src
+      "//#{ project.avatar_src }"
+    else
+      '/assets/simple-avatar.jpg'
+    Promise.resolve src
 
   cardLink: (project) ->
     link = if !!project.redirect
