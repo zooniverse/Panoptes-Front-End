@@ -42,17 +42,27 @@ counterpart.registerTranslations 'en',
 FeaturedProjects = React.createClass
   displayName: "FeaturedProjects"
 
+  imagePromise: (project) ->
+    src = if project.avatar_src
+      "//#{ project.avatar_src }"
+    else
+      '/assets/simple-avatar.jpg'
+    Promise.resolve src
+
   render: ->
     <div className="featured-projects">
-      <PromiseRenderer promise={apiClient.type('projects').get(FEATURED_PRODUCT_IDS)}>{(projects) =>
+      <PromiseRenderer promise={apiClient.type('projects').get(id: FEATURED_PRODUCT_IDS, cards: true)}>{(projects) =>
         if projects?
           <div className="featured-projects-list">
           {for project in projects
             [owner, name] = project.slug.split('/')
-
-            avatarSrc = project.get('avatar').then (avatar) ->
-              avatar.src
-            <OwnedCard key={project.id} resource={project} linkTo="/projects/#{owner}/#{name}" translationObjectName="projectsPage" imagePromise={avatarSrc} />
+            <OwnedCard
+              key={project.id}
+              resource={project}
+              linkTo="/projects/#{owner}/#{name}"
+              translationObjectName="projectsPage"
+              imagePromise={@imagePromise(project)}
+              skipOwner={true} />
           }
           </div>
       }</PromiseRenderer>
@@ -99,7 +109,7 @@ module.exports = React.createClass
             else
               <div className="recent-projects">
                 <Translate component="h5" content="home.recentProjects.altTitle" />
-                <PromiseRenderer promise={apiClient.type('projects').get(launch_approved: true, page_size: 4)}>{(projects) =>
+                <PromiseRenderer promise={apiClient.type('projects').get(launch_approved: true, page_size: 4, cards: true)}>{(projects) =>
                   <div className="recent-projects-list">
                     {projects.map (project) ->
                       <div>
