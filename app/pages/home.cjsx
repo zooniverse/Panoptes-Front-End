@@ -109,7 +109,7 @@ module.exports = React.createClass
             else
               <div className="recent-projects">
                 <Translate component="h5" content="home.recentProjects.altTitle" />
-                <PromiseRenderer promise={apiClient.type('projects').get(launch_approved: true, page_size: 4)}>{(projects) =>
+                <PromiseRenderer promise={apiClient.type('projects').get(launch_approved: true, page_size: 4, cards: true)}>{(projects) =>
                   <div className="recent-projects-list">
                     {projects.map (project) ->
                       <div>
