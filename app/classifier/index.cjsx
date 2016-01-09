@@ -253,14 +253,9 @@ Classifier = React.createClass
     if @props.project?
       getUserRoles = @props.project.get 'project_roles'
         .then (projectRoles) =>
-          getProjectRoleHavers = Promise.all projectRoles.map (projectRole) =>
-            projectRole.get 'owner'
-          getProjectRoleHavers
-            .then (projectRoleHavers) =>
-              (projectRoles[i].roles for user, i in projectRoleHavers when user is @props.user)
-            .then (setsOfUserRoles) =>
-              [[], setsOfUserRoles...].reduce (set, next) =>
-                set.concat next
+          projectRoles.map (projectRole) =>
+            if @props.user.id == projectRole.links.owner.id
+              projectRole.roles
 
       <PromiseRenderer promise={getUserRoles}>{(userRoles) =>
         if isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
