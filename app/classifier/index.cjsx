@@ -250,12 +250,11 @@ Classifier = React.createClass
     </div>
 
   renderExpertOptions: ->
-    if @props.project?
-      getUserRoles = @props.project.get 'project_roles'
+    if @props.project? && @props.user?
+      getUserRoles = @props.project.get('project_roles', user_id: @props.user.id)
         .then (projectRoles) =>
           projectRoles.map (projectRole) =>
-            if @props.user.id == projectRole.links.owner.id
-              projectRole.roles
+            projectRole.roles
 
       <PromiseRenderer promise={getUserRoles}>{(userRoles) =>
         if isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
