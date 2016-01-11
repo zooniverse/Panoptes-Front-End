@@ -17,6 +17,8 @@ Tutorial = require '../lib/tutorial'
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
 
+PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
+
 Classifier = React.createClass
   displayName: 'Classifier'
 
@@ -211,7 +213,35 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {if @state.expertClassification?
+      {if @props.project?.slug is PULSAR_HUNTERS_SLUG or location.href.indexOf('fake-pulsar-feedback') isnt -1
+        subjectClass = @props.subject.metadata['#Class']?.toUpperCase()
+        if subjectClass?
+          userFoundPulsar = @props.classification.annotations[0]?.value is 0
+
+          HelpButton = (props) =>
+            <button type="button" onClick={=>
+              {alert} = require 'modal-form/dialog'
+              {Markdown} = require 'markdownz'
+              console.log {Markdown}
+              alert <Markdown>{@props.workflow.tasks[@props.workflow.first_task].help}</Markdown>
+            }>
+              {props.children}
+            </button>
+
+          <div className="pulsar-hunters-feedback" data-is-correct={subjectClass? and userFoundPulsar || null}>
+            {if subjectClass in ['KNOWN', 'DISC']
+              if userFoundPulsar
+                <p>Congratulations! You’ve successfully spotted a known pulsar. Keep going to find one we don’t already know about.</p>
+              else
+                <p>This was actually a known pulsar. <HelpButton>Click here</HelpButton> to see some examples of known pulsars.</p>
+            else if subjectClass in ['FAKE']
+              if userFoundPulsar
+                <p>Congratulations! You’ve successfully spotted a simulated pulsar. Keep going to find a real, undiscovered pulsar.</p>
+              else
+                <p>This was a simulated pulsar. <HelpButton>Click here</HelpButton> to see some examples of known pulsars.</p>}
+          </div>
+
+      else if @state.expertClassification?
         <div className="has-expert-classification">
           Expert classification available.{' '}
           {if @state.showingExpertClassification
