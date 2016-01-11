@@ -13,7 +13,7 @@ module.exports = React.createClass
   getProjects: ->
     query =
       page_size: 24
-      sort: '+updated_at'
+      sort: '-updated_at'
       include: 'avatar'
 
     Object.assign query, @props.location.query
