@@ -64,6 +64,20 @@ module.exports = React.createClass
           return false
     true
 
+  anyFilledIn: ->
+    # if there are no questions, don't make them fill one in
+    return true unless Utility.getQuestionIDs(@props.task, @props.choiceID).length
+
+    # if there are questions, it's fine as long as they've filled ONE in
+    for questionID in Utility.getQuestionIDs(@props.task, @props.choiceID)
+      question = @props.task.questions[questionID]
+      answer = @state.answers[questionID]
+      if(answer?)
+        return true
+
+    # they must fill out at least one
+    false
+
   render: ->
     choice = @props.task.choices[@props.choiceID]
     <div className="survey-task-choice">
@@ -129,7 +143,7 @@ module.exports = React.createClass
       <div style={textAlign: 'center'}>
         <button type="button" className="minor-button" onClick={@props.onCancel}>Cancel</button>
         {' '}
-        <button type="button" className="standard-button" disabled={not @allFilledIn()} onClick={@handleIdentification}>
+        <button type="button" className="standard-button" disabled={not @allFilledIn() or not @anyFilledIn()} onClick={@handleIdentification}>
           <strong>Identify</strong>
         </button>
       </div>

@@ -32,7 +32,7 @@ module.exports = React.createClass
       if filteredChoices.length <= point
         breakpoint = point
 
-    <div className="survey-task-chooser">
+    <div className="flexible-survey survey-task-chooser">
       <div className="survey-task-chooser-characteristics">
         {for characteristicID in @props.task.characteristicsOrder
           characteristic = @props.task.characteristics[characteristicID]

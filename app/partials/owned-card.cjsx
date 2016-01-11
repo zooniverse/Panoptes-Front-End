@@ -10,6 +10,7 @@ FlexibleLink = React.createClass
 
   propTypes:
     to: React.PropTypes.string.isRequired
+    skipOwner: React.PropTypes.bool
 
   isExternal: ->
     @props.to.indexOf('http') > -1
@@ -57,10 +58,11 @@ module.exports = React.createClass
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.resource.display_name}</span></div>
-          <PromiseRenderer promise={@props.resource.get('owner')}>{ (owner) ->
-            if document.location.hash is "/collections"
-              <div className="owner">{owner?.display_name ? 'LOADING'}</div>
-          }</PromiseRenderer>
+          {if !@props.skipOwner
+            <PromiseRenderer promise={@props.resource.get('owner')}>{ (owner) ->
+              if document.location.hash is "/collections"
+                <div className="owner">{owner?.display_name ? 'LOADING'}</div>
+            }</PromiseRenderer>}
           {<div className="description">{@props.resource.description}</div> if @props.resource.description?}
           {<div className="private"><i className="fa fa-lock"></i> Private</div> if @props.resource.private}
           <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"#{@props.translationObjectName}.button"} /></button>
