@@ -32,7 +32,6 @@ Classifier = React.createClass
 
   getInitialState: ->
     subjectLoading: false
-    expertClassifier: null
     expertClassification: null
     classificationQuality: NaN
     showingExpertClassification: false
@@ -41,13 +40,10 @@ Classifier = React.createClass
   componentDidMount: ->
     @loadSubject @props.subject
     @prepareToClassify @props.classification
-    @checkExpertClassifier()
     Tutorial.startIfNecessary @props.user, @props.project
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
-      @setState expertClassifier: null
-      @checkExpertClassifier nextProps
       Tutorial.startIfNecessary nextProps.user, nextProps.project
     if nextProps.subject isnt @props.subject
       @loadSubject subject
@@ -86,23 +82,6 @@ Classifier = React.createClass
       if @props.workflow is workflow and @props.subject is subject
         window.expertClassification = expertClassification
         @setState {expertClassification}
-
-  checkExpertClassifier: (props = @props) ->
-    if props.project and props.user and @state.expertClassifier is null
-      getUserRoles = props.project.get('project_roles', user_id: props.user.id)
-        .then (projectRoles) =>
-          getProjectRoleHavers = Promise.all projectRoles.map (projectRole) =>
-            projectRole.get 'owner'
-          getProjectRoleHavers
-            .then (projectRoleHavers) =>
-              (projectRoles[i].roles for user, i in projectRoleHavers when user is props.user)
-            .then (setsOfUserRoles) =>
-              [[], setsOfUserRoles...].reduce (set, next) =>
-                set.concat next
-
-      getUserRoles.then (userRoles) =>
-        expertClassifier = isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
-        @setState {expertClassifier, userRoles}
 
   prepareToClassify: (classification) ->
     classification.annotations ?= []
@@ -270,11 +249,11 @@ Classifier = React.createClass
     </div>
 
   renderExpertOptions: ->
-    return unless @state.expertClassifier
+    return unless @props.expertClassifier
     <TriggeredModalForm trigger={
       <i className="fa fa-cog fa-fw"></i>
     }>
-      {if 'owner' in @state.userRoles or 'expert' in @state.userRoles
+      {if 'owner' in @props.userRoles or 'expert' in @props.userRoles
         <p>
           <label>
             <input type="checkbox" checked={@props.classification.gold_standard} onChange={@handleGoldStandardChange} />{' '}
@@ -287,7 +266,7 @@ Classifier = React.createClass
           </TriggeredModalForm>
         </p>}
 
-        {if isAdmin() or 'owner' in @state.userRoles or 'collaborator' in @state.userRoles
+        {if isAdmin() or 'owner' in @props.userRoles or 'collaborator' in @props.userRoles
           <p>
             <label>
               <input type="checkbox" checked={@props.demoMode} onChange={@handleDemoModeChange} />{' '}
@@ -363,11 +342,18 @@ module.exports = React.createClass
   getInitialState: ->
     workflow: null
     subject: null
+    expertClassifier: null
+    userRoles: []
 
   componentDidMount: ->
+    @checkExpertClassifier()
     @loadClassification @props.classification
 
   componentWillReceiveProps: (nextProps) ->
+    if @props.user isnt nextProps.user
+      @setState expertClassifier: null
+      @checkExpertClassifier nextProps
+
     unless nextProps.classification is @props.classification
       @loadClassification nextProps.classification
 
@@ -386,8 +372,29 @@ module.exports = React.createClass
       # TODO: Support multi-subject classifications in the future.
       @setState {subject}
 
+  checkExpertClassifier: (props = @props) ->
+    if props.project and props.user and @state.expertClassifier is null
+      getUserRoles = props.project.get('project_roles', user_id: props.user.id)
+        .then (projectRoles) =>
+          getProjectRoleHavers = Promise.all projectRoles.map (projectRole) =>
+            projectRole.get 'owner'
+          getProjectRoleHavers
+            .then (projectRoleHavers) =>
+              (projectRoles[i].roles for user, i in projectRoleHavers when user is props.user)
+            .then (setsOfUserRoles) =>
+              [[], setsOfUserRoles...].reduce (set, next) =>
+                set.concat next
+
+      getUserRoles.then (userRoles) =>
+        expertClassifier = isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
+        @setState {expertClassifier, userRoles}
+
   render: ->
     if @state.workflow? and @state.subject?
-      <Classifier {...@props} workflow={@state.workflow} subject={@state.subject} />
+      <Classifier {...@props}
+        workflow={@state.workflow}
+        subject={@state.subject}
+        expertClassifier={@state.expertClassifier}
+        userRoles={@state.userRoles} />
     else
       <span>Loading classifier...</span>
