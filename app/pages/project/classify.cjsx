@@ -70,6 +70,7 @@ module.exports = React.createClass
     workflow: null
     subject: null
     classification: null
+    projectIsComplete: false
     demoMode: sessionDemoMode
 
   propChangeHandlers:
@@ -104,11 +105,13 @@ module.exports = React.createClass
       currentWorkflowForProject[props.project.id]
 
   getRandomWorkflowID: (project) ->
-    project.get('workflows', active: true).then (workflows) ->
+    project.get('workflows', active: true).then (workflows) =>
       if workflows.length is 0
         throw new Error "No workflows for project #{project.id}"
         project.uncacheLink 'workflows'
       else
+        projectIsComplete = (true for workflow in workflows when not workflow.finished_at?).length is 0
+        @setState {projectIsComplete}
         randomIndex = Math.floor Math.random() * workflows.length
         # console.log 'Chose random workflow', workflows[randomIndex].id
         workflows[randomIndex].id
@@ -209,7 +212,8 @@ module.exports = React.createClass
 
   render: ->
     <div className="classify-page content-container">
-      <FinishedBanner project={@props.project} />
+      {if @state.projectIsComplete
+        <FinishedBanner project={@props.project} />}
 
       {if @state.classification?
         <Classifier
