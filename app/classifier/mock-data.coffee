@@ -33,6 +33,7 @@ workflow = apiClient.type('workflows').create
     init:
       type: 'single'
       question: 'Where shall we start?'
+      help: 'You don’t need help with this.'
       answers: [
         {label: 'Crop the image', next: 'crop'}
         {label: 'Enter some text', next: 'write'}

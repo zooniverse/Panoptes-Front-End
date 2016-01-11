@@ -17,6 +17,8 @@ Tutorial = require '../lib/tutorial'
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
 
+PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
+
 Classifier = React.createClass
   displayName: 'Classifier'
 
@@ -211,7 +213,32 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {if @state.expertClassification?
+      {if @props.project?.slug is PULSAR_HUNTERS_SLUG or location.href.indexOf('fake-pulsar-feedback') isnt -1
+        subjectClass = 'KNOWN' || @props.subject.metadata['#Class']?.toUpperCase()
+        if subjectClass?
+          userFoundPulsar = false || @props.classification.annotations[0]?.value is 0
+
+          helpButton = <button type="button" onClick={=>
+            {alert} = require 'modal-form/dialog'
+            {Markdown} = require 'markdownz'
+            console.log {Markdown}
+            alert <Markdown>{@props.workflow.tasks[@props.workflow.first_task].help}</Markdown>
+          }>Help</button>
+
+          <div className="pulsar-hunters-feedback">
+            {if subjectClass in ['KNOWN', 'DISC']
+              if userFoundPulsar
+                <p>Right, that's a pulsar. Nice work.</p>
+              else
+                <p>You missed a known pulsar. {helpButton}</p>
+            else if subjectClass is 'FAKE'
+              if userFoundPulsar
+                <p>Right, that's a simulated pulsar we made up to get more accurate data.</p>
+              else
+                <p>You missed a simulated pulsar. We use these to get more accurate data. {helpButton}</p>}
+          </div>
+
+      else if @state.expertClassification?
         <div className="has-expert-classification">
           Expert classification available.{' '}
           {if @state.showingExpertClassification
