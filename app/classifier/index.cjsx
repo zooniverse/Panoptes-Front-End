@@ -250,8 +250,8 @@ Classifier = React.createClass
     </div>
 
   renderExpertOptions: ->
-    if @props.project?
-      getUserRoles = @props.project.get 'project_roles'
+    if @props.project? and @props.user?
+      getUserRoles = @props.project.get('project_roles', user_id: @props.user.id)
         .then (projectRoles) =>
           getProjectRoleHavers = Promise.all projectRoles.map (projectRole) =>
             projectRole.get 'owner'
