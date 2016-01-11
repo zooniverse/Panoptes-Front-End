@@ -216,7 +216,7 @@ Classifier = React.createClass
       {if @props.project?.slug is PULSAR_HUNTERS_SLUG or location.href.indexOf('fake-pulsar-feedback') isnt -1
         subjectClass = 'KNOWN' || @props.subject.metadata['#Class']?.toUpperCase()
         if subjectClass?
-          userFoundPulsar = false || @props.classification.annotations[0]?.value is 0
+          userFoundPulsar = true || @props.classification.annotations[0]?.value is 0
 
           helpButton = <button type="button" onClick={=>
             {alert} = require 'modal-form/dialog'
@@ -225,7 +225,7 @@ Classifier = React.createClass
             alert <Markdown>{@props.workflow.tasks[@props.workflow.first_task].help}</Markdown>
           }>Help</button>
 
-          <div className="pulsar-hunters-feedback">
+          <div className="pulsar-hunters-feedback" data-is-correct={subjectClass? and userFoundPulsar || null}>
             {if subjectClass in ['KNOWN', 'DISC']
               if userFoundPulsar
                 <p>Right, that's a pulsar. Nice work.</p>
