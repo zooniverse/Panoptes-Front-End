@@ -280,17 +280,11 @@ Classifier = React.createClass
     </div>
 
   renderExpertOptions: ->
-    if @props.project?
-      getUserRoles = @props.project.get 'project_roles'
+    if @props.project? && @props.user?
+      getUserRoles = @props.project.get('project_roles', user_id: @props.user.id)
         .then (projectRoles) =>
-          getProjectRoleHavers = Promise.all projectRoles.map (projectRole) =>
-            projectRole.get 'owner'
-          getProjectRoleHavers
-            .then (projectRoleHavers) =>
-              (projectRoles[i].roles for user, i in projectRoleHavers when user is @props.user)
-            .then (setsOfUserRoles) =>
-              [[], setsOfUserRoles...].reduce (set, next) =>
-                set.concat next
+          projectRoles.map (projectRole) =>
+            projectRole.roles
 
       <PromiseRenderer promise={getUserRoles}>{(userRoles) =>
         if isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
