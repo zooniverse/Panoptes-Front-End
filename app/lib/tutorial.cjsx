@@ -56,7 +56,7 @@ module.exports = React.createClass
                       user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
                         projectPreferences ?= apiClient.type('project_preferences').create({
                           links: {
-                            project: '231'
+                            project: project.id
                           },
                           preferences: {}
                         })
