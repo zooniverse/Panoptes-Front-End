@@ -17,6 +17,8 @@ Tutorial = require '../lib/tutorial'
 unless process.env.NODE_ENV is 'production'
   mockData = require './mock-data'
 
+PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
+
 Classifier = React.createClass
   displayName: 'Classifier'
 
@@ -89,7 +91,6 @@ Classifier = React.createClass
       @addAnnotationForTask classification, @props.workflow.first_task
 
   render: ->
-
     <ChangeListener target={@props.classification}>{=>
       if @state.showingExpertClassification
         currentClassification = @state.expertClassification
@@ -211,7 +212,35 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {if @state.expertClassification?
+      {if @props.project?.slug is PULSAR_HUNTERS_SLUG or location.href.indexOf('fake-pulsar-feedback') isnt -1
+        subjectClass = @props.subject.metadata['#Class']?.toUpperCase()
+        if subjectClass?
+          userFoundPulsar = @props.classification.annotations[0]?.value is 0
+
+          HelpButton = (props) =>
+            <button type="button" onClick={=>
+              {alert} = require 'modal-form/dialog'
+              {Markdown} = require 'markdownz'
+              console.log {Markdown}
+              alert <Markdown>{@props.workflow.tasks[@props.workflow.first_task].help}</Markdown>
+            }>
+              {props.children}
+            </button>
+
+          <div className="pulsar-hunters-feedback" data-is-correct={subjectClass? and userFoundPulsar || null}>
+            {if subjectClass in ['KNOWN', 'DISC']
+              if userFoundPulsar
+                <p>Congratulations! You’ve successfully spotted a known pulsar. Keep going to find one we don’t already know about.</p>
+              else
+                <p>This was actually a known pulsar. <HelpButton>Click here</HelpButton> to see some examples of known pulsars.</p>
+            else if subjectClass in ['FAKE']
+              if userFoundPulsar
+                <p>Congratulations! You’ve successfully spotted a simulated pulsar. Keep going to find a real, undiscovered pulsar.</p>
+              else
+                <p>This was a simulated pulsar. <HelpButton>Click here</HelpButton> to see some examples of known pulsars.</p>}
+          </div>
+
+      else if @state.expertClassification?
         <div className="has-expert-classification">
           Expert classification available.{' '}
           {if @state.showingExpertClassification
@@ -250,50 +279,36 @@ Classifier = React.createClass
     </div>
 
   renderExpertOptions: ->
-    if @props.project?
-      getUserRoles = @props.project.get 'project_roles'
-        .then (projectRoles) =>
-          getProjectRoleHavers = Promise.all projectRoles.map (projectRole) =>
-            projectRole.get 'owner'
-          getProjectRoleHavers
-            .then (projectRoleHavers) =>
-              (projectRoles[i].roles for user, i in projectRoleHavers when user is @props.user)
-            .then (setsOfUserRoles) =>
-              [[], setsOfUserRoles...].reduce (set, next) =>
-                set.concat next
-
-      <PromiseRenderer promise={getUserRoles}>{(userRoles) =>
-        if isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
+    return unless @props.expertClassifier
+    <TriggeredModalForm trigger={
+      <i className="fa fa-cog fa-fw"></i>
+    }>
+      {if 'owner' in @props.userRoles or 'expert' in @props.userRoles
+        <p>
+          <label>
+            <input type="checkbox" checked={@props.classification.gold_standard} onChange={@handleGoldStandardChange} />{' '}
+            Gold standard mode
+          </label>{' '}
           <TriggeredModalForm trigger={
-            <i className="fa fa-cog fa-fw"></i>
+            <i className="fa fa-question-circle"></i>
           }>
-            {if 'owner' in userRoles or 'expert' in userRoles
-              <p>
-                <label>
-                  <input type="checkbox" checked={@props.classification.gold_standard} onChange={@handleGoldStandardChange} />{' '}
-                  Gold standard mode
-                </label>{' '}
-                <TriggeredModalForm trigger={
-                  <i className="fa fa-question-circle"></i>
-                }>
-                  <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
-                </TriggeredModalForm>
-              </p>}
-
-              {if isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles
-                <p>
-                  <label>
-                    <input type="checkbox" checked={@props.demoMode} onChange={@handleDemoModeChange} />{' '}
-                    Demo mode
-                  </label>{' '}
-                  <TriggeredModalForm trigger={
-                    <i className="fa fa-question-circle"></i>
-                  }>
-                    <p>In demo mode, classifications <strong>will not be saved</strong>. Use this for quick, inaccurate demos of the classification interface.</p>
-                  </TriggeredModalForm>
-                </p>}
+            <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
           </TriggeredModalForm>
-      }</PromiseRenderer>
+        </p>}
+
+        {if isAdmin() or 'owner' in @props.userRoles or 'collaborator' in @props.userRoles
+          <p>
+            <label>
+              <input type="checkbox" checked={@props.demoMode} onChange={@handleDemoModeChange} />{' '}
+              Demo mode
+            </label>{' '}
+            <TriggeredModalForm trigger={
+              <i className="fa fa-question-circle"></i>
+            }>
+              <p>In demo mode, classifications <strong>will not be saved</strong>. Use this for quick, inaccurate demos of the classification interface.</p>
+            </TriggeredModalForm>
+          </p>}
+    </TriggeredModalForm>
 
   # Whenever a subject image is loaded in the annotator, record its size at that time.
   handleSubjectImageLoad: (e, frameIndex) ->
@@ -322,7 +337,7 @@ Classifier = React.createClass
   completeClassification: ->
     @props.classification.update
       completed: true
-      'metadata.session': getSessionID().id
+      'metadata.session': getSessionID()
       'metadata.finished_at': (new Date).toISOString()
       'metadata.viewport':
         width: innerWidth
@@ -357,11 +372,18 @@ module.exports = React.createClass
   getInitialState: ->
     workflow: null
     subject: null
+    expertClassifier: null
+    userRoles: []
 
   componentDidMount: ->
+    @checkExpertClassifier()
     @loadClassification @props.classification
 
   componentWillReceiveProps: (nextProps) ->
+    if @props.user isnt nextProps.user
+      @setState expertClassifier: null
+      @checkExpertClassifier nextProps
+
     unless nextProps.classification is @props.classification
       @loadClassification nextProps.classification
 
@@ -380,8 +402,29 @@ module.exports = React.createClass
       # TODO: Support multi-subject classifications in the future.
       @setState {subject}
 
+  checkExpertClassifier: (props = @props) ->
+    if props.project and props.user and @state.expertClassifier is null
+      getUserRoles = props.project.get('project_roles', user_id: props.user.id)
+        .then (projectRoles) =>
+          getProjectRoleHavers = Promise.all projectRoles.map (projectRole) =>
+            projectRole.get 'owner'
+          getProjectRoleHavers
+            .then (projectRoleHavers) =>
+              (projectRoles[i].roles for user, i in projectRoleHavers when user is props.user)
+            .then (setsOfUserRoles) =>
+              [[], setsOfUserRoles...].reduce (set, next) =>
+                set.concat next
+
+      getUserRoles.then (userRoles) =>
+        expertClassifier = isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles or 'expert' in userRoles
+        @setState {expertClassifier, userRoles}
+
   render: ->
     if @state.workflow? and @state.subject?
-      <Classifier {...@props} workflow={@state.workflow} subject={@state.subject} />
+      <Classifier {...@props}
+        workflow={@state.workflow}
+        subject={@state.subject}
+        expertClassifier={@state.expertClassifier}
+        userRoles={@state.userRoles} />
     else
       <span>Loading classifier...</span>

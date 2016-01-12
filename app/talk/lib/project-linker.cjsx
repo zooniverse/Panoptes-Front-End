@@ -24,6 +24,7 @@ module?.exports = React.createClass
   loadMoreProjects: (page = 1, newProjects = [], load = 10) ->
     apiClient.type('projects').get({
       launch_approved: true,
+      cards: true
       page: page,
       page_size: 20
     })
