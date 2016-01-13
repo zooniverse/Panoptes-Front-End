@@ -79,7 +79,7 @@ module.exports = React.createClass
     document.documentElement.classList.remove 'on-home-page'
 
   lastFourProjects: ->
-    @props.user.get("project_preferences", page_size: 4, sort: '+updated_at')
+    @props.user.get("project_preferences", page_size: 4, sort: '-updated_at')
 
   render: ->
     aboutItems = ['contribute', 'explore', 'collaborate', 'discover']

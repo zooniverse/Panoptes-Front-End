@@ -54,6 +54,12 @@ module.exports = React.createClass
                     now = new Date().toISOString()
                     if user?
                       user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
+                        projectPreferences ?= apiClient.type('project_preferences').create({
+                          links: {
+                            project: project.id
+                          },
+                          preferences: {}
+                        })
                         projectPreferences.update 'preferences.tutorial_completed_at': now
                         projectPreferences.save()
                     else

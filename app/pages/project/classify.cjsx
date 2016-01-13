@@ -70,6 +70,7 @@ module.exports = React.createClass
     workflow: null
     subject: null
     classification: null
+    projectIsComplete: false
     demoMode: sessionDemoMode
 
   propChangeHandlers:
@@ -77,58 +78,55 @@ module.exports = React.createClass
     query: 'loadAppropriateClassification'
 
   componentDidMount: () ->
-    @getCurrentWorkflowID().then (id) =>
-      @getWorkflow @props.project, id
-        .then (workflow) =>
-          @setState
-            workflow: workflow
+    @getCurrentWorkflow().then (workflow) =>
+      @setState {workflow}
 
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
     # console.log 'Loading appropriate classification'
-    @promiseToSetState classification: @getCurrentWorkflowID(props).then (workflowID) =>
-      # console.log 'Loading classification for workflow', workflowID
+    @promiseToSetState classification: @getCurrentWorkflow(props).then (workflow) =>
+      # console.log 'Loading classification for workflow', workflow.id
       # Create a classification if it doesn't exist for the chosen workflow, then resolve our state with it.
-      currentClassifications.forWorkflow[workflowID] ?= @createNewClassification props.project, workflowID
-      currentClassifications.forWorkflow[workflowID]
+      currentClassifications.forWorkflow[workflow.id] ?= @createNewClassification props.project, workflow
+      currentClassifications.forWorkflow[workflow.id]
 
-  getCurrentWorkflowID: (props = @props) ->
-    getWorkflowID = if props.location.query?.workflow?
+  getCurrentWorkflow: (props = @props) ->
+    if props.location.query?.workflow?
       # console.log 'Workflow specified as', props.query.workflow
       # Prefer the workflow specified in the query.
-      Promise.resolve props.location.query.workflow
+      @getWorkflow props.project, props.location.query.workflow
     else
       # If no workflow is specified, pick a random one and record it for later.
       # When we send this classification, we'll clear this value to select a new random workflow.
-      currentWorkflowForProject[props.project.id] ?= @getRandomWorkflowID props.project
+      currentWorkflowForProject[props.project.id] ?= @getRandomWorkflow props.project
       currentWorkflowForProject[props.project.id]
 
-  getRandomWorkflowID: (project) ->
-    project.get('workflows', active: true).then (workflows) ->
+  getRandomWorkflow: (project) ->
+    project.get('workflows', active: true).then (workflows) =>
       if workflows.length is 0
         throw new Error "No workflows for project #{project.id}"
         project.uncacheLink 'workflows'
       else
+        projectIsComplete = (true for workflow in workflows when not workflow.finished_at?).length is 0
+        @setState {projectIsComplete}
         randomIndex = Math.floor Math.random() * workflows.length
         # console.log 'Chose random workflow', workflows[randomIndex].id
-        workflows[randomIndex].id
+        workflows[randomIndex]
 
-  createNewClassification: (project, workflowID) ->
-    workflow = @getWorkflow project, workflowID
-    subject = workflow.then (workflow) =>
-      @setState {workflow}
-      # A subject set is only specified if the workflow is grouped.
-      getSubjectSet = if workflow.grouped
-        workflow.get('subject_sets').then (subjectSets) =>
-          randomIndex = Math.floor Math.random() * subjectSets.length
-          subjectSets[randomIndex]
-      else
-        Promise.resolve()
+  createNewClassification: (project, workflow) ->
+    @setState {workflow}
+    # A subject set is only specified if the workflow is grouped.
+    getSubjectSet = if workflow.grouped
+      workflow.get('subject_sets').then (subjectSets) =>
+        randomIndex = Math.floor Math.random() * subjectSets.length
+        subjectSets[randomIndex]
+    else
+      Promise.resolve()
 
-      getSubjectSet.then (subjectSet) =>
-        @getNextSubject project, workflow, subjectSet
+    loadSubject = getSubjectSet.then (subjectSet) =>
+      @getNextSubject project, workflow, subjectSet
 
-    Promise.all([workflow, subject]).then ([workflow, subject]) =>
+    loadSubject.then (subject) =>
       # console.log 'Creating a new classification'
       classification = apiClient.type('classifications').create
         annotations: []
@@ -154,8 +152,7 @@ module.exports = React.createClass
   getWorkflow: (project, workflowID) ->
     # console.log 'Getting workflow', workflowID
     # We could just get the workflow directly, but this way we ensure the workflow belongs to the project.
-    project.get('workflows').then (workflows) ->
-      workflow = (workflow for workflow in workflows when workflow.id is workflowID)[0]
+    project.get('workflows', id: workflowID).then ([workflow]) ->
       unless workflow?
         throw new Error "No workflow #{workflowID} for project #{project.id}"
       workflow
@@ -209,7 +206,8 @@ module.exports = React.createClass
 
   render: ->
     <div className="classify-page content-container">
-      <FinishedBanner project={@props.project} />
+      {if @state.projectIsComplete
+        <FinishedBanner project={@props.project} />}
 
       {if @state.classification?
         <Classifier
@@ -312,9 +310,9 @@ module.exports = React.createClass
         </SignInPrompt>
 
   loadAnotherSubject: ->
-    @getCurrentWorkflowID(@props).then (workflowID) =>
+    @getCurrentWorkflow(@props).then (workflow) =>
       # Forget the old classification so a new one will load.
-      currentClassifications.forWorkflow[workflowID] = null
+      currentClassifications.forWorkflow[workflow.id] = null
       # Forget the old workflow, unless it was specified, so we'll get a random one next time.
       unless @props.location.query?.workflow?
         currentWorkflowForProject[@props.project.id] = null
