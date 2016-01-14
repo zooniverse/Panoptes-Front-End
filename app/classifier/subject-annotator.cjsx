@@ -135,7 +135,7 @@ module.exports = React.createClass
 
         else if @props.subject.retired
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
-            Retired!
+            Finished!
             {if @state.showWarning
               <Tooltip attachment="top left" targetAttachment="middle right">
                 <p>This subject already has enough classifications, so yours won’t be used in its analysis!</p>
