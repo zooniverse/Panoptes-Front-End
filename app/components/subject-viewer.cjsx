@@ -179,7 +179,7 @@ module.exports = React.createClass
       when 'image'
         <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
       when 'video'
-        <video src={src} type={"#{type}/#{format}"} controls onLoad={@handleLoad}>
+        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} onCanPlayThrough={@handleLoad} onEnded={@endVideo} onTimeUpdate={@updateScrubber}>
           Your browser does not support the video format. Please upgrade your browser.
         </video>
 
