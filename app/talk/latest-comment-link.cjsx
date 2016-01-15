@@ -1,5 +1,6 @@
 React = require 'react'
 apiClient = require '../api/client'
+talkClient = require '../api/talk'
 {timeAgo} = require './lib/time'
 DisplayRoles = require './lib/display-roles'
 Avatar = require '../partials/avatar'

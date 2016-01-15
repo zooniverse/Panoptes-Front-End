@@ -1,4 +1,5 @@
 React = require 'react'
+talkClient = require '../api/talk'
 PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 

@@ -1,4 +1,5 @@
 React = require 'react'
+talkClient = require '../api/talk'
 {Link} = require 'react-router'
 PromiseRenderer = require '../components/promise-renderer'
 merge = require 'lodash.merge'

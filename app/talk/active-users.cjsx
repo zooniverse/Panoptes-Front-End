@@ -2,6 +2,7 @@ React = require 'react'
 talkClient = require '../api/talk'
 {sugarClient} = require '../api/sugar'
 apiClient = require '../api/client'
+{sugarApiClient} = require '../api/sugar'
 {Link} = require 'react-router'
 Paginator = require './lib/paginator'
 
