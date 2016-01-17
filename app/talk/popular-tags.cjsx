@@ -1,5 +1,5 @@
 React = require 'react'
-talkClient = require '../api/talk'
+talkClient = require 'panoptes-client/lib/talk-client'
 PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 

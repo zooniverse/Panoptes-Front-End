@@ -1,6 +1,6 @@
 React = require 'react'
 PromiseToSetState = require '../lib/promise-to-set-state'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 SubjectViewer = require './subject-viewer'
 AggregateMark = require '../classifier/drawing-tools/aggregate-mark'
 ClassificationSummary = require '../classifier/classification-summary'

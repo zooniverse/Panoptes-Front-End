@@ -2,7 +2,7 @@ React = require 'react'
 {Link} = require 'react-router'
 {Markdown} = require 'markdownz'
 moment = require 'moment'
-talkClient = require '../../api/talk'
+talkClient = require 'panoptes-client/lib/talk-client'
 Loading = require '../../components/loading-indicator'
 Avatar = require '../../partials/avatar'
 

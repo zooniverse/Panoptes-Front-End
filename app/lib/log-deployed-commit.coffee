@@ -1,4 +1,4 @@
-config = require '../api/config'
+config = require 'panoptes-client/lib/config'
 
 module.exports = ->
   return unless fetch? # No biggie.

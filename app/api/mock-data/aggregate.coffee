@@ -1,4 +1,4 @@
-apiClient = require '../client'
+apiClient = require 'panoptes-client/lib/api-client'
 
 module.exports = apiClient.type('aggregate').create
   id: 'MOCK_AGGREGATE_FOR_AGGREGATE_VIEW'

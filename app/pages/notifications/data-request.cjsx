@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient =  require '../../api/client'
+apiClient =  require 'panoptes-client/lib/api-client'
 moment = require 'moment'
 
 module?.exports = React.createClass
