@@ -13,14 +13,14 @@ module.exports = React.createClass
 
   statics:
     checkIfCompleted: (user, project) ->
-      getCompletedAt = if user?
+      getCompletedAt = if completedThisSession[project.id]?
+        Promise.resolve new Date completedThisSession[project.id]
+      else if user?
         user.get 'project_preferences', project_id: project.id
           .catch =>
             []
           .then ([projectPreferences]) =>
             new Date projectPreferences?.preferences?.tutorial_completed_at
-      else
-        Promise.resolve new Date completedThisSession[project.id]
 
       getCompletedAt.then (completedAt) =>
         if isNaN completedAt.valueOf()
@@ -52,6 +52,7 @@ module.exports = React.createClass
                     null # We don't really care if the user canceled or completed the tutorial.
                   .then =>
                     now = new Date().toISOString()
+                    completedThisSession[project.id] = now
                     if user?
                       user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
                         projectPreferences ?= apiClient.type('project_preferences').create({
@@ -62,8 +63,6 @@ module.exports = React.createClass
                         })
                         projectPreferences.update 'preferences.tutorial_completed_at': now
                         projectPreferences.save()
-                    else
-                      completedThisSession[project.id] = now
 
     startIfNecessary: (user, project) ->
       @checkIfCompleted user, project
