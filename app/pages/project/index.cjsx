@@ -9,6 +9,7 @@ HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = window.api = require '../../api/client'
 {sugarClient} = require '../../api/sugar'
 LoadingIndicator = require '../../components/loading-indicator'
+PotentialFieldGuide = require './potential-field-guide'
 
 SOCIAL_ICONS =
   'bitbucket.com/': 'bitbucket'
@@ -135,8 +136,9 @@ ProjectPage = React.createClass
 
           {React.cloneElement(@props.children, {owner: owner, project: @props.project, user: @props.user})}
           {unless @props.project.launch_approved or @props.project.beta_approved
-            <Translate className="project-disclaimer" content="project.disclaimer" component="p" />
-          }
+            <Translate className="project-disclaimer" content="project.disclaimer" component="p" />}
+
+          <PotentialFieldGuide project={@props.project} />
         </div>
       }</PromiseRenderer>
     }</ChangeListener>

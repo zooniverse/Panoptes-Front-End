@@ -1,0 +1,97 @@
+.field-guide-pullout
+  background: rgba(white, 0.95)
+  bottom: 3vh !important // Override default
+  box-shadow: 0 0 15px rgba(black, 0.3)
+  color: black
+  font-size: 14px
+  transition: transform 150ms ease
+  width: 40vw
+  top: 3vh !important // Override default
+
+  img
+    max-width: 100%
+
+.field-guide-pullout-toggle
+  @extends $reset-button
+  background: inherit
+  border-radius: 0.5em 0.5em 0 0
+  color: inherit
+  letter-spacing: 0.1ch
+  padding: 0 1em
+  position: absolute
+  right: 100%
+  text-transform: uppercase
+  top: 33%
+  transform: rotate(-90deg) translateX(50%)
+  transform-origin: right bottom
+  white-space: nowrap
+
+.field-guide
+  display: flex
+  flex-direction: column
+  max-height: 100%
+
+  > header
+    background: black
+    color: white
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    letter-spacing: 0.2ch
+    padding: 1em
+    text-align: center
+    text-transform: uppercase
+
+.field-guide-header-button
+  @extends $reset-button
+
+  &[disabled]
+    visibility: hidden
+
+.field-guide-item
+  overflow: auto
+
+  > header
+    margin: 1em 0
+
+    &:empty
+      display: none
+
+.field-guide-item-icon-container
+  text-align: center
+
+.field-guide-item-icon
+  border-radius: 50%
+
+.field-guide-item-title-container
+  font-size: 2em
+  text-align: center
+
+.field-guide-item-content-container
+  padding: 0 2em
+
+.field-guide-menu
+  margin: 0
+  padding: 0
+
+  > li
+    display: block
+
+.field-guide-menu-item
+  @extends $reset-button
+  display: block
+  padding: 0.8em 1.6em
+  text-align: left
+  width: 100%
+
+  :nth-child(even) > &
+    background: rgba(MAIN_HIGHLIGHT, 0.3)
+
+.field-guide-menu-item-icon
+  border-radius: 50%
+  background: rgba(gray, 0.3)
+  vertical-align: middle
+  margin-right: 1em
+
+.field-guide-menu-item-title
+  font-weight: bold
