@@ -84,19 +84,20 @@ module.exports = React.createClass
       #window.location.search = @computeQueryString null
 
   searchProjectName: (value, callback) ->
-    unless value is ''
-      apiClient.type('projects').get(search: "#{value}", page_size: 10)
-        .then (projects) =>
-          opts = projects.map (project) ->
-            {
-              value: project.id,
-              label: project.display_name,
-              project: project
-            }
+    return callback null, { options: [] } if value is ''
 
-          callback null, {
-            options: opts
+    apiClient.type('projects').get(search: "#{value}", page_size: 10)
+      .then (projects) =>
+        opts = projects.map (project) ->
+          {
+            value: project.id,
+            label: project.display_name,
+            project: project
           }
+
+        callback null, {
+          options: opts
+        }
 
   currentPage: ->
     routes = @getRoutes()
