@@ -113,20 +113,39 @@ $survey-task-pill-button
   border: solid 1px rgba(24, 24, 24, 1)
   border-radius: 8px
   display: flex
-  flex-flow: column wrap
-  height: 440px
+  flex-wrap: wrap
   padding: 4px
-  overflow: auto
-  min-width: 400px;
 
   > *
     margin: 0 2px 2px 0
     position: relative
 
+  &[data-breakpoint="Infinity"] > *,
+  &[data-breakpoint="40"] > *
+    flex-basis: calc(33.33% - 2px)
+
+  &[data-breakpoint="20"] > *,
+  &[data-breakpoint="10"] > *
+    flex-basis: calc(50% - 2px)
+
+  &[data-breakpoint="5"] > *
+    flex-basis: calc(100% - 2px)
+
+  &[data-breakpoint="40"],
+  &[data-breakpoint="20"],
+  &[data-breakpoint="10"],
+  &[data-breakpoint="5"]
+    .survey-task-chooser-choice
+      align-items: center
+      justify-content: flex-start
+
 .survey-task-chooser-choice
   @extends $reset-button
   background: rgba(64, 64, 64, 1)
   color: white
+  display: flex
+  justify-content: center
+  width: 100%
 
   &:hover
     background: rgba(102, 102, 102, 1)
