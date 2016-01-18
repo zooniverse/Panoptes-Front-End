@@ -125,7 +125,7 @@ counterpart.registerTranslations 'en',
 
       The Data Controller is the Department of Physics, University of Oxford. For a copy of the information we hold on you please contact the project team at the address below:
 
-      Dr Chris Lintott
+      Professor Chris Lintott
       Oxford Astrophysics
       Denys Wilkinson Building
       Keble Road
