@@ -73,6 +73,11 @@ module.exports = React.createClass
       @setState listPromise: apiClient.type('projects').get @buildQuery null
       #window.location.search = @computeQueryString null
 
+  setSort: (newSort) ->
+    @setState sort: newSort, ->
+      @setState listPromise: apiClient.type('projects').get @buildQuery null
+      #window.location.search = @computeQueryString null
+
   filterDiscipline: (discipline) ->
     @setState tagFilter: discipline, ->
       @setState listPromise: apiClient.type('projects').get @buildQuery null
