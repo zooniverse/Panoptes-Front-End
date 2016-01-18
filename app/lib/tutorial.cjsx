@@ -21,9 +21,11 @@ module.exports = React.createClass
             []
           .then ([projectPreferences]) =>
             new Date projectPreferences?.preferences?.tutorial_completed_at
+      else
+        Promise.resolve null
 
       getCompletedAt.then (completedAt) =>
-        if isNaN completedAt.valueOf()
+        if isNaN completedAt?.valueOf()
           false
         else
           # TODO: Check if the completion date is greater than the tutorial's modified_at date.
