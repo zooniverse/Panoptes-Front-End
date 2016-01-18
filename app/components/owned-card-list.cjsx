@@ -62,9 +62,8 @@ module.exports = React.createClass
     return newQuery
 
   computeQueryString: (query) ->
-    query = @buildQuery query
     accum = []
-    #query = @buildQuery null
+    query = @buildQuery null
     for own key of query
       accum.push([key, '=', query[key]].join(''))
     return accum.join('&')
@@ -130,8 +129,7 @@ module.exports = React.createClass
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
             <div>
-              <div className="resource-results-counter card-list">
-                {if meta
+              <div className="resource-results-counter card-list" style={{overflow: 'visible'}}> {if meta
                   pageStart = meta.page * meta.page_size - meta.page_size + 1
                   pageEnd = Math.min(meta.page * meta.page_size, meta.count)
                   count = meta.count

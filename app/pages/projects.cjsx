@@ -20,11 +20,10 @@ module.exports = React.createClass
   title: 'Projects'
 
   listProjects: ->
-    query = {include: 'avatar'}
-    query.cards = true
-
-    if !apiClient.params.admin
-      query.launch_approved = true
+    query =
+      include: 'avatar'
+      cards: true
+      launch_approved: !apiClient.params.admin
 
     apiClient.type('projects').get Object.assign {}, query, @props.location.query
 
