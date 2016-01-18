@@ -62,6 +62,10 @@ EditProjectPage = React.createClass
           <li><Link to={@labPath('/collaborators')} activeClassName='active' className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
             Collaborators
           </Link></li>
+          {if 'field guide' in (@props.project.experimental_tools ? [])
+            <li><Link to={@labPath('/guide')} activeClassName='active' className="nav-list-item" title="Create a persistent guide that can be viewed within your project">
+              Field guide
+            </Link></li>}
           {if 'tutorial' in (@props.project.experimental_tools ? [])
             <li><Link to={@labPath('/tutorial')} activeClassName='active' className="nav-list-item" title="Create a pop-up tutorial for your project’s classification interface">
               Tutorial

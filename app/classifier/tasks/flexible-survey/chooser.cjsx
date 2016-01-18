@@ -76,7 +76,7 @@ module.exports = React.createClass
           </TriggeredModalForm>}
       </div>
 
-      <div className="survey-task-chooser-choices" data-breakpoint={breakpoint}>
+      <div className="flex-survey-task-chooser-choices" data-breakpoint={breakpoint}>
         {if filteredChoices.length is 0
           <div>
             <em>No matches.</em>
@@ -84,7 +84,7 @@ module.exports = React.createClass
         else
           for choiceID, i in filteredChoices
             choice = @props.task.choices[choiceID]
-            <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
+            <button key={choiceID + i} type="button" className="flex-survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
               {unless choice.images.length is 0
                 <span className="survey-task-chooser-choice-thumbnail-container">
                   <img src={@props.task.images[choice.images[0]]} alt={choice.label} className="survey-task-chooser-choice-thumbnail" />
