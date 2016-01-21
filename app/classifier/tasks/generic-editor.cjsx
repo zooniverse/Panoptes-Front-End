@@ -195,6 +195,7 @@ module.exports = React.createClass
     alert (resolve) =>
       <ChangeListener target={@props.workflow}>{=>
         <DrawingTaskDetailsEditor
+          project={@props.project}
           workflow={@props.workflow}
           task={@props.task}
           toolIndex={toolIndex}

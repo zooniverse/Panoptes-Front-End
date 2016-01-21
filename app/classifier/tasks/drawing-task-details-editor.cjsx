@@ -4,6 +4,10 @@ AutoSave = require '../../components/auto-save'
 module.exports = React.createClass
   displayName: 'DrawingTaskDetailsEditor'
 
+  propTypes:
+    project: React.PropTypes.object.isRequired
+    task: React.PropTypes.object.isRequired
+
   getDefaultProps: ->
     workflow: null
     task: null
@@ -38,14 +42,35 @@ module.exports = React.createClass
       </div>
 
       <div className="commands columns-container">
+        <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s).">
+          <i className="fa fa-question-circle fa-2x"></i>
+          <br />
+          <small><strong>Question</strong></small>
+        </button>
+        {
+          if @canUseTask(@props.project, "text")
+            <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
+              <i className="fa fa-file-text-o fa-2x"></i>
+              <br />
+              <small><strong>Text</strong></small>
+            </button>
+        }
+        <br />
+
         <button type="button" className="standard-button" onClick={@props.onClose}>Close</button>
-        <button type="button" className="major-button" onClick={@handleAddTask}>Add task</button>
       </div>
     </div>
 
-  handleAddTask: ->
-    SingleChoiceTask = require './single'
-    @props.task.tools[@props.toolIndex].details.push SingleChoiceTask.getDefaultTask()
+  canUseTask: (task)->
+    task in @props.project.experimental_tools
+
+  handleAddTask: (task) ->
+    switch task
+      when 'single' 
+        TaskChoice = require './single'
+      when 'text'
+        TaskChoice = require './text'
+    @props.task.tools[@props.toolIndex].details.push TaskChoice.getDefaultTask()
     @props.workflow.update 'tasks'
     @props.workflow.save()
 
