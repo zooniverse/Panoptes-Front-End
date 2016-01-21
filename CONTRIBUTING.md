@@ -20,5 +20,6 @@ Say you have some documentation or code you want to add:
 0. Make sure the tests still pass by running `bundle exec rspec` in our Rails projects or `npm test` in the JavaScript ones.
 0. Add tests if you introduced new functionality.
 0. Commit your changes. Try to make your commit message [informative](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html), but we're not sticklers about it. Do try to to add `Closes #issue` or `Fixes #issue` somewhere in your message if it's addressing a specific open issue.
-0. Submit a Pull Request
+0. Submit a Pull Request (PR)
 0. Wait for feedback or a merge!
+0. If your PR is open for a while, it may get out of synch with the master branch. In that case, pull the latest master branch and run `git rebase master` – while in your _feature_ branch – to update your feature branch to the latest master. You may need to use `git push --force-with-lease` to update your PR after rebasing.
