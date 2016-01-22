@@ -38,6 +38,7 @@ workflow = apiClient.type('workflows').create
       question: 'Where shall we start?'
       help: 'You don’t need help with this.'
       answers: [
+        {label: 'Everything all at once! :skull:', next: 'combo'}
         {label: 'Crop the image', next: 'crop'}
         {label: 'Enter some text', next: 'write'}
         {label: 'Single-answer question', next: 'ask'}
@@ -46,6 +47,18 @@ workflow = apiClient.type('workflows').create
         {label: 'Survey the image', next: 'survey'}
         {label: 'We’re done here.', next: null}
       ]
+
+    combo:
+      type: 'combo'
+      tasks: [
+        'crop'
+        'write'
+        'ask'
+        'features'
+        'draw'
+        'survey'
+      ]
+      next: 'init'
 
     crop:
       type: 'crop'
