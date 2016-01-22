@@ -61,7 +61,7 @@ module.exports = React.createClass
 
   componentDidUpdate: ->
     for frame of @props.subject.locations
-      @refs['videoPlayer'+frame].playbackRate = @state.videoStates[frame]?.playbackRate || 1
+      @refs['videoPlayer'+frame]?.playbackRate = @state.videoStates[frame]?.playbackRate || 1
 
   willReceiveProps: (nextProps) ->
     # The default state for subjects is flipbook if allowed
