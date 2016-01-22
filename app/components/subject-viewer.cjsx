@@ -166,7 +166,7 @@ module.exports = React.createClass
     </div>
 
   renderFrame: (frame) ->
-    <FrameViewer key={frame} frame={frame} subject={@props.subject} workflow={@props.workflow} classification={@props.classification} onLoad={@props.onLoad} frameWrapper={@props.frameWrapper}  />
+    <FrameViewer key={frame} frame={frame} project={@props.project} classification={@props.classification} subject={@props.subject} workflow={@props.workflow} classification={@props.classification} annotation={@props.annotation} onLoad={@props.onLoad} frameWrapper={@props.frameWrapper}  />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
@@ -223,15 +223,3 @@ module.exports = React.createClass
         </tbody>
       </table>
     </div>
-
-  handleLoad: (e) ->
-    frameDimensions = @state.frameDimensions
-    frameDimensions[e.target.src] =
-      width: e.target.naturalWidth
-      height: e.target.naturalHeight
-
-    @setState
-      loading: false
-      frameDimensions: frameDimensions
-
-    @props.onLoad? arguments...

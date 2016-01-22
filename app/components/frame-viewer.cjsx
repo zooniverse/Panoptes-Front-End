@@ -38,7 +38,6 @@ module.exports = React.createClass
     @refs.videoScrubber?.value = 0
 
   componentDidUpdate: ->
-    console.log 'cdu', @state.playbackRate
     @refs.videoPlayer?.playbackRate = @state.playbackRate
 
   render: () ->
@@ -144,7 +143,6 @@ module.exports = React.createClass
     scrubber.value = player.currentTime
 
   handleLoad: (e) ->
-    console.log 'FrameViewer', 'handleLoad'
     frameDimensions = @state.frameDimensions
     frameDimensions[e.target.src] =
       width: e.target.naturalWidth
