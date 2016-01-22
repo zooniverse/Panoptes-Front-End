@@ -1,10 +1,10 @@
 React = require 'react'
-LoadingIndicator = require '../components/loading-indicator'
 FavoritesButton = require '../collections/favorites-button'
 alert = require '../lib/alert'
 {Markdown} = require 'markdownz'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
+FrameViewer = require './frame-viewer'
 
 NOOP = Function.prototype
 
@@ -19,7 +19,6 @@ subjectHasMixedLocationTypes = (subject) ->
 
 ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
-SUBJECT_STYLE = display: 'block'
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'
@@ -53,15 +52,6 @@ module.exports = React.createClass
     playbackRate: 1
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
-    videoStates: []
-
-  componentDidMount: ->
-    for frame of @props.subject.locations
-      @refs['videoScrubber'+frame]?.value = 0
-
-  componentDidUpdate: ->
-    for frame of @props.subject.locations
-      @refs['videoPlayer'+frame]?.playbackRate = @state.videoStates[frame]?.playbackRate || 1
 
   willReceiveProps: (nextProps) ->
     # The default state for subjects is flipbook if allowed
@@ -82,11 +72,11 @@ module.exports = React.createClass
     mainDisplay = ''
     if @state.inFlipbookMode
       {type, format, src} = getSubjectLocation @props.subject, @state.frame
-      mainDisplay = @renderFrame type, format, src, @state.frame
+      mainDisplay = @renderFrame @state.frame
     else
       mainDisplay = for frame of @props.subject.locations
         {type, format, src} = getSubjectLocation @props.subject, frame
-        @renderFrame type, format, src, frame
+        @renderFrame frame
 
     tools = switch type
       when 'image'
@@ -148,10 +138,6 @@ module.exports = React.createClass
       <div className="subject-container" style={CONTAINER_STYLE}>
         {mainDisplay}
         {@props.children}
-        {if @state.loading
-          <div className="loading-cover" style={@constructor.overlayStyle}>
-            <LoadingIndicator />
-          </div>}
       </div>
 
       <div className="subject-tools">
@@ -179,49 +165,8 @@ module.exports = React.createClass
       </div>
     </div>
 
-  renderFrame: (type, format, src, frame) ->
-    FrameWrapper = @props.frameWrapper
-    frameDisplay = switch type
-      when 'image'
-        <img key={frame} className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
-      when 'video'
-        <div key={frame} className="subject-video-frame">
-          <video ref={'videoPlayer'+frame} src={src} type={"#{type}/#{format}"} onCanPlayThrough={@handleLoad} onEnded={@endVideo.bind this, frame} onTimeUpdate={@updateScrubber.bind this, frame}>
-            Your browser does not support the video format. Please upgrade your browser.
-          </video>
-          <span className="subject-video-controls">
-            <span className="subject-frame-play-controls">
-              {if @state.videoStates[frame]?.playing
-                <button type="button" className="secret-button" aria-label="Pause" onClick={@playVideo.bind this, frame, false}>
-                  <i className="fa fa-pause fa-fw"></i>
-                </button>
-              else
-                <button type="button" className="secret-button" aria-label="Play" onClick={@playVideo.bind this, frame, true}>
-                  <i className="fa fa-play fa-fw"></i>
-                </button>}
-            </span>
-            <input type="range" className="video-scrubber" ref={'videoScrubber'+frame} min="0" step="any" onChange={@seekVideo.bind this, frame} />
-            <span className="video-speed">
-            Speed:
-              {for rate, i in [0.25, 0.5, 1]
-                checked = rate == @state.videoStates[frame]?.playbackRate or (not @state.videoStates[frame]?.playbackRate and rate is 1)
-                <label key="rate-#{i}" className="secret-button">
-                  <input type="radio" name={'playbackRate'+frame} value={rate} checked={checked} onChange={(e) => @setPlayRate e, frame } />
-                  <span>
-                    {rate}&times;
-                  </span>
-                </label>
-              }
-            </span>
-          </span>
-        </div>
-
-    if FrameWrapper
-      <FrameWrapper key={frame} frame={frame} naturalWidth={@state.frameDimensions[src]?.width} naturalHeight={@state.frameDimensions[src]?.height} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation}>
-        {frameDisplay}
-      </FrameWrapper>
-    else
-      frameDisplay
+  renderFrame: (frame) ->
+    <FrameViewer key={frame} frame={frame} subject={@props.subject} workflow={@props.workflow} classification={@props.classification} onLoad={@props.onLoad} frameWrapper={@props.frameWrapper}  />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
@@ -278,43 +223,6 @@ module.exports = React.createClass
         </tbody>
       </table>
     </div>
-
-  playVideo: (frame, playing) ->
-    player = @refs['videoPlayer'+frame]
-    return unless player?
-    videoStates = @state.videoStates
-    videoStates[frame] = videoStates[frame] || {}
-    videoStates[frame].playing = playing
-    @setState {videoStates}
-    if playing
-      player.play()
-    else
-      player.pause()
-
-  setPlayRate: (e, frame) ->
-    # Yeah, updating arrays in @state is hard... this method is potentially open to race-conditions but currently in practice it's not a problem
-    videoStates = @state.videoStates
-    videoStates[frame] = videoStates[frame] || {}
-    videoStates[frame].playbackRate = parseFloat e.currentTarget.value
-    @setState {videoStates}
-
-  seekVideo: (frame) ->
-    player = @refs['videoPlayer'+frame]
-    scrubber = @refs['videoScrubber'+frame]
-    time = scrubber.value
-    player.currentTime = time
-
-  endVideo: (frame) ->
-    videoStates = @state.videoStates
-    videoStates[frame] = videoStates[frame] || {}
-    videoStates[frame].playing = false
-    @setState {videoStates}
-
-  updateScrubber: (frame) ->
-    player = @refs['videoPlayer'+frame]
-    scrubber = @refs['videoScrubber'+frame]
-    scrubber.setAttribute 'max', player.duration unless scrubber.getAttribute 'max'
-    scrubber.value = player.currentTime
 
   handleLoad: (e) ->
     frameDimensions = @state.frameDimensions
