@@ -23,6 +23,7 @@ module.exports =
     <Route path="register" component={require './partials/register-form'} />
   </Route>
   <Route path="privacy" component={require './pages/privacy-policy'} />
+  <Route path="security" component={require './pages/security'} />
 
   <Route path="users/:name" component={require './pages/profile'}>
     <IndexRoute component={require './pages/profile/feed'} />
