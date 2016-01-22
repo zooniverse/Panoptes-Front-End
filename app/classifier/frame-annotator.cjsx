@@ -80,7 +80,7 @@ module.exports = React.createClass
     x = (e.pageX - @state.sizeRect?.left) / scale.horizontal || 0
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
-  
+
   toggleWarning: ->
     @setState showWarning: not @state.showWarning
 
@@ -137,7 +137,7 @@ module.exports = React.createClass
             <PersistInsideSubject key={anyTaskName} {...hookProps} />}
         </svg>
         {@props.children}
-        
+
         {if @state.alreadySeen
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
             Already seen!
