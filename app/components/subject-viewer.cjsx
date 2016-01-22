@@ -96,7 +96,7 @@ module.exports = React.createClass
               <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
             </button>
         else
-          <span class="tools">
+          <span className="tools">
             {if @props.allowFlipbook and @props.allowSeparateFrames
               <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
                 <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
@@ -183,9 +183,9 @@ module.exports = React.createClass
     FrameWrapper = @props.frameWrapper
     frameDisplay = switch type
       when 'image'
-        <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
+        <img key={frame} className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
       when 'video'
-        <div className="subject-video-frame">
+        <div key={frame} className="subject-video-frame">
           <video ref={'videoPlayer'+frame} src={src} type={"#{type}/#{format}"} onCanPlayThrough={@handleLoad} onEnded={@endVideo.bind this, frame} onTimeUpdate={@updateScrubber.bind this, frame}>
             Your browser does not support the video format. Please upgrade your browser.
           </video>
@@ -217,7 +217,7 @@ module.exports = React.createClass
         </div>
 
     if FrameWrapper
-      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions[src]?.width} naturalHeight={@state.frameDimensions[src]?.height} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation}>
+      <FrameWrapper key={frame} frame={frame} naturalWidth={@state.frameDimensions[src]?.width} naturalHeight={@state.frameDimensions[src]?.height} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation}>
         {frameDisplay}
       </FrameWrapper>
     else

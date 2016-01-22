@@ -58,7 +58,7 @@ module.exports = React.createClass
       @updateSize()
 
   updateSize: ->
-    clientRect = @refs.sizeRect?.getDOMNode().getBoundingClientRect() # Read only
+    clientRect = @refs.sizeRect?.getBoundingClientRect() # Read only
     {left, right, top, bottom, width, height} = clientRect
     left += pageXOffset
     right += pageXOffset

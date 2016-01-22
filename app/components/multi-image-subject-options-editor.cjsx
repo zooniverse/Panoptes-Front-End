@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 ChangeListener = require './change-listener'
 
 module.exports = React.createClass
@@ -24,17 +25,17 @@ module.exports = React.createClass
   # Set relevant layout radio as checked. Must be a better way to do this, but setting defaultChecked on the radios in render() didn't seem to work
   updateRadios: () ->
     layout = @props.workflow.configuration?.multi_image_layout or @defaultLayout
-    @getDOMNode().querySelector('input[type="radio"][value="'+layout+'"]')?.defaultChecked = true;
+    ReactDOM.findDOMNode(this).querySelector('input[type="radio"][value="'+layout+'"]')?.defaultChecked = true;
 
   render: ->
     mode = @props.workflow.configuration?.multi_image_mode or @defaultMode
     <ChangeListener target={@props.workflow}>{ =>
       <div className="multi-image-subject-layout-editor">
         <div>
-          <select id="multi_image_mode" onChange={@handleSelectMode}>
-            <option value="flipbook" selected={mode is 'flipbook'}>Show flipbook</option>
-            <option value="separate" selected={mode is 'separate'}>Show separate frames</option>
-            <option value="flipbook_and_separate" selected={mode is 'flipbook_and_separate'}>Allow users to choose flipbook or separate frames</option>
+          <select id="multi_image_mode" onChange={@handleSelectMode} defaultValue={mode}>
+            <option value="flipbook">Show flipbook</option>
+            <option value="separate">Show separate frames</option>
+            <option value="flipbook_and_separate">Allow users to choose flipbook or separate frames</option>
           </select>
         </div>
         {if @props.workflow.configuration?.multi_image_mode is 'separate' or @props.workflow.configuration?.multi_image_mode is 'flipbook_and_separate'
