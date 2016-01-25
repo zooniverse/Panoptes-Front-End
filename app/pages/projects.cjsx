@@ -4,7 +4,7 @@ TitleMixin = require '../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list'
 {Link, Router} = require 'react-router'
-
+Filmstrip = require '../components/filmstrip'
 {PROJECT_SORTS} = require '../components/project-sorts'
 
 counterpart.registerTranslations 'en',
@@ -24,22 +24,39 @@ module.exports = React.createClass
     location: React.PropTypes.object
     history: React.PropTypes.object
 
+  apiOpts:
+    include: 'avatar'
+    cards: 'true'
+    launch_approved: !apiClient.params.admin
+
+  emptyPromise:
+    then: ->
+    catch: ->
+
   getInitialState: ->
-    return viewingProjects:
-        then: ->
-        catch: ->
+    viewingProjects: @emptyPromise
+    query: @props.location.query
+
+  setFilter: (tag) ->
+    @onGridChange {tags: tag, page: 1}
 
   onGridChange: (query) ->
-    thisQuery = Object.assign {}, @props.location.query, query
-    thisQuery.include = 'avatar'
-    thisQuery.cards = true
-    thisQuery.launch_approved = !apiClient.params.admin
+    urlQuery = Object.assign {}, @props.location.query, @state.query, query
 
-    delete thisQuery.tags if thisQuery.tags == ''
-    delete thisQuery.sort if thisQuery.sort == '' || thisQuery.sort == 'default'
+    delete urlQuery.tags if urlQuery.tags == ''
+    delete urlQuery.sort if urlQuery.sort == '' || urlQuery.sort == 'default'
+    delete urlQuery.page if urlQuery.page == '1'
 
-    @context.history.pushState null, @props.location.pathname, thisQuery
-    @setState viewingProjects: apiClient.type('projects').get thisQuery
+    @setState query: urlQuery, ->
+      @context.history.pushState null, @props.location.pathname, urlQuery
+      @fetchProjects()
+
+  fetchProjects: ->
+    apiQuery = Object.assign {}, @state.query, @apiOpts
+    @setState viewingProjects: apiClient.type('projects').get apiQuery
+
+  componentDidMount: ->
+    @fetchProjects()
 
   imagePromise: (project) ->
     src = if project.avatar_src
@@ -87,7 +104,6 @@ module.exports = React.createClass
       linkTo="projects"
 
       contents={@state.viewingProjects}
-
       onGridChange={@onGridChange}
       onSearch={query: @searchByName, navigate: @navigateToProject}
       sortOptions={PROJECT_SORTS}
@@ -95,4 +111,6 @@ module.exports = React.createClass
       cardLink={@cardLink}
       heroClass="projects-hero"
       imagePromise={@imagePromise}
-      skipOwner={true} />
+      skipOwner={true}>
+      <Filmstrip increment={350} filterOption={@setFilter} selectedFilter={@state.query.tags}/>
+    </OwnedCardList>
