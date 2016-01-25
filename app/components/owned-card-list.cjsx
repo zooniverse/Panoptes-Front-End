@@ -116,7 +116,7 @@ module.exports = React.createClass
               </nav>
             </div>
           else if ownedResources?.length is 0
-            <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" />
+            <div style={{padding: '2em'}}><h1 className='card-list' style={margin: '1em'}><Translate content="#{@props.translationObjectName}.notFoundMessage" component="p" /></h1></div>
           else
             <Translate content="#{@props.translationObjectName}.loadMessage" component="div" />
         }</PromiseRenderer>
