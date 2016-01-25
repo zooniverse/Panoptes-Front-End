@@ -1,0 +1,137 @@
+@import "jsplumb"
+@import "react-resizable"
+
+.answer-item
+  padding-left: 15px
+  padding-right: 15px
+  margin-top: 0.5em
+  margin-bottom: 0.5em
+  clear: both
+
+.box,
+.box-end
+  min-width: 200px
+  max-width: 400px
+  width: 220px
+  background-color: #ccc
+  border-style: solid
+  border-width: 1px
+  border-radius: 15px
+  position: absolute
+  overflow: hidden
+
+.box
+  resize: horizontal
+  overflow: auto
+  border-bottom-right-radius: 0
+
+.box-head
+  pointer-events: none
+  color: #fff
+  opacity: 0.7
+  float: left
+  margin-left: 10px
+  text-weight: 500
+
+.crop-box
+  background-color: #a7b2e4
+  > .drag-handel
+    background-color: alpha(darken(#a7b2e4, 60%), 30%)
+
+.drag-handel
+  padding-bottom: 10px
+  cursor:  move
+  border-top-left-radius: 15px
+  border-top-right-radius: 15px
+  background-color: rgba(0,0,0,.3)
+
+.drawing-box
+  min-width: 190px
+  background-color: #c5a8cc
+  > .drag-handel
+    background-color: alpha(darken(#c5a8cc, 60%), 30%)
+
+.drawing-tool-icon-vis
+  flex-shrink: 0
+  line-height: 1
+  margin-right: 0.5em
+  > svg
+    fill-opacity: 0.1
+    height: 1.5em
+    stroke: currentColor
+    stroke-width: 5
+    width: 1.5em
+
+.editor
+  width: 100%
+  height: 800px
+  border-style: solid
+  border-width: 2px
+  overflow: scroll
+  position: relative
+
+.end,
+.start
+  min-width: 30px
+  width: 75px
+  height: 30px
+  line-height: 30px
+  text-align: center
+  cursor: move
+
+.help-preview
+  border-style: solid
+  border-width: 1px
+  border-color: #ccc
+  max-width: 800px
+  padding: 4px 6px
+
+.help-text-vis
+  margin-left: 15px
+  padding: 0
+  width: 75px
+
+.lab
+  padding: 0
+  margin: 0
+  padding-left: 15px
+  background-color: rgba(255,255,255,.5)
+  border: none
+  display: flex
+  min-height: 1.5em
+
+.list-unstyled
+  padding-left: 0
+  list-style: none
+
+.markdown-vis > p
+  margin: 0
+
+.multiple-box
+  background-color: #9ecfdf
+  > .drag-handel
+    background-color: alpha(darken(#9ecfdf, 60%), 30%)
+
+.noselect
+  -webkit-touch-callout: none
+  user-select: none
+
+.req
+  padding: 0 15px 15px 0
+  float: right
+  clear: both
+
+.single-box
+  background-color: #b8d4a2
+  > .drag-handel
+    background-color: alpha(darken(#b8d4a2, 60%), 30%)
+
+.survey-box
+  background-color: #e1a4ad
+  > .drag-handel
+    background-color: alpha(darken(#e1a4ad, 60%), 30%)
+
+.text-box
+  background-color: #ecc6ac
+  > .drag-handel
+    background-color: alpha(darken(#ecc6ac, 60%), 30%)

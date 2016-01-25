@@ -29,7 +29,8 @@ counterpart.registerTranslations 'en',
     boilerplate:
       contact: 'Contact Us'
       jobs: 'Jobs'
-      privacyPolicy: 'Privacy policy'
+      privacyPolicy: 'Privacy Policy'
+      status: 'System Status'
 
 AdminToggle = React.createClass
   displayName: 'AdminToggle'
@@ -120,6 +121,8 @@ module.exports = React.createClass
           <Link to="/privacy"><Translate content="footer.boilerplate.privacyPolicy" /></Link>
           <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
           <a href="http://jobs.zooniverse.org/"><Translate content="footer.boilerplate.jobs" /></a>
+          <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
+          <a href="https://status.zooniverse.org/"><Translate content="footer.boilerplate.status" /></a>
         </div>
       </div>
     </footer>
