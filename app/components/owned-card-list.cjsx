@@ -26,7 +26,7 @@ module.exports = React.createClass
     heroNav: React.PropTypes.node
     skipOwner: React.PropTypes.bool
 
-    contents: React.PropTypes.object.isRequired
+    listPromise: React.PropTypes.object.isRequired
     onGridChange: React.PropTypes.func
     onSearch: React.PropTypes.object
     sortOptions: React.PropTypes.array
@@ -63,7 +63,7 @@ module.exports = React.createClass
         <div>
           {this.props.children}
         </div>
-        <PromiseRenderer promise={@props.contents}>{(ownedResources) =>
+        <PromiseRenderer promise={@props.listPromise}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
             <div>
