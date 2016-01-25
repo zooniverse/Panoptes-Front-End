@@ -103,10 +103,10 @@ module.exports = React.createClass
       translationObjectName="projectsPage"
       linkTo="projects"
 
-      contents={@state.viewingProjects}
       onGridChange={@onGridChange}
       onSearch={query: @searchByName, navigate: @navigateToProject}
       sortOptions={PROJECT_SORTS}
+      listPromise={@state.viewingProjects}
 
       cardLink={@cardLink}
       heroClass="projects-hero"
