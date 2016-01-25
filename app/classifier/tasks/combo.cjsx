@@ -30,6 +30,53 @@ module.exports = React.createClass
       # TODO
       0.5
 
+    BeforeSubject: (props) ->
+      <div>
+        {props.task.tasks.map (childTaskKey, i) ->
+          childTaskDescription = props.workflow.tasks[childTaskKey]
+          TaskComponent = props.taskTypes[childTaskDescription.type]
+          annotation = props.annotation.value[i]
+          if TaskComponent.BeforeSubject?
+            <TaskComponent.BeforeSubject key={i} {...props} task={childTaskDescription} annotation={annotation} />}
+      </div>
+
+    AfterSubject: (props) ->
+      <div>
+        {props.task.tasks.map (childTaskKey, i) ->
+          childTaskDescription = props.workflow.tasks[childTaskKey]
+          TaskComponent = props.taskTypes[childTaskDescription.type]
+          annotation = props.annotation.value[i]
+          if TaskComponent.AfterSubject?
+            <TaskComponent.AfterSubject key={i} {...props} task={childTaskDescription} annotation={annotation} />}
+      </div>
+
+    InsideSubject: (props) ->
+      <g className="combo-task-inside-subject-container">
+        {props.task.tasks.map (childTaskKey, i) ->
+          childTaskDescription = props.workflow.tasks[childTaskKey]
+          TaskComponent = props.taskTypes[childTaskDescription.type]
+          annotation = props.annotation.value[i]
+          if TaskComponent.InsideSubject?
+            <TaskComponent.InsideSubject key={i} {...props} task={childTaskDescription} annotation={annotation} />}
+      </g>
+
+    PersistInsideSubject: (props) ->
+      allComboAnnotations = []
+      props.classification.annotations.forEach (annotation) ->
+        taskDescription = props.workflow.tasks[annotation.task]
+        if taskDescription.type is 'combo'
+          allComboAnnotations.push annotation.value...
+
+      <g className="combo-task-persist-inside-subject-container">
+        {Object.keys(props.taskTypes).map (taskType) ->
+          unless taskType is 'combo'
+            TaskComponent = props.taskTypes[taskType]
+            if TaskComponent.PersistInsideSubject?
+              fauxClassification =
+                annotations: allComboAnnotations
+              <TaskComponent.PersistInsideSubject key={taskType} {...props} classification={fauxClassification} />}
+      </g>
+
   getDefaultProps: ->
     onChange: ->
 
@@ -46,11 +93,10 @@ module.exports = React.createClass
         TaskComponent = @props.taskTypes[taskDescription.type]
         annotation = @props.annotation.value[i]
 
-        taskNeedsHooks = HOOK_KEYS.some (hookKey) =>
-          hookKey of TaskComponent
+        unsupported = TaskComponent is @props.taskTypes.drawing
 
-        <div key={i} style={outline: '1px solid red' if taskNeedsHooks}>
-          {if taskNeedsHooks
+        <div key={i} style={outline: '1px solid red' if unsupported}>
+          {if unsupported
             <div className="form-help warning">
               <small>
                 <strong>This task might not work as part of a combo at this time.</strong>
