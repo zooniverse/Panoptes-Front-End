@@ -7,6 +7,7 @@ PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
 {Link, State, Navigation} = require 'react-router'
 DisciplineSlider = require './discipline-slider'
+Filmstrip = require './filmstrip'
 Select = require 'react-select'
 debounce = require 'debounce'
 
@@ -54,8 +55,8 @@ module.exports = React.createClass
     @setState query: Object.assign {}, @state.query, page: page
   setSort: (newSort) ->
     @setState query: Object.assign {}, @state.query, sort: newSort, page: 1
-  setFilter: (discipline) ->
-    @setState query: Object.assign {}, @state.query, tags: discipline, page: 1
+  setFilter: (tag) ->
+    @setState query: Object.assign {}, @state.query, tags: tag, page: 1
 
   userForTitle: ->
     if @props.ownerName
@@ -75,7 +76,7 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="resources-container">
-        <DisciplineSlider filterDiscipline={@setFilter} />
+        <Filmstrip increment={350} filterOption={@setFilter} selectedFilter={@state.query.tags}/>
         <PromiseRenderer promise={@props.contents}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
