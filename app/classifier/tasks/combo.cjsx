@@ -15,8 +15,12 @@ module.exports = React.createClass
     getTaskText: (task) ->
       "#{tasks.tasks.length}-task combo"
 
-    getDefaultAnnotation: ->
-      value: []
+    getDefaultAnnotation: (taskDescription, workflow, taskComponents) ->
+      value: taskDescription.tasks.map (childTaskKey) ->
+        childTaskDescription = workflow.tasks[childTaskKey]
+        ChildTaskComponent = taskComponents[childTaskDescription.type]
+        defaultAnnotation = ChildTaskComponent.getDefaultAnnotation childTaskDescription, workflow, taskComponents
+        Object.assign task: childTaskKey, defaultAnnotation
 
     isAnnotationComplete: (task, annotation) ->
       # TODO
@@ -40,7 +44,7 @@ module.exports = React.createClass
       {@props.task.tasks.map (task, i) =>
         taskDescription = @props.workflow.tasks[task]
         TaskComponent = @props.taskTypes[taskDescription.type]
-        annotation = @props.annotation.value[i] ? TaskComponent.getDefaultAnnotation()
+        annotation = @props.annotation.value[i]
 
         taskNeedsHooks = HOOK_KEYS.some (hookKey) =>
           hookKey of TaskComponent
