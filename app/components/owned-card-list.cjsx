@@ -6,8 +6,6 @@ apiClient = require 'panoptes-client/lib/api-client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
 {Link, State, Navigation} = require 'react-router'
-DisciplineSlider = require './discipline-slider'
-Filmstrip = require './filmstrip'
 Select = require 'react-select'
 debounce = require 'debounce'
 
@@ -29,34 +27,20 @@ module.exports = React.createClass
     skipOwner: React.PropTypes.bool
 
     contents: React.PropTypes.object.isRequired
-
     onGridChange: React.PropTypes.func
     onSearch: React.PropTypes.object
     sortOptions: React.PropTypes.array
 
-  getInitialState: ->
-    query: {}
-
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
-    @props.onGridChange @state.query if @props.onGridChange
-    @readQuery()
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
-  componentWillUpdate: (nextProps, nextState)->
-    return if @state.query == nextState.query
-    @props.onGridChange nextState.query if @props.onGridChange
-
-  readQuery: () ->
-    @setState query: @context.location.query
   setPage: (page) ->
-    @setState query: Object.assign {}, @state.query, page: page
+    @props.onGridChange page: page
   setSort: (newSort) ->
-    @setState query: Object.assign {}, @state.query, sort: newSort, page: 1
-  setFilter: (tag) ->
-    @setState query: Object.assign {}, @state.query, tags: tag, page: 1
+    @props.onGridChange {sort: newSort, page: 1}
 
   userForTitle: ->
     if @props.ownerName
@@ -76,7 +60,9 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="resources-container">
-        <Filmstrip increment={350} filterOption={@setFilter} selectedFilter={@state.query.tags}/>
+        <div>
+          {this.props.children}
+        </div>
         <PromiseRenderer promise={@props.contents}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
@@ -107,7 +93,6 @@ module.exports = React.createClass
                     searchPromptText="Select a sort order"
                     closeAfterClick={true}
                     className='standard-input search card-sort'
-                    value={@state.sort}
                     options={@props.sortOptions}
                     onChange={@setSort} />
                 }
