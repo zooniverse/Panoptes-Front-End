@@ -4,6 +4,7 @@ TitleMixin = require '../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list'
 {Link} = require 'react-router'
+{PROJECT_SORTS} = require '../components/project-sorts'
 
 counterpart.registerTranslations 'en',
   projectsPage:
@@ -14,18 +15,27 @@ counterpart.registerTranslations 'en',
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'
+  title: 'Projects'
 
   mixins: [TitleMixin]
 
-  title: 'Projects'
+  getInitialState: ->
+    return viewingProjects:
+      then: ->
+      catch: ->
 
-  fetchProjects: (query) ->
+  onGridChange: (query) ->
+    console.log query
+
     thisQuery = Object.assign {}, query
     thisQuery.include = 'avatar'
     thisQuery.cards = true
     thisQuery.launch_approved = !apiClient.params.admin
 
-    apiClient.type('projects').get Object.assign {}, thisQuery, @props.location.query
+    delete thisQuery.tags if thisQuery.tags == ''
+    delete thisQuery.sort if thisQuery.sort == '' || thisQuery.sort == 'default'
+
+    @setState viewingProjects: apiClient.type('projects').get Object.assign {}, thisQuery, @props.location.query
 
   imagePromise: (project) ->
     src = if project.avatar_src
@@ -43,12 +53,41 @@ module.exports = React.createClass
 
     return link
 
+  searchByName: (value, callback) ->
+    return callback null, { options: [] } if value is ''
+    apiClient.type('projects').get(search: "#{value}", page_size: 10)
+      .then (projects) =>
+        opts = projects.map (project) ->
+          {
+            value: project.id,
+            label: project.display_name,
+            project: project
+          }
+
+        callback null, {
+          options: opts
+        }
+  navigateToProject: (projectID) ->
+    apiClient.type('projects').get(projectID)
+      .then (project) =>
+        if project.redirect?
+          window.location.href = project.redirect
+        else
+          [owner, name] = project.slug.split('/')
+          @transitionTo 'project-home', owner: owner, name: name
+
   render: ->
     <OwnedCardList
       {...@props}
       translationObjectName="projectsPage"
-      listPromise={@fetchProjects}
       linkTo="projects"
+
+      contents={@state.viewingProjects}
+
+      onGridChange={@onGridChange}
+      onSearch={query: @searchByName, navigate: @navigateToProject}
+      sortOptions={PROJECT_SORTS}
+
       cardLink={@cardLink}
       heroClass="projects-hero"
       imagePromise={@imagePromise}

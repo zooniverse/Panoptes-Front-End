@@ -5,9 +5,8 @@ Translate = require 'react-translate-component'
 apiClient = require 'panoptes-client/lib/api-client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
-{Link, State, Navigation} = require 'react-router'
+{Router, Link, State, Navigation} = require 'react-router'
 DisciplineSlider = require './discipline-slider'
-{PROJECT_SORTS} = require '../components/project-sorts'
 Select = require 'react-select'
 debounce = require 'debounce'
 
@@ -15,11 +14,12 @@ module.exports = React.createClass
   displayName: 'OwnedCardList'
   mixins: [State, Navigation]
 
-  ignoreUpdate: false
+  contextTypes:
+    location: React.PropTypes.object
+    # history: React.PropTypes.object
 
   propTypes:
     imagePromise: React.PropTypes.func.isRequired
-    listPromise: React.PropTypes.func.isRequired
     cardLink: React.PropTypes.func.isRequired
     translationObjectName: React.PropTypes.string.isRequired
     ownerName: React.PropTypes.string
@@ -27,100 +27,35 @@ module.exports = React.createClass
     heroNav: React.PropTypes.node
     skipOwner: React.PropTypes.bool
 
-  getRoutes: ->
-    this.props.routes
+    contents: React.PropTypes.object.isRequired
+
+    onGridChange: React.PropTypes.func
+    onSearch: React.PropTypes.object
+    sortOptions: React.PropTypes.array
 
   getInitialState: ->
-    listPromise: null
-    tagFilter: ''
-    currentPage: null
-    sort: ''
-    page: 1
+    query: {}
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
+    @props.onGridChange @state.query if @props.onGridChange
+    @readQuery()
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
-  componentWillMount: ->
-    @readQuery
-    @setState currentPage: @currentPage()
-    @setState listPromise: @props.listPromise(@buildQuery())
-
   componentWillUpdate: (nextProps, nextState)->
-    @ignoreUpdate = true
-    for own key of nextState
-      continue if key == 'listPromise'
-      @ignoreUpdate = @ignoreUpdate && @state[key] == nextState[key]
-
-  componentDidUpdate: ->
-    @setState listPromise: @props.listPromise(@buildQuery()) unless @ignoreUpdate
-    @ignoreUpdate = false
+    return if @state.query == nextState.query
+    @props.onGridChange nextState.query if @props.onGridChange
 
   readQuery: () ->
-    {sort, page, discipline} = @context.router.getCurrentQuery()
-    @setState sort: sort || ''
-    @setState page: page || 1
-    @setState tags: discipline || ''
-
-  buildQuery: (query) ->
-    newQuery = Object.assign {}, query
-
-    newQuery.sort = @state.sort if @state.sort
-    newQuery.tags = @state.tagFilter if @state.tagFilter
-    newQuery.page = @state.page if @state.page != 1
-
-    console.log newQuery
-    return newQuery
-
-  computeQueryString: (query) ->
-    accum = []
-    query = @buildQuery query
-    for own key of query
-      accum.push([key, '=', query[key]].join(''))
-    return accum.join('&')
-
+    @setState query: @context.location.query
   setPage: (page) ->
-    @setState page: page, #->
-      #window.location.search = @computeQueryString null
-
+    @setState query: Object.assign {}, @state.query, page: page
   setSort: (newSort) ->
-    @setState sort: newSort, #->
-      #window.location.search = @computeQueryString null
-
-  filterDiscipline: (discipline) ->
-    @setState tagFilter: discipline, #->
-      #window.location.search = @computeQueryString null
-
-  searchProjectName: (value, callback) ->
-    return callback null, { options: [] } if value is ''
-
-    apiClient.type('projects').get(search: "#{value}", page_size: 10)
-      .then (projects) =>
-        opts = projects.map (project) ->
-          {
-            value: project.id,
-            label: project.display_name,
-            project: project
-          }
-
-        callback null, {
-          options: opts
-        }
-
-  currentPage: ->
-    routes = @getRoutes()
-    routes[routes.length - 1].path
-
-  routeToProject: (projectID) ->
-    apiClient.type('projects').get(projectID)
-      .then (project) =>
-        if project.redirect?
-          window.location.href = project.redirect
-        else
-          [owner, name] = project.slug.split('/')
-          @transitionTo 'project-home', owner: owner, name: name
+    @setState query: Object.assign {}, @state.query, sort: newSort, page: 1
+  setFilter: (discipline) ->
+    @setState query: Object.assign {}, @state.query, tags: discipline, page: 1
 
   userForTitle: ->
     if @props.ownerName
@@ -140,8 +75,8 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="resources-container">
-        <DisciplineSlider filterDiscipline={@filterDiscipline} />
-        <PromiseRenderer promise={@state.listPromise}>{(ownedResources) =>
+        <DisciplineSlider filterDiscipline={@setFilter} />
+        <PromiseRenderer promise={@props.contents}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
             <div>
@@ -151,27 +86,27 @@ module.exports = React.createClass
                   count = meta.count
                   <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />
                   <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" /><Link to='disciplines' className="view-by-discipline-link">View by discipline</Link></p>}
-                {if @state.currentPage is 'projects'
+                {if @props.onSearch
                   <Select
                     multi={false}
                     name="resourcesid"
-                    placeholder="Project Name:"
-                    searchPromptText="Search by a project name"
+                    placeholder="Name:"
+                    searchPromptText="Search by name"
                     closeAfterClick={true}
-                    asyncOptions={debounce(@searchProjectName, 200)}
-                    onChange={@routeToProject}
-                    className="search project-search standard-input"
+                    asyncOptions={debounce(@props.onSearch.query, 200)}
+                    onChange={@props.onSearch.navigate}
+                    className="search card-search standard-input"
                   />}
-                {if @state.currentPage is 'projects'
+                {if @props.sortOptions
                    <Select
                     multi={false}
                     name="sort_order"
                     placeholder="Sort By:"
                     searchPromptText="Select a sort order"
                     closeAfterClick={true}
-                    className='standard-input search project-sort'
+                    className='standard-input search card-sort'
                     value={@state.sort}
-                    options={PROJECT_SORTS}
+                    options={@props.sortOptions}
                     onChange={@setSort} />
                 }
               </div>
@@ -190,7 +125,7 @@ module.exports = React.createClass
                   <nav className="pagination">
                     {for page in [1..meta.page_count]
                       active = (page is +location.query.page) or (page is 1 and not location.search)
-                      <Link to={@props.linkTo} query={@buildQuery page: page} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.search is ""}>{page}</Link>}
+                      <a onClick={@setPage.bind null, page} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.search is ""}>{page}</a>}
                   </nav>}
               </nav>
             </div>
