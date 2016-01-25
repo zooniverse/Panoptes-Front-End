@@ -7,14 +7,14 @@ module.exports = React.createClass
   displayName: 'Filmstrip'
 
   propTypes:
-    increment: React.PropTypes.number
+    increment: React.PropTypes.number.isRequired
+    filterOption: React.PropTypes.func.isRequired
 
   getDefaultProps: ->
     filterCards: DISCIPLINES
 
   getInitialState: ->
     scrollPos: 0
-    selectedFilter: ''
 
   scrollLeft: ->
     @adjustPos(-@props.increment)
@@ -27,15 +27,16 @@ module.exports = React.createClass
 
   selectFilter: (filterName) ->
     @props.filterOption filterName
-    @setState(selectedFilter: @mangleFilterName(filterName))
 
   calculateClasses: (filterName)->
     filterName = @mangleFilterName(filterName)
     list = ['discipline']
     list.push "discipline-#{filterName}"
-    if(@state.selectedFilter == filterName)
+    if(@props.selectedFilter == filterName)
       list.push 'active'
-    if(@state.selectedFilter == '' && filterName == 'all')
+    if(!@props.selectedFilter? && filterName == 'all')
+      list.push 'active'
+    if(@props.selectedFilter == '' && filterName == 'all')
       list.push 'active'
     return list.join ' '
 
