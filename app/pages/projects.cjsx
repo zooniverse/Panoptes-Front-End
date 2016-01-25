@@ -3,7 +3,7 @@ React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list'
-{Link} = require 'react-router'
+{Link, Router} = require 'react-router'
 
 {PROJECT_SORTS} = require '../components/project-sorts'
 
