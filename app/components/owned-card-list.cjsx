@@ -15,9 +15,11 @@ module.exports = React.createClass
   displayName: 'OwnedCardList'
   mixins: [State, Navigation]
 
+  ignoreUpdate: false
+
   propTypes:
     imagePromise: React.PropTypes.func.isRequired
-    listPromise: React.PropTypes.object.isRequired
+    listPromise: React.PropTypes.func.isRequired
     cardLink: React.PropTypes.func.isRequired
     translationObjectName: React.PropTypes.string.isRequired
     ownerName: React.PropTypes.string
@@ -29,7 +31,7 @@ module.exports = React.createClass
     this.props.routes
 
   getInitialState: ->
-    listPromise: @props.listPromise
+    listPromise: null
     tagFilter: ''
     currentPage: null
     sort: ''
@@ -37,50 +39,58 @@ module.exports = React.createClass
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
-    @setState currentPage: @currentPage()
-    @readQuery
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
+  componentWillMount: ->
+    @readQuery
+    @setState currentPage: @currentPage()
+    @setState listPromise: @props.listPromise(@buildQuery())
+
+  componentWillUpdate: (nextProps, nextState)->
+    @ignoreUpdate = true
+    for own key of nextState
+      continue if key == 'listPromise'
+      @ignoreUpdate = @ignoreUpdate && @state[key] == nextState[key]
+
+  componentDidUpdate: ->
+    @setState listPromise: @props.listPromise(@buildQuery()) unless @ignoreUpdate
+    @ignoreUpdate = false
+
   readQuery: () ->
     {sort, page, discipline} = @context.router.getCurrentQuery()
-    @setState sort: sort if sort?
-    @setState page: page if page?
-    @setState tags: discipline if discipline?
+    @setState sort: sort || ''
+    @setState page: page || 1
+    @setState tags: discipline || ''
 
   buildQuery: (query) ->
-    newQuery = newQuery || {}
-    newQuery.include = 'avatar'
+    newQuery = Object.assign {}, query
+
     newQuery.sort = @state.sort if @state.sort
     newQuery.tags = @state.tagFilter if @state.tagFilter
     newQuery.page = @state.page if @state.page != 1
-    newQuery.launch_approved = true if !apiClient.params.admin
-    for own key of query
-      newQuery[key] = query[key]
 
+    console.log newQuery
     return newQuery
 
   computeQueryString: (query) ->
     accum = []
-    query = @buildQuery null
+    query = @buildQuery query
     for own key of query
       accum.push([key, '=', query[key]].join(''))
     return accum.join('&')
 
   setPage: (page) ->
-    @setState page: page, ->
-      @setState listPromise: apiClient.type('projects').get @buildQuery null
+    @setState page: page, #->
       #window.location.search = @computeQueryString null
 
   setSort: (newSort) ->
-    @setState sort: newSort, ->
-      @setState listPromise: apiClient.type('projects').get @buildQuery null
+    @setState sort: newSort, #->
       #window.location.search = @computeQueryString null
 
   filterDiscipline: (discipline) ->
-    @setState tagFilter: discipline, ->
-      @setState listPromise: apiClient.type('projects').get @buildQuery null
+    @setState tagFilter: discipline, #->
       #window.location.search = @computeQueryString null
 
   searchProjectName: (value, callback) ->
@@ -180,7 +190,7 @@ module.exports = React.createClass
                   <nav className="pagination">
                     {for page in [1..meta.page_count]
                       active = (page is +location.query.page) or (page is 1 and not location.search)
-                      <Link to={@props.linkTo} query={@buildQuery (page: page)} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.search is ""}>{page}</Link>}
+                      <Link to={@props.linkTo} query={@buildQuery page: page} key={page} className="pill-button" style={border: "2px solid" if page is 1 and window.location.search is ""}>{page}</Link>}
                   </nav>}
               </nav>
             </div>
