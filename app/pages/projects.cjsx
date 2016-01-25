@@ -19,13 +19,13 @@ module.exports = React.createClass
 
   title: 'Projects'
 
-  listProjects: ->
-    query =
-      include: 'avatar'
-      cards: true
-      launch_approved: !apiClient.params.admin
+  fetchProjects: (query) ->
+    thisQuery = Object.assign {}, query
+    thisQuery.include = 'avatar'
+    thisQuery.cards = true
+    thisQuery.launch_approved = !apiClient.params.admin
 
-    apiClient.type('projects').get Object.assign {}, query, @props.location.query
+    apiClient.type('projects').get Object.assign {}, thisQuery, @props.location.query
 
   imagePromise: (project) ->
     src = if project.avatar_src
@@ -47,7 +47,7 @@ module.exports = React.createClass
     <OwnedCardList
       {...@props}
       translationObjectName="projectsPage"
-      listPromise={@listProjects()}
+      listPromise={@fetchProjects}
       linkTo="projects"
       cardLink={@cardLink}
       heroClass="projects-hero"

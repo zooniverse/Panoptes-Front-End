@@ -55,9 +55,9 @@ module.exports = React.createClass
     @setState scrollPos: newPos
 
   componentDidMount: ->
-    @strip = @refs.strip.getDOMNode()
-    @viewport = @refs.viewport.getDOMNode()
-    @refs.filmstrip.getDOMNode().style.height = @strip.getBoundingClientRect().height + 'px'
+    @strip = @refs.strip
+    @viewport = @refs.viewport
+    @refs.filmstrip.style.height = @strip.getBoundingClientRect().height + 'px'
 
   render: -> <div className='filmstrip' ref='filmstrip'>
 			<button className='prevNav navButton' onClick={@scrollLeft}>&lt;</button>
@@ -69,7 +69,7 @@ module.exports = React.createClass
 			        </div>
 			        {for filter, i in @props.filterCards
 			          filterName = filter.value.replace(' ', '-')
-			          <div className={@calculateClasses(filter.value)} onClick={@selectFilter.bind this, filter.value} >
+			          <div key={i} className={@calculateClasses(filter.value)} onClick={@selectFilter.bind this, filter.value} >
 			            <span key={i} className="icon icon-#{filterName}"></span>
 			            <p>{filter.label}</p>
 			          </div>
