@@ -30,14 +30,17 @@ module.exports = React.createClass
 
   calculateClasses: (filterName)->
     filterName = @mangleFilterName(filterName)
+
     list = ['discipline']
     list.push "discipline-#{filterName}"
+
     if(@props.selectedFilter == filterName)
       list.push 'active'
     if(!@props.selectedFilter? && filterName == 'all')
       list.push 'active'
     if(@props.selectedFilter == '' && filterName == 'all')
       list.push 'active'
+
     return list.join ' '
 
   adjustPos: (increment) ->

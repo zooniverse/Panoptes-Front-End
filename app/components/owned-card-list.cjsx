@@ -6,7 +6,6 @@ apiClient = require 'panoptes-client/lib/api-client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
 {Link, State, Navigation} = require 'react-router'
-DisciplineSlider = require './discipline-slider'
 Filmstrip = require './filmstrip'
 Select = require 'react-select'
 debounce = require 'debounce'
@@ -76,7 +75,8 @@ module.exports = React.createClass
         </div>
       </section>
       <section className="resources-container">
-        <Filmstrip increment={350} filterOption={@setFilter} selectedFilter={@state.query.tags}/>
+        {if @context.location.pathname == '/projects'
+          <Filmstrip increment={350} filterOption={@setFilter} selectedFilter={@state.query.tags}/>}
         <PromiseRenderer promise={@props.contents}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
