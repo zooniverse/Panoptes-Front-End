@@ -42,6 +42,14 @@ module.exports = React.createClass
     onLeaveAnnotation: (task, annotation) ->
       @closeAllMarks task, annotation
 
+    areThereEnoughMarks:(task, annotation) ->
+      marksByTool = {}
+      annotation.value.forEach (mark) ->
+        marksByTool[mark.tool] ?= 0
+        marksByTool[mark.tool] += 1
+      task.tools.every (toolDescription, i) ->
+        (marksByTool[i] ? 0) >= (toolDescription.min ? 0)
+
     areMarksComplete: (task, annotation) ->
       tasks = require '..' # Circular
       for mark in annotation.value
@@ -56,7 +64,7 @@ module.exports = React.createClass
 
     isAnnotationComplete: (task, annotation) ->
       # Booleans compare to numbers as expected: true = 1, false = 0. Undefined does not.
-      @areMarksComplete(task, annotation) and annotation.value.length >= (task.required ? 0)
+      @areMarksComplete(task, annotation) and @areThereEnoughMarks(task, annotation) and annotation.value.length >= (task.required ? 0)
 
     testAnnotationQuality: (unknown, knownGood, workflow) ->
       unknownTaskDescription = workflow.tasks[unknown.task]
@@ -85,6 +93,8 @@ module.exports = React.createClass
         <span className="drawing-tool-icon" style={color: tool.color}>{icons[tool.type]}</span>{' '}
         <input type="radio" className="drawing-tool-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
         <Markdown>{tool.label}</Markdown>
+        {if tool.min? or tool.max?
+          <span className="tool-count">{tool.min ? 0}&ndash;{tool.max ? '∞'}</span>}
         {unless count is 0
           <span className="tool-count">({count})</span>}
       </label>
