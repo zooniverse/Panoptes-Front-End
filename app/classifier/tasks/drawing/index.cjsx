@@ -93,10 +93,19 @@ module.exports = React.createClass
         <span className="drawing-tool-icon" style={color: tool.color}>{icons[tool.type]}</span>{' '}
         <input type="radio" className="drawing-tool-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
         <Markdown>{tool.label}</Markdown>
-        {if tool.min? or tool.max?
-          <span className="tool-count">{tool.min ? 0}&ndash;{tool.max ? '∞'}</span>}
-        {unless count is 0
-          <span className="tool-count">({count})</span>}
+
+        <small className="tool-count">
+          {if count isnt 0
+            count + ' '}
+          {if count isnt 0 and (tool.min? or tool.max?)
+            ' of '}
+          {if tool.min?
+            <span style={color: 'red' if count < tool.min}>{tool.min} required</span>}
+          {if tool.min? and tool.max?
+            ', '}
+          {if tool.max?
+            <span style={color: 'orange' if count is tool.max}>{tool.max} maximum</span>}
+        </small>
       </label>
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} />
