@@ -37,7 +37,20 @@ CollectionsNav = React.createClass
     </nav>
 
 List = React.createClass
+
   displayName: 'List'
+
+  contextTypes:
+    location: React.PropTypes.object
+    history: React.PropTypes.object
+
+  emptyPromise:
+    then: ->
+    catch: ->
+
+  getInitialState: ->
+    viewingCollection: @emptyPromise
+    query: @props.location.query
 
   imagePromise: (collection) ->
     apiClient.type('subjects').get(collection_id: collection.id, page_size: 1)
@@ -50,22 +63,35 @@ List = React.createClass
     [owner, name] = collection.slug.split('/')
     "/collections/#{owner}/#{name}"
 
-  listCollections: ->
-    query = {}
+  onGridChange: (query) ->
+    urlQuery = Object.assign {}, @props.location.query, @state.query, query
+
+    delete urlQuery.sort if urlQuery.sort == '' || urlQuery.sort == 'default'
+    delete urlQuery.page if urlQuery.page == '1'
+
+    @setState query: urlQuery, ->
+      @context.history.pushState null, @props.location.pathname, urlQuery
+      @fetchCollection()
+
+  fetchCollection: ->
+    apiQuery = Object.assign {}, @state.query
+
     if @props.params?.owner?
-      query.owner = @props.params.owner
-      query.include = 'owner'
+      apiQuery.owner = @props.params.owner
+      apiQuery.include = 'owner'
+      apiQuery.favorite = @props.favorite
 
-    query.favorite = @props.favorite
-    Object.assign query, @props.location.query
+    @setState viewingCollection: apiClient.type('collections').get apiQuery
 
-    apiClient.type('collections').get query
+  componentDidMount: ->
+    @fetchCollection()
 
   render: ->
     <OwnedCardList
       {...@props}
       translationObjectName="collectionsPage"
-      listPromise={@listCollections()}
+      listPromise={@state.viewingCollection}
+      onGridChange={@onGridChange}
       linkTo="collections"
       heroNav={<CollectionsNav user={@props.user} />}
       heroClass="collections-hero"
