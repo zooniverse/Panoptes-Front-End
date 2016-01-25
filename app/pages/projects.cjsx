@@ -4,6 +4,7 @@ TitleMixin = require '../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list'
 {Link} = require 'react-router'
+
 {PROJECT_SORTS} = require '../components/project-sorts'
 
 counterpart.registerTranslations 'en',
@@ -19,15 +20,17 @@ module.exports = React.createClass
 
   mixins: [TitleMixin]
 
+  contextTypes:
+    location: React.PropTypes.object
+    history: React.PropTypes.object
+
   getInitialState: ->
     return viewingProjects:
-      then: ->
-      catch: ->
+        then: ->
+        catch: ->
 
   onGridChange: (query) ->
-    console.log query
-
-    thisQuery = Object.assign {}, query
+    thisQuery = Object.assign {}, @props.location.query, query
     thisQuery.include = 'avatar'
     thisQuery.cards = true
     thisQuery.launch_approved = !apiClient.params.admin
@@ -35,7 +38,8 @@ module.exports = React.createClass
     delete thisQuery.tags if thisQuery.tags == ''
     delete thisQuery.sort if thisQuery.sort == '' || thisQuery.sort == 'default'
 
-    @setState viewingProjects: apiClient.type('projects').get Object.assign {}, thisQuery, @props.location.query
+    @context.history.pushState null, @props.location.pathname, thisQuery
+    @setState viewingProjects: apiClient.type('projects').get thisQuery
 
   imagePromise: (project) ->
     src = if project.avatar_src
