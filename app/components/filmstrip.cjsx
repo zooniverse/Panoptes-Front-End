@@ -67,18 +67,18 @@ module.exports = React.createClass
 			<button className='prevNav navButton' onClick={@scrollLeft}>&lt;</button>
 			<div className='viewport' ref='viewport'>
 				<div className='strip' ref='strip' style={left: @state.scrollPos}>
-			      <div className={"filter"}>
-			        <div className={@calculateClasses('all')} onClick={@selectFilter.bind this, ''} >
+			      <ul className={"filter"}>
+			        <li className={@calculateClasses('all')} onClick={@selectFilter.bind this, ''} >
 			          <p>All<br/>Disciplines</p>
-			        </div>
+			        </li>
 			        {for filter, i in @props.filterCards
 			          filterName = filter.value.replace(' ', '-')
-			          <div key={i} className={@calculateClasses(filter.value)} onClick={@selectFilter.bind this, filter.value} >
+			          <li key={i} className={@calculateClasses(filter.value)} onClick={@selectFilter.bind this, filter.value} >
 			            <span key={i} className="icon icon-#{filterName}"></span>
 			            <p>{filter.label}</p>
-			          </div>
+			          </li>
 			        }
-			      </div>
+			      </ul>
 				</div>
 			</div>
 			<button className='nextNav navButton' onClick={@scrollRight}>&gt;</button>
