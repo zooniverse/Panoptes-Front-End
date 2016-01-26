@@ -95,9 +95,13 @@ module.exports = React.createClass
   render: ->
     answers = for answer, i in @props.task.answers
       answer._key ?= Math.random()
-      <label key={answer._key} className="minor-button #{if i in @props.annotation.value then 'active' else ''}">
-        <input type="checkbox" checked={i in @props.annotation.value} onChange={@handleChange.bind this, i} />
-        <Markdown>{answer.label}</Markdown>
+      <label key={answer._key} className="minor-button answer-button #{if i in @props.annotation.value then 'active' else ''}">
+        <div className="answer-button-icon-container">
+          <input type="checkbox" checked={i in @props.annotation.value} onChange={@handleChange.bind this, i} />
+        </div>
+        <div className="answer-button-label-container">
+          <Markdown className="answer-button-label">{answer.label}</Markdown>
+        </div>
       </label>
 
     <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />

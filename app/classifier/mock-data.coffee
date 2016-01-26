@@ -84,7 +84,7 @@ workflow = apiClient.type('workflows').create
         {type: 'rectangle', label: 'Rectangle', color: 'lime', max: 2}
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
         {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DRAWING_DETAILS}
+        {type: 'ellipse', label: 'Ellipse '.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
       ]
       next: 'survey'
 

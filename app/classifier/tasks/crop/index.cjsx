@@ -64,7 +64,7 @@ module.exports = React.createClass
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <p>
-        <button type="button" disabled={not @props.annotation.value?} onClick={@handleClear}>Clear current crop</button>
+        <button type="button" className="minor-button" disabled={not @props.annotation.value?} onClick={@handleClear}>Clear current crop</button>
       </p>
     </GenericTask>
 
