@@ -106,31 +106,6 @@ module.exports = React.createClass
                   </button>}
               </span>}
           </span>
-      when 'video'
-        <span className="subject-video-controls">
-          <span className="subject-frame-play-controls">
-            {if @state.playing
-              <button type="button" className="secret-button" aria-label="Pause" onClick={@playVideo.bind this, false}>
-                <i className="fa fa-pause fa-fw"></i>
-              </button>
-            else
-              <button type="button" className="secret-button" aria-label="Play" onClick={@playVideo.bind this, true}>
-                <i className="fa fa-play fa-fw"></i>
-              </button>}
-          </span>
-          <input type="range" className="video-scrubber" ref="videoScrubber" min="0" step="any" onChange={@seekVideo} />
-          <span className="video-speed">
-          Speed:
-            {for rate, i in [0.25, 0.5, 1]
-              <label key="rate-#{i}" className="secret-button">
-                <input type="radio" name="playbackRate" value={rate} checked={rate == @state.playbackRate} onChange={@setPlayRate} />
-                <span>
-                  {rate}&times;
-                </span>
-              </label>
-            }
-          </span>
-        </span>
 
     <div className={rootClass} style={ROOT_STYLE if @props.defaultStyle}>
       {if type is 'image'
