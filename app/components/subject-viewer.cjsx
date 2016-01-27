@@ -18,7 +18,7 @@ subjectHasMixedLocationTypes = (subject) ->
   allTypes.length > 1
 
 ROOT_STYLE = display: 'block'
-CONTAINER_STYLE = display: 'inline-block', position: 'relative'
+CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 SUBJECT_STYLE = display: 'block'
 
 module.exports = React.createClass
@@ -59,6 +59,9 @@ module.exports = React.createClass
     @refs.videoPlayer?.playbackRate = @state.playbackRate
 
   render: ->
+    rootClass = 'subject-viewer'
+    if @props.workflow.configuration?.multi_image_layout then rootClass += ' subject-viewer--layout-' + @props.workflow.configuration?.multi_image_layout
+    if @state.inFlipbookMode then rootClass += ' subject-viewer--flipbook'
     mainDisplay = ''
     if @state.inFlipbookMode
       {type, format, src} = getSubjectLocation @props.subject, @state.frame
@@ -115,8 +118,7 @@ module.exports = React.createClass
           </span>
         </span>
 
-
-    <div className="subject-viewer" style={ROOT_STYLE if @props.defaultStyle}>
+    <div className={rootClass} style={ROOT_STYLE if @props.defaultStyle}>
       {if type is 'image'
         @hiddenPreloadedImages()}
       <div className="subject-container" style={CONTAINER_STYLE}>
