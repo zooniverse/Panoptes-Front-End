@@ -52,6 +52,11 @@ FieldGuideEditor = React.createClass
           icons[image.id] = image
         @setState {icons}
 
+  createGuide: ->
+    @props.actions.createGuide @props.project.id
+      .then =>
+        @loadGuide @props.project
+
   createArticle: ->
     @props.actions.appendItem @state.guide.id
       .then =>
@@ -94,7 +99,7 @@ FieldGuideEditor = React.createClass
     <div>
       <p>
         This project doesn’t have a field guide yet.{' '}
-        <button type="button" onClick={@props.actions.createGuide.bind null, @props.project.id}>Create one!</button>
+        <button type="button" onClick={@createGuide}>Create one!</button>
       </p>
     </div>
 
