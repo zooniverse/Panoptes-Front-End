@@ -108,7 +108,7 @@ FieldGuideEditor = React.createClass
   renderEditor: ->
     window.editingGuide = @state.guide
 
-    <div className="field-guide-editor" className="columns-container">
+    <div className="field-guide-editor columns-container">
       <div>
         <ArticleList
           articles={@state.guide.items}
