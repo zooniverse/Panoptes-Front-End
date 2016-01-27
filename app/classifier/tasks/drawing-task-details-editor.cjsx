@@ -4,10 +4,6 @@ AutoSave = require '../../components/auto-save'
 module.exports = React.createClass
   displayName: 'DrawingTaskDetailsEditor'
 
-  propTypes:
-    project: React.PropTypes.object.isRequired
-    task: React.PropTypes.object.isRequired
-
   getDefaultProps: ->
     workflow: null
     task: null
