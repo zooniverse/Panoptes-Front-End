@@ -72,7 +72,7 @@ module.exports = React.createClass
                   pageEnd = Math.min(meta.page * meta.page_size, meta.count)
                   count = meta.count
                   <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />
-                  <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" /><Link to='disciplines' className="view-by-discipline-link">View by discipline</Link></p>}
+                  <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" /></p>}
                 {if @props.onSearch
                   <Select
                     multi={false}
