@@ -5,8 +5,6 @@ alert = require '../lib/alert'
 {Markdown} = require 'markdownz'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
-workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
-workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 
 NOOP = Function.prototype
 
@@ -45,6 +43,8 @@ module.exports = React.createClass
     project: null
     linkToFullImage: false
     frameWrapper: null
+    allowFlipbook: true
+    allowSeparateFrames: true
 
   getInitialState: ->
     loading: true
@@ -52,7 +52,13 @@ module.exports = React.createClass
     frame: @props.frame ? 0
     playbackRate: 1
     frameDimensions: {}
-    inFlipbookMode: workflowAllowsFlipbook @props.workflow
+    inFlipbookMode: @props.allowFlipbook
+
+  willReceiveProps: (nextProps) ->
+    # The default state for subjects is flipbook if allowed
+    if typeof nextProps.allowFlipbook is 'boolean'
+      this.setState
+        inFlipbookMode: allowFlipbook
 
   componentDidMount: ->
     @refs.videoScrubber?.value = 0
@@ -62,7 +68,7 @@ module.exports = React.createClass
 
   render: ->
     rootClass = 'subject-viewer'
-    if @props.workflow.configuration?.multi_image_layout then rootClass += ' subject-viewer--layout-' + @props.workflow.configuration?.multi_image_layout
+    if @props.workflow?.configuration?.multi_image_layout then rootClass += ' subject-viewer--layout-' + @props.workflow.configuration?.multi_image_layout
     if @state.inFlipbookMode then rootClass += ' subject-viewer--flipbook'
     mainDisplay = ''
     if @state.inFlipbookMode
@@ -75,14 +81,13 @@ module.exports = React.createClass
 
     tools = switch type
       when 'image'
-        if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
-          if workflowAllowsFlipbook(@props.workflow) and workflowAllowsSeparateFrames(@props.workflow)
-            <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
-              <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
-            </button>
+        if @props.allowFlipbook and @props.allowSeparateFrames
+          <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
+            <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
+          </button>
         else
           <span class="tools">
-            {if workflowAllowsFlipbook(@props.workflow) and workflowAllowsSeparateFrames(@props.workflow)
+            {if @props.allowFlipbook and @props.allowSeparateFrames
               <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
                 <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
               </button>}
