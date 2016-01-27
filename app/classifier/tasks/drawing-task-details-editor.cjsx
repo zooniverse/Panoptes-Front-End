@@ -1,5 +1,7 @@
 React = require 'react'
 AutoSave = require '../../components/auto-save'
+TriggeredModalForm = require 'modal-form/triggered'
+
 
 module.exports = React.createClass
   displayName: 'DrawingTaskDetailsEditor'
@@ -38,22 +40,28 @@ module.exports = React.createClass
       </div>
 
       <div className="commands columns-container">
-        <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s).">
-          <i className="fa fa-question-circle fa-2x"></i>
-          <br />
-          <small><strong>Question</strong></small>
-        </button>
-        {
-          if @canUseTask("text")
-            <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
-              <i className="fa fa-file-text-o fa-2x"></i>
-              <br />
-              <small><strong>Text</strong></small>
-            </button>
-        }
-        <br />
-
-        <button type="button" className="standard-button" onClick={@props.onClose}>Close</button>
+        <p>
+          <TriggeredModalForm trigger={
+            <span className="standard-button">
+              <i className="fa fa-plus-circle"></i>{' '}
+              Add a task
+            </span>
+          }>
+              <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'single'} title="Question tasks: the volunteer chooses from among a list of answers but does not mark or draw on the image(s).">
+                <i className="fa fa-question-circle fa-2x"></i>
+                <br />
+                <small><strong>Question</strong></small>
+              </button>{' '}
+              {
+                if @canUseTask("text")
+                  <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
+                    <i className="fa fa-file-text-o fa-2x"></i>
+                    <br />
+                    <small><strong>Text</strong></small>
+                  </button>
+              }
+          </TriggeredModalForm>
+        </p>
       </div>
     </div>
 
