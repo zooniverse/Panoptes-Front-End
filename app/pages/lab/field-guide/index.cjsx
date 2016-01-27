@@ -19,6 +19,7 @@ FieldGuideEditor = React.createClass
     actions: actions
 
   getInitialState: ->
+    loading: false
     guide: null
     icons: {}
     editing: null
@@ -31,10 +32,13 @@ FieldGuideEditor = React.createClass
       @loadGuide nextProps.project
 
   loadGuide: (project) ->
+    @setState loading: true
     apiClient.type('field_guides').get project_id: project.id
       .then ([guide]) =>
         @listenTo guide
-        @setState {guide}
+        @setState
+          loading: false
+          guide: guide
         if guide?
           @fetchIcons guide
 
@@ -92,20 +96,18 @@ FieldGuideEditor = React.createClass
 
       {if @state.guide?
         @renderEditor()
+      else if @state.loading
+        <p className="form-help">Loading field guide...</p>
       else
-        @renderCreator()}
-    </div>
-
-  renderCreator: ->
-    <div>
-      <p>
-        This project doesn’t have a field guide yet.{' '}
-        <button type="button" onClick={@createGuide}>Create one!</button>
-      </p>
+        <p>
+          This project doesn’t have a field guide yet.{' '}
+          <button type="button" onClick={@createGuide}>Create one!</button>
+        </p>}
     </div>
 
   renderEditor: ->
     window.editingGuide = @state.guide
+
     <div className="field-guide-editor" className="columns-container">
       <div>
         <ArticleList
