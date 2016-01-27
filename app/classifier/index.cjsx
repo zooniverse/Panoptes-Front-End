@@ -118,6 +118,7 @@ Classifier = React.createClass
           frameWrapper={FrameAnnotator}
           allowFlipbook={workflowAllowsFlipbook @props.workflow}
           allowSeparateFrames={workflowAllowsSeparateFrames @props.workflow}
+          onChange={@handleAnnotationChange.bind this, currentClassification}
         />
 
         <div className="task-area">
@@ -156,7 +157,7 @@ Classifier = React.createClass
       pointerEvents: 'none'
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
-      <TaskComponent task={task} annotation={annotation} onChange={@updateAnnotations.bind this, classification} />
+      <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
       <hr />
 
@@ -323,14 +324,14 @@ Classifier = React.createClass
     changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
     @props.classification.update changes
 
-  # This is passed as a generic change handler to the tasks
-  updateAnnotations: ->
-    @props.classification.update 'annotations'
+  handleAnnotationChange: (classification, newAnnotation) ->
+    classification.annotations[classification.annotations.length - 1] = newAnnotation
+    classification.update 'annotations'
 
   # Next (or start):
   addAnnotationForTask: (classification, taskKey) ->
     taskDescription = @props.workflow.tasks[taskKey]
-    annotation = tasks[taskDescription.type].getDefaultAnnotation()
+    annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
     annotation.task = taskKey
     classification.annotations.push annotation
     classification.update 'annotations'

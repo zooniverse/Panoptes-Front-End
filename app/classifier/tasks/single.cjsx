@@ -95,5 +95,5 @@ module.exports = React.createClass
 
   handleChange: (index, e) ->
     if e.target.checked
-      @props.annotation.value = index
-      @props.onChange? e
+      newAnnotation = Object.assign {}, @props.annotation, value: index
+      @props.onChange newAnnotation

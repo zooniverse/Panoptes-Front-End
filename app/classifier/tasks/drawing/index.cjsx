@@ -114,8 +114,10 @@ module.exports = React.createClass
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} />
 
-  handleChange: (index, e) ->
+  handleChange: (toolIndex, e) ->
+    # This handles changing tools, not any actually drawing.
+    # The annotation value is updated by the MarkingInitializer and the individual tools themselves.
     @constructor.closeAllMarks @props.task, @props.annotation
     if e.target.checked
-      @props.annotation._toolIndex = index
-      @props.onChange? e
+      newAnnotation = Object.assign {}, @props.annotation, _toolIndex: toolIndex
+      @props.onChange newAnnotation

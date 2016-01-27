@@ -65,6 +65,7 @@ module.exports = React.createClass
       </label>
     </GenericTask>
 
-  handleChange: (index, e) ->
-    @props.annotation.value = React.findDOMNode(@refs.textInput).value
-    @props.onChange? e
+  handleChange: ->
+    value = React.findDOMNode(@refs.textInput).value
+    newAnnotation = Object.assign @props.annotation, {value}
+    @props.onChange newAnnotation

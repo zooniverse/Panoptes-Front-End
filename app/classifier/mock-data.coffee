@@ -37,6 +37,7 @@ workflow = apiClient.type('workflows').create
       answers: [
         {label: 'Crop the image', next: 'crop'}
         {label: 'Enter some text', next: 'write'}
+        {label: 'Single-answer question', next: 'ask'}
         {label: 'Multi-answer question', next: 'features'}
         {label: 'Draw stuff', next: 'draw'}
         {label: 'Survey the image', next: 'survey'}
@@ -56,6 +57,18 @@ workflow = apiClient.type('workflows').create
       help: '''
         **Example**: If you see a bee, then type "Bee"
       '''
+      next: 'ask'
+
+    ask:
+      type: 'single'
+      question: 'Rhino starts with...'
+      answers: [
+        {label: 'Are'}
+        {label: 'Aitch'}
+        {label: 'Eye'}
+        {label: 'En'}
+        {label: 'Oh'}
+      ]
       next: 'features'
 
     features:

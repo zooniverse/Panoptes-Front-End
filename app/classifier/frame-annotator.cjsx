@@ -20,6 +20,7 @@ module.exports = React.createClass
     annotation: null
     onLoad: Function.prototype
     frame: 0
+    onChange: Function.prototype
 
   getInitialState: ->
     naturalWidth: 0
@@ -73,7 +74,7 @@ module.exports = React.createClass
 
   getEventOffset: (e) ->
     scale = @getScale()
-    console?.log 'Subject scale is', JSON.stringify scale
+    # console?.log 'Subject scale is', JSON.stringify scale
     x = (e.pageX - @state.sizeRect?.left) / scale.horizontal || 0
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
@@ -94,21 +95,24 @@ module.exports = React.createClass
 
     if TaskComponent?
       {BeforeSubject, InsideSubject, AfterSubject} = TaskComponent
-      hookProps =
-        workflow: @props.workflow
-        task: taskDescription
-        classification: @props.classification
-        annotation: @props.annotation
-        frame: @props.frame
-        scale: @getScale()
-        naturalWidth: @props.naturalWidth
-        naturalHeight: @props.naturalHeight
-        containerRect: @state.sizeRect
-        getEventOffset: this.getEventOffset
 
-      for task, Component of tasks when Component.getSVGProps?
-        for key, value of Component.getSVGProps hookProps
-          svgProps[key] = value
+    hookProps =
+      taskTypes: tasks
+      workflow: @props.workflow
+      task: taskDescription
+      classification: @props.classification
+      annotation: @props.annotation
+      frame: @props.frame
+      scale: @getScale()
+      naturalWidth: @props.naturalWidth
+      naturalHeight: @props.naturalHeight
+      containerRect: @state.sizeRect
+      getEventOffset: this.getEventOffset
+      onChange: @props.onChange
+
+    for task, Component of tasks when Component.getSVGProps?
+      for key, value of Component.getSVGProps hookProps
+        svgProps[key] = value
 
     <div className="frame-annotator">
       <div className="subject-area">

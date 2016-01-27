@@ -78,31 +78,31 @@ module.exports = React.createClass
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
     @props.mark.y += d.y / @props.scale.vertical
-    @props.onChange e
+    @props.onChange @props.mark
 
   handleTopLeftDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
     @props.mark.y += d.y / @props.scale.vertical
     @props.mark.width -= d.x / @props.scale.horizontal
     @props.mark.height -= d.y / @props.scale.vertical
-    @props.onChange e
+    @props.onChange @props.mark
 
   handleTopRightDrag: (e, d) ->
     @props.mark.y += d.y / @props.scale.vertical
     @props.mark.width += d.x / @props.scale.horizontal
     @props.mark.height -= d.y / @props.scale.vertical
-    @props.onChange e
+    @props.onChange @props.mark
 
   handleBottomRightDrag: (e, d) ->
     @props.mark.width += d.x / @props.scale.horizontal
     @props.mark.height += d.y / @props.scale.vertical
-    @props.onChange e
+    @props.onChange @props.mark
 
   handleBottomLeftDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
     @props.mark.width -= d.x / @props.scale.horizontal
     @props.mark.height += d.y / @props.scale.vertical
-    @props.onChange e
+    @props.onChange @props.mark
 
   normalizeMark: ->
     if @props.mark.width < 0
@@ -113,4 +113,4 @@ module.exports = React.createClass
       @props.mark.y += @props.mark.height
       @props.mark.height *= -1
 
-    @props.onChange()
+    @props.onChange @props.mark
