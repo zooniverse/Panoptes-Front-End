@@ -5,6 +5,7 @@ alert = require '../lib/alert'
 {Markdown} = require 'markdownz'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
+FrameAnnotator = require '../classifier/frame-annotator'
 
 NOOP = Function.prototype
 
@@ -42,29 +43,38 @@ module.exports = React.createClass
     defaultStyle: true
     project: null
     linkToFullImage: false
+    frameWrapper: FrameAnnotator
 
   getInitialState: ->
     loading: true
     playing: false
     frame: @props.frame ? 0
     playbackRate: 1
-  
+    frameDimensions: {}
+
   componentDidMount: ->
     @refs.videoScrubber?.value = 0
-    
+
   componentDidUpdate: ->
     @refs.videoPlayer?.playbackRate = @state.playbackRate
 
   render: ->
-    {type, format, src} = getSubjectLocation @props.subject, @state.frame
+    FrameWrapper = @props.frameWrapper
 
-    mainDisplay = switch type
-      when 'image'
-        <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
-      when 'video'
-        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} onCanPlayThrough={@handleLoad} onEnded={@endVideo} onTimeUpdate={@updateScrubber}>
-          Your browser does not support the video format. Please upgrade your browser.
-        </video>
+    mainDisplay = for frame of @props.subject.locations
+      {type, format, src} = getSubjectLocation @props.subject, frame
+
+      frameDisplay = switch type
+        when 'image'
+          <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
+        when 'video'
+          <video src={src} type={"#{type}/#{format}"} controls onLoad={@handleLoad}>
+            Your browser does not support the video format. Please upgrade your browser.
+          </video>
+
+      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions[src]?.width} naturalHeight={@state.frameDimensions[src]?.height} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation}>
+        {frameDisplay}
+      </FrameWrapper>
 
     tools = switch type
       when 'image'
@@ -144,6 +154,7 @@ module.exports = React.createClass
       </div>
     </div>
 
+
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
     <div style={
@@ -203,21 +214,21 @@ module.exports = React.createClass
       player.play()
     else
       player.pause()
-  
+
   setPlayRate: (e) ->
     playbackRate = parseFloat e.currentTarget.value
     @setState {playbackRate}
-  
+
   seekVideo: (e) ->
     player = @refs.videoPlayer
     scrubber = @refs.videoScrubber
     time = scrubber.value
     player.currentTime = time
-  
+
   endVideo: (e) ->
     playing = false
     @setState {playing}
-  
+
   updateScrubber: (e) ->
     player = @refs.videoPlayer
     scrubber = @refs.videoScrubber
@@ -225,5 +236,14 @@ module.exports = React.createClass
     scrubber.value = player.currentTime
 
   handleLoad: (e) ->
-    @setState loading: false
+    frameDimensions = @state.frameDimensions
+    frameDimensions[e.target.src] =
+      width: e.target.naturalWidth
+      height: e.target.naturalHeight
+
+    @setState
+      loading: false
+      frameDimensions: frameDimensions
+
+    console.log frameDimensions
     @props.onLoad? arguments...
