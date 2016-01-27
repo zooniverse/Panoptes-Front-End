@@ -34,8 +34,9 @@ FieldGuideEditor = React.createClass
     apiClient.type('field_guides').get project_id: project.id
       .then ([guide]) =>
         @listenTo guide
-        @fetchIcons guide
         @setState {guide}
+        if guide?
+          @fetchIcons guide
 
   listenTo: (guide) ->
     @_forceUpdate ?= @forceUpdate.bind this
