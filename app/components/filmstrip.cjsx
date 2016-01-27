@@ -64,22 +64,26 @@ module.exports = React.createClass
     @refs.filmstrip.style.height = @strip.getBoundingClientRect().height + 'px'
 
   render: -> <div className='filmstrip' ref='filmstrip'>
-			<button className='prevNav navButton' onClick={@scrollLeft}>&lt;</button>
-			<div className='viewport' ref='viewport'>
-				<div className='strip' ref='strip' style={left: @state.scrollPos}>
-			      <ul className={"filter"}>
-			        <li className={@calculateClasses('all')} onClick={@selectFilter.bind this, ''} >
-			          <p>All<br/>Disciplines</p>
-			        </li>
-			        {for filter, i in @props.filterCards
-			          filterName = filter.value.replace(' ', '-')
-			          <li key={i} className={@calculateClasses(filter.value)} onClick={@selectFilter.bind this, filter.value} >
-			            <span key={i} className="icon icon-#{filterName}"></span>
-			            <p>{filter.label}</p>
-			          </li>
-			        }
-			      </ul>
-				</div>
-			</div>
-			<button className='nextNav navButton' onClick={@scrollRight}>&gt;</button>
-		</div>
+      <button className='prevNav navButton' onClick={@scrollLeft}>&lt;</button>
+      <div className='viewport' ref='viewport'>
+        <div className='strip' ref='strip' style={left: @state.scrollPos}>
+            <ul className={"filter"}>
+              <li>
+                <button className={@calculateClasses('all')} onClick={@selectFilter.bind this, ''} >
+                  <p>All</p><p>Disciplines</p>
+                </button>
+              </li>
+              {for filter, i in @props.filterCards
+                filterName = filter.value.replace(' ', '-')
+                <li key={i}>
+                  <button key={i} className={@calculateClasses(filter.value)} onClick={@selectFilter.bind this, filter.value} >
+                    <span key={i} className="icon icon-#{filterName}"></span>
+                    <p>{filter.label}</p>
+                  </button>
+                </li>
+              }
+            </ul>
+        </div>
+      </div>
+      <button className='nextNav navButton' onClick={@scrollRight}>&gt;</button>
+    </div>
