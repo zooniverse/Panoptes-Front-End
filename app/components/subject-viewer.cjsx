@@ -53,6 +53,13 @@ module.exports = React.createClass
     playbackRate: 1
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
+    playbackRate: 1
+
+  componentDidMount: ->
+    @refs.videoScrubber?.value = 0
+
+  componentDidUpdate: ->
+    @refs.videoPlayer?.playbackRate = @state.playbackRate
 
   willReceiveProps: (nextProps) ->
     # The default state for subjects is flipbook if allowed
