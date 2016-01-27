@@ -165,7 +165,8 @@ module.exports = React.createClass
   setInFlipbookMode: (inFlipbookMode) ->
     @setState {inFlipbookMode}
 
-  setPlaying: (frame, playing) ->
+  setPlaying: (playing) ->
+    @setState {playing}
     if playing
       @nextFrame()
       @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
