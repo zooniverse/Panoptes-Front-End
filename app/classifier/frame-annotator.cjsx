@@ -84,7 +84,7 @@ module.exports = React.createClass
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
 
     svgStyle = {}
-    if type is 'image'
+    if type is 'image' and not @props.loading
       # Images are rendered again within the SVG itself.
       # When cropped right next to the edge of the image,
       # the original tag can show through, so fill the SVG to cover it.
@@ -133,16 +133,3 @@ module.exports = React.createClass
           <AfterSubject {...hookProps} />}
       </div>
     </div>
-
-  handleChildLoad: (e) ->
-    @props.onLoad? e, @props.frame
-    {naturalWidth, naturalHeight} = e.target
-    unless @props.naturalWidth is naturalWidth and @props.naturalHeight is naturalHeight
-      @setState {naturalWidth, naturalHeight}, =>
-        @updateSize()
-
-  handleFrameChange: (frame) ->
-    @setState {frame}
-
-  toggleWarning: ->
-    @setState showWarning: not @state.showWarning

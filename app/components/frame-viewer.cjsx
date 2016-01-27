@@ -93,7 +93,7 @@ module.exports = React.createClass
         </div>
 
     if FrameWrapper
-      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions[src]?.width} naturalHeight={@state.frameDimensions[src]?.height} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation}>
+      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading}>
         {frameDisplay}
       </FrameWrapper>
     else
@@ -143,13 +143,10 @@ module.exports = React.createClass
     scrubber.value = player.currentTime
 
   handleLoad: (e) ->
-    frameDimensions = @state.frameDimensions
-    frameDimensions[e.target.src] =
-      width: e.target.naturalWidth
-      height: e.target.naturalHeight
-
     @setState
       loading: false
-      frameDimensions: frameDimensions
+      frameDimensions:
+        width: e.target.naturalWidth
+        height: e.target.naturalHeight
 
     @props.onLoad? arguments...
