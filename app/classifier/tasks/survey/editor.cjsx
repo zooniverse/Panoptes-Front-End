@@ -13,6 +13,7 @@ PromiseRenderer = require '../../../components/promise-renderer'
 Papa = require 'papaparse'
 apiClient = require '../../../api/client'
 putFile = require '../../../lib/put-file'
+Utility = require './utility'
 
 module.exports = React.createClass
   displayName: 'SurveyTaskEditor'
@@ -307,21 +308,45 @@ module.exports = React.createClass
     @props.task.choices[choiceID]?.confusionsOrder.push confusionID
     @props.task.choices[choiceID]?.confusions[confusionID] = details
 
-  addQuestion: ({question, multiple, required, answers, __parsedExtra}) ->
-    unless question?
+  addQuestion: ({question, multiple, required, answers, name, __parsedExtra}) ->
+    unless question? or name?
       throw new Error 'Questions require a "question" column'
     unless answers?
       throw new Error 'Questions require a "answers" column'
-    questionID = @makeID question
-    unless questionID in @props.task.questionsOrder
+
+    choices = null
+    questionID = null
+    if(!!name)
+      choices = name.split(/\s*;s*/)
+    if(!!question)
+      questionID = @makeID question
+
+    # don't put it in the default questionsOrder if we've specified choices it should map to
+    unless choices? or questionID in @props.task.questionsOrder
       @props.task.questionsOrder.push questionID
+
+    # if we specified mapped choices, create those entries instead
+    if choices?
+      @props.task.questionsMap ?= {}
+      for choice in choices
+        continue unless !!choice
+        choiceID = @makeID choice
+        @props.task.questionsMap[choiceID] ?= []
+        @props.task.questionsMap[choiceID].push questionID if questionID?
+
+    # we only can get here if the question stuff is empty and the names are not empty
+    # that means there will be no questions for this choice, so we don't need to actually
+    # store any questions or answers for this row of the csv
+    return unless questionID?
+
     @props.task.questions[questionID] =
       label: question
       multiple: @determineBoolean multiple
       required: @determineBoolean required
       answersOrder: []
       answers: {}
-    for answer in answers.split(/\s*,\s*/).concat(__parsedExtra ? []).filter Boolean
+
+    for answer in answers.split(/;/).concat(__parsedExtra ? []).filter Boolean
       answerID = @makeID answer
       @props.task.questions[questionID].answersOrder.push answerID
       @props.task.questions[questionID].answers[answerID] =
