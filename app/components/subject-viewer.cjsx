@@ -53,13 +53,15 @@ module.exports = React.createClass
     playbackRate: 1
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
-    playbackRate: 1
+    videoStates: []
 
   componentDidMount: ->
-    @refs.videoScrubber?.value = 0
+    for frame of @props.subject.locations
+      @refs['videoScrubber'+frame]?.value = 0
 
   componentDidUpdate: ->
-    @refs.videoPlayer?.playbackRate = @state.playbackRate
+    for frame of @props.subject.locations
+      @refs['videoPlayer'+frame].playbackRate = @state.videoStates[frame]?.playbackRate || 1
 
   willReceiveProps: (nextProps) ->
     # The default state for subjects is flipbook if allowed
@@ -88,10 +90,11 @@ module.exports = React.createClass
 
     tools = switch type
       when 'image'
-        if @props.allowFlipbook and @props.allowSeparateFrames
-          <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
-            <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
-          </button>
+        if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
+          if @props.allowFlipbook and @props.allowSeparateFrames
+            <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
+              <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
+            </button>
         else
           <span class="tools">
             {if @props.allowFlipbook and @props.allowSeparateFrames
@@ -99,6 +102,9 @@ module.exports = React.createClass
                 <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
               </button>}
 
+            {if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
+              null
+            else
               <span className="subject-frame-play-controls">
                 {if @state.playing
                   <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
@@ -108,8 +114,8 @@ module.exports = React.createClass
                   <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
                     <i className="fa fa-play fa-fw"></i>
                   </button>}
-              </span>
-            </span>
+              </span>}
+          </span>
       when 'video'
         <span className="subject-video-controls">
           <span className="subject-frame-play-controls">
@@ -179,9 +185,36 @@ module.exports = React.createClass
       when 'image'
         <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
       when 'video'
-        <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} onCanPlayThrough={@handleLoad} onEnded={@endVideo} onTimeUpdate={@updateScrubber}>
-          Your browser does not support the video format. Please upgrade your browser.
-        </video>
+        <div className="subject-video-frame">
+          <video ref={'videoPlayer'+frame} src={src} type={"#{type}/#{format}"} onCanPlayThrough={@handleLoad} onEnded={@endVideo.bind this, frame} onTimeUpdate={@updateScrubber.bind this, frame}>
+            Your browser does not support the video format. Please upgrade your browser.
+          </video>
+          <span className="subject-video-controls">
+            <span className="subject-frame-play-controls">
+              {if @state.videoStates[frame]?.playing
+                <button type="button" className="secret-button" aria-label="Pause" onClick={@playVideo.bind this, frame, false}>
+                  <i className="fa fa-pause fa-fw"></i>
+                </button>
+              else
+                <button type="button" className="secret-button" aria-label="Play" onClick={@playVideo.bind this, frame, true}>
+                  <i className="fa fa-play fa-fw"></i>
+                </button>}
+            </span>
+            <input type="range" className="video-scrubber" ref={'videoScrubber'+frame} min="0" step="any" onChange={@seekVideo.bind this, frame} />
+            <span className="video-speed">
+            Speed:
+              {for rate, i in [0.25, 0.5, 1]
+                checked = rate == @state.videoStates[frame]?.playbackRate or (not @state.videoStates[frame]?.playbackRate and rate is 1)
+                <label key="rate-#{i}" className="secret-button">
+                  <input type="radio" name={'playbackRate'+frame} value={rate} checked={checked} onChange={(e) => @setPlayRate e, frame } />
+                  <span>
+                    {rate}&times;
+                  </span>
+                </label>
+              }
+            </span>
+          </span>
+        </div>
 
     if FrameWrapper
       <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions[src]?.width} naturalHeight={@state.frameDimensions[src]?.height} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation}>
@@ -212,8 +245,7 @@ module.exports = React.createClass
   setInFlipbookMode: (inFlipbookMode) ->
     @setState {inFlipbookMode}
 
-  setPlaying: (playing) ->
-    @setState {playing}
+  setPlaying: (frame, playing) ->
     if playing
       @nextFrame()
       @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
@@ -247,32 +279,40 @@ module.exports = React.createClass
       </table>
     </div>
 
-  playVideo: (playing) ->
-    player = @refs.videoPlayer
+  playVideo: (frame, playing) ->
+    player = @refs['videoPlayer'+frame]
     return unless player?
-    @setState {playing}
+    videoStates = @state.videoStates
+    videoStates[frame] = videoStates[frame] || {}
+    videoStates[frame].playing = playing
+    @setState {videoStates}
     if playing
       player.play()
     else
       player.pause()
 
-  setPlayRate: (e) ->
-    playbackRate = parseFloat e.currentTarget.value
-    @setState {playbackRate}
+  setPlayRate: (e, frame) ->
+    # Yeah, updating arrays in @state is hard... this method is potentially open to race-conditions but currently in practice it's not a problem
+    videoStates = @state.videoStates
+    videoStates[frame] = videoStates[frame] || {}
+    videoStates[frame].playbackRate = parseFloat e.currentTarget.value
+    @setState {videoStates}
 
-  seekVideo: (e) ->
-    player = @refs.videoPlayer
-    scrubber = @refs.videoScrubber
+  seekVideo: (frame) ->
+    player = @refs['videoPlayer'+frame]
+    scrubber = @refs['videoScrubber'+frame]
     time = scrubber.value
     player.currentTime = time
 
-  endVideo: (e) ->
-    playing = false
-    @setState {playing}
+  endVideo: (frame) ->
+    videoStates = @state.videoStates
+    videoStates[frame] = videoStates[frame] || {}
+    videoStates[frame].playing = false
+    @setState {videoStates}
 
-  updateScrubber: (e) ->
-    player = @refs.videoPlayer
-    scrubber = @refs.videoScrubber
+  updateScrubber: (frame) ->
+    player = @refs['videoPlayer'+frame]
+    scrubber = @refs['videoScrubber'+frame]
     scrubber.setAttribute 'max', player.duration unless scrubber.getAttribute 'max'
     scrubber.value = player.currentTime
 
