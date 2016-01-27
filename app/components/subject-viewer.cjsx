@@ -5,6 +5,8 @@ alert = require '../lib/alert'
 {Markdown} = require 'markdownz'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
+workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
+workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 
 NOOP = Function.prototype
 
@@ -50,7 +52,7 @@ module.exports = React.createClass
     frame: @props.frame ? 0
     playbackRate: 1
     frameDimensions: {}
-    inFlipbookMode: false
+    inFlipbookMode: workflowAllowsFlipbook @props.workflow
 
   componentDidMount: ->
     @refs.videoScrubber?.value = 0
@@ -74,24 +76,28 @@ module.exports = React.createClass
     tools = switch type
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
-          null
-        else
-          <span class="tools">
+          if workflowAllowsFlipbook(@props.workflow) and workflowAllowsSeparateFrames(@props.workflow)
             <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
               <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
             </button>
+        else
+          <span class="tools">
+            {if workflowAllowsFlipbook(@props.workflow) and workflowAllowsSeparateFrames(@props.workflow)
+              <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
+                <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
+              </button>}
 
-            <span className="subject-frame-play-controls">
-              {if @state.playing
-                <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
-                  <i className="fa fa-pause fa-fw"></i>
-                </button>
-              else
-                <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
-                  <i className="fa fa-play fa-fw"></i>
-                </button>}
+              <span className="subject-frame-play-controls">
+                {if @state.playing
+                  <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
+                    <i className="fa fa-pause fa-fw"></i>
+                  </button>
+                else
+                  <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
+                    <i className="fa fa-play fa-fw"></i>
+                  </button>}
+              </span>
             </span>
-          </span>
       when 'video'
         <span className="subject-video-controls">
           <span className="subject-frame-play-controls">
