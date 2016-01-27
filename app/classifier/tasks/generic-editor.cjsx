@@ -107,7 +107,6 @@ module.exports = React.createClass
                       <AutoSave resource={@props.workflow}>
                         Color{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          <!-- TODO Color picker instead of fixed choices -->
                           <option value="#ff0000">Red</option>
                           <option value="#ffff00">Yellow</option>
                           <option value="#00ff00">Green</option>
@@ -117,6 +116,32 @@ module.exports = React.createClass
                           <option value="#000000">Black</option>
                           <option value="#ffffff">White</option>
                         </select>
+                      </AutoSave>
+                    </div>
+
+                    <div key="min-max" className="min-max-editor workflow-choice-setting">
+                      <AutoSave resource={@props.workflow}>
+                        Min{' '}
+                        <input type="number"
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}.min"
+                          value={choice.min}
+                          placeholder="0"
+                          style={width: '3ch'}
+                          onBlur={handleChange}
+                          data-json-value={true}
+                         />
+                      </AutoSave>
+                      <AutoSave resource={@props.workflow}>
+                        Max{' '}
+                        <input
+                          type="number"
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}.max"
+                          value={choice.max}
+                          placeholder="∞"
+                          style={width: '3ch'}
+                          onBlur={handleChange}
+                          data-json-value={true}
+                         />
                       </AutoSave>
                     </div>
 

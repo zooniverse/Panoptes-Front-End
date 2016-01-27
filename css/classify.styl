@@ -44,6 +44,9 @@
   .marking-initializer
     cursor: crosshair
 
+    &[data-disabled]
+      cursor: not-allowed
+
   .loading-cover
     align-items: center
     background: rgba(gray, 0.5)
@@ -113,38 +116,56 @@
       margin-left: 0.5em
 
 .workflow-task
-  .answer
-    align-items: center
-    display: flex
-    margin: 0.5em 0
-    text-align: left
-
-    > input,
-    > .drawing-tool-icon
-      flex-shrink: 0
-      line-height: 1
-      margin-right: 0.5em
-
-    > .markdown > p:first-child:last-child
-      margin: 0
-
-    > .tool-count
-      margin-left: 0.5em
-      opacity: 0.7
+  & + .workflow-task
+    margin-top: 2em
 
   // Only show the "required" warning when a task is outside the normal flow.
   .classifier > .task-area & .required-task-warning
     display: none
 
-  .drawing-tool-icon > svg
+  .answer-button
+    align-items: baseline
+    display: flex
+    margin: 0.5em 0
+    padding: 1ch 2ch
+    position: relative
+    text-align: left
+
+    > :not(:first-child)
+      margin-left: 1ch
+
+    // Ignore first and last margins from Markdown.
+    .markdown
+      > :first-child
+        margin-top: 0
+
+      > :last-child
+        margin-bottom: 0
+
+    .answer-button-icon-container
+      align-self: flex-start
+      flex-shrink: 0
+      height: 1em // Overflow is okay!
+
+    .answer-button-label-container
+      align-items: baseline
+      display: flex
+      flex-grow: 1
+      flex-wrap: wrap
+
+    .answer-button-label
+      flex-grow: 1
+
+    .answer-button-status
+      font-size: 0.8em
+      opacity: 0.7
+
+  .drawing-tool-button-icon > svg
     fill-opacity: 0.1
     height: 1.5em
     stroke: currentColor
     stroke-width: 5
     width: 1.5em
 
-  .drawing-tool-input
+  .drawing-tool-button-input
     display: none
-
-  & + .workflow-task
-    margin-top: 2em

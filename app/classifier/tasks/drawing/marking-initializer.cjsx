@@ -12,7 +12,13 @@ module.exports = React.createClass
     getEventOffset: null
 
   render: ->
-    <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease}>
+    toolDescription = @props.task.tools[@props.annotation._toolIndex]
+    marksFromCurrentTool = @props.annotation.value.filter (mark) =>
+      mark.tool is @props.annotation._toolIndex
+
+    canMakeMarks = marksFromCurrentTool.length < (toolDescription.max ? Infinity)
+
+    <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease} disabled={not canMakeMarks}>
       <rect className="marking-initializer" width={@props.naturalWidth} height={@props.naturalHeight} fill="transparent" stroke="none" />
     </Draggable>
 

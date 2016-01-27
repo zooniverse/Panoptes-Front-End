@@ -79,12 +79,12 @@ workflow = apiClient.type('workflows').create
         * Draw something
       '''
       tools: [
-        {type: 'point', label: 'Point', color: 'red', details: MISC_DRAWING_DETAILS}
-        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DRAWING_DETAILS}
-        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DRAWING_DETAILS}
+        {type: 'point', label: 'Point', color: 'red', min: 1, max: 2}
+        {type: 'line', label: 'Line', color: 'yellow', min: 1}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime', max: 2}
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
         {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DRAWING_DETAILS}
+        {type: 'ellipse', label: 'Ellipse '.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
       ]
       next: 'survey'
 
