@@ -92,7 +92,7 @@ workflow = apiClient.type('workflows').create
       '''
       tools: [
         {type: 'point', label: 'Point', color: 'red', min: 1, max: 2}
-        {type: 'line', label: 'Line', color: 'yellow', min: 1}
+        {type: 'line', label: 'Line', color: 'yellow', min: 0}
         {type: 'rectangle', label: 'Rectangle', color: 'lime', max: 2}
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
         {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
@@ -291,6 +291,9 @@ subject = apiClient.type('subjects').create
         task: 'write'
         value: 'Rhino'
       }, {
+        task: 'ask'
+        value: 0
+      }, {
         task: 'features'
         value: [0, 1]
       }, {
@@ -313,7 +316,7 @@ subject = apiClient.type('subjects').create
         value: []
       }, {
         task: 'init'
-        value: 5
+        value: 6
       }]
 
 classification = apiClient.type('classifications').create
