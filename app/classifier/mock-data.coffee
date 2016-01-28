@@ -63,13 +63,12 @@ workflow = apiClient.type('workflows').create
       type: 'single'
       question: 'Rhino starts with...'
       answers: [
-        {label: 'Are'}
-        {label: 'Aitch'}
-        {label: 'Eye'}
-        {label: 'En'}
-        {label: 'Oh'}
+        {label: 'Are', next: 'features'}
+        {label: 'Aitch', next: 'features'}
+        {label: 'Eye', next: 'features'}
+        {label: 'En', next: 'features'}
+        {label: 'Oh', next: 'features'}
       ]
-      next: 'features'
 
     features:
       type: 'multiple'

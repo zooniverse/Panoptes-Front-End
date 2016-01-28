@@ -117,5 +117,5 @@ module.exports = React.createClass
         indexInValue = value.indexOf index
         value.splice indexInValue, 1
 
-    newAnnotation = Object.assign {}, @props.annotations, {value}
+    newAnnotation = Object.assign {}, @props.annotation, {value}
     @props.onChange newAnnotation
