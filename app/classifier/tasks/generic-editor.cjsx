@@ -48,9 +48,11 @@ module.exports = React.createClass
         </div>}
 
       {if choicesKey?
-        <hr />
+        <div>
+          <hr />
 
-        <span className="form-label">Choices</span>
+          <span className="form-label">Choices</span>
+        </div>
       }
       {' '} 
       {if choicesKey is 'answers'
