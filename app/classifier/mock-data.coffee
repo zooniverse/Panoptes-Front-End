@@ -27,6 +27,9 @@ MISC_DRAWING_DETAILS = [{
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
+  configuration:
+    multi_image_mode: 'flipbook_and_separate'
+
   first_task: 'init'
 
   tasks:
@@ -97,6 +100,7 @@ workflow = apiClient.type('workflows').create
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
         {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
         {type: 'ellipse', label: 'Ellipse '.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
+        {type: 'bezier', label: 'Bezier', color: 'orange', details: MISC_DRAWING_DETAILS}
       ]
       next: 'survey'
 
