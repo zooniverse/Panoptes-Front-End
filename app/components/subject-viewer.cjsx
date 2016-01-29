@@ -81,13 +81,13 @@ module.exports = React.createClass
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
           if @props.allowFlipbook and @props.allowSeparateFrames
-            <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
+            <button aria-label="Toggle flipbook mode" title="Toggle flipbook mode" className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
               <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
             </button>
         else
           <span className="tools">
             {if @props.allowFlipbook and @props.allowSeparateFrames
-              <button className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
+              <button aria-label="Toggle flipbook mode" title="Toggle flipbook mode" className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
                 <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
               </button>}
 
@@ -96,11 +96,11 @@ module.exports = React.createClass
             else
               <span className="subject-frame-play-controls">
                 {if @state.playing
-                  <button type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
+                  <button aria-label="Pause" title="Pause" type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
                     <i className="fa fa-pause fa-fw"></i>
                   </button>
                 else
-                  <button type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
+                  <button aria-label="Play" title="Play" type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
                     <i className="fa fa-play fa-fw"></i>
                   </button>}
               </span>}
@@ -125,7 +125,7 @@ module.exports = React.createClass
         </span>}
         <span>
           {if @props.subject?.metadata?
-            <button type="button" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
+            <button type="button" aria-label="Metadata" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
           {if @props.subject? and @props.user? and @props.project?
             <span>
               <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />
