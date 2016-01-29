@@ -75,6 +75,7 @@ module.exports =
       </Route>
       <Route path="faq" component={require './pages/project/faq'} />
       <Route path="education" component={require './pages/project/education'} />
+      <Route path="stats" component={require './pages/project/stats'} />
     </Route>
 
     <Route path="notifications" component={require './pages/notifications'} />
@@ -90,6 +91,7 @@ module.exports =
       <Route path="recents/:board" component={require './talk/recents'} />
       <Route name="talk-discussion" path=":board/:discussion" component={require './talk/discussion'} />
     </Route>
+  </Route>
 
     <Route path="favorites" component={require('./pages/collections').FavoritesList}>
       <Route path=":owner" component={require('./pages/collections').FavoritesList} />
