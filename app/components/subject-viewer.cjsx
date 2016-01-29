@@ -70,13 +70,12 @@ module.exports = React.createClass
     if @props.workflow?.configuration?.multi_image_layout then rootClass += ' subject-viewer--layout-' + @props.workflow.configuration?.multi_image_layout
     if @state.inFlipbookMode then rootClass += ' subject-viewer--flipbook'
     mainDisplay = ''
+    {type, format, src} = getSubjectLocation @props.subject, @state.frame
     if @state.inFlipbookMode
-      {type, format, src} = getSubjectLocation @props.subject, @state.frame
       mainDisplay = @renderFrame @state.frame
     else
-      mainDisplay = for frame of @props.subject.locations
-        {type, format, src} = getSubjectLocation @props.subject, frame
-        @renderFrame frame
+      mainDisplay = (@renderFrame frame, {key: "frame-#{frame}"} for frame of @props.subject.locations)
+          
 
     tools = switch type
       when 'image'
@@ -140,8 +139,8 @@ module.exports = React.createClass
       </div>
     </div>
 
-  renderFrame: (frame) ->
-    <FrameViewer frame={frame} project={@props.project} classification={@props.classification} subject={@props.subject} workflow={@props.workflow} classification={@props.classification} annotation={@props.annotation} onLoad={@props.onLoad} frameWrapper={@props.frameWrapper} onChange={@props.onChange} />
+  renderFrame: (frame, props = {}) ->
+    <FrameViewer {...@props} {...props} frame={frame} />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
