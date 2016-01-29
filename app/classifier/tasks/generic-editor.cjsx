@@ -47,10 +47,14 @@ module.exports = React.createClass
           <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
         </div>}
 
-      <hr />
+      {if choicesKey?
+        <div>
+          <hr />
 
-      <span className="form-label">Choices</span>
-      {' '}
+          <span className="form-label">Choices</span>
+        </div>
+      }
+      {' '} 
       {if choicesKey is 'answers'
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
         requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
@@ -220,6 +224,7 @@ module.exports = React.createClass
     alert (resolve) =>
       <ChangeListener target={@props.workflow}>{=>
         <DrawingTaskDetailsEditor
+          project={@props.project}
           workflow={@props.workflow}
           task={@props.task}
           toolIndex={toolIndex}

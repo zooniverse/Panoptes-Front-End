@@ -277,6 +277,7 @@ EditWorkflowPage = React.createClass
                 workflow={@props.workflow}
                 task={@props.workflow.tasks[@state.selectedTaskKey]}
                 taskPrefix="tasks.#{@state.selectedTaskKey}"
+                project={@props.project}
               />
               <hr />
               <br />
