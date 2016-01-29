@@ -26,13 +26,14 @@ module.exports = React.createClass
     onLoad: NOOP
     classification: null
     workflow: null
+    frameWrapper: null
+    onChange: ->
 
   getInitialState: ->
     loading: true
     playing: false
     playbackRate: 1
     frameDimensions: {}
-    frameWrapper: null
 
   componentDidMount: ->
     @refs.videoScrubber?.value = 0
@@ -93,7 +94,7 @@ module.exports = React.createClass
         </div>
 
     if FrameWrapper
-      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading}>
+      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange}>
         {frameDisplay}
       </FrameWrapper>
     else

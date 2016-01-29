@@ -107,15 +107,15 @@ module.exports = React.createClass
     <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
 
   handleChange: (index, e) ->
-    answers = @props.annotation.value
+    value = @props.annotation.value.slice 0
 
     if e.target.checked
-      if index not in answers
-        answers.push index
+      if index not in value
+        value.push index
     else
-      if index in answers
-        indexInAnswers = answers.indexOf index
-        answers.splice indexInAnswers, 1
+      if index in value
+        indexInValue = value.indexOf index
+        value.splice indexInValue, 1
 
-    @props.annotation.value = answers
-    @props.onChange? e
+    newAnnotation = Object.assign {}, @props.annotation, {value}
+    @props.onChange newAnnotation

@@ -44,7 +44,7 @@ module.exports = React.createClass
         frame: @props.frame
       if toolDescription.details?
         mark.details = for detailTaskDescription in toolDescription.details
-          tasks[detailTaskDescription.type].getDefaultAnnotation()
+          tasks[detailTaskDescription.type].getDefaultAnnotation detailTaskDescription, @props.workflow, tasks
 
       @props.annotation.value.push mark
 

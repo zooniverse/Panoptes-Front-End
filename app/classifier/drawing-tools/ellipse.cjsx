@@ -83,7 +83,7 @@ module.exports = React.createClass
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
     @props.mark.y += d.y / @props.scale.vertical
-    @props.onChange e
+    @props.onChange @props.mark
 
   handleRadiusHandleDrag: (coord, e, d) ->
     {x, y} = @props.getEventOffset e
@@ -93,4 +93,4 @@ module.exports = React.createClass
     @props.mark.angle = angle
     if coord is 'y'
       @props.mark.angle -= 90
-    @props.onChange e
+    @props.onChange @props.mark
