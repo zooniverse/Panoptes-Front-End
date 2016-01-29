@@ -93,7 +93,7 @@ module.exports = React.createClass
             <Link to="/lab"><Translate content="footer.discover.projectBuilder" /></Link>
             <Link to="/lab-how-to"><Translate content="footer.discover.howToGuide" /></Link>
             <Link to="/lab-policies"><Translate content="footer.discover.projectBuilderPolicies" /></Link>
-            {if process.env isnt 'production'
+            {if process.env.NODE_ENV isnt 'production'
               <Link to="/dev/classifier">Dev Classifier</Link>}
           </div>
           <div className="site-map-section">
