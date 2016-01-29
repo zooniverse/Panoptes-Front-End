@@ -58,7 +58,7 @@ module.exports = React.createClass
         </div>
       when 'video'
         <div className="subject-video-frame">
-          <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} onCanPlayThrough={@handleLoad} onEnded={@endVideo} onTimeUpdate={@updateScrubber}>
+          <video ref="videoPlayer" src={src} type={"#{type}/#{format}"} preload="auto" onCanPlay={@handleLoad} onEnded={@endVideo} onTimeUpdate={@updateScrubber}>
             Your browser does not support the video format. Please upgrade your browser.
           </video>
           <span className="subject-video-controls">
