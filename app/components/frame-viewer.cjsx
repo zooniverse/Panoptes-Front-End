@@ -144,10 +144,12 @@ module.exports = React.createClass
     scrubber.value = player.currentTime
 
   handleLoad: (e) ->
+    width = e.target.videoWidth ? e.target.naturalWidth
+    height = e.target.videoHeight ? e.target.naturalHeight
     @setState
       loading: false
       frameDimensions:
-        width: e.target.naturalWidth
-        height: e.target.naturalHeight
+        width: width ? 0
+        height: height ? 0
 
     @props.onLoad? arguments...
