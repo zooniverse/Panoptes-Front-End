@@ -1,4 +1,4 @@
-var apiClient = require('../../../api/client');
+var apiClient = require('panoptes-client/lib/api-client');
 var putFile = require('../../../lib/put-file');
 
 var projects = apiClient.type('projects');
