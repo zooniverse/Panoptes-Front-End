@@ -33,7 +33,7 @@ module.exports = React.createClass
     <div className="workflow-task-editor">
       <p><span className="form-label">Import task data</span></p>
       <div className="columns-container" style={marginBottom: '0.2em'}>
-        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addChoice}>Add choices CSV</FileButton>
+        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addChoice, null}>Add choices CSV</FileButton>
         <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
@@ -43,7 +43,7 @@ module.exports = React.createClass
         </TriggeredModalForm>
       </div>
       <div className="columns-container" style={marginBottom: '0.2em'}>
-        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addCharacteristics}>Add characteristics CSV</FileButton>
+        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addCharacteristics, null}>Add characteristics CSV</FileButton>
         <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
@@ -53,7 +53,7 @@ module.exports = React.createClass
         </TriggeredModalForm>
       </div>
       <div className="columns-container" style={marginBottom: '0.2em'}>
-        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addConfusion}>Add confused pairs CSV</FileButton>
+        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addConfusion, null}>Add confused pairs CSV</FileButton>
         <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
@@ -63,7 +63,7 @@ module.exports = React.createClass
         </TriggeredModalForm>
       </div>
       <div className="columns-container" style={marginBottom: '0.2em'}>
-        <FileButton className="major-button column" multiple onSelect={@handleFiles.bind this, @addQuestion}>Add questions CSV</FileButton>
+        <FileButton className="major-button column" multiple onSelect={@handleFiles.bind this, @addQuestion, @cleanQuestions}>Add questions CSV</FileButton>
         <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
@@ -185,7 +185,7 @@ module.exports = React.createClass
       </Details>
     </div>
 
-  handleFiles: (forEachRow, e) ->
+  handleFiles: (forEachRow, afterFileHook, e) ->
     @setState
       importErrors: []
     Array::slice.call(e.target.files).forEach (file) =>
@@ -201,6 +201,7 @@ module.exports = React.createClass
           throw error
           @handleImportError error, file
         .then =>
+          afterFileHook?()
           @props.workflow.update('tasks').save()
 
   readFile: (file) ->
@@ -308,36 +309,32 @@ module.exports = React.createClass
     @props.task.choices[choiceID]?.confusionsOrder.push confusionID
     @props.task.choices[choiceID]?.confusions[confusionID] = details
 
-  addQuestion: ({question, multiple, required, answers, name, __parsedExtra}) ->
-    unless question? or name?
+  addQuestion: ({question, multiple, required, answers, include, exclude, __parsedExtra}) ->
+    unless question?
       throw new Error 'Questions require a "question" column'
     unless answers?
       throw new Error 'Questions require a "answers" column'
 
-    choices = null
-    questionID = null
-    if(!!name)
-      choices = name.split(/\s*;s*/)
-    if(!!question)
-      questionID = @makeID question
+    includeChoices = include?.split /\s*;\s*/
+    excludeChoices = exclude?.split /\s*;\s*/
+    questionID = @makeID question
 
     # don't put it in the default questionsOrder if we've specified choices it should map to
-    unless choices? or questionID in @props.task.questionsOrder
-      @props.task.questionsOrder.push questionID
+    unless include? or questionID in @props.task.questionsOrder
+      (maybeProp @props.task.questionsOrder, []).push questionID
 
     # if we specified mapped choices, create those entries instead
-    if choices?
-      @props.task.questionsMap ?= {}
-      for choice in choices
-        continue unless !!choice
+    if includeChoices?
+      for choice in includeChoices
+        continue unless choice?
         choiceID = @makeID choice
-        @props.task.questionsMap[choiceID] ?= []
-        @props.task.questionsMap[choiceID].push questionID if questionID?
+        (maybeProp @props.task, inclusions, []).push [choiceID, questionID]
 
-    # we only can get here if the question stuff is empty and the names are not empty
-    # that means there will be no questions for this choice, so we don't need to actually
-    # store any questions or answers for this row of the csv
-    return unless questionID?
+    if excludeChoices?
+      for choice in excludeChoices
+        continue unless choice?
+        choiceID = @makeID choice
+        (maybeProp @props.task, exclusions, []). push [choiceID, questionID]
 
     @props.task.questions[questionID] =
       label: question
@@ -346,11 +343,32 @@ module.exports = React.createClass
       answersOrder: []
       answers: {}
 
-    for answer in answers.split(/;/).concat(__parsedExtra ? []).filter Boolean
+    for answer in ((answers.split /;/).concat __parsedExtra ? []).filter Boolean
       answerID = @makeID answer
       @props.task.questions[questionID].answersOrder.push answerID
       @props.task.questions[questionID].answers[answerID] =
         label: answer
+
+  maybeProp: (owner, prop, defVal) ->
+    owner[prop] = defVal unless owner[prop]?
+    owner[prop]
+
+  cleanQuestions: () ->
+    if @props.task.includeChoices?
+      for includeTuple in @props.task.includeChoices
+        (maybeProp (maybeProp @props.task.questionsMap, {}) includeTuple[0], []).push includeTuple[1]
+
+    if @props.task.questionsOrder?
+      for questionID in @props.task.questionsOrder
+        for choiceID in @props.task.choicesOrder
+          (maybeProp (maybeProp @props.task.questionsMap, {}) choiceID, []).push questionID
+
+    if @props.task.excludeChoices?
+      for excludeTuple in @props.task.excludeChoices
+        questionList = @props.task.questionsMap[excludeTuple[0]]
+        questionList.splice (questionList.indexOf excludeTuple[1]) 1
+
+    return
 
   handleImageAdd: (media) ->
     @props.task.images[media.metadata.filename] = media.src
