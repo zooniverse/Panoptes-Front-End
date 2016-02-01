@@ -15,15 +15,20 @@ module.exports = React.createClass
     disabled: React.PropTypes.bool
 
   render: ->
-    # NOTE: This won't actually render any new DOM nodes,
-    # it just attaches a `mousedown` listener to its child.
+    childProps =
+      className: [@props.children.props.className, 'draggable'].filter(Boolean).join ' '
+
     if @props.disabled
-      @props.children
+      Object.assign childProps,
+      'data-disabled': true
     else
-      React.cloneElement @props.children,
-        className: [@props.children.props.className, 'draggable'].filter(Boolean).join ' '
+      Object.assign childProps,
         onMouseDown: @handleStart
         onTouchStart: @handleStart
+
+    # NOTE: This won't actually render any new DOM nodes,
+    # it just attaches a `mousedown` listener to its child.
+    React.cloneElement @props.children, childProps
 
   _rememberCoords: (e) ->
     @_previousEventCoords =

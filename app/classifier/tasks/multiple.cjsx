@@ -95,23 +95,27 @@ module.exports = React.createClass
   render: ->
     answers = for answer, i in @props.task.answers
       answer._key ?= Math.random()
-      <label key={answer._key} className="minor-button #{if i in @props.annotation.value then 'active' else ''}">
-        <input type="checkbox" checked={i in @props.annotation.value} onChange={@handleChange.bind this, i} />
-        <Markdown>{answer.label}</Markdown>
+      <label key={answer._key} className="minor-button answer-button #{if i in @props.annotation.value then 'active' else ''}">
+        <div className="answer-button-icon-container">
+          <input type="checkbox" checked={i in @props.annotation.value} onChange={@handleChange.bind this, i} />
+        </div>
+        <div className="answer-button-label-container">
+          <Markdown className="answer-button-label">{answer.label}</Markdown>
+        </div>
       </label>
 
     <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
 
   handleChange: (index, e) ->
-    answers = @props.annotation.value
+    value = @props.annotation.value.slice 0
 
     if e.target.checked
-      if index not in answers
-        answers.push index
+      if index not in value
+        value.push index
     else
-      if index in answers
-        indexInAnswers = answers.indexOf index
-        answers.splice indexInAnswers, 1
+      if index in value
+        indexInValue = value.indexOf index
+        value.splice indexInValue, 1
 
-    @props.annotation.value = answers
-    @props.onChange? e
+    newAnnotation = Object.assign {}, @props.annotation, {value}
+    @props.onChange newAnnotation

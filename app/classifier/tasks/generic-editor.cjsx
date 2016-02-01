@@ -47,10 +47,14 @@ module.exports = React.createClass
           <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
         </div>}
 
-      <hr />
+      {if choicesKey?
+        <div>
+          <hr />
 
-      <span className="form-label">Choices</span>
-      {' '}
+          <span className="form-label">Choices</span>
+        </div>
+      }
+      {' '} 
       {if choicesKey is 'answers'
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
         requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
@@ -107,7 +111,6 @@ module.exports = React.createClass
                       <AutoSave resource={@props.workflow}>
                         Color{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.color" value={choice.color} onChange={handleChange}>
-                          <!-- TODO Color picker instead of fixed choices -->
                           <option value="#ff0000">Red</option>
                           <option value="#ffff00">Yellow</option>
                           <option value="#00ff00">Green</option>
@@ -117,6 +120,32 @@ module.exports = React.createClass
                           <option value="#000000">Black</option>
                           <option value="#ffffff">White</option>
                         </select>
+                      </AutoSave>
+                    </div>
+
+                    <div key="min-max" className="min-max-editor workflow-choice-setting">
+                      <AutoSave resource={@props.workflow}>
+                        Min{' '}
+                        <input type="number"
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}.min"
+                          value={choice.min}
+                          placeholder="0"
+                          style={width: '3ch'}
+                          onBlur={handleChange}
+                          data-json-value={true}
+                         />
+                      </AutoSave>
+                      <AutoSave resource={@props.workflow}>
+                        Max{' '}
+                        <input
+                          type="number"
+                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}.max"
+                          value={choice.max}
+                          placeholder="∞"
+                          style={width: '3ch'}
+                          onBlur={handleChange}
+                          data-json-value={true}
+                         />
                       </AutoSave>
                     </div>
 
@@ -195,6 +224,7 @@ module.exports = React.createClass
     alert (resolve) =>
       <ChangeListener target={@props.workflow}>{=>
         <DrawingTaskDetailsEditor
+          project={@props.project}
           workflow={@props.workflow}
           task={@props.task}
           toolIndex={toolIndex}

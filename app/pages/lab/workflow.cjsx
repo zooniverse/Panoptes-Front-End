@@ -8,6 +8,7 @@ apiClient = require '../../api/client'
 ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {History, Navigation, Link} = require 'react-router'
+MultiImageSubjectOptionsEditor = require '../../components/multi-image-subject-options-editor'
 tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
@@ -198,6 +199,14 @@ EditWorkflowPage = React.createClass
               <hr />
             </div>}
 
+          <AutoSave tag="div" resource={@props.workflow}>
+            <span className="form-label">Multi-image options</span><br />
+            <small className="form-help">Choose how to display multiple images</small>
+            <MultiImageSubjectOptionsEditor workflow={@props.workflow} />
+          </AutoSave>
+
+          <hr />
+
           <p>
             <AutoSave resource={@props.workflow}>
               Subject retirement <RetirementRulesEditor workflow={@props.workflow} />
@@ -260,6 +269,7 @@ EditWorkflowPage = React.createClass
                 workflow={@props.workflow}
                 task={@props.workflow.tasks[@state.selectedTaskKey]}
                 taskPrefix="tasks.#{@state.selectedTaskKey}"
+                project={@props.project}
               />
               <hr />
               <br />

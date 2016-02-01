@@ -27,6 +27,9 @@ MISC_DRAWING_DETAILS = [{
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
+  configuration:
+    multi_image_mode: 'flipbook_and_separate'
+
   first_task: 'init'
 
   tasks:
@@ -37,6 +40,7 @@ workflow = apiClient.type('workflows').create
       answers: [
         {label: 'Crop the image', next: 'crop'}
         {label: 'Enter some text', next: 'write'}
+        {label: 'Single-answer question', next: 'ask'}
         {label: 'Multi-answer question', next: 'features'}
         {label: 'Draw stuff', next: 'draw'}
         {label: 'Survey the image', next: 'survey'}
@@ -56,7 +60,18 @@ workflow = apiClient.type('workflows').create
       help: '''
         **Example**: If you see a bee, then type "Bee"
       '''
-      next: 'features'
+      next: 'ask'
+
+    ask:
+      type: 'single'
+      question: 'Rhino starts with...'
+      answers: [
+        {label: 'Are', next: 'features'}
+        {label: 'Aitch', next: 'features'}
+        {label: 'Eye', next: 'features'}
+        {label: 'En', next: 'features'}
+        {label: 'Oh', next: 'features'}
+      ]
 
     features:
       type: 'multiple'
@@ -79,12 +94,13 @@ workflow = apiClient.type('workflows').create
         * Draw something
       '''
       tools: [
-        {type: 'point', label: 'Point', color: 'red', details: MISC_DRAWING_DETAILS}
-        {type: 'line', label: 'Line', color: 'yellow', details: MISC_DRAWING_DETAILS}
-        {type: 'rectangle', label: 'Rectangle', color: 'lime', details: MISC_DRAWING_DETAILS}
+        {type: 'point', label: 'Point', color: 'red', min: 1, max: 2}
+        {type: 'line', label: 'Line', color: 'yellow', min: 0}
+        {type: 'rectangle', label: 'Rectangle', color: 'lime', max: 2}
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
         {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
-        {type: 'ellipse', label: 'Ellipse', color: 'magenta', details: MISC_DRAWING_DETAILS}
+        {type: 'ellipse', label: 'Ellipse '.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
+        {type: 'bezier', label: 'Bezier', color: 'orange', details: MISC_DRAWING_DETAILS}
       ]
       next: 'survey'
 
@@ -279,6 +295,9 @@ subject = apiClient.type('subjects').create
         task: 'write'
         value: 'Rhino'
       }, {
+        task: 'ask'
+        value: 0
+      }, {
         task: 'features'
         value: [0, 1]
       }, {
@@ -301,7 +320,7 @@ subject = apiClient.type('subjects').create
         value: []
       }, {
         task: 'init'
-        value: 5
+        value: 6
       }]
 
 classification = apiClient.type('classifications').create

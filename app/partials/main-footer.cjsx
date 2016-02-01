@@ -93,6 +93,8 @@ module.exports = React.createClass
             <Link to="/lab"><Translate content="footer.discover.projectBuilder" /></Link>
             <Link to="/lab-how-to"><Translate content="footer.discover.howToGuide" /></Link>
             <Link to="/lab-policies"><Translate content="footer.discover.projectBuilderPolicies" /></Link>
+            {if process.env.NODE_ENV isnt 'production'
+              <Link to="/dev/classifier">Dev Classifier</Link>}
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.about.title" />
@@ -113,7 +115,6 @@ module.exports = React.createClass
             <a href="https://twitter.com/the_zooniverse" target="_blank"><i className="fa fa-twitter"></i></a>
             <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank"><i className="fa fa-google-plus"></i></a>
           </div>
-
         </nav>
       </div>
       <div className="footer-sole">
