@@ -161,7 +161,7 @@ module.exports = React.createClass
 
       <hr />
 
-      {unless @props.task.questionsOrder.length is 0
+      {if @props.task.questionsOrder?.length
         <div>
           <Details summary="Questions">
             {for questionID in @props.task.questionsOrder
@@ -310,31 +310,32 @@ module.exports = React.createClass
     @props.task.choices[choiceID]?.confusions[confusionID] = details
 
   addQuestion: ({question, multiple, required, answers, include, exclude, __parsedExtra}) ->
-    unless question?
+    unless !!question
       throw new Error 'Questions require a "question" column'
-    unless answers?
+    unless !!answers
       throw new Error 'Questions require a "answers" column'
 
-    includeChoices = include?.split /\s*;\s*/
-    excludeChoices = exclude?.split /\s*;\s*/
+    includeChoices = include.split /\s*;\s*/ if !!include
+    excludeChoices = exclude.split /\s*;\s*/ if !!exclude
     questionID = @makeID question
 
     # don't put it in the default questionsOrder if we've specified choices it should map to
-    unless include? or questionID in @props.task.questionsOrder
-      (maybeProp @props.task.questionsOrder, []).push questionID
+    unless !!includeChoices or !questionID or (questionID in @props.task.questionsOrder)
+      qOrder = @maybeProp @props.task, 'questionsOrder', []
+      qOrder.push questionID
 
     # if we specified mapped choices, create those entries instead
     if includeChoices?
       for choice in includeChoices
-        continue unless choice?
         choiceID = @makeID choice
-        (maybeProp @props.task, inclusions, []).push [choiceID, questionID]
+        continue unless !!choiceID
+        (@maybeProp @props.task, 'inclusions', []).push [choiceID, questionID]
 
     if excludeChoices?
       for choice in excludeChoices
-        continue unless choice?
         choiceID = @makeID choice
-        (maybeProp @props.task, exclusions, []). push [choiceID, questionID]
+        continue unless !!choiceID
+        (@maybeProp @props.task, 'exclusions', []).push [choiceID, questionID]
 
     @props.task.questions[questionID] =
       label: question
@@ -354,21 +355,29 @@ module.exports = React.createClass
     owner[prop]
 
   cleanQuestions: () ->
-    if @props.task.includeChoices?
-      for includeTuple in @props.task.includeChoices
-        (maybeProp (maybeProp @props.task.questionsMap, {}) includeTuple[0], []).push includeTuple[1]
-
     if @props.task.questionsOrder?
       for questionID in @props.task.questionsOrder
         for choiceID in @props.task.choicesOrder
-          (maybeProp (maybeProp @props.task.questionsMap, {}) choiceID, []).push questionID
+          continue if @props.task.choices[choiceID].noQuestions
+          qMap = @maybeProp @props.task, 'questionsMap', {}
+          qSet = @maybeProp qMap, choiceID, []
+          qSet.push questionID
 
-    if @props.task.excludeChoices?
-      for excludeTuple in @props.task.excludeChoices
-        questionList = @props.task.questionsMap[excludeTuple[0]]
-        questionList.splice (questionList.indexOf excludeTuple[1]) 1
+    if @props.task.inclusions?
+      for includeTuple in @props.task.inclusions
+        qMap = @maybeProp @props.task, 'questionsMap', {}
+        qSet = @maybeProp qMap, includeTuple[0], []
+        qSet.push includeTuple[1]
 
-    return
+    if @props.task.exclusions?
+      for excludeTuple in @props.task.exclusions
+        qMap = @maybeProp @props.task, 'questionsMap', {}
+        qSet = @maybeProp qMap, excludeTuple[0], []
+        index = qSet.indexOf excludeTuple[1]
+        qSet.splice index, 1
+
+    delete @props.task.inclusions
+    delete @props.task.exclusions
 
   handleImageAdd: (media) ->
     @props.task.images[media.metadata.filename] = media.src
@@ -387,6 +396,9 @@ module.exports = React.createClass
         choices: {}
         questionsOrder: []
         questions: {}
+        inclusions: []
+        exclusions: []
+        questionsMap: {}
       @props.workflow.update 'tasks'
 
   resetMedia: (e) ->
