@@ -1,104 +1,176 @@
 React = require 'react'
-{Link, History} = require 'react-router'
-PromiseRenderer = require '../../components/promise-renderer'
-LoadingIndicator = require '../../components/loading-indicator'
+{Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
-counterpart = require 'counterpart'
-LandingPage = require './landing-page'
 
-sleep = (duration) ->
-  (value) ->
-    new Promise (resolve) ->
-      setTimeout resolve.bind(null, value), duration
-
-module.exports = React.createClass
-  displayName: 'LabIndex'
-  mixins: [History]
-
-  getInitialState: ->
-    page: 1
-    creationError: null
-    creationInProgress: false
-
-  fetchProjects: ->
-    projectsQuery =
-      current_user_roles: 'owner,collaborator',
-      page: @state.page
-      skipCache: true
-
-    apiClient.type('projects').get projectsQuery
+ProjectLink = React.createClass
+  getDefaultProps: ->
+    project: {}
+    avatar: null
+    owner: null
 
   render: ->
-    if @props.user?
-      <PromiseRenderer promise={@fetchProjects()}>{(projects) =>
-        if projects.length > 0
-          <div className="content-container">
-            <div>
-              <table>
-                <tbody>
-                  {for project in projects then do (project) =>
-                    [owner, name] = project.slug.split('/')
-                    <tr key={project.id}>
-                      <td>{project.display_name}</td>
-                      <td><Link to="/lab/#{project.id}" className="minor-button"><i className="fa fa-pencil"></i> Edit</Link></td>
-                      <td>
-                        <Link to="/projects/#{owner}/#{name}" className="minor-button"><i className="fa fa-hand-o-right"></i> View</Link>
-                      </td>
-                    </tr>}
-                </tbody>
-              </table>
+    <div className="lab-index-project-row">
+      {if @props.avatar?
+        style =
+          backgroundImage: "url(#{@props.avatar.src})"
+        <div className="lab-index-project-row-avatar" style={style} />}
+      <div className="lab-index-project-row-description">
+        <strong className="lab-index-project-row-name">{@props.project.display_name}</strong>{' '}
+        {if @props.owner?
+          <small>by {@props.owner.display_name}</small>}
+      </div>
+      <Link to="/lab/#{@props.project.id}" className="lab-index-project-row-icon-button" title="Edit">
+        <i className="fa fa-pencil fa-fw"></i>
+      </Link>
+      <Link to="/projects/#{@props.project.slug}" className="lab-index-project-row-icon-button" title="View">
+        <i className="fa fa-hand-o-right fa-fw"></i>
+      </Link>
+    </div>
 
-              {meta = projects[0]?.getMeta()
-              if meta? and meta.page_count isnt 1
-                <nav className="pagination">
-                  <label>
-                    Page
-                    {' '}
-                    <select value={@state.page} onChange={@handlePageChange}>
-                      {for page in [1..meta.page_count]
-                        <option key={page} value={page}>{page}</option>}
-                    </select>
-                    {' '}
-                    of {meta.page_count}
-                  </label>
-                </nav>}
-            </div>
-            <br />
-            <button className="standard-button" disabled={@state.creationInProgress} onClick={@createNewProject}>
-              Create a new project{' '}
-              <LoadingIndicator off={not @state.creationInProgress} />
-            </button>&nbsp;
-            <Link className="standard-button" to="/lab-policies">Project building policies</Link>&nbsp;
-            <Link className="standard-button" to="/lab-how-to">How to build a project</Link>
-            {if @state.creationError?
-              <p className="form-help error">{@state.creationError.message}</p>}
-          </div>
-        else
-          <LandingPage user={@props.user} parentIndex={this} />
-      }</PromiseRenderer>
-    else
-      <LandingPage parentIndex={this} />
+ProjectList = React.createClass
+  getDefaultProps: ->
+    title: ''
+    page: 1
+    roles: []
+    withAvatars: false
+    withOwners: false
+    onChangePage: ->
+
+  getInitialState: ->
+    loading: false
+    pages: 0
+    projects: []
+    avatars: {}
+    owners: {}
+    error: null
+
+  componentDidMount: ->
+    @loadData @props.roles, @props.page, @props.withAvatars, @props.withOwners
+
+  componentWillReceiveProps: (nextProps) ->
+    @loadData nextProps.roles, nextProps.page, nextProps.withAvatars, nextProps.withOwners
+
+  loadData: (roles, page, withAvatars, withOwners) ->
+    @setState
+      avatars: {}
+      owners: {}
+      error: null
+      loading: true
+
+    include = []
+    if @props.withAvatars
+      include.push 'avatar'
+    if @props.withOwners
+      include.push 'owners'
+
+    query =
+      current_user_roles: roles
+      page: page
+      include: include
+      sort: 'display_name'
+
+    awaitProjects = apiClient.type('projects').get query
+      .then (projects) =>
+        @setState {projects}
+      .catch (error) =>
+        @setState {error}
+      .then =>
+        @setState loading: false
+      .then =>
+        @state.projects.forEach (project) =>
+          if @props.withAvatars
+            project.get 'avatar'
+              .catch =>
+                {}
+              .then (avatar) =>
+                @state.avatars[project.id] = avatar
+                @forceUpdate()
+          if @props.withOwners
+            project.get 'owner'
+              .catch =>
+                null
+              .then (owner) =>
+                @state.owners[project.id] = owner
+                @forceUpdate()
 
   handlePageChange: (e) ->
-    @setState page: e.target.value, =>
-      @forceUpdate()
+    @props.onChangePage parseFloat e.target.value
 
-  createNewProject: ->
-    project = apiClient.type('projects').create
-      display_name: "Untitled project #{new Date().toISOString()}"
-      description: 'Description of project'
-      primary_language: counterpart.getLocale()
-      private: true
+  render: ->
+    pages = Math.max @state.projects[0]?.getMeta()?.page_count ? 1, @props.page
 
-    @setState
-      creationError: null
-      creationInProgress: true
+    <div className="content-container">
+      <header>
+        <strong className="form-label">{@props.title}</strong>{' '}
+        {unless @state.error? or pages is 1
+          <small className="form-help">
+            Page{' '}
+            <select value={@props.page} disabled={@state.loading} onChange={@handlePageChange}>
+              {[1..pages].map (page) =>
+                <option key={page} value={page}>{page}</option>}
+            </select>
+          </small>}
+      </header>
 
-    project.save()
-      .catch (error) =>
-        @setState creationError: error
-      .then sleep 1100 # Wait for the global request cache to clear (TODO: Cache should really expire on return).
-      .then (project) =>
-        # TODO: user.uncacheLink 'project'
-        @setState creationInProgress: false
-        @history.pushState(null, "/lab/#{project.id}")
+      {if @state.loading
+        <small className="form-help">Loading...</small>
+      else if @state.error?
+        <p className="form-help error">{@state.error.toString()}</p>
+      else if @state.projects.length is 0
+        <p className="form-help">No projects</p>
+      else
+        <ul className="lab-index-project-list">
+          {@state.projects.map (project) =>
+            <li key={project.id}>
+              <ProjectLink
+                project={project}
+                avatar={@state.avatars[project.id]}
+                owner={@state.owners[project.id]}
+              />
+            </li>}
+        </ul>}
+    </div>
+
+module.exports = React.createClass
+  getDefaultProps: ->
+    user: null
+    loaction:
+      query:
+        'owned-page': 1
+        'collaborations-page': 1
+
+  handlePageChange: (which, page) ->
+    queryUpdate = {}
+    queryUpdate[which] = page
+    newQuery = Object.assign {}, @props.location.query, queryUpdate
+    newLocation = Object.assign {}, @props.location, query: newQuery
+    @props.history.replace newLocation
+
+  render: ->
+    console.info 'Q', @props.query
+    if @props.user?
+      <div>
+        <ProjectList
+          title="Your projects"
+          page={@props.location.query['owned-page']}
+          roles={['owner', 'workaround']}
+          withAvatars
+          onChangePage={@handlePageChange.bind this, 'owned-page'}
+        />
+
+        <p style={textAlign: 'center'}>
+          <button type="button" className="standard-button" disabled>Create a new project</button>
+        </p>
+
+        <ProjectList
+          title="Collaborations"
+          page={@props.location.query['collabarations-page']}
+          roles={['collaborator']}
+          withOwners
+          style={fontSize: '0.8em'}
+          onChangePage={@handlePageChange.bind this, 'collabarations-page'}
+        />
+      </div>
+
+    else
+      <p className="form-help">TODO: Not-signed-in landing page</p>
