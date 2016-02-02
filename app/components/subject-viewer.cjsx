@@ -43,7 +43,7 @@ module.exports = React.createClass
     linkToFullImage: false
     frameWrapper: null
     allowFlipbook: true
-    allowSeparateFrames: true
+    allowSeparateFrames: false
 
   getInitialState: ->
     loading: true
