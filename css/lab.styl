@@ -14,22 +14,27 @@
 
 .lab-index-project-row
   display: flex
+  align-items: center
 
 .lab-index-project-row-avatar
   background-position: 50%, 50%
   background-size: cover
   flex: 0 0 2.5em
-  min-height: 2.5em
+  height: 2.5em
 
 .lab-index-project-row-description
-  flex: 1 1
+  flex: 1 1 auto
   padding: 0.5em 1em
 
+  &:first-child
+    padding-left: 0
+
 .lab-index-project-row-icon-button
-  align-self: center;
   border-width: 1px
-  flex: 0 0
+  flex: 0 0 auto
+  font-weight: bold
   padding: 0.5em 0.7em
+  text-decoration: none
 
   &:hover
     background: rgba(MAIN_HIGHLIGHT, 0.2)

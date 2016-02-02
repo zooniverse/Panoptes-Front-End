@@ -14,19 +14,19 @@ ProjectLink = React.createClass
   render: ->
     <div className="lab-index-project-row">
       {if @props.avatar?
-        style =
-          backgroundImage: "url(#{@props.avatar.src})"
-        <div className="lab-index-project-row-avatar" style={style} />}
+        <img className="lab-index-project-row-avatar" src={@props.avatar.src} />}
       <div className="lab-index-project-row-description">
         <strong className="lab-index-project-row-name">{@props.project.display_name}</strong>{' '}
         {if @props.owner?
           <small>by {@props.owner.display_name}</small>}
       </div>
-      <Link to="/lab/#{@props.project.id}" className="lab-index-project-row-icon-button" title="Edit">
-        <i className="fa fa-pencil fa-fw"></i>
+      <Link to="/lab/#{@props.project.id}" className="lab-index-project-row-icon-button">
+        <i className="fa fa-pencil fa-fw"></i>{' '}
+        <small>Edit</small>
       </Link>
-      <Link to="/projects/#{@props.project.slug}" className="lab-index-project-row-icon-button" title="View">
-        <i className="fa fa-hand-o-right fa-fw"></i>
+      <Link to="/projects/#{@props.project.slug}" className="lab-index-project-row-icon-button">
+        <i className="fa fa-hand-o-right fa-fw"></i>{' '}
+        <small>View</small>
       </Link>
     </div>
 
