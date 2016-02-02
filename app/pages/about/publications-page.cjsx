@@ -146,6 +146,8 @@ publicationCategories =
     },
     {slug: "zooniverse/planet-hunters"
     publications: [
+      {citation: "Planet Hunters. VIII. Characterization of 41 Long-Period Exoplanet Candidates from Kepler Archival Data, Wang+ 2015."
+      href: "http://arxiv.org/pdf/1512.02559v2.pdf"},
       {citation: "Planet Hunters. X. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
       href: "http://arxiv.org/pdf/1509.03622v1.pdf"},
       {citation: "GALEX J194419.33+491257.0: An unusually active SU UMa-type dwarf nova with a very short orbital period in the Kepler data, Kato & Osaki 2014."
@@ -201,6 +203,11 @@ publicationCategories =
       href: "http://www.astronomerstelegram.org/?read=7254"},
       {citation: "ATel #7261: PESSTO spectroscopic classification of optical transients, Cartier+ 2015."
       href: "http://www.astronomerstelegram.org/?read=7261"}]
+    },
+    {slug: "zooniverse/radio-galaxy-zoo"
+    publications: [
+      {citation: "Radio Galaxy Zoo: host galaxies and radio morphologies derived from visual inspection, Banfield+ 2015."
+      href: "http://arXiv.org/abs/1507.07272"}]
     }
   ],
   climate: [
@@ -213,7 +220,11 @@ publicationCategories =
   humanities: [
     {slug: "zooniverse/ancient-lives"
     publications: [
-      {citation: "P.Oxy 5156, Plutarch Moralia 660C, 661B-C (Quaestiones Convivales IV PR., 1.2), in The Oxyrhynchus Papyri Vol. 78, Brusuelas 2013."}]}
+    {citation: "A computational pipeline for crowdsourced transcriptions of Ancient Greek papyrus fragments, Williams+ 2014."
+    href: "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&tp=&arnumber=7004460&queryText%3Dwilliam+alex+pridemore"},
+      {citation: "P.Oxy 5156, Plutarch Moralia 660C, 661B-C (Quaestiones Convivales IV PR., 1.2), in The Oxyrhynchus Papyri Vol. 78, Brusuelas 2013."}
+
+      ]}
     ],
   nature: [
     {slug: "zooniverse/whale-fm"
@@ -242,7 +253,7 @@ publicationCategories =
       {citation: "Designing for Dabblers and Deterring Drop-Outs in Citizen Science, Eveleigh+ 2014."
       href: "http://discovery.ucl.ac.uk/1418573/1/p2985-eveleigh.pdf"}
       {citation: "Playing with science: gamised aspects of gamification found on the Online Citizen Science Project - Zooniverse, Greenhill+ 2014."
-      href: "https://www.escholar.manchester.ac.uk/uk-ac-man-scw:254358"}
+      href: "http://eprints.port.ac.uk/15648/"}
       {citation: "Why Won’t Alien’s Talk to Us: Content and Community Dynamics in Online Citizen Science, Luczak-Roesch+ 2014."
       href: "http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/view/8092"}
       {citation: "Volunteers’ Engagement in Human Computation Astronomy Projects, Ponciano+ 2014."
@@ -259,7 +270,7 @@ publicationCategories =
       href: "http://www.portico.org/Portico/#!journalAUSimpleView/tab=PDF?cs=ISSN_15391515?ct=E-Journal%20Content?auId=ark:/27927/pgg3ztfcwj0"}
       {citation: "Galaxy Zoo: Motivations of Citizen Scientists, Raddick+ 2013."
       href: "http://arxiv.org/abs/1303.6886"}
-      {citation: "Galaxy Zoo: Morphological Classification and Citizen Science, Forston+ 2012."
+      {citation: "Galaxy Zoo: Morphological Classification and Citizen Science, Fortson+ 2012."
       href: "http://labs.adsabs.harvard.edu/adsabs/abs/2012amld.book..213F/"}
       {citation: "Galaxy Zoo: Exploring the Motivations of Citizen Science Volunteers, Raddick+ 2010."
       href: "http://adsabs.harvard.edu/abs/2010AEdRv...9a0103R"}]
