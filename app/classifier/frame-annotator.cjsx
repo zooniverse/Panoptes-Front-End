@@ -27,6 +27,8 @@ module.exports = React.createClass
     naturalHeight: 0
     showWarning: false
     sizeRect: null
+    alreadySeen: false
+    showWarning: false
 
   componentDidMount: ->
     addEventListener 'resize', @updateSize
@@ -78,6 +80,9 @@ module.exports = React.createClass
     x = (e.pageX - @state.sizeRect?.left) / scale.horizontal || 0
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
+  
+  toggleWarning: ->
+    @setState showWarning: not @state.showWarning
 
   render: ->
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
@@ -132,6 +137,26 @@ module.exports = React.createClass
             <PersistInsideSubject key={anyTaskName} {...hookProps} />}
         </svg>
         {@props.children}
+        
+        {if @state.alreadySeen
+          <button type="button" className="warning-banner" onClick={@toggleWarning}>
+            Already seen!
+            {if @state.showWarning
+              <Tooltip attachment="top left" targetAttachment="middle right">
+                <p>Our records show that you’ve already seen this image. We might have run out of data for you in this workflow!</p>
+                <p>Try choosing a different workflow or contributing to a different project.</p>
+              </Tooltip>}
+          </button>
+
+        else if @props.subject.retired
+          <button type="button" className="warning-banner" onClick={@toggleWarning}>
+            Finished!
+            {if @state.showWarning
+              <Tooltip attachment="top left" targetAttachment="middle right">
+                <p>This subject already has enough classifications, so yours won’t be used in its analysis!</p>
+                <p>If you’re looking to help, try choosing a different workflow or contributing to a different project.</p>
+              </Tooltip>}
+          </button>}
 
         {if AfterSubject?
           <AfterSubject {...hookProps} />}
