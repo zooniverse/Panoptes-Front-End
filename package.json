@@ -65,8 +65,7 @@
     "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
     "start": "./bin/serve.sh",
-    "test": "browserify ./test/runner.coffee --extension .coffee --extension .cjsx --transform coffee-reactify --transform envify --ignore-transform coffeeify | testling \"${TESTLING_ARGS:---pass}\" | tap-spec",
-    "test-mac": "TESTLING_ARGS=\"-x open --new -a Google\\ Chrome --args --incognito\" npm run test"
+    "test": "echo 'Integration tests have moved to the panoptes-client library.'"
   },
   "browserify": {
     "transform": [
