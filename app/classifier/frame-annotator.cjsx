@@ -90,41 +90,12 @@ module.exports = React.createClass
   toggleWarning: ->
     @setState showWarning: not @state.showWarning
 
-  zoom: (change) ->
-    newNaturalWidth = @state.naturalWidth * change;
-    newNaturalHeight = @state.naturalHeight * change;
-    
-    newNaturalX = @state.naturalX - (newNaturalWidth - @state.naturalWidth)/2;
-    newNaturalY = @state.naturalY - (newNaturalHeight - @state.naturalHeight)/2;
-    
-    @setState
-      naturalWidth: newNaturalWidth, 
-      naturalHeight: newNaturalHeight,
-      naturalX: newNaturalX,
-      naturalY:newNaturalY
-
-  zoomReset: ->
-    @setState
-      naturalWidth: @props.naturalWidth, 
-      naturalHeight: @props.naturalHeight,
-      naturalX: 0,
-      naturalY: 0
-
-  panHorizontal:(direction) ->
-    return if this.state.naturalX == 0 || this.state.naturalY == 0   
-    @setState
-      naturalX: @state.naturalX * direction
-
-  panVertical:(direction)->
-    @setState
-      naturalY: @state.naturalY * direction
-
   render: ->    
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
     
-    createdViewBox = "#{@state.naturalX} #{@state.naturalY} #{@state.naturalWidth} #{@state.naturalHeight}"
+    createdViewBox = "#{@props.viewBoxDimensions.x} #{@props.viewBoxDimensions.y} #{@props.viewBoxDimensions.width} #{@props.viewBoxDimensions.height}"
     
     svgStyle = {}
     if type is 'image' and not @props.loading
@@ -173,15 +144,6 @@ module.exports = React.createClass
             <PersistInsideSubject key={anyTaskName} {...hookProps} />}
         </svg>
         {@props.children}
-        <span>
-          <button className={ "fa fa-arrow-circle-left" + if @state.naturalHeight == @props.naturalHeight then " disabled" else "" } onClick={ @panHorizontal.bind(this, .7) }> </button>
-          <button className={ "fa fa-arrow-circle-up" + if @state.naturalHeight == @props.naturalHeight then " disabled" else "" } onClick={@panVertical.bind(this, .7)}> </button>
-          <button className={ "fa fa-arrow-circle-down" + if @state.naturalWidth == @props.naturalWidth then " disabled" else ""} onClick={@panVertical.bind(this, 1.3)}> </button>
-          <button className={ "fa fa-arrow-circle-right" + if @state.naturalX == 0 then " disabled" else "" } onClick={@panHorizontal.bind(this, 1.3)}> </button>
-          <button className="zoom-out fa fa-minus-circle" onClick={ @zoom.bind(this, 1.1) }></button>
-          <button className="zoom-in fa fa-plus-circle" onClick={ @zoom.bind(this,.9) } ></button>
-          <button className="reset" onClick={ this.zoomReset } >Reset</button>
-        </span>
         {if @state.alreadySeen
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
             Already seen!
