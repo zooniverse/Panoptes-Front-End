@@ -1,7 +1,7 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
-apiClient = require '../../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
 
 MAX_AVATAR_SIZE = 65536

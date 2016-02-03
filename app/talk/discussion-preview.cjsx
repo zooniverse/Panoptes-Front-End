@@ -5,8 +5,8 @@ resourceCount = require './lib/resource-count'
 PromiseRenderer = require '../components/promise-renderer'
 LatestCommentLink = require './latest-comment-link'
 Thumbnail = require '../components/thumbnail'
-apiClient = require '../api/client'
-talkClient = require '../api/talk'
+apiClient = require 'panoptes-client/lib/api-client'
+talkClient = require 'panoptes-client/lib/talk-client'
 getSubjectLocation = require '../lib/get-subject-location'
 
 module?.exports = React.createClass

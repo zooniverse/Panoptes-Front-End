@@ -1,6 +1,6 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
-apiClient = require '../../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 SetToggle = require '../../lib/set-toggle'
 {Link} = require 'react-router'
 moment = require 'moment'

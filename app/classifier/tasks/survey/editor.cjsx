@@ -11,7 +11,7 @@ MediaArea = require '../../../components/media-area'
 PromiseRenderer = require '../../../components/promise-renderer'
 {Markdown} = require 'markdownz'
 Papa = require 'papaparse'
-apiClient = require '../../../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../../lib/put-file'
 Utility = require './utility'
 
