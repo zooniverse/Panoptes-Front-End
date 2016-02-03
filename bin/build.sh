@@ -29,7 +29,6 @@ mv -v "$BUILD_DIR/$vendor_js_original" "$BUILD_DIR/$VENDOR_JS"
   $(flag_externals external) \
   --extension .cjsx \
   --extension .coffee \
-  --ignore-transform coffeeify \
   --transform coffee-reactify \
   --global-transform envify \
   --entry "$SRC_JS" \
