@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../../api/client'
 putFile = require '../../lib/put-file'
 FileButton = require '../../components/file-button'
 {MarkdownEditor} = require 'markdownz'

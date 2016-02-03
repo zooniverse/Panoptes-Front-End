@@ -1,4 +1,4 @@
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../api/client'
 
 module.exports =
   hasSettingsRole: ->

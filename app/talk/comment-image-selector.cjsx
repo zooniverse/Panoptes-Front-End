@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../api/client'
 getSubjectLocation = require '../lib/get-subject-location'
 SingleSubmitButton = require '../components/single-submit-button'
 

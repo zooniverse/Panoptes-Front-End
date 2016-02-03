@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../api/client'
 Loading = require '../components/loading-indicator'
 CollectionPreview = require '../collections/preview'
 

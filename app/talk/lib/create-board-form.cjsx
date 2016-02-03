@@ -1,7 +1,7 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 ROLES = require './roles'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../../api/talk'
 SingleSubmitButton = require '../../components/single-submit-button'
 
 getUserRoleNames =  (user, section) ->

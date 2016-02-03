@@ -3,7 +3,7 @@ Dialog = require 'modal-form/dialog'
 StepThrough = require '../components/step-through'
 MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../api/client'
 
 completedThisSession = {}
 window?.tutorialsCompletedThisSession = completedThisSession

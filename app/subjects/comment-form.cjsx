@@ -1,6 +1,6 @@
 React = require 'react'
 {History, Link} = require 'react-router'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../api/talk'
 NewDiscussionForm = require '../talk/discussion-new-form'
 QuickSubjectCommentForm= require '../talk/quick-subject-comment-form'
 PromiseRenderer = require '../components/promise-renderer'

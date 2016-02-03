@@ -2,7 +2,7 @@ React = require 'react'
 Loading = require '../components/loading-indicator'
 Paginator = require '../talk/lib/paginator'
 ChangeListener = require '../components/change-listener'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../api/talk'
 Notification = require './notifications/notification'
 
 module?.exports = React.createClass

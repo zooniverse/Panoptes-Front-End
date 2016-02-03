@@ -1,6 +1,6 @@
 React = require 'react'
 {History} = require 'react-router'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../api/talk'
 Paginator = require './lib/paginator'
 TalkSearchResult = require './search-result'
 resourceCount = require './lib/resource-count'

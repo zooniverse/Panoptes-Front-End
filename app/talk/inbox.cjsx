@@ -1,6 +1,6 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
-apiClient = require 'panoptes-client/lib/api-client'
+talkClient = require '../api/talk'
+apiClient = require '../api/client'
 PromiseRenderer = require '../components/promise-renderer'
 Paginator = require './lib/paginator'
 {Link, History} = require 'react-router'

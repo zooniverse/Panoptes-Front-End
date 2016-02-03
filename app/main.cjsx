@@ -27,6 +27,3 @@ render <Router history={history}>{routes}</Router>,
 
 logDeployedCommit = require './lib/log-deployed-commit'
 logDeployedCommit()
-
-# For console access:
-window?.zooAPI = require 'panoptes-client/lib/api-client'

@@ -1,5 +1,5 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../../api/talk'
 projectSection = require './project-section'
 PromiseRenderer = require '../../components/promise-renderer'
 SingleSubmitButton = require '../../components/single-submit-button'

@@ -187,7 +187,7 @@ module.exports = React.createClass
           transition.retry()
 
   getDefaultProps: ->
-    apiClient = require 'panoptes-client/lib/api-client'
+    apiClient = require '../api/client'
     workflow: apiClient.type('workflows-for-dev-only').create
       display_name: 'Test workflow'
       tasks:

@@ -3,7 +3,7 @@ React = require 'react'
 Translate = require 'react-translate-component'
 {IndexLink, Link} = require 'react-router'
 ZooniverseLogoType = require './zooniverse-logotype'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../api/client'
 
 counterpart.registerTranslations 'en',
   footer:

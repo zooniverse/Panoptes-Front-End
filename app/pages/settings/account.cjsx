@@ -1,7 +1,7 @@
 React = require 'react'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-auth = require 'panoptes-client/lib/auth'
+auth = require '../../api/auth'
 
 MIN_PASSWORD_LENGTH = 8
 

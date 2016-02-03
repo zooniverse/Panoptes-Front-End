@@ -1,5 +1,5 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../../api/talk'
 AutoSave = require '../../components/auto-save'
 PromiseRenderer = require '../../components/promise-renderer'
 ChangeListener = require '../../components/change-listener'

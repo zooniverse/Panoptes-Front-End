@@ -1,6 +1,6 @@
 React = {findDOMNode} = require 'react'
 UserSearch = require '../components/user-search.cjsx'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../api/talk'
 Feedback = require './mixins/feedback'
 
 module?.exports = React.createClass
