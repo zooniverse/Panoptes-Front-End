@@ -1,7 +1,7 @@
-{Model} = require 'json-api-client'
-
 module.exports = (e) ->
-  unless this instanceof Model
+  # Using this module is a little odd.
+  # Ensure that it's called in the context of a JSON-API Model instance.
+  unless typeof @update is 'function' and typeof @emit is 'function'
     throw new Error 'Bind the handleInputChange function to a json-api-client Model instance'
 
   valueProperty = switch e.target.type

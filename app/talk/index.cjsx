@@ -3,7 +3,7 @@ React = require 'react'
 TalkBreadcrumbs = require './breadcrumbs.cjsx'
 TalkSearchInput = require './search-input'
 TalkFootnote = require './footnote'
-{sugarClient} = require '../api/sugar'
+{sugarClient} = require 'panoptes-client/lib/sugar'
 
 module?.exports = React.createClass
   displayName: 'Talk'

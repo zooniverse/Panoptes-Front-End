@@ -1,6 +1,6 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
-talkClient = require '../../api/talk'
+talkClient = require 'panoptes-client/lib/talk-client'
 userIsModerator = require './user-is-moderator'
 
 module?.exports = React.createClass

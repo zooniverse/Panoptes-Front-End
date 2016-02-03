@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient = require '../../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 {Link} = require 'react-router'
 Loading = require '../../components/loading-indicator'
 FEATURED_PRODUCT_IDS = require '../../lib/featured-projects'
