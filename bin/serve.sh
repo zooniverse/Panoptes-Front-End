@@ -11,6 +11,7 @@ pids=""
 
 ./node_modules/.bin/browserify \
   $([[ -z $DEBUG ]] || echo '--debug') \
+  --global-transform envify \
   $(flag_externals require) \
   --outfile "$DEV_DIR/$VENDOR_JS"
 
@@ -25,7 +26,7 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
   --extension .coffee \
   --ignore-transform coffeeify \
   --transform coffee-reactify \
-  --transform envify \
+  --global-transform envify \
   --entry $SRC_JS \
   --outfile $DEV_DIR/$OUT_JS \
   & pids="$pids $!"
