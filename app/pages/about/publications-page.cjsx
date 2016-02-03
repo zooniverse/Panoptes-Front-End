@@ -192,6 +192,10 @@ publicationCategories =
     },
     {slug: "zooniverse/space-warps"
     publications: [
+      {citation: "Space Warps - II. New gravitational lens candidates from the CFHTLS discovered through citizen science, Marshall+ 2016."
+      href: "http://mnras.oxfordjournals.org/content/455/2/1191.full.pdf"},
+      {citation: "Space Warps - I. Crowdsourcing the discovery of gravitational lenses, Marshall+ 2016."
+      href: "http://mnras.oxfordjournals.org/content/455/2/1171.full.pdf"},
       {citation: "The Red Radio Ring: a gravitationally lensed hyperluminous infrared radio galaxy at z=2.553 discovered through citizen science, Geach+ 2015."
       href: "http://arxiv.org/pdf/1503.05824v1.pdf"},
       {citation: "Gravitational lens modelling in a citizen science context, Küng+ 2015."
@@ -250,6 +254,10 @@ publicationCategories =
   meta: [
     {name: "Meta Studies"
     publications: [
+      {citation: "Science Learning via Participation in Online Citizen Science, Masters+ 2016."
+      href: "http://arxiv.org/pdf/1601.05973v1.pdf"}
+      {citation: "Defining and Measuring Success in Online Citizen Science: A Case Study of Zooniverse Projects, Cox+ 2015."
+      href: "http://eprints.whiterose.ac.uk/86535/"}
       {citation: "Designing for Dabblers and Deterring Drop-Outs in Citizen Science, Eveleigh+ 2014."
       href: "http://discovery.ucl.ac.uk/1418573/1/p2985-eveleigh.pdf"}
       {citation: "Playing with science: gamised aspects of gamification found on the Online Citizen Science Project - Zooniverse, Greenhill+ 2014."
