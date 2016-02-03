@@ -23,7 +23,6 @@ module.exports = React.createClass
     onChange: Function.prototype
 
   getInitialState: ->
-    console.log "--> getInitialState::@props.naturalWidth", @props.naturalWidth
     naturalWidth: @props.naturalWidth
     naturalHeight: @props.naturalHeight
     naturalX: 0,
@@ -175,12 +174,12 @@ module.exports = React.createClass
         </svg>
         {@props.children}
         <span>
-          <button className="pan-left fa fa-arrow-circle-left" onClick={ @panHorizontal.bind(this, .7) }> </button>
-          <button className="pan-left fa fa-arrow-circle-up" onClick={@panVertical.bind(this, .7)}> </button>
-          <button className="pan-left fa fa-arrow-circle-down" onClick={@panVertical.bind(this, 1.3)}> </button>
-          <button className="pan-left fa fa-arrow-circle-right" onClick={@panHorizontal.bind(this, 1.3)}> </button>
-          <button className="zoom-out" onClick={ @zoom.bind(this, 1.1) }>-</button>
-          <button className="zoom-in" onClick={ @zoom.bind(this,.9) } >+</button>
+          <button className={ "fa fa-arrow-circle-left" + if @state.naturalHeight == @props.naturalHeight then " disabled" else "" } onClick={ @panHorizontal.bind(this, .7) }> </button>
+          <button className={ "fa fa-arrow-circle-up" + if @state.naturalHeight == @props.naturalHeight then " disabled" else "" } onClick={@panVertical.bind(this, .7)}> </button>
+          <button className={ "fa fa-arrow-circle-down" + if @state.naturalWidth == @props.naturalWidth then " disabled" else ""} onClick={@panVertical.bind(this, 1.3)}> </button>
+          <button className={ "fa fa-arrow-circle-right" + if @state.naturalX == 0 then " disabled" else "" } onClick={@panHorizontal.bind(this, 1.3)}> </button>
+          <button className="zoom-out fa fa-minus-circle" onClick={ @zoom.bind(this, 1.1) }></button>
+          <button className="zoom-in fa fa-plus-circle" onClick={ @zoom.bind(this,.9) } ></button>
           <button className="reset" onClick={ this.zoomReset } >Reset</button>
         </span>
         {if @state.alreadySeen
