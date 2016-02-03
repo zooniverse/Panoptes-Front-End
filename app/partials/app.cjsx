@@ -1,5 +1,5 @@
 React = require 'react'
-auth = require 'panoptes-client/lib/auth'
+auth = require '../api/auth'
 IOStatus = require './io-status'
 MainHeader = require './main-header'
 MainFooter = require './main-footer'

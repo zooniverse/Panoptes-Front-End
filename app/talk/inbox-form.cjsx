@@ -1,6 +1,6 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../api/talk'
 UserSearch = require '../components/user-search'
 {History} = require 'react-router'
 {getErrors} = require './lib/validations'

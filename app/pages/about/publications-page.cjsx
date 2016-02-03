@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../../api/client'
 Loading = require '../../components/loading-indicator'
 
 counterpart.registerTranslations 'en',

@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../api/client'
 testClassificationQuality = require '../lib/test-classification-quality'
 ChangeListener = require '../components/change-listener'
 FrameAnnotator = require './frame-annotator'

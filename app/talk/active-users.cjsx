@@ -1,8 +1,7 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
-{sugarClient} = require 'panoptes-client/lib/sugar'
-apiClient = require 'panoptes-client/lib/api-client'
-{sugarApiClient} = require 'panoptes-client/lib/sugar'
+talkClient = require '../api/talk'
+{sugarClient} = require '../api/sugar'
+apiClient = require '../api/client'
 {Link} = require 'react-router'
 Paginator = require './lib/paginator'
 

@@ -1,5 +1,5 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../api/talk'
 SingleSubmitButton = require '../components/single-submit-button'
 
 module?.exports = React.createClass

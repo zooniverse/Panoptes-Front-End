@@ -1,6 +1,5 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
-talkClient = require 'panoptes-client/lib/talk-client'
+apiClient = require '../api/client'
 {timeAgo} = require './lib/time'
 DisplayRoles = require './lib/display-roles'
 Avatar = require '../partials/avatar'

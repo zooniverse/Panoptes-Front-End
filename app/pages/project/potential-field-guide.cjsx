@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../../api/client'
 Pullout = require 'react-pullout'
 FieldGuide = require '../../components/field-guide'
 

@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../api/client'
 getFavoritesName = require './get-favorites-name'
 alert = require '../lib/alert'
 SignInPrompt = require '../partials/sign-in-prompt'

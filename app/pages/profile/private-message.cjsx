@@ -1,6 +1,6 @@
 React = require 'react'
 PrivateMessageForm = require '../../talk/private-message-form'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../../api/talk'
 
 module.exports = React.createClass
   displayName: 'PrivateMessagePage'

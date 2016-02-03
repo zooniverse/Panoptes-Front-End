@@ -1,4 +1,4 @@
-auth = require 'panoptes-client/lib/auth'
+auth = require '../api/auth'
 
 subjectsSeenThisSession = []
 

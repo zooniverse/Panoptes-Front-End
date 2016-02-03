@@ -2,7 +2,7 @@ React = require 'react'
 {Link, History} = require 'react-router'
 PromiseRenderer = require '../../components/promise-renderer'
 LoadingIndicator = require '../../components/loading-indicator'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../../api/client'
 counterpart = require 'counterpart'
 LandingPage = require './landing-page'
 

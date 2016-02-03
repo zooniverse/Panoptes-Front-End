@@ -1,5 +1,5 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
+talkClient = require '../api/talk'
 Comment = require '../talk/comment'
 Paginator = require '../talk/lib/paginator'
 Loading = require '../components/loading-indicator'

@@ -1,12 +1,12 @@
 counterpart = require 'counterpart'
 React = require 'react'
 PromiseToSetState = require '../lib/promise-to-set-state'
-auth = require 'panoptes-client/lib/auth'
+auth = require '../api/auth'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
 Tooltip = require '../components/tooltip'
 debounce = require 'debounce'
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../api/client'
 
 REMOTE_CHECK_DELAY = 1000
 MIN_PASSWORD_LENGTH = 8

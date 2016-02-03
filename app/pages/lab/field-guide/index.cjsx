@@ -1,4 +1,4 @@
-apiClient = require 'panoptes-client/lib/api-client'
+apiClient = require '../../../api/client'
 React = require 'react'
 ArticleList = require './article-list'
 Dialog = require 'modal-form/dialog'
