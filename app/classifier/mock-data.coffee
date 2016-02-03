@@ -1,4 +1,4 @@
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 
 # This is just a blank image for testing drawing tools while offline.
 BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',

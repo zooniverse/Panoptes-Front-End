@@ -3,7 +3,7 @@ Thumbnail = require './thumbnail'
 PromiseRenderer = require './promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
 FileButton = require './file-button'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../lib/put-file'
 
 FileDropTarget = React.createClass

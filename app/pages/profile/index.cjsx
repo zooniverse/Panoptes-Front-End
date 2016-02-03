@@ -2,10 +2,10 @@ counterpart = require 'counterpart'
 React = require 'react'
 PrivateMessageForm = require '../../talk/private-message-form'
 PromiseRenderer = require '../../components/promise-renderer'
-apiClient = require '../../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
-talkClient = require '../../api/talk'
+talkClient = require 'panoptes-client/lib/talk-client'
 
 counterpart.registerTranslations 'en',
   profile:
