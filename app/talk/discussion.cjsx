@@ -78,7 +78,7 @@ module?.exports = React.createClass
   setComments: (page = @props.location.query?.page) ->
     @commentsRequest(page)
       .then (comments) =>
-        commentsMeta = comments[0]?.getMeta()
+        commentsMeta = comments[0]?.getMeta() ? {}
         @setState {comments, commentsMeta}, =>
           if @shouldScrollToBottom and comments.length
             @scrollToBottomOfDiscussion()
@@ -86,7 +86,7 @@ module?.exports = React.createClass
 
   setCommentsMeta: (page = @props.location.query?.page) ->
     @commentsRequest(page).then (comments) =>
-      commentsMeta = comments[0]?.getMeta()
+      commentsMeta = comments[0]?.getMeta() ? {}
       @setState {commentsMeta}
 
   scrollToBottomOfDiscussion: ->
@@ -303,7 +303,6 @@ module?.exports = React.createClass
       {if discussion and @props.user
         <FollowDiscussion user={@props.user} discussion={discussion} />
       }
-
       <Paginator page={+@state.commentsMeta.page} pageCount={@state.commentsMeta.page_count} />
 
       <div className="talk-list-content">
