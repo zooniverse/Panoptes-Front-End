@@ -131,6 +131,8 @@ module.exports = React.createClass
       </div>
     </div>
 
+  
+
   renderFrame: (frame, props = {}) ->
     <FrameViewer {...@props} {...props} frame={frame} />
 
@@ -174,6 +176,7 @@ module.exports = React.createClass
   handleFrameChange: (frame) ->
     @setState {frame}
     @props.onFrameChange frame
+
 
   showMetadata: ->
     # TODO: Sticky popup.
