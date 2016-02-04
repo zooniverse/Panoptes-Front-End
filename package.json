@@ -14,7 +14,6 @@
     "express": "~4.13.3",
     "fast-levenshtein": "~1.0.7",
     "history": "~1.17.0",
-    "json-api-client": "~0.4.0",
     "jsplumb": "1.7.9",
     "lodash.intersection": "~3.2.0",
     "lodash.merge": "~2.4.1",
@@ -23,6 +22,7 @@
     "markdownz": "~4.0.2",
     "modal-form": "~2.2.0",
     "moment": "~2.9.0",
+    "panoptes-client": "~2.0.0",
     "papaparse": "mholt/PapaParse#cada171",
     "react-component-resizable": "~0.3.0",
     "react": "~0.14.1",
@@ -41,21 +41,15 @@
   },
   "devDependencies": {
     "babelify": "~6.3.0",
-    "blue-tape": "~0.1.10",
     "browserify": "~11.0.1",
     "coffee-reactify": "~4.0.0",
-    "coffeeify": "~1.1.0",
     "csso": "~1.3.11",
     "envify": "~3.4.0",
-    "es6-promise": "~2.3.0",
-    "function-bind": "~1.0.2",
     "lessify": "~1.0.1",
     "nib": "~1.1.0",
     "node-static": "~0.7.7",
     "publisssh": "~1.0.0",
     "stylus": "~0.52.0",
-    "tap-spec": "~4.0.2",
-    "testling": "~1.7.1",
     "uglify-js": "~2.4.24",
     "watchify": "~3.3.1"
   },
@@ -71,10 +65,5 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
     "start": "./bin/serve.sh",
     "test": "echo 'Integration tests have moved to the panoptes-client library.'"
-  },
-  "browserify": {
-    "transform": [
-      "coffeeify"
-    ]
   }
 }

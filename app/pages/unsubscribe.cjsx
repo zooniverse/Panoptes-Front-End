@@ -1,5 +1,5 @@
 React = require 'react'
-auth = require '../api/auth'
+auth = require 'panoptes-client/lib/auth'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
 

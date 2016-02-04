@@ -1,6 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../components/loading-indicator'
 Thumbnail = require '../components/thumbnail'
 Avatar = require '../partials/avatar'
