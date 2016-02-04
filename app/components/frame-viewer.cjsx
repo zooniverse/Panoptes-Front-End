@@ -32,12 +32,17 @@ module.exports = React.createClass
       width: 0
       height: 0
     }
+    panEnabled: false
+    frameFocused: false
 
   componentDidMount: ->
     @refs.videoScrubber?.value = 0
+    addEventListener "keydown", @frameKeyPan
+
 
   componentDidUpdate: ->
     @refs.videoPlayer?.playbackRate = @state.playbackRate
+
 
   render: () ->
     subject = @props.subject
@@ -46,20 +51,17 @@ module.exports = React.createClass
     FrameWrapper = @props.frameWrapper
     frameDisplay = switch type
       when 'image'
-        <div className="subject-image-frame">
-          <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} />
+        <div className="subject-image-frame" >
+          <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} tabIndex={0} onFocus={@toggleFrameFocus} onBlur={@toggleFrameFocus} />
 
           {if @state.loading
-            <div className="loading-cover" style={@constructor.overlayStyle}>
+            <div className="loading-cover" style={@constructor.overlayStyle} >
               <LoadingIndicator />
             </div>}
           <span>
-            <button className={ "fa fa-arrow-circle-left" + if @state.viewBoxDimensions.x == 0 then " disabled" else "" } onClick={ @panHorizontal.bind(this, .7) }> </button>
-            <button className={ "fa fa-arrow-circle-up" + if @state.viewBoxDimensions.height == @state.frameDimensions.height then " disabled" else "" } onClick={@panVertical.bind(this, .7)}> </button>
-            <button className={ "fa fa-arrow-circle-down" + if @state.viewBoxDimensions.width == @state.frameDimensions.width then " disabled" else ""} onClick={@panVertical.bind(this, 1.3)}> </button>
-            <button className={ "fa fa-arrow-circle-right" + if @state.viewBoxDimensions.x == 0 then " disabled" else "" } onClick={@panHorizontal.bind(this, 1.3)}> </button>
-            <button className="zoom-out fa fa-minus-circle" onClick={ @zoom.bind(this, 1.1 ) }></button>
-            <button className="zoom-in fa fa-plus-circle" onClick={ @zoom.bind(this, .9) } ></button>
+            <button className={if @state.panEnabled then "fa fa-arrows" else "fa fa-pencil"} onClick={@togglePan}/>
+            <button className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
+            <button className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
             <button className="reset" onClick={ this.zoomReset } >Reset</button>
           </span>
         </div>
@@ -101,7 +103,7 @@ module.exports = React.createClass
         </div>
 
     if FrameWrapper
-      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange}>
+      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} panByDrag={@panByDrag} viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange}>
         {frameDisplay}
       </FrameWrapper>
     else
@@ -188,6 +190,40 @@ module.exports = React.createClass
         height: @state.frameDimensions.height,
         x: 0,
         y: 0
+
+  toggleFrameFocus: ->
+    @setState frameFocused: !@state.frameFocused
+
+  togglePan: ->
+    @setState panEnabled: !@state.panEnabled
+
+  panByDrag: (e, d) ->
+    return if @state.panEnabled == false
+
+    @setState
+      viewBoxDimensions:
+        x: @state.viewBoxDimensions.x -= d.x
+        y: @state.viewBoxDimensions.y -= d.y
+        width: @state.viewBoxDimensions.width
+        height: @state.viewBoxDimensions.height
+
+  frameKeyPan: (e)->
+    return if @state.frameFocused == false
+    keypress = e.which
+    switch keypress
+      # left
+      when 37 then @panHorizontal( .7)
+      # up
+      when 38 then @panVertical(1.3)
+      # right
+      when 39 then @panHorizontal(1.3)
+      # down
+      when 40 then @panVertical(.7)
+      # zoom out
+      when 187 then @zoom(1.1)
+      # zoom in 
+      when 189 then @zoom(.9)
+
 
   panHorizontal:(direction) ->
     @setState

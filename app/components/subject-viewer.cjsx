@@ -101,7 +101,7 @@ module.exports = React.createClass
     <div className={rootClass} style={ROOT_STYLE if @props.defaultStyle}>
       {if type is 'image'
         @hiddenPreloadedImages()}
-      <div className="subject-container" style={CONTAINER_STYLE}>
+      <div className="subject-container" style={CONTAINER_STYLE} >
         {mainDisplay}
         {@props.children}
       </div>

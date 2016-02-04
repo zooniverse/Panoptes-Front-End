@@ -133,10 +133,11 @@ module.exports = React.createClass
           <BeforeSubject {...hookProps} />}
         <svg style=svgStyle viewBox={createdViewBox} {...svgProps}>
           <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
-
           {if type is 'image'
-            <SVGImage src={src} width={@props.naturalWidth} height={@props.naturalHeight} />}
-
+            <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>
+              <SVGImage src={src} width={@props.naturalWidth} height={@props.naturalHeight} />
+            </Draggable>
+          }
           {if InsideSubject?
             <InsideSubject {...hookProps} />}
 
