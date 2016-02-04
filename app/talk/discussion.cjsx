@@ -78,11 +78,19 @@ module?.exports = React.createClass
   setComments: (page = @props.location.query?.page) ->
     @commentsRequest(page)
       .then (comments) =>
-        commentsMeta = comments[0]?.getMeta() ? {}
-        @setState {comments, commentsMeta}, =>
-          if @shouldScrollToBottom and comments.length
-            @scrollToBottomOfDiscussion()
-            @shouldScrollToBottom = false
+        if comments.length
+          commentsMeta = comments[0]?.getMeta() ? {}
+          @setState {comments, commentsMeta}, =>
+            if @shouldScrollToBottom
+              @scrollToBottomOfDiscussion()
+              @shouldScrollToBottom = false
+        else
+          {board, owner, name} = @props.params
+          if (owner and name)
+            @history.pushState(null, "/projects/#{owner}/#{name}/talk/#{board}")
+          else
+            @history.pushState(null, "/talk/#{board}")
+          
 
   setCommentsMeta: (page = @props.location.query?.page) ->
     @commentsRequest(page).then (comments) =>
