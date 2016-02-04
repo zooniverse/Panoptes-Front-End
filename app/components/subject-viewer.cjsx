@@ -23,14 +23,6 @@ CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 module.exports = React.createClass
   displayName: 'SubjectViewer'
 
-  statics:
-    overlayStyle:
-      height: '100%'
-      left: 0
-      position: 'absolute'
-      top: 0
-      width: '100%'
-
   getDefaultProps: ->
     subject: null
     user: null
