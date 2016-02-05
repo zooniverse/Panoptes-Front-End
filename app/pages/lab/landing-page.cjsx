@@ -8,7 +8,7 @@ LoginDialog = require '../../partials/login-dialog'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
-  landing:
+  labLanding:
     title: "Zooniverse Project Builder"
     content: "Anyone can build a Zooniverse project. Just upload your data and choose the tasks you want the volunteers to do. To find out more, read our [How to Build a Project documentation](/lab-how-to), or click the button below to get started."
     buttons:
@@ -17,7 +17,7 @@ counterpart.registerTranslations 'en',
       backToProjects: "Back to projects"
 
 module.exports = React.createClass
-  displayName: "ProjectBuilderLandingPage"
+  displayName: 'ProjectBuilderLandingPage'
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
@@ -30,19 +30,22 @@ module.exports = React.createClass
   render: ->
     <div className="landing-page">
       <ZooniverseLogoType />
-      <h3 className="landing-title"><Translate content="landing.title" /></h3>
-      <div className="landing-tagline"><Markdown>{counterpart "landing.content"}</Markdown></div>
-      {if @props.user?
-        # The parent index component is passed down so we can use its createNewProject method. This needs some refactoring.
-        <button type="button" className="call-to-action standard-button landing-button" onClick={@props.parentIndex.createNewProject}>
-          <Translate content="landing.buttons.getStarted" />
-        </button>
-      else
-        <button type="button" className="call-to-action standard-button landing-button" onClick={@showLoginDialog.bind this, 'sign-in'}>
-          <Translate content="landing.buttons.signIn" />
-        </button>
-      }
-      <Link to="/projects" className="call-to-action standard-button landing-button"><Translate content="landing.buttons.backToProjects" /></Link>
+
+      <h3 className="landing-title">
+        <Translate content="labLanding.title" />
+      </h3>
+
+      <div className="landing-tagline">
+        <Markdown>{counterpart "labLanding.content"}</Markdown>
+      </div>
+
+      <button type="button" className="call-to-action standard-button landing-button" onClick={@showLoginDialog.bind this, 'sign-in'}>
+        <Translate content="labLanding.buttons.signIn" />
+      </button>
+
+      <Link to="/projects" className="call-to-action standard-button landing-button">
+        <Translate content="labLanding.buttons.backToProjects" />
+      </Link>
     </div>
 
   showLoginDialog: (which) ->
