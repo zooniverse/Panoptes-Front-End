@@ -4,7 +4,7 @@ CommentLink = require './comment-link'
 PromiseRenderer = require '../components/promise-renderer'
 parseSection = require './lib/parse-section'
 CommentContextIcon = require './lib/comment-context-icon'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 {Markdown} = require 'markdownz'
 
 # This isn't very reuseable as it's prop is a comment resource with it's

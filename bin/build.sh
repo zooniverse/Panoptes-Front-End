@@ -11,7 +11,7 @@ cp -av "$DEV_DIR" "$BUILD_DIR"
 [[ -f "$BUILD_DIR/$OUT_CSS" ]] && rm "$BUILD_DIR/$OUT_CSS"
 
 ./node_modules/.bin/browserify \
-  --transform envify \
+  --global-transform envify \
   $(flag_externals require) \
   --outfile "$BUILD_DIR/$VENDOR_JS"
 
@@ -29,9 +29,8 @@ mv -v "$BUILD_DIR/$vendor_js_original" "$BUILD_DIR/$VENDOR_JS"
   $(flag_externals external) \
   --extension .cjsx \
   --extension .coffee \
-  --ignore-transform coffeeify \
   --transform coffee-reactify \
-  --transform envify \
+  --global-transform envify \
   --entry "$SRC_JS" \
   --outfile "$BUILD_DIR/$OUT_JS"
 

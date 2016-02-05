@@ -1,6 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
-talkClient = require '../../api/talk'
+talkClient = require 'panoptes-client/lib/talk-client'
 resourceCount = require './resource-count'
 formatNumber = require './format-number'
 

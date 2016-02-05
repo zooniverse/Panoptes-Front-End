@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient = require '../../../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 PromiseRenderer = require '../../../components/promise-renderer'
 ChangeListener = require '../../../components/change-listener'
 WorkflowNodes = require './workflow'
