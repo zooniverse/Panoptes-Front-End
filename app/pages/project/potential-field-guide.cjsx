@@ -37,7 +37,7 @@ module.exports = React.createClass
     @setState revealed: not @state.revealed
 
   render: ->
-    if @state.guide?
+    if @state.guide? and @state.guide.items.length isnt 0
       <Pullout className="field-guide-pullout" side="right" open={@state.revealed}>
         <button type="button" className="field-guide-pullout-toggle" onClick={@toggleFieldGuide}>
           <strong>Field guide</strong>
