@@ -62,7 +62,14 @@ FieldGuideEditor = React.createClass
       .then =>
         @loadGuide @props.project
 
+  deleteGuide: (guide) ->
+    if guide.items.length is 0 or confirm "Really delete this field guide and its #{guide.items.length} items?"
+      @props.actions.deleteGuide guide.id
+        .then =>
+          @loadGuide @props.project
+
   createArticle: ->
+    # TODO: Allow creation of article before writing to server.
     @props.actions.appendItem @state.guide.id
       .then =>
         @editArticle @state.guide.items.length - 1
@@ -105,19 +112,29 @@ FieldGuideEditor = React.createClass
         </p>}
     </div>
 
+  renderEmpty: ->
+    <p className="form-help">
+      Nothing in this guide.{' '}
+      <small>
+        <button type="button" className="minor-button" onClick={@deleteGuide.bind this, @state.guide}>Delete it</button>
+      </small>
+    </p>
+
   renderEditor: ->
     window.editingGuide = @state.guide
 
     <div className="field-guide-editor columns-container">
       <div>
-        <ArticleList
-          articles={@state.guide.items}
-          icons={@state.icons}
-          onReorder={@props.actions.replaceItems.bind null, @state.guide.id}
-          onAddArticle={@createArticle}
-          onRemoveArticle={@props.actions.removeItem.bind null, @state.guide.id}
-          onSelectArticle={@editArticle}
-        />
+        {if @state.guide.items.length is 0
+          @renderEmpty()
+        else
+          <ArticleList
+            articles={@state.guide.items}
+            icons={@state.icons}
+            onReorder={@props.actions.replaceItems.bind null, @state.guide.id}
+            onRemoveArticle={@props.actions.removeItem.bind null, @state.guide.id}
+            onSelectArticle={@editArticle}
+          />}
         <p style={textAlign: 'center'}>
           <button type="button" className="standard-button" onClick={@createArticle}>Add an entry</button>
         </p>
