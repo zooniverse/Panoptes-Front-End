@@ -212,23 +212,35 @@ module.exports = React.createClass
     keypress = e.which
     switch keypress
       # left
-      when 37 then @panHorizontal( .7)
+      when 37
+        e.preventDefault()
+        @panHorizontal(-20)
       # up
-      when 38 then @panVertical(1.3)
+      when 38 
+        e.preventDefault()
+        @panVertical(-20) 
       # right
-      when 39 then @panHorizontal(1.3)
+      when 39 
+        e.preventDefault()
+        @panHorizontal(20) 
       # down
-      when 40 then @panVertical(.7)
+      when 40 
+        e.preventDefault()
+        @panVertical(20) 
       # zoom out
-      when 187 then @zoom(1.1)
+      when 187 
+        e.preventDefault()
+        @zoom(.9) 
       # zoom in 
-      when 189 then @zoom(.9)
+      when 189 
+        e.preventDefault()
+        @zoom(1.1) 
 
 
   panHorizontal:(direction) ->
     @setState
       viewBoxDimensions:
-        x: @state.viewBoxDimensions.x * direction
+        x: @state.viewBoxDimensions.x + direction
         y: @state.viewBoxDimensions.y
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height
@@ -237,6 +249,6 @@ module.exports = React.createClass
     @setState
       viewBoxDimensions:
         x: @state.viewBoxDimensions.x 
-        y: @state.viewBoxDimensions.y * direction
+        y: @state.viewBoxDimensions.y + direction
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height
