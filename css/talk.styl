@@ -252,6 +252,14 @@ COPY_GREY_LIGHT = #afaeae
     .talk-page-header
       text-align: left
 
+    .talk-board-follow
+      margin: 10px auto
+
+      .description
+        display: inline-block
+        margin: auto 10px
+        color: #989898
+
   .talk-board-new-discussion
     @extend .talk-module
     padding: 0px
@@ -738,6 +746,15 @@ COPY_GREY_LIGHT = #afaeae
     .time-ago
       @extend .talk .talk-discussion-link .latest-comment-time
       font-size: 0.9em
+
+  .talk-started-discussion
+    .talk-search-result
+      margin: 0
+      padding: 0
+      border: none
+
+      .talk-comment-link
+        display: none
 
   .talk-discussion-preview
     border-bottom: none
