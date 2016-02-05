@@ -12,7 +12,7 @@ Progress = React.createClass
     progress: 0
     options:
       donut: true
-      donutWidth: 35
+      donutWidth: '20%'
       startAngle: 0
       total: 1
       showLabel: false
@@ -20,7 +20,7 @@ Progress = React.createClass
   render: ->
     percent = @props.progress * 100
     data =
-      series: [@props.progress]
+      series: [@props.progress, 1 - @props.progress]
 
     <div className="svg-container progress-container">
       <span className="progress-label">{"#{percent.toFixed(0)}% Complete"}</span>
@@ -54,9 +54,6 @@ Graph = React.createClass
       if idx >= minIdx
         data.labels.push @formatLabel[@props.by]?(label) ? label
         data.series[0].push value
-
-    #data.labels = data.labels[(-1*@props.num)..]
-    #data.series[0] = data.series[0][(-1*@props.num)..]
 
     <div className="svg-container">
       <ChartistGraph className="ct-major-twelfth" type="Bar" data={data} options={@props.options} />
