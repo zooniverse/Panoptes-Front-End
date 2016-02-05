@@ -118,6 +118,9 @@ FieldGuideEditor = React.createClass
           onRemoveArticle={@props.actions.removeItem.bind null, @state.guide.id}
           onSelectArticle={@editArticle}
         />
+        <p style={textAlign: 'center'}>
+          <button type="button" className="standard-button" onClick={@createArticle}>Add an entry</button>
+        </p>
       </div>
 
       <div className="form-help">
