@@ -11,10 +11,10 @@ document.baseURI ?= location.origin + document.querySelector('base').getAttribut
 if location?.hash?.indexOf('/') is 1
   location.replace location.hash.slice 1
 
-basename = document.baseURI
+basename = document.baseURI.slice(location.origin.length)
 history = useBasename(createBrowserHistory)({basename})
 
-history.listen (location) ->
+history.listen ->
   window.dispatchEvent new CustomEvent 'locationchange'
 
 render <Router history={history}>{routes}</Router>,
