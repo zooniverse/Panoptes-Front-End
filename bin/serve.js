@@ -21,5 +21,5 @@ router.use(function(req, res, next) {
 app.use(root, router);
 
 app.listen(port, host, function() {
-  console.log('Panoptes-Front-End listening at http://' + host + ':' + port + root);
+  console.log('Panoptes-Front-End listening at http://' + host + ':' + port + root + '/');
 });
