@@ -23,7 +23,8 @@ function flag_externals {
   out=""
   for module in $externals; do
     # Symlinked modules are assumed to be in development and aren't externalized.
-    if [[ "$module" != "express" && "$module" != "ejs" && "$module" != "babel" && "$module" != "coffee-react" && "$module" != "jsplumb" ]]; then
+    # JSPlumb is broken.
+    if [[ "$module" != "jsplumb" ]]; then
       [[ -L "node_modules/$module" ]] || out="$out --$1 $module"
     fi
   done
