@@ -5,7 +5,7 @@ var express = require('express');
 var port = process.env.PORT || 3735;
 var host = process.env.HOST || 'localhost';
 
-var root = '/' + process.env.DEPLOY_SUBDIR || '';
+var root = '/' + (process.env.DEPLOY_SUBDIR || '');
 
 var app = express();
 app.set('view engine', 'ejs');
@@ -21,5 +21,5 @@ router.use(function(req, res, next) {
 app.use(root, router);
 
 app.listen(port, host, function() {
-  console.log('Panoptes-Front-End listening at http://' + host + ':' + port + root + '/');
+  console.log('Panoptes-Front-End listening at http://' + host + ':' + port + root);
 });
