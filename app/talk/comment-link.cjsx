@@ -18,19 +18,14 @@ module?.exports = React.createClass
   projectComment: ->
     @props.comment.section isnt 'zooniverse'
 
-  pathname: ->
-    if process.env.NON_ROOT == 'true' then window.location.pathname else ''
-
   projectCommentUrl: ->
     {comment} = @props
     [ownerName, projectName] = comment.project_slug.split('/')
-    href = "/projects/#{ownerName}/#{projectName}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
-    window.location.origin + @pathname() + href
+    document.baseURI.slice(0, -1) + "/projects/#{ownerName}/#{projectName}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
 
   mainTalkCommentUrl: ->
     {comment} = @props
-    window.location.origin + @pathname() +
-    "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    document.baseURI.slice(0, -1) + "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
 
   render: ->
     <div className="talk-comment-link">

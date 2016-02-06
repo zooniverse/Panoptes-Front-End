@@ -5,22 +5,17 @@ ReactDOM = {render} = require 'react-dom'
 createBrowserHistory = require 'history/lib/createBrowserHistory'
 routes = require './router'
 
-routes = require './router'
+# IE < 11 doesn't support `document.baseURI` (test this).
+document.baseURI ?= location.origin + document.querySelector('base').getAttribute('href')
 
-basename = if process.env.DEPLOY_SUBDIR? then "/panoptes-front-end/#{process.env.DEPLOY_SUBDIR}/" else ''
+if location?.hash?.indexOf('/') is 1
+  location.replace location.hash.slice 1
 
+basename = document.baseURI
 history = useBasename(createBrowserHistory)({basename})
-
-if process.env.NON_ROOT isnt 'true' and window.location? and window.location.hash isnt ""
-  window.location.pathname = window.location.hash.slice(1)
 
 history.listen (location) ->
   window.dispatchEvent new CustomEvent 'locationchange'
-
-location = if process.env.NON_ROOT == "true"
-    null
-  else
-    Router.HistoryLocation
 
 render <Router history={history}>{routes}</Router>,
   document.getElementById('panoptes-main-container')
