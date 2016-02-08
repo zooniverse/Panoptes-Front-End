@@ -23,14 +23,6 @@ CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 module.exports = React.createClass
   displayName: 'SubjectViewer'
 
-  statics:
-    overlayStyle:
-      height: '100%'
-      left: 0
-      position: 'absolute'
-      top: 0
-      width: '100%'
-
   getDefaultProps: ->
     subject: null
     user: null
@@ -132,8 +124,8 @@ module.exports = React.createClass
               <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
             </span>}
           {if type is 'image' and @props.linkToFullImage
-            <a href={src} title="Subject Image" target="_blank">
-              <button type="button"><i className="fa fa-photo" /></button>
+            <a className="button" href={src} aria-label="Subject Image" title="Subject Image" target="zooImage">
+              <i className="fa fa-photo" />
             </a>}
         </span>
       </div>

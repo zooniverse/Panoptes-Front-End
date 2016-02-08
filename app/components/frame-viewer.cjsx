@@ -12,14 +12,6 @@ generateRadioRef = (name, subject, frame) =>
 module.exports = React.createClass
   displayName: 'FrameViewer'
 
-  statics:
-    overlayStyle:
-      height: '100%'
-      left: 0
-      position: 'absolute'
-      top: 0
-      width: '100%'
-
   getDefaultProps: ->
     subject: null
     frame: 0
