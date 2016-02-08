@@ -1,5 +1,6 @@
 React = require 'react'
 {History} = require 'react-router'
+PromiseToSetState = require '../../lib/promise-to-set-state'
 ChartistGraph = require 'react-chartist'
 moment = require 'moment'
 qs = require 'qs'
@@ -26,7 +27,6 @@ Progress = React.createClass
       <span className="progress-label">{"#{percent.toFixed(0)}% Complete"}</span>
       <ChartistGraph className="ct-square" type="Pie" data={data} options={@props.options} />
     </div>
-
 
 Graph = React.createClass
   getDefaultProps: ->
@@ -59,6 +59,16 @@ Graph = React.createClass
       <ChartistGraph className="ct-major-twelfth" type="Bar" data={data} options={@props.options} />
     </div>
 
+WorkflowProgress = React.createClass
+  render: ->
+    <div>
+      <h3>{@props.workflow.display_name}</h3>
+      <div>
+        Classifications: {@props.workflow.classifications_count.toLocaleString()}
+      </div>
+      <Progress progress={@props.workflow.completeness} />
+      <hr />
+    </div>
 
 ProjectStatsPage = React.createClass
   getDefaultProps: ->
@@ -84,19 +94,25 @@ ProjectStatsPage = React.createClass
   volunteer_count: (period) ->
     []
 
+  workflowInfo: ->
+    progress = []
+    for workflow, key in @props.workflows
+      if workflow?
+        progress.push(<WorkflowProgress key={key} workflow={workflow} />)
+    progress
+
   render: ->
+    progress = @workflowInfo()
     <div className="project-stats-page content-container">
       <div className="project-stats-dashboard">
-        <div className="major">
-          Classifications: {@props.totalClassifications.toLocaleString()}
-        </div>
-        <Progress progress={@props.totalClassifications / @props.requiredClassifications} />
         <div>
           Volunteers: {@props.totalVolunteers.toLocaleString()}
         </div>
         <div>
           Online now: {@props.currentVolunteers.toLocaleString()}
         </div>
+        <hr />
+        {progress}
       </div>
 
       <div>
@@ -117,7 +133,14 @@ ProjectStatsPage = React.createClass
     @props.handleGraphChange(which, e)
 
 ProjectStatsPageController = React.createClass
-  mixins: [History]
+  mixins: [History, PromiseToSetState]
+
+  getInitialState: ->
+    workflowList: (null for [1..@props.project.links.workflows.length])
+
+  componentDidMount: ->
+    for workflowID, idx in @props.project.links.workflows
+      @getWorkflow(workflowID, idx);
 
   handleGraphChange: (which, e) ->
     query = qs.parse location.search.slice 1
@@ -127,6 +150,14 @@ ProjectStatsPageController = React.createClass
 
   getQuery: (which) ->
     qs.parse(location.search.slice(1))[which]
+
+  getWorkflow: (workflowID, idx) ->
+    @props.project.get('workflows', id: workflowID).then ([workflow]) =>
+      unless workflow?
+        throw new Error "No workflow #{workflowID} for project #{@props.project.id}"
+      currentList = @state.workflowList
+      currentList[idx] = workflow
+      @setState({workflowList: currentList})
 
   render: ->
     queryProps =
@@ -139,6 +170,7 @@ ProjectStatsPageController = React.createClass
       requiredClassifications: @props.project.classifications_count / @props.project.completeness
       totalVolunteers: @props.project.classifiers_count
       currentVolunteers: @props.project.activity
+      workflows: @state.workflowList
 
     <ProjectStatsPage {...queryProps} />
 
