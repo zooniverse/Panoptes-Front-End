@@ -114,7 +114,9 @@ $survey-task-pill-button
   border-radius: 8px
   display: flex
   flex-wrap: wrap
+  flex-direction: column
   padding: 4px
+  height: 50vh
 
   > *
     margin: 0 2px 2px 0
@@ -122,14 +124,14 @@ $survey-task-pill-button
 
   &[data-breakpoint="Infinity"] > *,
   &[data-breakpoint="40"] > *
-    flex-basis: calc(33.33% - 2px)
+    width: calc(33.33% - 2px)
 
   &[data-breakpoint="20"] > *,
   &[data-breakpoint="10"] > *
-    flex-basis: calc(50% - 2px)
+    width: calc(50% - 2px)
 
   &[data-breakpoint="5"] > *
-    flex-basis: calc(100% - 2px)
+    width: calc(100% - 2px)
 
   &[data-breakpoint="40"],
   &[data-breakpoint="20"],
