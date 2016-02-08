@@ -68,13 +68,14 @@ Graph = React.createClass
 
 WorkflowProgress = React.createClass
   render: ->
-    <div>
-      <h3>{@props.workflow.display_name}</h3>
-      <div>
-        Classifications: {@props.workflow.classifications_count.toLocaleString()}
+    <div className="progress-element">
+      <div className="flex-wrapper">
+        <h3>{@props.workflow.display_name}</h3>
+        <div>
+          Classifications: {@props.workflow.classifications_count.toLocaleString()}
+        </div>
+        <Progress progress={@props.workflow.completeness} />
       </div>
-      <Progress progress={@props.workflow.completeness} />
-      <hr />
     </div>
 
 ProjectStatsPage = React.createClass
@@ -119,7 +120,10 @@ ProjectStatsPage = React.createClass
           Online now: {@props.currentVolunteers.toLocaleString()}
         </div>
         <hr />
-        {progress}
+        <div className="project-stats-progress">
+          {progress}
+        </div>
+        <hr />
       </div>
 
       <div>
