@@ -33,7 +33,7 @@ Graph = React.createClass
     data: []
     options:
       axisX:
-        offset: 40
+        offset: 90
         showGrid: false
       axisY:
         onlyInteger: true
@@ -43,6 +43,13 @@ Graph = React.createClass
     day: (date) -> moment(date).format 'MMM-DD-YYYY'
     week: (date) -> moment(date).format 'MMM-DD-YYYY'
     month: (date) -> moment(date).format 'MMM-DD-YYYY'
+
+  listener:
+    draw: (data) ->
+      if data.type == 'label'
+        if data.axis.units.dir == 'horizontal'
+          dx = data.width / 2 + (100 - data.width)
+          data.element.attr({x: data.element.attr('x') - dx})
 
   render: ->
     data =
@@ -56,7 +63,7 @@ Graph = React.createClass
         data.series[0].push value
 
     <div className="svg-container">
-      <ChartistGraph className="ct-major-twelfth" type="Bar" data={data} options={@props.options} />
+      <ChartistGraph className="ct-major-twelfth" listener={@listener} type="Bar" data={data} options={@props.options} />
     </div>
 
 WorkflowProgress = React.createClass
