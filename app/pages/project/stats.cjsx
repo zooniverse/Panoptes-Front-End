@@ -72,7 +72,13 @@ WorkflowProgress = React.createClass
       <div className="flex-wrapper">
         <h3>{@props.workflow.display_name}</h3>
         <div>
-          Classifications: {@props.workflow.classifications_count.toLocaleString()}
+          Retirement limit: {@props.workflow.retirement.options.count.toLocaleString()}
+        </div>
+        <div>
+          Images retired: {@props.workflow.retired_set_member_subjects_count.toLocaleString()} / {@props.workflow.subjects_count.toLocaleString()}
+        </div>
+        <div>
+          Classifications: {@props.workflow.classifications_count.toLocaleString()} / {(@props.workflow.subjects_count * @props.workflow.retirement.options.count).toLocaleString()}
         </div>
         <Progress progress={@props.workflow.completeness} />
       </div>
@@ -111,8 +117,11 @@ ProjectStatsPage = React.createClass
 
   render: ->
     progress = @workflowInfo()
+    if @props.startDate
+      start = <div>Launch Date: {moment(@props.startDate).format 'MMM-DD-YYYY'}</div>
     <div className="project-stats-page content-container">
       <div className="project-stats-dashboard">
+        {start}
         <div>
           Volunteers: {@props.totalVolunteers.toLocaleString()}
         </div>
@@ -176,12 +185,10 @@ ProjectStatsPageController = React.createClass
       classificationsBy: @getQuery('classifications') ? 'hour'
       volunteersBy: @getQuery('valunteerss') ? 'hour'
       projectId: @props.project.id
-      totalClassifications: @props.project.classifications_count
-      # there must be a better way to get this number
-      requiredClassifications: @props.project.classifications_count / @props.project.completeness
       totalVolunteers: @props.project.classifiers_count
       currentVolunteers: @props.project.activity
       workflows: @state.workflowList
+      startDate: @props.project.launch_date
 
     <ProjectStatsPage {...queryProps} />
 
