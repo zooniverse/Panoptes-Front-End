@@ -59,11 +59,6 @@ counterpart.registerTranslations 'en',
         bio: '''Coleman is helping to create new data analysis and visualization tools for existing Zooniverse
         projects as well as identifying new projects within the University of Portsmouth. He received
         his PhD in astrophysics from Drexel University.'''
-      darrenMcRoy:
-        title: 'Community Manager'
-        bio: '''Darren (DZM) serves as a liaison to the Zooniverse community and assists with strategic
-        content for projects. A Northwestern University graduate in journalism, he is also a golf addict,
-        amateur author, and hopeless animal lover.'''
       grantMiller:
         title: 'Communications Lead'
         bio: '''A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
@@ -224,12 +219,6 @@ teamMembers =
     bio: counterpart "team.content.colemanKrawczyk.bio"
     image: "/assets/team/coleman.jpg"
     location: "portsmouth"
-  darrenMcRoy:
-    name: "Darren McRoy"
-    title: counterpart "team.content.darrenMcRoy.title"
-    bio: counterpart "team.content.darrenMcRoy.bio"
-    image: "/assets/team/darren.jpg"
-    location: "chicago"
   grantMiller:
     name: "Grant Robert MacKinnon Miller"
     twitter: "mrniaboc"
