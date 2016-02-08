@@ -54,13 +54,13 @@
     "window-shim": "~1.0.0"
   },
   "scripts": {
-    "build": "NODE_ENV=${NODE_ENV:-production} ./bin/build.sh",
+    "build": "export NODE_ENV=${NODE_ENV:-production}; ./bin/build.sh",
     "check-build-size": "npm run build && cat ./build/vendor.*.js ./build/main.*.js | gzip --best | wc -c",
     "postinstall": "./bin/postinstall.sh",
     "deploy": "npm run build && publisssh ./build zooniverse-static/www.zooniverse.org/$DEPLOY_SUBDIR",
-    "deploy-branch": "DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD) npm run deploy",
-    "stage": "DEPLOY_SUBDIR=\"panoptes-front-end/$DEPLOY_SUBDIR\"; NODE_ENV=staging npm run build && publisssh ./build \"zooniverse-static/preview.zooniverse.org/$DEPLOY_SUBDIR\"",
-    "stage-branch": "DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD) npm run stage",
+    "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",
+    "stage": "export DEPLOY_SUBDIR=${DEPLOY_SUBDIR:-panoptes-front-end}; export NODE_ENV=staging; npm run build && publisssh ./build \"zooniverse-static/preview.zooniverse.org/$DEPLOY_SUBDIR\"",
+    "stage-branch": "export DEPLOY_SUBDIR=\"panoptes-front-end/$(git symbolic-ref --short HEAD)\"; npm run stage",
     "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
     "start": "./bin/serve.sh",
