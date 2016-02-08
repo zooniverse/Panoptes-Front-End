@@ -318,7 +318,7 @@ EditWorkflowPage = React.createClass
               toggle = @handleSubjectSetToggle.bind this, subjectSet
               <tr key={subjectSet.id}>
                 <td><input type="checkbox" checked={assigned} onChange={toggle} /></td>
-                <td>{subjectSet.display_name} (#{@props.subjectSet.id})</td>
+                <td>{subjectSet.display_name} (#{subjectSet.id})</td>
               </tr>}
           </tbody>
         </table>
