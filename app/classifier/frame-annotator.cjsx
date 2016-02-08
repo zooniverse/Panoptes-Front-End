@@ -138,7 +138,8 @@ module.exports = React.createClass
               <SVGImage src={src} width={@props.naturalWidth} height={@props.naturalHeight} />
             </Draggable>
           }
-          {if InsideSubject?
+
+          {if InsideSubject? && !@props.panEnabled
             <InsideSubject {...hookProps} />}
 
           {for anyTaskName, {PersistInsideSubject} of tasks when PersistInsideSubject?
