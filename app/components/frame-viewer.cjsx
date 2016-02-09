@@ -58,12 +58,12 @@ module.exports = React.createClass
             <div className="loading-cover" style={@constructor.overlayStyle} >
               <LoadingIndicator />
             </div>}
-          <span>
-            <button className={if @state.panEnabled then "fa fa-arrows" else "fa fa-pencil"} onClick={@togglePan}/>
+          <div>
+            <button className={if @state.panEnabled then "toggle fa fa-arrows active" else "toggle fa fa-arrows"} title={"pan"} onClick={@togglePan} ></button>
             <button className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
             <button className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
             <button className="reset" onClick={ this.zoomReset } >Reset</button>
-          </span>
+          </div>
         </div>
       when 'video'
         <div className="subject-video-frame">
