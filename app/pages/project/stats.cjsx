@@ -63,7 +63,7 @@ Graph = React.createClass
         data.series[0].push value
 
     <div className="svg-container">
-      <ChartistGraph className="ct-major-twelfth" listener={@listener} type="Bar" data={data} options={@props.options} />
+      <ChartistGraph className="ct-major-tenth" listener={@listener} type="Bar" data={data} options={@props.options} />
     </div>
 
 WorkflowProgress = React.createClass
