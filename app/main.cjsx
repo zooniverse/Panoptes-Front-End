@@ -5,7 +5,8 @@ ReactDOM = {render} = require 'react-dom'
 createBrowserHistory = require 'history/lib/createBrowserHistory'
 routes = require './router'
 
-# IE < 11 doesn't support `document.baseURI` (test this).
+# IE, oh my god:
+location.origin ?= location.protocol + "//" + location.hostname + if location.port then ':' + location.port else ''
 document.baseURI ?= location.origin + document.querySelector('base').getAttribute('href')
 
 if location?.hash?.indexOf('/') is 1
