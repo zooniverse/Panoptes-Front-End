@@ -29,6 +29,10 @@ Progress = React.createClass
     </div>
 
 Graph = React.createClass
+  getInitialState: ->
+    minIdx: Math.max Object.keys(@props.data).length - @props.num, 0
+    maxIdx: Object.keys(@props.data).length - 1
+
   getDefaultProps: ->
     data: []
     options:
@@ -38,33 +42,73 @@ Graph = React.createClass
       axisY:
         onlyInteger: true
 
+  componentWillReceiveProps: (nextProps) ->
+    newState =
+      minIdx: Math.max Object.keys(nextProps.data).length - @props.num, 0
+      maxIdx: Object.keys(nextProps.data).length - 1
+    @setState(newState)
+
   formatLabel:
     hour: (date) -> moment(date).format 'MMM-DD hh:mm A'
     day: (date) -> moment(date).format 'MMM-DD-YYYY'
     week: (date) -> moment(date).format 'MMM-DD-YYYY'
     month: (date) -> moment(date).format 'MMM-DD-YYYY'
 
-  listener:
-    draw: (data) ->
-      if data.type == 'label'
-        if data.axis.units.dir == 'horizontal'
-          dx = data.width / 2 + (100 - data.width)
-          data.element.attr({x: data.element.attr('x') - dx})
+  onDraw: (data) ->
+    length = @state.maxIdx - @state.minIdx + 1
+    if data.type == 'label'
+      if data.axis.units.dir == 'horizontal'
+        svgWidth = data.element.parent().parent().width()
+        width = (svgWidth - 65) / length
+        dx = width / 2 + (100 - width)
+        data.element.attr({x: data.element.attr('x') - dx})
+    else if data.type == 'bar'
+      data.element.attr({style: "stroke-width: #{100 / length}%"})
+
+  getOptions: (type) ->
+    optionsList = []
+    switch type
+      when 'min'
+        @props.data.forEach ({label}, idx) =>
+          if idx < @state.maxIdx
+            optionsList.push(<option value={idx} key={"min-#{idx}"}>{@formatLabel[@props.by]?(label) ? label}</option>)
+      when 'max'
+        @props.data.forEach ({label}, idx) =>
+          if idx > @state.minIdx
+            optionsList.push(<option value={idx} key={"max-#{idx}"}>{@formatLabel[@props.by]?(label) ? label}</option>)
+    optionsList
+
+  selectChange: (event) ->
+    newState = {}
+    newState[event.target.id] = event.target.value
+    @setState(newState)
 
   render: ->
     data =
       labels: []
       series: [[]]
 
-    minIdx = Object.keys(@props.data).length - @props.num
+    # minIdx = Object.keys(@props.data).length - @props.num
     @props.data.forEach ({label, value}, idx) =>
-      if idx >= minIdx
+      if (idx >= @state.minIdx & idx <= @state.maxIdx)
         data.labels.push @formatLabel[@props.by]?(label) ? label
         data.series[0].push value
 
+    #console.log(@state.maxIdx - @state.minIdx + 1)
+    listener =
+      draw: @onDraw
+
     <div className="svg-container">
-      <ChartistGraph className="ct-major-tenth" listener={@listener} type="Bar" data={data} options={@props.options} />
+      <select value={@state.minIdx} onChange={@selectChange} id="minIdx">
+        {@getOptions('min')}
+      </select>
+      <select value={@state.maxIdx} onChange={@selectChange} id="maxIdx">
+        {@getOptions('max')}
+      </select>
+      <br />
+      <ChartistGraph className="ct-major-tenth" listener={listener} type="Bar" data={data} options={@props.options} />
     </div>
+
 
 WorkflowProgress = React.createClass
   render: ->
