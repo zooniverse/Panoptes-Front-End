@@ -102,12 +102,14 @@ module.exports = React.createClass
         <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} panByDrag={@panByDrag} viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange} panEnabled={@state.panEnabled} >
           {frameDisplay}
         </FrameWrapper>
-        <div>
-          <button className={if @state.panEnabled then "toggle fa fa-arrows active" else "toggle fa fa-arrows"} title={"pan"} onClick={@togglePan} ></button>
-          <button className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
-          <button className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
-          <button className="reset" onClick={ this.zoomReset } >Reset</button>
-        </div>
+        {if ( @props.project? &&'pan and zoom' in @props.project?.experimental_tools) || window.location.pathname == "/dev/classifier"
+          <div>
+            <button className={if @state.panEnabled then "toggle fa fa-arrows active" else "toggle fa fa-arrows"} title={"pan"} onClick={@togglePan} ></button>
+            <button className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
+            <button className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
+            <button className="reset" onClick={ this.zoomReset } >Reset</button>
+          </div>}
+        
       </div>
 
 
