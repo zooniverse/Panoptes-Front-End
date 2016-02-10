@@ -162,7 +162,11 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
-        <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
+        {if Object.keys(@props.workflow.tasks).length > 1
+          <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>}
+        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
+          [ownerName, name] = @props.project.slug.split('/')
+          <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
         {if nextTaskKey
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
         else
@@ -173,9 +177,6 @@ Classifier = React.createClass
               <i className="fa fa-star fa-fw"></i>}
             {' '}Done
           </button>}
-        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
-          [ownerName, name] = @props.project.slug.split('/')
-          <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
         {@renderExpertOptions()}
       </nav>
 
