@@ -123,7 +123,7 @@ module.exports =
   <Route path="dev/workflow-tasks-editor" component={require './components/workflow-tasks-editor'} />
   <Route path="dev/classifier" component={
     if process.env.NODE_ENV is 'production'
-      React.createClass render: -> <p>Env is {process.env.NODE_ENV}</p>
+      require './pages/not-found'
     else
       require './pages/dev-classifier'
   } />
