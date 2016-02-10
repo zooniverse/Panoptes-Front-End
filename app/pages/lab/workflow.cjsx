@@ -98,7 +98,8 @@ EditWorkflowPage = React.createClass
                         when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'crop' then <i className="fa fa-crop fa-fw"></i>
-                        when 'text' then <i className="fa fa-file-text-o fa-fw"></i>}
+                        when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
+                        when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
                       {' '}
                       {tasks[definition.type].getTaskText definition}
                       {if key is @props.workflow.first_task
@@ -160,6 +161,13 @@ EditWorkflowPage = React.createClass
                         <small><strong>Crop</strong></small>
                       </button>
                     </AutoSave>}{' '}
+                  <AutoSave resource={@props.workflow}>
+                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'combo'} title="Several tasks at once!">
+                      <i className="fa fa-cubes fa-2x"></i>
+                      <br />
+                      <small><strong>Combo</strong></small>
+                    </button>
+                  </AutoSave>
                 </TriggeredModalForm>
               </p>
 
