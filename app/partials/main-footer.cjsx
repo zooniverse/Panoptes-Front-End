@@ -31,6 +31,7 @@ counterpart.registerTranslations 'en',
       jobs: 'Jobs'
       privacyPolicy: 'Privacy Policy'
       status: 'System Status'
+      security: 'Security'
 
 AdminToggle = React.createClass
   displayName: 'AdminToggle'
@@ -124,6 +125,8 @@ module.exports = React.createClass
           <a href="http://jobs.zooniverse.org/"><Translate content="footer.boilerplate.jobs" /></a>
           <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
           <a href="https://status.zooniverse.org/"><Translate content="footer.boilerplate.status" /></a>
+          <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
+          <Link to="/security"><Translate content="footer.boilerplate.security" /></Link>
         </div>
       </div>
     </footer>
