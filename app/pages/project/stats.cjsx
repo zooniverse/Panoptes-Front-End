@@ -105,6 +105,10 @@ Graph = React.createClass
         width = (svgWidth - 65) / length
         dx = width / 2 + (100 - width)
         data.element.attr({x: data.element.attr('x') - dx})
+        # number of bars that fit insdie an axis label (17px)
+        numberBars = Math.ceil 17 / width
+        if data.index % numberBars
+          data.element.attr({style: "display: none"})        
     else if data.type == 'bar'
       data.element.attr({style: "stroke-width: #{100 / length}%"})
 
