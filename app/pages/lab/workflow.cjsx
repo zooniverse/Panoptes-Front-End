@@ -55,7 +55,8 @@ EditWorkflowPage = React.createClass
     @history.createHref("/projects/#{owner}/#{name}/classify", viewQuery)
 
   canUseTask: (project, task)->
-    task in project.experimental_tools
+    # task in project.experimental_tools
+    true
 
   render: ->
     window.editingWorkflow = @props.workflow
