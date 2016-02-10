@@ -48,6 +48,7 @@ module.exports = React.createClass
     subject = @props.subject
     frame = @props.frame
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
+    console.log "TYPE", type
     FrameWrapper = @props.frameWrapper
     frameDisplay = switch type
       when 'image'
@@ -58,12 +59,6 @@ module.exports = React.createClass
             <div className="loading-cover" style={@constructor.overlayStyle} >
               <LoadingIndicator />
             </div>}
-          <div>
-            <button className={if @state.panEnabled then "toggle fa fa-arrows active" else "toggle fa fa-arrows"} title={"pan"} onClick={@togglePan} ></button>
-            <button className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
-            <button className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
-            <button className="reset" onClick={ this.zoomReset } >Reset</button>
-          </div>
         </div>
       when 'video'
         <div className="subject-video-frame">
@@ -103,9 +98,19 @@ module.exports = React.createClass
         </div>
 
     if FrameWrapper
-      <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} panByDrag={@panByDrag} viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange} panEnabled={@state.panEnabled} >
-        {frameDisplay}
-      </FrameWrapper>
+      <div>
+        <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} panByDrag={@panByDrag} viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange} panEnabled={@state.panEnabled} >
+          {frameDisplay}
+        </FrameWrapper>
+        <div>
+          <button className={if @state.panEnabled then "toggle fa fa-arrows active" else "toggle fa fa-arrows"} title={"pan"} onClick={@togglePan} ></button>
+          <button className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
+          <button className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
+          <button className="reset" onClick={ this.zoomReset } >Reset</button>
+        </div>
+      </div>
+
+
     else
       frameDisplay
 
