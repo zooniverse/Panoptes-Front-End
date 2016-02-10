@@ -31,8 +31,21 @@ Progress = React.createClass
 
 Graph = React.createClass
   getInitialState: ->
-    minIdx: Math.max Object.keys(@props.data).length - @props.num, 0
-    maxIdx: Object.keys(@props.data).length - 1
+    data =
+      labels: []
+      series: [[]]
+
+    @props.data.forEach ({label, value}, idx) =>
+      data.labels.push @formatLabel[@props.by]?(label) ? label
+      data.series[0].push value
+
+    min = Math.max data.labels.length - @props.num, 0
+    max = data.labels.length - 1
+
+    minIdx: min
+    maxIdx: max
+    midIdx: max + min
+    data: data
 
   getDefaultProps: ->
     data: []
@@ -60,9 +73,22 @@ Graph = React.createClass
         left: 15
 
   componentWillReceiveProps: (nextProps) ->
+    data =
+      labels: []
+      series: [[]]
+
+    nextProps.data.forEach ({label, value}, idx) =>
+      data.labels.push @formatLabel[nextProps.by]?(label) ? label
+      data.series[0].push value
+
+    min = Math.max data.labels.length - @props.num, 0
+    max = data.labels.length - 1
+
     newState =
-      minIdx: Math.max Object.keys(nextProps.data).length - @props.num, 0
-      maxIdx: Object.keys(nextProps.data).length - 1
+      minIdx: min
+      maxIdx: max
+      midIdx: max + min
+      data: data
     @setState(newState)
 
   formatLabel:
@@ -93,36 +119,37 @@ Graph = React.createClass
     newState =
       minIdx: event[0]
       maxIdx: event[1]
+      midIdx: event[1] + event[0]
     @setState(newState)
 
+  onSlideMid: (event) ->
+    diff = @state.maxIdx - @state.minIdx
+    newState =
+      minIdx: Math.floor (event - diff) / 2
+      maxIdx: Math.floor (event + diff) / 2
+      midIdx: event
+    if newState.minIdx >= 0 & newState.maxIdx < @state.data.labels.length
+      @setState(newState)
+
   render: ->
-    data =
-      labels: []
-      series: [[]]
-
-    @props.data.forEach ({label, value}, idx) =>
-      data.labels.push @formatLabel[@props.by]?(label) ? label
-      data.series[0].push value
-
     dataSlice =
-      labels: data.labels.slice(@state.minIdx, @state.maxIdx + 1)
-      series: [data.series[0].slice(@state.minIdx, @state.maxIdx + 1)]
+      labels: @state.data.labels.slice(@state.minIdx, @state.maxIdx + 1)
+      series: [@state.data.series[0].slice(@state.minIdx, @state.maxIdx + 1)]
 
-    listener =
-      draw: @onDraw
-    if data.labels.length > @props.num
-      listenerSmall =
-        draw: @onDrawSmall
+    if @state.data.labels.length > @props.num
       smallChart =
         <div>
-          <ChartistGraph listener={listenerSmall} type="Bar" data={data} options={@props.optionsSmall} />
-          <Rcslider min={0} max={data.labels.length - 1} range={true} allowCross={false} value={[@state.minIdx, @state.maxIdx]} tipFormatter={null} onChange={@onSlide} />
+          <ChartistGraph listener={draw: @onDrawSmall} type="Bar" data={@state.data} options={@props.optionsSmall} />
+          <div className="top-slider">
+            <Rcslider min={0} max={@state.data.labels.length - 1} range={true} allowCross={false} value={[@state.minIdx, @state.maxIdx]} tipFormatter={null} onChange={@onSlide} />
+          </div>
+          <Rcslider min={0} max={2 * (@state.data.labels.length - 1)} value={@state.midIdx} step={2} included={false} tipFormatter={null} onChange={@onSlideMid} />
           <br />
         </div>
 
     <div className="svg-container">
       {smallChart}
-      <ChartistGraph className="ct-major-tenth" listener={listener} type="Bar" data={dataSlice} options={@props.options} />
+      <ChartistGraph className="ct-major-tenth" listener={draw: @onDraw} type="Bar" data={dataSlice} options={@props.options} />
     </div>
 
 
