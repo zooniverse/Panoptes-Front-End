@@ -224,12 +224,12 @@ publicationCategories =
   humanities: [
     {slug: "zooniverse/ancient-lives"
     publications: [
-    {citation: "A computational pipeline for crowdsourced transcriptions of Ancient Greek papyrus fragments, Williams+ 2014."
-    href: "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&tp=&arnumber=7004460&queryText%3Dwilliam+alex+pridemore"},
+      {citation: "A computational pipeline for crowdsourced transcriptions of Ancient Greek papyrus fragments, Williams+ 2014."
+      href: "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&tp=&arnumber=7004460&queryText%3Dwilliam+alex+pridemore"},
       {citation: "P.Oxy 5156, Plutarch Moralia 660C, 661B-C (Quaestiones Convivales IV PR., 1.2), in The Oxyrhynchus Papyri Vol. 78, Brusuelas 2013."}
 
-      ]}
-    ],
+    ]}
+  ],
   nature: [
     {slug: "zooniverse/whale-fm"
     publications: [
