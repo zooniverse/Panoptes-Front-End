@@ -1,7 +1,7 @@
 React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
 
-THUMBNAIL_BREAKPOINTS = [Infinity, 40, 20, 10, 5, 0]
+THUMBNAIL_BREAKPOINTS = [Infinity, 160, 140, 120, 100, 80, 60, 40, 20, 10, 5, 0]
 
 module.exports = React.createClass
   displayName: 'Chooser'
