@@ -23,6 +23,7 @@
     "panoptes-client": "~2.4.0",
     "papaparse": "mholt/PapaParse#cada171",
     "qs": "~6.0.2",
+    "rc-slider": "~3.3.2",
     "react": "~0.14.1",
     "react-chartist": "~0.10.1",
     "react-component-resizable": "~0.3.0",

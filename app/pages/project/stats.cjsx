@@ -7,6 +7,7 @@ qs = require 'qs'
 PromiseRenderer = require '../../components/promise-renderer'
 config = require '../../api/config'
 {Model, makeHTTPRequest} = require 'json-api-client'
+Rcslider = require 'rc-slider'
 
 Progress = React.createClass
   getDefaultProps: ->
@@ -41,6 +42,22 @@ Graph = React.createClass
         showGrid: false
       axisY:
         onlyInteger: true
+    optionsSmall:
+      axisX:
+        offset: 0
+        showLabel: false
+        showGrid: false
+      axisY:
+        offset: 0
+        showLabel: false
+        showGrid: false
+      width: '100%'
+      height: '50px'
+      chartPadding:
+        top: 0
+        right: 15
+        bottom: 0
+        left: 15
 
   componentWillReceiveProps: (nextProps) ->
     newState =
@@ -65,22 +82,17 @@ Graph = React.createClass
     else if data.type == 'bar'
       data.element.attr({style: "stroke-width: #{100 / length}%"})
 
-  getOptions: (type) ->
-    optionsList = []
-    switch type
-      when 'min'
-        @props.data.forEach ({label}, idx) =>
-          if idx < @state.maxIdx
-            optionsList.push(<option value={idx} key={"min-#{idx}"}>{@formatLabel[@props.by]?(label) ? label}</option>)
-      when 'max'
-        @props.data.forEach ({label}, idx) =>
-          if idx > @state.minIdx
-            optionsList.push(<option value={idx} key={"max-#{idx}"}>{@formatLabel[@props.by]?(label) ? label}</option>)
-    optionsList
+  onDrawSmall: (data) ->
+    if data.type == 'bar'
+      style = "stroke-width: #{100 / Object.keys(@props.data).length}%"
+      if (data.index >= @state.minIdx & data.index <= @state.maxIdx)
+        style += '; stroke: darkred'
+      data.element.attr({style: style})
 
-  selectChange: (event) ->
-    newState = {}
-    newState[event.target.id] = event.target.value
+  onSlide: (event) ->
+    newState =
+      minIdx: event[0]
+      maxIdx: event[1]
     @setState(newState)
 
   render: ->
@@ -88,25 +100,29 @@ Graph = React.createClass
       labels: []
       series: [[]]
 
-    # minIdx = Object.keys(@props.data).length - @props.num
     @props.data.forEach ({label, value}, idx) =>
-      if (idx >= @state.minIdx & idx <= @state.maxIdx)
-        data.labels.push @formatLabel[@props.by]?(label) ? label
-        data.series[0].push value
+      data.labels.push @formatLabel[@props.by]?(label) ? label
+      data.series[0].push value
 
-    #console.log(@state.maxIdx - @state.minIdx + 1)
+    dataSlice =
+      labels: data.labels.slice(@state.minIdx, @state.maxIdx + 1)
+      series: [data.series[0].slice(@state.minIdx, @state.maxIdx + 1)]
+
     listener =
       draw: @onDraw
+    if data.labels.length > @props.num
+      listenerSmall =
+        draw: @onDrawSmall
+      smallChart =
+        <div>
+          <ChartistGraph listener={listenerSmall} type="Bar" data={data} options={@props.optionsSmall} />
+          <Rcslider min={0} max={data.labels.length - 1} range={true} allowCross={false} value={[@state.minIdx, @state.maxIdx]} tipFormatter={null} onChange={@onSlide} />
+          <br />
+        </div>
 
     <div className="svg-container">
-      <select value={@state.minIdx} onChange={@selectChange} id="minIdx">
-        {@getOptions('min')}
-      </select>
-      <select value={@state.maxIdx} onChange={@selectChange} id="maxIdx">
-        {@getOptions('max')}
-      </select>
-      <br />
-      <ChartistGraph className="ct-major-tenth" listener={listener} type="Bar" data={data} options={@props.options} />
+      {smallChart}
+      <ChartistGraph className="ct-major-tenth" listener={listener} type="Bar" data={dataSlice} options={@props.options} />
     </div>
 
 
