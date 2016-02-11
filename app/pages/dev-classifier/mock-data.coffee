@@ -337,19 +337,21 @@ subject = apiClient.type('subjects').create
         value: 6
       }]
 
+project = apiClient.type('project').create
+  id: 'MOCK_PROJECT_FOR_CLASSIFIER'
+  title: "The Dev Classifier"
+  experimental_tools: ['pan and zoom']
+
 classification = apiClient.type('classifications').create
   annotations: []
   metadata: {}
   links:
-    project: 'NO_PROJECT'
+    project: project.id
     workflow: workflow.id
     subjects: [subject.id]
   _workflow: workflow # TEMP
   _subjects: [subject] # TEMP
 
-project = 
-  title: "The Dev Classifier"
-  experimental_tools: ['pan and zoom']
 
 module.exports = {workflow, subject, classification, project}
 window?.mockClassifierData = module.exports

@@ -39,16 +39,13 @@ module.exports = React.createClass
     @refs.videoScrubber?.value = 0
     addEventListener "keydown", @frameKeyPan
 
-
   componentDidUpdate: ->
     @refs.videoPlayer?.playbackRate = @state.playbackRate
-
 
   render: () ->
     subject = @props.subject
     frame = @props.frame
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
-    console.log "TYPE", type
     FrameWrapper = @props.frameWrapper
     frameDisplay = switch type
       when 'image'
