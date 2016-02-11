@@ -116,60 +116,72 @@ $survey-task-pill-button
   flex-wrap: wrap
   flex-direction: column
   padding: 4px
-  height: 49vh
+  height: 20rem
 
   > *
     margin: 0 2px 2px 0
     position: relative
 
-  &[data-breakpoint="Infinity"],
-  &[data-breakpoint="160"]
-    height: 150vh
-
-  &[data-breakpoint="160"],
-  &[data-breakpoint="140"]
-    height: 97vh
-
-  &[data-breakpoint="140"],
-  &[data-breakpoint="120"]
-    height: 85vh
-
-  &[data-breakpoint="120"],
-  &[data-breakpoint="100"]
-    height: 73vh
-
-  &[data-breakpoint="100"],
-  &[data-breakpoint="80"]
-    height: 61vh
-
-  &[data-breakpoint="Infinity"] > *,
-  &[data-breakpoint="80"] > *
-    width: calc(25% - 2px)
-    overflow: hidden
-
-  &[data-breakpoint="80"] > *,
-  &[data-breakpoint="60"] > *
-    width: calc(25% - 2px)
-    overflow: hidden
-
-  &[data-breakpoint="60"] > *,
-  &[data-breakpoint="40"] > *
-    width: calc(33.33% - 2px)
-
-  &[data-breakpoint="20"] > *,
-  &[data-breakpoint="10"] > *
-    width: calc(50% - 2px)
-
-  &[data-breakpoint="5"] > *
-    width: calc(100% - 2px)
-
-  &[data-breakpoint="40"],
-  &[data-breakpoint="20"],
-  &[data-breakpoint="10"],
   &[data-breakpoint="5"]
+    height: calc(27rem + 4px)
+    > *
+      width: auto
+    .survey-task-chooser-choice
+      text-align: center
+      justify-content: flex-start
+
+  &[data-breakpoint="10"]
+    height: calc(15rem + 2px)
+    > *
+      width: auto
+    .survey-task-chooser-choice
+      text-align: center
+      justify-content: flex-start
+
+  &[data-breakpoint="20"]
+    height: 19rem
+    > *
+      width: calc(50% - 2px)
+    .survey-task-chooser-choice
+      justify-content: flex-start
+
+  &[data-breakpoint="40"]
+    height: calc(36rem + 4px)
+    > *
+      width: calc(50% - 2px)
     .survey-task-chooser-choice
       align-items: center
       justify-content: flex-start
+
+  &[data-breakpoint="60"]
+    height: calc(36rem + 4px)
+    > *
+      width: calc(33.33% - 2px)
+
+  &[data-breakpoint="80"],
+  &[data-breakpoint="100"],
+  &[data-breakpoint="120"],
+  &[data-breakpoint="140"],
+  &[data-breakpoint="160"],
+  &[data-breakpoint="Infinity"]
+    > *
+      width: calc(25% - 3px)
+
+  &[data-breakpoint="80"]
+    height: calc(36rem + 4px)
+
+  &[data-breakpoint="100"]
+    height: 73vh
+
+  &[data-breakpoint="120"]
+    height: 85vh
+
+  &[data-breakpoint="140"]
+    height: 97vh
+
+  &[data-breakpoint="Infinity"],
+  &[data-breakpoint="160"]
+    height: 150vh
 
 .survey-task-chooser-choice
   @extends $reset-button
@@ -192,14 +204,14 @@ $survey-task-pill-button
   display: inline-block
   vertical-align: middle
 
-  [data-breakpoint="Infinity"] &-container,
-  [data-breakpoint="160"] &-container,
-  [data-breakpoint="140"] &-container,
-  [data-breakpoint="120"] &-container,
-  [data-breakpoint="100"] &-container,
-  [data-breakpoint="80"] &-container,
-  [data-breakpoint="60"] &-container,
-  [data-breakpoint="40"] &-container
+  [data-breakpoint="Infinity"] &,
+  [data-breakpoint="160"] &,
+  [data-breakpoint="140"] &,
+  [data-breakpoint="120"] &,
+  [data-breakpoint="100"] &,
+  [data-breakpoint="80"] &,
+  [data-breakpoint="60"] &,
+  [data-breakpoint="40"] &
     display: none
 
   [data-breakpoint="20"] &
@@ -215,6 +227,8 @@ $survey-task-pill-button
 
 .survey-task-chooser-choice-label
   display: inline-block
+  white-space: nowrap
+  overflow: hidden
 
   [data-breakpoint="5"] &
     font-size: 1.5em
