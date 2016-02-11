@@ -13,9 +13,10 @@ EXPERIMENTAL_FEATURES = [
   'survey'
   'flexible-survey'
   'crop'
+  'text'
+  'combo'
   'tutorial'
   'field guide'
-  'text'
   'hide classification summaries'
 ]
 

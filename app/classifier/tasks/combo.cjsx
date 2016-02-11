@@ -11,10 +11,26 @@ ComboTaskEditor = React.createClass
   getDefaultProps: ->
     workflow: null
     task: null
+    onChange: ->
 
   removeTask: (index) ->
     @props.task.tasks.splice index, 1
-    @props.workflow.update('tasks').save()
+    @props.onChange @props.task
+
+  setOrder: (taskKeys) ->
+    @props.task.tasks = taskKeys
+    @props.onChange @props.task
+
+  addTask: (e) ->
+    taskKey = e.target.value
+    @props.task.tasks.push taskKey
+    console.log '>>>', @props.task
+    @props.onChange @props.task
+
+  setLooseRequirements: (e) ->
+    value = JSON.parse e.target.value
+    @props.task.loosen_requirements = value
+    @props.onChange @props.task
 
   renderSubtask: (taskKey, i) ->
     tasks = require '.'
@@ -23,22 +39,8 @@ ComboTaskEditor = React.createClass
     TaskComponent = tasks[taskDescription.type]
     <li key={taskDescription._key}>
       {TaskComponent.getTaskText taskDescription}{' '}
-      <button type="button" className="secret-button" onClick={@removeTask.bind this, i}>&times;</button>
+      <button type="button" onClick={@removeTask.bind this, i}>Remove</button>
     </li>
-
-  setOrder: (taskKeys) ->
-    @props.task.tasks = taskKeys
-    @props.workflow.update('tasks').save()
-
-  addTask: (e) ->
-    taskKey = e.target.value
-    @props.task.tasks.push taskKey
-    @props.workflow.update('tasks').save()
-
-  setLooseRequirements: (e) ->
-    value = JSON.parse e.target.value
-    @props.task.loosen_requirements = value
-    @props.workflow.update('tasks').save()
 
   render: ->
     tasks = require '.'
@@ -67,9 +69,14 @@ ComboTaskEditor = React.createClass
       </p>
     </div>
 
+ComboTaskSummary = React.createClass
+  render: ->
+    <div>(TODO: Combo task summary)</div>
+
 module.exports = React.createClass
   statics:
     Editor: ComboTaskEditor
+    Summary: ComboTaskSummary
 
     getDefaultTask: ->
       type: 'combo'
@@ -141,6 +148,10 @@ module.exports = React.createClass
       </g>
 
   getDefaultProps: ->
+    taskTypes: null
+    workflow: null
+    task: null
+    annotation: null
     onChange: ->
 
   handleChange: (index, newSubAnnotation) ->

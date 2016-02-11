@@ -57,6 +57,11 @@ EditWorkflowPage = React.createClass
   canUseTask: (project, task)->
     task in project.experimental_tools
 
+  handleTaskChange: (taskKey, taskDescription) ->
+    changes = {}
+    changes["tasks.#{taskKey}"] = taskDescription
+    @props.workflow.update(changes).save()
+
   render: ->
     window.editingWorkflow = @props.workflow
 
@@ -161,13 +166,14 @@ EditWorkflowPage = React.createClass
                         <small><strong>Crop</strong></small>
                       </button>
                     </AutoSave>}{' '}
-                  <AutoSave resource={@props.workflow}>
-                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'combo'} title="Several tasks at once!">
-                      <i className="fa fa-cubes fa-2x"></i>
-                      <br />
-                      <small><strong>Combo</strong></small>
-                    </button>
-                  </AutoSave>
+                  {if @canUseTask(@props.project, "combo")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'combo'} title="Combo tasks: show a bunch of tasks at the same time.">
+                        <i className="fa fa-cubes fa-2x"></i>
+                        <br />
+                        <small><strong>Combo</strong></small>
+                      </button>
+                    </AutoSave>}
                 </TriggeredModalForm>
               </p>
 
@@ -286,6 +292,7 @@ EditWorkflowPage = React.createClass
                 task={@props.workflow.tasks[@state.selectedTaskKey]}
                 taskPrefix="tasks.#{@state.selectedTaskKey}"
                 project={@props.project}
+                onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
               />
               <hr />
               <br />
@@ -394,11 +401,6 @@ EditWorkflowPage = React.createClass
       .then =>
         if @isMounted()
           @setState deletionInProgress: false
-
-  handleTaskChange: (taskKey, path, value) ->
-    changes = {}
-    changes["tasks.#{taskKey}.#{path}"] = value
-    @props.workflow.update changes
 
   handleGoldStandardDataImport: (e) ->
     @setState goldStandardFilesToImport: e.target.files
