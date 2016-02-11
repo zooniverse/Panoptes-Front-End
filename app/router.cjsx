@@ -23,6 +23,7 @@ module.exports =
     <Route path="register" component={require './partials/register-form'} />
   </Route>
   <Route path="privacy" component={require './pages/privacy-policy'} />
+  <Route path="security" component={require './pages/security'} />
 
   <Route path="users/:name" component={require './pages/profile'}>
     <IndexRoute component={require './pages/profile/feed'} />
@@ -121,7 +122,12 @@ module.exports =
 
   <Route path="todo" component={-> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
   <Route path="dev/workflow-tasks-editor" component={require './components/workflow-tasks-editor'} />
-  <Route path="dev/classifier" component={require './classifier'} />
+  <Route path="dev/classifier" component={
+    if process.env.NODE_ENV is 'production'
+      require './pages/not-found'
+    else
+      require './pages/dev-classifier'
+  } />
   <Route path="dev/ribbon" component={require './components/classifications-ribbon'} />
   <Route path="*" component={require './pages/not-found'} />
 </Route>

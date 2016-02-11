@@ -17,9 +17,6 @@ Tutorial = require '../lib/tutorial'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 
-unless process.env.NODE_ENV is 'production'
-  mockData = require './mock-data'
-
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
 Classifier = React.createClass
@@ -27,11 +24,9 @@ Classifier = React.createClass
 
   getDefaultProps: ->
     user: null
-    if mockData?
-      {workflow, subject, classification} = mockData
-    workflow: workflow ? null
-    subject: subject ? null
-    classification: classification ? null
+    workflow: null
+    subject: null
+    classification: null
     goodClassificationCutoff: 0.5
     onLoad: Function.prototype
 
@@ -372,7 +367,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     user: null
-    classification: mockData?.classification ? {}
+    classification: {}
     onLoad: Function.prototype
     onComplete: Function.prototype
     onClickNext: Function.prototype
