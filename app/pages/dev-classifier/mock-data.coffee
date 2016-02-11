@@ -347,5 +347,9 @@ classification = apiClient.type('classifications').create
   _workflow: workflow # TEMP
   _subjects: [subject] # TEMP
 
-module.exports = {workflow, subject, classification}
+project = 
+  title: "The Dev Classifier"
+  experimental_tools: ['pan and zoom']
+
+module.exports = {workflow, subject, classification, project}
 window?.mockClassifierData = module.exports
