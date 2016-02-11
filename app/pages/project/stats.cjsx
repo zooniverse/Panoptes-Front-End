@@ -7,6 +7,10 @@ qs = require 'qs'
 PromiseRenderer = require '../../components/promise-renderer'
 config = require '../../api/config'
 {Model, makeHTTPRequest} = require 'json-api-client'
+
+# hack to make browserify and rc-slider play nice
+document.createElement ?= (input) ->
+  style: {}
 Rcslider = require 'rc-slider'
 
 Progress = React.createClass
@@ -108,7 +112,7 @@ Graph = React.createClass
         # number of bars that fit insdie an axis label (17px)
         numberBars = Math.ceil 17 / width
         if data.index % numberBars
-          data.element.attr({style: "display: none"})        
+          data.element.attr({style: "display: none"})
     else if data.type == 'bar'
       data.element.attr({style: "stroke-width: #{100 / length}%"})
 
@@ -145,9 +149,11 @@ Graph = React.createClass
         <div>
           <ChartistGraph listener={draw: @onDrawSmall} type="Bar" data={@state.data} options={@props.optionsSmall} />
           <div className="top-slider">
-            <Rcslider min={0} max={@state.data.labels.length - 1} range={true} allowCross={false} value={[@state.minIdx, @state.maxIdx]} tipFormatter={null} onChange={@onSlide} />
+            <Rcslider ref="top-slider" min={0} max={@state.data.labels.length - 1} range={true} allowCross={false} value={[@state.minIdx, @state.maxIdx]} tipFormatter={null} onChange={@onSlide} />
           </div>
-          <Rcslider min={0} max={2 * (@state.data.labels.length - 1)} value={@state.midIdx} step={2} included={false} tipFormatter={null} onChange={@onSlideMid} />
+          <div className="mid-slider">
+            <Rcslider ref="mid-slider" min={0} max={2 * (@state.data.labels.length - 1)} value={@state.midIdx} step={2} included={false} tipFormatter={null} onChange={@onSlideMid} />
+          </div>
           <br />
         </div>
 
