@@ -162,6 +162,41 @@ Graph = React.createClass
       <ChartistGraph className="ct-major-tenth" listener={draw: @onDraw} type="Bar" data={dataSlice} options={@props.options} />
     </div>
 
+GraphSelect = React.createClass
+  getDefaultProps: ->
+    by: 'hour'
+
+  shouldComponentUpdate: (nextProps) ->
+    return @props.by isnt nextProps.by
+
+  statCount: (period, type) ->
+    stats_url = "#{config.statHost}/counts/#{type}/#{period}?project_id=#{@props.projectId}"
+    makeHTTPRequest 'GET', stats_url
+      .then (response) =>
+        results = JSON.parse response.responseText
+        bucket_data = results["events_over_time"]["buckets"]
+        data = bucket_data.map (stat_object) =>
+          label: stat_object.key_as_string
+          value: stat_object.doc_count
+      .catch (response) ->
+        console?.error 'Failed to get the stats'
+
+  render: ->
+    <div>
+      {@props.type[0].toUpperCase() + @props.type.substring(1)}s per{' '}
+      <select value={@props.by} onChange={@handleGraphChange.bind this, @props.type}>
+        <option value="hour">hour</option>
+        <option value="day">day</option>
+        <option value="week">week</option>
+        <option value="month">month</option>
+      </select><br />
+      <PromiseRenderer promise={@statCount(@props.by, @props.type)}>{(statData) =>
+        <Graph data={statData} by={@props.by} num={24} />
+      }</PromiseRenderer>
+    </div>
+
+  handleGraphChange: (which, e) ->
+    @props.handleGraphChange(which, e)
 
 WorkflowProgress = React.createClass
   render: ->
@@ -187,23 +222,6 @@ ProjectStatsPage = React.createClass
     requiredClassifications: 0
     totalVolunteers: 2
     currentVolunteers: 46
-    classificationsBy: 'hour'
-    volunteersBy: 'hour'
-
-  classification_count: (period) ->
-    stats_url = "#{config.statHost}/counts/classification/#{period}?project_id=#{@props.projectId}"
-    makeHTTPRequest 'GET', stats_url
-      .then (response) =>
-        results = JSON.parse response.responseText
-        bucket_data = results["events_over_time"]["buckets"]
-        data = bucket_data.map (stat_object) =>
-          label: stat_object.key_as_string
-          value: stat_object.doc_count
-      .catch (response) ->
-        console?.error 'Failed to get the stats'
-
-  volunteer_count: (period) ->
-    []
 
   workflowInfo: ->
     progress = []
@@ -233,21 +251,13 @@ ProjectStatsPage = React.createClass
       </div>
 
       <div>
-        Classifications per{' '}
-        <select value={@props.classificationsBy} onChange={@handleGraphChange.bind this, 'classifications'}>
-          <option value="hour">hour</option>
-          <option value="day">day</option>
-          <option value="week">week</option>
-          <option value="month">month</option>
-        </select><br />
-        <PromiseRenderer promise={@classification_count(@props.classificationsBy)}>{(classificationData) =>
-          <Graph data={classificationData} by={@props.classificationsBy} num={24} />
-        }</PromiseRenderer>
+        <GraphSelect handleGraphChange={@props.handleGraphChange} type="classification" projectId={@props.projectId} by={@props.classificationsBy}/>
       </div>
-    </div>
+      <div>
+        <GraphSelect handleGraphChange={@props.handleGraphChange} type="comment" projectId={@props.projectId} by={@props.commentsBy}/>
+      </div>
 
-  handleGraphChange: (which, e) ->
-    @props.handleGraphChange(which, e)
+    </div>
 
 ProjectStatsPageController = React.createClass
   mixins: [History, PromiseToSetState]
@@ -279,8 +289,8 @@ ProjectStatsPageController = React.createClass
   render: ->
     queryProps =
       handleGraphChange: @handleGraphChange
-      classificationsBy: @getQuery('classifications') ? 'hour'
-      volunteersBy: @getQuery('valunteerss') ? 'hour'
+      classificationsBy: @getQuery('classification') ? 'hour'
+      commentsBy: @getQuery('comment') ? 'hour'
       projectId: @props.project.id
       totalVolunteers: @props.project.classifiers_count
       currentVolunteers: @props.project.activity
