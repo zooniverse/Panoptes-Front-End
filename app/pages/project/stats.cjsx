@@ -200,11 +200,13 @@ GraphSelect = React.createClass
 
 WorkflowProgress = React.createClass
   render: ->
+    if @props.workflow.retirement.criteria == 'classification_count'
+      retirement = <div>Retirement limit: {@props.workflow.retirement.options.count.toLocaleString()}</div>
     <div className="progress-element">
       <div className="flex-wrapper">
         <h3>{@props.workflow.display_name}</h3>
         <div>
-          Retirement limit: {@props.workflow.retirement.options.count.toLocaleString()}
+          {retirement}
         </div>
         <div>
           Images retired: {@props.workflow.retired_set_member_subjects_count.toLocaleString()} / {@props.workflow.subjects_count.toLocaleString()}
