@@ -50,6 +50,7 @@ workflow = apiClient.type('workflows').create
 
     combo:
       type: 'combo'
+      loosen_requirements: true
       tasks: [
         'crop'
         'write'

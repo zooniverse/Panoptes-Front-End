@@ -19,9 +19,19 @@ ComboTask = React.createClass
         defaultAnnotation = ChildTaskComponent.getDefaultAnnotation childTaskDescription, workflow, taskComponents
         Object.assign task: childTaskKey, defaultAnnotation
 
-    isAnnotationComplete: (task, annotation) ->
-      # TODO (Remember to `loosen_requirements` if it's set)
-      true
+    isAnnotationComplete: (taskDescription, annotation, workflow) ->
+      taskTypes = require '..'
+
+      method = if taskDescription.loosen_requirements
+        'some'
+      else
+        'every'
+
+      subTasksComplete = annotation.value[method] (subAnnotation, i) =>
+        subTaskKey = taskDescription.tasks[i]
+        subTaskDescription = workflow.tasks[subTaskKey]
+        SubTaskComponent = taskTypes[subTaskDescription.type]
+        SubTaskComponent.isAnnotationComplete subTaskDescription, subAnnotation, workflow
 
     testAnnotationQuality: (unknown, knownGood) ->
       # TODO
