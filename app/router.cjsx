@@ -127,8 +127,6 @@ module.exports =
       <Route path="project_status/:owner/:name" component={require './pages/admin/project-status'} />
     </Route>
 
-    <Route path="dev/classifier" component={require './classifier'} />
-
     <Route path="todo" component={-> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />
     <Route path="dev/workflow-tasks-editor" component={require './components/workflow-tasks-editor'} />
     <Route path="dev/classifier" component={
