@@ -33,9 +33,11 @@ ComboTask = React.createClass
         SubTaskComponent = taskTypes[subTaskDescription.type]
         SubTaskComponent.isAnnotationComplete subTaskDescription, subAnnotation, workflow
 
-    testAnnotationQuality: (unknown, knownGood) ->
-      # TODO
-      0.5
+    testAnnotationQuality: (unknown, knownGood, workflow) ->
+      testClassificationQuality = require '../../../lib/test-classification-quality'
+      fauxUnknownClassification = annotations: unknown.value
+      fauxKnownGoodClassification = annotations: knownGood.value
+      testAnnotationQuality fauxUnknownClassification, fauxKnownGoodClassification, workflow
 
     BeforeSubject: (props) ->
       <div>
