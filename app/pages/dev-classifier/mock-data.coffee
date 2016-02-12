@@ -298,9 +298,6 @@ subject = apiClient.type('subjects').create
         task: 'init'
         value: 0
       }, {
-        task: 'combo',
-        value: []
-      }, {
         task: 'crop'
         value: {
           x: 20

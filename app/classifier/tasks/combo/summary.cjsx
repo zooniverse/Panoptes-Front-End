@@ -1,7 +1,12 @@
 React = require 'react'
 
 ComboTaskSummary = React.createClass
+  getDefaultProps: ->
+    task: null
+
   render: ->
-    <div>(TODO: Combo task summary)</div>
+    <div>
+      ({@props.task.tasks.length}-task combo)
+    </div>
 
 module.exports = ComboTaskSummary

@@ -37,7 +37,7 @@ ComboTask = React.createClass
       testClassificationQuality = require '../../../lib/test-classification-quality'
       fauxUnknownClassification = annotations: unknown.value
       fauxKnownGoodClassification = annotations: knownGood.value
-      testAnnotationQuality fauxUnknownClassification, fauxKnownGoodClassification, workflow
+      testClassificationQuality fauxUnknownClassification, fauxKnownGoodClassification, workflow
 
     BeforeSubject: (props) ->
       <div>
