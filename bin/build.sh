@@ -59,7 +59,7 @@ out_css_original=$OUT_CSS
 OUT_CSS=$(rename_with_hash "$BUILD_DIR/$OUT_CSS")
 mv -v "$BUILD_DIR/$out_css_original" "$BUILD_DIR/$OUT_CSS"
 
-node bin/compile-ejs.js
+./bin/compile-ejs.js
 
 echo
 echo "$VENDOR_JS:" $(cat "$BUILD_DIR/$VENDOR_JS" | gzip --best | wc -c) "bytes gzipped"

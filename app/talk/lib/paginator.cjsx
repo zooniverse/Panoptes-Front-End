@@ -1,26 +1,9 @@
 React = require 'react'
 {History} = require 'react-router'
 
-changeSearchString = (searchString, changes) ->
-  params = {}
-  if searchString isnt ""
-    for keyValue in searchString.slice(1).split('&')
-      [key, value] = keyValue.split('=')
-      params[key] = value
-  for key, value of changes
-    params[key] = value
-  params
-
 updatePageQueryParam = (page) ->
-  if process.env.NON_ROOT == 'true'
-    [beforeQuestionMark, afterQuestionMark] = location.hash.split('?')
-    oldSearch = '?' + afterQuestionMark
-    newSearch = changeSearchString(oldSearch, {page})
-    newSearch = "?#{([key, value].join('=') for key, value of newSearch when value?).join('&')}"
-    location.hash = beforeQuestionMark + newSearch
-  else
-    newSearch = changeSearchString(location.search, {page})
-    @history.pushState(null, location.pathname, newSearch)
+  pathname = location.href.slice(document.baseURI.length - 1, location.href.indexOf('?'))
+  @history.pushState(null, pathname, {page})
 
 module?.exports = React.createClass
   displayName: 'Paginator'

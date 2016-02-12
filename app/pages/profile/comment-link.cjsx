@@ -45,7 +45,8 @@ module?.exports = React.createClass
         else
           Promise.resolve "/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         href.then (href) =>
-          @setState({href})
+          @setState
+            href: document.baseURI.slice(0, -1) + href
 
   render: ->
     <div className="profile-feed-comment-link">
