@@ -15,7 +15,7 @@ Summary = React.createClass
     expanded: false
 
   render: ->
-    <div className="classification-task-summary">
+    <div>
       <div className="question">
         {@props.task.instruction}
       </div>
