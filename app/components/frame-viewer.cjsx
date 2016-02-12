@@ -101,7 +101,6 @@ module.exports = React.createClass
         </FrameWrapper>
         {if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
           <div>
-            <button className={"fa fa-mouse-pointer"} />
             <button className={if @state.panEnabled then "toggle fa fa-arrows active" else "toggle fa fa-mouse-pointer"} title={"pan"} onClick={@togglePan} ></button>
             <button className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
             <button className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
