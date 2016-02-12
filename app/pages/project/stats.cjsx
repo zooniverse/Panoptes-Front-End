@@ -120,7 +120,7 @@ Graph = React.createClass
     if data.type == 'bar'
       style = "stroke-width: #{100 / Object.keys(@props.data).length}%"
       if (data.index >= @state.minIdx & data.index <= @state.maxIdx)
-        style += '; stroke: darkred'
+        style += '; stroke: #f78d27'
       data.element.attr({style: style})
 
   onSlide: (event) ->
