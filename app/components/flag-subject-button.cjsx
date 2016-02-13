@@ -8,13 +8,21 @@ module?.exports = React.createClass
     subject: React.PropTypes.object # a subject response from panoptes
     project: React.PropTypes.object # a project response from panoptes
     workflow: React.PropTypes.object
+    classification: React.PropTypes.object
     user: React.PropTypes.object
 
   getInitialState: ->
     flagged: false
 
   toggleFlag: ->
-    @setState flagged: !@state.flagged
+    # console.log 'toggleFlag()'
+    @setState flagged: !@state.flagged, =>
+      @props.classification.annotations['flagged_subject'] = @state.flagged
+      @props.classification.update 'annotations'
+      console.log "ANNOTATIONS: ", @props.classification.annotations
+
+  # componentWillReceiveProps: (new_props) ->
+  #   console.log 'CLASSIFICATION: ', new_props.classification
 
   render: ->
     <button
