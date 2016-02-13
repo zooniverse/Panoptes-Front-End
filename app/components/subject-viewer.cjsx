@@ -120,7 +120,7 @@ module.exports = React.createClass
             <button type="button" aria-label="Metadata" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
           {if @props.subject? and @props.user? and @props.project?
             <span>
-              <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />
+              {<FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} /> unless @props.workflow.disable_favorites }
               <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
             </span>}
           {if type is 'image' and @props.linkToFullImage
