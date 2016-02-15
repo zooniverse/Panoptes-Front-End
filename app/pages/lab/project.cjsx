@@ -142,7 +142,7 @@ EditProjectPage = React.createClass
                 <Link className="nav-list-item" to="/lab-how-to">Read a tutorial</Link>
               </li>
               <li>
-                <a href="https://www.zooniverse.org/talk/18/" className="nav-list-item">Ask for help on talk</a>
+                <Link to="/talk/18" className="nav-list-item">Ask for help on talk</Link>
               </li>
             </ul>
           </li>
