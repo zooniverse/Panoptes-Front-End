@@ -2,7 +2,10 @@ React = require 'react'
 {History} = require 'react-router'
 
 updatePageQueryParam = (page) ->
-  pathname = location.href.slice(document.baseURI.length - 1, location.href.indexOf('?'))
+  base_uri_length = document.baseURI.length
+  has_params = !!window.location.search
+  end_path_index = if has_params then location.href.indexOf('?') else location.href.length
+  pathname = location.href.slice(base_uri_length - 1, end_path_index)
   @history.pushState(null, pathname, {page})
 
 module?.exports = React.createClass
