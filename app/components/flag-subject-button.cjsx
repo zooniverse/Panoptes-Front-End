@@ -15,14 +15,13 @@ module?.exports = React.createClass
     flagged: false
 
   toggleFlag: ->
-    # console.log 'toggleFlag()'
+    return if @props.classification.completed
     @setState flagged: !@state.flagged, =>
-      @props.classification.annotations['flagged_subject'] = @state.flagged
-      @props.classification.update 'annotations'
-      console.log "ANNOTATIONS: ", @props.classification.annotations
-
-  # componentWillReceiveProps: (new_props) ->
-  #   console.log 'CLASSIFICATION: ', new_props.classification
+      @props.classification.update subject_flagged: @state.flagged   # save flag in classification
+      # # save flag in metadata instead
+      # changes = {}
+      # changes["metadata.subject_flagged"] = @state.flagged
+      # @props.classification.update changes
 
   render: ->
     <button
