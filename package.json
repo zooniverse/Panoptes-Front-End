@@ -46,6 +46,10 @@
     "uglify-js": "~2.4.24",
     "watchify": "~3.3.1"
   },
+  "engines": {
+    "node": "~4.2.3",
+    "npm": "~2.14.7"
+  },
   "scripts": {
     "build": "export NODE_ENV=${NODE_ENV:-production}; ./bin/build.sh",
     "check-build-size": "npm run build && cat ./build/vendor.*.js ./build/main.*.js | gzip --best | wc -c",
