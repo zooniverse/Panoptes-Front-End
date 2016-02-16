@@ -39,13 +39,29 @@
 
   .subject-container
     > *
-      max-width: 100%;
+      max-width: 100%
       
-    button.toggle
-      &.active
-        background-color: #43BBFD
-        color: black
-        border none
+    span.draw-pan-toggle
+      background-color: #F9F9F9
+      border: solid .1px #989898
+      border-radius: .2em
+      span
+        // margin: .2em
+        border-radius: .1em
+        transition: background-color .5s
+        &.active
+          background-color: #43BBFD
+          color: black
+          border none
+      button
+        background-color: transparent
+        border:none
+    button
+      background-color: #f9f9f9
+      border: solid 1px #989898
+      -webkit-border-radius: 0.2em
+      border-radius: 0.2em
+      vertical-align: bottom
 
   // Multi-image layouts
   &:not(.subject-viewer--flipbook)

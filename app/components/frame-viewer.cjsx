@@ -101,10 +101,17 @@ module.exports = React.createClass
         </FrameWrapper>
         {if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
           <div>
-            <button className={if @state.panEnabled then "toggle fa fa-arrows active" else "toggle fa fa-mouse-pointer"} title={"pan"} onClick={@togglePan} ></button>
+            <span className="draw-pan-toggle" >
+              <span onClick={@togglePan} className={if @state.panEnabled then "" else "active"} >
+                <button className={"fa fa-mouse-pointer"} title={"annotate"} onClick={@togglePan}/>
+              </span>
+              <span className={if @state.panEnabled then "active" else ""}>
+                <button className={"fa fa-arrows"} title={"pan"} onClick={@togglePan}/>
+              </span>
+            </span>
             <button className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
             <button className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
-            <button className="reset" onClick={ this.zoomReset } >Reset</button>
+            <button className="reset fa fa-refresh" onClick={ this.zoomReset } ></button>
           </div>}
         
       </div>
