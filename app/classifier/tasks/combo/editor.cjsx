@@ -50,13 +50,16 @@ ComboTaskEditor = React.createClass
       else
         <DragReorderable tag="ul" items={@props.task.tasks} render={@renderSubtask} onChange={@setOrder} />}
       <p>
-        <select value="stuck" onChange={@addTask}>
-          <option value="stuck" disabled>Add a task...</option>
-          {Object.keys(@props.workflow.tasks).map (taskKey) =>
-            taskDescription = @props.workflow.tasks[taskKey]
-            TaskComponent = tasks[taskDescription.type]
-            <option key={taskKey} value={taskKey} disabled={taskDescription.type is 'drawing'}>{TaskComponent.getTaskText taskDescription}</option>}
-        </select>
+        <label>
+          Add a task:{' '}
+          <select value="stuck" onChange={@addTask}>
+            <option value="stuck" disabled>Tasks...</option>
+            {Object.keys(@props.workflow.tasks).map (taskKey) =>
+              taskDescription = @props.workflow.tasks[taskKey]
+              TaskComponent = tasks[taskDescription.type]
+              <option key={taskKey} value={taskKey} disabled={taskDescription.type is 'drawing'}>{TaskComponent.getTaskText taskDescription}</option>}
+          </select>
+        </label>
       </p>
       <p>
         This task’s requirements are met when{' '}
