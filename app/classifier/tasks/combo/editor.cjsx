@@ -1,5 +1,6 @@
 React = require 'react'
 DragReorderable = require 'drag-reorderable'
+NextTaskSelector = require '../next-task-selector'
 
 ComboTaskEditor = React.createClass
   getDefaultProps: ->
@@ -24,6 +25,10 @@ ComboTaskEditor = React.createClass
   setLooseRequirements: (e) ->
     value = JSON.parse e.target.value
     @props.task.loosen_requirements = value
+    @props.onChange @props.task
+
+  setNextTask: (e) ->
+    @props.task.next = e.target.value
     @props.onChange @props.task
 
   renderSubtask: (taskKey, i) ->
@@ -60,6 +65,14 @@ ComboTaskEditor = React.createClass
           <option value="true">any</option>
         </select>{' '}
         of its sub-tasks’ requirements are met.
+      </p>
+      <p>
+        <label>
+          Next task:{' '}
+          <NextTaskSelector workflow={@props.workflow} value={@props.task.next} onChange={@setNextTask} />
+        </label>
+        <br />
+        <span className="form-help">This overrides anything set by a sub-task.</span>
       </p>
     </div>
 
