@@ -242,7 +242,8 @@ module.exports = React.createClass
           <p style={textAlign: 'center'}>
             <button type="button" className="major-button" onClick={@showProjectCreator}>Create a new project</button>{' '}
             <Link to="/lab-how-to" className="standard-button">How-to</Link>{' '}
-            <Link to="/lab-policies" className="standard-button">Policies</Link>
+            <Link to="/lab-policies" className="standard-button">Policies</Link>{' '}
+            <Link to="/lab-best-practices/introduction" className="standard-button">Best Practices</Link>
           </p>
         </div>
         {if @state.creationInProgress
