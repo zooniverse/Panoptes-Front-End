@@ -66,4 +66,46 @@ Include any CSS **required for a component's functionality** inline in with comp
 
 ## Custom projects
 
-See [panoptes-client](https://www.npmjs.com/package/panoptes-client).
+See the **panoptes-client** library: <https://www.npmjs.com/package/panoptes-client>.
+
+## Format of annotation values
+
+The format of an annotation's value depends on the task used to generate it.
+
+- **single:** The index of the chosen answer.
+
+- **multiple:** An array of the indices of the chosen answers (in the order they were chosen).
+
+- **drawing:** An array of drawing tool marks (descriptions of which follow below).
+
+- **survey:** An array of identifications as objects. Each identification a `choice` (the ID of the identified animal) and `answers`, an object. Each key in `answers` is the ID of a question. If that question allows multiple answers, the value will be an array of answer IDs, otherwise just a single answer ID.
+
+- **crop:** An object containing the `x`, `y`, `width`, and `height` of the cropped region.
+
+- **text:** A string.
+
+### Drawing tool marks
+
+All coordinates are relative to the top-left of the image.
+
+All marks have a `tool`, which is the index of the tool (e.g. `workflow.tasks.T0.tools[0]`) used to make the mark.
+
+All marks contain a `frame`, which is the index of the subject frame (e.g. `subject.locations[0]`) the mark was made on.
+
+If `details` tasks are defined for a tool, its marks will have a `details` array of sub-classifications (each with a `value`, following the descriptions above).
+
+Drawing annotation value are as follows:
+
+- **point:** The `x` and `y` coordinates.
+
+- **line:** The start (`x1`, `y1`) and end (`x2`, `y2`) coordinates.
+
+- **polygon:** An array of objects, each containing the `x` and `y` coordinate of a vertex. If the mark was not explicitly closed by the user, `auto_closed` is `true`.
+
+- **rectangle:** The `x`, `y` coordinate of the top-left point of the rectangle along with its `width` and `height`.
+
+- **circle:** The `x` and `y` coordinate of the center of the circle and its radius `r`.
+
+- **ellipse:** The `x` and `y` coordinate of the center of the ellipse, its radii `rx` and `ry`, and the `angle` of `rx` relative to the x axis in degrees (counterclockwise from 3:00).
+
+- **bezier:** The same as polygon, but every odd-indexed point is the coordinate of the control point of a quadratic bezier curve.
