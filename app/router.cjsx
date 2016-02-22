@@ -121,6 +121,14 @@ module.exports =
     <Route path="lab-policies" component={require './pages/lab/lab-policies'} />
     <Route path="lab-how-to" component={require './pages/lab/how-to-page'} />
 
+    <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
+      <Route path="introduction" component={require './pages/lab/best-practices/introduction'} />
+      <Route path="great-project" component={require './pages/lab/best-practices/great-project'} />
+      <Route path="launch-rush" component={require './pages/lab/best-practices/launch-rush'} />
+      <Route path="the-long-haul" component={require './pages/lab/best-practices/the-long-haul'} />
+      <Route path="resources" component={require './pages/lab/best-practices/resources'} />
+    </Route>
+
     <Route path="admin" component={require './pages/admin'}>
       <IndexRoute component={require './pages/admin/user-settings'} />
       <Route path="project_status" component={require './pages/admin/project-status-list'} />
