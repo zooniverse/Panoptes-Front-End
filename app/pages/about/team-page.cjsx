@@ -77,6 +77,9 @@ counterpart.registerTranslations 'en',
         bio: '''Jen works on Galaxy Zoo education in her role as the SEPnet/Ogden Outreach Officer
         for the Institute of Cosmology and Gravitation, and has a PhD in astrophysics. Active
         galactic nuclei were her first love.'''
+      jordanMartin:
+        title: 'Visual Designer'
+        bio: '''Jordan joined the Zooniverse team at the Adler Planetarium as the Visual Designer starting in 2015. She spends her time at the Zooniverse making user interfaces beautiful, engaging, and a rewarding experience for volunteers. She spends her time at home with her two cats and many houseplants.'''
       julieFeldt:
         title: 'Educator'
         bio: '''Julie has a background in space physics and museum studies. She works on educational
@@ -246,6 +249,13 @@ teamMembers =
     bio: counterpart "team.content.jimODonnell.bio"
     image: "./assets/team/jim.jpg"
     location: "oxford"
+  jordanMartin:
+    name: "Jordan Martin"
+    twitter: "jordanIn312"
+    title: counterpart "team.content.jordanMartin.title"
+    bio: counterpart "team.content.jordanMartin.bio"
+    image: "./assets/team/jordan.jpg"
+    location: "chicago"
   julieFeldt:
     name: "Julie Feldt"
     twitter: "JulieAFeldt"
