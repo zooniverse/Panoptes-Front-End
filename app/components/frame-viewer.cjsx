@@ -33,7 +33,7 @@ module.exports = React.createClass
       height: 0
     }
     panEnabled: false
-    frameFocused: false
+    keyPanZoomEnabled: false
 
   componentDidMount: ->
     @refs.videoScrubber?.value = 0
@@ -50,7 +50,7 @@ module.exports = React.createClass
     frameDisplay = switch type
       when 'image'
         <div className="subject-image-frame" >
-          <img className="subject" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} tabIndex={0} onFocus={@toggleFrameFocus} onBlur={@toggleFrameFocus} />
+          <img ref="subjectImage" className={"subject pan-active"} src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} tabIndex={0} onFocus={@enableKeyPan} onBlur={@disableKeyPan} />
 
           {if @state.loading
             <div className="loading-cover" style={@constructor.overlayStyle} >
@@ -100,18 +100,24 @@ module.exports = React.createClass
           {frameDisplay}
         </FrameWrapper>
         {if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
-          <div>
+          <div className="pan-zoom-controls" >
             <span className="draw-pan-toggle" >
               <span onClick={@togglePan} className={if @state.panEnabled then "" else "active"} >
-                <button className={"fa fa-mouse-pointer"} title={"annotate"} onClick={@togglePan}/>
+                <button title={"draw"} className={"fa fa-mouse-pointer"} title={"annotate"} onClick={@togglePan}/>
               </span>
               <span className={if @state.panEnabled then "active" else ""}>
-                <button className={"fa fa-arrows"} title={"pan"} onClick={@togglePan}/>
+                <button title={"pan"} className={"fa fa-arrows"} title={"pan"} onClick={@togglePan}/>
               </span>
             </span>
-            <button className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
-            <button className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
-            <button className="reset fa fa-refresh" onClick={ this.zoomReset } ></button>
+            <span>
+              <button title={"zoom out"} className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
+            </span>
+            <span>
+              <button title={"zoom in"} className="zoom-in fa fa-plus" onClick={ @zoom.bind(this, .9) } />
+            </span>
+            <span>
+              <button title={"rest zoom levels"} className="reset fa fa-refresh" onClick={ this.zoomReset } ></button>
+            </span>
           </div>}
         
       </div>
@@ -183,16 +189,19 @@ module.exports = React.createClass
   zoom: (change) ->
     newNaturalWidth = @state.viewBoxDimensions.width * change
     newNaturalHeight = @state.viewBoxDimensions.height * change
-    
+  
     newNaturalX = @state.viewBoxDimensions.x - (newNaturalWidth - @state.viewBoxDimensions.width)/2
     newNaturalY = @state.viewBoxDimensions.y - (newNaturalHeight - @state.viewBoxDimensions.height)/2
-    
-    @setState
-      viewBoxDimensions:
-        width: newNaturalWidth,
-        height: newNaturalHeight,
-        x: newNaturalX,
-        y: newNaturalY
+
+    if (newNaturalWidth > @state.frameDimensions.width) || (newNaturalHeight * change > @state.frameDimensions.height)
+      @zoomReset()
+    else     
+      @setState
+        viewBoxDimensions:
+          width: newNaturalWidth,
+          height: newNaturalHeight,
+          x: newNaturalX,
+          y: newNaturalY
 
   zoomReset: ->
     @setState
@@ -202,11 +211,22 @@ module.exports = React.createClass
         x: 0,
         y: 0
 
-  toggleFrameFocus: ->
-    @setState frameFocused: !@state.frameFocused
+  enableKeyPan: ->
+    @setState
+      keyPanZoomEnabled: true
+
+  disableKeyPan: ->
+    @setState 
+      keyPanZoomEnabled: false
+
 
   togglePan: ->
-    @setState panEnabled: !@state.panEnabled
+    @setState panEnabled: !@state.panEnabled, => 
+      @toggleKeyPanZoom()
+
+  toggleKeyPanZoom: ->
+    @setState keyPanZoomEnabled: !@state.keyPanZoomEnabled, =>
+      if @state.panEnabled then this.refs.subjectImage.focus()
 
   panByDrag: (e, d) ->
     return if @state.panEnabled == false
@@ -219,7 +239,7 @@ module.exports = React.createClass
         height: @state.viewBoxDimensions.height
 
   frameKeyPan: (e)->
-    return if @state.frameFocused == false
+    return if @state.keyPanZoomEnabled == false
     keypress = e.which
     switch keypress
       # left
@@ -249,17 +269,19 @@ module.exports = React.createClass
 
 
   panHorizontal:(direction) ->
+    minX = @state.frameDimensions.width - @state.viewBoxDimensions.width
     @setState
       viewBoxDimensions:
-        x: @state.viewBoxDimensions.x + direction
+        x: Math.max(0, Math.min @state.viewBoxDimensions.x + direction, minX)
         y: @state.viewBoxDimensions.y
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height
 
   panVertical:(direction)->
+    minY = @state.frameDimensions.height - @state.viewBoxDimensions.height
     @setState
       viewBoxDimensions:
         x: @state.viewBoxDimensions.x 
-        y: @state.viewBoxDimensions.y + direction
+        y: Math.max 0, Math.min(@state.viewBoxDimensions.y + direction, minY)
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height
