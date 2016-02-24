@@ -112,5 +112,5 @@ module.exports = React.createClass
       heroClass="projects-hero"
       imagePromise={@imagePromise}
       skipOwner={true}>
-      <Filmstrip increment={350} filterOption={@setFilter} selectedFilter={@state.query.tags}/>
+      <Filmstrip increment={350} onChange={@setFilter} selectedFilter={@state.query.tags}/>
     </OwnedCardList>
