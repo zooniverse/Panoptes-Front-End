@@ -8,7 +8,7 @@ module.exports = React.createClass
 
   propTypes:
     increment: React.PropTypes.number.isRequired
-    filterOption: React.PropTypes.func.isRequired
+    onChange: React.PropTypes.func.isRequired
 
   getDefaultProps: ->
     filterCards: DISCIPLINES
@@ -26,7 +26,7 @@ module.exports = React.createClass
     filterName.replace(/\s+/g,'-')
 
   selectFilter: (filterName) ->
-    @props.filterOption filterName
+    @props.onChange filterName
 
   calculateClasses: (filterName)->
     filterName = @mangleFilterName(filterName)
