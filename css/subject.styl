@@ -40,16 +40,23 @@
   .subject-container
     > *
       max-width: 100%
+    
+    .frame-annotator
+      
+      display inline-block      
+        
     image.pan-active
       cursor all-scroll
     .pan-zoom-controls
-      span
-        padding 3px
+      display inline-block
+      float left
+      background: grey;
+      border-radius: .1em;
       .draw-pan-toggle
         background-color: #F9F9F9
         border: solid 1px #989898
         border-radius: .2em
-        span
+        div
           border-radius: .1em
           transition: background-color .5s
           &.active

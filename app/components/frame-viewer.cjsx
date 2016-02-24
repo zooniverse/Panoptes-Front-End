@@ -104,23 +104,23 @@ module.exports = React.createClass
         </FrameWrapper>
         {if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
           <div className="pan-zoom-controls" >
-            <span className="draw-pan-toggle" >
-              <span onClick={@togglePan} className={if @state.panEnabled then "" else "active"} >
+            <div className="draw-pan-toggle" >
+              <div onClick={@togglePan} className={if @state.panEnabled then "" else "active"} >
                 <button title={"draw"} className={"fa fa-mouse-pointer"} title={"annotate"} onClick={@togglePanOff}/>
-              </span>
-              <span className={if @state.panEnabled then "active" else ""}>
+              </div>
+              <div className={if @state.panEnabled then "active" else ""}>
                 <button title={"pan"} className={"fa fa-arrows"} title={"pan"} onClick={@togglePanOn}/>
-              </span>
-            </span>
-            <span>
+              </div>
+            </div>
+            <div>
               <button title={"zoom out"} className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
-            </span>
-            <span>
+            </div>
+            <div>
               <button title={"zoom in"} className="zoom-in fa fa-plus" onMouseDown={@zoom.bind(this, .9)} onMouseUp={@toggleZoom} />
-            </span>
-            <span>
+            </div>
+            <div>
               <button title={"rest zoom levels"} className="reset fa fa-refresh" onClick={ this.zoomReset } ></button>
-            </span>
+            </div>
           </div>}
         
       </div>
@@ -233,7 +233,7 @@ module.exports = React.createClass
 
   panByDrag: (e, d) ->
     return if @state.panEnabled == false
-    
+
     maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + 20
     minumumX = -20
     changedX = @state.viewBoxDimensions.x -= d.x
@@ -270,11 +270,11 @@ module.exports = React.createClass
         e.preventDefault()
         @panVertical(20) 
       # zoom out
-      when 187 #61
+      when 187
         e.preventDefault()
         @zoom(.9) 
       # zoom in 
-      when 189 #45
+      when 189
         @setState zooming: true
         e.preventDefault()
         @zoom(1.1) 
