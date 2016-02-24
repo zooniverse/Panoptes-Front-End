@@ -173,15 +173,15 @@ module.exports = React.createClass
     document.removeEventListener 'mousemove', @handleMouseMove
 
     @props.mark.closed = true
-    @props.onChange()
+    @props.onChange @props.mark
 
   handleMainDrag: (e, d) ->
     for point in @props.mark.points
       point.x += d.x / @props.scale.horizontal
       point.y += d.y / @props.scale.vertical
-    @props.onChange e
+    @props.onChange @props.mark
 
   handleHandleDrag: (index, e, d) ->
     @props.mark.points[index].x += d.x / @props.scale.horizontal
     @props.mark.points[index].y += d.y / @props.scale.vertical
-    @props.onChange e
+    @props.onChange @props.mark

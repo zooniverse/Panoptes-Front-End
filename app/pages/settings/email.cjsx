@@ -1,5 +1,5 @@
 React = require 'react'
-talkClient = require '../../api/talk'
+talkClient = require 'panoptes-client/lib/talk-client'
 AutoSave = require '../../components/auto-save'
 PromiseRenderer = require '../../components/promise-renderer'
 ChangeListener = require '../../components/change-listener'
@@ -21,9 +21,10 @@ module.exports = React.createClass
       when 'mentions' then "When I'm mentioned"
       when 'group_mentions' then "When I'm mentioned by group (@admins, @team, etc)"
       when 'messages' then 'When I receive a private message'
+      when 'started_discussions' then "When a discussion is started in a board I'm following"
 
   sortPreferences: (preferences) ->
-    order = ['participating_discussions', 'followed_discussions', 'mentions', 'group_mentions', 'messages']
+    order = ['participating_discussions', 'followed_discussions', 'started_discussions', 'mentions', 'group_mentions', 'messages']
     preferences.sort (a, b) ->
       order.indexOf(a.category) > order.indexOf(b.category)
 

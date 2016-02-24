@@ -2,8 +2,9 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 {Link, History} = require 'react-router'
 DiscussionPreview = require './discussion-preview'
-talkClient = require '../api/talk'
+talkClient = require 'panoptes-client/lib/talk-client'
 CommentBox = require './comment-box'
+FollowBoard = require './follow-board'
 commentValidations = require './lib/comment-validations'
 discussionValidations = require './lib/discussion-validations'
 {getErrors} = require './lib/validations'
@@ -142,6 +143,7 @@ module?.exports = React.createClass
     <div className="talk-board">
       <h1 className="talk-page-header">{board?.title}</h1>
       <p>{board?.description}</p>
+      <FollowBoard user={@props.user} board={board} />
       {if board && @props.user?
         <div className="talk-moderation">
           <Moderation user={@props.user} section={@props.section}>

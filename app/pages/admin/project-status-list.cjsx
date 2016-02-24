@@ -1,6 +1,6 @@
 React = require 'react'
 PromiseRenderer = require '../../components/promise-renderer'
-apiClient = require '../../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 Paginator = require '../../talk/lib/paginator'
 ProjectIcon = require '../../components/project-icon'
 {History, Link} = require 'react-router'

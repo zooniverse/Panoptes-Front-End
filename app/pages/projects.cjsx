@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list'
 {Link, Router} = require 'react-router'
 Filmstrip = require '../components/filmstrip'
@@ -62,7 +62,7 @@ module.exports = React.createClass
     src = if project.avatar_src
       "//#{ project.avatar_src }"
     else
-      '/assets/simple-avatar.jpg'
+      './assets/simple-avatar.jpg'
     Promise.resolve src
 
   cardLink: (project) ->

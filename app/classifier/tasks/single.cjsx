@@ -17,7 +17,7 @@ Summary = React.createClass
     expanded: @props.expanded
 
   render: ->
-    <div className="classification-task-summary">
+    <div>
       <div className="question">
         {@props.task.question}
         {if @state.expanded
@@ -82,14 +82,18 @@ module.exports = React.createClass
   render: ->
     answers = for answer, i in @props.task.answers
       answer._key ?= Math.random()
-      <label key={answer._key} className="minor-button #{if i is @props.annotation.value then 'active' else ''}">
-        <input type="radio" checked={i is @props.annotation.value} onChange={@handleChange.bind this, i} />
-        <Markdown>{answer.label}</Markdown>
+      <label key={answer._key} className="minor-button answer-button #{if i is @props.annotation.value then 'active' else ''}">
+        <div className="answer-button-icon-container">
+          <input type="radio" checked={i is @props.annotation.value} onChange={@handleChange.bind this, i} />
+        </div>
+        <div className="answer-button-label-container">
+          <Markdown className="answer-button-label">{answer.label}</Markdown>
+        </div>
       </label>
 
     <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
 
   handleChange: (index, e) ->
     if e.target.checked
-      @props.annotation.value = index
-      @props.onChange? e
+      newAnnotation = Object.assign {}, @props.annotation, value: index
+      @props.onChange newAnnotation

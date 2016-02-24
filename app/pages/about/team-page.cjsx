@@ -59,11 +59,6 @@ counterpart.registerTranslations 'en',
         bio: '''Coleman is helping to create new data analysis and visualization tools for existing Zooniverse
         projects as well as identifying new projects within the University of Portsmouth. He received
         his PhD in astrophysics from Drexel University.'''
-      darrenMcRoy:
-        title: 'Community Manager'
-        bio: '''Darren (DZM) serves as a liaison to the Zooniverse community and assists with strategic
-        content for projects. A Northwestern University graduate in journalism, he is also a golf addict,
-        amateur author, and hopeless animal lover.'''
       grantMiller:
         title: 'Communications Lead'
         bio: '''A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
@@ -82,6 +77,9 @@ counterpart.registerTranslations 'en',
         bio: '''Jen works on Galaxy Zoo education in her role as the SEPnet/Ogden Outreach Officer
         for the Institute of Cosmology and Gravitation, and has a PhD in astrophysics. Active
         galactic nuclei were her first love.'''
+      jordanMartin:
+        title: 'Visual Designer'
+        bio: '''Jordan joined the Zooniverse team at the Adler Planetarium as the Visual Designer starting in 2015. She spends her time at the Zooniverse making user interfaces beautiful, engaging, and a rewarding experience for volunteers. She spends her time at home with her two cats and many houseplants.'''
       julieFeldt:
         title: 'Educator'
         bio: '''Julie has a background in space physics and museum studies. She works on educational
@@ -162,215 +160,216 @@ teamMembers =
     twitter: "astopy"
     title: counterpart "team.content.adamMcMaster.title"
     bio: counterpart "team.content.adamMcMaster.bio"
-    image: "/assets/team/adam.jpg"
+    image: "./assets/team/adam.jpg"
     location: "oxford"
   alexBowyer:
     name: "Alex Bowyer"
     twitter: "alexbfree"
     title: counterpart "team.content.alexBowyer.title"
     bio: counterpart "team.content.alexBowyer.bio"
-    image: "/assets/team/alex_bowyer.jpg"
+    image: "./assets/team/alex_bowyer.jpg"
     location: "oxford"
   aliSwanson:
     name: "Ali Swanson"
     twitter: "alicatzoo"
     title: counterpart "team.content.aliSwanson.title"
     bio: counterpart "team.content.aliSwanson.bio"
-    image: "/assets/team/ali.jpg"
+    image: "./assets/team/ali.jpg"
     location: "oxford"
   andreaSimenstad:
     name: "Andrea Simenstad"
     title: counterpart "team.content.andreaSimenstad.title"
     bio: counterpart "team.content.andreaSimenstad.bio"
-    image: "/assets/team/andrea.jpg"
+    image: "./assets/team/andrea.jpg"
     location: "minnesota"
   brianCarstensen:
     name: "Brian Carstensen"
     twitter: "__brian_c__"
     title: counterpart "team.content.brianCarstensen.title"
     bio: counterpart "team.content.brianCarstensen.bio"
-    image: "/assets/team/brian.jpg"
+    image: "./assets/team/brian.jpg"
     location: "oxford"
   brookeSimmons:
     name: "Brooke Simmons"
     twitter: "vrooje"
     title: counterpart "team.content.brookeSimmons.title"
     bio: counterpart "team.content.brookeSimmons.bio"
-    image: "/assets/team/brooke.jpg"
+    image: "./assets/team/brooke.jpg"
     location: "oxford"
   camAllen:
     name: "Campbell Allen"
     title: counterpart "team.content.camAllen.title"
     bio: counterpart "team.content.camAllen.bio"
-    image: "/assets/team/cam.jpg"
+    image: "./assets/team/cam.jpg"
     location: "oxford"
   chrisLintott:
     name: "Chris Lintott"
     twitter: "chrislintott"
     title: counterpart "team.content.chrisLintott.title"
     bio: counterpart "team.content.chrisLintott.bio"
-    image: "/assets/team/chris-l.png"
+    image: "./assets/team/chris-l.png"
     location: "oxford"
   christopherDoogue:
     name: "Christopher Doogue"
     title: counterpart "team.content.christopherDoogue.title"
     bio: counterpart "team.content.christopherDoogue.bio"
-    image: "/assets/team/chris-d.jpg"
+    image: "./assets/team/chris-d.jpg"
     location: "oxford"
   colemanKrawczyk:
     name: "Coleman Krawczyk"
     twitter: "ColemanKrawczyk"
     title: counterpart "team.content.colemanKrawczyk.title"
     bio: counterpart "team.content.colemanKrawczyk.bio"
-    image: "/assets/team/coleman.jpg"
+    image: "./assets/team/coleman.jpg"
     location: "portsmouth"
-  darrenMcRoy:
-    name: "Darren McRoy"
-    title: counterpart "team.content.darrenMcRoy.title"
-    bio: counterpart "team.content.darrenMcRoy.bio"
-    image: "/assets/team/darren.jpg"
-    location: "chicago"
   grantMiller:
     name: "Grant Robert MacKinnon Miller"
     twitter: "mrniaboc"
     title: counterpart "team.content.grantMiller.title"
     bio: counterpart "team.content.grantMiller.bio"
-    image: "/assets/team/grant.jpg"
+    image: "./assets/team/grant.jpg"
     location: "oxford"
   gregHines:
     name: "Greg Hines"
     title: counterpart "team.content.gregHines.title"
     bio: counterpart "team.content.gregHines.bio"
-    image: "/assets/team/greg.jpg"
+    image: "./assets/team/greg.jpg"
     location: "oxford"
   jenGupta:
     name: "Jen Gupta"
     twitter: "jen_gupta"
     title: counterpart "team.content.jenGupta.title"
     bio: counterpart "team.content.jenGupta.bio"
-    image: "/assets/team/jen_gupta.jpg"
+    image: "./assets/team/jen_gupta.jpg"
     location: "portsmouth"
   jimODonnell:
     name: "Jim O'Donnell"
     twitter: "pekingspring"
     title: counterpart "team.content.jimODonnell.title"
     bio: counterpart "team.content.jimODonnell.bio"
-    image: "/assets/team/jim.jpg"
+    image: "./assets/team/jim.jpg"
     location: "oxford"
+  jordanMartin:
+    name: "Jordan Martin"
+    twitter: "jordanIn312"
+    title: counterpart "team.content.jordanMartin.title"
+    bio: counterpart "team.content.jordanMartin.bio"
+    image: "./assets/team/jordan.jpg"
+    location: "chicago"
   julieFeldt:
     name: "Julie Feldt"
     twitter: "JulieAFeldt"
     title: counterpart "team.content.julieFeldt.title"
     bio: counterpart "team.content.julieFeldt.bio"
-    image: "/assets/team/julie.png"
+    image: "./assets/team/julie.png"
     location: "chicago"
   karenMasters:
     name: "Karen Masters"
     twitter: "karenlmasters"
     title: counterpart "team.content.karenMasters.title"
     bio: counterpart "team.content.karenMasters.bio"
-    image: "/assets/team/karen.jpg"
+    image: "./assets/team/karen.jpg"
     location: "portsmouth"
   kellyBorden:
     name: "Kelly Borden"
     twitter: "BordenKelly"
     title: counterpart "team.content.kellyBorden.title"
     bio: counterpart "team.content.kellyBorden.bio"
-    image: "/assets/team/kelly.jpg"
+    image: "./assets/team/kelly.jpg"
     location: "chicago"
   kyleWillett:
     name: "Kyle Willett"
     twitter: "kwwillett"
     title: counterpart "team.content.kyleWillett.title"
     bio: counterpart "team.content.kyleWillett.bio"
-    image: "/assets/team/kyle.jpg"
+    image: "./assets/team/kyle.jpg"
     location: "minnesota"
   lauraTrouille:
     name: "Laura Trouille"
     twitter: "windycityastro"
     title: counterpart "team.content.lauraTrouille.title"
     bio: counterpart "team.content.lauraTrouille.bio"
-    image: "/assets/team/laura.jpg"
+    image: "./assets/team/laura.jpg"
     location: "chicago"
   lucyFortson:
     name: "Lucy Fortson"
     twitter: "lucyfortson"
     title: counterpart "team.content.lucyFortson.title"
     bio: counterpart "team.content.lucyFortson.bio"
-    image: "/assets/team/lucy.jpg"
+    image: "./assets/team/lucy.jpg"
     location: "minnesota"
   martenVeldthuis:
     name: "Marten Veldthuis"
     twitter: "mveldth"
     title: counterpart "team.content.martenVeldthuis.title"
     bio: counterpart "team.content.martenVeldthuis.bio"
-    image: "/assets/team/marten.jpg"
+    image: "./assets/team/marten.jpg"
     location: "oxford"
   megSchwamb:
     name: "Meg Schwamb"
     twitter: "megschwamb"
     title: counterpart "team.content.megSchwamb.title"
     bio: counterpart "team.content.megSchwamb.bio"
-    image: "/assets/team/meg.jpg"
+    image: "./assets/team/meg.jpg"
     location: "taipei"
   michaelParrish:
     name: "Michael Parrish"
     twitter: "michael_parrish"
     title: counterpart "team.content.michaelParrish.title"
     bio: counterpart "team.content.michaelParrish.bio"
-    image: "/assets/team/michael.png"
+    image: "./assets/team/michael.png"
     location: "chicago"
   rebeccaSmethurst:
     name: "Rebecca Smethurst"
     twitter: "becky1505"
     title: counterpart "team.content.rebeccaSmethurst.title"
     bio: counterpart "team.content.rebeccaSmethurst.bio"
-    image: "/assets/team/becky.jpg"
+    image: "./assets/team/becky.jpg"
     location: "oxford"
   rogerHutchings:
     name: "Roger Hutchings"
     title: counterpart "team.content.rogerHutchings.title"
     bio: counterpart "team.content.rogerHutchings.bio"
-    image: "/assets/team/roger.jpg"
+    image: "./assets/team/roger.jpg"
     location: "oxford"
   sandorKruk:
     name: "Sandor Kruk"
     twitter: "kruksandor"
     title: counterpart "team.content.sandorKruk.title"
     bio: counterpart "team.content.sandorKruk.bio"
-    image: "/assets/team/sandor.jpg"
+    image: "./assets/team/sandor.jpg"
     location: "oxford"
   sarahAllen:
     name: "Sarah Allen"
     title: counterpart "team.content.sarahAllen.title"
     bio: counterpart "team.content.sarahAllen.bio"
-    image: "/assets/team/sarah.jpg"
+    image: "./assets/team/sarah.jpg"
     location: "chicago"
   saschaIshikawa:
     name: "Sascha Ishikawa"
     twitter: "sascha_ishikawa"
     title: counterpart "team.content.saschaIshikawa.title"
     bio: counterpart "team.content.saschaIshikawa.bio"
-    image: "/assets/team/sascha.png"
+    image: "./assets/team/sascha.png"
     location: "chicago"
   simoneDuca:
     name: "Simone Duca"
     title: counterpart "team.content.simoneDuca.title"
     bio: counterpart "team.content.simoneDuca.bio"
-    image: "/assets/team/simone.jpg"
+    image: "./assets/team/simone.jpg"
     location: "oxford"
   veronicaMaidel:
     name: "Veronica Maidel"
     title: counterpart "team.content.veronicaMaidel.title"
     bio: counterpart "team.content.veronicaMaidel.bio"
-    image: "/assets/team/veronica.jpg"
+    image: "./assets/team/veronica.jpg"
     location: "chicago"
   victoriaVanHyning:
     name: "Victoria van Hyning"
     twitter: "VanHyningV"
     title: counterpart "team.content.victoriaVanHyning.title"
     bio: counterpart "team.content.victoriaVanHyning.bio"
-    image: "/assets/team/victoria.JPG"
+    image: "./assets/team/victoria.JPG"
     location: "oxford"
 
 module.exports = React.createClass
@@ -402,10 +401,7 @@ module.exports = React.createClass
         }</h2>
         {for teamMember, details of teamMembers
           if (@state.currentSort is details.location) or (@state.currentSort is 'showAll')
-            imageSrc = if process.env.NON_ROOT == 'true'
-                "." + details.image
-              else
-                details.image
+            imageSrc = details.image
             <div key={teamMember} className="team-member">
               <img src={imageSrc} alt="#{details.name}" />
               <div className="team-member-details">

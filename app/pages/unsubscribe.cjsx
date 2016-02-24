@@ -1,5 +1,5 @@
 React = require 'react'
-auth = require '../api/auth'
+auth = require 'panoptes-client/lib/auth'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
 
@@ -46,7 +46,7 @@ module.exports = React.createClass
       {if @props.location.query?.processed
         <div>
           <p><strong>Your unsubscribe request was successfully processed.</strong></p>
-          <p>If you change your mind, just visit your <a href="/settings">account settings</a> page to update your email preferences.</p>
+          <p>If you change your mind, just visit your <a href="#{document.baseURI.slice(0, -1)}/settings">account settings</a> page to update your email preferences.</p>
         </div>
       else
         <form onSubmit={@handleEmailSubmit}>

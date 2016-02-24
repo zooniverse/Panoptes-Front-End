@@ -1,8 +1,9 @@
 React = require 'react'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 testClassificationQuality = require '../lib/test-classification-quality'
 ChangeListener = require '../components/change-listener'
-SubjectAnnotator = require './subject-annotator'
+FrameAnnotator = require './frame-annotator'
+SubjectViewer = require '../components/subject-viewer'
 ClassificationSummary = require './classification-summary'
 {Link} = require 'react-router'
 tasks = require './tasks'
@@ -13,9 +14,8 @@ TriggeredModalForm = require 'modal-form/triggered'
 TutorialButton = require './tutorial-button'
 isAdmin = require '../lib/is-admin'
 Tutorial = require '../lib/tutorial'
-
-unless process.env.NODE_ENV is 'production'
-  mockData = require './mock-data'
+workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
+workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
@@ -24,11 +24,9 @@ Classifier = React.createClass
 
   getDefaultProps: ->
     user: null
-    if mockData?
-      {workflow, subject, classification} = mockData
-    workflow: workflow ? null
-    subject: subject ? null
-    classification: classification ? null
+    workflow: null
+    subject: null
+    classification: null
     goodClassificationCutoff: 0.5
     onLoad: Function.prototype
 
@@ -104,7 +102,7 @@ Classifier = React.createClass
       window.classification = currentClassification
 
       <div className="classifier">
-        <SubjectAnnotator
+        <SubjectViewer
           user={@props.user}
           project={@props.project}
           subject={@props.subject}
@@ -112,6 +110,10 @@ Classifier = React.createClass
           classification={currentClassification}
           annotation={currentAnnotation}
           onLoad={@handleSubjectImageLoad}
+          frameWrapper={FrameAnnotator}
+          allowFlipbook={workflowAllowsFlipbook @props.workflow}
+          allowSeparateFrames={workflowAllowsSeparateFrames @props.workflow}
+          onChange={@handleAnnotationChange.bind this, currentClassification}
         />
 
         <div className="task-area">
@@ -131,7 +133,7 @@ Classifier = React.createClass
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
-      waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation
+      waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
 
     # Each answer of a single-answer task can have its own `next` key to override the task's.
     if TaskComponent is tasks.single
@@ -150,12 +152,16 @@ Classifier = React.createClass
       pointerEvents: 'none'
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
-      <TaskComponent task={task} annotation={annotation} onChange={@updateAnnotations.bind this, classification} />
+      <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
       <hr />
 
       <nav className="task-nav">
-        <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>
+        {if Object.keys(@props.workflow.tasks).length > 1
+          <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>}
+        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
+          [ownerName, name] = @props.project.slug.split('/')
+          <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
         {if nextTaskKey
           <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
         else
@@ -166,9 +172,6 @@ Classifier = React.createClass
               <i className="fa fa-star fa-fw"></i>}
             {' '}Done
           </button>}
-        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
-          [ownerName, name] = @props.project.slug.split('/')
-          <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
         {@renderExpertOptions()}
       </nav>
 
@@ -317,14 +320,14 @@ Classifier = React.createClass
     changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
     @props.classification.update changes
 
-  # This is passed as a generic change handler to the tasks
-  updateAnnotations: ->
-    @props.classification.update 'annotations'
+  handleAnnotationChange: (classification, newAnnotation) ->
+    classification.annotations[classification.annotations.length - 1] = newAnnotation
+    classification.update 'annotations'
 
   # Next (or start):
   addAnnotationForTask: (classification, taskKey) ->
     taskDescription = @props.workflow.tasks[taskKey]
-    annotation = tasks[taskDescription.type].getDefaultAnnotation()
+    annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
     annotation.task = taskKey
     classification.annotations.push annotation
     classification.update 'annotations'
@@ -364,7 +367,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     user: null
-    classification: mockData?.classification ? {}
+    classification: {}
     onLoad: Function.prototype
     onComplete: Function.prototype
     onClickNext: Function.prototype

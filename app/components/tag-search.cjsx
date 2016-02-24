@@ -1,6 +1,6 @@
 React = require 'react'
 Select = require 'react-select'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 debounce = require 'debounce'
 
 module.exports = React.createClass

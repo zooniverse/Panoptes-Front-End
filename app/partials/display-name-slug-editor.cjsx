@@ -44,7 +44,7 @@ module.exports = React.createClass
             "You cannot change a live #{@props.resourceType}'s name."
           else
             "The #{@props.resourceType} name is the first thing people will see about the #{@props.resourceType}, and it will show up in the #{@props.resourceType} URL. Try to keep it short and sweet."}
-           Your {@props.resourceType}’s URL is <a href={url}>{url}</a>
+           Your {@props.resourceType}’s URL is <a href={document.baseURI.slice(0, -1) + url}>{url}</a>
         </small>
       }</PromiseRenderer>
     </p>

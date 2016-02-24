@@ -9,7 +9,7 @@ seenThisSession = require '../lib/seen-this-session'
 getSubjectLocation = require '../lib/get-subject-location'
 
 module.exports = React.createClass
-  displayName: 'SubjectAnnotator'
+  displayName: 'FrameAnnotator'
 
   getDefaultProps: ->
     user: null
@@ -19,18 +19,27 @@ module.exports = React.createClass
     classification: null
     annotation: null
     onLoad: Function.prototype
+    frame: 0
+    onChange: Function.prototype
 
   getInitialState: ->
-    frame: 0
     naturalWidth: 0
     naturalHeight: 0
     showWarning: false
     sizeRect: null
+    alreadySeen: false
+    showWarning: false
 
   componentDidMount: ->
     addEventListener 'resize', @updateSize
     @updateSize()
     @setState alreadySeen: @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
+
+  componentDidUpdate: (prevProps, prevState)->
+    # If size of the frame image has changed, update our sizing information (used for scaling/translating annotations)
+    if @props.naturalWidth isnt prevProps.naturalWidth or @props.naturalHeight isnt prevProps.naturalHeight
+      setTimeout =>
+        @updateSize()
 
   componentWillUnmount: ->
     removeEventListener 'resize', @updateSize
@@ -61,24 +70,27 @@ module.exports = React.createClass
     @setState sizeRect: {left, right, top, bottom, width, height}
 
   getScale: ->
-    horizontal = @state.sizeRect?.width / @state.naturalWidth || 0
-    vertical = @state.sizeRect?.height / @state.naturalHeight || 0
+    horizontal = @state.sizeRect?.width / @props.naturalWidth || 0
+    vertical = @state.sizeRect?.height / @props.naturalHeight || 0
     {horizontal, vertical}
 
   getEventOffset: (e) ->
     scale = @getScale()
-    console?.log 'Subject scale is', JSON.stringify scale
+    # console?.log 'Subject scale is', JSON.stringify scale
     x = (e.pageX - @state.sizeRect?.left) / scale.horizontal || 0
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
 
+  toggleWarning: ->
+    @setState showWarning: not @state.showWarning
+
   render: ->
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
-    {type, format, src} = getSubjectLocation @props.subject, @state.frame
+    {type, format, src} = getSubjectLocation @props.subject, @props.frame
 
     svgStyle = {}
-    if type is 'image'
+    if type is 'image' and not @props.loading
       # Images are rendered again within the SVG itself.
       # When cropped right next to the edge of the image,
       # the original tag can show through, so fill the SVG to cover it.
@@ -90,31 +102,33 @@ module.exports = React.createClass
       {BeforeSubject, InsideSubject, AfterSubject} = TaskComponent
 
     hookProps =
+      taskTypes: tasks
       workflow: @props.workflow
       task: taskDescription
       classification: @props.classification
       annotation: @props.annotation
-      frame: @state.frame
+      frame: @props.frame
       scale: @getScale()
-      naturalWidth: @state.naturalWidth
-      naturalHeight: @state.naturalHeight
+      naturalWidth: @props.naturalWidth
+      naturalHeight: @props.naturalHeight
       containerRect: @state.sizeRect
       getEventOffset: this.getEventOffset
+      onChange: @props.onChange
 
     for task, Component of tasks when Component.getSVGProps?
       for key, value of Component.getSVGProps hookProps
         svgProps[key] = value
 
-    <div className="subject-area">
-      {if BeforeSubject?
-        <BeforeSubject {...hookProps} />}
+    <div className="frame-annotator">
+      <div className="subject-area">
+        {if BeforeSubject?
+          <BeforeSubject {...hookProps} />}
 
-      <SubjectViewer user={@props.user} project={@props.project} subject={@props.subject} frame={@state.frame} onLoad={@handleSubjectFrameLoad} onFrameChange={@handleFrameChange}>
-        <svg style={Object.assign {}, SubjectViewer.overlayStyle, svgStyle} viewBox="0 0 #{@state.naturalWidth} #{@state.naturalHeight}" {...svgProps}>
-          <rect ref="sizeRect" width={@state.naturalWidth} height={@state.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
+        <svg style=svgStyle viewBox="0 0 #{@props.naturalWidth} #{@props.naturalHeight}" {...svgProps}>
+          <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
           {if type is 'image'
-            <SVGImage src={src} width={@state.naturalWidth} height={@state.naturalHeight} />}
+            <SVGImage src={src} width={@props.naturalWidth} height={@props.naturalHeight} />}
 
           {if InsideSubject?
             <InsideSubject {...hookProps} />}
@@ -122,6 +136,7 @@ module.exports = React.createClass
           {for anyTaskName, {PersistInsideSubject} of tasks when PersistInsideSubject?
             <PersistInsideSubject key={anyTaskName} {...hookProps} />}
         </svg>
+        {@props.children}
 
         {if @state.alreadySeen
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
@@ -142,23 +157,8 @@ module.exports = React.createClass
                 <p>If you’re looking to help, try choosing a different workflow or contributing to a different project.</p>
               </Tooltip>}
           </button>}
-      </SubjectViewer>
 
-      {if AfterSubject?
-        <AfterSubject {...hookProps} />}
+        {if AfterSubject?
+          <AfterSubject {...hookProps} />}
+      </div>
     </div>
-
-  handleSubjectFrameLoad: (e) ->
-    @props.onLoad? e, @state.frame
-    {naturalWidth, naturalHeight} = e.target
-    naturalWidth ?= e.target.offsetWidth
-    naturalHeight ?= e.target.offsetHeight
-    unless @state.naturalWidth is naturalWidth and @state.naturalHeight is naturalHeight
-      @setState {naturalWidth, naturalHeight}, =>
-        @updateSize()
-
-  handleFrameChange: (frame) ->
-    @setState {frame}
-
-  toggleWarning: ->
-    @setState showWarning: not @state.showWarning

@@ -62,12 +62,13 @@ module.exports = React.createClass
     onChange: Function.prototype
 
   render: ->
+    # The actual value is updated in the Initializer.
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <p>
-        <button type="button" disabled={not @props.annotation.value?} onClick={@handleClear}>Clear current crop</button>
+        <button type="button" className="minor-button" disabled={not @props.annotation.value?} onClick={@handleClear}>Clear current crop</button>
       </p>
     </GenericTask>
 
   handleClear: ->
-    @props.annotation.value = null
-    @props.onChange()
+    newAnnotation = Object.assign {}, @props.annotation, value: null
+    @props.onChange newAnnotation

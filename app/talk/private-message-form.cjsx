@@ -1,7 +1,7 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-apiClient = require '../api/client'
-talkClient = require '../api/talk'
+apiClient = require 'panoptes-client/lib/api-client'
+talkClient = require 'panoptes-client/lib/talk-client'
 {History} = require 'react-router'
 CommentBox = require './comment-box'
 

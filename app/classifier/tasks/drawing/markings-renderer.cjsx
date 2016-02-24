@@ -41,7 +41,7 @@ module.exports = React.createClass
         taskDescription = @props.workflow.tasks[annotation.task]
         if taskDescription.type is 'drawing'
           <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
-            {for mark in annotation.value
+            {for mark, i in annotation.value when parseInt(mark.frame) is parseInt(@props.frame)
               mark._key ?= Math.random()
               toolDescription = taskDescription.tools[mark.tool]
 
@@ -59,7 +59,7 @@ module.exports = React.createClass
                 color: toolDescription.color
 
               toolMethods =
-                onChange: @handleChange
+                onChange: @handleChange.bind this, i
                 onSelect: @handleSelect.bind this, annotation, mark
                 onDeselect: @handleDeselect
                 onDestroy: @handleDestroy.bind this, annotation, mark
@@ -69,8 +69,9 @@ module.exports = React.createClass
           </g>}
     </g>
 
-  handleChange: ->
-    @props.classification.update 'annotations'
+  handleChange: (markIndex, mark) ->
+    @props.annotation.value[markIndex] = mark
+    @props.onChange @props.annotation
 
   handleSelect: (annotation, mark) ->
     @setState selection: mark

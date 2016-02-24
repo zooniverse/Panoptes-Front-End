@@ -79,24 +79,23 @@ module.exports = React.createClass
       @setState filters: @state.filters
 
   handleChoice: (choiceID) ->
-    @props.annotation._choiceInProgress = true
     @setState selectedChoiceID: choiceID
-    @props.onChange()
+    newAnnotation = Object.assign {}, @props.annotation, _choiceInProgress: false
+    @props.onChange newAnnotation
 
   clearFilters: ->
     @setState filters: {}
 
   clearSelection: ->
-    @props.annotation._choiceInProgress = false
     @setState selectedChoiceID: ''
-    @props.onChange()
+    newAnnotation = Object.assign {}, @props.annotation, _choiceInProgress: false
+    @props.onChange newAnnotation
 
   handleAnnotation: (choice, answers, e) ->
     filters = JSON.parse JSON.stringify @state.filters
-
-    @props.annotation.value ?= []
-    @props.annotation.value.push {choice, answers, filters}
-    @props.onChange e
-
+    value = @props.annotation.value?.slice?(0) ? []
+    value.push {choice, answers, filters}
+    newAnnotation = Object.assign {}, @props.annotation, {value}
     @clearFilters()
     @clearSelection()
+    @props.onChange newAnnotation

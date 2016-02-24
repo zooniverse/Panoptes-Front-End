@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 PromiseRenderer = require '../components/promise-renderer'
 ZooniverseLogoType = require '../partials/zooniverse-logotype'
 OwnedCard = require '../partials/owned-card'
@@ -46,7 +46,7 @@ FeaturedProjects = React.createClass
     src = if project.avatar_src
       "//#{ project.avatar_src }"
     else
-      '/assets/simple-avatar.jpg'
+      './assets/simple-avatar.jpg'
     Promise.resolve src
 
   render: ->

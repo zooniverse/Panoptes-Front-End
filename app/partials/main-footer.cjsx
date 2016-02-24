@@ -3,7 +3,7 @@ React = require 'react'
 Translate = require 'react-translate-component'
 {IndexLink, Link} = require 'react-router'
 ZooniverseLogoType = require './zooniverse-logotype'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 
 counterpart.registerTranslations 'en',
   footer:
@@ -31,6 +31,7 @@ counterpart.registerTranslations 'en',
       jobs: 'Jobs'
       privacyPolicy: 'Privacy Policy'
       status: 'System Status'
+      security: 'Security'
 
 AdminToggle = React.createClass
   displayName: 'AdminToggle'
@@ -93,6 +94,8 @@ module.exports = React.createClass
             <Link to="/lab"><Translate content="footer.discover.projectBuilder" /></Link>
             <Link to="/lab-how-to"><Translate content="footer.discover.howToGuide" /></Link>
             <Link to="/lab-policies"><Translate content="footer.discover.projectBuilderPolicies" /></Link>
+            {if process.env.NODE_ENV isnt 'production'
+              <Link to="/dev/classifier">Dev Classifier</Link>}
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.about.title" />
@@ -113,7 +116,6 @@ module.exports = React.createClass
             <a href="https://twitter.com/the_zooniverse" target="_blank"><i className="fa fa-twitter"></i></a>
             <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank"><i className="fa fa-google-plus"></i></a>
           </div>
-
         </nav>
       </div>
       <div className="footer-sole">
@@ -123,6 +125,8 @@ module.exports = React.createClass
           <a href="http://jobs.zooniverse.org/"><Translate content="footer.boilerplate.jobs" /></a>
           <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
           <a href="https://status.zooniverse.org/"><Translate content="footer.boilerplate.status" /></a>
+          <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
+          <Link to="/security"><Translate content="footer.boilerplate.security" /></Link>
         </div>
       </div>
     </footer>

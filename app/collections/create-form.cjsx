@@ -1,5 +1,5 @@
 React = require 'react'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 

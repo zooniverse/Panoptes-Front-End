@@ -1,12 +1,12 @@
-var apiClient = require('../../../api/client');
+var apiClient = require('panoptes-client/lib/api-client');
 var putFile = require('../../../lib/put-file');
 
 var projects = apiClient.type('projects');
 var guides = apiClient.type('field_guides');
 
 var DEFAULT_ITEM = {
-  title: 'Untitled',
-  content: 'Here’s everything you need to know about the great **Untitled**...'
+  title: 'An example',
+  content: 'Here’s everything you need to know about the great **Example**...'
 };
 
 var actions = {
