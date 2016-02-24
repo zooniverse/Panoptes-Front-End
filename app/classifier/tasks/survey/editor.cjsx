@@ -275,7 +275,7 @@ module.exports = React.createClass
     @ensureChoice row.name
     for charKeyVal, isSet of row when charKeyVal isnt 'name'
       [characteristicLabel, valueLabelAndIcon] = charKeyVal.replace('=', '__SPLIT_ONCE__').split /\s*__SPLIT_ONCE__\s*/
-      [valueLabel, valueIcon] = valueLabelAndIcon.split /\s*,\s*/
+      [valueLabel, valueIcon] = valueLabelAndIcon.split /\s*;\s*/
       if characteristicLabel is '' or valueLabel is ''
         throw new Error 'Characteristics column headers should be formatted like "Color=Blue","Color=Red".'
       characteristicID = @makeID characteristicLabel
