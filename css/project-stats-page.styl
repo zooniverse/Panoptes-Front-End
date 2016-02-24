@@ -2,12 +2,18 @@ zoo-blue = #03517f
 zoo-green = #1eb3af
 zoo-orange = #f78d27
 
-.svg-container
-  background: white
+//.svg-container
+//  background: white
 
 .progress-container
   width: 100%
   position: relative
+
+.project-stats-page
+  background: white
+  border-radius: 15px
+  color: black
+  padding: 15px
 
 .ct-chart
     .ct-series-a
@@ -55,6 +61,10 @@ zoo-orange = #f78d27
   align-self: flex-end
   width: 25%
   word-wrap: break-word
+  @media (max-width: 1150px)
+    width: 33.333%
+  @media (max-width: 900px)
+    width: 50%
 
 .flex-wrapper
   padding: 5px
