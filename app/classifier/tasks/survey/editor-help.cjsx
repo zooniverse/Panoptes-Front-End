@@ -14,7 +14,7 @@ module.exports =
         <tr className="form-label">
           <td>The label for the choice</td>
           <td>A short description of the choice</td>
-          <td>Representative images of the choice, <code>,</code>-separated</td>
+          <td>Representative images of the choice, <code>;</code>-separated</td>
         </tr>
         <tr>
           <td>Shark</td>
@@ -24,7 +24,7 @@ module.exports =
         <tr>
           <td>Dolphin</td>
           <td>Dolphins are intelligent marine mammals who solve crimes.</td>
-          <td>http://example.com/images/dolphin.jpg, http://example.com/images/flipper.jpg</td>
+          <td>http://example.com/images/dolphin.jpg; http://example.com/images/flipper.jpg</td>
         </tr>
       </tbody>
     </table>
@@ -41,14 +41,14 @@ module.exports =
       <tbody>
         <tr>
           <th>Name</th>
-          <th>Color=Orange, http://...png</th>
-          <th>Color=Gray, http://...png</th>
-          <th>Teeth=Dull, http://...png</th>
-          <th>Teeth=Pointy, http://...png</th>
+          <th>Color=Orange; http://...png</th>
+          <th>Color=Gray; http://...png</th>
+          <th>Teeth=Dull; http://...png</th>
+          <th>Teeth=Pointy; http://...png</th>
         </tr>
         <tr className="form-label">
           <td>Choice name</td>
-          <td colSpan="4"><code>Characteristic</code>=<code>value</code>, <code>icon URL</code>, with each row marked <code>Y</code> or <code>N</code> for that choice</td>
+          <td colSpan="4"><code>Characteristic</code>=<code>value</code>; <code>icon URL</code>, with each row marked <code>Y</code> or <code>N</code> for that choice</td>
         </tr>
         <tr>
           <td>Shark</td>
