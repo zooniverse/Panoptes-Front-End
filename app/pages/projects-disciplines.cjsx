@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
-apiClient = require '../api/client'
+apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list-by-discipline'
 
 counterpart.registerTranslations 'en',

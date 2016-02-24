@@ -4,17 +4,25 @@
 	margin: 0 -25px
 	display: flex
 
-.navButton
+.filmstrip__nav-btn
 	border: 0
 	margin: 0
 	height: 100%
+	background-color: transparent
+	width: 40px
+	color: #006dff
+	font-weight: bold
+	font-size: 24pt
+	cursor: pointer
+	:focus
+		outilne: 0
 
-.viewport
+.filmstrip__viewport
 	overflow-x: hidden
 	position: relative
 	width: 100%
 
-.strip
+.filmstrip__strip
 	position: absolute
 	top: 0
 	left: 0
@@ -29,14 +37,3 @@
 	ul
 		padding: 0
 		list-style-type: none
-
-.navButton
-	background-color: transparent
-	width: 40px
-	color: #006dff
-	font-weight: bold
-	font-size: 24pt
-	cursor: pointer
-
-.navButton:focus
-	outline: 0
