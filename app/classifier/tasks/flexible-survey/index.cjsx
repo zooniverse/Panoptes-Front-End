@@ -80,7 +80,7 @@ module.exports = React.createClass
 
   handleChoice: (choiceID) ->
     @setState selectedChoiceID: choiceID
-    newAnnotation = Object.assign {}, @props.annotation, _choiceInProgress: true
+    newAnnotation = Object.assign {}, @props.annotation, _choiceInProgress: false
     @props.onChange newAnnotation
 
   clearFilters: ->
