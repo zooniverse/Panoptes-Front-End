@@ -44,7 +44,7 @@ GraphSelect = React.createClass
 WorkflowProgress = React.createClass
   render: ->
     if @props.workflow.retirement.criteria == 'classification_count'
-      retirement = <div>Retirement limit: {@props.workflow.retirement.options.count.toLocaleString()}</div>
+      retirement = <div><span className="progress-stat-label">Retirement limit:</span> {@props.workflow.retirement.options.count.toLocaleString()}</div>
     <div className="progress-element">
       <div className="flex-wrapper">
         <h3>{@props.workflow.display_name}</h3>
@@ -52,10 +52,10 @@ WorkflowProgress = React.createClass
           {retirement}
         </div>
         <div>
-          Images retired: {@props.workflow.retired_set_member_subjects_count.toLocaleString()} / {@props.workflow.subjects_count.toLocaleString()}
+          <span className="progress-stat-label">Images retired:</span> {@props.workflow.retired_set_member_subjects_count.toLocaleString()} / {@props.workflow.subjects_count.toLocaleString()}
         </div>
         <div>
-          Classifications: {@props.workflow.classifications_count.toLocaleString()} / {(@props.workflow.subjects_count * @props.workflow.retirement.options.count).toLocaleString()}
+          <span className="progress-stat-label">Classifications:</span> {@props.workflow.classifications_count.toLocaleString()} / {(@props.workflow.subjects_count * @props.workflow.retirement.options.count).toLocaleString()}
         </div>
         <Progress progress={@props.workflow.completeness} />
       </div>
@@ -78,15 +78,23 @@ ProjectStatsPage = React.createClass
   render: ->
     progress = @workflowInfo()
     if @props.startDate
-      start = <div>Launch Date: {moment(@props.startDate).format 'MMM-DD-YYYY'}</div>
+      start =
+        <div className="project-metadata-stat">
+          <div>{moment(@props.startDate).format 'MMM-DD-YYYY'}</div>
+          <div>Launch Date</div>
+        </div>
     <div className="project-stats-page content-container">
       <div className="project-stats-dashboard">
-        {start}
-        <div>
-          Volunteers: {@props.totalVolunteers.toLocaleString()}
-        </div>
-        <div>
-          Online now: {@props.currentVolunteers.toLocaleString()}
+        <div className="project-metadata-stats">
+          {start}
+          <div className="project-metadata-stat">
+            <div>{@props.totalVolunteers.toLocaleString()}</div>
+            <div>Volunteers</div>
+          </div>
+          <div className="project-metadata-stat">
+            <div>{@props.currentVolunteers.toLocaleString()}</div>
+            <div>Online now</div>
+          </div>
         </div>
         <hr />
         <div className="project-stats-progress">
