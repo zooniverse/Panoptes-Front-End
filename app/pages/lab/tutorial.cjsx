@@ -14,4 +14,3 @@ module.exports = React.createClass
         <ProjectModalEditor project={@props.project} type="tutorials" />
       </div>
     </div>
-
