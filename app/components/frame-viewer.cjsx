@@ -233,13 +233,19 @@ module.exports = React.createClass
 
   panByDrag: (e, d) ->
     return if @state.panEnabled == false
-    minX = @state.frameDimensions.width - @state.viewBoxDimensions.width
-    minY = @state.frameDimensions.height - @state.viewBoxDimensions.height
+    
+    maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + 20
+    minumumX = -20
+    changedX = @state.viewBoxDimensions.x -= d.x
+
+    maximumY = (@state.frameDimensions.height - @state.viewBoxDimensions.height) + 20
+    minimumY = -20
+    changedY = @state.viewBoxDimensions.y -= d.y
 
     @setState
       viewBoxDimensions:
-        x: Math.max(0, Math.min(@state.viewBoxDimensions.x -= d.x, minX))
-        y: Math.max(0, Math.min(@state.viewBoxDimensions.y -= d.y, minY))
+        x: Math.max(minumumX, Math.min(changedX, maximumX))
+        y: Math.max(minimumY, Math.min(changedY, maximumY))
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height
 
@@ -275,19 +281,23 @@ module.exports = React.createClass
 
 
   panHorizontal:(direction) ->
-    minX = @state.frameDimensions.width - @state.viewBoxDimensions.width
+    maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + 20
+    minumumX = -20
+    changedX = @state.viewBoxDimensions.x + direction
     @setState
       viewBoxDimensions:
-        x: Math.max(0, Math.min(@state.viewBoxDimensions.x + direction, minX))
+        x: Math.max(minumumX, Math.min(changedX, maximumX))
         y: @state.viewBoxDimensions.y
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height
 
   panVertical:(direction)->
-    minY = @state.frameDimensions.height - @state.viewBoxDimensions.height
+    maximumY = (@state.frameDimensions.height - @state.viewBoxDimensions.height) + 20
+    minimumY = -20
+    changedY = @state.viewBoxDimensions.y + direction
     @setState
       viewBoxDimensions:
         x: @state.viewBoxDimensions.x 
-        y: Math.max(0, Math.min(@state.viewBoxDimensions.y + direction, minY))
+        y: Math.max(minimumY, Math.min(changedY, maximumY))
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height
