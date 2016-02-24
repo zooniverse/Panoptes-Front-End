@@ -1,0 +1,107 @@
+React = require 'react'
+PromiseRenderer = require '../../../components/promise-renderer'
+config = require '../../../api/config'
+moment = require 'moment'
+{Model, makeHTTPRequest} = require 'json-api-client'
+{Progress, Graph} = require './charts'
+
+GraphSelect = React.createClass
+  getDefaultProps: ->
+    by: 'hour'
+
+  shouldComponentUpdate: (nextProps) ->
+    return @props.by isnt nextProps.by
+
+  statCount: (period, type) ->
+    stats_url = "#{config.statHost}/counts/#{type}/#{period}?project_id=#{@props.projectId}"
+    makeHTTPRequest 'GET', stats_url
+      .then (response) =>
+        results = JSON.parse response.responseText
+        bucket_data = results["events_over_time"]["buckets"]
+        data = bucket_data.map (stat_object) =>
+          label: stat_object.key_as_string
+          value: stat_object.doc_count
+      .catch (response) ->
+        console?.error 'Failed to get the stats'
+
+  render: ->
+    <div>
+      {@props.type[0].toUpperCase() + @props.type.substring(1)}s per{' '}
+      <select value={@props.by} onChange={@handleGraphChange.bind this, @props.type}>
+        <option value="hour">hour</option>
+        <option value="day">day</option>
+        <option value="week">week</option>
+        <option value="month">month</option>
+      </select><br />
+      <PromiseRenderer promise={@statCount(@props.by, @props.type)}>{(statData) =>
+        <Graph data={statData} by={@props.by} num={24} />
+      }</PromiseRenderer>
+    </div>
+
+  handleGraphChange: (which, e) ->
+    @props.handleGraphChange(which, e)
+
+WorkflowProgress = React.createClass
+  render: ->
+    if @props.workflow.retirement.criteria == 'classification_count'
+      retirement = <div>Retirement limit: {@props.workflow.retirement.options.count.toLocaleString()}</div>
+    <div className="progress-element">
+      <div className="flex-wrapper">
+        <h3>{@props.workflow.display_name}</h3>
+        <div>
+          {retirement}
+        </div>
+        <div>
+          Images retired: {@props.workflow.retired_set_member_subjects_count.toLocaleString()} / {@props.workflow.subjects_count.toLocaleString()}
+        </div>
+        <div>
+          Classifications: {@props.workflow.classifications_count.toLocaleString()} / {(@props.workflow.subjects_count * @props.workflow.retirement.options.count).toLocaleString()}
+        </div>
+        <Progress progress={@props.workflow.completeness} />
+      </div>
+    </div>
+
+ProjectStatsPage = React.createClass
+  getDefaultProps: ->
+    totalClassifications: 0
+    requiredClassifications: 0
+    totalVolunteers: 2
+    currentVolunteers: 46
+
+  workflowInfo: ->
+    progress = []
+    for workflow, key in @props.workflows
+      if workflow?.active
+        progress.push(<WorkflowProgress key={key} workflow={workflow} />)
+    progress
+
+  render: ->
+    progress = @workflowInfo()
+    if @props.startDate
+      start = <div>Launch Date: {moment(@props.startDate).format 'MMM-DD-YYYY'}</div>
+    <div className="project-stats-page content-container">
+      <div className="project-stats-dashboard">
+        {start}
+        <div>
+          Volunteers: {@props.totalVolunteers.toLocaleString()}
+        </div>
+        <div>
+          Online now: {@props.currentVolunteers.toLocaleString()}
+        </div>
+        <hr />
+        <div className="project-stats-progress">
+          {progress}
+        </div>
+        <hr />
+      </div>
+
+      <div>
+        <GraphSelect handleGraphChange={@props.handleGraphChange} type="classification" projectId={@props.projectId} by={@props.classificationsBy}/>
+      </div>
+      <div>
+        <GraphSelect handleGraphChange={@props.handleGraphChange} type="comment" projectId={@props.projectId} by={@props.commentsBy}/>
+      </div>
+
+    </div>
+
+module.exports = ProjectStatsPage
