@@ -31,15 +31,15 @@ module.exports = React.createClass
   calculateClasses: (filterName)->
     filterName = @mangleFilterName(filterName)
 
-    list = ['discipline']
-    list.push "discipline-#{filterName}"
+    list = ['filmstrip--disciplines__discipline-card']
+    list.push "filmstrip--disciplines__discipline-card--discipline-#{filterName}"
 
     if(@props.selectedFilter == filterName)
-      list.push 'active'
+      list.push 'filmstrip--disciplines__discipline-card--active'
     if(!@props.selectedFilter? && filterName == 'all')
-      list.push 'active'
+      list.push 'filmstrip--disciplines__discipline-card--active'
     if(@props.selectedFilter == '' && filterName == 'all')
-      list.push 'active'
+      list.push 'filmstrip--disciplines__discipline-card--active'
 
     return list.join ' '
 
@@ -63,11 +63,11 @@ module.exports = React.createClass
     @viewport = @refs.viewport
     @refs.filmstrip.style.height = @strip.getBoundingClientRect().height + 'px'
 
-  render: -> <div className='filmstrip' ref='filmstrip'>
-      <button className='prevNav navButton' onClick={@scrollLeft} role="presentation" aria-hidden="true" aria-label="Scroll Left">&lt;</button>
-      <div className='viewport' ref='viewport'>
-        <div className='strip' ref='strip' style={left: @state.scrollPos}>
-            <ul className={"filter"}>
+  render: -> <div className='filmstrip filmstrip--disciplines' ref='filmstrip'>
+      <button className='filmstrip__nav-btn' onClick={@scrollLeft} role="presentation" aria-hidden="true" aria-label="Scroll Left">&lt;</button>
+      <div className='filmstrip__viewport' ref='viewport'>
+        <div className='filmstrip__strip' ref='strip' style={left: @state.scrollPos}>
+            <ul>
               <li>
                 <button className={@calculateClasses('all')} onClick={@selectFilter.bind this, ''} >
                   <p>All</p><p>Disciplines</p>
@@ -77,7 +77,7 @@ module.exports = React.createClass
                 filterName = filter.value.replace(' ', '-')
                 <li key={i}>
                   <button key={i} className={@calculateClasses(filter.value)} onClick={@selectFilter.bind this, filter.value} >
-                    <span key={i} className="icon icon-#{filterName}"></span>
+                    <span key={i} className="filmstrip--disciplines__discipline-card__icon filmstrip--disciplines__discipline-card__icon-#{filterName}"></span>
                     <p>{filter.label}</p>
                   </button>
                 </li>
@@ -85,5 +85,5 @@ module.exports = React.createClass
             </ul>
         </div>
       </div>
-      <button className='nextNav navButton' onClick={@scrollRight} role="presentation" aria-hidden="true" aria-label="Scroll Right">&gt;</button>
+      <button className='filmstrip__nav-btn' onClick={@scrollRight} role="presentation" aria-hidden="true" aria-label="Scroll Right">&gt;</button>
     </div>
