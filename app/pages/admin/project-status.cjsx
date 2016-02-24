@@ -12,9 +12,10 @@ handleInputChange = require '../../lib/handle-input-change'
 EXPERIMENTAL_FEATURES = [
   'survey'
   'crop'
+  'text'
+  'combo'
   'tutorial'
   'field guide'
-  'text'
   'hide classification summaries'
 ]
 

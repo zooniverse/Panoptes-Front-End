@@ -58,6 +58,11 @@ EditWorkflowPage = React.createClass
     # task in project.experimental_tools
     true
 
+  handleTaskChange: (taskKey, taskDescription) ->
+    changes = {}
+    changes["tasks.#{taskKey}"] = taskDescription
+    @props.workflow.update(changes).save()
+
   render: ->
     window.editingWorkflow = @props.workflow
 
@@ -99,7 +104,8 @@ EditWorkflowPage = React.createClass
                         when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'crop' then <i className="fa fa-crop fa-fw"></i>
-                        when 'text' then <i className="fa fa-file-text-o fa-fw"></i>}
+                        when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
+                        when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
                       {' '}
                       {tasks[definition.type].getTaskText definition}
                       {if key is @props.workflow.first_task
@@ -153,6 +159,14 @@ EditWorkflowPage = React.createClass
                         <small><strong>Crop</strong></small>
                       </button>
                     </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "combo")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'combo'} title="Combo tasks: show a bunch of tasks at the same time.">
+                        <i className="fa fa-cubes fa-2x"></i>
+                        <br />
+                        <small><strong>Combo</strong></small>
+                      </button>
+                    </AutoSave>}
                 </TriggeredModalForm>
               </p>
 
@@ -271,6 +285,7 @@ EditWorkflowPage = React.createClass
                 task={@props.workflow.tasks[@state.selectedTaskKey]}
                 taskPrefix="tasks.#{@state.selectedTaskKey}"
                 project={@props.project}
+                onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
               />
               <hr />
               <br />
@@ -379,11 +394,6 @@ EditWorkflowPage = React.createClass
       .then =>
         if @isMounted()
           @setState deletionInProgress: false
-
-  handleTaskChange: (taskKey, path, value) ->
-    changes = {}
-    changes["tasks.#{taskKey}.#{path}"] = value
-    @props.workflow.update changes
 
   handleGoldStandardDataImport: (e) ->
     @setState goldStandardFilesToImport: e.target.files

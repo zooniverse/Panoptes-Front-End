@@ -53,7 +53,6 @@ DevClassifierPage = React.createClass
     classification: mockData.classification
 
   reload: ->
-    debugger
     workflow = @props.classification._workflow
     firstTask = workflow.tasks[workflow.first_task]
     FirstTaskComponent = tasks[firstTask.type]

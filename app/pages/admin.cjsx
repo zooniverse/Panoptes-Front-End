@@ -49,11 +49,11 @@ module.exports = React.createClass
     <div>
       <ChangeListener target={@props.user}>{ =>
         if @props.user?
-          if @props.user.admin?
+          if @props.user.admin
             <AdminPage {...@props} />
           else
             <div className="content-container">
-              <p>You're not an administrator</p>
+              <p>You are not an administrator</p>
             </div>
         else
           <div className="content-container">

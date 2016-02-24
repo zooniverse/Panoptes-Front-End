@@ -144,4 +144,4 @@ module.exports = React.createClass
         width: width ? 0
         height: height ? 0
 
-    @props.onLoad? arguments...
+    @props.onLoad? e, @props.frame

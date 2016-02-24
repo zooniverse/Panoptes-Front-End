@@ -12,7 +12,7 @@ module.exports = React.createClass
     expanded: @props.expanded
 
   render: ->
-    <div className="classification-task-summary">
+    <div>
       <div className="question">
         {@props.task.instruction}
         {if @state.expanded
