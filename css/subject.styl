@@ -44,29 +44,26 @@
       cursor all-scroll
     .pan-zoom-controls
       span
-        margin: 0.05em;
-    
-    span.draw-pan-toggle
-      background-color: #F9F9F9
-      border: solid .1px #989898
-      border-radius: .2em
-      span
-        // margin: .2em
-        border-radius: .1em
-        transition: background-color .5s
-        &.active
-          background-color: #43BBFD
-          color: black
-          border none
+        padding 3px
+      .draw-pan-toggle
+        background-color: #F9F9F9
+        border: solid 1px #989898
+        border-radius: .2em
+        span
+          border-radius: .1em
+          transition: background-color .5s
+          &.active
+            background-color: #43BBFD
+            color: black
+            border none
+        button
+          background-color: transparent
+          border:none
       button
-        background-color: transparent
-        border:none
-    button
-      background-color: #f9f9f9
-      border: solid 1px #989898
-      -webkit-border-radius: 0.2em
-      border-radius: 0.2em
-      vertical-align: bottom
+        background-color: #f9f9f9
+        border: solid 1px #989898
+        -webkit-border-radius: 0.2em
+        border-radius: 0.2em
 
   // Multi-image layouts
   &:not(.subject-viewer--flipbook)

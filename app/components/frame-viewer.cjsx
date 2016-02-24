@@ -37,10 +37,13 @@ module.exports = React.createClass
 
   componentDidMount: ->
     @refs.videoScrubber?.value = 0
-    addEventListener "keypress", @frameKeyPan
+    addEventListener "keydown", @frameKeyPan
 
   componentDidUpdate: ->
     @refs.videoPlayer?.playbackRate = @state.playbackRate
+
+  componentWillUnmount: ->
+    removeEventListener "keydown", @frameKeyPan
 
   render: () ->
     subject = @props.subject
@@ -203,13 +206,7 @@ module.exports = React.createClass
           height: newNaturalHeight,
           x: newNaturalX,
           y: newNaturalY
-        , =>
-          console.log "Pressed Zoom"
-          # setTimeout(function(){ debugger; }, 3000);
-          # setTimeout console.log "time", 0000
-          # debugger
           
-
   zoomReset: ->
     @setState
       viewBoxDimensions:
@@ -220,7 +217,6 @@ module.exports = React.createClass
 
 
   toggleZoom: ->
-    console.log "toggleZoom"
     @setState zooming: !@state.zooming
 
   togglePanOn: ->
@@ -248,9 +244,6 @@ module.exports = React.createClass
         height: @state.viewBoxDimensions.height
 
   frameKeyPan: (e)->
-    console.log "frameKeyPan()"
-    console.log "---> keypress", e.which
-    console.log "---> @state.panEnabled", @state.panEnabled
     return if @state.panEnabled == false
     keypress = e.which
     switch keypress
@@ -271,11 +264,11 @@ module.exports = React.createClass
         e.preventDefault()
         @panVertical(20) 
       # zoom out
-      when 61 #187 
+      when 187 #61
         e.preventDefault()
         @zoom(.9) 
       # zoom in 
-      when 45 #189 
+      when 189 #45
         @setState zooming: true
         e.preventDefault()
         @zoom(1.1) 
