@@ -266,7 +266,7 @@ module.exports = React.createClass
     if no_questions?
       choice.noQuestions = @determineBoolean no_questions
     if images?
-      images = images.split(/\s*,\s*/).concat(__parsedExtra ? []).filter Boolean
+      images = images.split(/s*;\s*/).concat(__parsedExtra ? []).filter Boolean
       choice.images = images
 
   addCharacteristics: (row) ->
