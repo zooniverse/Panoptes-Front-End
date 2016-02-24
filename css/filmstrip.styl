@@ -1,20 +1,28 @@
 .filmstrip
 	padding: 0
 	max-width: 1240px
-	margin: 0 auto
+	margin: 0 -25px
 	display: flex
 
-.navButton
+.filmstrip__nav-btn
 	border: 0
 	margin: 0
 	height: 100%
+	background-color: transparent
+	width: 40px
+	color: #006dff
+	font-weight: bold
+	font-size: 24pt
+	cursor: pointer
+	:focus
+		outilne: 0
 
-.viewport
+.filmstrip__viewport
 	overflow-x: hidden
 	position: relative
 	width: 100%
 
-.strip
+.filmstrip__strip
 	position: absolute
 	top: 0
 	left: 0
@@ -26,11 +34,6 @@
 	transition-property: left
 	transition-duration: 0.4s
 	transition-timing-function: ease
-
-.navButton
-	background-color: transparent
-	width: 40px
-	color: #006dff
-	font-weight: bold
-	font-size: 24pt
-	cursor: pointer
+	ul
+		padding: 0
+		list-style-type: none
