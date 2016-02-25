@@ -66,11 +66,15 @@
         button
           background-color: transparent
           border:none
+          
       button
         background-color: #f9f9f9
         border: solid 1px #989898
         -webkit-border-radius: 0.2em
         border-radius: 0.2em
+        &.disabled
+          background-color: #bbc0c0
+          color: #575959 
 
   // Multi-image layouts
   &:not(.subject-viewer--flipbook)

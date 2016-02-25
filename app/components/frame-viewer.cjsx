@@ -38,12 +38,15 @@ module.exports = React.createClass
   componentDidMount: ->
     @refs.videoScrubber?.value = 0
     addEventListener "keydown", @frameKeyPan
+    addEventListener "mousewheel", @frameKeyPan
 
   componentDidUpdate: ->
     @refs.videoPlayer?.playbackRate = @state.playbackRate
 
   componentWillUnmount: ->
     removeEventListener "keydown", @frameKeyPan
+    removeEventListener "mousewheel", @frameKeyPan
+
 
   render: () ->
     subject = @props.subject
@@ -113,13 +116,13 @@ module.exports = React.createClass
               </div>
             </div>
             <div>
-              <button title={"zoom out"} className="zoom-out fa fa-minus" onClick={ @zoom.bind(this, 1.1 ) } />
+              <button title={"zoom out"} className={"zoom-out fa fa-minus" + if @canZoomOut() then " disabled" else "" } onClick={ @zoom.bind(this, 1.1 ) } />
             </div>
             <div>
               <button title={"zoom in"} className="zoom-in fa fa-plus" onMouseDown={@zoom.bind(this, .9)} onMouseUp={@toggleZoom} />
             </div>
             <div>
-              <button title={"rest zoom levels"} className="reset fa fa-refresh" onClick={ this.zoomReset } ></button>
+              <button title={"rest zoom levels"} className={"reset fa fa-refresh" + if @canZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
             </div>
           </div>}
         
@@ -189,7 +192,12 @@ module.exports = React.createClass
 
     @props.onLoad? e, @props.frame
 
+  canZoomOut: ->
+    if @state.frameDimensions.width == @state.viewBoxDimensions.width && @state.frameDimensions.height == @state.viewBoxDimensions.height
+      true
+
   zoom: (change) ->
+
     newNaturalWidth = @state.viewBoxDimensions.width * change
     newNaturalHeight = @state.viewBoxDimensions.height * change
   
@@ -275,10 +283,12 @@ module.exports = React.createClass
         @zoom(.9) 
       # zoom in 
       when 189
-        @setState zooming: true
         e.preventDefault()
         @zoom(1.1) 
-
+      # zooming by mousewheel
+      when 1
+        e.preventDefault()
+        if e.deltaY > 0 then @zoom(.9) else @zoom(1.1)
 
   panHorizontal:(direction) ->
     maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + 20
