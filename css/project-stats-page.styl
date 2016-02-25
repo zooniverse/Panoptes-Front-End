@@ -2,13 +2,6 @@ zoo-blue = #03517f
 zoo-green = #1eb3af
 zoo-orange = #f78d27
 
-custom-rotate(n)
-  -webkit-transform: rotate(n)
-  -moz-transform: rotate(n)
-  -ms-transform: rotate(n)
-  -o-transform: rotate(n)
-  transform: rotate(n)
-
 //.svg-container
 //  background: white
 
@@ -88,8 +81,8 @@ custom-rotate(n)
   margin-bottom: -4px
   .rc-slider-handle
     cursor: ew-resize
-    top: -52px
-    height: 60px
+    top: -54px
+    height: 62px
     width: 10px
     margin-top: 0
     margin-left: -10px
@@ -112,8 +105,8 @@ custom-rotate(n)
 
   .rc-slider-track
     background-color: alpha(zoo-green, 0.15)
-    height: 60px
-    top: -52px
+    height: 62px
+    top: -54px
     border-radius: 0
     border-bottom: 2px solid #999
 
@@ -128,15 +121,17 @@ custom-rotate(n)
     margin-left: -13px
     &:before
       content: "\f0c9"
-      font-family: FontAwesome;
-      font-style: normal;
-      font-weight: normal;
-      color: #fff;
-      position: absolute;
-      font-size: 12px;
-      left: 8px;
-      top: 1px;
-      custom-rotate(90deg)
+      font-family: FontAwesome
+      font-style: normal
+      font-weight: normal
+      text-decoration: inherit
+      color: #fff
+      font-size: 13px
+      display: flex
+      flex-direction: row
+      align-items: center
+      justify-content: center
+      transform: rotate(90deg)
 
 .ui-handle
   width: 50px
