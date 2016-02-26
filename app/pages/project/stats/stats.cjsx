@@ -98,14 +98,17 @@ ProjectStatsPage = React.createClass
         </div>
         <hr />
         <div className="project-stats-progress">
+          <span className="project-stats-heading">Live Wrokflows</span>
           {progress}
         </div>
         <hr />
       </div>
-
+      <span className="project-stats-heading">Classification Stats</span>
       <div>
         <GraphSelect handleGraphChange={@props.handleGraphChange} type="classification" projectId={@props.projectId} by={@props.classificationsBy}/>
       </div>
+      <hr />
+      <span className="project-stats-heading">Talk Stats</span>
       <div>
         <GraphSelect handleGraphChange={@props.handleGraphChange} type="comment" projectId={@props.projectId} by={@props.commentsBy}/>
       </div>

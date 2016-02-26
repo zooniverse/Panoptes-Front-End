@@ -29,14 +29,7 @@ Progress = React.createClass
 
 Graph = React.createClass
   getInitialState: ->
-    data =
-      labels: []
-      series: [[]]
-
-    @props.data.forEach ({label, value}, idx) =>
-      data.labels.push @formatLabel[@props.by]?(label) ? label
-      data.series[0].push value
-
+    data = this.processData(@props.data, @props.by)
     min = Math.max data.labels.length - @props.num, 0
     max = data.labels.length - 1
 
@@ -70,24 +63,44 @@ Graph = React.createClass
         bottom: 0
         left: 15
 
-  componentWillReceiveProps: (nextProps) ->
+  processData: (inputData, binBy) ->
     data =
       labels: []
       series: [[]]
 
-    nextProps.data.forEach ({label, value}, idx) =>
-      data.labels.push @formatLabel[nextProps.by]?(label) ? label
+    previousLabel = ''
+    inputData.forEach ({label, value}, idx) =>
+      if idx > 0
+        # fill in bins with zero as a value
+        difference = Math.floor(moment.duration(moment(label).diff(moment(previousLabel)))[@formatDiff[binBy]]())
+        if difference > 1
+          for jdx in [1...difference]
+            shouldBe = moment(previousLabel).add(jdx, "#{binBy}s").format()
+            data.labels.push @formatLabel[binBy]?(shouldBe) ? shouldBe
+            data.series[0].push 0
+      data.labels.push @formatLabel[binBy]?(label) ? label
       data.series[0].push value
+      previousLabel = label
+    data
 
-    min = Math.max data.labels.length - @props.num, 0
-    max = data.labels.length - 1
+  componentWillReceiveProps: (nextProps) ->
+    if this.props.data != nextProps.data
+      data = this.processData(nextProps.data, nextProps.by)
+      min = Math.max data.labels.length - @props.num, 0
+      max = data.labels.length - 1
 
-    newState =
-      minIdx: min
-      maxIdx: max
-      midIdx: max + min
-      data: data
-    @setState(newState)
+      newState =
+        minIdx: min
+        maxIdx: max
+        midIdx: max + min
+        data: data
+      @setState(newState)
+
+  formatDiff:
+    hour: 'asHours'
+    day: 'asDays'
+    week: 'asWeeks'
+    month: 'asMonths'
 
   formatLabel:
     hour: (date) -> moment(date).format 'MMM-DD hh:mm A'
@@ -112,7 +125,7 @@ Graph = React.createClass
 
   onDrawSmall: (data) ->
     if data.type == 'bar'
-      style = "stroke-width: #{100 / Object.keys(@props.data).length}%"
+      style = "stroke-width: #{100 / @state.data.labels.length}%"
       if (data.index >= @state.minIdx & data.index <= @state.maxIdx)
         style += '; stroke: #f78d27'
       data.element.attr({style: style})
