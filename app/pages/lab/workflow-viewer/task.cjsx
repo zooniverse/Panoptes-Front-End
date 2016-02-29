@@ -246,8 +246,6 @@ Task = React.createClass
         icon = <i className="fa fa-pencil fa-fw"></i>
       when 'survey'
         icon = <i className="fa fa-binoculars fa-fw"></i>
-      when 'flexibleSurvey'
-        icon = <i className="fa fa-binoculars fa-fw"></i>
       when 'crop'
         icon = <i className="fa fa-crop fa-fw"></i>
       when 'text'
