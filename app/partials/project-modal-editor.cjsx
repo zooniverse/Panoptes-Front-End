@@ -25,7 +25,9 @@ ProjectModalStepEditor = React.createClass
   render: ->
     <div className="project-modal-step-editor">
       <header>
-        <button type="button" className="secret-button" onClick={@props.onRemove}>Remove step</button>
+        <button type="button" className="secret-button" title="Remove step" aria-label="Remove step" onClick={@props.onRemove}>
+          <i className="fa fa-times fa-fw"></i>
+        </button>
       </header>
       <p>
         {if @props.media?
