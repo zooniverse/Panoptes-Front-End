@@ -4,7 +4,7 @@ module.exports =
   multiple: require './multiple'
   drawing: require './drawing'
   survey: require './survey'
-  flexibleSurvey: require './flexible-survey'
+  flexibleSurvey: require './survey'
   crop: require './crop'
   text: require './text'
 

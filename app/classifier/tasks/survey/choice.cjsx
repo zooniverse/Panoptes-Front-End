@@ -1,6 +1,7 @@
 React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
 {Markdown} = require 'markdownz'
+Utility = require './utility'
 
 ImageFlipper = React.createClass
   displayName: 'ImageFlipper'
@@ -55,14 +56,27 @@ module.exports = React.createClass
     answers: {}
 
   allFilledIn: ->
-    unless @props.task.choices[@props.choiceID].noQuestions
-      for questionID in @props.task.questionsOrder
-        question = @props.task.questions[questionID]
-        if question.required
-          answer = @state.answers[questionID]
-          if (not answer?) or (question.multiple and answer.length is 0)
-            return false
+    for questionID in Utility.getQuestionIDs(@props.task, @props.choiceID)
+      question = @props.task.questions[questionID]
+      if question.required
+        answer = @state.answers[questionID]
+        if (not answer?) or (question.multiple and answer.length is 0)
+          return false
     true
+
+  anyFilledIn: ->
+    # if there are no questions, don't make them fill one in
+    return true unless Utility.getQuestionIDs(@props.task, @props.choiceID).length
+
+    # if there are questions, it's fine as long as they've filled ONE in
+    for questionID in Utility.getQuestionIDs(@props.task, @props.choiceID)
+      question = @props.task.questions[questionID]
+      answer = @state.answers[questionID]
+      if(answer?)
+        return true
+
+    # they must fill out at least one
+    false
 
   render: ->
     choice = @props.task.choices[@props.choiceID]
@@ -100,7 +114,7 @@ module.exports = React.createClass
         <hr />
 
         {unless choice.noQuestions
-          for questionID in @props.task.questionsOrder
+          for questionID in Utility.getQuestionIDs(@props.task, @props.choiceID)
             question = @props.task.questions[questionID]
             inputType = if question.multiple
               'checkbox'
@@ -123,13 +137,13 @@ module.exports = React.createClass
                 </span>}
             </div>}
 
-        {unless choice.noQuestions or @props.task.questionsOrder.lengths is 0
+        {unless choice.noQuestions or Utility.getQuestionIDs(@props.task, @props.choiceID).length is 0
           <hr />}
       </div>
       <div style={textAlign: 'center'}>
         <button type="button" className="minor-button" onClick={@props.onCancel}>Cancel</button>
         {' '}
-        <button type="button" className="standard-button" disabled={not @allFilledIn()} onClick={@handleIdentification}>
+        <button type="button" className="standard-button" disabled={not @allFilledIn() or not @anyFilledIn()} onClick={@handleIdentification}>
           <strong>Identify</strong>
         </button>
       </div>
