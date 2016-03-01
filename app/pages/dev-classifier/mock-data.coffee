@@ -280,7 +280,7 @@ workflow = apiClient.type('workflows').create
       next: 'init'
 
 # Bulk up the survey task a bit:
-'abcdefghijlkmnopqrstuvwxyz'.split('').forEach (x, i) ->
+'abcdefghijlkmnopqrstuvwxyz1234'.split('').forEach (x, i) ->
   xi = x + i
   workflow.tasks.survey.choicesOrder.push xi
   workflow.tasks.survey.choices[xi] =

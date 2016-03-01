@@ -129,13 +129,9 @@ $survey-task-pill-button
   &[data-columns="1"] > *
     flex-basis: calc(100% - 2px)
 
-  &[data-breakpoint="40"],
-  &[data-breakpoint="20"],
-  &[data-breakpoint="10"],
-  &[data-breakpoint="5"]
-    .survey-task-chooser-choice
-      align-items: center
-      justify-content: flex-start
+  .survey-task-chooser-choice
+    align-items: center
+    justify-content: flex-start
 
 .survey-task-chooser-choice
   @extends $reset-button
@@ -158,20 +154,19 @@ $survey-task-pill-button
   display: inline-block
   vertical-align: middle
 
-  [data-breakpoint="Infinity"] &-container,
-  [data-breakpoint="40"] &-container
+  [data-thumbnail-size="none"] &-container
     display: none
 
-  [data-breakpoint="20"] &
-    height: 1.5em
-    width: 2em
+  [data-thumbnail-size="large"] &
+    height: 6em
 
-  [data-breakpoint="10"] &
+  [data-thumbnail-size="medium"] &
     height: 3em
     max-width: 7.5em
 
-  [data-breakpoint="5"] &
-    height: 6em
+  [data-thumbnail-size="small"] &
+    height: 1.5em
+    width: 2em
 
 .survey-task-chooser-choice-label
   display: inline-block
