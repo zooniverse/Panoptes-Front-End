@@ -2,8 +2,6 @@ React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
 sortIntoColumns = require 'sort-into-columns'
 
-THUMBNAIL_BREAKPOINTS = [Infinity, 40, 20, 10, 5, 0]
-
 module.exports = React.createClass
   displayName: 'Chooser'
 
@@ -26,10 +24,18 @@ module.exports = React.createClass
       else
         choiceID
 
+  whatSizeThumbnails: ({length}) ->
+    if length <= 5
+      'large'
+    else if length <= 10
+      'medium'
+    else if length <= 30
+      'small'
+    else
+      'none'
+
   howManyColumns: ({length}) ->
-    if length is 0
-      0
-    else if length < 5
+    if length < 5
       1
     else if length < 20
       2
@@ -38,13 +44,11 @@ module.exports = React.createClass
 
   render: ->
     filteredChoices = @getFilteredChoices()
+
+    thumbnailSize = @whatSizeThumbnails filteredChoices
+
     columnsCount = @howManyColumns filteredChoices
-
     sortedFilteredChoices = sortIntoColumns filteredChoices, columnsCount
-
-    for point in THUMBNAIL_BREAKPOINTS
-      if sortedFilteredChoices.length <= point
-        breakpoint = point
 
     <div className="survey-task-chooser">
       <div className="survey-task-chooser-characteristics">
@@ -90,7 +94,7 @@ module.exports = React.createClass
           </TriggeredModalForm>}
       </div>
 
-      <div className="survey-task-chooser-choices" data-columns={columnsCount} data-breakpoint={breakpoint}>
+      <div className="survey-task-chooser-choices" data-thumbnail-size={thumbnailSize} data-columns={columnsCount}>
         {if sortedFilteredChoices.length is 0
           <div>
             <em>No matches.</em>
