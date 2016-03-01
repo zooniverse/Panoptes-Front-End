@@ -52,6 +52,14 @@ DevClassifierPage = React.createClass
   getDefaultProps: ->
     classification: mockData.classification
 
+  componentDidMount: ->
+    document.body.style.backgroundColor = '#444'
+    document.body.style.color = 'white'
+
+  componentWillUnmount: ->
+    document.body.style.backgroundColor = ''
+    document.body.style.color = ''
+
   reload: ->
     workflow = @props.classification._workflow
     firstTask = workflow.tasks[workflow.first_task]
