@@ -60,19 +60,21 @@ module.exports = React.createClass
     dismissals = JSON.parse(localStorage.getItem 'finished-project-dismissals') ? {}
     recentlyDismissed = Date.now() - dismissals[@props.project.id] < @props.dismissFor
 
-    if recentlyDismissed or not @state.projectIsComplete
+    if false and (recentlyDismissed or not @state.projectIsComplete)
       null
     else
-      <div className="project-finished-banner">
-        <strong>Great work!</strong>{' '}
-        Looks like this project is out of data at the moment!<br />
-        {if @state.hasResultsPage
-          [owner, name] = @props.project.slug.split '/'
-          <strong>
-            <Link to="/projects/#{owner}/#{name}/results">See the results</Link>
-          </strong>}{' '}
-          <small>
-            or{' '}
-            <button type="button" className="secret-button" onClick={@hide}><u>dismiss this message</u></button>
-          </small>
+      <div className="successful project-announcement-banner">
+        <p>
+          <strong>Great work!</strong>{' '}
+          Looks like this project is out of data at the moment!<br />
+          {if @state.hasResultsPage
+            [owner, name] = @props.project.slug.split '/'
+            <strong>
+              <Link to="/projects/#{owner}/#{name}/results">See the results</Link>
+            </strong>}{' '}
+            <small>
+              or{' '}
+              <button type="button" className="secret-button" onClick={@hide}><u>dismiss this message</u></button>
+            </small>
+        </p>
       </div>
