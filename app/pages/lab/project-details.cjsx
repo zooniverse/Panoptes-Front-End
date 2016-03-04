@@ -158,6 +158,15 @@ module.exports = React.createClass
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do.</small>
           </p>
 
+          <p>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Announcement Banner</span>
+              <br />
+              <textarea className="standard-input full" name="configuration.announcement" value={@props.project.configuration?.announcement} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
+            <small className="form-help">This text will appear as a banner at the top of all your project's pages.</small>
+          </p>
+
           <div>
             <AutoSave resource={@props.project}>
               <span className="form-label">Tags</span>
