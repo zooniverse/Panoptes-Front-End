@@ -60,7 +60,7 @@ module.exports = React.createClass
     dismissals = JSON.parse(localStorage.getItem 'finished-project-dismissals') ? {}
     recentlyDismissed = Date.now() - dismissals[@props.project.id] < @props.dismissFor
 
-    if false and (recentlyDismissed or not @state.projectIsComplete)
+    if recentlyDismissed or not @state.projectIsComplete
       null
     else
       <div className="successful project-announcement-banner">
