@@ -124,7 +124,7 @@ module.exports = React.createClass
         {if BeforeSubject?
           <BeforeSubject {...hookProps} />}
 
-        <svg style=svgStyle viewBox="0 0 #{@props.naturalWidth} #{@props.naturalHeight}" {...svgProps}>
+        <svg className="subject" style=svgStyle viewBox="0 0 #{@props.naturalWidth} #{@props.naturalHeight}" {...svgProps}>
           <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
 
           {if type is 'image'
