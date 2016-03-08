@@ -134,7 +134,7 @@ module.exports = React.createClass
           <strong>{choice.label}</strong>
         }>
           <Markdown content={choice.description} />
-          <p>
+          <div>
             {for characteristicID in @props.task.characteristicsOrder when choice.characteristics[characteristicID]?.length isnt 0
               characteristic = @props.task.characteristics[characteristicID]
               <div key={characteristicID}>
@@ -156,7 +156,7 @@ module.exports = React.createClass
                   twinLabels.join ', '}
                 </small>
               </div>}
-          </p>
+          </div>
         </Details>}
 
       <hr />
