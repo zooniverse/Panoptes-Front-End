@@ -250,7 +250,7 @@ module.exports = React.createClass
       label: name
       description: ''
       noQuestions: false
-      image: []
+      images: []
       characteristics: {}
       confusionsOrder: []
       confusions: {}
