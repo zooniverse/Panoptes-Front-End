@@ -85,7 +85,7 @@ module.exports = React.createClass
           for choiceID, i in filteredChoices
             choice = @props.task.choices[choiceID]
             <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
-              {unless choice.images.length is 0
+              {if choice.images?.length > 0
                 <span className="survey-task-chooser-choice-thumbnail-container">
                   <img src={@props.task.images[choice.images[0]]} alt={choice.label} className="survey-task-chooser-choice-thumbnail" />
                 </span>}
