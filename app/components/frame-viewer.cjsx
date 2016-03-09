@@ -52,6 +52,7 @@ module.exports = React.createClass
     removeEventListener "keyup", @stopZoom
 
   render: () ->
+    console.log "frameDimensions", @state.frameDimensions
     subject = @props.subject
     frame = @props.frame
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
@@ -111,7 +112,7 @@ module.exports = React.createClass
         {if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
           <div className="pan-zoom-controls" >
             <div className="draw-pan-toggle" >
-              <div onClick={@togglePan} className={if @state.panEnabled then "" else "active"} >
+              <div className={if @state.panEnabled then "" else "active"} >
                 <button title={"draw"} className={"fa fa-mouse-pointer"} title={"annotate"} onClick={@togglePanOff}/>
               </div>
               <div className={if @state.panEnabled then "active" else ""}>
@@ -196,24 +197,22 @@ module.exports = React.createClass
     @props.onLoad? e, @props.frame
 
   canZoomOut: ->
-    if @state.frameDimensions.width == @state.viewBoxDimensions.width && @state.frameDimensions.height == @state.viewBoxDimensions.height
-      true
+    return @state.frameDimensions.width == @state.viewBoxDimensions.width && @state.frameDimensions.height == @state.viewBoxDimensions.height      
 
   continuousZoom: (change) ->
     return if change == 0
     @setState zooming: true
 
     zoomNow = =>
-      # return if change == 0
       @zoom(change)
-      clearTimeout @state.zoomingTimeout
-      @setState zoomingTimeout: setTimeout(zoomNow, 200)
+      clearTimeout @state.zoomingTimeoutId
+      @setState zoomingTimeoutId: setTimeout(zoomNow, 200)
     
     zoomNow()
 
   zoom: (change) ->
-    return if change == 0 || @state.zooming == false
-    clearTimeout @state.zoomingTimeout
+    return if change == 0 || !@state.zooming
+    clearTimeout @state.zoomingTimeoutId
     newNaturalWidth = @state.viewBoxDimensions.width * change
     newNaturalHeight = @state.viewBoxDimensions.height * change
   
@@ -250,9 +249,9 @@ module.exports = React.createClass
     @setState zooming: !@state.zooming
 
   togglePanOn: ->
-    unless @state.panEnabled == true
+    unless @state.panEnabled
       @setState panEnabled: true, =>
-        if @state.panEnabled then this.refs.subjectImage.focus()
+        this.refs.subjectImage.focus()
   
   togglePanOff: ->
     @setState panEnabled: false
@@ -262,7 +261,7 @@ module.exports = React.createClass
       if @state.panEnabled then this.refs.subjectImage.focus()
 
   panByDrag: (e, d) ->
-    return if @state.panEnabled == false
+    return unless @state.panEnabled
 
     maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + 20
     minumumX = -20
@@ -280,7 +279,7 @@ module.exports = React.createClass
         height: @state.viewBoxDimensions.height
 
   frameKeyPan: (e)->
-    return if @state.panEnabled == false
+    return unless @state.panEnabled
     keypress = e.which
     switch keypress
       # left

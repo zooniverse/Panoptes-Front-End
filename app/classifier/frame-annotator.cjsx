@@ -23,10 +23,6 @@ module.exports = React.createClass
     onChange: Function.prototype
 
   getInitialState: ->
-    naturalWidth: @props.naturalWidth
-    naturalHeight: @props.naturalHeight
-    naturalX: 0,
-    naturalY: 0
     showWarning: false
     sizeRect: null
     alreadySeen: false

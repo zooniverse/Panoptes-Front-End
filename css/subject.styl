@@ -42,14 +42,15 @@
       max-width: 100%
     
     .frame-annotator
+      display: inline-block      
+      width: 90%
       
-      display inline-block      
-        
     image.pan-active
-      cursor all-scroll
+      cursor: all-scroll
     .pan-zoom-controls
-      display inline-block
-      float left
+      display: inline-block
+      width: 9%
+      float: left
       background: grey;
       border-radius: .1em;
       .draw-pan-toggle
@@ -62,7 +63,7 @@
           &.active
             background-color: #43BBFD
             color: black
-            border none
+            border: none
         button
           background-color: transparent
           border:none
