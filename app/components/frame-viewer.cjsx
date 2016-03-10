@@ -52,7 +52,6 @@ module.exports = React.createClass
     removeEventListener "keyup", @stopZoom
 
   render: () ->
-    console.log "frameDimensions", @state.frameDimensions
     subject = @props.subject
     frame = @props.frame
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
