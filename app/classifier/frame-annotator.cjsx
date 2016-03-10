@@ -23,8 +23,6 @@ module.exports = React.createClass
     onChange: Function.prototype
 
   getInitialState: ->
-    naturalWidth: 0
-    naturalHeight: 0
     showWarning: false
     sizeRect: null
     alreadySeen: false
@@ -47,6 +45,10 @@ module.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     if nextProps.annotation isnt @props.annotation
       @handleAnnotationChange @props.annotation, nextProps.annotation
+    @setState
+      naturalWidth: nextProps.naturalWidth
+      naturalHeight: nextProps.naturalHeight
+
 
   handleAnnotationChange: (oldAnnotation, currentAnnotation) ->
     if oldAnnotation?
@@ -84,11 +86,13 @@ module.exports = React.createClass
   toggleWarning: ->
     @setState showWarning: not @state.showWarning
 
-  render: ->
+  render: ->    
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
-
+    
+    createdViewBox = "#{@props.viewBoxDimensions.x} #{@props.viewBoxDimensions.y} #{@props.viewBoxDimensions.width} #{@props.viewBoxDimensions.height}"
+    
     svgStyle = {}
     if type is 'image' and not @props.loading
       # Images are rendered again within the SVG itself.
@@ -123,21 +127,21 @@ module.exports = React.createClass
       <div className="subject-area">
         {if BeforeSubject?
           <BeforeSubject {...hookProps} />}
-
-        <svg className="subject" style=svgStyle viewBox="0 0 #{@props.naturalWidth} #{@props.naturalHeight}" {...svgProps}>
+        <svg style=svgStyle viewBox={createdViewBox} {...svgProps}>
           <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
-
           {if type is 'image'
-            <SVGImage src={src} width={@props.naturalWidth} height={@props.naturalHeight} />}
+            <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>
+              <SVGImage className={"pan-active" if @props.panEnabled} src={src} width={@props.naturalWidth} height={@props.naturalHeight} />
+            </Draggable>
+          }
 
-          {if InsideSubject?
+          {if InsideSubject? && !@props.panEnabled
             <InsideSubject {...hookProps} />}
 
           {for anyTaskName, {PersistInsideSubject} of tasks when PersistInsideSubject?
             <PersistInsideSubject key={anyTaskName} {...hookProps} />}
         </svg>
         {@props.children}
-
         {if @state.alreadySeen
           <button type="button" className="warning-banner" onClick={@toggleWarning}>
             Already seen!

@@ -39,7 +39,44 @@
 
   .subject-container
     > *
-      max-width: 100%;
+      max-width: 100%
+    
+    .frame-annotator
+      display: inline-block      
+      width: 90%
+      
+    image.pan-active
+      cursor: all-scroll
+    .pan-zoom-controls
+      display: inline-block
+      width: 9%
+      float: left
+      text-align: center
+      background: grey;
+      border-radius: .1em;
+      .draw-pan-toggle
+        background-color: #F9F9F9
+        border: solid 1px #989898
+        border-radius: .2em
+        div
+          border-radius: .1em
+          transition: background-color .5s
+          &.active
+            background-color: #43BBFD
+            color: black
+            border: none
+        button
+          background-color: transparent
+          border:none
+          
+      button
+        background-color: #f9f9f9
+        border: solid 1px #989898
+        -webkit-border-radius: 0.2em
+        border-radius: 0.2em
+        &.disabled
+          background-color: #bbc0c0
+          color: #575959 
 
   // Multi-image layouts
   &:not(.subject-viewer--flipbook)

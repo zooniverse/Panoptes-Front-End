@@ -101,7 +101,7 @@ module.exports = React.createClass
     <div className={rootClass} style={ROOT_STYLE if @props.defaultStyle}>
       {if type is 'image'
         @hiddenPreloadedImages()}
-      <div className="subject-container" style={CONTAINER_STYLE}>
+      <div className="subject-container" style={CONTAINER_STYLE} >
         {mainDisplay}
         {@props.children}
       </div>
@@ -130,6 +130,8 @@ module.exports = React.createClass
         </span>
       </div>
     </div>
+
+  
 
   renderFrame: (frame, props = {}) ->
     <FrameViewer {...@props} {...props} frame={frame} />
@@ -174,6 +176,7 @@ module.exports = React.createClass
   handleFrameChange: (frame) ->
     @setState {frame}
     @props.onFrameChange frame
+
 
   showMetadata: ->
     # TODO: Sticky popup.
