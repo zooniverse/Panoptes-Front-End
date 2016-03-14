@@ -70,6 +70,10 @@ EditProjectPage = React.createClass
             <li><Link to={@labPath('/tutorial')} activeClassName='active' className="nav-list-item" title="Create a pop-up tutorial for your project’s classification interface">
               Tutorial
             </Link></li>}
+          {if 'mini-course' in (@props.project.experimental_tools ? [])
+            <li><Link to={@labPath('/mini-course')} activeClassName='active' className="nav-list-item" title="Create a pop-up mini-course for your project’s classification interface">
+              Mini-course
+            </Link></li>}
           <li><Link to={@labPath('/media')} activeClassName='active' className="nav-list-item" title="Add any images you’d like to use in this project’s introduction, science case, results, FAQ, or education content pages.">
             Media
           </Link></li>

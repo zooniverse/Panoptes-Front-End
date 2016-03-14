@@ -2,7 +2,7 @@ React = require 'react'
 ProjectModalEditor = require '../../partials/project-modal-editor'
 
 module.exports = React.createClass
-  displayName: 'EditTutorial'
+  displayName: 'EditMiniCourse'
 
   render: ->
     <div>
@@ -14,4 +14,3 @@ module.exports = React.createClass
         <ProjectModalEditor project={@props.project} type="tutorials" />
       </div>
     </div>
-
