@@ -48,6 +48,20 @@ module.exports = React.createClass
             </small>
           </p>
         </div>}
+
+      {if @props.toggleCurrentMarkOnly
+        <div>
+          <p>
+            <small>
+              <strong>
+                <button type="button" className="minor-button" onClick={@props.toggleCurrentMarkOnly}>
+                  Show current mark only
+                </button>
+              </strong>
+            </small>
+          </p>
+        </div>}
+
     </div>
 
   showHelp: ->
