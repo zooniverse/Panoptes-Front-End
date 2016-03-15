@@ -73,6 +73,7 @@ ProjectModalEditor = React.createClass
       console.log 'ProjectModalEditor onChange', arguments
 
   render: ->
+    <div>
       <div>
         {if @props.projectModal.steps.length is 0
           <p>This tutorial has no steps.</p>
