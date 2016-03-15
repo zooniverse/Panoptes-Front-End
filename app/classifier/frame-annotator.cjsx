@@ -86,13 +86,13 @@ module.exports = React.createClass
   toggleWarning: ->
     @setState showWarning: not @state.showWarning
 
-  render: ->    
+  render: ->
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
-    
+
     createdViewBox = "#{@props.viewBoxDimensions.x} #{@props.viewBoxDimensions.y} #{@props.viewBoxDimensions.width} #{@props.viewBoxDimensions.height}"
-    
+
     svgStyle = {}
     if type is 'image' and not @props.loading
       # Images are rendered again within the SVG itself.
