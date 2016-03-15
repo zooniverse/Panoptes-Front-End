@@ -171,6 +171,8 @@ publicationCategories =
     },
     {slug: "zooniverse/milky-way-project"
     publications: [
+      {citation: "The Milky Way Project and ATLASGAL: The distribution and physical properties of cold clumps near infrared bubbles, Kendrew+ 2016."
+      href: "http://arxiv.org/abs/1602.06982"},
       {citation: "The Milky Way Project: What are Yellowballs?, Kerton+ 2015."
       href: "http://arxiv.org/abs/1502.01388v1"},
       {citation: "The Milky Way Project: Leveraging Citizen Science and Machine Learning to Detect Interstellar Bubbles, Beaumont+ 2014."
@@ -213,6 +215,11 @@ publicationCategories =
       {citation: "Radio Galaxy Zoo: host galaxies and radio morphologies derived from visual inspection, Banfield+ 2015."
       href: "http://arXiv.org/abs/1507.07272"}]
     }
+    {slug: "zooniverse/moon-zoo"
+    publications: [
+      {citation: "The Moon Zoo citizen science project: Preliminary results for the Apollo 17 landing site, Bugiolacchi+ 2016."
+      href: "http://arxiv.org/pdf/1602.01664v1.pdf"}]
+    }
   ],
   climate: [
     {slug: "zooniverse/cyclone-center"
@@ -228,6 +235,11 @@ publicationCategories =
       href: "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&tp=&arnumber=7004460&queryText%3Dwilliam+alex+pridemore"},
       {citation: "P.Oxy 5156, Plutarch Moralia 660C, 661B-C (Quaestiones Convivales IV PR., 1.2), in The Oxyrhynchus Papyri Vol. 78, Brusuelas 2013."}
 
+    ]}
+    {slug: "zooniverse/operation-war-diary"
+    publications: [
+      {citation: "A Life in the Trenches? The Use of Operation War Diary and Crowdsourcing Methods to Provide an Understanding of the British Army’s Day-to-Day Life on the Western Front, Grayson+ 2016."
+      href: "http://bjmh.org.uk/index.php/bjmh/article/view/96"},
     ]}
   ],
   nature: [
