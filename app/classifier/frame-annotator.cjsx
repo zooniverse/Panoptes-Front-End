@@ -127,7 +127,7 @@ module.exports = React.createClass
       <div className="subject-area">
         {if BeforeSubject?
           <BeforeSubject {...hookProps} />}
-        <svg style=svgStyle viewBox={createdViewBox} {...svgProps}>
+        <svg className="subject" style=svgStyle viewBox={createdViewBox} {...svgProps}>
           <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
           {if type is 'image'
             <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>

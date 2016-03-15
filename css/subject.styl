@@ -40,17 +40,15 @@
   .subject-container
     > *
       max-width: 100%
+      display: flex
     
-    .frame-annotator
-      display: inline-block      
-      width: 90%
+    .frame-annotator   
+      flex: 9
       
     image.pan-active
       cursor: all-scroll
     .pan-zoom-controls
-      display: inline-block
-      width: 9%
-      float: left
+      flex: 1
       text-align: center
       background: grey;
       border-radius: .1em;
