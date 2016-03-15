@@ -183,6 +183,15 @@ module.exports = React.createClass
       <Details summary={<small>Raw task data</small>}>
         <pre style={fontSize: '10px', whiteSpace: 'pre-wrap'}>{JSON.stringify @props.task, null, 2}</pre>
       </Details>
+
+      <hr />
+
+      <label>
+        <AutoSave resource={@props.workflow}>
+          <input type="checkbox" name="#{@props.taskPrefix}.required" checked={@props.task.required} onChange={handleInputChange.bind @props.workflow} />{' '}
+          Require at least one identification
+        </AutoSave>
+      </label>
     </div>
 
   handleFiles: (forEachRow, afterFileHook, e) ->
