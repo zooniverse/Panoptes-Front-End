@@ -239,7 +239,7 @@ publicationCategories =
     {slug: "zooniverse/operation-war-diary"
     publications: [
       {citation: "A Life in the Trenches? The Use of Operation War Diary and Crowdsourcing Methods to Provide an Understanding of the British Army’s Day-to-Day Life on the Western Front, Grayson+ 2016."
-      href: "http://bjmh.org.uk/index.php/bjmh/article/view/96"},
+      href: "http://bjmh.org.uk/index.php/bjmh/article/view/96"}
     ]}
   ],
   nature: [
