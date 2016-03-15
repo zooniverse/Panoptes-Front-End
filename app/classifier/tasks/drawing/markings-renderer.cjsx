@@ -9,13 +9,13 @@ module.exports = React.createClass
     annotation: null
     workflow: null
     scale: null
-    currentMarkOnly: true
 
   getInitialState: ->
     selection: null
     oldSetOfMarks: []
 
   componentWillReceiveProps: (nextProps) ->
+    console.log 'MarkingsRenderer::componentWillReceiveProps()'
     # console.log 'Old marks were', @state.oldSetOfMarks
     newSetOfMarks = []
     # Automatically select new marks.
