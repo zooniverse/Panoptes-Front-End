@@ -112,7 +112,6 @@ Classifier = React.createClass
           annotation={currentAnnotation}
           onLoad={@handleSubjectImageLoad}
           currentMarkOnly={@state.currentMarkOnly}
-          toggleCurrentMarkOnly={@toggleCurrentMarkOnly}
           frameWrapper={FrameAnnotator}
           allowFlipbook={workflowAllowsFlipbook @props.workflow}
           allowSeparateFrames={workflowAllowsSeparateFrames @props.workflow}
@@ -366,9 +365,7 @@ Classifier = React.createClass
     @setState showingExpertClassification: value
 
   toggleCurrentMarkOnly: ->
-    console.log 'toggleCurrentMarkOnly()'
-    @setState currentMarkOnly: !@state.currentMarkOnly, =>
-      console.log 'currentMarkOnly: ', @state.currentMarkOnly
+    @setState currentMarkOnly: !@state.currentMarkOnly
 
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'

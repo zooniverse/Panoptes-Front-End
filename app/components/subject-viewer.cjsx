@@ -131,10 +131,8 @@ module.exports = React.createClass
       </div>
     </div>
 
-
-
   renderFrame: (frame, props = {}) ->
-    <FrameViewer {...@props} {...props} frame={frame} currentMarkOnly={@props.currentMarkOnly} toggleCurrentMarkOnly={@props.toggleCurrentMarkOnly} />
+    <FrameViewer {...@props} {...props} frame={frame} />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
@@ -176,7 +174,6 @@ module.exports = React.createClass
   handleFrameChange: (frame) ->
     @setState {frame}
     @props.onFrameChange frame
-
 
   showMetadata: ->
     # TODO: Sticky popup.

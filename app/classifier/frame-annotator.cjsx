@@ -87,7 +87,6 @@ module.exports = React.createClass
     @setState showWarning: not @state.showWarning
 
   render: ->
-    console.log 'FrameAnnotator::render(), props = ', @props # DEBUG CODE --STI
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
@@ -120,7 +119,6 @@ module.exports = React.createClass
       getEventOffset: this.getEventOffset
       onChange: @props.onChange
       currentMarkOnly: @props.currentMarkOnly
-      toggleCurrentMarkOnly: @props.toggleCurrentMarkOnly
 
     for task, Component of tasks when Component.getSVGProps?
       for key, value of Component.getSVGProps hookProps

@@ -15,7 +15,6 @@ module.exports = React.createClass
     oldSetOfMarks: []
 
   componentWillReceiveProps: (nextProps) ->
-    console.log 'MarkingsRenderer::componentWillReceiveProps(), props = ', @props # DEBUG CODE --STI
     newSetOfMarks = []
     # Automatically select new marks.
     annotations = nextProps.classification?.annotations ? []

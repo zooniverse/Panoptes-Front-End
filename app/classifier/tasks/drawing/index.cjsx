@@ -89,7 +89,6 @@ module.exports = React.createClass
     currentMarkOnly: false
 
   render: ->
-    console.log 'DRAWING >>>>>>>>>>>>>>>> props = ', @props
     tools = for tool, i in @props.task.tools
       tool._key ?= Math.random()
       count = (true for mark in @props.annotation.value when mark.tool is i).length
