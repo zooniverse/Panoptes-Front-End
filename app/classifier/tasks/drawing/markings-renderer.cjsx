@@ -15,8 +15,7 @@ module.exports = React.createClass
     oldSetOfMarks: []
 
   componentWillReceiveProps: (nextProps) ->
-    console.log 'MarkingsRenderer::componentWillReceiveProps()'
-    # console.log 'Old marks were', @state.oldSetOfMarks
+    console.log 'MarkingsRenderer::componentWillReceiveProps(), props = ', @props # DEBUG CODE --STI
     newSetOfMarks = []
     # Automatically select new marks.
     annotations = nextProps.classification?.annotations ? []
@@ -40,7 +39,6 @@ module.exports = React.createClass
         annotation._key ?= Math.random()
         isPriorAnnotation = annotation isnt @props.annotation
         taskDescription = @props.workflow.tasks[annotation.task]
-        console.log 'MARKS: ', annotation.value
         if taskDescription.type is 'drawing'
           <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
             {for mark, i in annotation.value when parseInt(mark.frame) is parseInt(@props.frame)

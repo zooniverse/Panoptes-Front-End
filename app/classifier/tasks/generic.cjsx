@@ -16,6 +16,7 @@ module.exports = React.createClass
     helping: false
 
   render: ->
+    console.log 'GenericTask::render(), props = ', @props # DEBUG CODE --STI
     <div className="workflow-task">
       <Markdown className="question">{@props.question}</Markdown>
       {@props.children}

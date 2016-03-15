@@ -89,6 +89,7 @@ module.exports = React.createClass
     currentMarkOnly: false
 
   render: ->
+    console.log 'DRAWING >>>>>>>>>>>>>>>> props = ', @props
     tools = for tool, i in @props.task.tools
       tool._key ?= Math.random()
       count = (true for mark in @props.annotation.value when mark.tool is i).length
@@ -115,7 +116,7 @@ module.exports = React.createClass
         </div>
       </label>
 
-    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} toggleCurrentMarkOnly={@toggleCurrentMarkOnly} />
+    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} currentMarkOnly={@props.currentMarkOnly} toggleCurrentMarkOnly={@props.toggleCurrentMarkOnly} />
 
   handleChange: (toolIndex, e) ->
     # This handles changing tools, not any actually drawing.
@@ -125,8 +126,8 @@ module.exports = React.createClass
       newAnnotation = Object.assign {}, @props.annotation, _toolIndex: toolIndex
       @props.onChange newAnnotation
 
-  toggleCurrentMarkOnly: ->
-    console.log 'toggleCurrentMarkOnly()'
-    @setState currentMarkOnly: !@state.currentMarkOnly, =>
-      console.log 'currentMarkOnly: ', @state.currentMarkOnly
-      return @state.currentMarkOnly
+  # toggleCurrentMarkOnly: ->
+  #   console.log 'toggleCurrentMarkOnly()'
+  #   @setState currentMarkOnly: !@state.currentMarkOnly, =>
+  #     console.log 'currentMarkOnly: ', @state.currentMarkOnly
+  #     return @state.currentMarkOnly

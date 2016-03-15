@@ -67,7 +67,7 @@ module.exports = React.createClass
       mainDisplay = @renderFrame @state.frame
     else
       mainDisplay = (@renderFrame frame, {key: "frame-#{frame}"} for frame of @props.subject.locations)
-          
+
 
     tools = switch type
       when 'image'
@@ -131,10 +131,10 @@ module.exports = React.createClass
       </div>
     </div>
 
-  
+
 
   renderFrame: (frame, props = {}) ->
-    <FrameViewer {...@props} {...props} frame={frame} />
+    <FrameViewer {...@props} {...props} frame={frame} currentMarkOnly={@props.currentMarkOnly} toggleCurrentMarkOnly={@props.toggleCurrentMarkOnly} />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
