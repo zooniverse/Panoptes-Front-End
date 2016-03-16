@@ -312,8 +312,8 @@ EditWorkflowPage = React.createClass
 
   renderSubjectSets: ->
     projectAndWorkflowSubjectSets = Promise.all [
-      @props.project.get 'subject_sets', sort:"display_name"
-      @props.workflow.get 'subject_sets', sort:"display_name"
+      @props.project.get 'subject_sets', sort: 'display_name', page_size: 100
+      @props.workflow.get 'subject_sets', sort: 'display_name', page_size: 100
     ]
 
     <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
