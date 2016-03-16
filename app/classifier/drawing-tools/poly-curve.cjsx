@@ -2,6 +2,7 @@ React = require 'react'
 DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
+deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 
 FINISHER_RADIUS = 8
@@ -119,7 +120,7 @@ module.exports = React.createClass
       svgPathGuide = "M#{lastEnd.x} #{lastEnd.y} Q #{controlPoint.x} #{controlPoint.y} #{newPoint.x} #{newPoint.y}"
 
     <DrawingToolRoot tool={this}>
-      <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <path d={svgPath} fill={'none' unless @props.mark.closed} />
       </Draggable>
 

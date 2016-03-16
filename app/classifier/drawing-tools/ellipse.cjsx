@@ -2,6 +2,7 @@ React = require 'react'
 DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
+deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 
 DEFAULT_SQUASH = 1 / 2
@@ -68,7 +69,7 @@ module.exports = React.createClass
           <line x1="0" y1="0" x2="0" y2={-1 * @props.mark.ry} strokeWidth={guideWidth} strokeDasharray={GUIDE_DASH} />
         </g>}
 
-      <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <ellipse rx={@props.mark.rx} ry={@props.mark.ry} />
       </Draggable>
 

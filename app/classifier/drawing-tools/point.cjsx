@@ -1,5 +1,6 @@
 React = require 'react'
 DrawingToolRoot = require './root'
+deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 
@@ -48,7 +49,7 @@ module.exports = React.createClass
       <line x1="0" y1={crosshairSpace * selectedRadius} x2="0" y2={selectedRadius} strokeWidth={crosshairWidth} />
       <line x1={crosshairSpace * selectedRadius} y1="0" x2={selectedRadius} y2="0" strokeWidth={crosshairWidth} />
 
-      <Draggable onDrag={@handleDrag} disabled={@props.disabled}>
+      <Draggable onDrag={@handleDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <circle r={radius} />
       </Draggable>
 
