@@ -29,18 +29,15 @@ module.exports = React.createClass
     }
     panEnabled: false
     zooming: false
-    zoomingTimeoutId: 0
+    zoomingTimeoutId: null
 
   componentDidMount: ->
     addEventListener "keydown", @frameKeyPan
     addEventListener "mousewheel", @frameKeyPan
-    addEventListener "mouseup", @stopZoom
-    addEventListener "keyup", @stopZoom
 
   componentWillUnmount: ->
     removeEventListener "keydown", @frameKeyPan
     removeEventListener "mousewheel", @frameKeyPan
-    removeEventListener "keyup", @stopZoom
 
   render: () ->
     subject = @props.subject
@@ -81,10 +78,10 @@ module.exports = React.createClass
               </div>
             </div>
             <div>
-              <button title={"zoom out"} className={"zoom-out fa fa-minus" + if @canZoomOut() then " disabled" else "" } onMouseDown={ @continuousZoom.bind(this, 1.1 ) } />
+              <button title={"zoom out"} className={"zoom-out fa fa-minus" + if @canZoomOut() then " disabled" else "" } onMouseDown={ @continuousZoom.bind(this, 1.1 ) } onMouseUp={@stopZoom} />
             </div>
             <div>
-              <button title={"zoom in"} className="zoom-in fa fa-plus" onMouseDown={@continuousZoom.bind(this, .9)} onMouseUp={@toggleZoom} />
+              <button title={"zoom in"} className="zoom-in fa fa-plus" onMouseDown={@continuousZoom.bind(this, .9)} onMouseUp={@stopZoom} />
             </div>
             <div>
               <button title={"rest zoom levels"} className={"reset fa fa-refresh" + if @canZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
@@ -119,17 +116,18 @@ module.exports = React.createClass
 
   continuousZoom: (change) ->
     return if change == 0
-    @setState zooming: true
-
-    zoomNow = =>
-      @zoom(change)
-      clearTimeout @state.zoomingTimeoutId
-      @setState zoomingTimeoutId: setTimeout(zoomNow, 200)
-    
-    zoomNow()
+    @setState zooming: true, =>
+      zoomNow = =>
+        # if !@state.zooming, we don't want to continuously call setTimeout
+        return if !@state.zooming
+        @zoom(change)
+        clearTimeout @state.zoomingTimeoutId
+        @setState zoomingTimeoutId: setTimeout(zoomNow, 200)
+      
+      zoomNow()
 
   zoom: (change) ->
-    return if change == 0 || !@state.zooming
+    return if !@state.zooming
     clearTimeout @state.zoomingTimeoutId
     newNaturalWidth = @state.viewBoxDimensions.width * change
     newNaturalHeight = @state.viewBoxDimensions.height * change
@@ -151,9 +149,8 @@ module.exports = React.createClass
   stopZoom: (e) ->
     e.stopPropagation()
     @setState zooming: false
-    @zoom(0)
+    @continuousZoom(0)
 
-          
   zoomReset: ->
     @setState
       viewBoxDimensions:
@@ -161,10 +158,6 @@ module.exports = React.createClass
         height: @state.frameDimensions.height,
         x: 0,
         y: 0
-
-
-  toggleZoom: ->
-    @setState zooming: !@state.zooming
 
   togglePanOn: ->
     unless @state.panEnabled
