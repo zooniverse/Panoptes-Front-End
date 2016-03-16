@@ -65,7 +65,7 @@ module.exports = React.createClass
 
               ToolComponent = drawingTools[toolDescription.type]
 
-              if @props.currentMarkOnly and i isnt annotation.value.length-1 then null # render only latest mark
+              if i < @props.hideMarksBeforeIndex then null # hide previous marks
               else <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
 
           </g>}

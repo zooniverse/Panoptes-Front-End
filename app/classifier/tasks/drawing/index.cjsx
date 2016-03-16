@@ -85,9 +85,6 @@ module.exports = React.createClass
     annotation: null
     onChange: Function.prototype
 
-  getInitialState: ->
-    currentMarkOnly: false
-
   render: ->
     tools = for tool, i in @props.task.tools
       tool._key ?= Math.random()
@@ -115,7 +112,7 @@ module.exports = React.createClass
         </div>
       </label>
 
-    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} currentMarkOnly={@props.currentMarkOnly} toggleCurrentMarkOnly={@props.toggleCurrentMarkOnly} />
+    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} hideMarksBeforeIndex={@props.hideMarksBeforeIndex} toggleHideMarksBefore={@props.toggleHideMarksBefore} />
 
   handleChange: (toolIndex, e) ->
     # This handles changing tools, not any actually drawing.
@@ -124,9 +121,3 @@ module.exports = React.createClass
     if e.target.checked
       newAnnotation = Object.assign {}, @props.annotation, _toolIndex: toolIndex
       @props.onChange newAnnotation
-
-  # toggleCurrentMarkOnly: ->
-  #   console.log 'toggleCurrentMarkOnly()'
-  #   @setState currentMarkOnly: !@state.currentMarkOnly, =>
-  #     console.log 'currentMarkOnly: ', @state.currentMarkOnly
-  #     return @state.currentMarkOnly

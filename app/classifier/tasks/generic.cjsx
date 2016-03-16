@@ -49,14 +49,16 @@ module.exports = React.createClass
           </p>
         </div>}
 
-      {if @props.toggleCurrentMarkOnly
+      {if @props.toggleHideMarksBefore
         <div>
           <p>
             <small>
               <strong>
-                <button type="button" className="minor-button" onClick={@props.toggleCurrentMarkOnly}>
-                  Show current mark only
-                </button>
+                <label className="hide-previous-marks-toggle">
+                  <input type="checkbox" onClick={@props.toggleHideMarksBefore}>
+                    Hide previous marks
+                  </input>
+                </label>
               </strong>
             </small>
           </p>
