@@ -34,8 +34,8 @@ module.exports = React.createClass
     @setState alreadySeen: @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
 
   componentDidUpdate: (prevProps, prevState)->
-    # If size of the frame image has changed, update our sizing information (used for scaling/translating annotations)
-    if @props.naturalWidth isnt prevProps.naturalWidth or @props.naturalHeight isnt prevProps.naturalHeight
+    # If size of the frame image or viewBoxDimensions has changed, update our sizing information (used for scaling/translating annotations)
+    if @props.naturalWidth isnt prevProps.naturalWidth or @props.naturalHeight isnt prevProps.naturalHeight or @props.viewBoxDimensions isnt prevProps.viewBoxDimensions
       setTimeout =>
         @updateSize()
 
@@ -45,20 +45,13 @@ module.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     if nextProps.annotation isnt @props.annotation
       @handleAnnotationChange @props.annotation, nextProps.annotation
-    @setState
-      naturalWidth: nextProps.naturalWidth
-      naturalHeight: nextProps.naturalHeight
-
 
   handleAnnotationChange: (oldAnnotation, currentAnnotation) ->
     if oldAnnotation?
-      # console.log 'Old annotation was', oldAnnotation
       lastTask = @props.workflow.tasks[oldAnnotation.task]
       LastTaskComponent = tasks[lastTask.type]
       if LastTaskComponent.onLeaveAnnotation?
         LastTaskComponent.onLeaveAnnotation lastTask, oldAnnotation
-    # if currentAnnotation?
-    #   console.log 'Annotation is now', currentAnnotation
     setTimeout => # Wait a tick for the annotation to load.
       @updateSize()
 
@@ -78,7 +71,6 @@ module.exports = React.createClass
 
   getEventOffset: (e) ->
     scale = @getScale()
-    # console?.log 'Subject scale is', JSON.stringify scale
     x = (e.pageX - @state.sizeRect?.left) / scale.horizontal || 0
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
