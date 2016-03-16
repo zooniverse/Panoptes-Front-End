@@ -164,7 +164,7 @@ module.exports = React.createClass
               <br />
               <textarea className="standard-input full" name="configuration.announcement" value={@props.project.configuration?.announcement} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
-            <small className="form-help">This text will appear as a banner at the top of all your project's pages.</small>
+            <small className="form-help">This text will appear as a banner at the top of all your project's pages. Only use this when you've got a big important announcement to make!</small>
           </p>
 
           <div>
