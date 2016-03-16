@@ -67,7 +67,7 @@ module.exports = React.createClass
 
     if FrameWrapper
       <div>
-        <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} panByDrag={@panByDrag} viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange} panEnabled={@state.panEnabled} currentMarkOnly={@props.currentMarkOnly} >
+        <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} panByDrag={@panByDrag} viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange} panEnabled={@state.panEnabled} hideMarksBeforeIndex={@props.hideMarksBeforeIndex} >
           {frameDisplay}
         </FrameWrapper>
         {if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
