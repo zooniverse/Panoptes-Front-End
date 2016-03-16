@@ -252,6 +252,17 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
+          <p>
+            <AutoSave tag="label" resource={@props.workflow}>
+              <input type="checkbox" name="world_wide_telescope" checked={@props.workflow.world_wide_telescope} onChange={handleInputChange.bind @props.workflow}/>{' '}
+              Use World Wide Telescope (WWT) API
+            </AutoSave>
+            <br />
+            <small className="form-help">Allow user to view subject in the WWT after classifying.</small>
+          </p>
+
+          <hr />
+
           <div style={pointerEvents: 'all'}>
             <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>Test this workflow</a>
           </div>
