@@ -6,6 +6,7 @@ OwnedCardList = require '../components/owned-card-list'
 {Link, Router} = require 'react-router'
 Filmstrip = require '../components/filmstrip'
 {PROJECT_SORTS} = require '../components/project-sorts'
+{ProjectFilteringInterface} = require '../components/project-card-list'
 
 counterpart.registerTranslations 'en',
   projectsPage:
@@ -14,7 +15,7 @@ counterpart.registerTranslations 'en',
     button: 'Get Started'
     notFoundMessage: 'Sorry, no projects found'
 
-module.exports = React.createClass
+ProjectsPage = React.createClass
   displayName: 'ProjectsPage'
   title: 'Projects'
 
@@ -33,84 +34,24 @@ module.exports = React.createClass
     then: ->
     catch: ->
 
-  getInitialState: ->
-    viewingProjects: @emptyPromise
-    query: @props.location.query
+  getDefaultProps: ->
+    location:
+      query:
+        discipline: ProjectFilteringInterface.defaultProps.discipline
+        page: ProjectFilteringInterface.defaultProps.page
+        sort: ProjectFilteringInterface.defaultProps.sort
 
-  setFilter: (tag) ->
-    @onGridChange {tags: tag, page: 1}
-
-  onGridChange: (query) ->
-    urlQuery = Object.assign {}, @props.location.query, @state.query, query
-
-    delete urlQuery.tags if urlQuery.tags == ''
-    delete urlQuery.sort if urlQuery.sort == '' || urlQuery.sort == 'default'
-    delete urlQuery.page if urlQuery.page == '1'
-
-    @setState query: urlQuery, ->
-      @context.history.pushState null, @props.location.pathname, urlQuery
-      @fetchProjects()
-
-  fetchProjects: ->
-    apiQuery = Object.assign {}, @state.query, @apiOpts
-    @setState viewingProjects: apiClient.type('projects').get apiQuery
-
-  componentDidMount: ->
-    @fetchProjects()
-
-  imagePromise: (project) ->
-    src = if project.avatar_src
-      "//#{ project.avatar_src }"
-    else
-      './assets/simple-avatar.jpg'
-    Promise.resolve src
-
-  cardLink: (project) ->
-    link = if !!project.redirect
-      project.redirect
-    else
-      [owner, name] = project.slug.split('/')
-      "/projects/#{owner}/#{name}"
-
-    return link
-
-  searchByName: (value, callback) ->
-    return callback null, { options: [] } if value is ''
-    apiClient.type('projects').get(search: "#{value}", page_size: 10)
-      .then (projects) =>
-        opts = projects.map (project) ->
-          {
-            value: project.id,
-            label: project.display_name,
-            project: project
-          }
-
-        callback null, {
-          options: opts
-        }
-  navigateToProject: (projectID) ->
-    apiClient.type('projects').get(projectID)
-      .then (project) =>
-        if project.redirect?
-          window.location.href = project.redirect
-        else
-          [owner, name] = project.slug.split('/')
-          @transitionTo 'project-home', owner: owner, name: name
+  updateQuery: (newParams) ->
+    query = Object.assign {}, @props.location.query, newParams
+    for key, value of query
+      if value is ''
+        delete query[key]
+    newLocation = Object.assign {}, @props.location, {query}
+    @props.history.replace newLocation
 
   render: ->
-    <OwnedCardList
-      {...@props}
-      translationObjectName="projectsPage"
-      linkTo="projects"
+    {discipline, page, sort} = @props.location.query
+    listingProps = {discipline, page, sort}
+    <ProjectFilteringInterface {...listingProps} onChangeQuery={@updateQuery} />
 
-      onGridChange={@onGridChange}
-      onSearch={query: @searchByName, navigate: @navigateToProject}
-      sortOptions={PROJECT_SORTS}
-      listPromise={@state.viewingProjects}
-
-      cardLink={@cardLink}
-      heroClass="projects-hero"
-      imagePromise={@imagePromise}
-      skipOwner={true}>
-      <Filmstrip increment={350} onChange={@setFilter} selectedFilter={@state.query.tags}/>
-    </OwnedCardList>
+module.exports = ProjectsPage
