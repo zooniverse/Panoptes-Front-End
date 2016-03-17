@@ -217,9 +217,12 @@ Classifier = React.createClass
       Thanks!
 
       {if @props.world_wide_telescope = true
-        <div>
-          <strong>HYPERLINK HERE</strong>
-        </div>}
+        <strong>
+          <WorldWideTelescope
+            passedIn={@props.subject}
+          />
+        </strong>
+        }
 
       {if @props.project?.slug is PULSAR_HUNTERS_SLUG or location.href.indexOf('fake-pulsar-feedback') isnt -1
         subjectClass = @props.subject.metadata['#Class']?.toUpperCase()
