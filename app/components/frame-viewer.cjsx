@@ -97,17 +97,6 @@ module.exports = React.createClass
     else
       frameDisplay
 
-  setPlaying: ( playing) ->
-    if playing
-      @nextFrame()
-      @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
-
-      autoStopDelay = @props.subject.locations.length * @props.playFrameDuration * @props.playIterations
-      @_autoStop = setTimeout @setPlaying.bind(this, false), autoStopDelay
-    else
-      clearInterval @_playingInterval
-      clearTimeout @_autoStop
-
   handleLoad: (e) ->
     width = e.target.videoWidth ? e.target.naturalWidth
     height = e.target.videoHeight ? e.target.naturalHeight
@@ -145,8 +134,8 @@ module.exports = React.createClass
     newNaturalWidth = @state.viewBoxDimensions.width * change
     newNaturalHeight = @state.viewBoxDimensions.height * change
   
-    newNaturalX = @state.viewBoxDimensions.x - (newNaturalWidth - @state.viewBoxDimensions.width)/2
-    newNaturalY = @state.viewBoxDimensions.y - (newNaturalHeight - @state.viewBoxDimensions.height)/2
+    newNaturalX = @state.viewBoxDimensions.x - (newNaturalWidth - @state.viewBoxDimensions.width) / 2
+    newNaturalY = @state.viewBoxDimensions.y - (newNaturalHeight - @state.viewBoxDimensions.height) / 2
 
     if (newNaturalWidth > @state.frameDimensions.width) || (newNaturalHeight * change > @state.frameDimensions.height)
       @zoomReset()
