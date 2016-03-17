@@ -1,12 +1,5 @@
 ReactDOM = require 'react-dom'
-DeleteButton = require './delete-button'
-
-isInBounds = ({top, left, width, height}, bounds) ->
-  goodTop = top < bounds.top + bounds.height
-  goodRight = left + width > bounds.left
-  goodBottom = top + height > bounds.top
-  goodLeft = left < bounds.left + bounds.width
-  goodTop and goodRight and goodBottom and goodLeft
+isInBounds = require '../../lib/is-in-bounds'
 
 deleteIfOutOfBounds = (tool) ->
   domNode = ReactDOM.findDOMNode tool
