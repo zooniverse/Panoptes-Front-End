@@ -67,7 +67,7 @@ module.exports = React.createClass
         Speed:
           {for rate, i in [0.25, 0.5, 1]
             <label key="rate-#{i}" className="secret-button">
-              <input type="radio" name="playRate" value={rate} checked={rate == @state.playbackRate} onChange={@setPlayRate} />
+              <input type="radio" name="playRate#{@props.frame}" value={rate} checked={rate == @state.playbackRate} onChange={@setPlayRate} />
               <span>
                 {rate}&times;
               </span>
