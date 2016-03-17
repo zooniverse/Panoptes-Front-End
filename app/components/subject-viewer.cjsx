@@ -41,7 +41,6 @@ module.exports = React.createClass
     loading: true
     playing: false
     frame: @props.frame ? 0
-    playbackRate: 1
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
 
@@ -50,12 +49,6 @@ module.exports = React.createClass
     if typeof nextProps.allowFlipbook is 'boolean'
       this.setState
         inFlipbookMode: allowFlipbook
-
-  componentDidMount: ->
-    @refs.videoScrubber?.value = 0
-
-  componentDidUpdate: ->
-    @refs.videoPlayer?.playbackRate = @state.playbackRate
 
   render: ->
     rootClass = 'subject-viewer'
