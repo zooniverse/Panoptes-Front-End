@@ -1,7 +1,11 @@
 React = require('react')
+PromiseRenderer = require '../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 Select = require 'react-select'
-{Link} = require 'react-router'
+{Link, Router, Navigation, History} = require 'react-router'
+Translate = require 'react-translate-component'
+debounce = require 'debounce'
+Filmstrip = require '../components/filmstrip'
 
 FlexibleLink = React.createClass
   displayName: 'FlexibleLink'
@@ -22,30 +26,43 @@ FlexibleLink = React.createClass
 ProjectCard = React.createClass
   displayName: 'ProjectCard'
   propTypes:
-    avatar: React.PropTypes.string
-    name: React.PropTypes.string.isRequired
-    slug: React.PropTypes.string.isRequired
-    redirect: React.PropTypes.string
+    project: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
     avatar: ''
     name: ''
     slug: ''
 
-  render: ->
-    avatarSrcWithProtocol = if !!@props.avatar
-      'https://' + @props.avatar
+  componentDidMount: ->
+    card = @refs.ownedCard
 
-    [owner, name] = @props.slug.split('/')
+    Promise.resolve (if @props.project.avatar_src then "//#{ @props.project.avatar_src }" else './assets/simple-avatar.jpg')
+      .then (src) =>
+        card.style.backgroundImage = "url('#{src}')"
+        card.style.backgroundSize = "contain"
+      .catch =>
+        card.style.background = "url('./assets/simple-pattern.jpg') center center repeat"
+
+    card.classList.add 'project-card'
+
+  render: ->
+    project = @props.project
+    avatarSrcWithProtocol = if !!project.avatar_src
+      'https://' + project.avatar_src
+
+    # [owner, name] = project.slug.split('/')
     linkProps =
-      to: if @props.redirect then @props.redirect else '/projects/' + @props.slug
-      params:
-        owner: owner
-        name: name
+      to: if project.redirect then project.redirect else '/projects/' + project.slug
 
     <FlexibleLink {...linkProps}>
-      <img src={avatarSrcWithProtocol} style={height: '1em', width: '1em'} />{' '}
-      <strong>{@props.name}</strong>
+      <div className="card" ref="ownedCard">
+        <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
+        <div className="details">
+          <div className="name"><span>{project.display_name}</span></div>
+          {<div className="description">{project.description}</div> if project.description?}
+          <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"projectsPage.button"} /></button>
+        </div>
+      </div>
     </FlexibleLink>
 
 ProjectCardList = React.createClass
@@ -54,29 +71,88 @@ ProjectCardList = React.createClass
   getDefaultProps: ->
     projects: []
 
+  componentDidMount: ->
+    document.documentElement.classList.add 'on-secondary-page'
+
+  componentWillUnmount: ->
+    document.documentElement.classList.remove 'on-secondary-page'
+
   render: ->
-    <ul>
+    <div className="card-list">
       {@props.projects.map (project) =>
-        <li key={project.id}>
-          <ProjectCard avatar={project.avatar_src} name={project.display_name} slug={project.slug} redirect={project.redirect} />
-        </li>}
-    </ul>
+        <div key={project.id}>
+          <ProjectCard project={project} />
+        </div>}
+    </div>
 
 
 DisciplineSelector = React.createClass
-  displayName: 'your filmstrip here'
+  displayName: 'DisciplineSelector'
 
   render: ->
-    <span>filmstrip</span>
+    <Filmstrip increment={350} onChange={@props.onChange}/>
+
+SearchSelector = React.createClass
+
+  displayName: 'SearchSelector'
+  mixins: [History]
+
+  getDefaultProps: ->
+    onChange: ->
+    query: ->
+    navigate: ->
+
+  navigateToProject: (projectID) ->
+    apiClient.type('projects').get(projectID)
+      .then (project) ->
+        if project.redirect?
+          window.location.href = project.redirect
+        else
+          window.location.href = ['/projects', project.slug].join('/')
+
+  searchByName: (value, callback) ->
+
+    if value?.trim().length > 0
+      apiClient.type('projects').get(search: "#{value}", page_size: 10)
+        .then (projects) ->
+          opts = projects.map (project) ->
+            {
+              value: project.id,
+              label: project.display_name,
+              project: project
+            }
+
+          callback null, { options: (opts || []) }
+
+    callback null, {options: []}
+
+  handleChange: (e) ->
+    @props.onChange e.value
+
+  render: ->
+    <Select
+      multi={false}
+      name="resourcesid"
+      placeholder="Name:"
+      value=""
+      searchPromptText="Search by name"
+      closeAfterClick={true}
+      asyncOptions={debounce(@searchByName, 500)}
+      onChange={@navigateToProject}
+      className="search card-search standard-input"
+    />
 
 SortSelector = React.createClass
   displayName: 'SortSelector'
   getDefaultProps: ->
-    value: 'active'
+    value: 'default'
     sortMethods: [
-      { key: 'active', label: 'Active' }
-      { key: 'inactive', label: 'Inactive' }
-    ]
+      { value: 'default', label: 'Default'},
+      { value: '-launch_date', label: 'Launch Date'},
+      { value: '-activity', label: 'Activity'},
+      { value: '-completeness', label: 'Completeness'},
+      { value: '-classifiers_count', label: 'Participants'},
+      { value: '-updated_at', label: 'last updated'}]
     onChange: ->
 
   handleChange: (e) ->
@@ -125,6 +201,7 @@ ProjectFilteringInterface = React.createClass
     pages: 0
     loading: false
     error: null
+    query: {}
 
   componentDidMount: ->
     {discipline, page, sort} = @props
@@ -143,7 +220,7 @@ ProjectFilteringInterface = React.createClass
     query =
       tags: discipline || undefined
       page: page
-      sort: @props.SORT_QUERY_VALUES[sort] ? @constructor.defaultProps.sort
+      sort: sort ? @constructor.defaultProps.sort
       launch_approved: true
       cards: true
       include: ['avatar']
@@ -169,28 +246,36 @@ ProjectFilteringInterface = React.createClass
   handlePageChange: (page) ->
     this.props.onChangeQuery {page}
 
-  render: ->
-    <div>
-      <header>
-        <DisciplineSelector value={@props.discipline} onChange={@handleDisciplineChange} />
-        <SortSelector value={@props.sort} onChange={@handleSortChange} />
-      </header>
+  setFilter: (e) ->
 
-      {if @state.error?
-        <p className="form-help error">{@state.error.toString()}</p>
-      else
-        <div>
-          {if @state.loading
-            <p className="form-help">Loading projects...</p>}
-          <ProjectCardList projects={@state.projects} />
-          <footer>
-            <nav>
-              Page:{' '}
-              <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />{' '}
-              of {@state.pages}
-            </nav>
-          </footer>
-        </div>}
+  render: ->
+    <div className="secondary-page all-resources-page">
+
+      <section className="hero projects-hero">
+        <div className="hero-container">
+          <Translate component="h1" content={"projectsPage.title"} />
+        </div>
+      </section>
+
+      <section className="resources-container">
+        <DisciplineSelector value={@props.discipline} onChange={@handleDisciplineChange} />
+        <div className="resource-results-counter">
+          <SearchSelector />
+          <SortSelector value={@props.sort} onChange={@handleSortChange} />
+          <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
+        </div>
+
+        <ProjectCardList projects={@state.projects} />
+
+        <footer>
+          <nav className="pagination">
+            Page:{' '}
+            <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
+            {' '} of {@state.pages}
+          </nav>
+        </footer>
+      </section>
+
     </div>
 
 module.exports =
