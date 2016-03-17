@@ -7,6 +7,7 @@ tasks = require './tasks'
 Tooltip = require '../components/tooltip'
 seenThisSession = require '../lib/seen-this-session'
 getSubjectLocation = require '../lib/get-subject-location'
+WarningBanner = require './warning-banner'
 
 module.exports = React.createClass
   displayName: 'FrameAnnotator'
@@ -23,7 +24,6 @@ module.exports = React.createClass
     onChange: Function.prototype
 
   getInitialState: ->
-    showWarning: false
     sizeRect: null
     alreadySeen: false
     showWarning: false
@@ -83,9 +83,6 @@ module.exports = React.createClass
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
 
-  toggleWarning: ->
-    @setState showWarning: not @state.showWarning
-
   render: ->    
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
@@ -143,24 +140,17 @@ module.exports = React.createClass
         </svg>
         {@props.children}
         {if @state.alreadySeen
-          <button type="button" className="warning-banner" onClick={@toggleWarning}>
-            Already seen!
-            {if @state.showWarning
-              <Tooltip attachment="top left" targetAttachment="middle right">
-                <p>Our records show that you’ve already seen this image. We might have run out of data for you in this workflow!</p>
-                <p>Try choosing a different workflow or contributing to a different project.</p>
-              </Tooltip>}
-          </button>
+          <WarningBanner label="Already seen!">
+            <p>Our records show that you’ve already seen this image. We might have run out of data for you in this workflow!</p>
+            <p>Try choosing a different workflow or contributing to a different project.</p>
+          </WarningBanner>
 
         else if @props.subject.retired
-          <button type="button" className="warning-banner" onClick={@toggleWarning}>
-            Finished!
-            {if @state.showWarning
-              <Tooltip attachment="top left" targetAttachment="middle right">
-                <p>This subject already has enough classifications, so yours won’t be used in its analysis!</p>
-                <p>If you’re looking to help, try choosing a different workflow or contributing to a different project.</p>
-              </Tooltip>}
-          </button>}
+          <WarningBanner label="Finished!">
+            <p>This subject already has enough classifications, so yours won’t be used in its analysis!</p>
+            <p>If you’re looking to help, try choosing a different workflow or contributing to a different project.</p>
+          </WarningBanner>
+        }
 
         {if AfterSubject?
           <AfterSubject {...hookProps} />}
