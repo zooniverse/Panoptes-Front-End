@@ -3,6 +3,7 @@ DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
+isInBounds = require '../../lib/is-in-bounds'
 
 RADIUS = 10
 SELECTED_RADIUS = 20
@@ -22,6 +23,14 @@ module.exports = React.createClass
 
     initMove: ({x, y}) ->
       {x, y}
+
+    initValid: (mark, {containerRect}) ->
+      markRect =
+        top: containerRect.top + mark.y
+        left: containerRect.left + mark.y
+        width: 1
+        height: 1
+      isInBounds markRect, containerRect
 
     initRelease: ->
       _inProgress: false
