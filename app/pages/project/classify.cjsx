@@ -317,7 +317,11 @@ module.exports = React.createClass
     if classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
       apiClient.type('minicourses').get project_id: @props.project.id
         .then([minicourse]) =>
+<<<<<<< HEAD
           MiniCourse.startIfNecessary.bind(MiniCourse, @props.user, @props.project)
+=======
+          MiniCourse.start.bind(MiniCourse, @props.user, @props.project)
+>>>>>>> Start of mini-course
           
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
