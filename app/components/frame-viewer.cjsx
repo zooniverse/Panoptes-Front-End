@@ -78,13 +78,13 @@ module.exports = React.createClass
               </div>
             </div>
             <div>
-              <button title={"zoom out"} className={"zoom-out fa fa-minus" + if @canZoomOut() then " disabled" else "" } onMouseDown={ @continuousZoom.bind(this, 1.1 ) } onMouseUp={@stopZoom} />
+              <button title={"zoom out"} className={"zoom-out fa fa-minus" + if @cannotZoomOut() then " disabled" else "" } onMouseDown={ @continuousZoom.bind(this, 1.1 ) } onMouseUp={@stopZoom} />
             </div>
             <div>
               <button title={"zoom in"} className="zoom-in fa fa-plus" onMouseDown={@continuousZoom.bind(this, .9)} onMouseUp={@stopZoom} />
             </div>
             <div>
-              <button title={"rest zoom levels"} className={"reset fa fa-refresh" + if @canZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
+              <button title={"rest zoom levels"} className={"reset fa fa-refresh" + if @cannotZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
             </div>
           </div>}
         
@@ -111,7 +111,7 @@ module.exports = React.createClass
 
     @props.onLoad? e, @props.frame
 
-  canZoomOut: ->
+  cannotZoomOut: ->
     return @state.frameDimensions.width == @state.viewBoxDimensions.width && @state.frameDimensions.height == @state.viewBoxDimensions.height      
 
   continuousZoom: (change) ->
