@@ -70,7 +70,7 @@ module.exports = React.createClass
             <ul>
               <li>
                 <button className={@calculateClasses('all')} onClick={@selectFilter.bind this, ''} >
-                  <p>All</p><p>Disciplines</p>
+                  <p>All<br/>Disciplines</p>
                 </button>
               </li>
               {for filter, i in @props.filterCards
