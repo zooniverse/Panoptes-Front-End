@@ -17,6 +17,9 @@ Tutorial = require '../lib/tutorial'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 WorldWideTelescope = require './world_wide_telescope'
+MiniCourse = require '../lib/mini-course'
+MiniCourseButton = require './mini-course-button'
+
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
@@ -209,6 +212,16 @@ Classifier = React.createClass
             <TutorialButton className="minor-button" user={@props.user} project={@props.project} title="Project tutorial" aria-label="Show the project tutorial" style={marginTop: '2em'}>
               Show the project tutorial
             </TutorialButton>
+          </strong>
+        </small>
+      </p>
+
+      <p>
+        <small>
+          <strong>
+            <MiniCourseButton className="minor-button" user={@props.user} project={@props.project} title="Project Mini-course" aria-label="Show the project mini-course" style={marginTop: '2em'}>
+              Restart the project mini-course
+            </MiniCourseButton>
           </strong>
         </small>
       </p>

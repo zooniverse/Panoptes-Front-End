@@ -11,13 +11,22 @@ FinishedBanner = require './finished-banner'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
 seenThisSession = require '../../lib/seen-this-session'
+MiniCourse = require '../../lib/mini-course'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
+
+PROMPT_MINI_COURSE_EVERY = 5
 
 SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
 
 if SKIP_CELLECT
   console?.warn 'Intelligent subject selection disabled'
+
+# Classification count tracked for mini-course prompt
+classificationsThisSession = 0
+
+auth.listen ->
+  classificationsThisSession = 0
 
 # Map each project ID to a promise of its last randomly-selected workflow ID.
 # This is to maintain the same random workflow for each project when none is specified by the user.
@@ -262,6 +271,9 @@ module.exports = React.createClass
         console?.warn 'Failed to save classification:', error
         @queueClassification classification
 
+      classificationsThisSession += 1
+      @maybeLaunchMiniCourse()
+
     return savingClassification
 
   queueClassification: (classification) ->
@@ -301,6 +313,12 @@ module.exports = React.createClass
         currentWorkflowForProject[@props.project.id] = null
       @loadAppropriateClassification()
 
+  maybeLaunchMiniCourse: ->
+    if classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
+      apiClient.type('minicourses').get project_id: @props.project.id
+        .then([minicourse]) =>
+          MiniCourse.start.bind(MiniCourse, @props.user, @props.project)
+          
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
 window.currentClassifications = currentClassifications
