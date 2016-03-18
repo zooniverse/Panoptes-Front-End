@@ -55,9 +55,8 @@ module.exports = React.createClass
             <small>
               <strong>
                 <label className="hide-previous-marks-toggle">
-                  <input type="checkbox" onClick={@props.toggleHideMarksBefore}>
-                    Hide previous marks
-                  </input>
+                  <input type="checkbox" onClick={@props.toggleHideMarksBefore} />
+                  {'Hide previous marks'}
                 </label>
               </strong>
             </small>
