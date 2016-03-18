@@ -20,6 +20,7 @@ counterpart.registerTranslations 'en',
       buildHelp: 'Project Builder Help'
       policies: 'Project Builder Policies'
       bestPractices: 'Best Practices Guide'
+      buildTalk: 'Project Builder Talk'
 
 module.exports = React.createClass
   displayName: 'ProjectBuilderLandingPage'
@@ -60,6 +61,7 @@ module.exports = React.createClass
           <Link to="/lab-how-to"><Translate content="labLanding.links.buildHelp" /></Link>
           <Link to="/lab-policies"><Translate content="labLanding.links.policies"></Translate></Link>
           <Link to="/lab-best-practices/introduction"><Translate content="labLanding.links.bestPractices" /></Link>
+          <Link to="/talk/18"><Translate content="labLanding.links.buildTalk" /></Link>
         </div>
       </div>
     </div>
