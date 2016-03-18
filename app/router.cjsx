@@ -117,6 +117,7 @@ module.exports =
       <Route path="data-exports" component={require './pages/lab/data-dumps'} />
       <Route path="tutorial" component={require './pages/lab/tutorial'} />
       <Route path="guide" component={require './pages/lab/field-guide'} />
+      <Route path="mini-course" component={require './pages/lab/mini-course'} />
     </Route>
     <Route path="lab-policies" component={require './pages/lab/lab-policies'} />
     <Route path="lab-how-to" component={require './pages/lab/how-to-page'} />

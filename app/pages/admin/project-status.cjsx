@@ -16,6 +16,7 @@ EXPERIMENTAL_FEATURES = [
   'combo'
   'tutorial'
   'field guide'
+  'mini-course'
   'hide classification summaries'
   'pan and zoom'
 ]
