@@ -36,6 +36,7 @@ Classifier = React.createClass
     classificationQuality: NaN
     showingExpertClassification: false
     selectedExpertAnnotation: -1
+    currentMarkOnly: false
 
   componentDidMount: ->
     @loadSubject @props.subject
@@ -110,6 +111,7 @@ Classifier = React.createClass
           classification={currentClassification}
           annotation={currentAnnotation}
           onLoad={@handleSubjectImageLoad}
+          currentMarkOnly={@state.currentMarkOnly}
           frameWrapper={FrameAnnotator}
           allowFlipbook={workflowAllowsFlipbook @props.workflow}
           allowSeparateFrames={workflowAllowsSeparateFrames @props.workflow}
@@ -152,7 +154,7 @@ Classifier = React.createClass
       pointerEvents: 'none'
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
-      <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+      <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} toggleCurrentMarkOnly={@toggleCurrentMarkOnly} currentMarkOnly={@state.currentMarkOnly} />
 
       <hr />
 
@@ -361,6 +363,9 @@ Classifier = React.createClass
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
+
+  toggleCurrentMarkOnly: ->
+    @setState currentMarkOnly: !@state.currentMarkOnly
 
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'

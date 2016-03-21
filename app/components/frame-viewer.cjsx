@@ -67,7 +67,7 @@ module.exports = React.createClass
 
     if FrameWrapper
       <div>
-        <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} panByDrag={@panByDrag} viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange} panEnabled={@state.panEnabled} >
+        <FrameWrapper frame={frame} naturalWidth={@state.frameDimensions?.width or 0} naturalHeight={@state.frameDimensions?.height or 0} panByDrag={@panByDrag} viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} workflow={@props.workflow} subject={@props.subject} classification={@props.classification} annotation={@props.annotation} loading={@state.loading} onChange={@props.onChange} panEnabled={@state.panEnabled} currentMarkOnly={@props.currentMarkOnly} >
           {frameDisplay}
         </FrameWrapper>
         {if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
@@ -90,7 +90,7 @@ module.exports = React.createClass
               <button title={"rest zoom levels"} className={"reset fa fa-refresh" + if @canZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
             </div>
           </div>}
-        
+
       </div>
 
 
@@ -115,7 +115,7 @@ module.exports = React.createClass
     @props.onLoad? e, @props.frame
 
   canZoomOut: ->
-    return @state.frameDimensions.width == @state.viewBoxDimensions.width && @state.frameDimensions.height == @state.viewBoxDimensions.height      
+    return @state.frameDimensions.width == @state.viewBoxDimensions.width && @state.frameDimensions.height == @state.viewBoxDimensions.height
 
   continuousZoom: (change) ->
     return if change == 0
@@ -125,7 +125,7 @@ module.exports = React.createClass
       @zoom(change)
       clearTimeout @state.zoomingTimeoutId
       @setState zoomingTimeoutId: setTimeout(zoomNow, 200)
-    
+
     zoomNow()
 
   zoom: (change) ->
@@ -147,17 +147,17 @@ module.exports = React.createClass
           height: newNaturalHeight,
           x: newNaturalX,
           y: newNaturalY
-  
+
   stopZoom: (e) ->
     e.stopPropagation()
     @setState zooming: false
     @zoom(0)
 
-          
+
   zoomReset: ->
     @setState
       viewBoxDimensions:
-        width: @state.frameDimensions.width, 
+        width: @state.frameDimensions.width,
         height: @state.frameDimensions.height,
         x: 0,
         y: 0
@@ -170,10 +170,10 @@ module.exports = React.createClass
     unless @state.panEnabled
       @setState panEnabled: true, =>
         this.refs.subjectImage.focus()
-  
+
   togglePanOff: ->
     @setState panEnabled: false
-  
+
   toggleKeyPanZoom: ->
     @setState keyPanZoomEnabled: !@state.keyPanZoomEnabled, =>
       if @state.panEnabled then this.refs.subjectImage.focus()
@@ -205,27 +205,27 @@ module.exports = React.createClass
         e.preventDefault()
         @panHorizontal(-20)
       # up
-      when 38 
+      when 38
         e.preventDefault()
-        @panVertical(-20) 
+        @panVertical(-20)
       # right
-      when 39 
+      when 39
         e.preventDefault()
-        @panHorizontal(20) 
+        @panHorizontal(20)
       # down
-      when 40 
+      when 40
         e.preventDefault()
-        @panVertical(20) 
+        @panVertical(20)
       # zoom out
       when 187
         e.preventDefault()
         @setState zooming: true
-        @zoom(.9) 
-      # zoom in 
+        @zoom(.9)
+      # zoom in
       when 189
         e.preventDefault()
         @setState zooming: true
-        @zoom(1.1) 
+        @zoom(1.1)
       # zooming by mousewheel
       when 1
         e.preventDefault()
@@ -248,7 +248,7 @@ module.exports = React.createClass
     changedY = @state.viewBoxDimensions.y + direction
     @setState
       viewBoxDimensions:
-        x: @state.viewBoxDimensions.x 
+        x: @state.viewBoxDimensions.x
         y: Math.max(minimumY, Math.min(changedY, maximumY))
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height

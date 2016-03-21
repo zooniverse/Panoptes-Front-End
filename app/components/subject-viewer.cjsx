@@ -60,7 +60,7 @@ module.exports = React.createClass
       mainDisplay = @renderFrame @state.frame
     else
       mainDisplay = (@renderFrame frame, {key: "frame-#{frame}"} for frame of @props.subject.locations)
-          
+
 
     tools = switch type
       when 'image'
@@ -124,8 +124,6 @@ module.exports = React.createClass
       </div>
     </div>
 
-  
-
   renderFrame: (frame, props = {}) ->
     <FrameViewer {...@props} {...props} frame={frame} />
 
@@ -169,7 +167,6 @@ module.exports = React.createClass
   handleFrameChange: (frame) ->
     @setState {frame}
     @props.onFrameChange frame
-
 
   showMetadata: ->
     # TODO: Sticky popup.
