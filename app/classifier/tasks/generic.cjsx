@@ -49,7 +49,7 @@ module.exports = React.createClass
           </p>
         </div>}
 
-      {if @props.toggleHideMarksBefore
+      {if @props.enableHidePrevMarks and @props.toggleHideMarksBefore
         <div>
           <p>
             <small>

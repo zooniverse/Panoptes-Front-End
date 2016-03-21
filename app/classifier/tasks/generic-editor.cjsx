@@ -50,12 +50,20 @@ module.exports = React.createClass
           <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
         </div>}
 
-      {if choicesKey?
+      {if choicesKey
         <div>
           <hr />
           <span className="form-label">Choices</span>
         </div>}
       {' '}
+
+    {if choicesKey is 'tools' and 'hide previous marks' in @props.project.experimental_tools # NOTE: assumes 'tools' is unique to drawing! --STI
+      [<label key="hide-previous-marks" className="pill-button">
+        <AutoSave resource={@props.workflow}>
+          <input type="checkbox" checked={@props.task.enableHidePrevMarks} onChange={@toggleHidePrevMarksEnabled} />{' '}
+          Allow hiding previous marks
+        </AutoSave>
+      </label>]}
 
       {if isAQuestion
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
@@ -200,6 +208,11 @@ module.exports = React.createClass
           </AutoSave>
         </div>}
     </div>
+
+  toggleHidePrevMarksEnabled: (e) ->
+    enableHidePrevMarks = e.target.checked
+    @props.task.enableHidePrevMarks = enableHidePrevMarks
+    @props.workflow.update 'tasks'
 
   toggleMultipleChoice: (e) ->
     newType = if e.target.checked

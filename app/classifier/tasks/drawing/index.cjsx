@@ -23,6 +23,7 @@ module.exports = React.createClass
       instruction: 'Explain what to draw.'
       help: ''
       tools: []
+      enableHidePrevMarks: false
 
     getTaskText: (task) ->
       task.instruction
@@ -112,7 +113,7 @@ module.exports = React.createClass
         </div>
       </label>
 
-    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} hideMarksBeforeIndex={@props.hideMarksBeforeIndex} toggleHideMarksBefore={@props.toggleHideMarksBefore} />
+    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} enableHidePrevMarks={@props.task.enableHidePrevMarks} toggleHideMarksBefore={@props.toggleHideMarksBefore} />
 
   handleChange: (toolIndex, e) ->
     # This handles changing tools, not any actually drawing.
