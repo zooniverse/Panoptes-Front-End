@@ -9,6 +9,7 @@ module.exports = React.createClass
     annotation: null
     workflow: null
     scale: null
+    currentMarkOnly: true
 
   getInitialState: ->
     selection: null
@@ -39,6 +40,7 @@ module.exports = React.createClass
         annotation._key ?= Math.random()
         isPriorAnnotation = annotation isnt @props.annotation
         taskDescription = @props.workflow.tasks[annotation.task]
+        console.log 'MARKS: ', annotation.value
         if taskDescription.type is 'drawing'
           <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
             {for mark, i in annotation.value when parseInt(mark.frame) is parseInt(@props.frame)
@@ -65,7 +67,10 @@ module.exports = React.createClass
                 onDestroy: @handleDestroy.bind this, annotation, mark
 
               ToolComponent = drawingTools[toolDescription.type]
-              <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
+
+              if @props.currentMarkOnly and i isnt annotation.value.length-1 then null # render only latest mark
+              else <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
+
           </g>}
     </g>
 
