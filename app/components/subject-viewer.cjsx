@@ -5,6 +5,7 @@ alert = require '../lib/alert'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 FrameViewer = require './frame-viewer'
+classnames = require 'classnames'
 
 NOOP = Function.prototype
 
@@ -17,7 +18,6 @@ subjectHasMixedLocationTypes = (subject) ->
         allTypes.push type
   allTypes.length > 1
 
-ROOT_STYLE = display: 'block'
 CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 
 module.exports = React.createClass
@@ -51,9 +51,13 @@ module.exports = React.createClass
         inFlipbookMode: allowFlipbook
 
   render: ->
-    rootClass = 'subject-viewer'
-    if @props.workflow?.configuration?.multi_image_layout then rootClass += ' subject-viewer--layout-' + @props.workflow.configuration?.multi_image_layout
-    if @state.inFlipbookMode then rootClass += ' subject-viewer--flipbook'
+    rootClasses = classnames('subject-viewer', { 
+      'default-root-style': @props.defaultStyle
+      'subject-viewer--flipbook': @state.inFlipbookMode 
+      "subject-viewer--layout-#{@props.workflow.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
+    })
+    # Feature detect IE11 and apply flex prop. Revisit or remove when IE11 is no longer supported.
+    rootStyle = flex: "1 1 auto" if "ActiveXObject" in window or window.ActiveXObject isnt undefined
     mainDisplay = ''
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     if @state.inFlipbookMode
@@ -91,7 +95,7 @@ module.exports = React.createClass
               </span>}
           </span>
 
-    <div className={rootClass} style={ROOT_STYLE if @props.defaultStyle}>
+    <div className={rootClasses} style={rootStyle}>
       {if type is 'image'
         @hiddenPreloadedImages()}
       <div className="subject-container" style={CONTAINER_STYLE} >
