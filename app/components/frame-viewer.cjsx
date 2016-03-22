@@ -133,6 +133,7 @@ module.exports = React.createClass
     return @state.frameDimensions.width == @state.viewBoxDimensions.width && @state.frameDimensions.height == @state.viewBoxDimensions.height      
 
   continuousZoom: (change) ->
+    @clearZoomingTimeout()
     return if change == 0
     @setState zooming: true, =>
       zoomNow = =>
