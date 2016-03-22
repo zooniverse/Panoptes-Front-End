@@ -150,8 +150,8 @@ module.exports = React.createClass
       clearTimeout @state.zoomingTimeoutId
 
   zoom: (change) ->
-    return if !@state.zooming
     @clearZoomingTimeout()
+    return if !@state.zooming
     newNaturalWidth = @state.viewBoxDimensions.width * change
     newNaturalHeight = @state.viewBoxDimensions.height * change
   
