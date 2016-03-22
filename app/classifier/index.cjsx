@@ -216,11 +216,9 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {if @props.world_wide_telescope = true
+      {if @props.workflow.world_wide_telescope = true
         <strong>
-          <WorldWideTelescope
-            passedIn={@props.subject}
-          />
+          <WorldWideTelescope/>
         </strong>
         }
 
