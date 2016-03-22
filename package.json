@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "dependencies": {
     "animated-scrollto": "~1.1.0",
+    "classnames": "~2.2.3",
     "counterpart": "~0.17.0",
     "data-uri-to-blob": "0.0.4",
     "debounce": "~1.0.0",
