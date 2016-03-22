@@ -57,13 +57,13 @@ module.exports = React.createClass
         </div>}
       {' '}
 
-    {if choicesKey is 'tools' and 'hide previous marks' in @props.project.experimental_tools # NOTE: assumes 'tools' is unique to drawing! --STI
-      [<label key="hide-previous-marks" className="pill-button">
+    {if @props.task.type is 'drawing' and 'hide previous marks' in @props.project.experimental_tools # NOTE: assumes 'tools' is unique to drawing! --STI
+      <label className="pill-button">
         <AutoSave resource={@props.workflow}>
           <input type="checkbox" checked={@props.task.enableHidePrevMarks} onChange={@toggleHidePrevMarksEnabled} />{' '}
           Allow hiding previous marks
         </AutoSave>
-      </label>]}
+      </label>}
 
       {if isAQuestion
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'

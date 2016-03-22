@@ -36,6 +36,8 @@ Classifier = React.createClass
     classificationQuality: NaN
     showingExpertClassification: false
     selectedExpertAnnotation: -1
+
+    # these states shouldn't be stored in the Classifier --STI
     hideMarksBeforeIndex: 0
     hidePreviousMarks: false
 

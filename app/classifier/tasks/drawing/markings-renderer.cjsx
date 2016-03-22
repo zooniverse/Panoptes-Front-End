@@ -65,8 +65,9 @@ module.exports = React.createClass
 
               ToolComponent = drawingTools[toolDescription.type]
 
-              if i < @props.hideMarksBeforeIndex then null # hide previous marks
-              else <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
+              # render only new marks
+              if i >= @props.hideMarksBeforeIndex
+                <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
 
           </g>}
     </g>
