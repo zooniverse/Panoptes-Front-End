@@ -1,6 +1,6 @@
 React = require 'react'
 PromiseRenderer = require '../../../components/promise-renderer'
-config = require '../../../api/config'
+config = require 'panoptes-client/lib/config'
 moment = require 'moment'
 {Model, makeHTTPRequest} = require 'json-api-client'
 {Progress, Graph} = require './charts'
@@ -16,7 +16,7 @@ GraphSelect = React.createClass
     stats_url = "#{config.statHost}/counts/#{type}/#{period}?project_id=#{@props.projectId}"
     makeHTTPRequest 'GET', stats_url
       .then (response) =>
-        results = JSON.parse response.responseText
+        results = JSON.parse response.text
         bucket_data = results["events_over_time"]["buckets"]
         data = bucket_data.map (stat_object) =>
           label: stat_object.key_as_string

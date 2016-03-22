@@ -91,7 +91,6 @@ module.exports =
       <Route path="recents/:board" component={require './talk/recents'} />
       <Route name="talk-discussion" path=":board/:discussion" component={require './talk/discussion'} />
     </Route>
-  </Route>
 
     <Route path="favorites" component={require('./pages/collections').FavoritesList}>
       <Route path=":owner" component={require('./pages/collections').FavoritesList} />
