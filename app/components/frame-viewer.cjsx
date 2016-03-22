@@ -32,12 +32,16 @@ module.exports = React.createClass
     zoomingTimeoutId: null
 
   componentDidMount: ->
-    addEventListener "keydown", @frameKeyPan
-    addEventListener "mousewheel", @frameKeyPan
+    if @props.project? && 'pan and zoom' in @props.project?.experimental_tools
+      # these events enable a user to navigate an image using arrows, +, and - keys, 
+      # while the user is in pan and zoom mode.
+      addEventListener "keydown", @frameKeyPan
+      addEventListener "mousewheel", @frameKeyPan
 
   componentWillUnmount: ->
-    removeEventListener "keydown", @frameKeyPan
-    removeEventListener "mousewheel", @frameKeyPan
+    if @props.project? && 'pan and zoom' in @props.project?.experimental_tools
+      removeEventListener "keydown", @frameKeyPan
+      removeEventListener "mousewheel", @frameKeyPan
 
   render: () ->
     subject = @props.subject
@@ -78,13 +82,27 @@ module.exports = React.createClass
               </div>
             </div>
             <div>
-              <button title={"zoom out"} className={"zoom-out fa fa-minus" + if @cannotZoomOut() then " disabled" else "" } onMouseDown={ @continuousZoom.bind(this, 1.1 ) } onMouseUp={@stopZoom} />
+              <button 
+                title={ "zoom out" } 
+                className={"zoom-out fa fa-minus" + if @cannotZoomOut() then " disabled" else "" } 
+                onMouseDown={ @continuousZoom.bind(this, 1.1 ) } 
+                onMouseUp={@stopZoom} 
+                onKeyDown={@keyDownZoomButton.bind(this,1.1)} 
+                onKeyUp={@stopZoom}
+              />
             </div>
             <div>
-              <button title={"zoom in"} className="zoom-in fa fa-plus" onMouseDown={@continuousZoom.bind(this, .9)} onMouseUp={@stopZoom} />
+              <button 
+                title={ "zoom in" } 
+                className={ "zoom-in fa fa-plus" } 
+                onMouseDown={@continuousZoom.bind(this, .9)} 
+                onMouseUp={@stopZoom} 
+                onKeyDown={@keyDownZoomButton.bind(this,.9)}
+                onKeyUp={@stopZoom} 
+              />
             </div>
             <div>
-              <button title={"rest zoom levels"} className={"reset fa fa-refresh" + if @cannotZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
+              <button title={"reset zoom levels"} className={"reset fa fa-refresh" + if @cannotZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
             </div>
           </div>}
         
@@ -118,17 +136,22 @@ module.exports = React.createClass
     return if change == 0
     @setState zooming: true, =>
       zoomNow = =>
-        # if !@state.zooming, we don't want to continuously call setTimeout
+        # if !@state.zooming, we don't want to continuously call setTimeout.
+        # !@state.zooming will be the case after a user creates a mouseup event.
         return if !@state.zooming
         @zoom(change)
-        clearTimeout @state.zoomingTimeoutId
+        @clearZoomingTimeout()
         @setState zoomingTimeoutId: setTimeout(zoomNow, 200)
       
       zoomNow()
 
+  clearZoomingTimeout: ->
+    if @state.zoomingTimeoutId 
+      clearTimeout @state.zoomingTimeoutId
+
   zoom: (change) ->
     return if !@state.zooming
-    clearTimeout @state.zoomingTimeoutId
+    @clearZoomingTimeout()
     newNaturalWidth = @state.viewBoxDimensions.width * change
     newNaturalHeight = @state.viewBoxDimensions.height * change
   
@@ -146,6 +169,12 @@ module.exports = React.createClass
           x: newNaturalX,
           y: newNaturalY
   
+  keyDownZoomButton: (change, e) ->
+    # only zoom if a user presses enter on the zoom button.
+    if e.which == 13
+      @setState zooming: true, =>
+        @zoom(change)
+
   stopZoom: (e) ->
     e.stopPropagation()
     @setState zooming: false
@@ -189,7 +218,7 @@ module.exports = React.createClass
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height
 
-  frameKeyPan: (e)->
+  frameKeyPan: (e) ->
     return unless @state.panEnabled
     keypress = e.which
     switch keypress
