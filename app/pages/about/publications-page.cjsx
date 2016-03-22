@@ -12,6 +12,7 @@ counterpart.registerTranslations 'en',
       climate: 'Climate'
       humanities: 'Humanities'
       nature: 'Nature'
+      medicine: 'Medicine'
       meta: 'Meta'
     content:
       header:
@@ -263,6 +264,13 @@ publicationCategories =
   #   ],
   # physics: [
   #   ],
+  medicine: [
+    {slug: "zooniverse/cell-slider"
+    publications: [
+      {citation: "Crowdsourcing the General Public for Large Scale Molecular Pathology Studies in Cancer, Candido dos Reis+ 2015."
+      href: "http://www.ebiomedicine.com/article/S2352-3964(15)30016-5/pdf"}]
+    },
+  ],
   meta: [
     {name: "Meta Studies"
     publications: [
