@@ -23,7 +23,6 @@ module.exports = React.createClass
       instruction: 'Explain what to draw.'
       help: ''
       tools: []
-      enableHidePrevMarks: false
 
     getTaskText: (task) ->
       task.instruction
@@ -31,6 +30,11 @@ module.exports = React.createClass
     getDefaultAnnotation: ->
       _toolIndex: 0
       value: []
+
+      # parameters for hide-previous-marks feature --STI
+      enableHidePrevMarks: false
+      hidePreviousMarks: false
+      hideMarksBeforeIndex: -1
 
     closeAllMarks: (task, annotation) ->
       for mark in annotation.value
@@ -113,7 +117,14 @@ module.exports = React.createClass
         </div>
       </label>
 
-    <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} enableHidePrevMarks={@props.task.enableHidePrevMarks} toggleHideMarksBefore={@props.toggleHideMarksBefore} />
+    <GenericTask
+      question={@props.task.instruction}
+      help={@props.task.help}
+      answers={tools}
+      required={@props.task.required}
+      enableHidePrevMarks={@props.task.enableHidePrevMarks}
+      toggleHideMarksBefore={@toggleHideMarksBefore.bind this, @props.annotation.value?.length}
+    />
 
   handleChange: (toolIndex, e) ->
     # This handles changing tools, not any actually drawing.
@@ -122,3 +133,13 @@ module.exports = React.createClass
     if e.target.checked
       newAnnotation = Object.assign {}, @props.annotation, _toolIndex: toolIndex
       @props.onChange newAnnotation
+
+  toggleHideMarksBefore: (index) ->
+    console.log 'DRAWING-TASK::toggleHideMarksBefore(), PROPS = ', @props # --STI
+    console.log 'toggleHideMarksBefore(), index = ', index
+    annotation = @props.annotation
+    annotation.hidePreviousMarks = !annotation.hidePreviousMarks
+    if annotation.hidePreviousMarks
+      annotation.hideMarksBeforeIndex = index
+    else
+      annotation.hideMarksBeforeIndex = -1

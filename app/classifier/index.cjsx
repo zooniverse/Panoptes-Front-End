@@ -37,10 +37,6 @@ Classifier = React.createClass
     showingExpertClassification: false
     selectedExpertAnnotation: -1
 
-    # these states shouldn't be stored in the Classifier --STI
-    hideMarksBeforeIndex: 0
-    hidePreviousMarks: false
-
   componentDidMount: ->
     @loadSubject @props.subject
     @prepareToClassify @props.classification
@@ -114,7 +110,6 @@ Classifier = React.createClass
           classification={currentClassification}
           annotation={currentAnnotation}
           onLoad={@handleSubjectImageLoad}
-          hideMarksBeforeIndex={@state.hideMarksBeforeIndex}
           frameWrapper={FrameAnnotator}
           allowFlipbook={workflowAllowsFlipbook @props.workflow}
           allowSeparateFrames={workflowAllowsSeparateFrames @props.workflow}
@@ -157,7 +152,7 @@ Classifier = React.createClass
       pointerEvents: 'none'
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
-      <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} toggleHideMarksBefore={@toggleHideMarksBefore.bind this, annotation.value?.length} hideMarksBeforeIndex={@state.hideMarksBeforeIndex} />
+      <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
       <hr />
 
@@ -366,11 +361,6 @@ Classifier = React.createClass
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
-
-  toggleHideMarksBefore: (index) ->
-    @setState hidePreviousMarks: !@state.hidePreviousMarks, =>
-      if @state.hidePreviousMarks then @setState hideMarksBeforeIndex: index
-      else @setState hideMarksBeforeIndex: -1
 
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'

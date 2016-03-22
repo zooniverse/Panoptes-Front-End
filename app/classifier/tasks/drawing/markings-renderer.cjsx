@@ -33,6 +33,7 @@ module.exports = React.createClass
     # console.log 'Marks are now', newSetOfMarks
 
   render: ->
+    console.log 'MARKINGS-RENDERER:render(), PROPS = ', @props # --STI
     <g>
       {for annotation in @props.classification?.annotations ? []
         annotation._key ?= Math.random()
@@ -66,7 +67,7 @@ module.exports = React.createClass
               ToolComponent = drawingTools[toolDescription.type]
 
               # render only new marks
-              if i >= @props.hideMarksBeforeIndex
+              if i >= @props.annotation.hideMarksBeforeIndex
                 <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
 
           </g>}
