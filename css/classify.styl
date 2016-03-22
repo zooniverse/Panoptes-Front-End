@@ -18,9 +18,6 @@
 .classifier
   display: flex
   justify-content: center
-  
-  > *
-    flex: 1 1 auto
 
   @media (max-width: 900px) // This is between iPad landscape and portrait.
     flex-wrap: wrap
@@ -38,7 +35,7 @@
     max-width: 100%
     > *
       display: flex
-      flex: 1 1 auto
+      flex: 1 1 auto // Fix for IE 11. Revisit or remove when IE11 is no longer supported.
 
   .subject
     border-radius: 5px
