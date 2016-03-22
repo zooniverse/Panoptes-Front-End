@@ -51,10 +51,10 @@ module.exports = React.createClass
         inFlipbookMode: allowFlipbook
 
   render: ->
-    rootClasses = classnames('subject-viewer', { 
+    rootClasses = classnames('subject-viewer', {
       'default-root-style': @props.defaultStyle
-      'subject-viewer--flipbook': @state.inFlipbookMode 
-      "subject-viewer--layout-#{@props.workflow.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
+      'subject-viewer--flipbook': @state.inFlipbookMode
+      "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
     })
     # Feature detect IE11 and apply flex prop. Revisit or remove when IE11 is no longer supported.
     rootStyle = flex: "1 1 auto" if "ActiveXObject" in window or window.ActiveXObject isnt undefined
@@ -64,7 +64,7 @@ module.exports = React.createClass
       mainDisplay = @renderFrame @state.frame
     else
       mainDisplay = (@renderFrame frame, {key: "frame-#{frame}"} for frame of @props.subject.locations)
-          
+
 
     tools = switch type
       when 'image'
@@ -128,7 +128,7 @@ module.exports = React.createClass
       </div>
     </div>
 
-  
+
 
   renderFrame: (frame, props = {}) ->
     <FrameViewer {...@props} {...props} frame={frame} />
