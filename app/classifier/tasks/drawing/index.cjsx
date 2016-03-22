@@ -30,9 +30,6 @@ module.exports = React.createClass
     getDefaultAnnotation: ->
       _toolIndex: 0
       value: []
-
-      # parameters for hide-previous-marks feature --STI
-      enableHidePrevMarks: false
       hidePreviousMarks: false
       hideMarksBeforeIndex: -1
 
@@ -135,11 +132,10 @@ module.exports = React.createClass
       @props.onChange newAnnotation
 
   toggleHideMarksBefore: (index) ->
-    console.log 'DRAWING-TASK::toggleHideMarksBefore(), PROPS = ', @props # --STI
-    console.log 'toggleHideMarksBefore(), index = ', index
     annotation = @props.annotation
     annotation.hidePreviousMarks = !annotation.hidePreviousMarks
     if annotation.hidePreviousMarks
       annotation.hideMarksBeforeIndex = index
     else
       annotation.hideMarksBeforeIndex = -1
+    @props.onChange(annotation)

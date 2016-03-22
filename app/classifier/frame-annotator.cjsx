@@ -49,7 +49,6 @@ module.exports = React.createClass
       naturalWidth: nextProps.naturalWidth
       naturalHeight: nextProps.naturalHeight
 
-
   handleAnnotationChange: (oldAnnotation, currentAnnotation) ->
     if oldAnnotation?
       # console.log 'Old annotation was', oldAnnotation
@@ -118,7 +117,6 @@ module.exports = React.createClass
       containerRect: @state.sizeRect
       getEventOffset: this.getEventOffset
       onChange: @props.onChange
-      hideMarksBeforeIndex: @props.hideMarksBeforeIndex
 
     for task, Component of tasks when Component.getSVGProps?
       for key, value of Component.getSVGProps hookProps

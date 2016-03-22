@@ -33,7 +33,6 @@ module.exports = React.createClass
     # console.log 'Marks are now', newSetOfMarks
 
   render: ->
-    console.log 'MARKINGS-RENDERER:render(), PROPS = ', @props # --STI
     <g>
       {for annotation in @props.classification?.annotations ? []
         annotation._key ?= Math.random()
