@@ -45,19 +45,20 @@ module.exports = React.createClass
   initCoords: null
 
   render: ->
+    console.log('props', @props)
     {x, y, width} = @props.mark
 
     <DrawingToolRoot tool={this}>
       <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
-        <rect x={x} y={y} width={width} height={@props.containerRect.height} />
+        <rect x={x} y={y} width={width} height={@props.containerRect.height / @props.scale.vertical} />
       </Draggable>
 
       {if @props.selected
         <g>
           <DeleteButton tool={this} x={x + width + 15} y={y + 10} />
 
-          <DragHandle x={x} y={@props.containerRect.height / 2} scale={@props.scale} onDrag={@handleLeftDrag} onEnd={@normalizeMark} />
-          <DragHandle x={x + width} y={@props.containerRect.height / 2} scale={@props.scale} onDrag={@handleRightDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleLeftDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x + width} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleRightDrag} onEnd={@normalizeMark} />
         </g>}
     </DrawingToolRoot>
 
