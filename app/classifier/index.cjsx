@@ -218,7 +218,10 @@ Classifier = React.createClass
 
       {if @props.workflow.world_wide_telescope = true
         <strong>
-          <WorldWideTelescope/>
+          <WorldWideTelescope
+            subjImage={@props.subject}
+            subjCrop={@props.classification.annotations}
+          />
         </strong>
         }
 
