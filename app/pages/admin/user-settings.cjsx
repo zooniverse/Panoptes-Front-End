@@ -24,6 +24,7 @@ UserSettings = React.createClass
           <li>Admin: <UserCheckboxToggle editUser={@props.editUser} field="admin" disabled /></li>
           <li>Login prompt: <UserCheckboxToggle editUser={@props.editUser} field="login_prompt" disabled /></li>
           <li>Private profile: <UserCheckboxToggle editUser={@props.editUser} field="private_profile" disabled /></li>
+          <li>Whitelist subject uploads: <UserCheckboxToggle editUser={@props.editUser} field="upload_whitelist" /></li>
           <li>Uploaded subjects: { @props.editUser.uploaded_subjects_count }</li>
           <li><UserLimitToggle editUser={@props.editUser} /> </li>
         </ul>
@@ -49,9 +50,14 @@ UserCheckboxToggle = React.createClass
   render: ->
     editUser = @props.editUser
     setting = editUser[@props.field]
-    <label style={whiteSpace: 'nowrap'}>
-      <input type="checkbox" disabled={@props.disabled} name={@props.field} value={setting} checked={setting} onChange={@set.bind this, @props.field, not setting} />
-    </label>
+    console.log setting
+    <div>
+      <AutoSave resource={editUser}>
+        <label style={whiteSpace: 'nowrap'}>
+          <input type="checkbox" disabled={@props.disabled} name={@props.field} value={setting} checked={setting} onChange={handleInputChange.bind editUser} />
+        </label>
+      </AutoSave>
+    </div>
 
 UserLimitToggle = React.createClass
   displayName: "User limit toggle"
