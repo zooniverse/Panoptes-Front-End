@@ -1,8 +1,8 @@
 isInBounds = (rect, bounds) ->
-  goodTop = rect.top < bounds.top + bounds.height
-  goodRight = rect.left + rect.width > bounds.left
-  goodBottom = rect.top + rect.height > bounds.top
-  goodLeft = rect.left < bounds.left + bounds.width
-  goodTop and goodRight and goodBottom and goodLeft
+  notBeyondLeft = rect.left + rect.width > bounds.left
+  notBeyondRight = rect.left < bounds.left + bounds.width
+  notBeyondTop = rect.top + rect.height > bounds.top
+  notBeyondBottom = rect.top < bounds.top + bounds.height
+  notBeyondLeft and notBeyondRight and notBeyondTop and notBeyondBottom
 
 module.exports = isInBounds
