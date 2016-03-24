@@ -12,7 +12,6 @@ PromiseRenderer = require '../../../components/promise-renderer'
 {Markdown} = require 'markdownz'
 Papa = require 'papaparse'
 apiClient = require 'panoptes-client/lib/api-client'
-putFile = require '../../../lib/put-file'
 Utility = require './utility'
 
 module.exports = React.createClass
