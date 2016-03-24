@@ -16,8 +16,15 @@ UserSettings = React.createClass
   getDefaultProps: ->
     editUser: null
 
+  componentDidMount: ->
+    @_boundForceUpdate ?= @forceUpdate.bind this
+    @props.editUser?.listen 'change', @_boundForceUpdate
+
+  componentWillReceiveProps: (nextProps) ->
+    @props.editUser?.stopListening 'change', @_boundForceUpdate
+    nextProps.editUser.listen 'change', @_boundForceUpdate
   render: ->
-    if @props.editUser
+    if @props.editUser?
       <div className="project-status">
         <h4>Settings for { @props.editUser.login }</h4>
         <ul>
