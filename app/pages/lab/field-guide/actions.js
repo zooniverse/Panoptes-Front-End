@@ -110,7 +110,7 @@ var actions = {
       return awaitPossibleRemoval.then(function() {
         apiClient.post(attachedImagesURL, payload).then(function(media) {
           media = [].concat(media)[0];
-          return putFile(media.src, iconFile).then(function() {
+          return putFile(media.src, iconFile, {'Content-Type': iconFile.type}).then(function() {
             var changes = {}
             changes['items.' + itemIndex + '.icon'] = media.id;
             guide.update(changes);
