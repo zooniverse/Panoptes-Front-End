@@ -32,11 +32,9 @@ Graph = React.createClass
     data = this.processData(@props.data, @props.by)
     min = Math.max data.labels.length - @props.num, 0
     max = data.labels.length - 1
-
-    minIdx: min
-    maxIdx: max
-    midIdx: max + min
-    data: data
+    state = @processRange(min, max)
+    state['data'] = data
+    state
 
   getDefaultProps: ->
     data: []
@@ -83,17 +81,19 @@ Graph = React.createClass
       previousLabel = label
     data
 
+  processRange: (min, max) ->
+    minIdx = @props.range[0] ? min
+    maxIdx = @props.range[1] ? max
+    midIdx = minIdx + maxIdx
+    {minIdx, maxIdx, midIdx}
+
   componentWillReceiveProps: (nextProps) ->
     if this.props.data != nextProps.data
       data = this.processData(nextProps.data, nextProps.by)
       min = Math.max data.labels.length - @props.num, 0
       max = data.labels.length - 1
-
-      newState =
-        minIdx: min
-        maxIdx: max
-        midIdx: max + min
-        data: data
+      newState = @processRange(min, max)
+      newState['data'] = data
       @setState(newState)
 
   formatDiff:
@@ -135,7 +135,7 @@ Graph = React.createClass
       minIdx: event[0]
       maxIdx: event[1]
       midIdx: event[1] + event[0]
-    @setState(newState)
+    @setState(newState, @onRangeChange)
 
   onSlideMid: (event) ->
     diff = @state.maxIdx - @state.minIdx
@@ -144,7 +144,10 @@ Graph = React.createClass
       maxIdx: Math.floor (event + diff) / 2
       midIdx: event
     if newState.minIdx >= 0 & newState.maxIdx < @state.data.labels.length
-      @setState(newState)
+      @setState(newState, @onRangeChange)
+      
+  onRangeChange: (event) ->
+    @props.handleRangeChange("#{@state.minIdx},#{@state.maxIdx}")
 
   render: ->
     dataSlice =

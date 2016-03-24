@@ -17,6 +17,13 @@ ProjectStatsPageController = React.createClass
   handleGraphChange: (which, e) ->
     query = qs.parse location.search.slice 1
     query[which] = e.target.value
+    query["#{which}Range"] = undefined
+    {owner, name} = @props.params
+    @history.pushState(null, "/projects/#{owner}/#{name}/stats/", query)
+
+  handleRangeChange: (which, range) ->
+    query = qs.parse location.search.slice 1
+    query["#{which}Range"] = range
     {owner, name} = @props.params
     @history.pushState(null, "/projects/#{owner}/#{name}/stats/", query)
 
@@ -34,8 +41,11 @@ ProjectStatsPageController = React.createClass
   render: ->
     queryProps =
       handleGraphChange: @handleGraphChange
+      handleRangeChange: @handleRangeChange
       classificationsBy: @getQuery('classification') ? 'hour'
+      classificationRange: @getQuery('classificationRange')
       commentsBy: @getQuery('comment') ? 'hour'
+      commentRange: @getQuery('commentRange')
       projectId: @props.project.id
       totalVolunteers: @props.project.classifiers_count
       currentVolunteers: @props.project.activity

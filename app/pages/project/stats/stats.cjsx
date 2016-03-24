@@ -25,6 +25,15 @@ GraphSelect = React.createClass
         console?.error 'Failed to get the stats'
 
   render: ->
+    if @props.range?
+      range = []
+      for r in @props.range.split(',')
+        if r
+          range.push(parseInt(r, 10))
+        else
+          range.push(undefined)
+    else
+      range = [undefined, undefined]
     <div>
       {@props.type[0].toUpperCase() + @props.type.substring(1)}s per{' '}
       <select value={@props.by} onChange={@handleGraphChange.bind this, @props.type}>
@@ -34,12 +43,15 @@ GraphSelect = React.createClass
         <option value="month">month</option>
       </select><br />
       <PromiseRenderer promise={@statCount(@props.by, @props.type)}>{(statData) =>
-        <Graph data={statData} by={@props.by} num={24} />
+        <Graph data={statData} by={@props.by} range={range} num={24} handleRangeChange={@handleRangeChange} />
       }</PromiseRenderer>
     </div>
 
   handleGraphChange: (which, e) ->
     @props.handleGraphChange(which, e)
+    
+  handleRangeChange: (range) ->
+    @props.handleRangeChange(@props.type, range)
 
 WorkflowProgress = React.createClass
   render: ->
@@ -105,12 +117,24 @@ ProjectStatsPage = React.createClass
       </div>
       <span className="project-stats-heading">Classification Stats</span>
       <div>
-        <GraphSelect handleGraphChange={@props.handleGraphChange} type="classification" projectId={@props.projectId} by={@props.classificationsBy}/>
+        <GraphSelect
+          handleGraphChange={@props.handleGraphChange}
+          handleRangeChange={@props.handleRangeChange}
+          type="classification"
+          projectId={@props.projectId}
+          by={@props.classificationsBy} 
+          range={@props.classificationRange} />
       </div>
       <hr />
       <span className="project-stats-heading">Talk Stats</span>
       <div>
-        <GraphSelect handleGraphChange={@props.handleGraphChange} type="comment" projectId={@props.projectId} by={@props.commentsBy}/>
+        <GraphSelect
+        handleGraphChange={@props.handleGraphChange}
+        handleRangeChange={@props.handleRangeChange}
+        type="comment"
+        projectId={@props.projectId}
+        by={@props.commentsBy} 
+        range={@props.commentRange} />
       </div>
 
     </div>
