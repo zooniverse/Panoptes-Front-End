@@ -28,6 +28,9 @@ module?.exports = React.createClass
     previousLabel: <span><i className="fa fa-long-arrow-left" /> Previous</span>
     nextLabel: <span>Next <i className="fa fa-long-arrow-right" /></span>
 
+  componentDidMount: ->
+    @setPage(1)
+
   mixins: [History]
 
   setPage: (activePage) ->
