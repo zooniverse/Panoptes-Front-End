@@ -4,7 +4,6 @@ SVGImage = require '../components/svg-image'
 Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
 tasks = require './tasks'
-Tooltip = require '../components/tooltip'
 seenThisSession = require '../lib/seen-this-session'
 getSubjectLocation = require '../lib/get-subject-location'
 WarningBanner = require './warning-banner'
@@ -83,13 +82,13 @@ module.exports = React.createClass
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
 
-  render: ->    
+  render: ->
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
-    
+
     createdViewBox = "#{@props.viewBoxDimensions.x} #{@props.viewBoxDimensions.y} #{@props.viewBoxDimensions.width} #{@props.viewBoxDimensions.height}"
-    
+
     svgStyle = {}
     if type is 'image' and not @props.loading
       # Images are rendered again within the SVG itself.
