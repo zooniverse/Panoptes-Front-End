@@ -45,12 +45,11 @@ module.exports = React.createClass
   initCoords: null
 
   render: ->
-    console.log('props', @props)
     {x, y, width} = @props.mark
 
     <DrawingToolRoot tool={this}>
       <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
-        <rect x={x} y={y} width={width} height={@props.containerRect.height / @props.scale.vertical} />
+        <rect ref="rect" x={x} y={y} width={width if @props.mark.width >= MINIMUM_WIDTH} height={@props.containerRect.height / @props.scale.vertical} />
       </Draggable>
 
       {if @props.selected
@@ -68,25 +67,25 @@ module.exports = React.createClass
     @props.onChange @props.mark
 
   handleLeftDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
+    @props.mark.x += d.x / @props.scale.horizontal if @props.mark.width >= MINIMUM_WIDTH
     # @props.mark.y += d.y / @props.scale.vertical
-    @props.mark.width -= d.x / @props.scale.horizontal
+    @props.mark.width -= d.x / @props.scale.horizontal 
     @props.mark.height -= d.y / @props.scale.vertical
-    @props.onChange @props.mark
+    @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
 
   handleRightDrag: (e, d) ->
     # @props.mark.y += d.y / @props.scale.vertical
     @props.mark.width += d.x / @props.scale.horizontal
     @props.mark.height -= d.y / @props.scale.vertical
-    @props.onChange @props.mark
+    @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
 
   normalizeMark: ->
     if @props.mark.width < 0
       @props.mark.x += @props.mark.width
       @props.mark.width *= -1
 
-    if @props.mark.height < 0
-      @props.mark.y += @props.mark.height
-      @props.mark.height *= -1
+    # if @props.mark.height < 0
+    #   @props.mark.y += @props.mark.height
+    #   @props.mark.height *= -1
 
-    @props.onChange @props.mark
+    @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
