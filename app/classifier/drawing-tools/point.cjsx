@@ -24,10 +24,10 @@ module.exports = React.createClass
     initMove: ({x, y}) ->
       {x, y}
 
-    initValid: (mark, {containerRect}) ->
+    initValid: (mark, {containerRect, scale}) ->
       markRect =
-        top: containerRect.top + mark.y
-        left: containerRect.left + mark.y
+        left: containerRect.left + (mark.x * scale.vertical)
+        top: containerRect.top + (mark.y * scale.horizontal)
         width: 1
         height: 1
       isInBounds markRect, containerRect
