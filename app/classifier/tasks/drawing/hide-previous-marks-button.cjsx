@@ -5,9 +5,18 @@ module.exports = React.createClass
 
   getInitialState: ->
     hideMarks: false
+    currentAnnotation: @getCurrentAnnotation()
 
   componentWillReceiveProps: ->
-    console.log 'CLASSIFICATION: ', @props.classification # --STI
+    currentAnnotation = @getCurrentAnnotation()
+    if currentAnnotation isnt @state.currentAnnotation # task must have changed
+      @setState currentAnnotation: currentAnnotation,
+        => if @state.hideMarks then @toggleHideMarks() # reset hidden marks
+
+  getCurrentAnnotation: ->
+    classification = @props.classification
+    annotations = classification.annotations
+    return annotations[annotations.length-1]
 
   toggleHideMarks: (e) ->
     @setState hideMarks: !@state.hideMarks, =>
