@@ -279,6 +279,23 @@ workflow = apiClient.type('workflows').create
 
       next: 'init'
 
+# Bulk up the survey task a bit:
+'abcdefghijlkmnopqrstuvwxyz1234'.split('').forEach (x, i) ->
+  xi = x + i
+  workflow.tasks.survey.choicesOrder.push xi
+  workflow.tasks.survey.choices[xi] =
+    label: xi
+    description: xi
+    images: ['aa1']
+    characteristics: do ->
+      out = {}
+      workflow.tasks.survey.characteristicsOrder.forEach (charID) ->
+        out[charID] = workflow.tasks.survey.characteristics[charID].valuesOrder.filter ->
+          Math.random() < 0.5
+      out
+    confusionsOrder: []
+    confusions: {}
+
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 

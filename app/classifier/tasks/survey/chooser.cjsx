@@ -1,7 +1,6 @@
 React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
-
-THUMBNAIL_BREAKPOINTS = [Infinity, 40, 20, 10, 5, 0]
+sortIntoColumns = require 'sort-into-columns'
 
 module.exports = React.createClass
   displayName: 'Chooser'
@@ -25,12 +24,31 @@ module.exports = React.createClass
       else
         choiceID
 
+  whatSizeThumbnails: ({length}) ->
+    if length <= 5
+      'large'
+    else if length <= 10
+      'medium'
+    else if length <= 30
+      'small'
+    else
+      'none'
+
+  howManyColumns: ({length}) ->
+    if length < 5
+      1
+    else if length < 20
+      2
+    else
+      3
+
   render: ->
     filteredChoices = @getFilteredChoices()
 
-    for point in THUMBNAIL_BREAKPOINTS
-      if filteredChoices.length <= point
-        breakpoint = point
+    thumbnailSize = @whatSizeThumbnails filteredChoices
+
+    columnsCount = @howManyColumns filteredChoices
+    sortedFilteredChoices = sortIntoColumns filteredChoices, columnsCount
 
     <div className="survey-task-chooser">
       <div className="survey-task-chooser-characteristics">
@@ -76,13 +94,13 @@ module.exports = React.createClass
           </TriggeredModalForm>}
       </div>
 
-      <div className="survey-task-chooser-choices" data-breakpoint={breakpoint}>
-        {if filteredChoices.length is 0
+      <div className="survey-task-chooser-choices" data-thumbnail-size={thumbnailSize} data-columns={columnsCount}>
+        {if sortedFilteredChoices.length is 0
           <div>
             <em>No matches.</em>
           </div>
         else
-          for choiceID, i in filteredChoices
+          for choiceID, i in sortedFilteredChoices
             choice = @props.task.choices[choiceID]
             <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
               {if choice.images?.length > 0
@@ -93,7 +111,7 @@ module.exports = React.createClass
             </button>}
       </div>
       <div style={textAlign: 'center'}>
-        Showing {filteredChoices.length} of {@props.task.choicesOrder.length}.
+        Showing {sortedFilteredChoices.length} of {@props.task.choicesOrder.length}.
         &ensp;
         <button type="button" className="survey-task-chooser-characteristic-clear-button" disabled={Object.keys(@props.filters).length is 0} onClick={@handleClearFilters}>
           <i className="fa fa-ban"></i> Clear filters

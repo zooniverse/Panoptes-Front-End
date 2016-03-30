@@ -1,7 +1,6 @@
 React = require 'react'
 alert = require '../../lib/alert'
 {Markdown} = require 'markdownz'
-Tooltip = require '../../components/tooltip'
 
 module.exports = React.createClass
   displayName: 'GenericTask'

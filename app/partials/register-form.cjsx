@@ -4,7 +4,6 @@ PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require 'panoptes-client/lib/auth'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
-Tooltip = require '../components/tooltip'
 debounce = require 'debounce'
 apiClient = require 'panoptes-client/lib/api-client'
 

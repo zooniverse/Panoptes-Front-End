@@ -202,7 +202,7 @@ module.exports = React.createClass
 
     apiClient.post @props.project._getURL(type), media: content_type: file.type
       .then ([resource]) =>
-        putFile resource.src, file
+        putFile resource.src, file, {'Content-Type': file.type}
       .then =>
         @props.project.uncacheLink type
         @["#{type}Get"] = null # Uncache the local request so that rerendering makes it again.
