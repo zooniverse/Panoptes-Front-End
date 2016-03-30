@@ -10,22 +10,12 @@ module.exports = React.createClass
     console.log 'CLASSIFICATION: ', @props.classification # --STI
 
   toggleHideMarks: (e) ->
-    console.log 'HidePreviousMarks::toggleHideMarks() >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ' # --STI
     @setState hideMarks: !@state.hideMarks, =>
-
       classification = @props.classification
       annotations = classification.annotations
-
-      if @state.hideMarks
-        console.log 'hiding marks before index: ', annotations[annotations.length - 1].value.length - 1
-        @props.classification._hideMarksBefore = annotations[annotations.length - 1].value.length - 1
-      else
-        console.log 'displaying all marks'
-        @props.classification._hideMarksBefore = -1
-
       @props.classification._hidePreviousMarks = @state.hideMarks
+      @props.classification._hideMarksBefore = if @state.hideMarks then annotations[annotations.length - 1].value.length - 1 else -1
       @props.classification.update()
-      # @props.onChange(annotations[annotations.length-1])
 
   render: ->
     return null unless @props.task.enableHidePrevMarks

@@ -36,12 +36,11 @@ module.exports = React.createClass
     <g>
       {for annotation, annotation_index in @props.classification?.annotations ? []
 
-        console.log 'ANNOTATION INDEX = ', annotation_index
-        console.log 'NUMBER OF ANNOTATIONS = ', @props.classification.annotations.length
+        # --STI
+        # console.log 'ANNOTATION INDEX = ', annotation_index
+        # console.log 'NUMBER OF ANNOTATIONS = ', @props.classification.annotations.length
 
-        if @props.classification._hidePreviousMarks and annotation_index < @props.classification.annotations.length - 1
-          console.log 'SKIPPING'
-          continue
+        continue if @props.classification._hidePreviousMarks and annotation_index < @props.classification.annotations.length - 1
 
         annotation._key ?= Math.random()
         isPriorAnnotation = annotation isnt @props.annotation
@@ -72,11 +71,6 @@ module.exports = React.createClass
                 onDestroy: @handleDestroy.bind this, annotation, mark
 
               ToolComponent = drawingTools[toolDescription.type]
-
-              # --STI
-              # if @props.classification._hideMarksBefore < 0 and annotation_index < @props.classification.annotations.length - 1
-              #   console.log 'HIDE PREVIOUS MARKS'
-              #   continue
 
               # render only new marks
               if !@props.classification._hideMarksBefore? or i > @props.classification._hideMarksBefore

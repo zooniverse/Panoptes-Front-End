@@ -32,8 +32,6 @@ module.exports = React.createClass
     getDefaultAnnotation: ->
       _toolIndex: 0
       value: []
-      hidePreviousMarks: false
-      hideMarksBeforeIndex: -1
 
     closeAllMarks: (task, annotation) ->
       for mark in annotation.value
