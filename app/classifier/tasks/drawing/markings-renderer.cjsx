@@ -36,14 +36,12 @@ module.exports = React.createClass
     <g>
       {for annotation, annotation_index in @props.classification?.annotations ? []
 
-        # --STI
-        # console.log '_hideMarksBefore = ', @props.classification._hideMarksBefore
-        # console.log 'annotation index = ', annotation_index
-        # console.log '@props.classification.annotations.length - 1 = ', @props.classification.annotations.length - 1
+        console.log 'ANNOTATION INDEX = ', annotation_index
+        console.log 'NUMBER OF ANNOTATIONS = ', @props.classification.annotations.length
 
-        # if @props.classification._hideMarksBefore < 0 and annotation_index < @props.classification.annotations.length - 1
-        #   console.log 'HIDE PREVIOUS MARKS'
-        #   continue
+        if @props.classification._hidePreviousMarks and annotation_index < @props.classification.annotations.length - 1
+          console.log 'SKIPPING'
+          continue
 
         annotation._key ?= Math.random()
         isPriorAnnotation = annotation isnt @props.annotation
