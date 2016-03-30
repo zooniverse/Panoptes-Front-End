@@ -147,9 +147,11 @@ publicationCategories =
     },
     {slug: "zooniverse/planet-hunters"
     publications: [
+      {citation: "Planet Hunters X: Searching for Nearby Neighbors of 75 Planet and Eclipsing Binary Candidates from the K2 Kepler extended mission, Schmitt+ 2016."
+      href: "http://arxiv.org/pdf/1603.06945v1.pdf"},
       {citation: "Planet Hunters. VIII. Characterization of 41 Long-Period Exoplanet Candidates from Kepler Archival Data, Wang+ 2015."
       href: "http://arxiv.org/pdf/1512.02559v2.pdf"},
-      {citation: "Planet Hunters. X. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
+      {citation: "Planet Hunters. IX. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
       href: "http://arxiv.org/pdf/1509.03622v1.pdf"},
       {citation: "GALEX J194419.33+491257.0: An unusually active SU UMa-type dwarf nova with a very short orbital period in the Kepler data, Kato & Osaki 2014."
       href: "http://adsabs.harvard.edu/doi/10.1093/pasj/psu025"},
