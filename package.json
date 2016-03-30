@@ -29,6 +29,7 @@
     "react-select": "~0.9.1",
     "react-swipe": "~3.0.0",
     "react-translate-component": "~0.10.0",
+    "sort-into-columns": "~1.0.0",
     "sugar-client": "~1.0.1",
     "swipe-js-iso": "~2.0.1",
     "test-shape-closeness": "0.0.1"
