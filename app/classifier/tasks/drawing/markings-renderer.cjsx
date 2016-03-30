@@ -34,7 +34,17 @@ module.exports = React.createClass
 
   render: ->
     <g>
-      {for annotation in @props.classification?.annotations ? []
+      {for annotation, annotation_index in @props.classification?.annotations ? []
+
+        # --STI
+        # console.log '_hideMarksBefore = ', @props.classification._hideMarksBefore
+        # console.log 'annotation index = ', annotation_index
+        # console.log '@props.classification.annotations.length - 1 = ', @props.classification.annotations.length - 1
+
+        # if @props.classification._hideMarksBefore < 0 and annotation_index < @props.classification.annotations.length - 1
+        #   console.log 'HIDE PREVIOUS MARKS'
+        #   continue
+
         annotation._key ?= Math.random()
         isPriorAnnotation = annotation isnt @props.annotation
         taskDescription = @props.workflow.tasks[annotation.task]
@@ -65,8 +75,13 @@ module.exports = React.createClass
 
               ToolComponent = drawingTools[toolDescription.type]
 
+              # --STI
+              # if @props.classification._hideMarksBefore < 0 and annotation_index < @props.classification.annotations.length - 1
+              #   console.log 'HIDE PREVIOUS MARKS'
+              #   continue
+
               # render only new marks
-              if i >= @props.annotation.hideMarksBeforeIndex
+              if !@props.classification._hideMarksBefore? or i > @props.classification._hideMarksBefore
                 <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
 
           </g>}

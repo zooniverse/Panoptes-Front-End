@@ -49,20 +49,6 @@ module.exports = React.createClass
           </p>
         </div>}
 
-      {if @props.enableHidePrevMarks
-        <div>
-          <p>
-            <small>
-              <strong>
-                <label className="hide-previous-marks-toggle">
-                  <input type="checkbox" onClick={@props.toggleHideMarksBefore} />
-                  {'Hide previous marks'}
-                </label>
-              </strong>
-            </small>
-          </p>
-        </div>}
-
     </div>
 
   showHelp: ->

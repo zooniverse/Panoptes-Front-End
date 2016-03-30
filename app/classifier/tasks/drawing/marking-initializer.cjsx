@@ -16,7 +16,7 @@ module.exports = React.createClass
     marksFromCurrentTool = @props.annotation.value.filter (mark) =>
       mark.tool is @props.annotation._toolIndex
 
-    canMakeMarks = marksFromCurrentTool.length < (toolDescription.max ? Infinity)
+    canMakeMarks = marksFromCurrentTool.length < (toolDescription?.max ? Infinity)
 
     <Draggable onStart={@handleInitStart} onDrag={@handleInitDrag} onEnd={@handleInitRelease} disabled={not canMakeMarks}>
       <rect className="marking-initializer" width={@props.naturalWidth} height={@props.naturalHeight} fill="transparent" stroke="none" />
