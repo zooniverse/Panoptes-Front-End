@@ -10,7 +10,7 @@ SEMI_MODAL_FORM_STYLE =
 
 SEMI_MODAL_UNDERLAY_STYLE =
   pointerEvents: 'none'
-  backgroundColor: 'rgba(0, 0, 0, 0.3)'
+  backgroundColor: 'rgba(0, 0, 0, 0)'
 
 module.exports = React.createClass
   displayName: 'DrawingToolRoot'

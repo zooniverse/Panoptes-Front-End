@@ -55,16 +55,21 @@
     vertical-align: middle
     width: 4em
 
-.project-finished-banner
-  background: SECOND_HIGHLIGHT
+.project-announcement-banner
   border: 2px solid
   border-radius: 0.2em
   box-shadow: 0 2px 4px rgba(black, 0.3)
-  color: BACKGROUND
-  margin: 0 auto 1em
-  padding: 0.5em 2em
+  box-sizing: border-box
+  color: white
+  margin: 0 3vw
+  padding: 0 1.5vw
   text-align: center
-  width: max-content
+
+  &.informational
+    background: MAIN_HIGHLIGHT
+
+  &.successful
+    background: SECOND_HIGHLIGHT
 
   a
     color: inherit

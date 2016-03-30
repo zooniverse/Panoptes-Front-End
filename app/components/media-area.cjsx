@@ -234,7 +234,7 @@ module.exports = React.createClass
 
   uploadMedia: (file, media) ->
     console.log "Uploading #{file.name} => #{media.src}"
-    putFile media.src, file
+    putFile media.src, file, {'Content-Type': file.type}
       .then =>
         media.refresh().then (media) =>
           # Another weird array.

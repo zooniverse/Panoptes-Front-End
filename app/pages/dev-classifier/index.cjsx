@@ -51,6 +51,7 @@ ClassificationViewer = React.createClass
 DevClassifierPage = React.createClass
   getDefaultProps: ->
     classification: mockData.classification
+    project: mockData.project
 
   reload: ->
     workflow = @props.classification._workflow
@@ -63,7 +64,7 @@ DevClassifierPage = React.createClass
 
   render: ->
     <div className="content-container">
-      <Classifier classification={@props.classification} onClickNext={@reload} />
+      <Classifier project={@props.project} classification={@props.classification} onClickNext={@reload} />
       <hr />
       <ClassificationViewer classification={@props.classification} />
     </div>

@@ -1,7 +1,7 @@
 React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
 
-THUMBNAIL_BREAKPOINTS = [Infinity, 160, 140, 120, 100, 80, 60, 40, 20, 10, 5, 0]
+THUMBNAIL_BREAKPOINTS = [Infinity, 40, 20, 10, 5, 0]
 
 module.exports = React.createClass
   displayName: 'Chooser'
@@ -85,7 +85,7 @@ module.exports = React.createClass
           for choiceID, i in filteredChoices
             choice = @props.task.choices[choiceID]
             <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
-              {unless choice.images.length is 0
+              {if choice.images?.length > 0
                 <span className="survey-task-chooser-choice-thumbnail-container">
                   <img src={@props.task.images[choice.images[0]]} alt={choice.label} className="survey-task-chooser-choice-thumbnail" />
                 </span>}

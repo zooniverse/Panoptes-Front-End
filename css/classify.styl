@@ -33,6 +33,9 @@
   .subject-container
     color: gray
     max-width: 100%
+    > *
+      display: flex
+      flex: 1 1 auto // Fix for IE 11. Revisit or remove when IE11 is no longer supported.
 
   .subject
     border-radius: 5px

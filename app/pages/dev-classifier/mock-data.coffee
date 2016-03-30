@@ -283,9 +283,9 @@ subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
-    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
-    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
+    {'image/jpeg': if navigator?.onLine then '//lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
+    {'image/jpeg': if navigator?.onLine then '//lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
+    {'image/jpeg': if navigator?.onLine then '//lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
   ]
 
   metadata:
@@ -337,15 +337,21 @@ subject = apiClient.type('subjects').create
         value: 6
       }]
 
+project = apiClient.type('project').create
+  id: 'MOCK_PROJECT_FOR_CLASSIFIER'
+  title: "The Dev Classifier"
+  experimental_tools: ['pan and zoom']
+
 classification = apiClient.type('classifications').create
   annotations: []
   metadata: {}
   links:
-    project: 'NO_PROJECT'
+    project: project.id
     workflow: workflow.id
     subjects: [subject.id]
   _workflow: workflow # TEMP
   _subjects: [subject] # TEMP
 
-module.exports = {workflow, subject, classification}
+
+module.exports = {workflow, subject, classification, project}
 window?.mockClassifierData = module.exports

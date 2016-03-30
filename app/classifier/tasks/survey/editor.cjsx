@@ -12,7 +12,6 @@ PromiseRenderer = require '../../../components/promise-renderer'
 {Markdown} = require 'markdownz'
 Papa = require 'papaparse'
 apiClient = require 'panoptes-client/lib/api-client'
-putFile = require '../../../lib/put-file'
 Utility = require './utility'
 
 module.exports = React.createClass
@@ -134,7 +133,7 @@ module.exports = React.createClass
           <strong>{choice.label}</strong>
         }>
           <Markdown content={choice.description} />
-          <p>
+          <div>
             {for characteristicID in @props.task.characteristicsOrder when choice.characteristics[characteristicID]?.length isnt 0
               characteristic = @props.task.characteristics[characteristicID]
               <div key={characteristicID}>
@@ -156,7 +155,7 @@ module.exports = React.createClass
                   twinLabels.join ', '}
                 </small>
               </div>}
-          </p>
+          </div>
         </Details>}
 
       <hr />
@@ -183,6 +182,15 @@ module.exports = React.createClass
       <Details summary={<small>Raw task data</small>}>
         <pre style={fontSize: '10px', whiteSpace: 'pre-wrap'}>{JSON.stringify @props.task, null, 2}</pre>
       </Details>
+
+      <hr />
+
+      <label>
+        <AutoSave resource={@props.workflow}>
+          <input type="checkbox" name="#{@props.taskPrefix}.required" checked={@props.task.required} onChange={handleInputChange.bind @props.workflow} />{' '}
+          Require at least one identification
+        </AutoSave>
+      </label>
     </div>
 
   handleFiles: (forEachRow, afterFileHook, e) ->
@@ -250,7 +258,7 @@ module.exports = React.createClass
       label: name
       description: ''
       noQuestions: false
-      image: []
+      images: []
       characteristics: {}
       confusionsOrder: []
       confusions: {}

@@ -35,6 +35,7 @@ module.exports = React.createClass
       </nav>
 
       <PromiseRenderer promise={@getProjects()}>{(projects) =>
+        projectsMeta = projects[0]?.getMeta()
         if projects.length is 0
           <div className="project-status-list">No projects found for this filter</div>
          else
@@ -49,8 +50,8 @@ module.exports = React.createClass
                  </div>}
              </div>
              <Paginator
-               page={+@props.location.query.page}
-               pageCount={projects[0]?.getMeta().page_count} />
+               page={projectsMeta?.page}
+               pageCount={projectsMeta?.page_count} />
             </div>
 
       }</PromiseRenderer>
