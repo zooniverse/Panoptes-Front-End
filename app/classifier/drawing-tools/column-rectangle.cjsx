@@ -4,7 +4,6 @@ DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 
-MINIMUM_SIZE = 5
 DELETE_BUTTON_DISTANCE = 9 / 10
 DEFAULT_WIDTH = 25
 MINIMUM_WIDTH = 25
@@ -40,24 +39,24 @@ module.exports = React.createClass
       _inProgress: false
 
     initValid: (mark) ->
-      mark.width > MINIMUM_SIZE
+      mark.width >= MINIMUM_WIDTH
 
   initCoords: null
 
   render: ->
     {x, y, width} = @props.mark
-
+    allowedWidth = if @props.mark.width < MINIMUM_WIDTH then MINIMUM_WIDTH else width
     <DrawingToolRoot tool={this}>
       <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
-        <rect ref="rect" x={x} y={y} width={width if @props.mark.width >= MINIMUM_WIDTH} height={@props.containerRect.height / @props.scale.vertical} />
+        <rect ref="rect" x={x} y={y} width={allowedWidth} height={@props.containerRect.height / @props.scale.vertical} />
       </Draggable>
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={x + width + 15} y={y + 10} />
+          <DeleteButton tool={this} x={x + allowedWidth + 20} y={y + 15} />
 
           <DragHandle x={x} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleLeftDrag} onEnd={@normalizeMark} />
-          <DragHandle x={x + width} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleRightDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x + allowedWidth} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleRightDrag} onEnd={@normalizeMark} />
         </g>}
     </DrawingToolRoot>
 
@@ -70,22 +69,20 @@ module.exports = React.createClass
     @props.mark.x += d.x / @props.scale.horizontal if @props.mark.width >= MINIMUM_WIDTH
     # @props.mark.y += d.y / @props.scale.vertical
     @props.mark.width -= d.x / @props.scale.horizontal 
-    @props.mark.height -= d.y / @props.scale.vertical
+    # @props.mark.height -= d.y / @props.scale.vertical
     @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
 
   handleRightDrag: (e, d) ->
     # @props.mark.y += d.y / @props.scale.vertical
     @props.mark.width += d.x / @props.scale.horizontal
-    @props.mark.height -= d.y / @props.scale.vertical
-    @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
+    # @props.mark.height -= d.y / @props.scale.vertical
+    @props.onChange @props.mark 
 
   normalizeMark: ->
-    if @props.mark.width < 0
-      @props.mark.x += @props.mark.width
-      @props.mark.width *= -1
+    if @props.mark.width < MINIMUM_WIDTH
+      @props.mark.x += @props.mark.width if @props.mark.width >= MINIMUM_WIDTH
+      # @props.mark.width *= -1
+      @props.mark.width is MINIMUM_WIDTH
 
-    # if @props.mark.height < 0
-    #   @props.mark.y += @props.mark.height
-    #   @props.mark.height *= -1
 
     @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
