@@ -64,7 +64,7 @@ module.exports = React.createClass
     @refs.filmstrip.style.height = @strip.getBoundingClientRect().height + 'px'
 
   render: -> <div className='filmstrip filmstrip--disciplines' ref='filmstrip'>
-      <button className='filmstrip__nav-btn' onClick={@scrollLeft} role="presentation" aria-hidden="true" aria-label="Scroll Left">&lt;</button>
+      <button className='filmstrip__nav-btn' onClick={@scrollLeft} role="presentation" aria-hidden="true" aria-label="Scroll Left"><i className="fa fa-chevron-left"></i></button>
       <div className='filmstrip__viewport' ref='viewport'>
         <div className='filmstrip__strip' ref='strip' style={left: @state.scrollPos}>
             <ul>
@@ -85,5 +85,5 @@ module.exports = React.createClass
             </ul>
         </div>
       </div>
-      <button className='filmstrip__nav-btn' onClick={@scrollRight} role="presentation" aria-hidden="true" aria-label="Scroll Right">&gt;</button>
+      <button className='filmstrip__nav-btn' onClick={@scrollRight} role="presentation" aria-hidden="true" aria-label="Scroll Right"><i className="fa fa-chevron-right"></i></button>
     </div>
