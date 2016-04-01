@@ -6,6 +6,7 @@ Select = require 'react-select'
 Translate = require 'react-translate-component'
 debounce = require 'debounce'
 Filmstrip = require '../components/filmstrip'
+PROJECT_SORTS = (require './project-sorts').PROJECT_SORTS
 
 FlexibleLink = React.createClass
   displayName: 'FlexibleLink'
@@ -146,13 +147,7 @@ SortSelector = React.createClass
   displayName: 'SortSelector'
   getDefaultProps: ->
     value: 'default'
-    sortMethods: [
-      { value: 'default', label: 'Default'},
-      { value: '-activity', label: 'Most Active'},
-      { value: 'completeness', label: 'Most Help Needed'},
-      { value: '-classifiers_count', label: 'Most Popular'},
-      { value: '-launch_date', label: 'Most Recently Launched'},
-      { value: '-updated_at', label: 'Most Recently Updated'}]
+    sortMethods: PROJECT_SORTS
     onChange: ->
 
   handleChange: (e) ->
