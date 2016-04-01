@@ -12,65 +12,88 @@ module.exports = React.createClass
   displayName: 'Tutorial'
 
   statics:
-    checkIfCompleted: (user, project) ->
-      getCompletedAt = if completedThisSession[project.id]?
-        Promise.resolve new Date completedThisSession[project.id]
+    find: ({workflow, project}) ->
+      # Prefer fetching the tutorial for the workflow, if a workflow is given.
+      awaitTutorialForWorkflow = if workflow?
+        apiClient.type('tutorials').get workflow_id: workflow.id
+          .then ([tutorial]) ->
+            tutorial
+      else
+        Promise.resolve()
+
+      # Wait for the workflow tutorial, but if nothing comes back, check for a project tutorial.
+      awaitTutorialInGeneral = awaitTutorialForWorkflow.then (tutorialForWorkflow) ->
+        if tutorialForWorkflow?
+          tutorialForWorkflow
+        else if project?
+          apiClient.type('tutorials').get project_id: project.id
+            .then ([tutorial]) =>
+              tutorial
+        else
+          # There's no workflow tutorial, and no project given.
+          Promise.resolve()
+
+    startIfNecessary: ({workflow, project, user}) ->
+      @find({workflow, project}).then (tutorial) =>
+        if tutorial?
+          @checkIfCompleted(tutorial, user).then (completed) =>
+            unless completed
+              @start tutorial, user
+
+    checkIfCompleted: (tutorial, user) ->
+      getCompletedAt = if completedThisSession[tutorial.id]?
+        Promise.resolve new Date completedThisSession[tutorial.id]
       else if user?
-        user.get 'project_preferences', project_id: project.id
-          .catch =>
-            []
-          .then ([projectPreferences]) =>
-            new Date projectPreferences?.preferences?.tutorial_completed_at
+        tutorial.get('project').then (project) =>
+          user.get 'project_preferences', project_id: project.id
+            .catch =>
+              []
+            .then ([projectPreferences]) =>
+              new Date projectPreferences?.preferences?.tutorial_completed_at
       else
         Promise.resolve null
 
       getCompletedAt.then (completedAt) =>
-        if isNaN completedAt?.valueOf()
-          false
-        else
-          # TODO: Check if the completion date is greater than the tutorial's modified_at date.
-          # Return `null` to mean "Completed, but not with the most recent version".
-          true
+        completedAt?
 
-    start: (user, project) ->
-      apiClient.type('tutorials').get project_id: project.id
-        .then ([tutorial]) =>
-          if tutorial? and tutorial.steps.length isnt 0
-            tutorial.get 'attached_images'
-              .catch =>
-                []
-              .then (mediaResources) =>
-                mediaByID = {}
-                for mediaResource in mediaResources
-                  mediaByID[mediaResource.id] = mediaResource
+    start: (tutorial, user) ->
+      TutorialComponent = this
 
-                TutorialComponent = this
-                Dialog.alert(<TutorialComponent steps={tutorial.steps} media={mediaByID} />, {
-                  className: 'tutorial-dialog',
-                  required: true,
-                  closeButton: true
-                })
-                  .catch =>
-                    null # We don't really care if the user canceled or completed the tutorial.
-                  .then =>
-                    now = new Date().toISOString()
-                    completedThisSession[project.id] = now
-                    if user?
-                      user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
-                        projectPreferences ?= apiClient.type('project_preferences').create({
-                          links: {
-                            project: project.id
-                          },
-                          preferences: {}
-                        })
-                        projectPreferences.update 'preferences.tutorial_completed_at': now
-                        projectPreferences.save()
+      if tutorial.steps.length isnt 0
+        awaitTutorialMedia = tutorial.get 'attached_images'
+          .catch ->
+            # Checking for attached images throws if there are none.
+            []
+          .then (mediaResources) ->
+            mediaByID = {}
+            for mediaResource in mediaResources
+              mediaByID[mediaResource.id] = mediaResource
+            mediaByID
 
-    startIfNecessary: (user, project) ->
-      @checkIfCompleted user, project
-        .then (completed) =>
-          if completed is false
-            @start user, project
+        awaitTutorialMedia.then (mediaByID) =>
+          Dialog.alert(<TutorialComponent steps={tutorial.steps} media={mediaByID} />, {
+            className: 'tutorial-dialog',
+            required: true,
+            closeButton: true
+          })
+            .catch =>
+              null # We don't really care if the user canceled or completed the tutorial.
+            .then =>
+              @markComplete tutorial, user
+
+    markComplete: (tutorial, user) ->
+      now = new Date().toISOString()
+      completedThisSession[tutorial.id] = now
+
+      if user?
+        tutorial.get('project').then (project) ->
+          user.get('project_preferences', project_id: project.id).then ([projectPreferences]) ->
+            projectPreferences ?= apiClient.type('project_preferences').create
+              links:
+                project: project.id
+              preferences: {}
+            projectPreferences.update 'preferences.tutorial_completed_at': now
+            projectPreferences.save()
 
   propTypes:
     steps: React.PropTypes.arrayOf React.PropTypes.shape
