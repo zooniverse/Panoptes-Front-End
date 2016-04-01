@@ -34,11 +34,11 @@ module.exports = React.createClass
     list = ['filmstrip--disciplines__discipline-card']
     list.push "filmstrip--disciplines__discipline-card--discipline-#{filterName}"
 
-    if(@props.selectedFilter == filterName)
+    if(@props.value== filterName)
       list.push 'filmstrip--disciplines__discipline-card--active'
-    if(!@props.selectedFilter? && filterName == 'all')
+    if(!@props.value? && filterName == 'all')
       list.push 'filmstrip--disciplines__discipline-card--active'
-    if(@props.selectedFilter == '' && filterName == 'all')
+    if(@props.value== '' && filterName == 'all')
       list.push 'filmstrip--disciplines__discipline-card--active'
 
     return list.join ' '
