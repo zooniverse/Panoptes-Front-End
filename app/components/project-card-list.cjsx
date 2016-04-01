@@ -148,11 +148,11 @@ SortSelector = React.createClass
     value: 'default'
     sortMethods: [
       { value: 'default', label: 'Default'},
-      { value: '-launch_date', label: 'Launch Date'},
-      { value: '-activity', label: 'Activity'},
-      { value: '-completeness', label: 'Completeness'},
-      { value: '-classifiers_count', label: 'Participants'},
-      { value: '-updated_at', label: 'last updated'}]
+      { value: '-activity', label: 'Most Active'},
+      { value: 'completeness', label: 'Most Help Needed'},
+      { value: '-classifiers_count', label: 'Most Popular'},
+      { value: '-launch_date', label: 'Most Recently Launched'},
+      { value: '-updated_at', label: 'Most Recently Updated'}]
     onChange: ->
 
   handleChange: (e) ->
@@ -162,7 +162,7 @@ SortSelector = React.createClass
     <Select
      multi={false}
      name="sort_order"
-     placeholder="Sort By"
+     placeholder="Sort by"
      searchPromptText="Select a sort order"
      closeAfterClick={true}
      className="standard-input search card-sort"
