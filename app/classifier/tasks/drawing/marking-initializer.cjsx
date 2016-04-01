@@ -89,7 +89,7 @@ module.exports = React.createClass
     @props.classification.update 'annotations'
 
     if MarkComponent.initValid?
-      unless MarkComponent.initValid mark
+      unless MarkComponent.initValid mark, @props
         @destroyMark @props.annotation, mark
 
   destroyMark: (annotation, mark) ->
