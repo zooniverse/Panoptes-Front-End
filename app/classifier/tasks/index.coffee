@@ -7,5 +7,6 @@ module.exports =
   flexibleSurvey: require './survey'
   crop: require './crop'
   text: require './text'
+  dropdown: require './dropdown'
 
 window?._tasks = module.exports
