@@ -69,7 +69,7 @@ module.exports = React.createClass
 
               ToolComponent = drawingTools[toolDescription.type]
 
-              if i > @props.classification._hideMarksBefore || !@props.classification._hideMarksBefore?
+              if i > @props.classification._hideMarksBefore or not @props.classification._hidePreviousMarks
                 <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
 
           </g>}

@@ -3,6 +3,11 @@ React = require 'react'
 module.exports = React.createClass
   displayName: 'HidePreviousMarksButton'
 
+  propTypes:
+    task: React.PropTypes.object
+    classification: React.PropTypes.object
+    annotation: React.PropTypes.object
+
   getInitialState: ->
     hideMarks: false
     currentAnnotation: @getCurrentAnnotation()

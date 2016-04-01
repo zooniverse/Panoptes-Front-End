@@ -89,6 +89,7 @@ Classifier = React.createClass
       @addAnnotationForTask classification, @props.workflow.first_task
 
   render: ->
+
     <ChangeListener target={@props.classification}>{=>
       if @state.showingExpertClassification
         currentClassification = @state.expertClassification
@@ -128,6 +129,9 @@ Classifier = React.createClass
   renderTask: (classification, annotation, task) ->
     TaskComponent = tasks[task.type]
 
+    if TaskComponent?
+      {AfterTask} = TaskComponent
+
     # Should we disabled the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
@@ -153,6 +157,9 @@ Classifier = React.createClass
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
       <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+
+      {if AfterTask?
+        <AfterTask task={task} classification={classification} annotation={annotation} />}
 
       <hr />
 
@@ -321,11 +328,19 @@ Classifier = React.createClass
     @props.classification.update changes
 
   handleAnnotationChange: (classification, newAnnotation) ->
+    # console.log 'Classifier::handleAnnotationChange()' # --STI
+    # console.log 'CLASSIFICATION: ', classification
+    # console.log 'ANNOTATION    : ', annotation
     classification.annotations[classification.annotations.length - 1] = newAnnotation
     classification.update 'annotations'
 
   # Next (or start):
   addAnnotationForTask: (classification, taskKey) ->
+
+    # console.log 'CLASSIFICATION: ', classification # --STI
+    classification._hidePreviousMarks = false
+    classification.update()
+
     taskDescription = @props.workflow.tasks[taskKey]
     annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
     annotation.task = taskKey
