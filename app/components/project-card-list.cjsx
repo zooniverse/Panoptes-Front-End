@@ -90,7 +90,7 @@ DisciplineSelector = React.createClass
   displayName: 'DisciplineSelector'
 
   render: ->
-    <Filmstrip increment={350} onChange={@props.onChange}/>
+    <Filmstrip increment={350} value={@props.value} onChange={@props.onChange}/>
 
 SearchSelector = React.createClass
 
