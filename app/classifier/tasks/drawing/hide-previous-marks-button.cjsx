@@ -24,6 +24,7 @@ module.exports = React.createClass
     return annotations[annotations.length-1]
 
   toggleHideMarks: (e) ->
+    console.log 'toggleHideMarks()'
     @setState hideMarks: !@state.hideMarks, =>
       classification = @props.classification
       annotations = classification.annotations
@@ -33,4 +34,16 @@ module.exports = React.createClass
 
   render: ->
     return null unless @props.task.enableHidePrevMarks
-    <button className='hide-previous-marks-button' onClick={@toggleHideMarks}>{if @state.hideMarks then 'Show' else 'Hide'} previous marks</button>
+    # <button className='hide-previous-marks-button minor-button' onClick={@toggleHideMarks}>{if @state.hideMarks then 'Show' else 'Hide'} previous marks</button>
+    <div>
+     <p>
+       <small>
+         <strong>
+           <label className="hide-previous-marks-toggle">
+             <input checked={@state.hideMarks} type="checkbox" onClick={@toggleHideMarks} />
+             {'Hide previous marks'}
+           </label>
+         </strong>
+       </small>
+     </p>
+    </div>

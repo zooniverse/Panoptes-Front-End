@@ -328,24 +328,18 @@ Classifier = React.createClass
     @props.classification.update changes
 
   handleAnnotationChange: (classification, newAnnotation) ->
-    # console.log 'Classifier::handleAnnotationChange()' # --STI
-    # console.log 'CLASSIFICATION: ', classification
-    # console.log 'ANNOTATION    : ', annotation
     classification.annotations[classification.annotations.length - 1] = newAnnotation
     classification.update 'annotations'
 
   # Next (or start):
   addAnnotationForTask: (classification, taskKey) ->
-
-    # console.log 'CLASSIFICATION: ', classification # --STI
-    classification._hidePreviousMarks = false
-    classification.update()
-
     taskDescription = @props.workflow.tasks[taskKey]
     annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
     annotation.task = taskKey
+    classification._hidePreviousMarks = false
     classification.annotations.push annotation
-    classification.update 'annotations'
+    classification.update()
+    # classification.update 'annotations'
 
   # Back up:
   destroyCurrentAnnotation: ->
