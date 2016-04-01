@@ -14,6 +14,7 @@ EXPERIMENTAL_FEATURES = [
   'crop'
   'text'
   'combo'
+  'dropdown'
   'tutorial'
   'field guide'
   'mini-course'

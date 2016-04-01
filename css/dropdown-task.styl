@@ -1,0 +1,62 @@
+.dropdown-editor
+  [draggable]
+    cursor: move
+    cursor: -moz-grab
+    cursor: -webkit-grab
+
+    // REVIEW - not sure the following is working...
+    [data-drag-reorderable-dragging] &
+      cursor: move
+      cursor: -moz-grabbing
+      cursor: -webkit-grabbing
+
+.dropdown-task-list
+  border: 1px solid rgba(gray, 0.3)
+  margin: 1em 0
+  padding: 0
+
+  > :not(:first-child)
+    border-top: 1px solid rgba(gray, 0.2)
+
+.dropdown-task-list-item-container
+  display: flex
+  border-left: 1em solid rgba(gray, 0.1)
+
+.dropdown-task-list-item-title
+  align-items: center
+  display: flex
+  padding: 0.5em 1em
+  text-align: left
+  font-weight: bold
+
+.dropdown-task-list-item-dependency
+  align-items: flex-start
+  display: flex
+  flex-grow: 1
+  padding: 0.5em 1em
+  text-align: left
+
+.dropdown-task-list-item-edit-button
+  @extends $reset-button
+  padding: 0.5em 1em
+
+  &:hover
+    background: rgba(green, 0.2)
+
+  &:active
+    background: green
+    color: white
+
+.dropdown-task-list-item-reset-button
+  @extends $reset-button
+  padding: 0.5em 1em
+
+  &:hover
+    background: rgba(red, 0.2)
+
+  &:active
+    background: red
+    color: white
+
+.dropdown-options-list
+    list-style-type: none
