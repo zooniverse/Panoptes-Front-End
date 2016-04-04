@@ -29,7 +29,7 @@ module.exports = React.createClass
       'large'
     else if length <= 10
       'medium'
-    else if length <= 30
+    else if length <= 20
       'small'
     else
       'none'
@@ -104,9 +104,8 @@ module.exports = React.createClass
             choice = @props.task.choices[choiceID]
             <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
               {if choice.images?.length > 0
-                <span className="survey-task-chooser-choice-thumbnail-container">
-                  <img src={@props.task.images[choice.images[0]]} alt={choice.label} className="survey-task-chooser-choice-thumbnail" />
-                </span>}
+                thumbnailSrc = @props.task.images[choice.images[0]]
+                <span className="survey-task-chooser-choice-thumbnail" role="presentation" style={backgroundImage: "url('#{thumbnailSrc}')"}></span>}
               <span className="survey-task-chooser-choice-label">{choice.label}</span>
             </button>}
       </div>

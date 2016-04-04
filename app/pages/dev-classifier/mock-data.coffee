@@ -121,11 +121,11 @@ workflow = apiClient.type('workflows').create
     survey:
       type: 'survey'
       images:
-        aa1: '//placehold.it/64.png?text=AA1'
+        aa1: '//placehold.it/64x32.png?text=AA1_WIDE'
         aa2: '//placehold.it/64.png?text=AA2'
-        ar1: '//placehold.it/64.png?text=AR1'
+        ar1: '//placehold.it/64x32.png?text=AR1_WIDE'
         ar2: '//placehold.it/64.png?text=AR2'
-        to1: '//placehold.it/64.png?text=TO1'
+        to1: '//placehold.it/64x32.png?text=TO1_WIDE'
         to2: '//placehold.it/64.png?text=TO2'
         so: '//placehold.it/48.png?text=so'
         sp: '//placehold.it/48.png?text=sp'
@@ -286,7 +286,7 @@ workflow = apiClient.type('workflows').create
   workflow.tasks.survey.choices[xi] =
     label: xi
     description: xi
-    images: ['aa1']
+    images: [Object.keys(workflow.tasks.survey.images)[Math.floor Math.random() * Object.keys(workflow.tasks.survey.images).length]]
     characteristics: do ->
       out = {}
       workflow.tasks.survey.characteristicsOrder.forEach (charID) ->
