@@ -29,7 +29,7 @@ module.exports = React.createClass
       'large'
     else if length <= 10
       'medium'
-    else if length <= 30
+    else if length <= 20
       'small'
     else
       'none'
