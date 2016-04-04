@@ -50,7 +50,6 @@ module.exports =
     <Route path="projects" component={require './pages/projects'} />
     <Route path="projects/:owner/:name" component={require './pages/project'}>
       <IndexRoute component={require './pages/project/home'} />
-      <Route name="disciplines" path="projects/disciplines?" handler={require './pages/projects-disciplines'} />
       <Route path="home" component={require './pages/project/home'} />
       <Route path="research" component={require './pages/project/research'} />
       <Route path="results" component={require './pages/project/results'} />
