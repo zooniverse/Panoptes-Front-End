@@ -155,19 +155,22 @@ $survey-task-pill-button
   display: inline-block
   vertical-align: middle
 
-  [data-thumbnail-size="none"] &-container
+  THUMBNAIL_ASPECT_RATIO = 1.25
+
+  [data-thumbnail-size="none"] &
     display: none
 
   [data-thumbnail-size="large"] &
     height: 6em
+    width: @height * THUMBNAIL_ASPECT_RATIO
 
   [data-thumbnail-size="medium"] &
     height: 3em
-    max-width: 7.5em
+    width: @height * THUMBNAIL_ASPECT_RATIO
 
   [data-thumbnail-size="small"] &
     height: 1.5em
-    width: 2em
+    width: @height * THUMBNAIL_ASPECT_RATIO
 
 .survey-task-chooser-choice-label
   display: inline-block
