@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 {Markdown} = require 'markdownz'
 GenericTask = require '../generic'
 GenericTaskEditor = require '../generic-editor'
@@ -61,11 +62,11 @@ module.exports = React.createClass
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <label className="answer">
-        <textarea className="standard-input full" rows="5" ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
+        <textarea autoFocus={true} className="standard-input full" rows="5" ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
       </label>
     </GenericTask>
 
   handleChange: ->
-    value = React.findDOMNode(@refs.textInput).value
+    value = ReactDOM.findDOMNode(@refs.textInput).value
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
