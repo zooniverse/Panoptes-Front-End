@@ -16,7 +16,7 @@ module.exports = React.createClass
   statics:
     Editor: GenericTaskEditor
     Summary: Summary
-    AfterTask: HidePreviousMarksButton
+    PersistAfterTask: HidePreviousMarksButton
     InsideSubject: MarkingInitializer
     PersistInsideSubject: MarkingsRenderer
 

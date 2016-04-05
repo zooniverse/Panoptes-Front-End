@@ -129,9 +129,6 @@ Classifier = React.createClass
   renderTask: (classification, annotation, task) ->
     TaskComponent = tasks[task.type]
 
-    if TaskComponent?
-      {AfterTask} = TaskComponent
-
     # Should we disabled the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
@@ -158,8 +155,8 @@ Classifier = React.createClass
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
       <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
-      {if AfterTask?
-        <AfterTask task={task} classification={classification} annotation={annotation} />}
+      {for anyTaskName, {PersistAfterTask} of tasks when PersistAfterTask?
+        <PersistAfterTask task={task} classification={classification} annotation={annotation} />}
 
       <hr />
 
