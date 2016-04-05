@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 
 module.exports = React.createClass
   displayName: 'WorldWideTelescope'
@@ -37,15 +38,15 @@ module.exports = React.createClass
     ra = 0
     dec = 0
     for value in chart.values
-      value.num = @degreeConvert(value.num) if /[:hms]/.test(value.num) and value.unit is 0
+      value.num = @degreeConvert value.num if /[:hms]/.test(value.num) and value.unit is 0
       query.lon.push(value) if value.unit is 3 or value.unit is 0
       query.lat.push(value) if value.unit is 2 or value.unit is 1
-    oppositeEnds = @oppositeCorners(query, chart.xBounds, chart.yBounds)
+    oppositeEnds = @oppositeCorners query, chart.xBounds, chart.yBounds
     for points in oppositeEnds
-      points = @equatConvert(points) if points.galactic is true
+      points = @equatConvert points if points.galactic is true
       ra += points.ra
       dec += points.dec
-    scale = @plateScale(oppositeEnds[0], oppositeEnds[1])
+    scale = @plateScale oppositeEnds[0], oppositeEnds[1]
     ra = ra / 2
     dec = dec / 2
     x = (chart.xBounds[1] - chart.xBounds[0]) / 2
@@ -76,8 +77,7 @@ module.exports = React.createClass
   inBounds: (test, boundaries) ->
     answer = 0
     test.map (value) ->
-      if value > boundaries[0] and value < boundaries[1]
-        answer = value
+      answer = value if value > boundaries[0] and value < boundaries[1]
     answer
 
   collectCharts: -> # organizes annotations into easier to read array of charts
@@ -116,7 +116,7 @@ module.exports = React.createClass
 
   degreeConvert: (item) -> # This will convert RA from sexagesimal to degrees
     degrees = 0
-    split = item.match(/[0-9]+/g)
+    split = item.match /[0-9]+/g
     degrees += split[0]*15
     degrees += split[1]/4 if split[1]
     degrees += split[2]/240 if split[2]
@@ -129,8 +129,8 @@ module.exports = React.createClass
   render: ->
     @collectCharts() if @props.classification[1]
     for chart in @props.charts
-      @queryConstruct(chart)
-    <div>{@props.urls.map (url) ->
-        <a href={url}>View in WorldWide Telescope</a>
+      @queryConstruct chart
+    <div><ul>{@props.urls.map (url, idx) ->
+        <li><a key={idx} href={url}>View in WorldWide Telescope</a></li>
         }
-    </div>
+    </ul></div>
