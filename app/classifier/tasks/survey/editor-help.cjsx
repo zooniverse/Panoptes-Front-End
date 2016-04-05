@@ -10,21 +10,25 @@ module.exports =
           <th>Name</th>
           <th>Description</th>
           <th>Images</th>
+          <th>No auestions</th>
         </tr>
         <tr className="form-label">
           <td>The label for the choice</td>
           <td>A short description of the choice</td>
           <td>Representative images of the choice, <code>;</code>-separated</td>
+          <td>Y or N for whether you want "sub-questions" to appear</td>
         </tr>
         <tr>
           <td>Shark</td>
           <td>A shark is a big gray ocean monster with fins and teeth.</td>
-          <td>http://example.com/images/shark.jpg</td>
+          <td>shark.jpg</td>
+          <td>Y</td>
         </tr>
         <tr>
           <td>Dolphin</td>
           <td>Dolphins are intelligent marine mammals who solve crimes.</td>
-          <td>http://example.com/images/dolphin.jpg; http://example.com/images/flipper.jpg</td>
+          <td>dolphin.jpg; flipper.jpg</td>
+          <td>N</td>
         </tr>
       </tbody>
     </table>
