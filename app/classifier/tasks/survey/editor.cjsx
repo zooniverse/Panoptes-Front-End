@@ -30,7 +30,7 @@ module.exports = React.createClass
     window.editingSurveyTask = @props.task
 
     <div className="workflow-task-editor">
-      <p><span className="form-label">Import task data</span></p>
+      <p><span className="form-label">Import task data. See <a href="https://www.zooniverse.org/projects/aliburchard/cameratraptest/faq">here for help</a>.</span></p>
       <div className="columns-container" style={marginBottom: '0.2em'}>
         <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addChoice, null}>Add choices CSV</FileButton>
         <TriggeredModalForm trigger={
