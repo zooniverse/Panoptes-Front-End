@@ -39,20 +39,20 @@ module.exports =
   </div>
 
   characteristics: <div className="content-container">
-    <p><strong>Characteristics</strong> of those choices that the user can filter through, formatted like this:</p>
+    <p><strong>Characteristics</strong> of those choices that the user can filter through. Note that the values in Name have to match the values in choices.csv exactly. Format like this:</p>
 
     <table className="standard-table">
       <tbody>
         <tr>
           <th>Name</th>
-          <th>Color=Orange; http://...png</th>
-          <th>Color=Gray; http://...png</th>
-          <th>Teeth=Dull; http://...png</th>
-          <th>Teeth=Pointy; http://...png</th>
+          <th>Color=Orange; orange.png</th>
+          <th>Color=Gray; gray.png</th>
+          <th>Teeth=Dull; dull.png</th>
+          <th>Teeth=Pointy; pointy.png</th>
         </tr>
         <tr className="form-label">
           <td>Choice name</td>
-          <td colSpan="4"><code>Characteristic</code>=<code>value</code>; <code>icon URL</code>, with each row marked <code>Y</code> or <code>N</code> for that choice</td>
+          <td colSpan="4"><code>Characteristic</code>=<code>value</code>; <code>icon filename</code>, with each row marked <code>Y</code> or <code>N</code> for that choice</td>
         </tr>
         <tr>
           <td>Shark</td>
