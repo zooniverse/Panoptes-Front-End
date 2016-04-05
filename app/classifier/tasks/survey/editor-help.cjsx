@@ -10,7 +10,7 @@ module.exports =
           <th>Name</th>
           <th>Description</th>
           <th>Images</th>
-          <th>No auestions</th>
+          <th>No questions</th>
         </tr>
         <tr className="form-label">
           <td>The label for the choice</td>
