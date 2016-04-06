@@ -86,9 +86,12 @@ Graph = React.createClass
     maxIdx = @props.range[1] ? max
     midIdx = minIdx + maxIdx
     {minIdx, maxIdx, midIdx}
+    
+  shouldComponentUpdate: (nextProps, nextState) ->
+    return (@state isnt nextState) or (@props.by isnt nextProps.by) or (@props.data isnt nextProps.data)
 
   componentWillReceiveProps: (nextProps) ->
-    if this.props.data != nextProps.data
+    if @props.data isnt nextProps.data
       data = this.processData(nextProps.data, nextProps.by)
       min = Math.max data.labels.length - @props.num, 0
       max = data.labels.length - 1
@@ -159,10 +162,26 @@ Graph = React.createClass
         <div>
           <ChartistGraph listener={draw: @onDrawSmall} type="Bar" data={@state.data} options={@props.optionsSmall} />
           <div className="top-slider">
-            <Rcslider ref="top-slider" min={0} max={@state.data.labels.length - 1} range={true} allowCross={false} value={[@state.minIdx, @state.maxIdx]} tipFormatter={null} onChange={@onSlide} />
+            <Rcslider
+              ref="top-slider"
+              min={0}
+              max={@state.data.labels.length - 1}
+              range={true}
+              allowCross={false}
+              value={[@state.minIdx, @state.maxIdx]}
+              tipFormatter={null}
+              onChange={@onSlide} />
           </div>
           <div className="mid-slider">
-            <Rcslider ref="mid-slider" min={0} max={2 * (@state.data.labels.length - 1)} value={@state.midIdx} step={2} included={false} tipFormatter={null} onChange={@onSlideMid} />
+            <Rcslider
+              ref="mid-slider"
+              min={0}
+              max={2 * (@state.data.labels.length - 1)}
+              value={@state.midIdx}
+              step={2}
+              included={false}
+              tipFormatter={null}
+              onChange={@onSlideMid} />
           </div>
           <br />
         </div>
