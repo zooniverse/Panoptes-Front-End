@@ -35,9 +35,9 @@ module.exports = React.createClass
       'none'
 
   howManyColumns: ({length}) ->
-    if length < 5
+    if length <= 5
       1
-    else if length < 20
+    else if length <= 20
       2
     else
       3
