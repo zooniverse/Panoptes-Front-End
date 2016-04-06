@@ -110,7 +110,7 @@ ProjectStatsPage = React.createClass
         </div>
         <hr />
         <div className="project-stats-progress">
-          <span className="project-stats-heading">Live Wrokflows</span>
+          <span className="project-stats-heading">Live Workflows</span>
           {progress}
         </div>
         <hr />
