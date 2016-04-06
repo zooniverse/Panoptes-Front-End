@@ -9,7 +9,7 @@ module.exports = React.createClass
     urls: []
     wwtUrl: "http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx?"
 
-  plateScale: (item1, item2) -> # this will only convert with DEC and RA
+  plateScale: (item1, item2) ->
     averageDec = (item1.dec + item2.dec) / 2
     deltaRA = ((item2.ra - item1.ra) * Math.cos(averageDec * Math.PI/180)) * 3600
     deltaDec = (item2.dec - item1.dec) * 3600
@@ -17,9 +17,9 @@ module.exports = React.createClass
     pixelSep = Math.sqrt(Math.pow(item1.x - item2.x,2) + (Math.pow(item1.y-item2.y, 2)))
     angularSep / pixelSep
 
-  equatConvert: (object) -> #convert galactic to equatorial coordinates in order to convert platescale
-    l = @radians object.dec
-    b = @radians object.ra
+  equatConvert: (object) -> #convert galactic to equatorial coordinates
+    l = @radians object.ra
+    b = @radians object.dec
     pole_ra = @radians 192.859508
     pole_dec = @radians 27.128336
     posangle = @radians 122.932-90.0
@@ -38,7 +38,7 @@ module.exports = React.createClass
     ra = 0
     dec = 0
     for value in chart.values
-      value.num = @degreeConvert value.num if /[:hms]/.test(value.num) and value.unit is 0
+      value.num = @degreeConvert value if value.unit is 0 or 1
       query.lon.push(value) if value.unit is 3 or value.unit is 0
       query.lat.push(value) if value.unit is 2 or value.unit is 1
     oppositeEnds = @oppositeCorners query, chart.xBounds, chart.yBounds
@@ -53,7 +53,7 @@ module.exports = React.createClass
     y = (chart.yBounds[1] - chart.yBounds[0]) / 2
     rotation = 0 # Double check rotation
     name = "Horsehead" # Must create unique names
-    @props.urls.push(@props.wwtUrl + "name=" + name + "&ra=" + ra + "&dec=" + dec + "&x=" + x + "&y=" + y + "&scale=" + scale + "&rotation=" + rotation + "&imageurl=" + "http://antwrp.gsfc.nasa.gov/apod/image/0811/horsehead_caelum.jpg")
+    @props.urls.push(@props.wwtUrl + "name=" + name + "&ra=" + ra + "&dec=" + dec + "&x=" + x + "&y=" + y + "&scale=" + scale + "&rotation=" + rotation + "&imageurl=" + "http://vignette4.wikia.nocookie.net/fantendo/images/2/26/Star.PNG/revision/20090803173255")
 
   oppositeCorners: (query, xBounds, yBounds) ->
     galactic = false
@@ -87,6 +87,8 @@ module.exports = React.createClass
         corners: [{x: chart.x, y: chart.y}, {x: chart.x + chart.width, y: chart.y},
         {x: chart.x, y: chart.y + chart.height},{x: chart.x + chart.width, y: chart.y + chart.height}]
         values: []
+        x: chart.x
+        y: chart.y
         width: chart.width
         height: chart.height
         xBounds: [chart.x, chart.x + chart.width]
@@ -114,12 +116,21 @@ module.exports = React.createClass
               least = distance
               value.unit = unit.details[0].value
 
-  degreeConvert: (item) -> # This will convert RA from sexagesimal to degrees
-    degrees = 0
-    split = item.match /[0-9]+/g
-    degrees += split[0]*15
-    degrees += split[1]/4 if split[1]
-    degrees += split[2]/240 if split[2]
+  degreeConvert: (item) -> # This will convert RA and DEC to degrees
+    degrees = item.num
+    if /[:hms\s]/.test(item.num) and item.unit is 0
+      degrees = 0
+      split = item.num.match /[0-9]+/g
+      degrees += Number(split[0]*15)
+      degrees += Number(split[1]/4) if split[1]
+      degrees += Number(split[2]/240) if split[2]
+    if /[:'dms\s]/.test(item.num) and item.unit is 1
+      degrees = 0
+      split = item.num.match /[-]+|[0-9]+/g
+      negative = split.shift() if split[0] is "-"
+      degrees += Number(split[0])
+      degrees += Number(split[1]/60) if split[1] # This needs to subtract if the first number is negative
+      degrees = negative + degrees if negative
     degrees
 
   imageCrop: (chart) ->
