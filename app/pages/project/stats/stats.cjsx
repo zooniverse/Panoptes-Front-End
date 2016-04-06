@@ -6,14 +6,31 @@ moment = require 'moment'
 {Progress, Graph} = require './charts'
 
 GraphSelect = React.createClass
+  getInitialState: ->
+    workflowsLoaded: false
+    query: "project_id=#{@props.projectId}"
+
   getDefaultProps: ->
     by: 'hour'
+    
+  componentWillReceiveProps: (nextProps) ->
+    # beacause I can't think of a cleaner way to check for this
+    # placing (@props.workflows isnt nextProps.workflows) in shouldComponentUpdate does not work
+    # and the workflow dropdown list is never made
+    # there might be a nice way to use PromiseRenderer for this
+    if (not @state.workflowsLoaded) and (nextProps.workflows?)
+      areNulls = false
+      for w in nextProps.workflows
+        if w is null
+          areNulls = true
+      if not areNulls
+        @setState({workflowsLoaded: true})
 
-  shouldComponentUpdate: (nextProps) ->
-    return @props.by isnt nextProps.by
+  shouldComponentUpdate: (nextProps, nextState) ->
+    return (@props.by isnt nextProps.by) or (@state isnt nextState)
 
   statCount: (period, type) ->
-    stats_url = "#{config.statHost}/counts/#{type}/#{period}?project_id=#{@props.projectId}"
+    stats_url = "#{config.statHost}/counts/#{type}/#{period}?#{@state.query}"
     makeHTTPRequest 'GET', stats_url
       .then (response) =>
         results = JSON.parse response.text
@@ -24,6 +41,24 @@ GraphSelect = React.createClass
       .catch (response) ->
         console?.error 'Failed to get the stats'
 
+  workflowSelect: ->
+    if @props.workflows?
+      options = [<option value={"project_id=#{@props.projectId}"} key={"workflowSelectAll"}>All</option>]
+      for workflow, key in @props.workflows
+        if workflow?.active
+          options.push(<option value={"workflow_id=#{workflow.id}"} key={"workflowSelect#{key}"}>{workflow.display_name}</option>)
+      if options.length > 1
+        <span>
+          {' '}for{' '}
+          <select onChange={@handleWorkflowSelect}>
+            {options}
+          </select>
+        </span>
+      
+  handleWorkflowSelect: (event) ->
+    @props.handleWorkflowChange(@props.type)
+    @setState({query: event.target.value})
+    
   render: ->
     if @props.range?
       range = []
@@ -34,6 +69,7 @@ GraphSelect = React.createClass
           range.push(undefined)
     else
       range = [undefined, undefined]
+    workflowSelect = @workflowSelect()
     <div>
       {@props.type[0].toUpperCase() + @props.type.substring(1)}s per{' '}
       <select value={@props.by} onChange={@handleGraphChange.bind this, @props.type}>
@@ -41,7 +77,9 @@ GraphSelect = React.createClass
         <option value="day">day</option>
         <option value="week">week</option>
         <option value="month">month</option>
-      </select><br />
+      </select>
+      {workflowSelect}
+      <br />
       <PromiseRenderer promise={@statCount(@props.by, @props.type)}>{(statData) =>
         <Graph data={statData} by={@props.by} range={range} num={24} handleRangeChange={@handleRangeChange} />
       }</PromiseRenderer>
@@ -120,6 +158,8 @@ ProjectStatsPage = React.createClass
         <GraphSelect
           handleGraphChange={@props.handleGraphChange}
           handleRangeChange={@props.handleRangeChange}
+          handleWorkflowChange={@props.handleWorkflowChange}
+          workflows={@props.workflows}
           type="classification"
           projectId={@props.projectId}
           by={@props.classificationsBy} 
