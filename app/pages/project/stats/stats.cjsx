@@ -91,7 +91,33 @@ GraphSelect = React.createClass
   handleRangeChange: (range) ->
     @props.handleRangeChange(@props.type, range)
 
+ETA = React.createClass
+  render: ->
+    if @props.data.length > 15
+      # don't count the last bin since the current day is not over yet
+      value = @props.data.slice(@props.data.length - 15, @props.data.length - 1)
+      days = 14
+    else
+      value = @props.data.slice(0, @props.data.length - 1)
+      days = @props.data.length - 1
+    rate = value.reduce (a,b) -> a + b
+    eta = Math.max(0, Math.ceil(days * (@props.totalCount - @props.currentCount) / rate))
+    <div>
+      <span className="progress-stat-label">ETC*</span> {"#{eta} days"}
+    </div>
+
 WorkflowProgress = React.createClass
+  statCount: ->
+    stats_url = "#{config.statHost}/counts/classification/day?workflow_id=#{@props.workflow.id}"
+    makeHTTPRequest 'GET', stats_url
+      .then (response) =>
+        results = JSON.parse response.text
+        bucket_data = results["events_over_time"]["buckets"]
+        data = bucket_data.map (stat_object) =>
+          stat_object.doc_count
+      .catch (response) ->
+        console?.error 'Failed to get the stats'
+        
   render: ->
     if @props.workflow.retirement.criteria == 'classification_count'
       retirement = <div><span className="progress-stat-label">Retirement limit:</span> {@props.workflow.retirement.options.count.toLocaleString()}</div>
@@ -107,6 +133,9 @@ WorkflowProgress = React.createClass
         <div>
           <span className="progress-stat-label">Classifications:</span> {@props.workflow.classifications_count.toLocaleString()} / {(@props.workflow.subjects_count * @props.workflow.retirement.options.count).toLocaleString()}
         </div>
+        <PromiseRenderer promise={@statCount()}>{(statData) =>
+          <ETA data={statData} currentCount={@props.workflow.classifications_count} totalCount={@props.workflow.subjects_count * @props.workflow.retirement.options.count} />
+        }</PromiseRenderer>
         <Progress progress={@props.workflow.completeness} />
       </div>
     </div>
@@ -150,6 +179,7 @@ ProjectStatsPage = React.createClass
         <div className="project-stats-progress">
           <span className="project-stats-heading">Live Workflows</span>
           {progress}
+          <span className="project-stats-footer">*Estimated time to compleation is based on the classification rate for the past 14 days</span>
         </div>
         <hr />
       </div>
