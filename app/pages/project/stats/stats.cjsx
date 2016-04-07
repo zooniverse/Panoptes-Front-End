@@ -162,7 +162,7 @@ ProjectStatsPage = React.createClass
           <div>{moment(@props.startDate).format 'MMM-DD-YYYY'}</div>
           <div>Launch Date</div>
         </div>
-    <div className="project-stats-page content-container">
+    <div className="project-text-content content-container">
       <div className="project-stats-dashboard">
         <div className="project-metadata-stats">
           {start}
