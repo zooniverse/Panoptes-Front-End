@@ -54,9 +54,9 @@ ProjectStatsPageController = React.createClass
       handleGraphChange: @handleGraphChange
       handleRangeChange: @handleRangeChange
       handleWorkflowChange: @handleWorkflowChange
-      classificationsBy: @getQuery('classification') ? 'hour'
+      classificationsBy: @getQuery('classification') ? 'day'
       classificationRange: @getQuery('classificationRange')
-      commentsBy: @getQuery('comment') ? 'hour'
+      commentsBy: @getQuery('comment') ? 'day'
       commentRange: @getQuery('commentRange')
       projectId: @props.project.id
       workflowId: @getQuery('workflow_id')
