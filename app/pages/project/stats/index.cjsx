@@ -21,8 +21,13 @@ ProjectStatsPageController = React.createClass
     {owner, name} = @props.params
     @history.pushState(null, "/projects/#{owner}/#{name}/stats/", query)
     
-  handleWorkflowChange: (which) ->
+  handleWorkflowChange: (which, e) ->
     query = qs.parse location.search.slice 1
+    [name, value] = e.target.value.split('=')
+    if name is 'workflow_id'
+      query[name] = value
+    else
+      query['workflow_id'] = undefined
     query["#{which}Range"] = undefined
     {owner, name} = @props.params
     @history.pushState(null, "/projects/#{owner}/#{name}/stats/", query)
@@ -54,6 +59,7 @@ ProjectStatsPageController = React.createClass
       commentsBy: @getQuery('comment') ? 'hour'
       commentRange: @getQuery('commentRange')
       projectId: @props.project.id
+      workflowId: @getQuery('workflow_id')
       totalVolunteers: @props.project.classifiers_count
       currentVolunteers: @props.project.activity
       workflows: @state.workflowList

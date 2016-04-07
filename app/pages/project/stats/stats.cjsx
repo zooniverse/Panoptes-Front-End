@@ -8,7 +8,6 @@ moment = require 'moment'
 GraphSelect = React.createClass
   getInitialState: ->
     workflowsLoaded: false
-    query: "project_id=#{@props.projectId}"
 
   getDefaultProps: ->
     by: 'hour'
@@ -27,10 +26,11 @@ GraphSelect = React.createClass
         @setState({workflowsLoaded: true})
 
   shouldComponentUpdate: (nextProps, nextState) ->
-    return (@props.by isnt nextProps.by) or (@state isnt nextState)
+    return (@props.by isnt nextProps.by) or (@props.workflowId isnt nextProps.workflowId) or (@state isnt nextState)
 
   statCount: (period, type) ->
-    stats_url = "#{config.statHost}/counts/#{type}/#{period}?#{@state.query}"
+    query = if @props.workflowId then "workflow_id=#{@props.workflowId}" else "project_id=#{@props.projectId}"
+    stats_url = "#{config.statHost}/counts/#{type}/#{period}?#{query}"
     makeHTTPRequest 'GET', stats_url
       .then (response) =>
         results = JSON.parse response.text
@@ -48,16 +48,16 @@ GraphSelect = React.createClass
         if workflow?.active
           options.push(<option value={"workflow_id=#{workflow.id}"} key={"workflowSelect#{key}"}>{workflow.display_name}</option>)
       if options.length > 1
+        value = if @props.workflowId then "workflow_id=#{@props.workflowId}" else "project_id=#{@props.projectId}"
         <span>
           {' '}for{' '}
-          <select onChange={@handleWorkflowSelect}>
+          <select onChange={@handleWorkflowSelect} value={value}>
             {options}
           </select>
         </span>
       
   handleWorkflowSelect: (event) ->
-    @props.handleWorkflowChange(@props.type)
-    @setState({query: event.target.value})
+    @props.handleWorkflowChange(@props.type, event)
     
   render: ->
     if @props.range?
@@ -160,6 +160,7 @@ ProjectStatsPage = React.createClass
           handleRangeChange={@props.handleRangeChange}
           handleWorkflowChange={@props.handleWorkflowChange}
           workflows={@props.workflows}
+          workflowId={@props.workflowId}
           type="classification"
           projectId={@props.projectId}
           by={@props.classificationsBy} 
