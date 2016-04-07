@@ -53,7 +53,7 @@ module.exports = React.createClass
     y = (chart.yBounds[1] - chart.yBounds[0]) / 2
     rotation = 0 # Double check rotation
     name = "Horsehead" # Must create unique names
-    @props.urls.push(@props.wwtUrl + "name=" + name + "&ra=" + ra + "&dec=" + dec + "&x=" + x + "&y=" + y + "&scale=" + scale + "&rotation=" + rotation + "&imageurl=" + "http://vignette4.wikia.nocookie.net/fantendo/images/2/26/Star.PNG/revision/20090803173255")
+    @props.urls.push(@props.wwtUrl + "name=" + name + "&ra=" + ra + "&dec=" + dec + "&x=" + x + "&y=" + y + "&scale=" + scale + "&rotation=" + rotation + "&imageurl=" + @imageCrop(chart))
 
   oppositeCorners: (query, xBounds, yBounds) ->
     galactic = false
@@ -129,13 +129,13 @@ module.exports = React.createClass
       split = item.num.match /[-]+|[0-9]+/g
       negative = split.shift() if split[0] is "-"
       degrees += Number(split[0])
-      degrees += Number(split[1]/60) if split[1] # This needs to subtract if the first number is negative
+      degrees += Number(split[1]/60) if split[1]
       degrees = negative + degrees if negative
     degrees
 
   imageCrop: (chart) ->
     subjImage = @props.subject.locations[0]["image/jpeg"]
-    "http://imgproc.zooniverse.org/crop?w=" + chart.width + "&h=" + chart.height + "&x=" + chart.x + "&y=" + chart.y + "&u=" + "panoptes-uploads.zooniverse.org/production/subject_location/90a3b642-55e2-4583-a4fb-2f0abeb5b285.jpeg"
+    console.log("http://imgproc.zooniverse.org/crop?w=" + chart.width + "&h=" + chart.height + "&x=" + chart.x + "&y=" + chart.y + "&u=" + "panoptes-uploads.zooniverse.org/production/subject_location/90a3b642-55e2-4583-a4fb-2f0abeb5b285.jpeg")
 
   render: ->
     @collectCharts() if @props.classification[1]
