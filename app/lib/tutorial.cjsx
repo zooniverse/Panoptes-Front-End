@@ -30,31 +30,28 @@ module.exports = React.createClass
             .then ([tutorial]) =>
               tutorial
         else
-          # There's no workflow tutorial, and no project given.
+          # There's no workflow tutorial and no project given.
           Promise.resolve()
 
     startIfNecessary: ({workflow, project, user}) ->
       @find({workflow, project}).then (tutorial) =>
         if tutorial?
           @checkIfCompleted(tutorial, user).then (completed) =>
+            console.log {completed}
             unless completed
               @start tutorial, user
 
     checkIfCompleted: (tutorial, user) ->
-      getCompletedAt = if completedThisSession[tutorial.id]?
-        Promise.resolve new Date completedThisSession[tutorial.id]
-      else if user?
+      if user?
         tutorial.get('project').then (project) =>
           user.get 'project_preferences', project_id: project.id
             .catch =>
               []
             .then ([projectPreferences]) =>
-              new Date projectPreferences?.preferences?.tutorial_completed_at
+              window.prefs = projectPreferences
+              projectPreferences?.preferences?.tutorials_completed_at?[tutorial.id]?
       else
-        Promise.resolve null
-
-      getCompletedAt.then (completedAt) =>
-        completedAt?
+        Promise.resolve completedThisSession[tutorial.id]?
 
     start: (tutorial, user) ->
       TutorialComponent = this
@@ -92,7 +89,10 @@ module.exports = React.createClass
               links:
                 project: project.id
               preferences: {}
-            projectPreferences.update 'preferences.tutorial_completed_at': now
+            # Build this manually. Having an index (even as a strings) keys creates an array.
+            projectPreferences.preferences ?= {}
+            projectPreferences.preferences.tutorials_completed_at ?= {}
+            projectPreferences.update "preferences.tutorials_completed_at.#{tutorial.id}": now
             projectPreferences.save()
 
   propTypes:
