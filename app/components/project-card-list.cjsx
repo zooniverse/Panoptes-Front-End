@@ -216,7 +216,7 @@ ProjectFilteringInterface = React.createClass
       tags: discipline || undefined
       page: page
       sort: sort ? @constructor.defaultProps.sort
-      launch_approved: true
+      launch_approved: true unless apiClient.params.admin
       cards: true
       include: ['avatar']
 
