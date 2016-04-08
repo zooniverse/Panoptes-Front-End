@@ -20,6 +20,7 @@ EXPERIMENTAL_FEATURES = [
   'mini-course'
   'hide classification summaries'
   'pan and zoom'
+  'hide previous marks'
 ]
 
 ProjectToggle = React.createClass

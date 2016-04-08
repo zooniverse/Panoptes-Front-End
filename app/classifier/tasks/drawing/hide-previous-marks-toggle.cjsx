@@ -21,12 +21,17 @@ HidePreviousMarksToggle = React.createClass
     @props.onChange @props.classification
 
   render: ->
+    annotations = @props.classification.annotations
+    currentAnnotation = annotations[annotations.length-1]
+    return null unless @props.workflow.tasks[currentAnnotation.task].enableHidePrevMarks
+
+
     DrawingTaskComponent = require '.' # Circular
 
     currentlyHidingMarks = @props.classification._hideMarksBefore > 0
 
     marksCount = 0
-    @props.classification.annotations.forEach (annotation) =>
+    annotations.forEach (annotation) =>
       taskDescription = @props.workflow.tasks[annotation.task]
       TaskComponent = @props.taskTypes[taskDescription.type]
       if TaskComponent is DrawingTaskComponent
