@@ -49,7 +49,7 @@ HidePreviousMarksToggle = React.createClass
     <div>
       <label style={checkedStyle if currentlyHidingMarks}>
         <input type="checkbox" checked={currentlyHidingMarks} disabled={marksCount is 0} onChange={@setPreviousMarks.bind this, nextValueToSet} />{' '}
-        Hide previous marks
+        Hide previous marks {if marksCount > 0 then '(' + marksCount + ')' }
       </label>
     </div>
 
