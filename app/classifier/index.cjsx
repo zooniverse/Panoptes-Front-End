@@ -151,8 +151,33 @@ Classifier = React.createClass
       opacity: 0.5
       pointerEvents: 'none'
 
+    # Run through the existing annotations to build up sets of persistent hooks in the order of the associated annotations. Skip duplicates.
+    persistentHooksBeforeTask = []
+    persistentHooksAfterTask = []
+    classification.annotations.forEach (annotation) =>
+      taskDescription = @props.workflow.tasks[annotation.task]
+      TaskComponent = tasks[taskDescription.type]
+      {PersistBeforeTask, PersistAfterTask} = TaskComponent
+      if PersistBeforeTask? and PersistBeforeTask not in persistentHooksBeforeTask
+        persistentHooksBeforeTask.push PersistBeforeTask
+      if PersistAfterTask? and PersistAfterTask not in persistentHooksAfterTask
+        persistentHooksAfterTask.push PersistAfterTask
+
+    # These props will be passed into the hooks. Append as necessary when creating hooks.
+    taskHookProps =
+      taskTypes: tasks
+      workflow: @props.workflow
+      classification: classification
+      onChange: -> classification.update()
+
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
+      {persistentHooksBeforeTask.map (HookComponent) =>
+        <HookComponent {...taskHookProps} />}
+
       <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+
+      {persistentHooksAfterTask.map (HookComponent) =>
+        <HookComponent {...taskHookProps} />}
 
       <hr />
 
