@@ -25,11 +25,6 @@ ProjectsPage = React.createClass
     location: React.PropTypes.object
     history: React.PropTypes.object
 
-  apiOpts:
-    include: 'avatar'
-    cards: 'true'
-    launch_approved: !apiClient.params.admin
-
   emptyPromise:
     then: ->
     catch: ->
