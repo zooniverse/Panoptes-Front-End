@@ -115,11 +115,10 @@ $survey-task-pill-button
   border-radius: 8px
   display: flex
   flex-wrap: wrap
-  padding: 4px
+  padding: 3px
 
   > *
-    margin: 0 2px 2px 0
-    position: relative
+    margin: 1px
 
   &[data-columns="3"] > *
     flex-basis: calc(33.33% - 2px)
@@ -130,17 +129,14 @@ $survey-task-pill-button
   &[data-columns="1"] > *
     flex-basis: calc(100% - 2px)
 
-  .survey-task-chooser-choice
-    align-items: center
-    justify-content: flex-start
+.survey-task-chooser-choice-button
+  @extends $reset-button
 
 .survey-task-chooser-choice
-  @extends $reset-button
+  align-items: center
   background: rgba(64, 64, 64, 1)
   color: white
   display: flex
-  justify-content: center
-  width: 100%
 
   &:hover
     background: rgba(102, 102, 102, 1)
@@ -175,7 +171,7 @@ $survey-task-pill-button
 .survey-task-chooser-choice-label
   display: inline-block
 
-  [data-breakpoint="5"] &
+  [data-columns="1"] &
     font-size: 1.5em
 
 .survey-task-chooser-characteristic-clear-button
