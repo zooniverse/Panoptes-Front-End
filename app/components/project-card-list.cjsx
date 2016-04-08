@@ -182,7 +182,7 @@ PageSelector = React.createClass
     <nav className="pagination">
       {for page in [1..@props.total]
         active = (page is +@props.current)
-        <a onClick={@handleChange.bind this, page} key={page} className="pill-button" style={border: "2px solid" if active}>{page}</a>}
+        <button onClick={@handleChange.bind this, page} key={page} className="pill-button" style={border: "2px solid" if active}>{page}</button>}
     </nav>
 
 ProjectFilteringInterface = React.createClass
@@ -199,6 +199,7 @@ ProjectFilteringInterface = React.createClass
   getInitialState: ->
     projects: []
     pages: 0
+    project_count: 0
     loading: false
     error: null
     query: {}
@@ -231,7 +232,8 @@ ProjectFilteringInterface = React.createClass
     apiClient.type('projects').get(query)
       .then (projects) =>
         pages = projects[0]?.getMeta()?.page_count
-        @setState {projects, pages}
+        project_count = projects[0]?.getMeta()?.count
+        @setState {projects, pages, project_count}
       .catch (error) =>
         @setState {error}
       .then =>
@@ -262,6 +264,9 @@ ProjectFilteringInterface = React.createClass
         <div className="resource-results-counter">
           <SearchSelector />
           <SortSelector value={@props.sort} onChange={@handleSortChange} />
+          {pageStart = @props.page * 20 - 20 + 1
+          pageEnd = Math.min(@props.page * 20, @state.project_count)
+          <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={@state.project_count} content="projectsPage.countMessage" /></p>}
           <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
         </div>
 
@@ -269,9 +274,7 @@ ProjectFilteringInterface = React.createClass
 
         <footer>
           <nav className="pagination">
-            Page:{' '}
             <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
-            {' '} of {@state.pages}
           </nav>
         </footer>
       </section>
