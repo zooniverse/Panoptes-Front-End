@@ -44,6 +44,11 @@ module.exports = React.createClass
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
 
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.annotation.task isnt @props.annotation?.task # task changed!
+      @props.classification._hidePreviousMarks = false
+      @props.classification.update()
+
   willReceiveProps: (nextProps) ->
     # The default state for subjects is flipbook if allowed
     if typeof nextProps.allowFlipbook is 'boolean'
@@ -128,8 +133,6 @@ module.exports = React.createClass
       </div>
     </div>
 
-
-
   renderFrame: (frame, props = {}) ->
     <FrameViewer {...@props} {...props} frame={frame} />
 
@@ -173,7 +176,6 @@ module.exports = React.createClass
   handleFrameChange: (frame) ->
     @setState {frame}
     @props.onFrameChange frame
-
 
   showMetadata: ->
     # TODO: Sticky popup.

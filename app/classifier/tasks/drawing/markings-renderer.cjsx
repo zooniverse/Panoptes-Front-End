@@ -15,7 +15,6 @@ module.exports = React.createClass
     oldSetOfMarks: []
 
   componentWillReceiveProps: (nextProps) ->
-    # console.log 'Old marks were', @state.oldSetOfMarks
     newSetOfMarks = []
     # Automatically select new marks.
     annotations = nextProps.classification?.annotations ? []
@@ -35,7 +34,11 @@ module.exports = React.createClass
 
   render: ->
     <g>
-      {for annotation in @props.classification?.annotations ? []
+      {for annotation, index in @props.classification?.annotations ? []
+
+        # skip previous annotations when hiding marks
+        continue if @props.classification._hidePreviousMarks and index < @props.classification.annotations.length - 1
+
         annotation._key ?= Math.random()
         isPriorAnnotation = annotation isnt @props.annotation
         taskDescription = @props.workflow.tasks[annotation.task]
@@ -65,7 +68,10 @@ module.exports = React.createClass
                 onDestroy: @handleDestroy.bind this, annotation, mark
 
               ToolComponent = drawingTools[toolDescription.type]
-              <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
+
+              if i > @props.classification._hideMarksBefore or not @props.classification._hidePreviousMarks
+                <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
+
           </g>}
     </g>
 

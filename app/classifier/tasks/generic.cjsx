@@ -47,6 +47,7 @@ module.exports = React.createClass
             </small>
           </p>
         </div>}
+
     </div>
 
   showHelp: ->

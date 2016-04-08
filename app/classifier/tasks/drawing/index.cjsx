@@ -8,6 +8,7 @@ testShapeCloseness = require 'test-shape-closeness'
 {Markdown} = require 'markdownz'
 icons = require './icons'
 drawingTools = require '../../drawing-tools'
+HidePreviousMarksButton = require './hide-previous-marks-button'
 
 module.exports = React.createClass
   displayName: 'DrawingTask'
@@ -15,6 +16,7 @@ module.exports = React.createClass
   statics:
     Editor: GenericTaskEditor
     Summary: Summary
+    PersistAfterTask: HidePreviousMarksButton
     InsideSubject: MarkingInitializer
     PersistInsideSubject: MarkingsRenderer
 
