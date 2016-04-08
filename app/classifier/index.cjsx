@@ -127,6 +127,7 @@ Classifier = React.createClass
     }</ChangeListener>
 
   renderTask: (classification, annotation, task) ->
+
     TaskComponent = tasks[task.type]
 
     # Should we disabled the "Back" button?
@@ -333,10 +334,8 @@ Classifier = React.createClass
     taskDescription = @props.workflow.tasks[taskKey]
     annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
     annotation.task = taskKey
-    classification._hidePreviousMarks = false
     classification.annotations.push annotation
-    classification.update()
-    # classification.update 'annotations'
+    classification.update 'annotations'
 
   # Back up:
   destroyCurrentAnnotation: ->

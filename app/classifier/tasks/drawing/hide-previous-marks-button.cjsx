@@ -10,13 +10,6 @@ module.exports = React.createClass
 
   getInitialState: ->
     hideMarks: false
-    currentAnnotation: @getCurrentAnnotation()
-
-  componentWillReceiveProps: ->
-    currentAnnotation = @getCurrentAnnotation()
-    if currentAnnotation isnt @state.currentAnnotation # task must have changed
-      @setState currentAnnotation: currentAnnotation,
-        => if @state.hideMarks then @toggleHideMarks() # reset hidden marks
 
   getCurrentAnnotation: ->
     classification = @props.classification

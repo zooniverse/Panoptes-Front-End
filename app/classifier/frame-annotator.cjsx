@@ -74,9 +74,6 @@ module.exports = React.createClass
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
 
-  toggleWarning: ->
-    @setState showWarning: not @state.showWarning
-
   render: ->
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
