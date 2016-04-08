@@ -19,7 +19,7 @@ ProjectStatsPageController = React.createClass
     query[which] = e.target.value
     query["#{which}Range"] = undefined
     {owner, name} = @props.params
-    @history.pushState(null, "/projects/#{owner}/#{name}/stats/", query)
+    @history.replaceState(null, "/projects/#{owner}/#{name}/stats/", query)
     
   handleWorkflowChange: (which, e) ->
     query = qs.parse location.search.slice 1
@@ -30,13 +30,13 @@ ProjectStatsPageController = React.createClass
       query['workflow_id'] = undefined
     query["#{which}Range"] = undefined
     {owner, name} = @props.params
-    @history.pushState(null, "/projects/#{owner}/#{name}/stats/", query)
+    @history.replaceState(null, "/projects/#{owner}/#{name}/stats/", query)
 
   handleRangeChange: (which, range) ->
     query = qs.parse location.search.slice 1
     query["#{which}Range"] = range
     {owner, name} = @props.params
-    @history.pushState(null, "/projects/#{owner}/#{name}/stats/", query)
+    @history.replaceState(null, "/projects/#{owner}/#{name}/stats/", query)
 
   getQuery: (which) ->
     qs.parse(location.search.slice(1))[which]
