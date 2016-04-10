@@ -57,6 +57,14 @@ module.exports = React.createClass
         </div>}
       {' '}
 
+      {if 'hide previous marks' in @props.project.experimental_tools
+        <label className="pill-button">
+          <AutoSave resource={@props.workflow}>
+            <input type="checkbox" checked={@props.task.enableHidePrevMarks} onChange={@toggleHidePrevMarksEnabled} />{' '}
+            Allow hiding marks
+          </AutoSave>
+        </label>}
+
       {if isAQuestion
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
 
@@ -200,6 +208,11 @@ module.exports = React.createClass
           </AutoSave>
         </div>}
     </div>
+
+  toggleHidePrevMarksEnabled: (e) ->
+    enableHidePrevMarks = e.target.checked
+    @props.task.enableHidePrevMarks = enableHidePrevMarks
+    @props.workflow.update 'tasks'
 
   toggleMultipleChoice: (e) ->
     newType = if e.target.checked

@@ -3,6 +3,7 @@ GenericTaskEditor = require '../generic-editor'
 Summary = require './summary'
 MarkingInitializer = require './marking-initializer'
 MarkingsRenderer = require './markings-renderer'
+HidePreviousMarksToggle = require './hide-previous-marks-toggle'
 GenericTask = require '../generic'
 testShapeCloseness = require 'test-shape-closeness'
 {Markdown} = require 'markdownz'
@@ -17,6 +18,7 @@ module.exports = React.createClass
     Summary: Summary
     InsideSubject: MarkingInitializer
     PersistInsideSubject: MarkingsRenderer
+    PersistAfterTask: HidePreviousMarksToggle
 
     getDefaultTask: ->
       type: 'drawing'
