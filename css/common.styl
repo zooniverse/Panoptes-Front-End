@@ -29,6 +29,20 @@ background-stripes(color1, color2, size)
   to
     background-position: 1em 0
 
+/* Globally prevent Firefox from affecting buttons' dimensions. */
+@css {
+  button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+
+  @-moz-document url-prefix() {
+    button:focus {
+      outline: 1px dotted;
+    }
+  }
+}
+
 $reset-button
   background: transparent
   border: 0
