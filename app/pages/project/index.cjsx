@@ -106,9 +106,9 @@ ProjectPage = React.createClass
               <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
                 pageTitles = @getPageTitles(pages)
                 <span>
-                  {if pageTitles.result
+                  {if pageTitles.results
                     <Link to="#{projectPath}/results" activeClassName="active"className="tabbed-content-tab">
-                      {pageTitles.result}
+                      {pageTitles.results}
                     </Link>}
                   {if pageTitles.faq
                     <Link to="#{projectPath}/faq" activeClassName="active" className="tabbed-content-tab">
