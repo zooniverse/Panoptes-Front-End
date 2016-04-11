@@ -61,7 +61,7 @@ ProjectStatsPageController = React.createClass
       projectId: @props.project.id
       workflowId: @getQuery('workflow_id')
       totalVolunteers: @props.project.classifiers_count
-      currentVolunteers: @props.project.activity
+      currentClassifications: @props.project.activity
       workflows: @state.workflowList
       startDate: @props.project.launch_date
 

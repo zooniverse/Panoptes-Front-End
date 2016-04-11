@@ -171,8 +171,8 @@ ProjectStatsPage = React.createClass
             <div>Volunteers</div>
           </div>
           <div className="project-metadata-stat">
-            <div>{@props.currentVolunteers.toLocaleString()}</div>
-            <div>Online now</div>
+            <div>{@props.currentClassifications.toLocaleString()}</div>
+            <div>Recent Classifications</div>
           </div>
         </div>
         <hr />
