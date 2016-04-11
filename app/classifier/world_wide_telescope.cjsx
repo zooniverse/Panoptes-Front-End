@@ -51,9 +51,15 @@ module.exports = React.createClass
     dec = dec / 2
     x = (chart.xBounds[1] - chart.xBounds[0]) / 2
     y = (chart.yBounds[1] - chart.yBounds[0]) / 2
-    rotation = 0 # Double check rotation
+    rotation = @rotationAngle(chart, query)
     name = "Horsehead" # Must create unique names
-    @props.urls.push(@props.wwtUrl + "name=" + name + "&ra=" + ra + "&dec=" + dec + "&x=" + x + "&y=" + y + "&scale=" + scale + "&rotation=" + rotation + "&imageurl=" + @imageCrop(chart))
+    @props.urls.push({id: @props.urls.length, link: @props.wwtUrl + "name=" + name + "&ra=" + ra + "&dec=" + dec + "&x=" + x + "&y=" + y + "&scale=" + scale + "&rotation=" + rotation + "&imageurl=" + @imageCrop(chart)})
+
+  rotationAngle: (chart, query) ->
+    yAxis = false
+    query.lon.map (ra) ->
+      yAxis = true if ra.y > chart.yBounds[0] and ra.y < chart.yBounds[1]
+    if yAxis then 0 else 90
 
   oppositeCorners: (query, xBounds, yBounds) ->
     galactic = false
@@ -135,13 +141,15 @@ module.exports = React.createClass
 
   imageCrop: (chart) ->
     subjImage = @props.subject.locations[0]["image/jpeg"]
-    console.log("http://imgproc.zooniverse.org/crop?w=" + chart.width + "&h=" + chart.height + "&x=" + chart.x + "&y=" + chart.y + "&u=" + "panoptes-uploads.zooniverse.org/production/subject_location/90a3b642-55e2-4583-a4fb-2f0abeb5b285.jpeg")
+    "http://imgproc.zooniverse.org/crop?w=" + chart.width + "&h=" + chart.height + "&x=" + chart.x + "&y=" + chart.y + "&u=" + "panoptes-uploads.zooniverse.org/production/subject_location/90a3b642-55e2-4583-a4fb-2f0abeb5b285.jpeg"
 
   render: ->
     @collectCharts() if @props.classification[1]
     for chart in @props.charts
       @queryConstruct chart
-    <div><ul>{@props.urls.map (url, idx) ->
-        <li><a key={idx} href={url}>View in WorldWide Telescope</a></li>
+    <div className="chart-summary">
+    <p>View Your Classification in Space!</p>
+    <ul>{@props.urls.map (url) ->
+        <li key={url.id} className="standard-button"><a href={url.link}>WorldWide Telescope</a></li>
         }
     </ul></div>
