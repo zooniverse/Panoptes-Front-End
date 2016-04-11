@@ -1,136 +1,184 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 
+class SimplePoint
+  constructor: (@x, @y) ->
+
+class AxisLabel
+  constructor: (annotation) ->
+    {@x, @y} = annotation
+    @value = annotation.details[0].value
+
+class AxisPoint
+  constructor: (annotation) ->
+    {@x, @y} = annotation
+    @value = annotation.details[0].value
+
+class Axis
+  @RA: 0
+  @DEC: 1
+  @GLAT: 2
+  @GLONG: 3
+  constructor: (@range, @unit) ->
+
+class StarChart
+  @GALACTIC: 0
+  @EQUATORIAL: 1
+  @OTHER: 2
+  constructor: (annotation) ->
+    {@width, @height, @x, @y} = annotation
+    @corners = ((new SimplePoint pt[0], pt[1]) for pt in [ [@x, @y], [@x, @y+@height], [@x+@width, @y], [@x+@width, @y+@height] ])
+    @axisPoints = []
+    @axisLabels = []
+  bounds: ->
+    x: [@x, @x+@width]
+    y: [@y, @y+@height]
+  calculateDistance: (p1, p2) ->
+    Math.sqrt(Math.pow(p1.x-p2.x,2)+Math.pow(p1.y-p2.y,2))
+  closestCornerDistance: (p) ->
+    chart: this
+    distance: (Math.min.apply null, ((@calculateDistance p, corner) for corner in @corners))
+  calculateMidpoints: ->
+    @midpoints = []
+    for p1 in @axisPoints
+      for p2 in @axisPoints
+        if p1 isnt p2
+          @midpoints.push
+            x: (p1.x+p2.x)/2
+            y: (p1.y+p2.y)/2
+  closestMidpointDistance: (p) ->
+    @calculateMidpoints() unless @midpoints?
+    result =
+      chart: this
+      distance: Math.min.apply null, ((@calculateDistance p, midpoint) for midpoint in @midpoints)
+  addAxisPoint: (axisPoint) ->
+    @axisPoints.push axisPoint
+  addAxisLabel: (axisLabel) ->
+    @axisLabels.push axisLabel
+  filterBounds: (items, prop, bounds) ->
+    (i for i in items when i[prop] < bounds[prop][0] || i[prop] > bounds[prop][1])
+  buildAxes: ->
+    bounds = @bounds()
+    xLabel = (@filterBounds @axisLabels, 'y', bounds)[0]
+    yLabel = (@filterBounds @axisLabels, 'x', bounds)[0]
+    xRange = (@filterBounds @axisPoints, 'y', bounds).sort( (a,b) -> a.x > b.x ).slice(0,2)
+    yRange = (@filterBounds @axisPoints, 'x', bounds).sort( (a,b) -> a.y > b.y ).slice(0,2)
+
+    @xAxis = new Axis xRange, xLabel.value
+    @yAxis = new Axis yRange, yLabel.value
+  coordinateSystem: ->
+    coords = StarChart.OTHER
+    coords = StarChart.EQUATORIAL if (@xAxis.unit == Axis.RA && @yAxis.unit == Axis.DEC) || (@xAxis.unit == Axis.DEC && @yAxis.unit == Axis.RA)
+    coords = StarChart.GALACTIC if (@xAxis.unit == Axis.GLAT && @yAxis.unit == Axis.GLON) || (@xAxis.unit == Axis.GLON && @yAxis.unit == Axis.GLAT)
+    coords
+
+class Plate
+  constructor: (@starChart, @url) ->
+    @imageBounds = @starChart.bounds()
+    [xRange, yRange] = [@starChart.xAxis.range, @starChart.yAxis.range]
+
+    @xyCorners = [
+      new SimplePoint(xRange[0].x, yRange[0].y), new SimplePoint(xRange[1].x, yRange[0].y),
+      new SimplePoint(xRange[1].x, yRange[1].y), new SimplePoint(xRange[0].x, yRange[1].y)
+    ]
+
+    makeStarCoord = if @starChart.coordinateSystem() == StarChart.EQUATORIAL then StarCoord.fromRaDec else StarCoord.fromGlatGlon
+    @coordCorners = [
+      makeStarCoord(xRange[0].value, yRange[0].value), makeStarCoord(xRange[1].value, yRange[0].value),
+      makeStarCoord(xRange[1].value, yRange[1].value), makeStarCoord(xRange[0].value, yRange[1].value)
+    ]
+  scale: ->
+    [star1, star2] = [ @coordCorners[0], @coordCorners[2] ]
+    [xy1, xy2] = [ @xyCorners[0], @xyCorners[2] ]
+    averageDec = (star1.dec + star2.dec) / 2
+    deltaRA = ((star2.ra - star1.ra) * Math.cos(averageDec * Math.PI/180)) * 3600
+    deltaDec = (star2.dec - star1.dec) * 3600
+    angularSep = Math.sqrt(Math.pow(deltaRA,2) + Math.pow(deltaDec,2))
+    pixelSep = Math.sqrt(Math.pow(xy1.x - xy2.x,2) + (Math.pow(xy1.y-xy2.y, 2)))
+    angularSep / pixelSep
+  #TODO: this is over-simplified; no guarantee the center of the plate is the center of the plot
+  centerCoords: ->
+    center =
+      x: (@xyCorners[0].x + @xyCorners[2].x) / 2
+      y: (@xyCorners[0].y + @xyCorners[2].y) / 2
+      ra: (@coordCorners[0].ra + @coordCorners[2].ra) / 2
+      dec: (@coordCorners[0].dec + @coordCorners[2].dec) / 2
+    center
+  getCropUrl: ->
+    # sampleUrl = "panoptes-uploads.zooniverse.org/production/subject_location/90a3b642-55e2-4583-a4fb-2f0abeb5b285.jpeg"
+    corner = @xyCorners[0]
+    # TODO: we need to account for the fact that the size of the image might be different than
+    # the size that it is displayed
+    "http://imgproc.zooniverse.org/crop?w=#{starChart.width}&h=#{starChart.height}&x=#{corner.x}&y=#{corner.y}&u=#{@url}"
+  getWwtUrl: ->
+    base = "http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx"
+    rotation = 0 #TODO: set rotation if ra and dec are funky
+    name = "Horsehead" #TODO: Must create unique names
+    center = @centerCoords()
+    sampleUrl = "http://antwrp.gsfc.nasa.gov/apod/image/0811/horsehead_caelum.jpg"
+    #TODO: this should be @getCropUrl() once we figure out why wwt is angry about query params
+    "#{base}?name=#{name}&ra=#{center.ra}&dec=#{center.dec}&x=#{center.x}&y=#{center.y}&scale=#{@scale()}&rotation=#{rotation}&imageurl=#{sampleUrl}"
+
+class StarCoord
+  constructor: (@ra, @dec) ->
+
+  s = StarCoord
+
+  @fromRaDec: (ra, dec) -> new StarCoord ra, dec
+  @fromGlatGlon: (glat,glon) ->
+    [ra, dec] = StarCoord._toEquatorial glat, glon
+    new StarCoord ra, dec
+
+  @_toEquatorial: (glat, glon) ->
+    [l, b, pole_ra, pole_dec, posangle] = s._toRadians deg for deg in [ glon, glat, 192.859508, 27.128336, 122.932-90.0 ]
+    ra = s._toDegrees(Math.atan2((Math.cos(b)*Math.cos(l-posangle)), (Math.sin(b)*Math.cos(pole_dec) - Math.cos(b)*Math.sin(pole_dec)*Math.sin(l-posangle))) + pole_ra)
+    dec = s._toDegrees(Math.asin(Math.cos(b)*Math.cos(pole_dec)*Math.sin(l-posangle)+Math.sin(b)*Math.sin(pole_dec)))
+    new StarCoord(ra, dec)
+
+  @_toRadians: (degrees) -> degrees * Math.PI / 180.0
+  @_toDegrees: (radians) -> radians * 180.0 / Math.PI
+
 module.exports = React.createClass
   displayName: 'WorldWideTelescope'
 
-  getDefaultProps: ->
-    charts: []
-    urls: []
-    wwtUrl: "http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx?"
+  parseClassification: ->
+    # parse chart rectangles
+    @charts = ((new StarChart annotation) for annotation in @props.classification[1].value)
 
-  plateScale: (item1, item2) -> # this will only convert with DEC and RA
-    averageDec = (item1.dec + item2.dec) / 2
-    deltaRA = ((item2.ra - item1.ra) * Math.cos(averageDec * Math.PI/180)) * 3600
-    deltaDec = (item2.dec - item1.dec) * 3600
-    angularSep = Math.sqrt(Math.pow(deltaRA,2) + Math.pow(deltaDec,2))
-    pixelSep = Math.sqrt(Math.pow(item1.x - item2.x,2) + (Math.pow(item1.y-item2.y, 2)))
-    angularSep / pixelSep
+    # assign axis points to charts
+    for annotation in @props.classification[2].value
+      point = new AxisPoint annotation
+      distances = ((chart.closestCornerDistance point) for chart in @charts)
+      closest = distances.sort((a,b) -> a.distance > b.distance)[0].chart
+      closest.addAxisPoint point
 
-  equatConvert: (object) -> #convert galactic to equatorial coordinates in order to convert platescale
-    l = @radians object.dec
-    b = @radians object.ra
-    pole_ra = @radians 192.859508
-    pole_dec = @radians 27.128336
-    posangle = @radians 122.932-90.0
-    object.ra = @degrees(Math.atan2((Math.cos(b)*Math.cos(l-posangle)), (Math.sin(b)*Math.cos(pole_dec) - Math.cos(b)*Math.sin(pole_dec)*Math.sin(l-posangle))) + pole_ra)
-    object.dec = @degrees(Math.asin(Math.cos(b)*Math.cos(pole_dec)*Math.sin(l-posangle)+Math.sin(b)*Math.sin(pole_dec)))
-    object
+    # assign axis labels to charts
+    for annotation in @props.classification[3].value
+      label = new AxisLabel annotation
+      distances = ((chart.closestMidpointDistance label) for chart in @charts)
+      closest = distances.sort((a,b) -> a.distance > b.distance)[0].chart
+      closest.addAxisLabel label
 
-  radians: (degrees) ->
-    degrees * Math.PI / 180
+    for chart in @charts
+      chart.buildAxes()
 
-  degrees: (radians) ->
-    radians * 180 / Math.PI
-
-  queryConstruct: (chart) ->
-    query = {lon: [], lat: []}
-    ra = 0
-    dec = 0
-    for value in chart.values
-      value.num = @degreeConvert value.num if /[:hms]/.test(value.num) and value.unit is 0
-      query.lon.push(value) if value.unit is 3 or value.unit is 0
-      query.lat.push(value) if value.unit is 2 or value.unit is 1
-    oppositeEnds = @oppositeCorners query, chart.xBounds, chart.yBounds
-    for points in oppositeEnds
-      points = @equatConvert points if points.galactic is true
-      ra += points.ra
-      dec += points.dec
-    scale = @plateScale oppositeEnds[0], oppositeEnds[1]
-    ra = ra / 2
-    dec = dec / 2
-    x = (chart.xBounds[1] - chart.xBounds[0]) / 2
-    y = (chart.yBounds[1] - chart.yBounds[0]) / 2
-    rotation = 0 # Double check rotation
-    name = "Horsehead" # Must create unique names
-    @props.urls.push(@props.wwtUrl + "name=" + name + "&ra=" + ra + "&dec=" + dec + "&x=" + x + "&y=" + y + "&scale=" + scale + "&rotation=" + rotation + "&imageurl=" + "http://antwrp.gsfc.nasa.gov/apod/image/0811/horsehead_caelum.jpg")
-
-  oppositeCorners: (query, xBounds, yBounds) ->
-    galactic = false
-    closeDist = 0
-    farDist = Infinity
-    furthest = {}
-    closest = {}
-    for lat in query.lat
-      for lon in query.lon
-        separation = Math.sqrt(Math.pow(lat.x-lon.x,2) + Math.pow(lat.y-lon.y,2))
-        if separation > closeDist
-          galactic = true if lat.unit is 2 and lon.unit is 3
-          closeDist = separation
-          furthest = {dec: Number(lat.num), ra: Number(lon.num), galactic: galactic, x: @inBounds([lat.x, lon.x] ,xBounds), y: @inBounds([lat.y, lon.y], yBounds)}
-        if separation < farDist
-          galactic = true if lat.unit is 2 and lon.unit is 3
-          farDist = separation
-          closest = {dec: Number(lat.num), ra: Number(lon.num), galactic: galactic, x: @inBounds([lat.x, lon.x], xBounds), y: @inBounds([lat.y, lon.y], yBounds)}
-    [furthest, closest]
-
-  inBounds: (test, boundaries) ->
-    answer = 0
-    test.map (value) ->
-      answer = value if value > boundaries[0] and value < boundaries[1]
-    answer
-
-  collectCharts: -> # organizes annotations into easier to read array of charts
-    units = @props.classification[3].value
-    for chart in @props.classification[1].value # get corner units for charts
-      graph = {
-        corners: [{x: chart.x, y: chart.y}, {x: chart.x + chart.width, y: chart.y},
-        {x: chart.x, y: chart.y + chart.height},{x: chart.x + chart.width, y: chart.y + chart.height}]
-        values: []
-        width: chart.width
-        height: chart.height
-        xBounds: [chart.x, chart.x + chart.width]
-        yBounds: [chart.y, chart.y + chart.height]
-      }
-      @props.charts.push(graph)
-    for value in @props.classification[2].value # match axis values to respective charts
-      least = Infinity
-      index = 0
-      @props.charts.forEach (chart, i) ->
-        chart.corners.map (point) ->
-          distance = Math.sqrt(Math.pow(value.x-point.x, 2) + Math.pow(value.y-point.y, 2))
-          if distance < least
-            least = distance
-            index = i
-      @props.charts[index].values.push({x: value.x, y: value.y, num: value.details[0].value})
-    for chart in @props.charts # match units to respective axis
-      for value in chart.values
-        least = Infinity
-        chart.values.map (value1) ->
-          midpoint = {x:(value.x + value1.x)/2, y:(value.y + value1.y)/2}
-          units.map (unit) ->
-            distance = Math.sqrt(Math.pow(midpoint.x-unit.x, 2) + Math.pow(midpoint.y-unit.y, 2))
-            if distance < least
-              least = distance
-              value.unit = unit.details[0].value
-
-  degreeConvert: (item) -> # This will convert RA from sexagesimal to degrees
-    degrees = 0
-    split = item.match /[0-9]+/g
-    degrees += split[0]*15
-    degrees += split[1]/4 if split[1]
-    degrees += split[2]/240 if split[2]
-    degrees
-
-  imageCrop: (chart) ->
-    subjImage = @props.subject.locations[0]["image/jpeg"]
-    "http://imgproc.zooniverse.org/crop?w=" + chart.width + "&h=" + chart.height + "&x=" + chart.x + "&y=" + chart.y + "&u=" + "panoptes-uploads.zooniverse.org/production/subject_location/90a3b642-55e2-4583-a4fb-2f0abeb5b285.jpeg"
+  parseDegrees: (str) ->
+    reg = /(\d+)(?:\D(\d+))?(?:\D(\d+))?/
+    match = reg.exec(str)
+    parseInt(match[1],10)*15 + parseInt(match[2],10)/4 + parseInt(match[3])/240
 
   render: ->
-    @collectCharts() if @props.classification[1]
-    for chart in @props.charts
-      @queryConstruct chart
-    <div><ul>{@props.urls.map (url, idx) ->
-        <li><a key={idx} href={url}>View in WorldWide Telescope</a></li>
-        }
+    #TODO: this shouldn't be necessary
+    return <div/> unless @props.classification[1]
+
+    subjImage = @props.subject.locations[0]["image/jpeg"]
+
+    @parseClassification()
+
+    plates = (new Plate(chart, subjImage) for chart in @charts)
+
+    <div><ul>{
+      plates.map (plate, idx) ->
+        <li key={idx}>View in <a href={plate.getWwtUrl()}>World Wide Telescope</a></li>
+      }
     </ul></div>
