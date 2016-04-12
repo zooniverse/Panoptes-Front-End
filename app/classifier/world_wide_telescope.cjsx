@@ -106,14 +106,20 @@ class Plate
     center
   getCropUrl: ->
     # sampleUrl = "panoptes-uploads.zooniverse.org/production/subject_location/90a3b642-55e2-4583-a4fb-2f0abeb5b285.jpeg"
+    url = ''
     corner = @xyCorners[0]
     # TODO: we need to account for the fact that the size of the image might be different than
     # the size that it is displayed
     "http://imgproc.zooniverse.org/crop?w=#{starChart.width}&h=#{starChart.height}&x=#{corner.x}&y=#{corner.y}&u=#{@url}"
+  computeRotation: ->
+    if @starChart.xAxis == Axis.RA || @starChart.xAxis == Axis.GLAT then 0 else 90
+  computeName: ->
+    #TODO: Must create unique names
+    "Horsehead"
   getWwtUrl: ->
     base = "http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx"
-    rotation = 0 #TODO: set rotation if ra and dec are funky
-    name = "Horsehead" #TODO: Must create unique names
+    rotation = @computeRotation()
+    name = @computeName()
     center = @centerCoords()
     sampleUrl = "http://antwrp.gsfc.nasa.gov/apod/image/0811/horsehead_caelum.jpg"
     #TODO: this should be @getCropUrl() once we figure out why wwt is angry about query params
@@ -130,7 +136,7 @@ class StarCoord
     new StarCoord ra, dec
 
   @_toEquatorial: (glat, glon) ->
-    [l, b, pole_ra, pole_dec, posangle] = s._toRadians deg for deg in [ glon, glat, 192.859508, 27.128336, 122.932-90.0 ]
+    [b, l, pole_ra, pole_dec, posangle] = s._toRadians deg for deg in [ glat, glon, 192.859508, 27.128336, 122.932-90.0 ]
     ra = s._toDegrees(Math.atan2((Math.cos(b)*Math.cos(l-posangle)), (Math.sin(b)*Math.cos(pole_dec) - Math.cos(b)*Math.sin(pole_dec)*Math.sin(l-posangle))) + pole_ra)
     dec = s._toDegrees(Math.asin(Math.cos(b)*Math.cos(pole_dec)*Math.sin(l-posangle)+Math.sin(b)*Math.sin(pole_dec)))
     new StarCoord(ra, dec)
@@ -163,9 +169,31 @@ module.exports = React.createClass
       chart.buildAxes()
 
   parseDegrees: (str) ->
-    reg = /(\d+)(?:\D(\d+))?(?:\D(\d+))?/
-    match = reg.exec(str)
-    parseInt(match[1],10)*15 + parseInt(match[2],10)/4 + parseInt(match[3])/240
+    return parseFloat str unless isNaN str
+
+    isNeg = false
+    reg = ///
+      (?:
+        (-)?                  # leading minus sign, if present
+        (\d+(?:\.\d+)?))      # a number that may or may not have decimal digits
+      (?:
+        \D+                   # one or more non-numeric digits (not captured)
+        (\d+(?:\.\d+)?))      # a number that may or may not have decimal digits
+        ?                     # this term is optional
+      (?:
+        \D+                   # one or more non-numeric digits (not captured)
+        (\d+(?:\.\d+)?))      # a number that may or may not have decimal digits
+        ?                     # this term is optional
+      ///
+    match = reg.exec str
+
+    isNeg = match[1] == '_'
+    match.shift() if isNeg
+
+    (parseInt(match[1],10)*15 +
+      (parseInt(match[2],10)/4 || 0) +
+      (parseInt(match[3])/240 || 0)) *
+      if isNeg then -1 else 1
 
   render: ->
     #TODO: this shouldn't be necessary
