@@ -3,7 +3,7 @@
 set -e
 
 FALLBACK_POLYFILLS_URL="https://cdn.polyfill.io/v1/polyfill.min.js?features=default,es6,Promise,fetch&flags=gated&ua=(MSIE%209.0)"
-FONT_AWESOME_URL="https://fortawesome.github.io/Font-Awesome/assets/font-awesome-4.5.0.zip"
+FONT_AWESOME_URL="https://github.com/FortAwesome/Font-Awesome/archive/v4.5.0.zip"
 
 curl "$FALLBACK_POLYFILLS_URL" > ./public/fallback-polyfills.js
 
