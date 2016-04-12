@@ -13,8 +13,8 @@ tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 GoldStandardImporter = require './gold-standard-importer'
-WorkflowCopyDialog = require './workflow-copy-dialog'
-projectActions = require './actions/workflow'
+WorkflowCreateDialog = require './workflow-create-dialog'
+workflowActions = require './actions/workflow'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -43,7 +43,7 @@ EditWorkflowPage = React.createClass
 
   getDefaultProps: ->
     workflow: null
-    actions: projectActions
+    workflowActions: workflowActions
 
   getInitialState: ->
     selectedTaskKey: @props.workflow.first_task
@@ -58,14 +58,14 @@ EditWorkflowPage = React.createClass
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
     @history.createHref("/projects/#{owner}/#{name}/classify", viewQuery)
 
-  showWorkflowCopy: ->
+  showWorkflowDialog: ->
     @setState workflowCreationInProgress: true
 
-  hideWorkflowCopy: ->
+  hideWorkflowDialog: ->
     @setState workflowCreationInProgress: false
 
   handleWorkflowCreation: (workflow) ->
-    @hideWorkflowCopy()
+    @hideWorkflowDialog()
     newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
     @props.history.push newLocation
     @props.project.uncacheLink 'workflows'
@@ -88,13 +88,13 @@ EditWorkflowPage = React.createClass
 
     <div className="edit-workflow-page">
       <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
-        <button onClick={@showWorkflowCopy} disabled={@props.project.live or @state.workflowCreationInProgress} title="Copy workflow">
+        <button onClick={@showWorkflowDialog} disabled={@props.project.live or @state.workflowCreationInProgress} title="Copy workflow">
           <i className="fa fa-copy"/>
         </button>
       </h3>
       {if @state.workflowCreationInProgress
         <ModalFormDialog tag="div">
-          <WorkflowCopyDialog onSubmit={@props.actions.createWorkflow} onCancel={@hideWorkflowCopy} onSuccess={@handleWorkflowCreation} workflow={@props.workflow} />
+          <WorkflowCreateDialog onSubmit={@props.workflowActions.createWorkflow} onCancel={@hideWorkflowDialog} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflow={@props.workflow} />
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       {if @props.project.live
