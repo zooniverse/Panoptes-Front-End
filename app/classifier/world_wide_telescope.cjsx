@@ -147,9 +147,9 @@ module.exports = React.createClass
     @collectCharts() if @props.classification[1]
     for chart in @props.charts
       @queryConstruct chart
-    <div className="chart-summary">
-    <p>View Your Classification in Space!</p>
-    <ul>{@props.urls.map (url) ->
-        <li key={url.id} className="standard-button"><a href={url.link}>WorldWide Telescope</a></li>
+    <div>
+    <p>View Your Classification(s) through the WorldWide Telescope!</p>
+    {@props.urls.map (url) ->
+        <div className="telescope-item"><a key={url.id} className="standard-button" href={url.link}>Chart {url.id + 1}</a></div>
         }
-    </ul></div>
+    </div>
