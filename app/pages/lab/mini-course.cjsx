@@ -11,6 +11,6 @@ module.exports = React.createClass
         <p><strong>Work in progress.</strong></p>
       </div>
       <div>
-        <ProjectModalEditor project={@props.project} type="minicourses" />
+        <ProjectModalEditor project={@props.project} kind="mini-course" />
       </div>
     </div>

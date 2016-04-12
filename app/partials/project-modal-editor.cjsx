@@ -153,7 +153,7 @@ ProjectModalEditorController = React.createClass
     apiClient.post @props.projectModal._getURL('attached_images'), payload
       .then (media) =>
         media = [].concat(media)[0]
-        putFile media.src, file, {'Content-Type': file.type}
+        putFile media.src, file
           .then =>
             changes = {}
             changes["steps.#{index}.media"] = media.id

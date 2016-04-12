@@ -11,20 +11,20 @@ module.exports = React.createClass
     minicourse: null
 
   componentDidMount: ->
-    @fetchMiniCourseFor @props.project
+    @fetchMiniCourseFor @props.workflow, @props.project
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.project is @props.project
-      @fetchMiniCourseFor nextProps.project
+    unless nextProps.workflow is @props.workflow and nextProps.project is @props.project
+      @fetchMiniCourseFor nextProps.workflow, nextProps.project
 
-  fetchMiniCourseFor: (project) ->
-    apiClient.type('minicourses').get project_id: project.id
-      .then ([minicourse]) =>
-        @setState {minicourse}
+  fetchMiniCourseFor: (workflow, project) ->
+    @setState minicourse: null
+    MiniCourse.find({workflow, project}).then (minicourse) =>
+      @setState {minicourse}
 
   render: ->
-    if @state.minicourse? and @state.minicourse.steps.length isnt 0
-      <button type="button" {...@props} onClick={MiniCourse.start.bind(MiniCourse, @props.user, @props.project)}>
+    if @state.minicourse?.steps.length > 0
+      <button type="button" {...@props} onClick={MiniCourse.start.bind(MiniCourse, @state.minicourse, @props.user)}>
         {@props.children}
       </button>
     else

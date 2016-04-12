@@ -14,6 +14,27 @@ module.exports = React.createClass
   displayName: 'MiniCourse'
 
   statics:
+    find: ({workflow, project}) ->
+      # Prefer fetching the tutorial for the workflow, if a workflow is given.
+      awaitTutorialForWorkflow = if workflow?
+        apiClient.type('tutorials').get workflow_id: workflow.id
+          .then ([tutorial]) ->
+            tutorial
+      else
+        Promise.resolve()
+
+      # Wait for the workflow tutorial, but if nothing comes back, check for a project tutorial.
+      awaitTutorialInGeneral = awaitTutorialForWorkflow.then (tutorialForWorkflow) ->
+        if tutorialForWorkflow?
+          tutorialForWorkflow
+        else if project?
+          apiClient.type('tutorials').get project_id: project.id
+            .then ([tutorial]) =>
+              tutorial
+        else
+          # There's no workflow tutorial and no project given.
+          Promise.resolve()
+
     checkIfCompleted: (projectPreferences) ->
       getCompletedAt = if completedThisSession[project.id]?
         Promise.resolve new Date completedThisSession[project.id]
@@ -31,10 +52,10 @@ module.exports = React.createClass
           true
 
     start: (user, project) ->
-      apiClient.type('minicourses').get project_id: project.id
-        .then ([minicourse]) =>
-          if minicourse? and minicourse.steps.length isnt 0
-            minicourse.get 'attached_images'
+      apiClient.type('tutorials').get project_id: project.id
+        .then ([tutorial]) =>
+          if tutorial? and tutorial.steps.length isnt 0
+            tutorial.get 'attached_images'
               .catch =>
                 []
               .then (mediaResources) =>
@@ -43,7 +64,7 @@ module.exports = React.createClass
                   mediaByID[mediaResource.id] = mediaResource
 
                 MiniCourseComponent = this
-                Dialog.alert(<MiniCourseComponent steps={minicourse.steps} media={mediaByID} />, {
+                Dialog.alert(<MiniCourseComponent steps={tutorial.steps} media={mediaByID} />, {
                   className: 'tutorial-dialog', #reusing tutorial styling
                   required: true,
                   closeButton: true

@@ -13,6 +13,6 @@ module.exports = React.createClass
         <p>However, it's also important to keep this as short as possible so volunteers can get started classifying as soon as possible!</p>
       </div>
       <div>
-        <ProjectModalEditor project={@props.project} type="tutorials" />
+        <ProjectModalEditor project={@props.project} kind="tutorial" />
       </div>
     </div>
