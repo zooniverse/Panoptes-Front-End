@@ -232,6 +232,15 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
+          {if 'tutorial' in @props.project.experimental_tools or 'mini-course' in @props.project.experimental_tools
+            <div ref="link-tutorials-section">
+              <span className="form-label">Associated tutorials or mini-courses</span><br />
+              <small className="form-help">Choose the tutorials or mini-courses you want to use for this workflow.</small>
+              {@renderTutorials()}
+            </div>}
+
+          <hr />
+
           {if 'hide classification summaries' in @props.project.experimental_tools
             <div>
               <div>
@@ -389,6 +398,27 @@ EditWorkflowPage = React.createClass
       </div>
     }</PromiseRenderer>
 
+  renderTutorials: ->
+    projectAndWorkflowTutorials = Promise.all [
+      apiClient.type('tutorials').get project_id: @props.project.id, page_size: 100
+      apiClient.type('tutorials').get workflow_id: @props.workflow.id, page_size: 100
+    ]
+    <PromiseRenderer promise={projectAndWorkflowTutorials}>{([projectTutorials, workflowTutorials]) =>
+      if projectTutorials.length > 0
+        <form className="workflow-task-editor-link-tutorials-form">
+          {for tutorial in projectTutorials
+            assignedTutorial = tutorial in workflowTutorials
+            toggleTutorial = @handleTutorialToggle.bind this, tutorial
+            <label key={tutorial.id}>
+              <input type="checkbox" checked={assignedTutorial} onChange={toggleTutorial} />
+              {tutorial.kind} #{tutorial.id}
+            </label>
+            }
+        </form>
+      else
+        <span>This project has no tutorials.</span>
+    }</PromiseRenderer>
+
   addNewTask: (type) ->
     taskCount = Object.keys(@props.workflow.tasks).length
 
@@ -441,6 +471,20 @@ EditWorkflowPage = React.createClass
         @props.workflow.addLink 'subject_sets', [subjectSet.id]
       else
         @props.workflow.removeLink 'subject_sets', subjectSet.id
+
+  handleTutorialToggle: (tutorial, e) ->
+    shouldAdd = e.target.checked
+
+    ensureSaved = if @props.workflow.hasUnsavedChanges()
+      @props.workflow.save()
+    else
+      Promise.resolve()
+
+    ensureSaved.then =>
+      if shouldAdd
+        @props.workflow.addLink 'tutorials', [tutorial.id]
+      else
+        @props.workflow.removeLink 'tutorials', tutorial.id
 
   addDemoSubjectSet: ->
     @props.project.uncacheLink 'subject_sets'
