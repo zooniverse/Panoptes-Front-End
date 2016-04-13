@@ -8,11 +8,10 @@ DropdownDialog = React.createClass
     selects: []
     initialSelect: {}
     related: []
-    onSave: ->
     onCancel: ->
+    onSave: ->
 
   getInitialState: ->
-
     editSelect: JSON.parse JSON.stringify @props.initialSelect
     optionsKeys: {}
     conditionalSelects: []
@@ -99,8 +98,6 @@ DropdownDialog = React.createClass
       @setState deletedValues: deletedValues
 
   save: (e) ->
-    # TODO update for save...
-
     if not @state.editSelect.title
       return window.alert('Dropdowns must have a Title.')
 
@@ -111,14 +108,12 @@ DropdownDialog = React.createClass
     if selectTitles.indexOf(@state.editSelect.title) isnt -1
       return window.alert('Dropdowns must have a unique Title.')
 
-    data = {editSelect: @state.editSelect, deletedValues: @state.deletedValues}
+    newData = {editSelect: @state.editSelect, deletedValues: @state.deletedValues}
 
-    @props.onSave? data, arguments...
+    @props.onSave(newData)
 
   cancel: ->
-    # TODO update for cancel...
-
-    @props.onCancel? arguments...
+    @props.onCancel()
 
   renderOption: (option) ->
     <li key={option.value}>

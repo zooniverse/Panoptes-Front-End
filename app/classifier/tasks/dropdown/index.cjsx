@@ -58,10 +58,9 @@ module?.exports = React.createClass
     getDefaultTask: ->
       type: 'dropdown'
       instruction: 'Select or type an option'
-      help: 'Select the appropriate option from the dropdown.'
+      help: ''
       selects: [
         {
-          # TODO can root id be something simpler?
           id: Math.random().toString(16).split('.')[1]
           title: 'Main Dropdown'
           required: true
@@ -84,7 +83,7 @@ module?.exports = React.createClass
       return true if not requiredSelects.length
 
       select = (i) ->
-        return i if annotation.value[i]?.value isnt null
+        return i if annotation.value[i]?.value isnt null and annotation.value[i]?.value isnt undefined
       selectsCompleted = requiredSelects.map select
 
       compareArrays = (requiredSelects, selectsCompleted) ->
@@ -105,7 +104,6 @@ module?.exports = React.createClass
     optionsKeys: {}
 
   componentDidMount: ->
-    # TODO use different React lifecycle method?
     annotationValues = @props.annotation.value
     if annotationValues.length
       for answer, i in annotationValues
@@ -154,7 +152,6 @@ module?.exports = React.createClass
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <div>
-
         {selectKeys.map (i) =>
           options = @getOptions(i)
           <div key={Math.random()}>
@@ -167,10 +164,10 @@ module?.exports = React.createClass
               allowCreate={selects[i].allowCreate}
               noResultsText={if not options?.length then null}
               addLabelText="Press enter for {label}..."
+              matchProp="label"
             />
           </div>
         }
-
       </div>
     </GenericTask>
 
