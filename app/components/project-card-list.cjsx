@@ -157,6 +157,7 @@ SortSelector = React.createClass
     <Select
      multi={false}
      name="sort_order"
+     value={@props.value}
      placeholder="Sort by"
      searchPromptText="Select a sort order"
      closeAfterClick={true}
