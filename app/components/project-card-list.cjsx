@@ -261,23 +261,21 @@ ProjectFilteringInterface = React.createClass
         <div className="resource-results-counter">
           <SearchSelector />
           <SortSelector value={@props.sort} onChange={@handleSortChange} />
-          {if @state.project_count>0
-             pageStart = @props.page * 20 - 20 + 1
-             pageEnd = Math.min(@props.page * 20, @state.project_count)
-             showingMessage = "projectsPage.countMessage"
-           else
-             showingMessage = "projectsPage.notFoundMessage"
-          <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={@state.project_count} content={showingMessage} /></p>}
-          <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
         </div>
 
+        {if @state.project_count>0
+           pageStart = @props.page * 20 - 20 + 1
+           pageEnd = Math.min(@props.page * 20, @state.project_count)
+           showingMessage = "projectsPage.countMessage"
+         else
+           showingMessage = "projectsPage.notFoundMessage"
+        <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={@state.project_count} content={showingMessage} /></p>}
+        <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
+        
         <ProjectCardList projects={@state.projects} />
 
-        <footer>
-          <nav className="pagination">
-            <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
-          </nav>
-        </footer>
+        <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
+        
       </section>
 
     </div>
