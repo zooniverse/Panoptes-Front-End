@@ -57,7 +57,7 @@ module.exports = React.createClass
         </div>}
       {' '}
 
-      {if 'hide previous marks' in @props.project.experimental_tools
+      {if @props.project and 'hide previous marks' in @props.project.experimental_tools
         <label className="pill-button">
           <AutoSave resource={@props.workflow}>
             <input type="checkbox" checked={@props.task.enableHidePrevMarks} onChange={@toggleHidePrevMarksEnabled} />{' '}
