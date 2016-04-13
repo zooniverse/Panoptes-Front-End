@@ -229,7 +229,7 @@ ProjectFilteringInterface = React.createClass
       .then (projects) =>
         pages = projects[0]?.getMeta()?.page_count
         project_count = projects[0]?.getMeta()?.count
-        project_count = 0 if !project_count
+        project_count ?= 0
         @setState {projects, pages, project_count}
       .catch (error) =>
         @setState {error}
