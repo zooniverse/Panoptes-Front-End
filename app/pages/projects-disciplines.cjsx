@@ -1,15 +1,7 @@
-counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list-by-discipline'
-
-counterpart.registerTranslations 'en',
-  projectsPage:
-    title: 'All Projects'
-    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found'
-    button: 'Get Started'
-    notFoundMessage: 'Sorry, no projects found'
 
 module.exports = React.createClass
   displayName: 'ProjectsPage'

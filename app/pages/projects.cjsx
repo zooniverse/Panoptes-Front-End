@@ -11,9 +11,9 @@ Filmstrip = require '../components/filmstrip'
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'All Projects'
-    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found.'
+    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s projects found.'
     button: 'Get Started'
-    notFoundMessage: 'Sorry, no projects found'
+    notFoundMessage: 'Sorry, no projects found.'
 
 ProjectsPage = React.createClass
   displayName: 'ProjectsPage'
