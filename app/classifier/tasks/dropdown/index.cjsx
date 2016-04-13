@@ -78,22 +78,8 @@ module?.exports = React.createClass
       value: []
 
     isAnnotationComplete: (task, annotation) ->
-      requiredSelects = Object.keys(task.selects).filter (i) -> task.selects[i].required
-
-      return true if not requiredSelects.length
-
-      select = (i) ->
-        return i if annotation.value[i]?.value isnt null and annotation.value[i]?.value isnt undefined
-      selectsCompleted = requiredSelects.map select
-
-      compareArrays = (requiredSelects, selectsCompleted) ->
-        areEqual = true
-        for i in [0..requiredSelects.length]
-          if requiredSelects[i] isnt selectsCompleted[i]
-            areEqual = false
-        areEqual
-
-      compareArrays(requiredSelects, selectsCompleted)
+      task.selects.every (select, i) ->
+        not select.required or annotation.value[i]?.value?
 
     testAnnotationQuality: (unknown, knownGood) ->
       distance = levenshtein.get unknown.value.toLowerCase(), knownGood.value.toLowerCase()
