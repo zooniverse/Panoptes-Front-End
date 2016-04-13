@@ -175,9 +175,10 @@ PageSelector = React.createClass
 
   render: ->
     <nav className="pagination">
-      {for page in [1..@props.total]
-        active = (page is +@props.current)
-        <button onClick={@handleChange.bind this, page} key={page} className="pill-button" style={border: "2px solid" if active}>{page}</button>}
+      {if @props.total>1
+         for page in [1..@props.total]
+           active = (page is +@props.current)
+           <button onClick={@handleChange.bind this, page} key={page} className="pill-button" style={border: "2px solid" if active}>{page}</button>}
     </nav>
 
 ProjectFilteringInterface = React.createClass
@@ -228,6 +229,7 @@ ProjectFilteringInterface = React.createClass
       .then (projects) =>
         pages = projects[0]?.getMeta()?.page_count
         project_count = projects[0]?.getMeta()?.count
+        project_count ?= 0
         @setState {projects, pages, project_count}
       .catch (error) =>
         @setState {error}
@@ -259,19 +261,21 @@ ProjectFilteringInterface = React.createClass
         <div className="resource-results-counter">
           <SearchSelector />
           <SortSelector value={@props.sort} onChange={@handleSortChange} />
-          {pageStart = @props.page * 20 - 20 + 1
-          pageEnd = Math.min(@props.page * 20, @state.project_count)
-          <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={@state.project_count} content="projectsPage.countMessage" /></p>}
-          <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
         </div>
 
+        {if @state.project_count>0
+           pageStart = @props.page * 20 - 20 + 1
+           pageEnd = Math.min(@props.page * 20, @state.project_count)
+           showingMessage = "projectsPage.countMessage"
+         else
+           showingMessage = "projectsPage.notFoundMessage"
+        <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={@state.project_count} content={showingMessage} /></p>}
+        <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
+        
         <ProjectCardList projects={@state.projects} />
 
-        <footer>
-          <nav className="pagination">
-            <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
-          </nav>
-        </footer>
+        <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
+        
       </section>
 
     </div>
