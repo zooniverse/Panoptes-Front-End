@@ -51,20 +51,23 @@ module?.exports = React.createClass
   render: ->
     <div className="profile-feed-comment-link">
       <header>
-        <span className="comment-timestamp"title={moment(@props.comment.created_at).toISOString()}>
+        <span className="comment-timestamp" title={moment(@props.comment.created_at).toISOString()}>
           {moment(@props.comment.created_at).fromNow()}
-        </span>{' '}
-        in{' '}
-        <a href={@state.href}>
-          {if @state.project? and @state.owner
-            <span>
-              <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.project.display_name}">{@state.project.display_name}</strong>
+        </span>
+        {if @state.board?.id and @state.discussion?.id
+          <span>
+            {' '}in{' '}
+            <a href={@state.href}>
+              {if @state.project? and @state.owner
+                <span>
+                  <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.project.display_name}">{@state.project.display_name}</strong>
+                  ➞
+                </span>}
+              <strong className="comment-board">{@state.board?.title}</strong>
               ➞
-            </span>}
-          <strong className="comment-board">{@state.board?.title}</strong>
-          ➞
-          <strong className="comment-discussion">{@state.discussion?.title}</strong>
-        </a>
+              <strong className="comment-discussion">{@state.discussion?.title}</strong>
+            </a>
+          </span>}
       </header>
 
       <Markdown className="comment-body" content={@props.comment.body} />
