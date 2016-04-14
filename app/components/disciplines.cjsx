@@ -1,7 +1,6 @@
 module.exports =
   DISCIPLINES:   [
     {value: 'arts', label: 'Arts'},
-    {value: 'astronomy', label: 'Astronomy'},
     {value: 'biology', label: 'Biology'},
     {value: 'climate', label: 'Climate'},
     {value: 'history', label: 'History'},
@@ -11,5 +10,6 @@ module.exports =
     {value: 'medicine', label: 'Medicine'},
     {value: 'nature', label: 'Nature'},
     {value: 'physics', label: 'Physics'},
-    {value: 'social science', label: 'Social Science'}
+    {value: 'social science', label: 'Social Science'},
+    {value: 'astronomy', label: 'Space'}
   ]
