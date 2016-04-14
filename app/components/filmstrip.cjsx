@@ -29,10 +29,10 @@ module.exports = React.createClass
     @props.onChange filterName
 
   calculateClasses: (filterName)->
-    filterName = @mangleFilterName(filterName)
+    mangledFilterName = @mangleFilterName(filterName)
 
     list = ['filmstrip--disciplines__discipline-card']
-    list.push "filmstrip--disciplines__discipline-card--discipline-#{filterName}"
+    list.push "filmstrip--disciplines__discipline-card--discipline-#{mangledFilterName}"
 
     if(@props.value== filterName)
       list.push 'filmstrip--disciplines__discipline-card--active'

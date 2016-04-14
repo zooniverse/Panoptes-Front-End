@@ -1,123 +1,204 @@
-DISCIPLINE_COLOR_ALL = #0072FF
-DISCIPLINE_COLOR_LANGUAGE = #9DDDF9
 DISCIPLINE_COLOR_ASTRONOMY = #512BAD
+DISCIPLINE_COLOR_ALL = #0072FF
+DISCIPLINE_COLOR_BIOLOGY = #18807F
+DISCIPLINE_COLOR_CLIMATE = #A1BFBE
+DISCIPLINE_COLOR_HISTORY = #F9DB46
+DISCIPLINE_COLOR_HUMANITARIAN = #C46FC6
+DISCIPLINE_COLOR_LANGUAGE = #9DDDF9
+DISCIPLINE_COLOR_LITERATURE = #EADF5C
+DISCIPLINE_COLOR_MEDICINE = #EF4343
 DISCIPLINE_COLOR_NATURE = #46D178
 DISCIPLINE_COLOR_PHYSICS = #F27441
-DISCIPLINE_COLOR_CLIMATE = #A1BFBE
-DISCIPLINE_COLOR_LITERATURE = #EADF5C
-DISCIPLINE_COLOR_BIOLOGY = #18807F
-DISCIPLINE_COLOR_HUMANITARIAN = #C46FC6
-DISCIPLINE_COLOR_MEDICINE = #EF4343
-DISCIPLINE_COLOR_HISTORY = #F9DB46
 DISCIPLINE_COLOR_SOCIAL_SCIENCE = #7EA8CE
 
 .filmstrip--disciplines ul
   display: flex;
 
   .filmstrip--disciplines__discipline-card
-    margin: 0.28em
-    text-align: center
-    width: 5em
+    background-color: white
+    border: 2px solid transparent
+    border-radius: 1em
+    color: #006DFF
     font-size:25px
     height: 4em
-    border-radius: 1em
-    border: 0
-    padding: .5em
-    color: #006DFF
-    background-color: white
+    margin: 0.28em
     min-width: 100px
-    &:hover,
-    &.filmstrip--disciplines__discipline-card--active
-      color: white
+    padding: .2em .5em .5em
+    text-align: center
+    width: 5em
+
+    &:focus
+    &:hover
+      background-color: white
+      border: 2px solid white
       cursor: pointer
+      outline: none
 
     .filmstrip--disciplines__discipline-card__icon
       font-size: 50px
-      width: 1.5em
       height: 2em
       margin: 0 auto
+      width: 1.5em
 
     p
-      margin-top: 0.333em
-      margin-bottom: 0px
       font-size: 14px
+      margin-bottom: 0px
+      margin-top: 0.333em
 
   .filmstrip--disciplines__discipline-card--discipline-all
-    &:hover,
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_ALL
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_ALL
+      color: DISCIPLINE_COLOR_ALL
 
   .filmstrip--disciplines__discipline-card--discipline-arts
-    &:hover,
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_ARTS
 
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_ARTS
+      color: DISCIPLINE_COLOR_ARTS
+
   .filmstrip--disciplines__discipline-card--discipline-astronomy
     min-width: 4em
-    &:hover,
+
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_ASTRONOMY
+
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_ASTRONOMY
+      color: DISCIPLINE_COLOR_ASTRONOMY
+
     .filmstrip--disciplines__discipline-card__icon
       margin-left: -0.6em
 
   .filmstrip--disciplines__discipline-card--discipline-biology
-    &:hover,
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_BIOLOGY
+
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_BIOLOGY
+      color: DISCIPLINE_COLOR_BIOLOGY
+
     .filmstrip--disciplines__discipline-card__icon
       margin-left: 0.3em
 
   .filmstrip--disciplines__discipline-card--discipline-climate
     min-width: 4em
-    &:hover,
+
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_CLIMATE
 
-  .filmstrip--disciplines__discipline-card--discipline-history
     &:hover,
+    &:focus
+      border-color: DISCIPLINE_COLOR_CLIMATE
+      color: DISCIPLINE_COLOR_CLIMATE
+
+  .filmstrip--disciplines__discipline-card--discipline-history
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_HISTORY
+
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_HISTORY
+      color: DISCIPLINE_COLOR_HISTORY
+
     .filmstrip--disciplines__discipline-card__icon
       margin-left: 0.1em
 
   .filmstrip--disciplines__discipline-card--discipline-humanitarian
-    &:hover,
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_HUMANITARIAN
 
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_HUMANITARIAN
+      color: DISCIPLINE_COLOR_HUMANITARIAN
+
   .filmstrip--disciplines__discipline-card--discipline-language
     min-width: 4em
-    &:hover,
+
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_LANGUAGE
+
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_LANGUAGE
+      color: DISCIPLINE_COLOR_LANGUAGE
+
     .filmstrip--disciplines__discipline-card__icon
       margin-left: -1em
 
   .filmstrip--disciplines__discipline-card--discipline-literature
-    &:hover,
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_LITERATURE
 
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_LITERATURE
+      color: DISCIPLINE_COLOR_LITERATURE
+
   .filmstrip--disciplines__discipline-card--discipline-medicine
-    &:hover,
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_MEDICINE
 
-  .filmstrip--disciplines__discipline-card--discipline-nature
     &:hover,
+    &:focus
+      border-color: DISCIPLINE_COLOR_MEDICINE
+      color: DISCIPLINE_COLOR_MEDICINE
+
+  .filmstrip--disciplines__discipline-card--discipline-nature
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_NATURE
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_NATURE
+      color: DISCIPLINE_COLOR_NATURE
+
     .filmstrip--disciplines__discipline-card__icon
       margin-left: -0.4em
 
   .filmstrip--disciplines__discipline-card--discipline-physics
-    &:hover,
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_PHYSICS
 
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_PHYSICS
+      color: DISCIPLINE_COLOR_PHYSICS
+
   .filmstrip--disciplines__discipline-card--discipline-social-science
-    &:hover,
+    &:active,
     &.filmstrip--disciplines__discipline-card--active
       background-color: DISCIPLINE_COLOR_SOCIAL_SCIENCE
+
+    &:focus,
+    &:hover
+      border-color: DISCIPLINE_COLOR_SOCIAL_SCIENCE
+      color: DISCIPLINE_COLOR_SOCIAL_SCIENCE
+
     .filmstrip--disciplines__discipline-card__icon
       margin-left: -0.3em
+
+  .filmstrip--disciplines__discipline-card
+    &:active,
+    &.filmstrip--disciplines__discipline-card--active
+      color: white
+      outline: none
