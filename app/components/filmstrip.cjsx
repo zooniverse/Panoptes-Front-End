@@ -61,7 +61,9 @@ module.exports = React.createClass
   componentDidMount: ->
     @strip = @refs.strip
     @viewport = @refs.viewport
-    @refs.filmstrip.style.height = @strip.getBoundingClientRect().height + 'px'
+    @refs.filmstrip.style.height = @strip.clientHeight + 'px'
+    @refs.viewport.style.paddingBottom = @viewport.offsetHeight - @viewport.clientHeight + 'px'
+    
 
   render: -> <div className='filmstrip filmstrip--disciplines' ref='filmstrip'>
       <button className='filmstrip__nav-btn' onClick={@scrollLeft} role="presentation" aria-hidden="true" aria-label="Scroll Left"><i className="fa fa-chevron-left"></i></button>
