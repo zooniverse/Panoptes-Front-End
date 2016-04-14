@@ -42,6 +42,7 @@ ProjectsPage = React.createClass
       if value is ''
         delete query[key]
     newLocation = Object.assign {}, @props.location, {query}
+    newLocation.search = ""
     @props.history.replace newLocation
 
   render: ->
