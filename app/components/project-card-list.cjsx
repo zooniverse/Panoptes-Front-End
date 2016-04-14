@@ -272,7 +272,8 @@ ProjectFilteringInterface = React.createClass
          else
            showingMessage = "projectsPage.notFoundMessage"
         <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={@state.project_count} content={showingMessage} /></p>}
-        <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
+        {if @state.pages>1
+          <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />}
         
         <ProjectCardList projects={@state.projects} />
 
