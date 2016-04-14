@@ -21,6 +21,7 @@ EXPERIMENTAL_FEATURES = [
   'hide classification summaries'
   'pan and zoom'
   'hide previous marks'
+  'column'
 ]
 
 ProjectToggle = React.createClass

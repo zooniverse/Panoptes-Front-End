@@ -62,27 +62,20 @@ module.exports = React.createClass
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
-    # @props.mark.y += d.y / @props.scale.vertical
     @props.onChange @props.mark
 
   handleLeftDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal if @props.mark.width >= MINIMUM_WIDTH
-    # @props.mark.y += d.y / @props.scale.vertical
     @props.mark.width -= d.x / @props.scale.horizontal 
-    # @props.mark.height -= d.y / @props.scale.vertical
     @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
 
   handleRightDrag: (e, d) ->
-    # @props.mark.y += d.y / @props.scale.vertical
     @props.mark.width += d.x / @props.scale.horizontal
-    # @props.mark.height -= d.y / @props.scale.vertical
     @props.onChange @props.mark 
 
   normalizeMark: ->
     if @props.mark.width < MINIMUM_WIDTH
       @props.mark.x += @props.mark.width if @props.mark.width >= MINIMUM_WIDTH
-      # @props.mark.width *= -1
       @props.mark.width is MINIMUM_WIDTH
-
 
     @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
