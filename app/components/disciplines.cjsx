@@ -5,7 +5,7 @@ module.exports =
     {value: 'biology', label: 'Biology'},
     {value: 'climate', label: 'Climate'},
     {value: 'history', label: 'History'},
-    {value: 'humanitarian', label: 'Humanitarian'},
+#   {value: 'humanitarian', label: 'Humanitarian'},
     {value: 'language', label: 'Language'},
     {value: 'literature', label: 'Literature'},
     {value: 'medicine', label: 'Medicine'},
