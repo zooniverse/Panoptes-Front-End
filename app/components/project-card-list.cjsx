@@ -240,7 +240,7 @@ ProjectFilteringInterface = React.createClass
 
   handleDisciplineChange: (discipline) ->
     page = 1
-    this.props.onChangeQuery {discipline}
+    this.props.onChangeQuery {discipline, page}
 
   handleSortChange: (sort) ->
     page = 1
