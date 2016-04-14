@@ -19,26 +19,31 @@
       padding: 0.5em
       max-width: 1200px
       margin: 0 auto
-      margin-bottom: 2em
       .pagination
         padding: 0.5em 0
 
-      p
-        font-size: 14px
-        margin: 0
-        padding: 2.33em 0
+    p
+      font-size: 14px
+      margin: 0
+      padding: 2.33em 0
 
-      p.showing-with-link-para
-        padding-top: 20px
-        padding-bottom: 20px
+    p.showing-with-link-para
+      padding-top: 20px
+      padding-bottom: 20px
+    
+      @media screen and (max-width: 750px)
+        clear: both
 
-      a.view-by-discipline-link
-        margin: 15px
-        display: inline-block
+    a.view-by-discipline-link
+      margin: 15px
+      display: inline-block
 
   .pagination
     padding: 2.33em 0
     text-align: center
+    
+    @media screen and (max-width: 750px)
+      padding: 0 0 1em
 
     .pill-button
       margin-right: 10px
@@ -53,10 +58,10 @@
     width: 100%
     float: right
     margin-right: 35px
-
-    @media screen and (max-width: 1024px)
-      position: relative
-      margin: 0 auto 2.33em
+    
+    @media screen and (max-width: 750px)
+      float: none
+      margin: 1em auto 0
 
   .card-sort
     max-width: 250px
@@ -64,3 +69,7 @@
     text-align: left
     width: 100%
     margin-left: 35px
+    
+    @media screen and (max-width: 750px)
+      float: none
+      margin: 2.33em auto 0
