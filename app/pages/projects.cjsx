@@ -44,7 +44,6 @@ ProjectsPage = React.createClass
     newLocation = Object.assign {}, @props.location, {query}
     newLocation.search = ""
     @props.history.replace newLocation
-    console.log "in updateQuery, props.location.query is now:",@props.location.query
 
   render: ->
     {discipline, page, sort} = @props.location.query
