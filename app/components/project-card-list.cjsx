@@ -239,6 +239,7 @@ ProjectFilteringInterface = React.createClass
         @setState loading: false
 
   handleDisciplineChange: (discipline) ->
+    page = 1
     this.props.onChangeQuery {discipline}
 
   handleSortChange: (sort) ->
