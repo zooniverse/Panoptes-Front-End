@@ -41,15 +41,16 @@ ProjectsPage = React.createClass
     for key, value of query
       if value is ''
         delete query[key]
-    newLocation = @props.location
-    newLocation.query = query
-    @props.history.replace newLocation
-    console.log "in updateQuery, props.location.query is now:",@props.location.query
+    newLocation = "?"
+    for key,value of query
+      newLocation += key + "=" + value + "&"
+    if newLocation!="?"
+      newLocation = newLocation.substring(0, newLocation.length-1)
+    @props.history.replace '/projects'+newLocation
 
   render: ->
     {discipline, page, sort} = @props.location.query
     listingProps = {discipline, page, sort}
-    console.log 'in render, props.location.query is now:',@props.location.query
     <ProjectFilteringInterface {...listingProps} onChangeQuery={@updateQuery} />
 
 module.exports = ProjectsPage
