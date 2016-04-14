@@ -186,7 +186,7 @@ ProjectFilteringInterface = React.createClass
   getDefaultProps: ->
     discipline: ''
     page: 1
-    sort: 'display_name'
+    sort: '-launch_date'
 
     # To separate the API from the UI (and present the user with more friendly query terms):
     SORT_QUERY_VALUES:
