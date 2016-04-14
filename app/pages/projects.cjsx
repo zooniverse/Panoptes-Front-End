@@ -49,7 +49,6 @@ ProjectsPage = React.createClass
   render: ->
     {discipline, page, sort} = @props.location.query
     listingProps = {discipline, page, sort}
-    console.log 'in render, props.location.query is now:',@props.location.query
     <ProjectFilteringInterface {...listingProps} onChangeQuery={@updateQuery} />
 
 module.exports = ProjectsPage
