@@ -1,45 +1,53 @@
 .filmstrip
-	padding: 0
-	display: flex
-	margin-bottom: 1.5em
-	max-width: 1200px
-	margin: 0 auto
+  padding: 0
+  display: flex
+  margin-bottom: 1.5em
+  max-width: 1200px
+  margin: 0 auto
   
   button::-moz-focus-inner {
     border: 0
   }
 
 .filmstrip__nav-btn
-	border: 0
-	margin: 0
-	height: 100%
-	background-color: transparent
-	width: 40px
-	color: #006dff
-	font-weight: bold
-	font-size: 24pt
-	cursor: pointer
-	&:focus
-	&:active
-		outline: 0
+  border: 0
+  margin: 0
+  height: 100%
+  background-color: transparent
+  width: 40px
+  color: #006dff
+  font-weight: bold
+  font-size: 24pt
+  cursor: pointer
+  &:focus
+  &:active
+    outline: 0
+
+  @media screen and (max-width: 450px)
+    display: none
 
 .filmstrip__viewport
-	overflow-x: hidden
-	position: relative
-	width: 100%
+  overflow-x: hidden
+  position: relative
+  width: 100%
+
+  @media screen and (max-width: 1024px)
+    height: 100%
+    overflow-x: auto
+    overflow-y: visible
 
 .filmstrip__strip
-	position: absolute
-	top: 0
-	left: 0
-	white-space: nowrap
-	display: flex
-	margin-left: -0.28em
+  position: absolute
+  top: 0
+  left: 0
+  white-space: nowrap
+  display: flex
+  margin-left: -0.28em
 
-	-webkit-transition-property: left
-	transition-property: left
-	transition-duration: 0.4s
-	transition-timing-function: ease
-	ul
-		padding: 0
-		list-style-type: none
+  -webkit-transition-property: left
+  transition-property: left
+  transition-duration: 0.4s
+  transition-timing-function: ease
+  ul
+    padding: 0
+    list-style-type: none
