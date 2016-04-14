@@ -6,7 +6,7 @@ Select = require 'react-select'
 Translate = require 'react-translate-component'
 debounce = require 'debounce'
 Filmstrip = require '../components/filmstrip'
-PROJECT_SORTS = (require './project-sorts').PROJECT_SORTS
+PROJECT_SORTS = (require '../lib/project-sorts').PROJECT_SORTS
 
 FlexibleLink = React.createClass
   displayName: 'FlexibleLink'
@@ -186,7 +186,7 @@ ProjectFilteringInterface = React.createClass
   getDefaultProps: ->
     discipline: ''
     page: 1
-    sort: '-activity'
+    sort: 'display_name'
 
     # To separate the API from the UI (and present the user with more friendly query terms):
     SORT_QUERY_VALUES:

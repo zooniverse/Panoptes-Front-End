@@ -5,7 +5,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list'
 {Link, Router} = require 'react-router'
 Filmstrip = require '../components/filmstrip'
-{PROJECT_SORTS} = require '../components/project-sorts'
+{PROJECT_SORTS} = require '../lib/project-sorts'
 {ProjectFilteringInterface} = require '../components/project-card-list'
 
 counterpart.registerTranslations 'en',
