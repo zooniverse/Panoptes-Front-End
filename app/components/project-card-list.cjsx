@@ -229,6 +229,7 @@ ProjectFilteringInterface = React.createClass
     apiClient.type('projects').get(query)
       .then (projects) =>
         pages = projects[0]?.getMeta()?.page_count
+        pages ?= 0
         project_count = projects[0]?.getMeta()?.count
         project_count ?= 0
         @setState {projects, pages, project_count}
@@ -272,11 +273,13 @@ ProjectFilteringInterface = React.createClass
          else
            showingMessage = "projectsPage.notFoundMessage"
         <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={@state.project_count} content={showingMessage} /></p>}
-        <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
+        {if @state.pages>1
+           <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />}
         
         <ProjectCardList projects={@state.projects} />
 
-        <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />
+        {if @state.pages>1
+           <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />}
         
       </section>
 
