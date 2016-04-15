@@ -96,7 +96,7 @@ UserLimitToggle = React.createClass
     <div>
       <AutoSave resource={@props.editUser}>
         Subject Limit:{' '}
-        <input type="number" name="subject_limit" min="1" ref="subjectLimit" defaultValue={@props.editUser.max_subjects} onBlur={@updateLimit} onChange={handleInputChange.bind @props.editUser} />
+        <input type="number" min="1" ref="subjectLimit" defaultValue={@props.editUser.subject_limit} onBlur={@updateLimit} onChange={handleInputChange.bind @props.editUser} />
         <span>{ @errorMessage() }</span>
       </AutoSave>
     </div>
