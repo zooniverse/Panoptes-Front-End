@@ -26,7 +26,7 @@ module?.exports = React.createClass
     if nextProps.location.query.page isnt @props.location.query.page
       @getComments nextProps.location.query.page
 
-  componentWillMount: ->
+  componentDidMount: ->
     @getComments()
 
   commentParams: (page) ->
