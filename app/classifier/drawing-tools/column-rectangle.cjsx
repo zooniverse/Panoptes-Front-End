@@ -2,6 +2,7 @@ React = require 'react'
 DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
+deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 
 DEFAULT_WIDTH = 25
@@ -43,7 +44,7 @@ module.exports = React.createClass
     {x, width} = @props.mark
 
     <DrawingToolRoot tool={this}>
-      <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <rect ref="rect" x={x} y={0} width={width} height={@props.containerRect.height / @props.scale.vertical} />
       </Draggable>
 
