@@ -36,13 +36,19 @@ module.exports = React.createClass
     {location} = @props
 
     <div className="secondary-page all-resources-page">
-      <section className={"hero #{@props.heroClass}"}>
-        <div className="hero-container">
+      {if @props.project?
+        <div className="hero-with-context">
           <Translate component="h1" user={@userForTitle()} content={"#{@props.translationObjectName}.title"} />
-          {if @props.heroNav?
-            @props.heroNav}
         </div>
-      </section>
+      else
+        <section className={"hero #{@props.heroClass}"}>
+          <div className="hero-container">
+            <Translate component="h1" user={@userForTitle()} content={"#{@props.translationObjectName}.title"} />
+            {if @props.heroNav?
+              @props.heroNav}
+          </div>
+        </section>}
+
       <section className="resources-container">
         <PromiseRenderer promise={@props.listPromise}>{(ownedResources) =>
           if ownedResources?.length > 0

@@ -9,7 +9,7 @@ Translate = require 'react-translate-component'
 counterpart.registerTranslations 'en',
   collectionsPage:
     title: '%(user)s Collections'
-    countMessage: 'Showing %(count)s found'
+    countMessage: 'Showing %(count)s collections'
     button: 'View Collection'
     loadMessage: 'Loading Collections'
     notFoundMessage: 'No Collections Found'
@@ -63,6 +63,12 @@ List = React.createClass
 
     apiClient.type('collections').get query
 
+  getCollectionOwnerName: ->
+    if @props.params?.collection_owner?
+      return @props.params.collection_owner
+    else
+      return @props.params.owner
+
   render: ->
     <OwnedCardList
       {...@props}
@@ -71,7 +77,7 @@ List = React.createClass
       linkTo="collections"
       heroNav={<CollectionsNav user={@props.user} />}
       heroClass="collections-hero"
-      ownerName={@props.params?.owner}
+      ownerName={@getCollectionOwnerName()}
       skipOwner={!@props.params?.owner}
       imagePromise={@imagePromise}
       cardLink={@cardLink} />
