@@ -48,7 +48,7 @@ module.exports = React.createClass
               @addConnection(c, id, nextTask, previousTask)
           else
             for a, adx in task.answers
-              c = ["#{id}_answer_#{adx}", a.next ? 'end']
+              c = ["#{id}_answer_#{adx}", if a.next then a.next else 'end']
               @addConnection(c, id, nextTask, previousTask)
         when 'multiple'
           if task.subtask
@@ -56,17 +56,17 @@ module.exports = React.createClass
               c = ["#{id}_next", task.next]
               @addConnection(c, id, nextTask, previousTask)
           else
-            c = ["#{id}_next", task.next ? 'end']
+            c = ["#{id}_next", if task.next then task.next else 'end']
             @addConnection(c, id, nextTask, previousTask)
         when 'drawing'
-          c = ["#{id}_next", task.next ? 'end']
+          c = ["#{id}_next", if task.next then task.next else 'end']
           @addConnection(c, id, nextTask, previousTask)
           for a, adx in task.tools
             if a.details[0]?
               c = ["#{id}_answer_#{adx}", a.details[0]]
               @addConnection(c, id, nextTask, previousTask)
         else
-          c=["#{id}_next", task.next ? 'end']
+          c=["#{id}_next", if task.next then task.next else 'end']
           @addConnection(c, id, nextTask, previousTask)
       nextTask[id] ?= {'end': 'end'}
     @setState({nextTask: nextTask, previousTask: previousTask})
