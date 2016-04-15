@@ -261,16 +261,21 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          <p>
-            <AutoSave tag="label" resource={@props.workflow}>
-              <input type="checkbox" name="world_wide_telescope" checked={@props.workflow.world_wide_telescope} onChange={handleInputChange.bind @props.workflow}/>{' '}
-              Use World Wide Telescope (WWT) API
-            </AutoSave>
-            <br />
-            <small className="form-help">Allow user to view subject in the WWT after classifying.</small>
-          </p>
+          {if 'WorldWide Telescope' in @props.project.experimental_tools
+            <div>
+              <div>
+                <AutoSave resource={@props.workflow}>
+                  <span className="form-label">Use World Wide Telescope API</span><br />
+                  <small className="form-help">Allow user to view subject in the WWT after classifying.</small>
+                  <br />
+                  <input type="checkbox" id="world_wide_telescope" onChange={@handleSetWorldWideTelescope} defaultChecked={@props.workflow.configuration?.external_api}/>
+                  <label htmlFor="world_wide_telescope">WorldWide Telescope</label>
+                </AutoSave>
+              </div>
 
-          <hr />
+              <hr />
+
+            </div>}
 
           <div style={pointerEvents: 'all'}>
             <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>Test this workflow</a>
@@ -378,6 +383,11 @@ EditWorkflowPage = React.createClass
   handleSetHideClassificationSummaries: (e) ->
     @props.workflow.update
       'configuration.hide_classification_summaries': e.target.checked
+
+  handleSetWorldWideTelescope: (e) ->
+    toggle = if e.target.checked then 'world_wide_telescope' else null
+    @props.workflow.update
+      'configuration.external_api': toggle
 
   handleSubjectSetToggle: (subjectSet, e) ->
     shouldAdd = e.target.checked
