@@ -4,7 +4,6 @@ DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 
-DELETE_BUTTON_DISTANCE = 9 / 10
 DEFAULT_WIDTH = 25
 MINIMUM_WIDTH = 25
 
@@ -14,12 +13,11 @@ module.exports = React.createClass
   statics:
     initCoords: null
 
-    defaultValues: ({x, y}) ->
+    defaultValues: ({x}) ->
       x: x
-      y: 0
       width: DEFAULT_WIDTH
 
-    initStart: ({x, y}, mark) ->
+    initStart: ({x}, mark) ->
       @initCoords = {x, 0}
       {x, 0, _inProgress: true}
 
@@ -31,9 +29,7 @@ module.exports = React.createClass
         width = @initCoords.x - cursor.x
         x = cursor.x
 
-      y = mark.y
-
-      {x, y, width}
+      {x, width}
 
     initRelease: ->
       _inProgress: false
@@ -44,19 +40,19 @@ module.exports = React.createClass
   initCoords: null
 
   render: ->
-    {x, y, width} = @props.mark
-    allowedWidth = if @props.mark.width < MINIMUM_WIDTH then MINIMUM_WIDTH else width
+    {x, width} = @props.mark
+
     <DrawingToolRoot tool={this}>
       <Draggable onDrag={@handleMainDrag} disabled={@props.disabled}>
-        <rect ref="rect" x={x} y={y} width={allowedWidth} height={@props.containerRect.height / @props.scale.vertical} />
+        <rect ref="rect" x={x} y={0} width={width} height={@props.containerRect.height / @props.scale.vertical} />
       </Draggable>
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={x + allowedWidth + 20} y={y + 15} />
+          <DeleteButton tool={this} x={x + width + 20} y={15} />
 
-          <DragHandle x={x} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleLeftDrag} onEnd={@normalizeMark} />
-          <DragHandle x={x + allowedWidth} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleRightDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleLeftDrag} />
+          <DragHandle x={x + width} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleRightDrag} />
         </g>}
     </DrawingToolRoot>
 
@@ -65,17 +61,12 @@ module.exports = React.createClass
     @props.onChange @props.mark
 
   handleLeftDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal if @props.mark.width >= MINIMUM_WIDTH
-    @props.mark.width -= d.x / @props.scale.horizontal 
-    @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
+    if @props.mark.width - d.x / @props.scale.horizontal >= MINIMUM_WIDTH
+      @props.mark.x += d.x / @props.scale.horizontal
+      @props.mark.width -= d.x / @props.scale.horizontal 
+      @props.onChange @props.mark
 
   handleRightDrag: (e, d) ->
-    @props.mark.width += d.x / @props.scale.horizontal
-    @props.onChange @props.mark 
-
-  normalizeMark: ->
-    if @props.mark.width < MINIMUM_WIDTH
-      @props.mark.x += @props.mark.width if @props.mark.width >= MINIMUM_WIDTH
-      @props.mark.width is MINIMUM_WIDTH
-
-    @props.onChange @props.mark if @props.mark.width >= MINIMUM_WIDTH
+    if @props.mark.width + d.x / @props.scale.horizontal >= MINIMUM_WIDTH
+      @props.mark.width += d.x / @props.scale.horizontal
+      @props.onChange @props.mark
