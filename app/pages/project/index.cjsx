@@ -173,7 +173,7 @@ module.exports = React.createClass
     'user': 'fetchProject'
 
   componentWillUpdate: (nextProps, nextState) ->
-    @context.updateProject nextState.project unless @state.project == nextState.project
+    @context.updateProject nextState.project if nextState.project isnt @state.project
 
   fetchProject: (_, props = @props) ->
     @setState error: false
