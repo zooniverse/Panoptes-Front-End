@@ -13,6 +13,9 @@ DELETE_BUTTON_WEIGHT = 5 # Weight of the second point.
 module.exports = React.createClass
   displayName: 'PolygonTool'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   statics:
     initCoords: null
 
@@ -48,6 +51,10 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.removeEventListener 'mousemove', @handleMouseMove
 
+  dragEnd: (target) ->
+    @context.geordi?.logEvent type: 'drag-polygon'
+    deleteIfOutOfBounds target
+
   render: ->
     averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
     finisherRadius = FINISHER_RADIUS / averageScale
@@ -69,7 +76,7 @@ module.exports = React.createClass
       y: (firstPoint.y + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.y)) / DELETE_BUTTON_WEIGHT
 
     <DrawingToolRoot tool={this}>
-      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={@dragEnd.bind this, this} disabled={@props.disabled}>
         <polyline points={points} fill={'none' unless @props.mark.closed} />
       </Draggable>
 

@@ -13,6 +13,9 @@ DELETE_BUTTON_ANGLE = 45
 
 module.exports = React.createClass
   displayName: 'PointTool'
+  
+  contextTypes:
+    geordi: React.PropTypes.object
 
   statics:
     defaultValues: ({x, y}) ->
@@ -40,6 +43,10 @@ module.exports = React.createClass
     x: (SELECTED_RADIUS / @props.scale.horizontal) * Math.cos theta
     y: -1 * (SELECTED_RADIUS / @props.scale.vertical) * Math.sin theta
 
+  dragEnd: (target) ->
+    @context.geordi?.logEvent type: 'drag-point'
+    deleteIfOutOfBounds target
+
   render: ->
     averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
 
@@ -58,7 +65,7 @@ module.exports = React.createClass
       <line x1="0" y1={crosshairSpace * selectedRadius} x2="0" y2={selectedRadius} strokeWidth={crosshairWidth} />
       <line x1={crosshairSpace * selectedRadius} y1="0" x2={selectedRadius} y2="0" strokeWidth={crosshairWidth} />
 
-      <Draggable onDrag={@handleDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+      <Draggable onDrag={@handleDrag} onEnd={@dragEnd.bind this, this} disabled={@props.disabled}>
         <circle r={radius} />
       </Draggable>
 

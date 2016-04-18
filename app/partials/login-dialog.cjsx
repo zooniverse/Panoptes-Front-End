@@ -20,6 +20,12 @@ module.exports = React.createClass
   getInitialState: ->
     which: @props.which
 
+  childContextTypes:
+    geordi: React.PropTypes.object
+
+  getChildContext: ->
+    geordi: @props.contextRef?.geordi
+
   render: ->
     <div className="tabbed-content" data-side="top" onSubmit={@handleSubmit}>
       <nav className="tabbed-content-tabs">

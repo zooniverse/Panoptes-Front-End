@@ -11,6 +11,9 @@ GRAB_STROKE_WIDTH = 6
 module.exports = React.createClass
   displayName: 'LineTool'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   statics:
     defaultValues: ({x, y}) ->
       x1: x
@@ -32,6 +35,13 @@ module.exports = React.createClass
       {x1, y1, x2, y2} = mark
       DrawingToolRoot.distance(x1, y1, x2, y2) > MINIMUM_LENGTH
 
+  dragEnd: (target) ->
+    @context.geordi?.logEvent type: 'drag-line'
+    deleteIfOutOfBounds target
+
+  logResize: ->
+    @context.geordi?.logEvent type: 'resize-line'
+
   render: ->
     {x1, y1, x2, y2} = @props.mark
     points = {x1, y1, x2, y2}
@@ -39,15 +49,15 @@ module.exports = React.createClass
     <DrawingToolRoot tool={this}>
       <line {...points} />
 
-      <Draggable onDrag={@handleStrokeDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+      <Draggable onDrag={@handleStrokeDrag} onEnd={@dragEnd.bind this, this} disabled={@props.disabled}>
         <line {...points} strokeWidth={GRAB_STROKE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)} strokeOpacity="0" />
       </Draggable>
 
       {if @props.selected
         <g>
           <DeleteButton tool={this} x={(x1 + x2) / 2} y={(y1 + y2) / 2} />
-          <DragHandle x={x1} y={y1} scale={@props.scale} onDrag={@handleHandleDrag.bind this, 1} />
-          <DragHandle x={x2} y={y2} scale={@props.scale} onDrag={@handleHandleDrag.bind this, 2} />
+          <DragHandle x={x1} y={y1} scale={@props.scale} onDrag={@handleHandleDrag.bind this, 1} onEnd={@logResize} />
+          <DragHandle x={x2} y={y2} scale={@props.scale} onDrag={@handleHandleDrag.bind this, 2} onEnd={@logResize} />
         </g>}
     </DrawingToolRoot>
 

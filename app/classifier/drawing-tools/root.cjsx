@@ -15,6 +15,9 @@ SEMI_MODAL_UNDERLAY_STYLE =
 module.exports = React.createClass
   displayName: 'DrawingToolRoot'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   statics:
     distance: (x1, y1, x2, y2) ->
       Math.sqrt Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
@@ -27,6 +30,7 @@ module.exports = React.createClass
 
   render: ->
     toolProps = @props.tool.props
+    geordi = @context.geordi
 
     rootProps =
       'data-disabled': toolProps.disabled or null
@@ -69,7 +73,7 @@ module.exports = React.createClass
             <TaskComponent autoFocus={i is 0} key={detailTask._key} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />}
           <hr />
           <p style={textAlign: 'center'}>
-            <button type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
+            <button type="submit" className="standard-button" disabled={not detailsAreComplete} onClick={ -> geordi?.logEvent type: 'subtask-end' }>OK</button>
           </p>
         </StickyModalForm>}
     </g>
@@ -78,6 +82,7 @@ module.exports = React.createClass
     this.refs.detailsForm?.reposition()
 
   handleDetailsChange: (detailIndex, annotation) ->
+    @context.geordi?.logEvent type: 'subtask-select-option'
     @props.tool.props.mark.details[detailIndex] = annotation
     @props.tool.props.onChange @props.tool.props.mark
 

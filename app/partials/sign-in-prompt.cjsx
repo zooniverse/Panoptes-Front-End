@@ -9,6 +9,9 @@ module.exports = React.createClass
     project: {}
     onChoose: Function.prototype # No-op
 
+  componentDidMount: ->
+    @props.contextRef?.geordi?.logEvent type: 'please-register'
+
   render: ->
     <div className="content-container">
       {@props.children}
@@ -24,15 +27,18 @@ module.exports = React.createClass
       </p>
     </div>
 
-  dismiss: ->
+  dismiss: (e)->
+    @props.contextRef?.geordi?.logEvent type: 'register-no-thanks'
     @props.onChoose()
 
   signIn: ->
+    @props.contextRef?.geordi?.logEvent type: 'register-sign-in'
     @props.onChoose()
     alert (resolve) =>
       <LoginDialog which="sign-in" project={@props.project} onSuccess={resolve} />
 
   register: ->
+    @props.contextRef?.geordi?.logEvent type: 'register-register'
     @props.onChoose()
     alert (resolve) =>
       <LoginDialog which="register" project={@props.project} onSuccess={resolve} />

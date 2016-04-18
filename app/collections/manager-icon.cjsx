@@ -13,6 +13,9 @@ module?.exports = React.createClass
   getInitialState: ->
     open: false
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   open: ->
     @setState {open: true}
 
@@ -28,6 +31,6 @@ module?.exports = React.createClass
 
       {if @state.open
         <Dialog tag="div" closeButton={true} onCancel={@close}>
-          <CollectionsManager user={@props.user} project={@props.project} subject={@props.subject} onSuccess={@close} />
+          <CollectionsManager contextRef={@context} user={@props.user} project={@props.project} subject={@props.subject} onSuccess={@close} />
         </Dialog>}
     </button>

@@ -10,6 +10,9 @@ module?.exports = React.createClass
     header: React.PropTypes.object             # Optional header ex: <h1>Tags</h1>
     section: React.PropTypes.string.isRequired # Talk section
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   tagsRequest: ->
     query =
       section: @props.section
@@ -23,11 +26,12 @@ module?.exports = React.createClass
     talkClient.type('tags/popular').get query
 
   tag: (talkTag, i) ->
+    logClick = @context.geordi?.makeHandler? 'hashtag-sidebar'
     tag = talkTag.name
     if @props.project
-      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/projects/#{@props.project.slug}/talk/tags/#{tag}">#{tag}</Link>{' '}</div>
+      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/projects/#{@props.project.slug}/talk/tags/#{tag}" onClick={logClick?.bind(this, '')}>#{tag}</Link>{' '}</div>
     else
-      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/talk/search/?query=#{tag}">#{tag}</Link>{' '}</div>
+      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/talk/search/?query=#{tag}" onClick={logClick?.bind(this, '')}>#{tag}</Link>{' '}</div>
 
   render: ->
     <div className="talk-popular-tags">

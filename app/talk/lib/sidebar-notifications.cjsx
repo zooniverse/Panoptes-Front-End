@@ -7,6 +7,9 @@ formatNumber = require './format-number'
 module?.exports = React.createClass
   displayName: 'SidebarNotifications'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   componentDidMount: ->
     @getUndeliveredCount() if @props.user
 
@@ -32,6 +35,7 @@ module?.exports = React.createClass
       'Notifications'
 
   render: ->
+    logClick = @context.geordi?.makeHandler? 'notifications-sidebar'
     return null unless @props.user and @state.unreadCount?
 
     {project, user} = @props
@@ -44,10 +48,10 @@ module?.exports = React.createClass
     <section className="talk-sidebar-notifications">
       <h3>
         {if project
-          <Link to="/projects/#{owner}/#{name}/notifications" {...linkProps} className="sidebar-link">{@label()}</Link>
+          <Link to="/projects/#{owner}/#{name}/notifications" {...linkProps} className="sidebar-link" onClick={logClick?.bind(this, '')}>{@label()}</Link>
         else if section
-          <Link to="/#{section}/notifications" {...linkProps} className="sidebar-link">{@label()}</Link>
+          <Link to="/#{section}/notifications" {...linkProps} className="sidebar-link" onClick={logClick?.bind(this, '')}>{@label()}</Link>
         else
-          <Link to="/notifications" {...linkProps} className="sidebar-link">{@label()}</Link>}
+          <Link to="/notifications" {...linkProps} className="sidebar-link" onClick={logClick?.bind(this, '')}>{@label()}</Link>}
       </h3>
     </section>

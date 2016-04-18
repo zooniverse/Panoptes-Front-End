@@ -12,14 +12,20 @@ FlexibleLink = React.createClass
     to: React.PropTypes.string.isRequired
     skipOwner: React.PropTypes.bool
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   isExternal: ->
     @props.to.indexOf('http') > -1
 
   render: ->
+    @logClick = @context.geordi?.makeHandler? 'profile-menu'
     if @isExternal()
       <a href={@props.to}>{@props.children}</a>
     else
-      <Link {...@props}>{@props.children}</Link>
+      <Link
+        {...@props}
+        onClick={@logClick?.bind(this, @props.logText)}>{@props.children}</Link>
 
 module.exports = React.createClass
   displayName: 'OwnedCard'
@@ -47,11 +53,15 @@ module.exports = React.createClass
 
   render: ->
     [owner, name] = @props.resource.slug.split('/')
+    dataText = "view-#{@props.translationObjectName?.toLowerCase().replace(/page$/,'').replace(/s?$/,'')}"
+
     linkProps =
       to: @props.linkTo
+      logText: dataText
       params:
         owner: owner
         name: name
+
 
     <FlexibleLink {...linkProps}>
       <div className="card" ref="ownedCard">

@@ -6,10 +6,16 @@ Loading = require '../../components/loading-indicator'
 module?.exports = React.createClass
   displayName: 'ProjectLinker'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getInitialState: ->
     projects: []
     meta: {}
     loading: true
+
+  componentWillReceiveProps: (nextProps, nextContext)->
+    @logClick = nextContext?.geordi?.makeHandler? 'change-project-sidebar'
 
   componentDidMount: ->
     @loadMoreProjects()
@@ -27,6 +33,13 @@ module?.exports = React.createClass
       <Link to="/projects/#{owner}/#{name}/talk">
         {project.display_name}
       </Link>
+      {if project.redirect
+        <a href={project.redirect} title={project.redirect}>{project.display_name}</a>
+      else
+        <Link to="/projects/#{owner}/#{name}" onClick={@logClick?.bind(this, project.display_name)}>
+          {project.display_name}
+        </Link>
+        }
     </div>
 
   onClickLoadMore: (e) ->

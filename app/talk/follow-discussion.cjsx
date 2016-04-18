@@ -5,6 +5,9 @@ SingleSubmitButton = require '../components/single-submit-button'
 module?.exports = React.createClass
   displayName: 'FollowDiscussion'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   propTypes:
     discussion: React.PropTypes.object.isRequired
     user: React.PropTypes.object.isRequired
@@ -24,7 +27,12 @@ module?.exports = React.createClass
     @getPreferences()
     @getSubscriptionsFor(discussionId) if discussionId and discussionId isnt @props.discussion?.id
 
+  logSubscribe: ->
+    @context.geordi?.logEvent
+      type: 'subscribe'
+
   toggleFollowed: (e) ->
+    @logSubscribe()
     e.preventDefault()
     subscription = @state.subscriptions.followed_discussions
     if subscription
@@ -33,6 +41,7 @@ module?.exports = React.createClass
       @follow()
 
   toggleParticipating: (e) ->
+    @logSubscribe()
     e.preventDefault()
     @toggle @state.subscriptions.participating_discussions
 

@@ -44,19 +44,25 @@ ProjectPage = React.createClass
     avatar: null
     pages: []
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-project-page'
     @fetchInfo @props.project
     @updateSugarSubscription @props.project
+    @context.geordi?.remember projectToken: @props.project?.slug
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-project-page'
     @updateSugarSubscription null
+    @context.geordi?.forget ['projectToken']
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project
       @fetchInfo nextProps.project
       @updateSugarSubscription nextProps.project
+      @context.geordi?.remember projectToken: nextProps.project?.slug
 
   fetchInfo: (project) ->
     @setState
@@ -102,6 +108,8 @@ ProjectPage = React.createClass
       map[page.url_key] = page
       map
 
+    logClick = @context?.geordi?.makeHandler? 'project-menu'
+
     <div className="project-page">
       {if @state.background?
         <div className="project-background" style={backgroundImage: "url('#{@state.background.src}')"}></div>}
@@ -126,7 +134,7 @@ ProjectPage = React.createClass
           </Link>}
 
         {if @props.project.redirect
-          <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank">
+          <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank" onClick={logClick?.bind this, 'project.nav.classify'}>
             <Translate content="project.nav.classify" />
           </a>
         else

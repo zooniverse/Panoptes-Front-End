@@ -24,6 +24,9 @@ PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 Classifier = React.createClass
   displayName: 'Classifier'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getDefaultProps: ->
     user: null
     workflow: null
@@ -54,6 +57,13 @@ Classifier = React.createClass
       @loadSubject subject
     if nextProps.classification isnt @props.classification
       @prepareToClassify nextProps.classification
+
+    @context.geordi.remember subjectID: @props.subject?.id
+
+  componentWillUnmount: () ->
+    try
+      @context.geordi?.forget ['subjectID']
+
 
   loadSubject: (subject) ->
     @setState
@@ -91,7 +101,7 @@ Classifier = React.createClass
   prepareToClassify: (classification) ->
     classification.annotations ?= []
     if classification.annotations.length is 0
-      @addAnnotationForTask classification, @props.workflow.first_task
+      @addAnnotationForTask classification, @props.workflow.first_task, true
 
   render: ->
     <ChangeListener target={@props.classification}>{=>
@@ -136,7 +146,7 @@ Classifier = React.createClass
     # Should we disabled the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
-    
+
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
@@ -333,9 +343,15 @@ Classifier = React.createClass
       </nav>
     </div>
 
+  logEvent: ->
+    @context?.geordi?.logEvent arguments...
+
   renderExpertOptions: ->
     return unless @props.expertClassifier
-    <TriggeredModalForm trigger={
+
+    logWrapper = @logEvent
+
+    <TriggeredModalForm triggerProps={{onClick: -> logWrapper type: 'classify-cog' }} trigger={
       <i className="fa fa-cog fa-fw"></i>
     }>
       {if 'owner' in @props.userRoles or 'expert' in @props.userRoles
@@ -344,7 +360,7 @@ Classifier = React.createClass
             <input type="checkbox" checked={@props.classification.gold_standard} onChange={@handleGoldStandardChange} />{' '}
             Gold standard mode
           </label>{' '}
-          <TriggeredModalForm trigger={
+          <TriggeredModalForm triggerProps={{onClick: -> logWrapper type: 'gold-standard-mode-query' }} trigger={
             <i className="fa fa-question-circle"></i>
           }>
             <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
@@ -357,7 +373,7 @@ Classifier = React.createClass
               <input type="checkbox" checked={@props.demoMode} onChange={@handleDemoModeChange} />{' '}
               Demo mode
             </label>{' '}
-            <TriggeredModalForm trigger={
+            <TriggeredModalForm triggerProps={{onClick: -> logWrapper type: 'demo-mode-query' }} trigger={
               <i className="fa fa-question-circle"></i>
             }>
               <p>In demo mode, classifications <strong>will not be saved</strong>. Use this for quick, inaccurate demos of the classification interface.</p>
@@ -367,6 +383,9 @@ Classifier = React.createClass
 
   # Whenever a subject image is loaded in the annotator, record its size at that time.
   handleSubjectImageLoad: (e, frameIndex) ->
+    @context.geordi?.remember subjectID: @props.subject?.id
+    @context.geordi?.logEvent type: 'view'
+
     {naturalWidth, naturalHeight, clientWidth, clientHeight} = e.target
     changes = {}
     changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
@@ -377,7 +396,10 @@ Classifier = React.createClass
     classification.update 'annotations'
 
   # Next (or start):
-  addAnnotationForTask: (classification, taskKey) ->
+  addAnnotationForTask: (classification, taskKey, noLog) ->
+    noLog = (typeof noLog is 'boolean') && noLog
+    @context.geordi.logEvent type: 'task-end' unless noLog
+
     taskDescription = @props.workflow.tasks[taskKey]
     annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
     annotation.task = taskKey
@@ -390,6 +412,7 @@ Classifier = React.createClass
     @props.classification.update 'annotations'
 
   completeClassification: ->
+    @context.geordi?.logEvent type: 'step-end'
     @props.classification.update
       completed: true
       'metadata.session': getSessionID()
@@ -406,9 +429,11 @@ Classifier = React.createClass
     @props.onComplete?()
 
   handleGoldStandardChange: (e) ->
+    @logEvent type: if e.target.checked then 'gold-standard-mode-on' else 'gold-standard-mode-off'
     @props.classification.update gold_standard: e.target.checked || undefined # Delete the whole key.
 
   handleDemoModeChange: (e) ->
+    @logEvent type: if e.target.checked then 'demo-mode-on' else 'demo-mode-off'
     @props.onChangeDemoMode e.target.checked
 
   toggleExpertClassification: (value) ->

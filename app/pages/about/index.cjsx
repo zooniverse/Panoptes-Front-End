@@ -18,6 +18,12 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'AboutPage'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  componentWillReceiveProps: (nextProps, nextContext)->
+    @logClick = nextContext?.geordi?.makeHandler? 'about-menu'
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
 
@@ -31,10 +37,10 @@ module.exports = React.createClass
           <Translate content="about.title" component="h1" />
           <nav className="hero-nav">
             <IndexLink to="/about" activeClassName="active"><Translate content="about.nav.about" /></IndexLink>
-            <Link to="/about/publications" activeClassName="active"><Translate content="about.nav.publications" /></Link>
-            <Link to="/about/team" activeClassName="active"><Translate content="about.nav.ourTeam" /></Link>
-            <Link to="/about/education" activeClassName="active"><Translate content="about.nav.education" /></Link>
-            <Link to="/about/contact" activeClassName="active"><Translate content="about.nav.contact" /></Link>
+            <Link to="/about/publications" activeClassName="active" onClick={@logClick?.bind(this, 'about.nav.publications')}><Translate content="about.nav.publications"/></Link>
+            <Link to="/about/team" activeClassName="active" onClick={@logClick?.bind(this, 'about.nav.ourTeam')}><Translate content="about.nav.ourTeam" /></Link>
+            <Link to="/about/education" activeClassName="active" onClick={@logClick?.bind(this, 'about.nav.education')}><Translate content="about.nav.education" /></Link>
+            <Link to="/about/contact" activeClassName="active" onClick={@logClick?.bind(this, 'about.nav.contact')}><Translate content="about.nav.contact" /></Link>
           </nav>
         </div>
       </section>

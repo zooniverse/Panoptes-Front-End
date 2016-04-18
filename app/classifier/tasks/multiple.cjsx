@@ -8,6 +8,9 @@ NOOP = Function.prototype
 Summary = React.createClass
   displayName: 'MultipleChoiceSummary'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getDefaultProps: ->
     task: null
     annotation: null
@@ -110,6 +113,7 @@ module.exports = React.createClass
     value = @props.annotation.value.slice 0
 
     if e.target.checked
+      @context.geordi?.logEvent type: 'select-option'
       if index not in value
         value.push index
     else

@@ -20,18 +20,24 @@ counterpart.registerTranslations 'en',
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  componentWillReceiveProps: (nextProps, nextContext)->
+    @logClick = nextContext?.geordi?.makeHandler? 'collect-menu'
+
   render: ->
     <nav className="hero-nav">
-      <IndexLink to="/collections" activeClassName="active">
+      <IndexLink to="/collections" activeClassName="active" onClick={@logClick?.bind(this, 'collectionsPage.all')}>
         <Translate content="collectionsPage.all" />
       </IndexLink>
 
       {if @props.user?
-        <Link to="/collections/#{@props.user.login}" activeClassName="active">
+        <Link to="/collections/#{@props.user.login}" activeClassName="active" onClick={@logClick?.bind(this, 'collectionsPage.myCollections')}>
           <Translate content="collectionsPage.myCollections" />
         </Link>}
       {if @props.user?
-        <Link to="/favorites/#{@props.user.login}" activeClassName="active">
+        <Link to="/favorites/#{@props.user.login}" activeClassName="active" onClick={@logClick?.bind(this, 'collectionsPage.favorites')}>
           <Translate content="collectionsPage.favorites" />
         </Link>}
     </nav>

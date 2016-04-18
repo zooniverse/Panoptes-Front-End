@@ -27,6 +27,12 @@ module.exports = React.createClass
   propTypes:
     user: React.PropTypes.object.isRequired
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  componentWillReceiveProps: (nextProps, nextContext)->
+    @logClick = nextContext?.geordi?.makeHandler? 'about-menu'
+
   getDefaultProps: ->
     focusablesSelector: 'a[href], button'
 
@@ -60,19 +66,19 @@ module.exports = React.createClass
         }>
           <PassHistoryContext {...@props} context={history: @history}>
             <div ref="accountMenu" role="menu" className="secret-list" onKeyDown={@navigateMenu}>
-              <Link role="menuitem" to="/users/#{@props.user.login}">
+              <Link role="menuitem" to="/users/#{@props.user.login}" onClick={@logClick?.bind(this, 'accountMenu.profile')}>
                 <i className="fa fa-user fa-fw"></i>{' '}
                 <Translate content="accountMenu.profile" />
               </Link>
-              <Link role="menuitem" to="/settings">
+              <Link role="menuitem" to="/settings" onClick={@logClick?.bind(this, 'accountMenu.settings')}>
                 <i className="fa fa-cogs fa-fw"></i>{' '}
                 <Translate content="accountMenu.settings" />
               </Link>
-              <Link role="menuitem" to="/collections/#{@props.user.login}">
+              <Link role="menuitem" to="/collections/#{@props.user.login}" onClick={@logClick?.bind(this, 'accountMenu.collections')}>
                 <i className="fa fa-image fa-fw"></i>{' '}
                 <Translate content="accountMenu.collections" />
               </Link>
-              <Link role="menuitem" to="/favorites/#{@props.user.login}">
+              <Link role="menuitem" to="/favorites/#{@props.user.login}" onClick={@logClick?.bind(this, 'accountMenu.favorites')}>
                 <i className="fa fa-star fa-fw"></i>{' '}
                 <Translate content="accountMenu.favorites" />
               </Link>
@@ -85,7 +91,7 @@ module.exports = React.createClass
           </PassHistoryContext>
         </TriggeredModalForm>{' '}
 
-        <Link to="/inbox" className="message-link" aria-label="Inbox #{if @state.unread then 'with unread messages' else ''}">
+        <Link to="/inbox" className="message-link" aria-label="Inbox #{if @state.unread then 'with unread messages' else ''}" onClick={@logClick?.bind(this, 'accountMenu.inbox', 'top-menu')}>
           <i className="fa fa-envelope#{if @state.unread then ' unread' else '-o'}" />
         </Link>
       </div>
@@ -114,4 +120,8 @@ module.exports = React.createClass
         e.preventDefault()
 
   handleSignOutClick: ->
+    @logClick? 'accountMenu.signOut'
+    @context.geordi?.logEvent
+      type: 'logout'
+      
     auth.signOut()

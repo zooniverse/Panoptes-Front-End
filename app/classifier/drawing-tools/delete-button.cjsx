@@ -15,6 +15,9 @@ CROSS_PATH = "
 module.exports = React.createClass
   displayName: 'DeleteButton'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getDefaultProps: ->
     x: 0
     y: 0
@@ -34,5 +37,6 @@ module.exports = React.createClass
     </g>
 
   destroyTool: ->
+    @context.geordi?.logEvent type: 'delete-drawing'
     @props.tool.setState destroying: true, =>
       setTimeout @props.tool.props.onDestroy, @props.destroyTransitionDuration
