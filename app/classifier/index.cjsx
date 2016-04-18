@@ -17,9 +17,6 @@ Tutorial = require '../lib/tutorial'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 
-unless process.env.NODE_ENV is 'production'
-  mockData = require './mock-data'
-
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
 Classifier = React.createClass
@@ -27,11 +24,9 @@ Classifier = React.createClass
 
   getDefaultProps: ->
     user: null
-    if mockData?
-      {workflow, subject, classification} = mockData
-    workflow: workflow ? null
-    subject: subject ? null
-    classification: classification ? null
+    workflow: null
+    subject: null
+    classification: null
     goodClassificationCutoff: 0.5
     onLoad: Function.prototype
 
@@ -138,7 +133,7 @@ Classifier = React.createClass
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
-      waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation
+      waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
 
     # Each answer of a single-answer task can have its own `next` key to override the task's.
     if TaskComponent is tasks.single
@@ -156,8 +151,33 @@ Classifier = React.createClass
       opacity: 0.5
       pointerEvents: 'none'
 
+    # Run through the existing annotations to build up sets of persistent hooks in the order of the associated annotations. Skip duplicates.
+    persistentHooksBeforeTask = []
+    persistentHooksAfterTask = []
+    classification.annotations.forEach (annotation) =>
+      taskDescription = @props.workflow.tasks[annotation.task]
+      TaskComponent = tasks[taskDescription.type]
+      {PersistBeforeTask, PersistAfterTask} = TaskComponent
+      if PersistBeforeTask? and PersistBeforeTask not in persistentHooksBeforeTask
+        persistentHooksBeforeTask.push PersistBeforeTask
+      if PersistAfterTask? and PersistAfterTask not in persistentHooksAfterTask
+        persistentHooksAfterTask.push PersistAfterTask
+
+    # These props will be passed into the hooks. Append as necessary when creating hooks.
+    taskHookProps =
+      taskTypes: tasks
+      workflow: @props.workflow
+      classification: classification
+      onChange: -> classification.update()
+
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
+      {persistentHooksBeforeTask.map (HookComponent) =>
+        <HookComponent {...taskHookProps} />}
+
       <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+
+      {persistentHooksAfterTask.map (HookComponent) =>
+        <HookComponent {...taskHookProps} />}
 
       <hr />
 
@@ -372,7 +392,7 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     user: null
-    classification: mockData?.classification ? {}
+    classification: {}
     onLoad: Function.prototype
     onComplete: Function.prototype
     onClickNext: Function.prototype

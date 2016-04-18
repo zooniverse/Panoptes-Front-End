@@ -4,6 +4,7 @@ ChangeListener = require '../../components/change-listener'
 PromiseRenderer = require '../../components/promise-renderer'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
+{Markdown} = require 'markdownz'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = window.api = require 'panoptes-client/lib/api-client'
@@ -105,9 +106,9 @@ ProjectPage = React.createClass
               <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
                 pageTitles = @getPageTitles(pages)
                 <span>
-                  {if pageTitles.result
+                  {if pageTitles.results
                     <Link to="#{projectPath}/results" activeClassName="active"className="tabbed-content-tab">
-                      {pageTitles.result}
+                      {pageTitles.results}
                     </Link>}
                   {if pageTitles.faq
                     <Link to="#{projectPath}/faq" activeClassName="active" className="tabbed-content-tab">
@@ -134,7 +135,13 @@ ProjectPage = React.createClass
               <a key={link._key} href={link.url} className="tabbed-content-tab" target="#{@props.project.id}-#{i}">{label}</a>}
           </nav>
 
+          {if @props.project.configuration?.announcement
+            <div className="informational project-announcement-banner">
+              <Markdown>{@props.project.configuration.announcement}</Markdown>
+            </div>}
+
           {React.cloneElement(@props.children, {owner: owner, project: @props.project, user: @props.user})}
+
           {unless @props.project.launch_approved or @props.project.beta_approved
             <Translate className="project-disclaimer" content="project.disclaimer" component="p" />}
 

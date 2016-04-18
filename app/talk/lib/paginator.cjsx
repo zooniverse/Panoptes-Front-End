@@ -1,26 +1,6 @@
 React = require 'react'
 {History} = require 'react-router'
-
-changeSearchString = (searchString, changes) ->
-  params = {}
-  if searchString isnt ""
-    for keyValue in searchString.slice(1).split('&')
-      [key, value] = keyValue.split('=')
-      params[key] = value
-  for key, value of changes
-    params[key] = value
-  params
-
-updatePageQueryParam = (page) ->
-  if process.env.NON_ROOT == 'true'
-    [beforeQuestionMark, afterQuestionMark] = location.hash.split('?')
-    oldSearch = '?' + afterQuestionMark
-    newSearch = changeSearchString(oldSearch, {page})
-    newSearch = "?#{([key, value].join('=') for key, value of newSearch when value?).join('&')}"
-    location.hash = beforeQuestionMark + newSearch
-  else
-    newSearch = changeSearchString(location.search, {page})
-    @history.pushState(null, location.pathname, newSearch)
+updateQueryParams = require './update-query-params'
 
 module?.exports = React.createClass
   displayName: 'Paginator'
@@ -31,11 +11,16 @@ module?.exports = React.createClass
     onPageChange: React.PropTypes.func.isRequired # passed (page) on change
     firstAndLast: React.PropTypes.bool            # optional, add 'first' & 'last' buttons
     scrollOnChange: React.PropTypes.bool          # optional, scroll to top of page on change
-    pageSelector: React.PropTypes.bool # show page selector?
+    pageSelector: React.PropTypes.bool            # show page selector?
+    pageKey: React.PropTypes.string               # optional name for key param (defaults to 'page')
 
   getDefaultProps: ->
     page: 1
-    onPageChange: updatePageQueryParam
+    pageKey: 'page'
+    onPageChange: (page) ->
+      queryChange = { }
+      queryChange[@props.pageKey] = page
+      updateQueryParams @history, queryChange
     firstAndLast: true
     pageSelector: true
     scrollOnChange: true
@@ -49,14 +34,15 @@ module?.exports = React.createClass
     window.scrollTo(0,0) if @props.scrollOnChange
 
   onClickNext: ->
-    {pageCount, page} = @props
+    {pageCount} = @props
+    page = @props[@props.pageKey]
     @props.onClickNext?()
 
     nextPage = if page is pageCount then pageCount else page + 1
     @setPage(nextPage)
 
   onClickPrev: ->
-    {pageCount, page} = @props
+    page = @props[@props.pageKey]
     @props.onClickPrev?()
 
     prevPage = if page is 1 then page else page - 1
@@ -72,7 +58,8 @@ module?.exports = React.createClass
     </option>
 
   render: ->
-    {page, pageCount} = @props
+    {pageCount} = @props
+    page = @props[@props.pageKey]
 
     <div className="paginator #{ @props.className }">
       {if @props.firstAndLast

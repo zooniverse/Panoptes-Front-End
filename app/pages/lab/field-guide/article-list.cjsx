@@ -8,7 +8,6 @@ ArticleList = React.createClass
     icons: {}
     onReorder: ->
     onSelectArticle: ->
-    onAddArticle: ->
     onRemoveArticle: ->
 
   renderArticle: (article, i) ->
@@ -25,11 +24,6 @@ ArticleList = React.createClass
     </li>
 
   render: ->
-    <div>
-      <DragReorderable tag="ul" className="field-guide-editor-article-list" items={@props.articles} render={@renderArticle} onChange={@props.onReorder} />
-      <p style={textAlign: 'center'}>
-        <button type="button" className="standard-button" onClick={@props.onAddArticle}>Add an entry</button>
-      </p>
-    </div>
+    <DragReorderable tag="ul" className="field-guide-editor-article-list" items={@props.articles} render={@renderArticle} onChange={@props.onReorder} />
 
 module.exports = ArticleList

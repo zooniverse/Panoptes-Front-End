@@ -41,10 +41,12 @@ List = React.createClass
 
   imagePromise: (collection) ->
     apiClient.type('subjects').get(collection_id: collection.id, page_size: 1)
-      .index(0)
-      .then (subject) ->
-        firstKey = Object.keys(subject.locations[0])[0]
-        subject.locations[0][firstKey]
+      .then ([subject]) ->
+        if subject?
+          firstKey = Object.keys(subject.locations[0])[0]
+          subject.locations[0][firstKey]
+        else
+          '/simple-avatar.jpg'
 
   cardLink: (collection) ->
     [owner, name] = collection.slug.split('/')

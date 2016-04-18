@@ -11,12 +11,16 @@ handleInputChange = require '../../lib/handle-input-change'
 
 EXPERIMENTAL_FEATURES = [
   'survey'
-  'flexible-survey'
   'crop'
+  'text'
+  'combo'
+  'dropdown'
   'tutorial'
   'field guide'
-  'text'
+  'mini-course'
   'hide classification summaries'
+  'pan and zoom'
+  'hide previous marks'
 ]
 
 ProjectToggle = React.createClass

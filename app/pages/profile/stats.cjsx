@@ -32,5 +32,5 @@ module.exports = React.createClass
           } />
         </div>
       else
-        <p>Sorry, we can’t show you stats for {@props.user.display_name}.</p>}
+        <p>Sorry, we can’t show you stats for {@props.profileUser.display_name}.</p>}
     </div>

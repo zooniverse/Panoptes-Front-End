@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 source "$(dirname "$0")/config.sh"
 
 pids=""
@@ -40,7 +42,7 @@ echo "$DEV_DIR/$VENDOR_JS:" $(cat "$DEV_DIR/$VENDOR_JS" | wc -c) "bytes"
   "$SRC_CSS" \
   & pids="$pids $!"
 
-node start.js \
+./bin/serve.js \
   & pids="$pids $!"
 
 trap 'kill -HUP $pids' INT TERM HUP

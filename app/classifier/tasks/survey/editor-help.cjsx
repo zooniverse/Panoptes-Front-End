@@ -10,21 +10,25 @@ module.exports =
           <th>Name</th>
           <th>Description</th>
           <th>Images</th>
+          <th>No questions</th>
         </tr>
         <tr className="form-label">
           <td>The label for the choice</td>
           <td>A short description of the choice</td>
-          <td>Representative images of the choice, <code>,</code>-separated</td>
+          <td>Representative images of the choice, <code>;</code>-separated</td>
+          <td>Y or N for whether you want "sub-questions" to appear</td>
         </tr>
         <tr>
           <td>Shark</td>
           <td>A shark is a big gray ocean monster with fins and teeth.</td>
-          <td>http://example.com/images/shark.jpg</td>
+          <td>shark.jpg</td>
+          <td>Y</td>
         </tr>
         <tr>
           <td>Dolphin</td>
           <td>Dolphins are intelligent marine mammals who solve crimes.</td>
-          <td>http://example.com/images/dolphin.jpg, http://example.com/images/flipper.jpg</td>
+          <td>dolphin.jpg; flipper.jpg</td>
+          <td>N</td>
         </tr>
       </tbody>
     </table>
@@ -35,20 +39,20 @@ module.exports =
   </div>
 
   characteristics: <div className="content-container">
-    <p><strong>Characteristics</strong> of those choices that the user can filter through, formatted like this:</p>
+    <p><strong>Characteristics</strong> of those choices that the user can filter through. Note that the values in Name have to match the values in choices.csv exactly. Format like this:</p>
 
     <table className="standard-table">
       <tbody>
         <tr>
           <th>Name</th>
-          <th>Color=Orange, http://...png</th>
-          <th>Color=Gray, http://...png</th>
-          <th>Teeth=Dull, http://...png</th>
-          <th>Teeth=Pointy, http://...png</th>
+          <th>Color=Orange; orange.png</th>
+          <th>Color=Gray; gray.png</th>
+          <th>Teeth=Dull; dull.png</th>
+          <th>Teeth=Pointy; pointy.png</th>
         </tr>
         <tr className="form-label">
           <td>Choice name</td>
-          <td colSpan="4"><code>Characteristic</code>=<code>value</code>, <code>icon URL</code>, with each row marked <code>Y</code> or <code>N</code> for that choice</td>
+          <td colSpan="4"><code>Characteristic</code>=<code>value</code>; <code>icon filename</code>, with each row marked <code>Y</code> or <code>N</code> for that choice</td>
         </tr>
         <tr>
           <td>Shark</td>
@@ -102,18 +106,24 @@ module.exports =
           <th>Multiple</th>
           <th>Required</th>
           <th>Answers</th>
+          <th>Include</th>
+          <th>Exclude</th>
         </tr>
         <tr className="form-label">
           <td>The question to ask</td>
           <td>Can the user select multiple answers? <code>Y</code> or <code>N</code></td>
           <td>Is an answer required? <code>Y</code> or <code>N</code></td>
           <td>The answers, <code>,</code>-separated</td>
+          <td>Choices to ask this question for (leave blank for all by default).</td>
+          <td>Choices to not ask this question for.</td>
         </tr>
         <tr>
           <td>Is this an example question?</td>
           <td>Y</td>
           <td>N</td>
           <td>Yes, No, Maybe</td>
+          <td> </td>
+          <td>Dolphin</td>
         </tr>
       </tbody>
     </table>

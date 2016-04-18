@@ -19,6 +19,7 @@ FieldGuideEditor = React.createClass
     actions: actions
 
   getInitialState: ->
+    loading: false
     guide: null
     icons: {}
     editing: null
@@ -31,11 +32,15 @@ FieldGuideEditor = React.createClass
       @loadGuide nextProps.project
 
   loadGuide: (project) ->
+    @setState loading: true
     apiClient.type('field_guides').get project_id: project.id
       .then ([guide]) =>
         @listenTo guide
-        @fetchIcons guide
-        @setState {guide}
+        @setState
+          loading: false
+          guide: guide
+        if guide?
+          @fetchIcons guide
 
   listenTo: (guide) ->
     @_forceUpdate ?= @forceUpdate.bind this
@@ -52,7 +57,19 @@ FieldGuideEditor = React.createClass
           icons[image.id] = image
         @setState {icons}
 
+  createGuide: ->
+    @props.actions.createGuide @props.project.id
+      .then =>
+        @loadGuide @props.project
+
+  deleteGuide: (guide) ->
+    if guide.items.length is 0 or confirm "Really delete this field guide and its #{guide.items.length} items?"
+      @props.actions.deleteGuide guide.id
+        .then =>
+          @loadGuide @props.project
+
   createArticle: ->
+    # TODO: Allow creation of article before writing to server.
     @props.actions.appendItem @state.guide.id
       .then =>
         @editArticle @state.guide.items.length - 1
@@ -86,30 +103,41 @@ FieldGuideEditor = React.createClass
 
       {if @state.guide?
         @renderEditor()
+      else if @state.loading
+        <p className="form-help">Loading field guide...</p>
       else
-        @renderCreator()}
+        <p>
+          This project doesn’t have a field guide yet.{' '}
+          <button type="button" onClick={@createGuide}>Create one!</button>
+        </p>}
     </div>
 
-  renderCreator: ->
-    <div>
-      <p>
-        This project doesn’t have a field guide yet.{' '}
-        <button type="button" onClick={@props.actions.createGuide.bind null, @props.project.id}>Create one!</button>
-      </p>
-    </div>
+  renderEmpty: ->
+    <p className="form-help">
+      Nothing in this guide.{' '}
+      <small>
+        <button type="button" className="minor-button" onClick={@deleteGuide.bind this, @state.guide}>Delete it</button>
+      </small>
+    </p>
 
   renderEditor: ->
     window.editingGuide = @state.guide
-    <div className="field-guide-editor" className="columns-container">
+
+    <div className="field-guide-editor columns-container">
       <div>
-        <ArticleList
-          articles={@state.guide.items}
-          icons={@state.icons}
-          onReorder={@props.actions.replaceItems.bind null, @state.guide.id}
-          onAddArticle={@createArticle}
-          onRemoveArticle={@props.actions.removeItem.bind null, @state.guide.id}
-          onSelectArticle={@editArticle}
-        />
+        {if @state.guide.items.length is 0
+          @renderEmpty()
+        else
+          <ArticleList
+            articles={@state.guide.items}
+            icons={@state.icons}
+            onReorder={@props.actions.replaceItems.bind null, @state.guide.id}
+            onRemoveArticle={@props.actions.removeItem.bind null, @state.guide.id}
+            onSelectArticle={@editArticle}
+          />}
+        <p style={textAlign: 'center'}>
+          <button type="button" className="standard-button" onClick={@createArticle}>Add an entry</button>
+        </p>
       </div>
 
       <div className="form-help">

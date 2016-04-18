@@ -33,6 +33,9 @@
   .subject-container
     color: gray
     max-width: 100%
+    > *
+      display: flex
+      flex: 1 1 auto // Fix for IE 11. Revisit or remove when IE11 is no longer supported.
 
   .subject
     border-radius: 5px
@@ -95,7 +98,7 @@
     transform: rotate(-15deg)
 
   > .task-area
-    flex: 0 0 50ch
+    flex: 0 0 60ch
     margin-bottom: 1em
     max-width: 100%
     @media (min-width: 900px)

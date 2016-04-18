@@ -15,6 +15,12 @@ counterpart.registerTranslations 'en',
       getStarted: "Get started!"
       signIn: "Sign in"
       backToProjects: "Back to projects"
+    links:
+      heading: 'Quick Links'
+      buildHelp: 'Project Builder Help'
+      policies: 'Project Builder Policies'
+      bestPractices: 'Best Practices Guide'
+      buildTalk: 'Project Builder Talk'
 
 module.exports = React.createClass
   displayName: 'ProjectBuilderLandingPage'
@@ -39,13 +45,25 @@ module.exports = React.createClass
         <Markdown>{counterpart "labLanding.content"}</Markdown>
       </div>
 
-      <button type="button" className="call-to-action standard-button landing-button" onClick={@showLoginDialog.bind this, 'sign-in'}>
-        <Translate content="labLanding.buttons.signIn" />
-      </button>
+      <div className="landing-actions">
+        <div className="landing-buttons">
+          <button type="button" className="call-to-action standard-button landing-button" onClick={@showLoginDialog.bind this, 'sign-in'}>
+            <Translate content="labLanding.buttons.signIn" />
+          </button>
 
-      <Link to="/projects" className="call-to-action standard-button landing-button">
-        <Translate content="labLanding.buttons.backToProjects" />
-      </Link>
+          <Link to="/projects" className="call-to-action standard-button landing-button">
+            <Translate content="labLanding.buttons.backToProjects" />
+          </Link>
+        </div>
+
+        <div className="landing-links">
+          <p className="heading"><Translate content="labLanding.links.heading" /></p>
+          <Link to="/lab-how-to"><Translate content="labLanding.links.buildHelp" /></Link>
+          <Link to="/lab-policies"><Translate content="labLanding.links.policies"></Translate></Link>
+          <Link to="/lab-best-practices/introduction"><Translate content="labLanding.links.bestPractices" /></Link>
+          <Link to="/talk/18"><Translate content="labLanding.links.buildTalk" /></Link>
+        </div>
+      </div>
     </div>
 
   showLoginDialog: (which) ->

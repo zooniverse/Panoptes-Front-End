@@ -1,13 +1,15 @@
 React = require 'react'
 Comment = require './comment'
-{Link} = require 'react-router'
+{Link, History} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
+updateQueryParams = require './lib/update-query-params'
 Loading = require '../components/loading-indicator'
 talkConfig = require './config'
 
 module?.exports = React.createClass
   displayName: 'TalkRecents'
+  mixins: [History]
 
   getInitialState: ->
     comments: []
@@ -15,13 +17,16 @@ module?.exports = React.createClass
     loading: true
 
   getDefaultProps: ->
-    location: query: page: 1
+    location:
+      query:
+        page: 1
+        showNotes: 'true'
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.location.query.page isnt @props.location.query.page
       @getComments nextProps.location.query.page
 
-  componentWillMount: ->
+  componentDidMount: ->
     @getComments()
 
   commentParams: (page) ->
@@ -30,8 +35,8 @@ module?.exports = React.createClass
     showNotes = if @refs.showNotes
       @refs.showNotes.checked
     else
-      # Occurs before the dom has rendered (default: true)
-      true
+      # Occurs before the dom has rendered (default: 'true')
+      @props.location.query.showNotes is 'true'
 
     params.page_size = talkConfig.recentsPageSize
     params.subject_default = false unless showNotes or @props.params.board
@@ -46,12 +51,14 @@ module?.exports = React.createClass
 
   getComments: (page = @props.location.query.page) ->
     talkClient.type('comments').get(@commentParams(page)).then (comments) =>
-      meta = comments[0].getMeta()
+      meta = comments[0]?.getMeta() or { }
       boardTitle = comments[0].board_title if @props.params.board
       loading = false
       @setState {comments, boardTitle, meta, loading}
 
   toggleNotes: ->
+    # Always reset to first page when toggling
+    updateQueryParams @history, showNotes: @refs.showNotes.checked, page: 1
     @getComments()
 
   commentTitle: (comment) ->
@@ -82,13 +89,14 @@ module?.exports = React.createClass
     <Paginator page={+@state.meta.page} pageCount={@state.meta.page_count} />
 
   render: ->
+    showNotes = @props.location.query.showNotes ? 'true'
     <div className="talk-recents">
       <h1 className="talk-page-header">
         Recent Comments {"on #{ @state.boardTitle or @props.project?.display_name or 'Zooniverse' }"}
         {unless @props.params.board
           <small className="talk-subject-default-toggle">
             <label>
-              <input ref="showNotes" type="checkbox" defaultChecked={true} onChange={@toggleNotes}/>
+              <input ref="showNotes" type="checkbox" checked={showNotes is 'true'} onChange={@toggleNotes}/>
               Show subject notes
             </label>
           </small>

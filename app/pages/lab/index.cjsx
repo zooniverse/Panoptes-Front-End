@@ -13,18 +13,20 @@ ProjectLink = React.createClass
 
   render: ->
     <div className="lab-index-project-row">
-      {if @props.avatar?
-        <img className="lab-index-project-row-avatar" src={@props.avatar.src} />}
-      <div className="lab-index-project-row-description">
-        <strong className="lab-index-project-row-name">{@props.project.display_name}</strong>{' '}
-        {if @props.owner?
-          <small>by {@props.owner.display_name}</small>}
-      </div>
-      <Link to="/lab/#{@props.project.id}" className="lab-index-project-row-icon-button">
-        <i className="fa fa-pencil fa-fw"></i>{' '}
-        <small>Edit</small>
+      <Link to="/lab/#{@props.project.id}" className="lab-index-project-row__link lab-index-project-row__group lab-index-project-row__action">
+        {if @props.avatar?
+          <img className="lab-index-project-row__avatar" src={@props.avatar.src} />}
+        <div className="lab-index-project-row__description">
+          <strong className="lab-index-project-row__name">{@props.project.display_name}</strong>{' '}
+          {if @props.owner?
+            <small>by {@props.owner.display_name}</small>}
+        </div>
+        <span className="lab-index-project-row__icon-button">
+          <i className="fa fa-pencil fa-fw"></i>{' '}
+          <small>Edit</small>
+        </span>
       </Link>
-      <Link to="/projects/#{@props.project.slug}" className="lab-index-project-row-icon-button">
+      <Link to="/projects/#{@props.project.slug}" className="lab-index-project-row__link lab-index-project-row__icon-button lab-index-project-row__action">
         <i className="fa fa-hand-o-right fa-fw"></i>{' '}
         <small>View</small>
       </Link>
@@ -130,7 +132,7 @@ ProjectList = React.createClass
       else
         <ul className="lab-index-project-list">
           {@state.projects.map (project) =>
-            <li key={project.id}>
+            <li key={project.id} className="lab-index-project-list__item">
               <ProjectLink
                 project={project}
                 avatar={@state.avatars[project.id]}
@@ -242,7 +244,9 @@ module.exports = React.createClass
           <p style={textAlign: 'center'}>
             <button type="button" className="major-button" onClick={@showProjectCreator}>Create a new project</button>{' '}
             <Link to="/lab-how-to" className="standard-button">How-to</Link>{' '}
-            <Link to="/lab-policies" className="standard-button">Policies</Link>
+            <Link to="/lab-policies" className="standard-button">Policies</Link>{' '}
+            <Link to="/lab-best-practices/introduction" className="standard-button">Best Practices</Link>{' '}
+            <Link to="/talk/18" className="standard-button">Project Builder Talk</Link>
           </p>
         </div>
         {if @state.creationInProgress

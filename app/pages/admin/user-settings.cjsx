@@ -3,12 +3,8 @@ ReactDOM = require 'react-dom'
 UserSearch = require '../../components/user-search'
 PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
-{Link} = require 'react-router'
-moment = require 'moment'
-ChangeListener = require '../../components/change-listener'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-SetToggle = require '../../lib/set-toggle'
 
 UserSettings = React.createClass
   displayName: "User Settings"
@@ -16,47 +12,58 @@ UserSettings = React.createClass
   getDefaultProps: ->
     editUser: null
 
+  componentDidMount: ->
+    @_boundForceUpdate ?= @forceUpdate.bind this
+    @props.editUser?.listen 'change', @_boundForceUpdate
+
+  componentWillReceiveProps: (nextProps) ->
+    @props.editUser?.stopListening 'change', @_boundForceUpdate
+    nextProps.editUser.listen 'change', @_boundForceUpdate
+
   render: ->
-    if @props.editUser
+    if @props.editUser?
+      handleChange = handleInputChange.bind @props.editUser
+
       <div className="project-status">
-        <h4>Settings for { @props.editUser.login }</h4>
+        <h4>Settings for {@props.editUser.login}</h4>
         <ul>
-          <li>Admin: <UserCheckboxToggle editUser={@props.editUser} field="admin" disabled /></li>
-          <li>Login prompt: <UserCheckboxToggle editUser={@props.editUser} field="login_prompt" disabled /></li>
-          <li>Private profile: <UserCheckboxToggle editUser={@props.editUser} field="private_profile" disabled /></li>
-          <li>Uploaded subjects: { @props.editUser.uploaded_subjects_count }</li>
-          <li><UserLimitToggle editUser={@props.editUser} /> </li>
+          <li>
+            <AutoSave resource={@props.editUser}>
+              <input type="checkbox" name="admin" checked={@props.editUser.admin} disabled onChange={handleChange} />{' '}
+              Admin
+            </AutoSave>
+          </li>
+          <li>
+            <AutoSave resource={@props.editUser}>
+              <input type="checkbox" name="login_prompt" checked={@props.editUser.login_prompt} disabled onChange={handleChange} />{' '}
+              Login prompt
+            </AutoSave>
+          </li>
+          <li>
+            <AutoSave resource={@props.editUser}>
+              <input type="checkbox" name="private_profile" checked={@props.editUser.private_profile} disabled onChange={handleChange} />{' '}
+              Private profile
+            </AutoSave>
+          </li>
+          <li>
+            <AutoSave resource={@props.editUser}>
+              <input type="checkbox" name="upload_whitelist" checked={@props.editUser.upload_whitelist} onChange={handleChange} />{' '}
+              Whitelist subject uploads
+            </AutoSave>
+          </li>
+        </ul>
+
+        <ul>
+          <li>Uploaded subjects: {@props.editUser.uploaded_subjects_count}</li>
+          <li><UserLimitToggle editUser={@props.editUser} /></li>
         </ul>
       </div>
+
     else
       <div>No user found</div>
 
-UserCheckboxToggle = React.createClass
-  displayName: "User Checkbox Toggle"
-
-  mixins: [SetToggle]
-
-  getDefaultProps: ->
-    editUser: null
-    field: null
-
-  getInitialState: ->
-    error: null
-    setting: {}
-
-  setterProperty: 'user'
-
-  render: ->
-    editUser = @props.editUser
-    setting = editUser[@props.field]
-    <label style={whiteSpace: 'nowrap'}>
-      <input type="checkbox" disabled={@props.disabled} name={@props.field} value={setting} checked={setting} onChange={@set.bind this, @props.field, not setting} />
-    </label>
-
 UserLimitToggle = React.createClass
   displayName: "User limit toggle"
-
-  mixins: [SetToggle]
 
   getDefaultProps: ->
     editUser: null
@@ -88,7 +95,7 @@ UserLimitToggle = React.createClass
   render: ->
     <div>
       <AutoSave resource={@props.editUser}>
-        <span className="form-label">Subject Limit:</span>
+        Subject Limit:{' '}
         <input type="number" name="subject_limit" min="1" ref="subjectLimit" value={@props.editUser.max_subjects} onBlur={@updateLimit} onChange={handleInputChange.bind @props.editUser} />
         <span>{ @errorMessage() }</span>
       </AutoSave>

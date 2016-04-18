@@ -12,7 +12,7 @@ PromiseRenderer = require '../../../components/promise-renderer'
 {Markdown} = require 'markdownz'
 Papa = require 'papaparse'
 apiClient = require 'panoptes-client/lib/api-client'
-putFile = require '../../../lib/put-file'
+Utility = require './utility'
 
 module.exports = React.createClass
   displayName: 'SurveyTaskEditor'
@@ -30,9 +30,9 @@ module.exports = React.createClass
     window.editingSurveyTask = @props.task
 
     <div className="workflow-task-editor">
-      <p><span className="form-label">Import task data</span></p>
+      <p><span className="form-label">Import task data. See <a href="https://www.zooniverse.org/projects/aliburchard/cameratraptest/faq">here for help</a>.</span></p>
       <div className="columns-container" style={marginBottom: '0.2em'}>
-        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addChoice}>Add choices CSV</FileButton>
+        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addChoice, null}>Add choices CSV</FileButton>
         <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
@@ -42,7 +42,7 @@ module.exports = React.createClass
         </TriggeredModalForm>
       </div>
       <div className="columns-container" style={marginBottom: '0.2em'}>
-        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addCharacteristics}>Add characteristics CSV</FileButton>
+        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addCharacteristics, null}>Add characteristics CSV</FileButton>
         <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
@@ -52,7 +52,7 @@ module.exports = React.createClass
         </TriggeredModalForm>
       </div>
       <div className="columns-container" style={marginBottom: '0.2em'}>
-        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addConfusion}>Add confused pairs CSV</FileButton>
+        <FileButton className="major-button column" accept=".csv, .tsv" multiple onSelect={@handleFiles.bind this, @addConfusion, null}>Add confused pairs CSV</FileButton>
         <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
@@ -62,7 +62,7 @@ module.exports = React.createClass
         </TriggeredModalForm>
       </div>
       <div className="columns-container" style={marginBottom: '0.2em'}>
-        <FileButton className="major-button column" multiple onSelect={@handleFiles.bind this, @addQuestion}>Add questions CSV</FileButton>
+        <FileButton className="major-button column" multiple onSelect={@handleFiles.bind this, @addQuestion, @cleanQuestions}>Add questions CSV</FileButton>
         <TriggeredModalForm trigger={
           <span className="secret-button">
             <i className="fa fa-question-circle"></i>
@@ -133,7 +133,7 @@ module.exports = React.createClass
           <strong>{choice.label}</strong>
         }>
           <Markdown content={choice.description} />
-          <p>
+          <div>
             {for characteristicID in @props.task.characteristicsOrder when choice.characteristics[characteristicID]?.length isnt 0
               characteristic = @props.task.characteristics[characteristicID]
               <div key={characteristicID}>
@@ -155,12 +155,12 @@ module.exports = React.createClass
                   twinLabels.join ', '}
                 </small>
               </div>}
-          </p>
+          </div>
         </Details>}
 
       <hr />
 
-      {unless @props.task.questionsOrder.length is 0
+      {if @props.task.questionsOrder?.length
         <div>
           <Details summary="Questions">
             {for questionID in @props.task.questionsOrder
@@ -182,9 +182,18 @@ module.exports = React.createClass
       <Details summary={<small>Raw task data</small>}>
         <pre style={fontSize: '10px', whiteSpace: 'pre-wrap'}>{JSON.stringify @props.task, null, 2}</pre>
       </Details>
+
+      <hr />
+
+      <label>
+        <AutoSave resource={@props.workflow}>
+          <input type="checkbox" name="#{@props.taskPrefix}.required" checked={@props.task.required} onChange={handleInputChange.bind @props.workflow} />{' '}
+          Require at least one identification
+        </AutoSave>
+      </label>
     </div>
 
-  handleFiles: (forEachRow, e) ->
+  handleFiles: (forEachRow, afterFileHook, e) ->
     @setState
       importErrors: []
     Array::slice.call(e.target.files).forEach (file) =>
@@ -200,6 +209,7 @@ module.exports = React.createClass
           throw error
           @handleImportError error, file
         .then =>
+          afterFileHook?()
           @props.workflow.update('tasks').save()
 
   readFile: (file) ->
@@ -248,7 +258,7 @@ module.exports = React.createClass
       label: name
       description: ''
       noQuestions: false
-      image: []
+      images: []
       characteristics: {}
       confusionsOrder: []
       confusions: {}
@@ -264,7 +274,7 @@ module.exports = React.createClass
     if no_questions?
       choice.noQuestions = @determineBoolean no_questions
     if images?
-      images = images.split(/\s*,\s*/).concat(__parsedExtra ? []).filter Boolean
+      images = images.split(/s*;\s*/).concat(__parsedExtra ? []).filter Boolean
       choice.images = images
 
   addCharacteristics: (row) ->
@@ -273,7 +283,7 @@ module.exports = React.createClass
     @ensureChoice row.name
     for charKeyVal, isSet of row when charKeyVal isnt 'name'
       [characteristicLabel, valueLabelAndIcon] = charKeyVal.replace('=', '__SPLIT_ONCE__').split /\s*__SPLIT_ONCE__\s*/
-      [valueLabel, valueIcon] = valueLabelAndIcon.split /\s*,\s*/
+      [valueLabel, valueIcon] = valueLabelAndIcon.split /\s*;\s*/
       if characteristicLabel is '' or valueLabel is ''
         throw new Error 'Characteristics column headers should be formatted like "Color=Blue","Color=Red".'
       characteristicID = @makeID characteristicLabel
@@ -307,25 +317,75 @@ module.exports = React.createClass
     @props.task.choices[choiceID]?.confusionsOrder.push confusionID
     @props.task.choices[choiceID]?.confusions[confusionID] = details
 
-  addQuestion: ({question, multiple, required, answers, __parsedExtra}) ->
-    unless question?
+  addQuestion: ({question, multiple, required, answers, include, exclude, __parsedExtra}) ->
+    unless !!question
       throw new Error 'Questions require a "question" column'
-    unless answers?
+    unless !!answers
       throw new Error 'Questions require a "answers" column'
+
+    includeChoices = include.split /\s*;\s*/ if !!include
+    excludeChoices = exclude.split /\s*;\s*/ if !!exclude
     questionID = @makeID question
-    unless questionID in @props.task.questionsOrder
-      @props.task.questionsOrder.push questionID
+
+    # don't put it in the default questionsOrder if we've specified choices it should map to
+    unless !!includeChoices or !questionID or (questionID in @props.task.questionsOrder)
+      qOrder = @maybeProp @props.task, 'questionsOrder', []
+      qOrder.push questionID
+
+    # if we specified mapped choices, create those entries instead
+    if includeChoices?
+      for choice in includeChoices
+        choiceID = @makeID choice
+        continue unless !!choiceID
+        (@maybeProp @props.task, 'inclusions', []).push [choiceID, questionID]
+
+    if excludeChoices?
+      for choice in excludeChoices
+        choiceID = @makeID choice
+        continue unless !!choiceID
+        (@maybeProp @props.task, 'exclusions', []).push [choiceID, questionID]
+
     @props.task.questions[questionID] =
       label: question
       multiple: @determineBoolean multiple
       required: @determineBoolean required
       answersOrder: []
       answers: {}
-    for answer in answers.split(/\s*,\s*/).concat(__parsedExtra ? []).filter Boolean
+
+    for answer in ((answers.split /;/).concat __parsedExtra ? []).filter Boolean
       answerID = @makeID answer
       @props.task.questions[questionID].answersOrder.push answerID
       @props.task.questions[questionID].answers[answerID] =
         label: answer
+
+  maybeProp: (owner, prop, defVal) ->
+    owner[prop] = defVal unless owner[prop]?
+    owner[prop]
+
+  cleanQuestions: () ->
+    if @props.task.questionsOrder?
+      for questionID in @props.task.questionsOrder
+        for choiceID in @props.task.choicesOrder
+          continue if @props.task.choices[choiceID].noQuestions
+          qMap = @maybeProp @props.task, 'questionsMap', {}
+          qSet = @maybeProp qMap, choiceID, []
+          qSet.push questionID
+
+    if @props.task.inclusions?
+      for includeTuple in @props.task.inclusions
+        qMap = @maybeProp @props.task, 'questionsMap', {}
+        qSet = @maybeProp qMap, includeTuple[0], []
+        qSet.push includeTuple[1]
+
+    if @props.task.exclusions?
+      for excludeTuple in @props.task.exclusions
+        qMap = @maybeProp @props.task, 'questionsMap', {}
+        qSet = @maybeProp qMap, excludeTuple[0], []
+        index = qSet.indexOf excludeTuple[1]
+        qSet.splice index, 1
+
+    delete @props.task.inclusions
+    delete @props.task.exclusions
 
   handleImageAdd: (media) ->
     @props.task.images[media.metadata.filename] = media.src
@@ -344,6 +404,9 @@ module.exports = React.createClass
         choices: {}
         questionsOrder: []
         questions: {}
+        inclusions: []
+        exclusions: []
+        questionsMap: {}
       @props.workflow.update 'tasks'
 
   resetMedia: (e) ->

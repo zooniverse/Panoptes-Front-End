@@ -12,7 +12,7 @@ module.exports = React.createClass
     else
       <small>No area cropped</small>
 
-    <div className="classification-task-summary">
+    <div>
       <div className="question">
         {@props.task.instruction}
       </div>

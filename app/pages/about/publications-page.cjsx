@@ -12,6 +12,7 @@ counterpart.registerTranslations 'en',
       climate: 'Climate'
       humanities: 'Humanities'
       nature: 'Nature'
+      medicine: 'Medicine'
       meta: 'Meta'
     content:
       header:
@@ -146,8 +147,12 @@ publicationCategories =
     },
     {slug: "zooniverse/planet-hunters"
     publications: [
-      {citation: "Planet Hunters. X. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
-      href: "http://arxiv.org/pdf/1509.03622v1.pdf"},
+      {citation: "Planet Hunters X: Searching for Nearby Neighbors of 75 Planet and Eclipsing Binary Candidates from the K2 Kepler extended mission, Schmitt+ 2016."
+      href: "http://arxiv.org/pdf/1603.06945v1.pdf"},
+      {citation: "Planet Hunters. VIII. Characterization of 41 Long-Period Exoplanet Candidates from Kepler Archival Data, Wang+ 2015."
+      href: "http://arxiv.org/pdf/1512.02559v2.pdf"},
+      {citation: "Planet Hunters. IX. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
+      href: "http://mnras.oxfordjournals.org/content/457/4/3988.full.pdf"},
       {citation: "GALEX J194419.33+491257.0: An unusually active SU UMa-type dwarf nova with a very short orbital period in the Kepler data, Kato & Osaki 2014."
       href: "http://adsabs.harvard.edu/doi/10.1093/pasj/psu025"},
       {citation: "Planet Hunters. VI. An Independent Characterization of KOI-351 and Several Long Period Planet Candidates from the Kepler Archival Data, Schmitt+ 2014."
@@ -169,6 +174,8 @@ publicationCategories =
     },
     {slug: "zooniverse/milky-way-project"
     publications: [
+      {citation: "The Milky Way Project and ATLASGAL: The distribution and physical properties of cold clumps near infrared bubbles, Kendrew+ 2016."
+      href: "http://arxiv.org/abs/1602.06982"},
       {citation: "The Milky Way Project: What are Yellowballs?, Kerton+ 2015."
       href: "http://arxiv.org/abs/1502.01388v1"},
       {citation: "The Milky Way Project: Leveraging Citizen Science and Machine Learning to Detect Interstellar Bubbles, Beaumont+ 2014."
@@ -190,6 +197,10 @@ publicationCategories =
     },
     {slug: "zooniverse/space-warps"
     publications: [
+      {citation: "Space Warps - II. New gravitational lens candidates from the CFHTLS discovered through citizen science, Marshall+ 2016."
+      href: "http://mnras.oxfordjournals.org/content/455/2/1191.full.pdf"},
+      {citation: "Space Warps - I. Crowdsourcing the discovery of gravitational lenses, Marshall+ 2016."
+      href: "http://mnras.oxfordjournals.org/content/455/2/1171.full.pdf"},
       {citation: "The Red Radio Ring: a gravitationally lensed hyperluminous infrared radio galaxy at z=2.553 discovered through citizen science, Geach+ 2015."
       href: "http://arxiv.org/pdf/1503.05824v1.pdf"},
       {citation: "Gravitational lens modelling in a citizen science context, Küng+ 2015."
@@ -201,6 +212,16 @@ publicationCategories =
       href: "http://www.astronomerstelegram.org/?read=7254"},
       {citation: "ATel #7261: PESSTO spectroscopic classification of optical transients, Cartier+ 2015."
       href: "http://www.astronomerstelegram.org/?read=7261"}]
+    },
+    {slug: "zooniverse/radio-galaxy-zoo"
+    publications: [
+      {citation: "Radio Galaxy Zoo: host galaxies and radio morphologies derived from visual inspection, Banfield+ 2015."
+      href: "http://arXiv.org/abs/1507.07272"}]
+    }
+    {slug: "zooniverse/moon-zoo"
+    publications: [
+      {citation: "The Moon Zoo citizen science project: Preliminary results for the Apollo 17 landing site, Bugiolacchi+ 2016."
+      href: "http://arxiv.org/pdf/1602.01664v1.pdf"}]
     }
   ],
   climate: [
@@ -213,8 +234,17 @@ publicationCategories =
   humanities: [
     {slug: "zooniverse/ancient-lives"
     publications: [
-      {citation: "P.Oxy 5156, Plutarch Moralia 660C, 661B-C (Quaestiones Convivales IV PR., 1.2), in The Oxyrhynchus Papyri Vol. 78, Brusuelas 2013."}]}
-    ],
+      {citation: "A computational pipeline for crowdsourced transcriptions of Ancient Greek papyrus fragments, Williams+ 2014."
+      href: "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&tp=&arnumber=7004460&queryText%3Dwilliam+alex+pridemore"},
+      {citation: "P.Oxy 5156, Plutarch Moralia 660C, 661B-C (Quaestiones Convivales IV PR., 1.2), in The Oxyrhynchus Papyri Vol. 78, Brusuelas 2013."}
+
+    ]}
+    {slug: "zooniverse/operation-war-diary"
+    publications: [
+      {citation: "A Life in the Trenches? The Use of Operation War Diary and Crowdsourcing Methods to Provide an Understanding of the British Army’s Day-to-Day Life on the Western Front, Grayson+ 2016."
+      href: "http://bjmh.org.uk/index.php/bjmh/article/view/96"}
+    ]}
+  ],
   nature: [
     {slug: "zooniverse/whale-fm"
     publications: [
@@ -236,13 +266,24 @@ publicationCategories =
   #   ],
   # physics: [
   #   ],
+  medicine: [
+    {slug: "zooniverse/cell-slider"
+    publications: [
+      {citation: "Crowdsourcing the General Public for Large Scale Molecular Pathology Studies in Cancer, Candido dos Reis+ 2015."
+      href: "http://www.ebiomedicine.com/article/S2352-3964(15)30016-5/pdf"}]
+    },
+  ],
   meta: [
     {name: "Meta Studies"
     publications: [
+      {citation: "Science Learning via Participation in Online Citizen Science, Masters+ 2016."
+      href: "http://arxiv.org/pdf/1601.05973v1.pdf"}
+      {citation: "Defining and Measuring Success in Online Citizen Science: A Case Study of Zooniverse Projects, Cox+ 2015."
+      href: "http://eprints.whiterose.ac.uk/86535/"}
       {citation: "Designing for Dabblers and Deterring Drop-Outs in Citizen Science, Eveleigh+ 2014."
       href: "http://discovery.ucl.ac.uk/1418573/1/p2985-eveleigh.pdf"}
       {citation: "Playing with science: gamised aspects of gamification found on the Online Citizen Science Project - Zooniverse, Greenhill+ 2014."
-      href: "https://www.escholar.manchester.ac.uk/uk-ac-man-scw:254358"}
+      href: "http://eprints.port.ac.uk/15648/"}
       {citation: "Why Won’t Alien’s Talk to Us: Content and Community Dynamics in Online Citizen Science, Luczak-Roesch+ 2014."
       href: "http://www.aaai.org/ocs/index.php/ICWSM/ICWSM14/paper/view/8092"}
       {citation: "Volunteers’ Engagement in Human Computation Astronomy Projects, Ponciano+ 2014."
@@ -259,7 +300,7 @@ publicationCategories =
       href: "http://www.portico.org/Portico/#!journalAUSimpleView/tab=PDF?cs=ISSN_15391515?ct=E-Journal%20Content?auId=ark:/27927/pgg3ztfcwj0"}
       {citation: "Galaxy Zoo: Motivations of Citizen Scientists, Raddick+ 2013."
       href: "http://arxiv.org/abs/1303.6886"}
-      {citation: "Galaxy Zoo: Morphological Classification and Citizen Science, Forston+ 2012."
+      {citation: "Galaxy Zoo: Morphological Classification and Citizen Science, Fortson+ 2012."
       href: "http://labs.adsabs.harvard.edu/adsabs/abs/2012amld.book..213F/"}
       {citation: "Galaxy Zoo: Exploring the Motivations of Citizen Science Volunteers, Raddick+ 2010."
       href: "http://adsabs.harvard.edu/abs/2010AEdRv...9a0103R"}]
@@ -344,5 +385,5 @@ module.exports = React.createClass
     src = if project?.avatar_src
       "//#{ project.avatar_src }"
     else
-      '/assets/simple-avatar.jpg'
+      './assets/simple-avatar.jpg'
     <img src={src} alt="Project Avatar" />

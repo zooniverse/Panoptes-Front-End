@@ -36,7 +36,7 @@ module.exports = React.createClass
   renderItem: ({icon, title, content, items}) ->
     <div className="field-guide-item">
       <header>
-        {if icon?
+        {if @props.icons[icon]?
           <div className="field-guide-item-icon-container">
             <CroppedImage className="field-guide-item-icon" src={@props.icons[icon].src} aspectRatio={1} width="6em" height="6em" />
           </div>}

@@ -4,6 +4,7 @@ $survey-task-pill-button
   padding: 0 0.4em
 
 .survey-identification-proxy
+  position: relative
   background: goldenrod
   border-radius: 3px
   color: white
@@ -114,38 +115,28 @@ $survey-task-pill-button
   border-radius: 8px
   display: flex
   flex-wrap: wrap
-  padding: 4px
+  padding: 3px
 
   > *
-    margin: 0 2px 2px 0
-    position: relative
+    margin: 1px
 
-  &[data-breakpoint="Infinity"] > *,
-  &[data-breakpoint="40"] > *
+  &[data-columns="3"] > *
     flex-basis: calc(33.33% - 2px)
 
-  &[data-breakpoint="20"] > *,
-  &[data-breakpoint="10"] > *
+  &[data-columns="2"] > *
     flex-basis: calc(50% - 2px)
 
-  &[data-breakpoint="5"] > *
+  &[data-columns="1"] > *
     flex-basis: calc(100% - 2px)
 
-  &[data-breakpoint="40"],
-  &[data-breakpoint="20"],
-  &[data-breakpoint="10"],
-  &[data-breakpoint="5"]
-    .survey-task-chooser-choice
-      align-items: center
-      justify-content: flex-start
+.survey-task-chooser-choice-button
+  @extends $reset-button
 
 .survey-task-chooser-choice
-  @extends $reset-button
+  align-items: center
   background: rgba(64, 64, 64, 1)
   color: white
   display: flex
-  justify-content: center
-  width: 100%
 
   &:hover
     background: rgba(102, 102, 102, 1)
@@ -160,25 +151,27 @@ $survey-task-pill-button
   display: inline-block
   vertical-align: middle
 
-  [data-breakpoint="Infinity"] &-container,
-  [data-breakpoint="40"] &-container
+  THUMBNAIL_ASPECT_RATIO = 1.25
+
+  [data-thumbnail-size="none"] &
     display: none
 
-  [data-breakpoint="20"] &
-    height: 1.5em
-    width: 2em
-
-  [data-breakpoint="10"] &
-    height: 3em
-    max-width: 7.5em
-
-  [data-breakpoint="5"] &
+  [data-thumbnail-size="large"] &
     height: 6em
+    width: @height * THUMBNAIL_ASPECT_RATIO
+
+  [data-thumbnail-size="medium"] &
+    height: 3em
+    width: @height * THUMBNAIL_ASPECT_RATIO
+
+  [data-thumbnail-size="small"] &
+    height: 1.5em
+    width: @height * THUMBNAIL_ASPECT_RATIO
 
 .survey-task-chooser-choice-label
   display: inline-block
 
-  [data-breakpoint="5"] &
+  [data-columns="1"] &
     font-size: 1.5em
 
 .survey-task-chooser-characteristic-clear-button

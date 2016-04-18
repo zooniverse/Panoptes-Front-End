@@ -4,9 +4,9 @@ SVGImage = require '../components/svg-image'
 Draggable = require '../lib/draggable'
 drawingTools = require './drawing-tools'
 tasks = require './tasks'
-Tooltip = require '../components/tooltip'
 seenThisSession = require '../lib/seen-this-session'
 getSubjectLocation = require '../lib/get-subject-location'
+WarningBanner = require './warning-banner'
 
 module.exports = React.createClass
   displayName: 'FrameAnnotator'
@@ -23,9 +23,6 @@ module.exports = React.createClass
     onChange: Function.prototype
 
   getInitialState: ->
-    naturalWidth: 0
-    naturalHeight: 0
-    showWarning: false
     sizeRect: null
     alreadySeen: false
     showWarning: false
@@ -36,8 +33,8 @@ module.exports = React.createClass
     @setState alreadySeen: @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
 
   componentDidUpdate: (prevProps, prevState)->
-    # If size of the frame image has changed, update our sizing information (used for scaling/translating annotations)
-    if @props.naturalWidth isnt prevProps.naturalWidth or @props.naturalHeight isnt prevProps.naturalHeight
+    # If size of the frame image or viewBoxDimensions has changed, update our sizing information (used for scaling/translating annotations)
+    if @props.naturalWidth isnt prevProps.naturalWidth or @props.naturalHeight isnt prevProps.naturalHeight or @props.viewBoxDimensions isnt prevProps.viewBoxDimensions
       setTimeout =>
         @updateSize()
 
@@ -50,13 +47,10 @@ module.exports = React.createClass
 
   handleAnnotationChange: (oldAnnotation, currentAnnotation) ->
     if oldAnnotation?
-      # console.log 'Old annotation was', oldAnnotation
       lastTask = @props.workflow.tasks[oldAnnotation.task]
       LastTaskComponent = tasks[lastTask.type]
       if LastTaskComponent.onLeaveAnnotation?
         LastTaskComponent.onLeaveAnnotation lastTask, oldAnnotation
-    # if currentAnnotation?
-    #   console.log 'Annotation is now', currentAnnotation
     setTimeout => # Wait a tick for the annotation to load.
       @updateSize()
 
@@ -76,18 +70,16 @@ module.exports = React.createClass
 
   getEventOffset: (e) ->
     scale = @getScale()
-    # console?.log 'Subject scale is', JSON.stringify scale
     x = (e.pageX - @state.sizeRect?.left) / scale.horizontal || 0
     y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
     {x, y}
-  
-  toggleWarning: ->
-    @setState showWarning: not @state.showWarning
 
   render: ->
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
     TaskComponent = tasks[taskDescription?.type]
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
+
+    createdViewBox = "#{@props.viewBoxDimensions.x} #{@props.viewBoxDimensions.y} #{@props.viewBoxDimensions.width} #{@props.viewBoxDimensions.height}"
 
     svgStyle = {}
     if type is 'image' and not @props.loading
@@ -123,40 +115,33 @@ module.exports = React.createClass
       <div className="subject-area">
         {if BeforeSubject?
           <BeforeSubject {...hookProps} />}
-
-        <svg style=svgStyle viewBox="0 0 #{@props.naturalWidth} #{@props.naturalHeight}" {...svgProps}>
+        <svg className="subject" style=svgStyle viewBox={createdViewBox} {...svgProps}>
           <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
-
           {if type is 'image'
-            <SVGImage src={src} width={@props.naturalWidth} height={@props.naturalHeight} />}
+            <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>
+              <SVGImage className={"pan-active" if @props.panEnabled} src={src} width={@props.naturalWidth} height={@props.naturalHeight} />
+            </Draggable>
+          }
 
-          {if InsideSubject?
+          {if InsideSubject? && !@props.panEnabled
             <InsideSubject {...hookProps} />}
 
           {for anyTaskName, {PersistInsideSubject} of tasks when PersistInsideSubject?
             <PersistInsideSubject key={anyTaskName} {...hookProps} />}
         </svg>
         {@props.children}
-        
         {if @state.alreadySeen
-          <button type="button" className="warning-banner" onClick={@toggleWarning}>
-            Already seen!
-            {if @state.showWarning
-              <Tooltip attachment="top left" targetAttachment="middle right">
-                <p>Our records show that you’ve already seen this image. We might have run out of data for you in this workflow!</p>
-                <p>Try choosing a different workflow or contributing to a different project.</p>
-              </Tooltip>}
-          </button>
+          <WarningBanner label="Already seen!">
+            <p>Our records show that you’ve already seen this image. We might have run out of data for you in this workflow!</p>
+            <p>Try choosing a different workflow or contributing to a different project.</p>
+          </WarningBanner>
 
         else if @props.subject.retired
-          <button type="button" className="warning-banner" onClick={@toggleWarning}>
-            Finished!
-            {if @state.showWarning
-              <Tooltip attachment="top left" targetAttachment="middle right">
-                <p>This subject already has enough classifications, so yours won’t be used in its analysis!</p>
-                <p>If you’re looking to help, try choosing a different workflow or contributing to a different project.</p>
-              </Tooltip>}
-          </button>}
+          <WarningBanner label="Finished!">
+            <p>This subject already has enough classifications, so yours won’t be used in its analysis!</p>
+            <p>If you’re looking to help, try choosing a different workflow or contributing to a different project.</p>
+          </WarningBanner>
+        }
 
         {if AfterSubject?
           <AfterSubject {...hookProps} />}

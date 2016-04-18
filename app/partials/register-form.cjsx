@@ -4,7 +4,6 @@ PromiseToSetState = require '../lib/promise-to-set-state'
 auth = require 'panoptes-client/lib/auth'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
-Tooltip = require '../components/tooltip'
 debounce = require 'debounce'
 apiClient = require 'panoptes-client/lib/api-client'
 
@@ -66,7 +65,7 @@ module.exports = React.createClass
             if nameConflict
               <span className="form-help error">
                 <Translate content="registerForm.nameConflict" />{' '}
-                <a href="/reset-password" onClick={@props.onSuccess}>
+                <a href="#{document.baseURI.slice(0, -1)}/reset-password" onClick={@props.onSuccess}>
                   <Translate content="registerForm.forgotPassword" />
                 </a>
               </span>
@@ -114,7 +113,7 @@ module.exports = React.createClass
             if emailConflict
               <span className="form-help error">
                 <Translate content="registerForm.emailConflict" />{' '}
-                <a href="/reset-password" onClick={@props.onSuccess}>
+                <a href="#{document.baseURI.slice(0, -1)}/reset-password" onClick={@props.onSuccess}>
                   <Translate content="registerForm.forgotPassword" />
                 </a>
               </span>
@@ -141,7 +140,7 @@ module.exports = React.createClass
 
       <label>
         <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@props.user?} onChange={@handlePrivacyPolicyChange} />
-        {privacyPolicyLink = <a target="_blank" href="/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
+        {privacyPolicyLink = <a target="_blank" href="#{document.baseURI.slice(0, -1)}/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
         <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
       </label>
 

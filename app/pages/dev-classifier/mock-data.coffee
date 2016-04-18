@@ -38,14 +38,29 @@ workflow = apiClient.type('workflows').create
       question: 'Where shall we start?'
       help: 'You don’t need help with this.'
       answers: [
+        {label: 'Everything all at once! :skull:', next: 'combo'}
         {label: 'Crop the image', next: 'crop'}
         {label: 'Enter some text', next: 'write'}
         {label: 'Single-answer question', next: 'ask'}
         {label: 'Multi-answer question', next: 'features'}
         {label: 'Draw stuff', next: 'draw'}
         {label: 'Survey the image', next: 'survey'}
+        {label: 'Maybe select something', next: 'dropdown'}
         {label: 'We’re done here.', next: null}
       ]
+
+    combo:
+      type: 'combo'
+      loosen_requirements: true
+      tasks: [
+        'crop'
+        'write'
+        'ask'
+        'features'
+        'draw'
+        'survey'
+      ]
+      next: 'init'
 
     crop:
       type: 'crop'
@@ -107,11 +122,11 @@ workflow = apiClient.type('workflows').create
     survey:
       type: 'survey'
       images:
-        aa1: '//placehold.it/64.png?text=AA1'
+        aa1: '//placehold.it/64x32.png?text=AA1_WIDE'
         aa2: '//placehold.it/64.png?text=AA2'
-        ar1: '//placehold.it/64.png?text=AR1'
+        ar1: '//placehold.it/64x32.png?text=AR1_WIDE'
         ar2: '//placehold.it/64.png?text=AR2'
-        to1: '//placehold.it/64.png?text=TO1'
+        to1: '//placehold.it/64x32.png?text=TO1_WIDE'
         to2: '//placehold.it/64.png?text=TO2'
         so: '//placehold.it/48.png?text=so'
         sp: '//placehold.it/48.png?text=sp'
@@ -265,13 +280,177 @@ workflow = apiClient.type('workflows').create
 
       next: 'init'
 
+    dropdown:
+      next: 'write'
+      type: 'dropdown'
+      instruction: "Select something, or if it's not an option - write it!"
+      selects: [
+        {
+          id: "cd1c7a8a13726"
+          title: "Country"
+          required: true
+          options: {
+            '*': [
+              {value: "USA", label: "United States of America"},
+              {value: "Canada", label: "Canada"},
+              {value: "Mypos", label: "Mypos"}
+            ]
+          }
+        },
+        {
+          id: "26971f135cb4b"
+          title: "State/Province"
+          required: true
+          allowCreate: false
+          condition: "cd1c7a8a13726"
+          options: {
+            'USA': [
+              {value: "HI", label: "Hawaii"},
+              {value: "IL", label: "Illinois"},
+              {value: "WI", label: "Wisconsin"}
+            ],
+            'Canada': [
+              {value: "AB", label: "Alberta"},
+              {value: "ON", label: "Ontario"},
+              {value: "QC", label: "Quebec"}
+            ],
+            'Mypos': [
+              {value: "Gondor", label: "Gondor"},
+              {value: "Rohan", label: "Rohan"},
+              {value: "Shire", label: "Shire"}
+            ]
+          }
+        },
+        {
+          id: "8f7afd193da42"
+          title: "County"
+          allowCreate: false
+          condition: "26971f135cb4b"
+          options: {
+            'USA;HI': [
+              {value: "Honolulu", label: "Honolulu"},
+              {value: "Maui", label: "Maui"}
+            ],
+            'USA;IL': [
+              {value: "Cook", label: "Cook"},
+              {value: "Lake", label: "Lake"}
+            ],
+            'Canada;AB': [
+              {value: "Rocky View", label: "Rocky View"},
+              {value: "Parkland", label: "Parkland"}
+            ],
+            'Canada;QC': [
+              {value: "Montreal", label: "Montreal"},
+              {value: "Capitale-Nationale", label: "Capitale-Nationale"}
+            ],
+            'Mypos;Rohan': [
+              {value: "Gotham County", label: "Gotham County"},
+              {value: "Metropolis County", label: "Metropolis County"}
+            ],
+            'Mypos;Shire': [
+              {value: "Municipality of Bikini Bottom", label: "Municipality of Bikini Bottom"},
+              {value: "Elbonia", label: "Elbonia"}
+            ]
+          }
+        },
+        {
+          id: "fdd12d9f1ad52"
+          title: "City"
+          allowCreate: false
+          condition: "8f7afd193da42"
+          options: {
+            'USA;HI;Honolulu': [
+              {value: "Honolulu", label: "Honolulu city"}
+            ],
+            'USA;IL;Cook': [
+              {value: "Chicago", label: "Chicago"},
+              {value: "Evanston", label: "Evanston"}
+            ],
+            'USA;IL;Lake': [
+              {value: "Waukegan", label: "Waukegan"},
+              {value: "Wheeling", label: "Wheeling"}
+            ],
+            'Canada;AB;Rocky View': [
+              {value: "Airdrie", label: "Airdrie"},
+              {value: "Chestermere", label: "Chestermere"}
+            ],
+            'Canada;QC;Capitale-Nationale': [
+              {value: "Quebec City", label: "Quebec City"},
+              {value: "Saint-Raymond", label: "Saint-Raymond"}
+            ],
+            'Mypos;Rohan;Gotham County': [
+              {value: "Gotham", label: "Gotham"}
+            ],
+            'Mypos;Rohan;Metropolis County': [
+              {value: "Metropolis", label: "Metropolis"}
+            ],
+            'Mypos;Shire;Municipality of Bikini Bottom': [
+              {value: "Bikini Bottom", label: "Bikini Bottom"}
+            ],
+            'Mypos;Shire;Elbonia': [
+              {value: "Townbert", label: "Townbert"}
+            ]
+          }
+        },
+        {
+          id: "e45fdf113f07e"
+          title: "Best State Sports Team"
+          allowCreate: true
+          condition: "26971f135cb4b"
+          options: {
+            'USA;HI': [
+              {value: "59d8b49f6a0bc", label: "Sharks"},
+              {value: "1df102313d355", label: "Rainbow Warriors"}
+            ],
+            'USA;IL': [
+              {value: "b085abfe3c4d9", label: "Bears"},
+              {value: "964419c0f3ade", label: "Bulls"},
+              {value: "e4430cd2c0be", label: "Blackhawks"}
+            ],
+            'Canada;AB': [
+              {value: "6df716c19bf73", label: "Oilers"},
+              {value: "23843c7b8ca3a", label: "Flames"}
+            ],
+            'Canada;QC': [
+              {value: "105ee8e45828c", label: "Canadiens"},
+              {value: "ade89b3bed25c", label: "Expos"}
+            ],
+            'Mypos;Shire': [
+              {value: "084f28a8999be", label: "Mighty Ducks"},
+              {value: "b52ad46b3818e", label: "Little Giants"}
+            ],
+            'Mypos;Rohan': [
+              {value: "df7cb03611f08", label: "Shelbyville Shelbyvillians"},
+              {value: "fac0841caac4e", label: "Springfield Isotopes"}
+            ]
+          }
+        }
+      ]
+
+# Bulk up the survey task a bit:
+'abcdefghijlkmnopqrstuvwxyz1234'.split('').forEach (x, i) ->
+  xi = x + i
+  workflow.tasks.survey.choicesOrder.push xi
+  workflow.tasks.survey.choices[xi] =
+    label: xi
+    description: xi
+    images: [Object.keys(workflow.tasks.survey.images)[Math.floor Math.random() * Object.keys(workflow.tasks.survey.images).length]]
+    characteristics: do ->
+      out = {}
+      workflow.tasks.survey.characteristicsOrder.forEach (charID) ->
+        out[charID] = workflow.tasks.survey.characteristics[charID].valuesOrder.filter ->
+          Math.random() < 0.5
+      out
+    confusionsOrder: []
+    confusions: {}
+
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
   locations: [
-    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
-    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
-    {'image/jpeg': if navigator?.onLine then 'http://lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
+    {'image/jpeg': if navigator?.onLine then '//lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
+    {'image/jpeg': if navigator?.onLine then '//lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
+    {'image/jpeg': if navigator?.onLine then '//lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
   ]
 
   metadata:
@@ -323,15 +502,21 @@ subject = apiClient.type('subjects').create
         value: 6
       }]
 
+project = apiClient.type('project').create
+  id: 'MOCK_PROJECT_FOR_CLASSIFIER'
+  title: "The Dev Classifier"
+  experimental_tools: ['pan and zoom']
+
 classification = apiClient.type('classifications').create
   annotations: []
   metadata: {}
   links:
-    project: 'NO_PROJECT'
+    project: project.id
     workflow: workflow.id
     subjects: [subject.id]
   _workflow: workflow # TEMP
   _subjects: [subject] # TEMP
 
-module.exports = {workflow, subject, classification}
+
+module.exports = {workflow, subject, classification, project}
 window?.mockClassifierData = module.exports
