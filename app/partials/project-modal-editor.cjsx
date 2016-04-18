@@ -233,6 +233,7 @@ ProjectModalCreator = React.createClass
     @setState error: null
     apiClient.type('tutorials').create(projectModalData).save()
       .then (createdProjectModal) =>
+        createdProjectModal.addLink 'workflows', @props.project.links.workflows
         @props.onCreate createdProjectModal
       .catch (error) =>
         @setState {error}
@@ -269,7 +270,12 @@ ProjectModalEditorFetcher = React.createClass
       projectModals: null
     apiClient.type('tutorials').get project_id: project.id
       .then (projectModals) =>
-        @setState {projectModals}
+        filteredProjectModals = 
+          if @props.kind is "tutorial"
+            projectModal for projectModal in projectModals when projectModal.kind is @props.kind or projectModal.kind is null
+          else if @props.kind is "mini-course"
+            projectModal for projectModal in projectModals when projectModal.kind is @props.kind
+        @setState {projectModals: filteredProjectModals}
       .catch (error) =>
         @setState {error}
       .then =>
@@ -284,7 +290,6 @@ ProjectModalEditorFetcher = React.createClass
       window?.editingProjectModals = @state.projectModals
       <div>
         {for projectModal in @state.projectModals
-          if projectModal.kind is @props.kind or projectModal.kind is null
             <ProjectModalEditorController
               key={projectModal.id}
               project={@props.project}

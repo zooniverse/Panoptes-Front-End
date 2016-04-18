@@ -3,6 +3,8 @@ apiClient = require 'panoptes-client/lib/api-client'
 MiniCourse = require '../lib/mini-course'
 
 module.exports = React.createClass
+  displayName: 'MiniCourseButton'
+  
   getDefaultProps: ->
     user: null
     project: null
