@@ -63,6 +63,7 @@ module.exports = React.createClass
 
   contextTypes:
     updateWorkflow: React.PropTypes.func
+    updateClassification: React.PropTypes.func
 
   getDefaultProps: ->
     query: null
@@ -86,6 +87,7 @@ module.exports = React.createClass
 
   componentWillUpdate: (nextProps, nextState) ->
     @context.updateWorkflow nextState.workflow if nextState.workflow isnt @state.workflow
+    @context.updateClassification nextState.classification if nextState.classification isnt @state.classification
 
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.

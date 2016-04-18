@@ -13,19 +13,26 @@ module.exports = React.createClass
     project: React.PropTypes.object
     subject: React.PropTypes.object
     workflow: React.PropTypes.object
+    classification: React.PropTypes.object
+
     updateUser: React.PropTypes.func
     updateProject: React.PropTypes.func
     updateSubject: React.PropTypes.func
     updateWorkflow: React.PropTypes.func
+    updateClassification: React.PropTypes.func
 
   getChildContext: ->
     user: @state.user
     project: @state.project
+    subject: @state.subject
+    workflow: @state.workflow
+    classification: @state.classification
+
     updateUser: @updateUser
     updateProject: @updateProject
     updateSubject: @updateSubject
     updateWorkflow: @updateWorkflow
-
+    updateClassification: @updateClassification
 
   getInitialState: ->
     user: null
@@ -44,6 +51,9 @@ module.exports = React.createClass
 
   updateWorkflow: (workflow) ->
     @setState workflow: workflow
+
+  updateClassification: (classification) ->
+    @setState classification: classification
 
   componentDidMount: ->
   updateSubject: (subject) ->
