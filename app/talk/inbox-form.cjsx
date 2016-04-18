@@ -15,6 +15,9 @@ module?.exports = React.createClass
   propTypes:
     user: React.PropTypes.object
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getInitialState: ->
     validationErrors: []
 
@@ -27,7 +30,13 @@ module?.exports = React.createClass
     @setState {validationErrors}
     !!validationErrors.length
 
+  logEvent: (evtType) ->
+    @context.geordi?.logEvent
+      type: evtType
+      data: null
+
   onSubmitMessage: (_, body) ->
+    @logEvent 'send-message'
     recipient_ids = ReactDOM.findDOMNode(@).querySelector('[name="userids"]').value
       .split(',').map (id) -> parseInt(id)
       .filter(Number)
@@ -48,7 +57,7 @@ module?.exports = React.createClass
     <div className="inbox-form talk-module">
       <div className="talk-form talk-moderation-children">
         <h2>To:</h2>
-        <UserSearch multi={false} />
+        <UserSearch multi={false} onSearch={@logEvent.bind(this, 'username-search')} />
 
         <h2>Message:</h2>
         <input placeholder="Subject" type="text" ref="subject"/>

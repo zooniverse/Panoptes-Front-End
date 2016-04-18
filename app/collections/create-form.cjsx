@@ -39,6 +39,18 @@ module?.exports = React.createClass
         @refs.private.value = true
         @props.onSubmit collection
 
+  logSettingChange: (clickedItem) ->
+    @props.contextRef?.geordi?.logEvent
+      type: clickedItem
+
+  logPrivacy: (e) ->
+    if e.currentTarget.checked
+      clickedItem = 'make-collection-private'
+    else
+      clickedItem = 'make-collection-public'
+    @props.contextRef?.geordi?.logEvent
+      type: clickedItem
+
   handleNameInputChange: ->
     @setState collectionNameLength: @refs.name.value.length
 
@@ -55,14 +67,14 @@ module?.exports = React.createClass
         <input className="collection-name-input" ref="name" onChange={@handleNameInputChange} placeholder="Collection Name" />
         <div className="collection-create-form-actions">
           <label>
-            <input ref="private" type="checkbox" defaultChecked={false}/>
+            <input ref="private" type="checkbox" onClick={@logPrivacy} defaultChecked={false}/>
             <Translate content="collectionCreateForm.private" />
           </label>
           <div className="submit-button-container">
             {if @state.collectionNameLength is 0
-              <button type="submit" disabled><Translate content="collectionCreateForm.submit" /></button>
+              <button type="submit" onClick={@logSettingChange.bind this, 'add-collection'} disabled><Translate content="collectionCreateForm.submit" /></button>
             else
-              <button type="submit"><Translate content="collectionCreateForm.submit" /></button>}
+              <button type="submit" onClick={@logSettingChange.bind this, 'add-collection'}><Translate content="collectionCreateForm.submit" /></button>}
           </div>
         </div>
       </form>

@@ -16,12 +16,14 @@ module.exports = React.createClass
 
   searchUsers: (value) ->
     clearTimeout @queryTimeout
+    onSearch = @props.onSearch
 
     if value is ''
       Promise.resolve options: []
     else
       new Promise (resolve) =>
         @queryTimeout = delayBy @props.debounce, =>
+          onSearch() if onSearch
           apiClient.type('users').get search: value, page_size: 10
             .then (users) =>
               for user in users

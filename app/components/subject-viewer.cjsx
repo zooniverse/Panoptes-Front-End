@@ -25,6 +25,9 @@ CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 module.exports = React.createClass
   displayName: 'SubjectViewer'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   signInAttentionTimeout: NaN
 
   getDefaultProps: ->
@@ -52,6 +55,10 @@ module.exports = React.createClass
     unless nextProps.subject is @props.subject
       clearTimeout @signInAttentionTimeout
       @setState loading: true
+
+  logSubjClick: (logType) ->
+    @context.geordi?.logEvent
+      type: logType
 
   promptToSignIn: ->
     alert (resolve) ->
@@ -145,7 +152,7 @@ module.exports = React.createClass
                 </button>
               </span>}
           {if type is 'image' and @props.linkToFullImage
-            <a className="button" href={src} aria-label="Subject Image" title="Subject Image" target="zooImage">
+            <a className="button" onClick={@logSubjClick.bind this, "subject-image"} href={src} aria-label="Subject Image" title="Subject Image" target="zooImage">
               <i className="fa fa-photo" />
             </a>}
         </span>
@@ -201,6 +208,7 @@ module.exports = React.createClass
     @props.onFrameChange frame
 
   showMetadata: ->
+    @logSubjClick "metadata"
     # TODO: Sticky popup.
     alert <div className="content-container">
       <header className="form-label" style={textAlign: 'center'}>Subject metadata</header>

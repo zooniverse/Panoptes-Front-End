@@ -22,6 +22,12 @@ counterpart.registerTranslations 'en',
 CollectionPage = React.createClass
   displayName: 'CollectionPage'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  componentWillReceiveProps: (nextProps, nextContext)->
+    @logClick = nextContext?.geordi?.makeHandler? 'about-menu'
+
   getDefaultProps: ->
     collection: null
 
@@ -40,18 +46,18 @@ CollectionPage = React.createClass
 
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
-          <IndexLink to="/collections/#{ownerName}/#{name}" activeClassName="active" className="tabbed-content-tab">
+          <IndexLink to="/collections/#{ownerName}/#{name}" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'view-collection')}>
             <Avatar user={owner} />
             {@props.collection.display_name}
           </IndexLink>
 
           {if isOwner
-            <Link to="/collections/#{ownerName}/#{name}/settings" activeClassName="active" className="tabbed-content-tab">
+            <Link to="/collections/#{ownerName}/#{name}/settings" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'settings-collection')}>
               <Translate content="collectionPage.settings" />
             </Link>}
 
           {if isOwner
-            <Link to="/collections/#{ownerName}/#{name}/collaborators" activeClassName="active" className="tabbed-content-tab">
+            <Link to="/collections/#{ownerName}/#{name}/collaborators" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'collab-collection')}>
               <Translate content="collectionPage.collaborators" />
             </Link>}
         </nav>

@@ -75,6 +75,19 @@ AdminToggle = React.createClass
 module.exports = React.createClass
   displayName: 'MainFooter'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logMenuClick: (linkName) ->
+    @context.geordi?.logEvent
+      type: 'footer-menu'
+      data: "\"#{linkName}\""
+
+  loggableLink: (aLink, linkSymbolicName) ->
+    React.cloneElement aLink,
+      onClick: (@logMenuClick.bind this, linkSymbolicName),
+      <Translate content="#{linkSymbolicName}" /> 
+
   render: ->
     <footer className="main-footer">
       <div className="centered-grid main-footer-flex">
@@ -89,44 +102,44 @@ module.exports = React.createClass
         <nav className="site-map">
           <div className="site-map-section">
             <Translate component="h6" content="footer.discover.title" />
-            <Link to="/projects"><Translate content="footer.discover.projectList" /></Link>
-            <Link to="/collections"><Translate content="footer.discover.collectionList" /></Link>
-            <Link to="/lab"><Translate content="footer.discover.projectBuilder" /></Link>
-            <Link to="/lab-how-to"><Translate content="footer.discover.howToGuide" /></Link>
-            <Link to="/lab-policies"><Translate content="footer.discover.projectBuilderPolicies" /></Link>
+            {@loggableLink <Link to="/projects"/>, 'footer.discover.projectList'}
+            {@loggableLink <Link to="/collections"/>, 'footer.discover.collectionList'}
+            {@loggableLink <Link to="/lab"/>, 'footer.discover.projectBuilder'}
+            {@loggableLink <Link to="/lab-how-to"/>, 'footer.discover.howToGuide'}
+            {@loggableLink <Link to="/lab-policies"/>, 'footer.discover.projectBuilderPolicies'}
             {if process.env.NODE_ENV isnt 'production'
               <Link to="/dev/classifier">Dev Classifier</Link>}
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.about.title" />
-            <Link to="/about"><Translate content="footer.about.aboutUs" /></Link>
-            <Link to="/about/education"><Translate content="footer.about.education" /></Link>
-            <Link to="/about/team"><Translate content="footer.about.ourTeam" /></Link>
-            <Link to="/about/publications"><Translate content="footer.about.publications" /></Link>
-            <Link to="/about/contact"><Translate content="footer.boilerplate.contact" /></Link>
+            {@loggableLink <Link to="/about" />, 'footer.about.aboutUs'}
+            {@loggableLink <Link to="/about/education" />, 'footer.about.education'}
+            {@loggableLink <Link to="/about/team" />, 'footer.about.ourTeam'}
+            {@loggableLink <Link to="/about/education" />, 'footer.about.education'}
+            {@loggableLink <Link to="/about/contact" />, 'footer.boilerplate.contact'}
           </div>
           <div className="site-map-section">
             <Translate component="h6" content="footer.talk.title" />
-            <Link to="/talk"><Translate content="footer.talk.zooTalk" /></Link>
-            <a href="http://daily.zooniverse.org/" target="_blank"><Translate content="footer.talk.daily" /></a>
-            <a href="http://blog.zooniverse.org/" target="_blank"><Translate content="footer.talk.blog" /></a>
+            {@loggableLink <Link to="/talk" />, 'footer.talk.zooTalk'}
+            <a href="http://daily.zooniverse.org/" target="_blank" onClick={@logMenuClick.bind this, 'footer.talk.daily'}><Translate content="footer.talk.daily" /></a>
+            <a href="http://blog.zooniverse.org/" target="_blank" onClick={@logMenuClick.bind this, 'footer.talk.blog'}><Translate content="footer.talk.blog" /></a>
           </div>
           <div className="site-map-section social-media">
-            <a href="https://www.facebook.com/therealzooniverse" target="_blank"><i className="fa fa-facebook"></i></a>
-            <a href="https://twitter.com/the_zooniverse" target="_blank"><i className="fa fa-twitter"></i></a>
-            <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank"><i className="fa fa-google-plus"></i></a>
+            <a href="https://www.facebook.com/therealzooniverse" target="_blank" onClick={@logMenuClick.bind this, 'footer.socialMedia.facebook'}><i className="fa fa-facebook"></i></a>
+            <a href="https://twitter.com/the_zooniverse" target="_blank" onClick={@logMenuClick.bind this, 'footer.socialMedia.twitter'}><i className="fa fa-twitter"></i></a>
+            <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank" onClick={@logMenuClick.bind this, 'footer.socialMedia.googlePlus'}><i className="fa fa-google-plus"></i></a>
           </div>
         </nav>
       </div>
       <div className="footer-sole">
         <div className="centered-grid footer-sole-links">
-          <Link to="/privacy"><Translate content="footer.boilerplate.privacyPolicy" /></Link>
+          {@loggableLink <Link to="/privacy" />, 'footer.boilerplate.privacyPolicy'}
           <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
-          <a href="http://jobs.zooniverse.org/"><Translate content="footer.boilerplate.jobs" /></a>
+          <a href="http://jobs.zooniverse.org/" onClick={@logMenuClick.bind this, 'footer.boilerplate.jobs'}><Translate content="footer.boilerplate.jobs" /></a>
           <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
-          <a href="https://status.zooniverse.org/"><Translate content="footer.boilerplate.status" /></a>
+          <a href="https://status.zooniverse.org/" onClick={@logMenuClick.bind this, 'footer.boilerplate.status'}><Translate content="footer.boilerplate.status" /></a>
           <i className="fa fa-ellipsis-v footer-sole-links-separator"></i>
-          <Link to="/security"><Translate content="footer.boilerplate.security" /></Link>
+          {@loggableLink <Link to="/security" />, 'footer.boilerplate.security'}
         </div>
       </div>
     </footer>

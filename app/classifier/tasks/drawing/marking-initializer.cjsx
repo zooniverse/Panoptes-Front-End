@@ -5,6 +5,9 @@ drawingTools = require '../../drawing-tools'
 module.exports = React.createClass
   displayName: 'MarkingInitializer'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getDefaultProps: ->
     annotation: null
     workflow: null
@@ -80,6 +83,9 @@ module.exports = React.createClass
     mark = @props.annotation.value[@props.annotation.value.length - 1]
     MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
 
+    toolName = taskDescription.tools[mark.tool].type
+    @context.geordi?.logEvent type: "draw-#{toolName}"
+    
     if MarkComponent.initRelease?
       mouseCoords = @props.getEventOffset e
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e

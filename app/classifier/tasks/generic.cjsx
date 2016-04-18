@@ -5,6 +5,12 @@ alert = require '../../lib/alert'
 module.exports = React.createClass
   displayName: 'GenericTask'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  componentWillReceiveProps: (nextProps, nextContext)->
+    @logClick = nextContext?.geordi?.makeHandler? 'task-help'
+
   getDefaultProps: ->
     question: ''
     help: ''
@@ -50,6 +56,7 @@ module.exports = React.createClass
     </div>
 
   showHelp: ->
+    @logClick? null
     alert <div className="content-container">
       <Markdown className="classification-task-help">{@props.help}</Markdown>
     </div>

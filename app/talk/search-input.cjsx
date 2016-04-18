@@ -10,7 +10,15 @@ module?.exports = React.createClass
     query: React.PropTypes.object
     placeholder: React.PropTypes.string
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logSearch: ->
+    @context.geordi?.logEvent
+      type: 'search'
+
   onSearchSubmit: (e) ->
+    @logSearch()
     e.preventDefault()
     {owner, name} = @props.params
     inputValue = @searchInput().value
@@ -43,4 +51,3 @@ module?.exports = React.createClass
         <i className="fa fa-search" />
       </button>
     </form>
-

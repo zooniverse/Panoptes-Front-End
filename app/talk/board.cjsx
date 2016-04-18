@@ -32,6 +32,9 @@ module?.exports = React.createClass
   displayName: 'TalkBoard'
   mixins: [History]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getInitialState: ->
     discussions: []
     board: {}
@@ -50,6 +53,10 @@ module?.exports = React.createClass
   componentWillMount: ->
     @setDiscussions(@props.location.query.page ? 1)
     @setBoard()
+
+  logNewDiscuss: ->
+    @context.geordi?.logEvent
+      type: 'new-discussion'
 
   discussionsRequest: (page) ->
     @setState loading: true
@@ -109,6 +116,7 @@ module?.exports = React.createClass
       .then (board) => @setState {board}
 
   onClickNewDiscussion: ->
+    @logNewDiscuss()
     @setState newDiscussionOpen: !@state.newDiscussionOpen
 
   roleReadLabel: (data, i) ->

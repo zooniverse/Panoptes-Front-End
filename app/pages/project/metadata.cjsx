@@ -1,11 +1,30 @@
 React = require 'react'
 {Link} = require 'react-router'
+visible = (require 'visible-element')()
 
 module?.exports = React.createClass
   displayName: 'ProjectMetadata'
 
   propTypes:
     project: React.PropTypes.object
+
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  scrollDone: false
+
+  handleScroll: ->
+    return if @scrollDone
+
+    @scrollDone = visible.inViewport(@refs.belowStats)
+    @context.geordi?.logEvent type: 'scroll-down' if @scrollDone
+
+  componentDidMount: ->
+    window.addEventListener 'scroll', @handleScroll
+
+  componentWillUnmount: ->
+    window.removeEventListener 'scroll', @handleScroll
+
 
   render: ->
     {project} = @props
@@ -38,4 +57,5 @@ module?.exports = React.createClass
           <div>Retired Subjects</div>
         </div>
       </div>
+      <div ref="belowStats"></div>
     </div>
