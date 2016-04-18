@@ -85,9 +85,10 @@ class Plate
     ]
 
     makeStarCoord = if @starChart.coordinateSystem() == StarChart.EQUATORIAL then StarCoord.fromRaDec else StarCoord.fromGlatGlon
+    xAxisDec = if @starChart.xAxis.unit == Axis.DEC || @starChart.xAxis.unit == Axis.GLAT then true else false
     @coordCorners = [
-      makeStarCoord(xRange[0].value, yRange[0].value), makeStarCoord(xRange[1].value, yRange[0].value),
-      makeStarCoord(xRange[1].value, yRange[1].value), makeStarCoord(xRange[0].value, yRange[1].value)
+      makeStarCoord(xRange[0].value, yRange[0].value, xAxisDec), makeStarCoord(xRange[1].value, yRange[0].value, xAxisDec),
+      makeStarCoord(xRange[1].value, yRange[1].value, xAxisDec), makeStarCoord(xRange[0].value, yRange[1].value, xAxisDec)
     ]
   scale: ->
     [star1, star2] = [ @coordCorners[0], @coordCorners[2] ]
@@ -128,12 +129,24 @@ class StarCoord
 
   s = StarCoord
 
-  @fromRaDec: (ra, dec) ->
+  @fromRaDec: (xAxis, yAxis, xAxisDec) ->
+    if xAxisDec = true
+      ra = yAxis
+      dec = xAxis
+    else
+      ra = xAxis
+      dec = yAxis
     ra = StarCoord._parseDegrees(ra, false)
     dec = StarCoord._parseDegrees(dec, true)
     new StarCoord ra, dec
 
-  @fromGlatGlon: (glat, glon) ->
+  @fromGlatGlon: (xAxis, yAxis, xAxisGlat) ->
+    if xAxisGlat = true
+      glat = xAxis
+      glon = yAxis
+    else
+      glon = xAxis
+      glat = yAxis
     glat = glat.replace(/[^\d.-]/g,'')
     glon = glon.replace(/[^\d.-]/g,'')
     [b, l, pole_ra, pole_dec, posangle] = [ s._toRadians(glat), s._toRadians(glon), s._toRadians(192.859508), s._toRadians(27.128336), s._toRadians(122.932-90.0) ]
@@ -214,8 +227,6 @@ module.exports = React.createClass
     @parseClassification()
 
     plates = (new Plate(chart, subjImage, @props.user) for chart in @charts)
-    for plate in plates
-      console.log(plate.getCropUrl())
 
     <div>
       <p>View Your Classification(s) in the WorldWide Telescope!</p>
