@@ -8,9 +8,46 @@ MainFooter = require './main-footer'
 module.exports = React.createClass
   displayName: 'PanoptesApp'
 
+  childContextTypes:
+    user: React.PropTypes.object
+    project: React.PropTypes.object
+    subject: React.PropTypes.object
+    workflow: React.PropTypes.object
+    updateUser: React.PropTypes.func
+    updateProject: React.PropTypes.func
+    updateSubject: React.PropTypes.func
+    updateWorkflow: React.PropTypes.func
+
+  getChildContext: ->
+    user: @state.user
+    project: @state.project
+    updateUser: @updateUser
+    updateProject: @updateProject
+    updateSubject: @updateSubject
+    updateWorkflow: @updateWorkflow
+
+
   getInitialState: ->
     user: null
+    project: null
+    subject: null
     initialLoadComplete: false
+
+  updateProject: (project) ->
+    @setState project: project
+
+  updateUser: (user) ->
+    @setState user: user
+
+  updateSubject: (subject) ->
+    @setState subject: subject
+
+  updateWorkflow: (workflow) ->
+    @setState workflow: workflow
+
+  componentDidMount: ->
+  updateSubject: (subject) ->
+    @setState subject: subject
 
   componentDidMount: ->
     auth.listen 'change', @handleAuthChange

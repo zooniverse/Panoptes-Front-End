@@ -154,6 +154,9 @@ module.exports = React.createClass
   displayName: 'ProjectPageWrapper'
   mixins: [TitleMixin, HandlePropChanges]
 
+  contextTypes:
+    updateProject: React.PropTypes.func
+
   title: ->
     @state.project?.display_name ? '(Loading)'
 
@@ -168,6 +171,9 @@ module.exports = React.createClass
     'params.owner': 'fetchProject'
     'params.name': 'fetchProject'
     'user': 'fetchProject'
+
+  componentWillUpdate: (nextProps, nextState) ->
+    @context.updateProject nextState.project unless @state.project == nextState.project
 
   fetchProject: (_, props = @props) ->
     @setState error: false

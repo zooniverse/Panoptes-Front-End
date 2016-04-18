@@ -390,6 +390,9 @@ Classifier = React.createClass
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
 
+  contextTypes:
+    updateSubject: React.PropTypes.func
+
   getDefaultProps: ->
     user: null
     classification: {}
@@ -414,6 +417,9 @@ module.exports = React.createClass
 
     unless nextProps.classification is @props.classification
       @loadClassification nextProps.classification
+
+  componentWillUpdate: (nextProps, nextState) ->
+    @context.updateSubject nextState.subject if nextState.subject isnt @state.subject
 
   loadClassification: (classification) ->
     @setState
