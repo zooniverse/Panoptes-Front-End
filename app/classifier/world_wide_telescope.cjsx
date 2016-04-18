@@ -107,7 +107,6 @@ class Plate
       dec: (@coordCorners[0].dec + @coordCorners[2].dec) / 2
     center
   getCropUrl: ->
-    url = "https://panoptes-uploads.zooniverse.org/production/subject_location/e3d7a7ed-5247-4c43-a8b3-2368b8267abb.jpeg"
     url = @url.replace(/^https?\:\/\//i, "")
     # TODO: we need to account for the fact that the size of the image might be different than
     # the size that it is displayed
