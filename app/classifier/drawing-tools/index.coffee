@@ -6,3 +6,4 @@ module.exports =
   circle: require './circle'
   ellipse: require './ellipse'
   bezier: require './poly-curve'
+  column: require './column-rectangle'
