@@ -1,4 +1,5 @@
 React = require 'react'
+alert = require '../../../lib/alert'
 TriggeredModalForm = require 'modal-form/triggered'
 Dialog = require 'modal-form/dialog'
 AutoSave = require '../../../components/auto-save'
@@ -41,7 +42,7 @@ module?.exports = React.createClass
         title: 'new dropdown title',
         condition: @props.task.selects[conditionIndex].id
         options: {},
-        required: true,
+        required: false,
         allowCreate: true
       })
     @editDropdown(conditionIndex + 1)
@@ -66,8 +67,6 @@ module?.exports = React.createClass
         delete select.options[deleteKey]
 
   handleSave: (newData) ->
-    # needs REVIEW...
-
     {editSelect, deletedValues} = newData
 
     @props.task.selects[@state.editing] = editSelect
@@ -110,7 +109,7 @@ module?.exports = React.createClass
             <AutoSave resource={@props.workflow}>
               <span className="form-label">Help text</span>
               <br />
-              <MarkdownEditor name="#{@props.taskPrefix}.help" onHelp={-> alert <MarkdownHelp/>} value={@props.task.help ? ""} rows="4" className="full" onChange={handleChange} />
+              <MarkdownEditor name="#{@props.taskPrefix}.help" value={@props.task.help ? ""} rows="4" className="full" onChange={handleChange} onHelp={-> alert <MarkdownHelp/>} />
             </AutoSave>
             <small className="form-help">Add text and images for a help window.</small>
           </div>

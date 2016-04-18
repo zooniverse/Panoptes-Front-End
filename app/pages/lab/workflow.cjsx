@@ -261,7 +261,7 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          {if 'WorldWide Telescope' in @props.project.experimental_tools
+          {if 'worldwide telescope' in @props.project.experimental_tools
             <div>
               <div>
                 <AutoSave resource={@props.workflow}>

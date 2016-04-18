@@ -20,7 +20,9 @@ EXPERIMENTAL_FEATURES = [
   'mini-course'
   'hide classification summaries'
   'pan and zoom'
-  'WorldWide Telescope'
+  'worldwide telescope'
+  'hide previous marks'
+  'column'
 ]
 
 ProjectToggle = React.createClass

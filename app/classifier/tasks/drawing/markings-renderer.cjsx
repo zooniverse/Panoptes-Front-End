@@ -34,6 +34,8 @@ module.exports = React.createClass
     # console.log 'Marks are now', newSetOfMarks
 
   render: ->
+    skippedMarks = 0
+
     <g>
       {for annotation in @props.classification?.annotations ? []
         annotation._key ?= Math.random()
@@ -43,6 +45,11 @@ module.exports = React.createClass
           <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
             {for mark, i in annotation.value when parseInt(mark.frame) is parseInt(@props.frame)
               mark._key ?= Math.random()
+
+              if skippedMarks < @props.classification._hideMarksBefore and not @props.classification.completed
+                skippedMarks += 1
+                continue
+
               toolDescription = taskDescription.tools[mark.tool]
 
               toolEnv =

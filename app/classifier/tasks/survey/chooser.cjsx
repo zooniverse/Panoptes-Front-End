@@ -102,11 +102,13 @@ module.exports = React.createClass
         else
           for choiceID, i in sortedFilteredChoices
             choice = @props.task.choices[choiceID]
-            <button key={choiceID + i} type="button" className="survey-task-chooser-choice" onClick={@props.onChoose.bind null, choiceID}>
-              {if choice.images?.length > 0
-                thumbnailSrc = @props.task.images[choice.images[0]]
-                <span className="survey-task-chooser-choice-thumbnail" role="presentation" style={backgroundImage: "url('#{thumbnailSrc}')"}></span>}
-              <span className="survey-task-chooser-choice-label">{choice.label}</span>
+            <button key={choiceID + i} type="button" className="survey-task-chooser-choice-button" onClick={@props.onChoose.bind null, choiceID}>
+              <div className="survey-task-chooser-choice">
+                {if choice.images?.length > 0
+                  thumbnailSrc = @props.task.images[choice.images[0]]
+                  <span className="survey-task-chooser-choice-thumbnail" role="presentation" style={backgroundImage: "url('#{thumbnailSrc}')"}></span>}
+                <span className="survey-task-chooser-choice-label">{choice.label}</span>
+              </div>
             </button>}
       </div>
       <div style={textAlign: 'center'}>

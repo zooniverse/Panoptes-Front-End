@@ -12,10 +12,10 @@ module.exports = React.createClass
 
   render: ->
     <div className="project-text-content content-container">
-      <PromiseRenderer promise={@props.project.get('pages', url_key: "result").index(0)}>{(faq) =>
+      <PromiseRenderer promise={@props.project.get('pages', url_key: 'results').index(0)}>{(page) =>
         <Markdown project={@props.project} className="column">{
-          if faq?.content
-            faq?.content
+          if page?.content
+            page?.content
           else
             'This project has no results to report yet.'
         }</Markdown>

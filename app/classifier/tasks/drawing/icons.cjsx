@@ -33,3 +33,7 @@ module.exports =
     <path d="M90 90 Q 10 50 90 10" fill={'none'} />
     <path d="M90 90 L 10 50 L 90 10" strokeDasharray={[10, 10]} fill={'none'} />
   </svg>
+
+  column: <svg viewBox="0 0 100 100">
+    <rect className="shape" x="10" y="0" width="25" height="100%" />
+  </svg>
