@@ -2,7 +2,7 @@ React = require('react')
 PromiseRenderer = require '../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 Select = require 'react-select'
-{Link, Router, Navigation, History} = require 'react-router'
+{Link, Router, History} = require 'react-router'
 Translate = require 'react-translate-component'
 debounce = require 'debounce'
 Filmstrip = require '../components/filmstrip'
@@ -94,7 +94,6 @@ DisciplineSelector = React.createClass
     <Filmstrip increment={350} value={@props.value} onChange={@props.onChange}/>
 
 SearchSelector = React.createClass
-
   displayName: 'SearchSelector'
   mixins: [History]
 
@@ -106,7 +105,7 @@ SearchSelector = React.createClass
   navigateToProject: (projectID) ->
     apiClient.type('projects').get(projectID)
       .then (project) ->
-        if project.redirect?
+        if project.redirect? and project.redirect.length isnt 0
           window.location.href = project.redirect
         else
           window.location.href = ['/projects', project.slug].join('/')
