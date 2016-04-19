@@ -13,11 +13,8 @@ counterpart.registerTranslations 'en',
     loading: 'Loading project'
     disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
     nav:
-      research: 'Research'
-      results: 'Results'
+      about: 'About'
       classify: 'Classify'
-      faq: 'FAQ'
-      education: 'Education'
       talk: 'Talk'
 
 SOCIAL_ICONS =
@@ -121,8 +118,8 @@ ProjectPage = React.createClass
           </IndexLink>}
 
         {unless @props.project.redirect
-          <Link to="#{projectPath}/research" activeClassName="active" className="tabbed-content-tab">
-            <Translate content="project.nav.research" />
+          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab">
+            <Translate content="project.nav.about" />
           </Link>}
 
         {if @props.project.redirect
@@ -132,21 +129,6 @@ ProjectPage = React.createClass
         else
           <Link to="#{projectPath}/classify" activeClassName="active" className="classify tabbed-content-tab">
             <Translate content="project.nav.classify" />
-          </Link>}
-
-        {if !!pages.results?.content
-          <Link to="#{projectPath}/results" activeClassName="active"className="tabbed-content-tab">
-            {pages.results.title}
-          </Link>}
-
-        {if !!pages.faq?.content
-          <Link to="#{projectPath}/faq" activeClassName="active" className="tabbed-content-tab">
-            {pages.faq.title}
-          </Link>}
-
-        {if !!pages.education?.content
-          <Link to="#{projectPath}/education" activeClassName="active" className="tabbed-content-tab">
-            {pages.education.title}
           </Link>}
 
         <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab">
@@ -181,6 +163,78 @@ ProjectPageController = React.createClass
   displayName: 'ProjectPageController'
 
   mixins: [TitleMixin]
+=======
+  redirect_classify_link: (redirect) ->
+    "#{redirect.replace(/\/?#?\/+$/, "")}/#/classify"
+
+  render: ->
+    <ChangeListener target={@props.project}>{=>
+      <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
+        [ownerName, name] = @props.project.slug.split('/')
+        projectPath = "/projects/#{ownerName}/#{name}"
+
+        <div className="project-page">
+          <PromiseRenderer promise={@props.project.get 'background'} then={(background) =>
+            <div className="project-background" style={backgroundImage: "url('#{background.src}')"}></div>
+          } catch={null} />
+
+          <nav className="project-nav tabbed-content-tabs">
+            {if @props.project.redirect
+              <a target="_blank" href={@props.project.redirect} className="tabbed-content-tab">
+                <ProjectAvatar project={@props.project} />
+                Visit {@props.project.title}
+              </a>
+            else
+              <Link to="#{projectPath}/home" activeClassName="active" className="tabbed-content-tab">
+                <ProjectAvatar project={@props.project} />
+                {@props.project.display_name}
+              </Link>}
+            {unless @props.project.redirect
+              <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab">
+                <Translate content="project.nav.about" />
+              </Link>}
+            {if @props.project.redirect
+              <a target="_blank" href={@redirect_classify_link(@props.project.redirect)} className="tabbed-content-tab">
+                <Translate content="project.nav.classify" />
+              </a>
+            else
+              <Link to="#{projectPath}/classify" activeClassName="active" className="classify tabbed-content-tab">
+                <Translate content="project.nav.classify" />
+              </Link>}
+            <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab">
+              <Translate content="project.nav.talk" />
+            </Link>
+            {for link, i in @props.project.urls
+              link._key ?= Math.random()
+              {label} = link
+              unless label
+                for pattern, icon of SOCIAL_ICONS
+                  if link.url.indexOf(pattern) isnt -1
+                    socialIcon = icon
+                socialIcon ?= 'globe'
+                label = <i className="fa fa-#{socialIcon} fa-fw fa-2x"></i>
+              <a key={link._key} href={link.url} className="tabbed-content-tab" target="#{@props.project.id}-#{i}">{label}</a>}
+          </nav>
+
+          {if @props.project.configuration?.announcement
+            <div className="informational project-announcement-banner">
+              <Markdown>{@props.project.configuration.announcement}</Markdown>
+            </div>}
+
+          {React.cloneElement(@props.children, {owner: owner, project: @props.project, user: @props.user})}
+
+          {unless @props.project.launch_approved or @props.project.beta_approved
+            <Translate className="project-disclaimer" content="project.disclaimer" component="p" />}
+
+          <PotentialFieldGuide project={@props.project} />
+        </div>
+      }</PromiseRenderer>
+    }</ChangeListener>
+
+module.exports = React.createClass
+  displayName: 'ProjectPageWrapper'
+  mixins: [TitleMixin, HandlePropChanges]
+>>>>>>> init commit
 
   title: ->
     @state.project?.display_name ? '(Loading)'

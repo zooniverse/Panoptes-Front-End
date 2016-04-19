@@ -1,10 +1,10 @@
 React = require 'react'
-TitleMixin = require '../../lib/title-mixin'
+TitleMixin = require '../../../lib/title-mixin'
 {Markdown} = require 'markdownz'
-PromiseRenderer = require '../../components/promise-renderer'
+PromiseRenderer = require '../../../components/promise-renderer'
 
 module.exports = React.createClass
-  displayName: 'ProjectEducationPage'
+  displayName: 'About'
 
   mixins: [TitleMixin]
 

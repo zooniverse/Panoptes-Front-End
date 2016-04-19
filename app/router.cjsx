@@ -57,9 +57,15 @@ module.exports =
     <Route path="projects/:owner/:name" component={require './pages/project'}>
       <IndexRoute component={require './pages/project/home'} />
       <Route path="home" component={ONE_UP_REDIRECT} />
-      <Route path="research" component={require './pages/project/research'} />
-      <Route path="results" component={require './pages/project/results'} />
       <Route path="classify" component={require './pages/project/classify'} />
+      <Route path="about" component={require './pages/project/about'}>
+        <IndexRedirect to="research" />
+        <Route path="research" component={require './pages/project/about/research'} />
+        <Route path="results" component={require './pages/project/about/results'} />
+        <Route path="faq" component={require './pages/project/about/faq'} />
+        <Route path="education" component={require './pages/project/about/education'} />
+        <Route path="team" component={require './pages/project/about/team'} />
+      </Route>
       <Route path="notifications" component={require './pages/notifications'} />
       <Route path="talk" component={require './pages/project/talk'}>
         <IndexRoute component={require './talk/init'} />
@@ -73,8 +79,6 @@ module.exports =
         <Route path=":board" component={require './talk/board'} />
         <Route path=":board/:discussion" component={require './talk/discussion'} />
       </Route>
-      <Route path="faq" component={require './pages/project/faq'} />
-      <Route path="education" component={require './pages/project/education'} />
       <Route path="stats" component={require './pages/project/stats'} />
     </Route>
 
