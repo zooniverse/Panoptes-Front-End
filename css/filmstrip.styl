@@ -1,0 +1,43 @@
+.filmstrip
+  padding: 0
+  display: flex
+  margin-bottom: 1.5em
+  max-width: 1200px
+  margin: 0 auto
+  overflow: hidden
+  
+  button::-moz-focus-inner {
+    border: 0
+  }
+
+.filmstrip__nav-btn
+  border: 0
+  margin: 0
+  height: 100%
+  background-color: transparent
+  width: 40px
+  color: #006dff
+  font-weight: bold
+  font-size: 24pt
+  cursor: pointer
+  &:focus
+  &:active
+    outline: 0
+
+  @media screen and (max-width: 450px)
+    display: none
+
+.filmstrip__viewport
+  height: 100%
+  overflow-x: auto
+  overflow-y: hidden
+  width: 100%
+
+.filmstrip__strip
+  white-space: nowrap
+  display: flex
+  margin-left: -0.28em
+
+  ul
+    padding: 0
+    list-style-type: none
