@@ -32,7 +32,8 @@
     "sort-into-columns": "~1.0.0",
     "sugar-client": "~1.0.1",
     "swipe-js-iso": "~2.0.1",
-    "test-shape-closeness": "0.0.1"
+    "test-shape-closeness": "0.0.1",
+    "zooniverse-geordi-client": "~1.3.6"
   },
   "devDependencies": {
     "browserify": "~11.0.1",
