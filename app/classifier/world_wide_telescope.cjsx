@@ -31,6 +31,7 @@ class StarChart
     @corners = ((new SimplePoint pt[0], pt[1]) for pt in [ [@x, @y], [@x, @y+@height], [@x+@width, @y], [@x+@width, @y+@height] ])
     @axisPoints = []
     @axisLabels = []
+    @valid = false
   bounds: ->
     x: [@x, @x+@width]
     y: [@y, @y+@height]
@@ -59,15 +60,17 @@ class StarChart
   filterBounds: (items, prop, bounds) ->
     (i for i in items when i[prop] < bounds[prop][0] || i[prop] > bounds[prop][1])
   buildAxes: ->
-    bounds = @bounds()
-    xLabel = (@filterBounds @axisLabels, 'y', bounds)[0]
-    yLabel = (@filterBounds @axisLabels, 'x', bounds)[0]
-    xRange = (@filterBounds @axisPoints, 'y', bounds).sort( (a,b) -> a.x > b.x ).slice(0,2)
-    yRange = (@filterBounds @axisPoints, 'x', bounds).sort( (a,b) -> a.y > b.y ).slice(0,2)
-    xRange[1] = xRange[0] if !xRange[1]
-    yRange[1] = yRange[0] if !yRange[1]
-    @xAxis = new Axis xRange, xLabel.value
-    @yAxis = new Axis yRange, yLabel.value
+    if @axisPoints.length >= 3 && @axisLabels.length >= 2
+      @valid = true
+      bounds = @bounds()
+      xLabel = (@filterBounds @axisLabels, 'y', bounds)[0]
+      yLabel = (@filterBounds @axisLabels, 'x', bounds)[0]
+      xRange = (@filterBounds @axisPoints, 'y', bounds).sort( (a,b) -> a.x > b.x ).slice(0,2)
+      yRange = (@filterBounds @axisPoints, 'x', bounds).sort( (a,b) -> a.y > b.y ).slice(0,2)
+      xRange[1] = xRange[0] if !xRange[1]
+      yRange[1] = yRange[0] if !yRange[1]
+      @xAxis = new Axis xRange, xLabel.value
+      @yAxis = new Axis yRange, yLabel.value
   coordinateSystem: ->
     coords = StarChart.OTHER
     coords = StarChart.EQUATORIAL if (@xAxis.unit == Axis.RA && @yAxis.unit == Axis.DEC) || (@xAxis.unit == Axis.DEC && @yAxis.unit == Axis.RA)
@@ -129,7 +132,7 @@ class StarCoord
   s = StarCoord
 
   @fromRaDec: (xAxis, yAxis, xAxisDec) ->
-    if xAxisDec = true
+    if xAxisDec == true
       ra = yAxis
       dec = xAxis
     else
@@ -140,7 +143,7 @@ class StarCoord
     new StarCoord ra, dec
 
   @fromGlatGlon: (xAxis, yAxis, xAxisGlat) ->
-    if xAxisGlat = true
+    if xAxisGlat == true
       glat = xAxis
       glon = yAxis
     else
@@ -225,7 +228,9 @@ module.exports = React.createClass
 
     @parseClassification()
 
-    plates = (new Plate(chart, subjImage, @props.user) for chart in @charts)
+    plates = []
+    for chart in @charts
+      plates.push(new Plate(chart, subjImage, @props.user)) if chart.valid
 
     <div>
       <p>View Your Classification(s) in the WorldWide Telescope!</p>
