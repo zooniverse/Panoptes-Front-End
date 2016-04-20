@@ -1,8 +1,8 @@
 counterpart = require 'counterpart'
 React = require 'react'
-PromiseRenderer = require '../../components/promise-renderer'
+PromiseRenderer = require '../../../components/promise-renderer'
 Translate = require 'react-translate-component'
-TitleMixin = require '../../lib/title-mixin'
+TitleMixin = require '../../../lib/title-mixin'
 {Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
