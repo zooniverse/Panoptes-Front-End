@@ -111,9 +111,12 @@ SearchSelector = React.createClass
           window.location.href = ['/projects', project.slug].join('/')
 
   searchByName: (value, callback) ->
+    query =
+      search: "%#{value}%"
+      launch_approved: true unless apiClient.params.admin
 
-    if value?.trim().length > 0
-      apiClient.type('projects').get(search: "#{value}", page_size: 10)
+    if value?.trim().length > 3
+      apiClient.type('projects').get(query, page_size: 10)
         .then (projects) ->
           opts = projects.map (project) ->
             {
@@ -137,7 +140,7 @@ SearchSelector = React.createClass
       value=""
       searchPromptText="Search by name"
       closeAfterClick={true}
-      asyncOptions={debounce(@searchByName, 500)}
+      asyncOptions={debounce(@searchByName, 2000)}
       onChange={@navigateToProject}
       className="search card-search standard-input"
     />
@@ -275,12 +278,12 @@ ProjectFilteringInterface = React.createClass
         <p className="showing-with-link-para"><Translate pageStart={pageStart} pageEnd={pageEnd} count={@state.project_count} content={showingMessage} /></p>}
         {if @state.pages>1
            <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />}
-        
+
         <ProjectCardList projects={@state.projects} />
 
         {if @state.pages>1
            <PageSelector current={@props.page} total={@state.pages} onChange={@handlePageChange} />}
-        
+
       </section>
 
     </div>
