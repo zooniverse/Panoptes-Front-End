@@ -26,7 +26,7 @@ module.exports = React.createClass
         if miniCourseForWorkflow?
           miniCourseForWorkflow
         else if project?
-          apiClient.type('tutorials').get project_id: project.id
+          apiClient.type('tutorials').get project_id: project.id, kind: "mini-course"
             .then ([minicourse]) =>
               minicourse
         else
@@ -51,61 +51,44 @@ module.exports = React.createClass
 
     start: (minicourse, user) ->
       MiniCourseComponent = this
-      preferences = null
-
-      if user?
-        minicourse.get('project').then (project) ->
-          user.get('project_preferences', project_id: project.id).then ([projectPreferences]) ->
-            preferences = projectPreferences
 
       if minicourse.steps.length isnt 0
-        awaitMiniCourseMedia = minicourse.get 'attached_images'
-          .catch ->
-            # Checking for attached images throws if there are none.
-            []
-          .then (mediaResources) ->
-            mediaByID = {}
-            for mediaResource in mediaResources
-              mediaByID[mediaResource.id] = mediaResource
-            mediaByID
+        minicourse.get('project').then (project) =>
+          awaitMiniCourseMedia = minicourse.get 'attached_images'
+            .catch ->
+              # Checking for attached images throws if there are none.
+              []
+            .then (mediaResources) ->
+              mediaByID = {}
+              for mediaResource in mediaResources
+                mediaByID[mediaResource.id] = mediaResource
+              mediaByID
 
-        awaitMiniCourseMedia.then (mediaByID) =>
-          Dialog.alert(<MiniCourseComponent id={minicourse.id} projectPreferences={preferences} steps={minicourse.steps} media={mediaByID} />, {
-            className: 'tutorial-dialog', #reusing tutorial styling
-            required: true,
-            closeButton: true
-          })
-            .catch =>
-              null # We don't really care if the user canceled or completed the tutorial.
-            .then =>
-              @markPreferences preferences, minicourse, user
+          awaitMiniCourseMedia.then (mediaByID) =>
+            Dialog.alert(<MiniCourseComponent project={project} user={user} steps={minicourse.steps} media={mediaByID} />, {
+              className: 'tutorial-dialog', #reusing tutorial styling
+              required: true,
+              closeButton: true
+            })
+              .catch =>
+                null # We don't really care if the user canceled or completed the tutorial.
+              # .then =>
+              #   console.log('then')
+              #   @markPreferences project, minicourse.id, user
 
-
-    markPreferences: (projectPreferences, minicourse, user) -> 
-      defaultPreferences = { "preferences.minicourse_opt_out.#{minicourse.id}": false, "preferences.slide_last_seen.#{minicourse.id}": 0 }
-      
+    markPreferences: (project, minicourseID, user) -> 
       if user?
-        if projectPreferences.preferences.minicourse_opt_out?[minicourse.id] # user is restarting via mini-course button
-          projectPreferences.update defaultPreferences
-          projectPreferences.save()
-        else
-          projectPreferences ?= apiClient.type('project_preferences').create({
-            links: {
-              project: project.id
-            },
-            preferences: {}
-          })
-          projectPreferences.update defaultPreferences
-          # projectPreferences.update 'preferences.mini_course_completed_at': now
-          projectPreferences.save()
+        user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
+          projectPreferences.update "preferences": null
+
 
     startIfNecessary: ({workflow, project, user}) ->
       @find({workflow, project}).then (minicourse) =>
         if minicourse?
-          @checkIfCompleted(tutorial, user).then (completed) =>
-            console.log {completed}
-            unless completed
-              @start minicourse, user unless projectPreferences.preferences.minicourse_opt_out["#{minicourse.id}"]
+          # @checkIfCompleted(minicourse, user).then (completed) =>
+          #   console.log {completed}
+          #   unless completed
+          @start minicourse, user 
 
   propTypes:
     steps: React.PropTypes.arrayOf React.PropTypes.shape
@@ -115,15 +98,50 @@ module.exports = React.createClass
   getDefaultProps: ->
     steps: []
     media: {}
+    minicourseID: null
+    project: {}
+    user: {}
 
+  getInitialState: ->
+    slideToStart: 0
+
+  componentWillMount: ->
+    defaultPreferences = { "preferences.minicourses.opt_out.#{minicourseID}": false, "preferences.minicourses.slide_last_seen.#{minicourseID}": 0 }
+
+    if @props.user
+      user?.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
+        # projectPreferences.update "preferences": null
+        if projectPreferences.preferences.minicourses?
+          if projectPreferences.preferences.minicourses.opt_out?["#{minicourseID}"] # user is restarting via mini-course button
+            projectPreferences.update defaultPreferences
+            projectPreferences.save()
+          else if projectPreferences.preferences.minicourses.slide_last_seen["#{minicourseID}"]
+            slideToStart = projectPreferences.preferences.minicourses.slide_last_seen["#{minicourseID}"]
+        else
+          # Create default preferences
+          projectPreferences ?= apiClient.type('project_preferences').create({
+            links: {
+              project: project.id
+            },
+            preferences: {}
+          })
+          projectPreferences.update defaultPreferences
+          # projectPreferences.update 'preferences.mini_course_completed_at': now
+          projectPreferences.save()
+    else
+      slideToStart = 0
+
+    @setState {slideToStart}
+  
   componentWillUnmount: ->
-    if @props.projectPreferences.preferences.slide_last_seen[@props.id] < @props.steps.length
-      nextSlideIndex = @props.projectPreferences.preferences.slide_last_seen[@props.id] + 1
-    @props.projectPreferences.update "preferences.slide_last_seen.#{@props.id}": nextSlideIndex
-    @props.projectPreferences.save()
+    if @props.projectPreferences?
+      if @props.projectPreferences.preferences.minicourses.slide_last_seen["#{@props.minicourseID}"] < @props.steps.length
+        nextSlideIndex = @props.projectPreferences.preferences.minicourses.slide_last_seen["#{@props.minicourseID}"] + 1
+        @props.projectPreferences.update "preferences.minicourses.slide_last_seen.#{@props.minicourseID}": nextSlideIndex
+        @props.projectPreferences.save()
   
   render: ->
-    <StepThrough ref="stepThrough" className="tutorial-steps" defaultStep={@props.projectPreferences?.slide_last_seen[@props.id] || 0}>
+    <StepThrough ref="stepThrough" className="tutorial-steps" defaultStep={@state.slideToStart}>
       {for step, i in @props.steps
         step._key ?= Math.random()
         <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>
@@ -139,5 +157,6 @@ module.exports = React.createClass
     @refs.stepThrough.goNext()
 
   handleOptOut: ->
-    @props.projectPreferences.update "preferences.minicourse_out_out.#{@props.id}": true
-    @props.projectPreferences.save()
+    if @props.projectPreferences?
+      @props.projectPreferences.update "preferences.minicourses.out_out.#{@props.minicourseID}": true
+      @props.projectPreferences.save()
