@@ -268,8 +268,10 @@ EditWorkflowPage = React.createClass
                   <span className="form-label">Use World Wide Telescope API</span><br />
                   <small className="form-help">Allow user to view subject in the WWT after classifying.</small>
                   <br />
-                  <input type="checkbox" id="world_wide_telescope" onChange={@handleSetWorldWideTelescope} defaultChecked={@props.workflow.configuration?.external_api}/>
-                  <label htmlFor="world_wide_telescope">WorldWide Telescope</label>
+                  <label htmlFor="world_wide_telescope_summary">
+                    <input type="checkbox" onChange={@handleSetWorldWideTelescope} defaultChecked={@props.workflow.configuration?.customizations}/>
+                    WorldWide Telescope
+                  </label>
                 </AutoSave>
               </div>
 
@@ -385,9 +387,9 @@ EditWorkflowPage = React.createClass
       'configuration.hide_classification_summaries': e.target.checked
 
   handleSetWorldWideTelescope: (e) ->
-    toggle = if e.target.checked then 'world_wide_telescope' else null
+    toggle = if e.target.checked then 'world_wide_telescope_summary' else null
     @props.workflow.update
-      'configuration.external_api': toggle
+      'configuration.customizations': toggle
 
   handleSubjectSetToggle: (subjectSet, e) ->
     shouldAdd = e.target.checked

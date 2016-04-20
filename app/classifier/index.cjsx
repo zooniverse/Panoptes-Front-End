@@ -241,12 +241,12 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {if @props.workflow.configuration.external_api is 'world_wide_telescope'
+      {if @props.workflow.configuration.customizations is 'world_wide_telescope_summary'
         <strong>
           <WorldWideTelescope
-            classification={@props.classification.annotations}
+            annotations={@props.classification.annotations}
             subject={@props.subject}
-            user={@props.user.display_name}
+            user_name={@props.user.display_name}
           />
         </strong>
         }
