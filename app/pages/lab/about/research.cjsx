@@ -1,5 +1,5 @@
 React = require 'react'
-ProjectPageEditor = require '../../partials/project-page-editor'
+ProjectPageEditor = require '../../../partials/project-page-editor'
 
 module.exports = React.createClass
   displayName: 'EditProjectResearch'

@@ -45,6 +45,10 @@ module.exports = React.createClass
                 <Link to="#{projectPath}/about/education" activeClassName="active" className="tabbed-content-tab">
                   {pageTitles.education}
                 </Link>}
+              {if pageTitles.team
+                <Link to="#{projectPath}/about/team" activeClassName="active" className="tabbed-content-tab">
+                  {pageTitles.team}
+                </Link>}
             </span>
           }</PromiseRenderer>
 

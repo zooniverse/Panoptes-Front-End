@@ -48,17 +48,8 @@ EditProjectPage = React.createClass
           <li><IndexLink to={@labPath()} activeClassName='active' className="nav-list-item" title="Input the basic information about your project, and set up its home page.">
             Project details
           </IndexLink></li>
-          <li><Link to={@labPath('/research')} activeClassName='active' className="nav-list-item" title="Explain your research to your audience here in as much detail as you’d like.">
-            Research
-          </Link></li>
-          <li><Link to={@labPath('/results')} activeClassName='active' className="nav-list-item" title="Once your project has hit its stride, share the results of your project with your volunteers here.">
-            Results
-          </Link></li>
-          <li><Link to={@labPath('/faq')} activeClassName='active' className="nav-list-item" title="Add details here about your research, how to classify, and what you plan to do with the classifications.">
-            FAQ
-          </Link></li>
-          <li><Link to={@labPath('/education')} activeClassName='active' className="nav-list-item" title="If you are a researcher open to collaborating with educators, or if your project is primarily for educational purposes, you can describe that here.">
-            Education
+          <li><Link to={@labPath('/about')} activeClassName='active' className="nav-list-item" title="Enter content for Research, Results, FAQ and Education.">
+            About
           </Link></li>
           <li><Link to={@labPath('/collaborators')} activeClassName='active' className="nav-list-item" title="Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project while it’s private).">
             Collaborators
