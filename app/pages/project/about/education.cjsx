@@ -11,7 +11,7 @@ module.exports = React.createClass
   title: 'Educational resources'
 
   render: ->
-    <div className="project-text-content content-container">
+    <div>
       <PromiseRenderer promise={@props.project.get('pages', url_key: "education").index(0)}>{(education) =>
         <Markdown project={@props.project} className="column">{
           if education?.content

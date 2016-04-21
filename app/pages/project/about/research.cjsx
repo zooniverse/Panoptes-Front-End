@@ -24,7 +24,7 @@ module.exports = React.createClass
   title: 'Science case'
 
   render: ->
-    <div className="project-text-content content-container">
+    <div>
       <div className="columns-container">
         <PromiseRenderer promise={@props.project.get('pages', url_key: "science_case").index(0)}>{(science_case) =>
           <Markdown project={@props.project} className="column">{

@@ -25,24 +25,24 @@ module.exports = React.createClass
         [ownerName, name] = @props.project.slug.split('/')
         projectPath = "/projects/#{ownerName}/#{name}"
 
-        <div className="project-text-content content-container">
+        <div className="about-container">
           <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
             pageTitles = @getPageTitles(pages)
             <span>
               {if pageTitles.science_case
-                <Link to="#{projectPath}/about/research" activeClassName="active"className="tabbed-content-tab">
+                <Link to="#{projectPath}/about/research" activeClassName="active"className="about-tabs">
                   {pageTitles.science_case}
                 </Link>}
               {if pageTitles.results
-                <Link to="#{projectPath}/about/results" activeClassName="active"className="tabbed-content-tab">
+                <Link to="#{projectPath}/about/results" activeClassName="active"className="about-tabs">
                   {pageTitles.results}
                 </Link>}
               {if pageTitles.faq
-                <Link to="#{projectPath}/about/faq" activeClassName="active" className="tabbed-content-tab">
+                <Link to="#{projectPath}/about/faq" activeClassName="active" className="about-tabs">
                   {pageTitles.faq}
                 </Link>}
               {if pageTitles.education
-                <Link to="#{projectPath}/about/education" activeClassName="active" className="tabbed-content-tab">
+                <Link to="#{projectPath}/about/education" activeClassName="active" className="about-tabs">
                   {pageTitles.education}
                 </Link>}
               {if pageTitles.team

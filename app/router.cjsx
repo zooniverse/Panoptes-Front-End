@@ -59,12 +59,21 @@ module.exports =
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" component={require './pages/project/classify'} />
       <Route path="about" component={require './pages/project/about'}>
+<<<<<<< 01d32a71b8466e6a224e8478c525107f31304bdb
         <IndexRedirect to="research" />
         <Route path="research" component={require './pages/project/about/research'} />
         <Route path="results" component={require './pages/project/about/results'} />
         <Route path="faq" component={require './pages/project/about/faq'} />
         <Route path="education" component={require './pages/project/about/education'} />
         <Route path="team" component={require './pages/project/about/team'} />
+=======
+        <IndexRoute path="research" component={require './pages/project/about/research'} />
+        <Route path="research" component={require './pages/project/about/research'}/>
+        <Route path="results" component={require './pages/project/about/results'}/>
+        <Route path="faq" component={require './pages/project/about/faq'}/>
+        <Route path="education" component={require './pages/project/about/education'}/>
+        <Route path="team" component={require './pages/project/about/team'}/>
+>>>>>>> Update Styling for About Page
       </Route>
       <Route path="notifications" component={require './pages/notifications'} />
       <Route path="talk" component={require './pages/project/talk'}>
