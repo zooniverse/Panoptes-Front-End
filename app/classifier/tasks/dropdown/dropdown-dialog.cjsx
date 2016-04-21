@@ -1,6 +1,8 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 DragReorderable = require 'drag-reorderable'
+{days, months} = require './data/time'
+{countries, USstates} = require './data/location'
 
 DropdownDialog = React.createClass
 
