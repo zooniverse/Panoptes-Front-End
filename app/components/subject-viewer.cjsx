@@ -25,6 +25,8 @@ CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 module.exports = React.createClass
   displayName: 'SubjectViewer'
 
+  signInAttentionTimeout: NaN
+
   getDefaultProps: ->
     subject: null
     user: null
@@ -46,11 +48,10 @@ module.exports = React.createClass
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
 
-  willReceiveProps: (nextProps) ->
-    # The default state for subjects is flipbook if allowed
-    if typeof nextProps.allowFlipbook is 'boolean'
-      this.setState
-        inFlipbookMode: allowFlipbook
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.subject is @props.subject
+      clearTimeout @signInAttentionTimeout
+      @setState loading: true
 
   promptToSignIn: ->
     alert (resolve) ->
@@ -139,7 +140,7 @@ module.exports = React.createClass
               </span>
             else
               <span>
-                <button type="button" className="secret-button" onClick={@promptToSignIn}>
+                <button type="button" className="secret-button #{if @state.loading then 'get-attention'}" onClick={@promptToSignIn}>
                   <small>You should sign in!</small>
                 </button>
               </span>}
@@ -151,8 +152,12 @@ module.exports = React.createClass
       </div>
     </div>
 
+  handleFrameLoad: ->
+    @props.onLoad? arguments...
+    @signInAttentionTimeout = setTimeout (=> @setState loading: false), 3000
+
   renderFrame: (frame, props = {}) ->
-    <FrameViewer {...@props} {...props} frame={frame} />
+    <FrameViewer {...@props} {...props} frame={frame} onLoad={@handleFrameLoad} />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
