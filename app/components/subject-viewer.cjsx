@@ -71,13 +71,13 @@ module.exports = React.createClass
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
           if @props.allowFlipbook and @props.allowSeparateFrames
-            <button aria-label="Toggle flipbook mode" title="Toggle flipbook mode" className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
+            <button className="secret-button" aria-label="Toggle flipbook mode" title="Toggle flipbook mode" onClick={@toggleInFlipbookMode}>
               <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
             </button>
         else
           <span className="tools">
             {if @props.allowFlipbook and @props.allowSeparateFrames
-              <button aria-label="Toggle flipbook mode" title="Toggle flipbook mode" className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
+              <button className="secret-button" aria-label="Toggle flipbook mode" title="Toggle flipbook mode" onClick={@toggleInFlipbookMode}>
                 <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
               </button>}
 
@@ -117,12 +117,18 @@ module.exports = React.createClass
           {if @props.workflow?.configuration?.enable_subject_flags
             <FlagSubjectButton classification={@props.classification} />}
           {if @props.subject?.metadata?
-            <button type="button" aria-label="Metadata" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
+            <span>
+              <button type="button" className="secret-button" aria-label="Metadata" title="Metadata" onClick={@showMetadata}>
+                <i className="fa fa-info-circle fa-fw"></i>
+              </button>{' '}
+            </span>}
           {if @props.subject? and @props.user? and @props.project?
             <span>
               {unless @props.workflow?.configuration?.disable_favorites
-                <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />}
-              <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
+                <span>
+                  <FavoritesButton className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />{' '}
+                </span>}
+              <CollectionsManagerIcon className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />
             </span>}
           {if type is 'image' and @props.linkToFullImage
             <a className="button" href={src} aria-label="Subject Image" title="Subject Image" target="zooImage">

@@ -21,10 +21,10 @@ module?.exports = React.createClass
 
   render: ->
     <button
-      className="collections-manager-icon"
+      className="collections-manager-icon #{@props.className ? ''}"
       title="Collect"
       onClick={@open}>
-      <i className="fa fa-list" />
+      <i className="fa fa-list fa-fw" />
 
       {if @state.open
         <Dialog tag="div" closeButton={true} onCancel={@close}>
