@@ -241,7 +241,7 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {if @props.workflow.configuration.customizations is 'world_wide_telescope_summary'
+      {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
         <strong>
           <WorldWideTelescope
             annotations={@props.classification.annotations}

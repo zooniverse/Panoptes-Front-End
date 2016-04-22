@@ -269,7 +269,7 @@ EditWorkflowPage = React.createClass
                   <small className="form-help">Allow user to view subject in the WWT after classifying.</small>
                   <br />
                   <label htmlFor="world_wide_telescope_summary">
-                    <input type="checkbox" onChange={@handleSetWorldWideTelescope} defaultChecked={@props.workflow.configuration?.customizations}/>
+                    <input type="checkbox" onChange={@handleSetWorldWideTelescope} checked={@telescopeValue()}/>
                     WorldWide Telescope
                   </label>
                 </AutoSave>
@@ -387,9 +387,21 @@ EditWorkflowPage = React.createClass
       'configuration.hide_classification_summaries': e.target.checked
 
   handleSetWorldWideTelescope: (e) ->
-    toggle = if e.target.checked then 'world_wide_telescope_summary' else null
+    if !@props.workflow.configuration.custom_summary
+      @props.workflow.update
+        'configuration.custom_summary' : []
+    summary_path = @props.workflow.configuration.custom_summary
+    if e.target.checked
+    then summary_path.push('world_wide_telescope')
+    else
+      index = summary_path.indexOf('world_wide_telescope')
+      summary_path.splice(index, 1)
     @props.workflow.update
-      'configuration.customizations': toggle
+      'configuration.custom_summary' : summary_path
+
+  telescopeValue: ->
+    if @props.workflow.configuration.custom_summary
+      'world_wide_telescope' in @props.workflow.configuration.custom_summary
 
   handleSubjectSetToggle: (subjectSet, e) ->
     shouldAdd = e.target.checked
