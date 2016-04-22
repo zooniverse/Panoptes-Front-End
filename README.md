@@ -84,6 +84,10 @@ The format of an annotation's value depends on the task used to generate it.
 
 - **text:** A string.
 
+- **combo:** A sub-array of annotations.
+
+- **dropdown:** An array of objects where the string `value` refers to the answer to the corresponding question and the boolean `option` indicates that the answer was in the list of options.
+
 ### Drawing tool marks
 
 All coordinates are relative to the top-left of the image.
@@ -109,3 +113,5 @@ Drawing annotation value are as follows:
 - **ellipse:** The `x` and `y` coordinate of the center of the ellipse, its radii `rx` and `ry`, and the `angle` of `rx` relative to the x axis in degrees (counterclockwise from 3:00).
 
 - **bezier:** The same as polygon, but every odd-indexed point is the coordinate of the control point of a quadratic bezier curve.
+
+- **column:** The left-most `x` pixel and the `width` of the column selection.
