@@ -9,8 +9,6 @@ apiClient = require 'panoptes-client/lib/api-client'
 completedThisSession = {}
 window?.minicoursesCompletedThisSession = completedThisSession
 
-MINI_COURSE_LAST_SLIDE_SEEN = 0
-
 module.exports = React.createClass
   displayName: 'MiniCourse'
 
@@ -114,16 +112,14 @@ module.exports = React.createClass
         # projectPreferences.save()
         if projectPreferences.preferences.minicourses?
           console.log('projectPreferences')
-          if projectPreferences.preferences.minicourses.opt_out["id_#{@props.minicourse.id}"] # user is restarting via mini-course button
+          # user is restarting via mini-course button
+          if projectPreferences.preferences.minicourses.opt_out["id_#{@props.minicourse.id}"] or projectPreferences.preferences.minicourses.slide_last_seen["id_#{@props.minicourse.id}"] >= @props.minicourse.steps.length 
             console.log('defaultPreferences', defaultPreferences)
             projectPreferences.update defaultPreferences
             projectPreferences.save()
               .then =>
                 slideToStart = 0
                 @setState {slideToStart: slideToStart, projectPreferences: projectPreferences}
-          else if projectPreferences.preferences.minicourses.slide_last_seen["id_#{@props.minicourse.id}"] >= @props.minicourse.steps.length
-            slideToStart = 0
-            @setState {slideToStart: slideToStart, projectPreferences: projectPreferences}
           else
             slideToStart = projectPreferences.preferences.minicourses.slide_last_seen["id_#{@props.minicourse.id}"]
             @setState {slideToStart: slideToStart, projectPreferences: projectPreferences}
