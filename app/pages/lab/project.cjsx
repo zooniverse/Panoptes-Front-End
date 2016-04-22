@@ -8,7 +8,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../../components/change-listener'
 Router = require 'react-router'
 ModalFormDialog = require 'modal-form/dialog'
-WorkflowCreateDialog = require './workflow-create-dialog'
+WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
@@ -102,7 +102,7 @@ EditProjectPage = React.createClass
                   <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
 
                 <li className="nav-list-item">
-                  <button type="button" onClick={@showWorkflowDialog} disabled={@props.project.live or @state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
+                  <button type="button" onClick={@showCreateWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
                     New workflow{' '}
                     <LoadingIndicator off={not @state.workflowCreationInProgress} />
                   </button>
@@ -113,7 +113,7 @@ EditProjectPage = React.createClass
 
           {if @state.workflowCreationInProgress
             <ModalFormDialog tag="div">
-              <WorkflowCreateDialog onSubmit={@props.workflowActions.createWorkflow} onCancel={@hideWorkflowDialog} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} />
+              <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} />
             </ModalFormDialog>}
 
           <li>
@@ -172,14 +172,14 @@ EditProjectPage = React.createClass
       </div>
     </div>
 
-  showWorkflowDialog: ->
+  showCreateWorkflow: ->
     @setState workflowCreationInProgress: true
 
-  hideWorkflowDialog: ->
+  hideCreateWorkflow: ->
     @setState workflowCreationInProgress: false
 
   handleWorkflowCreation: (workflow) ->
-    @hideWorkflowDialog()
+    @hideCreateWorkflow()
     newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
     @props.history.push newLocation
     @props.project.uncacheLink 'workflows'

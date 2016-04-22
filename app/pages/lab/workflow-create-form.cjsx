@@ -2,13 +2,13 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 counterpart = require 'counterpart'
 
-WorkflowCreateDialog = React.createClass
+WorkflowCreateForm = React.createClass
   getDefaultProps: ->
     onCancel: ->
     onSubmit: ->
     onSuccess: ->
     projectID: ''
-    workflow: null
+    workflowToClone: null
 
   getInitialState: ->
     busy: false
@@ -17,20 +17,26 @@ WorkflowCreateDialog = React.createClass
   handleSubmit: (e) ->
     e.preventDefault()
 
-    if not @refs.newDisplayName.value
-      return window.alert('Please provide a new workflow title')
-
     @setState
       busy: true
       error: null
 
+    workflowToClone = @props.workflowToClone
+
     newWorkflow =
       display_name: @refs.newDisplayName.value
       primary_language: counterpart.getLocale()
-      links:
-        project: @props.projectID
+      tasks: workflowToClone?.tasks ? {
+        init:
+          type: 'single'
+          question: 'Ask your first question here.'
+          answers: [{label: 'Yes'}]
+      }
+      first_task: workflowToClone?.first_task ? 'init'
+      configuration: workflowToClone?.configuration ? {}
+      retirement: workflowToClone?.retirement ? {}
 
-    awaitSubmission = @props.onSubmit(newWorkflow, @props.workflow)
+    awaitSubmission = @props.onSubmit(@props.projectID, newWorkflow)
 
     Promise.resolve(awaitSubmission)
       .then (result) =>
@@ -44,7 +50,7 @@ WorkflowCreateDialog = React.createClass
       <label>
         <span className="form-label">New Workflow Title</span>
         <br />
-        <input className="standard-input full" type="text" ref="newDisplayName" defaultValue="new worfklow title" autoFocus></input>
+        <input className="standard-input full" type="text" ref="newDisplayName" defaultValue="new worfklow title" autoFocus required />
       </label>
       <br />
       {if @state.error?
@@ -55,4 +61,4 @@ WorkflowCreateDialog = React.createClass
       </p>
     </form>
 
-module.exports = WorkflowCreateDialog
+module.exports = WorkflowCreateForm
