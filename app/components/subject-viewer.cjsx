@@ -6,6 +6,7 @@ getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 FrameViewer = require './frame-viewer'
 classnames = require 'classnames'
+FlagSubjectButton = require './flag-subject-button'
 
 NOOP = Function.prototype
 
@@ -113,6 +114,8 @@ module.exports = React.createClass
             </span>
         </span>}
         <span>
+          {if @props.workflow.configuration.enable_subject_flags
+            <FlagSubjectButton classification={@props.classification} />}
           {if @props.subject?.metadata?
             <button type="button" aria-label="Metadata" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
           {if @props.subject? and @props.user? and @props.project?
