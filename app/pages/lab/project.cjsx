@@ -5,11 +5,12 @@ LoadingIndicator = require '../../components/loading-indicator'
 TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 apiClient = require 'panoptes-client/lib/api-client'
-counterpart = require 'counterpart'
 ChangeListener = require '../../components/change-listener'
 Router = require 'react-router'
+ModalFormDialog = require 'modal-form/dialog'
+WorkflowCreateForm = require './workflow-create-form'
+workflowActions = require './actions/workflow'
 
-DEFAULT_WORKFLOW_NAME = 'Untitled workflow'
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
 
@@ -23,9 +24,9 @@ EditProjectPage = React.createClass
 
   getDefaultProps: ->
     project: id: '2'
+    workflowActions: workflowActions
 
   getInitialState: ->
-    workflowCreationError: null
     workflowCreationInProgress: false
     subjectSetCreationError: null
     subjectSetCreationInProgress: false
@@ -101,16 +102,19 @@ EditProjectPage = React.createClass
                   <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
 
                 <li className="nav-list-item">
-                  <button type="button" onClick={@createNewWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
+                  <button type="button" onClick={@showCreateWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
                     New workflow{' '}
                     <LoadingIndicator off={not @state.workflowCreationInProgress} />
-                  </button>{' '}
-                  {if @state.workflowCreationError?
-                    <div className="form-help error">{@state.workflowCreationError.message}</div>}
+                  </button>
                 </li>
               </ul>
             }</PromiseRenderer>
           </li>
+
+          {if @state.workflowCreationInProgress
+            <ModalFormDialog tag="div">
+              <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} />
+            </ModalFormDialog>}
 
           <li>
             <br />
@@ -168,37 +172,18 @@ EditProjectPage = React.createClass
       </div>
     </div>
 
-  createNewWorkflow: ->
-    @setState creatingWorkflow: true
+  showCreateWorkflow: ->
+    @setState workflowCreationInProgress: true
 
-    workflow = apiClient.type('workflows').create
-      display_name: DEFAULT_WORKFLOW_NAME
-      primary_language: counterpart.getLocale()
-      tasks:
-        init:
-          type: 'single'
-          question: 'Ask your first question here.'
-          answers: [
-            label: 'Yes'
-          ]
-      first_task: 'init'
-      links:
-        project: @props.project.id
+  hideCreateWorkflow: ->
+    @setState workflowCreationInProgress: false
 
-    @setState
-      workflowCreationError: null
-      workflowCreationInProgress: true
-
-    workflow.save()
-      .then =>
-        @history.pushState(null, "/lab/#{@props.project.id}/workflow/#{workflow.id}")
-      .catch (error) =>
-        @setState workflowCreationError: error
-      .then =>
-        @props.project.uncacheLink 'workflows'
-        @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
-        if @isMounted()
-          @setState workflowCreationInProgress: false
+  handleWorkflowCreation: (workflow) ->
+    @hideCreateWorkflow()
+    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
+    @props.history.push newLocation
+    @props.project.uncacheLink 'workflows'
+    @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
 
   createNewSubjectSet: ->
     subjectSet = apiClient.type('subject_sets').create
