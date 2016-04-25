@@ -28,6 +28,7 @@ workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
 
   configuration:
+    enable_subject_flags: true
     multi_image_mode: 'flipbook_and_separate'
 
   first_task: 'init'

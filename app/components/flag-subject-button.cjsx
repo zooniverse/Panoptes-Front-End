@@ -31,5 +31,5 @@ module?.exports = React.createClass
       type="button"
       title="#{if @state.flagged then 'Unflag' else 'Flag'} Subject as Inappropriate"
       onClick={@toggleFlag}>
-      <i className="fa fa-exclamation#{if @state.flagged then '-circle' else ''}" />
+      <i className="#{if @state.flagged then 'fa fa-flag' else 'fa fa-flag-o'}" />
     </button>

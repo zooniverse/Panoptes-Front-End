@@ -114,7 +114,7 @@ module.exports = React.createClass
             </span>
         </span>}
         <span>
-          {if not @props.workflow.enable_subject_flags
+          {if @props.workflow.configuration.enable_subject_flags
             <FlagSubjectButton project={@props.project} subject={@props.subject} user={@props.user} workflow={@props.workflow} classification={@props.classification} />}
           {if @props.subject?.metadata?
             <button type="button" aria-label="Metadata" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
