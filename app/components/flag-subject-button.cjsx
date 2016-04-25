@@ -11,12 +11,12 @@ module?.exports = React.createClass
     changes = {}
     if subject_flagged
       changes["metadata.subject_flagged"] = !subject_flagged
-      changes["metadata.subject_flagged_reason"] = null
     else
-      subject_flagged_reason = window.prompt 'What is your reason for flagging this subject?'
-      return if subject_flagged_reason is null
-      changes["metadata.subject_flagged_reason"] = subject_flagged_reason
-      changes["metadata.subject_flagged"] = !subject_flagged
+      subject_flagged = window.prompt 'What is your reason for flagging this subject?'
+      return if subject_flagged is null
+      changes["metadata.subject_flagged"] = subject_flagged
+
+    console.log 'SUBJECT FLAGGED = ', subject_flagged
 
     @props.classification.update changes
 
