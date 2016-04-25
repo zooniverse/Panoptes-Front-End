@@ -2,7 +2,7 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 DragReorderable = require 'drag-reorderable'
 {days, months} = require './data/time'
-{countries, USstates} = require './data/location'
+{countries, statesUSA} = require './data/location'
 
 DropdownDialog = React.createClass
 
@@ -40,6 +40,9 @@ DropdownDialog = React.createClass
     @setState optionsKeys: optionsKeys
 
   getOptionsKey: (select) ->
+    if select.condition? and not @state.optionsKeys[select.condition]
+      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
+
     if not select.condition? then '*' else @state.optionsKeys[select.condition]
 
   getOptionsByProp: (prop) ->
@@ -66,11 +69,8 @@ DropdownDialog = React.createClass
       return window.alert('Options must be unique within each dropdown')
 
     select = @state.editSelect
-
-    if select.condition? and not @state.optionsKeys[select.condition]
-      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
-
     optionsKey = @getOptionsKey(select)
+
     if select.options[optionsKey]?
       select.options[optionsKey].push {value: "#{Math.random().toString(16).split('.')[1]}", label: "#{optionLabel}"}
     else
@@ -98,6 +98,21 @@ DropdownDialog = React.createClass
       deletedValues = @state.deletedValues
       deletedValues.push value
       @setState deletedValues: deletedValues
+
+  handlePreset: ->
+    preset = @refs.preset.value
+
+    select = @state.editSelect
+    optionsKey = @getOptionsKey(select)
+
+    switch preset
+      when "days" then select.options["#{optionsKey}"] = days
+      when "months" then select.options["#{optionsKey}"] = months
+      when "countries" then select.options["#{optionsKey}"] = countries
+      when "statesUSA" then select.options["#{optionsKey}"] = statesUSA
+      else return
+
+    @refs.preset.value = ""
 
   save: (e) ->
     if not @state.editSelect.title
@@ -180,6 +195,22 @@ DropdownDialog = React.createClass
 
         <input ref="optionInput"></input>{' '}
         <button type="button" onClick={@onClickAddOption}><i className="fa fa-plus"/> Add Option</button>
+      </div>
+
+      <br />
+
+      <div>
+        <h2 className="form-label">Presets</h2>
+        <select ref="preset">
+          <option value="">none selected</option>
+          <option value="days">Days</option>
+          <option value="months">Months</option>
+          <option value="countries">Countries</option>
+          <option>Provinces - Canada</option>
+          <option value="statesUSA">States - United States</option>
+          <option>States - Mexico</option>
+        </select>
+        <button onClick={@handlePreset}>Apply</button>
       </div>
 
       <br />

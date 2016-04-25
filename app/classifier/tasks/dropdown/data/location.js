@@ -997,7 +997,7 @@ var location = {
       value: "716"
     }
   ],
-  USstates: [
+  statesUSA: [
     {
       label: "Alabama",
       value: "AL"
