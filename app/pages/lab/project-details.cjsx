@@ -195,6 +195,7 @@ module.exports = React.createClass
               options={DISCIPLINES}
               multi={true}
               onChange={@handleDisciplineTagChange} />
+              <small className="form-help">Select one or more discipline tags that best describe your project. These tags will be used to select the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project. </small>
               <br />
               </AutoSave>
               <AutoSave resource={@props.project}>
@@ -202,7 +203,7 @@ module.exports = React.createClass
               <br />
               <TagSearch name="tags" multi={true} value={@state.otherTagList} onChange={@handleOtherTagChange} />
             </AutoSave>
-            <small className="form-help">Enter a list of tags separated by commas to help users find your project.</small>
+            <small className="form-help">Enter a list of additional tags to describe your project separated by commas to help users find your project.</small>
           </div>
 
           <div>
