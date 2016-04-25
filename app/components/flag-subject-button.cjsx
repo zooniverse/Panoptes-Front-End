@@ -13,10 +13,18 @@ module?.exports = React.createClass
 
   toggleFlag: ->
     return if @props.classification.completed
+    subject_flagged = @props.classification.metadata.subject_flagged
 
     # save flag in metadata (Note: consider storing as classification.subject_flagged instead)
     changes = {}
-    changes["metadata.subject_flagged"] = !@props.classification.metadata.subject_flagged
+    if subject_flagged
+      changes["metadata.subject_flagged"] = !subject_flagged
+      changes["metadata.subject_flagged_reason"] = null
+    else
+      changes["metadata.subject_flagged_reason"] \
+        = window.prompt 'What is your reason for flagging this subject?'
+      changes["metadata.subject_flagged"] = !subject_flagged
+
     @props.classification.update changes
 
   render: ->
