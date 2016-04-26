@@ -175,7 +175,7 @@ module.exports = React.createClass
   handleProjectPreferencesOnUnmount: ->
     if @state.slideToStart is @props.minicourse.steps.length - 1
       now = new Date().toISOString()
-      completedThisSession[@props.minicourse.id] = now
+      minicoursesCompletedThisSession[@props.minicourse.id] = now
 
       @state.projectPreferences.update "preferences.minicourses.completed_at.id_#{@props.minicourse.id}": now
       @state.projectPreferences.save()
