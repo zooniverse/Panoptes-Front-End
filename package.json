@@ -42,18 +42,30 @@
     "test-shape-closeness": "0.0.1"
   },
   "devDependencies": {
-    "browserify": "~11.0.1",
+    "babel-cli": "~6.7.7",
+    "babel-loader": "~6.2.4",
+    "babel-plugin-react-transform": "~2.0.2",
+    "babel-plugin-transform-react-jsx": "~6.7.5",
+    "babel-preset-es2015": "~6.6.0",
+    "babel-preset-stage-0": "~6.5.0",
     "check-engines": "~1.2.0",
-    "coffee-reactify": "~4.0.0",
-    "csso": "~1.3.11",
+    "cjsx-loader": "~3.0.0",
+    "coffee-loader": "~0.7.2",
+    "coffee-script": "~1.10.0",
+    "css-loader": "~0.23.1",
     "ejs": "~2.3.3",
     "envify": "~3.4.0",
     "express": "~4.13.3",
+    "html-webpack-plugin": "~2.16.0",
     "nib": "~1.1.0",
     "publisssh": "~1.0.0",
+    "react-transform-hmr": "~1.0.4",
+    "style-loader": "~0.13.1",
     "stylus": "~0.52.0",
-    "uglify-js": "~2.4.24",
-    "watchify": "~3.3.1"
+    "stylus-loader": "~2.0.0",
+    "webpack": "~1.13.0",
+    "webpack-dev-middleware": "~1.6.1",
+    "webpack-hot-middleware": "~2.10.0"
   },
   "engines": {
     "node": "^4.2.3",
@@ -70,6 +82,7 @@
     "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
     "start": "check-engines && ./bin/serve.sh",
-    "test": "echo 'Integration tests have moved to the panoptes-client library.'"
+    "test": "echo 'Integration tests have moved to the panoptes-client library.'",
+    "webpack": "babel-node server.js"
   }
 }
