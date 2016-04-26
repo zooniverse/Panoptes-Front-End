@@ -103,7 +103,7 @@ ETA = React.createClass
     rate = value.reduce (a,b) -> a + b
     eta = Math.max(0, Math.ceil(days * (@props.totalCount - @props.currentCount) / rate))
     <div>
-      <span className="progress-stat-label">ETC*</span> {"#{eta} days"}
+      <span className="progress-stats-label">ETC*</span> {"#{eta} days"}
     </div>
 
 WorkflowProgress = React.createClass
@@ -120,7 +120,7 @@ WorkflowProgress = React.createClass
         
   render: ->
     if @props.workflow.retirement.criteria == 'classification_count'
-      retirement = <div><span className="progress-stat-label">Retirement limit:</span> {@props.workflow.retirement.options.count.toLocaleString()}</div>
+      retirement = <div><span className="progress-stats-label">Retirement limit:</span> {@props.workflow.retirement.options.count.toLocaleString()}</div>
     <div className="progress-element">
       <div className="flex-wrapper">
         <h3>{@props.workflow.display_name}</h3>
@@ -128,10 +128,10 @@ WorkflowProgress = React.createClass
           {retirement}
         </div>
         <div>
-          <span className="progress-stat-label">Images retired:</span> {@props.workflow.retired_set_member_subjects_count.toLocaleString()} / {@props.workflow.subjects_count.toLocaleString()}
+          <span className="progress-stats-label">Images retired:</span> {@props.workflow.retired_set_member_subjects_count.toLocaleString()} / {@props.workflow.subjects_count.toLocaleString()}
         </div>
         <div>
-          <span className="progress-stat-label">Classifications:</span> {@props.workflow.classifications_count.toLocaleString()} / {(@props.workflow.subjects_count * @props.workflow.retirement.options.count).toLocaleString()}
+          <span className="progress-stats-label">Classifications:</span> {@props.workflow.classifications_count.toLocaleString()} / {(@props.workflow.subjects_count * @props.workflow.retirement.options.count).toLocaleString()}
         </div>
         <PromiseRenderer promise={@statCount()}>{(statData) =>
           <ETA data={statData} currentCount={@props.workflow.classifications_count} totalCount={@props.workflow.subjects_count * @props.workflow.retirement.options.count} />
