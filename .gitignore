@@ -9,4 +9,7 @@
 /public/vendor.js
 /public/jsPlumb.min.js
 
+/dist
+npm-debug.log
+
 .DS_Store
