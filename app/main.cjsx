@@ -5,6 +5,7 @@ ReactDOM = {render} = require 'react-dom'
 createBrowserHistory = require 'history/lib/createBrowserHistory'
 routes = require './router'
 apiClient = require 'panoptes-client/lib/api-client'
+style = require '../css/main.styl'
 
 # IE, oh my god:
 location.origin ?= location.protocol + "//" + location.hostname + if location.port then ':' + location.port else ''
