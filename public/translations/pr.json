@@ -1,0 +1,13 @@
+{
+  "about": {
+    "title": "About Us, Yarr",
+    "nav": {
+      "about": "About",
+      "publications": "Publications",
+      "ourTeam": "Our Landlubbers",
+      "education": "Education",
+      "careers": "Careers",
+      "contact": "Contact Us"
+    }
+  }
+}

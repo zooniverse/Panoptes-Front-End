@@ -1,0 +1,13 @@
+{
+  "about": {
+    "title": "About Us",
+    "nav": {
+      "about": "About",
+      "publications": "Publications",
+      "ourTeam": "Our Team",
+      "education": "Education",
+      "careers": "Careers",
+      "contact": "Contact Us"
+    }
+  }
+}
