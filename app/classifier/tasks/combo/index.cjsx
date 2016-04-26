@@ -115,7 +115,7 @@ ComboTask = React.createClass
                 <strong>This task might not work as part of a combo at this time.</strong>
               </small>
             </div>}
-          <TaskComponent {...@props} task={taskDescription} annotation={annotation} onChange={@handleChange.bind this, i} />
+          <TaskComponent {...@props} autoFocus={i is 0} task={taskDescription} annotation={annotation} onChange={@handleChange.bind this, i} />
         </div>}
     </div>
 
