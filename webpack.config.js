@@ -3,12 +3,13 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   devtool: 'eval-source-map',
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, 'app/simple.js')
+    path.join(__dirname, 'app/main.cjsx')
   ],
   output: {
     path: path.join(__dirname, '/dist/'),
@@ -16,8 +17,12 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
+    new CopyWebpackPlugin([
+      { from: 'public/assets', to: 'public/assets' },
+      { from: 'public/assets', to: 'assets' }
+    ]),
     new HtmlWebpackPlugin({
-      template: 'views/webpack.html',
+      template: 'views/index.ejs',
       inject: 'body',
       filename: 'index.html'
     }),
@@ -35,6 +40,10 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
+      loader: 'babel'
+    }, {
+      test: /\.jsx?$/,
+      include: /markdownz/,
       loader: 'babel'
     }, {
       test: /\.cjsx$/,
