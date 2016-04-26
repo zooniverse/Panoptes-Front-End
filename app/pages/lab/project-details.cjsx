@@ -195,7 +195,7 @@ module.exports = React.createClass
               options={DISCIPLINES}
               multi={true}
               onChange={@handleDisciplineTagChange} />
-              <small className="form-help">Select one or more discipline tags that best describe your project. These tags will determine the subject categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project. </small>
+              <small className="form-help">Enter or select one or more discipline tags to identify which field(s) of research your project belongs to. These tags will determine the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project. </small>
               <br />
               </AutoSave>
               <AutoSave resource={@props.project}>
