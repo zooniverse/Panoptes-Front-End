@@ -61,7 +61,7 @@ module.exports = React.createClass
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <label className="answer">
-        <textarea autoFocus={if @props.autoFocus == true then true} className="standard-input full" rows="5" ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
+        <textarea autoFocus={@props.autoFocus} className="standard-input full" rows="5" ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
       </label>
     </GenericTask>
 
