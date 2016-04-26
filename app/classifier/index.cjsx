@@ -303,7 +303,7 @@ Classifier = React.createClass
         {if @props.owner? and @props.project?
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
-        <button type="button" className="continue major-button" onClick={@props.onClickNext}>Next</button>
+        <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
         {@renderExpertOptions()}
       </nav>
     </div>
