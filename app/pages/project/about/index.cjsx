@@ -33,10 +33,6 @@ module.exports = React.createClass
                 <Link to="#{projectPath}/about/research" activeClassName="active"className="about-tabs">
                   {pageTitles.science_case}
                 </Link>}
-              {if pageTitles.results
-                <Link to="#{projectPath}/about/results" activeClassName="active"className="about-tabs">
-                  {pageTitles.results}
-                </Link>}
               {if pageTitles.faq
                 <Link to="#{projectPath}/about/faq" activeClassName="active" className="about-tabs">
                   {pageTitles.faq}
@@ -46,8 +42,12 @@ module.exports = React.createClass
                   {pageTitles.education}
                 </Link>}
               {if pageTitles.team
-                <Link to="#{projectPath}/about/team" activeClassName="active" className="tabbed-content-tab">
+                <Link to="#{projectPath}/about/team" activeClassName="active" className="about-tabs">
                   {pageTitles.team}
+                </Link>}
+              {if pageTitles.results
+                <Link to="#{projectPath}/about/results" activeClassName="active"className="about-tabs">
+                  {pageTitles.results}
                 </Link>}
             </span>
           }</PromiseRenderer>

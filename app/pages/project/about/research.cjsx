@@ -34,22 +34,5 @@ module.exports = React.createClass
               'This project has no science case yet.'
           }</Markdown>
         }</PromiseRenderer>
-        <hr />
-        <div>
-          <Translate content="projectRoles.title" />
-          <PromiseRenderer promise={@props.project.get('project_roles')}>{(projectRoles) =>
-            <div>
-              {for projectRole in projectRoles then do (projectRole) =>
-                <PromiseRenderer key={projectRole.id} promise={projectRole.get('owner')}>{(user) =>
-                  <p>
-                    <img src={user.avatar} className="avatar" />{' '}
-                    {user.display_name}{' '}
-                    {for role in projectRole.roles
-                      <Translate key={role} content="projectRoles.#{role}" className="project-role #{role}" />}
-                  </p>
-                }</PromiseRenderer>}
-            </div>
-          }</PromiseRenderer>
-        </div>
       </div>
     </div>
