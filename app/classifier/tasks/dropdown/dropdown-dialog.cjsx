@@ -40,9 +40,6 @@ DropdownDialog = React.createClass
     @setState optionsKeys: optionsKeys
 
   getOptionsKey: (select) ->
-    if select.condition? and not @state.optionsKeys[select.condition]
-      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
-
     if not select.condition? then '*' else @state.optionsKeys[select.condition]
 
   getOptionsByProp: (prop) ->
@@ -69,6 +66,10 @@ DropdownDialog = React.createClass
       return window.alert('Options must be unique within each dropdown')
 
     select = @state.editSelect
+
+    if select.condition? and not @state.optionsKeys[select.condition]
+      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
+
     optionsKey = @getOptionsKey(select)
 
     if select.options[optionsKey]?
@@ -100,8 +101,8 @@ DropdownDialog = React.createClass
       @setState deletedValues: deletedValues
 
   handlePreset: ->
+    console.log 'handlePreset ran'
     preset = @refs.preset.value
-
     select = @state.editSelect
     optionsKey = @getOptionsKey(select)
 
@@ -112,6 +113,7 @@ DropdownDialog = React.createClass
       when "statesUSA" then select.options["#{optionsKey}"] = statesUSA
       else return
 
+    @setState editSelect: select
     @refs.preset.value = ""
 
   save: (e) ->
@@ -207,8 +209,8 @@ DropdownDialog = React.createClass
           <option value="months">Months</option>
           <option value="countries">Countries</option>
           <option>Provinces - Canada</option>
-          <option value="statesUSA">States - United States</option>
           <option>States - Mexico</option>
+          <option value="statesUSA">States - United States</option>
         </select>
         <button onClick={@handlePreset}>Apply</button>
       </div>
