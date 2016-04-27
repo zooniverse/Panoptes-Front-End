@@ -90,7 +90,7 @@ module.exports = React.createClass
           <i className="fa fa-envelope#{if @state.unread then ' unread' else '-o'}" />
         </Link>
 
-        <LanguageSelector />
+        <LanguageSelector user={@props.user} />
       </div>
     </div>
 
