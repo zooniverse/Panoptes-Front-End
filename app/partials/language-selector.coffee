@@ -9,7 +9,7 @@ module.exports = React.createClass
   displayName: 'LanguageSelector'
 
   render: ->
-    if isAdmin()
+    if @props.user?.admin
       return <TriggeredModalForm triggerProps={title: "Language Selection"} trigger={<span className="main-nav-item"><i style={verticalAlign: 'middle'} className="fa fa-globe" /></span>}>
         <div className="modal-nav-links">
           <a onClick={@englishMode} className="main-nav-item" target="_blank">English</a>
