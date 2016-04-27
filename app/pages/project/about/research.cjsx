@@ -2,8 +2,8 @@ counterpart = require 'counterpart'
 React = require 'react'
 PromiseRenderer = require '../../../components/promise-renderer'
 Translate = require 'react-translate-component'
-TitleMixin = require '../../../lib/title-mixin'
-{Markdown} = require 'markdownz'
+TitleMixin = require '../../lib/title-mixin'
+{Markdown} = (require 'markdownz').default
 
 counterpart.registerTranslations 'en',
   projectRoles:

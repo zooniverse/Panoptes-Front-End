@@ -1,6 +1,6 @@
 React = require 'react'
 GenericTask = require './generic'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 GenericTaskEditor = require './generic-editor'
 
 NOOP = Function.prototype

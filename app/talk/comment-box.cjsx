@@ -7,7 +7,7 @@ getSubjectLocation = require '../lib/get-subject-location'
 Loading = require '../components/loading-indicator'
 SingleSubmitButton = require '../components/single-submit-button'
 alert = require '../lib/alert'
-{Markdown, MarkdownEditor} = require 'markdownz'
+{Markdown, MarkdownEditor} = (require 'markdownz').default
 Suggester = require './suggester'
 
 module?.exports = React.createClass

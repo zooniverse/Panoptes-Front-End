@@ -1,6 +1,6 @@
 React = require 'react'
 icons = require '../../../classifier/tasks/drawing/icons'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 
 # Styling for ansers within a list
 # AnswerItem takes in `input`, `eps`, and `jp` as props

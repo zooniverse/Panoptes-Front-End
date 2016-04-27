@@ -1,5 +1,5 @@
 React = require 'react'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 GenericTask = require '../generic'
 TextTaskEditor = require './editor'
 levenshtein = require 'fast-levenshtein'
