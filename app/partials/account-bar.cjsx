@@ -8,6 +8,7 @@ Translate = require 'react-translate-component'
 Avatar = require '../partials/avatar'
 TriggeredModalForm = require 'modal-form/triggered'
 PassHistoryContext = require '../components/pass-history-context'
+LanguageSelector = require '../partials/language-selector'
 
 UP = 38
 DOWN = 40
@@ -88,6 +89,8 @@ module.exports = React.createClass
         <Link to="/inbox" className="message-link" aria-label="Inbox #{if @state.unread then 'with unread messages' else ''}">
           <i className="fa fa-envelope#{if @state.unread then ' unread' else '-o'}" />
         </Link>
+
+        <LanguageSelector />
       </div>
     </div>
 

@@ -3,6 +3,7 @@ React = require 'react'
 Translate = require 'react-translate-component'
 alert = require '../lib/alert'
 LoginDialog = require '../partials/login-dialog'
+LanguageSelector = require '../partials/language-selector'
 
 counterpart.registerTranslations 'en',
   loginBar:
@@ -20,6 +21,7 @@ module.exports = React.createClass
       <button type="button" className="secret-button" onClick={@showLoginDialog.bind this, 'register'}>
         <Translate content="loginBar.register" />
       </button>
+      <LanguageSelector />
     </div>
 
   showLoginDialog: (which) ->

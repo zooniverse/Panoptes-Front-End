@@ -1,11 +1,12 @@
 getFile = require './get-file'
 counterpart = require 'counterpart'
 
-module.exports = (language) ->
+module.exports = (language, user = null) ->
   getFile('/translations/' + language + '.json').then (data) =>
     console.log 'TEST DATA: ', data
     counterpart.registerTranslations language, JSON.parse(data.response)
-
     counterpart.setLocale language
-    @props.user.update languages: [language]
-    @props.user.save()
+
+    if user
+      user.update languages: [language]
+      user.save()
