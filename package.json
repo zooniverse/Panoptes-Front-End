@@ -84,8 +84,7 @@
     "stage-branch": "export DEPLOY_SUBDIR=\"panoptes-front-end/$(git symbolic-ref --short HEAD)\"; npm run stage;  echo \"Deployed to http://$(git symbolic-ref --short HEAD).pfe-preview.zooniverse.org/\";",
     "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
-    "start": "check-engines && ./bin/serve.sh",
-    "test": "echo 'Integration tests have moved to the panoptes-client library.'",
-    "webpack": "babel-node server.js"
+    "start": "babel-node server.js",
+    "test": "echo 'Integration tests have moved to the panoptes-client library.'"
   }
 }

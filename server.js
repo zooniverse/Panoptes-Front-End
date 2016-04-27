@@ -7,7 +7,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import config from './webpack.config.js';
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
-const port = isDeveloping ? 3000 : process.env.PORT;
+const port = isDeveloping ? 3735 : process.env.PORT;
 const app = express();
 
 const compiler = webpack(config);
@@ -31,9 +31,9 @@ app.get('*', function response(req, res) {
   res.end();
 });
 
-app.listen(port, '0.0.0.0', function onStart(err) {
+app.listen(port, 'localhost', function onStart(err) {
   if (err) {
     console.log(err);
   }
-  console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
+  console.info('==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
 });
