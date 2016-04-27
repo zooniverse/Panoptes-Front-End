@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 
 counterpart.registerTranslations 'en',
   bestPracticesGreatProjectsPage:
@@ -24,7 +24,7 @@ counterpart.registerTranslations 'en',
 
       __Create informative content and a solid name and tagline.__ The title of your project should be short and punchy; your tagline should try to "hook" volunteers. Use your static pages (Research, FAQs, etc.) to explain your project clearly and resolve the most common questions about it.
 
-      __Be prepared to test and make changes.__ However good your project’s "first draft" is, volunteer testing (including the formal Zooniverse "project review" stage) will reveal things to alter. You should first test your project with contacts, friends, or family who are trying it for the first time—and watch them as they do it! Study your feedback and raw data, and make adjustments. 
+      __Be prepared to test and make changes.__ However good your project’s "first draft" is, volunteer testing (including the formal Zooniverse "project review" stage) will reveal things to alter. You should first test your project with contacts, friends, or family who are trying it for the first time—and watch them as they do it! Study your feedback and raw data, and make adjustments.
 
       __Make your project visually clean and interesting.__ Choose imagery that fits your project’s aesthetic and that you have permission to use. Make sure that text is readable over your background. Also be sure to do a review to make sure that all of your text is displaying properly.
     '''

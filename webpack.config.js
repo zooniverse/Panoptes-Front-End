@@ -33,7 +33,7 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css', '.scss', '.sass'],
+    extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css'],
     modulesDirectories: ['.', 'node_modules']
   },
   module: {
@@ -42,6 +42,7 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'babel'
     }, {
+      // explicitly include markdownz to be transformed because it's es6
       test: /\.jsx?$/,
       include: /markdownz/,
       loader: 'babel'
@@ -64,6 +65,8 @@ module.exports = {
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
       loader: 'file-loader'
-    }]
+    }],
+    // suppress warning about the fact that sugar-client is precompiled
+    noParse: [/sugar-client/]
   }
 };

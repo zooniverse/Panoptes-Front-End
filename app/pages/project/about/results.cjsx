@@ -1,7 +1,7 @@
 React = require 'react'
-TitleMixin = require '../../../lib/title-mixin'
-{Markdown} = require 'markdownz'
-PromiseRenderer = require '../../../components/promise-renderer'
+TitleMixin = require '../../lib/title-mixin'
+{Markdown} = (require 'markdownz').default
+PromiseRenderer = require '../../components/promise-renderer'
 
 module.exports = React.createClass
   displayName: 'ProjectResultsPage'

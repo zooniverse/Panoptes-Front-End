@@ -7,7 +7,7 @@ Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
 {Link, History} = require 'react-router'
 merge = require 'lodash.merge'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 
 PAGE_SIZE = require('./config').discussionPageSize
 
