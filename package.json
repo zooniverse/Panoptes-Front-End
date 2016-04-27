@@ -63,6 +63,7 @@
     "nib": "~1.1.0",
     "publisssh": "~1.0.0",
     "react-transform-hmr": "~1.0.4",
+    "rimraf": "~2.5.2",
     "style-loader": "~0.13.1",
     "stylus": "~0.52.0",
     "stylus-loader": "~2.0.0",
@@ -76,15 +77,17 @@
   },
   "scripts": {
     "build": "check-engines && export NODE_ENV=${NODE_ENV:-production}; ./bin/build.sh",
+    "build": "rimraf dist && NODE_ENV=production webpack --config ./webpack.config.js --progress --profile --colors",
     "check-build-size": "npm run build && cat ./build/vendor.*.js ./build/main.*.js | gzip --best | wc -c",
     "postinstall": "./bin/postinstall.sh",
     "deploy": "npm run build && publisssh ./build zooniverse-static/www.zooniverse.org/$DEPLOY_SUBDIR",
     "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",
+    "dev": "babel-node server_dev.js",
     "stage": "export DEPLOY_SUBDIR=${DEPLOY_SUBDIR:-panoptes-front-end}; export NODE_ENV=staging; npm run build && publisssh ./build \"zooniverse-static/preview.zooniverse.org/$DEPLOY_SUBDIR\"",
     "stage-branch": "export DEPLOY_SUBDIR=\"panoptes-front-end/$(git symbolic-ref --short HEAD)\"; npm run stage;  echo \"Deployed to http://$(git symbolic-ref --short HEAD).pfe-preview.zooniverse.org/\";",
     "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
-    "start": "babel-node server.js",
+    "start": "NODE_ENV=production node server.js",
     "test": "echo 'Integration tests have moved to the panoptes-client library.'"
   }
 }
