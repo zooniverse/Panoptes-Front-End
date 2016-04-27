@@ -101,10 +101,14 @@ DropdownDialog = React.createClass
       @setState deletedValues: deletedValues
 
   handlePreset: ->
-    console.log 'handlePreset ran'
-    preset = @refs.preset.value
     select = @state.editSelect
+
+    if select.condition? and not @state.optionsKeys[select.condition]
+      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
+
     optionsKey = @getOptionsKey(select)
+
+    preset = @refs.preset.value
 
     switch preset
       when "days" then select.options["#{optionsKey}"] = days
