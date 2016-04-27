@@ -5,8 +5,8 @@ ReactDOM = {render} = require 'react-dom'
 createBrowserHistory = require 'history/lib/createBrowserHistory'
 routes = require './router'
 
-loadLanguage = require './lib/load-language'
-loadLanguage('en')
+languageEngine = require './lib/language-engine'
+languageEngine.load()
 
 # IE, oh my god:
 location.origin ?= location.protocol + "//" + location.hostname + if location.port then ':' + location.port else ''
