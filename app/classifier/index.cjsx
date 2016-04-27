@@ -276,7 +276,6 @@ Classifier = React.createClass
             <button type="button" onClick={=>
               {alert} = require 'modal-form/dialog'
               {Markdown} = (require 'markdownz').default
-              console.log {Markdown}
               alert <Markdown>{@props.workflow.tasks[@props.workflow.first_task].help}</Markdown>
             }>
               {props.children}
