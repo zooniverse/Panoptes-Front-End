@@ -97,6 +97,9 @@ module?.exports = React.createClass
     else
       @props.annotation.value = @props.task.selects.map -> {value: null, option: false}
 
+    if @props.autoFocus is true
+      @refs['select-0'].getInputNode().focus()
+
   handleOptionsKeys: (i, value) ->
     {id, condition} = @props.task.selects[i]
     optionsKeys = @state.optionsKeys
@@ -151,6 +154,7 @@ module?.exports = React.createClass
               noResultsText={if not options?.length then null}
               addLabelText="Press enter for {label}..."
               matchProp="label"
+              ref="select-#{i}"
             />
           </div>
         }
