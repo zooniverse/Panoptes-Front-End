@@ -32,23 +32,23 @@ module.exports = React.createClass
     else
       'All'
 
+  getPageClasses: ->
+    classes = 'secondary-page all-resources-page'
+    if @props.project?
+      classes += ' has-project-context'
+    classes
+
   render: ->
     {location} = @props
 
-    <div className="secondary-page all-resources-page">
-      {if @props.project?
-        <div className="hero-with-context">
+    <div className={@getPageClasses()}>
+      <section className={"hero #{@props.heroClass}"}>
+        <div className="hero-container">
           <Translate component="h1" user={@userForTitle()} content={"#{@props.translationObjectName}.title"} />
+          {if @props.heroNav?
+            @props.heroNav}
         </div>
-      else
-        <section className={"hero #{@props.heroClass}"}>
-          <div className="hero-container">
-            <Translate component="h1" user={@userForTitle()} content={"#{@props.translationObjectName}.title"} />
-            {if @props.heroNav?
-              @props.heroNav}
-          </div>
-        </section>}
-
+      </section>
       <section className="resources-container">
         <PromiseRenderer promise={@props.listPromise}>{(ownedResources) =>
           if ownedResources?.length > 0
