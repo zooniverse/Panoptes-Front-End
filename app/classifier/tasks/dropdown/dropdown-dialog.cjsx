@@ -2,7 +2,11 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 DragReorderable = require 'drag-reorderable'
 {days, months} = require './data/time'
-{countries, statesUSA} = require './data/location'
+Countries = require './data/countries' # value = ISO 3166-1 numeric code
+statesUSA = require './data/statesUSA' # value = two-letter postal abbreviation, does not duplicate with Canada
+provincesCanada = require './data/provincesCanada' # value = two-letter postal abbreviation, does not duplicate with USA
+statesMexico = require './data/statesMexico' # value = three-letter ISO 3166-2 abbreviation
+# IMPORTANT: before adding preset options, confirm values are not duplicated in existing presets
 
 DropdownDialog = React.createClass
 
@@ -107,14 +111,15 @@ DropdownDialog = React.createClass
       return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
 
     optionsKey = @getOptionsKey(select)
-
     preset = @refs.preset.value
 
     switch preset
       when "days" then select.options["#{optionsKey}"] = days
       when "months" then select.options["#{optionsKey}"] = months
-      when "countries" then select.options["#{optionsKey}"] = countries
+      when "Countries" then select.options["#{optionsKey}"] = Countries
       when "statesUSA" then select.options["#{optionsKey}"] = statesUSA
+      when "provincesCanada" then select.options["#{optionsKey}"] = provincesCanada
+      when "statesMexico" then select.options["#{optionsKey}"] = statesMexico
       else return
 
     @setState editSelect: select
@@ -211,10 +216,10 @@ DropdownDialog = React.createClass
           <option value="">none selected</option>
           <option value="days">Days</option>
           <option value="months">Months</option>
-          <option value="countries">Countries</option>
-          <option>Provinces - Canada</option>
-          <option>States - Mexico</option>
+          <option value="Countries">Countries</option>
           <option value="statesUSA">States - United States</option>
+          <option value="provincesCanada">Provinces - Canada</option>
+          <option value="statesMexico">States - Mexico</option>
         </select>
         <button onClick={@handlePreset}>Apply</button>
       </div>
