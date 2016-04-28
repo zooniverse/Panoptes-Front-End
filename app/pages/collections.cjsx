@@ -13,14 +13,41 @@ counterpart.registerTranslations 'en',
     button: 'View Collection'
     loadMessage: 'Loading Collections'
     notFoundMessage: 'No Collections Found'
-    myCollections: 'My Collections'
-    favorites: 'My Favorites'
-    all: 'All'
+    myCollections: 'My\u00a0Collections'
+    favorites: 'My\u00a0Favorites'
+    allProjectCollections: 'All\u00a0%(project)s\u00a0Collections'
+    allProjectUserCollections: 'All\u00a0%(user)s\'s\u00a0%(project)s\u00a0Collections'
+    allUserCollections: 'All\u00a0%(user)s\'s\u00a0Collections'
+    allCollections: 'All\u00a0Collections'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
 
-  render: ->
+  renderWithProjectContext: ->
+    <nav className="hero-nav">
+      <IndexLink to="#{@props.project.slug}/collections">
+        <Translate content="collectionsPage.allProjectCollections" project={@props.nonBreakableProjectName} />
+      </IndexLink>
+      <Link to="#{@props.project.slug}/collections/#{@props.collectionOwnerName}" activeClassName="active">
+        <Translate content="collectionsPage.allProjectUserCollections" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
+      </Link>
+      <Link to="#{@props.project.slug}/collections/#{@props.collectionOwnerName}/all">
+        <Translate content="collectionsPage.allUserCollections" user={@props.nonBreakableCollectionOwnerName} />
+      </Link>
+      <Link to="#{@props.project.slug}/collections/all">
+        <Translate content="collectionsPage.allCollections" />
+      </Link>
+      {if @props.user?
+        <Link to="#{@props.project.slug}/collections/#{@props.user.login}" activeClassName="active">
+          <Translate content="collectionsPage.myCollections" />
+        </Link>}
+      {if @props.user?
+        <Link to="#{@props.project.slug}/favorites/#{@props.user.login}" activeClassName="active">
+          <Translate content="collectionsPage.favorites" />
+        </Link>}
+    </nav>
+
+  renderWithoutProjectContext: ->
     <nav className="hero-nav">
       <IndexLink to="/collections" activeClassName="active">
         <Translate content="collectionsPage.all" />
@@ -35,6 +62,9 @@ CollectionsNav = React.createClass
           <Translate content="collectionsPage.favorites" />
         </Link>}
     </nav>
+
+  render: ->
+    if @props.project? then @renderWithProjectContext() else @renderWithoutProjectContext()
 
 List = React.createClass
   displayName: 'List'
@@ -52,9 +82,12 @@ List = React.createClass
     [owner, name] = collection.slug.split('/')
     "/collections/#{owner}/#{name}"
 
-  listCollections: ->
+  listCollections: (collectionOwner) ->
     query = {}
-    if @props.params?.owner?
+    if collectionOwner?
+      query.owner = collectionOwner
+      query.include = 'owner'
+    else if @props.params?.owner?
       query.owner = @props.params.owner
       query.include = 'owner'
 
@@ -70,12 +103,16 @@ List = React.createClass
       return @props.params.owner
 
   render: ->
+    if @props.project?
+      @nonBreakableProjectName = @props.project.display_name.replace /\ /g, "\u00a0"
+      @nonBreakableCollectionOwnerName = @getCollectionOwnerName().replace /\ /g, "\u00a0"
+      # TODO replace with owner display name
     <OwnedCardList
       {...@props}
       translationObjectName="collectionsPage"
-      listPromise={@listCollections()}
+      listPromise={@listCollections(@getCollectionOwnerName())}
       linkTo="collections"
-      heroNav={<CollectionsNav user={@props.user} />}
+      heroNav={<CollectionsNav user={@props.user} nonBreakableCollectionOwnerName={@nonBreakableCollectionOwnerName} nonBreakableProjectName={@nonBreakableProjectName} project={@props.project} owner={@props.owner} collectionOwnerName={@getCollectionOwnerName()} />}
       heroClass="collections-hero"
       ownerName={@getCollectionOwnerName()}
       skipOwner={!@props.params?.owner}
