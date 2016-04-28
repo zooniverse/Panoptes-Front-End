@@ -9,7 +9,7 @@ export OUT_JS="main.js"
 export VENDOR_JS="vendor.js"
 
 export SRC_CSS="css/main.styl"
-export OUT_CSS="main.css"
+export OUT_CSS="aaaaargh.css"
 
 export SRC_HTML="./views/index.ejs"
 export OUT_HTML="index.html"
