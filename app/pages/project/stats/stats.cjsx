@@ -1,16 +1,29 @@
 React = require 'react'
 PromiseRenderer = require '../../../components/promise-renderer'
-config = require 'panoptes-client/lib/config'
+statsClient = require 'panoptes-client/lib/stats-client'
 moment = require 'moment'
-{Model, makeHTTPRequest} = require 'json-api-client'
 {Progress, Graph} = require './charts'
 
 GraphSelect = React.createClass
   getInitialState: ->
     workflowsLoaded: false
+    statData: null
 
   getDefaultProps: ->
     by: 'hour'
+    
+  componentDidMount: ->
+    statsClient
+      .update
+        projectId: @props.projectId
+        workflowId: @props.workflowId
+      .statCount @props.by, @props.type
+      .then (data) ->
+        data.map (stat_object) ->
+          label: stat_object.key_as_string
+          value: stat_object.doc_count
+      .then (statData) =>
+        @setState {statData}
     
   componentWillReceiveProps: (nextProps) ->
     # beacause I can't think of a cleaner way to check for this
@@ -27,19 +40,7 @@ GraphSelect = React.createClass
 
   shouldComponentUpdate: (nextProps, nextState) ->
     return (@props.by isnt nextProps.by) or (@props.workflowId isnt nextProps.workflowId) or (@state isnt nextState)
-
-  statCount: (period, type) ->
-    query = if @props.workflowId then "workflow_id=#{@props.workflowId}" else "project_id=#{@props.projectId}"
-    stats_url = "#{config.statHost}/counts/#{type}/#{period}?#{query}"
-    makeHTTPRequest 'GET', stats_url
-      .then (response) =>
-        results = JSON.parse response.text
-        bucket_data = results["events_over_time"]["buckets"]
-        data = bucket_data.map (stat_object) =>
-          label: stat_object.key_as_string
-          value: stat_object.doc_count
-      .catch (response) ->
-        console?.error 'Failed to get the stats'
+        
 
   workflowSelect: ->
     if @props.workflows?
@@ -80,9 +81,7 @@ GraphSelect = React.createClass
       </select>
       {workflowSelect}
       <br />
-      <PromiseRenderer promise={@statCount(@props.by, @props.type)}>{(statData) =>
-        <Graph data={statData} by={@props.by} range={range} num={24} handleRangeChange={@handleRangeChange} />
-      }</PromiseRenderer>
+      {<Graph data={@state.statData} by={@props.by} range={range} num={24} handleRangeChange={@handleRangeChange} /> if @state.statData?}
     </div>
 
   handleGraphChange: (which, e) ->
@@ -107,16 +106,20 @@ ETA = React.createClass
     </div>
 
 WorkflowProgress = React.createClass
-  statCount: ->
-    stats_url = "#{config.statHost}/counts/classification/day?workflow_id=#{@props.workflow.id}"
-    makeHTTPRequest 'GET', stats_url
-      .then (response) =>
-        results = JSON.parse response.text
-        bucket_data = results["events_over_time"]["buckets"]
-        data = bucket_data.map (stat_object) =>
+  
+  getInitialState: ->
+    statData: null
+  
+  componentDidMount: ->
+    statsClient
+      .update
+        workflowId: @props.workflow?.id
+      .statCount 'day', 'classification'
+      .then (data) ->
+        data.map (stat_object) ->
           stat_object.doc_count
-      .catch (response) ->
-        console?.error 'Failed to get the stats'
+      .then (statData) =>
+        @setState {statData}
         
   render: ->
     if @props.workflow.retirement.criteria == 'classification_count'
@@ -133,9 +136,7 @@ WorkflowProgress = React.createClass
         <div>
           <span className="progress-stats-label">Classifications:</span> {@props.workflow.classifications_count.toLocaleString()} / {(@props.workflow.subjects_count * @props.workflow.retirement.options.count).toLocaleString()}
         </div>
-        <PromiseRenderer promise={@statCount()}>{(statData) =>
-          <ETA data={statData} currentCount={@props.workflow.classifications_count} totalCount={@props.workflow.subjects_count * @props.workflow.retirement.options.count} />
-        }</PromiseRenderer>
+        {<ETA data={@state.statData} currentCount={@props.workflow.classifications_count} totalCount={@props.workflow.subjects_count * @props.workflow.retirement.options.count} /> if @state.statData?}
         <Progress progress={@props.workflow.completeness} />
       </div>
     </div>
