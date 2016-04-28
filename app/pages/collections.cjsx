@@ -16,33 +16,49 @@ counterpart.registerTranslations 'en',
     myCollections: 'My\u00a0Collections'
     favorites: 'My\u00a0Favorites'
     allProjectCollections: 'All\u00a0%(project)s\u00a0Collections'
-    allProjectUserCollections: 'All\u00a0%(user)s\'s\u00a0%(project)s\u00a0Collections'
-    allUserCollections: 'All\u00a0%(user)s\'s\u00a0Collections'
+    myProjectCollections: 'My\u00a0%(project)s\u00a0Collections'
+    theirProjectCollections: '%(user)s\'s\u00a0%(project)s\u00a0Collections'
+    allMyCollections: 'All\u00a0My\u00a0Collections'
+    allTheirCollections: 'All\u00a0%(user)s\'s\u00a0Collections'
     allCollections: 'All\u00a0Collections'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
 
   renderWithProjectContext: ->
+    console.log @props.nonBreakableCollectionOwnerName
+    if @props.user? and @props.user.login == @props.collectionOwnerName
+      @lookingAtOwnCollections = true
+
     <nav className="hero-nav">
-      <IndexLink to="#{@props.project.slug}/collections">
+      {if @lookingAtOwnCollections
+        <Link to="/projects/#{@props.project.slug}/collections/#{@props.user.login}" activeClassName="active">
+          <Translate content="collectionsPage.myProjectCollections" user={@props.user.login} project={@props.nonBreakableProjectName} />
+        </Link>}
+      {if @lookingAtOwnCollections
+        <Link to="/projects/#{@props.project.slug}/collections/#{@props.collectionOwnerName}/all" activeClassName="active">
+          <Translate content="collectionsPage.allMyCollections" user={@props.nonBreakableCollectionOwnerName} />
+        </Link>}
+      {if !@lookingAtOwnCollections
+        <Link to="/projects/#{@props.project.slug}/collections/#{@props.collectionOwnerName}" activeClassName="active">
+          <Translate content="collectionsPage.theirProjectCollections" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
+        </Link>}
+      {if !@lookingAtOwnCollections
+        <Link to="/projects/#{@props.project.slug}/collections/#{@props.collectionOwnerName}/all" activeClassName="active">
+          <Translate content="collectionsPage.allTheirCollections" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
+        </Link>}
+      <IndexLink to="/projects/#{@props.project.slug}/collections" activeClassName="active">
         <Translate content="collectionsPage.allProjectCollections" project={@props.nonBreakableProjectName} />
       </IndexLink>
-      <Link to="#{@props.project.slug}/collections/#{@props.collectionOwnerName}" activeClassName="active">
-        <Translate content="collectionsPage.allProjectUserCollections" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
-      </Link>
-      <Link to="#{@props.project.slug}/collections/#{@props.collectionOwnerName}/all">
-        <Translate content="collectionsPage.allUserCollections" user={@props.nonBreakableCollectionOwnerName} />
-      </Link>
-      <Link to="#{@props.project.slug}/collections/all">
+      <Link to="/projects/#{@props.project.slug}/collections/all" activeClassName="active">
         <Translate content="collectionsPage.allCollections" />
       </Link>
-      {if @props.user?
-        <Link to="#{@props.project.slug}/collections/#{@props.user.login}" activeClassName="active">
+      {if @props.user? and !@lookingAtOwnCollections
+        <Link to="/projects/#{@props.project.slug}/collections/#{@props.user.login}" activeClassName="active">
           <Translate content="collectionsPage.myCollections" />
         </Link>}
       {if @props.user?
-        <Link to="#{@props.project.slug}/favorites/#{@props.user.login}" activeClassName="active">
+        <Link to="/projects/#{@props.project.slug}/favorites/#{@props.user.login}" activeClassName="active">
           <Translate content="collectionsPage.favorites" />
         </Link>}
     </nav>
@@ -52,7 +68,6 @@ CollectionsNav = React.createClass
       <IndexLink to="/collections" activeClassName="active">
         <Translate content="collectionsPage.all" />
       </IndexLink>
-
       {if @props.user?
         <Link to="/collections/#{@props.user.login}" activeClassName="active">
           <Translate content="collectionsPage.myCollections" />
