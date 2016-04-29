@@ -60,7 +60,7 @@
     "deploy": "npm run build && publisssh ./build zooniverse-static/www.zooniverse.org/$DEPLOY_SUBDIR",
     "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",
     "stage": "export DEPLOY_SUBDIR=${DEPLOY_SUBDIR:-panoptes-front-end}; export NODE_ENV=staging; npm run build && publisssh ./build \"zooniverse-static/preview.zooniverse.org/$DEPLOY_SUBDIR\"",
-    "stage-branch": "export DEPLOY_SUBDIR=\"panoptes-front-end/$(git symbolic-ref --short HEAD)\"; npm run stage",
+    "stage-branch": "export DEPLOY_SUBDIR=\"panoptes-front-end/$(git symbolic-ref --short HEAD)\"; npm run stage;  echo \"Deployed to http://$(git symbolic-ref --short HEAD).pfe-preview.zooniverse.org/\";",
     "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
     "start": "check-engines && ./bin/serve.sh",

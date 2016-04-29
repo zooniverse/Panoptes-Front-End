@@ -244,13 +244,14 @@ module.exports = React.createClass
       .then @loadAnotherSubject()
 
   saveClassification: ->
-    console?.info 'Completed classification', @state.classification
+    classification = @state.classification
+    console?.info 'Completed classification', classification
     savingClassification = if @state.demoMode
-      Promise.resolve @state.classification
+      Promise.resolve classification
     else if @props.simulateSaveFailure
       Promise.reject new Error 'Simulated failure of classification save'
     else
-      @state.classification.save()
+      classification.save()
 
     savingClassification
       .then (classification) =>
@@ -267,7 +268,7 @@ module.exports = React.createClass
         @saveAllQueuedClassifications()
       .catch (error) =>
         console?.warn 'Failed to save classification:', error
-        @queueClassification @state.classification
+        @queueClassification classification
 
       classificationsThisSession += 1
       @maybePromptToSignIn()

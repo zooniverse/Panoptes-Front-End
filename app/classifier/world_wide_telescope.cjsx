@@ -135,8 +135,8 @@ class Plate
     "http://imgproc.zooniverse.org/crop/#{@starChart.width}/#{@starChart.height}/#{@starChart.x}/#{@starChart.y}?u=#{url}"
 
   computeRotation: ->
-    if @starChart.xAxis == Axis.RA || @starChart.xAxis == Axis.GLAT
-    then 0
+    if @starChart.xAxis.unit == Axis.RA || @starChart.xAxis.unit == Axis.GLAT
+    then 180
     else 90
 
   computeName: ->
@@ -259,11 +259,11 @@ module.exports = React.createClass
         plates.push(new Plate(chart, subjImage, @props.user_name))
 
     <div>
-      <p>View Your Classification(s) in the WorldWide Telescope!</p>
       {plates.map (plate, idx) ->
         <div key={idx}>
+        <p>View Your Classification in the WorldWide Telescope!</p>
         <img className="chart-image" src={"#{plate.getCropUrl()}"}/>
-        <a href={plate.getWwtUrl()} className='telescope-button standard-button'>World Wide Telescope</a>
+        <a target="_blank" href={plate.getWwtUrl()} className='telescope-button standard-button'>World Wide Telescope</a>
         </div>
       }
     </div>
