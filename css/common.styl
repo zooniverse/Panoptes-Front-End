@@ -10,6 +10,21 @@ SUCCESS = #009E0C
 WARNING = #FFB300
 FAILURE = #FF5A43
 
+DISCIPLINE_COLOR_ARTS = #AFA48C
+DISCIPLINE_COLOR_ALL = #0072FF
+DISCIPLINE_COLOR_LANGUAGE = #9DDDF9
+DISCIPLINE_COLOR_ASTRONOMY = #512BAD
+DISCIPLINE_COLOR_NATURE = #46D178
+DISCIPLINE_COLOR_PHYSICS = #F27441
+DISCIPLINE_COLOR_CLIMATE = #A1BFBE
+DISCIPLINE_COLOR_LITERATURE = #EADF5C
+DISCIPLINE_COLOR_BIOLOGY = #18807F
+DISCIPLINE_COLOR_HUMANITARIAN = #C46FC6
+DISCIPLINE_COLOR_MEDICINE = #EF4343
+DISCIPLINE_COLOR_HISTORY = #F9DB46
+DISCIPLINE_COLOR_SOCIAL_SCIENCE = #7EA8CE
+
+
 background-stripes(color1, color2, size)
   background-image: linear-gradient(
     45deg,
@@ -28,6 +43,20 @@ background-stripes(color1, color2, size)
     background-position: 0 0
   to
     background-position: 1em 0
+
+/* Globally prevent Firefox from affecting buttons' dimensions. */
+@css {
+  button::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+
+  @-moz-document url-prefix() {
+    button:focus {
+      outline: 1px dotted;
+    }
+  }
+}
 
 $reset-button
   background: transparent

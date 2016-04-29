@@ -16,6 +16,7 @@ isAdmin = require '../lib/is-admin'
 Tutorial = require '../lib/tutorial'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
+WorldWideTelescope = require './world_wide_telescope'
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
@@ -151,8 +152,33 @@ Classifier = React.createClass
       opacity: 0.5
       pointerEvents: 'none'
 
+    # Run through the existing annotations to build up sets of persistent hooks in the order of the associated annotations. Skip duplicates.
+    persistentHooksBeforeTask = []
+    persistentHooksAfterTask = []
+    classification.annotations.forEach (annotation) =>
+      taskDescription = @props.workflow.tasks[annotation.task]
+      TaskComponent = tasks[taskDescription.type]
+      {PersistBeforeTask, PersistAfterTask} = TaskComponent
+      if PersistBeforeTask? and PersistBeforeTask not in persistentHooksBeforeTask
+        persistentHooksBeforeTask.push PersistBeforeTask
+      if PersistAfterTask? and PersistAfterTask not in persistentHooksAfterTask
+        persistentHooksAfterTask.push PersistAfterTask
+
+    # These props will be passed into the hooks. Append as necessary when creating hooks.
+    taskHookProps =
+      taskTypes: tasks
+      workflow: @props.workflow
+      classification: classification
+      onChange: -> classification.update()
+
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
+      {persistentHooksBeforeTask.map (HookComponent) =>
+        <HookComponent {...taskHookProps} />}
+
       <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+
+      {persistentHooksAfterTask.map (HookComponent) =>
+        <HookComponent {...taskHookProps} />}
 
       <hr />
 
@@ -214,6 +240,16 @@ Classifier = React.createClass
   renderSummary: (classification) ->
     <div>
       Thanks!
+
+      {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
+        <strong>
+          <WorldWideTelescope
+            annotations={@props.classification.annotations}
+            subject={@props.subject}
+            user_name={@props.user.display_name}
+          />
+        </strong>
+        }
 
       {if @props.project?.slug is PULSAR_HUNTERS_SLUG or location.href.indexOf('fake-pulsar-feedback') isnt -1
         subjectClass = @props.subject.metadata['#Class']?.toUpperCase()

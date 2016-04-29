@@ -14,11 +14,15 @@ EXPERIMENTAL_FEATURES = [
   'crop'
   'text'
   'combo'
+  'dropdown'
   'tutorial'
   'field guide'
   'mini-course'
   'hide classification summaries'
   'pan and zoom'
+  'worldwide telescope'
+  'hide previous marks'
+  'column'
 ]
 
 ProjectToggle = React.createClass

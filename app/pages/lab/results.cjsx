@@ -9,5 +9,5 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      <ProjectPageEditor project={@props.project} page="result" pageTitle="Result" />
+      <ProjectPageEditor project={@props.project} page="results" pageTitle="Results" />
     </div>

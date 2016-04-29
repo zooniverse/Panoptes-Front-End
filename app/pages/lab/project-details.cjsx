@@ -11,6 +11,9 @@ TagSearch = require '../../components/tag-search'
 {MarkdownEditor} = require 'markdownz'
 MarkdownHelp = require '../../partials/markdown-help'
 alert = require('../../lib/alert')
+{DISCIPLINES} = require '../../components/disciplines'
+Select = require 'react-select'
+CharLimit = require '../../components/char-limit'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -73,8 +76,21 @@ module.exports = React.createClass
     project: {}
 
   getInitialState: ->
+    {disciplineTagList, otherTagList} = @splitTags()
     avatarError: null
     backgroundError: null
+    disciplineTagList: disciplineTagList
+    otherTagList: otherTagList
+
+  splitTags: (kind) ->
+    disciplineTagList = []
+    otherTagList = []
+    for t in @props.project.tags
+      if DISCIPLINES.some((el) -> el.value == t)
+        disciplineTagList.push(t)
+      else
+        otherTagList.push(t)
+    {disciplineTagList, otherTagList}
 
   render: ->
     # Failures on media GETs are acceptable here,
@@ -137,7 +153,7 @@ module.exports = React.createClass
               <br />
               <input className="standard-input full" name="description" value={@props.project.description} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
-            <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.</small>
+            <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project. <CharLimit limit=300 string={@props.project.description} /></small>
           </p>
 
           <div>
@@ -146,7 +162,7 @@ module.exports = React.createClass
               <br />
               <MarkdownEditor className="full" name="introduction" rows="10" value={@props.project.introduction} project={@props.project} onChange={handleInputChange.bind @props.project} onHelp={-> alert <MarkdownHelp/>}/>
             </AutoSave>
-            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page.</small>
+            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. <CharLimit limit=1500 string={@props.project.introduction} /></small>
           </div>
 
           <p>
@@ -155,7 +171,7 @@ module.exports = React.createClass
               <br />
               <textarea className="standard-input full" name="workflow_description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
-            <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do.</small>
+            <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit=500 string={@props.project.workflow_description} /></small>
           </p>
 
           <p>
@@ -169,11 +185,26 @@ module.exports = React.createClass
 
           <div>
             <AutoSave resource={@props.project}>
-              <span className="form-label">Tags</span>
+            <span className="form-label">Discipline Tag</span>
+            <br />
+            <Select
+              ref="disciplineSelect"
+              name="disciplines"
+              placeholder="Add Discipline Tag"
+              className="discipline-tag"
+              value={@state.disciplineTagList}
+              options={DISCIPLINES}
+              multi={true}
+              onChange={@handleDisciplineTagChange} />
+              <small className="form-help">Enter or select one or more discipline tags to identify which field(s) of research your project belongs to. These tags will determine the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project. </small>
               <br />
-              <TagSearch name="tags" multi={true} value={@props.project.tags} onChange={@handleTagChange} />
+              </AutoSave>
+              <AutoSave resource={@props.project}>
+              <span className="form-label">Other Tags</span>
+              <br />
+              <TagSearch name="tags" multi={true} value={@state.otherTagList} onChange={@handleOtherTagChange} />
             </AutoSave>
-            <small className="form-help">Enter a list of tags separated by commas to help users find your project.</small>
+            <small className="form-help">Enter a list of additional tags to describe your project separated by commas to help users find your project.</small>
           </div>
 
           <div>
@@ -185,10 +216,22 @@ module.exports = React.createClass
       </div>
     </div>
 
+  handleDisciplineTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState disciplineTagList: newTags
+    allTags = newTags.concat @state.otherTagList
+    @handleTagChange(allTags)
+
+  handleOtherTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState otherTagList: newTags
+    allTags = @state.disciplineTagList.concat newTags
+    @handleTagChange(allTags)
+
   handleTagChange: (value) ->
     event =
       target:
-        value: if value is '' then [] else value.split(',')
+        value: value
         name: 'tags'
         dataset: {}
     handleInputChange.call @props.project, event

@@ -6,48 +6,49 @@
   margin: 0
   padding: 0
 
-  > li
+  &__item
+    border-top: 1px solid rgba(gray, 0.2)
     display: block
 
-    &:first-child:hover
-      margin-top: -2px
-
-    &:not(:first-child)
-      border-top: 1px solid rgba(gray, 0.2)
-
-    &:hover
-      border-top: 2px solid rgba(0,0,0,.2)
-      border-bottom: 2px solid rgba(0,0,0,.2)
-      margin-top: -1px
-      margin-bottom: -2px
+    &:first-child
+      border-top: 0
 
 .lab-index-project-row
-  display: flex
   align-items: center
+  display: flex
 
-.lab-index-project-row-avatar
-  background-position: 50%, 50%
-  background-size: cover
-  flex: 0 0 2.5em
-  height: 2.5em
+  &__link
+    color: inherit
+    text-decoration: none
 
-.lab-index-project-row-description
-  flex: 1 1 auto
-  padding: 0.5em 1em
+  &__group
+    align-items: inherit
+    display: flex
+    flex: 1 1 auto
 
-  &:first-child
-    padding-left: 0
+  &__avatar
+    background-position: 50%, 50%
+    background-size: cover
+    flex: 0 0 2.5em
+    height: 2.5em
 
-.lab-index-project-row-icon-button
-  border-width: 1px
-  flex: 0 0 auto
-  font-weight: bold
-  padding: 0.5em 0.7em
-  text-decoration: none
+  &__description
+    flex: 1 1 auto
+    padding: 0.5em 1em
 
-  &:hover
-    background: rgba(MAIN_HIGHLIGHT, 0.2)
+    &:first-child
+      padding-left: 0
 
-  &:active
-    background: MAIN_HIGHLIGHT
-    color: white
+  &__icon-button
+    color: MAIN_HIGHLIGHT
+    flex: 0 0 auto
+    font-weight: bold
+    padding: 0.5em 0.7em
+
+  &__action
+    &:hover
+      background: rgba(MAIN_HIGHLIGHT, 0.2)
+
+    &:active
+      background: MAIN_HIGHLIGHT
+      color: white

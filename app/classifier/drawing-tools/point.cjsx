@@ -1,7 +1,9 @@
 React = require 'react'
 DrawingToolRoot = require './root'
+deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
+isInBounds = require '../../lib/is-in-bounds'
 
 RADIUS = 10
 SELECTED_RADIUS = 20
@@ -21,6 +23,14 @@ module.exports = React.createClass
 
     initMove: ({x, y}) ->
       {x, y}
+
+    initValid: (mark, {containerRect, scale}) ->
+      markRect =
+        left: containerRect.left + (mark.x * scale.vertical)
+        top: containerRect.top + (mark.y * scale.horizontal)
+        width: 1
+        height: 1
+      isInBounds markRect, containerRect
 
     initRelease: ->
       _inProgress: false
@@ -48,7 +58,7 @@ module.exports = React.createClass
       <line x1="0" y1={crosshairSpace * selectedRadius} x2="0" y2={selectedRadius} strokeWidth={crosshairWidth} />
       <line x1={crosshairSpace * selectedRadius} y1="0" x2={selectedRadius} y2="0" strokeWidth={crosshairWidth} />
 
-      <Draggable onDrag={@handleDrag} disabled={@props.disabled}>
+      <Draggable onDrag={@handleDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <circle r={radius} />
       </Draggable>
 

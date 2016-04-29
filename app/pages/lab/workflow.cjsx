@@ -13,6 +13,8 @@ tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 GoldStandardImporter = require './gold-standard-importer'
+WorkflowCreateForm = require './workflow-create-form'
+workflowActions = require './actions/workflow'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -41,6 +43,7 @@ EditWorkflowPage = React.createClass
 
   getDefaultProps: ->
     workflow: null
+    workflowActions: workflowActions
 
   getInitialState: ->
     selectedTaskKey: @props.workflow.first_task
@@ -48,11 +51,25 @@ EditWorkflowPage = React.createClass
     forceReloader: 0
     deletionInProgress: false
     deletionError: null
+    workflowCreationInProgress: false
 
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
     @history.createHref("/projects/#{owner}/#{name}/classify", viewQuery)
+
+  showCreateWorkflow: ->
+    @setState workflowCreationInProgress: true
+
+  hideCreateWorkflow: ->
+    @setState workflowCreationInProgress: false
+
+  handleWorkflowCreation: (workflow) ->
+    @hideCreateWorkflow()
+    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
+    @props.history.push newLocation
+    @props.project.uncacheLink 'workflows'
+    @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
 
   canUseTask: (project, task)->
     task in project.experimental_tools
@@ -70,7 +87,15 @@ EditWorkflowPage = React.createClass
       pointerEvents: 'none'
 
     <div className="edit-workflow-page">
-      <h3>{@props.workflow.display_name} #{@props.workflow.id}</h3>
+      <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
+        <button onClick={@showCreateWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="Copy workflow">
+          <i className="fa fa-copy"/>
+        </button>
+      </h3>
+      {if @state.workflowCreationInProgress
+        <ModalFormDialog tag="div">
+          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} />
+        </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       {if @props.project.live
         <p className="form-help warning"><strong>You cannot edit a project’s workflows once it’s gone live.</strong></p>}
@@ -104,6 +129,7 @@ EditWorkflowPage = React.createClass
                         when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'crop' then <i className="fa fa-crop fa-fw"></i>
                         when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
+                        when 'dropdown' then <i className="fa fa-list fa-fw"></i>
                         when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
                       {' '}
                       {tasks[definition.type].getTaskText definition}
@@ -158,6 +184,14 @@ EditWorkflowPage = React.createClass
                         <small><strong>Crop</strong></small>
                       </button>
                     </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "dropdown")
+                      <AutoSave resource={@props.workflow}>
+                        <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'dropdown'} title="Dropdown tasks: the volunteer selects an option from a list. Conditional dropdowns can be created, and if a research team enables the feature, a volunteer can enter text if the answer they'd like to provide is not an option available.">
+                          <i className="fa fa-list fa-2x"></i>
+                          <br />
+                          <small><strong>Dropdown</strong></small>
+                        </button>
+                      </AutoSave>}{' '}
                   {if @canUseTask(@props.project, "combo")
                     <AutoSave resource={@props.workflow}>
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'combo'} title="Combo tasks: show a bunch of tasks at the same time.">
@@ -251,6 +285,24 @@ EditWorkflowPage = React.createClass
           </p>
 
           <hr />
+
+          {if 'worldwide telescope' in @props.project.experimental_tools
+            <div>
+              <div>
+                <AutoSave resource={@props.workflow}>
+                  <span className="form-label">Use World Wide Telescope API</span><br />
+                  <small className="form-help">Allow user to view subject in the WWT after classifying.</small>
+                  <br />
+                  <label htmlFor="world_wide_telescope_summary">
+                    <input type="checkbox" onChange={@handleSetWorldWideTelescope} checked={@telescopeValue()}/>
+                    WorldWide Telescope
+                  </label>
+                </AutoSave>
+              </div>
+
+              <hr />
+
+            </div>}
 
           <div style={pointerEvents: 'all'}>
             <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>Test this workflow</a>
@@ -358,6 +410,23 @@ EditWorkflowPage = React.createClass
   handleSetHideClassificationSummaries: (e) ->
     @props.workflow.update
       'configuration.hide_classification_summaries': e.target.checked
+
+  handleSetWorldWideTelescope: (e) ->
+    if !@props.workflow.configuration.custom_summary
+      @props.workflow.update
+        'configuration.custom_summary' : []
+    summary_path = @props.workflow.configuration.custom_summary
+    if e.target.checked
+    then summary_path.push('world_wide_telescope')
+    else
+      index = summary_path.indexOf('world_wide_telescope')
+      summary_path.splice(index, 1)
+    @props.workflow.update
+      'configuration.custom_summary' : summary_path
+
+  telescopeValue: ->
+    if @props.workflow.configuration.custom_summary
+      'world_wide_telescope' in @props.workflow.configuration.custom_summary
 
   handleSubjectSetToggle: (subjectSet, e) ->
     shouldAdd = e.target.checked

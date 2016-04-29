@@ -3,53 +3,51 @@ React = require 'react'
 TitleMixin = require '../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list'
+{Link, Router} = require 'react-router'
+Filmstrip = require '../components/filmstrip'
+{PROJECT_SORTS} = require '../lib/project-sorts'
+{ProjectFilteringInterface} = require '../components/project-card-list'
 
 counterpart.registerTranslations 'en',
   projectsPage:
     title: 'All Projects'
-    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s found'
+    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s projects found.'
     button: 'Get Started'
-    notFoundMessage: 'Sorry, no projects found'
+    notFoundMessage: 'Sorry, no projects found.'
 
-module.exports = React.createClass
+ProjectsPage = React.createClass
   displayName: 'ProjectsPage'
+  title: 'Projects'
 
   mixins: [TitleMixin]
 
-  title: 'Projects'
+  contextTypes:
+    location: React.PropTypes.object
+    history: React.PropTypes.object
 
-  listProjects: ->
-    query = {include: 'avatar'}
-    query.cards = true
+  emptyPromise:
+    then: ->
+    catch: ->
 
-    if !apiClient.params.admin
-      query.launch_approved = true
+  getDefaultProps: ->
+    location:
+      query:
+        discipline: ProjectFilteringInterface.defaultProps.discipline
+        page: ProjectFilteringInterface.defaultProps.page
+        sort: ProjectFilteringInterface.defaultProps.sort
 
-    apiClient.type('projects').get Object.assign {}, query, @props.location.query
-
-  imagePromise: (project) ->
-    src = if project.avatar_src
-      "//#{ project.avatar_src }"
-    else
-      './assets/simple-avatar.jpg'
-    Promise.resolve src
-
-  cardLink: (project) ->
-    link = if !!project.redirect
-      project.redirect
-    else
-      [owner, name] = project.slug.split('/')
-      "/projects/#{owner}/#{name}"
-
-    return link
+  updateQuery: (newParams) ->
+    query = Object.assign {}, @props.location.query, newParams
+    for key, value of query
+      if value is ''
+        delete query[key]
+    newLocation = Object.assign {}, @props.location, {query}
+    newLocation.search = ""
+    @props.history.replace newLocation
 
   render: ->
-    <OwnedCardList
-      {...@props}
-      translationObjectName="projectsPage"
-      listPromise={@listProjects()}
-      linkTo="projects"
-      cardLink={@cardLink}
-      heroClass="projects-hero"
-      imagePromise={@imagePromise}
-      skipOwner={true} />
+    {discipline, page, sort} = @props.location.query
+    listingProps = {discipline, page, sort}
+    <ProjectFilteringInterface {...listingProps} onChangeQuery={@updateQuery} />
+
+module.exports = ProjectsPage
