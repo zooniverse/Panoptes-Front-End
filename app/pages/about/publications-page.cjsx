@@ -152,11 +152,7 @@ publicationCategories =
       {citation: "Planet Hunters. VIII. Characterization of 41 Long-Period Exoplanet Candidates from Kepler Archival Data, Wang+ 2015."
       href: "http://arxiv.org/pdf/1512.02559v2.pdf"},
       {citation: "Planet Hunters. IX. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
-<<<<<<< HEAD
       href: "http://arxiv.org/pdf/1509.03622v1.pdf"},
-=======
-      href: "http://mnras.oxfordjournals.org/content/457/4/3988.full.pdf"},
->>>>>>> 7cf93b132ebdf7bd5b7faa1bd4691e4dcab6ebee
       {citation: "GALEX J194419.33+491257.0: An unusually active SU UMa-type dwarf nova with a very short orbital period in the Kepler data, Kato & Osaki 2014."
       href: "http://adsabs.harvard.edu/doi/10.1093/pasj/psu025"},
       {citation: "Planet Hunters. VI. An Independent Characterization of KOI-351 and Several Long Period Planet Candidates from the Kepler Archival Data, Schmitt+ 2014."
@@ -201,8 +197,8 @@ publicationCategories =
     },
     {slug: "zooniverse/space-warps"
     publications: [
-      {citation: "Space Warps - II. New gravitational lens candidates from the CFHTLS discovered through citizen science, Marshall+ 2016."
-      href: "http://mnras.oxfordjournals.org/content/455/2/1191.full.pdf"},
+      {citation: "Space Warps - II. New gravitational lens candidates from the CFHTLS discovered through citizen science, More+ 2016."
+      href: "https://ui.adsabs.harvard.edu/#abs/2016MNRAS.455.1191M/abstract"},
       {citation: "Space Warps - I. Crowdsourcing the discovery of gravitational lenses, Marshall+ 2016."
       href: "http://mnras.oxfordjournals.org/content/455/2/1171.full.pdf"},
       {citation: "The Red Radio Ring: a gravitationally lensed hyperluminous infrared radio galaxy at z=2.553 discovered through citizen science, Geach+ 2015."
@@ -227,7 +223,11 @@ publicationCategories =
       {citation: "The Moon Zoo citizen science project: Preliminary results for the Apollo 17 landing site, Bugiolacchi+ 2016."
       href: "http://arxiv.org/pdf/1602.01664v1.pdf"}]
     }
-  ],
+    {slug: "zooniverse/galaxy-zoo-mergers"
+    publications: [
+      {citation: "Galaxy Zoo: Mergers - Dynamical Models of Interacting Galaxies, Holincheck+ 2016.",
+      href: "https://ui.adsabs.harvard.edu/#abs/2016MNRAS.tmp..436H/abstract"}]
+  ]
   climate: [
     {slug: "zooniverse/cyclone-center"
     publications: [
