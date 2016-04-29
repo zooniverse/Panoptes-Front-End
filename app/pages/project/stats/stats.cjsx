@@ -13,11 +13,14 @@ GraphSelect = React.createClass
     by: 'hour'
     
   componentDidMount: ->
+    @getStats(@props.workflowId, @props.by)
+    
+  getStats: (workflowId, binBy) ->
     statsClient
       .update
         projectId: @props.projectId
-        workflowId: @props.workflowId
-      .statCount @props.by, @props.type
+        workflowId: workflowId
+      .statCount binBy, @props.type
       .then (data) ->
         data.map (stat_object) ->
           label: stat_object.key_as_string
@@ -26,10 +29,6 @@ GraphSelect = React.createClass
         @setState {statData}
     
   componentWillReceiveProps: (nextProps) ->
-    # beacause I can't think of a cleaner way to check for this
-    # placing (@props.workflows isnt nextProps.workflows) in shouldComponentUpdate does not work
-    # and the workflow dropdown list is never made
-    # there might be a nice way to use PromiseRenderer for this
     if (not @state.workflowsLoaded) and (nextProps.workflows?)
       areNulls = false
       for w in nextProps.workflows
@@ -37,11 +36,13 @@ GraphSelect = React.createClass
           areNulls = true
       if not areNulls
         @setState({workflowsLoaded: true})
+    #update the stats when dropdown options change
+    if (@props.workflowId isnt nextProps.workflowId) or (@props.by isnt nextProps.by)
+      @getStats(nextProps.workflowId, nextProps.by)
 
   shouldComponentUpdate: (nextProps, nextState) ->
     return (@props.by isnt nextProps.by) or (@props.workflowId isnt nextProps.workflowId) or (@state isnt nextState)
-        
-
+    
   workflowSelect: ->
     if @props.workflows?
       options = [<option value={"project_id=#{@props.projectId}"} key={"workflowSelectAll"}>All</option>]
