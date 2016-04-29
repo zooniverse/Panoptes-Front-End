@@ -158,7 +158,9 @@ EditProjectPage = React.createClass
 
       <div className="column">
         <ChangeListener target={@props.project} handler={=>
-          React.cloneElement(@props.children, @props)
+          propsWithoutChildren = Object.assign {}, @props
+          delete propsWithoutChildren.children
+          React.cloneElement(@props.children, propsWithoutChildren)
         } />
       </div>
     </div>

@@ -1,4 +1,4 @@
-Router = {IndexRoute, Route, Redirect} = require 'react-router'
+Router = {IndexRoute, IndexRedirect, Route, Redirect} = require 'react-router'
 React = require 'react'
 
 # <Redirect from="home" to="/" /> doesn't work.
@@ -114,7 +114,7 @@ module.exports =
     <Route path="lab/:projectID" component={require './pages/lab/project'}>
       <IndexRoute component={require './pages/lab/project-details'} />
       <Route path="about" component={require './pages/lab/about'}>
-        <IndexRoute component={require './pages/lab/about/research'} />
+        <IndexRedirect to='research' />
         <Route path="research" component={require './pages/lab/about/research'} />
         <Route path="results" component={require './pages/lab/about/results'} />
         <Route path="faq" component={require './pages/lab/about/faq'} />
