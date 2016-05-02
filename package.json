@@ -61,7 +61,7 @@
     "fs": "0.0.2",
     "html-webpack-plugin": "~2.16.0",
     "json-loader": "~0.5.4",
-    "publisssh": "~1.0.0",
+    "publisssh": "~1.1.0",
     "react-transform-hmr": "~1.0.4",
     "rimraf": "~2.5.2",
     "style-loader": "~0.13.1",
@@ -76,17 +76,22 @@
     "npm": "^2.14.7"
   },
   "scripts": {
-    "build": "rimraf dist && NODE_ENV=production webpack --config ./webpack.build.js --progress --profile --colors",
-    "deploy": "npm run build && publisssh ./dist zooniverse-static/www.zooniverse.org/$DEPLOY_SUBDIR",
-    "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",
+    "_build": "rimraf dist && webpack --config ./webpack.build.js --progress --profile --colors -p",
+    "_publish": "publisssh ./dist \"zooniverse-static/${BUCKET}/$DEPLOY_SUBDIR\" -r",
+
+    "build": "export NODE_ENV=staging; export DEPLOY_SUBDIR=\"\"; npm run _build",
+    "start": "NODE_ENV=staging; npm run build && node server.js",
     "dev": "babel-node server_dev.js",
-    "stage": "export DEPLOY_SUBDIR=${DEPLOY_SUBDIR:-panoptes-front-end}; export NODE_ENV=staging; npm run build && publisssh ./dist \"zooniverse-static/preview.zooniverse.org/$DEPLOY_SUBDIR\"",
-    "stage-branch": "export DEPLOY_SUBDIR=\"panoptes-front-end/$(git symbolic-ref --short HEAD)\"; npm run stage",
-    "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
+
+    "deploy": "export NODE_ENV=production; export BUCKET=www.zooniverse.org; npm run _build && npm run _publish",
+    "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",
+
+    "stage": "export DEPLOY_SUBDIR=${DEPLOY_SUBDIR:-panoptes-front-end}; export NODE_ENV=staging; export BUCKET=preview.zooniverse.org; npm run _build && npm run _publish",
+    "stage-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run stage",
 
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
+    "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
 
-    "start": "NODE_ENV=production node server.js",
     "test": "echo 'Integration tests have moved to the panoptes-client library.'"
   }
 }

@@ -6,7 +6,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var deploySubdir = '/' + (process.env.DEPLOY_SUBDIR || '');
+var deploySubdir = !!process.env.DEPLOY_SUBDIR ? '/'+process.env.DEPLOY_SUBDIR+'/': '';
+var cssAdjust = '../public'
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -15,7 +16,7 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, '/dist/'),
-    filename: '[name].js',
+    filename: '[name]-[hash].js',
     publicPath: deploySubdir
   },
   plugins: [
@@ -32,7 +33,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
-    new ExtractTextPlugin("style.css", {
+    new ExtractTextPlugin("[name]-[contenthash].css", {
+        devTool: 'source-map',
         allChunks: true
     })
   ],
@@ -62,10 +64,10 @@ module.exports = {
       loader: 'json'
     }, {
       test   : /\.css$/,
-      loaders: ['style', 'css']
+      loader: ExtractTextPlugin.extract('style-loader', 'css-loader?root='+cssAdjust)
     }, {
       test: /\.styl$/,
-      loader: ExtractTextPlugin.extract('style-loader','css-loader!stylus-loader')
+      loader: ExtractTextPlugin.extract('style-loader', 'css-loader?root='+cssAdjust+'!stylus-loader')
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
       loader: 'file-loader'
