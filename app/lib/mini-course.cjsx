@@ -6,8 +6,8 @@ MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
 
-completedThisSession = {}
-window?.minicoursesCompletedThisSession = completedThisSession
+minicoursesCompletedThisSession = {}
+window?.minicoursesCompletedThisSession = minicoursesCompletedThisSession
 
 module.exports = React.createClass
   displayName: 'MiniCourse'
@@ -99,18 +99,13 @@ module.exports = React.createClass
             window.prefs = projectPreferences
             projectPreferences?.preferences?.minicourses?.completed_at?["id_#{minicourse.id}"]?
       else
-        Promise.resolve completedThisSession[minicourse.id]?
+        Promise.resolve minicoursesCompletedThisSession[minicourse.id]?
 
     handleOptOut: (project, user, minicourseID) ->
       if user?
         user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
           projectPreferences.update "preferences.minicourses.opt_out.id_#{minicourseID}": true
           projectPreferences.save()
-
-  # propTypes:
-  #   steps: React.PropTypes.arrayOf React.PropTypes.shape
-  #     media: React.PropTypes.string
-  #     content: React.PropTypes.string
 
   getDefaultProps: ->
     media: {}
@@ -156,6 +151,8 @@ module.exports = React.createClass
     if @state.projectPreferences?
       @handleProjectPreferencesOnUnmount()
     else
+      now = new Date().toISOString()
+      minicoursesCompletedThisSession[@props.minicourse.id] = now
       sessionStorage.setItem('minicourse_slide_to_start', @state.slideToStart + 1)
   
   render: ->
@@ -177,8 +174,9 @@ module.exports = React.createClass
       now = new Date().toISOString()
       minicoursesCompletedThisSession[@props.minicourse.id] = now
 
-      @state.projectPreferences.update "preferences.minicourses.completed_at.id_#{@props.minicourse.id}": now
-      @state.projectPreferences.save()
+      if @props.user?
+        @state.projectPreferences.update "preferences.minicourses.completed_at.id_#{@props.minicourse.id}": now
+        @state.projectPreferences.save()
     else
       nextSlide = @state.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"] + 1
       
