@@ -234,9 +234,12 @@ EditWorkflowPage = React.createClass
 
           {if 'tutorial' in @props.project.experimental_tools or 'mini-course' in @props.project.experimental_tools
             <div ref="link-tutorials-section">
-              <span className="form-label">Associated tutorials or mini-courses</span><br />
-              <small className="form-help">Choose the tutorials or mini-courses you want to use for this workflow.</small>
-              {@renderTutorials()}
+              <span className="form-label">Associated tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools}</span><br />
+              <small className="form-help">Choose the tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools} you want to use for this workflow.</small>
+              <div>
+                {@renderTutorials() if 'tutorial' in @props.project.experimental_tools}
+                {@renderMiniCourses() if 'mini-course' in @props.project.experimental_tools}
+              </div>
             </div>}
 
           <hr />
@@ -404,19 +407,42 @@ EditWorkflowPage = React.createClass
       apiClient.type('tutorials').get workflow_id: @props.workflow.id, page_size: 100
     ]
     <PromiseRenderer promise={projectAndWorkflowTutorials}>{([projectTutorials, workflowTutorials]) =>
+      # Backwards compatibility with tutorials with null kind values
+      tutorials = projectTutorials.filter((value)-> value if value.kind is 'tutorial' or value.kind is null)
+      if tutorials.length > 0
+        <form className="workflow-link-tutorials-form">
+          <span className="form-label">Tutorials</span>
+          {for tutorial in tutorials
+            assignedTutorial = tutorial in workflowTutorials
+            toggleTutorial = @handleTutorialToggle.bind this, tutorial
+            <label key={tutorial.id}>
+              <input type="radio" checked={assignedTutorial} onChange={toggleTutorial} />
+              Tutorial #{tutorial.id}
+            </label>}
+        </form>
+      else
+        <span>This project has no tutorials.</span>
+    }</PromiseRenderer>
+
+  renderMiniCourses: ->
+    projectAndWorkflowTutorials = Promise.all [
+      apiClient.type('tutorials').get project_id: @props.project.id, page_size: 100, kind: 'mini-course'
+      apiClient.type('tutorials').get workflow_id: @props.workflow.id, page_size: 100, kind: 'mini-course'
+    ]
+    <PromiseRenderer promise={projectAndWorkflowTutorials}>{([projectTutorials, workflowTutorials]) =>
       if projectTutorials.length > 0
-        <form className="workflow-task-editor-link-tutorials-form">
+        <form className="workflow-link-tutorials-form">
+          <span className="form-label">Mini-Courses</span>
           {for tutorial in projectTutorials
             assignedTutorial = tutorial in workflowTutorials
             toggleTutorial = @handleTutorialToggle.bind this, tutorial
             <label key={tutorial.id}>
-              <input type="checkbox" checked={assignedTutorial} onChange={toggleTutorial} />
-              {tutorial.kind} #{tutorial.id}
-            </label>
-            }
+              <input type="radio" checked={assignedTutorial} onChange={toggleTutorial} />
+              Mini-Course #{tutorial.id}
+            </label>}
         </form>
       else
-        <span>This project has no tutorials.</span>
+        <span>This project has no mini-courses.</span>
     }</PromiseRenderer>
 
   addNewTask: (type) ->
