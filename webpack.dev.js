@@ -5,7 +5,6 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
-var deploySubdir = '/' + (process.env.DEPLOY_SUBDIR || '');
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -16,15 +15,12 @@ module.exports = {
   output: {
     path: path.join(__dirname, '/dist/'),
     filename: '[name].js',
-    publicPath: deploySubdir
   },
   plugins: [
     new CopyWebpackPlugin([
-      { from: 'public/assets', to: 'public/assets' },
-      { from: 'public/assets', to: 'assets' }
+      { from: 'public', to: '.' }
     ]),
     new HtmlWebpackPlugin({
-      baseUrl: deploySubdir,
       template: 'views/index.ejs',
       inject: 'body',
       filename: 'index.html'
