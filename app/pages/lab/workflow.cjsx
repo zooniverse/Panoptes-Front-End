@@ -355,7 +355,7 @@ EditWorkflowPage = React.createClass
               <br />
               <AutoSave resource={@props.workflow}>
                 <small>
-                  <button type="button" className="standard-button" onClick={@handleTaskDelete.bind this, @state.selectedTaskKey}>Delete this task</button>
+                  <button type="button" className="minor-button" onClick={@handleTaskDelete.bind this, @state.selectedTaskKey}>Delete this task</button>
                 </small>
               </AutoSave>
             </div>
