@@ -26,11 +26,35 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
-  userForTitle: ->
-    if @props.ownerName
-      "#{@props.ownerName}'s"
+  getMessageKeyToUseForTitle: ->
+    if @props.filter?
+      if "project_ids" of @props.filter
+        if "owner" of @props.filter
+          if @viewingOwnCollections
+            "#{@props.translationObjectName}.title.project.ownedBySelf"
+          else
+            "#{@props.translationObjectName}.title.project.ownedByOther"
+        else
+          "#{@props.translationObjectName}.title.project.allOwners"
+      else
+        if "owner" of @props.filter
+          if @viewingOwnCollections
+            "#{@props.translationObjectName}.title.allProjects.ownedBySelf"
+          else
+            "#{@props.translationObjectName}.title.allProjects.ownedByOther"
+        else
+          "#{@props.translationObjectName}.title.allProjects.allOwners"
     else
-      'All'
+      "#{@props.translationObjectName}.title.generic"
+
+  getOwnerForTitle: ->
+    console.log 'filter is ',@props.filter
+    if @props.filter? and "owner" of @props.filter
+      return @props.nonBreakableOwnerName
+
+  getProjectForTitle: ->
+    if @props.filter? and "project_ids" of @props.filter
+      return @props.nonBreakableProjectName
 
   getPageClasses: ->
     classes = 'secondary-page all-resources-page'
@@ -44,7 +68,7 @@ module.exports = React.createClass
     <div className={@getPageClasses()}>
       <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
-          <Translate component="h1" user={@userForTitle()} content={"#{@props.translationObjectName}.title"} />
+          <Translate component="h1" owner={@getOwnerForTitle()} project={@getProjectForTitle()} content={"#{@getMessageKeyToUseForTitle()}"} />
           {if @props.heroNav?
             @props.heroNav}
         </div>
