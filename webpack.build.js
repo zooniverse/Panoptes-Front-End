@@ -5,18 +5,19 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var SplitByPathPlugin = require('webpack-split-by-path');
 
 var deploySubdir = !!process.env.DEPLOY_SUBDIR ? '/'+process.env.DEPLOY_SUBDIR+'/': '';
 var cssAdjust = '../public'
 
 module.exports = {
-  devtool: 'eval-source-map',
   entry: [
     path.join(__dirname, 'app/main.cjsx')
   ],
   output: {
-    path: path.join(__dirname, '/dist/'),
-    filename: '[name].js',
+    path: path.join(__dirname, '/dist'),
+    filename: '[name]-[chunkhash].js',
+    chunkFilename: '[name]-[chunkhash].js',
     publicPath: deploySubdir
   },
   plugins: [
@@ -24,8 +25,9 @@ module.exports = {
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       mangle: true,
+      stats: true,
       compress: {
-        warnings: true
+        warnings: false
       }
     }),
     new CopyWebpackPlugin([
@@ -44,7 +46,13 @@ module.exports = {
     new ExtractTextPlugin("[name]-[contenthash].css", {
         devTool: 'source-map',
         allChunks: true
-    })
+    }),
+    new SplitByPathPlugin([
+      {
+        name: 'vendor',
+        path: path.join(__dirname, 'node_modules')
+      }
+    ])
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css'],
@@ -63,19 +71,19 @@ module.exports = {
     }, {
       test: /\.cjsx$/,
       exclude: /node_modules/,
-      loaders: ['coffee', 'cjsx']
+      loaders: ['babel','coffee', 'cjsx']
     }, {
       test: /\.coffee$/,
-      loader: 'coffee'
+      loaders: ['babel', 'coffee']
     }, {
       test: /\.json?$/,
       loader: 'json'
     }, {
       test   : /\.css$/,
-      loader: ExtractTextPlugin.extract('style-loader', 'css-loader?root='+cssAdjust)
+      loader: ExtractTextPlugin.extract('style-loader', 'css-loader?root=../public')
     }, {
       test: /\.styl$/,
-      loader: ExtractTextPlugin.extract('style-loader', 'css-loader?root='+cssAdjust+'!stylus-loader')
+      loader: ExtractTextPlugin.extract('style-loader', 'css-loader?root=../public!stylus-loader')
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
       loader: 'file-loader'

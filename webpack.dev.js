@@ -13,7 +13,7 @@ module.exports = {
     path.join(__dirname, 'app/main.cjsx')
   ],
   output: {
-    path: path.join(__dirname, '/dist/'),
+    path: path.join(__dirname, '/dist'),
     filename: '[name].js',
   },
   plugins: [
@@ -39,28 +39,28 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'babel'
+      loader: 'babel?cacheDirectory'
     }, {
       // explicitly include markdownz (and dependencies) to be transformed because it's es6
       test: /\.jsx?$/,
       include: /markdown/,
-      loader: 'babel'
+      loader: 'babel?cacheDirectory'
     }, {
       test: /\.cjsx$/,
       exclude: /node_modules/,
-      loaders: ['coffee', 'cjsx']
+      loaders: ['babel?cacheDirectory', 'coffee', 'cjsx']
     }, {
       test: /\.coffee$/,
-      loader: 'coffee'
+      loaders: ['babel?cacheDirectory', 'coffee']
     }, {
       test: /\.json?$/,
       loader: 'json'
     }, {
       test   : /\.css$/,
-      loaders: ['style', 'css']
+      loaders: ['style', 'css?root=../public']
     }, {
       test: /\.styl$/,
-      loaders: ['style','css','stylus']
+      loaders: ['style','css?root=../public','stylus']
     }, {
       test: /\.(jpg|png|gif|otf|eot|svg|ttf|woff\d?)$/,
       loader: 'file-loader'
