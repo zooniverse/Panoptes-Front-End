@@ -26,24 +26,20 @@ CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
 
   renderWithProjectContext: ->
-    console.log @props.nonBreakableCollectionOwnerName
-    if @props.user? and @props.user.login == @props.collectionOwnerName
-      @lookingAtOwnCollections = true
-
     <nav className="hero-nav">
-      {if @lookingAtOwnCollections
+      {if @props.viewingOwnCollections
         <Link to="/projects/#{@props.project.slug}/collections/#{@props.user.login}" activeClassName="active">
           <Translate content="collectionsPage.myProjectCollections" user={@props.user.login} project={@props.nonBreakableProjectName} />
         </Link>}
-      {if @lookingAtOwnCollections
+      {if @props.viewingOwnCollections
         <Link to="/projects/#{@props.project.slug}/collections/#{@props.collectionOwnerName}/all" activeClassName="active">
           <Translate content="collectionsPage.allMyCollections" user={@props.nonBreakableCollectionOwnerName} />
         </Link>}
-      {if !@lookingAtOwnCollections
+      {if !@props.viewingOwnCollections
         <Link to="/projects/#{@props.project.slug}/collections/#{@props.collectionOwnerName}" activeClassName="active">
           <Translate content="collectionsPage.theirProjectCollections" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
         </Link>}
-      {if !@lookingAtOwnCollections
+      {if !@props.viewingOwnCollections
         <Link to="/projects/#{@props.project.slug}/collections/#{@props.collectionOwnerName}/all" activeClassName="active">
           <Translate content="collectionsPage.allTheirCollections" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
         </Link>}
@@ -53,8 +49,8 @@ CollectionsNav = React.createClass
       <Link to="/projects/#{@props.project.slug}/collections/all" activeClassName="active">
         <Translate content="collectionsPage.allCollections" />
       </Link>
-      {if @props.user? and !@lookingAtOwnCollections
-        <Link to="/projects/#{@props.project.slug}/collections/#{@props.user.login}" activeClassName="active">
+      {if @props.user? and !@props.viewingOwnCollections
+        <Link to="/projects/#{@props.project.slug}/collections/#{@props.user.login}/all" activeClassName="active">
           <Translate content="collectionsPage.myCollections" />
         </Link>}
       {if @props.user?
@@ -81,6 +77,7 @@ CollectionsNav = React.createClass
   render: ->
     if @props.project? then @renderWithProjectContext() else @renderWithoutProjectContext()
 
+
 List = React.createClass
   displayName: 'List'
 
@@ -95,39 +92,61 @@ List = React.createClass
 
   cardLink: (collection) ->
     [owner, name] = collection.slug.split('/')
-    "/collections/#{owner}/#{name}"
+    if @props.project?
+      "/projects/#{@props.project.slug}/collections/#{owner}/#{name}"
+    else
+      "/collections/#{owner}/#{name}"
 
-  listCollections: (collectionOwner) ->
+  listCollections: (collectionOwner,project) ->
+    filters = @getFiltersFromPath()
     query = {}
-    if collectionOwner?
-      query.owner = collectionOwner
-      query.include = 'owner'
-    else if @props.params?.owner?
-      query.owner = @props.params.owner
-      query.include = 'owner'
+    for field, value of filters
+      query[field] = value
 
     query.favorite = @props.favorite
     Object.assign query, @props.location.query
 
     apiClient.type('collections').get query
 
+  # return the display name of the collection owner (just login name for now)
   getCollectionOwnerName: ->
     if @props.params?.collection_owner?
       return @props.params.collection_owner
     else
       return @props.params.owner
 
+  getFiltersFromPath: ->
+    # /projects/project_owner/project_name/collections/collection_owner/all -> All collection_owner's collections, viewed in context of project_name and collection_owner
+    # /projects/project_owner/project_name/collections/collection_owner     -> All collection_owner's collections for project_name, viewed in context of project_name and collection_owner
+    # /projects/project_owner/project_name/collections/all                  -> All collections, viewed in context of project_name
+    # /projects/project_owner/project_name/collections/                     -> All collections for project_name, viewed in context of project_name
+    # /collections/collection_owner                                         -> All collections by collection owner, no context
+    # /collections/                                                         -> All collections for all users
+    filters = {}
+    pathParts = @props.location.pathname.split('/')
+    [firstPart, ..., lastPart] = pathParts
+    if firstPart == "projects" and pathParts.length < 6 and lastPart != "all"
+      filters["project_ids"] = @props.project.id
+    if firstPart == "collections" and pathParts.length == 2 and pathParts[1] != ""
+      filters["owner"] = pathParts[1]
+    if pathParts.length>4 and pathParts[3] == "collections" and pathParts[4] != "" and pathParts[4] != "all"
+      filters["owner"] = pathParts[4]
+    return filters
+
+  checkIfViewingOwnCollections: ->
+    return @props.user? and @props.user.login == @getCollectionOwnerName()
+
   render: ->
     if @props.project?
       @nonBreakableProjectName = @props.project.display_name.replace /\ /g, "\u00a0"
       @nonBreakableCollectionOwnerName = @getCollectionOwnerName().replace /\ /g, "\u00a0"
-      # TODO replace with owner display name
+
     <OwnedCardList
       {...@props}
       translationObjectName="collectionsPage"
-      listPromise={@listCollections(@getCollectionOwnerName())}
+      listPromise={@listCollections(@getCollectionOwnerName(),@projectQueryParam)}
       linkTo="collections"
-      heroNav={<CollectionsNav user={@props.user} nonBreakableCollectionOwnerName={@nonBreakableCollectionOwnerName} nonBreakableProjectName={@nonBreakableProjectName} project={@props.project} owner={@props.owner} collectionOwnerName={@getCollectionOwnerName()} />}
+      heroNav={<CollectionsNav user={@props.user} filters={@getFiltersFromPath()} nonBreakableCollectionOwnerName={@nonBreakableCollectionOwnerName} nonBreakableProjectName={@nonBreakableProjectName} project={@props.project} owner={@props.owner} viewingOwnCollections={@checkIfViewingOwnCollections()} collectionOwnerName={@getCollectionOwnerName()} />}
       heroClass="collections-hero"
       ownerName={@getCollectionOwnerName()}
       skipOwner={!@props.params?.owner}
