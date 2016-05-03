@@ -16,10 +16,18 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, '/dist/'),
-    filename: '[name]-[hash].js',
+    filename: '[name].js',
     publicPath: deploySubdir
   },
   plugins: [
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: true,
+      compress: {
+        warnings: true
+      }
+    }),
     new CopyWebpackPlugin([
       { from: 'public', to: '.' }
     ]),
