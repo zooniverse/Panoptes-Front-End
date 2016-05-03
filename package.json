@@ -87,8 +87,9 @@
     "deploy": "export NODE_ENV=production; export BUCKET=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",
 
-    "stage": "export DEPLOY_SUBDIR=${DEPLOY_SUBDIR:-panoptes-front-end}; export NODE_ENV=staging; export BUCKET=preview.zooniverse.org; npm run _build && npm run _publish",
-    "stage-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run stage",
+    "_stage": "export NODE_ENV=staging; export BUCKET=preview.zooniverse.org; npm run _build && npm run _publish",
+    "stage": "export DEPLOY_SUBDIR=panoptes-front-end; npm run _stage",
+    "stage-branch": "export DEPLOY_SUBDIR=panoptes-front-end/$(git symbolic-ref --short HEAD); npm run _stage",
 
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
     "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
