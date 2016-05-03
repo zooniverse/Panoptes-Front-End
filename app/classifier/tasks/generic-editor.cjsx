@@ -48,6 +48,11 @@ module.exports = React.createClass
             <MarkdownEditor name="#{@props.taskPrefix}.help" onHelp={-> alert <MarkdownHelp/>} value={@props.task.help ? ""} rows="7" className="full" onChange={handleChange} />
           </AutoSave>
           <small className="form-help">Add text and images for a window that pops up when volunteers click “Need some help?” You can use markdown to format this text and add images. The help text can be as long as you need, but you should try to keep it simple and avoid jargon.</small>
+          {if @props.task.type is 'text'
+            <div>
+              <br />
+              <small className="form-help">For text tasks consider adding the help message "Use Ctrl-M to cycle through previous answers provided and Ctrl-K to clear previous answers."</small>
+            </div>}
         </div>}
 
       {if choicesKey?
@@ -58,12 +63,15 @@ module.exports = React.createClass
       {' '}
 
       {if @props.project and 'hide previous marks' in @props.project.experimental_tools
-        <label className="pill-button">
-          <AutoSave resource={@props.workflow}>
-            <input type="checkbox" checked={@props.task.enableHidePrevMarks} onChange={@toggleHidePrevMarksEnabled} />{' '}
-            Allow hiding marks
-          </AutoSave>
-        </label>}
+        <div>
+        <hr />
+          <label className="pill-button">
+            <AutoSave resource={@props.workflow}>
+              <input type="checkbox" checked={@props.task.enableHidePrevMarks} onChange={@toggleHidePrevMarksEnabled} />{' '}
+              Allow hiding marks
+            </AutoSave>
+          </label>
+        </div>}
 
       {if isAQuestion
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
@@ -122,7 +130,7 @@ module.exports = React.createClass
                             for toolKey of drawingTools
                               <option key={toolKey} value={toolKey}>{toolKey}</option>
                           else
-                            for toolKey of drawingTools 
+                            for toolKey of drawingTools
                               <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey is "column"}
                         </select>
                       </AutoSave>

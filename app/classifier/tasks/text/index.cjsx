@@ -81,7 +81,7 @@ module.exports = React.createClass
     </GenericTask>
 
   handleChange: ->
-    value = React.findDOMNode(@refs.textInput).value
+    value = @refs.textInput.value
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
 
@@ -100,7 +100,7 @@ module.exports = React.createClass
     if (e.keyCode is key.M) and (not e.target.value or (prevAnswers.indexOf e.target.value.trim()) isnt -1)
       @props.annotation.value = prevAnswers[@state.prevAnswerIndex]
       @setState prevAnswerIndex: (@state.prevAnswerIndex + 1) %% prevAnswers.length
-    # clears current answer from previous answers in local storage
+    # clears current answer from previous answers in local storage and textarea
     if e.keyCode is key.K
       answer = e.target.value.trim()
       unless (prevAnswers.indexOf answer) is -1
