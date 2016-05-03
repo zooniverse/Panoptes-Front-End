@@ -69,7 +69,8 @@
     "stylus-loader": "~2.0.0",
     "webpack": "~1.13.0",
     "webpack-dev-middleware": "~1.6.1",
-    "webpack-hot-middleware": "~2.10.0"
+    "webpack-hot-middleware": "~2.10.0",
+    "webpack-split-by-path": "0.0.8"
   },
   "engines": {
     "node": "^4.2.3",
@@ -80,8 +81,8 @@
     "_publish": "publisssh ./dist \"zooniverse-static/${BUCKET}/$DEPLOY_SUBDIR\" -r",
 
     "build": "export NODE_ENV=staging; export DEPLOY_SUBDIR=\"\"; npm run _build",
-    "start": "NODE_ENV=staging; npm run build && node server.js",
-    "dev": "babel-node server_dev.js",
+    "serve": "NODE_ENV=staging; node server.js",
+    "start": "babel-node server_dev.js",
 
     "deploy": "export NODE_ENV=production; export BUCKET=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",
