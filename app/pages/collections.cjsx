@@ -8,8 +8,16 @@ Translate = require 'react-translate-component'
 
 counterpart.registerTranslations 'en',
   collectionsPage:
-    title: '%(user)s Collections'
-    titleWithProjectContext: '%(project)s Collections'
+    title:
+      generic: 'All\u00a0Collections'
+      project:
+        ownedBySelf: 'My\u00a0%(project)s\u00a0Collections'
+        ownedByOther: '%(owner)s\'s\u00a0%(project)s\u00a0Collections'
+        allOwners: '%(project)s\u00a0Collections'
+      allProjects:
+        ownedBySelf: 'My\u00a0Collections'
+        ownedByOther: '%(owner)s\'s\u00a0Collections'
+        allOwners: 'All\u00a0Collections'
     countMessage: 'Showing %(count)s collections'
     button: 'View Collection'
     loadMessage: 'Loading Collections'
@@ -145,10 +153,13 @@ List = React.createClass
     <OwnedCardList
       {...@props}
       translationObjectName="collectionsPage"
-      listPromise={@listCollections(@getCollectionOwnerName()}
+      listPromise={@listCollections(@getCollectionOwnerName())}
       linkTo="collections"
+      filter={@getFiltersFromPath()}
       heroNav={<CollectionsNav user={@props.user} filters={@getFiltersFromPath()} nonBreakableCollectionOwnerName={@nonBreakableCollectionOwnerName} nonBreakableProjectName={@nonBreakableProjectName} project={@props.project} owner={@props.owner} viewingOwnCollections={@checkIfViewingOwnCollections()} collectionOwnerName={@getCollectionOwnerName()} />}
       heroClass="collections-hero"
+      nonBreakableOwnerName={@nonBreakableCollectionOwnerName}
+      nonBreakableProjectName={@nonBreakableProjectName}
       ownerName={@getCollectionOwnerName()}
       skipOwner={!@props.params?.owner}
       imagePromise={@imagePromise}
