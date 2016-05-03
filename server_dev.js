@@ -19,10 +19,15 @@ const middleware = webpackMiddleware(compiler, {
 
 app.use(middleware);
 app.use(webpackHotMiddleware(compiler));
-app.get('*', function response(req, res) {
-  res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
-  res.end();
-});
+
+var router = express.Router();
+router.use(express.static(path.join(__dirname, 'dist')));
+router.use(function(req,res,next){
+   res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
+   res.end();
+})
+
+app.use('/', router)
 
 app.listen(port, 'localhost', function onStart(err) {
   if (err) {

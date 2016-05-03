@@ -7,7 +7,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var SplitByPathPlugin = require('webpack-split-by-path');
 
-var deploySubdir = !!process.env.DEPLOY_SUBDIR ? '/'+process.env.DEPLOY_SUBDIR+'/': '';
+var deploySubdir = !!process.env.DEPLOY_SUBDIR ? '/'+process.env.DEPLOY_SUBDIR+'/': '/';
 var cssAdjust = '../public'
 
 module.exports = {
@@ -44,7 +44,6 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new ExtractTextPlugin("[name]-[contenthash].css", {
-        devTool: 'source-map',
         allChunks: true
     }),
     new SplitByPathPlugin([
