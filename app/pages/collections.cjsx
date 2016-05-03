@@ -9,6 +9,7 @@ Translate = require 'react-translate-component'
 counterpart.registerTranslations 'en',
   collectionsPage:
     title: '%(user)s Collections'
+    titleWithProjectContext: '%(project)s Collections'
     countMessage: 'Showing %(count)s collections'
     button: 'View Collection'
     loadMessage: 'Loading Collections'
@@ -144,7 +145,7 @@ List = React.createClass
     <OwnedCardList
       {...@props}
       translationObjectName="collectionsPage"
-      listPromise={@listCollections(@getCollectionOwnerName(),@projectQueryParam)}
+      listPromise={@listCollections(@getCollectionOwnerName()}
       linkTo="collections"
       heroNav={<CollectionsNav user={@props.user} filters={@getFiltersFromPath()} nonBreakableCollectionOwnerName={@nonBreakableCollectionOwnerName} nonBreakableProjectName={@nonBreakableProjectName} project={@props.project} owner={@props.owner} viewingOwnCollections={@checkIfViewingOwnCollections()} collectionOwnerName={@getCollectionOwnerName()} />}
       heroClass="collections-hero"
