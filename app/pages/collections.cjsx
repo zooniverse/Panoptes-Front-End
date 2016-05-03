@@ -24,6 +24,7 @@ counterpart.registerTranslations 'en',
     notFoundMessage: 'No Collections Found'
     myCollections: 'My\u00a0Collections'
     favorites: 'My\u00a0Favorites'
+    viewOnZooniverseOrg: 'View on zooniverse.org'
     collections:
       project:
         allOwners: 'All\u00a0%(project)s\u00a0Collections'
@@ -68,6 +69,10 @@ CollectionsNav = React.createClass
       {if @props.user?
         <Link to="/projects/#{@props.project.slug}/favorites/#{@props.user.login}" activeClassName="active">
           <Translate content="collectionsPage.favorites" />
+        </Link>}
+      {if @props.removeProjectContextLink?
+        <Link to="#{@props.removeProjectContextLink}">
+          <Translate content="collectionsPage.viewOnZooniverseOrg" />
         </Link>}
     </nav>
 
@@ -148,6 +153,15 @@ List = React.createClass
   checkIfViewingOwnCollections: ->
     return @props.user? and @props.user.login == @getCollectionOwnerName()
 
+  getRemoveProjectContextLink: ->
+    pathParts = @props.location.pathname.split('/')
+    [first, ..., last] = pathParts
+    if first == "projects"
+      if last == "all"
+        return pathParts[3...-1].join("/")
+      else
+        return pathParts[3...].join("/")
+
   render: ->
     if @props.project?
       @nonBreakableProjectName = @props.project.display_name.replace /\ /g, "\u00a0"
@@ -159,7 +173,7 @@ List = React.createClass
       listPromise={@listCollections(@getCollectionOwnerName())}
       linkTo="collections"
       filter={@getFiltersFromPath()}
-      heroNav={<CollectionsNav user={@props.user} filters={@getFiltersFromPath()} nonBreakableCollectionOwnerName={@nonBreakableCollectionOwnerName} nonBreakableProjectName={@nonBreakableProjectName} project={@props.project} owner={@props.owner} viewingOwnCollections={@checkIfViewingOwnCollections()} collectionOwnerName={@getCollectionOwnerName()} />}
+      heroNav={<CollectionsNav user={@props.user} filters={@getFiltersFromPath()} removeProjectContextLink={@getRemoveProjectContextLink()} nonBreakableCollectionOwnerName={@nonBreakableCollectionOwnerName} nonBreakableProjectName={@nonBreakableProjectName} project={@props.project} owner={@props.owner} viewingOwnCollections={@checkIfViewingOwnCollections()} collectionOwnerName={@getCollectionOwnerName()} />}
       heroClass="collections-hero"
       nonBreakableOwnerName={@nonBreakableCollectionOwnerName}
       nonBreakableProjectName={@nonBreakableProjectName}

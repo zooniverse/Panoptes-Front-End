@@ -48,7 +48,6 @@ module.exports = React.createClass
       "#{@props.translationObjectName}.title.generic"
 
   getOwnerForTitle: ->
-    console.log 'filter is ',@props.filter
     if @props.filter? and "owner" of @props.filter
       return @props.nonBreakableOwnerName
 
