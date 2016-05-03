@@ -3,7 +3,17 @@ TitleMixin = require '../../../lib/title-mixin'
 {Markdown} = require 'markdownz'
 ChangeListener = require '../../../components/change-listener'
 PromiseRenderer = require '../../../components/promise-renderer'
+Translate = require 'react-translate-component'
+counterpart = require 'counterpart'
 {Link} = require 'react-router'
+
+counterpart.registerTranslations 'en',
+    nav:
+        research: 'Research'
+        results: 'Results'
+        faq: 'FAQ'
+        education: 'Education'
+        team: 'The Team'
 
 module.exports = React.createClass
   displayName: 'About'
@@ -31,23 +41,23 @@ module.exports = React.createClass
             <span>
               {if pageTitles.science_case
                 <Link to="#{projectPath}/about/research" activeClassName="active"className="about-tabs">
-                  {pageTitles.science_case}
+                  <Translate content= "nav.research" />
                 </Link>}
-              {if pageTitles.faq
-                <Link to="#{projectPath}/about/faq" activeClassName="active" className="about-tabs">
-                  {pageTitles.faq}
-                </Link>}
-              {if pageTitles.education
-                <Link to="#{projectPath}/about/education" activeClassName="active" className="about-tabs">
-                  {pageTitles.education}
-                </Link>}
-              {if pageTitles.team
+              {unless @props.project.redirect
                 <Link to="#{projectPath}/about/team" activeClassName="active" className="about-tabs">
-                  {pageTitles.team}
+                  <Translate content= "nav.team" />
                 </Link>}
               {if pageTitles.results
                 <Link to="#{projectPath}/about/results" activeClassName="active"className="about-tabs">
-                  {pageTitles.results}
+                  <Translate content= "nav.results" />
+                </Link>}
+              {if pageTitles.education
+                <Link to="#{projectPath}/about/education" activeClassName="active" className="about-tabs">
+                  <Translate content= "nav.education" />
+                </Link>}
+              {if pageTitles.faq
+                <Link to="#{projectPath}/about/faq" activeClassName="active" className="about-tabs">
+                  <Translate content= "nav.faq" />
                 </Link>}
             </span>
           }</PromiseRenderer>
