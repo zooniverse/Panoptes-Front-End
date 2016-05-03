@@ -24,12 +24,15 @@ counterpart.registerTranslations 'en',
     notFoundMessage: 'No Collections Found'
     myCollections: 'My\u00a0Collections'
     favorites: 'My\u00a0Favorites'
-    allProjectCollections: 'All\u00a0%(project)s\u00a0Collections'
-    myProjectCollections: 'My\u00a0%(project)s\u00a0Collections'
-    theirProjectCollections: '%(user)s\'s\u00a0%(project)s\u00a0Collections'
-    allMyCollections: 'All\u00a0My\u00a0Collections'
-    allTheirCollections: 'All\u00a0%(user)s\'s\u00a0Collections'
-    allCollections: 'All\u00a0Collections'
+    collections:
+      project:
+        allOwners: 'All\u00a0%(project)s\u00a0Collections'
+        ownedBySelf: 'My\u00a0%(project)s\u00a0Collections'
+        ownedByOther: '%(user)s\'s\u00a0%(project)s\u00a0Collections'
+      allProjects:
+        allOwners: 'All\u00a0Collections'
+        ownedBySelf: 'All\u00a0My\u00a0Collections'
+        ownedByOther: 'All\u00a0%(user)s\'s\u00a0Collections'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
@@ -38,29 +41,29 @@ CollectionsNav = React.createClass
     <nav className="hero-nav">
       {if @props.viewingOwnCollections
         <Link to="/projects/#{@props.project.slug}/collections/#{@props.user.login}" activeClassName="active">
-          <Translate content="collectionsPage.myProjectCollections" user={@props.user.login} project={@props.nonBreakableProjectName} />
+          <Translate content="collectionsPage.collections.project.ownedBySelf" user={@props.user.login} project={@props.nonBreakableProjectName} />
         </Link>}
       {if @props.viewingOwnCollections
         <Link to="/projects/#{@props.project.slug}/collections/#{@props.collectionOwnerName}/all" activeClassName="active">
-          <Translate content="collectionsPage.allMyCollections" user={@props.nonBreakableCollectionOwnerName} />
+          <Translate content="collectionsPage.collections.allProjects.ownedBySelf" user={@props.nonBreakableCollectionOwnerName} />
         </Link>}
       {if !@props.viewingOwnCollections
         <Link to="/projects/#{@props.project.slug}/collections/#{@props.collectionOwnerName}" activeClassName="active">
-          <Translate content="collectionsPage.theirProjectCollections" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
+          <Translate content="collectionsPage.collections.project.ownedByOther" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
         </Link>}
       {if !@props.viewingOwnCollections
         <Link to="/projects/#{@props.project.slug}/collections/#{@props.collectionOwnerName}/all" activeClassName="active">
-          <Translate content="collectionsPage.allTheirCollections" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
+          <Translate content="collectionsPage.collections.allProjects.ownedByOther" user={@props.nonBreakableCollectionOwnerName} project={@props.nonBreakableProjectName} />
         </Link>}
       <IndexLink to="/projects/#{@props.project.slug}/collections" activeClassName="active">
-        <Translate content="collectionsPage.allProjectCollections" project={@props.nonBreakableProjectName} />
+        <Translate content="collectionsPage.collections.project.allOwners" project={@props.nonBreakableProjectName} />
       </IndexLink>
       <Link to="/projects/#{@props.project.slug}/collections/all" activeClassName="active">
-        <Translate content="collectionsPage.allCollections" />
+        <Translate content="collectionsPage.collections.allProjects.allOwners" />
       </Link>
       {if @props.user? and !@props.viewingOwnCollections
         <Link to="/projects/#{@props.project.slug}/collections/#{@props.user.login}/all" activeClassName="active">
-          <Translate content="collectionsPage.myCollections" />
+          <Translate content="collectionsPage.collections.project.ownedBySelf" />
         </Link>}
       {if @props.user?
         <Link to="/projects/#{@props.project.slug}/favorites/#{@props.user.login}" activeClassName="active">
