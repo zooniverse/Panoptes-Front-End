@@ -8,7 +8,6 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var SplitByPathPlugin = require('webpack-split-by-path');
 
 var deploySubdir = !!process.env.DEPLOY_SUBDIR ? '/'+process.env.DEPLOY_SUBDIR+'/': '/';
-var cssAdjust = '../public'
 
 module.exports = {
   entry: [
