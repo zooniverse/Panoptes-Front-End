@@ -55,7 +55,7 @@ module.exports = React.createClass
                   count = meta.count
                   <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />}
               </div>
-              <div className="card-list">
+              <div className="owned-card-list">
                 {for resource in ownedResources
                    <OwnedCard
                      key={resource.id}
