@@ -9,15 +9,26 @@ Translate = require 'react-translate-component'
 counterpart.registerTranslations 'en',
   collectionsPage:
     title:
-      generic: 'All\u00a0Collections'
-      project:
-        ownedBySelf: 'My\u00a0%(project)s\u00a0Collections'
-        ownedByOther: '%(owner)s\'s\u00a0%(project)s\u00a0Collections'
-        allOwners: '%(project)s\u00a0Collections'
-      allProjects:
-        ownedBySelf: 'My\u00a0Collections'
-        ownedByOther: '%(owner)s\'s\u00a0Collections'
-        allOwners: 'All\u00a0Collections'
+      collections:
+        generic: 'All\u00a0Collections'
+        project:
+          ownedBySelf: 'My\u00a0%(project)s\u00a0Collections'
+          ownedByOther: '%(owner)s\'s\u00a0%(project)s\u00a0Collections'
+          allOwners: '%(project)s\u00a0Collections'
+        allProjects:
+          ownedBySelf: 'My\u00a0Collections'
+          ownedByOther: '%(owner)s\'s\u00a0Collections'
+          allOwners: 'All\u00a0Collections'
+      favorites:
+        generic: 'All\u00a0Favorites'
+        project:
+          ownedBySelf: 'My\u00a0%(project)s\u00a0Favorites'
+          ownedByOther: '%(owner)s\'s\u00a0%(project)s\u00a0Favorites'
+          allOwners: '%(project)s\u00a0Favorites'
+        allProjects:
+          ownedBySelf: 'My\u00a0Favorites'
+          ownedByOther: '%(owner)s\'s\u00a0Favorites'
+          allOwners: 'All\u00a0Favorites'
     countMessage: 'Showing %(count)s collections'
     button: 'View Collection'
     loadMessage: 'Loading Collections'
@@ -33,6 +44,15 @@ counterpart.registerTranslations 'en',
         allOwners: 'All\u00a0Collections'
         ownedBySelf: 'All\u00a0My\u00a0Collections'
         ownedByOther: 'All\u00a0%(user)s\'s\u00a0Collections'
+    favorites:
+      project:
+        allOwners: 'All\u00a0%(project)s\u00a0Favorites'
+        ownedBySelf: 'My\u00a0%(project)s\u00a0Favorites'
+        ownedByOther: '%(user)s\'s\u00a0%(project)s\u00a0Favorites'
+      allProjects:
+        allOwners: 'All\u00a0Favorites'
+        ownedBySelf: 'All\u00a0My\u00a0Favorites'
+        ownedByOther: 'All\u00a0%(user)s\'s\u00a0Favorites'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
@@ -82,7 +102,7 @@ CollectionsNav = React.createClass
       </IndexLink>
       {if @props.user?
         <Link to="/collections/#{@props.user.login}" activeClassName="active">
-          <Translate content="collectionsPage.title.allProjects.ownedBySelf" />
+          <Translate content="collectionsPage.title.collections.allProjects.ownedBySelf" />
         </Link>}
       {if @props.user?
         <Link to="/favorites/#{@props.user.login}" activeClassName="active">
