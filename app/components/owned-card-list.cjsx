@@ -27,25 +27,29 @@ module.exports = React.createClass
     document.documentElement.classList.remove 'on-secondary-page'
 
   getMessageKeyToUseForTitle: ->
+    if @props.favorite
+      base = "favorites"
+    else
+      base = "collections"
     if @props.filter?
       if "project_ids" of @props.filter
         if "owner" of @props.filter
           if @viewingOwnCollections
-            "#{@props.translationObjectName}.title.collections.project.ownedBySelf"
+            "#{@props.translationObjectName}.title.#{base}.project.ownedBySelf"
           else
-            "#{@props.translationObjectName}.title.collections.project.ownedByOther"
+            "#{@props.translationObjectName}.title.#{base}.project.ownedByOther"
         else
-          "#{@props.translationObjectName}.title.collections.project.allOwners"
+          "#{@props.translationObjectName}.title.#{base}.project.allOwners"
       else
         if "owner" of @props.filter
           if @viewingOwnCollections
-            "#{@props.translationObjectName}.title.collections.allProjects.ownedBySelf"
+            "#{@props.translationObjectName}.title.#{base}.allProjects.ownedBySelf"
           else
-            "#{@props.translationObjectName}.title.collections.allProjects.ownedByOther"
+            "#{@props.translationObjectName}.title.#{base}.allProjects.ownedByOther"
         else
-          "#{@props.translationObjectName}.title.collections.allProjects.allOwners"
+          "#{@props.translationObjectName}.title.#{base}.allProjects.allOwners"
     else
-      "#{@props.translationObjectName}.title.collections.generic"
+      "#{@props.translationObjectName}.title.#{base}.generic"
 
   getOwnerForTitle: ->
     if @props.filter? and "owner" of @props.filter
@@ -63,7 +67,6 @@ module.exports = React.createClass
 
   render: ->
     {location} = @props
-
     <div className={@getPageClasses()}>
       <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
@@ -111,9 +114,9 @@ module.exports = React.createClass
               </nav>
             </div>
           else if ownedResources?.length is 0
-            <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" />
+            <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" className="error"/>
           else
-            <Translate content="#{@props.translationObjectName}.loadMessage" component="div" />
+            <Translate content="#{@props.translationObjectName}.loadMessage" component="div" className="loading"/>
         }</PromiseRenderer>
       </section>
     </div>
