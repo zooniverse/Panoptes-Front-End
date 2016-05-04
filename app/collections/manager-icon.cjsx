@@ -1,6 +1,6 @@
 React = require 'react'
 CollectionsManager = require './manager'
-alert = require '../lib/alert'
+Dialog = require 'modal-form/dialog'
 
 # Shows an icon to logged-in users that pops up a collections manager
 module?.exports = React.createClass
@@ -10,16 +10,24 @@ module?.exports = React.createClass
     subject: React.PropTypes.object
     user: React.PropTypes.object
 
-  toggleCollectionsManagerPopup: ->
-    alert (resolve) =>
-      <div className="content-container">
-        <CollectionsManager user={@props.user} project={@props.project} subject={@props.subject} onSuccess={resolve} />
-      </div>
+  getInitialState: ->
+    open: false
+
+  open: ->
+    @setState {open: true}
+
+  close: ->
+    @setState {open: false}
 
   render: ->
     <button
       className="collections-manager-icon"
       title="Collect"
-      onClick={@toggleCollectionsManagerPopup}>
+      onClick={@open}>
       <i className="fa fa-list" />
+
+      {if @state.open
+        <Dialog tag="div" closeButton={true} onCancel={@close}>
+          <CollectionsManager user={@props.user} project={@props.project} subject={@props.subject} onSuccess={@close} />
+        </Dialog>}
     </button>
