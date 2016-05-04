@@ -88,18 +88,18 @@ EditWorkflowPage = React.createClass
 
     <div className="edit-workflow-page">
       <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
-        <button onClick={@showCreateWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="Copy workflow">
+        <button onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="Copy workflow">
           <i className="fa fa-copy"/>
         </button>
       </h3>
       {if @state.workflowCreationInProgress
         <ModalFormDialog tag="div">
-          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} />
+          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} workflowActiveStatus={not @props.project.live} />
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
-      {if @props.project.live
-        <p className="form-help warning"><strong>You cannot edit a project’s workflows once it’s gone live.</strong></p>}
-      <div className="columns-container" style={disabledStyle if @props.project.live}>
+      {if @props.project.live and @props.workflow.active
+        <p className="form-help warning"><strong>You cannot edit an active workflow if the project is live.</strong></p>}
+      <div className="columns-container" style={disabledStyle if @props.project.live and @props.workflow.active}>
         <div className="column">
           <div>
             <AutoSave tag="label" resource={@props.workflow}>

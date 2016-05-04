@@ -1,5 +1,33 @@
 React = require 'react'
+PromiseRenderer = require '../../components/promise-renderer'
 SetToggle = require '../../lib/set-toggle'
+
+WorkflowToggle = React.createClass
+  displayName: "WorkflowToggle"
+
+  mixins: [SetToggle]
+
+  getDefaultProps: ->
+    workflow: null
+    project: null
+    field: null
+
+  getInitialState: ->
+    error: null
+    setting: {}
+
+  setterProperty: 'workflow'
+
+  render: ->
+    workflow = @props.workflow
+    setting = workflow[@props.field]
+    <span>
+      { workflow.id } - { workflow.display_name}:
+      <label style={whiteSpace: 'nowrap'}>
+        <input type="checkbox" name={@props.field} value={setting} checked={setting} onChange={@set.bind this, @props.field, not setting} />
+        Active
+      </label>
+    </span>
 
 module.exports = React.createClass
   displayName: 'EditProjectVisibility'
@@ -123,4 +151,21 @@ module.exports = React.createClass
 
         </div>
       </div>
+
+      <hr/>
+
+      <p className="form-label">Workflow Settings</p>
+      <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
+        if workflows.length is 0
+          <div className="workflow-status-list">No workflows found</div>
+        else
+          <div className="workflow-status-list">
+            <ul>
+            {workflows.map (workflow) =>
+              <li key={workflow.id}>
+                <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
+              </li>}
+            </ul>
+          </div>
+      }</PromiseRenderer>
     </div>
