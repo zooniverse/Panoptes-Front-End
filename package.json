@@ -80,8 +80,8 @@
     "_publish": "publisssh ./dist \"zooniverse-static/${BUCKET}/$DEPLOY_SUBDIR\" -r",
 
     "build": "export NODE_ENV=staging; export DEPLOY_SUBDIR=\"\"; npm run _build",
-    "serve": "NODE_ENV=staging; node server.js",
-    "start": "babel-node server_dev.js",
+    "serve": "export NODE_ENV=staging; node server.js",
+    "start": "export NODE_ENV=development; babel-node server_dev.js",
 
     "deploy": "export NODE_ENV=production; export BUCKET=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",

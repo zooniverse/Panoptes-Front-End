@@ -5,7 +5,6 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
-
 module.exports = {
   devtool: 'eval-source-map',
   entry: [
@@ -22,15 +21,13 @@ module.exports = {
       { from: 'public', to: '.' }
     ]),
     new HtmlWebpackPlugin({
+      development: true,
       template: 'views/index.ejs',
       inject: 'body',
       filename: 'index.html'
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css'],
@@ -40,19 +37,19 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'babel?cacheDirectory'
+      loader: 'babel'
     }, {
       // explicitly include markdownz (and dependencies) to be transformed because it's es6
       test: /\.jsx?$/,
       include: /markdown/,
-      loader: 'babel?cacheDirectory'
+      loader: 'babel'
     }, {
       test: /\.cjsx$/,
       exclude: /node_modules/,
-      loaders: ['babel?cacheDirectory', 'coffee', 'cjsx']
+      loaders: ['babel', 'coffee', 'cjsx']
     }, {
       test: /\.coffee$/,
-      loaders: ['babel?cacheDirectory', 'coffee']
+      loaders: ['babel', 'coffee']
     }, {
       test: /\.json?$/,
       loader: 'json'
