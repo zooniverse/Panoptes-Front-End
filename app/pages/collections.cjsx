@@ -22,9 +22,8 @@ counterpart.registerTranslations 'en',
     button: 'View Collection'
     loadMessage: 'Loading Collections'
     notFoundMessage: 'No Collections Found'
-    myCollections: 'My\u00a0Collections'
     favorites: 'My\u00a0Favorites'
-    viewOnZooniverseOrg: 'View on zooniverse.org'
+    viewOnZooniverseOrg: 'View\u00a0on\u00a0zooniverse.org'
     collections:
       project:
         allOwners: 'All\u00a0%(project)s\u00a0Collections'
@@ -79,11 +78,11 @@ CollectionsNav = React.createClass
   renderWithoutProjectContext: ->
     <nav className="hero-nav">
       <IndexLink to="/collections" activeClassName="active">
-        <Translate content="collectionsPage.all" />
+        <Translate content="collectionsPage.collections.allProjects.allOwners" />
       </IndexLink>
       {if @props.user?
         <Link to="/collections/#{@props.user.login}" activeClassName="active">
-          <Translate content="collectionsPage.myCollections" />
+          <Translate content="collectionsPage.title.allProjects.ownedBySelf" />
         </Link>}
       {if @props.user?
         <Link to="/favorites/#{@props.user.login}" activeClassName="active">
@@ -165,7 +164,9 @@ List = React.createClass
   render: ->
     if @props.project?
       @nonBreakableProjectName = @props.project.display_name.replace /\ /g, "\u00a0"
-      @nonBreakableCollectionOwnerName = @getCollectionOwnerName().replace /\ /g, "\u00a0"
+    owner = @getCollectionOwnerName()
+    if owner?
+      @nonBreakableCollectionOwnerName = owner.replace /\ /g, "\u00a0"
 
     <OwnedCardList
       {...@props}

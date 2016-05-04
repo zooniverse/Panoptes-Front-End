@@ -27,6 +27,8 @@ module.exports = React.createClass
     document.documentElement.classList.remove 'on-secondary-page'
 
   getMessageKeyToUseForTitle: ->
+    console.log @props.filter
+    console.log @props.filter?, "project_ids" of @props.filter, "owner" of @props.filter, @viewingOwnCollections
     if @props.filter?
       if "project_ids" of @props.filter
         if "owner" of @props.filter
@@ -48,6 +50,7 @@ module.exports = React.createClass
       "#{@props.translationObjectName}.title.generic"
 
   getOwnerForTitle: ->
+    console.log "nbo",@props.nonBreakableOwnerName
     if @props.filter? and "owner" of @props.filter
       return @props.nonBreakableOwnerName
 
