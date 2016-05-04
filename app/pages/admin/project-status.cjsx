@@ -106,7 +106,7 @@ ProjectExperimentalFeatures = React.createClass
       <AutoSave resource={@props.project}>
         <div className="project-status__section--table">
           {EXPERIMENTAL_FEATURES.map (task) =>
-            <label key={task}>
+            <label key={task} className="project-status__section--table--row">
               <input type="checkbox" name={task} checked={@setting(task)} onChange={@updateTasks.bind @, task} />
               {task.charAt(0).toUpperCase() + task.slice(1)}
             </label>}
@@ -156,8 +156,8 @@ VersionList = React.createClass
   render: ->
     <PromiseRenderer promise={@props.project.get 'versions'}>{ (versions) =>
       vs = versions.sort()
+      <h4>Recent Status Changes</h4>
       <ul className="project-status__section--list">
-        <h4>Recent Status Changes</h4>
         {vs.map (version) =>
           key = Object.keys(version.changeset)[0]
           from = version.changeset[key][0].toString()
