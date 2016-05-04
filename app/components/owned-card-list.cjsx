@@ -33,24 +33,23 @@ module.exports = React.createClass
       if "project_ids" of @props.filter
         if "owner" of @props.filter
           if @viewingOwnCollections
-            "#{@props.translationObjectName}.title.project.ownedBySelf"
+            "#{@props.translationObjectName}.title.collections.project.ownedBySelf"
           else
-            "#{@props.translationObjectName}.title.project.ownedByOther"
+            "#{@props.translationObjectName}.title.collections.project.ownedByOther"
         else
-          "#{@props.translationObjectName}.title.project.allOwners"
+          "#{@props.translationObjectName}.title.collections.project.allOwners"
       else
         if "owner" of @props.filter
           if @viewingOwnCollections
-            "#{@props.translationObjectName}.title.allProjects.ownedBySelf"
+            "#{@props.translationObjectName}.title.collections.allProjects.ownedBySelf"
           else
-            "#{@props.translationObjectName}.title.allProjects.ownedByOther"
+            "#{@props.translationObjectName}.title.collections.allProjects.ownedByOther"
         else
-          "#{@props.translationObjectName}.title.allProjects.allOwners"
+          "#{@props.translationObjectName}.title.collections.allProjects.allOwners"
     else
-      "#{@props.translationObjectName}.title.generic"
+      "#{@props.translationObjectName}.title.collections.generic"
 
   getOwnerForTitle: ->
-    console.log "nbo",@props.nonBreakableOwnerName
     if @props.filter? and "owner" of @props.filter
       return @props.nonBreakableOwnerName
 
