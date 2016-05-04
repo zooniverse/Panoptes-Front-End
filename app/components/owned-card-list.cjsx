@@ -27,8 +27,6 @@ module.exports = React.createClass
     document.documentElement.classList.remove 'on-secondary-page'
 
   getMessageKeyToUseForTitle: ->
-    console.log @props.filter
-    console.log @props.filter?, "project_ids" of @props.filter, "owner" of @props.filter, @viewingOwnCollections
     if @props.filter?
       if "project_ids" of @props.filter
         if "owner" of @props.filter
