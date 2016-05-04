@@ -13,15 +13,21 @@ module?.exports = React.createClass
   getInitialState: ->
     open: false
 
+  open: ->
+    @setState {open: true}
+
+  close: ->
+    @setState {open: false}
+
   render: ->
     <button
       className="collections-manager-icon"
       title="Collect"
-      onClick={@setState.bind this, {open: true}, null}>
+      onClick={@open}>
       <i className="fa fa-list" />
 
       {if @state.open
-        <Dialog tag="div">
-          <CollectionsManager user={@props.user} project={@props.project} subject={@props.subject} onSuccess={@setState.bind this, {open: false}, null} />
+        <Dialog tag="div" closeButton={true} onCancel={@close}>
+          <CollectionsManager user={@props.user} project={@props.project} subject={@props.subject} onSuccess={@close} />
         </Dialog>}
     </button>
