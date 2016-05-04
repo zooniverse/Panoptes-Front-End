@@ -38,6 +38,12 @@ module.exports = {
       inject: 'body',
       filename: 'index.html'
     }),
+    new HtmlWebpackPlugin({
+      baseUrl: deploySubdir,
+      template: 'views/htaccess.ejs',
+      inject: false,
+      filename: '.htaccess'
+    }),
     new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin("[name]-[contenthash].css", {
         allChunks: true
