@@ -8,6 +8,7 @@ ChangeListener = require '../../components/change-listener'
 ProjectIcon = require '../../components/project-icon'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
+WorkflowToggle = require '../../components/workflow-toggle'
 
 EXPERIMENTAL_FEATURES = [
   'survey'
@@ -56,32 +57,32 @@ ProjectToggle = React.createClass
       </label>
     </span>
 
-WorkflowToggle = React.createClass
-  displayName: "WorkflowToggle"
-
-  mixins: [SetToggle]
-
-  getDefaultProps: ->
-    workflow: null
-    project: null
-    field: null
-
-  getInitialState: ->
-    error: null
-    setting: {}
-
-  setterProperty: 'workflow'
-
-  render: ->
-    workflow = @props.workflow
-    setting = workflow[@props.field]
-    <span>
-      { workflow.id } - { workflow.display_name}:
-      <label style={whiteSpace: 'nowrap'}>
-        <input type="checkbox" name={@props.field} value={setting} checked={setting} onChange={@set.bind this, @props.field, not setting} />
-        Active
-      </label>
-    </span>
+# WorkflowToggle = React.createClass
+#   displayName: "WorkflowToggle"
+#
+#   mixins: [SetToggle]
+#
+#   getDefaultProps: ->
+#     workflow: null
+#     project: null
+#     field: null
+#
+#   getInitialState: ->
+#     error: null
+#     setting: {}
+#
+#   setterProperty: 'workflow'
+#
+#   render: ->
+#     workflow = @props.workflow
+#     setting = workflow[@props.field]
+#     <span>
+#       { workflow.id } - { workflow.display_name}:
+#       <label style={whiteSpace: 'nowrap'}>
+#         <input type="checkbox" name={@props.field} value={setting} checked={setting} onChange={@set.bind this, @props.field, not setting} />
+#         Active
+#       </label>
+#     </span>
 
 ProjectExperimentalFeatures = React.createClass
   displayName: "ProjectExperimentalFeatures"
