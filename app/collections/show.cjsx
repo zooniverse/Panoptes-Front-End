@@ -16,7 +16,8 @@ counterpart.registerTranslations 'en',
   collectionPage:
     settings: 'Settings'
     collaborators: 'Collaborators'
-    backToCollections: 'Back to Collections'
+    collectionsLink: '%(user)s\'s\u00a0Collections'
+    userLink: '%(user)s\'s\u00a0Profile'
   collectionsPageWrapper:
     error: 'There was an error retrieving this collection.'
 
@@ -44,6 +45,7 @@ CollectionPage = React.createClass
       params = {owner: ownerName, name: name}
 
       isOwner = @props.user?.id is owner.id
+      nonBreakableOwnerName =  owner.display_name.replace /\ /g, "\u00a0"
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
           <IndexLink to="#{@getProjectContextForLinkPrefix()}/collections/#{ownerName}/#{name}" activeClassName="active" className="tabbed-content-tab">
@@ -61,8 +63,11 @@ CollectionPage = React.createClass
               <Translate content="collectionPage.collaborators" />
             </Link>}
 
-          <Link to="#{@getProjectContextForLinkPrefix()}/collections" activeClassName="active" className="tabbed-content-tab">
-            <Translate content="collectionPage.backToCollections" />
+          <Link to="#{@getProjectContextForLinkPrefix()}/collections/#{ownerName}" activeClassName="active" className="tabbed-content-tab">
+            <Translate content="collectionPage.collectionsLink" user="#{nonBreakableOwnerName}" />
+          </Link>
+          <Link to="#{@getProjectContextForLinkPrefix()}/users/#{ownerName}" activeClassName="active" className="tabbed-content-tab">
+            <Translate content="collectionPage.userLink" user="#{nonBreakableOwnerName}" />
           </Link>
         </nav>
         <div className="collection-container talk">
