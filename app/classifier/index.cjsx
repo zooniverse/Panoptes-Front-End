@@ -20,7 +20,6 @@ WorldWideTelescope = require './world_wide_telescope'
 MiniCourse = require '../lib/mini-course'
 MiniCourseButton = require './mini-course-button'
 
-
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
 Classifier = React.createClass

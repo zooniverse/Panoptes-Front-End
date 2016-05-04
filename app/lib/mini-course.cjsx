@@ -9,6 +9,10 @@ apiClient = require 'panoptes-client/lib/api-client'
 minicoursesCompletedThisSession = {}
 window?.minicoursesCompletedThisSession = minicoursesCompletedThisSession
 
+# Note: the logic to handle a non-logged in user is currently commented out.
+# This logic may be added at a later date, but for now 
+# will move forward with the mini-course working only for signed in users.
+
 module.exports = React.createClass
   displayName: 'MiniCourse'
 
@@ -36,7 +40,6 @@ module.exports = React.createClass
 
     start: (minicourse, user) ->
       MiniCourseComponent = this
-
       if minicourse.steps.length isnt 0
         minicourse.get('project').then (project) =>
           awaitMiniCourseMedia = minicourse.get 'attached_images'
@@ -51,7 +54,7 @@ module.exports = React.createClass
 
           awaitMiniCourseMedia.then (mediaByID) =>
             Dialog.alert(<MiniCourseComponent project={project} user={user} minicourse={minicourse} media={mediaByID} />, {
-              className: 'tutorial-dialog', #reusing tutorial styling
+              className: 'tutorial-dialog mini-course-dialog', #reusing tutorial styling
               required: true,
               closeButton: true
               onSubmit: @handleOptOut.bind(null, project, user, minicourse.id)
@@ -74,21 +77,26 @@ module.exports = React.createClass
               projectPreferences.update resetPreferences
               projectPreferences.save().then =>
                 @start minicourse, user
-      else
-        sessionStorage.setItem 'minicourse_slide_to_start', 0
+            else
+              # Create default preferences if they don't exist
+              @createProjectPreferences(projectPreferences, minicourse.id, project.id).then =>
+                @start minicourse, user
+      # else
+      #   sessionStorage.setItem 'minicourse_slide_to_start', 0
 
-        @start minicourse, user
+      #   @start minicourse, user
 
     startIfNecessary: ({workflow, project, user}) ->
-      @find({workflow, project}).then (minicourse) =>
-        if minicourse?
-          @checkIfCompleted(minicourse, project, user).then (completed) =>
-            unless completed
-              if user?
+      if user?
+        @find({workflow, project}).then (minicourse) =>
+          if minicourse?
+            @checkIfCompleted(minicourse, project, user).then (completed) =>
+              unless completed
+                # if user?
                 user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
                   @start minicourse, user unless projectPreferences.preferences.minicourses?.opt_out["id_#{minicourse.id}"]
-              else
-                @start minicourse, user 
+                # else
+                #   @start minicourse, user 
 
     checkIfCompleted: (minicourse, project, user) ->
       if user?
@@ -98,14 +106,29 @@ module.exports = React.createClass
           .then ([projectPreferences]) =>
             window.prefs = projectPreferences
             projectPreferences?.preferences?.minicourses?.completed_at?["id_#{minicourse.id}"]?
-      else
-        Promise.resolve minicoursesCompletedThisSession[minicourse.id]?
+      # else
+      #   Promise.resolve minicoursesCompletedThisSession[minicourse.id]?
 
     handleOptOut: (project, user, minicourseID) ->
       if user?
         user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
           projectPreferences.update "preferences.minicourses.opt_out.id_#{minicourseID}": true
           projectPreferences.save()
+
+    createProjectPreferences: (projectPreferences, minicourseID, projectID) ->
+      defaultPreferences = { 
+        "preferences.minicourses.opt_out.id_#{minicourseID}": false, 
+        "preferences.minicourses.slide_to_start.id_#{minicourseID}": 0 
+      }
+
+      projectPreferences ?= apiClient.type('project_preferences').create({
+        links: {
+          project: projectID
+        },
+        preferences: {}
+      })
+      projectPreferences.update defaultPreferences
+      projectPreferences.save()
 
   getDefaultProps: ->
     media: {}
@@ -118,11 +141,6 @@ module.exports = React.createClass
     slideToStart: 0
 
   componentDidMount: ->
-    defaultPreferences = { 
-      "preferences.minicourses.opt_out.id_#{@props.minicourse.id}": false, 
-      "preferences.minicourses.slide_to_start.id_#{@props.minicourse.id}": 0 
-    }
-
     if @props.user?
       @props.user.get('project_preferences', project_id: @props.project.id).then ([projectPreferences]) =>
         if projectPreferences.preferences.minicourses?
@@ -133,19 +151,11 @@ module.exports = React.createClass
           }
         else
           # Create default preferences
-          projectPreferences ?= apiClient.type('project_preferences').create({
-            links: {
-              project: project.id
-            },
-            preferences: {}
-          })
-          projectPreferences.update defaultPreferences
-          projectPreferences.save()
-            .then =>
-              @setState { projectPreferences }
-    else
-      if sessionStorage.getItem('minicourse_slide_to_start')?
-        @refs.stepThrough.goTo sessionStorage.getItem('minicourse_slide_to_start')
+          newProjectPreferences = @createProjectPreferences(projectPreferences, @props.minicourse.id, @props.project.id)
+          @setState { projectPreferences: newProjectPreferences }
+    # else
+    #   if sessionStorage.getItem('minicourse_slide_to_start')?
+    #     @refs.stepThrough.goTo sessionStorage.getItem('minicourse_slide_to_start')
   
   componentWillUnmount: ->
     if @state.projectPreferences?
@@ -171,12 +181,14 @@ module.exports = React.createClass
 
   handleProjectPreferencesOnUnmount: ->
     if @state.slideToStart is @props.minicourse.steps.length - 1
+      console.log('finished')
       now = new Date().toISOString()
+      console.log('now', now)
       minicoursesCompletedThisSession[@props.minicourse.id] = now
 
-      if @props.user?
-        @state.projectPreferences.update "preferences.minicourses.completed_at.id_#{@props.minicourse.id}": now
-        @state.projectPreferences.save()
+      # if @props.user?
+      @state.projectPreferences.update "preferences.minicourses.completed_at.id_#{@props.minicourse.id}": now
+      @state.projectPreferences.save()
     else
       nextSlide = @state.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"] + 1
       
