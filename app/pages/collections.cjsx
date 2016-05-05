@@ -27,27 +27,6 @@ Translate = require 'react-translate-component'
 
 counterpart.registerTranslations 'en',
   collectionsPage:
-    title:
-      collections:
-        generic: 'All\u00a0Collections'
-        project:
-          ownedBySelf: 'My\u00a0%(project)s\u00a0Collections'
-          ownedByOther: '%(owner)s\'s\u00a0%(project)s\u00a0Collections'
-          allOwners: '%(project)s\u00a0Collections'
-        allProjects:
-          ownedBySelf: 'My\u00a0Collections'
-          ownedByOther: '%(owner)s\'s\u00a0Collections'
-          allOwners: 'All\u00a0Collections'
-      favorites:
-        generic: 'All\u00a0Favorites'
-        project:
-          ownedBySelf: 'My\u00a0%(project)s\u00a0Favorites'
-          ownedByOther: '%(owner)s\'s\u00a0%(project)s\u00a0Favorites'
-          allOwners: '%(project)s\u00a0Favorites'
-        allProjects:
-          ownedBySelf: 'My\u00a0Favorites'
-          ownedByOther: '%(owner)s\'s\u00a0Favorites'
-          allOwners: 'All\u00a0Favorites'
     countMessage: 'Showing %(count)s collections'
     button: 'View Collection'
     loadMessage: 'Loading Collections'
@@ -55,26 +34,28 @@ counterpart.registerTranslations 'en',
     viewOnZooniverseOrg: 'View\u00a0on\u00a0zooniverse.org'
     collections:
       self:
-        all: 'All\u00a0Collections'
-        user: 'All\u00a0My\u00a0Collections'
-        project: 'All\u00a0%(projectDisplayName)s\u00a0Collections'
+        all: 'All'
+        user: 'My\u00a0Collections'
+        project: '%(projectDisplayName)s'
         userAndProject: 'My\u00a0%(projectDisplayName)s\u00a0Collections'
       other:
-        all: 'All\u00a0Collections'
-        user: 'All\u00a0%(collectionOwnerName)s\'s\u00a0Collections'
-        project: 'All\u00a0%(projectDisplayName)s\u00a0Collections'
-        userAndProject: '%(collectionOwnerName)s\'s\u00a0%(projectDisplayName)s\u00a0Collections'
+        all: 'All'
+        user: '%(collectionOwnerName)s'
+        project: '%(projectDisplayName)s'
+        userAndProject: '%(collectionOwnerName)s in \u00a0%(projectDisplayName)s'
+      short: 'Collections'
     favorites:
       self:
-        all: 'All\u00a0Favorites'
+        all: 'All'
         user: 'My\u00a0Favorites'
-        project: 'All\u00a0%(projectDisplayName)s\u00a0Favorites'
+        project: '%(projectDisplayName)s'
         userAndProject: 'My\u00a0%(projectDisplayName)s\u00a0Favorites'
       other:
-        all: 'All\u00a0Favorites'
-        user: 'All\u00a0%(collectionOwnerName)s\'s\u00a0Favorites'
-        project: 'All\u00a0%(project)s\u00a0Favorites'
-        userAndProject: '%(collectionOwnerName)s\'s\u00a0%(projectDisplayName)s\u00a0Favorites'
+        all: 'All'
+        user: '%(collectionOwnerName)s'
+        project: '%(projectDisplayName)s'
+        userAndProject: '%(collectionOwnerName)s in \u00a0%(projectDisplayName)s'
+      short: 'Favorites'
     profile:
       self:
         user: 'My\u00a0Profile'
@@ -104,20 +85,22 @@ CollectionsNav = React.createClass
       link = "/projects/#{@props.project.slug}" + link
     return link
 
-  suffixLinkIfNeeded: (link) ->
-    if @context == "project" and !@filterType.includes("project")
+  suffixLinkIfNeeded: (link,linkShouldRemoveProjectFilter=false) ->
+    if @context.includes("project") and linkShouldRemoveProjectFilter
       # need to remove project from filter, while keeping it in context
       link = link + "/all"
     return link
 
-  uniqueId: (length=8) ->
+  getUniqueId: (length=8) ->
     id = ""
     id += Math.random().toString(36).substr(2) while id.length < length
     id.substr 0, length
 
-  createLink: (to,linkType="Link") ->
+  createLink: (to,linkType="Link", linkShouldRemoveProjectFilter=false, dontModifyLink=false) ->
+    if !dontModifyLink
+      to = @suffixLinkIfNeeded(@prefixLinkIfNeeded(to),linkShouldRemoveProjectFilter)
     return {
-      to: @suffixLinkIfNeeded(@prefixLinkIfNeeded(to))
+      to: to
       linkType: linkType
     }
 
@@ -132,19 +115,19 @@ CollectionsNav = React.createClass
 
   # When viewing collections, we only show one favorites link - and vice versa - to limit menu options.
   # This method will retrieve the best single link that is currently viable, for the specified baseType
-  # candidateLinks should be an array of links for the desired baseType, keyed by context
-  getBestLink: (baseType, candidateLinks) ->
+  # candidateLinksForThisType should be an array of links for the desired baseType, keyed by context
+  getBestLink: (baseType, candidateLinksForThisType) ->
     switch baseType
       when "favorites"
-        if @context.includes("projects")
-          bestLink = candidateLinks["projects"]
+        if @context.includes("project")
+          bestLink = candidateLinksForThisType["project"]
         else
-          bestLink = candidateLinks["all"]
-      when "collections","recents" then bestLink = candidateLinks[@context]
+          bestLink = candidateLinksForThisType["all"]
+      when "collections","recents" then bestLink = candidateLinksForThisType[@context]
       when "profile"
         switch @context
-          when "user-and-project" then bestLink = candidateLinks["user-and-project"]
-          else bestLink = candidateLinks["user"]
+          when "user-and-project" then bestLink = candidateLinksForThisType["user-and-project"]
+          else bestLink = candidateLinksForThisType["user"]
     return bestLink
 
   convertFilterTypeForMessageKey: (filterType) ->
@@ -155,20 +138,20 @@ CollectionsNav = React.createClass
 
   # figure out the nav bar, according to current baseType, context, filters and perspective
   getLinksToShow: ->
-    # links, indexed by baseType then filterType
-    navLinks = {
+    # candidatelinks, indexed by baseType then filterType
+    candidateLinks = {
       "collections":
-        "all": @createLink("/collections", "IndexLink")
-        "user": @createLink("/collections/#{@props.collectionOwnerLogin}")
+        "all": @createLink("/collections", "IndexLink",true)
+        "user": @createLink("/collections/#{@props.collectionOwnerLogin}","Link",true)
         "project": @createLink("/collections")
         "user-and-project": @createLink("/collections/#{@props.collectionOwnerLogin}")
       "favorites":
-        "all": @createLink("/favorites", "IndexLink")
-        "user": @createLink("/favorites/#{@props.collectionOwnerLogin}")
+        "all": @createLink("/favorites", "IndexLink",true)
+        "user": @createLink("/favorites/#{@props.collectionOwnerLogin}","Link",true)
         "project": @createLink("/favorites")
         "user-and-project": @createLink("/favorites/#{@props.collectionOwnerLogin}")
       "profile":
-        "user": @createLink("/users/#{@props.collectionOwnerLogin}")
+        "user": @createLink("/users/#{@props.collectionOwnerLogin}","Link",true)
         "user-and-project": @createLink("/users/#{@props.collectionOwnerLogin}")
       "recents":
         "all": @createLink("/talk/recents")
@@ -178,57 +161,62 @@ CollectionsNav = React.createClass
     }
 
     # now we set the message keys, according to context and perspective
-    for baseType,links of navLinks
+    for baseType,links of candidateLinks
       for filterType, to of links
         links[filterType]["messageKey"] = "collectionsPage.#{baseType}.#{@perspective}.#{@convertFilterTypeForMessageKey(filterType)}"
+    console.log "context",@context,"baseType",@baseType,"filterType",@filterType,"perspective",@perspective,"situation",@props.situation
 
     # now we have to decide which links to show, according to base type, filter, context and perspective
     linksToShow = []
 
     # first handle collection links
     if @baseType == "collections"
-      candidateLinks = navLinks[@baseType]
-      linksToShow.push candidateLinks["all"]
+      linksToShow.push candidateLinks[@baseType]["all"]
       if @context.includes("user")
-        linksToShow.push candidateLinks["user"]
+        linksToShow.push candidateLinks[@baseType]["user"]
       if @context.includes("project")
-        linksToShow.push candidateLinks["user"]
+        linksToShow.push candidateLinks[@baseType]["project"]
       if @context == "user-and-project"
-        linksToShow.push candidateLinks["user-and-project"]
-    else
-      linksToShow.push @getBestLink "collections", navLinks["collections"]
+        linksToShow.push candidateLinks[@baseType]["user-and-project"]
 
     # now favorites links
     if @baseType == "favorites"
-      candidateLinks = navLinks[@baseType]
       if @context.includes("project")
-        linksToShow.push candidateLinks["all"]
+        linksToShow.push candidateLinks[@baseType]["all"]
       if @context.includes("user")
-        linksToShow.push candidateLinks["user"]
+        linksToShow.push candidateLinks[@baseType]["user"]
       if @context.includes("project")
-        linksToShow.push candidateLinks["user"]
+        linksToShow.push candidateLinks[@baseType]["project"]
       if @context == "user-and-project"
-        linksToShow.push candidateLinks["user-and-project"]
-    else
-      linksToShow.push @getBestLink "favorites", navLinks["favorites"]
+        linksToShow.push candidateLinks[@baseType]["user-and-project"]
+
+    # now short links to alternate baseType
+    if @baseType != "collections"
+      shortCollectionsLink = @getBestLink "collections", candidateLinks["collections"]
+      shortCollectionsLink.messageKey = "collectionsPage.collections.short"
+      linksToShow.push shortCollectionsLink
+    if @baseType != "favorites"
+      shortFavoritesLink = @getBestLink "favorites", candidateLinks["favorites"]
+      shortFavoritesLink.messageKey = "collectionsPage.favorites.short"
+      linksToShow.push shortFavoritesLink
 
     # now user profile
     if @context.includes("user")
-      linksToShow.push @getBestLink "profile", navLinks["profile"]
+      linksToShow.push @getBestLink "profile", candidateLinks["profile"]
 
     # now recents
     # if (viewing profile or project recents)
-    #  linksToShow.push getBestLink "profile", navLinks["profile"]
+    #  linksToShow.push getBestLink "recents", candidateLinks["recents"]
 
     # now context removal link
-    contextRemovalLink = @createLink(@getRemoveProjectContextLink())
+    contextRemovalLink = @createLink(@getRemoveProjectContextLink(),"Link",false,true)
     contextRemovalLink["messageKey"] = "collectionsPage.viewOnZooniverseOrg"
     linksToShow.push contextRemovalLink
 
     return linksToShow
 
   generateUniqueKeyForLinkInstance: (link) ->
-    key = link.to + "-" + @uniqueId()
+    link.to + "-" + @getUniqueId()
 
   generateTranslateLink: (messageKey) ->
     if @props.project?
@@ -319,15 +307,15 @@ List = React.createClass
       else
         return @props.params.owner
 
-  # determine the
+  # determine the current situation: context, perspective, baseType and filterType
   determineSituation: ->
     if @props.project?
-      if @collectionOwnerLogin?
+      if @collectionOwnerLogin? and @collectionOwnerLogin != "all"
         context = "user-and-project"
       else
         context = "project"
     else
-      if @collectionOwnerLogin?
+      if @collectionOwnerLogin? and @collectionOwnerLogin != "all"
         context = "user"
       else
         context = "all"
@@ -339,6 +327,7 @@ List = React.createClass
       baseType = "favorites"
     else
       baseType = "collections"
+    console.log @filter
     if @filter?
       if "project_ids" of @filter
         if "owner" of @filter
@@ -346,7 +335,7 @@ List = React.createClass
         else
           filterType = "project"
       else
-        if "owner" of @filter
+        if "owner" of @filter and @filter["owner"] != "all"
           filterType = "user"
         else
           filterType = "all"
