@@ -26,39 +26,6 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
-  getMessageKeyToUseForTitle: ->
-    if @props.favorite
-      base = "favorites"
-    else
-      base = "collections"
-    if @props.filter?
-      if "project_ids" of @props.filter
-        if "owner" of @props.filter
-          if @viewingOwnCollections
-            "#{@props.translationObjectName}.title.#{base}.project.ownedBySelf"
-          else
-            "#{@props.translationObjectName}.title.#{base}.project.ownedByOther"
-        else
-          "#{@props.translationObjectName}.title.#{base}.project.allOwners"
-      else
-        if "owner" of @props.filter
-          if @viewingOwnCollections
-            "#{@props.translationObjectName}.title.#{base}.allProjects.ownedBySelf"
-          else
-            "#{@props.translationObjectName}.title.#{base}.allProjects.ownedByOther"
-        else
-          "#{@props.translationObjectName}.title.#{base}.allProjects.allOwners"
-    else
-      "#{@props.translationObjectName}.title.#{base}.generic"
-
-  getOwnerForTitle: ->
-    if @props.filter? and "owner" of @props.filter
-      return @props.nonBreakableOwnerName
-
-  getProjectForTitle: ->
-    if @props.filter? and "project_ids" of @props.filter
-      return @props.nonBreakableProjectName
-
   getPageClasses: ->
     classes = 'secondary-page all-resources-page'
     if @props.project?
@@ -70,7 +37,7 @@ module.exports = React.createClass
     <div className={@getPageClasses()}>
       <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
-          <Translate component="h1" owner={@getOwnerForTitle()} project={@getProjectForTitle()} content={"#{@getMessageKeyToUseForTitle()}"} />
+          <Translate component="h1" collectionOwnerName={@props.unbreakableCollectionOwnerName} projectDisplayName={@props.unbreakableProjectDisplayName} content={"#{@props.titleMessageKey}"} />
           {if @props.heroNav?
             @props.heroNav}
         </div>

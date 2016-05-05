@@ -57,72 +57,49 @@ counterpart.registerTranslations 'en',
       self:
         all: 'All\u00a0Collections'
         user: 'All\u00a0My\u00a0Collections'
-        project: 'All\u00a0%(projectName)s\u00a0Collections'
-        userAndProject: 'My\u00a0%(projectName)s\u00a0Collections'
+        project: 'All\u00a0%(projectDisplayName)s\u00a0Collections'
+        userAndProject: 'My\u00a0%(projectDisplayName)s\u00a0Collections'
       other:
         all: 'All\u00a0Collections'
-        user: 'All\u00a0%(collectionOwnerLogin)s\'s\u00a0Collections'
-        project: 'All\u00a0%(projectName)s\u00a0Collections'
-        userAndProject: '%(collectionOwnerLogin)s\'s\u00a0%(projectName)s\u00a0Collections'
+        user: 'All\u00a0%(collectionOwnerName)s\'s\u00a0Collections'
+        project: 'All\u00a0%(projectDisplayName)s\u00a0Collections'
+        userAndProject: '%(collectionOwnerName)s\'s\u00a0%(projectDisplayName)s\u00a0Collections'
     favorites:
       self:
         all: 'All\u00a0Favorites'
         user: 'My\u00a0Favorites'
-        project: 'All\u00a0%(projectName)s\u00a0Favorites'
-        userAndProject: 'My\u00a0%(projectName)s\u00a0Favorites'
+        project: 'All\u00a0%(projectDisplayName)s\u00a0Favorites'
+        userAndProject: 'My\u00a0%(projectDisplayName)s\u00a0Favorites'
       other:
         all: 'All\u00a0Favorites'
-        user: 'All\u00a0%(collectionOwnerLogin)s\'s\u00a0Favorites'
+        user: 'All\u00a0%(collectionOwnerName)s\'s\u00a0Favorites'
         project: 'All\u00a0%(project)s\u00a0Favorites'
-        userAndProject: '%(collectionOwnerLogin)s\'s\u00a0%(projectName)s\u00a0Favorites'
+        userAndProject: '%(collectionOwnerName)s\'s\u00a0%(projectDisplayName)s\u00a0Favorites'
     profile:
       self:
         user: 'My\u00a0Profile'
         userAndProject: 'My\u00a0Profile'
       other:
         user: '%(user)s\'s\u00a0Profile'
-        userAndProject: '%(collectionOwnerLogin)s\'s\u00a0Profile'
+        userAndProject: '%(collectionOwnerName)s\'s\u00a0Profile'
+    title:
+      collections:
+        all: 'All\u00a0Collections'
+        user: '%(collectionOwnerName)s\'s\u00a0Collections'
+        project: '\u00a0%(projectDisplayName)s\u00a0Collections'
+        userAndProject: '%(collectionOwnerName)s\'s\u00a0%(projectDisplayName)s\u00a0Collections'
+      favorites:
+        all: 'All\u00a0Favorites'
+        user: '%(collectionOwnerName)s\'s\u00a0Favorites'
+        project: '\u00a0%(projectDisplayName)s\u00a0Favorites'
+        userAndProject: '%(collectionOwnerName)s\'s\u00a0%(projectDisplayName)s\u00a0Favorites'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
   keys: {}
 
-  determineSituation: ->
-    if @props.project?
-      if @props.collectionOwnerName?
-        @context = "user-and-project"
-      else
-        @context = "project"
-    else
-      if @props.collectionOwnerName?
-        @context = "user"
-      else
-        @context = "all"
-    if @props.viewingOwnCollections
-      @perspective = "self"
-    else
-      @perspective = "other"
-    if @props.favorite
-      @baseType = "favorites"
-    else
-      @baseType = "collections"
-    if @props.filter?
-      if "project_ids" of @props.filter
-        if "owner" of @props.filter
-          @filterType = "user-and-project"
-        else
-          @filterType = "project"
-      else
-        if "owner" of @props.filter
-          @filterType = "user"
-        else
-          @filterType = "all"
-    else
-      @filterType = "all"
-    console.log "context:",@context,"perspective:",@perspective,"baseType:",@baseType,"filterType:",@filterType,"filter:",@props.filter
-
   prefixLinkIfNeeded: (link) ->
-    if @context=="project"
+    if @context.includes("project")
       # keeps project in context
       link = "/projects/#{@props.project.slug}" + link
     return link
@@ -155,38 +132,22 @@ CollectionsNav = React.createClass
 
   # When viewing collections, we only show one favorites link - and vice versa - to limit menu options.
   # This method will retrieve the best single link that is currently viable, for the specified baseType
+  # candidateLinks should be an array of links for the desired baseType, keyed by context
   getBestLink: (baseType, candidateLinks) ->
-    if baseType == "favorites"
-      if @context.includes("projects")
-        bestLink = candidateLinks["projects"]
-      else
-        bestLink = candidateLinks["all"]
-    else if baseType == "collections"
-      if @context == "user-and-project"
-        bestLink = candidateLinks["user-and-project"]
-      else if @context == "user"
-        bestLink = candidateLinks["user"]
-      else if @context == "project"
-        bestLink = candidateLinks["project"]
-      else
-        bestLink = candidateLinks["all"]
-    else if baseType == "recents"
-      if @context == "user-and-project"
-        bestLink = candidateLinks["user-and-project"]
-      else if @context == "user"
-        bestLink = candidateLinks["user"]
-      else if @context == "project"
-        bestLink = candidateLinks["project"]
-      else
-        bestLink = candidateLinks["all"]
-    else if baseType == "profile"
-      if @context == "user-and-project"
-        bestLink = candidateLinks["user-and-project"]
-      else
-        bestLink = candidateLinks["user"]
+    switch baseType
+      when "favorites"
+        if @context.includes("projects")
+          bestLink = candidateLinks["projects"]
+        else
+          bestLink = candidateLinks["all"]
+      when "collections","recents" then bestLink = candidateLinks[@context]
+      when "profile"
+        switch @context
+          when "user-and-project" then bestLink = candidateLinks["user-and-project"]
+          else bestLink = candidateLinks["user"]
     return bestLink
 
-  getCamelCase: (filterType) ->
+  convertFilterTypeForMessageKey: (filterType) ->
     if filterType == "user-and-project"
       return "userAndProject"
     else
@@ -219,7 +180,7 @@ CollectionsNav = React.createClass
     # now we set the message keys, according to context and perspective
     for baseType,links of navLinks
       for filterType, to of links
-        links[filterType]["messageKey"] = "collectionsPage.#{baseType}.#{@perspective}.#{@getCamelCase(filterType)}"
+        links[filterType]["messageKey"] = "collectionsPage.#{baseType}.#{@perspective}.#{@convertFilterTypeForMessageKey(filterType)}"
 
     # now we have to decide which links to show, according to base type, filter, context and perspective
     linksToShow = []
@@ -266,21 +227,18 @@ CollectionsNav = React.createClass
 
     return linksToShow
 
-  makeTextUnbreakable: (text) ->
-    text.replace /\ /g, "\u00a0"
-
   generateUniqueKeyForLinkInstance: (link) ->
     key = link.to + "-" + @uniqueId()
 
   generateTranslateLink: (messageKey) ->
     if @props.project?
       if @props.collectionOwnerName?
-        <Translate content="#{messageKey}" projectName={@makeTextUnbreakable(@props.project.display_name)} collectionOwnerLogin={@makeTextUnbreakable(@props.collectionOwnerName)} />
+        <Translate content="#{messageKey}" projectDisplayName={@props.unbreakableProjectDisplayName} collectionOwnerName={@props.unbreakableCollectionOwnerName} />
       else
-        <Translate content="#{messageKey}" projectName={@makeTextUnbreakable(@props.project.display_name)} />
+        <Translate content="#{messageKey}" projectDisplayName={@props.unbreakableProjectDisplayName} />
     else
       if @props.collectionOwnerName?
-        <Translate content="#{messageKey}" collectionOwnerLogin={@makeTextUnbreakable(@props.collectionOwnerName)} />
+        <Translate content="#{messageKey}" collectionOwnerName={@props.unbreakableCollectionOwnerName} />
       else
         <Translate content="#{messageKey}" />
 
@@ -301,12 +259,15 @@ CollectionsNav = React.createClass
     </nav>
 
   renderNavLinks: ->
-    @determineSituation()
     navLinks = @getLinksToShow()
     for i, link of navLinks
       @renderLink(link)
 
   render: ->
+    @filterType = @props.situation.filterType
+    @perspective = @props.situation.perspective
+    @baseType = @props.situation.baseType
+    @context = @props.situation.context
     @renderNavBar()
 
 List = React.createClass
@@ -328,10 +289,16 @@ List = React.createClass
     else
       "/collections/#{owner}/#{name}"
 
+  convertFilterTypeForMessageKey: (filterType) ->
+    if filterType == "user-and-project"
+      return "userAndProject"
+    else
+      return filterType
+
   listCollections: (collectionOwner,project) ->
-    filters = @getFiltersFromPath()
+    filter = @getFilterFromPath()
     query = {}
-    for field, value of filters
+    for field, value of filter
       query[field] = value
 
     query.favorite = @props.favorite
@@ -340,7 +307,7 @@ List = React.createClass
     apiClient.type('collections').get query
 
   # return the display name of the collection owner (just login name for now)
-  getCollectionOwnerName: ->
+  getCollectionOwnerLogin: ->
     if @props.favorite
       if @props.params?.favorites_owner?
         return @props.params.favorites_owner
@@ -352,8 +319,50 @@ List = React.createClass
       else
         return @props.params.owner
 
+  # determine the
+  determineSituation: ->
+    if @props.project?
+      if @collectionOwnerLogin?
+        context = "user-and-project"
+      else
+        context = "project"
+    else
+      if @collectionOwnerLogin?
+        context = "user"
+      else
+        context = "all"
+    if @viewingOwnCollections
+      perspective = "self"
+    else
+      perspective = "other"
+    if @props.favorite
+      baseType = "favorites"
+    else
+      baseType = "collections"
+    if @filter?
+      if "project_ids" of @filter
+        if "owner" of @filter
+          filterType = "user-and-project"
+        else
+          filterType = "project"
+      else
+        if "owner" of @filter
+          filterType = "user"
+        else
+          filterType = "all"
+    else
+      filterType = "all"
+    return {
+      context: context
+      perspective: perspective
+      baseType: baseType
+      filterType: filterType
+    }
 
-  getFiltersFromPath: ->
+  getTitleMessageKey: ->
+    "collectionsPage.title.#{@situation.baseType}.#{@convertFilterTypeForMessageKey(@situation.filterType)}"
+
+  getFilterFromPath: ->
     # /projects/project_owner/project_name/collections/collection_owner/all -> All collection_owner's collections, viewed in context of project_name and collection_owner
     # /projects/project_owner/project_name/collections/collection_owner     -> All collection_owner's collections for project_name, viewed in context of project_name and collection_owner
     # /projects/project_owner/project_name/collections/all                  -> All collections, viewed in context of project_name
@@ -380,34 +389,68 @@ List = React.createClass
       filters["owner"] = pathParts[4]
     return filters
 
-  checkIfViewingOwnCollections: ->
-    return @props.user? and @props.user.login == @getCollectionOwnerName()
+  makeTextUnbreakable: (text) ->
+    text.replace /\ /g, "\u00a0"
+
+  getUnbreakableProjectDisplayName: ->
+    if @props.project?
+      return @makeTextUnbreakable(@props.project.display_name)
+
+  getUnbreakableCollectionOwnerName: ->
+    if @collectionOwnerLogin? and @collectionOwnerLogin != "all"
+      return @makeTextUnbreakable(@collectionOwnerLogin)
 
   getHeroNavWithAppropriateParams: ->
     if @props.params?.collection_owner? or @props.params?.favorites_owner?
-      <CollectionsNav user={@props.user} location={@props.location} filter={@getFiltersFromPath()} project={@props.project} owner={@props.owner} viewingOwnCollections={@checkIfViewingOwnCollections()} collectionOwnerName={@getCollectionOwnerName()} collectionOwnerLogin={@getCollectionOwnerName()} />
+      <CollectionsNav user={@props.user}
+                      location={@props.location}
+                      situation={@situation}
+                      unbreakableProjectDisplayName = {@unbreakableProjectDisplayName}
+                      unbreakableCollectionOwnerName = {@unbreakableCollectionOwnerName}
+                      filter={@filter}
+                      project={@props.project}
+                      owner={@props.owner}
+                      viewingOwnCollections={@viewingOwnCollections}
+                      collectionOwnerName={@collectionOwnerLogin}
+                      collectionOwnerLogin={@collectionOwnerLogin} />
     else
-      <CollectionsNav user={@props.user} location={@props.location} filter={@getFiltersFromPath()} project={@props.project} owner={@props.owner} viewingOwnCollections={@checkIfViewingOwnCollections()} />
+      <CollectionsNav user={@props.user}
+                      location={@props.location}
+                      situation={@situation}
+                      unbreakableProjectDisplayName = {@unbreakableProjectDisplayName}
+                      unbreakableCollectionOwnerName = {@unbreakableCollectionOwnerName}
+                      filter={@filter}
+                      project={@props.project}
+                      owner={@props.owner}
+                      viewingOwnCollections={@viewingOwnCollections} />
 
   render: ->
-    console.log "favorite", @props.favorite
     if @props.params?.collection_owner? or @props.params?.favorites_owner?
-      collectionOwnerName = @getCollectionOwnerName()
+      @collectionOwnerLogin = @getCollectionOwnerLogin()
     else
-      collectionOwnerName = "all"
+      @collectionOwnerLogin = "all"
+    @viewingOwnCollections = @props.user? and @props.user.login == @getCollectionOwnerLogin()
+    @filter = @getFilterFromPath()
+    @situation = @determineSituation()
+    @unbreakableProjectDisplayName = @getUnbreakableProjectDisplayName()
+    @unbreakableCollectionOwnerName = @getUnbreakableCollectionOwnerName()
 
     <OwnedCardList
       {...@props}
-      translationObjectName="collectionsPage"
-      listPromise={@listCollections(collectionOwnerName)}
-      linkTo="collections"
-      filter={@getFiltersFromPath()}
-      heroNav={@getHeroNavWithAppropriateParams()}
-      heroClass="collections-hero"
-      ownerName={collectionOwnerName}
-      skipOwner={!@props.params?.owner}
-      imagePromise={@imagePromise}
-      cardLink={@cardLink} />
+      translationObjectName = "collectionsPage"
+      unbreakableProjectDisplayName = {@getUnbreakableProjectDisplayName()}
+      unbreakableCollectionOwnerName = {@getUnbreakableCollectionOwnerName()}
+      listPromise = {@listCollections(@collectionOwnerLogin)}
+      linkTo = "collections"
+      filter = {@filter}
+      situation = {@situation}
+      titleMessageKey = {@getTitleMessageKey()}
+      heroNav = {@getHeroNavWithAppropriateParams()}
+      heroClass = "collections-hero"
+      ownerName = {@collectionOwnerLogin}
+      skipOwner = {!@props.params?.owner}
+      imagePromise = {@imagePromise}
+      cardLink = {@cardLink} />
 
 FavoritesList = React.createClass
   displayName: 'FavoritesPage'
