@@ -119,12 +119,7 @@ CollectionsNav = React.createClass
   # candidateLinksForThisType should be an array of links for the desired baseType, keyed by context
   getBestLink: (baseType, candidateLinksForThisType) ->
     switch baseType
-      when "favorites"
-        if @context.includes("project")
-          bestLink = candidateLinksForThisType["project"]
-        else
-          bestLink = candidateLinksForThisType["all"]
-      when "collections","recents" then bestLink = candidateLinksForThisType[@context]
+      when "favorites","collections","recents" then bestLink = candidateLinksForThisType[@context]
       when "profile"
         switch @context
           when "user-and-project" then bestLink = candidateLinksForThisType["user-and-project"]
@@ -143,22 +138,22 @@ CollectionsNav = React.createClass
     candidateLinks = {
       "collections":
         "all": @createLink("all","/collections", "IndexLink",true)
-        "user": @createLink("user","/collections/#{@props.collectionOwnerLogin}","Link",true)
+        "user": @createLink("user","/collections/#{@props.contextUserLogin}","Link",true)
         "project": @createLink("project","/collections")
-        "user-and-project": @createLink("user-and-project","/collections/#{@props.collectionOwnerLogin}")
+        "user-and-project": @createLink("user-and-project","/collections/#{@props.contextUserLogin}")
       "favorites":
         "all": @createLink("all","/favorites", "IndexLink",true)
-        "user": @createLink("user","/favorites/#{@props.collectionOwnerLogin}","Link",true)
+        "user": @createLink("user","/favorites/#{@props.contextUserLogin}","Link",true)
         "project": @createLink("project","/favorites")
-        "user-and-project": @createLink("user-and-project","/favorites/#{@props.collectionOwnerLogin}")
+        "user-and-project": @createLink("user-and-project","/favorites/#{@props.contextUserLogin}")
       "profile":
-        "user": @createLink("user","/users/#{@props.collectionOwnerLogin}","Link",true)
-        "user-and-project": @createLink("user-and-project","/users/#{@props.collectionOwnerLogin}")
+        "user": @createLink("user","/users/#{@props.contextUserLogin}","Link",true)
+        "user-and-project": @createLink("user-and-project","/users/#{@props.contextUserLogin}")
       "recents":
         "all": @createLink("all","/talk/recents")
-        "user": @createLink("user","/users/#{@props.collectionOwnerLogin}")
+        "user": @createLink("user","/users/#{@props.contextUserLogin}")
         "project": @createLink("project","/talk/recents")
-        "user-and-project": @createLink("user-and-project","/users/#{@props.collectionOwnerLogin}")
+        "user-and-project": @createLink("user-and-project","/users/#{@props.contextUserLogin}")
     }
 
     # now we set the message keys, according to context and perspective
@@ -169,36 +164,26 @@ CollectionsNav = React.createClass
     # now we have to decide which links to show, according to base type, filter, context and perspective
     linksToShow = []
 
-    # first handle collection links
-    if @baseType == "collections"
-      linksToShow.push candidateLinks[@baseType]["all"]
-      if @context.includes("user")
-        linksToShow.push candidateLinks[@baseType]["user"]
-      if @context.includes("project")
-        linksToShow.push candidateLinks[@baseType]["project"]
-      if @context == "user-and-project"
-        linksToShow.push candidateLinks[@baseType]["user-and-project"]
-
-    # now favorites links
-    if @baseType == "favorites"
-      if @context.includes("project")
+    # first handle collection links, then favorites links
+    for baseType in ["collections", "favorites"]
+      if baseType == @baseType
         linksToShow.push candidateLinks[@baseType]["all"]
-      if @context.includes("user")
-        linksToShow.push candidateLinks[@baseType]["user"]
-      if @context.includes("project")
-        linksToShow.push candidateLinks[@baseType]["project"]
-      if @context == "user-and-project"
-        linksToShow.push candidateLinks[@baseType]["user-and-project"]
+        if @context.includes("user")
+          linksToShow.push candidateLinks[@baseType]["user"]
+        if @context.includes("project")
+          linksToShow.push candidateLinks[@baseType]["project"]
+        if @context == "user-and-project"
+          linksToShow.push candidateLinks[@baseType]["user-and-project"]
 
     # now short links to alternate baseType
-    if @baseType != "collections"
-      shortCollectionsLink = @getBestLink "collections", candidateLinks["collections"]
-      shortCollectionsLink.messageKey = "collectionsPage.collections.short"
-      linksToShow.push shortCollectionsLink
-    if @baseType != "favorites"
-      shortFavoritesLink = @getBestLink "favorites", candidateLinks["favorites"]
-      shortFavoritesLink.messageKey = "collectionsPage.favorites.short"
-      linksToShow.push shortFavoritesLink
+    for baseType in ["collections", "favorites"]
+      if baseType != @baseType
+        shortLink = @getBestLink baseType, candidateLinks[baseType]
+        if @context.includes("project") or (!@context.includes("project") and !@props.owner?)
+          # when we are within a project, we shorten the link to make more room - also if logged out not viewing project
+          shortLink.messageKey = "collectionsPage.#{baseType}.short"
+
+        linksToShow.push shortLink
 
     # now user profile
     if @context.includes("user")
@@ -209,9 +194,10 @@ CollectionsNav = React.createClass
     #  linksToShow.push getBestLink "recents", candidateLinks["recents"]
 
     # now context removal link
-    contextRemovalLink = @createLink(@filterType,@getRemoveProjectContextLink(),"Link",false,true)
-    contextRemovalLink["messageKey"] = "collectionsPage.viewOnZooniverseOrg"
-    linksToShow.push contextRemovalLink
+    if @context.includes("project")
+      contextRemovalLink = @createLink(@filterType,@getRemoveProjectContextLink(),"Link",false,true)
+      contextRemovalLink["messageKey"] = "collectionsPage.viewOnZooniverseOrg"
+      linksToShow.push contextRemovalLink
 
     return linksToShow
 
@@ -304,31 +290,56 @@ List = React.createClass
 
     apiClient.type('collections').get query
 
-  # return the display name of the collection owner (just login name for now)
-  getCollectionOwnerLogin: ->
+  # return the display name of the user whose context we are in (just login name for now)
+  # comes from collection, if present, otherwise from the logged in user if there is one.
+  getContextUserLogin: ->
     if @props.favorite
       if @props.params?.favorites_owner?
         return @props.params.favorites_owner
       else
-        return @props.params.owner
+        if @props.user?
+          return @props.user.login
+        else
+          return @props.params.owner
     else
       if @props.params?.collection_owner?
         return @props.params.collection_owner
       else
-        return @props.params.owner
+        if @props.user?
+          return @props.user.login
+        else
+          return @props.params.owner
 
   # determine the current situation: context, perspective, baseType and filterType
   determineSituation: ->
     if @props.project?
-      if @collectionOwnerLogin? and @collectionOwnerLogin != "all"
+      if @contextUserLogin? and @contextUserLogin != "all"
+        # user context comes from the collection owner
         context = "user-and-project"
       else
-        context = "project"
+        if @props.user?
+          # user context comes current logged in user
+          context = "user-and-project"
+        else
+          if @props.params.owner?
+            # user context comes from the URL parameter
+            context = "user-and-project"
+          else
+            context = "project"
     else
-      if @collectionOwnerLogin? and @collectionOwnerLogin != "all"
+      if @contextUserLogin? and @contextUserLogin != "all"
+        # user context comes from the collection
         context = "user"
       else
-        context = "all"
+        if @props.user?
+          # user context comes current logged in user
+          context = "user"
+        else
+          if @props.params.owner?
+            # user context comes from the URL parameter
+            context = "user"
+          else
+            context = "all"
     if @viewingOwnCollections
       perspective = "self"
     else
@@ -344,13 +355,13 @@ List = React.createClass
         else
           filterType = "project"
       else
-        if "owner" of @filter and @filter["owner"] != "all"
+        if "owner" of @filter
           filterType = "user"
         else
           filterType = "all"
     else
       filterType = "all"
-    #console.log "context",context,"baseType",baseType,"filterType",filterType,"perspective",perspective
+    console.log "context",context,"baseType",baseType,"filterType",filterType,"perspective",perspective
     return {
       context: context
       perspective: perspective
@@ -378,13 +389,13 @@ List = React.createClass
     [firstPart, ..., lastPart] = pathParts
     if firstPart == "projects" and pathParts.length < 6 and lastPart != "all"
       filters["project_ids"] = @props.project.id
-    if firstPart == "collections" and pathParts.length == 2 and pathParts[1] != ""
+    if firstPart == "collections" and pathParts.length == 2 and pathParts[1] != "" and pathParts[1] != "all"
       filters["owner"] = pathParts[1]
-    if firstPart == "favorites" and pathParts.length == 2 and pathParts[1] != ""
+    if firstPart == "favorites" and pathParts.length == 2 and pathParts[1] != "" and pathParts[1] != ""
       filters["owner"] = pathParts[1]
     if pathParts.length>4 and pathParts[3] == "collections" and pathParts[4] != "" and pathParts[4] != "all"
       filters["owner"] = pathParts[4]
-    if pathParts.length>4 and pathParts[3] == "favorites" and pathParts[4] != ""
+    if pathParts.length>4 and pathParts[3] == "favorites" and pathParts[4] != "" and pathParts[4] != "all"
       filters["owner"] = pathParts[4]
     return filters
 
@@ -396,11 +407,11 @@ List = React.createClass
       return @makeTextUnbreakable(@props.project.display_name)
 
   getUnbreakableCollectionOwnerName: ->
-    if @collectionOwnerLogin? and @collectionOwnerLogin != "all"
-      return @makeTextUnbreakable(@collectionOwnerLogin)
+    if @contextUserLogin? and @contextUserLogin != "all"
+      return @makeTextUnbreakable(@contextUserLogin)
 
   getHeroNavWithAppropriateParams: ->
-    if @props.params?.collection_owner? or @props.params?.favorites_owner?
+    if @props.params?.collection_owner? or @props.params?.favorites_owner? or @props.user? or @props.params.owner?
       <CollectionsNav user={@props.user}
                       location={@props.location}
                       situation={@situation}
@@ -410,8 +421,8 @@ List = React.createClass
                       project={@props.project}
                       owner={@props.owner}
                       viewingOwnCollections={@viewingOwnCollections}
-                      collectionOwnerName={@collectionOwnerLogin}
-                      collectionOwnerLogin={@collectionOwnerLogin} />
+                      collectionOwnerName={@contextUserLogin}
+                      contextUserLogin={@contextUserLogin} />
     else
       <CollectionsNav user={@props.user}
                       location={@props.location}
@@ -424,11 +435,11 @@ List = React.createClass
                       viewingOwnCollections={@viewingOwnCollections} />
 
   render: ->
-    if @props.params?.collection_owner? or @props.params?.favorites_owner?
-      @collectionOwnerLogin = @getCollectionOwnerLogin()
+    if @props.params?.collection_owner? or @props.params?.favorites_owner? or @props.user? or @props.params.owner?
+      @contextUserLogin = @getContextUserLogin()
     else
-      @collectionOwnerLogin = "all"
-    @viewingOwnCollections = @props.user? and @props.user.login == @getCollectionOwnerLogin()
+      @contextUserLogin = "all"
+    @viewingOwnCollections = @props.user? and @props.user.login == @getContextUserLogin()
     @filter = @getFilterFromPath()
     @situation = @determineSituation()
     @unbreakableProjectDisplayName = @getUnbreakableProjectDisplayName()
@@ -439,14 +450,14 @@ List = React.createClass
       translationObjectName = "collectionsPage"
       unbreakableProjectDisplayName = {@getUnbreakableProjectDisplayName()}
       unbreakableCollectionOwnerName = {@getUnbreakableCollectionOwnerName()}
-      listPromise = {@listCollections(@collectionOwnerLogin)}
+      listPromise = {@listCollections(@contextUserLogin)}
       linkTo = "collections"
       filter = {@filter}
       situation = {@situation}
       titleMessageKey = {@getTitleMessageKey()}
       heroNav = {@getHeroNavWithAppropriateParams()}
       heroClass = "collections-hero"
-      ownerName = {@collectionOwnerLogin}
+      ownerName = {@contextUserLogin}
       skipOwner = {!@props.params?.owner}
       imagePromise = {@imagePromise}
       cardLink = {@cardLink} />
