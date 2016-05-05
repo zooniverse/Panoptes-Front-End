@@ -57,7 +57,7 @@ module.exports = React.createClass
         Live
       </label>
 
-      <p className="form-help">Workflows can be edited during development, and subjects will never retire. In a live project, workflows are locked and can no longer be edited, and classifications count toward subject retirement.</p>
+      <p className="form-help">All workflows can be edited during development, and subjects will never retire. In a live project, active workflows are locked and can no longer be edited, and classifications count toward subject retirement.</p>
 
       <div style={looksDisabled if @props.project.private or not @props.project.live}>
         <hr />
@@ -142,4 +142,5 @@ module.exports = React.createClass
             </ul>
           </div>
       }</PromiseRenderer>
+      <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
     </div>
