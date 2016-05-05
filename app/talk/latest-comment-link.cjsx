@@ -8,6 +8,7 @@ PromiseRenderer = require '../components/promise-renderer'
 {Link, History} = require 'react-router'
 merge = require 'lodash.merge'
 {Markdown} = (require 'markdownz').default
+ContextualLinks = require '../lib/contextual-links'
 
 PAGE_SIZE = require('./config').discussionPageSize
 
@@ -77,7 +78,8 @@ module?.exports = React.createClass
         </div>
 
         {if @state.commentUser?
-          <Link className="user-profile-link" to="/users/#{@state.commentUser.login}">
+          commenterProfileLink = ContextualLinks.prefixLinkIfNeeded(@props,"/users/#{@state.commentUser.login}")
+          <Link className="user-profile-link" to="#{commenterProfileLink}">
             <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
           </Link>}
 

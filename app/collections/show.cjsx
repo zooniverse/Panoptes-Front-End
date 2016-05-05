@@ -11,12 +11,14 @@ Avatar = require '../partials/avatar'
 Loading = require '../components/loading-indicator'
 HandlePropChanges = require '../lib/handle-prop-changes'
 TitleMixin = require '../lib/title-mixin'
+ContextualLinks = require '../lib/contextual-links'
 
 counterpart.registerTranslations 'en',
   collectionPage:
     settings: 'Settings'
     collaborators: 'Collaborators'
     collectionsLink: '%(user)s\'s\u00a0Collections'
+    favoritesLink: '%(user)s\'s\u00a0Favorites'
     userLink: '%(user)s\'s\u00a0Profile'
   collectionsPageWrapper:
     error: 'There was an error retrieving this collection.'
@@ -33,40 +35,51 @@ CollectionPage = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-collection-page'
 
-  getProjectContextForLinkPrefix: ->
-    if @props.project?
-      return "/projects/#{@props.params.owner}/#{@props.params.name}"
+  getCollectionsLink: (ownerName) ->
+    if @props.collection.favorite?
+      ContextualLinks.prefixLinkIfNeeded(@props,"/favorites/#{ownerName}")
     else
-      return ""
+      ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{ownerName}")
+
+  getCollectionsLinkMessageKey: ->
+    if @props.collection.favorite?
+      "collectionPage.favoritesLink"
+    else
+      "collectionPage.collectionsLink"
 
   render: ->
     <PromiseRenderer promise={@props.collection.get('owner')}>{(owner) =>
       [ownerName, name] = @props.collection.slug.split('/')
       params = {owner: ownerName, name: name}
 
+      collectionLink = ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{ownerName}/#{name}")
+
       isOwner = @props.user?.id is owner.id
+      if isOwner
+        settingsLink = ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{ownerName}/#{name}/settings")
+        collabLink = ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{ownerName}/#{name}/collaborators")
+      profileLink = ContextualLinks.prefixLinkIfNeeded(@props,"/users/#{ownerName}")
       nonBreakableOwnerName =  owner.display_name.replace /\ /g, "\u00a0"
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
-          <IndexLink to="#{@getProjectContextForLinkPrefix()}/collections/#{ownerName}/#{name}" activeClassName="active" className="tabbed-content-tab">
+          <IndexLink to="#{collectionLink}" activeClassName="active" className="tabbed-content-tab">
             <Avatar user={owner} />
             {@props.collection.display_name}
           </IndexLink>
 
           {if isOwner
-            <Link to="#{@getProjectContextForLinkPrefix()}/collections/#{ownerName}/#{name}/settings" activeClassName="active" className="tabbed-content-tab">
+            <Link to="#{settingsLink}" activeClassName="active" className="tabbed-content-tab">
               <Translate content="collectionPage.settings" />
             </Link>}
 
           {if isOwner
-            <Link to="#{@getProjectContextForLinkPrefix()}/collections/#{ownerName}/#{name}/collaborators" activeClassName="active" className="tabbed-content-tab">
+            <Link to="#{collabLink}" activeClassName="active" className="tabbed-content-tab">
               <Translate content="collectionPage.collaborators" />
             </Link>}
-
-          <Link to="#{@getProjectContextForLinkPrefix()}/collections/#{ownerName}" activeClassName="active" className="tabbed-content-tab">
-            <Translate content="collectionPage.collectionsLink" user="#{nonBreakableOwnerName}" />
+          <Link to="#{@getCollectionsLink(ownerName)}" activeClassName="active" className="tabbed-content-tab">
+            <Translate content="#{@getCollectionsLinkMessageKey()}" user="#{nonBreakableOwnerName}" />
           </Link>
-          <Link to="#{@getProjectContextForLinkPrefix()}/users/#{ownerName}" activeClassName="active" className="tabbed-content-tab">
+          <Link to="#{profileLink}" activeClassName="active" className="tabbed-content-tab">
             <Translate content="collectionPage.userLink" user="#{nonBreakableOwnerName}" />
           </Link>
         </nav>
@@ -110,11 +123,11 @@ module.exports = React.createClass
     else
       @props.params.name
 
-  getClassPerProjectContext: ->
+  getPageClasses: ->
     if @props.project?
-      return " collection-page-with-project-context"
+      return "content-container collection-page-with-project-context"
     else
-      return ""
+      return "content-container"
 
   fetchCollection: ->
     @setState
@@ -140,7 +153,7 @@ module.exports = React.createClass
         @setState loading: false
 
   render: ->
-    <div className="content-container#{@getClassPerProjectContext()}">
+    <div className="#{@getPageClasses()}">
       {if @state.collection
         <CollectionPage {...@props} collection={@state.collection} roles={@state.roles} />}
 

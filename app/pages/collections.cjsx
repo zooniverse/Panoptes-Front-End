@@ -24,6 +24,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 OwnedCardList = require '../components/owned-card-list'
 Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
+ContextualLinks = require '../lib/contextual-links'
 
 counterpart.registerTranslations 'en',
   collectionsPage:
@@ -104,15 +105,6 @@ CollectionsNav = React.createClass
       linkType: linkType
       newFilterType: newFilterType
     }
-
-  getRemoveProjectContextLink: ->
-    pathParts = @props.location.pathname.split('/')
-    [first, ..., last] = pathParts
-    if first == "projects"
-      if last == "all"
-        return pathParts[3...-1].join("/")
-      else
-        return pathParts[3...].join("/")
 
   # When viewing collections, we only show one favorites link - and vice versa - to limit menu options.
   # This method will retrieve the best single link that is currently viable, for the specified baseType
@@ -195,7 +187,7 @@ CollectionsNav = React.createClass
 
     # now context removal link
     if @context.includes("project")
-      contextRemovalLink = @createLink(@filterType,@getRemoveProjectContextLink(),"Link",false,true)
+      contextRemovalLink = @createLink(@filterType,ContextualLinks.getRemoveProjectContextLink(@props),"Link",false,true)
       contextRemovalLink["messageKey"] = "collectionsPage.viewOnZooniverseOrg"
       linksToShow.push contextRemovalLink
 
