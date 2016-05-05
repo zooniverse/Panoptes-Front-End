@@ -86,8 +86,8 @@ module.exports =
 
       <Route path="collections" component={require('./pages/collections').CollectionsList}>
         <Route path="all" component={require('./pages/collections').CollectionsList} />
-        <Route path=":collection_owner" component={require('./pages/collections').CollectionsList} />
         <Route path=":collection_owner/all" component={require('./pages/collections').CollectionsList} />
+        <Route path=":collection_owner" component={require('./pages/collections').CollectionsList} />
       </Route>
       <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
         <Route path="settings" component={require './collections/settings'} />
@@ -95,6 +95,7 @@ module.exports =
         <Route path="talk" component={require './collections/show-list'} />
       </Route>
       <Route path="favorites" component={require('./pages/collections').FavoritesList}>
+        <Route path="all" component={require('./pages/collections').FavoritesList} />
         <Route path=":favorites_owner" component={require('./pages/collections').FavoritesList} />
       </Route>
       <Route path="faq" component={require './pages/project/faq'} />
