@@ -361,7 +361,7 @@ List = React.createClass
           filterType = "all"
     else
       filterType = "all"
-    console.log "context",context,"baseType",baseType,"filterType",filterType,"perspective",perspective
+    #console.log "context",context,"baseType",baseType,"filterType",filterType,"perspective",perspective
     return {
       context: context
       perspective: perspective
