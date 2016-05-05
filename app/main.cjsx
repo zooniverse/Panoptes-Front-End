@@ -4,6 +4,7 @@ ReactDOM = {render} = require 'react-dom'
 {useBasename} = require 'history'
 createBrowserHistory = require 'history/lib/createBrowserHistory'
 routes = require './router'
+apiClient = require 'panoptes-client/lib/api-client'
 
 # IE, oh my god:
 location.origin ?= location.protocol + "//" + location.hostname + if location.port then ':' + location.port else ''
@@ -25,4 +26,4 @@ logDeployedCommit = require './lib/log-deployed-commit'
 logDeployedCommit()
 
 # For console access:
-window?.zooAPI = require 'panoptes-client/lib/api-client'
+window?.zooAPI = apiClient
