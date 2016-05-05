@@ -1,7 +1,7 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 DragReorderable = require 'drag-reorderable'
-{days, months} = require './data/time'
+Months = require './data/months'
 Countries = require './data/countries' # value = ISO 3166-1 numeric code
 statesUSA = require './data/statesUSA' # value = two-letter postal abbreviation, does not duplicate with Canada
 provincesCanada = require './data/provincesCanada' # value = two-letter postal abbreviation, does not duplicate with USA
@@ -122,7 +122,7 @@ DropdownDialog = React.createClass
 
     switch preset
       when "numberRange" then @handleNumberRange(select, optionsKey)
-      when "months" then select.options["#{optionsKey}"] = months
+      when "months" then select.options["#{optionsKey}"] = Months
       when "Countries" then select.options["#{optionsKey}"] = Countries
       when "statesUSA" then select.options["#{optionsKey}"] = statesUSA
       when "provincesCanada" then select.options["#{optionsKey}"] = provincesCanada
