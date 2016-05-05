@@ -22,6 +22,7 @@ DropdownDialog = React.createClass
     optionsKeys: {}
     conditionalSelects: []
     deletedValues: []
+    numberRange: false
 
   componentDidMount: ->
     if @props.initialSelect.condition?
@@ -104,7 +105,13 @@ DropdownDialog = React.createClass
       deletedValues.push value
       @setState deletedValues: deletedValues
 
-  handlePreset: ->
+  handlePresetChange: (e) ->
+    if e.target.value is "numberRange"
+      @setState numberRange: true
+    else
+      @setState numberRange: false
+
+  handlePresetApply: ->
     select = @state.editSelect
 
     if select.condition? and not @state.optionsKeys[select.condition]
@@ -114,7 +121,7 @@ DropdownDialog = React.createClass
     preset = @refs.preset.value
 
     switch preset
-      when "days" then select.options["#{optionsKey}"] = days
+      when "numberRange" then @handleNumberRange(select, optionsKey)
       when "months" then select.options["#{optionsKey}"] = months
       when "Countries" then select.options["#{optionsKey}"] = Countries
       when "statesUSA" then select.options["#{optionsKey}"] = statesUSA
@@ -123,7 +130,20 @@ DropdownDialog = React.createClass
       else return
 
     @setState editSelect: select
+    @setState numberRange: false
     @refs.preset.value = ""
+
+  handleNumberRange: (select, optionsKey) ->
+    topNumber = @refs.topNumber.value
+    bottomNumber = @refs.bottomNumber.value
+
+    options = []
+    for num in [topNumber..bottomNumber]
+      options.push {value: num, label: "#{num}"}
+
+    select.options["#{optionsKey}"] = options
+
+    return select
 
   save: (e) ->
     if not @state.editSelect.title
@@ -212,16 +232,28 @@ DropdownDialog = React.createClass
 
       <div>
         <h2 className="form-label">Presets</h2>
-        <select ref="preset">
+        <select ref="preset" onChange={@handlePresetChange}>
           <option value="">none selected</option>
-          <option value="days">Days</option>
+          <option value="numberRange">Range of Numbers (i.e. Days, Years)</option>
           <option value="months">Months</option>
           <option value="Countries">Countries</option>
           <option value="statesUSA">States - United States</option>
           <option value="provincesCanada">Provinces - Canada</option>
           <option value="statesMexico">States - Mexico</option>
         </select>
-        <button onClick={@handlePreset}>Apply</button>
+
+        {if @state.numberRange
+          <div>
+            <label>Top number:
+              <input type="number" ref="topNumber" min="0" max="999999" />
+            </label>
+            <br />
+            <label>Bottom number:
+              <input type="number" ref="bottomNumber" min="0" max="999999" />
+            </label>
+          </div>}
+
+        <button onClick={@handlePresetApply}>Apply</button>
       </div>
 
       <br />
