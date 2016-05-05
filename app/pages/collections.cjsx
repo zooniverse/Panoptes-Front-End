@@ -165,7 +165,6 @@ CollectionsNav = React.createClass
     for baseType,links of candidateLinks
       for filterType, to of links
         links[filterType]["messageKey"] = "collectionsPage.#{baseType}.#{@perspective}.#{@convertFilterTypeForMessageKey(filterType)}"
-    console.log "context",@context,"baseType",@baseType,"filterType",@filterType,"perspective",@perspective,"situation",@props.situation
 
     # now we have to decide which links to show, according to base type, filter, context and perspective
     linksToShow = []
@@ -338,7 +337,6 @@ List = React.createClass
       baseType = "favorites"
     else
       baseType = "collections"
-    console.log @filter
     if @filter?
       if "project_ids" of @filter
         if "owner" of @filter
@@ -352,6 +350,7 @@ List = React.createClass
           filterType = "all"
     else
       filterType = "all"
+    #console.log "context",context,"baseType",baseType,"filterType",filterType,"perspective",perspective
     return {
       context: context
       perspective: perspective
