@@ -96,12 +96,13 @@ CollectionsNav = React.createClass
     id += Math.random().toString(36).substr(2) while id.length < length
     id.substr 0, length
 
-  createLink: (to,linkType="Link", linkShouldRemoveProjectFilter=false, dontModifyLink=false) ->
+  createLink: (newFilterType,to,linkType="Link", linkShouldRemoveProjectFilter=false, dontModifyLink=false) ->
     if !dontModifyLink
       to = @suffixLinkIfNeeded(@prefixLinkIfNeeded(to),linkShouldRemoveProjectFilter)
     return {
       to: to
       linkType: linkType
+      newFilterType: newFilterType
     }
 
   getRemoveProjectContextLink: ->
@@ -141,23 +142,23 @@ CollectionsNav = React.createClass
     # candidatelinks, indexed by baseType then filterType
     candidateLinks = {
       "collections":
-        "all": @createLink("/collections", "IndexLink",true)
-        "user": @createLink("/collections/#{@props.collectionOwnerLogin}","Link",true)
-        "project": @createLink("/collections")
-        "user-and-project": @createLink("/collections/#{@props.collectionOwnerLogin}")
+        "all": @createLink("all","/collections", "IndexLink",true)
+        "user": @createLink("user","/collections/#{@props.collectionOwnerLogin}","Link",true)
+        "project": @createLink("project","/collections")
+        "user-and-project": @createLink("user-and-project","/collections/#{@props.collectionOwnerLogin}")
       "favorites":
-        "all": @createLink("/favorites", "IndexLink",true)
-        "user": @createLink("/favorites/#{@props.collectionOwnerLogin}","Link",true)
-        "project": @createLink("/favorites")
-        "user-and-project": @createLink("/favorites/#{@props.collectionOwnerLogin}")
+        "all": @createLink("all","/favorites", "IndexLink",true)
+        "user": @createLink("user","/favorites/#{@props.collectionOwnerLogin}","Link",true)
+        "project": @createLink("project","/favorites")
+        "user-and-project": @createLink("user-and-project","/favorites/#{@props.collectionOwnerLogin}")
       "profile":
-        "user": @createLink("/users/#{@props.collectionOwnerLogin}","Link",true)
-        "user-and-project": @createLink("/users/#{@props.collectionOwnerLogin}")
+        "user": @createLink("user","/users/#{@props.collectionOwnerLogin}","Link",true)
+        "user-and-project": @createLink("user-and-project","/users/#{@props.collectionOwnerLogin}")
       "recents":
-        "all": @createLink("/talk/recents")
-        "user": @createLink("/users/#{@props.collectionOwnerLogin}")
-        "project": @createLink("/talk/recents")
-        "user-and-project": @createLink("/users/#{@props.collectionOwnerLogin}")
+        "all": @createLink("all","/talk/recents")
+        "user": @createLink("user","/users/#{@props.collectionOwnerLogin}")
+        "project": @createLink("project","/talk/recents")
+        "user-and-project": @createLink("user-and-project","/users/#{@props.collectionOwnerLogin}")
     }
 
     # now we set the message keys, according to context and perspective
@@ -209,7 +210,7 @@ CollectionsNav = React.createClass
     #  linksToShow.push getBestLink "recents", candidateLinks["recents"]
 
     # now context removal link
-    contextRemovalLink = @createLink(@getRemoveProjectContextLink(),"Link",false,true)
+    contextRemovalLink = @createLink(@filterType,@getRemoveProjectContextLink(),"Link",false,true)
     contextRemovalLink["messageKey"] = "collectionsPage.viewOnZooniverseOrg"
     linksToShow.push contextRemovalLink
 
@@ -233,13 +234,23 @@ CollectionsNav = React.createClass
   renderLink: (link) ->
     key = @generateUniqueKeyForLinkInstance(link)
     if link.linkType == "IndexLink"
-      <IndexLink key="#{key}" to="#{link.to}" activeClassName="active">
-        {@generateTranslateLink(link.messageKey)}
-      </IndexLink>
+      if link.newFilterType==@filterType
+        <IndexLink key="#{key}" to="#{link.to}" activeClassName="active">
+          {@generateTranslateLink(link.messageKey)}
+        </IndexLink>
+      else
+        <IndexLink key="#{key}" to="#{link.to}">
+          {@generateTranslateLink(link.messageKey)}
+        </IndexLink>
     else
-      <Link key="#{key}" to="#{link.to}" activeClassName="active">
-        {@generateTranslateLink(link.messageKey)}
-      </Link>
+      if link.newFilterType==@filterType
+        <Link key="#{key}" to="#{link.to}" activeClassName="active">
+          {@generateTranslateLink(link.messageKey)}
+        </Link>
+      else
+        <Link key="#{key}" to="#{link.to}">
+          {@generateTranslateLink(link.messageKey)}
+        </Link>
 
   renderNavBar: ->
     <nav className="hero-nav">
