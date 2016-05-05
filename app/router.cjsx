@@ -96,7 +96,13 @@ module.exports =
       </Route>
       <Route path="favorites" component={require('./pages/collections').FavoritesList}>
         <Route path="all" component={require('./pages/collections').FavoritesList} />
+        <Route path=":favorites_owner/all" component={require('./pages/collections').FavoritesList} />
         <Route path=":favorites_owner" component={require('./pages/collections').FavoritesList} />
+      </Route>
+      <Route path="users/:name" component={require './pages/profile'}>
+        <IndexRoute component={require './pages/profile/feed'} />
+        <Route path="message" component={require './pages/profile/private-message'} />
+        <Route path="stats" component={require './pages/profile/stats'} />
       </Route>
       <Route path="faq" component={require './pages/project/faq'} />
       <Route path="education" component={require './pages/project/education'} />

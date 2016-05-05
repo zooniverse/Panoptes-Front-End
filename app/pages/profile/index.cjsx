@@ -19,6 +19,7 @@ counterpart.registerTranslations 'en',
       moderation: "Moderation"
       stats: "Your stats"
       settings: "Settings"
+      viewOnZooniverseOrg: "View on zooniverse.org"
 
 UserProfilePage = React.createClass
   displayName: 'UserProfilePage'
@@ -49,39 +50,72 @@ UserProfilePage = React.createClass
       .then ([profileHeader]) =>
         @setState({profileHeader})
 
+  getPageClasses: ->
+    classes = 'secondary-page user-profile'
+    if @props.project?
+      classes += ' has-project-context'
+    classes
+
+  prefixLinkIfNeeded: (link) ->
+    if @props.project?
+      # keeps project in context
+      link = "/projects/#{@props.project.slug}" + link
+    return link
+
+  getRemoveProjectContextLink: ->
+    pathParts = @props.location.pathname.split('/')
+    [first, ...] = pathParts
+    if first == "projects"
+      return pathParts[3...].join("/")
+
+  getLinksForNav: ->
+    return {
+      recents: @prefixLinkIfNeeded("/users/#{@props.profileUser.login}")
+      collections: @prefixLinkIfNeeded("/collections/#{@props.profileUser.login}")
+      favorites:  @prefixLinkIfNeeded("/favorites/#{@props.profileUser.login}")
+      stats: @prefixLinkIfNeeded("/users/#{@props.profileUser.login}/stats")
+      message: @prefixLinkIfNeeded("/users/#{@props.profileUser.login}/message")
+      viewOnZooniverseOrg: @getRemoveProjectContextLink()
+    }
+
+  renderNavLinks: ->
+    linksForNav = @getLinksForNav()
+    <span>
+      <IndexLink to="#{linksForNav.recents}" activeClassName="active">
+        <Translate content="profile.nav.comments" />
+      </IndexLink>
+      <Link to="#{linksForNav.collections}" activeClassName="active">
+        <Translate content="profile.nav.collections" />
+      </Link>
+      <Link to="#{linksForNav.favorites}" activeClassName="active">
+        <Translate content="profile.nav.favorites" />
+      </Link>
+      {if @props.user is @props.profileUser
+        <Link to="#{linksForNav.stats}" activeClassName="active">
+          <Translate content="profile.nav.stats" />
+        </Link>
+      else
+        <Link to="#{linksForNav.message}" activeClassName="active">
+          <Translate content="profile.nav.message" />
+        </Link>}
+      {if @props.project?
+        <Link to="#{linksForNav.viewOnZooniverseOrg}" activeClassName="active">
+          <Translate content="profile.nav.viewOnZooniverseOrg" />
+        </Link>}
+    </span>
+
   render: ->
+
     if @state.profileHeader?
       headerStyle = backgroundImage: "url(#{@state.profileHeader.src})"
 
-    <div className="secondary-page user-profile">
+    <div className="#{@getPageClasses()}">
       <section className="hero user-profile-hero" style={headerStyle}>
         <div className="overlay"></div>
         <div className="hero-container">
           <h1>{@props.profileUser.display_name}</h1>
           <nav className="hero-nav">
-            <IndexLink to="/users/#{@props.profileUser.login}" activeClassName="active">
-              <Translate content="profile.nav.comments" />
-            </IndexLink>
-            {' '}
-            <Link to="/collections/#{@props.profileUser.login}" activeClassName="active">
-              <Translate content="profile.nav.collections" />
-            </Link>
-            {' '}
-            <Link to="/favorites/#{@props.profileUser.login}" activeClassName="active">
-              <Translate content="profile.nav.favorites" />
-            </Link>
-            {' '}
-
-            <span>
-              {if @props.user is @props.profileUser
-                <Link to="/users/#{@props.profileUser.login}/stats" activeClassName="active">
-                  <Translate content="profile.nav.stats" />
-                </Link>
-              else
-                <Link to="/users/#{@props.profileUser.login}/message" activeClassName="active">
-                  <Translate content="profile.nav.message" />
-                </Link>}
-            </span>
+            {@renderNavLinks()}
           </nav>
         </div>
       </section>
