@@ -5,6 +5,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 {sugarApiClient} = require 'panoptes-client/lib/sugar'
 {Link} = require 'react-router'
 Paginator = require './lib/paginator'
+ContextualLinks = require '../lib/contextual-links'
 
 module?.exports = React.createClass
   displayName: 'ActiveUsers'
@@ -83,11 +84,13 @@ module?.exports = React.createClass
     @updateTimeout = setTimeout @update, 10000
 
   userLink: (user) ->
+    url = ContextualLinks.prefixLinkIfNeeded @props,"/users/#{user.login}"
     <li key={user.id}>
-      <Link to="/users/#{user.login}" title="#{user.display_name}'s profile">{user.display_name}</Link>
+      <Link to="#{url}" title="#{user.display_name}'s profile">{user.display_name}</Link>
     </li>
 
   render: ->
+    console.log @props
     <div className="talk-active-users">
       <h3>{@state.total} Active Participants:</h3>
       <ul>

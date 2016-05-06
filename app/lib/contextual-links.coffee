@@ -1,17 +1,388 @@
+# When it comes to "context", there are actually a few different related concepts, which are explained here:
+#
+#  - Base Type   : When looking at user data, we can look at one of two types of set: collections or favorites (which are actually collections under the covers, but have special routes)
+#
+#  - Context     : Pages such as collections, recents, favorites and user profiles can be viewed either in a "zoo-wide" context (@props.project? will be false)
+#                  or in the context of a specific project.
+#                  In a project context, the user can be in the context of a particular user, or all users.
+#                  This gives four possible contexts at any given time: user, project, user + project or everything (zoo-wide, a.k.a. "all").
+#                  When we change context, we don't necessarily change what data is shown, just how it is referred to or presented.
+#
+#  - Filter      : The filter will determine which collections, favorites or recents are actually shown.
+#                  This usually corresponds to the context - but doesn't have to.
+#                  We can filter by project, by user, or by user + project, or have no filter in affect.
+#                  when we change the filter, we modify the query and actually change what data is shown.
+#
+#  - Perspective : Pages such as collections, recents and favorites can be viewed in one of three perspectives:
+#                  - viewing your *own* collections, viewing those of other users while logged in,
+#                  or viewing those of any users while logged out
+#                  When we change perspective, we don't change what content is shown, just how it is referred to or presented.
+#                  (Caveat: Privacy settings may cause different content to be visible depending on who we are - but this is handled
+#                   entirely by the API and is ignored in the front-end except for marking when a collection is Private)
+#
+# Here is a guide to the various contextual URL routes we are supporting:
+#
+#   /projects/project_owner/project_name/collections/collection_owner     -> All collection_owner's collections for project_name
+#   /projects/project_owner/project_name/collections/                     -> All collections for project_name
+#   /collections/collection_owner                                         -> All collections by collection owner
+#   /collections/                                                         -> All collections for all users
+#   /projects/project_owner/project_name/favorites/collection_owner       -> All collection_owner's favorites for project_name
+#   /projects/project_owner/project_name/favorites/                       -> All favorites collections for project_name
+#   /favorites/collection_owner                                           -> All collections owner's favorites
+#   /favorites/                                                           -> All favorites for all users
+#   /users/user_name                                                      -> The profile for user_name, in general Zooniverse context
+#   /projects/project_owner/project_name/users/user_name                  -> The profile for user_name, in the context of project_name
+#   /projects/project_owner/project_name/talk/recents/user_name           -> All recent comments for user_name made to the Talk of project_name
+#   /projects/project_owner/project_name/talk/recents                     -> All recent comments for all users and made to the Talk of project_name
+#   /talk/recents/user_name                                               -> All recent comments made by user_name to all projects
+#   /talk/recents/board_id                                                -> All recent comments on board_id made by user_name
+#   /talk/recents/                                                        -> All recent comments for all users and all projects
+#
+
+
 module.exports =
+
+  
+  #  In general, when we are in a user context, that could be the user who we're logged in as or the user whose content 
+  # we're viewing. Therefore we can deduce this from props 
+  # This method will return the login name of the user whose context we are in
+  # This comes from the collection, if present, otherwise from the logged in user if there is one.
+  # TODO UPDATE THIS FOR TALK RECENTS AND USER PROFILES
+  getContextUserLogin: (props) ->
+    if props.favorite
+      if props.params?.favorites_owner?
+        return props.params.favorites_owner
+      else
+        if props.user?
+          return props.user.login
+        else
+          return props.params.owner
+    else
+      if props.params?.collection_owner?
+        return props.params.collection_owner
+      else
+        if props.user?
+          return props.user.login
+        else
+          return props.params.owner
+  
+  # to discourage navigation links from ending up with a line break on small screens, we can swap all spaces for &nbsp;
+  makeTextUnbreakable: (text) ->
+    text.replace /\ /g, "\u00a0"
+    
   # ensures that a link will stay in the project context if we are in the context of a project
-  prefixLinkIfNeeded: (props,link) ->
+  prefixLinkIfNeeded: (props,url) ->
     if props.project?
       # keeps project in context
-      link = "/projects/#{props.project.slug}" + link
-    return link
+      url = "/projects/#{props.project.slug}" + url
+    return url
 
-  # generate a link to the current page, but forcing any project context to be removed
+  # determines current user/project/user+project filters in effect from the URL.
+  # returns the correct format for directly attaching to the query.
+  getFiltersFromPath: (props) ->
+    #TODO CHECK THIS AGAINST NEW URL SCHEMES
+    #TODO UPDATE ROUTES PER NEW URL SCHEMES
+    filters = {}
+    pathParts = props.location.pathname.split('/')
+    [firstPart, ..., lastPart] = pathParts
+    if firstPart == "projects" and pathParts.length < 6 and lastPart != "all"
+      filters["project_ids"] = @props.project.id
+    if firstPart == "collections" and pathParts.length == 2 and pathParts[1] != "" and pathParts[1] != "all"
+      filters["owner"] = pathParts[1]
+    if firstPart == "favorites" and pathParts.length == 2 and pathParts[1] != "" and pathParts[1] != ""
+      filters["owner"] = pathParts[1]
+    if pathParts.length>4 and pathParts[3] == "collections" and pathParts[4] != "" and pathParts[4] != "all"
+      filters["owner"] = pathParts[4]
+    if pathParts.length>4 and pathParts[3] == "favorites" and pathParts[4] != "" and pathParts[4] != "all"
+      filters["owner"] = pathParts[4]
+    return filters
+
+  # dashes not allowed in message keys, so we map the name. (We keep dashes so we can do things like context.includes("user"). )
+  convertFilterTypeForUseInMessageKey: (filterType) ->
+    if filterType == "user-and-project"
+      return "userAndProject"
+    else
+      return filterType
+
+  viewingAUsersCollectionsOrFavorites: (props) ->
+    pathParts = props.location.pathname.split('/')
+    [first, ..., penultimate, last] = pathParts
+    return last!="" and (penultimate == "collections" or penultimate == "favorites")
+
+  viewingAUserProfile: (props) ->
+    pathParts = props.location.pathname.split('/')
+    [first, ..., penultimate, last] = pathParts
+    return penultimate == "users"
+
+  viewingRecents: (props) ->
+    pathParts = props.location.pathname.split('/')
+    [first, ..., penultimate, last] = pathParts
+    return last == "recents" or penultimate == "recents"
+
+  # determine current context according to whether we are in a project and whether we are focussed on a user
+  getCurrentContext: (props, contextUserLogin=@getContextUserLogin(props)) ->
+    if props.project?
+      if @viewingAUsersCollectionsOrFavorites(props)
+        "user-and-project"
+      else
+        "project"
+    else
+      if @viewingAUsersCollectionsOrFavorites(props)
+        "user"
+      else
+        "all"
+
+  # determine current perspective
+  getCurrentPerspective: (props) ->
+    context=@getCurrentContext(props)
+    contextUserLogin=@getContextUserLogin(props)
+    if props.user?
+      currentUserLogin = props.user.login
+    if context.includes("user")
+      if currentUserLogin? and contextUserLogin==currentUserLogin
+        "self"
+      else
+        "other"
+    else
+      null
+
+  # determine what type of page we are viewing
+  getCurrentBaseType: (props) ->
+    if @viewingAUserProfile(props)
+      "users"
+    else if @viewingRecents(props)
+      "talk/recents"
+    else if props.favorite
+      "favorites"
+    else
+      "collections"
+
+  # determine what filter(s) are in effect - user, project, user-and-project or none ("all")
+  getCurrentFilterType: (props, filter = @getFiltersFromPath(props)) ->
+    if filter?
+      if "project_ids" of filter
+        if "owner" of filter
+          "user-and-project"
+        else
+          "project"
+      else
+        if "owner" of filter
+          "user"
+        else
+          "all"
+    else
+      "all"
+
+  # get a link that is the non-project-specific version of current page    
   getRemoveProjectContextLink: (props) ->
     pathParts = props.location.pathname.split('/')
-    [first, ..., last] = pathParts
+    [first, ...] = pathParts
     if first == "projects"
-      if last == "all"
-        return pathParts[3...-1].join("/")
+      return pathParts[3...].join("/")
+      
+  # construct a message key for a link or title
+  getMessageKey: (props,desiredBaseType,desiredFilterType,currentPerspective,title=false) ->
+    messageKey = ""
+    
+    if props.translationObjectName?
+      messageKey += "#{props.translationObjectName}."
+    
+    if title
+      messageKey += "title"
+    else
+      messageKey += "link"
+      
+    messageKey += ".#{desiredBaseType}.#{@convertFilterTypeForUseInMessageKey(desiredFilterType)}"
+    
+    if currentPerspective?
+      messageKey += ".#{currentPerspective}"
+    else
+      messageKey += ".other"
+    messageKey
+
+  # get message object with needed data for inserts
+  getMessageWithData: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin),
+    desiredFilterType=@getCurrentFilterType(props),
+    desiredBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props),
+    title=false) ->
+
+    message = {}
+    message.messageKey = @getMessageKey(props,desiredBaseType,desiredFilterType,currentPerspective,title)
+    if desiredFilterType.includes("user")
+      message.user = {
+        login: @makeTextUnbreakable(contextUserLogin)
+        displayName: @makeTextUnbreakable(contextUserLogin) #TODO get actual display name
+      }
+    if desiredFilterType.includes("project")
+      message.project = {
+        id: props.project.id
+        slug: props.project.slug
+        displayName: @makeTextUnbreakable(props.project.display_name)
+      }
+    message.isATitle = title
+    return message
+
+  # used by the following method
+  getUniqueId: (length=8) ->
+    id = ""
+    id += Math.random().toString(36).substr(2) while id.length < length
+    id.substr 0, length
+
+  # every link in react needs a unique ID. This creates one.
+  generateUniqueKeyForLinkInstance: (url) ->
+    tokenizedURL =  url.replace /\//g, "_"
+    return "link_#{tokenizedURL}_#{@getUniqueId()}"
+
+  # construct a URL for a link to specified base type with specified filter
+  getURL: (props, desiredBaseType, desiredFilterType) ->
+    url = "/#{desiredBaseType}/"
+    if desiredFilterType.includes("project")
+      url = @prefixLinkIfNeeded(props,url)
+    if desiredFilterType.includes("user")
+      url += "#{@getContextUserLogin(props)}/"
+    return url
+
+  # returns a new filter type, adding in a user filter to whatever is currently present
+  getFilterTypeWithUserFilterAdded: (currentFilterType) ->
+    if currentFilterType=="project"
+      return "user-and-project"
+    else if currentFilterType=="all"
+      return "user"
+    else
+      return currentFilterType
+
+  # get an object with all the necessary information to render a link
+  getLink: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin),
+    desiredFilterType=@getCurrentFilterType(props),
+    desiredBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props),
+    title = false) ->
+
+    url = @getURL(props,desiredBaseType,desiredFilterType)
+
+    if desiredFilterType=="all" or desiredFilterType=="project"
+      linkType="IndexLink"
+    else
+      linkType="Link"
+      
+    return {
+      message: @getMessageWithData(props,contextUserLogin,currentContext,desiredFilterType,desiredBaseType,currentPerspective,title)
+      to: url
+      type: linkType
+      key: @generateUniqueKeyForLinkInstance(url)
+      baseType: desiredBaseType
+    }
+
+  getOppositeBaseType: (baseType) ->
+    if baseType=="collections"
+      return "favorites"
+    else if baseType=="favorites"
+      return "collections"
+    else
+      return baseType
+
+  # links to "all collections", "all favorites", "all project collections", "all project favorites" etc.
+  getContextualLinksAcrossUsers: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin),
+    currentFilterType=@getCurrentFilterType(props),
+    currentBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props)) ->
+
+    links = []
+    if currentContext.includes("project")
+      desiredFilterType="project"
+    else
+      desiredFilterType="all"
+    links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,currentPerspective,false)
+    return links
+
+  # links to "user's collections", "user's favorites", "user's project collections", "user's project favorites" etc.
+  getContextualLinksForThisUser: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin),
+    currentFilterType=@getCurrentFilterType(props),
+    currentBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props)) ->
+    links = []
+    if currentContext.includes("user")
+      links.push @getLink(props,contextUserLogin,currentContext,currentFilterType,currentBaseType,currentPerspective,false)
+      links.push @getLink(props,contextUserLogin,currentContext,currentFilterType,@getOppositeBaseType(currentBaseType),currentPerspective,false)
+    return links
+
+  # links to "my collections", "my favorites", etc. (if not already covered in getContextualLinksForThisUser)
+  getContextualLinksForSelf: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin),
+    currentFilterType=@getCurrentFilterType(props),
+    currentBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props)) ->
+
+    links = []
+    if currentContext.includes("user") and (props.user?) and currentPerspective!="self"
+      links.push @getLink(props,props.user.login,currentContext,currentFilterType,currentBaseType,currentPerspective,false)
+      links.push @getLink(props,props.user.login,currentContext,currentFilterType,@getOppositeBaseType(currentBaseType),currentPerspective,false)
+    return links
+
+  # A "To the Zooniverse!" project context removal link that will view the same user & baseType in a non-project context
+  getZooniverseLinksForThisBaseType: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin),
+    currentFilterType=@getCurrentFilterType(props),
+    currentBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props),
+    desiredFilterType=@removeProjectFromFilterType(currentFilterType)) ->
+
+    zooniverseLinks = []
+    if currentContext.includes("project")
+      # if in project context, add "remove project context" link
+      zooniverseLinks.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,currentPerspective,false)
+    return zooniverseLinks
+
+  removeProjectFromFilterType: (filterType) ->
+    filterType = "user" if filterType == "user-and-project"
+    filterType = "all" if filterType == "project"
+    return filterType
+
+  # sort function that always puts collections before favorites, and leaves everything else untouched.
+  sortForCollectionsAndFavorites: (linkA,linkB) ->
+    if linkA.baseType == "collections"
+        return -1
+      else if linkA.baseType == "favorites"
+        return 1
       else
-        return pathParts[3...].join("/")
+        return 0
+
+  # get a title and list of links for a navigation bar, according to the current context, perspective, base type and filter
+  getContextualTitleAndNavLinks: (props) ->
+    contextUserLogin=@getContextUserLogin(props)
+    context = @getCurrentContext(props, contextUserLogin)
+    perspective = @getCurrentPerspective(props)
+    baseType = @getCurrentBaseType(props)
+    filterType = @getCurrentFilterType(props)
+    title = @getMessageWithData(props, contextUserLogin, context, filterType, baseType, perspective, true)
+
+    crossUsersContextualLinks = @getContextualLinksAcrossUsers(props,contextUserLogin)
+    crossUsersContextualLinks.sort @sortForCollectionsAndFavorites
+    console.log "broad",crossUsersContextualLinks
+    thisUserContextualLinks = @getContextualLinksForThisUser(props,contextUserLogin)
+    thisUserContextualLinks.sort @sortForCollectionsAndFavorites
+    console.log "user",thisUserContextualLinks
+    selfContextualLinks = @getContextualLinksForThisUser(props,contextUserLogin)
+    selfContextualLinks.sort @sortForCollectionsAndFavorites
+    console.log "self",selfContextualLinks
+    zooniverseLinks = @getZooniverseLinksForThisBaseType(props, contextUserLogin)
+    zooniverseLinks.sort @sortForCollectionsAndFavorites
+    console.log "zoo",zooniverseLinks
+    orderedLinks = crossUsersContextualLinks.concat thisUserContextualLinks, selfContextualLinks, zooniverseLinks
+
+    return {
+      title: title
+      links: orderedLinks
+    }
+

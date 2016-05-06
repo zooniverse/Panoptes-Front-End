@@ -20,7 +20,7 @@ counterpart.registerTranslations 'en',
       moderation: "Moderation"
       stats: "Your stats"
       settings: "Settings"
-      viewOnZooniverseOrg: "View on zooniverse.org"
+      removeProjectContextLink: "To the Zooniverse!"
 
 UserProfilePage = React.createClass
   displayName: 'UserProfilePage'
@@ -57,20 +57,14 @@ UserProfilePage = React.createClass
       classes += ' has-project-context'
     classes
 
-  getRemoveProjectContextLink: ->
-    pathParts = @props.location.pathname.split('/')
-    [first, ...] = pathParts
-    if first == "projects"
-      return pathParts[3...].join("/")
-
   getLinksForNav: ->
     return {
-      recents: ContextualLinks.prefixLinkIfNeeded(@props, "/users/#{@props.profileUser.login}")
-      collections: ContextualLinks.prefixLinkIfNeeded(@props, "/collections/#{@props.profileUser.login}")
-      favorites:  ContextualLinks.prefixLinkIfNeeded(@props, "/favorites/#{@props.profileUser.login}")
-      stats: ContextualLinks.prefixLinkIfNeeded(@props, "/users/#{@props.profileUser.login}/stats")
-      message: ContextualLinks.prefixLinkIfNeeded(@props, "/users/#{@props.profileUser.login}/message")
-      viewOnZooniverseOrg: ContextualLinks.getRemoveProjectContextLink(@props)
+      recents: ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.profileUser.login}"
+      collections: ContextualLinks.prefixLinkIfNeeded @props, "/collections/#{@props.profileUser.login}"
+      favorites:  ContextualLinks.prefixLinkIfNeeded @props, "/favorites/#{@props.profileUser.login}"
+      stats: ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.profileUser.login}/stats"
+      message: ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.profileUser.login}/message"
+      removeProjectContextLink: ContextualLinks.getRemoveProjectContextLink @props
     }
 
   renderNavLinks: ->
@@ -94,8 +88,8 @@ UserProfilePage = React.createClass
           <Translate content="profile.nav.message" />
         </Link>}
       {if @props.project?
-        <Link to="#{linksForNav.viewOnZooniverseOrg}" activeClassName="active">
-          <Translate content="profile.nav.viewOnZooniverseOrg" />
+        <Link to="#{linksForNav.removeProjectContextLink}" activeClassName="active">
+          <Translate content="profile.nav.removeProjectContextLink" />
         </Link>}
     </span>
 

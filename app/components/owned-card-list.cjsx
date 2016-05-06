@@ -37,7 +37,7 @@ module.exports = React.createClass
     <div className={@getPageClasses()}>
       <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
-          <Translate component="h1" collectionOwnerName={@props.unbreakableCollectionOwnerName} projectDisplayName={@props.unbreakableProjectDisplayName} content={"#{@props.titleMessageKey}"} />
+          <Translate component="h1" collectionOwnerName={@props.titleMessageObject.user?.displayName} projectDisplayName={@props.titleMessageObject.project?.displayName} content={"#{@props.titleMessageObject.messageKey}"} />
           {if @props.heroNav?
             @props.heroNav}
         </div>

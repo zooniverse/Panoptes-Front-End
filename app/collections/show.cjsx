@@ -37,9 +37,9 @@ CollectionPage = React.createClass
 
   getCollectionsLink: (ownerName) ->
     if @props.collection.favorite?
-      ContextualLinks.prefixLinkIfNeeded(@props,"/favorites/#{ownerName}")
+      ContextualLinks.prefixLinkIfNeeded @props, "/favorites/#{ownerName}"
     else
-      ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{ownerName}")
+      ContextualLinks.prefixLinkIfNeeded @props, "/collections/#{ownerName}"
 
   getCollectionsLinkMessageKey: ->
     if @props.collection.favorite?
@@ -52,13 +52,13 @@ CollectionPage = React.createClass
       [ownerName, name] = @props.collection.slug.split('/')
       params = {owner: ownerName, name: name}
 
-      collectionLink = ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{ownerName}/#{name}")
+      collectionLink = ContextualLinks.prefixLinkIfNeeded @props, "/collections/#{ownerName}/#{name}"
 
       isOwner = @props.user?.id is owner.id
       if isOwner
-        settingsLink = ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{ownerName}/#{name}/settings")
-        collabLink = ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{ownerName}/#{name}/collaborators")
-      profileLink = ContextualLinks.prefixLinkIfNeeded(@props,"/users/#{ownerName}")
+        settingsLink = ContextualLinks.prefixLinkIfNeeded @props, "/collections/#{ownerName}/#{name}/settings"
+        collabLink = ContextualLinks.prefixLinkIfNeeded @props, "/collections/#{ownerName}/#{name}/collaborators"
+      profileLink = ContextualLinks.prefixLinkIfNeeded @props, "/users/#{ownerName}"
       nonBreakableOwnerName =  owner.display_name.replace /\ /g, "\u00a0"
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
