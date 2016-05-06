@@ -101,13 +101,16 @@ ProjectExperimentalFeatures = React.createClass
     @props.project.update({experimental_tools: tools})
 
   render: ->
-    <div>
+    <div className="project-status__section">
+      <h4>Experimental Features</h4>
       <AutoSave resource={@props.project}>
-        {EXPERIMENTAL_FEATURES.map (task) =>
-          <label key={task}>
-            <input type="checkbox" name={task} checked={@setting(task)} onChange={@updateTasks.bind @, task} />
-            {task.charAt(0).toUpperCase() + task.slice(1)}
-          </label>}
+        <div className="project-status__section-table">
+          {EXPERIMENTAL_FEATURES.map (task) =>
+            <label key={task} className="project-status__section-table-row">
+              <input type="checkbox" name={task} checked={@setting(task)} onChange={@updateTasks.bind @, task} />
+              {task.charAt(0).toUpperCase() + task.slice(1)}
+            </label>}
+          </div>
       </AutoSave>
     </div>
 
@@ -136,7 +139,8 @@ ProjectRedirectToggle = React.createClass
       "Invalid URL - must be in https?://format"
 
   render: ->
-    <div>
+    <div className="project-status__section">
+      <h4>Project Redirect</h4>
       <AutoSave resource={@props.project}>
         <input type="text" name="redirect" ref="redirectUrl" value={@props.project.redirect} placeholder="External redirect" onBlur={@updateRedirect} onChange={handleInputChange.bind @props.project} />
         <span>{ @validUrlMessage() }</span>
@@ -152,7 +156,8 @@ VersionList = React.createClass
   render: ->
     <PromiseRenderer promise={@props.project.get 'versions'}>{ (versions) =>
       vs = versions.sort()
-      <ul className="project-status-changes">
+      <h4>Recent Status Changes</h4>
+      <ul className="project-status__section-list">
         {vs.map (version) =>
           key = Object.keys(version.changeset)[0]
           from = version.changeset[key][0].toString()
@@ -174,36 +179,39 @@ ProjectStatus = React.createClass
     <ChangeListener target={@props.project}>{ =>
       <div className="project-status">
         <ProjectIcon project={@props.project} />
-        <h4>Visibility Settings</h4>
-        <ul>
-          <li>Private: <ProjectToggle project={@props.project} field="private" trueLabel="Private" falseLabel="Public" /></li>
-          <li>Live: <ProjectToggle project={@props.project} field="live" trueLabel="Live" falseLabel="Development" /></li>
-          <li>Beta Requested: <ProjectToggle project={@props.project} field="beta_requested" /></li>
-          <li>Beta Approved: <ProjectToggle project={@props.project} field="beta_approved" /></li>
-          <li>Launch Requested: <ProjectToggle project={@props.project} field="launch_requested" /></li>
-          <li>Launch Approved: <ProjectToggle project={@props.project} field="launch_approved" /></li>
-        </ul>
-        <h4>Project Redirect</h4>
+        <div className="project-status__section">
+          <h4>Visibility Settings</h4>
+          <ul className="project-status__section-list">
+            <li>Private: <ProjectToggle project={@props.project} field="private" trueLabel="Private" falseLabel="Public" /></li>
+            <li>Live: <ProjectToggle project={@props.project} field="live" trueLabel="Live" falseLabel="Development" /></li>
+            <li>Beta Requested: <ProjectToggle project={@props.project} field="beta_requested" /></li>
+            <li>Beta Approved: <ProjectToggle project={@props.project} field="beta_approved" /></li>
+            <li>Launch Requested: <ProjectToggle project={@props.project} field="launch_requested" /></li>
+            <li>Launch Approved: <ProjectToggle project={@props.project} field="launch_approved" /></li>
+          </ul>
+        </div>
         <ProjectRedirectToggle project={@props.project} />
-        <h4>Experimental Features</h4>
         <ProjectExperimentalFeatures project={@props.project} />
-        <h4>Workflow Settings</h4>
-        <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
-          if workflows.length is 0
-            <div className="workflow-status-list">No workflows found</div>
-          else
-            <div className="workflow-status-list">
-              <ul>
-                {workflows.map (workflow) =>
-                  <li key={workflow.id}>
-                    <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
-                  </li>}
-              </ul>
-           </div>
-        }</PromiseRenderer>
+        <div className="project-status__section">
+          <h4>Workflow Settings</h4>
+          <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
+            if workflows.length is 0
+              <div className="workflow-status-list">No workflows found</div>
+            else
+              <div className="workflow-status-list">
+                <ul className="project-status__section-list">
+                  {workflows.map (workflow) =>
+                    <li key={workflow.id}>
+                      <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
+                    </li>}
+                </ul>
+             </div>
+          }</PromiseRenderer>
+        </div>
         <hr />
-        <h4>Recent Status Changes</h4>
-        <VersionList project={@props.project} />
+        <div className="project-status__section">
+          <VersionList project={@props.project} />
+        </div>
       </div>
     }</ChangeListener>
 
