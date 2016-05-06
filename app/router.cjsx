@@ -90,6 +90,7 @@ module.exports =
         <Route path=":collection_owner" component={require('./pages/collections').CollectionsList} />
       </Route>
       <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
+        <IndexRoute component={require './collections/show-list'} />
         <Route path="settings" component={require './collections/settings'} />
         <Route path="collaborators" component={require './collections/collaborators'} />
         <Route path="talk" component={require './collections/show-list'} />

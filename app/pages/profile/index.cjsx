@@ -6,6 +6,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
+ContextualLinks = require '../../lib/contextual-links'
 
 counterpart.registerTranslations 'en',
   profile:
@@ -56,12 +57,6 @@ UserProfilePage = React.createClass
       classes += ' has-project-context'
     classes
 
-  prefixLinkIfNeeded: (link) ->
-    if @props.project?
-      # keeps project in context
-      link = "/projects/#{@props.project.slug}" + link
-    return link
-
   getRemoveProjectContextLink: ->
     pathParts = @props.location.pathname.split('/')
     [first, ...] = pathParts
@@ -70,12 +65,12 @@ UserProfilePage = React.createClass
 
   getLinksForNav: ->
     return {
-      recents: @prefixLinkIfNeeded("/users/#{@props.profileUser.login}")
-      collections: @prefixLinkIfNeeded("/collections/#{@props.profileUser.login}")
-      favorites:  @prefixLinkIfNeeded("/favorites/#{@props.profileUser.login}")
-      stats: @prefixLinkIfNeeded("/users/#{@props.profileUser.login}/stats")
-      message: @prefixLinkIfNeeded("/users/#{@props.profileUser.login}/message")
-      viewOnZooniverseOrg: @getRemoveProjectContextLink()
+      recents: ContextualLinks.prefixLinkIfNeeded(@props, "/users/#{@props.profileUser.login}")
+      collections: ContextualLinks.prefixLinkIfNeeded(@props, "/collections/#{@props.profileUser.login}")
+      favorites:  ContextualLinks.prefixLinkIfNeeded(@props, "/favorites/#{@props.profileUser.login}")
+      stats: ContextualLinks.prefixLinkIfNeeded(@props, "/users/#{@props.profileUser.login}/stats")
+      message: ContextualLinks.prefixLinkIfNeeded(@props, "/users/#{@props.profileUser.login}/message")
+      viewOnZooniverseOrg: ContextualLinks.getRemoveProjectContextLink(@props)
     }
 
   renderNavLinks: ->

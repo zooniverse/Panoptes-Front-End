@@ -2,6 +2,7 @@ React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../components/loading-indicator'
 CollectionPreview = require '../collections/preview'
+ContextualLinks = require '../lib/contextual-links'
 
 module?.exports = React.createClass
   displayName: 'SubjectCollectionList'
@@ -30,7 +31,7 @@ module?.exports = React.createClass
         <h2>Collections:</h2>
         <div className="subject-collection-list-container">
           {for collection in @state.collections
-            <CollectionPreview key={"collection-#{ collection.id }"} collection={collection} />}
+            <CollectionPreview project={@props.project} key={"collection-#{ collection.id }"} collection={collection} />}
         </div>
       </div>
     else
