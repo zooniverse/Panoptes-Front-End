@@ -10,6 +10,7 @@ talkConfig = require './config'
 {timeAgo} = require './lib/time'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
+ContextualLinks = require '../lib/contextual-links'
 
 PAGE_SIZE = talkConfig.inboxPageSize
 
@@ -52,8 +53,9 @@ module?.exports = React.createClass
       <PromiseRenderer promise={apiClient.type('users').get(conversation.links.users.filter (userId) => userId isnt @props.user.id)}>{(users) =>
         <div>
           {users.map (user, i) =>
+            link = ContextualLinks.prefixIfNeeded @props, "/users/#{user.login}"
             <div key={user.id}>
-              <strong><Link key={user.id} to="/users/#{user.login}">{user.display_name}</Link></strong>
+              <strong><Link key={user.id} to="#{link}">{user.display_name}</Link></strong>
                 <PromiseRenderer promise={conversation.get('messages', {page_size: 1, sort: '-created_at'})}>{(messages) =>
                   <div>{timeAgo(messages[0].updated_at)}{', ' if i isnt (users.length-1)}</div>
                 }</PromiseRenderer>

@@ -65,12 +65,12 @@ UserProfilePage = React.createClass
 
   getLinksForNav: ->
     return {
-      recents: ContextualLinks.prefixLinkIfNeeded(@props, "/users/#{@props.profileUser.login}")
-      collections: ContextualLinks.prefixLinkIfNeeded(@props, "/collections/#{@props.profileUser.login}")
-      favorites:  ContextualLinks.prefixLinkIfNeeded(@props, "/favorites/#{@props.profileUser.login}")
-      stats: ContextualLinks.prefixLinkIfNeeded(@props, "/users/#{@props.profileUser.login}/stats")
-      message: ContextualLinks.prefixLinkIfNeeded(@props, "/users/#{@props.profileUser.login}/message")
-      viewOnZooniverseOrg: ContextualLinks.getRemoveProjectContextLink(@props)
+      recents: ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.profileUser.login}"
+      collections: ContextualLinks.prefixLinkIfNeeded @props, "/collections/#{@props.profileUser.login}"
+      favorites:  ContextualLinks.prefixLinkIfNeeded @props, "/favorites/#{@props.profileUser.login}"
+      stats: ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.profileUser.login}/stats"
+      message: ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.profileUser.login}/message"
+      viewOnZooniverseOrg: ContextualLinks.getRemoveProjectContextLink @props
     }
 
   renderNavLinks: ->

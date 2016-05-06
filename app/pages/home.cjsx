@@ -9,6 +9,7 @@ OwnedCard = require '../partials/owned-card'
 FEATURED_PRODUCT_IDS = require '../lib/featured-projects'
 {Markdown} = (require 'markdownz').default
 ProjectIcon = require '../components/project-icon'
+ContextualLinks = require '../lib/contextual-links'
 
 counterpart.registerTranslations 'en',
   home:
@@ -90,6 +91,7 @@ module.exports = React.createClass
         {if @props.user
           <PromiseRenderer promise={@lastFourProjects()}>{(projectPreferences) =>
             if projectPreferences.length > 0
+              link = ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.user.login}/stats"
               <div className="recent-projects">
                 <Translate component="h5" content="home.recentProjects.title" />
                 <div className="recent-projects-list">
@@ -104,7 +106,7 @@ module.exports = React.createClass
                         null
                     } />}
                 </div>
-                <Link to="/users/#{@props.user.login}/stats" className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
+                <Link to="#{link}" className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
               </div>
             else
               <div className="recent-projects">

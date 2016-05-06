@@ -5,6 +5,7 @@ Loading = require '../../components/loading-indicator'
 CommentLink = require '../../pages/profile/comment-link'
 ModerationReports = require './reports'
 ModerationActions = require './actions'
+ContextualLinks = require '../../lib/contextual-links'
 
 module?.exports = React.createClass
   displayName: 'ModerationComment'
@@ -30,6 +31,7 @@ module?.exports = React.createClass
   render: ->
     <div className="talk-module">
       {if @state.comment
+        link = ContextualLinks.prefixIfNeeded @props, "/users/#{state.comment.user-login}"
         <div key={"comment-#{@state.comment.id}"}>
           <h1>Comment {@state.comment.id} Reports</h1>
           <ModerationReports reports={@props.moderation.reports} />

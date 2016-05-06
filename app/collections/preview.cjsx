@@ -30,7 +30,7 @@ module?.exports = React.createClass
 
   render: ->
     [owner, name] = @props.collection.slug.split('/')
-    collectionLink = ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{owner}/#{name}")
+    collectionLink = ContextualLinks.prefixLinkIfNeeded @props,"/collections/#{owner}/#{name}"
 
     <div className="collection-preview">
       <div className="collection">
@@ -40,7 +40,7 @@ module?.exports = React.createClass
           </Link>
           {' '}by{' '}
           {if @state.owner
-            ownerProfileLink = ContextualLinks.prefixLinkIfNeeded(@props,"/users/#{@state.owner.login}")
+            ownerProfileLink = ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@state.owner.login}"
             <Link className="user-profile-link" to="#{ownerProfileLink}">
               <Avatar user={@state.owner} />{' '}{@state.owner.display_name}
             </Link>}

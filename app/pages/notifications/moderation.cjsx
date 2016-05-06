@@ -6,6 +6,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
 Avatar = require '../../partials/avatar'
+ContextualLinks = require '../../lib/contextual-links'
 
 module?.exports = React.createClass
   displayName: 'ModerationNotification'
@@ -54,9 +55,10 @@ module?.exports = React.createClass
         <p>Reports:</p>
         <ul>
           {for report, i in @state.reports
+            link = ContextualLinks.prefixLinkIfNeeded @props, "/users/#{report.user.login}"
             <div key={"#{ @state.moderation.id }-report-#{ i }"}>
               <li>
-                <Link className="user-profile-link" to="/users/#{report.user.login}">
+                <Link className="user-profile-link" to="#{link}">
                   <Avatar user={report.user} />{' '}{report.user.display_name}
                 </Link>
                 {': '}
@@ -67,7 +69,8 @@ module?.exports = React.createClass
 
         <div className="bottom">
           {if @state.commentUser
-            <Link className="user-profile-link" to="/users/@state.commentUser.login">
+            link = ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@state.commentUser.login}"
+            <Link className="user-profile-link" to="#{link}">
               <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
             </Link>}
 

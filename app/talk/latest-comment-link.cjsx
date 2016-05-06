@@ -78,7 +78,7 @@ module?.exports = React.createClass
         </div>
 
         {if @state.commentUser?
-          commenterProfileLink = ContextualLinks.prefixLinkIfNeeded(@props,"/users/#{@state.commentUser.login}")
+          commenterProfileLink = ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@state.commentUser.login}"
           <Link className="user-profile-link" to="#{commenterProfileLink}">
             <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
           </Link>}
