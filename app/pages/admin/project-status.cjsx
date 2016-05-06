@@ -104,9 +104,9 @@ ProjectExperimentalFeatures = React.createClass
     <div className="project-status__section">
       <h4>Experimental Features</h4>
       <AutoSave resource={@props.project}>
-        <div className="project-status__section--table">
+        <div className="project-status__section-table">
           {EXPERIMENTAL_FEATURES.map (task) =>
-            <label key={task} className="project-status__section--table--row">
+            <label key={task} className="project-status__section-table-row">
               <input type="checkbox" name={task} checked={@setting(task)} onChange={@updateTasks.bind @, task} />
               {task.charAt(0).toUpperCase() + task.slice(1)}
             </label>}
@@ -157,7 +157,7 @@ VersionList = React.createClass
     <PromiseRenderer promise={@props.project.get 'versions'}>{ (versions) =>
       vs = versions.sort()
       <h4>Recent Status Changes</h4>
-      <ul className="project-status__section--list">
+      <ul className="project-status__section-list">
         {vs.map (version) =>
           key = Object.keys(version.changeset)[0]
           from = version.changeset[key][0].toString()
@@ -181,7 +181,7 @@ ProjectStatus = React.createClass
         <ProjectIcon project={@props.project} />
         <div className="project-status__section">
           <h4>Visibility Settings</h4>
-          <ul className="project-status__section--list">
+          <ul className="project-status__section-list">
             <li>Private: <ProjectToggle project={@props.project} field="private" trueLabel="Private" falseLabel="Public" /></li>
             <li>Live: <ProjectToggle project={@props.project} field="live" trueLabel="Live" falseLabel="Development" /></li>
             <li>Beta Requested: <ProjectToggle project={@props.project} field="beta_requested" /></li>
@@ -199,7 +199,7 @@ ProjectStatus = React.createClass
               <div className="workflow-status-list">No workflows found</div>
             else
               <div className="workflow-status-list">
-                <ul className="project-status__section--list">
+                <ul className="project-status__section-list">
                   {workflows.map (workflow) =>
                     <li key={workflow.id}>
                       <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
