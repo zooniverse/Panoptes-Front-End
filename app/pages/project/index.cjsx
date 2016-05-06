@@ -16,6 +16,7 @@ counterpart.registerTranslations 'en',
       about: 'About'
       classify: 'Classify'
       talk: 'Talk'
+      collections: 'Collect'
 
 SOCIAL_ICONS =
   'bitbucket.com/': 'bitbucket'
@@ -31,7 +32,6 @@ SOCIAL_ICONS =
   'wordpress.com/': 'wordpress'
   'youtu.be/': 'youtube'
   'youtube.com/': 'youtube'
-
 
 ProjectPage = React.createClass
   getDefaultProps: ->
@@ -136,6 +136,10 @@ ProjectPage = React.createClass
 
         <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab">
           <Translate content="project.nav.talk" />
+        </Link>
+
+        <Link to="#{projectPath}/collections" activeClassName="active" className="tabbed-content-tab">
+          <Translate content="project.nav.collections" />
         </Link>
 
         {@props.project.urls.map ({label, url}, i) =>
