@@ -42,14 +42,14 @@ module.exports = {
       // explicitly include markdownz (and dependencies) to be transformed because it's es6
       test: /\.jsx?$/,
       include: /markdown/,
-      loader: 'babel'
+      loader: 'babel?cacheDirectory'
     }, {
       test: /\.cjsx$/,
       exclude: /node_modules/,
-      loaders: ['babel', 'coffee', 'cjsx']
+      loaders: ['babel?cacheDirectory', 'coffee', 'cjsx']
     }, {
       test: /\.coffee$/,
-      loaders: ['babel', 'coffee']
+      loaders: ['babel?cacheDirectory', 'coffee']
     }, {
       test: /\.json?$/,
       loader: 'json'
