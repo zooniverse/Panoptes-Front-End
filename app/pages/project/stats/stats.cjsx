@@ -18,8 +18,8 @@ GraphSelect = React.createClass
   getStats: (workflowId, binBy) ->
     statsClient
       .query
-        project_id: @props.projectId
-        workflow_id: workflowId
+        projectID: @props.projectId
+        workflowID: workflowId
         period: binBy
         type: @props.type
       .then (data) ->
@@ -117,7 +117,7 @@ WorkflowProgress = React.createClass
   componentDidMount: ->
     statsClient
       .query
-        workflow_id: @props.workflow?.id
+        workflowID: @props.workflow?.id
         period: 'day'
         type: 'classification'
       .then (data) ->
