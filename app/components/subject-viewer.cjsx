@@ -7,6 +7,7 @@ CollectionsManagerIcon = require '../collections/manager-icon'
 FrameViewer = require './frame-viewer'
 classnames = require 'classnames'
 FlagSubjectButton = require './flag-subject-button'
+SignInPrompt = require '../partials/sign-in-prompt'
 
 NOOP = Function.prototype
 
@@ -23,6 +24,8 @@ CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'
+
+  signInAttentionTimeout: NaN
 
   getDefaultProps: ->
     subject: null
@@ -45,11 +48,16 @@ module.exports = React.createClass
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
 
-  willReceiveProps: (nextProps) ->
-    # The default state for subjects is flipbook if allowed
-    if typeof nextProps.allowFlipbook is 'boolean'
-      this.setState
-        inFlipbookMode: allowFlipbook
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.subject is @props.subject
+      clearTimeout @signInAttentionTimeout
+      @setState loading: true
+
+  promptToSignIn: ->
+    alert (resolve) ->
+      <SignInPrompt onChoose={resolve}>
+        <p>Sign in to help us make the most out of your hard work.</p>
+      </SignInPrompt>
 
   render: ->
     rootClasses = classnames('subject-viewer', {
@@ -66,18 +74,17 @@ module.exports = React.createClass
     else
       mainDisplay = (@renderFrame frame, {key: "frame-#{frame}"} for frame of @props.subject.locations)
 
-
     tools = switch type
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
           if @props.allowFlipbook and @props.allowSeparateFrames
-            <button aria-label="Toggle flipbook mode" title="Toggle flipbook mode" className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
+            <button className="secret-button" aria-label="Toggle flipbook mode" title="Toggle flipbook mode" onClick={@toggleInFlipbookMode}>
               <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
             </button>
         else
           <span className="tools">
             {if @props.allowFlipbook and @props.allowSeparateFrames
-              <button aria-label="Toggle flipbook mode" title="Toggle flipbook mode" className="flipbook-toggle" onClick={@toggleInFlipbookMode}>
+              <button className="secret-button" aria-label="Toggle flipbook mode" title="Toggle flipbook mode" onClick={@toggleInFlipbookMode}>
                 <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
               </button>}
 
@@ -117,13 +124,26 @@ module.exports = React.createClass
           {if @props.workflow?.configuration?.enable_subject_flags
             <FlagSubjectButton classification={@props.classification} />}
           {if @props.subject?.metadata?
-            <button type="button" aria-label="Metadata" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
-          {if @props.subject? and @props.user? and @props.project?
             <span>
-              {unless @props.workflow?.configuration?.disable_favorites
-                <FavoritesButton project={@props.project} subject={@props.subject} user={@props.user} />}
-              <CollectionsManagerIcon project={@props.project} subject={@props.subject} user={@props.user} />
+              <button type="button" className="secret-button" aria-label="Metadata" title="Metadata" onClick={@showMetadata}>
+                <i className="fa fa-info-circle fa-fw"></i>
+              </button>{' '}
             </span>}
+          {if @props.project? and @props.subject?
+            if  @props.user?
+              <span>
+                {unless @props.workflow?.configuration?.disable_favorites
+                  <span>
+                    <FavoritesButton className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />{' '}
+                  </span>}
+                <CollectionsManagerIcon className="secret-button" project={@props.project} subject={@props.subject} user={@props.user} />
+              </span>
+            else
+              <span>
+                <button type="button" className="secret-button #{if @state.loading then 'get-attention'}" onClick={@promptToSignIn}>
+                  <small>You should sign in!</small>
+                </button>
+              </span>}
           {if type is 'image' and @props.linkToFullImage
             <a className="button" href={src} aria-label="Subject Image" title="Subject Image" target="zooImage">
               <i className="fa fa-photo" />
@@ -132,10 +152,12 @@ module.exports = React.createClass
       </div>
     </div>
 
-
+  handleFrameLoad: ->
+    @props.onLoad? arguments...
+    @signInAttentionTimeout = setTimeout (=> @setState loading: false), 3000
 
   renderFrame: (frame, props = {}) ->
-    <FrameViewer {...@props} {...props} frame={frame} />
+    <FrameViewer {...@props} {...props} frame={frame} onLoad={@handleFrameLoad} />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
@@ -177,7 +199,6 @@ module.exports = React.createClass
   handleFrameChange: (frame) ->
     @setState {frame}
     @props.onFrameChange frame
-
 
   showMetadata: ->
     # TODO: Sticky popup.

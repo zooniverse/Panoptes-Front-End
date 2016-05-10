@@ -10,22 +10,14 @@ counterpart = require 'counterpart'
 FinishedBanner = require './finished-banner'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
-SignInPrompt = require '../../partials/sign-in-prompt'
 seenThisSession = require '../../lib/seen-this-session'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
-
-PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
 
 SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
 
 if SKIP_CELLECT
   console?.warn 'Intelligent subject selection disabled'
-
-classificationsThisSession = 0
-
-auth.listen ->
-  classificationsThisSession = 0
 
 # Map each project ID to a promise of its last randomly-selected workflow ID.
 # This is to maintain the same random workflow for each project when none is specified by the user.
@@ -270,9 +262,6 @@ module.exports = React.createClass
         console?.warn 'Failed to save classification:', error
         @queueClassification classification
 
-      classificationsThisSession += 1
-      @maybePromptToSignIn()
-
     return savingClassification
 
   queueClassification: (classification) ->
@@ -302,13 +291,6 @@ module.exports = React.createClass
               console?.error 'Failed to update classification queue:', error
           .catch (error) =>
             console?.error 'Failed to save a queued classification:', error
-
-  maybePromptToSignIn: ->
-    if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not @props.user?
-      alert (resolve) =>
-        <SignInPrompt project={@props.project} onChoose={resolve}>
-          <p><strong>You’ve done {classificationsThisSession} classifications, but you’re not signed in!</strong></p>
-        </SignInPrompt>
 
   loadAnotherSubject: ->
     @getCurrentWorkflow(@props).then (workflow) =>
