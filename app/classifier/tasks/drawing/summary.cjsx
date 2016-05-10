@@ -11,6 +11,7 @@ module.exports = React.createClass
     expanded: false
 
   stripMarkdownFromLabel: (label) ->
+    label = label.replace /\!\[[^\]]*\]\([^)]*\)/g, ""
     remark.process(label)
 
   getInitialState: ->
