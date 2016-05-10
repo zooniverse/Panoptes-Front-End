@@ -1,6 +1,4 @@
 React = require 'react'
-strip = require 'strip-markdown'
-remark = (require 'remark').use(strip)
 
 module.exports = React.createClass
   displayName: 'DrawingSummary'
@@ -14,8 +12,7 @@ module.exports = React.createClass
     if number>1 then "#{type}s" else type
 
   stripMarkdownFromLabel: (label) ->
-    label = label.replace /\!\[[^\]]*\]\([^)]*\)/g, ""
-    remark.process(label)
+    label.replace /\!\[[^\]]*\]\([^)]*\)/g, ""
 
   getInitialState: ->
     expanded: @props.expanded
