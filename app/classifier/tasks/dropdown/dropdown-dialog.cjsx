@@ -1,11 +1,11 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 DragReorderable = require 'drag-reorderable'
-Months = require './data/months'
-Countries = require './data/countries' # value = ISO 3166-1 numeric code
-statesUSA = require './data/statesUSA' # value = two-letter postal abbreviation, does not duplicate with Canada
-provincesCanada = require './data/provincesCanada' # value = two-letter postal abbreviation, does not duplicate with USA
-statesMexico = require './data/statesMexico' # value = three-letter ISO 3166-2 abbreviation
+months = require './presets/months'
+countries = require './presets/countries' # value = ISO 3166-1 numeric code
+statesUSA = require './presets/states-USA' # value = two-letter postal abbreviation, does not duplicate with Canada
+provincesCanada = require './presets/provinces-Canada' # value = two-letter postal abbreviation, does not duplicate with USA
+statesMexico = require './presets/states-Mexico' # value = three-letter ISO 3166-2 abbreviation
 # IMPORTANT: before adding preset options, confirm values are not duplicated in existing presets
 
 DropdownDialog = React.createClass
@@ -22,7 +22,7 @@ DropdownDialog = React.createClass
     optionsKeys: {}
     conditionalSelects: []
     deletedValues: []
-    numberRange: false
+    presetValue: ""
 
   componentDidMount: ->
     if @props.initialSelect.condition?
@@ -85,7 +85,7 @@ DropdownDialog = React.createClass
     @setState editSelect: select
 
   onClickAddOption: ->
-    @addOption(@refs.optionInput.value)
+    @addOption @refs.optionInput.value
     @refs.optionInput.value = ''
 
   onReorder: (newOptions) ->
@@ -106,10 +106,7 @@ DropdownDialog = React.createClass
       @setState deletedValues: deletedValues
 
   handlePresetChange: (e) ->
-    if e.target.value is "numberRange"
-      @setState numberRange: true
-    else
-      @setState numberRange: false
+    @setState presetValue: e.target.value
 
   handlePresetApply: ->
     select = @state.editSelect
@@ -118,24 +115,23 @@ DropdownDialog = React.createClass
       return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
 
     optionsKey = @getOptionsKey(select)
-    preset = @refs.preset.value
+    preset = @state.presetValue
 
     switch preset
       when "numberRange" then @handleNumberRange(select, optionsKey)
-      when "months" then select.options["#{optionsKey}"] = Months
-      when "Countries" then select.options["#{optionsKey}"] = Countries
+      when "months" then select.options["#{optionsKey}"] = months
+      when "Countries" then select.options["#{optionsKey}"] = countries
       when "statesUSA" then select.options["#{optionsKey}"] = statesUSA
       when "provincesCanada" then select.options["#{optionsKey}"] = provincesCanada
       when "statesMexico" then select.options["#{optionsKey}"] = statesMexico
       else return
 
     @setState editSelect: select
-    @setState numberRange: false
-    @refs.preset.value = ""
+    @setState presetValue: ""
 
   handleNumberRange: (select, optionsKey) ->
-    topNumber = @refs.topNumber.value
-    bottomNumber = @refs.bottomNumber.value
+    topNumber = parseFloat @refs.topNumber.value
+    bottomNumber = parseFloat @refs.bottomNumber.value
 
     options = []
     for num in [topNumber..bottomNumber]
@@ -232,7 +228,7 @@ DropdownDialog = React.createClass
 
       <div>
         <h2 className="form-label">Presets</h2>
-        <select ref="preset" onChange={@handlePresetChange}>
+        <select value={@state.presetValue} onChange={@handlePresetChange}>
           <option value="">none selected</option>
           <option value="numberRange">Range of Numbers (i.e. Days, Years)</option>
           <option value="months">Months</option>
@@ -242,14 +238,14 @@ DropdownDialog = React.createClass
           <option value="statesMexico">States - Mexico</option>
         </select>
 
-        {if @state.numberRange
+        {if @state.presetValue is "numberRange"
           <div>
             <label>Top number:
-              <input type="number" ref="topNumber" min="0" max="999999" />
+              <input type="number" ref="topNumber" />
             </label>
             <br />
             <label>Bottom number:
-              <input type="number" ref="bottomNumber" min="0" max="999999" />
+              <input type="number" ref="bottomNumber" />
             </label>
           </div>}
 
