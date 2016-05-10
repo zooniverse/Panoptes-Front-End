@@ -229,7 +229,6 @@ ProjectModalCreator = React.createClass
       kind: @props.kind
       links:
         project: @props.project.id
-        workflows: @props.project.links.workflows
         
     @setState error: null
     apiClient.type('tutorials').create(projectModalData).save()
