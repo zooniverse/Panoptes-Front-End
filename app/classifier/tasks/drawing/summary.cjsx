@@ -9,7 +9,7 @@ module.exports = React.createClass
     expanded: false
 
   getCorrectSingularOrPluralOfDrawingType: (type, number) ->
-    if number>1 then "#{type}s" else type
+    if number!=1 then "#{type}s" else type
 
   stripMarkdownFromLabel: (label) ->
     label.replace /\!\[[^\]]*\]\([^)]*\)/g, ""
