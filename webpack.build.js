@@ -7,7 +7,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var SplitByPathPlugin = require('webpack-split-by-path');
 
-var deploySubdir = !!process.env.DEPLOY_SUBDIR ? '/'+process.env.DEPLOY_SUBDIR+'/': '/';
+var pfePrefix = !!process.env.PFE_PREFIX ? '/'+process.env.PFE_PREFIX+'/': '/';
 
 module.exports = {
   entry: [
@@ -17,7 +17,7 @@ module.exports = {
     path: path.join(__dirname, '/dist'),
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].js',
-    publicPath: deploySubdir
+    publicPath: pfePrefix
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
@@ -33,7 +33,8 @@ module.exports = {
       { from: 'public', to: '.' }
     ]),
     new HtmlWebpackPlugin({
-      baseUrl: deploySubdir,
+      baseUrl: pfePrefix,
+      useBaseBath: pfePrefix == '/',
       template: 'views/index.ejs',
       inject: 'body',
       filename: 'index.html'

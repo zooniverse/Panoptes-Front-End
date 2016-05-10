@@ -77,18 +77,25 @@
     "npm": "^2.14.7"
   },
   "scripts": {
-    "_build": "rimraf dist && webpack --config ./webpack.build.js --progress --profile --colors",
-    "_publish": "publisssh ./dist \"zooniverse-static/${BUCKET}/$DEPLOY_SUBDIR\" -r",
-    "build": "export NODE_ENV=staging; export DEPLOY_SUBDIR=\"\"; npm run _build",
+
+    "build": "webpack --config ./webpack.build.js --progress --profile --colors",
+    "clean": "rimraf dist",
+    "prep": "export NODE_ENV=staging; npm run clean && npm run build",
+    "publish": "publisssh ./dist \"zooniverse-static/${BUCKET}/$DEPLOY_SUBDIR\" $PUBLISH_FLAGS",
     "serve": "export NODE_ENV=staging; node server.js",
     "start": "export NODE_ENV=development; babel-node server_dev.js",
-    "deploy": "export NODE_ENV=production; export BUCKET=www.zooniverse.org; npm run _build && npm run _publish",
-    "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",
-    "_stage": "export NODE_ENV=staging; export BUCKET=preview.zooniverse.org; npm run _build && npm run _publish",
-    "stage": "export DEPLOY_SUBDIR=panoptes-front-end; npm run _stage",
-    "stage-branch": "export BRANCH_SUBDIR=$(git symbolic-ref --short HEAD); export DEPLOY_SUBDIR=${BRANCH_SUBDIR}-panoptes-front-end; npm run _stage",
+
+    "_deploy": "export BUCKET=www.zooniverse.org; npm run clean && npm run build && npm run publish",
+    "deploy": "export NODE_ENV=production; export DEPLOY_SUBDIR=panoptes-front-end; export PUBLISH_FLAGS=\"-d\" npm run _deploy",
+    "deploy-branch": "export NODE_ENV=production; export DEPLOY_SUBDIR=panoptes-front-end/$(git symbolic-ref --short HEAD); export PFE_PREFIX=$DEPLOY_SUBDIR; export PUBLISH_FLAGS=\"-dr\"; npm run _deploy; echo \"Unfortunately this is broken right now.\"",
+
+    "_stage": "export BUCKET=preview.zooniverse.org; npm run clean && npm run build && npm run publish",
+    "stage": "export NODE_ENV=staging; export DEPLOY_SUBDIR=panoptes-front-end; npm run _stage",
+    "stage-branch": "export NODE_ENV=staging; export BRANCH_SUBDIR=$(git symbolic-ref --short HEAD); export DEPLOY_SUBDIR=panoptes-front-end/${BRANCH_SUBDIR}; export PUBLISH_FLAGS=\"-r\"; npm run _stage; echo \"Link: https://${BRANCH_SUBDIR}.pfe-preview.zooniverse.org/\"",
+
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
     "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
+
     "test": "echo 'Integration tests have moved to the panoptes-client library.'"
   }
 }
