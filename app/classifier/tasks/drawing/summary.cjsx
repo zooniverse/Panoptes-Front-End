@@ -1,4 +1,6 @@
 React = require 'react'
+strip = require 'strip-markdown'
+remark = (require 'remark').use(strip)
 
 module.exports = React.createClass
   displayName: 'DrawingSummary'
@@ -7,6 +9,9 @@ module.exports = React.createClass
     task: null
     annotation: null
     expanded: false
+
+  stripMarkdownFromLabel: (label) ->
+    remark.process(label)
 
   getInitialState: ->
     expanded: @props.expanded
@@ -31,7 +36,7 @@ module.exports = React.createClass
         toolMarks = (mark for mark in @props.annotation.value when mark.tool is i)
         if @state.expanded or toolMarks.length isnt 0
           <div key={tool._key} className="answer">
-            {tool.type} <strong>{tool.label}</strong> ({[].concat toolMarks.length})
+            <strong>{@stripMarkdownFromLabel(tool.label)}</strong> ({[].concat toolMarks.length} {tool.type}s marked)
             {if @state.expanded
               for mark, i in toolMarks
                 mark._key ?= Math.random()
