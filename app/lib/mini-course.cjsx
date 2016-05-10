@@ -26,18 +26,6 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
-      # Wait for the workflow tutorial, but if nothing comes back, check for a project tutorial.
-      awaitMiniCourseInGeneral = awaitMiniCourseForWorkflow.then (miniCourseForWorkflow) ->
-        if miniCourseForWorkflow?
-          miniCourseForWorkflow
-        else if project?
-          apiClient.type('tutorials').get project_id: project.id, kind: "mini-course"
-            .then ([minicourse]) =>
-              minicourse
-        else
-          # There's no workflow tutorial and no project given.
-          Promise.resolve()
-
     start: (minicourse, user) ->
       MiniCourseComponent = this
       if minicourse.steps.length isnt 0
