@@ -1,4 +1,6 @@
 React = require 'react'
+strip = require 'strip-markdown'
+remark = (require 'remark').use(strip)
 
 module.exports = React.createClass
   displayName: 'DrawingSummary'
