@@ -132,6 +132,8 @@ Classifier = React.createClass
     # Should we disabled the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
+    
+
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
       waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
@@ -175,7 +177,7 @@ Classifier = React.createClass
       {persistentHooksBeforeTask.map (HookComponent) =>
         <HookComponent {...taskHookProps} />}
 
-      <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+      <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
       {persistentHooksAfterTask.map (HookComponent) =>
         <HookComponent {...taskHookProps} />}
@@ -312,7 +314,7 @@ Classifier = React.createClass
         {if @props.owner? and @props.project?
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
-        <button type="button" className="continue major-button" onClick={@props.onClickNext}>Next</button>
+        <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
         {@renderExpertOptions()}
       </nav>
     </div>

@@ -97,7 +97,7 @@ module.exports = React.createClass
       answer._key ?= Math.random()
       <label key={answer._key} className="minor-button answer-button #{if i in @props.annotation.value then 'active' else ''}">
         <div className="answer-button-icon-container">
-          <input type="checkbox" checked={i in @props.annotation.value} onChange={@handleChange.bind this, i} />
+          <input autoFocus={@props.autoFocus and i is 0} type="checkbox" checked={i in @props.annotation.value} onChange={@handleChange.bind this, i} />
         </div>
         <div className="answer-button-label-container">
           <Markdown className="answer-button-label">{answer.label}</Markdown>
