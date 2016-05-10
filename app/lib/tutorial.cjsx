@@ -18,21 +18,20 @@ module.exports = React.createClass
         apiClient.type('tutorials').get workflow_id: workflow.id
           .then ([tutorial]) ->
             # Backwards compatibility for null kind values. We assume these are standard tutorials.
-            tutorial if tutorial?.kind isnt 'mini-course'
+            tutorial if tutorial?.kind is 'tutorial' or tutorial?.kind is null
       else
         Promise.resolve()
 
       # Wait for the workflow tutorial, but if nothing comes back, check for a project tutorial.
-      # Keeping this check for now, but we should eventually take this out:
+      # Keeping this fetch for now, but we should eventually take this out:
       awaitTutorialInGeneral = awaitTutorialForWorkflow.then (tutorialForWorkflow) ->
         if tutorialForWorkflow?
           tutorialForWorkflow
         else if project?
           apiClient.type('tutorials').get project_id: project.id
             .then ([tutorial]) =>
-              console.log('tutorial', tutorial)
               # Backwards compatibility for null kind values. We assume these are standard tutorials.
-              tutorial if tutorial.kind isnt 'mini-course'
+              tutorial if tutorial?.kind is 'tutorial' or tutorial?.kind is null
         else
           # There's no workflow tutorial and no project given.
           Promise.resolve()

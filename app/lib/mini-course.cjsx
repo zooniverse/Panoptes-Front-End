@@ -26,6 +26,18 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
+      # Wait for the workflow tutorial, but if nothing comes back, check for a project tutorial.
+      awaitMiniCourseInGeneral = awaitMiniCourseForWorkflow.then (miniCourseForWorkflow) ->
+        if miniCourseForWorkflow?
+          miniCourseForWorkflow
+        else if project?
+          apiClient.type('tutorials').get project_id: project.id, kind: "mini-course"
+            .then ([minicourse]) =>
+              minicourse
+        else
+          # There's no workflow tutorial and no project given.
+          Promise.resolve()
+
     start: (minicourse, user) ->
       MiniCourseComponent = this
       if minicourse.steps.length isnt 0
@@ -61,7 +73,7 @@ module.exports = React.createClass
         user.get 'project_preferences', project_id: project.id
           .then ([projectPreferences]) =>
             window.prefs = projectPreferences
-            if projectPreferences.preferences.minicourses?
+            if projectPreferences?.preferences.minicourses?
               projectPreferences.update resetPreferences
               projectPreferences.save().then =>
                 @start minicourse, user
@@ -160,18 +172,16 @@ module.exports = React.createClass
         <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>
           <Markdown>{step.content}</Markdown>
           <hr />
-          {if @props.user?
-            <p style={textAlign: 'center'}>
-              <button type="submit" className="standard-button">Opt Out</button>
-            </p>}
+          <p>
+            <button type="button" className="standard-button">Close</button>{' '}
+            {<button type="submit" className="minor-button">Opt Out</button> if @props.user?}
+          </p>
         </MediaCard>}
     </StepThrough>
 
   handleProjectPreferencesOnUnmount: ->
     if @state.slideToStart is @props.minicourse.steps.length - 1
-      console.log('finished')
       now = new Date().toISOString()
-      console.log('now', now)
       minicoursesCompletedThisSession[@props.minicourse.id] = now
 
       # if @props.user?
