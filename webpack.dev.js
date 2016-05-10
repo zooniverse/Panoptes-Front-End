@@ -21,7 +21,7 @@ module.exports = {
       { from: 'public', to: '.' }
     ]),
     new HtmlWebpackPlugin({
-      development: true,
+      useBasePath: false,
       template: 'views/index.ejs',
       inject: 'body',
       filename: 'index.html'
