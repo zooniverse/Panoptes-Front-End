@@ -99,7 +99,7 @@ ProjectPage = React.createClass
   render: ->
     projectPath = "/projects/#{@props.project.slug}"
 
-    currentWorkflow = @props.preferences?.preferences.selected_workflow ? @props.project.configuration.default_workflow
+    currentWorkflow = @props.preferences?.preferences.selected_workflow ? @props.project.configuration?.default_workflow
 
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
