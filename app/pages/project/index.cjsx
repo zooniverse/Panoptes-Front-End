@@ -239,17 +239,25 @@ ProjectPageController = React.createClass
           .then (owner) =>
             @setState {owner}
 
-        awaitPreferences = user?.get 'project_preferences', project_id: project.id
-          .then ([preferences]) =>
-            preferences ? newPreferences = apiClient.type('project_preferences').create({
-              links: {
-                project: project.id
-              },
-              preferences: {}
-            }).save()
-          .then (preferences) =>
-            @listenToPreferences preferences
-            @setState {preferences}
+        awaitPreferences = if user?
+          user.get 'project_preferences', project_id: project.id
+            .then ([preferences]) =>
+              preferences ? newPreferences = apiClient.type('project_preferences').create({
+                links: {
+                  project: project.id
+                },
+                preferences: {}
+              }).save()
+        else
+          Promise.resolve apiClient.type('project_preferences').create
+            id: 'GUEST_PREFERENCES_DO_NOT_SAVE'
+            links:
+              project: project.id
+            preferences: {}
+
+        awaitPreferences = awaitPreferences.then (preferences) =>
+          @listenToPreferences preferences
+          @setState {preferences}
 
         Promise.all [awaitOwner, awaitPreferences]
 
@@ -262,14 +270,14 @@ ProjectPageController = React.createClass
   listenToPreferences: (preferences) ->
     @_listenedToPreferences?.stopListening 'change', @_boundForceUpdate
     preferences?.listen 'change', @_boundForceUpdate
+    @_listenedToPreferences = preferences
 
   handlePreferencesChange: (key, value) ->
     changes = {}
     changes[key] = value
-    if @state.preferences?
-      @state.preferences.update(changes).save()
-    else
-      console.log 'TODO: Store guest preferences'
+    @state.preferences.update changes
+    if @props.user?
+      @state.preferences.save()
 
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
