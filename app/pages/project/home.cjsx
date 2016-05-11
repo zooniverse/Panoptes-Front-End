@@ -53,7 +53,7 @@ module.exports = React.createClass
               query={workflow: workflow.id}
               key={workflow.id + Math.random()}
               className="call-to-action standard-button"
-              onMouseDown={@handleWorkflowSelection.bind this, workflow}
+              onClick={@handleWorkflowSelection.bind this, workflow}
             >
               {workflow.display_name}
             </Link>
