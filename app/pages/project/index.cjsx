@@ -99,6 +99,8 @@ ProjectPage = React.createClass
   render: ->
     projectPath = "/projects/#{@props.project.slug}"
 
+    currentWorkflow = @props.preferences?.preferences.selected_workflow ? @props.project.configuration.default_workflow
+
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
       map
@@ -131,7 +133,7 @@ ProjectPage = React.createClass
             <Translate content="project.nav.classify" />
           </a>
         else
-          <Link to="#{projectPath}/classify" activeClassName="active" className="classify tabbed-content-tab">
+          <Link to="#{projectPath}/classify" query={workflow: currentWorkflow} activeClassName="active" className="classify tabbed-content-tab">
             <Translate content="project.nav.classify" />
           </Link>}
 
