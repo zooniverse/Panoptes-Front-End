@@ -160,10 +160,10 @@ module.exports = React.createClass
   componentWillUnmount: ->
     if @state.projectPreferences?
       @handleProjectPreferencesOnUnmount()
-    else
-      now = new Date().toISOString()
-      minicoursesCompletedThisSession[@props.minicourse.id] = now
-      sessionStorage.setItem('minicourse_slide_to_start', @state.slideToStart + 1)
+    # else
+      # now = new Date().toISOString()
+      # minicoursesCompletedThisSession[@props.minicourse.id] = now
+      # sessionStorage.setItem('minicourse_slide_to_start', @state.slideToStart + 1)
   
   render: ->
     <StepThrough ref="stepThrough" className="tutorial-steps">

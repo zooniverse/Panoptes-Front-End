@@ -40,7 +40,6 @@ module.exports = React.createClass
       @find({workflow, project}).then (tutorial) =>
         if tutorial?
           @checkIfCompleted(tutorial, user).then (completed) =>
-            console.log {completed}
             unless completed
               @start tutorial, user
 
