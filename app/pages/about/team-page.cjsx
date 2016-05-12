@@ -144,6 +144,12 @@ to squeeze a bit of galaxy evolution science in.'''
         bio: '''Sascha joined the Zooniverse team in November 2013 as a front-end developer.
         A former researcher and software developer at NASA Ames, he received degrees in both
         computer science and mechanical engineering.'''
+      shaunANoordin:
+        title: 'Developer'
+        bio: '''Shaun was raised by Nintendo consoles and somehow transformed his love
+        for video games into a love for creating interactive experiences. When not at
+        his PC playing games or reading comics, he's at his PC studying web design and
+        coding experimental apps.'''
       simoneDuca:
         title: 'Web Developer'
         bio: '''Simone is a front end web developer at the Zooniverse. He has a Phd in logic and philosophy from Bristol and loves cooking.'''
@@ -352,6 +358,12 @@ teamMembers =
     bio: counterpart "team.content.saschaIshikawa.bio"
     image: "./assets/team/sascha.png"
     location: "chicago"
+  shaunANoordin:
+    name: "Shaun A. Noordin"
+    title: counterpart "team.content.shaunANoordin.title"
+    bio: counterpart "team.content.shaunANoordin.bio"
+    image: "./assets/team/shaunanoordin.jpg"
+    location: "oxford"
   simoneDuca:
     name: "Simone Duca"
     title: counterpart "team.content.simoneDuca.title"
