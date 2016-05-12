@@ -235,7 +235,8 @@ EditWorkflowPage = React.createClass
           {if 'tutorial' in @props.project.experimental_tools or 'mini-course' in @props.project.experimental_tools
             <div ref="link-tutorials-section">
               <span className="form-label">Associated tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools}</span><br />
-              <small className="form-help">Choose the tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools} you want to use for this workflow.</small>
+              <small className="form-help">Choose the tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools} you want to use for this workflow.</small><br />
+              <small className="form-help">Only one can be associated with a workflow at a time.</small>
               <div>
                 {@renderTutorials() if 'tutorial' in @props.project.experimental_tools}
                 {@renderMiniCourses() if 'mini-course' in @props.project.experimental_tools}
@@ -414,9 +415,9 @@ EditWorkflowPage = React.createClass
           <span className="form-label">Tutorials</span>
           {for tutorial in tutorials
             assignedTutorial = tutorial in workflowTutorials
-            toggleTutorial = @handleTutorialToggle.bind this, tutorial
+            toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
-              <input type="radio" checked={assignedTutorial} onChange={toggleTutorial} />
+              <input type="checkbox" checked={assignedTutorial} onChange={toggleTutorial} />
               Tutorial #{tutorial.id}
             </label>}
         </form>
@@ -435,9 +436,9 @@ EditWorkflowPage = React.createClass
           <span className="form-label">Mini-Courses</span>
           {for tutorial in projectTutorials
             assignedTutorial = tutorial in workflowTutorials
-            toggleTutorial = @handleTutorialToggle.bind this, tutorial
+            toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
-              <input type="radio" checked={assignedTutorial} onChange={toggleTutorial} />
+              <input type="checkbox" checked={assignedTutorial} onChange={toggleTutorial} />
               Mini-Course #{tutorial.id}
             </label>}
         </form>
@@ -498,7 +499,7 @@ EditWorkflowPage = React.createClass
       else
         @props.workflow.removeLink 'subject_sets', subjectSet.id
 
-  handleTutorialToggle: (tutorial, e) ->
+  handleTutorialToggle: (tutorial, workflowTutorials, e) ->
     shouldAdd = e.target.checked
 
     ensureSaved = if @props.workflow.hasUnsavedChanges()
@@ -506,11 +507,19 @@ EditWorkflowPage = React.createClass
     else
       Promise.resolve()
 
-    ensureSaved.then =>
-      if shouldAdd
-        @props.workflow.addLink 'tutorials', [tutorial.id]
-      else
-        @props.workflow.removeLink 'tutorials', tutorial.id
+    ensureSaved
+      .then =>
+        if shouldAdd
+          @props.workflow.addLink 'tutorials', [tutorial.id]
+
+          for workflowTutorial in workflowTutorials
+            if workflowTutorial.kind is null and tutorial.kind is 'tutorial' or workflowTutorial.kind is 'tutorial' and tutorial.kind is null
+              @props.workflow.removeLink 'tutorials', workflowTutorial.id if workflowTutorial.id isnt tutorial.id
+            else if workflowTutorial.kind is tutorial.kind
+              @props.workflow.removeLink 'tutorials', workflowTutorial.id if workflowTutorial.id isnt tutorial.id
+        else
+          @props.workflow.removeLink 'tutorials', tutorial.id
+
 
   addDemoSubjectSet: ->
     @props.project.uncacheLink 'subject_sets'
