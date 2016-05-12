@@ -18,25 +18,12 @@ module.exports = React.createClass
   statics:
     find: ({workflow, project}) ->
       # Prefer fetching the tutorial for the workflow, if a workflow is given.
-      awaitMiniCourseForWorkflow = if workflow?
+      if workflow?
         apiClient.type('tutorials').get workflow_id: workflow.id, kind: "mini-course"
           .then ([minicourse]) ->
             minicourse
       else
         Promise.resolve()
-
-      # Wait for the workflow tutorial, but if nothing comes back, check for a project tutorial.
-      # Take this out once workflow linking works:
-      awaitMiniCourseInGeneral = awaitMiniCourseForWorkflow.then (miniCourseForWorkflow) ->
-        if miniCourseForWorkflow?
-          miniCourseForWorkflow
-        else if project?
-          apiClient.type('tutorials').get project_id: project.id, kind: "mini-course"
-            .then ([minicourse]) =>
-              minicourse
-        else
-          # There's no workflow tutorial and no project given.
-          Promise.resolve()
 
     start: (minicourse, user) ->
       MiniCourseComponent = this

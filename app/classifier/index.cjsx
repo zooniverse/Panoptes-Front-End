@@ -220,7 +220,7 @@ Classifier = React.createClass
       <p>
         <small>
           <strong>
-            <MiniCourseButton className="minor-button" user={@props.user} project={@props.project} title="Project Mini-course" aria-label="Show the project mini-course" style={marginTop: '2em'}>
+            <MiniCourseButton className="minor-button" user={@props.user} project={@props.project} workflow={@props.workflow} title="Project Mini-course" aria-label="Show the project mini-course" style={marginTop: '2em'}>
               Restart the project mini-course
             </MiniCourseButton>
           </strong>
