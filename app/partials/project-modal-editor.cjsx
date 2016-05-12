@@ -68,7 +68,10 @@ ProjectModalEditor = React.createClass
 
   render: ->
     <div className="project-modal-editor">
-      <p className="form-label">{@props.kind} #{@props.projectModal.id}</p>
+      <div className="project-modal-header">
+        <p className="form-label">{@props.kind} #{@props.projectModal.id}</p>
+        <p><button className="pill-button" onClick={@props.onProjectModalDelete}>Delete {@props.kind}</button></p>
+      </div>
       {if @props.projectModal.steps.length is 0
         <p>This {@props.kind} has no steps.</p>
       else
@@ -136,8 +139,21 @@ ProjectModalEditorController = React.createClass
         onMediaSelect={@handleStepMediaChange}
         onMediaClear={@handleStepMediaClear}
         onStepChange={@handleStepChange}
+        onProjectModalDelete={@handleProjectModalDelete}
       />
     </div>
+
+  deleteProjectModal: ->
+    @props.projectModal.delete()
+      .then =>
+        @props.onDelete()
+
+  handleProjectModalDelete: ->
+    if @props.projectModal.steps.length > 0
+      for step, index in @props.projectModal.steps
+        @handleStepRemove(index)
+    else
+      @deleteProjectModal()
 
   handleStepAdd: ->
     @props.projectModal.steps.push
@@ -154,9 +170,7 @@ ProjectModalEditorController = React.createClass
     @props.projectModal.update changes
 
     if @props.projectModal.steps.length is 0
-      @props.projectModal.delete()
-        .then =>
-          @props.onDelete()
+      @deleteProjectModal()
     else
       @props.projectModal.save()
 
