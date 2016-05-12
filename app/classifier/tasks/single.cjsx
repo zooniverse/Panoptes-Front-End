@@ -80,7 +80,6 @@ module.exports = React.createClass
     onChange: NOOP
 
   render: ->
-    console.log ""
     answers = for answer, i in @props.task.answers
       answer._key ?= Math.random()
       <label key={answer._key} className="minor-button answer-button #{if i is @props.annotation.value then 'active' else ''}">

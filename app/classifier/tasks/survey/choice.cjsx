@@ -130,7 +130,7 @@ module.exports = React.createClass
                   answerID is @state.answers[questionID]
                 <span key={answerID}>
                   <label className="survey-task-choice-answer" data-checked={isChecked || null}>
-                    <input name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
+                    <input type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
                     {answer.label}
                   </label>
                   {' '}
