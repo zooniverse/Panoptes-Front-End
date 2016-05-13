@@ -1,6 +1,7 @@
 React = require 'react'
 {Markdown} = require 'markdownz'
 GenericTask = require '../generic'
+TextTaskEditor = require './editor'
 GenericTaskEditor = require '../generic-editor'
 levenshtein = require 'fast-levenshtein'
 
@@ -31,7 +32,7 @@ module.exports = React.createClass
   displayName: 'TextTask'
 
   statics:
-    Editor: GenericTaskEditor
+    Editor: TextTaskEditor
     Summary: Summary
 
     getDefaultTask: ->
