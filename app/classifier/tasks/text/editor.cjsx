@@ -4,8 +4,7 @@ AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
 {MarkdownEditor} = require 'markdownz'
 MarkdownHelp = require '../../../partials/markdown-help'
-
-
+NextTaskSelector = require '../next-task-selector'
 
 module?.exports = React.createClass
   displayName: 'TextTaskEditor'
@@ -79,4 +78,10 @@ module?.exports = React.createClass
               {"Unclear"}
             </label>
       </section>
+      <hr/>
+      <AutoSave resource={@props.workflow}>
+        <span className="form-label">Next task</span>
+        <br />
+        <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
+      </AutoSave>
     </div>

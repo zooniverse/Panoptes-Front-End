@@ -59,14 +59,46 @@ module.exports = React.createClass
     annotation: null
     onChange: NOOP
 
+  getInitialState: ->
+    currentTextAreaValue: ""
+
+  componentWillReceiveProps: (nextProps) ->
+    console.log "nextProps", nextProps
+
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <label className="answer">
         <textarea autoFocus={@props.autoFocus} className="standard-input full" rows="5" ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
       </label>
+      {if @props.task.text_tags 
+          <div className="transcription-metadata-tags">
+            {for tag, i in @props.task.text_tags
+              <button className="standard-button text-tag" key={i} value={tag} onClick={@setTagSelection} >{tag}</button>}
+          </div>}
     </GenericTask>
 
   handleChange: ->
-    value = React.findDOMNode(@refs.textInput).value
+    value = @refs.textInput.value
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
+
+  setTagSelection: (e) ->
+    textTag = e.target.value
+    startTag = '[' + textTag + ']'
+    endTag = '[/' + textTag + ']'
+    textArea = this.refs.textInput
+    textAreaValue = textArea.value
+    selectionStart = textArea.selectionStart
+    selectionEnd = textArea.selectionEnd
+    textBefore = textAreaValue.substring(0, selectionStart)
+    if selectionStart is selectionEnd
+      textAfter = textAreaValue.substring(selectionStart, textAreaValue.length)
+      value = textBefore + startTag + endTag + textAfter
+      newAnnotation = Object.assign @props.annotation, {value}
+      @props.onChange newAnnotation
+    else
+      textInBetween = textAreaValue.substring(selectionStart, selectionEnd)
+      textAfter = textAreaValue.substring(selectionEnd, textAreaValue.length)
+      value = textBefore + startTag + textInBetween + endTag + textAfter
+      newAnnotation = Object.assign @props.annotation, {value}
+      @props.onChange newAnnotation
