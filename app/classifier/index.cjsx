@@ -17,6 +17,8 @@ Tutorial = require '../lib/tutorial'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 WorldWideTelescope = require './world_wide_telescope'
+MiniCourse = require '../lib/mini-course'
+MiniCourseButton = require './mini-course-button'
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
@@ -41,11 +43,13 @@ Classifier = React.createClass
   componentDidMount: ->
     @loadSubject @props.subject
     @prepareToClassify @props.classification
-    Tutorial.startIfNecessary @props.user, @props.project
+    {workflow, project, user} = @props
+    Tutorial.startIfNecessary {workflow, project, user}
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
-      Tutorial.startIfNecessary nextProps.user, nextProps.project
+      {workflow, project, user} = nextProps
+      Tutorial.startIfNecessary {workflow, project, user}
     if nextProps.subject isnt @props.subject
       @loadSubject subject
     if nextProps.classification isnt @props.classification
@@ -206,9 +210,19 @@ Classifier = React.createClass
       <p>
         <small>
           <strong>
-            <TutorialButton className="minor-button" user={@props.user} project={@props.project} title="Project tutorial" aria-label="Show the project tutorial" style={marginTop: '2em'}>
+            <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} project={@props.project} title="Project tutorial" aria-label="Show the project tutorial" style={marginTop: '2em'}>
               Show the project tutorial
             </TutorialButton>
+          </strong>
+        </small>
+      </p>
+
+      <p>
+        <small>
+          <strong>
+            <MiniCourseButton className="minor-button" user={@props.user} project={@props.project} workflow={@props.workflow} title="Project Mini-course" aria-label="Show the project mini-course" style={marginTop: '2em'}>
+              Restart the project mini-course
+            </MiniCourseButton>
           </strong>
         </small>
       </p>
