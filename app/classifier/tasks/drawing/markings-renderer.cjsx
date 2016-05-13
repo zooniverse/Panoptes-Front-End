@@ -58,6 +58,8 @@ module.exports = React.createClass
                 disabled: isPriorAnnotation
                 selected: mark is @state.selection and not isPriorAnnotation
                 getEventOffset: @props.getEventOffset
+                workflow: @props.workflow
+                user: @props.user
 
               toolProps =
                 classification: @props.classification

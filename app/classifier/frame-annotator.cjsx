@@ -106,6 +106,7 @@ module.exports = React.createClass
       containerRect: @state.sizeRect
       getEventOffset: this.getEventOffset
       onChange: @props.onChange
+      user: @props.user
 
     for task, Component of tasks when Component.getSVGProps?
       for key, value of Component.getSVGProps hookProps

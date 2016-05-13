@@ -83,7 +83,7 @@ module.exports = React.createClass
 
   handleAddTask: (task) ->
     switch task
-      when 'single' 
+      when 'single'
         TaskChoice = require './single'
       when 'text'
         TaskChoice = require './text'
