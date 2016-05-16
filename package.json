@@ -20,7 +20,7 @@
     "markdownz": "~4.1.2",
     "modal-form": "~2.3.0",
     "moment": "~2.9.0",
-    "panoptes-client": "~2.4.0",
+    "panoptes-client": "~2.5.0",
     "papaparse": "mholt/PapaParse#cada171",
     "qs": "~6.0.2",
     "rc-slider": "~3.3.2",
