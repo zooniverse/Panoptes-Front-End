@@ -4,9 +4,12 @@ apiClient = require 'panoptes-client/lib/api-client'
 SetToggle = require '../../lib/set-toggle'
 {Link} = require 'react-router'
 moment = require 'moment'
+TagSearch = require '../../components/tag-search'
 ChangeListener = require '../../components/change-listener'
 ProjectIcon = require '../../components/project-icon'
 AutoSave = require '../../components/auto-save'
+{DISCIPLINES} = require '../../components/disciplines'
+Select = require 'react-select'
 handleInputChange = require '../../lib/handle-input-change'
 
 EXPERIMENTAL_FEATURES = [
@@ -29,6 +32,26 @@ ProjectToggle = React.createClass
   displayName: "ProjectToggle"
 
   mixins: [SetToggle]
+
+  handleDisciplineTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState disciplineTagList: newTags
+    allTags = newTags.concat @state.otherTagList
+    @handleTagChange(allTags)
+
+  handleOtherTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState otherTagList: newTags
+    allTags = @state.disciplineTagList.concat newTags
+    @handleTagChange(allTags)
+
+  handleTagChange: (value) ->
+    event =
+      target:
+        value: value
+        name: 'tags'
+        dataset: {}
+    handleInputChange.call @props.project, event
 
   getDefaultProps: ->
     project: null
@@ -92,6 +115,23 @@ ProjectExperimentalFeatures = React.createClass
   setting: (task) ->
     task in (@props.project?.experimental_tools or [])
 
+  splitTags: (kind) ->
+    disciplineTagList = []
+    otherTagList = []
+    for t in @props.project.tags
+      if DISCIPLINES.some((el) -> el.value == t)
+        disciplineTagList.push(t)
+      else
+        otherTagList.push(t)
+    {disciplineTagList, otherTagList}
+
+  getInitialState: ->
+    {disciplineTagList, otherTagList} = @splitTags()
+    error: null
+    setting: {}
+    disciplineTagList: disciplineTagList
+    otherTagList: otherTagList
+
   updateTasks: (task) ->
     tools = @props.project.experimental_tools or []
     if task in tools
@@ -110,7 +150,30 @@ ProjectExperimentalFeatures = React.createClass
               <input type="checkbox" name={task} checked={@setting(task)} onChange={@updateTasks.bind @, task} />
               {task.charAt(0).toUpperCase() + task.slice(1)}
             </label>}
-          </div>
+        </div>
+      </AutoSave>
+      <br />
+      <h4>Project Tags</h4>
+      <AutoSave resource={@props.project}>
+        <span className="form-label">Discipline Tag</span>
+        <br />
+        <Select
+          ref="disciplineSelect"
+          name="disciplines"
+          placeholder="Add Discipline Tag"
+          className="discipline-tag"
+          value={@state.disciplineTagList}
+          options={DISCIPLINES}
+          multi={true}
+          onChange={@handleDisciplineTagChange} />
+        <small className="form-help">Enter or select one or more discipline tags to identify which field(s) of research your project belongs to. These tags will determine the categories your project will appear under on the main Zooniverse projects page, if your project becomes a full Zooniverse project. </small>
+      </AutoSave>
+      <br />
+      <AutoSave resource={@props.project}>
+        <span className="form-label">Other Tags</span>
+        <br />
+        <TagSearch name="tags" multi={true} value={@state.otherTagList} onChange={@handleOtherTagChange} />
+        <small className="form-help">Enter a list of additional tags to describe your project separated by commas to help users find your project.</small>
       </AutoSave>
     </div>
 
