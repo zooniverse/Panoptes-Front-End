@@ -74,7 +74,6 @@ module.exports = React.createClass
           <div className="transcription-metadata-tags">
             {for tag, i in @props.task.text_tags
               <input type="button" className="standard-button text-tag" key={i} value={tag} onClick={@setTagSelection} />}
-
           </div>}
     </GenericTask>
 

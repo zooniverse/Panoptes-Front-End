@@ -50,15 +50,16 @@ module?.exports = React.createClass
           <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You can use markdown to format this text.</small><br />
         </div>
         <br/>
-        <div>
-          <AutoSave resource={@props.workflow}>
-            <span className="form-label">Help text</span>
-            <br />
-            <MarkdownEditor name="#{@props.taskPrefix}.help" value={@props.task.help ? ""} rows="4" className="full" onChange={handleChange} onHelp={-> alert <MarkdownHelp/>} />
-          </AutoSave>
-          <small className="form-help">Add text and images for a help window.</small>
-        </div>
-        <hr/>
+        {unless @props.isSubtask
+          <div>
+            <AutoSave resource={@props.workflow}>
+              <span className="form-label">Help text</span>
+              <br />
+              <MarkdownEditor name="#{@props.taskPrefix}.help" value={@props.task.help ? ""} rows="4" className="full" onChange={handleChange} onHelp={-> alert <MarkdownHelp/>} />
+            </AutoSave>
+            <small className="form-help">Add text and images for a help window.</small>
+          </div>
+          <hr/>}
       </section>
       <section>
         <span className="form-label">Metadata Tags</span> <br/>
@@ -79,9 +80,10 @@ module?.exports = React.createClass
             </label>
       </section>
       <hr/>
-      <AutoSave resource={@props.workflow}>
-        <span className="form-label">Next task</span>
-        <br />
-        <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
-      </AutoSave>
+      {unless @props.isSubtask
+        <AutoSave resource={@props.workflow}>
+          <span className="form-label">Next task</span>
+          <br />
+          <NextTaskSelector workflow={@props.workflow} name="#{@props.taskPrefix}.next" value={@props.task.next ? ''} onChange={handleInputChange.bind @props.workflow} />
+        </AutoSave>}
     </div>
