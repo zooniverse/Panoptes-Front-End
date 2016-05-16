@@ -1,15 +1,7 @@
 /build
 /node_modules
-/public/font-awesome
-/public/fallback-polyfills.js
-/public/index.html
-/public/main.css
-/public/main.js
-/public/main.js.map
-/public/vendor.js
-/public/jsPlumb.min.js
-
 /dist
+
 npm-debug.log
 
 .DS_Store
