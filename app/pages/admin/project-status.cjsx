@@ -33,26 +33,6 @@ ProjectToggle = React.createClass
 
   mixins: [SetToggle]
 
-  handleDisciplineTagChange: (value) ->
-    newTags = if value is '' then [] else value.split(',')
-    @setState disciplineTagList: newTags
-    allTags = newTags.concat @state.otherTagList
-    @handleTagChange(allTags)
-
-  handleOtherTagChange: (value) ->
-    newTags = if value is '' then [] else value.split(',')
-    @setState otherTagList: newTags
-    allTags = @state.disciplineTagList.concat newTags
-    @handleTagChange(allTags)
-
-  handleTagChange: (value) ->
-    event =
-      target:
-        value: value
-        name: 'tags'
-        dataset: {}
-    handleInputChange.call @props.project, event
-
   getDefaultProps: ->
     project: null
     field: null
@@ -114,6 +94,26 @@ ProjectExperimentalFeatures = React.createClass
 
   setting: (task) ->
     task in (@props.project?.experimental_tools or [])
+
+  handleDisciplineTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState disciplineTagList: newTags
+    allTags = newTags.concat @state.otherTagList
+    @handleTagChange(allTags)
+
+  handleOtherTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState otherTagList: newTags
+    allTags = @state.disciplineTagList.concat newTags
+    @handleTagChange(allTags)
+
+  handleTagChange: (value) ->
+    event =
+      target:
+        value: value
+        name: 'tags'
+        dataset: {}
+    handleInputChange.call @props.project, event
 
   splitTags: (kind) ->
     disciplineTagList = []
