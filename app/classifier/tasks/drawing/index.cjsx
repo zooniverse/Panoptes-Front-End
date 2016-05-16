@@ -87,6 +87,20 @@ module.exports = React.createClass
     annotation: null
     onChange: Function.prototype
 
+  saveTemplate: (annotations) ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update 'preferences.cells': annotations
+      pref.save()
+
+  clearTemplate: ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update 'preferences.cells': []
+      pref.save()
+
+  printTemplate: ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      console.log pref.preferences.cells
+
   render: ->
     tools = for tool, i in @props.task.tools
       tool._key ?= Math.random()
@@ -114,6 +128,15 @@ module.exports = React.createClass
             </div>
           </div>
         </div>
+        <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value}>
+          Save Row Dimensions
+        </button>
+        <button type="button" onClick={@printTemplate.bind null, this}>
+          Print Row Dimensions
+        </button>
+        <button type="button" onClick={@clearTemplate.bind null, this}>
+          Clear Row Dimensions
+        </button>
       </label>
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} />

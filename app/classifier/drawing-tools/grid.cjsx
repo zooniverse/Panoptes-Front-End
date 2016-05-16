@@ -13,6 +13,9 @@ module.exports = React.createClass
   displayName: 'GridTool'
   saveState: true
 
+  componentWillMount: ->
+    @findSchema()
+
   statics:
     initCoords: null
 
@@ -54,7 +57,6 @@ module.exports = React.createClass
   initCoords: null
 
   render: ->
-    @findSchema()
     {x, y, width, height} = @props.mark
 
     points = [
@@ -66,8 +68,16 @@ module.exports = React.createClass
     ].join '\n'
 
     <DrawingToolRoot tool={this}>
-      <polyline points={points} onClick={@destroyTool.bind null, this} />
+      {if @state?.template
+        @renderCells(points)
+      else
+        <polyline points={points} onClick={@destroyTool.bind null, this} />}
     </DrawingToolRoot>
+
+  renderCells: (points) ->
+    for cell in @state.cells
+      
+      <polyline points={points} onClick={@destroyTool.bind null, this} />
 
   destroyTool: ->
     if window.confirm 'Do you want to delete this cell?'
@@ -75,4 +85,5 @@ module.exports = React.createClass
 
   findSchema: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if pref.preferences.grid.inProgress
+      if pref.preferences.cells.length
+        @setState template: pref.preferences.cells
