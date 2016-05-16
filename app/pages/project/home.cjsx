@@ -31,9 +31,10 @@ module.exports = React.createClass
   handleWorkflowSelection: (workflow) ->
     @props.onChangePreferences 'preferences.selected_workflow', workflow?.id
     undefined # Don't prevent default Link behavior.
-    
+
   render: ->
     [owner, name] = @props.project.slug.split('/')
+
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
         <FinishedBanner project={@props.project} />

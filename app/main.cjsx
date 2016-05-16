@@ -15,7 +15,7 @@ if location?.hash?.indexOf('/') is 1
   location.replace location.hash.slice 1
 
 basename = document.baseURI.slice(location.origin.length)
-history = if window.useBasePath then useBasename(createBrowserHistory)({basename}) else createBrowserHistory()
+useBasename(createBrowserHistory)({basename})
 
 history.listen ->
   window.dispatchEvent new CustomEvent 'locationchange'

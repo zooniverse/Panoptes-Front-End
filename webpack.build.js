@@ -7,8 +7,6 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var SplitByPathPlugin = require('webpack-split-by-path');
 
-var pfePrefix = !!process.env.PFE_PREFIX ? '/'+process.env.PFE_PREFIX+'/': '/';
-
 module.exports = {
   entry: [
     path.join(__dirname, 'app/main.cjsx')
@@ -33,8 +31,6 @@ module.exports = {
       { from: 'public', to: '.' }
     ]),
     new HtmlWebpackPlugin({
-      baseUrl: pfePrefix,
-      useBaseBath: pfePrefix == '/',
       template: 'views/index.ejs',
       inject: 'body',
       filename: 'index.html'

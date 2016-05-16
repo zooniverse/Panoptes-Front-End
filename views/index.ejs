@@ -2,7 +2,6 @@
 
 <html>
   <head>
-    <base href="<%= htmlWebpackPlugin.options.baseUrl %>" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <base href="/" />
@@ -17,11 +16,6 @@
     <meta property="og:title" content="Zooniverse" />
     <meta property="og:description" content="The Zooniverse is the world’s largest and most popular platform for people-powered research." />
     <meta property="og:image" content="https://zooniverse-static.s3.amazonaws.com/assets/opengraph.jpg" />
-
-    <script type="text/javascript">
-      window.useBasepath = <%= (htmlWebpackPlugin.options.useBasePath || false).toString() %>;
-    </script>
-
   </head>
 
   <body>
