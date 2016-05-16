@@ -1,6 +1,12 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 DragReorderable = require 'drag-reorderable'
+months = require './presets/months'
+countries = require './presets/countries' # value = ISO 3166-1 numeric code
+statesUSA = require './presets/states-USA' # value = two-letter postal abbreviation, does not duplicate with Canada
+provincesCanada = require './presets/provinces-Canada' # value = two-letter postal abbreviation, does not duplicate with USA
+statesMexico = require './presets/states-Mexico' # value = three-letter ISO 3166-2 abbreviation
+# IMPORTANT: before adding preset options, confirm values are not duplicated in existing presets
 
 DropdownDialog = React.createClass
 
@@ -16,6 +22,7 @@ DropdownDialog = React.createClass
     optionsKeys: {}
     conditionalSelects: []
     deletedValues: []
+    presetValue: ""
 
   componentDidMount: ->
     if @props.initialSelect.condition?
@@ -69,6 +76,7 @@ DropdownDialog = React.createClass
       return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
 
     optionsKey = @getOptionsKey(select)
+
     if select.options[optionsKey]?
       select.options[optionsKey].push {value: "#{Math.random().toString(16).split('.')[1]}", label: "#{optionLabel}"}
     else
@@ -77,7 +85,7 @@ DropdownDialog = React.createClass
     @setState editSelect: select
 
   onClickAddOption: ->
-    @addOption(@refs.optionInput.value)
+    @addOption @refs.optionInput.value
     @refs.optionInput.value = ''
 
   onReorder: (newOptions) ->
@@ -96,6 +104,42 @@ DropdownDialog = React.createClass
       deletedValues = @state.deletedValues
       deletedValues.push value
       @setState deletedValues: deletedValues
+
+  handlePresetChange: (e) ->
+    @setState presetValue: e.target.value
+
+  handlePresetApply: ->
+    select = @state.editSelect
+
+    if select.condition? and not @state.optionsKeys[select.condition]
+      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
+
+    optionsKey = @getOptionsKey(select)
+    preset = @state.presetValue
+
+    switch preset
+      when "numberRange" then @handleNumberRange(select, optionsKey)
+      when "months" then select.options["#{optionsKey}"] = months
+      when "Countries" then select.options["#{optionsKey}"] = countries
+      when "statesUSA" then select.options["#{optionsKey}"] = statesUSA
+      when "provincesCanada" then select.options["#{optionsKey}"] = provincesCanada
+      when "statesMexico" then select.options["#{optionsKey}"] = statesMexico
+      else return
+
+    @setState editSelect: select
+    @setState presetValue: ""
+
+  handleNumberRange: (select, optionsKey) ->
+    topNumber = parseFloat @refs.topNumber.value
+    bottomNumber = parseFloat @refs.bottomNumber.value
+
+    options = []
+    for num in [topNumber..bottomNumber]
+      options.push {value: num, label: "#{num}"}
+
+    select.options["#{optionsKey}"] = options
+
+    return select
 
   save: (e) ->
     if not @state.editSelect.title
@@ -178,6 +222,34 @@ DropdownDialog = React.createClass
 
         <input ref="optionInput"></input>{' '}
         <button type="button" onClick={@onClickAddOption}><i className="fa fa-plus"/> Add Option</button>
+      </div>
+
+      <br />
+
+      <div>
+        <h2 className="form-label">Presets</h2>
+        <select value={@state.presetValue} onChange={@handlePresetChange}>
+          <option value="">none selected</option>
+          <option value="numberRange">Range of Numbers (i.e. Days, Years)</option>
+          <option value="months">Months</option>
+          <option value="Countries">Countries</option>
+          <option value="statesUSA">States - United States</option>
+          <option value="provincesCanada">Provinces - Canada</option>
+          <option value="statesMexico">States - Mexico</option>
+        </select>
+
+        {if @state.presetValue is "numberRange"
+          <div>
+            <label>Top number:
+              <input type="number" ref="topNumber" />
+            </label>
+            <br />
+            <label>Bottom number:
+              <input type="number" ref="bottomNumber" />
+            </label>
+          </div>}
+
+        <button onClick={@handlePresetApply}>Apply</button>
       </div>
 
       <br />
