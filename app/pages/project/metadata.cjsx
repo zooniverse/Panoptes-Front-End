@@ -1,4 +1,5 @@
 React = require 'react'
+{Link} = require 'react-router'
 
 module?.exports = React.createClass
   displayName: 'ProjectMetadata'
@@ -8,11 +9,12 @@ module?.exports = React.createClass
 
   render: ->
     {project} = @props
+    [owner, name] = project.slug.split('/')
 
     <div className="project-metadata content-container">
       <div className="project-metadata-header">
         <span>{project.display_name}</span>{' '}
-        <span>Statistics</span>
+        <Link to={"/projects/#{owner}/#{name}/stats"}><span>Statistics</span></Link>
       </div>
 
       <div className="project-metadata-stats">

@@ -1,0 +1,163 @@
+zoo-blue = #03517f
+zoo-green = #1eb3af
+zoo-orange = #f78d27
+
+.ct-chart
+    .ct-series-a
+      .ct-bar, .ct-slice-donut
+        // stroke-width: 4.5%
+        stroke: zoo-blue
+    .ct-series-b
+      .ct-bar, .ct-slice-donut
+        stroke-width: 4.5%
+        stroke: #aaa
+  .progress-label, .ct-label.ct-vertical, .ct-label.ct-horizontal
+    color: #000
+    fill: #000
+
+.ct-chart-bar
+  .ct-label.ct-horizontal.ct-end
+    display: block
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+    transform: rotate(-90deg) translateY(-6px)
+    transform-origin: 100% 0
+    text-align: right
+    max-height: 1.5em
+    min-width: 100px
+    max-width: 100px
+
+.ct-slice-donut
+  cursor: auto
+  
+.flex-wrapper
+  padding: 5px  
+
+.mid-slider
+  .rc-slider-handle
+    border-radius: 10px
+    border: none
+    background-color: #999
+    height: 20px
+    width: 26px
+    margin-top: -2px
+    margin-left: -13px
+    &:before
+      content: "\f0c9"
+      font-family: FontAwesome
+      font-style: normal
+      font-weight: normal
+      text-decoration: inherit
+      color: #fff
+      font-size: 13px
+      display: flex
+      flex-direction: row
+      align-items: center
+      justify-content: center
+      transform: rotate(90deg)
+
+.progress-container
+  width: 100%
+  position: relative
+  
+.progress-element
+  align-self: flex-end
+  width: 25%
+  word-wrap: break-word
+  @media (max-width: 1150px)
+    width: 33.333%
+  @media (max-width: 900px)
+    width: 50%
+
+.progress-label
+  color: #000
+  position: absolute
+  margin-top: 45%
+  width: 100%
+  text-align: center
+  font-size: 1.8vw
+
+.project-stats-footer
+  width: 100%
+  text-align: center
+  display: block
+
+.project-stats-heading
+  width: 100%
+  text-align: center
+  font-size: 2em
+  display: block
+  
+.progress-stats-label
+  font-weight: 600
+
+.project-stats-progress
+  display: flex
+  flex-flow: row wrap
+  width: 100%
+
+.rc-slider
+  margin: 0 15px 0 15px
+  width: auto !important
+  background-color: transparent !important
+
+.top-slider
+  margin-bottom: -4px
+  .rc-slider-handle
+    cursor: ew-resize
+    top: -54px
+    height: 62px
+    width: 10px
+    margin-top: 0
+    margin-left: -10px
+    border-radius: 0
+    border: none
+    border-left: 2px solid #999
+    border-right: 2px solid #999
+    &:first-of-type
+      margin-left: 0
+    &:hover
+      border-left: 2px solid #999
+      border-right: 2px solid #999
+    &:after
+      content: ""
+      position: absolute
+      top: 0
+      bottom: 0
+      left: 2px
+      border-left: 2px solid #999
+
+  .rc-slider-track
+    background-color: alpha(zoo-green, 0.15)
+    height: 62px
+    top: -54px
+    border-radius: 0
+    border-bottom: 2px solid #999
+
+.ui-handle
+  width: 50px
+  border-bottom: 1px solid #999
+  box-shadow: 0 3px 0px 0px #999, 0 6px 0px 0px #999
+  position: relative
+
+.ui-handle.handle-down:after
+.ui-handle.handle-up:before
+  display: block
+  content: ""
+  width: 0px
+  height: 0px
+  border: 5px solid #999
+  left: 50%
+  margin-left: -5px
+  position: absolute
+  border-right: 5px solid transparent
+  border-left: 5px solid transparent
+
+.ui-handle.handle-down:after
+  border-bottom: 5px solid transparent
+  top: 7px
+
+.ui-handle.handle-up:before
+  border-top: 5px solid transparent
+  top: -10px
