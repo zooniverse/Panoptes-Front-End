@@ -69,14 +69,14 @@ module.exports = React.createClass
 
     <DrawingToolRoot tool={this}>
       {if @state?.template
-        @renderCells(points)
+        <polyline points={points} onClick={@destroyTool.bind null, this} />
       else
         <polyline points={points} onClick={@destroyTool.bind null, this} />}
     </DrawingToolRoot>
 
   renderCells: (points) ->
     for cell in @state.cells
-      
+
       <polyline points={points} onClick={@destroyTool.bind null, this} />
 
   destroyTool: ->
