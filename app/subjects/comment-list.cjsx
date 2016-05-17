@@ -40,7 +40,7 @@ module?.exports = React.createClass
         <h2>Comments:</h2>
         <div>
           {for comment in @state.comments
-            <Comment key={"comment-#{comment.id}"} data={comment} locked={true} linked={true} />}
+            <Comment {...@props} key={"comment-#{comment.id}"} data={comment} locked={true} linked={true} hideFocus={true} />}
         </div>
 
         {if +@state.meta.page_count > 1

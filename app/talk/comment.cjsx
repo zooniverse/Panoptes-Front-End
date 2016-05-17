@@ -37,11 +37,13 @@ module?.exports = React.createClass
     index: React.PropTypes.number # The index of the comment in a discussion
     locked: React.PropTypes.bool  # disable action buttons
     linked: React.PropTypes.bool
+    hideFocus: React.PropTypes.bool # Control visibility of focus (default: false)
 
   getDefaultProps: ->
     active: false
     locked: false
     linked: false
+    hideFocus: false
 
   getInitialState: ->
     editing: false
@@ -128,12 +130,14 @@ module?.exports = React.createClass
     </div>
 
   # Render the focus if the comment has a focus AND
+  #   - @props.hideFocus isn't true
   #   - it's not in a discussion (recents) OR
   #   - it's a focused discussion and this is the first comment OR
   #   - it's not a focused discussion OR
   #   - it's a focused discussion and this comment's focus is different
   shouldShowFocus: ->
     return false unless @props.data.focus_id
+    return false if @props.hideFocus
 
     notInDiscussion = not @props.index
     isFirstSubjectComment = @props.index is 0 and @props.data.discussion_focus_id
