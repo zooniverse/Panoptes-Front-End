@@ -205,7 +205,7 @@ ProjectStatsPage = React.createClass
         <div className="project-stats-progress">
           <span className="project-stats-heading">Live Workflows</span>
           {progress}
-          <span className="project-stats-footer">*Estimated time to completion is based on the classification rate for the past 14 days</span>
+          <span className="project-stats-footer">*Estimated time to completion is based on the classification rate for the past 14 days and may be incorrect due to the way we currently report the data.</span>
         </div>
         <hr />
       </div>
