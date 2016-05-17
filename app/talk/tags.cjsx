@@ -27,7 +27,8 @@ module.exports = React.createClass
     differentTag = nextProps.params.tag isnt @props.params.tag
 
     if pageChanged or differentTag
-      @getTags(nextProps.location.query.page, nextProps.params.tag)
+      nextPage = if differentTag then 1 else nextProps.location.query.page
+      @getTags nextPage, nextProps.params.tag
 
   getTags: (page = @props.location.query.page, name = @props.params.tag) ->
     page or= 1
