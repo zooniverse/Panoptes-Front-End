@@ -570,6 +570,9 @@ COPY_GREY_LIGHT = #afaeae
     color: green
     text-decoration: italic
 
+  .talk-comment-container
+    position: relative
+
   .talk-comment-box
     @extend .talk-module
     width: 100%
@@ -766,3 +769,58 @@ COPY_GREY_LIGHT = #afaeae
 
     &:hover
       text-decoration: underline
+
+.talk .suggester
+  .suggestions
+    @extend .talk-module
+    position: absolute
+    display: none
+    z-index: 2
+    background-color: #FFFFFF
+    border: 1px solid TALK_BORDER
+    border-radius: TALK_BORDER_RADIUS
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1)
+    margin-top: 1.5em
+    padding: 0
+
+    .title
+      margin: 0
+      padding: 5px 10px
+      font-size: 1em
+      line-height: 1em
+      text-align: center
+      background-color: TALK_BACKGROUND
+      border-bottom: 1px solid TALK_BORDER
+
+      .loading
+        margin-left: 10px
+        transition: opacity 300ms ease
+        opacity: 0
+
+        &.shown
+          opacity: 1
+
+    ul
+      list-style: none outside none
+      margin: 0
+      padding: 0
+
+      li
+        padding: 5px 10px
+        border-bottom: 1px solid TALK_BORDER
+        cursor: pointer
+
+        small
+          font-weight: normal
+          color: COPY_GREY_MID
+
+        &.user
+          font-weight: bold
+
+        &:hover
+          background-color: SECOND_HIGHLIGHT
+          color: #FFFFFF
+
+          small
+            color: #FFFFFF
+

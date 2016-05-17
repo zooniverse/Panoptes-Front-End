@@ -8,6 +8,7 @@ Loading = require '../components/loading-indicator'
 SingleSubmitButton = require '../components/single-submit-button'
 alert = require '../lib/alert'
 {Markdown, MarkdownEditor} = require 'markdownz'
+Suggester = require './suggester'
 
 module?.exports = React.createClass
   displayName: 'Commentbox'
@@ -76,61 +77,64 @@ module?.exports = React.createClass
     feedback = @renderFeedback()
     loader = if @state.loading then <Loading />
 
-    <div className="talk-comment-box">
-
-      {if @props.reply
-        <div className="talk-comment-reply">
-          <div style={color: '#afaeae'}>
-            In reply to {@props.reply.comment.user_display_name}'s comment:
+    <div className="talk-comment-container">
+      <div className="talk-comment-box">
+        {if @props.reply
+          <div className="talk-comment-reply">
+            <div style={color: '#afaeae'}>
+              In reply to {@props.reply.comment.user_display_name}'s comment:
+            </div>
+            <Markdown project={@props.project}>{@props.reply.comment.body}</Markdown>
+            <button type="button" onClick={@props.onClickClearReply}><i className="fa fa-close" /> Clear Reply</button>
           </div>
-          <Markdown project={@props.project}>{@props.reply.comment.body}</Markdown>
-          <button type="button" onClick={@props.onClickClearReply}><i className="fa fa-close" /> Clear Reply</button>
-        </div>
-        }
+          }
 
-      <h1>{@props.header}</h1>
+        <h1>{@props.header}</h1>
 
-      {if @state.subject
-        <img className="talk-comment-focus-image" src={getSubjectLocation(@state.subject).src} />}
+        {if @state.subject
+          <img className="talk-comment-focus-image" src={getSubjectLocation(@state.subject).src} />}
 
-      <form className="talk-comment-form" onSubmit={@onSubmitComment}>
+        <form className="talk-comment-form" onSubmit={@onSubmitComment}>
+          <Suggester {...@props} input={@state.content} onSelect={@onInputChange}>
+            <MarkdownEditor previewing={@state.loading} placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <MarkdownHelp talk={true} title={<h1>Guide to commenting in Talk</h1>}/> }/>
+          </Suggester>
 
-        <MarkdownEditor previewing={@state.loading} placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <MarkdownHelp talk={true} title={<h1>Guide to commenting in Talk</h1>}/> }/>
-        <section>
-          <button
-            type="button"
-            className="talk-comment-image-select-button #{if @state.showing is 'image-selector' then 'active' else ''}"
-            onClick={@onImageSelectClick}>
-            Linked Image
-            {if @state.showing is 'image-selector' then <span>&nbsp;<i className="fa fa-close" /></span>}
-          </button>
-
-        <SingleSubmitButton type="submit" onClick={@onSubmitComment} className='talk-comment-submit-button'>{@props.submit}</SingleSubmitButton>
-          {if @props.onCancelClick
+          <section>
             <button
               type="button"
-              className="button talk-comment-submit-button"
-              onClick={@props.onCancelClick}>
-             Cancel
-            </button>}
-        </section>
+              className="talk-comment-image-select-button #{if @state.showing is 'image-selector' then 'active' else ''}"
+              onClick={@onImageSelectClick}>
+              Linked Image
+              {if @state.showing is 'image-selector' then <span>&nbsp;<i className="fa fa-close" /></span>}
+            </button>
 
-        {feedback}
+          <SingleSubmitButton type="submit" onClick={@onSubmitComment} className='talk-comment-submit-button'>{@props.submit}</SingleSubmitButton>
+            {if @props.onCancelClick
+              <button
+                type="button"
+                className="button talk-comment-submit-button"
+                onClick={@props.onCancelClick}>
+               Cancel
+              </button>}
+          </section>
 
-        <div className="submit-error">
-          {validationErrors}
-          {@state.error ? null}
+          {feedback}
+
+          <div className="submit-error">
+            {validationErrors}
+            {@state.error ? null}
+          </div>
+        </form>
+
+        <div className="talk-comment-children">
+          {switch @state.showing
+            when 'image-selector'
+              <CommentImageSelector
+                onSelectImage={@onSelectImage}
+                onClearImageClick={@onClearImageClick}
+                user={@props.user} />}
         </div>
-      </form>
 
-      <div className="talk-comment-children">
-        {switch @state.showing
-          when 'image-selector'
-            <CommentImageSelector
-              onSelectImage={@onSelectImage}
-              onClearImageClick={@onClearImageClick}
-              user={@props.user} />}
+        {loader}
       </div>
-
-      {loader}
     </div>
