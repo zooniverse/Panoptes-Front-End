@@ -59,12 +59,6 @@ module.exports = React.createClass
     annotation: null
     onChange: NOOP
 
-  getInitialState: ->
-    currentTextAreaValue: ""
-
-  componentWillReceiveProps: (nextProps) ->
-    console.log "nextProps", nextProps
-
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <label className="answer">

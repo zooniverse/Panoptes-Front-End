@@ -59,9 +59,7 @@ module?.exports = React.createClass
             </AutoSave>
             <small className="form-help">Add text and images for a help window.</small>
           </div>
-          <hr/>}
-      </section>
-      <section>
+          <br/>}
         <span className="form-label">Metadata Tags</span> <br/>
           <small className="form-help">Volunteers can attach the following tags to highlighted portions of their transcription.</small><br/>
             <label>
