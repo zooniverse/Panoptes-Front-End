@@ -28,9 +28,11 @@ module.exports = React.createClass
   getInitialState: ->
     workflows: []
 
-  render: ->
-    [owner, name] = @props.project.slug.split('/')
+  handleWorkflowSelection: (workflow) ->
+    @props.onChangePreferences 'preferences.selected_workflow', workflow?.id
+    undefined # Don't prevent default Link behavior.
 
+  render: ->
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
         <FinishedBanner project={@props.project} />
@@ -45,12 +47,18 @@ module.exports = React.createClass
             <small>at {@props.project.redirect}</small>
           </a>
         else if @props.project.configuration?.user_chooses_workflow
-          for workflow in @state.workflows
-            <Link to={"/projects/#{owner}/#{name}/classify?workflow=#{workflow.id}"} key={workflow.id} className="call-to-action standard-button">
+          @state.workflows.map (workflow) =>
+            <Link
+              to={"/projects/#{@props.project.slug}/classify"}
+              query={workflow: workflow.id}
+              key={workflow.id + Math.random()}
+              className="call-to-action standard-button"
+              onClick={@handleWorkflowSelection.bind this, workflow}
+            >
               {workflow.display_name}
             </Link>
         else
-          <Link to={"/projects/#{owner}/#{name}/classify"} className="call-to-action standard-button">
+          <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
             Get started!
           </Link>}
       </div>

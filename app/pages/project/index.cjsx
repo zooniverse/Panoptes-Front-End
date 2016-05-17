@@ -40,6 +40,7 @@ ProjectPage = React.createClass
   getDefaultProps: ->
     project: null
     owner: null
+    preferences: null
 
   getInitialState: ->
     background: null
@@ -98,6 +99,8 @@ ProjectPage = React.createClass
   render: ->
     projectPath = "/projects/#{@props.project.slug}"
 
+    currentWorkflow = @props.preferences?.preferences.selected_workflow ? @props.project.configuration?.default_workflow
+
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
       map
@@ -130,7 +133,7 @@ ProjectPage = React.createClass
             <Translate content="project.nav.classify" />
           </a>
         else
-          <Link to="#{projectPath}/classify" activeClassName="active" className="classify tabbed-content-tab">
+          <Link to="#{projectPath}/classify" query={workflow: currentWorkflow} activeClassName="active" className="classify tabbed-content-tab">
             <Translate content="project.nav.classify" />
           </Link>}
 
@@ -168,7 +171,12 @@ ProjectPage = React.createClass
           <Markdown>{@props.project.configuration.announcement}</Markdown>
         </div>}
 
-      {React.cloneElement @props.children, user: @props.user, project: @props.project, owner: @props.owner}
+      {React.cloneElement @props.children,
+        user: @props.user
+        project: @props.project
+        owner: @props.owner
+        preferences: @props.preferences
+        onChangePreferences: @props.onChangePreferences}
 
       {unless @props.project.launch_approved or @props.project.beta_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
@@ -194,9 +202,15 @@ ProjectPageController = React.createClass
     error: null
     project: null
     owner: null
+    preferences: null
+
+  _listenedToPreferences: null
+
+  _boundForceUpdate: null
 
   componentDidMount: ->
-    @fetchProject @props.params.owner, @props.params.name
+    @_boundForceUpdate = @forceUpdate.bind this
+    @fetchProjectData @props.params.owner, @props.params.name, @props.user
 
   componentWillReceiveProps: (nextProps) ->
     {owner, name} = nextProps.params
@@ -204,27 +218,66 @@ ProjectPageController = React.createClass
     userChanged = nextProps.user isnt @props.user
 
     if pathChanged or userChanged
-      @fetchProject owner, name
+      @fetchProjectData owner, name, nextProps.user
 
-  fetchProject: (owner, name) ->
+  fetchProjectData: (owner, name, user) ->
+    @listenToPreferences null
     @setState
       loading: true
       error: null
       project: null
       owner: null
+      preferences: null
 
     query = slug: owner + '/' + name
 
     apiClient.type('projects').get query
       .then ([project]) =>
         @setState {project}
-        project.get 'owner'
-      .then (owner) =>
-        @setState {owner}
+
+        awaitOwner = project.get 'owner'
+          .then (owner) =>
+            @setState {owner}
+
+        awaitPreferences = if user?
+          user.get 'project_preferences', project_id: project.id
+            .then ([preferences]) =>
+              preferences ? newPreferences = apiClient.type('project_preferences').create({
+                links: {
+                  project: project.id
+                },
+                preferences: {}
+              }).save()
+        else
+          Promise.resolve apiClient.type('project_preferences').create
+            id: 'GUEST_PREFERENCES_DO_NOT_SAVE'
+            links:
+              project: project.id
+            preferences: {}
+
+        awaitPreferences = awaitPreferences.then (preferences) =>
+          @listenToPreferences preferences
+          @setState {preferences}
+
+        Promise.all [awaitOwner, awaitPreferences]
+
       .catch (error) =>
         @setState {error}
+
       .then =>
         @setState loading: false
+
+  listenToPreferences: (preferences) ->
+    @_listenedToPreferences?.stopListening 'change', @_boundForceUpdate
+    preferences?.listen 'change', @_boundForceUpdate
+    @_listenedToPreferences = preferences
+
+  handlePreferencesChange: (key, value) ->
+    changes = {}
+    changes[key] = value
+    @state.preferences.update changes
+    if @props.user?
+      @state.preferences.save()
 
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
@@ -241,7 +294,7 @@ ProjectPageController = React.createClass
       {if @state.error?
         <div>
           <p>
-            There was an error retrieving the project{' '}
+            There was an error retrieving project{' '}
             <strong>{slug}</strong>.
           </p>
           <p>
@@ -250,7 +303,13 @@ ProjectPageController = React.createClass
         </div>}
 
       {if @state.project? and @state.owner?
-        <ProjectPage {...@props} project={@state.project} owner={@state.owner} />}
+        <ProjectPage
+          {...@props}
+          project={@state.project}
+          owner={@state.owner}
+          preferences={@state.preferences}
+          onChangePreferences={@handlePreferencesChange}
+        />}
     </div>
 
 module.exports = ProjectPageController
