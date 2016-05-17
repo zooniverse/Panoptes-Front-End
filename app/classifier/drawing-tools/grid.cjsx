@@ -69,15 +69,26 @@ module.exports = React.createClass
 
     <DrawingToolRoot tool={this}>
       {if @state?.template
+        @renderCells()
         <polyline points={points} onClick={@destroyTool.bind null, this} />
       else
         <polyline points={points} onClick={@destroyTool.bind null, this} />}
     </DrawingToolRoot>
 
-  renderCells: (points) ->
-    for cell in @state.cells
-
+  renderCells: ->
+    for cell in @state.template
+      points = @pointParser cell
       <polyline points={points} onClick={@destroyTool.bind null, this} />
+
+  pointParser: (cell) ->
+    {y, height} = @props.mark
+    points = [
+      [x, y].join ','
+      [x + cell.width, y].join ','
+      [x + cell.width, y + height].join ','
+      [x, y + height].join ','
+      [x, y].join ','
+    ].join '\n'
 
   destroyTool: ->
     if window.confirm 'Do you want to delete this cell?'
