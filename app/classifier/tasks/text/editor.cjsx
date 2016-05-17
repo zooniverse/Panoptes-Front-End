@@ -38,7 +38,6 @@ module?.exports = React.createClass
   render: ->
     handleChange = handleInputChange.bind @props.workflow
 
-
     <div className="text-editor" >
       <section>
         <div>
@@ -58,8 +57,7 @@ module?.exports = React.createClass
               <MarkdownEditor name="#{@props.taskPrefix}.help" value={@props.task.help ? ""} rows="4" className="full" onChange={handleChange} onHelp={-> alert <MarkdownHelp/>} />
             </AutoSave>
             <small className="form-help">Add text and images for a help window.</small>
-          </div>
-          <br/>}
+          </div>}
         <span className="form-label">Metadata Tags</span> <br/>
           <small className="form-help">Volunteers can attach the following tags to highlighted portions of their transcription.</small><br/>
             <label>
