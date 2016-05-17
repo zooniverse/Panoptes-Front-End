@@ -41,10 +41,11 @@ module.exports = React.createClass
 
           awaitMiniCourseMedia.then (mediaByID) =>
             Dialog.alert(<MiniCourseComponent project={project} user={user} minicourse={minicourse} media={mediaByID} />, {
-              className: 'tutorial-dialog mini-course-dialog', #reusing tutorial styling
+              className: 'mini-course-dialog', #reusing tutorial styling
               required: true,
               closeButton: true
               onSubmit: @handleOptOut.bind(null, project, user, minicourse.id)
+              onCancel: @handleOnCancel
             })
               .catch =>
                 null # We don't really care if the user canceled or completed the tutorial.
@@ -93,6 +94,10 @@ module.exports = React.createClass
           projectPreferences.update "preferences.minicourses.opt_out.id_#{minicourseID}": true
           projectPreferences.save()
 
+    handleOnCancel: ->
+      console.log('cancel')
+      return
+
     createProjectPreferences: (projectPreferences, minicourseID, projectID) ->
       defaultPreferences = { 
         "preferences.minicourses.opt_out.id_#{minicourseID}": false, 
@@ -115,6 +120,7 @@ module.exports = React.createClass
     user: {}
 
   getInitialState: ->
+    optOutCheckbox: false
     projectPreferences: null
     slideToStart: 0
 
@@ -137,17 +143,33 @@ module.exports = React.createClass
       @handleProjectPreferencesOnUnmount()
   
   render: ->
-    <StepThrough ref="stepThrough" className="tutorial-steps">
+    <StepThrough ref="stepThrough" className="mini-course-dialog__steps">
       {for step, i in @props.minicourse.steps
         step._key ?= Math.random()
-        <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>
+        <MediaCard key={step._key} className="steps__step" src={@props.media[step.media]?.src}>
           <Markdown>{step.content}</Markdown>
           <hr />
-          <p>
-            <button type="submit" className="minor-button">Opt Out</button> 
-          </p>
+          <div className="steps__step-actions">
+            <label className="action__opt-out">
+              <input type="checkbox" onChange={@handleOptOutToggle} />
+              Do not show me this again 
+            </label>
+            {if @state.optOutCheckbox
+              <button type="submit" className="minor-button">Opt out <i className="fa fa-long-arrow-right fa-lg" aria-hidden="true"></i></button>
+            else
+              <button type="button" className="standard-button" onClick={@handleOnCancel}>Close</button>}
+          </div>
         </MediaCard>}
     </StepThrough>
+
+  handleOptOutToggle: (e) ->
+    checked = e.target.checked
+    console.log('handling', checked)
+
+    if checked
+      @setState optOutCheckbox: true
+    else
+      @setState optOutCheckbox: false
 
   handleProjectPreferencesOnUnmount: ->
     if @state.slideToStart is @props.minicourse.steps.length - 1

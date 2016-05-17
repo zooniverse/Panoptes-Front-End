@@ -1,3 +1,46 @@
+.modal-form-underlay.mini-course-dialog
+  background-color: rgba(0,0,0,0.6)
+
 .mini-course-dialog
-  .step-through-controls
-    display: none
+  border-radius: 8px
+  padding: 0 0 1.5em
+
+  @media screen and (max-width: 400px)
+    margin-left: 0em
+    margin-top: 1.75em
+        
+  &__steps
+    display: flex
+    flex-direction: column
+    max-height: 85vh
+    width: 65vw
+    
+    > .step-through-content
+      // TODO: I'd rather the header media not scroll.
+      overflow-y: auto !important // Override swipe library setting.
+
+    > .step-through-controls
+      display: none
+      
+    .steps__step
+      &-actions
+        display: flex
+        justify-content: space-between
+        
+        .action__opt-out
+          font-style: italic
+      
+  .media-card.steps__step
+    > .media-card-content
+      @extends .content-container
+
+  .media-card-header
+    background-color: lightgray
+    border-top-left-radius: 8px
+    border-top-right-radius: 8px
+    
+  .media-card-media
+    display: block
+    margin: 0 auto
+    max-width: 300px
+    width: 100%
