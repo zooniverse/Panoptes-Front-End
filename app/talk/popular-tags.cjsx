@@ -25,9 +25,9 @@ module?.exports = React.createClass
   tag: (talkTag, i) ->
     tag = talkTag.name
     if @props.project
-      <div key={talkTag.id} className="truncated"><Link to="/projects/#{@props.project.slug}/talk/tags/#{tag}">#{tag}</Link>{' '}</div>
+      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/projects/#{@props.project.slug}/talk/tags/#{tag}">#{tag}</Link>{' '}</div>
     else
-      <div key={talkTag.id} className="truncated"><Link to="/talk/search/?query=#{tag}">#{tag}</Link>{' '}</div>
+      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/talk/search/?query=#{tag}">#{tag}</Link>{' '}</div>
 
   render: ->
     <div className="talk-popular-tags">
