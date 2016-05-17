@@ -1,4 +1,6 @@
 React = require 'react'
+WorkflowToggle = require '../../components/workflow-toggle'
+PromiseRenderer = require '../../components/promise-renderer'
 SetToggle = require '../../lib/set-toggle'
 
 module.exports = React.createClass
@@ -55,7 +57,7 @@ module.exports = React.createClass
         Live
       </label>
 
-      <p className="form-help">Workflows can be edited during development, and subjects will never retire. In a live project, workflows are locked and can no longer be edited, and classifications count toward subject retirement.</p>
+      <p className="form-help">All workflows can be edited during development, and subjects will never retire. In a live project, active workflows are locked and can no longer be edited, and classifications count toward subject retirement.</p>
 
       <div style={looksDisabled if @props.project.private or not @props.project.live}>
         <hr />
@@ -123,4 +125,22 @@ module.exports = React.createClass
 
         </div>
       </div>
+
+      <hr/>
+
+      <p className="form-label">Workflow Settings</p>
+      <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
+        if workflows.length is 0
+          <div className="workflow-status-list">No workflows found</div>
+        else
+          <div className="workflow-status-list">
+            <ul>
+            {workflows.map (workflow) =>
+              <li key={workflow.id}>
+                <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
+              </li>}
+            </ul>
+          </div>
+      }</PromiseRenderer>
+      <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
     </div>

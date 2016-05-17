@@ -88,18 +88,18 @@ EditWorkflowPage = React.createClass
 
     <div className="edit-workflow-page">
       <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
-        <button onClick={@showCreateWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="Copy workflow">
+        <button onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="Copy workflow">
           <i className="fa fa-copy"/>
         </button>
       </h3>
       {if @state.workflowCreationInProgress
         <ModalFormDialog tag="div">
-          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} />
+          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} workflowActiveStatus={not @props.project.live} />
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
-      {if @props.project.live
-        <p className="form-help warning"><strong>You cannot edit a project’s workflows once it’s gone live.</strong></p>}
-      <div className="columns-container" style={disabledStyle if @props.project.live}>
+      {if @props.project.live and @props.workflow.active
+        <p className="form-help warning"><strong>You cannot edit an active workflow if the project is live.</strong></p>}
+      <div className="columns-container" style={disabledStyle if @props.project.live and @props.workflow.active}>
         <div className="column">
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
@@ -217,9 +217,10 @@ EditWorkflowPage = React.createClass
             <hr />
 
             <p>
-              <small className="form-help">Version {@props.workflow.version}</small>
+              <small className="form-help">Version {@props.workflow.version} - Status: <span className={if @props.workflow.active then "color-label green" else "color-label red"}>{if @props.workflow.active then "Active" else "Inactive"}</span></small>
             </p>
             <p className="form-help"><small>Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by a whole number: 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the version by a decimal, e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data.</small></p>
+            <p className="form-help"><small>Status indicates whether a workflow is active or inactive. Active workflows are available to volunteers and classifications count toward subject retirement. Workflow status can be managed under the Visibility section within the Project Builder.</small></p>
           </div>
 
           <hr />
