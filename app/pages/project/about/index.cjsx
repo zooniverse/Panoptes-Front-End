@@ -29,37 +29,35 @@ module.exports = React.createClass
       .reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
 
   render: ->
-    <PromiseRenderer promise={@props.project.get 'owner'}>{(owner) =>
-      [ownerName, name] = @props.project.slug.split('/')
-      projectPath = "/projects/#{ownerName}/#{name}"
+    [ownerName, name] = @props.project.slug.split('/')
+    projectPath = "/projects/#{ownerName}/#{name}"
 
-      <div className="about-container">
-        <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
-          pageTitles = @getPageTitles(pages)
-          <span>
-            {if pageTitles.science_case
-              <Link to="#{projectPath}/about/research" activeClassName="active"className="about-tabs">
-                <Translate content= "nav.research" />
-              </Link>}
-              <Link to="#{projectPath}/about/team" activeClassName="active" className="about-tabs">
-                <Translate content= "nav.team" />
-              </Link>
-            {if pageTitles.results
-              <Link to="#{projectPath}/about/results" activeClassName="active"className="about-tabs">
-                <Translate content= "nav.results" />
-              </Link>}
-            {if pageTitles.education
-              <Link to="#{projectPath}/about/education" activeClassName="active" className="about-tabs">
-                <Translate content= "nav.education" />
-              </Link>}
-            {if pageTitles.faq
-              <Link to="#{projectPath}/about/faq" activeClassName="active" className="about-tabs">
-                <Translate content= "nav.faq" />
-              </Link>}
-          </span>
-        }</PromiseRenderer>
+    <div className="project-about-page">
+      <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
+        pageTitles = @getPageTitles(pages)
+        <span>
+          {if pageTitles.science_case
+            <Link to="#{projectPath}/about/research" activeClassName="active"className="about-tabs">
+              <Translate content= "nav.research" />
+            </Link>}
+            <Link to="#{projectPath}/about/team" activeClassName="active" className="about-tabs">
+              <Translate content= "nav.team" />
+            </Link>
+          {if pageTitles.results
+            <Link to="#{projectPath}/about/results" activeClassName="active"className="about-tabs">
+              <Translate content= "nav.results" />
+            </Link>}
+          {if pageTitles.education
+            <Link to="#{projectPath}/about/education" activeClassName="active" className="about-tabs">
+              <Translate content= "nav.education" />
+            </Link>}
+          {if pageTitles.faq
+            <Link to="#{projectPath}/about/faq" activeClassName="active" className="about-tabs">
+              <Translate content= "nav.faq" />
+            </Link>}
+        </span>
+      }</PromiseRenderer>
 
-        {React.cloneElement(@props.children, {owner: owner, project: @props.project, user: @props.user})}
+      {React.cloneElement(@props.children, {project: @props.project, user: @props.user})}
 
-      </div>
-    }</PromiseRenderer>
+    </div>
