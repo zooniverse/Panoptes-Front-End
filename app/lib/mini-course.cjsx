@@ -27,7 +27,6 @@ module.exports = React.createClass
         Promise.resolve()
 
     start: (minicourse, projectPreferences, user) ->
-      console.log('calling start', minicourse, projectPreferences, user)
       MiniCourseComponent = this
       if minicourse.steps.length isnt 0
         awaitMiniCourseMedia = minicourse.get 'attached_images'
@@ -44,7 +43,8 @@ module.exports = React.createClass
           Dialog.alert(<MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} />, {
             className: 'mini-course-dialog',
             required: true,
-            closeButton: true
+            closeButton: true,
+            top: 0.2
           })
             .catch =>
               null # We don't really care if the user canceled or completed the tutorial.
@@ -67,18 +67,24 @@ module.exports = React.createClass
           @createProjectPreferences(projectPreferences, minicourse.id, project.id).then (newProjectPreferences) =>
             @start minicourse, newProjectPreferences, user
 
-    startIfNecessary: ({workflow, projectPreferences, user}) ->
+    startIfNecessary: ({workflow, preferences, project, user}) ->
       if user?
         @find({workflow}).then (minicourse) =>
           if minicourse?
-            @checkIfCompleted(minicourse, projectPreferences, user).then (completed) =>
+            @checkIfCompletedOrOptedOut(minicourse, preferences, project, user).then (completed) =>
               unless completed
-                @start minicourse, projectPreferences, user unless projectPreferences.preferences.minicourses?.opt_out["id_#{minicourse.id}"] 
+                @start minicourse, preferences, user
 
-    checkIfCompleted: (minicourse, projectPreferences, user) ->
-      if user?
+    checkIfCompletedOrOptedOut: (minicourse, projectPreferences, project, user) ->
+      if user? and projectPreferences.preferences?.minicourses?
         window.prefs = projectPreferences
-        projectPreferences?.preferences?.minicourses?.completed_at?["id_#{minicourse.id}"]?
+        if projectPreferences.preferences.minicourses.completed_at?["id_#{minicourse.id}"]?
+          Promise.resolve projectPreferences.preferences.minicourses.completed_at?["id_#{minicourse.id}"]?
+        else 
+          Promise.resolve projectPreferences.preferences.minicourses.opt_out["id_#{minicourse.id}"]
+      else if user?
+        newProjectPreferences = @createProjectPreferences(projectPreferences, minicourse.id, project.id)
+        Promise.resolve newProjectPreferences.preferences.minicourses.opt_out["id_#{minicourse.id}"]
 
     createProjectPreferences: (projectPreferences, minicourseID, projectID) ->
       defaultPreferences = { 
@@ -99,32 +105,18 @@ module.exports = React.createClass
   getDefaultProps: ->
     media: {}
     minicourse: {}
-    project: {}
     projectPreferences: {}
     user: {}
 
   getInitialState: ->
     optOut: false
-    slideToStart: 0
-
-  componentDidMount: ->
-    if @props.user?
-      if @props.projectPreferences.preferences.minicourses?
-        @setState { 
-          slideToStart: @props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"],
-          projectPreferences 
-        }
-      else
-        # Create default preferences
-        @createProjectPreferences(@props.projectPreferences, @props.minicourse.id, @props.project.id).then (newProjectPreferences) =>
-          @setState { projectPreferences: newProjectPreferences }
   
   componentWillUnmount: ->
-    if @state.projectPreferences?
+    if @props.user?
       @handleProjectPreferencesOnUnmount()
   
   render: ->
-    <ReactSwipe key={@state.optOut} startSlide={@state.slideToStart} continuous={false} className="mini-course-dialog__steps">
+    <ReactSwipe key={@state.optOut} swipeOptions={startSlide: @props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"], continuous: false} className="mini-course-dialog__steps">
       {for step, i in @props.minicourse.steps
         step._key ?= Math.random()
         <MediaCard key={step._key} className="steps__step" src={@props.media[step.media]?.src}>
