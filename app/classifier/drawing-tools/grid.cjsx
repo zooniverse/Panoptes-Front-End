@@ -25,8 +25,6 @@ module.exports = React.createClass
       width: 0
       height: 0
 
-    savedRow: ->
-
     initStart: ({x, y}, mark) ->
       @initCoords = {x, y}
       {x, y, _inProgress: true}
@@ -50,6 +48,7 @@ module.exports = React.createClass
 
     initRelease: (cursor, mark, e) ->
       _inProgress: false
+      # discover if we are in row mode. If so, make a mark for each item rendered
 
     initValid: (mark) ->
       mark.width > MINIMUM_SIZE and mark.height > MINIMUM_SIZE
@@ -70,7 +69,6 @@ module.exports = React.createClass
     <DrawingToolRoot tool={this}>
       {if @state?.template
         @renderCells()
-        <polyline points={points} onClick={@destroyTool.bind null, this} />
       else
         <polyline points={points} onClick={@destroyTool.bind null, this} />}
     </DrawingToolRoot>
@@ -83,11 +81,11 @@ module.exports = React.createClass
   pointParser: (cell) ->
     {y, height} = @props.mark
     points = [
-      [x, y].join ','
-      [x + cell.width, y].join ','
-      [x + cell.width, y + height].join ','
-      [x, y + height].join ','
-      [x, y].join ','
+      [cell.x, y].join ','
+      [cell.x + cell.width, y].join ','
+      [cell.x + cell.width, y + height].join ','
+      [cell.x, y + height].join ','
+      [cell.x, y].join ','
     ].join '\n'
 
   destroyTool: ->

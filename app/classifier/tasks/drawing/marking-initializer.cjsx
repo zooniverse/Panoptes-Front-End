@@ -13,7 +13,6 @@ module.exports = React.createClass
     workflow: null
     frame: 0
     getEventOffset: null
-    user: null
 
   render: ->
     toolDescription = @props.task.tools[@props.annotation._toolIndex]
@@ -54,9 +53,6 @@ module.exports = React.createClass
 
       MarkComponent = drawingTools[toolDescription.type]
 
-      if MarkComponent.saveState = true
-        @initSave toolDescription.type
-
       if MarkComponent.defaultValues?
         defaultValues = MarkComponent.defaultValues mouseCoords
         for key, value of defaultValues
@@ -96,10 +92,9 @@ module.exports = React.createClass
       for key, value of initReleaseValues
         mark[key] = value
 
+    if MarkComponent.saveState = false
+      console.log "ok"
     @props.classification.update 'annotations'
-
-    if MarkComponent.saveState = true
-      @commitSave mark
 
     if MarkComponent.initValid?
       unless MarkComponent.initValid mark, @props
@@ -111,17 +106,3 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @props.classification.update 'annotations'
-
-  initSave: (tool) ->
-    startTime = @props.classification.metadata.started_at
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      unless pref.preferences.grid.cells? && pref.preferences.grid.started_at == startTime
-        pref.update 'preferences.grid': {cells: [], started_at: startTime, inProgress: true}
-        pref.save()
-
-  commitSave: (mark) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if pref.preferences.grid?.inProgress
-        pref.preferences.grid.cells.push mark
-        pref.update 'preferences.grid.cells': pref.preferences.grid.cells
-        pref.save()
