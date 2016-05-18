@@ -11,7 +11,6 @@ DELETE_BUTTON_DISTANCE = 9 / 10
 
 module.exports = React.createClass
   displayName: 'GridTool'
-  saveState: true
 
   componentWillMount: ->
     @findSchema()
@@ -48,10 +47,15 @@ module.exports = React.createClass
 
     initRelease: (cursor, mark, e) ->
       _inProgress: false
-      # discover if we are in row mode. If so, make a mark for each item rendered
 
     initValid: (mark) ->
       mark.width > MINIMUM_SIZE and mark.height > MINIMUM_SIZE
+
+    saveState: (mark, template) ->
+      for cell in template
+        cell.y = mark.y
+        cell.height = mark.height
+      template
 
   initCoords: null
 

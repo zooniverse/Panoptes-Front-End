@@ -14,6 +14,9 @@ module.exports = React.createClass
     frame: 0
     getEventOffset: null
 
+  componentWillReceiveProps: ->
+    @findSchema()
+
   render: ->
     toolDescription = @props.task.tools[@props.annotation._toolIndex]
     marksFromCurrentTool = @props.annotation.value.filter (mark) =>
@@ -92,8 +95,12 @@ module.exports = React.createClass
       for key, value of initReleaseValues
         mark[key] = value
 
-    if MarkComponent.saveState = false
-      console.log "ok"
+    if MarkComponent.saveState? and @state?.template
+      multipleMarks = MarkComponent.saveState mark, @state.template
+      for cell in multipleMarks
+        @props.annotation.value[@props.annotation.value.length] = cell
+        @props.classification.update 'annotations'
+
     @props.classification.update 'annotations'
 
     if MarkComponent.initValid?
@@ -106,3 +113,8 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @props.classification.update 'annotations'
+
+  findSchema: ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      if pref.preferences.cells.length
+        @setState template: pref.preferences.cells
