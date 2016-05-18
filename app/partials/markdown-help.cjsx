@@ -156,7 +156,9 @@ module?.exports = React.createClass
               # header1<br/>
               ## header2<br/>
               ### header3<br/>
-              <em>etc., up to six # symbols</em>
+              <em>etc., up to six # symbols</em><br/>
+              Header 1 will appear orange. <br/>
+              Headers 2-6 will appear blue.
             </td>
             <td>
               <Markdown>
