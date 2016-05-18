@@ -29,8 +29,7 @@ module.exports = React.createClass
       .reduce(((accum, page) -> accum[page.url_key] = page.title; accum), {})
 
   render: ->
-    [ownerName, name] = @props.project.slug.split('/')
-    projectPath = "/projects/#{ownerName}/#{name}"
+    projectPath = "/projects/#{@props.project.slug}"
 
     <div className="project-about-page">
       <PromiseRenderer promise={@props.project.get 'pages'}>{(pages) =>
