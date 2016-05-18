@@ -88,7 +88,6 @@
 
     "_deploy": "export BUCKET=www.zooniverse.org; npm run clean && npm run build && npm run publish",
     "deploy": "export NODE_ENV=production; export DEPLOY_SUBDIR=panoptes-front-end; export PUBLISH_FLAGS=\"-d\" npm run _deploy",
-    "deploy-branch": "export NODE_ENV=production; export DEPLOY_SUBDIR=panoptes-front-end/$(git symbolic-ref --short HEAD); export PFE_PREFIX=$DEPLOY_SUBDIR; export PUBLISH_FLAGS=\"-dr\"; npm run _deploy; echo \"Unfortunately this is broken right now.\"",
 
     "_stage": "export BUCKET=preview.zooniverse.org; npm run clean && npm run build && npm run publish",
     "stage": "export NODE_ENV=staging; export DEPLOY_SUBDIR=panoptes-front-end; npm run _stage",
