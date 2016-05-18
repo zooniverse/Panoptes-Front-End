@@ -16,7 +16,7 @@ module.exports = React.createClass
   displayName: 'MiniCourse'
 
   statics:
-    find: ({workflow, project}) ->
+    find: ({workflow}) ->
       # Prefer fetching the tutorial for the workflow, if a workflow is given.
       if workflow?
         apiClient.type('tutorials').get workflow_id: workflow.id, kind: "mini-course"
@@ -71,7 +71,7 @@ module.exports = React.createClass
 
     startIfNecessary: ({workflow, project, user}) ->
       if user?
-        @find({workflow, project}).then (minicourse) =>
+        @find({workflow}).then (minicourse) =>
           if minicourse?
             @checkIfCompleted(minicourse, project, user).then (completed) =>
               unless completed

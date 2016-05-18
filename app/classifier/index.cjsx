@@ -44,12 +44,12 @@ Classifier = React.createClass
     @loadSubject @props.subject
     @prepareToClassify @props.classification
     {workflow, project, user} = @props
-    Tutorial.startIfNecessary {workflow, project, user}
+    Tutorial.startIfNecessary {workflow, user}
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
       {workflow, project, user} = nextProps
-      Tutorial.startIfNecessary {workflow, project, user}
+      Tutorial.startIfNecessary {workflow, user}
     if nextProps.subject isnt @props.subject
       @loadSubject subject
     if nextProps.classification isnt @props.classification

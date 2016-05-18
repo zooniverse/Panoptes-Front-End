@@ -12,15 +12,15 @@ module.exports = React.createClass
     tutorial: null
 
   componentDidMount: ->
-    @fetchTutorialFor @props.workflow, @props.project
+    @fetchTutorialFor @props.workflow
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.workflow is @props.workflow and nextProps.project is @props.project
-      @fetchTutorialFor nextProps.workflow, nextProps.project
+      @fetchTutorialFor nextProps.workflow
 
-  fetchTutorialFor: (workflow, project) ->
+  fetchTutorialFor: (workflow) ->
     @setState tutorial: null
-    Tutorial.find({workflow, project}).then (tutorial) =>
+    Tutorial.find({workflow}).then (tutorial) =>
       @setState {tutorial}
 
   render: ->
