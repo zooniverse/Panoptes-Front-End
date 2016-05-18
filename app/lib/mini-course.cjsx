@@ -1,8 +1,6 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 Dialog = require 'modal-form/dialog'
-# StepThrough = require '../components/step-through'
-ReactSwipe = require 'react-swipe'
 MediaCard = require '../components/media-card'
 {Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -127,7 +125,7 @@ module.exports = React.createClass
               <input type="checkbox" onChange={@handleOptOut} checked={@state.optOut} />
               Do not show me this again 
             </label>}
-          <button type="submit" className="standard-button">
+          <button type="submit" className="standard-button action__button">
             {if @state.optOut
               <span>Opt out <i className="fa fa-long-arrow-right fa-lg" aria-hidden="true"></i></span>
             else
@@ -140,13 +138,13 @@ module.exports = React.createClass
   handleOptOut: (e) ->
     checked = e.target.checked
 
-    @setState optOut: checked
-
     @props.projectPreferences.update "preferences.minicourses.opt_out.id_#{@props.minicourse.id}": checked
     @props.projectPreferences.save()
+      .then =>
+        @setState optOut: checked
 
   handleProjectPreferencesOnUnmount: ->
-    if @state.slideToStart is @props.minicourse.steps.length - 1
+    if @props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"] is @props.minicourse.steps.length - 1
       now = new Date().toISOString()
       minicoursesCompletedThisSession[@props.minicourse.id] = now
 
