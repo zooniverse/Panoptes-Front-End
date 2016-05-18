@@ -116,27 +116,26 @@ module.exports = React.createClass
       @handleProjectPreferencesOnUnmount()
   
   render: ->
-    <ReactSwipe key={@state.optOut} swipeOptions={startSlide: @props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"], continuous: false} className="mini-course-dialog__steps">
-      {for step, i in @props.minicourse.steps
-        step._key ?= Math.random()
-        <MediaCard key={step._key} className="steps__step" src={@props.media[step.media]?.src}>
-          <Markdown>{step.content}</Markdown>
-          <hr />
-          <div className="steps__step-actions">
-            {if @props.user?
-              <label className="action__opt-out">
-                <input type="checkbox" onChange={@handleOptOut} checked={@state.optOut} />
-                Do not show me this again 
-              </label>}
-            <button type="submit" className="standard-button">
-              {if @state.optOut
-                <span>Opt out <i className="fa fa-long-arrow-right fa-lg" aria-hidden="true"></i></span>
-              else
-                <span>Close</span>}
-            </button>
-          </div>
-        </MediaCard>}
-    </ReactSwipe>
+    step = @props.minicourse.steps[@props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"]]
+    <div className="mini-course-dialog__steps">
+      <MediaCard className="steps__step" src={@props.media[step.media]?.src}>
+        <Markdown>{step.content}</Markdown>
+        <hr />
+        <div className="steps__step-actions">
+          {if @props.user?
+            <label className="action__opt-out">
+              <input type="checkbox" onChange={@handleOptOut} checked={@state.optOut} />
+              Do not show me this again 
+            </label>}
+          <button type="submit" className="standard-button">
+            {if @state.optOut
+              <span>Opt out <i className="fa fa-long-arrow-right fa-lg" aria-hidden="true"></i></span>
+            else
+              <span>Close</span>}
+          </button>
+        </div>
+      </MediaCard>
+    </div>
 
   handleOptOut: (e) ->
     checked = e.target.checked

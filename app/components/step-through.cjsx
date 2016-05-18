@@ -21,7 +21,7 @@ module.exports = React.createClass
     childrenCount = React.Children.count @props.children
 
     <div className="step-through" {...@props}>
-      <ReactSwipe ref="swiper" className="step-through-content" swipeOptions={startSlide: @state.step, continuous: false, callback: @handleStep.bind this, childrenCount}>
+      <ReactSwipe ref="swiper" className="step-through-content" startSlide={@state.step} continuous={false} callback={@handleStep.bind this, childrenCount}>
         {@props.children}
       </ReactSwipe>
 

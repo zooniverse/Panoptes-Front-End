@@ -32,7 +32,7 @@
     "react-pullout": "~1.0.1",
     "react-router": "~1.0.0",
     "react-select": "~0.9.1",
-    "react-swipe": "~5.0.0",
+    "react-swipe": "~3.0.0",
     "react-translate-component": "~0.10.0",
     "remark": "~4.2.2",
     "sort-into-columns": "~1.0.0",
