@@ -12,32 +12,20 @@ module.exports = React.createClass
   displayName: 'Tutorial'
 
   statics:
-    find: ({workflow, project}) ->
+    find: ({workflow}) ->
       # Prefer fetching the tutorial for the workflow, if a workflow is given.
-      awaitTutorialForWorkflow = if workflow?
+      if workflow?
         apiClient.type('tutorials').get workflow_id: workflow.id
-          .then ([tutorial]) ->
+          .then (tutorials) ->
             # Backwards compatibility for null kind values. We assume these are standard tutorials.
-            tutorial if tutorial?.kind is 'tutorial' or tutorial?.kind is null
+            onlyStandardTutorials = tutorials.filter (tutorial) ->
+              tutorial.kind in ['tutorial', null]
+            onlyStandardTutorials[0]
       else
         Promise.resolve()
 
-      # Wait for the workflow tutorial, but if nothing comes back, check for a project tutorial.
-      # Keeping this fetch for now, but we should eventually take this out:
-      awaitTutorialInGeneral = awaitTutorialForWorkflow.then (tutorialForWorkflow) ->
-        if tutorialForWorkflow?
-          tutorialForWorkflow
-        else if project?
-          apiClient.type('tutorials').get project_id: project.id
-            .then ([tutorial]) =>
-              # Backwards compatibility for null kind values. We assume these are standard tutorials.
-              tutorial if tutorial?.kind is 'tutorial' or tutorial?.kind is null
-        else
-          # There's no workflow tutorial and no project given.
-          Promise.resolve()
-
-    startIfNecessary: ({workflow, project, user}) ->
-      @find({workflow, project}).then (tutorial) =>
+    startIfNecessary: ({workflow, user}) ->
+      @find({workflow}).then (tutorial) =>
         if tutorial?
           @checkIfCompleted(tutorial, user).then (completed) =>
             unless completed

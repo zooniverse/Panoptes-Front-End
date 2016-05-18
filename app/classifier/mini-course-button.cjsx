@@ -13,15 +13,15 @@ module.exports = React.createClass
     minicourse: null
 
   componentDidMount: ->
-    @fetchMiniCourseFor @props.workflow, @props.project
+    @fetchMiniCourseFor @props.workflow
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.workflow is @props.workflow and nextProps.project is @props.project
-      @fetchMiniCourseFor nextProps.workflow, nextProps.project
+      @fetchMiniCourseFor nextProps.workflow
 
-  fetchMiniCourseFor: (workflow, project) ->
+  fetchMiniCourseFor: (workflow) ->
     @setState minicourse: null
-    MiniCourse.find({workflow, project}).then (minicourse) =>
+    MiniCourse.find({workflow}).then (minicourse) =>
       @setState {minicourse}
 
   render: ->
