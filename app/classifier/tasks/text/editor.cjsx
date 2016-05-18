@@ -20,23 +20,18 @@ module?.exports = React.createClass
   updateTags:(e)->
     value = e.target.value
     checked = e.target.checked
-    if @props.task.text_tags
-      # the tag does not current exist and the input is checked
-      if @props.task.text_tags.indexOf(value) is -1 and checked
-        @props.task.text_tags.push(value)
-        @props.onChange @props.task
-      else if !checked
-        removalIndex = @props.task.text_tags.indexOf(value)
-        @props.task.text_tags.splice(removalIndex,1);
-        @props.onChange @props.task
-    else 
-      @props.task.text_tags = []
-      @props.task.text_tags.push(value) if checked
-      @props.onChange @props.task
+    text_tags = @props.task.text_tags ? []
+    if text_tags.indexOf(value) is -1 and checked
+      text_tags.push(value)
+    else if !checked
+      removalIndex = text_tags.indexOf(value)
+      text_tags.splice(removalIndex,1);
+    @props.onChange @props.task
 
 
   render: ->
     handleChange = handleInputChange.bind @props.workflow
+    requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
 
     <div className="text-editor" >
       <section>
@@ -58,6 +53,16 @@ module?.exports = React.createClass
             </AutoSave>
             <small className="form-help">Add text and images for a help window.</small>
           </div>}
+        <span>
+          <label className="pill-button" title={requiredHelp}>
+            <AutoSave resource={@props.workflow}>
+              <input type="checkbox" name="#{@props.taskPrefix}.required" checked={@props.task.required} onChange={handleChange} />{' '}
+              Required
+            </AutoSave>
+          </label>
+          {' '}
+        </span>
+        <br />
         <span className="form-label">Metadata Tags</span> <br/>
           <small className="form-help">Volunteers can attach the following tags to highlighted portions of their transcription.</small><br/>
             <label>

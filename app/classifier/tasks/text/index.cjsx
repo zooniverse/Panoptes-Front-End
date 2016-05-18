@@ -2,7 +2,6 @@ React = require 'react'
 {Markdown} = require 'markdownz'
 GenericTask = require '../generic'
 TextTaskEditor = require './editor'
-GenericTaskEditor = require '../generic-editor'
 levenshtein = require 'fast-levenshtein'
 
 NOOP = Function.prototype
@@ -88,11 +87,9 @@ module.exports = React.createClass
     if selectionStart is selectionEnd
       textAfter = textAreaValue.substring(selectionStart, textAreaValue.length)
       value = textBefore + startTag + endTag + textAfter
-      newAnnotation = Object.assign @props.annotation, {value}
-      @props.onChange newAnnotation
     else
       textInBetween = textAreaValue.substring(selectionStart, selectionEnd)
       textAfter = textAreaValue.substring(selectionEnd, textAreaValue.length)
       value = textBefore + startTag + textInBetween + endTag + textAfter
-      newAnnotation = Object.assign @props.annotation, {value}
-      @props.onChange newAnnotation
+    newAnnotation = Object.assign @props.annotation, {value}
+    @props.onChange newAnnotation
