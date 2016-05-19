@@ -118,10 +118,13 @@ module?.exports = React.createClass
     select.options[optionsKey]
 
   getDisabledAttribute: (i) ->
-    select = @props.task.selects[i]
+    {selects} = @props.task
+    select = selects[i]
+    condition = selects.filter (filterSelect) => filterSelect.id is select.condition
+    conditionIndex = selects.indexOf(condition[0])
     optionsKeys = @state.optionsKeys
 
-    if select.condition? and not optionsKeys[select.condition]
+    if select.condition? and not @props.annotation.value[conditionIndex]
       return true
     if select.condition? and select.allowCreate is false and not select.options[optionsKeys[select.condition]]?.length
       return true
@@ -143,13 +146,16 @@ module?.exports = React.createClass
       <div>
         {selectKeys.map (i) =>
           options = @getOptions(i)
+          disabled = @getDisabledAttribute(i)
           <div key={Math.random()}>
-            <div>{selects[i].title}</div>
+            {if selects[i].title isnt @props.task.instruction
+              <div>{selects[i].title}</div>}
             <Select
               options={options}
               onChange={@onChangeSelect.bind(@, i)}
               value={@props.annotation.value[i]?.value}
-              disabled={@getDisabledAttribute(i)}
+              disabled={disabled}
+              placeholder={if disabled then "N/A"}
               allowCreate={selects[i].allowCreate}
               noResultsText={if not options?.length then null}
               addLabelText="Press enter for {label}..."

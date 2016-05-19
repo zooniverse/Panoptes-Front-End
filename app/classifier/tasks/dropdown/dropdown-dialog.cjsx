@@ -198,7 +198,7 @@ DropdownDialog = React.createClass
               <select onChange={@onChangeConditionalAnswer.bind(@, condition)}>
                 <option value="">none selected</option>
                 {condition.options[@getOptionsKey(condition)]?.map (option) =>
-                  <option key={option.value} value={option.value} label={option.label}></option>}
+                  <option key={option.value} value={option.value}>{option.label}</option>}
               </select>
             </div>
           }
