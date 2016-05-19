@@ -39,6 +39,7 @@ Classifier = React.createClass
     classificationQuality: NaN
     showingExpertClassification: false
     selectedExpertAnnotation: -1
+    backButtonWarning: false
 
   componentDidMount: ->
     @loadSubject @props.subject
@@ -190,7 +191,7 @@ Classifier = React.createClass
 
       <nav className="task-nav">
         {if Object.keys(@props.workflow.tasks).length > 1
-          <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>}
+          <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
         {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
@@ -206,6 +207,7 @@ Classifier = React.createClass
           </button>}
         {@renderExpertOptions()}
       </nav>
+      { @renderBackButtonWarning() if @state.backButtonWarning }
 
       <p>
         <small>
@@ -413,6 +415,15 @@ Classifier = React.createClass
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
+
+  warningToggleOn: ->
+    @setState backButtonWarning: true
+
+  warningToggleOff: ->
+    @setState backButtonWarning: false 
+
+  renderBackButtonWarning: ->
+    <p className={"back-button-warning"} >{"Going back will delete all annotations for the current task."}</p>
 
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
