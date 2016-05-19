@@ -12,6 +12,9 @@
   &:hover
     background: lighten(MAIN_HIGHLIGHT, 20%)
 
+  &:focus
+    background: lighten(MAIN_HIGHLIGHT, 20%)
+
   &:disabled
     pointer-events: none
 
@@ -26,6 +29,9 @@
 
   &:hover
     background: lighten(SECOND_HIGHLIGHT, 20%)
+  
+  &:focus
+    background: lighten(SECOND_HIGHLIGHT, 20%)
 
 .minor-button
   @extends .standard-button
@@ -33,6 +39,9 @@
   background: lighten(#424242, 90%)
 
   &:hover
+    background: lighten(#424242, 95%)
+  
+  &:focus
     background: lighten(#424242, 95%)
 
   &.active
@@ -61,6 +70,9 @@
     padding: 1em
 
     &:hover
+      background: lighten(COBOLT_BLUE, 20%)
+    
+    &:focus
       background: lighten(COBOLT_BLUE, 20%)
 
     &:disabled
@@ -101,3 +113,8 @@
   &:hover
     background: COBOLT_BLUE
     color: white
+  
+  &:focus
+    background: COBOLT_BLUE
+    color: white
+    
