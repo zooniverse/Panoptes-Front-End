@@ -5,11 +5,10 @@ zoo-orange = #f78d27
 .ct-chart
     .ct-series-a
       .ct-bar, .ct-slice-donut
-        // stroke-width: 4.5%
         stroke: zoo-blue
         &:hover + .ct-tooltip
         &:focus + .ct-tooltip
-          fill: #000
+          fill: zoo-blue
     .ct-series-b
       .ct-bar, .ct-slice-donut
         stroke-width: 4.5%
@@ -19,8 +18,7 @@ zoo-orange = #f78d27
     fill: #000
   .ct-tooltip
     text-anchor: middle
-    color: #000
-    fill: rgba(0,0,0,0)
+    fill: alpha(zoo-blue, 0)
     font-size: 1rem
 
 .ct-chart-bar
