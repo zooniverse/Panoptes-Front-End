@@ -38,9 +38,8 @@ getStyleOf = (element) ->
     element.currentStyle
 
 # Creates a div to mimic the textarea
-mimic = (element) ->
-  reactId = element.getAttribute 'data-reactid'
-  id = "mimic-textarea#{reactId}".replace(/\./g, '-')
+mimic = (element, id) ->
+  id = "mimic-textarea#{id}"
   div = document.querySelector "##{id}"
 
   unless div
@@ -87,8 +86,8 @@ relativePosition = ({from, within}) ->
   left: relativeParent.offsetLeft + within.offsetLeft + from.left
 
 # Returns the {top, left} of the caret position within a textarea
-module?.exports = (textArea, popupElement, caretPosition) ->
-  div = mimic textArea
+module?.exports = (id, textArea, popupElement, caretPosition) ->
+  div = mimic textArea, id
   textAreaProps = copyTextProps from: textArea, to: div
   caretSpan = copyText from: textArea, to: div, at: caretPosition
   bounds = getBounds from: caretSpan, container: textAreaProps, containing: popupElement
