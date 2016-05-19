@@ -194,7 +194,7 @@ ProjectStatsPage = React.createClass
           {start}
           <div className="project-metadata-stat">
             <div>{@props.totalVolunteers.toLocaleString()}</div>
-            <div>Volunteers</div>
+            <div>Registered Volunteers</div>
           </div>
           <div className="project-metadata-stat">
             <div>{@props.currentClassifications.toLocaleString()}</div>
