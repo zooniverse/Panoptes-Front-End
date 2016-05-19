@@ -92,6 +92,16 @@ module.exports = React.createClass
       pref.update 'preferences.cells': annotations
       pref.save()
 
+  saveGrid: (annotations) ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update 'preferences.grid': annotations
+      pref.save()
+
+  clearGrid: ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update 'preferences.grid': []
+      pref.save()
+
   clearTemplate: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       pref.update 'preferences.cells': []
@@ -129,6 +139,12 @@ module.exports = React.createClass
         </button>
         <button type="button" onClick={@clearTemplate.bind null, this}>
           Clear Row Dimensions
+        </button>
+        <button type="button" onClick={@saveGrid.bind this, @props.annotation.value}>
+          Save Grid Dimensions
+        </button>
+        <button type="button" onClick={@clearGrid.bind null, this}>
+          Clear Grid Dimensions
         </button>
       </label>
 

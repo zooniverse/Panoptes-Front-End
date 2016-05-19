@@ -97,8 +97,9 @@ module.exports = React.createClass
 
     if MarkComponent.saveState? and @state?.template
       multipleMarks = MarkComponent.saveState mark, @state.template
+      @props.annotation.value.pop
       for cell in multipleMarks
-        @props.annotation.value[@props.annotation.value.length] = cell
+        @props.annotation.value.push cell
         @props.classification.update 'annotations'
 
     @props.classification.update 'annotations'
@@ -118,3 +119,5 @@ module.exports = React.createClass
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       if pref.preferences.cells.length
         @setState template: pref.preferences.cells
+      else
+        @setState template: null
