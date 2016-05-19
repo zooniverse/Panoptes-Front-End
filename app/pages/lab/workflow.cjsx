@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 handleInputChange = require '../../lib/handle-input-change'
 PromiseRenderer = require '../../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
@@ -52,6 +53,11 @@ EditWorkflowPage = React.createClass
     deletionInProgress: false
     deletionError: null
     workflowCreationInProgress: false
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.workflow isnt @props.workflow
+      ReactDOM.findDOMNode(@refs.defaultWorkflow).defaultChecked = nextProps.project.configuration.default_workflow is nextProps.workflow.id
+      ReactDOM.findDOMNode(@refs.hideClassificationSummaries).defaultChecked = nextProps.workflow.configuration.hide_classification_summaries
 
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
@@ -233,6 +239,20 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
+          <div>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Set as default</span><br />
+              <small className="form-help">If you have more than one workflow, you can set which should be default. Only one can be default.</small>
+              <br />
+              <label>
+                <input ref="defaultWorkflow" type="checkbox" defaultChecked={@props.project.configuration?.default_workflow is @props.workflow.id} onChange={@handleDefaultWorkflowToggle} />
+                Default workflow
+              </label>
+            </AutoSave>
+          </div>
+
+          <hr />
+
           {if 'tutorial' in @props.project.experimental_tools or 'mini-course' in @props.project.experimental_tools
             <div ref="link-tutorials-section">
               <span className="form-label">Associated tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools}</span><br />
@@ -253,8 +273,10 @@ EditWorkflowPage = React.createClass
                   <span className="form-label">Classification summaries</span><br />
                   <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
                   <br />
-                  <input type="checkbox" id="hide_classification_summaries" onChange={@handleSetHideClassificationSummaries} defaultChecked={@props.workflow.configuration?.hide_classification_summaries} />
-                  <label htmlFor="hide_classification_summaries">Hide classification summaries</label>
+                  <label>
+                    <input ref="hideClassificationSummaries" type="checkbox" defaultChecked={@props.workflow.configuration.hide_classification_summaries} onChange={@handleSetHideClassificationSummaries} />
+                    Hide classification summaries
+                  </label>
                 </AutoSave>
               </div>
 
@@ -499,6 +521,16 @@ EditWorkflowPage = React.createClass
         @props.workflow.addLink 'subject_sets', [subjectSet.id]
       else
         @props.workflow.removeLink 'subject_sets', subjectSet.id
+
+  handleDefaultWorkflowToggle: (e) ->
+    shouldSet = e.target.checked
+
+    if shouldSet
+      @props.project.update 'configuration.default_workflow': @props.workflow.id
+      @props.project.save()
+    else
+      @props.project.update 'configuration.default_workflow': null
+      @props.project.save()
 
   handleTutorialToggle: (tutorial, workflowTutorials, e) ->
     shouldAdd = e.target.checked
