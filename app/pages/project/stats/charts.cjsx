@@ -124,7 +124,17 @@ Graph = React.createClass
         if data.index % numberBars
           data.element.attr({style: "display: none"})
     else if data.type == 'bar'
-      data.element.attr({style: "stroke-width: #{100 / length}%"})
+      data.element.attr(
+        style: "stroke-width: #{100 / length}%"
+        focusable: true
+        tabindex: 0
+      )
+      data.group.elem('text', {
+          x: data.x1
+          y: 15
+          class: "ct-label ct-tooltip"
+        }
+      ).text(data.series[data.index])
 
   onDrawSmall: (data) ->
     if data.type == 'bar'

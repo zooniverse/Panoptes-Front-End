@@ -7,6 +7,9 @@ zoo-orange = #f78d27
       .ct-bar, .ct-slice-donut
         // stroke-width: 4.5%
         stroke: zoo-blue
+        &:hover + .ct-tooltip
+        &:focus + .ct-tooltip
+          fill: #000
     .ct-series-b
       .ct-bar, .ct-slice-donut
         stroke-width: 4.5%
@@ -14,6 +17,11 @@ zoo-orange = #f78d27
   .progress-label, .ct-label.ct-vertical, .ct-label.ct-horizontal
     color: #000
     fill: #000
+  .ct-tooltip
+    text-anchor: middle
+    color: #000
+    fill: rgba(0,0,0,0)
+    font-size: 1rem
 
 .ct-chart-bar
   .ct-label.ct-horizontal.ct-end
