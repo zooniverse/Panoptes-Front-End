@@ -109,7 +109,13 @@ module.exports = React.createClass
   getInitialState: ->
     optOut: false
   
+  componentDidMount: ->
+    # If user navigates away via link in markdown, record the next slide to load in prefs
+    window.addEventListener 'beforeunload', @handleProjectPreferencesOnUnmount
+
   componentWillUnmount: ->
+    window.removeEventListener 'beforeunload', @handleProjectPreferencesOnUnmount
+
     if @props.user?
       @handleProjectPreferencesOnUnmount()
   
