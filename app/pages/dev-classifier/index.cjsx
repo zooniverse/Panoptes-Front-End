@@ -72,7 +72,7 @@ DevClassifierPage = React.createClass
 
   render: ->
     <div className="content-container">
-      <Classifier project={@props.project} classification={@props.classification} onClickNext={@reload} />
+      <Classifier user={@props.user}  project={@props.project} classification={@props.classification} onClickNext={@reload} />
       <hr />
       <ClassificationViewer classification={@props.classification} />
     </div>

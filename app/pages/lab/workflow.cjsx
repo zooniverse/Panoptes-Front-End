@@ -88,18 +88,18 @@ EditWorkflowPage = React.createClass
 
     <div className="edit-workflow-page">
       <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
-        <button onClick={@showCreateWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="Copy workflow">
+        <button onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="Copy workflow">
           <i className="fa fa-copy"/>
         </button>
       </h3>
       {if @state.workflowCreationInProgress
         <ModalFormDialog tag="div">
-          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} />
+          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} workflowActiveStatus={not @props.project.live} />
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
-      {if @props.project.live
-        <p className="form-help warning"><strong>You cannot edit a project’s workflows once it’s gone live.</strong></p>}
-      <div className="columns-container" style={disabledStyle if @props.project.live}>
+      {if @props.project.live and @props.workflow.active
+        <p className="form-help warning"><strong>You cannot edit an active workflow if the project is live.</strong></p>}
+      <div className="columns-container" style={disabledStyle if @props.project.live and @props.workflow.active}>
         <div className="column">
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
@@ -217,9 +217,10 @@ EditWorkflowPage = React.createClass
             <hr />
 
             <p>
-              <small className="form-help">Version {@props.workflow.version}</small>
+              <small className="form-help">Version {@props.workflow.version} - Status: <span className={if @props.workflow.active then "color-label green" else "color-label red"}>{if @props.workflow.active then "Active" else "Inactive"}</span></small>
             </p>
             <p className="form-help"><small>Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by a whole number: 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the version by a decimal, e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data.</small></p>
+            <p className="form-help"><small>Status indicates whether a workflow is active or inactive. Active workflows are available to volunteers and classifications count toward subject retirement. Workflow status can be managed under the Visibility section within the Project Builder.</small></p>
           </div>
 
           <hr />
@@ -229,6 +230,19 @@ EditWorkflowPage = React.createClass
             <small className="form-help">Choose the set of subjects you want to use for this workflow.</small>
             {@renderSubjectSets()}
           </div>
+
+          <hr />
+
+          {if 'tutorial' in @props.project.experimental_tools or 'mini-course' in @props.project.experimental_tools
+            <div ref="link-tutorials-section">
+              <span className="form-label">Associated tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools}</span><br />
+              <small className="form-help">Choose the tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools} you want to use for this workflow.</small><br />
+              <small className="form-help">Only one can be associated with a workflow at a time.</small>
+              <div>
+                {@renderTutorials() if 'tutorial' in @props.project.experimental_tools}
+                {@renderMiniCourses() if 'mini-course' in @props.project.experimental_tools}
+              </div>
+            </div>}
 
           <hr />
 
@@ -286,6 +300,24 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
+          {if 'worldwide telescope' in @props.project.experimental_tools
+            <div>
+              <div>
+                <AutoSave resource={@props.workflow}>
+                  <span className="form-label">Use World Wide Telescope API</span><br />
+                  <small className="form-help">Allow user to view subject in the WWT after classifying.</small>
+                  <br />
+                  <label htmlFor="world_wide_telescope_summary">
+                    <input type="checkbox" onChange={@handleSetWorldWideTelescope} checked={@telescopeValue()}/>
+                    WorldWide Telescope
+                  </label>
+                </AutoSave>
+              </div>
+
+              <hr />
+
+            </div>}
+
           <div style={pointerEvents: 'all'}>
             <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>Test this workflow</a>
           </div>
@@ -324,7 +356,7 @@ EditWorkflowPage = React.createClass
               <br />
               <AutoSave resource={@props.workflow}>
                 <small>
-                  <button type="button" onClick={@handleTaskDelete.bind this, @state.selectedTaskKey}>Delete this task</button>
+                  <button type="button" className="minor-button" onClick={@handleTaskDelete.bind this, @state.selectedTaskKey}>Delete this task</button>
                 </small>
               </AutoSave>
             </div>
@@ -371,6 +403,50 @@ EditWorkflowPage = React.createClass
       </div>
     }</PromiseRenderer>
 
+  renderTutorials: ->
+    projectAndWorkflowTutorials = Promise.all [
+      apiClient.type('tutorials').get project_id: @props.project.id, page_size: 100
+      apiClient.type('tutorials').get workflow_id: @props.workflow.id, page_size: 100
+    ]
+    <PromiseRenderer promise={projectAndWorkflowTutorials}>{([projectTutorials, workflowTutorials]) =>
+      # Backwards compatibility with tutorials with null kind values
+      tutorials = projectTutorials.filter((value)-> value if value.kind is 'tutorial' or value.kind is null)
+      if tutorials.length > 0
+        <form className="workflow-link-tutorials-form">
+          <span className="form-label">Tutorials</span>
+          {for tutorial in tutorials
+            assignedTutorial = tutorial in workflowTutorials
+            toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
+            <label key={tutorial.id}>
+              <input type="checkbox" checked={assignedTutorial} onChange={toggleTutorial} />
+              Tutorial #{tutorial.id}
+            </label>}
+        </form>
+      else
+        <span>This project has no tutorials.</span>
+    }</PromiseRenderer>
+
+  renderMiniCourses: ->
+    projectAndWorkflowTutorials = Promise.all [
+      apiClient.type('tutorials').get project_id: @props.project.id, page_size: 100, kind: 'mini-course'
+      apiClient.type('tutorials').get workflow_id: @props.workflow.id, page_size: 100, kind: 'mini-course'
+    ]
+    <PromiseRenderer promise={projectAndWorkflowTutorials}>{([projectTutorials, workflowTutorials]) =>
+      if projectTutorials.length > 0
+        <form className="workflow-link-tutorials-form">
+          <span className="form-label">Mini-Courses</span>
+          {for tutorial in projectTutorials
+            assignedTutorial = tutorial in workflowTutorials
+            toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
+            <label key={tutorial.id}>
+              <input type="checkbox" checked={assignedTutorial} onChange={toggleTutorial} />
+              Mini-Course #{tutorial.id}
+            </label>}
+        </form>
+      else
+        <span>This project has no mini-courses.</span>
+    }</PromiseRenderer>
+
   addNewTask: (type) ->
     taskCount = Object.keys(@props.workflow.tasks).length
 
@@ -393,6 +469,23 @@ EditWorkflowPage = React.createClass
     @props.workflow.update
       'configuration.hide_classification_summaries': e.target.checked
 
+  handleSetWorldWideTelescope: (e) ->
+    if !@props.workflow.configuration.custom_summary
+      @props.workflow.update
+        'configuration.custom_summary' : []
+    summary_path = @props.workflow.configuration.custom_summary
+    if e.target.checked
+    then summary_path.push('world_wide_telescope')
+    else
+      index = summary_path.indexOf('world_wide_telescope')
+      summary_path.splice(index, 1)
+    @props.workflow.update
+      'configuration.custom_summary' : summary_path
+
+  telescopeValue: ->
+    if @props.workflow.configuration.custom_summary
+      'world_wide_telescope' in @props.workflow.configuration.custom_summary
+
   handleSubjectSetToggle: (subjectSet, e) ->
     shouldAdd = e.target.checked
 
@@ -406,6 +499,28 @@ EditWorkflowPage = React.createClass
         @props.workflow.addLink 'subject_sets', [subjectSet.id]
       else
         @props.workflow.removeLink 'subject_sets', subjectSet.id
+
+  handleTutorialToggle: (tutorial, workflowTutorials, e) ->
+    shouldAdd = e.target.checked
+
+    ensureSaved = if @props.workflow.hasUnsavedChanges()
+      @props.workflow.save()
+    else
+      Promise.resolve()
+
+    ensureSaved
+      .then =>
+        if shouldAdd
+          @props.workflow.addLink 'tutorials', [tutorial.id]
+
+          for workflowTutorial in workflowTutorials
+            if workflowTutorial.kind is null and tutorial.kind is 'tutorial' or workflowTutorial.kind is 'tutorial' and tutorial.kind is null
+              @props.workflow.removeLink 'tutorials', workflowTutorial.id if workflowTutorial.id isnt tutorial.id
+            else if workflowTutorial.kind is tutorial.kind
+              @props.workflow.removeLink 'tutorials', workflowTutorial.id if workflowTutorial.id isnt tutorial.id
+        else
+          @props.workflow.removeLink 'tutorials', tutorial.id
+
 
   addDemoSubjectSet: ->
     @props.project.uncacheLink 'subject_sets'

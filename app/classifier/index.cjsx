@@ -16,6 +16,9 @@ isAdmin = require '../lib/is-admin'
 Tutorial = require '../lib/tutorial'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
+WorldWideTelescope = require './world_wide_telescope'
+MiniCourse = require '../lib/mini-course'
+MiniCourseButton = require './mini-course-button'
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
@@ -40,11 +43,13 @@ Classifier = React.createClass
   componentDidMount: ->
     @loadSubject @props.subject
     @prepareToClassify @props.classification
-    Tutorial.startIfNecessary @props.user, @props.project
+    {workflow, project, user} = @props
+    Tutorial.startIfNecessary {workflow, user}
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
-      Tutorial.startIfNecessary nextProps.user, nextProps.project
+      {workflow, project, user} = nextProps
+      Tutorial.startIfNecessary {workflow, user}
     if nextProps.subject isnt @props.subject
       @loadSubject subject
     if nextProps.classification isnt @props.classification
@@ -131,6 +136,8 @@ Classifier = React.createClass
     # Should we disabled the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
+    
+
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
       waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
@@ -174,7 +181,7 @@ Classifier = React.createClass
       {persistentHooksBeforeTask.map (HookComponent) =>
         <HookComponent {...taskHookProps} />}
 
-      <TaskComponent taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+      <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
       {persistentHooksAfterTask.map (HookComponent) =>
         <HookComponent {...taskHookProps} />}
@@ -203,9 +210,19 @@ Classifier = React.createClass
       <p>
         <small>
           <strong>
-            <TutorialButton className="minor-button" user={@props.user} project={@props.project} title="Project tutorial" aria-label="Show the project tutorial" style={marginTop: '2em'}>
+            <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} project={@props.project} title="Project tutorial" aria-label="Show the project tutorial" style={marginTop: '2em'}>
               Show the project tutorial
             </TutorialButton>
+          </strong>
+        </small>
+      </p>
+
+      <p>
+        <small>
+          <strong>
+            <MiniCourseButton className="minor-button" user={@props.user} project={@props.project} workflow={@props.workflow} title="Project Mini-course" aria-label="Show the project mini-course" style={marginTop: '2em'}>
+              Restart the project mini-course
+            </MiniCourseButton>
           </strong>
         </small>
       </p>
@@ -239,6 +256,16 @@ Classifier = React.createClass
   renderSummary: (classification) ->
     <div>
       Thanks!
+
+      {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
+        <strong>
+          <WorldWideTelescope
+            annotations={@props.classification.annotations}
+            subject={@props.subject}
+            user_name={@props.user.display_name}
+          />
+        </strong>
+        }
 
       {if @props.project?.slug is PULSAR_HUNTERS_SLUG or location.href.indexOf('fake-pulsar-feedback') isnt -1
         subjectClass = @props.subject.metadata['#Class']?.toUpperCase()
@@ -301,7 +328,7 @@ Classifier = React.createClass
         {if @props.owner? and @props.project?
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
-        <button type="button" className="continue major-button" onClick={@props.onClickNext}>Next</button>
+        <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
         {@renderExpertOptions()}
       </nav>
     </div>

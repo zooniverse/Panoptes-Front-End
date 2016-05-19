@@ -2,16 +2,22 @@ Router = {IndexRoute, Route, Redirect} = require 'react-router'
 React = require 'react'
 
 # <Redirect from="home" to="/" /> doesn't work.
-ROOT_REDIRECT = React.createClass
+ONE_UP_REDIRECT = React.createClass
   componentDidMount: ->
-    @props.history.replace '/'
+    givenPathSegments = @props.location.pathname.split '/'
+    givenPathSegments.pop()
+    pathOneLevelUp = givenPathSegments.join '/'
+    @props.history.replace
+      pathname: pathOneLevelUp,
+      query: @props.location.query
+
   render: ->
     null
 
 module.exports =
   <Route path="/" component={require './partials/app'}>
     <IndexRoute component={require './pages/home'} />
-    <Route path="home" component={ROOT_REDIRECT} />
+    <Route path="home" component={ONE_UP_REDIRECT} />
 
     <Route path="about" component={require './pages/about'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/about/about-home'} />
@@ -50,7 +56,7 @@ module.exports =
     <Route path="projects" component={require './pages/projects'} />
     <Route path="projects/:owner/:name" component={require './pages/project'}>
       <IndexRoute component={require './pages/project/home'} />
-      <Route path="home" component={require './pages/project/home'} />
+      <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="research" component={require './pages/project/research'} />
       <Route path="results" component={require './pages/project/results'} />
       <Route path="classify" component={require './pages/project/classify'} />
@@ -69,6 +75,7 @@ module.exports =
       </Route>
       <Route path="faq" component={require './pages/project/faq'} />
       <Route path="education" component={require './pages/project/education'} />
+      <Route path="stats" component={require './pages/project/stats'} />
     </Route>
 
     <Route path="notifications" component={require './pages/notifications'} />

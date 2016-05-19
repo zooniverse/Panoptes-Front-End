@@ -87,13 +87,14 @@ module?.exports = React.createClass
   render: ->
     <PromiseRenderer promise={@state.favoritedPromise}>{(favorited) =>
       <button
-        className="favorites-button"
+        className="favorites-button #{@props.className ? ''}"
         type="button"
         title={if favorited then 'Unfavorite' else 'Favorite'}
         onClick={@toggleFavorite}>
         <i className="
           fa fa-heart#{if favorited then '' else '-o'}
           #{if favorited then 'favorited' else ''}
+          fa-fw
         " />
       </button>
     }</PromiseRenderer>

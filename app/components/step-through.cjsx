@@ -2,6 +2,8 @@ React = require 'react'
 ReactSwipe = require 'react-swipe'
 
 module.exports = React.createClass
+  displayName: 'StepThrough'
+  
   propTypes:
     defaultStep: React.PropTypes.number
 

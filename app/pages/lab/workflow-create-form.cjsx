@@ -9,6 +9,7 @@ WorkflowCreateForm = React.createClass
     onSuccess: ->
     projectID: ''
     workflowToClone: null
+    workflowActiveStatus: false
 
   getInitialState: ->
     busy: false
@@ -35,6 +36,7 @@ WorkflowCreateForm = React.createClass
       first_task: workflowToClone?.first_task ? 'init'
       configuration: workflowToClone?.configuration ? {}
       retirement: workflowToClone?.retirement ? {}
+      active: @props.workflowActiveStatus ? false
 
     awaitSubmission = @props.onSubmit(@props.projectID, newWorkflow)
 

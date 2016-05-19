@@ -4,27 +4,28 @@ Tutorial = require '../lib/tutorial'
 
 module.exports = React.createClass
   getDefaultProps: ->
-    user: null
+    workflow: null
     project: null
+    user: null
 
   getInitialState: ->
     tutorial: null
 
   componentDidMount: ->
-    @fetchTutorialFor @props.project
+    @fetchTutorialFor @props.workflow
 
   componentWillReceiveProps: (nextProps) ->
-    unless nextProps.project is @props.project
-      @fetchTutorialFor nextProps.project
+    unless nextProps.workflow is @props.workflow and nextProps.project is @props.project
+      @fetchTutorialFor nextProps.workflow
 
-  fetchTutorialFor: (project) ->
-    apiClient.type('tutorials').get project_id: project.id
-      .then ([tutorial]) =>
-        @setState {tutorial}
+  fetchTutorialFor: (workflow) ->
+    @setState tutorial: null
+    Tutorial.find({workflow}).then (tutorial) =>
+      @setState {tutorial}
 
   render: ->
-    if @state.tutorial? and @state.tutorial.steps.length isnt 0
-      <button type="button" {...@props} onClick={Tutorial.start.bind(Tutorial, @props.user, @props.project)}>
+    if @state.tutorial?.steps.length > 0
+      <button type="button" {...@props} onClick={Tutorial.start.bind(Tutorial, @state.tutorial, @props.user)}>
         {@props.children}
       </button>
     else

@@ -52,7 +52,7 @@ ProjectModalEditor = React.createClass
   getDefaultProps: ->
     projectModal: null
     media: null
-    type: null
+    kind: null
 
     onStepAdd: ->
       console.log 'ProjectModalEditor onStepAdd', arguments
@@ -67,9 +67,13 @@ ProjectModalEditor = React.createClass
       console.log 'ProjectModalEditor onChange', arguments
 
   render: ->
-    <div style={maxWidth: '50ch'}>
+    <div className="project-modal-editor">
+      <div className="project-modal-header">
+        <p className="form-label">{@props.kind} #{@props.projectModal.id}</p>
+        <p><button className="pill-button" onClick={@props.onProjectModalDelete}>Delete {@props.kind}</button></p>
+      </div>
       {if @props.projectModal.steps.length is 0
-        <p>This tutorial has no steps.</p>
+        <p>This {@props.kind} has no steps.</p>
       else
         for step, i in @props.projectModal.steps
           step._key ?= Math.random()
@@ -88,15 +92,16 @@ ProjectModalEditor = React.createClass
     </div>
 
 ProjectModalEditorController = React.createClass
+  displayName: 'ProjectModalEditorController'
+
+  getInitialState: ->
+    media: {}
+
   getDefaultProps: ->
     project: null
     projectModal: null
-    media: {}
     delayBeforeSave: 5000
-    type: null
-
-    onChangeMedia: ->
-      console.log 'ProjectModalEditorController onChangeMedia', arguments
+    kind: null
 
     onDelete: ->
       console.log 'ProjectModalEditorController onDelete', arguments
@@ -104,21 +109,51 @@ ProjectModalEditorController = React.createClass
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
     @props.projectModal.listen @_boundForceUpdate
+    @fetchMediaFor(@props.projectModal)
 
   componentWillUnmount: ->
     @props.projectModal.stopListening @_boundForceUpdate
 
+  fetchMediaFor: (projectModal) ->
+    if projectModal?
+      projectModal.get 'attached_images', {} # Prevent caching.
+        .catch =>
+          [] # We get an an error if there're no attached images.
+        .then (mediaResources) =>
+          media = {}
+          for mediaResource in mediaResources
+            media[mediaResource.id] = mediaResource
+          @setState {media}
+    else
+      @setState media: {}
+
   render: ->
-    <ProjectModalEditor
-      projectModal={@props.projectModal}
-      media={@props.media}
-      type={@props.type}
-      onStepAdd={@handleStepAdd}
-      onStepRemove={@handleStepRemove}
-      onMediaSelect={@handleStepMediaChange}
-      onMediaClear={@handleStepMediaClear}
-      onStepChange={@handleStepChange}
-    />
+    <div>
+      <hr />
+      <ProjectModalEditor
+        projectModal={@props.projectModal}
+        media={@state.media}
+        kind={@props.kind}
+        onStepAdd={@handleStepAdd}
+        onStepRemove={@handleStepRemove}
+        onMediaSelect={@handleStepMediaChange}
+        onMediaClear={@handleStepMediaClear}
+        onStepChange={@handleStepChange}
+        onProjectModalDelete={@handleProjectModalDelete}
+      />
+    </div>
+
+  deleteProjectModal: ->
+    @props.projectModal.delete()
+      .then =>
+        @props.onDelete()
+
+  handleProjectModalDelete: ->
+    if @props.projectModal.steps.length > 0
+      for step, index in @props.projectModal.steps
+        @handleStepRemove(index)
+    else
+      @deleteProjectModal()
 
   handleStepAdd: ->
     @props.projectModal.steps.push
@@ -135,9 +170,7 @@ ProjectModalEditorController = React.createClass
     @props.projectModal.update changes
 
     if @props.projectModal.steps.length is 0
-      @props.projectModal.delete()
-        .then =>
-          @props.onDelete()
+      @deleteProjectModal()
     else
       @props.projectModal.save()
 
@@ -160,12 +193,12 @@ ProjectModalEditorController = React.createClass
             @props.projectModal.update changes
             @props.projectModal.save()
               .then =>
-                @props.onChangeMedia()
+                @fetchMediaFor @props.projectModal
       .catch (error) =>
         console.error error
 
   handleStepMediaClear: (index) ->
-    @props.media[@props.projectModal.steps[index].media]?.delete()
+    @state.media[@props.projectModal.steps[index].media]?.delete()
     changes = {}
     changes["steps.#{index}.media"] = undefined
     @props.projectModal.update changes
@@ -186,7 +219,7 @@ ProjectModalEditorController = React.createClass
 ProjectModalCreator = React.createClass
   getDefaultProps: ->
     project: null
-    type: null
+    kind: null
 
     onCreate: ->
       console.log 'ProjectModalCreator onCreate', arguments
@@ -196,24 +229,23 @@ ProjectModalCreator = React.createClass
 
   render: ->
     <div>
-      <p>This project doesn’t have a tutorial.</p>
       {if @state.error?
           <p>{@state.error.toString()}</p>}
       <p>
-        <button type="button" onClick={@handleCreateClick}>Build one</button>
+        <button type="button" onClick={@handleCreateClick}>Build a {@props.kind}</button>
       </p>
     </div>
 
   handleCreateClick: ->
-    projectModalType = @props.type
     projectModalData =
       steps: []
       language: 'en'
+      kind: @props.kind
       links:
         project: @props.project.id
-
+        
     @setState error: null
-    apiClient.type(projectModalType).create(projectModalData).save()
+    apiClient.type('tutorials').create(projectModalData).save()
       .then (createdProjectModal) =>
         @props.onCreate createdProjectModal
       .catch (error) =>
@@ -222,18 +254,18 @@ ProjectModalCreator = React.createClass
 ProjectModalEditorFetcher = React.createClass
   getDefaultProps: ->
     project: null
-    type: null
+    kind: null
 
   getInitialState: ->
     loading: false
     error: null
-    projectModal: null
+    projectModals: null
     media: {}
 
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
     @props.project.listen @_boundForceUpdate
-    @fetchProjectModalFor @props.project
+    @fetchProjectModalsFor @props.project
 
   componentWillUnmount: ->
     @props.project.stopListening @_boundForceUpdate
@@ -242,57 +274,50 @@ ProjectModalEditorFetcher = React.createClass
     unless nextProps.project is @props.project
       @props.project.stopListening @_boundForceUpdate
       nextProps.project.listen @_boundForceUpdate
-      @fetchProjectModalFor nextProps.project
+      @fetchProjectModalsFor nextProps.project
 
-  fetchProjectModalFor: (project) ->
+  fetchProjectModalsFor: (project) ->
     @setState
       loading: true
       error: null
-      projectModal: null
-    apiClient.type(@props.type).get project_id: project.id
-      .then ([projectModal]) =>
-        @setState {projectModal}
-        @fetchMediaFor projectModal
+      projectModals: null
+    apiClient.type('tutorials').get project_id: project.id
+      .then (projectModals) =>
+        filteredProjectModals = 
+          if @props.kind is "tutorial"
+            projectModal for projectModal in projectModals when projectModal.kind is @props.kind or projectModal.kind is null
+          else if @props.kind is "mini-course"
+            projectModal for projectModal in projectModals when projectModal.kind is @props.kind
+        @setState {projectModals: filteredProjectModals}
       .catch (error) =>
         @setState {error}
       .then =>
         @setState loading: false
-
-  fetchMediaFor: (projectModal) ->
-    if projectModal?
-      projectModal.get 'attached_images', {} # Prevent caching.
-        .catch =>
-          [] # We get an an error if there're no attached images.
-        .then (mediaResources) =>
-          media = {}
-          for mediaResource in mediaResources
-            media[mediaResource.id] = mediaResource
-          @setState {media}
-    else
-      @setState media: {}
 
   render: ->
     if @state.loading
       <p>Loading...</p>
     else if @state.error?
       <p>{@state.error.toString()}</p>
-    else if @state.projectModal?
-      window?.editingProjectModal = @state.projectModal
-      <ProjectModalEditorController
-        project={@props.project}
-        projectModal={@state.projectModal}
-        media={@state.media}
-        type={@props.type}
-        onChangeMedia={@handleChangeToMedia}
-        onDelete={@handleProjectModalCreateOrDelete}
-      />
+    else if @state.projectModals?
+      window?.editingProjectModals = @state.projectModals
+      <div>
+        {for projectModal in @state.projectModals
+            <ProjectModalEditorController
+              key={projectModal.id}
+              project={@props.project}
+              projectModal={projectModal}
+              media={@state.media}
+              kind={@props.kind}
+              onDelete={@handleProjectModalCreateOrDelete}
+            />}
+        <hr />
+        <ProjectModalCreator project={@props.project} kind={@props.kind} onCreate={@handleProjectModalCreateOrDelete} />
+      </div>
     else
-      <ProjectModalCreator project={@props.project} type={@props.type} onCreate={@handleProjectModalCreateOrDelete} />
-
-  handleChangeToMedia: ->
-    @fetchMediaFor @state.projectModal
+      <ProjectModalCreator project={@props.project} kind={@props.kind} onCreate={@handleProjectModalCreateOrDelete} />
 
   handleProjectModalCreateOrDelete: ->
-    @fetchProjectModalFor @props.project
+    @fetchProjectModalsFor @props.project
 
 module.exports = ProjectModalEditorFetcher

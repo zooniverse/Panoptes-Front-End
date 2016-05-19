@@ -10,18 +10,19 @@ counterpart = require 'counterpart'
 FinishedBanner = require './finished-banner'
 Classifier = require '../../classifier'
 alert = require '../../lib/alert'
-SignInPrompt = require '../../partials/sign-in-prompt'
 seenThisSession = require '../../lib/seen-this-session'
+MiniCourse = require '../../lib/mini-course'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
-PROMPT_TO_SIGN_IN_AFTER = [5, 10, 25, 50, 100, 250, 500]
+PROMPT_MINI_COURSE_EVERY = 2
 
 SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
 
 if SKIP_CELLECT
   console?.warn 'Intelligent subject selection disabled'
 
+# Classification count tracked for mini-course prompt
 classificationsThisSession = 0
 
 auth.listen ->
@@ -244,13 +245,14 @@ module.exports = React.createClass
       .then @loadAnotherSubject()
 
   saveClassification: ->
-    console?.info 'Completed classification', @state.classification
+    classification = @state.classification
+    console?.info 'Completed classification', classification
     savingClassification = if @state.demoMode
-      Promise.resolve @state.classification
+      Promise.resolve classification
     else if @props.simulateSaveFailure
       Promise.reject new Error 'Simulated failure of classification save'
     else
-      @state.classification.save()
+      classification.save()
 
     savingClassification
       .then (classification) =>
@@ -267,10 +269,10 @@ module.exports = React.createClass
         @saveAllQueuedClassifications()
       .catch (error) =>
         console?.warn 'Failed to save classification:', error
-        @queueClassification @state.classification
+        @queueClassification classification
 
       classificationsThisSession += 1
-      @maybePromptToSignIn()
+      @maybeLaunchMiniCourse()
 
     return savingClassification
 
@@ -302,13 +304,6 @@ module.exports = React.createClass
           .catch (error) =>
             console?.error 'Failed to save a queued classification:', error
 
-  maybePromptToSignIn: ->
-    if classificationsThisSession in PROMPT_TO_SIGN_IN_AFTER and not @props.user?
-      alert (resolve) =>
-        <SignInPrompt project={@props.project} onChoose={resolve}>
-          <p><strong>You’ve done {classificationsThisSession} classifications, but you’re not signed in!</strong></p>
-        </SignInPrompt>
-
   loadAnotherSubject: ->
     @getCurrentWorkflow(@props).then (workflow) =>
       # Forget the old classification so a new one will load.
@@ -318,6 +313,10 @@ module.exports = React.createClass
         currentWorkflowForProject[@props.project.id] = null
       @loadAppropriateClassification()
 
+  maybeLaunchMiniCourse: ->
+    if classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
+      MiniCourse.startIfNecessary {workflow: @state.workflow, project: @props.project, user: @props.user}
+          
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
 window.currentClassifications = currentClassifications

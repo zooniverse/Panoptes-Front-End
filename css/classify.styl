@@ -1,3 +1,16 @@
+@keyframes be-slightly-annoying
+  0%
+    transform: rotate(0);
+  25%
+    transform: rotate(2deg);
+  75%
+    transform: rotate(-2deg);
+  100%
+    transform: rotate(0);
+
+.get-attention
+  animation: be-slightly-annoying 0.3s infinite
+
 .pulsar-hunters-feedback
   background: #666
   box-shadow: 0 1px 3px rgba(black, 0.5)
@@ -148,9 +161,9 @@
         margin-bottom: 0
 
     .answer-button-icon-container
-      align-self: flex-start
+      align-self: center
       flex-shrink: 0
-      height: 1em // Overflow is okay!
+      height: 1.5em
 
     .answer-button-label-container
       align-items: baseline
@@ -160,6 +173,10 @@
 
     .answer-button-label
       flex-grow: 1
+      img
+        vertical-align: middle
+        padding-left: 5px
+        padding-right: 5px
 
     .answer-button-status
       font-size: 0.8em
@@ -173,4 +190,7 @@
     width: 1.5em
 
   .drawing-tool-button-input
-    display: none
+    opacity: 0.01
+    position: absolute
+    &:focus + *:not(.active)
+      background: lighten(#424242, 95%)      

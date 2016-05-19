@@ -3,6 +3,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 CreateSubjectDefaultButton = require '../../talk/lib/create-subject-default-button'
 CreateBoardForm = require '../../talk/lib/create-board-form'
 projectSection = require '../../talk/lib/project-section'
+SingleSubmitButton = require '../../components/single-submit-button'
 
 module?.exports = React.createClass
   displayName: 'EditProjectTalk'
@@ -13,11 +14,13 @@ module?.exports = React.createClass
   getInitialState: ->
     boards: []
     editingBoard: null
+    suggestedTags: []
 
   section: ->
     projectSection(@props.project)
 
-  componentWillMount: ->
+  componentDidMount: ->
+    @getSuggestedTags()
     @setBoards()
 
   setBoards: ->
@@ -64,6 +67,37 @@ module?.exports = React.createClass
       <ul><li style={listStyleType: 'none', opacity: 0.5}>{board.description}</li></ul>
     </li>
 
+  getSuggestedTags: ->
+    talkClient.type('suggested_tags').get(section: @section()).then (suggestedTags) =>
+      @setState {suggestedTags}
+
+  deleteSuggestedTag: (tag) ->
+    tag.delete().then =>
+      @getSuggestedTags()
+
+  suggestedTag: (tag) ->
+    <div className="suggested-tag" key={"suggested-tag-#{tag.id}"}>
+      #{tag.name}
+      <SingleSubmitButton type="submit" onClick={@deleteSuggestedTag.bind @, tag}>Remove</SingleSubmitButton>
+    </div>
+
+  suggestedTagChanged: (e) ->
+    key = e.which or e.keyCode
+    if key is 13 # enter
+      @createSuggestedTag e
+    else if @state.suggestedTagError
+      @setState suggestedTagError: null
+
+  createSuggestedTag: (e) ->
+    e.preventDefault()
+    name = @refs.newSuggestedTag.value.trim().toLowerCase()
+    @setState suggestedTagError: null
+    talkClient.type('suggested_tags').create(section: @section(), name: name).save().then =>
+      @refs.newSuggestedTag.value = ''
+      @getSuggestedTags()
+    .catch (e) =>
+      @setState suggestedTagError: e.message
+
   render: ->
     <div className="edit-project-talk talk">
       <p className="form-help">Setup your project's talk</p>
@@ -92,5 +126,14 @@ module?.exports = React.createClass
           <ul>{@state.boards.map(@board)}</ul>
         else
           <p>See above to add boards to your project, or look in the moderator controls listed under the talk tab of your project!</p>}
+      </div>
+
+      <p>3. You can create a list of suggested tags to use.</p>
+      <div className="suggested-tags">
+        {@state.suggestedTags.map(@suggestedTag)}
+        <input type="text" ref="newSuggestedTag" placeholder="New suggested tag" onKeyUp={@suggestedTagChanged} />
+        <SingleSubmitButton type="submit" onClick={@createSuggestedTag}>Create</SingleSubmitButton>
+        {if @state.suggestedTagError
+          <span className="error">{@state.suggestedTagError}</span>}
       </div>
     </div>

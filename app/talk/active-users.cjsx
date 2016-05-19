@@ -51,7 +51,7 @@ module?.exports = React.createClass
 
   userIdsOnPage: (ids, page) ->
     offset = (page - 1) * @state.perPage
-    ids.slice offset, offset + @state.perPage
+    [].concat(ids).slice offset, offset + @state.perPage
 
   getActiveUserIds: ->
     sugarApiClient.get '/active_users', channel: @props.section

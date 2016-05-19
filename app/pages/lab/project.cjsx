@@ -102,7 +102,7 @@ EditProjectPage = React.createClass
                   <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
 
                 <li className="nav-list-item">
-                  <button type="button" onClick={@showCreateWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
+                  <button type="button" onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
                     New workflow{' '}
                     <LoadingIndicator off={not @state.workflowCreationInProgress} />
                   </button>
@@ -113,7 +113,7 @@ EditProjectPage = React.createClass
 
           {if @state.workflowCreationInProgress
             <ModalFormDialog tag="div">
-              <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} />
+              <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowActiveStatus={not @props.project.live} />
             </ModalFormDialog>}
 
           <li>

@@ -12,65 +12,78 @@ module.exports = React.createClass
   displayName: 'Tutorial'
 
   statics:
-    checkIfCompleted: (user, project) ->
-      getCompletedAt = if completedThisSession[project.id]?
-        Promise.resolve new Date completedThisSession[project.id]
-      else if user?
-        user.get 'project_preferences', project_id: project.id
-          .catch =>
-            []
-          .then ([projectPreferences]) =>
-            new Date projectPreferences?.preferences?.tutorial_completed_at
+    find: ({workflow}) ->
+      # Prefer fetching the tutorial for the workflow, if a workflow is given.
+      if workflow?
+        apiClient.type('tutorials').get workflow_id: workflow.id
+          .then (tutorials) ->
+            # Backwards compatibility for null kind values. We assume these are standard tutorials.
+            onlyStandardTutorials = tutorials.filter (tutorial) ->
+              tutorial.kind in ['tutorial', null]
+            onlyStandardTutorials[0]
       else
-        Promise.resolve null
+        Promise.resolve()
 
-      getCompletedAt.then (completedAt) =>
-        if isNaN completedAt?.valueOf()
-          false
-        else
-          # TODO: Check if the completion date is greater than the tutorial's modified_at date.
-          # Return `null` to mean "Completed, but not with the most recent version".
-          true
+    startIfNecessary: ({workflow, user}) ->
+      @find({workflow}).then (tutorial) =>
+        if tutorial?
+          @checkIfCompleted(tutorial, user).then (completed) =>
+            unless completed
+              @start tutorial, user
 
-    start: (user, project) ->
-      apiClient.type('tutorials').get project_id: project.id
-        .then ([tutorial]) =>
-          if tutorial? and tutorial.steps.length isnt 0
-            tutorial.get 'attached_images'
-              .catch =>
-                []
-              .then (mediaResources) =>
-                mediaByID = {}
-                for mediaResource in mediaResources
-                  mediaByID[mediaResource.id] = mediaResource
+    checkIfCompleted: (tutorial, user) ->
+      if user?
+        tutorial.get('project').then (project) =>
+          user.get 'project_preferences', project_id: project.id
+            .catch =>
+              []
+            .then ([projectPreferences]) =>
+              window.prefs = projectPreferences
+              projectPreferences?.preferences?.tutorials_completed_at?[tutorial.id]?
+      else
+        Promise.resolve completedThisSession[tutorial.id]?
 
-                TutorialComponent = this
-                Dialog.alert(<TutorialComponent steps={tutorial.steps} media={mediaByID} />, {
-                  className: 'tutorial-dialog',
-                  required: true,
-                  closeButton: true
-                })
-                  .catch =>
-                    null # We don't really care if the user canceled or completed the tutorial.
-                  .then =>
-                    now = new Date().toISOString()
-                    completedThisSession[project.id] = now
-                    if user?
-                      user.get('project_preferences', project_id: project.id).then ([projectPreferences]) =>
-                        projectPreferences ?= apiClient.type('project_preferences').create({
-                          links: {
-                            project: project.id
-                          },
-                          preferences: {}
-                        })
-                        projectPreferences.update 'preferences.tutorial_completed_at': now
-                        projectPreferences.save()
+    start: (tutorial, user) ->
+      TutorialComponent = this
 
-    startIfNecessary: (user, project) ->
-      @checkIfCompleted user, project
-        .then (completed) =>
-          if completed is false
-            @start user, project
+      if tutorial.steps.length isnt 0
+        awaitTutorialMedia = tutorial.get 'attached_images'
+          .catch ->
+            # Checking for attached images throws if there are none.
+            []
+          .then (mediaResources) ->
+            mediaByID = {}
+            for mediaResource in mediaResources
+              mediaByID[mediaResource.id] = mediaResource
+            mediaByID
+
+        awaitTutorialMedia.then (mediaByID) =>
+          Dialog.alert(<TutorialComponent steps={tutorial.steps} media={mediaByID} />, {
+            className: 'tutorial-dialog',
+            required: true,
+            closeButton: true
+          })
+            .catch =>
+              null # We don't really care if the user canceled or completed the tutorial.
+            .then =>
+              @markComplete tutorial, user
+
+    markComplete: (tutorial, user) ->
+      now = new Date().toISOString()
+      completedThisSession[tutorial.id] = now
+
+      if user?
+        tutorial.get('project').then (project) ->
+          user.get('project_preferences', project_id: project.id).then ([projectPreferences]) ->
+            projectPreferences ?= apiClient.type('project_preferences').create
+              links:
+                project: project.id
+              preferences: {}
+            # Build this manually. Having an index (even as a strings) keys creates an array.
+            projectPreferences.preferences ?= {}
+            projectPreferences.preferences.tutorials_completed_at ?= {}
+            projectPreferences.update "preferences.tutorials_completed_at.#{tutorial.id}": now
+            projectPreferences.save()
 
   propTypes:
     steps: React.PropTypes.arrayOf React.PropTypes.shape
