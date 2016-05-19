@@ -26,6 +26,7 @@ module?.exports = React.createClass
     else if !checked
       removalIndex = text_tags.indexOf(value)
       text_tags.splice(removalIndex,1);
+    @props.task.text_tags = text_tags
     @props.onChange @props.task
 
 
