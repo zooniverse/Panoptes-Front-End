@@ -58,6 +58,10 @@ module.exports =
       <IndexRoute component={require './pages/project/home'} />
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" component={require './pages/project/classify'} />
+      <Redirect from="research" to="about/research"/>
+      <Redirect from="results" to="about/results"/>
+      <Redirect from="faq" to="about/faq"/>
+      <Redirect from="education" to="about/education"/>
       <Route path="about" component={require './pages/project/about'}>
         <IndexRedirect to="research" />
         <Route path="research" component={require './pages/project/about/research'} />
