@@ -54,11 +54,6 @@ EditWorkflowPage = React.createClass
     deletionError: null
     workflowCreationInProgress: false
 
-  componentWillReceiveProps: (nextProps) ->
-    if nextProps.workflow isnt @props.workflow
-      ReactDOM.findDOMNode(@refs.defaultWorkflow).defaultChecked = nextProps.project.configuration.default_workflow is nextProps.workflow.id
-      ReactDOM.findDOMNode(@refs.hideClassificationSummaries).defaultChecked = nextProps.workflow.configuration.hide_classification_summaries
-
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
@@ -245,7 +240,7 @@ EditWorkflowPage = React.createClass
               <small className="form-help">If you have more than one workflow, you can set which should be default. Only one can be default.</small>
               <br />
               <label>
-                <input ref="defaultWorkflow" type="checkbox" defaultChecked={@props.project.configuration?.default_workflow is @props.workflow.id} onChange={@handleDefaultWorkflowToggle} />
+                <input ref="defaultWorkflow" type="checkbox" checked={@props.project.configuration?.default_workflow is @props.workflow.id} onChange={@handleDefaultWorkflowToggle} />
                 Default workflow
               </label>
             </AutoSave>
@@ -274,7 +269,7 @@ EditWorkflowPage = React.createClass
                   <small className="form-help">Classification summaries show the user how they have answered/marked for each task once the classification is complete</small>
                   <br />
                   <label>
-                    <input ref="hideClassificationSummaries" type="checkbox" defaultChecked={@props.workflow.configuration.hide_classification_summaries} onChange={@handleSetHideClassificationSummaries} />
+                    <input ref="hideClassificationSummaries" type="checkbox" checked={@props.workflow.configuration.hide_classification_summaries} onChange={@handleSetHideClassificationSummaries} />
                     Hide classification summaries
                   </label>
                 </AutoSave>
