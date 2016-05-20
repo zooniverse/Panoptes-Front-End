@@ -1,7 +1,7 @@
 React = require 'react'
 {Markdown} = require 'markdownz'
 GenericTask = require '../generic'
-GenericTaskEditor = require '../generic-editor'
+TextTaskEditor = require './editor'
 levenshtein = require 'fast-levenshtein'
 
 NOOP = Function.prototype
@@ -31,7 +31,7 @@ module.exports = React.createClass
   displayName: 'TextTask'
 
   statics:
-    Editor: GenericTaskEditor
+    Editor: TextTaskEditor
     Summary: Summary
 
     getDefaultTask: ->
@@ -63,9 +63,33 @@ module.exports = React.createClass
       <label className="answer">
         <textarea autoFocus={@props.autoFocus} className="standard-input full" rows="5" ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
       </label>
+      {if @props.task.text_tags 
+          <div className="transcription-metadata-tags">
+            {for tag, i in @props.task.text_tags
+              <input type="button" className="standard-button text-tag" key={i} value={tag} onClick={@setTagSelection} />}
+          </div>}
     </GenericTask>
 
   handleChange: ->
-    value = React.findDOMNode(@refs.textInput).value
+    value = @refs.textInput.value
+    newAnnotation = Object.assign @props.annotation, {value}
+    @props.onChange newAnnotation
+
+  setTagSelection: (e) ->
+    textTag = e.target.value
+    startTag = '[' + textTag + ']'
+    endTag = '[/' + textTag + ']'
+    textArea = this.refs.textInput
+    textAreaValue = textArea.value
+    selectionStart = textArea.selectionStart
+    selectionEnd = textArea.selectionEnd
+    textBefore = textAreaValue.substring(0, selectionStart)
+    if selectionStart is selectionEnd
+      textAfter = textAreaValue.substring(selectionStart, textAreaValue.length)
+      value = textBefore + startTag + endTag + textAfter
+    else
+      textInBetween = textAreaValue.substring(selectionStart, selectionEnd)
+      textAfter = textAreaValue.substring(selectionEnd, textAreaValue.length)
+      value = textBefore + startTag + textInBetween + endTag + textAfter
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
