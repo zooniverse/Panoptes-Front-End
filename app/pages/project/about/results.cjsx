@@ -1,7 +1,7 @@
 React = require 'react'
-TitleMixin = require '../../lib/title-mixin'
+TitleMixin = require '../../../lib/title-mixin'
 {Markdown} = require 'markdownz'
-PromiseRenderer = require '../../components/promise-renderer'
+PromiseRenderer = require '../../../components/promise-renderer'
 
 module.exports = React.createClass
   displayName: 'ProjectResultsPage'
@@ -11,7 +11,7 @@ module.exports = React.createClass
   title: 'Results'
 
   render: ->
-    <div className="project-text-content content-container">
+    <div>
       <PromiseRenderer promise={@props.project.get('pages', url_key: 'results').index(0)}>{(page) =>
         <Markdown project={@props.project} className="column">{
           if page?.content
