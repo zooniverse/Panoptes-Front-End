@@ -9,10 +9,8 @@
   padding: 0.4em 1.4em
   text-align: center
 
+  &:focus,
   &:hover
-    background: lighten(MAIN_HIGHLIGHT, 20%)
-
-  &:focus
     background: lighten(MAIN_HIGHLIGHT, 20%)
 
   &:disabled
@@ -27,21 +25,18 @@
   background: SECOND_HIGHLIGHT
   font-weight: bold
 
+  &:focus,
   &:hover
     background: lighten(SECOND_HIGHLIGHT, 20%)
   
-  &:focus
-    background: lighten(SECOND_HIGHLIGHT, 20%)
 
 .minor-button
   @extends .standard-button
   color: FOREGROUND
   background: lighten(#424242, 90%)
 
+  &:focus,
   &:hover
-    background: lighten(#424242, 95%)
-  
-  &:focus
     background: lighten(#424242, 95%)
 
   &.active
@@ -69,10 +64,8 @@
     font-size: 14px
     padding: 1em
 
+    &:focus,
     &:hover
-      background: lighten(COBOLT_BLUE, 20%)
-    
-    &:focus
       background: lighten(COBOLT_BLUE, 20%)
 
     &:disabled
@@ -110,11 +103,8 @@
   color: COBOLT_BLUE
   position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
 
+  &:focus,
   &:hover
-    background: COBOLT_BLUE
-    color: white
-  
-  &:focus
     background: COBOLT_BLUE
     color: white
     
