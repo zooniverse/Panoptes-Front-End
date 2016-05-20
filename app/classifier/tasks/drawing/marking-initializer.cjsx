@@ -97,10 +97,9 @@ module.exports = React.createClass
 
     if MarkComponent.saveState? and @state?.template
       multipleMarks = MarkComponent.saveState mark, @state.template
-      @props.annotation.value.pop
+      @props.annotation.value.pop()
       for cell in multipleMarks
         @props.annotation.value.push cell
-        @props.classification.update 'annotations'
 
     @props.classification.update 'annotations'
 

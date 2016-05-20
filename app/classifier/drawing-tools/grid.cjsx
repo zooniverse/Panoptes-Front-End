@@ -48,8 +48,9 @@ module.exports = React.createClass
     initRelease: (cursor, mark, e) ->
       _inProgress: false
 
-    initValid: (mark) ->
-      mark.width > MINIMUM_SIZE and mark.height > MINIMUM_SIZE
+    # This must be rewritten. It is likely an annotation will be destroyed when it's a row as the cursor doesn't move much to the left or right
+    # initValid: (mark) ->
+    #   mark.width > MINIMUM_SIZE and mark.height > MINIMUM_SIZE
 
     saveState: (mark, template) ->
       for cell in template
@@ -60,27 +61,36 @@ module.exports = React.createClass
   initCoords: null
 
   render: ->
-    {x, y, width, height} = @props.mark
+    points = @pointFinder @props.mark
 
-    points = [
+    <DrawingToolRoot tool={this}>
+      {if @state?.template
+        @renderCells()
+      else
+        <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+          <polyline points={points} />
+        </Draggable>}
+    </DrawingToolRoot>
+
+  renderCells: ->
+    for cell in @state.template
+      points = @pointParser cell
+      <polyline points={points} />
+
+  handleMainDrag: (e, d) ->
+    @props.mark.x += d.x / @props.scale.horizontal
+    @props.mark.y += d.y / @props.scale.vertical
+    @props.onChange @props.mark
+
+  pointFinder: (mark) ->
+    {x, y, width, height} = mark
+    [
       [x, y].join ','
       [x + width, y].join ','
       [x + width, y + height].join ','
       [x, y + height].join ','
       [x, y].join ','
     ].join '\n'
-
-    <DrawingToolRoot tool={this}>
-      {if @state?.template
-        @renderCells()
-      else
-        <polyline points={points} onClick={@destroyTool.bind null, this} />}
-    </DrawingToolRoot>
-
-  renderCells: ->
-    for cell in @state.template
-      points = @pointParser cell
-      <polyline points={points} onClick={@destroyTool.bind null, this} />
 
   pointParser: (cell) ->
     {y, height} = @props.mark
@@ -91,10 +101,6 @@ module.exports = React.createClass
       [cell.x, y + height].join ','
       [cell.x, y].join ','
     ].join '\n'
-
-  destroyTool: ->
-    if window.confirm 'Do you want to delete this cell?'
-      this.setState destroying: true
 
   findSchema: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
