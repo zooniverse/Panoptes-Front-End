@@ -21,10 +21,11 @@ module?.exports = React.createClass
     kind: null
     pendingSearch: null
     lastSearch: null
+    id: null
 
   componentDidMount: ->
     textArea = ReactDOM.findDOMNode(@).querySelector 'textarea'
-    @setState textArea: textArea
+    @setState textArea: textArea, id: Date.now().toString(16)
     textArea.addEventListener 'click', @handleInput
 
   componentWillUnmount: ->
@@ -41,7 +42,7 @@ module?.exports = React.createClass
     @setState open: true, kind: kind, data: []
 
   reposition: ->
-    position = getCaretPosition @state.textArea, @refs.suggestions, @state.textArea.selectionEnd
+    position = getCaretPosition @state.id, @state.textArea, @refs.suggestions, @state.textArea.selectionEnd
     @refs.suggestions.style.top = "#{position.top}px"
     @refs.suggestions.style.left = "#{position.left}px"
 

@@ -13,11 +13,8 @@ counterpart.registerTranslations 'en',
     loading: 'Loading project'
     disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
     nav:
-      research: 'Research'
-      results: 'Results'
+      about: 'About'
       classify: 'Classify'
-      faq: 'FAQ'
-      education: 'Education'
       talk: 'Talk'
 
 SOCIAL_ICONS =
@@ -124,8 +121,8 @@ ProjectPage = React.createClass
           </IndexLink>}
 
         {unless @props.project.redirect
-          <Link to="#{projectPath}/research" activeClassName="active" className="tabbed-content-tab">
-            <Translate content="project.nav.research" />
+          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab">
+            <Translate content="project.nav.about" />
           </Link>}
 
         {if @props.project.redirect
@@ -135,21 +132,6 @@ ProjectPage = React.createClass
         else
           <Link to="#{projectPath}/classify" query={workflow: currentWorkflow} activeClassName="active" className="classify tabbed-content-tab">
             <Translate content="project.nav.classify" />
-          </Link>}
-
-        {if !!pages.results?.content
-          <Link to="#{projectPath}/results" activeClassName="active"className="tabbed-content-tab">
-            {pages.results.title}
-          </Link>}
-
-        {if !!pages.faq?.content
-          <Link to="#{projectPath}/faq" activeClassName="active" className="tabbed-content-tab">
-            {pages.faq.title}
-          </Link>}
-
-        {if !!pages.education?.content
-          <Link to="#{projectPath}/education" activeClassName="active" className="tabbed-content-tab">
-            {pages.education.title}
           </Link>}
 
         <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab">

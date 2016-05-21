@@ -1,4 +1,4 @@
-Router = {IndexRoute, Route, Redirect} = require 'react-router'
+Router = {IndexRoute, IndexRedirect, Route, Redirect} = require 'react-router'
 React = require 'react'
 
 # <Redirect from="home" to="/" /> doesn't work.
@@ -57,9 +57,19 @@ module.exports =
     <Route path="projects/:owner/:name" component={require './pages/project'}>
       <IndexRoute component={require './pages/project/home'} />
       <Route path="home" component={ONE_UP_REDIRECT} />
-      <Route path="research" component={require './pages/project/research'} />
-      <Route path="results" component={require './pages/project/results'} />
       <Route path="classify" component={require './pages/project/classify'} />
+      <Redirect from="research" to="about/research"/>
+      <Redirect from="results" to="about/results"/>
+      <Redirect from="faq" to="about/faq"/>
+      <Redirect from="education" to="about/education"/>
+      <Route path="about" component={require './pages/project/about'}>
+        <IndexRedirect to="research" />
+        <Route path="research" component={require './pages/project/about/research'} />
+        <Route path="results" component={require './pages/project/about/results'} />
+        <Route path="faq" component={require './pages/project/about/faq'} />
+        <Route path="education" component={require './pages/project/about/education'} />
+        <Route path="team" component={require './pages/project/about/team'} />
+      </Route>
       <Route path="notifications" component={require './pages/notifications'} />
       <Route path="talk" component={require './pages/project/talk'}>
         <IndexRoute component={require './talk/init'} />
@@ -73,8 +83,6 @@ module.exports =
         <Route path=":board" component={require './talk/board'} />
         <Route path=":board/:discussion" component={require './talk/discussion'} />
       </Route>
-      <Route path="faq" component={require './pages/project/faq'} />
-      <Route path="education" component={require './pages/project/education'} />
       <Route path="stats" component={require './pages/project/stats'} />
     </Route>
 
@@ -109,10 +117,14 @@ module.exports =
     <Route path="lab" component={require './pages/lab'} />
     <Route path="lab/:projectID" component={require './pages/lab/project'}>
       <IndexRoute component={require './pages/lab/project-details'} />
-      <Route path="research" component={require './pages/lab/research'} />
-      <Route path="results" component={require './pages/lab/results'} />
-      <Route path="faq" component={require './pages/lab/faq'} />
-      <Route path="education" component={require './pages/lab/education'} />
+      <Route path="about" component={require './pages/lab/about'}>
+        <IndexRedirect to='research' />
+        <Route path="research" component={require './pages/lab/about/research'} />
+        <Route path="results" component={require './pages/lab/about/results'} />
+        <Route path="faq" component={require './pages/lab/about/faq'} />
+        <Route path="education" component={require './pages/lab/about/education'} />
+        <Route path="team" component={require './pages/lab/about/team'} />
+      </Route>
       <Route path="collaborators" component={require './pages/lab/collaborators'} />
       <Route path="media" component={require './pages/lab/media'} />
       <Route path="workflow/:workflowID" component={require './pages/lab/workflow'} />

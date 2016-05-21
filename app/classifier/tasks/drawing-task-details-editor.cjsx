@@ -1,6 +1,7 @@
 React = require 'react'
 AutoSave = require '../../components/auto-save'
 TriggeredModalForm = require 'modal-form/triggered'
+TextTaskEditor = require './text/editor'
 
 
 module.exports = React.createClass
@@ -25,14 +26,26 @@ module.exports = React.createClass
           for subtask, i in @props.details
             subtask._key ?= Math.random()
             <div key={subtask._key} className="drawing-task-details-editor-subtask-wrapper">
-              <GenericTaskEditor
-                workflow={@props.workflow}
-                task={subtask}
-                taskPrefix="#{@props.toolPath}.details.#{i}"
-                isSubtask={true}
-                onChange={@handleSubtaskChange.bind this, i}
-                onDelete={@handleSubtaskDelete.bind this, i}
-              />
+              {
+                if subtask.type is 'text'
+                  <TextTaskEditor 
+                    workflow={@props.workflow}
+                    task={subtask}
+                    taskPrefix="#{@props.toolPath}.details.#{i}"
+                    isSubtask={true}
+                    onChange={@handleSubtaskChange.bind this, i}
+                    onDelete={@handleSubtaskDelete.bind this, i}
+                  />
+                else                
+                  <GenericTaskEditor
+                    workflow={@props.workflow}
+                    task={subtask}
+                    taskPrefix="#{@props.toolPath}.details.#{i}"
+                    isSubtask={true}
+                    onChange={@handleSubtaskChange.bind this, i}
+                    onDelete={@handleSubtaskDelete.bind this, i}
+                  />
+              }
               <AutoSave resource={@props.workflow}>
                 <button type="button" className="subtask-delete" aria-label="Remove subtask" title="Remove subtask" onClick={@handleSubtaskDelete.bind this, i}>&times;</button>
               </AutoSave>
