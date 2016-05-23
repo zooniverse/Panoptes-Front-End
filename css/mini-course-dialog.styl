@@ -17,12 +17,10 @@
     flex-direction: column
     max-height: 75vh
     width: 75vw
-    
-    > .step-through-content
-      // TODO: I'd rather the header media not scroll.
-      overflow-y: auto !important // Override swipe library setting.
       
     .steps__step
+      overflow-y: auto
+      
       &-actions
         align-items: center
         display: flex
@@ -39,7 +37,7 @@
           
   .media-card.steps__step
     > .media-card-content
-      @extends .content-container
+      margin: 1em 3vw
       
       .markdown
         h1, h2, h3, h4, h5
@@ -50,8 +48,12 @@
         h6
           color: #a1a1a1
           font-style: italic
+          margin: 0 0 0.5em
           text-align: right
           width: 100%
+          
+          @media screen and (max-width: 400px)
+            text-align: center
           
         p
           color: #2b2b2b

@@ -110,7 +110,7 @@ module.exports = React.createClass
     optOut: false
   
   componentDidMount: ->
-    # If user navigates away via link in markdown, record the next slide to load in prefs
+    # If user navigates away, record the next slide to load in prefs
     window.addEventListener 'beforeunload', @handleProjectPreferencesOnUnmount
 
   componentWillUnmount: ->
@@ -129,7 +129,7 @@ module.exports = React.createClass
           {if @props.user?
             <label className="action__opt-out">
               <input type="checkbox" onChange={@handleOptOut} checked={@state.optOut} />
-              Do not show me this again 
+              Do not show mini-course in the future 
             </label>}
           <button type="submit" className="standard-button action__button">
             {if @state.optOut
