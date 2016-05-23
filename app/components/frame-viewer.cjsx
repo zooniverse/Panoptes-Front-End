@@ -197,7 +197,7 @@ module.exports = React.createClass
         this.refs.subjectImage.focus()
 
   togglePanOff: (e) ->
-    unless e.relatedTarget.title is "zoom out" or e.relatedTarget.title is "zoom in"
+    unless e.relatedTarget?.title is "zoom out" or e.relatedTarget?.title is "zoom in"
       @setState panEnabled: false
 
   toggleKeyPanZoom: ->
