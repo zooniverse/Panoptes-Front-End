@@ -11,7 +11,10 @@ const app = express();
 const compiler = webpack(config);
 const middleware = webpackMiddleware(compiler, {
   publicPath: config.output.publicPath,
-  stats: false
+  noInfo: true,
+  stats: {
+    colors: true
+  }
 });
 
 app.use(middleware);
