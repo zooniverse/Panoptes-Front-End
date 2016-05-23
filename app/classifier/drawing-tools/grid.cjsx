@@ -113,7 +113,7 @@ module.exports = React.createClass
 
   findSchema: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if pref.preferences.row?.length
+      if pref.preferences.activeTemplate == 'row'
         @setState row: pref.preferences.row
-      if pref.preferences.grid?.length
+      if pref.preferences.activeTemplate == "grid"
         @setState grid: pref.preferences.grid

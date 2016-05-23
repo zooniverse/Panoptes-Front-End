@@ -84,9 +84,8 @@ module.exports = React.createClass
 
   componentWillMount: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      console.log pref
-      if pref.preferences.template
-        @setState template: pref.preferences.template
+      if pref.preferences.activeTemplate
+        @setState template: pref.preferences.activeTemplate
 
   getDefaultProps: ->
     task: null
@@ -95,32 +94,22 @@ module.exports = React.createClass
 
   activateTemplate: (annotations, type) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if pref.preferences.template != type
+      pref.update 'preferences.activeTemplate': type
+      if type == 'row'
         pref.update 'preferences.row': annotations
         pref.update 'preferences.template': annotations
-        pref.save()
-        @setState template: type
       else
         pref.update 'preferences.template': null
-        pref.save()
-        @setState template: null
-
-  saveGrid: (annotations) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.grid': annotations
       pref.save()
+      @setState template: type
 
   clearRow: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       pref.update 'preferences.row': null
+      pref.update 'preferences.activeTemplate': 'cell'
       pref.update 'preferences.template': null
       pref.save()
-      @setState template: null
-
-  clearGrid: ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.grid': null
-      pref.save()
+      @setState template: 'cell'
 
   render: ->
     tools = for tool, i in @props.task.tools
@@ -149,17 +138,14 @@ module.exports = React.createClass
             </div>
           </div>
         </div>
+        <button type="button" className="tabbed-content-tab #{('active' if @state?.template is 'cell') ? ''}" onClick={@activateTemplate.bind this, @props.annotation.value, 'cell'} >
+          Draw Cells
+        </button>
         <button type="button" className="tabbed-content-tab #{('active' if @state?.template is 'row') ? ''}" onClick={@activateTemplate.bind this, @props.annotation.value, 'row'} >
           Draw Rows
         </button>
         <button type="button" onClick={@clearRow.bind null, this}>
           Clear Row Template
-        </button>
-        <button type="button" onClick={@saveGrid.bind this, @props.annotation.value}>
-          Save Grid Template
-        </button>
-        <button type="button" onClick={@clearGrid.bind null, this}>
-          Clear Grid Template
         </button>
       </label>
 
