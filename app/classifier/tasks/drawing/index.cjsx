@@ -82,29 +82,44 @@ module.exports = React.createClass
       # TODO: This doesn't factor in details tasks at all.
       testShapeCloseness unknownShapes.concat knownGoodShapes
 
+  componentWillMount: ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      console.log pref
+      if pref.preferences.template
+        @setState template: pref.preferences.template
+
   getDefaultProps: ->
     task: null
     annotation: null
     onChange: Function.prototype
 
-  saveTemplate: (annotations) ->
+  activateTemplate: (annotations, type) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.cells': annotations
-      pref.save()
+      if pref.preferences.template != type
+        pref.update 'preferences.row': annotations
+        pref.update 'preferences.template': annotations
+        pref.save()
+        @setState template: type
+      else
+        pref.update 'preferences.template': null
+        pref.save()
+        @setState template: null
 
   saveGrid: (annotations) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       pref.update 'preferences.grid': annotations
       pref.save()
 
+  clearRow: ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update 'preferences.row': null
+      pref.update 'preferences.template': null
+      pref.save()
+      @setState template: null
+
   clearGrid: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.grid': []
-      pref.save()
-
-  clearTemplate: ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.cells': []
+      pref.update 'preferences.grid': null
       pref.save()
 
   render: ->
@@ -134,17 +149,17 @@ module.exports = React.createClass
             </div>
           </div>
         </div>
-        <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value}>
-          Save Row Dimensions
+        <button type="button" className="tabbed-content-tab #{('active' if @state?.template is 'row') ? ''}" onClick={@activateTemplate.bind this, @props.annotation.value, 'row'} >
+          Draw Rows
         </button>
-        <button type="button" onClick={@clearTemplate.bind null, this}>
-          Clear Row Dimensions
+        <button type="button" onClick={@clearRow.bind null, this}>
+          Clear Row Template
         </button>
         <button type="button" onClick={@saveGrid.bind this, @props.annotation.value}>
-          Save Grid Dimensions
+          Save Grid Template
         </button>
         <button type="button" onClick={@clearGrid.bind null, this}>
-          Clear Grid Dimensions
+          Clear Grid Template
         </button>
       </label>
 

@@ -95,8 +95,8 @@ module.exports = React.createClass
       for key, value of initReleaseValues
         mark[key] = value
 
-    if MarkComponent.saveState? and @state?.template
-      multipleMarks = MarkComponent.saveState mark, @state.template
+    if MarkComponent.saveState? and @state?.row
+      multipleMarks = MarkComponent.saveState mark, @state.row #this should say which tool is selected
       @props.annotation.value.pop()
       for cell in multipleMarks
         @props.annotation.value.push cell
@@ -116,7 +116,9 @@ module.exports = React.createClass
 
   findSchema: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if pref.preferences.cells.length
-        @setState template: pref.preferences.cells
+      if pref.preferences.row?.length
+        @setState row: pref.preferences.row
       else
-        @setState template: null
+        @setState row: null
+      if pref.preferences.grid?.length
+        @setState grid: pref.preferences.grid

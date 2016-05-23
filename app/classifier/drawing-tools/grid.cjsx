@@ -23,6 +23,7 @@ module.exports = React.createClass
       y: y
       width: 0
       height: 0
+      type: 'cell'
 
     initStart: ({x, y}, mark) ->
       @initCoords = {x, y}
@@ -56,6 +57,7 @@ module.exports = React.createClass
       for cell in template
         cell.y = mark.y
         cell.height = mark.height
+        cell.type = 'row'
       template
 
   initCoords: null
@@ -64,16 +66,23 @@ module.exports = React.createClass
     points = @pointFinder @props.mark
 
     <DrawingToolRoot tool={this}>
-      {if @state?.template
-        @renderCells()
+      {if @state?.grid
+        @renderGrid()
+      else if @state?.row
+        @renderRow()
       else
         <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
           <polyline points={points} />
         </Draggable>}
     </DrawingToolRoot>
 
-  renderCells: ->
-    for cell in @state.template
+  renderGrid: ->
+    for cell in @state.grid
+      points = @pointFinder cell
+      <polyline points={points} />
+
+  renderRow: ->
+    for cell in @state.row
       points = @pointParser cell
       <polyline points={points} />
 
@@ -104,5 +113,7 @@ module.exports = React.createClass
 
   findSchema: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if pref.preferences.cells.length
-        @setState template: pref.preferences.cells
+      if pref.preferences.row?.length
+        @setState row: pref.preferences.row
+      if pref.preferences.grid?.length
+        @setState grid: pref.preferences.grid
