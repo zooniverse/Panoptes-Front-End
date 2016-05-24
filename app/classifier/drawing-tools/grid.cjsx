@@ -48,12 +48,15 @@ module.exports = React.createClass
       _inProgress: false
 
     initValid: (mark) ->
-      mark.height > MINIMUM_SIZE
+      mark is null or mark.height > MINIMUM_SIZE
 
     saveState: (mark, template) ->
+      rowID = Math.random()
       for cell in template
+        cell.rowID = rowID
         cell.y = mark.y
         cell.height = mark.height
+        cell.rowID = rowID
       template
 
   initCoords: null
@@ -70,19 +73,21 @@ module.exports = React.createClass
         <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
           <polyline points={points} />
         </Draggable>}
+        {if @props.selected
+          <g>
+            <DeleteButton tool={this} x={@props.mark.x + (@props.mark.width * DELETE_BUTTON_DISTANCE)} y={@props.mark.y} />
+          </g>}
     </DrawingToolRoot>
 
   renderGrid: ->
     for cell in @state.grid
       points = @pointFinder cell
-      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, cell} disabled={@props.disabled}>
-        <polyline points={points} />
-      </Draggable>
+      <polyline points={points} />
 
   renderRow: ->
     for cell in @state.row
       points = @pointParser cell
-      <polyline points={points} />
+      <polyline key={Math.random()} points={points} />
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal

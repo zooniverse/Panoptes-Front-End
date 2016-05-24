@@ -98,3 +98,10 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @props.classification.update 'annotations'
+    if mark.rowID
+      index = []
+      for cell in annotation.value
+        if cell.rowID is mark.rowID
+          index.push(annotation.value.indexOf cell)
+      annotation.value.splice index[0], index.length
+      @props.classification.update 'annotations'
