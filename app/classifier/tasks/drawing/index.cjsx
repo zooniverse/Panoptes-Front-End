@@ -95,7 +95,7 @@ module.exports = React.createClass
   activateTemplate: (annotations, type) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       pref.update 'preferences.activeTemplate': type
-      if type == 'row'
+      if type == 'row' and !pref.preferences.row
         pref.update 'preferences.row': annotations
         pref.update 'preferences.template': annotations
       else

@@ -4,9 +4,8 @@ DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
-Rectangle = require './rectangle'
 
-MINIMUM_SIZE = 5
+MINIMUM_SIZE = 10
 DELETE_BUTTON_DISTANCE = 9 / 10
 
 module.exports = React.createClass
@@ -23,7 +22,6 @@ module.exports = React.createClass
       y: y
       width: 0
       height: 0
-      type: 'cell'
 
     initStart: ({x, y}, mark) ->
       @initCoords = {x, y}
@@ -49,15 +47,13 @@ module.exports = React.createClass
     initRelease: (cursor, mark, e) ->
       _inProgress: false
 
-    # This must be rewritten. It is likely an annotation will be destroyed when it's a row as the cursor doesn't move much to the left or right
-    # initValid: (mark) ->
-    #   mark.width > MINIMUM_SIZE and mark.height > MINIMUM_SIZE
+    initValid: (mark) ->
+      mark.height > MINIMUM_SIZE
 
     saveState: (mark, template) ->
       for cell in template
         cell.y = mark.y
         cell.height = mark.height
-        cell.type = 'row'
       template
 
   initCoords: null
@@ -79,7 +75,9 @@ module.exports = React.createClass
   renderGrid: ->
     for cell in @state.grid
       points = @pointFinder cell
-      <polyline points={points} />
+      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, cell} disabled={@props.disabled}>
+        <polyline points={points} />
+      </Draggable>
 
   renderRow: ->
     for cell in @state.row

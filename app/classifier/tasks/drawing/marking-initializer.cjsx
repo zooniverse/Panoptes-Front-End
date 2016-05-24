@@ -96,11 +96,14 @@ module.exports = React.createClass
         mark[key] = value
 
     if MarkComponent.saveState? and @state?.template == 'row'
-      console.log "this saved correctly"
       multipleMarks = MarkComponent.saveState mark, @state.row #this should say which tool is selected
+      mark = null
       @props.annotation.value.pop()
       for cell in multipleMarks
         @props.annotation.value.push cell
+
+        unless MarkComponent.initValid cell
+          @destroyMark @props.annotation, cell
 
     @props.classification.update 'annotations'
 
