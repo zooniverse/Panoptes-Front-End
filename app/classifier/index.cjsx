@@ -423,7 +423,7 @@ Classifier = React.createClass
     @setState backButtonWarning: false 
 
   renderBackButtonWarning: ->
-    <p className="back-button-warning" >Going back will delete all annotations for the current task.</p>
+    <p className="back-button-warning" >Going back will clear your work for the current task.</p>
 
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
