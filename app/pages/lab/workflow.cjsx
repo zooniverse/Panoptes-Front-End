@@ -83,6 +83,8 @@ EditWorkflowPage = React.createClass
   render: ->
     window.editingWorkflow = @props.workflow
 
+    noTasksDefined = Object.keys(@props.workflow.tasks).length is 0
+
     disabledStyle =
       opacity: 0.4
       pointerEvents: 'none'
@@ -116,28 +118,33 @@ EditWorkflowPage = React.createClass
               <div className="nav-list standalone">
                 <span className="nav-list-header">Tasks</span>
                 <br />
-                {for key, definition of @props.workflow.tasks
-                  classNames = ['secret-button', 'nav-list-item']
-                  if key is @state.selectedTaskKey
-                    classNames.push 'active'
-                  <div key={key}>
-                    <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
-                      {switch definition.type
-                        when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
-                        when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
-                        when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
-                        when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
-                        when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
-                        when 'crop' then <i className="fa fa-crop fa-fw"></i>
-                        when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
-                        when 'dropdown' then <i className="fa fa-list fa-fw"></i>
-                        when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
-                      {' '}
-                      {tasks[definition.type].getTaskText definition}
-                      {if key is @props.workflow.first_task
-                        <small> <em>(first)</em></small>}
-                    </button>
-                  </div>}
+                {if noTasksDefined
+                  <div className="nav-list-item">
+                    <small className="form-help">(No tasks yet)</small>
+                  </div>
+                else
+                  for key, definition of @props.workflow.tasks
+                    classNames = ['secret-button', 'nav-list-item']
+                    if key is @state.selectedTaskKey
+                      classNames.push 'active'
+                    <div key={key}>
+                      <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
+                        {switch definition.type
+                          when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
+                          when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
+                          when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
+                          when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
+                          when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
+                          when 'crop' then <i className="fa fa-crop fa-fw"></i>
+                          when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
+                          when 'dropdown' then <i className="fa fa-list fa-fw"></i>
+                          when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
+                        {' '}
+                        {tasks[definition.type].getTaskText definition}
+                        {if key is @props.workflow.first_task
+                          <small> <em>(first)</em></small>}
+                      </button>
+                    </div>}
               </div>
 
               <p>
@@ -206,9 +213,12 @@ EditWorkflowPage = React.createClass
 
               <AutoSave tag="div" resource={@props.workflow}>
                 <small>First task</small>{' '}
-                <select name="first_task" value={@props.workflow.first_task} onChange={handleInputChange.bind @props.workflow}>
-                  {for taskKey, definition of @props.workflow.tasks
-                    <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
+                <select name="first_task" value={@props.workflow.first_task} disabled={noTasksDefined} onChange={handleInputChange.bind @props.workflow}>
+                  {if noTasksDefined
+                    <option>(No tasks yet)</option>
+                  else
+                    for taskKey, definition of @props.workflow.tasks
+                      <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
                 </select>
               </AutoSave>
             </div>
@@ -378,7 +388,9 @@ EditWorkflowPage = React.createClass
               </AutoSave>
             </div>
           else
-            <p>Choose a task to edit</p>}
+            <div className="form-help">
+              <p>Choose a task to edit. The configuration for that task will appear here.</p>
+            </div>}
         </div>
       </div>
 
