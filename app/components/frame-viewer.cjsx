@@ -36,12 +36,12 @@ module.exports = React.createClass
       # these events enable a user to navigate an image using arrows, +, and - keys,
       # while the user is in pan and zoom mode.
       addEventListener "keydown", @frameKeyPan
-      addEventListener "mousewheel", @frameKeyPan
+      addEventListener "wheel", @frameKeyPan
 
   componentWillUnmount: ->
     if @props.project? && 'pan and zoom' in @props.project?.experimental_tools
       removeEventListener "keydown", @frameKeyPan
-      removeEventListener "mousewheel", @frameKeyPan
+      removeEventListener "wheel", @frameKeyPan
 
   render: () ->
     subject = @props.subject
@@ -51,7 +51,7 @@ module.exports = React.createClass
     frameDisplay = switch type
       when 'image'
         <div className="subject-image-frame" >
-          <img ref="subjectImage" className={"subject pan-active"} src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} tabIndex={0} onFocus={@togglePanOn} onBlur={@togglePanOff}/>
+          <img ref="subjectImage" className={"subject pan-active"} src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} tabIndex={0}/>
 
           {if @state.loading
             <div className="loading-cover" style={@constructor.overlayStyle} >
@@ -78,17 +78,18 @@ module.exports = React.createClass
                 <button title={"draw"} className={"fa fa-mouse-pointer"} title={"annotate"} onClick={@togglePanOff}/>
               </div>
               <div className={if @state.panEnabled then "active" else ""}>
-                <button title={"pan"} className={"fa fa-arrows"} title={"pan"} onClick={@togglePanOn}/>
+                <button title={"pan"} className={"fa fa-arrows"} title={"pan"} onClick={@togglePanOn} onBlur={@togglePanOff}/>
               </div>
             </div>
             <div>
               <button
                 title={ "zoom out" }
-                className={"zoom-out fa fa-minus" + if @cannotZoomOut() then " disabled" else "" }
-                onMouseDown={ @continuousZoom.bind(this, 1.1 ) }
+                className={ "zoom-out fa fa-minus" + if @cannotZoomOut() then " disabled" else "" }
+                onMouseDown={@continuousZoom.bind(this, 1.1)}
                 onMouseUp={@stopZoom}
-                onKeyDown={@keyDownZoomButton.bind(this,1.1)}
+                onKeyDown={@keyDownZoomButton.bind(this, 1.1)}
                 onKeyUp={@stopZoom}
+                onFocus={@togglePanOn}
                 onBlur={@togglePanOff}
               />
             </div>
@@ -98,8 +99,9 @@ module.exports = React.createClass
                 className={ "zoom-in fa fa-plus" }
                 onMouseDown={@continuousZoom.bind(this, .9)}
                 onMouseUp={@stopZoom}
-                onKeyDown={@keyDownZoomButton.bind(this,.9)}
+                onKeyDown={@keyDownZoomButton.bind(this, .9)}
                 onKeyUp={@stopZoom}
+                onFocus={@togglePanOn}
                 onBlur={@togglePanOff}
               />
             </div>
@@ -193,12 +195,10 @@ module.exports = React.createClass
 
   togglePanOn: ->
     unless @state.panEnabled
-      @setState panEnabled: true, =>
-        this.refs.subjectImage.focus()
+      @setState panEnabled: true
 
   togglePanOff: (e) ->
-    unless e.relatedTarget?.title is "zoom out" or e.relatedTarget?.title is "zoom in"
-      @setState panEnabled: false
+    @setState panEnabled: false
 
   toggleKeyPanZoom: ->
     @setState keyPanZoomEnabled: !@state.keyPanZoomEnabled, =>
@@ -223,6 +223,7 @@ module.exports = React.createClass
         height: @state.viewBoxDimensions.height
 
   frameKeyPan: (e) ->
+    console.log e.which
     return unless @state.panEnabled
     keypress = e.which
     switch keypress
@@ -242,13 +243,13 @@ module.exports = React.createClass
       when 40
         e.preventDefault()
         @panVertical(20)
-      # zoom out
-      when 187
+      # zoom out - Chrome(187), Firefox(61)
+      when 187, 61
         e.preventDefault()
         @setState zooming: true
         @zoom(.9)
-      # zoom in
-      when 189
+      # zoom in - Chrome(189), Firefox(173)
+      when 189, 173
         e.preventDefault()
         @setState zooming: true
         @zoom(1.1)
