@@ -5,6 +5,7 @@ PromiseToSetState = require '../../lib/promise-to-set-state'
 PromiseRenderer = require '../../components/promise-renderer'
 FinishedBanner = require './finished-banner'
 ProjectMetadata = require './metadata'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 {Link} = require 'react-router'
 
 module.exports = React.createClass
@@ -18,7 +19,7 @@ module.exports = React.createClass
       if project._workflows?
         @setState workflows: project._workflows
       else
-        workflows = project.get 'workflows', active: true
+        workflows = getWorkflowsInOrder project, active: true
 
         workflows.then (workflows) =>
           project._workflows = workflows

@@ -1,8 +1,8 @@
-getWorkflowsInOrder = (project) ->
+getWorkflowsInOrder = (project, query) ->
   console.log {project}
   order = project.configuration?.workflow_order ? []
 
-  project.get('workflows').then (workflows) ->
+  project.get('workflows', query).then (workflows) ->
     workflowsByID = {}
     workflows.forEach (workflow) ->
       workflowsByID[workflow.id] = workflow
