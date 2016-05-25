@@ -79,12 +79,12 @@
   },
   "scripts": {
 
-    "build": "check-engines; webpack --config ./webpack.build.js --progress --profile --colors",
+    "build": "check-engines && webpack --config ./webpack.build.js --progress --profile --colors",
     "clean": "rimraf dist",
     "prep": "export NODE_ENV=staging; npm run clean && npm run build",
     "publish": "publisssh ./dist \"zooniverse-static/${BUCKET}/$DEPLOY_SUBDIR\" $PUBLISH_FLAGS",
-    "serve": "export NODE_ENV=staging; check-engines; node server.js",
-    "start": "export NODE_ENV=development; check-engines; babel-node server_dev.js",
+    "serve": "export NODE_ENV=staging; check-engines && node server.js",
+    "start": "export NODE_ENV=development; check-engines && babel-node server_dev.js",
 
     "_deploy": "export BUCKET=www.zooniverse.org; npm run clean && npm run build && npm run publish",
     "deploy": "export NODE_ENV=production; export DEPLOY_SUBDIR=panoptes-front-end; export PUBLISH_FLAGS=\"-d\" npm run _deploy",
