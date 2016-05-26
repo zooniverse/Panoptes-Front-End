@@ -29,6 +29,10 @@ module.exports = React.createClass
 
         @promiseToSetState {workflows}
 
+  logClick: ->
+    @context?.geordi?.logEvent
+      type: 'get-started'
+
   getInitialState: ->
     workflows: []
 
@@ -63,7 +67,7 @@ module.exports = React.createClass
               {workflow.display_name}
             </Link>
         else
-          <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
+          <Link to={"/projects/#{@props.project.slug}/classify"} onClick={@logClick.bind null, this} className="call-to-action standard-button">
             Get started!
           </Link>}
       </div>

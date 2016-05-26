@@ -33,7 +33,6 @@ module?.exports = React.createClass
   logEvent: (evtType) ->
     @context.geordi?.logEvent
       type: evtType
-      data: null
 
   onSubmitMessage: (_, body) ->
     @logEvent 'send-message'

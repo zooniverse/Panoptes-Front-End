@@ -6,7 +6,7 @@ MainFooter = require './main-footer'
 GeordiClient = require 'zooniverse-geordi-client'
 {generateSessionID} = require '../lib/session'
 
-class GeordiLogger
+class GeordiLogger # Make calls to the Geordi API to log user activity
   constructor: (@state, @geordi) ->
 
   keys: {}
@@ -23,7 +23,7 @@ class GeordiLogger
       zooUserIDGetter: () => @state.user?.id
       subjectGetter: () => @keys?.subjectID
 
-  makeHandler: (defType) ->
+  makeHandler: (defType) -> # Once defined, efficiently logs different data to same event type 
     instance = @instance
     (eventData, eventType) ->
         eventType = defType if typeof linkType isnt 'string'
@@ -31,7 +31,7 @@ class GeordiLogger
           type: eventType
           data: "\"#{eventData}\""
 
-  logEvent: (logEntry) ->
+  logEvent: (logEntry) -> # Accepts key/values to make appropriate Geordi logging
     geordi = @instance()
     newEntry = Object.assign {}, logEntry, @keys
     geordi?.logEvent newEntry
