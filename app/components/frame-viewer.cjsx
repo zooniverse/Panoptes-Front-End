@@ -33,15 +33,15 @@ module.exports = React.createClass
 
   componentDidMount: ->
     if @props.project? && 'pan and zoom' in @props.project?.experimental_tools
-      # these events enable a user to navigate an image using arrows, +, and - keys, 
+      # these events enable a user to navigate an image using arrows, +, and - keys,
       # while the user is in pan and zoom mode.
       addEventListener "keydown", @frameKeyPan
-      addEventListener "mousewheel", @frameKeyPan
+      addEventListener "wheel", @frameKeyPan
 
   componentWillUnmount: ->
     if @props.project? && 'pan and zoom' in @props.project?.experimental_tools
       removeEventListener "keydown", @frameKeyPan
-      removeEventListener "mousewheel", @frameKeyPan
+      removeEventListener "wheel", @frameKeyPan
 
   render: () ->
     subject = @props.subject
@@ -82,30 +82,30 @@ module.exports = React.createClass
               </div>
             </div>
             <div>
-              <button 
-                title={ "zoom out" } 
-                className={"zoom-out fa fa-minus" + if @cannotZoomOut() then " disabled" else "" } 
-                onMouseDown={ @continuousZoom.bind(this, 1.1 ) } 
-                onMouseUp={@stopZoom} 
-                onKeyDown={@keyDownZoomButton.bind(this,1.1)} 
+              <button
+                title={ "zoom out" }
+                className={"zoom-out fa fa-minus" + if @cannotZoomOut() then " disabled" else "" }
+                onMouseDown={ @continuousZoom.bind(this, 1.1 ) }
+                onMouseUp={@stopZoom}
+                onKeyDown={@keyDownZoomButton.bind(this,1.1)}
                 onKeyUp={@stopZoom}
               />
             </div>
             <div>
-              <button 
-                title={ "zoom in" } 
-                className={ "zoom-in fa fa-plus" } 
-                onMouseDown={@continuousZoom.bind(this, .9)} 
-                onMouseUp={@stopZoom} 
+              <button
+                title={ "zoom in" }
+                className={ "zoom-in fa fa-plus" }
+                onMouseDown={@continuousZoom.bind(this, .9)}
+                onMouseUp={@stopZoom}
                 onKeyDown={@keyDownZoomButton.bind(this,.9)}
-                onKeyUp={@stopZoom} 
+                onKeyUp={@stopZoom}
               />
             </div>
             <div>
               <button title={"reset zoom levels"} className={"reset fa fa-refresh" + if @cannotZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
             </div>
           </div>}
-        
+
       </div>
 
 
@@ -130,7 +130,7 @@ module.exports = React.createClass
     @props.onLoad? e, @props.frame
 
   cannotZoomOut: ->
-    return @state.frameDimensions.width == @state.viewBoxDimensions.width && @state.frameDimensions.height == @state.viewBoxDimensions.height      
+    return @state.frameDimensions.width == @state.viewBoxDimensions.width && @state.frameDimensions.height == @state.viewBoxDimensions.height
 
   continuousZoom: (change) ->
     @clearZoomingTimeout()
@@ -143,11 +143,11 @@ module.exports = React.createClass
         @zoom(change)
         @clearZoomingTimeout()
         @setState zoomingTimeoutId: setTimeout(zoomNow, 200)
-      
+
       zoomNow()
 
   clearZoomingTimeout: ->
-    if @state.zoomingTimeoutId 
+    if @state.zoomingTimeoutId
       clearTimeout @state.zoomingTimeoutId
 
   zoom: (change) ->
@@ -155,7 +155,7 @@ module.exports = React.createClass
     return if !@state.zooming
     newNaturalWidth = @state.viewBoxDimensions.width * change
     newNaturalHeight = @state.viewBoxDimensions.height * change
-  
+
     newNaturalX = @state.viewBoxDimensions.x - (newNaturalWidth - @state.viewBoxDimensions.width) / 2
     newNaturalY = @state.viewBoxDimensions.y - (newNaturalHeight - @state.viewBoxDimensions.height) / 2
 
@@ -169,7 +169,7 @@ module.exports = React.createClass
           height: newNaturalHeight,
           x: newNaturalX,
           y: newNaturalY
-  
+
   keyDownZoomButton: (change, e) ->
     # only zoom if a user presses enter on the zoom button.
     if e.which == 13
@@ -184,7 +184,7 @@ module.exports = React.createClass
   zoomReset: ->
     @setState
       viewBoxDimensions:
-        width: @state.frameDimensions.width, 
+        width: @state.frameDimensions.width,
         height: @state.frameDimensions.height,
         x: 0,
         y: 0
@@ -193,10 +193,10 @@ module.exports = React.createClass
     unless @state.panEnabled
       @setState panEnabled: true, =>
         this.refs.subjectImage.focus()
-  
+
   togglePanOff: ->
     @setState panEnabled: false
-  
+
   toggleKeyPanZoom: ->
     @setState keyPanZoomEnabled: !@state.keyPanZoomEnabled, =>
       if @state.panEnabled then this.refs.subjectImage.focus()
@@ -204,12 +204,12 @@ module.exports = React.createClass
   panByDrag: (e, d) ->
     return unless @state.panEnabled
 
-    maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + 20
-    minumumX = -20
+    maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + (@state.frameDimensions.width * 0.6)
+    minumumX = -(@state.frameDimensions.width * 0.6)
     changedX = @state.viewBoxDimensions.x -= d.x
 
-    maximumY = (@state.frameDimensions.height - @state.viewBoxDimensions.height) + 20
-    minimumY = -20
+    maximumY = (@state.frameDimensions.height - @state.viewBoxDimensions.height) + (@state.frameDimensions.height * 0.6)
+    minimumY = -(@state.frameDimensions.height * 0.6)
     changedY = @state.viewBoxDimensions.y -= d.y
 
     @setState
@@ -228,35 +228,36 @@ module.exports = React.createClass
         e.preventDefault()
         @panHorizontal(-20)
       # up
-      when 38 
+      when 38
         e.preventDefault()
-        @panVertical(-20) 
+        @panVertical(-20)
       # right
-      when 39 
+      when 39
         e.preventDefault()
-        @panHorizontal(20) 
+        @panHorizontal(20)
       # down
-      when 40 
+      when 40
         e.preventDefault()
-        @panVertical(20) 
-      # zoom out
-      when 187
-        e.preventDefault()
-        @setState zooming: true
-        @zoom(.9) 
-      # zoom in 
-      when 189
+        @panVertical(20)
+      # zoom out - Chrome(187), Firefox(61)
+      when 187, 61
         e.preventDefault()
         @setState zooming: true
-        @zoom(1.1) 
-      # zooming by mousewheel
+        @zoom(.9)
+      # zoom in - Chrome(189), Firefox(173)
+      when 189, 173
+        e.preventDefault()
+        @setState zooming: true
+        @zoom(1.1)
+      # zooming by wheel
       when 1
         e.preventDefault()
+        @setState zooming: true
         if e.deltaY > 0 then @zoom(.9) else @zoom(1.1)
 
   panHorizontal:(direction) ->
-    maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + 20
-    minumumX = -20
+    maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + (@state.frameDimensions.width * 0.6)
+    minumumX = -(@state.frameDimensions.width * 0.6)
     changedX = @state.viewBoxDimensions.x + direction
     @setState
       viewBoxDimensions:
@@ -266,12 +267,12 @@ module.exports = React.createClass
         height: @state.viewBoxDimensions.height
 
   panVertical:(direction)->
-    maximumY = (@state.frameDimensions.height - @state.viewBoxDimensions.height) + 20
-    minimumY = -20
+    maximumY = (@state.frameDimensions.height - @state.viewBoxDimensions.height) + (@state.frameDimensions.height * 0.6)
+    minimumY = -(@state.frameDimensions.height * 0.6)
     changedY = @state.viewBoxDimensions.y + direction
     @setState
       viewBoxDimensions:
-        x: @state.viewBoxDimensions.x 
+        x: @state.viewBoxDimensions.x
         y: Math.max(minimumY, Math.min(changedY, maximumY))
         width: @state.viewBoxDimensions.width
         height: @state.viewBoxDimensions.height
