@@ -97,7 +97,11 @@ EditProjectPage = React.createClass
             <PromiseRenderer promise={getWorkflowsInOrder @props.project}>{(workflows) =>
               renderWorkflowListItem = (workflow) =>
                 <li key={workflow.id}>
-                  <Link to={@labPath "/workflow/#{workflow.id}"} className="nav-list-item" activeClassName="active">{workflow.display_name}</Link>
+                  <Link to={@labPath "/workflow/#{workflow.id}"} className="nav-list-item" activeClassName="active">
+                    {workflow.display_name}
+                    {if workflow.id is @props.project.configuration?.default_workflow
+                      <span title="Default workflow">{' '}*{' '}</span>}
+                  </Link>
                 </li>
 
               renderWorkflowListItemListener = (workflow) =>
