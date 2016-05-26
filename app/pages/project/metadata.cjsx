@@ -1,6 +1,7 @@
 React = require 'react'
 {Link} = require 'react-router'
 visible = (require 'visible-element')()
+debounce = require 'debounce'
 
 module?.exports = React.createClass
   displayName: 'ProjectMetadata'
@@ -20,7 +21,7 @@ module?.exports = React.createClass
     @context.geordi?.logEvent type: 'scroll-down' if @scrollDone
 
   componentDidMount: ->
-    window.addEventListener 'scroll', @handleScroll
+    window.addEventListener 'scroll', debounce(@handleScroll, 200)
 
   componentWillUnmount: ->
     window.removeEventListener 'scroll', @handleScroll

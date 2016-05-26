@@ -23,10 +23,10 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
       zooUserIDGetter: () => @state.user?.id
       subjectGetter: () => @keys?.subjectID
 
-  makeHandler: (defType) -> # Once defined, efficiently logs different data to same event type 
+  makeHandler: (defType) -> # Once defined, efficiently logs different data to same event type
     instance = @instance
     (eventData, eventType) ->
-        eventType = defType if typeof linkType isnt 'string'
+        eventType = defType if typeof eventType isnt 'string'
         instance()?.logEvent
           type: eventType
           data: "\"#{eventData}\""
