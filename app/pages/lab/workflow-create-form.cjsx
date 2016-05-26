@@ -28,7 +28,7 @@ WorkflowCreateForm = React.createClass
       display_name: @refs.newDisplayName.value
       primary_language: counterpart.getLocale()
       tasks: workflowToClone?.tasks ? {}
-      first_task: workflowToClone?.first_task ? 'init'
+      first_task: workflowToClone?.first_task ? ''
       configuration: workflowToClone?.configuration ? {}
       retirement: workflowToClone?.retirement ? {}
       active: @props.workflowActiveStatus ? false
