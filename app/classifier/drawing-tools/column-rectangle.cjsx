@@ -53,7 +53,7 @@ module.exports = React.createClass
     {x, width} = @props.mark
 
     <DrawingToolRoot tool={this}>
-      <Draggable onDrag={@handleMainDrag} onEnd={@dragEnd.bind this, this} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={@dragEnd.bind null, this} disabled={@props.disabled}>
         <rect ref="rect" x={x} y={0} width={width} height={@props.containerRect.height / @props.scale.vertical} />
       </Draggable>
 

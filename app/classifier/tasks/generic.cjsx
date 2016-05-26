@@ -8,9 +8,6 @@ module.exports = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
 
-  componentWillReceiveProps: (nextProps, nextContext)->
-    @logClick = nextContext?.geordi?.makeHandler? 'task-help'
-
   getDefaultProps: ->
     question: ''
     help: ''
@@ -56,7 +53,7 @@ module.exports = React.createClass
     </div>
 
   showHelp: ->
-    @logClick? null
+    @context?.geordi?.logEvent type: 'task-help'
     alert <div className="content-container">
       <Markdown className="classification-task-help">{@props.help}</Markdown>
     </div>
