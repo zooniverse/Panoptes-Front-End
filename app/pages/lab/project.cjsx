@@ -99,7 +99,11 @@ EditProjectPage = React.createClass
                 <li key={workflow.id}>
                   <Link to={@labPath "/workflow/#{workflow.id}"} className="nav-list-item" activeClassName="active">{workflow.display_name}</Link>
                 </li>
-              <DragReorderable tag="ul" className="nav-list" items={workflows} render={renderWorkflowListItem} onChange={@handleWorkflowReorder} />
+
+              renderWorkflowListItemListener = (workflow) =>
+                <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind null, workflow} />
+
+              <DragReorderable tag="ul" className="nav-list" items={workflows} render={renderWorkflowListItemListener} onChange={@handleWorkflowReorder} />
             }</PromiseRenderer>
 
             <div className="nav-list-item">
