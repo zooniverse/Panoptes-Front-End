@@ -4,6 +4,9 @@ putFile = require '../lib/put-file'
 FileButton = require '../components/file-button'
 {MarkdownEditor} = (require 'markdownz').default
 debounce = require 'debounce'
+DragReorderable = require 'drag-reorderable'
+CroppedImage = require '../components/cropped-image'
+classnames = require 'classnames'
 
 ProjectModalStepEditor = React.createClass
   getDefaultProps: ->
@@ -19,16 +22,8 @@ ProjectModalStepEditor = React.createClass
     onMediaClear: ->
       console.log 'ProjectModalStepEditor onMediaClear', arguments
 
-    onRemove: ->
-      console.log 'ProjectModalStepEditor onRemove', arguments
-
   render: ->
     <div className="project-modal-step-editor">
-      <header>
-        <button type="button" className="secret-button" title="Remove step" aria-label="Remove step" onClick={@props.onRemove}>
-          <i className="fa fa-times fa-fw"></i>
-        </button>
-      </header>
       <p>
         {if @props.media?
           <span>
@@ -66,6 +61,25 @@ ProjectModalEditor = React.createClass
     onStepChange: ->
       console.log 'ProjectModalEditor onChange', arguments
 
+  getInitialState: ->
+    stepToEdit: 0
+
+  onClick: (stepIndex) ->
+    @setState stepToEdit: stepIndex
+
+  renderStepList: (step, i) ->
+    step._key ?= Math.random()
+    liClasses = classnames selected: @state.stepToEdit is i
+
+    <li key={step._key} className={liClasses}>
+      <button type="button" className="field-guide-editor-article-button" onClick={@onClick.bind null, i}>
+        <span className="field-guide-editor-article-button-title">Step #{i+1}</span>
+      </button>
+      <button type="button" className="field-guide-editor-article-list-item-remove-button" title="Remove this entry" onClick={@props.onStepRemove.bind null, i}>
+        <i className="fa fa-trash-o fa-fw"></i>
+      </button>
+    </li>
+
   render: ->
     <div className="project-modal-editor">
       <div className="project-modal-header">
@@ -75,17 +89,16 @@ ProjectModalEditor = React.createClass
       {if @props.projectModal.steps.length is 0
         <p>This {@props.kind} has no steps.</p>
       else
-        for step, i in @props.projectModal.steps
-          step._key ?= Math.random()
+        <div className="project-modal-step-editor-container">
+          <DragReorderable tag="ul" className="project-modal-step-list" items={@props.projectModal.steps} render={@renderStepList} onChange={@props.onStepChange} />
           <ProjectModalStepEditor
-            key={step._key}
-            step={step}
-            media={@props.media?[step.media]}
-            onMediaSelect={@props.onMediaSelect.bind null, i}
-            onMediaClear={@props.onMediaClear.bind null, i}
-            onChange={@props.onStepChange.bind null, i}
-            onRemove={@props.onStepRemove.bind null, i}
-          />}
+            step={@props.projectModal.steps[@state.stepToEdit]}
+            media={@props.media?[@props.projectModal.steps[@state.stepToEdit].media]}
+            onMediaSelect={@props.onMediaSelect.bind null, @state.stepToEdit}
+            onMediaClear={@props.onMediaClear.bind null, @state.stepToEdit}
+            onChange={@props.onStepChange.bind null, @state.stepToEdit}
+          />
+        </div>}
       <div>
         <button type="button" onClick={@props.onStepAdd}>Add a step</button>
       </div>

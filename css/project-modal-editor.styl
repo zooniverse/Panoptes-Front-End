@@ -1,14 +1,30 @@
 .project-modal-editor
-  max-width: 50ch
+  width: 100%
 
   .project-modal-header
     align-items: center
     display: flex
     justify-content: space-between
 
+.project-modal-step-editor-container
+  display: flex
+  
+  .project-modal-step-list
+    flex: 1 1 50%
+    list-style: none
+    padding: 0
+    
+    li
+      display: flex
+      
+      &.selected
+        background-color: lightgray
+
 .project-modal-step-editor
   border: 1px solid rgba(gray, 0.5)
+  flex: 1 1 50%
   margin: 1em 0
+  max-width: 50ch
   padding: 0.5em 1em
   position: relative
 
