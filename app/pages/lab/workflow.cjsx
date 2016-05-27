@@ -435,7 +435,7 @@ EditWorkflowPage = React.createClass
             assignedTutorial = tutorial in workflowTutorials
             toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
-              <input type="checkbox" checked={assignedTutorial} onChange={toggleTutorial} />
+              <input type={if tutorials.length is 1 then "checkbox" else "radio"} checked={assignedTutorial} onChange={toggleTutorial} />
               Tutorial #{tutorial.id}
             </label>}
         </form>
@@ -456,7 +456,7 @@ EditWorkflowPage = React.createClass
             assignedTutorial = tutorial in workflowTutorials
             toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
-              <input type="checkbox" checked={assignedTutorial} onChange={toggleTutorial} />
+              <input type={if projectTutorials.length is 1 then "checkbox" else "radio"} checked={assignedTutorial} onChange={toggleTutorial} />
               Mini-Course #{tutorial.id}
             </label>}
         </form>
