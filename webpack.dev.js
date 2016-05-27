@@ -65,5 +65,8 @@ module.exports = {
     }],
     // suppress warning about the fact that sugar-client is precompiled
     noParse: [/sugar-client/]
+  } ,
+  node: {
+    fs: "empty"
   }
 };
