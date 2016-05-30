@@ -84,32 +84,34 @@ module.exports = React.createClass
 
   componentWillMount: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if pref.preferences.activeTemplate
-        @setState template: pref.preferences.activeTemplate
+      @setState preferences: pref.preferences
 
   getDefaultProps: ->
     task: null
     annotation: null
     onChange: Function.prototype
 
-  activateTemplate: (annotations, type) ->
+  activateTemplate: (type) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       pref.update 'preferences.activeTemplate': type
-      if type == 'row' and !pref.preferences.row
-        pref.update 'preferences.row': annotations
-        pref.update 'preferences.template': annotations
-      else
-        pref.update 'preferences.template': null
-      pref.save()
-      @setState template: type
+      @setState preferences: pref.preferences
 
   clearRow: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       pref.update 'preferences.row': null
       pref.update 'preferences.activeTemplate': 'cell'
-      pref.update 'preferences.template': null
       pref.save()
-      @setState template: 'cell'
+      @setState preferences: pref.preferences
+
+  saveRow: (annotations, type) ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update 'preferences.activeTemplate': type
+      if type == 'row' and !pref.preferences.row
+        pref.update 'preferences.row': annotations
+      else
+        pref.update 'preferences.template': null
+      pref.save()
+      @setState preferences: pref.preferences
 
   render: ->
     tools = for tool, i in @props.task.tools
@@ -138,15 +140,22 @@ module.exports = React.createClass
             </div>
           </div>
         </div>
-        <button type="button" className="tabbed-content-tab #{('active' if @state?.template is 'cell') ? ''}" onClick={@activateTemplate.bind this, @props.annotation.value, 'cell'} >
-          Draw Cells
-        </button>
-        <button type="button" className="tabbed-content-tab #{('active' if @state?.template is 'row') ? ''}" onClick={@activateTemplate.bind this, @props.annotation.value, 'row'} >
-          Draw Rows
-        </button>
-        <button type="button" onClick={@clearRow.bind null, this}>
-          Clear Row Template
-        </button>
+        {if tool.type is 'grid'
+          <button type="button" className="tabbed-content-tab #{('active' if @state?.preferences.activeTemplate is 'cell') ? ''}" onClick={@activateTemplate.bind this, 'cell'} >
+            Draw Cells
+          </button>}
+        {if tool.type is 'grid'
+          <button type="button" className="tabbed-content-tab #{('active' if @state?.preferences.activeTemplate is 'row') ? ''}" disabled={not @state?.preferences?.row?} onClick={@activateTemplate.bind this, 'row'} >
+            Draw Rows
+          </button>}
+        {if tool.type is 'grid'
+          <button type="button" onClick={@saveRow.bind this, @props.annotation.value, 'row'}>
+            Save Row Template
+          </button>}
+        {if tool.type is 'grid'
+          <button type="button" onClick={@clearRow.bind null, this}>
+            Clear Row Template
+          </button>}
       </label>
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} />

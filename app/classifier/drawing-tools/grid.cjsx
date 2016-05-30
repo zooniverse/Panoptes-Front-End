@@ -53,7 +53,6 @@ module.exports = React.createClass
     saveState: (mark, template) ->
       rowID = Math.random()
       for cell in template
-        cell.rowID = rowID
         cell.y = mark.y
         cell.height = mark.height
         cell.rowID = rowID
