@@ -61,21 +61,43 @@ ProjectModalEditor = React.createClass
     onStepChange: ->
       console.log 'ProjectModalEditor onChange', arguments
 
+    onStepOrderChange: ->
+      console.log 'ProjectModalEditor onStepOrderChange', arguments
+
   getInitialState: ->
     stepToEdit: 0
 
   onClick: (stepIndex) ->
     @setState stepToEdit: stepIndex
 
+  handleStepRemove: (stepToRemove) ->
+    if @props.projectModal.steps.length is 0
+      stepIndex = null
+    else
+      stepIndex = 0
+
+    @setState { stepToEdit: stepIndex }, -> @props.onStepRemove stepToRemove
+
+  handleStepReorder: (stepsInNewOrder) ->
+    stepReorderedIndex = null
+
+    for step, index in stepsInNewOrder
+      stepReorderedIndex = index if @props.projectModal.steps[@state.stepToEdit].content is step.content
+
+    @props.onStepOrderChange stepsInNewOrder
+    @setState stepToEdit: stepReorderedIndex
+
   renderStepList: (step, i) ->
     step._key ?= Math.random()
-    liClasses = classnames selected: @state.stepToEdit is i
+    buttonClasses = classnames 
+      "selected": @state.stepToEdit is i
+      "project-modal-step-list-item-button": true
 
-    <li key={step._key} className={liClasses}>
-      <button type="button" className="field-guide-editor-article-button" onClick={@onClick.bind null, i}>
-        <span className="field-guide-editor-article-button-title">Step #{i+1}</span>
+    <li key={step._key} className="project-modal-step-list-item">
+      <button type="button" className={buttonClasses} onClick={@onClick.bind null, i}>
+        <span className="project-modal-step-list-item-button-title">Step #{i+1}</span>
       </button>
-      <button type="button" className="field-guide-editor-article-list-item-remove-button" title="Remove this entry" onClick={@props.onStepRemove.bind null, i}>
+      <button type="button" className="project-modal-step-list-item-remove-button" title="Remove this step" onClick={@handleStepRemove.bind null, i}>
         <i className="fa fa-trash-o fa-fw"></i>
       </button>
     </li>
@@ -90,7 +112,7 @@ ProjectModalEditor = React.createClass
         <p>This {@props.kind} has no steps.</p>
       else
         <div className="project-modal-step-editor-container">
-          <DragReorderable tag="ul" className="project-modal-step-list" items={@props.projectModal.steps} render={@renderStepList} onChange={@props.onStepChange} />
+          <DragReorderable tag="ul" className="project-modal-step-list" items={@props.projectModal.steps} render={@renderStepList} onChange={@handleStepReorder} />
           <ProjectModalStepEditor
             step={@props.projectModal.steps[@state.stepToEdit]}
             media={@props.media?[@props.projectModal.steps[@state.stepToEdit].media]}
@@ -152,6 +174,7 @@ ProjectModalEditorController = React.createClass
         onMediaSelect={@handleStepMediaChange}
         onMediaClear={@handleStepMediaClear}
         onStepChange={@handleStepChange}
+        onStepOrderChange={@handleStepOrderChange}
         onProjectModalDelete={@handleProjectModalDelete}
       />
     </div>
@@ -221,6 +244,10 @@ ProjectModalEditorController = React.createClass
     changes = {}
     changes["steps.#{index}.#{key}"] = value
     @props.projectModal.update changes
+    @saveProjectModal()
+
+  handleStepOrderChange: (stepsInNewOrder) ->
+    @props.projectModal.update steps: stepsInNewOrder
     @saveProjectModal()
 
   saveProjectModal: ->

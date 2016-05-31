@@ -8,22 +8,57 @@
 
 .project-modal-step-editor-container
   display: flex
+  flex-wrap: wrap
   
   .project-modal-step-list
-    flex: 1 1 50%
+    border: 1px solid rgba(gray,0.3)
+    flex: 1 1 auto
     list-style: none
+    margin: 1em 0.5em 1em 0
+    max-width: 50ch
     padding: 0
     
-    li
-      display: flex
+    > :not(:first-child)
+      border-top: 1px solid rgba(gray, 0.2)
       
-      &.selected
-        background-color: lightgray
+    .project-modal-step-list-item
+      display: flex
+      border-left: 1em solid rgba(gray, 0.1) // Drag handle
+      
+      .project-modal-step-list-item-button
+        @extends $reset-button
+        align-items: center
+        display: flex
+        flex-grow: 1
+        padding: 0.5em 1em
+        text-align: left
+
+        &:hover, &:focus
+          background: rgba(MAIN_HIGHLIGHT, 0.2)
+
+        &:active, &.selected
+          background: MAIN_HIGHLIGHT
+          color: white
+          
+          .project-modal-step-list-item-button-title
+            font-weight: bold
+            
+      .project-modal-step-list-item-remove-button
+        @extends $reset-button
+        padding: 0.5em 1em
+
+        &:hover
+          background: rgba(red, 0.2)
+
+        &:active
+          background: red
+          color: white
+          
 
 .project-modal-step-editor
   border: 1px solid rgba(gray, 0.5)
-  flex: 1 1 50%
-  margin: 1em 0
+  flex: 1 1 auto
+  margin: 1em 0 1em 0.5em
   max-width: 50ch
   padding: 0.5em 1em
   position: relative
@@ -32,3 +67,4 @@
     position: absolute
     right: 0
     top: 0
+      
