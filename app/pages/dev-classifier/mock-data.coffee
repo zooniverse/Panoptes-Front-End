@@ -184,7 +184,7 @@ workflow = apiClient.type('workflows').create
       choicesOrder: ['aa', 'ar', 'to']
       choices:
         aa:
-          label: 'Aardvark'
+          label: 'Aardvark '.repeat 10
           description: 'Basically a long-nose rabbit'
           images: [
             'aa1'
