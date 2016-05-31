@@ -3,7 +3,6 @@
   "version": "0.0.2",
   "dependencies": {
     "animated-scrollto": "~1.1.0",
-    "babelify": "~6.4.0",
     "classnames": "~2.2.3",
     "chartist": "~0.9.5",
     "counterpart": "~0.17.0",
@@ -42,34 +41,59 @@
     "test-shape-closeness": "0.0.1"
   },
   "devDependencies": {
-    "browserify": "~11.0.1",
+    "babel-cli": "~6.7.7",
+    "babel-loader": "~6.2.4",
+    "babel-plugin-react-transform": "~2.0.2",
+    "babel-plugin-transform-react-jsx": "~6.7.5",
+    "babel-preset-es2015": "~6.6.0",
+    "babel-preset-stage-0": "~6.5.0",
+    "babelify": "~6.4.0",
     "check-engines": "~1.2.0",
-    "coffee-reactify": "~4.0.0",
-    "csso": "~1.3.11",
+    "cjsx-loader": "~3.0.0",
+    "coffee-loader": "~0.7.2",
+    "coffee-script": "~1.10.0",
+    "copy-webpack-plugin": "~2.1.3",
+    "css-loader": "~0.23.1",
     "ejs": "~2.3.3",
-    "envify": "~3.4.0",
     "express": "~4.13.3",
-    "nib": "~1.1.0",
-    "publisssh": "~1.0.0",
+    "extract-text-webpack-plugin": "~1.0.1",
+    "file-loader": "~0.8.5",
+    "html-webpack-plugin": "~2.16.0",
+    "json-loader": "~0.5.4",
+    "publisssh": "~1.1.0",
+    "react-transform-hmr": "~1.0.4",
+    "rimraf": "~2.5.2",
+    "style-loader": "~0.13.1",
     "stylus": "~0.52.0",
-    "uglify-js": "~2.4.24",
-    "watchify": "~3.3.1"
+    "stylus-loader": "~2.0.0",
+    "webpack": "~1.13.0",
+    "webpack-dev-middleware": "~1.6.1",
+    "webpack-hot-middleware": "~2.10.0",
+    "webpack-split-by-path": "0.0.8"
   },
   "engines": {
     "node": "^4.2.3",
     "npm": "^2.14.7"
   },
   "scripts": {
-    "build": "check-engines && export NODE_ENV=${NODE_ENV:-production}; ./bin/build.sh",
-    "check-build-size": "npm run build && cat ./build/vendor.*.js ./build/main.*.js | gzip --best | wc -c",
-    "postinstall": "./bin/postinstall.sh",
-    "deploy": "npm run build && publisssh ./build zooniverse-static/www.zooniverse.org/$DEPLOY_SUBDIR",
-    "deploy-branch": "export DEPLOY_SUBDIR=$(git symbolic-ref --short HEAD); npm run deploy",
-    "stage": "export DEPLOY_SUBDIR=${DEPLOY_SUBDIR:-panoptes-front-end}; export NODE_ENV=staging; npm run build && publisssh ./build \"zooniverse-static/preview.zooniverse.org/$DEPLOY_SUBDIR\"",
-    "stage-branch": "export DEPLOY_SUBDIR=\"panoptes-front-end/$(git symbolic-ref --short HEAD)\"; npm run stage;  echo \"Deployed to http://$(git symbolic-ref --short HEAD).pfe-preview.zooniverse.org/\";",
-    "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
+
+    "build": "check-engines && webpack --config ./webpack.build.js --progress --profile --colors",
+    "clean": "rimraf dist",
+    "prep": "export NODE_ENV=staging; npm run clean && npm run build",
+    "publish": "publisssh ./dist \"zooniverse-static/${BUCKET}/$DEPLOY_SUBDIR\" $PUBLISH_FLAGS",
+    "serve": "export NODE_ENV=staging; check-engines && node server.js",
+    "start": "export NODE_ENV=development; check-engines && babel-node server_dev.js",
+
+    "_deploy": "export BUCKET=www.zooniverse.org; npm run clean && npm run build && npm run publish",
+    "deploy": "export NODE_ENV=production; export DEPLOY_SUBDIR=panoptes-front-end; export PUBLISH_FLAGS=\"-d\" npm run _deploy",
+
+    "_stage": "export BUCKET=preview.zooniverse.org; npm run clean && npm run build && npm run publish",
+    "stage": "export NODE_ENV=staging; export DEPLOY_SUBDIR=panoptes-front-end; npm run _stage",
+    "stage-branch": "export NODE_ENV=staging; export BRANCH_SUBDIR=$(git symbolic-ref --short HEAD); export DEPLOY_SUBDIR=panoptes-front-end/${BRANCH_SUBDIR}; export PUBLISH_FLAGS=\"-r\"; npm run _stage; echo \"Link: https://${BRANCH_SUBDIR}.pfe-preview.zooniverse.org/\"",
+
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
-    "start": "check-engines && ./bin/serve.sh",
+    "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
+
     "test": "echo 'Integration tests have moved to the panoptes-client library.'"
   }
 }

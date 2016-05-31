@@ -6,7 +6,7 @@ drawingTools = require '../drawing-tools'
 alert = require '../../lib/alert'
 DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
-{MarkdownEditor} = require 'markdownz'
+{MarkdownEditor} = (require 'markdownz').default
 MarkdownHelp = require '../../partials/markdown-help'
 
 module.exports = React.createClass
@@ -122,7 +122,7 @@ module.exports = React.createClass
                             for toolKey of drawingTools
                               <option key={toolKey} value={toolKey}>{toolKey}</option>
                           else
-                            for toolKey of drawingTools 
+                            for toolKey of drawingTools
                               <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey is "column"}
                         </select>
                       </AutoSave>

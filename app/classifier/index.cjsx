@@ -277,8 +277,7 @@ Classifier = React.createClass
           HelpButton = (props) =>
             <button type="button" onClick={=>
               {alert} = require 'modal-form/dialog'
-              {Markdown} = require 'markdownz'
-              console.log {Markdown}
+              {Markdown} = (require 'markdownz').default
               alert <Markdown>{@props.workflow.tasks[@props.workflow.first_task].help}</Markdown>
             }>
               {props.children}

@@ -7,7 +7,7 @@ PromiseRenderer = require '../components/promise-renderer'
 ZooniverseLogoType = require '../partials/zooniverse-logotype'
 OwnedCard = require '../partials/owned-card'
 FEATURED_PRODUCT_IDS = require '../lib/featured-projects'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 ProjectIcon = require '../components/project-icon'
 
 counterpart.registerTranslations 'en',
