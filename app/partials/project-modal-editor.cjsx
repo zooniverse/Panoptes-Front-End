@@ -5,7 +5,6 @@ FileButton = require '../components/file-button'
 {MarkdownEditor} = (require 'markdownz').default
 debounce = require 'debounce'
 DragReorderable = require 'drag-reorderable'
-CroppedImage = require '../components/cropped-image'
 classnames = require 'classnames'
 
 ProjectModalStepEditor = React.createClass
