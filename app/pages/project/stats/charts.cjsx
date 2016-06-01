@@ -46,20 +46,25 @@ Graph = React.createClass
         onlyInteger: true
     optionsSmall:
       axisX:
-        offset: 90
-        #showLabel: false
+        offset: 15
+        position: 'start'
+        labelOffset:
+          y: -5
         showGrid: false
       axisY:
         offset: 0
         showLabel: false
         showGrid: false
       width: '100%'
-      height: '50px'
+      height: '70px'
       chartPadding:
         top: 0
         right: 15
         bottom: 0
         left: 15
+      classNames:
+        label: 'ct-label-range'
+        labelGroup: 'ct-labels-range'
 
   processData: (inputData, binBy) ->
     data =
@@ -86,6 +91,15 @@ Graph = React.createClass
     maxIdx = @props.range[1] ? max
     midIdx = minIdx + maxIdx
     {minIdx, maxIdx, midIdx}
+    
+  setDefaultRange: ->
+    min = Math.max @state.data.labels.length - @props.num, 0
+    max = @state.data.labels.length - 1
+    newState =
+      minIdx: min
+      maxIdx: max
+      midIdx: min + max
+    @setState(newState, @onRangeChange)
     
   shouldComponentUpdate: (nextProps, nextState) ->
     return (@state isnt nextState) or (@props.by isnt nextProps.by) or (@props.data isnt nextProps.data)
@@ -139,8 +153,13 @@ Graph = React.createClass
   onDrawSmall: (data) ->
     if data.type == 'label'
       if data.axis.units.dir == 'horizontal'
-        if ([@state.minIdx, @state.maxIdx].indexOf(data.index) < 0)          
+        if ([0, @state.data.labels.length - 1].indexOf(data.index) < 0)          
           data.element.attr({style: "display: none"})
+        else
+          data.element.attr({width: 100})
+          if data.index > 0
+            newX = data.element.parent().parent().width() - 100
+            data.element.attr({x: newX, class: 'ct-label-range-last'})
     if data.type == 'bar'
       style = "stroke-width: #{100 / @state.data.labels.length}%"
       if (data.index >= @state.minIdx & data.index <= @state.maxIdx)
@@ -174,6 +193,10 @@ Graph = React.createClass
     if @state.data.labels.length > @props.num
       smallChart =
         <div>
+          <DateRange
+            dateMin={@state.data.labels[@state.minIdx]}
+            dateMax={@state.data.labels[@state.maxIdx]}
+            setDefaultRange={@setDefaultRange} />
           <ChartistGraph listener={draw: @onDrawSmall} type="Bar" data={@state.data} options={@props.optionsSmall} />
           <div className="top-slider">
             <Rcslider
@@ -203,6 +226,14 @@ Graph = React.createClass
     <div className="svg-container">
       {smallChart}
       <ChartistGraph className="ct-major-tenth" listener={draw: @onDraw} type="Bar" data={dataSlice} options={@props.options} />
+    </div>
+
+DateRange = React.createClass
+  render: ->
+    <div className="date-range">
+      <span className="progress-stats-label">Current date range:</span>
+      <span>{' ' + @props.dateMin + ' to ' + @props.dateMax}</span>
+      <button className="standard-button date-reset" onClick={@props.setDefaultRange}>Reset date range</button>
     </div>
 
 module.exports =
