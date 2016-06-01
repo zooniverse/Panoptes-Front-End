@@ -111,16 +111,17 @@ module.exports = React.createClass
         for tool, tdx in v.tools
           subList = []
           # make subtasks into their own tasks (use lowest task number not in use)
-          for st, sdx in tool.details
-            tmp = 'S' + L
-            subList.push(tmp)
-            keys.push(tmp)
-            workflow[tmp] = clone(st)
-            workflow[tmp].subtask = true
-            L += 1
-            # set 'next' to be the next subtask in the list (if it exists)
-            if tool.details[sdx + 1]?
-              workflow[tmp].next = 'S' + L
+          if tool.details?
+            for st, sdx in tool.details
+              tmp = 'S' + L
+              subList.push(tmp)
+              keys.push(tmp)
+              workflow[tmp] = clone(st)
+              workflow[tmp].subtask = true
+              L += 1
+              # set 'next' to be the next subtask in the list (if it exists)
+              if tool.details[sdx + 1]?
+                workflow[tmp].next = 'S' + L
           # replace details with a list of keys
           workflow[k].tools[tdx].details = subList
     # make sure the keys are in number order
