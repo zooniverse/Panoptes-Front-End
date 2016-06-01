@@ -131,7 +131,12 @@ module?.exports = React.createClass
 
                 <div className="list">
                   {for notification in @state.notifications
-                    <Notification notification={notification} key={notification.id} user={@props.user} />
+                    <Notification
+                      notification={notification}
+                      key={notification.id}
+                      user={@props.user}
+                      project={@props.project}
+                      params={@props.params} />
                   }
                 </div>
 
