@@ -13,6 +13,17 @@ counterpart.registerTranslations 'en',
     button: 'View Collection'
     loadMessage: 'Loading Collections'
     notFoundMessage: 'No Collections Found'
+  title:
+    collections:
+      all:
+        self: 'All Collections'
+      user:
+        self: 'All %(collectionOwnerName)s\'s Collections'
+    favorites:
+      all:
+        self: 'All Favorites'
+      user:
+        self: 'All %(collectionOwnerName)s\'s Favorites'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
@@ -24,19 +35,23 @@ CollectionsNav = React.createClass
 
   # render a link from a contextual-links link object
   renderLink: (link) ->
-    <Link key="#{link.key}" to="#{link.to}" activeClassName="active">
-      {@generateTranslateLink(link.message)}
-    </Link>
+    if link.type=="IndexLink"
+      <IndexLink key="#{link.key}" to="#{link.to}" activeClassName="active">
+        {@generateTranslateLink(link.message)}
+      </IndexLink>
+    else
+      <Link key="#{link.key}" to="#{link.to}" activeClassName="active">
+        {@generateTranslateLink(link.message)}
+      </Link>
 
   # TODO add message/stats links in the middle here
   renderNavBar: ->
     <nav className="hero-nav">
-      {@renderNavLinks(@props.titleAndNavLinks.contextualLinks)}
-      {@renderNavLinks(@props.titleAndNavLinks.zooniverseLinks)}
+      {@renderNavLinks(@props.titleAndNavLinks.links)}
     </nav>
 
   renderNavLinks: (links) ->
-    for i, link of navLinks
+    for i, link of links
       @renderLink(link)
 
   render: ->
@@ -58,7 +73,7 @@ List = React.createClass
     [owner, name] = collection.slug.split('/')
     ContextualLinks.prefixLinkIfNeeded(@props,"/collections/#{owner}/#{name}")
 
-  listCollections: (collectionOwner,project) ->
+  listCollections: ->
     filters = ContextualLinks.getFiltersFromPath(@props)
     query = {}
     for field, value of filters
@@ -70,17 +85,19 @@ List = React.createClass
     apiClient.type('collections').get query
 
   render: ->
-    @props.translationObjectName = "collectionsPage"
-    @props.titleAndNavLinks = ContextualLinks.getContextualTitleAndNavLinks(@props)
-    @props.contextUserLogin = ContextualLinks.getContextUserLogin(@props)
+    titleAndNavLinks = ContextualLinks.getContextualTitleAndNavLinks(@props)
+    contextUserLogin = ContextualLinks.getContextUserLogin(@props)
     <OwnedCardList
       {...@props}
-      listPromise = {@listCollections(@props.contextUserLogin)}
+      translationObjectName = "collectionsPage"
+      contextUserLogin = {contextUserLogin}
+      titleAndNavLinks = {titleAndNavLinks}
+      listPromise = {@listCollections()}
       linkTo = "collections"
-      titleMessageObject = {@props.titleAndNavLinks.title}
-      heroNav={<CollectionsNav {...@props} />}
+      titleMessageObject = {titleAndNavLinks.title}
+      heroNav={<CollectionsNav {...@props} contextUserLogin={contextUserLogin} titleAndNavLinks={titleAndNavLinks} />}
       heroClass = "collections-hero"
-      ownerName = {@props.contextUserLogin}
+      ownerName = {contextUserLogin}
       skipOwner = {!@props.params?.owner}
       imagePromise = {@imagePromise}
       cardLink = {@cardLink} />

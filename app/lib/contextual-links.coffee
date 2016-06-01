@@ -104,6 +104,11 @@ module.exports =
     else
       return filterType
 
+  viewingAUsersCollectionsOrFavorites: (props) ->
+    pathParts = props.location.pathname.split('/')
+    [first, ..., penultimate, last] = pathParts
+    return last!="" and (penultimate == "collections" or penultimate == "favorites")
+
   viewingAUserProfile: (props) ->
     pathParts = props.location.pathname.split('/')
     [first, ..., penultimate, last] = pathParts
@@ -117,12 +122,12 @@ module.exports =
   # determine current context according to whether we are in a project and whether we are focussed on a user
   getCurrentContext: (props, contextUserLogin=@getContextUserLogin(props)) ->
     if props.project?
-      if contextUserLogin?
+      if @viewingAUsersCollectionsOrFavorites(props)
         "user-and-project"
       else
         "project"
     else
-      if contextUserLogin?
+      if @viewingAUsersCollectionsOrFavorites(props)
         "user"
       else
         "all"
@@ -168,7 +173,13 @@ module.exports =
     else
       "all"
 
-
+  # get a link that is the non-project-specific version of current page    
+  getRemoveProjectContextLink: (props) ->
+    pathParts = props.location.pathname.split('/')
+    [first, ...] = pathParts
+    if first == "projects"
+      return pathParts[3...].join("/")
+      
   # construct a message key for a link or title
   getMessageKey: (props,desiredBaseType,desiredFilterType,currentPerspective,title=false) ->
     messageKey = ""
@@ -183,10 +194,12 @@ module.exports =
       
     messageKey += ".#{desiredBaseType}.#{@convertFilterTypeForUseInMessageKey(desiredFilterType)}"
     
-    if perspective?
+    if currentPerspective?
       messageKey += ".#{currentPerspective}"
+    else
+      messageKey += ".other"
     messageKey
-    
+
   # get message object with needed data for inserts
   getMessageWithData: (props,
     contextUserLogin=@getContextUserLogin(props),
@@ -232,6 +245,15 @@ module.exports =
       url += "#{@getContextUserLogin(props)}/"
     return url
 
+  # returns a new filter type, adding in a user filter to whatever is currently present
+  getFilterTypeWithUserFilterAdded: (currentFilterType) ->
+    if currentFilterType=="project"
+      return "user-and-project"
+    else if currentFilterType=="all"
+      return "user"
+    else
+      return currentFilterType
+
   # get an object with all the necessary information to render a link
   getLink: (props,
     contextUserLogin=@getContextUserLogin(props),
@@ -241,57 +263,91 @@ module.exports =
     currentPerspective=@getCurrentPerspective(props),
     title = false) ->
 
-    url = @getURL(props,baseType,desiredFilterType)
+    url = @getURL(props,desiredBaseType,desiredFilterType)
 
+    if desiredFilterType=="all" or desiredFilterType=="project"
+      linkType="IndexLink"
+    else
+      linkType="Link"
+      
     return {
       message: @getMessageWithData(props,contextUserLogin,currentContext,desiredFilterType,desiredBaseType,currentPerspective,title)
       to: url
+      type: linkType
       key: @generateUniqueKeyForLinkInstance(url)
       baseType: desiredBaseType
     }
 
-  # for example, if we are viewing collections, this is all the collections links
-  getContextualLinksForThisBaseType: (props,
-    contextUserLogin=@getContextUserLogin(props),
-    currentContext=@getCurrentContext(props,contextUserLogin),
-    currentFilterType=@getCurrentFilterType(props),
-    currentBaseType=@getCurrentBaseType(props),
-    currentPerspective=@getCurrentPerspective(props)) ->
-
-    return [@getLink(props,contextUserLogin,currentContext,currentFilterType,currentBaseType,currentPerspective,false)]
-
-  # for example, if we are viewing collections, this is all the favorites links
-  getContextualLinksForOppositeBaseType: (props,
-    contextUserLogin=@getContextUserLogin(props),
-    currentContext=@getCurrentContext(props,contextUserLogin),
-    currentFilterType=@getCurrentFilterType(props),
-    currentBaseType=@getCurrentBaseType(props),
-    currentPerspective=@getCurrentPerspective(props)) ->
-
+  getOppositeBaseType: (baseType) ->
     if baseType=="collections"
-      desiredBaseType="favorites"
+      return "favorites"
     else if baseType=="favorites"
-      desiredBaseType="collections"
+      return "collections"
     else
-      return []
+      return baseType
 
-    return [@getLink(props,contextUserLogin,currentContext,currentFilterType,desiredBaseType,currentPerspective,false)]
+  # links to "all collections", "all favorites", "all project collections", "all project favorites" etc.
+  getContextualLinksAcrossUsers: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin),
+    currentFilterType=@getCurrentFilterType(props),
+    currentBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props)) ->
 
-  removeProjectFromContext: (context) ->
-    context = "user" if context == "user-and-project"
-    context = "all" if context == "project"
-    return context
+    links = []
+    if currentContext.includes("project")
+      desiredFilterType="project"
+    else
+      desiredFilterType="all"
+    links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,currentPerspective,false)
+    return links
 
-  # for example, if we are viewing collections, this is links to view collections in a non-project context
+  # links to "user's collections", "user's favorites", "user's project collections", "user's project favorites" etc.
+  getContextualLinksForThisUser: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin),
+    currentFilterType=@getCurrentFilterType(props),
+    currentBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props)) ->
+    links = []
+    if currentContext.includes("user")
+      links.push @getLink(props,contextUserLogin,currentContext,currentFilterType,currentBaseType,currentPerspective,false)
+      links.push @getLink(props,contextUserLogin,currentContext,currentFilterType,@getOppositeBaseType(currentBaseType),currentPerspective,false)
+    return links
+
+  # links to "my collections", "my favorites", etc. (if not already covered in getContextualLinksForThisUser)
+  getContextualLinksForSelf: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin),
+    currentFilterType=@getCurrentFilterType(props),
+    currentBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props)) ->
+
+    links = []
+    if currentContext.includes("user") and (props.user?) and currentPerspective!="self"
+      links.push @getLink(props,props.user.login,currentContext,currentFilterType,currentBaseType,currentPerspective,false)
+      links.push @getLink(props,props.user.login,currentContext,currentFilterType,@getOppositeBaseType(currentBaseType),currentPerspective,false)
+    return links
+
+  # A "To the Zooniverse!" project context removal link that will view the same user & baseType in a non-project context
   getZooniverseLinksForThisBaseType: (props,
     contextUserLogin=@getContextUserLogin(props),
     currentContext=@getCurrentContext(props,contextUserLogin),
     currentFilterType=@getCurrentFilterType(props),
     currentBaseType=@getCurrentBaseType(props),
     currentPerspective=@getCurrentPerspective(props),
-    desiredFilterType = @removeProjectFromFilterType(filterType)) ->
+    desiredFilterType=@removeProjectFromFilterType(currentFilterType)) ->
 
-    return [@getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,currentPerspective,false)]
+    zooniverseLinks = []
+    if currentContext.includes("project")
+      # if in project context, add "remove project context" link
+      zooniverseLinks.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,currentPerspective,false)
+    return zooniverseLinks
+
+  removeProjectFromFilterType: (filterType) ->
+    filterType = "user" if filterType == "user-and-project"
+    filterType = "all" if filterType == "project"
+    return filterType
 
   # sort function that always puts collections before favorites, and leaves everything else untouched.
   sortForCollectionsAndFavorites: (linkA,linkB) ->
@@ -309,18 +365,24 @@ module.exports =
     perspective = @getCurrentPerspective(props)
     baseType = @getCurrentBaseType(props)
     filterType = @getCurrentFilterType(props)
-    title = @getMessageWithData(props, contextUserLogin, filterType, baseType, perspective, true)
-    contextualLinks = {}
-    contextualLinks.concat @getLinksForThisBaseType(props,contextUserLogin)
-    contextualLinks.concat @getLinksForOppositeBaseType(props,contextUserLogin)
-    contextualLinks.sort @sortForCollectionsAndFavorites
-    zooniverseLinks = {}
-    zooniverseLinks.concat @getZooniverseLinksForThisBaseType(props, contextUserLogin)
+    title = @getMessageWithData(props, contextUserLogin, context, filterType, baseType, perspective, true)
+
+    crossUsersContextualLinks = @getContextualLinksAcrossUsers(props,contextUserLogin)
+    crossUsersContextualLinks.sort @sortForCollectionsAndFavorites
+    console.log "broad",crossUsersContextualLinks
+    thisUserContextualLinks = @getContextualLinksForThisUser(props,contextUserLogin)
+    thisUserContextualLinks.sort @sortForCollectionsAndFavorites
+    console.log "user",thisUserContextualLinks
+    selfContextualLinks = @getContextualLinksForThisUser(props,contextUserLogin)
+    selfContextualLinks.sort @sortForCollectionsAndFavorites
+    console.log "self",selfContextualLinks
+    zooniverseLinks = @getZooniverseLinksForThisBaseType(props, contextUserLogin)
     zooniverseLinks.sort @sortForCollectionsAndFavorites
+    console.log "zoo",zooniverseLinks
+    orderedLinks = crossUsersContextualLinks.concat thisUserContextualLinks, selfContextualLinks, zooniverseLinks
 
     return {
       title: title
-      contextualLinks: contextualLinks
-      zooniverseLinks: zooniverseLinks
+      links: orderedLinks
     }
 
