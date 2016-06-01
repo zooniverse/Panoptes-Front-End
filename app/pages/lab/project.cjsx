@@ -96,16 +96,16 @@ EditProjectPage = React.createClass
             <div className="nav-list-header">Workflows</div>
             <PromiseRenderer promise={getWorkflowsInOrder @props.project}>{(workflows) =>
               renderWorkflowListItem = (workflow) =>
-                <li key={workflow.id}>
-                  <Link to={@labPath "/workflow/#{workflow.id}"} className="nav-list-item" activeClassName="active">
-                    {workflow.display_name}
-                    {if workflow.id is @props.project.configuration?.default_workflow
-                      <span title="Default workflow">{' '}*{' '}</span>}
-                  </Link>
-                </li>
+                <Link to={@labPath "/workflow/#{workflow.id}"} className="nav-list-item" activeClassName="active">
+                  {workflow.display_name}
+                  {if workflow.id is @props.project.configuration?.default_workflow
+                    <span title="Default workflow">{' '}*{' '}</span>}
+                </Link>
 
               renderWorkflowListItemListener = (workflow) =>
-                <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind null, workflow} />
+                <li key={workflow.id}>
+                  <ChangeListener target={workflow} eventName="save" handler={renderWorkflowListItem.bind null, workflow} />
+                </li>
 
               <DragReorderable tag="ul" className="nav-list" items={workflows} render={renderWorkflowListItemListener} onChange={@handleWorkflowReorder} />
             }</PromiseRenderer>
