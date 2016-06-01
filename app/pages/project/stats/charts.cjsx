@@ -46,8 +46,8 @@ Graph = React.createClass
         onlyInteger: true
     optionsSmall:
       axisX:
-        offset: 0
-        showLabel: false
+        offset: 90
+        #showLabel: false
         showGrid: false
       axisY:
         offset: 0
@@ -137,6 +137,10 @@ Graph = React.createClass
       ).text(data.series[data.index])
 
   onDrawSmall: (data) ->
+    if data.type == 'label'
+      if data.axis.units.dir == 'horizontal'
+        if ([@state.minIdx, @state.maxIdx].indexOf(data.index) < 0)          
+          data.element.attr({style: "display: none"})
     if data.type == 'bar'
       style = "stroke-width: #{100 / @state.data.labels.length}%"
       if (data.index >= @state.minIdx & data.index <= @state.maxIdx)
