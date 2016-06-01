@@ -105,8 +105,6 @@ module.exports =
         <Route path="message" component={require './pages/profile/private-message'} />
         <Route path="stats" component={require './pages/profile/stats'} />
       </Route>
-      <Route path="faq" component={require './pages/project/faq'} />
-      <Route path="education" component={require './pages/project/education'} />
       <Route path="stats" component={require './pages/project/stats'} />
     </Route>
 
