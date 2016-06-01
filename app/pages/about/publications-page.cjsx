@@ -369,7 +369,7 @@ module.exports = React.createClass
                           <p>
                             <cite>{publication.citation}</cite><br />
                             {if publication.href? then <a href={publication.href} target="_blank">View publication.</a>}{' '}
-                            {if publication.openAccess then <a href={publication.openAccess} target="_blank">View open access version.</a>}
+                            {if publication.openAccess? then <a href={publication.openAccess} target="_blank">View open access version.</a>}
                           </p>
                         </div>
                       </li>}
