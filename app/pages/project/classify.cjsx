@@ -15,7 +15,7 @@ MiniCourse = require '../../lib/mini-course'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
-PROMPT_MINI_COURSE_EVERY = 2
+PROMPT_MINI_COURSE_EVERY = 5
 
 SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
 
