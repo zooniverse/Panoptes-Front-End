@@ -257,7 +257,7 @@ Task = React.createClass
     <Resizable className={box_class} style={clone(@state.style)} id={@props.plumbId} ref={@props.plumbId} embedCss={false} onResize={@onResize}>
       <div className='drag-handel'>
         <span className='box-head noselect'>
-          {"Sub-" if @state.task.subtask}{"Task #{@props.taskKey.substr(1)}: "}{icon}{" #{@state.task.type.charAt(0).toUpperCase()}#{@state.task.type.substr(1)}"}
+          {"Sub-" if @state.task.subtask}{"Task #{@props.taskKey}: "}{icon}{" #{@state.task.type.charAt(0).toUpperCase()}#{@state.task.type.substr(1)}"}
         </span>
         <br />
       </div>
