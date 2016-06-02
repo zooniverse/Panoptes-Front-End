@@ -1,6 +1,5 @@
 {
-  "name": "panoptes",
-  "version": "0.0.2",
+  "name": "panoptes-front-end",
   "dependencies": {
     "animated-scrollto": "~1.1.0",
     "babelify": "~6.4.0",
@@ -27,7 +26,7 @@
     "react": "~0.14.1",
     "react-chartist": "~0.10.1",
     "react-component-resizable": "~0.3.0",
-    "react-dom": "^0.14.1",
+    "react-dom": "~0.14.1",
     "react-interpolate-component": "~0.8.0",
     "react-pullout": "~1.0.1",
     "react-router": "~1.0.0",
@@ -77,23 +76,19 @@
     "npm": "^2.14.7"
   },
   "scripts": {
+    "start": "export NODE_ENV=development; check-engines && babel-node ./dev-server.js",
 
-    "build": "check-engines && webpack --config ./webpack.build.js --progress --profile --colors",
-    "clean": "rimraf dist",
-    "prep": "export NODE_ENV=staging; npm run clean && npm run build",
-    "publish": "publisssh ./dist \"zooniverse-static/${BUCKET}/$DEPLOY_SUBDIR\" $PUBLISH_FLAGS",
-    "serve": "export NODE_ENV=staging; check-engines && node server.js",
-    "start": "export NODE_ENV=development; check-engines && babel-node server_dev.js",
+    "_build": "check-engines && rimraf dist; webpack --config ./webpack.build.js --progress --profile --colors",
+    "serve-static": "export NODE_ENV=staging; check-engines && npm run _build && node ./static-server.js",
 
-    "_deploy": "export BUCKET=www.zooniverse.org; npm run clean && npm run build && npm run publish",
-    "deploy": "export NODE_ENV=production; export DEPLOY_SUBDIR=panoptes-front-end; export PUBLISH_FLAGS=\"-d\" npm run _deploy",
+    "_publish": "publisssh ./dist \"zooniverse-static/${DOMAIN}/panoptes-front-end/$SUBDIR\" $PUBLISH_FLAGS",
+    "_log-staging-url": "echo \"Staged at https://$SUBDIR.pfe-preview.zooniverse.org/\"",
+    "_stage": "export DOMAIN=preview.zooniverse.org; npm run _build && npm run _publish && npm run _log-staging-url",
+    "stage": "export NODE_ENV=staging; export SUBDIR=$(git symbolic-ref --short HEAD); export PUBLISH_FLAGS=--remove; npm run _stage",
+    "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
 
-    "_stage": "export BUCKET=preview.zooniverse.org; npm run clean && npm run build && npm run publish",
-    "stage": "export NODE_ENV=staging; export DEPLOY_SUBDIR=panoptes-front-end; npm run _stage",
-    "stage-branch": "export NODE_ENV=staging; export BRANCH_SUBDIR=$(git symbolic-ref --short HEAD); export DEPLOY_SUBDIR=panoptes-front-end/${BRANCH_SUBDIR}; export PUBLISH_FLAGS=\"-r\"; npm run _stage; echo \"Link: https://${BRANCH_SUBDIR}.pfe-preview.zooniverse.org/\"",
-
-    "stage-with-docker": "./bin/run-through-docker.sh 'npm run-script stage'",
-    "stage-branch-with-docker": "./bin/run-through-docker.sh 'npm run-script stage-branch'",
+    "_deploy": "export DOMAIN=www.zooniverse.org; npm run _build && npm run _publish",
+    "deploy": "export NODE_ENV=production; npm run _deploy",
 
     "test": "echo 'Integration tests have moved to the panoptes-client library.'"
   }
