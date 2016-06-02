@@ -76,7 +76,7 @@
   "scripts": {
     "start": "export NODE_ENV=development; check-engines && babel-node ./dev-server.js",
 
-    "_build": "check-engines && rimraf dist; webpack --config ./webpack.build.js --progress --profile --colors",
+    "_build": "export HEAD_COMMIT=$(git rev-parse --short HEAD); check-engines && rimraf dist; webpack --config ./webpack.build.js --progress --profile --colors",
     "serve-static": "export NODE_ENV=staging; check-engines && npm run _build && node ./static-server.js",
 
     "_publish": "publisssh ./dist \"zooniverse-static/$PATH_ROOT/$SUBDIR\" $PUBLISH_FLAGS",
