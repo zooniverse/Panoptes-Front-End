@@ -19,7 +19,7 @@ SingleSubmitButton = require '../components/single-submit-button'
 DisplayRoles = require './lib/display-roles'
 CommentContextIcon = require './lib/comment-context-icon'
 merge = require 'lodash.merge'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 DEFAULT_AVATAR = './assets/simple-avatar.jpg'
 
 module?.exports = React.createClass

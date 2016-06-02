@@ -2,7 +2,7 @@ React = require 'react'
 moment = require 'moment'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 PAGE_SIZE = require('../../talk/config').discussionPageSize
 
 module?.exports = React.createClass

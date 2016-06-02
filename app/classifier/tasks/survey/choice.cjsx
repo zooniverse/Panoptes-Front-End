@@ -1,6 +1,6 @@
 React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 Utility = require './utility'
 
 ImageFlipper = React.createClass

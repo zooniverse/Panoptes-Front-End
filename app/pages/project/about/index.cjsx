@@ -1,6 +1,6 @@
 React = require 'react'
 TitleMixin = require '../../../lib/title-mixin'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 PromiseRenderer = require '../../../components/promise-renderer'
 Translate = require 'react-translate-component'
 counterpart = require 'counterpart'
