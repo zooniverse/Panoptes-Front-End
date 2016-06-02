@@ -2,7 +2,7 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 Dialog = require 'modal-form/dialog'
 MediaCard = require '../components/media-card'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 apiClient = require 'panoptes-client/lib/api-client'
 
 minicoursesCompletedThisSession = {}
@@ -48,9 +48,9 @@ module.exports = React.createClass
               null # We don't really care if the user canceled or completed the tutorial.
 
     restart: (minicourse, projectPreferences, project, user) ->
-      resetPreferences = { 
-        "preferences.minicourses.opt_out.id_#{minicourse.id}": false, 
-        "preferences.minicourses.slide_to_start.id_#{minicourse.id}": 0 
+      resetPreferences = {
+        "preferences.minicourses.opt_out.id_#{minicourse.id}": false,
+        "preferences.minicourses.slide_to_start.id_#{minicourse.id}": 0
         "preferences.minicourses.completed_at.id_#{minicourse.id}": null
       }
 
@@ -78,16 +78,16 @@ module.exports = React.createClass
         window.prefs = projectPreferences
         if projectPreferences.preferences.minicourses.completed_at?["id_#{minicourse.id}"]?
           Promise.resolve projectPreferences.preferences.minicourses.completed_at?["id_#{minicourse.id}"]?
-        else 
+        else
           Promise.resolve projectPreferences.preferences.minicourses.opt_out["id_#{minicourse.id}"]
       else if user?
         newProjectPreferences = @createProjectPreferences(projectPreferences, minicourse.id, project.id)
         Promise.resolve newProjectPreferences.preferences.minicourses.opt_out["id_#{minicourse.id}"]
 
     createProjectPreferences: (projectPreferences, minicourseID, projectID) ->
-      defaultPreferences = { 
-        "preferences.minicourses.opt_out.id_#{minicourseID}": false, 
-        "preferences.minicourses.slide_to_start.id_#{minicourseID}": 0 
+      defaultPreferences = {
+        "preferences.minicourses.opt_out.id_#{minicourseID}": false,
+        "preferences.minicourses.slide_to_start.id_#{minicourseID}": 0
       }
 
       projectPreferences ?= apiClient.type('project_preferences').create({
@@ -108,7 +108,7 @@ module.exports = React.createClass
 
   getInitialState: ->
     optOut: false
-  
+
   componentDidMount: ->
     # If user navigates away, record the next slide to load in prefs
     window.addEventListener 'beforeunload', @handleProjectPreferencesOnUnmount
@@ -118,7 +118,7 @@ module.exports = React.createClass
 
     if @props.user?
       @handleProjectPreferencesOnUnmount()
-  
+
   render: ->
     step = @props.minicourse.steps[@props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"]]
     <div className="mini-course-dialog__steps">
@@ -129,7 +129,7 @@ module.exports = React.createClass
           {if @props.user?
             <label className="action__opt-out">
               <input type="checkbox" onChange={@handleOptOut} checked={@state.optOut} />
-              Do not show mini-course in the future 
+              Do not show mini-course in the future
             </label>}
           <button type="submit" className="standard-button action__button">
             {if @state.optOut
@@ -158,6 +158,6 @@ module.exports = React.createClass
       @props.projectPreferences.save()
     else
       nextSlide = @props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"] + 1
-      
+
       @props.projectPreferences.update "preferences.minicourses.slide_to_start.id_#{@props.minicourse.id}": nextSlide
       @props.projectPreferences.save()
