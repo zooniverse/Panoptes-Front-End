@@ -5,10 +5,9 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+var config = {
   devtool: 'eval-source-map',
   entry: [
-    'webpack-hot-middleware/client?reload=true',
     path.join(__dirname, 'app/main.cjsx')
   ],
   output: {
@@ -29,9 +28,7 @@ module.exports = {
       template: 'views/index.ejs',
       inject: 'body',
       filename: 'index.html'
-    }),
-    new webpack.HotModuleReplacementPlugin(),
-    // new webpack.NoErrorsPlugin(),
+    })
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.styl', '.css'],
@@ -74,3 +71,10 @@ module.exports = {
     fs: "empty"
   }
 };
+
+if (process.env.BABEL_ENV === 'hot-reload') {
+  config.entry.unshift('webpack-hot-middleware/client?reload=true');
+  config.plugins.push(new webpack.HotModuleReplacementPlugin());
+}
+
+module.exports = config;

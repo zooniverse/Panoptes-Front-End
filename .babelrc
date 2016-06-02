@@ -3,6 +3,11 @@
   "env": {
     "development": {
       "plugins": [
+        ["transform-react-jsx"]
+      ]
+    },
+    "hot-reload": {
+      "plugins": [
         ["react-transform", {
           "transforms": [{
             "transform": "react-transform-hmr",
