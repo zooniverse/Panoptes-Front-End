@@ -51,7 +51,7 @@ module.exports = React.createClass
     frameDisplay = switch type
       when 'image'
         <div className="subject-image-frame" >
-          <img ref="subjectImage" className={"subject pan-active"} src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} tabIndex={0} onFocus={@togglePanOn} onBlur={@togglePanOff}/>
+          <img ref="subjectImage" className="subject pan-active" src={src} style={SUBJECT_STYLE} onLoad={@handleLoad} tabIndex={0} onFocus={@togglePanOn} onBlur={@togglePanOff}/>
 
           {if @state.loading
             <div className="loading-cover" style={@constructor.overlayStyle} >
@@ -75,15 +75,15 @@ module.exports = React.createClass
           <div className="pan-zoom-controls" >
             <div className="draw-pan-toggle" >
               <div className={if @state.panEnabled then "" else "active"} >
-                <button title={"draw"} title={"annotate"} className={"fa fa-mouse-pointer"} onClick={@togglePanOff}/>
+                <button title="annotate" className="fa fa-mouse-pointer" onClick={@togglePanOff}/>
               </div>
               <div className={if @state.panEnabled then "active" else ""}>
-                <button title={"pan"} ref="pan" className={"fa fa-arrows"} onClick={@handleFocus.bind(this, "pan")} onFocus={@togglePanOn} onBlur={@togglePanOff}/>
+                <button title="pan" ref="pan" className="fa fa-arrows" onClick={@handleFocus.bind(this, "pan")} onFocus={@togglePanOn} onBlur={@togglePanOff}/>
               </div>
             </div>
             <div>
               <button
-                title={ "zoom out" }
+                title="zoom out"
                 ref="zoomOut"
                 className={"zoom-out fa fa-minus" + if @cannotZoomOut() then " disabled" else "" }
                 onMouseDown={ @continuousZoom.bind(this, 1.1 ) }
@@ -97,9 +97,9 @@ module.exports = React.createClass
             </div>
             <div>
               <button
-                title={ "zoom in" }
+                title="zoom in"
                 ref="zoomIn"
-                className={ "zoom-in fa fa-plus" }
+                className="zoom-in fa fa-plus"
                 onMouseDown={@continuousZoom.bind(this, .9)}
                 onMouseUp={@stopZoom}
                 onKeyDown={@keyDownZoomButton.bind(this,.9)}
@@ -110,7 +110,7 @@ module.exports = React.createClass
               />
             </div>
             <div>
-              <button title={"reset zoom levels"} className={"reset fa fa-refresh" + if @cannotZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
+              <button title="reset zoom levels" className={"reset fa fa-refresh" + if @cannotZoomOut() then " disabled" else ""} onClick={ this.zoomReset } ></button>
             </div>
           </div>}
 
