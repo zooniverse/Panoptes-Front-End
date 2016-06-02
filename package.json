@@ -79,13 +79,13 @@
     "_build": "check-engines && rimraf dist; webpack --config ./webpack.build.js --progress --profile --colors",
     "serve-static": "export NODE_ENV=staging; check-engines && npm run _build && node ./static-server.js",
 
-    "_publish": "publisssh ./dist \"zooniverse-static/${DOMAIN}/panoptes-front-end/$SUBDIR\" $PUBLISH_FLAGS",
+    "_publish": "publisssh ./dist \"zooniverse-static/$PATH_ROOT/$SUBDIR\" $PUBLISH_FLAGS",
     "_log-staging-url": "echo \"Staged at https://$SUBDIR.pfe-preview.zooniverse.org/\"",
-    "_stage": "export DOMAIN=preview.zooniverse.org; npm run _build && npm run _publish && npm run _log-staging-url",
+    "_stage": "export PATH_ROOT=preview.zooniverse.org/panoptes-front-end; npm run _build && npm run _publish && npm run _log-staging-url",
     "stage": "export NODE_ENV=staging; export SUBDIR=$(git symbolic-ref --short HEAD); export PUBLISH_FLAGS=--remove; npm run _stage",
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
 
-    "_deploy": "export DOMAIN=www.zooniverse.org; npm run _build && npm run _publish",
+    "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
 
     "test": "echo 'Integration tests have moved to the panoptes-client library.'"
