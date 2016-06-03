@@ -9,7 +9,16 @@ module?.exports = React.createClass
   displayName: 'PrivateMessageForm'
   mixins: [History]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logClick: ->
+    @context?.geordi?.logEvent
+      type: 'send-message'
+      data: {sender: @props.user.display_name, recipient: @props.profileUser.display_name}
+
   onSubmitMessage: (_, body) ->
+    @logClick()
     pm = ReactDOM.findDOMNode(@).querySelector('.private-message-form')
     input = pm.querySelector('input')
 

@@ -29,6 +29,9 @@ UserProfilePage = React.createClass
   getInitialState: ->
     profileHeader: null
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
     @getProfileHeader(@props.profileUser)
@@ -39,6 +42,11 @@ UserProfilePage = React.createClass
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
+
+  logClick: ->
+    @context?.geordi?.logEvent
+      type: 'message-user'
+      data: {sender: @props.user.display_name, recipient: @props.profileUser.display_name}
 
   getProfileHeader: (user) ->
     # TODO: Why's this return an array?
@@ -78,7 +86,7 @@ UserProfilePage = React.createClass
                   <Translate content="profile.nav.stats" />
                 </Link>
               else
-                <Link to="/users/#{@props.profileUser.login}/message" activeClassName="active">
+                <Link to="/users/#{@props.profileUser.login}/message" onClick={@logClick.bind null, this} activeClassName="active">
                   <Translate content="profile.nav.message" />
                 </Link>}
             </span>

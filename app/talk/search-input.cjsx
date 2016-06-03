@@ -13,15 +13,16 @@ module?.exports = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
 
-  logSearch: ->
-    @context.geordi?.logEvent
+  logSearch: (value) ->
+    @context?.geordi?.logEvent
       type: 'search'
+      data: {searchTerm: value}
 
   onSearchSubmit: (e) ->
-    @logSearch()
     e.preventDefault()
     {owner, name} = @props.params
     inputValue = @searchInput().value
+    @logSearch inputValue
 
     if owner and name
       if inputValue.match(/\#[-\w\d]{3,40}/) # searches for #hashtags

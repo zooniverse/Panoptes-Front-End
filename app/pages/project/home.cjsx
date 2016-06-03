@@ -41,7 +41,6 @@ module.exports = React.createClass
     undefined # Don't prevent default Link behavior.
 
   render: ->
-    logClick = @context.geordi?.makeHandler? 'get-started'
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
         <FinishedBanner project={@props.project} />
