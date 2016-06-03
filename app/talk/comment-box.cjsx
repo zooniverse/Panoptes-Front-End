@@ -43,9 +43,10 @@ module?.exports = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
 
-  logPageClick: (clicked) ->
-    @context.geordi?.logEvent
+  logPageClick: (clicked, button) ->
+    @context?.geordi?.logEvent
       type: clicked
+      data: {button: button}
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.reply isnt @props.reply
@@ -53,7 +54,7 @@ module?.exports = React.createClass
 
   onSubmitComment: (e) ->
     if @props.logSubmit is true
-      @logPageClick('add-comment')
+      @logPageClick 'add-comment', @props.submit
     e.preventDefault()
     textareaValue = @state.content
     return if @props.validationCheck?(textareaValue)
@@ -71,7 +72,7 @@ module?.exports = React.createClass
     @setState content: e.target.value
 
   onImageSelectClick: (e) ->
-    @logPageClick('insert-linked-image')
+    @context?.geordi?.logEvent type: 'insert-linked-image'
     @toggleComponent('image-selector')
 
   onSelectImage: (imageData) ->

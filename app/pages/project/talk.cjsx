@@ -12,12 +12,12 @@ module.exports = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
 
-  logGeordi: (item) ->
+  logGeordi: ->
     @context.geordi?.logEvent
-      type: item
+      type: "breadcrumb"
 
   componentWillMount: ->
-    @logGeordi "talk-view"
+    @context?.geordi?.logEvent type: 'talk-view'
 
   render: ->
     [owner, name] = @props.project.slug.split('/')
@@ -25,7 +25,7 @@ module.exports = React.createClass
     <div className="project-text-content talk project">
       <div className="content-container">
         <h1 className="talk-main-link">
-          <Link to="/projects/#{owner}/#{name}/talk" onClick={@logGeordi.bind this, "breadcrumb"}>
+          <Link to="/projects/#{owner}/#{name}/talk" onClick={@logGeordi.bind null, this}>
             {@props.project.display_name} Talk
           </Link>
         </h1>

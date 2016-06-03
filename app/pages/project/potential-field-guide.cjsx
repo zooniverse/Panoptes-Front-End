@@ -12,6 +12,9 @@ module.exports = React.createClass
     icons: {}
     revealed: true
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   componentDidMount: ->
     @fetchGuide @props.project
 
@@ -33,7 +36,16 @@ module.exports = React.createClass
             icons[image.id] = image
           @setState {icons}
 
+  logClick: (type) ->
+    @context?.geordi?.logEvent
+      type: type
+
   toggleFieldGuide: ->
+    if @state.revealed
+      type = "close-field-guide"
+    else
+      type = "open-field-guide"
+    @logClick type
     @setState revealed: not @state.revealed
 
   render: ->

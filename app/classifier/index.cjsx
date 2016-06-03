@@ -443,7 +443,7 @@ Classifier = React.createClass
     @setState backButtonWarning: true
 
   warningToggleOff: ->
-    @setState backButtonWarning: false 
+    @setState backButtonWarning: false
 
   renderBackButtonWarning: ->
     <p className="back-button-warning" >Going back will clear your work for the current task.</p>

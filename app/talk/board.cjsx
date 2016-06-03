@@ -75,7 +75,11 @@ module?.exports = React.createClass
 
   setBoard: ->
     @boardRequest()
-      .then (board) => @setState {board}
+      .then (board) =>
+        @setState {board}
+        @context?.geordi?.logEvent
+          type: "talk-view"
+          data: {board: board?.title}
 
   onCreateDiscussion: ->
     @setState newDiscussionOpen: false
