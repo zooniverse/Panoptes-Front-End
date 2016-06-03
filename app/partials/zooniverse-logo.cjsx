@@ -1,5 +1,7 @@
 React = require 'react'
 
+nextID = 0
+
 module.exports = React.createClass
   displayName: 'ZooniverseLogo'
 
@@ -7,9 +9,16 @@ module.exports = React.createClass
     width: '1em'
     height: '1em'
 
-  render: ->
-    useHTML = '''
-      <use xlink:href="#zooniverse-logo-source" x="0" y="0" width="100" height="100" />
-    '''
+  getInitialState: ->
+    nextID += 1
+    titleID: 'zooniverse-logo_' + nextID
 
-    <svg viewBox="0 0 100 100" width={@props.width} height={@props.height} className="zooniverse-logo" dangerouslySetInnerHTML={__html: useHTML} />
+  render: ->
+    <svg role="img" className="zooniverse-logo" viewBox="0 0 100 100" width={@props.width} height={@props.height} aria-labelledby={@state.titleID}>
+      <title id={@state.titleID}>Zooniverse Logo</title>
+      <g fill="currentColor" stroke="none" transform="translate(50, 50)">
+        <path d="M 0 -45 A 45 45 0 0 1 0 45 A 45 45 0 0 1 0 -45 Z M 0 -30 A 30 30 0 0 0 0 30 A 30 30 0 0 0 0 -30 Z"></path>
+        <path d="M 0 -14 A 14 14 0 0 1 0 14 A 14 14 0 0 1 0 -14 Z"></path>
+        <ellipse cx="0" cy="0" rx="6" ry="65" transform="rotate(50)"></ellipse>
+      </g>
+    </svg>
