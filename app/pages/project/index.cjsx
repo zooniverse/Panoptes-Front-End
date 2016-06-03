@@ -139,14 +139,14 @@ ProjectPage = React.createClass
             Visit {@props.project.display_name}
           </a>
         else
-          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab">
+          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.home'}>
             {if @state.avatar?
               <img src={@state.avatar.src} className="avatar" />}
             {@props.project.display_name}
           </IndexLink>}
 
         {unless @props.project.redirect
-          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab">
+          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.about'}>
             <Translate content="project.nav.about" />
           </Link>}
 
@@ -161,11 +161,11 @@ ProjectPage = React.createClass
         else
           if @state.selectedWorkflow?
             query = workflow: @state.selectedWorkflow.id
-          <Link to="#{projectPath}/classify" query={query} activeClassName="active" className="classify tabbed-content-tab">
+          <Link to="#{projectPath}/classify" query={query} activeClassName="active" className="classify tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.classify'}>
             <Translate content="project.nav.classify" />
           </Link>}
 
-        <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab">
+        <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.talk'}>
           <Translate content="project.nav.talk" />
         </Link>
 
