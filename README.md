@@ -4,11 +4,11 @@
 
 Requires Node.js.
 
-Run `npm install` to install dependencies.
+`npm install` installs dependencies.
 
-`npm start` runs **./bin/serve.sh**, which watches the main CoffeeScript and Stylus files and runs a little server out of **./public** on port 3735 (looks like EYES).
+`npm start` builds and runs the site locally.
 
-`npm run stage-branch` runs **./bin/build.sh** which builds and optimizes the site, and then deploys it to <http://demo.zooniverse.org/panoptes-front-end/current-git-branch-name>.
+`npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
 
 All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
