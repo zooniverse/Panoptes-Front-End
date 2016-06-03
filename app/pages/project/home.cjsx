@@ -12,9 +12,6 @@ module.exports = React.createClass
 
   mixins: [HandlePropChanges, PromiseToSetState]
 
-  contextTypes:
-    geordi: React.PropTypes.object
-
   propChangeHandlers:
     project: (project) ->
       # TODO: Build this kind of caching into json-api-client.
@@ -27,10 +24,6 @@ module.exports = React.createClass
           project._workflows = workflows
 
         @promiseToSetState {workflows}
-
-  logClick: ->
-    @context?.geordi?.logEvent
-      type: 'get-started'
 
   getInitialState: ->
     workflows: []

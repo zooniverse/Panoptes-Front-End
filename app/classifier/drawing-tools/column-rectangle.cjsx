@@ -10,8 +10,6 @@ MINIMUM_WIDTH = 25
 
 module.exports = React.createClass
   displayName: 'RectangleTool'
-  contextTypes:
-    geordi: React.PropTypes.object
 
   statics:
     initCoords: null
@@ -42,18 +40,11 @@ module.exports = React.createClass
 
   initCoords: null
 
-  dragEnd: (target) ->
-    @context.geordi?.logEvent type: 'drag-column'
-    deleteIfOutOfBounds target
-
-  logResize: ->
-    @context.geordi?.logEvent type: 'resize-column'
-
   render: ->
     {x, width} = @props.mark
 
     <DrawingToolRoot tool={this}>
-      <Draggable onDrag={@handleMainDrag} onEnd={@dragEnd.bind null, this} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <rect ref="rect" x={x} y={0} width={width} height={@props.containerRect.height / @props.scale.vertical} />
       </Draggable>
 
@@ -61,8 +52,8 @@ module.exports = React.createClass
         <g>
           <DeleteButton tool={this} x={x + width + 20} y={15} />
 
-          <DragHandle x={x} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleLeftDrag} onEnd={@logResize}/>
-          <DragHandle x={x + width} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleRightDrag} onEnd={@logResize} />
+          <DragHandle x={x} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleLeftDrag} />
+          <DragHandle x={x + width} y={(@props.containerRect.height / @props.scale.vertical) / 2} scale={@props.scale} onDrag={@handleRightDrag} />
         </g>}
     </DrawingToolRoot>
 
