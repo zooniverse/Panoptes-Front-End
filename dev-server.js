@@ -18,7 +18,10 @@ const middleware = webpackMiddleware(compiler, {
 });
 
 app.use(middleware);
-app.use(webpackHotMiddleware(compiler));
+
+if (process.env.BABEL_ENV === 'hot-reload') {
+  app.use(webpackHotMiddleware(compiler));
+}
 
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use(function(req,res,next){
@@ -31,6 +34,5 @@ app.listen(port, 'localhost', function onStart(err) {
     console.log(err);
   }
   console.info('==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
-  console.info('==> 🕓 Please wait for webpack to finish processing your application code.')
-  console.info('==> 🕓 Message will read "webpack: bundle is now VALID."')
+  console.info('==> 🕓 Please wait for webpack to finish processing your application code.');
 });
