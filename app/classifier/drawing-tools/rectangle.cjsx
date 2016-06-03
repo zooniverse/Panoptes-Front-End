@@ -11,9 +11,6 @@ DELETE_BUTTON_DISTANCE = 9 / 10
 module.exports = React.createClass
   displayName: 'RectangleTool'
 
-  contextTypes:
-    geordi: React.PropTypes.object
-
   statics:
     initCoords: null
 
@@ -52,10 +49,6 @@ module.exports = React.createClass
 
   initCoords: null
 
-  dragEnd: (target) ->
-    @context.geordi?.logEvent type: 'drag-rectangle'
-    deleteIfOutOfBounds target
-
   render: ->
     {x, y, width, height} = @props.mark
 
@@ -68,7 +61,7 @@ module.exports = React.createClass
     ].join '\n'
 
     <DrawingToolRoot tool={this}>
-      <Draggable onDrag={@handleMainDrag} onEnd={@dragEnd.bind this, this} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <polyline points={points} />
       </Draggable>
 
@@ -113,8 +106,6 @@ module.exports = React.createClass
     @props.onChange @props.mark
 
   normalizeMark: ->
-    @context.geordi?.logEvent type: 'resize-rectangle'
-
     if @props.mark.width < 0
       @props.mark.x += @props.mark.width
       @props.mark.width *= -1

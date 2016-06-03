@@ -14,9 +14,6 @@ DELETE_BUTTON_ANGLE = 45
 module.exports = React.createClass
   displayName: 'EllipseTool'
 
-  contextTypes:
-    geordi: React.PropTypes.object
-
   statics:
     defaultValues: ({x, y}) ->
       x: x
@@ -56,13 +53,6 @@ module.exports = React.createClass
     x: @props.mark.rx * Math.cos theta
     y: -1 * @props.mark.ry * Math.sin theta
 
-  dragEnd: (target) ->
-    @context.geordi?.logEvent type: 'drag-ellipse'
-    deleteIfOutOfBounds target
-
-  logResize: ->
-    @context.geordi?.logEvent type: 'resize-ellipse'
-
   render: ->
     positionAndRotate = "
       translate(#{@props.mark.x}, #{@props.mark.y})
@@ -79,15 +69,15 @@ module.exports = React.createClass
           <line x1="0" y1="0" x2="0" y2={-1 * @props.mark.ry} strokeWidth={guideWidth} strokeDasharray={GUIDE_DASH} />
         </g>}
 
-      <Draggable onDrag={@handleMainDrag} onEnd={@dragEnd.bind this, this} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <ellipse rx={@props.mark.rx} ry={@props.mark.ry} />
       </Draggable>
 
       {if @props.selected
         <g>
           <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />
-          <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'x'} x={@props.mark.rx} y={0} scale={@props.scale} onEnd={@logResize}/>
-          <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'y'} x={0} y={-1 * @props.mark.ry} scale={@props.scale} onEnd={@logResize}/>
+          <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'x'} x={@props.mark.rx} y={0} scale={@props.scale} />
+          <DragHandle onDrag={@handleRadiusHandleDrag.bind this, 'y'} x={0} y={-1 * @props.mark.ry} scale={@props.scale} />
         </g>}
     </DrawingToolRoot>
 

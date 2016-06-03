@@ -12,10 +12,7 @@ GUIDE_DASH = [4, 4]
 DELETE_BUTTON_ANGLE = 45
 
 module.exports = React.createClass
-  displayName: 'CircleTool'
-
-  contextTypes:
-    geordi: React.PropTypes.object
+  displayName: 'EllipseTool'
 
   statics:
     defaultValues: ({x, y}) ->
@@ -54,13 +51,6 @@ module.exports = React.createClass
     x: @props.mark.r * Math.cos theta
     y: -1 * @props.mark.r * Math.sin theta
 
-  dragEnd: (target) ->
-    @context.geordi?.logEvent type: 'drag-circle'
-    deleteIfOutOfBounds target
-
-  logResize: ->
-    @context.geordi?.logEvent type: 'resize-circle'
-
   render: ->
     positionAndRotate = "
       translate(#{@props.mark.x}, #{@props.mark.y})
@@ -73,14 +63,14 @@ module.exports = React.createClass
       {if @props.selected
         <line x1="0" y1="0" x2={@props.mark.r} y2="0" strokeWidth={GUIDE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)} strokeDasharray={GUIDE_DASH} />}
 
-      <Draggable onDrag={@handleMainDrag} onEnd={@dragEnd.bind this, this} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <ellipse rx={@props.mark.r} ry={@props.mark.r} />
       </Draggable>
 
       {if @props.selected
         <g>
           <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />
-          <DragHandle onDrag={@handleRadiusHandleDrag} x={@props.mark.r} y={0} scale={@props.scale} onEnd={@logResize} />
+          <DragHandle onDrag={@handleRadiusHandleDrag} x={@props.mark.r} y={0} scale={@props.scale} />
         </g>}
     </DrawingToolRoot>
 

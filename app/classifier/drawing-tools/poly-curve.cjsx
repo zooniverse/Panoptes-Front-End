@@ -17,9 +17,6 @@ DELETE_BUTTON_WEIGHT = 0.75 # fraction of line lenght to place delete button
 module.exports = React.createClass
   displayName: 'BezierCurveTool'
 
-  contextTypes:
-    geordi: React.PropTypes.object
-
   statics:
     initCoords: null
 
@@ -88,10 +85,6 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.removeEventListener 'mousemove', @handleMouseMove
 
-  dragEnd: (target) ->
-    @context.geordi?.logEvent type: 'drag-poly-curve'
-    deleteIfOutOfBounds target
-
   render: ->
     {points} = @props.mark
     averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
@@ -127,7 +120,7 @@ module.exports = React.createClass
       svgPathGuide = "M#{lastEnd.x} #{lastEnd.y} Q #{controlPoint.x} #{controlPoint.y} #{newPoint.x} #{newPoint.y}"
 
     <DrawingToolRoot tool={this}>
-      <Draggable onDrag={@handleMainDrag} onEnd={@dragEnd.bind this, this} disabled={@props.disabled}>
+      <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <path d={svgPath} fill={'none' unless @props.mark.closed} />
       </Draggable>
 

@@ -49,9 +49,6 @@ Summary = React.createClass
 module.exports = React.createClass
   displayName: 'SingleChoiceTask'
 
-  contextTypes:
-    geordi: React.PropTypes.object
-
   statics:
     Editor: GenericTaskEditor
     Summary: Summary
@@ -98,6 +95,5 @@ module.exports = React.createClass
 
   handleChange: (index, e) ->
     if e.target.checked
-      @context.geordi?.logEvent type: 'select-option'
       newAnnotation = Object.assign {}, @props.annotation, value: index
       @props.onChange newAnnotation
