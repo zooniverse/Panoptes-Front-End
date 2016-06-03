@@ -12,6 +12,9 @@ module.exports = React.createClass
 
   mixins: [HandlePropChanges, PromiseToSetState]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   propChangeHandlers:
     project: (project) ->
       # TODO: Build this kind of caching into json-api-client.
@@ -58,7 +61,7 @@ module.exports = React.createClass
               {workflow.display_name}
             </Link>
         else
-          <Link to={"/projects/#{@props.project.slug}/classify"} onClick={@logClick.bind null, this} className="call-to-action standard-button">
+          <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
             Get started!
           </Link>}
       </div>

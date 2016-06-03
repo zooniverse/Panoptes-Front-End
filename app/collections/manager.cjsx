@@ -17,12 +17,7 @@ module?.exports = React.createClass
     subject: React.PropTypes.object
     project: React.PropTypes.object
 
-  logModalChange: (clickedItem) ->
-    @props.contextRef?.geordi?.logEvent
-      type: clickedItem
-
   addToCollections: ->
-    @logModalChange 'add-to-collection'
     collections = @refs.search.getSelected()
     return unless collections.length > 0
 
@@ -45,7 +40,6 @@ module?.exports = React.createClass
         <CollectionSearch
           ref="search"
           multi={true}
-          contextRef={@props.contextRef}
           project={@props.project}
           onChange={@handleChange} />
         <button type="button" className="standard-button search-button" disabled={if @state.hasCollectionSelected then true else false} onClick={@addToCollections}>
@@ -56,5 +50,5 @@ module?.exports = React.createClass
       <hr />
 
       <div className="form-help">Or Create a new Collection</div>
-      <CollectionsCreateForm contextRef={@props.contextRef} project={@props.project?.id} subject={@props.subject.id} onSubmit={@props.onSuccess} />
+      <CollectionsCreateForm project={@props.project?.id} subject={@props.subject.id} onSubmit={@props.onSuccess} />
     </div>

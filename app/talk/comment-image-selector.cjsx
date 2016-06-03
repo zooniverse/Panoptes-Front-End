@@ -6,9 +6,6 @@ SingleSubmitButton = require '../components/single-submit-button'
 module?.exports = React.createClass
   displayName: 'TalkCommentImageSelector'
 
-  contextTypes:
-    geordi: React.PropTypes.object
-
   getInitialState: ->
     subjects: []
 
@@ -17,10 +14,6 @@ module?.exports = React.createClass
 
   componentWillMount: ->
     @setRecents()
-
-  logImageSelect: ->
-    @context.geordi?.logEvent
-      type: 'select-image-to-link'
 
   setRecents: ->
     @props.user.get('recents', {sort: '-created_at'})
@@ -56,7 +49,7 @@ module?.exports = React.createClass
     <div key={data.id} className="talk-comment-image-item">
       <img src={getSubjectLocation(data).src} />
       <div className="image-card-select">
-        <button onClick={=> @setFocusImage(data); @logImageSelect()}>Select</button>
+        <button onClick={=> @setFocusImage(data)}>Select</button>
       </div>
     </div>
 

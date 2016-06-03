@@ -72,7 +72,6 @@ module?.exports = React.createClass
     @setState content: e.target.value
 
   onImageSelectClick: (e) ->
-    @context?.geordi?.logEvent type: 'insert-linked-image'
     @toggleComponent('image-selector')
 
   onSelectImage: (imageData) ->

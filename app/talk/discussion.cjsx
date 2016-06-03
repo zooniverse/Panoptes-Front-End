@@ -44,13 +44,6 @@ module?.exports = React.createClass
   getDefaultProps: ->
     location: query: page: 1
 
-  contextTypes:
-    geordi: React.PropTypes.object
-
-  logTitleEdit: ->
-    @context.geordi?.logEvent
-      type: 'edit-title'
-
   promptToSignIn: ->
     alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
@@ -234,7 +227,6 @@ module?.exports = React.createClass
     </div>
 
   onClickEditTitle: ->
-    @logTitleEdit()
     @setState {editingTitle: not @state.editingTitle}
 
   onChangeTitle: (e) ->

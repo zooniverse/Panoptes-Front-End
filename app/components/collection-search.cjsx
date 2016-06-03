@@ -10,10 +10,6 @@ module.exports = React.createClass
     multi: false
     project: null
 
-  logSearch: ->
-    @props.contextRef?.geordi?.logEvent
-      type: 'search-collection'
-
   searchCollections: (value, callback) ->
     query =
       page_size: 20
@@ -43,7 +39,6 @@ module.exports = React.createClass
       ref="collectionSelect"
       multi={@props.multi}
       name="collids"
-      onChange={@logSearch}
       placeholder="Collection Name"
       searchPromptText="Type to search Collections"
       className="collection-search"
