@@ -24,9 +24,9 @@ module?.exports = React.createClass
     subject_flagged = @props.classification.metadata.subject_flagged
     <button
       disabled={@props.classification.completed}
-      className="flag-subject-button"
+      className="flag-subject-button #{@props.className ? ''}"
       type="button"
       title="#{if subject_flagged then 'Unflag' else 'Flag'} Subject as Inappropriate"
       onClick={@toggleFlag}>
-      <i className="#{if subject_flagged then 'fa fa-flag' else 'fa fa-flag-o'}" />
+      <i className="fa #{if subject_flagged then 'fa-flag' else 'fa-flag-o'} fa-fw" />
     </button>
