@@ -17,13 +17,58 @@ counterpart.registerTranslations 'en',
     collections:
       all:
         self: 'All Collections'
+        other: 'All Collections'
+      project:
+        other: '%(projectDisplayName)s Collections'
+        self: '%(projectDisplayName)s Collections'
+      userAndProject:
+        other: '%(collectionOwnerName)s\'s %(projectDisplayName)s Collections'
+        self: '%(collectionOwnerName)s\'s %(projectDisplayName)s Collections'
       user:
         self: 'All %(collectionOwnerName)s\'s Collections'
+        other: 'All %(collectionOwnerName)s\'s Collections'
     favorites:
       all:
         self: 'All Favorites'
+        other: 'All Favorites'
+      project:
+        other: '%(projectDisplayName)s Favorites'
+        self: '%(projectDisplayName)s Favorites'
+      userAndProject:
+        self: '%(collectionOwnerName)s\'s %(projectDisplayName)s Favorites'
+        other: '%(collectionOwnerName)s\'s %(projectDisplayName)s Favorites'
       user:
         self: 'All %(collectionOwnerName)s\'s Favorites'
+        other: 'All %(collectionOwnerName)s\'s Favorites'
+  link:
+    collections:
+      all:
+        other: 'All Collections'
+        self: 'All'
+      project:
+        other: 'All'
+        self: 'All'
+      userAndProject:
+        other: '%(collectionOwnerName)s\'s Collections'
+        self: 'My Collections'
+      user:
+        self: 'My Collections'
+        other: '%(collectionOwnerName)s\'s Collections'
+    favorites:
+      all:
+        other: 'All Favorites'
+        self: 'All'
+      project:
+        other: 'All'
+        self: 'All'
+      userAndProject:
+        other: '%(collectionOwnerName)s\'s Favorites'
+        self: 'My Favorites'
+      user:
+        self: 'My Favorites'
+        other: '%(collectionOwnerName)s\'s Favorites'
+    removeProjectContext: 'To the Zooniverse!'
+
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
@@ -36,11 +81,11 @@ CollectionsNav = React.createClass
   # render a link from a contextual-links link object
   renderLink: (link) ->
     if link.type=="IndexLink"
-      <IndexLink key="#{link.key}" to="#{link.to}" activeClassName="active">
+      <IndexLink key="#{link.key}" to="#{link.to}" title="#{link.message.hoverText}" activeClassName="active">
         {@generateTranslateLink(link.message)}
       </IndexLink>
     else
-      <Link key="#{link.key}" to="#{link.to}" activeClassName="active">
+      <Link key="#{link.key}" to="#{link.to}" title="#{link.message.hoverText}" activeClassName="active">
         {@generateTranslateLink(link.message)}
       </Link>
 

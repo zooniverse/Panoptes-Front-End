@@ -49,22 +49,16 @@ module.exports =
   # This comes from the collection, if present, otherwise from the logged in user if there is one.
   # TODO UPDATE THIS FOR TALK RECENTS AND USER PROFILES
   getContextUserLogin: (props) ->
-    if props.favorite
-      if props.params?.favorites_owner?
-        return props.params.favorites_owner
-      else
-        if props.user?
-          return props.user.login
-        else
-          return props.params.owner
+    if props.favorite and props.params?.favorites_owner?
+      return props.params.favorites_owner
+    else if !props.favorite and props.params?.collection_owner?
+      return props.params.collection_owner
+    else if !props.project? and props.params?.owner?
+      return props.params.owner
+    else if props.user?
+      return props.user.login
     else
-      if props.params?.collection_owner?
-        return props.params.collection_owner
-      else
-        if props.user?
-          return props.user.login
-        else
-          return props.params.owner
+      return props.params.owner # which may be null
   
   # to discourage navigation links from ending up with a line break on small screens, we can swap all spaces for &nbsp;
   makeTextUnbreakable: (text) ->
@@ -83,10 +77,11 @@ module.exports =
     #TODO CHECK THIS AGAINST NEW URL SCHEMES
     #TODO UPDATE ROUTES PER NEW URL SCHEMES
     filters = {}
-    pathParts = props.location.pathname.split('/')
+    pathParts = @safelyGetPath(props)
     [firstPart, ..., lastPart] = pathParts
+
     if firstPart == "projects" and pathParts.length < 6 and lastPart != "all"
-      filters["project_ids"] = @props.project.id
+      filters["project_ids"] = props.project.id
     if firstPart == "collections" and pathParts.length == 2 and pathParts[1] != "" and pathParts[1] != "all"
       filters["owner"] = pathParts[1]
     if firstPart == "favorites" and pathParts.length == 2 and pathParts[1] != "" and pathParts[1] != ""
@@ -95,6 +90,7 @@ module.exports =
       filters["owner"] = pathParts[4]
     if pathParts.length>4 and pathParts[3] == "favorites" and pathParts[4] != "" and pathParts[4] != "all"
       filters["owner"] = pathParts[4]
+
     return filters
 
   # dashes not allowed in message keys, so we map the name. (We keep dashes so we can do things like context.includes("user"). )
@@ -104,19 +100,24 @@ module.exports =
     else
       return filterType
 
-  viewingAUsersCollectionsOrFavorites: (props) ->
+  # get the path, ensuring the last element is never an empty string    
+  safelyGetPath: (props) ->
     pathParts = props.location.pathname.split('/')
-    [first, ..., penultimate, last] = pathParts
+    [firstPart, ..., lastPart] = pathParts
+    if lastPart==""
+      pathParts=pathParts.slice 0, -1
+    pathParts
+
+  viewingAUsersCollectionsOrFavorites: (props) ->
+    [first, ..., penultimate, last] = @safelyGetPath(props)
     return last!="" and (penultimate == "collections" or penultimate == "favorites")
 
   viewingAUserProfile: (props) ->
-    pathParts = props.location.pathname.split('/')
-    [first, ..., penultimate, last] = pathParts
+    [first, ..., penultimate, last] = @safelyGetPath(props)
     return penultimate == "users"
 
   viewingRecents: (props) ->
-    pathParts = props.location.pathname.split('/')
-    [first, ..., penultimate, last] = pathParts
+    [first, ..., penultimate, last] = @safelyGetPath(props)
     return last == "recents" or penultimate == "recents"
 
   # determine current context according to whether we are in a project and whether we are focussed on a user
@@ -134,17 +135,11 @@ module.exports =
 
   # determine current perspective
   getCurrentPerspective: (props) ->
-    context=@getCurrentContext(props)
     contextUserLogin=@getContextUserLogin(props)
-    if props.user?
-      currentUserLogin = props.user.login
-    if context.includes("user")
-      if currentUserLogin? and contextUserLogin==currentUserLogin
-        "self"
-      else
-        "other"
+    if props.user?.login? and contextUserLogin==props.user.login
+      "self"
     else
-      null
+      "other"
 
   # determine what type of page we are viewing
   getCurrentBaseType: (props) ->
@@ -175,7 +170,7 @@ module.exports =
 
   # get a link that is the non-project-specific version of current page    
   getRemoveProjectContextLink: (props) ->
-    pathParts = props.location.pathname.split('/')
+    pathParts = @safelyGetPath(props)
     [first, ...] = pathParts
     if first == "projects"
       return pathParts[3...].join("/")
@@ -200,6 +195,32 @@ module.exports =
       messageKey += ".other"
     messageKey
 
+  # string summarizing what we would actually be filtering on for the desired filter
+  getFilterSummary: (props,
+    desiredFilterType=@getCurrentFilterType(props,contextUserLogin),
+    desiredBaseType=@getCurrentBaseType(props),
+    currentPerspective=@getCurrentPerspective(props)) ->
+
+    if desiredFilterType.includes("user")
+      if currentPerspective=='self'
+        summaryString="all my"
+      else
+        summaryString="all this user\'s"
+    else
+      summaryString="all"
+
+    if desiredBaseType=="collections" or desiredBaseType=="favorites"
+      summaryString += " #{desiredBaseType}"
+    else if desiredBaseType=="recents"
+      summaryString += " recent comments"
+    else
+      summaryString += " [#{desiredBaseType}]" # TODO check this
+
+    if desiredFilterType.includes("project")
+      summaryString += " within this project"
+
+    return summaryString
+
   # get message object with needed data for inserts
   getMessageWithData: (props,
     contextUserLogin=@getContextUserLogin(props),
@@ -211,6 +232,7 @@ module.exports =
 
     message = {}
     message.messageKey = @getMessageKey(props,desiredBaseType,desiredFilterType,currentPerspective,title)
+    message.hoverText = "View #{@getFilterSummary(props,desiredFilterType,desiredBaseType,currentPerspective)}"
     if desiredFilterType.includes("user")
       message.user = {
         login: @makeTextUnbreakable(contextUserLogin)
@@ -222,6 +244,9 @@ module.exports =
         slug: props.project.slug
         displayName: @makeTextUnbreakable(props.project.display_name)
       }
+    if currentContext?.includes('project') and !desiredFilterType?.includes('project')
+      message.messageKey = "link.removeProjectContext"
+      message.hoverText += " on zooniverse.org"
     message.isATitle = title
     return message
 
@@ -237,22 +262,22 @@ module.exports =
     return "link_#{tokenizedURL}_#{@getUniqueId()}"
 
   # construct a URL for a link to specified base type with specified filter
-  getURL: (props, desiredBaseType, desiredFilterType) ->
+  getURL: (props, desiredUserLogin, desiredBaseType, desiredFilterType) ->
     url = "/#{desiredBaseType}/"
     if desiredFilterType.includes("project")
       url = @prefixLinkIfNeeded(props,url)
     if desiredFilterType.includes("user")
-      url += "#{@getContextUserLogin(props)}/"
+      url += "#{desiredUserLogin}/"
     return url
 
-  # returns a new filter type, adding in a user filter to whatever is currently present
-  getFilterTypeWithUserFilterAdded: (currentFilterType) ->
-    if currentFilterType=="project"
+  # returns a new filter type or context, adding in a user filter to whatever is currently present
+  addUserToFilterOrContext: (currentValue) ->
+    if currentValue=="project"
       return "user-and-project"
-    else if currentFilterType=="all"
+    else if currentValue=="all"
       return "user"
     else
-      return currentFilterType
+      return currentValue
 
   # get an object with all the necessary information to render a link
   getLink: (props,
@@ -263,7 +288,7 @@ module.exports =
     currentPerspective=@getCurrentPerspective(props),
     title = false) ->
 
-    url = @getURL(props,desiredBaseType,desiredFilterType)
+    url = @getURL(props,contextUserLogin,desiredBaseType,desiredFilterType)
 
     if desiredFilterType=="all" or desiredFilterType=="project"
       linkType="IndexLink"
@@ -300,6 +325,9 @@ module.exports =
     else
       desiredFilterType="all"
     links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,currentPerspective,false)
+    if !props.user?
+      # if not logged in, there's room for a link to the other baseType.
+      links.push @getLink(props,contextUserLogin,currentContext,currentFilterType,@getOppositeBaseType(currentBaseType),currentPerspective,false)
     return links
 
   # links to "user's collections", "user's favorites", "user's project collections", "user's project favorites" etc.
@@ -315,18 +343,25 @@ module.exports =
       links.push @getLink(props,contextUserLogin,currentContext,currentFilterType,@getOppositeBaseType(currentBaseType),currentPerspective,false)
     return links
 
+  getSelfIfAvailable: (props) ->
+    if props.user?
+      return props.user.login
+    else
+      return @getContextUserLogin(props)
+
   # links to "my collections", "my favorites", etc. (if not already covered in getContextualLinksForThisUser)
   getContextualLinksForSelf: (props,
-    contextUserLogin=@getContextUserLogin(props),
+    contextUserLogin=@getSelfIfAvailable(props)
     currentContext=@getCurrentContext(props,contextUserLogin),
     currentFilterType=@getCurrentFilterType(props),
     currentBaseType=@getCurrentBaseType(props),
     currentPerspective=@getCurrentPerspective(props)) ->
 
     links = []
-    if currentContext.includes("user") and (props.user?) and currentPerspective!="self"
-      links.push @getLink(props,props.user.login,currentContext,currentFilterType,currentBaseType,currentPerspective,false)
-      links.push @getLink(props,props.user.login,currentContext,currentFilterType,@getOppositeBaseType(currentBaseType),currentPerspective,false)
+    if not (currentContext=="user" or (currentContext=="user-and-project" and currentPerspective=="self"))
+      desiredFilterType = @addUserToFilterOrContext(currentFilterType)
+      links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,"self",false)
+      links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,@getOppositeBaseType(currentBaseType),"self",false)
     return links
 
   # A "To the Zooniverse!" project context removal link that will view the same user & baseType in a non-project context
@@ -369,16 +404,12 @@ module.exports =
 
     crossUsersContextualLinks = @getContextualLinksAcrossUsers(props,contextUserLogin)
     crossUsersContextualLinks.sort @sortForCollectionsAndFavorites
-    console.log "broad",crossUsersContextualLinks
     thisUserContextualLinks = @getContextualLinksForThisUser(props,contextUserLogin)
     thisUserContextualLinks.sort @sortForCollectionsAndFavorites
-    console.log "user",thisUserContextualLinks
-    selfContextualLinks = @getContextualLinksForThisUser(props,contextUserLogin)
+    selfContextualLinks = @getContextualLinksForSelf(props)
     selfContextualLinks.sort @sortForCollectionsAndFavorites
-    console.log "self",selfContextualLinks
     zooniverseLinks = @getZooniverseLinksForThisBaseType(props, contextUserLogin)
     zooniverseLinks.sort @sortForCollectionsAndFavorites
-    console.log "zoo",zooniverseLinks
     orderedLinks = crossUsersContextualLinks.concat thisUserContextualLinks, selfContextualLinks, zooniverseLinks
 
     return {
