@@ -19,8 +19,12 @@ module?.exports = React.createClass
     sugarClient.subscribeTo @props.section or 'zooniverse'
     @logTalkView()
 
+  componentDidMount: ->
+    @context.geordi?.remember projectToken: 'zooTalk'
+
   componentWillUnmount: ->
     sugarClient.unsubscribeFrom @props.section or 'zooniverse'
+    @context.geordi?.forget ['projectToken']
 
   render: ->
     logClick = @context.geordi?.makeHandler? 'breadcrumb'
