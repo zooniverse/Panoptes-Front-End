@@ -9,6 +9,8 @@ GeordiClient = require 'zooniverse-geordi-client'
 class GeordiLogger # Make calls to the Geordi API to log user activity
   constructor: (@state, @geordi) ->
 
+  @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy']
+
   keys: {}
 
   geordi: null
@@ -27,15 +29,17 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
     instance = @instance
     (eventData, eventType) ->
         eventType = defType if typeof eventType isnt 'string'
-        instance()?.logEvent
-          type: eventType
-          data: "\"#{eventData}\""
+        if GeordiLogger.tokens.indexOf(instance().projectToken) > -1
+          instance()?.logEvent
+            type: eventType
+            data: "\"#{eventData}\""
 
   logEvent: (logEntry) -> # Accepts key/values to make appropriate Geordi logging
     geordi = @instance()
     newEntry = Object.assign {}, logEntry, @keys
-    geordi?.logEvent newEntry
-    console.log 'No logger available for event ', JSON.stringify(logEntry) unless geordi?.logEvent
+    if GeordiLogger.tokens.indexOf(newEntry.projectToken) > -1
+      @geordi?.logEvent newEntry
+    console.log 'No logger available for event ', JSON.stringify(logEntry) unless @geordi?.logEvent
 
   remember: (keyVals) ->
     rebuild = keyVals?.projectToken? && (keyVals?.projectToken != @geordi?.projectToken)
