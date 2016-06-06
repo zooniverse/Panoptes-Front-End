@@ -346,8 +346,6 @@ module.exports =
   getSelfIfAvailable: (props) ->
     if props.user?
       return props.user.login
-    else
-      return @getContextUserLogin(props)
 
   # links to "my collections", "my favorites", etc. (if not already covered in getContextualLinksForThisUser)
   getContextualLinksForSelf: (props,
@@ -358,7 +356,7 @@ module.exports =
     currentPerspective=@getCurrentPerspective(props)) ->
 
     links = []
-    if not (currentContext=="user" or (currentContext=="user-and-project" and currentPerspective=="self"))
+    if props.user? and not (currentContext=="user" or (currentContext=="user-and-project" and currentPerspective=="self"))
       desiredFilterType = @addUserToFilterOrContext(currentFilterType)
       links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,"self",false)
       links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,@getOppositeBaseType(currentBaseType),"self",false)
@@ -401,15 +399,19 @@ module.exports =
     baseType = @getCurrentBaseType(props)
     filterType = @getCurrentFilterType(props)
     title = @getMessageWithData(props, contextUserLogin, context, filterType, baseType, perspective, true)
-
+    console.log 'context',context
     crossUsersContextualLinks = @getContextualLinksAcrossUsers(props,contextUserLogin)
     crossUsersContextualLinks.sort @sortForCollectionsAndFavorites
+    console.log 'broad',crossUsersContextualLinks
     thisUserContextualLinks = @getContextualLinksForThisUser(props,contextUserLogin)
     thisUserContextualLinks.sort @sortForCollectionsAndFavorites
+    console.log 'user',thisUserContextualLinks
     selfContextualLinks = @getContextualLinksForSelf(props)
     selfContextualLinks.sort @sortForCollectionsAndFavorites
+    console.log 'self',selfContextualLinks
     zooniverseLinks = @getZooniverseLinksForThisBaseType(props, contextUserLogin)
     zooniverseLinks.sort @sortForCollectionsAndFavorites
+    console.log 'zoo',zooniverseLinks
     orderedLinks = crossUsersContextualLinks.concat thisUserContextualLinks, selfContextualLinks, zooniverseLinks
 
     return {
