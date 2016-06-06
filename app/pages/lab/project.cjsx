@@ -10,6 +10,7 @@ Router = require 'react-router'
 ModalFormDialog = require 'modal-form/dialog'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
+isAdmin = require '../lib/is-admin'
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
@@ -252,7 +253,7 @@ module.exports = React.createClass
           <p className="form-help">Loading project</p>
         </div>
       } then={([project, owners]) =>
-        if @props.user in owners or @props.user.admin
+        if @props.user in owners or isAdmin()
           <EditProjectPage {...@props} project={project} />
         else
           <div className="content-container">
