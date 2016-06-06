@@ -83,18 +83,21 @@ ProjectModalEditor = React.createClass
     for step, index in stepsInNewOrder
       stepReorderedIndex = index if @props.projectModal.steps[@state.stepToEdit].content is step.content
 
+    for step, i in @props.projectModal.steps
+      step._key = null
+      
     @props.onStepOrderChange stepsInNewOrder
     @setState stepToEdit: stepReorderedIndex
 
   renderStepList: (step, i) ->
-    step._key ?= Math.random()
+    step._key ?= i+1
     buttonClasses = classnames 
       "selected": @state.stepToEdit is i
       "project-modal-step-list-item-button": true
 
     <li key={step._key} className="project-modal-step-list-item">
       <button type="button" className={buttonClasses} onClick={@onClick.bind null, i}>
-        <span className="project-modal-step-list-item-button-title">Step #{i+1}</span>
+        <span className="project-modal-step-list-item-button-title">Step #{step._key}</span>
       </button>
       <button type="button" className="project-modal-step-list-item-remove-button" title="Remove this step" onClick={@handleStepRemove.bind null, i}>
         <i className="fa fa-trash-o fa-fw"></i>
