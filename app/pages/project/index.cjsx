@@ -43,10 +43,12 @@ ProjectPage = React.createClass
     background: null
     avatar: null
     pages: []
+    selectedWorkflow: null
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-project-page'
     @fetchInfo @props.project
+    @getSelectedWorkflow @props.project, @props.preferences
     @updateSugarSubscription @props.project
 
   componentWillUnmount: ->
@@ -56,7 +58,10 @@ ProjectPage = React.createClass
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project
       @fetchInfo nextProps.project
+      @getSelectedWorkflow nextProps.project, nextProps.preferences
       @updateSugarSubscription nextProps.project
+    else if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow?.id
+      @getSelectedWorkflow nextProps.project, nextProps.preferences
 
   fetchInfo: (project) ->
     @setState
@@ -82,6 +87,20 @@ ProjectPage = React.createClass
       .then (pages) =>
         @setState {pages}
 
+  getSelectedWorkflow: (project, preferences) ->
+    @setState selectedWorkflow: 'PENDING'
+
+    preferredWorkflowID = preferences?.preferences.selected_workflow ? project.configuration?.default_workflow
+    if preferredWorkflowID?
+      apiClient.type('workflows').get preferredWorkflowID
+        .then (workflow) =>
+          if workflow.active
+            @setState selectedWorkflow: workflow
+          else
+            @setState selectedWorkflow: null
+    else
+      @setState selectedWorkflow: null
+
   _lastSugarSubscribedID: null
 
   updateSugarSubscription: (project) ->
@@ -95,8 +114,6 @@ ProjectPage = React.createClass
 
   render: ->
     projectPath = "/projects/#{@props.project.slug}"
-
-    currentWorkflow = @props.preferences?.preferences.selected_workflow ? @props.project.configuration?.default_workflow
 
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
@@ -129,8 +146,14 @@ ProjectPage = React.createClass
           <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank">
             <Translate content="project.nav.classify" />
           </a>
+        else if @state.selectedWorkflow is 'PENDING'
+          <span className="classify tabbed-content-tab" title="Loading..." style={opacity: 0.5}>
+            <Translate content="project.nav.classify" />
+          </span>
         else
-          <Link to="#{projectPath}/classify" query={workflow: currentWorkflow} activeClassName="active" className="classify tabbed-content-tab">
+          if @state.selectedWorkflow?
+            query = workflow: @state.selectedWorkflow.id
+          <Link to="#{projectPath}/classify" query={query} activeClassName="active" className="classify tabbed-content-tab">
             <Translate content="project.nav.classify" />
           </Link>}
 
