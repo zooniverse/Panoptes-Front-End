@@ -252,7 +252,7 @@ module.exports = React.createClass
           <p className="form-help">Loading project</p>
         </div>
       } then={([project, owners]) =>
-        if @props.user in owners
+        if @props.user in owners or @props.user.admin
           <EditProjectPage {...@props} project={project} />
         else
           <div className="content-container">
