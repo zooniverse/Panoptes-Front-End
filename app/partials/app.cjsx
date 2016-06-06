@@ -11,7 +11,8 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
 
   @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy']
 
-  keys: {}
+  keys: 
+    projectToken: 'zooHome'
 
   geordi: null
 
@@ -20,8 +21,8 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
 
   makeGeordi: (projectSlug) ->
     new GeordiClient
-      server: @state?.env
-      projectToken: projectSlug || ''
+      env: @state?.env
+      projectToken: projectSlug || @keys?.projectToken
       zooUserIDGetter: () => @state.user?.id
       subjectGetter: () => @keys?.subjectID
 
@@ -35,24 +36,23 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
             data: "\"#{eventData}\""
 
   logEvent: (logEntry) -> # Accepts key/values to make appropriate Geordi logging
-    geordi = @instance()
     newEntry = Object.assign {}, logEntry, @keys
     if GeordiLogger.tokens.indexOf(newEntry.projectToken) > -1
-      @geordi?.logEvent newEntry
-    console.log 'No logger available for event ', JSON.stringify(logEntry) unless @geordi?.logEvent
+      @instance().logEvent newEntry
+      console.log 'No logger available for event ', JSON.stringify(logEntry) unless @instance().logEvent
 
   remember: (keyVals) ->
-    rebuild = keyVals?.projectToken? && (keyVals?.projectToken != @geordi?.projectToken)
-    @geordi = @makeGeordi keyVals.projectToken if rebuild
+    reset = keyVals?.projectToken? && (keyVals?.projectToken != @geordi?.projectToken)
+    @instance().update {projectToken: keyVals.projectToken} if reset
     @keys = Object.assign {}, @keys, keyVals
 
   forget: (forgetKeys) ->
-    rebuild = false
+    reset = false
     for key in forgetKeys
-      rebuild = true if key == 'projectToken'
+      reset = (key == 'projectToken')
       delete @keys[key]
 
-    @geordi = @makeGeordi '' if rebuild
+    @instance().update {projectToken: 'zooHome'} if reset
 
 module.exports = React.createClass
   displayName: 'PanoptesApp'
