@@ -10,7 +10,7 @@ Router = require 'react-router'
 ModalFormDialog = require 'modal-form/dialog'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
-isAdmin = require '../lib/is-admin'
+isAdmin = require '../../lib/is-admin'
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
