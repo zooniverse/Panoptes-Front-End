@@ -249,7 +249,6 @@ module.exports = React.createClass
       when 40
         e.preventDefault()
         @panVertical(20)
-<<<<<<< 55b9506badaab0ad5702a2ccd37b1364dc36b8a7
       # zoom out - Chrome(187), Firefox(61)
       when 187, 61
         e.preventDefault()
@@ -261,19 +260,6 @@ module.exports = React.createClass
         @setState zooming: true
         @zoom(1.1)
       # zooming by wheel
-=======
-      # zoom out
-      when 187
-        e.preventDefault()
-        @setState zooming: true
-        @zoom(.9)
-      # zoom in
-      when 189
-        e.preventDefault()
-        @setState zooming: true
-        @zoom(1.1)
-      # zooming by mousewheel
->>>>>>> Add Grid Tracking
       when 1
         e.preventDefault()
         @setState zooming: true
