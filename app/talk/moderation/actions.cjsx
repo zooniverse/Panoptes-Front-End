@@ -3,6 +3,7 @@ React = require 'react'
 moment = require 'moment'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
+ContextualLinks = require '../../lib/contextual-links'
 
 actionTaken =
   destroy: 'Deleted'
@@ -74,8 +75,9 @@ module?.exports = React.createClass
       {if @state.actions
         <div>
           {for action in @state.actions
+            link = ContextualLinks.prefixIfNeeded(@props,"/users/#{action.user.login}")
             <div key={"moderation-#{moderation.id}-action-#{action.action}"}>
-              {actionTaken[action.action] ? action.action} by <Link to="/users/#{action.user.login}">{action.user.display_name}</Link>
+              {actionTaken[action.action] ? action.action} by <Link to="#{link}">{action.user.display_name}</Link>
               {if action.message
                 <div>
                   <i className="fa fa-quote-left"/> {action.message} <i className="fa fa-quote-right"/>

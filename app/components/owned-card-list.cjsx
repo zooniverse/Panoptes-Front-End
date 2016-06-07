@@ -26,19 +26,18 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
-  userForTitle: ->
-    if @props.ownerName
-      "#{@props.ownerName}'s"
-    else
-      'All'
+  getPageClasses: ->
+    classes = 'secondary-page all-resources-page'
+    if @props.project?
+      classes += ' has-project-context'
+    classes
 
   render: ->
     {location} = @props
-
-    <div className="secondary-page all-resources-page">
+    <div className={@getPageClasses()}>
       <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
-          <Translate component="h1" user={@userForTitle()} content={"#{@props.translationObjectName}.title"} />
+          <Translate component="h1" collectionOwnerName={@props.titleMessageObject.user?.displayName} projectDisplayName={@props.titleMessageObject.project?.displayName} content={"#{@props.titleMessageObject.messageKey}"} />
           {if @props.heroNav?
             @props.heroNav}
         </div>
@@ -82,9 +81,9 @@ module.exports = React.createClass
               </nav>
             </div>
           else if ownedResources?.length is 0
-            <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" />
+            <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" className="error"/>
           else
-            <Translate content="#{@props.translationObjectName}.loadMessage" component="div" />
+            <Translate content="#{@props.translationObjectName}.loadMessage" component="div" className="loading"/>
         }</PromiseRenderer>
       </section>
     </div>

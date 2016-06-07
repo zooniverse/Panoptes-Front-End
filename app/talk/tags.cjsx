@@ -93,7 +93,7 @@ module.exports = React.createClass
                 </section>
 
                 <section>
-                  <ActiveUsers section={@props.section} />
+                  <ActiveUsers project={@props.project} section={@props.section} />
                 </section>
 
                 <section>

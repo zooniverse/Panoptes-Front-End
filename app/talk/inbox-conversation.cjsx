@@ -8,6 +8,7 @@ HandlePropChanges = require '../lib/handle-prop-changes'
 CommentBox = require './comment-box'
 {Link, History} = require 'react-router'
 {timestamp} = require './lib/time'
+ContextualLinks = require '../lib/contextual-links'
 
 module?.exports = React.createClass
   displayName: 'InboxConversation'
@@ -46,10 +47,11 @@ module?.exports = React.createClass
         @setState {messages, messagesMeta}
 
   message: (data, i) ->
+    link = ContextualLinks.prefixIfNeeded("/users/#{commentOwner.login}")
     <div className="conversation-message" key={data.id}>
       <PromiseRenderer promise={apiClient.type('users').get(data.user_id)}>{(commentOwner) =>
         <span>
-          <strong><Link to="/users/#{commentOwner.login}">{commentOwner.display_name}</Link></strong>{' '}
+          <strong><Link to="#{link}">{commentOwner.display_name}</Link></strong>{' '}
           <span>{timestamp(data.updated_at)}</span>
         </span>
       }</PromiseRenderer>
@@ -83,8 +85,9 @@ module?.exports = React.createClass
           <div>
             In this conversation:{' '}
             {@state.recipients.map (user, i) =>
+              link = ContextualLinks.prefixIfNeeded @props, "/users/#{user.login}"
               <span key={user.id}>
-                <Link to="/users/#{user.login}">
+                <Link to="#{link}">
                   {user.display_name}
                 </Link>{', ' unless i is @state.recipients.length-1}
               </span>
