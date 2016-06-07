@@ -28,8 +28,8 @@ counterpart.registerTranslations 'en',
         anonymous:
           project: '%(projectDisplayName)s Collections'
       userAndProject:
-        other: '%(collectionOwnerName)s\'s %(projectDisplayName)s Collections'
-        self: '%(collectionOwnerName)s\'s %(projectDisplayName)s Collections'
+        other: '%(collectionOwnerName)s\'s Collections'
+        self: '%(collectionOwnerName)s\'s Collections'
         anonymous:
           userAndProject: '%(collectionOwnerName)s\'s Collections'
       user:
@@ -49,8 +49,8 @@ counterpart.registerTranslations 'en',
         anonymous:
           project: '%(projectDisplayName)s Favorites'
       userAndProject:
-        self: '%(collectionOwnerName)s\'s %(projectDisplayName)s Favorites'
-        other: '%(collectionOwnerName)s\'s %(projectDisplayName)s Favorites'
+        self: '%(collectionOwnerName)s\'s Favorites'
+        other: '%(collectionOwnerName)s\'s Favorites'
         anonymous:
           userAndProject: '%(collectionOwnerName)s\'s Favorites'
       user:
@@ -61,7 +61,7 @@ counterpart.registerTranslations 'en',
   link:
     collections:
       all:
-        other: 'All Collections'
+        other: 'All\u00a0Collections'
         self: 'All'
         anonymous:
           all: 'Collections'
@@ -73,18 +73,18 @@ counterpart.registerTranslations 'en',
           project: 'Collections'
           userAndProject: 'All'
       userAndProject:
-        other: '%(collectionOwnerName)s\'s Collections'
-        self: 'My Collections'
+        other: '%(collectionOwnerName)s\'s\u00a0Collections'
+        self: 'My\u00a0Collections'
         anonymous:
-          userAndProject: '%(collectionOwnerName)s\'s Collections'
+          userAndProject: '%(collectionOwnerName)s\'s\u00a0Collections'
       user:
-        self: 'My Collections'
-        other: '%(collectionOwnerName)s\'s Collections'
+        self: 'My\u00a0Collections'
+        other: '%(collectionOwnerName)s\'s\u00a0Collections'
         anonymous:
-          user: '%(collectionOwnerName)s\'s Collections'
+          user: '%(collectionOwnerName)s\'s\u00a0Collections'
     favorites:
       all:
-        other: 'All Favorites'
+        other: 'All\u00a0Favorites'
         self: 'All'
         anonymous:
           all: 'Favorites'
@@ -96,16 +96,16 @@ counterpart.registerTranslations 'en',
           project: 'Favorites'
           userAndProject: 'All'
       userAndProject:
-        other: '%(collectionOwnerName)s\'s Favorites'
+        other: '%(collectionOwnerName)s\'s\u00a0Favorites'
         self: 'My Favorites'
         anonymous:
-          userAndProject: '%(collectionOwnerName)s\'s Favorites'
+          userAndProject: '%(collectionOwnerName)s\'s\u00a0Favorites'
       user:
-        self: 'My Favorites'
-        other: '%(collectionOwnerName)s\'s Favorites'
+        self: 'My\u00a0Favorites'
+        other: '%(collectionOwnerName)s\'s\u00a0Favorites'
         anonymous:
-          user: '%(collectionOwnerName)s\'s Favorites'
-    removeProjectContext: 'To the Zooniverse!'
+          user: '%(collectionOwnerName)s\'s\u00a0Favorites'
+    removeProjectContext: 'To\u00a0the\u00a0Zooniverse!'
 
 
 CollectionsNav = React.createClass
