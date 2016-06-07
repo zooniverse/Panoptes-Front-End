@@ -414,19 +414,14 @@ module.exports =
     baseType = @getCurrentBaseType(props)
     filterType = @getCurrentFilterType(props)
     title = @getMessageWithData(props, contextUserLogin, context, filterType, baseType, perspective, true)
-    console.log 'context',context
     crossUsersContextualLinks = @getContextualLinksAcrossUsers(props,contextUserLogin)
     crossUsersContextualLinks.sort @sortForCollectionsAndFavorites
-    console.log 'broad',crossUsersContextualLinks
     thisUserContextualLinks = @getContextualLinksForThisUser(props,contextUserLogin)
     thisUserContextualLinks.sort @sortForCollectionsAndFavorites
-    console.log 'user',thisUserContextualLinks
     selfContextualLinks = @getContextualLinksForSelf(props)
     selfContextualLinks.sort @sortForCollectionsAndFavorites
-    console.log 'self',selfContextualLinks
     zooniverseLinks = @getZooniverseLinksForThisBaseType(props, contextUserLogin)
     zooniverseLinks.sort @sortForCollectionsAndFavorites
-    console.log 'zoo',zooniverseLinks
     orderedLinks = crossUsersContextualLinks.concat thisUserContextualLinks, selfContextualLinks, zooniverseLinks
 
     return {
