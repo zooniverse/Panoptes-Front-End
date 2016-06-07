@@ -36,13 +36,13 @@ CollectionPage = React.createClass
     document.documentElement.classList.remove 'on-collection-page'
 
   getCollectionsLink: (ownerName) ->
-    if @props.collection.favorite?
+    if @props.collection.favorite
       ContextualLinks.prefixLinkIfNeeded @props, "/favorites/#{ownerName}"
     else
       ContextualLinks.prefixLinkIfNeeded @props, "/collections/#{ownerName}"
 
   getCollectionsLinkMessageKey: ->
-    if @props.collection.favorite?
+    if @props.collection.favorite
       "collectionPage.favoritesLink"
     else
       "collectionPage.collectionsLink"
