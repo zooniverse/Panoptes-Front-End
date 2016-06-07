@@ -14,8 +14,8 @@
 #                  when we change the filter, we modify the query and actually change what data is shown.
 #
 #  - Perspective : Pages such as collections, recents and favorites can be viewed in one of three perspectives:
-#                  - viewing your *own* collections, viewing those of other users while logged in,
-#                  or viewing those of any users while logged out
+#                  - viewing your *own* collections ("self"), viewing those of other users while logged in ("other"),
+#                  or viewing those of any users while logged out ("anonymous")
 #                  When we change perspective, we don't change what content is shown, just how it is referred to or presented.
 #                  (Caveat: Privacy settings may cause different content to be visible depending on who we are - but this is handled
 #                   entirely by the API and is ignored in the front-end except for marking when a collection is Private)
@@ -94,7 +94,7 @@ module.exports =
     return filters
 
   # dashes not allowed in message keys, so we map the name. (We keep dashes so we can do things like context.includes("user"). )
-  convertFilterTypeForUseInMessageKey: (filterType) ->
+  convertFilterTypeOrContextForUseInMessageKey: (filterType) ->
     if filterType == "user-and-project"
       return "userAndProject"
     else
@@ -136,10 +136,13 @@ module.exports =
   # determine current perspective
   getCurrentPerspective: (props) ->
     contextUserLogin=@getContextUserLogin(props)
-    if props.user?.login? and contextUserLogin==props.user.login
-      "self"
+    if props.user?.login?
+      if contextUserLogin==props.user.login
+        "self"
+      else
+        "other"
     else
-      "other"
+      "anonymous"
 
   # determine what type of page we are viewing
   getCurrentBaseType: (props) ->
@@ -176,7 +179,16 @@ module.exports =
       return pathParts[3...].join("/")
       
   # construct a message key for a link or title
-  getMessageKey: (props,desiredBaseType,desiredFilterType,currentPerspective,title=false) ->
+  #
+  # message keys are made up as follows:
+  #
+  # <link|title>.<baseType>.<desiredFilterType>.<currentPerspective>
+  #
+  # When currentPerspective == "anonymous", we also need the context:
+  #
+  # <link|title>.<baseType>.<desiredFilterType>.<currentPerspective>.<currentContext>
+  #
+  getMessageKey: (props,currentContext,desiredBaseType,desiredFilterType,currentPerspective,title=false) ->
     messageKey = ""
     
     if props.translationObjectName?
@@ -187,12 +199,14 @@ module.exports =
     else
       messageKey += "link"
       
-    messageKey += ".#{desiredBaseType}.#{@convertFilterTypeForUseInMessageKey(desiredFilterType)}"
+    messageKey += ".#{desiredBaseType}.#{@convertFilterTypeOrContextForUseInMessageKey(desiredFilterType)}"
     
     if currentPerspective?
       messageKey += ".#{currentPerspective}"
-    else
-      messageKey += ".other"
+
+    if currentPerspective=="anonymous"
+      messageKey += ".#{@convertFilterTypeOrContextForUseInMessageKey(currentContext)}"
+      
     messageKey
 
   # string summarizing what we would actually be filtering on for the desired filter
@@ -231,7 +245,7 @@ module.exports =
     title=false) ->
 
     message = {}
-    message.messageKey = @getMessageKey(props,desiredBaseType,desiredFilterType,currentPerspective,title)
+    message.messageKey = @getMessageKey(props,currentContext,desiredBaseType,desiredFilterType,currentPerspective,title)
     message.hoverText = "View #{@getFilterSummary(props,desiredFilterType,desiredBaseType,currentPerspective)}"
     if desiredFilterType.includes("user")
       message.user = {
@@ -325,9 +339,9 @@ module.exports =
     else
       desiredFilterType="all"
     links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,currentPerspective,false)
-    if !props.user?
-      # if not logged in, there's room for a link to the other baseType.
-      links.push @getLink(props,contextUserLogin,currentContext,currentFilterType,@getOppositeBaseType(currentBaseType),currentPerspective,false)
+    if !props.user? and !currentContext.includes("user")
+      # if not logged in and not looking at a user, there's room for a link to the other baseType.
+      links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,@getOppositeBaseType(currentBaseType),currentPerspective,false)
     return links
 
   # links to "user's collections", "user's favorites", "user's project collections", "user's project favorites" etc.
@@ -356,10 +370,11 @@ module.exports =
     currentPerspective=@getCurrentPerspective(props)) ->
 
     links = []
-    if props.user? and not (currentContext=="user" or (currentContext=="user-and-project" and currentPerspective=="self"))
+    if props.user? and not (currentContext.includes("user") and currentPerspective=="self")
       desiredFilterType = @addUserToFilterOrContext(currentFilterType)
       links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,"self",false)
-      links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,@getOppositeBaseType(currentBaseType),"self",false)
+      if currentContext!="user" and currentPerspective!="other"
+        links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,@getOppositeBaseType(currentBaseType),"self",false)
     return links
 
   # A "To the Zooniverse!" project context removal link that will view the same user & baseType in a non-project context

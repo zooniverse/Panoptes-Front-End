@@ -13,60 +13,98 @@ counterpart.registerTranslations 'en',
     button: 'View Collection'
     loadMessage: 'Loading Collections'
     notFoundMessage: 'No Collections Found'
+
+  # titles/links in the format <link|title>.<baseType>.<desiredFilterType>.<currentPerspective>[.<currentContext>]
   title:
     collections:
       all:
         self: 'All Collections'
         other: 'All Collections'
+        anonymous:
+          all: 'All Collections'
       project:
         other: '%(projectDisplayName)s Collections'
         self: '%(projectDisplayName)s Collections'
+        anonymous:
+          project: '%(projectDisplayName)s Collections'
       userAndProject:
         other: '%(collectionOwnerName)s\'s %(projectDisplayName)s Collections'
         self: '%(collectionOwnerName)s\'s %(projectDisplayName)s Collections'
+        anonymous:
+          userAndProject: '%(collectionOwnerName)s\'s Collections'
       user:
         self: 'All %(collectionOwnerName)s\'s Collections'
         other: 'All %(collectionOwnerName)s\'s Collections'
+        anonymous:
+          user: 'All %(collectionOwnerName)s\'s Collections'
     favorites:
       all:
         self: 'All Favorites'
         other: 'All Favorites'
+        anonymous:
+          all: 'All Favorites'
       project:
         other: '%(projectDisplayName)s Favorites'
         self: '%(projectDisplayName)s Favorites'
+        anonymous:
+          project: '%(projectDisplayName)s Favorites'
       userAndProject:
         self: '%(collectionOwnerName)s\'s %(projectDisplayName)s Favorites'
         other: '%(collectionOwnerName)s\'s %(projectDisplayName)s Favorites'
+        anonymous:
+          userAndProject: '%(collectionOwnerName)s\'s Favorites'
       user:
         self: 'All %(collectionOwnerName)s\'s Favorites'
         other: 'All %(collectionOwnerName)s\'s Favorites'
+        anonymous:
+          user: 'All %(collectionOwnerName)s\'s Favorites'
   link:
     collections:
       all:
         other: 'All Collections'
         self: 'All'
+        anonymous:
+          all: 'Collections'
+          user: 'All'
       project:
         other: 'All'
         self: 'All'
+        anonymous:
+          project: 'Collections'
+          userAndProject: 'All'
       userAndProject:
         other: '%(collectionOwnerName)s\'s Collections'
         self: 'My Collections'
+        anonymous:
+          userAndProject: '%(collectionOwnerName)s\'s Collections'
       user:
         self: 'My Collections'
         other: '%(collectionOwnerName)s\'s Collections'
+        anonymous:
+          user: '%(collectionOwnerName)s\'s Collections'
     favorites:
       all:
         other: 'All Favorites'
         self: 'All'
+        anonymous:
+          all: 'Favorites'
+          user: 'All'
       project:
         other: 'All'
         self: 'All'
+        anonymous:
+          project: 'Favorites'
+          userAndProject: 'All'
       userAndProject:
         other: '%(collectionOwnerName)s\'s Favorites'
         self: 'My Favorites'
+        anonymous:
+          userAndProject: '%(collectionOwnerName)s\'s Favorites'
       user:
         self: 'My Favorites'
         other: '%(collectionOwnerName)s\'s Favorites'
+        anonymous:
+          user: '%(collectionOwnerName)s\'s Favorites'
     removeProjectContext: 'To the Zooniverse!'
 
 
