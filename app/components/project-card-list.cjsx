@@ -56,7 +56,7 @@ ProjectCard = React.createClass
       to: if project.redirect then project.redirect else '/projects/' + project.slug
 
     <FlexibleLink {...linkProps}>
-      <div className="card" ref="ownedCard">
+      <div className="project-card" ref="ownedCard">
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{project.display_name}</span></div>
@@ -79,7 +79,7 @@ ProjectCardList = React.createClass
     document.documentElement.classList.remove 'on-secondary-page'
 
   render: ->
-    <div className="card-list">
+    <div className="project-card-list">
       {@props.projects.map (project) =>
         <div key={project.id}>
           <ProjectCard project={project} />

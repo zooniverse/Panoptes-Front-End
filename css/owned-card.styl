@@ -1,4 +1,5 @@
-.card-list
+.owned-card-list,
+.project-card-list
   display: flex
   flex-direction: row
   flex-wrap: wrap
@@ -11,7 +12,8 @@
   position: relative
   font-size: 14px
 
-.card
+.owned-card,
+.project-card
   background-position: 50% 0
   background-size: cover
   display: inline-block
@@ -31,7 +33,6 @@
     color: FOREGROUND
     display: flex
     flex-direction: column
-    height: 175px
     padding: 20px
     text-align: left
 
@@ -55,6 +56,10 @@
 
     &:hover
       background: lighten(COBOLT_BLUE, 20%)
+
+.owned-card
+  .name
+    margin-bottom: 1em
 
 .project-card
   height: 270px
