@@ -127,7 +127,6 @@ CollectionsNav = React.createClass
         {@generateTranslateLink(link.message)}
       </Link>
 
-  # TODO add message/stats links in the middle here
   renderNavBar: ->
     <nav className="hero-nav">
       {@renderNavLinks(@props.titleAndNavLinks.links)}

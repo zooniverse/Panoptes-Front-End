@@ -47,7 +47,7 @@ module.exports =
   # we're viewing. Therefore we can deduce this from props 
   # This method will return the login name of the user whose context we are in
   # This comes from the collection, if present, otherwise from the logged in user if there is one.
-  # TODO UPDATE THIS FOR TALK RECENTS AND USER PROFILES
+
   getContextUserLogin: (props) ->
     if props.favorite and props.params?.favorites_owner?
       return props.params.favorites_owner
@@ -74,8 +74,6 @@ module.exports =
   # determines current user/project/user+project filters in effect from the URL.
   # returns the correct format for directly attaching to the query.
   getFiltersFromPath: (props) ->
-    #TODO CHECK THIS AGAINST NEW URL SCHEMES
-    #TODO UPDATE ROUTES PER NEW URL SCHEMES
     filters = {}
     pathParts = @safelyGetPath(props)
     [firstPart, ..., lastPart] = pathParts
@@ -215,23 +213,24 @@ module.exports =
     desiredBaseType=@getCurrentBaseType(props),
     currentPerspective=@getCurrentPerspective(props)) ->
 
-    if desiredFilterType.includes("user")
-      if currentPerspective=='self'
-        summaryString="all my"
+    if desiredBaseType=="users"
+      summaryString = "this user's profile"
+    else
+      if desiredFilterType.includes("user")
+        if currentPerspective=='self'
+          summaryString="all my"
+        else
+          summaryString="all this user\'s"
       else
-        summaryString="all this user\'s"
-    else
-      summaryString="all"
+        summaryString="all"
 
-    if desiredBaseType=="collections" or desiredBaseType=="favorites"
-      summaryString += " #{desiredBaseType}"
-    else if desiredBaseType=="recents"
-      summaryString += " recent comments"
-    else
-      summaryString += " [#{desiredBaseType}]" # TODO check this
+      if desiredBaseType=="collections" or desiredBaseType=="favorites"
+        summaryString += " #{desiredBaseType}"
+      else if desiredBaseType=="talk/recents"
+        summaryString += " recent comments"
 
-    if desiredFilterType.includes("project")
-      summaryString += " within this project"
+      if desiredFilterType.includes("project")
+        summaryString += " within this project"
 
     return summaryString
 
@@ -250,7 +249,7 @@ module.exports =
     if desiredFilterType.includes("user")
       message.user = {
         login: @makeTextUnbreakable(contextUserLogin)
-        displayName: @makeTextUnbreakable(contextUserLogin) #TODO get actual display name
+        displayName: @makeTextUnbreakable(contextUserLogin) # in future we should get the actual display name
       }
     if desiredFilterType.includes("project")
       message.project = {
