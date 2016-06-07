@@ -58,12 +58,15 @@ module.exports = React.createClass
     annotation: null
     onChange: NOOP
 
+  getInitialState: ->
+    rows: 1
+
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <label className="answer">
-        <textarea autoFocus={@props.autoFocus} className="standard-input full" rows="5" ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
+        <textarea autoFocus={@props.autoFocus} className="standard-input full" rows={@state.rows} ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
       </label>
-      {if @props.task.text_tags 
+      {if @props.task.text_tags
           <div className="transcription-metadata-tags">
             {for tag, i in @props.task.text_tags
               <input type="button" className="standard-button text-tag" key={i} value={tag} onClick={@setTagSelection} />}
@@ -71,6 +74,10 @@ module.exports = React.createClass
     </GenericTask>
 
   handleChange: ->
+    if @refs.textInput.scrollHeight > @refs.textInput.offsetHeight
+      rows = @state.rows + 1
+      @setState rows: rows
+
     value = @refs.textInput.value
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
