@@ -80,9 +80,15 @@ module.exports = React.createClass
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
 
+  handleReset: (e) ->
+    # keyCode 8 is backspace, 46 is delete
+    if e.which is 8 or e.which is 46
+      @setState rows: 1
+
   handleResize: ->
     scroll = @refs.textInput.scrollHeight
     offset = @refs.textInput.offsetHeight
+
     heightChange = scroll - offset + 2
     return unless heightChange > 0
 
@@ -107,7 +113,7 @@ module.exports = React.createClass
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <label className="answer">
-        <textarea autoFocus={@props.autoFocus} className="standard-input full" rows={@state.rows} ref="textInput" value={@props.annotation.value} onChange={@handleChange} />
+        <textarea autoFocus={@props.autoFocus} className="standard-input full" rows={@state.rows} ref="textInput" value={@props.annotation.value} onKeyDown={@handleReset} onChange={@handleChange} />
       </label>
       {if @props.task.text_tags
         <div className="transcription-metadata-tags">
@@ -118,6 +124,10 @@ module.exports = React.createClass
 
   handleChange: ->
     value = @refs.textInput.value
+
+    if @props.annotation.value?.length > value.length
+      @setState rows: 1
+    @handleResize()
+
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
-    @handleResize()
