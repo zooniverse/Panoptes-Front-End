@@ -246,7 +246,7 @@ module.exports =
     message = {}
     message.messageKey = @getMessageKey(props,currentContext,desiredBaseType,desiredFilterType,currentPerspective,title)
     message.hoverText = "View #{@getFilterSummary(props,desiredFilterType,desiredBaseType,currentPerspective)}"
-    if desiredFilterType.includes("user")
+    if desiredFilterType.includes("user") or desiredBaseType=="users"
       message.user = {
         login: @makeTextUnbreakable(contextUserLogin)
         displayName: @makeTextUnbreakable(contextUserLogin) # in future we should get the actual display name

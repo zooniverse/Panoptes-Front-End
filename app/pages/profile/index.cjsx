@@ -20,7 +20,7 @@ counterpart.registerTranslations 'en',
       moderation: "Moderation"
       stats: "Your stats"
       settings: "Settings"
-      removeProjectContextLink: "To the Zooniverse!"
+      removeProjectContextLink: 'View\u00a0%(collectionOwnerName)s\'s\u00a0Zooniverse.org\u00a0Profile'
 
 UserProfilePage = React.createClass
   displayName: 'UserProfilePage'
@@ -69,27 +69,30 @@ UserProfilePage = React.createClass
 
   renderNavLinks: ->
     linksForNav = @getLinksForNav()
+    className = ""
+    if @props.project?
+      className += " about-tabs"
     <span>
-      <IndexLink to="#{linksForNav.recents}" activeClassName="active">
+      <IndexLink to="#{linksForNav.recents}" className={className} activeClassName="active">
         <Translate content="profile.nav.comments" />
       </IndexLink>
-      <Link to="#{linksForNav.collections}" activeClassName="active">
+      <Link to="#{linksForNav.collections}" className={className} activeClassName="active">
         <Translate content="profile.nav.collections" />
       </Link>
-      <Link to="#{linksForNav.favorites}" activeClassName="active">
+      <Link to="#{linksForNav.favorites}" className={className} activeClassName="active">
         <Translate content="profile.nav.favorites" />
       </Link>
       {if @props.user is @props.profileUser
-        <Link to="#{linksForNav.stats}" activeClassName="active">
+        <Link to="#{linksForNav.stats}" className={className} activeClassName="active">
           <Translate content="profile.nav.stats" />
         </Link>
       else
-        <Link to="#{linksForNav.message}" activeClassName="active">
+        <Link to="#{linksForNav.message}" className={className} activeClassName="active">
           <Translate content="profile.nav.message" />
         </Link>}
       {if @props.project?
-        <Link to="#{linksForNav.removeProjectContextLink}" activeClassName="active">
-          <Translate content="profile.nav.removeProjectContextLink" />
+        <Link to="#{linksForNav.removeProjectContextLink.to}" className={className} activeClassName="active">
+          <Translate content="profile.nav.removeProjectContextLink" collectionOwnerName={linksForNav.removeProjectContextLink.message.user?.displayName} />
         </Link>}
     </span>
 
@@ -98,18 +101,27 @@ UserProfilePage = React.createClass
     if @state.profileHeader?
       headerStyle = backgroundImage: "url(#{@state.profileHeader.src})"
 
+    classNames = "user-profile-content"
+    if @props.project?
+      classNames += " project-text-content in-project-context talk"
+
     <div className="#{@getPageClasses()}">
       <section className="hero user-profile-hero" style={headerStyle}>
         <div className="overlay"></div>
         <div className="hero-container">
           <h1>{@props.profileUser.display_name}</h1>
-          <nav className="hero-nav">
-            {@renderNavLinks()}
-          </nav>
+          {if !@props.project?
+            <nav className="hero-nav">
+              {@renderNavLinks()}
+            </nav>}
         </div>
       </section>
 
-      <section className="user-profile-content">
+      <section className={classNames}>
+        {if @props.project?
+          <nav className="hero-nav">
+            {@renderNavLinks()}
+        </nav>}
         {React.cloneElement(@props.children, @props)}
       </section>
     </div>
