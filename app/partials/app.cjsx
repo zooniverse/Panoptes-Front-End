@@ -70,7 +70,7 @@ module.exports = React.createClass
   getEnv: ->
     reg = /\W?env=(\w+)/
     browser_env = window?.location?.search?.match(reg)
-    @state?.env || browser_env || 'staging'
+    @state?.env || browser_env?[1] || 'staging'
 
   getInitialState: ->
     user: null
