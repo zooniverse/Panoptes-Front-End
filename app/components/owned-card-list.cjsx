@@ -39,11 +39,13 @@ module.exports = React.createClass
       <section className={"hero #{@props.heroClass}"}>
         <div className="hero-container">
           <Translate component="h1" collectionOwnerName={@props.titleMessageObject.user?.displayName} projectDisplayName={@props.titleMessageObject.project?.displayName} content={"#{@props.titleMessageObject.messageKey}"} />
-          {if @props.heroNav?
+          {if @props.heroNav? and !@props.project?
             @props.heroNav}
         </div>
       </section>
       <section className="resources-container">
+        {if @props.heroNav? and @props.project?
+            @props.heroNav}
         <PromiseRenderer promise={@props.listPromise}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()

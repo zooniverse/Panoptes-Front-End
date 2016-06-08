@@ -140,12 +140,15 @@ CollectionsNav = React.createClass
 
   # render a link from a contextual-links link object
   renderLink: (link) ->
+    className = ""
+    if @props.project?
+      className += " about-tabs"
     if link.type=="IndexLink"
-      <IndexLink key="#{link.key}" to="#{link.to}" title="#{link.message.hoverText}" activeClassName="active">
+      <IndexLink key="#{link.key}" to="#{link.to}" className={className} title="#{link.message.hoverText}" activeClassName="active">
         {@generateTranslateLink(link.message)}
       </IndexLink>
     else
-      <Link key="#{link.key}" to="#{link.to}" title="#{link.message.hoverText}" activeClassName="active">
+      <Link key="#{link.key}" to="#{link.to}" className={className} title="#{link.message.hoverText}" activeClassName="active">
         {@generateTranslateLink(link.message)}
       </Link>
 
