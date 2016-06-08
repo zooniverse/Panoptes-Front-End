@@ -258,7 +258,7 @@ module.exports =
         displayName: @makeTextUnbreakable(props.project.display_name)
       }
     if currentContext?.includes('project') and !desiredFilterType?.includes('project')
-      message.messageKey = "link.removeProjectContext"
+      message.messageKey = "removeProjectContext." + message.messageKey
       message.hoverText += " on zooniverse.org"
     message.isATitle = title
     return message
@@ -376,8 +376,9 @@ module.exports =
         links.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,@getOppositeBaseType(currentBaseType),"self",false)
     return links
 
-  # A "To the Zooniverse!" project context removal link that will view the same user & baseType in a non-project context
-  getZooniverseLinksForThisBaseType: (props,
+  # A project context removal link that will view the same user & baseType in a non-project context
+  # If not in project context, return null
+  getRemoveProjectContextLink: (props,
     contextUserLogin=@getContextUserLogin(props),
     currentContext=@getCurrentContext(props,contextUserLogin),
     currentFilterType=@getCurrentFilterType(props),
@@ -385,11 +386,11 @@ module.exports =
     currentPerspective=@getCurrentPerspective(props),
     desiredFilterType=@removeProjectFromFilterType(currentFilterType)) ->
 
-    zooniverseLinks = []
     if currentContext.includes("project")
       # if in project context, add "remove project context" link
-      zooniverseLinks.push @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,currentPerspective,false)
-    return zooniverseLinks
+      return @getLink(props,contextUserLogin,currentContext,desiredFilterType,currentBaseType,currentPerspective,false)
+    else
+      return null
 
   removeProjectFromFilterType: (filterType) ->
     filterType = "user" if filterType == "user-and-project"
@@ -419,12 +420,16 @@ module.exports =
     thisUserContextualLinks.sort @sortForCollectionsAndFavorites
     selfContextualLinks = @getContextualLinksForSelf(props)
     selfContextualLinks.sort @sortForCollectionsAndFavorites
-    zooniverseLinks = @getZooniverseLinksForThisBaseType(props, contextUserLogin)
-    zooniverseLinks.sort @sortForCollectionsAndFavorites
-    orderedLinks = crossUsersContextualLinks.concat thisUserContextualLinks, selfContextualLinks, zooniverseLinks
+    orderedLinks = crossUsersContextualLinks.concat thisUserContextualLinks, selfContextualLinks
 
     return {
       title: title
       links: orderedLinks
     }
 
+  shouldShowCollectionOwner: (props,
+    contextUserLogin=@getContextUserLogin(props),
+    currentContext=@getCurrentContext(props,contextUserLogin)) ->
+    console.log 'should show determined ',!currentContext.includes("user")
+    return !currentContext.includes("user")
+    

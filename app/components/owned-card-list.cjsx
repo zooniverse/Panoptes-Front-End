@@ -5,6 +5,7 @@ Translate = require 'react-translate-component'
 apiClient = require 'panoptes-client/lib/api-client'
 PromiseRenderer = require '../components/promise-renderer'
 OwnedCard = require '../partials/owned-card'
+ContextualLinks = require '../lib/contextual-links'
 {Link} = require 'react-router'
 
 module.exports = React.createClass
@@ -46,13 +47,23 @@ module.exports = React.createClass
         <PromiseRenderer promise={@props.listPromise}>{(ownedResources) =>
           if ownedResources?.length > 0
             meta = ownedResources[0].getMeta()
+            classNames = "resource-results-counter"
+            if meta and @props.removeProjectContextLink?
+              classNames += " remove-project-context-link-follows"
             <div>
-              <div className="resource-results-counter">
+              <div className={classNames}>
                 {if meta
                   pageStart = meta.page * meta.page_size - meta.page_size + 1
                   pageEnd = Math.min(meta.page * meta.page_size, meta.count)
                   count = meta.count
                   <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" component="p" />}
+                {if @props.removeProjectContextLink?
+                  link = @props.removeProjectContextLink
+                  <p className="remove-project-context-link">
+                    <Link key="#{link.key}" to="#{link.to}" title="#{link.message.hoverText}" activeClassName="active">
+                      <Translate content="#{link.message.messageKey}" projectDisplayName={link.message.project?.displayName} collectionOwnerName={link.message.user?.displayName} />
+                    </Link>
+                  </p>}
               </div>
               <div className="owned-card-list">
                 {for resource in ownedResources
@@ -62,7 +73,7 @@ module.exports = React.createClass
                      imagePromise={@props.imagePromise(resource)}
                      linkTo={@props.cardLink(resource)}
                      translationObjectName={@props.translationObjectName}
-                     skipOwner={@props.skipOwner} />}
+                     skipOwner={!ContextualLinks.shouldShowCollectionOwner(@props)} />}
               </div>
               <nav>
                 {if meta

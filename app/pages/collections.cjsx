@@ -105,8 +105,30 @@ counterpart.registerTranslations 'en',
         other: '%(collectionOwnerName)s\'s\u00a0Favorites'
         anonymous:
           user: '%(collectionOwnerName)s\'s\u00a0Favorites'
-    removeProjectContext: 'To\u00a0the\u00a0Zooniverse!'
-
+  removeProjectContext:
+    link:
+      collections:
+        all:
+          self: 'View\u00a0Other\u00a0Zooniverse\u00a0Collections'
+          other: 'View\u00a0Other\u00a0Zooniverse\u00a0Collections'
+          anonymous:
+            project: 'View\u00a0Other\u00a0Zooniverse\u00a0Collections'
+        user:
+          self: 'View\u00a0My\u00a0Other\u00a0Zooniverse\u00a0Collections'
+          other: 'View\u00a0%(collectionOwnerName)s\'s\u00a0Other\u00a0Zooniverse\u00a0Collections'
+          anonymous:
+            userAndProject: 'View\u00a0%(collectionOwnerName)s\'s\u00a0Other\u00a0Zooniverse\u00a0Collections'
+      favorites:
+        all:
+          self: 'View\u00a0Other\u00a0Zooniverse\u00a0Favorites'
+          other: 'View\u00a0Other\u00a0Zooniverse\u00a0Favorites'
+          anonymous:
+            project: 'View\u00a0Other\u00a0Zooniverse\u00a0Favorites'
+        user:
+          self: 'View\u00a0My\u00a0Other\u00a0Zooniverse\u00a0Favorites'
+          other: 'View\u00a0%(collectionOwnerName)s\'s\u00a0Other\u00a0Zooniverse\u00a0Favorites'
+          anonymous:
+            userAndProject: 'View\u00a0%(collectionOwnerName)s\'s\u00a0Other\u00a0Zooniverse\u00a0Favorites'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
@@ -169,18 +191,20 @@ List = React.createClass
   render: ->
     titleAndNavLinks = ContextualLinks.getContextualTitleAndNavLinks(@props)
     contextUserLogin = ContextualLinks.getContextUserLogin(@props)
+    removeProjectContextLink = ContextualLinks.getRemoveProjectContextLink(@props,contextUserLogin)
     <OwnedCardList
       {...@props}
       translationObjectName = "collectionsPage"
       contextUserLogin = {contextUserLogin}
       titleAndNavLinks = {titleAndNavLinks}
       listPromise = {@listCollections()}
+      removeProjectContextLink = {removeProjectContextLink}
       linkTo = "collections"
       titleMessageObject = {titleAndNavLinks.title}
       heroNav={<CollectionsNav {...@props} contextUserLogin={contextUserLogin} titleAndNavLinks={titleAndNavLinks} />}
       heroClass = "collections-hero"
       ownerName = {contextUserLogin}
-      skipOwner = {!@props.params?.owner}
+      skipOwner = {false}
       imagePromise = {@imagePromise}
       cardLink = {@cardLink} />
 

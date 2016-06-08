@@ -4,6 +4,7 @@ PromiseRenderer = require '../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
+ContextualLinks = require '../lib/contextual-links'
 
 FlexibleLink = React.createClass
   displayName: 'FlexibleLink'
@@ -58,10 +59,10 @@ module.exports = React.createClass
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.resource.display_name}</span></div>
+          {console.log 'skip is ',@props.skipOwner}
           {if !@props.skipOwner
-            <PromiseRenderer promise={@props.resource.get('owner')}>{ (owner) ->
-              if document.location.hash is "/collections"
-                <div className="owner">{owner?.display_name ? 'LOADING'}</div>
+            <PromiseRenderer promise={@props.resource.get('owner')} {...@props}>{ (owner) ->
+              <div className="owner">{owner?.display_name ? 'LOADING'}</div>
             }</PromiseRenderer>}
           {<div className="description">{@props.resource.description}</div> if @props.resource.description?}
           {<div className="private"><i className="fa fa-lock"></i> Private</div> if @props.resource.private}
