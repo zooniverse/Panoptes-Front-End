@@ -27,13 +27,11 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
       subjectGetter: () => @keys?.subjectID
 
   makeHandler: (defType) -> # Once defined, efficiently logs different data to same event type
-    instance = @instance
-    (eventData, eventType) ->
+    (eventData, eventType) =>
         eventType = defType if typeof eventType isnt 'string'
-        if GeordiLogger.tokens.indexOf(instance().projectToken) > -1
-          instance()?.logEvent
-            type: eventType
-            data: "\"#{eventData}\""
+        @logEvent
+          type: eventType
+          data: "\"#{eventData}\""
 
   logEvent: (logEntry) -> # Accepts key/values to make appropriate Geordi logging
     newEntry = Object.assign {}, logEntry, @keys
