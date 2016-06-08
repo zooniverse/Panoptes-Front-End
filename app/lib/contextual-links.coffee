@@ -430,6 +430,5 @@ module.exports =
   shouldShowCollectionOwner: (props,
     contextUserLogin=@getContextUserLogin(props),
     currentContext=@getCurrentContext(props,contextUserLogin)) ->
-    console.log 'should show determined ',!currentContext.includes("user")
     return !currentContext.includes("user")
     
