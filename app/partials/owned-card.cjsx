@@ -60,8 +60,7 @@ module.exports = React.createClass
           <div className="name"><span>{@props.resource.display_name}</span></div>
           {if !@props.skipOwner
             <PromiseRenderer promise={@props.resource.get('owner')}>{ (owner) ->
-              if document.location.hash is "/collections"
-                <div className="owner">{owner?.display_name ? 'LOADING'}</div>
+              <div className="owner">{owner?.display_name ? 'LOADING'}</div>
             }</PromiseRenderer>}
           {<div className="description">{@props.resource.description}</div> if @props.resource.description?}
           {<div className="private"><i className="fa fa-lock"></i> Private</div> if @props.resource.private}
