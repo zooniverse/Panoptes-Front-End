@@ -93,13 +93,13 @@ module.exports = React.createClass
       # Chrome, Safari increment rows (heightChange) by 22
       rows = rows + (heightChange / 22)
     else
-      # Firefox increments rows by 7, 8, 22 or 23, so the following handles specific noted row increases
+      # Firefox and Edge increment rows by varying amounts, so the following handles the row increases noted
       switch heightChange
-        when 30
+        when 30, 45
           rows = rows + 2
-        when 52
+        when 52, 67
           rows = rows + 3
-        when 75
+        when 75, 90
           rows = rows + 4
         else
           rows = rows + 1
