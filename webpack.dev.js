@@ -2,6 +2,7 @@
 
 var path = require('path');
 var webpack = require('webpack');
+var nib = require('nib');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -69,6 +70,9 @@ var config = {
   } ,
   node: {
     fs: "empty"
+  },
+  stylus: {
+    use: [nib()]
   }
 };
 

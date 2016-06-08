@@ -2,6 +2,7 @@
 
 var path = require('path');
 var webpack = require('webpack');
+var nib = require('nib');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -88,5 +89,8 @@ module.exports = {
   } ,
   node: {
     fs: "empty"
+  },
+  stylus: {
+    use: [nib()]
   }
 };
