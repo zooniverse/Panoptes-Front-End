@@ -84,9 +84,13 @@ module.exports = React.createClass
       <polyline points={points} />
 
   renderRow: ->
+    totalPoints = []
     for cell in @state.row
       points = @pointParser cell
-      <polyline key={Math.random()} points={points} />
+      totalPoints.push points
+    <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+      <polyline key={Math.random()} points={totalPoints.join()} />
+    </Draggable>
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal

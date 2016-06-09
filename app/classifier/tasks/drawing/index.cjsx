@@ -103,11 +103,13 @@ module.exports = React.createClass
       pref.save()
       @setState preferences: pref.preferences
 
-  saveRow: (annotations, type) ->
+  saveRow: (marks) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.activeTemplate': type
-      if type == 'row' and !pref.preferences.row
-        pref.update 'preferences.row': annotations
+      pref.update 'preferences.activeTemplate': 'row'
+      if !pref.preferences.row
+        lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
+        lastRow = (i for i in marks when i.y < lastCellMid && (i.y + i.height) > lastCellMid)
+        pref.update 'preferences.row': lastRow
       else
         pref.update 'preferences.template': null
       pref.save()
@@ -149,7 +151,7 @@ module.exports = React.createClass
             Draw Rows
           </button>}
         {if tool.type is 'grid'
-          <button type="button" onClick={@saveRow.bind this, @props.annotation.value, 'row'}>
+          <button type="button" onClick={@saveRow.bind this, @props.annotation.value} disabled={@state?.preferences?.row?}>
             Save Row Template
           </button>}
         {if tool.type is 'grid'
