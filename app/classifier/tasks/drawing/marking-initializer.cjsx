@@ -98,6 +98,7 @@ module.exports = React.createClass
       mark = null
       @props.annotation.value.pop()
       for cell in multipleMarks
+        cell.skip = true unless cell == multipleMarks[0]
         @props.annotation.value.push cell
 
         unless MarkComponent.initValid cell

@@ -88,9 +88,14 @@ module.exports = React.createClass
     for cell in @state.row
       points = @pointParser cell
       totalPoints.push points
-    <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+    <Draggable onDrag={@handleRowDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
       <polyline key={Math.random()} points={totalPoints.join()} />
     </Draggable>
+
+  handleRowDrag: (e, d) ->
+    @props.mark.x += d.x / @props.scale.horizontal
+    @props.mark.y += d.y / @props.scale.vertical
+    @props.onChange @props.mark # this should be updated to reflect row
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal

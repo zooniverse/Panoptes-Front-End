@@ -50,6 +50,9 @@ module.exports = React.createClass
                 skippedMarks += 1
                 continue
 
+              if mark.skip?
+                continue
+
               toolDescription = taskDescription.tools[mark.tool]
 
               toolEnv =
