@@ -59,7 +59,11 @@ module.exports = React.createClass
     onChange: NOOP
 
   getInitialState: ->
-    rows: 1
+    textareaHeight: undefined
+    initOffsetHeight: undefined
+
+  componentDidMount: ->
+    @setState initOffsetHeight: @refs.textInput.offsetHeight
 
   setTagSelection: (e) ->
     textTag = e.target.value
@@ -81,34 +85,25 @@ module.exports = React.createClass
     @props.onChange newAnnotation
 
   handleClear: (e) ->
-    # keyCode 8 is backspace, 46 is delete
     if e.which is 8 or e.which is 46
-      @setState rows: 1
+      @setState textareaHeight: @state.initOffsetHeight
 
-  handleResize: ->
-    heightChange = @refs.textInput.scrollHeight - @refs.textInput.offsetHeight + 2
-    return unless heightChange > 0
-    rows = @state.rows
-    if heightChange % 22 is 0
-      # Chrome, Safari increment rows (heightChange) by 22
-      rows = rows + (heightChange / 22)
-    else
-      # Firefox and Edge increment rows by varying amounts, so the following handles the row increases noted
-      switch heightChange
-        when 30, 45
-          rows = rows + 2
-        when 52, 67
-          rows = rows + 3
-        when 75, 90
-          rows = rows + 4
-        else
-          rows = rows + 1
-    @setState rows: rows
+  updateHeight: ->
+    @setState textareaHeight: @refs.textInput.scrollHeight + 2
 
   render: ->
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <label className="answer">
-        <textarea autoFocus={@props.autoFocus} className="standard-input full" rows={@state.rows} ref="textInput" value={@props.annotation.value} onKeyDown={@handleClear} onChange={@handleChange} />
+        <textarea
+          autoFocus={@props.autoFocus}
+          className="standard-input full"
+          ref="textInput"
+          value={@props.annotation.value}
+          onChange={@handleChange}
+          rows="1"
+          style={height: @state.textareaHeight}
+          onKeyDown={@handleClear}
+        />
       </label>
       {if @props.task.text_tags
         <div className="transcription-metadata-tags">
@@ -118,11 +113,7 @@ module.exports = React.createClass
     </GenericTask>
 
   handleChange: ->
+    @updateHeight()
     value = @refs.textInput.value
-
-    if @props.annotation.value?.length > value.length
-      @setState rows: 1
-    @handleResize()
-
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
