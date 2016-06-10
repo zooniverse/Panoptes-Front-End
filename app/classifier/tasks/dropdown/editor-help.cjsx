@@ -6,7 +6,7 @@ module.exports =
   allowCreate: "Check this box to allow a volunteer to type an unique answer, not provided as an option."
 
   options: <div className="content-container">
-    <p>Add an option label individually <strong>OR</strong> copy and paste a list of option labels, <em>NO</em> header or blank rows, and click the 'Add' button. Labels can be seperated by line breaks or commas, and copied directly from file types CSV, TXT, XLS(X) or others. An example of a list that could be copied then pasted into the input is as follows:</p>
+    <p>Add an option label individually <strong>OR</strong> copy and paste a list of option labels, <em>NO</em> header, and click the 'Add' button. Labels can be copied directly from file types CSV, TXT, XLS(X) or others. An example of a list that could be copied then pasted into the input is as follows:</p>
 
     <table className="standard-table">
       <tbody>

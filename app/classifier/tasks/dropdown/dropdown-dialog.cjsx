@@ -10,8 +10,6 @@ provincesCanada = require './presets/provinces-Canada' # value = two-letter post
 statesMexico = require './presets/states-Mexico' # value = three-letter ISO 3166-2 abbreviation
 # IMPORTANT: before adding preset options, confirm values are not duplicated in existing presets
 
-alertCount = 0
-
 DropdownDialog = React.createClass
 
   getDefaultProps: ->
@@ -73,24 +71,15 @@ DropdownDialog = React.createClass
         @handleOptionsKeys(@state.conditionalSelects[otherIndex], null)
 
   addOption: (optionLabel) ->
-    addOption: (optionLabel) ->
     if not optionLabel
-      alertCount++
-      return window.alert('Please provide an option.')
-
-    if @getOptionsByProp("label")?.indexOf(optionLabel) isnt -1
-      alertCount++
-      return window.alert('Options must be unique within each dropdown.')
+      return
 
     select = @state.editSelect
-
-    if select.condition? and not @state.optionsKeys[select.condition]
-      alertCount++
-      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to.')
-
-    alertCount = 0
-
     optionsKey = @getOptionsKey(select)
+
+    if @getOptionsByProp("label")?.indexOf(optionLabel) isnt -1
+      dupIndex = @getOptionsByProp("label")?.indexOf(optionLabel)
+      select.options[optionsKey]?.splice(dupIndex, 1)
 
     if select.options[optionsKey]?
       select.options[optionsKey].push {value: "#{Math.random().toString(16).split('.')[1]}", label: "#{optionLabel}"}
@@ -121,10 +110,6 @@ DropdownDialog = React.createClass
 
   handlePresetApply: ->
     select = @state.editSelect
-
-    if select.condition? and not @state.optionsKeys[select.condition]
-      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
-
     optionsKey = @getOptionsKey(select)
     preset = @state.presetValue
 
@@ -153,13 +138,11 @@ DropdownDialog = React.createClass
     return select
 
   handleAdd: ->
-    optionsArray = @refs.optionInput.value.split(/\n|,/)
+    optionsArray = @refs.optionInput.value.split(/\n/)
 
     for option in optionsArray
-      if alertCount < 3
-        @addOption option
+      @addOption option
 
-    alertCount = 0
     @refs.optionInput.value = ""
 
   save: (e) ->
@@ -274,7 +257,7 @@ DropdownDialog = React.createClass
 
       <br />
 
-      <div>
+      <div style={disabledStyle if @checkConditions()}>
         <h2 className="form-label">Presets</h2>
         <select value={@state.presetValue} onChange={@handlePresetChange}>
           <option value="">none selected</option>
