@@ -64,6 +64,7 @@ module.exports = React.createClass
 
   componentDidMount: ->
     @setState initOffsetHeight: @refs.textInput.offsetHeight
+    @updateHeight()
 
   setTagSelection: (e) ->
     textTag = e.target.value
@@ -84,10 +85,6 @@ module.exports = React.createClass
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
 
-  handleClear: (e) ->
-    if e.which is 8 or e.which is 46
-      @setState textareaHeight: @state.initOffsetHeight
-
   updateHeight: ->
     @setState textareaHeight: @refs.textInput.scrollHeight + 2
 
@@ -102,7 +99,6 @@ module.exports = React.createClass
           onChange={@handleChange}
           rows="1"
           style={height: @state.textareaHeight}
-          onKeyDown={@handleClear}
         />
       </label>
       {if @props.task.text_tags
