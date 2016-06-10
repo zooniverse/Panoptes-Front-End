@@ -85,22 +85,51 @@ module.exports = React.createClass
 
   renderRow: ->
     totalPoints = []
-    for cell in @state.row
-      points = @pointParser cell
-      totalPoints.push points
+    if @props.mark.renderDrag is true
+      for cell in @state.row
+        points = @pointRow cell
+        totalPoints.push points
+    else
+      @props.mark.x = Infinity
+      for cell in @state.row
+        points = @pointParser cell # know if it's the first or second time to parse. if second, it won't be able to move left and right due to pointParser
+        @markRow(cell)  # turn that dang mark into a row
+        totalPoints.push points
     <Draggable onDrag={@handleRowDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
       <polyline key={Math.random()} points={totalPoints.join()} />
     </Draggable>
 
+  markRow: (cell) ->
+    if cell.x < @props.mark.x
+      @props.mark.x = cell.x
+    if cell.x > @props.mark.x
+      @props.mark.width = (cell.x + cell.width - @props.mark.x)
+
   handleRowDrag: (e, d) ->
+    @props.mark.renderDrag = true
     @props.mark.x += d.x / @props.scale.horizontal
     @props.mark.y += d.y / @props.scale.vertical
-    @props.onChange @props.mark # this should be updated to reflect row
+    newRows = @state.row
+    for cell in newRows
+      cell.x += d.x / @props.scale.horizontal
+      cell.y += d.y / @props.scale.vertical
+    @setState row: newRows
+    @props.onChange @props.mark
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
     @props.mark.y += d.y / @props.scale.vertical
     @props.onChange @props.mark
+
+  pointRow: (cell) ->
+    {y, height} = @props.mark #now do this according to state, or mark?
+    points = [
+      [cell.x, y].join ','
+      [cell.x + cell.width, y].join ','
+      [cell.x + cell.width, y + height].join ','
+      [cell.x, y + height].join ','
+      [cell.x, y].join ','
+    ].join '\n'
 
   pointFinder: (mark) ->
     {x, y, width, height} = mark
