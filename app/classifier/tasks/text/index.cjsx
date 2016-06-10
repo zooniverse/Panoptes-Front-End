@@ -113,7 +113,13 @@ module.exports = React.createClass
     </GenericTask>
 
   handleChange: ->
-    @updateHeight()
     value = @refs.textInput.value
+
+    if @props.annotation.value?.length > value.length
+      @setState textareaHeight: @state.initOffsetHeight, =>
+        @updateHeight()
+    else
+      @updateHeight()
+
     newAnnotation = Object.assign @props.annotation, {value}
     @props.onChange newAnnotation
