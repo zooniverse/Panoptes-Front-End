@@ -11,6 +11,8 @@ ModalFormDialog = require 'modal-form/dialog'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
 isAdmin = require '../../lib/is-admin'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
+DragReorderable = require 'drag-reorderable'
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
@@ -33,6 +35,15 @@ EditProjectPage = React.createClass
     subjectSetCreationInProgress: false
     deletionError: null
     deletionInProgress: false
+
+  handleWorkflowReorder: (newOrder) ->
+    newOrderIDs = newOrder.map (workflow) ->
+      workflow.id
+    @props.project.update({
+      'configuration.workflow_order': newOrderIDs
+    })
+    @forceUpdate()
+    @props.project.save()
 
   labPath: (postFix = '') ->
     "/lab/#{@props.project.id}#{postFix}"
@@ -83,24 +94,28 @@ EditProjectPage = React.createClass
           <li>
             <br />
             <div className="nav-list-header">Workflows</div>
-            <PromiseRenderer promise={@props.project.get 'workflows'}>{(workflows) =>
-              <ul className="nav-list">
-                {renderWorkflowListItem = (workflow) ->
-                  <li key={workflow.id}>
-                    <Link to={@labPath("/workflow/#{workflow.id}")} activeClassName="active" className="nav-list-item" title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">{workflow.display_name}</Link>
-                  </li>}
+            <PromiseRenderer promise={getWorkflowsInOrder @props.project}>{(workflows) =>
+              renderWorkflowListItem = (workflow) =>
+                <Link to={@labPath "/workflow/#{workflow.id}"} className="nav-list-item" activeClassName="active">
+                  {workflow.display_name}
+                  {if workflow.id is @props.project.configuration?.default_workflow
+                    <span title="Default workflow">{' '}*{' '}</span>}
+                </Link>
 
-                {for workflow in workflows
-                  <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
-
-                <li className="nav-list-item">
-                  <button type="button" onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
-                    New workflow{' '}
-                    <LoadingIndicator off={not @state.workflowCreationInProgress} />
-                  </button>
+              renderWorkflowListItemListener = (workflow) =>
+                <li key={workflow.id}>
+                  <ChangeListener target={workflow} eventName="save" handler={renderWorkflowListItem.bind null, workflow} />
                 </li>
-              </ul>
+
+              <DragReorderable tag="ul" className="nav-list" items={workflows} render={renderWorkflowListItemListener} onChange={@handleWorkflowReorder} />
             }</PromiseRenderer>
+
+            <div className="nav-list-item">
+              <button type="button" onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
+                New workflow{' '}
+                <LoadingIndicator off={not @state.workflowCreationInProgress} />
+              </button>
+            </div>
           </li>
 
           {if @state.workflowCreationInProgress
