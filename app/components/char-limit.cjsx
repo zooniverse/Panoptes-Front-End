@@ -1,6 +1,9 @@
 React = require 'react'
 
 module.exports = React.createClass
+  propTypes:
+    limit: React.PropTypes.number.isRequired
+    string: React.PropTypes.string.isRequired
 
   getDefaultProps: ->
     limit: 0
@@ -11,4 +14,3 @@ module.exports = React.createClass
     <span>
       {remaining} of {@props.limit} characters remaining.
     </span>
-
