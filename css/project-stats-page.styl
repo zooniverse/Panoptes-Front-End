@@ -28,22 +28,34 @@ zoo-orange = #f78d27
     font-size: 1rem
     font-weight: bold
 
-.ct-chart-bar
-  .ct-label.ct-horizontal.ct-end
-    display: block
-    overflow: hidden
-    text-overflow: ellipsis
-    white-space: nowrap
-    transform: rotate(-90deg) translateY(-6px)
-    transform-origin: 100% 0
+.ct-labels-range
+  .ct-label-range
+    font-size: 0.75rem
+  .ct-label-range-last
     text-align: right
-    max-height: 1.5em
-    min-width: 100px
-    max-width: 100px
+
+.ct-major-tenth
+  .ct-chart-bar
+    .ct-label.ct-horizontal.ct-end
+      display: block
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+      transform: rotate(-90deg) translateY(-6px)
+      transform-origin: 100% 0
+      text-align: right
+      max-height: 1.5em
+      min-width: 100px
+      max-width: 100px
 
 .ct-slice-donut
   cursor: auto
 
+.date-range
+  margin: .5em 0
+  .date-reset
+    float: right
+  
 .flex-wrapper
   padding: 5px
 
@@ -119,8 +131,8 @@ zoo-orange = #f78d27
   margin-bottom: -4px
   .rc-slider-handle
     cursor: ew-resize
-    top: -54px
-    height: 62px
+    top: -40px
+    height: 48px
     width: 10px
     margin-top: 0
     margin-left: -10px
@@ -143,8 +155,8 @@ zoo-orange = #f78d27
 
   .rc-slider-track
     background-color: alpha(zoo-green, 0.15)
-    height: 62px
-    top: -54px
+    height: 48px
+    top: -40px
     border-radius: 0
     border-bottom: 2px solid #999
 
