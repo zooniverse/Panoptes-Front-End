@@ -53,6 +53,7 @@ module.exports = React.createClass
     saveState: (mark, template) ->
       rowID = Math.random()
       for cell in template
+        cell.reorder = false
         cell.y = mark.y
         cell.height = mark.height
         cell.rowID = rowID
@@ -90,31 +91,27 @@ module.exports = React.createClass
         points = @pointRow cell
         totalPoints.push points
     else
-      @props.mark.x = Infinity
       for cell in @state.row
-        points = @pointParser cell # know if it's the first or second time to parse. if second, it won't be able to move left and right due to pointParser
-        @markRow(cell)  # turn that dang mark into a row
+        # if cell is @state.row[0]
+          # @markChange cell
+        points = @pointParser cell
         totalPoints.push points
     <Draggable onDrag={@handleRowDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
       <polyline key={Math.random()} points={totalPoints.join()} />
     </Draggable>
 
-  markRow: (cell) ->
-    if cell.x < @props.mark.x
-      @props.mark.x = cell.x
-    if cell.x > @props.mark.x
-      @props.mark.width = (cell.x + cell.width - @props.mark.x)
+  markChange: (cell) -> # this should change mark into first grid item, not entire row
+    @props.mark.x = cell.x
+    @props.mark.width = cell.width
 
   handleRowDrag: (e, d) ->
     @props.mark.renderDrag = true
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.y += d.y / @props.scale.vertical
     newRows = @state.row
-    for cell in newRows
+    alteringRows = (i for i in @props.classification.annotations[0].value when i.rowID is @props.mark.rowID)
+    for cell in alteringRows
       cell.x += d.x / @props.scale.horizontal
       cell.y += d.y / @props.scale.vertical
-    @setState row: newRows
-    @props.onChange @props.mark
+    @setState row: alteringRows
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
@@ -122,7 +119,7 @@ module.exports = React.createClass
     @props.onChange @props.mark
 
   pointRow: (cell) ->
-    {y, height} = @props.mark #now do this according to state, or mark?
+    {y, height} = @props.mark
     points = [
       [cell.x, y].join ','
       [cell.x + cell.width, y].join ','
