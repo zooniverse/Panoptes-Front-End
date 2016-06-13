@@ -7,6 +7,9 @@ routes = require './router'
 apiClient = require 'panoptes-client/lib/api-client'
 style = require '../css/main.styl'
 
+languageEngine = require './lib/language-engine'
+languageEngine.load()
+
 # IE, oh my god:
 location.origin ?= location.protocol + "//" + location.hostname + if location.port then ':' + location.port else ''
 document.baseURI ?= location.origin + document.querySelector('base').getAttribute('href')

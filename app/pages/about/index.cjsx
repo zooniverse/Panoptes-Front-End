@@ -4,16 +4,30 @@ Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
 {Markdown} = (require 'markdownz').default
 
-counterpart.registerTranslations 'en',
-  about:
-    title: 'About Us'
-    nav:
-      about: 'About'
-      publications: 'Publications'
-      ourTeam: 'Our Team'
-      education: 'Education'
-      careers: 'Careers'
-      contact: 'Contact Us'
+# counterpart.registerTranslations 'en',
+#   about:
+#     title: 'About Us'
+#     nav:
+#       about: 'About'
+#       publications: 'Publications'
+#       ourTeam: 'Our Team'
+#       education: 'Education'
+#       careers: 'Careers'
+#       contact: 'Contact Us'
+
+# counterpart.registerTranslations 'es',
+#   about:
+#     title: 'Sobre Nosotros'
+#     nav:
+#       about: 'Sobre'
+#       publications: 'Publicaciones'
+#       ourTeam: 'Corillo'
+#       education: 'Educacion'
+#       careers: 'Carreras'
+#       contact: 'Contacte Nos'
+#
+# counterpart.setLocale 'es'
+
 
 module.exports = React.createClass
   displayName: 'AboutPage'
