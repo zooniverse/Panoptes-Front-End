@@ -22,21 +22,33 @@ zoo-orange = #f78d27
     font-size: 1rem
     font-weight: bold
 
-.ct-chart-bar
-  .ct-label.ct-horizontal.ct-end
-    display: block
-    overflow: hidden
-    text-overflow: ellipsis
-    white-space: nowrap
-    transform: rotate(-90deg) translateY(-6px)
-    transform-origin: 100% 0
+.ct-labels-range
+  .ct-label-range
+    font-size: 0.75rem
+  .ct-label-range-last
     text-align: right
-    max-height: 1.5em
-    min-width: 100px
-    max-width: 100px
+
+.ct-major-tenth
+  .ct-chart-bar
+    .ct-label.ct-horizontal.ct-end
+      display: block
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+      transform: rotate(-90deg) translateY(-6px)
+      transform-origin: 100% 0
+      text-align: right
+      max-height: 1.5em
+      min-width: 100px
+      max-width: 100px
 
 .ct-slice-donut
   cursor: auto
+  
+.date-range
+  margin: .5em 0
+  .date-reset
+    float: right
   
 .flex-wrapper
   padding: 5px  
