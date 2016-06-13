@@ -82,22 +82,23 @@ ProjectModalEditor = React.createClass
 
     for step, index in stepsInNewOrder
       stepReorderedIndex = index if @props.projectModal.steps[@state.stepToEdit].content is step.content
-
-    for step, i in @props.projectModal.steps
-      step._key = null
       
     @props.onStepOrderChange stepsInNewOrder
     @setState stepToEdit: stepReorderedIndex
 
+  handleStepAdd: ->
+    @props.onStepAdd()
+    @setState stepToEdit: @props.projectModal.steps.length - 1
+
   renderStepList: (step, i) ->
-    step._key ?= i+1
+    step._key ?= Math.random()
     buttonClasses = classnames 
       "selected": @state.stepToEdit is i
       "project-modal-step-list-item-button": true
 
     <li key={step._key} className="project-modal-step-list-item">
       <button type="button" className={buttonClasses} onClick={@onClick.bind null, i}>
-        <span className="project-modal-step-list-item-button-title">Step #{step._key}</span>
+        <span className="project-modal-step-list-item-button-title">Step #{i + 1}</span>
       </button>
       <button type="button" className="project-modal-step-list-item-remove-button" title="Remove this step" onClick={@handleStepRemove.bind null, i}>
         <i className="fa fa-trash-o fa-fw"></i>
@@ -124,7 +125,7 @@ ProjectModalEditor = React.createClass
           />
         </div>}
       <div>
-        <button type="button" onClick={@props.onStepAdd}>Add a step</button>
+        <button type="button" onClick={@handleStepAdd}>Add a step</button>
       </div>
     </div>
 
@@ -188,8 +189,11 @@ ProjectModalEditorController = React.createClass
 
   handleProjectModalDelete: ->
     if @props.projectModal.steps.length > 0
-      for step, index in @props.projectModal.steps
-        @handleStepRemove(index)
+      for step in @props.projectModal.steps
+        # Always pass in first index into step remove, because step deletion changes length
+        # i.e. index 3 will be undefined in an originally 4 item length array after first is deleted
+        # but iterate through the length of the original step array.
+        @handleStepRemove(0)
     else
       @deleteProjectModal()
 
