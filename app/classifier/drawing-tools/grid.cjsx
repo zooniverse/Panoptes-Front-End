@@ -152,5 +152,13 @@ module.exports = React.createClass
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       if pref.preferences.activeTemplate == 'row'
         @setState row: pref.preferences.row
-      if pref.preferences.activeTemplate == "grid"
-        @setState grid: pref.preferences.grid
+    # @props.user.get('project_preferences')
+    #   .then (projects) =>
+    #     for project in projects
+    #       if project.links.project == @props.workflow.links.project
+    #         proj = project
+    #         if proj.preferences.activeTemplate == 'row'
+    #           @setState row: proj.preferences.row
+    #         if proj.preferences.activeTemplate == 'grid'
+    #           @setState grid: proj.preferences.grid
+    #   .catch =>
