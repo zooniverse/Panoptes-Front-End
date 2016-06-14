@@ -30,6 +30,7 @@ workflow = apiClient.type('workflows').create
   configuration:
     enable_subject_flags: true
     multi_image_mode: 'flipbook_and_separate'
+    multi_image_layout: 'grid3'
 
   first_task: 'init'
 
