@@ -40,7 +40,7 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
       console.warn 'No Geordi logger available for event ', JSON.stringify(logEntry) unless @instance().logEvent
 
   remember: (eventData) ->
-    reset = eventData?.projectToken? && (eventData?.projectToken != @geordi?.projectToken)
+    reset = eventData?.projectToken? && (eventData?.projectToken != @instance().projectToken)
     @instance().update {projectToken: eventData.projectToken} if reset
     @keys = Object.assign {}, @keys, eventData
 
