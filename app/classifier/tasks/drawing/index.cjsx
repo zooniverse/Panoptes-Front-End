@@ -97,39 +97,22 @@ module.exports = React.createClass
       pref.save()
       @setState preferences: pref.preferences
 
-  clearRow: ->
+  clearTemplate: (type) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.row': null
+      pref.update "preferences.#{type}": null
       pref.update 'preferences.activeTemplate': null
       pref.save()
       @setState preferences: pref.preferences
 
-  clearGrid: ->
+  saveTemplate: (marks, type) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.grid': null
-      pref.update 'preferences.activeTemplate': null
-      pref.save()
-      @setState preferences: pref.preferences
-
-  saveRow: (marks) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.activeTemplate': 'row'
-      if !pref.preferences.row
+      pref.update 'preferences.activeTemplate': type
+      if !pref.preferences.grid and type is 'grid'
+        pref.update 'preferences.grid': marks
+      else if !pref.preferences.row and type is 'row'
         lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
         lastRow = (i for i in marks when i.y < lastCellMid && (i.y + i.height) > lastCellMid)
         pref.update 'preferences.row': lastRow
-      else
-        pref.update 'preferences.template': null
-      pref.save()
-      @setState preferences: pref.preferences
-
-  saveGrid: (marks) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.activeTemplate': 'grid'
-      if !pref.preferences.grid
-        pref.update 'preferences.grid': marks
-      else
-        pref.update 'preferences.template': null
       pref.save()
       @setState preferences: pref.preferences
 
@@ -169,11 +152,11 @@ module.exports = React.createClass
             Draw Rows
           </button>}
         {if tool.type is 'grid'
-          <button type="button" onClick={@saveRow.bind this, @props.annotation.value} disabled={@state?.preferences?.row?}>
+          <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value, 'row'} disabled={@state?.preferences?.row?}>
             Save Row Template
           </button>}
         {if tool.type is 'grid'
-          <button type="button" onClick={@clearRow.bind null, this}>
+          <button type="button" onClick={@clearTemplate.bind this, 'row'}>
             Clear Row Template
           </button>}
         {if tool.type is 'grid'
@@ -181,11 +164,11 @@ module.exports = React.createClass
             Place Grid
           </button>}
         {if tool.type is 'grid'
-          <button type="button" onClick={@saveGrid.bind this, @props.annotation.value}>
+          <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value, 'grid'} disabled={@state?.preferences?.grid?}>
             Save Grid Template
           </button>}
         {if tool.type is 'grid'
-          <button type="button" onClick={@clearGrid.bind null, this}>
+          <button type="button" onClick={@clearTemplate.bind this, 'grid'}>
             Clear Grid Template
           </button>}
       </label>

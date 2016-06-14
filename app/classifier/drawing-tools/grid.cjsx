@@ -100,17 +100,11 @@ module.exports = React.createClass
         totalPoints.push points
     else
       for cell in @state.row
-        # if cell is @state.row[0]
-        #   @markChange cell
         points = @pointParser cell
         totalPoints.push points
     <Draggable onDrag={@handleRowDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
       <polyline key={Math.random()} points={totalPoints.join()} />
     </Draggable>
-
-  markChange: (cell) -> # this should change mark into first grid item, not entire row
-    @props.mark.x = cell.x
-    @props.mark.width = cell.width
 
   handleRowDrag: (e, d) ->
     @props.mark.renderDrag = true

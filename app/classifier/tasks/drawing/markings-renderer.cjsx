@@ -81,13 +81,13 @@ module.exports = React.createClass
           </g>}
     </g>
 
-  handleChange: (markIndex, mark) -> # this is altering annotations
+  handleChange: (markIndex, mark) ->
     @props.annotation.value[markIndex] = mark
     @props.onChange @props.annotation
 
-  handleSelect: (annotation, mark) -> #this is altering annotations
+  handleSelect: (annotation, mark) ->
     @setState selection: mark
-    unless mark.reorder is false # maybe make this reorder every item in the template, rather than the single item
+    unless mark.reorder is false
       markIndex = annotation.value.indexOf mark
       annotation.value.splice markIndex, 1
       annotation.value.push mark
