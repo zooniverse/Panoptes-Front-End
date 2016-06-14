@@ -11,7 +11,7 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
 
   @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy']
 
-  keys: 
+  keys:
     projectToken: 'zooHome'
 
   geordi: null
@@ -50,7 +50,7 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
       reset = (key == 'projectToken')
       delete @keys[key]
 
-    @instance().update {projectToken: 'zooHome'} if reset
+    @remember {projectToken: 'zooHome'} if reset
 
 module.exports = React.createClass
   displayName: 'PanoptesApp'
