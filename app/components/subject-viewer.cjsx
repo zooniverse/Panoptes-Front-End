@@ -122,7 +122,9 @@ module.exports = React.createClass
         </span>}
         <span>
           {if @props.workflow?.configuration?.enable_subject_flags
-            <FlagSubjectButton className="secret-button" classification={@props.classification} />}
+            <span>
+              <FlagSubjectButton className="secret-button" classification={@props.classification} />{' '}
+            </span>}
           {if @props.subject?.metadata?
             <span>
               <button type="button" className="secret-button" aria-label="Metadata" title="Metadata" onClick={@showMetadata}>
