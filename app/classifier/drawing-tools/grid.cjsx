@@ -86,14 +86,14 @@ module.exports = React.createClass
 
   renderRow: ->
     totalPoints = []
-    if @props.mark.renderDrag is true
+    if @props.mark.renderDrag is true #is this necessary?
       for cell in @state.row
         points = @pointRow cell
         totalPoints.push points
     else
       for cell in @state.row
         # if cell is @state.row[0]
-          # @markChange cell
+        #   @markChange cell
         points = @pointParser cell
         totalPoints.push points
     <Draggable onDrag={@handleRowDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
@@ -149,16 +149,13 @@ module.exports = React.createClass
     ].join '\n'
 
   findSchema: ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if pref.preferences.activeTemplate == 'row'
-        @setState row: pref.preferences.row
-    # @props.user.get('project_preferences')
-    #   .then (projects) =>
-    #     for project in projects
-    #       if project.links.project == @props.workflow.links.project
-    #         proj = project
-    #         if proj.preferences.activeTemplate == 'row'
-    #           @setState row: proj.preferences.row
-    #         if proj.preferences.activeTemplate == 'grid'
-    #           @setState grid: proj.preferences.grid
-    #   .catch =>
+    @props.user.get('project_preferences')
+      .then (projects) =>
+        for project in projects
+          if project.links.project == @props.workflow.links.project
+            proj = project
+            if proj.preferences.activeTemplate == 'row'
+              @setState row: proj.preferences.row
+            if proj.preferences.activeTemplate == 'grid'
+              @setState grid: proj.preferences.grid
+      .catch =>

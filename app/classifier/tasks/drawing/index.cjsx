@@ -83,7 +83,7 @@ module.exports = React.createClass
       testShapeCloseness unknownShapes.concat knownGoodShapes
 
   componentWillMount: ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+    @props.user.get('project_preferences', {project_id: @props.workflow.links?.project}).then ([pref]) =>
       @setState preferences: pref.preferences
 
   getDefaultProps: ->
@@ -94,6 +94,7 @@ module.exports = React.createClass
   activateTemplate: (type) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       pref.update 'preferences.activeTemplate': type
+      pref.save()
       @setState preferences: pref.preferences
 
   clearRow: ->

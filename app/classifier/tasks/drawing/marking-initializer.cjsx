@@ -118,10 +118,11 @@ module.exports = React.createClass
     @props.classification.update 'annotations'
 
   findSchema: ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if pref.preferences.row?.length
-        @setState row: pref.preferences.row
-      else
-        @setState row: null
-      if pref.preferences.activeTemplate
-        @setState template: pref.preferences.activeTemplate
+    if @props.workflow.links.project
+      @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+        if pref.preferences.row?.length
+          @setState row: pref.preferences.row
+        else
+          @setState row: null
+        if pref.preferences.activeTemplate
+          @setState template: pref.preferences.activeTemplate
