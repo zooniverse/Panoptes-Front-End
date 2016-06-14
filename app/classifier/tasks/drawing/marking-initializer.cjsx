@@ -93,8 +93,8 @@ module.exports = React.createClass
       for key, value of initReleaseValues
         mark[key] = value
 
-    if MarkComponent.saveState? and @state?.template == 'row'
-      multipleMarks = MarkComponent.saveState mark, @state.row #this should say which tool is selected
+    if MarkComponent.saveState? and @state?.template
+      multipleMarks = MarkComponent.saveState mark, @state[@state['template']], @state['template'] #this should say which tool is selected
       mark = null
       @props.annotation.value.pop()
       for cell in multipleMarks
@@ -124,5 +124,11 @@ module.exports = React.createClass
           @setState row: pref.preferences.row
         else
           @setState row: null
+        if pref.preferences.grid?.length
+          @setState grid: pref.preferences.grid
+        else
+          @setState grid: null
         if pref.preferences.activeTemplate
           @setState template: pref.preferences.activeTemplate
+        else
+          @setState template: null

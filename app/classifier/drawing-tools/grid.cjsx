@@ -50,14 +50,20 @@ module.exports = React.createClass
     initValid: (mark) ->
       mark is null or mark.height > MINIMUM_SIZE
 
-    saveState: (mark, template) ->
-      rowID = Math.random()
-      for cell in template
-        cell.reorder = false
-        cell.y = mark.y
-        cell.height = mark.height
-        cell.rowID = rowID
-      template
+    saveState: (mark, template, type) ->
+      templateID = Math.random()
+      if type is 'row'
+        for cell in template
+          cell.reorder = false
+          cell.y = mark.y
+          cell.height = mark.height
+          cell.templateID = templateID
+        template
+      else
+        for cell in template
+          cell.reorder = false
+          cell.templateID = templateID
+        template
 
   initCoords: null
 
@@ -80,9 +86,11 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   renderGrid: ->
+    totalPoints = []
     for cell in @state.grid
       points = @pointFinder cell
-      <polyline points={points} />
+      totalPoints.push points
+    <polyline points={totalPoints.join()} />
 
   renderRow: ->
     totalPoints = []
@@ -107,7 +115,7 @@ module.exports = React.createClass
   handleRowDrag: (e, d) ->
     @props.mark.renderDrag = true
     newRows = @state.row
-    alteringRows = (i for i in @props.classification.annotations[0].value when i.rowID is @props.mark.rowID)
+    alteringRows = (i for i in @props.classification.annotations[0].value when i.templateID is @props.mark.templateID)
     for cell in alteringRows
       cell.x += d.x / @props.scale.horizontal
       cell.y += d.y / @props.scale.vertical
