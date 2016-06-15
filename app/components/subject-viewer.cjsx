@@ -66,7 +66,7 @@ module.exports = React.createClass
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
     })
     # Feature detect IE11 and apply flex prop. Revisit or remove when IE11 is no longer supported.
-    rootStyle = flex: "1 1 auto" if "ActiveXObject" in window or window.ActiveXObject isnt undefined
+    rootStyle = flex: "1 1 auto" if "ActiveXObject" in window or window.ActiveXObject isnt undefined or @props.workflow.configuration.image_layout and 'flex-option' in @props.workflow.configuration.image_layout
     mainDisplay = ''
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     if @state.inFlipbookMode
