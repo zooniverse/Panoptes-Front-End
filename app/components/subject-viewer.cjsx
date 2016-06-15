@@ -65,8 +65,7 @@ module.exports = React.createClass
       'subject-viewer--flipbook': @state.inFlipbookMode
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
     })
-    # Feature detect IE11 and apply flex prop. Revisit or remove when IE11 is no longer supported.
-    rootStyle = flex: "1 1 auto" if "ActiveXObject" in window or window.ActiveXObject isnt undefined
+
     mainDisplay = ''
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     if @state.inFlipbookMode
@@ -103,7 +102,7 @@ module.exports = React.createClass
               </span>}
           </span>
 
-    <div className={rootClasses} style={rootStyle}>
+    <div className={rootClasses}>
       {if type is 'image'
         @hiddenPreloadedImages()}
       <div className="subject-container" style={CONTAINER_STYLE} >
@@ -122,7 +121,9 @@ module.exports = React.createClass
         </span>}
         <span>
           {if @props.workflow?.configuration?.enable_subject_flags
-            <FlagSubjectButton className="secret-button" classification={@props.classification} />}
+            <span>
+              <FlagSubjectButton className="secret-button" classification={@props.classification} />{' '}
+            </span>}
           {if @props.subject?.metadata?
             <span>
               <button type="button" className="secret-button" aria-label="Metadata" title="Metadata" onClick={@showMetadata}>

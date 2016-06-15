@@ -30,6 +30,7 @@ workflow = apiClient.type('workflows').create
   configuration:
     enable_subject_flags: true
     multi_image_mode: 'flipbook_and_separate'
+    multi_image_layout: 'grid3'
 
   first_task: 'init'
 
@@ -449,11 +450,18 @@ workflow = apiClient.type('workflows').create
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
-  locations: [
-    {'image/jpeg': if navigator?.onLine then '//lorempixel.com/320/240/animals/1' else BLANK_IMAGE}
-    {'image/jpeg': if navigator?.onLine then '//lorempixel.com/320/240/animals/2' else BLANK_IMAGE}
-    {'image/jpeg': if navigator?.onLine then '//lorempixel.com/320/240/animals/3' else BLANK_IMAGE}
-  ]
+  locations: if navigator?.onLine
+    [
+      {'image/jpeg': '//lorempixel.com/900/600/animals/1'} # Landscape
+      {'image/jpeg': '//lorempixel.com/600/900/animals/2'} # Portrait
+      {'image/jpeg': '//lorempixel.com/1900/1000/animals/3'} # Very wide
+      {'image/jpeg': '//lorempixel.com/1000/1900/animals/4'} # Very tall
+      {'image/jpeg': '//lorempixel.com/400/300/animals/4'} # Sorta small
+    ]
+  else
+    [
+      {'image/png': BLANK_IMAGE}
+    ]
 
   metadata:
     'Capture date': '5 Feb, 2015'
@@ -504,7 +512,7 @@ subject = apiClient.type('subjects').create
         value: 6
       }]
 
-project = apiClient.type('project').create
+project = apiClient.type('projects').create
   id: 'MOCK_PROJECT_FOR_CLASSIFIER'
   title: "The Dev Classifier"
   experimental_tools: ['pan and zoom']

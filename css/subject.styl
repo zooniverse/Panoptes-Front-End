@@ -1,7 +1,7 @@
 .subject-viewer
   min-width: 0
   max-width: 100%
-  
+
   .default-root-style
     display: block
 
@@ -9,17 +9,17 @@
     .subject-frame-pip
       &.active
         font-weight: 700
-  
+
   video
     width: 100%
-  
+
   .subject-video-controls
     display: inline-block
     width: 30vw
-  
+
   .video-scrubber
     width: 80%
-    
+
   .video-speed
     white-space: nowrap
     display: inline-block
@@ -36,21 +36,20 @@
         left: -50px
         height: 0
         width: 0
-  
+
         &:checked + span
           color: MAIN_HIGHLIGHT
 
   .subject-container
     > *
       max-width: 100%
-    
+
     .frame-annotator
       flex: 9
-      
+
     image.pan-active
       cursor: all-scroll
     .pan-zoom-controls
-      flex: 1
       text-align: center
       background: grey;
       border-radius: .1em;
@@ -68,7 +67,7 @@
         button
           background-color: transparent
           border:none
-          
+
       button
         background-color: #f9f9f9
         border: solid 1px #989898
@@ -76,11 +75,12 @@
         border-radius: 0.2em
         &.disabled
           background-color: #bbc0c0
-          color: #575959 
+          color: #575959
 
   // Multi-image layouts
   &:not(.subject-viewer--flipbook)
     .subject-container
+      align-items: center
       justify-content: space-between
     &.subject-viewer--layout-grid2
       .subject-container > *
