@@ -227,14 +227,13 @@ module.exports = React.createClass
     </div>
 
   scrollIntoView: (e) ->
-    # Auto-scroll to the middle of the classification interface on load.
+    # Auto-scroll to top of the classification interface on load.
     # It's not perfect, but it should make the location of everything more obvious.
     lineHeight = parseFloat getComputedStyle(document.body).lineHeight
     node = ReactDOM.findDOMNode(@)
-    space = (innerHeight - node.offsetHeight) / 2
-    idealScrollY = node.offsetTop - space
+    idealScrollY = node.offsetTop - lineHeight
     if Math.abs(idealScrollY - scrollY) > lineHeight
-      animatedScrollTo document.body, node.offsetTop - space, 333
+      animatedScrollTo document.body, node.offsetTop - lineHeight, 333
 
   handleDemoModeChange: (newDemoMode) ->
     sessionDemoMode = newDemoMode
