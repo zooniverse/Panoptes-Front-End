@@ -68,7 +68,7 @@ module.exports = React.createClass
   initCoords: null
 
   render: ->
-    points = @pointFinder @props.mark
+    points = @cellPoints @props.mark
 
     <DrawingToolRoot tool={this}>
       {if @state?.grid
@@ -88,7 +88,7 @@ module.exports = React.createClass
   renderGrid: ->
     totalPoints = []
     for cell in @state.grid
-      points = @pointFinder cell
+      points = @cellPoints cell
       totalPoints.push points
     <polyline points={totalPoints.join()} />
 
@@ -96,11 +96,11 @@ module.exports = React.createClass
     totalPoints = []
     if @props.mark.renderDrag is true #is this necessary?
       for cell in @state.row
-        points = @pointRow cell
+        points = @rowPoints cell
         totalPoints.push points
     else
       for cell in @state.row
-        points = @pointParser cell
+        points = @rowPoints cell
         totalPoints.push points
     <Draggable onDrag={@handleRowDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
       <polyline key={Math.random()} points={totalPoints.join()} />
@@ -120,17 +120,7 @@ module.exports = React.createClass
     @props.mark.y += d.y / @props.scale.vertical
     @props.onChange @props.mark
 
-  pointRow: (cell) ->
-    {y, height} = @props.mark
-    points = [
-      [cell.x, y].join ','
-      [cell.x + cell.width, y].join ','
-      [cell.x + cell.width, y + height].join ','
-      [cell.x, y + height].join ','
-      [cell.x, y].join ','
-    ].join '\n'
-
-  pointFinder: (mark) ->
+  cellPoints: (mark) ->
     {x, y, width, height} = mark
     [
       [x, y].join ','
@@ -140,7 +130,7 @@ module.exports = React.createClass
       [x, y].join ','
     ].join '\n'
 
-  pointParser: (cell) ->
+  rowPoints: (cell) ->
     {y, height} = @props.mark
     points = [
       [cell.x, y].join ','
