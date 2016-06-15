@@ -71,7 +71,7 @@ StatsHoldingPage = React.createClass
   render: ->
     <div className="project-text-content content-container">
       <div className="project-stats-dashboard">
-        Project statistics are currently unavalible and we are working to fix the issue.
+        Project statistics are currently unavailable and we are working to fix the issue.
       </div>
     </div>
 
