@@ -1,30 +1,21 @@
 React = require 'react'
-ReactDOM = {render} = require 'react-dom'
-{Router, Route, Link} = require 'react-router'
-{useBasename} = require 'history'
-createBrowserHistory = require 'history/lib/createBrowserHistory'
+ReactDOM = require 'react-dom'
+{Router, browserHistory} = require 'react-router'
 routes = require './router'
-apiClient = require 'panoptes-client/lib/api-client'
 style = require '../css/main.styl'
 
-# IE, oh my god:
-location.origin ?= location.protocol + "//" + location.hostname + if location.port then ':' + location.port else ''
-document.baseURI ?= location.origin + document.querySelector('base').getAttribute('href')
-
-if location?.hash?.indexOf('/') is 1
+# Redirect any old `/#/foo`-style URLs to `/foo`.
+if location?.hash.charAt(1) is '/'
   location.replace location.hash.slice 1
 
-basename = document.baseURI.slice(location.origin.length)
-history = useBasename(createBrowserHistory)({basename})
+browserHistory.listen ->
+  dispatchEvent new CustomEvent 'locationchange'
 
-history.listen ->
-  window.dispatchEvent new CustomEvent 'locationchange'
-
-render <Router history={history}>{routes}</Router>,
+ReactDOM.render <Router history={browserHistory}>{routes}</Router>,
   document.getElementById('panoptes-main-container')
 
-logDeployedCommit = require './lib/log-deployed-commit'
-logDeployedCommit()
+# Are we connected to the latest back end?
+require('./lib/log-deployed-commit')()
 
-# For console access:
-window?.zooAPI = apiClient
+# Just for console access:
+window?.zooAPI = require 'panoptes-client/lib/api-client'

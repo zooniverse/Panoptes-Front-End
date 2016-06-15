@@ -1,6 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
-{IndexLink, Link, History} = require 'react-router'
+{routerShape} = require 'react-router/lib/PropTypes'
+{IndexLink, Link} = require 'react-router'
 ZooniverseLogo = require './zooniverse-logo'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
@@ -12,7 +13,7 @@ isAdmin = require '../lib/is-admin'
 TriggeredModalForm = require 'modal-form/triggered'
 debounce = require 'debounce'
 HamburgerIcon = require '../partials/hamburger-icon'
-PassHistoryContext = require '../components/pass-history-context'
+PassRouterContext = require '../components/pass-router-context'
 
 counterpart.registerTranslations 'en',
   mainNav:
@@ -32,7 +33,8 @@ MOBILE_WIDTH = 875 # px
 module.exports = React.createClass
   displayName: 'MainHeader'
 
-  mixins: [History]
+  contextTypes:
+    router: routerShape
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -115,9 +117,9 @@ module.exports = React.createClass
           <TriggeredModalForm
             triggerProps={className: "hamburger-modal-trigger"}
             trigger={<HamburgerIcon />}>
-            <PassHistoryContext {...@props} context={history: @history}>
+            <PassRouterContext context={@context}>
               {@links()}
-            </PassHistoryContext>
+            </PassRouterContext>
           </TriggeredModalForm>}
 
       </div>
