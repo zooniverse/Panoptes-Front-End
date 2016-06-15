@@ -61,11 +61,11 @@ module?.exports = React.createClass
       logClick = @context.geordi?.makeHandler? 'discussion-time'
     if @props.params?.owner and @props.params?.name
       {owner, name} = @props.params
-      <Link className={className} onClick={logClick?.bind(this, '')} to={@history.createHref("/projects/#{owner}/#{name}/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
+      <Link className={className} onClick={logClick?.bind(this, childtext)} to={@history.createHref("/projects/#{owner}/#{name}/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
         {childtext}
       </Link>
     else
-      <Link className={className} onClick={logClick?.bind(this, '')} to={@history.createHref("/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
+      <Link className={className} onClick={logClick?.bind(this, childtext)} to={@history.createHref("/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
         {childtext}
       </Link>
 

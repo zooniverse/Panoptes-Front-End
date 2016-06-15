@@ -81,12 +81,12 @@ module.exports = React.createClass
   logMenuClick: (linkName) ->
     @context.geordi?.logEvent
       type: 'footer-menu'
-      data: "\"#{linkName}\""
+      relatedID: "\"#{linkName}\""
 
   loggableLink: (aLink, linkSymbolicName) ->
     React.cloneElement aLink,
       onClick: (@logMenuClick.bind this, linkSymbolicName),
-      <Translate content="#{linkSymbolicName}" /> 
+      <Translate content="#{linkSymbolicName}" />
 
   render: ->
     <footer className="main-footer">

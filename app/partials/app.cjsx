@@ -31,7 +31,7 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
         eventType = defType if typeof eventType isnt 'string'
         @logEvent
           type: eventType
-          data: "\"#{eventData}\""
+          relatedID: "\"#{eventData}\""
 
   logEvent: (logEntry) -> # Accepts key/values to make appropriate Geordi logging
     newEntry = Object.assign {}, logEntry, @keys

@@ -31,7 +31,7 @@ module?.exports = React.createClass
     if @props.project
       <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/projects/#{@props.project.slug}/talk/tags/#{tag}" onClick={logClick?.bind(this, tag)}>#{tag}</Link>{' '}</div>
     else
-      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/talk/search/?query=#{tag}" onClick={logClick?.bind(this, '')}>#{tag}</Link>{' '}</div>
+      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/talk/search/?query=#{tag}" onClick={logClick?.bind(this, tag)}>#{tag}</Link>{' '}</div>
 
   render: ->
     <div className="talk-popular-tags">
