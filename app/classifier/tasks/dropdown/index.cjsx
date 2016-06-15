@@ -79,7 +79,7 @@ module?.exports = React.createClass
 
     isAnnotationComplete: (task, annotation) ->
       task.selects.every (select, i) ->
-        not select.required or annotation.value[i]?.value?
+        not select.required or (annotation.value[i]?.value? and annotation.value[i]?.value isnt "")
 
     testAnnotationQuality: (unknown, knownGood) ->
       distance = levenshtein.get unknown.value.toLowerCase(), knownGood.value.toLowerCase()
