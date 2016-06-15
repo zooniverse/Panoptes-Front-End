@@ -50,7 +50,7 @@
     box-shadow: 0 0 0 1px gray
     max-height: 90vh
     max-width: 100%
-    user-select: none
+    user-select: none    
 
   .marking-initializer
     cursor: crosshair
@@ -113,6 +113,15 @@
     @media (min-width: 900px)
       margin-left: 1em
 
+  // for subject images that are not height contained
+  // this class name is enabled through a workflow config
+  &.large-image 
+    .subject
+      max-height: none
+    
+    .task-area
+      flex: 0 0 45ch
+      
   .task-nav
     display: flex
     margin-top: 1em

@@ -94,6 +94,9 @@ Classifier = React.createClass
       @addAnnotationForTask classification, @props.workflow.first_task
 
   render: ->
+    largeFormatImage = @props.workflow.configuration.image_layout and 'no-max-height' in @props.workflow.configuration.image_layout
+    classifierClassNames = if largeFormatImage then "classifier large-image" else "classifier"
+
     <ChangeListener target={@props.classification}>{=>
       if @state.showingExpertClassification
         currentClassification = @state.expertClassification
@@ -106,7 +109,7 @@ Classifier = React.createClass
       # This is just easy access for debugging.
       window.classification = currentClassification
 
-      <div className="classifier">
+      <div className={classifierClassNames} >
         <SubjectViewer
           user={@props.user}
           project={@props.project}
