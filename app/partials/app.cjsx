@@ -31,7 +31,7 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
         eventType = defType if typeof eventType isnt 'string'
         @logEvent
           type: eventType
-          relatedID: "#{eventData}"
+          relatedID: eventData
 
   logEvent: (logEntry) -> # Accepts key/values to make appropriate Geordi logging
     newEntry = Object.assign {}, logEntry, @keys
@@ -55,7 +55,7 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
 module.exports = React.createClass
   displayName: 'PanoptesApp'
 
-  geordiLogger: null
+  geordiLogger: null # Maintains project and subject context for the Geordi client
 
   childContextTypes:
     user: React.PropTypes.object
