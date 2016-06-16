@@ -2,6 +2,7 @@ React = require 'react'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
+ContextualLinks = require '../../lib/contextual-links'
 
 module?.exports = React.createClass
   displayName: 'ModerationActions'
@@ -23,8 +24,9 @@ module?.exports = React.createClass
     <ul>
       {if @state.reports
         for report, i in @state.reports
+          link = ContextualLinks.prefixLinkIfNeeded @props, "/users/#{report.user.login}"
           <li key={"report-#{i}"}>
-            <Link to="/users/#{report.user.login}">{report.user.display_name}</Link>: {report.message}
+            <Link to="#{link}">{report.user.display_name}</Link>: {report.message}
           </li>
       else
         <Loading />}

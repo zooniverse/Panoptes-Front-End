@@ -6,6 +6,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
+ContextualLinks = require '../../lib/contextual-links'
 
 counterpart.registerTranslations 'en',
   profile:
@@ -19,6 +20,7 @@ counterpart.registerTranslations 'en',
       moderation: "Moderation"
       stats: "Your stats"
       settings: "Settings"
+      removeProjectContextLink: 'View\u00a0%(collectionOwnerName)s\'s\u00a0Zooniverse.org\u00a0Profile'
 
 UserProfilePage = React.createClass
   displayName: 'UserProfilePage'
@@ -49,44 +51,77 @@ UserProfilePage = React.createClass
       .then ([profileHeader]) =>
         @setState({profileHeader})
 
+  getPageClasses: ->
+    classes = 'secondary-page user-profile'
+    if @props.project?
+      classes += ' has-project-context'
+    classes
+
+  getLinksForNav: ->
+    return {
+      recents: ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.profileUser.login}"
+      collections: ContextualLinks.prefixLinkIfNeeded @props, "/collections/#{@props.profileUser.login}"
+      favorites:  ContextualLinks.prefixLinkIfNeeded @props, "/favorites/#{@props.profileUser.login}"
+      stats: ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.profileUser.login}/stats"
+      message: ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@props.profileUser.login}/message"
+      removeProjectContextLink: ContextualLinks.getRemoveProjectContextLink @props
+    }
+
+  renderNavLinks: ->
+    linksForNav = @getLinksForNav()
+    className = ""
+    if @props.project?
+      className += " about-tabs"
+    <span>
+      <IndexLink to="#{linksForNav.recents}" className={className} activeClassName="active">
+        <Translate content="profile.nav.comments" />
+      </IndexLink>
+      <Link to="#{linksForNav.collections}" className={className} activeClassName="active">
+        <Translate content="profile.nav.collections" />
+      </Link>
+      <Link to="#{linksForNav.favorites}" className={className} activeClassName="active">
+        <Translate content="profile.nav.favorites" />
+      </Link>
+      {if @props.user is @props.profileUser
+        <Link to="#{linksForNav.stats}" className={className} activeClassName="active">
+          <Translate content="profile.nav.stats" />
+        </Link>
+      else
+        <Link to="#{linksForNav.message}" className={className} activeClassName="active">
+          <Translate content="profile.nav.message" />
+        </Link>}
+      {if @props.project?
+        <Link to="#{linksForNav.removeProjectContextLink.to}" className={className} activeClassName="active">
+          <Translate content="profile.nav.removeProjectContextLink" collectionOwnerName={linksForNav.removeProjectContextLink.message.user?.displayName} />
+        </Link>}
+    </span>
+
   render: ->
+
     if @state.profileHeader?
       headerStyle = backgroundImage: "url(#{@state.profileHeader.src})"
 
-    <div className="secondary-page user-profile">
+    classNames = "user-profile-content"
+    if @props.project?
+      classNames += " project-text-content in-project-context talk"
+
+    <div className="#{@getPageClasses()}">
       <section className="hero user-profile-hero" style={headerStyle}>
         <div className="overlay"></div>
         <div className="hero-container">
           <h1>{@props.profileUser.display_name}</h1>
-          <nav className="hero-nav">
-            <IndexLink to="/users/#{@props.profileUser.login}" activeClassName="active">
-              <Translate content="profile.nav.comments" />
-            </IndexLink>
-            {' '}
-            <Link to="/collections/#{@props.profileUser.login}" activeClassName="active">
-              <Translate content="profile.nav.collections" />
-            </Link>
-            {' '}
-            <Link to="/favorites/#{@props.profileUser.login}" activeClassName="active">
-              <Translate content="profile.nav.favorites" />
-            </Link>
-            {' '}
-
-            <span>
-              {if @props.user is @props.profileUser
-                <Link to="/users/#{@props.profileUser.login}/stats" activeClassName="active">
-                  <Translate content="profile.nav.stats" />
-                </Link>
-              else
-                <Link to="/users/#{@props.profileUser.login}/message" activeClassName="active">
-                  <Translate content="profile.nav.message" />
-                </Link>}
-            </span>
-          </nav>
+          {if !@props.project?
+            <nav className="hero-nav">
+              {@renderNavLinks()}
+            </nav>}
         </div>
       </section>
 
-      <section className="user-profile-content">
+      <section className={classNames}>
+        {if @props.project?
+          <nav className="hero-nav">
+            {@renderNavLinks()}
+        </nav>}
         {React.cloneElement(@props.children, @props)}
       </section>
     </div>

@@ -83,6 +83,28 @@ module.exports =
         <Route path=":board" component={require './talk/board'} />
         <Route path=":board/:discussion" component={require './talk/discussion'} />
       </Route>
+
+      <Route path="collections" component={require('./pages/collections').CollectionsList}>
+        <Route path="all" component={require('./pages/collections').CollectionsList} />
+        <Route path=":collection_owner/all" component={require('./pages/collections').CollectionsList} />
+        <Route path=":collection_owner" component={require('./pages/collections').CollectionsList} />
+      </Route>
+      <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
+        <IndexRoute component={require './collections/show-list'} />
+        <Route path="settings" component={require './collections/settings'} />
+        <Route path="collaborators" component={require './collections/collaborators'} />
+        <Route path="talk" component={require './collections/show-list'} />
+      </Route>
+      <Route path="favorites" component={require('./pages/collections').FavoritesList}>
+        <Route path="all" component={require('./pages/collections').FavoritesList} />
+        <Route path=":favorites_owner/all" component={require('./pages/collections').FavoritesList} />
+        <Route path=":favorites_owner" component={require('./pages/collections').FavoritesList} />
+      </Route>
+      <Route path="users/:name" component={require './pages/profile'}>
+        <IndexRoute component={require './pages/profile/feed'} />
+        <Route path="message" component={require './pages/profile/private-message'} />
+        <Route path="stats" component={require './pages/profile/stats'} />
+      </Route>
       <Route path="stats" component={require './pages/project/stats'} />
     </Route>
 

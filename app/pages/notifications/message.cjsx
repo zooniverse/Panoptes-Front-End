@@ -5,6 +5,7 @@ moment = require 'moment'
 talkClient = require 'panoptes-client/lib/talk-client'
 Loading = require '../../components/loading-indicator'
 Avatar = require '../../partials/avatar'
+ContextualLinks = require '../../lib/contextual-links'
 
 module?.exports = React.createClass
   displayName: 'MessageNotification'
@@ -28,6 +29,7 @@ module?.exports = React.createClass
   render: ->
     notification = @props.notification
     if @state.message
+      link = ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@state.messageUser.login}"
       <div className="conversation-message talk-module">
         <Link to="/inbox/#{notification.source.conversation_id}" {...@props} className="message-link">
           {notification.message}{' '}
@@ -37,7 +39,7 @@ module?.exports = React.createClass
         <Markdown>{@state.message.body}</Markdown>
 
         <div className="bottom">
-          <Link className="user-profile-link" to="/users/#{@state.messageUser.login}">
+          <Link className="user-profile-link" to="#{link}">
             <Avatar user={@state.messageUser} />{' '}{@state.messageUser.display_name}
           </Link>{' '}
           <Link to={"/inbox/#{notification.source.conversation_id}"} {...@props} className="time-ago">

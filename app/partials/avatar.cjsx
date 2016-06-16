@@ -42,4 +42,4 @@ module?.exports = React.createClass
     @setState src: DEFAULT_AVATAR
 
   render: ->
-    <img src={@state.src} onError={@handleError} alt="User avatar" className="avatar" data-loading={@state.loading || null} />
+    <img src={@state.src} onError={@handleError} title="#{@props.user.display_name}" alt="User avatar for #{@props.user.display_name}" className="avatar" data-loading={@state.loading || null} />

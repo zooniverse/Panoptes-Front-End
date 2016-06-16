@@ -5,6 +5,7 @@ Loading = require '../components/loading-indicator'
 Thumbnail = require '../components/thumbnail'
 Avatar = require '../partials/avatar'
 getSubjectLocation = require '../lib/get-subject-location'
+ContextualLinks = require '../lib/contextual-links'
 
 module?.exports = React.createClass
   displayName: 'CollectionPreview'
@@ -29,16 +30,18 @@ module?.exports = React.createClass
 
   render: ->
     [owner, name] = @props.collection.slug.split('/')
+    collectionLink = ContextualLinks.prefixLinkIfNeeded @props,"/collections/#{owner}/#{name}"
 
     <div className="collection-preview">
       <div className="collection">
         <p className="title">
-          <Link to="/collections/#{owner}/#{name}">
+          <Link to="#{collectionLink}">
             {@props.collection.display_name}
           </Link>
           {' '}by{' '}
           {if @state.owner
-            <Link className="user-profile-link" to="/users/#{@state.owner.login}">
+            ownerProfileLink = ContextualLinks.prefixLinkIfNeeded @props, "/users/#{@state.owner.login}"
+            <Link className="user-profile-link" to="#{ownerProfileLink}">
               <Avatar user={@state.owner} />{' '}{@state.owner.display_name}
             </Link>}
         </p>
