@@ -66,6 +66,10 @@ module.exports = React.createClass
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
     })
 
+    isIE = 'ActiveXObject' of window
+    if isIE
+      rootStyle = flex: '1 1 auto'
+
     mainDisplay = ''
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     if @state.inFlipbookMode
@@ -102,7 +106,7 @@ module.exports = React.createClass
               </span>}
           </span>
 
-    <div className={rootClasses}>
+    <div className={rootClasses} style={rootStyle}>
       {if type is 'image'
         @hiddenPreloadedImages()}
       <div className="subject-container" style={CONTAINER_STYLE} >

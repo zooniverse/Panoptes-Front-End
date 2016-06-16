@@ -44,13 +44,14 @@
 
     > *
       display: flex
+      flex: 1 1 auto
 
   .subject
     border-radius: 5px
     box-shadow: 0 0 0 1px gray
     max-height: 90vh
     max-width: 100%
-    user-select: none    
+    user-select: none
 
   .marking-initializer
     cursor: crosshair
@@ -115,13 +116,13 @@
 
   // for subject images that are not height contained
   // this class name is enabled through a workflow config
-  &.large-image 
+  &.large-image
     .subject
       max-height: none
-    
+
     .task-area
       flex: 0 0 45ch
-      
+
   .task-nav
     display: flex
     margin-top: 1em
