@@ -102,7 +102,7 @@ $generic-heading
   display: block
 
 /* applying style from "fa" and "fa-external-link" conditionally rather than have to apply those classes every time */
-a[href^="http"]:after
+a[href^="http"]:not(.suppress-external-link-icon):after
   content: "\00a0\f08e"
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;

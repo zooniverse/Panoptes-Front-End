@@ -417,7 +417,7 @@ module.exports = React.createClass
             <div key={teamMember} className="team-member">
               <img src={imageSrc} alt="#{details.name}" />
               <div className="team-member-details">
-                <h3>{details.name}, {details.title} {if details.twitter then <a href="http://twitter.com/#{details.twitter}" target="_blank"><i className="fa fa-twitter"></i></a> }</h3>
+                <h3>{details.name}, {details.title} {if details.twitter then <a href="http://twitter.com/#{details.twitter}" className="suppress-external-link-icon" target="_blank"><i className="fa fa-twitter"></i></a> }</h3>
                 <p>{details.bio}</p>
               </div>
             </div>

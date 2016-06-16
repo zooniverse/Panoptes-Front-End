@@ -112,9 +112,9 @@ module.exports = React.createClass
             <a href="http://blog.zooniverse.org/" target="_blank"><Translate content="footer.talk.blog" /></a>
           </div>
           <div className="site-map-section social-media">
-            <a href="https://www.facebook.com/therealzooniverse" target="_blank"><i className="fa fa-facebook"></i></a>
-            <a href="https://twitter.com/the_zooniverse" target="_blank"><i className="fa fa-twitter"></i></a>
-            <a href="https://plus.google.com/+ZooniverseOrgReal" target="_blank"><i className="fa fa-google-plus"></i></a>
+            <a href="https://www.facebook.com/therealzooniverse" className="suppress-external-link-icon" target="_blank"><i className="fa fa-facebook"></i></a>
+            <a href="https://twitter.com/the_zooniverse" className="suppress-external-link-icon" target="_blank"><i className="fa fa-twitter"></i></a>
+            <a href="https://plus.google.com/+ZooniverseOrgReal" className="suppress-external-link-icon" target="_blank"><i className="fa fa-google-plus"></i></a>
           </div>
         </nav>
       </div>

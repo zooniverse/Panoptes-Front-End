@@ -57,7 +57,7 @@ module?.exports = React.createClass
         {if @state.board?.id and @state.discussion?.id
           <span>
             {' '}in{' '}
-            <a href={@state.href}>
+            <a className="suppress-external-link-icon" href={@state.href}>
               {if @state.project? and @state.owner
                 <span>
                   <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.project.display_name}">{@state.project.display_name}</strong>
