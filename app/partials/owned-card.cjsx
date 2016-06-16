@@ -59,9 +59,7 @@ module.exports = React.createClass
         <div className="details">
           <div className="name"><span>{@props.resource.display_name}</span></div>
           {if !@props.skipOwner
-            <PromiseRenderer promise={@props.resource.get('owner')}>{ (owner) ->
-              <div className="owner">{owner?.display_name ? 'LOADING'}</div>
-            }</PromiseRenderer>}
+            <div className="owner">{@props.resource.links.owner.display_name}</div>}
           {<div className="description">{@props.resource.description}</div> if @props.resource.description?}
           {<div className="private"><i className="fa fa-lock"></i> Private</div> if @props.resource.private}
           <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"#{@props.translationObjectName}.button"} /></button>
