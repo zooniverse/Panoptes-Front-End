@@ -107,6 +107,7 @@ module.exports = React.createClass
       getEventOffset: this.getEventOffset
       onChange: @props.onChange
       user: @props.user
+      preferences: @props.preferences
 
     for task, Component of tasks when Component.getSVGProps?
       for key, value of Component.getSVGProps hookProps

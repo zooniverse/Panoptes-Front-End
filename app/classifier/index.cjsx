@@ -125,6 +125,7 @@ Classifier = React.createClass
           project={@props.project}
           subject={@props.subject}
           workflow={@props.workflow}
+          preferences={@props.preferences}
           classification={currentClassification}
           annotation={currentAnnotation}
           onLoad={@handleSubjectImageLoad}
@@ -194,7 +195,7 @@ Classifier = React.createClass
       {persistentHooksBeforeTask.map (HookComponent) =>
         <HookComponent {...taskHookProps} />}
 
-      <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} user={@props.user} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+      <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} preferences={@props.preferences} user={@props.user} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
       {persistentHooksAfterTask.map (HookComponent) =>
         <HookComponent {...taskHookProps} />}

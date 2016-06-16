@@ -52,13 +52,16 @@ module.exports = React.createClass
 
     saveState: (mark, template, type) ->
       templateID = Math.random()
+      array = []
       if type is 'row'
         for cell in template
+          cell._key = Math.random()
           cell.reorder = false
           cell.y = mark.y
           cell.height = mark.height
           cell.templateID = templateID
-        template
+          array.push Object.assign({}, cell)
+        array
       else
         for cell in template
           cell.reorder = false
