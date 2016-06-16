@@ -51,22 +51,23 @@ module.exports = React.createClass
       mark is null or mark.height > MINIMUM_SIZE
 
     saveState: (mark, template, type) ->
+      templateCopy = []
+      for cell in template
+        templateCopy.push Object.assign({}, cell)
       templateID = Math.random()
-      array = []
       if type is 'row'
-        for cell in template
+        for cell in templateCopy
           cell._key = Math.random()
           cell.reorder = false
           cell.y = mark.y
           cell.height = mark.height
           cell.templateID = templateID
-          array.push Object.assign({}, cell)
-        array
+        templateCopy
       else
-        for cell in template
+        for cell in templateCopy
           cell.reorder = false
           cell.templateID = templateID
-        template
+        templateCopy
 
   initCoords: null
 
@@ -93,7 +94,9 @@ module.exports = React.createClass
     for cell in @state.grid
       points = @cellPoints cell
       totalPoints.push points
-    <polyline points={totalPoints.join()} />
+    <Draggable onDrag={@handleGridDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+      <polyline key={Math.random()} points={totalPoints.join()} />
+    </Draggable>
 
   renderRow: ->
     totalPoints = []
@@ -108,6 +111,15 @@ module.exports = React.createClass
     <Draggable onDrag={@handleRowDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
       <polyline key={Math.random()} points={totalPoints.join()} />
     </Draggable>
+
+  handleGridDrag: (e, d) ->
+    @props.mark.renderDrag = true
+    newGrid = @state.grid
+    alteringRows = (i for i in @props.classification.annotations[0].value when i.templateID is @props.mark.templateID)
+    for cell in alteringRows
+      cell.x += d.x / @props.scale.horizontal
+      cell.y += d.y / @props.scale.vertical
+    @setState grid: alteringRows
 
   handleRowDrag: (e, d) ->
     @props.mark.renderDrag = true

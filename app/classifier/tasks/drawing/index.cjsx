@@ -82,39 +82,29 @@ module.exports = React.createClass
       # TODO: This doesn't factor in details tasks at all.
       testShapeCloseness unknownShapes.concat knownGoodShapes
 
-  componentWillMount: ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links?.project}).then ([pref]) =>
-      @setState preferences: pref.preferences
-
   getDefaultProps: ->
     task: null
     annotation: null
     onChange: Function.prototype
 
   activateTemplate: (type) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.activeTemplate': type
-      pref.save()
-      @setState preferences: pref.preferences
+    @props.preferences.preferences.activeTemplate = type
+    @props.preferences.update 'preferences'
 
   clearTemplate: (type) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update "preferences.#{type}": null
-      pref.update 'preferences.activeTemplate': null
-      pref.save()
-      @setState preferences: pref.preferences
+    @props.preferences.preferences.activeTemplate = null
+    @props.preferences.preferences[type] = null
+    @props.preferences.update 'preferences'
 
   saveTemplate: (marks, type) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.activeTemplate': type
-      if !pref.preferences.grid and type is 'grid'
-        pref.update 'preferences.grid': marks
-      else if !pref.preferences.row and type is 'row'
-        lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
-        lastRow = (i for i in marks when i.y < lastCellMid && (i.y + i.height) > lastCellMid)
-        pref.update 'preferences.row': lastRow
-      pref.save()
-      @setState preferences: pref.preferences
+    @props.preferences.preferences.activeTemplate = type
+    if !@props.preferences.preferences[type] and type is 'row'
+      lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
+      lastRow = (i for i in marks when i.y < lastCellMid && (i.y + i.height) > lastCellMid)
+      @props.preferences.preferences.row = lastRow
+    else if !@props.preferences.preferences[type]
+      @props.preferences.preferences[type] = marks
+    @props.preferences.update 'preferences'
 
   render: ->
     tools = for tool, i in @props.task.tools
@@ -144,15 +134,15 @@ module.exports = React.createClass
           </div>
         </div>
         {if tool.type is 'grid'
-          <button type="button" className="tabbed-content-tab #{('active' if !@state?.preferences.activeTemplate) ? ''}" onClick={@activateTemplate.bind this, null} >
+          <button type="button" className="tabbed-content-tab #{('active' if !@props.preferences.preferences?.activeTemplate) ? ''}" onClick={@activateTemplate.bind this, null} >
             Draw Cells
           </button>}
         {if tool.type is 'grid'
-          <button type="button" className="tabbed-content-tab #{('active' if @state?.preferences.activeTemplate is 'row') ? ''}" disabled={not @state?.preferences?.row?} onClick={@activateTemplate.bind this, 'row'} >
+          <button type="button" className="tabbed-content-tab #{('active' if @props.preferences.preferences?.activeTemplate is 'row') ? ''}" disabled={!@props.preferences.preferences.row} onClick={@activateTemplate.bind this, 'row'} >
             Draw Rows
           </button>}
         {if tool.type is 'grid'
-          <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value, 'row'} disabled={@state?.preferences?.row?}>
+          <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value, 'row'} disabled={@props.preferences.preferences?.row?}>
             Save Row Template
           </button>}
         {if tool.type is 'grid'
@@ -160,11 +150,11 @@ module.exports = React.createClass
             Clear Row Template
           </button>}
         {if tool.type is 'grid'
-          <button type="button" className="tabbed-content-tab #{('active' if @state?.preferences.activeTemplate is 'grid') ? ''}" disabled={not @state?.preferences?.grid?} onClick={@activateTemplate.bind this, 'grid'} >
+          <button type="button" className="tabbed-content-tab #{('active' if @props.preferences.preferences?.activeTemplate is 'grid') ? ''}" disabled={!@props.preferences.preferences?.grid?} onClick={@activateTemplate.bind this, 'grid'} >
             Place Grid
           </button>}
         {if tool.type is 'grid'
-          <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value, 'grid'} disabled={@state?.preferences?.grid?}>
+          <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value, 'grid'} disabled={@props.preferences.preferences?.grid?}>
             Save Grid Template
           </button>}
         {if tool.type is 'grid'
