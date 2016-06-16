@@ -72,7 +72,7 @@ List = React.createClass
       heroNav={<CollectionsNav user={@props.user} />}
       heroClass="collections-hero"
       ownerName={@props.params?.owner}
-      skipOwner={!@props.params?.owner}
+      skipOwner={@props.params?.owner?}
       imagePromise={@imagePromise}
       cardLink={@cardLink} />
 
