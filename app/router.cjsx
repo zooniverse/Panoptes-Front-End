@@ -100,14 +100,17 @@ module.exports =
       <Route name="talk-discussion" path=":board/:discussion" component={require './talk/discussion'} />
     </Route>
 
-    <Route path="favorites" component={require('./pages/collections').FavoritesList}>
-      <Route path=":owner" component={require('./pages/collections').FavoritesList} />
+    <Route path="favorites" component={require('./pages/collections/index')}>
+      <IndexRoute path=":collection_owner" component={require('./pages/collections/favorites-list')} />
+      <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
     </Route>
 
-    <Route path="collections" component={require('./pages/collections').CollectionsList}>
-      <Route path=":owner" component={require('./pages/collections').CollectionsList} />
+    <Route path="collections" component={require('./pages/collections/index')}>
+       <IndexRoute path=":collection_owner" component={require('./pages/collections/collections-list')} />
+       <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
     </Route>
-    <Route path="collections/:owner/:name" component={require './collections/show'}>
+
+    <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
       <IndexRoute component={require './collections/show-list'} />
       <Route path="settings" component={require './collections/settings'} />
       <Route path="collaborators" component={require './collections/collaborators'} />
