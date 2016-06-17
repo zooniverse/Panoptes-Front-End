@@ -88,23 +88,26 @@ module.exports = React.createClass
     onChange: Function.prototype
 
   activateTemplate: (type) ->
-    @props.preferences.preferences.activeTemplate = type
-    @props.preferences.update 'preferences'
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update 'preferences.activeTemplate': type
+      pref.save()
 
   clearTemplate: (type) ->
-    @props.preferences.preferences.activeTemplate = null
-    @props.preferences.preferences[type] = null
-    @props.preferences.update 'preferences'
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update "preferences.#{type}": null
+      pref.update 'preferences.activeTemplate': null
+      pref.save()
 
   saveTemplate: (marks, type) ->
-    @props.preferences.preferences.activeTemplate = type
-    if !@props.preferences.preferences[type] and type is 'row'
-      lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
-      lastRow = (i for i in marks when i.y < lastCellMid && (i.y + i.height) > lastCellMid)
-      @props.preferences.preferences.row = lastRow
-    else if !@props.preferences.preferences[type]
-      @props.preferences.preferences[type] = marks
-    @props.preferences.update 'preferences'
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update 'preferences.activeTemplate': type
+      if !pref.preferences.grid and type is 'grid'
+        pref.update 'preferences.grid': marks
+      else if !pref.preferences.row and type is 'row'
+        lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
+        lastRow = (i for i in marks when i.y < lastCellMid && (i.y + i.height) > lastCellMid)
+        pref.update 'preferences.row': lastRow
+      pref.save()
 
   render: ->
     tools = for tool, i in @props.task.tools

@@ -90,45 +90,27 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   renderGrid: ->
-    totalPoints = []
+    console.log @props.preferences
     for cell in @state.grid
       points = @cellPoints cell
-      totalPoints.push points
-    <Draggable onDrag={@handleGridDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
-      <polyline key={Math.random()} points={totalPoints.join()} />
-    </Draggable>
+      <Draggable onDrag={@handleTemplateDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+        <polyline key={Math.random()} points={points} />
+      </Draggable>
 
   renderRow: ->
-    totalPoints = []
-    if @props.mark.renderDrag is true #is this necessary?
-      for cell in @state.row
-        points = @rowPoints cell
-        totalPoints.push points
-    else
-      for cell in @state.row
-        points = @rowPoints cell
-        totalPoints.push points
-    <Draggable onDrag={@handleRowDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
-      <polyline key={Math.random()} points={totalPoints.join()} />
-    </Draggable>
+    for cell in @state.row
+      points = @rowPoints cell
+      <Draggable onDrag={@handleTemplateDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+        <polyline key={Math.random()} points={points} />
+      </Draggable>
 
-  handleGridDrag: (e, d) ->
-    @props.mark.renderDrag = true
-    newGrid = @state.grid
+  handleTemplateDrag: (e, d) ->
+    newGrid = @state[@state.activeTemplate]
     alteringRows = (i for i in @props.classification.annotations[0].value when i.templateID is @props.mark.templateID)
     for cell in alteringRows
       cell.x += d.x / @props.scale.horizontal
       cell.y += d.y / @props.scale.vertical
     @setState grid: alteringRows
-
-  handleRowDrag: (e, d) ->
-    @props.mark.renderDrag = true
-    newRows = @state.row
-    alteringRows = (i for i in @props.classification.annotations[0].value when i.templateID is @props.mark.templateID)
-    for cell in alteringRows
-      cell.x += d.x / @props.scale.horizontal
-      cell.y += d.y / @props.scale.vertical
-    @setState row: alteringRows
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
@@ -147,7 +129,7 @@ module.exports = React.createClass
 
   rowPoints: (cell) ->
     {y, height} = @props.mark
-    points = [
+    [
       [cell.x, y].join ','
       [cell.x + cell.width, y].join ','
       [cell.x + cell.width, y + height].join ','
@@ -161,6 +143,9 @@ module.exports = React.createClass
         for project in projects
           if project.links.project == @props.workflow.links.project
             proj = project
+            @setState preferences: proj.preferences
+            if proj.preferences.activeTemplate
+              @setState activeTemplate: proj.preferences.activeTemplate
             if proj.preferences.activeTemplate == 'row'
               @setState row: proj.preferences.row
             if proj.preferences.activeTemplate == 'grid'

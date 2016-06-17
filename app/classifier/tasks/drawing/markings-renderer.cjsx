@@ -63,6 +63,7 @@ module.exports = React.createClass
                 getEventOffset: @props.getEventOffset
                 workflow: @props.workflow
                 user: @props.user
+                preferences: @props.preferences
 
               toolProps =
                 classification: @props.classification
