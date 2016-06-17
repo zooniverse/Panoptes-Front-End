@@ -90,7 +90,6 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   renderGrid: ->
-    console.log @props.preferences
     for cell in @state.grid
       points = @cellPoints cell
       <Draggable onDrag={@handleTemplateDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
@@ -105,7 +104,6 @@ module.exports = React.createClass
       </Draggable>
 
   handleTemplateDrag: (e, d) ->
-    newGrid = @state[@state.activeTemplate]
     alteringRows = (i for i in @props.classification.annotations[0].value when i.templateID is @props.mark.templateID)
     for cell in alteringRows
       cell.x += d.x / @props.scale.horizontal

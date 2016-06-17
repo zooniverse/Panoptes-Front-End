@@ -104,9 +104,12 @@ module.exports = React.createClass
       if !pref.preferences.grid and type is 'grid'
         pref.update 'preferences.grid': marks
       else if !pref.preferences.row and type is 'row'
+        newArray = []
         lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
-        lastRow = (i for i in marks when i.y < lastCellMid && (i.y + i.height) > lastCellMid)
-        pref.update 'preferences.row': lastRow
+        for cell in marks
+          if cell.y < lastCellMid && (cell.y + cell.height) > lastCellMid
+            newArray.push Object.assign({}, cell)
+        pref.update 'preferences.row': newArray
       pref.save()
 
   render: ->
