@@ -1,6 +1,5 @@
 React = require 'react'
 DrawingToolRoot = require './root'
-DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
@@ -75,10 +74,8 @@ module.exports = React.createClass
     points = @cellPoints @props.mark
 
     <DrawingToolRoot tool={this}>
-      {if @state?.grid
-        @renderGrid()
-      else if @state?.row
-        @renderRow()
+      {if @state?.template
+        @renderTemplate()
       else
         <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
           <polyline points={points} />
@@ -89,16 +86,10 @@ module.exports = React.createClass
           </g>}
     </DrawingToolRoot>
 
-  renderGrid: ->
-    for cell in @state.grid
-      points = @cellPoints cell
-      <Draggable onDrag={@handleTemplateDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
-        <polyline key={Math.random()} points={points} />
-      </Draggable>
-
-  renderRow: ->
-    for cell in @state.row
-      points = @rowPoints cell
+  renderTemplate: ->
+    for cell in @state.template
+      points = @cellPoints cell if @state.activeTemplate is 'grid'
+      points = @rowPoints cell if @state.activeTemplate is 'row'
       <Draggable onDrag={@handleTemplateDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <polyline key={Math.random()} points={points} />
       </Draggable>
@@ -108,7 +99,7 @@ module.exports = React.createClass
     for cell in alteringRows
       cell.x += d.x / @props.scale.horizontal
       cell.y += d.y / @props.scale.vertical
-    @setState grid: alteringRows
+    @setState template: alteringRows
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
@@ -138,14 +129,9 @@ module.exports = React.createClass
   findSchema: ->
     @props.user.get('project_preferences')
       .then (projects) =>
-        for project in projects
-          if project.links.project == @props.workflow.links.project
-            proj = project
-            @setState preferences: proj.preferences
+        for proj in projects
+          if proj.links.project == @props.workflow.links.project
             if proj.preferences.activeTemplate
               @setState activeTemplate: proj.preferences.activeTemplate
-            if proj.preferences.activeTemplate == 'row'
-              @setState row: proj.preferences.row
-            if proj.preferences.activeTemplate == 'grid'
-              @setState grid: proj.preferences.grid
+              @setState template: proj.preferences[proj.preferences.activeTemplate]
       .catch =>

@@ -103,6 +103,7 @@ module.exports = React.createClass
       pref.update 'preferences.activeTemplate': type
       if !pref.preferences.grid and type is 'grid'
         pref.update 'preferences.grid': marks
+        pref.save()
       else if !pref.preferences.row and type is 'row'
         newArray = []
         lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
