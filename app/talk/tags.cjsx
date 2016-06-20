@@ -3,7 +3,8 @@ React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
 Paginator = require './lib/paginator'
-SubjectViewer = require '../components/subject-viewer'
+getSubjectLocation = require '../lib/get-subject-location'
+Thumbnail = require '../components/thumbnail'
 resourceCount = require './lib/resource-count'
 Loading = require '../components/loading-indicator'
 PopularTags = require './popular-tags'
@@ -69,7 +70,7 @@ module.exports = React.createClass
                         Subject {tag.subject.id}
                       </Link>
                     </p>
-                    <SubjectViewer subject={tag.subject} user={@props.user} project={@props.project}/>
+                    <Thumbnail src={getSubjectLocation(tag.subject).src} width={100} />
                     <ul className="tag-list">
                       {for subjectTag in tag.subjectTags
                         <li key={"tag-#{ tag.id }-#{ subjectTag.id }"}>
