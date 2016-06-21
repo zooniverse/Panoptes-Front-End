@@ -5,7 +5,6 @@ deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 
 MINIMUM_SIZE = 10
-DELETE_BUTTON_DISTANCE = 9 / 10
 
 module.exports = React.createClass
   displayName: 'GridTool'
@@ -82,7 +81,7 @@ module.exports = React.createClass
         </Draggable>}
         {if @props.selected
           <g>
-            <DeleteButton tool={this} x={@props.mark.x + (@props.mark.width * DELETE_BUTTON_DISTANCE)} y={@props.mark.y} />
+            <DeleteButton tool={this} x={@props.mark.x} y={@props.mark.y} />
           </g>}
     </DrawingToolRoot>
 
