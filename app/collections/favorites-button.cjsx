@@ -24,6 +24,13 @@ module?.exports = React.createClass
     favorites: {}
     favorited: false
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logSubjLike: (liked) ->
+    @context.geordi?.logEvent
+      type: liked
+
   promptToSignIn: ->
     alert (resolve) ->
       <SignInPrompt onChoose={resolve}>
@@ -77,12 +84,16 @@ module?.exports = React.createClass
         .then ([favorites, favorited]) =>
           if not favorites?
             @createFavorites()
+            @logSubjLike 'favorite'
           else if favorited
             @removeSubjectFrom(favorites)
+            @logSubjLike 'unfavorite'
           else
             @addSubjectTo(favorites)
+            @logSubjLike 'favorite'
     else
       @promptToSignIn()
+      @logSubjLike 'favorite'
 
   render: ->
     <PromiseRenderer promise={@state.favoritedPromise}>{(favorited) =>

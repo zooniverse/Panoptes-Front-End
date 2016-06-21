@@ -90,7 +90,6 @@ module?.exports = React.createClass
             @history.pushState(null, "/projects/#{owner}/#{name}/talk/#{board}")
           else
             @history.pushState(null, "/talk/#{board}")
-          
 
   setCommentsMeta: (page = @props.location.query?.page) ->
     @commentsRequest(page).then (comments) =>
@@ -365,6 +364,7 @@ module?.exports = React.createClass
             validationErrors={@state.commentValidationErrors}
             onSubmitComment={@onSubmitComment}
             reply={@state.reply}
+            logSubmit={true}
             onClickClearReply={=> @setState({reply: null})}
             header={null} />
         </section>

@@ -29,6 +29,9 @@ UserProfilePage = React.createClass
   getInitialState: ->
     profileHeader: null
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
     @getProfileHeader(@props.profileUser)
@@ -40,6 +43,11 @@ UserProfilePage = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
+  logClick: ->
+    @context?.geordi?.logEvent
+      type: 'message-user'
+      data: {sender: @props.user.display_name, recipient: @props.profileUser.display_name}
+
   getProfileHeader: (user) ->
     # TODO: Why's this return an array?
     # The user should have an ID in its links.
@@ -50,6 +58,7 @@ UserProfilePage = React.createClass
         @setState({profileHeader})
 
   render: ->
+    logClick = @context?.geordi?.makeHandler? 'user-menu'
     if @state.profileHeader?
       headerStyle = backgroundImage: "url(#{@state.profileHeader.src})"
 
@@ -59,26 +68,26 @@ UserProfilePage = React.createClass
         <div className="hero-container">
           <h1>{@props.profileUser.display_name}</h1>
           <nav className="hero-nav">
-            <IndexLink to="/users/#{@props.profileUser.login}" activeClassName="active">
+            <IndexLink to="/users/#{@props.profileUser.login}" activeClassName="active" onClick={logClick?.bind(this, 'comments')}>
               <Translate content="profile.nav.comments" />
             </IndexLink>
             {' '}
-            <Link to="/collections/#{@props.profileUser.login}" activeClassName="active">
+            <Link to="/collections/#{@props.profileUser.login}" activeClassName="active" onClick={logClick?.bind(this, 'collections')}>
               <Translate content="profile.nav.collections" />
             </Link>
             {' '}
-            <Link to="/favorites/#{@props.profileUser.login}" activeClassName="active">
+            <Link to="/favorites/#{@props.profileUser.login}" activeClassName="active" onClick={logClick?.bind(this, 'favorites')}>
               <Translate content="profile.nav.favorites" />
             </Link>
             {' '}
 
             <span>
               {if @props.user is @props.profileUser
-                <Link to="/users/#{@props.profileUser.login}/stats" activeClassName="active">
+                <Link to="/users/#{@props.profileUser.login}/stats" activeClassName="active" onClick={logClick?.bind(this, 'stats')}>
                   <Translate content="profile.nav.stats" />
                 </Link>
               else
-                <Link to="/users/#{@props.profileUser.login}/message" activeClassName="active">
+                <Link to="/users/#{@props.profileUser.login}/message" onClick={@logClick.bind null, this} activeClassName="active">
                   <Translate content="profile.nav.message" />
                 </Link>}
             </span>

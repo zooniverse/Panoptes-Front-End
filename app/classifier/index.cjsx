@@ -24,6 +24,9 @@ PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 Classifier = React.createClass
   displayName: 'Classifier'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getDefaultProps: ->
     user: null
     workflow: null
@@ -54,6 +57,13 @@ Classifier = React.createClass
       @loadSubject subject
     if nextProps.classification isnt @props.classification
       @prepareToClassify nextProps.classification
+
+    @context.geordi.remember subjectID: @props.subject?.id
+
+  componentWillUnmount: () ->
+    try
+      @context.geordi?.forget ['subjectID']
+
 
   loadSubject: (subject) ->
     @setState
@@ -139,7 +149,7 @@ Classifier = React.createClass
     # Should we disabled the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
-    
+
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
@@ -370,6 +380,8 @@ Classifier = React.createClass
 
   # Whenever a subject image is loaded in the annotator, record its size at that time.
   handleSubjectImageLoad: (e, frameIndex) ->
+    @context.geordi?.remember subjectID: @props.subject?.id
+
     {naturalWidth, naturalHeight, clientWidth, clientHeight} = e.target
     changes = {}
     changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
@@ -421,7 +433,7 @@ Classifier = React.createClass
     @setState backButtonWarning: true
 
   warningToggleOff: ->
-    @setState backButtonWarning: false 
+    @setState backButtonWarning: false
 
   renderBackButtonWarning: ->
     <p className="back-button-warning" >Going back will clear your work for the current task.</p>

@@ -62,6 +62,9 @@ module.exports = React.createClass
 
   title: 'Classify'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getDefaultProps: ->
     query: null
     project: null
@@ -81,6 +84,12 @@ module.exports = React.createClass
   componentDidMount: () ->
     @getCurrentWorkflow().then (workflow) =>
       @setState {workflow}
+
+  componentWillUpdate: (nextProps, nextState) ->
+    @context.geordi.remember workflowID: nextState?.workflow?.id
+
+  componentWillUnmount: () ->
+    @context.geordi?.forget ['workflowID']
 
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
@@ -244,6 +253,7 @@ module.exports = React.createClass
       .then @loadAnotherSubject()
 
   saveClassification: ->
+    @context.geordi?.logEvent type: 'classify'
     classification = @state.classification
     console?.info 'Completed classification', classification
     savingClassification = if @state.demoMode

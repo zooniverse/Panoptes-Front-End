@@ -31,6 +31,7 @@ module?.exports = React.createClass
     content: ''
     subject: null
     user: null
+    logSubmit: false # if true, geordi logging will be made through onSubmitComment
 
   getInitialState: ->
     subject: @props.subject
@@ -39,11 +40,21 @@ module?.exports = React.createClass
     loading: false
     error: ''
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logPageClick: (clicked, button) ->
+    @context?.geordi?.logEvent
+      type: clicked
+      data: {button: button}
+
   componentWillReceiveProps: (nextProps) ->
     if nextProps.reply isnt @props.reply
       @setState {reply: nextProps.reply}
 
   onSubmitComment: (e) ->
+    if @props.logSubmit is true
+      @logPageClick 'add-comment', @props.submit
     e.preventDefault()
     textareaValue = @state.content
     return if @props.validationCheck?(textareaValue)
@@ -82,7 +93,7 @@ module?.exports = React.createClass
         {if @props.reply
           <div className="talk-comment-reply">
             <div style={color: '#afaeae'}>
-              In reply to {@props.reply.comment.user_display_name}'s comment:
+              In reply to {@props.reply.comment.user_display_name}s comment:
             </div>
             <Markdown project={@props.project}>{@props.reply.comment.body}</Markdown>
             <button type="button" onClick={@props.onClickClearReply}><i className="fa fa-close" /> Clear Reply</button>
@@ -98,7 +109,6 @@ module?.exports = React.createClass
           <Suggester {...@props} input={@state.content} onSelect={@onInputChange}>
             <MarkdownEditor previewing={@state.loading} placeholder={@props.placeholder} project={@props.project} className="full" value={@state.content} onChange={@onInputChange} onHelp={-> alert <MarkdownHelp talk={true} title={<h1>Guide to commenting in Talk</h1>}/> }/>
           </Suggester>
-
           <section>
             <button
               type="button"

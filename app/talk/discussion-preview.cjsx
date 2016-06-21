@@ -15,21 +15,28 @@ module?.exports = React.createClass
   propTypes:
     discussion: React.PropTypes.object
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logDiscussionClick: ->
+    @context.geordi?.logEvent
+      type: "view-discussion"
+
   discussionLink: ->
     {discussion} = @props
 
     if (@props.params?.owner and @props.params?.name) # get from url if possible
       {owner, name} = @props.params
       projectTalk = "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
-      <Link to={projectTalk}>{discussion.title}</Link>
+      <Link to={projectTalk} onClick={@logDiscussionClick.bind null, this}>{discussion.title}</Link>
 
     else if @props.project # otherwise fetch from project
       [owner, name] = @props.project.slug.split('/')
       projectTalk = "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
-      <Link to={projectTalk}>{discussion.title}</Link>
+      <Link to={projectTalk} onClick={@logDiscussionClick.bind null, this}>{discussion.title}</Link>
 
     else # link to zooniverse main talk
-      <Link to="/talk/#{discussion.board_id}/#{discussion.id}">
+      <Link to="/talk/#{discussion.board_id}/#{discussion.id}" onClick={@logDiscussionClick.bind null, this}>
         {discussion.title}
       </Link>
 

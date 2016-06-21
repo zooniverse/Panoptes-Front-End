@@ -27,6 +27,13 @@ module?.exports = React.createClass
   propTypes:
     section: React.PropTypes.string # 'zooniverse' for main-talk, 'project_id' for projects
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logTalkClick: (talkItem) ->
+    @context.geordi?.logEvent
+      type: talkItem
+
   propChangeHandlers:
     'section': 'setBoards'
     'user': 'setBoards'
@@ -155,9 +162,9 @@ module?.exports = React.createClass
           <section>
             <h3>
               {if @props.section is 'zooniverse'
-                <Link className="sidebar-link" to="/talk/recents" {...@props}>Recent Comments</Link>
+                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/talk/recents" {...@props}>Recent Comments</Link>
               else
-                <Link className="sidebar-link" to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents" {...@props}>Recent Comments</Link>
+                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents" {...@props}>Recent Comments</Link>
               }
             </h3>
           </section>

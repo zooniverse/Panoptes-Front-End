@@ -50,6 +50,9 @@ module.exports = React.createClass
     agreedToPrivacyPolicy: null
     error: null
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   render: ->
     {badNameChars, nameConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
@@ -231,6 +234,7 @@ module.exports = React.createClass
     badNameChars?.length is 0 and not nameConflict and not passwordsDontMatch and not emailConflict and nameExists and agreesToPrivacyPolicy
 
   handleSubmit: (e) ->
+    @context.geordi?.logEvent type: 'register'
     e.preventDefault()
     login = @refs.name.value
     password = @refs.password.value

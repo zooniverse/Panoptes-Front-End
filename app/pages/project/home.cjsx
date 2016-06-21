@@ -13,6 +13,9 @@ module.exports = React.createClass
 
   mixins: [HandlePropChanges, PromiseToSetState]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   propChangeHandlers:
     project: (project) ->
       # TODO: Build this kind of caching into json-api-client.
@@ -34,8 +37,6 @@ module.exports = React.createClass
     undefined # Don't prevent default Link behavior.
 
   render: ->
-    [owner, name] = @props.project.slug.split('/')
-
     <div className="project-home-page">
       <div className="call-to-action-container content-container">
         <FinishedBanner project={@props.project} />

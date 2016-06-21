@@ -50,31 +50,44 @@ module?.exports = React.createClass
     commentValidationErrors: []
     replies: []
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logItemClick: (itemClick) ->
+    @context.geordi?.logEvent
+      type: itemClick
+
   componentDidMount: ->
     if @props.active
       ReactDOM.findDOMNode(@).scrollIntoView()
 
   onClickReply: (e) ->
+    @logItemClick 'reply-post'
     @props.onClickReply(@props.data)
 
   onClickLink: (e) ->
+    @logItemClick 'link-post'
     @toggleComponent('link')
 
   onClickReport: (e) ->
+    @logItemClick 'report-post'
     @toggleComponent('report')
 
   onClickEdit: (e) ->
+    @logItemClick 'edit-post'
     React.findDOMNode(@).scrollIntoView()
     @setState editing: true
     @removeFeedback()
 
   onClickDelete: (e) ->
+    @logItemClick 'delete-post'
     @props.onDeleteComment(@props.data.id)
 
   onCancelClick: (e) ->
     @setState editing: false
 
   onSubmitComment: (e, textContent, subject) ->
+    @logItemClick 'update-comment'
     @props.onUpdateComment?(textContent, subject, @props.data.id)
       .then =>
         @setState editing: false
@@ -86,6 +99,7 @@ module?.exports = React.createClass
     !!commentValidationErrors.length
 
   onClickLike: ->
+    @logItemClick 'like-post'
     @props.onLikeComment(@props.data.id)
 
   upvoteCount: ->
@@ -94,7 +108,7 @@ module?.exports = React.createClass
   commentSubjectTitle: (comment, subject) ->
     {owner, name} = @props.params
     if (comment.focus_type is 'Subject') and (owner and name)
-      <Link to="/projects/#{owner}/#{name}/talk/subjects/#{comment.focus_id}">
+      <Link to="/projects/#{owner}/#{name}/talk/subjects/#{comment.focus_id}" onClick={@logItemClick.bind this, "view-subject-direct"}>
         Subject {subject.id}
       </Link>
     else

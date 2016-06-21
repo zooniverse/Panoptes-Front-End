@@ -32,6 +32,9 @@ module?.exports = React.createClass
   displayName: 'TalkBoard'
   mixins: [History]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getInitialState: ->
     discussions: []
     board: {}
@@ -51,6 +54,10 @@ module?.exports = React.createClass
     @setDiscussions(@props.location.query.page ? 1)
     @setBoard()
 
+  logNewDiscuss: ->
+    @context.geordi?.logEvent
+      type: 'new-discussion'
+
   discussionsRequest: (page) ->
     @setState loading: true
     board_id = +@props.params.board
@@ -68,7 +75,11 @@ module?.exports = React.createClass
 
   setBoard: ->
     @boardRequest()
-      .then (board) => @setState {board}
+      .then (board) =>
+        @setState {board}
+        @context?.geordi?.logEvent
+          type: "talk-view"
+          data: {board: board?.title}
 
   onCreateDiscussion: ->
     @setState newDiscussionOpen: false
@@ -109,6 +120,7 @@ module?.exports = React.createClass
       .then (board) => @setState {board}
 
   onClickNewDiscussion: ->
+    @logNewDiscuss()
     @setState newDiscussionOpen: !@state.newDiscussionOpen
 
   roleReadLabel: (data, i) ->

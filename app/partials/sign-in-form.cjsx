@@ -17,6 +17,9 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'SignInForm'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getInitialState: ->
     busy: false
     login: ''
@@ -67,7 +70,7 @@ module.exports = React.createClass
           </a>}
       </p>
 
-      <button type="submit" className="standard-button full" disabled={disabled or @state.login.length is 0 or @state.password.length is 0}>
+      <button type="submit" className="standard-button full" disabled={disabled or @state.login.length is 0 or @state.password.length is 0} onClick={@context.geordi?.logEvent type: 'login'}>
         <Translate content="signInForm.signIn" />
       </button>
     </form>

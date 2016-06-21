@@ -2,6 +2,7 @@
   "name": "panoptes-front-end",
   "dependencies": {
     "animated-scrollto": "~1.1.0",
+    "babelify": "~6.4.0",
     "chartist": "~0.9.5",
     "classnames": "~2.2.3",
     "counterpart": "~0.17.0",
@@ -37,7 +38,9 @@
     "strip-markdown": "~0.3.1",
     "sugar-client": "~1.0.1",
     "swipe-js-iso": "~2.0.1",
-    "test-shape-closeness": "0.0.1"
+    "test-shape-closeness": "0.0.1",
+    "visible-element": "~1.0.1",
+    "zooniverse-geordi-client": "^1.4"
   },
   "devDependencies": {
     "babel-cli": "~6.7.7",

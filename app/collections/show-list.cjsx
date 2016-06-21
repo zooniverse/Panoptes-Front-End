@@ -21,10 +21,13 @@ module?.exports = React.createClass
   displayName: 'CollectionShowList'
   mixins: [History]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   componentDidMount: ->
     @fetchCollectionSubjects pick @props.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
-  componentWillReceiveProps: (nextProps) ->
+  componentWillReceiveProps: (nextProps, nextContext) ->
     @fetchCollectionSubjects pick nextProps.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
 
   fetchCollectionSubjects: (query = null) ->
@@ -71,6 +74,7 @@ module?.exports = React.createClass
       {owner: owner, name: name, id: subject.id}
 
   render: ->
+    logClick = @context.geordi?.makeHandler? 'about-menu'
     subjectNode = (subject) =>
       <div className="collection-subject-viewer" key={subject.id}>
         <SubjectViewer defaultStyle={false} subject={subject} user={@props.user}>
@@ -79,7 +83,7 @@ module?.exports = React.createClass
               <i className="fa fa-close" />
             </button>}
           <PromiseRenderer promise={@fetchProjectOwner(subject)}>{ (params) =>
-            <Link className="subject-link" to={"/projects/#{params.owner}/#{params.name}/talk/subjects/#{subject.id}"}>
+            <Link className="subject-link" to={"/projects/#{params.owner}/#{params.name}/talk/subjects/#{subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
               <span></span>
             </Link>
           }</PromiseRenderer>

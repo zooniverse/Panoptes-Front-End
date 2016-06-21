@@ -45,21 +45,27 @@ ProjectPage = React.createClass
     pages: []
     selectedWorkflow: null
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-project-page'
     @fetchInfo @props.project
     @getSelectedWorkflow @props.project, @props.preferences
     @updateSugarSubscription @props.project
+    @context.geordi?.remember projectToken: @props.project?.slug
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-project-page'
     @updateSugarSubscription null
+    @context.geordi?.forget ['projectToken']
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project
       @fetchInfo nextProps.project
       @getSelectedWorkflow nextProps.project, nextProps.preferences
       @updateSugarSubscription nextProps.project
+      @context.geordi?.remember projectToken: nextProps.project?.slug
     else if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow?.id
       @getSelectedWorkflow nextProps.project, nextProps.preferences
 
@@ -119,6 +125,8 @@ ProjectPage = React.createClass
       map[page.url_key] = page
       map
 
+    logClick = @context?.geordi?.makeHandler? 'project-menu'
+
     <div className="project-page">
       {if @state.background?
         <div className="project-background" style={backgroundImage: "url('#{@state.background.src}')"}></div>}
@@ -131,19 +139,19 @@ ProjectPage = React.createClass
             Visit {@props.project.display_name}
           </a>
         else
-          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab">
+          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.home'}>
             {if @state.avatar?
               <img src={@state.avatar.src} className="avatar" />}
             {@props.project.display_name}
           </IndexLink>}
 
         {unless @props.project.redirect
-          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab">
+          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.about'}>
             <Translate content="project.nav.about" />
           </Link>}
 
         {if @props.project.redirect
-          <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank">
+          <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank" onClick={logClick?.bind this, 'project.nav.classify'}>
             <Translate content="project.nav.classify" />
           </a>
         else if @state.selectedWorkflow is 'PENDING'
@@ -153,11 +161,11 @@ ProjectPage = React.createClass
         else
           if @state.selectedWorkflow?
             query = workflow: @state.selectedWorkflow.id
-          <Link to="#{projectPath}/classify" query={query} activeClassName="active" className="classify tabbed-content-tab">
+          <Link to="#{projectPath}/classify" query={query} activeClassName="active" className="classify tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.classify'}>
             <Translate content="project.nav.classify" />
           </Link>}
 
-        <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab">
+        <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.talk'}>
           <Translate content="project.nav.talk" />
         </Link>
 
