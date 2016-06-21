@@ -263,7 +263,7 @@ module.exports = React.createClass
       when 1
         e.preventDefault()
         @setState zooming: true
-        if e.deltaY > 0 then @zoom(.9) else @zoom(1.1)
+        if e.deltaY > 0 then @zoom(1.1) else @zoom(0.9)
 
   panHorizontal:(direction) ->
     maximumX = (@state.frameDimensions.width - @state.viewBoxDimensions.width) + (@state.frameDimensions.width * 0.6)
