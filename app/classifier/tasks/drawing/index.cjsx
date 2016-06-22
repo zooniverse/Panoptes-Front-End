@@ -9,6 +9,7 @@ testShapeCloseness = require 'test-shape-closeness'
 {Markdown} = (require 'markdownz').default
 icons = require './icons'
 drawingTools = require '../../drawing-tools'
+GridButtons = require './grid-buttons'
 
 module.exports = React.createClass
   displayName: 'DrawingTask'
@@ -87,65 +88,6 @@ module.exports = React.createClass
     annotation: null
     onChange: Function.prototype
 
-  activateTemplate: (type) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.activeTemplate': type
-      pref.save()
-
-  clearTemplate: (type) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.activeTemplate': null
-      if type is 'row'
-        pref.update "preferences.#{type}": null
-        pref.save()
-      else
-        pref.preferences.savedGrids.shift()
-        pref.update 'preferences.savedGrids': pref.preferences.savedGrids
-        if pref.preferences.savedGrids.length > 0
-          pref.update 'preferences.grid': pref.preferences.savedGrids[0].value
-        else
-          pref.update 'preferences.grid': null
-        pref.save()
-
-  saveTemplate: (marks, type) ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.activeTemplate': type
-      if pref.preferences.grid and type is 'grid'
-        @setState templateForm: true
-        pref.update 'preferences.grid': marks
-        pref.save()
-      if !pref.preferences.grid and type is 'grid'
-        @setState templateForm: true
-        pref.update 'preferences.grid': marks
-        pref.save()
-      else if !pref.preferences.row and type is 'row'
-        newArray = []
-        lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
-        for cell in marks
-          if cell.y < lastCellMid && (cell.y + cell.height) > lastCellMid
-            newArray.push Object.assign({}, cell)
-        pref.update 'preferences.row': newArray
-      pref.save()
-
-  onSubmit: (e) ->
-    e.preventDefault()
-
-    displayName = @refs.name.value
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      if !pref.preferences?.savedGrids?
-        pref.update 'preferences.savedGrids': [{ value: @props.annotation.value, label: displayName, id: Math.random()}]
-        pref.save()
-      else
-        pref.preferences.savedGrids.unshift({ value: @props.annotation.value, label: displayName, id: Math.random()})
-        pref.update 'preferences.savedGrids': pref.preferences.savedGrids
-        pref.save()
-    @setState templateForm: false
-
-  renderTemplateSave: ->
-    <form onSubmit={@onSubmit} className="collections-create-form">
-      <input className="collection-name-input" ref="name" placeholder="Template Name" />
-    </form>
-
   render: ->
     tools = for tool, i in @props.task.tools
       tool._key ?= Math.random()
@@ -174,51 +116,12 @@ module.exports = React.createClass
               </div>
             </div>
           </div>
-          {if tool.type is 'grid'
-            <div>
-              <button type="button" className="tabbed-content-tab #{('active' if !@props.preferences.preferences?.activeTemplate) ? ''}" onClick={@activateTemplate.bind this, null} >
-                Draw Cells
-              </button><br />
-              <button type="button" className="tabbed-content-tab #{('active' if @props.preferences.preferences?.activeTemplate is 'row') ? ''}" disabled={!@props.preferences.preferences.row} onClick={@activateTemplate.bind this, 'row'} >
-                Draw Rows
-              </button>
-              <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value, 'row'} disabled={@props.preferences.preferences?.row?}>
-                Save Row Template
-              </button>
-              <button type="button" onClick={@clearTemplate.bind this, 'row'}>
-                Clear Row Template
-              </button><br />
-              <button type="button" className="tabbed-content-tab #{('active' if @props.preferences.preferences?.activeTemplate is 'grid') ? ''}" disabled={!@props.preferences.preferences?.grid?} onClick={@activateTemplate.bind this, 'grid'} >
-                Place Grid
-              </button>
-              <button type="button" onClick={@saveTemplate.bind this, @props.annotation.value, 'grid'}>
-                Save New Grid Template
-              </button>
-              <button type="button" onClick={@clearTemplate.bind this, 'grid'}>
-                Delete Active Grid Template
-              </button>
-            </div>}
-            <div>
-              { @renderTemplateSave() if @state?.templateForm }
-            </div>
         </label>
-        <select onChange={@logSomething}>
-          {@props.preferences.preferences.savedGrids?.map (select, i) ->
-              <option key={select.id} value={i}>{select.label}</option>}
-        </select>
+        {if tool.type is 'grid'
+          <GridButtons {...@props} />}
       </div>
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} />
-
-  logSomething: (e) ->
-    index = e.target.value
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      movedGrid = pref.preferences.savedGrids[index]
-      pref.update 'preferences.grid': movedGrid.value
-      pref.preferences.savedGrids.splice index, 1
-      pref.preferences.savedGrids.unshift movedGrid
-      pref.update 'preferences.savedGrids': pref.preferences.savedGrids
-      pref.save()
 
   handleChange: (toolIndex, e) ->
     # This handles changing tools, not any actually drawing.
