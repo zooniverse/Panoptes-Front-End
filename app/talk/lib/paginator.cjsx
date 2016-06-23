@@ -32,10 +32,13 @@ module?.exports = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
 
-  componentWillReceiveProps: (nextProps, nextContext) ->
-    @context.geordi?.logEvent
-      type: 'change-page'
-      relatedID: "page-#{nextProps.page}"
+  addAvailableData: (data) ->
+    if @props.collection?
+      data.collection = @props.collection.slug
+    data
+
+  componentDidMount: ->
+    @logClick = @context.geordi.makeHandler 'change-page'
 
   setPage: (activePage) ->
     @props.onPageChange.call(this, activePage)
@@ -43,8 +46,9 @@ module?.exports = React.createClass
 
   onClickNext: ->
     @context.geordi?.logEvent
-      type: 'next-page'
-      relatedID: "page-#{@props[@props.pageKey]}"
+      type: 'change-page'
+      relatedID: 'next-page'
+      data: @addAvailableData {page:@props[@props.pageKey]}
     {pageCount} = @props
     page = @props[@props.pageKey]
     @props.onClickNext?()
@@ -54,8 +58,9 @@ module?.exports = React.createClass
 
   onClickPrev: ->
     @context.geordi?.logEvent
-      type: 'previous-page'
-      relatedID: "page-#{@props[@props.pageKey]}"
+      type: 'change-page'
+      relatedID: 'previous-page'
+      data: @addAvailableData {page:@props[@props.pageKey]}
     page = @props[@props.pageKey]
     @props.onClickPrev?()
 
@@ -64,9 +69,9 @@ module?.exports = React.createClass
 
   onSelectPage: (e) ->
     @context.geordi?.logEvent
-      type: 'select-page'
-      relatedID: "page-#{@refs.pageSelect.value}"
-
+      type: 'change-page'
+      relatedID: 'select-page'
+      data: @addAvailableData {page:@refs.pageSelect.value}
     selectedPage = +@refs.pageSelect.value
     @setPage(selectedPage)
 
@@ -86,8 +91,9 @@ module?.exports = React.createClass
           onClick={=>
             @setPage(1);
             @context.geordi?.logEvent
-              type: 'first-page'
-              relatedID: 'page-1'
+              type: 'change-page'
+              relatedID: 'first-page'
+              data: @addAvailableData {page:1}
           }
           disabled={page is 1}>
           <i className="fa fa-fast-backward" /> First
@@ -122,8 +128,9 @@ module?.exports = React.createClass
           onClick={=>
             @setPage(pageCount);
             @context.geordi?.logEvent
-              type: 'last-page'
-              relatedID: "page-#{pageCount}"
+              type: 'change-page'
+              relatedID: 'last-page'
+              data: @addAvailableData {page:pageCount}
           }
           disabled={page is pageCount}>
           Last <i className="fa fa-fast-forward" />
