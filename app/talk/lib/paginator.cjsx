@@ -31,6 +31,9 @@ module?.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+  
+  componentDidMount: ->
+    @logClick = @context.geordi?.makeHandler 'change-page'
 
   componentWillReceiveProps: (nextProps, nextContext)->
     @logClick = nextContext?.geordi?.makeHandler? 'change-page'
