@@ -30,16 +30,9 @@ module?.exports = React.createClass
     [owner, name] = project.slug.split('/')
 
     <div key={project.id}>
-      <Link to="/projects/#{owner}/#{name}/talk">
+      <Link to="/projects/#{owner}/#{name}/talk" onClick={@logClick?.bind(this, project.display_name)}>
         {project.display_name}
       </Link>
-      {if project.redirect
-        <a href={project.redirect} title={project.redirect}>{project.display_name}</a>
-      else
-        <Link to="/projects/#{owner}/#{name}" onClick={@logClick?.bind(this, project.display_name)}>
-          {project.display_name}
-        </Link>
-        }
     </div>
 
   onClickLoadMore: (e) ->

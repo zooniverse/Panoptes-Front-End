@@ -115,7 +115,7 @@ module.exports = React.createClass
             {@loggableLink <Link to="/about" />, 'footer.about.aboutUs'}
             {@loggableLink <Link to="/about/education" />, 'footer.about.education'}
             {@loggableLink <Link to="/about/team" />, 'footer.about.ourTeam'}
-            {@loggableLink <Link to="/about/education" />, 'footer.about.education'}
+            {@loggableLink <Link to="/about/publications" />, 'footer.about.publications'}
             {@loggableLink <Link to="/about/contact" />, 'footer.boilerplate.contact'}
           </div>
           <div className="site-map-section">

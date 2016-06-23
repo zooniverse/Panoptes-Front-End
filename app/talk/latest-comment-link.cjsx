@@ -57,7 +57,7 @@ module?.exports = React.createClass
     @setState({latestCommentText}) if latestCommentText
 
   discussionLink: (childtext = '', query = {}, className = '') ->
-    if className = "latest-comment-time"
+    if className is "latest-comment-time"
       logClick = @context.geordi?.makeHandler? 'discussion-time'
     if @props.params?.owner and @props.params?.name
       {owner, name} = @props.params
