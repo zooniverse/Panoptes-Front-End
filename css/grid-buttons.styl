@@ -1,0 +1,44 @@
+.grid-button-tab
+  @extends $reset-button
+  font-size: 0.9em
+  letter-spacing: 0.05em
+  padding: 0.8em 1.2vw
+  margin: 0.3vw
+  border: 2px solid transparent
+
+  &.active
+    border: 2px solid MAIN_HIGHLIGHT
+    border-radius: .5em
+    font-weight: bolder
+
+.grid-button-template
+  padding:5px
+  margin: 0.5vw
+
+.grid-button-table
+  margin-left: 2em
+  margin-top: 2em
+  text-align: center
+
+.template-create-form
+  margin-left: 3.5em
+
+  .template-name-input
+    border: 1px solid #cccccc
+    border-color: #d9d9d9 #cccccc #b3b3b3
+    border-radius: 4px
+    box-shadow: none
+    box-sizing: border-box
+    padding: 8px 10px
+    width: 60%
+
+  .template-form-button
+    @extends $reset-button
+    background-color: black
+    border-radius: 0.5em
+    box-shadow: 0 0 1px inset
+    display: inline-block
+    font-size: 0.9em
+    margin: 0em 0.2vw
+    padding: 0 0.8em 0 0.5em
+    vertical-align: middle

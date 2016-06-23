@@ -55,6 +55,7 @@ module.exports = React.createClass
       templateID = Math.random()
       if type is 'row'
         for cell in templateCopy
+          cell.type = 'row'
           cell._key = Math.random()
           cell.reorder = false
           cell.y = mark.y
@@ -63,6 +64,7 @@ module.exports = React.createClass
         templateCopy
       else
         for cell in templateCopy
+          cell.type = 'grid'
           cell.reorder = false
           cell.templateID = templateID
         templateCopy
