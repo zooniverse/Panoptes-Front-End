@@ -7,6 +7,7 @@ module.exports = React.createClass
 
   childContextTypes:
     router: routerShape
+    geordi: React.PropTypes.object
 
   getChildContext: ->
     @props.context
