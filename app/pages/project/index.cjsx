@@ -34,6 +34,10 @@ SOCIAL_ICONS =
 
 
 ProjectPage = React.createClass
+  contextTypes:
+    setAppHeaderVariant: React.PropTypes.func
+    geordi: React.PropTypes.object
+
   getDefaultProps: ->
     project: null
     owner: null
@@ -45,10 +49,8 @@ ProjectPage = React.createClass
     pages: []
     selectedWorkflow: null
 
-  contextTypes:
-    geordi: React.PropTypes.object
-
   componentDidMount: ->
+    @context.setAppHeaderVariant 'demoted'
     document.documentElement.classList.add 'on-project-page'
     @fetchInfo @props.project
     @getSelectedWorkflow @props.project, @props.preferences
@@ -56,6 +58,7 @@ ProjectPage = React.createClass
     @context.geordi?.remember projectToken: @props.project?.slug
 
   componentWillUnmount: ->
+    @context.setAppHeaderVariant null
     document.documentElement.classList.remove 'on-project-page'
     @updateSugarSubscription null
     @context.geordi?.forget ['projectToken']
