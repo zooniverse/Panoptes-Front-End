@@ -32,15 +32,19 @@ module?.exports = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
 
-  componentWillReceiveProps: (nextProps, nextContext)->
-    @logClick = nextContext?.geordi?.makeHandler? 'change-page'
+  componentWillReceiveProps: (nextProps, nextContext) ->
+    @context.geordi?.logEvent
+      type: 'change-page'
+      relatedID: "page-#{nextProps.page}"
 
   setPage: (activePage) ->
     @props.onPageChange.call(this, activePage)
     window.scrollTo(0,0) if @props.scrollOnChange
 
   onClickNext: ->
-    @logClick 'next-page'
+    @context.geordi?.logEvent
+      type: 'next-page'
+      relatedID: "page-#{@props[@props.pageKey]}"
     {pageCount} = @props
     page = @props[@props.pageKey]
     @props.onClickNext?()
@@ -49,7 +53,9 @@ module?.exports = React.createClass
     @setPage(nextPage)
 
   onClickPrev: ->
-    @logClick 'previous-page'
+    @context.geordi?.logEvent
+      type: 'previous-page'
+      relatedID: "page-#{@props[@props.pageKey]}"
     page = @props[@props.pageKey]
     @props.onClickPrev?()
 
@@ -57,7 +63,10 @@ module?.exports = React.createClass
     @setPage(prevPage)
 
   onSelectPage: (e) ->
-    @logClick 'select-page'
+    @context.geordi?.logEvent
+      type: 'select-page'
+      relatedID: "page-#{@refs.pageSelect.value}"
+
     selectedPage = +@refs.pageSelect.value
     @setPage(selectedPage)
 
@@ -74,7 +83,12 @@ module?.exports = React.createClass
       {if @props.firstAndLast
         <button
           className="paginator-first"
-          onClick={=> @setPage(1); @logClick 'first-page'}
+          onClick={=>
+            @setPage(1);
+            @context.geordi?.logEvent
+              type: 'first-page'
+              relatedID: 'page-1'
+          }
           disabled={page is 1}>
           <i className="fa fa-fast-backward" /> First
         </button>}
@@ -105,7 +119,12 @@ module?.exports = React.createClass
       {if @props.firstAndLast
         <button
           className="paginator-last"
-          onClick={=> @setPage(pageCount); @logClick 'last-page'}
+          onClick={=>
+            @setPage(pageCount);
+            @context.geordi?.logEvent
+              type: 'last-page'
+              relatedID: "page-#{pageCount}"
+          }
           disabled={page is pageCount}>
           Last <i className="fa fa-fast-forward" />
         </button>}
