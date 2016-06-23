@@ -37,9 +37,6 @@ module?.exports = React.createClass
       data.collection = @props.collection.slug
     data
 
-  componentDidMount: ->
-    @logClick = @context.geordi.makeHandler 'change-page'
-
   setPage: (activePage) ->
     @props.onPageChange.call(this, activePage)
     window.scrollTo(0,0) if @props.scrollOnChange
