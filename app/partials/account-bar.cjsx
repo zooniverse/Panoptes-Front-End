@@ -1,13 +1,14 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-{Link, History} = require 'react-router'
+{routerShape} = require 'react-router/lib/PropTypes'
+{Link} = require 'react-router'
 auth = require 'panoptes-client/lib/auth'
 talkClient = require 'panoptes-client/lib/talk-client'
 counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 Avatar = require '../partials/avatar'
 TriggeredModalForm = require 'modal-form/triggered'
-PassHistoryContext = require '../components/pass-history-context'
+PassRouterContext = require '../components/pass-router-context'
 
 UP = 38
 DOWN = 40
@@ -22,7 +23,9 @@ counterpart.registerTranslations 'en',
 
 module.exports = React.createClass
   displayName: 'AccountBar'
-  mixins: [History]
+
+  contextTypes:
+    router: routerShape
 
   propTypes:
     user: React.PropTypes.object.isRequired
@@ -64,7 +67,7 @@ module.exports = React.createClass
           className: 'secret-button',
           onClick: @handleAccountMenuOpen
         }>
-          <PassHistoryContext {...@props} context={history: @history}>
+          <PassRouterContext context={@context}>
             <div ref="accountMenu" role="menu" className="secret-list" onKeyDown={@navigateMenu}>
               <Link role="menuitem" to="/users/#{@props.user.login}" onClick={@logClick?.bind(this, 'accountMenu.profile')}>
                 <i className="fa fa-user fa-fw"></i>{' '}
@@ -88,7 +91,7 @@ module.exports = React.createClass
                 <Translate content="accountMenu.signOut" />
               </button>
             </div>
-          </PassHistoryContext>
+          </PassRouterContext>
         </TriggeredModalForm>{' '}
 
         <Link to="/inbox" className="message-link" aria-label="Inbox #{if @state.unread then 'with unread messages' else ''}" onClick={@logClick?.bind(this, 'accountMenu.inbox', 'top-menu')}>
