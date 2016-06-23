@@ -35,8 +35,6 @@ module.exports = React.createClass
 
   contextTypes:
     router: routerShape
-
-  contextTypes:
     geordi: React.PropTypes.object
 
   componentWillReceiveProps: (nextProps, nextContext)->
