@@ -26,12 +26,10 @@ module.exports = React.createClass
 
   contextTypes:
     router: routerShape
+    geordi: React.PropTypes.object
 
   propTypes:
     user: React.PropTypes.object.isRequired
-
-  contextTypes:
-    geordi: React.PropTypes.object
 
   componentWillReceiveProps: (nextProps, nextContext)->
     @logClick = nextContext?.geordi?.makeHandler? 'about-menu'
@@ -126,5 +124,5 @@ module.exports = React.createClass
     @logClick? 'accountMenu.signOut'
     @context.geordi?.logEvent
       type: 'logout'
-      
+
     auth.signOut()
