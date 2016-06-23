@@ -108,7 +108,7 @@ module?.exports = React.createClass
             <div className="collection-subjects-list">{subjects.map(subjectNode)}</div>
 
             <Paginator
-              collection={@props.collection}
+              data={collection:@props.collection.slug}
               page={meta.page}
               onPageChange={@onPageChange}
               pageCount={meta.page_count} />

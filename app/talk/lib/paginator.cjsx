@@ -13,6 +13,7 @@ module?.exports = React.createClass
     scrollOnChange: React.PropTypes.bool          # optional, scroll to top of page on change
     pageSelector: React.PropTypes.bool            # show page selector?
     pageKey: React.PropTypes.string               # optional name for key param (defaults to 'page')
+    data: React.PropTypes.object                  # additional data to be added to the data field when logging to Geordi
 
   getDefaultProps: ->
     page: 1
@@ -26,16 +27,12 @@ module?.exports = React.createClass
     scrollOnChange: true
     previousLabel: <span><i className="fa fa-long-arrow-left" /> Previous</span>
     nextLabel: <span>Next <i className="fa fa-long-arrow-right" /></span>
+    data: {}
 
   mixins: [History]
 
   contextTypes:
     geordi: React.PropTypes.object
-
-  addAvailableData: (data) ->
-    if @props.collection?
-      data.collection = @props.collection.slug
-    data
 
   setPage: (activePage) ->
     @props.onPageChange.call(this, activePage)
@@ -45,7 +42,7 @@ module?.exports = React.createClass
     @context.geordi?.logEvent
       type: 'change-page'
       relatedID: 'next-page'
-      data: @addAvailableData {page:@props[@props.pageKey]}
+      data: {page:@props[@props.pageKey], {...@props.data}}
     {pageCount} = @props
     page = @props[@props.pageKey]
     @props.onClickNext?()
@@ -57,7 +54,7 @@ module?.exports = React.createClass
     @context.geordi?.logEvent
       type: 'change-page'
       relatedID: 'previous-page'
-      data: @addAvailableData {page:@props[@props.pageKey]}
+      data: {page:@props[@props.pageKey], {...@props.data}}
     page = @props[@props.pageKey]
     @props.onClickPrev?()
 
@@ -68,7 +65,7 @@ module?.exports = React.createClass
     @context.geordi?.logEvent
       type: 'change-page'
       relatedID: 'select-page'
-      data: @addAvailableData {page:@refs.pageSelect.value}
+      data: {page:@refs.pageSelect.value, {...@props.data}}
     selectedPage = +@refs.pageSelect.value
     @setPage(selectedPage)
 
@@ -90,7 +87,7 @@ module?.exports = React.createClass
             @context.geordi?.logEvent
               type: 'change-page'
               relatedID: 'first-page'
-              data: @addAvailableData {page:1}
+              data: {page:1, {...@props.data}}
           }
           disabled={page is 1}>
           <i className="fa fa-fast-backward" /> First
@@ -127,7 +124,7 @@ module?.exports = React.createClass
             @context.geordi?.logEvent
               type: 'change-page'
               relatedID: 'last-page'
-              data: @addAvailableData {page:pageCount}
+              data: {page:pageCount, {...@props.data}}
           }
           disabled={page is pageCount}>
           Last <i className="fa fa-fast-forward" />
