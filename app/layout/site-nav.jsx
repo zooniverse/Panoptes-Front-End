@@ -1,5 +1,8 @@
 import React from 'react';
 import counterpart from 'counterpart';
+import classnames from 'classnames';
+import {routerShape} from 'react-router/lib/PropTypes';
+import PassContext from '../components/pass-context';
 import { Link, IndexLink } from 'react-router';
 import Translate from 'react-translate-component';
 import AdminOnly from '../components/admin-only';
@@ -11,9 +14,11 @@ import LoginBar from './login-bar';
 import style from './site-nav.styl';
 void style;
 
+const MAX_MOBILE_WIDTH = 875;
+
 counterpart.registerTranslations('en', {
   siteNav: {
-    home: 'Home',
+    home: 'Zooniverse',
     projects: 'Projects',
     about: 'About',
     collect: 'Collect',
@@ -27,13 +32,44 @@ counterpart.registerTranslations('en', {
 });
 
 const SiteNav = React.createClass({
+  resizeTimeout: NaN,
+
   contextTypes: {
+    router: routerShape,
     geordi: React.PropTypes.object,
   },
 
   propTypes: {
     user: React.PropTypes.any,
     onToggle: React.PropTypes.func,
+  },
+
+  getInitialState() {
+    return {
+      isMobile: true
+    };
+  },
+
+  componentDidMount() {
+    this.handleResize();
+    addEventListener('resize', this.handleResize);
+  },
+
+  componentWillUnmount() {
+    addEventListener('resize', this.handleResize);
+  },
+
+  handleResize() {
+    if (!isNaN(this.resizeTimeout)) {
+      clearTimeout(this.resizeTimeout);
+    }
+    this.resizeTimeout = setTimeout(() => {
+      this.setState({
+        isMobile: innerWidth < MAX_MOBILE_WIDTH,
+      }, () => {
+        this.resizeTimeout = NaN;
+      });
+    }, 100);
   },
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -43,9 +79,13 @@ const SiteNav = React.createClass({
       nextContext.geordi.makeHandler('top-menu');
   },
 
-  renderMainLinks() {
+  renderLinks(isMobile) {
     return (
-      <span className="site-nav__main-links">
+      <span
+        className={classnames('site-nav__main-links', {
+          'site-nav__main-links--vertical': this.state.isMobile
+        })}
+      >
         <Link
           to="/projects"
           className="site-nav__link"
@@ -117,6 +157,7 @@ const SiteNav = React.createClass({
               className="site-nav__link"
               activeClassName="site-nav__link--active"
               title="More links"
+              aria-label="More links"
             >• • •</span>
           }
         >
@@ -144,8 +185,30 @@ const SiteNav = React.createClass({
     );
   },
 
+  renderMobileLinksMenu() {
+    return (
+      <TriggeredModalForm
+        className="site-nav__modal"
+        trigger={
+          <span
+            className="site-nav__link"
+            activeClassName="site-nav__link--active"
+            title="Site navigation"
+            aria-label="Site navigation"
+          >
+            <span style={{ display: 'inline-block', transform: 'scale(2.5, 2)' }}>≡</span>
+          </span>
+        }
+      >
+        <PassContext context={this.context}>
+          {this.renderLinks()}
+        </PassContext>
+      </TriggeredModalForm>
+    );
+  },
+
   render() {
-    const logo = <ZooniverseLogo width="1.8em" height="1.8em" style={{ margin: '-0.4em 0' }} />;
+    const logo = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
 
     return (
       <nav className="site-nav">
@@ -155,10 +218,10 @@ const SiteNav = React.createClass({
           activeClassName="site-nav__link--active"
           onClick={!!this.logClick && this.logClick.bind(this, 'logo')}
         >
-          {!!this.props.onToggle ? 'Home' : logo}
-        </IndexLink>{' '}
+          {!!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : logo}
+        </IndexLink>
 
-        {this.renderMainLinks()}{' '}
+        {!this.state.isMobile && this.renderLinks()}
 
         {!!this.props.user ? <AccountBar user={this.props.user} /> : <LoginBar />}
 
@@ -169,6 +232,8 @@ const SiteNav = React.createClass({
             style={{ lineHeight: 0 }}
             onClick={this.props.onToggle}
           >{logo}</button>}
+
+        {this.state.isMobile && this.renderMobileLinksMenu()}
       </nav>
     );
   },
