@@ -90,7 +90,7 @@ const SiteNav = React.createClass({
           to="/projects"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
-          onClick={!!this.logClick && this.logClick.bind(this, 'mainNav.projects')}
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.projects') : null}
         >
           <Translate content="siteNav.projects" />
         </Link>{' '}
@@ -98,7 +98,7 @@ const SiteNav = React.createClass({
           to="/about"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
-          onClick={!!this.logClick && this.logClick.bind(this, 'mainNav.about')}
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.about') : null}
         >
           <Translate content="siteNav.about" />
         </Link>{' '}
@@ -106,7 +106,7 @@ const SiteNav = React.createClass({
           to="/talk"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
-          onClick={!!this.logClick && this.logClick.bind(this, 'mainNav.talk')}
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.talk') : null}
         >
           <Translate content="siteNav.talk" />
         </Link>{' '}
@@ -114,7 +114,7 @@ const SiteNav = React.createClass({
           to="/notifications"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
-          onClick={!!this.logClick && this.logClick.bind(this, 'mainNav.notifications')}
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.notifications') : null}
         >
           <Translate content="siteNav.notifications" />
         </Link>{' '}
@@ -122,7 +122,7 @@ const SiteNav = React.createClass({
           to="/collections"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
-          onClick={!!this.logClick && this.logClick.bind(this, 'mainNav.collect')}
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.collect') : null}
         >
           <Translate content="siteNav.collect" />
         </Link>{' '}
@@ -130,7 +130,7 @@ const SiteNav = React.createClass({
           to="/lab"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
-          onClick={!!this.logClick && this.logClick.bind(this, 'mainNav.lab')}
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.lab') : null}
         >
           <span className="site-nav__link-label-for-builders">
             <Translate content="siteNav.lab" />
@@ -142,7 +142,7 @@ const SiteNav = React.createClass({
             to={"/admin"}
             className="site-nav__link"
             activeClassName="site-nav__link--active"
-            onClick={!!this.logClick && this.logClick.bind(this, 'mainNav.admin')}
+            onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.admin') : null}
           >
             <span className="site-nav__link-label-for-builders">
               <Translate content="siteNav.admin" />
@@ -166,7 +166,7 @@ const SiteNav = React.createClass({
             className="site-nav__link"
             activeClassName="site-nav__link--active"
             target="_blank"
-            onClick={!!this.logClick && this.logClick.bind(this, 'mainNav.daily', 'globe-menu')}
+            onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.daily', 'globe-menu') : null}
           >
             <Translate content="siteNav.daily" />
           </a>
@@ -176,7 +176,7 @@ const SiteNav = React.createClass({
             className="site-nav__link"
             activeClassName="site-nav__link--active"
             target="_blank"
-            onClick={!!this.logClick && this.logClick.bind(this, 'mainNav.blog', 'globe-menu')}
+            onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.blog', 'globe-menu') : null}
           >
             <Translate content="siteNav.blog" />
           </a>
@@ -216,7 +216,7 @@ const SiteNav = React.createClass({
           to="/"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
-          onClick={!!this.logClick && this.logClick.bind(this, 'logo')}
+          onClick={!!this.logClick ? this.logClick.bind(this, 'logo') : null}
         >
           {!!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : logo}
         </IndexLink>

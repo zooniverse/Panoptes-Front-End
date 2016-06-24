@@ -131,7 +131,7 @@ const AccountBar = React.createClass({
                 role="menuitem"
                 to={`/users/${this.props.user.login}`}
                 className="site-nav__link"
-                onClick={!!this.logClick && this.logClick.bind(this, 'accountMenu.profile')}
+                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.profile') : null}
               >
                 <i className="fa fa-user fa-fw"></i>{' '}
                 <Translate content="accountMenu.profile" />
@@ -141,7 +141,7 @@ const AccountBar = React.createClass({
                 role="menuitem"
                 to="/settings"
                 className="site-nav__link"
-                onClick={!!this.logClick && this.logClick.bind(this, 'accountMenu.settings')}
+                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.settings') : null}
               >
                 <i className="fa fa-cogs fa-fw"></i>{' '}
                 <Translate content="accountMenu.settings" />
@@ -151,7 +151,7 @@ const AccountBar = React.createClass({
                 role="menuitem"
                 to={`/collections/${this.props.user.login}`}
                 className="site-nav__link"
-                onClick={!!this.logClick && this.logClick.bind(this, 'accountMenu.collections')}
+                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.collections') : null}
               >
                 <i className="fa fa-image fa-fw"></i>{' '}
                 <Translate content="accountMenu.collections" />
@@ -161,7 +161,7 @@ const AccountBar = React.createClass({
                 role="menuitem"
                 to={`/favorites/${this.props.user.login}`}
                 className="site-nav__link"
-                onClick={!!this.logClick && this.logClick.bind(this, 'accountMenu.favorites')}
+                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.favorites') : null}
               >
                 <i className="fa fa-star fa-fw"></i>{' '}
                 <Translate content="accountMenu.favorites" />
@@ -191,7 +191,7 @@ const AccountBar = React.createClass({
           aria-label={`
             Inbox ${this.state.unread ? 'with unread messages' : ''}
           `.trim()}
-          onClick={!!this.logClick && this.logClick.bind(this, 'accountMenu.inbox', 'top-menu')}
+          onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.inbox', 'top-menu') : null}
         >
           <span
             className={`
