@@ -130,9 +130,11 @@ ProjectPage = React.createClass
 
     logClick = @context?.geordi?.makeHandler? 'project-menu'
 
+    if @state.background?
+      backgroundStyle = backgroundImage: "url('#{@state.background.src}')"
+
     <div className="project-page">
-      {if @state.background?
-        <div className="project-background" style={backgroundImage: "url('#{@state.background.src}')"}></div>}
+      <div className="project-background" style={backgroundStyle}></div>
 
       <nav className="project-nav tabbed-content-tabs">
         {if @props.project.redirect
