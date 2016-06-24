@@ -56,7 +56,7 @@ module.exports = React.createClass
             else
               <span>{@state.error.toString()}</span>}{' '}
 
-            <a href="#{document.baseURI.slice(0, -1)}/reset-password" onClick={@props.onSuccess}>
+            <a href="#{window.location.origin}/reset-password" onClick={@props.onSuccess}>
               <Translate content="signInForm.forgotPassword" />
             </a>
           </div>
@@ -65,7 +65,7 @@ module.exports = React.createClass
           <LoadingIndicator />
 
         else
-          <a href="#{document.baseURI.slice(0, -1)}/reset-password" onClick={@props.onSuccess}>
+          <a href="#{window.location.origin}/reset-password" onClick={@props.onSuccess}>
             <Translate content="signInForm.forgotPassword" />
           </a>}
       </p>
