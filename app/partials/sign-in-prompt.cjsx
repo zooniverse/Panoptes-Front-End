@@ -29,16 +29,16 @@ module.exports = React.createClass
 
   dismiss: (e)->
     @props.contextRef?.geordi?.logEvent type: 'register-no-thanks'
-    @props.onChoose()
+    @props.onChoose e
 
-  signIn: ->
+  signIn: (e) ->
     @props.contextRef?.geordi?.logEvent type: 'register-sign-in'
-    @props.onChoose()
+    @props.onChoose e
     alert (resolve) =>
       <LoginDialog which="sign-in" project={@props.project} onSuccess={resolve} />
 
-  register: ->
+  register: (e) ->
     @props.contextRef?.geordi?.logEvent type: 'register-register'
-    @props.onChoose()
+    @props.onChoose e
     alert (resolve) =>
       <LoginDialog which="register" project={@props.project} onSuccess={resolve} />
