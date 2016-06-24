@@ -20,7 +20,7 @@ ClassificationViewer = React.createClass
     @_boundForceUpdate = null
 
   ignoreUnderscoredProperties: (key, value) ->
-    unless key.charAt(0) is '_'
+    unless "#{key}".charAt(0) is '_'
       value
 
   render: ->
