@@ -1,0 +1,58 @@
+.app-footer
+  font-size: 14px
+
+  a
+    color: rgba(white, 0.5)
+    text-decoration: none
+
+    &:hover
+      color: rgba(white, 0.7)
+
+  &__upper
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    margin: 0 auto
+    max-width: 960px
+    padding: 2em 5vw 1em
+
+  &__brand
+    flex-basis: 30%
+    margin: 0 2em 1em 0
+
+  &__nav-lists
+    display: flex
+    flex: 1 1 auto
+    flex-wrap: wrap
+    justify-content: space-between
+
+  &__nav-list
+    flex: 0 0 auto
+    margin: 0 2em 1em 0
+    padding: 0
+
+    > li
+      display: block
+
+    &--social
+      white-space: nowrap
+
+      > li
+        display: inline-block
+        margin: 0 0.5em
+
+  &__sole
+    background: rgba(black, 0.2)
+    font-size: 0.8em
+    padding: 2em 0
+    text-align: center
+    width: 100%
+
+.footer-admin-toggle
+  display: inline-block
+  color: white
+  margin-left: -1em
+  padding: 0.5em 1em
+
+  &--active
+    background: red
