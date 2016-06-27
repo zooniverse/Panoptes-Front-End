@@ -35,12 +35,12 @@ const SiteNav = React.createClass({
   resizeTimeout: NaN,
 
   contextTypes: {
+    user: React.PropTypes.object,
     router: routerShape,
     geordi: React.PropTypes.object,
   },
 
   propTypes: {
-    user: React.PropTypes.any,
     onToggle: React.PropTypes.func,
   },
 
@@ -223,7 +223,7 @@ const SiteNav = React.createClass({
 
         {!this.state.isMobile && this.renderLinks()}
 
-        {!!this.props.user ? <AccountBar user={this.props.user} /> : <LoginBar />}
+        {!!this.context.user ? <AccountBar /> : <LoginBar />}
 
         {!!this.props.onToggle &&
           <button

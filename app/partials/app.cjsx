@@ -52,7 +52,7 @@ PanoptesApp = React.createClass
     <div className="panoptes-main">
       <IOStatus />
       {if @state.initialLoadComplete
-        <AppLayout user={@state.user}>
+        <AppLayout>
           {React.cloneElement @props.children, user: @state.user}
         </AppLayout>}
     </div>

@@ -28,7 +28,6 @@ const AdminToggle = React.createClass({
   },
 
   render() {
-    console.log('RENDER with', apiClient.params.admin);
     return (
       <label
         className={classnames('footer-admin-toggle', {
