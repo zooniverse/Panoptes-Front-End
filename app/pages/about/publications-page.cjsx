@@ -385,5 +385,5 @@ module.exports = React.createClass
     src = if project?.avatar_src
       "//#{ project.avatar_src }"
     else
-      './assets/simple-avatar.jpg'
+      '/assets/simple-avatar.jpg'
     <img src={src} alt="Project Avatar" />

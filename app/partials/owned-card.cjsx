@@ -47,7 +47,7 @@ module.exports = React.createClass
         card.style.backgroundImage = "url('#{src}')"
         card.style.backgroundSize = "contain"
       .catch =>
-        card.style.background = "url('./assets/simple-pattern.jpg') center center repeat"
+        card.style.background = "url('/assets/simple-pattern.jpg') center center repeat"
 
     card.classList.add 'project-card' if @props.resource.description?
 

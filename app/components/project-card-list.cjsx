@@ -37,12 +37,12 @@ ProjectCard = React.createClass
   componentDidMount: ->
     card = @refs.ownedCard
 
-    Promise.resolve (if @props.project.avatar_src then "//#{ @props.project.avatar_src }" else './assets/simple-avatar.jpg')
+    Promise.resolve (if @props.project.avatar_src then "//#{ @props.project.avatar_src }" else '/assets/simple-avatar.jpg')
       .then (src) =>
         card.style.backgroundImage = "url('#{src}')"
         card.style.backgroundSize = "contain"
       .catch =>
-        card.style.background = "url('./assets/simple-pattern.jpg') center center repeat"
+        card.style.background = "url('/assets/simple-pattern.jpg') center center repeat"
 
     card.classList.add 'project-card'
 

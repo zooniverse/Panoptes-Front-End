@@ -46,7 +46,7 @@ FeaturedProjects = React.createClass
     src = if project.avatar_src
       "//#{ project.avatar_src }"
     else
-      './assets/simple-avatar.jpg'
+      '/assets/simple-avatar.jpg'
     Promise.resolve src
 
   render: ->
@@ -134,7 +134,7 @@ module.exports = React.createClass
             {for item in aboutItems
               <div key={item} className="about-item">
                 <div className="about-item-wrapper">
-                  <img className="about-image" src="./assets/home-#{item}.gif" alt="" />
+                  <img className="about-image" src="/assets/home-#{item}.gif" alt="" />
                   <div className="about-item-content">
                     <Translate component="h5" content="home.about.#{item}.title" />
                     <Markdown>{counterpart "home.about.#{item}.content"}</Markdown>
