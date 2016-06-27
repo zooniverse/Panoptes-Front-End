@@ -1,5 +1,5 @@
 React = require 'react'
-alert = require '../../lib/alert'
+{alert} = require 'modal-form/dialog'
 {Markdown} = (require 'markdownz').default
 
 module.exports = React.createClass
@@ -52,4 +52,4 @@ module.exports = React.createClass
   showHelp: ->
     alert <div className="content-container">
       <Markdown className="classification-task-help">{@props.help}</Markdown>
-    </div>
+    </div>, closeButton: true
