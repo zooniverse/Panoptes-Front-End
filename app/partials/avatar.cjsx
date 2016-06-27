@@ -6,14 +6,10 @@ module?.exports = React.createClass
   displayName: 'Avatar'
 
   propTypes:
-    user: React.PropTypes.object
-    size: React.PropTypes.any
-    className: React.PropTypes.string
+    user: React.PropTypes.object # User response
 
   getDefaultProps: ->
     user: null
-    size: ''
-    className: ''
 
   getInitialState: ->
     loading: false
@@ -46,14 +42,4 @@ module?.exports = React.createClass
     @setState src: DEFAULT_AVATAR
 
   render: ->
-    <img
-      src={@state.src}
-      alt="Avatar for #{@props.user.display_name}"
-      className={"avatar #{@props.className}".trim()}
-      data-loading={@state.loading || null}
-      style={
-        height: @props.size
-        width: @props.size
-      }
-      onError={@handleError}
-    />
+    <img src={@state.src} onError={@handleError} alt="User avatar" className="avatar" data-loading={@state.loading || null} />

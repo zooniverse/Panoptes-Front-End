@@ -1,0 +1,86 @@
+MAIN_FOOTER_BACKGROUND = #272727
+FOOTER_TEXT_COLOR = rgba(white, 0.5)
+
+.main-footer
+  background: MAIN_FOOTER_BACKGROUND
+  color: FOOTER_TEXT_COLOR
+  display: flex
+  flex-direction: column
+  font-size: 14px
+  justify-content: center
+  line-height: 20px
+  overflow: auto
+
+  a
+    color: inherit
+    text-decoration: none
+
+    &:hover
+      color: rgba(white, 0.75)
+
+  .main-logo
+    margin: 0 6.25vw 2.7em 0
+    color: white
+
+  .main-logo-link
+    color: rgba(white, 0.25)
+    font-size: 18px
+    margin-bottom: 2.7em
+
+    &:hover
+      color: white
+
+  .main-footer-flex
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    max-width: 960px
+    width: 100%
+
+  .site-map
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+
+  .site-map-section
+    display: flex
+    margin: 0 6.25vw 2.7em 0
+    flex: 1 0 auto
+    flex-direction: column
+
+    h6
+      color: COPY
+      font-size: inherit
+
+    a
+      display: block
+      white-space: nowrap
+
+  .social-media
+    display: block
+    // flex-basis: 100px
+    text-align: center
+    a
+      margin: 0.5em
+      display: inline-block
+
+  .footer-sole
+    background: darken(MAIN_FOOTER_BACKGROUND, 20%)
+
+  .footer-sole-links
+    color: darken(FOOTER_TEXT_COLOR, 30%)
+    font-size: 0.9em
+
+    a
+      font-size: inherit
+
+    .footer-sole-links-separator
+      margin: 0 1em
+
+.admin-toggle
+  display: block
+  color: white
+  padding: 1em
+
+  &.in-admin-mode
+    background: red

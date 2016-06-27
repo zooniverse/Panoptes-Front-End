@@ -1,0 +1,182 @@
+.main-header
+  font-size: 14px
+
+  .on-home-page &
+    position: absolute
+    width: 100%
+    z-index: 1
+
+  .on-secondary-page &
+    position: absolute
+    width: 100%
+    z-index: 1
+
+  a
+    text-decoration: none
+
+    &.main-logo
+      color: white
+
+  .on-project-page &
+    opacity: 0.4
+    position: relative
+    transition: opacity 0.5s
+
+    &:hover
+      opacity: 1
+
+  .login-bar
+
+    > *
+      margin: 0 0 0 1em
+
+  .account-bar
+    position: relative
+    top: .75em
+
+    .account-info
+      padding-bottom: 1.25em
+
+      .avatar
+        height: calc(1em + 1.5vw)
+        vertical-align: middle
+        width: calc(1em + 1.5vw)
+
+      .display-name
+        color: white
+        margin-right: 1.4em
+
+      .message-link
+        margin-left: 1.4em
+        position: relative
+
+        i.unread
+          &:after // red dot for unreads
+            content: ''
+            background: FAILURE
+            height: 0.5em
+            width: 0.5em
+            position: absolute
+            top: 0
+            left: calc(1em - 0.25em)
+            border-radius: 50%
+      a
+        color: white
+
+  .hamburger-modal-trigger
+    width: 30px
+    height: 25px
+
+.main-title
+  align-items: center
+  background: #0072ff
+  box-sizing: border-box
+  color: BACKGROUND
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  padding: 10px 3vw
+
+  .on-home-page &
+    border-bottom: none
+    transition: background 1s ease
+
+    .main-logo
+      color: #0072ff
+
+    .main-nav-item:hover
+      background: rgba(0,0,0,0.2)
+
+  .on-project-page &, .on-home-page &, .on-secondary-page &, .on-landing-page &
+    background: transparent
+
+  &.header-sticky
+    background: rgba(0,0,0,0.7)
+    position: fixed
+    width: 100%
+    z-index: 1
+
+    .main-nav-item:hover
+      background: rgba(0,0,0,0.8)
+
+  .main-logo
+    font-family: "Montserrat"
+    font-size: 2em
+    font-smoothing: antialiased
+    letter-spacing: 0.05em
+    text-transform: uppercase
+
+  svg
+    vertical-align: sub
+
+.main-nav
+  display: flex
+  flex: 1 0 auto
+  flex-wrap: wrap
+  padding: 0 1.5em
+
+  > hr
+    border: 0
+    flex: 1 1 auto
+    margin: 0
+
+  &.mobile .main-nav-item
+    color: black
+    width: 100%
+
+    &:hover
+      color: MAIN_HIGHLIGHT
+
+.main-nav-item
+  color: rgba(255,255,255,0.5)
+  padding: 7.5px 2vw
+  margin: 2.5px 0 0
+
+  &:link:hover
+    background: rgba(255,255,255, 0.2)
+    color: rgba(255,255,255,1)
+
+  &.active
+    color: white
+    border-bottom: solid 2px white
+    font-weight: bold
+
+  .minor
+    font-size: 10px
+    font-weight: bold
+    letter-spacing: 0.1em
+    text-transform: uppercase
+
+.on-secondary-page
+  .secondary-page
+    .hero
+      background-size: cover
+      box-sizing: border-box
+      min-height: 250px
+      overflow: auto
+      background-color: COBOLT_BLUE
+      padding: 140px 3vw 5px 3vw
+
+      .hero-container
+        margin: 0 auto
+        max-width: 960px
+
+        h1
+          color: white
+          font-size: 2.5em
+          font-weight: 400
+          margin-bottom: 1em
+
+        .hero-nav
+          a
+            @extends .main-nav-item
+            font-size: 14px
+            line-height: 3em
+            text-decoration: none
+
+.modal-nav-links
+  .main-nav-item
+    display: block
+    color: COPY
+    &:hover
+      color: COPY
