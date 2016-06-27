@@ -22,11 +22,17 @@
     text-decoration: inherit
     white-space: nowrap;
 
+    &--leading
+      margin-right: -0.5em
+
+    &--trailing
+      margin-left: -0.5em
+
     &:hover
       opacity: 1
       background: rgba(white, 0.2)
       position: relative
-      z-index: 1 // This improves hit area on hover when used with a `link-buncher`.
+      z-index: 1 // This improves hit area on hover for --leading and --trailing.
 
     &--active
       opacity: 1
@@ -49,10 +55,6 @@
     &--unread::after
       opacity: 1
 
-  &__link-buncher
-    display: inline-block
-    margin: 0 -0.5em
-
   &__link-label-for-builders
     font-size: 0.7em
     font-weight: bold
@@ -74,19 +76,24 @@
       height: 1.5em // TODO: Why's this weird?
       width: 1.5em // TODO: Why's this weird?
 
-  .site-nav__reveal-toggle
+  &__demoted-floater
+    background: rgba(white, 0.2)
+    border-radius: 3em
+    padding: 0 0.5em
     position: relative
     z-index: 2
 
-    // TODO, maybe:
-    // &::after
-    //   border: 0.4em solid
-    //   border-bottom-width: 0
-    //   border-color: currentColor transparent
-    //   content: ''
-    //   height: 0
-    //   left: 50%
-    //   position: absolute
-    //   top: 100%
-    //   transform: translateX(-50%)
-    //   width: 0
+  &__reveal-toggle
+    position: relative
+
+    &::after
+      border: 0.3em solid
+      border-bottom-width: 0
+      border-color: currentColor transparent
+      bottom: 0.3em
+      content: ''
+      height: 0
+      margin-top: 0.5em
+      position: absolute
+      right: 0.6em
+      width: 0

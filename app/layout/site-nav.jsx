@@ -8,8 +8,9 @@ import Translate from 'react-translate-component';
 import AdminOnly from '../components/admin-only';
 import TriggeredModalForm from 'modal-form/triggered';
 import ZooniverseLogo from '../partials/zooniverse-logo';
+import alert from '../lib/alert';
+import LoginDialog from '../partials/login-dialog';
 import AccountBar from './account-bar';
-import LoginBar from './login-bar';
 
 import style from './site-nav.styl';
 void style;
@@ -28,6 +29,8 @@ counterpart.registerTranslations('en', {
     lab: 'Build a project',
     admin: 'Admin',
     notifications: 'Notifications',
+    signIn: 'Sign in',
+    register: 'Register',
   },
 });
 
@@ -77,6 +80,16 @@ const SiteNav = React.createClass({
       !!nextContext.geordi &&
       !!nextContext.geordi.makeHandler &&
       nextContext.geordi.makeHandler('top-menu');
+  },
+
+  showSignInDialog(event) {
+    const which = event.currentTarget.value;
+    if (this.context.geordi !== undefined) {
+      this.context.geordi.logEvent({
+        type: which === 'sign-in' ? 'login' : 'register-link',
+      });
+    }
+    alert((resolve) => <LoginDialog which={which} onSuccess={resolve} contextRef={this.context} />);
   },
 
   renderLinks(isMobile) {
@@ -207,6 +220,18 @@ const SiteNav = React.createClass({
     );
   },
 
+  renderShortSignInButton() {
+    return (
+      <TriggeredModalForm
+        trigger={
+          <span className="site-nav__link">Sign in</span>
+        }
+      >
+        <LoginBar />
+      </TriggeredModalForm>
+    );
+  },
+
   render() {
     const logo = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
 
@@ -223,15 +248,49 @@ const SiteNav = React.createClass({
 
         {!this.state.isMobile && this.renderLinks()}
 
-        {!!this.props.user ? <AccountBar user={this.props.user} /> : <LoginBar />}
+        {!this.props.onToggle && (!!this.props.user ? (
+          <AccountBar user={this.props.user} />
+        ) : (
+          <span>
+            <button type="button" value="sign-in" className="secret-button" onClick={this.showSignInDialog}>
+              <span className="site-nav__link site-nav__link--leading">
+                <Translate content="siteNav.signIn" />
+              </span>
+            </button>
+
+            <button type="button" value="register" className="secret-button" onClick={this.showSignInDialog}>
+              <span className="site-nav__link site-nav__link--trailing">
+                <Translate content="siteNav.register" />
+              </span>
+            </button>
+          </span>
+        ))}
 
         {!!this.props.onToggle &&
-          <button
-            type="button"
-            className="secret-button site-nav__reveal-toggle"
-            style={{ lineHeight: 0 }}
-            onClick={this.props.onToggle}
-          >{logo}</button>}
+          <span className="site-nav__demoted-floater">
+            {!!this.props.user ? (
+              <AccountBar user={this.props.user} />
+            ) : (
+              <button type="button" value="sign-in" className="secret-button" onClick={this.showSignInDialog}>
+                <span className="site-nav__link site-nav__link--leading">
+                  <span className="site-nav__link-label-for-builders">
+                    <Translate content="siteNav.signIn" />
+                  </span>
+                </span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              className="secret-button"
+              style={{ lineHeight: 0 }}
+              onClick={this.props.onToggle}
+            >
+              <span className="site-nav__link site-nav__link--trailing site-nav__reveal-toggle">
+                {logo}
+              </span>
+            </button>
+          </span>}
 
         {this.state.isMobile && this.renderMobileLinksMenu()}
       </nav>
