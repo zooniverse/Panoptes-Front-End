@@ -103,7 +103,7 @@ module?.exports = React.createClass
           <ChangeListener target={@props.user}>{ =>
             if @state.notifications?.length > 0
               <div>
-                  <p>
+                  <p className="talk-module">
                     You have{' '}
                     {if @state.unreadCount is 0 then 'no' else @state.unreadCount}{' '}
                     unread notifications
