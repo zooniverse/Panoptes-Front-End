@@ -1,6 +1,6 @@
 React = require 'react'
 FavoritesButton = require '../collections/favorites-button'
-alert = require '../lib/alert'
+{alert} = require 'modal-form/dialog'
 {Markdown} = (require 'markdownz').default
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
@@ -61,10 +61,17 @@ module.exports = React.createClass
       type: logType
 
   promptToSignIn: ->
-    alert (resolve) ->
-      <SignInPrompt onChoose={resolve}>
-        <p>Sign in to help us make the most out of your hard work.</p>
-      </SignInPrompt>
+    # This is super hacky.
+    # TODO: Make a way to dismiss `alert`ed dialogs without requiring a form submission.
+    fauxSubmit = (e) ->
+      form = e.currentTarget
+      until form?.nodeName is 'FORM' or not form?
+        form = form.parentNode
+      form?.dispatchEvent new CustomEvent 'submit'
+
+    alert <SignInPrompt onChoose={fauxSubmit}>
+      <p>Sign in to help us make the most out of your hard work.</p>
+    </SignInPrompt>
 
   render: ->
     rootClasses = classnames('subject-viewer', {
@@ -227,4 +234,4 @@ module.exports = React.createClass
             </tr>}
         </tbody>
       </table>
-    </div>
+    </div>, closeButton: true
