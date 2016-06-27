@@ -1,60 +1,11 @@
 React = require 'react'
 auth = require 'panoptes-client/lib/auth'
 IOStatus = require './io-status'
-MainHeader = require './main-header'
-MainFooter = require './main-footer'
-GeordiClient = require 'zooniverse-geordi-client'
+AppLayout = require('../layout').default
+GeordiLogger = require '../lib/geordi-logger'
 {generateSessionID} = require '../lib/session'
 
-class GeordiLogger # Make calls to the Geordi API to log user activity
-  constructor: (@state, @geordi) ->
-
-  @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy']
-
-  keys:
-    projectToken: 'zooHome'
-
-  geordi: null
-
-  instance: =>
-    @geordi = @geordi || @makeGeordi @keys?.projectToken
-
-  makeGeordi: (projectSlug) ->
-    new GeordiClient
-      env: @state?.env
-      projectToken: projectSlug || @keys?.projectToken
-      zooUserIDGetter: () => @state.user?.id
-      subjectGetter: () => @keys?.subjectID
-
-  makeHandler: (defType) -> # Once defined, efficiently logs different data to same event type
-    (eventData, eventType) =>
-        eventType = defType if typeof eventType isnt 'string'
-        @logEvent
-          type: eventType
-          relatedID: eventData
-
-  logEvent: (logEntry) -> # Accepts key/values to make appropriate Geordi logging
-    newEntry = Object.assign {}, logEntry, @keys
-    if GeordiLogger.tokens.indexOf(newEntry.projectToken) > -1
-      @instance().logEvent newEntry
-      console.warn 'No Geordi logger available for event ', JSON.stringify(logEntry) unless @instance().logEvent
-
-  remember: (eventData) ->
-    reset = eventData?.projectToken? && (eventData?.projectToken != @instance().projectToken)
-    @instance().update {projectToken: eventData.projectToken} if reset
-    @keys = Object.assign {}, @keys, eventData
-
-  forget: (forgetKeys) ->
-    reset = false
-    for key in forgetKeys
-      reset = (key == 'projectToken')
-      delete @keys[key]
-
-    @remember {projectToken: 'zooHome'} if reset
-
-module.exports = React.createClass
-  displayName: 'PanoptesApp'
-
+PanoptesApp = React.createClass
   geordiLogger: null # Maintains project and subject context for the Geordi client
 
   childContextTypes:
@@ -100,10 +51,10 @@ module.exports = React.createClass
   render: ->
     <div className="panoptes-main">
       <IOStatus />
-      <MainHeader user={@state.user} />
-      <div className="main-content">
-        {if @state.initialLoadComplete
-          React.cloneElement @props.children, {user: @state.user}}
-      </div>
-      <MainFooter user={@state.user} />
+      {if @state.initialLoadComplete
+        <AppLayout user={@state.user}>
+          {React.cloneElement @props.children, user: @state.user}
+        </AppLayout>}
     </div>
+
+module.exports = PanoptesApp

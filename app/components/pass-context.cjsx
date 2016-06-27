@@ -4,6 +4,7 @@ React = require 'react'
 module.exports = React.createClass
   contextTypes:
     router: routerShape
+    geordi: React.PropTypes.object
 
   childContextTypes:
     router: routerShape
