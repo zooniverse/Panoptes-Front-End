@@ -26,7 +26,7 @@ module.exports = React.createClass
   saveTemplate: (marks) ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       if !pref.preferences.row
-        pref.update 'preferences.activeTemplate': type
+        pref.update 'preferences.activeTemplate': 'row'
         newArray = []
         lastCellMid = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
         for cell in marks
@@ -82,9 +82,9 @@ module.exports = React.createClass
     </form>
 
   renderGridSelect: ->
-    <div>
+    <div className="grid-selection">
       <p>Selected Grid:</p>
-      <select disabled={@props.preferences.preferences?.savedGrids?.length is 0} onChange={@logSomething}>
+      <select className="grid-selection-dropdown" disabled={@props.preferences.preferences?.savedGrids?.length is 0} onChange={@logSomething}>
         {@props.preferences.preferences.savedGrids?.map (select, i) ->
           <option key={select.id} value={i}>{select.label}</option>}
       </select>
@@ -94,56 +94,57 @@ module.exports = React.createClass
     <div>
 
       <table className="grid-button-table">
-        <tr>
-          <td>
-            <li>
-              <button type="button" className="grid-button-tab #{('active' if !@props.preferences.preferences?.activeTemplate) ? ''}" onClick={@activateTemplate.bind this, null} >
-                Draw Cells
-              </button>
-            </li>
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>
+              <li>
+                <button type="button" className="grid-button-tab #{('active' if !@props.preferences.preferences?.activeTemplate) ? ''}" onClick={@activateTemplate.bind this, null} >
+                  Draw Cells
+                </button>
+              </li>
+            </td>
+          </tr>
 
-        <tr>
-          <td>
-            <li>
-              <button type="button" className="grid-button-tab #{('active' if @props.preferences.preferences?.activeTemplate is 'row') ? ''}" disabled={!@props.preferences.preferences.row} onClick={@activateTemplate.bind this, 'row'} >
-                Draw Rows
+          <tr>
+            <td>
+              <li>
+                <button type="button" className="grid-button-tab #{('active' if @props.preferences.preferences?.activeTemplate is 'row') ? ''}" disabled={!@props.preferences.preferences.row} onClick={@activateTemplate.bind this, 'row'} >
+                  Draw Rows
+                </button>
+              </li>
+            </td>
+            <td>
+              <button type="button" className="grid-button-template" disabled={@props.annotation.value.length is 0 or @props.preferences.preferences?.row?} title="Create Rows After Drawing Cells" onClick={@saveTemplate.bind this, @props.annotation.value}>
+                create
               </button>
-            </li>
-          </td>
-          <td>
-            <button type="button" className="grid-button-template" disabled={@props.annotation.value.length is 0 or @props.preferences.preferences?.row?} title="Create Rows After Drawing Cells" onClick={@saveTemplate.bind this, @props.annotation.value}>
-              create
-            </button>
-          </td>
-          <td>
-            <button type="button" className="grid-button-template" disabled={!@props.preferences.preferences?.row} title="Delete Saved Rows" onClick={@clearTemplate.bind this, 'row'}>
-              delete template
-            </button>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <li>
-              <button type="button" className="grid-button-tab #{('active' if @props.preferences.preferences?.activeTemplate is 'grid') ? ''}" disabled={!@props.preferences.preferences?.grid? or @renderedGrid()} onClick={@activateTemplate.bind this, 'grid'} >
-                Draw Grid
+            </td>
+            <td>
+              <button type="button" className="grid-button-template" disabled={!@props.preferences.preferences?.row} title="Delete Saved Rows" onClick={@clearTemplate.bind this, 'row'}>
+                delete template
               </button>
-            </li>
-          </td>
-          <td>
-            <button type="button" className="grid-button-template" title="Create New Grid Based on Cells/Rows Marked" disabled={@props.annotation.value.length is 0 or !@props.preferences.preferences.row} onClick={@setState.bind this, templateForm: true, null}>
-              create
-            </button>
-          </td>
-          <td>
-            <button type="button" className="grid-button-template" disabled={!@props.preferences.preferences?.grid} onClick={@clearTemplate.bind this, 'grid'}>
-              delete template
-            </button>
-          </td>
-        </tr>
+            </td>
+          </tr>
 
+          <tr>
+            <td>
+              <li>
+                <button type="button" className="grid-button-tab #{('active' if @props.preferences.preferences?.activeTemplate is 'grid') ? ''}" disabled={!@props.preferences.preferences?.grid? or @renderedGrid()} onClick={@activateTemplate.bind this, 'grid'} >
+                  Draw Grid
+                </button>
+              </li>
+            </td>
+            <td>
+              <button type="button" className="grid-button-template" title="Create New Grid Based on Cells/Rows Marked" disabled={@props.annotation.value.length is 0 or !@props.preferences.preferences.row} onClick={@setState.bind this, templateForm: true, null}>
+                create
+              </button>
+            </td>
+            <td>
+              <button type="button" className="grid-button-template" disabled={!@props.preferences.preferences?.grid} onClick={@clearTemplate.bind this, 'grid'}>
+                delete template
+              </button>
+            </td>
+          </tr>
+        </tbody>
       </table>
 
       { @renderTemplateSave() if @state?.templateForm }

@@ -12,6 +12,9 @@ module.exports = React.createClass
   componentWillMount: ->
     @findSchema()
 
+  componentWillUnmount: ->
+    @props.mark.rendered = {template: @state.template, activeTemplate: @state.activeTemplate}
+
   statics:
     initCoords: null
 
@@ -55,8 +58,8 @@ module.exports = React.createClass
       templateID = Math.random()
       if type is 'row'
         for cell in templateCopy
-          cell.type = 'row'
           cell._key = Math.random()
+          cell.type = 'row'
           cell.reorder = false
           cell.y = mark.y
           cell.height = mark.height
@@ -64,6 +67,7 @@ module.exports = React.createClass
         templateCopy
       else
         for cell in templateCopy
+          cell._key = Math.random()
           cell.type = 'grid'
           cell.reorder = false
           cell.templateID = templateID
@@ -91,11 +95,12 @@ module.exports = React.createClass
     for cell in @state.template
       points = @cellPoints cell if @state.activeTemplate is 'grid'
       points = @rowPoints cell if @state.activeTemplate is 'row'
-      <Draggable onDrag={@handleTemplateDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
-        <polyline key={Math.random()} points={points} />
+      <Draggable key={Math.random()} onDrag={@handleTemplateDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+        <polyline points={points} />
       </Draggable>
 
   handleTemplateDrag: (e, d) ->
+    console.log @props.mark
     alteringRows = (i for i in @props.classification.annotations[0].value when i.templateID is @props.mark.templateID)
     for cell in alteringRows
       cell.x += d.x / @props.scale.horizontal
