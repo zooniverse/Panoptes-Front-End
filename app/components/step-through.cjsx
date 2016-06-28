@@ -59,6 +59,5 @@ module.exports = React.createClass
       step: index %% total
 
   handleScroll: ->
-    node = ReactDOM.findDOMNode(@)
-    mediaCard = node.querySelector(".tutorial-steps div")
-    setTimeout (=> animatedScrollTo mediaCard, node.offsetTop, 0), 500
+    reactSwipeNode = ReactDOM.findDOMNode(@refs.swiper)
+    setTimeout (=> animatedScrollTo reactSwipeNode, reactSwipeNode.offsetTop, 0), 500
