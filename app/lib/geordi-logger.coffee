@@ -13,9 +13,15 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
   instance: =>
     @geordi = @geordi || @makeGeordi @keys?.projectToken
 
+  getEnv: ->
+    shell_env = process.env.NODE_ENV if process.env.NODE_ENV=="production"
+    reg = /\W?env=(\w+)/
+    browser_env = window?.location?.search?.match(reg)?[1]
+    shell_env || browser_env || 'staging'
+    
   makeGeordi: (projectSlug) ->
     new GeordiClient
-      env: @state?.env
+      env: @getEnv()
       projectToken: projectSlug || @keys?.projectToken
       zooUserIDGetter: () => @state.user?.id
       subjectGetter: () => @keys?.subjectID

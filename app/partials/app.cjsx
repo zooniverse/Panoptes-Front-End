@@ -20,15 +20,9 @@ PanoptesApp = React.createClass
     updateUser: @updateUser
     geordi: @geordiLogger
 
-  getEnv: ->
-    reg = /\W?env=(\w+)/
-    browser_env = window?.location?.search?.match(reg)
-    @state?.env || browser_env?[1] || 'staging'
-
   getInitialState: ->
     initialLoadComplete: false
     user: null
-    env: @getEnv()
 
   updateUser: (user) ->
     @setState user: user
