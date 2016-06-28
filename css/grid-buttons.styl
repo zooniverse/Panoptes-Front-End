@@ -20,16 +20,18 @@
   margin-top: 2em
   text-align: center
 
-.grid-selection
-  margin-left: 4em
+.new-grid-button
+  @extends $reset-button
+  background-color: MAIN_HIGHLIGHT
+  border-radius: 0.5em
+  box-shadow: 0 0 1px inset
+  display: inline-block
+  font-size: 0.9em
+  margin: 0em 0.2vw
+  padding: 0 0.8em 0 0.5em
+  vertical-align: middle
 
-  .grid-selection-dropdown
-    background: #f7f7f7
-    border-radius: 6px
-    color: #6b6a6a
-    width: 60%
-
-.template-create-form
+.template-select
   margin-left: 4em
 
   .template-name-input
@@ -39,6 +41,12 @@
     box-shadow: none
     box-sizing: border-box
     padding: 8px 10px
+    width: 60%
+
+  .grid-selection-dropdown
+    background: #f7f7f7
+    border-radius: 6px
+    color: #6b6a6a
     width: 60%
 
   .template-form-button

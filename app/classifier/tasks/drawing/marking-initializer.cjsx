@@ -86,7 +86,7 @@ module.exports = React.createClass
 
     toolName = taskDescription.tools[mark.tool].type
     @context.geordi?.logEvent type: "draw-#{toolName}"
-    
+
     if MarkComponent.initRelease?
       mouseCoords = @props.getEventOffset e
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
@@ -95,10 +95,8 @@ module.exports = React.createClass
 
     if MarkComponent.saveState? and pref.activeTemplate
       multipleMarks = MarkComponent.saveState mark, pref[pref.activeTemplate], pref.activeTemplate
-      mark = null
-      @props.annotation.value.pop()
       for cell in multipleMarks
-        cell.skip = true unless cell == multipleMarks[0]
+        cell.skip = true
         @props.annotation.value.push cell
 
         unless MarkComponent.initValid cell
