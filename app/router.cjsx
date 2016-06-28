@@ -203,5 +203,6 @@ module.exports =
         require './pages/dev-classifier'
     } />
     <Route path="dev/ribbon" component={require './components/classifications-ribbon'} />
+    <Route path="dev/circle-ribbon" component={require('./components/circle-ribbon').default} />
     <Route path="*" component={require './pages/not-found'} />
   </Route>
