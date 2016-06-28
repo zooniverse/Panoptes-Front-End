@@ -10,12 +10,10 @@ PanoptesApp = React.createClass
 
   childContextTypes:
     user: React.PropTypes.object
-    updateUser: React.PropTypes.func
     geordi: React.PropTypes.object
 
   getChildContext: ->
     user: @state.user
-    updateUser: @updateUser
     geordi: @geordiLogger
 
   getEnv: ->
@@ -25,11 +23,8 @@ PanoptesApp = React.createClass
 
   getInitialState: ->
     user: null
-    env: @getEnv()
+    env: @getEnv() # Used by Geordi.
     initialLoadComplete: false
-
-  updateUser: (user) ->
-    @setState user: user
 
   componentDidMount: ->
     auth.listen 'change', @handleAuthChange
