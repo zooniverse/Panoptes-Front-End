@@ -4,10 +4,12 @@ React = require 'react'
 module.exports = React.createClass
   contextTypes:
     router: routerShape
+    user: React.PropTypes.object
     geordi: React.PropTypes.object
 
   childContextTypes:
     router: routerShape
+    user: React.PropTypes.object
     geordi: React.PropTypes.object
 
   getChildContext: ->

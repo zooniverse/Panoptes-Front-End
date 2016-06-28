@@ -26,16 +26,9 @@ counterpart.registerTranslations('en', {
 
 const AccountBar = React.createClass({
   contextTypes: {
+    user: React.PropTypes.object,
     router: routerShape,
     geordi: React.PropTypes.object,
-  },
-
-  propTypes: {
-    user: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      display_name: React.PropTypes.string,
-      login: React.PropTypes.string,
-    }),
   },
 
   getInitialState() {
@@ -62,7 +55,7 @@ const AccountBar = React.createClass({
 
   lookUpUnread() {
     talkClient.type('conversations').get({
-      user_id: this.props.user.id,
+      user_id: this.context.user.id,
       unread: true,
       page_size: 1,
     }).then((conversations) => {
@@ -116,8 +109,8 @@ const AccountBar = React.createClass({
           className="site-nav__modal"
           trigger={
             <span className="site-nav__link">
-              <strong>{this.props.user.display_name}</strong>{' '}
-              <Avatar className="site-nav__user-avatar" user={this.props.user} size="2em" />
+              <strong>{this.context.user.display_name}</strong>{' '}
+              <Avatar className="site-nav__user-avatar" user={this.context.user} size="2em" />
             </span>
           }
           triggerProps={{
@@ -129,7 +122,7 @@ const AccountBar = React.createClass({
             <div ref="accountMenu" role="menu" onKeyDown={this.navigateMenu}>
               <Link
                 role="menuitem"
-                to={`/users/${this.props.user.login}`}
+                to={`/users/${this.context.user.login}`}
                 className="site-nav__link"
                 onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.profile') : null}
               >
@@ -149,7 +142,7 @@ const AccountBar = React.createClass({
               <br />
               <Link
                 role="menuitem"
-                to={`/collections/${this.props.user.login}`}
+                to={`/collections/${this.context.user.login}`}
                 className="site-nav__link"
                 onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.collections') : null}
               >
@@ -159,7 +152,7 @@ const AccountBar = React.createClass({
               <br />
               <Link
                 role="menuitem"
-                to={`/favorites/${this.props.user.login}`}
+                to={`/favorites/${this.context.user.login}`}
                 className="site-nav__link"
                 onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.favorites') : null}
               >

@@ -73,7 +73,7 @@ const AppFooter = React.createClass({
             </IndexLink>
             <br />
             <AdminOnly>
-              <AdminToggle user={this.props.user} />
+              <AdminToggle />
             </AdminOnly>
           </div>
 

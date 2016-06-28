@@ -13,7 +13,6 @@ const LAYOUT_DEV_MODE = process.env.NODE_ENV !== 'production' &&
 
 const AppLayout = React.createClass({
   propTypes: {
-    user: React.PropTypes.any,
     children: React.PropTypes.node,
   },
 
@@ -101,9 +100,8 @@ const AppLayout = React.createClass({
           className={classnames('app-layout__header', {
             'app-layout__header--demoted': this.state.siteHeaderDemoted,
           })}
-          user={this.props.user}
         >
-          <SiteNav ref="mainNav" user={this.props.user} onToggle={togglePrimaryNav} />
+          <SiteNav ref="mainNav" onToggle={togglePrimaryNav} />
         </header>
 
         <div className="app-layout__not-header">
@@ -132,7 +130,7 @@ const AppLayout = React.createClass({
           </div>
 
           <footer className="app-layout__footer">
-            <SiteFooter user={this.props.user} />
+            <SiteFooter />
 
             {LAYOUT_DEV_MODE &&
               <div

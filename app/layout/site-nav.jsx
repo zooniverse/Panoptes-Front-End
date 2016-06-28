@@ -35,12 +35,13 @@ const SiteNav = React.createClass({
   resizeTimeout: NaN,
 
   contextTypes: {
+    initialLoadComplete: React.PropTypes.bool,
+    user: React.PropTypes.object,
     router: routerShape,
     geordi: React.PropTypes.object,
   },
 
   propTypes: {
-    user: React.PropTypes.any,
     onToggle: React.PropTypes.func,
   },
 
@@ -223,7 +224,12 @@ const SiteNav = React.createClass({
 
         {!this.state.isMobile && this.renderLinks()}
 
-        {!!this.props.user ? <AccountBar user={this.props.user} /> : <LoginBar />}
+        {!this.context.initialLoadComplete &&
+          <span className="site-nav__link">
+            <i className="fa fa-spinner fa-spin fa-fw"></i>
+          </span>}
+
+        {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar /> : <LoginBar />)}
 
         {!!this.props.onToggle &&
           <button

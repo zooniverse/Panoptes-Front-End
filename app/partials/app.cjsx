@@ -9,11 +9,13 @@ PanoptesApp = React.createClass
   geordiLogger: null # Maintains project and subject context for the Geordi client
 
   childContextTypes:
+    initialLoadComplete: React.PropTypes.bool
     user: React.PropTypes.object
     updateUser: React.PropTypes.func
     geordi: React.PropTypes.object
 
   getChildContext: ->
+    initialLoadComplete: @state.initialLoadComplete
     user: @state.user
     updateUser: @updateUser
     geordi: @geordiLogger
@@ -24,9 +26,9 @@ PanoptesApp = React.createClass
     @state?.env || browser_env?[1] || 'staging'
 
   getInitialState: ->
+    initialLoadComplete: false
     user: null
     env: @getEnv()
-    initialLoadComplete: false
 
   updateUser: (user) ->
     @setState user: user
@@ -45,16 +47,15 @@ PanoptesApp = React.createClass
   handleAuthChange: ->
     auth.checkCurrent().then (user) =>
       @setState
-        user: user
         initialLoadComplete: true
+        user: user
 
   render: ->
     <div className="panoptes-main">
       <IOStatus />
-      {if @state.initialLoadComplete
-        <AppLayout user={@state.user}>
-          {React.cloneElement @props.children, user: @state.user}
-        </AppLayout>}
+      <AppLayout>
+        {React.cloneElement @props.children, user: @state.user}
+      </AppLayout>
     </div>
 
 module.exports = PanoptesApp
