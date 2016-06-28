@@ -4,11 +4,20 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
   constructor: (@state, @geordi) ->
 
   @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy']
+  @GEORDI_WARNINGS_TIMEOUT_INTERVAL = 5 * 60 * 1000 # only warn about Geordi down once every 5 mins, to avoid console spam
 
   keys:
     projectToken: 'zooHome'
 
   geordi: null
+
+  suppressWarnings: false
+
+  suppressWarningsForAWhile: ->
+    @suppressWarnings = true
+    setTimeout =>
+      @suppressWarnings = false
+    , GeordiLogger.GEORDI_WARNINGS_TIMEOUT_INTERVAL
 
   instance: =>
     @geordi = @geordi || @makeGeordi @keys?.projectToken
@@ -31,7 +40,10 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
     newEntry = Object.assign {}, logEntry, @keys
     if GeordiLogger.tokens.indexOf(newEntry.projectToken) > -1
       @instance().logEvent newEntry
-      console.warn 'No Geordi logger available for event ', JSON.stringify(logEntry) unless @instance().logEvent
+      .catch (err) =>
+        if !@suppressWarnings
+          console.warn "Warning: Error was encountered logging to Geordi server [#{@state?.env} - #{@instance().GEORDI_SERVER_URL[@state?.env]}]:",err
+          @suppressWarningsForAWhile()
 
   remember: (eventData) ->
     reset = eventData?.projectToken? && (eventData?.projectToken != @instance().projectToken)
