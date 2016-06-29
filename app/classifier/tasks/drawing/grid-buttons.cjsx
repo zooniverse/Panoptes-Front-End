@@ -25,6 +25,7 @@ module.exports = React.createClass
         pref.preferences.savedGrids.shift()
         pref.update 'preferences.savedGrids': pref.preferences.savedGrids
         if pref.preferences?.savedGrids?.length > 0
+          @activateTemplate 'grid'
           pref.update 'preferences.grid': pref.preferences.savedGrids[0].value
         else
           pref.update 'preferences.grid': null
@@ -62,6 +63,7 @@ module.exports = React.createClass
     @setState hideDrawingTools: true
 
   changeGrid: (e) ->
+    @activateTemplate 'grid'
     index = e.target.value
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       movedGrid = pref.preferences.savedGrids[index]

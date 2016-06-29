@@ -95,12 +95,11 @@ module.exports = React.createClass
 
     if MarkComponent.saveState? and pref.activeTemplate
       multipleMarks = MarkComponent.saveState mark, pref[pref.activeTemplate], pref.activeTemplate
-      for cell in multipleMarks
-        cell.skip = true
-        @props.annotation.value.push cell
+      for multiple in multipleMarks
+        @props.annotation.value.push multiple
 
-        unless MarkComponent.initValid cell
-          @destroyMark @props.annotation, cell
+        unless MarkComponent.initValid multiple
+          @destroyMark @props.annotation, multiple
 
     @props.classification.update 'annotations'
 

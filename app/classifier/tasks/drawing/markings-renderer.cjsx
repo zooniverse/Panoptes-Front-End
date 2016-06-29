@@ -50,7 +50,7 @@ module.exports = React.createClass
                 skippedMarks += 1
                 continue
 
-              if mark.skip?
+              if mark._copy?
                 continue
 
               toolDescription = taskDescription.tools[mark.tool]
@@ -88,7 +88,7 @@ module.exports = React.createClass
 
   handleSelect: (annotation, mark) ->
     @setState selection: mark
-    unless mark.reorder is false
+    unless mark.templateID
       markIndex = annotation.value.indexOf mark
       annotation.value.splice markIndex, 1
       annotation.value.push mark
@@ -103,10 +103,10 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @props.classification.update 'annotations'
-    if mark.templateID
+    if mark._templateID
       index = []
       for cell in annotation.value
-        if cell.templateID is mark.templateID
+        if cell._templateID is mark._templateID
           index.push(annotation.value.indexOf cell)
       annotation.value.splice index[0], index.length
       @props.classification.update 'annotations'

@@ -10,17 +10,14 @@ module.exports = React.createClass
   displayName: 'GridTool'
 
   componentWillMount: ->
-    console.log 'mounting'
-    if @props.mark.prerendered and @props.preferences.preferences[@props.mark.type]
-      newTemplate = @templateRerender @props.mark, @props.preferences.preferences[@props.mark.type]
-      @setState template: newTemplate
-      @setState activeTemplate: @props.mark.type
-    unless @props.mark.prerendered
+    if @props.mark._prerendered and @props.preferences.preferences[@props.mark._type]
+      @setState template: @templateRerender @props.mark, @props.preferences.preferences[@props.mark._type]
+      @setState activeTemplate: @props.mark._type
+    unless @props.mark._prerendered
       @findSchema()
 
   componentWillUnmount: ->
-    console.log 'unmounting!'
-    @props.mark.prerendered = true
+    @props.mark._prerendered = true
 
   statics:
     initCoords: null
@@ -56,39 +53,26 @@ module.exports = React.createClass
       _inProgress: false
 
     initValid: (mark) ->
-      mark is null or mark.height > MINIMUM_SIZE
+      mark.height > MINIMUM_SIZE
 
     saveState: (mark, template, type) ->
       templateID = Math.random()
-      templateCopy = []
-      mark.reorder = false
-      mark.type = type
-      mark.templateID = templateID
-      if type is 'row'
-        mark.x = template[0].x
-        mark.width = template[0].width
-      if type is 'grid'
-        mark.x = template[0].x
-        mark.width = template[0].width
-        mark.y = template[0].y
-        mark.height = template[0].height
-      for cell in template
-        templateCopy.push Object.assign({}, cell)
+      mark._type = type
+      mark._templateID = templateID
+      mark.x = template[0].x
+      mark.width = template[0].width
+      mark.y = template[0].y if type is 'grid'
+      mark.height = template[0].height if type is 'grid'
+      templateCopy = for cell in template
+        Object.assign({}, cell)
       templateCopy.shift()
-      if type is 'row'
-        for cell in templateCopy
-          cell._key = Math.random()
-          cell.reorder = false
-          cell.y = mark.y
-          cell.height = mark.height
-          cell.templateID = templateID
-        templateCopy
-      else
-        for cell in templateCopy
-          cell._key = Math.random()
-          cell.reorder = false
-          cell.templateID = templateID
-        templateCopy
+      for cell in templateCopy
+        cell._copy = true
+        cell._key = Math.random()
+        cell._templateID = templateID
+        cell.y = mark.y if type is 'row'
+        cell.height = mark.height if type is 'row'
+      templateCopy
 
   initCoords: null
 
@@ -117,11 +101,11 @@ module.exports = React.createClass
       </Draggable>
 
   handleTemplateDrag: (e, d) ->
-    alteringRows = (i for i in @props.classification.annotations[0].value when i.templateID is @props.mark.templateID)
-    for cell in alteringRows
+    mobileTemplate = (i for i in @props.classification.annotations[0].value when i._templateID is @props.mark._templateID)
+    for cell in mobileTemplate
       cell.x += d.x / @props.scale.horizontal
       cell.y += d.y / @props.scale.vertical
-    @setState template: alteringRows
+    @setState template: mobileTemplate
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
@@ -153,7 +137,7 @@ module.exports = React.createClass
     changeY = mark.y - template[0].y
     for cell in template
       cell.x = cell.x + changeX
-      cell.y = cell.y + changeY if mark.type is 'grid'
+      cell.y = cell.y + changeY if mark._type is 'grid'
     template
 
   findSchema: ->
