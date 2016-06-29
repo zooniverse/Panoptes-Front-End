@@ -47,17 +47,17 @@ module.exports = React.createClass
 
   render: ->
     <div>
-      <ChangeListener target={@props.user}>{ =>
-        if @props.user?
+      {if @props.user?
+        <ChangeListener target={@props.user}>{ =>
           if @props.user.admin
             <AdminPage {...@props} />
           else
             <div className="content-container">
               <p>You are not an administrator</p>
             </div>
-        else
-          <div className="content-container">
-            <p>You’re not signed in.</p>
-          </div>
-      }</ChangeListener>
+        }</ChangeListener>
+      else
+        <div className="content-container">
+          <p>You’re not signed in.</p>
+        </div>}
     </div>
