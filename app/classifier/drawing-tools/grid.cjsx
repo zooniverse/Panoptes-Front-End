@@ -27,6 +27,7 @@ module.exports = React.createClass
       y: y
       width: 0
       height: 0
+      _type: 'cell'
 
     initStart: ({x, y}, mark) ->
       @initCoords = {x, y}
