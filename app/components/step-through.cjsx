@@ -1,5 +1,8 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 ReactSwipe = require 'react-swipe'
+animatedScrollTo = require 'animated-scrollto'
+
 
 module.exports = React.createClass
   displayName: 'StepThrough'
@@ -41,13 +44,20 @@ module.exports = React.createClass
 
   goPrevious: ->
     @refs.swiper.swipe.prev()
+    @handleScroll()
 
   goNext: ->
     @refs.swiper.swipe.next()
+    @handleScroll()
 
   goTo: (index) ->
     @refs.swiper.swipe.slide index
+    @handleScroll()
 
   handleStep: (total, index) ->
     @setState
       step: index %% total
+
+  handleScroll: ->
+    reactSwipeNode = ReactDOM.findDOMNode(@refs.swiper)
+    setTimeout (=> animatedScrollTo reactSwipeNode, reactSwipeNode.offsetTop, 0), 500
