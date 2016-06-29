@@ -18,12 +18,10 @@
     top: -1em
 
 .home-page-for-user
-  align-items: center;
   background: black
   color: white
   display: flex
-  flex-direction: column
-  padding: 3em
+  flex-grow: 1
   position: relative
 
   &__background
@@ -33,18 +31,38 @@
     top: 0
     width: 100%
 
+  &__content
+    align-items: center;
+    display: flex
+    flex-direction: column
+    flex-grow: 1
+    margin-top: 5em
+
   &__welcome
     font-size: 20px
+    margin: 1em 2em
 
   &__menu
-    display: flex
+    display: inline-flex
     flex-wrap: wrap
+    margin: 1em 2em
+
+  &__menu-column
+    display: flex
+    flex-direction: column
 
   &__menu-button
-    flex: 1 0 50%
+    display: block
     white-space: nowrap
 
   &__menu-label
     display: block
     padding: 1em 2em
     text-align: left
+
+  &__section
+    align-self: stretch
+    background: white
+    color: black
+    flex-grow: 1
+    padding: 1em 2em
