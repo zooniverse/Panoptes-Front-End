@@ -36,7 +36,8 @@ PanoptesApp = React.createClass
     auth.stopListening 'change', @handleAuthChange
 
   componentWillUpdate: (nextProps, nextState) ->
-    @geordiLogger = @geordiLogger || new GeordiLogger nextState
+    if !(@geordiLogger? && @geordiLogger.user == nextState.user)
+      @geordiLogger = new GeordiLogger nextState.user
 
   handleAuthChange: ->
     auth.checkCurrent().then (user) =>
