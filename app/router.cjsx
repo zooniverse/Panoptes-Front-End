@@ -18,6 +18,7 @@ module.exports =
   <Route path="/" component={require './partials/app'}>
     <IndexRoute component={require './pages/home'} />
     <Route path="home" component={ONE_UP_REDIRECT} />
+    <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
     <Route path="about" component={require './pages/about'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/about/about-home'} />
@@ -193,6 +194,5 @@ module.exports =
         require './pages/dev-classifier'
     } />
     <Route path="dev/ribbon" component={require './components/classifications-ribbon'} />
-    <Route path="dev/circle-ribbon" component={require('./components/circle-ribbon').default} />
     <Route path="*" component={require './pages/not-found'} />
   </Route>
