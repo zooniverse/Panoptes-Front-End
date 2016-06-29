@@ -239,7 +239,7 @@ DropdownDialog = React.createClass
       <div>
         <p>
           <span className="form-label">Add Option(s){' '}</span>
-          <TriggeredModalForm trigger={
+          <TriggeredModalForm className="dropdown-help" trigger={
             <span className="secret-button">
               <i className="fa fa-question-circle"></i>
             </span>
