@@ -1,6 +1,8 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 DragReorderable = require 'drag-reorderable'
+TriggeredModalForm = require 'modal-form/triggered'
+dropdownEditorHelp = require './editor-help'
 months = require './presets/months'
 countries = require './presets/countries' # value = ISO 3166-1 numeric code
 statesUSA = require './presets/states-USA' # value = two-letter postal abbreviation, does not duplicate with Canada
@@ -33,13 +35,17 @@ DropdownDialog = React.createClass
         conditionalSelect = @props.selects.filter (select) => select.id is conditionalSelect[0].condition
       conditionalSelects.reverse()
       @setState conditionalSelects: conditionalSelects
+      optionsKeys = {}
+      for select in conditionalSelects
+        optionsKeys[select.id] = null
+      @setState optionsKeys: optionsKeys
 
   handleOptionsKeys: (select, value) ->
     optionsKeys = @state.optionsKeys
-    if not select.condition?
-      optionsKeys[select.id] = value
-    else if value is null or value is ''
+    if value is null or value is ""
       optionsKeys[select.id] = null
+    else if not select.condition?
+      optionsKeys[select.id] = value
     else
       optionsKeys[select.id] = "#{optionsKeys[select.condition]};#{value}"
     @setState optionsKeys: optionsKeys
@@ -58,24 +64,22 @@ DropdownDialog = React.createClass
     select.allowCreate = @refs.allowCreate.checked
     @setState editSelect: select
 
-  onChangeConditionalAnswer: (select, e) ->
+  onChangeConditionalAnswer: (select, index, e) ->
     @handleOptionsKeys(select, e.target.value)
-    for select in @props.related
-      @handleOptionsKeys(select, null)
+    if @state.conditionalSelects.length and index isnt (@state.conditionalSelects.length - 1)
+      for otherIndex in [(index + 1)..(@state.conditionalSelects.length - 1)]
+        @handleOptionsKeys(@state.conditionalSelects[otherIndex], null)
 
   addOption: (optionLabel) ->
     if not optionLabel
-      return window.alert('Please provide an option')
-
-    if @getOptionsByProp("label")?.indexOf(optionLabel) isnt -1
-      return window.alert('Options must be unique within each dropdown')
+      return
 
     select = @state.editSelect
-
-    if select.condition? and not @state.optionsKeys[select.condition]
-      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
-
     optionsKey = @getOptionsKey(select)
+
+    if @getOptionsByProp("label")?.indexOf(optionLabel) isnt -1
+      dupIndex = @getOptionsByProp("label")?.indexOf(optionLabel)
+      select.options[optionsKey]?.splice(dupIndex, 1)
 
     if select.options[optionsKey]?
       select.options[optionsKey].push {value: "#{Math.random().toString(16).split('.')[1]}", label: "#{optionLabel}"}
@@ -83,10 +87,6 @@ DropdownDialog = React.createClass
       select.options["#{optionsKey}"] = [{value: "#{Math.random().toString(16).split('.')[1]}", label: "#{optionLabel}"}]
 
     @setState editSelect: select
-
-  onClickAddOption: ->
-    @addOption @refs.optionInput.value
-    @refs.optionInput.value = ''
 
   onReorder: (newOptions) ->
     select = @state.editSelect
@@ -110,10 +110,6 @@ DropdownDialog = React.createClass
 
   handlePresetApply: ->
     select = @state.editSelect
-
-    if select.condition? and not @state.optionsKeys[select.condition]
-      return window.alert('Please select an answer to the related conditional dropdown(s) to associate the new option to')
-
     optionsKey = @getOptionsKey(select)
     preset = @state.presetValue
 
@@ -141,6 +137,14 @@ DropdownDialog = React.createClass
 
     return select
 
+  handleAdd: ->
+    optionsArray = @refs.optionInput.value.split(/\n/)
+
+    for option in optionsArray
+      @addOption option
+
+    @refs.optionInput.value = ""
+
   save: (e) ->
     if not @state.editSelect.title
       return window.alert('Dropdowns must have a Title.')
@@ -159,6 +163,13 @@ DropdownDialog = React.createClass
   cancel: ->
     @props.onCancel()
 
+  checkConditions: ->
+    if @props.initialSelect.condition?
+      disable = Object.keys(@state.optionsKeys).some (key) =>
+        @state.optionsKeys[key] is null
+      return disable
+    return false
+
   renderOption: (option) ->
     <li key={option.value}>
       <span><i className="fa fa-bars" />{' '}</span>
@@ -169,6 +180,10 @@ DropdownDialog = React.createClass
     </li>
 
   render: ->
+    disabledStyle =
+      opacity: 0.4
+      pointerEvents: 'none'
+
     select = @state.editSelect
     <div className="dropdown-editor">
       <p>
@@ -181,10 +196,10 @@ DropdownDialog = React.createClass
           <span>Dependent on {@state.conditionalSelects[@state.conditionalSelects.length - 1]?.title}</span>}
       </p>
 
-      <label className="pill-button">
+      <label className="pill-button" title={dropdownEditorHelp.required}>
         Required <input type="checkbox" ref="required" checked={select.required} onChange={@editSelect}></input>
       </label>{' '}
-      <label className="pill-button">
+      <label className="pill-button" title={dropdownEditorHelp.allowCreate}>
         Allow Create <input type="checkbox" ref="allowCreate" checked={select.allowCreate} onChange={@editSelect}></input>
       </label>
       <br />
@@ -193,9 +208,9 @@ DropdownDialog = React.createClass
         <div>
           <br />
           <h2 className="form-label">Options For</h2>
-          {@state.conditionalSelects.map (condition) =>
+          {@state.conditionalSelects.map (condition, index) =>
             <div key={condition.id}>
-              <select onChange={@onChangeConditionalAnswer.bind(@, condition)}>
+              <select onChange={@onChangeConditionalAnswer.bind(@, condition, index)}>
                 <option value="">none selected</option>
                 {condition.options[@getOptionsKey(condition)]?.map (option) =>
                   <option key={option.value} value={option.value}>{option.label}</option>}
@@ -219,14 +234,30 @@ DropdownDialog = React.createClass
           render={@renderOption}
           onChange={@onReorder}
         />
+      </div>
 
-        <input ref="optionInput"></input>{' '}
-        <button type="button" onClick={@onClickAddOption}><i className="fa fa-plus"/> Add Option</button>
+      <div>
+        <p>
+          <span className="form-label">Add Option(s){' '}</span>
+          <TriggeredModalForm className="dropdown-help" trigger={
+            <span className="secret-button">
+              <i className="fa fa-question-circle"></i>
+            </span>
+          }>{dropdownEditorHelp.options}
+          </TriggeredModalForm>
+        </p>
+        {if @checkConditions()
+          <p className="form-help warning">Please select Options For above</p>}
+        <div style={disabledStyle if @checkConditions()}>
+          <textarea ref="optionInput"/>
+          <br />
+          <button type="button" onClick={@handleAdd}><i className="fa fa-plus"/> Add</button>
+        </div>
       </div>
 
       <br />
 
-      <div>
+      <div style={disabledStyle if @checkConditions()}>
         <h2 className="form-label">Presets</h2>
         <select value={@state.presetValue} onChange={@handlePresetChange}>
           <option value="">none selected</option>
