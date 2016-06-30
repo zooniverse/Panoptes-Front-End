@@ -1,13 +1,14 @@
 import React from 'react';
 import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
+import RecentCollectionsSection from './recent-collections';
 
 import style from './index.styl';
 void style;
 
 const SECTIONS = {
   projects: RecentProjectsSection,
-  collections: () => <div>TODO: collections</div>,
+  collections: RecentCollectionsSection,
   messages: () => <div>TODO: messages</div>,
   builds: () => <div>TODO: builds</div>,
 };
@@ -21,12 +22,25 @@ function BlurredImage(props) {
           backgroundImage: `url('${props.src}')`,
           backgroundPosition: props.position,
           fontSize: props.blur,
-        }}></div>
+        }}
+      ></div>
     </div>
   );
 }
 
+BlurredImage.propTypes = {
+  className: React.PropTypes.string,
+  style: React.PropTypes.object,
+  src: React.PropTypes.string,
+  position: React.PropTypes.string,
+  blur: React.PropTypes.any,
+};
+
 const HomePageForUser = React.createClass({
+  propTypes: {
+    user: React.PropTypes.object,
+  },
+
   getDefaultProps() {
     return {
       user: {},
@@ -35,7 +49,7 @@ const HomePageForUser = React.createClass({
 
   getInitialState() {
     return {
-      openSection: 'projects',
+      openSection: 'collections',
     };
   },
 
@@ -81,6 +95,8 @@ const HomePageForUser = React.createClass({
   },
 
   render() {
+    if (!this.props.user) return null;
+
     const OpenSectionComponent = SECTIONS[this.state.openSection];
 
     return (
@@ -93,10 +109,7 @@ const HomePageForUser = React.createClass({
           {OpenSectionComponent === undefined ? (
             this.renderMenu()
           ) : (
-            <div className="home-page-for-user__section">
-              <button type="button" onClick={this.selectSection}>X</button>
-              <OpenSectionComponent user={this.props.user} />
-            </div>
+            <OpenSectionComponent user={this.props.user} onClose={this.selectSection} />
           )}
         </div>
       </div>
