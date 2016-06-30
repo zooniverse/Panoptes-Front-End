@@ -8,6 +8,27 @@ module.exports = React.createClass
     if @props.preferences.preferences?.grid?
       @activateTemplate 'grid'
 
+  componentWillUnmount: ->
+    @props.annotation.value.sort (a,b) ->
+      parseFloat(a.y) - parseFloat(b.y) || parseFloat(a.x) - parseFloat(b.x)
+    currentTemp = null
+    column = 'a'
+    row = 1
+    for cell in @props.annotation.value
+      if cell._templateID
+        currentTemp = cell._templateID if currentTemp is null
+        if cell._templateID == currentTemp
+          cell.column = column
+          cell.row = row
+          column = String.fromCharCode(column.charCodeAt(0)+1)
+        else
+          row = row + 1
+          currentTemp = cell._templateID
+          cell.row = row
+          cell.column = 'a'
+          column = 'b'
+    console.log @props.annotation.value
+
   activateTemplate: (type) ->
     @preferences.activeTemplate = type
     @props.preferences.update 'preferences'
@@ -16,9 +37,17 @@ module.exports = React.createClass
     if type is null
       @setState hideDrawingTools: false
 
-  clearRow: (type) ->
+  clearRow: ->
+    @removeMarks 'row'
     @preferences.activeTemplate = null
     @preferences.row = null
+    @props.preferences.update 'preferences'
+
+  removeMarks: (type) ->
+    marks = @props.annotation.value.filter((mark) =>
+      mark if mark._type != type
+    )
+    @props.annotation.value = marks
     @props.preferences.update 'preferences'
 
   deleteGrid: ->
@@ -42,7 +71,7 @@ module.exports = React.createClass
       @preferences.row = newArray
     @props.preferences.update 'preferences'
 
-  onSubmit: (e) ->
+  saveGrid: (e) ->
     e.preventDefault()
     @activateTemplate 'grid'
 
@@ -70,7 +99,7 @@ module.exports = React.createClass
     @props.preferences.update 'preferences'
 
   renderTemplateSave: ->
-    <form onSubmit={@onSubmit} className="template-select">
+    <form onSubmit={@saveGrid} className="template-select">
       <input className="template-name-input" ref="name" placeholder="Template Name" /><br />
       <button type="submit" className="template-form-button">Save Template</button>
       <button type="button" className="template-form-button" onClick={@setState.bind this, templateForm: null, null}>Cancel</button>
@@ -113,6 +142,11 @@ module.exports = React.createClass
               <td>
                 <button type="button" className="grid-button-template" disabled={!@props.annotation.value.length or @preferences.row?} onClick={@saveRow.bind this, @props.annotation.value}>
                   done
+                </button>
+              </td>
+              <td>
+                <button type="button" className="grid-button-template" disabled={!@props.annotation.value.length} onClick={@removeMarks.bind this, 'cell'}>
+                  clear
                 </button>
               </td>
             </tr>

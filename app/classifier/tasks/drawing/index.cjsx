@@ -47,6 +47,10 @@ module.exports = React.createClass
 
     areThereEnoughMarks:(task, annotation) ->
       marksByTool = {}
+      if task.tools[annotation._toolIndex].type == 'grid'
+        for mark in annotation.value
+          return true if mark._templateID
+        return false
       annotation.value.forEach (mark) ->
         marksByTool[mark.tool] ?= 0
         marksByTool[mark.tool] += 1

@@ -68,6 +68,7 @@ module.exports = React.createClass
         Object.assign({}, cell)
       templateCopy.shift()
       for cell in templateCopy
+        cell._type = type
         cell._copy = true
         cell._key = Math.random()
         cell._templateID = templateID
