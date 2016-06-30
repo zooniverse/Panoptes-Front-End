@@ -159,6 +159,7 @@ module?.exports = React.createClass
               allowCreate={selects[i].allowCreate}
               noResultsText={if not options?.length then null}
               addLabelText="Press enter for {label}..."
+              matchPos="start"
               matchProp="label"
               ref="select-#{i}"
             />
