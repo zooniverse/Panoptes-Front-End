@@ -11,13 +11,11 @@ PanoptesApp = React.createClass
   childContextTypes:
     initialLoadComplete: React.PropTypes.bool
     user: React.PropTypes.object
-    updateUser: React.PropTypes.func
     geordi: React.PropTypes.object
 
   getChildContext: ->
     initialLoadComplete: @state.initialLoadComplete
     user: @state.user
-    updateUser: @updateUser
     geordi: @geordiLogger
 
   getInitialState: ->
