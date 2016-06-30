@@ -20,15 +20,9 @@ PanoptesApp = React.createClass
     updateUser: @updateUser
     geordi: @geordiLogger
 
-  getEnv: ->
-    reg = /\W?env=(\w+)/
-    browser_env = window?.location?.search?.match(reg)
-    @state?.env || browser_env?[1] || 'staging'
-
   getInitialState: ->
     initialLoadComplete: false
     user: null
-    env: @getEnv()
 
   updateUser: (user) ->
     @setState user: user
@@ -42,7 +36,8 @@ PanoptesApp = React.createClass
     auth.stopListening 'change', @handleAuthChange
 
   componentWillUpdate: (nextProps, nextState) ->
-    @geordiLogger = @geordiLogger || new GeordiLogger nextState
+    if !(@geordiLogger? && @geordiLogger.user == nextState.user)
+      @geordiLogger = new GeordiLogger nextState.user
 
   handleAuthChange: ->
     auth.checkCurrent().then (user) =>
