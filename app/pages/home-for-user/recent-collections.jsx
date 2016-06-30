@@ -1,7 +1,7 @@
 import React from 'react';
 import HomePageSection from './generic-section';
 
-const RecentProjectsSection = React.createClass({
+const RecentCollectionsSection = React.createClass({
   propTypes: {
     onClose: React.PropTypes.func,
   },
@@ -14,49 +14,39 @@ const RecentProjectsSection = React.createClass({
     return {
       loading: false,
       error: null,
-      projects: [],
+      collections: [],
     };
   },
 
   componentDidMount() {
-    this.fetchProjects(this.context.user);
+    this.fetchCollections(this.context.user);
   },
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user !== this.context.user) {
-      this.fetchProjects(nextProps.user);
+      this.fetchCollections(nextProps.user);
     }
   },
 
-  fetchProjects(user) {
+  fetchCollections(user) {
     this.setState({
       loading: true,
       error: null,
     });
 
-    user.get('project_preferences', {
+    user.get('collections', {
       page_size: 8,
       sort: '-updated_at',
     })
-    .then((preferences) => {
-      return Promise.all(preferences.map((preference) => {
-        // A user might have preferences for a project that no longer exists.
-        return preference.get('project').catch(() => {
-          return null;
-        });
-      })).then((projects) => {
-        return projects.filter(Boolean);
-      });
-    })
-    .then((projects) => {
+    .then((collections) => {
       this.setState({
-        projects,
+        collections,
       });
     })
     .catch((error) => {
       this.setState({
         error: error,
-        projects: [],
+        collections: [],
       });
     })
     .then(() => {
@@ -69,14 +59,14 @@ const RecentProjectsSection = React.createClass({
   render() {
     return (
       <HomePageSection
-        title="Recent projects"
+        title="Recent collections"
         loading={this.state.loading}
         onClose={this.props.onClose}
       >
-        {this.state.projects.map((project) => {
+        {this.state.collections.map((collection) => {
           return (
-            <div key={project.id}>
-              {project.id}: {project.display_name}
+            <div key={collection.id}>
+              {collection.id}
             </div>
           );
         })}
@@ -85,4 +75,4 @@ const RecentProjectsSection = React.createClass({
   },
 });
 
-export default RecentProjectsSection;
+export default RecentCollectionsSection;
