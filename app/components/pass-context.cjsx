@@ -3,11 +3,13 @@ React = require 'react'
 
 module.exports = React.createClass
   contextTypes:
+    initialLoadComplete: React.PropTypes.bool
     router: routerShape
     user: React.PropTypes.object
     geordi: React.PropTypes.object
 
   childContextTypes:
+    initialLoadComplete: React.PropTypes.bool
     router: routerShape
     user: React.PropTypes.object
     geordi: React.PropTypes.object
