@@ -4,20 +4,8 @@ Draggable = require '../../lib/draggable'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 
-MINIMUM_SIZE = 10
-
 module.exports = React.createClass
   displayName: 'GridTool'
-
-  componentWillMount: ->
-    if @props.mark._prerendered and @props.preferences.preferences[@props.mark._type]
-      @setState template: @templateRerender @props.mark, @props.preferences.preferences[@props.mark._type]
-      @setState activeTemplate: @props.mark._type
-    unless @props.mark._prerendered
-      @findSchema()
-
-  componentWillUnmount: ->
-    @props.mark._prerendered = true
 
   statics:
     initCoords: null
@@ -54,7 +42,7 @@ module.exports = React.createClass
       _inProgress: false
 
     initValid: (mark) ->
-      mark.height > MINIMUM_SIZE
+      mark.height > 10
 
     saveState: (mark, template, type) ->
       templateID = Math.random()
@@ -68,15 +56,25 @@ module.exports = React.createClass
         Object.assign({}, cell)
       templateCopy.shift()
       for cell in templateCopy
-        cell._type = type
-        cell._copy = true
         cell._key = Math.random()
+        cell._type = type
         cell._templateID = templateID
+        cell._copy = true
         cell.y = mark.y if type is 'row'
         cell.height = mark.height if type is 'row'
       templateCopy
 
   initCoords: null
+
+  componentWillMount: ->
+    if @props.mark._prerendered and @props.preferences.preferences[@props.mark._type]
+      @setState template: @templateRerender @props.mark, @props.preferences.preferences[@props.mark._type]
+      @setState activeTemplate: @props.mark._type
+    unless @props.mark._prerendered
+      @findSchema()
+
+  componentWillUnmount: ->
+    @props.mark._prerendered = true
 
   render: ->
     points = @cellPoints @props.mark

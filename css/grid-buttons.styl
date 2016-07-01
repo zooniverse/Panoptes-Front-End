@@ -1,61 +1,55 @@
 .grid-button-tab
   @extends $reset-button
-  font-size: 0.9em
-  letter-spacing: 0.05em
-  padding: 0.8em 1.2vw
-  margin: 0.3vw
   border: 2px solid transparent
+  font-size: 0.9em
+  margin: 0.3vw
+  padding: 0.8em 1.2vw
 
   &.active
     border: 2px solid MAIN_HIGHLIGHT
     border-radius: .5em
-    font-weight: bolder
+    font-weight: bold
 
 .grid-button-template
-  padding:5px
+  cursor: pointer
   margin: 0.5vw
+  padding:5px
 
 .grid-button-table
   margin-left: 2em
   margin-top: 2em
   text-align: center
 
-.new-grid-button
-  @extends $reset-button
-  background-color: MAIN_HIGHLIGHT
-  border-radius: 0.5em
-  box-shadow: 0 0 1px inset
-  display: inline-block
-  font-size: 0.9em
-  margin: 0em 0.2vw
-  padding: 0 0.8em 0 0.5em
-  vertical-align: middle
-
 .template-select
   margin-left: 4em
 
   .template-name-input
     border: 1px solid #cccccc
-    border-color: #d9d9d9 #cccccc #b3b3b3
     border-radius: 4px
-    box-shadow: none
-    box-sizing: border-box
-    padding: 8px 10px
+    padding: 0.6em 0.8em
     width: 60%
 
   .grid-selection-dropdown
-    background: #f7f7f7
-    border-radius: 6px
-    color: #6b6a6a
-    width: 60%
+    @extends .standard-input
+    border: 1px solid #cccccc
+    border-radius: 4px
+    font-size: 0.9
+    margin-bottom: 1em
+    width: 40%
+
+    .grid-dropdown-options
+      color: yellow
+      background-color: blue
 
   .template-form-button
     @extends $reset-button
     background-color: black
     border-radius: 0.5em
-    box-shadow: 0 0 1px inset
     display: inline-block
     font-size: 0.9em
     margin: 0em 0.2vw
     padding: 0 0.8em 0 0.5em
     vertical-align: middle
+
+  .create-grid
+    background-color: MAIN_HIGHLIGHT
