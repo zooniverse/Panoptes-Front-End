@@ -52,9 +52,9 @@ module.exports = React.createClass
 
   deleteGrid: ->
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.preferences.savedGrids.shift()
+      pref.preferences.savedGrids.pop()
       if pref.preferences?.savedGrids?.length > 0
-        pref.update 'preferences.grid': pref.preferences.savedGrids[0].value
+        pref.update 'preferences.grid': pref.preferences.savedGrids[0].template
       else
         pref.update 'preferences.grid': null
         @activateTemplate null
@@ -71,11 +71,6 @@ module.exports = React.createClass
     @props.preferences.preferences.row = savedRow
     @props.preferences.update 'preferences'
 
-  terminate: ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences': {}
-      pref.save()
-
   saveGrid: (e) ->
     e.preventDefault()
     @activateTemplate 'grid'
@@ -86,24 +81,13 @@ module.exports = React.createClass
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       pref.update 'preferences.grid': newGrid
       if !pref.preferences?.savedGrids?
-        pref.update 'preferences.savedGrids': [{ value: @props.annotation.value, label: displayName, id: Math.random()}]
+        pref.update 'preferences.savedGrids': [{ value: Math.random(), label: displayName, template: newGrid}]
         pref.save()
       else
-        pref.preferences.savedGrids.unshift { value: @props.annotation.value, label: displayName, id: Math.random()}
+        pref.preferences.savedGrids.push { value: Math.random(), label: displayName, template: newGrid}
         pref.save()
     @setState templateForm: false
     @setState hideDrawingTools: true
-
-  changeGrid: (e) ->
-    console.log 'your saved grids'
-    console.log @props.preferences.preferences.savedGrids
-    grids = @props.preferences.preferences.savedGrids
-    @activateTemplate 'grid'
-    selectedGrid = @preferences.savedGrids[e.target.value]
-    @props.preferences.preferences.grid = selectedGrid.value
-    grids.splice e.target.value, 1
-    grids.unshift selectedGrid
-    @props.preferences.update 'preferences'
 
   renderTemplateSave: ->
     <form onSubmit={@saveGrid} className="template-select">
@@ -112,13 +96,27 @@ module.exports = React.createClass
       <button type="button" className="template-form-button" onClick={@setState.bind this, templateForm: null, null}>Cancel</button>
     </form>
 
+  changeGrid: (value) ->
+    @activateTemplate 'grid'
+    @props.preferences.preferences.savedGrids.map (grid, index) =>
+      if grid.value is value
+        @props.preferences.preferences.grid = grid.template
+        @props.preferences.preferences.savedGrids.splice index, 1
+        @props.preferences.preferences.savedGrids.push grid
+        @props.preferences.update 'preferences'
+
   renderGridSelect: ->
     <div className="template-select">
       <p>Select Saved Grid:</p>
-      <select className="grid-selection-dropdown" onChange={@changeGrid}>
-        {@props.preferences.preferences.savedGrids?.map (select, i) ->
-          <option className='grid-dropdown-options' key={select.id} value={i}>{select.label}</option>}
-      </select><br />
+      <Select
+        className='grid-selection-dropdown'
+        clearable={false}
+        onChange={@changeGrid}
+        options={@props.preferences.preferences.savedGrids}
+        scrollMenuIntoView={true}
+        searchable={false}
+        value={@props.preferences.preferences.savedGrids?[@props.preferences.preferences.savedGrids.length - 1]?.label}
+      />
       <button type="button" className="template-form-button" onClick={@deleteGrid.bind this, null}>
         delete template
       </button><br /><br />
@@ -173,11 +171,6 @@ module.exports = React.createClass
               <td>
                 <button type="button" className="grid-button-template" title='Remove all rows and/or row template' disabled={!@preferences.row} onClick={@clearRow.bind this, null}>
                   clear
-                </button>
-              </td>
-              <td>
-                <button type="button" className="grid-button-template" onClick={@terminate.bind this, null}>
-                  TERMINATE!
                 </button>
               </td>
             </tr>
