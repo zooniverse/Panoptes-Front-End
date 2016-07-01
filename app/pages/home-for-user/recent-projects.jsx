@@ -1,5 +1,6 @@
 import React from 'react';
 import HomePageSection from './generic-section';
+import { Link } from 'react-router';
 
 const RecentProjectsSection = React.createClass({
   propTypes: {
@@ -73,6 +74,9 @@ const RecentProjectsSection = React.createClass({
         loading={this.state.loading}
         onClose={this.props.onClose}
       >
+        <div className="home-page-section__sub-header">
+          <Link to={`/users/${this.context.user.login}/stats`} className="outlined-button">See all</Link>
+        </div>
         {this.state.projects.map((project) => {
           return (
             <div key={project.id}>

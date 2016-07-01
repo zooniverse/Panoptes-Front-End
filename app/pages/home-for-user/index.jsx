@@ -2,6 +2,7 @@ import React from 'react';
 import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
 import RecentCollectionsSection from './recent-collections';
+import RecentMessagesSection from './recent-messages';
 
 import style from './index.styl';
 void style;
@@ -9,7 +10,7 @@ void style;
 const SECTIONS = {
   projects: RecentProjectsSection,
   collections: RecentCollectionsSection,
-  messages: () => <div>TODO: messages</div>,
+  messages: RecentMessagesSection,
   builds: () => <div>TODO: builds</div>,
 };
 
@@ -49,7 +50,7 @@ const HomePageForUser = React.createClass({
 
   getInitialState() {
     return {
-      openSection: 'collections',
+      openSection: 'messages',
     };
   },
 
