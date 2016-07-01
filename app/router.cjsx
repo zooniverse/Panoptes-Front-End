@@ -101,12 +101,12 @@ module.exports =
     </Route>
 
     <Route path="favorites" component={require('./pages/collections/index')}>
-      <IndexRoute path=":collection_owner" component={require('./pages/collections/favorites-list')} />
+      <IndexRoute component={require('./pages/collections/favorites-list')} />
       <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
     </Route>
 
     <Route path="collections" component={require('./pages/collections/index')}>
-       <IndexRoute path=":collection_owner" component={require('./pages/collections/collections-list')} />
+       <IndexRoute component={require('./pages/collections/collections-list')} />
        <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
     </Route>
 
