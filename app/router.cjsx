@@ -142,6 +142,7 @@ module.exports =
     <Route path="lab-how-to" component={require './pages/lab/how-to-page'} />
 
     <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
+      <IndexRedirect to="introduction" />
       <Route path="introduction" component={require './pages/lab/best-practices/introduction'} />
       <Route path="great-project" component={require './pages/lab/best-practices/great-project'} />
       <Route path="launch-rush" component={require './pages/lab/best-practices/launch-rush'} />
