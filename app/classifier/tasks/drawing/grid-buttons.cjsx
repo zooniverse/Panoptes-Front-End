@@ -61,11 +61,6 @@ module.exports = React.createClass
         @setState hideDrawingTools: false
       pref.save()
 
-  terminate: ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences': {}
-      pref.save()
-
   saveRow: (marks) ->
     @activateTemplate 'row'
     lastCellMidpoint = marks[marks.length - 1].y + marks[marks.length - 1].height / 2
@@ -176,11 +171,6 @@ module.exports = React.createClass
               <td>
                 <button type="button" className="grid-button-template" title='Remove all rows and/or row template' disabled={!@preferences.row} onClick={@clearRow.bind this, null}>
                   clear
-                </button>
-              </td>
-              <td>
-                <button type="button" className="grid-button-template" onClick={@terminate.bind this, null}>
-                  Terminate!
                 </button>
               </td>
             </tr>
