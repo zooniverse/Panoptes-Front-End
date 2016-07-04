@@ -54,11 +54,16 @@ module.exports = React.createClass
     @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
       pref.preferences.savedGrids.pop()
       if pref.preferences?.savedGrids?.length > 0
-        pref.update 'preferences.grid': pref.preferences.savedGrids[0].template
+        pref.update 'preferences.grid': pref.preferences.savedGrids[pref.preferences.savedGrids.length - 1].template
       else
         pref.update 'preferences.grid': null
         @activateTemplate null
         @setState hideDrawingTools: false
+      pref.save()
+
+  terminate: ->
+    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+      pref.update 'preferences': {}
       pref.save()
 
   saveRow: (marks) ->
@@ -171,6 +176,11 @@ module.exports = React.createClass
               <td>
                 <button type="button" className="grid-button-template" title='Remove all rows and/or row template' disabled={!@preferences.row} onClick={@clearRow.bind this, null}>
                   clear
+                </button>
+              </td>
+              <td>
+                <button type="button" className="grid-button-template" onClick={@terminate.bind this, null}>
+                  Terminate!
                 </button>
               </td>
             </tr>

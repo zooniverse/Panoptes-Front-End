@@ -11,9 +11,18 @@
     font-weight: bold
 
 .grid-button-template
+  @extends $reset-button
+  background: white
+  border: 0
+  border-radius: .5em
+  color: black
   cursor: pointer
-  margin: 0.5vw
-  padding:5px
+  font-size: 12px
+  margin: 0 0.5vw
+  padding: 0.2em 0.5em
+
+  &:hover
+    background: lighten(MAIN_HIGHLIGHT, 30%)
 
 .grid-button-table
   margin: 1em 4em
@@ -46,5 +55,11 @@
     padding: 0.2em 0.5em
     vertical-align: middle
 
+    &:hover
+      background: lighten(black, 30%)
+
   .create-grid
     background-color: MAIN_HIGHLIGHT
+
+    &:hover
+      background: lighten(MAIN_HIGHLIGHT, 30%)
