@@ -1,7 +1,6 @@
 GeordiClient = require 'zooniverse-geordi-client'
 
 class GeordiLogger # Make calls to the Geordi API to log user activity
-  constructor: (@user, @geordi) ->
 
   @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy']
 
@@ -23,7 +22,7 @@ class GeordiLogger # Make calls to the Geordi API to log user activity
     new GeordiClient
       env: @getEnv()
       projectToken: projectSlug || @keys?.projectToken
-      zooUserIDGetter: () => @user?.id
+      zooUserIDGetter: () => @keys?.userID
       subjectGetter: () => @keys?.subjectID
 
   makeHandler: (defType) -> # Once defined, efficiently logs different data to same event type
