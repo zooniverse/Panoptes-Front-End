@@ -1,7 +1,23 @@
 .circle-ribbon
+  &__project-arc
+    cursor: pointer
+
   &__tooltip
     background: gray
+    border-radius: 0.3em
+    box-shadow: 0 1px 1px rgba(black, 0.5)
     color: white
-    padding: 0 0.5em
+    font-size: 12px
+    padding: 0.1em 1em
     pointer-events: none
+    text-shadow: 0 1px 1px rgba(black, 0.5)
+    transform: translate(-50%, -50%)
     white-space: nowrap
+
+    &--hangs-left
+      margin-left: -1em
+      transform: translate(-100%, -50%)
+
+    &--hangs-right
+      margin-left: 1em
+      transform: translate(0, -50%)

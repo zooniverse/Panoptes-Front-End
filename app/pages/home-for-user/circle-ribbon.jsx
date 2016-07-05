@@ -6,6 +6,15 @@ void style;
 let instanceCount = 0;
 
 const CircleRibbon = React.createClass({
+  propTypes: {
+    size: React.PropTypes.string,
+    weight: React.PropTypes.number,
+    gap: React.PropTypes.number,
+    image: React.PropTypes.string,
+    arcs: React.PropTypes.array,
+    onClick: React.PropTypes.func,
+  },
+
   getDefaultProps() {
     return {
       size: '10em',
@@ -32,7 +41,12 @@ const CircleRibbon = React.createClass({
         label: 'Fifth arc',
         color: 'blue',
         value: 1 / 8,
+      }, {
+        label: 'Sixth arc',
+        color: 'magenta',
+        value: 1 / 9,
       }],
+      onClick: () => {},
     };
   },
 
@@ -49,18 +63,6 @@ const CircleRibbon = React.createClass({
     instanceCount += 1;
   },
 
-  handleMouseEnter(event) {
-    this.setState({
-      hoverIndex: event.target.getAttribute('data-index'),
-    });
-  },
-
-  handleMouseLeave(event) {
-    this.setState({
-      hoverIndex: -1,
-    });
-  },
-
   getPointOnCircle(amount, radius) {
     const degrees = amount * 360;
     const startingFromTop = degrees - 90;
@@ -71,26 +73,47 @@ const CircleRibbon = React.createClass({
     };
   },
 
-  getArcMidpoint(arc) {
+  getTooltipPoint(arc, radius) {
     const index = this.props.arcs.indexOf(arc);
-    let amount = this.props.arcs.slice(0, index).reduce((start, arc) => {
-      return start + arc.value;
+    const amount = this.props.arcs.slice(0, index).reduce((start, anotherArc) => {
+      return start + anotherArc.value;
     }, 0) + (arc.value / 2);
 
-    const radius = 50 - (this.props.weight / 2);
     const midpoint = this.getPointOnCircle(amount, radius);
 
     this.point.x = midpoint.x;
     this.point.y = midpoint.y;
     const currentTransformationMatrix = this.refs.arcGroup.getCTM();
-    return this.point.matrixTransform(currentTransformationMatrix);
+    const { x, y } = this.point.matrixTransform(currentTransformationMatrix);
+    const { offsetWidth, offsetHeight } = this.refs.container;
+
+    return {
+      x: x / offsetWidth,
+      y: y / offsetHeight,
+    };
+  },
+
+  handleMouseEnter(event) {
+    this.setState({
+      hoverIndex: event.target.getAttribute('data-index'),
+    });
+  },
+
+  handleMouseLeave() {
+    this.setState({
+      hoverIndex: -1,
+    });
+  },
+
+  handleClick() {
+    this.props.onClick(this.state.hoverIndex);
   },
 
   renderArc(arc) {
     const index = this.props.arcs.indexOf(arc);
 
-    const startAmount = this.props.arcs.slice(0, index).reduce((start, arc) => {
-      return start + arc.value;
+    const startAmount = this.props.arcs.slice(0, index).reduce((start, anotherArc) => {
+      return start + anotherArc.value;
     }, 0);
 
     const endAmount = startAmount + arc.value;
@@ -102,12 +125,17 @@ const CircleRibbon = React.createClass({
 
     return (
       <path
+        className="circle-ribbon__project-arc"
         key={index + arc.label}
-        d={`M ${startPoint.x} ${startPoint.y} A ${radius} ${radius} 0 0 1 ${endPoint.x}, ${endPoint.y}`}
+        d={`
+          M ${startPoint.x} ${startPoint.y}
+          A ${radius} ${radius} 0 0 1 ${endPoint.x}, ${endPoint.y}
+        `}
         stroke={arc.color}
         data-index={index}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
+        onClick={this.handleClick}
       />
     );
   },
@@ -117,13 +145,13 @@ const CircleRibbon = React.createClass({
 
     const hoveredArc = this.props.arcs[this.state.hoverIndex];
 
-    let hoverLabelPosition;
+    let tooltipPosition;
     if (hoveredArc !== undefined) {
-      hoverLabelPosition = this.getArcMidpoint(hoveredArc);
+      tooltipPosition = this.getTooltipPoint(hoveredArc, 50);
     }
 
     return (
-      <div className="circle-ribbon" style={{ position: 'relative' }}>
+      <div ref="container" className="circle-ribbon" style={{ position: 'relative' }}>
         <svg ref="svg" viewBox="0 0 100 100" width={this.props.size} height={this.props.size}>
           <defs>
             <clipPath id={`circle-ribbon-clip-${this.id}`}>
@@ -153,13 +181,25 @@ const CircleRibbon = React.createClass({
         </svg>
 
         {hoveredArc !== undefined && (
-          <div className="circle-ribbon__tooltip" style={{ position: 'absolute', left: hoverLabelPosition.x, top: hoverLabelPosition.y }}>
-            {hoveredArc.label}
+          <div
+            className={`
+              circle-ribbon__tooltip
+              circle-ribbon__tooltip--hangs-${tooltipPosition.x < 0.5 ? 'left' : 'right'}
+            `}
+            style={{
+              backgroundColor: hoveredArc.color,
+              position: 'absolute',
+              left: `${tooltipPosition.x * 100}%`,
+              top: `${tooltipPosition.y * 100}%`,
+            }}
+          >
+            <strong>{hoveredArc.label}</strong>{' '}
+            <small>{Math.round(hoveredArc.value * 100)}%</small>
           </div>
         )}
       </div>
     );
-  }
+  },
 });
 
 export default CircleRibbon;
