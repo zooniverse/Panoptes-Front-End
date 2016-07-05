@@ -23,9 +23,9 @@ const RecentProjectsSection = React.createClass({
     this.fetchProjects(this.context.user);
   },
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.user !== this.context.user) {
-      this.fetchProjects(nextProps.user);
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextContext.user !== this.context.user) {
+      this.fetchProjects(nextContext.user);
     }
   },
 

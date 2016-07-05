@@ -1,7 +1,9 @@
 import React from 'react';
+import apiClient from 'panoptes-client/lib/api-client';
 import HomePageSection from './generic-section';
+import { Link } from 'react-router';
 
-const RecentCollectionsSection = React.createClass({
+const MyBuildsSection = React.createClass({
   propTypes: {
     onClose: React.PropTypes.func,
   },
@@ -14,39 +16,39 @@ const RecentCollectionsSection = React.createClass({
     return {
       loading: false,
       error: null,
-      collections: [],
+      projects: [],
     };
   },
 
   componentDidMount() {
-    this.fetchCollections(this.context.user);
+    this.fetchProjects(this.context.user);
   },
 
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextContext.user !== this.context.user) {
-      this.fetchCollections(nextContext.user);
+      this.fetchProjects(nextContext.user);
     }
   },
 
-  fetchCollections(user) {
+  fetchProjects() {
     this.setState({
       loading: true,
       error: null,
     });
 
-    user.get('collections', {
-      page_size: 8,
+    apiClient.type('projects').get({
+      current_user_roles: ['owner', 'workaround'],
       sort: '-updated_at',
     })
-    .then((collections) => {
+    .then((projects) => {
       this.setState({
-        collections,
+        projects,
       });
     })
     .catch((error) => {
       this.setState({
         error: error,
-        collections: [],
+        projects: [],
       });
     })
     .then(() => {
@@ -59,15 +61,18 @@ const RecentCollectionsSection = React.createClass({
   render() {
     return (
       <HomePageSection
-        title="Recent collections"
+        title="My builds"
         loading={this.state.loading}
         error={this.state.error}
         onClose={this.props.onClose}
       >
-        {this.state.collections.map((collection) => {
+        <div className="home-page-section__sub-header">
+          <Link to={`/lab`} className="outlined-button">See all</Link>
+        </div>
+        {this.state.projects.map((project) => {
           return (
-            <div key={collection.id}>
-              {collection.id}
+            <div key={project.id}>
+              {project.id}: {project.display_name}
             </div>
           );
         })}
@@ -76,4 +81,4 @@ const RecentCollectionsSection = React.createClass({
   },
 });
 
-export default RecentCollectionsSection;
+export default MyBuildsSection;
