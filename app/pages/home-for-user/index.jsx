@@ -1,4 +1,5 @@
 import React from 'react';
+import BlurredImage from './blurred-image';
 import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
 import RecentCollectionsSection from './recent-collections';
@@ -12,29 +13,6 @@ const SECTIONS = {
   collections: RecentCollectionsSection,
   messages: RecentMessagesSection,
   builds: () => <div>TODO: builds</div>,
-};
-
-function BlurredImage(props) {
-  return (
-    <div className={`blurred-image__container ${props.className}`.trim()} style={props.style}>
-      <div
-        className="blurred-image__display"
-        style={{
-          backgroundImage: `url('${props.src}')`,
-          backgroundPosition: props.position,
-          fontSize: props.blur,
-        }}
-      ></div>
-    </div>
-  );
-}
-
-BlurredImage.propTypes = {
-  className: React.PropTypes.string,
-  style: React.PropTypes.object,
-  src: React.PropTypes.string,
-  position: React.PropTypes.string,
-  blur: React.PropTypes.any,
 };
 
 const HomePageForUser = React.createClass({
@@ -102,7 +80,7 @@ const HomePageForUser = React.createClass({
 
     return (
       <div className="home-page-for-user">
-        <BlurredImage className="home-page-for-user__background" src="//lorempixel.com/500/500/animals/2" blur="1em" position="50% 33%" />
+        <BlurredImage className="home-page-for-user__background" src="//lorempixel.com/500/500/animals/2" blur="0.5em" position="50% 33%" />
 
         <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
           <CircleRibbon />
