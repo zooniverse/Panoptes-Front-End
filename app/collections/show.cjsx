@@ -39,9 +39,7 @@ CollectionPage = React.createClass
 
   render: ->
     <PromiseRenderer promise={@props.collection.get('owner')}>{(owner) =>
-      [ownerName, name] = @props.collection.slug.split('/')
-      params = {owner: ownerName, name: name}
-      baseLink = "/collections/#{ownerName}/#{name}"
+      baseLink = "/collections/#{@props.collection.slug}"
       isOwner = @props.user?.id is owner.id
 
       <div className="collections-page">
