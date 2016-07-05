@@ -61,6 +61,7 @@ const RecentCollectionsSection = React.createClass({
       <HomePageSection
         title="Recent collections"
         loading={this.state.loading}
+        error={this.state.error}
         onClose={this.props.onClose}
       >
         {this.state.collections.map((collection) => {
