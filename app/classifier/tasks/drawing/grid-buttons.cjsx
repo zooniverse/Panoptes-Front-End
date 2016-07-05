@@ -10,23 +10,29 @@ module.exports = React.createClass
       @activateTemplate 'grid'
 
   componentWillUnmount: ->
+    if !@props.preferences.preferences.row
+      @rowMap('_rowID')
+    else
+      @rowMap('_templateID')
+
+  rowMap: (templateType) ->
     @props.annotation.value.sort (a,b) ->
       parseFloat(a.y) - parseFloat(b.y) || parseFloat(a.x) - parseFloat(b.x)
     tempID = null
     column = 'a'
     row = 1
     for cell in @props.annotation.value
-      if cell._templateID
-        tempID = cell._templateID if tempID is null
-        if cell._templateID == tempID
+      if cell[templateType]
+        tempID = cell[templateType] if tempID is null
+        if cell[templateType] == tempID
           cell.column = column
           cell.row = row
           column = String.fromCharCode(column.charCodeAt(0)+1)
         else
           row = row + 1
-          tempID = cell._templateID
-          cell.row = row
+          tempID = cell[templateType]
           cell.column = 'a'
+          cell.row = row
           column = 'b'
 
   activateTemplate: (type) ->
@@ -72,6 +78,7 @@ module.exports = React.createClass
     @props.preferences.update 'preferences'
 
   saveGrid: (e) ->
+    @props.annotation._completed = true
     e.preventDefault()
     @activateTemplate 'grid'
 

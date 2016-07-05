@@ -56,6 +56,7 @@ module.exports = React.createClass
         Object.assign({}, cell)
       templateCopy.shift()
       for cell in templateCopy
+        cell._rowID = cell._templateID if type is 'grid'
         cell._key = Math.random()
         cell._type = type
         cell._templateID = templateID
@@ -101,7 +102,7 @@ module.exports = React.createClass
       </Draggable>
 
   handleTemplateDrag: (e, d) ->
-    mobileTemplate = (i for i in @props.classification.annotations[0].value when i._templateID is @props.mark._templateID)
+    mobileTemplate = (i for i in @props.classification.annotations[@props.classification.annotations.length - 1].value when i._templateID is @props.mark._templateID)
     for cell in mobileTemplate
       cell.x += d.x / @props.scale.horizontal
       cell.y += d.y / @props.scale.vertical
