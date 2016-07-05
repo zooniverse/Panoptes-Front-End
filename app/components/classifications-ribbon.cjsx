@@ -1,4 +1,7 @@
 React = require 'react'
+apiClient = require 'panoptes-client/lib/api-client'
+getColorFromString = require('../lib/get-color-from-string').default
+getUserClassificationCounts = require('../lib/get-user-classification-counts').default
 
 ClassificationsRibbon = React.createClass
   displayName: 'ClassificationsRibbon'
@@ -9,15 +12,6 @@ ClassificationsRibbon = React.createClass
     cutoff: 1 / 50
     width: '100%'
     height: '1em'
-
-  getProjectColor: (name) ->
-    characters = name.split ''
-    hue = [0, characters...].reduce (code, character) ->
-      # Square the number so that e.g. "a" and "b" aren't so close.
-      return code + Math.pow character.charCodeAt(0), 2
-    saturation = 50 + (hue % 50)
-    hue %= 360
-    "hsl(#{hue}, #{saturation}%, 50%)"
 
   render: ->
     if @props.projects.length is 0
@@ -44,7 +38,7 @@ ClassificationsRibbon = React.createClass
             others.push {project, classifications}
             continue
           else
-            band = <rect key={project} fill={@getProjectColor project} stroke="none" x={lastX} y="0" width={width} height="1">
+            band = <rect key={project} fill={getColorFromString project} stroke="none" x={lastX} y="0" width={width} height="1">
               <title>
                 {project}: {classifications ? '?'}
               </title>
@@ -80,33 +74,26 @@ module.exports = React.createClass
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.user is @props.user
-      @getClassificationCounts @props.user
+      @getClassificationCounts nextProps.user
 
   getClassificationCounts: (user) ->
     @setState loading: true
-    @getAllProjectPreferences(user).then (preferences) =>
-      projects = for preference in preferences
-        preference.get('project').catch =>
-          null
-      Promise.all(projects).then (projects) =>
-        counts = for i in  [0...preferences.length] when projects[i]?
-          project: projects[i].display_name
-          classifications: preferences[i].activity_count
-        @setState
-          loading: false
-          projects: counts
 
-  getAllProjectPreferences: (user, _page = 1, _collection = []) ->
-    user.get('project_preferences', page: _page).then (projectPreferences) =>
-      if projectPreferences.length is 0
-        projectPreferences
-      else
-        _collection.push projectPreferences...
-        meta = projectPreferences[0].getMeta()
-        if meta.page is meta.page_count
-          _collection
-        else
-          @getAllProjectPreferences user, meta.page + 1, _collection
+    getUserClassificationCounts(user).then (classificationCounts) =>
+      console.log('Got counts', classificationCounts)
+      awaitProjects = Promise.all Object.keys(classificationCounts).map (projectID) =>
+        return apiClient.type('projects').get projectID
+
+      awaitProjects.then (projects) =>
+        console.log('Got projects', projects)
+        pairs = []
+        for i in [0...projects.length]
+          pairs.push
+            project: projects[i].display_name
+            classifications: classificationCounts[projects[i].id]
+          @setState
+            loading: false
+            projects: pairs
 
   render: ->
     if @state.loading
