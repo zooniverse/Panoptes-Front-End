@@ -117,14 +117,9 @@ const RecentCollectionsSection = React.createClass({
       <HomePageSection
         title="Recent messages"
         loading={this.state.loading}
+        error={this.state.error}
         onClose={this.props.onClose}
       >
-        {!!this.state.error && (
-          <div>
-            {this.state.error.toString()})
-          </div>
-        )}
-
         {this.state.conversations.map((conversation) => {
           const partner = this.state.converationPartners[conversation.id];
           const message = this.state.lastMessages[conversation.id];
