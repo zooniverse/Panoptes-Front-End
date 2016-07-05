@@ -4,6 +4,7 @@ const HomePageSection = React.createClass({
   propTypes: {
     title: React.PropTypes.string,
     loading: React.PropTypes.bool,
+    error: React.PropTypes.object,
     onClose: React.PropTypes.func,
     children: React.PropTypes.node,
   },
@@ -21,6 +22,11 @@ const HomePageSection = React.createClass({
           <span className="home-page-section__header-label">{this.props.title}</span>
           <button type="button" className="secret-button" onClick={this.props.onClose}>×</button>
         </header>
+        {!!this.props.error && (
+          <div className="home-page-section__error">
+            {this.props.error.toString()}
+          </div>
+        )}
 
         <div className="home-page-section__content">
           {this.props.children}

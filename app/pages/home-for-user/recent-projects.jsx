@@ -72,6 +72,7 @@ const RecentProjectsSection = React.createClass({
       <HomePageSection
         title="Recent projects"
         loading={this.state.loading}
+        error={this.state.error}
         onClose={this.props.onClose}
       >
         <div className="home-page-section__sub-header">
