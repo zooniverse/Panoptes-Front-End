@@ -23,7 +23,7 @@ PanoptesApp = React.createClass
     user: null
 
   componentWillMount: ->
-    @setupGeordi(@state.user)
+    @geordiLogger = new GeordiLogger
   
   componentDidMount: ->
     auth.listen 'change', @handleAuthChange
@@ -33,15 +33,13 @@ PanoptesApp = React.createClass
   componentWillUnmount: ->
     auth.stopListening 'change', @handleAuthChange
 
-  setupGeordi: (user) ->
-    @geordiLogger = new GeordiLogger user
-
   handleAuthChange: ->
+    @geordiLogger.forget ['userID']
     auth.checkCurrent().then (user) =>
       @setState
         initialLoadComplete: true
         user: user
-      @setupGeordi(user)
+      @geordiLogger.remember userID: user.id if user?
 
   render: ->
     <div className="panoptes-main">
