@@ -4,6 +4,7 @@ import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
 import RecentCollectionsSection from './recent-collections';
 import RecentMessagesSection from './recent-messages';
+import MyBuildsSection from './my-builds';
 
 import style from './index.styl';
 void style;
@@ -12,7 +13,7 @@ const SECTIONS = {
   projects: RecentProjectsSection,
   collections: RecentCollectionsSection,
   messages: RecentMessagesSection,
-  builds: () => <div>TODO: builds</div>,
+  builds: MyBuildsSection,
 };
 
 const HomePageForUser = React.createClass({
@@ -28,13 +29,19 @@ const HomePageForUser = React.createClass({
 
   getInitialState() {
     return {
-      openSection: 'messages',
+      openSection: null,
     };
   },
 
   selectSection(event) {
     this.setState({
       openSection: event.currentTarget.value,
+    });
+  },
+
+  deselectSection() {
+    this.setState({
+      openSection: null,
     });
   },
 
@@ -88,7 +95,7 @@ const HomePageForUser = React.createClass({
           {OpenSectionComponent === undefined ? (
             this.renderMenu()
           ) : (
-            <OpenSectionComponent user={this.props.user} onClose={this.selectSection} />
+            <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
           )}
         </div>
       </div>
