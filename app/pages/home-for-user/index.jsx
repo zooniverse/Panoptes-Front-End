@@ -1,10 +1,13 @@
 import React from 'react';
+// import apiClient from 'panoptes-client/lib/api-client';
 import BlurredImage from './blurred-image';
+import getUserRibbonData from '../../lib/get-user-ribbon-data';
 import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
 import RecentCollectionsSection from './recent-collections';
 import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
+import ProjectStats from './project-stats';
 
 import style from './index.styl';
 void style;
@@ -29,8 +32,63 @@ const HomePageForUser = React.createClass({
 
   getInitialState() {
     return {
+      ribbonData: [],
+      loading: false,
+      error: null,
+      selectedProjectID: null,
       openSection: null,
     };
+  },
+
+  componentDidMount() {
+    this.fetchRibbonData(this.props.user);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user !== this.props.user) {
+      this.fetchRibbonData(nextProps.user);
+    }
+  },
+
+  fetchRibbonData(user) {
+    if (!user) {
+      return;
+    }
+
+    this.setState({
+      loading: true,
+      error: null,
+    });
+
+    getUserRibbonData(user)
+    .then((ribbonData) => {
+      console.info('GOT SOME RIBBON DATA', ribbonData);
+      this.setState({
+        ribbonData: ribbonData,
+      });
+    })
+    .catch((error) => {
+      this.setState({
+        error: error,
+      });
+    })
+    .then(() => {
+      this.setState({
+        loading: false,
+      });
+    });
+  },
+
+  selectProject(index) {
+    this.setState({
+      selectedProjectIndex: index,
+    });
+  },
+
+  deselectProject() {
+    this.setState({
+      selectedProjectIndex: null,
+    });
   },
 
   selectSection(event) {
@@ -83,21 +141,32 @@ const HomePageForUser = React.createClass({
   render() {
     if (!this.props.user) return null;
 
+    const selectedProject = this.state.ribbonData[this.state.selectedProjectIndex];
+
     const OpenSectionComponent = SECTIONS[this.state.openSection];
 
     return (
       <div className="home-page-for-user">
         <BlurredImage className="home-page-for-user__background" src="//lorempixel.com/500/500/animals/2" blur="0.5em" position="50% 33%" />
 
-        <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-          <CircleRibbon />
-          <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
-          {OpenSectionComponent === undefined ? (
-            this.renderMenu()
-          ) : (
-            <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
-          )}
-        </div>
+        {!!this.state.error && (
+          <div>{this.state.error.toString()}</div>
+        )}
+
+        {selectedProject === undefined ? (
+          <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
+            <CircleRibbon data={this.state.ribbonData} onClick={this.selectProject} />
+            <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
+
+            {OpenSectionComponent === undefined ? (
+              this.renderMenu()
+            ) : (
+              <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
+            )}
+          </div>
+        ) : (
+          <ProjectStats projectID={selectedProject.id} onClose={this.deselectProject} />
+        )}
       </div>
     );
   },
