@@ -258,16 +258,15 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          {if 'tutorial' in @props.project.experimental_tools or 'mini-course' in @props.project.experimental_tools
-            <div ref="link-tutorials-section">
-              <span className="form-label">Associated tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools}</span><br />
-              <small className="form-help">Choose the tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools} you want to use for this workflow.</small><br />
-              <small className="form-help">Only one can be associated with a workflow at a time.</small>
-              <div>
-                {@renderTutorials() if 'tutorial' in @props.project.experimental_tools}
-                {@renderMiniCourses() if 'mini-course' in @props.project.experimental_tools}
-              </div>
-            </div>}
+          <div ref="link-tutorials-section">
+            <span className="form-label">Associated tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools}</span><br />
+            <small className="form-help">Choose the tutorial {"and/or mini-course" if 'mini-course' in @props.project.experimental_tools} you want to use for this workflow.</small><br />
+            <small className="form-help">Only one can be associated with a workflow at a time.</small>
+            <div>
+              {@renderTutorials()}
+              {@renderMiniCourses() if 'mini-course' in @props.project.experimental_tools}
+            </div>
+          </div>
 
           <hr />
 
