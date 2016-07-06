@@ -98,7 +98,7 @@ module.exports = React.createClass
       for multiple in multipleMarks
         @props.annotation.value.push multiple
 
-        unless MarkComponent.initValid multiple
+        unless MarkComponent.initValid multiple, @props
           @destroyMark @props.annotation, multiple
 
     @props.classification.update 'annotations'

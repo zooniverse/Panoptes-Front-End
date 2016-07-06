@@ -41,13 +41,19 @@ module.exports = React.createClass
     initRelease: (cursor, mark, e) ->
       _inProgress: false
 
-    initValid: (mark) ->
-      mark.height > 10
+    initValid: (mark, props) ->
+      if mark._type is 'grid'
+        test = true
+        props.annotation.value.map (cell) ->
+          test = false if cell._type is 'grid' and cell.templateID != mark.templateID
+        test
+      else
+        mark.height > 10
 
     saveState: (mark, template, type) ->
       templateID = Math.random()
       mark._type = type
-      mark._templateID = templateID
+      mark.templateID = templateID
       mark.x = template[0].x
       mark.width = template[0].width
       mark.y = template[0].y if type is 'grid'
@@ -56,10 +62,10 @@ module.exports = React.createClass
         Object.assign({}, cell)
       templateCopy.shift()
       for cell in templateCopy
-        cell._rowID = cell._templateID if type is 'grid'
+        cell._rowID = cell.templateID if type is 'grid' and cell.templateID?
         cell._key = Math.random()
         cell._type = type
-        cell._templateID = templateID
+        cell.templateID = templateID
         cell._copy = true
         cell.y = mark.y if type is 'row'
         cell.height = mark.height if type is 'row'
@@ -72,7 +78,9 @@ module.exports = React.createClass
       @setState template: @templateRerender @props.mark, @props.preferences.preferences[@props.mark._type]
       @setState activeTemplate: @props.mark._type
     unless @props.mark._prerendered
-      @findSchema()
+      if @props.preferences.preferences.activeTemplate
+        @setState activeTemplate: @props.preferences.preferences.activeTemplate
+        @setState template: @props.preferences.preferences[@props.preferences.preferences.activeTemplate]
 
   componentWillUnmount: ->
     @props.mark._prerendered = true
@@ -102,7 +110,7 @@ module.exports = React.createClass
       </Draggable>
 
   handleTemplateDrag: (e, d) ->
-    mobileTemplate = (i for i in @props.classification.annotations[@props.classification.annotations.length - 1].value when i._templateID is @props.mark._templateID)
+    mobileTemplate = (i for i in @props.classification.annotations[@props.classification.annotations.length - 1].value when i.templateID is @props.mark.templateID)
     for cell in mobileTemplate
       cell.x += d.x / @props.scale.horizontal
       cell.y += d.y / @props.scale.vertical
@@ -140,13 +148,3 @@ module.exports = React.createClass
       cell.x = cell.x + changeX
       cell.y = cell.y + changeY if mark._type is 'grid'
     template
-
-  findSchema: ->
-    @props.user.get('project_preferences')
-      .then (projects) =>
-        for proj in projects
-          if proj.links.project == @props.workflow.links.project
-            if proj.preferences.activeTemplate
-              @setState activeTemplate: proj.preferences.activeTemplate
-              @setState template: proj.preferences[proj.preferences.activeTemplate]
-      .catch =>

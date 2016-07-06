@@ -61,8 +61,6 @@ module.exports = React.createClass
                 disabled: isPriorAnnotation
                 selected: mark is @state.selection and not isPriorAnnotation
                 getEventOffset: @props.getEventOffset
-                workflow: @props.workflow
-                user: @props.user
                 preferences: @props.preferences
 
               toolProps =
@@ -88,11 +86,10 @@ module.exports = React.createClass
 
   handleSelect: (annotation, mark) ->
     @setState selection: mark
-    unless mark.templateID
-      markIndex = annotation.value.indexOf mark
-      annotation.value.splice markIndex, 1
-      annotation.value.push mark
-      @props.classification.update 'annotations'
+    markIndex = annotation.value.indexOf mark
+    annotation.value.splice markIndex, 1
+    annotation.value.push mark
+    @props.classification.update 'annotations'
 
   handleDeselect: ->
     @setState selection: null
@@ -103,10 +100,10 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @props.classification.update 'annotations'
-    if mark._templateID
+    if mark.templateID
       index = []
       for cell in annotation.value
-        if cell._templateID is mark._templateID
+        if cell.templateID is mark.templateID
           index.push(annotation.value.indexOf cell)
       annotation.value.splice index[0], index.length
       @props.classification.update 'annotations'

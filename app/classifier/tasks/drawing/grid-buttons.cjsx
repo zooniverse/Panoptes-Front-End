@@ -4,16 +4,22 @@ Select = require 'react-select'
 module.exports = React.createClass
   displayName: 'GridButtons'
 
+  getDefaultProps: ->
+    preferences: null
+
   componentWillMount: ->
-    if @props.preferences.preferences?.grid?
+    if @props.preferences?.preferences?.grid?
       @clearRow()
       @activateTemplate 'grid'
 
   componentWillUnmount: ->
-    if !@props.preferences.preferences.row
-      @rowMap('_rowID')
+    rowID = false
+    @props.annotation.value.map (mark) ->
+      rowID = true if mark._rowID
+    if rowID is true
+      @rowMap '_rowID'
     else
-      @rowMap('_templateID')
+      @rowMap 'templateID'
 
   rowMap: (templateType) ->
     @props.annotation.value.sort (a,b) ->
@@ -136,7 +142,7 @@ module.exports = React.createClass
     </div>
 
   render: ->
-    @preferences = @props.preferences.preferences
+    @preferences = @props.preferences?.preferences
     @annotations = @props.annotation.value
     <div>
 
@@ -147,44 +153,20 @@ module.exports = React.createClass
           <tbody>
 
             <tr>
-              <td>
-                <li><button type="button" className="grid-button-tab #{('active' if !@preferences.activeTemplate) ? ''}" onClick={@activateTemplate.bind this, null} >
-                    Draw Header
-                </button></li>
-              </td>
-              <td>
-                <button type="button" className="grid-button-template" disabled={!@annotations.length} onClick={@saveRow.bind this, @annotations}>
-                  done
-                </button>
-              </td>
-              <td>
-                <button type="button" className="grid-button-template" title='Remove all header cells' disabled={!@annotations.length} onClick={@removeMarks.bind this, 'cell'}>
-                  clear
-                </button>
-              </td>
+              <td><li><button type="button" className="grid-button-tab #{('active' if !@preferences?.activeTemplate) ? ''}" onClick={@activateTemplate.bind this, null} > Draw Header </button></li></td>
+              <td><button type="button" className="grid-button-template" disabled={!@annotations.length} onClick={@saveRow.bind this, @annotations}> done </button></td>
+              <td><button type="button" className="grid-button-template" title='Remove all header cells' disabled={!@annotations.length} onClick={@removeMarks.bind this, 'cell'}> clear </button></td>
             </tr>
 
             <tr>
-              <td>
-                <li><button type="button" className="grid-button-tab #{('active' if @preferences?.activeTemplate is 'row') ? ''}" disabled={!@preferences.row} onClick={@activateTemplate.bind this, 'row'} >
-                    Draw Rows
-                </button></li>
-              </td>
-              <td>
-                <button type="button" className="grid-button-template" disabled={!@annotations.length or !@preferences.row} onClick={@setState.bind this, templateForm: true, null}>
-                  done
-                </button>
-              </td>
-              <td>
-                <button type="button" className="grid-button-template" title='Remove all rows and/or row template' disabled={!@preferences.row} onClick={@clearRow.bind this, null}>
-                  clear
-                </button>
-              </td>
+              <td><li><button type="button" className="grid-button-tab #{('active' if @preferences?.activeTemplate is 'row') ? ''}" disabled={!@preferences?.row} onClick={@activateTemplate.bind this, 'row'} > Draw Rows </button></li></td>
+              <td><button type="button" className="grid-button-template" disabled={!@annotations.length or !@preferences.row} onClick={@setState.bind this, templateForm: true, null}> done </button></td>
+              <td><button type="button" className="grid-button-template" title='Remove all rows and/or row template' disabled={!@preferences.row} onClick={@clearRow.bind this, null}> clear </button></td>
             </tr>
 
           </tbody>
         </table>}
 
-      { @renderTemplateSave() if @state?.templateForm }
+        { @renderTemplateSave() if @state?.templateForm }
 
     </div>
