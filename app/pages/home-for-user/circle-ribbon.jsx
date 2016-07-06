@@ -11,7 +11,7 @@ const CircleRibbon = React.createClass({
     weight: React.PropTypes.number,
     gap: React.PropTypes.number,
     image: React.PropTypes.string,
-    arcs: React.PropTypes.array,
+    data: React.PropTypes.array,
     onClick: React.PropTypes.func,
   },
 
@@ -21,31 +21,7 @@ const CircleRibbon = React.createClass({
       weight: 10,
       gap: 2,
       image: '//lorempixel.com/100/100/animals/1',
-      arcs: [{
-        label: 'First arc',
-        color: 'red',
-        value: 1 / 4,
-      }, {
-        label: 'Second arc',
-        color: 'orange',
-        value: 1 / 5,
-      }, {
-        label: 'Third arc',
-        color: 'yellow',
-        value: 1 / 6,
-      }, {
-        label: 'Fourth arc',
-        color: 'lime',
-        value: 1 / 7,
-      }, {
-        label: 'Fifth arc',
-        color: 'blue',
-        value: 1 / 8,
-      }, {
-        label: 'Sixth arc',
-        color: 'magenta',
-        value: 1 / 9,
-      }],
+      data: [],
       onClick: () => {},
     };
   },
@@ -61,6 +37,19 @@ const CircleRibbon = React.createClass({
     this.id = instanceCount;
     this.point = this.refs.svg.createSVGPoint();
     instanceCount += 1;
+    this.setTotal(this.props.data);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setTotal(nextProps.data);
+  },
+
+  setTotal(data) {
+    this.setState({
+      totalClassifications: data.reduce((total, project) => {
+        return total + project.classifications;
+      }, 0),
+    });
   },
 
   getPointOnCircle(amount, radius) {
@@ -73,11 +62,12 @@ const CircleRibbon = React.createClass({
     };
   },
 
-  getTooltipPoint(arc, radius) {
-    const index = this.props.arcs.indexOf(arc);
-    const amount = this.props.arcs.slice(0, index).reduce((start, anotherArc) => {
-      return start + anotherArc.value;
-    }, 0) + (arc.value / 2);
+  getTooltipPoint(project, radius) {
+    const index = this.props.data.indexOf(project);
+
+    const amount = (this.props.data.slice(0, index).reduce((start, otherArc) => {
+      return start + otherArc.classifications;
+    }, 0) + (project.classifications / 2)) / this.state.totalClassifications;
 
     const midpoint = this.getPointOnCircle(amount, radius);
 
@@ -109,14 +99,14 @@ const CircleRibbon = React.createClass({
     this.props.onClick(this.state.hoverIndex);
   },
 
-  renderArc(arc) {
-    const index = this.props.arcs.indexOf(arc);
+  renderArc(project) {
+    const index = this.props.data.indexOf(project);
 
-    const startAmount = this.props.arcs.slice(0, index).reduce((start, anotherArc) => {
-      return start + anotherArc.value;
-    }, 0);
+    const startAmount = this.props.data.slice(0, index).reduce((count, otherArc) => {
+      return count + otherArc.classifications;
+    }, 0) / this.state.totalClassifications;
 
-    const endAmount = startAmount + arc.value;
+    const endAmount = startAmount + (project.classifications / this.state.totalClassifications);
 
     const radius = 50 - (this.props.weight / 2);
 
@@ -126,12 +116,12 @@ const CircleRibbon = React.createClass({
     return (
       <path
         className="circle-ribbon__project-arc"
-        key={index + arc.label}
+        key={project.id}
         d={`
           M ${startPoint.x} ${startPoint.y}
           A ${radius} ${radius} 0 0 1 ${endPoint.x}, ${endPoint.y}
         `}
-        stroke={arc.color}
+        stroke={project.color}
         data-index={index}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
@@ -143,7 +133,7 @@ const CircleRibbon = React.createClass({
   render() {
     const imageSize = 100 - (this.props.weight * 2) - (this.props.gap * 2);
 
-    const hoveredArc = this.props.arcs[this.state.hoverIndex];
+    const hoveredArc = this.props.data[this.state.hoverIndex];
 
     let tooltipPosition;
     if (hoveredArc !== undefined) {
@@ -172,10 +162,10 @@ const CircleRibbon = React.createClass({
           )}
 
           <g ref="arcGroup" fill="none" stroke="none" transform="translate(50, 50)">
-            <circle r={`${50 - (this.props.weight / 2)}`} stroke="gray" strokeWidth="1" />
+            <circle r={`${50 - (this.props.weight / 2)}`} stroke="gray" strokeWidth="0.5" />
 
             <g strokeWidth={this.props.weight}>
-              {this.props.arcs.map(this.renderArc)}
+              {this.props.data.map(this.renderArc)}
             </g>
           </g>
         </svg>
@@ -193,8 +183,13 @@ const CircleRibbon = React.createClass({
               top: `${tooltipPosition.y * 100}%`,
             }}
           >
-            <strong>{hoveredArc.label}</strong>{' '}
-            <small>{Math.round(hoveredArc.value * 100)}%</small>
+            {hoveredArc.owner}/
+            <strong>{hoveredArc.name}</strong>{' '}
+            <br />
+            <small>
+              {hoveredArc.classifications} classifications{' '}
+              ({Math.round((hoveredArc.classifications / this.state.totalClassifications) * 100)}%)
+            </small>
           </div>
         )}
       </div>
