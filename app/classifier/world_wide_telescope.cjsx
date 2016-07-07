@@ -104,10 +104,25 @@ class Plate
 
     makeStarCoord = if @starChart.coordinateSystem() == StarChart.EQUATORIAL then StarCoord.fromRaDec else StarCoord.fromGlatGlon
     xAxisDec = if @starChart.xAxis.unit == Axis.DEC || @starChart.xAxis.unit == Axis.GLAT then true else false
+    @fullValues xRange
+    @fullValues yRange
     @coordCorners = [
       makeStarCoord(xRange[0].value, yRange[0].value, xAxisDec), makeStarCoord(xRange[1].value, yRange[0].value, xAxisDec),
       makeStarCoord(xRange[1].value, yRange[1].value, xAxisDec), makeStarCoord(xRange[0].value, yRange[1].value, xAxisDec)
     ]
+
+  fullValues: (ranges) ->
+    firstValue = ranges[0].value.match(/(-)?\d+(?:\.\d+)?/g)
+    secondValue = ranges[1]?.value.match(/(-)?\d+(?:\.\d+)?/g)
+    difference = Math.abs(firstValue.length - secondValue?.length)
+    if difference > 0 && secondValue
+      longerNumber = if firstValue.length > secondValue.length then firstValue else secondValue
+      shorterNumber = if secondValue.length < firstValue.length then secondValue else firstValue
+      index = 0
+      until longerNumber.length == shorterNumber.length
+        shorterNumber.splice(index, 0, longerNumber[index])
+        index = index + 1
+      [ranges[0].value, ranges[1].value] = [firstValue.join(" "), secondValue.join(" ")]
 
   scale: ->
     [star1, star2] = [ @coordCorners[0], @coordCorners[2] ]
