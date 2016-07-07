@@ -35,7 +35,7 @@ const CircleRibbon = React.createClass({
 
   getInitialState() {
     return {
-      weight: 1,
+      totalClassifications: 0,
       hoverIndex: -1,
     };
   },
@@ -114,6 +114,10 @@ const CircleRibbon = React.createClass({
     const startAmount = this.props.data.slice(0, index).reduce((count, otherArc) => {
       return count + otherArc.classifications;
     }, 0) / this.state.totalClassifications;
+
+    if (!isFinite(startAmount)) {
+      return null;
+    }
 
     const endAmount = startAmount + (project.classifications / this.state.totalClassifications);
 

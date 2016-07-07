@@ -17,7 +17,8 @@ const ProjectStats = React.createClass({
 
   getInitialState() {
     return {
-      data: {},
+      project: {},
+      backgroundSrc: null,
       loading: false,
       error: null,
     };
@@ -44,6 +45,16 @@ const ProjectStats = React.createClass({
       this.setState({
         project: project,
       });
+
+      return project.get('background')
+      .catch(() => {
+        return null;
+      })
+      .then((background) => {
+        this.setState({
+          backgroundSrc: background.src,
+        });
+      });
     })
     .catch((error) => {
       this.setState({
@@ -59,10 +70,12 @@ const ProjectStats = React.createClass({
 
   render() {
     return (
-      <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-        <BlurredImage className="home-page-for-user__background" src="//lorempixel.com/500/500/animals/2" blur="0.5em" position="50% 33%" />
+      <div className="home-page-project-stats" style={{ position: 'relative', zIndex: 1 }}>
+        {this.state.background !== null && (
+          <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
+        )}
 
-        <div className="home-page-project-stats">
+        <div className="home-page-project-stats__content">
           <a href="#">X</a>
           {this.state.loading && (
             <div>Loading...</div>
