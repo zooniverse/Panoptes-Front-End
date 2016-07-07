@@ -20,7 +20,7 @@ const HomePageSection = React.createClass({
             }}
           ></i>
           <span className="home-page-section__header-label">{this.props.title}</span>
-          <button type="button" className="secret-button" onClick={this.props.onClose}>×</button>
+          <a href="#" className="secret-button">×</a>
         </header>
         {!!this.props.error && (
           <div className="home-page-section__error">
