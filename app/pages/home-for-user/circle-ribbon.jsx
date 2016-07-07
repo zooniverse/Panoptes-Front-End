@@ -1,9 +1,14 @@
 import React from 'react';
+import SVGLink from './svg-link';
 
 import style from './circle-ribbon.styl';
 void style;
 
 let instanceCount = 0;
+
+function defaultHREFTemplate(project) {
+  return `#project-${project.id}`;
+}
 
 const CircleRibbon = React.createClass({
   propTypes: {
@@ -12,6 +17,7 @@ const CircleRibbon = React.createClass({
     gap: React.PropTypes.number,
     image: React.PropTypes.string,
     data: React.PropTypes.array,
+    hrefTemplate: React.PropTypes.func,
     onClick: React.PropTypes.func,
   },
 
@@ -22,6 +28,7 @@ const CircleRibbon = React.createClass({
       gap: 2,
       image: '//lorempixel.com/100/100/animals/1',
       data: [],
+      hrefTemplate: defaultHREFTemplate,
       onClick: () => {},
     };
   },
@@ -96,7 +103,7 @@ const CircleRibbon = React.createClass({
   },
 
   handleClick(event) {
-    const index = event.target.getAttribute('data-index');
+    const index = event.currentTarget.querySelector('[data-index]').getAttribute('data-index');
     const clickedProject = this.props.data[index];
     this.props.onClick(clickedProject.id);
   },
@@ -116,19 +123,23 @@ const CircleRibbon = React.createClass({
     const endPoint = this.getPointOnCircle(endAmount, radius);
 
     return (
-      <path
-        className="circle-ribbon__project-arc"
+      <SVGLink
         key={project.id}
-        d={`
-          M ${startPoint.x} ${startPoint.y}
-          A ${radius} ${radius} 0 0 1 ${endPoint.x}, ${endPoint.y}
-        `}
-        stroke={project.color}
-        data-index={index}
-        onMouseEnter={this.handleMouseEnter}
-        onMouseLeave={this.handleMouseLeave}
+        xlinkHref={this.props.hrefTemplate(project)}
         onClick={this.handleClick}
-      />
+      >
+        <path
+          className="circle-ribbon__project-arc"
+          d={`
+            M ${startPoint.x} ${startPoint.y}
+            A ${radius} ${radius} 0 0 1 ${endPoint.x}, ${endPoint.y}
+          `}
+          stroke={project.color}
+          data-index={index}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        />
+      </SVGLink>
     );
   },
 
