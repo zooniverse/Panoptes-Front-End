@@ -255,7 +255,10 @@ module.exports = React.createClass
     plates = []
     for chart in @charts
       if chart.valid
-        plates.push(new Plate(chart, subjImage, @props.user_name))
+        try
+          plates.push(new Plate(chart, subjImage, @props.user_name))
+        catch error
+          console?.error 'Failed to link to Worldwide Telescope. Units must be annotated outside chart.'
 
     <div>
       {plates.map (plate, idx) ->
