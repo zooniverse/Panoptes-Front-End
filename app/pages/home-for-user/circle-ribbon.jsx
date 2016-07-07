@@ -7,7 +7,7 @@ void style;
 let instanceCount = 0;
 
 function defaultHREFTemplate(project) {
-  return `#project-${project.id}`;
+  return `#project=${project.id}`;
 }
 
 const CircleRibbon = React.createClass({

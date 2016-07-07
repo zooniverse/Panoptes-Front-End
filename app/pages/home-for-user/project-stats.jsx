@@ -62,8 +62,8 @@ const ProjectStats = React.createClass({
       <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
         <BlurredImage className="home-page-for-user__background" src="//lorempixel.com/500/500/animals/2" blur="0.5em" position="50% 33%" />
 
-        <div className="user-home-page-project-stats">
-          <button type="button" onClick={this.props.onClose}>X</button>
+        <div className="home-page-project-stats">
+          <a href="#">X</a>
           {this.state.loading && (
             <div>Loading...</div>
           )}

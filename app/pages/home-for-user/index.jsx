@@ -8,6 +8,7 @@ import RecentCollectionsSection from './recent-collections';
 import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
 import ProjectStats from './project-stats';
+import qs from 'qs';
 
 import style from './index.styl';
 void style;
@@ -41,6 +42,7 @@ const HomePageForUser = React.createClass({
   },
 
   componentDidMount() {
+    addEventListener('hashChange', this.handleHashChange);
     this.fetchRibbonData(this.props.user);
   },
 
@@ -48,6 +50,14 @@ const HomePageForUser = React.createClass({
     if (nextProps.user !== this.props.user) {
       this.fetchRibbonData(nextProps.user);
     }
+  },
+
+  componentWillUnmount() {
+    removeEventListener('hashChange', this.handleHashChange);
+  },
+
+  handleHashChange() {
+    this.forceUpdate();
   },
 
   fetchRibbonData(user) {
@@ -78,60 +88,36 @@ const HomePageForUser = React.createClass({
     });
   },
 
-  selectProject(projectID) {
-    this.setState({
-      selectedProjectID: projectID,
-    });
-  },
-
-  deselectProject() {
-    this.setState({
-      selectedProjectID: null,
-    });
-  },
-
-  selectSection(event) {
-    this.setState({
-      openSection: event.currentTarget.value,
-    });
-  },
-
-  deselectSection() {
-    this.setState({
-      openSection: null,
-    });
-  },
-
   renderMenu() {
     return (
       <div className="home-page-for-user__menu">
         <div className="home-page-for-user__menu-column">
-          <button type="button" value="projects" className="secret-button home-page-for-user__menu-button" onClick={this.selectSection}>
+          <a href="#focus=projects" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-cog fa-fw"></i>
               My recent projects
             </span>
-          </button>
-          <button type="button" value="collections" className="secret-button home-page-for-user__menu-button" onClick={this.selectSection}>
+          </a>
+          <a href="#focus=collections" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-cog fa-fw"></i>
               My collections
             </span>
-          </button>
+          </a>
         </div>
         <div className="home-page-for-user__menu-column">
-          <button type="button" value="messages" className="secret-button home-page-for-user__menu-button" onClick={this.selectSection}>
+          <a href="#focus=messages" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-cog fa-fw"></i>
               Messages
             </span>
-          </button>
-          <button type="button" value="builds" className="secret-button home-page-for-user__menu-button" onClick={this.selectSection}>
+          </a>
+          <a href="#focus=builds" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-cog fa-fw"></i>
               My builds
             </span>
-          </button>
+          </a>
         </div>
       </div>
     );
@@ -140,7 +126,9 @@ const HomePageForUser = React.createClass({
   render() {
     if (!this.props.user) return null;
 
-    const OpenSectionComponent = SECTIONS[this.state.openSection];
+    const hashQuery = qs.parse(this.props.location.hash.slice(1));
+
+    const OpenSectionComponent = SECTIONS[hashQuery.focus];
 
     return (
       <div className="home-page-for-user">
@@ -150,9 +138,11 @@ const HomePageForUser = React.createClass({
           <div>{this.state.error.toString()}</div>
         )}
 
-        {this.state.selectedProjectID === null ? (
+        {!!hashQuery.project ? (
+          <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
+        ) : (
           <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-            <CircleRibbon data={this.state.ribbonData} onClick={this.selectProject} />
+            <CircleRibbon data={this.state.ribbonData} />
             <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
 
             {OpenSectionComponent === undefined ? (
@@ -161,8 +151,6 @@ const HomePageForUser = React.createClass({
               <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
             )}
           </div>
-        ) : (
-          <ProjectStats projectID={this.state.selectedProjectID} onClose={this.deselectProject} />
         )}
       </div>
     );
