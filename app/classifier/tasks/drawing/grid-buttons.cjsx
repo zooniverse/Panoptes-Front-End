@@ -45,9 +45,9 @@ module.exports = React.createClass
     @props.preferences.preferences.activeTemplate = type
     @props.preferences.update 'preferences'
     if type is 'grid'
-      @setState hideDrawingTools: true
+      @setState gridSelect: true
     if type is null
-      @setState hideDrawingTools: false
+      @setState gridSelect: false
 
   clearRow: ->
     @removeMarks 'row'
@@ -70,7 +70,7 @@ module.exports = React.createClass
       else
         pref.update 'preferences.grid': null
         @activateTemplate null
-        @setState hideDrawingTools: false
+        @setState gridSelect: false
       pref.save()
 
   saveRow: (marks) ->
@@ -100,10 +100,10 @@ module.exports = React.createClass
         pref.preferences.savedGrids.push { value: Math.random(), label: displayName, template: newGrid}
         pref.save()
     @setState templateForm: false
-    @setState hideDrawingTools: true
+    @setState gridSelect: true
 
   renderTemplateSave: ->
-    <form onSubmit={@saveGrid} className="template-select">
+    <form onSubmit={@saveGrid}>
       <input className="template-name-input" ref="name" placeholder="Template Name" /><br />
       <button type="submit" className="template-form-button">Save Template</button>
       <button type="button" className="template-form-button" onClick={@setState.bind this, templateForm: null, null}>Cancel</button>
@@ -119,7 +119,7 @@ module.exports = React.createClass
         @props.preferences.update 'preferences'
 
   renderGridSelect: ->
-    <div className="template-select">
+    <div>
       <p>Select Saved Grid:</p>
       <Select
         className='grid-selection-dropdown'
@@ -132,23 +132,26 @@ module.exports = React.createClass
       />
       <button type="button" className="template-form-button" onClick={@deleteGrid.bind this, null}>
         delete template
-      </button><br /><br />
+      </button>
+      <p> or </p>
       <button type="button" className="template-form-button create-grid" onClick={@activateTemplate.bind this, null}>
         create new grid
-      </button>
-      <button type="button" className="template-form-button" onClick={@activateTemplate.bind this, 'grid'}>
-        cancel
       </button>
     </div>
 
   render: ->
     @preferences = @props.preferences?.preferences
     @annotations = @props.annotation.value
-    <div>
+    <div className="template-select">
 
-      { @renderGridSelect() if @preferences?.grid}
+      { @renderGridSelect() if @state?.gridSelect }
 
-      {unless @state?.hideDrawingTools
+      { if @preferences?.grid and !@state?.gridSelect
+        <button type="button" className="template-form-button" onClick={@activateTemplate.bind this, 'grid'}>
+          cancel new grid
+        </button>}
+
+      {unless @state?.gridSelect
         <table className="grid-button-table">
           <tbody>
 
@@ -160,8 +163,8 @@ module.exports = React.createClass
 
             <tr>
               <td><li><button type="button" className="grid-button-tab #{('active' if @preferences?.activeTemplate is 'row') ? ''}" disabled={!@preferences?.row} onClick={@activateTemplate.bind this, 'row'} > Draw Rows </button></li></td>
-              <td><button type="button" className="grid-button-template" disabled={!@annotations.length or !@preferences.row} onClick={@setState.bind this, templateForm: true, null}> done </button></td>
-              <td><button type="button" className="grid-button-template" title='Remove all rows and/or row template' disabled={!@preferences.row} onClick={@clearRow.bind this, null}> clear </button></td>
+              <td><button type="button" className="grid-button-template" disabled={!@annotations.length or !@preferences?.row} onClick={@setState.bind this, templateForm: true, null}> done </button></td>
+              <td><button type="button" className="grid-button-template" title='Remove all rows and/or row template' disabled={!@preferences?.row} onClick={@clearRow.bind this, null}> clear </button></td>
             </tr>
 
           </tbody>
