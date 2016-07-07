@@ -62,7 +62,6 @@ const HomePageForUser = React.createClass({
 
     getUserRibbonData(user)
     .then((ribbonData) => {
-      console.info('GOT SOME RIBBON DATA', ribbonData);
       this.setState({
         ribbonData: ribbonData,
       });
@@ -79,15 +78,15 @@ const HomePageForUser = React.createClass({
     });
   },
 
-  selectProject(index) {
+  selectProject(projectID) {
     this.setState({
-      selectedProjectIndex: index,
+      selectedProjectID: projectID,
     });
   },
 
   deselectProject() {
     this.setState({
-      selectedProjectIndex: null,
+      selectedProjectID: null,
     });
   },
 
@@ -141,8 +140,6 @@ const HomePageForUser = React.createClass({
   render() {
     if (!this.props.user) return null;
 
-    const selectedProject = this.state.ribbonData[this.state.selectedProjectIndex];
-
     const OpenSectionComponent = SECTIONS[this.state.openSection];
 
     return (
@@ -153,7 +150,7 @@ const HomePageForUser = React.createClass({
           <div>{this.state.error.toString()}</div>
         )}
 
-        {selectedProject === undefined ? (
+        {this.state.selectedProjectID === null ? (
           <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
             <CircleRibbon data={this.state.ribbonData} onClick={this.selectProject} />
             <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
@@ -165,7 +162,7 @@ const HomePageForUser = React.createClass({
             )}
           </div>
         ) : (
-          <ProjectStats projectID={selectedProject.id} onClose={this.deselectProject} />
+          <ProjectStats projectID={this.state.selectedProjectID} onClose={this.deselectProject} />
         )}
       </div>
     );
