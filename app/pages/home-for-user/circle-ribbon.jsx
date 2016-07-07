@@ -95,8 +95,10 @@ const CircleRibbon = React.createClass({
     });
   },
 
-  handleClick() {
-    this.props.onClick(this.state.hoverIndex);
+  handleClick(event) {
+    const index = event.target.getAttribute('data-index');
+    const clickedProject = this.props.data[index];
+    this.props.onClick(clickedProject.id);
   },
 
   renderArc(project) {
