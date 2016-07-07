@@ -70,10 +70,9 @@ EditProjectPage = React.createClass
             <li><Link to={@labPath('/guide')} activeClassName='active' className="nav-list-item" title="Create a persistent guide that can be viewed within your project">
               Field guide
             </Link></li>}
-          {if 'tutorial' in (@props.project.experimental_tools ? [])
-            <li><Link to={@labPath('/tutorial')} activeClassName='active' className="nav-list-item" title="Create a pop-up tutorial for your project’s classification interface">
-              Tutorial
-            </Link></li>}
+          <li><Link to={@labPath('/tutorial')} activeClassName='active' className="nav-list-item" title="Create a pop-up tutorial for your project’s classification interface">
+            Tutorial
+          </Link></li>
           {if 'mini-course' in (@props.project.experimental_tools ? [])
             <li><Link to={@labPath('/mini-course')} activeClassName='active' className="nav-list-item" title="Create a pop-up mini-course for your project’s classification interface">
               Mini-course
