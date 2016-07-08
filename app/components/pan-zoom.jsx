@@ -4,6 +4,13 @@ const PanZoom = React.createClass({
   
   getInitialState() {
     return {
+      panEnabled: false,
+      viewBoxDimensions: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+      },
       zooming: false,
       zoomingTimeoutId: null
     }
@@ -21,16 +28,35 @@ const PanZoom = React.createClass({
     removeEventListener("wheel", this.frameKeyPan);
   },
   
+  componentWillUpdate(newProps) {
+    if (newProps.frameDimensions == this.props.frameDimensions) return;
+    this.setState({
+      viewBoxDimensions: {
+        width: newProps.frameDimensions.width,
+        height: newProps.frameDimensions.height,
+        x: 0,
+        y: 0
+      }
+    });
+  },
+  
   render() {
+    const children = React.Children.map(this.props.children, (child) => {
+          return React.cloneElement(child, {
+            viewBoxDimensions: this.state.viewBoxDimensions,
+            panByDrag: this.panByDrag,
+            panEnabled: this.state.panEnabled
+          })
+        });
     return (
       <div>
-      {this.props.children}
+      {children}
         <div className="pan-zoom-controls" >
           <div className="draw-pan-toggle" >
-            <div className={this.props.panEnabled ? "" : "active"} >
+            <div className={this.state.panEnabled ? "" : "active"} >
               <button title="annotate" className="fa fa-mouse-pointer" onClick={this.togglePanOff}/>
             </div>
-            <div className={this.props.panEnabled ? "active" : ""}>
+            <div className={this.state.panEnabled ? "active" : ""}>
               <button title="pan" ref="pan" className="fa fa-arrows" onClick={this.handleFocus.bind(this, "pan")} onFocus={this.togglePanOn} onBlur={this.togglePanOff}/>
             </div>
           </div>
@@ -76,7 +102,7 @@ const PanZoom = React.createClass({
   },
 
   cannotZoomOut() {
-    return this.props.frameDimensions.width == this.props.viewBoxDimensions.width && this.props.frameDimensions.height == this.props.viewBoxDimensions.height;
+    return this.props.frameDimensions.width == this.state.viewBoxDimensions.width && this.props.frameDimensions.height == this.state.viewBoxDimensions.height;
   },
 
   continuousZoom(change) {
@@ -104,20 +130,22 @@ const PanZoom = React.createClass({
   zoom(change) {
     this.clearZoomingTimeout();
     if (!this.state.zooming) return;
-    let newNaturalWidth = this.props.viewBoxDimensions.width * change;
-    let newNaturalHeight = this.props.viewBoxDimensions.height * change;
+    let newNaturalWidth = this.state.viewBoxDimensions.width * change;
+    let newNaturalHeight = this.state.viewBoxDimensions.height * change;
 
-    let newNaturalX = this.props.viewBoxDimensions.x - (newNaturalWidth - this.props.viewBoxDimensions.width) / 2;
-    let newNaturalY = this.props.viewBoxDimensions.y - (newNaturalHeight - this.props.viewBoxDimensions.height) / 2;
+    let newNaturalX = this.state.viewBoxDimensions.x - (newNaturalWidth - this.state.viewBoxDimensions.width) / 2;
+    let newNaturalY = this.state.viewBoxDimensions.y - (newNaturalHeight - this.state.viewBoxDimensions.height) / 2;
 
     if ((newNaturalWidth > this.props.frameDimensions.width) || (newNaturalHeight * change > this.props.frameDimensions.height)) {
       this.zoomReset()
     } else {
-      this.props.onChange({
+      this.setState({
+        viewBoxDimensions: {
           width: newNaturalWidth,
           height: newNaturalHeight,
           x: newNaturalX,
           y: newNaturalY
+        }
       });
     }
   },
@@ -138,20 +166,22 @@ const PanZoom = React.createClass({
   },
   
   zoomReset() {
-    this.props.onChange({
+    this.setState({
+      viewBoxDimensions: {
         width: this.props.frameDimensions.width,
         height: this.props.frameDimensions.height,
         x: 0,
         y: 0
+      }
     });
   },
 
   togglePanOn() {
-    if (!this.props.panEnabled) this.props.onToggle(true);
+    if (!this.state.panEnabled) this.setState({panEnabled: true});
   },
   
   togglePanOff() {
-    this.props.onToggle(false);
+    this.setState({panEnabled: false});
   },
   
   toggleKeyPanZoom() {
@@ -159,26 +189,28 @@ const PanZoom = React.createClass({
   },
   
   panByDrag(e, d) {
-    if (!this.props.panEnabled) return;
+    if (!this.state.panEnabled) return;
 
-    let maximumX = (this.props.frameDimensions.width - this.props.viewBoxDimensions.width) + (this.props.frameDimensions.width * 0.6);
+    let maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width) + (this.props.frameDimensions.width * 0.6);
     let minumumX = -(this.props.frameDimensions.width * 0.6);
-    let changedX = this.props.viewBoxDimensions.x -= d.x;
+    let changedX = this.state.viewBoxDimensions.x -= d.x;
 
-    let maximumY = (this.props.frameDimensions.height - this.props.viewBoxDimensions.height) + (this.props.frameDimensions.height * 0.6);
+    let maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height) + (this.props.frameDimensions.height * 0.6);
     let minimumY = -(this.props.frameDimensions.height * 0.6);
-    let changedY = this.props.viewBoxDimensions.y -= d.y;
+    let changedY = this.state.viewBoxDimensions.y -= d.y;
 
-    this.props.onChange({
+    this.setState({
+      viewBoxDimensions: {
         x: Math.max(minumumX, Math.min(changedX, maximumX)),
         y: Math.max(minimumY, Math.min(changedY, maximumY)),
-        width: this.props.viewBoxDimensions.width,
-        height: this.props.viewBoxDimensions.height
+        width: this.state.viewBoxDimensions.width,
+        height: this.state.viewBoxDimensions.height
+      }
     });
   },
 
   frameKeyPan(e) {
-    if (!this.props.panEnabled) return;
+    if (!this.state.panEnabled) return;
     let keypress = e.which;
     switch (keypress) {
       // left
@@ -225,26 +257,30 @@ const PanZoom = React.createClass({
   },
 
   panHorizontal(direction) {
-    let maximumX = (this.props.frameDimensions.width - this.props.viewBoxDimensions.width) + (this.props.frameDimensions.width * 0.6);
+    let maximumX = (this.props.frameDimensions.width - this.state.viewBoxDimensions.width) + (this.props.frameDimensions.width * 0.6);
     let minumumX = -(this.props.frameDimensions.width * 0.6);
-    let changedX = this.props.viewBoxDimensions.x + direction;
-    this.props.onChange({
+    let changedX = this.state.viewBoxDimensions.x + direction;
+    this.setState({
+      viewBoxDimensions: {
         x: Math.max(minumumX, Math.min(changedX, maximumX)),
-        y: this.props.viewBoxDimensions.y,
-        width: this.props.viewBoxDimensions.width,
-        height: this.props.viewBoxDimensions.height
+        y: this.state.viewBoxDimensions.y,
+        width: this.state.viewBoxDimensions.width,
+        height: this.state.viewBoxDimensions.height
+      }
     });
   },
 
   panVertical(direction) {
-    let maximumY = (this.props.frameDimensions.height - this.props.viewBoxDimensions.height) + (this.props.frameDimensions.height * 0.6);
+    let maximumY = (this.props.frameDimensions.height - this.state.viewBoxDimensions.height) + (this.props.frameDimensions.height * 0.6);
     let minimumY = -(this.props.frameDimensions.height * 0.6);
-    let changedY = this.props.viewBoxDimensions.y + direction;
-    this.props.onChange({
-        x: this.props.viewBoxDimensions.x,
+    let changedY = this.state.viewBoxDimensions.y + direction;
+    this.setState({
+      viewBoxDimensions: {
+        x: this.state.viewBoxDimensions.x,
         y: Math.max(minimumY, Math.min(changedY, maximumY)),
-        width: this.props.viewBoxDimensions.width,
-        height: this.props.viewBoxDimensions.height
+        width: this.state.viewBoxDimensions.width,
+        height: this.state.viewBoxDimensions.height
+      }
     });
   }
   

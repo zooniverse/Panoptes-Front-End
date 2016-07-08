@@ -21,12 +21,8 @@ module.exports = React.createClass
 
   getInitialState: ->
     loading: true
-    panEnabled: false
-    frameDimensions: {}
-    viewBoxDimensions: {
-      x: 0,
-      y: 0,
-      width: 0
+    frameDimensions: {
+      width: 0,
       height: 0
     }
 
@@ -58,7 +54,6 @@ module.exports = React.createClass
         frame={frame} 
         naturalWidth={@state.frameDimensions?.width or 0} 
         naturalHeight={@state.frameDimensions?.height or 0} 
-        panByDrag={@refs.panZoom?.panByDrag} 
         viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} 
         workflow={@props.workflow} 
         subject={@props.subject} 
@@ -68,20 +63,13 @@ module.exports = React.createClass
         preferences={@props.preferences}
         modification={@props?.modification} 
         onChange={@props.onChange} 
-        panEnabled={@state.panEnabled} 
         >
         {frameDisplay}
       </FrameWrapper>
 
     if FrameWrapper
       if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
-        <PanZoom 
-          ref="panZoom" 
-          frameDimensions={@state.frameDimensions} 
-          viewBoxDimensions={@state.viewBoxDimensions} 
-          panEnabled={@state.panEnabled}
-          onToggle={@togglePan}
-          onChange={@updateViewBox}>
+        <PanZoom ref="panZoom" frameDimensions={@state.frameDimensions}>
           {wrappedDisplay}
         </PanZoom>
       else
@@ -103,10 +91,4 @@ module.exports = React.createClass
         y: 0
 
     @props.onLoad? e, @props.frame
-  
-  togglePan: (panEnabled) ->
-    @setState {panEnabled}
-  
-  updateViewBox: (viewBoxDimensions) ->
-    @setState {viewBoxDimensions}
 
