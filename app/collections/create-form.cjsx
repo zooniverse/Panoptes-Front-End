@@ -8,7 +8,7 @@ counterpart.registerTranslations 'en',
     private: 'Private'
     submit: "Add Collection"
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'CollectionsCreateForm'
 
   getInitialState: ->

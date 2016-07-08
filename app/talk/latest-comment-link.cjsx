@@ -15,7 +15,7 @@ truncate = (string = '', ending = '', length = 80) ->
   return string if string.trim().length <= length
   string.trim().slice(0, (length - ending.length)) + ending
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkLatestCommentComment'
   mixins: [History]
 

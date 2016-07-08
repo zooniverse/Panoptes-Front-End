@@ -1,6 +1,6 @@
 # mixin --- toggle-children.cjsx
 
-module?.exports =
+module.exports =
   getInitialState: ->
     showing: null # string name of child component to show
 

@@ -9,7 +9,7 @@ Loading = require '../components/loading-indicator'
 PromiseRenderer = require '../components/promise-renderer'
 projectSection = require '../talk/lib/project-section'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'DiscussionNewForm'
 
   propTypes:

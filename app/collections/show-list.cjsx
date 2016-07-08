@@ -17,7 +17,7 @@ counterpart.registerTranslations 'en',
     error: 'There was an error listing this collection.'
     noSubjects: 'No subjects in this collection.'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'CollectionShowList'
   mixins: [History]
 

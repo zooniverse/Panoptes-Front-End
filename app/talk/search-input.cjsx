@@ -1,7 +1,7 @@
 React = require 'react'
 {History} = require 'react-router'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkSearchInput'
   mixins: [History]
 

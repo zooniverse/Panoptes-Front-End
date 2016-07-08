@@ -15,7 +15,7 @@ PAGE_SIZE = talkConfig.inboxPageSize
 
 promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkInbox'
   mixins: [History]
 

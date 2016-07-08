@@ -45,7 +45,7 @@ TalkMarkdownHelp = React.createClass
       </tbody>
     </table>
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'MarkdownHelp'
 
   getDefaultProps: ->

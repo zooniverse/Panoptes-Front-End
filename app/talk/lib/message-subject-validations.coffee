@@ -4,7 +4,7 @@
 
 MAX_LENGTH = 256 # characters
 
-module?.exports = [
+module.exports = [
   # existence
   {
     check: (subject) -> subject.length > 0

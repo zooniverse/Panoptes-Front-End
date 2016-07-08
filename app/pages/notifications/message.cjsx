@@ -6,7 +6,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 Loading = require '../../components/loading-indicator'
 Avatar = require '../../partials/avatar'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'MessageNotification'
 
   propTypes:

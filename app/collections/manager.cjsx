@@ -3,7 +3,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 CollectionsCreateForm = require './create-form'
 CollectionSearch = require '../components/collection-search'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'CollectionsManager'
 
   getInitialState: ->

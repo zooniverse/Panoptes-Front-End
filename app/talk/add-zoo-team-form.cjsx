@@ -3,7 +3,7 @@ UserSearch = require '../components/user-search.cjsx'
 talkClient = require 'panoptes-client/lib/talk-client'
 Feedback = require './mixins/feedback'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'ModerationsZooniverseTeam'
   mixins: [Feedback]
 

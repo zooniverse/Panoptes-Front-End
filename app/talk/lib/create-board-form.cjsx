@@ -17,7 +17,7 @@ roleRankText =
     Roles rank from most private to least private in the order: <strong>{ROLES.join(' > ')}</strong>
   </span>
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'CreateBoardForm'
 
   propTypes:

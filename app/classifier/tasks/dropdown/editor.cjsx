@@ -11,7 +11,7 @@ MarkdownHelp = require '../../../partials/markdown-help'
 DropdownList = require './dropdown-list'
 DropdownDialog = require './dropdown-dialog'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'DropdownEditor'
 
   getDefaultProps: ->

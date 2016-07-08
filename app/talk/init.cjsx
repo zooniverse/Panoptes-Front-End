@@ -20,7 +20,7 @@ DragReorderable = require 'drag-reorderable'
 Paginator = require './lib/paginator'
 SidebarNotifications = require './lib/sidebar-notifications'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkInit'
   mixins: [HandlePropChanges]
 

@@ -18,7 +18,7 @@ defaultDiscussionTitle = (subject) ->
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkQuickSubjectCommentForm'
   mixins: [State, History]
 

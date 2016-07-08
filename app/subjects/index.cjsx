@@ -11,7 +11,7 @@ SubjectDiscussionList = require './discussion-list'
 SubjectMentionList = require './mention-list'
 SubjectCollectionList = require './collection-list'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'Subject'
 
   getInitialState: ->

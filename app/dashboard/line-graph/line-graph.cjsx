@@ -6,7 +6,7 @@ XLabels = require './x-labels'
 YRules = require './y-rules'
 YLabels = require './y-labels'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'LineGraph'
 
   axisColor: 'lightgrey'

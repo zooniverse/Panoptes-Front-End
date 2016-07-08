@@ -7,7 +7,7 @@ updateQueryParams = require './lib/update-query-params'
 Loading = require '../components/loading-indicator'
 talkConfig = require './config'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkRecents'
   mixins: [History]
 

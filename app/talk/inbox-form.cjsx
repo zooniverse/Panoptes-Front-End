@@ -8,7 +8,7 @@ subjectValidations = require './lib/message-subject-validations'
 messageValidations = require './lib/message-validations'
 CommentBox = require './comment-box'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'InboxForm'
   mixins: [History]
 

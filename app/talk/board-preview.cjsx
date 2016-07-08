@@ -4,7 +4,7 @@ resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
 merge = require 'lodash.merge'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkBoardDisplay'
 
   propTypes:

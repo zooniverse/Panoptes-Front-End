@@ -4,7 +4,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 PromiseRenderer = require '../components/promise-renderer'
 merge = require 'lodash.merge'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkBreadcrumbs'
 
   crumbCatch: (e) ->

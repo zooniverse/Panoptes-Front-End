@@ -16,7 +16,7 @@ actionTaken =
   watch: 'Watched'
   watched: 'Watched'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'ModerationActions'
 
   propTypes:

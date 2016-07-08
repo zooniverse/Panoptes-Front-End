@@ -2,7 +2,7 @@
 
 MAX_LENGTH = 10000 # characters
 
-module?.exports = [
+module.exports = [
   # existence
   {
     check: (message) -> message.length > 0

@@ -3,7 +3,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../components/loading-indicator'
 CollectionPreview = require '../collections/preview'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'SubjectCollectionList'
 
   componentWillMount: ->

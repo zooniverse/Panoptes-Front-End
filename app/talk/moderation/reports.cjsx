@@ -3,7 +3,7 @@ React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'ModerationActions'
 
   propTypes:

@@ -4,7 +4,7 @@ Comment = require '../talk/comment'
 Paginator = require '../talk/lib/paginator'
 Loading = require '../components/loading-indicator'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'SubjectCommentList'
 
   componentWillMount: ->

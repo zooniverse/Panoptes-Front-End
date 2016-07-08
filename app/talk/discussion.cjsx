@@ -28,7 +28,7 @@ SidebarNotifications = require './lib/sidebar-notifications'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkDiscussion'
   mixins: [History]
 

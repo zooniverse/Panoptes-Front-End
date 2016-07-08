@@ -10,7 +10,7 @@ alert = require '../lib/alert'
 {Markdown, MarkdownEditor} = (require 'markdownz').default
 Suggester = require './suggester'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'Commentbox'
   mixins: [ToggleChildren, Feedback]
 

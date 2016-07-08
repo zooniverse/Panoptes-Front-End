@@ -5,7 +5,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 {History} = require 'react-router'
 CommentBox = require './comment-box'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'PrivateMessageForm'
   mixins: [History]
 

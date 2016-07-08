@@ -5,7 +5,7 @@ MessageNotification = require './message'
 ModerationNotification = require './moderation'
 StartedDiscussionNotification = require './started-discussion'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'Notification'
 
   propTypes:

@@ -3,7 +3,7 @@ CollectionsManager = require './manager'
 Dialog = require 'modal-form/dialog'
 
 # Shows an icon to logged-in users that pops up a collections manager
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'CollectionsManagerIcon'
 
   propTypes:
