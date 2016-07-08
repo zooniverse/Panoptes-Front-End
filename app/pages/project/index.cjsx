@@ -36,6 +36,7 @@ SOCIAL_ICONS =
 ProjectPage = React.createClass
   contextTypes:
     setAppHeaderVariant: React.PropTypes.func
+    revealSiteHeader: React.PropTypes.func
     geordi: React.PropTypes.object
 
   getDefaultProps: ->
@@ -51,6 +52,8 @@ ProjectPage = React.createClass
 
   componentDidMount: ->
     @context.setAppHeaderVariant 'demoted'
+    unless @props.user?
+      @context.revealSiteHeader()
     document.documentElement.classList.add 'on-project-page'
     @fetchInfo @props.project
     @getSelectedWorkflow @props.project, @props.preferences

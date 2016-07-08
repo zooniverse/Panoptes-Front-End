@@ -18,6 +18,7 @@ const AppLayout = React.createClass({
 
   childContextTypes: {
     setAppHeaderVariant: React.PropTypes.func,
+    revealSiteHeader: React.PropTypes.func,
   },
 
   getInitialState() {
@@ -36,6 +37,13 @@ const AppLayout = React.createClass({
           siteHeaderDemoted: variant === 'demoted',
         });
       },
+
+      revealSiteHeader: () => {
+        this.matchWindowScale();
+        this.setState({
+          siteHeaderRevealed: true,
+        });
+      }
     };
   },
 
