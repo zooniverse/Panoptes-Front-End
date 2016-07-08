@@ -1,5 +1,6 @@
 React = require 'react'
 Select = require 'react-select'
+debounce = require 'debounce'
 
 module.exports = React.createClass
   displayName: 'GridButtons'
@@ -45,7 +46,7 @@ module.exports = React.createClass
     @props.preferences.preferences.activeTemplate = type
     @props.preferences.update 'preferences'
     if type is 'grid'
-      @setState gridSelect: true
+      @setState gridSelect: true, templateForm: null, error: null
     if type is null
       @setState gridSelect: false
 
@@ -84,26 +85,39 @@ module.exports = React.createClass
     @props.preferences.update 'preferences'
 
   saveGrid: (e) ->
-    @props.annotation._completed = true
     e.preventDefault()
-    @activateTemplate 'grid'
+    if @uniqueName @refs.name.value
+      @props.annotation._completed = true
+      @activateTemplate 'grid'
 
-    newGrid = for cell in @props.annotation.value
-      Object.assign({}, cell)
-    displayName = @refs.name.value
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.update 'preferences.grid': newGrid
-      if !pref.preferences?.savedGrids?
-        pref.update 'preferences.savedGrids': [{ value: Math.random(), label: displayName, template: newGrid}]
-        pref.save()
-      else
-        pref.preferences.savedGrids.push { value: Math.random(), label: displayName, template: newGrid}
-        pref.save()
-    @setState templateForm: false
-    @setState gridSelect: true
+      newGrid = for cell in @props.annotation.value
+        Object.assign({}, cell)
+      displayName = @refs.name.value
+      @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
+        pref.update 'preferences.grid': newGrid
+        if !pref.preferences?.savedGrids?
+          pref.update 'preferences.savedGrids': [{ value: Math.random(), label: displayName, template: newGrid}]
+          pref.save()
+        else
+          pref.preferences.savedGrids.push { value: Math.random(), label: displayName, template: newGrid}
+          pref.save()
+      @setState templateForm: false
+      @setState gridSelect: true
+      @setState error: null if @state?.error
+
+  uniqueName: (name) ->
+    unique = true
+    @props.preferences.preferences?.savedGrids?.map (template) ->
+      unique = false if template.label == name
+    @setState error: true if unique is false
+    unique
 
   renderTemplateSave: ->
     <form onSubmit={@saveGrid}>
+      {if @state.error
+        <div className="form-help error">
+          <span>Template Name Should be Unique</span>
+        </div>}
       <input className="template-name-input" ref="name" placeholder="Template Name" /><br />
       <button type="submit" className="template-form-button">Save Template</button>
       <button type="button" className="template-form-button" onClick={@setState.bind this, templateForm: null, null}>Cancel</button>
