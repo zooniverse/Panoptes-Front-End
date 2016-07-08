@@ -1,6 +1,5 @@
 React = require 'react'
 Select = require 'react-select'
-debounce = require 'debounce'
 
 module.exports = React.createClass
   displayName: 'GridButtons'
