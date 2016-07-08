@@ -23,45 +23,48 @@ const PanZoom = React.createClass({
   
   render() {
     return (
-      <div className="pan-zoom-controls" >
-        <div className="draw-pan-toggle" >
-          <div className={this.props.panEnabled ? "" : "active"} >
-            <button title="annotate" className="fa fa-mouse-pointer" onClick={this.togglePanOff}/>
+      <div>
+      {this.props.children}
+        <div className="pan-zoom-controls" >
+          <div className="draw-pan-toggle" >
+            <div className={this.props.panEnabled ? "" : "active"} >
+              <button title="annotate" className="fa fa-mouse-pointer" onClick={this.togglePanOff}/>
+            </div>
+            <div className={this.props.panEnabled ? "active" : ""}>
+              <button title="pan" ref="pan" className="fa fa-arrows" onClick={this.handleFocus.bind(this, "pan")} onFocus={this.togglePanOn} onBlur={this.togglePanOff}/>
+            </div>
           </div>
-          <div className={this.props.panEnabled ? "active" : ""}>
-            <button title="pan" ref="pan" className="fa fa-arrows" onClick={this.handleFocus.bind(this, "pan")} onFocus={this.togglePanOn} onBlur={this.togglePanOff}/>
+          <div>
+            <button
+              title="zoom out"
+              ref="zoomOut"
+              className={"zoom-out fa fa-minus" + (this.cannotZoomOut() ? " disabled" : "") }
+              onMouseDown={ this.continuousZoom.bind(this, 1.1 ) }
+              onMouseUp={this.stopZoom}
+              onKeyDown={this.keyDownZoomButton.bind(this,1.1)}
+              onKeyUp={this.stopZoom}
+              onFocus={this.togglePanOn}
+              onBlur={this.togglePanOff}
+              onClick={this.handleFocus.bind(this, "zoomOut")}
+            />
           </div>
-        </div>
-        <div>
-          <button
-            title="zoom out"
-            ref="zoomOut"
-            className={"zoom-out fa fa-minus" + (this.cannotZoomOut() ? " disabled" : "") }
-            onMouseDown={ this.continuousZoom.bind(this, 1.1 ) }
-            onMouseUp={this.stopZoom}
-            onKeyDown={this.keyDownZoomButton.bind(this,1.1)}
-            onKeyUp={this.stopZoom}
-            onFocus={this.togglePanOn}
-            onBlur={this.togglePanOff}
-            onClick={this.handleFocus.bind(this, "zoomOut")}
-          />
-        </div>
-        <div>
-          <button
-            title="zoom in"
-            ref="zoomIn"
-            className="zoom-in fa fa-plus"
-            onMouseDown={this.continuousZoom.bind(this, .9)}
-            onMouseUp={this.stopZoom}
-            onKeyDown={this.keyDownZoomButton.bind(this,.9)}
-            onKeyUp={this.stopZoom}
-            onFocus={this.togglePanOn}
-            onBlur={this.togglePanOff}
-            onClick={this.handleFocus.bind(this, "zoomIn")}
-          />
-        </div>
-        <div>
-          <button title="reset zoom levels" className={"reset fa fa-refresh" + (this.cannotZoomOut() ? " disabled" : "")} onClick={ this.zoomReset } ></button>
+          <div>
+            <button
+              title="zoom in"
+              ref="zoomIn"
+              className="zoom-in fa fa-plus"
+              onMouseDown={this.continuousZoom.bind(this, .9)}
+              onMouseUp={this.stopZoom}
+              onKeyDown={this.keyDownZoomButton.bind(this,.9)}
+              onKeyUp={this.stopZoom}
+              onFocus={this.togglePanOn}
+              onBlur={this.togglePanOff}
+              onClick={this.handleFocus.bind(this, "zoomIn")}
+            />
+          </div>
+          <div>
+            <button title="reset zoom levels" className={"reset fa fa-refresh" + (this.cannotZoomOut() ? " disabled" : "")} onClick={ this.zoomReset } ></button>
+          </div>
         </div>
       </div>
     )

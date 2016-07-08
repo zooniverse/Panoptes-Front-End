@@ -52,42 +52,40 @@ module.exports = React.createClass
             <LoadingIndicator />
           </div>}
         </VideoPlayer>
+    
+    wrappedDisplay =
+      <FrameWrapper 
+        frame={frame} 
+        naturalWidth={@state.frameDimensions?.width or 0} 
+        naturalHeight={@state.frameDimensions?.height or 0} 
+        panByDrag={@refs.panZoom?.panByDrag} 
+        viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} 
+        workflow={@props.workflow} 
+        subject={@props.subject} 
+        classification={@props.classification} 
+        annotation={@props.annotation} 
+        loading={@state.loading}
+        preferences={@props.preferences}
+        modification={@props?.modification} 
+        onChange={@props.onChange} 
+        panEnabled={@state.panEnabled} 
+        >
+        {frameDisplay}
+      </FrameWrapper>
 
     if FrameWrapper
-      <div>
-        <FrameWrapper 
-          frame={frame} 
-          naturalWidth={@state.frameDimensions?.width or 0} 
-          naturalHeight={@state.frameDimensions?.height or 0} 
-          panByDrag={@refs.panZoom?.panByDrag} 
-          viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} 
-          workflow={@props.workflow} 
-          subject={@props.subject} 
-          classification={@props.classification} 
-          annotation={@props.annotation} 
-          loading={@state.loading}
-          preferences={@props.preferences}
-          modification={@props?.modification} 
-          onChange={@props.onChange} 
-          panEnabled={@state.panEnabled} 
-          >
-          {frameDisplay}
-        </FrameWrapper>
-        {if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
-          <PanZoom 
-            ref="panZoom" 
-            frameDimensions={@state.frameDimensions} 
-            viewBoxDimensions={@state.viewBoxDimensions} 
-            panEnabled={@state.panEnabled}
-            onToggle={@togglePan}
-            onChange={@updateViewBox} 
-          />}
-
-      </div>
-
-
-    else
-      frameDisplay
+      if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
+        <PanZoom 
+          ref="panZoom" 
+          frameDimensions={@state.frameDimensions} 
+          viewBoxDimensions={@state.viewBoxDimensions} 
+          panEnabled={@state.panEnabled}
+          onToggle={@togglePan}
+          onChange={@updateViewBox}>
+          {wrappedDisplay}
+        </PanZoom>
+      else
+        wrappedDisplay
 
   handleLoad: (e) ->
     width = e.target.videoWidth ? e.target.naturalWidth
