@@ -2,6 +2,16 @@ import React from 'react';
 
 const PanZoom = React.createClass({
   
+  getDefaultProps() {
+    return {
+      enabled: false,
+      frameDimensions: {
+        height: 0,
+        width: 0
+      }
+    }
+  },
+  
   getInitialState() {
     return {
       panEnabled: false,
