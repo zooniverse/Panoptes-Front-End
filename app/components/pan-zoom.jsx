@@ -51,6 +51,7 @@ const PanZoom = React.createClass({
     return (
       <div>
       {children}
+      {this.props.enabled ?
         <div className="pan-zoom-controls" >
           <div className="draw-pan-toggle" >
             <div className={this.state.panEnabled ? "" : "active"} >
@@ -92,6 +93,8 @@ const PanZoom = React.createClass({
             <button title="reset zoom levels" className={"reset fa fa-refresh" + (this.cannotZoomOut() ? " disabled" : "")} onClick={ this.zoomReset } ></button>
           </div>
         </div>
+        : ""
+      }
       </div>
     )
   },

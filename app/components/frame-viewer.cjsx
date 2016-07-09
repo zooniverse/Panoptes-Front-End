@@ -31,6 +31,7 @@ module.exports = React.createClass
     frame = @props.frame
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
     FrameWrapper = @props.frameWrapper
+    zoomEnabled = @props.project? && 'pan and zoom' in @props.project?.experimental_tools
     frameDisplay = switch type
       when 'image'
         <div className="subject-image-frame" >
@@ -48,32 +49,27 @@ module.exports = React.createClass
             <LoadingIndicator />
           </div>}
         </VideoPlayer>
-    
-    wrappedDisplay =
-      <FrameWrapper 
-        frame={frame} 
-        naturalWidth={@state.frameDimensions?.width or 0} 
-        naturalHeight={@state.frameDimensions?.height or 0} 
-        viewBoxDimensions={@state.viewBoxDimensions or "0 0 0 0"} 
-        workflow={@props.workflow} 
-        subject={@props.subject} 
-        classification={@props.classification} 
-        annotation={@props.annotation} 
-        loading={@state.loading}
-        preferences={@props.preferences}
-        modification={@props?.modification} 
-        onChange={@props.onChange} 
-        >
-        {frameDisplay}
-      </FrameWrapper>
 
     if FrameWrapper
-      if ( @props.project? && 'pan and zoom' in @props.project?.experimental_tools)
-        <PanZoom ref="panZoom" frameDimensions={@state.frameDimensions}>
-          {wrappedDisplay}
-        </PanZoom>
-      else
-        wrappedDisplay
+      <PanZoom ref="panZoom" enabled={zoomEnabled} frameDimensions={@state.frameDimensions}>
+        <FrameWrapper 
+          frame={frame} 
+          naturalWidth={@state.frameDimensions?.width or 0} 
+          naturalHeight={@state.frameDimensions?.height or 0} 
+          workflow={@props.workflow} 
+          subject={@props.subject} 
+          classification={@props.classification} 
+          annotation={@props.annotation} 
+          loading={@state.loading}
+          preferences={@props.preferences}
+          modification={@props?.modification} 
+          onChange={@props.onChange} 
+          >
+          {frameDisplay}
+        </FrameWrapper>
+      </PanZoom>
+    else
+      frameDisplay
 
   handleLoad: (e) ->
     width = e.target.videoWidth ? e.target.naturalWidth
