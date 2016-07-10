@@ -22,6 +22,12 @@ counterpart.registerTranslations 'en',
 CollectionPage = React.createClass
   displayName: 'CollectionPage'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  componentWillReceiveProps: (nextProps, nextContext)->
+    @logClick = nextContext?.geordi?.makeHandler? 'about-menu'
+
   getDefaultProps: ->
     collection: null
 
@@ -33,25 +39,23 @@ CollectionPage = React.createClass
 
   render: ->
     <PromiseRenderer promise={@props.collection.get('owner')}>{(owner) =>
-      [ownerName, name] = @props.collection.slug.split('/')
-      params = {owner: ownerName, name: name}
-
+      baseLink = "/collections/#{@props.collection.slug}"
       isOwner = @props.user?.id is owner.id
 
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
-          <IndexLink to="/collections/#{ownerName}/#{name}" activeClassName="active" className="tabbed-content-tab">
+          <IndexLink to="#{baseLink}" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'view-collection')}>
             <Avatar user={owner} />
             {@props.collection.display_name}
           </IndexLink>
 
           {if isOwner
-            <Link to="/collections/#{ownerName}/#{name}/settings" activeClassName="active" className="tabbed-content-tab">
+            <Link to="#{baseLink}/settings" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'settings-collection')}>
               <Translate content="collectionPage.settings" />
             </Link>}
 
           {if isOwner
-            <Link to="/collections/#{ownerName}/#{name}/collaborators" activeClassName="active" className="tabbed-content-tab">
+            <Link to="#{baseLink}/collaborators" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'collab-collection')}>
               <Translate content="collectionPage.collaborators" />
             </Link>}
         </nav>
@@ -79,8 +83,8 @@ module.exports = React.createClass
     loading: false
 
   propChangeHandlers:
-    'params.owner': 'fetchCollection'
-    'params.name': 'fetchCollection'
+    'params.collection_owner': 'fetchCollection'
+    'params.collection_name': 'fetchCollection'
     'user': 'fetchCollection'
 
   fetchCollection: ->
@@ -89,7 +93,7 @@ module.exports = React.createClass
       loading: true
 
     apiClient.type('collections')
-      .get(slug: @props.params.owner + '/' + @props.params.name, include: 'owner')
+      .get(slug: @props.params.collection_owner + '/' + @props.params.collection_name, include: 'owner')
       .then ([collection]) =>
         unless collection then @setState error: true
 

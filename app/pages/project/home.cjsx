@@ -1,10 +1,11 @@
 React = require 'react'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 PromiseRenderer = require '../../components/promise-renderer'
 FinishedBanner = require './finished-banner'
 ProjectMetadata = require './metadata'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 {Link} = require 'react-router'
 
 module.exports = React.createClass
@@ -12,13 +13,16 @@ module.exports = React.createClass
 
   mixins: [HandlePropChanges, PromiseToSetState]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   propChangeHandlers:
     project: (project) ->
       # TODO: Build this kind of caching into json-api-client.
       if project._workflows?
         @setState workflows: project._workflows
       else
-        workflows = project.get 'workflows', active: true
+        workflows = getWorkflowsInOrder project, active: true
 
         workflows.then (workflows) =>
           project._workflows = workflows

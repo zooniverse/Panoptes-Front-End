@@ -8,7 +8,7 @@ putFile = require '../../lib/put-file'
 counterpart = require 'counterpart'
 DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
-{MarkdownEditor} = require 'markdownz'
+{MarkdownEditor} = (require 'markdownz').default
 MarkdownHelp = require '../../partials/markdown-help'
 alert = require('../../lib/alert')
 {DISCIPLINES} = require '../../components/disciplines'
@@ -153,7 +153,7 @@ module.exports = React.createClass
               <br />
               <input className="standard-input full" name="description" value={@props.project.description} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
-            <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project. <CharLimit limit=300 string={@props.project.description} /></small>
+            <small className="form-help">This should be a one-line call to action for your project that displays on your landing page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project. <CharLimit limit={300} string={@props.project.description ? ''} /></small>
           </p>
 
           <div>
@@ -162,7 +162,7 @@ module.exports = React.createClass
               <br />
               <MarkdownEditor className="full" name="introduction" rows="10" value={@props.project.introduction} project={@props.project} onChange={handleInputChange.bind @props.project} onHelp={-> alert <MarkdownHelp/>}/>
             </AutoSave>
-            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. <CharLimit limit=1500 string={@props.project.introduction} /></small>
+            <small className="form-help">Add a brief introduction to get people interested in your project. This will display on your landing page. <CharLimit limit={1500} string={@props.project.introduction ? ''} /></small>
           </div>
 
           <p>
@@ -171,7 +171,7 @@ module.exports = React.createClass
               <br />
               <textarea className="standard-input full" name="workflow_description" value={@props.project.workflow_description} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
-            <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit=500 string={@props.project.workflow_description} /></small>
+            <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit={500} string={@props.project.workflow_description ? ''} /></small>
           </p>
 
           <p>

@@ -1,7 +1,7 @@
 counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 
 counterpart.registerTranslations 'en',
   bestPracticesAppendixPage:
@@ -13,7 +13,7 @@ counterpart.registerTranslations 'en',
       ### Useful Links, Blog Posts, and Documents:
 
       - [Project Builder Policies](/lab-policies) &mdash; Official Zooniverse policy about user-built projects.
-      - [Examples of Strong Newsletters](https://docs.google.com/document/d/1xB0nNPzwwzNgCwm0_ZufIy-0I6HX3OG2YHkVZ-oBQCo/edit?usp=sharing) &mdash; Samples of newsletters we have used. 
+      - [Examples of Strong Newsletters](https://docs.google.com/document/d/1xB0nNPzwwzNgCwm0_ZufIy-0I6HX3OG2YHkVZ-oBQCo/edit?usp=sharing) &mdash; Samples of newsletters we have used.
       - [What Are Moderators For?](https://docs.google.com/document/d/1L8LwYy_uUxwX1NqE5sXi0fnrjZKG1DZu1fWLath9BOE) &mdash; Learn what moderators are and why you want them.
       - [Measuring Success in Citizen Science Projects: Part 1](http://blog.zooniverse.org/2015/08/24/measuring-success-in-citizen-science-projects-part-1-methods/) and [Part 2](http://blog.zooniverse.org/2015/08/24/measuring-success-in-citizen-science-projects-part-2-results/) &mdash; An analysis of past (and current) Zooniverse projects, demonstrating the importance of engagement.
       - [Who Are The Zooniverse Community? We Asked Them&hellip;](http://blog.zooniverse.org/2015/03/05/who-are-the-zooniverse-community-we-asked-them/) &mdash; A summary of results from a survey of Zooniverse volunteers conducted as part of a master’s thesis in 2014-2015.

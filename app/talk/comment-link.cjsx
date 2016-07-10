@@ -21,11 +21,11 @@ module?.exports = React.createClass
   projectCommentUrl: ->
     {comment} = @props
     [ownerName, projectName] = comment.project_slug.split('/')
-    document.baseURI.slice(0, -1) + "/projects/#{ownerName}/#{projectName}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    window.location.origin + "/projects/#{ownerName}/#{projectName}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
 
   mainTalkCommentUrl: ->
     {comment} = @props
-    document.baseURI.slice(0, -1) + "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    window.location.origin + "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
 
   render: ->
     <div className="talk-comment-link">

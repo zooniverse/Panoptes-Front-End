@@ -17,13 +17,15 @@ Tutorial = require '../lib/tutorial'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 WorldWideTelescope = require './world_wide_telescope'
-MiniCourse = require '../lib/mini-course'
 MiniCourseButton = require './mini-course-button'
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
 Classifier = React.createClass
   displayName: 'Classifier'
+
+  contextTypes:
+    geordi: React.PropTypes.object
 
   getDefaultProps: ->
     user: null
@@ -39,6 +41,7 @@ Classifier = React.createClass
     classificationQuality: NaN
     showingExpertClassification: false
     selectedExpertAnnotation: -1
+    backButtonWarning: false
 
   componentDidMount: ->
     @loadSubject @props.subject
@@ -54,6 +57,13 @@ Classifier = React.createClass
       @loadSubject subject
     if nextProps.classification isnt @props.classification
       @prepareToClassify nextProps.classification
+
+    @context.geordi.remember subjectID: @props.subject?.id
+
+  componentWillUnmount: () ->
+    try
+      @context.geordi?.forget ['subjectID']
+
 
   loadSubject: (subject) ->
     @setState
@@ -94,6 +104,9 @@ Classifier = React.createClass
       @addAnnotationForTask classification, @props.workflow.first_task
 
   render: ->
+    largeFormatImage = @props.workflow.configuration.image_layout and 'no-max-height' in @props.workflow.configuration.image_layout
+    classifierClassNames = if largeFormatImage then "classifier large-image" else "classifier"
+
     <ChangeListener target={@props.classification}>{=>
       if @state.showingExpertClassification
         currentClassification = @state.expertClassification
@@ -106,7 +119,7 @@ Classifier = React.createClass
       # This is just easy access for debugging.
       window.classification = currentClassification
 
-      <div className="classifier">
+      <div className={classifierClassNames} >
         <SubjectViewer
           user={@props.user}
           project={@props.project}
@@ -136,7 +149,7 @@ Classifier = React.createClass
     # Should we disabled the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
-    
+
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
@@ -190,7 +203,7 @@ Classifier = React.createClass
 
       <nav className="task-nav">
         {if Object.keys(@props.workflow.tasks).length > 1
-          <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation}>Back</button>}
+          <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
         {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
@@ -206,11 +219,12 @@ Classifier = React.createClass
           </button>}
         {@renderExpertOptions()}
       </nav>
+      { @renderBackButtonWarning() if @state.backButtonWarning }
 
       <p>
         <small>
           <strong>
-            <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} project={@props.project} title="Project tutorial" aria-label="Show the project tutorial" style={marginTop: '2em'}>
+            <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} project={@props.project} style={marginTop: '2em'}>
               Show the project tutorial
             </TutorialButton>
           </strong>
@@ -220,7 +234,7 @@ Classifier = React.createClass
       <p>
         <small>
           <strong>
-            <MiniCourseButton className="minor-button" user={@props.user} project={@props.project} workflow={@props.workflow} title="Project Mini-course" aria-label="Show the project mini-course" style={marginTop: '2em'}>
+            <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
               Restart the project mini-course
             </MiniCourseButton>
           </strong>
@@ -275,8 +289,7 @@ Classifier = React.createClass
           HelpButton = (props) =>
             <button type="button" onClick={=>
               {alert} = require 'modal-form/dialog'
-              {Markdown} = require 'markdownz'
-              console.log {Markdown}
+              {Markdown} = (require 'markdownz').default
               alert <Markdown>{@props.workflow.tasks[@props.workflow.first_task].help}</Markdown>
             }>
               {props.children}
@@ -367,6 +380,8 @@ Classifier = React.createClass
 
   # Whenever a subject image is loaded in the annotator, record its size at that time.
   handleSubjectImageLoad: (e, frameIndex) ->
+    @context.geordi?.remember subjectID: @props.subject?.id
+
     {naturalWidth, naturalHeight, clientWidth, clientHeight} = e.target
     changes = {}
     changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
@@ -413,6 +428,15 @@ Classifier = React.createClass
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
+
+  warningToggleOn: ->
+    @setState backButtonWarning: true
+
+  warningToggleOff: ->
+    @setState backButtonWarning: false
+
+  renderBackButtonWarning: ->
+    <p className="back-button-warning" >Going back will clear your work for the current task.</p>
 
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'

@@ -10,6 +10,9 @@ Router = require 'react-router'
 ModalFormDialog = require 'modal-form/dialog'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
+isAdmin = require '../../lib/is-admin'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
+DragReorderable = require 'drag-reorderable'
 
 DEFAULT_SUBJECT_SET_NAME = 'Untitled subject set'
 DELETE_CONFIRMATION_PHRASE = 'I AM DELETING THIS PROJECT'
@@ -32,6 +35,15 @@ EditProjectPage = React.createClass
     subjectSetCreationInProgress: false
     deletionError: null
     deletionInProgress: false
+
+  handleWorkflowReorder: (newOrder) ->
+    newOrderIDs = newOrder.map (workflow) ->
+      workflow.id
+    @props.project.update({
+      'configuration.workflow_order': newOrderIDs
+    })
+    @forceUpdate()
+    @props.project.save()
 
   labPath: (postFix = '') ->
     "/lab/#{@props.project.id}#{postFix}"
@@ -58,10 +70,9 @@ EditProjectPage = React.createClass
             <li><Link to={@labPath('/guide')} activeClassName='active' className="nav-list-item" title="Create a persistent guide that can be viewed within your project">
               Field guide
             </Link></li>}
-          {if 'tutorial' in (@props.project.experimental_tools ? [])
-            <li><Link to={@labPath('/tutorial')} activeClassName='active' className="nav-list-item" title="Create a pop-up tutorial for your project’s classification interface">
-              Tutorial
-            </Link></li>}
+          <li><Link to={@labPath('/tutorial')} activeClassName='active' className="nav-list-item" title="Create a pop-up tutorial for your project’s classification interface">
+            Tutorial
+          </Link></li>
           {if 'mini-course' in (@props.project.experimental_tools ? [])
             <li><Link to={@labPath('/mini-course')} activeClassName='active' className="nav-list-item" title="Create a pop-up mini-course for your project’s classification interface">
               Mini-course
@@ -82,24 +93,28 @@ EditProjectPage = React.createClass
           <li>
             <br />
             <div className="nav-list-header">Workflows</div>
-            <PromiseRenderer promise={@props.project.get 'workflows'}>{(workflows) =>
-              <ul className="nav-list">
-                {renderWorkflowListItem = (workflow) ->
-                  <li key={workflow.id}>
-                    <Link to={@labPath("/workflow/#{workflow.id}")} activeClassName="active" className="nav-list-item" title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">{workflow.display_name}</Link>
-                  </li>}
+            <PromiseRenderer promise={getWorkflowsInOrder @props.project}>{(workflows) =>
+              renderWorkflowListItem = (workflow) =>
+                <Link to={@labPath "/workflow/#{workflow.id}"} className="nav-list-item" activeClassName="active">
+                  {workflow.display_name}
+                  {if workflow.id is @props.project.configuration?.default_workflow
+                    <span title="Default workflow">{' '}*{' '}</span>}
+                </Link>
 
-                {for workflow in workflows
-                  <ChangeListener key={workflow.id} target={workflow} eventName="save" handler={renderWorkflowListItem.bind this, workflow} />}
-
-                <li className="nav-list-item">
-                  <button type="button" onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
-                    New workflow{' '}
-                    <LoadingIndicator off={not @state.workflowCreationInProgress} />
-                  </button>
+              renderWorkflowListItemListener = (workflow) =>
+                <li key={workflow.id}>
+                  <ChangeListener target={workflow} eventName="save" handler={renderWorkflowListItem.bind null, workflow} />
                 </li>
-              </ul>
+
+              <DragReorderable tag="ul" className="nav-list" items={workflows} render={renderWorkflowListItemListener} onChange={@handleWorkflowReorder} />
             }</PromiseRenderer>
+
+            <div className="nav-list-item">
+              <button type="button" onClick={@showCreateWorkflow} disabled={@state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
+                New workflow{' '}
+                <LoadingIndicator off={not @state.workflowCreationInProgress} />
+              </button>
+            </div>
           </li>
 
           {if @state.workflowCreationInProgress
@@ -240,7 +255,7 @@ module.exports = React.createClass
       getProject = apiClient.type('projects').get @props.params.projectID
 
       getOwners = getProject.then (project) =>
-        project.get('project_roles', page_size: 100).then (projectRoles) =>
+        project.get('project_roles', user_id: @props.user.id).then (projectRoles) =>
           owners = for projectRole in projectRoles when 'owner' in projectRole.roles or 'collaborator' in projectRole.roles
             projectRole.get 'owner'
           Promise.all owners
@@ -252,7 +267,7 @@ module.exports = React.createClass
           <p className="form-help">Loading project</p>
         </div>
       } then={([project, owners]) =>
-        if @props.user in owners
+        if @props.user in owners or isAdmin()
           <EditProjectPage {...@props} project={project} />
         else
           <div className="content-container">

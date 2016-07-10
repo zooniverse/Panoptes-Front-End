@@ -27,13 +27,8 @@ WorkflowCreateForm = React.createClass
     newWorkflow =
       display_name: @refs.newDisplayName.value
       primary_language: counterpart.getLocale()
-      tasks: workflowToClone?.tasks ? {
-        init:
-          type: 'single'
-          question: 'Ask your first question here.'
-          answers: [{label: 'Yes'}]
-      }
-      first_task: workflowToClone?.first_task ? 'init'
+      tasks: workflowToClone?.tasks ? {}
+      first_task: workflowToClone?.first_task ? ''
       configuration: workflowToClone?.configuration ? {}
       retirement: workflowToClone?.retirement ? {}
       active: @props.workflowActiveStatus ? false

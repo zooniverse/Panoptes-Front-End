@@ -5,7 +5,7 @@ PromiseRenderer = require '../components/promise-renderer'
 parseSection = require './lib/parse-section'
 CommentContextIcon = require './lib/comment-context-icon'
 apiClient = require 'panoptes-client/lib/api-client'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 
 # This isn't very reuseable as it's prop is a comment resource with it's
 # linked discussion added on. Probably a better way to approach this.

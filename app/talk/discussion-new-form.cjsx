@@ -94,6 +94,7 @@ module?.exports = React.createClass
           placeholder={"""Add a comment here to start the discussion.
           This comment will appear at the start of the discussion."""}
           onSubmitComment={@onSubmitDiscussion}
+          logSubmit={true}
           subject={@props.subject}
           submit="Create Discussion"/>
         {if @state.loading then <Loading />}

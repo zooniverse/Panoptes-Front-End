@@ -1,7 +1,7 @@
 React = require 'react'
 FavoritesButton = require '../collections/favorites-button'
-alert = require '../lib/alert'
-{Markdown} = require 'markdownz'
+{alert} = require 'modal-form/dialog'
+{Markdown} = (require 'markdownz').default
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 FrameViewer = require './frame-viewer'
@@ -24,6 +24,9 @@ CONTAINER_STYLE = display: 'flex', flexWrap: 'wrap', position: 'relative'
 
 module.exports = React.createClass
   displayName: 'SubjectViewer'
+
+  contextTypes:
+    geordi: React.PropTypes.object
 
   signInAttentionTimeout: NaN
 
@@ -53,11 +56,22 @@ module.exports = React.createClass
       clearTimeout @signInAttentionTimeout
       @setState loading: true
 
+  logSubjClick: (logType) ->
+    @context.geordi?.logEvent
+      type: logType
+
   promptToSignIn: ->
-    alert (resolve) ->
-      <SignInPrompt onChoose={resolve}>
-        <p>Sign in to help us make the most out of your hard work.</p>
-      </SignInPrompt>
+    # This is super hacky.
+    # TODO: Make a way to dismiss `alert`ed dialogs without requiring a form submission.
+    fauxSubmit = (e) ->
+      form = e.currentTarget
+      until form?.nodeName is 'FORM' or not form?
+        form = form.parentNode
+      form?.dispatchEvent new CustomEvent 'submit'
+
+    alert <SignInPrompt onChoose={fauxSubmit}>
+      <p>Sign in to help us make the most out of your hard work.</p>
+    </SignInPrompt>
 
   render: ->
     rootClasses = classnames('subject-viewer', {
@@ -65,8 +79,11 @@ module.exports = React.createClass
       'subject-viewer--flipbook': @state.inFlipbookMode
       "subject-viewer--layout-#{@props.workflow?.configuration?.multi_image_layout}": @props.workflow?.configuration?.multi_image_layout
     })
-    # Feature detect IE11 and apply flex prop. Revisit or remove when IE11 is no longer supported.
-    rootStyle = flex: "1 1 auto" if "ActiveXObject" in window or window.ActiveXObject isnt undefined
+
+    isIE = 'ActiveXObject' of window
+    if isIE
+      rootStyle = flex: '1 1 auto'
+
     mainDisplay = ''
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     if @state.inFlipbookMode
@@ -122,7 +139,9 @@ module.exports = React.createClass
         </span>}
         <span>
           {if @props.workflow?.configuration?.enable_subject_flags
-            <FlagSubjectButton classification={@props.classification} />}
+            <span>
+              <FlagSubjectButton className="secret-button" classification={@props.classification} />{' '}
+            </span>}
           {if @props.subject?.metadata?
             <span>
               <button type="button" className="secret-button" aria-label="Metadata" title="Metadata" onClick={@showMetadata}>
@@ -145,7 +164,7 @@ module.exports = React.createClass
                 </button>
               </span>}
           {if type is 'image' and @props.linkToFullImage
-            <a className="button" href={src} aria-label="Subject Image" title="Subject Image" target="zooImage">
+            <a className="button" onClick={@logSubjClick.bind this, "subject-image"} href={src} aria-label="Subject Image" title="Subject Image" target="zooImage">
               <i className="fa fa-photo" />
             </a>}
         </span>
@@ -201,6 +220,7 @@ module.exports = React.createClass
     @props.onFrameChange frame
 
   showMetadata: ->
+    @logSubjClick "metadata"
     # TODO: Sticky popup.
     alert <div className="content-container">
       <header className="form-label" style={textAlign: 'center'}>Subject metadata</header>
@@ -214,4 +234,4 @@ module.exports = React.createClass
             </tr>}
         </tbody>
       </table>
-    </div>
+    </div>, closeButton: true

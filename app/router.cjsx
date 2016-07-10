@@ -100,14 +100,17 @@ module.exports =
       <Route name="talk-discussion" path=":board/:discussion" component={require './talk/discussion'} />
     </Route>
 
-    <Route path="favorites" component={require('./pages/collections').FavoritesList}>
-      <Route path=":owner" component={require('./pages/collections').FavoritesList} />
+    <Route path="favorites" component={require('./pages/collections/index')}>
+      <IndexRoute component={require('./pages/collections/favorites-list')} />
+      <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
     </Route>
 
-    <Route path="collections" component={require('./pages/collections').CollectionsList}>
-      <Route path=":owner" component={require('./pages/collections').CollectionsList} />
+    <Route path="collections" component={require('./pages/collections/index')}>
+       <IndexRoute component={require('./pages/collections/collections-list')} />
+       <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
     </Route>
-    <Route path="collections/:owner/:name" component={require './collections/show'}>
+
+    <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
       <IndexRoute component={require './collections/show-list'} />
       <Route path="settings" component={require './collections/settings'} />
       <Route path="collaborators" component={require './collections/collaborators'} />
@@ -142,6 +145,7 @@ module.exports =
     <Route path="lab-how-to" component={require './pages/lab/how-to-page'} />
 
     <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
+      <IndexRedirect to="introduction" />
       <Route path="introduction" component={require './pages/lab/best-practices/introduction'} />
       <Route path="great-project" component={require './pages/lab/best-practices/great-project'} />
       <Route path="launch-rush" component={require './pages/lab/best-practices/launch-rush'} />

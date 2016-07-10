@@ -2,8 +2,10 @@ React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../lib/put-file'
 FileButton = require '../components/file-button'
-{MarkdownEditor} = require 'markdownz'
+{MarkdownEditor} = (require 'markdownz').default
 debounce = require 'debounce'
+DragReorderable = require 'drag-reorderable'
+classnames = require 'classnames'
 
 ProjectModalStepEditor = React.createClass
   getDefaultProps: ->
@@ -19,16 +21,8 @@ ProjectModalStepEditor = React.createClass
     onMediaClear: ->
       console.log 'ProjectModalStepEditor onMediaClear', arguments
 
-    onRemove: ->
-      console.log 'ProjectModalStepEditor onRemove', arguments
-
   render: ->
     <div className="project-modal-step-editor">
-      <header>
-        <button type="button" className="secret-button" title="Remove step" aria-label="Remove step" onClick={@props.onRemove}>
-          <i className="fa fa-times fa-fw"></i>
-        </button>
-      </header>
       <p>
         {if @props.media?
           <span>
@@ -66,6 +60,51 @@ ProjectModalEditor = React.createClass
     onStepChange: ->
       console.log 'ProjectModalEditor onChange', arguments
 
+    onStepOrderChange: ->
+      console.log 'ProjectModalEditor onStepOrderChange', arguments
+
+  getInitialState: ->
+    stepToEdit: 0
+
+  onClick: (stepIndex) ->
+    @setState stepToEdit: stepIndex
+
+  handleStepRemove: (stepToRemove) ->
+    if @props.projectModal.steps.length is 0
+      stepIndex = null
+    else
+      stepIndex = 0
+
+    @setState { stepToEdit: stepIndex }, -> @props.onStepRemove stepToRemove
+
+  handleStepReorder: (stepsInNewOrder) ->
+    stepReorderedIndex = null
+
+    for step, index in stepsInNewOrder
+      stepReorderedIndex = index if @props.projectModal.steps[@state.stepToEdit].content is step.content
+      
+    @props.onStepOrderChange stepsInNewOrder
+    @setState stepToEdit: stepReorderedIndex
+
+  handleStepAdd: ->
+    @props.onStepAdd()
+    @setState stepToEdit: @props.projectModal.steps.length - 1
+
+  renderStepList: (step, i) ->
+    step._key ?= Math.random()
+    buttonClasses = classnames 
+      "selected": @state.stepToEdit is i
+      "project-modal-step-list-item-button": true
+
+    <li key={step._key} className="project-modal-step-list-item">
+      <button type="button" className={buttonClasses} onClick={@onClick.bind null, i}>
+        <span className="project-modal-step-list-item-button-title">Step #{i + 1}</span>
+      </button>
+      <button type="button" className="project-modal-step-list-item-remove-button" title="Remove this step" onClick={@handleStepRemove.bind null, i}>
+        <i className="fa fa-trash-o fa-fw"></i>
+      </button>
+    </li>
+
   render: ->
     <div className="project-modal-editor">
       <div className="project-modal-header">
@@ -75,19 +114,18 @@ ProjectModalEditor = React.createClass
       {if @props.projectModal.steps.length is 0
         <p>This {@props.kind} has no steps.</p>
       else
-        for step, i in @props.projectModal.steps
-          step._key ?= Math.random()
+        <div className="project-modal-step-editor-container">
+          <DragReorderable tag="ul" className="project-modal-step-list" items={@props.projectModal.steps} render={@renderStepList} onChange={@handleStepReorder} />
           <ProjectModalStepEditor
-            key={step._key}
-            step={step}
-            media={@props.media?[step.media]}
-            onMediaSelect={@props.onMediaSelect.bind null, i}
-            onMediaClear={@props.onMediaClear.bind null, i}
-            onChange={@props.onStepChange.bind null, i}
-            onRemove={@props.onStepRemove.bind null, i}
-          />}
+            step={@props.projectModal.steps[@state.stepToEdit]}
+            media={@props.media?[@props.projectModal.steps[@state.stepToEdit].media]}
+            onMediaSelect={@props.onMediaSelect.bind null, @state.stepToEdit}
+            onMediaClear={@props.onMediaClear.bind null, @state.stepToEdit}
+            onChange={@props.onStepChange.bind null, @state.stepToEdit}
+          />
+        </div>}
       <div>
-        <button type="button" onClick={@props.onStepAdd}>Add a step</button>
+        <button type="button" onClick={@handleStepAdd}>Add a step</button>
       </div>
     </div>
 
@@ -139,6 +177,7 @@ ProjectModalEditorController = React.createClass
         onMediaSelect={@handleStepMediaChange}
         onMediaClear={@handleStepMediaClear}
         onStepChange={@handleStepChange}
+        onStepOrderChange={@handleStepOrderChange}
         onProjectModalDelete={@handleProjectModalDelete}
       />
     </div>
@@ -150,8 +189,11 @@ ProjectModalEditorController = React.createClass
 
   handleProjectModalDelete: ->
     if @props.projectModal.steps.length > 0
-      for step, index in @props.projectModal.steps
-        @handleStepRemove(index)
+      for step in @props.projectModal.steps
+        # Always pass in first index into step remove, because step deletion changes length
+        # i.e. index 3 will be undefined in an originally 4 item length array after first is deleted
+        # but iterate through the length of the original step array.
+        @handleStepRemove(0)
     else
       @deleteProjectModal()
 
@@ -208,6 +250,10 @@ ProjectModalEditorController = React.createClass
     changes = {}
     changes["steps.#{index}.#{key}"] = value
     @props.projectModal.update changes
+    @saveProjectModal()
+
+  handleStepOrderChange: (stepsInNewOrder) ->
+    @props.projectModal.update steps: stepsInNewOrder
     @saveProjectModal()
 
   saveProjectModal: ->

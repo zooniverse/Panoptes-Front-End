@@ -26,7 +26,7 @@ module.exports = React.createClass
 
   render: ->
     if @state.minicourse?.steps.length > 0 and @props.user?
-      <button type="button" {...@props} onClick={MiniCourse.restart.bind(MiniCourse, @state.minicourse, @props.project, @props.user)}>
+      <button type="button" {...@props} onClick={MiniCourse.restart.bind(MiniCourse, @state.minicourse, @props.preferences, @props.project, @props.user)}>
         {@props.children}
       </button>
     else

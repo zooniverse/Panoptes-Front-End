@@ -24,7 +24,8 @@ module?.exports = React.createClass
         <Comment
           data={@state.comment}
           user={@props.user}
-          project={@props.project} />
+          project={@props.project}
+          params={@props.params} />
       </div>
     else
       <div className="talk-module">

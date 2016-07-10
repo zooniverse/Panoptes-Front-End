@@ -10,10 +10,19 @@ module?.exports = React.createClass
     query: React.PropTypes.object
     placeholder: React.PropTypes.string
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logSearch: (value) ->
+    @context?.geordi?.logEvent
+      type: 'search'
+      data: {searchTerm: value}
+
   onSearchSubmit: (e) ->
     e.preventDefault()
     {owner, name} = @props.params
     inputValue = @searchInput().value
+    @logSearch inputValue
 
     if owner and name
       if inputValue.match(/\#[-\w\d]{3,40}/) # searches for #hashtags
@@ -36,11 +45,10 @@ module?.exports = React.createClass
     <form className="talk-search-form" onSubmit={ @onSearchSubmit }>
       <input type="text"
         defaultValue={@props.location.query?.query}
-        placeholder={@props.placeholder ? "Search..."}
+        placeholder={@props.placeholder ? 'Search or enter a #tag'}
         ref="talkSearchInput">
       </input>
       <button type="submit">
         <i className="fa fa-search" />
       </button>
     </form>
-

@@ -29,11 +29,21 @@ module?.exports = React.createClass
 
   mixins: [History]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+  
+  componentDidMount: ->
+    @logClick = @context.geordi?.makeHandler 'change-page'
+
+  componentWillReceiveProps: (nextProps, nextContext)->
+    @logClick = nextContext?.geordi?.makeHandler? 'change-page'
+
   setPage: (activePage) ->
     @props.onPageChange.call(this, activePage)
     window.scrollTo(0,0) if @props.scrollOnChange
 
   onClickNext: ->
+    @logClick 'next-page'
     {pageCount} = @props
     page = @props[@props.pageKey]
     @props.onClickNext?()
@@ -42,6 +52,7 @@ module?.exports = React.createClass
     @setPage(nextPage)
 
   onClickPrev: ->
+    @logClick 'previous-page'
     page = @props[@props.pageKey]
     @props.onClickPrev?()
 
@@ -49,6 +60,7 @@ module?.exports = React.createClass
     @setPage(prevPage)
 
   onSelectPage: (e) ->
+    @logClick 'select-page'
     selectedPage = +@refs.pageSelect.value
     @setPage(selectedPage)
 
@@ -65,7 +77,7 @@ module?.exports = React.createClass
       {if @props.firstAndLast
         <button
           className="paginator-first"
-          onClick={=> @setPage(1)}
+          onClick={=> @setPage(1); @logClick 'first-page'}
           disabled={page is 1}>
           <i className="fa fa-fast-backward" /> First
         </button>}
@@ -96,7 +108,7 @@ module?.exports = React.createClass
       {if @props.firstAndLast
         <button
           className="paginator-last"
-          onClick={=> @setPage(pageCount)}
+          onClick={=> @setPage(pageCount); @logClick 'last-page'}
           disabled={page is pageCount}>
           Last <i className="fa fa-fast-forward" />
         </button>}

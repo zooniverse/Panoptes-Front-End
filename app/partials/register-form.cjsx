@@ -50,6 +50,9 @@ module.exports = React.createClass
     agreedToPrivacyPolicy: null
     error: null
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   render: ->
     {badNameChars, nameConflict, passwordTooShort, passwordsDontMatch, emailConflict} = @state
 
@@ -65,7 +68,7 @@ module.exports = React.createClass
             if nameConflict
               <span className="form-help error">
                 <Translate content="registerForm.nameConflict" />{' '}
-                <a href="#{document.baseURI.slice(0, -1)}/reset-password" onClick={@props.onSuccess}>
+                <a href="#{window.location.origin}/reset-password" onClick={@props.onSuccess}>
                   <Translate content="registerForm.forgotPassword" />
                 </a>
               </span>
@@ -113,7 +116,7 @@ module.exports = React.createClass
             if emailConflict
               <span className="form-help error">
                 <Translate content="registerForm.emailConflict" />{' '}
-                <a href="#{document.baseURI.slice(0, -1)}/reset-password" onClick={@props.onSuccess}>
+                <a href="#{window.location.origin}/reset-password" onClick={@props.onSuccess}>
                   <Translate content="registerForm.forgotPassword" />
                 </a>
               </span>
@@ -140,7 +143,7 @@ module.exports = React.createClass
 
       <label>
         <input type="checkbox" ref="agreesToPrivacyPolicy" disabled={@props.user?} onChange={@handlePrivacyPolicyChange} />
-        {privacyPolicyLink = <a target="_blank" href="#{document.baseURI.slice(0, -1)}/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
+        {privacyPolicyLink = <a target="_blank" href="#{window.location.origin}/privacy"><Translate content="registerForm.privacyPolicy" /></a>; null}
         <Translate component="span" content="registerForm.agreeToPrivacyPolicy" link={privacyPolicyLink} />
       </label>
 
@@ -231,6 +234,7 @@ module.exports = React.createClass
     badNameChars?.length is 0 and not nameConflict and not passwordsDontMatch and not emailConflict and nameExists and agreesToPrivacyPolicy
 
   handleSubmit: (e) ->
+    @context.geordi?.logEvent type: 'register'
     e.preventDefault()
     login = @refs.name.value
     password = @refs.password.value

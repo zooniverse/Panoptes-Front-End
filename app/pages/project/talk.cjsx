@@ -9,13 +9,23 @@ TalkFootnote = require '../../talk/footnote'
 module.exports = React.createClass
   displayName: 'ProjectTalkPage'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logGeordi: ->
+    @context.geordi?.logEvent
+      type: "breadcrumb"
+
+  componentWillMount: ->
+    @context?.geordi?.logEvent type: 'talk-view'
+
   render: ->
     [owner, name] = @props.project.slug.split('/')
 
     <div className="project-text-content talk project">
       <div className="content-container">
         <h1 className="talk-main-link">
-          <Link to="/projects/#{owner}/#{name}/talk">
+          <Link to="/projects/#{owner}/#{name}/talk" onClick={@logGeordi.bind null, this}>
             {@props.project.display_name} Talk
           </Link>
         </h1>

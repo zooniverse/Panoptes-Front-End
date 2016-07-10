@@ -1,17 +1,30 @@
 React = require 'react'
 auth = require 'panoptes-client/lib/auth'
 IOStatus = require './io-status'
-MainHeader = require './main-header'
-MainFooter = require './main-footer'
+AppLayout = require('../layout').default
+GeordiLogger = require '../lib/geordi-logger'
 {generateSessionID} = require '../lib/session'
 
-module.exports = React.createClass
-  displayName: 'PanoptesApp'
+PanoptesApp = React.createClass
+  geordiLogger: null # Maintains project and subject context for the Geordi client
+
+  childContextTypes:
+    initialLoadComplete: React.PropTypes.bool
+    user: React.PropTypes.object
+    geordi: React.PropTypes.object
+
+  getChildContext: ->
+    initialLoadComplete: @state.initialLoadComplete
+    user: @state.user
+    geordi: @geordiLogger
 
   getInitialState: ->
-    user: null
     initialLoadComplete: false
+    user: null
 
+  componentWillMount: ->
+    @geordiLogger = new GeordiLogger
+  
   componentDidMount: ->
     auth.listen 'change', @handleAuthChange
     generateSessionID()
@@ -21,18 +34,19 @@ module.exports = React.createClass
     auth.stopListening 'change', @handleAuthChange
 
   handleAuthChange: ->
+    @geordiLogger.forget ['userID']
     auth.checkCurrent().then (user) =>
       @setState
-        user: user
         initialLoadComplete: true
+        user: user
+      @geordiLogger.remember userID: user.id if user?
 
   render: ->
     <div className="panoptes-main">
       <IOStatus />
-      <MainHeader user={@state.user} />
-      <div className="main-content">
-        {if @state.initialLoadComplete
-          React.cloneElement @props.children, {user: @state.user}}
-      </div>
-      <MainFooter user={@state.user} />
+      <AppLayout>
+        {React.cloneElement @props.children, user: @state.user}
+      </AppLayout>
     </div>
+
+module.exports = PanoptesApp

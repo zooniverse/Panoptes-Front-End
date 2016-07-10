@@ -6,7 +6,7 @@ MarkingsRenderer = require './markings-renderer'
 HidePreviousMarksToggle = require './hide-previous-marks-toggle'
 GenericTask = require '../generic'
 testShapeCloseness = require 'test-shape-closeness'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 icons = require './icons'
 drawingTools = require '../../drawing-tools'
 

@@ -35,20 +35,16 @@
   @media (max-width: 900px) // This is between iPad landscape and portrait.
     flex-wrap: wrap
 
-  > .subject-area
-    align-items: center
-    display: flex
-    flex-shrink: 1
-    flex-direction: column
-    margin: 0 1.5vw 1em 0
-    min-width: 0
+  > .subject-viewer
+    flex: 0 1 auto
 
   .subject-container
     color: gray
     max-width: 100%
+
     > *
       display: flex
-      flex: 1 1 auto // Fix for IE 11. Revisit or remove when IE11 is no longer supported.
+      flex: 1 1 auto
 
   .subject
     border-radius: 5px
@@ -114,8 +110,18 @@
     flex: 0 0 60ch
     margin-bottom: 1em
     max-width: 100%
+
     @media (min-width: 900px)
       margin-left: 1em
+
+  // for subject images that are not height contained
+  // this class name is enabled through a workflow config
+  &.large-image
+    .subject
+      max-height: none
+
+    .task-area
+      flex: 0 0 45ch
 
   .task-nav
     display: flex
@@ -132,6 +138,13 @@
 
     > :not(:first-child)
       margin-left: 0.5em
+
+  .back-button-warning
+    background-color: #686868
+    border-radius: .3em
+    margin-top: 1em
+    padding: .5em
+    text-align: center;
 
 .workflow-task
   & + .workflow-task
@@ -193,4 +206,4 @@
     opacity: 0.01
     position: absolute
     &:focus + *:not(.active)
-      background: lighten(#424242, 95%)      
+      background: lighten(#424242, 95%)

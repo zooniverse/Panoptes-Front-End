@@ -1,0 +1,32 @@
+{
+  "presets": ["es2015"],
+  "env": {
+    "development": {
+      "plugins": [
+        ["transform-react-jsx"]
+      ]
+    },
+    "hot-reload": {
+      "plugins": [
+        ["react-transform", {
+          "transforms": [{
+            "transform": "react-transform-hmr",
+            "imports": ["react"],
+            "locals": ["module"]
+          }]
+        }],
+        ["transform-react-jsx"]
+      ]
+    },
+    "staging": {
+      "plugins": [
+        ["transform-react-jsx"]
+      ]
+    },
+    "production": {
+      "plugins": [
+        ["transform-react-jsx"]
+      ]
+    }
+  }
+}

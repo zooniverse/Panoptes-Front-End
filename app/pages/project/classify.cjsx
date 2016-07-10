@@ -15,7 +15,7 @@ MiniCourse = require '../../lib/mini-course'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
-PROMPT_MINI_COURSE_EVERY = 2
+PROMPT_MINI_COURSE_EVERY = 5
 
 SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
 
@@ -62,6 +62,9 @@ module.exports = React.createClass
 
   title: 'Classify'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getDefaultProps: ->
     query: null
     project: null
@@ -81,6 +84,12 @@ module.exports = React.createClass
   componentDidMount: () ->
     @getCurrentWorkflow().then (workflow) =>
       @setState {workflow}
+
+  componentWillUpdate: (nextProps, nextState) ->
+    @context.geordi.remember workflowID: nextState?.workflow?.id
+
+  componentWillUnmount: () ->
+    @context.geordi?.forget ['workflowID']
 
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
@@ -227,14 +236,13 @@ module.exports = React.createClass
     </div>
 
   scrollIntoView: (e) ->
-    # Auto-scroll to the middle of the classification interface on load.
+    # Auto-scroll to top of the classification interface on load.
     # It's not perfect, but it should make the location of everything more obvious.
     lineHeight = parseFloat getComputedStyle(document.body).lineHeight
     node = ReactDOM.findDOMNode(@)
-    space = (innerHeight - node.offsetHeight) / 2
-    idealScrollY = node.offsetTop - space
+    idealScrollY = node.offsetTop - lineHeight
     if Math.abs(idealScrollY - scrollY) > lineHeight
-      animatedScrollTo document.body, node.offsetTop - space, 333
+      animatedScrollTo document.body, node.offsetTop - lineHeight, 333
 
   handleDemoModeChange: (newDemoMode) ->
     sessionDemoMode = newDemoMode
@@ -245,6 +253,7 @@ module.exports = React.createClass
       .then @loadAnotherSubject()
 
   saveClassification: ->
+    @context.geordi?.logEvent type: 'classify'
     classification = @state.classification
     console?.info 'Completed classification', classification
     savingClassification = if @state.demoMode
@@ -315,7 +324,7 @@ module.exports = React.createClass
 
   maybeLaunchMiniCourse: ->
     if classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
-      MiniCourse.startIfNecessary {workflow: @state.workflow, project: @props.project, user: @props.user}
+      MiniCourse.startIfNecessary {workflow: @state.workflow, preferences: @props.preferences, project: @props.project, user: @props.user}
           
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject

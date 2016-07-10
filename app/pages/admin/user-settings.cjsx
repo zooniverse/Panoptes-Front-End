@@ -67,37 +67,17 @@ UserLimitToggle = React.createClass
 
   getDefaultProps: ->
     editUser: null
-    invalidLimit: "invalidLimit"
 
   getInitialState: ->
     error: null
-
-  validLimit: (limit) ->
-    if limit == ""
-      false
-    else
-      n = ~ ~Number(limit)
-      String(n) == limit and n >= 0
-
-  updateLimit: (e) ->
-    _subject_limit = this.refs.subjectLimit.value
-    if @validLimit(_subject_limit)
-      handleInputChange.call(@props.editUser, e)
-    else
-      @setState(error: @props.invalidLimit)
-
-  errorMessage: ->
-    if @state.error == @props.invalidLimit
-      "Must be a positive integer"
-    else if @state.error == @props.invalidLimit
-      "kasjdhkdjshf"
 
   render: ->
     <div>
       <AutoSave resource={@props.editUser}>
         Subject Limit:{' '}
-        <input type="number" name="subject_limit" min="1" ref="subjectLimit" value={@props.editUser.max_subjects} onBlur={@updateLimit} onChange={handleInputChange.bind @props.editUser} />
-        <span>{ @errorMessage() }</span>
+        <input type="number" min="1" ref="subjectLimit" name="subject_limit"
+          value={@props.editUser.subject_limit}
+          onChange={handleInputChange.bind @props.editUser} />
       </AutoSave>
     </div>
 

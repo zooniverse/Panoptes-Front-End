@@ -9,6 +9,9 @@ Paginator = require './lib/paginator'
 module?.exports = React.createClass
   displayName: 'ActiveUsers'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getInitialState: ->
     userRecords: { }
     users: []
@@ -83,8 +86,9 @@ module?.exports = React.createClass
     @updateTimeout = setTimeout @update, 10000
 
   userLink: (user) ->
+    logClick = @context.geordi?.makeHandler? 'view-profile-sidebar'
     <li key={user.id}>
-      <Link to="/users/#{user.login}" title="#{user.display_name}'s profile">{user.display_name}</Link>
+      <Link to="/users/#{user.login}" title="#{user.display_name}'s profile" onClick={logClick?.bind(this, user.display_name)}>{user.display_name}</Link>
     </li>
 
   render: ->

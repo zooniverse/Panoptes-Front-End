@@ -26,6 +26,14 @@ module.exports = React.createClass
   displayName: 'TalkSearch'
   mixins: [History]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  goBack: (linkName) ->
+    @history.goBack()
+    @context.geordi?.logEvent
+      type: linkName
+
   getInitialState: ->
     errorThrown: false
     isLoading: true
@@ -74,7 +82,7 @@ module.exports = React.createClass
     numberOfResults = @state.results.length
 
     <div className="talk-search">
-      <button  className="link-style" type="button" onClick={@history.goBack}>
+      <button className="link-style" type="button" onClick={@goBack.bind this, 'search-back'}>
         <i className="fa fa-backward" /> Back
       </button>
 

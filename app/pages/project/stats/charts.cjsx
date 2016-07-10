@@ -1,10 +1,6 @@
 React = require 'react'
 ChartistGraph = require 'react-chartist'
 moment = require 'moment'
-
-# hack to make browserify and rc-slider play nice when using window shim
-document.createElement ?= (input) ->
-  style: {}
 Rcslider = require 'rc-slider'
 
 Progress = React.createClass

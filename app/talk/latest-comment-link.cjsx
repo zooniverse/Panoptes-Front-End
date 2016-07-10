@@ -7,7 +7,7 @@ Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
 {Link, History} = require 'react-router'
 merge = require 'lodash.merge'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 
 PAGE_SIZE = require('./config').discussionPageSize
 
@@ -33,6 +33,13 @@ module?.exports = React.createClass
     commentUser: null
     latestCommentText: ''
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
+  logProfileClick: (profileItem) ->
+    @context.geordi?.logEvent
+      type: profileItem
+
   projectPrefix: ->
     if @props.project then 'project-' else ''
 
@@ -50,13 +57,15 @@ module?.exports = React.createClass
     @setState({latestCommentText}) if latestCommentText
 
   discussionLink: (childtext = '', query = {}, className = '') ->
+    if className is "latest-comment-time"
+      logClick = @context.geordi?.makeHandler? 'discussion-time'
     if @props.params?.owner and @props.params?.name
       {owner, name} = @props.params
-      <Link className={className} to={@history.createHref("/projects/#{owner}/#{name}/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
+      <Link className={className} onClick={logClick?.bind(this, childtext)} to={@history.createHref("/projects/#{owner}/#{name}/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
         {childtext}
       </Link>
     else
-      <Link className={className} to={@history.createHref("/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
+      <Link className={className} onClick={logClick?.bind(this, childtext)} to={@history.createHref("/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
         {childtext}
       </Link>
 
@@ -77,7 +86,7 @@ module?.exports = React.createClass
         </div>
 
         {if @state.commentUser?
-          <Link className="user-profile-link" to="/users/#{@state.commentUser.login}">
+          <Link className="user-profile-link" to="/users/#{@state.commentUser.login}" onClick={@logProfileClick.bind this, 'view-profile-author'}>
             <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
           </Link>}
 

@@ -17,6 +17,9 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'SignInForm'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   getInitialState: ->
     busy: false
     login: ''
@@ -53,7 +56,7 @@ module.exports = React.createClass
             else
               <span>{@state.error.toString()}</span>}{' '}
 
-            <a href="#{document.baseURI.slice(0, -1)}/reset-password" onClick={@props.onSuccess}>
+            <a href="#{window.location.origin}/reset-password" onClick={@props.onSuccess}>
               <Translate content="signInForm.forgotPassword" />
             </a>
           </div>
@@ -62,12 +65,12 @@ module.exports = React.createClass
           <LoadingIndicator />
 
         else
-          <a href="#{document.baseURI.slice(0, -1)}/reset-password" onClick={@props.onSuccess}>
+          <a href="#{window.location.origin}/reset-password" onClick={@props.onSuccess}>
             <Translate content="signInForm.forgotPassword" />
           </a>}
       </p>
 
-      <button type="submit" className="standard-button full" disabled={disabled or @state.login.length is 0 or @state.password.length is 0}>
+      <button type="submit" className="standard-button full" disabled={disabled or @state.login.length is 0 or @state.password.length is 0} onClick={@context.geordi?.logEvent type: 'login'}>
         <Translate content="signInForm.signIn" />
       </button>
     </form>

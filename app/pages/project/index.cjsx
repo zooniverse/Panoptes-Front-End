@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 {IndexLink, Link} = require 'react-router'
-{Markdown} = require 'markdownz'
+{Markdown} = (require 'markdownz').default
 PotentialFieldGuide = require './potential-field-guide'
 TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -34,6 +34,10 @@ SOCIAL_ICONS =
 
 
 ProjectPage = React.createClass
+  contextTypes:
+    setAppHeaderVariant: React.PropTypes.func
+    geordi: React.PropTypes.object
+
   getDefaultProps: ->
     project: null
     owner: null
@@ -43,20 +47,30 @@ ProjectPage = React.createClass
     background: null
     avatar: null
     pages: []
+    selectedWorkflow: null
 
   componentDidMount: ->
+    @context.setAppHeaderVariant 'demoted'
     document.documentElement.classList.add 'on-project-page'
     @fetchInfo @props.project
+    @getSelectedWorkflow @props.project, @props.preferences
     @updateSugarSubscription @props.project
+    @context.geordi?.remember projectToken: @props.project?.slug
 
   componentWillUnmount: ->
+    @context.setAppHeaderVariant null
     document.documentElement.classList.remove 'on-project-page'
     @updateSugarSubscription null
+    @context.geordi?.forget ['projectToken']
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project
       @fetchInfo nextProps.project
+      @getSelectedWorkflow nextProps.project, nextProps.preferences
       @updateSugarSubscription nextProps.project
+      @context.geordi?.remember projectToken: nextProps.project?.slug
+    else if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow?.id
+      @getSelectedWorkflow nextProps.project, nextProps.preferences
 
   fetchInfo: (project) ->
     @setState
@@ -82,6 +96,20 @@ ProjectPage = React.createClass
       .then (pages) =>
         @setState {pages}
 
+  getSelectedWorkflow: (project, preferences) ->
+    @setState selectedWorkflow: 'PENDING'
+
+    preferredWorkflowID = preferences?.preferences.selected_workflow ? project.configuration?.default_workflow
+    if preferredWorkflowID?
+      apiClient.type('workflows').get preferredWorkflowID
+        .then (workflow) =>
+          if workflow.active
+            @setState selectedWorkflow: workflow
+          else
+            @setState selectedWorkflow: null
+    else
+      @setState selectedWorkflow: null
+
   _lastSugarSubscribedID: null
 
   updateSugarSubscription: (project) ->
@@ -96,15 +124,17 @@ ProjectPage = React.createClass
   render: ->
     projectPath = "/projects/#{@props.project.slug}"
 
-    currentWorkflow = @props.preferences?.preferences.selected_workflow ? @props.project.configuration?.default_workflow
-
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
       map
 
+    logClick = @context?.geordi?.makeHandler? 'project-menu'
+
+    if @state.background?
+      backgroundStyle = backgroundImage: "url('#{@state.background.src}')"
+
     <div className="project-page">
-      {if @state.background?
-        <div className="project-background" style={backgroundImage: "url('#{@state.background.src}')"}></div>}
+      <div className="project-background" style={backgroundStyle}></div>
 
       <nav className="project-nav tabbed-content-tabs">
         {if @props.project.redirect
@@ -114,27 +144,33 @@ ProjectPage = React.createClass
             Visit {@props.project.display_name}
           </a>
         else
-          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab">
+          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.home'}>
             {if @state.avatar?
               <img src={@state.avatar.src} className="avatar" />}
             {@props.project.display_name}
           </IndexLink>}
 
         {unless @props.project.redirect
-          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab">
+          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.about'}>
             <Translate content="project.nav.about" />
           </Link>}
 
         {if @props.project.redirect
-          <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank">
+          <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank" onClick={logClick?.bind this, 'project.nav.classify'}>
             <Translate content="project.nav.classify" />
           </a>
+        else if @state.selectedWorkflow is 'PENDING'
+          <span className="classify tabbed-content-tab" title="Loading..." style={opacity: 0.5}>
+            <Translate content="project.nav.classify" />
+          </span>
         else
-          <Link to="#{projectPath}/classify" query={workflow: currentWorkflow} activeClassName="active" className="classify tabbed-content-tab">
+          if @state.selectedWorkflow?
+            query = workflow: @state.selectedWorkflow.id
+          <Link to="#{projectPath}/classify" query={query} activeClassName="active" className="classify tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.classify'}>
             <Translate content="project.nav.classify" />
           </Link>}
 
-        <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab">
+        <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.talk'}>
           <Translate content="project.nav.talk" />
         </Link>
 

@@ -64,7 +64,7 @@ module.exports = React.createClass
   handleLeftDrag: (e, d) ->
     if @props.mark.width - d.x / @props.scale.horizontal >= MINIMUM_WIDTH
       @props.mark.x += d.x / @props.scale.horizontal
-      @props.mark.width -= d.x / @props.scale.horizontal 
+      @props.mark.width -= d.x / @props.scale.horizontal
       @props.onChange @props.mark
 
   handleRightDrag: (e, d) ->
