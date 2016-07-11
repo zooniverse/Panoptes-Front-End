@@ -16,6 +16,7 @@ const CircleRibbon = React.createClass({
     weight: React.PropTypes.number,
     gap: React.PropTypes.number,
     image: React.PropTypes.string,
+    loading: React.PropTypes.bool,
     data: React.PropTypes.array,
     hrefTemplate: React.PropTypes.func,
     onClick: React.PropTypes.func,
@@ -27,6 +28,7 @@ const CircleRibbon = React.createClass({
       weight: 10,
       gap: 2,
       image: '//lorempixel.com/100/100/animals/1',
+      loading: false,
       data: [],
       hrefTemplate: defaultHREFTemplate,
       onClick: () => {},
@@ -179,7 +181,9 @@ const CircleRibbon = React.createClass({
           )}
 
           <g ref="arcGroup" fill="none" stroke="none" transform="translate(50, 50)">
-            <circle r={`${50 - (this.props.weight / 2)}`} stroke="gray" strokeWidth="0.5" />
+            {this.props.loading && (
+              <circle className="circle-ribbon__loading-ring" r={50 - (this.props.weight / 2)} stroke="gray" strokeWidth="0.5" />
+            )}
 
             <g strokeWidth={this.props.weight}>
               {this.props.data.map(this.renderArc)}

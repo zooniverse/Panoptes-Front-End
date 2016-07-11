@@ -1,13 +1,10 @@
 import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 // NOTE: This is completely ridiculous. But React doesn't know about SVG's <a>. Replace it ASAP.
 
 const SVGLink = React.createClass({
-  mixins: [PureRenderMixin],
-
   componentDidMount() {
     this.link = document.createElementNS(SVG_NS, 'a');
     this.inject();

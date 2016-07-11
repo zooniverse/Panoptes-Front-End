@@ -16,6 +16,7 @@ const HomePageSection = React.createClass({
           <i
             className="fa fa-spinner fa-spin fa-fw"
             style={{
+              alignSelf: 'center',
               visibility: this.props.loading ? '' : 'hidden',
             }}
           ></i>

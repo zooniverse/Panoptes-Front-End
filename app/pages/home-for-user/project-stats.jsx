@@ -76,7 +76,7 @@ const ProjectStats = React.createClass({
         )}
 
         <div className="home-page-project-stats__content">
-          <a href="#">X</a>
+          <a href="#">×</a>
           {this.state.loading && (
             <div>Loading...</div>
           )}
