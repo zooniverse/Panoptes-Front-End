@@ -43,6 +43,7 @@ ProjectPage = React.createClass
     project: null
     owner: null
     preferences: null
+    loading: false
 
   getInitialState: ->
     background: null
@@ -150,7 +151,10 @@ ProjectPage = React.createClass
           <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.home'}>
             {if @state.avatar?
               <img src={@state.avatar.src} className="avatar" />}
-            {@props.project.display_name}
+            {if @props.loading
+              'Loading...'
+            else
+              @props.project.display_name}
           </IndexLink>}
 
         {unless @props.project.redirect
@@ -241,46 +245,51 @@ ProjectPageController = React.createClass
     if pathChanged or userChanged
       @fetchProjectData owner, name, nextProps.user
 
-  fetchProjectData: (owner, name, user) ->
+  fetchProjectData: (ownerName, projectName, user) ->
     @listenToPreferences null
     @setState
       loading: true
       error: null
-      project: null
-      owner: null
       preferences: null
 
-    query = slug: owner + '/' + name
+    slug = ownerName + '/' + projectName
 
-    apiClient.type('projects').get query
+    apiClient.type('projects').get {slug}
       .then ([project]) =>
         @setState {project}
 
-        awaitOwner = project.get 'owner'
-          .then (owner) =>
-            @setState {owner}
+        if project?
+          awaitOwner = project.get 'owner'
+            .then (owner) =>
+              @setState {owner}
 
-        awaitPreferences = if user?
-          user.get 'project_preferences', project_id: project.id
-            .then ([preferences]) =>
-              preferences ? newPreferences = apiClient.type('project_preferences').create({
-                links: {
-                  project: project.id
-                },
-                preferences: {}
-              }).save()
+          awaitPreferences = if user?
+            user.get 'project_preferences', project_id: project.id
+              .then ([preferences]) =>
+                preferences ? newPreferences = apiClient.type('project_preferences').create({
+                  links: {
+                    project: project.id
+                  },
+                  preferences: {}
+                }).save()
+          else
+            Promise.resolve apiClient.type('project_preferences').create
+              id: 'GUEST_PREFERENCES_DO_NOT_SAVE'
+              links:
+                project: project.id
+              preferences: {}
+
+          awaitPreferences = awaitPreferences.then (preferences) =>
+            @listenToPreferences preferences
+            @setState {preferences}
+
+          Promise.all [awaitOwner, awaitPreferences]
+
         else
-          Promise.resolve apiClient.type('project_preferences').create
-            id: 'GUEST_PREFERENCES_DO_NOT_SAVE'
-            links:
-              project: project.id
-            preferences: {}
-
-        awaitPreferences = awaitPreferences.then (preferences) =>
-          @listenToPreferences preferences
-          @setState {preferences}
-
-        Promise.all [awaitOwner, awaitPreferences]
+          this.setState
+            owner: null,
+            preferences: null
+            error: new Error 'NOT_FOUND'
 
       .catch (error) =>
         @setState {error}
@@ -304,33 +313,40 @@ ProjectPageController = React.createClass
     slug = @props.params.owner + '/' + @props.params.name
 
     <div className="project-page-wrapper">
-      {if @state.loading
-        <div>
-          <p>
-            Loading{' '}
-            <strong>{slug}</strong>...
-          </p>
-        </div>}
-
-      {if @state.error?
-        <div>
-          <p>
-            There was an error retrieving project{' '}
-            <strong>{slug}</strong>.
-          </p>
-          <p>
-            <code>{@state.error.stack}</code>
-          </p>
-        </div>}
-
       {if @state.project? and @state.owner?
         <ProjectPage
           {...@props}
           project={@state.project}
           owner={@state.owner}
           preferences={@state.preferences}
+          loading={@state.loading}
           onChangePreferences={@handlePreferencesChange}
-        />}
+        />
+
+      else if @state.loading
+        <div className="content-container">
+          <p>
+            Loading{' '}
+            <strong>{slug}</strong>...
+          </p>
+        </div>
+
+      else if @state.error?
+        if @state.error.message is 'NOT_FOUND'
+          <div className="content-container">
+            <p>Project <code>{slug}</code> not found.</p>
+            <p>If you're sure the URL is correct, you might not have permission to view this project.</p>
+          </div>
+        else
+          <div className="content-container">
+            <p>
+              There was an error retrieving project{' '}
+              <strong>{slug}</strong>.
+            </p>
+            <p>
+              <code>{@state.error.toString()}</code>
+            </p>
+          </div>}
     </div>
 
 module.exports = ProjectPageController
