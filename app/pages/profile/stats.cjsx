@@ -19,15 +19,16 @@ module.exports = React.createClass
           <PromiseRenderer promise={ClassificationsRibbon::getAllProjectPreferences @props.profileUser} then={(projectPreferences) =>
             <div>
               {projectPreferences.map (projectPreference) =>
-                <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} catch={null} then={(project) =>
-                  if project?
-                    <span>
-                      <ProjectIcon project={project} badge={projectPreference.activity_count} />
-                      &ensp;
-                    </span>
-                  else
-                    null
-                } />}
+                if projectPreference.activity_count > 0
+                  <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} catch={null} then={(project) =>
+                    if project?
+                      <span>
+                        <ProjectIcon project={project} badge={projectPreference.activity_count} />
+                        &ensp;
+                      </span>
+                    else
+                      null
+                  } />}
             </div>
           } />
         </div>

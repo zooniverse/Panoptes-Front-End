@@ -56,7 +56,7 @@ ClassificationsRibbon = React.createClass
           othersWidth = 1 - lastX
           <rect fill="gray" fillOpacity="0.5" stroke="none" x={lastX} y="0" width={othersWidth} height="1">
             <title>
-              {("#{project}: #{classifications ? '?'}" for {project, classifications} in others).join '\n'}
+              {("#{project}: #{classifications ? '?'}" for {project, classifications} in others when classifications > 0).join '\n'}
             </title>
           </rect>}
       </svg>
