@@ -142,7 +142,8 @@ const HomePageForUser = React.createClass({
           <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
         ) : (
           <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-            <CircleRibbon data={this.state.ribbonData} />
+            <CircleRibbon loading={this.state.loading} data={this.state.ribbonData} />
+
             <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
 
             {OpenSectionComponent === undefined ? (

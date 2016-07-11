@@ -1,4 +1,12 @@
+@keyframes circle-ribbon__loading-ring-animation
+  100%
+    transform: rotate(360deg)
+
 .circle-ribbon
+  &__loading-ring
+    animation: circle-ribbon__loading-ring-animation 5s linear infinite
+    stroke-dasharray: 10
+
   &__project-arc
     cursor: pointer
 
