@@ -16,9 +16,11 @@ class AxisPoint
 
 class Axis
   @RA: 0
-  @DEC: 1
-  @GLAT: 2
-  @GLON: 3
+  @RA1950: 1
+  @DEC: 2
+  @DEC1950: 3
+  @GLAT: 4
+  @GLON: 5
 
   constructor: (@range, @unit) ->
 
@@ -88,6 +90,8 @@ class StarChart
     coords = StarChart.OTHER
     if (@xAxis.unit == Axis.RA && @yAxis.unit == Axis.DEC) || (@xAxis.unit == Axis.DEC && @yAxis.unit == Axis.RA)
       coords = StarChart.EQUATORIAL
+    if (@xAxis.unit == Axis.RA1950 && @yAxis.unit == Axis.DEC1950) || (@xAxis.unit == Axis.DEC1950 && @yAxis.unit == Axis.RA1950)
+      coords = StarChart.EQUATORIAL
     if (@xAxis.unit == Axis.GLAT && @yAxis.unit == Axis.GLON) || (@xAxis.unit == Axis.GLON && @yAxis.unit == Axis.GLAT)
       coords = StarChart.GALACTIC
     coords
@@ -103,7 +107,7 @@ class Plate
     ]
 
     makeStarCoord = if @starChart.coordinateSystem() == StarChart.EQUATORIAL then StarCoord.fromRaDec else StarCoord.fromGlatGlon
-    xAxisDec = if @starChart.xAxis.unit == Axis.DEC || @starChart.xAxis.unit == Axis.GLAT then true else false
+    xAxisDec = if @starChart.xAxis.unit == Axis.DEC || @starChart.xAxis.unit == Axis.DEC1950 || @starChart.xAxis.unit == Axis.GLAT then true else false
     @fullValues xRange
     @fullValues yRange
     @coordCorners = [
@@ -149,7 +153,7 @@ class Plate
     "http://imgproc.zooniverse.org/crop/#{@starChart.width}/#{@starChart.height}/#{@starChart.x}/#{@starChart.y}?u=#{url}"
 
   computeRotation: ->
-    if @starChart.xAxis.unit == Axis.RA || @starChart.xAxis.unit == Axis.GLAT
+    if @starChart.xAxis.unit == Axis.RA || @starChart.xAxis.unit == Axis.RA1950 || @starChart.xAxis.unit == Axis.GLAT
     then 180
     else 90
 
