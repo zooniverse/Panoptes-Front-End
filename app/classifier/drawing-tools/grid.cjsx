@@ -63,7 +63,7 @@ module.exports = React.createClass
       templateCopy.shift()
       for cell in templateCopy
         cell._rowID = cell.templateID if type is 'grid' and cell.templateID?
-        cell._key = Math.random()
+        cell._key ?= Math.random()
         cell._type = type
         cell.templateID = templateID
         cell._copy = true
@@ -105,7 +105,7 @@ module.exports = React.createClass
     for cell in @state.template
       points = @cellPoints cell if @state.activeTemplate is 'grid'
       points = @rowPoints cell if @state.activeTemplate is 'row'
-      <Draggable key={Math.random()} onDrag={@handleTemplateDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
+      <Draggable key={cell._key} onDrag={@handleTemplateDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
         <polyline points={points} />
       </Draggable>
 

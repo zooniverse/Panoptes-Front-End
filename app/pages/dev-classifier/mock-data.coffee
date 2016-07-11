@@ -119,6 +119,7 @@ workflow = apiClient.type('workflows').create
         {type: 'ellipse', label: 'Ellipse '.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
         {type: 'bezier', label: 'Bezier', color: 'orange', details: MISC_DRAWING_DETAILS}
         {type: 'column', label: 'Column Rectangle', color: 'darkgreen'}
+        {type: 'grid', label: 'Grid', color: 'purple'}
       ]
       next: 'survey'
 
@@ -517,6 +518,9 @@ project = apiClient.type('projects').create
   title: "The Dev Classifier"
   experimental_tools: ['pan and zoom']
 
+preferences = apiClient.type('project_preferences').create
+  preferences: {}
+
 classification = apiClient.type('classifications').create
   annotations: []
   metadata: {}
@@ -528,5 +532,5 @@ classification = apiClient.type('classifications').create
   _subjects: [subject] # TEMP
 
 
-module.exports = {workflow, subject, classification, project}
+module.exports = {workflow, subject, classification, project, preferences}
 window?.mockClassifierData = module.exports

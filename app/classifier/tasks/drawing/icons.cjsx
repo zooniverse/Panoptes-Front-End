@@ -37,3 +37,7 @@ module.exports =
   column: <svg viewBox="0 0 100 100">
     <rect className="shape" x="10" y="0" width="25" height="100%" />
   </svg>
+
+  grid: <svg viewBox="0 0 100 100">
+    <polyline className="shape" points="0, 25 50, 25 50, 75 0, 75 0, 25 50, 25 100, 25 100, 75 50, 75 50, 25" />
+  </svg>

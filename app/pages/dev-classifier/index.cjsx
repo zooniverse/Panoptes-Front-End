@@ -52,6 +52,7 @@ DevClassifierPage = React.createClass
   getDefaultProps: ->
     classification: mockData.classification
     project: mockData.project
+    preferences: mockData.preferences
 
   componentDidMount: ->
     document.body.style.backgroundColor = '#444'
@@ -72,7 +73,7 @@ DevClassifierPage = React.createClass
 
   render: ->
     <div className="content-container">
-      <Classifier user={@props.user}  project={@props.project} classification={@props.classification} onClickNext={@reload} />
+      <Classifier user={@props.user}  project={@props.project} preferences={@props.preferences} classification={@props.classification} onClickNext={@reload} />
       <hr />
       <ClassificationViewer classification={@props.classification} />
     </div>
