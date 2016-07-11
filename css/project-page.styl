@@ -4,6 +4,9 @@
   color: #000000
   margin: 1.5em 12vw
   padding: 1.5em 6vw
+  
+  .columns-container
+    flex-wrap: wrap
 
   .markdown
     img
@@ -17,6 +20,22 @@
 
     a
       color: DARK_BLUE
+      
+  .team-list  
+    padding: 0
+     
+  .team-list-item
+    list-style: none
+    
+    &__project-roles
+      display: inline-flex
+      flex-wrap: wrap
+    
+    .project-role
+      margin: 0.3em
+      
+      &.owner
+        color: inherit
 
 .on-project-page
   background: FOREGROUND
