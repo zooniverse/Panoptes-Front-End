@@ -28,7 +28,7 @@ promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 PAGE_SIZE = talkConfig.boardPageSize
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkBoard'
   mixins: [History]
 

@@ -2,7 +2,7 @@ React = require 'react'
 {History} = require 'react-router'
 updateQueryParams = require './update-query-params'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'Paginator'
 
   propTypes:

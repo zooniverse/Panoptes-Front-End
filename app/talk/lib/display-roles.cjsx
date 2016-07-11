@@ -33,4 +33,4 @@ DisplayRoles = React.createClass
       {uniq(@props.roles, roleDisplayName).map(@role)}
     </div>
 
-module?.exports = DisplayRoles
+module.exports = DisplayRoles

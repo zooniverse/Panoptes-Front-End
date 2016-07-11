@@ -1,4 +1,4 @@
-module?.exports = [
+module.exports = [
 # Role          | Can access:
   "admin"       # admin, moderator, ream, all
   "moderator"   # moderator, team, all

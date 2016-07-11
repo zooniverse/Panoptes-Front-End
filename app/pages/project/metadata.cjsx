@@ -1,7 +1,7 @@
 React = require 'react'
 {Link} = require 'react-router'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'ProjectMetadata'
 
   propTypes:

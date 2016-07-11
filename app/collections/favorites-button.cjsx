@@ -5,7 +5,7 @@ alert = require '../lib/alert'
 SignInPrompt = require '../partials/sign-in-prompt'
 PromiseRenderer = require '../components/promise-renderer'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'CollectionFavoritesButton'
 
   propTypes:

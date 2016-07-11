@@ -86,7 +86,7 @@ relativePosition = ({from, within}) ->
   left: relativeParent.offsetLeft + within.offsetLeft + from.left
 
 # Returns the {top, left} of the caret position within a textarea
-module?.exports = (id, textArea, popupElement, caretPosition) ->
+module.exports = (id, textArea, popupElement, caretPosition) ->
   div = mimic textArea, id
   textAreaProps = copyTextProps from: textArea, to: div
   caretSpan = copyText from: textArea, to: div, at: caretPosition

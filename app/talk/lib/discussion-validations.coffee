@@ -1,6 +1,6 @@
 MAX_LENGTH = 255 # characters
 
-module?.exports = [
+module.exports = [
   # existence
   {
     check: (comment) -> comment.length > 0

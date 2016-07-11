@@ -8,7 +8,7 @@ Loading = require '../components/loading-indicator'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'SubjectCommentForm'
   mixins: [History]
 

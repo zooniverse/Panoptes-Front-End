@@ -7,7 +7,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
 Avatar = require '../../partials/avatar'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'ModerationNotification'
 
   propTypes:

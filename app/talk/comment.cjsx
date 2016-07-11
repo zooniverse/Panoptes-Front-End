@@ -22,7 +22,7 @@ merge = require 'lodash.merge'
 {Markdown} = (require 'markdownz').default
 DEFAULT_AVATAR = '/assets/simple-avatar.jpg'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkComment'
   mixins: [ToggleChildren, Feedback]
 

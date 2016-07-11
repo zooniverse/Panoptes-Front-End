@@ -8,7 +8,7 @@ page_size = require('./config').moderationsPageSize
 updateQueryParams = require './lib/update-query-params'
 ModerationComment = require './moderation/comment'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkModerations'
   mixins: [History]
 

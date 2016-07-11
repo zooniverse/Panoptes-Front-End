@@ -2,7 +2,7 @@ React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
 SingleSubmitButton = require '../components/single-submit-button'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'FollowDiscussion'
 
   contextTypes:

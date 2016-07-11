@@ -5,7 +5,7 @@ talkConfig = require './config'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkCommentLink'
 
   propTypes:

@@ -5,7 +5,7 @@ ChangeListener = require '../components/change-listener'
 talkClient = require 'panoptes-client/lib/talk-client'
 Notification = require './notifications/notification'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'NotificationsPage'
 
   propTypes:

@@ -3,7 +3,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 talkClient = require 'panoptes-client/lib/talk-client'
 userIsModerator = require './user-is-moderator'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'Moderation'
 
   propTypes:

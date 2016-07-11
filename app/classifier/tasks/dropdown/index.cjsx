@@ -48,7 +48,7 @@ Summary = React.createClass
       </div>
     </div>
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'DropdownTask'
 
   statics:

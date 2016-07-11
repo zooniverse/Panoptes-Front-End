@@ -6,7 +6,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 {Link} = require 'react-router'
 Paginator = require './lib/paginator'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'ActiveUsers'
 
   contextTypes:

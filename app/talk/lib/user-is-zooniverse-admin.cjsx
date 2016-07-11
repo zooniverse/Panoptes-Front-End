@@ -3,4 +3,4 @@ userIsZooniverseAdmin = (usersRoles) ->
     role.section is 'zooniverse' and role.name is 'admin'
   zooniverseAdminRoles.length > 0
 
-module?.exports = userIsZooniverseAdmin
+module.exports = userIsZooniverseAdmin

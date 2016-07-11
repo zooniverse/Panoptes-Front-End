@@ -4,7 +4,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 resourceCount = require './resource-count'
 formatNumber = require './format-number'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'SidebarNotifications'
 
   componentDidMount: ->

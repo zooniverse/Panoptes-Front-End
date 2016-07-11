@@ -9,7 +9,7 @@ CommentBox = require './comment-box'
 {Link, History} = require 'react-router'
 {timestamp} = require './lib/time'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'InboxConversation'
   mixins: [HandlePropChanges, History]
 

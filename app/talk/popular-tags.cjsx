@@ -3,7 +3,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TalkPopularTags'
 
   propTypes:

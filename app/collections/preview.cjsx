@@ -6,7 +6,7 @@ Thumbnail = require '../components/thumbnail'
 Avatar = require '../partials/avatar'
 getSubjectLocation = require '../lib/get-subject-location'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'CollectionPreview'
 
   componentWillMount: ->

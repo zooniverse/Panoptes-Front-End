@@ -2,7 +2,7 @@
 
 React = require 'react'
 
-module?.exports =
+module.exports =
   getInitialState: ->
     feedback: null
 

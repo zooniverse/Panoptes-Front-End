@@ -2,7 +2,7 @@ React = require 'react'
 apiClient =  require 'panoptes-client/lib/api-client'
 moment = require 'moment'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'DataRequestNotification'
 
   propTypes:

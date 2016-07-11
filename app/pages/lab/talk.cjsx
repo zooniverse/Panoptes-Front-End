@@ -5,7 +5,7 @@ CreateBoardForm = require '../../talk/lib/create-board-form'
 projectSection = require '../../talk/lib/project-section'
 SingleSubmitButton = require '../../components/single-submit-button'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'EditProjectTalk'
 
   getDefaultProps: ->

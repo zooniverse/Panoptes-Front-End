@@ -3,7 +3,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 {Link} = require 'react-router'
 Loading = require '../../components/loading-indicator'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'ProjectLinker'
 
   contextTypes:

@@ -5,7 +5,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 {Markdown} = (require 'markdownz').default
 PAGE_SIZE = require('../../talk/config').discussionPageSize
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'CommentLink'
 
   getDefaultProps: ->

@@ -14,4 +14,4 @@ userIsModerator = (user, roles, section) -> # User response, Roles Response, Tal
 
   intersect(moderationRoles, allowedModerationRoles).length > 0
 
-module?.exports = userIsModerator
+module.exports = userIsModerator

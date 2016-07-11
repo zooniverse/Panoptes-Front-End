@@ -10,7 +10,7 @@ parseQuery = ->
 
   params
 
-module?.exports = (reactHistory, queryChange) ->
+module.exports = (reactHistory, queryChange) ->
   nextQuery = Object.assign { }, parseQuery(), queryChange
   nextHref = reactHistory.createHref window.location.pathname, nextQuery
   reactHistory.pushState null, nextHref

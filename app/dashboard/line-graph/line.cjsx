@@ -1,6 +1,6 @@
 React = require 'react'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'LineGraphLine'
   borderWidth: 2
 

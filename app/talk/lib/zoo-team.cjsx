@@ -3,7 +3,7 @@ PromiseRenderer = require '../../components/promise-renderer'
 talkClient = require 'panoptes-client/lib/talk-client'
 userIsZooniverseAdmin = require './user-is-zooniverse-admin'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'ZooniverseTeam'
 
   propTypes:

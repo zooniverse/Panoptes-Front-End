@@ -4,7 +4,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 Loading = require '../components/loading-indicator'
 getCaretPosition = require './lib/get-caret-position'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'Suggester'
 
   propTypes:

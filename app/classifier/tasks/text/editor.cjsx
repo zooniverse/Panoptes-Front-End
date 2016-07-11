@@ -6,7 +6,7 @@ handleInputChange = require '../../../lib/handle-input-change'
 MarkdownHelp = require '../../../partials/markdown-help'
 NextTaskSelector = require '../next-task-selector'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'TextTaskEditor'
 
   getDefaultProps: ->

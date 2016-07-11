@@ -49,7 +49,7 @@ USER_STATS_DATA = [
   {name: "Classifications Today", value: "5"}
 ]
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'Dashboard'
 
   statsItem: (d, i) ->

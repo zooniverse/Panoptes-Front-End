@@ -6,7 +6,7 @@ CommentLink = require '../../pages/profile/comment-link'
 ModerationReports = require './reports'
 ModerationActions = require './actions'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'ModerationComment'
 
   propTypes:

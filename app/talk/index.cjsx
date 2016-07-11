@@ -5,7 +5,7 @@ TalkSearchInput = require './search-input'
 TalkFootnote = require './footnote'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'Talk'
 
   contextTypes:

@@ -8,7 +8,7 @@ DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
 DEFAULT_BOARD_DESCRIPTION = 'General comment threads about individual subjects'
 
 
-module?.exports = React.createClass
+module.exports = React.createClass
   displayName: 'CreateSubjectDefaultButton'
 
   propTypes:
