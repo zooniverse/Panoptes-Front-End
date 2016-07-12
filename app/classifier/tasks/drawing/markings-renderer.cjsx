@@ -64,6 +64,7 @@ module.exports = React.createClass
                 mark: mark
                 details: toolDescription.details
                 color: toolDescription.color
+                size: toolDescription.size ? 'large'
 
               toolMethods =
                 onChange: @handleChange.bind this, i

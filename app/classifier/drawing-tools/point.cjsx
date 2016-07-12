@@ -5,8 +5,12 @@ Draggable = require '../../lib/draggable'
 DeleteButton = require './delete-button'
 isInBounds = require '../../lib/is-in-bounds'
 
-RADIUS = 10
-SELECTED_RADIUS = 20
+RADIUS = 
+  large: 10
+  small: 2
+SELECTED_RADIUS = 
+  large: 20
+  small: 7
 CROSSHAIR_SPACE = 0.2
 CROSSHAIR_WIDTH = 1
 DELETE_BUTTON_ANGLE = 45
@@ -34,23 +38,27 @@ module.exports = React.createClass
 
     initRelease: ->
       _inProgress: false
+    
+    options: ['size']
 
   getDeleteButtonPosition: ->
+    size = @props.size
     theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)
-    x: (SELECTED_RADIUS / @props.scale.horizontal) * Math.cos theta
-    y: -1 * (SELECTED_RADIUS / @props.scale.vertical) * Math.sin theta
+    x: (SELECTED_RADIUS[size] / @props.scale.horizontal) * Math.cos theta
+    y: -1 * (SELECTED_RADIUS[size] / @props.scale.vertical) * Math.sin theta
 
   render: ->
+    size = @props.size
     averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
 
     crosshairSpace = CROSSHAIR_SPACE / averageScale
     crosshairWidth = CROSSHAIR_WIDTH / averageScale
-    selectedRadius = SELECTED_RADIUS / averageScale
+    selectedRadius = SELECTED_RADIUS[size] / averageScale
 
     radius = if @props.selected
-      SELECTED_RADIUS / averageScale
+      SELECTED_RADIUS[size] / averageScale
     else
-      RADIUS / averageScale
+      RADIUS[size] / averageScale
 
     <DrawingToolRoot tool={this} transform="translate(#{@props.mark.x}, #{@props.mark.y})">
       <line x1="0" y1={-1 * crosshairSpace * selectedRadius} x2="0" y2={-1 * selectedRadius} strokeWidth={crosshairWidth} />
