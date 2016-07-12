@@ -26,6 +26,7 @@ function getUserRibbonData(user) {
         if (projects[i] !== null && owners[i] !== null) {
           return {
             id: projects[i].id,
+            slug: projects[i].slug,
             name: projects[i].display_name,
             owner: owners[i].display_name,
             color: getColorFromString(projects[i].slug),
