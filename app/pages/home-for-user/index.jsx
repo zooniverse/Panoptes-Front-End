@@ -1,5 +1,4 @@
 import React from 'react';
-// import apiClient from 'panoptes-client/lib/api-client';
 import BlurredImage from './blurred-image';
 import getUserRibbonData from '../../lib/get-user-ribbon-data';
 import CircleRibbon from './circle-ribbon';
@@ -23,6 +22,7 @@ const SECTIONS = {
 const HomePageForUser = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
+    location: React.PropTypes.object,
   },
 
   getDefaultProps() {
@@ -88,6 +88,10 @@ const HomePageForUser = React.createClass({
     });
   },
 
+  findProjectLink(project) {
+    return `/projects/${project.slug}`;
+  },
+
   renderMenu() {
     return (
       <div className="home-page-for-user__menu">
@@ -142,7 +146,7 @@ const HomePageForUser = React.createClass({
           <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
         ) : (
           <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-            <CircleRibbon loading={this.state.loading} data={this.state.ribbonData} />
+            <CircleRibbon loading={this.state.loading} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
             <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
 
