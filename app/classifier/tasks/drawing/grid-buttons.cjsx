@@ -63,15 +63,16 @@ module.exports = React.createClass
     @props.preferences.update 'preferences'
 
   deleteGrid: ->
-    @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-      pref.preferences.savedGrids.pop()
-      if pref.preferences?.savedGrids?.length > 0
-        pref.update 'preferences.grid': pref.preferences.savedGrids[pref.preferences.savedGrids.length - 1].template
-      else
-        pref.update 'preferences.grid': null
-        @activateTemplate null
-        @setState gridSelect: false
-      pref.save()
+    @props.preferences.preferences.savedGrids.pop()
+    prefs = @props.preferences.preferences
+    if prefs.savedGrids?.length > 0
+      @activateTemplate 'grid'
+      prefs.grid = prefs.savedGrids[prefs.savedGrids.length - 1].template
+    else
+      prefs.grid = null
+      @activateTemplate null
+      @setState gridSelect: false
+    @props.preferences.save()
 
   saveRow: (marks) ->
     @activateTemplate 'row'
@@ -82,26 +83,25 @@ module.exports = React.createClass
         savedRow.push Object.assign({}, cell)
     @props.preferences.preferences.row = savedRow
     @props.preferences.update 'preferences'
+    @forceUpdate()
 
   saveGrid: (e) ->
     e.preventDefault()
     if @uniqueName @refs.name.value
+      prefs = @props.preferences.preferences
       @props.annotation._completed = true
       @activateTemplate 'grid'
 
       newGrid = for cell in @props.annotation.value
         Object.assign({}, cell)
       displayName = @refs.name.value
-      @props.user.get('project_preferences', {project_id: @props.workflow.links.project}).then ([pref]) =>
-        pref.update 'preferences.grid': newGrid
-        if !pref.preferences?.savedGrids?
-          pref.update 'preferences.savedGrids': [{ value: Math.random(), label: displayName, template: newGrid}]
-          pref.save()
-        else
-          pref.preferences.savedGrids.push { value: Math.random(), label: displayName, template: newGrid}
-          pref.save()
-      @setState templateForm: false
-      @setState gridSelect: true
+      prefs.grid = newGrid
+      if !prefs.savedGrids
+        prefs.savedGrids = [{ value: Math.random(), label: displayName, template: newGrid}]
+      else
+        prefs.savedGrids.push { value: Math.random(), label: displayName, template: newGrid}
+      @props.preferences.save()
+      @setState templateForm: false, gridSelect: true
       @setState error: null if @state?.error
 
   uniqueName: (name) ->
