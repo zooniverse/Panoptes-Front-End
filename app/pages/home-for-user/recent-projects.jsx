@@ -1,6 +1,7 @@
 import React from 'react';
 import HomePageSection from './generic-section';
 import { Link } from 'react-router';
+import ProjectCard from '../../partials/project-card';
 
 const RecentProjectsSection = React.createClass({
   propTypes: {
@@ -16,6 +17,7 @@ const RecentProjectsSection = React.createClass({
       loading: false,
       error: null,
       projects: [],
+      avatars: {},
     };
   },
 
@@ -33,6 +35,7 @@ const RecentProjectsSection = React.createClass({
     this.setState({
       loading: true,
       error: null,
+      avatars: {},
     });
 
     user.get('project_preferences', {
@@ -53,6 +56,17 @@ const RecentProjectsSection = React.createClass({
       this.setState({
         projects,
       });
+
+      return Promise.all(projects.map((project) => {
+        return project.get('avatar')
+        .catch(() => {
+          return null;
+        })
+        .then((avatar) => {
+          this.state.avatars[project.id] = avatar;
+          this.forceUpdate();
+        });
+      }));
     })
     .catch((error) => {
       this.setState({
@@ -78,13 +92,13 @@ const RecentProjectsSection = React.createClass({
         <div className="home-page-section__sub-header">
           <Link to={`/users/${this.context.user.login}/stats`} className="outlined-button">See all</Link>
         </div>
-        {this.state.projects.map((project) => {
-          return (
-            <div key={project.id}>
-              {project.id}: {project.display_name}
-            </div>
-          );
-        })}
+
+        <div className="project-card-list">
+          {this.state.projects.map((project) => {
+            const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
+            return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
+          })}
+        </div>
       </HomePageSection>
     );
   },
