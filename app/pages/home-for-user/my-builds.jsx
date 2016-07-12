@@ -2,6 +2,7 @@ import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import HomePageSection from './generic-section';
 import { Link } from 'react-router';
+import ProjectCard from '../../partials/project-card';
 
 const MyBuildsSection = React.createClass({
   propTypes: {
@@ -17,6 +18,7 @@ const MyBuildsSection = React.createClass({
       loading: false,
       error: null,
       projects: [],
+      avatars: {},
     };
   },
 
@@ -34,6 +36,7 @@ const MyBuildsSection = React.createClass({
     this.setState({
       loading: true,
       error: null,
+      avatars: {},
     });
 
     apiClient.type('projects').get({
@@ -44,6 +47,17 @@ const MyBuildsSection = React.createClass({
       this.setState({
         projects,
       });
+
+      return Promise.all(projects.map((project) => {
+        return project.get('avatar')
+        .catch(() => {
+          return null;
+        })
+        .then((avatar) => {
+          this.state.avatars[project.id] = avatar;
+          this.forceUpdate();
+        });
+      }));
     })
     .catch((error) => {
       this.setState({
@@ -67,14 +81,12 @@ const MyBuildsSection = React.createClass({
         onClose={this.props.onClose}
       >
         <div className="home-page-section__sub-header">
-          <Link to={`/lab`} className="outlined-button">See all</Link>
+          <Link to="/lab" className="outlined-button">See all</Link>
         </div>
+
         {this.state.projects.map((project) => {
-          return (
-            <div key={project.id}>
-              {project.id}: {project.display_name}
-            </div>
-          );
+          const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
+          return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} href={`/lab/${project.id}`} />;
         })}
       </HomePageSection>
     );
