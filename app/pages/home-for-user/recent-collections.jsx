@@ -1,5 +1,8 @@
 import React from 'react';
+import apiClient from 'panoptes-client/lib/api-client';
 import HomePageSection from './generic-section';
+import { Link } from 'react-router';
+import CollectionCard from '../../partials/collection-card';
 
 const RecentCollectionsSection = React.createClass({
   propTypes: {
@@ -15,6 +18,7 @@ const RecentCollectionsSection = React.createClass({
       loading: false,
       error: null,
       collections: [],
+      images: {},
     };
   },
 
@@ -32,16 +36,34 @@ const RecentCollectionsSection = React.createClass({
     this.setState({
       loading: true,
       error: null,
+      images: {},
     });
 
     user.get('collections', {
       page_size: 8,
       sort: '-updated_at',
+      favorite: false,
     })
     .then((collections) => {
-      this.setState({
-        collections,
-      });
+      this.setState({ collections });
+
+      return Promise.all(collections.map((collection) => {
+        return apiClient.type('subjects').get({
+          collection_id: collection.id,
+          page_size: 1,
+        })
+        .then(([subject]) => {
+          let imageSrc;
+          if (subject !== undefined) {
+            const firstLocationKey = Object.keys(subject.locations[0])[0];
+            imageSrc = subject.locations[0][firstLocationKey];
+          } else {
+            imageSrc = '/simple-avatar.jpg';
+          }
+          this.state.images[collection.id] = imageSrc;
+          this.forceUpdate();
+        });
+      }));
     })
     .catch((error) => {
       this.setState({
@@ -64,13 +86,15 @@ const RecentCollectionsSection = React.createClass({
         error={this.state.error}
         onClose={this.props.onClose}
       >
-        {this.state.collections.map((collection) => {
-          return (
-            <div key={collection.id}>
-              {collection.id}
-            </div>
-          );
-        })}
+        <div className="home-page-section__sub-header">
+          <Link to={`/collections/${this.context.user.login}`} className="outlined-button">See all</Link>
+        </div>
+
+        <div className="collections-card-list">
+          {this.state.collections.map((collection) => {
+            return <CollectionCard key={collection.id} collection={collection} imagePromise={this.state.images[collection.id]} linkTo="#" translationObjectName="collectionsPage" />;
+          })}
+        </div>
       </HomePageSection>
     );
   },
