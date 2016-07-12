@@ -361,6 +361,9 @@ COPY_GREY_LIGHT = #afaeae
       p
         display: inline
         margin-right: 5px
+      
+      .project-role
+        @extends $project-role
 
   .talk-discussion-preview
     @extend .talk-module
@@ -486,7 +489,7 @@ COPY_GREY_LIGHT = #afaeae
       font-size: 0.8em
 
     .project-role
-      font-size: 0.5em
+      @extends $project-role
 
   .talk-comment-reply
     padding: TALK_PADDING

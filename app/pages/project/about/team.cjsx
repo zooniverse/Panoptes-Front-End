@@ -40,7 +40,7 @@ module.exports = React.createClass
             {for projectRole in projectRoles then do (projectRole) =>
               <PromiseRenderer key={projectRole.id} promise={projectRole.get('owner')}>{(user) =>
                 <li className="team-list-item">
-                  <span>
+                  <span className="team-list-item__display-name">
                     <Avatar user={user} className="avatar" />{' '}
                     {user.display_name}{' '}
                   </span>
