@@ -2,7 +2,6 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
-PromiseRenderer = require '../../components/promise-renderer'
 FinishedBanner = require './finished-banner'
 ProjectMetadata = require './metadata'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'

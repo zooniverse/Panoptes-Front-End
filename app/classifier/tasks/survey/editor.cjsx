@@ -8,11 +8,8 @@ AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
 NextTaskSelector = require '../next-task-selector'
 MediaArea = require '../../../components/media-area'
-PromiseRenderer = require '../../../components/promise-renderer'
 {Markdown} = (require 'markdownz').default
 Papa = require 'papaparse'
-apiClient = require 'panoptes-client/lib/api-client'
-Utility = require './utility'
 
 module.exports = React.createClass
   displayName: 'SurveyTaskEditor'

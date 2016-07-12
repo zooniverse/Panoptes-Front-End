@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-talkClient = require 'panoptes-client/lib/talk-client'
 SubjectViewer = require '../components/subject-viewer'
 PopularTags = require '../talk/popular-tags'
 ActiveUsers = require '../talk/active-users'

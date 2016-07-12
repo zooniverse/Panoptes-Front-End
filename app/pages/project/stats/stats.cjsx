@@ -1,5 +1,4 @@
 React = require 'react'
-PromiseRenderer = require '../../../components/promise-renderer'
 statsClient = require 'panoptes-client/lib/stats-client'
 moment = require 'moment'
 {Progress, Graph} = require './charts'

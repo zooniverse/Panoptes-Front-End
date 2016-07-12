@@ -1,7 +1,5 @@
 React = require 'react'
 auth = require 'panoptes-client/lib/auth'
-alert = require '../lib/alert'
-LoginDialog = require '../partials/login-dialog'
 
 module.exports = React.createClass
   displayName: 'UnsubscribeFromEmailsPage'

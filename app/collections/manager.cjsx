@@ -1,5 +1,4 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
 CollectionsCreateForm = require './create-form'
 CollectionSearch = require '../components/collection-search'
 

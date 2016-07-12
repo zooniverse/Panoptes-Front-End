@@ -1,6 +1,4 @@
 React = require 'react'
-PromiseRenderer = require '../components/promise-renderer'
-parseSection = require './lib/parse-section'
 talkConfig = require './config'
 
 PAGE_SIZE = talkConfig.discussionPageSize

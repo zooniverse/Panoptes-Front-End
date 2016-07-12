@@ -1,8 +1,7 @@
 React = require('react')
-PromiseRenderer = require '../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 Select = require 'react-select'
-{Link, Router, History} = require 'react-router'
+{History} = require 'react-router'
 Translate = require 'react-translate-component'
 debounce = require 'debounce'
 Filmstrip = require '../components/filmstrip'

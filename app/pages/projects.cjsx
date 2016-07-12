@@ -1,10 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
 TitleMixin = require '../lib/title-mixin'
-apiClient = require 'panoptes-client/lib/api-client'
-{Link, Router} = require 'react-router'
-Filmstrip = require '../components/filmstrip'
-{PROJECT_SORTS} = require '../lib/project-sorts'
 {ProjectFilteringInterface} = require '../components/project-card-list'
 
 counterpart.registerTranslations 'en',

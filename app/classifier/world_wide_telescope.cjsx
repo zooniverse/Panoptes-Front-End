@@ -1,5 +1,4 @@
 React = require 'react'
-ReactDOM = require 'react-dom'
 crypto = require 'crypto'
 
 class SimplePoint

@@ -1,6 +1,5 @@
 React = require 'react'
 StickyModalForm = require 'modal-form/sticky'
-ChangeListener = require '../../components/change-listener'
 
 STROKE_WIDTH = 1.5
 SELECTED_STROKE_WIDTH = 2.5

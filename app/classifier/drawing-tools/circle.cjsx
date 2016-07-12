@@ -1,5 +1,4 @@
 React = require 'react'
-EllipseTool = require './ellipse'
 DrawingToolRoot = require './root'
 DragHandle = require './drag-handle'
 Draggable = require '../../lib/draggable'

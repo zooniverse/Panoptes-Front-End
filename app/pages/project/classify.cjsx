@@ -9,7 +9,6 @@ animatedScrollTo = require 'animated-scrollto'
 counterpart = require 'counterpart'
 FinishedBanner = require './finished-banner'
 Classifier = require '../../classifier'
-alert = require '../../lib/alert'
 seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
 

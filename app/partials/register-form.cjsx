@@ -5,7 +5,6 @@ auth = require 'panoptes-client/lib/auth'
 Translate = require 'react-translate-component'
 LoadingIndicator = require '../components/loading-indicator'
 debounce = require 'debounce'
-apiClient = require 'panoptes-client/lib/api-client'
 
 REMOTE_CHECK_DELAY = 1000
 MIN_PASSWORD_LENGTH = 8

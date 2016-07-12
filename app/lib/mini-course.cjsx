@@ -1,5 +1,4 @@
 React = require 'react'
-ReactDOM = require 'react-dom'
 Dialog = require 'modal-form/dialog'
 MediaCard = require '../components/media-card'
 {Markdown} = (require 'markdownz').default

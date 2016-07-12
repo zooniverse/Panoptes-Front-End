@@ -1,6 +1,4 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
-{sugarClient} = require 'panoptes-client/lib/sugar'
 apiClient = require 'panoptes-client/lib/api-client'
 {sugarApiClient} = require 'panoptes-client/lib/sugar'
 {Link} = require 'react-router'

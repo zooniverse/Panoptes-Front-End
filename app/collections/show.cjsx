@@ -1,8 +1,5 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
-Paginator = require '../talk/lib/paginator'
-SubjectViewer = require '../components/subject-viewer'
 PromiseRenderer = require '../components/promise-renderer'
 {IndexLink, Link} = require 'react-router'
 Translate = require 'react-translate-component'
