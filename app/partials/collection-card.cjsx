@@ -31,7 +31,7 @@ module.exports = React.createClass
 
   propTypes:
     collection: React.PropTypes.object.isRequired
-    imagePromise: React.PropTypes.any.isRequired
+    imagePromise: React.PropTypes.any
     linkTo: React.PropTypes.string.isRequired
     translationObjectName: React.PropTypes.string.isRequired
 
@@ -48,6 +48,8 @@ module.exports = React.createClass
   refreshImage: (promise) ->
     Promise.resolve(promise)
       .then (src) =>
+        if src is null
+          throw new Error 'No collection card image!' # Caught immediately
         @refs.collectionCard.style.backgroundImage = "url('#{src}')"
         @refs.collectionCard.style.backgroundSize = "contain"
       .catch =>
