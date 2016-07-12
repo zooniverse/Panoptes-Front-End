@@ -9,8 +9,7 @@ ProjectCard = React.createClass
 
   getDefaultProps: ->
     imageSrc: ''
-    name: ''
-    slug: ''
+    href: ''
 
   render: ->
     conditionalStyle = {}
@@ -25,10 +24,14 @@ ProjectCard = React.createClass
     if conditionalStyle.backgroundImage?
       conditionalStyle.backgroundSize = "contain"
 
-    linkProps =
-      to: if @props.project.redirect then @props.project.redirect else '/projects/' + @props.project.slug
+    href = if !!@props.project.redirect
+      @props.project.redirect
+    else if !!@props.href
+      @props.href
+    else
+      '/projects/' + @props.project.slug
 
-    <FlexibleLink {...linkProps}>
+    <FlexibleLink to={href}>
       <div className="project-card" ref="projectCard" style={conditionalStyle}>
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
