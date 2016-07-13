@@ -293,6 +293,16 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
+          {if 'invert' in @props.project.experimental_tools
+            <div>
+              <AutoSave tag="label" resource={@props.workflow}>
+                <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
+                Allow Users To Flip Image Color
+              </AutoSave>
+
+              <hr />
+            </div>}
+
           <p>
             <AutoSave resource={@props.workflow}>
               Subject retirement <RetirementRulesEditor workflow={@props.workflow} />
@@ -494,6 +504,10 @@ EditWorkflowPage = React.createClass
   handleSetHideClassificationSummaries: (e) ->
     @props.workflow.update
       'configuration.hide_classification_summaries': e.target.checked
+
+  handleSetInvert: (e) ->
+    @props.workflow.update
+      'configuration.invert_subject': e.target.checked
 
   handleSetWorldWideTelescope: (e) ->
     if !@props.workflow.configuration.custom_summary

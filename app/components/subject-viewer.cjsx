@@ -126,6 +126,10 @@ module.exports = React.createClass
             </span>
         </span>}
         <span>
+          {if @props.workflow?.configuration?.invert_subject?
+            <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleInvert}>
+              <i className="fa fa-adjust "></i>
+            </button>}{' '}
           {if @props.workflow?.configuration?.enable_subject_flags
             <span>
               <FlagSubjectButton className="secret-button" classification={@props.classification} />{' '}
@@ -190,6 +194,11 @@ module.exports = React.createClass
 
   toggleInFlipbookMode: () ->
     @setInFlipbookMode not @state.inFlipbookMode
+
+  toggleInvert: () ->
+    mode = not @state.imageInvert
+    @setState imageInvert: mode
+    @props.subject.invert = mode
 
   setInFlipbookMode: (inFlipbookMode) ->
     @setState {inFlipbookMode}

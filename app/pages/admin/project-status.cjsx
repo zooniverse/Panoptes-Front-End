@@ -23,6 +23,7 @@ EXPERIMENTAL_FEATURES = [
   'hide previous marks'
   'column'
   'grid'
+  'invert'
 ]
 
 ProjectToggle = React.createClass

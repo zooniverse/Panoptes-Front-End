@@ -128,7 +128,7 @@ module.exports = React.createClass
 
           {for anyTaskName, {PersistInsideSubject} of tasks when PersistInsideSubject?
             <PersistInsideSubject key={anyTaskName} {...hookProps} />}
-            <ModifiedImage src={src} width={@props.naturalWidth} height={@props.naturalHeight}/>
+          {<ModifiedImage src={src} width={@props.naturalWidth} height={@props.naturalHeight}/> if @props.subject.invert }
         </svg>
         {@props.children}
         {if @state.alreadySeen
