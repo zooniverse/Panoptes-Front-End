@@ -23,6 +23,7 @@ EXPERIMENTAL_FEATURES = [
   'worldwide telescope'
   'hide previous marks'
   'column'
+  'grid'
 ]
 
 ProjectToggle = React.createClass

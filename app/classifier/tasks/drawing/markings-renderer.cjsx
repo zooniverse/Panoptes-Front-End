@@ -50,6 +50,9 @@ module.exports = React.createClass
                 skippedMarks += 1
                 continue
 
+              if mark._copy?
+                continue
+
               toolDescription = taskDescription.tools[mark.tool]
 
               toolEnv =
@@ -58,6 +61,7 @@ module.exports = React.createClass
                 disabled: isPriorAnnotation
                 selected: mark is @state.selection and not isPriorAnnotation
                 getEventOffset: @props.getEventOffset
+                preferences: @props.preferences
 
               toolProps =
                 classification: @props.classification
@@ -96,3 +100,10 @@ module.exports = React.createClass
     markIndex = annotation.value.indexOf mark
     annotation.value.splice markIndex, 1
     @props.classification.update 'annotations'
+    if mark.templateID
+      index = []
+      for cell in annotation.value
+        if cell.templateID is mark.templateID
+          index.push(annotation.value.indexOf cell)
+      annotation.value.splice index[0], index.length
+      @props.classification.update 'annotations'

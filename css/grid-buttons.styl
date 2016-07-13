@@ -1,0 +1,68 @@
+.grid-button-tab
+  @extends $reset-button
+  border: 2px solid transparent
+  font-size: 0.9em
+  margin: 0.3vw
+  padding: 0.8em 1.2vw
+
+  &.active
+    border: 2px solid MAIN_HIGHLIGHT
+    border-radius: .5em
+    font-weight: bold
+
+.grid-button-template
+  @extends $reset-button
+  background: white
+  border: 0
+  border-radius: .5em
+  color: black
+  cursor: pointer
+  font-size: 12px
+  margin: 0 0.5vw
+  padding: 0.2em 0.5em
+
+  &:hover
+    background: lighten(MAIN_HIGHLIGHT, 30%)
+
+.grid-button-table
+  margin: 1em 0em
+  text-align: center
+
+.template-select
+  margin-left: 4em
+
+  p
+    margin: 0.5em 3.2em
+
+  .template-name-input
+    border: 1px solid #cccccc
+    border-radius: 4px
+    padding: 0.6em 0.8em
+    width: 60%
+
+  .grid-selection-dropdown
+    border-radius: 4px
+    font-size: 0.9
+    width: 60%
+
+    .Select-menu
+      max-height: 6em
+
+  .template-form-button
+    @extends $reset-button
+    background-color: black
+    border-radius: 0.5em
+    display: inline-block
+    font-size: 0.9em
+    margin: 0.6em 0.8vw 0 0.8vw
+    padding: 0.2em 0.5em
+    vertical-align: middle
+
+    &:hover
+      background: lighten(black, 30%)
+
+  .create-grid
+    background-color: MAIN_HIGHLIGHT
+
+    &:hover
+      background: lighten(MAIN_HIGHLIGHT, 30%)

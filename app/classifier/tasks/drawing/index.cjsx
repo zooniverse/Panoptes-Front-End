@@ -9,6 +9,7 @@ testShapeCloseness = require 'test-shape-closeness'
 {Markdown} = (require 'markdownz').default
 icons = require './icons'
 drawingTools = require '../../drawing-tools'
+GridButtons = require './grid-buttons'
 
 module.exports = React.createClass
   displayName: 'DrawingTask'
@@ -46,6 +47,11 @@ module.exports = React.createClass
 
     areThereEnoughMarks:(task, annotation) ->
       marksByTool = {}
+      if task.tools[annotation._toolIndex].type == 'grid'
+        for mark in annotation.value
+          return true if mark._type is 'grid'
+        return true if annotation._completed is true
+        return false
       annotation.value.forEach (mark) ->
         marksByTool[mark.tool] ?= 0
         marksByTool[mark.tool] += 1
@@ -91,30 +97,34 @@ module.exports = React.createClass
     tools = for tool, i in @props.task.tools
       tool._key ?= Math.random()
       count = (true for mark in @props.annotation.value when mark.tool is i).length
-      <label key={tool._key} >
-        <input name={i} autoFocus={@props.autoFocus and i is 0} type="radio" className="drawing-tool-button-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
-        <div className="minor-button answer-button #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
-          <div className="answer-button-icon-container">
-            <span className="drawing-tool-button-icon" style={color: tool.color}>{icons[tool.type]}</span>
-          </div>
+      <div>
+        <label key={tool._key} >
+          <input name={i} autoFocus={@props.autoFocus and i is 0} type="radio" className="drawing-tool-button-input" checked={i is (@props.annotation._toolIndex ? 0)} onChange={@handleChange.bind this, i} />
+          <div className="minor-button answer-button #{if i is (@props.annotation._toolIndex ? 0) then 'active' else ''}">
+            <div className="answer-button-icon-container">
+              <span className="drawing-tool-button-icon" style={color: tool.color}>{icons[tool.type]}</span>
+            </div>
 
-          <div className="answer-button-label-container">
-            <Markdown className="answer-button-label">{tool.label}</Markdown>
-            <div className="answer-button-status">
-              {count + ' '}
-              {if tool.min? or tool.max?
-                'of '}
-              {if tool.min?
-                <span style={color: 'red' if count < tool.min}>{tool.min} required</span>}
-              {if tool.min? and tool.max?
-                ', '}
-              {if tool.max?
-                <span style={color: 'orange' if count is tool.max}>{tool.max} maximum</span>}
-              {' '}drawn
+            <div className="answer-button-label-container">
+              <Markdown className="answer-button-label">{tool.label}</Markdown>
+              <div className="answer-button-status">
+                {count + ' '}
+                {if tool.min? or tool.max?
+                  'of '}
+                {if tool.min?
+                  <span style={color: 'red' if count < tool.min}>{tool.min} required</span>}
+                {if tool.min? and tool.max?
+                  ', '}
+                {if tool.max?
+                  <span style={color: 'orange' if count is tool.max}>{tool.max} maximum</span>}
+                {' '}drawn
+              </div>
             </div>
           </div>
-        </div>
-      </label>
+        </label>
+        {if tool.type is 'grid'
+          <GridButtons {...@props} />}
+      </div>
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} answers={tools} required={@props.task.required} />
 

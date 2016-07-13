@@ -79,18 +79,27 @@ module.exports = React.createClass
     @props.classification.update 'annotations'
 
   handleInitRelease: (e) ->
+    pref = @props.preferences.preferences
     taskDescription = @props.workflow.tasks[@props.annotation.task]
     mark = @props.annotation.value[@props.annotation.value.length - 1]
     MarkComponent = drawingTools[taskDescription.tools[mark.tool].type]
 
     toolName = taskDescription.tools[mark.tool].type
     @context.geordi?.logEvent type: "draw-#{toolName}"
-    
+
     if MarkComponent.initRelease?
       mouseCoords = @props.getEventOffset e
       initReleaseValues = MarkComponent.initRelease mouseCoords, mark, e
       for key, value of initReleaseValues
         mark[key] = value
+
+    if MarkComponent.saveState? and pref.activeTemplate
+      multipleMarks = MarkComponent.saveState mark, pref[pref.activeTemplate], pref.activeTemplate
+      for multiple in multipleMarks
+        @props.annotation.value.push multiple
+
+        unless MarkComponent.initValid multiple, @props
+          @destroyMark @props.annotation, multiple
 
     @props.classification.update 'annotations'
 
