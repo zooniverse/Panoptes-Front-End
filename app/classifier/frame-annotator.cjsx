@@ -5,6 +5,7 @@ tasks = require './tasks'
 seenThisSession = require '../lib/seen-this-session'
 getSubjectLocation = require '../lib/get-subject-location'
 WarningBanner = require './warning-banner'
+ModifiedImage = require '../components/modified-image'
 
 module.exports = React.createClass
   displayName: 'FrameAnnotator'
@@ -127,6 +128,7 @@ module.exports = React.createClass
 
           {for anyTaskName, {PersistInsideSubject} of tasks when PersistInsideSubject?
             <PersistInsideSubject key={anyTaskName} {...hookProps} />}
+            <ModifiedImage src={src} width={@props.naturalWidth} height={@props.naturalHeight}/>
         </svg>
         {@props.children}
         {if @state.alreadySeen
