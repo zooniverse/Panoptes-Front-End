@@ -2,7 +2,7 @@ import React from 'react';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-// NOTE: This is completely ridiculous. But React doesn't know about SVG's <a>. Replace it ASAP.
+// NOTE: This is completely ridiculous. But React doesn't know about SVG's <a>. Replace this thing ASAP.
 
 const SVGLink = React.createClass({
   componentDidMount() {
@@ -11,14 +11,7 @@ const SVGLink = React.createClass({
   },
 
   componentWillUpdate() {
-    while (this.link.childNodes.length > 0) {
-      this.refs.group.appendChild(this.link.childNodes[0]);
-    }
-
-    if (!!this.link.parentNode) {
-      this.link.parentNode.insertBefore(this.refs.group, this.link);
-      this.link.parentNode.removeChild(this.link);
-    }
+    this.backToNormal();
   },
 
   componentDidUpdate() {
@@ -41,6 +34,17 @@ const SVGLink = React.createClass({
 
     this.refs.group.parentNode.insertBefore(this.link, this.refs.group);
     this.refs.group.parentNode.removeChild(this.refs.group);
+  },
+
+  backToNormal() {
+    while (this.link.childNodes.length > 0) {
+      this.refs.group.appendChild(this.link.childNodes[0]);
+    }
+
+    if (!!this.link.parentNode) {
+      this.link.parentNode.insertBefore(this.refs.group, this.link);
+      this.link.parentNode.removeChild(this.link);
+    }
   },
 
   render() {
