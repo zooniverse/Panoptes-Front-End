@@ -209,7 +209,7 @@ const SiteNav = React.createClass({
   },
 
   render() {
-    const logo = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
+    const logo = <ZooniverseLogo width="1.8em" height="1.8em" title="Show navigation" style={{ verticalAlign: '-0.5em' }} />;
 
     return (
       <nav className="site-nav">
