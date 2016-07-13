@@ -1,6 +1,5 @@
 React = require 'react'
 {Link} = require 'react-router'
-ChangeListener = require '../../../components/change-listener'
 
 module.exports = React.createClass
   displayName: 'AboutEditor'

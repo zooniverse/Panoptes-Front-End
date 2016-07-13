@@ -18,7 +18,6 @@ SubjectViewer = require '../components/subject-viewer'
 SingleSubmitButton = require '../components/single-submit-button'
 DisplayRoles = require './lib/display-roles'
 CommentContextIcon = require './lib/comment-context-icon'
-merge = require 'lodash.merge'
 {Markdown} = (require 'markdownz').default
 DEFAULT_AVATAR = '/assets/simple-avatar.jpg'
 

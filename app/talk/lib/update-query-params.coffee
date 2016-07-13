@@ -1,5 +1,3 @@
-React = require 'react'
-
 parseQuery = ->
   query = window.location.search.replace('?', '').split '&'
   params = { }

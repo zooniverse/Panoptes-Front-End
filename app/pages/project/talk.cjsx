@@ -1,6 +1,5 @@
 React = require 'react'
 {Link} = require 'react-router'
-TalkInit = require '../../talk/init'
 TalkBreadcrumbs = require '../../talk/breadcrumbs'
 TalkSearchInput = require '../../talk/search-input'
 projectSection = require '../../talk/lib/project-section'

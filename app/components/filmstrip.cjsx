@@ -1,5 +1,4 @@
 React = require 'react'
-{Link, State, Navigation} = require 'react-router'
 {DISCIPLINES} = require './disciplines'
 
 module.exports = React.createClass

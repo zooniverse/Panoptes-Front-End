@@ -1,5 +1,4 @@
 React = require 'react'
-ReactDOM = require 'react-dom'
 counterpart = require 'counterpart'
 
 WorkflowCreateForm = React.createClass

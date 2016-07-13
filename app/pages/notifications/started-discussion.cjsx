@@ -1,7 +1,6 @@
 React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
 {Link} = require 'react-router'
-{Markdown} = (require 'markdownz').default
 Loading = require '../../components/loading-indicator'
 Comment = require '../../talk/search-result'
 

@@ -1,11 +1,7 @@
 React = require 'react'
-handleInputChange = require '../../lib/handle-input-change'
-PromiseRenderer = require '../../components/promise-renderer'
-apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 TalkDataExportButton = require '../../talk/data-export-button'
-isAdmin = require '../../lib/is-admin'
 
 counterpart.registerTranslations 'en',
   projectDetails:

@@ -1,7 +1,6 @@
 React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
 Comment = require '../talk/comment'
-Paginator = require '../talk/lib/paginator'
 Loading = require '../components/loading-indicator'
 
 module.exports = React.createClass

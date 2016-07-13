@@ -6,7 +6,6 @@ DisplayRoles = require './lib/display-roles'
 Avatar = require '../partials/avatar'
 PromiseRenderer = require '../components/promise-renderer'
 {Link, History} = require 'react-router'
-merge = require 'lodash.merge'
 {Markdown} = (require 'markdownz').default
 
 PAGE_SIZE = require('./config').discussionPageSize

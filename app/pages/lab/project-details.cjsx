@@ -5,7 +5,6 @@ PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
-counterpart = require 'counterpart'
 DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor} = (require 'markdownz').default

@@ -1,5 +1,4 @@
 React = require 'react'
-ReactDOM = require 'react-dom'
 CroppedImage = require '../../../components/cropped-image'
 
 ArticleListItem = React.createClass

@@ -1,8 +1,6 @@
 React = require 'react'
-PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
-counterpart = require 'counterpart'
 Translate = require 'react-translate-component'
 
 FlexibleLink = React.createClass

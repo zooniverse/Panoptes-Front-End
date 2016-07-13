@@ -1,7 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
-resourceCount = require './resource-count'
 formatNumber = require './format-number'
 
 module.exports = React.createClass

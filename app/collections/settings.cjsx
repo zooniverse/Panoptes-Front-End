@@ -1,7 +1,6 @@
 React = require 'react'
 {History} = require 'react-router'
 DisplayNameSlugEditor = require '../partials/display-name-slug-editor'
-apiClient = require 'panoptes-client/lib/api-client'
 alert = require '../lib/alert'
 SetToggle = require '../lib/set-toggle'
 CollectionRole = require '../lib/collection-role'

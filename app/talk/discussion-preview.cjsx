@@ -1,12 +1,10 @@
 React = require 'react'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
-{State} = require 'react-router'
 PromiseRenderer = require '../components/promise-renderer'
 LatestCommentLink = require './latest-comment-link'
 Thumbnail = require '../components/thumbnail'
 apiClient = require 'panoptes-client/lib/api-client'
-talkClient = require 'panoptes-client/lib/talk-client'
 getSubjectLocation = require '../lib/get-subject-location'
 
 module.exports = React.createClass

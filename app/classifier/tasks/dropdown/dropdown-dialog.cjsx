@@ -1,5 +1,4 @@
 React = require 'react'
-ReactDOM = require 'react-dom'
 DragReorderable = require 'drag-reorderable'
 TriggeredModalForm = require 'modal-form/triggered'
 dropdownEditorHelp = require './editor-help'

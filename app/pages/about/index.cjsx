@@ -2,7 +2,6 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
-{Markdown} = (require 'markdownz').default
 
 counterpart.registerTranslations 'en',
   about:

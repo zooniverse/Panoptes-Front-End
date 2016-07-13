@@ -1,5 +1,4 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
 Tutorial = require '../lib/tutorial'
 
 module.exports = React.createClass

@@ -2,7 +2,6 @@ React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
 {Link} = require 'react-router'
 PromiseRenderer = require '../components/promise-renderer'
-merge = require 'lodash.merge'
 
 module.exports = React.createClass
   displayName: 'TalkBreadcrumbs'
