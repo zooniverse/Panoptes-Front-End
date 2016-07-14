@@ -1,0 +1,43 @@
+.recent-conversations-list
+  padding: 0
+
+  &__item
+    display: block
+
+.recent-conversation-link
+  align-items: center
+  border: 1px solid gray
+  border-radius: 0.3em
+  color: inherit
+  display: flex
+  margin: 0.5em 0
+  text-decoration: none
+
+  &__direction
+    flex-basis: 3em
+    opacity: 0.5
+    text-align: right
+
+  &__partner
+    flex-basis: 10em
+    font-weight: bold
+    margin: 0 1ch;
+
+  &__partner-avatar
+    border-radius: 50%
+    height: 2em
+    vertical-align: middle
+    width: 2em
+
+  &__preview
+    flex-grow: 1
+    margin: 0 1ch;
+
+  &__title
+    font-weight: bold
+    white-space: nowrap
+
+  &__body-preview
+    font-size: 0.8em
+    line-height: 1.5em
+    max-height: 3.5em

@@ -1,7 +1,11 @@
 import React from 'react';
-import HomePageSection from './generic-section';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
+import HomePageSection from './generic-section';
+import { Link } from 'react-router';
+
+import style from './recent-messages.styl';
+void style;
 
 const LOADER_BULLETS = '• • •';
 
@@ -121,6 +125,37 @@ const RecentCollectionsSection = React.createClass({
     });
   },
 
+  renderConversation(conversation) {
+    const partner = this.state.converationPartners[conversation.id];
+    const message = this.state.lastMessages[conversation.id];
+    const sentLastMessage = !!message && (this.state.messageAuthors[message.id] === this.context.user);
+
+    return (
+      <Link to={`/inbox/${conversation.id}`} className="recent-conversation-link">
+        <span className="recent-conversation-link__direction">
+          {sentLastMessage ? (
+            'To'
+          ) : (
+            'From'
+          )}
+        </span>
+        <span className="recent-conversation-link__partner">
+          <img role="presentation" src="https://www.fillmurray.com/50/50" className="recent-conversation-link__partner-avatar" />{' '}
+          {!!partner ? partner.display_name : LOADER_BULLETS}
+        </span>
+
+        <div className="recent-conversation-link__preview">
+          <div className="recent-conversation-link__title">
+            {conversation.title}
+          </div>
+          <div className="recent-conversation-link__body-preview">
+            {!!message ? message.body : LOADER_BULLETS}
+          </div>
+        </div>
+      </Link>
+    );
+  },
+
   render() {
     return (
       <HomePageSection
@@ -129,27 +164,19 @@ const RecentCollectionsSection = React.createClass({
         error={this.state.error}
         onClose={this.props.onClose}
       >
-        {this.state.conversations.map((conversation) => {
-          const partner = this.state.converationPartners[conversation.id];
-          const message = this.state.lastMessages[conversation.id];
-          const sentLastMessage = !!message && (this.state.messageAuthors[message.id] === this.context.user);
+        <div className="home-page-section__sub-header">
+          <Link to="/inbox" className="outlined-button">See all</Link>
+        </div>
 
-          return (
-            <div key={conversation.id}>
-              <b>TITLE</b>: {conversation.title}{' '}
-              <b>
-                {sentLastMessage ? (
-                  'TO'
-                ) : (
-                  'FROM'
-                )}
-              </b>: {!!partner ? partner.display_name : LOADER_BULLETS}
-              <br />
-              <b>LAST MESSAGE</b>: {!!message ? message.body : LOADER_BULLETS}
-              <hr />
-            </div>
-          );
-        })}
+        <ul className="recent-conversations-list">
+          {this.state.conversations.map((conversation) => {
+            return (
+              <li key={conversation.id} className="recent-conversations-list__item">
+                {this.renderConversation(conversation)}
+              </li>
+            );
+          })}
+        </ul>
       </HomePageSection>
     );
   },
