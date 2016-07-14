@@ -3,6 +3,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import HomePageSection from './generic-section';
 import { Link } from 'react-router';
+import StringTruncator from './string-truncator';
 
 import style from './recent-messages.styl';
 void style;
@@ -149,7 +150,7 @@ const RecentCollectionsSection = React.createClass({
             {conversation.title}
           </div>
           <div className="recent-conversation-link__body-preview">
-            {!!message ? message.body : LOADER_BULLETS}
+            {!!message ? <StringTruncator>{message.body}</StringTruncator> : LOADER_BULLETS}
           </div>
         </div>
       </Link>
