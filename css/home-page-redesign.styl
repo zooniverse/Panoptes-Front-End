@@ -1,0 +1,209 @@
+NAVY = #044774
+TEAL = #1DAAA7
+ORANGE = #FA8B22
+GRAY = #EFF2F5
+
+.on-home-page-not-logged-in
+  .app-layout__header
+    background: rgba(0, 0, 0, 0.5)
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.0))
+    position: absolute
+    width: 100%
+    z-index: 1
+    top: 0
+    left: 0
+
+  .zooniverse-logo, .site-nav__link
+    opacity: 1
+    color: #FFFFFF
+
+  .modal-form .site-nav__link
+    color: #000000
+
+  h1, h2
+    color: #FFFFFF
+    font-size: 30px
+
+    @media (max-width: 900px)
+      font-size: 25px
+
+    &.lighter
+      font-weight: 400
+
+.home-page-not-logged-in
+  section
+    display: flex
+    flex-direction: column
+    position: relative
+    align-items: center
+    justify-content: center
+    text-align: center
+    min-height: 50vw // video is 2:1 aspect ratio and 100% width
+
+  .zooniverse-logo
+    position: relative
+    width: 25px
+    top: 4px
+
+  .standard-button
+    background: none
+    border: 4px solid #FFFFFF
+    border-radius: 6px
+    padding: 0.75em 1.5em
+    transition: background 500ms ease
+    margin-top: 50px
+    font-size: 15px
+
+    @media (max-width: 900px)
+      margin-top: 20px
+
+    &:hover
+      background: rgba(0, 0, 0, 0.3)
+
+  .home-link-down
+    width: 100%
+    text-align: center
+    border: none
+    background-color: TEAL
+    color: #FFFFFF
+    font-size: 50px
+    line-height: 50px
+
+  .home-intro
+    color: #FFFFFF
+    z-index: 0
+
+    h1
+      color: #FFFFFF
+
+    video
+      display: none
+
+    .home-mobile-video-image
+      display: block
+
+    @media (min-width: 900px)
+      video
+        display: block
+
+      .home-mobile-video-image
+        display: none
+
+    video, .home-mobile-video-image
+      position: absolute
+      top: 0
+      left: 0
+      z-index: -1
+      width: 100%
+
+    @media (max-width: 700px)
+      padding-top: 8vw
+
+  .home-discover
+    color: NAVY
+    background-color: GRAY
+
+    p
+      margin: 20px auto
+      width: 50vw
+      font-size: 2em
+
+      @media (max-width: 900px)
+        width: 100%
+
+    h1, p, .standard-button
+      color: NAVY
+
+    .standard-button
+      border: 4px solid NAVY
+
+      &:hover
+        background: rgba(0, 0, 0, 0.1)
+
+  .home-promoted, .home-featured-collections
+    margin: 40px 0
+    background-size: cover
+    transition: background-image 500ms ease-in-out
+
+    h1, p
+      color: #FFFFFF
+
+    .description
+      position: relative
+      opacity: 1
+      top: 0
+      font-size: 2em
+
+      &:not(.appearing)
+        transition: all 1s
+
+      &.appearing
+        top: 50px
+        opacity: 0
+
+    &:hover
+      .controls
+        opacity: 1
+
+    .controls
+      opacity: 0
+      display: flex
+      justify-content: space-around
+      align-items: center
+      width: 300px
+      margin-top 50px
+      color: #FFFFFF
+      font-size: 2em
+      transition: opacity 500ms ease-in-out
+
+      .fa-angle-left, .fa-angle-right
+        font-size: 1.5em
+
+      i
+        cursor: pointer
+
+    .owner
+      margin-left: 2vw
+      margin-right: auto
+
+  .home-social
+    h1
+      color: ORANGE
+      margin: 20px auto
+
+    h2, h2 a
+      color: ORANGE
+      margin: 20px auto
+      font-size: 1.5em
+
+    .home-social-columns
+      display: flex
+      flex-direction: row
+      justify-content: space-around
+
+      @media (max-width: 900px)
+        display: block
+
+      .home-social-column
+        padding: 0 5%
+        text-align: left
+
+        ul
+          list-style: none
+          padding: 0
+
+          li
+            margin: 0 0 2.5em 0
+
+        .home-social-text
+          max-width: 100vw
+          margin: 0
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+
+          @media (min-width: 900px)
+            max-width: 20vw
+
+        .home-social-timestamp
+          margin: 0.5em 0
