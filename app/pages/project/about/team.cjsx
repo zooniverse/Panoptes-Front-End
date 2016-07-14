@@ -4,6 +4,7 @@ PromiseRenderer = require '../../../components/promise-renderer'
 Translate = require 'react-translate-component'
 TitleMixin = require '../../../lib/title-mixin'
 {Markdown} = (require 'markdownz').default
+Avatar = require '../../../partials/avatar'
 
 counterpart.registerTranslations 'en',
   projectRoles:
@@ -27,27 +28,29 @@ module.exports = React.createClass
     <div className="columns-container">
       <PromiseRenderer promise={@props.project.get('pages', url_key: "team").index(0)}>{(team) =>
         if team?.content
-          <div className="column columns-container">
-            <Markdown project={@props.project}>{
-                team?.content
-            }</Markdown>
-            <hr />
-          </div>
+          <Markdown project={@props.project} className="column">{
+              team?.content
+          }</Markdown>
       }</PromiseRenderer>
-      <div>
+      <hr />
+      <aside>
         <Translate content="projectRoles.title" />
         <PromiseRenderer promise={@props.project.get('project_roles')}>{(projectRoles) =>
-          <div>
+          <ul className="team-list">
             {for projectRole in projectRoles then do (projectRole) =>
               <PromiseRenderer key={projectRole.id} promise={projectRole.get('owner')}>{(user) =>
-                <p>
-                  <img src={user.avatar} className="avatar" />{' '}
-                  {user.display_name}{' '}
+                <li className="team-list-item">
+                  <span className="team-list-item__display-name">
+                    <Avatar user={user} className="avatar" />{' '}
+                    {user.display_name}{' '}
+                  </span>
+                  <span className="team-list-item__project-roles">
                   {for role in projectRole.roles
                     <Translate key={role} content="projectRoles.#{role}" className="project-role #{role}" />}
-                </p>
+                  </span>
+                </li>
               }</PromiseRenderer>}
-          </div>
+          </ul>
         }</PromiseRenderer>
-      </div>
+      </aside>
     </div>
