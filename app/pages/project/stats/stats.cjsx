@@ -164,9 +164,9 @@ ProjectStatsPage = React.createClass
   render: ->
     progress = @workflowInfo()
     #Dates for gap in classification stats
-    classificationGap = ['2016-01-13T00:00:00.000Z', '2016-02-07T00:00:00.000Z']
+    classificationGap = ['2015-06-30T00:00:00.000Z', '2016-06-09T00:00:00.000Z']
     #Dates for gap in talk stats
-    talkGap = ['2016-02-18T00:00:00.000Z', '2016-04-07T00:00:00.000Z']
+    talkGap = ['2015-06-30T00:00:00.000Z', '2016-06-09T00:00:00.000Z']
     if @props.startDate
       start =
         <div className="project-metadata-stat">
@@ -178,14 +178,14 @@ ProjectStatsPage = React.createClass
         classificationFootnote =
           <span className="project-stats-footer">
            {classificationFootnoteMarker}
-            The gap in the classification data from {moment(classificationGap[0]).format 'MMM-DD-YYYY'} to {moment(classificationGap[1]).format 'MMM-DD-YYYY'} was caused a bug in our event notification system.  <b>No</b> classifications were lost in this time. 
+            Due to an issue with our stats server all data before {moment(classificationGap[1]).format 'MMM-DD-YYYY'} is currently unavailable.  We are currently working to resolve this issue.  <b>No</b> classifications were lost in this time. 
           </span>
       if moment(@props.startDate) <= moment(talkGap[1])
         talkFootnoteMarker = <span><sup>&#8225;</sup></span>
         talkFootnote =
           <span className="project-stats-footer">
             {talkFootnoteMarker}
-            The gap in the talk data from {moment(talkGap[0]).format 'MMM-DD-YYYY'} to {moment(talkGap[1]).format 'MMM-DD-YYYY'} was caused a bug in our event notification system.  <b>No</b> talk comments were lost in this time. 
+            Due to an issue with our stats server all data before {moment(talkGap[1]).format 'MMM-DD-YYYY'} is currently unavailable.  We are currently working to resolve this issue.  <b>No</b> talk comments were lost in this time. 
           </span>
     <div className="project-text-content content-container">
       <div className="project-stats-dashboard">

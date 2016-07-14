@@ -67,13 +67,4 @@ ProjectStatsPageController = React.createClass
 
     <ProjectStatsPage {...queryProps} />
 
-StatsHoldingPage = React.createClass
-  render: ->
-    <div className="project-text-content content-container">
-      <div className="project-stats-dashboard">
-        Project statistics are currently unavailable and we are working to fix the issue.
-      </div>
-    </div>
-
-#module.exports = ProjectStatsPageController
-module.exports = StatsHoldingPage
+module.exports = ProjectStatsPageController
