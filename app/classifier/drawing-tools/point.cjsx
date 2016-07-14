@@ -41,6 +41,9 @@ module.exports = React.createClass
     
     options: ['size']
 
+  getDefaultProps: ->
+    size: 'large'
+  
   getDeleteButtonPosition: ->
     size = @props.size
     theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)
