@@ -39,9 +39,12 @@ module.exports = React.createClass
         @setState {reports}
 
   render: ->
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     notification = @props.notification
     [owner, name] = notification.project_slug.split('/') if notification.project_slug
-    path = if notification.project_id then "/projects/#{owner}/#{name}/talk/moderations" else '/talk/moderations'
+    path = if notification.project_id then "/projects/#{notification.project_slug}/talk/moderations" else '/talk/moderations'
 
     if @state.moderation
       <div className="moderation talk-module">
@@ -56,7 +59,7 @@ module.exports = React.createClass
           {for report, i in @state.reports
             <div key={"#{ @state.moderation.id }-report-#{ i }"}>
               <li>
-                <Link className="user-profile-link" to="/users/#{report.user.login}">
+                <Link className="user-profile-link" to="#{baseLink}users/#{report.user.login}">
                   <Avatar user={report.user} />{' '}{report.user.display_name}
                 </Link>
                 {': '}
@@ -67,7 +70,7 @@ module.exports = React.createClass
 
         <div className="bottom">
           {if @state.commentUser
-            <Link className="user-profile-link" to="/users/@state.commentUser.login">
+            <Link className="user-profile-link" to="#{baseLink}users/@state.commentUser.login">
               <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
             </Link>}
 

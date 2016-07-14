@@ -64,6 +64,7 @@ module.exports = React.createClass
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.collection.display_name}</span></div>
+          {<div className="public-spaceholder">&nbsp;</div> if !@props.collection.private}
           {if !@props.skipOwner
             <div className="owner">{@props.collection.links.owner.display_name}</div>}
           {<div className="description">{@props.collection.description}</div> if @props.collection.description?}

@@ -40,6 +40,16 @@
           font-weight: 400
           margin-bottom: 1em
 
+          img.avatar
+            padding-right: 10px !important
+
+          span.login-name
+            padding-left: 7px !important
+
+            span
+              font-size: 0.65em !important
+              font-weight: 200 !important
+
         .hero-nav
           a
             @extends .main-nav-item
@@ -104,6 +114,33 @@
       border-radius: 4px
       overflow: auto
       padding: 1em
+
+&.has-project-context
+  background-color: transparent !important
+
+  .hero
+    background-image: none !important
+    background-color: transparent !important
+    padding-top: 2vw !important
+    min-height: initial !important
+
+    .hero-container
+      margin: 0 !important
+      max-width: initial !important
+
+      h1
+        text-align: center
+    .overlay
+      background-image: none !important
+      background-color: transparent !important
+
+  .content-container
+    margin: 1em auto
+
+  nav.hero-nav
+    a
+      span
+        text-transform:none !important
 
 .centered-grid
   margin: 0 auto

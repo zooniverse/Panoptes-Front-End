@@ -8,6 +8,7 @@ TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 NotificationsLink = require '../../talk/lib/notifications-link'
+classNames = require 'classNames'
 
 counterpart.registerTranslations 'en',
   project:
@@ -17,6 +18,7 @@ counterpart.registerTranslations 'en',
       about: 'About'
       classify: 'Classify'
       talk: 'Talk'
+      collections: 'Collect'
 
 SOCIAL_ICONS =
   'bitbucket.com/': 'bitbucket'
@@ -135,6 +137,11 @@ ProjectPage = React.createClass
 
     logClick = @context?.geordi?.makeHandler? 'project-menu'
 
+    collectClasses = classNames {
+      "tabbed-content-tab": true
+      "active": @props.project? and (@props.routes[2].path=="collections" or @props.routes[2].path=="favorites")
+    }
+
     if @state.background?
       backgroundStyle = backgroundImage: "url('#{@state.background.src}')"
 
@@ -187,6 +194,9 @@ ProjectPage = React.createClass
           className: 'tabbed-content-tab',
           onClick: logClick?.bind(this, 'project.nav.notifications')
         } />
+         <Link to="#{projectPath}/collections" activeClassName="active" className={collectClasses}>
+          <Translate content="project.nav.collections" />
+        </Link>
 
         {@props.project.urls.map ({label, url}, i) =>
           unless !!label

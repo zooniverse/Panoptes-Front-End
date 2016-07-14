@@ -127,12 +127,15 @@ module.exports = React.createClass
           @setState replies: [comment].concat(@state.replies)
 
   replyLine: (comment) ->
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     <div key={comment.id} className="comment-reply-line" ref="comment-reply-#{comment.id}">
       <p>
         <Link to="/users/#{comment.user_login}">{comment.user_display_name}</Link>
         {if comment.reply_id
           <span>
-            {' '}in reply to <Link to="/users/#{comment.reply_user_login}">{comment.reply_user_display_name}</Link>'s{' '}
+            {' '}in reply to <Link to="#{baseLink}users/#{comment.reply_user_login}">{comment.reply_user_display_name}</Link>'s{' '}
             <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, comment)}>
               comment
             </button>

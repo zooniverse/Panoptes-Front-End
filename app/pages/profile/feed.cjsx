@@ -28,7 +28,10 @@ module.exports = React.createClass
       comments: null
       error: null
     }, =>
-      talkClient.type('comments').get({user_id: user.id, page: page, sort: '-created_at'})
+      criteria = {user_id: user.id, page: page, sort: '-created_at'}
+      if @props.project?
+        criteria.project_id = @props.project.id
+      talkClient.type('comments').get(criteria)
         .catch (error) =>
           @setState({error})
         .then (comments) =>

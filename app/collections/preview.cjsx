@@ -28,17 +28,18 @@ module.exports = React.createClass
       @setState {subjects}
 
   render: ->
-    [owner, name] = @props.collection.slug.split('/')
-
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     <div className="collection-preview">
       <div className="collection">
         <p className="title">
-          <Link to="/collections/#{owner}/#{name}">
+          <Link to="#{baseLink}collections/#{collection.slug}">
             {@props.collection.display_name}
           </Link>
           {' '}by{' '}
           {if @state.owner
-            <Link className="user-profile-link" to="/users/#{@state.owner.login}">
+            <Link className="user-profile-link" to="#{baseLink}users/#{@state.owner.login}">
               <Avatar user={@state.owner} />{' '}{@state.owner.display_name}
             </Link>}
         </p>

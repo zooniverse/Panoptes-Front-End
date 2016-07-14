@@ -1,54 +1,57 @@
 counterpart = require 'counterpart'
 React = require 'react'
+TitleMixin = require '../../lib/title-mixin'
 Translate = require 'react-translate-component'
-{Link, IndexLink} = require 'react-router'
+CollectionsNav = require './nav'
+classNames = require 'classnames'
 
 counterpart.registerTranslations 'en',
+  projectcollectionsPage:
+    title: '%(user)s %(project)s Collections'
+    countMessage: 'Showing %(count)s favorites collections.'
+    button: 'View Favorites Collection'
+    loadMessage: 'Loading favorites collections...'
+    notFoundMessage: 'No favorites collections found'
+    all: '%(project)s Collections'
+    more: 'Show more...'
+    userWide: 'Show all %(user)s\'s Zooniverse collections...'
+    zooWide: 'Show all Zooniverse collections...'
+  projectfavoritesPage:
+    title: '%(user)s %(project)s Favorites'
+    countMessage: 'Showing %(count)s favorites collections.'
+    button: 'View Favorites Collection'
+    loadMessage: 'Loading favorites collections...'
+    notFoundMessage: 'No favorites collections found'
+    all: '%(project)s Favorites'
+    more: 'Show more...'
+    userWide: 'Show all %(user)s\'s Zooniverse favorites...'
+    zooWide: 'Show all Zooniverse favorites...'
   collectionsPage:
     title: '%(user)s Collections'
-    countMessage: 'Showing %(count)s found'
+    countMessage: 'Showing %(count)s collections.'
     button: 'View Collection'
-    loadMessage: 'Loading Collections'
-    notFoundMessage: 'No Collections Found'
-    myCollections: 'My Collections'
-    favorites: 'My Favorites'
-    all: 'All'
+    loadMessage: 'Loading collections...'
+    notFoundMessage: 'No collections found'
+    my: 'My Collections'
+    all: 'All Collections'
+    more: 'Show more...'
   favoritesPage:
     title: '%(user)s Favorites'
-    countMessage: 'Showing %(count)s found'
+    countMessage: 'Showing %(count)s favorites collections.'
     button: 'View Favorites Collection'
-    loadMessage: 'Loading Favorites Collections'
-    notFoundMessage: 'No Favorites Collections Found'
-    myCollections: 'My Collections'
-    favorites: 'My Favorites'
-    all: 'All'
+    loadMessage: 'Loading favorites collections...'
+    notFoundMessage: 'No favorites collections found'
+    my: 'My Favorites'
+    all: 'All Favorites'
+    more: 'Show more...'
 
-CollectionsNav = React.createClass
-  displayName: 'CollectionsNav'
-
-  contextTypes:
-    geordi: React.PropTypes.object
-
-  componentWillReceiveProps: (nextProps, nextContext)->
-    @logClick = nextContext?.geordi?.makeHandler? 'collect-menu'
-
-  render: ->
-    <nav className="hero-nav">
-      <IndexLink to="/collections" activeClassName="active" onClick={@logClick?.bind(this, "#{@props.route.path}Page.all")}>
-        <Translate content="#{@props.route.path}Page.all" />
-      </IndexLink>
-
-      {if @props.user?
-        <Link to="/collections/#{@props.user.login}" activeClassName="active" onClick={@logClick?.bind(this, "#{@props.route.path}Page.myCollections")}>
-          <Translate content="#{@props.route.path}Page.myCollections" />
-        </Link>}
-      {if @props.user?
-        <Link to="/favorites/#{@props.user.login}" activeClassName="active" onClick={@logClick?.bind(this, "#{@props.route.path}Page.favorites")}>
-          <Translate content="#{@props.route.path}Page.favorites" />
-        </Link>}
-    </nav>
 
 CollectionsContainer = React.createClass
+
+  mixins: [TitleMixin]
+
+  title: ->
+    if @props.params.collection_owner? then "#{@props.params.collection_owner}" else "All"
 
   userForTitle: ->
     if @props.params?.collection_owner?
@@ -57,11 +60,28 @@ CollectionsContainer = React.createClass
       'All'
 
   render: ->
-    <div className="secondary-page all-resources-page">
+    classes = classNames {
+      "secondary-page":true
+      "all-resources-page": true
+      "has-project-context": @props.project?
+    }
+    attrsForTitle = {
+       user: @userForTitle()
+       content: "#{@props.route.path}Page.title"
+    }
+    if @props.project?
+      attrsForTitle.content = "project" + attrsForTitle.content
+      attrsForTitle.project = @props.project.display_name
+    <div className={classes}>
       <section className={"hero collections-hero"}>
         <div className="hero-container">
-          <Translate component="h1" user={@userForTitle()} content={"#{@props.route.path}Page.title"} />
-          <CollectionsNav route={@props.route} user={@props.user} />
+          <Translate component="h1" {...attrsForTitle} />
+          {if !@props.project?
+            <CollectionsNav
+              route={@props.route}
+              translationObjectName="#{@props.route.path}Page"
+              user={@props.user}
+              project={@props.project} />}
         </div>
       </section>
       {if @props.children?

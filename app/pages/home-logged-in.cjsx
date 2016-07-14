@@ -74,7 +74,9 @@ module.exports = React.createClass
 
   render: ->
     aboutItems = ['contribute', 'explore', 'collaborate', 'discover']
-
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     <div className="home-page">
       <div className="flex-container">
         <section className="hero on-dark">
@@ -95,7 +97,7 @@ module.exports = React.createClass
                         null
                     } />}
                 </div>
-                <Link to="/users/#{@props.user.login}/stats" className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
+                <Link to="#{baseLink}users/#{@props.user.login}/stats" className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
               </div>
             else
               <div className="recent-projects">

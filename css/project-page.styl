@@ -183,9 +183,32 @@
   font-size: .75em
   color: #CDCDCD
 
+.collection-page-with-project-context,
 .project-text-content
+  background-color: #ebebeb
+  padding: 1.5em 3vw
+  color: #000000
   border-radius: 3px
-  margin: 1.5em 3vw
+
+  .project-role
+    color: #ffffff
+    background-color: #555555
+    padding: 0.1em 0.4em
+
+    &.owner
+      background-color: #0072ff
+
+  a
+    color: #0072ff
+
+&.in-project-context
+  nav.hero-nav
+    text-align: center
+  a.about-tabs
+    color: #153D84
+  a.about-tabs.active,
+  a.about-tabs:hover
+    border: 2px solid #153D84 !important
 
 .project-metadata
   padding: 1.5em 3vw
