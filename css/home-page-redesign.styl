@@ -33,6 +33,9 @@ GRAY = #EFF2F5
       font-weight: 400
 
 .home-page-not-logged-in
+  *:focus
+    outline: none
+
   section
     display: flex
     flex-direction: column
@@ -40,9 +43,10 @@ GRAY = #EFF2F5
     align-items: center
     justify-content: center
     text-align: center
-    min-height: 50vw // video is 2:1 aspect ratio and 100% width
+    min-height: 40vw
 
     @media (max-width: 900px)
+      min-height: 100vh
       padding-top: 2em
       padding-bottom: 2em
 
@@ -93,6 +97,7 @@ GRAY = #EFF2F5
   .home-intro
     background-color: GRAY
     z-index: 0
+    min-height: 50vw // video is 2:1 aspect ratio and 100% width
 
     video
       display: none
@@ -107,15 +112,17 @@ GRAY = #EFF2F5
       .home-mobile-video-image
         display: none
 
+    @media (max-width: 900px)
+      min-height: 100vh
+
     video, .home-mobile-video-image
       position: absolute
       top: 0
       left: 0
       z-index: -1
       width: 100%
-
-      @media (max-width: 900px)
-        height: 100%
+      height: 100%
+      object-fit: cover
 
     .home-intro-buttons
       display: flex
@@ -182,15 +189,52 @@ GRAY = #EFF2F5
         color: #FFFFFF
 
   .home-promoted
-    background-size: cover
-    background-position: center
-    transition: background-image 500ms ease-in-out
     padding: 0
 
-    .filter
-      @extends .home-page-not-logged-in section
+    &:not(.appearing)
+      .current-background-image, .last-background-image
+        transition: opacity 1s
+
+      .description
+        transition: all 1s
+
+    &.appearing
+      .last-background-image
+        opacity: 1
+
+      .current-background-image
+        opacity: 0
+
+      .description
+        top: 50px
+        opacity: 0
+
+    *
+      z-index: 2
+
+    .current-background-image, .last-background-image
+      position: absolute
+      top: 0
+      left: 0
       width: 100%
-      background: linear-gradient(top, rgba(DARK-BLUE-GREEN, 0.4), rgba(0, 0, 0, 0))
+      height: 100%
+      object-fit: cover
+      z-index: 0
+
+    .current-background-image
+      opacity: 1
+
+    .last-background-image
+      opacity: 0
+
+    .layer
+      position: absolute
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      background: linear-gradient(top, rgba(DARK-BLUE-GREEN, 0.2), rgba(DARK-BLUE-GREEN, 0.1))
+      z-index: 1
 
     .description
       opacity: 1
@@ -200,13 +244,6 @@ GRAY = #EFF2F5
       margin-bottom: 10px
       font-size: 3em
       color: #FFFFFF
-
-      &:not(.appearing)
-        transition: all 1s
-
-      &.appearing
-        top: 50px
-        opacity: 0
 
       @media (max-width: 900px)
         font-size: 2em
@@ -255,7 +292,7 @@ GRAY = #EFF2F5
 
     .owner
       position: absolute
-      bottom: 100px
+      bottom: 50px
       left: 2vw
       margin: 0
       color: #FFFFFF
@@ -265,7 +302,7 @@ GRAY = #EFF2F5
 
   .home-social
     background-color: GRAY
-    padding 50px 0
+    padding: 50px 30px
 
     @media (max-width: 900px)
       padding 2em

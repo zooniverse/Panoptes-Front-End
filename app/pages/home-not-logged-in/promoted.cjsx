@@ -23,7 +23,7 @@ module.exports = React.createClass
 
       timer = setInterval =>
         unless hovered
-          @refs.description.classList.add 'appearing'
+          @refs.container.classList.add 'appearing'
           @setState index: (@state.index + 1) % @state.projects.length
       , 5000
 
@@ -65,32 +65,37 @@ module.exports = React.createClass
   render: ->
     project = @state.projects[@state.index]
     return <div /> unless project
-    @refs?.description?.classList?.add 'appearing'
+    lastIndex = (@state.projects.length + @state.index - 1) % @state.projects.length
+    lastProject = @state.projects[lastIndex]
+
+    @refs?.container?.classList?.add 'appearing'
     background = project.image or './assets/default-project-background.jpg'
+    lastBackground = lastProject.image or './assets/default-project-background.jpg'
 
     setTimeout =>
-      @refs.description.classList.remove 'appearing'
-    , 100
+      @refs.container.classList.remove 'appearing'
+    , 10
 
-    <section className="home-promoted" style={backgroundImage: "url(#{background})"} onMouseEnter={@hovered} onMouseLeave={@unhovered}>
-      <div className="filter">
-        <h1>THE ZO<ZooniverseLogo />NIVERSE</h1>
+    <section ref="container" className="home-promoted" onMouseEnter={@hovered} onMouseLeave={@unhovered}>
+      <div className="layer"></div>
+      <img className="last-background-image" src={lastBackground} />
+      <img className="current-background-image" src={background} />
+      <h1>THE ZO<ZooniverseLogo />NIVERSE</h1>
 
-        <p ref="description" className="description">{project.caption}</p>
+      <p className="description">{project.caption}</p>
 
-        <i className="controls angles fa fa-angle-left" onClick={@setIndex(@state.index - 1)} />
-        <i className="controls angles fa fa-angle-right" onClick={@setIndex(@state.index + 1)} />
+      <i className="controls angles fa fa-angle-left" onClick={@setIndex(@state.index - 1)} />
+      <i className="controls angles fa fa-angle-right" onClick={@setIndex(@state.index + 1)} />
 
-        <Link to={"/projects/#{project.slug}"} className="standard-button">Join Our Team</Link>
+      <Link to={"/projects/#{project.slug}"} className="standard-button">Join Our Team</Link>
 
-        <div className="controls circles">
-        {for promotedProject, i in @state.projects
-          if promotedProject.id is project.id
-            <i key={"promoted-project-#{promotedProject.id}"} className="fa fa-circle" />
-          else
-            <i key={"promoted-project-#{promotedProject.id}"} className="fa fa-circle-o" onClick={@setIndex(i)} />}
-        </div>
-
-        <p className="owner">Image from <b>{project.display_name} Project</b></p>
+      <div className="controls circles">
+      {for promotedProject, i in @state.projects
+        if promotedProject.id is project.id
+          <i key={"promoted-project-#{promotedProject.id}"} className="fa fa-circle" />
+        else
+          <i key={"promoted-project-#{promotedProject.id}"} className="fa fa-circle-o" onClick={@setIndex(i)} />}
       </div>
+
+      <p className="owner">Image from <b>{project.display_name} Project</b></p>
     </section>
