@@ -6,7 +6,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 PromiseRenderer = require '../components/promise-renderer'
 ZooniverseLogoType = require '../partials/zooniverse-logotype'
 ProjectCard = require '../partials/project-card'
-FEATURED_PROJECT_IDS = require '../lib/featured-projects'
+FEATURED_PROJECTS = require '../lib/featured-projects'
 {Markdown} = (require 'markdownz').default
 ProjectIcon = require '../components/project-icon'
 
@@ -51,7 +51,7 @@ FeaturedProjects = React.createClass
 
   render: ->
     <div className="featured-projects">
-      <PromiseRenderer promise={apiClient.type('projects').get(id: FEATURED_PROJECT_IDS, cards: true)}>{(projects) =>
+      <PromiseRenderer promise={apiClient.type('projects').get(id: Object.keys(FEATURED_PROJECTS), cards: true)}>{(projects) =>
         if projects?
           <div className="featured-projects-list">
           {for project in projects

@@ -4,7 +4,7 @@ ReactDOM = require 'react-dom'
 ZooniverseLogo = require '../partials/zooniverse-logo'
 HomePageSocial = require './home-not-logged-in/social'
 HomePagePromoted = require './home-not-logged-in/promoted'
-HomePageFeaturedCollections = require './home-not-logged-in/featured-collections'
+# HomePageFeaturedCollections = require './home-not-logged-in/featured-collections'
 
 module.exports = React.createClass
   displayName: 'HomePage'
@@ -17,7 +17,7 @@ module.exports = React.createClass
 
   scrollDown: (e) ->
     e.preventDefault()
-    ReactDOM.findDOMNode(@refs.discover)?.scrollIntoView behavior: 'smooth', block: 'start'
+    @refs.discover?.scrollIntoView behavior: 'smooth', block: 'start'
 
   render: ->
     <div className="home-page-not-logged-in">
@@ -31,14 +31,14 @@ module.exports = React.createClass
 
         <h1>THE ZO<ZooniverseLogo />NIVERSE</h1>
         <h2 className="lighter">is people powered research</h2>
-        <h2>
-          <Link to="/about" className="standard-button">Learn More</Link>
-        </h2>
+        <div className="home-intro-buttons">
+          <button className="standard-button" onClick={@scrollDown}>Learn More</button>
+          <Link to="/projects" className="intro-button">Get Started</Link>
+        </div>
+        <button className="home-link-down" onClick={@scrollDown}>
+          <i className="fa fa-angle-down" onClick={@scrollDown} />
+        </button>
       </section>
-
-      <button className="home-link-down" onClick={@scrollDown}>
-        <i className="fa fa-angle-down" onClick={@scrollDown} />
-      </button>
 
       <section className="home-discover" ref="discover">
         <h1>Discover, teach, and learn</h1>
@@ -50,14 +50,10 @@ module.exports = React.createClass
           contribute to real discoveries.
         </p>
 
-        <h2>
-          <Link to="/projects" className="standard-button">Get started</Link>
-        </h2>
+        <Link to="/projects" className="discover-button">Choose a Project</Link>
       </section>
 
       <HomePagePromoted />
-
-      <HomePageFeaturedCollections />
 
       <HomePageSocial />
     </div>

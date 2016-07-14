@@ -28,11 +28,12 @@ module.exports = React.createClass
 
       <div className="home-social-columns">
         <div className="home-social-column">
-          <h2><a href="https://twitter.com/the_zooniverse">Twitter</a></h2>
+          <h2><a href="https://twitter.com/the_zooniverse">Latest on Twitter</a></h2>
           <ul>
             {for tweet, i in @state.social.tweets
               <li key={"tweet-#{i}"}>
-                <p className="home-social-text">
+                <h3><a href={"https://twitter.com/the_zooniverse/status/#{tweet.id_str}"}>{tweet.user.screen_name}</a></h3>
+                <p>
                   <a href={"https://twitter.com/the_zooniverse/status/#{tweet.id_str}"}>{tweet.text}</a>
                 </p>
                 <p className="home-social-timestamp">
@@ -45,9 +46,10 @@ module.exports = React.createClass
         <div className="home-social-column">
           <h2><a href="https://www.facebook.com/therealzooniverse">Facebook</a></h2>
           <ul>
-            {for status, i in @state.social.statuses
+            {for status, i in @state.social.statuses[0..1]
               <li key="status-#{i}">
-                <p className="home-social-text">
+                <h3><a href={status.link}>Zooniverse</a></h3>
+                <p>
                   <a href={status.link}>{status.message}</a>
                 </p>
                 <p className="home-social-timestamp">
@@ -62,14 +64,13 @@ module.exports = React.createClass
           <ul>
             {for post, i in @state.social.posts
               <li key="post-#{i}">
-                <p className="home-social-text">
-                  <a href={post.link}>{post.title}</a>
-                </p>
+                <h3><a href={post.link}>{post.title}</a></h3>
                 <p className="home-social-timestamp">
                   {moment(new Date(post.created_at)).fromNow()}
                 </p>
               </li>}
           </ul>
+          <a className="home-social-read-more" href="http://blog.zooniverse.org">Read More <i className="fa fa-long-arrow-right"></i></a>
         </div>
       </div>
     </section>
