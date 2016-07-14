@@ -57,7 +57,7 @@ const SiteNav = React.createClass({
   },
 
   componentWillUnmount() {
-    addEventListener('resize', this.handleResize);
+    removeEventListener('resize', this.handleResize);
   },
 
   handleResize() {
