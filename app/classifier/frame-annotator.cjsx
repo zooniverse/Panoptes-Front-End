@@ -117,7 +117,11 @@ module.exports = React.createClass
           <BeforeSubject {...hookProps} />}
         <svg className="subject" style=svgStyle viewBox={createdViewBox} {...svgProps}>
           <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
-          {if type is 'image'
+          {if type is 'image' and @props.workflow.configuration.invert_subject?
+            <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>
+              <ModifiedImage className={"pan-active" if @props.panEnabled} src={src} subject={@props.subject} width={@props.naturalWidth} height={@props.naturalHeight}/>
+            </Draggable>
+          else if type is 'image'
             <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>
               <SVGImage className={"pan-active" if @props.panEnabled} src={src} width={@props.naturalWidth} height={@props.naturalHeight} />
             </Draggable>
