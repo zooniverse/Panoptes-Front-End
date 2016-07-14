@@ -10,7 +10,7 @@ RADIUS =
   small: 2
 SELECTED_RADIUS = 
   large: 20
-  small: 7
+  small: 10
 CROSSHAIR_SPACE = 0.2
 CROSSHAIR_WIDTH = 1
 DELETE_BUTTON_ANGLE = 45
@@ -45,10 +45,9 @@ module.exports = React.createClass
     size: 'large'
   
   getDeleteButtonPosition: ->
-    size = @props.size
     theta = (DELETE_BUTTON_ANGLE) * (Math.PI / 180)
-    x: (SELECTED_RADIUS[size] / @props.scale.horizontal) * Math.cos theta
-    y: -1 * (SELECTED_RADIUS[size] / @props.scale.vertical) * Math.sin theta
+    x: (SELECTED_RADIUS.large / @props.scale.horizontal) * Math.cos theta
+    y: -1 * (SELECTED_RADIUS.large / @props.scale.vertical) * Math.sin theta
 
   render: ->
     size = @props.size
