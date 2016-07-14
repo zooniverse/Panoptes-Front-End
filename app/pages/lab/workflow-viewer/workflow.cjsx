@@ -1,6 +1,6 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-{StartEndNode} = require './task.cjsx'
+{Task, StartEndNode} = require './task.cjsx'
 
 DETACHABLE = false
 
