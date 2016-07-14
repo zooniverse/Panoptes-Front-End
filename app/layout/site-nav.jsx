@@ -209,7 +209,7 @@ const SiteNav = React.createClass({
   },
 
   render() {
-    const logo = <ZooniverseLogo width="1.8em" height="1.8em" title="Show navigation" style={{ verticalAlign: '-0.5em' }} />;
+    const logo = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
 
     return (
       <nav className="site-nav">
@@ -237,7 +237,7 @@ const SiteNav = React.createClass({
             className="secret-button site-nav__reveal-toggle"
             style={{ lineHeight: 0 }}
             onClick={this.props.onToggle}
-          >{logo}</button>}
+            >{React.cloneElement(logo, {title: "Show navigation"})}</button>}
 
         {this.state.isMobile && this.renderMobileLinksMenu()}
       </nav>
