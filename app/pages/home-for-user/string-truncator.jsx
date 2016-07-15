@@ -4,9 +4,10 @@ const StringTruncator = React.createClass({
   propTypes: {
     tag: React.PropTypes.node,
     className: React.PropTypes.string,
-    children: React.PropTypes.string,
-    splitter: React.PropTypes.any,
-    ellipsis: React.PropTypes.node,
+    children: React.PropTypes.string.isRequired,
+    splitter: React.PropTypes.instanceOf(RegExp),
+    chop: React.PropTypes.number,
+    ellipsis: React.PropTypes.element,
   },
 
   getDefaultProps() {
@@ -14,60 +15,78 @@ const StringTruncator = React.createClass({
       tag: 'div',
       className: '',
       children: '',
-      splitter: /(\W)/g,
-      ellipsis: <span className="string-trucator__ellipsis">…</span>,
+      splitter: /(\W*\s)/,
+      reduceBy: 4,
+      ellipsis: <span>…</span>,
     };
   },
 
   getInitialState() {
     return {
-      modifiedString: '',
+      truncatedString: '',
     };
   },
 
   componentDidMount() {
-    this.findTruncatedString(this.props.children);
+    this.truncate(this.props);
+    addEventListener('resize', this.handleResize);
   },
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.children !== this.props.children) {
-      this.findTruncatedString(nextProps.children);
-    }
+    this.truncate(nextProps);
   },
 
-  findTruncatedString(string, _lastWord = -1) {
-    const allWords = string.split(this.props.splitter);
+  componentWillUnmount() {
+    removeEventListener('resize', this.handleResize);
+  },
 
-    if (_lastWord === -1) {
-      _lastWord = allWords.length;
+  handleResize() {
+    this.truncate(this.props);
+  },
+
+  truncate(props, _lastWord = -1) {
+    if (this.container === null) {
+      return;
     }
 
-    const wordsThatMightFit = allWords.slice(0, _lastWord);
+    const allWords = props.children.split(props.splitter);
+
+    let lastWord = _lastWord;
+    if (lastWord === -1) {
+      lastWord = allWords.length;
+    }
+
+    const wordsThatMightFit = allWords.slice(0, lastWord);
 
     this.setState({
-      modifiedString: wordsThatMightFit.join('').trim(),
+      truncatedString: wordsThatMightFit.join('').trim(),
     }, () => {
-      if (!!this.container && (this.container.offsetHeight < this.container.scrollHeight)) {
-        this.findTruncatedString(string, wordsThatMightFit.length - 5);
+      if (this.container.offsetHeight < this.container.scrollHeight) {
+        // TODO: Binary-search this to iterate as few times as necessary.
+        this.truncate(props, wordsThatMightFit.length - props.reduceBy);
       }
     });
   },
 
   render() {
-    let possibleEllipsis = null;
-    if (this.state.modifiedString !== this.props.children) {
-      possibleEllipsis = this.props.ellipsis;
+    let possibleEllipsis;
+    if (this.state.truncatedString !== this.props.children) {
+      possibleEllipsis = React.cloneElement(this.props.ellipsis, {
+        className: ['string-truncator__ellipsis', this.props.ellipsis.props.className].join(' ').trim(),
+      });
     }
 
     return React.createElement(this.props.tag, Object.assign({
       ref: (element) => {
-        if (!!element) {
+        if (element !== null) {
           this.container = element.parentNode;
+        } else {
+          this.container = null;
         }
       },
     }, this.props, {
-      className: ['string-trucator', this.props.className].join(' ').trim(),
-    }), this.state.modifiedString, possibleEllipsis);
+      className: ['string-truncator', this.props.className].join(' ').trim(),
+    }), this.state.truncatedString, possibleEllipsis);
   },
 });
 
