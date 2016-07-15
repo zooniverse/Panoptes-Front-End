@@ -277,6 +277,7 @@ module.exports = React.createClass
             submit={"Update Comment"}
             onCancelClick={@onCancelClick}
             onSubmitComment={@onSubmitComment}
-            user={@props.user} />}
+            user={@props.user}
+            project={@props.project} />}
       </div>
     </div>

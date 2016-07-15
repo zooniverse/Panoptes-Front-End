@@ -210,7 +210,8 @@ module.exports = React.createClass
             <NewDiscussionForm
               boardId={+@props.params.board}
               onCreateDiscussion={@onCreateDiscussion}
-              user={@props.user} />}
+              user={@props.user}
+              project={@props.project} />}
          </section>
        else
          <p>Please <button className="link-style" type="button" onClick={promptToSignIn}>sign in</button> to create discussions</p>}

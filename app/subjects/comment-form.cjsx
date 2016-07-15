@@ -65,6 +65,7 @@ module.exports = React.createClass
   startDiscussion: ->
     <NewDiscussionForm
       user={@props.user}
+      project={@props.project}
       subject={@props.subject}
       onCreateDiscussion={@onCreateDiscussion} />
 
