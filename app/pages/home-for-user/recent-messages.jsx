@@ -1,6 +1,7 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
+import classnames from 'classnames';
 import HomePageSection from './generic-section';
 import { Link } from 'react-router';
 import StringTruncator from './string-truncator';
@@ -126,13 +127,18 @@ const RecentCollectionsSection = React.createClass({
     });
   },
 
-  renderConversation(conversation) {
+  renderConversation(conversation, index, allConversations) {
     const partner = this.state.converationPartners[conversation.id];
     const message = this.state.lastMessages[conversation.id];
     const sentLastMessage = !!message && (this.state.messageAuthors[message.id] === this.context.user);
 
+    const allClassNames = classnames('recent-conversation-link', {
+      'recent-conversation-link--first': index === 0,
+      'recent-conversation-link--last': index === allConversations.length - 1,
+    });
+
     return (
-      <Link to={`/inbox/${conversation.id}`} className="recent-conversation-link">
+      <Link to={`/inbox/${conversation.id}`} className={allClassNames}>
         <span className="recent-conversation-link__direction">
           {sentLastMessage ? (
             'To'
@@ -140,8 +146,8 @@ const RecentCollectionsSection = React.createClass({
             'From'
           )}
         </span>
+        <img role="presentation" src="https://www.fillmurray.com/50/50" className="recent-conversation-link__partner-avatar" />
         <span className="recent-conversation-link__partner">
-          <img role="presentation" src="https://www.fillmurray.com/50/50" className="recent-conversation-link__partner-avatar" />{' '}
           {!!partner ? partner.display_name : LOADER_BULLETS}
         </span>
 
@@ -160,6 +166,7 @@ const RecentCollectionsSection = React.createClass({
   render() {
     return (
       <HomePageSection
+        titleFill="#11497f"
         title="Recent messages"
         loading={this.state.loading}
         error={this.state.error}
@@ -170,10 +177,10 @@ const RecentCollectionsSection = React.createClass({
         </div>
 
         <ul className="recent-conversations-list">
-          {this.state.conversations.map((conversation) => {
+          {this.state.conversations.map((conversation, i, allConversations) => {
             return (
               <li key={conversation.id} className="recent-conversations-list__item">
-                {this.renderConversation(conversation)}
+                {this.renderConversation(conversation, i, allConversations)}
               </li>
             );
           })}

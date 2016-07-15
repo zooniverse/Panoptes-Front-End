@@ -6,34 +6,49 @@
 
 .recent-conversation-link
   align-items: center
+  background: white
   border: 1px solid gray
-  border-radius: 0.3em
-  color: inherit
+  color: black
   display: flex
-  margin: 0.5em 0
+  margin-bottom: -1px
+  padding: 1ch 1em
   text-decoration: none
+
+  &:hover
+    box-shadow: 0 0 0 1px #eef2f5 inset
+
+  &--first
+    border-radius: 0.3em 0.3em 0 0
+
+  &--last
+    border-radius: 0 0 0.3em 0.3em
 
   &__direction
     flex-basis: 3em
+    flex-shrink: 0
+    margin: 0 0.5ch;
     opacity: 0.5
     text-align: right
 
   &__partner
     flex-basis: 10em
+    flex-shrink: 0
     font-weight: bold
-    margin: 0 1ch;
+    margin: 0 0.5ch;
 
   &__partner-avatar
     border-radius: 50%
+    flex-shrink: 0
     height: 2em
+    margin: 0 0.5ch;
     vertical-align: middle
     width: 2em
 
   &__preview
-    flex-grow: 1
-    margin: 0 1ch;
+    margin: 0 0.5ch;
 
   &__title
+    font-size: 1.2em
     font-weight: bold
     white-space: nowrap
 
