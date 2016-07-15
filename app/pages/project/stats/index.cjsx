@@ -12,7 +12,7 @@ ProjectStatsPageController = React.createClass
     workflowList: []
 
   componentDidMount: ->
-    getWorkflowsInOrder(@props.project)
+    getWorkflowsInOrder @props.project
       .then (workflows) =>
         @setState workflowList: workflows
 
@@ -42,14 +42,6 @@ ProjectStatsPageController = React.createClass
 
   getQuery: (which) ->
     qs.parse(location.search.slice(1))[which]
-
-  # getWorkflow: (workflowID, idx) ->
-  #   @props.project.get('workflows', id: workflowID).then ([workflow]) =>
-  #     unless workflow?
-  #       throw new Error "No workflow #{workflowID} for project #{@props.project.id}"
-  #     currentList = @state.workflowList
-  #     currentList[idx] = workflow
-  #     @setState({workflowList: currentList})
 
   render: ->
     queryProps =
