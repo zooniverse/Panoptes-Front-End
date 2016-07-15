@@ -5,7 +5,6 @@ moment = require 'moment'
 
 GraphSelect = React.createClass
   getInitialState: ->
-    workflowsLoaded: false
     statData: null
 
   getDefaultProps: ->
@@ -31,19 +30,12 @@ GraphSelect = React.createClass
         console?.log 'Failed to fetch stats'
 
   componentWillReceiveProps: (nextProps) ->
-    if (not @state.workflowsLoaded) and (nextProps.workflows?)
-      areNulls = false
-      for w in nextProps.workflows
-        if w is null
-          areNulls = true
-      if not areNulls
-        @setState({workflowsLoaded: true})
     #update the stats when dropdown options change
     if (@props.workflowId isnt nextProps.workflowId) or (@props.by isnt nextProps.by)
       @getStats(nextProps.workflowId, nextProps.by)
 
   shouldComponentUpdate: (nextProps, nextState) ->
-    return (@props.by isnt nextProps.by) or (@props.workflowId isnt nextProps.workflowId) or (@state isnt nextState)
+    return (@props.by isnt nextProps.by) or (@props.workflowId isnt nextProps.workflowId) or (@props.workflows isnt nextProps.workflows) or (@state isnt nextState)
 
   workflowSelect: ->
     if @props.workflows?
