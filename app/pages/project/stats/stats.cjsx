@@ -10,10 +10,10 @@ GraphSelect = React.createClass
 
   getDefaultProps: ->
     by: 'hour'
-    
+
   componentDidMount: ->
     @getStats(@props.workflowId, @props.by)
-    
+
   getStats: (workflowId, binBy) ->
     statsClient
       .query
@@ -29,7 +29,7 @@ GraphSelect = React.createClass
         @setState {statData}
       .catch (e) ->
         console?.log 'Failed to fetch stats'
-    
+
   componentWillReceiveProps: (nextProps) ->
     if (not @state.workflowsLoaded) and (nextProps.workflows?)
       areNulls = false
@@ -44,7 +44,7 @@ GraphSelect = React.createClass
 
   shouldComponentUpdate: (nextProps, nextState) ->
     return (@props.by isnt nextProps.by) or (@props.workflowId isnt nextProps.workflowId) or (@state isnt nextState)
-    
+
   workflowSelect: ->
     if @props.workflows?
       options = [<option value={"project_id=#{@props.projectId}"} key={"workflowSelectAll"}>All</option>]
@@ -59,10 +59,10 @@ GraphSelect = React.createClass
             {options}
           </select>
         </span>
-      
+
   handleWorkflowSelect: (event) ->
     @props.handleWorkflowChange(@props.type, event)
-    
+
   render: ->
     if @props.range?
       range = []
@@ -89,7 +89,7 @@ GraphSelect = React.createClass
 
   handleGraphChange: (which, e) ->
     @props.handleGraphChange(which, e)
-    
+
   handleRangeChange: (range) ->
     @props.handleRangeChange(@props.type, range)
 
@@ -109,10 +109,10 @@ ETA = React.createClass
     </div>
 
 WorkflowProgress = React.createClass
-  
+
   getInitialState: ->
     statData: null
-  
+
   componentDidMount: ->
     statsClient
       .query
@@ -126,7 +126,7 @@ WorkflowProgress = React.createClass
         @setState {statData}
       .catch (e) ->
         console?.log 'Failed to fetch stats'
-        
+
   render: ->
     if @props.workflow.retirement.criteria == 'classification_count'
       retirement = <div><span className="progress-stats-label">Retirement limit:</span> {@props.workflow.retirement.options.count.toLocaleString()}</div>
@@ -178,16 +178,16 @@ ProjectStatsPage = React.createClass
         classificationFootnote =
           <span className="project-stats-footer">
            {classificationFootnoteMarker}
-            Due to an issue with our stats server all data before {moment(classificationGap[1]).format 'MMM-DD-YYYY'} is currently unavailable.  We are currently working to resolve this issue.  <b>No</b> classifications were lost in this time. 
+            Due to an issue with our stats server all data before {moment(classificationGap[1]).format 'MMM-DD-YYYY'} is currently unavailable.  We are currently working to resolve this issue.  <b>No</b> classifications were lost in this time.
           </span>
       if moment(@props.startDate) <= moment(talkGap[1])
         talkFootnoteMarker = <span><sup>&#8225;</sup></span>
         talkFootnote =
           <span className="project-stats-footer">
             {talkFootnoteMarker}
-            Due to an issue with our stats server all data before {moment(talkGap[1]).format 'MMM-DD-YYYY'} is currently unavailable.  We are currently working to resolve this issue.  <b>No</b> talk comments were lost in this time. 
+            Due to an issue with our stats server all data before {moment(talkGap[1]).format 'MMM-DD-YYYY'} is currently unavailable.  We are currently working to resolve this issue.  <b>No</b> talk comments were lost in this time.
           </span>
-    <div className="project-text-content content-container">
+    <div className="stats-text-content content-container">
       <div className="project-stats-dashboard">
         <div className="project-metadata-stats">
           {start}
@@ -218,7 +218,7 @@ ProjectStatsPage = React.createClass
           workflowId={@props.workflowId}
           type="classification"
           projectId={@props.projectId}
-          by={@props.classificationsBy} 
+          by={@props.classificationsBy}
           range={@props.classificationRange} />
       </div>
       {classificationFootnote}
@@ -230,7 +230,7 @@ ProjectStatsPage = React.createClass
         handleRangeChange={@props.handleRangeChange}
         type="comment"
         projectId={@props.projectId}
-        by={@props.commentsBy} 
+        by={@props.commentsBy}
         range={@props.commentRange} />
       </div>
       {talkFootnote}
