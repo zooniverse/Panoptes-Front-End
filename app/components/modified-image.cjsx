@@ -5,7 +5,7 @@ STYLE = {
 }
 
 MARKUP =
-  '<svg id="svg-invert-filter" style="position: fixed; right: 100%; top: 100%; visibility: hidden;">
+  '<svg style="position: fixed; right: 100%; top: 100%; visibility: hidden;">
     <defs>
       <filter id="svg-invert-filter">
         <feComponentTransfer>
@@ -24,9 +24,7 @@ module.exports = React.createClass
     @setElements()
 
   setElements: ->
-    filter = document.getElementById('svg-invert-filter')
-    unless filter
-      document.body.insertAdjacentHTML('afterbegin', MARKUP)
+    document.body.insertAdjacentHTML('afterbegin', MARKUP)
 
   render: ->
-    <image xlinkHref={@props.src} {...@props} style={STYLE if @props?.subject} />
+    <image xlinkHref={@props.src} height={@props.height} width={@props.width} style={STYLE if @props.modified} />

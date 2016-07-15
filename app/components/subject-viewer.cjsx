@@ -174,7 +174,7 @@ module.exports = React.createClass
     @signInAttentionTimeout = setTimeout (=> @setState loading: false), 3000
 
   renderFrame: (frame, props = {}) ->
-    <FrameViewer {...@props} {...props} frame={frame} onLoad={@handleFrameLoad} />
+    <FrameViewer {...@props} {...props} frame={frame} modified={@state?.imageInvert || null} onLoad={@handleFrameLoad} />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
@@ -198,7 +198,6 @@ module.exports = React.createClass
   toggleInvert: () ->
     mode = not @state.imageInvert
     @setState imageInvert: mode
-    @props.subject.invert = mode
 
   setInFlipbookMode: (inFlipbookMode) ->
     @setState {inFlipbookMode}
