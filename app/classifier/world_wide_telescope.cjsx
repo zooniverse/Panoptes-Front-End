@@ -108,11 +108,12 @@ class Plate
 
     makeStarCoord = if @starChart.coordinateSystem() == StarChart.EQUATORIAL then StarCoord.fromRaDec else StarCoord.fromGlatGlon
     xAxisDec = if @starChart.xAxis.unit == Axis.DEC || @starChart.xAxis.unit == Axis.DEC1950 || @starChart.xAxis.unit == Axis.GLAT then true else false
+    epoch1950 = if @starChart.xAxis.unit == Axis.DEC1950 || @starChart.xAxis.unit == Axis.RA1950 then true else false
     @fullValues xRange
     @fullValues yRange
     @coordCorners = [
-      makeStarCoord(xRange[0].value, yRange[0].value, xAxisDec), makeStarCoord(xRange[1].value, yRange[0].value, xAxisDec),
-      makeStarCoord(xRange[1].value, yRange[1].value, xAxisDec), makeStarCoord(xRange[0].value, yRange[1].value, xAxisDec)
+      makeStarCoord(xRange[0].value, yRange[0].value, xAxisDec, epoch1950), makeStarCoord(xRange[1].value, yRange[0].value, xAxisDec, epoch1950),
+      makeStarCoord(xRange[1].value, yRange[1].value, xAxisDec, epoch1950), makeStarCoord(xRange[0].value, yRange[1].value, xAxisDec, epoch1950)
     ]
 
   fullValues: (ranges) ->
@@ -153,7 +154,7 @@ class Plate
     "http://imgproc.zooniverse.org/crop/#{@starChart.width}/#{@starChart.height}/#{@starChart.x}/#{@starChart.y}?u=#{url}"
 
   computeRotation: ->
-    if @starChart.xAxis.unit == Axis.RA || @starChart.xAxis.unit == Axis.RA1950 || @starChart.xAxis.unit == Axis.GLAT
+    if @starChart.xAxis.unit == Axis.RA || @starChart.xAxis.unit == Axis.RA1950 || @starChart.xAxis.unit == Axis.GLON
     then 180
     else 90
 
@@ -173,7 +174,7 @@ class StarCoord
 
   s = StarCoord
 
-  @fromRaDec: (xAxis, yAxis, xAxisDec) ->
+  @fromRaDec: (xAxis, yAxis, xAxisDec, epoch1950) ->
     if xAxisDec == true
       ra = yAxis
       dec = xAxis
@@ -182,9 +183,10 @@ class StarCoord
       dec = yAxis
     ra = StarCoord._parseDegrees(ra, false)
     dec = StarCoord._parseDegrees(dec, true)
+    [ra, dec] = StarCoord._epochConvert(ra, dec) if epoch1950 is true
     new StarCoord ra, dec
 
-  @fromGlatGlon: (xAxis, yAxis, xAxisGlat) ->
+  @fromGlatGlon: (xAxis, yAxis, xAxisGlat, epoch1950) ->
     if xAxisGlat == true
       glat = xAxis
       glon = yAxis
@@ -197,6 +199,11 @@ class StarCoord
     ra = s._toDegrees(Math.atan2((Math.cos(b) * Math.cos(l - posangle)), (Math.sin(b) * Math.cos(pole_dec) - Math.cos(b) * Math.sin(pole_dec) * Math.sin(l-posangle))) + pole_ra)
     dec = s._toDegrees(Math.asin(Math.cos(b) * Math.cos(pole_dec) * Math.sin(l - posangle) + Math.sin(b) * Math.sin(pole_dec)))
     new StarCoord ra, dec
+
+  @_epochConvert: (ra, dec) ->
+    RA2000 = ra + 0.640265 + 0.278369 * Math.sin(@_toDegrees(ra)) * Math.tan(@_toDegrees(dec))
+    DEC2000 = dec + 0.278369 * Math.cos(@_toDegrees(ra))
+    [RA2000, DEC2000]
 
   @_toRadians: (degrees) -> degrees * Math.PI / 180.0
 
