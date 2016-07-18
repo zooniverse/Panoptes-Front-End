@@ -23,6 +23,7 @@
     "qs": "~6.0.2",
     "rc-slider": "~3.3.2",
     "react": "~0.14.1",
+    "react-autofill": "~1.1.3",
     "react-chartist": "~0.10.1",
     "react-component-resizable": "~0.3.0",
     "react-dom": "~0.14.1",
