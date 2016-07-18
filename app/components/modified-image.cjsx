@@ -1,10 +1,10 @@
 React = require 'react'
 
-STYLE = {
-    filter: "url('#svg-invert-filter')"
+FILTERS = {
+    invert: "url('#svg-invert-filter')"
 }
 
-MARKUP =
+INVERT =
   '<svg style="position: fixed; right: 100%; top: 100%; visibility: hidden;">
     <defs>
       <filter id="svg-invert-filter">
@@ -24,7 +24,11 @@ module.exports = React.createClass
     @setElements()
 
   setElements: ->
-    document.body.insertAdjacentHTML('afterbegin', MARKUP)
+    document.body.insertAdjacentHTML('afterbegin', INVERT)
+
+  filterFinder: ->
+    if @props.modification.invert is true
+      filter: FILTERS.invert
 
   render: ->
-    <image xlinkHref={@props.src} height={@props.height} width={@props.width} style={STYLE if @props.modified} />
+    <image xlinkHref={@props.src} height={@props.height} width={@props.width} style={@filterFinder()} />
