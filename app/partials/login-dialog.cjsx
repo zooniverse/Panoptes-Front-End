@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+autofill = require 'react-autofill'
 Translate = require 'react-translate-component'
 SignInForm = require './sign-in-form'
 RegisterForm = require './register-form'
@@ -10,7 +11,7 @@ counterpart.registerTranslations 'en',
     signIn: 'Sign in'
     register: 'Register'
 
-module.exports = React.createClass
+module.exports = autofill React.createClass
   displayName: 'LoginDialog'
 
   getDefaultProps: ->
