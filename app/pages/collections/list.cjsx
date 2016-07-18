@@ -69,7 +69,7 @@ List = React.createClass
                     active = (page is +location.query.page) or (page is 1 and not location.search)
                     <Link
                       key={page}
-                      to={"#{@props.linkTo}?page=#{page}"}
+                      to={"#{@props.location.pathname}?page=#{page}"}
                       activeClassName="active"
                       className="pill-button"
                       style={border: "2px solid" if active}>
