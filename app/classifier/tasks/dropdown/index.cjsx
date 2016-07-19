@@ -93,7 +93,14 @@ module.exports = React.createClass
       @props.annotation.value = @props.task.selects.map -> {value: null, option: false}
 
     if @props.autoFocus is true
-      @refs['select-0'].getInputNode().focus()
+      @handleFocus()
+
+  componentDidUpdate: (prevProps) ->
+    if prevProps.task isnt @props.task and @props.autoFocus is true
+      @handleFocus()
+
+  handleFocus: ->
+    @refs['select-0'].getInputNode().focus()
 
   handleOptionsKeys: (i, value) ->
     {id, condition} = @props.task.selects[i]

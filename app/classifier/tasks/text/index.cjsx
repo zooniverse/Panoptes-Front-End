@@ -65,6 +65,10 @@ module.exports = React.createClass
       @setState textareaHeight: @state.initOffsetHeight, =>
         @updateHeight()
 
+  componentDidUpdate: (prevProps) ->
+    if prevProps.task isnt @props.task and @props.autoFocus is true
+      @refs.textInput.focus()
+
   setTagSelection: (e) ->
     textTag = e.target.value
     startTag = '[' + textTag + ']'
