@@ -20,14 +20,10 @@ INVERT =
 module.exports = React.createClass
   displayName: 'ModifiedImage'
 
-  componentWillMount: ->
-    @setElements()
-
-  setElements: ->
-    document.body.insertAdjacentHTML('afterbegin', INVERT)
-
   filterFinder: ->
     if @props.modification.invert is true
+      unless document.getElementById('svg-invert-filter')
+        document.body.insertAdjacentHTML('afterbegin', INVERT)
       filter: FILTERS.invert
 
   render: ->
