@@ -17,11 +17,17 @@ module.exports = React.createClass
     error: null
 
   componentDidMount: ->
+    if @props.project?
+      document.documentElement.classList.add 'on-secondary-page'
     @getComments(@props.profileUser, @props.location.query.page)
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps is @props.profileUser and nextProps.location.query.page is @props.location.query.page
       @getComments(nextProps.profileUser, nextProps.location.query.page)
+
+  componentWillUnmount: ->
+    if @props.project?
+      document.documentElement.classList.remove 'on-secondary-page'
 
   getComments: (user, page) ->
     @setState {

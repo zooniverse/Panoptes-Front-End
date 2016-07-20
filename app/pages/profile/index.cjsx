@@ -43,7 +43,6 @@ UserProfilePage = React.createClass
     @getProfileHeader(@props.profileUser)
 
   componentWillReceiveProps: (nextProps) ->
-    document.documentElement.classList.add 'on-secondary-page'
     unless nextProps.profileUser is @props.profileUser
       @getProfileHeader(nextProps.profileUser)
 
@@ -97,7 +96,7 @@ UserProfilePage = React.createClass
 
   render: ->
     logClick = @context?.geordi?.makeHandler? 'user-menu'
-    if @state.profileHeader?
+    if @state.profileHeader? and !@props.project?
       headerStyle = backgroundImage: "url(#{@state.profileHeader.src})"
     pageClasses = classNames {
       "secondary-page": true

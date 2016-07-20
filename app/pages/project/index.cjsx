@@ -139,7 +139,7 @@ ProjectPage = React.createClass
 
     collectClasses = classNames {
       "tabbed-content-tab": true
-      "active": @props.project? and (@props.routes[2].path=="collections" or @props.routes[2].path=="favorites")
+      "active": @props.project? and (@props.routes[2].path is "collections" or @props.routes[2].path is "favorites")
     }
 
     if @state.background?

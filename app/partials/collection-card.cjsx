@@ -2,6 +2,7 @@ React = require 'react'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
 Translate = require 'react-translate-component'
+classNames = require 'classnames'
 
 FlexibleLink = React.createClass
   displayName: 'FlexibleLink'
@@ -58,18 +59,21 @@ module.exports = React.createClass
         owner: owner
         name: name
 
+    ownerClasses = classNames {
+      "owner": true
+      "owner-private": @props.collection.private
+      "owner-public": !@props.collection.private
+    }
 
     <FlexibleLink {...linkProps}>
       <div className="collection-card" ref="collectionCard">
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.collection.display_name}</span></div>
-          {<div className="public-spaceholder">&nbsp;</div> if !@props.collection.private}
-          {if !@props.skipOwner
-            <div className="owner">{@props.collection.links.owner.display_name}</div>}
-          {<div className="description">{@props.collection.description}</div> if @props.collection.description?}
           {<div className="private"><i className="fa fa-lock"></i> Private</div> if @props.collection.private}
-          <button type="button" tabIndex="-1" className="standard-button card-button"><Translate content={"#{@props.translationObjectName}.button"} /></button>
+          {if !@props.skipOwner
+            <div className={ownerClasses}>{@props.collection.links.owner.display_name}</div>}
+          {<div className="description">{@props.collection.description}</div> if @props.collection.description?}
         </div>
       </div>
     </FlexibleLink>

@@ -14,9 +14,9 @@ counterpart.registerTranslations 'en',
   collectionPage:
     settings: 'Settings'
     collaborators: 'Collaborators'
-    collectionsLink: '%(user)s\'s\u00a0Collections'
-    favoritesLink: '%(user)s\'s\u00a0Favorites'
-    userLink: '%(user)s\'s\u00a0Profile'
+    collectionsLink: '%(user)s\'s Collections'
+    favoritesLink: '%(user)s\'s Favorites'
+    userLink: '%(user)s\'s Profile'
   collectionsPageWrapper:
     error: 'There was an error retrieving this collection.'
 
@@ -52,25 +52,24 @@ CollectionPage = React.createClass
 
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
-          <IndexLink to="#{baseCollectionLink}/#" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'view-collection')}>
+          <IndexLink to={baseCollectionLink} activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'view-collection')}>
             <Avatar user={owner} />
             {@props.collection.display_name}
           </IndexLink>
-
           {if isOwner
-            <Link to="#{baseCollectionLink}/settings" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'settings-collection')}>
-              <Translate content="collectionPage.settings" />
-            </Link>}
-
-          {if isOwner
-            <Link to="#{baseCollectionLink}/collaborators" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'collab-collection')}>
-              <Translate content="collectionPage.collaborators" />
-            </Link>}
-          <Link to="#{baseCollectionsLink}/" className="tabbed-content-tab">
-            <Translate content="#{collectionsLinkMessageKey}" user="#{@props.collection.links.owner.display_name}" />
+            <span>
+              <Link to="#{baseCollectionLink}/settings" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'settings-collection')}>
+                <Translate content="collectionPage.settings" />
+              </Link>
+              <Link to="#{baseCollectionLink}/collaborators" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'collab-collection')}>
+                <Translate content="collectionPage.collaborators" />
+              </Link>
+            </span>}
+          <Link to={baseCollectionsLink} className="tabbed-content-tab">
+            <Translate content="#{collectionsLinkMessageKey}" user={@props.collection.links.owner.display_name} />
           </Link>
-          <Link to="#{profileLink}/" activeClassName="active" className="tabbed-content-tab">
-            <Translate content="collectionPage.userLink" user="#{@props.collection.links.owner.display_name}" />
+          <Link to={profileLink} activeClassName="active" className="tabbed-content-tab">
+            <Translate content="collectionPage.userLink" user={@props.collection.links.owner.display_name} />
           </Link>
         </nav>
         <div className="collection-container talk">

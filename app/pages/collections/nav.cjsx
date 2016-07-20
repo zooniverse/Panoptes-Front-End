@@ -17,12 +17,17 @@ CollectionsNav = React.createClass
       "about-tabs": @props.project?
     }
     baseLink = ""
-    messageKeyPrefixToUse=""
+    messageKeyPrefixToUse = ""
     if @props.project?
       messageKeyPrefixToUse += "project"
       baseLink += "/projects/#{@props.project.slug}"
 
     <nav className="hero-nav">
+      {if @props.project?
+        <Link to="/#{@props.baseType}/" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "#{@props.baseType}.allZoo")}>
+          <Translate content="project#{@props.baseType}Page.allZoo" />
+        </Link>}
+
       <IndexLink to="#{baseLink}/collections" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "collections.all")}>
         <Translate content="#{messageKeyPrefixToUse}collectionsPage.all" project="#{@props.project?.display_name}"/>
       </IndexLink>
@@ -32,14 +37,15 @@ CollectionsNav = React.createClass
       </IndexLink>
 
       {if @props.user?
-        <Link to="#{baseLink}/collections/#{@props.user.login}" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "collections.my")}>
-          <Translate content="collectionsPage.my" />
-        </Link>}
+        <span>
+          <Link to="#{baseLink}/collections/#{@props.user.login}" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "collections.my")}>
+            <Translate content="collectionsPage.my" />
+          </Link>
+          <Link to="#{baseLink}/favorites/#{@props.user.login}" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "favorites.my")}>
+            <Translate content="favoritesPage.my" />
+          </Link>
+        </span>}
 
-      {if @props.user?
-        <Link to="#{baseLink}/favorites/#{@props.user.login}" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "favorites.my")}>
-          <Translate content="favoritesPage.my" />
-        </Link>}
     </nav>
 
 module.exports = CollectionsNav

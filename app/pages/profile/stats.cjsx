@@ -7,6 +7,14 @@ module.exports = React.createClass
   getDefaultProps: ->
     user: null
 
+  componentDidMount: ->
+    if @props.project?
+      document.documentElement.classList.add 'on-secondary-page'
+
+  componentWillUnmount: ->
+    if @props.project?
+      document.documentElement.classList.remove 'on-secondary-page'
+
   render: ->
     <div className="content-container">
       <h3>Your contribution stats</h3>

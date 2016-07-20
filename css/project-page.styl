@@ -86,11 +86,12 @@
 
 .project-nav
   margin-left: 0
-  margin-top: 2em
+  margin-top: 2.5em
   text-align: left
 
   .tabbed-content-tab
     position: relative
+    line-height: 2.5em
 
   .avatar
     height: 4em
@@ -206,9 +207,16 @@
     text-align: center
   a.about-tabs
     color: PROJECT_SUBMENU_BLUE
+    white-space: nowrap
+    margin-bottom: 0
+    margin-top: 0
+  a.about-tabs:first-child
+    margin-top: 1em
+  a.about-tabs:last-child
+    margin-bottom: 3em
   a.about-tabs.active,
   a.about-tabs:hover
-    border: 2px solid PROJECT_SUBMENU_BLUE !important
+    border: 2px solid PROJECT_SUBMENU_BLUE
 
 .project-metadata
   padding: 1.5em 3vw

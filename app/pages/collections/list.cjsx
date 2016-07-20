@@ -13,10 +13,10 @@ List = React.createClass
   statics: {
     getPropsForList: (props,favorite)->
       translationObjectName = "collectionsPage"
-      if props.routes[1]=="collections" or props.routes[1]=="favorites"
-        translationObjectName = "#{props.routes[1]}Page"
-      else if props.routes[2]=="collections" or props.routes[2]=="favorites"
-        translationObjectName = "#{props.routes[2]}Page"
+      for pos in [1..3]
+        if props.routes[pos].path is "collections" or props.routes[pos].path is "favorites"
+          translationObjectName = "#{props.routes[pos].path}Page"
+          break
       if props.project?
         translationObjectName = "project#{translationObjectName}"
       Object.assign({}, props, {favorite: favorite, translationObjectName:"#{translationObjectName}"})
@@ -64,23 +64,22 @@ List = React.createClass
       "in-project-context": @props.project?
     }
 
-    baseLink = if @props.project? then "/projects/#{@props.project.slug}/" else "/"
-    baseType = if @props.favorite then "favorites" else "collections"
-    shouldShowMoreLink = @props.params.profile_name? || @props.params.collection_owner?
-    showMoreLink = "#{baseLink}#{baseType}/"
-    shouldShowSubMenu = @props.project? && !@props.params.profile_name?
-    shouldShowZooWideLink = @props.project? && !shouldShowMoreLink
-    showZooWideLink = "/#{baseType}/"
-    shouldShowUserWideLink = @props.project? && shouldShowMoreLink
-    userForUserWideLink = if @props.params.profile_name? then @props.params.profile_name else @props.params.collection_owner
-    showUserWideLink = "/users/#{userForUserWideLink}/#{baseType}"
+    baseLink = if @props.project? then "/projects/#{@props.project.slug}" else ""
+    projectCollectionsLink = "#{baseLink}/#{@props.baseType}/"
+    if @props.params.profile_name?
+      username = @props.params.profile_name
+    else if @props.params.collection_owner?
+      username = @props.params.collection_owner
+    if username?
+      userCollectionsLink = "/users/#{username}/#{@props.baseType}"
 
     <section className={classes}>
-      {if shouldShowSubMenu
+      {if !@props.params.profile_name? and @props.project?
         <CollectionsNav
           translationObjectName="#{@props.translationObjectName}"
           user={@props.user}
-          project={@props.project} />}
+          project={@props.project}
+          baseType={@props.baseType} />}
       <PromiseRenderer promise={@listCollections()}>{(collections) =>
         if collections?.length > 0
           meta = collections[0].getMeta()
@@ -91,19 +90,34 @@ List = React.createClass
                   pageStart = meta.page * meta.page_size - meta.page_size + 1
                   pageEnd = Math.min(meta.page * meta.page_size, meta.count)
                   count = meta.count
-                  <Translate pageStart={pageStart} pageEnd={pageEnd} count={count} content="#{@props.translationObjectName}.countMessage" />}
-                {if shouldShowMoreLink
-                  <Link className="show-more" to="#{showMoreLink}">
-                    <Translate content="#{@props.translationObjectName}.more" />
-                  </Link>}
-                {if shouldShowZooWideLink
-                  <Link className="show-more" to="#{showZooWideLink}">
-                    <Translate content="#{@props.translationObjectName}.zooWide" />
-                  </Link>}
-                {if shouldShowUserWideLink
-                  <Link className="show-more" to="#{showUserWideLink}">
-                    <Translate content="#{@props.translationObjectName}.userWide" user="#{userForUserWideLink}"/>
-                  </Link>}
+                  translateProps = {
+                    pageStart: pageStart
+                    pageEnd: pageEnd
+                    count: count
+                  }
+                  if @props.project?
+                    projectNameForMessages = @props.project.display_name
+                  else
+                    projectNameForMessages = "Zooniverse"
+                  translateProps["project"] = projectNameForMessages
+                  if username?
+                    countMessageKey = "#{@props.translationObjectName}.countForUserMessage"
+                    translateProps["user"] = username
+                  else
+                    countMessageKey = "#{@props.translationObjectName}.countMessage"
+                  <Translate {...translateProps} content={countMessageKey}/>}
+                {if @props.params.profile_name? or @props.params.collection_owner?
+                  <span>
+                    <br/>
+                    {if @props.params.profile_name?
+                      <Link className="show-more" to={projectCollectionsLink}>
+                        <Translate content="#{@props.translationObjectName}.projectWide" project={projectNameForMessages}/>
+                      </Link>}
+                    {if username? and @props.project?
+                      <Link className="show-more" to={userCollectionsLink}>
+                        <Translate content="#{@props.translationObjectName}.userWide" user={username}/>
+                      </Link>}
+                  </span>}
               </p>
             </div>
             <div className="collections-card-list">
@@ -118,24 +132,40 @@ List = React.createClass
             </div>
             <nav>
               {if meta
+                buttonClasses = classNames {
+                  "pill-button": true
+                  "project-pill-button": @props.project?
+                }
                 <nav className="pagination">
                   {for page in [1..meta.page_count]
                     active = (page is +location.query.page) or (page is 1 and not location.search)
                     <Link
-                      key={page}
-                      to={"#{@props.location.pathname}?page=#{page}"}
-                      activeClassName="active"
-                      className="pill-button"
-                      style={border: "2px solid" if active}>
+                      key = {page}
+                      to = {"#{@props.location.pathname}?page=#{page}"}
+                      activeClassName = "active"
+                      className = {buttonClasses}
+                      style = {border: "2px solid" if active}>
                       {page}
                     </Link>}
                 </nav>}
             </nav>
           </div>
         else if collections?.length is 0
-          <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" />
+          <div>
+            <div className="resource-results-counter collection-results-counter">
+              <p>
+                <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" />
+              </p>
+            </div>
+          </div>
         else
-          <Translate content="#{@props.translationObjectName}.loadMessage" component="div" />
+          <div>
+            <div className="resource-results-counter collection-results-counter">
+              <p>
+                <Translate content="#{@props.translationObjectName}.loadMessage" component="div" />
+              </p>
+            </div>
+          </div>
       }</PromiseRenderer>
     </section>
 

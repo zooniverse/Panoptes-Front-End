@@ -9,6 +9,6 @@ FavoritesList = React.createClass
 
   render: ->
     props = List.getPropsForList(@props,true)
-    <List {...props} />
+    <List {...props} baseType="favorites" />
 
 module.exports = FavoritesList

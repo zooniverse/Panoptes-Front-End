@@ -9,6 +9,6 @@ CollectionsList = React.createClass
 
   render: ->
     props = List.getPropsForList(@props,false)
-    <List {...props} />
+    <List {...props} baseType="collections" />
 
 module.exports = CollectionsList
