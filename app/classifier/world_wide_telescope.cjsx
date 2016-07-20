@@ -140,9 +140,12 @@ class Plate
     angularSep / pixelSep
 
   centerCoords: ->
+    s = @starChart
+    upperY = s.height - (s.yAxis.range[0].y - s.corners[0].y)
+    lowerY = s.corners[3].y - s.yAxis.range[1].y
     center =
-      x: @starChart.width / 2
-      y: @starChart.height / 2
+      x: ((s.xAxis.range[0].x - s.corners[0].x) + (s.xAxis.range[1].x - s.corners[0].x)) / 2
+      y: (upperY + lowerY) / 2
       ra: (@coordCorners[0].ra + @coordCorners[2].ra) / 2
       dec: (@coordCorners[0].dec + @coordCorners[2].dec) / 2
     center
