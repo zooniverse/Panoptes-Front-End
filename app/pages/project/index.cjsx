@@ -8,7 +8,7 @@ TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 NotificationsLink = require '../../talk/lib/notifications-link'
-classNames = require 'classNames'
+classNames = require 'classnames'
 
 counterpart.registerTranslations 'en',
   project:

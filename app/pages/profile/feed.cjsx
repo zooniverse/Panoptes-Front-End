@@ -30,7 +30,7 @@ module.exports = React.createClass
     }, =>
       criteria = {user_id: user.id, page: page, sort: '-created_at'}
       if @props.project?
-        criteria.project_id = @props.project.id
+        criteria.section = "project-#{@props.project.id}"
       talkClient.type('comments').get(criteria)
         .catch (error) =>
           @setState({error})
@@ -47,7 +47,7 @@ module.exports = React.createClass
           <h2>Recent comments</h2>
 
           {for comment in @state.comments
-            <CommentLink key={comment.id} comment={comment} />}
+            <CommentLink key={comment.id} comment={comment} project={@props.project}/>}
 
           <Paginator pageCount={meta.page_count} page={meta.page} />
         </div>

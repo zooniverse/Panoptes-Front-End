@@ -8,7 +8,7 @@ Avatar = require '../partials/avatar'
 Loading = require '../components/loading-indicator'
 HandlePropChanges = require '../lib/handle-prop-changes'
 TitleMixin = require '../lib/title-mixin'
-classNames = require 'classNames'
+classNames = require 'classnames'
 
 counterpart.registerTranslations 'en',
   collectionPage:
@@ -38,59 +38,38 @@ CollectionPage = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-collection-page'
 
-  getBaseLink: ->
-    baseLink = "/"
-    if @props.project?
-      baseLink += "projects/#{@props.project.slug}"
-    baseLink
-
-  getOwnerLogin: ->
-    [owner_login, collection_name] = @props.collection.slug.split('/')
-    owner_login
-
-  getCollectionsLink: ->
-    baseLink = @getBaseLink()
-    [owner_login, collection_name] = @props.collection.slug.split('/')
-    if @props.collection.favorite
-      "#{baseLink}favorites/#{@getOwnerLogin()}"
-    else
-      "#{baseLink}collections/#{@getOwnerLogin()}"
-
-  getProfileLink: ->
-    baseLink = @getBaseLink()
-    "#{baseLink}users/#{@getOwnerLogin()}"
-
-  getCollectionsLinkMessageKey: ->
-    if @props.collection.favorite
-      "collectionPage.favoritesLink"
-    else
-      "collectionPage.collectionsLink"
-
   render: ->
     <PromiseRenderer promise={@props.collection.get('owner')}>{(owner) =>
-      baseCollectionsLink = "#{@getBaseLink()}collections/#{@props.collection.slug}/"
+      baseType = if @props.collection.favorite then "favorites" else "collections"
+      baseLink = ""
+      if @props.project?
+        baseLink = "/projects/#{@props.project.slug}"
+      baseCollectionLink = "#{baseLink}/#{baseType}/#{@props.collection.slug}"
+      baseCollectionsLink = "#{baseLink}/#{baseType}/#{owner.login}"
       isOwner = @props.user?.id is owner.id
+      profileLink = "#{baseLink}/users/#{owner.login}"
+      collectionsLinkMessageKey = "collectionPage.#{baseType}Link"
 
       <div className="collections-page">
         <nav className="collection-nav tabbed-content-tabs">
-          <IndexLink to="#{baseCollectionsLink}" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'view-collection')}>
+          <IndexLink to="#{baseCollectionLink}/#" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'view-collection')}>
             <Avatar user={owner} />
             {@props.collection.display_name}
           </IndexLink>
 
           {if isOwner
-            <Link to="#{baseCollectionsLink}settings" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'settings-collection')}>
+            <Link to="#{baseCollectionLink}/settings" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'settings-collection')}>
               <Translate content="collectionPage.settings" />
             </Link>}
 
           {if isOwner
-            <Link to="#{baseCollectionsLink}collaborators" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'collab-collection')}>
+            <Link to="#{baseCollectionLink}/collaborators" activeClassName="active" className="tabbed-content-tab" onClick={@logClick?.bind(this, 'collab-collection')}>
               <Translate content="collectionPage.collaborators" />
             </Link>}
-          <Link to="#{@getCollectionsLink()}" activeClassName="active" className="tabbed-content-tab">
-            <Translate content="#{@getCollectionsLinkMessageKey()}" user="#{@props.collection.links.owner.display_name}" />
+          <Link to="#{baseCollectionsLink}/" className="tabbed-content-tab">
+            <Translate content="#{collectionsLinkMessageKey}" user="#{@props.collection.links.owner.display_name}" />
           </Link>
-          <Link to="#{@getProfileLink()}" activeClassName="active" className="tabbed-content-tab">
+          <Link to="#{profileLink}/" activeClassName="active" className="tabbed-content-tab">
             <Translate content="collectionPage.userLink" user="#{@props.collection.links.owner.display_name}" />
           </Link>
         </nav>

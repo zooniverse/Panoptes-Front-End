@@ -57,16 +57,13 @@ module.exports = React.createClass
           <span>
             {' '}in{' '}
             <a href={@state.href}>
-              {if @state.project? and @state.owner
+              {if @state.project? and @state.owner? and !@props.project?
                 <span>
-                  {if !@state.project?
-                    <span>
-                      <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.project.display_name}">{@state.project.display_name}</strong>
-                      <span>&nbsp;➞&nbsp;</span>
-                    </span>}
+                  <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.project.display_name}">{@state.project.display_name}</strong>
+                  <span>{' '}➞{' '}</span>
                 </span>}
               <strong className="comment-board">{@state.board?.title}</strong>
-              <span>&nbsp;➞&nbsp;</span>
+              <span>{' '}➞{' '}</span>
               <strong className="comment-discussion">{@state.discussion?.title}</strong>
             </a>
           </span>}

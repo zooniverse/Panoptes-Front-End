@@ -6,7 +6,7 @@ Translate = require 'react-translate-component'
 {Link, IndexLink} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
 Avatar = require '../../partials/avatar'
-classNames = require 'classNames'
+classNames = require 'classnames'
 TitleMixin = require '../../lib/title-mixin'
 
 counterpart.registerTranslations 'en',
@@ -114,7 +114,7 @@ UserProfilePage = React.createClass
       <section className="hero user-profile-hero" style={headerStyle}>
         <div className="overlay"></div>
         <div className="hero-container">
-          <h1><Avatar user={@props.profileUser} />{@props.profileUser.display_name}<span class="login" className="login-name">({@props.profileUser.login})</span></h1>
+          <h1><Avatar user={@props.profileUser} />{@props.profileUser.display_name}<span className="login-name">({@props.profileUser.login})</span></h1>
           {if !@props.project?
             <nav className="hero-nav">
               {@renderNavLinks()}

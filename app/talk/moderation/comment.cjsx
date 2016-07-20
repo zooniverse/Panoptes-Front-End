@@ -40,7 +40,7 @@ module.exports = React.createClass
             </Link>:
           </span>
 
-          <CommentLink comment={@state.comment} />
+          <CommentLink comment={@state.comment} project={@props.project} />
           <ModerationActions {...@props} comment={@state.comment} />
         </div>
       else

@@ -1,7 +1,7 @@
 React = require 'react'
 {Link, IndexLink} = require 'react-router'
 Translate = require 'react-translate-component'
-classNames = require 'classNames'
+classNames = require 'classnames'
 
 CollectionsNav = React.createClass
   displayName: 'CollectionsNav'
@@ -16,28 +16,28 @@ CollectionsNav = React.createClass
     classes = classNames {
       "about-tabs": @props.project?
     }
-    baseLink = "/"
+    baseLink = ""
     messageKeyPrefixToUse=""
     if @props.project?
       messageKeyPrefixToUse += "project"
-      baseLink += "projects/#{@props.project.slug}/"
+      baseLink += "/projects/#{@props.project.slug}"
 
     <nav className="hero-nav">
-      <IndexLink to="#{baseLink}collections" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "collections.all")}>
+      <IndexLink to="#{baseLink}/collections" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "collections.all")}>
         <Translate content="#{messageKeyPrefixToUse}collectionsPage.all" project="#{@props.project?.display_name}"/>
       </IndexLink>
 
-      <IndexLink to="#{baseLink}favorites" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "favorites.all")}>
+      <IndexLink to="#{baseLink}/favorites" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "favorites.all")}>
         <Translate content="#{messageKeyPrefixToUse}favoritesPage.all" project="#{@props.project?.display_name}"/>
       </IndexLink>
 
       {if @props.user?
-        <Link to="#{baseLink}collections/#{@props.user.login}" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "collections.my")}>
+        <Link to="#{baseLink}/collections/#{@props.user.login}" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "collections.my")}>
           <Translate content="collectionsPage.my" />
         </Link>}
 
       {if @props.user?
-        <Link to="#{baseLink}favorites/#{@props.user.login}" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "favorites.my")}>
+        <Link to="#{baseLink}/favorites/#{@props.user.login}" className={classes} activeClassName="active" onClick={@logClick?.bind(this, "favorites.my")}>
           <Translate content="favoritesPage.my" />
         </Link>}
     </nav>

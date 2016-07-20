@@ -10,6 +10,18 @@ classNames = require 'classnames'
 List = React.createClass
   displayName: 'List'
 
+  statics: {
+    getPropsForList: (props,favorite)->
+      translationObjectName = "collectionsPage"
+      if props.routes[1]=="collections" or props.routes[1]=="favorites"
+        translationObjectName = "#{props.routes[1]}Page"
+      else if props.routes[2]=="collections" or props.routes[2]=="favorites"
+        translationObjectName = "#{props.routes[2]}Page"
+      if props.project?
+        translationObjectName = "project#{translationObjectName}"
+      Object.assign({}, props, {favorite: favorite, translationObjectName:"#{translationObjectName}"})
+  }
+
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
 
@@ -35,7 +47,8 @@ List = React.createClass
     query = {}
     if @props.params?.collection_owner?
       query.owner = @props.params.collection_owner
-      query.include = 'owner'
+    else if @props.params?.profile_name?
+      query.owner = @props.params.profile_name
     if @props.project?
       query.project_ids = @props.project.id
     query.favorite = @props.favorite

@@ -230,7 +230,7 @@ module.exports = React.createClass
 
             {if @props.linked
               <div style={textAlign: "right"}>
-                <CommentLink comment={@props.data}>
+                <CommentLink comment={@props.data} project={@props.project}>
                   <i className="fa fa-comments-o"/> View the discussion
                 </CommentLink>
               </div>
