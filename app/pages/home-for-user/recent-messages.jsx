@@ -26,6 +26,7 @@ const RecentCollectionsSection = React.createClass({
       error: null,
       conversations: [],
       messageAuthors: {},
+      avatars: {},
       lastMessages: {},
     };
   },
@@ -45,8 +46,9 @@ const RecentCollectionsSection = React.createClass({
       loading: true,
       error: null,
       converationPartners: {},
-      lastMessages: {},
       messageAuthors: {},
+      avatars: {},
+      lastMessages: {},
     });
 
     talkClient.type('conversations').get({
@@ -123,7 +125,16 @@ const RecentCollectionsSection = React.createClass({
     .then((author) => {
       this.state.messageAuthors[message.id] = author;
       this.forceUpdate();
-      return author;
+      return author.get('avatar')
+      .catch(() => {
+        return [];
+      })
+      .then((avatars) => {
+        const avatar = [].concat(avatars)[0]; // Why's this an array?
+        this.state.avatars[author.id] = avatar;
+        this.forceUpdate();
+        return author;
+      });
     });
   },
 
@@ -131,6 +142,12 @@ const RecentCollectionsSection = React.createClass({
     const partner = this.state.converationPartners[conversation.id];
     const message = this.state.lastMessages[conversation.id];
     const sentLastMessage = !!message && (this.state.messageAuthors[message.id] === this.context.user);
+
+    let avatarSrc = '/assets/simple-avatar.jpg';
+    if (!!partner && !!this.state.avatars[partner.id]) {
+      console.log('AVATAR', this.state.avatars[partner.id]);
+      avatarSrc = this.state.avatars[partner.id].src;
+    }
 
     const allClassNames = classnames('recent-conversation-link', {
       'recent-conversation-link--first': index === 0,
@@ -146,7 +163,7 @@ const RecentCollectionsSection = React.createClass({
             'From'
           )}
         </span>
-        <img role="presentation" src="https://www.fillmurray.com/50/50" className="recent-conversation-link__partner-avatar" />
+        <img role="presentation" src={avatarSrc} className="recent-conversation-link__partner-avatar" />
         <span className="recent-conversation-link__partner">
           {!!partner ? partner.display_name : LOADER_BULLETS}
         </span>
