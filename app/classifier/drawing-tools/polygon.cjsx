@@ -7,6 +7,7 @@ DeleteButton = require './delete-button'
 
 FINISHER_RADIUS = 8
 GRAB_STROKE_WIDTH = 6
+BUFFER = 40
 
 DELETE_BUTTON_WEIGHT = 5 # Weight of the second point.
 
@@ -64,9 +65,7 @@ module.exports = React.createClass
       points.push [firstPoint.x, firstPoint.y].join ','
     points = points.join '\n'
 
-    deleteButtonPosition =
-      x: (firstPoint.x + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.x)) / DELETE_BUTTON_WEIGHT
-      y: (firstPoint.y + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.y)) / DELETE_BUTTON_WEIGHT
+    deleteButtonPosition = @getDeletePosition(firstPoint, secondPoint, lastPoint)
 
     <DrawingToolRoot tool={this}>
       <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
@@ -93,6 +92,30 @@ module.exports = React.createClass
             </g>}
         </g>}
     </DrawingToolRoot>
+
+  getDeletePosition: (firstPoint, secondPoint, lastPoint) ->
+    multiplePoints = firstPoint != lastPoint
+    x = (firstPoint.x + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.x)) / DELETE_BUTTON_WEIGHT
+    y = (firstPoint.y + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.y)) / DELETE_BUTTON_WEIGHT
+    if @calculateDistance(x, firstPoint.x, y, firstPoint.y) is 'x'
+      x += BUFFER
+    else if @calculateDistance(x, firstPoint.x, y, firstPoint.y) is 'y'
+      y += BUFFER
+    if @calculateDistance(x, secondPoint.x, y, secondPoint.y) is 'x' and multiplePoints
+      x += BUFFER
+    else if @calculateDistance(x, secondPoint.x, y, secondPoint.y) is 'y' and multiplePoints
+      y += BUFFER
+    x: x
+    y: y
+
+  calculateDistance: (x1, x2, y1, y2) ->
+    xDistance = Math.abs(x1 - x2)
+    yDistance = Math.abs(y1 - y2)
+    if xDistance < BUFFER and yDistance < BUFFER
+      if yDistance > xDistance
+        'x'
+      else if xDistance > yDistance
+        'y'
 
   handleMouseMove: (e) ->
     xPos = e.pageX
