@@ -26,6 +26,10 @@ const HomePageForUser = React.createClass({
     location: React.PropTypes.object,
   },
 
+  contextTypes: {
+    setAppHeaderVariant: React.PropTypes.func,
+  },
+
   getDefaultProps() {
     return {
       user: {},
@@ -46,6 +50,7 @@ const HomePageForUser = React.createClass({
   },
 
   componentDidMount() {
+    this.context.setAppHeaderVariant('detached');
     addEventListener('hashChange', this.handleHashChange);
     this.fetchRibbonData(this.props.user);
   },
@@ -57,6 +62,7 @@ const HomePageForUser = React.createClass({
   },
 
   componentWillUnmount() {
+    this.context.setAppHeaderVariant(null);
     removeEventListener('hashChange', this.handleHashChange);
   },
 
