@@ -34,6 +34,7 @@ const HomePageForUser = React.createClass({
 
   getInitialState() {
     return {
+      backgroundSrc: '',
       showNews: false,
       ribbonData: [],
       loading: false,
@@ -70,6 +71,17 @@ const HomePageForUser = React.createClass({
     this.setState({
       loading: true,
       error: null,
+    });
+
+    user.get('profile_header')
+    .catch(() => {
+      return [];
+    })
+    .then((profileHeaders) => {
+      const profileHeader = [].concat(profileHeaders)[0];
+      this.setState({
+        backgroundSrc: profileHeader.src,
+      });
     });
 
     getUserRibbonData(user)
@@ -144,7 +156,7 @@ const HomePageForUser = React.createClass({
 
     return (
       <div className="home-page-for-user">
-        <BlurredImage className="home-page-for-user__background" src="//lorempixel.com/500/500/animals/2" blur="0.5em" position="50% 33%" />
+        <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
 
         {!!this.state.error && (
           <div>{this.state.error.toString()}</div>
