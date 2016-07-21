@@ -27,6 +27,7 @@ const AppLayout = React.createClass({
     return {
       siteHeaderDemoted: false,
       siteHeaderRevealed: false,
+      siteHeaderDetached: false,
       mainContentScale: 1,
       headerHeight: 0,
     };
@@ -37,6 +38,7 @@ const AppLayout = React.createClass({
       setAppHeaderVariant: (variant) => {
         this.setState({
           siteHeaderDemoted: variant === 'demoted',
+          siteHeaderDetached: variant === 'detached',
         });
       },
 
@@ -45,7 +47,7 @@ const AppLayout = React.createClass({
         this.setState({
           siteHeaderRevealed: (innerWidth > MAX_MOBILE_WIDTH),
         });
-      }
+      },
     };
   },
 
@@ -103,6 +105,7 @@ const AppLayout = React.createClass({
           ref="header"
           className={classnames('app-layout__header', {
             'app-layout__header--demoted': this.state.siteHeaderDemoted,
+            'app-layout__header--detached': this.state.siteHeaderDetached,
           })}
         >
           <SiteNav ref="mainNav" onToggle={togglePrimaryNav} visible={this.state.siteHeaderRevealed} params={this.props.params} />
