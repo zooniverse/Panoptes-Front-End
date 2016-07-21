@@ -1,5 +1,6 @@
 import React from 'react';
 import BlurredImage from './blurred-image';
+import Pullout from 'react-pullout';
 import getUserRibbonData from '../../lib/get-user-ribbon-data';
 import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
@@ -33,6 +34,7 @@ const HomePageForUser = React.createClass({
 
   getInitialState() {
     return {
+      showNews: false,
       ribbonData: [],
       loading: false,
       error: null,
@@ -90,6 +92,12 @@ const HomePageForUser = React.createClass({
 
   findProjectLink(project) {
     return `/projects/${project.slug}`;
+  },
+
+  toggleNews() {
+    this.setState({
+      showNews: !this.state.showNews,
+    });
   },
 
   renderMenu() {
@@ -157,6 +165,24 @@ const HomePageForUser = React.createClass({
             )}
           </div>
         )}
+
+        <div className="content-container">
+          <p style={{ textAlign: 'center' }}>Re-use social media from home page here.</p>
+        </div>
+
+        <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
+          <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
+            <div className="home-page-news-pullout__toggle-label">
+              <i className="fa fa-cog fa-fw"></i>
+              <br />
+              News
+            </div>
+          </button>
+
+          <p>News thing 1</p>
+          <p>News thing 2</p>
+          <p>News thing 3</p>
+        </Pullout>
       </div>
     );
   },
