@@ -7,6 +7,7 @@ DeleteButton = require './delete-button'
 
 MINIMUM_SIZE = 5
 DELETE_BUTTON_DISTANCE = 9 / 10
+BUFFER = 40
 
 module.exports = React.createClass
   displayName: 'RectangleTool'
@@ -52,6 +53,8 @@ module.exports = React.createClass
   render: ->
     {x, y, width, height} = @props.mark
 
+    deletePosition = @getDeletePosition(x, y, width, height)
+
     points = [
       [x, y].join ','
       [x + width, y].join ','
@@ -67,7 +70,7 @@ module.exports = React.createClass
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={x + (width * DELETE_BUTTON_DISTANCE)} y={y} />
+          <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} />
 
           <DragHandle x={x} y={y} scale={@props.scale} onDrag={@handleTopLeftDrag} onEnd={@normalizeMark} />
           <DragHandle x={x + width} y={y} scale={@props.scale} onDrag={@handleTopRightDrag} onEnd={@normalizeMark} />
@@ -75,6 +78,11 @@ module.exports = React.createClass
           <DragHandle x={x} y={y + height} scale={@props.scale} onDrag={@handleBottomLeftDrag} onEnd={@normalizeMark} />
         </g>}
     </DrawingToolRoot>
+
+  getDeletePosition: (x, y, width, height) ->
+    y -= BUFFER if x + width - x < BUFFER * 2
+    x: Math.min(x + (width - 40), x + (width * DELETE_BUTTON_DISTANCE))
+    y: y
 
   handleMainDrag: (e, d) ->
     @props.mark.x += d.x / @props.scale.horizontal
