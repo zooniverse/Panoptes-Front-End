@@ -35,6 +35,7 @@ const HomePageForUser = React.createClass({
   getInitialState() {
     return {
       backgroundSrc: '',
+      avatarSrc: '',
       showNews: false,
       ribbonData: [],
       loading: false,
@@ -81,6 +82,17 @@ const HomePageForUser = React.createClass({
       const profileHeader = [].concat(profileHeaders)[0];
       this.setState({
         backgroundSrc: profileHeader.src,
+      });
+    });
+
+    user.get('avatar')
+    .catch(() => {
+      return [];
+    })
+    .then((avatars) => {
+      const avatar = [].concat(avatars)[0];
+      this.setState({
+        avatarSrc: avatar.src,
       });
     });
 
@@ -150,6 +162,11 @@ const HomePageForUser = React.createClass({
   render() {
     if (!this.props.user) return null;
 
+    let avatarSrc = this.state.avatarSrc;
+    if (!avatarSrc) {
+      avatarSrc = '/assets/simple-avatar.jpg';
+    }
+
     const hashQuery = qs.parse(this.props.location.hash.slice(1));
 
     const OpenSectionComponent = SECTIONS[hashQuery.focus];
@@ -166,7 +183,7 @@ const HomePageForUser = React.createClass({
           <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
         ) : (
           <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-            <CircleRibbon loading={this.state.loading} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
+            <CircleRibbon loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
             <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
 
