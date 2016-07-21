@@ -2,6 +2,7 @@
   background: black
   color: white
   display: flex
+  flex-direction: column
   flex-grow: 1
   position: relative
 
@@ -93,3 +94,22 @@
   display: inline-block
   padding: 0.1em 1em
   text-decoration: none
+
+.home-page-news-pullout
+  background: white
+  color: black
+  padding: 1em 2em
+  transition: transform 0.5s
+  z-index: 5
+
+  &__toggle-button.secret-button
+    position: absolute
+    right: 100%
+    top: 33%
+
+  &__toggle-label
+    background: #0f7481
+    border-radius: 0.3em 0 0 0.3em
+    color: white
+    font-size: 14px
+    padding: 0.5em 1em
