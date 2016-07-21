@@ -9,7 +9,7 @@ module.exports = React.createClass
     block: null
 
   componentDidMount: ->
-    if @props.project?
+    if @props.project? or @props.params?.profile_name?
       document.documentElement.classList.add 'on-secondary-page'
     userId = @props.profileUser?.id
     @getBlockedUser(userId) if userId
@@ -19,7 +19,7 @@ module.exports = React.createClass
     @getBlockedUser(userId) if userId and userId isnt @props.profileUser?.id
 
   componentWillUnmount: ->
-    if @props.project?
+    if @props.project? or @props.params?.profile_name?
       document.documentElement.classList.remove 'on-secondary-page'
 
   getBlockedUser: (id) ->

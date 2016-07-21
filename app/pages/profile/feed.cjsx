@@ -17,7 +17,7 @@ module.exports = React.createClass
     error: null
 
   componentDidMount: ->
-    if @props.project?
+    if @props.project? or @props.params?.profile_name?
       document.documentElement.classList.add 'on-secondary-page'
     @getComments(@props.profileUser, @props.location.query.page)
 
@@ -26,7 +26,7 @@ module.exports = React.createClass
       @getComments(nextProps.profileUser, nextProps.location.query.page)
 
   componentWillUnmount: ->
-    if @props.project?
+    if @props.project? or @props.params?.profile_name?
       document.documentElement.classList.remove 'on-secondary-page'
 
   getComments: (user, page) ->
@@ -44,6 +44,7 @@ module.exports = React.createClass
           @setState({comments})
 
   render: ->
+    console.log @props.params
     <div className="content-container">
       {if @state.comments?.length is 0
         <p className="form-help">No recent comments</p>

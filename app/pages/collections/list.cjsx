@@ -140,11 +140,11 @@ List = React.createClass
                   {for page in [1..meta.page_count]
                     active = (page is +location.query.page) or (page is 1 and not location.search)
                     <Link
-                      key = {page}
-                      to = {"#{@props.location.pathname}?page=#{page}"}
-                      activeClassName = "active"
-                      className = {buttonClasses}
-                      style = {border: "2px solid" if active}>
+                      key={page}
+                      to={"#{@props.location.pathname}?page=#{page}"}
+                      activeClassName="active"
+                      className={buttonClasses}
+                      style={border: "2px solid" if active}>
                       {page}
                     </Link>}
                 </nav>}
@@ -153,17 +153,13 @@ List = React.createClass
         else if collections?.length is 0
           <div>
             <div className="resource-results-counter collection-results-counter">
-              <p>
-                <Translate content="#{@props.translationObjectName}.notFoundMessage" component="div" />
-              </p>
+              <Translate content="#{@props.translationObjectName}.notFoundMessage" component="p" />
             </div>
           </div>
         else
           <div>
             <div className="resource-results-counter collection-results-counter">
-              <p>
-                <Translate content="#{@props.translationObjectName}.loadMessage" component="div" />
-              </p>
+              <Translate content="#{@props.translationObjectName}.loadMessage" component="p" />
             </div>
           </div>
       }</PromiseRenderer>

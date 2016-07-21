@@ -88,7 +88,7 @@ UserProfilePage = React.createClass
             <Translate content="profile.nav.stats" />
           </Link>
         else
-          <Link to="#{baseLink}users/#{@props.profileUser.login}/message" className={classes} activeClassName="active"onClick={@logClick.bind null, this}>
+          <Link to="#{baseLink}users/#{@props.profileUser.login}/message" className={classes} activeClassName="active" onClick={@logClick.bind null, this}>
             <Translate content="profile.nav.message" />
           </Link>}
       </span>

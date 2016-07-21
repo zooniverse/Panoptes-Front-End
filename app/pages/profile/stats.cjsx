@@ -8,11 +8,11 @@ module.exports = React.createClass
     user: null
 
   componentDidMount: ->
-    if @props.project?
+    if @props.project? or @props.params?.profile_name?
       document.documentElement.classList.add 'on-secondary-page'
 
   componentWillUnmount: ->
-    if @props.project?
+    if @props.project? or @props.params?.profile_name?
       document.documentElement.classList.remove 'on-secondary-page'
 
   render: ->
