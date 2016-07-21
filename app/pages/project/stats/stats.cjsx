@@ -149,8 +149,7 @@ ProjectStatsPage = React.createClass
   workflowInfo: ->
     progress = []
     for workflow, key in @props.workflows
-      if workflow?.active
-        progress.push(<WorkflowProgress key={key} workflow={workflow} />)
+      progress.push(<WorkflowProgress key={key} workflow={workflow} />)
     progress
 
   render: ->
