@@ -12,7 +12,7 @@ ProjectStatsPageController = React.createClass
     workflowList: []
 
   componentDidMount: ->
-    getWorkflowsInOrder @props.project
+    getWorkflowsInOrder @props.project, active: true
       .then (workflows) =>
         @setState workflowList: workflows
 
