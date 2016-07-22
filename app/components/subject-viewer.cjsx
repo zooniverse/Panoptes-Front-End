@@ -43,6 +43,7 @@ module.exports = React.createClass
     frameWrapper: null
     allowFlipbook: true
     allowSeparateFrames: false
+    metadataFilters: ['#', '!']
 
   getInitialState: ->
     loading: true
@@ -235,7 +236,7 @@ module.exports = React.createClass
       <hr />
       <table className="standard-table">
         <tbody>
-          {for key, value of @props.subject?.metadata when key.charAt(0) isnt '#' and key[...2] isnt '//'
+          {for key, value of @props.subject?.metadata when key.charAt(0) not in @props.metadataFilters and key[...2] isnt '//'
             <tr key={key}>
               <th>{key}</th>
               <Markdown tag="td" content={value} inline />
