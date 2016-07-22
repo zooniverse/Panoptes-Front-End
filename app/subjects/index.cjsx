@@ -39,7 +39,8 @@ module.exports = React.createClass
                 subject={@state.subject}
                 user={@props.user}
                 project={@props.project}
-                linkToFullImage={true}/>
+                linkToFullImage={true}
+                metadataFilters={['#']} />
 
               <SubjectCommentList subject={@state.subject} {...@props} />
               <SubjectCollectionList subject={@state.subject} {...@props} />
