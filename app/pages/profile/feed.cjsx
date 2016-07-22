@@ -44,7 +44,6 @@ module.exports = React.createClass
           @setState({comments})
 
   render: ->
-    console.log @props.params
     <div className="content-container">
       {if @state.comments?.length is 0
         <p className="form-help">No recent comments</p>
