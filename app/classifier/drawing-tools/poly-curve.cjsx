@@ -11,7 +11,7 @@ GUIDE_WIDTH = 1
 GUIDE_DASH = [4, 4]
 # fraction of line lenght along (x) and perpendicular (y) to the line to place control point
 DEFAULT_CURVE = {x: 0.5, y: 0}
-BUFFER = 40
+BUFFER = 44
 
 DELETE_BUTTON_WEIGHT = 0.75 # fraction of line lenght to place delete button
 
@@ -95,15 +95,12 @@ module.exports = React.createClass
     document.removeEventListener 'mousemove', @handleMouseMove
 
   calculateDistance: (x1, x2, y1, y2) ->
-    Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
-
-  calculateDistance: (x1, x2, y1, y2) ->
     xDistance = Math.abs(x1 - x2)
     yDistance = Math.abs(y1 - y2)
     if xDistance < BUFFER and yDistance < BUFFER
-      if yDistance > xDistance
+      if yDistance >= xDistance
         'x'
-      else if xDistance > yDistance
+      else if xDistance >= yDistance
         'y'
 
   render: ->

@@ -7,7 +7,7 @@ DeleteButton = require './delete-button'
 
 FINISHER_RADIUS = 8
 GRAB_STROKE_WIDTH = 6
-BUFFER = 40
+BUFFER = 50
 
 DELETE_BUTTON_WEIGHT = 5 # Weight of the second point.
 
@@ -97,14 +97,12 @@ module.exports = React.createClass
     multiplePoints = firstPoint != lastPoint
     x = (firstPoint.x + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.x)) / DELETE_BUTTON_WEIGHT
     y = (firstPoint.y + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.y)) / DELETE_BUTTON_WEIGHT
-    if @calculateDistance(x, firstPoint.x, y, firstPoint.y) is 'x'
-      x += BUFFER
-    else if @calculateDistance(x, firstPoint.x, y, firstPoint.y) is 'y'
-      y += BUFFER
-    if @calculateDistance(x, secondPoint.x, y, secondPoint.y) is 'x' and multiplePoints
-      x += BUFFER
-    else if @calculateDistance(x, secondPoint.x, y, secondPoint.y) is 'y' and multiplePoints
-      y += BUFFER
+    points = [firstPoint, secondPoint]
+    for i in points
+      if @calculateDistance(x, i.x, y, i.y) is 'x' and multiplePoints
+        x += BUFFER
+      else if @calculateDistance(x, i.x, y, i.y) is 'y' and multiplePoints
+        y += BUFFER
     x: x
     y: y
 
@@ -112,9 +110,9 @@ module.exports = React.createClass
     xDistance = Math.abs(x1 - x2)
     yDistance = Math.abs(y1 - y2)
     if xDistance < BUFFER and yDistance < BUFFER
-      if yDistance > xDistance
+      if yDistance >= xDistance
         'x'
-      else if xDistance > yDistance
+      else if xDistance >= yDistance
         'y'
 
   handleMouseMove: (e) ->
