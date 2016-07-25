@@ -35,18 +35,13 @@ module.exports = React.createClass
     @setState timer: null
 
   loadProjects: ->
-    apiClient.type('projects').get(id: Object.keys(FEATURED_PROJECTS), cards: true, include: 'background,avatar').then (projects) =>
+    apiClient.type('projects').get(id: Object.keys(FEATURED_PROJECTS), cards: true).then (projects) =>
       Promise.all(projects.map (project) =>
-        project.get 'background'
-          .then ([background]) =>
-            project.image = background.src
-            project.caption = FEATURED_PROJECTS[project.id]
-            loadImage project.image or './assets/default-project-background.jpg'
-            project
-          .catch =>
-            project.image = project.avatar_src
-            project.caption = "needs your help"
-            project
+        featuredProject = FEATURED_PROJECTS[project.id]
+        project.image = featuredProject.image
+        project.caption = featuredProject.caption
+        loadImage project.image
+        project
       )
 
   hovered: ->
@@ -71,10 +66,7 @@ module.exports = React.createClass
   render: ->
     {project, lastProject} = @state
     return <div /> unless project
-
     @refs?.container?.classList?.add 'appearing'
-    background = project.image or './assets/default-project-background.jpg'
-    lastBackground = lastProject?.image or './assets/default-project-background.jpg'
 
     # This seems silly, but it ensures the render has completed before beginning the animation
     requestAnimationFrame =>
@@ -83,8 +75,8 @@ module.exports = React.createClass
 
     <section ref="container" className="home-promoted" onMouseEnter={@hovered} onMouseLeave={@unhovered}>
       <div className="layer"></div>
-      <img className="last-background-image" src={lastBackground} />
-      <img className="current-background-image" src={background} />
+      <img className="last-background-image" src={lastProject?.image} />
+      <img className="current-background-image" src={project.image} />
       <h1>THE ZO<ZooniverseLogo />NIVERSE</h1>
 
       <p className="description">{project.caption}</p>

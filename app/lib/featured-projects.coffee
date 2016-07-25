@@ -1,10 +1,26 @@
 module.exports = if process.env.NODE_ENV is 'production'
-  '376': "needs you to decipher handwriting"
-  '26': "needs you to find new worlds"
-  '60': "needs you to identify species"
-  '21': "needs you to analyze galaxies"
+  '376':
+    caption: 'needs you to decipher handwriting'
+    image: '/assets/featured-projects/376.jpg'
+  '26':
+    caption: 'needs you to find new worlds'
+    image: '/assets/featured-projects/26.jpg'
+  '60':
+    caption: 'needs you to identify species'
+    image: '/assets/featured-projects/60.jpg'
+  '21':
+    caption: 'needs you to analyze galaxies'
+    image: '/assets/featured-projects/21.jpg'
 else
-  '1625': "needs you to decipher handwriting"
-  '1626': "needs you to find new worlds"
-  '1627': "needs you to identify species"
-  '1628': "needs you to analyze galaxies"
+  '1625':
+    caption: 'needs you to decipher handwriting'
+    image: '/assets/featured-projects/376.jpg'
+  '1626':
+    caption: 'needs you to find new worlds'
+    image: '/assets/featured-projects/26.jpg'
+  '1627':
+    caption: 'needs you to identify species'
+    image: '/assets/featured-projects/60.jpg'
+  '1628':
+    caption: 'needs you to analyze galaxies'
+    image: '/assets/featured-projects/21.jpg'
