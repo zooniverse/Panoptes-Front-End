@@ -5,15 +5,14 @@ moment = require 'moment'
 
 GraphSelect = React.createClass
   getInitialState: ->
-    workflowsLoaded: false
     statData: null
 
   getDefaultProps: ->
     by: 'hour'
-    
+
   componentDidMount: ->
     @getStats(@props.workflowId, @props.by)
-    
+
   getStats: (workflowId, binBy) ->
     statsClient
       .query
@@ -29,22 +28,15 @@ GraphSelect = React.createClass
         @setState {statData}
       .catch (e) ->
         console?.log 'Failed to fetch stats'
-    
+
   componentWillReceiveProps: (nextProps) ->
-    if (not @state.workflowsLoaded) and (nextProps.workflows?)
-      areNulls = false
-      for w in nextProps.workflows
-        if w is null
-          areNulls = true
-      if not areNulls
-        @setState({workflowsLoaded: true})
     #update the stats when dropdown options change
     if (@props.workflowId isnt nextProps.workflowId) or (@props.by isnt nextProps.by)
       @getStats(nextProps.workflowId, nextProps.by)
 
   shouldComponentUpdate: (nextProps, nextState) ->
-    return (@props.by isnt nextProps.by) or (@props.workflowId isnt nextProps.workflowId) or (@state isnt nextState)
-    
+    return (@props.by isnt nextProps.by) or (@props.workflowId isnt nextProps.workflowId) or (@props.workflows isnt nextProps.workflows) or (@state isnt nextState)
+
   workflowSelect: ->
     if @props.workflows?
       options = [<option value={"project_id=#{@props.projectId}"} key={"workflowSelectAll"}>All</option>]
@@ -59,10 +51,10 @@ GraphSelect = React.createClass
             {options}
           </select>
         </span>
-      
+
   handleWorkflowSelect: (event) ->
     @props.handleWorkflowChange(@props.type, event)
-    
+
   render: ->
     if @props.range?
       range = []
@@ -89,7 +81,7 @@ GraphSelect = React.createClass
 
   handleGraphChange: (which, e) ->
     @props.handleGraphChange(which, e)
-    
+
   handleRangeChange: (range) ->
     @props.handleRangeChange(@props.type, range)
 
@@ -109,10 +101,10 @@ ETA = React.createClass
     </div>
 
 WorkflowProgress = React.createClass
-  
+
   getInitialState: ->
     statData: null
-  
+
   componentDidMount: ->
     statsClient
       .query
@@ -126,7 +118,7 @@ WorkflowProgress = React.createClass
         @setState {statData}
       .catch (e) ->
         console?.log 'Failed to fetch stats'
-        
+
   render: ->
     if @props.workflow.retirement.criteria == 'classification_count'
       retirement = <div><span className="progress-stats-label">Retirement limit:</span> {@props.workflow.retirement.options.count.toLocaleString()}</div>
@@ -157,16 +149,15 @@ ProjectStatsPage = React.createClass
   workflowInfo: ->
     progress = []
     for workflow, key in @props.workflows
-      if workflow?.active
-        progress.push(<WorkflowProgress key={key} workflow={workflow} />)
+      progress.push(<WorkflowProgress key={key} workflow={workflow} />)
     progress
 
   render: ->
     progress = @workflowInfo()
     #Dates for gap in classification stats
-    classificationGap = ['2016-01-13T00:00:00.000Z', '2016-02-07T00:00:00.000Z']
+    classificationGap = ['2015-06-30T00:00:00.000Z', '2016-06-09T00:00:00.000Z']
     #Dates for gap in talk stats
-    talkGap = ['2016-02-18T00:00:00.000Z', '2016-04-07T00:00:00.000Z']
+    talkGap = ['2015-06-30T00:00:00.000Z', '2016-06-09T00:00:00.000Z']
     if @props.startDate
       start =
         <div className="project-metadata-stat">
@@ -178,16 +169,16 @@ ProjectStatsPage = React.createClass
         classificationFootnote =
           <span className="project-stats-footer">
            {classificationFootnoteMarker}
-            The gap in the classification data from {moment(classificationGap[0]).format 'MMM-DD-YYYY'} to {moment(classificationGap[1]).format 'MMM-DD-YYYY'} was caused a bug in our event notification system.  <b>No</b> classifications were lost in this time. 
+            Due to an issue with our stats server all data before {moment(classificationGap[1]).format 'MMM-DD-YYYY'} is currently unavailable.  We are currently working to resolve this issue.  <b>No</b> classifications were lost in this time.
           </span>
       if moment(@props.startDate) <= moment(talkGap[1])
         talkFootnoteMarker = <span><sup>&#8225;</sup></span>
         talkFootnote =
           <span className="project-stats-footer">
             {talkFootnoteMarker}
-            The gap in the talk data from {moment(talkGap[0]).format 'MMM-DD-YYYY'} to {moment(talkGap[1]).format 'MMM-DD-YYYY'} was caused a bug in our event notification system.  <b>No</b> talk comments were lost in this time. 
+            Due to an issue with our stats server all data before {moment(talkGap[1]).format 'MMM-DD-YYYY'} is currently unavailable.  We are currently working to resolve this issue.  <b>No</b> talk comments were lost in this time.
           </span>
-    <div className="project-text-content content-container">
+    <div className="stats-text-content content-container">
       <div className="project-stats-dashboard">
         <div className="project-metadata-stats">
           {start}
@@ -218,7 +209,7 @@ ProjectStatsPage = React.createClass
           workflowId={@props.workflowId}
           type="classification"
           projectId={@props.projectId}
-          by={@props.classificationsBy} 
+          by={@props.classificationsBy}
           range={@props.classificationRange} />
       </div>
       {classificationFootnote}
@@ -230,7 +221,7 @@ ProjectStatsPage = React.createClass
         handleRangeChange={@props.handleRangeChange}
         type="comment"
         projectId={@props.projectId}
-        by={@props.commentsBy} 
+        by={@props.commentsBy}
         range={@props.commentRange} />
       </div>
       {talkFootnote}

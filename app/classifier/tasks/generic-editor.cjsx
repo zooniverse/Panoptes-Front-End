@@ -114,6 +114,7 @@ module.exports = React.createClass
                       </div>
 
                   when 'drawing'
+                    options = drawingTools[choice.type].options ? []
                     [<div key="type" className="workflow-choice-setting">
                       <AutoSave resource={@props.workflow}>
                         Type{' '}
@@ -169,6 +170,24 @@ module.exports = React.createClass
                          />
                       </AutoSave>
                     </div>
+                    
+                    if 'size' in options
+                      <div key="size" className="workflow-choice-setting">
+                        <AutoSave resource={@props.workflow}>
+                          <label>Size{' '}
+                            <select 
+                            name="#{@props.taskPrefix}.#{choicesKey}.#{index}.size" 
+                            value={choice.size}
+                            onChange={handleChange}
+                            >
+                              <option value="large">Large</option>
+                              <option value="small">Small</option>
+                            </select>
+                          </label>
+                        </AutoSave>
+                      </div>
+                    else
+                      null
 
                     <div key="details" className="workflow-choice-setting">
                       <button type="button" onClick={@editToolDetails.bind this, @props.task, index}>Sub-tasks ({choice.details?.length ? 0})</button>{' '}

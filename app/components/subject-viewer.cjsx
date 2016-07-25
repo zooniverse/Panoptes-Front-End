@@ -43,6 +43,7 @@ module.exports = React.createClass
     frameWrapper: null
     allowFlipbook: true
     allowSeparateFrames: false
+    metadataFilters: ['#', '!']
 
   getInitialState: ->
     loading: true
@@ -126,6 +127,10 @@ module.exports = React.createClass
             </span>
         </span>}
         <span>
+          {if @props.workflow?.configuration?.invert_subject?
+            <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleModification.bind this, 'invert'}>
+              <i className="fa fa-adjust "></i>
+            </button>}{' '}
           {if @props.workflow?.configuration?.enable_subject_flags
             <span>
               <FlagSubjectButton className="secret-button" classification={@props.classification} />{' '}
@@ -170,7 +175,7 @@ module.exports = React.createClass
     @signInAttentionTimeout = setTimeout (=> @setState loading: false), 3000
 
   renderFrame: (frame, props = {}) ->
-    <FrameViewer {...@props} {...props} frame={frame} onLoad={@handleFrameLoad} />
+    <FrameViewer {...@props} {...props} frame={frame} modification={@state?.modification} onLoad={@handleFrameLoad} />
 
   hiddenPreloadedImages: ->
     # Render this to ensure that all a subject's location images are cached and ready to display.
@@ -190,6 +195,16 @@ module.exports = React.createClass
 
   toggleInFlipbookMode: () ->
     @setInFlipbookMode not @state.inFlipbookMode
+
+  toggleModification: (type) ->
+    mods = @state?.modification
+    if !mods
+      mods = {}
+    if mods[type] is undefined
+      mods[type] = true
+    else
+      mods[type] = not mods[type]
+    @setState modification: mods
 
   setInFlipbookMode: (inFlipbookMode) ->
     @setState {inFlipbookMode}
@@ -221,7 +236,7 @@ module.exports = React.createClass
       <hr />
       <table className="standard-table">
         <tbody>
-          {for key, value of @props.subject?.metadata when key.charAt(0) isnt '#' and key[...2] isnt '//'
+          {for key, value of @props.subject?.metadata when key.charAt(0) not in @props.metadataFilters and key[...2] isnt '//'
             <tr key={key}>
               <th>{key}</th>
               <Markdown tag="td" content={value} inline />

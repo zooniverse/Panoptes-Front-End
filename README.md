@@ -2,7 +2,7 @@
 
 ## Development
 
-Requires Node.js.
+Requires Node.js. It's recommended you manage your Node installations with **nvm**.
 
 `npm install` installs dependencies.
 
@@ -11,6 +11,108 @@ Requires Node.js.
 `npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
 
 All the good stuff is in **./app**. Start at **./app/main.cjsx**
+
+While editing, do your best to follow style and architecture conventions already used by the project, unless you have a reason not to. **If in doubt, ask.**
+
+### It doesn't run
+
+Try `rm -rf ./node_modules && npm install` to freshen up your dependencies. And read the warnings, they should should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies.
+
+### Directory structure
+
+- #### ./app/classifier/
+
+  All things classifier-related.
+
+- #### ./app/collections/
+
+  Collections-related components.
+
+- #### ./app/components/
+
+  Misc generic, reusable components.
+
+- #### ./app/layout/
+
+  App-level layout stuff goes here. If it affects the main site header, the main site footer, or the layout of the main site content, this is where it lives.
+
+- #### ./app/lib/
+
+  Individual functions and data that are reused across components.
+
+- #### ./app/pages/
+
+  This is where the bulk of the app lives. Ideally, each route points to a page component responsible for fetching data and handling any actions the user can perform on that data. That page component uses that data to render the UI with dumb components, passing actions down as necessary.
+
+- #### ./app/partials/
+
+  Originally intended to hold isolated components that wouldn't actually be reused anywhere. These probably belong closer to where they're actually used.
+
+- #### ./app/subjects/
+
+  Subject views (TODOC: How's this related to Talk/collections?)
+
+- #### ./app/talk/
+
+  Talk-related components.
+
+- #### ./public
+
+  Files here will get copied to the output directory during build.
+
+### Classifier tasks
+
+Each task component class should have a couple static components:
+
+- `Summary`: Shows the post-classification summary of the tasks's annotation.
+
+- `Editor`: The component used to edit the workflow task in the project builder.
+
+There are also a few hooks into the rest of the classification interface available, if the task needs to render outside the task area.
+
+- `BeforeSubject`: HTML Content to appear before the subject image during the task.
+
+- `InsideSubject`: SVG Content to appear over the subject image during the task.
+
+- `AfterSubject` HTML Content to appear after the subject image during the task.
+
+These hooks can be prefixed with `Persist`, which will cause them to appear with the task and persist even after the user has moved on to the next task.
+
+`Persist{Before,After}Task` work the same way, but for the task area. Non-persistent hooks are unnecessary for the task area.
+
+Each component also needs a few static methods:
+
+- `getDefaultTask`: Returns the task description to be used as the default when a user adds the task to a workflow in the project builder.
+
+- `getTaskText`: Given a task, this returns a basic text description of the task (e.g. the question in a question task, the instruction in a drawing task, etc.)
+
+- `getDefaultAnnotation`: The annotation to be generated when the classifier begins the task
+
+- `isAnnotationComplete`: Given a task and an annotation, this determines whether or not the classifier will allow the user to move on to the next task.
+
+- `testAnnotationQuality`: Given the user's annotation and a known-good "gold standard" annotation for the same task, this returns a number between 0 (totally wrong) and 1 (totally correct) indicating how close the user's annotation is to the standard.
+
+#### Task editors
+
+Make sure you call `this.props.onChange` with the updated task when it changes.
+
+### Drawing task tools
+
+Some static methods, called from the `MarkInitializer` component, which controls the mark's values during the user's first mark-creating action:
+
+- `defaultValues`: Just some defaults for the mark.
+
+- `initStart`: For every mousedown/touchstart until `isComplete` returns true, return the values for the mark.
+
+- `initMove`" For every mousemove/touchmove, return new values for the mark.
+
+- `initRelease`: For every mouseup/touchend, return new values for the mark.
+
+- `isComplete`: Is the mark complete? Some marks require multiple interactions before the initializer gives up control.
+
+- `initValid`: If a mark is invalid (e.g. a rectangle with zero width or height), it'll be destroyed automatically.
+
+A couple helper components are the `DrawingToolRoot` which handles selected/disabled states and renders sub-task popups, and the `DeleteButton` and `DragHandle`, which render consistent controls for drawing tools. There's also a `deleteIfOutOfBounds` function that should be called after any whole-mark drags.
 
 ### Conventions
 

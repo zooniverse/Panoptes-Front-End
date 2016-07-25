@@ -237,7 +237,7 @@ const SiteNav = React.createClass({
             className="secret-button site-nav__reveal-toggle"
             style={{ lineHeight: 0 }}
             onClick={this.props.onToggle}
-          >{logo}</button>}
+            >{React.cloneElement(logo, {title: "Show navigation"})}</button>}
 
         {this.state.isMobile && this.renderMobileLinksMenu()}
       </nav>

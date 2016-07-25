@@ -216,7 +216,8 @@ module.exports = React.createClass
                       subject={subject}
                       user={@props.user}
                       project={@props.project}
-                      linkToFullImage={true}/>
+                      linkToFullImage={true}
+                      metadataFilters={['#']} />
                   </div>
                 }
                 catch={null}
@@ -277,6 +278,7 @@ module.exports = React.createClass
             submit={"Update Comment"}
             onCancelClick={@onCancelClick}
             onSubmitComment={@onSubmitComment}
-            user={@props.user} />}
+            user={@props.user}
+            project={@props.project} />}
       </div>
     </div>
