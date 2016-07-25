@@ -12,35 +12,6 @@ module.exports = React.createClass
       @clearRow()
       @activateTemplate 'grid'
 
-  componentWillUnmount: ->
-    rowID = false
-    @props.annotation.value.map (mark) ->
-      rowID = true if mark._rowID
-    if rowID is true
-      @rowMap '_rowID'
-    else
-      @rowMap 'templateID'
-
-  rowMap: (templateType) ->
-    @props.annotation.value.sort (a,b) ->
-      parseFloat(a.y) - parseFloat(b.y) || parseFloat(a.x) - parseFloat(b.x)
-    tempID = null
-    column = 'a'
-    row = 1
-    for cell in @props.annotation.value
-      if cell[templateType]
-        tempID = cell[templateType] if tempID is null
-        if cell[templateType] == tempID
-          cell.column = column
-          cell.row = row
-          column = String.fromCharCode(column.charCodeAt(0)+1)
-        else
-          row = row + 1
-          tempID = cell[templateType]
-          cell.column = 'a'
-          cell.row = row
-          column = 'b'
-
   activateTemplate: (type) ->
     @props.preferences.preferences.activeTemplate = type
     @props.preferences.update 'preferences'
