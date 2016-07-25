@@ -18,17 +18,17 @@ module.exports = React.createClass
 
   componentDidMount: ->
     @loadProjects().then (projects) =>
-      for project in projects when project.image
-        image = new Image()
-        image.src = project.image
-
       timer = setInterval =>
         unless hovered
-          @setState index: (@state.index + 1) % @state.projects.length
+          index = (@state.index + 1) % @state.projects.length
+          project = @state.projects[index]
+          lastProject = @state.project
+          @setState {index, project, lastProject}
           @refs.container.classList.add 'appearing'
       , 5000
 
-      @setState {projects, timer}
+      project = projects[0]
+      @setState {projects, project, timer}
 
   componentWillUnmount: ->
     clearInterval(@state.timer) if @state.timer
@@ -57,22 +57,24 @@ module.exports = React.createClass
 
   setIndex: (i) ->
     =>
-      if i >= 0 and i < @state.projects.length
-        @setState index: i
+      index = if i >= 0 and i < @state.projects.length
+        i
       else if i < 0
-        @setState index: @state.projects.length - 1
+        @state.projects.length - 1
       else
-        @setState index: 0
+        0
+
+      lastProject = @state.project
+      project = @state.projects[index]
+      @setState {index, project, lastProject}
 
   render: ->
-    project = @state.projects[@state.index]
+    {project, lastProject} = @state
     return <div /> unless project
-    lastIndex = (@state.projects.length + @state.index - 1) % @state.projects.length
-    lastProject = @state.projects[lastIndex]
 
     @refs?.container?.classList?.add 'appearing'
     background = project.image or './assets/default-project-background.jpg'
-    lastBackground = lastProject.image or './assets/default-project-background.jpg'
+    lastBackground = lastProject?.image or './assets/default-project-background.jpg'
 
     # This seems silly, but it ensures the render has completed before beginning the animation
     requestAnimationFrame =>
