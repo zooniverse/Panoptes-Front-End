@@ -24,10 +24,10 @@ GRAY = #EFF2F5
 
   h1, h2
     color: #FFFFFF
-    font-size: 30px
+    font-size: 3em
 
     @media (max-width: 900px)
-      font-size: 20px
+      font-size: 2em
 
     &.lighter
       font-weight: 400
@@ -52,8 +52,8 @@ GRAY = #EFF2F5
 
   .zooniverse-logo
     position: relative
-    width: 25px
-    top: 4px
+    width: 0.82em  // oddly-specific, but it aligns with text
+    top: 0.14em
 
   .standard-button
     border: 2px solid
@@ -63,7 +63,7 @@ GRAY = #EFF2F5
     padding: 0.75em 1.75em
     transition: background 500ms ease
     margin: 50px 10px 0 10px
-    font-size: 15px
+    font-size: 1.5em
     font-weight: bold
     text-decoration: none
 
@@ -88,11 +88,14 @@ GRAY = #EFF2F5
     border: none
     background: none
     color: #FFFFFF
-    font-size: 50px
-    line-height: 50px
+    font-size: 5em
 
     @media (max-width: 900px)
       display: none
+
+  .home-intro, .home-promoted
+    h1
+      font-size: 3.5em
 
   .home-intro
     background-color: GRAY
@@ -137,7 +140,7 @@ GRAY = #EFF2F5
       padding: 0.75em 1.75em
       transition: background 500ms ease
       margin: 50px 10px 0 10px
-      font-size: 15px
+      font-size: 1.5em
       font-weight: bold
       text-decoration: none
       color: DARK-BLUE-GREEN
@@ -174,7 +177,7 @@ GRAY = #EFF2F5
       padding: 0.75em 1.75em
       transition: background 500ms ease
       margin: 50px 10px 0 10px
-      font-size: 15px
+      font-size: 1.5em
       font-weight: bold
       text-decoration: none
       color: DARK-BLUE
@@ -193,10 +196,10 @@ GRAY = #EFF2F5
 
     &:not(.appearing)
       .current-background-image, .last-background-image
-        transition: opacity 1s
+        transition: opacity 750ms ease-out
 
       .description
-        transition: all 1s
+        transition: all 750ms ease-out
 
     &.appearing
       .last-background-image

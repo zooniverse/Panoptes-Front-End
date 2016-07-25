@@ -4,6 +4,7 @@ ReactDOM = require 'react-dom'
 apiClient = require 'panoptes-client/lib/api-client'
 ZooniverseLogo = require '../../partials/zooniverse-logo'
 FEATURED_PROJECTS = require '../../lib/featured-projects'
+loadImage = require '../../lib/load-image'
 
 hovered = false
 
@@ -23,8 +24,8 @@ module.exports = React.createClass
 
       timer = setInterval =>
         unless hovered
-          @refs.container.classList.add 'appearing'
           @setState index: (@state.index + 1) % @state.projects.length
+          @refs.container.classList.add 'appearing'
       , 5000
 
       @setState {projects, timer}
@@ -40,6 +41,7 @@ module.exports = React.createClass
           .then ([background]) =>
             project.image = background.src
             project.caption = FEATURED_PROJECTS[project.id]
+            loadImage project.image or './assets/default-project-background.jpg'
             project
           .catch =>
             project.image = project.avatar_src
@@ -72,9 +74,10 @@ module.exports = React.createClass
     background = project.image or './assets/default-project-background.jpg'
     lastBackground = lastProject.image or './assets/default-project-background.jpg'
 
-    setTimeout =>
-      @refs.container.classList.remove 'appearing'
-    , 10
+    # This seems silly, but it ensures the render has completed before beginning the animation
+    requestAnimationFrame =>
+      requestAnimationFrame =>
+        @refs.container.classList.remove 'appearing'
 
     <section ref="container" className="home-promoted" onMouseEnter={@hovered} onMouseLeave={@unhovered}>
       <div className="layer"></div>
