@@ -34,9 +34,7 @@ module.exports = React.createClass
     if project.redirect
       Promise.resolve false
     else
-      getWorkflowsInOrder(project).then (allWorkflows) ->
-        activeWorkflows = allWorkflows.filter (workflow) ->
-          workflow.active
+      getWorkflowsInOrder(project, {active: true, fields: 'finished_at'}).then (activeWorkflows) ->
         if activeWorkflows.length is 0
           # No active workflows? This is probably a custom project.
           false

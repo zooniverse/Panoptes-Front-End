@@ -197,7 +197,7 @@ module.exports = React.createClass
       <hr/>
 
       <p className="form-label">Workflow Settings</p>
-      <PromiseRenderer promise={getWorkflowsInOrder @props.project}>{(workflows) =>
+      <PromiseRenderer promise={getWorkflowsInOrder @props.project, fields: 'display_name,active'}>{(workflows) =>
         if workflows.length is 0
           <div className="workflow-status-list">No workflows found</div>
         else

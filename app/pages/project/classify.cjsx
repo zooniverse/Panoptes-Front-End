@@ -112,7 +112,7 @@ module.exports = React.createClass
       currentWorkflowForProject[props.project.id]
 
   getRandomWorkflow: (project) ->
-    getWorkflowsInOrder(project, active: true).then (workflows) =>
+    getWorkflowsInOrder(project, {active: true, fields: 'finished_at'}).then (workflows) =>
       if workflows.length is 0
         throw new Error "No workflows for project #{project.id}"
         project.uncacheLink 'workflows'
@@ -121,7 +121,7 @@ module.exports = React.createClass
         @setState {projectIsComplete}
         randomIndex = Math.floor Math.random() * workflows.length
         # console.log 'Chose random workflow', workflows[randomIndex].id
-        workflows[randomIndex]
+        @getWorkflow project, workflows[randomIndex].id
 
   createNewClassification: (project, workflow) ->
     @setState {workflow}
