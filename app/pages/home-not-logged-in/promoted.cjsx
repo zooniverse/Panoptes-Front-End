@@ -18,15 +18,7 @@ module.exports = React.createClass
 
   componentDidMount: ->
     @loadProjects().then (projects) =>
-      timer = setInterval =>
-        unless hovered
-          index = (@state.index + 1) % @state.projects.length
-          project = @state.projects[index]
-          lastProject = @state.project
-          @setState {index, project, lastProject}
-          @refs.container.classList.add 'appearing'
-      , 5000
-
+      timer = setInterval @advanceIndex, 5000
       project = projects[0]
       @setState {projects, project, timer}
 
@@ -50,6 +42,14 @@ module.exports = React.createClass
   unhovered: ->
     hovered = false
 
+  advanceIndex: ->
+    unless hovered
+      index = (@state.index + 1) % @state.projects.length
+      project = @state.projects[index]
+      lastProject = @state.project
+      @setState {index, project, lastProject}
+      @refs.container.classList.add 'appearing'
+
   setIndex: (i) ->
     =>
       index = if i >= 0 and i < @state.projects.length
@@ -61,7 +61,9 @@ module.exports = React.createClass
 
       lastProject = @state.project
       project = @state.projects[index]
-      @setState {index, project, lastProject}
+      clearInterval @state.timer
+      timer = setInterval @advanceIndex, 5000
+      @setState {index, project, lastProject, timer}
 
   render: ->
     {project, lastProject} = @state
