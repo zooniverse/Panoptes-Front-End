@@ -408,7 +408,7 @@ Classifier = React.createClass
   completeClassification: ->
     currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
-    currentTask.tools.map (tool) =>
+    currentTask?.tools?.map (tool) =>
       if tool.type is 'grid'
         GridTool.mapCells @props.classification.annotations
     @props.classification.update

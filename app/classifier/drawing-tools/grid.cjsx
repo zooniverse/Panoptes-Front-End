@@ -73,21 +73,16 @@ module.exports = React.createClass
 
     mapCells: (annotations) ->
       currentAnnotation = annotations[annotations.length - 1]
-      rowID = false
+      templateType = 'templateID'
       currentAnnotation.value.map (mark) ->
-        rowID = true if mark._rowID
-      if rowID is true
-        templateType = '_rowID'
-      else
-        templateType = 'templateID'
+        templateType = '_rowID' if mark._rowID
       currentAnnotation.value.sort (a,b) ->
         parseFloat(a.y) - parseFloat(b.y) || parseFloat(a.x) - parseFloat(b.x)
-      tempID = null
       column = 'a'
       row = 1
       for cell in currentAnnotation.value
         if cell[templateType]
-          tempID = cell[templateType] if tempID is null
+          tempID = cell[templateType] unless tempID
           if cell[templateType] == tempID
             cell.column = column
             cell.row = row
