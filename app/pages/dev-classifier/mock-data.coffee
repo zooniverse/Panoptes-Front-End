@@ -31,6 +31,7 @@ workflow = apiClient.type('workflows').create
     enable_subject_flags: true
     multi_image_mode: 'flipbook_and_separate'
     multi_image_layout: 'grid3'
+    invert_subject: true
 
   first_task: 'init'
 
@@ -112,6 +113,7 @@ workflow = apiClient.type('workflows').create
       '''
       tools: [
         {type: 'point', label: 'Point', color: 'red', min: 1, max: 2}
+        {type: 'point', label: 'Small Point', color: 'coral', size: 'small'}
         {type: 'line', label: 'Line', color: 'yellow', min: 0}
         {type: 'rectangle', label: 'Rectangle', color: 'lime', max: 2}
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
