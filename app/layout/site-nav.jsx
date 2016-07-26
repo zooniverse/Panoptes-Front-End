@@ -133,9 +133,7 @@ const SiteNav = React.createClass({
           activeClassName="site-nav__link--active"
           onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.lab') : null}
         >
-          <span className="site-nav__link-label-for-builders">
-            <Translate content="siteNav.lab" />
-          </span>
+          <Translate content="siteNav.lab" />
         </Link>{' '}
 
         <AdminOnly whenActive>
@@ -145,9 +143,7 @@ const SiteNav = React.createClass({
             activeClassName="site-nav__link--active"
             onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.admin') : null}
           >
-            <span className="site-nav__link-label-for-builders">
-              <Translate content="siteNav.admin" />
-            </span>
+            <Translate content="siteNav.admin" />
           </Link>
         </AdminOnly>
 
