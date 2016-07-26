@@ -94,5 +94,5 @@ module.exports = React.createClass
           <i key={"promoted-project-#{promotedProject.id}"} className="fa fa-circle-o" onClick={@setIndex(i)} />}
       </div>
 
-      <p className="owner">Image from <b>{project.display_name} Project</b></p>
+      <p className="owner">Image from <strong>{project.display_name}</strong></p>
     </section>
