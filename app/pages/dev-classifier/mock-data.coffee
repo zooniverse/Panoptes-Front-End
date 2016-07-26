@@ -453,13 +453,16 @@ workflow = apiClient.type('workflows').create
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
+  # Images originally from lorempixel.com shared under CC BY-SA, 
+  # but the service is often slow and/or fails to load at all. 
+  # Noted original source next to each.
   locations: if navigator?.onLine
     [
-      {'image/jpeg': '//lorempixel.com/900/600/animals/1'} # Landscape
-      {'image/jpeg': '//lorempixel.com/600/900/animals/2'} # Portrait
-      {'image/jpeg': '//lorempixel.com/1900/1000/animals/3'} # Very wide
-      {'image/jpeg': '//lorempixel.com/1000/1900/animals/4'} # Very tall
-      {'image/jpeg': '//lorempixel.com/400/300/animals/4'} # Sorta small
+      {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/landscape.jpeg"} # //lorempixel.com/900/600/animals/1
+      {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/portrait.jpeg"} # //lorempixel.com/600/900/animals/2
+      {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-wide.jpeg"} # //lorempixel.com/1900/1000/animals/3
+      {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/very-tall.jpeg"} # //lorempixel.com/1000/1900/animals/4
+      {'image/jpeg': "#{window.location.origin}/assets/dev-classifier/small.jpeg"} # //lorempixel.com/400/300/animals/4
     ]
   else
     [
