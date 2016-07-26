@@ -65,12 +65,14 @@ module.exports = React.createClass
             {for post, i in @state.social.posts
               <li key="post-#{i}">
                 <h3><a href={post.link}>{post.title}</a></h3>
+                <p>
+                  <a href={post.link}>{post.excerpt}</a>
+                </p>
                 <p className="home-social-timestamp">
                   {moment(new Date(post.created_at)).fromNow()}
                 </p>
               </li>}
           </ul>
-          <a className="home-social-read-more" href="http://blog.zooniverse.org">Read More <i className="fa fa-long-arrow-right"></i></a>
         </div>
       </div>
     </section>
