@@ -4,7 +4,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 formatNumber = require './format-number'
 
 module.exports = React.createClass
-  displayName: 'SidebarNotifications'
+  displayName: 'NotificationsLink'
 
   componentDidMount: ->
     @getUndeliveredCount() if @props.user
@@ -26,7 +26,7 @@ module.exports = React.createClass
 
   label: ->
     if @state.unreadCount > 0
-      "Notifications (#{ formatNumber @state.unreadCount } unread)"
+      "Notifications (#{ formatNumber @state.unreadCount })"
     else
       'Notifications'
 
@@ -34,19 +34,15 @@ module.exports = React.createClass
     return null unless @props.user and @state.unreadCount?
 
     {project, user} = @props
-    {section, owner, name} = @props.params
+    {section, owner, name} = @props?.params or { }
     section or= @props.section
 
-    linkProps = {project, section, user}
+    linkProps = Object.assign { }, @props.linkProps, {project, section, user}
     linkParams = {section, owner, name}
 
-    <section className="talk-sidebar-notifications">
-      <h3>
-        {if project
-          <Link to="/projects/#{owner}/#{name}/notifications" {...linkProps} className="sidebar-link">{@label()}</Link>
-        else if section
-          <Link to="/#{section}/notifications" {...linkProps} className="sidebar-link">{@label()}</Link>
-        else
-          <Link to="/notifications" {...linkProps} className="sidebar-link">{@label()}</Link>}
-      </h3>
-    </section>
+    if project
+      <Link to="/projects/#{owner}/#{name}/notifications" {...linkProps}>{@label()}</Link>
+    else if section
+      <Link to="/#{section}/notifications" {...linkProps}>{@label()}</Link>
+    else
+      <Link to="/notifications" {...linkProps}>{@label()}</Link>
