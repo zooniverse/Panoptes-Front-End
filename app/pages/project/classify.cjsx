@@ -11,6 +11,7 @@ FinishedBanner = require './finished-banner'
 Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -111,7 +112,7 @@ module.exports = React.createClass
       currentWorkflowForProject[props.project.id]
 
   getRandomWorkflow: (project) ->
-    project.get('workflows', active: true).then (workflows) =>
+    getWorkflowsInOrder(project, active: true).then (workflows) =>
       if workflows.length is 0
         throw new Error "No workflows for project #{project.id}"
         project.uncacheLink 'workflows'
