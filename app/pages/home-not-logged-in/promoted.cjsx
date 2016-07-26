@@ -48,7 +48,6 @@ module.exports = React.createClass
       project = @state.projects[index]
       lastProject = @state.project
       @setState {index, project, lastProject}
-      @refs.container.classList.add 'appearing'
 
   setIndex: (i) ->
     =>
@@ -68,10 +67,11 @@ module.exports = React.createClass
   render: ->
     {project, lastProject} = @state
     return <div /> unless project
-    @refs?.container?.classList?.add 'appearing'
 
     # This seems silly, but it ensures the render has completed before beginning the animation
     requestAnimationFrame =>
+      @refs.container.classList.add 'appearing'
+
       requestAnimationFrame =>
         @refs.container.classList.remove 'appearing'
 

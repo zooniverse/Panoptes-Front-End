@@ -269,7 +269,7 @@ GRAY = #EFF2F5
         width: 25px
         height: 25px
         line-height: 25px
-        vertical-align: middle
+        top: calc(50% - 12.5px) // vertically centered
         padding: 10px
         cursor: pointer
 
@@ -281,7 +281,7 @@ GRAY = #EFF2F5
 
       &.circles
         position: absolute
-        bottom: 100px
+        bottom: 15%
         left: 0
         width: 100%
         text-align: center
@@ -291,7 +291,11 @@ GRAY = #EFF2F5
           cursor: pointer
 
       @media (max-width: 900px)
-        display: none
+        &.angles
+          display: none
+
+        &.circles
+          opacity: 1
 
     .owner
       position: absolute
