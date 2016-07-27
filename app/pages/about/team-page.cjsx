@@ -160,7 +160,10 @@ to squeeze a bit of galaxy evolution science in.'''
       willGranger:
         title: 'Developer'
         bio: '''Will joined the Adler Planetarium in 2016 as a front-end developer for the Zooniverse. In the past, he has taught English overseas, toured in bands, and helped open a music venue in Alabama.'''
-
+      zachWolfenbarger:
+        title: 'Developer'
+        bio: '''Zach is a software developer. He was a molecular biologist, but then the lab needed some code to be written and the die was cast. He’s also in a couple of bands and can be found playing shows at bars and comic conventions all over the midwest.'''
+        
 teamMembers =
   adamMcMaster:
     name: "Adam McMaster"
@@ -389,7 +392,13 @@ teamMembers =
     bio: counterpart "team.content.willGranger.bio"
     image: "/assets/team/will.jpg"
     location: "chicago"
-    
+  zachWolfenbarger:
+    name: "Zach Wolfenbarger"
+    title: counterpart "team.content.zachWolfenbarger.title"
+    bio: counterpart "team.content.zachWolfenbarger.bio"
+    image: "/assets/team/zach.jpg"
+    location: "chicago"
+
 module.exports = React.createClass
   displayName: 'TeamPage'
 
