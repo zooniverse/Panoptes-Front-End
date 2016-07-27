@@ -126,15 +126,6 @@ const AppLayout = React.createClass({
             } : null}
           >
             {this.props.children}
-            <div
-              className={classnames('app-layout__main-overlay', {
-                'app-layout__main-overlay--active': demotedHeaderIsRevealed,
-              })}
-              style={{
-                display: demotedHeaderIsRevealed ? 'block' : 'none',
-              }}
-              onClick={this.togglePrimaryNav}
-            ></div>
           </div>
 
           <footer className="app-layout__footer">
