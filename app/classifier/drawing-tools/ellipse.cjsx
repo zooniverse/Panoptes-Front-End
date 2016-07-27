@@ -10,7 +10,7 @@ MINIMUM_RADIUS = 5
 GUIDE_WIDTH = 1
 GUIDE_DASH = [4, 4]
 DELETE_BUTTON_ANGLE = 45
-BUFFER = 12
+BUFFER = 18
 
 module.exports = React.createClass
   displayName: 'EllipseTool'
@@ -51,16 +51,8 @@ module.exports = React.createClass
 
   getDeletePosition: ->
     theta = (DELETE_BUTTON_ANGLE - @props.mark.angle) * (Math.PI / 180)
-    x = @props.mark.rx * Math.cos theta
-    y = -1 * @props.mark.ry * Math.sin theta
-    yHandle = -1 * @props.mark.ry
-    x += BUFFER / @props.scale.horizontal if @calculateDistance(x, @props.mark.rx, y, 0) < BUFFER / @props.scale.horizontal
-    y += BUFFER / @props.scale.vertical if @calculateDistance(x, 0, y, yHandle) < BUFFER / @props.scale.vertical
-    x: x
-    y: y
-
-  calculateDistance: (x1, x2, y1, y2) ->
-    Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+    x: (@props.mark.rx + (BUFFER / @props.scale.horizontal)) * Math.cos theta
+    y: -1 * (@props.mark.ry + (BUFFER / @props.scale.vertical)) * Math.sin theta
 
   render: ->
     positionAndRotate = "
