@@ -32,11 +32,6 @@ counterpart.registerTranslations 'en',
       andreaSimenstad:
         title: 'Developer'
         bio: '''Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.'''
-      brianCarstensen:
-        title: 'UX Developer'
-        bio: '''Brian Carstensen recently moved from Chicago to Oxford. Brian has a degree
-        in graphic design from Columbia College in Chicago, and worked in that field for a
-        number of years before finding a niche in web development.'''
       brookeSimmons:
         title: 'Researcher'
         bio: 'Brooke is an astrophysicist studying black holes, galaxies, and how citizen
@@ -108,6 +103,9 @@ counterpart.registerTranslations 'en',
         bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota. One of the Zooniverse
 co-founders, she helps with project wrangling (aka management) and strategic planning while trying
 to squeeze a bit of galaxy evolution science in.'''
+      markBouslog:
+        title: 'Developer'
+        bio: '''Mark is a front-end web developer for the Zooniverse team at the Adler Planetarium. Joining in November 2015 from a career in accounting, he’s thrilled to focus his number crunching to 1’s and 0’s and is constantly inspired and humbled by the power of programming, citizen science and coffee.'''
       martenVeldthuis:
         title: 'Developer'
         bio: '''Marten joined the development team at the Zooniverse in 2015. He has a degree in
@@ -159,6 +157,9 @@ to squeeze a bit of galaxy evolution science in.'''
       victoriaVanHyning:
         title: 'Researcher'
         bio: '''Victoria is a British Academy postdoctoral fellow in English at Oxford, and is the humanities PI at Zooniverse. She works on Science Gossip, Annotate, and Shakespeare's World and more. Coffee is her lifeblood.'''
+      willGranger:
+        title: 'Developer'
+        bio: '''Will joined the Adler Planetarium in 2016 as a front-end developer for the Zooniverse. In the past, he has taught English overseas, toured in bands, and helped open a music venue in Alabama.'''
 
 teamMembers =
   adamMcMaster:
@@ -188,13 +189,6 @@ teamMembers =
     bio: counterpart "team.content.andreaSimenstad.bio"
     image: "/assets/team/andrea.jpg"
     location: "minnesota"
-  brianCarstensen:
-    name: "Brian Carstensen"
-    twitter: "__brian_c__"
-    title: counterpart "team.content.brianCarstensen.title"
-    bio: counterpart "team.content.brianCarstensen.bio"
-    image: "/assets/team/brian.jpg"
-    location: "oxford"
   brookeSimmons:
     name: "Brooke Simmons"
     twitter: "vrooje"
@@ -304,6 +298,12 @@ teamMembers =
     bio: counterpart "team.content.lucyFortson.bio"
     image: "/assets/team/lucy.jpg"
     location: "minnesota"
+  markBouslog:
+    name: "Mark Bouslog"
+    title: counterpart "team.content.markBouslog.title"
+    bio: counterpart "team.content.markBouslog.bio"
+    image: "/assets/team/mark.jpg"
+    location: "chicago"
   martenVeldthuis:
     name: "Marten Veldthuis"
     twitter: "mveldth"
@@ -383,7 +383,13 @@ teamMembers =
     bio: counterpart "team.content.victoriaVanHyning.bio"
     image: "/assets/team/victoria.JPG"
     location: "oxford"
-
+  willGranger:
+    name: "Will Granger"
+    title: counterpart "team.content.willGranger.title"
+    bio: counterpart "team.content.willGranger.bio"
+    image: "/assets/team/will.jpg"
+    location: "chicago"
+    
 module.exports = React.createClass
   displayName: 'TeamPage'
 
