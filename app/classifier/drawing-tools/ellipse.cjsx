@@ -10,7 +10,7 @@ MINIMUM_RADIUS = 5
 GUIDE_WIDTH = 1
 GUIDE_DASH = [4, 4]
 DELETE_BUTTON_ANGLE = 45
-BUFFER = 44
+BUFFER = 12
 
 module.exports = React.createClass
   displayName: 'EllipseTool'
@@ -54,8 +54,8 @@ module.exports = React.createClass
     x = @props.mark.rx * Math.cos theta
     y = -1 * @props.mark.ry * Math.sin theta
     yHandle = -1 * @props.mark.ry
-    x += BUFFER if @calculateDistance(x, @props.mark.rx, y, 0) < BUFFER
-    y += BUFFER if @calculateDistance(x, 0, y, yHandle) < BUFFER
+    x += BUFFER / @props.scale.horizontal if @calculateDistance(x, @props.mark.rx, y, 0) < BUFFER / @props.scale.horizontal
+    y += BUFFER / @props.scale.vertical if @calculateDistance(x, 0, y, yHandle) < BUFFER / @props.scale.vertical
     x: x
     y: y
 

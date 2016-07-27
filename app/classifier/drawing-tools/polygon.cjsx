@@ -7,7 +7,7 @@ DeleteButton = require './delete-button'
 
 FINISHER_RADIUS = 8
 GRAB_STROKE_WIDTH = 6
-BUFFER = 50
+BUFFER = 14
 
 DELETE_BUTTON_WEIGHT = 5 # Weight of the second point.
 
@@ -100,16 +100,16 @@ module.exports = React.createClass
     points = [firstPoint, secondPoint]
     for i in points
       if @calculateDistance(x, i.x, y, i.y) is 'x' and multiplePoints
-        x += BUFFER
+        x += BUFFER / @props.scale.horizontal
       else if @calculateDistance(x, i.x, y, i.y) is 'y' and multiplePoints
-        y += BUFFER
+        y += BUFFER / @props.scale.vertical
     x: x
     y: y
 
   calculateDistance: (x1, x2, y1, y2) ->
     xDistance = Math.abs(x1 - x2)
     yDistance = Math.abs(y1 - y2)
-    if xDistance < BUFFER and yDistance < BUFFER
+    if xDistance < BUFFER / @props.scale.horizontal and yDistance < BUFFER / @props.scale.vertical
       if yDistance >= xDistance
         'x'
       else if xDistance >= yDistance

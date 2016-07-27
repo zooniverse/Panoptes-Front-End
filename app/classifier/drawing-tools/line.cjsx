@@ -7,7 +7,7 @@ DragHandle = require './drag-handle'
 
 MINIMUM_LENGTH = 5
 GRAB_STROKE_WIDTH = 6
-BUFFER = 44
+BUFFER = 12
 
 module.exports = React.createClass
   displayName: 'LineTool'
@@ -37,16 +37,16 @@ module.exports = React.createClass
     x = (x1 + x2) / 2
     y = (y1 + y2) / 2
     if @calculateDistance(x, x1, y, y1) is 'x'
-      x += BUFFER
+      x += BUFFER / @props.scale.horizontal
     else if @calculateDistance(x, x1, y, y1) is 'y'
-      y += BUFFER
+      y += BUFFER / @props.scale.vertical
     x: x
     y: y
 
   calculateDistance: (deleteBtnX, handleBtnX, deleteBtnY, handleBtnY) ->
     xDistance = Math.abs(deleteBtnX - handleBtnX)
     yDistance = Math.abs(deleteBtnY - handleBtnY)
-    if xDistance < BUFFER and yDistance < BUFFER
+    if xDistance < BUFFER / @props.scale.horizontal and yDistance < BUFFER / @props.scale.vertical
       if yDistance >= xDistance
         'x'
       else if xDistance >= yDistance
