@@ -5,6 +5,20 @@ VERY-DARK-BLUE = #020D26
 ORANGE-HIGHLIGHT = #E45950
 GRAY = #EFF2F5
 
+$absolute-fill
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+
+$flex-section
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  text-align: center
+
 .on-home-page-not-logged-in
   .app-layout__header
     background: rgba(0, 0, 0, 0.5)
@@ -37,12 +51,8 @@ GRAY = #EFF2F5
     outline: none
 
   section
-    display: flex
-    flex-direction: column
+    @extends $flex-section
     position: relative
-    align-items: center
-    justify-content: center
-    text-align: center
     min-height: 40vw
 
     @media (max-width: 900px)
@@ -119,12 +129,8 @@ GRAY = #EFF2F5
       min-height: 100vh
 
     video, .home-mobile-video-image
-      position: absolute
-      top: 0
-      left: 0
+      @extends $absolute-fill
       z-index: -1
-      width: 100%
-      height: 100%
       object-fit: cover
 
     .home-intro-buttons
@@ -194,55 +200,46 @@ GRAY = #EFF2F5
   .home-promoted
     padding: 0
 
-    &:not(.appearing)
-      .current-background-image, .last-background-image
-        transition: opacity 750ms ease-out
-
-      .description
-        transition: all 750ms ease-out
-
-    &.appearing
-      .last-background-image
-        opacity: 1
-
-      .current-background-image
-        opacity: 0
-
-      .description
-        top: 50px
-        opacity: 0
-
-    *
-      z-index: 2
-
-    .current-background-image, .last-background-image
-      position: absolute
-      top: 0
-      left: 0
+    .promoted-projects
       width: 100%
-      height: 100%
+
+      .promoted-project
+        @extends $flex-section
+        @extends $absolute-fill
+
+        *
+          opacity: 0
+
+        .description
+          top: 50px
+          transition: top 0ms
+
+        &.current
+          *
+            opacity: 1
+            z-index: 2
+
+          .description
+            top: 10px
+            transition: all 750ms ease-out
+
+          .layer
+            z-index: 1
+
+          .background-image
+            z-index: 0
+
+    .background-image
+      @extends $absolute-fill
       object-fit: cover
-      z-index: 0
-
-    .current-background-image
-      opacity: 1
-
-    .last-background-image
-      opacity: 0
+      transition: opacity 750ms ease-out
 
     .layer
-      position: absolute
-      top: 0
-      left: 0
-      width: 100%
-      height: 100%
+      @extends $absolute-fill
       background: linear-gradient(top, rgba(DARK-BLUE-GREEN, 0.25), rgba(DARK-BLUE-GREEN, 0.4))
-      z-index: 1
 
     .description
-      opacity: 1
       position: relative
-      top: 10px
       margin-top: 10px
       margin-bottom: 10px
       font-size: 3em
