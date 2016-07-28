@@ -11,7 +11,7 @@ GUIDE_WIDTH = 1
 GUIDE_DASH = [4, 4]
 # fraction of line lenght along (x) and perpendicular (y) to the line to place control point
 DEFAULT_CURVE = {x: 0.5, y: 0}
-BUFFER = 12
+BUFFER = 10
 
 DELETE_BUTTON_WEIGHT = 0.75 # fraction of line lenght to place delete button
 
@@ -70,12 +70,10 @@ module.exports = React.createClass
     if control?
       x = (1 - t) * (1 - t) * start.x + 2 * (1 - t) * t * control.x + t * t * end.x
       y = (1 - t) * (1 - t) * start.y + 2 * (1 - t) * t * control.y + t * t * end.y
-      points = [start, end, control]
-      for i in points
-        if @calculateDistance(x, i.x, y, i.y) is 'x'
-          x += BUFFER / @props.scale.horizontal
-        else if @calculateDistance(x, i.x, y, i.y) is 'y'
-          y += BUFFER / @props.scale.vertical
+      for point in @props.mark.points
+        if @calculateDistance(x, point.x, y, point.y) < BUFFER / ((@props.scale.horizontal + @props.scale.vertical) / 2)
+          x = x - (BUFFER / @props.scale.horizontal)
+          y = y - (BUFFER / @props.scale.vertical)
       x: x
       y: y
     else
@@ -94,14 +92,8 @@ module.exports = React.createClass
   componentWillUnmount: ->
     document.removeEventListener 'mousemove', @handleMouseMove
 
-  calculateDistance: (x1, x2, y1, y2) ->
-    xDistance = Math.abs(x1 - x2)
-    yDistance = Math.abs(y1 - y2)
-    if xDistance < BUFFER / @props.scale.horizontal and yDistance < BUFFER / @props.scale.vertical
-      if yDistance >= xDistance
-        'x'
-      else if xDistance >= yDistance
-        'y'
+  calculateDistance: (deleteBtnX, handleBtnX, deleteBtnY, handleBtnY) ->
+    Math.sqrt(Math.pow(deleteBtnX - handleBtnX, 2) + Math.pow(deleteBtnY - handleBtnY, 2))
 
   render: ->
     {points} = @props.mark
