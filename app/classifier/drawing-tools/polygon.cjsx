@@ -65,7 +65,7 @@ module.exports = React.createClass
       points.push [firstPoint.x, firstPoint.y].join ','
     points = points.join '\n'
 
-    deleteButtonPosition = @getDeletePosition(firstPoint, secondPoint, lastPoint)
+    deleteButtonPosition = @getDeletePosition(firstPoint, secondPoint)
 
     <DrawingToolRoot tool={this}>
       <Draggable onDrag={@handleMainDrag} onEnd={deleteIfOutOfBounds.bind null, this} disabled={@props.disabled}>
@@ -93,27 +93,17 @@ module.exports = React.createClass
         </g>}
     </DrawingToolRoot>
 
-  getDeletePosition: (firstPoint, secondPoint, lastPoint) ->
-    multiplePoints = firstPoint != lastPoint
+  getDeletePosition: (firstPoint, secondPoint) ->
     x = (firstPoint.x + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.x)) / DELETE_BUTTON_WEIGHT
     y = (firstPoint.y + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.y)) / DELETE_BUTTON_WEIGHT
-    points = [firstPoint, secondPoint]
-    for i in points
-      if @calculateDistance(x, i.x, y, i.y) is 'x' and multiplePoints
-        x += BUFFER / @props.scale.horizontal
-      else if @calculateDistance(x, i.x, y, i.y) is 'y' and multiplePoints
-        y += BUFFER / @props.scale.vertical
+    for point in @props.mark.points
+      if @calculateDistance(x, point.x, y, point.y) < BUFFER / @props.scale.horizontal
+        x = x - (BUFFER / @props.scale.horizontal)
     x: x
     y: y
 
-  calculateDistance: (x1, x2, y1, y2) ->
-    xDistance = Math.abs(x1 - x2)
-    yDistance = Math.abs(y1 - y2)
-    if xDistance < BUFFER / @props.scale.horizontal and yDistance < BUFFER / @props.scale.vertical
-      if yDistance >= xDistance
-        'x'
-      else if xDistance >= yDistance
-        'y'
+  calculateDistance: (deleteBtnX, handleBtnX, deleteBtnY, handleBtnY) ->
+    Math.sqrt(Math.pow(deleteBtnX - handleBtnX, 2) + Math.pow(deleteBtnY - handleBtnY, 2))
 
   handleMouseMove: (e) ->
     xPos = e.pageX
