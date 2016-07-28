@@ -7,7 +7,8 @@ DragHandle = require './drag-handle'
 
 MINIMUM_LENGTH = 5
 GRAB_STROKE_WIDTH = 6
-BUFFER = 12
+BUFFER = 16
+DELETE_BUTTON_WEIGHT = 8
 
 module.exports = React.createClass
   displayName: 'LineTool'
@@ -34,23 +35,17 @@ module.exports = React.createClass
       DrawingToolRoot.distance(x1, y1, x2, y2) > MINIMUM_LENGTH
 
   getDeletePosition: (x1, y1, x2, y2) ->
-    x = (x1 + x2) / 2
-    y = (y1 + y2) / 2
-    if @calculateDistance(x, x1, y, y1) is 'x'
-      x += BUFFER / @props.scale.horizontal
-    else if @calculateDistance(x, x1, y, y1) is 'y'
-      y += BUFFER / @props.scale.vertical
+    scale = (@props.scale.horizontal + @props.scale.vertical) / 2
+    x = x1 + (BUFFER / @props.scale.horizontal)
+    if (@props.containerRect.width / @props.scale.horizontal) < x + (DELETE_BUTTON_WEIGHT / scale)
+      x = x - ((BUFFER / @props.scale.horizontal) * 2)
+    if @calculateDistance(x, x2, y1, y2) < DELETE_BUTTON_WEIGHT / scale
+      y1 = y1 - (BUFFER / @props.scale.horizontal)
     x: x
-    y: y
+    y: y1
 
   calculateDistance: (deleteBtnX, handleBtnX, deleteBtnY, handleBtnY) ->
-    xDistance = Math.abs(deleteBtnX - handleBtnX)
-    yDistance = Math.abs(deleteBtnY - handleBtnY)
-    if xDistance < BUFFER / @props.scale.horizontal and yDistance < BUFFER / @props.scale.vertical
-      if yDistance >= xDistance
-        'x'
-      else if xDistance >= yDistance
-        'y'
+    Math.sqrt(Math.pow(deleteBtnX - handleBtnX, 2) + Math.pow(deleteBtnY - handleBtnY, 2))
 
   render: ->
     {x1, y1, x2, y2} = @props.mark
