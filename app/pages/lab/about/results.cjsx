@@ -1,4 +1,4 @@
-eact = require 'react'
+React = require 'react'
 ProjectPageEditor = require '../../../partials/project-page-editor'
 
 module.exports = React.createClass
