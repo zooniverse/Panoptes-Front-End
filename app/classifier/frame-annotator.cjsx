@@ -22,23 +22,11 @@ module.exports = React.createClass
     onChange: Function.prototype
 
   getInitialState: ->
-    sizeRect: null
     alreadySeen: false
     showWarning: false
 
   componentDidMount: ->
-    addEventListener 'resize', @updateSize
-    @updateSize()
     @setState alreadySeen: @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
-
-  componentDidUpdate: (prevProps, prevState)->
-    # If size of the frame image or viewBoxDimensions has changed, update our sizing information (used for scaling/translating annotations)
-    if @props.naturalWidth isnt prevProps.naturalWidth or @props.naturalHeight isnt prevProps.naturalHeight or @props.viewBoxDimensions isnt prevProps.viewBoxDimensions
-      setTimeout =>
-        @updateSize()
-
-  componentWillUnmount: ->
-    removeEventListener 'resize', @updateSize
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.annotation isnt @props.annotation
@@ -50,27 +38,28 @@ module.exports = React.createClass
       LastTaskComponent = tasks[lastTask.type]
       if LastTaskComponent.onLeaveAnnotation?
         LastTaskComponent.onLeaveAnnotation lastTask, oldAnnotation
-    setTimeout => # Wait a tick for the annotation to load.
-      @updateSize()
-
-  updateSize: ->
+  
+  getSizeRect: ->
     clientRect = @refs.sizeRect?.getBoundingClientRect() # Read only
+    return null unless clientRect?
     {left, right, top, bottom, width, height} = clientRect
     left += pageXOffset
     right += pageXOffset
     top += pageYOffset
     bottom += pageYOffset
-    @setState sizeRect: {left, right, top, bottom, width, height}
+    {left, right, top, bottom, width, height}
 
   getScale: ->
-    horizontal = @state.sizeRect?.width / @props.naturalWidth || 0
-    vertical = @state.sizeRect?.height / @props.naturalHeight || 0
+    sizeRect = @getSizeRect()
+    horizontal = sizeRect?.width / @props.naturalWidth || 0
+    vertical = sizeRect?.height / @props.naturalHeight || 0
     {horizontal, vertical}
 
   getEventOffset: (e) ->
     scale = @getScale()
-    x = (e.pageX - @state.sizeRect?.left) / scale.horizontal || 0
-    y = (e.pageY - @state.sizeRect?.top) / scale.vertical || 0
+    sizeRect = @getSizeRect()
+    x = (e.pageX - sizeRect?.left) / scale.horizontal || 0
+    y = (e.pageY - sizeRect?.top) / scale.vertical || 0
     {x, y}
 
   render: ->
@@ -102,7 +91,7 @@ module.exports = React.createClass
       scale: @getScale()
       naturalWidth: @props.naturalWidth
       naturalHeight: @props.naturalHeight
-      containerRect: @state.sizeRect
+      containerRect: @getSizeRect()
       getEventOffset: this.getEventOffset
       onChange: @props.onChange
       preferences: @props.preferences
