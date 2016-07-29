@@ -47,14 +47,6 @@ const AppLayout = React.createClass({
     };
   },
 
-  componentDidMount() {
-    addEventListener('locationchange', this.handleNavigation);
-  },
-
-  componentWillUnmount() {
-    removeEventListener('locationchange', this.handleNavigation);
-  },
-
   handleNavigation() {
     this.setState({
       siteHeaderRevealed: false,
