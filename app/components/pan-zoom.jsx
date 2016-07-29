@@ -166,9 +166,9 @@ const PanZoom = React.createClass({
   keyDownZoomButton(change, e) {
     // only zoom if a user presses enter on the zoom button.
     if (e.which == 13) {
-      this.setState({zooming: true}), () => {
+      this.setState({zooming: true}, () => {
         this.zoom(change);
-      }
+      });
     }
   },
 
