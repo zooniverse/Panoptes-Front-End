@@ -17,7 +17,6 @@ workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
-GridTool = require './drawing-tools/grid'
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
@@ -268,9 +267,45 @@ Classifier = React.createClass
         </p>}
     </div>
 
+  withinTolerance: (userX, userY, metaX, metaY, tolerance) ->
+    distance = Math.sqrt((userY - metaY)**2 + (userX - metaX)**2)
+    isWithinTolerance = distance < tolerance
+    return isWithinTolerance
+
   renderSummary: (classification) ->
     <div>
       Thanks!
+
+      {
+        subjectClass = @props.subject.metadata['#Type']?.toUpperCase()
+        userMadeAnnotation = @props.classification.annotations?.length > 0 && @props.classification.annotations[0].value.length > 0
+        subjectSuccessMessage = @props.subject.metadata['#F_Success']
+        subjectFailureMessage = @props.subject.metadata['#F_Fail']
+        subjectXPos = parseFloat(@props.subject.metadata['#X1'])
+        subjectYPos = parseFloat(@props.subject.metadata['#Y1'])
+        subjectTol = parseFloat(@props.subject.metadata['#Tol1'])
+        userXPos = @props.classification.annotations[0]?.value[0]?.x
+        userYPos = @props.classification.annotations[0]?.value[0]?.y
+        isWithinTolerance = @withinTolerance(userXPos, userYPos, subjectXPos, subjectYPos, subjectTol)
+
+        console.log(subjectClass)
+        console.log(userMadeAnnotation)
+        console.log(@props.classification.annotations?.length)
+        console.log(@props.classification.annotations[0])
+
+        if subjectClass == 'DUD'
+          if userMadeAnnotation == true
+            <p>{subjectFailureMessage}</p>
+          else
+            <p>{subjectSuccessMessage}</p>
+        else if subjectClass == 'SIM'
+          if !(userMadeAnnotation?) || !isWithinTolerance
+            <p>{subjectFailureMessage}</p>
+          else
+            <p>{subjectSuccessMessage}</p>
+        else
+          <p>You classified some real data!</p>
+        }
 
       {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
         <strong>
@@ -406,11 +441,6 @@ Classifier = React.createClass
     @props.classification.update 'annotations'
 
   completeClassification: ->
-    currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-    currentTask = @props.workflow.tasks[currentAnnotation?.task]
-    currentTask?.tools?.map (tool) =>
-      if tool.type is 'grid'
-        GridTool.mapCells @props.classification.annotations
     @props.classification.update
       completed: true
       'metadata.session': getSessionID()
