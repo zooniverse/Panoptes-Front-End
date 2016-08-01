@@ -47,10 +47,12 @@ const AppLayout = React.createClass({
     };
   },
 
-  handleNavigation() {
-    this.setState({
-      siteHeaderRevealed: false,
-    });
+  hidePrimaryNav() {
+    if (this.state.siteHeaderRevealed) {
+      this.setState({
+        siteHeaderRevealed: false,
+      });
+    }
   },
 
   matchWindowScale() {
@@ -116,6 +118,7 @@ const AppLayout = React.createClass({
                 scale(${this.state.mainContentScale})
               `,
             } : null}
+            onClick={this.hidePrimaryNav}
           >
             {this.props.children}
           </div>
