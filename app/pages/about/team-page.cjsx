@@ -58,11 +58,6 @@ counterpart.registerTranslations 'en',
         title: 'Communications Lead'
         bio: '''A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
         social media and publishes the Daily Zooniverse blog.'''
-      gregHines:
-        title: 'Data Scientist'
-        bio: '''Greg uses machine learning and statistics to help projects analyse the volunteer
-        classifications. He has a PhD in Computer Science from the University of Waterloo, Canada.
-        In his spare time, Greg loves to eat pancakes with real maple syrup and run ultramarathons.'''
       jimODonnell:
         title: 'UX Developer'
         bio: '''Professional cynic but his heart's not in it. Web developer for the Zooniverse,
@@ -231,12 +226,6 @@ teamMembers =
     title: counterpart "team.content.grantMiller.title"
     bio: counterpart "team.content.grantMiller.bio"
     image: "/assets/team/grant.jpg"
-    location: "oxford"
-  gregHines:
-    name: "Greg Hines"
-    title: counterpart "team.content.gregHines.title"
-    bio: counterpart "team.content.gregHines.bio"
-    image: "/assets/team/greg.jpg"
     location: "oxford"
   jenGupta:
     name: "Jen Gupta"
