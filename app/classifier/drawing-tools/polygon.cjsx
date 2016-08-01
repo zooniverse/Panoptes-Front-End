@@ -7,7 +7,7 @@ DeleteButton = require './delete-button'
 
 FINISHER_RADIUS = 8
 GRAB_STROKE_WIDTH = 6
-BUFFER = 14
+BUFFER = 16
 
 DELETE_BUTTON_WEIGHT = 5 # Weight of the second point.
 
@@ -94,11 +94,11 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   getDeletePosition: (firstPoint, secondPoint) ->
+    buffer = BUFFER / @props.scale.horizontal
     x = (firstPoint.x + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.x)) / DELETE_BUTTON_WEIGHT
     y = (firstPoint.y + ((DELETE_BUTTON_WEIGHT - 1) * secondPoint.y)) / DELETE_BUTTON_WEIGHT
     for point in @props.mark.points
-      if @calculateDistance(x, point.x, y, point.y) < BUFFER / @props.scale.horizontal
-        x = x - (BUFFER / @props.scale.horizontal)
+      x = point.x - buffer if @calculateDistance(x, point.x, y, point.y) < buffer
     x: x
     y: y
 

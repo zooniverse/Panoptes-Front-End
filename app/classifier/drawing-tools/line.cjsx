@@ -8,7 +8,7 @@ DragHandle = require './drag-handle'
 MINIMUM_LENGTH = 5
 GRAB_STROKE_WIDTH = 6
 BUFFER = 16
-DELETE_BUTTON_WEIGHT = 8
+DELETE_BUTTON_WIDTH = 8
 
 module.exports = React.createClass
   displayName: 'LineTool'
@@ -36,11 +36,11 @@ module.exports = React.createClass
 
   getDeletePosition: (x1, y1, x2, y2) ->
     scale = (@props.scale.horizontal + @props.scale.vertical) / 2
-    x = x1 + (BUFFER / @props.scale.horizontal)
-    if (@props.containerRect.width / @props.scale.horizontal) < x + (DELETE_BUTTON_WEIGHT / scale)
-      x = x - ((BUFFER / @props.scale.horizontal) * 2)
-    if @calculateDistance(x, x2, y1, y2) < DELETE_BUTTON_WEIGHT / scale
-      y1 = y1 - (BUFFER / @props.scale.horizontal)
+    x = x1 + (BUFFER / scale)
+    if (@props.containerRect.width / @props.scale.horizontal) < x + (DELETE_BUTTON_WIDTH / scale)
+      x = x - ((BUFFER / scale) * 2)
+    if @calculateDistance(x, x2, y1, y2) < DELETE_BUTTON_WIDTH / scale
+      y1 = y1 - (BUFFER / scale)
     x: x
     y: y1
 

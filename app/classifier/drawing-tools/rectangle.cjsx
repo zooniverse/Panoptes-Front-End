@@ -6,7 +6,7 @@ deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 
 MINIMUM_SIZE = 5
-DELETE_BUTTON_DISTANCE = 9 / 10
+DELETE_BUTTON_WIDTH = 8
 BUFFER = 16
 
 module.exports = React.createClass
@@ -80,9 +80,10 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   getDeletePosition: (x, width) ->
-    x = x + (width + (BUFFER / @props.scale.horizontal))
-    if (@props.containerRect.width / @props.scale.horizontal) < x + (8 / @props.scale.horizontal)
-      x = x - ((BUFFER / @props.scale.horizontal) * 2)
+    scale = @props.scale.horizontal
+    x += width + (BUFFER / scale)
+    if (@props.containerRect.width / scale) < x + (DELETE_BUTTON_WIDTH / scale)
+      x -= (BUFFER / scale) * 2
     x: x
 
   handleMainDrag: (e, d) ->

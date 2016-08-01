@@ -11,7 +11,7 @@ GUIDE_WIDTH = 1
 GUIDE_DASH = [4, 4]
 # fraction of line lenght along (x) and perpendicular (y) to the line to place control point
 DEFAULT_CURVE = {x: 0.5, y: 0}
-BUFFER = 10
+BUFFER = 16
 
 DELETE_BUTTON_WEIGHT = 0.75 # fraction of line lenght to place delete button
 
@@ -68,12 +68,11 @@ module.exports = React.createClass
     # t is in the range [0,1]
     # if control is undefined just return the point t along the line between start and end
     if control?
+      buffer = BUFFER / @props.scale.horizontal
       x = (1 - t) * (1 - t) * start.x + 2 * (1 - t) * t * control.x + t * t * end.x
       y = (1 - t) * (1 - t) * start.y + 2 * (1 - t) * t * control.y + t * t * end.y
       for point in @props.mark.points
-        if @calculateDistance(x, point.x, y, point.y) < BUFFER / ((@props.scale.horizontal + @props.scale.vertical) / 2)
-          x = x - (BUFFER / @props.scale.horizontal)
-          y = y - (BUFFER / @props.scale.vertical)
+        x = point.x - buffer if @calculateDistance(x, point.x, y, point.y) < buffer
       x: x
       y: y
     else
