@@ -17,6 +17,7 @@ workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
+GridTool = require './drawing-tools/grid'
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
@@ -405,6 +406,11 @@ Classifier = React.createClass
     @props.classification.update 'annotations'
 
   completeClassification: ->
+    currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
+    currentTask = @props.workflow.tasks[currentAnnotation?.task]
+    currentTask?.tools?.map (tool) =>
+      if tool.type is 'grid'
+        GridTool.mapCells @props.classification.annotations
     @props.classification.update
       completed: true
       'metadata.session': getSessionID()

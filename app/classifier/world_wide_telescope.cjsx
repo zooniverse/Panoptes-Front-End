@@ -16,9 +16,11 @@ class AxisPoint
 
 class Axis
   @RA: 0
-  @DEC: 1
-  @GLAT: 2
-  @GLON: 3
+  @RA1950: 1
+  @DEC: 2
+  @DEC1950: 3
+  @GLAT: 4
+  @GLON: 5
 
   constructor: (@range, @unit) ->
 
@@ -88,6 +90,8 @@ class StarChart
     coords = StarChart.OTHER
     if (@xAxis.unit == Axis.RA && @yAxis.unit == Axis.DEC) || (@xAxis.unit == Axis.DEC && @yAxis.unit == Axis.RA)
       coords = StarChart.EQUATORIAL
+    if (@xAxis.unit == Axis.RA1950 && @yAxis.unit == Axis.DEC1950) || (@xAxis.unit == Axis.DEC1950 && @yAxis.unit == Axis.RA1950)
+      coords = StarChart.EQUATORIAL
     if (@xAxis.unit == Axis.GLAT && @yAxis.unit == Axis.GLON) || (@xAxis.unit == Axis.GLON && @yAxis.unit == Axis.GLAT)
       coords = StarChart.GALACTIC
     coords
@@ -103,11 +107,27 @@ class Plate
     ]
 
     makeStarCoord = if @starChart.coordinateSystem() == StarChart.EQUATORIAL then StarCoord.fromRaDec else StarCoord.fromGlatGlon
-    xAxisDec = if @starChart.xAxis.unit == Axis.DEC || @starChart.xAxis.unit == Axis.GLAT then true else false
+    xAxisDec = if @starChart.xAxis.unit == Axis.DEC || @starChart.xAxis.unit == Axis.DEC1950 || @starChart.xAxis.unit == Axis.GLAT then true else false
+    epoch1950 = if @starChart.xAxis.unit == Axis.DEC1950 || @starChart.xAxis.unit == Axis.RA1950 then true else false
+    @fullValues xRange
+    @fullValues yRange
     @coordCorners = [
-      makeStarCoord(xRange[0].value, yRange[0].value, xAxisDec), makeStarCoord(xRange[1].value, yRange[0].value, xAxisDec),
-      makeStarCoord(xRange[1].value, yRange[1].value, xAxisDec), makeStarCoord(xRange[0].value, yRange[1].value, xAxisDec)
+      makeStarCoord(xRange[0].value, yRange[0].value, xAxisDec, epoch1950), makeStarCoord(xRange[1].value, yRange[0].value, xAxisDec, epoch1950),
+      makeStarCoord(xRange[1].value, yRange[1].value, xAxisDec, epoch1950), makeStarCoord(xRange[0].value, yRange[1].value, xAxisDec, epoch1950)
     ]
+
+  fullValues: (ranges) ->
+    firstValue = ranges[0].value.match(/(-)?\d+(?:\.\d+)?/g)
+    secondValue = ranges[1]?.value.match(/(-)?\d+(?:\.\d+)?/g)
+    difference = Math.abs(firstValue.length - secondValue?.length)
+    if difference > 0 && secondValue
+      longerNumber = if firstValue.length > secondValue.length then firstValue else secondValue
+      shorterNumber = if secondValue.length < firstValue.length then secondValue else firstValue
+      index = 0
+      until longerNumber.length == shorterNumber.length
+        shorterNumber.splice(index, 0, longerNumber[index])
+        index = index + 1
+      [ranges[0].value, ranges[1].value] = [firstValue.join(" "), secondValue.join(" ")]
 
   scale: ->
     [star1, star2] = [ @coordCorners[0], @coordCorners[2] ]
@@ -120,9 +140,12 @@ class Plate
     angularSep / pixelSep
 
   centerCoords: ->
+    s = @starChart
+    upperY = s.height - (s.yAxis.range[0].y - s.corners[0].y)
+    lowerY = s.corners[3].y - s.yAxis.range[1].y
     center =
-      x: @starChart.width / 2
-      y: @starChart.height / 2
+      x: ((s.xAxis.range[0].x - s.corners[0].x) + (s.xAxis.range[1].x - s.corners[0].x)) / 2
+      y: (upperY + lowerY) / 2
       ra: (@coordCorners[0].ra + @coordCorners[2].ra) / 2
       dec: (@coordCorners[0].dec + @coordCorners[2].dec) / 2
     center
@@ -134,7 +157,7 @@ class Plate
     "http://imgproc.zooniverse.org/crop/#{@starChart.width}/#{@starChart.height}/#{@starChart.x}/#{@starChart.y}?u=#{url}"
 
   computeRotation: ->
-    if @starChart.xAxis.unit == Axis.RA || @starChart.xAxis.unit == Axis.GLAT
+    if @starChart.xAxis.unit == Axis.RA || @starChart.xAxis.unit == Axis.RA1950 || @starChart.xAxis.unit == Axis.GLON
     then 180
     else 90
 
@@ -154,7 +177,7 @@ class StarCoord
 
   s = StarCoord
 
-  @fromRaDec: (xAxis, yAxis, xAxisDec) ->
+  @fromRaDec: (xAxis, yAxis, xAxisDec, epoch1950) ->
     if xAxisDec == true
       ra = yAxis
       dec = xAxis
@@ -163,9 +186,10 @@ class StarCoord
       dec = yAxis
     ra = StarCoord._parseDegrees(ra, false)
     dec = StarCoord._parseDegrees(dec, true)
+    [ra, dec] = StarCoord._epochConvert(ra, dec) if epoch1950 is true
     new StarCoord ra, dec
 
-  @fromGlatGlon: (xAxis, yAxis, xAxisGlat) ->
+  @fromGlatGlon: (xAxis, yAxis, xAxisGlat, epoch1950) ->
     if xAxisGlat == true
       glat = xAxis
       glon = yAxis
@@ -178,6 +202,11 @@ class StarCoord
     ra = s._toDegrees(Math.atan2((Math.cos(b) * Math.cos(l - posangle)), (Math.sin(b) * Math.cos(pole_dec) - Math.cos(b) * Math.sin(pole_dec) * Math.sin(l-posangle))) + pole_ra)
     dec = s._toDegrees(Math.asin(Math.cos(b) * Math.cos(pole_dec) * Math.sin(l - posangle) + Math.sin(b) * Math.sin(pole_dec)))
     new StarCoord ra, dec
+
+  @_epochConvert: (ra, dec) ->
+    RA2000 = ra + 0.640265 + 0.278369 * Math.sin(@_toDegrees(ra)) * Math.tan(@_toDegrees(dec))
+    DEC2000 = dec + 0.278369 * Math.cos(@_toDegrees(ra))
+    [RA2000, DEC2000]
 
   @_toRadians: (degrees) -> degrees * Math.PI / 180.0
 
@@ -255,7 +284,10 @@ module.exports = React.createClass
     plates = []
     for chart in @charts
       if chart.valid
-        plates.push(new Plate(chart, subjImage, @props.user_name))
+        try
+          plates.push(new Plate(chart, subjImage, @props.user_name))
+        catch error
+          console?.error 'Failed to link to Worldwide Telescope. Units must be annotated outside chart.'
 
     <div>
       {plates.map (plate, idx) ->

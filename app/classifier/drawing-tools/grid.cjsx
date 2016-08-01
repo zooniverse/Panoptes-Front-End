@@ -71,6 +71,29 @@ module.exports = React.createClass
         cell.height = mark.height if type is 'row'
       templateCopy
 
+    mapCells: (annotations) ->
+      currentAnnotation = annotations[annotations.length - 1]
+      templateType = 'templateID'
+      currentAnnotation.value.map (mark) ->
+        templateType = '_rowID' if mark._rowID
+      currentAnnotation.value.sort (a,b) ->
+        parseFloat(a.y) - parseFloat(b.y) || parseFloat(a.x) - parseFloat(b.x)
+      column = 'a'
+      row = 1
+      for cell in currentAnnotation.value
+        if cell[templateType]
+          tempID = cell[templateType] unless tempID
+          if cell[templateType] == tempID
+            cell.column = column
+            cell.row = row
+            column = String.fromCharCode(column.charCodeAt(0)+1)
+          else
+            row = row + 1
+            tempID = cell[templateType]
+            cell.column = 'a'
+            cell.row = row
+            column = 'b'
+
   initCoords: null
 
   componentWillMount: ->
