@@ -80,7 +80,7 @@ module.exports = React.createClass
             <i className="controls angles fa fa-angle-left" onClick={=> @switchTo(projectIndex - 1)} />
             <i className="controls angles fa fa-angle-right" onClick={=> @switchTo(projectIndex + 1)} />
 
-            <Link to={"/projects/#{project.slug}"} className="standard-button">Join Our Team</Link>
+            <Link to={if project.redirect then project.redirect else "/projects/#{project.slug}"} className="standard-button">Join Our Team</Link>
 
             <div className="controls circles">
               {for _, controlIndex in @state.projects
