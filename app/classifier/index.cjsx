@@ -268,11 +268,6 @@ Classifier = React.createClass
         </p>}
     </div>
 
-  withinTolerance: (userX, userY, metaX, metaY, tolerance) ->
-    distance = Math.sqrt((userY - metaY)**2 + (userX - metaX)**2)
-    isWithinTolerance = distance < tolerance
-    return isWithinTolerance
-
   renderSummary: (classification) ->
     <div>
       Thanks!
