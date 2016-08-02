@@ -9,5 +9,6 @@ module.exports =
   text: require './text'
   dropdown: require './dropdown'
   shortcut: require './shortcut'
+  metadataBasedFeedback: require './metadata-based-feedback'
 
 window?._tasks = module.exports

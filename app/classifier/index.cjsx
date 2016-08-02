@@ -22,6 +22,7 @@ experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 Shortcut = require './tasks/shortcut'
 `import CacheClassification from '../components/cache-classification'`
+MetadataBasedFeedback = require './tasks/metadata-based-feedback'
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -319,36 +320,19 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {
-        subjectClass = @props.subject.metadata['#Type']?.toUpperCase()
-        userMadeAnnotation = @props.classification.annotations?.length > 0 && @props.classification.annotations[0].value.length > 0
-        subjectSuccessMessage = @props.subject.metadata['#F_Success']
-        subjectFailureMessage = @props.subject.metadata['#F_Fail']
-        subjectXPos = parseFloat(@props.subject.metadata['#X1'])
-        subjectYPos = parseFloat(@props.subject.metadata['#Y1'])
-        subjectTol = parseFloat(@props.subject.metadata['#Tol1'])
-        userXPos = @props.classification.annotations[0]?.value[0]?.x
-        userYPos = @props.classification.annotations[0]?.value[0]?.y
-        isWithinTolerance = @withinTolerance(userXPos, userYPos, subjectXPos, subjectYPos, subjectTol)
-
-        console.log(subjectClass)
-        console.log(userMadeAnnotation)
-        console.log(@props.classification.annotations?.length)
-        console.log(@props.classification.annotations[0])
-
-        if subjectClass == 'DUD'
-          if userMadeAnnotation == true
-            <p>{subjectFailureMessage}</p>
-          else
-            <p>{subjectSuccessMessage}</p>
-        else if subjectClass == 'SIM'
-          if !(userMadeAnnotation?) || !isWithinTolerance
-            <p>{subjectFailureMessage}</p>
-          else
-            <p>{subjectSuccessMessage}</p>
-        else
-          <p>You classified some real data!</p>
-        }
+      <MetadataBasedFeedback
+      subject={@props.subject}
+      classification={@props.classification}
+      dudLabel='DUD'
+      simLabel='SIM'
+      subjectLabel='SUB'
+      metaTypeFieldName='#Type'
+      metaSuccessMessageFieldName='#F_Success'
+      metaFailureMessageFieldName='#F_Fail'
+      metaSimCoordXPattern='#X'
+      metaSimCoordYPattern='#Y'
+      metaSimTolPattern='#Tol'
+      />
 
       {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
         <strong>
