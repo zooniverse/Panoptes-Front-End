@@ -8,5 +8,6 @@ module.exports =
   crop: require './crop'
   text: require './text'
   dropdown: require './dropdown'
+  metadataBasedFeedback: require './metadata-based-feedback'
 
 window?._tasks = module.exports
