@@ -54,18 +54,22 @@ GraphSelect = React.createClass
 
   handleWorkflowSelect: (event) ->
     @props.handleWorkflowChange(@props.type, event)
+  
+  getRange: ->
+    if @props.range?
+      range = []
+      for r in @props.range.split(',')
+        if r
+          range.push(parseInt(r, 10))
+        else
+          range.push(undefined)
+    else
+      range = [undefined, undefined]
+    range
 
   render: ->
     if @state.statData?
-      if @props.range?
-        range = []
-        for r in @props.range.split(',')
-          if r
-            range.push(parseInt(r, 10))
-          else
-            range.push(undefined)
-      else
-        range = [undefined, undefined]
+      range = @getRange()
       workflowSelect = @workflowSelect()
       <div>
         {@props.type[0].toUpperCase() + @props.type.substring(1)}s per{' '}
