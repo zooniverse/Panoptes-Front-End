@@ -56,28 +56,33 @@ GraphSelect = React.createClass
     @props.handleWorkflowChange(@props.type, event)
 
   render: ->
-    if @props.range?
-      range = []
-      for r in @props.range.split(',')
-        if r
-          range.push(parseInt(r, 10))
-        else
-          range.push(undefined)
+    if @state.statData?
+      if @props.range?
+        range = []
+        for r in @props.range.split(',')
+          if r
+            range.push(parseInt(r, 10))
+          else
+            range.push(undefined)
+      else
+        range = [undefined, undefined]
+      workflowSelect = @workflowSelect()
+      <div>
+        {@props.type[0].toUpperCase() + @props.type.substring(1)}s per{' '}
+        <select value={@props.by} onChange={@handleGraphChange.bind this, @props.type}>
+          <option value="hour">hour</option>
+          <option value="day">day</option>
+          <option value="week">week</option>
+          <option value="month">month</option>
+        </select>
+        {workflowSelect}
+        <br />
+        {<Graph data={@state.statData} by={@props.by} range={range} num={24} handleRangeChange={@handleRangeChange} />}
+      </div>
     else
-      range = [undefined, undefined]
-    workflowSelect = @workflowSelect()
-    <div>
-      {@props.type[0].toUpperCase() + @props.type.substring(1)}s per{' '}
-      <select value={@props.by} onChange={@handleGraphChange.bind this, @props.type}>
-        <option value="hour">hour</option>
-        <option value="day">day</option>
-        <option value="week">week</option>
-        <option value="month">month</option>
-      </select>
-      {workflowSelect}
-      <br />
-      {<Graph data={@state.statData} by={@props.by} range={range} num={24} handleRangeChange={@handleRangeChange} /> if @state.statData?}
-    </div>
+      <div>
+        There is no stats data available at this time.
+      </div>
 
   handleGraphChange: (which, e) ->
     @props.handleGraphChange(which, e)
