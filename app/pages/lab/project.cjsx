@@ -91,7 +91,7 @@ EditProjectPage = React.createClass
           <li>
             <br />
             <div className="nav-list-header">Workflows</div>
-            <PromiseRenderer promise={getWorkflowsInOrder @props.project}>{(workflows) =>
+            <PromiseRenderer promise={getWorkflowsInOrder @props.project, fields: 'display_name'}>{(workflows) =>
               renderWorkflowListItem = (workflow) =>
                 <Link to={@labPath "/workflow/#{workflow.id}"} className="nav-list-item" activeClassName="active">
                   {workflow.display_name}

@@ -41,8 +41,7 @@ GraphSelect = React.createClass
     if @props.workflows?
       options = [<option value={"project_id=#{@props.projectId}"} key={"workflowSelectAll"}>All</option>]
       for workflow, key in @props.workflows
-        if workflow?.active
-          options.push(<option value={"workflow_id=#{workflow.id}"} key={"workflowSelect#{key}"}>{workflow.display_name}</option>)
+        options.push(<option value={"workflow_id=#{workflow.id}"} key={"workflowSelect#{key}"}>{workflow.display_name}</option>)
       if options.length > 1
         value = if @props.workflowId then "workflow_id=#{@props.workflowId}" else "project_id=#{@props.projectId}"
         <span>

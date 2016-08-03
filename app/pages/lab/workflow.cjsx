@@ -620,7 +620,7 @@ module.exports = React.createClass
       workflowID: ''
 
   render: ->
-    <PromiseRenderer promise={apiClient.type('workflows').get @props.params.workflowID}>{(workflow) =>
+    <PromiseRenderer promise={apiClient.type('workflows').get @props.params.workflowID, {}}>{(workflow) =>
       <ChangeListener target={workflow}>{=>
         <EditWorkflowPage {...@props} workflow={workflow} />
       }</ChangeListener>

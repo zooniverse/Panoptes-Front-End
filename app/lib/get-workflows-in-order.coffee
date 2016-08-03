@@ -1,5 +1,7 @@
-getWorkflowsInOrder = (project, query) ->
+getWorkflowsInOrder = (project, query = {}) ->
   order = project.configuration?.workflow_order ? []
+  unless query?.page_size?
+    query['page_size'] = 50
 
   project.get('workflows', query).then (workflows) ->
     workflowsByID = {}

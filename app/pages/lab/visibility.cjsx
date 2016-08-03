@@ -3,6 +3,7 @@ WorkflowToggle = require '../../components/workflow-toggle'
 PromiseRenderer = require '../../components/promise-renderer'
 SetToggle = require '../../lib/set-toggle'
 Dialog = require 'modal-form/dialog'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 
 module.exports = React.createClass
   displayName: 'EditProjectVisibility'
@@ -196,7 +197,7 @@ module.exports = React.createClass
       <hr/>
 
       <p className="form-label">Workflow Settings</p>
-      <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
+      <PromiseRenderer promise={getWorkflowsInOrder @props.project, fields: 'display_name,active'}>{(workflows) =>
         if workflows.length is 0
           <div className="workflow-status-list">No workflows found</div>
         else
