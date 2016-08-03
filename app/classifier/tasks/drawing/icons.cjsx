@@ -41,3 +41,21 @@ module.exports =
   grid: <svg viewBox="0 0 100 100">
     <polyline className="shape" points="0, 25 50, 25 50, 75 0, 75 0, 25 50, 25 100, 25 100, 75 50, 75 50, 25" />
   </svg>
+
+  arrow: <svg viewBox="0 0 100 100">
+    <line className="shape" x1="10" y1="90" x2="90" y2="10" />
+    <polyline className="shape" points="90,10 70,15 85,30, 90,10" closed={true} fill="currentColor" />
+  </svg>
+
+  marsarrow: <svg viewBox="0 0 100 100">
+    <line className="shape" x1="10" y1="90" x2="90" y2="10" />
+    <polyline className="shape" points="90,10 70,15 85,30, 90,10" closed={true} fill="currentColor" />
+    <circle className="shape" cx="50" cy="50" r="20" />
+  </svg>
+
+  compass: <svg viewBox="0 0 100 100">
+    <line className="shape" x1="10" y1="90" x2="90" y2="10" />
+    <line className="shape" x1="20" y1="20" x2="80" y2="80" />
+    <polyline className="shape" points="90,10 70,15 85,30, 90,10" closed={true} fill="currentColor" />
+    <circle className="shape" cx="50" cy="50" r="20" />
+  </svg>

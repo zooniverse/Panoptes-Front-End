@@ -8,3 +8,6 @@ module.exports =
   bezier: require './poly-curve'
   column: require './column-rectangle'
   grid: require './grid'
+  arrow: require './arrow'
+  marsarrow: require './mars-arrow'
+  compass: require './compass'
