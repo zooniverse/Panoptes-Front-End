@@ -135,11 +135,10 @@ VersionList = React.createClass
       <ul className="project-status__section-list">
         {vs.map (version) =>
           key = Object.keys(version.changeset)[0]
-          from = version.changeset[key][0].toString()
-          to = version.changeset[key][1].toString()
+          changes = 'from ' + version.changeset[key].join ' to '
           m = moment(version.created_at)
           <PromiseRenderer key={version.id} promise={apiClient.type('users').get(version.whodunnit)} >{ (user) =>
-            <li>{user.display_name} changed {key} from {from} to {to} {m.fromNow()}</li>
+            <li>{user.display_name} changed {key} {changes}  {m.fromNow()}</li>
           }</PromiseRenderer>}
       </ul>
     }</PromiseRenderer>
