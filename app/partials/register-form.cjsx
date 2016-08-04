@@ -76,7 +76,7 @@ module.exports = React.createClass
                 <Translate content="registerForm.looksGood" />
               </span>}
         </span>
-        <input type="text" ref="name" className="standard-input full" disabled={@props.user?} autoFocus onChange={@handleNameChange} maxlength="255" />
+        <input type="text" ref="name" className="standard-input full" disabled={@props.user?} autoFocus onChange={@handleNameChange} maxLength="255" />
       </label>
 
       <br />
