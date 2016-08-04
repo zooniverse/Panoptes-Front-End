@@ -54,7 +54,7 @@ GraphSelect = React.createClass
 
   handleWorkflowSelect: (event) ->
     @props.handleWorkflowChange(@props.type, event)
-  
+
   getRange: ->
     if @props.range?
       range = []
