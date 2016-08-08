@@ -245,7 +245,7 @@ Classifier = React.createClass
             {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
               [ownerName, name] = @props.project.slug.split('/')
               <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
-            {if nextTaskKey
+            {if nextTaskKey and !task.shortcut
               <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
             else
               <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>

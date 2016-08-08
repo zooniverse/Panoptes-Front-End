@@ -2,6 +2,7 @@ React = require 'react'
 GenericTask = require './generic'
 {Markdown} = (require 'markdownz').default
 GenericTaskEditor = require './generic-editor'
+NothingHere = require '../nothing-here'
 
 NOOP = Function.prototype
 
@@ -43,7 +44,7 @@ Summary = React.createClass
             for index in @props.annotation.value
               <div key={index} className="answer">
                 <i className="fa fa-check-square-o fa-fw"></i>
-                {@props.task.answers[index].label}
+                {@props.task.answers[index]?.label}
               </div>}
       </div>
     </div>
@@ -88,7 +89,11 @@ module.exports = React.createClass
         </div>
       </label>
 
-    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
+    <div>
+      <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
+
+      {<NothingHere handleChange={@handleChange} task={@props.task} annotation={@props.annotation} /> if @props.task.nothingHere}
+    </div>
 
   handleChange: (index, e) ->
     value = @props.annotation.value.slice 0

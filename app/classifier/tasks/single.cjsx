@@ -2,6 +2,7 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 GenericTask = require './generic'
 GenericTaskEditor = require './generic-editor'
+NothingHere = require '../nothing-here'
 
 NOOP = Function.prototype
 
@@ -39,7 +40,7 @@ Summary = React.createClass
         else if @props.annotation.value?
           <div className="answer">
             <i className="fa fa-check-circle-o fa-fw"></i>
-            <Markdown tag="span" inline={true}>{@props.task.answers[@props.annotation.value].label}</Markdown>
+            <Markdown tag="span" inline={true}>{@props.task.answers[@props.annotation.value]?.label}</Markdown>
           </div>
         else
           <div className="answer">No answer</div>}
@@ -85,7 +86,11 @@ module.exports = React.createClass
         </div>
       </label>
 
-    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
+    <div>
+      <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
+
+      {<NothingHere handleChange={@handleChange} task={@props.task} /> if @props.task.nothingHere}
+    </div>
 
   handleChange: (index, e) ->
     if e.target.checked
