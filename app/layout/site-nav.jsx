@@ -208,7 +208,7 @@ const SiteNav = React.createClass({
     const logo = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
     const label = !!this.props.visible ? 
       React.cloneElement(logo, {title: "Hide navigation menu"}) : 
-      <span style={{fontSize: '2em'}}>≡</span>;
+      <span style={{display: 'inline-block', fontSize: '2em', width: '0.9em'}}>≡</span>;
 
     return (
       <nav className="site-nav">
