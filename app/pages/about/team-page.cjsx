@@ -32,6 +32,9 @@ counterpart.registerTranslations 'en',
       andreaSimenstad:
         title: 'Developer'
         bio: '''Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.'''
+      beverleyNewing:
+        title: 'Web Developer Intern'
+        bio: '''Beverley is an English and German literature graduate, now working as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.'''   
       brookeSimmons:
         title: 'Researcher'
         bio: 'Brooke is an astrophysicist studying black holes, galaxies, and how citizen
@@ -187,6 +190,13 @@ teamMembers =
     bio: counterpart "team.content.andreaSimenstad.bio"
     image: "/assets/team/andrea.jpg"
     location: "minnesota"
+  beverleyNewing:
+    name: "Beverley Newing"
+    twitter: "beverleynewing"
+    title: counterpart "team.content.beverleyNewing.title"
+    bio: counterpart "team.content.beverleyNewing.bio"
+    image: "/assets/team/bev.jpg"
+    location: "oxford" 
   brookeSimmons:
     name: "Brooke Simmons"
     twitter: "vrooje"
