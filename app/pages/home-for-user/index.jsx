@@ -9,6 +9,7 @@ import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
 import ProjectStats from './project-stats';
 import qs from 'qs';
+import HomePageSocial from '../home-not-logged-in/social'
 
 import style from './index.styl';
 void style;
@@ -201,8 +202,8 @@ const HomePageForUser = React.createClass({
           </div>
         )}
 
-        <div className="content-container">
-          <p style={{ textAlign: 'center' }}>Re-use social media from home page here.</p>
+        <div className="home-page-for-user_social">
+          <HomePageSocial />
         </div>
 
         <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
