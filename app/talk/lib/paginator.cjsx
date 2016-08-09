@@ -10,7 +10,6 @@ module.exports = React.createClass
     page: React.PropTypes.number                  # page number
     onPageChange: React.PropTypes.func.isRequired # passed (page) on change
     firstAndLast: React.PropTypes.bool            # optional, add 'first' & 'last' buttons
-    scrollOnChange: React.PropTypes.bool          # optional, scroll to top of page on change
     pageSelector: React.PropTypes.bool            # show page selector?
     pageKey: React.PropTypes.string               # optional name for key param (defaults to 'page')
 
@@ -23,7 +22,6 @@ module.exports = React.createClass
       updateQueryParams @history, queryChange
     firstAndLast: true
     pageSelector: true
-    scrollOnChange: true
     previousLabel: <span><i className="fa fa-long-arrow-left" /> Previous</span>
     nextLabel: <span>Next <i className="fa fa-long-arrow-right" /></span>
 
@@ -40,7 +38,6 @@ module.exports = React.createClass
 
   setPage: (activePage) ->
     @props.onPageChange.call(this, activePage)
-    window.scrollTo(0,0) if @props.scrollOnChange
 
   onClickNext: ->
     @logClick 'next-page'
