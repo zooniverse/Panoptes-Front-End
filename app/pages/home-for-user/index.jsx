@@ -10,6 +10,7 @@ import MyBuildsSection from './my-builds';
 import ProjectStats from './project-stats';
 import qs from 'qs';
 import HomePageSocial from '../home-not-logged-in/social'
+import NewsSection from './news-section'
 
 import style from './index.styl';
 void style;
@@ -215,9 +216,8 @@ const HomePageForUser = React.createClass({
             </div>
           </button>
 
-          <p>News thing 1</p>
-          <p>News thing 2</p>
-          <p>News thing 3</p>
+          <NewsSection />
+
         </Pullout>
       </div>
     );
