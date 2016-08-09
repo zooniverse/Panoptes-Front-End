@@ -29,6 +29,7 @@
     "react-interpolate-component": "~0.8.0",
     "react-pullout": "~1.0.1",
     "react-router": "~2.4.1",
+    "react-router-scroll": "~0.3.0",
     "react-select": "~0.9.1",
     "react-swipe": "~3.0.0",
     "react-translate-component": "~0.10.0",

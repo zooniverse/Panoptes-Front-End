@@ -1,6 +1,7 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-{Router, browserHistory} = require 'react-router'
+{ applyRouterMiddleware, Router, browserHistory } = require 'react-router'
+useScroll = require 'react-router-scroll/lib/useScroll'
 routes = require './router'
 style = require '../css/main.styl'
 
@@ -11,7 +12,7 @@ if location?.hash.charAt(1) is '/'
 browserHistory.listen ->
   dispatchEvent new CustomEvent 'locationchange'
 
-ReactDOM.render <Router history={browserHistory}>{routes}</Router>,
+ReactDOM.render <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>{routes}</Router>,
   document.getElementById('panoptes-main-container')
 
 # Are we connected to the latest back end?
