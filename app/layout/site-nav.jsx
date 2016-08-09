@@ -88,6 +88,16 @@ const SiteNav = React.createClass({
           'site-nav__main-links--vertical': this.state.isMobile
         })}
       >
+        {!!this.state.isMobile &&
+        <Link
+          to="/"
+          className="site-nav__link"
+          activeClassName="site-nav__link--active"
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
+        >
+          <Translate content="siteNav.home" />
+        </Link>
+        }
         <Link
           to="/projects"
           className="site-nav__link"
@@ -185,7 +195,7 @@ const SiteNav = React.createClass({
   renderMobileLinksMenu() {
     return (
       <TriggeredModalForm
-        className="site-nav__modal"
+        className="site-nav__modal site-nav__reveal-toggle"
         trigger={
           <span
             className="site-nav__link"
@@ -230,7 +240,7 @@ const SiteNav = React.createClass({
 
         {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar /> : <LoginBar />)}
 
-        {!!this.props.onToggle &&
+        {!!this.props.onToggle && !this.state.isMobile &&
           <button
             type="button"
             className="secret-button site-nav__reveal-toggle"
