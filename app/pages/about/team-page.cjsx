@@ -34,7 +34,7 @@ counterpart.registerTranslations 'en',
         bio: '''Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.'''
       beverleyNewing:
         title: 'Web Developer Intern'
-        bio: '''Beverley is an English and German literature graduate, now working as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.'''   
+        bio: '''Beverley is an English and German literature graduate, now working as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.'''
       brookeSimmons:
         title: 'Researcher'
         bio: 'Brooke is an astrophysicist studying black holes, galaxies, and how citizen
@@ -161,7 +161,7 @@ to squeeze a bit of galaxy evolution science in.'''
       zachWolfenbarger:
         title: 'Developer'
         bio: '''Zach is a software developer. He was a molecular biologist, but then the lab needed some code to be written and the die was cast. He’s also in a couple of bands and can be found playing shows at bars and comic conventions all over the midwest.'''
-        
+
 teamMembers =
   adamMcMaster:
     name: "Adam McMaster"
@@ -195,8 +195,8 @@ teamMembers =
     twitter: "beverleynewing"
     title: counterpart "team.content.beverleyNewing.title"
     bio: counterpart "team.content.beverleyNewing.bio"
-    image: "/assets/team/bev.jpg"
-    location: "oxford" 
+    image: "/assets/team/beverley.jpg"
+    location: "oxford"
   brookeSimmons:
     name: "Brooke Simmons"
     twitter: "vrooje"
