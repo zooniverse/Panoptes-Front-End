@@ -202,7 +202,7 @@ const HomePageForUser = React.createClass({
           </div>
         )}
 
-        <div className="home-page-for-user_social">
+        <div className="on-home-page-logged-in flex-container">
           <HomePageSocial />
         </div>
 
