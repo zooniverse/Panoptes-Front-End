@@ -106,8 +106,8 @@ RecentProjects = React.createClass
               <ProjectIcon project={project} badge={badge} />
               &ensp;
             </div>}
-        </div>}
-      <Link to={@state.href} className="call-to-action standard-button x-large"><Translate content={@state.action} /></Link>
+        </div>
+      <Link to={@state.href} className="call-to-action standard-button x-large"><Translate content={@state.action} /></Link>}
     </div>
     
 
