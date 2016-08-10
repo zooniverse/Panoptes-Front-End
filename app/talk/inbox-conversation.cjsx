@@ -46,10 +46,13 @@ module.exports = React.createClass
         @setState {messages, messagesMeta}
 
   message: (data, i) ->
+    profile_link = "/users/#{commentOwner.login}"
+    if @props.project?
+      profile_link = "/projects/#{@props.project.slug}#{profile_link}"
     <div className="conversation-message" key={data.id}>
       <PromiseRenderer promise={apiClient.type('users').get(data.user_id)}>{(commentOwner) =>
         <span>
-          <strong><Link to="/users/#{commentOwner.login}">{commentOwner.display_name}</Link></strong>{' '}
+          <strong><Link to={profile_link}>{commentOwner.display_name}</Link></strong>{' '}
           <span>{timestamp(data.updated_at)}</span>
         </span>
       }</PromiseRenderer>
@@ -76,6 +79,9 @@ module.exports = React.createClass
 
   render: ->
     if @props.user
+      profile_link = "/users/#{user.login}"
+      if @props.project?
+        profile_link = "/projects/#{@props.project.slug}#{profile_link}"
       <div className="talk inbox-conversation content-container">
         <Link to="/inbox">Back to Inbox</Link>
         <h1>{@state.conversation?.title}</h1>
@@ -84,7 +90,7 @@ module.exports = React.createClass
             In this conversation:{' '}
             {@state.recipients.map (user, i) =>
               <span key={user.id}>
-                <Link to="/users/#{user.login}">
+                <Link to={profile_link}>
                   {user.display_name}
                 </Link>{', ' unless i is @state.recipients.length-1}
               </span>

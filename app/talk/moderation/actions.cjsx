@@ -74,8 +74,11 @@ module.exports = React.createClass
       {if @state.actions
         <div>
           {for action in @state.actions
+            profile_link = "/users/#{action.user.login}"
+            if @props.project?
+              profile_link = "/projects/#{@props.project.slug}#{profile_link}"
             <div key={"moderation-#{moderation.id}-action-#{action.action}"}>
-              {actionTaken[action.action] ? action.action} by <Link to="/users/#{action.user.login}">{action.user.display_name}</Link>
+              {actionTaken[action.action] ? action.action} by <Link to={profile_link}>{action.user.display_name}</Link>
               {if action.message
                 <div>
                   <i className="fa fa-quote-left"/> {action.message} <i className="fa fa-quote-right"/>
