@@ -72,9 +72,10 @@ RecentProjects = React.createClass
   
   componentWillMount: ->
     @props.user
-      .get("project_preferences", page_size: 4, sort: '-updated_at')
+      .get("project_preferences", page_size: 10, sort: '-updated_at')
       .then (projectPreferences) =>
-        userProjects = projectPreferences.map (projectPreference) -> projectPreference.links.project
+        userProjects = projectPreferences.map (projectPreference) -> projectPreference.links.project if projectPreference.activity_count > 0
+        userProjects = userProjects.filter(Boolean).slice 0, 4
         activityCounts = {}
         if userProjects.length > 0
           activityCounts[projectPreference.links.project] = projectPreference.activity_count for projectPreference in projectPreferences
