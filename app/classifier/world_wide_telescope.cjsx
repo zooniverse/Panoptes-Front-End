@@ -253,6 +253,10 @@ module.exports = React.createClass
   displayName: 'WorldWideTelescope'
 
   parseClassification: ->
+    for annotation in @props.annotations
+      annotation.type = @props.workflow.tasks[annotation.task].type
+
+    debugger
     # parse chart rectangles
     @charts = ((new StarChart annotation) for annotation in @props.annotations[1].value)
 

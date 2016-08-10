@@ -278,6 +278,7 @@ Classifier = React.createClass
             annotations={@props.classification.annotations}
             subject={@props.subject}
             user_name={@props.user.display_name}
+            workflow={@props.workflow}
           />
         </strong>
         }
