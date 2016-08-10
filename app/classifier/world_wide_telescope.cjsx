@@ -253,22 +253,24 @@ module.exports = React.createClass
   displayName: 'WorldWideTelescope'
 
   parseClassification: ->
-    for annotation in @props.annotations
-      annotation.type = @props.workflow.tasks[annotation.task].type
+    telescopeAnnotations = []
+    @props.annotations.map (annotation) =>
+      if @props.workflow.tasks[annotation.task].type is 'drawing'
+        annotation.type = @props.workflow.tasks[annotation.task].type
+        telescopeAnnotations.push(annotation)
 
-    debugger
     # parse chart rectangles
-    @charts = ((new StarChart annotation) for annotation in @props.annotations[1].value)
+    @charts = ((new StarChart annotation) for annotation in telescopeAnnotations[0].value)
 
     # assign axis points to charts
-    for annotation in @props.annotations[2].value
+    for annotation in telescopeAnnotations[1].value
       point = new AxisPoint annotation
       distances = ((chart.closestCornerDistance point) for chart in @charts)
       closest = distances.sort((a, b) -> a.distance > b.distance)[0].chart
       closest.addAxisPoint point
 
     # assign axis labels to charts
-    for annotation in @props.annotations[3].value
+    for annotation in telescopeAnnotations[2].value
       label = new AxisLabel annotation
       distances = ((chart.closestMidpointDistance label) for chart in @charts)
       closest = distances.sort((a, b) -> a.distance > b.distance)[0].chart
