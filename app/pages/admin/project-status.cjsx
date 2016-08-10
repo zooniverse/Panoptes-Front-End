@@ -7,6 +7,7 @@ ChangeListener = require '../../components/change-listener'
 ProjectIcon = require '../../components/project-icon'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 WorkflowToggle = require '../../components/workflow-toggle'
 
 EXPERIMENTAL_FEATURES = [
@@ -134,11 +135,10 @@ VersionList = React.createClass
       <ul className="project-status__section-list">
         {vs.map (version) =>
           key = Object.keys(version.changeset)[0]
-          from = version.changeset[key][0].toString()
-          to = version.changeset[key][1].toString()
+          changes = 'from ' + version.changeset[key].join ' to '
           m = moment(version.created_at)
           <PromiseRenderer key={version.id} promise={apiClient.type('users').get(version.whodunnit)} >{ (user) =>
-            <li>{user.display_name} changed {key} from {from} to {to} {m.fromNow()}</li>
+            <li>{user.display_name} changed {key} {changes}  {m.fromNow()}</li>
           }</PromiseRenderer>}
       </ul>
     }</PromiseRenderer>
@@ -168,7 +168,7 @@ ProjectStatus = React.createClass
         <ProjectExperimentalFeatures project={@props.project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
-          <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
+          <PromiseRenderer promise={getWorkflowsInOrder @props.project, fields: 'display_name,active'}>{(workflows) =>
             if workflows.length is 0
               <div className="workflow-status-list">No workflows found</div>
             else

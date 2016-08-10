@@ -10,7 +10,7 @@ counterpart.registerTranslations 'en',
       chicago: 'Chicago'
       minnesota: 'Minnesota'
       portsmouth: 'Portsmouth'
-      taipei: 'Taipei'
+      hilo: 'Hilo'
     content:
       header:
         showAll: 'Zooniverse Team'
@@ -108,9 +108,9 @@ to squeeze a bit of galaxy evolution science in.'''
         mechanics from Kerbal Space Program, and feels like he's therefore basically an astrophysicist.'''
       megSchwamb:
         title: 'Researcher'
-        bio: '''Meg is a planetary scientist and astronomer involved in the Zooniverse's Planet
-        Four and Planet Hunters projects. She studies small bodies in the Solar System, exoplanets,
-        and Mars. Meg has a fondness for baking, soccer, and champagne.'''
+        bio: '''Meg is a planetary scientist and astronomer involved in the Zooniverse's Planet Four, Planet Four: Terrains,
+        and Comet Hunters projects. She also serves as project scientist for Comet Hunters. She studies small bodies in the
+        Solar System, exoplanets, and Mars. Meg has a fondness for baking, soccer, and champagne.'''
       michaelParrish:
         title: 'Rails/Backend Developer'
         bio: '''Software developer at the Zooniverse. Dog, fishing, snakes, and bourbon.'''
@@ -309,7 +309,7 @@ teamMembers =
     title: counterpart "team.content.megSchwamb.title"
     bio: counterpart "team.content.megSchwamb.bio"
     image: "/assets/team/meg.jpg"
-    location: "taipei"
+    location: "hilo"
   michaelParrish:
     name: "Michael Parrish"
     twitter: "michael_parrish"

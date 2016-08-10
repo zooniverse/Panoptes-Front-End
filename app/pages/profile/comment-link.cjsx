@@ -36,7 +36,8 @@ module.exports = React.createClass
           if rootType is 'project'
             # TODO: Focus
             apiClient.type('projects').get(rootID).then (project) =>
-              @setState({project})
+              @setState
+                boardProject: project
               project.get('owner').then (owner) =>
                 @setState({owner})
                 [owner, name] = project.slug.split('/')
@@ -57,13 +58,13 @@ module.exports = React.createClass
           <span>
             {' '}in{' '}
             <a href={@state.href}>
-              {if @state.project? and @state.owner
+              {if @state.boardProject? and @state.owner? and !@props.project?
                 <span>
-                  <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.project.display_name}">{@state.project.display_name}</strong>
-                  ➞
+                  <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.boardProject.display_name}">{@state.boardProject.display_name}</strong>
+                  <span>{' '}➞{' '}</span>
                 </span>}
               <strong className="comment-board">{@state.board?.title}</strong>
-              ➞
+              <span>{' '}➞{' '}</span>
               <strong className="comment-discussion">{@state.discussion?.title}</strong>
             </a>
           </span>}

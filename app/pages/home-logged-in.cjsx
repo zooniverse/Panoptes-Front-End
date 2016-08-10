@@ -30,8 +30,7 @@ counterpart.registerTranslations 'en',
         title: 'Discover, teach, and learn'
         content: '''Our platform offers many opportunities for education, from using projects in classrooms to sharing information between volunteers. You can even use the [Zooniverse Project Builder](/lab) to create your very own project!'''
     featuredProjects:
-      title: 'Get started on a project right now!'
-      loggedTitle: 'Get started on a new project right now!'
+      title: 'Get started on a new project right now!'
       button: 'See all projects'
     recentProjects:
       title: "Welcome back! Jump into one of your recent projects..."
@@ -75,11 +74,13 @@ module.exports = React.createClass
 
   render: ->
     aboutItems = ['contribute', 'explore', 'collaborate', 'discover']
-
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     <div className="home-page">
-      <section className="hero on-dark">
-        <ZooniverseLogoType />
-        {if @props.user
+      <div className="flex-container">
+        <section className="hero on-dark">
+          <ZooniverseLogoType />
           <PromiseRenderer promise={@lastFourProjects()}>{(projectPreferences) =>
             if projectPreferences.length > 0
               <div className="recent-projects">
@@ -96,7 +97,7 @@ module.exports = React.createClass
                         null
                     } />}
                 </div>
-                <Link to="/users/#{@props.user.login}/stats" className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
+                <Link to="#{baseLink}users/#{@props.user.login}/stats" className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
               </div>
             else
               <div className="recent-projects">
@@ -113,34 +114,11 @@ module.exports = React.createClass
                 <Link to="/projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.recentProjects.altButton" /></Link>
               </div>
           }</PromiseRenderer>
-         else
-          <div>
-            <h3 className="hero-title"><Translate content="home.hero.title" /></h3>
-            <p className="hero-tagline"><Translate content="home.hero.tagline" /></p>
-            <Link to="/projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.hero.button" /></Link>
-          </div>}
-      </section>
-      {unless @props.user?
-        <section className="about-zooniverse">
-          <div className="about-items-list">
-            {for item in aboutItems
-              <div key={item} className="about-item">
-                <div className="about-item-wrapper">
-                  <img className="about-image" src="/assets/home-#{item}.gif" alt="" />
-                  <div className="about-item-content">
-                    <Translate component="h5" content="home.about.#{item}.title" />
-                    <Markdown>{counterpart "home.about.#{item}.content"}</Markdown>
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-        </section>}
+        </section>
+      </div>
+
       <section className="featured-projects content-container">
-        {if @props.user?
-           <Translate component="h5" content="home.featuredProjects.loggedTitle" />
-         else
-           <Translate component="h5" content="home.featuredProjects.title" />}
+        <Translate component="h5" content="home.featuredProjects.title" />
         <FeaturedProjects />
       </section>
     </div>

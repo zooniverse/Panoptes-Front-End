@@ -27,6 +27,9 @@ module.exports = React.createClass
 
   render: ->
     notification = @props.notification
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     if @state.message
       <div className="conversation-message talk-module">
         <Link to="/inbox/#{notification.source.conversation_id}" {...@props} className="message-link">
@@ -37,7 +40,7 @@ module.exports = React.createClass
         <Markdown>{@state.message.body}</Markdown>
 
         <div className="bottom">
-          <Link className="user-profile-link" to="/users/#{@state.messageUser.login}">
+          <Link className="user-profile-link" to="#{baseLink}users/#{@state.messageUser.login}">
             <Avatar user={@state.messageUser} />{' '}{@state.messageUser.display_name}
           </Link>{' '}
           <Link to={"/inbox/#{notification.source.conversation_id}"} {...@props} className="time-ago">

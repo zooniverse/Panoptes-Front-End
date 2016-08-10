@@ -47,18 +47,12 @@ const AppLayout = React.createClass({
     };
   },
 
-  componentDidMount() {
-    addEventListener('locationchange', this.handleNavigation);
-  },
-
-  componentWillUnmount() {
-    removeEventListener('locationchange', this.handleNavigation);
-  },
-
-  handleNavigation() {
-    this.setState({
-      siteHeaderRevealed: false,
-    });
+  hidePrimaryNav() {
+    if (this.state.siteHeaderRevealed) {
+      this.setState({
+        siteHeaderRevealed: false,
+      });
+    }
   },
 
   matchWindowScale() {
@@ -124,17 +118,9 @@ const AppLayout = React.createClass({
                 scale(${this.state.mainContentScale})
               `,
             } : null}
+            onClick={this.hidePrimaryNav}
           >
             {this.props.children}
-            <div
-              className={classnames('app-layout__main-overlay', {
-                'app-layout__main-overlay--active': demotedHeaderIsRevealed,
-              })}
-              style={{
-                display: demotedHeaderIsRevealed ? 'block' : 'none',
-              }}
-              onClick={this.togglePrimaryNav}
-            ></div>
           </div>
 
           <footer className="app-layout__footer">

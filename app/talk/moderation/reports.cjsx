@@ -20,11 +20,14 @@ module.exports = React.createClass
       @setState {reports}
 
   render: ->
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     <ul>
       {if @state.reports
         for report, i in @state.reports
           <li key={"report-#{i}"}>
-            <Link to="/users/#{report.user.login}">{report.user.display_name}</Link>: {report.message}
+            <Link to="#{baseLink}users/#{report.user.login}">{report.user.display_name}</Link>: {report.message}
           </li>
       else
         <Loading />}

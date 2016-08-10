@@ -21,7 +21,7 @@ module.exports = React.createClass
       if project._workflows?
         @setState workflows: project._workflows
       else
-        workflows = getWorkflowsInOrder project, active: true
+        workflows = getWorkflowsInOrder project, {active: true, fields: 'display_name'}
 
         workflows.then (workflows) =>
           project._workflows = workflows

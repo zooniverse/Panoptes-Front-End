@@ -38,8 +38,10 @@ module.exports =
     <Route path="privacy" component={require './pages/privacy-policy'} />
     <Route path="security" component={require './pages/security'} />
 
-    <Route path="users/:name" component={require './pages/profile'}>
+    <Route path="users/:profile_name" component={require './pages/profile'}>
       <IndexRoute component={require './pages/profile/feed'} />
+      <Route path="favorites" component={require('./pages/collections/favorites-list')} />
+      <Route path="collections" component={require('./pages/collections/collections-list')} />
       <Route path="message" component={require './pages/profile/private-message'} />
       <Route path="stats" component={require './pages/profile/stats'} />
     </Route>
@@ -84,6 +86,29 @@ module.exports =
         <Route path=":board/:discussion" component={require './talk/discussion'} />
       </Route>
       <Route path="stats" component={require './pages/project/stats'} />
+      <Route path="favorites" component={require('./pages/collections/index')}>
+        <IndexRoute component={require('./pages/collections/favorites-list')} />
+        <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
+      </Route>
+  
+      <Route path="collections" component={require('./pages/collections/index')}>
+         <IndexRoute component={require('./pages/collections/collections-list')} />
+         <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
+      </Route>
+
+      <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
+        <IndexRoute component={require './collections/show-list'} />
+        <Route path="settings" component={require './collections/settings'} />
+        <Route path="collaborators" component={require './collections/collaborators'} />
+        <Route path="talk" component={require './collections/show-list'} />
+      </Route>
+      <Route path="users/:profile_name" component={require './pages/profile'}>
+        <IndexRoute component={require './pages/profile/feed'} />
+        <Route path="favorites" component={require('./pages/collections/favorites-list')} />
+        <Route path="collections" component={require('./pages/collections/collections-list')} />
+        <Route path="message" component={require './pages/profile/private-message'} />
+        <Route path="stats" component={require './pages/profile/stats'} />
+      </Route>
     </Route>
 
     <Route path="notifications" component={require './pages/notifications'} />
