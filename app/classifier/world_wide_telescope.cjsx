@@ -68,21 +68,46 @@ class StarChart
   addAxisLabel: (axisLabel) ->
     @axisLabels.push axisLabel
 
-  filterBounds: (items, prop, bounds) ->
-    (i for i in items when i[prop] < bounds[prop][0] || i[prop] > bounds[prop][1])
+  findAxis: (points) ->
+    xSlope = Infinity
+    ySlope = 0
+    xAxis = null
+    yAxis = null
+    for pointA in points
+      for pointB in points
+        if Math.abs(@slope(pointA, pointB)) < xSlope
+          xSlope = Math.abs(@slope(pointA, pointB))
+          xAxis = [pointA, pointB]
+        if Math.abs(@slope(pointA, pointB)) > ySlope
+          ySlope = Math.abs(@slope(pointA, pointB))
+          yAxis = [pointA, pointB]
+    xAxis: xAxis
+    yAxis: yAxis
+
+  slope: (pointA, pointB) ->
+    (pointA.y - pointB.y) / (pointA.x - pointB.x)
+
+  findLabels: (range, labels) ->
+    midpoint = {x: (range[0].x + range[1].x) / 2, y: (range[1].y + range[1].y) / 2}
+    label = null
+    distance = Infinity
+    for point in labels
+      if @calculateDistance(midpoint, point) < distance
+        label = point
+        distance = @calculateDistance(midpoint, point)
+    label
 
   buildAxes: ->
     if @axisPoints.length >= 3 && @axisLabels.length >= 2
       @valid = true
-      bounds = @bounds()
-      xLabel = (@filterBounds @axisLabels, 'y', bounds)[0]
-      yLabel = (@filterBounds @axisLabels, 'x', bounds)[0]
-      xRange = (@filterBounds @axisPoints, 'y', bounds).sort( (a, b) -> a.x > b.x ).slice(0, 2)
-      yRange = (@filterBounds @axisPoints, 'x', bounds).sort( (a, b) -> a.y > b.y ).slice(0, 2)
-      if !xRange[1]
-        xRange[1] = xRange[0]
-      if !yRange[1]
-        yRange[1] = yRange[0]
+      xRange = (@findAxis @axisPoints).xAxis.sort( (a, b) -> a.x > b.x )
+      yRange = (@findAxis @axisPoints).yAxis.sort( (a, b) -> a.y > b.y )
+      xLabel = @findLabels xRange, @axisLabels
+      yLabel = @findLabels yRange, @axisLabels
+      console.log xRange
+      console.log yRange
+      console.log xLabel
+      console.log yLabel
       @xAxis = new Axis xRange, xLabel.value
       @yAxis = new Axis yRange, yLabel.value
 
