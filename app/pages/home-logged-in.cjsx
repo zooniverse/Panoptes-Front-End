@@ -97,15 +97,16 @@ RecentProjects = React.createClass
   
   render: ->
     <div className="recent-projects">
-      <Translate component="h5" content={@state.title} />
-      <div className="recent-projects-list">
-        {for project in @state.projects
-          badge = @state.activityCounts[project.id] ? 0
-          <div key={project.id}>
-            <ProjectIcon project={project} badge={badge} />
-            &ensp;
-          </div>}
-      </div>
+      {if @state.projects.length > 0
+        <Translate component="h5" content={@state.title} />
+        <div className="recent-projects-list">
+          {for project in @state.projects
+            badge = @state.activityCounts[project.id] ? 0
+            <div key={project.id}>
+              <ProjectIcon project={project} badge={badge} />
+              &ensp;
+            </div>}
+        </div>}
       <Link to={@state.href} className="call-to-action standard-button x-large"><Translate content={@state.action} /></Link>
     </div>
     
