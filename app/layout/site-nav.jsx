@@ -16,6 +16,8 @@ import style from './site-nav.styl';
 void style;
 
 const MAX_MOBILE_WIDTH = 875;
+const ZOO_LOGO = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
+const HAMBURGER_MENU = <span style={{ display: 'inline-block', transform: 'scale(2.5, 2)' }}>≡</span>;
 
 counterpart.registerTranslations('en', {
   siteNav: {
@@ -203,7 +205,7 @@ const SiteNav = React.createClass({
             title="Site navigation"
             aria-label="Site navigation"
           >
-            <span style={{ display: 'inline-block', transform: 'scale(2.5, 2)' }}>≡</span>
+            {HAMBURGER_MENU}
           </span>
         }
       >
@@ -215,10 +217,9 @@ const SiteNav = React.createClass({
   },
 
   render() {
-    const logo = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
     const label = !!this.props.visible ? 
-      React.cloneElement(logo, {title: "Hide navigation menu"}) : 
-      <span style={{display: 'inline-block', fontSize: '2em', width: '0.9em'}}>≡</span>;
+      React.cloneElement(ZOO_LOGO, {title: "Hide navigation menu"}) : 
+      HAMBURGER_MENU;
 
     return (
       <nav className="site-nav">
@@ -228,7 +229,7 @@ const SiteNav = React.createClass({
           activeClassName="site-nav__link--active"
           onClick={!!this.logClick ? this.logClick.bind(this, 'logo') : null}
         >
-          {!!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : logo}
+          {!!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : ZOO_LOGO}
         </IndexLink>
 
         {!this.state.isMobile && this.renderLinks()}
