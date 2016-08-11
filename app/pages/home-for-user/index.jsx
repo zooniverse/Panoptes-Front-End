@@ -216,7 +216,7 @@ const HomePageForUser = React.createClass({
             </div>
           </button>
 
-          <NewsSection />
+          <NewsSection projects={this.state.ribbonData} />
 
         </Pullout>
       </div>
