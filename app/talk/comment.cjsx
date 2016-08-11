@@ -132,7 +132,7 @@ module.exports = React.createClass
       baseLink += "projects/#{@props.project.slug}/"
     <div key={comment.id} className="comment-reply-line" ref="comment-reply-#{comment.id}">
       <p>
-        <Link to="/users/#{comment.user_login}">{comment.user_display_name}</Link>
+        <Link to="#{baseLink}users/#{comment.user_login}">{comment.user_display_name}</Link>
         {if comment.reply_id
           <span>
             {' '}in reply to <Link to="#{baseLink}users/#{comment.reply_user_login}">{comment.reply_user_display_name}</Link>'s{' '}
@@ -165,7 +165,9 @@ module.exports = React.createClass
     feedback = @renderFeedback()
     activeClass = if @props.active then 'active' else ''
     isDeleted = if @props.data.is_deleted then 'deleted' else ''
-
+    profile_link = "/users/#{@props.data.user_login}"
+    if @props.project?
+      profile_link = "/projects/#{@props.project.slug}#{profile_link}"
     <div className="talk-comment #{activeClass} #{isDeleted}">
       <div className="talk-comment-author">
         <PromiseRenderer promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
@@ -173,7 +175,7 @@ module.exports = React.createClass
         }</PromiseRenderer>
 
         <div>
-          <Link to="/users/#{@props.data.user_login}">{@props.data.user_display_name}</Link>
+          <Link to={profile_link}>{@props.data.user_display_name}</Link>
           <div className="user-mention-name">@{@props.data.user_login}</div>
         </div>
 
@@ -185,6 +187,9 @@ module.exports = React.createClass
       <div className="talk-comment-body">
         <CommentContextIcon comment={@props.data}></CommentContextIcon>
         {if @props.data.reply_id
+          profile_link = "/users/#{@props.data.reply_user_login}"
+          if @props.project?
+            profile_link = "/projects/#{@props.project.slug}#{profile_link}"
           <div className="talk-comment-reply">
             {if @state.replies.length
               <div>
@@ -193,7 +198,7 @@ module.exports = React.createClass
               </div>
               }
 
-            In reply to <Link to="/users/#{@props.data.reply_user_login}">{@props.data.reply_user_display_name}</Link>'s{' '}
+            In reply to <Link to={profile_link}>{@props.data.reply_user_display_name}</Link>'s{' '}
 
             <button className="link-style" type="button" onClick={(e) => @onClickRenderReplies(e, @props.data)}>comment</button>
           </div>
