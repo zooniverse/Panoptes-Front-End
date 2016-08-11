@@ -2,6 +2,20 @@
   display: flex
   flex-flow: row wrap
 
+  .secondary-page-side-bar
+    flex-basis: 170px
+
+    nav
+     .side-bar-button
+       width: 100%
+       text-align: left
+
+     .secret-button.nav-alumni::before
+       height: 22px
+       border-top: 1px dotted FOREGROUND
+       content: ""
+       display: block
+
   .team-member-list
     flex: 2 1 80%
 
@@ -22,4 +36,4 @@
         margin: 0 1.5em
 
         p
-          margin: 0
+          margin: 2px 0px 0px
