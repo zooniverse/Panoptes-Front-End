@@ -229,8 +229,8 @@ const SiteNav = React.createClass({
           activeClassName="site-nav__link--active"
           onClick={!!this.logClick ? this.logClick.bind(this, 'logo') : null}
         >
-          {!!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : ZOO_LOGO}
-        </IndexLink>
+          {!this.state.isMobile && !!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : ZOO_LOGO}
+          </IndexLink>
 
         {!this.state.isMobile && this.renderLinks()}
 
