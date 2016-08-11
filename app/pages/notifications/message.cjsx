@@ -3,6 +3,7 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 moment = require 'moment'
 talkClient = require 'panoptes-client/lib/talk-client'
+apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
 Avatar = require '../../partials/avatar'
 
@@ -20,8 +21,8 @@ module.exports = React.createClass
     conversation: null
 
   componentWillMount: ->
-    talkClient.type('messages').get(@props.notification.source_id, include: 'conversation,user').then (message) =>
-      message.get('user').then (messageUser) =>
+    talkClient.type('messages').get(@props.notification.source_id, include: 'conversation').then (message) =>
+      apiClient.type('users').get(message.user_id).then (messageUser) =>
         message.get('conversation').then (conversation) =>
           @setState {message, conversation, messageUser}
 
