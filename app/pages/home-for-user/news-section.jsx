@@ -15,9 +15,40 @@ const NewsSection = React.createClass({
 
   getInitialState() {
     return {
-      projects: [],
       avatars: {},
+      projects: [],
+      publications: [],
     };
+  },
+
+  componentWillReceiveProps() {
+    this.recentPublications()
+  },
+
+  recentPublications() {
+    const userProjects = [];
+    const newsPublications = [];
+
+    userProjects.push({name: 'Solar Stormwatch', slug: 'zooniverse/solar-stormwatch'}),
+    this.props.projects.map((project) =>{
+      userProjects.push({name:project.name, slug: project.slug});
+    });
+
+    for (var category in Publications.articles()) {
+      Publications.articles()[category].map((project) =>{
+        userProjects.map((userProj) =>{
+          if (userProj.slug === project['slug']){
+            newsPublications.push({name: userProj.name, publication: project.publications[0]});
+          }
+        })
+      });
+    };
+
+    if (newsPublications.length < 2)
+      newsPublications.push({name: 'Meta Data', publication: Publications.articles().meta[0].publications[0]});
+    return this.setState({
+      publications: newsPublications,
+    });
   },
 
   fetchProjects() {
@@ -45,6 +76,13 @@ const NewsSection = React.createClass({
     })
   },
 
+  renderPublication(article) {
+    return <div>
+      <h5>{article.name}</h5>
+      <p>{article.publication.citation}</p>
+    </div>
+  },
+
   render() {
     return (
       <div className='news-pullout-main'>
@@ -52,6 +90,9 @@ const NewsSection = React.createClass({
 
         <div className='news-pullout-section'>
           <h3> Recent Publications </h3>
+          {this.state.publications.map((article) => {
+            return this.renderPublication(article);
+          })}
         </div>
 
         <div className='news-pullout-section'>

@@ -22,6 +22,10 @@ counterpart.registerTranslations 'en',
 module.exports = React.createClass
   displayName: 'PublicationsPage'
 
+  statics:
+    articles: ->
+      publicationCategories
+
   getInitialState: ->
     currentSort: 'showAll'
 
