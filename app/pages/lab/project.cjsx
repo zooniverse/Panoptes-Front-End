@@ -236,10 +236,6 @@ module.exports = React.createClass
   mixins: [TitleMixin, History]
   title: 'Edit'
 
-  componentDidMount: ->
-    unless @props.user
-      @history.pushState(null, "/lab")
-
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.user
       @history.pushState(null, "/lab")
