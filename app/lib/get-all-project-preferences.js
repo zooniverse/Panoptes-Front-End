@@ -1,6 +1,7 @@
 function getAllProjectPreferences(user, _page = 1, _accumulator = []) {
   return user.get('project_preferences', {
     page: _page,
+    include: 'project',
   })
   .then((projectPreferences) => {
     if (projectPreferences.length === 0) {
