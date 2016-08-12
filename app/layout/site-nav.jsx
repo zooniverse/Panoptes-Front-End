@@ -245,7 +245,6 @@ const SiteNav = React.createClass({
           <button
             type="button"
             className="secret-button site-nav__reveal-toggle"
-            style={{ lineHeight: 0 }}
             onClick={this.props.onToggle}
             >{label}</button>}
 
