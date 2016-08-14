@@ -104,10 +104,6 @@ class StarChart
       yRange = (@findAxis @axisPoints).yAxis.sort( (a, b) -> a.y > b.y )
       xLabel = @findLabels xRange, @axisLabels
       yLabel = @findLabels yRange, @axisLabels
-      console.log xRange
-      console.log yRange
-      console.log xLabel
-      console.log yLabel
       @xAxis = new Axis xRange, xLabel.value
       @yAxis = new Axis yRange, yLabel.value
 
@@ -305,20 +301,15 @@ module.exports = React.createClass
       chart.buildAxes()
 
   render: ->
-    #TODO: this shouldn't be necessary
-    return <div/> unless @props.annotations[1]
-
     subjImage = @props.subject.locations[0]["image/jpeg"]
-
-    @parseClassification()
-
     plates = []
-    for chart in @charts
-      if chart.valid
-        try
+
+    try
+      @parseClassification()
+
+      for chart in @charts
+        if chart.valid
           plates.push(new Plate(chart, subjImage, @props.user_name))
-        catch error
-          console?.error 'Failed to link to Worldwide Telescope. Units must be annotated outside chart.'
 
     <div>
       {plates.map (plate, idx) ->
