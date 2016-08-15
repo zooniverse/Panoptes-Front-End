@@ -202,37 +202,36 @@ ProjectStatus = React.createClass
         <ProjectExperimentalFeatures project={@props.project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
+          <small>The workflow level dropdown is for the workflow level experimental feature.</small>
           {if @state.workflows.length is 0
-            <div className="workflow-status-list">No workflows found</div>
+            <div>No workflows found</div>
           else
-            <div className="workflow-status-list">
-              <h4>Workflow Settings</h4>
-              <div className="workflow-status-list">
-                <ul className="project-status__section-list">
-                  {@state.workflows.map (workflow) =>
-                    <li key={workflow.id}>
-                      <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
-                      <AutoSave resource={workflow}>
-                        <select
-                          onChange={@onChangeWorkflowLevel.bind(null, workflow)}
-                          value={if workflow.configuration.level? then workflow.configuration.level}
-                        >
-                          <option value="none">none</option>
-                          {@state.workflows.map (workflow, i) =>
-                            value = String(i + 1)
-                            <option
-                              key={i + Math.random()}
-                              value={value}
-                              disabled={@state.usedWorkflowLevels.indexOf(value) > -1}
-                            >
-                              {value}
-                            </option>}
-                        </select>
-                      </AutoSave>
-                    </li>}
-                </ul>
-              </div>
-           </div>}
+            <ul className="project-status__section-list">
+              {@state.workflows.map (workflow) =>
+                <li key={workflow.id} className="section-list__item">
+                  <WorkflowToggle workflow={workflow} project={@props.project} field="active" />{' | '}
+                  <AutoSave resource={workflow}>
+                    <label>
+                      Level:{' '}
+                      <select
+                        onChange={@onChangeWorkflowLevel.bind(null, workflow)}
+                        value={if workflow.configuration.level? then workflow.configuration.level}
+                      >
+                        <option value="none">none</option>
+                        {@state.workflows.map (workflow, i) =>
+                          value = String(i + 1)
+                          <option
+                            key={i + Math.random()}
+                            value={value}
+                            disabled={@state.usedWorkflowLevels.indexOf(value) > -1}
+                          >
+                            {value}
+                          </option>}
+                      </select>
+                    </label>
+                  </AutoSave>
+                </li>}
+            </ul>}
         </div>
         <hr />
         <div className="project-status__section">
