@@ -25,6 +25,7 @@ EXPERIMENTAL_FEATURES = [
   'column'
   'grid'
   'invert'
+  'workflow level'
 ]
 
 ProjectToggle = React.createClass
@@ -146,8 +147,41 @@ VersionList = React.createClass
 ProjectStatus = React.createClass
   displayName: "ProjectStatus"
 
+  propTypes:
+    project: React.PropTypes.object.isRequired
+
+  getInitialState: ->
+    usedWorkflowLevels: []
+    workflows: []
+
   getDefaultProps: ->
     project: null
+
+  componentDidMount: ->
+    getWorkflowsInOrder @props.project, fields: 'display_name,active,configuration'
+      .then (workflows) =>
+        usedWorkflowLevels = @getUsedWorkflowLevels(workflows)
+        @setState usedWorkflowLevels: usedWorkflowLevels, workflows: workflows
+
+  onChangeWorkflowLevel: (workflow, event) ->
+    selected = event.target.value
+    if selected is 'none'
+      workflow.update({ 'configuration.level': undefined })
+    else
+      workflow.update({ 'configuration.level': selected })
+
+    usedWorkflowLevels = @getUsedWorkflowLevels(@state.workflows);
+
+    @setState usedWorkflowLevels: usedWorkflowLevels
+
+  getUsedWorkflowLevels: (workflows) ->
+    usedWorkflowLevels = []
+
+    for workflow in workflows
+      if workflow.configuration.level?
+        usedWorkflowLevels.push(workflow.configuration.level);
+
+    usedWorkflowLevels
 
   render: ->
     <ChangeListener target={@props.project}>{ =>
@@ -168,19 +202,37 @@ ProjectStatus = React.createClass
         <ProjectExperimentalFeatures project={@props.project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
-          <PromiseRenderer promise={getWorkflowsInOrder @props.project, fields: 'display_name,active'}>{(workflows) =>
-            if workflows.length is 0
-              <div className="workflow-status-list">No workflows found</div>
-            else
+          {if @state.workflows.length is 0
+            <div className="workflow-status-list">No workflows found</div>
+          else
+            <div className="workflow-status-list">
+              <h4>Workflow Settings</h4>
               <div className="workflow-status-list">
                 <ul className="project-status__section-list">
-                  {workflows.map (workflow) =>
+                  {@state.workflows.map (workflow) =>
                     <li key={workflow.id}>
                       <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
+                      <AutoSave resource={workflow}>
+                        <select
+                          onChange={@onChangeWorkflowLevel.bind(null, workflow)}
+                          value={if workflow.configuration.level? then workflow.configuration.level}
+                        >
+                          <option value="none">none</option>
+                          {@state.workflows.map (workflow, i) =>
+                            value = String(i + 1)
+                            <option
+                              key={i + Math.random()}
+                              value={value}
+                              disabled={@state.usedWorkflowLevels.indexOf(value) > -1}
+                            >
+                              {value}
+                            </option>}
+                        </select>
+                      </AutoSave>
                     </li>}
                 </ul>
-             </div>
-          }</PromiseRenderer>
+              </div>
+           </div>}
         </div>
         <hr />
         <div className="project-status__section">
