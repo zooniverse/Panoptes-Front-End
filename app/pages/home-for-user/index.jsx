@@ -11,6 +11,7 @@ import ProjectStats from './project-stats';
 import qs from 'qs';
 import HomePageSocial from '../home-not-logged-in/social'
 import NewsSection from './news-section'
+import apiClient from 'panoptes-client/lib/api-client'
 
 import style from './index.styl';
 void style;
@@ -106,6 +107,7 @@ const HomePageForUser = React.createClass({
 
     getUserRibbonData(user)
     .then((ribbonData) => {
+      this.recentSubjects(ribbonData);
       this.setState({
         ribbonData: ribbonData,
       });
@@ -122,8 +124,46 @@ const HomePageForUser = React.createClass({
     });
   },
 
+  recentSubjects(ribbonData) {
+    this.fetchRecentSubjects(ribbonData).then((result) => {
+      this.setState({
+        newData: result,
+      });
+    });
+  },
+
   findProjectLink(project) {
     return `/projects/${project.slug}`;
+  },
+
+  fetchRecentSubjects(ribbonData) {
+    const newSubjects = ribbonData.map((result) => {
+      return result.subject_sets
+    }).reduce((a, b) => {
+      return a.concat(b);
+    }).sort().reverse().slice(0, 2);
+    return Promise.all(newSubjects.map((subject) => {
+      return apiClient.type('subject_sets').get(subject).catch(() => {
+        return null;
+      });
+    })).then((subject_set) => {
+      const projects = Promise.all(subject_set.map((data) => {
+        return apiClient.type('projects').get(data.links.project).catch(() => {
+          return null;
+        });
+      }));
+
+      return Promise.all([projects]).then(([project]) => {
+        return subject_set.map((data, i) => {
+          return {
+            project: project[i].display_name,
+            href: project[i].slug,
+            date_updated: data.updated_at,
+            dataSet: data.display_name,
+          }
+        });
+      });
+    });
   },
 
   toggleNews() {
@@ -216,7 +256,7 @@ const HomePageForUser = React.createClass({
             </div>
           </button>
 
-          <NewsSection projects={this.state.ribbonData} />
+          <NewsSection projects={this.state.ribbonData} newDatasets={this.state.newData} />
 
         </Pullout>
       </div>
