@@ -20,6 +20,7 @@ function getUserRibbonData(user) {
             owner: projects[i].links.owner.display_name,
             color: getColorFromString(projects[i].slug),
             classifications: prefsResource.activity_count,
+            subject_sets: projects[i].links.subject_sets,
           };
         } else {
           return null;
