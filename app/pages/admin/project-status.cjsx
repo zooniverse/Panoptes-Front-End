@@ -158,21 +158,25 @@ ProjectStatus = React.createClass
     project: null
 
   componentDidMount: ->
-    getWorkflowsInOrder @props.project, fields: 'display_name,active,configuration'
-      .then (workflows) =>
-        usedWorkflowLevels = @getUsedWorkflowLevels(workflows)
-        @setState usedWorkflowLevels: usedWorkflowLevels, workflows: workflows
+    @getWorkflows()
 
   onChangeWorkflowLevel: (workflow, event) ->
     selected = event.target.value
+    workflowToUpdate = workflow
+
+    # In Autosave component
     if selected is 'none'
-      workflow.update({ 'configuration.level': undefined })
+      workflowToUpdate.update({ 'configuration.level': undefined })
     else
-      workflow.update({ 'configuration.level': selected })
+      workflowToUpdate.update({ 'configuration.level': selected })
 
-    usedWorkflowLevels = @getUsedWorkflowLevels(@state.workflows);
+    @getWorkflows()
 
-    @setState usedWorkflowLevels: usedWorkflowLevels
+  getWorkflows: ->
+    getWorkflowsInOrder @props.project, fields: 'display_name,active,configuration'
+      .then (workflows) =>
+        usedWorkflowLevels = @getUsedWorkflowLevels(workflows)
+        @setState { usedWorkflowLevels, workflows }
 
   getUsedWorkflowLevels: (workflows) ->
     usedWorkflowLevels = []
