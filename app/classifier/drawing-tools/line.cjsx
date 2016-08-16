@@ -36,16 +36,17 @@ module.exports = React.createClass
 
   getDeletePosition: (x1, y1, x2, y2) ->
     scale = (@props.scale.horizontal + @props.scale.vertical) / 2
-    x = x1 + (BUFFER / scale)
-    if (@props.containerRect.width / @props.scale.horizontal) < x + (DELETE_BUTTON_WIDTH / scale)
-      x = x - ((BUFFER / scale) * 2)
-    if @calculateDistance(x, x2, y1, y2) < DELETE_BUTTON_WIDTH / scale
-      y1 = y1 - (BUFFER / scale)
+    x = if x1 > x2 then x1 + (BUFFER / scale) else x1 - (BUFFER / scale)
+    if @outOfBounds(x, scale)
+      x = (x1 + x2) / 2
+      y1 = (y1 + y2) / 2
     x: x
     y: y1
 
-  calculateDistance: (deleteBtnX, handleBtnX, deleteBtnY, handleBtnY) ->
-    Math.sqrt(Math.pow(deleteBtnX - handleBtnX, 2) + Math.pow(deleteBtnY - handleBtnY, 2))
+  outOfBounds: (deleteBtnX, scale) ->
+    leftSide = deleteBtnX - (DELETE_BUTTON_WIDTH / scale) < 0
+    rightSide = (@props.containerRect.width / @props.scale.horizontal) < deleteBtnX + (DELETE_BUTTON_WIDTH / scale)
+    leftSide or rightSide
 
   render: ->
     {x1, y1, x2, y2} = @props.mark
