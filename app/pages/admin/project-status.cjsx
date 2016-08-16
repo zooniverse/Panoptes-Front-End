@@ -151,6 +151,7 @@ ProjectStatus = React.createClass
     project: React.PropTypes.object.isRequired
 
   getInitialState: ->
+    error: null
     usedWorkflowLevels: []
     workflows: []
 
@@ -164,13 +165,20 @@ ProjectStatus = React.createClass
     selected = event.target.value
     workflowToUpdate = workflow
 
-    # In Autosave component
+    if @state.error
+      @setState error: null
+
+    # Saving explicitly to avoid potential race condition with projects with many workflows
     if selected is 'none'
       workflowToUpdate.update({ 'configuration.level': undefined })
     else
       workflowToUpdate.update({ 'configuration.level': selected })
 
-    @getWorkflows()
+    workflowToUpdate.save()
+      .then =>
+        @getWorkflows()
+      .catch (error) =>
+        @setState error: error
 
   getWorkflows: ->
     getWorkflowsInOrder @props.project, fields: 'display_name,active,configuration'
@@ -207,6 +215,8 @@ ProjectStatus = React.createClass
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
           <small>The workflow level dropdown is for the workflow level experimental feature.</small>
+          {if @state.error
+            <div>{@state.error}</div>}
           {if @state.workflows.length is 0
             <div>No workflows found</div>
           else
@@ -214,26 +224,24 @@ ProjectStatus = React.createClass
               {@state.workflows.map (workflow) =>
                 <li key={workflow.id} className="section-list__item">
                   <WorkflowToggle workflow={workflow} project={@props.project} field="active" />{' | '}
-                  <AutoSave resource={workflow}>
-                    <label>
-                      Level:{' '}
-                      <select
-                        onChange={@onChangeWorkflowLevel.bind(null, workflow)}
-                        value={if workflow.configuration.level? then workflow.configuration.level}
-                      >
-                        <option value="none">none</option>
-                        {@state.workflows.map (workflow, i) =>
-                          value = String(i + 1)
-                          <option
-                            key={i + Math.random()}
-                            value={value}
-                            disabled={@state.usedWorkflowLevels.indexOf(value) > -1}
-                          >
-                            {value}
-                          </option>}
-                      </select>
-                    </label>
-                  </AutoSave>
+                  <label>
+                    Level:{' '}
+                    <select
+                      onChange={@onChangeWorkflowLevel.bind(null, workflow)}
+                      value={if workflow.configuration.level? then workflow.configuration.level}
+                    >
+                      <option value="none">none</option>
+                      {@state.workflows.map (workflow, i) =>
+                        value = String(i + 1)
+                        <option
+                          key={i + Math.random()}
+                          value={value}
+                          disabled={@state.usedWorkflowLevels.indexOf(value) > -1}
+                        >
+                          {value}
+                        </option>}
+                    </select>
+                  </label>
                 </li>}
             </ul>}
         </div>
