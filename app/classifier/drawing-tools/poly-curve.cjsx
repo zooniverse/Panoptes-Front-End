@@ -11,6 +11,7 @@ GUIDE_WIDTH = 1
 GUIDE_DASH = [4, 4]
 # fraction of line lenght along (x) and perpendicular (y) to the line to place control point
 DEFAULT_CURVE = {x: 0.5, y: 0}
+BUFFER = 16
 
 DELETE_BUTTON_WEIGHT = 0.75 # fraction of line lenght to place delete button
 
@@ -62,16 +63,21 @@ module.exports = React.createClass
       x: (dx * control.x) - (dy * control.y) + start.x
       y: (dy * control.x) + (dx * control.y) + start.y
 
-    positionAlongCurve: (start, end, control, t) ->
-      # t is how far along the curve you want the pont
-      # t is in the range [0,1]
-      # if control is undefined just return the point t along the line between start and end
-      if control?
-        x: (1 - t) * (1 - t) * start.x + 2 * (1 - t) * t * control.x + t * t * end.x
-        y: (1 - t) * (1 - t) * start.y + 2 * (1 - t) * t * control.y + t * t * end.y
-      else
-        x: (1 - t) * start.x + t * end.x
-        y: (1 - t) * start.y + t * end.y
+  positionAlongCurve: (start, end, control, t) ->
+    # t is how far along the curve you want the pont
+    # t is in the range [0,1]
+    # if control is undefined just return the point t along the line between start and end
+    if control?
+      buffer = BUFFER / @props.scale.horizontal
+      x = (1 - t) * (1 - t) * start.x + 2 * (1 - t) * t * control.x + t * t * end.x
+      y = (1 - t) * (1 - t) * start.y + 2 * (1 - t) * t * control.y + t * t * end.y
+      for point in @props.mark.points
+        x = point.x - buffer if @calculateDistance(x, point.x, y, point.y) < buffer
+      x: x
+      y: y
+    else
+      x: (1 - t) * start.x + t * end.x
+      y: (1 - t) * start.y + t * end.y
 
   componentWillMount: ->
     @setState
@@ -84,6 +90,9 @@ module.exports = React.createClass
 
   componentWillUnmount: ->
     document.removeEventListener 'mousemove', @handleMouseMove
+
+  calculateDistance: (deleteBtnX, handleBtnX, deleteBtnY, handleBtnY) ->
+    Math.sqrt(Math.pow(deleteBtnX - handleBtnX, 2) + Math.pow(deleteBtnY - handleBtnY, 2))
 
   render: ->
     {points} = @props.mark
@@ -100,7 +109,7 @@ module.exports = React.createClass
     lastPoint = points[points.length - 1]
 
     deleteButtonPosition =
-      @constructor.positionAlongCurve(firstPoint, secondPoint, firstControlPoint , DELETE_BUTTON_WEIGHT)
+      @positionAlongCurve(firstPoint, secondPoint, firstControlPoint , DELETE_BUTTON_WEIGHT)
 
     svgPath = "M#{firstPoint.x} #{firstPoint.y} "
     svgPathHelpers = "M#{firstPoint.x} #{firstPoint.y} "
