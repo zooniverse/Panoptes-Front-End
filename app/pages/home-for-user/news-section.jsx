@@ -84,16 +84,27 @@ const NewsSection = React.createClass({
 
   renderPublication(article) {
     return <div>
+      <p className="pullout-publication-timestamp"> Aug 12, 2016 </p>
       <h5>{article.name}</h5>
-      <p>{article.publication.citation}</p>
+      <p className="news-section-content">
+        <a href={article.publication.href} target="_blank">
+          {article.publication.citation}
+          <i className="fa fa-long-arrow-right"></i>
+        </a>
+      </p>
     </div>
   },
 
   renderNewDatasets(data) {
+    const link = window.location.origin + "/projects/" + data.href
     const date = this.formatDate(new Date(data.date_updated));
     return <div>
       <h5>{data.project}</h5>
-      <p className= "news-section-content">{data.dataSet}</p>
+      <p className= "news-section-content">
+        <a href={link} target="_blank">
+          {data.dataSet}
+        </a>
+      </p>
       <p className="pullout-dataset-timestamp">{date}</p>
     </div>
   },
