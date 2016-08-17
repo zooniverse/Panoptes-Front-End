@@ -9,6 +9,12 @@ void style;
 
 const NewsSection = React.createClass({
 
+  getDefaultProps() {
+    return {
+      newDatasets: [],
+    };
+  },
+
   componentDidMount() {
     this.fetchProjects();
   },
@@ -83,24 +89,45 @@ const NewsSection = React.createClass({
     </div>
   },
 
+  renderNewDatasets(data) {
+    const date = this.formatDate(new Date(data.date_updated));
+    return <div>
+      <h5>{data.project}</h5>
+      <p className= "news-section-content">{data.dataSet}</p>
+      <p className="pullout-dataset-timestamp">{date}</p>
+    </div>
+  },
+
+  formatDate(date) {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May",
+    "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    return months[month] + " " + day + ", " + year
+  },
+
   render() {
     return (
       <div className='news-pullout-main'>
         <h2> Zooniverse News </h2>
 
         <div className='news-pullout-section'>
-          <h3> Recent Publications </h3>
+          <h4> Recent Publications </h4>
           {this.state.publications.map((article) => {
             return this.renderPublication(article);
           })}
         </div>
 
         <div className='news-pullout-section'>
-          <h3> New Datasets </h3>
+          <h4> New Datasets </h4>
+          {this.props.newDatasets.map((data) => {
+            return this.renderNewDatasets(data);
+          })}
         </div>
 
         <div className='news-pullout-section'>
-          <h3> Newest Project </h3>
+          <h4> Newest Project </h4>
           {this.state.projects.map((project) => {
             const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
             return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
