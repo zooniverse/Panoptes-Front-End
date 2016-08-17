@@ -23,6 +23,7 @@ module.exports = React.createClass
     importErrors: []
     resettingFiles: false
     editing: 'data'
+    # copying entire task Object to edit in @state...
     task: JSON.parse JSON.stringify @props.task
     choicesName: null
     characteristicsName: null
@@ -146,7 +147,7 @@ module.exports = React.createClass
         {if @state.editing is 'data'
           <div className="tab-content">
             <div className="columns-container">
-              <button className="major-button apply" disabled={@checkApply()} onClick={@handleApply}>Apply</button>
+              <button className="major-button apply" disabled={@checkApply()} onClick={@handleApply.bind(null, @state.task)}>Apply</button>
               <button className="major-button clear" disabled={@checkClear()} onClick={@clearState}>Clear</button>
             </div>
             <hr />
@@ -281,19 +282,15 @@ module.exports = React.createClass
   handleImportTabs: (tab) ->
     @setState editing: tab
 
-  handleApply: ->
-    if @state.choicesName or @state.confusionsName
-      @props.task.choices = @state.task.choices
-      @props.task.choicesOrder = @state.task.choicesOrder
-      @props.task.questionsMap = @state.task.questionsMap
-    if @state.characteristicsName
-      @props.task.characteristics = @state.task.characteristics
-      @props.task.characteristicsOrder = @state.task.characteristicsOrder
-      @props.task.choices = @state.task.choices
-    if @state.questionsName
-      @props.task.questions = @state.task.questions
-      @props.task.questionsOrder = @state.task.questionsOrder
-      @props.task.questionsMap = @state.task.questionsMap
+  handleApply: (newTask) ->
+    @props.task.characteristics = newTask.characteristics
+    @props.task.characteristicsOrder = newTask.characteristicsOrder
+    @props.task.choices = newTask.choices
+    @props.task.choicesOrder = newTask.choicesOrder
+    @props.task.questions = newTask.questions
+    @props.task.questionsMap = newTask.questionsMap
+    @props.task.questionsOrder = newTask.questionsOrder
+
     @props.workflow.update('tasks').save()
       .then =>
         @clearState()
@@ -386,15 +383,6 @@ module.exports = React.createClass
       confusions: {}
     @state.task.choices[choiceID]
 
-  ensureChoice: (name) ->
-    choiceLabels = []
-    for choiceKey, choiceValue of @state.task.choices
-      choiceLabels.push choiceValue.label
-    noLabelMatch = choiceLabels.some (label, i) =>
-      label is name
-    unless noLabelMatch
-      throw new Error "#{name} does not have a Choices match"
-
   addChoice: ({name, description, no_questions, images, __parsedExtra}) ->
     unless name?
       throw new Error 'Choices require a "name" column.'
@@ -409,10 +397,19 @@ module.exports = React.createClass
       choice.images = images
     @setState choices: true
 
+  checkChoiceLabelMatch: (name) ->
+    choiceLabels = []
+    for choiceKey, choiceValue of @state.task.choices
+      choiceLabels.push choiceValue.label
+    noLabelMatch = choiceLabels.some (label, i) =>
+      label is name
+    unless noLabelMatch
+      throw new Error "#{name} does not have a Choices match"
+
   addCharacteristics: (row) ->
     unless row.name?
       throw new Error 'Characteristics require a "name" column.'
-    @ensureChoice(row.name)
+    @checkChoiceLabelMatch(row.name)
     for charKeyVal, isSet of row when charKeyVal isnt 'name'
       [characteristicLabel, valueLabelAndIcon] = charKeyVal.replace('=', '__SPLIT_ONCE__').split /\s*__SPLIT_ONCE__\s*/
       [valueLabel, valueIcon] = valueLabelAndIcon.split /\s*;\s*/
@@ -444,8 +441,8 @@ module.exports = React.createClass
       throw new Error 'Confused pairs require a "name" column.'
     unless twin?
       throw new Error 'Confused pairs require a "twin" column.'
-    @ensureChoice name
-    @ensureChoice twin
+    @checkChoiceLabelMatch name
+    @checkChoiceLabelMatch twin
     choiceID = @makeID name
     confusionID = @makeID twin
     @state.task.choices[choiceID]?.confusionsOrder.push confusionID
@@ -469,14 +466,14 @@ module.exports = React.createClass
     # if we specified mapped choices, create those entries instead
     if includeChoices?
       for choice in includeChoices
-        @ensureChoice choice
+        @checkChoiceLabelMatch choice
         choiceID = @makeID choice
         continue unless !!choiceID
         (@maybeProp @state.task, 'inclusions', []).push [choiceID, questionID]
 
     if excludeChoices?
       for choice in excludeChoices
-        @ensureChoice choice
+        @checkChoiceLabelMatch choice
         choiceID = @makeID choice
         continue unless !!choiceID
         (@maybeProp @state.task, 'exclusions', []).push [choiceID, questionID]
@@ -648,9 +645,8 @@ module.exports = React.createClass
 
     #confusions
     if @checkConfusions()
-      for choiceKey, choiceValue of @state.task.choices
-        if Object.keys(choiceValue.confusions).length is 0
-          contentWarnings.push {source: 'confusions', message: "#{choiceValue.label} has no confusions."}
+      for choiceKey, choiceValue of @state.task.choices when choiceValue.confusionsOrder.length is 0
+        contentWarnings.push {source: 'confusions', message: "#{choiceValue.label} has no confusions."}
     else
       contentWarnings.push {source: 'confusions', message: 'No confusions added.'}
 
@@ -660,14 +656,12 @@ module.exports = React.createClass
 
     #images-choices
     for choiceKey, choiceValue of @state.task.choices
-      for image in choiceValue.images
-        if Object.keys(@props.task.images).indexOf(image) is -1
-          contentWarnings.push {source: 'images-choices', message: "#{choiceValue.label} is missing image #{image}."}
+      for image in choiceValue.images when image not in Object.keys(@props.task.images)
+        contentWarnings.push {source: 'images-choices', message: "#{choiceValue.label} is missing image #{image}."}
 
     #images-characteristics
     for characteristicsKey, characteristicsValue of @state.task.characteristics
-      for characteristicKey, characteristicValue of characteristicsValue.values
-        if Object.keys(@props.task.images).indexOf(characteristicValue.image) is -1
-          contentWarnings.push {source: 'images-characteristics', message: "Characteristic #{characteristicsValue.label}, subtype #{characteristicValue.label} is missing #{characteristicValue.image}."}
+      for characteristicKey, characteristicValue of characteristicsValue.values when characteristicValue.image not in Object.keys(@props.task.images)
+        contentWarnings.push {source: 'images-characteristics', message: "Characteristic #{characteristicsValue.label}, subtype #{characteristicValue.label} is missing #{characteristicValue.image}."}
 
     contentWarnings
