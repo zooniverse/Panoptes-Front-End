@@ -13,7 +13,6 @@ seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 `import CustomSignInPrompt from './custom-sign-in-prompt'`
-{ Link } = require 'react-router'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 

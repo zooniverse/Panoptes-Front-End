@@ -1,5 +1,4 @@
 import React from 'react';
-// import classnames from 'classnames';
 
 const PROMPT_CUSTOM_SIGN_IN_EVERY = 3;
 
