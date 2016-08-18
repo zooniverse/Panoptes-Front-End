@@ -1,9 +1,11 @@
 import React from 'react';
 // import classnames from 'classnames';
 
+const PROMPT_CUSTOM_SIGN_IN_EVERY = 3;
+
 export default class CustomSignInPrompt extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.hide = this.hide.bind(this);
     this.state = {
       hidden: true,
@@ -11,7 +13,7 @@ export default class CustomSignInPrompt extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.show !== nextProps.show && this.state.hidden === true) {
+    if (nextProps.classificationsThisSession % PROMPT_CUSTOM_SIGN_IN_EVERY === 0) {
       this.setState({ hidden: false });
     }
   }
@@ -21,20 +23,20 @@ export default class CustomSignInPrompt extends React.Component {
   }
 
   render() {
-    let prompt;
     if (!this.state.hidden) {
-      prompt = (
-        <div>
-          {this.props.children}
+      return (
+        <div className="project-announcement-banner custom-sign-in-banner">
+          <span>
+            <i className="fa fa-exclamation-circle" aria-hidden="true"></i>{' '}
+            {this.props.children}
+          </span>
           <button type="button" className="secret-button" onClick={this.hide}>
             x
           </button>
         </div>);
-    } else {
-      prompt = <div></div>;
     }
 
-    return (prompt);
+    return (null);
   }
 }
 
@@ -43,10 +45,10 @@ CustomSignInPrompt.propTypes = {
     React.PropTypes.arrayOf(React.PropTypes.node).isRequired,
     React.PropTypes.node.isRequired,
   ]),
-  show: React.PropTypes.bool.isRequired,
+  classificationsThisSession: React.PropTypes.number.isRequired,
 };
 
 CustomSignInPrompt.defaultProps = {
   children: null,
-  show: false,
+  classificationsThisSession: 0,
 };

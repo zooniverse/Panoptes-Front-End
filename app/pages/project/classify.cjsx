@@ -12,12 +12,12 @@ Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
-CustomSignInPrompt = require './custom-sign-in-prompt.jsx'
+`import CustomSignInPrompt from './custom-sign-in-prompt'`
+{ Link } = require 'react-router'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
 PROMPT_MINI_COURSE_EVERY = 5
-PROMPT_CUSTOM_SIGN_IN_EVERY = 3
 
 SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
 
@@ -222,7 +222,7 @@ module.exports = React.createClass
         <FinishedBanner project={@props.project} />}
 
       {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
-        <CustomSignInPrompt show={classificationsThisSession % PROMPT_CUSTOM_SIGN_IN_EVERY is 0}> 
+        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}> 
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
         </CustomSignInPrompt>}
       {if @state.classification?
