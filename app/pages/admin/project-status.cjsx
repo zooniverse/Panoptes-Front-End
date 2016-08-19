@@ -214,7 +214,7 @@ ProjectStatus = React.createClass
         <ProjectExperimentalFeatures project={@props.project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
-          <small>The workflow level dropdown is for the workflow assignemnt experimental feature.</small>
+          <small>The workflow level dropdown is for the workflow assignment experimental feature.</small>
           {if @state.error
             <div>{@state.error}</div>}
           {if @state.workflows.length is 0
@@ -232,7 +232,7 @@ ProjectStatus = React.createClass
                     >
                       <option value="none">none</option>
                       {@state.workflows.map (workflow, i) =>
-                        value = String(i + 1)
+                        value = i + 1
                         <option
                           key={i + Math.random()}
                           value={value}
