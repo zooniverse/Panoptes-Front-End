@@ -64,7 +64,6 @@ Classifier = React.createClass
     try
       @context.geordi?.forget ['subjectID']
 
-
   loadSubject: (subject) ->
     @setState
       subjectLoading: true
@@ -138,6 +137,8 @@ Classifier = React.createClass
         <div className="task-area">
           {if currentTask?
             @renderTask currentClassification, currentAnnotation, currentTask
+          else if @subjectIsGravitySpyGoldStandard()
+            @renderGravitySpyGoldStandard currentClassification
           else if not @props.workflow.configuration?.hide_classification_summaries # Classification is complete; show summary if enabled
             @renderSummary currentClassification}
         </div>
@@ -149,8 +150,6 @@ Classifier = React.createClass
 
     # Should we disabled the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
-
-
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
@@ -205,7 +204,7 @@ Classifier = React.createClass
       <nav className="task-nav">
         {if Object.keys(@props.workflow.tasks).length > 1
           <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
-        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
+        {if not nextTaskKey and (not @subjectIsGravitySpyGoldStandard() or @props.workflow.configuration?.hide_classification_summaries) and @props.owner? and @props.project?
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
         {if nextTaskKey
@@ -280,8 +279,7 @@ Classifier = React.createClass
             user_name={@props.user.display_name}
             workflow={@props.workflow}
           />
-        </strong>
-        }
+        </strong>}
 
       {if @props.project?.slug is PULSAR_HUNTERS_SLUG or location.href.indexOf('fake-pulsar-feedback') isnt -1
         subjectClass = @props.subject.metadata['#Class']?.toUpperCase()
@@ -380,6 +378,37 @@ Classifier = React.createClass
           </p>}
     </TriggeredModalForm>
 
+  renderGravitySpyGoldStandard: (classification) ->
+    choiceLabels = []
+    for annotation in classification.annotations when @props.workflow.tasks[annotation.task].type is 'survey'
+      for value in annotation.value
+        choiceLabels.push @props.workflow.tasks[annotation.task].choices[value.choice].label
+    match = choiceLabels.some (label) => label is @props.subject.metadata['#Label']
+
+    <div>
+    {if match
+      <div>
+        <p>Good work!</p>
+        <p>When our experts classified this image,<br />they also thought it was a {@props.subject.metadata['#Label']}!</p>
+      </div>
+    else
+      <div>
+        <p>You responded {choiceLabels.join(', ')}.</p>
+        <p>When our experts classified this image,<br />they labeled it as a {@props.subject.metadata['#Label']}.</p>
+        <p>Some of the glitch classes can look quite similar,<br />so please keep trying your best.</p>
+        <p>Check out the tutorial and the field guide for more guidance.</p>
+      </div>}
+
+      <hr />
+
+      <nav className="task-nav">
+        {if @props.owner? and @props.project?
+          [ownerName, name] = @props.project.slug.split('/')
+          <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
+        <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
+      </nav>
+    </div>
+
   # Whenever a subject image is loaded in the annotator, record its size at that time.
   handleSubjectImageLoad: (e, frameIndex) ->
     @context.geordi?.remember subjectID: @props.subject?.id
@@ -425,7 +454,10 @@ Classifier = React.createClass
       console.log 'Classification quality', classificationQuality
       @setState {classificationQuality}
 
-    @props.onComplete?()
+    if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
+      @props.onCompleteAndLoadAnotherSubject?()
+    else
+      @props.onComplete?()
 
   handleGoldStandardChange: (e) ->
     @props.classification.update gold_standard: e.target.checked || undefined # Delete the whole key.
@@ -445,6 +477,12 @@ Classifier = React.createClass
   renderBackButtonWarning: ->
     <p className="back-button-warning" >Going back will clear your work for the current task.</p>
 
+  subjectIsGravitySpyGoldStandard: ->
+    if @props.workflow.configuration?.gravity_spy_gold_standard and @props.subject.metadata?['#Type'] is 'Gold'
+      true
+    else
+      false
+
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
 
@@ -453,6 +491,7 @@ module.exports = React.createClass
     classification: {}
     onLoad: Function.prototype
     onComplete: Function.prototype
+    onCompleteAndLoadAnotherSubject: Function.prototype
     onClickNext: Function.prototype
 
   getInitialState: ->

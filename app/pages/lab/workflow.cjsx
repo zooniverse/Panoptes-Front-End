@@ -286,6 +286,24 @@ EditWorkflowPage = React.createClass
               <hr />
             </div>}
 
+          {if 'Gravity Spy Gold Standard' in @props.project.experimental_tools
+            <div>
+              <div>
+                <AutoSave resource={@props.workflow}>
+                  <span className="form-label">Gravity Spy Gold Standard</span><br />
+                  <small className="form-help">Notify a user how they've classified a Gold Standard subject.</small>
+                  <br />
+                  <label htmlFor="gravity_spy_gold_standard">
+                    <input type="checkbox" onChange={@handleSetGravitySpyGoldStandard} checked={@props.workflow.configuration.gravity_spy_gold_standard}/>
+                    Gravity Spy Gold Standard
+                  </label>
+                </AutoSave>
+              </div>
+
+              <hr />
+
+            </div>}
+
           <AutoSave tag="div" resource={@props.workflow}>
             <span className="form-label">Multi-image options</span><br />
             <small className="form-help">Choose how to display multiple images</small>
@@ -509,6 +527,10 @@ EditWorkflowPage = React.createClass
   handleSetInvert: (e) ->
     @props.workflow.update
       'configuration.invert_subject': e.target.checked
+
+  handleSetGravitySpyGoldStandard: (e) ->
+    @props.workflow.update
+      'configuration.gravity_spy_gold_standard': e.target.checked
 
   handleSetWorldWideTelescope: (e) ->
     if !@props.workflow.configuration.custom_summary

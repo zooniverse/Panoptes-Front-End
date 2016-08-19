@@ -231,7 +231,8 @@ module.exports = React.createClass
           onLoad={@scrollIntoView}
           demoMode={@state.demoMode}
           onChangeDemoMode={@handleDemoModeChange}
-          onComplete={if @state.workflow?.configuration?.hide_classification_summaries then @saveClassificationAndLoadAnotherSubject else @saveClassification}
+          onComplete={@saveClassification}
+          onCompleteAndLoadAnotherSubject={@saveClassificationAndLoadAnotherSubject}
           onClickNext={@loadAnotherSubject}
         />
       else if @state.rejected.classification?
