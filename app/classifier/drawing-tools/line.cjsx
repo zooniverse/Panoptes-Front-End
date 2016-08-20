@@ -7,6 +7,8 @@ DragHandle = require './drag-handle'
 
 MINIMUM_LENGTH = 5
 GRAB_STROKE_WIDTH = 6
+BUFFER = 16
+DELETE_BUTTON_WIDTH = 8
 
 module.exports = React.createClass
   displayName: 'LineTool'
@@ -32,9 +34,25 @@ module.exports = React.createClass
       {x1, y1, x2, y2} = mark
       DrawingToolRoot.distance(x1, y1, x2, y2) > MINIMUM_LENGTH
 
+  getDeletePosition: (x1, y1, x2, y2) ->
+    scale = (@props.scale.horizontal + @props.scale.vertical) / 2
+    x = if x1 > x2 then x1 + (BUFFER / scale) else x1 - (BUFFER / scale)
+    if @outOfBounds(x, scale)
+      x = (x1 + x2) / 2
+      y1 = (y1 + y2) / 2
+    x: x
+    y: y1
+
+  outOfBounds: (deleteBtnX, scale) ->
+    leftSide = deleteBtnX - (DELETE_BUTTON_WIDTH / scale) < 0
+    rightSide = (@props.containerRect.width / @props.scale.horizontal) < deleteBtnX + (DELETE_BUTTON_WIDTH / scale)
+    leftSide or rightSide
+
   render: ->
     {x1, y1, x2, y2} = @props.mark
     points = {x1, y1, x2, y2}
+
+    deletePosition = @getDeletePosition(x1, y1, x2, y2)
 
     <DrawingToolRoot tool={this}>
       <line {...points} />
@@ -45,7 +63,7 @@ module.exports = React.createClass
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={(x1 + x2) / 2} y={(y1 + y2) / 2} />
+          <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} />
           <DragHandle x={x1} y={y1} scale={@props.scale} onDrag={@handleHandleDrag.bind this, 1} />
           <DragHandle x={x2} y={y2} scale={@props.scale} onDrag={@handleHandleDrag.bind this, 2} />
         </g>}
