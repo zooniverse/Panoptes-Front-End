@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PROMPT_CUSTOM_SIGN_IN_EVERY = 3;
+const PROMPT_CUSTOM_SIGN_IN_EVERY = 5;
 
 export default class CustomSignInPrompt extends React.Component {
   constructor(props) {
