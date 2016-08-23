@@ -9,9 +9,10 @@ import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
 import ProjectStats from './project-stats';
 import qs from 'qs';
-import HomePageSocial from '../home-not-logged-in/social'
-import NewsSection from './news-section'
-import apiClient from 'panoptes-client/lib/api-client'
+import HomePageSocial from '../home-not-logged-in/social';
+import NewsSection from './news-section';
+import apiClient from 'panoptes-client/lib/api-client';
+import moment from 'moment';
 
 import style from './index.styl';
 void style;
@@ -125,10 +126,8 @@ const HomePageForUser = React.createClass({
   },
 
   recentSubjects(ribbonData) {
-    this.fetchRecentSubjects(ribbonData).then((result) => {
-      this.setState({
-        newData: result,
-      });
+    this.setState({
+      newData: this.fetchRecentSubjects(ribbonData),
     });
   },
 
@@ -137,32 +136,16 @@ const HomePageForUser = React.createClass({
   },
 
   fetchRecentSubjects(ribbonData) {
-    const newSubjects = ribbonData.map((result) => {
-      return result.subject_sets
-    }).reduce((a, b) => {
-      return a.concat(b);
-    }).sort().reverse().slice(0, 2);
-    return Promise.all(newSubjects.map((subject) => {
-      return apiClient.type('subject_sets').get(subject).catch(() => {
-        return null;
-      });
-    })).then((subject_set) => {
-      const projects = Promise.all(subject_set.map((data) => {
-        return apiClient.type('projects').get(data.links.project).catch(() => {
-          return null;
-        });
-      }));
+    const recentSets = ribbonData.sort((a, b) => {
+      return new Date(b['recentSubjectSet'].updated_at) - new Date(a['recentSubjectSet'].updated_at)
+    }).slice(0, 3);
 
-      return Promise.all([projects]).then(([project]) => {
-        return subject_set.map((data, i) => {
-          return {
-            project: project[i].display_name,
-            href: project[i].slug,
-            date_updated: data.updated_at,
-            dataSet: data.display_name,
-          }
-        });
-      });
+    return recentSets.map((project) => {
+      return {
+        project: project.name,
+        href: project.slug,
+        timestamp: moment(new Date(project['recentSubjectSet'].updated_at)).fromNow(),
+      }
     });
   },
 
