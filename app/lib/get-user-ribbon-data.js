@@ -14,9 +14,9 @@ function getUserRibbonData(user) {
       return Promise.all(projects.map((project) => {
         return project.get('subject_sets').catch(() => {
           return null;
-        })
-      }))
-    })
+        });
+      }));
+    });
 
     return Promise.all([awaitProjects, awaitSubjectSets]).then(([projects, subject_sets]) => {
       return prefsResources.map((prefsResource, i) => {

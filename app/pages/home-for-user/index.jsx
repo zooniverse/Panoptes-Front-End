@@ -136,7 +136,13 @@ const HomePageForUser = React.createClass({
   },
 
   fetchRecentSubjects(ribbonData) {
-    const recentSets = ribbonData.sort((a, b) => {
+    const test = []
+    ribbonData.map((data) => {
+      if (data['recentSubjectSet'] !== undefined){
+        test.push(data)
+      }
+    });
+    const recentSets = test.sort((a, b) => {
       return new Date(b['recentSubjectSet'].updated_at) - new Date(a['recentSubjectSet'].updated_at)
     }).slice(0, 3);
 
