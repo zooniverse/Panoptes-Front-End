@@ -24,22 +24,17 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
-    startIfNecessary: ({workflow, user}) ->
+    startIfNecessary: ({workflow, user, preferences}) ->
       @find({workflow}).then (tutorial) =>
         if tutorial?
-          @checkIfCompleted(tutorial, user).then (completed) =>
+          @checkIfCompleted(tutorial, user, preferences).then (completed) =>
             unless completed
               @start tutorial, user
 
-    checkIfCompleted: (tutorial, user) ->
+    checkIfCompleted: (tutorial, user, preferences) ->
       if user?
-        tutorial.get('project').then (project) =>
-          user.get 'project_preferences', project_id: project.id
-            .catch =>
-              []
-            .then ([projectPreferences]) =>
-              window.prefs = projectPreferences
-              projectPreferences?.preferences?.tutorials_completed_at?[tutorial.id]?
+        window.prefs = preferences
+        Promise.resolve preferences?.preferences?.tutorials_completed_at?[tutorial.id]?
       else
         Promise.resolve completedThisSession[tutorial.id]?
 
