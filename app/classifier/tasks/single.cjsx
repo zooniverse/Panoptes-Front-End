@@ -89,10 +89,13 @@ module.exports = React.createClass
     <div>
       <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
 
-      {<NothingHere handleChange={@handleChange} task={@props.task} /> if @props.task.nothingHere}
+      {<NothingHere onChange={@props.onChange} annotation={@props.annotation} task={@props.task} /> if @props.task.nothingHere}
     </div>
 
   handleChange: (index, e) ->
+    if @props.task.nothingHere and @props.annotation.value is @props.task.answers.length
+      @props.task.shortcut = false
+
     if e.target.checked
       newAnnotation = Object.assign {}, @props.annotation, value: index
       @props.onChange newAnnotation

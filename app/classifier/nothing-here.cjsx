@@ -1,9 +1,13 @@
 React = require 'react'
 
+NOOP = Function.prototype
+
 module.exports = React.createClass
   displayName: 'NothinHereOption'
 
   getDefaultProps: ->
+    multiple: false
+    onChange: NOOP
     task: null
 
   render: ->
@@ -17,11 +21,15 @@ module.exports = React.createClass
     </label>
 
   initShortcut: (e) ->
-    @props.handleChange @props.task.answers.length, e
+    value = if @props.multiple
+      [@props.task.answers.length]
+    else
+      @props.task.answers.length
 
     if e.target.checked
       @props.task.shortcut = true
     else
       @props.task.shortcut = false
 
-    @forceUpdate()
+    newAnnotation = Object.assign {}, @props.annotation, {value: value}
+    @props.onChange newAnnotation

@@ -92,11 +92,16 @@ module.exports = React.createClass
     <div>
       <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
 
-      {<NothingHere handleChange={@handleChange} task={@props.task} annotation={@props.annotation} /> if @props.task.nothingHere}
+      {<NothingHere multiple={true} onChange={@props.onChange} task={@props.task} annotation={@props.annotation} /> if @props.task.nothingHere}
     </div>
 
   handleChange: (index, e) ->
     value = @props.annotation.value.slice 0
+
+    if @props.task.nothingHere
+      if value[0] is @props.task.answers.length
+        @props.task.shortcut = false
+        value = []
 
     if e.target.checked
       if index not in value
