@@ -35,7 +35,6 @@ const NewsSection = React.createClass({
     const userProjects = [];
     const newsPublications = [];
 
-    userProjects.push({name: 'Solar Stormwatch', slug: 'zooniverse/solar-stormwatch'}),
     this.props.projects.map((project) =>{
       userProjects.push({name:project.name, slug: project.slug});
     });
