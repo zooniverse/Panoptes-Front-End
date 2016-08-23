@@ -109,28 +109,30 @@ const NewsSection = React.createClass({
   render() {
     return (
       <div className='news-pullout-main'>
-        <h2> Zooniverse News </h2>
+        <div className='pullout-scroll-contain'>
+          <h2> Zooniverse News </h2>
 
-        <div className='news-pullout-section'>
-          <h4> Recent Publications </h4>
-          {this.state.publications.map((article) => {
-            return this.renderPublication(article);
-          })}
-        </div>
+          <div className='news-pullout-section'>
+            <h4> Recent Publications </h4>
+            {this.state.publications.map((article) => {
+              return this.renderPublication(article);
+            })}
+          </div>
 
-        <div className='news-pullout-section'>
-          <h4> New Datasets </h4>
-          {this.props.newDatasets.map((data) => {
-            return this.renderNewDatasets(data);
-          })}
-        </div>
+          <div className='news-pullout-section'>
+            <h4> New Datasets </h4>
+            {this.props.newDatasets.map((data) => {
+              return this.renderNewDatasets(data);
+            })}
+          </div>
 
-        <div className='news-pullout-section'>
-          <h4> Newest Project </h4>
-          {this.state.projects.map((project) => {
-            const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
-            return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
-          })}
+          <div className='news-pullout-section'>
+            <h4> Newest Project </h4>
+            {this.state.projects.map((project) => {
+              const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
+              return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
+            })}
+          </div>
         </div>
       </div>
     );
