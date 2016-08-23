@@ -1,5 +1,6 @@
 import React from 'react';
 import SVGLink from './svg-link';
+import { Link } from 'react-router';
 
 import style from './circle-ribbon.styl';
 void style;
@@ -20,6 +21,7 @@ const CircleRibbon = React.createClass({
     data: React.PropTypes.array,
     hrefTemplate: React.PropTypes.func,
     onClick: React.PropTypes.func,
+    user: React.PropTypes.object,
   },
 
   getDefaultProps() {
@@ -170,15 +172,17 @@ const CircleRibbon = React.createClass({
           </defs>
 
           {!!this.props.image && (
-            <image
-              xlinkHref={this.props.image}
-              x={this.props.weight + this.props.gap}
-              y={this.props.weight + this.props.gap}
-              width={imageSize}
-              height={imageSize}
-              clipPath={`url('#circle-ribbon-clip-${this.id}')`}
-              className={`url('#circle-ribbon-shadow-${this.id}')`}
-            />
+            <Link to={`/users/${this.props.user.login}/stats`}>
+              <image
+                xlinkHref={this.props.image}
+                x={this.props.weight + this.props.gap}
+                y={this.props.weight + this.props.gap}
+                width={imageSize}
+                height={imageSize}
+                clipPath={`url('#circle-ribbon-clip-${this.id}')`}
+                className={`url('#circle-ribbon-shadow-${this.id}')`}
+              />
+            </Link>
           )}
 
           <g ref="arcGroup" fill="none" stroke="none" transform="translate(50, 50)">
