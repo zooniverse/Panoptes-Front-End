@@ -260,12 +260,6 @@ ProjectPageController = React.createClass
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
     @fetchProjectData @props.params.owner, @props.params.name, @props.user
-      .then =>
-        # For testing! Simulating a new assignment coming in after some time.
-        setTimeout ( => 
-          console.log('set selected workfow')
-          @state.preferences.update "preferences.selected_workflow": '2333'
-        ), 5000
 
   componentWillReceiveProps: (nextProps) ->
     {owner, name} = nextProps.params
