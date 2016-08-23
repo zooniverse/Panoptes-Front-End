@@ -97,25 +97,13 @@ const NewsSection = React.createClass({
 
   renderNewDatasets(data) {
     const link = window.location.origin + "/projects/" + data.href
-    const date = this.formatDate(new Date(data.date_updated));
     return <div>
-      <h5>{data.project}</h5>
-      <p className= "news-section-content">
-        <a href={link} target="_blank">
-          {data.dataSet}
-        </a>
-      </p>
-      <p className="pullout-dataset-timestamp">{date}</p>
+      <a href={link} target="_blank">
+        <h5>{data.project} </h5>
+      </a>
+        <h5> has been updated! </h5>
+      <p className="pullout-dataset-timestamp">{data.timestamp}</p>
     </div>
-  },
-
-  formatDate(date) {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May",
-    "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
-    const day = date.getDate();
-    const month = date.getMonth();
-    const year = date.getFullYear();
-    return months[month] + " " + day + ", " + year
   },
 
   render() {
