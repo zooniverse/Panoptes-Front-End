@@ -214,7 +214,7 @@ const HomePageForUser = React.createClass({
           <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
         ) : (
           <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-            <CircleRibbon loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
+            <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
             <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
 
