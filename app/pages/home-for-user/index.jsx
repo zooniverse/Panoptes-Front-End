@@ -209,45 +209,48 @@ const HomePageForUser = React.createClass({
     const OpenSectionComponent = SECTIONS[hashQuery.focus];
 
     return (
-      <div className="home-page-for-user">
-        <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
+      <div>
+        <div className="home-page-for-user">
+          <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
 
-        {!!this.state.error && (
-          <div>{this.state.error.toString()}</div>
-        )}
+          {!!this.state.error && (
+            <div>{this.state.error.toString()}</div>
+          )}
 
-        {!!hashQuery.project ? (
-          <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
-        ) : (
-          <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-            <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
+          {!!hashQuery.project ? (
+            <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
+          ) : (
+            <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
+              <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
-            <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
+              <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
 
-            {OpenSectionComponent === undefined ? (
-              this.renderMenu()
-            ) : (
-              <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
-            )}
-          </div>
-        )}
+              {OpenSectionComponent === undefined ? (
+                this.renderMenu()
+              ) : (
+                <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
+              )}
+            </div>
+          )}
 
-        <div className="on-home-page-logged-in flex-container">
+          <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
+            <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
+              <div className="home-page-news-pullout__toggle-label">
+                <i className="fa fa-cog fa-fw"></i>
+                <br />
+                News
+              </div>
+            </button>
+
+            <NewsSection projects={this.state.ribbonData} newDatasets={this.state.newData} />
+
+          </Pullout>
+        </div>
+
+        <div className="home-page-for-user on-home-page-logged-in">
           <HomePageSocial />
         </div>
 
-        <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
-          <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
-            <div className="home-page-news-pullout__toggle-label">
-              <i className="fa fa-cog fa-fw"></i>
-              <br />
-              News
-            </div>
-          </button>
-
-          <NewsSection projects={this.state.ribbonData} newDatasets={this.state.newData} />
-
-        </Pullout>
       </div>
     );
   },
