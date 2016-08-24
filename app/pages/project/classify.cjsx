@@ -12,6 +12,7 @@ Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
+`import CustomSignInPrompt from './custom-sign-in-prompt'`
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -219,6 +220,10 @@ module.exports = React.createClass
       {if @state.projectIsComplete
         <FinishedBanner project={@props.project} />}
 
+      {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
+        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}> 
+          <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
+        </CustomSignInPrompt>}
       {if @state.classification?
         <Classifier
           {...@props}
