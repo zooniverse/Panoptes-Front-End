@@ -68,10 +68,6 @@ module.exports = React.createClass
                 >
                   {workflow.display_name}
                 </Link>
-              else # Show something if workflow config levels aren't set.
-                <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
-                  Get started!
-                </Link>
           else
             <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
               Get started!
