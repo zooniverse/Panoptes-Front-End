@@ -112,6 +112,14 @@ const CircleRibbon = React.createClass({
     this.props.onClick(clickedProject.id);
   },
 
+  calcLargeArc(classifications) {
+    if (classifications / this.state.totalClassifications >= .5) {
+      return 1;
+    } else {
+      return 0;
+    }
+  },
+
   renderArc(project) {
     const index = this.props.data.indexOf(project);
 
@@ -129,6 +137,7 @@ const CircleRibbon = React.createClass({
 
     const startPoint = this.getPointOnCircle(startAmount, radius);
     const endPoint = this.getPointOnCircle(endAmount, radius);
+    const largeArc = this.calcLargeArc(project.classifications);
 
     return (
       <SVGLink
@@ -141,7 +150,7 @@ const CircleRibbon = React.createClass({
           className="circle-ribbon__project-arc"
           d={`
             M ${startPoint.x} ${startPoint.y}
-            A ${radius} ${radius} 0 0 1 ${endPoint.x}, ${endPoint.y}
+            A ${radius} ${radius} 0 ${largeArc} 1 ${endPoint.x}, ${endPoint.y}
           `}
           stroke={project.color}
           data-index={index}
