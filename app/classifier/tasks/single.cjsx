@@ -2,7 +2,6 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 GenericTask = require './generic'
 GenericTaskEditor = require './generic-editor'
-NothingHere = require '../nothing-here'
 
 NOOP = Function.prototype
 
@@ -86,16 +85,9 @@ module.exports = React.createClass
         </div>
       </label>
 
-    <div>
-      <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
-
-      {<NothingHere onChange={@props.onChange} annotation={@props.annotation} task={@props.task} /> if @props.task.nothingHere}
-    </div>
+    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
 
   handleChange: (index, e) ->
-    if @props.task.nothingHere and @props.annotation.value is @props.task.answers.length
-      @props.task.shortcut = false
-
     if e.target.checked
       newAnnotation = Object.assign {}, @props.annotation, value: index
       @props.onChange newAnnotation

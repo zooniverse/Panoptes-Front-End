@@ -2,7 +2,6 @@ React = require 'react'
 GenericTask = require './generic'
 {Markdown} = (require 'markdownz').default
 GenericTaskEditor = require './generic-editor'
-NothingHere = require '../nothing-here'
 
 NOOP = Function.prototype
 
@@ -89,19 +88,10 @@ module.exports = React.createClass
         </div>
       </label>
 
-    <div>
-      <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
-
-      {<NothingHere multiple={true} onChange={@props.onChange} task={@props.task} annotation={@props.annotation} /> if @props.task.nothingHere}
-    </div>
+    <GenericTask question={@props.task.question} help={@props.task.help} answers={answers} required={@props.task.required} />
 
   handleChange: (index, e) ->
     value = @props.annotation.value.slice 0
-
-    if @props.task.nothingHere
-      if value[0] is @props.task.answers.length
-        @props.task.shortcut = false
-        value = []
 
     if e.target.checked
       if index not in value
