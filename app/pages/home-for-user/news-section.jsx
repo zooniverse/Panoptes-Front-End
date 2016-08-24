@@ -98,10 +98,10 @@ const NewsSection = React.createClass({
     const link = window.location.origin + "/projects/" + data.href
     return <div>
       <a href={link} target="_blank">
-        <h5>{data.project} </h5>
-      </a>
+        <h5 className="news-section-title">{data.project} </h5>
         <h5> has been updated! </h5>
-      <p className="pullout-dataset-timestamp">{data.timestamp}</p>
+        <p className="pullout-dataset-timestamp">{data.timestamp}</p>
+      </a>
     </div>
   },
 
@@ -119,17 +119,17 @@ const NewsSection = React.createClass({
           </div>
 
           <div className='news-pullout-section'>
-            <h4> New Datasets </h4>
-            {this.props.newDatasets.map((data) => {
-              return this.renderNewDatasets(data);
-            })}
+          <h4> Newest Project </h4>
+          {this.state.projects.map((project) => {
+            const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
+            return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
+          })}
           </div>
 
           <div className='news-pullout-section'>
-            <h4> Newest Project </h4>
-            {this.state.projects.map((project) => {
-              const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
-              return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
+            <h4> New Datasets </h4>
+            {this.props.newDatasets.map((data) => {
+              return this.renderNewDatasets(data);
             })}
           </div>
         </div>
