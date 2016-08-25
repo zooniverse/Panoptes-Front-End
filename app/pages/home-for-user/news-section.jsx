@@ -70,7 +70,7 @@ const NewsSection = React.createClass({
 
   renderPublication(article) {
     return <div>
-      <h5 className="pullout-publication-timestamp">{article.date}</h5>
+      <h5 className="pullout-timestamp">{article.date}</h5>
       <p className="news-section-content">
         <a href={article.href} target="_blank">
           {article.citation}
@@ -86,7 +86,7 @@ const NewsSection = React.createClass({
       <a href={link} target="_blank">
         <h5 className="news-section-title">{data.project} </h5>
         <h5> has been updated! </h5>
-        <p className="pullout-dataset-timestamp">{data.timestamp}</p>
+        <p className="pullout-timestamp">{data.timestamp}</p>
       </a>
     </div>
   },
