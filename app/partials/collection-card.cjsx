@@ -31,7 +31,7 @@ module.exports = React.createClass
 
   propTypes:
     collection: React.PropTypes.object.isRequired
-    imagePromise: React.PropTypes.object.isRequired
+    imagePromise: React.PropTypes.any
     linkTo: React.PropTypes.string.isRequired
     translationObjectName: React.PropTypes.string.isRequired
 
@@ -39,14 +39,21 @@ module.exports = React.createClass
     apiClient.type(@props.collection.links.owner.type).get(@props.collection.links.owner.id)
 
   componentDidMount: ->
-    card = @refs.collectionCard
+    @refreshImage @props.imagePromise
 
-    @props.imagePromise
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.imagePromise is @props.imagePromise
+      @refreshImage nextProps.imagePromise
+
+  refreshImage: (promise) ->
+    Promise.resolve(promise)
       .then (src) =>
-        card.style.backgroundImage = "url('#{src}')"
-        card.style.backgroundSize = "contain"
+        if src is null
+          throw new Error 'No collection card image!' # Caught immediately
+        @refs.collectionCard.style.backgroundImage = "url('#{src}')"
+        @refs.collectionCard.style.backgroundSize = "contain"
       .catch =>
-        card.style.background = "url('/assets/simple-pattern.jpg') center center repeat"
+        @refs.collectionCard.style.background = "url('/assets/simple-pattern.jpg') center center repeat"
 
   render: ->
     [owner, name] = @props.collection.slug.split('/')

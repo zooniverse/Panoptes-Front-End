@@ -18,6 +18,7 @@ module.exports =
   <Route path="/" component={require './partials/app'}>
     <IndexRoute component={require './pages/home'} />
     <Route path="home" component={ONE_UP_REDIRECT} />
+    <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
     <Route path="about" component={require './pages/about'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/about/about-home'} />
