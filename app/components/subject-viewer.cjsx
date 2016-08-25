@@ -43,6 +43,7 @@ module.exports = React.createClass
     frameWrapper: null
     allowFlipbook: true
     allowSeparateFrames: false
+    metadataPrefixes: ['#', '!']
     metadataFilters: ['#', '!']
 
   getInitialState: ->
@@ -238,7 +239,7 @@ module.exports = React.createClass
         <tbody>
           {for key, value of @props.subject?.metadata when key.charAt(0) not in @props.metadataFilters and key[...2] isnt '//'
             <tr key={key}>
-              <th>{key}</th>
+              <th>{key.replace(///^(#{@props.metadataPrefixes.join('|')})///, '')}</th>
               <Markdown tag="td" content={value} inline />
             </tr>}
         </tbody>
