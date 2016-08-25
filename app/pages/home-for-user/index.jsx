@@ -242,7 +242,7 @@ const HomePageForUser = React.createClass({
               </div>
             </button>
 
-            <NewsSection projects={this.state.ribbonData} newDatasets={this.state.newData} />
+            <NewsSection newDatasets={this.state.newData} />
 
           </Pullout>
         </div>
