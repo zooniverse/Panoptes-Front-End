@@ -103,7 +103,7 @@ const AccountBar = React.createClass({
 
   render() {
     return (
-      <span>
+      <span className="account-bar">
         <TriggeredModalForm
           ref="accountMenuButton"
           className="site-nav__modal"

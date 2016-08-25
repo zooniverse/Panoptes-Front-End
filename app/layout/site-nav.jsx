@@ -16,6 +16,8 @@ import style from './site-nav.styl';
 void style;
 
 const MAX_MOBILE_WIDTH = 875;
+const ZOO_LOGO = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
+const HAMBURGER_MENU = <span style={{ display: 'inline-block', transform: 'scale(2.5, 2)' }}>≡</span>;
 
 counterpart.registerTranslations('en', {
   siteNav: {
@@ -88,6 +90,16 @@ const SiteNav = React.createClass({
           'site-nav__main-links--vertical': this.state.isMobile
         })}
       >
+        {!!this.state.isMobile &&
+        <Link
+          to="/"
+          className="site-nav__link"
+          activeClassName="site-nav__link--active"
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
+        >
+          <Translate content="siteNav.home" />
+        </Link>
+        }
         <Link
           to="/projects"
           className="site-nav__link"
@@ -185,7 +197,7 @@ const SiteNav = React.createClass({
   renderMobileLinksMenu() {
     return (
       <TriggeredModalForm
-        className="site-nav__modal"
+        className="site-nav__modal site-nav__reveal-toggle"
         trigger={
           <span
             className="site-nav__link"
@@ -193,7 +205,7 @@ const SiteNav = React.createClass({
             title="Site navigation"
             aria-label="Site navigation"
           >
-            <span style={{ display: 'inline-block', transform: 'scale(2.5, 2)' }}>≡</span>
+            {HAMBURGER_MENU}
           </span>
         }
       >
@@ -205,7 +217,9 @@ const SiteNav = React.createClass({
   },
 
   render() {
-    const logo = <ZooniverseLogo width="1.8em" height="1.8em" style={{ verticalAlign: '-0.5em' }} />;
+    const label = !!this.props.visible ? 
+      React.cloneElement(ZOO_LOGO, {title: "Hide navigation menu"}) : 
+      HAMBURGER_MENU;
 
     return (
       <nav className="site-nav">
@@ -215,8 +229,8 @@ const SiteNav = React.createClass({
           activeClassName="site-nav__link--active"
           onClick={!!this.logClick ? this.logClick.bind(this, 'logo') : null}
         >
-          {!!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : logo}
-        </IndexLink>
+          {!this.state.isMobile && !!this.props.onToggle ? <Translate component="strong" content="siteNav.home" /> : ZOO_LOGO}
+          </IndexLink>
 
         {!this.state.isMobile && this.renderLinks()}
 
@@ -227,13 +241,12 @@ const SiteNav = React.createClass({
 
         {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar /> : <LoginBar />)}
 
-        {!!this.props.onToggle &&
+        {!!this.props.onToggle && !this.state.isMobile &&
           <button
             type="button"
             className="secret-button site-nav__reveal-toggle"
-            style={{ lineHeight: 0 }}
             onClick={this.props.onToggle}
-            >{React.cloneElement(logo, {title: "Show navigation"})}</button>}
+            >{label}</button>}
 
         {this.state.isMobile && this.renderMobileLinksMenu()}
       </nav>
