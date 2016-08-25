@@ -17,6 +17,7 @@ const NewsSection = React.createClass({
 
   componentDidMount() {
     this.fetchProjects();
+    this.recentPublications();
   },
 
   getInitialState() {
@@ -27,32 +28,18 @@ const NewsSection = React.createClass({
     };
   },
 
-  componentWillReceiveProps() {
-    this.recentPublications()
-  },
-
   recentPublications() {
-    const userProjects = [];
-    const newsPublications = [];
-
-    this.props.projects.map((project) =>{
-      userProjects.push({name:project.name, slug: project.slug});
-    });
-
+    const articles = []
     for (var category in Publications.articles()) {
       Publications.articles()[category].map((project) =>{
-        userProjects.map((userProj) =>{
-          if (userProj.slug === project['slug']){
-            newsPublications.push({name: userProj.name, publication: project.publications[0]});
-          }
-        })
+        articles.push(...project.publications)
       });
     };
-
-    if (newsPublications.length < 2)
-      newsPublications.push({name: 'Meta Data', publication: Publications.articles().meta[0].publications[0]});
+    const newestPublications = articles.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date)
+    }).splice(0, 3);
     return this.setState({
-      publications: newsPublications,
+      publications: newestPublications,
     });
   },
 
@@ -83,11 +70,10 @@ const NewsSection = React.createClass({
 
   renderPublication(article) {
     return <div>
-      <p className="pullout-publication-timestamp"> Aug 12, 2016 </p>
-      <h5>{article.name}</h5>
+      <h5 className="pullout-publication-timestamp">{article.date}</h5>
       <p className="news-section-content">
-        <a href={article.publication.href} target="_blank">
-          {article.publication.citation}
+        <a href={article.href} target="_blank">
+          {article.citation}
           <i className="fa fa-long-arrow-right"></i>
         </a>
       </p>
