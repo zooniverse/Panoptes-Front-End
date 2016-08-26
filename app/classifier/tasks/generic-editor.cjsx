@@ -8,6 +8,7 @@ DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
 {MarkdownEditor} = (require 'markdownz').default
 MarkdownHelp = require '../../partials/markdown-help'
+NothingHereEditor = require './nothing-here-editor'
 
 `import MinMaxEditor from './drawing/min-max-editor';`
 
@@ -209,6 +210,10 @@ module.exports = React.createClass
                   <small className="form-help">*grid table:* cells which can be made into a table for consecutive annotations.</small>}
               </div>}
         </div>}
+
+      <NothingHereEditor workflow={@props.workflow} task={@props.task} onChange={handleInputChange.bind @props.workflow} />
+
+      <hr />
 
       {unless @props.task.type is 'single' or @props.isSubtask
         <div>

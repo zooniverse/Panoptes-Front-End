@@ -20,6 +20,7 @@ GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
+NothingHere = require './tasks/nothing-here'
 `import CacheClassification from '../components/cache-classification'`
 
 # For easy debugging
@@ -179,7 +180,7 @@ Classifier = React.createClass
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
-      waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
+      waitingForAnswer = !task.shortcut and not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
 
     # Each answer of a single-answer task can have its own `next` key to override the task's.
     if TaskComponent is tasks.single
@@ -238,6 +239,8 @@ Classifier = React.createClass
             <HookComponent key={key} {...taskHookProps} />}
 
           <hr />
+
+          <NothingHere task={task} classification={@props.classification} />
 
           <nav className="task-nav">
             {if Object.keys(@props.workflow.tasks).length > 1
@@ -457,7 +460,7 @@ Classifier = React.createClass
   completeClassification: ->
     if @props.workflow.configuration.persist_annotations
       CacheClassification.delete()
-    
+
     currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
     currentTask?.tools?.map (tool) =>
