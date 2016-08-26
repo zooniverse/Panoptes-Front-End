@@ -11,7 +11,6 @@ MultiImageSubjectOptionsEditor = require '../../components/multi-image-subject-o
 tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
-GoldStandardImporter = require './gold-standard-importer'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
 
@@ -19,21 +18,6 @@ DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
 else
   '1166' # Ghosts
-
-EXAMPLE_GOLD_STANDARD_DATA = '''
-  [{
-    "links": {
-      "subjects": ["123"]
-    },
-    "annotations": [{
-      task: "T1",
-      value: 3
-    }, {
-      task: "T2",
-      value: "The value"
-    }, ...]
-  }, ...]
-'''
 
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
@@ -46,7 +30,6 @@ EditWorkflowPage = React.createClass
 
   getInitialState: ->
     selectedTaskKey: @props.workflow.first_task
-    goldStandardFilesToImport: null
     forceReloader: 0
     deletionInProgress: false
     deletionError: null
@@ -332,27 +315,6 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          <p>
-            <FileButton className="standard-button" accept="application/json" multiple onSelect={@handleGoldStandardDataImport}>Import gold standard classifications</FileButton>
-            <br />
-            <small className="form-help">Import gold standard classifications to improve the quality of automatic aggregations and optionally provide classification feedback for volunteers.</small>{' '}
-            <TriggeredModalForm trigger={<i className="fa fa-question-circle"></i>}>
-              <p>Gold standard classificaitons should be in the form:</p>
-              <pre>{EXAMPLE_GOLD_STANDARD_DATA}</pre>
-            </TriggeredModalForm>
-          </p>
-
-          <p>
-            <AutoSave tag="label" resource={@props.workflow}>
-              <input type="checkbox" name="public_gold_standard" checked={@props.workflow.public_gold_standard} onChange={handleInputChange.bind @props.workflow} />{' '}
-              Use gold standard data to provide classification feedback to volunteers.
-            </AutoSave>
-            <br />
-            <small className="form-help">After they classify, they’ll be able to compare their own classification to the gold standard data to make sure they’re on the right track.</small>
-          </p>
-
-          <hr />
-
           {if 'worldwide telescope' in @props.project.experimental_tools
             <div>
               <div>
@@ -419,16 +381,6 @@ EditWorkflowPage = React.createClass
             </div>}
         </div>
       </div>
-
-      {if @state.goldStandardFilesToImport?
-        <ModalFormDialog required>
-          <GoldStandardImporter
-            project={@props.project}
-            workflow={@props.workflow}
-            files={@state.goldStandardFilesToImport}
-            onClose={@handleGoldStandardImportClose}
-          />
-        </ModalFormDialog>}
     </div>
 
   renderSubjectSets: ->
@@ -615,12 +567,6 @@ EditWorkflowPage = React.createClass
       .then =>
         if @isMounted()
           @setState deletionInProgress: false
-
-  handleGoldStandardDataImport: (e) ->
-    @setState goldStandardFilesToImport: e.target.files
-
-  handleGoldStandardImportClose: ->
-    @setState goldStandardFilesToImport: null
 
   handleViewClick: ->
     setTimeout =>
