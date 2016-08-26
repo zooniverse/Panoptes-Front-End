@@ -207,3 +207,19 @@
     position: absolute
     &:focus + *:not(.active)
       background: lighten(#424242, 95%)
+
+.nothing-here-shortcut
+  background: #424242
+  border-radius: 0.2em
+  padding: .6em 1.4em
+
+  &:focus,
+  &:hover
+    background: lighten(#424242, 20%)
+    cursor: pointer
+
+  &.active
+    background: MAIN_HIGHLIGHT
+
+  span
+    padding-left: 0.6em

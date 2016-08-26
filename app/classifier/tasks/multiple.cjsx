@@ -37,13 +37,15 @@ Summary = React.createClass
               {answer.label}
             </div>
         else
-          if @props.annotation.value.length is 0
+          if @props.task.shortcut
+            <div className="answer">'Nothing Here'</div>
+          else if @props.annotation.value.length is 0
             <div className="answer">'No answer'</div>
           else
             for index in @props.annotation.value
               <div key={index} className="answer">
                 <i className="fa fa-check-square-o fa-fw"></i>
-                {@props.task.answers[index]?.label}
+                {@props.task.answers[index].label}
               </div>}
       </div>
     </div>

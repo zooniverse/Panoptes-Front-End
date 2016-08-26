@@ -240,7 +240,8 @@ Classifier = React.createClass
 
           <hr />
 
-          <NothingHere task={task} classification={@props.classification} />
+          {if task.nothingHere
+            <NothingHere task={task} classification={@props.classification} />}
 
           <nav className="task-nav">
             {if Object.keys(@props.workflow.tasks).length > 1
@@ -463,6 +464,10 @@ Classifier = React.createClass
 
     currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
+
+    if currentTask.shortcut
+      currentAnnotation.nothingHere = true
+
     currentTask?.tools?.map (tool) =>
       if tool.type is 'grid'
         GridTool.mapCells @props.classification.annotations

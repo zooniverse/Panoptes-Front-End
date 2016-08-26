@@ -39,8 +39,10 @@ Summary = React.createClass
         else if @props.annotation.value?
           <div className="answer">
             <i className="fa fa-check-circle-o fa-fw"></i>
-            <Markdown tag="span" inline={true}>{@props.task.answers[@props.annotation.value]?.label}</Markdown>
+            <Markdown tag="span" inline={true}>{@props.task.answers[@props.annotation.value].label}</Markdown>
           </div>
+        else if @props.task.shortcut
+          <div className="answer">Nothing Here</div>
         else
           <div className="answer">No answer</div>}
       </div>

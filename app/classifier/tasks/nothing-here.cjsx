@@ -1,14 +1,11 @@
 React = require 'react'
-AutoSave = require '../../components/auto-save'
-
-NOOP = Function.prototype
 
 module.exports = React.createClass
   displayName: 'NothingHere'
 
   getDefaultProps: ->
+    classification: null
     task: null
-    onChange: NOOP
 
   toggleShortcut: (e) ->
     @props.task.shortcut = if e.target.checked
@@ -18,14 +15,14 @@ module.exports = React.createClass
     @props.classification.update 'annotations'
 
   render: ->
-    console.log @props
-    <div>
+    <label className="answer-button">
       <p>
-        <small>
+        <small className="nothing-here-shortcut #{if @props.task.shortcut then 'active' else ''}">
           <strong>
-            <input type="checkbox" className="minor-button" onChange={@toggleShortcut} />
+            <input type="checkbox" onChange={@toggleShortcut} />
               Nothing Here
           </strong>
         </small>
       </p>
-    </div>
+
+    </label>

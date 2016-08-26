@@ -196,7 +196,7 @@ module.exports = React.createClass
 
       <hr />
 
-        <NothingHereEditor workflow={@props.workflow} task={@props.task} onChange={handleInputChange.bind @props.workflow} />
+        <NothingHereEditor workflow={@props.workflow} task={@props.task} />
 
       <hr />
 
