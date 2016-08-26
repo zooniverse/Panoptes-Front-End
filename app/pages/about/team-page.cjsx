@@ -44,8 +44,8 @@ counterpart.registerTranslations 'en',
         title: 'Developer'
         bio: '''Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.'''
       arfonSmith:
-        title: 'Developer'
-        bio: 'Arfon was a founding developer of the first incarnation of the Zooniverse in Oxford.'
+        title: 'Technical Lead'
+        bio: 'Arfon was co-founder and Technical Lead of the Zooniverse for the first five years of the project.'
       beverleyNewing:
         title: 'Web Developer Intern'
         bio: '''Beverley is an English and German literature graduate, now working as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.'''
@@ -65,7 +65,7 @@ counterpart.registerTranslations 'en',
         In his spare time he enjoys playing an obscure form of rugby.'''
       chrisLintott:
         title: 'Zooniverse PI'
-        bio: '''Astronomer and founder of both Galaxy Zoo and the Zooniverse that grew from it,
+        bio: '''Astronomer and co-founder of both Galaxy Zoo and the Zooniverse that grew from it,
         Chris is interested in how galaxies form and evolve, how citizen science can change the
         world, and whether the Chicago Fire can get their act together.'''
       chrisSnyder:
