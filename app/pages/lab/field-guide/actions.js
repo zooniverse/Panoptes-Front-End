@@ -4,16 +4,10 @@ var putFile = require('../../../lib/put-file');
 var projects = apiClient.type('projects');
 var guides = apiClient.type('field_guides');
 
-var DEFAULT_ITEM = {
-  title: 'An example',
-  content: 'Here’s everything you need to know about the great **Example**...'
-};
-
 var actions = {
   createGuide: function(projectID) {
-    var defaultItem = Object.assign({}, DEFAULT_ITEM);
     var newGuide = {
-      items: [defaultItem],
+      items: [],
       language: 'en',
       links: {project: projectID}
     };
@@ -128,7 +122,7 @@ var actions = {
   },
 
   appendItem: function(guideID) {
-    var newItem = Object.assign({}, DEFAULT_ITEM);
+    var newItem = {};
     return guides.get(guideID).then(function(guide) {
       guide.items.push(newItem);
       guide.update({
