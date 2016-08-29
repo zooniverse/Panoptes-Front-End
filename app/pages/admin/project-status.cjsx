@@ -26,6 +26,7 @@ EXPERIMENTAL_FEATURES = [
   'grid'
   'invert'
   'workflow assignment'
+  'Gravity Spy Gold Standard'
 ]
 
 ProjectToggle = React.createClass
