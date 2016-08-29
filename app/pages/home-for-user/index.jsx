@@ -90,9 +90,11 @@ const HomePageForUser = React.createClass({
     })
     .then((profileHeaders) => {
       const profileHeader = [].concat(profileHeaders)[0];
-      this.setState({
-        backgroundSrc: profileHeader.src,
-      });
+      if (profileHeader != undefined) {
+        this.setState({
+          backgroundSrc: profileHeader.src,
+        });
+      };
     });
 
     user.get('avatar')
@@ -101,9 +103,11 @@ const HomePageForUser = React.createClass({
     })
     .then((avatars) => {
       const avatar = [].concat(avatars)[0];
-      this.setState({
-        avatarSrc: avatar.src,
-      });
+      if (avatar != undefined) {
+        this.setState({
+          avatarSrc: avatar.src,
+        });
+      };
     });
 
     getUserRibbonData(user)

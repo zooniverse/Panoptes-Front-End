@@ -1,8 +1,7 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import { Link } from 'react-router';
 import ProjectCard from '../../partials/project-card';
-import Publications from '../about/publications-page';
+import Publications from '../about/publications';
 
 import style from './news-section.styl';
 void style;
@@ -15,11 +14,6 @@ const NewsSection = React.createClass({
     };
   },
 
-  componentDidMount() {
-    this.fetchProjects();
-    this.recentPublications();
-  },
-
   getInitialState() {
     return {
       avatars: {},
@@ -28,15 +22,20 @@ const NewsSection = React.createClass({
     };
   },
 
+  componentDidMount() {
+    this.fetchProjects();
+    this.recentPublications();
+  },
+
   recentPublications() {
-    const articles = []
-    for (var category in Publications.articles()) {
-      Publications.articles()[category].map((project) =>{
+    const articles = [];
+    for (var category in Publications) {
+      Publications[category].map((project) =>{
         articles.push(...project.publications)
       });
     };
     const newestPublications = articles.sort((a, b) => {
-      return new Date(b.date) - new Date(a.date)
+      return new Date(b.date) - new Date(a.date);
     }).splice(0, 3);
     return this.setState({
       publications: newestPublications,
