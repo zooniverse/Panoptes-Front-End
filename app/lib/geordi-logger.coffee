@@ -2,7 +2,11 @@ GeordiClient = require 'zooniverse-geordi-client'
 
 class GeordiLogger # Make calls to the Geordi API to log user activity
 
-  @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy']
+  @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/hsc-comet-hunters-prototype']
+  # when we go live, switch to:
+  # @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/comet-hunters']
+  # during dev (for staging):
+  # @tokens = ['zooHome', 'zooTalk', 'zooniverse/gravity-spy', 'mschwamb/planet-four-terrains']
 
   keys:
     projectToken: 'zooHome'
