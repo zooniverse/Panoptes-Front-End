@@ -170,13 +170,13 @@ const HomePageForUser = React.createClass({
         <div className="home-page-for-user__menu-column">
           <a href="#focus=projects" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw"></i>
+              <i className="fa fa-history fa-fw"></i>
               My recent projects
             </span>
           </a>
           <a href="#focus=collections" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw"></i>
+              <i className="fa fa-th-large fa-fw"></i>
               My collections
             </span>
           </a>
@@ -184,7 +184,7 @@ const HomePageForUser = React.createClass({
         <div className="home-page-for-user__menu-column">
           <a href="#focus=messages" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw"></i>
+              <i className="fa fa-envelope fa-fw"></i>
               Messages
             </span>
           </a>
