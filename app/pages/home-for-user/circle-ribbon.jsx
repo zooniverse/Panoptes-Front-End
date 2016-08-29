@@ -1,6 +1,5 @@
 import React from 'react';
 import SVGLink from './svg-link';
-import { Link } from 'react-router';
 
 import style from './circle-ribbon.styl';
 void style;
@@ -113,7 +112,7 @@ const CircleRibbon = React.createClass({
   },
 
   calcLargeArc(classifications) {
-    if (classifications / this.state.totalClassifications >= .5) {
+    if (classifications / this.state.totalClassifications >= 0.5) {
       return 1;
     } else {
       return 0;
@@ -181,7 +180,7 @@ const CircleRibbon = React.createClass({
           </defs>
 
           {!!this.props.image && (
-            <Link to={`/users/${this.props.user.login}/stats`}>
+            <SVGLink to={`/users/${this.props.user.login}/stats`} aria-label={`${this.props.user.login} stats`}>
               <image
                 xlinkHref={this.props.image}
                 x={this.props.weight + this.props.gap}
@@ -191,7 +190,7 @@ const CircleRibbon = React.createClass({
                 clipPath={`url('#circle-ribbon-clip-${this.id}')`}
                 className={`url('#circle-ribbon-shadow-${this.id}')`}
               />
-            </Link>
+            </SVGLink>
           )}
 
           <g ref="arcGroup" fill="none" stroke="none" transform="translate(50, 50)">
