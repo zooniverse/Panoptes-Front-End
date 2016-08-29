@@ -1,6 +1,6 @@
 import getAllProjectPreferences from './get-all-project-preferences';
 import getColorFromString from './get-color-from-string';
-import apiClient from 'panoptes-client/lib/api-client'
+import apiClient from 'panoptes-client/lib/api-client';
 
 function getUserRibbonData(user) {
   return getAllProjectPreferences(user).then((prefsResources) => {
@@ -18,10 +18,10 @@ function getUserRibbonData(user) {
       }));
     });
 
-    return Promise.all([awaitProjects, awaitSubjectSets]).then(([projects, subject_sets]) => {
+    return Promise.all([awaitProjects, awaitSubjectSets]).then(([projects, subjectSets]) => {
       return prefsResources.map((prefsResource, i) => {
-        const sortedSubjects = subject_sets[i].sort((a, b) => {
-          return new Date(b.updated_at) - new Date(a.updated_at)
+        const sortedSubjects = subjectSets[i].sort((a, b) => {
+          return new Date(b.updated_at) - new Date(a.updated_at);
         });
         if (projects[i] !== null) {
           return {

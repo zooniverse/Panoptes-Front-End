@@ -11,7 +11,6 @@ import ProjectStats from './project-stats';
 import qs from 'qs';
 import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-section';
-import apiClient from 'panoptes-client/lib/api-client';
 import moment from 'moment';
 
 import style from './index.styl';
@@ -90,11 +89,11 @@ const HomePageForUser = React.createClass({
     })
     .then((profileHeaders) => {
       const profileHeader = [].concat(profileHeaders)[0];
-      if (profileHeader != undefined) {
+      if (!!profileHeader) {
         this.setState({
           backgroundSrc: profileHeader.src,
         });
-      };
+      }
     });
 
     user.get('avatar')
@@ -103,11 +102,11 @@ const HomePageForUser = React.createClass({
     })
     .then((avatars) => {
       const avatar = [].concat(avatars)[0];
-      if (avatar != undefined) {
+      if (!!avatar) {
         this.setState({
           avatarSrc: avatar.src,
         });
-      };
+      }
     });
 
     getUserRibbonData(user)
@@ -140,22 +139,22 @@ const HomePageForUser = React.createClass({
   },
 
   fetchRecentSubjects(ribbonData) {
-    const newestSubjects = []
+    const newestSubjectSets = [];
     ribbonData.map((project) => {
-      if (project['recentSubjectSet'] !== undefined){
-        newestSubjects.push(project)
+      if (!!project.recentSubjectSet) {
+        newestSubjectSets.push(project);
       }
     });
-    const recentSets = newestSubjects.sort((a, b) => {
-      return new Date(b['recentSubjectSet'].updated_at) - new Date(a['recentSubjectSet'].updated_at)
+    const recentSets = newestSubjectSets.sort((a, b) => {
+      return new Date(b.recentSubjectSet.updated_at) - new Date(a.recentSubjectSet.updated_at);
     }).slice(0, 3);
 
     return recentSets.map((project) => {
       return {
         project: project.name,
         href: project.slug,
-        timestamp: moment(new Date(project['recentSubjectSet'].updated_at)).fromNow(),
-      }
+        timestamp: moment(new Date(project.recentSubjectSet.updated_at)).fromNow(),
+      };
     });
   },
 

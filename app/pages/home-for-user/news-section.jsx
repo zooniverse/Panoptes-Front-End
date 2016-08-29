@@ -8,6 +8,10 @@ void style;
 
 const NewsSection = React.createClass({
 
+  propTypes: {
+    newDatasets: React.PropTypes.array,
+  },
+
   getDefaultProps() {
     return {
       newDatasets: [],
@@ -29,11 +33,11 @@ const NewsSection = React.createClass({
 
   recentPublications() {
     const articles = [];
-    for (var category in Publications) {
-      Publications[category].map((project) =>{
-        articles.push(...project.publications)
+    Object.keys(Publications).forEach((category) => {
+      Publications[category].map((project) => {
+        return articles.push(...project.publications);
       });
-    };
+    });
     const newestPublications = articles.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);
     }).splice(0, 3);
@@ -64,11 +68,11 @@ const NewsSection = React.createClass({
           this.forceUpdate();
         });
       }));
-    })
+    });
   },
 
   renderPublication(article) {
-    return <div>
+    return (<div key={Math.random()}>
       <h5 className="pullout-timestamp">{article.date}</h5>
       <p className="news-section-content">
         <a href={article.href} target="_blank">
@@ -76,42 +80,42 @@ const NewsSection = React.createClass({
           <i className="fa fa-long-arrow-right"></i>
         </a>
       </p>
-    </div>
+    </div>);
   },
 
   renderNewDatasets(data) {
-    const link = window.location.origin + "/projects/" + data.href
-    return <div>
+    const link = window.location.origin + '/projects/' + data.href;
+    return (<div key={Math.random()}>
       <a href={link} target="_blank">
         <h5 className="news-section-title">{data.project} </h5>
         <h5> has been updated! </h5>
         <p className="pullout-timestamp">{data.timestamp}</p>
       </a>
-    </div>
+    </div>);
   },
 
   render() {
     return (
-      <div className='news-pullout-main'>
-        <div className='pullout-scroll-contain'>
+      <div className="news-pullout-main">
+        <div className="pullout-scroll-contain">
           <h2> Zooniverse News </h2>
 
-          <div className='news-pullout-section'>
+          <div className="news-pullout-section">
             <h4> Recent Publications </h4>
             {this.state.publications.map((article) => {
               return this.renderPublication(article);
             })}
           </div>
 
-          <div className='news-pullout-section'>
-          <h4> Newest Project </h4>
-          {this.state.projects.map((project) => {
-            const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
-            return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
-          })}
+          <div className="news-pullout-section">
+            <h4> Newest Project </h4>
+            {this.state.projects.map((project) => {
+              const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
+              return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
+            })}
           </div>
 
-          <div className='news-pullout-section'>
+          <div className="news-pullout-section">
             <h4> New Datasets </h4>
             {this.props.newDatasets.map((data) => {
               return this.renderNewDatasets(data);
