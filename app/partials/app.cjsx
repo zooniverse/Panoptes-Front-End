@@ -24,7 +24,7 @@ PanoptesApp = React.createClass
 
   componentWillMount: ->
     @geordiLogger = new GeordiLogger
-  
+
   componentDidMount: ->
     auth.listen 'change', @handleAuthChange
     generateSessionID()
