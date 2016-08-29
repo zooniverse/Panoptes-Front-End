@@ -383,21 +383,26 @@ Classifier = React.createClass
     for annotation in classification.annotations when @props.workflow.tasks[annotation.task].type is 'survey'
       for value in annotation.value
         choiceLabels.push @props.workflow.tasks[annotation.task].choices[value.choice].label
-    match = choiceLabels.some (label) => label is @props.subject.metadata['#Label']
+    match = choiceLabels.every (label) => label is @props.subject.metadata['#Label']
 
     <div>
     {if match
       <div>
         <p>Good work!</p>
         <p>When our experts classified this image,<br />they also thought it was a {@props.subject.metadata['#Label']}!</p>
+        {if choiceLabels.length > 1
+          <p>You should only assign 1 label.</p>}
       </div>
     else
       <div>
         <p>You responded {choiceLabels.join(', ')}.</p>
+        {if choiceLabels.length > 1
+          <p>You should only assign 1 label.</p>}
         <p>When our experts classified this image,<br />they labeled it as a {@props.subject.metadata['#Label']}.</p>
         <p>Some of the glitch classes can look quite similar,<br />so please keep trying your best.</p>
         <p>Check out the tutorial and the field guide for more guidance.</p>
       </div>}
+
 
       <hr />
 
@@ -478,10 +483,7 @@ Classifier = React.createClass
     <p className="back-button-warning" >Going back will clear your work for the current task.</p>
 
   subjectIsGravitySpyGoldStandard: ->
-    if @props.workflow.configuration?.gravity_spy_gold_standard and @props.subject.metadata?['#Type'] is 'Gold'
-      true
-    else
-      false
+    @props.workflow.configuration?.gravity_spy_gold_standard and @props.subject.metadata?['#Type'] is 'Gold'
 
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'

@@ -293,7 +293,7 @@ EditWorkflowPage = React.createClass
                   <span className="form-label">Gravity Spy Gold Standard</span><br />
                   <small className="form-help">Notify a user how they've classified a Gold Standard subject.</small>
                   <br />
-                  <label htmlFor="gravity_spy_gold_standard">
+                  <label>
                     <input type="checkbox" onChange={@handleSetGravitySpyGoldStandard} checked={@props.workflow.configuration.gravity_spy_gold_standard}/>
                     Gravity Spy Gold Standard
                   </label>
