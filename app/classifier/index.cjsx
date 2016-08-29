@@ -17,6 +17,9 @@ workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
+Intervention = require '../lib/intervention'
+experimentsClient = require '../lib/experiments-client'
+interventionMonitor = require '../lib/intervention-monitor'
 
 Classifier = React.createClass
   displayName: 'Classifier'
@@ -34,12 +37,34 @@ Classifier = React.createClass
   getInitialState: ->
     subjectLoading: false
     backButtonWarning: false
+    renderIntervention: false
+
+  disableIntervention: ->
+    @setState renderIntervention: false
+
+  enableIntervention: ->
+    experimentsClient.logExperimentState @context.geordi, interventionMonitor?.latestFromSugar, "interventionDetected"
+    @setState renderIntervention: true
 
   componentDidMount: ->
+    experimentsClient.startOrResumeExperiment interventionMonitor, @context.geordi
+    @setState renderIntervention: interventionMonitor?.shouldShowIntervention()
+    interventionMonitor.on 'interventionRequested', @enableIntervention
+    interventionMonitor.on 'classificationTaskRequested', @disableIntervention
     @loadSubject @props.subject
     @prepareToClassify @props.classification
     {workflow, project, preferences, user} = @props
     Tutorial.startIfNecessary {workflow, user, preferences}
+
+  reCheckIfInterventionNeeded: ->
+    # Sometimes, the intervention request arrives at a time when this component is not mounted
+    # (and therefore we are not listening to Sugar experiment updates)
+    # Therefore, prior to render we must re-check that our current state.renderIntervention is correct
+    # (We still need the state variable to be able to trigger a re-render when we ARE mounted)
+    if @context.intervention_monitor? and @context.intervention_monitor.latestFromSugar?
+      @setState renderIntervention: @context.intervention_monitor?.shouldShowIntervention()
+    else
+      @setState renderIntervention: false
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
@@ -49,10 +74,16 @@ Classifier = React.createClass
       @loadSubject subject
     if nextProps.classification isnt @props.classification
       @prepareToClassify nextProps.classification
+    if @props.subject isnt nextProps.subject or !@context.geordi?.keys["subjectID"]?
+      @context.geordi?.remember subjectID: nextProps.subject?.id
 
-    @context.geordi.remember subjectID: @props.subject?.id
+  componentWillMount: () ->
+    interventionMonitor.setProjectSlug @props.project.slug
+    @reCheckIfInterventionNeeded()
 
   componentWillUnmount: () ->
+    interventionMonitor.removeListener 'interventionRequested', @enableIntervention
+    interventionMonitor.removeListener 'classificationTaskRequested', @disableIntervention
     try
       @context.geordi?.forget ['subjectID']
 
@@ -113,7 +144,7 @@ Classifier = React.createClass
   renderTask: (classification, annotation, task) ->
     TaskComponent = tasks[task.type]
 
-    # Should we disabled the "Back" button?
+    # Should we disable the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
     # Should we disable the "Next" or "Done" buttons?
@@ -156,80 +187,91 @@ Classifier = React.createClass
       onChange: -> classification.update()
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
-      {persistentHooksBeforeTask.map (HookComponent) =>
-        <HookComponent {...taskHookProps} />}
+      {if @state.renderIntervention
+        <Intervention
+            user={@props.user}
+            experimentName={interventionMonitor?.latestFromSugar["experiment_name"]}
+            sessionID={getSessionID()}
+            interventionID={interventionMonitor?.latestFromSugar["next_event"]}
+            interventionDetails={experimentsClient.constructInterventionFromSugarData interventionMonitor?.latestFromSugar}
+            disableInterventionFunction={@disableIntervention}
+          />}
+        <div className="coverable-task-container">
+          {persistentHooksBeforeTask.map (HookComponent) =>
+            <HookComponent {...taskHookProps} />}
 
-      <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} preferences={@props.preferences} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+          <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} preferences={@props.preferences} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
-      {persistentHooksAfterTask.map (HookComponent) =>
-        <HookComponent {...taskHookProps} />}
+          {persistentHooksAfterTask.map (HookComponent) =>
+            <HookComponent {...taskHookProps} />}
 
-      <hr />
+          <hr />
 
-      <nav className="task-nav">
-        {if Object.keys(@props.workflow.tasks).length > 1
-          <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
-        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
-          [ownerName, name] = @props.project.slug.split('/')
-          <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
-        {if nextTaskKey
-          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
-        else
-          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
-            {if @props.demoMode
-              <i className="fa fa-trash fa-fw"></i>
-            else if @props.classification.gold_standard
-              <i className="fa fa-star fa-fw"></i>}
-            {' '}Done
-          </button>}
-        {@renderExpertOptions()}
-      </nav>
-      { @renderBackButtonWarning() if @state.backButtonWarning }
+          <nav className="task-nav">
+            {if Object.keys(@props.workflow.tasks).length > 1
+              <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
+            {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
+              [ownerName, name] = @props.project.slug.split('/')
+              <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
+            {if nextTaskKey
+              <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
+            else
+              <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
+                {if @props.demoMode
+                  <i className="fa fa-trash fa-fw"></i>
+                else if @props.classification.gold_standard
+                  <i className="fa fa-star fa-fw"></i>}
+                {' '}Done
+              </button>}
+            {@renderExpertOptions()}
+          </nav>
+          { @renderBackButtonWarning() if @state.backButtonWarning }
 
-      <p>
-        <small>
-          <strong>
-            <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} project={@props.project} style={marginTop: '2em'}>
-              Show the project tutorial
-            </TutorialButton>
-          </strong>
-        </small>
-      </p>
+          <p>
+            <small>
+              <strong>
+                <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} project={@props.project} style={marginTop: '2em'}>
+                  Show the project tutorial
+                </TutorialButton>
+              </strong>
+            </small>
+          </p>
 
-      <p>
-        <small>
-          <strong>
-            <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
-              Restart the project mini-course
-            </MiniCourseButton>
-          </strong>
-        </small>
-      </p>
+          <p>
+            <small>
+              <strong>
+                <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
+                  Restart the project mini-course
+                </MiniCourseButton>
+              </strong>
+            </small>
+          </p>
 
-      {if @props.demoMode
-        <p style={textAlign: 'center'}>
-          <i className="fa fa-trash"></i>{' '}
-          <small>
-            <strong>Demo mode:</strong>
-            <br />
-            No classifications are being recorded.{' '}
-            <button type="button" className="secret-button" onClick={@props.onChangeDemoMode.bind null, false}>
-              <u>Disable</u>
-            </button>
-          </small>
-        </p>
-      else if @props.classification.gold_standard
-        <p style={textAlign: 'center'}>
-          <i className="fa fa-star"></i>{' '}
-          <small>
-            <strong>Gold standard mode:</strong>
-            <br />
-            Please ensure this classification is completely accurate.{' '}
-            <button type="button" className="secret-button" onClick={@props.classification.update.bind @props.classification, gold_standard: undefined}>
-              <u>Disable</u>
-            </button>
-          </small>
-        </p>}
+          {if @props.demoMode
+            <p style={textAlign: 'center'}>
+              <i className="fa fa-trash"></i>{' '}
+              <small>
+                <strong>Demo mode:</strong>
+                <br />
+                No classifications are being recorded.{' '}
+                <button type="button" className="secret-button" onClick={@props.onChangeDemoMode.bind null, false}>
+                  <u>Disable</u>
+                </button>
+              </small>
+            </p>
+          else if @props.classification.gold_standard
+            <p style={textAlign: 'center'}>
+              <i className="fa fa-star"></i>{' '}
+              <small>
+                <strong>Gold standard mode:</strong>
+                <br />
+                Please ensure this classification is completely accurate.{' '}
+                <button type="button" className="secret-button" onClick={@props.classification.update.bind @props.classification, gold_standard: undefined}>
+                  <u>Disable</u>
+                </button>
+              </small>
+            </p>}
+        </div>
     </div>
 
   renderSummary: (classification) ->
@@ -373,6 +415,17 @@ Classifier = React.createClass
       @props.onCompleteAndLoadAnotherSubject?()
     else
       @props.onComplete?()
+      .then (classification) =>
+        # after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
+        experimentName = experimentsClient.checkForExperiment(@props.project.slug)
+        if experimentName? and @props.user
+          experimentsClient.postDataToExperimentServer interventionMonitor,
+                                                       @context.geordi,
+                                                       experimentName, @props.user?.id,
+                                                       classification.metadata.session,
+                                                       "classification",classification.id
+      , (error) =>
+        console.log error
 
   handleGoldStandardChange: (e) ->
     @props.classification.update gold_standard: e.target.checked || undefined # Delete the whole key.

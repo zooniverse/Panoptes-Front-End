@@ -9,6 +9,7 @@
     "data-uri-to-blob": "0.0.4",
     "debounce": "~1.0.0",
     "drag-reorderable": "~0.1.0",
+    "events": "~1.1.1",
     "jsplumb": "1.7.9",
     "lodash.intersection": "~3.2.0",
     "lodash.merge": "~2.4.1",
