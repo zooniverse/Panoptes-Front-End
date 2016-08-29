@@ -18,6 +18,7 @@ workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
+Intervention = require '../lib/intervention'
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
@@ -26,6 +27,7 @@ Classifier = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+    interventionMonitor: React.PropTypes.object
 
   getDefaultProps: ->
     user: null
@@ -192,6 +194,7 @@ Classifier = React.createClass
       onChange: -> classification.update()
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
+      <Intervention monitor={@context.interventionMonitor} />
       {persistentHooksBeforeTask.map (HookComponent) =>
         <HookComponent {...taskHookProps} />}
 
