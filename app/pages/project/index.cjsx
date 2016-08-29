@@ -77,7 +77,7 @@ ProjectPage = React.createClass
       @updateSugarSubscription nextProps.project
       @context.geordi?.remember projectToken: nextProps.project?.slug
     else if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow?.id
-      @getSelectedWorkflow nextProps.project, nextProps.preferences
+      @getSelectedWorkflow(nextProps.project, nextProps.preferences)
 
   fetchInfo: (project) ->
     @setState
@@ -106,9 +106,16 @@ ProjectPage = React.createClass
   getSelectedWorkflow: (project, preferences) ->
     @setState selectedWorkflow: 'PENDING'
 
-    preferredWorkflowID = preferences?.preferences.selected_workflow ? project.configuration?.default_workflow
+    # preference user selected workflow, then project owner set workflow, then default workflow
+    if preferences?.preferences.selected_workflow 
+      preferredWorkflowID = preferences?.preferences.selected_workflow
+    else if preferences?.settings.workflow_id
+      preferredWorkflowID = preferences?.settings.workflow_id
+    else if project.configuration?.default_workflow 
+      preferredWorkflowID = project.configuration?.default_workflow
+
     if preferredWorkflowID?
-      apiClient.type('workflows').get preferredWorkflowID
+      apiClient.type('workflows').get preferredWorkflowID, {}
         .then (workflow) =>
           if workflow.active
             @setState selectedWorkflow: workflow

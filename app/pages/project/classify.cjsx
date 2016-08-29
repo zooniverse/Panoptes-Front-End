@@ -13,6 +13,7 @@ seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 `import CustomSignInPrompt from './custom-sign-in-prompt'`
+`import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog'`
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -77,6 +78,7 @@ module.exports = React.createClass
     classification: null
     projectIsComplete: false
     demoMode: sessionDemoMode
+    promptWorkflowAssignmentDialog: false
 
   propChangeHandlers:
     project: 'loadAppropriateClassification'
@@ -92,6 +94,16 @@ module.exports = React.createClass
   componentWillUnmount: () ->
     @context.geordi?.forget ['workflowID']
 
+  componentWillReceiveProps: (nextProps) ->
+    @shouldWorkflowAssignmentPrompt(nextProps.preferences)
+
+  shouldWorkflowAssignmentPrompt: (preferences) ->
+    # Only for Gravity Spy which is assigning workflows to logged in users
+    assignedWorkflowID = preferences?.settings?.workflow_id
+    if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and @props.user?
+      if assignedWorkflowID? and assignedWorkflowID isnt @props.location.query.workflow
+        @setState promptWorkflowAssignmentDialog: true if @state.promptWorkflowAssignmentDialog is false
+
   loadAppropriateClassification: (_, props = @props) ->
     # To load the right classification, we'll need to know which workflow the user expects.
     # console.log 'Loading appropriate classification'
@@ -103,7 +115,7 @@ module.exports = React.createClass
 
   getCurrentWorkflow: (props = @props) ->
     if props.location.query?.workflow?
-      # console.log 'Workflow specified as', props.query.workflow
+      # console.log 'Workflow specified as', props.location.query.workflow
       # Prefer the workflow specified in the query.
       @getWorkflow props.project, props.location.query.workflow
     else
@@ -181,6 +193,7 @@ module.exports = React.createClass
     # If there aren't any left (or there weren't any to begin with), refill the list.
     if upcomingSubjects.forWorkflow[workflow.id].length is 0
       # console.log 'Fetching subjects'
+      @maybePromptWorkflowAssignmentDialog()
       subjectQuery =
         workflow_id: workflow.id
         sort: 'queued' unless SKIP_CELLECT
@@ -331,6 +344,21 @@ module.exports = React.createClass
     if classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
       MiniCourse.startIfNecessary {workflow: @state.workflow, preferences: @props.preferences, project: @props.project, user: @props.user}
 
+  maybePromptWorkflowAssignmentDialog: (nextWorkflow) ->
+    if @state.promptWorkflowAssignmentDialog
+      WorkflowAssignmentDialog.start(@props.history, @props.location, @props.preferences)
+        .then =>
+          @loadAnotherSubject()
+
+          if @props.location.query.workflow isnt @props.preferences.preferences.selected_workflow
+            @props.preferences.update({ 'preferences.selected_workflow': @props.preferences.settings.workflow_id });
+            @props.preferences.save()
+              .then =>
+                @setState promptWorkflowAssignmentDialog: false
+          else
+            @setState promptWorkflowAssignmentDialog: false
+
+               
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
 window.currentClassifications = currentClassifications
