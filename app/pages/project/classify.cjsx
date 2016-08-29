@@ -100,7 +100,7 @@ module.exports = React.createClass
   shouldWorkflowAssignmentPrompt: (preferences) ->
     # Only for Gravity Spy which is assigning workflows to logged in users
     assignedWorkflowID = preferences?.settings?.workflow_id
-    if @props.project.experimental_tools.indexOf 'workflow assignment' > -1 and @props.user?
+    if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and @props.user?
       if assignedWorkflowID? and assignedWorkflowID isnt @props.location.query.workflow
         @setState promptWorkflowAssignmentDialog: true if @state.promptWorkflowAssignmentDialog is false
 
