@@ -149,22 +149,44 @@ There are some ~~nice~~ **unfortunate** (in hindsight) components to help with a
 
 Include any CSS **required for a component's functionality** inline in with component, otherwise keep it in a separate file, one per component. For a given component, pick a unique top-level class name for that component and nest child classes under it. Keep common base styles and variables in **common.styl**. Stylus formatting: Yes colons, no semicolons, no braces. `@extends` up top, then properties (alphabetically), then descendant selectors. Prefer use of `display: flex` and `flex-wrap: wrap` to explicit media queries wherever possible.
 
+Our CSS has gotten really huge, so we're trying out [BEM](http://getbem.com/introduction/) for organization.
+
 ```styl
 // <special-button.styl>
 .special-button
   background: red
   color: white
 
-.special-button-icon
+.special-button__icon
   width: 1em;
 
 // <special-container.styl>
 .special-container
   margin: 1em 1vw
 
-  .special-button
+  .special-container__button
     border: 1px solid
 ```
+
+### Writing components in ES6/ES2015
+
+We're migrating from coffeescript to ES6. This can be done incrementally by writing a new component or rewriting an existing component in ES6. A few gotchas should be mentioned:
+
+- The existential operator does not exist in ES6. Either compare explicitly to `null` or use `!!thing` if it just needs to be truthy.
+
+- Native ES6 classes are preferred since eventually `React.createClass()` will be deprecated, however, if the existing component is relying on mixins, then consider using `React.createClass()`.
+
+- Mixins are being deprecated and not supported with native classes, so do not use them in new components.
+
+- Use backticks to import ES6 components into coffeescript components: 
+
+```
+`import NewComponent from './new-component'`
+```
+
+An ESLint configuration file is setup in the root of the repository for you to use with your text editor to lint both ES6 and use Airbnb's React style guide.
+
+A (guide)[https://toddmotto.com/react-create-class-versus-component/] on writing native classes versus using `React.createClass()`
 
 ## Custom projects
 
