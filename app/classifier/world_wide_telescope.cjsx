@@ -118,7 +118,7 @@ class StarChart
     coords
 
 class Plate
-  constructor: (@starChart, @url, @user_name) ->
+  constructor: (@starChart, @url) ->
     @imageBounds = @starChart.bounds()
     [xRange, yRange] = [@starChart.xAxis.range, @starChart.yAxis.range]
 
@@ -183,8 +183,7 @@ class Plate
     else 90
 
   computeName: ->
-    hashTime = crypto.createHash('md5').update(new Date().toString()).digest('hex').slice(0, 10)
-    @user_name + hashTime
+    crypto.createHash('md5').update(new Date().toString()).digest('hex').slice(0, 10)
 
   getWwtUrl: ->
     base = "http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx"
@@ -309,7 +308,7 @@ module.exports = React.createClass
 
       for chart in @charts
         if chart.valid
-          plates.push(new Plate(chart, subjImage, @props.user_name))
+          plates.push(new Plate(chart, subjImage))
 
     <div>
       {plates.map (plate, idx) ->
