@@ -131,7 +131,7 @@ EditSubjectSetPage = React.createClass
   subjectLimitMessage: (project_subject_count, user) ->
     "The project has " + project_subject_count + " uploaded subjects. " +
     "You have uploaded " + user.uploaded_subjects_count + " subjects from an " +
-    "allowance of " + user.subject_limit + ". Your uploaded subject count is the tally of all subjects (including those deleted) that your account has uploaded through the project builder or Zooniverse api."
+    "allowance of " + user.subject_limit + ". Your uploaded subject count is the tally of all subjects (including those deleted) that your account has uploaded through the project builder or Zooniverse API."
 
   render: ->
     <div>
