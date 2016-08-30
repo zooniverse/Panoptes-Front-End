@@ -45,7 +45,6 @@ module.exports = React.createClass
       if !!@props.project.redirect
         <a href={@props.project.redirect} className="stats-project-icon">{content}</a>
       else
-        [owner, name] = @props.project.slug.split '/'
-        <Link to="/projects/#{owner}/#{name}" className="stats-project-icon">{content}</Link>
+        <Link to="/projects/#{@props.project.slug}" className="stats-project-icon">{content}</Link>
     else
       <span className="stats-project-icon">{content}</span>
