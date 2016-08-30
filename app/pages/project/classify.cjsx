@@ -70,6 +70,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     query: null
     project: null
+    selectedWorkflow: null
     simulateSaveFailure: (location?.search ? '').indexOf('simulate-classification-save-failure') isnt -1
 
   getInitialState: ->
@@ -85,7 +86,7 @@ module.exports = React.createClass
     query: 'loadAppropriateClassification'
 
   componentDidMount: () ->
-    @getCurrentWorkflow().then (workflow) =>
+    @getCurrentWorkflow(@props).then (workflow) =>
       @setState {workflow}
 
   componentWillUpdate: (nextProps, nextState) ->
@@ -96,12 +97,13 @@ module.exports = React.createClass
 
   componentWillReceiveProps: (nextProps) ->
     @shouldWorkflowAssignmentPrompt(nextProps.preferences)
+    @getCurrentWorkflow(nextProps)
 
   shouldWorkflowAssignmentPrompt: (preferences) ->
     # Only for Gravity Spy which is assigning workflows to logged in users
     assignedWorkflowID = preferences?.settings?.workflow_id
     if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and @props.user?
-      if assignedWorkflowID? and assignedWorkflowID isnt @props.location.query.workflow
+      if assignedWorkflowID? and @props.location.query.workflow? and assignedWorkflowID isnt @props.location.query.workflow
         @setState promptWorkflowAssignmentDialog: true if @state.promptWorkflowAssignmentDialog is false
 
   loadAppropriateClassification: (_, props = @props) ->
@@ -113,11 +115,14 @@ module.exports = React.createClass
       currentClassifications.forWorkflow[workflow.id] ?= @createNewClassification props.project, workflow
       currentClassifications.forWorkflow[workflow.id]
 
-  getCurrentWorkflow: (props = @props) ->
+  getCurrentWorkflow: (props) ->
     if props.location.query?.workflow?
       # console.log 'Workflow specified as', props.location.query.workflow
       # Prefer the workflow specified in the query.
       @getWorkflow props.project, props.location.query.workflow
+    else if props.selectedWorkflow?.id?
+      # Select the selected workflow if user navigates directly to the classify page
+      @getWorkflow props.project, props.selectedWorkflow.id
     else
       # If no workflow is specified, pick a random one and record it for later.
       # When we send this classification, we'll clear this value to select a new random workflow.
