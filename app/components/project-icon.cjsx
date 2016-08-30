@@ -1,5 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
+apiClient = require 'panoptes-client/lib/api-client'
 
 module.exports = React.createClass
   displayName: 'ProjectIcon'
@@ -23,10 +24,8 @@ module.exports = React.createClass
       @getDetails nextProps.project
 
   getDetails: (project) ->
-    project.get 'owner'
-      .then (owner) =>
-        @setState {owner}
-    project.get 'avatar'
+    apiClient.type 'avatars'
+      .get project.links.avatar.id
       .catch =>
         null
       .then (avatar) =>
@@ -36,7 +35,7 @@ module.exports = React.createClass
     content = [
       <img key="image" src={@state.avatar?.src ? @props.defaultAvatarSrc} />
       <div key="label" className="label">
-        <span className="owner">{@state.owner?.display_name}</span><br />
+        <span className="owner">{@props.project.links.owner?.display_name}</span><br />
         <span className="display-name"><strong>{@props.project.display_name}</strong></span>
       </div>
       <div key="badge" className="badge">{@props.badge}</div> if @props.badge
