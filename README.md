@@ -181,10 +181,10 @@ We're migrating from coffeescript to ES6. This can be done incrementally by writ
 - Use backticks to import ES6 components into coffeescript components: 
 
 ```
-`import NewComponet from './new-component'`
+`import NewComponent from './new-component'`
 ```
 
-An ESLint configration file is setup in the root of the repository for you to use with your text editor to lint both ES6 and use Airbnb's React style guide.
+An ESLint configuration file is setup in the root of the repository for you to use with your text editor to lint both ES6 and use Airbnb's React style guide.
 
 A (guide)[https://toddmotto.com/react-create-class-versus-component/] on writing native classes versus using `React.createClass()`
 
