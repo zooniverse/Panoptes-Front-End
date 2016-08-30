@@ -33,7 +33,7 @@ module.exports = React.createClass
 
   render: ->
     content = [
-      <img key="image" src={@state.avatar?.src ? @props.defaultAvatarSrc} />
+      <img key="image" alt="" src={@state.avatar?.src ? @props.defaultAvatarSrc} />
       <div key="label" className="label">
         <span className="owner">{@props.project.links.owner?.display_name}</span><br />
         <span className="display-name"><strong>{@props.project.display_name}</strong></span>
