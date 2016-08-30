@@ -105,11 +105,10 @@ ProjectPage = React.createClass
 
   getSelectedWorkflow: (project, preferences) ->
     @setState selectedWorkflow: 'PENDING'
-
     # preference user selected workflow, then project owner set workflow, then default workflow
-    if preferences?.preferences.selected_workflow 
+    if preferences?.preferences.selected_workflow?
       preferredWorkflowID = preferences?.preferences.selected_workflow
-    else if preferences?.settings.workflow_id
+    else if preferences?.settings?.workflow_id
       preferredWorkflowID = preferences?.settings.workflow_id
     else if project.configuration?.default_workflow 
       preferredWorkflowID = project.configuration?.default_workflow
@@ -359,7 +358,7 @@ ProjectPageController = React.createClass
         if @state.error.message is 'NOT_FOUND'
           <div className="content-container">
             <p>Project <code>{slug}</code> not found.</p>
-            <p>If you're sure the URL is correct, you might not have permission to view this project.</p>
+            <p>"If you're sure the URL is correct, you might not have permission to view this project."</p>
           </div>
         else
           <div className="content-container">

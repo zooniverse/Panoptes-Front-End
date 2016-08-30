@@ -352,7 +352,7 @@ module.exports = React.createClass
           @loadAnotherSubject()
 
           if @props.location.query.workflow isnt @props.preferences.preferences.selected_workflow
-            @props.preferences.update({ 'preferences.selected_workflow': @props.preferences.settings.workflow_id });
+            @props.preferences.update({ 'preferences.selected_workflow': @props.preferences?.settings?.workflow_id });
             @props.preferences.save()
               .then =>
                 @setState promptWorkflowAssignmentDialog: false
