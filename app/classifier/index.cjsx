@@ -19,6 +19,8 @@ WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
 
+PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
+
 Classifier = React.createClass
   displayName: 'Classifier'
 
@@ -35,9 +37,7 @@ Classifier = React.createClass
 
   getInitialState: ->
     subjectLoading: false
-    expertClassification: null
     classificationQuality: NaN
-    showingExpertClassification: false
     selectedExpertAnnotation: -1
     backButtonWarning: false
 
@@ -65,35 +65,14 @@ Classifier = React.createClass
   loadSubject: (subject) ->
     @setState
       subjectLoading: true
-      expertClassification: null
       classificationQuality: NaN
-      showingExpertClassification: false
       selectedExpertAnnotation: -1
-
-    @getExpertClassification @props.workflow, @props.subject
 
     preloadSubject subject
       .then =>
         if @props.subject is subject # The subject could have changed while we were loading.
           @setState subjectLoading: false
           @props.onLoad?()
-
-  getExpertClassification: (workflow, subject) ->
-    awaitExpertClassification = Promise.resolve do =>
-      apiClient.get('/classifications/gold_standard', {
-        workflow_id: workflow.id,
-        subject_ids: [subject.id]
-      })
-        .catch ->
-          []
-        .then ([expertClassification]) ->
-          expertClassification
-
-    awaitExpertClassification.then (expertClassification) =>
-      expertClassification ?= subject.expert_classification_data?[workflow.id]
-      if @props.workflow is workflow and @props.subject is subject
-        window.expertClassification = expertClassification
-        @setState {expertClassification}
 
   prepareToClassify: (classification) ->
     classification.annotations ?= []
@@ -105,13 +84,10 @@ Classifier = React.createClass
     classifierClassNames = if largeFormatImage then "classifier large-image" else "classifier"
 
     <ChangeListener target={@props.classification}>{=>
-      if @state.showingExpertClassification
-        currentClassification = @state.expertClassification
-      else
-        currentClassification = @props.classification
-        unless @props.classification.completed
-          currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
-          currentTask = @props.workflow.tasks[currentAnnotation?.task]
+      currentClassification = @props.classification
+      unless @props.classification.completed
+        currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
+        currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
       # This is just easy access for debugging.
       window.classification = currentClassification
@@ -279,30 +255,8 @@ Classifier = React.createClass
           />
         </strong>}
 
-      {if @state.expertClassification?
-        <div className="has-expert-classification">
-          Expert classification available.{' '}
-          {if @state.showingExpertClassification
-            <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
-          else
-            <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
-
-          {unless true or isNaN @state.classificationQuality
-            qualityString = (@state.classificationQuality * 100).toString().split('.')[0] + '%'
-            <div>Looks like you matched about <strong>{qualityString}</strong>.</div>}
-          {if @state.classificationQuality < @props.goodClassificationCutoff
-            <div>Keep at it, all classifications are useful!</div>}
-          {if @state.classificationQuality > @props.goodClassificationCutoff
-            <div>Keep up the good work!</div>}
-        </div>}
-
       <div>
-        <strong>
-          {if @state.showingExpertClassification
-            'Expert classification:'
-          else
-            'Your classification:'}
-        </strong>
+        <strong>Your classification:</strong>
         <ClassificationSummary workflow={@props.workflow} classification={classification} />
       </div>
 
@@ -425,10 +379,11 @@ Classifier = React.createClass
         width: innerWidth
         height: innerHeight
 
-    if @state.expertClassification?
-      classificationQuality = testClassificationQuality @props.classification, @state.expertClassification, @props.workflow
-      console.log 'Classification quality', classificationQuality
-      @setState {classificationQuality}
+    # Stripped out gold standard classification import interface, however do we still want this?
+    # if @state.expertClassification?
+    #   classificationQuality = testClassificationQuality @props.classification, @state.expertClassification, @props.workflow
+    #   console.log 'Classification quality', classificationQuality
+    #   @setState {classificationQuality}
 
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
@@ -440,9 +395,6 @@ Classifier = React.createClass
 
   handleDemoModeChange: (e) ->
     @props.onChangeDemoMode e.target.checked
-
-  toggleExpertClassification: (value) ->
-    @setState showingExpertClassification: value
 
   warningToggleOn: ->
     @setState backButtonWarning: true
