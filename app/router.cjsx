@@ -101,7 +101,11 @@ module.exports =
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
       </Route>
+<<<<<<< 9ebdfc86f530708b4b42c452c2cadb594fe0c19e
 
+=======
+      
+>>>>>>> remove hover from ribbon
       <Route path="collections" component={require('./pages/collections/index')}>
          <IndexRoute component={require('./pages/collections/collections-list')} />
          <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
