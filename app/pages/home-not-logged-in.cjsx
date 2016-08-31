@@ -19,7 +19,7 @@ module.exports = React.createClass
     @refs.discover?.scrollIntoView behavior: 'smooth', block: 'start'
 
   render: ->
-    <div className="home-page-not-logged-in">
+    <div className="on-home-page home-page-not-logged-in">
       <div className="flex-container">
         <section className="home-intro">
           <img className="home-mobile-video-image" src="./assets/home-video.jpg" />
