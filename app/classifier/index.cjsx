@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-testClassificationQuality = require '../lib/test-classification-quality'
 ChangeListener = require '../components/change-listener'
 FrameAnnotator = require './frame-annotator'
 SubjectViewer = require '../components/subject-viewer'
@@ -32,13 +31,10 @@ Classifier = React.createClass
     workflow: null
     subject: null
     classification: null
-    goodClassificationCutoff: 0.5
     onLoad: Function.prototype
 
   getInitialState: ->
     subjectLoading: false
-    classificationQuality: NaN
-    selectedExpertAnnotation: -1
     backButtonWarning: false
 
   componentDidMount: ->
@@ -63,10 +59,7 @@ Classifier = React.createClass
       @context.geordi?.forget ['subjectID']
 
   loadSubject: (subject) ->
-    @setState
-      subjectLoading: true
-      classificationQuality: NaN
-      selectedExpertAnnotation: -1
+    @setState subjectLoading: true
 
     preloadSubject subject
       .then =>
@@ -378,12 +371,6 @@ Classifier = React.createClass
       'metadata.viewport':
         width: innerWidth
         height: innerHeight
-
-    # Stripped out gold standard classification import interface, however do we still want this?
-    # if @state.expertClassification?
-    #   classificationQuality = testClassificationQuality @props.classification, @state.expertClassification, @props.workflow
-    #   console.log 'Classification quality', classificationQuality
-    #   @setState {classificationQuality}
 
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
