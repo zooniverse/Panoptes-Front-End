@@ -32,7 +32,7 @@ module.exports = React.createClass
 
   propTypes:
     collection: React.PropTypes.object.isRequired
-    imagePromise: React.PropTypes.any
+    imagePromise: React.PropTypes.any.isRequired
     linkTo: React.PropTypes.string.isRequired
     translationObjectName: React.PropTypes.string.isRequired
 
@@ -49,16 +49,10 @@ module.exports = React.createClass
   refreshImage: (promise) ->
     Promise.resolve(promise)
       .then (src) =>
-        if src is null
-          throw new Error 'No collection card image!' # Caught immediately
         @refs.collectionCard.style.backgroundImage = "url('#{src}')"
         @refs.collectionCard.style.backgroundSize = "contain"
       .catch =>
-<<<<<<< 069aabec01fdc70615a7b0aaf4f632a7a008f8d7
-        card.style.background = "url('/assets/simple-pattern.png') center center repeat"
-=======
         @refs.collectionCard.style.background = "url('/assets/simple-pattern.jpg') center center repeat"
->>>>>>> Fix collection card image handling
 
   render: ->
     [owner, name] = @props.collection.slug.split('/')
