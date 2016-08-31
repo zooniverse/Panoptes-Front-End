@@ -3,7 +3,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import ProjectCard from '../../partials/project-card';
 import Publications from '../about/publications';
 
-import style from './news-section.styl';
+import style from './news-pullout.styl';
 void style;
 
 const NewsSection = React.createClass({
@@ -73,8 +73,8 @@ const NewsSection = React.createClass({
 
   renderPublication(article) {
     return (<div key={Math.random()}>
-      <h5 className="pullout-timestamp">{article.date}</h5>
-      <p className="news-section-content">
+      <h5 className="home-page-news-pullout__section--timestamp">{article.date}</h5>
+      <p className="home-page-news-pullout__section--content">
         <a href={article.href} target="_blank">
           {article.citation}
           <i className="fa fa-long-arrow-right"></i>
@@ -87,27 +87,27 @@ const NewsSection = React.createClass({
     const link = window.location.origin + '/projects/' + data.href;
     return (<div key={Math.random()}>
       <a href={link} target="_blank">
-        <h5 className="news-section-title">{data.project} </h5>
+        <h5 className="home-page-news-pullout__section--title">{data.project} </h5>
         <h5> has been updated! </h5>
-        <p className="pullout-timestamp">{data.timestamp}</p>
+        <p className="home-page-news-pullout__section--timestamp">{data.timestamp}</p>
       </a>
     </div>);
   },
 
   render() {
     return (
-      <div className="news-pullout-main">
-        <div className="pullout-scroll-contain">
+      <div className="home-page-news-pullout__main">
+        <div className="home-page-news-pullout__container">
           <h2> Zooniverse News </h2>
 
-          <div className="news-pullout-section">
+          <div className="home-page-news-pullout__section">
             <h4> Recent Publications </h4>
             {this.state.publications.map((article) => {
               return this.renderPublication(article);
             })}
           </div>
 
-          <div className="news-pullout-section">
+          <div className="home-page-news-pullout__section">
             <h4> Newest Project </h4>
             {this.state.projects.map((project) => {
               const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
@@ -115,7 +115,7 @@ const NewsSection = React.createClass({
             })}
           </div>
 
-          <div className="news-pullout-section">
+          <div className="home-page-news-pullout__section">
             <h4> New Datasets </h4>
             {this.props.newDatasets.map((data) => {
               return this.renderNewDatasets(data);
