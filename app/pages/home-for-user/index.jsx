@@ -10,7 +10,7 @@ import MyBuildsSection from './my-builds';
 import ProjectStats from './project-stats';
 import qs from 'qs';
 import HomePageSocial from '../home-not-logged-in/social';
-import NewsSection from './news-section';
+import NewsSection from './news-pullout';
 import moment from 'moment';
 
 import style from './index.styl';
@@ -212,7 +212,7 @@ const HomePageForUser = React.createClass({
     const OpenSectionComponent = SECTIONS[hashQuery.focus];
 
     return (
-      <div>
+      <div className='on-home-page'>
         <div className="home-page-for-user">
           <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
 
