@@ -10,7 +10,6 @@ import TriggeredModalForm from 'modal-form/triggered';
 import ZooniverseLogo from '../partials/zooniverse-logo';
 import AccountBar from './account-bar';
 import LoginBar from './login-bar';
-import NotificationsLink from '../talk/lib/notifications-link';
 
 import style from './site-nav.styl';
 void style;
@@ -30,7 +29,6 @@ counterpart.registerTranslations('en', {
     blog: 'Blog',
     lab: 'Build a project',
     admin: 'Admin',
-    notifications: 'Notifications',
   },
 });
 
@@ -124,12 +122,6 @@ const SiteNav = React.createClass({
         >
           <Translate content="siteNav.talk" />
         </Link>{' '}
-
-        <NotificationsLink section="zooniverse" user={this.context.user} linkProps={{
-          className: 'site-nav__link',
-          activeClassName: 'site-nav__link--active',
-          onClick: !!this.logClick ? this.logClick.bind(this, 'mainNav.notifications') : null
-        }} />{' '}
 
         <Link
           to="/collections"
@@ -239,7 +231,7 @@ const SiteNav = React.createClass({
             <i className="fa fa-spinner fa-spin fa-fw"></i>
           </span>}
 
-        {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar /> : <LoginBar />)}
+        {this.context.initialLoadComplete && (!!this.context.user ? <AccountBar params={this.props.params} /> : <LoginBar />)}
 
         {!!this.props.onToggle && !this.state.isMobile &&
           <button

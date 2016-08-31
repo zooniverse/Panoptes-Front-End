@@ -7,7 +7,6 @@ PotentialFieldGuide = require './potential-field-guide'
 TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 {sugarClient} = require 'panoptes-client/lib/sugar'
-NotificationsLink = require '../../talk/lib/notifications-link'
 classNames = require 'classnames'
 
 counterpart.registerTranslations 'en',
@@ -195,11 +194,6 @@ ProjectPage = React.createClass
           <Translate content="project.nav.talk" />
         </Link>
 
-        <NotificationsLink {...@props} linkProps={
-          activeClassName: 'active',
-          className: 'tabbed-content-tab',
-          onClick: logClick?.bind(this, 'project.nav.notifications')
-        } />
          <Link to="#{projectPath}/collections" activeClassName="active" className={collectClasses}>
           <Translate content="project.nav.collections" />
         </Link>
