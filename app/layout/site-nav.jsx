@@ -10,6 +10,7 @@ import TriggeredModalForm from 'modal-form/triggered';
 import ZooniverseLogo from '../partials/zooniverse-logo';
 import AccountBar from './account-bar';
 import LoginBar from './login-bar';
+import SiteSubnav from './site-subnav';
 
 import style from './site-nav.styl';
 void style;
@@ -151,37 +152,29 @@ const SiteNav = React.createClass({
           </Link>
         </AdminOnly>
 
-        <TriggeredModalForm
-          className="site-nav__modal"
-          trigger={
-            <span
+        <SiteSubnav isMobile={this.state.isMobile}>
+          <span>
+            <a
+              href="http://daily.zooniverse.org/"
               className="site-nav__link"
               activeClassName="site-nav__link--active"
-              title="More links"
-              aria-label="More links"
-            >• • •</span>
-          }
-        >
-          <a
-            href="http://daily.zooniverse.org/"
-            className="site-nav__link"
-            activeClassName="site-nav__link--active"
-            target="_blank"
-            onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.daily', 'globe-menu') : null}
-          >
-            <Translate content="siteNav.daily" />
-          </a>
-          <br />
-          <a
-            href="http://blog.zooniverse.org/"
-            className="site-nav__link"
-            activeClassName="site-nav__link--active"
-            target="_blank"
-            onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.blog', 'globe-menu') : null}
-          >
-            <Translate content="siteNav.blog" />
-          </a>
-        </TriggeredModalForm>
+              target="_blank"
+              onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.daily', 'globe-menu') : null}
+            >
+              <Translate content="siteNav.daily" />
+            </a>
+            <br />
+            <a
+              href="http://blog.zooniverse.org/"
+              className="site-nav__link"
+              activeClassName="site-nav__link--active"
+              target="_blank"
+              onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.blog', 'globe-menu') : null}
+            >
+              <Translate content="siteNav.blog" />
+            </a>
+          </span>
+        </SiteSubnav>
       </span>
     );
   },
