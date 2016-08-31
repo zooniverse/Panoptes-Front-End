@@ -124,7 +124,7 @@ to squeeze a bit of galaxy evolution science in.'''
         Happy-go-lucky about outreach, the Zooniverse and everything.'''
       robinSchaaf:
         title: 'Mobile App Developer'
-        bio: '''Robin has a background in web development for educational institutions.  In her free team she enjoys board games and playing bass guitar.'''
+        bio: '''Robin has a background in web development for educational institutions.  In her free time she enjoys board games and playing bass guitar.'''
       rogerHutchings:
         title: 'Developer'
         bio: '''Roger builds front end interfaces for the Zooniverse, and enjoys coding, music and rebuilding motorbikes in his spare time.'''
