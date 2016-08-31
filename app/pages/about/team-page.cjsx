@@ -122,6 +122,9 @@ to squeeze a bit of galaxy evolution science in.'''
         bio: '''Becky is an astrophysicist working towards her doctorate in Oxford. She is
         interested in how galaxies change over time and how we can track this evolution.
         Happy-go-lucky about outreach, the Zooniverse and everything.'''
+      robinSchaaf:
+        title: 'Mobile App Developer'
+        bio: '''Robin has a background in web development for educational institutions.  In her free team she enjoys board games and playing bass guitar.'''
       rogerHutchings:
         title: 'Developer'
         bio: '''Roger builds front end interfaces for the Zooniverse, and enjoys coding, music and rebuilding motorbikes in his spare time.'''
@@ -334,6 +337,12 @@ teamMembers =
     bio: counterpart "team.content.rebeccaSmethurst.bio"
     image: "/assets/team/becky.jpg"
     location: "oxford"
+  robinSchaaf:
+    name: "Robin Schaaf"
+    title: counterpart "team.content.robinSchaaf.title"
+    bio: counterpart "team.content.robinSchaaf.bio"
+    image: "/assets/team/robin.jpg"
+    location: "chicago"
   rogerHutchings:
     name: "Roger Hutchings"
     title: counterpart "team.content.rogerHutchings.title"
