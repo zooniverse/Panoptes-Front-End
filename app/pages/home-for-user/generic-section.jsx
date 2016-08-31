@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const HomePageSection = React.createClass({
   propTypes: {
@@ -21,7 +22,7 @@ const HomePageSection = React.createClass({
             }}
           ></i>
           <span className="home-page-section__header-label">{this.props.title}</span>
-          <a href="#" className="secret-button" title="Close this section" aria-label="Close this section">×</a>
+          <Link to="#" className="secret-button" title="Close this section" aria-label="Close this section">x</Link>
         </header>
         {!!this.props.error && (
           <div className="home-page-section__error">
