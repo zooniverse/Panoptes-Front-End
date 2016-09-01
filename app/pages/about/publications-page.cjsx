@@ -3,7 +3,7 @@ React = require 'react'
 Translate = require 'react-translate-component'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
-publicationCategories = require './publications'
+Publications = require('../../lib/publications').default
 
 counterpart.registerTranslations 'en',
   publications:
@@ -34,7 +34,7 @@ module.exports = React.createClass
 
   projectSlugs: ->
     slugs = []
-    for category, list of publicationCategories
+    for category, list of Publications
       slugs = slugs.concat(project.slug for project in list when project.slug)
     slugs
 
@@ -60,7 +60,7 @@ module.exports = React.createClass
               @state.currentSort
         }</h2>
         {if @state.projects
-          for category, projects of publicationCategories
+          for category, projects of Publications
             if (@state.currentSort is category) or (@state.currentSort is 'showAll')
               <ul key={category} className="publications-list">
                 {for projectListing in projects

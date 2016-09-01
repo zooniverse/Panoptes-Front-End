@@ -1,7 +1,7 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import ProjectCard from '../../partials/project-card';
-import Publications from '../about/publications';
+import Publications from '../../lib/publications';
 
 import style from './news-pullout.styl';
 void style;
