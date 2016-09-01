@@ -1,0 +1,173 @@
+config = {
+  CLASSIFICATION_MARKER: "classification"
+
+  PROJECT_SLUGS: {
+    COMET_HUNTERS: "mschwamb/comet-hunters"
+  }
+
+  COMET_HUNTERS_VOLCROWE_EXPERIMENT: "CometHuntersVolcroweExperiment1"
+
+  INTERVENTION_TYPES: {
+    QUESTION: "question"
+    STATEMENT: "statement"
+  }
+}
+
+config.ENABLED_EXPERIMENTS = {
+  "#{ config.PROJECT_SLUGS['COMET_HUNTERS']}": [config.COMET_HUNTERS_VOLCROWE_EXPERIMENT]
+}
+
+config.INTERVENTION_DETAILS = {
+  "#{ config.PROJECT_SLUGS['COMET_HUNTERS']}": {
+    "#{ config.COMET_HUNTERS_VOLCROWE_EXPERIMENT }": {
+      "valued-statement-1": {
+        title: "Interesting Fact",
+        body: "On average, we receive a total of A classifications on this project every day."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      } # TODO Calculate A
+      "valued-statement-2": {
+        title: "Interesting Fact",
+        body: "To date, you have classified a total of B images. The average contributor to this project has classified a total of C images."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      } # TODO Calculate C, and B if possible (Omit first sentence if not)
+      "valued-statement-3": {
+        title: "Interesting Fact",
+        body: "Your total number of classifications for this project represents D% of the total number received to date."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      } #TODO Calculate D, or use alternative "Your input is extremely valuable to the project. Thanks very much, please keep going!"
+      "valued-statement-4": {
+        title: "Interesting Fact",
+        body: "On average, this project receives classifications from E individual contributors every week."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      }
+      "valued-statement-5": {
+        title: "A Quick Thought",
+        body: "Submitting a few more classifications will make a huge difference to the outcome of this project. Thanks very much, please keep going!"
+        type: config.INTERVENTION_TYPES.STATEMENT
+      }
+      "gamisation-statement-1": {
+        title: "Interesting Fact",
+        body: "Some users as they classify on this project have fun by sharing images of comets that look like other things on Talk."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      } # TODO Add links.
+      "gamisation-statement-2": {
+        title: "A Quick Thought",
+        body: "Remember, the data you contribute to this project is used to advance scientific knowledge.  Please take your time and make sure you contribute your best possible guess."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      } # TODO Add links.
+      "gamisation-statement-3": {
+        title: "A Quick Thought",
+        body: "We hope you enjoy looking at these images; scientific research should be fun."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      }
+      "gamisation-statement-4": {
+        title: "A Quick Thought",
+        body: "If you’re starting to feel bored with this project and would like a break, why not contribute some classifications to [another Zooniverse project]?"
+        type: config.INTERVENTION_TYPES.STATEMENT
+      } # TODO Add specific links to other projects, with text, at random, with tracking
+      "gamisation-statement-5": {
+        title: "A Quick Thought",
+        body: "Why not take a break if you feel you need one?"
+        type: config.INTERVENTION_TYPES.STATEMENT
+      }
+      "learning-statement-1": {
+        title: "Interesting Fact",
+        body: "Asteroids are small rocky bodies left over from the construction zones that  the planets in our Solar System formed from."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      }
+      "learning-statement-2": {
+        title: "Interesting Fact",
+        body: "The asteroids you review on Comet Hunters orbit between Mars and Jupiter roughly at 2-5 times the distance between the Earth the Sun."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      }
+      "learning-statement-3": {
+        title: "Interesting Fact",
+        body: "Freshly exposed buried water ice is thought to drive the activity on main-belt comets. This might mean that main-belt comets helped deliver water to the young Earth."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      }
+      "learning-statement-4": {
+        title: "Interesting Fact",
+        body: "During an outburst, dust and dirt are ejected off the surface of the asteroid. Sunlight then pushes these small particles into long streaks and complex shapes that we call a main-belt comet's tail."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      }
+      "learning-statement-5": {
+        title: "Interesting Fact",
+        body: "Main-belt comets are a new class of minor planets recently discovered in our Solar System. Less than 20 have been discovered to date."
+        type: config.INTERVENTION_TYPES.STATEMENT
+      }
+      "valued-question-1": {
+        title: "A Quick Question",
+        body: "How do you know that you are making a valuable contribution to this project?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "valued-question-2": {
+        title: "A Quick Question",
+        body: "How much money do you think you should receive for each of your classifications if you were being paid to participate in this project?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "valued-question-3": {
+        title: "A Quick Question",
+        body: "How would you feel if we told you that you've contributed more classifications today than most other users do in a day?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "valued-question-4": {
+        title: "A Quick Question",
+        body: "How many other users do you think have contributed to this project today?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "valued-question-5": {
+        title: "A Quick Question",
+        body: "How would you feel if we told you that your classifications are usually more accurate than the average user?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "gamisation-question-1": {
+        title: "A Quick Question",
+        body: "Does this feel like a game? Explain why or how it does/doesn't feel like one."
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "gamisation-question-2": {
+        title: "A Quick Question",
+        body: "To what extent do you think you would classify more images if you won things or were thanked or rewarded?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "gamisation-question-3": {
+        title: "A Quick Question",
+        body: "When you’re classifying, what sort of things put you off or make you bored?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "gamisation-question-4": {
+        title: "A Quick Question",
+        body: "What do you think about the amount of time it takes to complete one classification?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "gamisation-question-5": {
+        title: "A Quick Question",
+        body: "Do you ever feel like you lose yourself in the project?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "learning-question-1": {title: "A Quick Question", body: "What would help you to learn more while classifying?"}
+      "learning-question-2": {
+        title: "A Quick Question",
+        body: "What have you learned about comets since starting this project?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "learning-question-3": {
+        title: "A Quick Question",
+        body: "Which other sources of information on comets have you looked at since starting this project?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "learning-question-4": {
+        title: "A Quick Question",
+        body: "What knowledge of comets have you shared with others since starting this project?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+      "learning-question-5": {
+        title: "A Quick Question",
+        body: "Is there anything you would like to learn about comets by participating in this project?"
+        type: config.INTERVENTION_TYPES.QUESTION
+      }
+    }
+  }
+}
+
+module.exports = config
