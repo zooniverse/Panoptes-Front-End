@@ -151,3 +151,4 @@ module.exports = React.createClass
   handleProjectEmailChange: (projectPreference, args...) ->
     handleInputChange.apply projectPreference, args
     projectPreference.save()
+    @forceUpdate()
