@@ -186,7 +186,7 @@ We're migrating from coffeescript to ES6. This can be done incrementally by writ
 
 An ESLint configuration file is setup in the root of the repository for you to use with your text editor to lint both ES6 and use Airbnb's React style guide.
 
-A (guide)[https://toddmotto.com/react-create-class-versus-component/] on writing native classes versus using `React.createClass()`
+A [guide](https://toddmotto.com/react-create-class-versus-component/) on writing native classes versus using `React.createClass()`
 
 ## Custom projects
 
