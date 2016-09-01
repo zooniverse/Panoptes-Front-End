@@ -180,7 +180,7 @@ const AccountBar = React.createClass({
 
         <Link
           to="/inbox"
-          className="site-nav__link"
+          className="site-nav__link site-nav__icon site-nav__icon--inbox"
           activeClassName="site-nav__link--active"
           aria-label={`
             Inbox ${this.state.unread ? 'with unread messages' : ''}
@@ -201,7 +201,7 @@ const AccountBar = React.createClass({
         </Link>
 
         <NotificationsLink params={this.props.params} user={this.context.user} linkProps={{
-          className: 'site-nav__link',
+          className: 'site-nav__link site-nav__icon site-nav__icon--notifications',
           activeClassName: 'site-nav__link--active',
           onClick: !!this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
         }} />
