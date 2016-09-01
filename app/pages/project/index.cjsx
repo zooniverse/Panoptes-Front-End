@@ -51,6 +51,7 @@ ProjectPage = React.createClass
     background: null
     avatar: null
     pages: []
+    projectIsComplete: false
     selectedWorkflow: null
 
   componentDidMount: ->
@@ -102,25 +103,49 @@ ProjectPage = React.createClass
       .then (pages) =>
         @setState {pages}
 
+    @checkIfProjectIsComplete(project)
+
   getSelectedWorkflow: (project, preferences) ->
     @setState selectedWorkflow: 'PENDING'
     # preference user selected workflow, then project owner set workflow, then default workflow
+    # if none of those are set, select random workflow
     if preferences?.preferences.selected_workflow?
       preferredWorkflowID = preferences?.preferences.selected_workflow
     else if preferences?.settings?.workflow_id
       preferredWorkflowID = preferences?.settings.workflow_id
     else if project.configuration?.default_workflow 
       preferredWorkflowID = project.configuration?.default_workflow
+    else
+      preferredWorkflowID = @selectRandomWorkflow project
 
     if preferredWorkflowID?
-      apiClient.type('workflows').get preferredWorkflowID, {}
-        .then (workflow) =>
-          if workflow.active
-            @setState selectedWorkflow: workflow
-          else
-            @setState selectedWorkflow: null
+      @getWorkflow(project)
     else
       @setState selectedWorkflow: null
+
+  checkIfProjectIsComplete: (project) ->
+    getWorkflowsInOrder(project, {active: true, fields: 'finished_at'}).then (workflows) =>
+      projectIsComplete = (true for workflow in workflows when not workflow.finished_at?).length is 0
+      @setState {projectIsComplete}
+
+  selectRandomWorkflow: (project) ->
+    linkedWorkflows = project.links.workflows
+
+    if linkedWorkflows.length is 0
+      throw new Error "No workflows for project #{project.id}"
+      project.uncacheLink 'workflows'
+    else
+      randomIndex = Math.floor Math.random() * workflows.length
+      # console.log 'Chose random workflow', workflows[randomIndex].id
+      linkedWorkflows[randomIndex].id
+
+  getWorkflow: (project) ->
+    project.get workflow_id: preferredWorkflowID
+      .then (workflow) =>
+        if workflow.active
+          @setState selectedWorkflow: workflow
+        else
+          @setState selectedWorkflow: null
 
   _lastSugarSubscribedID: null
 
@@ -219,7 +244,8 @@ ProjectPage = React.createClass
         owner: @props.owner
         preferences: @props.preferences
         onChangePreferences: @props.onChangePreferences
-        selectedWorkflow: @state.selectedWorkflow}
+        selectedWorkflow: @state.selectedWorkflow
+        projectIsComplete: @state.projectIsComplete}
 
       {unless @props.project.launch_approved or @props.project.beta_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
