@@ -62,6 +62,9 @@ Classifier = React.createClass
 
     @context.geordi.remember subjectID: @props.subject?.id
 
+  componentWillMount: () ->
+    @context.interventionMonitor.setProjectSlug @props.project.slug
+
   componentWillUnmount: () ->
     try
       @context.geordi?.forget ['subjectID']
@@ -195,80 +198,83 @@ Classifier = React.createClass
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
       <Intervention monitor={@context.interventionMonitor} />
-      {persistentHooksBeforeTask.map (HookComponent) =>
-        <HookComponent {...taskHookProps} />}
+      {if !@context.interventionMonitor.shouldShowIntervention()
+        <div className="hidable-task-container">
+          {persistentHooksBeforeTask.map (HookComponent) =>
+            <HookComponent {...taskHookProps} />}
 
-      <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} preferences={@props.preferences} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
+          <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} preferences={@props.preferences} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
-      {persistentHooksAfterTask.map (HookComponent) =>
-        <HookComponent {...taskHookProps} />}
+          {persistentHooksAfterTask.map (HookComponent) =>
+            <HookComponent {...taskHookProps} />}
 
-      <hr />
+          <hr />
 
-      <nav className="task-nav">
-        {if Object.keys(@props.workflow.tasks).length > 1
-          <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
-        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
-          [ownerName, name] = @props.project.slug.split('/')
-          <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
-        {if nextTaskKey
-          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
-        else
-          <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
-            {if @props.demoMode
-              <i className="fa fa-trash fa-fw"></i>
-            else if @props.classification.gold_standard
-              <i className="fa fa-star fa-fw"></i>}
-            {' '}Done
-          </button>}
-        {@renderExpertOptions()}
-      </nav>
-      { @renderBackButtonWarning() if @state.backButtonWarning }
+          <nav className="task-nav">
+            {if Object.keys(@props.workflow.tasks).length > 1
+              <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
+            {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
+              [ownerName, name] = @props.project.slug.split('/')
+              <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
+            {if nextTaskKey
+              <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
+            else
+              <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
+                {if @props.demoMode
+                  <i className="fa fa-trash fa-fw"></i>
+                else if @props.classification.gold_standard
+                  <i className="fa fa-star fa-fw"></i>}
+                {' '}Done
+              </button>}
+            {@renderExpertOptions()}
+          </nav>
+          { @renderBackButtonWarning() if @state.backButtonWarning }
 
-      <p>
-        <small>
-          <strong>
-            <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} project={@props.project} style={marginTop: '2em'}>
-              Show the project tutorial
-            </TutorialButton>
-          </strong>
-        </small>
-      </p>
+          <p>
+            <small>
+              <strong>
+                <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} project={@props.project} style={marginTop: '2em'}>
+                  Show the project tutorial
+                </TutorialButton>
+              </strong>
+            </small>
+          </p>
 
-      <p>
-        <small>
-          <strong>
-            <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
-              Restart the project mini-course
-            </MiniCourseButton>
-          </strong>
-        </small>
-      </p>
+          <p>
+            <small>
+              <strong>
+                <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
+                  Restart the project mini-course
+                </MiniCourseButton>
+              </strong>
+            </small>
+          </p>
 
-      {if @props.demoMode
-        <p style={textAlign: 'center'}>
-          <i className="fa fa-trash"></i>{' '}
-          <small>
-            <strong>Demo mode:</strong>
-            <br />
-            No classifications are being recorded.{' '}
-            <button type="button" className="secret-button" onClick={@props.onChangeDemoMode.bind null, false}>
-              <u>Disable</u>
-            </button>
-          </small>
-        </p>
-      else if @props.classification.gold_standard
-        <p style={textAlign: 'center'}>
-          <i className="fa fa-star"></i>{' '}
-          <small>
-            <strong>Gold standard mode:</strong>
-            <br />
-            Please ensure this classification is completely accurate.{' '}
-            <button type="button" className="secret-button" onClick={@props.classification.update.bind @props.classification, gold_standard: undefined}>
-              <u>Disable</u>
-            </button>
-          </small>
-        </p>}
+          {if @props.demoMode
+            <p style={textAlign: 'center'}>
+              <i className="fa fa-trash"></i>{' '}
+              <small>
+                <strong>Demo mode:</strong>
+                <br />
+                No classifications are being recorded.{' '}
+                <button type="button" className="secret-button" onClick={@props.onChangeDemoMode.bind null, false}>
+                  <u>Disable</u>
+                </button>
+              </small>
+            </p>
+          else if @props.classification.gold_standard
+            <p style={textAlign: 'center'}>
+              <i className="fa fa-star"></i>{' '}
+              <small>
+                <strong>Gold standard mode:</strong>
+                <br />
+                Please ensure this classification is completely accurate.{' '}
+                <button type="button" className="secret-button" onClick={@props.classification.update.bind @props.classification, gold_standard: undefined}>
+                  <u>Disable</u>
+                </button>
+              </small>
+            </p>}
+        </div>}
     </div>
 
   renderSummary: (classification) ->
