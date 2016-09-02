@@ -21,14 +21,15 @@ const NewsSection = React.createClass({
 
   getInitialState() {
     return {
-      avatars: {},
-      projects: [],
+      newestAvatar: {},
+      newestProject: {},
       publications: [],
+      projects: [],
     };
   },
 
   componentDidMount() {
-    this.fetchProjects();
+    this.fetchNewestProject();
     this.recentPublications();
   },
 
@@ -47,28 +48,27 @@ const NewsSection = React.createClass({
     });
   },
 
-  fetchProjects() {
+  fetchNewestProject() {
     apiClient.type('projects').get({
       sort: '-launch_date',
       launch_approved: true,
       page_size: 1,
       include: ['avatar'],
     })
-    .then((projects) => {
-      this.setState({
-        projects,
-      });
-
-      return Promise.all(projects.map((project) => {
-        return project.get('avatar')
+    .then(([project]) => {
+      return new Promise(() => {
+        return apiClient.type('avatars')
+        .get(project.links.avatar.id)
         .catch(() => {
           return null;
         })
         .then((avatar) => {
-          this.state.avatars[project.id] = avatar;
-          this.forceUpdate();
+          this.setState({
+            newestAvatar: avatar,
+            newestProject: project,
+          });
         });
-      }));
+      });
     });
   },
 
@@ -97,6 +97,8 @@ const NewsSection = React.createClass({
   },
 
   render() {
+    const avatarSrc = this.state.newestAvatar.src || null
+
     return (
       <div className="home-page-news-pullout news-main">
         <div className="home-page-news-pullout news-container">
@@ -111,10 +113,7 @@ const NewsSection = React.createClass({
 
           <div className="home-page-news-pullout news-section">
             <h4> Newest Project </h4>
-            {this.state.projects.map((project) => {
-              const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
-              return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
-            })}
+            <ProjectCard key={this.state.newestProject.id} project={this.state.newestProject} imageSrc={avatarSrc} />
           </div>
 
           <div className="home-page-news-pullout news-section">
