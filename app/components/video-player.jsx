@@ -1,5 +1,7 @@
 import React from 'react';
 
+const IS_IE = 'ActiveXObject' in window;
+
 const VideoPlayer = React.createClass({
 
   propTypes: {
@@ -19,11 +21,20 @@ const VideoPlayer = React.createClass({
   },
 
   componentDidMount() {
-    if (!!this.refs.videoScrubber) this.refs.videoScrubber.value = 0;
+    if (!!this.refs.videoScrubber) {
+      this.refs.videoScrubber.value = 0;
+      if (IS_IE) this.refs.videoScrubber.addEventListener('change', this.seekVideo);
+    }
   },
 
   componentDidUpdate() {
     if (!!this.refs.videoPlayer) this.refs.videoPlayer.playbackRate = this.state.playbackRate;
+  },
+
+  componentWillUnmount() {
+    if (!!this.refs.videoScrubber && IS_IE) {
+      this.refs.videoScrubber.removeEventListener('change', this.seekVideo);
+    }
   },
 
   setPlayRate(e) {
