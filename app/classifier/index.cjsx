@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-testClassificationQuality = require '../lib/test-classification-quality'
 ChangeListener = require '../components/change-listener'
 FrameAnnotator = require './frame-annotator'
 SubjectViewer = require '../components/subject-viewer'
@@ -19,8 +18,6 @@ WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
 
-PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
-
 Classifier = React.createClass
   displayName: 'Classifier'
 
@@ -32,15 +29,10 @@ Classifier = React.createClass
     workflow: null
     subject: null
     classification: null
-    goodClassificationCutoff: 0.5
     onLoad: Function.prototype
 
   getInitialState: ->
     subjectLoading: false
-    expertClassification: null
-    classificationQuality: NaN
-    showingExpertClassification: false
-    selectedExpertAnnotation: -1
     backButtonWarning: false
 
   componentDidMount: ->
@@ -65,37 +57,13 @@ Classifier = React.createClass
       @context.geordi?.forget ['subjectID']
 
   loadSubject: (subject) ->
-    @setState
-      subjectLoading: true
-      expertClassification: null
-      classificationQuality: NaN
-      showingExpertClassification: false
-      selectedExpertAnnotation: -1
-
-    @getExpertClassification @props.workflow, @props.subject
+    @setState subjectLoading: true
 
     preloadSubject subject
       .then =>
         if @props.subject is subject # The subject could have changed while we were loading.
           @setState subjectLoading: false
           @props.onLoad?()
-
-  getExpertClassification: (workflow, subject) ->
-    awaitExpertClassification = Promise.resolve do =>
-      apiClient.get('/classifications/gold_standard', {
-        workflow_id: workflow.id,
-        subject_ids: [subject.id]
-      })
-        .catch ->
-          []
-        .then ([expertClassification]) ->
-          expertClassification
-
-    awaitExpertClassification.then (expertClassification) =>
-      expertClassification ?= subject.expert_classification_data?[workflow.id]
-      if @props.workflow is workflow and @props.subject is subject
-        window.expertClassification = expertClassification
-        @setState {expertClassification}
 
   prepareToClassify: (classification) ->
     classification.annotations ?= []
@@ -107,13 +75,10 @@ Classifier = React.createClass
     classifierClassNames = if largeFormatImage then "classifier large-image" else "classifier"
 
     <ChangeListener target={@props.classification}>{=>
-      if @state.showingExpertClassification
-        currentClassification = @state.expertClassification
-      else
-        currentClassification = @props.classification
-        unless @props.classification.completed
-          currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
-          currentTask = @props.workflow.tasks[currentAnnotation?.task]
+      currentClassification = @props.classification
+      unless @props.classification.completed
+        currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
+        currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
       # This is just easy access for debugging.
       window.classification = currentClassification
@@ -280,57 +245,8 @@ Classifier = React.createClass
           />
         </strong>}
 
-      {if @props.project?.slug is PULSAR_HUNTERS_SLUG or location.href.indexOf('fake-pulsar-feedback') isnt -1
-        subjectClass = @props.subject.metadata['#Class']?.toUpperCase()
-        if subjectClass?
-          userFoundPulsar = @props.classification.annotations[0]?.value is 0
-
-          HelpButton = (props) =>
-            <button type="button" onClick={=>
-              {alert} = require 'modal-form/dialog'
-              {Markdown} = (require 'markdownz').default
-              alert <Markdown>{@props.workflow.tasks[@props.workflow.first_task].help}</Markdown>
-            }>
-              {props.children}
-            </button>
-
-          <div className="pulsar-hunters-feedback" data-is-correct={subjectClass? and userFoundPulsar || null}>
-            {if subjectClass in ['KNOWN', 'DISC']
-              if userFoundPulsar
-                <p>Congratulations! You’ve successfully spotted a known pulsar. Keep going to find one we don’t already know about.</p>
-              else
-                <p>This was actually a known pulsar. <HelpButton>Click here</HelpButton> to see some examples of known pulsars.</p>
-            else if subjectClass in ['FAKE']
-              if userFoundPulsar
-                <p>Congratulations! You’ve successfully spotted a simulated pulsar. Keep going to find a real, undiscovered pulsar.</p>
-              else
-                <p>This was a simulated pulsar. <HelpButton>Click here</HelpButton> to see some examples of known pulsars.</p>}
-          </div>
-
-      else if @state.expertClassification?
-        <div className="has-expert-classification">
-          Expert classification available.{' '}
-          {if @state.showingExpertClassification
-            <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
-          else
-            <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
-
-          {unless true or isNaN @state.classificationQuality
-            qualityString = (@state.classificationQuality * 100).toString().split('.')[0] + '%'
-            <div>Looks like you matched about <strong>{qualityString}</strong>.</div>}
-          {if @state.classificationQuality < @props.goodClassificationCutoff
-            <div>Keep at it, all classifications are useful!</div>}
-          {if @state.classificationQuality > @props.goodClassificationCutoff
-            <div>Keep up the good work!</div>}
-        </div>}
-
       <div>
-        <strong>
-          {if @state.showingExpertClassification
-            'Expert classification:'
-          else
-            'Your classification:'}
-        </strong>
+        <strong>Your classification:</strong>
         <ClassificationSummary workflow={@props.workflow} classification={classification} />
       </div>
 
@@ -453,11 +369,6 @@ Classifier = React.createClass
         width: innerWidth
         height: innerHeight
 
-    if @state.expertClassification?
-      classificationQuality = testClassificationQuality @props.classification, @state.expertClassification, @props.workflow
-      console.log 'Classification quality', classificationQuality
-      @setState {classificationQuality}
-
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
     else
@@ -468,9 +379,6 @@ Classifier = React.createClass
 
   handleDemoModeChange: (e) ->
     @props.onChangeDemoMode e.target.checked
-
-  toggleExpertClassification: (value) ->
-    @setState showingExpertClassification: value
 
   warningToggleOn: ->
     @setState backButtonWarning: true
