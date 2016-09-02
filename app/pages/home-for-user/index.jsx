@@ -11,7 +11,6 @@ import ProjectStats from './project-stats';
 import qs from 'qs';
 import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-pullout';
-import moment from 'moment';
 
 import style from './index.styl';
 void style;
@@ -111,9 +110,10 @@ const HomePageForUser = React.createClass({
 
     getUserRibbonData(user)
     .then((ribbonData) => {
-      this.recentSubjects(ribbonData);
+      const updatedProjects = this.recentlyUpdatedProjects(ribbonData.slice());
       this.setState({
         ribbonData: ribbonData,
+        updatedProjects: updatedProjects,
       });
     })
     .catch((error) => {
@@ -128,34 +128,14 @@ const HomePageForUser = React.createClass({
     });
   },
 
-  recentSubjects(ribbonData) {
-    this.setState({
-      newData: this.fetchRecentSubjects(ribbonData),
-    });
+  recentlyUpdatedProjects(data) {
+    return data.sort((a, b) => {
+      return new Date(b.updated_at) - new Date(a.updated_at);
+    }).splice(0, 3);
   },
 
   findProjectLink(project) {
     return `/projects/${project.slug}`;
-  },
-
-  fetchRecentSubjects(ribbonData) {
-    const newestSubjectSets = [];
-    ribbonData.map((project) => {
-      if (!!project.recentSubjectSet) {
-        newestSubjectSets.push(project);
-      }
-    });
-    const recentSets = newestSubjectSets.sort((a, b) => {
-      return new Date(b.recentSubjectSet.updated_at) - new Date(a.recentSubjectSet.updated_at);
-    }).slice(0, 3);
-
-    return recentSets.map((project) => {
-      return {
-        project: project.name,
-        href: project.slug,
-        timestamp: moment(new Date(project.recentSubjectSet.updated_at)).fromNow(),
-      };
-    });
   },
 
   toggleNews() {
@@ -245,7 +225,7 @@ const HomePageForUser = React.createClass({
               </div>
             </button>
 
-            <NewsSection newDatasets={this.state.newData} />
+            <NewsSection updatedProjects={this.state.updatedProjects} />
 
           </Pullout>
         </div>
