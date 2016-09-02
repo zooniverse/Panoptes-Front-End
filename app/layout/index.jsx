@@ -105,7 +105,7 @@ const AppLayout = React.createClass({
             'app-layout__header--demoted': this.state.siteHeaderDemoted,
           })}
         >
-          <SiteNav ref="mainNav" onToggle={togglePrimaryNav} visible={this.state.siteHeaderRevealed} />
+          <SiteNav ref="mainNav" onToggle={togglePrimaryNav} visible={this.state.siteHeaderRevealed} params={this.props.params} />
         </header>
 
         <div className="app-layout__not-header">

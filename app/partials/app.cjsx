@@ -44,7 +44,7 @@ PanoptesApp = React.createClass
   render: ->
     <div className="panoptes-main">
       <IOStatus />
-      <AppLayout>
+      <AppLayout {...@props}>
         {React.cloneElement @props.children, user: @state.user}
       </AppLayout>
     </div>

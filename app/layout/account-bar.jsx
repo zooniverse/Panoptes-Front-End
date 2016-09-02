@@ -8,6 +8,7 @@ import Translate from 'react-translate-component';
 import Avatar from '../partials/avatar';
 import TriggeredModalForm from 'modal-form/triggered';
 import PassContext from '../components/pass-context';
+import NotificationsLink from '../talk/lib/notifications-link';
 
 const FOCUSABLES = 'a[href], button';
 
@@ -179,7 +180,7 @@ const AccountBar = React.createClass({
 
         <Link
           to="/inbox"
-          className="site-nav__link"
+          className="site-nav__link site-nav__icon site-nav__icon--inbox"
           activeClassName="site-nav__link--active"
           aria-label={`
             Inbox ${this.state.unread ? 'with unread messages' : ''}
@@ -198,6 +199,12 @@ const AccountBar = React.createClass({
               <i className="fa fa-envelope-o fa-fw" />}
           </span>
         </Link>
+
+        <NotificationsLink params={this.props.params} user={this.context.user} linkProps={{
+          className: 'site-nav__link site-nav__icon site-nav__icon--notifications',
+          activeClassName: 'site-nav__link--active',
+          onClick: !!this.logClick ? this.logClick.bind(this, 'accountMenu.notifications') : null
+        }} />
       </span>
     );
   },
