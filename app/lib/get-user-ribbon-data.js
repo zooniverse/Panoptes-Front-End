@@ -10,19 +10,8 @@ function getUserRibbonData(user) {
       });
     }));
 
-    const awaitSubjectSets = awaitProjects.then((projects) => {
-      return Promise.all(projects.map((project) => {
-        return project.get('subject_sets').catch(() => {
-          return null;
-        });
-      }));
-    });
-
-    return Promise.all([awaitProjects, awaitSubjectSets]).then(([projects, subjectSets]) => {
+    return Promise.all([awaitProjects]).then(([projects]) => {
       return prefsResources.map((prefsResource, i) => {
-        const sortedSubjects = subjectSets[i].sort((a, b) => {
-          return new Date(b.updated_at) - new Date(a.updated_at);
-        });
         if (projects[i] !== null) {
           return {
             id: projects[i].id,
@@ -31,7 +20,7 @@ function getUserRibbonData(user) {
             owner: projects[i].links.owner.display_name,
             color: getColorFromString(projects[i].slug),
             classifications: prefsResource.activity_count,
-            recentSubjectSet: sortedSubjects[0],
+            updated_at: projects[i].updated_at,
           };
         } else {
           return null;
