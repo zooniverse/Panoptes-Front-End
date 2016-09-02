@@ -97,6 +97,7 @@ const NewsSection = React.createClass({
   },
 
   render() {
+    const projLink = window.location.origin + '/projects/' + this.state.newestProject.slug || null
     const avatarSrc = this.state.newestAvatar.src || null
 
     return (
@@ -113,7 +114,7 @@ const NewsSection = React.createClass({
 
           <div className="home-page-news-pullout news-section">
             <h4> Newest Project </h4>
-            <ProjectCard key={this.state.newestProject.id} project={this.state.newestProject} imageSrc={avatarSrc} />
+            <ProjectCard href={projLink} key={this.state.newestProject.id} project={this.state.newestProject} imageSrc={avatarSrc} />
           </div>
 
           <div className="home-page-news-pullout news-section">
