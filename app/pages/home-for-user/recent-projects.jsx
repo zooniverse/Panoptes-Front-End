@@ -40,7 +40,6 @@ const RecentProjectsSection = React.createClass({
     });
 
     user.get('project_preferences', {
-      page_size: 20,
       sort: '-updated_at',
     })
     .then((preferences) => {
@@ -70,8 +69,11 @@ const RecentProjectsSection = React.createClass({
             return null;
           })
           .then((avatar) => {
-            this.state.avatars[project.id] = avatar;
-            this.forceUpdate();
+            const newState = this.state.avatars;
+            newState[project.id] = avatar;
+            this.setState({
+              avatars: newState,
+            });
           });
         }
       }));
