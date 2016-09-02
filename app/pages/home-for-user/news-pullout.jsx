@@ -2,6 +2,7 @@ import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import ProjectCard from '../../partials/project-card';
 import Publications from '../../lib/publications';
+import moment from 'moment';
 
 import style from './news-pullout.styl';
 void style;
@@ -9,12 +10,12 @@ void style;
 const NewsSection = React.createClass({
 
   propTypes: {
-    newDatasets: React.PropTypes.array,
+    updatedProjects: React.PropTypes.array,
   },
 
   getDefaultProps() {
     return {
-      newDatasets: [],
+      updatedProjects: [],
     };
   },
 
@@ -83,13 +84,14 @@ const NewsSection = React.createClass({
     </div>);
   },
 
-  renderNewDatasets(data) {
-    const link = window.location.origin + '/projects/' + data.href;
-    return (<div key={Math.random()}>
+  renderUpdatedProjects(project) {
+    const link = window.location.origin + '/projects/' + project.slug;
+    const timestamp = moment(new Date(project.updated_at)).fromNow();
+    return (<div key={project.id}>
       <a href={link} target="_blank">
-        <h5 className="home-page-news-pullout news-section__title">{data.project} </h5>
+        <h5 className="home-page-news-pullout news-section__title">{project.name} </h5>
         <h5> has been updated! </h5>
-        <p className="home-page-news-pullout news-section__timestamp">{data.timestamp}</p>
+        <p className="home-page-news-pullout news-section__timestamp">{timestamp}</p>
       </a>
     </div>);
   },
@@ -116,9 +118,9 @@ const NewsSection = React.createClass({
           </div>
 
           <div className="home-page-news-pullout news-section">
-            <h4> New Datasets </h4>
-            {this.props.newDatasets.map((data) => {
-              return this.renderNewDatasets(data);
+            <h4> Updated Projects </h4>
+            {this.props.updatedProjects.map((project) => {
+              return this.renderUpdatedProjects(project);
             })}
           </div>
         </div>
