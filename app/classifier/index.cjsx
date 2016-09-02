@@ -197,7 +197,7 @@ Classifier = React.createClass
       onChange: -> classification.update()
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
-      <Intervention monitor={@context.interventionMonitor} />
+      <Intervention monitor={@context.interventionMonitor} user={@props.user} />
       {if !@context.interventionMonitor.shouldShowIntervention()
         <div className="hidable-task-container">
           {persistentHooksBeforeTask.map (HookComponent) =>

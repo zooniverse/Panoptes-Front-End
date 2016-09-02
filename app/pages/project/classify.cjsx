@@ -12,6 +12,7 @@ Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
+experimentsClient = new (require '../../lib/experiments-client')
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -262,6 +263,14 @@ module.exports = React.createClass
       Promise.reject new Error 'Simulated failure of classification save'
     else
       classification.save()
+      .then (classification) =>
+        # after classification is saved, if we are in an experiment, save
+        experiment_name = experimentsClient.checkForExperiment(@props.project.slug)
+        if experiment_name?
+          experimentsClient.postDataToExperimentServer(experiment_name,@props.user.id,classification.metadata.session,"classification",classification.id)
+      , (error) =>
+        debugger
+        console.log error
 
     savingClassification
       .then (classification) =>
