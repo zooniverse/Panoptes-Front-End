@@ -14,6 +14,12 @@ module.exports = React.createClass
   getInitialState: ->
     workflows: []
 
+  getDefaultProps: ->
+    owner: {}
+    project: {}
+    selectedWorkflow: null
+    user: null
+
   componentDidMount: -> 
     @getWorkflows(@props.project)
 
@@ -69,9 +75,18 @@ module.exports = React.createClass
                   {workflow.display_name}
                 </Link>
           else
-            <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
-              Get started!
-            </Link>
+            if @props.selectedWorkflow?
+              <Link 
+                to={"/projects/#{@props.project.slug}/classify"}
+                query={workflow: @props.selectedWorkflow.id}
+                className="call-to-action standard-button"
+              >
+                Get started!
+              </Link>
+            else
+              <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
+                Get started!
+              </Link>
         else if @props.project.configuration?.user_chooses_workflow
           @state.workflows.map (workflow) =>
             <Link
@@ -83,6 +98,14 @@ module.exports = React.createClass
             >
               {workflow.display_name}
             </Link>
+        else if @props.selectedWorkflow?
+          <Link 
+            to={"/projects/#{@props.project.slug}/classify"}
+            query={workflow: @props.selectedWorkflow.id}
+            className="call-to-action standard-button"
+          >
+            Get started!
+          </Link>
         else
           <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
             Get started!

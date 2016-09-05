@@ -218,7 +218,8 @@ ProjectPage = React.createClass
         project: @props.project
         owner: @props.owner
         preferences: @props.preferences
-        onChangePreferences: @props.onChangePreferences}
+        onChangePreferences: @props.onChangePreferences
+        selectedWorkflow: @state.selectedWorkflow}
 
       {unless @props.project.launch_approved or @props.project.beta_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
@@ -352,7 +353,7 @@ ProjectPageController = React.createClass
         if @state.error.message is 'NOT_FOUND'
           <div className="content-container">
             <p>Project <code>{slug}</code> not found.</p>
-            <p>"If you're sure the URL is correct, you might not have permission to view this project."</p>
+            <p>If you're sure the URL is correct, you might not have permission to view this project.</p>
           </div>
         else
           <div className="content-container">
