@@ -36,12 +36,30 @@ Classifier = React.createClass
   getInitialState: ->
     subjectLoading: false
     backButtonWarning: false
+    renderIntervention: false
 
   componentDidMount: ->
+    @setState renderIntervention: @context.interventionMonitor?.shouldShowIntervention()
+    @context.interventionMonitor.on 'interventionRequested', =>
+      if @isMounted()
+        @setState renderIntervention: true
+    @context.interventionMonitor.on 'classificationTaskRequested', =>
+      if @isMounted()
+        @setState renderIntervention: false
     @loadSubject @props.subject
     @prepareToClassify @props.classification
     {workflow, project, preferences, user} = @props
     Tutorial.startIfNecessary {workflow, user, preferences}
+
+  reCheckIfInterventionNeeded: ->
+    # Sometimes, the intervention request arrives at a time when this component is not able to receive that
+    # information into its state (ie. we are not mounted)
+    # Therefore, prior to render we must re-check that our current state.renderIntervention is correct
+    # (We still need the state variable to be able to trigger a re-render when we ARE mounted)
+    if @context.intervention_monitor? and @context.intervention_monitor.latestFromSugar?
+      @setState renderIntervention: @context.intervention_monitor?.shouldShowIntervention()
+    else
+      @setState renderIntervention: false
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
@@ -53,11 +71,14 @@ Classifier = React.createClass
       @prepareToClassify nextProps.classification
 
     @context.geordi.remember subjectID: @props.subject?.id
+    @reCheckIfInterventionNeeded()
 
   componentWillMount: () ->
     @context.interventionMonitor.setProjectSlug @props.project.slug
 
   componentWillUnmount: () ->
+    @context.interventionMonitor.removeListener 'interventionRequested', => {}
+    @context.interventionMonitor.removeListener 'classificationTaskRequested', => {}
     try
       @context.geordi?.forget ['subjectID']
 
@@ -118,7 +139,7 @@ Classifier = React.createClass
   renderTask: (classification, annotation, task) ->
     TaskComponent = tasks[task.type]
 
-    # Should we disabled the "Back" button?
+    # Should we disable the "Back" button?
     onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
 
     # Should we disable the "Next" or "Done" buttons?
@@ -161,8 +182,9 @@ Classifier = React.createClass
       onChange: -> classification.update()
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
-      <Intervention monitor={@context.interventionMonitor} />
-      {if !@context.interventionMonitor.shouldShowIntervention()
+      {if @state.renderIntervention==true
+        <Intervention monitor={@context.interventionMonitor} user={@props.user} />
+      else
         <div className="hidable-task-container">
           {persistentHooksBeforeTask.map (HookComponent) =>
             <HookComponent {...taskHookProps} />}
