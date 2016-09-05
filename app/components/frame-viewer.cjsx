@@ -1,8 +1,8 @@
 React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 getSubjectLocation = require '../lib/get-subject-location'
-VideoPlayer = require './video-player'
-PanZoom = require('./pan-zoom').default
+`import VideoPlayer from './video-player'`
+`import PanZoom from './pan-zoom'`
 
 SUBJECT_STYLE = display: 'block'
 NOOP = Function.prototype
