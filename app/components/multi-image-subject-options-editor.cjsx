@@ -48,9 +48,17 @@ module.exports = React.createClass
             <input type="radio" id="multi_image_grid3" name="multi_image_layout" value="grid3" onChange={@handleSelectLayout} />
             <label htmlFor="multi_image_grid3">Grid (3col)</label>
           </div>}
+        <div>
+          <input type="checkbox" id="multi_image_clone_markers" name="multi_image_tool" onChange={@handleSelectTool} />
+          <label htmlFor="multi_image_clone_markers">Clone markers in all frames</label>
+        </div>  
       </div>
     }</ChangeListener>
-
+    
+  handleSelectTool: (e) ->
+    @props.workflow.update
+      'configuration.multi_image_tool': e.target.checked
+    
   handleSelectMode: (e) ->
     mode = e.target.value
     @props.workflow.update

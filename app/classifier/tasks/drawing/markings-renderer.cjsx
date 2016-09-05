@@ -35,50 +35,89 @@ module.exports = React.createClass
 
   render: ->
     skippedMarks = 0
-
     <g>
       {for annotation in @props.classification?.annotations ? []
+        
         annotation._key ?= Math.random()
         isPriorAnnotation = annotation isnt @props.annotation
         taskDescription = @props.workflow.tasks[annotation.task]
         if taskDescription.type is 'drawing'
-          <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
-            {for mark, i in annotation.value when parseInt(mark.frame) is parseInt(@props.frame)
-              mark._key ?= Math.random()
+          if @props.workflow.configuration.multi_image_tool
+            <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
+                {for mark, i in annotation.value
+                  mark._key ?= Math.random()
 
-              if skippedMarks < @props.classification._hideMarksBefore and not @props.classification.completed
-                skippedMarks += 1
-                continue
+                  if skippedMarks < @props.classification._hideMarksBefore and not @props.classification.completed
+                    skippedMarks += 1
+                    continue
 
-              if mark._copy?
-                continue
+                  if mark._copy?
+                    continue
 
-              toolDescription = taskDescription.tools[mark.tool]
+                  toolDescription = taskDescription.tools[mark.tool]
 
-              toolEnv =
-                containerRect: @props.containerRect
-                scale: @props.scale
-                disabled: isPriorAnnotation
-                selected: mark is @state.selection and not isPriorAnnotation
-                getEventOffset: @props.getEventOffset
-                preferences: @props.preferences
+                  toolEnv =
+                    containerRect: @props.containerRect
+                    scale: @props.scale
+                    disabled: isPriorAnnotation
+                    selected: mark is @state.selection and not isPriorAnnotation
+                    getEventOffset: @props.getEventOffset
+                    preferences: @props.preferences
 
-              toolProps =
-                classification: @props.classification
-                mark: mark
-                details: toolDescription.details
-                color: toolDescription.color
-                size: toolDescription.size
+                  toolProps =
+                    classification: @props.classification
+                    mark: mark
+                    details: toolDescription.details
+                    color: toolDescription.color
+                    size: toolDescription.size
 
-              toolMethods =
-                onChange: @handleChange.bind this, i
-                onSelect: @handleSelect.bind this, annotation, mark
-                onDeselect: @handleDeselect
-                onDestroy: @handleDestroy.bind this, annotation, mark
+                  toolMethods =
+                    onChange: @handleChange.bind this, i
+                    onSelect: @handleSelect.bind this, annotation, mark
+                    onDeselect: @handleDeselect
+                    onDestroy: @handleDestroy.bind this, annotation, mark
 
-              ToolComponent = drawingTools[toolDescription.type]
-              <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
-          </g>}
+                  ToolComponent = drawingTools[toolDescription.type]
+                  <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
+            </g>
+          else   
+            <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
+                {for mark, i in annotation.value when parseInt(mark.frame) is parseInt(@props.frame)
+                  mark._key ?= Math.random()
+
+                  if skippedMarks < @props.classification._hideMarksBefore and not @props.classification.completed
+                    skippedMarks += 1
+                    continue
+
+                  if mark._copy?
+                    continue
+
+                  toolDescription = taskDescription.tools[mark.tool]
+
+                  toolEnv =
+                    containerRect: @props.containerRect
+                    scale: @props.scale
+                    disabled: isPriorAnnotation
+                    selected: mark is @state.selection and not isPriorAnnotation
+                    getEventOffset: @props.getEventOffset
+                    preferences: @props.preferences
+
+                  toolProps =
+                    classification: @props.classification
+                    mark: mark
+                    details: toolDescription.details
+                    color: toolDescription.color
+                    size: toolDescription.size
+
+                  toolMethods =
+                    onChange: @handleChange.bind this, i
+                    onSelect: @handleSelect.bind this, annotation, mark
+                    onDeselect: @handleDeselect
+                    onDestroy: @handleDestroy.bind this, annotation, mark
+
+                  ToolComponent = drawingTools[toolDescription.type]
+                  <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
+            </g>}
     </g>
 
   handleChange: (markIndex, mark) ->
