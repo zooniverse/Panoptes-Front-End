@@ -6,15 +6,15 @@ class ExperimentsClient # Client for the ExperimentServer
 
   EXPERIMENT_SERVER_PRODUCTION_URL: "https://experiments.zooniverse.org"
   EXPERIMENT_SERVER_STAGING_URL: "https://experiments.staging.zooniverse.org"
-  EXPERIMENT_SERVER_DEVELOPMENT_URL: "http://localhost:4567"
+  #EXPERIMENT_SERVER_DEVELOPMENT_URL: "http://localhost:4567"
   EXPERIMENT_SERVER_URL_TO_USE: null
   
   ensureEnvironmentSet: ->
     if not @EXPERIMENT_SERVER_URL_TO_USE?
       if window.location.hostname=="www.zooniverse.org"
         @EXPERIMENT_SERVER_URL_TO_USE = @EXPERIMENT_SERVER_PRODUCTION_URL
-      else if window.location.hostname=="localhost"
-        @EXPERIMENT_SERVER_URL_TO_USE = @EXPERIMENT_SERVER_DEVELOPMENT_URL
+      #else if window.location.hostname=="localhost"
+      #  @EXPERIMENT_SERVER_URL_TO_USE = @EXPERIMENT_SERVER_DEVELOPMENT_URL
       else
         @EXPERIMENT_SERVER_URL_TO_USE = @EXPERIMENT_SERVER_STAGING_URL
     @EXPERIMENT_SERVER_URL_TO_USE
@@ -45,7 +45,7 @@ class ExperimentsClient # Client for the ExperimentServer
 
   lookupProjectSlug: (enabled_experiments, experiment_name) ->
     this_project_slug for this_project_slug, experiments_for_this_slug of enabled_experiments when experiment_name in experiments_for_this_slug
-    
+
   getProjectSlugForExperiment: (experiment_name) ->
     @ensureEnvironmentSet()
     switch @EXPERIMENT_SERVER_URL_TO_USE
@@ -99,7 +99,7 @@ class ExperimentsClient # Client for the ExperimentServer
       switch experiment_name
         when config.COMET_HUNTERS_VOLCROWE_EXPERIMENT
           if "intervention_time" of sugar_data
-            if sugar_data["intervention_time"]
+            if sugar_data["intervention_time"]==true
               if "next_event" of sugar_data
                 intervention_id = sugar_data["next_event"]
                 @getInterventionFromConfig project_slug, experiment_name, intervention_id
