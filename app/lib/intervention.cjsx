@@ -8,6 +8,7 @@ config = require './intervention-config'
 Intervention = React.createClass
 
   contextTypes:
+    geordi: React.PropTypes.object
     interventionMonitor: React.PropTypes.object
 
   getInitialState: ->
@@ -16,15 +17,22 @@ Intervention = React.createClass
   cancelIntervention: (event) ->
     # TODO cancel properly
     @endIntervention(event)
+    @context.geordi?.logEvent
+      type: "cancelIntervention"
 
   endIntervention: (event) ->
-    experiment_name = event.target.attributes.getNamedItem("data-experiment-name").value
-    user_id = event.target.attributes.getNamedItem("data-user-id").value
-    session_id = event.target.attributes.getNamedItem("data-session-id").value
-    intervention_id = event.target.attributes.getNamedItem("data-next-event").value
+    experiment_name = event.target.attributes.getNamedItem("data-experiment-name")?.value
+    user_id = event.target.attributes.getNamedItem("data-user-id")?.value
+    session_id = event.target.attributes.getNamedItem("data-session-id")?.value
+    intervention_id = event.target.attributes.getNamedItem("data-next-event")?.value
     type = "intervention"
-    experimentsClient.postDataToExperimentServer(experiment_name, user_id, session_id, type, intervention_id)
-    @context.interventionMonitor?
+    experimentsClient.postDataToExperimentServer @context.interventionMonitor,
+                                                 @context.geordi,
+                                                 experiment_name,
+                                                 user_id,
+                                                 session_id,
+                                                 type,
+                                                 intervention_id
 
   render: ->
     if @context.interventionMonitor?.latestFromSugar
@@ -32,7 +40,7 @@ Intervention = React.createClass
       user_id = @props.user.id
       session_id = getSessionID()
       intervention_id = @context.interventionMonitor?.latestFromSugar["next_event"]
-      intervention_details = experimentsClient.constructInterventionFromSugarData(@context.interventionMonitor?.latestFromSugar)
+      intervention_details = experimentsClient.constructInterventionFromSugarData @context.interventionMonitor?.latestFromSugar
     if intervention_details
       <div className="intervention">
         <h3 className="intervention-title">{intervention_details.title}:</h3>

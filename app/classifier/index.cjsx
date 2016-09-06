@@ -42,13 +42,17 @@ Classifier = React.createClass
     renderIntervention: false
 
   componentDidMount: ->
+    experimentsClient.startOrResumeExperiment(@context.interventionMonitor, @context.geordi)
     @setState renderIntervention: @context.interventionMonitor?.shouldShowIntervention()
     @context.interventionMonitor.on 'interventionRequested', =>
+      experimentsClient.logExperimentState @context.geordi,"interventionStart",@context.interventionMonitor?.latestFromSugar
       if @isMounted()
         @setState renderIntervention: true
     @context.interventionMonitor.on 'classificationTaskRequested', =>
+      experimentsClient.logExperimentState @context.geordi,"classificationStart",@context.interventionMonitor?.latestFromSugar
       if @isMounted()
         @setState renderIntervention: false
+
     @loadSubject @props.subject
     @prepareToClassify @props.classification
     {workflow, project, preferences, user} = @props
@@ -408,10 +412,14 @@ Classifier = React.createClass
     else
       @props.onComplete?()
       .then (classification) =>
-        # after classification is saved, if we are in an experiment, save
+        # after classification is saved, if we are in an experiment, notify experiment server to advance the session plan
         experiment_name = experimentsClient.checkForExperiment(@props.project.slug)
         if experiment_name?
-          experimentsClient.postDataToExperimentServer(experiment_name,@props.user.id,classification.metadata.session,"classification",classification.id)
+          experimentsClient.postDataToExperimentServer @context.interventionMonitor,
+                                                       @context.geordi,
+                                                       experiment_name, @props.user.id,
+                                                       classification.metadata.session,
+                                                       "classification",classification.id
       , (error) =>
         console.log error
 

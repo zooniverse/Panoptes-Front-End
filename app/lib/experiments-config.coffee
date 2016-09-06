@@ -149,7 +149,11 @@ COMET_HUNTERS_VOLCROWE_EXPERIMENT_INTERVENTIONS = {
       body: "Do you ever feel like you lose yourself in the project?"
       type: intervention_config.INTERVENTION_TYPES.QUESTION
     }
-    "learning-question-1": {title: "A Quick Question", body: "What would help you to learn more while classifying?"}
+    "learning-question-1": {
+      title: "A Quick Question",
+      body: "What would help you to learn more while classifying?"
+      type: intervention_config.INTERVENTION_TYPES.QUESTION
+    }
     "learning-question-2": {
       title: "A Quick Question",
       body: "What have you learned about comets since starting this project?"
