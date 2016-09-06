@@ -41,8 +41,7 @@ module.exports = React.createClass
                 boardProject: project
               project.get('owner').then (owner) =>
                 @setState({owner})
-                [owner, name] = project.slug.split('/')
-                "/projects/#{owner}/#{name}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
+                "/projects/#{project.slug}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         else
           Promise.resolve "/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         href.then (href) =>
