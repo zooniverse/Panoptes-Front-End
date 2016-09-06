@@ -113,7 +113,6 @@ class ExperimentsClient # Client for the ExperimentServer
             if typeof subvalue is 'string'
               value_to_use[index] = @replaceAllSubStringsByRegEx subvalue, value_compression_map
         simple_data[fieldname_to_use] = value_to_use
-    console.log "simple_data",simple_data
     simple_data
 
   replaceAllSubStringsByRegEx: (string_to_modify, value_compression_map) ->
@@ -131,10 +130,8 @@ class ExperimentsClient # Client for the ExperimentServer
           error: "too_much_data"
           details: "The data passed to Geordi was too large to store, at #{jsonString.length} characters (maximum is 512)."
         }
-      console.log "safeJSON",jsonString
       jsonString
     else
-      console.log "safeJSON:",null
       null
 
   # experimentState == "experimentStart", "classificationStart", "classificationEnd", "interventionStart", "interventionEnd", or "experimentEnd"
