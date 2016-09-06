@@ -1,6 +1,9 @@
 React = require 'react'
 InterventionMonitor = require './intervention-monitor'
-config = require './experiments-config'
+http = require 'http'
+experimentsClient = new (require './experiments-client')
+config = require './intervention-config'
+{getSessionID} = require '../lib/session'
 
 Intervention = React.createClass
 

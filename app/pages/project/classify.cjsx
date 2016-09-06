@@ -14,6 +14,7 @@ MiniCourse = require '../../lib/mini-course'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 `import CustomSignInPrompt from './custom-sign-in-prompt'`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog'`
+experimentsClient = new (require '../../lib/experiments-client')
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -239,7 +240,7 @@ module.exports = React.createClass
         <FinishedBanner project={@props.project} />}
 
       {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
-        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}> 
+        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
         </CustomSignInPrompt>}
       {if @state.classification?
@@ -286,6 +287,13 @@ module.exports = React.createClass
       Promise.reject new Error 'Simulated failure of classification save'
     else
       classification.save()
+      .then (classification) =>
+        # after classification is saved, if we are in an experiment, save
+        experiment_name = experimentsClient.checkForExperiment(@props.project.slug)
+        if experiment_name?
+          experimentsClient.postDataToExperimentServer(experiment_name,@props.user.id,classification.metadata.session,"classification",classification.id)
+      , (error) =>
+        console.log error
 
     savingClassification
       .then (classification) =>
@@ -364,7 +372,7 @@ module.exports = React.createClass
           else
             @setState promptWorkflowAssignmentDialog: false
 
-               
+
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
 window.currentClassifications = currentClassifications

@@ -19,6 +19,8 @@ MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
 
+PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
+
 Classifier = React.createClass
   displayName: 'Classifier'
 

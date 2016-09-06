@@ -1,3 +1,5 @@
+intervention_config = require './intervention-config'
+
 config = {
   CLASSIFICATION_MARKER: "classification"
 
