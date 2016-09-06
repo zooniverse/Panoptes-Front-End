@@ -18,6 +18,7 @@ WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
+experimentsClient = new (require '../lib/experiments-client')
 
 PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
 
@@ -406,6 +407,13 @@ Classifier = React.createClass
       @props.onCompleteAndLoadAnotherSubject?()
     else
       @props.onComplete?()
+      .then (classification) =>
+        # after classification is saved, if we are in an experiment, save
+        experiment_name = experimentsClient.checkForExperiment(@props.project.slug)
+        if experiment_name?
+          experimentsClient.postDataToExperimentServer(experiment_name,@props.user.id,classification.metadata.session,"classification",classification.id)
+      , (error) =>
+        console.log error
 
   handleGoldStandardChange: (e) ->
     @props.classification.update gold_standard: e.target.checked || undefined # Delete the whole key.
