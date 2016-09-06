@@ -10,6 +10,8 @@ Requires Node.js. It's recommended you manage your Node installations with **nvm
 
 `npm run stage` builds and optimizes the site, and then deploys it to <https://current-git-branch-name.pfe-preview.zooniverse.org>.
 
+For testing with production data, you can add `env=production` to your development url, e.g. `localhost:3735/projects?env=production`. Note that it is removed on every page refresh. 
+
 All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
 While editing, do your best to follow style and architecture conventions already used by the project, unless you have a reason not to. **If in doubt, ask.**
