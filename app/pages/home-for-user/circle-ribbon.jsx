@@ -20,6 +20,7 @@ const CircleRibbon = React.createClass({
     data: React.PropTypes.array,
     hrefTemplate: React.PropTypes.func,
     onClick: React.PropTypes.func,
+    user: React.PropTypes.object,
   },
 
   getDefaultProps() {
@@ -110,6 +111,14 @@ const CircleRibbon = React.createClass({
     this.props.onClick(clickedProject.id);
   },
 
+  calcLargeArc(classifications) {
+    if (classifications / this.state.totalClassifications >= 0.5) {
+      return 1;
+    } else {
+      return 0;
+    }
+  },
+
   renderArc(project) {
     const index = this.props.data.indexOf(project);
 
@@ -127,6 +136,7 @@ const CircleRibbon = React.createClass({
 
     const startPoint = this.getPointOnCircle(startAmount, radius);
     const endPoint = this.getPointOnCircle(endAmount, radius);
+    const largeArc = this.calcLargeArc(project.classifications);
 
     return (
       <SVGLink
@@ -139,7 +149,7 @@ const CircleRibbon = React.createClass({
           className="circle-ribbon__project-arc"
           d={`
             M ${startPoint.x} ${startPoint.y}
-            A ${radius} ${radius} 0 0 1 ${endPoint.x}, ${endPoint.y}
+            A ${radius} ${radius} 0 ${largeArc} 1 ${endPoint.x}, ${endPoint.y}
           `}
           stroke={project.color}
           data-index={index}
@@ -170,15 +180,17 @@ const CircleRibbon = React.createClass({
           </defs>
 
           {!!this.props.image && (
-            <image
-              xlinkHref={this.props.image}
-              x={this.props.weight + this.props.gap}
-              y={this.props.weight + this.props.gap}
-              width={imageSize}
-              height={imageSize}
-              clipPath={`url('#circle-ribbon-clip-${this.id}')`}
-              className={`url('#circle-ribbon-shadow-${this.id}')`}
-            />
+            <SVGLink to={`/users/${this.props.user.login}/stats`} aria-label={`${this.props.user.login} stats`}>
+              <image
+                xlinkHref={this.props.image}
+                x={this.props.weight + this.props.gap}
+                y={this.props.weight + this.props.gap}
+                width={imageSize}
+                height={imageSize}
+                clipPath={`url('#circle-ribbon-clip-${this.id}')`}
+                className={`url('#circle-ribbon-shadow-${this.id}')`}
+              />
+            </SVGLink>
           )}
 
           <g ref="arcGroup" fill="none" stroke="none" transform="translate(50, 50)">

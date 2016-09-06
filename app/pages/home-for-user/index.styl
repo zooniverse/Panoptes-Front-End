@@ -21,6 +21,8 @@
     display: flex
     flex-direction: column
     flex-grow: 1
+    font-size: 15px
+    margin-bottom: 5em
     margin-top: 5em
 
   &__welcome
@@ -41,6 +43,10 @@
     display: block
     text-decoration: none
     white-space: nowrap
+
+    &:focus,
+    &:hover
+      background: lighten(rgba(66, 66, 66, 0.25), 50%)
 
   &__menu-label
     display: block
@@ -80,6 +86,10 @@
   &__content
     padding: 1em 2em
 
+    .details
+      border-bottom-left-radius: 0.9em
+      border-bottom-right-radius: 0.9em
+
 .home-page-project-stats
   flex-grow: 1
   position: relative;
@@ -94,13 +104,13 @@
   border-radius: 0.3em
   color: #0f7481
   display: inline-block
+  margin-bottom: 0.5em
   padding: 0.1em 1em
   text-decoration: none
 
 .home-page-news-pullout
   background: white
   color: black
-  padding: 1em 2em
   transition: transform 0.5s
   z-index: 5
 
@@ -112,6 +122,10 @@
   &__toggle-label
     background: #0f7481
     border-radius: 0.3em 0 0 0.3em
+    box-shadow: 0px 3px 6px rgba(0,0,0,0.24)
     color: white
     font-size: 14px
     padding: 0.5em 1em
+
+.on-home-page-logged-in
+  padding-top: 0

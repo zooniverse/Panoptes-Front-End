@@ -2,6 +2,7 @@ import React from 'react';
 import HomePageSection from './generic-section';
 import { Link } from 'react-router';
 import ProjectCard from '../../partials/project-card';
+import apiClient from 'panoptes-client/lib/api-client'
 
 const RecentProjectsSection = React.createClass({
   propTypes: {
@@ -39,13 +40,16 @@ const RecentProjectsSection = React.createClass({
     });
 
     user.get('project_preferences', {
-      page_size: 8,
       sort: '-updated_at',
     })
     .then((preferences) => {
+      preferences = preferences.filter((projectPreference) => {
+         return projectPreference.activity_count > 0;
+      });
+      preferences = preferences.filter(Boolean).slice(0,8);
       return Promise.all(preferences.map((preference) => {
         // A user might have preferences for a project that no longer exists.
-        return preference.get('project').catch(() => {
+        return preference.get('project', {include: ['avatar']}).catch(() => {
           return null;
         });
       })).then((projects) => {
@@ -58,14 +62,20 @@ const RecentProjectsSection = React.createClass({
       });
 
       return Promise.all(projects.map((project) => {
-        return project.get('avatar')
-        .catch(() => {
-          return null;
-        })
-        .then((avatar) => {
-          this.state.avatars[project.id] = avatar;
-          this.forceUpdate();
-        });
+        if (project.links.avatar.id) {
+          return apiClient.type('avatars')
+          .get(project.links.avatar.id)
+          .catch(() => {
+            return null;
+          })
+          .then((avatar) => {
+            const newState = this.state.avatars;
+            newState[project.id] = avatar;
+            this.setState({
+              avatars: newState,
+            });
+          });
+        }
       }));
     })
     .catch((error) => {

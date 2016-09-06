@@ -18,7 +18,6 @@ module.exports =
   <Route path="/" component={require './partials/app'}>
     <IndexRoute component={require './pages/home'} />
     <Route path="home" component={ONE_UP_REDIRECT} />
-    <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
     <Route path="about" component={require './pages/about'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/about/about-home'} />
@@ -91,7 +90,7 @@ module.exports =
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
       </Route>
-  
+
       <Route path="collections" component={require('./pages/collections/index')}>
          <IndexRoute component={require('./pages/collections/collections-list')} />
          <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />

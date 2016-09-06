@@ -9,6 +9,8 @@ import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
 import ProjectStats from './project-stats';
 import qs from 'qs';
+import HomePageSocial from '../home-not-logged-in/social';
+import NewsSection from './news-pullout';
 
 import style from './index.styl';
 void style;
@@ -86,9 +88,11 @@ const HomePageForUser = React.createClass({
     })
     .then((profileHeaders) => {
       const profileHeader = [].concat(profileHeaders)[0];
-      this.setState({
-        backgroundSrc: profileHeader.src,
-      });
+      if (!!profileHeader) {
+        this.setState({
+          backgroundSrc: profileHeader.src,
+        });
+      }
     });
 
     user.get('avatar')
@@ -97,15 +101,19 @@ const HomePageForUser = React.createClass({
     })
     .then((avatars) => {
       const avatar = [].concat(avatars)[0];
-      this.setState({
-        avatarSrc: avatar.src,
-      });
+      if (!!avatar) {
+        this.setState({
+          avatarSrc: avatar.src,
+        });
+      }
     });
 
     getUserRibbonData(user)
     .then((ribbonData) => {
+      const updatedProjects = this.recentlyUpdatedProjects(ribbonData.slice());
       this.setState({
         ribbonData: ribbonData,
+        updatedProjects: updatedProjects,
       });
     })
     .catch((error) => {
@@ -118,6 +126,12 @@ const HomePageForUser = React.createClass({
         loading: false,
       });
     });
+  },
+
+  recentlyUpdatedProjects(data) {
+    return data.sort((a, b) => {
+      return new Date(b.updated_at) - new Date(a.updated_at);
+    }).splice(0, 3);
   },
 
   findProjectLink(project) {
@@ -136,13 +150,13 @@ const HomePageForUser = React.createClass({
         <div className="home-page-for-user__menu-column">
           <a href="#focus=projects" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw"></i>
+              <i className="fa fa-history fa-fw"></i>{' '}
               My recent projects
             </span>
           </a>
           <a href="#focus=collections" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw"></i>
+              <i className="fa fa-th-large fa-fw"></i>{' '}
               My collections
             </span>
           </a>
@@ -150,13 +164,13 @@ const HomePageForUser = React.createClass({
         <div className="home-page-for-user__menu-column">
           <a href="#focus=messages" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw"></i>
+              <i className="fa fa-envelope fa-fw"></i>{' '}
               Messages
             </span>
           </a>
           <a href="#focus=builds" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw"></i>
+              <i className="fa fa-cog fa-fw"></i>{' '}
               My builds
             </span>
           </a>
@@ -178,46 +192,48 @@ const HomePageForUser = React.createClass({
     const OpenSectionComponent = SECTIONS[hashQuery.focus];
 
     return (
-      <div className="home-page-for-user">
-        <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
+      <div className='on-home-page'>
+        <div className="home-page-for-user">
+          <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
 
-        {!!this.state.error && (
-          <div>{this.state.error.toString()}</div>
-        )}
+          {!!this.state.error && (
+            <div>{this.state.error.toString()}</div>
+          )}
 
-        {!!hashQuery.project ? (
-          <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
-        ) : (
-          <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-            <CircleRibbon loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
+          {!!hashQuery.project ? (
+            <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
+          ) : (
+            <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
+              <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
-            <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
+              <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
 
-            {OpenSectionComponent === undefined ? (
-              this.renderMenu()
-            ) : (
-              <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
-            )}
-          </div>
-        )}
+              {OpenSectionComponent === undefined ? (
+                this.renderMenu()
+              ) : (
+                <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
+              )}
+            </div>
+          )}
 
-        <div className="content-container">
-          <p style={{ textAlign: 'center' }}>Re-use social media from home page here.</p>
+          <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
+            <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
+              <div className="home-page-news-pullout__toggle-label">
+                <i className="fa fa-cog fa-fw"></i>
+                <br />
+                News
+              </div>
+            </button>
+
+            <NewsSection updatedProjects={this.state.updatedProjects} />
+
+          </Pullout>
         </div>
 
-        <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
-          <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
-            <div className="home-page-news-pullout__toggle-label">
-              <i className="fa fa-cog fa-fw"></i>
-              <br />
-              News
-            </div>
-          </button>
+        <div className="home-page-for-user on-home-page-logged-in">
+          <HomePageSocial />
+        </div>
 
-          <p>News thing 1</p>
-          <p>News thing 2</p>
-          <p>News thing 3</p>
-        </Pullout>
       </div>
     );
   },
