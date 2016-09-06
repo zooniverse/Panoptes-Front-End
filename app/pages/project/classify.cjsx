@@ -5,7 +5,6 @@ TitleMixin = require '../../lib/title-mixin'
 HandlePropChanges = require '../../lib/handle-prop-changes'
 PromiseToSetState = require '../../lib/promise-to-set-state'
 apiClient = require 'panoptes-client/lib/api-client'
-animatedScrollTo = require 'animated-scrollto'
 counterpart = require 'counterpart'
 FinishedBanner = require './finished-banner'
 Classifier = require '../../classifier'
@@ -246,7 +245,6 @@ module.exports = React.createClass
         <Classifier
           {...@props}
           classification={@state.classification}
-          onLoad={@scrollIntoView}
           demoMode={@state.demoMode}
           onChangeDemoMode={@handleDemoModeChange}
           onComplete={@saveClassification}
@@ -258,15 +256,6 @@ module.exports = React.createClass
       else
         <span>Loading classification</span>}
     </div>
-
-  scrollIntoView: (e) ->
-    # Auto-scroll to top of the classification interface on load.
-    # It's not perfect, but it should make the location of everything more obvious.
-    lineHeight = parseFloat getComputedStyle(document.body).lineHeight
-    node = ReactDOM.findDOMNode(@)
-    idealScrollY = node.offsetTop - lineHeight
-    if Math.abs(idealScrollY - scrollY) > lineHeight
-      animatedScrollTo document.body, node.offsetTop - lineHeight, 333
 
   handleDemoModeChange: (newDemoMode) ->
     sessionDemoMode = newDemoMode
