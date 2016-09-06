@@ -76,17 +76,17 @@ COMET_HUNTERS_VOLCROWE_EXPERIMENT_INTERVENTIONS = {
     }
     "learning-statement-1": {
       title: "Interesting Fact",
-      body: "Asteroids are small rocky bodies left over from the construction zones that  the planets in our Solar System formed from."
+      body: "Asteroids are small rocky bodies left over from the construction zones that the planets in our Solar System formed from."
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
     }
     "learning-statement-2": {
       title: "Interesting Fact",
-      body: "The asteroids you review on Comet Hunters orbit between Mars and Jupiter roughly at 2-5 times the distance between the Earth the Sun."
+      body: "The asteroids you review on Comet Hunters orbit between Mars and Jupiter roughly at 2-5 times the distance between the Earth and the Sun."
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
     }
     "learning-statement-3": {
       title: "Interesting Fact",
-      body: "Freshly exposed buried water ice is thought to drive the activity on main-belt comets. This might mean that main-belt comets helped deliver water to the young Earth."
+      body: "Buried water ice that has been freshly exposed is thought to be responsible for the cometary-like acitivity on main-belt comets. It is thought that ancient cousins (in other words, icy asteroids) of today's main-belt comets helped deliver water to the young Earth."
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
     }
     "learning-statement-4": {
