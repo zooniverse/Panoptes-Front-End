@@ -49,15 +49,15 @@ module.exports = React.createClass
             <label htmlFor="multi_image_grid3">Grid (3col)</label>
           </div>}
         <div>
-          <input type="checkbox" id="multi_image_clone_markers" name="multi_image_tool" onChange={@handleSelectTool} />
+          <input type="checkbox" id="multi_image_clone_markers" name="multi_image_clone_markers" onChange={@toggleCloneMarks} />
           <label htmlFor="multi_image_clone_markers">Clone markers in all frames</label>
         </div>  
       </div>
     }</ChangeListener>
     
-  handleSelectTool: (e) ->
+  toggleCloneMarks: (e) ->
     @props.workflow.update
-      'configuration.multi_image_tool': e.target.checked
+      'configuration.multi_image_clone_markers': e.target.checked
     
   handleSelectMode: (e) ->
     mode = e.target.value
