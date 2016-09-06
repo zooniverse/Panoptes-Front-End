@@ -8,6 +8,7 @@ TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 classNames = require 'classnames'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 
 counterpart.registerTranslations 'en',
   project:
@@ -53,6 +54,7 @@ ProjectPage = React.createClass
     pages: []
     projectIsComplete: false
     selectedWorkflow: null
+    activeWorkflows: []
 
   componentDidMount: ->
     @context.setAppHeaderVariant 'demoted'
@@ -105,8 +107,12 @@ ProjectPage = React.createClass
 
     @checkIfProjectIsComplete(project)
 
+  getWorkflows: (project) ->
+    getWorkflowsInOrder(project, {active: true, fields: 'display_name,finished_at,configuration'}).then (workflows) =>
+      @setState { activeWorkflows: workflows }
+      workflows
+
   getSelectedWorkflow: (project, preferences) ->
-    @setState selectedWorkflow: 'PENDING'
     # preference user selected workflow, then project owner set workflow, then default workflow
     # if none of those are set, select random workflow
     if preferences?.preferences.selected_workflow?
@@ -119,14 +125,14 @@ ProjectPage = React.createClass
       preferredWorkflowID = @selectRandomWorkflow project
 
     if preferredWorkflowID?
-      @getWorkflow(project)
+      @getWorkflow(project, preferredWorkflowID)
     else
       @setState selectedWorkflow: null
 
   checkIfProjectIsComplete: (project) ->
-    getWorkflowsInOrder(project, {active: true, fields: 'finished_at'}).then (workflows) =>
-      projectIsComplete = (true for workflow in workflows when not workflow.finished_at?).length is 0
-      @setState {projectIsComplete}
+    @getWorkflows(project).then (workflows) =>
+      projectIsComplete = (true for workflow in @state.activeWorkflows when not workflow.finished_at?).length is 0
+      @setState { projectIsComplete }
 
   selectRandomWorkflow: (project) ->
     linkedWorkflows = project.links.workflows
@@ -139,10 +145,13 @@ ProjectPage = React.createClass
       # console.log 'Chose random workflow', workflows[randomIndex].id
       linkedWorkflows[randomIndex].id
 
-  getWorkflow: (project) ->
-    project.get workflow_id: preferredWorkflowID
-      .then (workflow) =>
-        if workflow.active
+  getWorkflow: (project, workflowID) ->
+    project.get('workflows', id: workflowID)
+      .then ([workflow]) =>
+        if !workflow?
+          throw new Error "No workflow #{workflowID} for project #{project.id}"
+          @setState selectedWorkflow: null
+        else if workflow.active
           @setState selectedWorkflow: workflow
         else
           @setState selectedWorkflow: null
@@ -204,14 +213,12 @@ ProjectPage = React.createClass
           <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank" onClick={logClick?.bind this, 'project.nav.classify'}>
             <Translate content="project.nav.classify" />
           </a>
-        else if @state.selectedWorkflow is 'PENDING'
+        else if @state.selectedWorkflow is null
           <span className="classify tabbed-content-tab" title="Loading..." style={opacity: 0.5}>
             <Translate content="project.nav.classify" />
           </span>
         else
-          if @state.selectedWorkflow?
-            query = workflow: @state.selectedWorkflow.id
-          <Link to="#{projectPath}/classify" query={query} activeClassName="active" className="classify tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.classify'}>
+          <Link to="#{projectPath}/classify" activeClassName="active" className="classify tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.classify'}>
             <Translate content="project.nav.classify" />
           </Link>}
 
@@ -245,6 +252,7 @@ ProjectPage = React.createClass
         preferences: @props.preferences
         onChangePreferences: @props.onChangePreferences
         selectedWorkflow: @state.selectedWorkflow
+        activeWorkflows: @state.activeWorkflows
         projectIsComplete: @state.projectIsComplete}
 
       {unless @props.project.launch_approved or @props.project.beta_approved

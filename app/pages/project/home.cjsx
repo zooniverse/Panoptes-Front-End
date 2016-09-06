@@ -67,7 +67,6 @@ module.exports = React.createClass
               if workflow.configuration.level <= currentLevel and workflow.configuration.level?
                 <Link
                   to={"/projects/#{@props.project.slug}/classify"}
-                  query={workflow: workflow.id}
                   key={workflow.id + Math.random()}
                   className="call-to-action standard-button"
                   onClick={@handleWorkflowSelection.bind this, workflow}
@@ -75,37 +74,19 @@ module.exports = React.createClass
                   {workflow.display_name}
                 </Link>
           else
-            if @props.selectedWorkflow?
-              <Link 
-                to={"/projects/#{@props.project.slug}/classify"}
-                query={workflow: @props.selectedWorkflow.id}
-                className="call-to-action standard-button"
-              >
-                Get started!
-              </Link>
-            else
-              <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
-                Get started!
-              </Link>
+            <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
+              Get started!
+            </Link>
         else if @props.project.configuration?.user_chooses_workflow
           @state.workflows.map (workflow) =>
             <Link
               to={"/projects/#{@props.project.slug}/classify"}
-              query={workflow: workflow.id}
               key={workflow.id + Math.random()}
               className="call-to-action standard-button"
               onClick={@handleWorkflowSelection.bind this, workflow}
             >
               {workflow.display_name}
             </Link>
-        else if @props.selectedWorkflow?
-          <Link 
-            to={"/projects/#{@props.project.slug}/classify"}
-            query={workflow: @props.selectedWorkflow.id}
-            className="call-to-action standard-button"
-          >
-            Get started!
-          </Link>
         else
           <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
             Get started!

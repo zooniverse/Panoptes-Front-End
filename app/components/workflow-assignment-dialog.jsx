@@ -13,9 +13,8 @@ const WorkflowAssignmentDialog = React.createClass({
     },
 
     handleNewWorkflowAssignment(history, location, preferences) {
-      history.push({
-        pathname: location.pathname,
-        query: { workflow: preferences.settings.workflow_id },
+      preferences.update({
+        'preferences.selected_workflow': preferences.settings.workflow_id,
       });
     },
   },
