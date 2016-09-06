@@ -169,7 +169,7 @@ Classifier = React.createClass
       <nav className="task-nav">
         {if Object.keys(@props.workflow.tasks).length > 1
           <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
-        {if not nextTaskKey and (not @subjectIsGravitySpyGoldStandard() or @props.workflow.configuration?.hide_classification_summaries) and @props.owner? and @props.project?
+        {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
         {if nextTaskKey
