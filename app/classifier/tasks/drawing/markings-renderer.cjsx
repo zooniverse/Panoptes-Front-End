@@ -42,7 +42,7 @@ module.exports = React.createClass
         taskDescription = @props.workflow.tasks[annotation.task]
         if taskDescription.type is 'drawing'
           <g key={annotation._key} className="marks-for-annotation" data-disabled={isPriorAnnotation || null}>
-            {for mark, i in annotation.value when @props.workflow.configuration.multi_image_clone_markers or parseInt(mark.frame) is parseInt(@props.frame)
+            {for mark, i in annotation.value when @props.workflow?.configuration.multi_image_clone_markers or parseInt(mark.frame) is parseInt(@props.frame)
               mark._key ?= Math.random()
 
               if skippedMarks < @props.classification._hideMarksBefore and not @props.classification.completed
