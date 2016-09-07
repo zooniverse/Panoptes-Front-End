@@ -20,8 +20,6 @@ GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
 experimentsClient = new (require '../lib/experiments-client')
 
-PULSAR_HUNTERS_SLUG = 'zooniverse/pulsar-hunters'
-
 Classifier = React.createClass
   displayName: 'Classifier'
 
