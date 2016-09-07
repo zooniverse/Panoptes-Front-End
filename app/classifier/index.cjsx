@@ -192,7 +192,7 @@ Classifier = React.createClass
       onChange: -> classification.update()
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
-      {if @state.renderIntervention==true
+      {if @state.renderIntervention
         <Intervention monitor={@context.interventionMonitor} user={@props.user} />
       else
         <div className="hidable-task-container">
