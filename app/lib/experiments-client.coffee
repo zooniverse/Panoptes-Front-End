@@ -79,7 +79,8 @@ class ExperimentsClient # Client for the ExperimentServer
 
   # TODO Design a better way for Geordi to handle long "data" field values (currently it's VARCHAR(512) set by Loopback
   # - so we need to compress the string as much as possible and ensure it is never longer than 512 or that will cause a
-  # 500 error
+  # 500 error. Note: Geordi server will be updated: https://github.com/zooniverse/geordi/issues/87. When it is, these
+# # three methdos can be removed.
   #
   simplifyParticipantDataForLogging: (data) ->
     fieldsToInclude = ["current_session_id","current_session_history","current_session_plan","seq_of_next_event","next_event","intervention_time","active"]
