@@ -41,18 +41,23 @@ Classifier = React.createClass
     backButtonWarning: false
     renderIntervention: false
 
-  componentDidMount: ->
-    experimentsClient.startOrResumeExperiment(@context.interventionMonitor, @context.geordi)
-    @setState renderIntervention: @context.interventionMonitor?.shouldShowIntervention()
-    @context.interventionMonitor.on 'interventionRequested', =>
-      experimentsClient.logExperimentState @context.geordi,"interventionStart",@context.interventionMonitor?.latestFromSugar
-      if @isMounted()
-        @setState renderIntervention: true
-    @context.interventionMonitor.on 'classificationTaskRequested', =>
-      experimentsClient.logExperimentState @context.geordi,"classificationStart",@context.interventionMonitor?.latestFromSugar
-      if @isMounted()
-        @setState renderIntervention: false
+  disableIntervention: ->
+    experimentsClient.logExperimentState @context.geordi,
+                                         "classificationStart",
+                                         @context.interventionMonitor?.latestFromSugar
+    @setState renderIntervention: false
 
+  enableIntervention: ->
+    experimentsClient.logExperimentState @context.geordi,
+                                         "interventionStart",
+                                         @context.interventionMonitor?.latestFromSugar
+    @setState renderIntervention: true
+
+  componentDidMount: ->
+    experimentsClient.startOrResumeExperiment @context.interventionMonitor, @context.geordi
+    @setState renderIntervention: @context.interventionMonitor?.shouldShowIntervention()
+    @context.interventionMonitor.on 'interventionRequested', @enableIntervention
+    @context.interventionMonitor.on 'classificationTaskRequested', @disableIntervention
     @loadSubject @props.subject
     @prepareToClassify @props.classification
     {workflow, project, preferences, user} = @props
@@ -84,8 +89,8 @@ Classifier = React.createClass
     @context.interventionMonitor.setProjectSlug @props.project.slug
 
   componentWillUnmount: () ->
-    @context.interventionMonitor.removeListener 'interventionRequested', => {}
-    @context.interventionMonitor.removeListener 'classificationTaskRequested', => {}
+    @context.interventionMonitor.removeListener 'interventionRequested', @enableIntervention
+    @context.interventionMonitor.removeListener 'classificationTaskRequested', @disableIntervention
     try
       @context.geordi?.forget ['subjectID']
 
@@ -412,12 +417,12 @@ Classifier = React.createClass
     else
       @props.onComplete?()
       .then (classification) =>
-        # after classification is saved, if we are in an experiment, notify experiment server to advance the session plan
+        # after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
         experiment_name = experimentsClient.checkForExperiment(@props.project.slug)
-        if experiment_name?
+        if experiment_name? and @props.user
           experimentsClient.postDataToExperimentServer @context.interventionMonitor,
                                                        @context.geordi,
-                                                       experiment_name, @props.user.id,
+                                                       experiment_name, @props.user?.id,
                                                        classification.metadata.session,
                                                        "classification",classification.id
       , (error) =>
