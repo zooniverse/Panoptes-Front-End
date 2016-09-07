@@ -1,6 +1,5 @@
 React = require 'react'
 InterventionMonitor = require './intervention-monitor'
-http = require 'http'
 experimentsClient = new (require './experiments-client')
 config = require './intervention-config'
 {getSessionID} = require '../lib/session'
