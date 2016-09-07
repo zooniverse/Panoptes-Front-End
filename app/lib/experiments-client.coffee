@@ -43,16 +43,16 @@ class ExperimentsClient # Client for the ExperimentServer
       else
         config.PROJECT_SLUGS_STAGING
 
-  lookupProjectSlug: (enabled_experiments, experiment_name) ->
-    this_project_slug for this_project_slug, experiments_for_this_slug of enabled_experiments when experiment_name in experiments_for_this_slug
+  lookupProjectSlug: (enabledExperiments, experimentName) ->
+    thisProjectSlug for thisProjectSlug, experimentsForThisSlug of enabledExperiments when experimentName in experimentsForThisSlug
 
-  getProjectSlugForExperiment: (experiment_name) ->
+  getProjectSlugForExperiment: (experimentName) ->
     @ensureEnvironmentSet()
     switch @EXPERIMENT_SERVER_URL_TO_USE
       when @EXPERIMENT_SERVER_PRODUCTION_URL
-        @lookupProjectSlug config.ENABLED_EXPERIMENTS_PRODUCTION, experiment_name
+        @lookupProjectSlug config.ENABLED_EXPERIMENTS_PRODUCTION, experimentName
       else
-        @lookupProjectSlug config.ENABLED_EXPERIMENTS_STAGING, experiment_name
+        @lookupProjectSlug config.ENABLED_EXPERIMENTS_STAGING, experimentName
 
   # At the start (or resume) of an experiment, make sure geordi gets updated.
   #
@@ -62,12 +62,12 @@ class ExperimentsClient # Client for the ExperimentServer
   #
   startOrResumeExperiment: (interventionMonitor, geordi) ->
     if interventionMonitor?.latestFromSugar and interventionMonitor?.latestFromSugar["active"]
-      experiment_name = interventionMonitor?.latestFromSugar["experiment_name"]
+      experimentName = interventionMonitor?.latestFromSugar["experiment_name"]
       cohort = interventionMonitor?.latestFromSugar["cohort"]
       @logExperimentState geordi, "experimentStartOrResume", interventionMonitor?.latestFromSugar
       # TODO check geordi experiment value - if it was null, log an experimentStart event else log a resume event.
       geordi?.remember
-        experiment: experiment_name
+        experiment: experimentName
         cohort: cohort
     else
       if interventionMonitor?.latestFromSugar and not interventionMonitor?.latestFromSugar["active"]
@@ -82,15 +82,15 @@ class ExperimentsClient # Client for the ExperimentServer
   # 500 error
   #
   simplifyParticipantDataForLogging: (data) ->
-    fields_to_include = ["current_session_id","current_session_history","current_session_plan","seq_of_next_event","next_event","intervention_time","active"]
-    fieldname_shortening_map = {
+    fieldsToInclude = ["current_session_id","current_session_history","current_session_plan","seq_of_next_event","next_event","intervention_time","active"]
+    fieldnameShorteningMap = {
       current_session_id: "sessID"
       current_session_history: "hist"
       current_session_plan: "plan"
       seq_of_next_event: "next_evt_pos"
       intervention_time: "ivn_next"
     }
-    value_compression_map = {
+    valueCompressionMap = {
       intervention: "i"
       classification: "c"
       "-question-": "qu"
@@ -99,32 +99,32 @@ class ExperimentsClient # Client for the ExperimentServer
       valued: "val"
       learning: "lrn"
     }
-    simple_data = {}
-    for field in fields_to_include
+    simpleData = {}
+    for field in fieldsToInclude
       if field of data
-        fieldname_to_use = field
-        if field of fieldname_shortening_map
-          fieldname_to_use = fieldname_shortening_map[field]
-        value_to_use = JSON.parse(JSON.stringify(data[field])) # deep clone
-        if typeof value_to_use is 'string'
-          value_to_use = @replaceAllSubStringsByRegEx value_to_use, value_compression_map
-        else if typeof value_to_use is 'object'
-          for subvalue, index in value_to_use
-            if typeof subvalue is 'string'
-              value_to_use[index] = @replaceAllSubStringsByRegEx subvalue, value_compression_map
-        simple_data[fieldname_to_use] = value_to_use
-    simple_data
+        fieldnameToUse = field
+        if field of fieldnameShorteningMap
+          fieldnameToUse = fieldnameShorteningMap[field]
+        valueToUse = JSON.parse(JSON.stringify(data[field])) # deep clone
+        if typeof valueToUse is 'string'
+          valueToUse = @replaceAllSubStringsByRegEx valueToUse, valueCompressionMap
+        else if typeof valueToUse is 'object'
+          for subValue, index in valueToUse
+            if typeof subValue is 'string'
+              valueToUse[index] = @replaceAllSubStringsByRegEx subValue, valueCompressionMap
+        simpleData[fieldnameToUse] = valueToUse
+    simpleData
 
-  replaceAllSubStringsByRegEx: (string_to_modify, value_compression_map) ->
-    for regex_str, replacement of value_compression_map
-      regex = new RegExp regex_str,"gi"
-      string_to_modify = string_to_modify.replace regex, replacement
-    string_to_modify
+  replaceAllSubStringsByRegEx: (stringToModify, valueCompressionMap) ->
+    for regexStr, replacement of valueCompressionMap
+      regex = new RegExp regexStr,"gi"
+      stringToModify = stringToModify.replace regex, replacement
+    stringToModify
 
   # .. and if it's too long, we give up.
-  safeJSON: (simplified_data) ->
-    if simplified_data
-      jsonString = JSON.stringify(simplified_data)
+  safeJSON: (simplifiedData) ->
+    if simplifiedData
+      jsonString = JSON.stringify(simplifiedData)
       if jsonString.length >= 512
         jsonString = JSON.stringify {
           error: "too_much_data"
@@ -136,35 +136,35 @@ class ExperimentsClient # Client for the ExperimentServer
 
   # experimentState == "experimentStart", "classificationStart", "classificationEnd", "interventionStart", "interventionEnd", or "experimentEnd"
   logExperimentState: (geordi, experimentState, data) ->
-    simple_data = null
+    simpleData = null
     if data?
-      simple_data = @simplifyParticipantDataForLogging data
+      simpleData = @simplifyParticipantDataForLogging data
     geordi?.logEvent
       type: "experiment"
       relatedID: experimentState
-      data: @safeJSON simple_data
+      data: @safeJSON simpleData
 
   # check if this project has an experiment enabled. Return experiment_name if so.
   #
   # (If it does, it should be notifying experiment server of its classifications, 
   #  which will register it or progress it)
-  checkForExperiment: (project_slug) ->
-    enabled_experiments = @getEnabledExperiments()
-    if project_slug of enabled_experiments
-      enabled_experiments[project_slug]
+  checkForExperiment: (projectSlug) ->
+    enabledExperiments = @getEnabledExperiments()
+    if projectSlug of enabledExperiments
+      enabledExperiments[projectSlug]
 
   # type = "classification" or "intervention", and id is the classification_id or intervention_id correspondingly
-  postDataToExperimentServer: (interventionMonitor, geordi, experiment_name, user_id, session_id, type, id) ->
+  postDataToExperimentServer: (interventionMonitor, geordi, experimentName, userID, sessionID, type, id) ->
     @ensureEnvironmentSet()
 
-    if not session_id?
-      session_id = getSessionID()
+    if not sessionID?
+      sessionID = getSessionID()
 
-    post_path = "/experiment/#{experiment_name}/user/#{user_id}/session/#{session_id}/#{type}/#{id}"
-    post_url = "#{@EXPERIMENT_SERVER_URL_TO_USE}#{post_path}"
+    postPath = "/experiment/#{experimentName}/user/#{userID}/session/#{sessionID}/#{type}/#{id}"
+    postUrl = "#{@EXPERIMENT_SERVER_URL_TO_USE}#{postPath}"
 
     request = new XMLHttpRequest()
-    request.open 'POST', post_url, true
+    request.open 'POST', postUrl, true
     if DEBUG
       request.addEventListener "readystatechange", (e) =>
       if request.readyState is 4
@@ -181,26 +181,26 @@ class ExperimentsClient # Client for the ExperimentServer
 
     response
 
-  getInterventionFromConfig: (project_slug, experiment_name, intervention_id) ->
-    enabled_experiments = @getEnabledExperiments()
-    intervention_details = @getInterventionDetails()
-    if experiment_name in enabled_experiments[project_slug] and project_slug of intervention_details
-      if experiment_name of intervention_details[project_slug]
-        if intervention_id of intervention_details[project_slug][experiment_name]
-          intervention_details[project_slug][experiment_name][intervention_id]
+  getInterventionFromConfig: (projectSlug, experimentName, interventionID) ->
+    enabledExperiments = @getEnabledExperiments()
+    interventionDetails = @getInterventionDetails()
+    if experimentName in enabledExperiments[projectSlug] and projectSlug of interventionDetails
+      if experimentName of interventionDetails[projectSlug]
+        if interventionID of interventionDetails[projectSlug][experimentName]
+          interventionDetails[projectSlug][experimentName][interventionID]
 
-  constructInterventionFromSugarData: (sugar_data) ->
-    if "experiment_name" of sugar_data
-      experiment_name = sugar_data["experiment_name"]
-      project_slug = @getProjectSlugForExperiment(experiment_name)
-      switch experiment_name
+  constructInterventionFromSugarData: (sugarData) ->
+    if "experiment_name" of sugarData
+      experimentName = sugarData["experiment_name"]
+      projectSlug = @getProjectSlugForExperiment(experimentName)
+      switch experimentName
         when config.COMET_HUNTERS_VOLCROWE_EXPERIMENT
-          if "intervention_time" of sugar_data
-            if sugar_data["intervention_time"]==true
-              if "next_event" of sugar_data
-                intervention_id = sugar_data["next_event"]
-                @getInterventionFromConfig project_slug, experiment_name, intervention_id
+          if "intervention_time" of sugarData
+            if sugarData["intervention_time"]==true
+              if "next_event" of sugarData
+                interventionID = sugarData["next_event"]
+                @getInterventionFromConfig projectSlug, experimentName, interventionID
         else
-          console.log "Intervention Requested for Unsupported Experiment '#{experiment_name}'"
+          console.log "Intervention Requested for Unsupported Experiment '#{experimentName}'"
 
 module.exports = ExperimentsClient

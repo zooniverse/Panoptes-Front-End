@@ -418,11 +418,11 @@ Classifier = React.createClass
       @props.onComplete?()
       .then (classification) =>
         # after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
-        experiment_name = experimentsClient.checkForExperiment(@props.project.slug)
-        if experiment_name? and @props.user
+        experimentName = experimentsClient.checkForExperiment(@props.project.slug)
+        if experimentName? and @props.user
           experimentsClient.postDataToExperimentServer @context.interventionMonitor,
                                                        @context.geordi,
-                                                       experiment_name, @props.user?.id,
+                                                       experimentName, @props.user?.id,
                                                        classification.metadata.session,
                                                        "classification",classification.id
       , (error) =>
