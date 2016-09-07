@@ -211,7 +211,7 @@ module.exports = React.createClass
               </div>}
         </div>}
 
-      <NothingHereEditor workflow={@props.workflow} task={@props.task} />
+      <NothingHereEditor taskPrefix={@props.taskPrefix} workflow={@props.workflow} task={@props.task} />
 
       <hr />
 
