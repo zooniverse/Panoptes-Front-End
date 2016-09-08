@@ -1,6 +1,7 @@
 React = require 'react'
 ClassificationsRibbon = require '../../components/classifications-ribbon'
 PromiseRenderer = require '../../components/promise-renderer'
+getAllProjectPreferences = require('../../lib/get-all-project-preferences').default
 ProjectIcon = require '../../components/project-icon'
 
 module.exports = React.createClass
@@ -24,7 +25,7 @@ module.exports = React.createClass
         centered = textAlign: 'center'
         <div style=centered>
           <p><ClassificationsRibbon user={@props.profileUser} /></p>
-          <PromiseRenderer promise={ClassificationsRibbon::getAllProjectPreferences @props.profileUser} then={(projectPreferences) =>
+          <PromiseRenderer promise={getAllProjectPreferences @props.profileUser} then={(projectPreferences) =>
             <div>
               {projectPreferences.map (projectPreference) =>
                 if projectPreference.activity_count > 0

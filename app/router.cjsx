@@ -90,7 +90,7 @@ module.exports =
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
       </Route>
-  
+
       <Route path="collections" component={require('./pages/collections/index')}>
          <IndexRoute component={require('./pages/collections/collections-list')} />
          <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
