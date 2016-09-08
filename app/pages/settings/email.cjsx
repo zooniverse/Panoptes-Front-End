@@ -18,6 +18,15 @@ module.exports = React.createClass
     projectPreferences: []
 
   componentWillMount: ->
+    @getProjectPreferences()
+
+  componentDidUpdate: (prevProps, prevState) ->
+    console.log @state
+    console.log prevState
+    unless @state.page is prevState.page
+      @getProjectPreferences()
+
+  getProjectPreferences: ->
     @props.user.get('project_preferences', page: @state.page)
       .then (projectPreferences) =>
         if projectPreferences
