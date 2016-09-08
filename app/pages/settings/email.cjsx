@@ -21,8 +21,6 @@ module.exports = React.createClass
     @getProjectPreferences()
 
   componentDidUpdate: (prevProps, prevState) ->
-    console.log @state
-    console.log prevState
     unless @state.page is prevState.page
       @getProjectPreferences()
 
