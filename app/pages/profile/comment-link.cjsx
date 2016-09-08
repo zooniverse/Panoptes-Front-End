@@ -3,6 +3,7 @@ moment = require 'moment'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 {Markdown} = (require 'markdownz').default
+{Link} = require 'react-router'
 
 module.exports = React.createClass
   displayName: 'CommentLink'
@@ -40,13 +41,12 @@ module.exports = React.createClass
                 boardProject: project
               project.get('owner').then (owner) =>
                 @setState({owner})
-                [owner, name] = project.slug.split('/')
-                "/projects/#{owner}/#{name}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
+                "/projects/#{project.slug}/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         else
           Promise.resolve "/talk/#{board.id}/#{discussion.id}?comment=#{comment.id}"
         href.then (href) =>
           @setState
-            href: window.location.origin + href
+            href: href
 
   render: ->
     <div className="profile-feed-comment-link">
@@ -57,7 +57,7 @@ module.exports = React.createClass
         {if @state.board?.id and @state.discussion?.id
           <span>
             {' '}in{' '}
-            <a href={@state.href}>
+            <Link to={@state.href}>
               {if @state.boardProject? and @state.owner? and !@props.project?
                 <span>
                   <strong className="comment-project" title="#{@state.owner.display_name}/#{@state.boardProject.display_name}">{@state.boardProject.display_name}</strong>
@@ -66,7 +66,7 @@ module.exports = React.createClass
               <strong className="comment-board">{@state.board?.title}</strong>
               <span>{' '}➞{' '}</span>
               <strong className="comment-discussion">{@state.discussion?.title}</strong>
-            </a>
+            </Link>
           </span>}
       </header>
 
