@@ -7,22 +7,31 @@ module.exports = React.createClass
     classification: null
     task: null
 
-  toggleShortcut: (e) ->
-    @props.task.shortcut = if e.target.checked
-      true
+  toggleShortcut: (index, e) ->
+    if e.target.checked
+      @props.task.nothingHere[index].checked = true
     else
-      false
+      @props.task.nothingHere[index].checked = false
     @props.classification.update 'annotations'
 
   render: ->
-    <label className="answer-button">
-      <p>
-        <small className="nothing-here-shortcut #{if @props.task.shortcut then 'active' else ''}">
-          <strong>
-            <input type="checkbox" onChange={@toggleShortcut} />
-              Nothing Here
-          </strong>
-        </small>
-      </p>
+    # TODO: allow nothing here to deselect other options. Refer to generic editor choiceskey
+    # Rename nothingHere to shortcuts?
 
-    </label>
+    <div>
+
+      {if @props.task.nothingHere
+        for shortcut, index in @props.task.nothingHere
+          shortcut._key ?= Math.random()
+          <label key={shortcut._key} className="answer-button">
+            <p>
+              <small className="nothing-here-shortcut #{if shortcut.checked then 'active' else ''}">
+                <strong>
+                  <input type="checkbox" onChange={@toggleShortcut.bind this, index} />
+                    {shortcut.label}
+                </strong>
+              </small>
+            </p>
+
+          </label>}
+    </div>

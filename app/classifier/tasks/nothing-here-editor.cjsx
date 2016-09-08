@@ -19,7 +19,7 @@ module.exports = React.createClass
 
   addAnswer: ->
     @props.task.nothingHere.push
-      label: 'Enter an answer'
+      label: 'Nothing Here'
     @props.workflow.update 'tasks'
 
   removeChoice: (choicesName, index) ->
