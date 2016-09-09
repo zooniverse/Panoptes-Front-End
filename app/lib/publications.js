@@ -345,8 +345,8 @@ const Publications = {
   meta: [
     {name: "Meta Studies",
     publications: [
-      {citation: "Intervention Strategies for Increasing Engagement in Crowdsourcing: Platform, Predictions, and Experiments, Segal+ 2016."
-      href: "http://research.microsoft.com/en-us/um/people/horvitz/engagement_intervention.pdf"
+      {citation: "Intervention Strategies for Increasing Engagement in Crowdsourcing: Platform, Predictions, and Experiments, Segal+ 2016.",
+      href: "http://research.microsoft.com/en-us/um/people/horvitz/engagement_intervention.pdf",
       date: "2016"},
       {citation: "Science Learning via Participation in Online Citizen Science, Masters+ 2016.",
       href: "http://arxiv.org/pdf/1601.05973v1.pdf",
