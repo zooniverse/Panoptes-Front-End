@@ -1,4 +1,5 @@
-React = {findDOMNode} = require 'react'
+React = require 'react'
+ReactDOM = require 'react-dom'
 UserSearch = require '../components/user-search.cjsx'
 talkClient = require 'panoptes-client/lib/talk-client'
 Feedback = require './mixins/feedback'
@@ -14,7 +15,7 @@ module.exports = React.createClass
     return unless window.confirm('Are you sure that you want to add this user to the Zooniverse team?')
 
     e.preventDefault()
-    userSelect = findDOMNode(@).querySelector('[name="userids"]')
+    userSelect = ReactDOM.findDOMNode(@).querySelector('[name="userids"]')
     userId = userSelect.value
 
     talkClient.type('roles').create({

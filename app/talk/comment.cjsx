@@ -74,7 +74,7 @@ module.exports = React.createClass
 
   onClickEdit: (e) ->
     @logItemClick 'edit-post'
-    React.findDOMNode(@).scrollIntoView()
+    ReactDOM.findDOMNode(@).scrollIntoView()
     @setState editing: true
     @removeFeedback()
 
