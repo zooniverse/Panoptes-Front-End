@@ -18,7 +18,7 @@ WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
-experimentsClient = new (require '../lib/experiments-client')
+ExperimentsClient = require '../lib/experiments-client'
 
 Classifier = React.createClass
   displayName: 'Classifier'
@@ -26,6 +26,7 @@ Classifier = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
     interventionMonitor: React.PropTypes.object
+    experimentsClient: React.PropTypes.object
 
   getDefaultProps: ->
     user: null
@@ -40,19 +41,14 @@ Classifier = React.createClass
     renderIntervention: false
 
   disableIntervention: ->
-    experimentsClient.logExperimentState @context.geordi,
-                                         "classificationStart",
-                                         @context.interventionMonitor?.latestFromSugar
     @setState renderIntervention: false
 
   enableIntervention: ->
-    experimentsClient.logExperimentState @context.geordi,
-                                         "interventionStart",
-                                         @context.interventionMonitor?.latestFromSugar
+    @context.experimentsClient.logExperimentState @context.geordi, @context.interventionMonitor?.latestFromSugar, "interventionDetected"
     @setState renderIntervention: true
 
   componentDidMount: ->
-    experimentsClient.startOrResumeExperiment @context.interventionMonitor, @context.geordi
+    @context.experimentsClient.startOrResumeExperiment @context
     @setState renderIntervention: @context.interventionMonitor?.shouldShowIntervention()
     @context.interventionMonitor.on 'interventionRequested', @enableIntervention
     @context.interventionMonitor.on 'classificationTaskRequested', @disableIntervention
@@ -79,8 +75,7 @@ Classifier = React.createClass
       @loadSubject subject
     if nextProps.classification isnt @props.classification
       @prepareToClassify nextProps.classification
-
-    @context.geordi.remember subjectID: @props.subject?.id
+    @context.geordi?.remember subjectID: @props.subject?.id
     @reCheckIfInterventionNeeded()
 
   componentWillMount: () ->
@@ -193,7 +188,14 @@ Classifier = React.createClass
 
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
       {if @state.renderIntervention
-        <Intervention monitor={@context.interventionMonitor} user={@props.user} />
+        <Intervention
+          monitor={@context.interventionMonitor}
+          user={@props.user}
+          experimentName={@context.interventionMonitor?.latestFromSugar["experiment_name"]}
+          sessionID={getSessionID()}
+          interventionID={@context.interventionMonitor?.latestFromSugar["next_event"]}
+          interventionDetails={@context.experimentsClient.constructInterventionFromSugarData @context.interventionMonitor?.latestFromSugar}
+          />
       else
         <div className="hidable-task-container">
           {persistentHooksBeforeTask.map (HookComponent) =>
@@ -416,9 +418,9 @@ Classifier = React.createClass
       @props.onComplete?()
       .then (classification) =>
         # after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
-        experimentName = experimentsClient.checkForExperiment(@props.project.slug)
+        experimentName = @context.experimentsClient.checkForExperiment(@props.project.slug)
         if experimentName? and @props.user
-          experimentsClient.postDataToExperimentServer @context.interventionMonitor,
+          @context.experimentsClient.postDataToExperimentServer @context.interventionMonitor,
                                                        @context.geordi,
                                                        experimentName, @props.user?.id,
                                                        classification.metadata.session,

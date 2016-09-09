@@ -19,7 +19,7 @@ class InterventionMonitor extends EventEmitter
     @project_slug = project_slug
 
   shouldShowIntervention: ->
-    return (@latestFromSugar? and @latestFromSugar["intervention_time"] == true)
+    return (@latestFromSugar? and @latestFromSugar["intervention_time"])
 
   startListening: ->
     sugarClient.on 'experiment', @sugarListener
