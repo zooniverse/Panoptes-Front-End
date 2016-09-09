@@ -82,14 +82,11 @@ ProjectPage = React.createClass
     # Only call to get workflow if we know if there is a user or not, have preferences, and the project is finished loading
     if nextContext.initialLoadComplete and not nextProps.loading and nextProps.preferences
       if @state.selectedWorkflow is null
-        console.log('selectedWorkflow is null')
         @getSelectedWorkflow(nextProps.project, nextProps.preferences)
       else if nextProps.preferences?.preferences.selected_workflow? and @state.selectedWorkflow? 
         if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow.id
-          console.log('selected workflow exists but doesnt match current state workflow', nextProps.preferences?.preferences.selected_workflow, @state.selectedWorkflow?.id)
           @getSelectedWorkflow(nextProps.project, nextProps.preferences)
       else if @props.user isnt nextProps.user
-        console.log('next user isnt user')
         @getSelectedWorkflow(nextProps.project, nextProps.preferences)
 
   fetchInfo: (project) ->
@@ -140,7 +137,6 @@ ProjectPage = React.createClass
       preferredWorkflowID = @selectRandomWorkflow(project)
 
     if preferredWorkflowID?
-      console.log('getting selected workflow', preferredWorkflowID)
       @getWorkflow(project, preferredWorkflowID)
     else
       @setState selectedWorkflow: null
@@ -148,7 +144,6 @@ ProjectPage = React.createClass
   checkIfProjectIsComplete: (project) ->
     projectIsComplete = (true for workflow in @state.activeWorkflows when not workflow.finished_at?).length is 0
     @setState { projectIsComplete }
-    console.log('checked if project is complete', @state.projectIsComplete)
 
   selectRandomWorkflow: (project) ->
     linkedWorkflows = project.links.workflows
@@ -158,7 +153,7 @@ ProjectPage = React.createClass
       project.uncacheLink 'workflows'
     else
       randomIndex = Math.floor Math.random() * @state.activeWorkflows.length
-      console.log 'Chose random workflow', linkedWorkflows[randomIndex]
+      # console.log 'Chose random workflow', linkedWorkflows[randomIndex]
       linkedWorkflows[randomIndex]
 
   getWorkflow: (project, workflowID) ->

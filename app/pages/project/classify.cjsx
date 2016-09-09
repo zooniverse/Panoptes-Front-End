@@ -97,14 +97,12 @@ module.exports = React.createClass
         currentClassifications.forWorkflow[@props.selectedWorkflow?.id] = null
         @setState { classification: null }
         @loadAppropriateClassification(nextProps)
-    console.log('nextProps.loadingSelectedWorkflow', nextProps.loadingSelectedWorkflow)
     @shouldWorkflowAssignmentPrompt(nextProps.preferences) unless nextProps.loadingSelectedWorkflow
 
   shouldWorkflowAssignmentPrompt: (preferences) ->
     # Only for Gravity Spy which is assigning workflows to logged in users
     if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and @props.user?
       assignedWorkflowID = preferences?.settings?.workflow_id
-      console.log('should?', assignedWorkflowID? and @props.selectedWorkflow? and assignedWorkflowID isnt @props.selectedWorkflow?.id)
       if assignedWorkflowID? and @props.selectedWorkflow? and assignedWorkflowID isnt @props.selectedWorkflow?.id
         @setState promptWorkflowAssignmentDialog: true if @state.promptWorkflowAssignmentDialog is false
 
@@ -317,7 +315,7 @@ module.exports = React.createClass
     if @state.promptWorkflowAssignmentDialog
       WorkflowAssignmentDialog.start()
         .then =>
-          @setState({ promptWorkflowAssignmentDialog: false }, console.log('setting state to false', @state.promptWorkflowAssignmentDialog))
+          @setState { promptWorkflowAssignmentDialog: false }
         .then =>
           if props.preferences.selected_workflow isnt props.preferences.settings.workflow_id
             props.preferences.update
