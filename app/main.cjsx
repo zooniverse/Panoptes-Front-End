@@ -15,7 +15,9 @@ browserHistory.listen ->
 # make sure project stats page does not scroll back to the top when the URL changes
 shouldUpdateScroll = (prevRouterProps, routerProps) ->
   pathname = routerProps.location.pathname.split('/')
-  if ('stats' in pathname) and ('projects' in pathname)
+  isStats = ('stats' in pathname) and ('projects' in pathname)
+  hashChange = routerProps.location.hash.length
+  if isStats or hashChange
     false
   else
     true
