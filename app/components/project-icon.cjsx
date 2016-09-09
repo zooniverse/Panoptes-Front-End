@@ -26,10 +26,14 @@ module.exports = React.createClass
   getDetails: (project) ->
     apiClient.type 'avatars'
       .get project.links.avatar.id
-      .catch =>
-        null
       .then (avatar) =>
         @setState {avatar}
+      .catch =>
+        project.get 'avatar'
+          .catch =>
+            null
+          .then (avatar) =>
+            @setState {avatar}
 
   render: ->
     content = [
