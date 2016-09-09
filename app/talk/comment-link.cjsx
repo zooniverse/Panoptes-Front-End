@@ -1,6 +1,5 @@
 React = require 'react'
 talkConfig = require './config'
-{Link} = require 'react-router'
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -19,17 +18,22 @@ module.exports = React.createClass
 
   projectCommentUrl: ->
     {comment} = @props
-    "/projects/#{comment.project_slug}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    [ownerName, projectName] = comment.project_slug.split('/')
+    window.location.origin + "/projects/#{ownerName}/#{projectName}/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
 
   mainTalkCommentUrl: ->
     {comment} = @props
-    "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
+    window.location.origin + "/talk/#{comment.board_id}/#{comment.discussion_id}?comment=#{comment.id}"
 
   render: ->
-    href = if @projectComment() then @projectCommentUrl() else @mainTalkCommentUrl()
-
     <div className="talk-comment-link">
-      <Link to={href}>
-        {@props.children ? window.location.origin + href}
-      </Link>
+      {if @projectComment()
+        <a href={@projectCommentUrl()}>
+          {@props.children ? @projectCommentUrl()}
+        </a>
+
+      else
+        <a href={@mainTalkCommentUrl()}>
+          {@props.children ? @mainTalkCommentUrl()}
+        </a>}
     </div>
