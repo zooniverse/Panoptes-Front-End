@@ -15,7 +15,6 @@ module.exports = React.createClass
     activeWorkflows: []
     owner: {}
     project: {}
-    selectedWorkflow: null
     user: null
 
   handleWorkflowSelection: (workflow) ->

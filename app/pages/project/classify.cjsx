@@ -63,11 +63,16 @@ module.exports = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
 
+  propTypes:
+    loadingSelectedWorkflow: React.PropTypes.bool
+    project: React.PropTypes.object
+    workflow: React.PropTypes.object
+    simulateSaveFailure: React.PropTypes.bool
+
   getDefaultProps: ->
     loadingSelectedWorkflow: false
-    query: null
     project: null
-    selectedWorkflow: null
+    workflow: null
     simulateSaveFailure: (location?.search ? '').indexOf('simulate-classification-save-failure') isnt -1
 
   getInitialState: ->
@@ -79,11 +84,11 @@ module.exports = React.createClass
     rejected: null
 
   componentDidMount: () ->
-    if @props.selectedWorkflow? and not @props.loadingSelectedWorkflow
+    if @props.workflow and not @props.loadingSelectedWorkflow
       @loadAppropriateClassification(@props)
 
   componentWillUpdate: (nextProps, nextState) ->
-    @context.geordi.remember workflowID: nextProps?.selectedWorkflow?.id
+    @context.geordi.remember workflowID: nextProps?.workflow?.id
 
   componentWillUnmount: () ->
     @context.geordi?.forget ['workflowID']
@@ -91,19 +96,21 @@ module.exports = React.createClass
   componentWillReceiveProps: (nextProps) ->
     if @props.project isnt nextProps.project
       @loadAppropriateClassification(nextProps)
-    if nextProps.selectedWorkflow? and not nextProps.loadingSelectedWorkflow
-      if @props.selectedWorkflow isnt nextProps.selectedWorkflow
+    unless nextProps.loadingSelectedWorkflow
+      if @props.workflow isnt nextProps.workflow
         # Clear out current classification
-        currentClassifications.forWorkflow[@props.selectedWorkflow?.id] = null
+        currentClassifications.forWorkflow[@props.workflow?.id] = null
         @setState { classification: null }
         @loadAppropriateClassification(nextProps)
-    @shouldWorkflowAssignmentPrompt(nextProps.preferences) unless nextProps.loadingSelectedWorkflow
+    if nextProps.loadingSelectedWorkflow is false and nextProps.user isnt null
+      @shouldWorkflowAssignmentPrompt(nextProps)
 
-  shouldWorkflowAssignmentPrompt: (preferences) ->
+  shouldWorkflowAssignmentPrompt: (nextProps) ->
     # Only for Gravity Spy which is assigning workflows to logged in users
-    if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and @props.user?
-      assignedWorkflowID = preferences?.settings?.workflow_id
-      if assignedWorkflowID? and @props.selectedWorkflow? and assignedWorkflowID isnt @props.selectedWorkflow?.id
+    if nextProps.project.experimental_tools.indexOf('workflow assignment') > -1
+      assignedWorkflowID = nextProps.preferences?.settings?.workflow_id
+      currentWorkflowID = @props.preferences?.preferences.selected_workflow
+      if assignedWorkflowID? and currentWorkflowID? and assignedWorkflowID isnt currentWorkflowID
         @setState promptWorkflowAssignmentDialog: true if @state.promptWorkflowAssignmentDialog is false
 
   loadAppropriateClassification: (props) ->
@@ -111,13 +118,15 @@ module.exports = React.createClass
     if @state.rejected?.classification?
       @setState rejected: null
 
-    awaitClassification = Promise.resolve(
-      currentClassifications.forWorkflow[props.selectedWorkflow.id] ?= @createNewClassification props.project, props.selectedWorkflow
-    ).catch (error) =>
-      @setState rejected: { classification: error }
-
-    awaitClassification.then (classification) =>
-      @setState { classification }
+    if currentClassifications.forWorkflow[props.workflow.id]
+      @setState { classification: currentClassifications.forWorkflow[props.workflow.id] }
+    else
+      @createNewClassification(props.project, props.workflow)
+        .then (classification) =>
+          currentClassifications.forWorkflow[props.workflow.id] = classification
+          @setState { classification }
+        .catch (error) =>
+          @setState rejected: { classification: error }
 
   createNewClassification: (project, workflow) ->
     # A subject set is only specified if the workflow is grouped.
@@ -298,14 +307,14 @@ module.exports = React.createClass
 
   loadAnotherSubject: ->
     # Forget the old classification so a new one will load.
-    currentClassifications.forWorkflow[@props.selectedWorkflow.id] = null
+    currentClassifications.forWorkflow[@props.workflow.id] = null
 
-    @loadAppropriateClassification(@props) if @props.selectedWorkflow?
+    @loadAppropriateClassification(@props) if @props.workflow?
 
   maybeLaunchMiniCourse: ->
     if classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
       MiniCourse.startIfNecessary({
-        workflow: @props.selectedWorkflow,
+        workflow: @props.workflow,
         preferences: @props.preferences,
         project: @props.project,
         user: @props.user

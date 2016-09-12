@@ -43,6 +43,12 @@ ProjectPage = React.createClass
     geordi: React.PropTypes.object
     initialLoadComplete: React.PropTypes.bool
 
+  propTypes:
+    project: React.PropTypes.object.isRequired
+    owner: React.PropTypes.object.isRequired
+    preferences: React.PropTypes.object
+    loading: React.PropTypes.bool
+
   getDefaultProps: ->
     project: null
     owner: null
@@ -76,17 +82,16 @@ ProjectPage = React.createClass
   componentWillReceiveProps: (nextProps, nextContext) ->
     if nextProps.project isnt @props.project
       @fetchInfo nextProps.project
+      @getAllWorkflows(nextProps.project)
       @updateSugarSubscription nextProps.project
       @context.geordi?.remember projectToken: nextProps.project?.slug
 
-    # Only call to get workflow if we know if there is a user or not, have preferences, and the project is finished loading
-    if nextContext.initialLoadComplete and not nextProps.loading and nextProps.preferences
-      if @state.selectedWorkflow is null
-        @getSelectedWorkflow(nextProps.project, nextProps.preferences)
-      else if nextProps.preferences?.preferences.selected_workflow? and @state.selectedWorkflow? 
-        if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow.id
-          @getSelectedWorkflow(nextProps.project, nextProps.preferences)
-      else if @props.user isnt nextProps.user
+    # Only call to get workflow if we know if there is a user or not and the project is finished loading
+    if nextContext.initialLoadComplete and not nextProps.loading and nextProps.preferences and @state.activeWorkflows.length is 0
+      @getAllWorkflows(nextProps.project)
+
+    if nextProps.preferences?.preferences? and @state.selectedWorkflow?
+      if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow.id
         @getSelectedWorkflow(nextProps.project, nextProps.preferences)
 
   fetchInfo: (project) ->
@@ -113,18 +118,18 @@ ProjectPage = React.createClass
       .then (pages) =>
         @setState {pages}
 
-    @getAllWorkflows(project)
+  getAllWorkflows: (project) ->
+    @setState { loadingSelectedWorkflow: true }
+
+    getWorkflowsInOrder(project, { active: true })
       .then (activeWorkflows) =>
         @setState { activeWorkflows }
       .then =>
         @checkIfProjectIsComplete(project)
-
-  getAllWorkflows: (project) ->
-    getWorkflowsInOrder(project, {active: true, fields: 'display_name,finished_at,configuration'}).then (activeWorkflows) =>
-      activeWorkflows
+      .then =>
+        @getSelectedWorkflow(project, @props.preferences)
 
   getSelectedWorkflow: (project, preferences) ->
-    @setState { loadingSelectedWorkflow: true }
     # preference user selected workflow, then project owner set workflow, then default workflow
     # if none of those are set, select random workflow
     if preferences?.preferences.selected_workflow?
@@ -136,36 +141,33 @@ ProjectPage = React.createClass
     else
       preferredWorkflowID = @selectRandomWorkflow(project)
 
-    if preferredWorkflowID?
-      @getWorkflow(project, preferredWorkflowID)
-    else
-      @setState selectedWorkflow: null
+    @getWorkflow(project, preferredWorkflowID)
 
   checkIfProjectIsComplete: (project) ->
     projectIsComplete = (true for workflow in @state.activeWorkflows when not workflow.finished_at?).length is 0
     @setState { projectIsComplete }
 
   selectRandomWorkflow: (project) ->
-    linkedWorkflows = project.links.workflows
-
-    if linkedWorkflows.length is 0
+    if @state.activeWorkflows.length is 0
       throw new Error "No workflows for project #{project.id}"
       project.uncacheLink 'workflows'
     else
       randomIndex = Math.floor Math.random() * @state.activeWorkflows.length
-      # console.log 'Chose random workflow', linkedWorkflows[randomIndex]
-      linkedWorkflows[randomIndex]
+      # console.log 'Chose random workflow', @state.activeWorkflows[randomIndex].id
+      @state.activeWorkflows[randomIndex].id
 
-  getWorkflow: (project, workflowID) ->
-    project.get('workflows', id: workflowID)
-      .then ([workflow]) =>
-        if !workflow?
-          throw new Error "No workflow #{workflowID} for project #{project.id}"
-          @setState { selectedWorkflow: null, loadingSelectedWorkflow: false }
-        else if workflow.active
-          @setState { selectedWorkflow: workflow, loadingSelectedWorkflow: false }
-        else
-          @setState { selectedWorkflow: null, loadingSelectedWorkflow: false }
+  getWorkflow: (project, selectedWorkflowID) ->
+    selectedWorkflowIndex = @state.activeWorkflows.findIndex (workflow, index) ->
+      workflow.id is selectedWorkflowID
+
+    if selectedWorkflowIndex is -1
+      throw new Error "No workflow #{selectedWorkflowID} for project #{project.id}"
+      @setState { selectedWorkflow: null, loadingSelectedWorkflow: false }
+    else
+      @setState {
+        selectedWorkflow: @state.activeWorkflows[selectedWorkflowIndex],
+        loadingSelectedWorkflow: false
+      }
 
   _lastSugarSubscribedID: null
 
@@ -263,7 +265,7 @@ ProjectPage = React.createClass
         preferences: @props.preferences
         onChangePreferences: @props.onChangePreferences
         loadingSelectedWorkflow: @state.loadingSelectedWorkflow
-        selectedWorkflow: @state.selectedWorkflow
+        workflow: @state.selectedWorkflow
         activeWorkflows: @state.activeWorkflows
         projectIsComplete: @state.projectIsComplete}
 
@@ -278,6 +280,10 @@ ProjectPageController = React.createClass
   displayName: 'ProjectPageController'
 
   mixins: [TitleMixin]
+
+  propTypes:
+    params: React.PropTypes.object
+    user: React.PropTypes.object
 
   title: ->
     @state.project?.display_name ? '(Loading)'
