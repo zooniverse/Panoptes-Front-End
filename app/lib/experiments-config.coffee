@@ -26,22 +26,22 @@ COMET_HUNTERS_VOLCROWE_EXPERIMENT_INTERVENTIONS = {
   "#{ config.COMET_HUNTERS_VOLCROWE_EXPERIMENT }": {
     "valued-statement-1": {
       title: "Interesting Fact",
-      body: "On average, we receive a total of A classifications on this project every day."
+      body: "On average, we receive a total of 1900 classifications on this project every day."
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
-    } # TODO Calculate A
+    }
     "valued-statement-2": {
       title: "Interesting Fact",
-      body: "To date, you have classified a total of B images. The average contributor to this project has classified a total of C images."
+      body: "The average contributor to this project has classified a total of 37 images."
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
-    } # TODO Calculate C, and B if possible (Omit first sentence if not)
+    }
     "valued-statement-3": {
       title: "Interesting Fact",
-      body: "Your total number of classifications for this project represents D% of the total number received to date."
+      body: "Your input is extremely valuable to the project. Thanks very much, please keep going!"
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
-    } #TODO Calculate D, or use alternative "Your input is extremely valuable to the project. Thanks very much, please keep going!"
+    }
     "valued-statement-4": {
       title: "Interesting Fact",
-      body: "On average, this project receives classifications from E individual contributors every week."
+      body: "On average, this project receives classifications from 365 individual contributors every week."
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
     }
     "valued-statement-5": {
