@@ -53,10 +53,27 @@ Intervention = React.createClass
     if @context.experimentsClient.currentExperimentState isnt @context.experimentsClient.EXPERIMENT_STATE_INTERVENTION_ON_SCREEN
       @context.experimentsClient.logExperimentState @context.geordi, @context.interventionMonitor?.latestFromSugar, "interventionStart"
 
+  getBodyMarkup: (html) ->
+    { __html: html }
+
+  logLinkClick: (event) ->
+    logData = {
+      sessID: @props.sessionID
+      ivnID: @props.interventionID
+      linkAddress: event.target.getAttribute("href")
+    }
+    @context.experimentsClient.logExperimentData @context.geordi, 'interventionLinkClicked', logData
+
+  componentDidMount: ->
+    interventionBody = document.getElementsByClassName("intervention-body")[0]
+    linksInInterventions = interventionBody.getElementsByTagName("a")
+    for link in linksInInterventions
+      link.addEventListener("click", @logLinkClick)
+
   render: ->
     <div className="intervention">
       <h3 className="intervention-title">{@props.interventionDetails.title}:</h3>
-      <p className="intervention-body">{@props.interventionDetails.body}</p>
+      <p dangerouslySetInnerHTML={@getBodyMarkup(@props.interventionDetails.body)} className="intervention-body"/>
       {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
         <textarea placeholder="Enter your answer here" className="intervention-question"/>}
       <hr/>
