@@ -17,13 +17,7 @@ Intervention = React.createClass
     interventionID: React.PropTypes.string.isRequired
     interventionDetails: React.PropTypes.object.isRequired
 
-  cancelQuestion: (event) ->
-    console.log 'cancel question'
-
-  answerQuestion: (event) ->
-    console.log 'answer question'
-
-  endStatement: (event) ->
+  endIntervention: ->
     @context.experimentsClient.postDataToExperimentServer @context.interventionMonitor,
                                                  @context.geordi,
                                                  @props.experimentName,
@@ -31,6 +25,28 @@ Intervention = React.createClass
                                                  @props.sessionID,
                                                  "intervention",
                                                  @props.interventionID
+
+  skipIntervention: (event) ->
+    logData = {
+      sessID: @props.sessionID
+      ivnID: @props.interventionID
+      cancelled: true
+    }
+    @context.experimentsClient.logExperimentData @context.geordi, 'skipIntervention', logData
+    @endIntervention()
+
+  answerQuestion: (event) ->
+    logData = {
+      sessID: @props.sessionID
+      ivnID: @props.interventionID
+      answer: document.getElementsByClassName("intervention-question")[0].value
+    }
+    @context.experimentsClient.logExperimentData @context.geordi, 'interventionResponse', logData
+    @endIntervention()
+    event.target.disabled = true
+
+  endStatement: (event) ->
+    @endIntervention()
     event.target.disabled = true
 
   componentWillMount: ->
@@ -51,7 +67,7 @@ Intervention = React.createClass
           </button>}
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
           <span>
-            <button type="button" onClick={@skipQuestion} className="intervention-cancel back minor-button">
+            <button type="button" onClick={@skipIntervention} className="intervention-cancel back minor-button">
               <span>Skip this question</span>
             </button>
             <button type="button" onClick={@answerQuestion} className="intervention-submit continue major-button">

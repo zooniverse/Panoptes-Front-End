@@ -184,6 +184,14 @@ class ExperimentsClient # Client for the ExperimentServer
       relatedID: "experimentState"
       data: @safeJSON simpleData
 
+  # log some experimental data to geordi, with the specified event type
+  logExperimentData: (geordi, eventType, eventData) ->
+    geordi.logEvent {
+      type: eventType
+      relatedID: "experimentData",
+      data: JSON.stringify(eventData)
+    }
+         
   # check if this project has an experiment enabled. Return experiment_name if so.
   #
   # (If it does, it should be notifying experiment server of its classifications, 
