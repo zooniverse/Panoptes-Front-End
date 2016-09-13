@@ -261,12 +261,10 @@ module.exports = React.createClass
           console?.log 'Demo mode: Did NOT save classification'
         else
           console?.log 'Saved classification', classification.id
-          Promise.all([
-            classification.get 'workflow'
-            classification.get 'subjects'
-          ]).then ([workflow, subjects]) ->
-            seenThisSession.add workflow, subjects
-            classification.destroy()
+          classification.get('subjects')
+            .then (subjects) =>
+              seenThisSession.add @props.workflow, subjects
+              classification.destroy()
         @saveAllQueuedClassifications()
       .catch (error) =>
         console?.warn 'Failed to save classification:', error
