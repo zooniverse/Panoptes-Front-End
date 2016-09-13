@@ -51,14 +51,14 @@ COMET_HUNTERS_VOLCROWE_EXPERIMENT_INTERVENTIONS = {
     }
     "gamisation-statement-1": {
       title: "Interesting Fact",
-      body: "Some users as they classify on this project have fun by sharing images of comets that look like other things on Talk."
+      body: "Some users as they classify on this project have fun by sharing images of comets that look like other things on Talk such as <a href='https://www.zooniverse.org/projects/mschwamb/comet-hunters/talk/211/37406'>hearts</a> or <a href='https://www.zooniverse.org/projects/mschwamb/comet-hunters/talk/211/48914'>flowers</a>."
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
-    } # TODO Add links.
+    }
     "gamisation-statement-2": {
       title: "A Quick Thought",
       body: "Remember, the data you contribute to this project is used to advance scientific knowledge.  Please take your time and make sure you contribute your best possible guess."
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
-    } # TODO Add links.
+    }
     "gamisation-statement-3": {
       title: "A Quick Thought",
       body: "We hope you enjoy looking at these images; scientific research should be fun."
@@ -66,9 +66,9 @@ COMET_HUNTERS_VOLCROWE_EXPERIMENT_INTERVENTIONS = {
     }
     "gamisation-statement-4": {
       title: "A Quick Thought",
-      body: "If you’re starting to feel bored with this project and would like a break, why not contribute some classifications to [another Zooniverse project]?"
+      body: "If you’re starting to feel bored with this project and would like a break, why not contribute some classifications to <a href='/projects/'>another Zooniverse project</a>?"
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
-    } # TODO Add specific links to other projects, with text, at random, with tracking
+    }
     "gamisation-statement-5": {
       title: "A Quick Thought",
       body: "Why not take a break if you feel you need one?"
@@ -86,7 +86,7 @@ COMET_HUNTERS_VOLCROWE_EXPERIMENT_INTERVENTIONS = {
     }
     "learning-statement-3": {
       title: "Interesting Fact",
-      body: "Buried water ice that has been freshly exposed is thought to be responsible for the cometary-like acitivity on main-belt comets. It is thought that ancient cousins (in other words, icy asteroids) of today's main-belt comets helped deliver water to the young Earth."
+      body: "Buried water ice that has been freshly exposed is thought to be responsible for the cometary-like activity on main-belt comets. It is thought that ancient cousins (in other words, icy asteroids) of today's main-belt comets helped deliver water to the young Earth."
       type: intervention_config.INTERVENTION_TYPES.STATEMENT
     }
     "learning-statement-4": {
