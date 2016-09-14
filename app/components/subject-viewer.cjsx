@@ -45,6 +45,7 @@ module.exports = React.createClass
     allowSeparateFrames: false
     metadataPrefixes: ['#', '!']
     metadataFilters: ['#', '!']
+    workflow: null
 
   getInitialState: ->
     loading: true
