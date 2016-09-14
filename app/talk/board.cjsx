@@ -90,11 +90,11 @@ module.exports = React.createClass
       if @state.board.section is 'zooniverse'
         @boardRequest().delete()
           .then =>
-            @context.router.push(null, "/talk")
+            @context.router.push '/talk'
       else
         @boardRequest().delete()
           .then =>
-            @context.router.push(null, "/projects/#{owner}/#{name}/talk")
+            @context.router.push "/projects/#{owner}/#{name}/talk"
 
   onEditBoard: (e) ->
     e.preventDefault()

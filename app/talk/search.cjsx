@@ -74,7 +74,9 @@ module.exports = React.createClass
   goToPage: (n) ->
     nextQuery = Object.assign {}, @props.location.query, {page: n}
 
-    @context.router.push(null, location.pathname, nextQuery)
+    @context.router.push
+      pathname: location.pathname
+      query: nextQuery
 
   render: ->
     numberOfResults = @state.results.length

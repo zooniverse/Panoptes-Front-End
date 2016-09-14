@@ -60,7 +60,7 @@ module.exports = React.createClass
 
                     talkClient.type('comments').create(comment).save()
                       .then (comment) =>
-                        @context.router.push(null, "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}?comment=#{comment.id}")
+                        @context.router.push "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}?comment=#{comment.id}"
                   else
                     focus_id = +@props.subject?.id
                     focus_type = 'Subject' if !!focus_id
@@ -78,7 +78,7 @@ module.exports = React.createClass
                       }
                     talkClient.type('discussions').create(discussion).save()
                       .then (discussion) =>
-                        @context.router.push(null, "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}")
+                        @context.router.push "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
             else
               throw new Error("A board for subject comments has not been setup for this project yet.")

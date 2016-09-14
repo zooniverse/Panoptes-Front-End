@@ -11,7 +11,7 @@ module.exports = React.createClass
 
   crumbCatch: (e) ->
     if e.message.indexOf('not allowed to show') isnt -1
-      @context.router.replace(null, "/talk/not-found")
+      @context.router.replace '/talk/not-found'
 
   boardLink: (board) ->
     <Link to="#{@rootTalkPath()}/#{board.id}">

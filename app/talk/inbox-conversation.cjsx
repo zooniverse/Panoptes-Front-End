@@ -75,7 +75,7 @@ module.exports = React.createClass
     e.preventDefault()
     if confirm 'Are you sure you want to archive this conversation?'
       @state.conversation.delete().then =>
-        @context.router.push(null, '/inbox')
+        @context.router.push '/inbox'
 
   render: ->
     if @props.user

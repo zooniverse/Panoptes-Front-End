@@ -42,7 +42,7 @@ module.exports = React.createClass
     @goToPage(page)
 
   goToPage: (n) ->
-    @context.router.push(null, "/inbox?page=#{n}")
+    @context.router.push "/inbox?page=#{n}"
     @setConversations(n)
 
   message: (data, i) ->

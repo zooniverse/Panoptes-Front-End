@@ -49,7 +49,7 @@ module.exports = React.createClass
 
     talkClient.type('conversations').create(conversation).save()
       .then (conversation) =>
-        @context.router.push(null, "/inbox/#{conversation.id}")
+        @context.router.push "/inbox/#{conversation.id}"
 
   render: ->
     <div className="inbox-form talk-module">

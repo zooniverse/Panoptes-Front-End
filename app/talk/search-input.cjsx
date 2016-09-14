@@ -25,11 +25,15 @@ module.exports = React.createClass
 
     if owner and name
       if inputValue.match(/\#[-\w\d]{3,40}/) # searches for #hashtags
-        @context.router.push(null, "/projects/#{owner}/#{name}/talk/tags/#{inputValue.slice(1, inputValue.length)}")
+        @context.router.push "/projects/#{owner}/#{name}/talk/tags/#{inputValue.slice(1, inputValue.length)}"
       else
-        @context.router.push(null, "/projects/#{owner}/#{name}/talk/search", {query: inputValue})
+        @context.router.push
+          pathname: "/projects/#{owner}/#{name}/talk/search"
+          query: {query: inputValue}
     else
-      @context.router.push(null, "/talk/search", {query: inputValue})
+      @context.router.push
+        pathname: "/talk/search"
+        query: {query: inputValue}
 
   componentWillReceiveProps: (nextProps) ->
     return unless @refs.talkSearchInput
