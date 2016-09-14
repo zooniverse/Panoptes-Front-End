@@ -92,8 +92,6 @@ Each component also needs a few static methods:
 
 - `isAnnotationComplete`: Given a task and an annotation, this determines whether or not the classifier will allow the user to move on to the next task.
 
-- `testAnnotationQuality`: Given the user's annotation and a known-good "gold standard" annotation for the same task, this returns a number between 0 (totally wrong) and 1 (totally correct) indicating how close the user's annotation is to the standard.
-
 #### Task editors
 
 Make sure you call `this.props.onChange` with the updated task when it changes.
