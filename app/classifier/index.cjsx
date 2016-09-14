@@ -293,26 +293,29 @@ Classifier = React.createClass
           </p>}
     </TriggeredModalForm>
 
+  # Temp fix for typos in subject metadata
+  checkGravitySpyGoldStandardLabel: (label) ->
+    if @props.subject.metadata['#Label'] is 'Low Frequency Lines'
+      'Low Frequency Line'
+    else if @props.subject.metadata['#Label'] is 'Air Compressor'
+      'Air Compressor (50 Hz)'
+    else
+      @props.subject.metadata['#Label']
+
   renderGravitySpyGoldStandard: (classification) ->
     choiceLabels = []
+    metadataLabel = @checkGravitySpyGoldStandardLabel(@props.subject.metadata['#Label'])
+
     for annotation in classification.annotations when @props.workflow.tasks[annotation.task].type is 'survey'
       for value in annotation.value
         choiceLabels.push @props.workflow.tasks[annotation.task].choices[value.choice].label
-    match = choiceLabels.every (label) => label is @props.subject.metadata['#Label']
-
-    # Temp fix for typos in subject metadata
-    label = @props.subject.metadata['#Label']
-    if @props.subject.links.subject_sets.indexOf('5984') > -1 # Issue in Subject Set 5984
-      if @props.subject.metadata['#Label'] is 'Low Frequency Lines'
-        label = 'Low Frequency Line'
-      else if @props.subject.metadata['#Label'] is 'Air Compressor'
-        label = 'Air Compressor (50 Hz)'
+    match = choiceLabels.every (label) => label is metadataLabel
 
     <div>
     {if match
       <div>
         <p>Good work!</p>
-        <p>When our experts classified this image,<br />they also thought it was a {label}!</p>
+        <p>When our experts classified this image,<br />they also thought it was a {metadataLabel}!</p>
         {if choiceLabels.length > 1
           <p>You should only assign 1 label.</p>}
       </div>
@@ -321,7 +324,7 @@ Classifier = React.createClass
         <p>You responded {choiceLabels.join(', ')}.</p>
         {if choiceLabels.length > 1
           <p>You should only assign 1 label.</p>}
-        <p>When our experts classified this image,<br />they labeled it as a {label}.</p>
+        <p>When our experts classified this image,<br />they labeled it as a {metadataLabel}.</p>
         <p>Some of the glitch classes can look quite similar,<br />so please keep trying your best.</p>
         <p>Check out the tutorial and the field guide for more guidance.</p>
       </div>}
