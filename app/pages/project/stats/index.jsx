@@ -1,54 +1,41 @@
 import React from 'react';
 import qs from 'qs';
-import { ProjectStatsPage } from './stats.js';
+import { ProjectStatsPage } from './stats.jsx';
+import getWorkflowsInOrder from '../../../lib/get-workflows-in-order.coffee';
 
 class ProjectStatsPageController extends React.Component {
   constructor(props) {
     super(props);
 
-    this.getWorkflow = this.getWorkflow.bind(this);
     this.handleGraphChange = this.handleGraphChange.bind(this);
     this.handleWorkflowChange = this.handleWorkflowChange.bind(this);
     this.handleRangeChange = this.handleRangeChange.bind(this);
 
-    const workflowList = [];
-    for (let i = 1; i <= this.props.project.links.workflows.length; i++) {
-      workflowList.push(null);
-    }
     this.state = {
-      workflowList,
-      failedWorkflowIdx: [],
+      workflowList: [],
     };
   }
 
   componentDidMount() {
-    let idx = 0;
-    for (const workflowID of this.props.project.links.workflows) {
-      this.getWorkflow(workflowID, idx);
-      idx++;
-    }
+    const fields = [
+      'classifications_count',
+      'completeness',
+      'display_name',
+      'retired_set_member_subjects_count',
+      'retirement,subjects_count',
+    ];
+    const query = {
+      active: true,
+      fields: fields.join(','),
+    };
+    getWorkflowsInOrder(this.props.project, query)
+      .then((workflows) => {
+        this.setState({ workflowList: workflows });
+      });
   }
 
   getQuery(which) {
     return qs.parse(location.search.slice(1))[which];
-  }
-
-  getWorkflow(workflowID, idx) {
-    this.props.project.get('workflows', { id: workflowID })
-      .then(([workflow]) => {
-        if (workflow) {
-          const currentList = [...this.state.workflowList];
-          currentList[idx] = workflow;
-          this.setState({ workflowList: currentList });
-        } else {
-          throw new Error(`No workflow ${workflowID} for project ${this.props.project.id}`);
-        }
-      })
-      .catch(() => {
-        const currentFail = [...this.state.failedWorkflowIdx];
-        currentFail.push(idx);
-        this.setState({ failedWorkflowIdx: currentFail });
-      });
   }
 
   handleGraphChange(which, e) {
@@ -56,7 +43,7 @@ class ProjectStatsPageController extends React.Component {
     query[which] = e.target.value;
     query[`${which}Range`] = undefined;
     const { owner, name } = this.props.params;
-    this.context.history.replaceState(null, `/projects/${owner}/${name}/stats/`, query);
+    this.context.router.replace({ pathname: `/projects/${owner}/${name}/stats/`, query });
   }
 
   handleWorkflowChange(which, e) {
@@ -69,14 +56,14 @@ class ProjectStatsPageController extends React.Component {
     }
     query[`${which}Range`] = undefined;
     const { owner, name } = this.props.params;
-    this.context.history.replaceState(null, `/projects/${owner}/${name}/stats/`, query);
+    this.context.router.replace({ pathname: `/projects/${owner}/${name}/stats/`, query });
   }
 
   handleRangeChange(which, range) {
     const query = qs.parse(location.search.slice(1));
     query[`${which}Range`] = range;
     const { owner, name } = this.props.params;
-    this.context.history.replaceState(null, `/projects/${owner}/${name}/stats/`, query);
+    this.context.router.replace({ pathname: `/projects/${owner}/${name}/stats/`, query });
   }
 
   render() {
@@ -93,7 +80,6 @@ class ProjectStatsPageController extends React.Component {
       totalVolunteers: this.props.project.classifiers_count,
       currentClassifications: this.props.project.activity,
       workflows: this.state.workflowList,
-      failedWorkflows: this.state.failedWorkflowIdx,
       startDate: this.props.project.launch_date,
     };
 
@@ -101,7 +87,7 @@ class ProjectStatsPageController extends React.Component {
   }
 }
 
-ProjectStatsPageController.contextTypes = { history: React.PropTypes.object };
+ProjectStatsPageController.contextTypes = { router: React.PropTypes.object };
 
 ProjectStatsPageController.propTypes = {
   project: React.PropTypes.object,

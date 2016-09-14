@@ -77,7 +77,10 @@ export class Graph extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (this.state !== nextState) || (this.props.by !== nextProps.by) || (this.props.data !== nextProps.data);
+    const newState = (this.state !== nextState);
+    const newBy = (this.props.by !== nextProps.by);
+    const newData = (this.props.data !== nextProps.data);
+    return newState || newBy || newData;
   }
 
   onDraw(data) {
@@ -154,7 +157,8 @@ export class Graph extends React.Component {
     for (const { label, value } of inputData) {
       if (idx > 0) {
         // fill in bins wint zero as a value
-        const difference = Math.floor(moment.duration(moment(label).diff(moment(previousLabel)))[this.formatDiff[binBy]]());
+        const dateDiff = moment(label).diff(moment(previousLabel));
+        const difference = Math.floor(moment.duration(dateDiff)[this.formatDiff[binBy]]());
         if (difference > 1) {
           for (let jdx = 1; jdx < difference; jdx += 1) {
             const shouldBe = moment(previousLabel).add(jdx, `${binBy}s`).format();
@@ -188,7 +192,11 @@ export class Graph extends React.Component {
     if (this.state.data.labels.length > this.props.num) {
       smallChart = (
         <div>
-          <ChartistGraph listener={{ draw: this.onDrawSmall }} type="Bar" data={this.state.data} options={this.props.optionsSmall} />
+          <ChartistGraph
+            listener={{ draw: this.onDrawSmall }}
+            type="Bar" data={this.state.data}
+            options={this.props.optionsSmall}
+          />
           <div className="top-slider">
             <Rcslider
               ref="top-slider"
@@ -221,7 +229,12 @@ export class Graph extends React.Component {
     return (
       <div className="svg-container">
         {smallChart}
-        <ChartistGraph className="ct-major-tenth" listener={{ draw: this.onDraw }} type="Bar" data={dataSlice} options={this.props.options} />
+        <ChartistGraph
+          className="ct-major-tenth"
+          listener={{ draw: this.onDraw }}
+          type="Bar" data={dataSlice}
+          options={this.props.options}
+        />
       </div>
     );
   }

@@ -1,13 +1,14 @@
 import React from 'react';
 import statsClient from 'panoptes-client/lib/stats-client';
 import moment from 'moment';
-import { Progress, Graph } from './charts.js';
+import { Progress, Graph } from './charts.jsx';
 
 export class GraphSelect extends React.Component {
   constructor(props) {
     super(props);
 
     this.getStats = this.getStats.bind(this);
+    this.getRange = this.getRange.bind(this);
     this.workflowSelect = this.workflowSelect.bind(this);
     this.handleWorkflowSelect = this.handleWorkflowSelect.bind(this);
     this.handleGraphChange = this.handleGraphChange.bind(this);
@@ -24,19 +25,6 @@ export class GraphSelect extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if ((!this.state.workflowsLoaded) && (nextProps.workflows)) {
-      let areNulls = false;
-      let idx = 0;
-      for (const w of nextProps.workflows) {
-        if ((w === null) && (this.props.failedWorkflows.indexOf(idx) < 0)) {
-          areNulls = true;
-        }
-        idx++;
-      }
-      if (!areNulls) {
-        this.setState({ workflowsLoaded: true });
-      }
-    }
     // update the stats when dropdown options change
     if ((this.props.workflowId !== nextProps.workflowId) || (this.props.by !== nextProps.by)) {
       this.getStats(nextProps.workflowId, nextProps.by);
@@ -44,7 +32,11 @@ export class GraphSelect extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (this.props.by !== nextProps.by) || (this.props.workflowId !== nextProps.workflowId) || (this.state !== nextState);
+    const newBy = (this.props.by !== nextProps.by);
+    const newWorkflowId = (this.props.workflowId !== nextProps.workflowId);
+    const newWorkflows = (this.props.workflows !== nextProps.workflows);
+    const newState = (this.state !== nextState);
+    return newBy || newWorkflowId || newWorkflows || newState;
   }
 
   getStats(workflowId, binBy) {
@@ -71,19 +63,44 @@ export class GraphSelect extends React.Component {
       });
   }
 
+  getRange() {
+    let range = [];
+    if (this.props.range) {
+      for (const r of this.props.range.split(',')) {
+        if (r) {
+          range.push(parseInt(r, 10));
+        } else {
+          range.push(undefined);
+        }
+      }
+    } else {
+      range = [undefined, undefined];
+    }
+    return range;
+  }
+
   workflowSelect() {
-    let workflowSelect = undefined;
+    let workflowSelect;
     if (this.props.workflows) {
-      const options = [<option value={`project_id=${this.props.projectId}`} key={"workflowSelectAll"}>All</option>];
+      const options = [
+        <option value={`project_id=${this.props.projectId}`} key={"workflowSelectAll"}>All</option>,
+      ];
       let key = 0;
       for (const workflow of this.props.workflows) {
-        if (workflow != null ? workflow.active : void 0) {
-          options.push(<option value={`workflow_id=${workflow.id}`} key={`workflowSelect${key}`}>{workflow.display_name}</option>);
-        }
+        options.push(
+          <option value={`workflow_id=${workflow.id}`} key={`workflowSelect${key}`}>
+            {workflow.display_name}
+          </option>
+        );
         key++;
       }
       if (options.length > 1) {
-        const value = this.props.workflowId ? `workflow_id=${this.props.workflowId}` : `project_id=${this.props.projectId}`;
+        let value;
+        if (this.props.workflowId) {
+          value = `workflow_id=${this.props.workflowId}`;
+        } else {
+          value = `project_id=${this.props.projectId}`;
+        }
         workflowSelect = (
           <span>
             {' '}for{' '}
@@ -110,37 +127,36 @@ export class GraphSelect extends React.Component {
   }
 
   render() {
-    let range = [];
-    if (this.props.range) {
-      for (const r of this.props.range.split(',')) {
-        if (r) {
-          range.push(parseInt(r, 10));
-        } else {
-          range.push(undefined);
-        }
-      }
-    } else {
-      range = [undefined, undefined];
-    }
-    const workflowSelect = this.workflowSelect();
-    let graph = undefined;
-    if (this.state.statData) {
-      graph = <Graph data={this.state.statData} by={this.props.by} range={range} num={24} handleRangeChange={this.handleRangeChange} />;
-    }
-    return (
+    let output = (
       <div>
-        {this.props.type[0].toUpperCase() + this.props.type.substring(1)}s per{' '}
-        <select value={this.props.by} onChange={this.handleGraphChange}>
-          <option value="hour">hour</option>
-          <option value="day">day</option>
-          <option value="week">week</option>
-          <option value="month">month</option>
-        </select>
-        {workflowSelect}
-        <br />
-        {graph}
+        There is no stats data available at this time.
       </div>
     );
+    if (this.state.statData) {
+      const range = this.getRange();
+      const workflowSelect = this.workflowSelect();
+      output = (
+        <div>
+          {this.props.type[0].toUpperCase() + this.props.type.substring(1)}s per{' '}
+          <select value={this.props.by} onChange={this.handleGraphChange}>
+            <option value="hour">hour</option>
+            <option value="day">day</option>
+            <option value="week">week</option>
+            <option value="month">month</option>
+          </select>
+          {workflowSelect}
+          <br />
+          <Graph
+            data={this.state.statData}
+            by={this.props.by}
+            range={range}
+            num={24}
+            handleRangeChange={this.handleRangeChange}
+          />
+        </div>
+      );
+    }
+    return output;
   }
 }
 
@@ -162,6 +178,7 @@ GraphSelect.propTypes = {
 };
 
 export const Eta = (props) => {
+  let output = <div />;
   if (props.data.length > 1) {
     let value;
     let days;
@@ -175,13 +192,13 @@ export const Eta = (props) => {
     }
     const rate = value.reduce((a, b) => (a + b));
     const eta = Math.max(0, Math.ceil(days * (props.totalCount - props.currentCount) / rate));
-    return (
+    output = (
       <div>
         <span className="progress-stats-label">ETC*</span> {`${eta} days`}
       </div>
     );
   }
-  return <div />;
+  return output;
 };
 
 Eta.propTypes = {
@@ -227,10 +244,22 @@ export class WorkflowProgress extends React.Component {
     let retirement;
     let eta;
     if (this.props.workflow.retirement.criteria === 'classification_count') {
-      retirement = <div><span className="progress-stats-label">Retirement limit:</span> {this.props.workflow.retirement.options.count.toLocaleString()}</div>;
+      retirement = (
+        <div>
+          <span className="progress-stats-label">Retirement limit:</span>
+          {' '}{this.props.workflow.retirement.options.count.toLocaleString()}
+        </div>
+      );
     }
+    const total = this.props.workflow.subjects_count * this.props.workflow.retirement.options.count;
     if (this.state.statData) {
-      eta = <Eta data={this.state.statData} currentCount={this.props.workflow.classifications_count} totalCount={this.props.workflow.subjects_count * this.props.workflow.retirement.options.count} />;
+      eta = (
+        <Eta
+          data={this.state.statData}
+          currentCount={this.props.workflow.classifications_count}
+          totalCount={total}
+        />
+    );
     }
     return (
       <div className="progress-element">
@@ -240,10 +269,14 @@ export class WorkflowProgress extends React.Component {
             {retirement}
           </div>
           <div>
-            <span className="progress-stats-label">Images retired:</span> {this.props.workflow.retired_set_member_subjects_count.toLocaleString()} / {this.props.workflow.subjects_count.toLocaleString()}
+            <span className="progress-stats-label">Images retired:</span>
+            {' '}{this.props.workflow.retired_set_member_subjects_count.toLocaleString()}
+            {' / '}{this.props.workflow.subjects_count.toLocaleString()}
           </div>
           <div>
-            <span className="progress-stats-label">Classifications:</span> {this.props.workflow.classifications_count.toLocaleString()} / {(this.props.workflow.subjects_count * this.props.workflow.retirement.options.count).toLocaleString()}
+            <span className="progress-stats-label">Classifications:</span>
+            {' '}{this.props.workflow.classifications_count.toLocaleString()}
+            {' / '}{total.toLocaleString()}
           </div>
           {eta}
           <Progress progress={this.props.workflow.completeness} />
@@ -267,9 +300,7 @@ export class ProjectStatsPage extends React.Component {
     const progress = [];
     let key = 0;
     for (const workflow of this.props.workflows) {
-      if (workflow != null ? workflow.active : void 0) {
-        progress.push(<WorkflowProgress key={key} workflow={workflow} />);
-      }
+      progress.push(<WorkflowProgress key={key} workflow={workflow} />);
       key++;
     }
     return progress;
@@ -278,9 +309,9 @@ export class ProjectStatsPage extends React.Component {
   render() {
     const progress = this.workflowInfo();
     // Dates for gap in classification stats
-    const classificationGap = ['2016-01-13T00:00:00.000Z', '2016-02-07T00:00:00.000Z'];
+    const classificationGap = ['2015-06-30T00:00:00.000Z', '2016-06-09T00:00:00.000Z'];
     // Dates for gap in talk stats
-    const talkGap = ['2016-02-18T00:00:00.000Z', '2016-04-07T00:00:00.000Z'];
+    const talkGap = ['2015-06-30T00:00:00.000Z', '2016-06-09T00:00:00.000Z'];
     let start;
     if (this.props.startDate) {
       start = (
@@ -297,8 +328,10 @@ export class ProjectStatsPage extends React.Component {
       classificationFootnote = (
         <span className="project-stats-footer">
          {classificationFootnoteMarker}
-          The gap in the classification data from {moment(classificationGap[0]).format('MMM-DD-YYYY')} to {moment(classificationGap[1]).format('MMM-DD-YYYY')} was caused a bug in our event notification system.
-          &nbsp;<b>No</b> classifications were lost in this time.
+         Due to an issue with our stats server all data before
+         {' '}{moment(classificationGap[1]).format('MMM-DD-YYYY')} is
+         {' '}currently unavailable.  We are currently working to resolve this issue.
+         {' '}<b>No</b> classifications were lost in this time.
         </span>
       );
     }
@@ -309,8 +342,10 @@ export class ProjectStatsPage extends React.Component {
       talkFootnote = (
         <span className="project-stats-footer">
           {talkFootnoteMarker}
-          The gap in the talk data from {moment(talkGap[0]).format('MMM-DD-YYYY')} to {moment(talkGap[1]).format('MMM-DD-YYYY')} was caused a bug in our event notification system.
-          &nbsp;<b>No</b> talk comments were lost in this time.
+          Due to an issue with our stats server all data before
+          {' '}{moment(talkGap[1]).format('MMM-DD-YYYY')} is
+          {' '}currently unavailable.  We are currently working to resolve this issue.
+          {' '}<b>No</b> talk comments were lost in this time.
         </span>
       );
     }
@@ -332,11 +367,17 @@ export class ProjectStatsPage extends React.Component {
           <div className="project-stats-progress">
             <span className="project-stats-heading">Live Workflows</span>
             {progress}
-            <span className="project-stats-footer">*Estimated time to completion is based on the classification rate for the past 14 days and may be incorrect due to the way we currently report the data.</span>
+            <span className="project-stats-footer">
+              *Estimated time to completion is based on the classification rate
+              {' '}for the past 14 days and may be incorrect due to the way
+              {' '}we currently report the data.
+            </span>
           </div>
           <hr />
         </div>
-        <span className="project-stats-heading">Classification Stats{classificationFootnoteMarker}</span>
+        <span className="project-stats-heading">
+          Classification Stats{classificationFootnoteMarker}
+        </span>
         <div>
           <GraphSelect
             handleGraphChange={this.props.handleGraphChange}
