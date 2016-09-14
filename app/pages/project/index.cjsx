@@ -132,7 +132,9 @@ ProjectPage = React.createClass
   getSelectedWorkflow: (project, preferences) ->
     # preference user selected workflow, then project owner set workflow, then default workflow
     # if none of those are set, select random workflow
-    if preferences?.preferences.selected_workflow?
+    if @props.location.query?.workflow? and 'allow workflow query' in @props.project.experimental_tools
+      preferredWorkflowID = @props.location.query.workflow
+    else if preferences?.preferences.selected_workflow?
       preferredWorkflowID = preferences?.preferences.selected_workflow
     else if preferences?.settings?.workflow_id?
       preferredWorkflowID = preferences?.settings.workflow_id
