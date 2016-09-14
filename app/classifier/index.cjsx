@@ -74,7 +74,8 @@ Classifier = React.createClass
       @loadSubject subject
     if nextProps.classification isnt @props.classification
       @prepareToClassify nextProps.classification
-    @context.geordi?.remember subjectID: nextProps.subject?.id
+    if @props.subject isnt nextProps.subject or !@context.geordi?.keys["subjectID"]?
+      @context.geordi?.remember subjectID: nextProps.subject?.id
 
   componentWillMount: () ->
     interventionMonitor.setProjectSlug @props.project.slug
