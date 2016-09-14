@@ -1,6 +1,6 @@
 React = require 'react'
-InterventionMonitor = require './intervention-monitor'
-ExperimentsClient = require './experiments-client'
+interventionMonitor = require './intervention-monitor'
+experimentsClient = require './experiments-client'
 config = require './intervention-config'
 {getSessionID} = require '../lib/session'
 
@@ -8,8 +8,6 @@ Intervention = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
-    interventionMonitor: React.PropTypes.object
-    experimentsClient: React.PropTypes.object
 
   propTypes:
     experimentName: React.PropTypes.string.isRequired
@@ -18,7 +16,7 @@ Intervention = React.createClass
     interventionDetails: React.PropTypes.object.isRequired
 
   endIntervention: ->
-    @context.experimentsClient.postDataToExperimentServer @context.interventionMonitor,
+    experimentsClient.postDataToExperimentServer interventionMonitor,
                                                  @context.geordi,
                                                  @props.experimentName,
                                                  @props.user.id,
@@ -32,7 +30,7 @@ Intervention = React.createClass
       ivnID: @props.interventionID
       cancelled: true
     }
-    @context.experimentsClient.logExperimentData @context.geordi, 'skipIntervention', logData
+    experimentsClient.logExperimentData @context.geordi, 'skipIntervention', logData
     @endIntervention()
 
   answerQuestion: (event) ->
@@ -41,7 +39,7 @@ Intervention = React.createClass
       ivnID: @props.interventionID
       answer: document.getElementsByClassName("intervention-question")[0].value
     }
-    @context.experimentsClient.logExperimentData @context.geordi, 'interventionResponse', logData
+    experimentsClient.logExperimentData @context.geordi, 'interventionResponse', logData
     @endIntervention()
     event.target.disabled = true
 
@@ -50,8 +48,8 @@ Intervention = React.createClass
     event.target.disabled = true
 
   componentWillMount: ->
-    if @context.experimentsClient.currentExperimentState isnt @context.experimentsClient.EXPERIMENT_STATE_INTERVENTION_ON_SCREEN
-      @context.experimentsClient.logExperimentState @context.geordi, @context.interventionMonitor?.latestFromSugar, "interventionStart"
+    if experimentsClient.currentExperimentState isnt experimentsClient.EXPERIMENT_STATE_INTERVENTION_ON_SCREEN
+      experimentsClient.logExperimentState @context.geordi, interventionMonitor?.latestFromSugar, "interventionStart"
 
   getBodyMarkup: (html) ->
     { __html: html }
@@ -62,7 +60,7 @@ Intervention = React.createClass
       ivnID: @props.interventionID
       linkAddress: event.target.getAttribute("href")
     }
-    @context.experimentsClient.logExperimentData @context.geordi, 'interventionLinkClicked', logData
+    experimentsClient.logExperimentData @context.geordi, 'interventionLinkClicked', logData
 
   componentDidMount: ->
     interventionBody = document.getElementsByClassName("intervention-body")[0]

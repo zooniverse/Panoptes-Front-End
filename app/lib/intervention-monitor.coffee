@@ -1,3 +1,5 @@
+# Monitors interventions coming via Sugar, for example from Experiment Server, throughout the app
+
 {sugarClient} = require 'panoptes-client/lib/sugar'
 EventEmitter = require 'events'
 
@@ -40,4 +42,4 @@ class InterventionMonitor extends EventEmitter
         if DEBUG then console.log "Update from Sugar - no intervention required though:\n",@latestFromSugar
         this.emit 'classificationTaskRequested', @latestFromSugar
 
-module.exports = InterventionMonitor
+module.exports = new InterventionMonitor

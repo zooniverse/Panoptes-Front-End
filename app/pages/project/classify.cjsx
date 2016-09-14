@@ -14,7 +14,7 @@ MiniCourse = require '../../lib/mini-course'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 `import CustomSignInPrompt from './custom-sign-in-prompt'`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog'`
-ExperimentsClient = require '../../lib/experiments-client'
+experimentsClient = require '../../lib/experiments-client'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -281,7 +281,7 @@ module.exports = React.createClass
 
   saveClassification: ->
     if @context.geordi.keys["experiment"]?
-      @context.experimentsClient.logExperimentState @context.geordi, @context.interventionMonitor?.latestFromSugar, "classificationStart"
+      experimentsClient.logExperimentState @context.geordi, interventionMonitor?.latestFromSugar, "classificationStart"
     else
       @context.geordi?.logEvent type: 'classify'
 

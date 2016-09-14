@@ -1,3 +1,5 @@
+# For managing experiments and interactions with the Experiment Server, and maintaining the current experiment state
+
 config = require './experiments-config'
 {getSessionID} = require '../lib/session'
 DEBUG = true
@@ -15,13 +17,11 @@ class ExperimentsClient # Client for the ExperimentServer
   #EXPERIMENT_SERVER_DEVELOPMENT_URL: "http://localhost:4567"
   EXPERIMENT_SERVER_URL_TO_USE: null
 
-  # method for merging two coffeescript objects. Courtesy of https://gist.github.com/sheldonh/6089299
-  #_merge: (xs...) ->
-  #  if xs?.length > 0
-  #    @_tap {}, (m) -> m[k] = v for k, v of x for x in xs
-  #_tap: (o, fn) -> fn(o); o
-
   currentExperimentState: @EXPERIMENT_STATE_WHATS_NEXT
+  # TODO As soon as we support more than one PFE experiment at once (even if on different projects) we'll need to
+  # update this class so that it can handle different state for different experiments at the same time.
+  # The better approach will be to move this responsibility to the Experiment Server. See
+  # https://github.com/zooniverse/experiment-server/issues/31
 
   ensureEnvironmentSet: ->
     if not @EXPERIMENT_SERVER_URL_TO_USE?
@@ -74,18 +74,18 @@ class ExperimentsClient # Client for the ExperimentServer
   # that we would do that POST to the experiment server
   # - this isn't currently done here as we don't have an experiment that needs registration)
   #
-  startOrResumeExperiment: (context) ->
-    if context.interventionMonitor?.latestFromSugar and "experiment_name" of context.interventionMonitor?.latestFromSugar
-      experimentName = context.interventionMonitor?.latestFromSugar["experiment_name"]
-      cohort = context.interventionMonitor?.latestFromSugar["cohort"]
-      context.geordi?.remember
+  startOrResumeExperiment: (interventionMonitor, geordi) ->
+    if interventionMonitor?.latestFromSugar and "experiment_name" of interventionMonitor?.latestFromSugar
+      experimentName = interventionMonitor?.latestFromSugar["experiment_name"]
+      cohort = interventionMonitor?.latestFromSugar["cohort"]
+      geordi?.remember
         experiment: experimentName
         cohort: cohort
-      if context.interventionMonitor?.latestFromSugar["seq_of_next_event"] is 1
-        if Object.keys(context.interventionMonitor?.latestFromSugar["session_histories"]).length > 0
-          @logExperimentState context.geordi, context.interventionMonitor?.latestFromSugar, "experimentResume"
+      if interventionMonitor?.latestFromSugar["seq_of_next_event"] is 1
+        if Object.keys(interventionMonitor?.latestFromSugar["session_histories"]).length > 0
+          @logExperimentState geordi, interventionMonitor?.latestFromSugar, "experimentResume"
         else
-          @logExperimentState context.geordi, context.interventionMonitor?.latestFromSugar, "experimentStart"
+          @logExperimentState geordi, interventionMonitor?.latestFromSugar, "experimentStart"
 
   # TODO Design a better way for Geordi to handle long "data" field values (currently it's VARCHAR(512) set by Loopback
   # - so we need to compress the string as much as possible and ensure it is never longer than 512 or that will cause a
@@ -248,4 +248,4 @@ class ExperimentsClient # Client for the ExperimentServer
         else
           console.log "Intervention Requested for Unsupported Experiment '#{experimentName}'"
 
-module.exports = ExperimentsClient
+module.exports = new ExperimentsClient

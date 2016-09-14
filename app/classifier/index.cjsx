@@ -18,15 +18,14 @@ WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
-ExperimentsClient = require '../lib/experiments-client'
+experimentsClient = require '../lib/experiments-client'
+interventionMonitor = require '../lib/intervention-monitor'
 
 Classifier = React.createClass
   displayName: 'Classifier'
 
   contextTypes:
     geordi: React.PropTypes.object
-    interventionMonitor: React.PropTypes.object
-    experimentsClient: React.PropTypes.object
 
   getDefaultProps: ->
     user: null
@@ -44,14 +43,14 @@ Classifier = React.createClass
     @setState renderIntervention: false
 
   enableIntervention: ->
-    @context.experimentsClient.logExperimentState @context.geordi, @context.interventionMonitor?.latestFromSugar, "interventionDetected"
+    experimentsClient.logExperimentState @context.geordi, interventionMonitor?.latestFromSugar, "interventionDetected"
     @setState renderIntervention: true
 
   componentDidMount: ->
-    @context.experimentsClient.startOrResumeExperiment @context
-    @setState renderIntervention: @context.interventionMonitor?.shouldShowIntervention()
-    @context.interventionMonitor.on 'interventionRequested', @enableIntervention
-    @context.interventionMonitor.on 'classificationTaskRequested', @disableIntervention
+    experimentsClient.startOrResumeExperiment interventionMonitor, @context.geordi
+    @setState renderIntervention: interventionMonitor?.shouldShowIntervention()
+    interventionMonitor.on 'interventionRequested', @enableIntervention
+    interventionMonitor.on 'classificationTaskRequested', @disableIntervention
     @loadSubject @props.subject
     @prepareToClassify @props.classification
     {workflow, project, preferences, user} = @props
@@ -79,11 +78,11 @@ Classifier = React.createClass
     @reCheckIfInterventionNeeded()
 
   componentWillMount: () ->
-    @context.interventionMonitor.setProjectSlug @props.project.slug
+    interventionMonitor.setProjectSlug @props.project.slug
 
   componentWillUnmount: () ->
-    @context.interventionMonitor.removeListener 'interventionRequested', @enableIntervention
-    @context.interventionMonitor.removeListener 'classificationTaskRequested', @disableIntervention
+    interventionMonitor.removeListener 'interventionRequested', @enableIntervention
+    interventionMonitor.removeListener 'classificationTaskRequested', @disableIntervention
     try
       @context.geordi?.forget ['subjectID']
 
@@ -189,12 +188,11 @@ Classifier = React.createClass
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
       {if @state.renderIntervention
         <Intervention
-          monitor={@context.interventionMonitor}
           user={@props.user}
-          experimentName={@context.interventionMonitor?.latestFromSugar["experiment_name"]}
+          experimentName={interventionMonitor?.latestFromSugar["experiment_name"]}
           sessionID={getSessionID()}
-          interventionID={@context.interventionMonitor?.latestFromSugar["next_event"]}
-          interventionDetails={@context.experimentsClient.constructInterventionFromSugarData @context.interventionMonitor?.latestFromSugar}
+          interventionID={interventionMonitor?.latestFromSugar["next_event"]}
+          interventionDetails={experimentsClient.constructInterventionFromSugarData interventionMonitor?.latestFromSugar}
           />
       else
         <div className="hidable-task-container">
@@ -418,9 +416,9 @@ Classifier = React.createClass
       @props.onComplete?()
       .then (classification) =>
         # after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
-        experimentName = @context.experimentsClient.checkForExperiment(@props.project.slug)
+        experimentName = experimentsClient.checkForExperiment(@props.project.slug)
         if experimentName? and @props.user
-          @context.experimentsClient.postDataToExperimentServer @context.interventionMonitor,
+          experimentsClient.postDataToExperimentServer interventionMonitor,
                                                        @context.geordi,
                                                        experimentName, @props.user?.id,
                                                        classification.metadata.session,
