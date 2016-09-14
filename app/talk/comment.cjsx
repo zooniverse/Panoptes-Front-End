@@ -18,7 +18,7 @@ SubjectViewer = require '../components/subject-viewer'
 SingleSubmitButton = require '../components/single-submit-button'
 DisplayRoles = require './lib/display-roles'
 CommentContextIcon = require './lib/comment-context-icon'
-{Markdown} = (require 'markdownz').default
+`import WrappedMarkdown from '../components/wrapped-markdown';`
 DEFAULT_AVATAR = '/assets/simple-avatar.jpg'
 
 module.exports = React.createClass
@@ -142,7 +142,7 @@ module.exports = React.createClass
           </span>
           }
       </p>
-      <Markdown project={@props.project} content={comment.body} />
+      <WrappedMarkdown project={@props.project} content={comment.body} />
     </div>
 
   # Render the focus if the comment has a focus AND
@@ -231,7 +231,7 @@ module.exports = React.createClass
                 catch={null}
                 />}
 
-            <Markdown content={@props.data.body} project={@props.project} header={null}/>
+            <WrappedMarkdown content={@props.data.body} project={@props.project} header={null}/>
 
             {if @props.linked
               <div style={textAlign: "right"}>
