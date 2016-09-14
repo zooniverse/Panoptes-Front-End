@@ -3,6 +3,8 @@ interventionMonitor = require './intervention-monitor'
 experimentsClient = require './experiments-client'
 config = require './intervention-config'
 {getSessionID} = require '../lib/session'
+Dialog = require 'modal-form/dialog'
+{Link} = require 'react-router'
 
 Intervention = React.createClass
 
@@ -64,6 +66,9 @@ Intervention = React.createClass
     }
     experimentsClient.logExperimentData @context.geordi, 'interventionLinkClicked', logData
 
+  optOut: ->
+    console.log "opt out"
+
   componentDidMount: ->
     interventionBody = document.getElementsByClassName("intervention-body")[0]
     linksInInterventions = interventionBody.getElementsByTagName("a")
@@ -71,27 +76,39 @@ Intervention = React.createClass
       link.addEventListener("click", @logLinkClick)
 
   render: ->
-    <form className="intervention">
-      <h3 className="intervention-title">{@props.interventionDetails.title}:</h3>
+    <Dialog style={maxWidth: '30%', paddingLeft: '1.2em', paddingRight: '1.2em', top: '20%'} tag="form" className="intervention" closeButton={true} onCancel={@skipIntervention}>
+      <h3 style={paddingTop: '0.7em'} className="intervention-title">{@props.interventionDetails.title}:</h3>
       <p dangerouslySetInnerHTML={@getBodyMarkup(@props.interventionDetails.body)} className="intervention-body"/>
       {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
-        <textarea placeholder="Enter your answer here" className="intervention-question"/>}
-      <hr/>
-      <nav className="task-nav">
+        <textarea style={width: '95%', height:'5em', padding:'0.5em', lineHeight: '1.35em', fontSize:'medium'} placeholder="Enter your answer here" className="intervention-question"/>}
+      <nav className="task-nav" style={textAlign:"center",paddingBottom:'1em',paddingTop:'1.3em'}>
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.STATEMENT
-          <button type="submit" onClick={@endStatement} className="intervention-ok continue major-button">
-            <span>Continue</span>
+          <button type="submit" onClick={@endStatement} className="intervention-ok continue major-button" style={margin: "0 auto"}>
+              <span>Continue</span>
           </button>}
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
-          <span>
+          <span style={margin: "0 auto"}>
             <button type="button" onClick={@skipIntervention} className="intervention-cancel back minor-button">
               <span>Skip this question</span>
             </button>
-            <button type="submit" onClick={@answerQuestion} className="intervention-submit continue major-button">
+            <button style={marginLeft: "1em"} type="submit" onClick={@answerQuestion} className="intervention-submit continue major-button">
               <span>Submit my answer</span>
             </button>
           </span>}
       </nav>
-    </form>
+      <hr/>
+      <p className="interventions-info" style={fontSize: 'x-small'}>
+        {if @props.interventionDetails.type is config.INTERVENTION_TYPES.STATEMENT
+          <span>
+            We are showing you this message as a trial of a new feature which aims to make your experience on Comet Hunters more interesting and enjoyable.
+            If you would prefer not to receive messages like this, you can <a style={cursor:'pointer'} onClick={@optOut}>click here to opt-out</a> from all future messages.
+          </span>}
+        {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
+          <span>
+            We are asking you this question as a part of an initiative to make volunteers' experiences on Comet Hunters more interesting and enjoyable.
+            If you would prefer not to receive questions like this, you can <a style={cursor:'pointer'} onClick={@optOut}>click here to opt-out</a> from all future questions.
+          </span>}
+      </p>
+    </Dialog>
 
 module.exports = Intervention

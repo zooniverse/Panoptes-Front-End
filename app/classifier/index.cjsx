@@ -189,14 +189,13 @@ Classifier = React.createClass
     <div className="task-container" style={disabledStyle if @state.subjectLoading}>
       {if @state.renderIntervention
         <Intervention
-          user={@props.user}
-          experimentName={interventionMonitor?.latestFromSugar["experiment_name"]}
-          sessionID={getSessionID()}
-          interventionID={interventionMonitor?.latestFromSugar["next_event"]}
-          interventionDetails={experimentsClient.constructInterventionFromSugarData interventionMonitor?.latestFromSugar}
-          />
-      else
-        <div className="hidable-task-container">
+            user={@props.user}
+            experimentName={interventionMonitor?.latestFromSugar["experiment_name"]}
+            sessionID={getSessionID()}
+            interventionID={interventionMonitor?.latestFromSugar["next_event"]}
+            interventionDetails={experimentsClient.constructInterventionFromSugarData interventionMonitor?.latestFromSugar}
+          />}
+        <div className="coverable-task-container">
           {persistentHooksBeforeTask.map (HookComponent) =>
             <HookComponent {...taskHookProps} />}
 
@@ -271,7 +270,7 @@ Classifier = React.createClass
                 </button>
               </small>
             </p>}
-        </div>}
+        </div>
     </div>
 
   renderSummary: (classification) ->
