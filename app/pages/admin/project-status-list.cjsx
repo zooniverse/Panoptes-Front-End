@@ -3,12 +3,10 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 Paginator = require '../../talk/lib/paginator'
 ProjectIcon = require '../../components/project-icon'
-{History, Link} = require 'react-router'
+{Link} = require 'react-router'
 
 module.exports = React.createClass
   displayName: "ProjectStatusPage"
-
-  mixins: [History]
 
   getProjects: ->
     query =

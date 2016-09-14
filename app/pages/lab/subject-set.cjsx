@@ -5,7 +5,6 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../../components/change-listener'
 Papa = require 'papaparse'
-{History} = require 'react-router'
 alert = require '../../lib/alert'
 SubjectViewer = require '../../components/subject-viewer'
 SubjectUploader = require '../../partials/subject-uploader'
@@ -113,7 +112,8 @@ SubjectSetListing = React.createClass
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
 
-  mixins: [History]
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
     subjectSet: null
@@ -164,7 +164,7 @@ EditSubjectSetPage = React.createClass
           <strong>Drag-and-drop or click to upload manifests and subject images here.</strong><br />
           Manifests must be <code>.csv</code> or <code>.tsv</code>. The first row should define metadata headers. All other rows should include at least one reference to an image filename in the same directory as the manifest.<br />
           Headers that begin with "#" or "//" denote private fields that will not be visible to classifiers in the main classification interface or in the Talk discussion tool.<br />
-          Headers that begin with "!" denote fields that <strong>will not</strong> be visible to classifiers in the main classification interface but <strong>will be </strong> visible after classification in the Talk discussion tool.<br /> 
+          Headers that begin with "!" denote fields that <strong>will not</strong> be visible to classifiers in the main classification interface but <strong>will be </strong> visible after classification in the Talk discussion tool.<br />
           Subject images can be up to {MAX_FILE_SIZE / 1024}KB and any of: {<span key={ext}><code>{ext}</code>{', ' if VALID_SUBJECT_EXTENSIONS[i + 1]?}</span> for ext, i in VALID_SUBJECT_EXTENSIONS}{' '}
           and may not contain {<span key={char}><kbd>{char}</kbd>{', ' if INVALID_FILENAME_CHARS[i + 1]?}</span> for char, i in INVALID_FILENAME_CHARS}<br />
         </UploadDropTarget>
@@ -318,7 +318,7 @@ EditSubjectSetPage = React.createClass
         .then =>
           announceSetChange()
           @props.project.uncacheLink 'subject_sets'
-          @history.pushState(null, "/lab/#{@props.project.id}")
+          @context.router.push "/lab/#{@props.project.id}"
         .catch (error) =>
           @setState deletionError: error
         .then =>

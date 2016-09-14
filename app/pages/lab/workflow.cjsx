@@ -6,7 +6,7 @@ ModalFormDialog = require 'modal-form/dialog'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
-{History, Link} = require 'react-router'
+{Link} = require 'react-router'
 MultiImageSubjectOptionsEditor = require '../../components/multi-image-subject-options-editor'
 tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
@@ -22,7 +22,8 @@ else
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
 
-  mixins: [History]
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
     workflow: null
@@ -38,7 +39,7 @@ EditWorkflowPage = React.createClass
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
-    @history.createHref("/projects/#{owner}/#{name}/classify", viewQuery)
+    @context.router.createHref "/projects/#{owner}/#{name}/classify", viewQuery
 
   showCreateWorkflow: ->
     @setState workflowCreationInProgress: true
@@ -49,7 +50,7 @@ EditWorkflowPage = React.createClass
   handleWorkflowCreation: (workflow) ->
     @hideCreateWorkflow()
     newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
-    @props.history.push newLocation
+    @context.router.push newLocation
     @props.project.uncacheLink 'workflows'
     @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
 
@@ -561,7 +562,7 @@ EditWorkflowPage = React.createClass
 
       @props.workflow.delete().then =>
         @props.project.uncacheLink 'workflows'
-        @history.pushState(null, "/lab/#{@props.project.id}")
+        @context.router "/lab/#{@props.project.id}"
       .catch (error) =>
         @setState deletionError: error
       .then =>
