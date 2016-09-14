@@ -2,7 +2,7 @@
 
 config = require './experiments-config'
 {getSessionID} = require '../lib/session'
-DEBUG = true
+DEBUG = false
 
 class ExperimentsClient # Client for the ExperimentServer
 

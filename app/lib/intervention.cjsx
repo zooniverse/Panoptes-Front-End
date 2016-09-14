@@ -42,10 +42,12 @@ Intervention = React.createClass
     experimentsClient.logExperimentData @context.geordi, 'interventionResponse', logData
     @endIntervention()
     event.target.disabled = true
+    event.preventDefault()
 
   endStatement: (event) ->
     @endIntervention()
     event.target.disabled = true
+    event.preventDefault()
 
   componentWillMount: ->
     if experimentsClient.currentExperimentState isnt experimentsClient.EXPERIMENT_STATE_INTERVENTION_ON_SCREEN
@@ -69,7 +71,7 @@ Intervention = React.createClass
       link.addEventListener("click", @logLinkClick)
 
   render: ->
-    <div className="intervention">
+    <form className="intervention">
       <h3 className="intervention-title">{@props.interventionDetails.title}:</h3>
       <p dangerouslySetInnerHTML={@getBodyMarkup(@props.interventionDetails.body)} className="intervention-body"/>
       {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
@@ -77,7 +79,7 @@ Intervention = React.createClass
       <hr/>
       <nav className="task-nav">
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.STATEMENT
-          <button type="button" onClick={@endStatement} className="intervention-ok continue major-button">
+          <button type="submit" onClick={@endStatement} className="intervention-ok continue major-button">
             <span>Continue</span>
           </button>}
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
@@ -85,11 +87,11 @@ Intervention = React.createClass
             <button type="button" onClick={@skipIntervention} className="intervention-cancel back minor-button">
               <span>Skip this question</span>
             </button>
-            <button type="button" onClick={@answerQuestion} className="intervention-submit continue major-button">
+            <button type="submit" onClick={@answerQuestion} className="intervention-submit continue major-button">
               <span>Submit my answer</span>
             </button>
           </span>}
       </nav>
-    </div>
+    </form>
 
 module.exports = Intervention

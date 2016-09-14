@@ -3,7 +3,7 @@
 {sugarClient} = require 'panoptes-client/lib/sugar'
 EventEmitter = require 'events'
 
-DEBUG = true
+DEBUG = false
 
 # for detecting interventions that have been posted via Sugar (e.g. by the Experiment Server)
 class InterventionMonitor extends EventEmitter
