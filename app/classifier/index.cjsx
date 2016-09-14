@@ -57,8 +57,8 @@ Classifier = React.createClass
     Tutorial.startIfNecessary {workflow, user, preferences}
 
   reCheckIfInterventionNeeded: ->
-    # Sometimes, the intervention request arrives at a time when this component is not able to receive that
-    # information into its state (ie. we are not mounted)
+    # Sometimes, the intervention request arrives at a time when this component is not mounted
+    # (and therefore we are not listening to Sugar experiment updates)
     # Therefore, prior to render we must re-check that our current state.renderIntervention is correct
     # (We still need the state variable to be able to trigger a re-render when we ARE mounted)
     if @context.intervention_monitor? and @context.intervention_monitor.latestFromSugar?
