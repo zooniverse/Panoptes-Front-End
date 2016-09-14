@@ -64,7 +64,7 @@ module.exports = React.createClass
     @props.collection.stopListening 'delete'
 
   redirect: ->
-    @context.router.push(null, "/collections")
+    @context.router.push '/collections'
 
   confirmDelete: ->
     alert (resolve) =>
