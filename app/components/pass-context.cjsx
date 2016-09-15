@@ -7,12 +7,16 @@ module.exports = React.createClass
     router: routerShape
     user: React.PropTypes.object
     geordi: React.PropTypes.object
+    notificationsCounter: React.PropTypes.object
+    unreadNotificationsCount: React.PropTypes.number
 
   childContextTypes:
     initialLoadComplete: React.PropTypes.bool
     router: routerShape
     user: React.PropTypes.object
     geordi: React.PropTypes.object
+    notificationsCounter: React.PropTypes.object
+    unreadNotificationsCount: React.PropTypes.number
 
   getChildContext: ->
     @props.context
