@@ -30,16 +30,20 @@ module.exports = React.createClass
   render: ->
     mode = @props.workflow.configuration?.multi_image_mode or @defaultMode
     cloneMarksChecked = @props.workflow?.configuration.multi_image_clone_markers or false
+    enableSwitchingChecked = @props.workflow?.configuration.enable_switching_flipbook_and_separate or false
     <ChangeListener target={@props.workflow}>{ =>
       <div className="multi-image-subject-layout-editor">
         <div>
           <select id="multi_image_mode" onChange={@handleSelectMode} defaultValue={mode}>
             <option value="flipbook">Show flipbook</option>
             <option value="separate">Show separate frames</option>
-            <option value="flipbook_and_separate">Allow users to choose flipbook or separate frames</option>
           </select>
         </div>
-        {if @props.workflow.configuration?.multi_image_mode is 'separate' or @props.workflow.configuration?.multi_image_mode is 'flipbook_and_separate'
+        <div>
+          <input type="checkbox" id="enable_switching_flipbook_and_separate" name="enable_switching_flipbook_and_separate" checked={enableSwitchingChecked} onChange={@toggleEnableSwitching} />
+          <label htmlFor="enable_switching_flipbook_and_separate">Allow users to choose flipbook or separate frames</label>
+        </div>
+        {if @props.workflow.configuration?.multi_image_mode is 'separate'
           <div>
             <label>Show separate frames as</label><br/>
             <input type="radio" id="multi_image_row" name="multi_image_layout" value="row" onChange={@handleSelectLayout} />
@@ -59,7 +63,11 @@ module.exports = React.createClass
   toggleCloneMarks: (e) ->
     @props.workflow.update
       'configuration.multi_image_clone_markers': e.target.checked
-    
+
+  toggleEnableSwitching: (e) ->
+    @props.workflow.update
+      'configuration.enable_switching_flipbook_and_separate': e.target.checked
+
   handleSelectMode: (e) ->
     mode = e.target.value
     @props.workflow.update

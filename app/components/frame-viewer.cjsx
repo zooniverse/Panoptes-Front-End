@@ -29,6 +29,7 @@ module.exports = React.createClass
   render: () ->
     subject = @props.subject
     frame = @props.frame
+    console.log 'PROPS FRAME FROM SUBJECT-VIEWER', frame
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
     FrameWrapper = @props.frameWrapper
     zoomEnabled = @props.project? && 'pan and zoom' in @props.project?.experimental_tools
