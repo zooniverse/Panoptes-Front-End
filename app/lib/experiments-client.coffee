@@ -226,6 +226,29 @@ class ExperimentsClient # Client for the ExperimentServer
         if DEBUG then console.log "Error posting to Experiment Server: #{response.status} #{response.statusText}"
         #TODO log Experiment Error
 
+  optOutThisUser: (interventionMonitor, geordi, experimentName, userID) ->
+    postPath = "/users/#{userID}/optout"
+    postURL = "#{@EXPERIMENT_SERVER_URL_TO_USE}#{postPath}"
+    params = new URLSearchParams()
+    params.append 'experiment_name', experimentName
+    params.append 'user_id', userID
+    params.append 'project', @getProjectSlugForExperiment experimentName
+    fetch postURL, {
+      method: 'POST'
+      body: params
+      headers: new Headers()
+      mode: 'cors'
+      cache: 'default'
+    }
+    .then (response) =>
+      if response.ok
+        if DEBUG then console.log "Successful opt out posted to Experiment Server #{postURL}: #{response.status} #{response.statusText}"
+        @logExperimentState geordi, interventionMonitor?.latestFromSugar, "experimentOptOut"
+      else
+        if DEBUG then console.log "Error posting opt out to Experiment Server: #{response.status} #{response.statusText}"
+        #TODO log Experiment Error
+      interventionMonitor.clearSugarLatest()
+
   getInterventionFromConfig: (projectSlug, experimentName, interventionID) ->
     enabledExperiments = @getEnabledExperiments()
     interventionDetails = @getInterventionDetails()

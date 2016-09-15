@@ -16,6 +16,7 @@ Intervention = React.createClass
     sessionID: React.PropTypes.string.isRequired
     interventionID: React.PropTypes.string.isRequired
     interventionDetails: React.PropTypes.object.isRequired
+    disableInterventionFunction: React.PropTypes.func.isRequired
 
   endIntervention: ->
     experimentsClient.postDataToExperimentServer interventionMonitor,
@@ -67,7 +68,8 @@ Intervention = React.createClass
     experimentsClient.logExperimentData @context.geordi, 'interventionLinkClicked', logData
 
   optOut: ->
-    console.log "opt out"
+    experimentsClient.optOutThisUser interventionMonitor, @context.geordi, @props.experimentName, @props.user.id
+    @props.disableInterventionFunction()
 
   componentDidMount: ->
     interventionBody = document.getElementsByClassName("intervention-body")[0]

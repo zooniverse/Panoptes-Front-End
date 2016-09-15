@@ -20,8 +20,11 @@ class InterventionMonitor extends EventEmitter
   setProjectSlug: (project_slug) ->
     @project_slug = project_slug
 
+  clearSugarLatest: ->
+    @latestFromSugar = null
+    
   shouldShowIntervention: ->
-    return (@latestFromSugar? and @latestFromSugar["intervention_time"])
+    return (@latestFromSugar? and @latestFromSugar["intervention_time"] and @latestFromSugar["next_event"] and @latestFromSugar["active"])
 
   startListening: ->
     sugarClient.on 'experiment', @sugarListener
@@ -35,11 +38,14 @@ class InterventionMonitor extends EventEmitter
     # intervention only valid if it's for the right project
     if @project_slug? and intervention_target_project == @project_slug
       @latestFromSugar = sugarPayload.message
-      if @latestFromSugar["intervention_time"]==true
-        if DEBUG then console.log "Sugar reports that an intervention is required:\n",@latestFromSugar
-        this.emit 'interventionRequested', @latestFromSugar
+      if @latestFromSugar["active"]==true
+        if @latestFromSugar["intervention_time"]==true
+          if DEBUG then console.log "Sugar reports that an intervention is required:\n",@latestFromSugar
+          this.emit 'interventionRequested', @latestFromSugar
+        else
+          if DEBUG then console.log "Update from Sugar - no intervention required though:\n",@latestFromSugar
+          this.emit 'classificationTaskRequested', @latestFromSugar
       else
-        if DEBUG then console.log "Update from Sugar - no intervention required though:\n",@latestFromSugar
-        this.emit 'classificationTaskRequested', @latestFromSugar
+        if DEBUG then console.log "Sugar's experimental data ignored as participant is marked inactive:\n",@latestFromSugar
 
 module.exports = new InterventionMonitor

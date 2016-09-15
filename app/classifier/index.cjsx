@@ -194,6 +194,7 @@ Classifier = React.createClass
             sessionID={getSessionID()}
             interventionID={interventionMonitor?.latestFromSugar["next_event"]}
             interventionDetails={experimentsClient.constructInterventionFromSugarData interventionMonitor?.latestFromSugar}
+            disableInterventionFunction={@disableIntervention}
           />}
         <div className="coverable-task-container">
           {persistentHooksBeforeTask.map (HookComponent) =>
