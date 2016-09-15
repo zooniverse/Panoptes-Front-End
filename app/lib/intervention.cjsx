@@ -88,7 +88,7 @@ Intervention = React.createClass
           </button>}
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
           <span style={margin: "0 auto"}>
-            <button type="button" onClick={@skipIntervention} className="intervention-cancel back minor-button">
+            <button type="button" onClick={@skipIntervention} className="intervention-cancel standard-button">
               <span>Skip this question</span>
             </button>
             <button style={marginLeft: "1em"} type="submit" onClick={@answerQuestion} className="intervention-submit continue major-button">
@@ -100,12 +100,12 @@ Intervention = React.createClass
       <p className="interventions-info" style={fontSize: 'x-small'}>
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.STATEMENT
           <span>
-            We are showing you this message as a trial of a new feature which aims to make your experience on Comet Hunters more interesting and enjoyable.
+            We are showing you this message as a trial of a new feature which aims to make your experience on Zooniverse projects like Comet Hunters more interesting and enjoyable.
             If you would prefer not to receive messages like this, you can <a style={cursor:'pointer'} onClick={@optOut}>click here to opt-out</a> from all future messages.
           </span>}
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
           <span>
-            We are asking you this question as a part of an initiative to make volunteers' experiences on Comet Hunters more interesting and enjoyable.
+            We are asking you this question as a part of an initiative to make volunteers' experiences on Zooniverse projects like Comet Hunters more interesting and enjoyable.
             If you would prefer not to receive questions like this, you can <a style={cursor:'pointer'} onClick={@optOut}>click here to opt-out</a> from all future questions.
           </span>}
       </p>
