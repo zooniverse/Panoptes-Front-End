@@ -24,6 +24,13 @@ Classifier = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
 
+  propTypes:
+    user: React.PropTypes.object
+    workflow: React.PropTypes.object
+    subject: React.PropTypes.object
+    classification: React.PropTypes.object
+    onLoad: React.PropTypes.func
+
   getDefaultProps: ->
     user: null
     workflow: null
@@ -44,7 +51,7 @@ Classifier = React.createClass
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
       {workflow, project, user, preferences} = nextProps
-      Tutorial.startIfNecessary {workflow, user, preferences}
+      Tutorial.startIfNecessary {workflow, user, preferences} if preferences?
     if nextProps.subject isnt @props.subject
       @loadSubject subject
     if nextProps.classification isnt @props.classification
@@ -395,16 +402,25 @@ Classifier = React.createClass
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
 
+  propTypes:
+    classification: React.PropTypes.object
+    onLoad: React.PropTypes.func
+    onComplete: React.PropTypes.func
+    onCompleteAndLoadAnotherSubject: React.PropTypes.func
+    onClickNext: React.PropTypes.func
+    workflow: React.PropTypes.object
+    user: React.PropTypes.object
+
   getDefaultProps: ->
-    user: null
     classification: {}
     onLoad: Function.prototype
     onComplete: Function.prototype
     onCompleteAndLoadAnotherSubject: Function.prototype
     onClickNext: Function.prototype
+    workflow: null
+    user: null
 
   getInitialState: ->
-    workflow: null
     subject: null
     expertClassifier: null
     userRoles: []
@@ -422,14 +438,9 @@ module.exports = React.createClass
       @loadClassification nextProps.classification
 
   loadClassification: (classification) ->
-    @setState
-      workflow: null
-      subject: null
+    @setState subject: null
 
     # TODO: These underscored references are temporary stopgaps.
-
-    Promise.resolve(classification._workflow ? classification.get 'workflow').then (workflow) =>
-      @setState {workflow}
 
     Promise.resolve(classification._subjects ? classification.get 'subjects').then ([subject]) =>
       # We'll only handle one subject per classification right now.
@@ -454,9 +465,9 @@ module.exports = React.createClass
         @setState {expertClassifier, userRoles}
 
   render: ->
-    if @state.workflow? and @state.subject?
+    if @props.workflow? and @state.subject?
       <Classifier {...@props}
-        workflow={@state.workflow}
+        workflow={@props.workflow}
         subject={@state.subject}
         expertClassifier={@state.expertClassifier}
         userRoles={@state.userRoles} />

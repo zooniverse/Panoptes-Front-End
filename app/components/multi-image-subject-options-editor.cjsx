@@ -29,6 +29,7 @@ module.exports = React.createClass
 
   render: ->
     mode = @props.workflow.configuration?.multi_image_mode or @defaultMode
+    cloneMarksChecked = @props.workflow?.configuration.multi_image_clone_markers or false
     <ChangeListener target={@props.workflow}>{ =>
       <div className="multi-image-subject-layout-editor">
         <div>
@@ -49,7 +50,7 @@ module.exports = React.createClass
             <label htmlFor="multi_image_grid3">Grid (3col)</label>
           </div>}
         <div>
-          <input type="checkbox" id="multi_image_clone_markers" name="multi_image_clone_markers" onChange={@toggleCloneMarks} />
+          <input type="checkbox" id="multi_image_clone_markers" name="multi_image_clone_markers" checked={cloneMarksChecked} onChange={@toggleCloneMarks} />
           <label htmlFor="multi_image_clone_markers">Clone markers in all frames</label>
         </div>  
       </div>
