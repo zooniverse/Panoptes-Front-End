@@ -10,6 +10,7 @@ seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
 `import CustomSignInPrompt from './custom-sign-in-prompt'`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog'`
+experimentsClient = require '../../lib/experiments-client'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -217,7 +218,7 @@ module.exports = React.createClass
         <FinishedBanner project={@props.project} />}
 
       {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
-        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}> 
+        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
         </CustomSignInPrompt>}
       {if @state.classification?
@@ -245,7 +246,11 @@ module.exports = React.createClass
       .then @loadAnotherSubject()
 
   saveClassification: ->
-    @context.geordi?.logEvent type: 'classify'
+    if @context.geordi.keys["experiment"]?
+      experimentsClient.logExperimentState @context.geordi, interventionMonitor?.latestFromSugar, "classificationStart"
+    else
+      @context.geordi?.logEvent type: 'classify'
+
     classification = @state.classification
     console?.info 'Completed classification', classification
     savingClassification = if @state.demoMode
@@ -329,7 +334,7 @@ module.exports = React.createClass
               'preferences.selected_workflow': props.preferences.settings.workflow_id
             props.preferences.save()
 
-               
+
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
 window.currentClassifications = currentClassifications
