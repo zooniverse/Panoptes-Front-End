@@ -67,8 +67,6 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
-    interventionMonitor: React.PropTypes.object
-    experimentsClient: React.PropTypes.object
 
   getDefaultProps: ->
     query: null
