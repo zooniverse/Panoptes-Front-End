@@ -76,7 +76,7 @@ module.exports = React.createClass
 
     testAnnotationQuality: (unknown, knownGood, workflow) ->
       unknownTaskDescription = workflow.tasks[unknown.task]
-      unknownShapes = unknown.value.map (annotationShape)>
+      unknownShapes = unknown.value.map (annotationShape) ->
         toolDescription = unknownTaskDescription.tools[annotationShape.tool]
         Object.assign {}, annotationShape, type: toolDescription.type
 
