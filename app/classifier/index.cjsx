@@ -37,6 +37,7 @@ Classifier = React.createClass
     workflow: null
     subject: null
     classification: null
+    goodClassificationCutoff: 0.5
     onLoad: Function.prototype
 
   getInitialState: ->

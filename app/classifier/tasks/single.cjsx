@@ -68,6 +68,12 @@ module.exports = React.createClass
     isAnnotationComplete: (task, annotation) ->
       annotation.value? or not task.required
 
+    testAnnotationQuality: (unknown, knownGood) ->
+      if unknown.value is knownGood.value
+        1
+      else
+        0
+
   getDefaultProps: ->
     task: null
     annotation: null
