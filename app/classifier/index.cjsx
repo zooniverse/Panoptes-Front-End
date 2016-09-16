@@ -17,6 +17,7 @@ workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 WorldWideTelescope = require './world_wide_telescope'
 MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
+testClassificationQuality = require '../lib/test-classification-quality'
 
 Classifier = React.createClass
   displayName: 'Classifier'
@@ -40,6 +41,7 @@ Classifier = React.createClass
 
   getInitialState: ->
     backButtonWarning: false
+    classificationQuality: NaN
     expertClassification: null
     selectedExpertAnnotation: -1
     showingExpertClassification: false
@@ -68,6 +70,7 @@ Classifier = React.createClass
 
   loadSubject: (subject) ->
     @setState
+      classificationQuality: NaN
       expertClassification: null
       selectedExpertAnnotation: -1
       showingExpertClassification: false
@@ -289,6 +292,14 @@ Classifier = React.createClass
             <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
           else
             <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
+
+          {unless true or isNaN @state.classificationQuality
+            qualityString = (@state.classificationQuality * 100).toString().split('.')[0] + '%'
+            <div>Looks like you matched about <strong>{qualityString}</strong>.</div>}
+          {if @state.classificationQuality < @props.goodClassificationCutoff
+            <div>Keep at it, all classifications are useful!</div>}
+          {if @state.classificationQuality > @props.goodClassificationCutoff
+            <div>Keep up the good work!</div>}
         </div>}
 
       <div>
@@ -419,6 +430,11 @@ Classifier = React.createClass
       'metadata.viewport':
         width: innerWidth
         height: innerHeight
+
+    if @state.expertClassification?
+      classificationQuality = testClassificationQuality @props.classification, @state.expertClassification, @props.workflow
+      console.log 'Classification quality', classificationQuality
+      @setState {classificationQuality}
 
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
