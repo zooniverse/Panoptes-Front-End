@@ -9,6 +9,7 @@
     "data-uri-to-blob": "0.0.4",
     "debounce": "~1.0.0",
     "drag-reorderable": "~0.1.0",
+    "fast-levenshtein": "~1.0.7",
     "jsplumb": "1.7.9",
     "lodash.intersection": "~3.2.0",
     "lodash.merge": "~2.4.1",
@@ -37,6 +38,7 @@
     "strip-markdown": "~0.3.1",
     "sugar-client": "~1.0.1",
     "swipe-js-iso": "~2.0.1",
+    "test-shape-closeness": "0.0.1",
     "visible-element": "~1.0.1",
     "zooniverse-geordi-client": "^1.4"
   },
