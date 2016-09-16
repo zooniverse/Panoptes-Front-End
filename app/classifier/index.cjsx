@@ -289,14 +289,6 @@ Classifier = React.createClass
             <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
           else
             <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
-
-          {unless true or isNaN @state.classificationQuality
-            qualityString = (@state.classificationQuality * 100).toString().split('.')[0] + '%'
-            <div>Looks like you matched about <strong>{qualityString}</strong>.</div>}
-          {if @state.classificationQuality < @props.goodClassificationCutoff
-            <div>Keep at it, all classifications are useful!</div>}
-          {if @state.classificationQuality > @props.goodClassificationCutoff
-            <div>Keep up the good work!</div>}
         </div>}
 
       <div>
