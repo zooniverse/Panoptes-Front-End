@@ -80,7 +80,8 @@ module.exports = React.createClass
     if @state.inFlipbookMode
       mainDisplay = @renderFrame @state.frame
     else
-      mainDisplay = (@renderFrame frame, {key: "frame-#{frame}"} for frame of @props.subject.locations)
+      mainDisplay = @props.subject.locations.map (frame, index) =>
+        @renderFrame index, {key: "frame-#{index}"}
 
     tools = switch type
       when 'image'
