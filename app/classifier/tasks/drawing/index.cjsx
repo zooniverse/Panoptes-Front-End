@@ -81,7 +81,7 @@ module.exports = React.createClass
         Object.assign {}, annotationShape, type: toolDescription.type
 
       knownGoodTaskDescription = workflow.tasks[knownGood.task]
-      knownGoodShapes = knownGood.value.map (annotationShape)>
+      knownGoodShapes = knownGood.value.map (annotationShape) ->
         toolDescription = knownGoodTaskDescription.tools[annotationShape.tool]
         Object.assign {}, annotationShape, type: toolDescription.type
 
