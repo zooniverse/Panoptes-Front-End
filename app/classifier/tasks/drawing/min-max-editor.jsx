@@ -10,35 +10,49 @@ const MinMaxEditor = React.createClass({
 
   getInitialState() {
     return {
-      min: null,
-      max: null,
+      tool: null,
     };
   },
 
   componentWillMount() {
-    this.setState({ min: this.props.choice.min, max: this.props.choice.max });
+    this.setState({
+      tool: this.props.choice,
+    });
   },
 
   componentWillReceiveProps(newProps) {
-    this.setState({ min: newProps.choice.min, max: newProps.choice.max });
+    this.setState({
+      tool: newProps.choice,
+    });
   },
 
   onChangeMin(e) {
-    this.setState({ min: e.target.value });
-    this.updateWorkflow(e.target.name, e.target.value);
+    const tool = this.state.tool;
+    if (e.target.value) {
+      tool.min = e.target.value;
+    } else {
+      delete tool.min;
+    }
+    this.updateWorkflow(tool);
   },
 
   onChangeMax(e) {
-    const newMax = e.target.value && e.target.value < this.state.min ?
-      this.state.min :
+    const tool = this.state.tool;
+    const newMax = e.target.value && e.target.value < this.state.tool.min ?
+      this.state.tool.min :
       e.target.value;
-    this.setState({ max: newMax });
-    this.updateWorkflow(e.target.name, newMax);
+    if (newMax) {
+      tool.max = newMax;
+    } else {
+      delete tool.max;
+    }
+    this.updateWorkflow(tool);
   },
 
-  updateWorkflow(name, value) {
+  updateWorkflow(tool) {
     const changes = {};
-    changes[name] = value;
+    changes[this.props.name] = tool;
+    this.setState({ tool });
     this.props.workflow.update(changes);
   },
 
@@ -52,7 +66,7 @@ const MinMaxEditor = React.createClass({
             inputMode="numeric"
             name={`${this.props.name}.min`}
             min="0"
-            value={this.state.min}
+            value={this.state.tool.min}
             placeholder="0"
             size="5"
             style={{ width: '5ch' }}
@@ -65,8 +79,8 @@ const MinMaxEditor = React.createClass({
             type="number"
             inputMode="numeric"
             name={`${this.props.name}.max`}
-            min={this.state.min ? this.state.min : 0}
-            value={this.state.max}
+            min={this.state.tool.min ? this.state.tool.min : 0}
+            value={this.state.tool.max}
             placeholder="∞"
             size="5"
             style={{ width: '5ch' }}
