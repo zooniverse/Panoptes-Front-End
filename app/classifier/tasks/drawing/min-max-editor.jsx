@@ -33,6 +33,9 @@ const MinMaxEditor = React.createClass({
     } else {
       delete tool.min;
     }
+    if (tool.max && tool.max < tool.min) {
+      tool.max = tool.min;
+    }
     this.updateWorkflow(tool);
   },
 
