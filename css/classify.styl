@@ -150,6 +150,10 @@
   & + .workflow-task
     margin-top: 2em
 
+  .markdown:first-child
+    :first-child
+      margin-top: 0
+
   // Only show the "required" warning when a task is outside the normal flow.
   .classifier > .task-area & .required-task-warning
     display: none
