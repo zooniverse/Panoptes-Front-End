@@ -26,6 +26,8 @@ EXPERIMENTAL_FEATURES = [
   'invert'
   'workflow assignment'
   'Gravity Spy Gold Standard'
+  'allow workflow query'
+  'expert comparison summary'
 ]
 
 ProjectToggle = React.createClass

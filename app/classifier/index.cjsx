@@ -24,6 +24,13 @@ Classifier = React.createClass
   contextTypes:
     geordi: React.PropTypes.object
 
+  propTypes:
+    user: React.PropTypes.object
+    workflow: React.PropTypes.object
+    subject: React.PropTypes.object
+    classification: React.PropTypes.object
+    onLoad: React.PropTypes.func
+
   getDefaultProps: ->
     user: null
     workflow: null
@@ -32,8 +39,11 @@ Classifier = React.createClass
     onLoad: Function.prototype
 
   getInitialState: ->
-    subjectLoading: false
     backButtonWarning: false
+    expertClassification: null
+    selectedExpertAnnotation: -1
+    showingExpertClassification: false
+    subjectLoading: false
 
   componentDidMount: ->
     @loadSubject @props.subject
@@ -44,7 +54,7 @@ Classifier = React.createClass
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
       {workflow, project, user, preferences} = nextProps
-      Tutorial.startIfNecessary {workflow, user, preferences}
+      Tutorial.startIfNecessary {workflow, user, preferences} if preferences?
     if nextProps.subject isnt @props.subject
       @loadSubject subject
     if nextProps.classification isnt @props.classification
@@ -57,13 +67,37 @@ Classifier = React.createClass
       @context.geordi?.forget ['subjectID']
 
   loadSubject: (subject) ->
-    @setState subjectLoading: true
+    @setState
+      expertClassification: null
+      selectedExpertAnnotation: -1
+      showingExpertClassification: false
+      subjectLoading: true
+
+    if @props.project.experimental_tools.indexOf('expert comparison summary') > -1
+      @getExpertClassification @props.workflow, @props.subject
 
     preloadSubject subject
       .then =>
         if @props.subject is subject # The subject could have changed while we were loading.
           @setState subjectLoading: false
           @props.onLoad?()
+
+  getExpertClassification: (workflow, subject) ->
+    awaitExpertClassification = Promise.resolve do =>
+      apiClient.get('/classifications/gold_standard', {
+        workflow_id: workflow.id,
+        subject_ids: [subject.id]
+      })
+        .catch ->
+          []
+        .then ([expertClassification]) ->
+          expertClassification
+
+    awaitExpertClassification.then (expertClassification) =>
+      expertClassification ?= subject.expert_classification_data?[workflow.id]
+      if @props.workflow is workflow and @props.subject is subject
+        window.expertClassification = expertClassification
+        @setState {expertClassification}
 
   prepareToClassify: (classification) ->
     classification.annotations ?= []
@@ -75,10 +109,13 @@ Classifier = React.createClass
     classifierClassNames = if largeFormatImage then "classifier large-image" else "classifier"
 
     <ChangeListener target={@props.classification}>{=>
-      currentClassification = @props.classification
-      unless @props.classification.completed
-        currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
-        currentTask = @props.workflow.tasks[currentAnnotation?.task]
+      if @state.showingExpertClassification
+        currentClassification = @state.expertClassification
+      else
+        currentClassification = @props.classification
+        unless @props.classification.completed
+          currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
+          currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
       # This is just easy access for debugging.
       window.classification = currentClassification
@@ -243,10 +280,24 @@ Classifier = React.createClass
             subject={@props.subject}
             workflow={@props.workflow}
           />
-        </strong>}
+        </strong>
+
+      else if @state.expertClassification?
+        <div className="has-expert-classification">
+          Expert classification available.{' '}
+          {if @state.showingExpertClassification
+            <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
+          else
+            <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
+        </div>}
 
       <div>
-        <strong>Your classification:</strong>
+        <strong>
+          {if @state.showingExpertClassification
+            'Expert classification:'
+          else
+            'Your classification:'}
+        </strong>
         <ClassificationSummary workflow={@props.workflow} classification={classification} />
       </div>
 
@@ -380,6 +431,9 @@ Classifier = React.createClass
   handleDemoModeChange: (e) ->
     @props.onChangeDemoMode e.target.checked
 
+  toggleExpertClassification: (value) ->
+    @setState showingExpertClassification: value
+
   warningToggleOn: ->
     @setState backButtonWarning: true
 
@@ -395,16 +449,25 @@ Classifier = React.createClass
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
 
+  propTypes:
+    classification: React.PropTypes.object
+    onLoad: React.PropTypes.func
+    onComplete: React.PropTypes.func
+    onCompleteAndLoadAnotherSubject: React.PropTypes.func
+    onClickNext: React.PropTypes.func
+    workflow: React.PropTypes.object
+    user: React.PropTypes.object
+
   getDefaultProps: ->
-    user: null
     classification: {}
     onLoad: Function.prototype
     onComplete: Function.prototype
     onCompleteAndLoadAnotherSubject: Function.prototype
     onClickNext: Function.prototype
+    workflow: null
+    user: null
 
   getInitialState: ->
-    workflow: null
     subject: null
     expertClassifier: null
     userRoles: []
@@ -422,14 +485,9 @@ module.exports = React.createClass
       @loadClassification nextProps.classification
 
   loadClassification: (classification) ->
-    @setState
-      workflow: null
-      subject: null
+    @setState subject: null
 
     # TODO: These underscored references are temporary stopgaps.
-
-    Promise.resolve(classification._workflow ? classification.get 'workflow').then (workflow) =>
-      @setState {workflow}
 
     Promise.resolve(classification._subjects ? classification.get 'subjects').then ([subject]) =>
       # We'll only handle one subject per classification right now.
@@ -454,9 +512,9 @@ module.exports = React.createClass
         @setState {expertClassifier, userRoles}
 
   render: ->
-    if @state.workflow? and @state.subject?
+    if @props.workflow? and @state.subject?
       <Classifier {...@props}
-        workflow={@state.workflow}
+        workflow={@props.workflow}
         subject={@state.subject}
         expertClassifier={@state.expertClassifier}
         userRoles={@state.userRoles} />

@@ -45,6 +45,7 @@ module.exports = React.createClass
     allowSeparateFrames: false
     metadataPrefixes: ['#', '!']
     metadataFilters: ['#', '!']
+    workflow: null
 
   getInitialState: ->
     loading: true
@@ -80,8 +81,8 @@ module.exports = React.createClass
       mainDisplay = @renderFrame @state.frame
       console.log ' @state.frame',  @state.frame
     else
-      mainDisplay = (@renderFrame frame, {key: "frame-#{frame}"} for frame of @props.subject.locations)
-      console.log 'F R A M E', frame
+      mainDisplay = @props.subject.locations.map (frame, index) =>
+        @renderFrame index, {key: "frame-#{index}"}
     tools = switch type
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject

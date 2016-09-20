@@ -4,18 +4,10 @@ import ReactDOM from 'react-dom';
 
 const WorkflowAssignmentDialog = React.createClass({
   statics: {
-    start(history, location, preferences) {
+    start() {
       return Dialog.alert(<WorkflowAssignmentDialog />, {
         className: 'workflow-assignment-dialog',
         closeButton: true,
-        onSubmit: this.handleNewWorkflowAssignment.bind(null, history, location, preferences),
-      });
-    },
-
-    handleNewWorkflowAssignment(history, location, preferences) {
-      history.push({
-        pathname: location.pathname,
-        query: { workflow: preferences.settings.workflow_id },
       });
     },
   },
