@@ -40,7 +40,7 @@ Intervention = React.createClass
     logData = {
       sessID: @props.sessionID
       ivnID: @props.interventionID
-      answer: document.getElementsByClassName("intervention-question")[0].value
+      answer: @refs.question?.value
     }
     experimentsClient.logExperimentData @context.geordi, 'interventionResponse', logData
     @endIntervention()
@@ -72,18 +72,17 @@ Intervention = React.createClass
     @props.disableInterventionFunction()
 
   componentDidMount: ->
-    interventionBody = document.getElementsByClassName("intervention-body")[0]
-    linksInInterventions = interventionBody.getElementsByTagName("a")
+    linksInInterventions = @refs.body.getElementsByTagName("a")
     for link in linksInInterventions
       link.addEventListener("click", @logLinkClick)
 
   render: ->
     <Dialog style={maxWidth: '30%', paddingLeft: '1.2em', paddingRight: '1.2em', top: '20%'} tag="form" className="intervention" closeButton={true} onCancel={@skipIntervention}>
       <h3 style={paddingTop: '0.7em'} className="intervention-title">{@props.interventionDetails.title}:</h3>
-      <p dangerouslySetInnerHTML={@getBodyMarkup(@props.interventionDetails.body)} className="intervention-body"/>
+      <p ref="body" dangerouslySetInnerHTML={@getBodyMarkup(@props.interventionDetails.body)} className="intervention-body"/>
       {if @props.interventionDetails.type is config.INTERVENTION_TYPES.QUESTION
-        <textarea style={width: '95%', height:'5em', padding:'0.5em', lineHeight: '1.35em', fontSize:'medium'} placeholder="Enter your answer here" className="intervention-question"/>}
-      <nav className="task-nav" style={textAlign:"center",paddingBottom:'1em',paddingTop:'1.3em'}>
+        <textarea ref="question" style={width: '95%', height:'5em', padding:'0.5em', lineHeight: '1.35em', fontSize:'medium'} placeholder="Enter your answer here" className="intervention-question"/>}
+      <div className="task-nav" style={textAlign:"center",paddingBottom:'1em',paddingTop:'1.3em'}>
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.STATEMENT
           <button type="submit" onClick={@endStatement} className="intervention-ok continue major-button" style={margin: "0 auto"}>
               <span>Continue</span>
@@ -97,7 +96,7 @@ Intervention = React.createClass
               <span>Submit my answer</span>
             </button>
           </span>}
-      </nav>
+      </div>
       <hr/>
       <p className="interventions-info" style={fontSize: 'x-small'}>
         {if @props.interventionDetails.type is config.INTERVENTION_TYPES.STATEMENT

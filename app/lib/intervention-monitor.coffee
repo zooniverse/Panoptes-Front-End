@@ -9,10 +9,7 @@ DEBUG = false
 class InterventionMonitor extends EventEmitter
   project_slug: null
 
-  sugarEvent: null
-
   constructor: ->
-    @sugarEvent = new Event 'sugarExperimentEvent'
     @startListening()
 
   latestFromSugar: null

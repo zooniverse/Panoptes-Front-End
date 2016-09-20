@@ -66,16 +66,6 @@ Classifier = React.createClass
     {workflow, project, preferences, user} = @props
     Tutorial.startIfNecessary {workflow, user, preferences}
 
-  reCheckIfInterventionNeeded: ->
-    # Sometimes, the intervention request arrives at a time when this component is not mounted
-    # (and therefore we are not listening to Sugar experiment updates)
-    # Therefore, prior to render we must re-check that our current state.renderIntervention is correct
-    # (We still need the state variable to be able to trigger a re-render when we ARE mounted)
-    if @context.intervention_monitor? and @context.intervention_monitor.latestFromSugar?
-      @setState renderIntervention: @context.intervention_monitor?.shouldShowIntervention()
-    else
-      @setState renderIntervention: false
-
   componentWillReceiveProps: (nextProps) ->
     if nextProps.project isnt @props.project or nextProps.user isnt @props.user
       {workflow, project, user, preferences} = nextProps
@@ -89,7 +79,6 @@ Classifier = React.createClass
 
   componentWillMount: () ->
     interventionMonitor.setProjectSlug @props.project.slug
-    @reCheckIfInterventionNeeded()
 
   componentWillUnmount: () ->
     interventionMonitor.removeListener 'interventionRequested', @enableIntervention
