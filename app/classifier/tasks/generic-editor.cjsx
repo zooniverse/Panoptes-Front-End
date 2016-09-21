@@ -146,7 +146,7 @@ module.exports = React.createClass
                         </select>
                       </AutoSave>
                     </div>
-                    
+
                     <MinMaxEditor
                       key='min-max'
                       workflow={@props.workflow}
