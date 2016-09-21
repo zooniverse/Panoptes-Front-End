@@ -28,7 +28,7 @@ class NotificationsCounter {
 
   setSection() {
     if(this.owner && this.name) {
-      let slug = `${this.owner}/${this.name}`;
+      const slug = `${this.owner}/${this.name}`;
 
       if(this.slug !== slug) {
         this.slug = slug;
