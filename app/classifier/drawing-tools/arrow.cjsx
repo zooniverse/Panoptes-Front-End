@@ -8,6 +8,7 @@ DragHandle = require './drag-handle'
 MINIMUM_LENGTH = 5
 GRAB_STROKE_WIDTH = 6
 CIRCLE_RADIUS = 20
+DELETE_TOOL_PERPENDICULAR_OFFSET = 15
 
 module.exports = React.createClass
   displayName: 'ArrowTool'
@@ -62,6 +63,9 @@ module.exports = React.createClass
     headpoints = ([x, y].join ',' for {x, y} in headpointsarray)
     headpoints = headpoints.join '\n'
 
+    deleteButtonPostion = { x: headpointsarray[0].x + DELETE_TOOL_PERPENDICULAR_OFFSET*lineperpunit[0],
+    y: headpointsarray[0].y + DELETE_TOOL_PERPENDICULAR_OFFSET*lineperpunit[1]}
+
     <DrawingToolRoot tool={this} transform={positionAndRotate}>
       <line {...linepoints} />
       <polyline points={headpoints} closed={true} fill='currentColor' />
@@ -73,7 +77,7 @@ module.exports = React.createClass
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={(x1 + x2) / 2} y={(y1 + y2) / 2} />
+          <DeleteButton tool={this} x={deleteButtonPostion.x} y={deleteButtonPostion.y} />
           <DragHandle x={x1} y={y1} scale={@props.scale} onDrag={@handleHandleDrag.bind this, 1} />
           <DragHandle x={x2} y={y2} scale={@props.scale} onDrag={@handleHandleDrag.bind this, 2} />
         </g>}
