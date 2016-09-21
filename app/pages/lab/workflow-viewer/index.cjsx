@@ -3,12 +3,15 @@ apiClient = require 'panoptes-client/lib/api-client'
 PromiseRenderer = require '../../../components/promise-renderer'
 ChangeListener = require '../../../components/change-listener'
 WorkflowNodes = require './workflow'
-{History, Navigation} = require 'react-router'
+{Navigation} = require 'react-router'
 
 WorkflowVis = React.createClass
   displayName: 'WorkflowVis'
 
-  mixins: [History, Navigation]
+  mixins: [Navigation]
+
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getInitialState: ->
     # make a new jsPlumb instance each time component is mounted
@@ -20,7 +23,7 @@ WorkflowVis = React.createClass
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
     viewQuery = workflow: @props.workflow.id, reload: 0
-    @history.createHref("/projects/#{owner}/#{name}/classify", viewQuery)
+    @context.router.createHref "/projects/#{owner}/#{name}/classify", viewQuery
 
   render: ->
     <div>
