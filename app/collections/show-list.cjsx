@@ -7,7 +7,7 @@ Paginator = require '../talk/lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
 SubjectViewer = require '../components/subject-viewer'
 Loading = require '../components/loading-indicator'
-{Link, History} = require 'react-router'
+{Link} = require 'react-router'
 
 VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS = ['page', 'page_size']
 
@@ -18,10 +18,10 @@ counterpart.registerTranslations 'en',
 
 module.exports = React.createClass
   displayName: 'CollectionShowList'
-  mixins: [History]
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired
 
   componentDidMount: ->
     @fetchCollectionSubjects pick @props.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
@@ -43,7 +43,7 @@ module.exports = React.createClass
     nextQuery = Object.assign {}, @props.location.query, { page }
     currentPath = @props.location.pathname
 
-    @history.pushState(null, @history.createHref(currentPath, nextQuery))
+    @context.router.push @context.router.createHref(currentPath, nextQuery)
 
   handleDeleteSubject: (subject) ->
     @props.collection.removeLink 'subjects', [subject.id.toString()]
