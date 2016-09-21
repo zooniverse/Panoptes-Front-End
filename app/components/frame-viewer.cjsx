@@ -44,10 +44,6 @@ module.exports = React.createClass
         </div>
       when 'video'
         <VideoPlayer src={src} type={type} format={format} frame={@props.frame} onLoad={@handleLoad}>
-        {if @state.loading
-          <div className="loading-cover" style={@constructor.overlayStyle}>
-            <LoadingIndicator />
-          </div>}
         </VideoPlayer>
 
     if FrameWrapper
