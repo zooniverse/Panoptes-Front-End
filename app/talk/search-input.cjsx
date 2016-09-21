@@ -21,7 +21,7 @@ module.exports = React.createClass
   onSearchSubmit: (e) ->
     e.preventDefault()
     {owner, name} = @props.params
-    inputValue = @searchInput().value
+    inputValue = @refs.talkSearchInput?.value
     @logSearch inputValue
 
     if owner and name
@@ -32,14 +32,12 @@ module.exports = React.createClass
     else
       @history.pushState(null, "/talk/search", {query: inputValue})
 
-  searchInput: ->
-    @refs.talkSearchInput
-
   componentWillReceiveProps: (nextProps) ->
+    return unless @refs.talkSearchInput
     if nextProps.location.query?.query
-      @searchInput().value = nextProps.location.query.query
+      @refs.talkSearchInput.value = nextProps.location.query.query
     else
-      @searchInput().value = ''
+      @refs.talkSearchInput.value = ''
 
   render: ->
     <form className="talk-search-form" onSubmit={ @onSearchSubmit }>

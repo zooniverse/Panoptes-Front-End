@@ -32,6 +32,15 @@
       opacity: 1
       border-bottom-color: white
 
+  &__icon
+    padding: 0.5em 0.5em 0.3em 0.5em
+
+    &--inbox
+      margin-left: 0.5em
+
+    &--notifications
+      margin-right: 1em
+
   &__inbox-link
     position: relative
 
@@ -67,6 +76,10 @@
     &.modal-form-pointer
       height: 1.5em // TODO: Why's this weird?
       width: 1.5em // TODO: Why's this weird?
+    
+  .account-bar
+  .login-bar
+    z-index: 2
 
   .site-nav__reveal-toggle
     position: relative

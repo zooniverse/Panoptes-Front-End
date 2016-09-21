@@ -3,6 +3,7 @@ WorkflowToggle = require '../../components/workflow-toggle'
 PromiseRenderer = require '../../components/promise-renderer'
 SetToggle = require '../../lib/set-toggle'
 Dialog = require 'modal-form/dialog'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 
 module.exports = React.createClass
   displayName: 'EditProjectVisibility'
@@ -196,7 +197,7 @@ module.exports = React.createClass
       <hr/>
 
       <p className="form-label">Workflow Settings</p>
-      <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
+      <PromiseRenderer promise={getWorkflowsInOrder @props.project, fields: 'display_name,active'}>{(workflows) =>
         if workflows.length is 0
           <div className="workflow-status-list">No workflows found</div>
         else
@@ -210,4 +211,5 @@ module.exports = React.createClass
           </div>
       }</PromiseRenderer>
       <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
+      <p className="form-help">On a live project, if you want to switch which subjects sets are associated with an active workflow: set the workflow to inactive, next change which subject sets are linked in the Workflow Section within the Project Builder, then return the workflow to active.</p>
     </div>

@@ -27,7 +27,7 @@ module.exports = React.createClass
 
     <div className="talk-search-result talk-module">
       <CommentContextIcon comment={comment}></CommentContextIcon>
-      <CommentLink comment={comment}>{comment.discussion_title}</CommentLink>
+      <CommentLink comment={comment} project={@props.project}>{comment.discussion_title}</CommentLink>
       <Markdown content={comment.body} project={@props.project} />
       <DiscussionPreview {...@props} discussion={discussion} owner={owner} name={name} comment={comment} />
     </div>

@@ -2,7 +2,6 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 GenericTask = require '../generic'
 TextTaskEditor = require './editor'
-levenshtein = require 'fast-levenshtein'
 
 NOOP = Function.prototype
 
@@ -47,11 +46,6 @@ module.exports = React.createClass
 
     isAnnotationComplete: (task, annotation) ->
       annotation.value isnt '' or not task.required
-
-    testAnnotationQuality: (unknown, knownGood) ->
-      distance = levenshtein.get unknown.value.toLowerCase(), knownGood.value.toLowerCase()
-      length = Math.max unknown.value.length, knownGood.value.length
-      (length - distance) / length
 
   getDefaultProps: ->
     task: null

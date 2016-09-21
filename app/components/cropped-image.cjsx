@@ -1,4 +1,5 @@
 React = require 'react'
+ReactDOM = require 'react-dom'
 
 module.exports = React.createClass
   XLINK_NS: 'http://www.w3.org/1999/xlink'
@@ -44,7 +45,7 @@ module.exports = React.createClass
     </svg>
 
   componentDidUpdate: ->
-    image = React.findDOMNode @refs.image
+    image = ReactDOM.findDOMNode @refs.image
     image.setAttribute 'width', @state.naturalWidth
     image.setAttribute 'height', @state.naturalHeight
     image.setAttributeNS @XLINK_NS, 'href', @props.src

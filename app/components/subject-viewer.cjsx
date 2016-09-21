@@ -43,7 +43,9 @@ module.exports = React.createClass
     frameWrapper: null
     allowFlipbook: true
     allowSeparateFrames: false
+    metadataPrefixes: ['#', '!']
     metadataFilters: ['#', '!']
+    workflow: null
 
   getInitialState: ->
     loading: true
@@ -78,18 +80,18 @@ module.exports = React.createClass
     if @state.inFlipbookMode
       mainDisplay = @renderFrame @state.frame
     else
-      mainDisplay = (@renderFrame frame, {key: "frame-#{frame}"} for frame of @props.subject.locations)
-
+      mainDisplay = @props.subject.locations.map (frame, index) =>
+        @renderFrame index, {key: "frame-#{index}"}
     tools = switch type
       when 'image'
         if not @state.inFlipbookMode or @props.subject?.locations.length < 2 or subjectHasMixedLocationTypes @props.subject
-          if @props.allowFlipbook and @props.allowSeparateFrames
+          if @props.workflow?.configuration.enable_switching_flipbook_and_separate
             <button className="secret-button" aria-label="Toggle flipbook mode" title="Toggle flipbook mode" onClick={@toggleInFlipbookMode}>
               <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
             </button>
         else
           <span className="tools">
-            {if @props.allowFlipbook and @props.allowSeparateFrames
+            {if @props.workflow?.configuration.enable_switching_flipbook_and_separate
               <button className="secret-button" aria-label="Toggle flipbook mode" title="Toggle flipbook mode" onClick={@toggleInFlipbookMode}>
                 <i className={"fa fa-fw " + if @state.inFlipbookMode then "fa-th-large" else "fa-film"}></i>
               </button>}
@@ -238,7 +240,7 @@ module.exports = React.createClass
         <tbody>
           {for key, value of @props.subject?.metadata when key.charAt(0) not in @props.metadataFilters and key[...2] isnt '//'
             <tr key={key}>
-              <th>{key}</th>
+              <th>{key.replace(///^(#{@props.metadataPrefixes.join('|')})///, '')}</th>
               <Markdown tag="td" content={value} inline />
             </tr>}
         </tbody>

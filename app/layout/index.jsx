@@ -7,6 +7,8 @@ import SiteFooter from './site-footer';
 import style from './index.styl';
 void style;
 
+const MAX_MOBILE_WIDTH = 875;
+
 const LAYOUT_DEV_MODE = process.env.NODE_ENV !== 'production' &&
   typeof window !== 'undefined' &&
   location.search.indexOf('layout-dev') !== -1;
@@ -41,24 +43,18 @@ const AppLayout = React.createClass({
       revealSiteHeader: () => {
         this.matchWindowScale();
         this.setState({
-          siteHeaderRevealed: true,
+          siteHeaderRevealed: (innerWidth > MAX_MOBILE_WIDTH),
         });
       }
     };
   },
 
-  componentDidMount() {
-    addEventListener('locationchange', this.handleNavigation);
-  },
-
-  componentWillUnmount() {
-    removeEventListener('locationchange', this.handleNavigation);
-  },
-
-  handleNavigation() {
-    this.setState({
-      siteHeaderRevealed: false,
-    });
+  hidePrimaryNav() {
+    if (this.state.siteHeaderRevealed) {
+      this.setState({
+        siteHeaderRevealed: false,
+      });
+    }
   },
 
   matchWindowScale() {
@@ -109,7 +105,7 @@ const AppLayout = React.createClass({
             'app-layout__header--demoted': this.state.siteHeaderDemoted,
           })}
         >
-          <SiteNav ref="mainNav" onToggle={togglePrimaryNav} />
+          <SiteNav ref="mainNav" onToggle={togglePrimaryNav} visible={this.state.siteHeaderRevealed} params={this.props.params} />
         </header>
 
         <div className="app-layout__not-header">
@@ -124,17 +120,9 @@ const AppLayout = React.createClass({
                 scale(${this.state.mainContentScale})
               `,
             } : null}
+            onClick={this.hidePrimaryNav}
           >
             {this.props.children}
-            <div
-              className={classnames('app-layout__main-overlay', {
-                'app-layout__main-overlay--active': demotedHeaderIsRevealed,
-              })}
-              style={{
-                display: demotedHeaderIsRevealed ? 'block' : 'none',
-              }}
-              onClick={this.togglePrimaryNav}
-            ></div>
           </div>
 
           <footer className="app-layout__footer">

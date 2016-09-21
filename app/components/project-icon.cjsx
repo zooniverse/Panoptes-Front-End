@@ -1,5 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
+apiClient = require 'panoptes-client/lib/api-client'
 
 module.exports = React.createClass
   displayName: 'ProjectIcon'
@@ -23,10 +24,8 @@ module.exports = React.createClass
       @getDetails nextProps.project
 
   getDetails: (project) ->
-    project.get 'owner'
-      .then (owner) =>
-        @setState {owner}
-    project.get 'avatar'
+    apiClient.type 'avatars'
+      .get project.links.avatar.id
       .catch =>
         null
       .then (avatar) =>
@@ -34,9 +33,9 @@ module.exports = React.createClass
 
   render: ->
     content = [
-      <img key="image" src={@state.avatar?.src ? @props.defaultAvatarSrc} />
+      <img key="image" alt="" src={@state.avatar?.src ? @props.defaultAvatarSrc} />
       <div key="label" className="label">
-        <span className="owner">{@state.owner?.display_name}</span><br />
+        <span className="owner">{@props.project.links.owner?.display_name}</span><br />
         <span className="display-name"><strong>{@props.project.display_name}</strong></span>
       </div>
       <div key="badge" className="badge">{@props.badge}</div> if @props.badge
@@ -46,7 +45,6 @@ module.exports = React.createClass
       if !!@props.project.redirect
         <a href={@props.project.redirect} className="stats-project-icon">{content}</a>
       else
-        [owner, name] = @props.project.slug.split '/'
-        <Link to="/projects/#{owner}/#{name}" className="stats-project-icon">{content}</Link>
+        <Link to="/projects/#{@props.project.slug}" className="stats-project-icon">{content}</Link>
     else
       <span className="stats-project-icon">{content}</span>

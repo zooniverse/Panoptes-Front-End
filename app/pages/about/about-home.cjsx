@@ -15,7 +15,7 @@ counterpart.registerTranslations 'en',
 
     You’ll be able to study authentic objects of interest gathered by researchers, like images of faraway galaxies, historical records and diaries, or videos of animals in their natural habitats. By answering simple questions about them, you’ll help contribute to our understanding of our world, our history, our Universe, and more.
 
-    With our wide-ranging and ever-expanding suite of projects, covering many disciplines and topics across the sciences and humanities, there's a place for anyone and everyone to explore, learn and have fun in the Zooniverse.
+    With our wide-ranging and ever-expanding suite of projects, covering many disciplines and topics across the sciences and humanities, there's a place for anyone and everyone to explore, learn and have fun in the Zooniverse. To volunteer with us, just go to the [Projects](/projects) page, choose one you like the look of, and get started.
 
     ### We accelerate important research by working together
 

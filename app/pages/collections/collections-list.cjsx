@@ -7,8 +7,16 @@ CollectionsList = React.createClass
   mixins: [TitleMixin]
   title: 'Collections'
 
+  componentDidMount: ->
+    if @props.project? or @props.params?.profile_name?
+      document.documentElement.classList.add 'on-secondary-page'
+
+  componentWillUnmount: ->
+    if @props.project? or @props.params?.profile_name?
+      document.documentElement.classList.remove 'on-secondary-page'
+
   render: ->
-    props = Object.assign({}, @props, {favorite: false, translationObjectName:"collectionsPage"})
-    <List {...props} />
+    props = List.getPropsForList(@props,false)
+    <List {...props} baseType="collections" />
 
 module.exports = CollectionsList

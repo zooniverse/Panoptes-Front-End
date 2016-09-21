@@ -3,6 +3,7 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 moment = require 'moment'
 talkClient = require 'panoptes-client/lib/talk-client'
+apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
 Avatar = require '../../partials/avatar'
 
@@ -20,13 +21,16 @@ module.exports = React.createClass
     conversation: null
 
   componentWillMount: ->
-    talkClient.type('messages').get(@props.notification.source_id, include: 'conversation,user').then (message) =>
-      message.get('user').then (messageUser) =>
+    talkClient.type('messages').get(@props.notification.source_id, include: 'conversation').then (message) =>
+      apiClient.type('users').get(message.user_id).then (messageUser) =>
         message.get('conversation').then (conversation) =>
           @setState {message, conversation, messageUser}
 
   render: ->
     notification = @props.notification
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     if @state.message
       <div className="conversation-message talk-module">
         <Link to="/inbox/#{notification.source.conversation_id}" {...@props} className="message-link">
@@ -37,7 +41,7 @@ module.exports = React.createClass
         <Markdown>{@state.message.body}</Markdown>
 
         <div className="bottom">
-          <Link className="user-profile-link" to="/users/#{@state.messageUser.login}">
+          <Link className="user-profile-link" to="#{baseLink}users/#{@state.messageUser.login}">
             <Avatar user={@state.messageUser} />{' '}{@state.messageUser.display_name}
           </Link>{' '}
           <Link to={"/inbox/#{notification.source.conversation_id}"} {...@props} className="time-ago">

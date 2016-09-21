@@ -11,6 +11,7 @@
   overflow: hidden
   position: relative
   font-size: 14px
+  margin-top: 2.33em
 
 .collection-card,
 .project-card
@@ -58,8 +59,24 @@
       background: lighten(COBOLT_BLUE, 20%)
 
 .collection-card
+  border-radius: 1em
+
   .name
     margin-bottom: 1em
+    height: 2.9em
+    overflow: hidden
+    text-overflow: ellipsis
+    line-height: 1.45em
+    max-height: 2.9em
+
+  .owner,
+  .private
+    margin: 0 auto
+    height: 1.5em
+  .owner-private
+    height: 1.8em
+  .owner-public
+    height: 3.6em
 
 .project-card
   height: 270px

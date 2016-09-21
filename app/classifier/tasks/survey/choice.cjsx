@@ -23,14 +23,14 @@ ImageFlipper = React.createClass
     <span className="survey-task-image-flipper">
       {@renderPreload()}
       <img src={@props.images[@state.frame]} className="survey-task-image-flipper-image" />
-      <span className="survey-task-image-flipper-pips">
+      <div className="survey-task-image-flipper-pips">
         {unless @props.images.length is 1
           for index in [0...@props.images.length]
             <span key={@props.images[index]}>
               <button type="button" className="survey-task-image-flipper-pip" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>
               {' '}
             </span>}
-      </span>
+      </div>
     </span>
 
   renderPreload: ->

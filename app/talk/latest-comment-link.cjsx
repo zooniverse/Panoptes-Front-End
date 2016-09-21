@@ -78,6 +78,10 @@ module.exports = React.createClass
     else
       scrollToLastComment: true, page: @lastPage()
 
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
+
     <div className="talk-latest-comment-link">
       <div className="talk-discussion-link">
         <div ref="markdownText" className="hidden-markdown">
@@ -85,7 +89,7 @@ module.exports = React.createClass
         </div>
 
         {if @state.commentUser?
-          <Link className="user-profile-link" to="/users/#{@state.commentUser.login}" onClick={@logProfileClick.bind this, 'view-profile-author'}>
+          <Link className="user-profile-link" to="#{baseLink}users/#{@state.commentUser.login}" onClick={@logProfileClick.bind this, 'view-profile-author'}>
             <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
           </Link>}
 

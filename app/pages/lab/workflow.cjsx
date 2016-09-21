@@ -6,12 +6,11 @@ ModalFormDialog = require 'modal-form/dialog'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../../components/change-listener'
 RetirementRulesEditor = require '../../components/retirement-rules-editor'
-{History, Link} = require 'react-router'
+{Link} = require 'react-router'
 MultiImageSubjectOptionsEditor = require '../../components/multi-image-subject-options-editor'
 tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
-GoldStandardImporter = require './gold-standard-importer'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
 
@@ -20,25 +19,11 @@ DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
 else
   '1166' # Ghosts
 
-EXAMPLE_GOLD_STANDARD_DATA = '''
-  [{
-    "links": {
-      "subjects": ["123"]
-    },
-    "annotations": [{
-      task: "T1",
-      value: 3
-    }, {
-      task: "T2",
-      value: "The value"
-    }, ...]
-  }, ...]
-'''
-
 EditWorkflowPage = React.createClass
   displayName: 'EditWorkflowPage'
 
-  mixins: [History]
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
     workflow: null
@@ -46,7 +31,6 @@ EditWorkflowPage = React.createClass
 
   getInitialState: ->
     selectedTaskKey: @props.workflow.first_task
-    goldStandardFilesToImport: null
     forceReloader: 0
     deletionInProgress: false
     deletionError: null
@@ -55,7 +39,7 @@ EditWorkflowPage = React.createClass
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
-    @history.createHref("/projects/#{owner}/#{name}/classify", viewQuery)
+    @context.router.createHref "/projects/#{owner}/#{name}/classify", viewQuery
 
   showCreateWorkflow: ->
     @setState workflowCreationInProgress: true
@@ -66,7 +50,7 @@ EditWorkflowPage = React.createClass
   handleWorkflowCreation: (workflow) ->
     @hideCreateWorkflow()
     newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
-    @props.history.push newLocation
+    @context.router.push newLocation
     @props.project.uncacheLink 'workflows'
     @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
 
@@ -98,6 +82,7 @@ EditWorkflowPage = React.createClass
           <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} workflowActiveStatus={not @props.project.live} />
         </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
+      <p className="form-help">If you have multiple workflows you can rearrange the order in which they are listed on your project's front page by clicking and dragging on the left gray tab next to each workflow title in the left menu bar.</p>
       {if @props.project.live and @props.workflow.active
         <p className="form-help warning"><strong>You cannot edit an active workflow if the project is live.</strong></p>}
       <div className="columns-container" style={disabledStyle if @props.project.live and @props.workflow.active}>
@@ -285,6 +270,24 @@ EditWorkflowPage = React.createClass
               <hr />
             </div>}
 
+          {if 'Gravity Spy Gold Standard' in @props.project.experimental_tools
+            <div>
+              <div>
+                <AutoSave resource={@props.workflow}>
+                  <span className="form-label">Gravity Spy Gold Standard</span><br />
+                  <small className="form-help">Notify a user how they've classified a Gold Standard subject.</small>
+                  <br />
+                  <label>
+                    <input type="checkbox" onChange={@handleSetGravitySpyGoldStandard} checked={@props.workflow.configuration.gravity_spy_gold_standard}/>
+                    Gravity Spy Gold Standard
+                  </label>
+                </AutoSave>
+              </div>
+
+              <hr />
+
+            </div>}
+
           <AutoSave tag="div" resource={@props.workflow}>
             <span className="form-label">Multi-image options</span><br />
             <small className="form-help">Choose how to display multiple images</small>
@@ -309,27 +312,6 @@ EditWorkflowPage = React.createClass
             </AutoSave>
             <br />
             <small className="form-help">How many people should classify each subject before it is “done”? Once a subject has reached the retirement limit it will no longer be shown to any volunteers.</small>
-          </p>
-
-          <hr />
-
-          <p>
-            <FileButton className="standard-button" accept="application/json" multiple onSelect={@handleGoldStandardDataImport}>Import gold standard classifications</FileButton>
-            <br />
-            <small className="form-help">Import gold standard classifications to improve the quality of automatic aggregations and optionally provide classification feedback for volunteers.</small>{' '}
-            <TriggeredModalForm trigger={<i className="fa fa-question-circle"></i>}>
-              <p>Gold standard classificaitons should be in the form:</p>
-              <pre>{EXAMPLE_GOLD_STANDARD_DATA}</pre>
-            </TriggeredModalForm>
-          </p>
-
-          <p>
-            <AutoSave tag="label" resource={@props.workflow}>
-              <input type="checkbox" name="public_gold_standard" checked={@props.workflow.public_gold_standard} onChange={handleInputChange.bind @props.workflow} />{' '}
-              Use gold standard data to provide classification feedback to volunteers.
-            </AutoSave>
-            <br />
-            <small className="form-help">After they classify, they’ll be able to compare their own classification to the gold standard data to make sure they’re on the right track.</small>
           </p>
 
           <hr />
@@ -400,16 +382,6 @@ EditWorkflowPage = React.createClass
             </div>}
         </div>
       </div>
-
-      {if @state.goldStandardFilesToImport?
-        <ModalFormDialog required>
-          <GoldStandardImporter
-            project={@props.project}
-            workflow={@props.workflow}
-            files={@state.goldStandardFilesToImport}
-            onClose={@handleGoldStandardImportClose}
-          />
-        </ModalFormDialog>}
     </div>
 
   renderSubjectSets: ->
@@ -509,6 +481,10 @@ EditWorkflowPage = React.createClass
     @props.workflow.update
       'configuration.invert_subject': e.target.checked
 
+  handleSetGravitySpyGoldStandard: (e) ->
+    @props.workflow.update
+      'configuration.gravity_spy_gold_standard': e.target.checked
+
   handleSetWorldWideTelescope: (e) ->
     if !@props.workflow.configuration.custom_summary
       @props.workflow.update
@@ -586,18 +562,12 @@ EditWorkflowPage = React.createClass
 
       @props.workflow.delete().then =>
         @props.project.uncacheLink 'workflows'
-        @history.pushState(null, "/lab/#{@props.project.id}")
+        @context.router "/lab/#{@props.project.id}"
       .catch (error) =>
         @setState deletionError: error
       .then =>
         if @isMounted()
           @setState deletionInProgress: false
-
-  handleGoldStandardDataImport: (e) ->
-    @setState goldStandardFilesToImport: e.target.files
-
-  handleGoldStandardImportClose: ->
-    @setState goldStandardFilesToImport: null
 
   handleViewClick: ->
     setTimeout =>
@@ -620,7 +590,7 @@ module.exports = React.createClass
       workflowID: ''
 
   render: ->
-    <PromiseRenderer promise={apiClient.type('workflows').get @props.params.workflowID}>{(workflow) =>
+    <PromiseRenderer promise={apiClient.type('workflows').get @props.params.workflowID, {}}>{(workflow) =>
       <ChangeListener target={workflow}>{=>
         <EditWorkflowPage {...@props} workflow={workflow} />
       }</ChangeListener>

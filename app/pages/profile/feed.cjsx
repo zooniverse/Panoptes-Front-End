@@ -17,18 +17,27 @@ module.exports = React.createClass
     error: null
 
   componentDidMount: ->
+    if @props.project? or @props.params?.profile_name?
+      document.documentElement.classList.add 'on-secondary-page'
     @getComments(@props.profileUser, @props.location.query.page)
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps is @props.profileUser and nextProps.location.query.page is @props.location.query.page
       @getComments(nextProps.profileUser, nextProps.location.query.page)
 
+  componentWillUnmount: ->
+    if @props.project? or @props.params?.profile_name?
+      document.documentElement.classList.remove 'on-secondary-page'
+
   getComments: (user, page) ->
     @setState {
       comments: null
       error: null
     }, =>
-      talkClient.type('comments').get({user_id: user.id, page: page, sort: '-created_at'})
+      criteria = {user_id: user.id, page: page, sort: '-created_at'}
+      if @props.project?
+        criteria.section = "project-#{@props.project.id}"
+      talkClient.type('comments').get(criteria)
         .catch (error) =>
           @setState({error})
         .then (comments) =>
@@ -44,7 +53,7 @@ module.exports = React.createClass
           <h2>Recent comments</h2>
 
           {for comment in @state.comments
-            <CommentLink key={comment.id} comment={comment} />}
+            <CommentLink key={comment.id} comment={comment} project={@props.project}/>}
 
           <Paginator pageCount={meta.page_count} page={meta.page} />
         </div>

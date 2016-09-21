@@ -10,7 +10,7 @@ counterpart.registerTranslations 'en',
       chicago: 'Chicago'
       minnesota: 'Minnesota'
       portsmouth: 'Portsmouth'
-      taipei: 'Taipei'
+      hilo: 'Hilo'
     content:
       header:
         showAll: 'Zooniverse Team'
@@ -32,6 +32,9 @@ counterpart.registerTranslations 'en',
       andreaSimenstad:
         title: 'Developer'
         bio: '''Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.'''
+      beverleyNewing:
+        title: 'Web Developer Intern'
+        bio: '''Beverley is an English and German literature graduate, now working as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.'''
       brookeSimmons:
         title: 'Researcher'
         bio: 'Brooke is an astrophysicist studying black holes, galaxies, and how citizen
@@ -108,9 +111,9 @@ to squeeze a bit of galaxy evolution science in.'''
         mechanics from Kerbal Space Program, and feels like he's therefore basically an astrophysicist.'''
       megSchwamb:
         title: 'Researcher'
-        bio: '''Meg is a planetary scientist and astronomer involved in the Zooniverse's Planet
-        Four and Planet Hunters projects. She studies small bodies in the Solar System, exoplanets,
-        and Mars. Meg has a fondness for baking, soccer, and champagne.'''
+        bio: '''Meg is a planetary scientist and astronomer involved in the Zooniverse's Planet Four, Planet Four: Terrains,
+        and Comet Hunters projects. She also serves as project scientist for Comet Hunters. She studies small bodies in the
+        Solar System, exoplanets, and Mars. Meg has a fondness for baking, soccer, and champagne.'''
       michaelParrish:
         title: 'Rails/Backend Developer'
         bio: '''Software developer at the Zooniverse. Dog, fishing, snakes, and bourbon.'''
@@ -119,6 +122,9 @@ to squeeze a bit of galaxy evolution science in.'''
         bio: '''Becky is an astrophysicist working towards her doctorate in Oxford. She is
         interested in how galaxies change over time and how we can track this evolution.
         Happy-go-lucky about outreach, the Zooniverse and everything.'''
+      robinSchaaf:
+        title: 'Mobile App Developer'
+        bio: '''Robin has a background in web development for educational institutions.  In her free time she enjoys board games and playing bass guitar.'''
       rogerHutchings:
         title: 'Developer'
         bio: '''Roger builds front end interfaces for the Zooniverse, and enjoys coding, music and rebuilding motorbikes in his spare time.'''
@@ -158,7 +164,7 @@ to squeeze a bit of galaxy evolution science in.'''
       zachWolfenbarger:
         title: 'Developer'
         bio: '''Zach is a software developer. He was a molecular biologist, but then the lab needed some code to be written and the die was cast. He’s also in a couple of bands and can be found playing shows at bars and comic conventions all over the midwest.'''
-        
+
 teamMembers =
   adamMcMaster:
     name: "Adam McMaster"
@@ -187,6 +193,13 @@ teamMembers =
     bio: counterpart "team.content.andreaSimenstad.bio"
     image: "/assets/team/andrea.jpg"
     location: "minnesota"
+  beverleyNewing:
+    name: "Beverley Newing"
+    twitter: "beverleynewing"
+    title: counterpart "team.content.beverleyNewing.title"
+    bio: counterpart "team.content.beverleyNewing.bio"
+    image: "/assets/team/beverley.jpg"
+    location: "oxford"
   brookeSimmons:
     name: "Brooke Simmons"
     twitter: "vrooje"
@@ -309,7 +322,7 @@ teamMembers =
     title: counterpart "team.content.megSchwamb.title"
     bio: counterpart "team.content.megSchwamb.bio"
     image: "/assets/team/meg.jpg"
-    location: "taipei"
+    location: "hilo"
   michaelParrish:
     name: "Michael Parrish"
     twitter: "michael_parrish"
@@ -324,6 +337,12 @@ teamMembers =
     bio: counterpart "team.content.rebeccaSmethurst.bio"
     image: "/assets/team/becky.jpg"
     location: "oxford"
+  robinSchaaf:
+    name: "Robin Schaaf"
+    title: counterpart "team.content.robinSchaaf.title"
+    bio: counterpart "team.content.robinSchaaf.bio"
+    image: "/assets/team/robin.jpg"
+    location: "chicago"
   rogerHutchings:
     name: "Roger Hutchings"
     title: counterpart "team.content.rogerHutchings.title"

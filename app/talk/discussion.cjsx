@@ -325,7 +325,7 @@ module.exports = React.createClass
           </section>
 
           <section>
-            <ActiveUsers section={@props.section} />
+            <ActiveUsers section={@props.section} project={@props.project}/>
           </section>
 
           <section>
@@ -340,11 +340,14 @@ module.exports = React.createClass
       {if discussion?.locked
         @lockedMessage()
       else if @props.user?
+        baseLink = "/"
+        if @props.project?
+          baseLink += "projects/#{@props.project.slug}/"
         <section>
           <div className="talk-comment-author">
             <Avatar user={@props.user} />
             <p>
-              <Link to="/users/#{@props.user.login}">{@props.user.display_name}</Link>
+              <Link to="#{baseLink}users/#{@props.user.login}">{@props.user.display_name}</Link>
             </p>
             <div className="user-mention-name">@{@props.user.login}</div>
             <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.user.id, section: ['zooniverse', discussion.section], is_shown: true, page_size: 100)}>{(roles) =>

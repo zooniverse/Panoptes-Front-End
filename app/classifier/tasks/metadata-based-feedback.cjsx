@@ -6,11 +6,10 @@ module.exports = React.createClass
   withinTolerance: (userX, userY, metaX, metaY, tolerance) ->
     distance = Math.sqrt((userY - metaY)**2 + (userX - metaX)**2)
     isWithinTolerance = distance < tolerance
-    return isWithinTolerance
 
   withinAnyTolerance: (userX, userY) ->
     for key, value of @props.subject?.metadata
-      if key.indexOf(@props.metaSimCoordXPattern) == 0
+      if key.indexOf(@props.metaSimCoordXPattern) is 0
         xKey = key
         metaX = parseFloat(@props.subject.metadata[xKey])
         yKey = @props.metaSimCoordYPattern + xKey.substr(2)
@@ -53,12 +52,12 @@ module.exports = React.createClass
     userYPos = @props.classification?.annotations[0]?.value[0]?.y
     isWithinTolerance = @withinAnyTolerance(userXPos, userYPos)
 
-    if subjectClass == @props.dudLabel
-      if userMadeAnnotation == true && subjectFailureMessage
+    if subjectClass is @props.dudLabel
+      if userMadeAnnotation is true && subjectFailureMessage
         <p>{subjectFailureMessage}</p>
       else if subjectSuccessMessage
         <p>{subjectSuccessMessage}</p>
-    else if subjectClass == @props.simLabel
+    else if subjectClass is @props.simLabel
       if (!(userMadeAnnotation?) || !isWithinTolerance) && subjectFailureMessage
         <p>{subjectFailureMessage}</p>
       else if subjectSuccessMessage

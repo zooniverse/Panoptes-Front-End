@@ -68,21 +68,42 @@ class StarChart
   addAxisLabel: (axisLabel) ->
     @axisLabels.push axisLabel
 
-  filterBounds: (items, prop, bounds) ->
-    (i for i in items when i[prop] < bounds[prop][0] || i[prop] > bounds[prop][1])
+  findAxis: (points) ->
+    xSlope = Infinity
+    ySlope = 0
+    xAxis = null
+    yAxis = null
+    for pointA in points
+      for pointB in points
+        if Math.abs(@slope(pointA, pointB)) < xSlope
+          xSlope = Math.abs(@slope(pointA, pointB))
+          xAxis = [pointA, pointB]
+        if Math.abs(@slope(pointA, pointB)) > ySlope
+          ySlope = Math.abs(@slope(pointA, pointB))
+          yAxis = [pointA, pointB]
+    xAxis: xAxis
+    yAxis: yAxis
+
+  slope: (pointA, pointB) ->
+    (pointA.y - pointB.y) / (pointA.x - pointB.x)
+
+  findLabels: (range, labels) ->
+    midpoint = {x: (range[0].x + range[1].x) / 2, y: (range[1].y + range[1].y) / 2}
+    label = null
+    distance = Infinity
+    for point in labels
+      if @calculateDistance(midpoint, point) < distance
+        label = point
+        distance = @calculateDistance(midpoint, point)
+    label
 
   buildAxes: ->
     if @axisPoints.length >= 3 && @axisLabels.length >= 2
       @valid = true
-      bounds = @bounds()
-      xLabel = (@filterBounds @axisLabels, 'y', bounds)[0]
-      yLabel = (@filterBounds @axisLabels, 'x', bounds)[0]
-      xRange = (@filterBounds @axisPoints, 'y', bounds).sort( (a, b) -> a.x > b.x ).slice(0, 2)
-      yRange = (@filterBounds @axisPoints, 'x', bounds).sort( (a, b) -> a.y > b.y ).slice(0, 2)
-      if !xRange[1]
-        xRange[1] = xRange[0]
-      if !yRange[1]
-        yRange[1] = yRange[0]
+      xRange = (@findAxis @axisPoints).xAxis.sort( (a, b) -> a.x > b.x )
+      yRange = (@findAxis @axisPoints).yAxis.sort( (a, b) -> a.y > b.y )
+      xLabel = @findLabels xRange, @axisLabels
+      yLabel = @findLabels yRange, @axisLabels
       @xAxis = new Axis xRange, xLabel.value
       @yAxis = new Axis yRange, yLabel.value
 
@@ -97,7 +118,7 @@ class StarChart
     coords
 
 class Plate
-  constructor: (@starChart, @url, @user_name) ->
+  constructor: (@starChart, @url) ->
     @imageBounds = @starChart.bounds()
     [xRange, yRange] = [@starChart.xAxis.range, @starChart.yAxis.range]
 
@@ -162,8 +183,7 @@ class Plate
     else 90
 
   computeName: ->
-    hashTime = crypto.createHash('md5').update(new Date().toString()).digest('hex').slice(0, 10)
-    @user_name + hashTime
+    crypto.createHash('md5').update(new Date().toString()).digest('hex').slice(0, 10)
 
   getWwtUrl: ->
     base = "http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx"
@@ -253,18 +273,24 @@ module.exports = React.createClass
   displayName: 'WorldWideTelescope'
 
   parseClassification: ->
+    telescopeAnnotations = []
+    @props.annotations.map (annotation) =>
+      if @props.workflow.tasks[annotation.task].type is 'drawing'
+        annotation.type = @props.workflow.tasks[annotation.task].type
+        telescopeAnnotations.push(annotation)
+
     # parse chart rectangles
-    @charts = ((new StarChart annotation) for annotation in @props.annotations[1].value)
+    @charts = ((new StarChart annotation) for annotation in telescopeAnnotations[0].value)
 
     # assign axis points to charts
-    for annotation in @props.annotations[2].value
+    for annotation in telescopeAnnotations[1].value
       point = new AxisPoint annotation
       distances = ((chart.closestCornerDistance point) for chart in @charts)
       closest = distances.sort((a, b) -> a.distance > b.distance)[0].chart
       closest.addAxisPoint point
 
     # assign axis labels to charts
-    for annotation in @props.annotations[3].value
+    for annotation in telescopeAnnotations[2].value
       label = new AxisLabel annotation
       distances = ((chart.closestMidpointDistance label) for chart in @charts)
       closest = distances.sort((a, b) -> a.distance > b.distance)[0].chart
@@ -274,20 +300,15 @@ module.exports = React.createClass
       chart.buildAxes()
 
   render: ->
-    #TODO: this shouldn't be necessary
-    return <div/> unless @props.annotations[1]
-
     subjImage = @props.subject.locations[0]["image/jpeg"]
-
-    @parseClassification()
-
     plates = []
-    for chart in @charts
-      if chart.valid
-        try
-          plates.push(new Plate(chart, subjImage, @props.user_name))
-        catch error
-          console?.error 'Failed to link to Worldwide Telescope. Units must be annotated outside chart.'
+
+    try
+      @parseClassification()
+
+      for chart in @charts
+        if chart.valid
+          plates.push(new Plate(chart, subjImage))
 
     <div>
       {plates.map (plate, idx) ->
