@@ -84,7 +84,7 @@ module.exports = React.createClass
             <td>**_bolditalics_**</td>
             <td><Markdown>**_bolditalics_**</Markdown></td>
           </tr>
-            <tr>
+          <tr>
             <td>Superscript</td>
             <td>
                ^superscript^
@@ -95,7 +95,7 @@ module.exports = React.createClass
               <Markdown>^super\ script^</Markdown>
             </td>
           </tr>
-           <tr>
+          <tr>
             <td>Subscript</td>
             <td>
                ~subscript~
