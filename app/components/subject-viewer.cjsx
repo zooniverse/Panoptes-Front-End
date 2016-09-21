@@ -79,7 +79,6 @@ module.exports = React.createClass
     {type, format, src} = getSubjectLocation @props.subject, @state.frame
     if @state.inFlipbookMode
       mainDisplay = @renderFrame @state.frame
-      console.log ' @state.frame',  @state.frame
     else
       mainDisplay = @props.subject.locations.map (frame, index) =>
         @renderFrame index, {key: "frame-#{index}"}

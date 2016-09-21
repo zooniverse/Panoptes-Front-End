@@ -45,8 +45,8 @@ module.exports = React.createClass
         </div>
         {if @props.workflow.configuration?.multi_image_mode is 'separate'
           <div>
-            <label>Show separate frames as</label><br/>
-            <input type="radio" id="multi_image_row" name="multi_image_layout" value="row" onChange={@handleSelectLayout} />
+            <label>Show separate frames as<input type="radio" id="multi_image_row" name="multi_image_layout" value="row" onChange={@handleSelectLayout} /></label><br/>
+
             <label htmlFor="multi_image_row">Single row (side by side)</label>
             <input type="radio" id="multi_image_grid2" name="multi_image_layout" value="grid2" onChange={@handleSelectLayout} />
             <label htmlFor="multi_image_grid2">Grid (2col)</label>
