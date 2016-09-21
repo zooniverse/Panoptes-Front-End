@@ -9,6 +9,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 classNames = require 'classnames'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
+isAdmin = require '../../lib/is-admin'
 
 counterpart.registerTranslations 'en',
   project:
@@ -87,8 +88,12 @@ ProjectPage = React.createClass
       @context.geordi?.remember projectToken: nextProps.project?.slug
 
     # Only call to get workflow if we know if there is a user or not and the project is finished loading
-    if nextContext.initialLoadComplete and not nextProps.loading and nextProps.preferences and @state.activeWorkflows.length is 0
-      @getAllWorkflows(nextProps.project)
+    if nextContext.initialLoadComplete and not nextProps.loading and nextProps.preferences and @state.activeWorkflows.length is 0 and not @state.loadingSelectedWorkflow
+
+      if nextProps.location.query?.workflow? and ('allow workflow query' in nextProps.project.experimental_tools or @checkUserRoles(nextProps.project, nextProps.user))
+        @getAllWorkflows(nextProps.project, { id: nextProps.location.query.workflow })
+      else
+        @getAllWorkflows(nextProps.project)
 
     if nextProps.preferences?.preferences? and @state.selectedWorkflow?
       if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow.id
@@ -118,10 +123,9 @@ ProjectPage = React.createClass
       .then (pages) =>
         @setState {pages}
 
-  getAllWorkflows: (project) ->
+  getAllWorkflows: (project, query = { active: true }) ->
     @setState { loadingSelectedWorkflow: true }
-
-    getWorkflowsInOrder(project, { active: true })
+    getWorkflowsInOrder(project, query)
       .then (activeWorkflows) =>
         @setState { activeWorkflows }
       .then =>
@@ -130,9 +134,9 @@ ProjectPage = React.createClass
         @getSelectedWorkflow(project, @props.preferences)
 
   getSelectedWorkflow: (project, preferences) ->
-    # preference user selected workflow, then project owner set workflow, then default workflow
+    # preference workflow query, then user selected workflow, then project owner set workflow, then default workflow
     # if none of those are set, select random workflow
-    if @props.location.query?.workflow? and 'allow workflow query' in @props.project.experimental_tools
+    if @props.location.query?.workflow? and ('allow workflow query' in @props.project.experimental_tools or @checkUserRoles(project, @props.user))
       preferredWorkflowID = @props.location.query.workflow
       unless preferences?.preferences.selected_workflow is preferredWorkflowID
         @props.onChangePreferences 'preferences.selected_workflow', preferredWorkflowID
@@ -183,6 +187,16 @@ ProjectPage = React.createClass
 
   redirectClassifyLink: (redirect) ->
     "#{redirect.replace(/\/?#?\/+$/, "")}/#/classify"
+
+  checkUserRoles: (project, user) ->
+    getUserRoles = project.get('project_roles', user_id: user.id)
+      .then ([userRoles]) =>
+        userRoles.roles
+      .catch =>
+        []
+
+    getUserRoles.then (userRoles) =>
+      isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles
 
   render: ->
     projectPath = "/projects/#{@props.project.slug}"
