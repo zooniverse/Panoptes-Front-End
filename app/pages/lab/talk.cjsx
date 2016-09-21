@@ -128,7 +128,7 @@ module.exports = React.createClass
           <p>See above to add boards to your project, or look in the moderator controls listed under the talk tab of your project!</p>}
       </div>
 
-      <p>3. You can create a list of suggested tags to use.</p>
+      <p>3. You can create a list of suggested tags to use. Suggested tags are weighted higher in autocompletion results as well as populating the list of tags when you first type "#" in a Talk text box.</p>
       <div className="suggested-tags">
         {@state.suggestedTags.map(@suggestedTag)}
         <input type="text" ref="newSuggestedTag" placeholder="New suggested tag" onKeyUp={@suggestedTagChanged} />
