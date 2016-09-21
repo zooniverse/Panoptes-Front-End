@@ -14,7 +14,7 @@ truncate = (string = '', ending = '', length = 80) ->
   string.trim().slice(0, (length - ending.length)) + ending
 
 module.exports = React.createClass
-  displayName: 'TalkLatestCommentComment'
+  displayName: 'TalkLatestCommentLink'
 
   propTypes:
     project: React.PropTypes.object
