@@ -9,6 +9,8 @@ NextTaskSelector = require './next-task-selector'
 {MarkdownEditor} = (require 'markdownz').default
 MarkdownHelp = require '../../partials/markdown-help'
 
+`import MinMaxEditor from './drawing/min-max-editor';`
+
 module.exports = React.createClass
   displayName: 'GenericTaskEditor'
 
@@ -122,8 +124,8 @@ module.exports = React.createClass
                           {for toolKey of drawingTools
                             <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["column", "grid"]}
                           {if @canUse("column")
-                            <option key="column" value="column">column</option>
-                          if @canUse("grid")
+                            <option key="column" value="column">column</option>}
+                          {if @canUse("grid")
                             <option key="grid" value="grid">grid</option>}
                         </select>
                       </AutoSave>
@@ -145,31 +147,12 @@ module.exports = React.createClass
                       </AutoSave>
                     </div>
 
-                    <div key="min-max" className="min-max-editor workflow-choice-setting">
-                      <AutoSave resource={@props.workflow}>
-                        Min{' '}
-                        <input type="number"
-                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}.min"
-                          value={choice.min}
-                          placeholder="0"
-                          style={width: '3ch'}
-                          onBlur={handleChange}
-                          data-json-value={true}
-                         />
-                      </AutoSave>
-                      <AutoSave resource={@props.workflow}>
-                        Max{' '}
-                        <input
-                          type="number"
-                          name="#{@props.taskPrefix}.#{choicesKey}.#{index}.max"
-                          value={choice.max}
-                          placeholder="∞"
-                          style={width: '3ch'}
-                          onBlur={handleChange}
-                          data-json-value={true}
-                         />
-                      </AutoSave>
-                    </div>
+                    <MinMaxEditor
+                      key='min-max'
+                      workflow={@props.workflow}
+                      name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
+                      choice={choice}
+                    />
                     
                     if 'size' in options
                       <div key="size" className="workflow-choice-setting">

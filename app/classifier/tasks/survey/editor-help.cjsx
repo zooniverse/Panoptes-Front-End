@@ -113,7 +113,7 @@ module.exports =
           <td>The question to ask</td>
           <td>Can the user select multiple answers? <code>Y</code> or <code>N</code></td>
           <td>Is an answer required? <code>Y</code> or <code>N</code></td>
-          <td>The answers, <code>,</code>-separated</td>
+          <td>The answers separated with <code>;</code></td>
           <td>Choices to ask this question for (leave blank for all by default).</td>
           <td>Choices to not ask this question for.</td>
         </tr>
@@ -121,7 +121,7 @@ module.exports =
           <td>Is this an example question?</td>
           <td>Y</td>
           <td>N</td>
-          <td>Yes, No, Maybe</td>
+          <td>Yes; No; Maybe</td>
           <td> </td>
           <td>Dolphin</td>
         </tr>

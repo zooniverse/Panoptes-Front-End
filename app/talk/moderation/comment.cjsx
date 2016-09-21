@@ -30,17 +30,20 @@ module.exports = React.createClass
   render: ->
     <div className="talk-module">
       {if @state.comment
+        profile_link = "/users/#{@state.comment.user_login}"
+        if @props.project?
+          profile_link = "/projects/#{@props.project.slug}#{profile_link}"
         <div key={"comment-#{@state.comment.id}"}>
           <h1>Comment {@state.comment.id} Reports</h1>
           <ModerationReports reports={@props.moderation.reports} />
 
           <span>Reported comment by:{' '}
-            <Link to="/users/#{@state.comment.user_login}">
+            <Link to={profile_link}>
               {@state.comment.user_display_name or @state.comment.user_login}
             </Link>:
           </span>
 
-          <CommentLink comment={@state.comment} />
+          <CommentLink comment={@state.comment} project={@props.project} />
           <ModerationActions {...@props} comment={@state.comment} />
         </div>
       else

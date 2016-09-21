@@ -60,6 +60,59 @@ FeaturedProjects = React.createClass
       <Link to="/projects" className="call-to-action standard-button x-large"><Translate content="home.featuredProjects.button" /></Link>
     </div>
 
+RecentProjects = React.createClass
+  displayName: 'RecentProjects'
+  
+  getInitialState: ->
+    projects: []
+    activityCounts: {}
+    title: ""
+    href: ''
+    action: ""
+  
+  componentWillMount: ->
+    @props.user
+      .get("project_preferences", page_size: 10, sort: '-updated_at')
+      .then (projectPreferences) =>
+        userProjects = projectPreferences.map (projectPreference) -> projectPreference.links.project if projectPreference.activity_count > 0
+        userProjects = userProjects.filter(Boolean).slice 0, 4
+        activityCounts = {}
+        if userProjects.length > 0
+          activityCounts[projectPreference.links.project] = projectPreference.activity_count for projectPreference in projectPreferences
+          @setState
+            activityCounts: activityCounts
+            title: "home.recentProjects.title"
+            href: "/users/#{@props.user.login}/stats"
+            action: "home.recentProjects.button"
+          projectsPromise = apiClient.type('projects').get userProjects, include: ['avatar', 'owners']
+        else
+          @setState
+            title: "home.recentProjects.altTitle"
+            href: '/projects'
+            action: "home.recentProjects.altButton"
+          projectsPromise = apiClient.type('projects').get(launch_approved: true, page_size: 4, cards: true)
+        projectsPromise
+      .then (projects) =>
+        @setState {projects}
+  
+  render: ->
+    if @state.projects.length > 0
+      <div className="recent-projects">
+          <Translate component="h5" content={@state.title} />
+          <div className="recent-projects-list">
+            {for project in @state.projects
+              badge = @state.activityCounts[project.id] ? 0
+              <div key={project.id}>
+                <ProjectIcon project={project} badge={badge} />
+                &ensp;
+              </div>}
+          </div>
+          <Link to={@state.href} className="call-to-action standard-button x-large"><Translate content={@state.action} /></Link>
+      </div>
+    else
+      null
+    
+
 module.exports = React.createClass
   displayName: 'HomePage'
 
@@ -74,44 +127,14 @@ module.exports = React.createClass
 
   render: ->
     aboutItems = ['contribute', 'explore', 'collaborate', 'discover']
-
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     <div className="home-page">
       <div className="flex-container">
         <section className="hero on-dark">
           <ZooniverseLogoType />
-          <PromiseRenderer promise={@lastFourProjects()}>{(projectPreferences) =>
-            if projectPreferences.length > 0
-              <div className="recent-projects">
-                <Translate component="h5" content="home.recentProjects.title" />
-                <div className="recent-projects-list">
-                  {projectPreferences.map (projectPreference) =>
-                    <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} catch={null} then={(project) =>
-                      if project?
-                        <div>
-                          <ProjectIcon project={project} badge={projectPreference.activity_count} />
-                          &ensp;
-                        </div>
-                      else
-                        null
-                    } />}
-                </div>
-                <Link to="/users/#{@props.user.login}/stats" className="call-to-action standard-button x-large"><Translate content="home.recentProjects.button" /></Link>
-              </div>
-            else
-              <div className="recent-projects">
-                <Translate component="h5" content="home.recentProjects.altTitle" />
-                <PromiseRenderer promise={apiClient.type('projects').get(launch_approved: true, page_size: 4, cards: true)}>{(projects) =>
-                  <div className="recent-projects-list">
-                    {projects.map (project) ->
-                      <div>
-                        <ProjectIcon key={project.id} project={project} />
-                        &ensp;
-                      </div>}
-                  </div>
-                }</PromiseRenderer>
-                <Link to="/projects" className="call-to-action standard-button hero-button x-large"><Translate content="home.recentProjects.altButton" /></Link>
-              </div>
-          }</PromiseRenderer>
+          <RecentProjects user={@props.user} />
         </section>
       </div>
 

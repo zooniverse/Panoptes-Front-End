@@ -7,6 +7,7 @@ ChangeListener = require '../../components/change-listener'
 ProjectIcon = require '../../components/project-icon'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 WorkflowToggle = require '../../components/workflow-toggle'
 
 EXPERIMENTAL_FEATURES = [
@@ -15,7 +16,6 @@ EXPERIMENTAL_FEATURES = [
   'text'
   'combo'
   'dropdown'
-  'field guide'
   'mini-course'
   'hide classification summaries'
   'pan and zoom'
@@ -24,6 +24,10 @@ EXPERIMENTAL_FEATURES = [
   'column'
   'grid'
   'invert'
+  'workflow assignment'
+  'Gravity Spy Gold Standard'
+  'allow workflow query'
+  'expert comparison summary'
 ]
 
 ProjectToggle = React.createClass
@@ -134,11 +138,10 @@ VersionList = React.createClass
       <ul className="project-status__section-list">
         {vs.map (version) =>
           key = Object.keys(version.changeset)[0]
-          from = version.changeset[key][0].toString()
-          to = version.changeset[key][1].toString()
+          changes = 'from ' + version.changeset[key].join ' to '
           m = moment(version.created_at)
           <PromiseRenderer key={version.id} promise={apiClient.type('users').get(version.whodunnit)} >{ (user) =>
-            <li>{user.display_name} changed {key} from {from} to {to} {m.fromNow()}</li>
+            <li>{user.display_name} changed {key} {changes}  {m.fromNow()}</li>
           }</PromiseRenderer>}
       </ul>
     }</PromiseRenderer>
@@ -146,8 +149,53 @@ VersionList = React.createClass
 ProjectStatus = React.createClass
   displayName: "ProjectStatus"
 
+  propTypes:
+    project: React.PropTypes.object.isRequired
+
+  getInitialState: ->
+    error: null
+    usedWorkflowLevels: []
+    workflows: []
+
   getDefaultProps: ->
     project: null
+
+  componentDidMount: ->
+    @getWorkflows()
+
+  onChangeWorkflowLevel: (workflow, event) ->
+    selected = event.target.value
+    workflowToUpdate = workflow
+
+    if @state.error
+      @setState error: null
+
+    # Saving explicitly to avoid potential race condition with projects with many workflows
+    if selected is 'none'
+      workflowToUpdate.update({ 'configuration.level': undefined })
+    else
+      workflowToUpdate.update({ 'configuration.level': selected })
+
+    workflowToUpdate.save()
+      .then =>
+        @getWorkflows()
+      .catch (error) =>
+        @setState error: error
+
+  getWorkflows: ->
+    getWorkflowsInOrder @props.project, fields: 'display_name,active,configuration'
+      .then (workflows) =>
+        usedWorkflowLevels = @getUsedWorkflowLevels(workflows)
+        @setState { usedWorkflowLevels, workflows }
+
+  getUsedWorkflowLevels: (workflows) ->
+    usedWorkflowLevels = []
+
+    for workflow in workflows
+      if workflow.configuration.level?
+        usedWorkflowLevels.push(workflow.configuration.level);
+
+    usedWorkflowLevels
 
   render: ->
     <ChangeListener target={@props.project}>{ =>
@@ -168,19 +216,36 @@ ProjectStatus = React.createClass
         <ProjectExperimentalFeatures project={@props.project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
-          <PromiseRenderer promise={@props.project.get('workflows')}>{(workflows) =>
-            if workflows.length is 0
-              <div className="workflow-status-list">No workflows found</div>
-            else
-              <div className="workflow-status-list">
-                <ul className="project-status__section-list">
-                  {workflows.map (workflow) =>
-                    <li key={workflow.id}>
-                      <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
-                    </li>}
-                </ul>
-             </div>
-          }</PromiseRenderer>
+          <small>The workflow level dropdown is for the workflow assignment experimental feature.</small>
+          {if @state.error
+            <div>{@state.error}</div>}
+          {if @state.workflows.length is 0
+            <div>No workflows found</div>
+          else
+            <ul className="project-status__section-list">
+              {@state.workflows.map (workflow) =>
+                <li key={workflow.id} className="section-list__item">
+                  <WorkflowToggle workflow={workflow} project={@props.project} field="active" />{' | '}
+                  <label>
+                    Level:{' '}
+                    <select
+                      onChange={@onChangeWorkflowLevel.bind(null, workflow)}
+                      value={if workflow.configuration.level? then workflow.configuration.level}
+                    >
+                      <option value="none">none</option>
+                      {@state.workflows.map (workflow, i) =>
+                        value = i + 1
+                        <option
+                          key={i + Math.random()}
+                          value={value}
+                          disabled={@state.usedWorkflowLevels.indexOf(value) > -1}
+                        >
+                          {value}
+                        </option>}
+                    </select>
+                  </label>
+                </li>}
+            </ul>}
         </div>
         <hr />
         <div className="project-status__section">

@@ -86,11 +86,12 @@
 
 .project-nav
   margin-left: 0
-  margin-top: 2em
+  margin-top: 2.5em
   text-align: left
 
   .tabbed-content-tab
     position: relative
+    line-height: 2.5em
 
   .avatar
     height: 4em
@@ -107,6 +108,14 @@
   margin: 0 3vw
   padding: 0 1.5vw
   text-align: center
+  
+  &.custom-sign-in-banner
+    display: flex
+    justify-content: space-between
+    margin: 0 0 3vh
+    
+    p
+      display: inline-block
 
   &.informational
     background: MAIN_HIGHLIGHT
@@ -164,7 +173,7 @@
       font-weight: 700
       line-height: 2.5em
       font-size: 15px
-      color: #404040
+      color: FOREGROUND
       text-align: center
       max-width: 800px
       margin: 0 auto 1em
@@ -183,9 +192,43 @@
   font-size: .75em
   color: #CDCDCD
 
+.collection-page-with-project-context,
 .project-text-content
+  background-color: #ebebeb
+  padding: 1.5em 3vw
+  color: #000000
   border-radius: 3px
-  margin: 1.5em 3vw
+
+  .project-role
+    color: #ffffff
+    background-color: #555555
+    padding: 0.1em 0.4em
+
+    &.owner
+      background-color: #0072ff
+
+  a
+    color: #0072ff
+
+&.in-project-context
+  .pill-button
+    color: FOREGROUND
+    border-color: FOREGROUND
+
+  nav.hero-nav
+    text-align: center
+  a.about-tabs
+    color: PROJECT_SUBMENU_BLUE
+    white-space: nowrap
+    margin-bottom: 0
+    margin-top: 0
+  a.about-tabs:first-child
+    margin-top: 1em
+  a.about-tabs:last-child
+    margin-bottom: 3em
+  a.about-tabs.active,
+  a.about-tabs:hover
+    border: 2px solid PROJECT_SUBMENU_BLUE
 
 .project-metadata
   padding: 1.5em 3vw

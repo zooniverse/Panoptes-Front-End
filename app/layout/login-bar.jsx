@@ -26,7 +26,7 @@ const LoginBar = React.createClass({
 
   render() {
     return (
-      <span>
+      <span className="login-bar">
         <button type="button" value="sign-in" className="secret-button" onClick={this.showDialog}>
           <span className="site-nav__link">
             <Translate content="loginBar.signIn" />

@@ -81,11 +81,6 @@ module.exports = React.createClass
       task.selects.every (select, i) ->
         not select.required or (annotation.value[i]?.value? and annotation.value[i]?.value isnt "")
 
-    testAnnotationQuality: (unknown, knownGood) ->
-      distance = levenshtein.get unknown.value.toLowerCase(), knownGood.value.toLowerCase()
-      length = Math.max unknown.value.length, knownGood.value.length
-      (length - distance) / length
-
   getInitialState: ->
     optionsKeys: {}
 

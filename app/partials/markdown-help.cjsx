@@ -85,6 +85,28 @@ module.exports = React.createClass
             <td><Markdown>**_bolditalics_**</Markdown></td>
           </tr>
           <tr>
+            <td>Superscript</td>
+            <td>
+               ^superscript^
+                ^super\ script^
+            </td>
+            <td>
+              <Markdown>^superscript^</Markdown>
+              <Markdown>^super\ script^</Markdown>
+            </td>
+          </tr>
+          <tr>
+            <td>Subscript</td>
+            <td>
+               ~subscript~
+                ~sub\ script~
+            </td>
+            <td>
+              <Markdown>^subscript^</Markdown>
+              <Markdown>~sub\ script~</Markdown>
+            </td>
+          </tr>
+          <tr>
             <td>Hyperlink</td>
             <td>[zooniverse](http://www.zooniverse.org)</td>
             <td><Markdown>[zooniverse](http://www.zooniverse.org)</Markdown></td>

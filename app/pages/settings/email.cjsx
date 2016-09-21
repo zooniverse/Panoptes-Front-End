@@ -4,6 +4,7 @@ AutoSave = require '../../components/auto-save'
 PromiseRenderer = require '../../components/promise-renderer'
 ChangeListener = require '../../components/change-listener'
 handleInputChange = require '../../lib/handle-input-change'
+apiClient = require 'panoptes-client/lib/api-client'
 
 module.exports = React.createClass
   displayName: 'EmailSettingsPage'
@@ -13,6 +14,28 @@ module.exports = React.createClass
 
   getInitialState: ->
     page: 1
+    projects: []
+    projectPreferences: []
+
+  componentWillMount: ->
+    @getProjectPreferences()
+
+  componentDidUpdate: (prevProps, prevState) ->
+    unless @state.page is prevState.page
+      @getProjectPreferences()
+
+  getProjectPreferences: ->
+    @props.user.get('project_preferences', page: @state.page)
+      .then (projectPreferences) =>
+        if projectPreferences
+          projects = for preference in projectPreferences
+            preference.get('project').catch =>
+              null
+          Promise.all(projects).then (projects) =>
+            @setState
+              meta: projectPreferences[0].getMeta()
+              projects: projects
+              projectPreferences: projectPreferences
 
   nameOfPreference: (preference) ->
     switch preference.category
@@ -110,34 +133,29 @@ module.exports = React.createClass
             <th>Project</th>
           </tr>
         </thead>
-        <PromiseRenderer promise={@props.user.get 'project_preferences', page: @state.page} pending={=> <tbody></tbody>} then={(projectPreferences) =>
-          meta = projectPreferences[0].getMeta()
-          <tbody>
-            {for projectPreference in projectPreferences then do (projectPreference) =>
-              <PromiseRenderer key={projectPreference.id} promise={projectPreference.get 'project'} then={(project) =>
-                <ChangeListener target={projectPreference} handler={=>
-                  <tr>
-                    <td><input type="checkbox" name="email_communication" checked={projectPreference.email_communication} onChange={@handleProjectEmailChange.bind this, projectPreference} /></td>
-                    <td>{project.display_name}</td>
-                  </tr>
-                } />
-              } />}
-            <tr>
-              <td colSpan="2">
-                {if meta?
-                  <nav className="pagination">
-                    Page <select value={@state.page} disabled={meta.page_count < 2} onChange={(e) => @setState page: e.target.value}>
-                      {for p in [1..meta.page_count]
-                        <option key={p} value={p}>{p}</option>}
-                    </select> of {meta.page_count || '?'}
-                  </nav>}
-              </td>
-            </tr>
-          </tbody>
-        } />
+        <tbody>
+          {@state.projectPreferences.map (projectPreference, i) =>
+            if @state.projects[i]
+              <tr key={i}>
+                <td><input type="checkbox" name="email_communication" checked={projectPreference.email_communication} onChange={@handleProjectEmailChange.bind this, projectPreference} /></td>
+                <td>{@state.projects[i].display_name}</td>
+              </tr>}
+          <tr>
+            <td colSpan="2">
+              {if @state.meta
+                <nav className="pagination">
+                  Page <select value={@state.page} disabled={@state.meta.page_count < 2} onChange={(e) => @setState page: e.target.value}>
+                    {for p in [1..@state.meta.page_count]
+                      <option key={p} value={p}>{p}</option>}
+                  </select> of {@state.meta.page_count || '?'}
+                </nav>}
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
   handleProjectEmailChange: (projectPreference, args...) ->
     handleInputChange.apply projectPreference, args
     projectPreference.save()
+    @forceUpdate()

@@ -84,9 +84,12 @@ module.exports = React.createClass
     @updateTimeout = setTimeout @update, 10000
 
   userLink: (user) ->
+    baseLink = "/"
+    if @props.project?
+      baseLink += "projects/#{@props.project.slug}/"
     logClick = @context.geordi?.makeHandler? 'view-profile-sidebar'
     <li key={user.id}>
-      <Link to="/users/#{user.login}" title="#{user.display_name}'s profile" onClick={logClick?.bind(this, user.display_name)}>{user.display_name}</Link>
+      <Link to="#{baseLink}users/#{user.login}" title="#{user.display_name}'s profile" onClick={logClick?.bind(this, user.display_name)}>{user.display_name}</Link>
     </li>
 
   render: ->

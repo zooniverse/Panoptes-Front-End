@@ -1,5 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
+getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 
 THREE_DAYS = 3 * 24 * 60 * 60 * 1000
 
@@ -33,9 +34,7 @@ module.exports = React.createClass
     if project.redirect
       Promise.resolve false
     else
-      project.get('workflows').then (allWorkflows) ->
-        activeWorkflows = allWorkflows.filter (workflow) ->
-          workflow.active
+      getWorkflowsInOrder(project, {active: true, fields: 'finished_at'}).then (activeWorkflows) ->
         if activeWorkflows.length is 0
           # No active workflows? This is probably a custom project.
           false

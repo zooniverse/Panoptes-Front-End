@@ -25,7 +25,7 @@ module.exports = React.createClass
     title = input.value
     user_id = @props.user.id
 
-    apiClient.type('users').get(login: @props.params.name).index(0)
+    apiClient.type('users').get(login: @props.params.profile_name).index(0)
       .then (user) =>
         recipient_ids = [+user.id] # must be array
         conversation = {title, body, user_id, recipient_ids}

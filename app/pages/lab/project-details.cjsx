@@ -12,7 +12,7 @@ MarkdownHelp = require '../../partials/markdown-help'
 alert = require('../../lib/alert')
 {DISCIPLINES} = require '../../components/disciplines'
 Select = require 'react-select'
-CharLimit = require '../../components/char-limit'
+`import CharLimit from '../../components/char-limit'`
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000

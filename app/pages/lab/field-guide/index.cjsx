@@ -99,6 +99,7 @@ FieldGuideEditor = React.createClass
     <div>
       <header>
         <strong>Field guide</strong>
+        <p>A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they're seeing. It's available anywhere in your project.</p>
       </header>
 
       {if @state.guide?
@@ -141,7 +142,6 @@ FieldGuideEditor = React.createClass
       </div>
 
       <div className="form-help">
-        <p>A field guide is a place to store general project-specific information that volunteers will need to understand in order to complete classifications and talk about what they're seeing. It's available anywhere in your project.</p>
         <p>Information can be grouped into different sections, and each section should have a title and an icon. Content for each section is rendered with Markdown, so you can include any media you've uploaded for your project there.</p>
       </div>
 

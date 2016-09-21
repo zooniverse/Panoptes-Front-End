@@ -7,6 +7,8 @@ import SiteFooter from './site-footer';
 import style from './index.styl';
 void style;
 
+const MAX_MOBILE_WIDTH = 875;
+
 const LAYOUT_DEV_MODE = process.env.NODE_ENV !== 'production' &&
   typeof window !== 'undefined' &&
   location.search.indexOf('layout-dev') !== -1;
@@ -41,7 +43,7 @@ const AppLayout = React.createClass({
       revealSiteHeader: () => {
         this.matchWindowScale();
         this.setState({
-          siteHeaderRevealed: true,
+          siteHeaderRevealed: (innerWidth > MAX_MOBILE_WIDTH),
         });
       }
     };
@@ -103,7 +105,7 @@ const AppLayout = React.createClass({
             'app-layout__header--demoted': this.state.siteHeaderDemoted,
           })}
         >
-          <SiteNav ref="mainNav" onToggle={togglePrimaryNav} />
+          <SiteNav ref="mainNav" onToggle={togglePrimaryNav} visible={this.state.siteHeaderRevealed} params={this.props.params} />
         </header>
 
         <div className="app-layout__not-header">
