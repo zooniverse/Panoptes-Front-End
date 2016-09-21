@@ -21,6 +21,9 @@ module.exports = React.createClass
     discussion: React.PropTypes.object
     title: React.PropTypes.bool
     preview: React.PropTypes.bool
+
+  contextTypes:
+    geordi: React.PropTypes.object
     router: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
@@ -31,9 +34,6 @@ module.exports = React.createClass
     commentUser: null
     latestCommentText: ''
     roles: []
-
-  contextTypes:
-    geordi: React.PropTypes.object
 
   logProfileClick: (profileItem) ->
     @context.geordi?.logEvent
