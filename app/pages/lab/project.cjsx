@@ -238,6 +238,9 @@ module.exports = React.createClass
   mixins: [TitleMixin]
   title: 'Edit'
 
+  contextTypes:
+    router: React.PropTypes.object.isRequired
+
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.user
       @context.router.push '/lab'
