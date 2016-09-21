@@ -124,8 +124,8 @@ module.exports = React.createClass
                           {for toolKey of drawingTools
                             <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["column", "grid"]}
                           {if @canUse("column")
-                            <option key="column" value="column">column</option>
-                          if @canUse("grid")
+                            <option key="column" value="column">column</option>}
+                          {if @canUse("grid")
                             <option key="grid" value="grid">grid</option>}
                         </select>
                       </AutoSave>
