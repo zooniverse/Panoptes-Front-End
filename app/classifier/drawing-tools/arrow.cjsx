@@ -63,8 +63,8 @@ module.exports = React.createClass
     headpoints = ([x, y].join ',' for {x, y} in headpointsarray)
     headpoints = headpoints.join '\n'
 
-    deleteButtonPostion = { x: headpointsarray[0].x + DELETE_TOOL_PERPENDICULAR_OFFSET*lineperpunit[0],
-    y: headpointsarray[0].y + DELETE_TOOL_PERPENDICULAR_OFFSET*lineperpunit[1]}
+    deleteButtonPostion = { x: headpointsarray[0].x + DELETE_TOOL_PERPENDICULAR_OFFSET*lineperpunit[0]/scaleFactor,
+    y: headpointsarray[0].y + DELETE_TOOL_PERPENDICULAR_OFFSET*lineperpunit[1]/scaleFactor}
 
     <DrawingToolRoot tool={this} transform={positionAndRotate}>
       <line {...linepoints} />
