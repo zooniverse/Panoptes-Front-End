@@ -6,55 +6,25 @@ talkClient = require 'panoptes-client/lib/talk-client'
 module.exports = React.createClass
   displayName: 'NotificationsLink'
 
-  componentWillReceiveProps: (nextProps) ->
-    return unless nextProps.user
-    {owner, name} = nextProps.params
-    if owner isnt @state.owner and name isnt @state.name
-      @setSection(owner, name).then =>
-        @getUndeliveredCount()
-
-  getInitialState: ->
-    unreadCount: null
-    section: null
-    owner: null
-    name: null
-
-  setSection: (owner, name) ->
-    if owner and name
-      apiClient.type('projects').get(slug: "#{owner}/#{name}").then ([project]) =>
-        section = "project-#{project.id}"
-        @setState {owner, name, section}
-    else
-      Promise.resolve().then =>
-        section = null
-        @setState {owner, name, section}
-
-  getUndeliveredCount: ->
-    query =
-      delivered: false
-      page_size: 1
-
-    query.section = @state.section if @state.section
-    talkClient.type('notifications').get(query).then (notifications) =>
-      unreadCount = notifications[0]?.getMeta()?.count or 0
-      @setState {unreadCount}
+  contextTypes:
+    unreadNotificationsCount: React.PropTypes.number
 
   label: ->
-    if @state.unreadCount > 0
+    if @context.unreadNotificationsCount > 0
       <i className="fa fa-bell fa-fw" />
     else
       <i className="fa fa-bell-o fa-fw" />
 
   ariaLabel: ->
-    if @state.unreadCount > 0
-      "Notifications (#{ @state.unreadCount } unread)"
+    if @context.unreadNotificationsCount > 0
+      "Notifications (#{ @context.unreadNotificationsCount } unread)"
     else
       'Notifications'
 
   render: ->
-    return null unless @props.user and @state.unreadCount?
+    return null unless @props.user and @context.unreadNotificationsCount?
 
-    {section, owner, name} = @state
+    {owner, name} = @props.params
     linkProps = @props.linkProps
     linkProps['aria-label'] = @ariaLabel()
 

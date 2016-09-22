@@ -8,6 +8,9 @@ Notification = require './notifications/notification'
 module.exports = React.createClass
   displayName: 'NotificationsPage'
 
+  contextTypes:
+    notificationsCounter: React.PropTypes.object
+
   propTypes:
     project: React.PropTypes.object
     user: React.PropTypes.object
@@ -83,6 +86,7 @@ module.exports = React.createClass
     for notification in @state.notifications
       notification.update delivered: true
     @setState unreadCount: 0
+    @context.notificationsCounter.setUnread 0
 
   title: ->
     if @props.project
