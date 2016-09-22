@@ -87,7 +87,7 @@ module.exports = React.createClass
           <tr>
             <td>Superscript</td>
             <td>
-               ^superscript^
+               ^superscript^<br/>
                 ^super\ script^
             </td>
             <td>
@@ -98,7 +98,7 @@ module.exports = React.createClass
           <tr>
             <td>Subscript</td>
             <td>
-               ~subscript~
+               ~subscript~<br/>
                 ~sub\ script~
             </td>
             <td>
