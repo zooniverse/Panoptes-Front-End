@@ -232,7 +232,7 @@ module.exports = React.createClass
           onClickNext={@loadAnotherSubject}
         />
       else if @state.rejected?.classification?
-        <code>{@state.rejected.classification.toString()}</code>
+        <code>Please try again. Something went wrong: {@state.rejected.classification.toString()}</code>
       else
         <span>Loading classification</span>}
     </div>
