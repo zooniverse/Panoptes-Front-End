@@ -4,7 +4,6 @@ talkClient = require 'panoptes-client/lib/talk-client'
 {timeAgo} = require './lib/time'
 DisplayRoles = require './lib/display-roles'
 Avatar = require '../partials/avatar'
-PromiseRenderer = require '../components/promise-renderer'
 {Link, History} = require 'react-router'
 {Markdown} = (require 'markdownz').default
 
@@ -31,6 +30,7 @@ module.exports = React.createClass
   getInitialState: ->
     commentUser: null
     latestCommentText: ''
+    roles: []
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -48,13 +48,15 @@ module.exports = React.createClass
   componentWillMount: ->
     comment = @props.comment or @props.discussion?.latest_comment
     return unless comment
+    @updateRoles comment
     apiClient.type('users').get(comment.user_id).then (commentUser) =>
       @setState {commentUser}
   
   componentWillReceiveProps: (newProps) ->
     oldComment = @props.comment or @props.discussion?.latest_comment
     comment = newProps.comment or newProps.discussion?.latest_comment
-    return unless comment isnt oldComment
+    return if comment is oldComment
+    @updateRoles comment
     apiClient.type('users').get(comment.user_id).then (commentUser) =>
       @setState {commentUser}
 
@@ -74,6 +76,17 @@ module.exports = React.createClass
       <Link className={className} onClick={logClick?.bind(this, childtext)} to={@history.createHref("/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
         {childtext}
       </Link>
+
+  updateRoles: (comment) ->
+    talkClient
+      .type 'roles'
+      .get
+        user_id: comment.user_id
+        section: ['zooniverse', comment.section]
+        is_shown: true
+        page_size: 100
+      .then (roles) =>
+        @setState {roles}
 
   render: ->
     {discussion} = @props
@@ -101,10 +114,7 @@ module.exports = React.createClass
           </Link>}
 
         {' '}
-
-        <PromiseRenderer promise={talkClient.type('roles').get(user_id: comment.user_id, section: ['zooniverse', comment.section], is_shown: true, page_size: 100)}>{(roles) =>
-          <DisplayRoles roles={roles} section={comment.section} />
-        }</PromiseRenderer>
+        <DisplayRoles roles={@state.roles} section={comment.section} />
 
         <span>
           {if discussion.title and @props.title
