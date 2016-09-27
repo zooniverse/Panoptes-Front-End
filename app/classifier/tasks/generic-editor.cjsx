@@ -210,8 +210,6 @@ module.exports = React.createClass
               </div>}
         </div>}
 
-      <hr />
-
       {unless @props.task.type is 'single' or @props.isSubtask
         <div>
           <AutoSave resource={@props.workflow}>

@@ -35,15 +35,15 @@ module.exports = React.createClass
 
       {for shortcut, index in @props.options
           shortcut._key ?= Math.random()
-          <label key={shortcut._key} className="answer-button">
-            <p>
+          <p>
+            <label key={shortcut._key} className="answer-button">
               <small className="nothing-here-shortcut #{if shortcut.label is @props.annotation.shortcut then 'active' else ''}">
                 <strong>
                   <input type="checkbox" checked={shortcut.label is @props.annotation.shortcut} onChange={@toggleShortcut.bind this, index, shortcut} />
                     {shortcut.label}
                 </strong>
               </small>
-            </p>
+            </label>
+          </p>}
 
-          </label>}
     </div>
