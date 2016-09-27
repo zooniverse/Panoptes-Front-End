@@ -50,6 +50,13 @@ module.exports = React.createClass
     return unless comment
     apiClient.type('users').get(comment.user_id).then (commentUser) =>
       @setState {commentUser}
+  
+  componentWillReceiveProps: (newProps) ->
+    oldComment = @props.comment or @props.discussion?.latest_comment
+    comment = newProps.comment or newProps.discussion?.latest_comment
+    return unless comment isnt oldComment
+    apiClient.type('users').get(comment.user_id).then (commentUser) =>
+      @setState {commentUser}
 
   componentDidMount: ->
     latestCommentText = @refs?.markdownText?.textContent
