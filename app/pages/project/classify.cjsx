@@ -95,7 +95,6 @@ module.exports = React.createClass
     @context.geordi?.forget ['workflowID']
 
   componentWillReceiveProps: (nextProps) ->
-    console.log nextProps
     if @props.project isnt nextProps.project
       @loadAppropriateClassification(nextProps)
     unless nextProps.loadingSelectedWorkflow

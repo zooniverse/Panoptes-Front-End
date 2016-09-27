@@ -241,7 +241,7 @@ Classifier = React.createClass
           <hr />
 
           {if task.nothingHere
-            <NothingHere task={task} annotation={annotation} classification={@props.classification} />}
+            <NothingHere options={task.nothingHere} annotation={annotation} classification={@props.classification} />}
 
           <nav className="task-nav">
             {if Object.keys(@props.workflow.tasks).length > 1
@@ -249,7 +249,7 @@ Classifier = React.createClass
             {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
               [ownerName, name] = @props.project.slug.split('/')
               <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
-            {if nextTaskKey and !task.shortcut
+            {if nextTaskKey and !annotation.shortcut
               <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
             else
               <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
@@ -464,14 +464,9 @@ Classifier = React.createClass
 
     currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
-
-    if currentTask.shortcut
-      currentAnnotation.nothingHere = true
-
     currentTask?.tools?.map (tool) =>
       if tool.type is 'grid'
         GridTool.mapCells @props.classification.annotations
-
     @props.classification.update
       completed: true
       'metadata.session': getSessionID()

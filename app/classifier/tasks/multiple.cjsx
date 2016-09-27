@@ -37,9 +37,7 @@ Summary = React.createClass
               {answer.label}
             </div>
         else
-          if @props.task.shortcut
-            <div className="answer">'Nothing Here'</div>
-          else if @props.annotation.value.length is 0
+          if @props.annotation.value.length is 0
             <div className="answer">'No answer'</div>
           else
             for index in @props.annotation.value

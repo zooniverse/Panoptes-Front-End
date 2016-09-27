@@ -1,6 +1,6 @@
 React = require 'react'
-AutoSave = require '../../components/auto-save'
-handleInputChange = require '../../lib/handle-input-change'
+AutoSave = require './auto-save'
+handleInputChange = require '../lib/handle-input-change'
 
 module.exports = React.createClass
   displayName: 'NothingHereSelector'
@@ -8,6 +8,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     workflow: null
     task: null
+    taskPrefix: null
 
   toggleNothingHere: (e) ->
     if e.target.checked
@@ -30,7 +31,15 @@ module.exports = React.createClass
     handleChange = handleInputChange.bind @props.workflow
     nothingHelp = 'Check this box to give the volunteer an option to skip to the end of a classification if a subject does not contain relevant information.'
 
+    children = React.Children.map @props.children, (child) =>
+      React.cloneElement child
+
     <div>
+
+      {children}
+
+      <hr />
+
       <label title={nothingHelp}>
         <AutoSave resource={@props.workflow}>
           <span className="form-label">Nothing Here Option</span>{' '}

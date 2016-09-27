@@ -7,7 +7,6 @@ surveyEditorHelp = require './editor-help'
 AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
 NextTaskSelector = require '../next-task-selector'
-NothingHereEditor = require '../nothing-here-editor'
 MediaArea = require '../../../components/media-area'
 {Markdown} = (require 'markdownz').default
 Papa = require 'papaparse'
@@ -193,10 +192,6 @@ module.exports = React.createClass
               </Details>}
           </div>}
       </div>
-
-      <hr />
-
-        <NothingHereEditor workflow={@props.workflow} task={@props.task} />
 
       <hr />
 

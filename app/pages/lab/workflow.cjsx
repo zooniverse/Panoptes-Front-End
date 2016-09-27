@@ -13,6 +13,7 @@ AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
+NothingHereEditor = require '../../components/nothing-here-editor'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -376,13 +377,15 @@ EditWorkflowPage = React.createClass
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
             <div>
-              <TaskEditorComponent
-                workflow={@props.workflow}
-                task={@props.workflow.tasks[@state.selectedTaskKey]}
-                taskPrefix="tasks.#{@state.selectedTaskKey}"
-                project={@props.project}
-                onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
-              />
+              <NothingHereEditor taskPrefix="tasks.#{@state.selectedTaskKey}" workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} >
+                <TaskEditorComponent
+                  workflow={@props.workflow}
+                  task={@props.workflow.tasks[@state.selectedTaskKey]}
+                  taskPrefix="tasks.#{@state.selectedTaskKey}"
+                  project={@props.project}
+                  onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
+                />
+              </NothingHereEditor>
               <hr />
               <br />
               <AutoSave resource={@props.workflow}>
