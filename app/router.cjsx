@@ -44,6 +44,8 @@ module.exports =
       <Route path="contact" component={require './pages/about/contact-page'} />
     </Route>
 
+    <Route path="faq" component={require './pages/faq'} />
+
     <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/get-involved/volunteering-page'} />
       <Route path="education" component={require './pages/get-involved/education'} />
@@ -89,6 +91,8 @@ module.exports =
     <Route path="projects" component={ProjectsPage}>
       <IndexRoute component={FilteredProjectsList} />
     </Route>
+
+    <Route path="faq" component={require './pages/faq'} />
 
     <Route path="projects/:owner/:name" component={require './pages/project'}>
       <IndexRoute component={ProjectHomePage} />
