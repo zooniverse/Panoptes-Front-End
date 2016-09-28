@@ -17,9 +17,6 @@ ProjectsPage = React.createClass
 
   mixins: [TitleMixin]
 
-  contextTypes:
-    location: React.PropTypes.object
-
   emptyPromise:
     then: ->
     catch: ->
