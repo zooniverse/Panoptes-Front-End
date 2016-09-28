@@ -20,7 +20,7 @@ const SVGLink = React.createClass({
 
   inject() {
     Array.prototype.forEach.call(this.link.attributes, (attribute) => {
-      this.link.removeAttribute(attribute.name);
+      attribute && this.link.removeAttribute(attribute.name); //In IE11, this attribute is often undefined
     });
 
     Array.prototype.forEach.call(this.refs.group.attributes, (attribute) => {
@@ -37,6 +37,7 @@ const SVGLink = React.createClass({
   },
 
   backToNormal() {
+    if (!this.link) return; //In IE11, this.link is often undefined
     while (this.link.childNodes.length > 0) {
       this.refs.group.appendChild(this.link.childNodes[0]);
     }

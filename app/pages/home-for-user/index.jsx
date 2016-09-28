@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import BlurredImage from './blurred-image';
 import Pullout from 'react-pullout';
 import getUserRibbonData from '../../lib/get-user-ribbon-data';
@@ -148,32 +149,32 @@ const HomePageForUser = React.createClass({
     return (
       <div className="home-page-for-user__menu">
         <div className="home-page-for-user__menu-column">
-          <a href="#focus=projects" className="home-page-for-user__menu-button">
+          <Link to="#focus=projects" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-history fa-fw"></i>{' '}
               My recent projects
             </span>
-          </a>
-          <a href="#focus=collections" className="home-page-for-user__menu-button">
+          </Link>
+          <Link to="#focus=collections" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-th-large fa-fw"></i>{' '}
               My collections
             </span>
-          </a>
+          </Link>
         </div>
         <div className="home-page-for-user__menu-column">
-          <a href="#focus=messages" className="home-page-for-user__menu-button">
+          <Link to="#focus=messages" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-envelope fa-fw"></i>{' '}
               Messages
             </span>
-          </a>
-          <a href="#focus=builds" className="home-page-for-user__menu-button">
+          </Link>
+          <Link to="#focus=builds" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-cog fa-fw"></i>{' '}
               My builds
             </span>
-          </a>
+          </Link>
         </div>
       </div>
     );
