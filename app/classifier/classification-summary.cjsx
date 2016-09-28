@@ -16,7 +16,7 @@ module.exports = React.createClass
         for annotation in @props.classification.annotations
           annotation._key = Math.random()
           task = @props.workflow.tasks[annotation.task]
-          SummaryComponent = tasks[task.type].Summary # TODO: There's a lot of duplicated code in these modules.
+          SummaryComponent = if annotation.shortcut then tasks['nothingHere'].Summary else tasks[task.type].Summary # TODO: There's a lot of duplicated code in these modules.
           <div key={annotation._key} className="classification-task-summary">
             <SummaryComponent task={task} annotation={annotation} onToggle={@props.onToggle} />
           </div>}

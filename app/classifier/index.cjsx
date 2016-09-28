@@ -180,7 +180,7 @@ Classifier = React.createClass
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
-      waitingForAnswer = !task.shortcut and not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
+      waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
 
     # Each answer of a single-answer task can have its own `next` key to override the task's.
     if TaskComponent is tasks.single

@@ -1,7 +1,39 @@
 React = require 'react'
+{Markdown} = (require 'markdownz').default
+
+Summary = React.createClass
+  displayName: 'NothingHereSummary'
+
+  getDefaultProps: ->
+    task: null
+    annotation: null
+
+  componentWillMount: ->
+    if @props.annotation.shortcut
+      @setState answer: @props.annotation.shortcut
+
+  render: ->
+    <div>
+      <div className="question">
+        {@props.task.question}
+      </div>
+      <div className="answers">
+        {if @state.answer
+          <div className="answer">
+            <i className="fa fa-check-circle-o fa-fw"></i>
+            <Markdown tag="span" inline={true}>{@state.answer}</Markdown>
+          </div>
+        else
+          <div className="answer">No answer</div>}
+      </div>
+    </div>
+
 
 module.exports = React.createClass
   displayName: 'NothingHere'
+
+  statics:
+    Summary: Summary
 
   getDefaultProps: ->
     annotation: null
@@ -15,9 +47,9 @@ module.exports = React.createClass
       else if nextProps.annotation.value isnt null
         @removeShortcuts(nextProps)
 
-  removeShortcuts: (nextProps) ->
-    nextProps.annotation.shortcut = false
-    nextProps.classification.update 'annotations'
+  removeShortcuts: (newProps) ->
+    newProps.annotation.shortcut = false
+    newProps.classification.update 'annotations'
 
   toggleShortcut: (index, shortcut, e) ->
     if e.target.checked
