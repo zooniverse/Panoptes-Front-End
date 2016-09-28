@@ -6,28 +6,7 @@ Translate = require 'react-translate-component'
 debounce = require 'debounce'
 Filmstrip = require '../components/filmstrip'
 PROJECT_SORTS = (require '../lib/project-sorts').PROJECT_SORTS
-ProjectCard = require '../partials/project-card'
-
-ProjectCardList = React.createClass
-  displayName: 'ProjectCardList'
-
-  getDefaultProps: ->
-    projects: []
-
-  componentDidMount: ->
-    document.documentElement.classList.add 'on-secondary-page'
-
-  componentWillUnmount: ->
-    document.documentElement.classList.remove 'on-secondary-page'
-
-  render: ->
-    <div className="project-card-list">
-      {@props.projects.map (project) =>
-        <div key={project.id}>
-          <ProjectCard project={project} />
-        </div>}
-    </div>
-
+`import ProjectCardList from '../components/new-project-card-list';`
 
 DisciplineSelector = React.createClass
   displayName: 'DisciplineSelector'
@@ -231,6 +210,5 @@ ProjectFilteringInterface = React.createClass
     </div>
 
 module.exports =
-  ProjectCard: ProjectCard
   ProjectCardList: ProjectCardList
   ProjectFilteringInterface: ProjectFilteringInterface
