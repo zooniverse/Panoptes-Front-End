@@ -22,7 +22,9 @@ const HomePageSection = React.createClass({
             }}
           ></i>
           <span className="home-page-section__header-label">{this.props.title}</span>
-          <Link to="#" className="secret-button" title="Close this section" aria-label="Close this section">x</Link>
+          <Link to="#" className="secret-button" title="Close this section" aria-label="Close this section">
+            <i className="fa fa-times"></i>
+          </Link>
         </header>
         {!!this.props.error && (
           <div className="home-page-section__error">
