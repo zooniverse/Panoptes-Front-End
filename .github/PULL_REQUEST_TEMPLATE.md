@@ -13,3 +13,4 @@ Describe your changes.
 
 - [ ] If it's a new component, is it in ES6? Is it clear of warnings from ESLint?
 - [ ] Have you replaced any `ChangeListener` or `PromiseRenderer` components with code that updates component state?
+- [ ] If changes are made to the classifier, does the dev classifier still work?
