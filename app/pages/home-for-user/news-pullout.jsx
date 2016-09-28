@@ -98,7 +98,7 @@ const NewsSection = React.createClass({
 
   render() {
     const projLink = window.location.origin + '/projects/' + this.state.newestProject.slug || null
-    const avatarSrc = this.state.newestAvatar.src || null
+    const avatarSrc = !!this.state.newestAvatar ? this.state.newestAvatar.src : null;
 
     return (
       <div className="home-page-news-pullout news-main">

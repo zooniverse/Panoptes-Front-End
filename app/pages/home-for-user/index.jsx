@@ -192,7 +192,7 @@ const HomePageForUser = React.createClass({
     const OpenSectionComponent = SECTIONS[hashQuery.focus];
 
     return (
-      <div className='on-home-page'>
+      <div className="on-home-page">
         <div className="home-page-for-user">
           <BlurredImage className="home-page-for-user__background" src={this.state.backgroundSrc} blur="0.5em" position="50% 33%" />
 
@@ -219,7 +219,7 @@ const HomePageForUser = React.createClass({
           <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
             <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
               <div className="home-page-news-pullout__toggle-label">
-                <i className="fa fa-cog fa-fw"></i>
+                <i className={this.state.showNews ? "fa fa-chevron-right" : "fa fa-chevron-left"}></i>
                 <br />
                 News
               </div>

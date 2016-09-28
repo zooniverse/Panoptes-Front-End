@@ -211,7 +211,7 @@ const CircleRibbon = React.createClass({
               circle-ribbon__tooltip--hangs-${tooltipPosition.x < 0.5 ? 'left' : 'right'}
             `}
             style={{
-              backgroundColor: hoveredArc.color,
+              borderColor: hoveredArc.color,
               position: 'absolute',
               left: `${tooltipPosition.x * 100}%`,
               top: `${tooltipPosition.y * 100}%`,
