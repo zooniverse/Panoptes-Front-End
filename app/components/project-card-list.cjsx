@@ -1,7 +1,7 @@
 React = require('react')
 apiClient = require 'panoptes-client/lib/api-client'
 Select = require 'react-select'
-{History} = require 'react-router'
+
 Translate = require 'react-translate-component'
 debounce = require 'debounce'
 Filmstrip = require '../components/filmstrip'
@@ -37,7 +37,7 @@ DisciplineSelector = React.createClass
 
 SearchSelector = React.createClass
   displayName: 'SearchSelector'
-  mixins: [History]
+
 
   getDefaultProps: ->
     onChange: ->
