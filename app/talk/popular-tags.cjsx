@@ -1,6 +1,5 @@
 React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
-PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 
 module.exports = React.createClass
@@ -12,6 +11,12 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+  
+  getInitialState: ->
+    tags: []
+  
+  componentWillMount: ->
+    @tagsRequest()
 
   tagsRequest: ->
     query =
@@ -23,7 +28,11 @@ module.exports = React.createClass
       query.taggable_type = @props.type
       query.taggable_id = @props.id
 
-    talkClient.type('tags/popular').get query
+    talkClient
+      .type 'tags/popular'
+      .get query
+      .then (tags) =>
+        @setState {tags}
 
   tag: (talkTag, i) ->
     logClick = @context.geordi?.makeHandler? 'hashtag-sidebar'
@@ -35,11 +44,10 @@ module.exports = React.createClass
 
   render: ->
     <div className="talk-popular-tags">
-      <PromiseRenderer promise={@tagsRequest()}>{(tags) =>
-        if tags?.length
-          <div>
-            {@props.header ? null}
-            <section>{tags.map(@tag)}</section>
-          </div>
-      }</PromiseRenderer>
+      {if @state.tags?.length
+        <div>
+          {@props.header ? null}
+          <section>{@state.tags.map(@tag)}</section>
+        </div>
+      }
     </div>
