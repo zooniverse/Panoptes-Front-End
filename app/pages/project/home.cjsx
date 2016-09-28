@@ -57,14 +57,15 @@ module.exports = React.createClass
             </Link>
         else if @props.project.configuration?.user_chooses_workflow
           @props.activeWorkflows.map (workflow) =>
-            <Link
-              to={"/projects/#{@props.project.slug}/classify"}
-              key={workflow.id + Math.random()}
-              className="call-to-action standard-button"
-              onClick={@handleWorkflowSelection.bind this, workflow}
-            >
-              {workflow.display_name}
-            </Link>
+            if workflow.links.subject_sets
+              <Link
+                to={"/projects/#{@props.project.slug}/classify"}
+                key={workflow.id + Math.random()}
+                className="call-to-action standard-button"
+                onClick={@handleWorkflowSelection.bind this, workflow}
+              >
+                {workflow.display_name}
+              </Link>
         else
           <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
             Get started!
