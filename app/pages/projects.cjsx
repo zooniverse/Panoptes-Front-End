@@ -1,5 +1,6 @@
 counterpart = require 'counterpart'
 React = require 'react'
+{browserHistory} = require 'react-router'
 TitleMixin = require '../lib/title-mixin'
 {ProjectFilteringInterface} = require '../components/project-card-list'
 
@@ -15,10 +16,6 @@ ProjectsPage = React.createClass
   title: 'Projects'
 
   mixins: [TitleMixin]
-
-  contextTypes:
-    location: React.PropTypes.object
-    history: React.PropTypes.object
 
   emptyPromise:
     then: ->
@@ -38,7 +35,7 @@ ProjectsPage = React.createClass
         delete query[key]
     newLocation = Object.assign {}, @props.location, {query}
     newLocation.search = ""
-    @props.history.replace newLocation
+    browserHistory.push newLocation
 
   render: ->
     {discipline, page, sort} = @props.location.query

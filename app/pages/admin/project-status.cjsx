@@ -28,6 +28,7 @@ EXPERIMENTAL_FEATURES = [
   'Gravity Spy Gold Standard'
   'allow workflow query'
   'expert comparison summary'
+  'persist answers'
 ]
 
 ProjectToggle = React.createClass

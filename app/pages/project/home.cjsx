@@ -49,7 +49,7 @@ module.exports = React.createClass
                   className="call-to-action standard-button"
                   onClick={@handleWorkflowSelection.bind this, workflow}
                 >
-                  {workflow.display_name}
+                  You've unlocked level {workflow.display_name}
                 </Link>
           else
             <Link to={"/projects/#{@props.project.slug}/classify"} className="call-to-action standard-button">
