@@ -59,7 +59,6 @@ Classifier = React.createClass
     @setState renderIntervention: true
 
   componentDidMount: ->
-    console.log('cacheClassification', @props.cacheClassification)
     experimentsClient.startOrResumeExperiment interventionMonitor, @context.geordi
     @setState renderIntervention: interventionMonitor?.shouldShowIntervention()
     interventionMonitor.on 'interventionRequested', @enableIntervention

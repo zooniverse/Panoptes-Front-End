@@ -5,6 +5,8 @@ class CacheClassification {
     this.state = {
       cachedClassification: null,
     };
+
+    window.cachedClassification = this.state.cachedClassification;
   }
 
   create() {
