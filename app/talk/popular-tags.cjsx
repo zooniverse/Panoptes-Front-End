@@ -2,6 +2,24 @@ React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
 {Link} = require 'react-router'
 
+ProjectTag = (props) ->
+  tag = props.tag.name
+  <div className="truncated">
+    <Link to="/projects/#{props.project.slug}/talk/tags/#{tag}" onClick={props.onClick} >
+      #{tag}
+    </Link>
+    {' '}
+  </div>
+
+TalkTag = (props) ->
+  tag = props.tag.name
+  <div className="truncated">
+    <Link to="/talk/search/?query=#{tag}" onClick={props.onClick} >
+      #{tag}
+    </Link>
+    {' '}
+  </div>
+  
 module.exports = React.createClass
   displayName: 'TalkPopularTags'
 
@@ -34,20 +52,20 @@ module.exports = React.createClass
       .then (tags) =>
         @setState {tags}
 
-  tag: (talkTag, i) ->
-    logClick = @context.geordi?.makeHandler? 'hashtag-sidebar'
-    tag = talkTag.name
-    if @props.project
-      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/projects/#{@props.project.slug}/talk/tags/#{tag}" onClick={logClick?.bind(this, tag)}>#{tag}</Link>{' '}</div>
-    else
-      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/talk/search/?query=#{tag}" onClick={logClick?.bind(this, tag)}>#{tag}</Link>{' '}</div>
-
   render: ->
     <div className="talk-popular-tags">
       {if @state.tags?.length
         <div>
           {@props.header ? null}
-          <section>{@state.tags.map(@tag)}</section>
+          <section>
+            {@state.tags.map (tag) =>
+              logClick = @context.geordi?.makeHandler? 'hashtag-sidebar'
+              if @props.project
+                <ProjectTag key={tag.id} project={@props.project} tag={tag} onClick={logClick?.bind(this, tag)} />
+              else
+                <TalkTag key={tag.id} tag={tag} onClick={logClick?.bind(this, tag)} />
+            }
+          </section>
         </div>
       }
     </div>
