@@ -8,20 +8,16 @@ Summary = React.createClass
     task: null
     annotation: null
 
-  componentWillMount: ->
-    if @props.annotation.shortcut
-      @setState answer: @props.annotation.shortcut
-
   render: ->
     <div>
       <div className="question">
         {@props.task.question}
       </div>
       <div className="answers">
-        {if @state.answer
+        {if @props.annotation.value['skipped']
           <div className="answer">
             <i className="fa fa-check-circle-o fa-fw"></i>
-            <Markdown tag="span" inline={true}>{@state.answer}</Markdown>
+            <Markdown tag="span" inline={true}>{@props.annotation.value['skipped']}</Markdown>
           </div>
         else
           <div className="answer">No answer</div>}

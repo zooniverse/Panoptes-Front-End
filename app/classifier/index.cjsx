@@ -475,6 +475,9 @@ Classifier = React.createClass
         width: innerWidth
         height: innerHeight
 
+    if currentAnnotation.shortcut
+      currentAnnotation.value = {skipped: currentAnnotation.shortcut}
+      delete currentAnnotation['shortcut']
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
     else
