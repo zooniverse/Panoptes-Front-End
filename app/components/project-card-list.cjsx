@@ -4,15 +4,9 @@ Select = require 'react-select'
 
 Translate = require 'react-translate-component'
 debounce = require 'debounce'
-Filmstrip = require '../components/filmstrip'
 PROJECT_SORTS = (require '../lib/project-sorts').PROJECT_SORTS
 `import ProjectCardList from '../components/new-project-card-list';`
-
-DisciplineSelector = React.createClass
-  displayName: 'DisciplineSelector'
-
-  render: ->
-    <Filmstrip increment={350} value={@props.value} onChange={@props.onChange}/>
+`import DisciplineSelector from '../components/discipline-selector';`
 
 SearchSelector = React.createClass
   displayName: 'SearchSelector'
