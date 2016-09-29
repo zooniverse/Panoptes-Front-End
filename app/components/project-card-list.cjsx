@@ -3,62 +3,10 @@ apiClient = require 'panoptes-client/lib/api-client'
 Select = require 'react-select'
 
 Translate = require 'react-translate-component'
-debounce = require 'debounce'
 PROJECT_SORTS = (require '../lib/project-sorts').PROJECT_SORTS
 `import ProjectCardList from '../components/new-project-card-list';`
 `import DisciplineSelector from '../components/discipline-selector';`
-
-SearchSelector = React.createClass
-  displayName: 'SearchSelector'
-
-
-  getDefaultProps: ->
-    onChange: ->
-    query: ->
-    navigate: ->
-
-  navigateToProject: (projectID) ->
-    apiClient.type('projects').get(projectID)
-      .then (project) ->
-        if project.redirect? and project.redirect.length isnt 0
-          window.location.href = project.redirect
-        else
-          window.location.href = ['/projects', project.slug].join('/')
-
-  searchByName: (value, callback) ->
-    query =
-      search: "%#{value}%"
-      launch_approved: true unless apiClient.params.admin
-
-    if value?.trim().length > 3
-      apiClient.type('projects').get(query, page_size: 10)
-        .then (projects) ->
-          opts = projects.map (project) ->
-            {
-              value: project.id,
-              label: project.display_name,
-              project: project
-            }
-
-          callback null, { options: (opts || []) }
-
-    callback null, {options: []}
-
-  handleChange: (e) ->
-    @props.onChange e.value
-
-  render: ->
-    <Select
-      multi={false}
-      name="resourcesid"
-      placeholder="Name:"
-      value=""
-      searchPromptText="Search by name"
-      closeAfterClick={true}
-      asyncOptions={debounce(@searchByName, 2000)}
-      onChange={@navigateToProject}
-      className="search card-search standard-input"
-    />
+`import SearchSelector from '../components/projects-search-selector';`
 
 SortSelector = React.createClass
   displayName: 'SortSelector'
@@ -204,5 +152,4 @@ ProjectFilteringInterface = React.createClass
     </div>
 
 module.exports =
-  ProjectCardList: ProjectCardList
   ProjectFilteringInterface: ProjectFilteringInterface
