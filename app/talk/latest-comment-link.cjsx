@@ -47,7 +47,7 @@ module.exports = React.createClass
 
   componentWillMount: ->
     comment = @props.comment or @props.discussion?.latest_comment
-    return unless comment
+    return unless comment?
     @updateRoles comment
     apiClient.type('users').get(comment.user_id).then (commentUser) =>
       @setState {commentUser}
@@ -55,7 +55,7 @@ module.exports = React.createClass
   componentWillReceiveProps: (newProps) ->
     oldComment = @props.comment or @props.discussion?.latest_comment
     comment = newProps.comment or newProps.discussion?.latest_comment
-    return if comment is oldComment
+    return if comment is oldComment or not comment?
     @updateRoles comment
     apiClient.type('users').get(comment.user_id).then (commentUser) =>
       @setState {commentUser}
