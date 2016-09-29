@@ -26,23 +26,19 @@ class CacheClassification {
     } else {
       cachedClassification = this.state.cachedClassification;
     }
-    console.log('update taskKey', taskKey);
     const cachedAnnotation = this.isAnnotationCached(taskKey);
 
     if (cachedAnnotation) {
-      console.log('annotation is cached', cachedAnnotation);
       const index = cachedClassification.annotations.findIndex(
         (annotation) => annotation.task === taskKey);
-      console.log('index', index);
+
       if (index > -1) {
-        const newAnnotations = cachedClassification.annotations.slice(index, 1);
-        cachedClassification.annotations = newAnnotations;
+        cachedClassification.annotations.splice(index, 1);
       }
     }
     cachedClassification.annotations.push(newAnnotation);
 
     cachedClassification.update('annotations');
-    console.log('cachedClassification', cachedClassification);
   }
 
   delete() {
@@ -54,16 +50,12 @@ class CacheClassification {
 
     if (this.state.cachedClassification !== null) {
       const annotations = this.state.cachedClassification.annotations;
-      console.log('annotations, taskKey', annotations, taskKey);
       annotations.forEach((annotation) => {
-        console.log('annotation.task', annotation.task, taskKey);
         if (annotation.task === taskKey) {
-          console.log('annotation task is taskkey', annotation);
           annotationToReturn = annotation;
         }
       });
     }
-    console.log('annotationToReturn', annotationToReturn);
 
     return annotationToReturn;
   }
