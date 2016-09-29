@@ -437,7 +437,6 @@ Classifier = React.createClass
 
     if @props.workflow.configuration.persist_annotations
       cachedAnnotation = @props.cacheClassification.isAnnotationCached(taskKey)
-      console.log('cachedAnnotation', cachedAnnotation)
       if cachedAnnotation?
         annotation = cachedAnnotation
 
@@ -447,6 +446,7 @@ Classifier = React.createClass
   # Back up:
   destroyCurrentAnnotation: ->
     lastAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
+
     @props.classification.annotations.pop()
     @props.classification.update 'annotations'
 
@@ -456,7 +456,8 @@ Classifier = React.createClass
   completeClassification: ->
     if @props.workflow.configuration.persist_annotations
       @props.cacheClassification.delete()
-
+    
+    currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
     currentTask?.tools?.map (tool) =>
       if tool.type is 'grid'

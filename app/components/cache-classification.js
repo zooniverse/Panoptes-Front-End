@@ -8,28 +8,41 @@ class CacheClassification {
   }
 
   create() {
-    apiClient.type('classifications').create({
+    const cachedClassification = apiClient.type('classifications').create({
       annotations: [],
       id: 'CACHED_CLASSIFICATION_DO_NOT_SAVE',
-    }).then((classification) => {
-      this.state = { cachedClassification: classification };
-      return this.state.cachedClassification;
     });
+
+    this.state = { cachedClassification };
+    return this.state.cachedClassification;
   }
 
   update(newAnnotation) {
     let cachedClassification;
+    const taskKey = newAnnotation.task;
 
     if (this.state.cachedClassification === null) {
-      console.log('this.state.cachedClassification is null', this.state.cachedClassification);
       cachedClassification = this.create();
     } else {
       cachedClassification = this.state.cachedClassification;
     }
-    console.log('cachedClassification', cachedClassification);
+    console.log('update taskKey', taskKey);
+    const cachedAnnotation = this.isAnnotationCached(taskKey);
 
-    cachedClassification.annotations[cachedClassification.annotations.length - 1] = newAnnotation;
+    if (cachedAnnotation) {
+      console.log('annotation is cached', cachedAnnotation);
+      const index = cachedClassification.annotations.findIndex(
+        (annotation) => annotation.task === taskKey);
+      console.log('index', index);
+      if (index > -1) {
+        const newAnnotations = cachedClassification.annotations.slice(index, 1);
+        cachedClassification.annotations = newAnnotations;
+      }
+    }
+    cachedClassification.annotations.push(newAnnotation);
+
     cachedClassification.update('annotations');
+    console.log('cachedClassification', cachedClassification);
   }
 
   delete() {
@@ -37,19 +50,22 @@ class CacheClassification {
   }
 
   isAnnotationCached(taskKey) {
+    let annotationToReturn = null;
+
     if (this.state.cachedClassification !== null) {
       const annotations = this.state.cachedClassification.annotations;
-
+      console.log('annotations, taskKey', annotations, taskKey);
       annotations.forEach((annotation) => {
+        console.log('annotation.task', annotation.task, taskKey);
         if (annotation.task === taskKey) {
-          return annotation;
+          console.log('annotation task is taskkey', annotation);
+          annotationToReturn = annotation;
         }
-
-        return null;
       });
     }
+    console.log('annotationToReturn', annotationToReturn);
 
-    return null;
+    return annotationToReturn;
   }
 }
 
