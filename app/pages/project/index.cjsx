@@ -175,7 +175,7 @@ ProjectPage = React.createClass
       workflow.id is selectedWorkflowID
 
     if selectedWorkflowIndex is -1
-      throw new Error "No workflow #{selectedWorkflowID} for project #{project.id}"
+      console.error "No workflow #{selectedWorkflowID} for project #{project.id}"
       @clearInvalidWorkflow(selectedWorkflowID)
         .then(@getSelectedWorkflow(project, @props.preferences))
     else
@@ -188,9 +188,9 @@ ProjectPage = React.createClass
       if selectedWorkflowID is preferences.preferences.selected_workflow
         preferences.update 'preferences.selected_workflow': undefined
         preferences.save()
-      else if selectedWorkflowID is preferences.settings?.workflow_id
-        preferences.update 'preferences.settings.workflow_id': undefined
-        preferences.save()
+      # else if selectedWorkflowID is preferences.settings?.workflow_id
+      #   preferences.update 'preferences.settings.workflow_id': undefined
+      #   preferences.save()
     )
 
   _lastSugarSubscribedID: null
