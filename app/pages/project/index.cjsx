@@ -149,7 +149,7 @@ ProjectPage = React.createClass
     else
       selectedWorkflowID = @selectRandomWorkflow(project)
 
-    @isWorkflowInvalid(project, selectedWorkflowID)
+    @isWorkflowInactive(project, selectedWorkflowID)
 
   checkIfProjectIsComplete: (project) ->
     projectIsComplete = (true for workflow in @state.activeWorkflows when not workflow.finished_at?).length is 0
@@ -170,27 +170,27 @@ ProjectPage = React.createClass
       loadingSelectedWorkflow: false
     }
 
-  isWorkflowInvalid: (project, selectedWorkflowID) ->
+  isWorkflowInactive: (project, selectedWorkflowID) ->
     selectedWorkflowIndex = @state.activeWorkflows.findIndex (workflow, index) ->
       workflow.id is selectedWorkflowID
 
     if selectedWorkflowIndex is -1
       console.error "No workflow #{selectedWorkflowID} for project #{project.id}"
-      @clearInvalidWorkflow(selectedWorkflowID)
+      @clearInactiveWorkflow(selectedWorkflowID)
         .then(@getSelectedWorkflow(project, @props.preferences))
     else
       @getWorkflow(selectedWorkflowIndex)
 
-  clearInvalidWorkflow: (selectedWorkflowID) ->
+  clearInactiveWorkflow: (selectedWorkflowID) ->
     preferences = @props.preferences
 
     Promise.resolve(
       if selectedWorkflowID is preferences.preferences.selected_workflow
         preferences.update 'preferences.selected_workflow': undefined
-        preferences.save()
-      # else if selectedWorkflowID is preferences.settings?.workflow_id
-      #   preferences.update 'preferences.settings.workflow_id': undefined
-      #   preferences.save()
+      else if selectedWorkflowID is preferences.settings?.workflow_id
+        preferences.update 'preferences.settings.workflow_id': undefined
+
+      preferences.save()
     )
 
   _lastSugarSubscribedID: null
