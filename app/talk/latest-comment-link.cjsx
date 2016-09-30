@@ -67,15 +67,16 @@ module.exports = React.createClass
   discussionLink: (childtext = '', query = {}, className = '') ->
     if className is "latest-comment-time"
       logClick = @context.geordi?.makeHandler? 'discussion-time'
+    locationObject =
+      pathname: "/talk/#{@props.discussion.board_id}/#{@props.discussion.id}"
+      query: query
     if @props.params?.owner and @props.params?.name
       {owner, name} = @props.params
-      <Link className={className} onClick={logClick?.bind(this, childtext)} to={@context.router.createHref("/projects/#{owner}/#{name}/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
-        {childtext}
-      </Link>
-    else
-      <Link className={className} onClick={logClick?.bind(this, childtext)} to={@context.router.createHref("/talk/#{@props.discussion.board_id}/#{@props.discussion.id}", query)}>
-        {childtext}
-      </Link>
+      locationObject.pathname = "/projects/#{owner}/#{name}" + locationObject.pathname
+
+    <Link className={className} onClick={logClick?.bind(this, childtext)} to={@context.router.createHref(locationObject)}>
+      {childtext}
+    </Link>
 
   updateRoles: (comment) ->
     talkClient

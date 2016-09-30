@@ -41,9 +41,9 @@ module.exports = React.createClass
 
   onPageChange: (page) ->
     nextQuery = Object.assign {}, @props.location.query, { page }
-    currentPath = @props.location.pathname
-
-    @context.router.push @context.router.createHref(currentPath, nextQuery)
+    @context.router.push
+      pathname: @props.location.pathname
+      query: nextQuery
 
   handleDeleteSubject: (subject) ->
     @props.collection.removeLink 'subjects', [subject.id.toString()]
