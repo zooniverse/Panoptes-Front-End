@@ -153,13 +153,13 @@ module.exports = React.createClass
                       name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
                       choice={choice}
                     />
-                    
+
                     if 'size' in options
                       <div key="size" className="workflow-choice-setting">
                         <AutoSave resource={@props.workflow}>
                           <label>Size{' '}
-                            <select 
-                            name="#{@props.taskPrefix}.#{choicesKey}.#{index}.size" 
+                            <select
+                            name="#{@props.taskPrefix}.#{choicesKey}.#{index}.size"
                             value={choice.size}
                             onChange={handleChange}
                             >
@@ -207,6 +207,12 @@ module.exports = React.createClass
                   <small className="form-help">*column rectangle:* a box with full height but variable width; this tool *cannot* be rotated.</small>}
                 {if @canUse("grid")
                   <small className="form-help">*grid table:* cells which can be made into a table for consecutive annotations.</small>}
+                {if @canUse("arrow")
+                  <small className="form-help">*arrow:* a line with an arrow head at one end.</small>}
+                {if @canUse("mars-arrow")
+                  <small className="form-help">*mars arrow:* a line with an arrow head at one end and a circle at its midpoint.</small>}
+                {if @canUse("arrow")
+                    <small className="form-help">*compass:* a line with an arrow head at one end and a circle at its midpoint that is transected by a short line perpendcular to the arrow.</small>}
               </div>}
         </div>}
 
