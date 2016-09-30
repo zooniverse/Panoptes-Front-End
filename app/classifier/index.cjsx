@@ -223,13 +223,15 @@ Classifier = React.createClass
             disableInterventionFunction={@disableIntervention}
           />}
         <div className="coverable-task-container">
-          {persistentHooksBeforeTask.map (HookComponent) =>
-            <HookComponent {...taskHookProps} />}
+          {persistentHooksBeforeTask.map (HookComponent, i) =>
+            key = i + Math.random()
+            <HookComponent key={key} {...taskHookProps} />}
 
           <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} preferences={@props.preferences} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
 
-          {persistentHooksAfterTask.map (HookComponent) =>
-            <HookComponent {...taskHookProps} />}
+          {persistentHooksAfterTask.map (HookComponent, i) =>
+            key = i + Math.random()
+            <HookComponent key={key} {...taskHookProps} />}
 
           <hr />
 

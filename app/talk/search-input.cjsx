@@ -1,9 +1,7 @@
 React = require 'react'
-{History} = require 'react-router'
 
 module.exports = React.createClass
   displayName: 'TalkSearchInput'
-  mixins: [History]
 
   propTypes:
     params: React.PropTypes.object
@@ -12,6 +10,7 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+    router: React.PropTypes.object.isRequired
 
   logSearch: (value) ->
     @context?.geordi?.logEvent
@@ -26,11 +25,15 @@ module.exports = React.createClass
 
     if owner and name
       if inputValue.match(/\#[-\w\d]{3,40}/) # searches for #hashtags
-        @history.pushState(null, "/projects/#{owner}/#{name}/talk/tags/#{inputValue.slice(1, inputValue.length)}")
+        @context.router.push "/projects/#{owner}/#{name}/talk/tags/#{inputValue.slice(1, inputValue.length)}"
       else
-        @history.pushState(null, "/projects/#{owner}/#{name}/talk/search", {query: inputValue})
+        @context.router.push
+          pathname: "/projects/#{owner}/#{name}/talk/search"
+          query: {query: inputValue}
     else
-      @history.pushState(null, "/talk/search", {query: inputValue})
+      @context.router.push
+        pathname: "/talk/search"
+        query: {query: inputValue}
 
   componentWillReceiveProps: (nextProps) ->
     return unless @refs.talkSearchInput

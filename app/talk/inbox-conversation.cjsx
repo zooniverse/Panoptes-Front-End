@@ -6,12 +6,15 @@ SingleSubmitButton = require '../components/single-submit-button'
 HandlePropChanges = require '../lib/handle-prop-changes'
 {Markdown} = (require 'markdownz').default
 CommentBox = require './comment-box'
-{Link, History} = require 'react-router'
+{Link} = require 'react-router'
 {timestamp} = require './lib/time'
 
 module.exports = React.createClass
   displayName: 'InboxConversation'
-  mixins: [HandlePropChanges, History]
+  mixins: [HandlePropChanges]
+
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getInitialState: ->
     messages: []
@@ -72,7 +75,7 @@ module.exports = React.createClass
     e.preventDefault()
     if confirm 'Are you sure you want to archive this conversation?'
       @state.conversation.delete().then =>
-        @history.pushState(null, '/inbox')
+        @context.router.push '/inbox'
 
   render: ->
     if @props.user

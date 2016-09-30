@@ -1,5 +1,5 @@
 React = require 'react'
-{Link, History} = require 'react-router'
+{Link} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
 Paginator = require './lib/paginator'
@@ -13,7 +13,9 @@ ProjectLinker = require './lib/project-linker'
 
 module.exports = React.createClass
   displayName: 'TalkTags'
-  mixins: [History]
+
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getInitialState: ->
     tags: null
@@ -49,7 +51,7 @@ module.exports = React.createClass
     <div className="talk-search">
       <h1>Subjects tagged with #{@props.params.tag}</h1>
 
-      <button className="link-style" type="button" onClick={@history.goBack}>
+      <button className="link-style" type="button" onClick={@context.router.goBack}>
         <i className="fa fa-backward" /> Back
       </button>
 

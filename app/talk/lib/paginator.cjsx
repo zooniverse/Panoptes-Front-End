@@ -1,5 +1,4 @@
 React = require 'react'
-{History} = require 'react-router'
 updateQueryParams = require './update-query-params'
 
 module.exports = React.createClass
@@ -13,23 +12,22 @@ module.exports = React.createClass
     pageSelector: React.PropTypes.bool            # show page selector?
     pageKey: React.PropTypes.string               # optional name for key param (defaults to 'page')
 
+  contextTypes:
+    geordi: React.PropTypes.object
+    router: React.PropTypes.object.isRequired
+
   getDefaultProps: ->
     page: 1
     pageKey: 'page'
     onPageChange: (page) ->
       queryChange = { }
       queryChange[@props.pageKey] = page
-      updateQueryParams @history, queryChange
+      updateQueryParams @context.router, queryChange
     firstAndLast: true
     pageSelector: true
     previousLabel: <span><i className="fa fa-long-arrow-left" /> Previous</span>
     nextLabel: <span>Next <i className="fa fa-long-arrow-right" /></span>
 
-  mixins: [History]
-
-  contextTypes:
-    geordi: React.PropTypes.object
-  
   componentDidMount: ->
     @logClick = @context.geordi?.makeHandler 'change-page'
 

@@ -39,7 +39,9 @@ EditWorkflowPage = React.createClass
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
-    @context.router.createHref "/projects/#{owner}/#{name}/classify", viewQuery
+    @context.router.createHref
+      pathname: "/projects/#{owner}/#{name}/classify"
+      query: viewQuery
 
   showCreateWorkflow: ->
     @setState workflowCreationInProgress: true

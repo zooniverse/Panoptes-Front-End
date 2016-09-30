@@ -6,9 +6,12 @@ PromiseRenderer = require '../components/promise-renderer'
 module.exports = React.createClass
   displayName: 'TalkBreadcrumbs'
 
+  contextTypes:
+    router: React.PropTypes.object.isRequired
+
   crumbCatch: (e) ->
     if e.message.indexOf('not allowed to show') isnt -1
-      @history.replaceState(null, "/talk/not-found")
+      @context.router.replace '/talk/not-found'
 
   boardLink: (board) ->
     <Link to="#{@rootTalkPath()}/#{board.id}">

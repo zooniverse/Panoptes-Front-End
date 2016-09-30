@@ -4,7 +4,6 @@ Comment = require './comment'
 CommentBox = require './comment-box'
 commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
-{History} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
 PromiseRenderer = require '../components/promise-renderer'
@@ -27,7 +26,9 @@ PAGE_SIZE = talkConfig.discussionPageSize
 
 module.exports = React.createClass
   displayName: 'TalkDiscussion'
-  mixins: [History]
+
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getInitialState: ->
     comments: []
@@ -64,7 +65,9 @@ module.exports = React.createClass
 
         if page isnt @props.location.query.page
           @props.location.query.page = page
-          @history.replaceState(null, @props.location.pathname, @props.location.query)
+          @context.router.replace
+            pathname: @props.location.pathname
+            query: @props.location.query
 
       @setComments(@props.location.query.page ? 1)
 
@@ -84,9 +87,9 @@ module.exports = React.createClass
         else
           {board, owner, name} = @props.params
           if (owner and name)
-            @history.pushState(null, "/projects/#{owner}/#{name}/talk/#{board}")
+            @context.router.push "/projects/#{owner}/#{name}/talk/#{board}"
           else
-            @history.pushState(null, "/talk/#{board}")
+            @context.router.push "/talk/#{board}"
 
   setCommentsMeta: (page = @props.location.query?.page) ->
     @commentsRequest(page).then (comments) =>
@@ -186,9 +189,9 @@ module.exports = React.createClass
           @setComments(@props.location.query.page)
           {owner, name} = @props.params
           if (owner and name)
-            @history.pushState(null, "/projects/#{owner}/#{name}/talk")
+            @context.router.push "/projects/#{owner}/#{name}/talk"
           else
-            @history.pushState(null, "/talk")
+            @context.router.push "/talk"
 
   commentValidations: (commentBody) ->
     # TODO: return true if any additional validations fail
@@ -212,9 +215,13 @@ module.exports = React.createClass
           {owner, name} = @props.params
 
           if (owner and name)
-            @history.pushState(null, "/projects/#{owner}/#{name}/talk/#{board_id}/#{}", @props.location.query)
+            @context.router.push
+              pathname: "/projects/#{owner}/#{name}/talk/#{board_id}/#{}"
+              query: @props.location.query
           else
-            @history.pushState(null, "/talk/#{board_id}/", @props.location.query)
+            @context.router.push
+              pathname: "/talk/#{board_id}/"
+              query: @props.location.query
         else
           @setDiscussion()
 

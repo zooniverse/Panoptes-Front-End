@@ -1,6 +1,6 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-{Link, History} = require 'react-router'
+{Link} = require 'react-router'
 DiscussionPreview = require './discussion-preview'
 talkClient = require 'panoptes-client/lib/talk-client'
 FollowBoard = require './follow-board'
@@ -25,10 +25,10 @@ PAGE_SIZE = talkConfig.boardPageSize
 
 module.exports = React.createClass
   displayName: 'TalkBoard'
-  mixins: [History]
 
   contextTypes:
     geordi: React.PropTypes.object
+    router: React.PropTypes.object.isRequired
 
   getInitialState: ->
     discussions: []
@@ -90,11 +90,11 @@ module.exports = React.createClass
       if @state.board.section is 'zooniverse'
         @boardRequest().delete()
           .then =>
-            @history.pushState(null, "/talk")
+            @context.router.push '/talk'
       else
         @boardRequest().delete()
           .then =>
-            @history.pushState(null, "/projects/#{owner}/#{name}/talk")
+            @context.router.push "/projects/#{owner}/#{name}/talk"
 
   onEditBoard: (e) ->
     e.preventDefault()

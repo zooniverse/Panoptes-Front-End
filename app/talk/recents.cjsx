@@ -1,6 +1,6 @@
 React = require 'react'
 Comment = require './comment'
-{Link, History} = require 'react-router'
+{Link} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
 updateQueryParams = require './lib/update-query-params'
@@ -9,7 +9,9 @@ talkConfig = require './config'
 
 module.exports = React.createClass
   displayName: 'TalkRecents'
-  mixins: [History]
+
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getInitialState: ->
     comments: []
@@ -58,7 +60,7 @@ module.exports = React.createClass
 
   toggleNotes: ->
     # Always reset to first page when toggling
-    updateQueryParams @history, showNotes: @refs.showNotes.checked, page: 1
+    updateQueryParams @context.router, showNotes: @refs.showNotes.checked, page: 1
     @getComments()
 
   commentTitle: (comment) ->
