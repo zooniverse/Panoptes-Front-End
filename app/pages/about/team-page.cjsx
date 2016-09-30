@@ -21,11 +21,6 @@ counterpart.registerTranslations 'en',
         bio: '''Adam is responsible for managing the Zooniverse's web hosting infrastructure.
         He has a computer science degree and has worked in web hosting and development for many years.
         He's also working on a degree in astronomy with the OU.'''
-      amyBoyer:
-        title: 'Developer'
-        bio: '''Amy has been a Zooniverse developer at the Adler since November 2015. She holds a BS and
-        MS in computer science and has over a decade of industry experience. An aspiring astronomer as
-        a child, she couldn't be happier to have landed here.'''
       alexBowyer:
         title: 'Web Science Architect'
         bio: '''Alex worked remotely for Zooniverse from his home in Northumberland.
@@ -40,12 +35,21 @@ counterpart.registerTranslations 'en',
         bio: '''Ali spent most of her PhD chasing lions around the Serengeti. She finished
         her PhD in Ecology, Evolution, and Behavior at the University of Minnesota in 2014,
         and joined the Zooniverse as a Postdoc in Ecology and Citizen Science.'''
+      # amitKapadia:
+      #   title: 'Developer'
+      #   bio: '''Amit was a developer at the Adler Planetarium.'''
+      amyBoyer:
+        title: 'Developer'
+        bio: '''Amy has been a Zooniverse developer at the Adler since November 2015. She holds a BS and
+        MS in computer science and has over a decade of industry experience. An aspiring astronomer as
+        a child, she couldn't be happier to have landed here.'''
       andreaSimenstad:
         title: 'Developer'
         bio: '''Andrea joined Zooniverse as a developer at the University of Minnesota in 2015. When she is not captivated by code, she can be found enjoying snow on skis and exploring lakes by kayak. She graduated from Carleton College with a degree in Cognitive Science.'''
       arfonSmith:
         title: 'Technical Lead'
-        bio: 'Arfon was co-founder and Technical Lead of the Zooniverse for the first five years of the project.'
+        bio: '''Arfon was co-founder and Technical Lead of the Zooniverse for the first five years of the project.
+        Arfon served as Director of Citizen Science at the Adler Planetarium and co-lead of the Zooniverse until fall 2013.'''
       beverleyNewing:
         title: 'Web Developer Intern'
         bio: '''Beverley is an English and German literature graduate, now working as a Web Developer Intern at Zooniverse. In her spare time she's an avid fan of geese and enjoys motorbiking.'''
@@ -84,17 +88,17 @@ counterpart.registerTranslations 'en',
         his PhD in astrophysics from Drexel University.'''
       darrenMcRoy:
         title: 'Community Manager'
-        bio: '''Darren (DZM) served as a liaison to the Zooniverse community and assists with strategic
+        bio: '''Darren (DZM) served as a liaison to the Zooniverse community and assisted with strategic
         content for projects. A Northwestern University graduate in journalism, he is also a golf addict,
         amateur author, and hopeless animal lover.'''
       darrylWright:
         title: 'Researcher'
         bio: 'Darryl is doing machine learning research with the Zooniverse, based in Oxford.'
-      edPaget:
-        title: 'Developer'
-        bio: '''Ed Paget joined Adler's Zooniverse Team as a software developer in August 2012.
-        He previously worked as a freelance programmer and photographer. Ed graduated from
-        Northwestern University with a major in Radio/TV/Film.'''
+      # edPaget:
+      #   title: 'Developer'
+      #   bio: '''Ed Paget joined Adler's Zooniverse Team as a software developer in August 2012.
+      #   He previously worked as a freelance programmer and photographer. Ed graduated from
+      #   Northwestern University with a major in Radio/TV/Film.'''
       grantMiller:
         title: 'Communications Lead'
         bio: '''A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
@@ -109,9 +113,9 @@ counterpart.registerTranslations 'en',
         Greg loves to eat pancakes with real maple syrup and run ultramarathons.'''
       heathVanSingel:
         title: 'Designer'
-        bio: '''Heath was the UX/UI Designer for projects at the Zooniverse where he worked to craft
-        thoughtful and engaging user experiences. Apart from design Heath also enjoys illustration,
-        a good sci-fi or fantasy novel, and trips back to Michigan.'''
+        bio: '''Heath was the UX/UI Designer at the Zooniverse where he worked to craft thoughtful and
+        engaging user experiences. Apart from design, Heath also enjoys illustration, a good sci-fi or fantasy
+        novel, and exploring his new home in the Pacific Northwest.'''
       hughDickinson:
         title: 'Researcher'
         bio: '''Hugh is a postdoc studying the Zooniverse.'''
@@ -158,7 +162,7 @@ counterpart.registerTranslations 'en',
       lauraWhyte:
         title: 'Adler Planetarium Zooniverse Director'
         bio: '''Laura was the Director of Citizen Science at Adler Planetarium and co-lead of the
-        Zooniverse until 2015.'''
+        Zooniverse from fall 2013 to summer 2015.'''
       lucyFortson:
         title: 'University of Minnesota Zooniverse Director'
         bio: '''Associate Professor of Physics and Astronomy at the University of Minnesota. One of the Zooniverse
@@ -234,9 +238,9 @@ counterpart.registerTranslations 'en',
         from Bristol and loves cooking.'''
       stuartLynn:
         title: 'Developer'
-        bio: '''Stuart arrived at the Adler as a developer in July 2011, having been in our Oxford team previously.
-        He studied mathematical physics at Edinburgh University and received his doctorate in astrophysics from Royal
-        Observatory Edinburgh. Data analysis maestro.'''
+        bio: '''Stuart arrived at the Adler as a developer in July 2011, having been one of the founding
+        developers at Oxford. He studied mathematical physics at Edinburgh University and received his doctorate
+        in astrophysics from Royal Observatory Edinburgh. Data analysis maestro and web developer.'''
       steveRaden:
         title: 'Developer'
         bio: 'Steve Raden was a developer at the Adler in Chicago.'
@@ -273,6 +277,12 @@ teamMembers =
     bio: counterpart "team.content.alexBowyer.bio"
     image: "/assets/team/alex_bowyer.jpg"
     location: "alumni"
+  # amitKapadia:
+  #   name: "Amit Kapadia"
+  #   title: counterpart "team.content.amitKapadia.title"
+  #   bio: counterpart "team.content.amitKapadia.bio"
+  #   image: "/assets/team/amit.jpg"
+  #   location: "alumni"
   amyBoyer:
     name: "Amy Boyer"
     title: counterpart "team.content.amyBoyer.title"
@@ -370,13 +380,13 @@ teamMembers =
     bio: counterpart "team.content.darrylWright.bio"
     image: "/assets/team/team-member-avatar.jpg"
     location: "oxford"
-  edPaget:
-    name: "Ed Paget"
-    twitter: "edpaget"
-    title: counterpart "team.content.edPaget.title"
-    bio: counterpart "team.content.edPaget.bio"
-    image: "/assets/team/ed.png"
-    location: "alumni"
+  # edPaget:
+  #   name: "Ed Paget"
+  #   twitter: "edpaget"
+  #   title: counterpart "team.content.edPaget.title"
+  #   bio: counterpart "team.content.edPaget.bio"
+  #   image: "/assets/team/ed.png"
+  #   location: "alumni"
   grantMiller:
     name: "Grant Robert MacKinnon Miller"
     twitter: "mrniaboc"
