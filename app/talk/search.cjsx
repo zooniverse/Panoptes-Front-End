@@ -1,5 +1,4 @@
 React = require 'react'
-{History} = require 'react-router'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
 TalkSearchResult = require './search-result'
@@ -23,13 +22,13 @@ filterObjectKeys = (object, validKeys) ->
 
 module.exports = React.createClass
   displayName: 'TalkSearch'
-  mixins: [History]
 
   contextTypes:
     geordi: React.PropTypes.object
+    router: React.PropTypes.object.isRequired
 
   goBack: (linkName) ->
-    @history.goBack()
+    @context.router.goBack()
     @context.geordi?.logEvent
       type: linkName
 
@@ -75,7 +74,9 @@ module.exports = React.createClass
   goToPage: (n) ->
     nextQuery = Object.assign {}, @props.location.query, {page: n}
 
-    @history.pushState(null, location.pathname, nextQuery)
+    @context.router.push
+      pathname: location.pathname
+      query: nextQuery
 
   render: ->
     numberOfResults = @state.results.length

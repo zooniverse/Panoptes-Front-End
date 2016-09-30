@@ -2,15 +2,14 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
-{History} = require 'react-router'
 CommentBox = require './comment-box'
 
 module.exports = React.createClass
   displayName: 'PrivateMessageForm'
-  mixins: [History]
 
   contextTypes:
     geordi: React.PropTypes.object
+    router: React.PropTypes.object.isRequired
 
   logClick: ->
     @context?.geordi?.logEvent
@@ -33,7 +32,7 @@ module.exports = React.createClass
       .then (conversation) =>
         talkClient.type('conversations').create(conversation).save()
           .then (conversation) =>
-            @history.pushState(null, "/inbox/#{conversation.id}")
+            @context.router.push "/inbox/#{conversation.id}"
 
   render: ->
     <div className="talk talk-module">

@@ -2,7 +2,6 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 talkClient = require 'panoptes-client/lib/talk-client'
 UserSearch = require '../components/user-search'
-{History} = require 'react-router'
 {getErrors} = require './lib/validations'
 subjectValidations = require './lib/message-subject-validations'
 messageValidations = require './lib/message-validations'
@@ -10,13 +9,13 @@ CommentBox = require './comment-box'
 
 module.exports = React.createClass
   displayName: 'InboxForm'
-  mixins: [History]
 
   propTypes:
     user: React.PropTypes.object
 
   contextTypes:
     geordi: React.PropTypes.object
+    router: React.PropTypes.object.isRequired
 
   getInitialState: ->
     validationErrors: []
@@ -50,7 +49,7 @@ module.exports = React.createClass
 
     talkClient.type('conversations').create(conversation).save()
       .then (conversation) =>
-        @history.pushState(null, "/inbox/#{conversation.id}")
+        @context.router.push "/inbox/#{conversation.id}"
 
   render: ->
     <div className="inbox-form talk-module">

@@ -4,13 +4,14 @@ auth = require 'panoptes-client/lib/auth'
 Paginator = require './lib/paginator'
 Loading = require '../components/loading-indicator'
 page_size = require('./config').moderationsPageSize
-{History} = require 'react-router'
 updateQueryParams = require './lib/update-query-params'
 ModerationComment = require './moderation/comment'
 
 module.exports = React.createClass
   displayName: 'TalkModerations'
-  mixins: [History]
+
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getInitialState: ->
     moderations: []
@@ -53,7 +54,7 @@ module.exports = React.createClass
       @setModerations()
 
   filterByAction: (action) ->
-    updateQueryParams @history, state: action
+    updateQueryParams @context.router, state: action
 
   nameOf: (action) ->
     switch action

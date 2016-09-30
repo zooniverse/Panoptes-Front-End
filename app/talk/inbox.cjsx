@@ -3,7 +3,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
 PromiseRenderer = require '../components/promise-renderer'
 Paginator = require './lib/paginator'
-{Link, History} = require 'react-router'
+{Link} = require 'react-router'
 Loading = require '../components/loading-indicator'
 InboxForm = require './inbox-form'
 talkConfig = require './config'
@@ -17,7 +17,9 @@ promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 
 module.exports = React.createClass
   displayName: 'TalkInbox'
-  mixins: [History]
+
+  contextTypes:
+    router: React.PropTypes.object.isRequired
 
   getDefaultProps: ->
     location: query: page: 1
@@ -40,7 +42,7 @@ module.exports = React.createClass
     @goToPage(page)
 
   goToPage: (n) ->
-    @history.pushState(null, "/inbox?page=#{n}")
+    @context.router.push "/inbox?page=#{n}"
     @setConversations(n)
 
   message: (data, i) ->
