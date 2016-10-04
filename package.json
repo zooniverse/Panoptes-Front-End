@@ -90,6 +90,6 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
-    "test": "echo 'Integration tests have moved to the panoptes-client library.'"
+    "test": "export NODE_ENV=development; mocha test/test.js"
   }
 }
