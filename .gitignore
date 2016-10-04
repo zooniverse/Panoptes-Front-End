@@ -3,5 +3,6 @@
 /dist
 
 npm-debug.log
+flow.log*
 
 .DS_Store
