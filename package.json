@@ -61,6 +61,7 @@
     "file-loader": "~0.8.5",
     "html-webpack-plugin": "~2.16.0",
     "json-loader": "~0.5.4",
+    "mocha": "~3.1.0",
     "nib": "~1.1.0",
     "publisssh": "~1.1.0",
     "react-transform-hmr": "~1.0.4",
@@ -89,6 +90,6 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
-    "test": "echo 'Integration tests have moved to the panoptes-client library.'"
+    "test": "export NODE_ENV=development; mocha test/test.js"
   }
 }
