@@ -12,5 +12,6 @@ Describe your changes.
 ## Optional
 
 - [ ] If it's a new component, is it in ES6? Is it clear of warnings from ESLint?
+- [ ] Have you [added a Flow declaration](https://flowtype.org/docs/getting-started.html) if there isn't one already?
 - [ ] Have you replaced any `ChangeListener` or `PromiseRenderer` components with code that updates component state?
 - [ ] If changes are made to the classifier, does the dev classifier still work?

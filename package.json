@@ -59,6 +59,7 @@
     "express": "~4.13.3",
     "extract-text-webpack-plugin": "~1.0.1",
     "file-loader": "~0.8.5",
+    "flow-bin": "~0.33.0",
     "html-webpack-plugin": "~2.16.0",
     "json-loader": "~0.5.4",
     "mocha": "~3.1.0",
@@ -90,6 +91,7 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
-    "test": "export NODE_ENV=development; mocha test/test.js"
+    "test": "export NODE_ENV=development; mocha test/test.js",
+    "flow": "flow; exit 0"
   }
 }
