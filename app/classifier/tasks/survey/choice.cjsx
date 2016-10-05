@@ -125,7 +125,7 @@ module.exports = React.createClass
                   answerID is @state.answers[questionID]
                 <span key={answerID}>
                   <label className="survey-task-choice-answer" data-checked={isChecked || null}>
-                    <input name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
+                    <input ref={questionID} name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
                     {answer.label}
                   </label>
                   {' '}
@@ -152,10 +152,13 @@ module.exports = React.createClass
       else
         @state.answers[questionID].splice @state.answers[questionID].indexOf(answerID), 1
     else
-      @state.answers[questionID] = if e.target.checked
-        answerID
+      console.log 'e.target', answerID
+      console.log 'old answer', @state.answers[questionID]
+      if answerID is @state.answers[questionID]
+        delete @state.answers[questionID]
+        @refs[questionID].checked = false
       else
-        null
+        @state.answers[questionID] = answerID
     @setState answers: @state.answers
 
   handleIdentification: ->
