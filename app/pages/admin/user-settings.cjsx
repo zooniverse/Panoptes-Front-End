@@ -5,6 +5,37 @@ PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
+{Link} = require 'react-router'
+
+UserProjects = React.createClass
+  displayName: 'UserProjects'
+
+  getInitialState: ->
+    projects: []
+
+  componentDidMount: ->
+    @updateProjects @props.user.login
+  
+  componentWillReceiveProps: (newProps) ->
+    @updateProjects newProps.user.login if newProps.user isnt @props.user
+  
+  updateProjects: (login) ->
+    apiClient.type 'projects'
+      .get
+        owner: login
+        cards: true
+      .then (projects) =>
+        @setState {projects}
+
+  render: ->
+    <div>
+      <h3>Projects</h3>
+      <ul>
+        {@state.projects.map (project) -> 
+          <li key={project.id}><Link to="/projects/#{project.slug}">{project.display_name}</Link></li>
+        }
+      </ul>
+    </div>
 
 UserSettings = React.createClass
   displayName: "User Settings"
@@ -111,6 +142,9 @@ module.exports = React.createClass
           if editUser == @props.user
             <p>Can't edit your own account</p>
           else if editUser?
-            <UserSettings editUser={editUser} />
+            <div>
+              <UserSettings editUser={editUser} />
+              <UserProjects user={editUser} />
+            </div>
         }</PromiseRenderer>}
     </div>
