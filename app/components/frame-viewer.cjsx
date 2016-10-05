@@ -31,7 +31,7 @@ module.exports = React.createClass
     frame = @props.frame
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
     FrameWrapper = @props.frameWrapper
-    zoomEnabled = @props.project? && 'pan and zoom' in @props.project?.experimental_tools
+    zoomEnabled = @props.workflow?.configuration.pan_and_zoom
     frameDisplay = switch type
       when 'image'
         <div className="subject-image-frame" >

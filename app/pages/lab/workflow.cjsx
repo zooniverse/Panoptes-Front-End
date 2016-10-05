@@ -307,6 +307,22 @@ EditWorkflowPage = React.createClass
 
             </div>}
 
+          <div>
+            <div>
+              <AutoSave resource={@props.workflow}>
+                <span className="form-label">Pan and zoom</span><br />
+                <small className="form-help">Pan and zoom allows the user to zoom in and out and pan the subject in the subject viewer.</small>
+                <br />
+                <label>
+                  <input ref="panAndZoomToggle" type="checkbox" checked={@props.workflow.configuration.pan_and_zoom} onChange={@handleSetPanAndZoom} />
+                  Pan and Zoom
+                </label>
+              </AutoSave>
+            </div>
+
+            <hr />
+          </div>
+
           <AutoSave tag="div" resource={@props.workflow}>
             <span className="form-label">Multi-image options</span><br />
             <small className="form-help">Choose how to display multiple images</small>
@@ -552,6 +568,10 @@ EditWorkflowPage = React.createClass
 
     @props.workflow.update changes
     @setState selectedTaskKey: nextTaskID
+
+  handleSetPanAndZoom: (e) ->
+    @props.workflow.update
+      'configuration.pan_and_zoom': e.target.checked
 
   handleSetHideClassificationSummaries: (e) ->
     @props.workflow.update
