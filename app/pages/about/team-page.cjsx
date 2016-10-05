@@ -61,6 +61,9 @@ counterpart.registerTranslations 'en',
         title: 'Communications Lead'
         bio: '''A former exoplanetary scientist, Grant is now responsible for communicating with our volunteers and researchers. He is also behind the Zooniverse's presence on
         social media and publishes the Daily Zooniverse blog.'''
+      helenSpiers:
+        title: 'Researcher'
+        bio: '''After finishing a PhD studying the molecular basis of human brain development, Helen joined the Zooniverse as a Postdoc in citizen science and medical research.'''
       jimODonnell:
         title: 'UX Developer'
         bio: '''Professional cynic but his heart's not in it. Web developer for the Zooniverse,
@@ -195,7 +198,7 @@ teamMembers =
     location: "minnesota"
   beverleyNewing:
     name: "Beverley Newing"
-    twitter: "beverleynewing"
+    twitter: "WebDevBev"
     title: counterpart "team.content.beverleyNewing.title"
     bio: counterpart "team.content.beverleyNewing.bio"
     image: "/assets/team/beverley.jpg"
@@ -240,6 +243,13 @@ teamMembers =
     bio: counterpart "team.content.grantMiller.bio"
     image: "/assets/team/grant.jpg"
     location: "oxford"
+  helenSpiers:
+    name: "Helen Spiers"
+    twitter: "H_Spiers"
+    title: counterpart "team.content.helenSpiers.title"
+    bio: counterpart "team.content.helenSpiers.bio"
+    image: "/assets/team/helenspiers.jpg"
+    location: "oxford"
   jenGupta:
     name: "Jen Gupta"
     twitter: "jen_gupta"
@@ -256,14 +266,13 @@ teamMembers =
     location: "oxford"
   jordanMartin:
     name: "Jordan Martin"
-    twitter: "jordanIn312"
+    twitter: "Jordanwhitneym"
     title: counterpart "team.content.jordanMartin.title"
     bio: counterpart "team.content.jordanMartin.bio"
     image: "/assets/team/jordan.jpg"
     location: "chicago"
   julieFeldt:
     name: "Julie Feldt"
-    twitter: "JulieAFeldt"
     title: counterpart "team.content.julieFeldt.title"
     bio: counterpart "team.content.julieFeldt.bio"
     image: "/assets/team/julie.png"
