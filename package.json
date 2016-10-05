@@ -65,6 +65,7 @@
     "mocha": "~3.1.0",
     "nib": "~1.1.0",
     "publisssh": "~1.1.0",
+    "react-addons-test-utils": "~0.14.8",
     "react-transform-hmr": "~1.0.4",
     "rimraf": "~2.5.2",
     "style-loader": "~0.13.1",
@@ -93,6 +94,6 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
-    "test": "export NODE_ENV=development; mocha app/**/*.spec.js --reporter nyan"
+    "test": "export NODE_ENV=development; mocha app/**/*.spec.js --reporter nyan --compilers js:babel-core/register"
   }
 }
