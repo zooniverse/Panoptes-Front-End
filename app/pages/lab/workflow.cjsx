@@ -298,15 +298,14 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          {if 'invert' in @props.project.experimental_tools
-            <div>
-              <AutoSave tag="label" resource={@props.workflow}>
-                <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
-                Allow Users To Flip Image Color
-              </AutoSave>
+          <div>
+            <AutoSave tag="label" resource={@props.workflow}>
+              <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
+              Allow Users To Flip Image Color
+            </AutoSave>
 
-              <hr />
-            </div>}
+            <hr />
+          </div>
 
           <p>
             <AutoSave resource={@props.workflow}>
