@@ -21,7 +21,6 @@ EXPERIMENTAL_FEATURES = [
   'pan and zoom'
   'worldwide telescope'
   'hide previous marks'
-  'column'
   'grid'
   'invert'
   'workflow assignment'
