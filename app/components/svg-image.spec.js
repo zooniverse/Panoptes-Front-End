@@ -3,12 +3,12 @@ import assert from 'assert'
 import SVGImage from './svg-image'
 import {shallow, render} from 'enzyme'
 
-describe('SVGImage', () => {
-  it('should render without crashing', () => {
+describe('SVGImage', function(){
+  it('should render without crashing', function(){
     shallow(<SVGImage />)
   });
 
-  it('it should contain an image element', () => {
+  it('it should contain an image element', function(){
     const filename = 'foobar.jpeg'
     const wrapper = render(<SVGImage src={filename} />);
     const image = wrapper.find('image');

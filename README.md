@@ -16,6 +16,11 @@ All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
 While editing, do your best to follow style and architecture conventions already used by the project, unless you have a reason not to. **If in doubt, ask.**
 
+### Testing
+
+If you write a new component, write a test. Each component should have its own `.spec.js` file. The test runner is [Mocha](https://mochajs.org/) and [Enzyme](http://airbnb.io/enzyme/) is available for testing React components.
+You can run the tests with `npm test`. 
+
 ### It doesn't run
 
 Try `rm -rf ./node_modules && npm install` to freshen up your dependencies. And read the warnings, they should should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies.
