@@ -4,7 +4,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import isAdmin from '../lib/is-admin';
 
 const AdminOnly = React.createClass({
-  refreshing: false,
+  refreshing: (false: bool),
 
   contextTypes: {
     user: React.PropTypes.object,
