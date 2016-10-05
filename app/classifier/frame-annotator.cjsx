@@ -5,7 +5,6 @@ seenThisSession = require '../lib/seen-this-session'
 getSubjectLocation = require '../lib/get-subject-location'
 WarningBanner = require './warning-banner'
 ModifiedImage = require '../components/modified-image'
-# SVGImage = require '../components/svg-image'
 `import SVGImage from '../components/svg-image';`
 
 module.exports = React.createClass
