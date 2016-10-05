@@ -5,7 +5,7 @@ import {shallow, render} from 'enzyme'
 
 describe('SVGImage', function(){
   it('should render without crashing', function(){
-    shallow(<SVGImage />)
+    shallow(<SVGImage src="barfoo.png"/>)
   });
 
   it('it should contain an image element', function(){
