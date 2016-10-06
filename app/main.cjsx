@@ -1,5 +1,6 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
+Pusher = require 'pusher-js'
 { applyRouterMiddleware, Router, browserHistory } = require 'react-router'
 useScroll = require 'react-router-scroll/lib/useScroll'
 routes = require './router'
@@ -21,6 +22,8 @@ shouldUpdateScroll = (prevRouterProps, routerProps) ->
     false
   else
     true
+
+window?.pusher = new Pusher('79e8e05ea522377ba6db', {encrypted: true});
 
 ReactDOM.render <Router history={browserHistory} render={applyRouterMiddleware(useScroll(shouldUpdateScroll))}>{routes}</Router>,
   document.getElementById('panoptes-main-container')

@@ -202,8 +202,8 @@ const SiteNav = React.createClass({
   },
 
   render() {
-    const label = !!this.props.visible ? 
-      React.cloneElement(ZOO_LOGO, {title: "Hide navigation menu"}) : 
+    const label = !!this.props.visible ?
+      React.cloneElement(ZOO_LOGO, {title: "Hide navigation menu"}) :
       HAMBURGER_MENU;
 
     return (

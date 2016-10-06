@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import AdminOnly from '../components/admin-only';
 import SiteNav from './site-nav';
 import SiteFooter from './site-footer';
+import ChatWindow from './chat';
 
 import style from './index.styl';
 void style;
@@ -107,6 +108,8 @@ const AppLayout = React.createClass({
         >
           <SiteNav ref="mainNav" onToggle={togglePrimaryNav} visible={this.state.siteHeaderRevealed} params={this.props.params} />
         </header>
+
+        <ChatWindow />
 
         <div className="app-layout__not-header">
           <div
