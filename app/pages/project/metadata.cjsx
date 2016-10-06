@@ -7,6 +7,16 @@ module.exports = React.createClass
   propTypes:
     project: React.PropTypes.object
 
+  getInitialState: ->
+      return {classifications_count: @props.project.classifications_count};
+
+  componentDidMount: ->
+    channel = window.pusher.subscribe('panoptes')
+    channel.bind 'classification', (data) =>
+      console.log(data)
+      if data.project_id == @props.project.id
+        @setState({classifications_count: @state.classifications_count + 1})
+
   render: ->
     {project} = @props
     [owner, name] = project.slug.split('/')
@@ -24,7 +34,7 @@ module.exports = React.createClass
         </div>
 
         <div className="project-metadata-stat">
-          <div>{project.classifications_count.toLocaleString()}</div>
+          <div>{@state.classifications_count.toLocaleString()}</div>
           <div>Classifications</div>
         </div>
 

@@ -23,8 +23,6 @@ shouldUpdateScroll = (prevRouterProps, routerProps) ->
   else
     true
 
-window?.pusher = new Pusher('79e8e05ea522377ba6db', {encrypted: true});
-
 ReactDOM.render <Router history={browserHistory} render={applyRouterMiddleware(useScroll(shouldUpdateScroll))}>{routes}</Router>,
   document.getElementById('panoptes-main-container')
 
@@ -33,3 +31,9 @@ require('./lib/log-deployed-commit')()
 
 # Just for console access:
 window?.zooAPI = require 'panoptes-client/lib/api-client'
+
+if zooAPI.root == "https://panoptes-staging.zooniverse.org/api"
+  window?.pusher = new Pusher('95781402b5854a712a03', {encrypted: true});
+else
+  window?.pusher = new Pusher('79e8e05ea522377ba6db', {encrypted: true});
+
