@@ -323,12 +323,12 @@ publicationCategories =
       href: "http://journals.ametsoc.org/doi/abs/10.1175/BAMS-D-13-00152.1"
       date: "June 1, 2015"}
     ]},
-    {slug: "zooniverse/season-spotter"
+    {name: "Season Spotter"
     publications: [
       {citation: "Season Spotter: Using Citizen Science to Validate and Scale Plant Phenology from Near-Surface Remote Sensing, Kosmala+ 2016."
       href: "http://www.mdpi.com/2072-4292/8/9/726"
       date: "August 23, 2016"}
-    ]}
+    ]},
 
   ],
   humanities: [
