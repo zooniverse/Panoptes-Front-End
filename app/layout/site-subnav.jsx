@@ -10,9 +10,7 @@ const SiteSubnav = React.createClass({
   trigger() {
     return(
       <span className="site-nav__link"
-        activeClassName="site-nav__link--active"
-        title="More links"
-        aria-label="More links">• • •</span>
+        activeClassName="site-nav__link--active">News</span>
     );
   },
 
