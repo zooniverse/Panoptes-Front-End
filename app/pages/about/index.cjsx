@@ -31,7 +31,7 @@ module.exports = React.createClass
 
   render: ->
     <div className="secondary-page about-page">
-      <section className="hero about-hero">
+      <section className="hero">
         <div className="hero-container">
           <Translate content="about.title" component="h1" />
           <nav className="hero-nav">
