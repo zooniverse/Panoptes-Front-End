@@ -40,8 +40,9 @@ module.exports = React.createClass
       permissions: {read: 'all', write: 'all'}
       section: @props.section
 
-    talkClient.type('boards').create(board).save()
-      .then => @props.onCreateBoard?(board)
+    talkClient.type('boards').create(board).save().then (defaultBoard) =>
+      @props.onCreateBoard?(board)
+      @setState {defaultBoard}
 
   render: ->
     if @state.defaultBoard?
