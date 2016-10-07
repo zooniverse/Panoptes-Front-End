@@ -15,7 +15,7 @@
     "lodash.merge": "~2.4.1",
     "lodash.pick": "~3.1.0",
     "lodash.uniq": "~3.2.2",
-    "markdownz": "~4.1.4",
+    "markdownz": "~4.2",
     "modal-form": "~2.4.2",
     "moment": "~2.9.0",
     "panoptes-client": "~2.5.0",
@@ -42,6 +42,7 @@
   "devDependencies": {
     "babel-cli": "~6.7.7",
     "babel-loader": "~6.2.4",
+    "babel-plugin-add-module-exports": "~0.2.1",
     "babel-plugin-react-transform": "~2.0.2",
     "babel-plugin-transform-object-assign": "~6.8.0",
     "babel-plugin-transform-react-jsx": "~6.7.5",

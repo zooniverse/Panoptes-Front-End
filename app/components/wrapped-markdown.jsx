@@ -11,7 +11,8 @@ const WrappedMarkdown = React.createClass({
   },
 
   onClick(e) {
-    if (e.target.origin === window.location.origin) {
+    if (e.target.origin === window.location.origin &&
+      e.target.pathname !== window.location.pathname) {
       const newURL = e.target.pathname + e.target.search + e.target.hash;
       browserHistory.push(newURL);
       e.preventDefault();
