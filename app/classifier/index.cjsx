@@ -20,6 +20,7 @@ GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
+{VisibilitySplit} = require('seven-ten')
 
 Classifier = React.createClass
   displayName: 'Classifier'
@@ -268,9 +269,11 @@ Classifier = React.createClass
           <p>
             <small>
               <strong>
-                <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
-                  Restart the project mini-course
-                </MiniCourseButton>
+                <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+                  <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
+                    Restart the project mini-course
+                  </MiniCourseButton>
+                </VisibilitySplit>
               </strong>
             </small>
           </p>
