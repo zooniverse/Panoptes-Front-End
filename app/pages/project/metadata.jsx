@@ -10,7 +10,7 @@ class ProjectMetadata extends React.Component {
   }
 
   componentDidMount() {
-    const channel = window.pusher.subscribe('panoptes');
+    const channel = this.context.pusher.subscribe('panoptes');
     channel.bind('classification', (data) => {
       if (data.project_id === this.props.project.id) {
         this.setState({ classificationsCount: this.state.classificationsCount + 1 });
@@ -55,6 +55,10 @@ class ProjectMetadata extends React.Component {
       </div>
     );
   }
+}
+
+ProjectMetadata.contextTypes = {
+  pusher: React.PropTypes.func,
 }
 
 ProjectMetadata.propTypes = {
