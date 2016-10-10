@@ -1,5 +1,6 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
+testClassificationQuality = require '../lib/test-classification-quality'
 ChangeListener = require '../components/change-listener'
 FrameAnnotator = require './frame-annotator'
 SubjectViewer = require '../components/subject-viewer'
@@ -306,6 +307,20 @@ Classifier = React.createClass
     <div>
       Thanks!
 
+      <MetadataBasedFeedback
+      subject={@props.subject}
+      classification={@props.classification}
+      dudLabel='DUD'
+      simLabel='SIM'
+      subjectLabel='SUB'
+      metaTypeFieldName='#Type'
+      metaSuccessMessageFieldName='#F_Success'
+      metaFailureMessageFieldName='#F_Fail'
+      metaSimCoordXPattern='#X'
+      metaSimCoordYPattern='#Y'
+      metaSimTolPattern='#Tol'
+      />
+
       {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
         <strong>
           <WorldWideTelescope
@@ -440,11 +455,6 @@ Classifier = React.createClass
     @props.classification.update 'annotations'
 
   completeClassification: ->
-    currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-    currentTask = @props.workflow.tasks[currentAnnotation?.task]
-    currentTask?.tools?.map (tool) =>
-      if tool.type is 'grid'
-        GridTool.mapCells @props.classification.annotations
     @props.classification.update
       completed: true
       'metadata.session': getSessionID()
