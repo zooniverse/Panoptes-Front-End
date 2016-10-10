@@ -229,7 +229,7 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          {if 'persist answers' in @props.project.experimental_tools
+          {if 'persist annotations' in @props.project.experimental_tools
             <div>
               <AutoSave resource={@props.workflow}>
               <span className="form-label">Set annotation persistence</span><br />
