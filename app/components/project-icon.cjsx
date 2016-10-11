@@ -24,20 +24,23 @@ module.exports = React.createClass
       @getDetails nextProps.project
 
   getDetails: (project) ->
-    apiClient.type 'avatars'
-      .get project.links.avatar.id
-      .then (avatar) =>
-        @setState {avatar}
-      .catch =>
-        project.get 'avatar'
-          .catch =>
-            null
-          .then (avatar) =>
-            @setState {avatar}
+    if project.avatar_src
+      @setState avatar: "http://#{ project.avatar_src }"
+    else
+      apiClient.type 'avatars'
+        .get project.links.avatar.id
+        .then (avatar) =>
+          @setState avatar: avatar.src
+        .catch =>
+          project.get 'avatar'
+            .catch =>
+              null
+            .then (avatar) =>
+              @setState avatar: avatar.src
 
   render: ->
     content = [
-      <img key="image" alt="" src={@state.avatar?.src ? @props.defaultAvatarSrc} />
+      <img key="image" alt="" src={@state.avatar ? @props.defaultAvatarSrc} />
       <div key="label" className="label">
         <span className="owner">{@props.project.links.owner?.display_name}</span><br />
         <span className="display-name"><strong>{@props.project.display_name}</strong></span>
