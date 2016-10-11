@@ -63,5 +63,5 @@ class CacheClassification {
   }
 }
 
-
-export default CacheClassification;
+const cachedClassification = new CacheClassification;
+export default cachedClassification;

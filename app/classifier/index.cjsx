@@ -41,7 +41,7 @@ Classifier = React.createClass
     subject: null
     classification: null
     onLoad: Function.prototype
-    cacheClassification: new CacheClassification
+    # cacheClassification: new CacheClassification
 
   getInitialState: ->
     backButtonWarning: false
@@ -435,7 +435,7 @@ Classifier = React.createClass
     annotation.task = taskKey
 
     if @props.workflow.configuration.persist_annotations
-      cachedAnnotation = @props.cacheClassification.isAnnotationCached(taskKey)
+      cachedAnnotation = CacheClassification.isAnnotationCached(taskKey)
       if cachedAnnotation?
         annotation = cachedAnnotation
 
@@ -450,11 +450,11 @@ Classifier = React.createClass
     @props.classification.update 'annotations'
 
     if @props.workflow.configuration.persist_annotations
-      @props.cacheClassification.update(lastAnnotation)
+      CacheClassification.update(lastAnnotation)
 
   completeClassification: ->
     if @props.workflow.configuration.persist_annotations
-      @props.cacheClassification.delete()
+      CacheClassification.delete()
     
     currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
