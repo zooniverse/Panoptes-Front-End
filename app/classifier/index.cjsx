@@ -41,7 +41,6 @@ Classifier = React.createClass
     subject: null
     classification: null
     onLoad: Function.prototype
-    # cacheClassification: new CacheClassification
 
   getInitialState: ->
     backButtonWarning: false
