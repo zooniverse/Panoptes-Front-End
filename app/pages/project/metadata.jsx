@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
 class ProjectMetadata extends React.Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class ProjectMetadata extends React.Component {
       if (data.project_id === this.props.project.id) {
         this.setState({ classificationsCount: this.state.classificationsCount + 1 });
       }
-    })
+    });
   }
 
   render() {
@@ -58,16 +58,16 @@ class ProjectMetadata extends React.Component {
 }
 
 ProjectMetadata.contextTypes = {
-  pusher: React.PropTypes.func,
-}
+  pusher: React.PropTypes.object,
+};
 
 ProjectMetadata.propTypes = {
   project: React.PropTypes.object,
-}
+};
 
 ProjectMetadata.defaultProps = {
   project: null,
-}
+};
 
 export default ProjectMetadata;
 
