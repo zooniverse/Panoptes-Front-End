@@ -152,8 +152,6 @@ module.exports = React.createClass
       else
         @state.answers[questionID].splice @state.answers[questionID].indexOf(answerID), 1
     else
-      console.log 'e.target', answerID
-      console.log 'old answer', @state.answers[questionID]
       if answerID is @state.answers[questionID]
         delete @state.answers[questionID]
         @refs[questionID].checked = false
