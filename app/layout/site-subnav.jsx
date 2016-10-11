@@ -11,8 +11,8 @@ const SiteSubnav = React.createClass({
     return(
       <span className="site-nav__link"
         activeClassName="site-nav__link--active"
-        title="More links"
-        aria-label="More links">• • •</span>
+        title="News"
+        aria-label="News">News</span>
     );
   },
 

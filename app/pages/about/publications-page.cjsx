@@ -302,12 +302,18 @@ publicationCategories =
       {citation: "Radio Galaxy Zoo: host galaxies and radio morphologies derived from visual inspection, Banfield+ 2015."
       href: "http://arXiv.org/abs/1507.07272"
       date: "July 27, 2015"}]
-    }
+    },
     {slug: "zooniverse/moon-zoo"
     publications: [
       {citation: "The Moon Zoo citizen science project: Preliminary results for the Apollo 17 landing site, Bugiolacchi+ 2016."
       href: "http://arxiv.org/pdf/1602.01664v1.pdf"
       date: "Jan 2016"}]
+    },
+    {slug: "zooniverse/disk-detective"
+    publications: [
+      {citation: "Disk Detective: Discovery of New Circumstellar Disk Candidates through Citizen Science, Kuchner+ 2016."
+      href: "https://arxiv.org/abs/1607.05713"
+      date: "July 2016"}]
     }
   ],
   climate: [
@@ -316,7 +322,14 @@ publicationCategories =
       {citation: "Cyclone Center: Can Citizen Scientists Improve Tropical Cyclone Intensity Records?, Hennon+ 2014."
       href: "http://journals.ametsoc.org/doi/abs/10.1175/BAMS-D-13-00152.1"
       date: "June 1, 2015"}
-    ]}
+    ]},
+    {name: "Season Spotter"
+    publications: [
+      {citation: "Season Spotter: Using Citizen Science to Validate and Scale Plant Phenology from Near-Surface Remote Sensing, Kosmala+ 2016."
+      href: "http://www.mdpi.com/2072-4292/8/9/726"
+      date: "August 23, 2016"}
+    ]},
+
   ],
   humanities: [
     {slug: "zooniverse/ancient-lives"

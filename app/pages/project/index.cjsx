@@ -137,19 +137,19 @@ ProjectPage = React.createClass
     # preference workflow query, then user selected workflow, then project owner set workflow, then default workflow
     # if none of those are set, select random workflow
     if @props.location.query?.workflow? and ('allow workflow query' in @props.project.experimental_tools or @checkUserRoles(project, @props.user))
-      preferredWorkflowID = @props.location.query.workflow
-      unless preferences?.preferences.selected_workflow is preferredWorkflowID
-        @props.onChangePreferences 'preferences.selected_workflow', preferredWorkflowID
+      selectedWorkflowID = @props.location.query.workflow
+      unless preferences?.preferences.selected_workflow is selectedWorkflowID
+        @props.onChangePreferences 'preferences.selected_workflow', selectedWorkflowID
     else if preferences?.preferences.selected_workflow?
-      preferredWorkflowID = preferences?.preferences.selected_workflow
+      selectedWorkflowID = preferences?.preferences.selected_workflow
     else if preferences?.settings?.workflow_id?
-      preferredWorkflowID = preferences?.settings.workflow_id
+      selectedWorkflowID = preferences?.settings.workflow_id
     else if project.configuration?.default_workflow?
-      preferredWorkflowID = project.configuration?.default_workflow
+      selectedWorkflowID = project.configuration?.default_workflow
     else
-      preferredWorkflowID = @selectRandomWorkflow(project)
+      selectedWorkflowID = @selectRandomWorkflow(project)
 
-    @getWorkflow(project, preferredWorkflowID)
+    @isWorkflowInactive(project, selectedWorkflowID)
 
   checkIfProjectIsComplete: (project) ->
     projectIsComplete = (true for workflow in @state.activeWorkflows when not workflow.finished_at?).length is 0
@@ -164,18 +164,34 @@ ProjectPage = React.createClass
       # console.log 'Chose random workflow', @state.activeWorkflows[randomIndex].id
       @state.activeWorkflows[randomIndex].id
 
-  getWorkflow: (project, selectedWorkflowID) ->
+  getWorkflow: (selectedWorkflowIndex) ->
+    @setState {
+      selectedWorkflow: @state.activeWorkflows[selectedWorkflowIndex],
+      loadingSelectedWorkflow: false
+    }
+
+  isWorkflowInactive: (project, selectedWorkflowID) ->
     selectedWorkflowIndex = @state.activeWorkflows.findIndex (workflow, index) ->
       workflow.id is selectedWorkflowID
 
     if selectedWorkflowIndex is -1
-      throw new Error "No workflow #{selectedWorkflowID} for project #{project.id}"
-      @setState { selectedWorkflow: null, loadingSelectedWorkflow: false }
+      console.error "No workflow #{selectedWorkflowID} for project #{project.id}"
+      @clearInactiveWorkflow(selectedWorkflowID)
+        .then(@getSelectedWorkflow(project, @props.preferences))
     else
-      @setState {
-        selectedWorkflow: @state.activeWorkflows[selectedWorkflowIndex],
-        loadingSelectedWorkflow: false
-      }
+      @getWorkflow(selectedWorkflowIndex)
+
+  clearInactiveWorkflow: (selectedWorkflowID) ->
+    preferences = @props.preferences
+
+    Promise.resolve(
+      if selectedWorkflowID is preferences.preferences.selected_workflow
+        preferences.update 'preferences.selected_workflow': undefined
+      else if selectedWorkflowID is preferences.settings?.workflow_id
+        preferences.update 'preferences.settings.workflow_id': undefined
+
+      preferences.save()
+    )
 
   _lastSugarSubscribedID: null
 

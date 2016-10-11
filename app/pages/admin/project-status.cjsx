@@ -23,12 +23,11 @@ EXPERIMENTAL_FEATURES = [
   'hide previous marks'
   'column'
   'grid'
-  'invert'
   'workflow assignment'
   'Gravity Spy Gold Standard'
   'allow workflow query'
   'expert comparison summary'
-  'persist answers'
+  'persist annotations'
 ]
 
 ProjectToggle = React.createClass

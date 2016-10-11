@@ -43,6 +43,7 @@ export class Graph extends React.Component {
     this.onRangeChange = this.onRangeChange.bind(this);
     this.processData = this.processData.bind(this);
     this.processRange = this.processRange.bind(this);
+    this.setDefaultRange = this.setDefaultRange.bind(this);
 
     this.formatDiff = {
       hour: 'asHours',
@@ -113,6 +114,19 @@ export class Graph extends React.Component {
   }
 
   onDrawSmall(data) {
+    if (data.type === 'label') {
+      if (data.axis.units.dir === 'horizontal') {
+        if ([0, this.state.data.labels.length - 1].indexOf(data.index) < 0) {
+          data.element.attr({ style: 'display: none' });
+        } else {
+          data.element.attr({ width: 100 });
+          if (data.index > 0) {
+            const newX = data.element.parent().parent().width() - 100;
+            data.element.attr({ x: newX, class: 'ct-label-range-last' });
+          }
+        }
+      }
+    }
     if (data.type === 'bar') {
       let style = `stroke-width: ${100 / this.state.data.labels.length}%`;
       if (data.index >= this.state.minIdx & data.index <= this.state.maxIdx) {
@@ -145,6 +159,17 @@ export class Graph extends React.Component {
 
   onRangeChange() {
     this.props.handleRangeChange(`${this.state.minIdx},${this.state.maxIdx}`);
+  }
+
+  setDefaultRange() {
+    const min = Math.max(this.state.data.labels.length - this.props.num, 0);
+    const max = this.state.data.labels.length - 1;
+    const newState = {
+      minIdx: min,
+      maxIdx: max,
+      midIdx: min + max,
+    };
+    this.setState(newState, this.onRangeChange);
   }
 
   processData(inputData, binBy) {
@@ -192,6 +217,11 @@ export class Graph extends React.Component {
     if (this.state.data.labels.length > this.props.num) {
       smallChart = (
         <div>
+          <DateRange
+            dateMin={this.state.data.labels[this.state.minIdx]}
+            dateMax={this.state.data.labels[this.state.maxIdx]}
+            setDefaultRange={this.setDefaultRange}
+          />
           <ChartistGraph
             listener={{ draw: this.onDrawSmall }}
             type="Bar" data={this.state.data}
@@ -253,8 +283,11 @@ Graph.defaultProps = {
   },
   optionsSmall: {
     axisX: {
-      offset: 0,
-      showLabel: false,
+      offset: 15,
+      position: 'start',
+      labelOffset: {
+        y: -10,
+      },
       showGrid: false,
     },
     axisY: {
@@ -270,6 +303,10 @@ Graph.defaultProps = {
       bottom: 0,
       left: 15,
     },
+    classNames: {
+      label: 'ct-label-range',
+      labelGroup: 'ct-labels-range',
+    },
   },
 };
 
@@ -281,4 +318,20 @@ Graph.propTypes = {
   optionsSmall: React.PropTypes.object,
   range: React.PropTypes.array,
   handleRangeChange: React.PropTypes.func,
+};
+
+const DateRange = (props) => (
+  <div className="date-range">
+    <span className="progress-stats-label">Current date range:</span>
+    <span>{` ${props.dateMin} to ${props.dateMax}`}</span>
+    <button className="standard-button date-reset" onClick={props.setDefaultRange}>
+      Reset date range
+    </button>
+  </div>
+);
+
+DateRange.propTypes = {
+  dateMin: React.PropTypes.string,
+  dateMax: React.PropTypes.string,
+  setDefaultRange: React.PropTypes.func,
 };

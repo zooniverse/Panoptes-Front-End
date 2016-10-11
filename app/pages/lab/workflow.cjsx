@@ -229,6 +229,20 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
+          {if 'persist annotations' in @props.project.experimental_tools
+            <div>
+              <AutoSave resource={@props.workflow}>
+              <span className="form-label">Set annotation persistence</span><br />
+              <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
+              <br />
+              <label>
+                <input ref="persistAnnotation" type="checkbox" checked={@props.workflow.configuration.persist_annotations} onChange={@handlePersistAnnotationsToggle} />
+                Persist annotations
+              </label>
+              </AutoSave>
+              <hr />
+            </div>}
+
           <div>
             <AutoSave resource={@props.project}>
               <span className="form-label">Set as default</span><br />
@@ -298,15 +312,14 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          {if 'invert' in @props.project.experimental_tools
-            <div>
-              <AutoSave tag="label" resource={@props.workflow}>
-                <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
-                Allow Users To Flip Image Color
-              </AutoSave>
+          <div>
+            <AutoSave tag="label" resource={@props.workflow}>
+              <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
+              Allow Users To Flip Image Color
+            </AutoSave>
 
-              <hr />
-            </div>}
+            <hr />
+          </div>
 
           <p>
             <AutoSave resource={@props.workflow}>
@@ -478,6 +491,10 @@ EditWorkflowPage = React.createClass
   handleSetHideClassificationSummaries: (e) ->
     @props.workflow.update
       'configuration.hide_classification_summaries': e.target.checked
+
+  handlePersistAnnotationsToggle: (e) ->
+    @props.workflow.update
+      'configuration.persist_annotations': e.target.checked
 
   handleSetInvert: (e) ->
     @props.workflow.update

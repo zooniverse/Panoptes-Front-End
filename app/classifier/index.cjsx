@@ -20,6 +20,10 @@ GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
+`import CacheClassification from '../components/cache-classification'`
+
+# For easy debugging
+window.cachedClassification = CacheClassification
 
 Classifier = React.createClass
   displayName: 'Classifier'
@@ -431,20 +435,35 @@ Classifier = React.createClass
     taskDescription = @props.workflow.tasks[taskKey]
     annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
     annotation.task = taskKey
+
+    if @props.workflow.configuration.persist_annotations
+      cachedAnnotation = CacheClassification.isAnnotationCached(taskKey)
+      if cachedAnnotation?
+        annotation = cachedAnnotation
+
     classification.annotations.push annotation
     classification.update 'annotations'
 
   # Back up:
   destroyCurrentAnnotation: ->
+    lastAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
+
     @props.classification.annotations.pop()
     @props.classification.update 'annotations'
 
+    if @props.workflow.configuration.persist_annotations
+      CacheClassification.update(lastAnnotation)
+
   completeClassification: ->
+    if @props.workflow.configuration.persist_annotations
+      CacheClassification.delete()
+    
     currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
     currentTask?.tools?.map (tool) =>
       if tool.type is 'grid'
         GridTool.mapCells @props.classification.annotations
+
     @props.classification.update
       completed: true
       'metadata.session': getSessionID()
@@ -479,7 +498,7 @@ Classifier = React.createClass
     @setState showingExpertClassification: value
 
   warningToggleOn: ->
-    @setState backButtonWarning: true
+    @setState backButtonWarning: true unless @props.workflow.configuration.persist_annotations
 
   warningToggleOff: ->
     @setState backButtonWarning: false

@@ -1,3 +1,10 @@
 {
-  "requiredOrgs": ["zooniverse"]
+  "requiredOrgs": ["zooniverse"],
+  "userBlacklist": [
+    "alexbfree",
+    "aweiksnar",
+    "brian-c",
+    "chrissnyder",
+    "edpaget"
+  ]
 }
