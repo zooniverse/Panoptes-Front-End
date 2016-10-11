@@ -22,6 +22,9 @@ experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 `import CacheClassification from '../components/cache-classification'`
 
+# For easy debugging
+window.cachedClassification = CacheClassification
+
 Classifier = React.createClass
   displayName: 'Classifier'
 

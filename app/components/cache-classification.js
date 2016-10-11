@@ -1,19 +1,12 @@
-import apiClient from 'panoptes-client/lib/api-client';
-
 class CacheClassification {
   constructor() {
     this.state = {
       cachedClassification: null,
     };
-
-    window.cachedClassification = this.state.cachedClassification;
   }
 
   create() {
-    const cachedClassification = apiClient.type('classifications').create({
-      annotations: [],
-      id: 'CACHED_CLASSIFICATION_DO_NOT_SAVE',
-    });
+    const cachedClassification = { annotations: [] };
 
     this.state = { cachedClassification };
     return this.state.cachedClassification;
@@ -39,8 +32,6 @@ class CacheClassification {
       }
     }
     cachedClassification.annotations.push(newAnnotation);
-
-    cachedClassification.update('annotations');
   }
 
   delete() {
