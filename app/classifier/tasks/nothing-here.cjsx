@@ -9,7 +9,6 @@ Summary = React.createClass
     task: null
 
   render: ->
-    console.log @props
     <div>
       <div className="question">
         {@props.task.question}
@@ -41,6 +40,7 @@ module.exports = React.createClass
     annotation: null
     classification: null
     options: []
+    task: null
     workflow: null
 
   componentWillReceiveProps: (nextProps) ->
