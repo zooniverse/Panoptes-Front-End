@@ -1,4 +1,5 @@
 React = require 'react'
+apiClient = require 'panoptes-client/lib/api-client'
 
 ClassificationsRibbon = React.createClass
   displayName: 'ClassificationsRibbon'
@@ -86,7 +87,7 @@ module.exports = React.createClass
     @setState loading: true
     @getAllProjectPreferences(user).then (preferences) =>
       projects = for preference in preferences
-        preference.get('project').catch =>
+        apiClient.type('projects').get(preference.links.project).catch =>
           null
       Promise.all(projects).then (projects) =>
         counts = for i in  [0...preferences.length] when projects[i]?
@@ -97,7 +98,7 @@ module.exports = React.createClass
           projects: counts
 
   getAllProjectPreferences: (user, _page = 1, _collection = []) ->
-    user.get('project_preferences', page: _page).then (projectPreferences) =>
+    user.get('project_preferences', page: _page, include: 'project').then (projectPreferences) =>
       if projectPreferences.length is 0
         projectPreferences
       else
