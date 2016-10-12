@@ -79,21 +79,15 @@ module.exports = React.createClass
   getClassificationCounts: (user) ->
     @setState loading: true
 
-    getUserClassificationCounts(@props.user).then (classificationCounts) =>
-      console.log('Got counts', classificationCounts)
-      awaitProjects = Promise.all Object.keys(classificationCounts).map (projectID) =>
-        return apiClient.type('projects').get projectID
-
-      awaitProjects.then (projects) =>
-        console.log('Got projects', projects)
-        pairs = []
-        for i in [0...projects.length]
-          pairs.push
-            project: projects[i].display_name
-            classifications: classificationCounts[projects[i].id]
-        @setState
-          loading: false
-          projects: pairs
+    getUserClassificationCounts(@props.user).then (projects) =>
+      pairs = []
+      for i in [0...projects.length]
+        pairs.push
+          project: projects[i].display_name
+          classifications: projects[i].activity_count
+      @setState
+        loading: false
+        projects: pairs
 
   render: ->
     if @state.loading

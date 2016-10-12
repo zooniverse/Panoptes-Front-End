@@ -28,7 +28,7 @@ module.exports = React.createClass
       @setState avatar: "http://#{ project.avatar_src }"
     else
       apiClient.type 'avatars'
-        .get project.links.avatar.id
+        .get project.links?.avatar?.id
         .then (avatar) =>
           @setState avatar: avatar.src
         .catch =>
