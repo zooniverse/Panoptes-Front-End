@@ -1,6 +1,7 @@
 React = require 'react'
 AutoSave = require './auto-save'
 handleInputChange = require '../lib/handle-input-change'
+NothingHere = require '../classifier/tasks/nothing-here'
 
 module.exports = React.createClass
   displayName: 'NothingHereSelector'
@@ -8,26 +9,40 @@ module.exports = React.createClass
   getDefaultProps: ->
     workflow: null
     task: null
-    taskPrefix: null
 
   toggleNothingHere: (e) ->
     if e.target.checked
-      @props.task.nothingHere = []
+      taskCount = Object.keys(@props.workflow.tasks).length
+      taskPrefix = "T#{taskCount}"
+
+      taskIDNumber = -1
+      until nextTaskID? and nextTaskID not of @props.workflow.tasks
+        taskIDNumber += 1
+        nextTaskID = "T#{taskCount + taskIDNumber}"
+
+      changes = {}
+      changes["tasks.#{nextTaskID}"] = NothingHere.getDefaultTask(@props.task.question)
+
+      @props.task.unlinkedTask = taskPrefix
+      @props.workflow.update changes
       @addAnswer()
     else
-      @props.task.nothingHere = false
-    @props.workflow.update 'tasks'
+      delete @props.workflow.tasks[@props.task.unlinkedTask]
+      delete @props.task['unlinkedTask']
+      @props.workflow.update 'tasks'
 
   addAnswer: ->
-    @props.task.nothingHere.push
+    @props.workflow.tasks[@props.task.unlinkedTask].answers.push
       label: 'Nothing Here'
     @props.workflow.update 'tasks'
 
-  removeChoice: (choicesName, index) ->
-    @props.task.nothingHere.splice index, 1
+  removeChoice: (index) ->
+    @props.workflow.tasks[@props.task?.unlinkedTask].answers.splice index, 1
     @props.workflow.update 'tasks'
 
   render: ->
+    shortcuts = @props.workflow.tasks[@props.task?.unlinkedTask]
+
     handleChange = handleInputChange.bind @props.workflow
     nothingHelp = 'Check this box to give the volunteer an option to skip to the end of a classification if a subject does not contain relevant information.'
 
@@ -43,23 +58,21 @@ module.exports = React.createClass
       <label title={nothingHelp}>
         <AutoSave resource={@props.workflow}>
           <span className="form-label">Nothing Here Option</span>{' '}
-          <input type="checkbox" checked={@props.task.nothingHere} onChange={@toggleNothingHere} />
+          <input type="checkbox" checked={shortcuts} onChange={@toggleNothingHere} />
         </AutoSave>
       </label>
 
-        {if @props.task.nothingHere
+        {if shortcuts
           <div className="workflow-task-editor-choices">
-            {if (@props.task.nothingHere.length ? 0) is 0 # Work around the empty-array-becomes-null bug on the back end.
-              <span className="form-help">No <code>{choicesKey}</code> defined for this task.</span>}
-            {for shortcut, index in @props.task.nothingHere
+            {for shortcut, index in shortcuts.answers
               shortcut._key ?= Math.random()
               <div key={shortcut._key} className="workflow-choice-editor">
                 <AutoSave resource={@props.workflow}>
-                  <textarea name="#{@props.taskPrefix}.nothingHere.#{index}.label" value={shortcut.label} onChange={handleChange} />
+                  <textarea name="tasks.#{@props.task.unlinkedTask}.answers.#{index}.label" value={shortcut.label} onChange={handleChange} />
                 </AutoSave>
 
                 <AutoSave resource={@props.workflow}>
-                  <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={@removeChoice.bind this, 'nothingHere', index}>&times;</button>
+                  <button type="button" className="workflow-choice-remove-button" title="Remove choice" onClick={@removeChoice.bind this, index}>&times;</button>
                 </AutoSave>
               </div>}
 

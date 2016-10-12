@@ -240,8 +240,8 @@ Classifier = React.createClass
 
           <hr />
 
-          {if task.nothingHere
-            <NothingHere options={task.nothingHere} annotation={annotation} classification={@props.classification} />}
+          {if task.unlinkedTask
+            <NothingHere task={task} workflow={@props.workflow} annotation={annotation} classification={@props.classification} onChange={@handleAnnotationChange.bind this, classification} />}
 
           <nav className="task-nav">
             {if Object.keys(@props.workflow.tasks).length > 1
@@ -476,7 +476,8 @@ Classifier = React.createClass
         height: innerHeight
 
     if currentAnnotation.shortcut
-      currentAnnotation.value = {skipped: currentAnnotation.shortcut}
+      currentAnnotation.task = currentTask.unlinkedTask
+      currentAnnotation.value = {shortcut: currentAnnotation.shortcut}
       delete currentAnnotation['shortcut']
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()

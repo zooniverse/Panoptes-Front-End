@@ -5,19 +5,20 @@ Summary = React.createClass
   displayName: 'NothingHereSummary'
 
   getDefaultProps: ->
-    task: null
     annotation: null
+    task: null
 
   render: ->
+    console.log @props
     <div>
       <div className="question">
         {@props.task.question}
       </div>
       <div className="answers">
-        {if @props.annotation.value['skipped']
+        {if @props.annotation.value['shortcut']
           <div className="answer">
             <i className="fa fa-check-circle-o fa-fw"></i>
-            <Markdown tag="span" inline={true}>{@props.annotation.value['skipped']}</Markdown>
+            <Markdown tag="span" inline={true}>{@props.annotation.value['shortcut']}</Markdown>
           </div>
         else
           <div className="answer">No answer</div>}
@@ -31,10 +32,16 @@ module.exports = React.createClass
   statics:
     Summary: Summary
 
+    getDefaultTask: (question) ->
+      answers: []
+      type: 'nothingHere'
+      question: question
+
   getDefaultProps: ->
     annotation: null
     classification: null
     options: []
+    workflow: null
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.annotation.shortcut
@@ -59,12 +66,14 @@ module.exports = React.createClass
     @props.classification.update 'annotations'
 
   render: ->
+    shortcuts = @props.workflow.tasks[@props.task.unlinkedTask].answers
+
     <div>
 
-      {for shortcut, index in @props.options
+      {for shortcut, index in shortcuts
           shortcut._key ?= Math.random()
-          <p>
-            <label key={shortcut._key} className="answer-button">
+          <p key={shortcut._key}>
+            <label className="answer-button">
               <small className="nothing-here-shortcut #{if shortcut.label is @props.annotation.shortcut then 'active' else ''}">
                 <strong>
                   <input type="checkbox" checked={shortcut.label is @props.annotation.shortcut} onChange={@toggleShortcut.bind this, index, shortcut} />

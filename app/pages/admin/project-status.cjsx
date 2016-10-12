@@ -28,6 +28,7 @@ EXPERIMENTAL_FEATURES = [
   'allow workflow query'
   'expert comparison summary'
   'persist annotations'
+  'nothingHere'
 ]
 
 ProjectToggle = React.createClass
