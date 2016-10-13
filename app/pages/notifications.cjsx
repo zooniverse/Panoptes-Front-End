@@ -1,9 +1,9 @@
 React = require 'react'
 Loading = require '../components/loading-indicator'
 Paginator = require '../talk/lib/paginator'
-ChangeListener = require '../components/change-listener'
 talkClient = require 'panoptes-client/lib/talk-client'
 Notification = require './notifications/notification'
+`import NotificationSection from './notifications/notification-section';`
 
 module.exports = React.createClass
   displayName: 'NotificationsPage'
@@ -58,7 +58,29 @@ module.exports = React.createClass
       else
         firstMeta = lastMeta = meta
 
-      @setState {notifications, notificationsMap, firstMeta, lastMeta}
+      notificationGroups = @groupNotifications(notifications)
+      zooNotifications = if notificationGroups['zooniverse'] then @addKeys(notificationGroups['zooniverse']) else {}
+      projNotifications = @sortedProjects(notificationGroups)
+
+      @setState {notifications, zooNotifications, projNotifications, notificationsMap, firstMeta, lastMeta}
+
+  groupNotifications: (notifications) ->
+    result = notifications.reduce ((groups, notification) ->
+      groups[notification.section] = groups[notification.section] or []
+      groups[notification.section].push notification
+      groups
+    ), {}
+
+  addKeys: (project) ->
+    Object.assign {key: Math.random(), notifications: project}
+
+  sortedProjects: (projectGroups) ->
+    delete projectGroups['zooniverse']
+    mostRecent = Object.keys(projectGroups).map (group) ->
+      projectGroups[group]
+    mostRecent.sort( (a, b) -> a[0].updated_at < b[0].updated_at )
+    mostRecent.map (notifications) =>
+      @addKeys(notifications)
 
   notificationsQuery: (page = @props.location.query.page, options = { }) ->
     page or= 1
@@ -104,66 +126,62 @@ module.exports = React.createClass
         </h1>
 
         {if @props.user?
-          <ChangeListener target={@props.user}>{ =>
-            if @state.notifications?.length > 0
-              <div>
-                  <p className="talk-module">
-                    You have{' '}
-                    {if @state.unreadCount is 0 then 'no' else @state.unreadCount}{' '}
-                    unread notifications
-                  </p>
-                  {if @state.firstMeta.page > 1 or @state.unreadCount > 0
-                    <div className="centering">
-                      <div className="talk-module inline-block">
-                        {if @state.firstMeta.page > 1
-                          <Paginator
-                            className="newer inline-block"
-                            page={+@state.firstMeta.page}
-                            pageCount={@state.firstMeta.page_count}
-                            scrollOnChange={false}
-                            firstAndLast={false}
-                            pageSelector={false}
-                            previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>}
-                            onClickPrev={@markAsRead 'first'} />}
+          if @state.notifications?.length > 0
+            <div>
+                <p className="talk-module">
+                  You have{' '}
+                  {if @state.unreadCount is 0 then 'no' else @state.unreadCount}{' '}
+                  unread notifications
+                </p>
+                {if @state.firstMeta.page > 1 or @state.unreadCount > 0
+                  <div className="centering">
+                    <div className="talk-module inline-block">
+                      {if @state.firstMeta.page > 1
+                        <Paginator
+                          className="newer inline-block"
+                          page={+@state.firstMeta.page}
+                          pageCount={@state.firstMeta.page_count}
+                          scrollOnChange={false}
+                          firstAndLast={false}
+                          pageSelector={false}
+                          previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>}
+                          onClickPrev={@markAsRead 'first'} />}
 
-                        {if @state.unreadCount > 0
-                          <button onClick={@markAllAsRead}>
-                            Mark all as read
-                          </button>}
-                      </div>
-                    </div>}
+                      {if @state.unreadCount > 0
+                        <button onClick={@markAllAsRead}>
+                          Mark all as read
+                        </button>}
+                    </div>
+                  </div>}
 
-                <div className="list">
-                  {for notification in @state.notifications
-                    <Notification
-                      notification={notification}
-                      key={notification.id}
-                      user={@props.user}
-                      project={@props.project}
-                      params={@props.params} />
-                  }
-                </div>
-
-                <div className="centering">
-                  <Paginator
-                    className="older"
-                    page={+@state.lastMeta.page}
-                    pageCount={@state.lastMeta.page_count}
-                    scrollOnChange={false}
-                    firstAndLast={false}
-                    pageSelector={false}
-                    nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>}
-                    onClickNext={@markAsRead 'last'} />
-                </div>
+              <div className="list">
+                {for group in @state.projNotifications
+                  <NotificationSection
+                    key={group.key}
+                    projectID={group.notifications[0].project_id}
+                    notifications={group.notifications} />
+                }
               </div>
-            else if @state.notifications?.length is 0
-              <div className="centering talk-module">
-                <p>You have no notifications.</p>
-                <p>You can receive notifications by participating in Talk, following discussions, and receiving messages.</p>
+
+              <div className="centering">
+                <Paginator
+                  className="older"
+                  page={+@state.lastMeta.page}
+                  pageCount={@state.lastMeta.page_count}
+                  scrollOnChange={false}
+                  firstAndLast={false}
+                  pageSelector={false}
+                  nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>}
+                  onClickNext={@markAsRead 'last'} />
               </div>
-            else
-              <Loading />
-          }</ChangeListener>
+            </div>
+          else if @state.notifications?.length is 0
+            <div className="centering talk-module">
+              <p>You have no notifications.</p>
+              <p>You can receive notifications by participating in Talk, following discussions, and receiving messages.</p>
+            </div>
+          else
+            <Loading />
         else
           <div className="centering talk-module">
             <p>You're not signed in.</p>
