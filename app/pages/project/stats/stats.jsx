@@ -243,6 +243,18 @@ export class WorkflowProgress extends React.Component {
   render() {
     let retirement;
     let eta;
+    let total;
+    let retiredDiv;
+    if (this.props.workflow.retirement.criteria !== 'never_retire') {
+      retiredDiv = (
+        <div>
+          <span className="progress-stats-label">Images retired:</span>
+          {' '}{this.props.workflow.retired_set_member_subjects_count.toLocaleString()}
+          {' / '}{this.props.workflow.subjects_count.toLocaleString()}
+        </div>
+      );
+    }
+    let classificationsString = ` ${this.props.workflow.classifications_count.toLocaleString()}`;
     if (this.props.workflow.retirement.criteria === 'classification_count') {
       retirement = (
         <div>
@@ -250,16 +262,17 @@ export class WorkflowProgress extends React.Component {
           {' '}{this.props.workflow.retirement.options.count.toLocaleString()}
         </div>
       );
-    }
-    const total = this.props.workflow.subjects_count * this.props.workflow.retirement.options.count;
-    if (this.state.statData) {
-      eta = (
-        <Eta
-          data={this.state.statData}
-          currentCount={this.props.workflow.classifications_count}
-          totalCount={total}
-        />
-    );
+      total = this.props.workflow.subjects_count * this.props.workflow.retirement.options.count;
+      if (this.state.statData) {
+        eta = (
+          <Eta
+            data={this.state.statData}
+            currentCount={this.props.workflow.classifications_count}
+            totalCount={total}
+          />
+        );
+      }
+      classificationsString += ` / ${total.toLocaleString()}`;
     }
     return (
       <div className="progress-element">
@@ -268,15 +281,10 @@ export class WorkflowProgress extends React.Component {
           <div>
             {retirement}
           </div>
-          <div>
-            <span className="progress-stats-label">Images retired:</span>
-            {' '}{this.props.workflow.retired_set_member_subjects_count.toLocaleString()}
-            {' / '}{this.props.workflow.subjects_count.toLocaleString()}
-          </div>
+          {retiredDiv}
           <div>
             <span className="progress-stats-label">Classifications:</span>
-            {' '}{this.props.workflow.classifications_count.toLocaleString()}
-            {' / '}{total.toLocaleString()}
+            {classificationsString}
           </div>
           {eta}
           <Progress progress={this.props.workflow.completeness} />
@@ -298,16 +306,18 @@ export class ProjectStatsPage extends React.Component {
 
   workflowInfo() {
     const progress = [];
+    let ETAVisible = false;
     let key = 0;
     for (const workflow of this.props.workflows) {
       progress.push(<WorkflowProgress key={key} workflow={workflow} />);
+      ETAVisible = ETAVisible || (workflow.retirement.criteria === 'classification_count');
       key++;
     }
-    return progress;
+    return { progress, ETAVisible };
   }
 
   render() {
-    const progress = this.workflowInfo();
+    const { progress, ETAVisible } = this.workflowInfo();
     // Dates for gap in classification stats
     const classificationGap = ['2015-06-30T00:00:00.000Z', '2016-06-09T00:00:00.000Z'];
     // Dates for gap in talk stats
@@ -349,6 +359,16 @@ export class ProjectStatsPage extends React.Component {
         </span>
       );
     }
+    let ETAFootnote;
+    if (ETAVisible) {
+      ETAFootnote = (
+        <span className="project-stats-footer">
+          *Estimated time to completion is based on the classification rate
+          {' '}for the past 14 days and may be incorrect due to the way
+          {' '}we currently report the data, or unavailable for some workflows.
+        </span>
+      );
+    }
     return (
       <div className="project-text-content content-container">
         <div className="project-stats-dashboard">
@@ -367,11 +387,7 @@ export class ProjectStatsPage extends React.Component {
           <div className="project-stats-progress">
             <span className="project-stats-heading">Live Workflows</span>
             {progress}
-            <span className="project-stats-footer">
-              *Estimated time to completion is based on the classification rate
-              {' '}for the past 14 days and may be incorrect due to the way
-              {' '}we currently report the data.
-            </span>
+            {ETAFootnote}
           </div>
           <hr />
         </div>
