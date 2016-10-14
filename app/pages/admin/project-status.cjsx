@@ -11,7 +11,6 @@ getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 WorkflowToggle = require '../../components/workflow-toggle'
 
 EXPERIMENTAL_FEATURES = [
-  'survey'
   'crop'
   'combo'
   'dropdown'
