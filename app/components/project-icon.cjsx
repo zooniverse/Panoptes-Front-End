@@ -8,7 +8,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     project: null
     badge: ''
-    defaultAvatarSrc: '/assets/simple-avatar.jpg'
+    defaultAvatarSrc: '/assets/simple-avatar.png'
     onClick: null
     linkTo: true
 
