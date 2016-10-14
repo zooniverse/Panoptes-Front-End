@@ -1,6 +1,6 @@
 React = require 'react'
 
-DEFAULT_AVATAR = '/assets/simple-avatar.jpg'
+DEFAULT_AVATAR = '/assets/simple-avatar.png'
 
 module.exports = React.createClass
   displayName: 'Avatar'
