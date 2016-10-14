@@ -92,7 +92,7 @@ module.exports = React.createClass
         <AutoSave resource={@props.user}>
           <label>
             <input type="checkbox" name="beta_email_communication" checked={@props.user.beta_email_communication} onChange={handleInputChange.bind @props.user} />{' '}
-            Get beta project email updates
+            Get beta project email updates and become a beta tester
           </label>
         </AutoSave>
       </p>
