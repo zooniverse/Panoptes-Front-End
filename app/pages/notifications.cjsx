@@ -116,7 +116,7 @@ module.exports = React.createClass
     else if @props.params.section
       "#{ @props.params.section } Notifications"
     else
-      'Notifications'
+      'My Notifications'
 
   render: ->
     <div className="talk notifications">
@@ -159,7 +159,8 @@ module.exports = React.createClass
                   <NotificationSection
                     key={group.key}
                     projectID={group.notifications[0].project_id}
-                    notifications={group.notifications} />
+                    notifications={group.notifications}
+                    user={this.props.user} />
                 }
               </div>
 

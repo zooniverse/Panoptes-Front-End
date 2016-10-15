@@ -1,5 +1,27 @@
 .notification-section
   @extends .content-container
-  background-color: #DAE6EB
-  border-radius: 3px
+  background-color: #EDEDED
+  border-radius: 4px
   margin: 1.5em 7em
+  overflow: hidden
+  padding: 1em 4em
+
+  &__header
+    display: flex
+
+  &__item
+    // align-self: center
+    width: 33%
+
+  &__title
+    text-align: center
+
+  &__img
+    border-radius: 50%
+    margin-left: 50%
+    max-width: 40px
+    max-height: 40px
+
+  &__close
+    float: right
+    position: absolute
