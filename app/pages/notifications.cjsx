@@ -59,28 +59,26 @@ module.exports = React.createClass
         firstMeta = lastMeta = meta
 
       notificationGroups = @groupNotifications(notifications)
-      zooNotifications = if notificationGroups['zooniverse'] then @addKeys(notificationGroups['zooniverse']) else {}
-      projNotifications = @sortedProjects(notificationGroups)
+      projNotifications = @sortProjects(notificationGroups)
 
-      @setState {notifications, zooNotifications, projNotifications, notificationsMap, firstMeta, lastMeta}
+      @setState {notifications, projNotifications, notificationsMap, firstMeta, lastMeta}
 
   groupNotifications: (notifications) ->
-    result = notifications.reduce ((groups, notification) ->
-      groups[notification.section] = groups[notification.section] or []
-      groups[notification.section].push notification
+    notifications.reduce ((groups, notification) ->
+      groups[notification.project_id] = groups[notification.project_id] or []
+      groups[notification.project_id].push notification
       groups
     ), {}
 
-  addKeys: (project) ->
-    Object.assign {key: Math.random(), notifications: project}
-
-  sortedProjects: (projectGroups) ->
-    delete projectGroups['zooniverse']
+  sortProjects: (projectGroups) ->
     mostRecent = Object.keys(projectGroups).map (group) ->
-      projectGroups[group]
-    mostRecent.sort( (a, b) -> a[0].updated_at < b[0].updated_at )
-    mostRecent.map (notifications) =>
-      @addKeys(notifications)
+      Object.assign {_key: Math.random(), notifications: projectGroups[group], project_id: group}
+    mostRecent.sort( (a, b) -> a.notifications[0].updated_at < b.notifications[0].updated_at )
+    mostRecent.map (group, i) =>
+      if group['project_id'] is ''
+        mostRecent.splice i, 1
+        mostRecent.unshift group
+    mostRecent
 
   notificationsQuery: (page = @props.location.query.page, options = { }) ->
     page or= 1
@@ -157,9 +155,9 @@ module.exports = React.createClass
               <div className="list">
                 {for group in @state.projNotifications
                   <NotificationSection
-                    key={group.key}
-                    projectID={group.notifications[0].project_id}
+                    key={group._key}
                     notifications={group.notifications}
+                    projectID={group.project_id}
                     user={this.props.user} />
                 }
               </div>
