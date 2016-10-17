@@ -6,16 +6,15 @@ counterpart.registerTranslations 'en',
   glossary:
     content: '''
       ## Glossary
-      A collection of definitions for terms used across the Zooniverse. The terms are split into three different groups; [General Terms](#generalTerms); [People](#people) and [Project-Specific Terms](#projectSpecificTerms).
+      A collection of definitions for terms used across the Zooniverse. The terms are split into three different groups; [General Terms](#general-terms); [People](#people) and [Project-Specific Terms](#project-specific-terms).
 
-      ###<a name="generalTerms"></a>GENERAL TERMS
-
-      this is my generalterm...horaay!
-
-      ###<a name="people"></a>PEOPLE
+      ###GENERAL TERMS <a id="general-terms"></a>
 
 
-      ###<a name="projectSpecificTerms"></a>PROJECT-SPECIFIC TERMS
+      ###PEOPLE <a id="people"></a>
+
+
+      ###PROJECT-SPECIFIC TERMS <a id="project-specific-terms"></a>
 
 
     '''
