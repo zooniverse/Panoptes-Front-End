@@ -19,7 +19,9 @@ Summary = React.createClass
   render: ->
     <div>
       <div className="question">
-        {@props.task.question}
+        <Markdown>
+          {@props.task.question}
+        </Markdown>
         {if @state.expanded
           <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
         else
