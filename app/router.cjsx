@@ -90,7 +90,7 @@ module.exports =
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
       </Route>
-  
+
       <Route path="collections" component={require('./pages/collections/index')}>
          <IndexRoute component={require('./pages/collections/collections-list')} />
          <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
@@ -168,6 +168,7 @@ module.exports =
     </Route>
     <Route path="lab-policies" component={require './pages/lab/lab-policies'} />
     <Route path="lab-how-to" component={require './pages/lab/how-to-page'} />
+    <Route path="glossary" component={require './pages/lab/glossary'} />
 
     <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
       <IndexRedirect to="introduction" />
