@@ -476,8 +476,9 @@ Classifier = React.createClass
         height: innerHeight
 
     if currentAnnotation.shortcut
-      currentAnnotation.task = currentTask.unlinkedTask
-      currentAnnotation.value = {shortcut: currentAnnotation.shortcut}
+      @addAnnotationForTask @props.classification, currentTask.unlinkedTask
+      newAnnotation = classification.annotations[classification.annotations.length - 1]
+      newAnnotation['value'] = currentAnnotation.shortcut
       delete currentAnnotation['shortcut']
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()

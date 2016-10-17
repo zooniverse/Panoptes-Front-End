@@ -36,6 +36,10 @@ module.exports = React.createClass
       type: 'nothingHere'
       question: question
 
+    getDefaultAnnotation: ->
+      _key: Math.random()
+      value: null
+
   getDefaultProps: ->
     annotation: null
     classification: null
@@ -43,41 +47,27 @@ module.exports = React.createClass
     task: null
     workflow: null
 
-  componentWillReceiveProps: (nextProps) ->
-    if nextProps.annotation.shortcut
-      if nextProps.annotation.value instanceof Array
-        @removeShortcuts(nextProps) if nextProps.annotation.value?.length > 0
-      else if nextProps.annotation.value isnt null
-        @removeShortcuts(nextProps)
-
-  removeShortcuts: (newProps) ->
-    newProps.annotation.shortcut = false
-    newProps.classification.update 'annotations'
-
   toggleShortcut: (index, shortcut, e) ->
     if e.target.checked
-      @props.annotation.shortcut = shortcut.label
-      if @props.annotation.value instanceof Array
-        @props.annotation.value = []
-      else
-        @props.annotation.value = null
+      @props.annotation.shortcut = shortcut
     else
       @props.annotation.shortcut = false
     @props.classification.update 'annotations'
 
   render: ->
-    shortcuts = @props.workflow.tasks[@props.task.unlinkedTask].answers
+    options = @props.workflow.tasks[@props.task.unlinkedTask].answers
+    shortcut = @props.annotation.shortcut
 
     <div>
 
-      {for shortcut, index in shortcuts
-          shortcut._key ?= Math.random()
-          <p key={shortcut._key}>
+      {for option, index in options
+          option._key ?= Math.random()
+          <p key={option._key}>
             <label className="answer-button">
-              <small className="nothing-here-shortcut #{if shortcut.label is @props.annotation.shortcut then 'active' else ''}">
+              <small className="nothing-here-shortcut #{if option.label is shortcut?.label then 'active' else ''}">
                 <strong>
-                  <input type="checkbox" checked={shortcut.label is @props.annotation.shortcut} onChange={@toggleShortcut.bind this, index, shortcut} />
-                    {shortcut.label}
+                  <input type="checkbox" checked={option.label is shortcut?.label} onChange={@toggleShortcut.bind this, index, option} />
+                    {option.label}
                 </strong>
               </small>
             </label>
