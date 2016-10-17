@@ -60,7 +60,9 @@ module.exports = React.createClass
               buttonKey="projectDetails.aggregationExport"
               contentType="application/x-gzip"
               exportType="aggregations_export"
-              newFeature=true />
+              newFeature=true 
+            />
+            <small className="form-help">Text tasks cannot be aggregated at this time.</small>
           </div>
           <hr />
 

@@ -13,7 +13,6 @@ WorkflowToggle = require '../../components/workflow-toggle'
 EXPERIMENTAL_FEATURES = [
   'survey'
   'crop'
-  'text'
   'combo'
   'dropdown'
   'mini-course'
