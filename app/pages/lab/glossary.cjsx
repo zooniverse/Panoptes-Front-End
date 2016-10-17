@@ -3,29 +3,27 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 
 counterpart.registerTranslations 'en',
-  policiesPage:
+  glossary:
     content: '''
       ## Glossary
-      A collection of definitions for terms used across the Zooniverse. The terms are split into three different groups; <a name="generalTerms">General Terms</a>; <a name="projectSpecificTerms">Project-Specific Terms</a>, and <a name="people">People</a>.
+      A collection of definitions for terms used across the Zooniverse. The terms are split into three different groups; [General Terms](#generalTerms); [People](#people) and [Project-Specific Terms](#projectSpecificTerms).
 
-      <a href="#generalTerms">###GENERAL TERMS</a>
+      ###<a name="generalTerms"></a>GENERAL TERMS
+
+      this is my generalterm...horaay!
+
+      ###<a name="people"></a>PEOPLE
 
 
-
-      <a href="#people">###PEOPLE</a>
-
-
-
-      <a href="projectSpecificTerms">###PROJECT-SPECIFIC TERMS</a>
-
+      ###<a name="projectSpecificTerms"></a>PROJECT-SPECIFIC TERMS
 
 
     '''
 
 module.exports = React.createClass
-  displayName: 'LabPoliciesPage'
+  displayName: 'Glossary'
 
   render: ->
     <div className="secondary-page centered-grid">
-      <Markdown>{counterpart "policiesPage.content"}</Markdown>
+      <Markdown>{counterpart "glossary.content"}</Markdown>
     </div>
