@@ -84,7 +84,7 @@ RecentProjects = React.createClass
             title: "home.recentProjects.title"
             href: "/users/#{@props.user.login}/stats"
             action: "home.recentProjects.button"
-          projectsPromise = apiClient.type('projects').get(id: userProjects, cards: true, include: ['avatar', 'owners'])
+          projectsPromise = apiClient.type('projects').get(id: userProjects, cards: true)
         else
           @setState
             title: "home.recentProjects.altTitle"
