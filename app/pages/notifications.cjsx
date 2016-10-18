@@ -83,6 +83,7 @@ module.exports = React.createClass
   notificationsQuery: (page = @props.location.query.page, options = { }) ->
     page or= 1
     query = Object.assign { }, options, {page}
+    query.page_size = 100
     query.section = "project-#{ @props.project.id }" if @props.project
     query.section = @props.params.section if @props.params.section
     query
@@ -119,38 +120,13 @@ module.exports = React.createClass
   render: ->
     <div className="talk notifications">
       <div className="content-container">
-        <h1 className={"title #{ if @props.project then 'talk-module' else '' }"}>
+        <h3 className={"title #{ if @props.project then 'talk-module' else 'notifications-title' }"}>
           {@title()}
-        </h1>
+        </h3>
 
         {if @props.user?
           if @state.notifications?.length > 0
             <div>
-                <p className="talk-module">
-                  You have{' '}
-                  {if @state.unreadCount is 0 then 'no' else @state.unreadCount}{' '}
-                  unread notifications
-                </p>
-                {if @state.firstMeta.page > 1 or @state.unreadCount > 0
-                  <div className="centering">
-                    <div className="talk-module inline-block">
-                      {if @state.firstMeta.page > 1
-                        <Paginator
-                          className="newer inline-block"
-                          page={+@state.firstMeta.page}
-                          pageCount={@state.firstMeta.page_count}
-                          scrollOnChange={false}
-                          firstAndLast={false}
-                          pageSelector={false}
-                          previousLabel={<span>Load newer <i className="fa fa-long-arrow-up" /></span>}
-                          onClickPrev={@markAsRead 'first'} />}
-
-                      {if @state.unreadCount > 0
-                        <button onClick={@markAllAsRead}>
-                          Mark all as read
-                        </button>}
-                    </div>
-                  </div>}
 
               <div className="list">
                 {for group in @state.projNotifications

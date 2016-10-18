@@ -12,17 +12,26 @@ const NotificationSection = React.createClass({
     projectID: React.PropTypes.string,
   },
 
+  getInitialState() {
+    return {
+      expanded: false,
+      messageLength: 3,
+    };
+  },
+
   componentWillMount() {
     if (this.props.projectID === '') {
       this.setZooniverse();
     } else {
-      return apiClient.type('projects').get({id: this.props.projectID, cards: true})
+      return apiClient.type('projects').get({ id: this.props.projectID, cards: true })
       .catch(() => {
         return null;
       })
       .then(([project]) => {
         this.setState({
-          project: project
+          slug: project.slug,
+          name: project.display_name,
+          avatar: project.avatar_src
         });
       });
     }
@@ -36,19 +45,12 @@ const NotificationSection = React.createClass({
 
   setZooniverse() {
     this.setState({
-      project: 'zooniverse'
+      name: 'Zooniverse'
     })
   },
 
-  getInitialState() {
-    return {
-      project: {},
-      expanded: false,
-    };
-  },
-
-  avatarFor(project) {
-    const src = project.avatar_src ? '//' + project.avatar_src : '/assets/simple-avatar.jpg';
+  avatarFor() {
+    const src = this.state.avatar ? '//' + this.state.avatar : '/assets/simple-avatar.jpg';
     return <img src={src} className="notification-section__img" alt="Project Avatar" />
   },
 
@@ -56,34 +58,39 @@ const NotificationSection = React.createClass({
     const sectionTitle = this.props.projectID.length ? 'section-' + this.props.projectID : 'section-zooniverse';
 
     return (
-        <div id={this.state.expanded ? "" : sectionTitle}>
-          <button className="secret-button notification-section__close" title="Remove choice" onClick={this.setState.bind(this, {expanded: !this.state.expanded})}>
-            <i className="fa fa-times"></i>
-          </button>
+      <div id={this.state.expanded ? '' : sectionTitle}>
+        <button className="secret-button notification-section__close" title="Remove choice" onClick={this.setState.bind(this, {expanded: !this.state.expanded})}>
+          <i className="fa fa-times"></i>
+        </button>
 
-          <div className="notification-section__header">
+        <div className="notification-section__header">
 
-            <div className="notification-section__item">
-              {this.avatarFor(this.state.project)}
-            </div>
-
-            <div className="notification-section__item">
-              <h3 className="notification-section__title">{this.state.project.display_name}</h3>
-            </div>
-
+          <div className="notification-section__item">
+            {this.avatarFor()}
           </div>
+
+          <div className="notification-section__item">
+            <Link to={'/projects/' + this.state.slug} className="notification-section__title">
+              <h4 className="notification-section__title">{this.state.name}</h4>
+            </Link>
+          </div>
+
         </div>
+      </div>
     );
   },
 
   render() {
+    const notificationLength = Math.min(this.props.notifications.length, this.state.messageLength)
+    const shownNotifications = this.props.notifications.slice(0, notificationLength)
+
     return (
       <div className="notification-section">
 
         {this.renderHeader()}
 
         {this.state.expanded && (
-          this.props.notifications.map((notification) => {
+          shownNotifications.map((notification) => {
             return (
               <Notification
                 notification={notification}
