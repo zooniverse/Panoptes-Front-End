@@ -16,6 +16,7 @@ const NewsSection = React.createClass({
   getDefaultProps() {
     return {
       updatedProjects: [],
+      showNews: false,
     };
   },
 
@@ -101,7 +102,7 @@ const NewsSection = React.createClass({
     const avatarSrc = !!this.state.newestAvatar ? this.state.newestAvatar.src : null;
 
     return (
-      <div className="home-page-news-pullout news-main">
+      <div className={"home-page-news-pullout news-main" + (this.props.showNews ? " active" : "")}>
         <div className="home-page-news-pullout news-container">
           <h2> Zooniverse News </h2>
 
