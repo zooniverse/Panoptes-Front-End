@@ -241,7 +241,7 @@ Classifier = React.createClass
           <hr />
 
           {if task.unlinkedTask
-            <NothingHere task={task} workflow={@props.workflow} annotation={annotation} classification={@props.classification} onChange={@handleAnnotationChange.bind this, classification} />}
+            <NothingHere task={task} workflow={@props.workflow} annotation={annotation} classification={@props.classification} />}
 
           <nav className="task-nav">
             {if Object.keys(@props.workflow.tasks).length > 1
