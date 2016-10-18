@@ -142,7 +142,7 @@ const CircleRibbon = React.createClass({
       <SVGLink
         key={project.id}
         xlinkHref={this.props.hrefTemplate(project)}
-        aria-label={`${project.owner}/${project.name} (${project.classifications} classifications)`}
+        aria-label={`${project.slug} (${project.classifications} classifications)`}
         onClick={this.handleClick}
       >
         <path
@@ -217,8 +217,7 @@ const CircleRibbon = React.createClass({
               top: `${tooltipPosition.y * 100}%`,
             }}
           >
-            {hoveredArc.owner}/
-            <strong>{hoveredArc.name}</strong>{' '}
+            <strong>{hoveredArc.slug}</strong>{' '}
             <br />
             <small>
               {hoveredArc.classifications} classifications{' '}
