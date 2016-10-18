@@ -14,10 +14,10 @@ Summary = React.createClass
         {@props.task.question}
       </div>
       <div className="answers">
-        {if @props.annotation.value['shortcut']
+        {if @props.annotation.value?
           <div className="answer">
             <i className="fa fa-check-circle-o fa-fw"></i>
-            <Markdown tag="span" inline={true}>{@props.annotation.value['shortcut']}</Markdown>
+            <Markdown tag="span" inline={true}>{@props.task.answers[@props.annotation.value].label}</Markdown>
           </div>
         else
           <div className="answer">No answer</div>}
@@ -43,31 +43,34 @@ module.exports = React.createClass
   getDefaultProps: ->
     annotation: null
     classification: null
-    options: []
     task: null
     workflow: null
 
-  toggleShortcut: (index, shortcut, e) ->
+  getInitialState: ->
+    index: null
+
+  toggleShortcut: (i, shortcut, e) ->
     if e.target.checked
-      @props.annotation.shortcut = shortcut
+      @props.annotation.shortcut = {index: i}
+      @setState index: i
     else
       @props.annotation.shortcut = false
+      @setState index: null
     @props.classification.update 'annotations'
 
   render: ->
     options = @props.workflow.tasks[@props.task.unlinkedTask].answers
-    shortcut = @props.annotation.shortcut
 
     <div>
 
-      {for option, index in options
-          option._key ?= Math.random()
-          <p key={option._key}>
+      {for answer, i in options
+          answer._key ?= Math.random()
+          <p key={answer._key}>
             <label className="answer-button">
-              <small className="nothing-here-shortcut #{if option.label is shortcut?.label then 'active' else ''}">
+              <small className="nothing-here-shortcut #{if i is @state.index then 'active' else ''}">
                 <strong>
-                  <input type="checkbox" checked={option.label is shortcut?.label} onChange={@toggleShortcut.bind this, index, option} />
-                    {option.label}
+                  <input type="checkbox" checked={i is @state.index} onChange={@toggleShortcut.bind this, i, answer} />
+                    {answer.label}
                 </strong>
               </small>
             </label>

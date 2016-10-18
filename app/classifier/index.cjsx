@@ -478,7 +478,7 @@ Classifier = React.createClass
     if currentAnnotation.shortcut
       @addAnnotationForTask @props.classification, currentTask.unlinkedTask
       newAnnotation = classification.annotations[classification.annotations.length - 1]
-      newAnnotation['value'] = currentAnnotation.shortcut
+      newAnnotation['value'] = currentAnnotation.shortcut['index']
       delete currentAnnotation['shortcut']
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
