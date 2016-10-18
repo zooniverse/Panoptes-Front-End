@@ -25,18 +25,9 @@ module.exports = React.createClass
 
   getDetails: (project) ->
     if project.avatar_src
-      @setState avatar: "http://#{ project.avatar_src }"
+      @setState avatar: "//#{ project.avatar_src }"
     else
-      apiClient.type 'avatars'
-        .get project.links?.avatar?.id
-        .then (avatar) =>
-          @setState avatar: avatar.src
-        .catch =>
-          project.get 'avatar'
-            .catch =>
-              null
-            .then (avatar) =>
-              @setState avatar: avatar.src
+      @setState avatar: '/assets/simple-avatar.jpg'
 
   render: ->
     content = [

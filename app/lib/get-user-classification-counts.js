@@ -3,14 +3,18 @@ import apiClient from 'panoptes-client/lib/api-client';
 
 function getUserClassificationCounts(user) {
   return getAllProjectPreferences(user).then((projectPreferences) => {
-    const projectIDs = projectPreferences.map((projectPreference) => {
+    const activePreferences = projectPreferences.filter((preference) => {
+      if (preference.activity_count > 0)
+        return preference;
+    });
+    const projectIDs = activePreferences.map((projectPreference) => {
       return projectPreference.links.project;
     });
-    return apiClient.type('projects').get({ id: projectIDs, cards: true, page_size: projectPreferences.length }).catch(() => {
+    return apiClient.type('projects').get({ id: projectIDs, cards: true, page_size: activePreferences.length }).catch(() => {
       return null;
     })
     .then((projects) => {
-      const classifications = projectPreferences.reduce((counts, projectPreference) => {
+      const classifications = activePreferences.reduce((counts, projectPreference) => {
         counts[projectPreference.links.project] = projectPreference.activity_count;
         return counts;
       }, {});

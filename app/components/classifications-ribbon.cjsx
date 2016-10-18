@@ -1,7 +1,7 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-getColorFromString = require('../lib/get-color-from-string').default
-getUserClassificationCounts = require('../lib/get-user-classification-counts').default
+`import getColorFromString from '../lib/get-color-from-string';`
+`import getUserClassificationCounts from '../lib/get-user-classification-counts';`
 
 ClassificationsRibbon = React.createClass
   displayName: 'ClassificationsRibbon'

@@ -3,7 +3,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 ClassificationsRibbon = require '../../components/classifications-ribbon'
 PromiseRenderer = require '../../components/promise-renderer'
 ProjectIcon = require '../../components/project-icon'
-getUserClassificationCounts = require('../../lib/get-user-classification-counts').default
+`import getUserClassificationCounts from '../../lib/get-user-classification-counts';`
 
 module.exports = React.createClass
   getDefaultProps: ->
