@@ -1,11 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+class ProjectMetadataStat extends React.Component {
+  render() {
+    return (
+      <div className="project-metadata-stat">
+        <div>{this.props.value}</div>
+        <div>{this.props.label}</div>
+      </div>
+    );
+
+  }
+}
+
 class ProjectMetadata extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      classificationsCount: this.props.project.classifications_count,
+      classificationsCount: props.project.classifications_count,
     };
   }
 
@@ -32,25 +45,10 @@ class ProjectMetadata extends React.Component {
         </div>
 
         <div className="project-metadata-stats">
-          <div className="project-metadata-stat">
-            <div>{project.classifiers_count.toLocaleString()}</div>
-            <div>Registered Volunteers</div>
-          </div>
-
-          <div className="project-metadata-stat">
-            <div>{this.state.classificationsCount.toLocaleString()}</div>
-            <div>Classifications</div>
-          </div>
-
-          <div className="project-metadata-stat">
-            <div>{project.subjects_count.toLocaleString()}</div>
-            <div>Subjects</div>
-          </div>
-
-          <div className="project-metadata-stat">
-            <div>{project.retired_subjects_count.toLocaleString()}</div>
-            <div>Retired Subjects</div>
-          </div>
+          <ProjectMetadataStat label="Registered Volunteers" value={project.classifiers_count.toLocaleString()}  />
+          <ProjectMetadataStat label="Classifications" value={this.state.classificationsCount.toLocaleString()} />
+          <ProjectMetadataStat label="Subjects" value={project.subjects_count.toLocaleString()} />
+          <ProjectMetadataStat label="Retired Subjects" value={project.retired_subjects_count.toLocaleString()}  />
         </div>
       </div>
     );
