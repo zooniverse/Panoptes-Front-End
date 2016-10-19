@@ -11,9 +11,7 @@ getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 WorkflowToggle = require '../../components/workflow-toggle'
 
 EXPERIMENTAL_FEATURES = [
-  'survey'
   'crop'
-  'text'
   'combo'
   'dropdown'
   'mini-course'
@@ -21,14 +19,12 @@ EXPERIMENTAL_FEATURES = [
   'pan and zoom'
   'worldwide telescope'
   'hide previous marks'
-  'column'
   'grid'
-  'invert'
   'workflow assignment'
   'Gravity Spy Gold Standard'
   'allow workflow query'
   'expert comparison summary'
-  'persist answers'
+  'persist annotations'
 ]
 
 ProjectToggle = React.createClass

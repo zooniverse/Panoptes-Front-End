@@ -62,14 +62,14 @@ FeaturedProjects = React.createClass
 
 RecentProjects = React.createClass
   displayName: 'RecentProjects'
-  
+
   getInitialState: ->
     projects: []
     activityCounts: {}
     title: ""
     href: ''
     action: ""
-  
+
   componentWillMount: ->
     @props.user
       .get("project_preferences", page_size: 10, sort: '-updated_at')
@@ -84,7 +84,7 @@ RecentProjects = React.createClass
             title: "home.recentProjects.title"
             href: "/users/#{@props.user.login}/stats"
             action: "home.recentProjects.button"
-          projectsPromise = apiClient.type('projects').get userProjects, include: ['avatar', 'owners']
+          projectsPromise = apiClient.type('projects').get(id: userProjects, cards: true)
         else
           @setState
             title: "home.recentProjects.altTitle"
@@ -94,7 +94,7 @@ RecentProjects = React.createClass
         projectsPromise
       .then (projects) =>
         @setState {projects}
-  
+
   render: ->
     if @state.projects.length > 0
       <div className="recent-projects">
@@ -111,7 +111,7 @@ RecentProjects = React.createClass
       </div>
     else
       null
-    
+
 
 module.exports = React.createClass
   displayName: 'HomePage'

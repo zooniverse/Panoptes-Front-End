@@ -25,6 +25,7 @@ module.exports =
       <Route path="publications" component={require './pages/about/publications-page'} />
       <Route path="education" component={require './pages/about/education-page'} />
       <Route path="contact" component={require './pages/about/contact-page'} />
+      <Route path="volunteering" component={require './pages/about/volunteering-page'} />
     </Route>
 
     <Route path="reset-password" component={require './pages/reset-password'} />
@@ -90,7 +91,7 @@ module.exports =
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
       </Route>
-  
+
       <Route path="collections" component={require('./pages/collections/index')}>
          <IndexRoute component={require('./pages/collections/collections-list')} />
          <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />

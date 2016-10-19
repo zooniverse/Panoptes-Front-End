@@ -65,14 +65,12 @@ module.exports = React.createClass
                 <br />
                 <small><strong>Question</strong></small>
               </button>{' '}
-              {
-                if @canUseTask("text")
-                  <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
-                    <i className="fa fa-file-text-o fa-2x"></i>
-                    <br />
-                    <small><strong>Text</strong></small>
-                  </button>
-              }
+
+              <button type="submit" className="minor-button" onClick={@handleAddTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
+                <i className="fa fa-file-text-o fa-2x"></i>
+                <br />
+                <small><strong>Text</strong></small>
+              </button>
           </TriggeredModalForm>
         </p>
       </div>

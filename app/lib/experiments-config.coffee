@@ -4,9 +4,7 @@ config = {
   CLASSIFICATION_MARKER: "classification"
 
   PROJECT_SLUGS_PRODUCTION: {
-    COMET_HUNTERS: "mschwamb/hsc-comet-hunters-prototype"
-#   when we go live, switch to:
-#   COMET_HUNTERS: "mschwamb/comet-hunters"
+    COMET_HUNTERS: "mschwamb/comet-hunters"
   }
 
   PROJECT_SLUGS_STAGING: {

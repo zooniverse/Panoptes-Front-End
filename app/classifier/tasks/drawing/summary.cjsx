@@ -1,4 +1,5 @@
 React = require 'react'
+{Markdown} = (require 'markdownz').default
 
 module.exports = React.createClass
   displayName: 'DrawingSummary'
@@ -20,7 +21,9 @@ module.exports = React.createClass
   render: ->
     <div>
       <div className="question">
-        {@props.task.instruction}
+        <Markdown>
+          {@props.task.instruction}
+        </Markdown>
         {if @state.expanded
           <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
         else

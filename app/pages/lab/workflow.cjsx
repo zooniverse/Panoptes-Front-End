@@ -153,22 +153,20 @@ EditWorkflowPage = React.createClass
                       <small><strong>Drawing</strong></small>
                     </button>
                   </AutoSave>{' '}
-                  {if @canUseTask(@props.project, "text")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
-                        <i className="fa fa-file-text-o fa-2x"></i>
-                        <br />
-                        <small><strong>Text</strong></small>
-                      </button>
-                    </AutoSave>}{' '}
-                  {if @canUseTask(@props.project, "survey")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
-                        <i className="fa fa-binoculars fa-2x"></i>
-                        <br />
-                        <small><strong>Survey</strong></small>
-                      </button>
-                    </AutoSave>}{' '}
+                  <AutoSave resource={@props.workflow}>
+                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
+                      <i className="fa fa-file-text-o fa-2x"></i>
+                      <br />
+                      <small><strong>Text</strong></small>
+                    </button>
+                  </AutoSave>{' '}
+                  <AutoSave resource={@props.workflow}>
+                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
+                      <i className="fa fa-binoculars fa-2x"></i>
+                      <br />
+                      <small><strong>Survey</strong></small>
+                    </button>
+                  </AutoSave>{' '}
                   {if @canUseTask(@props.project, "crop")
                     <AutoSave resource={@props.workflow}>
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">
@@ -228,6 +226,20 @@ EditWorkflowPage = React.createClass
           </div>
 
           <hr />
+
+          {if 'persist annotations' in @props.project.experimental_tools
+            <div>
+              <AutoSave resource={@props.workflow}>
+              <span className="form-label">Set annotation persistence</span><br />
+              <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
+              <br />
+              <label>
+                <input ref="persistAnnotation" type="checkbox" checked={@props.workflow.configuration.persist_annotations} onChange={@handlePersistAnnotationsToggle} />
+                Persist annotations
+              </label>
+              </AutoSave>
+              <hr />
+            </div>}
 
           <div>
             <AutoSave resource={@props.project}>
@@ -298,15 +310,14 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          {if 'invert' in @props.project.experimental_tools
-            <div>
-              <AutoSave tag="label" resource={@props.workflow}>
-                <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
-                Allow Users To Flip Image Color
-              </AutoSave>
+          <div>
+            <AutoSave tag="label" resource={@props.workflow}>
+              <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
+              Allow Users To Flip Image Color
+            </AutoSave>
 
-              <hr />
-            </div>}
+            <hr />
+          </div>
 
           <p>
             <AutoSave resource={@props.workflow}>
@@ -478,6 +489,10 @@ EditWorkflowPage = React.createClass
   handleSetHideClassificationSummaries: (e) ->
     @props.workflow.update
       'configuration.hide_classification_summaries': e.target.checked
+
+  handlePersistAnnotationsToggle: (e) ->
+    @props.workflow.update
+      'configuration.persist_annotations': e.target.checked
 
   handleSetInvert: (e) ->
     @props.workflow.update
