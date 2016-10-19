@@ -100,9 +100,12 @@ module.exports = React.createClass
             <em>No matches.</em>
           </div>
         else
+          selectedChoices = (item.choice for item in @props.annotation.value)
+
           for choiceID, i in sortedFilteredChoices
             choice = @props.task.choices[choiceID]
-            <button key={choiceID + i} type="button" className="survey-task-chooser-choice-button" onClick={@props.onChoose.bind null, choiceID}>
+            chosenAlready = choiceID in selectedChoices
+            <button key={choiceID + i} type="button" className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}" onClick={@props.onChoose.bind null, choiceID}>
               <span className="survey-task-chooser-choice">
                 {if choice.images?.length > 0
                   thumbnailSrc = @props.task.images[choice.images[0]]
