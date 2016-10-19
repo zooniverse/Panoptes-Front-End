@@ -7,7 +7,9 @@ counterpart.registerTranslations 'en',
     content: '''
       ## Glossary
       A collection of definitions for terms used across the Zooniverse. The terms are split into three different groups:
-      
+
+      [[toc]]
+
       ## General Terms
 
 
