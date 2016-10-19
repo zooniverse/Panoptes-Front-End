@@ -13,6 +13,11 @@ class ProjectMetadataStat extends React.Component {
   }
 }
 
+ProjectMetadataStat.propTypes = {
+  label: React.PropTypes.string.isRequired,
+  value: React.PropTypes.string.isRequired
+}
+
 class ProjectMetadata extends React.Component {
   constructor(props) {
     super(props);
@@ -29,6 +34,10 @@ class ProjectMetadata extends React.Component {
         this.setState({ classificationsCount: this.state.classificationsCount + 1 });
       }
     });
+  }
+
+  componentWillUnmount() {
+    this.context.pusher.unsubscribe('panoptes');
   }
 
   render() {
@@ -56,15 +65,15 @@ class ProjectMetadata extends React.Component {
 }
 
 ProjectMetadata.contextTypes = {
-  pusher: React.PropTypes.object,
+  pusher: React.PropTypes.object.isRequired,
 };
 
 ProjectMetadata.propTypes = {
-  project: React.PropTypes.object,
+  project: React.PropTypes.object.isRequired,
 };
 
 ProjectMetadata.defaultProps = {
-  project: null,
+  project: {},
 };
 
 export default ProjectMetadata;
