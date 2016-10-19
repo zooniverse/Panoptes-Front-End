@@ -1,7 +1,9 @@
 import React from 'react';
 import Notification from './notification';
 import apiClient from 'panoptes-client/lib/api-client';
+import talkClient from 'panoptes-client/lib/talk-client';
 import { Link } from 'react-router';
+import Paginator from '../../talk/lib/paginator';
 
 const NotificationSection = React.createClass({
 
@@ -10,6 +12,12 @@ const NotificationSection = React.createClass({
     params: React.PropTypes.object,
     project: React.PropTypes.object,
     projectID: React.PropTypes.string,
+  },
+
+  getDefaultProps() {
+    return {
+      location: {query: {page: 1}}
+    };
   },
 
   getInitialState() {
@@ -81,8 +89,9 @@ const NotificationSection = React.createClass({
   },
 
   render() {
-    const notificationLength = Math.min(this.props.notifications.length, this.state.messageLength)
-    const shownNotifications = this.props.notifications.slice(0, notificationLength)
+    console.log(this.props);
+    const notificationLength = Math.min(this.props.notifications.length, this.state.messageLength);
+    const shownNotifications = this.props.notifications.slice(0, notificationLength);
 
     return (
       <div className="notification-section">
@@ -100,6 +109,17 @@ const NotificationSection = React.createClass({
                 params={this.props.params}
               />);
           })
+        )}
+
+        {this.state.expanded && (
+            <div className="centering">
+              <Paginator
+                className="older"
+                scrollOnChange={false}
+                firstAndLast={false}
+                pageSelector={false}
+                nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>} />
+            </div>
         )}
 
       </div>
