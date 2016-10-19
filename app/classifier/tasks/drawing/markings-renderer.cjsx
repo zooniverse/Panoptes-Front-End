@@ -53,6 +53,11 @@ module.exports = React.createClass
                 continue
 
               toolDescription = taskDescription.tools[mark.tool]
+              
+              if parseInt(mark.frame) is parseInt(@props.frame)
+                {details} = toolDescription
+              else
+                details = null
 
               toolEnv =
                 containerRect: @props.containerRect
@@ -65,7 +70,7 @@ module.exports = React.createClass
               toolProps =
                 classification: @props.classification
                 mark: mark
-                details: toolDescription.details
+                details: details
                 color: toolDescription.color
                 size: toolDescription.size
 
