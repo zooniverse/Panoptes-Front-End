@@ -129,7 +129,7 @@ module.exports = React.createClass
             </span>
         </span>}
         <span>
-          {if @props.workflow?.configuration?.invert_subject?
+          {if @props.workflow?.configuration?.invert_subject
             <button type="button" className="secret-button" aria-label="Invert image" title="Invert image" onClick={@toggleModification.bind this, 'invert'}>
               <i className="fa fa-adjust "></i>
             </button>}{' '}
