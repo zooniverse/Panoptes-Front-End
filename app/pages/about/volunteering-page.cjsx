@@ -25,8 +25,6 @@ counterpart.registerTranslations 'en',
     ### Further Information
     If you'd like any more information on any of these different roles, contact us via the [Contact Us](/about/contact) page.
 
-
-
     '''
 
 module.exports = React.createClass
