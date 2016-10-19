@@ -105,7 +105,7 @@ module.exports = React.createClass
             <br />
 
             <AutoSave resource={@props.user}>
-              <span className="form-label">Credited name</span>
+              <span className="form-label">Real name</span>
               <br />
               <input type="text" className="standard-input full" name="credited_name" value={@props.user.credited_name} onChange={handleInputChange.bind @props.user} />
             </AutoSave>

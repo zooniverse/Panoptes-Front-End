@@ -55,28 +55,23 @@ module.exports = React.createClass
   getInitialState: ->
     answers: {}
 
-  allFilledIn: ->
+  checkFilledIn: ->
+    # if there are no questions, don't make them fill one in
+    return true unless Utility.getQuestionIDs(@props.task, @props.choiceID).length
+
+    # if there are questions, it's fine as long as they've filled required ones in
+    answerProvided = []
     for questionID in Utility.getQuestionIDs(@props.task, @props.choiceID)
       question = @props.task.questions[questionID]
       if question.required
         answer = @state.answers[questionID]
-        if (not answer?) or (question.multiple and answer.length is 0)
-          return false
-    true
-
-  anyFilledIn: ->
-    # if there are no questions, don't make them fill one in
-    return true unless Utility.getQuestionIDs(@props.task, @props.choiceID).length
-
-    # if there are questions, it's fine as long as they've filled ONE in
-    for questionID in Utility.getQuestionIDs(@props.task, @props.choiceID)
-      question = @props.task.questions[questionID]
-      answer = @state.answers[questionID]
-      if(answer?)
-        return true
-
-    # they must fill out at least one
-    false
+        if (answer?.length isnt 0) and answer?
+          answerProvided.push true
+        else
+          answerProvided.push false
+      else
+        answerProvided.push true
+    canIdentify = answerProvided.every (answer) -> answer is true
 
   render: ->
     choice = @props.task.choices[@props.choiceID]
@@ -130,7 +125,7 @@ module.exports = React.createClass
                   answerID is @state.answers[questionID]
                 <span key={answerID}>
                   <label className="survey-task-choice-answer" data-checked={isChecked || null}>
-                    <input name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
+                    <input ref={questionID} name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
                     {answer.label}
                   </label>
                   {' '}
@@ -143,7 +138,7 @@ module.exports = React.createClass
       <div style={textAlign: 'center'}>
         <button type="button" className="minor-button" onClick={@props.onCancel}>Cancel</button>
         {' '}
-        <button type="button" className="standard-button" disabled={not @allFilledIn() or not @anyFilledIn()} onClick={@handleIdentification}>
+        <button type="button" className="standard-button" disabled={not @checkFilledIn()} onClick={@handleIdentification}>
           <strong>Identify</strong>
         </button>
       </div>
@@ -157,10 +152,11 @@ module.exports = React.createClass
       else
         @state.answers[questionID].splice @state.answers[questionID].indexOf(answerID), 1
     else
-      @state.answers[questionID] = if e.target.checked
-        answerID
+      if answerID is @state.answers[questionID]
+        delete @state.answers[questionID]
+        @refs[questionID].checked = false
       else
-        null
+        @state.answers[questionID] = answerID
     @setState answers: @state.answers
 
   handleIdentification: ->
