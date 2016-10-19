@@ -72,7 +72,7 @@ module.exports = React.createClass
 
   sortProjects: (projectGroups) ->
     mostRecent = Object.keys(projectGroups).map (group) ->
-      Object.assign {_key: Math.random(), notifications: projectGroups[group], project_id: group}
+      Object.assign {_key: Math.random(), notifications: projectGroups[group], section: projectGroups[group][0].section, project_id: group}
     mostRecent.sort( (a, b) -> a.notifications[0].updated_at < b.notifications[0].updated_at )
     mostRecent.map (group, i) =>
       if group['project_id'] is ''
@@ -134,6 +134,7 @@ module.exports = React.createClass
                     key={group._key}
                     notifications={group.notifications}
                     projectID={group.project_id}
+                    section={group.section}
                     user={this.props.user} />
                 }
               </div>

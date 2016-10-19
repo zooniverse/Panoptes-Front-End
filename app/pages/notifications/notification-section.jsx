@@ -16,20 +16,23 @@ const NotificationSection = React.createClass({
 
   getDefaultProps() {
     return {
-      location: {query: {page: 1}}
+      location: { query: { page: 1 } },
+      section: null
     };
   },
 
   getInitialState() {
     return {
       expanded: false,
-      messageLength: 3,
+      shownMessages: 3,
     };
   },
 
   componentWillMount() {
-    if (this.props.projectID === '') {
-      this.setZooniverse();
+    if (this.props.section === 'zooniverse') {
+      this.setState({
+        name: 'Zooniverse',
+      });
     } else {
       return apiClient.type('projects').get({ id: this.props.projectID, cards: true })
       .catch(() => {
@@ -46,29 +49,60 @@ const NotificationSection = React.createClass({
   },
 
   componentDidMount() {
-    const sectionTitle = this.props.projectID.length ? 'section-' + this.props.projectID : 'section-zooniverse';
+    this.getUnreadCount();
+    const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
     const expandDiv = document.getElementById(sectionTitle);
-    expandDiv.addEventListener('click', this.setState.bind(this, { expanded: true }));
+    expandDiv.addEventListener('click', this.setState.bind(this, { expanded: true }, null));
   },
 
-  setZooniverse() {
-    this.setState({
-      name: 'Zooniverse'
+  getUnreadCount() {
+    return talkClient.type('notifications').get({page: 1, page_size: 1, delivered: false, section: this.props.section })
+    .catch(() => {
+      return null;
     })
+    .then(([project]) => {
+      if (project) {
+        console.log(project);
+        const count = project.getMeta().count || 0;
+        console.log(count);
+        this.setState({ unread: count });
+      } else {
+        this.setState({ unread: 0 });
+      }
+    });
   },
 
   avatarFor() {
+    console.log(this.state);
     const src = this.state.avatar ? '//' + this.state.avatar : '/assets/simple-avatar.jpg';
-    return <img src={src} className="notification-section__img" alt="Project Avatar" />
+    if (this.state.unread > 0) {
+      return this.unreadCircle();
+    } else {
+      return <img src={src} className="notification-section__img" alt="Project Avatar" />;
+    }
+  },
+
+  unreadCircle() {
+    return (
+      <svg className="notification-section__img" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="0" cy="0" r="100" fill="#E45950">
+          <title>
+            {(this.state.unread + " Unread Notification(s)")}
+          </title>
+        </circle>
+        <text x="40%" y="50%" stroke="white" stroke-width="2px" dy=".3em">{this.state.unread}</text>
+      </svg>
+    );
   },
 
   renderHeader() {
-    const sectionTitle = this.props.projectID.length ? 'section-' + this.props.projectID : 'section-zooniverse';
+    const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
+    const buttonType = this.state.expanded ? 'fa fa-times' : 'fa fa-chevron-down'
 
     return (
       <div id={this.state.expanded ? '' : sectionTitle}>
-        <button className="secret-button notification-section__close" title="Remove choice" onClick={this.setState.bind(this, {expanded: !this.state.expanded})}>
-          <i className="fa fa-times"></i>
+        <button className="secret-button notification-section__toggle" title="Remove choice" onClick={this.setState.bind(this, {expanded: !this.state.expanded}, null)}>
+          <i className={buttonType}></i>
         </button>
 
         <div className="notification-section__header">
@@ -90,7 +124,7 @@ const NotificationSection = React.createClass({
 
   render() {
     console.log(this.props);
-    const notificationLength = Math.min(this.props.notifications.length, this.state.messageLength);
+    const notificationLength = Math.min(this.props.notifications.length, this.state.shownMessages);
     const shownNotifications = this.props.notifications.slice(0, notificationLength);
 
     return (
