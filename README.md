@@ -1,5 +1,7 @@
 # Panoptes (front end)
 
+![Build Status](https://travis-ci.org/zooniverse/Panoptes-Front-End.svg?branch=master)
+
 ## Development
 
 Requires Node.js. It's recommended you manage your Node installations with **nvm**.
