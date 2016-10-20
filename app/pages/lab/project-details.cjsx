@@ -13,10 +13,12 @@ alert = require('../../lib/alert')
 {DISCIPLINES} = require '../../components/disciplines'
 Select = require 'react-select'
 `import CharLimit from '../../components/char-limit'`
+`import ExternalLinksEditor from './external-links-editor'`
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
 
+###
 ExternalLinksEditor = React.createClass
   displayName: 'ExternalLinksEditor'
 
@@ -67,6 +69,7 @@ ExternalLinksEditor = React.createClass
     changes =
       urls: (link for link in @props.project.urls when link isnt linkToRemove)
     @props.project.update changes
+###
 
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
