@@ -62,9 +62,7 @@ const NotificationSection = React.createClass({
     })
     .then(([project]) => {
       if (project) {
-        console.log(project);
         const count = project.getMeta().count || 0;
-        console.log(count);
         this.setState({ unread: count });
       } else {
         this.setState({ unread: 0 });
@@ -73,7 +71,6 @@ const NotificationSection = React.createClass({
   },
 
   avatarFor() {
-    console.log(this.state);
     const src = this.state.avatar ? '//' + this.state.avatar : '/assets/simple-avatar.jpg';
     if (this.state.unread > 0) {
       return this.unreadCircle();
@@ -123,7 +120,6 @@ const NotificationSection = React.createClass({
   },
 
   render() {
-    console.log(this.props);
     const notificationLength = Math.min(this.props.notifications.length, this.state.shownMessages);
     const shownNotifications = this.props.notifications.slice(0, notificationLength);
 

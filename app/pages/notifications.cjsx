@@ -3,6 +3,7 @@ Loading = require '../components/loading-indicator'
 Paginator = require '../talk/lib/paginator'
 talkClient = require 'panoptes-client/lib/talk-client'
 Notification = require './notifications/notification'
+`import getNotificationProjects from '../talk/lib/get-notification-projects';`
 `import NotificationSection from './notifications/notification-section';`
 
 module.exports = React.createClass
@@ -35,6 +36,8 @@ module.exports = React.createClass
     pageChanged = nextProps.location.query.page isnt @props.location.query.page
     userChanged = nextProps.user and nextProps.user isnt @props.user
     @getNotifications(nextProps.location.query.page) if pageChanged or userChanged
+    getNotificationProjects(nextProps.user).then (results) =>
+      console.log results
 
   getNotifications: (page) ->
     @getUnreadCount()
