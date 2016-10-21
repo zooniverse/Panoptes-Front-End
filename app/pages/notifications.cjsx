@@ -9,108 +9,25 @@ Notification = require './notifications/notification'
 module.exports = React.createClass
   displayName: 'NotificationsPage'
 
-  contextTypes:
-    notificationsCounter: React.PropTypes.object
-
   propTypes:
     project: React.PropTypes.object
     user: React.PropTypes.object
 
-  getDefaultProps: ->
-    location: query: page: 1
-
-  getInitialState: ->
-    firstMeta: { }
-    lastMeta: { }
-    notificationsMap: { }
+  getInitialState: () ->
+    projNotifications: []
 
   componentWillMount: ->
-    @getNotifications() if @props.user
-
-  componentWillUnmount: ->
-    if @props.user
-      @markAsRead('first')()
-      @markAsRead('last')()
+    @getProjectNotifications(@props.user) if @props.user
 
   componentWillReceiveProps: (nextProps) ->
-    pageChanged = nextProps.location.query.page isnt @props.location.query.page
-    userChanged = nextProps.user and nextProps.user isnt @props.user
-    @getNotifications(nextProps.location.query.page) if pageChanged or userChanged
-    getNotificationProjects(nextProps.user).then (results) =>
-      console.log results
+    @getProjectNotifications(nextProps.user) if nextProps.user
 
-  getNotifications: (page) ->
-    @getUnreadCount()
-    talkClient.type('notifications').get(@notificationsQuery(page)).then (newNotifications) =>
-      meta = newNotifications[0]?.getMeta() or { }
-      notifications = @state.notifications or newNotifications
-      meta.notificationIds = (n.id for n in newNotifications)
-      notificationsMap = @state.notificationsMap
-
-      for notification in newNotifications
-        notificationsMap[notification.id] = notification
-
-      {firstMeta, lastMeta} = @state
-
-      if meta.page > @state.lastMeta.page
-        lastMeta = meta
-        notifications.push newNotifications...
-      else if meta.page < @state.firstMeta.page
-        firstMeta = meta
-        notifications.unshift newNotifications...
-      else
-        firstMeta = lastMeta = meta
-
-      notificationGroups = @groupNotifications(notifications)
-      projNotifications = @sortProjects(notificationGroups)
-
-      @setState {notifications, projNotifications, notificationsMap, firstMeta, lastMeta}
-
-  groupNotifications: (notifications) ->
-    notifications.reduce ((groups, notification) ->
-      groups[notification.project_id] = groups[notification.project_id] or []
-      groups[notification.project_id].push notification
-      groups
-    ), {}
-
-  sortProjects: (projectGroups) ->
-    mostRecent = Object.keys(projectGroups).map (group) ->
-      Object.assign {_key: Math.random(), notifications: projectGroups[group], section: projectGroups[group][0].section, project_id: group}
-    mostRecent.sort( (a, b) -> a.notifications[0].updated_at < b.notifications[0].updated_at )
-    mostRecent.map (group, i) =>
-      if group['project_id'] is ''
-        mostRecent.splice i, 1
-        mostRecent.unshift group
-    mostRecent
-
-  notificationsQuery: (page = @props.location.query.page, options = { }) ->
-    page or= 1
-    query = Object.assign { }, options, {page}
-    query.page_size = 100
-    query.section = "project-#{ @props.project.id }" if @props.project
-    query.section = @props.params.section if @props.params.section
-    query
-
-  getUnreadCount: ->
-    talkClient.type('notifications').get(@notificationsQuery(1, page_size: 1, delivered: false)).then (notifications) =>
-      unreadCount = notifications[0]?.getMeta()?.count or 0
-      @setState {unreadCount}
-
-  markAsRead: (meta) ->
-    =>
-      ids = @state["#{ meta }Meta"].notificationIds
-      ids = (id for id in ids when not @state.notificationsMap[id].delivered)
-      return if ids.length is 0
-      talkClient.put '/notifications/read', id: ids.join(',')
-      for notification in @state.notifications when notification.id in ids
-        notification.update delivered: true
-
-  markAllAsRead: ->
-    talkClient.put '/notifications/read'
-    for notification in @state.notifications
-      notification.update delivered: true
-    @setState unreadCount: 0
-    @context.notificationsCounter.setUnread 0
+  getProjectNotifications: (user) ->
+    if @props.project
+      talkClient.type('notifications').get({ page: 1, page_size: 1, section: project })
+    else
+      getNotificationProjects(user).then (projNotifications) =>
+        @setState {projNotifications: projNotifications}
 
   title: ->
     if @props.project
@@ -128,33 +45,22 @@ module.exports = React.createClass
         </h3>
 
         {if @props.user?
-          if @state.notifications?.length > 0
+          if @state.projNotifications?.length > 0
             <div>
 
               <div className="list">
-                {for group in @state.projNotifications
+                {for notification in @state.projNotifications
                   <NotificationSection
-                    key={group._key}
-                    notifications={group.notifications}
-                    projectID={group.project_id}
-                    section={group.section}
+                    key={notification.id}
+                    projectID={notification.project_id}
+                    slug={notification.project_slug}
+                    section={notification.section}
                     user={this.props.user} />
                 }
               </div>
 
-              <div className="centering">
-                <Paginator
-                  className="older"
-                  page={+@state.lastMeta.page}
-                  pageCount={@state.lastMeta.page_count}
-                  scrollOnChange={false}
-                  firstAndLast={false}
-                  pageSelector={false}
-                  nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>}
-                  onClickNext={@markAsRead 'last'} />
-              </div>
             </div>
-          else if @state.notifications?.length is 0
+          else if @state.projNotifications?.length is 0
             <div className="centering talk-module">
               <p>You have no notifications.</p>
               <p>You can receive notifications by participating in Talk, following discussions, and receiving messages.</p>

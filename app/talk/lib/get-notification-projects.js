@@ -3,7 +3,7 @@ import talkClient from 'panoptes-client/lib/talk-client';
 
 function getNotificationProjects(user) {
   return getAllProjectPreferences(user).then((projectPreferences) => {
-    const retrieveNotification = function newestNotification(project) {
+    function newestNotification(project) {
       return talkClient.type('notifications').get({ page: 1, page_size: 1, section: project })
       .catch(() => {
         return null;
@@ -13,10 +13,10 @@ function getNotificationProjects(user) {
       });
     };
 
-    return retrieveNotification('zooniverse').then((zooniverse) => {
+    return newestNotification('zooniverse').then((zooniverse) => {
       const projNotifications = projectPreferences.map((projectPreference) => {
         const section = 'project-' + projectPreference.links.project;
-        return retrieveNotification(section);
+        return newestNotification(section);
       });
 
       const filteredProjects = Promise.all(projNotifications).then((projects) => {

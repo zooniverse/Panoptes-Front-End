@@ -8,27 +8,38 @@ import Paginator from '../../talk/lib/paginator';
 const NotificationSection = React.createClass({
 
   propTypes: {
+    location: React.PropTypes.object,
     notifications: React.PropTypes.array,
     params: React.PropTypes.object,
     project: React.PropTypes.object,
     projectID: React.PropTypes.string,
+    section: React.PropTypes.string,
+    slug: React.PropTypes.string,
+    user: React.PropTypes.object,
+  },
+
+  contextTypes: {
+    notificationsCounter: React.PropTypes.object,
   },
 
   getDefaultProps() {
     return {
       location: { query: { page: 1 } },
-      section: null
+      section: null,
     };
   },
 
   getInitialState() {
     return {
       expanded: false,
-      shownMessages: 3,
+      firstMeta: { },
+      lastMeta: { },
+      notificationsMap: { },
     };
   },
 
   componentWillMount() {
+    if (this.props.user) this.getNotifications();
     if (this.props.section === 'zooniverse') {
       this.setState({
         name: 'Zooniverse',
@@ -40,9 +51,8 @@ const NotificationSection = React.createClass({
       })
       .then(([project]) => {
         this.setState({
-          slug: project.slug,
           name: project.display_name,
-          avatar: project.avatar_src
+          avatar: project.avatar_src,
         });
       });
     }
@@ -53,6 +63,54 @@ const NotificationSection = React.createClass({
     const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
     const expandDiv = document.getElementById(sectionTitle);
     expandDiv.addEventListener('click', this.setState.bind(this, { expanded: true }, null));
+  },
+
+  componentWillReceiveProps(nextProps) {
+    const pageChanged = nextProps.location.query.page !== this.props.location.query.page;
+    const userChanged = nextProps.user && nextProps.user !== this.props.user;
+    if (pageChanged || userChanged) {
+      this.getNotifications(nextProps.location.query.page);
+    }
+  },
+
+  componentWillUnmount() {
+    if (this.props.user) {
+      // this.markAsRead('first')()
+      // this.markAsRead('last')()
+    }
+  },
+
+  getNotifications(page) {
+    let firstMeta;
+    let lastMeta;
+    this.getUnreadCount();
+    return talkClient.type('notifications').get(this.notificationsQuery(page))
+      .then((newNotifications) => {
+        const meta = newNotifications[0].getMeta() || { };
+        const notifications = this.state.notifications || newNotifications;
+        const notificationsMap = this.state.notificationsMap;
+
+        for (const notification in newNotifications) {
+          notificationsMap[notification.id] = notification;
+        }
+
+        if (meta.page > this.state.lastMeta.page) {
+          lastMeta = meta;
+          notifications.push.apply(notifications, newNotifications);
+        } else if (meta.page < this.state.firstMeta.page) {
+          firstMeta = meta;
+          notifications.unshift.apply(notifications, newNotifications);
+        } else {
+          firstMeta = lastMeta = meta;
+        }
+
+        this.setState({
+          notifications: notifications,
+          notificationsMap: notificationsMap,
+          firstMeta: firstMeta,
+          lastMeta: lastMeta,
+        });
+      });
   },
 
   getUnreadCount() {
@@ -70,6 +128,30 @@ const NotificationSection = React.createClass({
     });
   },
 
+  markAsRead(position) {
+    const ids = this.state[position + 'Meta'].notificationIds
+    console.log(this.state);
+    // const ids = (id for id in ids when not @state.notificationsMap[id].delivered)
+    // return if ids.length is 0
+    // talkClient.put '/notifications/read', id: ids.join(',')
+    // for notification in @state.notifications when notification.id in ids
+    //   notification.update delivered: true
+  },
+
+  notificationsQuery(page = this.props.location.query.page, options = { }) {
+    const query = Object.assign({}, options, {
+      page: page,
+      page_size: 5,
+    });
+    if (this.props.project) {
+      query.section = 'project-' + this.props.project.id;
+    }
+    if (this.props.section) {
+      query.section = this.props.section;
+    }
+    return query
+  },
+
   avatarFor() {
     const src = this.state.avatar ? '//' + this.state.avatar : '/assets/simple-avatar.jpg';
     if (this.state.unread > 0) {
@@ -84,21 +166,25 @@ const NotificationSection = React.createClass({
       <svg className="notification-section__img" xmlns="http://www.w3.org/2000/svg">
         <circle cx="0" cy="0" r="100" fill="#E45950">
           <title>
-            {(this.state.unread + " Unread Notification(s)")}
+            {(this.state.unread + ' Unread Notification(s)')}
           </title>
         </circle>
-        <text x="40%" y="50%" stroke="white" stroke-width="2px" dy=".3em">{this.state.unread}</text>
+        <text x="40%" y="50%" stroke="white" strokeWidth="2px" dy=".3em">{this.state.unread}</text>
       </svg>
     );
   },
 
   renderHeader() {
     const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
-    const buttonType = this.state.expanded ? 'fa fa-times' : 'fa fa-chevron-down'
+    const buttonType = this.state.expanded ? 'fa fa-times' : 'fa fa-chevron-down';
 
     return (
       <div id={this.state.expanded ? '' : sectionTitle}>
-        <button className="secret-button notification-section__toggle" title="Remove choice" onClick={this.setState.bind(this, {expanded: !this.state.expanded}, null)}>
+        <button
+          className="secret-button notification-section__toggle"
+          title="Remove choice"
+          onClick={this.setState.bind(this, { expanded: !this.state.expanded }, null)}
+        >
           <i className={buttonType}></i>
         </button>
 
@@ -120,16 +206,14 @@ const NotificationSection = React.createClass({
   },
 
   render() {
-    const notificationLength = Math.min(this.props.notifications.length, this.state.shownMessages);
-    const shownNotifications = this.props.notifications.slice(0, notificationLength);
-
+    console.log(this.state);
     return (
       <div className="notification-section">
 
         {this.renderHeader()}
 
         {this.state.expanded && (
-          shownNotifications.map((notification) => {
+          this.state.notifications.map((notification) => {
             return (
               <Notification
                 notification={notification}
@@ -142,14 +226,15 @@ const NotificationSection = React.createClass({
         )}
 
         {this.state.expanded && (
-            <div className="centering">
-              <Paginator
-                className="older"
-                scrollOnChange={false}
-                firstAndLast={false}
-                pageSelector={false}
-                nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>} />
-            </div>
+          <div className="centering">
+            <Paginator
+              className="older"
+              scrollOnChange={false}
+              firstAndLast={false}
+              pageSelector={false}
+              nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>}
+            />
+          </div>
         )}
 
       </div>
