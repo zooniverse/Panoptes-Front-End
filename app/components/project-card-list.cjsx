@@ -55,6 +55,7 @@ SearchSelector = React.createClass
   searchByName: (value, callback) ->
     query =
       search: "%#{value}%"
+      cards: true
       launch_approved: true unless apiClient.params.admin
 
     if value?.trim().length > 3
