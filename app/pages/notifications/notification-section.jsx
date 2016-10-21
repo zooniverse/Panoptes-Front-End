@@ -14,6 +14,7 @@ const NotificationSection = React.createClass({
     project: React.PropTypes.object,
     projectID: React.PropTypes.string,
     section: React.PropTypes.string,
+    singleProject: React.PropTypes.bool,
     slug: React.PropTypes.string,
     user: React.PropTypes.object,
   },
@@ -26,6 +27,7 @@ const NotificationSection = React.createClass({
     return {
       location: { query: { page: 1 } },
       section: null,
+      singleProject: false,
     };
   },
 
@@ -59,10 +61,8 @@ const NotificationSection = React.createClass({
   },
 
   componentDidMount() {
+    if (this.props.singleProject) this.setState({ expanded: true })
     this.getUnreadCount();
-    const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
-    const expandDiv = document.getElementById(sectionTitle);
-    expandDiv.addEventListener('click', this.setState.bind(this, { expanded: true }, null));
   },
 
   componentWillReceiveProps(nextProps) {
@@ -130,7 +130,6 @@ const NotificationSection = React.createClass({
 
   markAsRead(position) {
     const ids = this.state[position + 'Meta'].notificationIds
-    console.log(this.state);
     // const ids = (id for id in ids when not @state.notificationsMap[id].delivered)
     // return if ids.length is 0
     // talkClient.put '/notifications/read', id: ids.join(',')
@@ -176,37 +175,37 @@ const NotificationSection = React.createClass({
 
   renderHeader() {
     const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
-    const buttonType = this.state.expanded ? 'fa fa-times' : 'fa fa-chevron-down';
+    const buttonType = this.state.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
 
     return (
-      <div id={this.state.expanded ? '' : sectionTitle}>
-        <button
-          className="secret-button notification-section__toggle"
-          title="Remove choice"
-          onClick={this.setState.bind(this, { expanded: !this.state.expanded }, null)}
-        >
-          <i className={buttonType}></i>
-        </button>
+      <div>
 
         <div className="notification-section__header">
-
           <div className="notification-section__item">
             {this.avatarFor()}
           </div>
 
           <div className="notification-section__item">
             <Link to={'/projects/' + this.state.slug} className="notification-section__title">
-              <h4 className="notification-section__title">{this.state.name}</h4>
+              <h3 className="notification-section__title">{this.state.name}</h3>
             </Link>
           </div>
 
+          <div className="notification-section__item">
+            <button
+              className="secret-button notification-section__toggle"
+              title="Remove choice"
+              onClick={this.setState.bind(this, { expanded: !this.state.expanded }, null)}
+            >
+              <i className={buttonType}></i>
+            </button>
+          </div>
         </div>
       </div>
     );
   },
 
   render() {
-    console.log(this.state);
     return (
       <div className="notification-section">
 

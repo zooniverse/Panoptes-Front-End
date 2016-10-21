@@ -14,6 +14,7 @@ module.exports = React.createClass
     user: React.PropTypes.object
 
   getInitialState: () ->
+    loading: true
     projNotifications: []
 
   componentWillMount: ->
@@ -24,10 +25,12 @@ module.exports = React.createClass
 
   getProjectNotifications: (user) ->
     if @props.project
-      talkClient.type('notifications').get({ page: 1, page_size: 1, section: project })
+      talkClient.type('notifications').get({ page: 1, page_size: 1, section: 'project-' + @props.project.id })
+        .then (projNotifications) =>
+          @setState {projNotifications: projNotifications, loading: false}
     else
       getNotificationProjects(user).then (projNotifications) =>
-        @setState {projNotifications: projNotifications}
+        @setState {projNotifications: projNotifications, loading: false}
 
   title: ->
     if @props.project
@@ -40,7 +43,7 @@ module.exports = React.createClass
   render: ->
     <div className="talk notifications">
       <div className="content-container">
-        <h3 className={"title #{ if @props.project then 'talk-module' else 'notifications-title' }"}>
+        <h3 className={"centering title #{ if @props.project then 'talk-module' else 'notifications-title' }"}>
           {@title()}
         </h3>
 
@@ -53,6 +56,7 @@ module.exports = React.createClass
                   <NotificationSection
                     key={notification.id}
                     projectID={notification.project_id}
+                    singleProject={true if @props.project}
                     slug={notification.project_slug}
                     section={notification.section}
                     user={this.props.user} />
@@ -60,6 +64,8 @@ module.exports = React.createClass
               </div>
 
             </div>
+          else if @state.loading
+            <Loading />
           else if @state.projNotifications?.length is 0
             <div className="centering talk-module">
               <p>You have no notifications.</p>
