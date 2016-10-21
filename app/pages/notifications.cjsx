@@ -40,6 +40,9 @@ module.exports = React.createClass
     else
       'My Notifications'
 
+  onChildChanged: (id) ->
+    this.setState({expanded: id})
+
   render: ->
     <div className="talk notifications">
       <div className="content-container">
@@ -55,6 +58,8 @@ module.exports = React.createClass
                 {for notification in @state.projNotifications
                   <NotificationSection
                     key={notification.id}
+                    callbackParent={@onChildChanged}
+                    expanded={true if notification.project_id is @state.expanded}
                     projectID={notification.project_id}
                     singleProject={true if @props.project}
                     slug={notification.project_slug}

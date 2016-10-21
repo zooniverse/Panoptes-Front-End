@@ -173,9 +173,16 @@ const NotificationSection = React.createClass({
     );
   },
 
+  onDivChanged() {
+    const id = this.props.projectID;
+    this.props.callbackParent(id)
+  },
+
   renderHeader() {
     const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
-    const buttonType = this.state.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
+    const buttonType = this.props.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
+    const expandToggle = this.props.expanded ? false : this.props.projectID
+    console.log(expandToggle);
 
     return (
       <div>
@@ -195,7 +202,7 @@ const NotificationSection = React.createClass({
             <button
               className="secret-button notification-section__toggle"
               title="Remove choice"
-              onClick={this.setState.bind(this, { expanded: !this.state.expanded }, null)}
+              onClick={this.props.callbackParent.bind(null, expandToggle)}
             >
               <i className={buttonType}></i>
             </button>
@@ -211,7 +218,7 @@ const NotificationSection = React.createClass({
 
         {this.renderHeader()}
 
-        {this.state.expanded && (
+        {this.props.expanded && (
           this.state.notifications.map((notification) => {
             return (
               <Notification
