@@ -1,40 +1,15 @@
 import React from 'react';
 import AutoSave from '../../components/auto-save.coffee';
 import handleInputChange from '../../lib/handle-input-change.coffee';
-
-class ExternalLinksEditorRow extends React.Component {
-  render() {
-    return (
-      <AutoSave tag="tr" resource={this.props.project}>
-        <td>
-          <input type="text" name={`urls.${this.props.idx}.label`} value={this.props.link.label} onChange={handleInputChange.bind(this.props.project)} />
-        </td>
-        <td>
-          <input type="text" name={`urls.${this.props.idx}.url`} value={this.props.link.url} onChange={handleInputChange.bind(this.props.project)} />
-        </td>
-        <td>
-          <button type="button" onClick={this.props.handleRemoveLink}>
-            <i className="fa fa-remove"></i>
-          </button>
-        </td>
-      </AutoSave>
-    );
-  }
-}
-
-ExternalLinksEditorRow.propTypes = {
-  project: React.PropTypes.object,
-  link: React.PropTypes.object,
-  idx: React.PropTypes.number,
-  handleRemoveLink: React.PropTypes.func,
-};
-
+import DragReorderable from 'drag-reorderable';
 
 export default class ExternalLinksEditor extends React.Component {
   constructor(props) {
     super(props);
     this.handleAddLink = this.handleAddLink.bind(this);
+    this.handleLinkReorder = this.handleLinkReorder.bind(this);
     this.handleRemoveLink = this.handleRemoveLink.bind(this);
+    this.renderRow = this.renderRow.bind(this);
   }
 
   handleAddLink() {
@@ -47,6 +22,14 @@ export default class ExternalLinksEditor extends React.Component {
     this.props.project.update(changes);
   }
 
+  handleLinkReorder(newLinkOrder) {
+    const changes = {
+      urls: newLinkOrder,
+    };
+    this.props.project.update(changes);
+    this.props.project.save();
+  }
+
   handleRemoveLink(linkToRemove) {
     const urlList = this.props.project.urls.slice();
     const indexToRemove = urlList.findIndex(i => (i._key === linkToRemove._key));
@@ -56,31 +39,63 @@ export default class ExternalLinksEditor extends React.Component {
         urls: urlList,
       };
       this.props.project.update(changes);
+      // Remove link is handeld outside of the AutoSave so save directly
+      // This is to prevent setState on the AutoSave from firing after the dom is removed
+      this.props.project.save();
     }
   }
 
+  renderRow(link) {
+    // Find the links current position in the list
+    const idx = this.props.project.urls.findIndex(i => (i._key === link._key));
+    return (
+      <tr key={link._key}>
+        <AutoSave tag="td" resource={this.props.project}>
+          <input
+            type="text"
+            name={`urls.${idx}.label`}
+            value={link.label}
+            onChange={handleInputChange.bind(this.props.project)}
+          />
+        </AutoSave>
+        <AutoSave tag="td" resource={this.props.project}>
+          <input
+            type="text"
+            name={`urls.${idx}.url`}
+            value={link.url}
+            onChange={handleInputChange.bind(this.props.project)}
+          />
+        </AutoSave>
+        <td>
+          <button type="button" onClick={this.handleRemoveLink.bind(this, link)}>
+            <i className="fa fa-remove"></i>
+          </button>
+        </td>
+      </tr>
+    );
+  }
+
   render() {
-    const body = [];
-    let idx = 0;
     for (const link of this.props.project.urls) {
       if (!link._key) {
         link._key = Math.random();
       }
-      body.push(<ExternalLinksEditorRow idx={idx} key={link._key} link={link} project={this.props.project} handleRemoveLink={this.handleRemoveLink.bind(this, link)} />);
-      idx += 1;
     }
     return (
       <div>
-        <table>
+        <table className="external-links-table">
           <thead>
             <tr>
               <th>Label</th>
               <th>URL</th>
             </tr>
           </thead>
-          <tbody>
-            {body}
-          </tbody>
+          <DragReorderable
+            tag="tbody"
+            items={this.props.project.urls}
+            render={this.renderRow}
+            onChange={this.handleLinkReorder}
+          />
         </table>
 
         <AutoSave resource={this.props.project}>

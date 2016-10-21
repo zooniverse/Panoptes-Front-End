@@ -18,59 +18,6 @@ Select = require 'react-select'
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
 
-###
-ExternalLinksEditor = React.createClass
-  displayName: 'ExternalLinksEditor'
-
-  getDefaultProps: ->
-    project: {}
-
-  render: ->
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Label</th>
-            <th>URL</th>
-          </tr>
-        </thead>
-        <tbody>
-          {for link, i in @props.project.urls
-            link._key ?= Math.random()
-            <AutoSave key={link._key} tag="tr" resource={@props.project}>
-              <td>
-                <input type="text" name="urls.#{i}.label" value={@props.project.urls[i].label} onChange={handleInputChange.bind @props.project} />
-              </td>
-              <td>
-                <input type="text" name="urls.#{i}.url" value={@props.project.urls[i].url} onChange={handleInputChange.bind @props.project} />
-              </td>
-              <td>
-                <button type="button" onClick={@handleRemoveLink.bind this, link}>
-                  <i className="fa fa-remove"></i>
-                </button>
-              </td>
-            </AutoSave>}
-        </tbody>
-      </table>
-
-      <AutoSave resource={@props.project}>
-        <button type="button" onClick={@handleAddLink}>Add a link</button>
-      </AutoSave>
-    </div>
-
-  handleAddLink: ->
-    changes = {}
-    changes["urls.#{@props.project.urls.length}"] =
-      label: 'Example'
-      url: 'https://example.com/'
-    @props.project.update changes
-
-  handleRemoveLink: (linkToRemove) ->
-    changes =
-      urls: (link for link in @props.project.urls when link isnt linkToRemove)
-    @props.project.update changes
-###
-
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
 
