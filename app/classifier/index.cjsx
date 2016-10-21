@@ -457,7 +457,7 @@ Classifier = React.createClass
   completeClassification: ->
     if @props.workflow.configuration.persist_annotations
       CacheClassification.delete()
-    
+
     currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
     currentTask?.tools?.map (tool) =>
