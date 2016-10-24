@@ -44,7 +44,6 @@ module.exports = React.createClass
     shortcuts = @props.workflow.tasks[@props.task?.unlinkedTask]
 
     handleChange = handleInputChange.bind @props.workflow
-    nothingHelp = 'Check this box to give the volunteer an option to skip to the end of a classification if a subject does not contain relevant information.'
 
     children = React.Children.map @props.children, (child) =>
       React.cloneElement child
@@ -55,12 +54,19 @@ module.exports = React.createClass
 
       <hr />
 
-      <label title={nothingHelp}>
+      <label title="Shortcut Options to End Classification">
         <AutoSave resource={@props.workflow}>
           <span className="form-label">Nothing Here Option</span>{' '}
           <input type="checkbox" checked={shortcuts} onChange={@toggleNothingHere} />
         </AutoSave>
       </label>
+
+      <br />
+
+      <small className="form-help">
+        Check this box to give volunteers the choice to skip to the end
+        of a classification if one of the following options is selected.
+      </small>
 
         {if shortcuts
           <div className="workflow-task-editor-choices">
