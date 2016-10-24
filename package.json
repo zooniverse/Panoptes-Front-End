@@ -20,6 +20,7 @@
     "moment": "~2.9.0",
     "panoptes-client": "~2.5.0",
     "papaparse": "mholt/PapaParse#cada171",
+    "pusher-js": "~3.2.1",
     "qs": "~6.0.2",
     "rc-slider": "~3.3.2",
     "react": "~0.14.1",
@@ -63,6 +64,7 @@
     "extract-text-webpack-plugin": "~1.0.1",
     "file-loader": "~0.8.5",
     "html-webpack-plugin": "~2.16.0",
+    "jsdom": "~9.8.0",
     "json-loader": "~0.5.4",
     "mocha": "~3.1.0",
     "nib": "~1.1.0",
@@ -70,6 +72,7 @@
     "react-addons-test-utils": "~0.14.8",
     "react-transform-hmr": "~1.0.4",
     "rimraf": "~2.5.2",
+    "sinon": "~1.17.6",
     "style-loader": "~0.13.1",
     "stylus": "~0.54.5",
     "stylus-loader": "~2.1.0",
@@ -96,6 +99,6 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
-    "test": "export NODE_ENV=development; mocha app/**/*.spec.js --reporter nyan --compilers js:babel-core/register"
+    "test": "export NODE_ENV=development; mocha test/setup.js 'app/**/*.spec.js' --reporter nyan --compilers js:babel-core/register"
   }
 }
