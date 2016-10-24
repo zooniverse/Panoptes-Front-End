@@ -10,13 +10,15 @@ module.exports = React.createClass
   getDefaultProps: ->
     project: null
 
-  getInitialState: ->
-    error: null
-    setting:
-      private: false
-      beta_requested: false
-      launch_requested: false
-    workflows: null
+  getInitialState: -> {
+    error: null,
+    setting: {
+      private: false,
+      beta_requested: false,
+      launch_requested: false,
+    },
+    workflows: null 
+  }
 
   mixins: [SetToggle]
 
@@ -71,7 +73,7 @@ module.exports = React.createClass
       .catch((error) =>
         @setState {error}
       ).then((workflow) =>
-        if not workflow.active and workflow.id is @props.project.configuration.default_workflow
+        if not workflow.active and workflow.id is @props.project.configuration?.default_workflow
           @props.project.update({ 'configuration.default_workflow': null })
           @props.project.save()
       ).then(() => @forceUpdate()) # Dislike. Eventually we should refactor to not have to call this.forceUpdate()
