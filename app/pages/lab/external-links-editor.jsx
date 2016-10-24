@@ -45,6 +45,14 @@ export default class ExternalLinksEditor extends React.Component {
     }
   }
 
+  handleDisableDrag(event) {
+    event.target.parentElement.parentElement.setAttribute('draggable', false);
+  }
+
+  handleEnableDrag(event) {
+    event.target.parentElement.parentElement.setAttribute('draggable', true);
+  }
+
   renderRow(link) {
     // Find the links current position in the list
     const idx = this.props.project.urls.findIndex(i => (i._key === link._key));
@@ -56,6 +64,8 @@ export default class ExternalLinksEditor extends React.Component {
             name={`urls.${idx}.label`}
             value={link.label}
             onChange={handleInputChange.bind(this.props.project)}
+            onMouseDown={this.handleDisableDrag}
+            onMouseUp={this.handleEnableDrag}
           />
         </AutoSave>
         <AutoSave tag="td" resource={this.props.project}>
@@ -64,6 +74,8 @@ export default class ExternalLinksEditor extends React.Component {
             name={`urls.${idx}.url`}
             value={link.url}
             onChange={handleInputChange.bind(this.props.project)}
+            onMouseDown={this.handleDisableDrag}
+            onMouseUp={this.handleEnableDrag}
           />
         </AutoSave>
         <td>
