@@ -64,7 +64,7 @@ module.exports = React.createClass
       <br />
 
       <small className="form-help">
-        Check this box to give volunteers the choice to skip to the end
+        Give volunteers the choice to skip to the end
         of a classification if one of the following options is selected.
       </small>
 

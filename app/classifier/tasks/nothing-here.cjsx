@@ -49,12 +49,16 @@ module.exports = React.createClass
   getInitialState: ->
     index: null
 
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.annotation.task isnt @props.annotation.task
+      @setState index: null
+
   toggleShortcut: (i, shortcut, e) ->
     if e.target.checked
       @props.annotation.shortcut = {index: i}
       @setState index: i
     else
-      @props.annotation.shortcut = false
+      delete @props.annotation.shortcut
       @setState index: null
     @props.classification.update 'annotations'
 
