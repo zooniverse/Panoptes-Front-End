@@ -77,6 +77,8 @@ module.exports = React.createClass
       svgStyle.background = 'black'
 
     svgProps = {}
+    if type is 'image' and not @props.loading
+      svgProps.preserveAspectRatio = 'xMinYMin meet'
 
     if TaskComponent?
       {BeforeSubject, InsideSubject, AfterSubject} = TaskComponent
