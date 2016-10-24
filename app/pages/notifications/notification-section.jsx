@@ -75,8 +75,8 @@ const NotificationSection = React.createClass({
 
   componentWillUnmount() {
     if (this.props.user) {
-      // this.markAsRead('first')()
-      // this.markAsRead('last')()
+      this.markAsRead('first');
+      this.markAsRead('last');
     }
   },
 
@@ -90,9 +90,11 @@ const NotificationSection = React.createClass({
         const notifications = this.state.notifications || newNotifications;
         const notificationsMap = this.state.notificationsMap;
 
-        for (const notification in newNotifications) {
-          notificationsMap[notification.id] = notification;
-        }
+        meta.notificationIds = [];
+        newNotifications.forEach((notification, i) => {
+          notificationsMap[notification.id] = notification
+          meta.notificationIds.push(newNotifications[i].id);
+        });
 
         if (meta.page > this.state.lastMeta.page) {
           lastMeta = meta;
@@ -129,12 +131,23 @@ const NotificationSection = React.createClass({
   },
 
   markAsRead(position) {
-    const ids = this.state[position + 'Meta'].notificationIds
-    // const ids = (id for id in ids when not @state.notificationsMap[id].delivered)
-    // return if ids.length is 0
-    // talkClient.put '/notifications/read', id: ids.join(',')
-    // for notification in @state.notifications when notification.id in ids
-    //   notification.update delivered: true
+    const ids = this.state[position + 'Meta'].notificationIds;
+    const unread = [];
+    ids.forEach((id) => {
+      if (!this.state.notificationsMap[id].delivered) {
+        unread.push(id);
+      }
+    });
+
+    if (unread.length === 0) {
+      return unread;
+    }
+
+    this.state.notifications.forEach((notification) => {
+      if (unread.indexOf(notification.id) > -1) {
+        notification.updated({ delivered: true });
+      }
+    });
   },
 
   notificationsQuery(page = this.props.location.query.page, options = { }) {
@@ -148,7 +161,7 @@ const NotificationSection = React.createClass({
     if (this.props.section) {
       query.section = this.props.section;
     }
-    return query
+    return query;
   },
 
   avatarFor() {
@@ -182,7 +195,6 @@ const NotificationSection = React.createClass({
     const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
     const buttonType = this.props.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
     const expandToggle = this.props.expanded ? false : this.props.projectID
-    console.log(expandToggle);
 
     return (
       <div>
