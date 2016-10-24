@@ -20,7 +20,7 @@ module.exports = React.createClass
     <select name={@props.name} value={@props.value} onChange={@props.onChange}>
       <option value="">(End of classification!)</option>
       {for key, definition of @props.workflow.tasks
-        unless definition.type is 'nothingHere'
+        unless definition.type is 'shortcut'
           text = tasks[definition.type].getTaskText definition
           if text.length > MAX_TEXT_LENGTH_IN_MENU
             text = text[0...MAX_TEXT_LENGTH_IN_MENU] + '...'

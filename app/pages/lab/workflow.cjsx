@@ -13,7 +13,7 @@ AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
-NothingHereEditor = require '../../components/nothing-here-editor'
+ShortcutEditor = require '../../components/shortcut-editor'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -110,7 +110,7 @@ EditWorkflowPage = React.createClass
                   </div>
                 else
                   for key, definition of @props.workflow.tasks
-                    unless definition.type is 'nothingHere'
+                    unless definition.type is 'shortcut'
                       classNames = ['secret-button', 'nav-list-item']
                       if key is @state.selectedTaskKey
                         classNames.push 'active'
@@ -205,7 +205,7 @@ EditWorkflowPage = React.createClass
                     <option>(No tasks yet)</option>
                   else
                     for taskKey, definition of @props.workflow.tasks
-                      unless definition.type is 'nothingHere'
+                      unless definition.type is 'shortcut'
                         <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
                 </select>
               </AutoSave>
@@ -379,8 +379,8 @@ EditWorkflowPage = React.createClass
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
             <div>
-              {if 'nothingHere' in @props.project.experimental_tools
-                <NothingHereEditor workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} >
+              {if 'shortcut' in @props.project.experimental_tools
+                <ShortcutEditor workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} >
                   <TaskEditorComponent
                     workflow={@props.workflow}
                     task={@props.workflow.tasks[@state.selectedTaskKey]}
@@ -388,7 +388,7 @@ EditWorkflowPage = React.createClass
                     project={@props.project}
                     onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
                   />
-                </NothingHereEditor>
+                </ShortcutEditor>
               else
                 <TaskEditorComponent
                   workflow={@props.workflow}

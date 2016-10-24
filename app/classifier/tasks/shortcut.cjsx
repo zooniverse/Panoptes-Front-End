@@ -2,7 +2,7 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 
 Summary = React.createClass
-  displayName: 'NothingHereSummary'
+  displayName: 'ShortcutSummary'
 
   getDefaultProps: ->
     annotation: null
@@ -26,14 +26,14 @@ Summary = React.createClass
 
 
 module.exports = React.createClass
-  displayName: 'NothingHere'
+  displayName: 'Shortcut'
 
   statics:
     Summary: Summary
 
     getDefaultTask: (question) ->
       answers: []
-      type: 'nothingHere'
+      type: 'shortcut'
       question: question
 
     getDefaultAnnotation: ->
@@ -71,7 +71,7 @@ module.exports = React.createClass
           answer._key ?= Math.random()
           <p key={answer._key}>
             <label className="answer-button">
-              <small className="nothing-here-shortcut #{if i is @state.index then 'active' else ''}">
+              <small className="unlinked-shortcut #{if i is @state.index then 'active' else ''}">
                 <strong>
                   <input type="checkbox" checked={i is @state.index} onChange={@toggleShortcut.bind this, i, answer} />
                     {answer.label}

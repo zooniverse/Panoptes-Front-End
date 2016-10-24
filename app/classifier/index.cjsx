@@ -20,7 +20,7 @@ GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
-NothingHere = require './tasks/nothing-here'
+Shortcut = require './tasks/shortcut'
 `import CacheClassification from '../components/cache-classification'`
 
 # For easy debugging
@@ -241,7 +241,7 @@ Classifier = React.createClass
           <hr />
 
           {if task.unlinkedTask
-            <NothingHere task={task} workflow={@props.workflow} annotation={annotation} classification={@props.classification} />}
+            <Shortcut task={task} workflow={@props.workflow} annotation={annotation} classification={@props.classification} />}
 
           <nav className="task-nav">
             {if Object.keys(@props.workflow.tasks).length > 1

@@ -1,16 +1,16 @@
 React = require 'react'
 AutoSave = require './auto-save'
 handleInputChange = require '../lib/handle-input-change'
-NothingHere = require '../classifier/tasks/nothing-here'
+Shortcut = require '../classifier/tasks/shortcut'
 
 module.exports = React.createClass
-  displayName: 'NothingHereSelector'
+  displayName: 'ShortcutSelector'
 
   getDefaultProps: ->
     workflow: null
     task: null
 
-  toggleNothingHere: (e) ->
+  toggleShortcut: (e) ->
     if e.target.checked
       taskCount = Object.keys(@props.workflow.tasks).length
       taskPrefix = "T#{taskCount}"
@@ -21,7 +21,7 @@ module.exports = React.createClass
         nextTaskID = "T#{taskCount + taskIDNumber}"
 
       changes = {}
-      changes["tasks.#{nextTaskID}"] = NothingHere.getDefaultTask(@props.task.question)
+      changes["tasks.#{nextTaskID}"] = Shortcut.getDefaultTask(@props.task.question)
 
       @props.task.unlinkedTask = taskPrefix
       @props.workflow.update changes
@@ -56,8 +56,8 @@ module.exports = React.createClass
 
       <label title="Shortcut Options to End Classification">
         <AutoSave resource={@props.workflow}>
-          <span className="form-label">Nothing Here Option</span>{' '}
-          <input type="checkbox" checked={shortcuts} onChange={@toggleNothingHere} />
+          <span className="form-label">Shortcut Option</span>{' '}
+          <input type="checkbox" checked={shortcuts} onChange={@toggleShortcut} />
         </AutoSave>
       </label>
 
