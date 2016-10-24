@@ -13,6 +13,9 @@ module.exports = React.createClass
     project: React.PropTypes.object
     user: React.PropTypes.object
 
+  getDefaultProps: () ->
+    location: { query: { page: 1 } }
+
   getInitialState: () ->
     loading: true
     projNotifications: []
@@ -59,7 +62,9 @@ module.exports = React.createClass
                   <NotificationSection
                     key={notification.id}
                     callbackParent={@onChildChanged}
+                    location={@props.location}
                     expanded={true if notification.project_id is @state.expanded}
+                    page={this.props.location.query.page}
                     projectID={notification.project_id}
                     singleProject={true if @props.project}
                     slug={notification.project_slug}

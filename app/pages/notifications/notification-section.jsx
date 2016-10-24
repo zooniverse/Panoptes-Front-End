@@ -4,10 +4,13 @@ import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import { Link } from 'react-router';
 import Paginator from '../../talk/lib/paginator';
+import updateQueryParams from '../../talk/lib/update-query-params'
 
 const NotificationSection = React.createClass({
 
   propTypes: {
+    callbackParent: React.PropTypes.func,
+    expanded: React.PropTypes.bool,
     location: React.PropTypes.object,
     notifications: React.PropTypes.array,
     params: React.PropTypes.object,
@@ -21,6 +24,7 @@ const NotificationSection = React.createClass({
 
   contextTypes: {
     notificationsCounter: React.PropTypes.object,
+    router: React.PropTypes.object.isRequired,
   },
 
   getDefaultProps() {
@@ -33,7 +37,6 @@ const NotificationSection = React.createClass({
 
   getInitialState() {
     return {
-      expanded: false,
       firstMeta: { },
       lastMeta: { },
       notificationsMap: { },
@@ -41,6 +44,7 @@ const NotificationSection = React.createClass({
   },
 
   componentWillMount() {
+    if (this.props.singleProject) this.setState({ expanded: true })
     if (this.props.user) this.getNotifications();
     if (this.props.section === 'zooniverse') {
       this.setState({
@@ -61,7 +65,6 @@ const NotificationSection = React.createClass({
   },
 
   componentDidMount() {
-    if (this.props.singleProject) this.setState({ expanded: true })
     this.getUnreadCount();
   },
 
@@ -86,22 +89,22 @@ const NotificationSection = React.createClass({
     this.getUnreadCount();
     return talkClient.type('notifications').get(this.notificationsQuery(page))
       .then((newNotifications) => {
-        const meta = newNotifications[0].getMeta() || { };
-        const notifications = this.state.notifications || newNotifications;
+        const meta = newNotifications[0] ? newNotifications[0].getMeta() : { };
+        const notifications = newNotifications;
         const notificationsMap = this.state.notificationsMap;
+        firstMeta = this.state.firstMeta;
+        lastMeta = this.state.lastMeta;
 
         meta.notificationIds = [];
         newNotifications.forEach((notification, i) => {
-          notificationsMap[notification.id] = notification
+          notificationsMap[notification.id] = notification;
           meta.notificationIds.push(newNotifications[i].id);
         });
 
         if (meta.page > this.state.lastMeta.page) {
           lastMeta = meta;
-          notifications.push.apply(notifications, newNotifications);
         } else if (meta.page < this.state.firstMeta.page) {
           firstMeta = meta;
-          notifications.unshift.apply(notifications, newNotifications);
         } else {
           firstMeta = lastMeta = meta;
         }
@@ -113,6 +116,11 @@ const NotificationSection = React.createClass({
           lastMeta: lastMeta,
         });
       });
+  },
+
+  onDivChanged() {
+    const id = this.props.projectID;
+    this.props.callbackParent(id);
   },
 
   getUnreadCount() {
@@ -186,15 +194,18 @@ const NotificationSection = React.createClass({
     );
   },
 
-  onDivChanged() {
-    const id = this.props.projectID;
-    this.props.callbackParent(id)
+  onSectionToggle() {
+    const queryChange = { };
+    const expandToggle = this.props.expanded ? false : this.props.projectID;
+    queryChange.page = 1;
+    updateQueryParams(this.context.router, queryChange);
+    this.props.callbackParent(expandToggle);
   },
 
   renderHeader() {
     const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
     const buttonType = this.props.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
-    const expandToggle = this.props.expanded ? false : this.props.projectID
+    const expandToggle = this.props.expanded ? false : this.props.projectID;
 
     return (
       <div>
@@ -214,7 +225,7 @@ const NotificationSection = React.createClass({
             <button
               className="secret-button notification-section__toggle"
               title="Remove choice"
-              onClick={this.props.callbackParent.bind(null, expandToggle)}
+              onClick={this.onSectionToggle}
             >
               <i className={buttonType}></i>
             </button>
@@ -243,14 +254,17 @@ const NotificationSection = React.createClass({
           })
         )}
 
-        {this.state.expanded && (
+        {this.props.expanded && (
           <div className="centering">
             <Paginator
-              className="older"
+              page={+this.state.lastMeta.page}
+              pageCount={this.state.lastMeta.page_count}
               scrollOnChange={false}
               firstAndLast={false}
               pageSelector={false}
-              nextLabel={<span>Load more <i className="fa fa-long-arrow-down" /></span>}
+              nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
+              previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
+              onClickNext={this.markAsRead('last')}
             />
           </div>
         )}
