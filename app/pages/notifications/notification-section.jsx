@@ -210,7 +210,7 @@ const NotificationSection = React.createClass({
     return (
       <div>
 
-        <div className="notification-section__header">
+        <div className="notification-section__container">
           <div className="notification-section__item">
             {this.avatarFor()}
           </div>
@@ -223,7 +223,6 @@ const NotificationSection = React.createClass({
 
           <div className="notification-section__item">
             <button
-              className="secret-button notification-section__toggle"
               title="Remove choice"
               onClick={this.onSectionToggle}
             >
@@ -236,6 +235,8 @@ const NotificationSection = React.createClass({
   },
 
   render() {
+    const l = this.state.lastMeta;
+
     return (
       <div className="notification-section">
 
@@ -257,14 +258,17 @@ const NotificationSection = React.createClass({
         {this.props.expanded && (
           <div className="centering">
             <Paginator
+              className="notification-section__container"
               page={+this.state.lastMeta.page}
               pageCount={this.state.lastMeta.page_count}
+              itemCount={true}
               scrollOnChange={false}
               firstAndLast={false}
               pageSelector={false}
               nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
               previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
               onClickNext={this.markAsRead('last')}
+              totalItems={<span>{(l.page * l.page_size) - (l.page_size - 1)} - {Math.min(l.page_size * l.page, l.count)} of {l.count}</span>}
             />
           </div>
         )}

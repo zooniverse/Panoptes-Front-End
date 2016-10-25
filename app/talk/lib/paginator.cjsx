@@ -10,6 +10,7 @@ module.exports = React.createClass
     onPageChange: React.PropTypes.func.isRequired # passed (page) on change
     firstAndLast: React.PropTypes.bool            # optional, add 'first' & 'last' buttons
     pageSelector: React.PropTypes.bool            # show page selector?
+    itemCount: React.PropTypes.bool               # show number of items out of total
     pageKey: React.PropTypes.string               # optional name for key param (defaults to 'page')
 
   contextTypes:
@@ -23,6 +24,7 @@ module.exports = React.createClass
       queryChange = { }
       queryChange[@props.pageKey] = page
       updateQueryParams @context.router, queryChange
+    itemCount: false
     firstAndLast: true
     pageSelector: true
     previousLabel: <span><i className="fa fa-long-arrow-left" /> Previous</span>
@@ -90,6 +92,12 @@ module.exports = React.createClass
           <select value={page} onChange={@onSelectPage} ref="pageSelect">
             {[1..pageCount].map(@pageOption)}
           </select> of {pageCount}
+        </div>
+        }
+
+      {if @props.itemCount and @props.totalItems
+        <div className="paginator-page-selector">
+          {@props.totalItems}
         </div>
         }
 
