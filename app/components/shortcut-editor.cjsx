@@ -23,7 +23,7 @@ module.exports = React.createClass
       changes = {}
       changes["tasks.#{nextTaskID}"] = Shortcut.getDefaultTask(@props.task.question)
 
-      @props.task.unlinkedTask = taskPrefix
+      @props.task.unlinkedTask = nextTaskID
       @props.workflow.update changes
       @addAnswer()
     else
