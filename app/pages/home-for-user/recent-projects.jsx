@@ -62,7 +62,7 @@ const RecentProjectsSection = React.createClass({
       });
 
       return Promise.all(projects.map((project) => {
-        if (project.links.avatar.id) {
+        if (project.links.avatar) {
           return apiClient.type('avatars')
           .get(project.links.avatar.id)
           .catch(() => {
