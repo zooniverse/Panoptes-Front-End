@@ -10,7 +10,7 @@ const RecentCollectionsSection = React.createClass({
   },
 
   contextTypes: {
-    user: React.PropTypes.object,
+    user: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {
@@ -60,8 +60,11 @@ const RecentCollectionsSection = React.createClass({
           } else {
             imageSrc = '/simple-avatar.jpg';
           }
-          this.state.images[collection.id] = imageSrc;
-          this.forceUpdate();
+          const imageState = Object.assign({}, this.state.images);
+          imageState[collection.id] = imageSrc;
+          this.setState({
+            images: imageState,
+          });
         });
       }));
     })

@@ -4,7 +4,7 @@ import BlurredImage from './blurred-image';
 
 const ProjectStats = React.createClass({
   propTypes: {
-    projectID: React.PropTypes.string,
+    projectID: React.PropTypes.string.isRequired,
     onClose: React.PropTypes.func,
   },
 

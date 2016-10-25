@@ -20,7 +20,7 @@ const CircleRibbon = React.createClass({
     data: React.PropTypes.array,
     hrefTemplate: React.PropTypes.func,
     onClick: React.PropTypes.func,
-    user: React.PropTypes.object,
+    user: React.PropTypes.object.isRequired,
   },
 
   getDefaultProps() {

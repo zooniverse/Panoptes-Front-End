@@ -25,7 +25,7 @@ const SECTIONS = {
 
 const HomePageForUser = React.createClass({
   propTypes: {
-    user: React.PropTypes.object,
+    user: React.PropTypes.object.isRequired,
     location: React.PropTypes.object,
   },
 

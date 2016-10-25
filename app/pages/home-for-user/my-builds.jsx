@@ -6,11 +6,11 @@ import ProjectCard from '../../partials/project-card';
 
 const MyBuildsSection = React.createClass({
   propTypes: {
-    onClose: React.PropTypes.func,
+    onClose: React.PropTypes.func.isRequired,
   },
 
   contextTypes: {
-    user: React.PropTypes.object,
+    user: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {
@@ -54,8 +54,11 @@ const MyBuildsSection = React.createClass({
           return null;
         })
         .then((avatar) => {
-          this.state.avatars[project.id] = avatar;
-          this.forceUpdate();
+          const newState = Object.assign({}, this.state.avatars);
+          newState[project.id] = avatar;
+          this.setState({
+            avatars: newState,
+          });
         });
       }));
     })

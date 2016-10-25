@@ -17,7 +17,7 @@ const RecentCollectionsSection = React.createClass({
   },
 
   contextTypes: {
-    user: React.PropTypes.object,
+    user: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {
@@ -45,7 +45,7 @@ const RecentCollectionsSection = React.createClass({
     this.setState({
       loading: true,
       error: null,
-      converationPartners: {},
+      conversationPartners: {},
       messageAuthors: {},
       avatars: {},
       lastMessages: {},
@@ -93,8 +93,11 @@ const RecentCollectionsSection = React.createClass({
         // Why're you talking to yourself?
         partner = currentUser;
       }
-      this.state.converationPartners[conversation.id] = partner;
-      this.forceUpdate();
+      const newState = Object.assign({}, this.state.conversationPartners);
+      newState[conversation.id] = partner;
+      this.setState({
+        conversationPartners: newState,
+      });
       return partner;
     });
   },
@@ -108,8 +111,11 @@ const RecentCollectionsSection = React.createClass({
       return [];
     })
     .then(([message]) => {
-      this.state.lastMessages[conversation.id] = message;
-      this.forceUpdate();
+      const newState = Object.assign({}, this.state.lastMessages);
+      newState[conversation.id] = message;
+      this.setState({
+        lastMessages: newState,
+      });
       return this.fetchMessageAuthor(message)
       .then(() => {
         return message;
@@ -123,29 +129,34 @@ const RecentCollectionsSection = React.createClass({
       return null;
     })
     .then((author) => {
-      this.state.messageAuthors[message.id] = author;
-      this.forceUpdate();
+      const authorState = Object.assign({}, this.state.messageAuthors);
+      authorState[message.id] = author;
+      this.setState({
+        messageAuthors: authorState,
+      });
       return author.get('avatar')
       .catch(() => {
         return [];
       })
       .then((avatars) => {
         const avatar = [].concat(avatars)[0]; // Why's this an array?
-        this.state.avatars[author.id] = avatar;
-        this.forceUpdate();
+        const avatarState = Object.assign({}, this.state.avatars);
+        avatarState[author.id] = avatar;
+        this.setState({
+          avatars: avatarState,
+        });
         return author;
       });
     });
   },
 
   renderConversation(conversation, index, allConversations) {
-    const partner = this.state.converationPartners[conversation.id];
+    const partner = this.state.conversationPartners[conversation.id];
     const message = this.state.lastMessages[conversation.id];
     const sentLastMessage = !!message && (this.state.messageAuthors[message.id] === this.context.user);
 
     let avatarSrc = '/assets/simple-avatar.jpg';
     if (!!partner && !!this.state.avatars[partner.id]) {
-      console.log('AVATAR', this.state.avatars[partner.id]);
       avatarSrc = this.state.avatars[partner.id].src;
     }
 
