@@ -118,10 +118,10 @@ export default class ExternalLinksEditor extends React.Component {
   }
 }
 
-ExternalLinksEditor.DefaultProps = {
+ExternalLinksEditor.defaultProps = {
   project: {},
 };
 
 ExternalLinksEditor.propTypes = {
-  project: React.PropTypes.object,
+  project: React.PropTypes.object.isRequired,
 };
