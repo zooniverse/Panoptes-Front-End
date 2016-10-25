@@ -99,6 +99,6 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
-    "test": "export NODE_ENV=development; mocha test/setup.js 'app/**/*.spec.js' --reporter nyan --compilers js:babel-core/register"
+    "test": "export NODE_ENV=development; mocha test/setup.js $(find app -name *.spec.js) --reporter nyan --compilers js:babel-core/register,coffee:coffee-script/register"
   }
 }
