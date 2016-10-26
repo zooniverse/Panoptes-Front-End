@@ -1,5 +1,7 @@
 # Panoptes (front end)
 
+![Build Status](https://travis-ci.org/zooniverse/Panoptes-Front-End.svg?branch=master)
+
 ## Development
 
 Requires Node.js. It's recommended you manage your Node installations with **nvm**.
@@ -15,6 +17,11 @@ For testing with production data, you can add `env=production` to your developme
 All the good stuff is in **./app**. Start at **./app/main.cjsx**
 
 While editing, do your best to follow style and architecture conventions already used by the project, unless you have a reason not to. **If in doubt, ask.**
+
+### Testing
+
+If you write a new component, write a test. Each component should have its own `.spec.js` file. The test runner is [Mocha](https://mochajs.org/) and [Enzyme](http://airbnb.io/enzyme/) is available for testing React components.
+You can run the tests with `npm test`. 
 
 ### It doesn't run
 

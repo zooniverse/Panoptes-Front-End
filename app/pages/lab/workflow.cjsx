@@ -153,22 +153,20 @@ EditWorkflowPage = React.createClass
                       <small><strong>Drawing</strong></small>
                     </button>
                   </AutoSave>{' '}
-                  {if @canUseTask(@props.project, "text")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
-                        <i className="fa fa-file-text-o fa-2x"></i>
-                        <br />
-                        <small><strong>Text</strong></small>
-                      </button>
-                    </AutoSave>}{' '}
-                  {if @canUseTask(@props.project, "survey")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
-                        <i className="fa fa-binoculars fa-2x"></i>
-                        <br />
-                        <small><strong>Survey</strong></small>
-                      </button>
-                    </AutoSave>}{' '}
+                  <AutoSave resource={@props.workflow}>
+                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
+                      <i className="fa fa-file-text-o fa-2x"></i>
+                      <br />
+                      <small><strong>Text</strong></small>
+                    </button>
+                  </AutoSave>{' '}
+                  <AutoSave resource={@props.workflow}>
+                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
+                      <i className="fa fa-binoculars fa-2x"></i>
+                      <br />
+                      <small><strong>Survey</strong></small>
+                    </button>
+                  </AutoSave>{' '}
                   {if @canUseTask(@props.project, "crop")
                     <AutoSave resource={@props.workflow}>
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">

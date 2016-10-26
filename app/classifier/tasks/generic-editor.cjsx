@@ -122,9 +122,7 @@ module.exports = React.createClass
                         Type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
                           {for toolKey of drawingTools
-                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["column", "grid"]}
-                          {if @canUse("column")
-                            <option key="column" value="column">column</option>}
+                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid"]}
                           {if @canUse("grid")
                             <option key="grid" value="grid">grid</option>}
                         </select>
@@ -203,8 +201,7 @@ module.exports = React.createClass
                 <small className="form-help">*rectangle:* a box of any size and length-width ratio; this tool *cannot* be rotated.</small><br />
                 <small className="form-help">*circle:* a point and a radius.</small><br />
                 <small className="form-help">*ellipse:* an oval of any size and axis ratio; this tool *can* be rotated.</small><br />
-                {if @canUse("column")
-                  <small className="form-help">*column rectangle:* a box with full height but variable width; this tool *cannot* be rotated.</small>}
+                <small className="form-help">*column rectangle:* a box with full height but variable width; this tool *cannot* be rotated.</small>
                 {if @canUse("grid")
                   <small className="form-help">*grid table:* cells which can be made into a table for consecutive annotations.</small>}
               </div>}

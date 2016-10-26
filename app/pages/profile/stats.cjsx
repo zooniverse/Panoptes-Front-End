@@ -3,12 +3,13 @@ apiClient = require 'panoptes-client/lib/api-client'
 ClassificationsRibbon = require '../../components/classifications-ribbon'
 PromiseRenderer = require '../../components/promise-renderer'
 ProjectIcon = require '../../components/project-icon'
+`import getUserClassificationCounts from '../../lib/get-user-classification-counts';`
 
 module.exports = React.createClass
   getDefaultProps: ->
     user: null
     profileUser: null
-  
+
   getInitialState: ->
     projects: {}
 
@@ -20,24 +21,20 @@ module.exports = React.createClass
   componentWillUnmount: ->
     if @props.project? or @props.params?.profile_name?
       document.documentElement.classList.remove 'on-secondary-page'
-  
+
   componentWillReceiveProps: (newProps) ->
     if @props.user isnt newProps.user
       @getProjectStats newProps.profileUser
-  
+
   getProjectStats: (user) ->
-    ClassificationsRibbon::getAllProjectPreferences user
-      .then (projectPreferences) =>
-        projectPreferences.map (projectPreference) =>
-          apiClient.type 'projects'
-            .get projectPreference.links.project
-            .then (project) =>
-              if projectPreference.activity_count > 0
-                project.activity_count = projectPreference.activity_count
-                @setState (state, props) -> 
-                  projects = state.projects
-                  projects[project.id] = project
-                  {projects}
+    getUserClassificationCounts(user)
+      .then (projects) =>
+        projects.map (project, i) =>
+          if project.activity_count > 0
+            @setState (state, props) ->
+              projects = state.projects
+              projects[project.id] = project
+              {projects}
 
   render: ->
     <div className="content-container">

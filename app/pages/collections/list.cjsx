@@ -35,7 +35,7 @@ List = React.createClass
           firstKey = Object.keys(subject.locations[0])[0]
           subject.locations[0][firstKey]
         else
-          '/simple-avatar.jpg'
+          '/simple-avatar.png'
 
   cardLink: (collection) ->
     baseLink = "/"

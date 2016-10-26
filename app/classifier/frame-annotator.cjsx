@@ -1,11 +1,11 @@
 React = require 'react'
-SVGImage = require '../components/svg-image'
 Draggable = require '../lib/draggable'
 tasks = require './tasks'
 seenThisSession = require '../lib/seen-this-session'
 getSubjectLocation = require '../lib/get-subject-location'
 WarningBanner = require './warning-banner'
 ModifiedImage = require '../components/modified-image'
+`import SVGImage from '../components/svg-image';`
 
 module.exports = React.createClass
   displayName: 'FrameAnnotator'
