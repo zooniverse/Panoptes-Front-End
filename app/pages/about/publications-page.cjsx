@@ -3,7 +3,7 @@ React = require 'react'
 Translate = require 'react-translate-component'
 apiClient = require 'panoptes-client/lib/api-client'
 Loading = require '../../components/loading-indicator'
-Publications = require('../../lib/publications').default
+`import Publications from '../../lib/publications';`
 
 counterpart.registerTranslations 'en',
   publications:
