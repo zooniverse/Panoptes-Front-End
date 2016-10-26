@@ -20,7 +20,7 @@ counterpart.registerTranslations 'en',
     To sign up as a beta tester, go to [www.zooniverse.org/settings/email](/settings/email) and tick the box relating to beta testing. We'll then send you emails when a project is ready to be tested. You can change your email settings any time you want using the [same email page](/settings/email) and unticking the box.
 
     ### Volunteer as a Project Moderator
-    Volunteer moderators have extra permissions in the Talk discussion tool for a particular project. They help moderate discussions and act as a point of contact for the project. Moderators are selected by the project owner. If you're interested in becoming a moderator on a project your'e taking part in, go to the project's About page and get in touch with the researcher.
+    Volunteer moderators have extra permissions in the Talk discussion tool for a particular project. They help moderate discussions and act as a point of contact for the project. Moderators are selected by the project owner. If you're interested in becoming a moderator on a project you're taking part in, go to the project's About page and get in touch with the researcher.
 
     ### Further Information
     If you'd like any more information on any of these different roles, contact us via the [Contact Us](/about/contact) page.
