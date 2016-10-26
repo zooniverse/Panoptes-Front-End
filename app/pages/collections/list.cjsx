@@ -128,6 +128,7 @@ List = React.createClass
                    imagePromise={@imagePromise(collection)}
                    linkTo={@cardLink(collection)}
                    translationObjectName={@props.translationObjectName}
+                   subjectCount={collection.links.subjects?.length}
                    skipOwner={@props.params?.collection_owner?} />}
             </div>
             <nav>
