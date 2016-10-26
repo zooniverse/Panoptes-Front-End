@@ -81,7 +81,7 @@ class StepThrough extends Component {
           
           <span className="step-through-pips">
             {allSteps.map(thisStep =>
-              <label key={thisStep} className="step-through-pip" title="Step #{i + 1}">
+              <label key={thisStep} className="step-through-pip" title={`Step ${thisStep + 1}`}>
                 <input 
                   type="radio" 
                   className="step-through-pip-input" 
