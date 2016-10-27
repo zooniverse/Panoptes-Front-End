@@ -38,7 +38,7 @@ module.exports = React.createClass
       LastTaskComponent = tasks[lastTask.type]
       if LastTaskComponent.onLeaveAnnotation?
         LastTaskComponent.onLeaveAnnotation lastTask, oldAnnotation
-  
+
   getSizeRect: ->
     clientRect = @refs.sizeRect?.getBoundingClientRect() # Read only
     return null unless clientRect?
@@ -75,6 +75,9 @@ module.exports = React.createClass
       # When cropped right next to the edge of the image,
       # the original tag can show through, so fill the SVG to cover it.
       svgStyle.background = 'black'
+
+      unless taskDescription?.type is 'crop' or 'drawing'
+        svgStyle.pointerEvents = 'none'
 
     svgProps = {}
 
