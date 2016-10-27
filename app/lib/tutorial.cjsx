@@ -1,10 +1,9 @@
 React = require 'react'
 Dialog = require 'modal-form/dialog'
+StepThrough = require '../components/step-through'
 MediaCard = require '../components/media-card'
 {Markdown} = (require 'markdownz').default
 apiClient = require 'panoptes-client/lib/api-client'
-
-`import StepThrough from '../components/step-through'`
 
 completedThisSession = {}
 window?.tutorialsCompletedThisSession = completedThisSession
