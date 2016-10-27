@@ -12,12 +12,9 @@ const NotificationSection = React.createClass({
     callbackParent: React.PropTypes.func,
     expanded: React.PropTypes.bool,
     location: React.PropTypes.object,
-    notifications: React.PropTypes.array,
-    params: React.PropTypes.object,
     project: React.PropTypes.object,
     projectID: React.PropTypes.string,
     section: React.PropTypes.string,
-    singleProject: React.PropTypes.bool,
     slug: React.PropTypes.string,
     user: React.PropTypes.object,
   },
@@ -30,8 +27,6 @@ const NotificationSection = React.createClass({
   getDefaultProps() {
     return {
       location: { query: { page: 1 } },
-      section: null,
-      singleProject: false,
     };
   },
 
@@ -40,11 +35,11 @@ const NotificationSection = React.createClass({
       firstMeta: { },
       lastMeta: { },
       notificationsMap: { },
+      notifications: [],
     };
   },
 
   componentWillMount() {
-    if (this.props.singleProject) this.setState({ expanded: true })
     if (this.props.user) this.getNotifications();
     if (this.props.section === 'zooniverse') {
       this.setState({
@@ -90,7 +85,6 @@ const NotificationSection = React.createClass({
     return talkClient.type('notifications').get(this.notificationsQuery(page))
       .then((newNotifications) => {
         const meta = newNotifications[0] ? newNotifications[0].getMeta() : { };
-        const notifications = newNotifications;
         const notificationsMap = this.state.notificationsMap;
         firstMeta = this.state.firstMeta;
         lastMeta = this.state.lastMeta;
@@ -110,7 +104,7 @@ const NotificationSection = React.createClass({
         }
 
         this.setState({
-          notifications: notifications,
+          notifications: newNotifications,
           notificationsMap: notificationsMap,
           firstMeta: firstMeta,
           lastMeta: lastMeta,
@@ -118,13 +112,14 @@ const NotificationSection = React.createClass({
       });
   },
 
-  onDivChanged() {
-    const id = this.props.projectID;
-    this.props.callbackParent(id);
+  onSectionToggle() {
+    const expandToggle = this.props.expanded ? false : this.props.projectID;
+    updateQueryParams(this.context.router, { page: 1 });
+    this.props.callbackParent(expandToggle);
   },
 
   getUnreadCount() {
-    return talkClient.type('notifications').get({page: 1, page_size: 1, delivered: false, section: this.props.section })
+    return talkClient.type('notifications').get({ page: 1, page_size: 1, delivered: false, section: this.props.section })
     .catch(() => {
       return null;
     })
@@ -139,7 +134,7 @@ const NotificationSection = React.createClass({
   },
 
   markAsRead(position) {
-    const ids = this.state[position + 'Meta'].notificationIds;
+    const ids = this.state[`${position}Meta`].notificationIds;
     const unread = [];
     ids.forEach((id) => {
       if (!this.state.notificationsMap[id].delivered) {
@@ -147,9 +142,7 @@ const NotificationSection = React.createClass({
       }
     });
 
-    if (unread.length === 0) {
-      return unread;
-    }
+    if (unread.length === 0) return unread;
 
     this.state.notifications.forEach((notification) => {
       if (unread.indexOf(notification.id) > -1) {
@@ -163,9 +156,7 @@ const NotificationSection = React.createClass({
       page: page,
       page_size: 5,
     });
-    if (this.props.project) {
-      query.section = 'project-' + this.props.project.id;
-    }
+
     if (this.props.section) {
       query.section = this.props.section;
     }
@@ -173,20 +164,19 @@ const NotificationSection = React.createClass({
   },
 
   avatarFor() {
-    const src = this.state.avatar ? '//' + this.state.avatar : '/assets/simple-avatar.jpg';
+    const src = this.state.avatar ? `//${this.state.avatar}` : '/assets/simple-avatar.jpg';
     if (this.state.unread > 0) {
       return this.unreadCircle();
-    } else {
-      return <img src={src} className="notification-section__img" alt="Project Avatar" />;
     }
+    return <img src={src} className="notification-section__img" alt="Project Avatar" />;
   },
 
   unreadCircle() {
     return (
-      <svg className="notification-section__img" xmlns="http://www.w3.org/2000/svg">
+      <svg className="notification-section__img">
         <circle cx="0" cy="0" r="100" fill="#E45950">
           <title>
-            {(this.state.unread + ' Unread Notification(s)')}
+            {`${this.state.unread} Unread Notification(s)`}
           </title>
         </circle>
         <text x="40%" y="50%" stroke="white" strokeWidth="2px" dy=".3em">{this.state.unread}</text>
@@ -194,18 +184,9 @@ const NotificationSection = React.createClass({
     );
   },
 
-  onSectionToggle() {
-    const queryChange = { };
-    const expandToggle = this.props.expanded ? false : this.props.projectID;
-    queryChange.page = 1;
-    updateQueryParams(this.context.router, queryChange);
-    this.props.callbackParent(expandToggle);
-  },
-
   renderHeader() {
-    const sectionTitle = this.props.projectID.length ? this.props.section : 'project-zooniverse';
     const buttonType = this.props.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
-    const expandToggle = this.props.expanded ? false : this.props.projectID;
+    const projLink = this.props.slug ? `/projects/${this.props.slug}` : '/';
 
     return (
       <div>
@@ -216,16 +197,13 @@ const NotificationSection = React.createClass({
           </div>
 
           <div className="notification-section__item">
-            <Link to={'/projects/' + this.state.slug} className="notification-section__title">
+            <Link to={projLink} className="notification-section__title">
               <h3 className="notification-section__title">{this.state.name}</h3>
             </Link>
           </div>
 
           <div className="notification-section__item">
-            <button
-              title="Remove choice"
-              onClick={this.onSectionToggle}
-            >
+            <button title="Remove choice" onClick={this.onSectionToggle}>
               <i className={buttonType}></i>
             </button>
           </div>
@@ -249,8 +227,6 @@ const NotificationSection = React.createClass({
                 notification={notification}
                 key={notification.id}
                 user={this.props.user}
-                project={this.props.project}
-                params={this.props.params}
               />);
           })
         )}

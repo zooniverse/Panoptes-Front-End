@@ -1,8 +1,6 @@
 React = require 'react'
 Loading = require '../components/loading-indicator'
-Paginator = require '../talk/lib/paginator'
 talkClient = require 'panoptes-client/lib/talk-client'
-Notification = require './notifications/notification'
 `import getNotificationProjects from '../talk/lib/get-notification-projects';`
 `import NotificationSection from './notifications/notification-section';`
 
@@ -35,22 +33,14 @@ module.exports = React.createClass
       getNotificationProjects(user).then (projNotifications) =>
         @setState {projNotifications: projNotifications, loading: false}
 
-  title: ->
-    if @props.project
-      "#{ @props.project.display_name } Notifications"
-    else if @props.params.section
-      "#{ @props.params.section } Notifications"
-    else
-      'My Notifications'
-
   onChildChanged: (id) ->
     this.setState({expanded: id})
 
   render: ->
     <div className="talk notifications">
       <div className="content-container">
-        <h3 className={"centering title #{ if @props.project then 'talk-module' else 'notifications-title' }"}>
-          {@title()}
+        <h3 className={"centering title #{ if @props.project then 'notifications-title__project' else 'notifications-title' }"}>
+          My Notifications
         </h3>
 
         {if @props.user?
@@ -64,9 +54,7 @@ module.exports = React.createClass
                     callbackParent={@onChildChanged}
                     location={@props.location}
                     expanded={true if notification.project_id is @state.expanded}
-                    page={this.props.location.query.page}
                     projectID={notification.project_id}
-                    singleProject={true if @props.project}
                     slug={notification.project_slug}
                     section={notification.section}
                     user={this.props.user} />
