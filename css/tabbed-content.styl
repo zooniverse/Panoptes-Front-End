@@ -26,6 +26,12 @@
   margin: 1em 3vw
   text-align: center
 
+  .responsive-break
+    display: none
+
+    @media (max-width: 400px)
+      display: block
+
 .tabbed-content-tab
   @extends $reset-button
   border-bottom: 3px solid transparent
