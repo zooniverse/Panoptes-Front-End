@@ -34,7 +34,7 @@ PanoptesApp = React.createClass
 
   getDefaultProps: ->
     notificationsCounter: new NotificationsCounter()
-    pusher: new Pusher(pusherEnv, {encrypted: true});
+    pusher: (pusherEnv && new Pusher(pusherEnv, {encrypted: true}))
 
   componentWillMount: ->
     @geordiLogger = new GeordiLogger
