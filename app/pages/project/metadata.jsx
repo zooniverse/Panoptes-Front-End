@@ -28,16 +28,20 @@ class ProjectMetadata extends React.Component {
   }
 
   componentDidMount() {
-    const channel = this.context.pusher.subscribe('panoptes');
-    channel.bind('classification', (data) => {
-      if (data.project_id === this.props.project.id) {
-        this.setState({ classificationsCount: this.state.classificationsCount + 1 });
-      }
-    });
+    if (this.context.pusher) {
+      const channel = this.context.pusher.subscribe('panoptes');
+      channel.bind('classification', (data) => {
+        if (data.project_id === this.props.project.id) {
+          this.setState({ classificationsCount: this.state.classificationsCount + 1 });
+        }
+      });
+    }
   }
 
   componentWillUnmount() {
-    this.context.pusher.unsubscribe('panoptes');
+    if (this.context.pusher) {
+      this.context.pusher.unsubscribe('panoptes');
+    }
   }
 
   render() {
@@ -65,7 +69,7 @@ class ProjectMetadata extends React.Component {
 }
 
 ProjectMetadata.contextTypes = {
-  pusher: React.PropTypes.object.isRequired,
+  pusher: React.PropTypes.object,
 };
 
 ProjectMetadata.propTypes = {
