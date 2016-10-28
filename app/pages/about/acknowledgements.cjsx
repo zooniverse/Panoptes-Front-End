@@ -13,6 +13,10 @@ counterpart.registerTranslations 'en',
 
     You can find a list of publications written using the Zooniverse on the Publications tab (link).
 
+    If you would like to reference the project builder, information for this is below:
+
+    *Bowyer, A.; Lintott, C.; Hines, G.; Allen, C.; Paget, E. Panoptes, a project building tool for citizen science. 2015; in press. [Google Scholar](url)*
+
     If you have any questions about how to acknowledge the Zooniverse, such as referencing a particular individual or custom code, get in touch (link).
 '''
 
