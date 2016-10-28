@@ -76,7 +76,8 @@ module.exports = React.createClass
       # the original tag can show through, so fill the SVG to cover it.
       svgStyle.background = 'black'
 
-      unless taskDescription?.type is 'crop' or 'drawing'
+      # Allow touch scrolling on subject for mobile and tablets
+      unless taskDescription?.type is 'drawing' or taskDescription?.type is 'crop'
         svgStyle.pointerEvents = 'none'
 
     svgProps = {}
