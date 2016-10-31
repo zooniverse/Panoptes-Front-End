@@ -58,7 +58,7 @@ const RecentCollectionsSection = React.createClass({
             const firstLocationKey = Object.keys(subject.locations[0])[0];
             imageSrc = subject.locations[0][firstLocationKey];
           } else {
-            imageSrc = '/simple-avatar.jpg';
+            imageSrc = '/simple-avatar.png';
           }
           const imageState = Object.assign({}, this.state.images);
           imageState[collection.id] = imageSrc;

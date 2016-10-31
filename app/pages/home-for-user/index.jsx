@@ -185,7 +185,7 @@ const HomePageForUser = React.createClass({
 
     let avatarSrc = this.state.avatarSrc;
     if (!avatarSrc) {
-      avatarSrc = '/assets/simple-avatar.jpg';
+      avatarSrc = '/assets/simple-avatar.png';
     }
 
     const hashQuery = qs.parse(this.props.location.hash.slice(1));

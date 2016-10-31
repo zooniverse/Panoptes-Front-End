@@ -155,7 +155,7 @@ const RecentCollectionsSection = React.createClass({
     const message = this.state.lastMessages[conversation.id];
     const sentLastMessage = !!message && (this.state.messageAuthors[message.id] === this.context.user);
 
-    let avatarSrc = '/assets/simple-avatar.jpg';
+    let avatarSrc = '/assets/simple-avatar.png';
     if (!!partner && !!this.state.avatars[partner.id]) {
       avatarSrc = this.state.avatars[partner.id].src;
     }
