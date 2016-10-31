@@ -4,6 +4,8 @@ import HomePageSection from './generic-section';
 import { Link } from 'react-router';
 import ProjectCard from '../../partials/project-card';
 
+const NOOP = Function.prototype;
+
 const MyBuildsSection = React.createClass({
   propTypes: {
     onClose: React.PropTypes.func.isRequired,
@@ -19,6 +21,12 @@ const MyBuildsSection = React.createClass({
       error: null,
       projects: [],
       avatars: {},
+    };
+  },
+
+  getDefaultProps() {
+    return {
+      onClose: NOOP,
     };
   },
 
@@ -40,7 +48,7 @@ const MyBuildsSection = React.createClass({
     });
 
     apiClient.type('projects').get({
-      current_user_roles: ['owner', 'workaround'],
+      current_user_roles: ['owner'],
       sort: '-updated_at',
     })
     .then((projects) => {

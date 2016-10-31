@@ -3,7 +3,6 @@ import apiClient from 'panoptes-client/lib/api-client';
 import ProjectCard from '../../partials/project-card';
 import Publications from '../../lib/publications';
 import moment from 'moment';
-import { browserHistory } from 'react-router';
 
 import style from './news-pullout.styl';
 void style;
@@ -91,7 +90,7 @@ const NewsSection = React.createClass({
     const link = '/projects/' + project.slug;
     const timestamp = moment(new Date(project.updated_at)).fromNow();
     return (<div key={project.id} className="home-page-news-pullout news-section__link">
-      <a onClick={this.onNavigate.bind(this, link)}>
+      <a href={link}>
         <h5 className="home-page-news-pullout news-section__title">{project.name} </h5>
         <h5> has been updated! </h5>
         <p className="home-page-news-pullout news-section__timestamp">{timestamp}</p>
@@ -99,12 +98,8 @@ const NewsSection = React.createClass({
     </div>);
   },
 
-  onNavigate(link) {
-    browserHistory.push(link);
-  },
-
   render() {
-    const projLink = window.location.origin + '/projects/' + this.state.newestProject.slug || null
+    const projLink = `${window.location.origin}/projects/${this.state.newestProject.slug}`;
     const avatarSrc = !!this.state.newestAvatar ? this.state.newestAvatar.src : null;
 
     return (
