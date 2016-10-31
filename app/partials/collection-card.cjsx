@@ -8,6 +8,7 @@ FlexibleLink = React.createClass
   displayName: 'FlexibleLink'
 
   propTypes:
+    subjectCount: React.PropTypes.number
     to: React.PropTypes.string.isRequired
     skipOwner: React.PropTypes.bool
 
@@ -67,6 +68,7 @@ module.exports = React.createClass
 
     <FlexibleLink {...linkProps}>
       <div className="collection-card" ref="collectionCard">
+        <div key="badge" className="badge">{@props.subjectCount}</div>
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.collection.display_name}</span></div>
