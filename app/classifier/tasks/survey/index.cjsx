@@ -45,7 +45,7 @@ module.exports = React.createClass
   render: ->
     <div className="survey-task">
       {if @state.selectedChoiceID is ''
-        <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} />
+        <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} annotation={@props.annotation} />
       else
         <Choice task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
     </div>

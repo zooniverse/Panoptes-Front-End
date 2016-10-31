@@ -207,22 +207,22 @@ module.exports = React.createClass
           <tr>
             <td>Image</td>
             <td>
-              ![imagealttext](/assets/simple-avatar.jpg)<br/>
+              ![imagealttext](/assets/simple-avatar.png)<br/>
               <em>images must already be uploaded; use <a href="http://imgur.com/" target="_blank">imgur</a> to host new images</em>
             </td>
             <td>
-              <Markdown>![imagealttext](/assets/simple-avatar.jpg)</Markdown>
+              <Markdown>![imagealttext](/assets/simple-avatar.png)</Markdown>
             </td>
           </tr>
           <tr>
             <td>Resized Image</td>
             <td>
-              ![imagealttext](/assets/simple-avatar.jpg =MxN)<br/>
+              ![imagealttext](/assets/simple-avatar.png =MxN)<br/>
               <em>M is width in pixels, N is height in pixels</em><br/>
               <em>constrain by ommitting one value, e.g.: =75x or =x75</em>
             </td>
             <td>
-              <Markdown>![imagealttext](/assets/simple-avatar.jpg =75x75)</Markdown>
+              <Markdown>![imagealttext](/assets/simple-avatar.png =75x75)</Markdown>
               sample set @ 75x75
             </td>
           </tr>

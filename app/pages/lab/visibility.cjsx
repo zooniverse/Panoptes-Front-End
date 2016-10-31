@@ -1,6 +1,5 @@
 React = require 'react'
 WorkflowToggle = require '../../components/workflow-toggle'
-PromiseRenderer = require '../../components/promise-renderer'
 SetToggle = require '../../lib/set-toggle'
 Dialog = require 'modal-form/dialog'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
@@ -11,16 +10,25 @@ module.exports = React.createClass
   getDefaultProps: ->
     project: null
 
-  getInitialState: ->
-    error: null
-    setting:
-      private: false
-      beta_requested: false
-      launch_requested: false
+  getInitialState: -> {
+    error: null,
+    setting: {
+      private: false,
+      beta_requested: false,
+      launch_requested: false,
+    },
+    workflows: null 
+  }
 
   mixins: [SetToggle]
 
   setterProperty: 'project'
+
+  componentDidMount: ->
+    getWorkflowsInOrder(@props.project, fields: 'display_name,active')
+      .then((workflows) =>
+        @setState({ workflows })
+      )
 
   isReviewable: ->
     not @props.project.private and
@@ -57,6 +65,18 @@ module.exports = React.createClass
       </div>,
       closeButton: true
     )
+
+  handleWorkflowSettingChange: (workflow, e) ->
+    checked = e.target.checked
+
+    workflow.update({ 'active': checked }).save()
+      .catch((error) =>
+        @setState {error}
+      ).then((workflow) =>
+        if not workflow.active and workflow.id is @props.project.configuration?.default_workflow
+          @props.project.update({ 'configuration.default_workflow': null })
+          @props.project.save()
+      ).then(() => @forceUpdate()) # Dislike. Eventually we should refactor to not have to call this.forceUpdate()
 
   render: ->
     looksDisabled =
@@ -197,19 +217,27 @@ module.exports = React.createClass
       <hr/>
 
       <p className="form-label">Workflow Settings</p>
-      <PromiseRenderer promise={getWorkflowsInOrder @props.project, fields: 'display_name,active'}>{(workflows) =>
-        if workflows.length is 0
-          <div className="workflow-status-list">No workflows found</div>
-        else
-          <div className="workflow-status-list">
-            <ul>
-            {workflows.map (workflow) =>
-              <li key={workflow.id}>
-                <WorkflowToggle workflow={workflow} project={@props.project} field="active" />
-              </li>}
-            </ul>
-          </div>
-      }</PromiseRenderer>
+      {if @state.workflows is null
+        <div className="workflow-status-list">Loading workflows...</div>
+      else if @state.workflows.length is 0
+        <div className="workflow-status-list">No workflows found</div>
+      else
+        <div className="workflow-status-list">
+          <ul>
+          {@state.workflows.map (workflow) =>
+            setting = workflow.active
+            <li key={workflow.id}>
+              <span>
+                {workflow.id} - {workflow.display_name}:
+                <label style={whiteSpace: 'nowrap'}>
+                  <input type="checkbox" name="active" value={setting} checked={setting} onChange={@handleWorkflowSettingChange.bind(this, workflow)} />
+                  Active
+                </label>
+              </span>
+            </li>}
+          </ul>
+        </div>}
       <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
+      <p className="form-help">If an active workflow is the default workflow for the project and is made inactive, then it will be removed as the default workflow.</p>
       <p className="form-help">On a live project, if you want to switch which subjects sets are associated with an active workflow: set the workflow to inactive, next change which subject sets are linked in the Workflow Section within the Project Builder, then return the workflow to active.</p>
     </div>

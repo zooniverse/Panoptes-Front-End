@@ -1,7 +1,9 @@
 getWorkflowsInOrder = (project, query = {}) ->
   order = project.configuration?.workflow_order ? []
+
+  # TODO remove default page_size once pagination solution implemented
   unless query?.page_size?
-    query['page_size'] = 50
+    query['page_size'] = 100
 
   project.get('workflows', query).then (workflows) ->
     workflowsByID = {}

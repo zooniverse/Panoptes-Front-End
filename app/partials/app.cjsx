@@ -5,6 +5,9 @@ AppLayout = require('../layout').default
 GeordiLogger = require '../lib/geordi-logger'
 {generateSessionID} = require '../lib/session'
 NotificationsCounter = require('../lib/notifications-counter').default
+Pusher = require 'pusher-js'
+apiClient = require 'panoptes-client/lib/api-client'
+pusherEnv = require('../lib/pusher-env').default
 
 PanoptesApp = React.createClass
   geordiLogger: null # Maintains project and subject context for the Geordi client
@@ -15,6 +18,7 @@ PanoptesApp = React.createClass
     geordi: React.PropTypes.object
     notificationsCounter: React.PropTypes.object
     unreadNotificationsCount: React.PropTypes.number
+    pusher: React.PropTypes.object
 
   getChildContext: ->
     initialLoadComplete: @state.initialLoadComplete
@@ -22,6 +26,7 @@ PanoptesApp = React.createClass
     geordi: @geordiLogger
     notificationsCounter: @props.notificationsCounter
     unreadNotificationsCount: @state.unreadNotificationsCount
+    pusher: @props.pusher
 
   getInitialState: ->
     initialLoadComplete: false
@@ -29,6 +34,7 @@ PanoptesApp = React.createClass
 
   getDefaultProps: ->
     notificationsCounter: new NotificationsCounter()
+    pusher: (pusherEnv && new Pusher(pusherEnv, {encrypted: true}))
 
   componentWillMount: ->
     @geordiLogger = new GeordiLogger
