@@ -1,7 +1,6 @@
 React = require 'react'
 Loading = require '../components/loading-indicator'
 talkClient = require 'panoptes-client/lib/talk-client'
-`import getNotificationProjects from '../talk/lib/get-notification-projects';`
 `import NotificationSection from './notifications/notification-section';`
 
 module.exports = React.createClass
@@ -15,7 +14,6 @@ module.exports = React.createClass
     location: { query: { page: 1 } }
 
   getInitialState: () ->
-    loading: true
     projNotifications: []
 
   componentWillMount: ->
@@ -28,10 +26,25 @@ module.exports = React.createClass
     if @props.project
       talkClient.type('notifications').get({ page: 1, page_size: 1, section: 'project-' + @props.project.id })
         .then (projNotifications) =>
-          @setState {projNotifications: projNotifications, loading: false}
+          @setState {projNotifications: projNotifications }
     else
-      getNotificationProjects(user).then (projNotifications) =>
-        @setState {projNotifications: projNotifications, loading: false}
+      talkClient.type('notifications').get({ page: 1, page_size: 50 })
+        .then (projNotifications) =>
+          sortedNotifications = @sortNotifications(projNotifications)
+          @setState {projNotifications: sortedNotifications }
+
+  sortNotifications: (notifications) ->
+    projectSections = []
+    projectNotifications = []
+    notifications.map (notification) ->
+      if projectSections.indexOf(notification.section) < 0
+        if notification.section is 'zooniverse'
+          projectSections.unshift(notification.section)
+          projectNotifications.unshift(notification)
+        else
+          projectSections.push(notification.section)
+          projectNotifications.push(notification)
+    projectNotifications
 
   onChildChanged: (id) ->
     this.setState({expanded: id})
@@ -62,8 +75,6 @@ module.exports = React.createClass
               </div>
 
             </div>
-          else if @state.loading
-            <Loading />
           else if @state.projNotifications?.length is 0
             <div className="centering talk-module">
               <p>You have no notifications.</p>

@@ -4,7 +4,7 @@ import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import { Link } from 'react-router';
 import Paginator from '../../talk/lib/paginator';
-import updateQueryParams from '../../talk/lib/update-query-params'
+import updateQueryParams from '../../talk/lib/update-query-params';
 
 const NotificationSection = React.createClass({
 
@@ -146,7 +146,7 @@ const NotificationSection = React.createClass({
 
     this.state.notifications.forEach((notification) => {
       if (unread.indexOf(notification.id) > -1) {
-        notification.updated({ delivered: true });
+        notification.update({ delivered: true });
       }
     });
   },
@@ -243,7 +243,7 @@ const NotificationSection = React.createClass({
               pageSelector={false}
               nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
               previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
-              onClickNext={this.markAsRead('last')}
+              onClickNext={this.markAsRead.bind(this, 'last')}
               totalItems={<span>{(l.page * l.page_size) - (l.page_size - 1)} - {Math.min(l.page_size * l.page, l.count)} of {l.count}</span>}
             />
           </div>
