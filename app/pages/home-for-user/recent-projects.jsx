@@ -103,6 +103,12 @@ const RecentProjectsSection = React.createClass({
           <Link to={`/users/${this.context.user.login}/stats`} className="outlined-button">See all</Link>
         </div>
 
+        {this.state.projects.length === 0 && (
+          <div className="home-page-section__header-label">
+            <p> You have no recent projects. </p>
+          </div>
+        )}
+
         <div className="project-card-list">
           {this.state.projects.map((project) => {
             const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;

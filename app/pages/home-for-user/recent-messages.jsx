@@ -179,14 +179,16 @@ const RecentCollectionsSection = React.createClass({
           {!!partner ? partner.display_name : LOADER_BULLETS}
         </span>
 
-        <div className="recent-conversation-link__preview">
-          <div className="recent-conversation-link__title">
-            {conversation.title}
+        {screen.width > 350 && (
+          <div className="recent-conversation-link__preview">
+            <div className="recent-conversation-link__title">
+              {conversation.title}
+            </div>
+            <div className="recent-conversation-link__body-preview">
+              {!!message ? <StringTruncator>{message.body}</StringTruncator> : LOADER_BULLETS}
+            </div>
           </div>
-          <div className="recent-conversation-link__body-preview">
-            {!!message ? <StringTruncator>{message.body}</StringTruncator> : LOADER_BULLETS}
-          </div>
-        </div>
+        )}
       </Link>
     );
   },
@@ -203,6 +205,12 @@ const RecentCollectionsSection = React.createClass({
         <div className="home-page-section__sub-header">
           <Link to="/inbox" className="outlined-button">See all</Link>
         </div>
+
+        {this.state.conversations.length === 0 && (
+          <div className="home-page-section__header-label">
+            <p> Your inbox is empty. </p>
+          </div>
+        )}
 
         <ul className="recent-conversations-list">
           {this.state.conversations.map((conversation, i, allConversations) => {

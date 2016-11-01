@@ -93,9 +93,15 @@ const RecentCollectionsSection = React.createClass({
           <Link to={`/collections/${this.context.user.login}`} className="outlined-button">See all</Link>
         </div>
 
+        {this.state.collections.length === 0 && (
+          <div className="home-page-section__header-label">
+            <p> You have no collections. </p>
+          </div>
+        )}
+
         <div className="collections-card-list">
           {this.state.collections.map((collection) => {
-            return <CollectionCard key={collection.id} collection={collection} imagePromise={this.state.images[collection.id]} linkTo="#" translationObjectName="collectionsPage" />;
+            return <CollectionCard key={collection.id} subjectCount={collection.links.subjects.length} collection={collection} imagePromise={this.state.images[collection.id]} linkTo={`/collections/${collection.slug}`} translationObjectName="collectionsPage" />;
           })}
         </div>
       </HomePageSection>

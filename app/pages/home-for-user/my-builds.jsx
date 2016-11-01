@@ -95,6 +95,12 @@ const MyBuildsSection = React.createClass({
           <Link to="/lab" className="outlined-button">See all</Link>
         </div>
 
+        {this.state.projects.length === 0 && (
+          <div className="home-page-section__header-label">
+            <p> You have no builds. </p>
+          </div>
+        )}
+
         {this.state.projects.map((project) => {
           const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
           return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} href={`/lab/${project.id}`} />;
