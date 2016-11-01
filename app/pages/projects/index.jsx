@@ -7,8 +7,8 @@ counterpart.registerTranslations('en', {
   projectsHome: {
     title: 'Projects',
     nav: {
-      active: 'Active',
-      outofdata: 'Paused',
+      live: 'Live',
+      paused: 'Paused',
       finished: 'Finished',
     },
   },
@@ -22,6 +22,13 @@ class ProjectsPage extends Component {
 
   getChildContext() {
     return { updateQuery: this.updateQuery };
+  }
+
+  componentWillMount() {
+    const { status } = this.props.location.query;
+    if (!status) {
+      browserHistory.push('/projects?status=live');
+    }
   }
 
   componentDidMount() {
@@ -56,13 +63,13 @@ class ProjectsPage extends Component {
           <div className="hero-container">
             <Translate content="projectsHome.title" component="h1" />
             <nav className="hero-nav">
-              <IndexLink to="/projects" activeClassName="active">
-                <Translate content="projectsHome.nav.active" />
+              <IndexLink to={{ pathname: '/projects', query: { status: 'live' } || null }} activeClassName="active">
+                <Translate content="projectsHome.nav.live" />
               </IndexLink>
-              <Link to="/projects/outofdata" activeClassName="active">
-                <Translate content="projectsHome.nav.outofdata" />
+              <Link to={{ pathname: '/projects', query: { status: 'paused' } }} activeClassName="active">
+                <Translate content="projectsHome.nav.paused" />
               </Link>
-              <Link to="/projects/finished" activeClassName="active">
+              <Link to={{ pathname: '/projects', query: { status: 'finished' } }} activeClassName="active">
                 <Translate content="projectsHome.nav.finished" />
               </Link>
             </nav>
@@ -91,6 +98,7 @@ ProjectsPage.defaultProps = {
       discipline: '',
       page: '1',
       sort: '-launch_date',
+      status: 'live',
     },
   },
 };
