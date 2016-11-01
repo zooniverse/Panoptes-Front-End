@@ -1,13 +1,15 @@
 import counterpart from 'counterpart';
 import React, { Component, PropTypes } from 'react';
 import Translate from 'react-translate-component';
-import { browserHistory, Link, IndexLink } from 'react-router';
+import { browserHistory } from 'react-router';
+
+import StatusLink from './status-link';
 
 counterpart.registerTranslations('en', {
   projectsHome: {
     title: 'Projects',
     nav: {
-      live: 'Live',
+      active: 'Active',
       paused: 'Paused',
       finished: 'Finished',
     },
@@ -18,6 +20,7 @@ class ProjectsPage extends Component {
   constructor(props) {
     super(props);
     this.updateQuery = this.updateQuery.bind(this);
+    this.checkURLForStatusFilter = this.checkURLForStatusFilter.bind(this);
   }
 
   getChildContext() {
@@ -25,10 +28,7 @@ class ProjectsPage extends Component {
   }
 
   componentWillMount() {
-    const { status } = this.props.location.query;
-    if (!status) {
-      browserHistory.push('/projects?status=live');
-    }
+    this.checkURLForStatusFilter(this.props);
   }
 
   componentDidMount() {
@@ -38,8 +38,20 @@ class ProjectsPage extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.checkURLForStatusFilter(nextProps);
+  }
+
   componentWillUnmount() {
     document.documentElement.classList.remove('on-secondary-page');
+  }
+
+//  Makes sure the active class is applied also when status param is null
+  checkURLForStatusFilter(props) {
+    const { location } = props;
+    if (!location.query.status) {
+      this.updateQuery({ status: 'live' });
+    }
   }
 
   updateQuery(newParams) {
@@ -57,26 +69,27 @@ class ProjectsPage extends Component {
   }
 
   render() {
+    const { children, location } = this.props;
     return (
       <div className="secondary-page all-resources-page">
         <section className="hero projects-hero">
           <div className="hero-container">
             <Translate content="projectsHome.title" component="h1" />
             <nav className="hero-nav">
-              <IndexLink to={{ pathname: '/projects', query: { status: 'live' } || null }} activeClassName="active">
-                <Translate content="projectsHome.nav.live" />
-              </IndexLink>
-              <Link to={{ pathname: '/projects', query: { status: 'paused' } }} activeClassName="active">
+              <StatusLink location={location} status="live" updateQuery={this.updateQuery}>
+                <Translate content="projectsHome.nav.active" />
+              </StatusLink>
+              <StatusLink location={location} status="paused" updateQuery={this.updateQuery}>
                 <Translate content="projectsHome.nav.paused" />
-              </Link>
-              <Link to={{ pathname: '/projects', query: { status: 'finished' } }} activeClassName="active">
+              </StatusLink>
+              <StatusLink location={location} status="finished" updateQuery={this.updateQuery}>
                 <Translate content="projectsHome.nav.finished" />
-              </Link>
+              </StatusLink>
             </nav>
           </div>
         </section>
         <section className="resources-container">
-          {this.props.children}
+          {children}
         </section>
       </div>
     );
