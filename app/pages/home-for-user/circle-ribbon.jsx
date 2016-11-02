@@ -51,7 +51,7 @@ const CircleRibbon = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    this.setTotal(nextProps.data);
+    if (this.props.data !== nextProps.data) { this.setTotal(nextProps.data); }
   },
 
   setTotal(data) {

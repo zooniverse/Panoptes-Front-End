@@ -19,11 +19,18 @@ function BlurredImage(props) {
 }
 
 BlurredImage.propTypes = {
-  className: React.PropTypes.string,
-  style: React.PropTypes.object,
-  src: React.PropTypes.string,
-  position: React.PropTypes.string,
+  className: React.PropTypes.string.isRequired,
+  style: React.PropTypes.object.isRequired,
+  src: React.PropTypes.string.isRequired,
+  position: React.PropTypes.string.isRequired,
   blur: React.PropTypes.any,
+};
+
+BlurredImage.defaultProps = {
+  className: '',
+  style: {},
+  src: '',
+  position: '',
 };
 
 export default BlurredImage;
