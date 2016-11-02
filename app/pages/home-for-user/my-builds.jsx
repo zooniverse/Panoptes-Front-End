@@ -4,8 +4,6 @@ import HomePageSection from './generic-section';
 import { Link } from 'react-router';
 import ProjectCard from '../../partials/project-card';
 
-const NOOP = Function.prototype;
-
 const MyBuildsSection = React.createClass({
   propTypes: {
     onClose: React.PropTypes.func.isRequired,
@@ -15,18 +13,18 @@ const MyBuildsSection = React.createClass({
     user: React.PropTypes.object.isRequired,
   },
 
+  getDefaultProps() {
+    return {
+      onClose: () => {},
+    };
+  },
+
   getInitialState() {
     return {
       loading: false,
       error: null,
       projects: [],
       avatars: {},
-    };
-  },
-
-  getDefaultProps() {
-    return {
-      onClose: NOOP,
     };
   },
 

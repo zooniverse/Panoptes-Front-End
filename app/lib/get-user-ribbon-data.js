@@ -1,7 +1,5 @@
-import getAllProjectPreferences from './get-all-project-preferences';
 import getUserClassificationCounts from './get-user-classification-counts';
 import getColorFromString from './get-color-from-string';
-import apiClient from 'panoptes-client/lib/api-client';
 
 function getUserRibbonData(user) {
   return getUserClassificationCounts(user).then((projects) => {

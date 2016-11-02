@@ -11,6 +11,7 @@ const NewsSection = React.createClass({
 
   propTypes: {
     showNews: React.PropTypes.bool.isRequired,
+    toggleNews: React.PropTypes.func,
     updatedProjects: React.PropTypes.array.isRequired,
   },
 
@@ -18,6 +19,7 @@ const NewsSection = React.createClass({
     return {
       updatedProjects: [],
       showNews: false,
+      toggleNews: () => {},
     };
   },
 
@@ -87,7 +89,7 @@ const NewsSection = React.createClass({
   },
 
   renderUpdatedProjects(project) {
-    const link = '/projects/' + project.slug;
+    const link = `/projects/${project.slug}`;
     const timestamp = moment(new Date(project.updated_at)).fromNow();
     return (<div key={project.id} className="home-page-news-pullout news-section__link">
       <a href={link}>
@@ -105,6 +107,11 @@ const NewsSection = React.createClass({
     return (
       <div className={"home-page-news-pullout news-main" + (this.props.showNews ? " active" : "")}>
         <div className="home-page-news-pullout news-container">
+
+          <a className="news-section__close" onClick={this.props.toggleNews}>
+            <i className="fa fa-times fa-lg"></i>
+          </a>
+
           <h2> Zooniverse News </h2>
 
           <div className="home-page-news-pullout news-section">
