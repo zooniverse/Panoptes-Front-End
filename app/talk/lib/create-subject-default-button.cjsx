@@ -1,6 +1,5 @@
 React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
-PromiseRenderer = require '../../components/promise-renderer'
 SingleSubmitButton = require '../../components/single-submit-button'
 
 DEFAULT_BOARD_TITLE = 'Notes'            # Name of board to put subject comments
@@ -14,11 +13,24 @@ module.exports = React.createClass
     section: React.PropTypes.string
     onCreateBoard: React.PropTypes.func # passed (board) on create
 
-  defaultBoardPromise: ->
+  getInitialState: ->
+    defaultBoard: null
+
+  componentWillMount: ->
+    @getDefaultBoard @props.section
+
+  componentWillReceiveProps: (newProps) ->
+    @getDefaultBoard newProps.section if newProps.section isnt @props.section
+
+  getDefaultBoard: (section) ->
     talkClient
-      .type('boards')
-      .get({section: @props.section, subject_default: true})
-      .index(0)
+      .type 'boards'
+      .get
+        section: section
+        subject_default: true
+      .index 0
+      .then (defaultBoard) =>
+        @setState {defaultBoard}
 
   createSubjectDefaultBoard: ->
     board =
@@ -28,17 +40,16 @@ module.exports = React.createClass
       permissions: {read: 'all', write: 'all'}
       section: @props.section
 
-    talkClient.type('boards').create(board).save()
-      .then => @props.onCreateBoard?(board)
+    talkClient.type('boards').create(board).save().then (defaultBoard) =>
+      @props.onCreateBoard?(board)
+      @setState {defaultBoard}
 
   render: ->
-    <PromiseRenderer promise={@defaultBoardPromise()}>{(defaultBoard) =>
-      if defaultBoard?
-        <div>
-          <i className="fa fa-check" /> Subject Default Board Setup
-        </div>
-      else
-        <SingleSubmitButton type="button" onClick={@createSubjectDefaultBoard}>
-          <i className="fa fa-photo" /> Activate Talk Subject Comments Board
-        </SingleSubmitButton>
-    }</PromiseRenderer>
+    if @state.defaultBoard?
+      <div>
+        <i className="fa fa-check" /> Subject Default Board Setup
+      </div>
+    else
+      <SingleSubmitButton type="button" onClick={@createSubjectDefaultBoard}>
+        <i className="fa fa-photo" /> Activate Talk Subject Comments Board
+      </SingleSubmitButton>
