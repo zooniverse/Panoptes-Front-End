@@ -46,7 +46,7 @@ const RecentProjectsSection = React.createClass({
       const activePreferences = preferences.filter((projectPreference) => {
         return projectPreference.activity_count > 0;
       });
-      const recentPreferences = activePreferences.filter(Boolean).slice(0, 8);
+      const recentPreferences = activePreferences.filter(Boolean).slice(0, 5);
       return Promise.all(recentPreferences.map((preference) => {
         // A user might have preferences for a project that no longer exists.
         return preference.get('project', { include: ['avatar'] }).catch(() => {

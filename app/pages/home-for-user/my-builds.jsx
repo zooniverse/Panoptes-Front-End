@@ -99,10 +99,12 @@ const MyBuildsSection = React.createClass({
           </div>
         )}
 
-        {this.state.projects.map((project) => {
-          const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
-          return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} href={`/lab/${project.id}`} />;
-        })}
+        <div className="project-card-list">
+          {this.state.projects.map((project) => {
+            const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
+            return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} href={`/lab/${project.id}`} />;
+          })}
+        </div>
       </HomePageSection>
     );
   },

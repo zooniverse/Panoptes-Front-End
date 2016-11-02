@@ -145,7 +145,10 @@ const HomePageForUser = React.createClass({
     });
   },
 
-  renderMenu() {
+  renderMenu(openComponent) {
+    if ((openComponent) && (screen.width < 700)) {
+      return;
+    }
     return (
       <div className="home-page-for-user__menu">
         <div className="home-page-for-user__menu-column">
@@ -209,9 +212,9 @@ const HomePageForUser = React.createClass({
 
               <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
 
-              {OpenSectionComponent === undefined ? (
-                this.renderMenu()
-              ) : (
+              {this.renderMenu(OpenSectionComponent)}
+
+              {OpenSectionComponent && (
                 <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
               )}
             </div>
