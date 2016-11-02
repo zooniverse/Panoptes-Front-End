@@ -8,9 +8,7 @@ FlexibleLink = React.createClass
   displayName: 'FlexibleLink'
 
   propTypes:
-    subjectCount: React.PropTypes.number
     to: React.PropTypes.string.isRequired
-    skipOwner: React.PropTypes.bool
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -35,6 +33,12 @@ module.exports = React.createClass
     imagePromise: React.PropTypes.object.isRequired
     linkTo: React.PropTypes.string.isRequired
     translationObjectName: React.PropTypes.string.isRequired
+    subjectCount: React.PropTypes.number
+    skipOwner: React.PropTypes.bool
+  
+  getDefaultProps: ->
+    subjectCount: 0
+    skipOwner: false
 
   collectionOwner: ->
     apiClient.type(@props.collection.links.owner.type).get(@props.collection.links.owner.id)
