@@ -3,9 +3,9 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 
 counterpart.registerTranslations 'en',
-  callToAction:
+  callForProjects:
    pageContent: '''
-    ## Call for Biomedical Proposals
+    ## Call for Biomedical Project Proposals
 
     Would your research benefit from the involvement of hundreds or even thousands of volunteers? We are currently seeking proposals for biomedical projects to be developed as part of the Zooniverse.org platform.
 
@@ -30,13 +30,13 @@ counterpart.registerTranslations 'en',
     We will begin reviewing proposals from December 4th, but project proposals are welcomed until January 31st.
 
 
-    [Submit a Proposal](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)
+    [SUBMIT A PROPOSAL](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)
 
 
     '''
 
 module.exports = React.createClass
-  displayName: 'CallToAction'
+  displayName: 'CallForProjects'
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
@@ -45,4 +45,4 @@ module.exports = React.createClass
     document.documentElement.classList.remove 'on-secondary-page'
 
   render: ->
-    <Markdown>{counterpart "callToAction.pageContent"}</Markdown>
+    <Markdown>{counterpart "callForProjects.pageContent"}</Markdown>

@@ -29,7 +29,7 @@ module.exports =
       <Route path="publications" component={require './pages/about/publications-page'} />
       <Route path="education" component={require './pages/about/education-page'} />
       <Route path="volunteering" component={require './pages/about/volunteering-page'} />
-      <Route path="callToAction" component={require './pages/about/call-to-action'} />
+      <Route path="callForProjects" component={require './pages/about/call-for-projects'} />
       <Route path="contact" component={require './pages/about/contact-page'} />
     </Route>
 
