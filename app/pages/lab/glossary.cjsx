@@ -5,7 +5,7 @@ React = require 'react'
 counterpart.registerTranslations 'en',
   policiesPage:
     content: '''
-      # Glossary
+      ## Glossary
       A collection of definitions for terms that are used across the Zooniverse. The terms are split into three different categories:
 
       [General Terms](#general-terms)
@@ -14,7 +14,7 @@ counterpart.registerTranslations 'en',
 
       If you'd like to see a definition that currently isn't on this page, [get in touch](/about/contact) and we'll look into adding it.
 
-      ## General Terms
+      ### General Terms
 
 
       + **Classification** -  A classification is all the data associated with a  volunteer’s response to an item of data (or subject) they’re presented with whilst going through a project. In essence, a classification is the core unit of human effort produced by the Zooniverse community.
@@ -44,9 +44,7 @@ counterpart.registerTranslations 'en',
       + **Zooniverse** - the Zooniverse encompasses the team, website, projects and our codebase. The Zooniverse is an open web-based platform for large­ scale citizen science research projects, capable of supporting tens of thousands of simultaneous users. The Zooniverse hosts the largest collection of online citizen science projects in the world, supporting over 1.5 million registered users and containing projects in astronomy, ecology, humanities, physics, and beyond.
 
 
-
-
-      ## People
+      ### People
 
 
       + **Collaborator** - Collaborators are people with permission on a project with full access to edit workflows and project content, including deleting some or all of the project. You can add a collaborator to a project you own through the Collaborators section of the Project Builder.
@@ -80,10 +78,7 @@ counterpart.registerTranslations 'en',
 
 
 
-
-
-
-      ## Project-Specific Terms
+      ### Project-Specific Terms
 
 
       + **Active workflow** - these are workflows that are currently being presented to volunteers. They can’t be edited whilst they are active. You can make a workflow active and inactive by ticking the relevant box on the Visibility tab on the Project Builder page
