@@ -353,8 +353,8 @@ EditWorkflowPage = React.createClass
             </p>
             <p className="form-help">
               <small>
-              When using "Retirement Count" the completeness will increase after each imge retires.  Since the images are
-              {' '}shown to users in a random order, this completeness estimage will be slow to increase until the project is close to being finished.
+              When using "Retirement Count" the completeness will increase after each image retires.  Since the images are
+              {' '}shown to users in a random order, this completeness estimate will be slow to increase until the project is close to being finished.
               {' '}If your project does not have a constant retirement limit (e.g. it uses a custom retiment rule) and/or subject sets 
               {' '}have been unlinked from a live workflow, this estimate will be the most accurate.
               </small>
