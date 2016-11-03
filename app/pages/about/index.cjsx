@@ -14,6 +14,7 @@ counterpart.registerTranslations 'en',
       careers: 'Careers'
       volunteering: 'Volunteering'
       contact: 'Contact Us'
+      callToAction: 'Call to Action'
 
 module.exports = React.createClass
   displayName: 'AboutPage'
@@ -41,6 +42,7 @@ module.exports = React.createClass
             <Link to="/about/team" activeClassName="active" onClick={@logClick?.bind(this, 'about.nav.ourTeam')}><Translate content="about.nav.ourTeam" /></Link>
             <Link to="/about/education" activeClassName="active" onClick={@logClick?.bind(this, 'about.nav.education')}><Translate content="about.nav.education" /></Link>
             <Link to="/about/volunteering" activeClassName="active" onClick={@logClick?.bind(this, 'about.nav.volunteering')}><Translate content="about.nav.volunteering" /></Link>
+            <Link to="/about/callToAction" activeClassName="active" onClick={@logClick?.bind(this, 'about.nav.callToAction')}><Translate content="about.nav.callToAction" /></Link>
             <Link to="/about/contact" activeClassName="active" onClick={@logClick?.bind(this, 'about.nav.contact')}><Translate content="about.nav.contact" /></Link>
           </nav>
         </div>

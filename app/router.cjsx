@@ -28,8 +28,9 @@ module.exports =
       <Route path="team" component={require './pages/about/team-page'} />
       <Route path="publications" component={require './pages/about/publications-page'} />
       <Route path="education" component={require './pages/about/education-page'} />
-      <Route path="contact" component={require './pages/about/contact-page'} />
       <Route path="volunteering" component={require './pages/about/volunteering-page'} />
+      <Route path="callToAction" component={require './pages/about/call-to-action'} />
+      <Route path="contact" component={require './pages/about/contact-page'} />
     </Route>
 
     <Route path="reset-password" component={require './pages/reset-password'} />
