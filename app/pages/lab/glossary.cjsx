@@ -3,7 +3,7 @@ React = require 'react'
 {Markdown} = (require 'markdownz').default
 
 counterpart.registerTranslations 'en',
-  policiesPage:
+  glossary:
     content: '''
       ## Glossary
       A collection of definitions for terms that are used across the Zooniverse. The terms are split into three different categories:
@@ -154,5 +154,5 @@ module.exports = React.createClass
 
   render: ->
     <div className="secondary-page centered-grid">
-      <Markdown>{counterpart "policiesPage.content"}</Markdown>
+      <Markdown>{counterpart "glossary.content"}</Markdown>
     </div>
