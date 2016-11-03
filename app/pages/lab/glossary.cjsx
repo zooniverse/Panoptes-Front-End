@@ -35,12 +35,6 @@ counterpart.registerTranslations 'en',
       + **Project builder** - This is the web tool that researchers use to create Zooniverse projects. It can be found at [http://www.zooniverse.org/lab](/lab)  There is documentation to help with this process on the Project Builder page.
 
 
-      + **Talk** - is the object-orientated discussion tool associated with your project. Talk enables volunteers to comment on the subjects they've reviewed and promotes discussion amongst the volunteer community.  Talk is also a place where the research team and project volunteers can interact. Talk has a series of message boards for longer discussions. Additionally, each subject has a dedicated page on its project Talk where a registered volunteer can write a comment, add searchable Twitter-like hashtags, or  link multiple subjects together into groups called collections
-
-
-      + **Talk Tags** - Tags are used to help note something as relating to a particular topic. For example, one way of using it would be the following:  you’ve found an image that you think would be good for the Daily Zoo, and so you post it in Talk and then include the tag #dailyzoo in the post. This makes it easier for it to be found as a suggestion, because you can do a search for a particular tag using the search bar. A list of popular tags is displayed on the right-hand side of the Talk page and clicking one will take you to instances of that tag in the Talk boards. So for example if you clicked on #dailyzoo, you’d then be shown all the different suggestions that people have made for it that they’ve tagged.
-
-
       + **Zooniverse** - the Zooniverse encompasses the team, website, projects and our codebase. The Zooniverse is an open web-based platform for large­ scale citizen science research projects, capable of supporting tens of thousands of simultaneous users. The Zooniverse hosts the largest collection of online citizen science projects in the world, supporting over 1.5 million registered users and containing projects in astronomy, ecology, humanities, physics, and beyond.
 
 
@@ -80,10 +74,6 @@ counterpart.registerTranslations 'en',
 
       ### Project-Specific Terms
 
-
-      + **Active workflow** - these are workflows that are currently being presented to volunteers. They can’t be edited whilst they are active. You can make a workflow active and inactive by ticking the relevant box on the Visibility tab on the Project Builder page
-
-
       + **Aggregation** - Each subject in a Zooniverse project is independently classified by multiple people. Aggregation is the process of combining these multiple assessments together.
 
 
@@ -93,12 +83,6 @@ counterpart.registerTranslations 'en',
       + **Classification interface** - This is the web interface where volunteers are review subjects (subjects being data that volunteers are presented to in projects) and perform the desired project assessments and tasks. Researchers can add in various things to this interface such as tutorials on how to use it, and also mini-courses that give you information about the science behind the project. Each workflow has its own separate classification interface. You can access the classification interface through the main landing page of the project.
 
 
-      + **Default workflow** -  The default workflow is the workflow that appears if the volunteers doesn’t choose one from the offered list on the front page of the project  but just clicks on the Classify tab. If a project has more than one active workflow, the project owner and project collaborators can choose which one will be the default workflow.
-
-
-      + **Drawing Task** - A task where the volunteers are asked to directly highlight or mark something on an image (e.g. drawing a circle around a penguin if visible in the image presented)
-
-
       + **Export** - An export is how to get the volunteer classifications and other relevant information about your project that is stored in the Zooniverse databases. It is essentially a data dump from the Zooniverse database. Project owners and collaborators can request data exports from their projects through the Project Builder. Project data is supplied in CSV/JSON format and Talk data is supplied in JSON format, and the two most commonly used exports are the subject data export, providing all the information stored about the subjects you’ve uploaded for your project, and the classification export, which has information stored for each project classification. You can request a data export by going to the Project Builder, going to the Data Exports tab and then selecting from where whichever data export you’d like, provided you have the right permissions.
 
 
@@ -106,9 +90,6 @@ counterpart.registerTranslations 'en',
 
 
       + **Gold standard data** - This is data from classifications made by ‘Experts’. ‘Expert’ is a role assigned by the project owner, and their data can be used as a standard to compare the rest of the data against. There is currently an experimental feature which allows you to create a training set and provide in-classification feedback using gold standard data.
-
-
-      + **Inactive workflow** - Inactive workflows are ones that aren’t currently being shown to volunteers, but can be edited. You can make a workflow active and inactive by ticking the relevant box on the Visibility tab on the Project Builder page
 
 
       + **Landing page** - front page of your project’s website. This is where people are directly when they go to your project’s url. The landing page is always accessible from your project’s website by clicking on the project’s avatar.
@@ -126,22 +107,26 @@ counterpart.registerTranslations 'en',
       + **Project Tags** - These help define which field of research your project belongs to, and determines which category your project will sit under on the Projects page in the categories section (it will still appear on the main Project page regardless). Users can also search by tag to find projects.
 
 
-      + **Question Task** - A task where the volunteers are asked to assess the image and respond to a multiple choice question. In the Project Builder, a question task can allow the volunteer to choose a single response or select multiple answers to the question posed.
-
-
       + **Subject** - The chunk of data/thing a volunteer on a Zooniverse project is being presented with and asked to review and analyze.  It typically is an image, graph, photo, audio recording, video,  or a collection of these different things.
 
 
       + **Subject Set** - This is a group of subjects (subjects being data that volunteers are presented to in projects). Subjects are uploaded into subject sets through the Project Builder, and it is subject sets that can be linked to workflows in order to get the desired subjects showing on your project’s webpage. You can group subjects into subject sets however you wish. You might want to group Subjects together, for example to represent a season’s worth of images in Snapshot Serengeti or a particular cell dye staining as in Cell Slider.
 
 
-      + **Sub-task** - Sometimes when you are asked to do a task, such as drag a circle around an element in a picture, you are then asked a further task and what is contained in the circle. This is a subtask. For example, you may be asked to circle penguins in an image, a sub-task would be identifying whether the penguin circled is an adult or chick.
+      + **Talk** - is the object-orientated discussion tool associated with your project. Talk enables volunteers to comment on the subjects they've reviewed and promotes discussion amongst the volunteer community.  Talk is also a place where the research team and project volunteers can interact. Talk has a series of message boards for longer discussions. Additionally, each subject has a dedicated page on its project Talk where a registered volunteer can write a comment, add searchable Twitter-like hashtags, or  link multiple subjects together into groups called collections
 
-
-      + **Survey task** - A survey task is a task where you identify something by selection from many options and then are asked a variety of questions about what you’ve just identified, like behaviour, number or color.  For example, you could be asked to identify an animal in an image and then answer questions on how many legs you can see, which way it is facing and whether it is an adult or baby. An example of such a project is Camera CATalog.
+        + **Talk Tags** - Tags are used to help note something as relating to a particular topic. For example, one way of using it would be the following:  you’ve found an image that you think would be good for the Daily Zoo, and so you post it in Talk and then include the tag #dailyzoo in the post. This makes it easier for it to be found as a suggestion, because you can do a search for a particular tag using the search bar. A list of popular tags is displayed on the right-hand side of the Talk page and clicking one will take you to instances of that tag in the Talk boards. So for example if you clicked on #dailyzoo, you’d then be shown all the different suggestions that people have made for it that they’ve tagged.
 
 
       + **Tasks** - A task could be listing how many of a particular thing a volunteer sees in an image and then drawing circles around them, identifying the various animals they can see in an image or identifying where abouts in an image something is. There are a wide variety of tools to help create a wide variety of different tasks in the Project Builder tool. One or more tasks make up a workflow.
+
+        + **Drawing Task** - A task where the volunteers are asked to directly highlight or mark something on an image (e.g. drawing a circle around a penguin if visible in the image presented)
+
+        + **Question Task** - A task where the volunteers are asked to assess the image and respond to a multiple choice question. In the Project Builder, a question task can allow the volunteer to choose a single response or select multiple answers to the question posed.
+
+        + **Sub-task** - Sometimes when you are asked to do a task, such as drag a circle around an element in a picture, you are then asked a further task and what is contained in the circle. This is a subtask. For example, you may be asked to circle penguins in an image, a sub-task would be identifying whether the penguin circled is an adult or chick.
+
+        + **Survey task** - A survey task is a task where you identify something by selection from many options and then are asked a variety of questions about what you’ve just identified, like behaviour, number or color.  For example, you could be asked to identify an animal in an image and then answer questions on how many legs you can see, which way it is facing and whether it is an adult or baby. An example of such a project is Camera CATalog.
 
 
       + **Tools** - tools enable volunteers draw or highlight a particular area of a subject image presented on the classification interface (e.g. draw a circle, draw a line, place a pointer). You can design your project such that a single task in the Project Builder can have one or more tools available for volunteers to mark or identify different features found in your subject images.
@@ -151,6 +136,12 @@ counterpart.registerTranslations 'en',
 
 
       + **Workflow** - This is a series of tasks and assessments that a volunteer is asked to do  when presented with data in a Zooniverse’s project classification interface. This can be either one task or multiple tasks, depending on the project.
+
+        + **Active workflow** - these are workflows that are currently being presented to volunteers. They can’t be edited whilst they are active. You can make a workflow active and inactive by ticking the relevant box on the Visibility tab on the Project Builder page
+
+        + **Default workflow** -  The default workflow is the workflow that appears if the volunteers doesn’t choose one from the offered list on the front page of the project  but just clicks on the Classify tab. If a project has more than one active workflow, the project owner and project collaborators can choose which one will be the default workflow.
+
+        + **Inactive workflow** - Inactive workflows are ones that aren’t currently being shown to volunteers, but can be edited. You can make a workflow active and inactive by ticking the relevant box on the Visibility tab on the Project Builder page
 
 
       + **Zooniverse approved project** - this is a project that has undergone beta testing and been approved by the Zooniverse team. Details of this process can be found on the Policy Page. Zooniverse approved projects that are currently live can be seen on the Projects page.
