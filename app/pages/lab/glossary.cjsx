@@ -8,7 +8,9 @@ counterpart.registerTranslations 'en',
       # Glossary
       A collection of definitions for terms that are used across the Zooniverse. The terms are split into three different categories:
 
-      [[toc]]
+      [General Terms](#general-terms)
+      [People](#people)
+      [Project-Specific Terms](#project-specific-terms)
 
       If you'd like to see a definition that currently isn't on this page, [get in touch](/about/contact) and we'll look into adding it.
 
@@ -157,12 +159,6 @@ counterpart.registerTranslations 'en',
 
 
       + **Zooniverse approved project** - this is a project that has undergone beta testing and been approved by the Zooniverse team. Details of this process can be found on the Policy Page. Zooniverse approved projects that are currently live can be seen on the Projects page.
-
-
-
-
-
-
 
 
     '''
