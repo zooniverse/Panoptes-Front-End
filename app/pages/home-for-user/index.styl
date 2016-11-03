@@ -1,0 +1,134 @@
+GRAY = #EFF2F5
+
+.home-page-for-user
+  background: black
+  color: white
+  display: flex
+  flex-direction: column
+  flex-grow: 1
+  padding-top: 5vh
+  position: relative
+
+  &__background
+    background-color: #0f7481
+    height: 100%
+    left: 0
+    opacity: 0.5
+    position: absolute
+    top: 0
+    width: 100%
+
+  &__content
+    align-items: center;
+    display: flex
+    flex-direction: column
+    flex-grow: 1
+    font-size: 1.6em
+    margin-top: 5em
+
+  &__welcome
+    font-size: 1.2em
+    margin: 1em 2em
+
+  &__menu
+    display: inline-flex
+    flex-wrap: wrap
+    margin: 1em 2em
+    margin-bottom: 5em
+
+  &__menu-column
+    display: flex
+    flex-direction: column
+
+  &__menu-button
+    color: inherit
+    display: block
+    text-decoration: none
+    white-space: nowrap
+
+    &:focus,
+    &:hover
+      background: lighten(rgba(66, 66, 66, 0.25), 50%)
+
+  &__menu-label
+    display: block
+    padding: 1em 2em
+    text-align: left
+
+.home-page-section
+  align-self: stretch
+  background: #eef2f5
+  color: black
+  flex-grow: 1
+  font-size: 1em
+
+  &__header
+    background: #0f7481
+    color: white
+    display: flex
+    padding: 0.5em 2em
+
+  &__header-label
+    flex-grow: 1
+    text-align: center
+
+  &__error
+    background: rgba(red, 0.3)
+    color: black
+    font-size: 0.8em
+    font-weight: bold
+    padding: 0.5em 2em
+    text-align: center
+
+  &__sub-header
+    font-size: 0.8em
+    font-weight: bold
+    text-align: right
+
+  &__content
+    background-color: GRAY
+    padding: 1em 2em
+
+    .details
+      border-bottom-left-radius: 0.9em
+      border-bottom-right-radius: 0.9em
+
+.home-page-project-stats
+  flex-grow: 1
+  position: relative;
+  z-index: 1
+
+  &__content
+    position: relative
+    z-index: 1
+
+.outlined-button
+  border: 0.07em solid
+  border-radius: 0.3em
+  color: #0f7481
+  display: inline-block
+  margin-bottom: 0.5em
+  padding: 0.1em 1em
+  text-decoration: none
+
+.home-page-news-pullout
+  background: white
+  color: black
+  transition: transform 0.5s
+  z-index: 5
+
+  &__toggle-button.secret-button
+    position: absolute
+    right: 100%
+    top: 33%
+
+  &__toggle-label
+    background: #0f7481
+    border-radius: 0.3em 0 0 0.3em
+    box-shadow: 0px 3px 6px rgba(0,0,0,0.24)
+    color: white
+    font-size: 0.9em
+    padding: 0.5em 1em
+
+.on-home-page-logged-in
+  padding-top: 0
