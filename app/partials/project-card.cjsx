@@ -20,7 +20,7 @@ ProjectCard = React.createClass
       conditionalStyle.backgroundImage = "url('//#{ @props.project.avatar_src }')"
       conditionalStyle.backgroundSize = "contain"
     else
-      conditionalStyle.background = "url('/assets/simple-pattern.jpg') center center repeat"
+      conditionalStyle.background = "url('/assets/simple-pattern.png') center center repeat"
 
     linkProps =
       to: if project.redirect then project.redirect else '/projects/' + project.slug

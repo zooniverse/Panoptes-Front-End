@@ -49,14 +49,14 @@
     font-style: italic
 
   .card-button
-    background: COBOLT_BLUE
+    background: LIGHT_GREEN_HEADER
     min-height: 35px
     padding: 0.6em
     position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
     width: 180px
 
     &:hover
-      background: lighten(COBOLT_BLUE, 20%)
+      background: lighten(LIGHT_GREEN_HEADER, 20%)
 
 .collection-card
   border-radius: 1em
@@ -77,6 +77,16 @@
     height: 1.8em
   .owner-public
     height: 3.6em
+
+  .badge
+    background: rgba(black, 0.4)
+    border-radius: 2em
+    color: white
+    float: right
+    font-weight: bold
+    height: 1.5em
+    margin: 0.2em 0.2em 0 0
+    padding: 0 0.5em
 
 .project-card
   height: 270px

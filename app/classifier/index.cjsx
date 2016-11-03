@@ -20,6 +20,11 @@ GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
+Shortcut = require './tasks/shortcut'
+`import CacheClassification from '../components/cache-classification'`
+
+# For easy debugging
+window.cachedClassification = CacheClassification
 
 Classifier = React.createClass
   displayName: 'Classifier'
@@ -175,7 +180,7 @@ Classifier = React.createClass
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
-      waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
+      waitingForAnswer = !annotation.shortcut and not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
 
     # Each answer of a single-answer task can have its own `next` key to override the task's.
     if TaskComponent is tasks.single
@@ -235,13 +240,16 @@ Classifier = React.createClass
 
           <hr />
 
+          {if task.unlinkedTask
+            <Shortcut task={task} workflow={@props.workflow} annotation={annotation} classification={@props.classification} />}
+
           <nav className="task-nav">
             {if Object.keys(@props.workflow.tasks).length > 1
               <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
             {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
               [ownerName, name] = @props.project.slug.split('/')
               <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
-            {if nextTaskKey
+            {if nextTaskKey and !annotation.shortcut
               <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
             else
               <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
@@ -431,15 +439,29 @@ Classifier = React.createClass
     taskDescription = @props.workflow.tasks[taskKey]
     annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
     annotation.task = taskKey
+
+    if @props.workflow.configuration.persist_annotations
+      cachedAnnotation = CacheClassification.isAnnotationCached(taskKey)
+      if cachedAnnotation?
+        annotation = cachedAnnotation
+
     classification.annotations.push annotation
     classification.update 'annotations'
 
   # Back up:
   destroyCurrentAnnotation: ->
+    lastAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
+
     @props.classification.annotations.pop()
     @props.classification.update 'annotations'
 
+    if @props.workflow.configuration.persist_annotations
+      CacheClassification.update(lastAnnotation)
+
   completeClassification: ->
+    if @props.workflow.configuration.persist_annotations
+      CacheClassification.delete()
+
     currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
     currentTask?.tools?.map (tool) =>
@@ -453,6 +475,11 @@ Classifier = React.createClass
         width: innerWidth
         height: innerHeight
 
+    if currentAnnotation.shortcut
+      @addAnnotationForTask @props.classification, currentTask.unlinkedTask
+      newAnnotation = classification.annotations[classification.annotations.length - 1]
+      newAnnotation['value'] = currentAnnotation.shortcut['index']
+      delete currentAnnotation['shortcut']
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
     else
@@ -479,7 +506,7 @@ Classifier = React.createClass
     @setState showingExpertClassification: value
 
   warningToggleOn: ->
-    @setState backButtonWarning: true
+    @setState backButtonWarning: true unless @props.workflow.configuration.persist_annotations
 
   warningToggleOff: ->
     @setState backButtonWarning: false

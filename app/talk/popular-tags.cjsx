@@ -1,8 +1,25 @@
 React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
-PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 
+ProjectTag = (props) ->
+  tag = props.tag.name
+  <div className="truncated">
+    <Link to="/projects/#{props.project.slug}/talk/tags/#{tag}" onClick={props.onClick} >
+      #{tag}
+    </Link>
+    {' '}
+  </div>
+
+TalkTag = (props) ->
+  tag = props.tag.name
+  <div className="truncated">
+    <Link to="/talk/search/?query=#{tag}" onClick={props.onClick} >
+      #{tag}
+    </Link>
+    {' '}
+  </div>
+  
 module.exports = React.createClass
   displayName: 'TalkPopularTags'
 
@@ -12,6 +29,12 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+  
+  getInitialState: ->
+    tags: []
+  
+  componentWillMount: ->
+    @tagsRequest()
 
   tagsRequest: ->
     query =
@@ -23,23 +46,26 @@ module.exports = React.createClass
       query.taggable_type = @props.type
       query.taggable_id = @props.id
 
-    talkClient.type('tags/popular').get query
-
-  tag: (talkTag, i) ->
-    logClick = @context.geordi?.makeHandler? 'hashtag-sidebar'
-    tag = talkTag.name
-    if @props.project
-      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/projects/#{@props.project.slug}/talk/tags/#{tag}" onClick={logClick?.bind(this, tag)}>#{tag}</Link>{' '}</div>
-    else
-      <div key={"#{talkTag.id}-#{i}"} className="truncated"><Link to="/talk/search/?query=#{tag}" onClick={logClick?.bind(this, tag)}>#{tag}</Link>{' '}</div>
+    talkClient
+      .type 'tags/popular'
+      .get query
+      .then (tags) =>
+        @setState {tags}
 
   render: ->
     <div className="talk-popular-tags">
-      <PromiseRenderer promise={@tagsRequest()}>{(tags) =>
-        if tags?.length
-          <div>
-            {@props.header ? null}
-            <section>{tags.map(@tag)}</section>
-          </div>
-      }</PromiseRenderer>
+      {if @state.tags?.length
+        <div>
+          {@props.header ? null}
+          <section>
+            {@state.tags.map (tag) =>
+              logClick = @context.geordi?.makeHandler? 'hashtag-sidebar'
+              if @props.project
+                <ProjectTag key={tag.id} project={@props.project} tag={tag} onClick={logClick?.bind(this, tag)} />
+              else
+                <TalkTag key={tag.id} tag={tag} onClick={logClick?.bind(this, tag)} />
+            }
+          </section>
+        </div>
+      }
     </div>

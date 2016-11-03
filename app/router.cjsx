@@ -1,6 +1,10 @@
 Router = {IndexRoute, IndexRedirect, Route, Redirect} = require 'react-router'
 React = require 'react'
 
+`import ProjectsPage from './pages/projects/index';`
+`import FilteredProjectsList from './pages/projects/filtered-projects-list';`
+
+
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
   componentDidMount: ->
@@ -25,6 +29,7 @@ module.exports =
       <Route path="publications" component={require './pages/about/publications-page'} />
       <Route path="education" component={require './pages/about/education-page'} />
       <Route path="contact" component={require './pages/about/contact-page'} />
+      <Route path="volunteering" component={require './pages/about/volunteering-page'} />
     </Route>
 
     <Route path="reset-password" component={require './pages/reset-password'} />
@@ -55,7 +60,12 @@ module.exports =
       <Route path="email" component={require './pages/settings/email' } />
     </Route>
 
-    <Route path="projects" component={require './pages/projects'} />
+    <Route path="projects" component={ProjectsPage}>
+      <IndexRoute component={FilteredProjectsList} status="live" />
+      <Route path="finished" component={FilteredProjectsList} status="finished" />
+      <Route path="outofdata" component={FilteredProjectsList} status="paused" />
+    </Route>
+
     <Route path="projects/:owner/:name" component={require './pages/project'}>
       <IndexRoute component={require './pages/project/home'} />
       <Route path="home" component={ONE_UP_REDIRECT} />
@@ -90,7 +100,7 @@ module.exports =
         <IndexRoute component={require('./pages/collections/favorites-list')} />
         <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
       </Route>
-  
+
       <Route path="collections" component={require('./pages/collections/index')}>
          <IndexRoute component={require('./pages/collections/collections-list')} />
          <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />

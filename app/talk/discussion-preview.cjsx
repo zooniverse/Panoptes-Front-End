@@ -1,7 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
-PromiseRenderer = require '../components/promise-renderer'
 LatestCommentLink = require './latest-comment-link'
 Thumbnail = require '../components/thumbnail'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -15,6 +14,22 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+  
+  getInitialState: ->
+    subject: null
+  
+  componentDidMount: ->
+    @updateSubject @props.discussion
+
+  componentWillReceiveProps: (newProps) ->
+    @updateSubject newProps.discussion if newProps.discussion isnt @props.discussion
+
+  updateSubject: (discussion)->
+    if discussion.focus_id and discussion.focus_type is 'Subject'
+      apiClient.type 'subjects'
+        .get discussion.focus_id
+        .then (subject) =>
+          @setState {subject}
 
   logDiscussionClick: ->
     @context.geordi?.logEvent
@@ -45,13 +60,11 @@ module.exports = React.createClass
     <div className="talk-discussion-preview">
       <div className="preview-content">
 
-        {if discussion.focus_id and (discussion.focus_type is 'Subject')
+        {if @state.subject?
           <div className="subject-preview">
-            <PromiseRenderer catch={null} promise={apiClient.type('subjects').get(discussion.focus_id)}>{(subject) =>
-              <Thumbnail src={getSubjectLocation(subject).src} width={100} />
-            }</PromiseRenderer>
+            <Thumbnail src={getSubjectLocation(@state.subject).src} width={100} />
           </div>
-          }
+        }
 
         <h1>
           {<i className="fa fa-thumb-tack talk-sticky-pin"></i> if discussion.sticky}

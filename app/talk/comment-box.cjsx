@@ -93,7 +93,7 @@ module.exports = React.createClass
         {if @props.reply
           <div className="talk-comment-reply">
             <div style={color: '#afaeae'}>
-              In reply to {@props.reply.comment.user_display_name}s comment:
+              In reply to {@props.reply.comment.user_display_name}'s comment:
             </div>
             <Markdown project={@props.project}>{@props.reply.comment.body}</Markdown>
             <button type="button" onClick={@props.onClickClearReply}><i className="fa fa-close" /> Clear Reply</button>

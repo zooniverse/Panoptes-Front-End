@@ -13,6 +13,7 @@ AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
+ShortcutEditor = require '../../components/shortcut-editor'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -109,27 +110,28 @@ EditWorkflowPage = React.createClass
                   </div>
                 else
                   for key, definition of @props.workflow.tasks
-                    classNames = ['secret-button', 'nav-list-item']
-                    if key is @state.selectedTaskKey
-                      classNames.push 'active'
-                    <div key={key}>
-                      <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
-                        {switch definition.type
-                          when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
-                          when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
-                          when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
-                          when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
-                          when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
-                          when 'crop' then <i className="fa fa-crop fa-fw"></i>
-                          when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
-                          when 'dropdown' then <i className="fa fa-list fa-fw"></i>
-                          when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
-                        {' '}
-                        {tasks[definition.type].getTaskText definition}
-                        {if key is @props.workflow.first_task
-                          <small> <em>(first)</em></small>}
-                      </button>
-                    </div>}
+                    unless definition.type is 'shortcut'
+                      classNames = ['secret-button', 'nav-list-item']
+                      if key is @state.selectedTaskKey
+                        classNames.push 'active'
+                      <div key={key}>
+                        <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
+                          {switch definition.type
+                            when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
+                            when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
+                            when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
+                            when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
+                            when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
+                            when 'crop' then <i className="fa fa-crop fa-fw"></i>
+                            when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
+                            when 'dropdown' then <i className="fa fa-list fa-fw"></i>
+                            when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
+                          {' '}
+                          {tasks[definition.type].getTaskText definition}
+                          {if key is @props.workflow.first_task
+                            <small> <em>(first)</em></small>}
+                        </button>
+                      </div>}
               </div>
 
               <p>
@@ -153,22 +155,20 @@ EditWorkflowPage = React.createClass
                       <small><strong>Drawing</strong></small>
                     </button>
                   </AutoSave>{' '}
-                  {if @canUseTask(@props.project, "text")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
-                        <i className="fa fa-file-text-o fa-2x"></i>
-                        <br />
-                        <small><strong>Text</strong></small>
-                      </button>
-                    </AutoSave>}{' '}
-                  {if @canUseTask(@props.project, "survey")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
-                        <i className="fa fa-binoculars fa-2x"></i>
-                        <br />
-                        <small><strong>Survey</strong></small>
-                      </button>
-                    </AutoSave>}{' '}
+                  <AutoSave resource={@props.workflow}>
+                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'text'} title="Text tasks: the volunteer writes free-form text into a dialog box.">
+                      <i className="fa fa-file-text-o fa-2x"></i>
+                      <br />
+                      <small><strong>Text</strong></small>
+                    </button>
+                  </AutoSave>{' '}
+                  <AutoSave resource={@props.workflow}>
+                    <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'survey'} title="Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them.">
+                      <i className="fa fa-binoculars fa-2x"></i>
+                      <br />
+                      <small><strong>Survey</strong></small>
+                    </button>
+                  </AutoSave>{' '}
                   {if @canUseTask(@props.project, "crop")
                     <AutoSave resource={@props.workflow}>
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">
@@ -203,7 +203,8 @@ EditWorkflowPage = React.createClass
                     <option>(No tasks yet)</option>
                   else
                     for taskKey, definition of @props.workflow.tasks
-                      <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
+                      unless definition.type is 'shortcut'
+                        <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
                 </select>
               </AutoSave>
             </div>
@@ -228,6 +229,20 @@ EditWorkflowPage = React.createClass
           </div>
 
           <hr />
+
+          {if 'persist annotations' in @props.project.experimental_tools
+            <div>
+              <AutoSave resource={@props.workflow}>
+              <span className="form-label">Set annotation persistence</span><br />
+              <small className="form-help">Save the annotation of the task you are on when the back button is clicked.</small>
+              <br />
+              <label>
+                <input ref="persistAnnotation" type="checkbox" checked={@props.workflow.configuration.persist_annotations} onChange={@handlePersistAnnotationsToggle} />
+                Persist annotations
+              </label>
+              </AutoSave>
+              <hr />
+            </div>}
 
           <div>
             <AutoSave resource={@props.project}>
@@ -298,15 +313,14 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          {if 'invert' in @props.project.experimental_tools
-            <div>
-              <AutoSave tag="label" resource={@props.workflow}>
-                <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
-                Allow Users To Flip Image Color
-              </AutoSave>
+          <div>
+            <AutoSave tag="label" resource={@props.workflow}>
+              <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
+              Allow Users To Flip Image Color
+            </AutoSave>
 
-              <hr />
-            </div>}
+            <hr />
+          </div>
 
           <p>
             <AutoSave resource={@props.workflow}>
@@ -363,13 +377,24 @@ EditWorkflowPage = React.createClass
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
             <div>
-              <TaskEditorComponent
-                workflow={@props.workflow}
-                task={@props.workflow.tasks[@state.selectedTaskKey]}
-                taskPrefix="tasks.#{@state.selectedTaskKey}"
-                project={@props.project}
-                onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
-              />
+              {if 'shortcut' in @props.project.experimental_tools
+                <ShortcutEditor workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} >
+                  <TaskEditorComponent
+                    workflow={@props.workflow}
+                    task={@props.workflow.tasks[@state.selectedTaskKey]}
+                    taskPrefix="tasks.#{@state.selectedTaskKey}"
+                    project={@props.project}
+                    onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
+                  />
+                </ShortcutEditor>
+              else
+                <TaskEditorComponent
+                  workflow={@props.workflow}
+                  task={@props.workflow.tasks[@state.selectedTaskKey]}
+                  taskPrefix="tasks.#{@state.selectedTaskKey}"
+                  project={@props.project}
+                  onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
+                />}
               <hr />
               <br />
               <AutoSave resource={@props.workflow}>
@@ -479,6 +504,10 @@ EditWorkflowPage = React.createClass
     @props.workflow.update
       'configuration.hide_classification_summaries': e.target.checked
 
+  handlePersistAnnotationsToggle: (e) ->
+    @props.workflow.update
+      'configuration.persist_annotations': e.target.checked
+
   handleSetInvert: (e) ->
     @props.workflow.update
       'configuration.invert_subject': e.target.checked
@@ -576,8 +605,11 @@ EditWorkflowPage = React.createClass
       @setState forceReloader: @state.forceReloader + 1
 
   handleTaskDelete: (taskKey, e) ->
+    shortcut = @props.workflow.tasks[taskKey].unlinkedTask
     if e.shiftKey or confirm 'Really delete this task?'
       changes = {}
+      if shortcut
+        changes["tasks.#{shortcut}"] = undefined
       changes["tasks.#{taskKey}"] = undefined
       @props.workflow.update changes
 

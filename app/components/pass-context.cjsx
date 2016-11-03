@@ -9,6 +9,7 @@ module.exports = React.createClass
     geordi: React.PropTypes.object
     notificationsCounter: React.PropTypes.object
     unreadNotificationsCount: React.PropTypes.number
+    pusher: React.PropTypes.object
 
   childContextTypes:
     initialLoadComplete: React.PropTypes.bool
@@ -17,6 +18,7 @@ module.exports = React.createClass
     geordi: React.PropTypes.object
     notificationsCounter: React.PropTypes.object
     unreadNotificationsCount: React.PropTypes.number
+    pusher: React.PropTypes.object
 
   getChildContext: ->
     @props.context

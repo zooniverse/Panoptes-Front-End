@@ -1,7 +1,7 @@
 React = require 'react'
 {Markdown} = (require 'markdownz').default
 FinishedBanner = require './finished-banner'
-ProjectMetadata = require './metadata'
+`import ProjectMetadata from './metadata'`
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 {Link} = require 'react-router'
 

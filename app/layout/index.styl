@@ -23,7 +23,7 @@
     z-index: 2
 
   &__header
-    background-color: #0072ff
+    background-color: #00979D
     color: white
 
     &--demoted
@@ -57,7 +57,15 @@
     transition: opacity 250ms, transform 125ms
 
     &--set-aside
-      opacity: 0.9
+      
+      .project-page
+
+        > div
+        > nav
+          opacity: 0.9
+
+        > .talk
+          opacity: 1
 
   &__page-header,
   &__page-content

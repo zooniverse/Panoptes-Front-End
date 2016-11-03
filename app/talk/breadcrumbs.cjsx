@@ -1,10 +1,21 @@
 React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
 {Link} = require 'react-router'
-PromiseRenderer = require '../components/promise-renderer'
 
 module.exports = React.createClass
   displayName: 'TalkBreadcrumbs'
+  
+  getInitialState: ->
+    board: null
+    discussion: null
+  
+  componentWillMount: ->
+    @updateBoard @props.params.board
+    @updateDiscussion @props.params.discussion
+  
+  componentWillReceiveProps: (newProps) ->
+    @updateBoard newProps.params.board if newProps.params.board isnt @props.params.board
+    @updateDiscussion newProps.params.discussion if newProps.params.discussion isnt @props.params.discussion
 
   contextTypes:
     router: React.PropTypes.object.isRequired
@@ -24,11 +35,32 @@ module.exports = React.createClass
       "/projects/#{owner}/#{name}/talk"
     else
       "/talk"
+  
+  updateBoard: (boardId) ->
+    if boardId?
+      talkClient
+        .type 'boards'
+        .get boardId
+        .then (board) =>
+          @setState {board}
+        .catch @crumbCatch
+    else
+      @setState board: null
 
+  updateDiscussion: (discussionId) ->
+    if discussionId?
+      talkClient
+        .type 'discussions'
+        .get discussionId
+        .then (discussion) =>
+          @setState {discussion}
+        .catch @crumbCatch
+    else
+      @setState discussion: null
+      
   render: ->
-    params = @props.params
-    onBoard = params.board?
-    onDiscussion = onBoard and params.discussion?
+    onBoard = @state.board?
+    onDiscussion = onBoard and @state.discussion?
     onRecents = @props.route.path.match /\/talk\/recents/
 
     <div className="talk-breadcrumbs">
@@ -43,25 +75,20 @@ module.exports = React.createClass
           </span>}
 
         {if onBoard
-          <PromiseRenderer promise={talkClient.type('boards').get(params.board)} catch={@crumbCatch}>{(board) =>
-            <span>
-              {if onDiscussion
-                <span>
-                  {@boardLink board}
-                  <PromiseRenderer promise={talkClient.type('discussions').get(params.discussion)} catch={@crumbCatch}>{(discussion) =>
-                    <span>&nbsp;>&nbsp;{discussion.title}</span>}
-                  </PromiseRenderer>
-                </span>
-              else if not onDiscussion and not onRecents
-                <span>{board.title}</span>}
-
-              {if onRecents
-                <span>
-                  {@boardLink board}
-                  <span>&nbsp;>&nbsp;Recents</span>
-                </span>}
-            </span>}
-          </PromiseRenderer>
+          <span>
+            {if onDiscussion
+              <span>
+                {@boardLink @state.board}
+                <span>&nbsp;>&nbsp;{@state.discussion?.title}</span>
+              </span>
+            else if not onDiscussion and not onRecents
+              <span>{@state.board?.title}</span>}
+            {if onRecents
+              <span>
+                {@boardLink @state.board}
+                <span>&nbsp;>&nbsp;Recents</span>
+              </span>}
+          </span>
         else if onRecents
           <span>&nbsp;>&nbsp;Recents</span>}
       </div>

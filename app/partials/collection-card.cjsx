@@ -9,7 +9,6 @@ FlexibleLink = React.createClass
 
   propTypes:
     to: React.PropTypes.string.isRequired
-    skipOwner: React.PropTypes.bool
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -34,6 +33,12 @@ module.exports = React.createClass
     imagePromise: React.PropTypes.object.isRequired
     linkTo: React.PropTypes.string.isRequired
     translationObjectName: React.PropTypes.string.isRequired
+    subjectCount: React.PropTypes.number
+    skipOwner: React.PropTypes.bool
+  
+  getDefaultProps: ->
+    subjectCount: 0
+    skipOwner: false
 
   collectionOwner: ->
     apiClient.type(@props.collection.links.owner.type).get(@props.collection.links.owner.id)
@@ -46,7 +51,7 @@ module.exports = React.createClass
         card.style.backgroundImage = "url('#{src}')"
         card.style.backgroundSize = "contain"
       .catch =>
-        card.style.background = "url('/assets/simple-pattern.jpg') center center repeat"
+        card.style.background = "url('/assets/simple-pattern.png') center center repeat"
 
   render: ->
     [owner, name] = @props.collection.slug.split('/')
@@ -67,6 +72,7 @@ module.exports = React.createClass
 
     <FlexibleLink {...linkProps}>
       <div className="collection-card" ref="collectionCard">
+        <div key="badge" className="badge">{@props.subjectCount}</div>
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.collection.display_name}</span></div>
