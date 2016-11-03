@@ -5,6 +5,7 @@ import talkClient from 'panoptes-client/lib/talk-client';
 import { Link } from 'react-router';
 import Paginator from '../../talk/lib/paginator';
 import updateQueryParams from '../../talk/lib/update-query-params';
+import ZooniverseLogo from '../../partials/zooniverse-logo';
 
 const NotificationSection = React.createClass({
 
@@ -164,11 +165,23 @@ const NotificationSection = React.createClass({
   },
 
   avatarFor() {
+    const projLink = this.props.slug ? `/projects/${this.props.slug}` : '/';
     const src = this.state.avatar ? `//${this.state.avatar}` : '/assets/simple-avatar.jpg';
+    let avatar;
+
     if (this.state.unread > 0) {
       return this.unreadCircle();
     }
-    return <img src={src} className="notification-section__img" alt="Project Avatar" />;
+    if (this.state.name === 'Zooniverse') {
+      avatar = <ZooniverseLogo width="40" height="40" />;
+    } else {
+      avatar = <img src={src} className="notification-section__img" alt="Project Avatar" />;
+    }
+    return (
+      <Link to={projLink}>
+        {avatar}
+      </Link>
+    );
   },
 
   unreadCircle() {
@@ -186,10 +199,9 @@ const NotificationSection = React.createClass({
 
   renderHeader() {
     const buttonType = this.props.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
-    const projLink = this.props.slug ? `/projects/${this.props.slug}` : '/';
 
     return (
-      <div>
+      <div onClick={this.onSectionToggle}>
 
         <div className="notification-section__container">
           <div className="notification-section__item">
@@ -197,13 +209,11 @@ const NotificationSection = React.createClass({
           </div>
 
           <div className="notification-section__item">
-            <Link to={projLink} className="notification-section__title">
-              <h3 className="notification-section__title">{this.state.name}</h3>
-            </Link>
+            <h3 className="notification-section__title">{this.state.name}</h3>
           </div>
 
           <div className="notification-section__item">
-            <button title="Remove choice" onClick={this.onSectionToggle}>
+            <button title="Remove choice">
               <i className={buttonType}></i>
             </button>
           </div>
