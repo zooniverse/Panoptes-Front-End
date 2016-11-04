@@ -49,7 +49,9 @@ const RecentProjectsSection = React.createClass({
       const recentPreferences = activePreferences.filter(Boolean).slice(0, 5);
       return Promise.all(recentPreferences.map((preference) => {
         // A user might have preferences for a project that no longer exists.
-        return preference.get('project', { include: ['avatar'] }).catch(() => {
+        return apiClient.type('projects').get({id: preference.links.project, cards: true}).then(function(project) {
+          return project[0];
+        }).catch(() => {
           return null;
         });
       })).then((projects) => {
@@ -60,23 +62,6 @@ const RecentProjectsSection = React.createClass({
       this.setState({
         projects,
       });
-
-      return Promise.all(projects.map((project) => {
-        if (project.links.avatar) {
-          return apiClient.type('avatars')
-          .get(project.links.avatar.id)
-          .catch(() => {
-            return null;
-          })
-          .then((avatar) => {
-            const newState = this.state.avatars;
-            newState[project.id] = avatar;
-            this.setState({
-              avatars: newState,
-            });
-          });
-        }
-      }));
     })
     .catch((error) => {
       this.setState({
@@ -111,8 +96,8 @@ const RecentProjectsSection = React.createClass({
 
         <div className="project-card-list">
           {this.state.projects.map((project) => {
-            const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
-            return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} />;
+            console.log(project);
+            return <ProjectCard key={project.id} project={project} />;
           })}
         </div>
       </HomePageSection>
