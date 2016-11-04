@@ -5,243 +5,199 @@ counterpart = require 'counterpart'
 counterpart.registerTranslations 'en',
   howToPage:
     content: '''
-      # How to Build a Project
+      # Index
+      * [Getting Started - the Quick Guide](#getting-started)
+      * [Overview: Everything on your Nav Bar](#overview)
+      * [The Nav Bar - The Detailed Guide](#details)
+        * [Project Details](#project)
+        * [About Pages](#about)
+        * [Collaborators](#collabs)
+        * [Media](#media)
+        * [Visibility](#visibility)
+        * [Workflows](#workflows)
+        * [Subject Sets]
+      * [Project Building: The Detailed Guide](#building)
+      * [Subjects and so on](#subjects)
 
-      **So you want to build a project using the Zooniverse Project Builder?**
-      This tutorial will help walk you through the process, using Kitteh Zoo as an example.
-      You can [explore the actual project](https://www.zooniverse.org/projects/vrooje/kitteh-zoo).
+      There are five sections to this guide. The first section, [Getting Started - The Quick Guide](#getting-started) is an overview of the steps you need to complete in order to set up a project. This is for you who want to get a quick overview of what the process is, and a quick go-to guide for those who don't need any further help in setting a project up.
 
-      [![Kitteh Zoo screenshot](/assets/how-to-lab/how-to-1.jpg)](/assets/how-to-lab/how-to-1.jpg)
+      For those of you who'd like a bit more guidance, the [Nav Bar Overview](#overview) section explains in a bit more detail what the different nav bar headers on the Project Builder page are for, as well Zooniverse terminology. The following section section, [The Nav Bar - More Details](#details) helps to explain all the different parts under each of these nav bar headers in more detail. Finally,[the Detailed Guide](#building) links to a step-by-step walkthrough of how to set up a project, showing you how to set up the project 'Kitteh Zoo'for those of you who'd still like a bit more detail about how to set one up.
 
-      ### Getting Started
 
-      To get started building, go to [the Project Builder home page](/lab) and log in to your Zooniverse account, then click the "Build a Project" button in the top right. Here you can see all of the projects you own and collaborate on. Click on "Create a project" to start building.
+      # Getting Started - the Quick Guide
 
-      [![Project Builder screenshot](/assets/how-to-lab/how-to-2.jpg)](/assets/how-to-lab/how-to-2.jpg)
+      A brief overview of all the steps you need to do to how to set up a project - for more details on how to use each section on the navbar, click [here](#details)and for a detailed walk-through of setting up a project, check out the 'Detailed Guide' section [here](#building).
 
-      **Start building:** Now you're in the Project Builder itself. This is where the magic happens. On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are terms you'll see a lot, and they have specific meanings in the Zooniverse.  Project is pretty self-explanatory; Galaxy Zoo, Penguin Watch, and of course, Kitteh Zoo, are all examples of Zooniverse projects that you could build using the project builder. A workflow is the sequence of tasks that you ask volunteers to do, and subjects are the things (usually images) that volunteers do those tasks on.
+      1. Make sure you are logged in to your Zooniverse account.
+      2. Click on "Build a Project" or head over to www.zooniverse.org/lab and click "Create a New Project"
+      3. Define your project. A popup will appear, where you can start to define your project. Once you've filled this out, you'll be taken to a more detailed "Project Details" page where you can further define basic information. You can change all this later on from the same page. Then, go through each of the other blue tabs on the left-hand side. There is guidance information for each component listed on the page itself, and more detail further down in this guide too.
+      4. The next step is to create your workflow. Click on "New Workflow" in the Navigation Bar on the left-hand side of the page underneath the blue tabs. Run through this as many times as necessary to set up your workflow.
+      5. Link your workflow to subjects: Under "Associated Subject Sets" select "use default subject set" which will link your project to ridiculous photos of cats. Alternatively, you can upload your own subjects under the "Subjects" menu on the left-hand Nav bar (detailed instructions [here](#subjects) ):
+      6. Test your workflow: Hit the "Test this Workflow" button to actually see how it comes together!
+      7. Lather, rinse, repeat: Explore your project, figuring out what works and what doesn't. Make changes, then refresh your project page to test out the changes. Guidelines on project design for maximizing engagement and data quality are **here** (link to policies page)
+      8. Lastly, once you are happy with all of these components, make your project Public on the 'Visibility Page' and submit it for review to the Zooniverse team.
 
-      [![Project details editor screenshot](/assets/how-to-lab/how-to-3.jpg)](/assets/how-to-lab/how-to-3.jpg)
 
-      ### Define your project.
+      # Overview: Everything on your Nav Bar
 
-      The first thing you'll want to do is fill in some basic information about your project on the Project Details page. Just click and type in the relevant boxes. We've added a short description that will be formatted using the markdown language. The avatar and background image for Kitteh Zoo are in this folder. Download these images to your computer. Now add these images by dragging and dropping or by clicking on the relevant boxes (like in the image above). You can come back and add more details at any time while building your project.
+      On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are terms you'll see a lot, and they have specific meanings in the Zooniverse. Project is pretty self-explanatory; Galaxy Zoo, Penguin Watch, and of course, Kitteh Zoo, are all examples of Zooniverse projects that you could build using the project builder. A workflow is the sequence of tasks that you ask volunteers to do, and subjects are the things (usually images) that volunteers do those tasks on.
 
-      ### Building a workflow
+      For more details on how to use these individual sections, click [here](#details).
 
-      This is where you build the tasks that volunteers actually do. When you first get to this page, you'll see there is a sample task (specifically a question) already in place.
+      #### Project
+      This holds all your project level details. The project name, the people involved, and all the extra content (e.g. text and pictures) you want to share, are all here.
 
-      [![Project workflow editor screenshot](/assets/how-to-lab/how-to-4.jpg)](/assets/how-to-lab/how-to-4.jpg)
+      - **Project Details:** This is your project's "behind the scenes" home page. Start off by naming and describing your project, add a logo and background image.
 
-      We want to create this:
+      - **About:** You can add all sorts of additional pages, including *Research, Team, Results, Education,* and *FAQ*
 
-      [![Project workflow example](/assets/how-to-lab/how-to-5.jpg)](/assets/how-to-lab/how-to-5.jpg)
+      - **Collaborators:** Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project before it's public).
 
-      We'll start by replacing the sample text with our question, which asks people how many cats are in the image. We add more answers using the "+" button under the "Yes" answer. Use the screenshot below to fill in the workflow details (you may need to zoom in!)
 
-      [![Project workflow editing screenshot](/assets/how-to-lab/how-to-6.jpg)](/assets/how-to-lab/how-to-6.jpg)
+      - **Tutorial:** This is where you create tutorials to show your users how to use your project.
 
-      We added both text and images into the _Help Text_ box using the markdown language ([learn more about markdown](http://markdownlivepreview.com)).
 
-      Here is the markdown for the help text:
+      - **Media:** Add any images you need for your project pages (not the images you want people to classify!)
 
-          Tell us **how many cats** you see. You should include:
+      - **Visibility:** Set your project's "state" - private or public, live or in development, and apply for review to become approved by the Zooniverse. You can also activate or deactivate specific workflows on this page.
 
-            - Actual cats (not drawn or simulated)
-            - Cats of any species
+      - **Talk:** Create and manage the discussion boards for your project.
 
-          We will ask many people the same question about this image, so don't worry if you aren't absolutely sure. *Just give us your best guess.*
+      - **Data Exports:** Access your raw and aggregated classification data, subject data, and comments from Talk.
 
-          Here are some examples of cats:
+      #### Workflows
+      A workflow is the sequence of tasks that you're asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow is where you define those tasks and set out the order in which the volunteers will do them. Your project might have multiple workflows (if you want to set different tasks for different image sets). See the Workflow Details section for more on workflows.
 
-          ![Sink Cats Relax](http://zooniverse-resources.s3.amazonaws.com/bigblogfiles/cat_demo/cat_bloonet.jpg)
-          ![Only 1 of these cats counts.](http://zooniverse-resources.s3.amazonaws.com/bigblogfiles/cat_demo/cat_valentina_a.jpg)
-          ![Wet kitteh iz not amused](http://zooniverse-resources.s3.amazonaws.com/bigblogfiles/cat_demo/cat_joeltelling.jpg)
+      #### Subjects
+      A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the "manifest") defining their properties, and the images themselves. Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it's best to just have all their subjects in 1 set, but not all. See the Subject Details section for more on subjects.
 
-          And here are some examples of not-cats (you can ignore these):
 
-          ![A sample of things that are not cats.](http://zooniverse-resources.s3.amazonaws.com/bigblogfiles/cat_demo/notcats.png)
+      # The Nav Bar - More Details
 
-      We can set subsequent tasks to depend on the answer to this question. Right now we haven't made any other tasks, so the only option is "End of Classification." Once we create more tasks, we'll go back through and link them. Note that this question is _required_ (people can't move on until they've answered it) and only one answer is allowed.
+      Detailed instructors on how to use the pages described above.
 
-      Now we want to draw circles around the cat's faces and mark a point on their tails. Why? Because we can. (For your own project you'd obviously want to think carefully about the reasons for adding tasks to a workflow, and what you want to get from the answers/marks.)
+      ## Project Details
 
-      [![Project workflow task editing screenshot](/assets/how-to-lab/how-to-7.jpg)](/assets/how-to-lab/how-to-7.jpg)
+      Name: The project name is the first thing people will see and it will show up in the project URL. Try to keep it short and sweet.
 
-      So under the _Task_ list, we'll click on **drawing**. We're asking folks to draw (with ellipses) around the cats' faces, as well as mark their tail tips with a point. We've changed the color on the Cattail points so they stand out more too. As usual, the main text gives people basic instructions on what we want, and the help text provides some more explanation on how to do the task.
+      Avatar: Pick an avatar image for your project. This will represent your project on the Zooniverse home page. It can also be used as your project's brand. It's best if it's recognizable even as a small icon. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50KB, but at minimum 100x100 pixels.
 
-      In addition to marking all the cat faces, we want to know just how cute they are. So every time someone marks a cat-face, we've added a pop-up question to ask just that. Add this question by clicking on the _sub-tasks_ button below the _Type_ and _Color_ task specifications.
+      Background: This image will be the background for all of your project pages, including your project's front page, which newcomers will see first. It should be relatively high resolution and you should be able to read text written across it. To add an image, either drag and drop or click to open your file viewer. For best results, use images of at least 1 megapixel, no larger than 256 KB. Most people's screens are not much bigger than 1300 pixels across and 750 pixels high, so if your image is a lot bigger than this you may find it doesn't look the way you expect. Feel free to experiment with different sizes on a "typical" desktop, laptop or mobile screen.
 
-      [![Project workflow task details editing screenshot](/assets/how-to-lab/how-to-8.jpg)](/assets/how-to-lab/how-to-8.jpg)
+      Description: This should be a one-line call to action for your project. This will display on your landing page and, if approved, on the Zooniverse home page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.
 
-      When building your own project, you can combine any number of tasks in any order. You can start with a drawing task instead of a question. You can add sub-tasks for any drawing tool you make.
+      Introduction: Add a brief introduction to get people interested in your project. This will display on your project's front page. Note this field (renders markdown)[http://markdownlivepreview.com/], so you can format the text. You can make this longer than the Description, but it's still probably best to save much longer text for areas like the Research Case or FAQ tabs.
 
-      In general, keep in mind that people are more likely to complete more classifications if the workflow is short and simple. Try to keep the workflow as simple as possible to achieve your research goals, and definitely try to only request tasks that cannot be accurately accomplished by automated methods.
+      Checkbox: Volunteers choose workflow: A workflow is a set of tasks a volunteer completes to create a classification. Your project might have multiple workflows (if you want to set different tasks for different image sets). Check this to let volunteers select which workflow they want to work on; otherwise, they'll be served workflow-subject pairs randomly.
 
-      ### Linking the workflow together
+      Checkbox: Private project:
+      On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you're still working out its details. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left). Team members you add can see your project even if it's private. Once your project is public, anyone with the link can view and classify on it.
 
-      Now that all the tasks have been created, we've got to string them together by specifying what happens _next_. Right now, this means you kind of need to work backwards. The drawing task is the last task in this workflow, so we'll leave the "Next Task" button as the default "end of classification." But we'll have to go back to our first question.
 
-      The first question, "How many cats are in this image?" only allows one answer, so you can specify the next task depending on the answer.  If folks say "None" for the number of cats, the classification ends. But if they say there's at least one cat, then they go on to the next question.
+      ## About <a id = "about"></a>
 
-      [![Project workflow task editing screenshot](/assets/how-to-lab/how-to-9.jpg)](/assets/how-to-lab/how-to-9.jpg)
+      Contains pages for Research, Team, FAQ, Results, and Education: These pages are where you really get to share all the cool things about your project. All of these pages use Markdown (see link above) to format text and display images.
 
-      ### Upload subjects
+      Research: Explain your research to your audience here in as much detail as you'd like. This page displays no matter what, since explaining your motivation to volunteers is critical for the success of your project!
 
-      To really get started building a project, you need images to work with. Normally you would add your own images by clicking on the "New Subject Set" button on the left hand side of the screen. This is one of the trickier steps in project creation -- for the purposes of this tutorial you can simply copy the Kitteh Zoo subject set, but check out the next section "Uploading subjects -- the nitty gritty" if you want to practice the full approach. To do this go to the workflow you created and under the _associated subject_ set section click on _add an example subject set_. You should now see the 'kittehs' subject set selected.
+      Results: Once your project has hit its stride, share the results of your project with your volunteers here. This page will only display if you add content to it.
 
-      [![Project workflow task editing screenshot](/assets/how-to-lab/how-to-10.jpg)](/assets/how-to-lab/how-to-10.jpg)
+      FAQ: Add details here about your research, how to classify, and what you plan to do with the classifications. This page can evolve as your project does so that your active community members have a resource to point new users to. This page will only display if you add content to it.
 
-      **CONGRATULATIONS!**
+      Education: If you are a researcher open to collaborating with educators you can state that here, include educational content, and describe how you'd like to help educators use your project. Also, if your project is primarily for educational purposes you can describe that here. This page will only display if you add content to it.
 
-      You should have successfully created Kitteh Zoo! To view it, got back to the _Build a Project_ page (by clicking the button in the top right of the page) and then click on the view button next to the new project you have just made.
 
-      [![Project list screenshot](/assets/how-to-lab/how-to-11.jpg)](/assets/how-to-lab/how-to-11.jpg)
+      ## Collaborators <a id = "collabs"></a>
 
-      ### Uploading subjects - the Nitty Gritty
+      Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project before it's public).
 
-      When you actually build your own project, there won't be an example set of images already loaded for you. Get started uploading a set of subjects for your project by clicking on the "New Subject Set" button on the left hand side of the screen. That will bring you to the _Subject Uploader_.
+      Owner: The owner is the original project creator. There can be only one.
 
-      It's easiest if you have all of your images in a single folder along with a manifest file, and you will upload both at the same time. The manifest file lists all the images we want to upload and links each  image to additional information, also called metadata, such as date, time, and photographer. There is more information about the manifest in the "Details" section below, but for now you can see an example manifest file in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
+      Collaborator: Collaborators have full access to edit workflows and project content, including deleting some or all of the project.
 
-      Click on the "Upload Subjects" box and navigate to the "Kitteh" folder you downloaded. The easiest thing to do is simply hit _cmd + a_ (on Mac, or _ctrl + a_ on Windows) to select everything in that folder. Note that the subject uploader ignores the excel file and the other folders. Click "open" to select those images and the manifest file for upload. The project uploader now indicates that the "Cat project manifest.csv" has 29 subjects for upload.
+      Expert: Experts can enter “gold mode” to make authoritative gold standard classifications that will be used to validate data quality.
 
-      Click "Upload" to start the process. It might take a little while, but when everything is uploaded, you'll see a list of all of the subjects. The numbers to the left are unique identifiers for each subject, and the icons to the right let you preview or delete each subject.
+      Researcher: Members of the research team will be marked as researchers on “Talk"
 
-      Subject sets can be pretty powerful, and sometimes complex. You can have a single subject set that you add to over time, or have multiple subject sets, say, from different years or places. You can have different subject sets for different workflows, but you don't have to. You can even have multiple images in a given subject. For more details and advice on creating and structuring subject sets and associated manifests, check out the details section below.
+      Moderator: Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on “Talk".
 
-      ### PROJECT BUILDER'S MANUAL – THE DETAILS
+      Tester: Testers can view and classify on your project to give feedback while it’s still private. They cannot access the project builder.
 
-      - **Project**: This holds all your project level details. The project name, the people involved, and all the extra content (e.g. text and pictures) you want to share, are all here.
-        - **Project Details**: This is your project's "behind the scenes" home page. Start off by naming and describing your project, add a logo and background image.
-        - **Research Case, FAQ, Results, and Education**: You can add a lot of information in these pages to help volunteers better understand the motivation for your project, the best approaches for classifying, and the outcomes of your project.
-        - **Collaborators**: Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project before it's public).
-        - **Workflows**: A workflow is the sequence of tasks that you're asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow is where you define those tasks and set out the order in which the volunteers will do them. Your project might have multiple workflows (if you want to set different tasks for different image sets).
-      - **Subjects**: A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the "manifest") defining their properties, and the images themselves. Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it's best to just have all their subjects in 1 set, but not all.
+      Translator: Translators will have access to the project builder as well as the translation site, so they can translate all of your project text into a different language.
 
-      ### DETAILS - Workflows
 
+      ##TUTORIALS - Needs writing ##
+
+
+
+      ## Media <a id = "media"></a>
+      You can upload your own media to your project (such as example images for your help pages) so you can link to it without an external host. To start uploading, drop an image into the box (or click it to bring up your file browser and select a file).
+
+      Once the image has uploaded, it will appear above the "Add an image" box. You can then copy the markdown text beneath the image into your project, or add another image.
+
+      ## Visibility <a id="visibility"></a>
+      This page is where you decide whether your project is public and whether it's ready to go live. Also set workflows to "active" vs. "inactive" -- you can edit inactive workflows on a live project and link different subject sets to different workflows.
+
+      For more information on the different project stages, see our project builder policies.
+
+
+      ## Workflows <a id= "workflows"></a>
+
+      ## Orientation ##
       Note that a workflow with fewer tasks will be easier for volunteers to complete. We know from surveys of our volunteers that many people classify in their limited spare time, and sometimes they only have a few minutes. Longer, more complex workflows mean each classification takes longer, so if your workflow is very long you may lose volunteers.
 
-      _Workflow Name_: Give your workflow a short, but descriptive name. If you have multiple workflows and give volunteers the option of choosing which they want to work on, this name will appear on a button instead of "Get started!"
+      *Workflow Name:* Give your workflow a short, but descriptive name. If you have multiple workflows and give volunteers the option of choosing which they want to work on, this name will appear on a button instead of "Get started!"
 
-      _Version_: Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by a whole number: 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the version by a decimal, e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data.
+      *Version:* Version indicates which version of the workflow you are on. Every time you save changes to a workflow, you create a new version. Big changes, like adding or deleting questions, will change the version by a whole number: 1.0 to 2.0, etc. Smaller changes, like modifying the help text, will change the version by a decimal, e.g. 2.0 to 2.1. The version is tracked with each classification in case you need it when analyzing your data.
 
-      _Tasks_: There are two main types of tasks: questions and drawing. For question tasks, the volunteer chooses from a list of answers but does not mark or draw on the image. In drawing tasks, the volunteer marks or draws directly on the image using tools that you specify. They can also give sub-classifications for each mark. Note that you can set the first task from the drop-down menu.
+      *Tasks:* There are two main types of tasks: questions and drawing. For question tasks, the volunteer chooses from a list of answers but does not mark or draw on the image. In drawing tasks, the volunteer marks or draws directly on the image using tools that you specify. They can also give sub-classifications for each mark. Note that you can set the first task from the drop-down menu.
 
-      _Main Text_: Describe the task, or ask the question, in a way that is clear to a non-expert.
+      *Main Text:* Describe the task, or ask the question, in a way that is clear to a non-expert.
 
       The wording here is very important, because you will in general get what you ask for. Solicit opinions from team members and testers before you make the project public: it often takes a few tries to reach the combination of simplicity and clarity that will guide your volunteers to give you the inputs you need.
 
       You can use markdown in the main text.
 
-      _Help Text_: Add text and images for a pop-up help window. This is shown next to the main text of the task in the main classification interface, when the volunteer clicks a button asking for help. You can use markdown in this text, and link to other images to help illustrate your description. The help text can be as long as you need, but you should try to keep it simple and avoid jargon. One thing that is useful in the help text is a concise description of why you are asking for this particular information.
+      *Help Text:* Add text and images for a pop-up help window. This is shown next to the main text of the task in the main classification interface, when the volunteer clicks a button asking for help. You can use markdown in this text, and link to other images to help illustrate your description. The help text can be as long as you need, but you should try to keep it simple and avoid jargon. One thing that is useful in the help text is a concise description of why you are asking for this particular information.
 
-      ### DETAILS - Project Details:
 
-      _Name_: The project name is the first thing people will see and it will show up in the project URL. Try to keep it short and sweet.
+      # Project building: the slightly-more-detailed-version <a id="details"></a>
 
-      _Avatar_: Pick an avatar image for your project. This will represent your project on the Zooniverse home page. It can also be used as your project's brand. It's best if it's recognizable even as a small icon. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50KB, but at minimum 100x100 pixels.
+      If you'd still like to see a more detailed walk-through of how to set up a project from scratch, check out the [tutorial](/project-builder-walkthrough) for setting up 'Kitteh Zoo', a project for classifying cats.
 
-      _Background_: This image will be the background for all of your project pages, including your project's front page, which newcomers will see first. It should be relatively high resolution and you should be able to read text written across it. To add an image, either drag and drop or click to open your file viewer. For best results, use images of at least 1 megapixel, no larger than 256 KB. Most people's screens are not much bigger than 1300 pixels across and 750 pixels high, so if your image is a lot bigger than this you may find it doesn't look the way you expect. Feel free to experiment with different sizes on a "typical" desktop, laptop or mobile screen.
+      ## Create Tasks
+      Create tasks with the "Add New Task" Button. Delete tasks with the little "Delete this task" button on the bottom right hand side. *Note: When you create a new workflow, a question task is automatically created. You'll need to delete it if you don't want to ask your volunteers questions.
 
-      _Description_: This should be a one-line call to action for your project. This will display on your landing page and, if approved, on the Zooniverse home page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.
+      ## Wiring tasks together
+      After you've created all your tasks, you need to wire them together. Set your first task using the "First Task" dropdown menu below the "Add Task" button. Then for each task, you have to specify *what comes next*. In question tasks, you can specify different "Next Tasks" for different answers (provided users can only select one answer)
+      Subject retirement: Decide how many people you want to see each photo. You'll use the beta test to refine this number. We suggest starting out kinda high, like 10-20.
+      Multi-Image options: If you have more than one subject in your subject set (like on www.snapshotserengeti.org), decide how users will see them.
 
-      _Introduction_: Add a brief introduction to get people interested in your project. This will display on your project's front page. Note this field (renders markdown)[http://markdownlivepreview.com/], so you can format the text. You can make this longer than the Description, but it's still probably best to save much longer text for areas like the Research Case or FAQ tabs.
+      ## Task Content
+      Tasks can be Questions or Markings. Both types have "Main Text" boxes where you can ask your questions or tell users what to draw, as well as provide additional support for answering the question in the "Help Text" box.
 
-      _Checkbox: Volunteers choose workflow_: A workflow is a set of tasks a volunteer completes to create a classification. Your project might have multiple workflows (if you want to set different tasks for different image sets). Check this to let volunteers select which workflow they want to work on; otherwise, they'll be served workflow-subject pairs randomly.
+      ### Questions:
+      Choices: This section contains all your answers. The key features of this section are:
+        - Required: if you select this, the user will HAVE to answer the question before moving on.
+        - Multiple: if you select this, the user can select more than one answer -- use this for "select all that apply" type questions.
+        - Next Task: The “Next task” selection (which appears below the text box for each answer) describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).
 
-      _Checkbox: Private project_:
-      On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you're still working out its details. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left). Team members you add can see your project even if it's private. Once your project is public, anyone with the link can view and classify on it.
+      ### Marking:
+      Choices: This section contains all the different things people can mark. We call each separate option a "Tool" and you can specify a label, colour, and tool type for each option. Check out the Aggregation docs to understand how multiple volunteer answers are turned into final shapes for your data analysis!
 
-      ### DETAILS - Additional Content
+      Tool types are:
+      - *point:* X marks the spot.
+      - *line:* a straight line at any angle.
+      - *polygon:* an arbitrary shape made of point-to-point lines.
+      - *rectangle:* a box of any size and length-width ratio; this tool *cannot* be rotated.
+      - *circle:* a point and a radius.
+      - *ellipse:* an oval of any size and axis ratio; this tool *can* be rotated.
 
-      _Research Case, FAQ, Results, and Education_: These pages are where you really get to share all the cool things about your project. All of these pages use Markdown (see link above) to format text and display images.
 
-      [![Project additional content editor screenshot](/assets/how-to-lab/how-to-12.jpg)](/assets/how-to-lab/how-to-12.jpg)
+      # Subjects and so on <a id="subjects"></a>
 
-      _Research case_: Explain your research to your audience here in as much detail as you'd like. This page displays no matter what, since explaining your motivation to volunteers is critical for the success of your project!
+      Need to generate this content from the 'how-to' page
 
-      _Results_: Once your project has hit its stride, share the results of your project with your volunteers here. This page will only display if you add content to it.
-
-      _FAQ_: Add details here about your research, how to classify, and what you plan to do with the classifications. This page can evolve as your project does so that your active community members have a resource to point new users to. This page will only display if you add content to it.
-
-      _Education_: If you are a researcher open to collaborating with educators you can state that here, include educational content, and describe how you'd like to help educators use your project. Also, if your project is primarily for educational purposes you can describe that here. This page will only display if you add content to it.
-
-      ### DETAILS - Media
-
-      You can upload your own media to your project (such as example images for your help pages) so  you can link to it without an external host. To start uploading, drop an image into the box (or click it to bring up your file browser and select a file).
-
-      Once the image has uploaded, it will appear above the "Add an image" box. You can then copy the markdown text beneath the image into your project, or add another image.
-
-      ### DETAILS - Visibility
-
-      This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](/lab-policies).
-
-      ### DETAILS - Collaborators
-
-      Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project before it's public).
-
-      [![Project collaborator editor screenshot](/assets/how-to-lab/how-to-13.jpg)](/assets/how-to-lab/how-to-13.jpg)
-
-      _Owner_: The owner is the original project creator. There can be only one.
-
-      _Collaborator_: Collaborators have full access to edit workflows and project content, including deleting some or all of the project.
-
-      _Expert_: Experts can enter “gold mode” to make authoritative gold standard classifications that will be used to validate data quality.
-
-      _Researcher_: Members of the research team will be marked as researchers on “Talk"
-
-      _Moderator_: Moderators have extra privileges in the community discussion area to moderate discussions. They will also be marked as moderators on “Talk".
-
-      _Tester_: Testers can view and classify on your project to give feedback while it’s still private. They cannot access the project builder.
-
-      _Translator_: Translators will have access to the project builder as well as the translation site, so they can translate all of your project text into a different language.
-
-      ### DETAILS - Subject sets and manifest details, a.k.a. "What is a manifest?"
-
-      *The condensed answer:*
-
-      A manifest is a file that tells our software how to combine the images you have into units of data (subjects) to be classified. The manifest also allows you to link your classifications back to the rest of your data. A manifest is formatted as a CSV file with 1 line per subject, with a unique identifier and the names of images to be associated with a subject on each row (with additional information often included in other fields as well). There is an example in the ["Kitteh" zip file](https://data.zooniverse.org/tutorial/kitteh_zoo.zip).
-
-      *The full answer:*
-
-      What we call a "manifest" is really just a plain text file with a specific format to each line.
-
-      To understand the format, let's start with the first few lines from the Kitteh Zoo manifest:
-
-          subject_id,image_name_1,origin,link,attribution,license,#secret_description
-          1,6672150457_420d61007d_b.jpg,Flickr,https://www.flickr.com/photos/aigle_dore/6672150457,Moyan Brenn,Creative Commons - share adapt attribute,sleepy striped kitteh is unsuspecting of paparazzi
-          2,8300920648_d4a21bba59_z,Flickr,https://www.flickr.com/photos/aigle_dore/8300920648,Moyan Brenn,Creative Commons - share adapt attribute,grandfather kitteh has ear hair. a lot of it
-          3,6713782851_82fc8c73e5_z.jpg,Flickr,https://www.flickr.com/photos/hellie55/6713782851,hehaden,Creative Commons - share adapt attribute,juvenile kittehs practice break-in at the catnip factory
-
-      The first line of the file is a header line that specifies the name of each of the manifest fields. In this case, our manifest has 7 fields (or columns), called "subject\_id", "image\_name", "origin", "link", "attribution", "license" and “#secret\_description”. They are separated by commas: this is what's known as a "comma separated values" file, or CSV file.
-
-      After the first line, each row of the file contains information about 1 subject. The first field, corresponding with the "subject\_id" header, is a unique number that identifies the subject. The second field, which aligns with the "image\_name" header, contains the name of the image that's associated with that subject. These 2 fields are critically important: the image name is obviously important, and a unique identifier is important for matching your classifications to the rest of your data.
-
-      All the other fields are optional, but in general having more information in the manifest is better. Most projects include additional information in the manifest that helps them match the classifications and subjects to the other data they need for their research. The additional information in the manifest can also be made available to volunteers as they classify or in the Talk discussion tool (some very keen volunteers find this extremely useful). Any fields with names that begin with “#” or “//” will *not* be shown to volunteers, such as the “#secret\_description” field in Kitteh Zoo. These hidden fields will still be returned to you in the classification file, so you can use these to include information helpful to your research without worrying about whether it might affect the classifications themselves. There might be information that could helpful for the volunteers in discussions or further exploration in the Talk discsussion tool, but could bias the classifications if visible to volunteers while classifying. Any fields with names that begin with "!" *will not* be accessible to volunteers in the classification interface, but *will be*  available on Talk after classification. Information in fields that *don’t* begin with a “#”, “//”, or '!' will always be accessible to volunteers in both the classification interface and the Talk discussion tool.
-
-      For now, let’s assume you’re just including the bare minimum of information, like:
-
-          id,image
-          1,kitteh_in_box.jpg
-          2,kitteh_stalking.jpg
-          3,kitteh_losing_balance.jpg
-
-      Note the field names have changed from the previous example. That's because, aside from marking whether a field is hidden or not, it doesn't actually matter to the Zooniverse what the fields are called (or what order they’re in), so you can name and order them according to whatever works best for your project.
-
-      Using a manifest CSV file also makes it very easy to create subjects with multiple images:
-
-          id,image1,image2
-          1,kitteh_in_box.jpg,kitteh_eating_box.jpg
-          2,kitteh_stalking.jpg,kitteh_pounced.jpg
-          3,kitteh_losing_balance.jpg,kitteh_falling_off_sofa.jpg
-
-      If you upload this manifest plus the 6 images named in it, the Zooniverse software will create 3 subjects with 2 images each. When these subjects come up in the classification interface, volunteers will be able to flash between the images or switch between them manually.
-
-      You can create a manifest file in a simple text editor (such as TextEdit or Notepad), although this method is prone to errors like missed or extra commas. People often find it easiest to create manifest files using spreadsheet software such as Google Sheets, iWork Numbers or Microsoft Excel. Creating and maintaining a manifest using a spreadsheet makes the manifest easy to read, and you can export it to CSV format when you're ready to upload your subjects. You can also open existing CSV files in spreadsheet software.
-
-      *Note:* if you have a large subject set it may be cumbersome to manually create a manifest. We suggest using a command-line or other tool to copy-paste a directory list of files into a spreadsheet to help you get started.
     '''
 
 module.exports = React.createClass
