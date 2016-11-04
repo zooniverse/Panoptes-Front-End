@@ -47,15 +47,11 @@ const RecentProjectsSection = React.createClass({
         return projectPreference.activity_count > 0;
       });
       const recentPreferences = activePreferences.filter(Boolean).slice(0, 5);
-      return Promise.all(recentPreferences.map((preference) => {
-        // A user might have preferences for a project that no longer exists.
-        return apiClient.type('projects').get({id: preference.links.project, cards: true}).then(function(project) {
-          return project[0];
-        }).catch(() => {
-          return null;
-        });
-      })).then((projects) => {
-        return projects.filter(Boolean);
+      const project_ids = recentPreferences.map((preference) => {
+        return preference.links.project
+      });
+      return apiClient.type('projects').get({id: project_ids, cards: true}).catch(() => {
+        return null;
       });
     })
     .then((projects) => {
@@ -96,7 +92,6 @@ const RecentProjectsSection = React.createClass({
 
         <div className="project-card-list">
           {this.state.projects.map((project) => {
-            console.log(project);
             return <ProjectCard key={project.id} project={project} />;
           })}
         </div>
