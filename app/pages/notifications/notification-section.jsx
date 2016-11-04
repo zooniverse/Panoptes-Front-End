@@ -13,7 +13,6 @@ const NotificationSection = React.createClass({
     callbackParent: React.PropTypes.func,
     expanded: React.PropTypes.bool,
     location: React.PropTypes.object,
-    project: React.PropTypes.object,
     projectID: React.PropTypes.string,
     section: React.PropTypes.string,
     slug: React.PropTypes.string,
@@ -21,7 +20,6 @@ const NotificationSection = React.createClass({
   },
 
   contextTypes: {
-    notificationsCounter: React.PropTypes.object,
     router: React.PropTypes.object.isRequired,
   },
 
@@ -79,6 +77,12 @@ const NotificationSection = React.createClass({
     }
   },
 
+  onSectionToggle() {
+    const expandToggle = this.props.expanded ? false : this.props.projectID;
+    updateQueryParams(this.context.router, { page: 1 });
+    this.props.callbackParent(expandToggle);
+  },
+
   getNotifications(page) {
     let firstMeta;
     let lastMeta;
@@ -113,12 +117,6 @@ const NotificationSection = React.createClass({
       });
   },
 
-  onSectionToggle() {
-    const expandToggle = this.props.expanded ? false : this.props.projectID;
-    updateQueryParams(this.context.router, { page: 1 });
-    this.props.callbackParent(expandToggle);
-  },
-
   getUnreadCount() {
     return talkClient.type('notifications').get({ page: 1, page_size: 1, delivered: false, section: this.props.section })
     .catch(() => {
@@ -147,7 +145,7 @@ const NotificationSection = React.createClass({
 
     this.state.notifications.forEach((notification) => {
       if (unread.indexOf(notification.id) > -1) {
-        notification.update({ delivered: true });
+        notification.update({ delivered: true }).save();
       }
     });
   },
@@ -248,13 +246,12 @@ const NotificationSection = React.createClass({
               page={+this.state.lastMeta.page}
               pageCount={this.state.lastMeta.page_count}
               itemCount={true}
-              scrollOnChange={false}
               firstAndLast={false}
               pageSelector={false}
               nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
               previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
-              onClickNext={this.markAsRead.bind(this, 'last')}
-              totalItems={<span>{(l.page * l.page_size) - (l.page_size - 1)} - {Math.min(l.page_size * l.page, l.count)} of {l.count}</span>}
+              onClickNext={this.markAsRead.bind('last')}
+              totalItems={<span className="notification-section__item-count">{(l.page * l.page_size) - (l.page_size - 1)} - {Math.min(l.page_size * l.page, l.count)} of {l.count}</span>}
             />
           </div>
         )}
