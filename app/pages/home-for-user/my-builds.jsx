@@ -46,6 +46,7 @@ const MyBuildsSection = React.createClass({
     });
 
     apiClient.type('projects').get({
+      cards: true,
       current_user_roles: ['owner'],
       sort: '-updated_at',
     })
@@ -53,20 +54,6 @@ const MyBuildsSection = React.createClass({
       this.setState({
         projects,
       });
-
-      return Promise.all(projects.map((project) => {
-        return project.get('avatar')
-        .catch(() => {
-          return null;
-        })
-        .then((avatar) => {
-          const newState = Object.assign({}, this.state.avatars);
-          newState[project.id] = avatar;
-          this.setState({
-            avatars: newState,
-          });
-        });
-      }));
     })
     .catch((error) => {
       this.setState({
@@ -101,8 +88,7 @@ const MyBuildsSection = React.createClass({
 
         <div className="project-card-list">
           {this.state.projects.map((project) => {
-            const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
-            return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} href={`/lab/${project.id}`} />;
+            return <ProjectCard key={project.id} project={project} href={`/lab/${project.id}`} />;
           })}
         </div>
       </HomePageSection>
