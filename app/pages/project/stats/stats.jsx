@@ -274,7 +274,6 @@ export class WorkflowProgress extends React.Component {
         );
       }
       classificationsString += ` / ${total.toLocaleString()}`;
-      // not entirely sure why this first check is needed, but the code crashes without it
       if (this.props.workflow.configuration) {
         if (this.props.workflow.configuration.stats_completeness_type === 'classification') {
           completeness = this.props.workflow.classifications_count / total;
