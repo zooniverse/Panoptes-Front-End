@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Notification from './notification';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
@@ -7,36 +7,24 @@ import Paginator from '../../talk/lib/paginator';
 import updateQueryParams from '../../talk/lib/update-query-params';
 import ZooniverseLogo from '../../partials/zooniverse-logo';
 
-const NotificationSection = React.createClass({
-
-  propTypes: {
-    callbackParent: React.PropTypes.func,
-    expanded: React.PropTypes.bool,
-    location: React.PropTypes.object,
-    projectID: React.PropTypes.string,
-    section: React.PropTypes.string,
-    slug: React.PropTypes.string,
-    user: React.PropTypes.object,
-  },
-
-  contextTypes: {
-    router: React.PropTypes.object.isRequired,
-  },
-
-  getDefaultProps() {
-    return {
-      location: { query: { page: 1 } },
-    };
-  },
-
-  getInitialState() {
-    return {
+class NotificationSection extends Component {
+  constructor(props) {
+    super(props);
+    this.onSectionToggle = this.onSectionToggle.bind(this);
+    this.getNotifications = this.getNotifications.bind(this);
+    this.getUnreadCount = this.getUnreadCount.bind(this);
+    this.markAsRead = this.markAsRead.bind(this);
+    this.notificationsQuery = this.notificationsQuery.bind(this);
+    this.avatarFor = this.avatarFor.bind(this);
+    this.unreadCircle = this.unreadCircle.bind(this);
+    this.renderHeader = this.renderHeader.bind(this);
+    this.state = {
       firstMeta: { },
       lastMeta: { },
       notificationsMap: { },
       notifications: [],
     };
-  },
+  }
 
   componentWillMount() {
     if (this.props.user) this.getNotifications();
@@ -56,11 +44,11 @@ const NotificationSection = React.createClass({
         });
       });
     }
-  },
+  }
 
   componentDidMount() {
     this.getUnreadCount();
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     const pageChanged = nextProps.location.query.page !== this.props.location.query.page;
@@ -68,20 +56,20 @@ const NotificationSection = React.createClass({
     if (pageChanged || userChanged) {
       this.getNotifications(nextProps.location.query.page);
     }
-  },
+  }
 
   componentWillUnmount() {
     if (this.props.user) {
       this.markAsRead('first');
       this.markAsRead('last');
     }
-  },
+  }
 
   onSectionToggle() {
     const expandToggle = this.props.expanded ? false : this.props.projectID;
     updateQueryParams(this.context.router, { page: 1 });
     this.props.callbackParent(expandToggle);
-  },
+  }
 
   getNotifications(page) {
     let firstMeta;
@@ -115,7 +103,7 @@ const NotificationSection = React.createClass({
           lastMeta: lastMeta,
         });
       });
-  },
+  }
 
   getUnreadCount() {
     return talkClient.type('notifications').get({ page: 1, page_size: 1, delivered: false, section: this.props.section })
@@ -130,7 +118,7 @@ const NotificationSection = React.createClass({
         this.setState({ unread: 0 });
       }
     });
-  },
+  }
 
   markAsRead(position) {
     const ids = this.state[`${position}Meta`].notificationIds;
@@ -148,7 +136,7 @@ const NotificationSection = React.createClass({
         notification.update({ delivered: true }).save();
       }
     });
-  },
+  }
 
   notificationsQuery(page = this.props.location.query.page, options = { }) {
     const query = Object.assign({}, options, {
@@ -160,7 +148,7 @@ const NotificationSection = React.createClass({
       query.section = this.props.section;
     }
     return query;
-  },
+  }
 
   avatarFor() {
     const projLink = this.props.slug ? `/projects/${this.props.slug}` : '/';
@@ -180,7 +168,7 @@ const NotificationSection = React.createClass({
         {avatar}
       </Link>
     );
-  },
+  }
 
   unreadCircle() {
     return (
@@ -193,7 +181,7 @@ const NotificationSection = React.createClass({
         <text x="40%" y="50%" stroke="white" strokeWidth="2px" dy=".3em">{this.state.unread}</text>
       </svg>
     );
-  },
+  }
 
   renderHeader() {
     const buttonType = this.props.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
@@ -218,7 +206,7 @@ const NotificationSection = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
   render() {
     const l = this.state.lastMeta;
@@ -250,7 +238,7 @@ const NotificationSection = React.createClass({
               pageSelector={false}
               nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
               previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
-              onClickNext={this.markAsRead.bind('last')}
+              onClickNext={this.markAsRead.bind(this, 'last')}
               totalItems={<span className="notification-section__item-count">{(l.page * l.page_size) - (l.page_size - 1)} - {Math.min(l.page_size * l.page, l.count)} of {l.count}</span>}
             />
           </div>
@@ -258,7 +246,27 @@ const NotificationSection = React.createClass({
 
       </div>
     );
-  },
-});
+  }
+}
+
+NotificationSection.propTypes = {
+  callbackParent: React.PropTypes.func,
+  expanded: React.PropTypes.bool,
+  location: React.PropTypes.object,
+  projectID: React.PropTypes.string,
+  section: React.PropTypes.string,
+  slug: React.PropTypes.string,
+  user: React.PropTypes.object,
+};
+
+NotificationSection.contextTypes = {
+  router: React.PropTypes.object.isRequired,
+};
+
+NotificationSection.defaultProps = {
+  expanded: false,
+  location: { query: { page: 1 } },
+  slug: '',
+};
 
 export default NotificationSection;
