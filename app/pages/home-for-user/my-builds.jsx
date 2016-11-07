@@ -46,7 +46,6 @@ const MyBuildsSection = React.createClass({
     });
 
     apiClient.type('projects').get({
-      cards: true,
       current_user_roles: ['owner'],
       sort: '-updated_at',
     })
