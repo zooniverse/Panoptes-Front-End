@@ -2,6 +2,7 @@ React = require 'react'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 TalkDataExportButton = require '../../talk/data-export-button'
+ExportWorkflowsDialog = require('../../partials/export-workflows-dialog').default
 
 counterpart.registerTranslations 'en',
   projectDetails:
@@ -81,4 +82,5 @@ module.exports = React.createClass
           </div>
         </div>
       </div>
+      <ExportWorkflowsDialog project={@props.project} />
     </div>
