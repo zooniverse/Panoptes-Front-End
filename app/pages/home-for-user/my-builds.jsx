@@ -48,10 +48,26 @@ const MyBuildsSection = React.createClass({
     apiClient.type('projects').get({
       current_user_roles: ['owner'],
       sort: '-updated_at',
+      include: ['avatar']
     })
     .then((projects) => {
       this.setState({
         projects,
+      });
+      projects.map((project) => {
+        if (project.links.avatar.id) {
+          apiClient.type('avatars').get(project.links.avatar.id)
+          .catch(() => {
+            return null;
+          })
+          .then((avatar) => {
+            const newState = Object.assign({}, this.state.avatars);
+            newState[project.id] = avatar;
+            this.setState({
+              avatars: newState
+            });
+          });
+        }
       });
     })
     .catch((error) => {
@@ -87,7 +103,8 @@ const MyBuildsSection = React.createClass({
 
         <div className="project-card-list">
           {this.state.projects.map((project) => {
-            return <ProjectCard key={project.id} project={project} href={`/lab/${project.id}`} />;
+            const avatarSrc = !!this.state.avatars[project.id] ? this.state.avatars[project.id].src : null;
+            return <ProjectCard key={project.id} project={project} imageSrc={avatarSrc} href={`/lab/${project.id}`} />;
           })}
         </div>
       </HomePageSection>
