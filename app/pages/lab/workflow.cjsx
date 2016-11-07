@@ -311,7 +311,7 @@ EditWorkflowPage = React.createClass
             <div>
               <AutoSave resource={@props.workflow}>
                 <span className="form-label">Pan and zoom</span><br />
-                <small className="form-help">Pan and zoom allows the user to zoom in and out and pan the subject in the subject viewer.</small>
+                <small className="form-help">Pan and zoom allows the user to zoom in and out and pan image subjects in the classification interface.</small>
                 <br />
                 <label>
                   <input ref="panAndZoomToggle" type="checkbox" checked={@props.workflow.configuration.pan_and_zoom} onChange={@handleSetPanAndZoom} />
