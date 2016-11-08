@@ -19,16 +19,14 @@ module.exports = React.createClass
     expanded: @props.expanded
 
   render: ->
-    marks = (mark for mark in @props.annotation.value)
-
     <div>
       <div className="question">
         <Markdown>
           {@props.task.instruction}
         </Markdown>
-        {if @state.expanded and marks.length isnt 0
+        {if @state.expanded and @props.annotation.value.length isnt 0
           <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: false, null}>Less</button>
-        else if marks.length isnt 0
+        else if @props.annotation.value.length isnt 0
           <button type="button" className="toggle-more" onClick={@setState.bind this, expanded: true, null}>More</button>}
         {if @props.onToggle?
           if @props.inactive

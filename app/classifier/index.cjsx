@@ -173,8 +173,7 @@ Classifier = React.createClass
     }</ChangeListener>
 
   renderTask: (classification, annotation, task) ->
-    taskKeys = Object.keys(@props.workflow.tasks)
-    visibleTasks = taskKeys.filter (key) => key if @props.workflow.tasks[key].type isnt 'shortcut'
+    visibleTasks = Object.keys(@props.workflow.tasks).filter (key) => key if @props.workflow.tasks[key].type isnt 'shortcut'
 
     TaskComponent = tasks[task.type]
 
