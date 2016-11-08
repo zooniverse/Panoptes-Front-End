@@ -12,6 +12,7 @@ class NotificationSection extends Component {
     super(props);
     this.onSectionToggle = this.onSectionToggle.bind(this);
     this.state = {
+      currentMeta: { },
       firstMeta: { },
       lastMeta: { },
       notificationsMap: { },
@@ -95,6 +96,7 @@ class NotificationSection extends Component {
           notificationsMap: notificationsMap,
           firstMeta: firstMeta,
           lastMeta: lastMeta,
+          currentMeta: meta,
         });
       });
   }
@@ -206,7 +208,7 @@ class NotificationSection extends Component {
   }
 
   render() {
-    const l = this.state.lastMeta;
+    const l = this.state.currentMeta;
 
     return (
       <div className="notification-section">
@@ -228,14 +230,14 @@ class NotificationSection extends Component {
           <div className="centering">
             <Paginator
               className="notification-section__container"
-              page={+this.state.lastMeta.page}
+              page={+this.state.currentMeta.page}
               pageCount={this.state.lastMeta.page_count}
               itemCount={true}
               firstAndLast={false}
               pageSelector={false}
               nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
               previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
-              onClickNext={this.markAsRead.bind(this, 'last')}
+              onClickNext={this.markAsRead.bind(this, 'first')}
               totalItems={<span className="notification-section__item-count">{(l.page * l.page_size) - (l.page_size - 1)} - {Math.min(l.page_size * l.page, l.count)} of {l.count}</span>}
             />
           </div>
