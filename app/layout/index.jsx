@@ -4,8 +4,6 @@ import AdminOnly from '../components/admin-only';
 import SiteNav from './site-nav';
 import SiteFooter from './site-footer';
 
-import style from './index.styl';
-void style;
 
 const MAX_MOBILE_WIDTH = 875;
 

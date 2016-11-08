@@ -6,8 +6,6 @@ import HomePageSection from './generic-section';
 import { Link } from 'react-router';
 import StringTruncator from './string-truncator';
 
-import style from './recent-messages.styl';
-void style;
 
 const LOADER_BULLETS = '• • •';
 

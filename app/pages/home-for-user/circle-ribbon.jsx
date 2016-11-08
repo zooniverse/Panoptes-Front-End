@@ -1,8 +1,6 @@
 import React from 'react';
 import SVGLink from './svg-link';
 
-import style from './circle-ribbon.styl';
-void style;
 
 let instanceCount = 0;
 

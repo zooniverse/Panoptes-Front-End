@@ -4,8 +4,6 @@ import ProjectCard from '../../partials/project-card';
 import Publications from '../../lib/publications';
 import moment from 'moment';
 
-import style from './news-pullout.styl';
-void style;
 
 const NewsSection = React.createClass({
 
