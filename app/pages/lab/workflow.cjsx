@@ -333,57 +333,6 @@ EditWorkflowPage = React.createClass
           </p>
 
           <hr />
-          
-          <div>
-            <span className="form-label">How should the project completeness be calculated?</span>
-            <br />
-            <p className="form-help">
-              <small>
-                Use this option to change how your project's completeness is calculated on the public statistics page.
-              </small>
-            </p>
-            <p className="form-help">
-              <small>
-              When using "Classification Count" the completeness will increase after each classification. The
-              {' '}total number of classifications needed to complete the workflow is estimated assuming a constant retirement limit.
-              {' '}If the retirement limit is changed and/or subjects sets are unlinked from an <b>active</b> workflow this estimate will be inaccurate.
-              {' '}To avoid these issues completed subject sets should not be removed, instead completed workflows should be deactivated
-              {' '}and new ones created for new subject sets (note: workflows can be copied using the <i className="fa fa-copy"/> button at the top of the page).
-              </small>
-            </p>
-            <p className="form-help">
-              <small>
-              When using "Retirement Count" the completeness will increase after each image retires (note: this value is re-calculated once an hour).
-              {' '}Since the images are shown to users in a random order, this completeness estimate will be slow to increase until the project is close to being finished.
-              {' '}If your project does not have a constant retirement limit (e.g. it uses a custom retiment rule) and/or subject sets 
-              {' '}have been unlinked from a live workflow, this estimate will be the most accurate.
-              </small>
-            </p>
-            <AutoSave tag="div" resource={@props.workflow}>
-              <label>
-                <input
-                  type="radio"
-                  name="stats_completeness_type"
-                  value="classification"
-                  checked={stats_completeness_type == 'classification'}
-                  onChange={@handleSetStatsCompletenessType}
-                />
-                Classification Count
-              </label>
-              <br />
-              <label>
-                <input
-                  type="radio"
-                  name="stats_completeness_type"
-                  value="retirement"
-                  checked={stats_completeness_type == 'retirement'}
-                  onChange={@handleSetStatsCompletenessType}
-                />
-                Retirement Count
-              </label>
-            </AutoSave>
-          </div>
-          <hr />
 
           {if 'worldwide telescope' in @props.project.experimental_tools
             <div>
@@ -568,10 +517,6 @@ EditWorkflowPage = React.createClass
   handleSetGravitySpyGoldStandard: (e) ->
     @props.workflow.update
       'configuration.gravity_spy_gold_standard': e.target.checked
-
-  handleSetStatsCompletenessType: (e) ->
-    @props.workflow.update
-      'configuration.stats_completeness_type': e.target.value
 
   handleSetWorldWideTelescope: (e) ->
     if !@props.workflow.configuration.custom_summary
