@@ -10,9 +10,6 @@ module.exports = React.createClass
     project: React.PropTypes.object
     user: React.PropTypes.object
 
-  getDefaultProps: () ->
-    location: { query: { page: 1 } }
-
   getInitialState: () ->
     projNotifications: []
 
@@ -20,13 +17,13 @@ module.exports = React.createClass
     @getProjectNotifications(@props.user) if @props.user
 
   componentWillReceiveProps: (nextProps) ->
-    @getProjectNotifications(nextProps.user) if nextProps.user
+    @getProjectNotifications(nextProps.user) if nextProps.user isnt this.props.user
 
   getProjectNotifications: (user) ->
     if @props.project
       talkClient.type('notifications').get({ page: 1, page_size: 1, section: 'project-' + @props.project.id })
-        .then (projNotifications) =>
-          @setState {projNotifications: projNotifications }
+        .then (projNotification) =>
+          @setState {projNotifications: projNotification }
     else
       talkClient.type('notifications').get({ page: 1, page_size: 50 })
         .then (projNotifications) =>
@@ -46,8 +43,8 @@ module.exports = React.createClass
           projectNotifications.push(notification)
     projectNotifications
 
-  onChildChanged: (id) ->
-    this.setState({expanded: id})
+  onChildChanged: (section) ->
+    this.setState({expanded: section})
 
   render: ->
     <div className="talk notifications">
@@ -66,7 +63,7 @@ module.exports = React.createClass
                     key={notification.id}
                     callbackParent={@onChildChanged}
                     location={@props.location}
-                    expanded={true if notification.project_id is @state.expanded}
+                    expanded={true if notification.section is @state.expanded}
                     projectID={notification.project_id}
                     slug={notification.project_slug}
                     section={notification.section}

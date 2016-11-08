@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Notification from './notification';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
@@ -11,23 +11,16 @@ class NotificationSection extends Component {
   constructor(props) {
     super(props);
     this.onSectionToggle = this.onSectionToggle.bind(this);
-    this.getNotifications = this.getNotifications.bind(this);
-    this.getUnreadCount = this.getUnreadCount.bind(this);
-    this.markAsRead = this.markAsRead.bind(this);
-    this.notificationsQuery = this.notificationsQuery.bind(this);
-    this.avatarFor = this.avatarFor.bind(this);
-    this.unreadCircle = this.unreadCircle.bind(this);
-    this.renderHeader = this.renderHeader.bind(this);
     this.state = {
       firstMeta: { },
       lastMeta: { },
       notificationsMap: { },
       notifications: [],
+      page: 1,
     };
   }
 
   componentWillMount() {
-    if (this.props.user) this.getNotifications();
     if (this.props.section === 'zooniverse') {
       this.setState({
         name: 'Zooniverse',
@@ -51,9 +44,10 @@ class NotificationSection extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const pageChanged = nextProps.location.query.page !== this.props.location.query.page;
+    const pageChanged = nextProps.location.query.page !== this.state.page;
     const userChanged = nextProps.user && nextProps.user !== this.props.user;
-    if (pageChanged || userChanged) {
+    if ((pageChanged || userChanged) && nextProps.expanded) {
+      this.setState({ notifications: [], page: nextProps.location.query.page });
       this.getNotifications(nextProps.location.query.page);
     }
   }
@@ -66,7 +60,7 @@ class NotificationSection extends Component {
   }
 
   onSectionToggle() {
-    const expandToggle = this.props.expanded ? false : this.props.projectID;
+    const expandToggle = this.props.expanded ? false : this.props.section;
     updateQueryParams(this.context.router, { page: 1 });
     this.props.callbackParent(expandToggle);
   }
@@ -123,22 +117,25 @@ class NotificationSection extends Component {
   markAsRead(position) {
     const ids = this.state[`${position}Meta`].notificationIds;
     const unread = [];
-    ids.forEach((id) => {
-      if (!this.state.notificationsMap[id].delivered) {
-        unread.push(id);
-      }
-    });
 
-    if (unread.length === 0) return unread;
+    if (ids !== undefined) {
+      ids.forEach((id) => {
+        if (!this.state.notificationsMap[id].delivered) {
+          unread.push(id);
+        }
+      });
 
-    this.state.notifications.forEach((notification) => {
-      if (unread.indexOf(notification.id) > -1) {
-        notification.update({ delivered: true }).save();
-      }
-    });
+      if (unread.length === 0) return unread;
+
+      this.state.notifications.forEach((notification) => {
+        if (unread.indexOf(notification.id) > -1) {
+          notification.update({ delivered: true }).save();
+        }
+      });
+    }
   }
 
-  notificationsQuery(page = this.props.location.query.page, options = { }) {
+  notificationsQuery(page = this.props.location.page, options = { }) {
     const query = Object.assign({}, options, {
       page: page,
       page_size: 5,
@@ -216,7 +213,7 @@ class NotificationSection extends Component {
 
         {this.renderHeader()}
 
-        {this.props.expanded && (
+        {(this.props.expanded) && (
           this.state.notifications.map((notification) => {
             return (
               <Notification
@@ -227,7 +224,7 @@ class NotificationSection extends Component {
           })
         )}
 
-        {this.props.expanded && (
+        {(this.props.expanded) && (
           <div className="centering">
             <Paginator
               className="notification-section__container"
@@ -265,8 +262,6 @@ NotificationSection.contextTypes = {
 
 NotificationSection.defaultProps = {
   expanded: false,
-  location: { query: { page: 1 } },
-  slug: '',
 };
 
 export default NotificationSection;
