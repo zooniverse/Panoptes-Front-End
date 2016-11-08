@@ -22,7 +22,7 @@ experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 Shortcut = require './tasks/shortcut'
 `import CacheClassification from '../components/cache-classification'`
-MetadataBasedFeedback = require './tasks/metadata-based-feedback'
+MetadataBasedFeedback = require './metadata-based-feedback'
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -315,19 +315,20 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      <MetadataBasedFeedback
-      subject={@props.subject}
-      classification={@props.classification}
-      dudLabel='DUD'
-      simLabel='SIM'
-      subjectLabel='SUB'
-      metaTypeFieldName='#Type'
-      metaSuccessMessageFieldName='#F_Success'
-      metaFailureMessageFieldName='#F_Fail'
-      metaSimCoordXPattern='#X'
-      metaSimCoordYPattern='#Y'
-      metaSimTolPattern='#Tol'
-      />
+      {if 'metadata based feedback' in @props.project.experimental_tools
+        <MetadataBasedFeedback
+          subject={@props.subject}
+          classification={@props.classification}
+          dudLabel='DUD'
+          simLabel='SIM'
+          subjectLabel='SUB'
+          metaTypeFieldName='#Type'
+          metaSuccessMessageFieldName='#F_Success'
+          metaFailureMessageFieldName='#F_Fail'
+          metaSimCoordXPattern='#X'
+          metaSimCoordYPattern='#Y'
+          metaSimTolPattern='#Tol'
+        />}
 
       {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
         <strong>
