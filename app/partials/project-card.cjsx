@@ -33,7 +33,7 @@ ProjectCard = React.createClass
 
     <FlexibleLink to={href}>
       <div className="project-card" ref="projectCard" style={conditionalStyle}>
-        <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
+        <svg viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.project.display_name}</span></div>
           {<div className="description">{@props.project.description}</div> if @props.project.description?}

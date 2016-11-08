@@ -1,7 +1,5 @@
 import React from 'react';
 
-import style from './blurred-image.styl';
-void style;
 
 function BlurredImage(props) {
   return (

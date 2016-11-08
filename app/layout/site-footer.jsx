@@ -6,8 +6,6 @@ import AdminOnly from '../components/admin-only';
 import AdminToggle from './admin-toggle';
 import { Link, IndexLink } from 'react-router';
 
-import style from './site-footer.styl';
-void style;
 
 counterpart.registerTranslations('en', {
   footer: {

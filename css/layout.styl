@@ -1,51 +1,77 @@
-body
-  margin: 0
-
-.panoptes-main
-  display: flex
-  flex: 1 0 auto
-  flex-direction: column
-  min-height: 100vh // TODO: iOS's `vh` is buggy, so work around it.
-
-.main-content
-  display: flex
-  flex: 1 0 auto
-  flex-direction: column
-
-.content-container
-  margin: 1.5em 3vw
-
-.columns-container
-  display: flex
-
-  &.inline
-    align-items: baseline
-    flex-wrap: wrap
-
-  &.spread
-    justify-content: space-between
-
-  > :not(:last-child)
-    margin-right: 1.5vw
-
-  > :not(hr)
-    flex: 1 1
-
-  > .column
-    flex-grow: 5
-    // Constrain images to column width
-    min-width: 0
-    img
-      max-width: 100%
-
-
-  > hr
-    border-width: 0 0 0 1px
-    height: auto
-    margin-bottom: 0
-    margin-top: 0
-
-// IE workaround: https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
-.flex-container
+.app-layout
+  background-position: center top
+  background-size: cover
   display: flex
   flex-direction: column
+  min-height: 100vh
+  position: relative
+
+  &--site-header-demoted
+    background-color: #0b517c
+    color: white
+
+  &__admin-indicator
+    border: 0.3em solid;
+    border-image: repeating-linear-gradient(45deg, #000, #000 1%, #ff0 1%, #ff0 2%) 5;
+    box-sizing: border-box
+    height: 100%
+    left: 0
+    pointer-events: none
+    position: fixed
+    top: 0
+    width: 100%
+    z-index: 2
+
+  &__header
+    background-color: #00979D
+    color: white
+
+    &--demoted
+      background-color: transparent
+      color: inherit
+      position: absolute
+      right: 0
+      top: 0
+
+    // TODO: Make this a header variant of the layout, "detached" maybe.
+    /.on-home-page &:not(&--demoted),
+    /.on-secondary-page &:not(&--demoted),
+    &--detached
+      background-color: transparent
+      position: absolute
+      width: 100%
+      z-index: 1
+
+  &__not-header
+    display: flex
+    flex-direction: column
+    flex-grow: 1
+
+  &__main
+    background: white
+    color: #404040
+    display: flex
+    flex-direction: column
+    flex-grow: 1
+    position: relative
+    transform-origin: center top
+    transition: opacity 250ms, transform 125ms
+
+    &--set-aside
+      
+      .project-page
+
+        > div
+        > nav
+          opacity: 0.9
+
+        > .talk
+          opacity: 1
+
+  &__page-header,
+  &__page-content
+    padding: 1em 5vw
+
+  &:not(&--site-header-demoted) &__footer
+    background: #272727
+    color: rgba(white, 0.5)
