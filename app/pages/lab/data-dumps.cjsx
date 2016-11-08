@@ -92,5 +92,4 @@ module.exports = React.createClass
           </div>
         </div>
       </div>
-      <ExportWorkflowsDialog project={@props.project} />
     </div>
