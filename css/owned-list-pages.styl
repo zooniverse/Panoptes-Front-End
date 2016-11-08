@@ -7,21 +7,37 @@
   .resources-container
     background: #ebebeb
     padding: 0 3vw 2.33em
+    text-align: center
 
     .resource-results-counter
       color: rgba(100, 100, 100, 0.5)
       font-weight: 700
-      text-align: center
+      margin: 0 auto
+      max-width: 1200px
+      overflow: visible
+      position: relative
+      padding: 0
 
-      p
-        font-size: 14px
-        margin: 0
-        padding: 2.33em 0
+      .pagination
+        padding: 0.5em 0
+  p
+    font-size: 1em
+    margin: 0
+    padding: 2.33em 0
+
+  p.showing-projects
+    padding-top: 1.1em
+    padding-bottom: 1.1em
+
+    @media screen and (max-width: 750px)
+      clear: both
+
+  a.view-by-discipline-link
+    margin: 15px
+    display: inline-block
 
   .in-project-context
-
     .collection-results-counter
-
         p:first-child
           padding-top: 0px
 
@@ -38,3 +54,25 @@
 
     .active
       border: 2px solid
+
+.card-search
+  max-width: 250px
+  text-align: left
+  width: 100%
+  float: right
+  margin-right: 35px
+
+  @media screen and (max-width: 750px)
+    float: none
+    margin: 1em auto 0
+
+.card-sort
+  max-width: 250px
+  float: left
+  text-align: left
+  width: 100%
+  margin-left: 35px
+
+  @media screen and (max-width: 750px)
+    float: none
+    margin: 2.33em auto 0
