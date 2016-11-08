@@ -55,8 +55,7 @@ class ExportWorkflowsDialog extends React.Component{
 
   render(){
     return (
-      <div className="dialog-content">
-        <div className="content-container">
+        <div>
           <label className="form-label">Select a Workflow:</label>
           <select size="5" ref="workflowList" className="multiline-select standard-input" style={{padding: "0.3vh 0.3vw"}} onChange={this.toggleExport.bind(this)}>
             {this.state.workflows.map((result) => (
@@ -68,7 +67,6 @@ class ExportWorkflowsDialog extends React.Component{
             <button className="standard-button" style={{marginLeft: "1em"}} disabled={!this.state.workflow_selected} onClick={this.requestDataExport.bind(this)}>Export</button>
           </div>
         </div>
-      </div>
     );
   }
 }

@@ -3,6 +3,7 @@ counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 TalkDataExportButton = require '../../talk/data-export-button'
 ExportWorkflowsDialog = require('../../partials/export-workflows-dialog').default
+Dialog = require 'modal-form/dialog'
 
 counterpart.registerTranslations 'en',
   projectDetails:
@@ -24,6 +25,11 @@ module.exports = React.createClass
     avatarError: null
     backgroundError: null
 
+  showWorkflowExport: ->
+    Dialog.alert(
+      <ExportWorkflowsDialog project={@props.project} />
+    )
+
   render: ->
     <div className="data-exports">
       <p className="form-label">Project data exports</p>
@@ -36,6 +42,10 @@ module.exports = React.createClass
               project={@props.project}
               buttonKey="projectDetails.classificationExport"
               exportType="classifications_export"  />
+          </div>
+          <div className="row">
+            <button onClick={@showWorkflowExport}>Request new workflow classification export</button>
+            <small className="form-help"> CSV format.</small>
           </div>
           <div className="row">
             <DataExportButton
@@ -61,7 +71,7 @@ module.exports = React.createClass
               buttonKey="projectDetails.aggregationExport"
               contentType="application/x-gzip"
               exportType="aggregations_export"
-              newFeature=true 
+              newFeature=true
             />
             <small className="form-help">Text tasks and survey tasks cannot be aggregated at this time.</small>
           </div>
@@ -82,5 +92,4 @@ module.exports = React.createClass
           </div>
         </div>
       </div>
-      <ExportWorkflowsDialog project={@props.project} />
     </div>
