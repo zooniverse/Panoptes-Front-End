@@ -5,32 +5,33 @@ counterpart = require 'counterpart'
 counterpart.registerTranslations 'en',
   howToPage:
     content: '''
+
       # Index
-      * [Getting Started - the Quick Guide](#getting-started)
-      * [Overview: Everything on your Nav Bar](#overview)
-      * [The Nav Bar - The Detailed Guide](#details)
-        * [Project Details](#project)
-        * [About Pages](#about)
-        * [Collaborators](#collabs)
-        * [Media](#media)
-        * [Visibility](#visibility)
-        * [Workflows](#workflows)
-        * [Subject Sets]
-      * [Project Building: The Detailed Guide](#building)
-      * [Subjects and so on](#subjects)
+        * [Getting Started - the Quick Guide](#getting-started)
+        * [Nav Bar - the Overview](#overview)
+        * [Nav Bar - the Detailed Guide](#details)
+            * [Project Details](#project)
+            * [About Pages](#about)
+            * [Collaborators](#collabs)
+            * [Media](#media)
+            * [Visibility](#visibility)
+            * [Workflows](#workflows)
+            * [Subject Sets]
+        * [Project Building: The Detailed Guide](#building)
+        * [Subjects and so on](#subjects)
 
-      There are five sections to this guide. The first section, [Getting Started - The Quick Guide](#getting-started) is an overview of the steps you need to complete in order to set up a project. This is for you who want to get a quick overview of what the process is, and a quick go-to guide for those who don't need any further help in setting a project up.
+      There are five sections to this guide. The first section, [Getting Started - The Quick Guide](#getting-started) is an overview of the steps you need to complete in order to set up a project, in case you want a brief guide or reminder of all the steps.
 
-      For those of you who'd like a bit more guidance, the [Nav Bar Overview](#overview) section explains in a bit more detail what the different nav bar headers on the Project Builder page are for, as well Zooniverse terminology. The following section section, [The Nav Bar - More Details](#details) helps to explain all the different parts under each of these nav bar headers in more detail. Finally,[the Detailed Guide](#building) links to a step-by-step walkthrough of how to set up a project, showing you how to set up the project 'Kitteh Zoo'for those of you who'd still like a bit more detail about how to set one up.
+      For those of you who'd like a bit more guidance, the [Nav Bar Overview](#overview) section summarises in a bit more detail what the different nav bar headers on the Project Builder page are for. The following section section, [The Nav Bar - More Details](#details) is a more in-depth guide which goes into all of the subsections of the navbar and the finer details of how to set up a project. Finally,[the Detailed Guide](#building) links to a step-by-step walkthrough of how to set up a project, showing you how to set up the project 'Kitteh Zoo'.
 
 
-      # Getting Started - the Quick Guide
+      ## Getting Started - the Quick Guide
 
       A brief overview of all the steps you need to do to how to set up a project - for more details on how to use each section on the navbar, click [here](#details)and for a detailed walk-through of setting up a project, check out the 'Detailed Guide' section [here](#building).
 
       1. Make sure you are logged in to your Zooniverse account.
       2. Click on "Build a Project" or head over to www.zooniverse.org/lab and click "Create a New Project"
-      3. Define your project. A popup will appear, where you can start to define your project. Once you've filled this out, you'll be taken to a more detailed "Project Details" page where you can further define basic information. You can change all this later on from the same page. Then, go through each of the other blue tabs on the left-hand side. There is guidance information for each component listed on the page itself, and more detail further down in this guide too.
+      3. Define your project. A popup will appear. Once you've filled this out, you'll be taken to a more detailed "Project Details" page where you can further define basic information (you can change all this later on from the same page). Then, go through each of the other blue tabs on the left-hand side. There is guidance information for each component listed on the page itself, and more detail further down in this guide too.
       4. The next step is to create your workflow. Click on "New Workflow" in the Navigation Bar on the left-hand side of the page underneath the blue tabs. Run through this as many times as necessary to set up your workflow.
       5. Link your workflow to subjects: Under "Associated Subject Sets" select "use default subject set" which will link your project to ridiculous photos of cats. Alternatively, you can upload your own subjects under the "Subjects" menu on the left-hand Nav bar (detailed instructions [here](#subjects) ):
       6. Test your workflow: Hit the "Test this Workflow" button to actually see how it comes together!
@@ -38,7 +39,7 @@ counterpart.registerTranslations 'en',
       8. Lastly, once you are happy with all of these components, make your project Public on the 'Visibility Page' and submit it for review to the Zooniverse team.
 
 
-      # Overview: Everything on your Nav Bar
+      #€ Overview: Everything on your Nav Bar
 
       On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are terms you'll see a lot, and they have specific meanings in the Zooniverse. Project is pretty self-explanatory; Galaxy Zoo, Penguin Watch, and of course, Kitteh Zoo, are all examples of Zooniverse projects that you could build using the project builder. A workflow is the sequence of tasks that you ask volunteers to do, and subjects are the things (usually images) that volunteers do those tasks on.
 
@@ -94,7 +95,7 @@ counterpart.registerTranslations 'en',
       On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you're still working out its details. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left). Team members you add can see your project even if it's private. Once your project is public, anyone with the link can view and classify on it.
 
 
-      ## About <a id = "about"></a>
+      ## About
 
       Contains pages for Research, Team, FAQ, Results, and Education: These pages are where you really get to share all the cool things about your project. All of these pages use Markdown (see link above) to format text and display images.
 
@@ -107,7 +108,7 @@ counterpart.registerTranslations 'en',
       Education: If you are a researcher open to collaborating with educators you can state that here, include educational content, and describe how you'd like to help educators use your project. Also, if your project is primarily for educational purposes you can describe that here. This page will only display if you add content to it.
 
 
-      ## Collaborators <a id = "collabs"></a>
+      ## Collaborators
 
       Add people to your team and specify what their roles are so that they have the right access to the tools they need (including access to the project before it's public).
 
@@ -129,19 +130,18 @@ counterpart.registerTranslations 'en',
       ##TUTORIALS - Needs writing ##
 
 
-
-      ## Media <a id = "media"></a>
+      ## Media
       You can upload your own media to your project (such as example images for your help pages) so you can link to it without an external host. To start uploading, drop an image into the box (or click it to bring up your file browser and select a file).
 
       Once the image has uploaded, it will appear above the "Add an image" box. You can then copy the markdown text beneath the image into your project, or add another image.
 
-      ## Visibility <a id="visibility"></a>
+      ## Visibility
       This page is where you decide whether your project is public and whether it's ready to go live. Also set workflows to "active" vs. "inactive" -- you can edit inactive workflows on a live project and link different subject sets to different workflows.
 
       For more information on the different project stages, see our project builder policies.
 
 
-      ## Workflows <a id= "workflows"></a>
+      ## Workflows
 
       ## Orientation ##
       Note that a workflow with fewer tasks will be easier for volunteers to complete. We know from surveys of our volunteers that many people classify in their limited spare time, and sometimes they only have a few minutes. Longer, more complex workflows mean each classification takes longer, so if your workflow is very long you may lose volunteers.
@@ -161,9 +161,9 @@ counterpart.registerTranslations 'en',
       *Help Text:* Add text and images for a pop-up help window. This is shown next to the main text of the task in the main classification interface, when the volunteer clicks a button asking for help. You can use markdown in this text, and link to other images to help illustrate your description. The help text can be as long as you need, but you should try to keep it simple and avoid jargon. One thing that is useful in the help text is a concise description of why you are asking for this particular information.
 
 
-      # Project building: the slightly-more-detailed-version <a id="details"></a>
+      # Project building: the slightly-more-detailed-version
 
-      If you'd still like to see a more detailed walk-through of how to set up a project from scratch, check out the [tutorial](/project-builder-walkthrough) for setting up 'Kitteh Zoo', a project for classifying cats.
+      If you'd still like to see a more detailed walk-through of how to set up a project from scratch, check out this page here (link to old Kitteh Zoo walk through). It's a walkthrough of setting up the 'Kitteh Zoo', a project for classifying cats.
 
       ## Create Tasks
       Create tasks with the "Add New Task" Button. Delete tasks with the little "Delete this task" button on the bottom right hand side. *Note: When you create a new workflow, a question task is automatically created. You'll need to delete it if you don't want to ask your volunteers questions.
@@ -194,14 +194,14 @@ counterpart.registerTranslations 'en',
       - *ellipse:* an oval of any size and axis ratio; this tool *can* be rotated.
 
 
-      # Subjects and so on <a id="subjects"></a>
+      # Subjects and so on
 
       Need to generate this content from the 'how-to' page
 
     '''
 
 module.exports = React.createClass
-  displayName: 'HowToPage'
+  displayName: 'howToPage'
 
   render: ->
     <div className="secondary-page centered-grid">
