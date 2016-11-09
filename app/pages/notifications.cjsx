@@ -10,7 +10,7 @@ module.exports = React.createClass
     project: React.PropTypes.object
     user: React.PropTypes.object
 
-  getInitialState: () ->
+  getInitialState: ->
     projNotifications: []
 
   componentWillMount: ->
@@ -63,7 +63,7 @@ module.exports = React.createClass
                     key={notification.id}
                     callbackParent={@onChildChanged}
                     location={@props.location}
-                    expanded={true if notification.section is @state.expanded}
+                    expanded={notification.section is @state.expanded}
                     projectID={notification.project_id}
                     slug={notification.project_slug}
                     section={notification.section}

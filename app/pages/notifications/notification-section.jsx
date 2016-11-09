@@ -27,12 +27,12 @@ class NotificationSection extends Component {
         name: 'Zooniverse',
       });
     } else {
-      return apiClient.type('projects').get({ id: this.props.projectID, cards: true })
+      apiClient.type('projects').get({ id: this.props.projectID, cards: true })
       .catch(() => {
         return null;
       })
       .then(([project]) => {
-        this.setState({
+        return this.setState({
           name: project.display_name,
           avatar: project.avatar_src,
         });
@@ -48,7 +48,6 @@ class NotificationSection extends Component {
     const pageChanged = nextProps.location.query.page !== this.state.page;
     const userChanged = nextProps.user && nextProps.user !== this.props.user;
     if ((pageChanged || userChanged) && nextProps.expanded) {
-      this.setState({ notifications: [], page: nextProps.location.query.page });
       this.getNotifications(nextProps.location.query.page);
     }
   }
@@ -69,8 +68,7 @@ class NotificationSection extends Component {
   getNotifications(page) {
     let firstMeta;
     let lastMeta;
-    this.getUnreadCount();
-    return talkClient.type('notifications').get(this.notificationsQuery(page))
+    return talkClient.type('notifications').get({ page, page_size: 5, section: this.props.section })
       .then((newNotifications) => {
         const meta = newNotifications[0] ? newNotifications[0].getMeta() : { };
         const notificationsMap = this.state.notificationsMap;
@@ -93,11 +91,13 @@ class NotificationSection extends Component {
 
         this.setState({
           notifications: newNotifications,
-          notificationsMap: notificationsMap,
-          firstMeta: firstMeta,
-          lastMeta: lastMeta,
           currentMeta: meta,
+          firstMeta,
+          lastMeta,
+          notificationsMap,
+          page,
         });
+        this.getUnreadCount();
       });
   }
 
@@ -122,9 +122,7 @@ class NotificationSection extends Component {
 
     if (ids !== undefined) {
       ids.forEach((id) => {
-        if (!this.state.notificationsMap[id].delivered) {
-          unread.push(id);
-        }
+        if (!this.state.notificationsMap[id].delivered) unread.push(id);
       });
 
       if (unread.length === 0) return unread;
@@ -137,47 +135,33 @@ class NotificationSection extends Component {
     }
   }
 
-  notificationsQuery(page = this.props.location.page, options = { }) {
-    const query = Object.assign({}, options, {
-      page: page,
-      page_size: 5,
-    });
-
-    if (this.props.section) {
-      query.section = this.props.section;
-    }
-    return query;
-  }
-
   avatarFor() {
-    const projLink = this.props.slug ? `/projects/${this.props.slug}` : '/';
     const src = this.state.avatar ? `//${this.state.avatar}` : '/assets/simple-avatar.jpg';
     let avatar;
 
-    if (this.state.unread > 0) {
-      return this.unreadCircle();
-    }
+    if (this.state.unread > 0) return this.unreadCircle();
+
     if (this.state.name === 'Zooniverse') {
       avatar = <ZooniverseLogo width="40" height="40" />;
     } else {
       avatar = <img src={src} className="notification-section__img" alt="Project Avatar" />;
     }
     return (
-      <Link to={projLink}>
+      <Link to={this.props.slug ? `/projects/${this.props.slug}` : '/'}>
         {avatar}
       </Link>
     );
   }
 
   unreadCircle() {
+    const centerNum = this.state.unread > 9 ? '30%' : '40%';
+
     return (
       <svg className="notification-section__img">
         <circle cx="0" cy="0" r="100" fill="#E45950">
-          <title>
-            {`${this.state.unread} Unread Notification(s)`}
-          </title>
+          <title> {`${this.state.unread} Unread Notification(s)`} </title>
         </circle>
-        <text x="40%" y="50%" stroke="white" strokeWidth="2px" dy=".3em">{this.state.unread}</text>
+        <text x={centerNum} y="50%" stroke="white" strokeWidth="2px" dy=".3em">{this.state.unread}</text>
       </svg>
     );
   }
@@ -198,7 +182,7 @@ class NotificationSection extends Component {
           </div>
 
           <div className="notification-section__item">
-            <button title="Remove choice">
+            <button title="Toggle Section">
               <i className={buttonType}></i>
             </button>
           </div>
