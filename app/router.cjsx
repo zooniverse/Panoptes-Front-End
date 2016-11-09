@@ -62,9 +62,7 @@ module.exports =
     </Route>
 
     <Route path="projects" component={ProjectsPage}>
-      <IndexRoute component={FilteredProjectsList} status="live" />
-      <Route path="finished" component={FilteredProjectsList} status="finished" />
-      <Route path="outofdata" component={FilteredProjectsList} status="paused" />
+      <IndexRoute component={FilteredProjectsList} />
     </Route>
 
     <Route path="projects/:owner/:name" component={require './pages/project'}>

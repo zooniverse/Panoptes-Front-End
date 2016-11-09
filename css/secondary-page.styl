@@ -47,6 +47,26 @@
             font-size: 14px
             line-height: 3em
             text-decoration: none
+          button
+            @extends .main-nav-item
+            background: none
+            border: 0
+            font: 400 15px/1.5 Open Sans,Gill Sans,Arial,sans-serif
+            font-size: 14px
+            line-height: 1em
+            outline: none
+            cursor: pointer
+            text-decoration: none
+            &:hover
+              background: rgba(255,255,255, 0.2)
+              color: rgba(255,255,255,1)
+            &.active
+              color: white
+              border-bottom: solid 2px white
+              border-top: 0
+              border-left: 0
+              border-right: 0
+              font-weight: bold
 
   .secondary-page.has-project-context
     background-color: transparent
