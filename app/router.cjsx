@@ -62,9 +62,7 @@ module.exports =
     </Route>
 
     <Route path="projects" component={ProjectsPage}>
-      <IndexRoute component={FilteredProjectsList} status="live" />
-      <Route path="finished" component={FilteredProjectsList} status="finished" />
-      <Route path="outofdata" component={FilteredProjectsList} status="paused" />
+      <IndexRoute component={FilteredProjectsList} />
     </Route>
 
     <Route path="projects/:owner/:name" component={require './pages/project'}>
@@ -180,6 +178,8 @@ module.exports =
     <Route path="lab-policies" component={require './pages/lab/lab-policies'} />
     <Route path="lab-how-to" component={require './pages/lab/how-to-page'} />
     <Route path="project-builder-walkthrough" component={require './pages/lab/project-builder-walkthrough'} />
+    <Route path="glossary" component={require './pages/lab/glossary'} />
+
 
     <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
       <IndexRedirect to="introduction" />

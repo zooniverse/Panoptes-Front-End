@@ -48,25 +48,27 @@ const MyBuildsSection = React.createClass({
     apiClient.type('projects').get({
       current_user_roles: ['owner'],
       sort: '-updated_at',
+      include: ['avatar']
     })
     .then((projects) => {
       this.setState({
         projects,
       });
-
-      return Promise.all(projects.map((project) => {
-        return project.get('avatar')
-        .catch(() => {
-          return null;
-        })
-        .then((avatar) => {
-          const newState = Object.assign({}, this.state.avatars);
-          newState[project.id] = avatar;
-          this.setState({
-            avatars: newState,
+      projects.map((project) => {
+        if (project.links.avatar.id) {
+          apiClient.type('avatars').get(project.links.avatar.id)
+          .catch(() => {
+            return null;
+          })
+          .then((avatar) => {
+            const newState = Object.assign({}, this.state.avatars);
+            newState[project.id] = avatar;
+            this.setState({
+              avatars: newState
+            });
           });
-        });
-      }));
+        }
+      });
     })
     .catch((error) => {
       this.setState({

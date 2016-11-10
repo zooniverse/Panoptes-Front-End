@@ -13,13 +13,12 @@ counterpart.registerTranslations('en', {
 
 class FilteredProjectsList extends Component {
   render() {
-    const { discipline, page, sort } = this.props.location.query;
-    const filteringProps = { discipline, page, sort };
+    const { discipline, page, sort, status } = this.props.location.query;
+    const filteringProps = { discipline, page, sort, status };
     return (
-      <ProjectFilteringInterface 
-        status={this.props.route.status} 
+      <ProjectFilteringInterface
         onChangeQuery={this.context.updateQuery}
-        {...filteringProps} 
+        {...filteringProps}
       />
     );
   }
@@ -31,13 +30,6 @@ FilteredProjectsList.contextTypes = {
 
 FilteredProjectsList.propTypes = {
   location: PropTypes.object.isRequired,
-  route: PropTypes.shape({
-    status: PropTypes.oneOf([
-      'live',
-      'finished',
-      'paused',
-    ]).isRequired,
-  }).isRequired,
 };
 
 export default FilteredProjectsList;

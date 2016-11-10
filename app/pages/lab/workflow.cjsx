@@ -650,7 +650,7 @@ EditWorkflowPage = React.createClass
 
       @props.workflow.delete().then =>
         @props.project.uncacheLink 'workflows'
-        @context.router "/lab/#{@props.project.id}"
+        @context.router.push "/lab/#{@props.project.id}"
       .catch (error) =>
         @setState deletionError: error
       .then =>

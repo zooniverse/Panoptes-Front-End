@@ -27,6 +27,10 @@ You can run the tests with `npm test`.
 
 Try `rm -rf ./node_modules && npm install` to freshen up your dependencies. And read the warnings, they should should tell you if you're using the wrong version of Node or npm or if you're missing any dependencies.
 
+When running webpack, look out for type errors from [Babel Typecheck](https://github.com/codemix/babel-plugin-typecheck). You might need to add the correct [flowtype annotation](https://flowtype.org/docs/type-annotations.html) in manually.
+
+
+
 ### Directory structure
 
 - #### ./app/classifier/
