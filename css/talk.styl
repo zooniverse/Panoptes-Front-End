@@ -133,6 +133,13 @@ COPY_GREY_LIGHT = #afaeae
     @media screen and (max-width: TALK_BREAKPOINT)
       display: block
 
+  .tagged-results
+    display: flex
+    flex-wrap: wrap
+
+  .tagged-subject
+    flex: 0 0 320px
+
   .talk-comment-context-icon
     float: right
     padding: TALK_PADDING
@@ -361,7 +368,7 @@ COPY_GREY_LIGHT = #afaeae
       p
         display: inline
         margin-right: 5px
-      
+
       .project-role
         @extends $project-role
 
@@ -827,4 +834,3 @@ COPY_GREY_LIGHT = #afaeae
 
           small
             color: #FFFFFF
-
