@@ -71,7 +71,7 @@ module.exports = React.createClass
                         Subject {tag.subject.id}
                       </Link>
                     </p>
-                    <Thumbnail src={getSubjectLocation(tag.subject).src} width={100} />
+                    <Thumbnail src={getSubjectLocation(tag.subject).src} width={300} />
                     <ul className="tag-list">
                       {for subjectTag in tag.subjectTags
                         <li key={"tag-#{ tag.id }-#{ subjectTag.id }"}>
