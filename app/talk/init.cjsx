@@ -157,9 +157,9 @@ module.exports = React.createClass
           <section>
             <h3>
               {if @props.section is 'zooniverse'
-                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/talk/recents" {...@props}>Recent Comments</Link>
+                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/talk/recents">Recent Comments</Link>
               else
-                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents" {...@props}>Recent Comments</Link>
+                <Link className="sidebar-link" onClick={@logTalkClick.bind this, 'recent-comments-sidebar'} to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/recents">Recent Comments</Link>
               }
             </h3>
           </section>
