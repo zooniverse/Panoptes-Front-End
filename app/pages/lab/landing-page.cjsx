@@ -21,7 +21,11 @@ counterpart.registerTranslations 'en',
       policies: 'Project Builder Policies'
       bestPractices: 'Best Practices Guide'
       buildTalk: 'Project Builder Talk'
+<<<<<<< HEAD
       acknowledgements: 'Acknowledgements'
+=======
+      glossary: 'Glossary'
+>>>>>>> master
 
 module.exports = React.createClass
   displayName: 'ProjectBuilderLandingPage'
@@ -64,6 +68,7 @@ module.exports = React.createClass
           <Link to="/lab-best-practices/introduction"><Translate content="labLanding.links.bestPractices" /></Link>
           <Link to="/about/acknowledgements"><Translate content="labLanding.links.acknowledgements" /></Link>
           <Link to="/talk/18"><Translate content="labLanding.links.buildTalk" /></Link>
+          <Link to="/glossary"><Translate content="labLanding.links.glossary" /></Link>
         </div>
       </div>
     </div>

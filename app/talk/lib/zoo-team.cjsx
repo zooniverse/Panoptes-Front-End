@@ -1,5 +1,4 @@
 React = require 'react'
-PromiseRenderer = require '../../components/promise-renderer'
 talkClient = require 'panoptes-client/lib/talk-client'
 userIsZooniverseAdmin = require './user-is-zooniverse-admin'
 
@@ -12,17 +11,30 @@ module.exports = React.createClass
 
   getInitialState: ->
     open: false
+    roles: []
+
+  componentDidMount: ->
+    @updateRoles @props.user
+
+  componentWillReceiveProps: (newProps) ->
+    @updateRoles newProps.user if newProps.user isnt @props.user
+
+  updateRoles: (user) ->
+    talkClient.type 'roles'
+      .get
+        user_id: user.id
+        section: ['zooniverse', @props.section]
+        page_size: 100
+      .then (roles) =>
+        @setState {roles}
 
   render: ->
     {section} = @props
 
     <div>
-      <PromiseRenderer pending={null} promise={talkClient.type('roles').get(user_id: @props.user.id, section: ['zooniverse', section], page_size: 100)}>{(roles) =>
-
-        if userIsZooniverseAdmin(roles)
-          @props.children
-        else
-          null
-
-      }</PromiseRenderer>
+      {if userIsZooniverseAdmin(@state.roles)
+        @props.children
+      else
+        null
+      }
     </div>

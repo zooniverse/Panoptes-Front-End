@@ -9,7 +9,6 @@ FlexibleLink = React.createClass
 
   propTypes:
     to: React.PropTypes.string.isRequired
-    skipOwner: React.PropTypes.bool
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -31,22 +30,33 @@ module.exports = React.createClass
 
   propTypes:
     collection: React.PropTypes.object.isRequired
-    imagePromise: React.PropTypes.object.isRequired
+    imagePromise: React.PropTypes.any
     linkTo: React.PropTypes.string.isRequired
     translationObjectName: React.PropTypes.string.isRequired
+    subjectCount: React.PropTypes.number
+    skipOwner: React.PropTypes.bool
+  
+  getDefaultProps: ->
+    subjectCount: 0
+    skipOwner: false
 
   collectionOwner: ->
     apiClient.type(@props.collection.links.owner.type).get(@props.collection.links.owner.id)
 
   componentDidMount: ->
-    card = @refs.collectionCard
+    @refreshImage @props.imagePromise
 
-    @props.imagePromise
+  componentWillReceiveProps: (nextProps) ->
+    unless nextProps.imagePromise is @props.imagePromise
+      @refreshImage nextProps.imagePromise
+
+  refreshImage: (promise) ->
+    Promise.resolve(promise)
       .then (src) =>
-        card.style.backgroundImage = "url('#{src}')"
-        card.style.backgroundSize = "contain"
+        @refs.collectionCard.style.backgroundImage = "url('#{src}')"
+        @refs.collectionCard.style.backgroundSize = "contain"
       .catch =>
-        card.style.background = "url('/assets/simple-pattern.png') center center repeat"
+        @refs.collectionCard.style.background = "url('/assets/simple-pattern.jpg') center center repeat"
 
   render: ->
     [owner, name] = @props.collection.slug.split('/')
@@ -67,6 +77,7 @@ module.exports = React.createClass
 
     <FlexibleLink {...linkProps}>
       <div className="collection-card" ref="collectionCard">
+        <div key="badge" className="badge">{@props.subjectCount}</div>
         <svg className="card-space-maker" viewBox="0 0 2 1" width="100%"></svg>
         <div className="details">
           <div className="name"><span>{@props.collection.display_name}</span></div>

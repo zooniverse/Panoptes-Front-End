@@ -13,6 +13,7 @@ AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
+ShortcutEditor = require '../../components/shortcut-editor'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -69,6 +70,8 @@ EditWorkflowPage = React.createClass
 
     noTasksDefined = Object.keys(@props.workflow.tasks).length is 0
 
+    stats_completeness_type = @props.workflow.configuration.stats_completeness_type ? 'retirement'
+
     disabledStyle =
       opacity: 0.4
       pointerEvents: 'none'
@@ -109,27 +112,28 @@ EditWorkflowPage = React.createClass
                   </div>
                 else
                   for key, definition of @props.workflow.tasks
-                    classNames = ['secret-button', 'nav-list-item']
-                    if key is @state.selectedTaskKey
-                      classNames.push 'active'
-                    <div key={key}>
-                      <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
-                        {switch definition.type
-                          when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
-                          when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
-                          when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
-                          when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
-                          when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
-                          when 'crop' then <i className="fa fa-crop fa-fw"></i>
-                          when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
-                          when 'dropdown' then <i className="fa fa-list fa-fw"></i>
-                          when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
-                        {' '}
-                        {tasks[definition.type].getTaskText definition}
-                        {if key is @props.workflow.first_task
-                          <small> <em>(first)</em></small>}
-                      </button>
-                    </div>}
+                    unless definition.type is 'shortcut'
+                      classNames = ['secret-button', 'nav-list-item']
+                      if key is @state.selectedTaskKey
+                        classNames.push 'active'
+                      <div key={key}>
+                        <button type="button" className={classNames.join ' '} onClick={@setState.bind this, selectedTaskKey: key, null}>
+                          {switch definition.type
+                            when 'single' then <i className="fa fa-dot-circle-o fa-fw"></i>
+                            when 'multiple' then <i className="fa fa-check-square-o fa-fw"></i>
+                            when 'drawing' then <i className="fa fa-pencil fa-fw"></i>
+                            when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
+                            when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
+                            when 'crop' then <i className="fa fa-crop fa-fw"></i>
+                            when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
+                            when 'dropdown' then <i className="fa fa-list fa-fw"></i>
+                            when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
+                          {' '}
+                          {tasks[definition.type].getTaskText definition}
+                          {if key is @props.workflow.first_task
+                            <small> <em>(first)</em></small>}
+                        </button>
+                      </div>}
               </div>
 
               <p>
@@ -201,7 +205,8 @@ EditWorkflowPage = React.createClass
                     <option>(No tasks yet)</option>
                   else
                     for taskKey, definition of @props.workflow.tasks
-                      <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
+                      unless definition.type is 'shortcut'
+                        <option key={taskKey} value={taskKey}>{tasks[definition.type].getTaskText definition}</option>}
                 </select>
               </AutoSave>
             </div>
@@ -328,6 +333,57 @@ EditWorkflowPage = React.createClass
           </p>
 
           <hr />
+          
+          <div>
+            <span className="form-label">How should the project completeness be calculated?</span>
+            <br />
+            <p className="form-help">
+              <small>
+                Use this option to change how your project's completeness is calculated on the public statistics page.
+              </small>
+            </p>
+            <p className="form-help">
+              <small>
+              When using "Classification Count" the completeness will increase after each classification. The
+              {' '}total number of classifications needed to complete the workflow is estimated assuming a constant retirement limit.
+              {' '}If the retirement limit is changed and/or subjects sets are unlinked from an <b>active</b> workflow this estimate will be inaccurate.
+              {' '}To avoid these issues completed subject sets should not be removed, instead completed workflows should be deactivated
+              {' '}and new ones created for new subject sets (note: workflows can be copied using the <i className="fa fa-copy"/> button at the top of the page).
+              </small>
+            </p>
+            <p className="form-help">
+              <small>
+              When using "Retirement Count" the completeness will increase after each image retires (note: this value is re-calculated once an hour).
+              {' '}Since the images are shown to users in a random order, this completeness estimate will be slow to increase until the project is close to being finished.
+              {' '}If your project does not have a constant retirement limit (e.g. it uses a custom retiment rule) and/or subject sets 
+              {' '}have been unlinked from a live workflow, this estimate will be the most accurate.
+              </small>
+            </p>
+            <AutoSave tag="div" resource={@props.workflow}>
+              <label>
+                <input
+                  type="radio"
+                  name="stats_completeness_type"
+                  value="classification"
+                  checked={stats_completeness_type == 'classification'}
+                  onChange={@handleSetStatsCompletenessType}
+                />
+                Classification Count
+              </label>
+              <br />
+              <label>
+                <input
+                  type="radio"
+                  name="stats_completeness_type"
+                  value="retirement"
+                  checked={stats_completeness_type == 'retirement'}
+                  onChange={@handleSetStatsCompletenessType}
+                />
+                Retirement Count
+              </label>
+            </AutoSave>
+          </div>
+          <hr />
 
           {if 'worldwide telescope' in @props.project.experimental_tools
             <div>
@@ -374,13 +430,24 @@ EditWorkflowPage = React.createClass
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
             <div>
-              <TaskEditorComponent
-                workflow={@props.workflow}
-                task={@props.workflow.tasks[@state.selectedTaskKey]}
-                taskPrefix="tasks.#{@state.selectedTaskKey}"
-                project={@props.project}
-                onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
-              />
+              {if 'shortcut' in @props.project.experimental_tools
+                <ShortcutEditor workflow={@props.workflow} task={@props.workflow.tasks[@state.selectedTaskKey]} >
+                  <TaskEditorComponent
+                    workflow={@props.workflow}
+                    task={@props.workflow.tasks[@state.selectedTaskKey]}
+                    taskPrefix="tasks.#{@state.selectedTaskKey}"
+                    project={@props.project}
+                    onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
+                  />
+                </ShortcutEditor>
+              else
+                <TaskEditorComponent
+                  workflow={@props.workflow}
+                  task={@props.workflow.tasks[@state.selectedTaskKey]}
+                  taskPrefix="tasks.#{@state.selectedTaskKey}"
+                  project={@props.project}
+                  onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
+                />}
               <hr />
               <br />
               <AutoSave resource={@props.workflow}>
@@ -502,6 +569,10 @@ EditWorkflowPage = React.createClass
     @props.workflow.update
       'configuration.gravity_spy_gold_standard': e.target.checked
 
+  handleSetStatsCompletenessType: (e) ->
+    @props.workflow.update
+      'configuration.stats_completeness_type': e.target.value
+
   handleSetWorldWideTelescope: (e) ->
     if !@props.workflow.configuration.custom_summary
       @props.workflow.update
@@ -579,7 +650,7 @@ EditWorkflowPage = React.createClass
 
       @props.workflow.delete().then =>
         @props.project.uncacheLink 'workflows'
-        @context.router "/lab/#{@props.project.id}"
+        @context.router.push "/lab/#{@props.project.id}"
       .catch (error) =>
         @setState deletionError: error
       .then =>
@@ -591,8 +662,11 @@ EditWorkflowPage = React.createClass
       @setState forceReloader: @state.forceReloader + 1
 
   handleTaskDelete: (taskKey, e) ->
+    shortcut = @props.workflow.tasks[taskKey].unlinkedTask
     if e.shiftKey or confirm 'Really delete this task?'
       changes = {}
+      if shortcut
+        changes["tasks.#{shortcut}"] = undefined
       changes["tasks.#{taskKey}"] = undefined
       @props.workflow.update changes
 

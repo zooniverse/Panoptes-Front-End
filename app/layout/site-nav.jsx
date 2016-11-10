@@ -49,13 +49,20 @@ const SiteNav = React.createClass({
 
   getInitialState() {
     return {
-      isMobile: true
+      isMobile: true,
     };
   },
 
   componentDidMount() {
     this.handleResize();
     addEventListener('resize', this.handleResize);
+  },
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.logClick = !!nextContext &&
+      !!nextContext.geordi &&
+      !!nextContext.geordi.makeHandler &&
+      nextContext.geordi.makeHandler('top-menu');
   },
 
   componentWillUnmount() {
@@ -75,18 +82,11 @@ const SiteNav = React.createClass({
     }, 100);
   },
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    this.logClick = !!nextContext &&
-      !!nextContext.geordi &&
-      !!nextContext.geordi.makeHandler &&
-      nextContext.geordi.makeHandler('top-menu');
-  },
-
   renderLinks(isMobile) {
     return (
       <span
         className={classnames('site-nav__main-links', {
-          'site-nav__main-links--vertical': this.state.isMobile
+          'site-nav__main-links--vertical': this.state.isMobile,
         })}
       >
         {!!this.state.isMobile &&

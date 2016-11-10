@@ -1,6 +1,15 @@
+counterpart = require 'counterpart'
+Translate = require 'react-translate-component'
 React = require 'react'
 alert = require '../lib/alert'
 LoginDialog = require './login-dialog'
+
+counterpart.registerTranslations 'en',
+  signInPrompt:
+    explanation: 'Signing in allows you to participate in discussions, allows us to give you credit for your work, and helps the science team make the best use of the data you provide.'
+    noThanks: 'No thanks'
+    register: 'Register'
+    signIn: 'Sign in'
 
 module.exports = React.createClass
   displayName: 'SignInPrompt'
@@ -15,14 +24,22 @@ module.exports = React.createClass
   render: ->
     <div className="content-container">
       {@props.children}
-      <p>Signing in allows you to participate in discussions, allows us to give you credit for your work, and helps the science team make the best use of the data you provide.</p>
+      <p>
+        <Translate content="signInPrompt.explanation" />
+      </p>
       <p className="columns-container spread inline">
         <span>
-          <button type="button" className="minor-button" onClick={@dismiss}>No thanks</button>
+          <button type="button" className="minor-button" onClick={@dismiss}>
+            <Translate content="signInPrompt.noThanks" />
+          </button>
         </span>
         <span>
-          <button type="button" className="standard-button" autoFocus onClick={@signIn}>Sign in</button>{' '}
-          <button type="button" className="standard-button" onClick={@register}>Register</button>
+          <button type="button" className="standard-button" autoFocus onClick={@signIn}>
+            <Translate content="signInPrompt.signIn" />
+          </button>{' '}
+          <button type="button" className="standard-button" onClick={@register}>
+            <Translate content="signInPrompt.register" />
+          </button>
         </span>
       </p>
     </div>

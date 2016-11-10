@@ -18,6 +18,7 @@ const DOWN = 40;
 counterpart.registerTranslations('en', {
   accountMenu: {
     profile: 'Profile',
+    home: 'Home',
     settings: 'Settings',
     signOut: 'Sign Out',
     collections: 'Collections',
@@ -129,6 +130,16 @@ const AccountBar = React.createClass({
               >
                 <i className="fa fa-user fa-fw"></i>{' '}
                 <Translate content="accountMenu.profile" />
+              </Link>
+              <br />
+              <Link
+                role="menuitem"
+                to="/"
+                className="site-nav__link"
+                onClick={!!this.logClick ? this.logClick.bind(this, 'accountMenu.home') : null}
+              >
+                <i className="fa fa-home fa-fw"></i>{' '}
+                <Translate content="accountMenu.home" />
               </Link>
               <br />
               <Link

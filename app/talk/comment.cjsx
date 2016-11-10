@@ -8,7 +8,6 @@ CommentBox = require './comment-box'
 CommentReportForm = require './comment-report-form'
 CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
-PromiseRenderer = require '../components/promise-renderer'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -48,6 +47,9 @@ module.exports = React.createClass
     editing: false
     commentValidationErrors: []
     replies: []
+    commentOwner: null
+    roles: []
+    subject: null
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -55,6 +57,32 @@ module.exports = React.createClass
   logItemClick: (itemClick) ->
     @context.geordi?.logEvent
       type: itemClick
+
+  componentWillMount: ->
+    apiClient
+      .type 'users'
+      .get
+        id: @props.data.user_id
+      .index 0
+      .then (commentOwner) =>
+        @setState {commentOwner}
+    
+    if @props.data.focus_id
+      apiClient
+        .type 'subjects'
+        .get @props.data.focus_id
+        .then (subject) =>
+          @setState {subject}
+
+    talkClient
+      .type 'roles'
+      .get
+        user_id: @props.data.user_id
+        section: ['zooniverse', @props.data.section]
+        is_shown: true
+        page_size: 100
+      .then (roles) =>
+        @setState {roles}
 
   componentDidMount: ->
     if @props.active
@@ -152,7 +180,7 @@ module.exports = React.createClass
   #   - it's not a focused discussion OR
   #   - it's a focused discussion and this comment's focus is different
   shouldShowFocus: ->
-    return false unless @props.data.focus_id
+    return false unless @state.subject?
     return false if @props.hideFocus
 
     notInDiscussion = not @props.index
@@ -170,18 +198,12 @@ module.exports = React.createClass
       profile_link = "/projects/#{@props.project.slug}#{profile_link}"
     <div className="talk-comment #{activeClass} #{isDeleted}">
       <div className="talk-comment-author">
-        <PromiseRenderer promise={apiClient.type('users').get(id: @props.data.user_id).index(0)}>{(commentOwner) =>
-          <Avatar user={commentOwner} />
-        }</PromiseRenderer>
-
+        {<Avatar user={@state.commentOwner} /> if @state.commentOwner?}
         <div>
           <Link to={profile_link}>{@props.data.user_display_name}</Link>
           <div className="user-mention-name">@{@props.data.user_login}</div>
         </div>
-
-        <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.data.user_id, section: ['zooniverse', @props.data.section], is_shown: true, page_size: 100)}>{(roles) =>
-          <DisplayRoles roles={roles} section={@props.data.section} />
-        }</PromiseRenderer>
+        <DisplayRoles roles={@state.roles} section={@props.data.section} />
       </div>
 
       <div className="talk-comment-body">
@@ -213,23 +235,16 @@ module.exports = React.createClass
             <p className="talk-comment-date">{timestamp(@props.data.created_at)}</p>
 
             {if @shouldShowFocus()
-              <PromiseRenderer
-                promise={
-                  apiClient.type('subjects').get(@props.data.focus_id)
-                }
-                then={(subject) =>
-                  <div className="polaroid-image">
-                    {@commentSubjectTitle(@props.data, subject)}
-                    <SubjectViewer
-                      subject={subject}
-                      user={@props.user}
-                      project={@props.project}
-                      linkToFullImage={true}
-                      metadataFilters={['#']} />
-                  </div>
-                }
-                catch={null}
-                />}
+              <div className="polaroid-image">
+                {@commentSubjectTitle(@props.data, @state.subject)}
+                <SubjectViewer
+                  subject={@state.subject}
+                  user={@props.user}
+                  project={@props.project}
+                  linkToFullImage={true}
+                  metadataFilters={['#']} />
+              </div>
+            }
 
             <WrappedMarkdown content={@props.data.body} project={@props.project} header={null}/>
 

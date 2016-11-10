@@ -22,6 +22,7 @@ module.exports =
   <Route path="/" component={require './partials/app'}>
     <IndexRoute component={require './pages/home'} />
     <Route path="home" component={ONE_UP_REDIRECT} />
+    <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
     <Route path="about" component={require './pages/about'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/about/about-home'} />
@@ -62,9 +63,7 @@ module.exports =
     </Route>
 
     <Route path="projects" component={ProjectsPage}>
-      <IndexRoute component={FilteredProjectsList} status="live" />
-      <Route path="finished" component={FilteredProjectsList} status="finished" />
-      <Route path="outofdata" component={FilteredProjectsList} status="paused" />
+      <IndexRoute component={FilteredProjectsList} />
     </Route>
 
     <Route path="projects/:owner/:name" component={require './pages/project'}>
@@ -179,6 +178,7 @@ module.exports =
     </Route>
     <Route path="lab-policies" component={require './pages/lab/lab-policies'} />
     <Route path="lab-how-to" component={require './pages/lab/how-to-page'} />
+    <Route path="glossary" component={require './pages/lab/glossary'} />
 
     <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
       <IndexRedirect to="introduction" />
