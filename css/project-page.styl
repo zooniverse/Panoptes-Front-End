@@ -133,8 +133,7 @@
   font-size: 14px
 
   .call-to-action-container
-    min-height: 500px
-    align-items: center
+    min-height: 200px
     display flex
     flex: 1 0 auto
     flex-direction: column
@@ -149,14 +148,67 @@
         opacity: 0.5
         pointer-events: none
 
-  .description
-    font-size: 2.2em
-    font-weight: 700
-    line-height: 1.5em
+  &__introduction
     margin: 50px 0 40px 0
-    max-width: 100%
-    max-width: 800px
-    text-align: center
+    max-width: 400px
+    padding: 6em 0 0 6em
+
+    span
+      font-size: 2em
+      font-weight: 600
+      line-height: 1.5em
+
+  &__buttons
+    margin: 2em 0em
+
+    a
+      background: transparent
+      border: 2px solid white
+      border-radius: .5em
+      margin-right: 1.5em
+      font-size: 1em
+      font-weight: 75
+      padding: 0.8em 1.4vw
+
+  &__content
+    position: relative
+    margin: 3em 6em
+
+    h4
+      color: TEAL_GREEN
+      text-transform: uppercase
+
+  &__talk-images
+    background: white
+    min-height: 200px
+    width: 100%
+
+  &__stats-section
+    background: aliceblue
+    min-height: 275px
+    width: 100%
+
+  &__workflow-choice
+    position: relative
+    background: aliceblue
+    min-height: 275px
+    width: 100%
+
+  &__workflow-choice:before
+    position: absolute
+    left: 9em
+    bottom: 100%
+    width: 0
+    height: 0
+    content: " "
+    border-bottom: 20px solid aliceblue
+    border-left: 10px solid transparent
+    border-right: 10px solid transparent
+
+  &__about-section
+    background: TEAL_GREEN
+    min-height: 450px
+    width: 100%
 
   .workflow-description
     line-height: 1.5em
