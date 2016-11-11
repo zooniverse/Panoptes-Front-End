@@ -37,6 +37,8 @@ module.exports =
       <IndexRoute component={require './pages/get-involved/volunteering-page'} />
       <Route path="education" component={require './pages/get-involved/education'} />
       <Route path="callForProjects" component={require './pages/get-involved/call-for-projects'} />
+      <Route path="CollectionsList" component={require './pages/get-involved/collections-list'} />
+      <Route path="FavoritesList" component={require './pages/get-involved/favorites-list'} />
     </Route>
 
     <Route path="reset-password" component={require './pages/reset-password'} />
