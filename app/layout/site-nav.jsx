@@ -49,13 +49,20 @@ const SiteNav = React.createClass({
 
   getInitialState() {
     return {
-      isMobile: true
+      isMobile: true,
     };
   },
 
   componentDidMount() {
     this.handleResize();
     addEventListener('resize', this.handleResize);
+  },
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.logClick = !!nextContext &&
+      !!nextContext.geordi &&
+      !!nextContext.geordi.makeHandler &&
+      nextContext.geordi.makeHandler('top-menu');
   },
 
   componentWillUnmount() {
@@ -75,29 +82,22 @@ const SiteNav = React.createClass({
     }, 100);
   },
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    this.logClick = !!nextContext &&
-      !!nextContext.geordi &&
-      !!nextContext.geordi.makeHandler &&
-      nextContext.geordi.makeHandler('top-menu');
-  },
-
   renderLinks(isMobile) {
     return (
       <span
         className={classnames('site-nav__main-links', {
-          'site-nav__main-links--vertical': this.state.isMobile
+          'site-nav__main-links--vertical': this.state.isMobile,
         })}
       >
         {!!this.state.isMobile &&
-        <Link
-          to="/"
-          className="site-nav__link"
-          activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
-        >
-          <Translate content="siteNav.home" />
-        </Link>
+          <Link
+            to="/"
+            className="site-nav__link"
+            activeClassName="site-nav__link--active"
+            onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
+          >
+            <Translate content="siteNav.home" />
+          </Link>
         }
         <Link
           to="/projects"
@@ -114,6 +114,14 @@ const SiteNav = React.createClass({
           onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.about') : null}
         >
           <Translate content="siteNav.about" />
+        </Link>{' '}
+        <Link
+          to="/get-involved"
+          className="site-nav__link"
+          activeClassName="site-nav__link--active"
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.getInvolved') : null}
+        >
+          <Translate content="siteNav.getInvolved" />
         </Link>{' '}
         <Link
           to="/talk"
