@@ -33,6 +33,13 @@ module.exports =
       <Route path="contact" component={require './pages/about/contact-page'} />
     </Route>
 
+    <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
+      <IndexRoute component={require './pages/get-involved/volunteering-page'} />
+      <Route path="volunteering" component={require './pages/get-involved/volunteering-page'} />
+      <Route path="education" component={require './pages/get-involved/education'} />
+      <Route path="callForProjects" component={require './pages/get-involved/call-for-projects'} />
+    </Route>
+
     <Route path="reset-password" component={require './pages/reset-password'} />
 
     <Route path="unsubscribe" component={require './pages/unsubscribe'} />
