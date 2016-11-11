@@ -29,7 +29,7 @@ module.exports = React.createClass
     document.documentElement.classList.remove 'on-secondary-page'
 
   render: ->
-    <div className="secondary-page get-involved">
+    <div className="secondary-page get-involved-page">
       <section className="hero">
         <div className="hero-container">
           <Translate content="getInvolved.title" component="h1" />
@@ -42,7 +42,7 @@ module.exports = React.createClass
           </nav>
         </div>
       </section>
-      <section className="get-involved-content content-container">
+      <section className="get-involved-page-content content-container">
         {@props.children}
       </section>
     </div>
