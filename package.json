@@ -14,7 +14,7 @@
     "lodash.merge": "~2.4.1",
     "lodash.pick": "~3.1.0",
     "lodash.uniq": "~3.2.2",
-    "markdownz": "~4.2",
+    "markdownz": "zooniverse/markdownz#react-15",
     "modal-form": "~2.4.2",
     "moment": "~2.9.0",
     "panoptes-client": "~2.5.0",
