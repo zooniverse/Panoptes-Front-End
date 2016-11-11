@@ -24,6 +24,7 @@ counterpart.registerTranslations('en', {
     home: 'Zooniverse',
     projects: 'Projects',
     about: 'About',
+    getInvolved: 'Get Involved',
     collect: 'Collect',
     talk: 'Talk',
     daily: 'Daily Zooniverse',
