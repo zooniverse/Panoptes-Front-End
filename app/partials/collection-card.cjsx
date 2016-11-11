@@ -22,7 +22,7 @@ FlexibleLink = React.createClass
       <a href={@props.to}>{@props.children}</a>
     else
       <Link
-        {...@props}
+        to={@props.to}
         onClick={@logClick?.bind(this, @props.logText)}>{@props.children}</Link>
 
 module.exports = React.createClass
