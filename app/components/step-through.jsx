@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
-import ReactSwipe from 'react-swipe'
-import animatedScrollTo from 'animated-scrollto'
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+import ReactSwipe from 'react-swipe';
+import animatedScrollTo from 'animated-scrollto';
 
 class StepThrough extends Component {
   constructor(props) {
@@ -120,7 +120,7 @@ class StepThrough extends Component {
   render() {
     const childrenCount = React.Children.count(this.props.children);
     return (
-      <div className="step-through" {...this.props}>
+      <div className="step-through" className={this.props.className} style={this.props.style}>
         <ReactSwipe 
           ref="swiper" 
           className="step-through-content" 
