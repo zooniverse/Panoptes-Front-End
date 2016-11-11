@@ -24,7 +24,7 @@ module.exports = React.createClass
 
   render: ->
     if @state.tutorial?.steps.length > 0
-      <button type="button" {...@props} onClick={Tutorial.start.bind(Tutorial, @state.tutorial, @props.user)}>
+      <button type="button" className={@props.className} style={@props.style} onClick={Tutorial.start.bind(Tutorial, @state.tutorial, @props.user)}>
         {@props.children}
       </button>
     else
