@@ -14,7 +14,7 @@ counterpart.registerTranslations 'en',
     required: 'Required'
     looksGood: 'Looks good'
     userName: 'User name'
-    badChars: "Only letters, numbers, '.', '_', and '-'."
+    badChars: "Only letters, numbers, '_', and '-'."
     nameConflict: 'That username is taken'
     forgotPassword: 'Forget your password?'
     password: 'Password'
