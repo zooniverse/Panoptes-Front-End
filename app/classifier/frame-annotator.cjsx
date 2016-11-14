@@ -79,6 +79,8 @@ module.exports = React.createClass
       # Allow touch scrolling on subject for mobile and tablets
       unless taskDescription?.type is 'drawing' or taskDescription?.type is 'crop'
         svgStyle.pointerEvents = 'none'
+      if @props.panEnabled is true
+        svgStyle.pointerEvents = 'all'
 
     svgProps = {}
 
