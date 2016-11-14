@@ -2,6 +2,21 @@ const Publications = {
   space: [
     {slug: "zooniverse/galaxy-zoo",
     publications: [
+      {citation: "Galaxy Zoo: Quantitative Visual Morphological Classifications for 48,000 galaxies from CANDELS, Simmons+ 2016.",
+      href: "http://xxx.lanl.gov/pdf/1610.03070v1",
+      date: "October 12, 2016"},
+      {citation: "Galaxy Zoo: Morphological Classification for 120,000 Galaxies in HST Legacy Imaging, Willett+ 2016.",
+      href: "https://arxiv.org/pdf/1610.03068v2.pdf",
+      date: "October 17, 2016"},
+      {citation: "Galaxy Zoo: Mergers - Dynamical Models of Interacting Galaxies, Holincheck+ 2016.",
+      href: "http://adsabs.harvard.edu/abs/2016MNRAS.tmp..436H",
+      date: "June 2016"},
+      {citation: "Galaxy Zoo: Comparing the demographics of spiral arm number and a new method for correcting redshift bias, Hart+ 2016.",
+      href: "https://ui.adsabs.harvard.edu/#abs/2016MNRAS.461.3663H/abstract",
+      date: "October 2016"},
+      {citation: "Galaxy Zoo: Evidence for rapid, recent quenching within a population of AGN host galaxies, Smethurst+ 2016.",
+      href: "http://mnras.oxfordjournals.org/content/early/2016/09/02/mnras.stw2204",
+      date: "September 2 2016"},
       {citation: "Galaxy Zoo: the effect of bar-driven fueling on the presence of an active galactic nucleus in disc galaxies, Galloway+ 2015.",
       href: "http://arxiv.org/abs/1502.01033",
       date: "Feb 3, 2015"},
@@ -279,6 +294,9 @@ const Publications = {
     },
     {slug: "zooniverse/radio-galaxy-zoo",
     publications: [
+      {citation: "Radio Galaxy Zoo: discovery of a poor cluster through a giant wide-angle tail radio galaxy, Banfield+ 2016.",
+      href: "http://mnras.oxfordjournals.org/content/early/2016/05/05/mnras.stw1067.abstract",
+      date: "May 5, 2016"},
       {citation: "Radio Galaxy Zoo: host galaxies and radio morphologies derived from visual inspection, Banfield+ 2015.",
       href: "http://arXiv.org/abs/1507.07272",
       date: "July 27, 2015"}]
@@ -291,6 +309,9 @@ const Publications = {
     },
     {slug: "zooniverse/disk-detective",
     publications: [
+      {citation: "A new M dwarf debris disk candidate in a young moving group discovered with disk detective, Silverberg+ 2016.",
+      href: "http://iopscience.iop.org/article/10.3847/2041-8205/830/2/L28/pdf",
+      date: "October 2016"},
       {citation: "Disk Detective: Discovery of New Circumstellar Disk Candidates through Citizen Science, Kuchner+ 2016.",
       href: "https://arxiv.org/abs/1607.05713",
       date: "July 2016"}]
@@ -343,7 +364,10 @@ const Publications = {
       date: "May 28, 2015"},
       {citation: "Snapshot Serengeti, high-frequency annotated camera trap images of 40 mammalian species in an African savanna, Swanson+ 2015.",
       href: "http://www.nature.com/articles/sdata201526",
-      date: "June 9, 2015"}]
+      date: "June 9, 2015"},
+      {citation: "A generalized approach for producing, quantifying, and validating citizen science data from wildlife images, Swanson+ 2016.",
+      href: "http://onlinelibrary.wiley.com/doi/10.1111/cobi.12695/abstract",
+      date: "April 25, 2016"}]
     }
   ],
   medicine: [
@@ -354,18 +378,47 @@ const Publications = {
       date: "May 9, 2015"}]
     },
   ],
+  physics: [
+    {slug: "zooniverse/higgs-hunters",
+    publications: [
+      {citation: "'That looks weird' - evaluating citizen scientists' ability to detect unusual features in ATLAS images of LHC collisions, Barr+ 2016.",
+      href: "https://arxiv.org/pdf/1610.02214v1.pdf",
+      date: "October 10, 2016"}]
+    },
+  ],
   meta: [
     {name: "Meta Studies",
     publications: [
+      {citation: "Giving Citizen Scientists a Chance: A Study of Volunteer-led Scientific Discovery, Straub 2016.",
+      href: "http://theoryandpractice.citizenscienceassociation.org/articles/10.5334/cstp.40/",
+      date: "2016"},
       {citation: "Intervention Strategies for Increasing Engagement in Crowdsourcing: Platform, Predictions, and Experiments, Segal+ 2016.",
       href: "http://research.microsoft.com/en-us/um/people/horvitz/engagement_intervention.pdf",
       date: "2016"},
       {citation: "Science Learning via Participation in Online Citizen Science, Masters+ 2016.",
       href: "http://arxiv.org/pdf/1601.05973v1.pdf",
       date: "2016"},
+      {citation: "'Guess what! You're the first to see this event': Increasing Contribution to Online Production Communities, Jackson+ 2016.",
+      href: "http://citsci.syr.edu/content/%E2%80%9Cguess-what-you%E2%80%99re-first-see-event%E2%80%9D-increasing-contribution-online-production-communities",
+      date: "2016"},
+      {citation: "Which Way Did They Go? Newcomer Movement through the Zooniverse, Jackson+ 2016.",
+      href: "http://dl.acm.org/citation.cfm?id=2818048.2835197",
+      date: "February - March 2016"},
       {citation: "Defining and Measuring Success in Online Citizen Science: A Case Study of Zooniverse Projects, Cox+ 2015.",
       href: "http://eprints.whiterose.ac.uk/86535/",
       date: "Feb 2015"},
+      {citation: "Being Present in Online Communities: Learning in Citizen Science, Mugar+ 2015.",
+      href: "http://dl.acm.org/citation.cfm?id=2768555",
+      date: "June 27 - 30 2015"},
+      {citation: "Motivations for Sustained Participation in Crowdsourcing: Case Studies of Citizen Science on the Role of Talk, Jackson+ 2015.",
+      href: "http://ieeexplore.ieee.org/document/7070006/",
+      date: "2015"},
+      {citation: "Socializing the Crowd: Learning to Talk in Citizen Science, Oesterlund+ 2014.",
+      href: "http://proceedings.aom.org/content/2014/1/16799.short",
+      date: "January 2014"},
+      {citation: "Planet hunters and seafloor explorers: legitimate peripheral participation through practice proxies in online citizen science, Mugar+ 2014.",
+      href: "http://dl.acm.org/citation.cfm?id=2531721",
+      date: "February 2014"},
       {citation: "Designing for Dabblers and Deterring Drop-Outs in Citizen Science, Eveleigh+ 2014.",
       href: "http://discovery.ucl.ac.uk/1418573/1/p2985-eveleigh.pdf",
       date: "Apr 26, 2014"},
