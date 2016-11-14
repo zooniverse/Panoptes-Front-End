@@ -13,7 +13,7 @@ counterpart.registerTranslations 'en',
 
     You can see examples of our current biomedical projects at Zooniverse.org. These include [Microscopy Masters](https://www.zooniverse.org/projects/jbrugg/microscopy-masters), where citizen scientists classify cryo-electron microscopy images to advance understanding of protein and virus structure, and [Worm Watch Lab](https://www.wormwatchlab.org/), which aims to improve understanding of the relationship between genes and behaviour.
 
-    Using our unique [Project Builder](lab) tool you can now build your own Zooniverse project. If your project requires tools that don’t yet exist on the Zooniverse platform, please propose your project using the form below. We are particularly interested in developing projects that extend the functionality our platform.
+    Using our unique [Project Builder](/lab) tool you can now build your own Zooniverse project. If your project requires tools that don’t yet exist on the Zooniverse platform, please propose your project using the form below. We are particularly interested in developing projects that extend the functionality our platform.
 
     ### Project Selection
 
