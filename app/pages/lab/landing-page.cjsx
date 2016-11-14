@@ -21,11 +21,8 @@ counterpart.registerTranslations 'en',
       policies: 'Project Builder Policies'
       bestPractices: 'Best Practices Guide'
       buildTalk: 'Project Builder Talk'
-<<<<<<< HEAD
       acknowledgements: 'Acknowledgements'
-=======
       glossary: 'Glossary'
->>>>>>> master
 
 module.exports = React.createClass
   displayName: 'ProjectBuilderLandingPage'
