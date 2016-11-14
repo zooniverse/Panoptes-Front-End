@@ -24,7 +24,7 @@ counterpart.registerTranslations('en', {
     home: 'Zooniverse',
     projects: 'Projects',
     about: 'About',
-    collect: 'Collect',
+    getInvolved: 'Get Involved',
     talk: 'Talk',
     daily: 'Daily Zooniverse',
     blog: 'Blog',
@@ -90,14 +90,14 @@ const SiteNav = React.createClass({
         })}
       >
         {!!this.state.isMobile &&
-        <Link
-          to="/"
-          className="site-nav__link"
-          activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
-        >
-          <Translate content="siteNav.home" />
-        </Link>
+          <Link
+            to="/"
+            className="site-nav__link"
+            activeClassName="site-nav__link--active"
+            onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.home') : null}
+          >
+            <Translate content="siteNav.home" />
+          </Link>
         }
         <Link
           to="/projects"
@@ -116,6 +116,14 @@ const SiteNav = React.createClass({
           <Translate content="siteNav.about" />
         </Link>{' '}
         <Link
+          to="/get-involved"
+          className="site-nav__link"
+          activeClassName="site-nav__link--active"
+          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.getInvolved') : null}
+        >
+          <Translate content="siteNav.getInvolved" />
+        </Link>{' '}
+        <Link
           to="/talk"
           className="site-nav__link"
           activeClassName="site-nav__link--active"
@@ -123,15 +131,7 @@ const SiteNav = React.createClass({
         >
           <Translate content="siteNav.talk" />
         </Link>{' '}
-
-        <Link
-          to="/collections"
-          className="site-nav__link"
-          activeClassName="site-nav__link--active"
-          onClick={!!this.logClick ? this.logClick.bind(this, 'mainNav.collect') : null}
-        >
-          <Translate content="siteNav.collect" />
-        </Link>{' '}
+        
         <Link
           to="/lab"
           className="site-nav__link"

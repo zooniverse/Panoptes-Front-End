@@ -28,10 +28,19 @@ module.exports =
       <IndexRoute component={require './pages/about/about-home'} />
       <Route path="team" component={require './pages/about/team-page'} />
       <Route path="publications" component={require './pages/about/publications-page'} />
+<<<<<<< HEAD
       <Route path="education" component={require './pages/about/education-page'} />
       <Route path="acknowledgements" component={require './pages/about/acknowledgements'} />
+=======
+>>>>>>> 21fe72febe391b01057d8e98b4583d6271a45c92
       <Route path="contact" component={require './pages/about/contact-page'} />
-      <Route path="volunteering" component={require './pages/about/volunteering-page'} />
+    </Route>
+
+    <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
+      <IndexRoute component={require './pages/get-involved/volunteering-page'} />
+      <Route path="education" component={require './pages/get-involved/education'} />
+      <Route path="callForProjects" component={require './pages/get-involved/call-for-projects'} />
+      <Route path="CollectionsList" component={require './pages/collections'} />
     </Route>
 
     <Route path="reset-password" component={require './pages/reset-password'} />
@@ -206,3 +215,4 @@ module.exports =
     <Route path="dev/ribbon" component={require './components/classifications-ribbon'} />
     <Route path="*" component={require './pages/not-found'} />
   </Route>
+ 
