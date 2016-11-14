@@ -37,8 +37,7 @@ module.exports = React.createClass
             <IndexLink to="/get-involved" activeClassName="active"><Translate content="getInvolved.nav.volunteering" /></IndexLink>
             <Link to="/get-involved/education" activeClassName="active" onClick={@logClick?.bind(this, 'getInvolved.nav.education')}><Translate content="getInvolved.nav.education" /></Link>
             <Link to="/get-involved/callForProjects" activeClassName="active" onClick={@logClick?.bind(this, 'getInvolved.nav.callForProjects')}><Translate content="getInvolved.nav.callForProjects" /></Link>
-            <Link to="/get-involved/CollectionsList" activeClassname="active" onClick={@logClick?.bind(this, 'getInvolved.nav.collections-list')}><Translate content="getInvolved.nav.collections" /></Link>
-            <Link to="/get-involved/FavoritesList" activeClassname="active" onClick={@logClick?.bind(this, 'getInvolved.nav.favorites-list')}><Translate content="getInvolved.nav.favorites" /></Link>
+            <Link to="/collections" activeClassname="active" onClick={@logClick?.bind(this, 'getInvolved.nav.collections-list')}><Translate content="getInvolved.nav.collections" /></Link>
           </nav>
         </div>
       </section>

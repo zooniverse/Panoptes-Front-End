@@ -10,11 +10,7 @@ counterpart.registerTranslations 'en',
       about: 'About'
       publications: 'Publications'
       ourTeam: 'Our Team'
-      education: 'Education'
-      careers: 'Careers'
-      volunteering: 'Volunteering'
       contact: 'Contact Us'
-      callForProjects: 'Call for Projects'
 
 module.exports = React.createClass
   displayName: 'AboutPage'
