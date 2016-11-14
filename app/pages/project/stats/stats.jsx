@@ -245,6 +245,7 @@ export class WorkflowProgress extends React.Component {
     let eta;
     let total;
     let retiredDiv;
+    let completeness = this.props.workflow.completeness;
     if (this.props.workflow.retirement.criteria !== 'never_retire') {
       retiredDiv = (
         <div>
@@ -273,6 +274,11 @@ export class WorkflowProgress extends React.Component {
         );
       }
       classificationsString += ` / ${total.toLocaleString()}`;
+      if (this.props.workflow.configuration) {
+        if (this.props.workflow.configuration.stats_completeness_type === 'classification') {
+          completeness = this.props.workflow.classifications_count / total;
+        }
+      }
     }
     return (
       <div className="progress-element">
@@ -287,7 +293,7 @@ export class WorkflowProgress extends React.Component {
             {classificationsString}
           </div>
           {eta}
-          <Progress progress={this.props.workflow.completeness} />
+          <Progress progress={completeness} />
         </div>
       </div>
     );

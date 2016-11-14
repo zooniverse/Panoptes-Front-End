@@ -1,0 +1,32 @@
+@keyframes circle-ribbon__loading-ring-animation
+  100%
+    transform: rotate(360deg)
+
+.circle-ribbon
+  &__loading-ring
+    animation: circle-ribbon__loading-ring-animation 5s linear infinite
+    stroke-dasharray: 10
+
+  &__project-arc
+    cursor: pointer
+
+  &__tooltip
+    background: #F0F0F0
+    border-radius: 0.2em
+    border-style: solid
+    border-width: 3px
+    box-shadow: 0 1px 1px rgba(black, 0.5)
+    color: black
+    font-size: 0.8em
+    padding: 0.1em 1em
+    pointer-events: none
+    transform: translate(-50%, -50%)
+    white-space: nowrap
+
+    &--hangs-left
+      margin-left: -1em
+      transform: translate(-100%, -50%)
+
+    &--hangs-right
+      margin-left: 1em
+      transform: translate(0, -50%)

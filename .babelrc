@@ -1,9 +1,10 @@
 {
-  "presets": ["es2015"],
+  "presets": ["es2015", "react"],
   "env": {
     "development": {
       "plugins": [
-        ["transform-react-jsx"]
+        ["transform-react-jsx"],
+        ["typecheck"]
       ]
     },
     "hot-reload": {

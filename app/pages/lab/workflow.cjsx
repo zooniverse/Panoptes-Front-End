@@ -70,6 +70,8 @@ EditWorkflowPage = React.createClass
 
     noTasksDefined = Object.keys(@props.workflow.tasks).length is 0
 
+    stats_completeness_type = @props.workflow.configuration.stats_completeness_type ? 'retirement'
+
     disabledStyle =
       opacity: 0.4
       pointerEvents: 'none'
@@ -593,7 +595,7 @@ EditWorkflowPage = React.createClass
 
       @props.workflow.delete().then =>
         @props.project.uncacheLink 'workflows'
-        @context.router "/lab/#{@props.project.id}"
+        @context.router.push "/lab/#{@props.project.id}"
       .catch (error) =>
         @setState deletionError: error
       .then =>
