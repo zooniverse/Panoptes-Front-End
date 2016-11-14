@@ -10,6 +10,7 @@ module.exports = React.createClass
     width: MAX_THUMBNAIL_DIMENSION
     height: MAX_THUMBNAIL_DIMENSION
     origin: 'https://thumbnails.zooniverse.org'
+    format: 'image'
 
   getInitialState: ->
     failed: false
@@ -32,7 +33,14 @@ module.exports = React.createClass
       maxWidth: @props.width
       maxHeight: @props.height
 
-    <img {...@props} src={src} {...dimensions} style={style} onError={@handleError} />
+    if (@props.format == 'mp4')
+      <div>
+        <video width="300" controls>
+          <source src={@props.src} type="video/mp4" />
+         </video>
+      </div>
+    else
+      <img {...@props} src={src} {...dimensions} style={style} onError={@handleError} />
 
   handleError: ->
     unless @state.failed
