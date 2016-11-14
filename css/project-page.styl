@@ -159,7 +159,7 @@
       line-height: 1.5em
 
   &__buttons
-    margin: 2em 0em
+    margin: 2em 0 0 0
 
     a
       background: transparent
@@ -170,29 +170,59 @@
       font-weight: 75
       padding: 0.8em 1.4vw
 
+      &:hover
+        background-color: white
+        color: black
+
   &__content
     position: relative
     margin: 3em 6em
 
     h4
       color: TEAL_GREEN
+      margin: 1em 0
       text-transform: uppercase
 
-  &__talk-images
+  &__talk-status
     background: white
-    min-height: 200px
+    color: black
+    display: flex
+    height: 275px
     width: 100%
 
-  &__stats-section
-    background: aliceblue
-    min-height: 275px
-    width: 100%
+  &__talk-image
+    background-color: black
+    flex: 1 1 auto
+    margin: 2px
+    max-width: 23%
+
+  &__talk-stat
+    color: DARK_BLUE
+    flex: 1 1 auto
+    margin: 2px
+    display: flex
+    max-width: 31%
+    align-items: center
+    justify-content: vertical
 
   &__workflow-choice
     position: relative
-    background: aliceblue
-    min-height: 275px
+    background-color: #eff2f5
     width: 100%
+
+    a
+      background: transparent
+      border: 2px solid TEAL_GREEN
+      border-radius: .5em
+      color: TEAL_GREEN
+      margin-right: 1.5em
+      font-size: 1em
+      font-weight: 75
+      padding: 0.8em 1.4vw
+
+      &:hover
+        background-color: TEAL_GREEN
+        color: white
 
   &__workflow-choice:before
     position: absolute
@@ -201,7 +231,7 @@
     width: 0
     height: 0
     content: " "
-    border-bottom: 20px solid aliceblue
+    border-bottom: 20px solid #eff2f5
     border-left: 10px solid transparent
     border-right: 10px solid transparent
 
@@ -292,13 +322,12 @@
     border: 2px solid PROJECT_SUBMENU_BLUE
 
 .project-metadata
+  background: #eff2f5
+  color: DARK_BLUE
   padding: 1.5em 3vw
   margin: 0
-  background: rgba(0,0,0,0.8)
 
   &-header
-    text-align: center
-    margin-bottom: 1.5em
     :first-child
       font-weight: bold
 
@@ -313,3 +342,10 @@
     text-align: center
     :first-child
       font-size: 2em
+
+    &__value
+      border-bottom: 2px solid BURNT_ORANGE
+      color: BURNT_ORANGE
+
+    &__label
+      margin-top: 0.6em

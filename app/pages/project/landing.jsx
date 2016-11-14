@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react';
 import FinishedBanner from './finished-banner';
 import {Link} from 'react-router';
+import TalkStatus from './talk-status';
+import ProjectMetadata from './metadata';
 
 class ProjectPage extends React.Component {
 
@@ -11,8 +13,63 @@ class ProjectPage extends React.Component {
     };
   }
 
-  renderWorkflows() {
+  toggleWorkflows() {
     this.setState({ showWorkflows: !this.state.showWorkflows });
+  }
+
+  renderWorkflows() {
+    return (
+      <div className="project-home-page__workflow-choice">
+
+        <div className="project-home-page__content">
+          <div className="content-container">
+            {!!this.props.project.workflow_description && (
+              <h4>{this.props.project.workflow_description}</h4>
+            )}
+
+            {this.props.activeWorkflows.map ((workflow) => {
+              return (
+                <Link
+                  to={`/projects/${this.props.project.slug}/classify`}
+                  key={workflow.id + Math.random()}
+                  className="call-to-action standard-button"
+                >
+                  {workflow.display_name}
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  renderWorkflowAssignment() {
+    const currentWorkflowAtLevel = this.props.activeWorkflows.filter((workflow) => {
+      if (workflow.id === this.props.preferences.settings.workflow_id) {
+        return workflow
+      }
+    })
+    const currentLevel = currentWorkflowAtLevel.length > 0 ? currentWorkflowAtLevel[0].configuration.level : 1
+    this.props.activeWorkflows.map((workflow) => {
+      if (workflow.configuration.level <= currentLevel && workflow.configuration.level != null) {
+        return (
+          <Link
+            to={`/projects/${this.props.project.slug}/classify`}
+            key={workflow.id + Math.random()}
+            className="call-to-action standard-button"
+            onClick={this.handleWorkflowSelection.bind(this, workflow)}
+          >
+            You've unlocked level {workflow.display_name}
+          </Link>
+        )
+      }
+    })
+  }
+
+  handleWorkflowSelection(workflow) {
+    this.props.onChangePreferences('preferences.selected_workflow', workflow.id)
+    return undefined
   }
 
   render() {
@@ -22,7 +79,7 @@ class ProjectPage extends React.Component {
 
     if (workflowChoose) {
       getStarted = (
-        <a className="call-to-action standard-button" onClick={this.renderWorkflows.bind(this)}>
+        <a className="call-to-action standard-button" onClick={this.toggleWorkflows.bind(this)}>
           Get Started
         </a>
       )
@@ -41,11 +98,12 @@ class ProjectPage extends React.Component {
           <small>at {this.props.project.redirect}</small>
         </a>
       )
+    } else if ((this.props.project.experimental_tools.indexOf('workflow assignment') != -1) && (this.props.user != null)) {
+      redirectCondition = this.renderWorkflowAssignment();
     } else {
       redirectCondition = (
         <div className="project-home-page__buttons">
           {getStarted}
-
           <Link to={`/projects/${this.props.project.slug}/about`} className="call-to-action standard-button">
             Learn More
           </Link>
@@ -55,7 +113,7 @@ class ProjectPage extends React.Component {
 
     return (
       <div className="project-home-page">
-        <div className="call-to-action-container content-containe">
+        <div className="call-to-action-container content-container">
           <FinishedBanner project={this.props.project} />
 
           <div className="project-home-page__introduction">
@@ -67,33 +125,12 @@ class ProjectPage extends React.Component {
         </div>
 
         {!!this.state.showWorkflows && (
-          <div className="project-home-page__workflow-choice">
-
-            <div className="project-home-page__content">
-              <h4>{this.props.project.workflow_description}</h4>
-
-              {this.props.activeWorkflows.map ((workflow) => {
-                return (
-                  <Link
-                    to={"/projects/#{@props.project.slug}/classify"}
-                    key={workflow.id + Math.random()}
-                    className="call-to-action standard-button"
-                  >
-                    {workflow.display_name}
-                  </Link>
-                )
-              })}
-
-            </div>
-
-          </div>
+          this.renderWorkflows()
         )}
 
-        <div className="project-home-page__talk-images">
-        </div>
+        <TalkStatus project={this.props.project} user={this.props.user} />
 
-        <div className="project-home-page__stats-section">
-        </div>
+        <ProjectMetadata project={this.props.project} />
 
         <div className="project-home-page__about-section">
         </div>
