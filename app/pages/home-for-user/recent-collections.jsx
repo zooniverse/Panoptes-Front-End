@@ -37,6 +37,7 @@ const RecentCollectionsSection = React.createClass({
       loading: true,
       error: null,
       images: {},
+      collections: [],
     });
 
     user.get('collections', {
@@ -71,7 +72,6 @@ const RecentCollectionsSection = React.createClass({
     .catch((error) => {
       this.setState({
         error: error,
-        collections: [],
       });
     })
     .then(() => {
@@ -101,7 +101,8 @@ const RecentCollectionsSection = React.createClass({
 
         <div className="collections-card-list">
           {this.state.collections.map((collection) => {
-            return <CollectionCard key={collection.id} subjectCount={collection.links.subjects.length} collection={collection} imagePromise={this.state.images[collection.id]} linkTo={`/collections/${collection.slug}`} translationObjectName="collectionsPage" />;
+            const subjectCount = collection.links.subjects ? collection.links.subjects.length : 0;
+            return <CollectionCard key={collection.id} subjectCount={subjectCount} collection={collection} imagePromise={this.state.images[collection.id]} linkTo={`/collections/${collection.slug}`} translationObjectName="collectionsPage" />;
           })}
         </div>
       </HomePageSection>
