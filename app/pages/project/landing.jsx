@@ -148,7 +148,7 @@ class ProjectPage extends React.Component {
 
         <TalkStatus project={this.props.project} user={this.props.user} />
 
-        <ProjectMetadata project={this.props.project} />
+        <ProjectMetadata project={this.props.project} activeWorkflows={this.props.activeWorkflows} />
 
         <div className="project-home-page__research">
           {this.renderResearcherWords()}
