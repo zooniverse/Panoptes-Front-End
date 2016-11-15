@@ -176,7 +176,7 @@ counterpart.registerTranslations 'en',
 
       ### DETAILS - Visibility
 
-      This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](/lab-policies).
+      This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](/help/lab-policies).
 
       ### DETAILS - Collaborators
 

@@ -25,7 +25,7 @@ counterpart.registerTranslations 'en',
 
       __Consider giving volunteers more ways to contribute.__ Some Zooniverse volunteers have conducted in-depth data analyses, written sorting algorithms, and become co-authors with researchers on peer-reviewed papers. Volunteers can also help with blogs and social media.
 
-      __End your project and do right by your volunteers.__ When your project has been completed, thank your volunteers and explain what happens next. We expect researchers to use the results of the project in peer-reviewed research, and to share results with the community. Classification data should also be made open after a proprietary period. More information can be found [here](/lab-policies).
+      __End your project and do right by your volunteers.__ When your project has been completed, thank your volunteers and explain what happens next. We expect researchers to use the results of the project in peer-reviewed research, and to share results with the community. Classification data should also be made open after a proprietary period. More information can be found [here](/help/lab-policies).
     '''
 
 module.exports = React.createClass
