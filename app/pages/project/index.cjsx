@@ -10,6 +10,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 classNames = require 'classnames'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 isAdmin = require '../../lib/is-admin'
+{Split} = require('seven-ten')
 
 counterpart.registerTranslations 'en',
   project:
@@ -55,6 +56,7 @@ ProjectPage = React.createClass
     owner: null
     preferences: null
     loading: false
+    splits: null
 
   getInitialState: ->
     activeWorkflows: []
@@ -301,7 +303,8 @@ ProjectPage = React.createClass
         loadingSelectedWorkflow: @state.loadingSelectedWorkflow
         workflow: @state.selectedWorkflow
         activeWorkflows: @state.activeWorkflows
-        projectIsComplete: @state.projectIsComplete}
+        projectIsComplete: @state.projectIsComplete
+        splits: @props.splits}
 
       {unless @props.project.launch_approved or @props.project.beta_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
@@ -332,6 +335,7 @@ ProjectPageController = React.createClass
     project: null
     owner: null
     preferences: null
+    splits: null
 
   _listenedToPreferences: null
 
@@ -340,6 +344,7 @@ ProjectPageController = React.createClass
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
     @fetchProjectData @props.params.owner, @props.params.name, @props.user
+    @setupSplits()
 
   componentWillReceiveProps: (nextProps) ->
     {owner, name} = nextProps.params
@@ -348,6 +353,20 @@ ProjectPageController = React.createClass
 
     if pathChanged or userChanged
       @fetchProjectData owner, name, nextProps.user
+      @setupSplits nextProps
+
+  componentWillUnmount: ->
+    Split.clear()
+
+  setupSplits: (props = @props) ->
+    user = props.user
+    {owner, name} = props.params
+
+    if user
+      Split.load("#{owner}/#{name}").then (splits) =>
+        @setState {splits}
+    else
+      Split.clear()
 
   fetchProjectData: (ownerName, projectName, user) ->
     @listenToPreferences null
@@ -425,6 +444,7 @@ ProjectPageController = React.createClass
           preferences={@state.preferences}
           loading={@state.loading}
           onChangePreferences={@handlePreferencesChange}
+          splits={@state.splits}
         />
 
       else if @state.loading
