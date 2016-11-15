@@ -1,6 +1,6 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import FinishedBanner from './finished-banner';
-import {Link} from 'react-router';
 import TalkStatus from './talk-status';
 import ProjectMetadata from './metadata';
 
@@ -9,6 +9,8 @@ class ProjectPage extends React.Component {
   constructor() {
     super();
     this.state = {
+      researcherAvatar: null,
+      researcherWords: '',
       showWorkflows: false,
     };
   }
@@ -27,7 +29,7 @@ class ProjectPage extends React.Component {
               <h4>{this.props.project.workflow_description}</h4>
             )}
 
-            {this.props.activeWorkflows.map ((workflow) => {
+            {this.props.activeWorkflows.map((workflow) => {
               return (
                 <Link
                   to={`/projects/${this.props.project.slug}/classify`}
@@ -36,21 +38,21 @@ class ProjectPage extends React.Component {
                 >
                   {workflow.display_name}
                 </Link>
-              )
+              );
             })}
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   renderWorkflowAssignment() {
     const currentWorkflowAtLevel = this.props.activeWorkflows.filter((workflow) => {
       if (workflow.id === this.props.preferences.settings.workflow_id) {
-        return workflow
+        return workflow;
       }
-    })
-    const currentLevel = currentWorkflowAtLevel.length > 0 ? currentWorkflowAtLevel[0].configuration.level : 1
+    });
+    const currentLevel = currentWorkflowAtLevel.length > 0 ? currentWorkflowAtLevel[0].configuration.level : 1;
     this.props.activeWorkflows.map((workflow) => {
       if (workflow.configuration.level <= currentLevel && workflow.configuration.level != null) {
         return (
@@ -62,33 +64,49 @@ class ProjectPage extends React.Component {
           >
             You've unlocked level {workflow.display_name}
           </Link>
-        )
+        );
       }
-    })
+    });
   }
 
   handleWorkflowSelection(workflow) {
     this.props.onChangePreferences('preferences.selected_workflow', workflow.id)
-    return undefined
+    return undefined;
+  }
+
+  renderResearcherWords() {
+    let avatarSrc = '/assets/simple-avatar.png';
+
+    return (
+      <div className="project-home-page__researcher-words">
+
+        <img role="presentation" src={avatarSrc} />
+
+        <div>
+          <h4>Words from the researcher</h4>
+          <span>"Here are some inspiring words about how much we need your help!"</span>
+        </div>
+      </div>
+    );
   }
 
   render() {
     let redirectCondition;
     let getStarted;
-    const workflowChoose = !!this.props.project.configuration.user_chooses_workflow ? true : false;
+    const workflowChoose = this.props.project.configuration.user_chooses_workflow ? true : false;
 
     if (workflowChoose) {
       getStarted = (
         <a className="call-to-action standard-button" onClick={this.toggleWorkflows.bind(this)}>
           Get Started
         </a>
-      )
+      );
     } else {
       getStarted = (
         <Link to={`/projects/${this.props.project.slug}/classify`} className="call-to-action standard-button">
           Get Started
         </Link>
-      )
+      );
     }
 
     if (this.props.project.redirect) {
@@ -97,8 +115,8 @@ class ProjectPage extends React.Component {
           <strong>Visit the project</strong><br />
           <small>at {this.props.project.redirect}</small>
         </a>
-      )
-    } else if ((this.props.project.experimental_tools.indexOf('workflow assignment') != -1) && (this.props.user != null)) {
+      );
+    } else if ((this.props.project.experimental_tools.indexOf('workflow assignment') !== -1) && (this.props.user != null)) {
       redirectCondition = this.renderWorkflowAssignment();
     } else {
       redirectCondition = (
@@ -108,7 +126,7 @@ class ProjectPage extends React.Component {
             Learn More
           </Link>
         </div>
-      )
+      );
     }
 
     return (
@@ -132,7 +150,13 @@ class ProjectPage extends React.Component {
 
         <ProjectMetadata project={this.props.project} />
 
-        <div className="project-home-page__about-section">
+        <div className="project-home-page__research">
+          {this.renderResearcherWords()}
+
+          <div className="project-home-page__about-text">
+            <h4>About {this.props.project.display_name}</h4>
+            <span> {this.props.project.introduction} </span>
+          </div>
         </div>
 
       </div>
