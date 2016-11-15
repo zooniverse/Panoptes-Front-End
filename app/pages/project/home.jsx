@@ -7,17 +7,42 @@ const Markdown = markdownz.Markdown;
 
 
 export default class ProjectHomePage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showWorkflowButtons: false,
+    };
+
+    this.showWorkflowButtons = this.showWorkflowButtons.bind(this);
+  }
+
+  componentDidMount() {
+    this.showWorkflowButtons(this.props, this.context);
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (this.context.user !== nextContext.user) {
+      this.showWorkflowButtons(nextProps, nextContext);
+    }
+  }
+
+  showWorkflowButtons(props, context) {
+    const workflowAssignment = this.props.project.experimental_tools.includes('workflow assignment');
+
+    if ((props.project.configuration && props.project.configuration.user_chooses_workflow && !workflowAssignment) ||
+      (workflowAssignment && context.user)) {
+      this.setState({ showWorkflowButtons: true });
+    } else {
+      this.setState({ showWorkflowButtons: false });
+    }
+  }
+
   render() {
     let workflowDescription;
-    let showWorkflowButtons = false;
-    const workflowAssignment = this.props.project.experimental_tools.includes('workflow assignment');
 
     if (this.props.project.workflow_description && this.props.project.workflow_description !== '') {
       workflowDescription = this.props.project.workflow_description;
-    }
-
-    if ((this.props.project.configuration && this.props.project.configuration.user_chooses_workflow) || workflowAssignment) {
-      showWorkflowButtons = true;
     }
 
     return (
@@ -36,8 +61,8 @@ export default class ProjectHomePage extends React.Component {
             onChangePreferences={this.props.onChangePreferences}
             preferences={this.props.preferences}
             project={this.props.project}
-            showWorkflowButtons={showWorkflowButtons}
-            workflowAssignment={workflowAssignment}
+            showWorkflowButtons={this.state.showWorkflowButtons}
+            workflowAssignment={this.props.project.experimental_tools.includes('workflow assignment')}
           />
         </div>
 
@@ -53,6 +78,10 @@ export default class ProjectHomePage extends React.Component {
     );
   }
 }
+
+ProjectHomePage.contextTypes = {
+  user: React.PropTypes.object.isRequired,
+};
 
 ProjectHomePage.defaultProps = {
   activeWorkflows: [],
