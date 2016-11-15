@@ -3,7 +3,6 @@ ReactDOM = require 'react-dom'
 UserSearch = require '../components/user-search'
 apiClient = require 'panoptes-client/lib/api-client'
 CollectionRole = require '../lib/collection-role'
-PromiseRenderer = require '../components/promise-renderer'
 
 ID_PREFIX = 'COLLECTION_COLLABORATORS_PAGE_'
 
@@ -184,8 +183,12 @@ module.exports = React.createClass
     error: null
     owner: null
     roleSets: []
+    hasSettingsRole: false
 
   componentDidMount: ->
+    @hasSettingsRole()
+      .then (hasSettingsRole) =>
+        @setState {hasSettingsRole}
     @update()
 
   update: (callback = ->) ->
@@ -202,33 +205,31 @@ module.exports = React.createClass
     @update()
 
   render: ->
-    <PromiseRenderer promise={@hasSettingsRole()}>{(hasSettingsRole) =>
-      if hasSettingsRole
-        { roleSets, owner } = @state
+    if @state.hasSettingsRole
+      { roleSets, owner } = @state
 
-        <div className="collection-settings-tab">
-          {if @state.error?
-            <p className="form-help error">{@state.error.toString()}</p>}
+      <div className="collection-settings-tab">
+        {if @state.error?
+          <p className="form-help error">{@state.error.toString()}</p>}
 
-          {if roleSets.length is 1
-            <div className="helpful-tip">None yet, add some with the form below.</div>}
+        {if roleSets.length is 1
+          <div className="helpful-tip">None yet, add some with the form below.</div>}
 
-          {if owner and roleSets.length > 1
-            <div>
-              {for roleSet in roleSets
-                continue if owner.id is roleSet.links.owner.id
-                <RoleRow key={roleSet.id} roleSet={roleSet} onRemove={@handleCollaboratorChange} />}
-            </div>}
+        {if owner and roleSets.length > 1
+          <div>
+            {for roleSet in roleSets
+              continue if owner.id is roleSet.links.owner.id
+              <RoleRow key={roleSet.id} roleSet={roleSet} onRemove={@handleCollaboratorChange} />}
+          </div>}
 
-          <br />
-          <hr />
-          <br />
+        <br />
+        <hr />
+        <br />
 
-          <div className="form-label">Add a collaborator</div>
-          <RoleCreator collection={@props.collection} onAdd={@handleCollaboratorChange} />
-        </div>
-      else
-        <div className="collection-settings-tab">
-          <p>Not allowed to edit this collection</p>
-        </div>
-    }</PromiseRenderer>
+        <div className="form-label">Add a collaborator</div>
+        <RoleCreator collection={@props.collection} onAdd={@handleCollaboratorChange} />
+      </div>
+    else
+      <div className="collection-settings-tab">
+        <p>Not allowed to edit this collection</p>
+      </div>
