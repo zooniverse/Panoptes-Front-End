@@ -29,7 +29,7 @@ export default class ProjectHomeWorkflowButton extends React.Component {
 
     return (
       <Link
-        to={`projects/${this.props.project.slug}/classify`}
+        to={`/projects/${this.props.project.slug}/classify`}
         className={linkClasses}
         onClick={this.handleWorkflowSelection}
         disabled={this.props.disabled}

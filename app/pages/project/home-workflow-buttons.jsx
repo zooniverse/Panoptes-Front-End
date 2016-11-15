@@ -64,7 +64,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     }
 
     return (
-      <Link to={`projects/${this.props.project.slug}/classify`} className="call-to-action standard-button">
+      <Link to={`/projects/${this.props.project.slug}/classify`} className="call-to-action standard-button">
         Get started!
       </Link>
     );
