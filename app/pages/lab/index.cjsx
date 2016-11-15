@@ -244,10 +244,10 @@ module.exports = React.createClass
           <p style={textAlign: 'center'}>
             <button type="button" className="major-button" onClick={@showProjectCreator}>Create a new project</button>{' '}
             <Link to="/help" className="standard-button">How-to</Link>{' '}
+            <Link to="/help/glossary" className="standard-button">Glossary</Link>
             <Link to="/help/lab-policies" className="standard-button">Policies</Link>{' '}
             <Link to="lab-best-practices/introduction" className="standard-button">Best Practices</Link>{' '}
             <Link to="/talk/18" className="standard-button">Project Builder Talk</Link>{' '}
-            <Link to="/help/glossary" className="standard-button">Glossary</Link>
           </p>
         </div>
         {if @state.creationInProgress
