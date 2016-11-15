@@ -248,6 +248,6 @@ module.exports = React.createClass
   displayName: 'HowToPage'
 
   render: ->
-    <div className="secondary-page centered-grid">
+    <div className="secondary-page">
       <Markdown>{counterpart "howToPage.content"}</Markdown>
     </div>

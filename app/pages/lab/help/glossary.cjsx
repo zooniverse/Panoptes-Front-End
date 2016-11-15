@@ -118,6 +118,6 @@ module.exports = React.createClass
   displayName: 'Glossary'
 
   render: ->
-    <div className="secondary-page centered-grid">
+    <div className="secondary-page">
       <Markdown>{counterpart "glossary.content"}</Markdown>
     </div>
