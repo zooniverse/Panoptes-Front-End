@@ -60,10 +60,10 @@ module.exports = React.createClass
         <div className="landing-links">
           <p className="heading"><Translate content="labLanding.links.heading" /></p>
           <Link to="/help"><Translate content="labLanding.links.buildHelp" /></Link>
-          <Link to="/lab-policies"><Translate content="labLanding.links.policies"></Translate></Link>
+          <Link to="/help/lab-policies"><Translate content="labLanding.links.policies"></Translate></Link>
           <Link to="/lab-best-practices/introduction"><Translate content="labLanding.links.bestPractices" /></Link>
           <Link to="/talk/18"><Translate content="labLanding.links.buildTalk" /></Link>
-          <Link to="/glossary"><Translate content="labLanding.links.glossary" /></Link>
+          <Link to="/help/glossary"><Translate content="labLanding.links.glossary" /></Link>
         </div>
       </div>
     </div>
