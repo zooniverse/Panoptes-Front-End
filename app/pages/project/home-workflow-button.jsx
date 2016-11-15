@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import classnames from 'classnames';
 
 
 export default class ProjectHomeWorkflowButton extends React.Component {
@@ -9,26 +10,39 @@ export default class ProjectHomeWorkflowButton extends React.Component {
     this.handleWorkflowSelection = this.handleWorkflowSelection.bind(this);
   }
 
-  handleWorkflowSelection() {
-    this.props.onChangePreferences({ 'preferences.selected_workflow': this.props.workflow.id });
+  handleWorkflowSelection(e) {
+    if (this.props.disabled) {
+      e.preventDefault()
+    } else {
+      this.props.onChangePreferences('preferences.selected_workflow', this.props.workflow.id);
+    }
   }
 
   render() {
+    // To disable the anchor tag, use class to set pointer-events: none style. 
+    // Except IE, which supports a disabled attribute instead. 
+    const linkClasses = classnames({
+      'call-to-action': true,
+      'standard-button': true,
+      'call-to-action-button--disabled': this.props.disabled
+    });
+
     return (
       <Link
         to={`projects/${this.props.project.slug}/classify`}
-        className="call-to-action standard-button"
+        className={linkClasses}
         onClick={this.handleWorkflowSelection}
-        disabled={this.props.disabledLevel}
+        disabled={this.props.disabled}
+        ariaDisabled={this.props.disabled}
       >
-        {(this.props.workflowAssignment) ? `You've unlocked level ${this.props.workflow.display_name}` : this.props.workflow.display_name}
+        {(this.props.workflowAssignment && !this.props.disabled) ? `You've unlocked level ${this.props.workflow.display_name}` : this.props.workflow.display_name}
       </Link>
     );
   }
 }
 
 ProjectHomeWorkflowButton.defaultProps = {
-  disabledLevel: false,
+  disabled: false,
   onChangePreferences: () => {},
   project: {},
   workflow: {},
@@ -36,7 +50,7 @@ ProjectHomeWorkflowButton.defaultProps = {
 }
 
 ProjectHomeWorkflowButton.propTypes = {
-  disabledLevel: React.PropTypes.bool,
+  disabled: React.PropTypes.bool,
   onChangePreferences: React.PropTypes.func.isRequired,
   project: React.PropTypes.shape({
     slug: React.PropTypes.string,

@@ -8,19 +8,19 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   constructor(props) {
     super(props);
 
-    this.hasLevelBeenReached = this.hasLevelBeenReached.bind(this);
+    this.shouldWorkflowBeDisabled = this.shouldWorkflowBeDisabled.bind(this);
     this.renderRedirectLink = this.renderRedirectLink.bind(this);
     this.renderWorkflowButtons = this.renderWorkflowButtons.bind(this);
   }
 
-  hasLevelBeenReached(workflow) {
-    if (this.context.user && workflow.configuration.level) {
+  shouldWorkflowBeDisabled(workflow) {
+    if (this.context.user && workflow.configuration.level && this.props.preferences) {
       const currentWorkflowAtLevel = this.props.activeWorkflows.filter((activeWorkflow) => {
         return (activeWorkflow.id === this.props.preferences.settings.workflow_id) ? activeWorkflow : null;
       });
       const currentLevel = (currentWorkflowAtLevel.length > 0) ? currentWorkflowAtLevel[0].configuration.level : 1;
 
-      return (!workflow.configuration.level <= currentLevel);
+      return (workflow.configuration.level > currentLevel);
     }
 
     return false;
@@ -41,7 +41,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
             return (
               <ProjectHomeWorkflowButton
                 key={workflow.id}
-                disabledLevel={this.hasLevelBeenReached(workflow)}
+                disabled={this.shouldWorkflowBeDisabled(workflow)}
                 onChangePreferences={this.props.onChangePreferences}
                 project={this.props.project}
                 workflow={workflow}
@@ -64,15 +64,15 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     }
 
     return (
-      <Link to={`/projects/${this.props.project.slug}/classify`} className="call-to-action standard-button">
+      <Link to={`projects/${this.props.project.slug}/classify`} className="call-to-action standard-button">
         Get started!
       </Link>
     );
   }
 }
 
-ProjectHomeWorkflowButtons.childContextTypes = {
-  user: React.PropTypes.object.isRequired,
+ProjectHomeWorkflowButtons.contextTypes = {
+  user: React.PropTypes.object,
 };
 
 ProjectHomeWorkflowButtons.defaultProps = {
