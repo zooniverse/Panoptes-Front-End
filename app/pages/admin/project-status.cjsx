@@ -26,6 +26,7 @@ EXPERIMENTAL_FEATURES = [
   'expert comparison summary'
   'persist annotations'
   'shortcut'
+  'metadata based feedback'
 ]
 
 ProjectToggle = React.createClass

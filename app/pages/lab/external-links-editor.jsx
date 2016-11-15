@@ -10,6 +10,7 @@ export default class ExternalLinksEditor extends React.Component {
     this.handleLinkReorder = this.handleLinkReorder.bind(this);
     this.handleRemoveLink = this.handleRemoveLink.bind(this);
     this.renderRow = this.renderRow.bind(this);
+    this.renderTable = this.renderTable.bind(this);
   }
 
   handleAddLink() {
@@ -87,28 +88,38 @@ export default class ExternalLinksEditor extends React.Component {
     );
   }
 
-  render() {
-    for (const link of this.props.project.urls) {
+  renderTable(urls) {
+    const tableUrls = [].concat(urls);
+    for (const link of tableUrls) {
       if (!link._key) {
         link._key = Math.random();
       }
     }
+
+    return (
+      <table className="external-links-table">
+        <thead>
+          <tr>
+            <th>Label</th>
+            <th>URL</th>
+          </tr>
+        </thead>
+        <DragReorderable
+          tag="tbody"
+          items={tableUrls}
+          render={this.renderRow}
+          onChange={this.handleLinkReorder}
+        />
+      </table>      
+    );
+  }
+
+  render() {
     return (
       <div>
-        <table className="external-links-table">
-          <thead>
-            <tr>
-              <th>Label</th>
-              <th>URL</th>
-            </tr>
-          </thead>
-          <DragReorderable
-            tag="tbody"
-            items={this.props.project.urls}
-            render={this.renderRow}
-            onChange={this.handleLinkReorder}
-          />
-        </table>
+        {(this.props.project.urls.length > 0)
+          ? this.renderTable(this.props.project.urls)
+          : null}
 
         <AutoSave resource={this.props.project}>
           <button type="button" onClick={this.handleAddLink}>Add a link</button>
