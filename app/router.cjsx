@@ -66,6 +66,13 @@ module.exports =
       <Route path="email" component={require './pages/settings/email' } />
     </Route>
 
+    <Route path="help" component={require './pages/lab/help'}>
+      <IndexRoute component={require './pages/lab/help/how-to-page'} />
+      <Route path="glossary" component={require './pages/lab/help/glossary'} />
+      <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
+      <Route path="best-practices" component={require './pages/lab/best-practices'} />
+    </Route>
+
     <Route path="projects" component={ProjectsPage}>
       <IndexRoute component={FilteredProjectsList} />
     </Route>
@@ -210,4 +217,3 @@ module.exports =
     <Route path="dev/ribbon" component={require './components/classifications-ribbon'} />
     <Route path="*" component={require './pages/not-found'} />
   </Route>
- 
