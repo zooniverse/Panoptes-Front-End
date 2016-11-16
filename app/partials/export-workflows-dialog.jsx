@@ -1,8 +1,6 @@
 import React from 'react'
 import apiClient from 'panoptes-client/lib/api-client'
 
-// import getWorkflowsInOrder from '../lib/get-workflows-in-order'
-
 class ExportWorkflowsDialog extends React.Component{
   constructor(props){
     super(props);
@@ -42,16 +40,6 @@ class ExportWorkflowsDialog extends React.Component{
 
     apiClient.post(`/workflows/${workflow_id}/classifications_export`, {media: {content_type: 'text/csv'}})
   }
-  /*
-  requestDataExport: ->
-    @setState exportError: null
-    apiClient.post @props.project._getURL(@props.exportType), media: content_type: @props.contentType
-      .then =>
-        @_exportsGet = null
-        @setState exportRequested: true
-      .catch (error) =>
-        @setState exportError: error
-        */
 
   render(){
     return (
