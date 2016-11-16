@@ -22,7 +22,7 @@ counterpart.registerTranslations 'en',
 
       There are five sections to this guide. The first section, [Getting Started - The Quick Guide](#getting-started) is an overview of the steps you need to complete in order to set up a project, in case you want a brief guide or reminder of all the steps.
 
-      For those of you who'd like a bit more guidance, the [Nav Bar Overview](#overview) section summarises in a bit more detail what the different nav bar headers on the Project Builder page are for. The following section section, [The Nav Bar - More Details](#details) is a more in-depth guide which goes into all of the subsections of the navbar and the finer details of how to set up a project. Finally,[the Detailed Guide](#building) links to a step-by-step walkthrough of how to set up a project, showing you how to set up the project 'Kitteh Zoo'.
+      For those of you who'd like a bit more guidance, the [Nav Bar Overview](#overview) section summarises in a bit more detail what the different nav bar headers on the Project Builder page are for. The following section section, [The Nav Bar - More Details](#details) is a more in-depth guide which goes into all of the subsections of the navbar and the finer details of how to set up a project. If you'd like to see a walkthrough of setting a project up, click here for the documentation on building 'Kitteh Zoo'.
 
 
       ## Getting Started - the Quick Guide
