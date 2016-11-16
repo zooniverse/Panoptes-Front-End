@@ -7,6 +7,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleSplitWorkflowAssignment = this.handleSplitWorkflowAssignment.bind(this);
     this.shouldWorkflowBeDisabled = this.shouldWorkflowBeDisabled.bind(this);
     this.renderRedirectLink = this.renderRedirectLink.bind(this);
     this.renderWorkflowButtons = this.renderWorkflowButtons.bind(this);
@@ -53,13 +54,41 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     return (<span>Loading...</span>);
   }
 
+  handleSplitWorkflowAssignment() {
+    console.log('lol')
+    let workflowAssignmentID = '2334';
+
+    if (process.env.NODE_ENV === 'production' || locationMatch(/\W?env=(production)/)) {
+      workflowAssignmentID = '2360';
+    }
+
+    if (this.props.split['home-buttons.visible']) {
+      this.props.onChangePreferences('preferences.selected_workflow', workflowAssignmentID);
+    }
+  }
+
   render() {
     if (this.props.project.redirect) {
       return this.renderRedirectLink();
     }
 
     if (this.props.showWorkflowButtons) {
-      return this.renderWorkflowButtons();
+      if (this.props.workflowAssignment && this.props.preferences === null) {
+        console.log('hey')
+        return (
+          <VisibilitySplit splits={this.props.splits} splitKey={'home-buttons.visible'} elementKey={'div'}>
+            <Link
+              to={`/projects/${this.props.project.slug}/classify`}
+              className="call-to-action standard-button"
+              onClick={this.handleSplitWorkflowAssignment}
+            >
+              Get started!
+            </Link>
+          </VisibilitySplit>
+        );
+      } else {
+        return this.renderWorkflowButtons();
+      }
     }
 
     return (
