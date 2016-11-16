@@ -6,11 +6,17 @@ module.exports = React.createClass
 
   getDefaultProps: ->
     preferences: null
+  
+  getInitialState: ->
+    value: ''
 
   componentWillMount: ->
+    value = @props.preferences.preferences.savedGrids?[@props.preferences.preferences.savedGrids.length - 1]?.label
+    @setState {value}
     if @props.preferences?.preferences?.grid?
       @clearRow()
       @activateTemplate 'grid'
+      
 
   activateTemplate: (type) ->
     @props.preferences.preferences.activeTemplate = type
@@ -74,6 +80,8 @@ module.exports = React.createClass
       @props.preferences.save()
       @setState templateForm: false, gridSelect: true
       @setState error: null if @state?.error
+      value = displayName
+      @setState {value}
 
   uniqueName: (name) ->
     unique = true
@@ -93,14 +101,16 @@ module.exports = React.createClass
       <button type="button" className="template-form-button" onClick={@setState.bind this, templateForm: null, null}>Cancel</button>
     </form>
 
-  changeGrid: (value) ->
+  changeGrid: (option) ->
     @activateTemplate 'grid'
     @props.preferences.preferences.savedGrids.map (grid, index) =>
-      if grid.value is value
+      if grid.value is option.value
         @props.preferences.preferences.grid = grid.template
         @props.preferences.preferences.savedGrids.splice index, 1
         @props.preferences.preferences.savedGrids.push grid
         @props.preferences.update 'preferences'
+        value = grid.label
+        @setState {value}
 
   renderGridSelect: ->
     <div>
@@ -112,7 +122,7 @@ module.exports = React.createClass
         options={@props.preferences.preferences.savedGrids}
         scrollMenuIntoView={true}
         searchable={false}
-        value={@props.preferences.preferences.savedGrids?[@props.preferences.preferences.savedGrids.length - 1]?.label}
+        value={label: @state.value, value: @state.value}
       />
       <button type="button" className="template-form-button" onClick={@deleteGrid.bind this, null}>
         delete template

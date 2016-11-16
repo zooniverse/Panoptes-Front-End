@@ -30,7 +30,7 @@
     "react-pullout": "~1.0.2",
     "react-router": "~2.5.2",
     "react-router-scroll": "~0.3.2",
-    "react-select": "~0.9.1",
+    "react-select": "~1.0.0-rc",
     "react-swipe": "~5.0.3",
     "react-translate-component": "~0.13.0",
     "seven-ten": "~2.0.1",
