@@ -7,7 +7,7 @@ WORKDIR /src
 RUN apt-get update && \
     apt-get install -y curl libfreetype6 libfontconfig1 git ruby unzip flex \
                        bison && \
-    curl https://deb.nodesource.com/setup_4.x | bash - && \
+    curl https://deb.nodesource.com/setup_6.x | bash - && \
     apt-get install -y nodejs && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
