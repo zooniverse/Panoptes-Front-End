@@ -52,13 +52,11 @@ class TalkStatus extends React.Component {
 }
 
 TalkStatus.propTypes = {
-  project: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  project: React.PropTypes.object.isRequired,
 };
 
 TalkStatus.defaultProps = {
   project: {},
-  user: null,
 };
 
 export default TalkStatus;

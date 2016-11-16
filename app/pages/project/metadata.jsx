@@ -49,12 +49,21 @@ class ProjectMetadata extends React.Component {
     this.props.activeWorkflows.map((workflow) => {
       percentComplete += workflow.completeness
     });
-    percentComplete /= this.props.activeWorkflows.length;
+
+    if (this.props.activeWorkflows.length > 0) {
+      percentComplete /= this.props.activeWorkflows.length;
+    }
 
     return (
       <div className="project-metadata-status-bar">
         <svg width="100%" height="1em" viewBox="0 0 1 1" preserveAspectRatio="none" style={{ display: 'block' }}>
-          <rect fill="hsl(25, 100%, 50%)" stroke="none" x="0" y="0" width={percentComplete} height="1" />
+          <defs>
+            <linearGradient id="linear-gradient">
+              <stop offset="14%" stopColor="#ff471a" stopOpacity="0%"/>
+              <stop offset="79%" stopColor="#ffad33" stopOpacity="85%"/>
+            </linearGradient>
+          </defs>
+          <rect fill="url(#linear-gradient)" stroke="none" x="0" y="0" width={percentComplete} height="1" />
           <rect fill="hsl(0, 0%, 75%)" stroke="none" x={percentComplete} y="0" width={1 - percentComplete} height="1" />
         </svg>
         <br />

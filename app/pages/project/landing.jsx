@@ -165,17 +165,17 @@ class ProjectPage extends React.Component {
 }
 
 ProjectPage.propTypes = {
-  activeWorkflows: PropTypes.array.isRequired,
-  owner: PropTypes.object.isRequired,
-  project: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  activeWorkflows: React.PropTypes.array.isRequired,
+  owner: React.PropTypes.object.isRequired,
+  project: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object,
 };
 
 ProjectPage.defaultProps = {
   activeWorkflows: [],
   owner: {},
   project: {},
-  user: null,
+  user: {},
 };
 
 export default ProjectPage;
