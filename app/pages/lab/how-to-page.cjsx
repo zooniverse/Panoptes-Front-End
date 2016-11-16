@@ -174,20 +174,20 @@ counterpart.registerTranslations 'en',
 
       #### Questions:
       Choices: This section contains all your answers. The key features of this section are:
-      - Required: if you select this, the user will HAVE to answer the question before moving on.
-      - Multiple: if you select this, the user can select more than one answer -- use this for "select all that apply" type questions.
-      - Next Task: The “Next task” selection (which appears below the text box for each answer) describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).
+      - **Required:** if you select this, the user will HAVE to answer the question before moving on.
+      - **Multiple:** if you select this, the user can select more than one answer -- use this for "select all that apply" type questions.
+      - **Next Task:** The “Next task” selection (which appears below the text box for each answer) describes what task you want the volunteer to perform next after they give a particular answer. You can choose from among the tasks you’ve already defined. If you want to link a task to another you haven’t built yet, you can come back and do it later (don’t forget to save your changes).
 
       #### Marking:
       Choices: This section contains all the different things people can mark. We call each separate option a "Tool" and you can specify a label, colour, and tool type for each option. Check out the Aggregation docs to understand how multiple volunteer answers are turned into final shapes for your data analysis!
 
       Tool types are:
-      - *point:* X marks the spot.
-      - *line:* a straight line at any angle.
-      - *polygon:* an arbitrary shape made of point-to-point lines.
-      - *rectangle:* a box of any size and length-width ratio; this tool *cannot* be rotated.
-      - *circle:* a point and a radius.
-      - *ellipse:* an oval of any size and axis ratio; this tool *can* be rotated.
+      - **point:** X marks the spot.
+      - **line:** a straight line at any angle.
+      - **polygon:** an arbitrary shape made of point-to-point lines.
+      - **rectangle:** a box of any size and length-width ratio; this tool *cannot* be rotated.
+      - **circle:** a point and a radius.
+      - **ellipse:** an oval of any size and axis ratio; this tool *can* be rotated.
 
       ### Subject Sets
       Need to generate this content from the 'how-to' page
