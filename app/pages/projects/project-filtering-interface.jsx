@@ -89,7 +89,7 @@ class ProjectFilteringInterface extends Component {
 
   handleSortChange(sort) {
     const page = '1';
-    this.props.onChangeQuery({ sort, page });
+    this.props.onChangeQuery({ sort: sort.value, page });
   }
 
   handlePageChange(page) {

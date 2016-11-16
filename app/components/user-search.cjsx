@@ -8,11 +8,21 @@ delayBy = (timeout, fn) ->
 module.exports = React.createClass
   displayName: 'UserSearch'
 
+  queryTimeout: NaN
+
+  propTypes:
+    multi: React.PropTypes.bool
+    debounce: React.PropTypes.number
+
   getDefaultProps: ->
     multi: true
     debounce: 200
 
-  queryTimeout: NaN
+  getInitialState: ->
+    users: []
+
+  onChange: (users) ->
+    @setState {users}
 
   searchUsers: (value) ->
     clearTimeout @queryTimeout
@@ -33,12 +43,14 @@ module.exports = React.createClass
               resolve {options}
 
   render: ->
-    <Select
+    <Select.Async
       multi={@props.multi}
       name="userids"
+      value={@state.users}
+      onChange={@onChange}
       placeholder="Username:"
       searchPromptText="Type to search Users"
       className="search standard-input"
       closeAfterClick={true}
       matchProp={'label'}
-      asyncOptions={@searchUsers} />
+      loadOptions={@searchUsers} />

@@ -39,8 +39,7 @@ module.exports = React.createClass
         <CollectionSearch
           ref="search"
           multi={true}
-          project={@props.project}
-          onChange={@handleChange} />
+          project={@props.project} />
         <button type="button" className="standard-button search-button" disabled={if @state.hasCollectionSelected then true else false} onClick={@addToCollections}>
           Add
         </button>

@@ -12,8 +12,8 @@ MarkdownHelp = require '../../partials/markdown-help'
 alert = require('../../lib/alert')
 {DISCIPLINES} = require '../../components/disciplines'
 Select = require 'react-select'
-`import CharLimit from '../../components/char-limit'`
-`import ExternalLinksEditor from './external-links-editor'`
+`import CharLimit from '../../components/char-limit';`
+`import ExternalLinksEditor from './external-links-editor';`
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -165,14 +165,16 @@ module.exports = React.createClass
       </div>
     </div>
 
-  handleDisciplineTagChange: (value) ->
-    newTags = if value is '' then [] else value.split(',')
+  handleDisciplineTagChange: (options) ->
+    newTags = options.map (option) ->
+      option.value
     @setState disciplineTagList: newTags
     allTags = newTags.concat @state.otherTagList
     @handleTagChange(allTags)
 
-  handleOtherTagChange: (value) ->
-    newTags = if value is '' then [] else value.split(',')
+  handleOtherTagChange: (options) ->
+    newTags = options.map (option) ->
+      option.value
     @setState otherTagList: newTags
     allTags = @state.disciplineTagList.concat newTags
     @handleTagChange(allTags)
