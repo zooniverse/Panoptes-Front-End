@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import ProjectHomeWorkflowButton from './home-workflow-button';
+import locationMatch from '../../lib/location-match';
 
 
 export default class ProjectHomeWorkflowButtons extends React.Component {
