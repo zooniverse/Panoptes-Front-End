@@ -1,6 +1,9 @@
-import React, {PropTypes} from 'react';
-import {sugarApiClient} from 'panoptes-client/lib/sugar';
-import {Link} from 'react-router';
+import React, { PropTypes } from 'react';
+import { sugarApiClient } from 'panoptes-client/lib/sugar';
+import { Link } from 'react-router';
+import talkClient from 'panoptes-client/lib/talk-client';
+import apiClient from 'panoptes-client/lib/api-client';
+import getSubjectLocation from '../../lib/get-subject-location';
 
 class TalkStatus extends React.Component {
 
@@ -13,7 +16,22 @@ class TalkStatus extends React.Component {
   }
 
   componentWillMount() {
+    let recentSubjects;
     this.talkItems();
+    talkClient.type('discussions').get({ section: 'project-' + this.props.project.id, sort: '-created_at' })
+    .then((discussions) => {
+      recentSubjects = discussions.filter((discussion) => {
+        if (discussion.focus_type === 'Subject') return discussion;
+      });
+      recentSubjects.splice(0, 3).map((subject) => {
+        apiClient.type('subjects').get(subject.focus_id)
+        .then((image) => {
+          const newArray = this.state.talkImages.slice();
+          newArray.push(image);
+          this.setState({ talkImages: newArray });
+        });
+      });
+    });
   }
 
   talkItems() {
@@ -32,17 +50,19 @@ class TalkStatus extends React.Component {
     return (
       <div className="project-home-page__talk-status">
 
-        <div className="project-home-page__talk-image">
-        </div>
-
-        <div className="project-home-page__talk-image">
-        </div>
-
-        <div className="project-home-page__talk-image">
-        </div>
+        {this.state.talkImages.map((image) => {
+          return (
+            <div className="project-home-page__talk-image">
+              <img alt="" src={getSubjectLocation(image).src} />
+            </div>
+          );
+        })}
 
         <div className="project-home-page__talk-stat">
-          <strong>{this.state.activeUsers}</strong> {peopleAmount} talking about <strong>{this.props.project.display_name}</strong> right now.
+          <span>
+            <strong>{this.state.activeUsers}</strong> {peopleAmount} talking about <strong>{this.props.project.display_name}
+            </strong> right now.
+          </span>
           <Link to={`/projects/${this.props.project.slug}/talk`} className="call-to-action standard-button">Join In</Link>
         </div>
 

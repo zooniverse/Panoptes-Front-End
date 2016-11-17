@@ -167,7 +167,6 @@
       border-radius: .5em
       margin-right: 1.5em
       font-size: 1em
-      font-weight: 75
       padding: 0.8em 1.4vw
 
       &:hover
@@ -229,26 +228,55 @@
       line-height: 2
 
   &__talk-status
-    background: white
-    color: black
     display: flex
-    flex-wrap: wrap
-    height: 275px
-    width: 100%
+    flex-flow: row wrap
 
   &__talk-image
-    background-color: black
-    flex: 1 1 20%
-    margin: 2px
+    background: black
+    flex: auto
+    width: 240px
+
+    img
+      width: 100%
+      height: 100%
 
   &__talk-stat
+    background: white
     color: DARK_BLUE
-    flex: 1 1 auto
-    margin: 2px
     display: flex
-    max-width: 31%
-    align-items: center
-    justify-content: vertical
+    flex: auto
+    flex-direction: column
+    justify-content: center
+    min-height: 100px
+    padding: 0 2em 0 4em
+    position: relative
+    width: 180px
+
+    span
+      font-size: 18px
+      margin-bottom: 0.75em
+
+    a
+      background: transparent
+      border: 2px solid DARK_BLUE
+      border-radius: .5em
+      color: DARK_BLUE
+      font-size: 1em
+      padding: 0.2em 0.8vw
+      width: 4em
+
+      &:hover
+        background-color: DARK_BLUE
+        color: white
+
+  &__talk-stat:before
+    right: 100%
+    top: 3em
+    content: " "
+    position: absolute
+    border-bottom: 12px solid transparent
+    border-right: 25px solid white
+    border-top: 12px solid transparent
 
   &__workflow-choice
     position: relative
