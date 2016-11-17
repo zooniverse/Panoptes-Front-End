@@ -29,6 +29,7 @@ module.exports =
       <IndexRoute component={require './pages/about/about-home'} />
       <Route path="team" component={require './pages/about/team-page'} />
       <Route path="publications" component={require './pages/about/publications-page'} />
+      <Route path="acknowledgements" component={require './pages/about/acknowledgements'} />
       <Route path="contact" component={require './pages/about/contact-page'} />
     </Route>
 
@@ -211,4 +212,3 @@ module.exports =
     <Route path="dev/ribbon" component={require './components/classifications-ribbon'} />
     <Route path="*" component={require './pages/not-found'} />
   </Route>
- 
