@@ -6,7 +6,7 @@ counterpart.registerTranslations 'en',
   howToPage:
     content: '''
 
-      # Index
+      # Project Builder Documentation
         * [Getting Started - the Quick Guide](#the-quick-guide)
         * [Overview - Everything on your Nav Bar](#overview-everything-on-your-nav-bar)
           * [Project](#project)
@@ -27,15 +27,15 @@ counterpart.registerTranslations 'en',
               * [Questions](#questions)
               * [Marking](#marking)
             * [Subject Sets](#subject-sets)
+        * [Further Help](#further-help)
 
 
       There are three sections to this guide. The first section, [Getting Started - the Quick Guide](#the-quick-guide) is an overview of the steps you need to complete in order to set up a project, in case you want a brief guide or reminder of all the steps.
 
       The second section, [Overview - Everything on Your Nav Bar](#overview-everything-on-your-nav-bar), goes through each of the nav bar sections on the Project Builder nav bar in case you want to check where something lives.
 
-      For those of you who'd like further more guidance, the  third section, [The Detailed Guide](#the-detailed-guide), summarises in a more detail the finer details of how to set up a project.
+      For those of you who'd like further more guidance, the  third section, [The Detailed Guide](#the-detailed-guide), summarises in more detail the finer details of how to set up a project.
 
-      If you'd like to see a walkthrough of setting a project up, [visit the documentation on building 'Kitteh Zoo'](/project-builder-walkthrough).
 
       ## The Quick Guide
 
@@ -45,7 +45,7 @@ counterpart.registerTranslations 'en',
       2. Click on "Build a Project" or head over to www.zooniverse.org/lab and click "Create a New Project"
       3. Define your project. A popup will appear. Once you've filled this out, you'll be taken to a more detailed "Project Details" page where you can further define basic information (you can change all this later on from the same page). Then, go through each of the other blue tabs on the left-hand side. There is guidance information for each component listed on the page itself, and more detail further down in this guide too.
       4. The next step is to create your workflow. Click on "New Workflow" in the Navigation Bar on the left-hand side of the page underneath the blue tabs. Run through this as many times as necessary to set up your workflow.
-      5. Link your workflow to subjects: Under "Associated Subject Sets" select "use default subject set" which will link your project to ridiculous photos of cats. Alternatively, you can upload your own subjects under the "Subjects" menu on the left-hand Nav bar (detailed instructions [here](#subjects) ):
+      5. Link your workflow to subjects: Under "Associated Subject Sets" select "use default subject set" which will link your project to ridiculous photos of cats. Alternatively, you can upload your own subjects under the "Subjects" menu on the left-hand Nav bar (detailed instructions [here](#subjects) ).
       6. Test your workflow: Hit the "Test this Workflow" button to actually see how it comes together!
       7. Lather, rinse, repeat: Explore your project, figuring out what works and what doesn't. Make changes, then refresh your project page to test out the changes. Guidelines on project design for maximizing engagement and data quality on the [Policies page](/lab-policies).
       8. Lastly, once you are happy with all of these components, make your project Public on the 'Visibility Page' and submit it for review to the Zooniverse team.
@@ -92,7 +92,7 @@ counterpart.registerTranslations 'en',
 
       * **Description**: This should be a one-line call to action for your project. This will display on your landing page and, if approved, on the Zooniverse home page. Some volunteers will decide whether to try your project based on reading this, so try to write short text that will make people actively want to join your project.
 
-      * **Introduction**: Add a brief introduction to get people interested in your project. This will display on your project's front page. Note this field (renders markdown)[http://markdownlivepreview.com/], so you can format the text. You can make this longer than the Description, but it's still probably best to save much longer text for areas like the Research Case or FAQ tabs.
+      * **Introduction**: Add a brief introduction to get people interested in your project. This will display on your project's front page. Note this field [renders markdown](http://markdownlivepreview.com/), so you can format the text. You can make this longer than the Description, but it's still probably best to save much longer text for areas like the Research Case or FAQ tabs.
 
       * **Checkbox: Volunteers choose workflow:** A workflow is a set of tasks a volunteer completes to create a classification. Your project might have multiple workflows (if you want to set different tasks for different image sets). Check this to let volunteers select which workflow they want to work on; otherwise, they'll be served workflow-subject pairs randomly.
 
@@ -131,13 +131,18 @@ counterpart.registerTranslations 'en',
 
 
       ### Tutorials
-      **Needs writing**
+      This is where you create tutorials to show your users how to use your project! You can add as many steps you want, but shorter is better, because that allows your users to get stuck into the project quicker!
+
+      You can upload both an image and then some associated text to create each step of the tutorial.
+
+      In some cases, you might have several different workflows, and so need several different tutorials. On the Workflow page, you can specify which tutorial shows for the workflow a volunteer is on.
 
 
       ### Media
       You can upload your own media to your project (such as example images for your help pages) so you can link to it without an external host. To start uploading, drop an image into the box (or click it to bring up your file browser and select a file).
 
       Once the image has uploaded, it will appear above the "Add an image" box. You can then copy the markdown text beneath the image into your project, or add another image.
+
 
       ### Visibility
       This page is where you decide whether your project is public and whether it's ready to go live. Also set workflows to "active" vs. "inactive" -- you can edit inactive workflows on a live project and link different subject sets to different workflows.
@@ -192,8 +197,14 @@ counterpart.registerTranslations 'en',
       - **ellipse:** an oval of any size and axis ratio; this tool *can* be rotated.
 
       ### Subject Sets
-      Need to generate this content from the 'how-to' page
+      On this page, you can add groups of data to be classified.
 
+      To do so, drag and drop items onto the drop zone in the browser and then upload. You can give each set a name so that you can easily distinguish between them.
+
+      ## Further Help
+      If you'd like some further information, check out the [documentation behind building Kitteh Zoo](/project-builder-walkthrough), that talks you through building the project building the project builder from scratch.
+
+      If this doesn't help, get in contact with the Zooniverse team via the [contact page](/about/contact).
     '''
 
 module.exports = React.createClass
