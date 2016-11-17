@@ -23,16 +23,16 @@ counterpart.registerTranslations('en', {
 
 const CollectionPage = React.createClass({
 
-  contextTypes: {
-    geordi: React.PropTypes.object,
-  },
-
   propTypes: {
     user: React.PropTypes.object,
     collection: React.PropTypes.object.isRequired,
     project: React.PropTypes.object,
     children: React.PropTypes.node,
     roles: React.PropTypes.array,
+  },
+
+  contextTypes: {
+    geordi: React.PropTypes.object,
   },
 
   getDefaultProps() {
@@ -79,7 +79,7 @@ const CollectionPage = React.createClass({
     if (!!this.props.project) {
       baseLink = `/projects/${this.props.project.slug}`;
     }
-    const baseCollectionLink = `${baseLink}/${baseType}/${this.props.collection.slug}`;
+    const baseCollectionLink = `${baseLink}/collections/${this.props.collection.slug}`;
     const baseCollectionsLink = `${baseLink}/${baseType}/${this.state.owner.login}`;
     const isOwner = !!this.props.user && this.props.user.id === this.state.owner.id;
     const profileLink = `${baseLink}/users/${this.state.owner.login}`;
