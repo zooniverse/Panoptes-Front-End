@@ -5,26 +5,26 @@ import classnames from 'classnames';
 
 export default class ProjectHomeWorkflowButton extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.handleWorkflowSelection = this.handleWorkflowSelection.bind(this);
   }
 
   handleWorkflowSelection(e) {
     if (this.props.disabled) {
-      e.preventDefault()
+      e.preventDefault();
     } else {
       this.props.onChangePreferences('preferences.selected_workflow', this.props.workflow.id);
     }
   }
 
   render() {
-    // To disable the anchor tag, use class to set pointer-events: none style. 
-    // Except IE, which supports a disabled attribute instead. 
+    // To disable the anchor tag, use class to set pointer-events: none style.
+    // Except IE, which supports a disabled attribute instead.
     const linkClasses = classnames({
       'call-to-action': true,
       'standard-button': true,
-      'call-to-action-button--disabled': this.props.disabled
+      'call-to-action-button--disabled': this.props.disabled,
     });
 
     return (
@@ -47,7 +47,7 @@ ProjectHomeWorkflowButton.defaultProps = {
   project: {},
   workflow: {},
   workflowAssignment: false,
-}
+};
 
 ProjectHomeWorkflowButton.propTypes = {
   disabled: React.PropTypes.bool,
@@ -55,6 +55,9 @@ ProjectHomeWorkflowButton.propTypes = {
   project: React.PropTypes.shape({
     slug: React.PropTypes.string,
   }).isRequired,
-  workflow: React.PropTypes.object.isRequired,
+  workflow: React.PropTypes.shape({
+    display_name: React.PropTypes.string,
+    id: React.PropTypes.string,
+  }).isRequired,
   workflowAssignment: React.PropTypes.bool,
 };

@@ -29,8 +29,9 @@ describe('ProjectHomeWorkflowButtons', function() {
 
   describe('if workflow assignment is true', function() {
     beforeEach(function () {
-      wrapper = render(
-        <ProjectHomeWorkflowButtons activeWorkflows={testWorkflows} preferences={testUserPreferences} showWorkflowButtons={true} workflowAssignment={true} />
+      wrapper = mount(
+        <ProjectHomeWorkflowButtons activeWorkflows={testWorkflows} preferences={testUserPreferences} showWorkflowButtons={true} workflowAssignment={true} />,
+        { context: { user: { id: 1 } } }
       );
     });
 
@@ -39,7 +40,7 @@ describe('ProjectHomeWorkflowButtons', function() {
     });
 
     it('should disable buttons for levels that user has not reached', function() {
-      assert.equal(wrapper.find('.standard-button').last().attr('disabled'), true);
-    })
+      assert.equal(wrapper.find('.standard-button').last().props().disabled, true);
+    });
   });
 });
