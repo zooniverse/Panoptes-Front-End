@@ -18,7 +18,7 @@ export default class ProjectHomePage extends React.Component {
   }
 
   componentDidMount() {
-    this.showWorkflowButtons(this.props, this.context);
+    this.showWorkflowButtons();
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -27,7 +27,7 @@ export default class ProjectHomePage extends React.Component {
     }
   }
 
-  showWorkflowButtons(props, context) {
+  showWorkflowButtons(props = this.props, context = this.context) {
     const workflowAssignment = this.props.project.experimental_tools.includes('workflow assignment');
 
     if ((props.project.configuration && props.project.configuration.user_chooses_workflow && !workflowAssignment) ||
