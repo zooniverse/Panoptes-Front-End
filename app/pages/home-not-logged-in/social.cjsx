@@ -1,6 +1,7 @@
 React = require 'react'
 moment = require 'moment'
 talkClient = require 'panoptes-client/lib/talk-client'
+he = require 'he'
 
 module.exports = React.createClass
   displayName: 'HomePageSocial'
@@ -64,7 +65,7 @@ module.exports = React.createClass
           <ul>
             {for post, i in @state.social.posts
               <li key="post-#{i}">
-                <h3><a href={post.link}>{post.title}</a></h3>
+                <h3><a href={post.link}>{he.decode(post.title)}</a></h3>
                 <p>
                   <a href={post.link}>{post.excerpt}</a>
                 </p>
