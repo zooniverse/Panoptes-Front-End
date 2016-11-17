@@ -19,7 +19,7 @@ counterpart.registerTranslations 'en',
             * [Tutorials](#tutorials)
             * [Media](#media)
             * [Visibility](#visibility)
-            * [Workflows](#workflows)
+            * [Workflow](#workflow)
               * [Orientation](#orientation)
               * [Create Tasks](#create-tasks)
               * [Wiring Tasks Together](#wiring-tasks-together)
@@ -29,13 +29,17 @@ counterpart.registerTranslations 'en',
             * [Subject Sets](#subject-sets)
 
 
-      There are five sections to this guide. The first section, [Getting Started - The Quick Guide](#getting-started) is an overview of the steps you need to complete in order to set up a project, in case you want a brief guide or reminder of all the steps.
+      There are three sections to this guide. The first section, [Getting Started - the Quick Guide](#the-quick-guide) is an overview of the steps you need to complete in order to set up a project, in case you want a brief guide or reminder of all the steps.
 
-      For those of you who'd like a bit more guidance, the [Nav Bar Overview](#overview) section summarises in a bit more detail what the different nav bar headers on the Project Builder page are for. The following section section, [The Nav Bar - More Details](#details) is a more in-depth guide which goes into all of the subsections of the navbar and the finer details of how to set up a project. If you'd like to see a walkthrough of setting a project up, click here for the documentation on building 'Kitteh Zoo'.
+      The second section, [Overview - Everything on Your Nav Bar](#overview-everything-on-your-nav-bar), goes through each of the nav bar sections on the Project Builder nav bar in case you want to check where something lives.
+
+      For those of you who'd like further more guidance, the  third section, [The Detailed Guide](#the-detailed-guide), summarises in a more detail the finer details of how to set up a project.
+
+      If you'd like to see a walkthrough of setting a project up, [visit the documentation on building 'Kitteh Zoo'](/project-builder-walkthrough).
 
       ## The Quick Guide
 
-      A brief overview of all the steps you need to do to how to set up a project - for more details on how to use each section on the navbar, click [here](#details)and for a detailed walk-through of setting up a project, check out the 'Detailed Guide' section [here](#building).
+      A brief overview of all the steps you need to do to how to set up a project!
 
       1. Make sure you are logged in to your Zooniverse account.
       2. Click on "Build a Project" or head over to www.zooniverse.org/lab and click "Create a New Project"
@@ -43,14 +47,12 @@ counterpart.registerTranslations 'en',
       4. The next step is to create your workflow. Click on "New Workflow" in the Navigation Bar on the left-hand side of the page underneath the blue tabs. Run through this as many times as necessary to set up your workflow.
       5. Link your workflow to subjects: Under "Associated Subject Sets" select "use default subject set" which will link your project to ridiculous photos of cats. Alternatively, you can upload your own subjects under the "Subjects" menu on the left-hand Nav bar (detailed instructions [here](#subjects) ):
       6. Test your workflow: Hit the "Test this Workflow" button to actually see how it comes together!
-      7. Lather, rinse, repeat: Explore your project, figuring out what works and what doesn't. Make changes, then refresh your project page to test out the changes. Guidelines on project design for maximizing engagement and data quality are **here** (link to policies page)
+      7. Lather, rinse, repeat: Explore your project, figuring out what works and what doesn't. Make changes, then refresh your project page to test out the changes. Guidelines on project design for maximizing engagement and data quality on the [Policies page](/lab-policies).
       8. Lastly, once you are happy with all of these components, make your project Public on the 'Visibility Page' and submit it for review to the Zooniverse team.
 
       ## Overview: Everything on your Nav Bar
 
-      On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are terms you'll see a lot, and they have specific meanings in the Zooniverse. Project is pretty self-explanatory; Galaxy Zoo, Penguin Watch, and of course, Kitteh Zoo, are all examples of Zooniverse projects that you could build using the project builder. A workflow is the sequence of tasks that you ask volunteers to do, and subjects are the things (usually images) that volunteers do those tasks on.
-
-      For more details on how to use these individual sections, click [here](#details).
+      On the left-hand side, you've got your main menus: Project, Workflow, and Subjects. These are terms you'll see a lot, and they have specific meanings in the Zooniverse. Project is pretty self-explanatory; Galaxy Zoo, Penguin Watch, and of course, Kitteh Zoo, are all examples of Zooniverse projects that you could build using the project builder. A workflow is the sequence of tasks that you ask volunteers to do, and subjects are the things (usually images) that volunteers do those tasks on. For more Zooniverse definitions, check out the [Glossary page](/glossary).
 
       ### Project
       This holds all your project level details. The project name, the people involved, and all the extra content (e.g. text and pictures) you want to share, are all here.
@@ -72,10 +74,10 @@ counterpart.registerTranslations 'en',
       - **Data Exports:** Access your raw and aggregated classification data, subject data, and comments from Talk.
 
       ### Workflows
-      A workflow is the sequence of tasks that you're asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow is where you define those tasks and set out the order in which the volunteers will do them. Your project might have multiple workflows (if you want to set different tasks for different image sets). See the Workflow Details section for more on workflows.
+      A workflow is the sequence of tasks that you're asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your data, or both. The workflow is where you define those tasks and set out the order in which the volunteers will do them. Your project might have multiple workflows (if you want to set different tasks for different image sets). See the more detailed [Workflow](#workflow) section for more on workflows.
 
       ### Subjects
-      A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the "manifest") defining their properties, and the images themselves. Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it's best to just have all their subjects in 1 set, but not all. See the Subject Details section for more on subjects.
+      A subject is a unit of data to be analyzed. A subject can include one or more images that will be analyzed at the same time by volunteers. A subject set consists of a list of subjects (the "manifest") defining their properties, and the images themselves. Feel free to group subjects into sets in the way that is most useful for your research. Many projects will find it's best to just have all their subjects in 1 set, but not all. See the [Subject Details](#subject-sets) section for more on subjects.
 
 
       ## The Detailed Guide
@@ -92,14 +94,14 @@ counterpart.registerTranslations 'en',
 
       * **Introduction**: Add a brief introduction to get people interested in your project. This will display on your project's front page. Note this field (renders markdown)[http://markdownlivepreview.com/], so you can format the text. You can make this longer than the Description, but it's still probably best to save much longer text for areas like the Research Case or FAQ tabs.
 
-      * **Checkbox:** Volunteers choose workflow: A workflow is a set of tasks a volunteer completes to create a classification. Your project might have multiple workflows (if you want to set different tasks for different image sets). Check this to let volunteers select which workflow they want to work on; otherwise, they'll be served workflow-subject pairs randomly.
+      * **Checkbox: Volunteers choose workflow:** A workflow is a set of tasks a volunteer completes to create a classification. Your project might have multiple workflows (if you want to set different tasks for different image sets). Check this to let volunteers select which workflow they want to work on; otherwise, they'll be served workflow-subject pairs randomly.
 
-      * **Checkbox:** Private project:
-      On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you're still working out its details. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left). Team members you add can see your project even if it's private. Once your project is public, anyone with the link can view and classify on it.
+      * **Checkbox: Private project:**
+      On "private" projects, only users with specified project roles can see or classify on the project. We strongly recommend you keep your project private while you're still working out its details. Share it with your team to get feedback by adding them in the Collaborators area (linked at the left-hand side of the Project Builder). Team members you add can see your project even if it's private. Once your project is public, anyone with the link can view and classify on it.
 
 
       ### About
-      Contains pages for Research, Team, FAQ, Results, and Education: These pages are where you really get to share all the cool things about your project. All of these pages use Markdown (see link above) to format text and display images.
+      Contains pages for Research, Team, FAQ, Results, and Education: These pages are where you really get to share all the cool things about your project. All of these pages use (Markdown)[http://markdownlivepreview.com/] to format text and display images.
 
       * **Research:** Explain your research to your audience here in as much detail as you'd like. This page displays no matter what, since explaining your motivation to volunteers is critical for the success of your project!
 
@@ -140,10 +142,10 @@ counterpart.registerTranslations 'en',
       ### Visibility
       This page is where you decide whether your project is public and whether it's ready to go live. Also set workflows to "active" vs. "inactive" -- you can edit inactive workflows on a live project and link different subject sets to different workflows.
 
-      For more information on the different project stages, see our project builder policies.
+      For more information on the different project stages, see our [Project Builder policies](/lab-policies).
 
 
-      ### Workflows
+      ### Workflow
 
       #### Orientation
       Note that a workflow with fewer tasks will be easier for volunteers to complete. We know from surveys of our volunteers that many people classify in their limited spare time, and sometimes they only have a few minutes. Longer, more complex workflows mean each classification takes longer, so if your workflow is very long you may lose volunteers.
@@ -165,9 +167,9 @@ counterpart.registerTranslations 'en',
       #### Wiring tasks together
       After you've created all your tasks, you need to wire them together. Set your first task using the "First Task" dropdown menu below the "Add Task" button. Then for each task, you have to specify *what comes next*. In question tasks, you can specify different "Next Tasks" for different answers (provided users can only select one answer)
 
-      Subject retirement: Decide how many people you want to see each photo. You'll use the beta test to refine this number. We suggest starting out kinda high, like 10-20.
+      **Subject retirement:** Decide how many people you want to see each photo. You'll use the beta test to refine this number. We suggest starting out kinda high, like 10-20.
 
-      Multi-Image options: If you have more than one subject in your subject set (like on www.snapshotserengeti.org), decide how users will see them.
+      **Multi-Image options:** If you have more than one subject in your subject set (like on www.snapshotserengeti.org), decide how users will see them.
 
       ### Task Content
       Tasks can be Questions or Markings. Both types have "Main Text" boxes where you can ask your questions or tell users what to draw, as well as provide additional support for answering the question in the "Help Text" box.
