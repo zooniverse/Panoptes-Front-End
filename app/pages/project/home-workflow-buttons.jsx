@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import ProjectHomeWorkflowButton from './home-workflow-button';
-// import LoadingIndicator from '../../components/loading-indicator';
 
 
 export default class ProjectHomeWorkflowButtons extends React.Component {
@@ -51,7 +50,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
         }</div>);
     }
 
-    return ('Loading');
+    return (<span>Loading...</span>);
   }
 
   render() {

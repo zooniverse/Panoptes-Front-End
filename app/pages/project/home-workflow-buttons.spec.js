@@ -24,6 +24,10 @@ const testUserPreferences = {
   settings: { workflow_id: '1234' },
 };
 
+const testProject = {
+  redirect: 'www.testproject.com',
+}
+
 describe('ProjectHomeWorkflowButtons', function() {
   let wrapper;
 
@@ -41,6 +45,50 @@ describe('ProjectHomeWorkflowButtons', function() {
 
     it('should disable buttons for levels that user has not reached', function() {
       assert.equal(wrapper.find('.standard-button').last().props().disabled, true);
+    });
+  });
+
+  describe('if user chooses workflow assignment', function() {
+    beforeEach(function () {
+      wrapper = render(
+        <ProjectHomeWorkflowButtons activeWorkflows={testWorkflows} showWorkflowButtons={true} />
+      );
+    });
+
+    it('should render workflow button options', function() {
+      assert.equal(wrapper.find('.standard-button').length, 3);
+    });
+  });
+
+  describe('if user cannot choose workflow assignment', function() {
+    beforeEach(function () {
+      wrapper = render(
+        <ProjectHomeWorkflowButtons activeWorkflows={testWorkflows} showWorkflowButtons={false} />
+      );
+    });
+
+    it('should render one button', function() {
+      assert.equal(wrapper.find('.standard-button').length, 1);
+    });
+
+    it('should have text "Get started!"', function() {
+      assert.equal(wrapper.find('.standard-button').text(), 'Get started!');
+    })
+  });
+
+  describe('if project has a redirect', function() {
+    beforeEach(function () {
+      wrapper = render(
+        <ProjectHomeWorkflowButtons project={testProject} />
+      );
+    });
+
+    it('should render a redirect link', function() {
+      assert.equal(wrapper.find('a').length, 1);
+    });
+
+    it('should have href equal to project redirect', function() {
+      assert.equal(wrapper.find('a').prop('href'), testProject.redirect);
     });
   });
 });
