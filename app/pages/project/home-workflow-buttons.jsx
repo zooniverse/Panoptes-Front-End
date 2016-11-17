@@ -26,6 +26,18 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     return false;
   }
 
+  handleSplitWorkflowAssignment() {
+    let workflowAssignmentID = '2334';
+
+    if (process.env.NODE_ENV === 'production' || locationMatch(/\W?env=(production)/)) {
+      workflowAssignmentID = '2360';
+    }
+
+    if (this.props.splits['workflow.assignment']) {
+      this.props.onChangePreferences('preferences.selected_workflow', workflowAssignmentID);
+    }
+  }
+
   renderRedirectLink() {
     return (<a href={this.props.project.redirect} className="call-to-action standard-button">
       <strong>Visit the project</strong><br />
@@ -54,29 +66,18 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     return (<span>Loading...</span>);
   }
 
-  handleSplitWorkflowAssignment() {
-    console.log('lol')
-    let workflowAssignmentID = '2334';
-
-    if (process.env.NODE_ENV === 'production' || locationMatch(/\W?env=(production)/)) {
-      workflowAssignmentID = '2360';
-    }
-
-    if (this.props.split['home-buttons.visible']) {
-      this.props.onChangePreferences('preferences.selected_workflow', workflowAssignmentID);
-    }
-  }
-
   render() {
     if (this.props.project.redirect) {
       return this.renderRedirectLink();
     }
 
     if (this.props.showWorkflowButtons) {
-      if (this.props.workflowAssignment && this.props.preferences === null) {
-        console.log('hey')
-        return (
-          <VisibilitySplit splits={this.props.splits} splitKey={'home-buttons.visible'} elementKey={'div'}>
+      if (this.props.splits && this.props.preferences && this.props.workflowAssignment) {
+        const gravitySpySplit = (this.props.splits['workflow.assignment']) ? this.props.splits['workflow.assignment'].variant.value.description === 'Apprentice workflow assignment' : false;
+        const newToProject = Object.keys(this.props.preferences.preferences).length === 0;
+
+        if (newToProject && gravitySpySplit) {
+          return (
             <Link
               to={`/projects/${this.props.project.slug}/classify`}
               className="call-to-action standard-button"
@@ -84,11 +85,11 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
             >
               Get started!
             </Link>
-          </VisibilitySplit>
-        );
-      } else {
-        return this.renderWorkflowButtons();
+          );
+        }
       }
+
+      return this.renderWorkflowButtons();
     }
 
     return (
@@ -110,6 +111,7 @@ ProjectHomeWorkflowButtons.defaultProps = {
   preferences: {},
   project: {},
   showWorkflowButtons: false,
+  splits: {},
   workflowAssignment: false,
 };
 
@@ -117,6 +119,7 @@ ProjectHomeWorkflowButtons.propTypes = {
   activeWorkflows: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
   onChangePreferences: React.PropTypes.func.isRequired,
   preferences: React.PropTypes.shape({
+    preferences: React.PropTypes.object,
     settings: React.PropTypes.objectOf(React.PropTypes.string),
   }),
   project: React.PropTypes.shape({
@@ -124,5 +127,6 @@ ProjectHomeWorkflowButtons.propTypes = {
     slug: React.PropTypes.string,
   }).isRequired,
   showWorkflowButtons: React.PropTypes.bool.isRequired,
+  splits: React.PropTypes.object,
   workflowAssignment: React.PropTypes.bool,
 };

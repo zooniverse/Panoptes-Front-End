@@ -63,6 +63,7 @@ export default class ProjectHomePage extends React.Component {
             project={this.props.project}
             showWorkflowButtons={this.state.showWorkflowButtons}
             workflowAssignment={this.props.project.experimental_tools.includes('workflow assignment')}
+            splits={this.props.splits}
           />
         </div>
 
@@ -89,6 +90,7 @@ ProjectHomePage.defaultProps = {
   onChangePreferences: () => {},
   preferences: {},
   project: {},
+  splits: {},
 };
 
 ProjectHomePage.propTypes = {
@@ -103,5 +105,6 @@ ProjectHomePage.propTypes = {
     introduction: React.PropTypes.string,
     workflow_description: React.PropTypes.string,
   }).isRequired,
+  splits: React.PropTypes.object,
 };
 
