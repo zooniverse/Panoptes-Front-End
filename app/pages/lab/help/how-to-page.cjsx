@@ -11,6 +11,8 @@ counterpart.registerTranslations 'en',
       This tutorial will help walk you through the process, using Kitteh Zoo as an example.
       You can [explore the actual project](https://www.zooniverse.org/projects/vrooje/kitteh-zoo).
 
+      If you'd like to read more on strategy on building and running a project, such as what to plan for when building your project and what to do after launch, check out the [Best Practices pages](/lab-best-practices).
+
       [![Kitteh Zoo screenshot](/assets/how-to-lab/how-to-1.jpg)](/assets/how-to-lab/how-to-1.jpg)
 
       ### Getting Started
