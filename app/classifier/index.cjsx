@@ -99,7 +99,7 @@ Classifier = React.createClass
       showingExpertClassification: false
       subjectLoading: true
 
-    if @props.project.experimental_tools.indexOf('expert comparison summary') > -1
+    if @props.project.experimental_tools?.indexOf('expert comparison summary') > -1
       @getExpertClassification @props.workflow, @props.subject
 
     preloadSubject subject
@@ -317,7 +317,7 @@ Classifier = React.createClass
     <div>
       Thanks!
 
-      {if 'metadata based feedback' in @props.project.experimental_tools
+      {if @props.project.experimental_tools?.indexOf('metadata-based-feedback') > -1
         <MetadataBasedFeedback
           subject={@props.subject}
           classification={@props.classification}
