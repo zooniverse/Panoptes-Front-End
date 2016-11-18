@@ -523,6 +523,7 @@ subject = apiClient.type('subjects').create
 project = apiClient.type('projects').create
   id: 'MOCK_PROJECT_FOR_CLASSIFIER'
   title: "The Dev Classifier"
+  experimental_tools: []
 
 preferences = apiClient.type('project_preferences').create
   preferences: {}
