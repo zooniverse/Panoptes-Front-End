@@ -367,7 +367,13 @@ const Publications = {
       date: "June 9, 2015"},
       {citation: "A generalized approach for producing, quantifying, and validating citizen science data from wildlife images, Swanson+ 2016.",
       href: "http://onlinelibrary.wiley.com/doi/10.1111/cobi.12695/abstract",
-      date: "April 25, 2016"}]
+      date: "April 25, 2016"},
+      {citation: "In the absence of a 'landscape of fear': How lions, hyenas, and cheetahs coexist, Swanson+ 2016.",
+      href: "http://onlinelibrary.wiley.com/doi/10.1002/ece3.2569/full",
+      date: "November 6, 2016"},
+      {citation: "The spatial distribution of African savannah herbivores: species associations and habitat occupancy in a landscape context, Anderson+ 2016.",
+      href: "http://rstb.royalsocietypublishing.org/content/371/1703/20150314",
+      date: "August 8, 2016"}]
     }
   ],
   medicine: [
