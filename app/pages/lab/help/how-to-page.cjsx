@@ -3,7 +3,7 @@ counterpart = require 'counterpart'
 {Markdown} = (require 'markdownz').default
 
 counterpart.registerTranslations 'en',
-  howToPage:
+  howToBuildAProject:
     content: '''
       # How to Build a Project
 
@@ -245,9 +245,9 @@ counterpart.registerTranslations 'en',
     '''
 
 module.exports = React.createClass
-  displayName: 'HowToPage'
+  displayName: 'HowToBuildAProject'
 
   render: ->
     <div className="secondary-page">
-      <Markdown>{counterpart "howToPage.content"}</Markdown>
+      <Markdown>{counterpart "howToBuildAProject.content"}</Markdown>
     </div>

@@ -7,7 +7,7 @@ counterpart.registerTranslations 'en',
   help:
     title: 'Help'
     nav:
-      howTo: 'How to'
+      howToBuildAProject: 'How to Build a Project'
       policies: 'Policies'
       glossary: 'Glossary'
       bestPractices: 'Best Practices'
@@ -33,7 +33,7 @@ module.exports = React.createClass
         <div className="hero-container">
           <Translate content="help.title" component="h1" />
           <nav className="hero-nav">
-            <IndexLink to="/help" activeClassName="active"><Translate content="help.nav.howTo" /></IndexLink>
+            <IndexLink to="/help" activeClassName="active"><Translate content="help.nav.howToBuildAProject" /></IndexLink>
             <Link to="/help/glossary" activeClassName="active" onClick={@logClick?.bind(this, 'help.nav.glossary')}><Translate content="help.nav.glossary"/></Link>
             <Link to="/help/lab-policies" activeClassName="active" onClick={@logClick?.bind(this, 'help.nav.policies')}><Translate content="help.nav.policies" /></Link>
             <Link to="/lab-best-practices/introduction" activeClassName="active" onClick={@logClick?.bind(this, 'help.nav.bestPractices')}><Translate content="help.nav.bestPractices" /></Link>
