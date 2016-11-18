@@ -149,9 +149,9 @@
         pointer-events: none
 
   &__introduction
-    margin: 50px 0 40px 0
+    margin-bottom: 40px
     max-width: 400px
-    padding: 6em 0 0 6em
+    padding: 10% 0 0 10%
 
     span
       font-size: 2em
@@ -174,8 +174,9 @@
         color: black
 
   &__content
+    flex: auto
     background-color: #eff2f5
-    margin: 3em 6em
+    margin: 3em 4em
     width: 100%
 
     h4
@@ -185,6 +186,7 @@
 
   &__research
     display: flex
+    flex-flow: row wrap
 
     h4
       margin-bottom: 2em
@@ -194,7 +196,8 @@
     background-color: white
     color: DARK_BLUE
     display: flex
-    flex: 1 1 40%
+    flex: auto
+    width: 200px
     padding: 3em 3em 4em 2em
     position: relative
 
@@ -210,19 +213,21 @@
       font-size: 1.75em
       font-style: italic
 
-  &__researcher-words:before
-    left: 100%
-    top: 7em
-    content: " "
-    position: absolute
-    border-bottom: 12px solid transparent
-    border-left: 25px solid white
-    border-top: 12px solid transparent
+  @media (min-width: 600px)
+    &__researcher-words:before
+      left: 100%
+      top: 7em
+      content: " "
+      position: absolute
+      border-bottom: 12px solid transparent
+      border-left: 25px solid white
+      border-top: 12px solid transparent
 
   &__about-text
     background-color: #0f7481
-    flex: 2 1 60%
-    padding: 3em 5em 4em 5em
+    flex: auto
+    width: 300px
+    padding: 3em 3em 4em 3em
 
     span
       line-height: 2
@@ -279,6 +284,7 @@
     border-top: 12px solid transparent
 
   &__workflow-choice
+    display: flex
     position: relative
     background-color: #eff2f5
     width: 100%
@@ -298,7 +304,7 @@
 
   &__workflow-choice:before
     position: absolute
-    left: 9em
+    left: 14%
     bottom: 100%
     width: 0
     height: 0
@@ -337,7 +343,6 @@
       margin: 0 auto 1em
 
    .markdown
-      color: #646464
       line-height: 1.4em
       text-align: center
       max-width: 800px

@@ -9,14 +9,13 @@ class ProjectMetadataStat extends React.Component {
         <div className="project-metadata-stat__label">{this.props.label}</div>
       </div>
     );
-
   }
 }
 
 ProjectMetadataStat.propTypes = {
   label: React.PropTypes.string.isRequired,
-  value: React.PropTypes.string.isRequired
-}
+  value: React.PropTypes.string.isRequired,
+};
 
 class ProjectMetadata extends React.Component {
   constructor(props) {
@@ -47,7 +46,7 @@ class ProjectMetadata extends React.Component {
   renderStatus() {
     let percentComplete = 0;
     this.props.activeWorkflows.map((workflow) => {
-      percentComplete += workflow.completeness
+      percentComplete += workflow.completeness;
     });
 
     if (this.props.activeWorkflows.length > 0) {
@@ -59,8 +58,8 @@ class ProjectMetadata extends React.Component {
         <svg width="100%" height="1em" viewBox="0 0 1 1" preserveAspectRatio="none" style={{ display: 'block' }}>
           <defs>
             <linearGradient id="linear-gradient">
-              <stop offset="14%" stopColor="#ff471a" stopOpacity="0%"/>
-              <stop offset="79%" stopColor="#ffad33" stopOpacity="85%"/>
+              <stop offset="14%" stopColor="#ff471a" stopOpacity="0%" />
+              <stop offset="79%" stopColor="#ffad33" stopOpacity="85%" />
             </linearGradient>
           </defs>
           <rect fill="url(#linear-gradient)" stroke="none" x="0" y="0" width={percentComplete} height="1" />
@@ -87,7 +86,7 @@ class ProjectMetadata extends React.Component {
         {this.renderStatus()}
 
         <div className="project-metadata-stats">
-          <ProjectMetadataStat label="Volunteers" value={project.classifiers_count.toLocaleString()}  />
+          <ProjectMetadataStat label="Volunteers" value={project.classifiers_count.toLocaleString()} />
           <ProjectMetadataStat label="Classifications" value={this.state.classificationsCount.toLocaleString()} />
           <ProjectMetadataStat label="Subjects" value={project.subjects_count.toLocaleString()} />
           <ProjectMetadataStat label="Completed Subjects" value={project.retired_subjects_count.toLocaleString()} />
@@ -102,10 +101,12 @@ ProjectMetadata.contextTypes = {
 };
 
 ProjectMetadata.propTypes = {
+  activeWorkflows: React.PropTypes.array,
   project: React.PropTypes.object.isRequired,
 };
 
 ProjectMetadata.defaultProps = {
+  activeWorkflows: [],
   project: {},
 };
 

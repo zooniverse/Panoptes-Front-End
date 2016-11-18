@@ -18,7 +18,7 @@ class TalkStatus extends React.Component {
   componentWillMount() {
     let recentSubjects;
     this.talkItems();
-    talkClient.type('discussions').get({ section: 'project-' + this.props.project.id, sort: '-created_at' })
+    talkClient.type('discussions').get({ section: `project-${this.props.project.id}`, sort: '-created_at' })
     .then((discussions) => {
       recentSubjects = discussions.filter((discussion) => {
         if (discussion.focus_type === 'Subject') return discussion;
@@ -35,24 +35,24 @@ class TalkStatus extends React.Component {
   }
 
   talkItems() {
-    sugarApiClient.get('/active_users', {channel: `project-${this.props.project.id}`})
+    sugarApiClient.get('/active_users', { channel: `project-${this.props.project.id}` })
     .then((activeUsers) => {
-      this.setState({activeUsers: activeUsers.length})
+      this.setState({ activeUsers: activeUsers.length });
     })
     .catch(() => {
-      return null
-    })
+      return null;
+    });
   }
 
   render() {
-    const peopleAmount = this.state.activeUsers === 1 ? 'person is' : 'people are'
+    const peopleAmount = this.state.activeUsers === 1 ? 'person is' : 'people are';
 
     return (
       <div className="project-home-page__talk-status">
 
         {this.state.talkImages.map((image) => {
           return (
-            <div className="project-home-page__talk-image">
+            <div key={image.id} className="project-home-page__talk-image">
               <img alt="" src={getSubjectLocation(image).src} />
             </div>
           );
