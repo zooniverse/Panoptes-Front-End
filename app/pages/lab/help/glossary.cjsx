@@ -21,7 +21,7 @@ counterpart.registerTranslations 'en',
 
       + **Collection** - A collection is similar to favoriting an image, but allows volunteers to additionally link together groups of subjects. These collections can be set to either public or private, and you can see all of the public collections on the [Collections](/collections) page. Volunteers can only add to their own collections, and not those of others.
 
-      + **Favorites** - If a volunteer finds an image on a project that they like and wants to be able to see again in the future, they can mark it as a ‘Favorite’ by clicking the heart icon underneath it. These images then show on the volunteer’s [Favorites](/collections) page.
+      + **Favorites** - If a volunteer finds an image on a project that they like and wants to be able to see again in the future, they can mark it as a ‘Favorite’ by clicking the heart icon underneath it. These images then show on the volunteer’s [Favorites](/favorites) page.
 
       + **Newsletter** - a brief email message about your project sent to your project's registered volunteers or to a subset of registered Zooniverse volunteers. Newsletters are a great way to update volunteers on the your project's progress and also help give the daily classification rate a boost. If you’d like a newsletter to be sent out for your project, [get in touch](/about/contact) with Grant Miller, the Zooniverse Communications Lead.
 
