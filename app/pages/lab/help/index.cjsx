@@ -10,7 +10,6 @@ counterpart.registerTranslations 'en',
       howToBuildAProject: 'How to Build a Project'
       policies: 'Policies'
       glossary: 'Glossary'
-      bestPractices: 'Best Practices'
 
 module.exports = React.createClass
   displayName: 'HowTo'
@@ -36,7 +35,6 @@ module.exports = React.createClass
             <IndexLink to="/help" activeClassName="active"><Translate content="help.nav.howToBuildAProject" /></IndexLink>
             <Link to="/help/glossary" activeClassName="active" onClick={@logClick?.bind(this, 'help.nav.glossary')}><Translate content="help.nav.glossary"/></Link>
             <Link to="/help/lab-policies" activeClassName="active" onClick={@logClick?.bind(this, 'help.nav.policies')}><Translate content="help.nav.policies" /></Link>
-            <Link to="/lab-best-practices/introduction" activeClassName="active" onClick={@logClick?.bind(this, 'help.nav.bestPractices')}><Translate content="help.nav.bestPractices" /></Link>
           </nav>
         </div>
       </section>
