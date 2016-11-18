@@ -7,6 +7,7 @@ counterpart.registerTranslations 'en',
     content: '''
       # How to Build a Project
 
+
       **So you want to build a project using the Zooniverse Project Builder?**
       This tutorial will help walk you through the process, using Kitteh Zoo as an example.
       You can [explore the actual project](https://www.zooniverse.org/projects/vrooje/kitteh-zoo).
