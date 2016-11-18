@@ -5,6 +5,9 @@ React = require 'react'
 `import FilteredProjectsList from './pages/projects/filtered-projects-list';`
 `import CollectionPageWrapper from './collections/show';`
 `import ProjectHomePage from './pages/project/home';`
+`import AboutProject from './pages/project/about/index';`
+`import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
+`import AboutProjectTeam from './pages/project/about/team';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -87,13 +90,13 @@ module.exports =
       <Redirect from="results" to="about/results"/>
       <Redirect from="faq" to="about/faq"/>
       <Redirect from="education" to="about/education"/>
-      <Route path="about" component={require './pages/project/about'}>
+      <Route path="about" component={AboutProject}>
         <IndexRedirect to="research" />
-        <Route path="research" component={require './pages/project/about/research'} />
-        <Route path="results" component={require './pages/project/about/results'} />
-        <Route path="faq" component={require './pages/project/about/faq'} />
-        <Route path="education" component={require './pages/project/about/education'} />
-        <Route path="team" component={require './pages/project/about/team'} />
+        <Route path="research" component={AboutProjectResearch} />
+        <Route path="results" component={AboutProjectResults} />
+        <Route path="faq" component={AboutProjectFAQ} />
+        <Route path="education" component={AboutProjectEducation} />
+        <Route path="team" component={AboutProjectTeam} />
       </Route>
       <Route path="notifications" component={require './pages/notifications'} />
       <Route path="talk" component={require './pages/project/talk'}>
