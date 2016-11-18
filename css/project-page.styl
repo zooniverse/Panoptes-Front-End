@@ -149,18 +149,15 @@
         pointer-events: none
 
   &__introduction
+    display: flex
+    flex-flow: row wrap
     max-width: 400px
-    padding: 10% 0 2em 0
+    padding: 15% 0 4em 10%
 
     span
       font-size: 2em
       font-weight: 600
       line-height: 1.5em
-
-  &__content
-    flex: auto
-    margin: 3.5em 10%
-    width: 100%
 
     a
       background: transparent
@@ -174,6 +171,11 @@
         background-color: white
         color: black
 
+  &__content
+    flex: auto
+    margin: 3.5em 10%
+    width: 100%
+
     h4
       color: #0f7481
       text-transform: uppercase
@@ -183,7 +185,7 @@
     color: DARK_BLUE
     display: flex
     flex: auto
-    width: 75px
+    width: 160px
     padding: 3em 3em 4em 2em
     position: relative
 
@@ -212,8 +214,8 @@
   &__about-text
     background-color: #0f7481
     flex: auto
-    width: 450px
-    padding: 3em 5em 4em 5em
+    width: 600px
+    padding: 3em 3em 4em 3em
 
     p
       line-height: 1.75
@@ -235,21 +237,17 @@
     flex-direction: column
     justify-content: center
     min-height: 100px
-    padding: 0 2em 0 4em
+    padding: 2em 2em 2em 4em
     position: relative
-    width: 180px
+    width: 200px
 
     span
       font-size: 18px
       margin-bottom: 0.75em
 
-    a
-      background: transparent
+    .join-in
       border: 2px solid DARK_BLUE
-      border-radius: .5em
       color: DARK_BLUE
-      font-size: 1em
-      padding: 0.2em 0.8vw
       width: 4em
 
       &:hover
@@ -283,7 +281,7 @@
       color: #0f7481
       margin-right: 1.5em
       font-size: 1em
-      padding: 0.8em 1.4vw
+      padding: 0.6em 1.4vw
 
       &:hover
         background-color: #0f7481

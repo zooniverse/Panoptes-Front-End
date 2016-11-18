@@ -18,19 +18,23 @@ class TalkStatus extends React.Component {
   componentWillMount() {
     let recentSubjects;
     this.talkItems();
-    talkClient.type('discussions').get({ section: `project-${this.props.project.id}`, sort: '-created_at' })
-    .then((discussions) => {
-      recentSubjects = discussions.filter((discussion) => {
-        if (discussion.focus_type === 'Subject') return discussion;
-      });
-      recentSubjects.splice(0, 3).map((subject) => {
-        apiClient.type('subjects').get(subject.focus_id)
+    talkClient.type('comments').get({ section: `project-${this.props.project.id}`, sort: '-created_at', focus_type: 'Subject' })
+    .then((comments) => {
+      comments.splice(0, 3).map((comment) => {
+        apiClient.type('subjects').get(comment.focus_id)
         .then((image) => {
           const newArray = this.state.talkImages.slice();
           newArray.push(image);
           this.setState({ talkImages: newArray });
         });
       });
+    })
+    .then(() => {
+      if (this.state.talkImages.length < 3) {
+        do {
+          this.state.talkImages.push('/assets/default-project-background.jpg');
+        } while (this.state.talkImages.length < 3);
+      }
     });
   }
 
@@ -51,6 +55,13 @@ class TalkStatus extends React.Component {
       <div className="project-home-page__section">
 
         {this.state.talkImages.map((image) => {
+          if (typeof (image) === 'string') {
+            return (
+              <div key={image.id} className="project-home-page__talk-image">
+                <img alt="" src={image} />
+              </div>
+            );
+          }
           return (
             <div key={image.id} className="project-home-page__talk-image">
               <img alt="" src={getSubjectLocation(image).src} />
@@ -63,7 +74,7 @@ class TalkStatus extends React.Component {
             <strong>{this.state.activeUsers}</strong> {peopleAmount} talking about <strong>{this.props.project.display_name}
             </strong> right now.
           </span>
-          <Link to={`/projects/${this.props.project.slug}/talk`} className="call-to-action standard-button">Join In</Link>
+          <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in standard-button">Join In</Link>
         </div>
 
       </div>

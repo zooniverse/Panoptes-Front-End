@@ -132,14 +132,12 @@ class ProjectHomePage extends React.Component {
     return (
       <div className="project-home-page">
 
-        <div className="project-home-page__content">
+        <div className="project-home-page__introduction">
 
-          <div className="project-home-page__introduction">
-            <FinishedBanner project={this.props.project} />
-            <span>{this.props.project.description}</span>
-          </div>
-
+          <FinishedBanner project={this.props.project} />
+          <span>{this.props.project.description}</span>
           {redirectCondition}
+
         </div>
 
         {!!this.state.showWorkflows && (
