@@ -1,5 +1,18 @@
 import React, { PropTypes } from 'react';
 import AboutPageLayout from './about-page-layout';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
+
+counterpart.registerTranslations('en', {
+  aboutPages: {
+    missingContent: {
+      education: 'This project has no educational resources yet.',
+      faq: 'This project has no frequently asked questions yet.',
+      research: 'This project has no science case yet.',
+      results: 'This project has no results to report yet.',
+    }
+  }
+});
 
 const SimplePageRenderer = ({ pageSlug, noContent, pages, project }) => {
   const matchingPage = pages.find(page => page.slug === pageSlug);
@@ -23,28 +36,28 @@ SimplePageRenderer.propTypes = {
 const AboutProjectEducation = (props) => (
   <SimplePageRenderer {...props}
     pageSlug="education"
-    noContent="This project has no educational resources yet."
+    noContent={counterpart('aboutPages.missingContent.education')}
   />
 );
 
 const AboutProjectFAQ = (props) => (
   <SimplePageRenderer {...props}
     pageSlug="faq"
-    noContent="'This project has no frequently asked questions yet.'"
+    noContent={counterpart('aboutPages.missingContent.faq')}
   />
 );
 
 const AboutProjectResearch = (props) => (
   <SimplePageRenderer {...props}
     pageSlug="research"
-    noContent="This project has no science case yet."
+    noContent={counterpart('aboutPages.missingContent.research')}
   />
 );
 
 const AboutProjectResults = (props) => (
   <SimplePageRenderer {...props}
     pageSlug="results"
-    noContent="This project has no results to report yet."
+    noContent={counterpart('aboutPages.missingContent.results')}
   />
 );
 
