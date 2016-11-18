@@ -19,13 +19,13 @@ counterpart.registerTranslations 'en',
 
       + **Classification** -  A classification is all the data associated with a  volunteer’s response to an item of data (or subject) they’re presented with whilst going through a project. In essence, a classification is the core unit of human effort produced by the Zooniverse community.
 
-      + **Collection** - A collection is similar to favoriting an image, but allows volunteers to additionally link together groups of subjects. These collections can be set to either public or private, and you can see all of the public collections on the [Collections](collections) page. Volunteers can only add to their own collections, and not those of others.
+      + **Collection** - A collection is similar to favoriting an image, but allows volunteers to additionally link together groups of subjects. These collections can be set to either public or private, and you can see all of the public collections on the [Collections](/collections) page. Volunteers can only add to their own collections, and not those of others.
 
-      + **Favorites** - If a volunteer finds an image on a project that they like and wants to be able to see again in the future, they can mark it as a ‘Favorite’ by clicking the heart icon underneath it. These images then show on the volunteer’s [Favorites](collections/favorites-list) page.
+      + **Favorites** - If a volunteer finds an image on a project that they like and wants to be able to see again in the future, they can mark it as a ‘Favorite’ by clicking the heart icon underneath it. These images then show on the volunteer’s [Favorites](/favorites) page.
 
-      + **Newsletter** - a brief email message about your project sent to your project's registered volunteers or to a subset of registered Zooniverse volunteers. Newsletters are a great way to update volunteers on the your project's progress and also help give the daily classification rate a boost. If you’d like a newsletter to be sent out for your project, [get in touch](about/contact) with Grant Miller, the Zooniverse Communications Lead.
+      + **Newsletter** - a brief email message about your project sent to your project's registered volunteers or to a subset of registered Zooniverse volunteers. Newsletters are a great way to update volunteers on the your project's progress and also help give the daily classification rate a boost. If you’d like a newsletter to be sent out for your project, [get in touch](/about/contact) with Grant Miller, the Zooniverse Communications Lead.
 
-      + **Project** - A project is a way for our volunteer community to engage with a specific research goal or question, using data provided by the researchers. This gives the researcher data to work with and helps progress science. It takes shape in the form of a website, which includes the main classification interface and the [Talk discussion tool](talk).
+      + **Project** - A project is a way for our volunteer community to engage with a specific research goal or question, using data provided by the researchers. This gives the researcher data to work with and helps progress science. It takes shape in the form of a website, which includes the main classification interface and the [Talk discussion tool](/talk).
 
       + **Project Builder** - This is the web tool that researchers use to create Zooniverse projects.  There is documentation to help with this process on [the Project Builder page](/lab).
 
@@ -34,21 +34,21 @@ counterpart.registerTranslations 'en',
 
       ### People
 
-      + **Collaborator** - Collaborators are people with permission on a project with full access to edit workflows and project content, including deleting some or all of the project. You can add a collaborator to a project you own through the Collaborators section of the [Project Builder](lab).
+      + **Collaborator** - Collaborators are people with permission on a project with full access to edit workflows and project content, including deleting some or all of the project. You can add a collaborator to a project you own through the Collaborators section of the [Project Builder](/lab).
 
-      + **Display name** - This is the name that shows up in the [Talk boards](talk). You can edit this at any time by going to your [Settings](settings) page and entering into the appropriate box what you’d like to change it to.
+      + **Display name** - This is the name that shows up in the [Talk boards](/talk). You can edit this at any time by going to your [Settings](/settings) page and entering into the appropriate box what you’d like to change it to.
 
-      + **Expert** - Experts can enter "gold mode" to make authoritative gold standard data that will be used to validate data quality. You can add an expert to a project you own through the Collaborators section of the [Project Builder](lab).
+      + **Expert** - Experts can enter "gold mode" to make authoritative gold standard data that will be used to validate data quality. You can add an expert to a project you own through the Collaborators section of the [Project Builder](/lab).
 
-      + **Moderator** - this is a role given to allocated by the project owner, and typically given to a member of the project’s volunteer community. The moderator is given extra privileges in the project’s [Talk](talk) discussion tool (such as the ability to create new discussion boards), and they oversee and help moderate the Talk discussions. You can add a moderator to a project you own through the Collaborators section of the [Project Builder](lab).
+      + **Moderator** - this is a role given to allocated by the project owner, and typically given to a member of the project’s volunteer community. The moderator is given extra privileges in the project’s [Talk](/talk) discussion tool (such as the ability to create new discussion boards), and they oversee and help moderate the Talk discussions. You can add a moderator to a project you own through the Collaborators section of the [Project Builder](/lab).
 
-      + **Project owner** - This is the person who has built the project using the [Project Builder](lab). They are typically the researcher working with the data.
+      + **Project owner** - This is the person who has built the project using the [Project Builder](/lab). They are typically the researcher working with the data.
 
       + **Real name** - this is the name that will be published alongside any research which involves Zooniverse data from projects you’ve been involved with.
 
-      + **Researcher** - Members of a project’s research team will be marked as researchers on [Talk](talk). You can add a researcher to a project you own through the Collaborators section of the [Project Builder](lab).
+      + **Researcher** - Members of a project’s research team will be marked as researchers on [Talk](/talk). You can add a researcher to a project you own through the Collaborators section of the [Project Builder](/lab).
 
-      + **Testers** - Testers are people who can view and classify on your project to give feedback while it’s still private. They cannot access the project builder. You can add testers to a project you own  through the Collaborators section of the [Project Builder](lab).
+      + **Testers** - Testers are people who can view and classify on your project to give feedback while it’s still private. They cannot access the project builder. You can add testers to a project you own  through the Collaborators section of the [Project Builder](/lab).
 
       + **User name** - This is the name that you log in with. This is currently permanently associated with your Zooniverse account and your classifications.
 
@@ -75,19 +75,19 @@ counterpart.registerTranslations 'en',
 
       + **Mini-course** - this is an educational course that is embedded into the project. It is designed to help teach users more about the science behind projects that they are interacting with. Gravity Spy has one such mini-course.
 
-      + **Project Avatar** - the project’s logo. This image shows in the top left corner of for the project website. If the project becomes Zooniverse approved, the project avatar will also be listed on the [Zooniverse projects page](projects)
+      + **Project Avatar** - the project’s logo. This image shows in the top left corner of for the project website. If the project becomes Zooniverse approved, the project avatar will also be listed on the [Zooniverse projects page](/projects)
 
-      + **Project Tags** - These help define which field of research your project belongs to, and determines which category your project will sit under on the [Projects page](projects) in the categories section (it will still appear on the main Project page regardless). Users can also search by tag to find projects.
+      + **Project Tags** - These help define which field of research your project belongs to, and determines which category your project will sit under on the [Projects page](/projects) in the categories section (it will still appear on the main Project page regardless). Users can also search by tag to find projects.
 
       + **Subject** - The chunk of data/thing a volunteer on a Zooniverse project is being presented with and asked to review and analyze.  It typically is an image, graph, photo, audio recording, video,  or a collection of these different things.
 
-      + **Subject Set** - This is a group of subjects (subjects being data that volunteers are presented to in projects). Subjects are uploaded into subject sets through the [Project Builder](lab), and it is subject sets that can be linked to workflows in order to get the desired subjects showing on your project’s webpage. You can group subjects into subject sets however you wish. You might want to group Subjects together, for example to represent a season’s worth of images in [Snapshot Serengeti](https://www.snapshotserengeti.org/) or a particular cell dye staining as in Cell Slider.
+      + **Subject Set** - This is a group of subjects (subjects being data that volunteers are presented to in projects). Subjects are uploaded into subject sets through the [Project Builder](/lab), and it is subject sets that can be linked to workflows in order to get the desired subjects showing on your project’s webpage. You can group subjects into subject sets however you wish. You might want to group Subjects together, for example to represent a season’s worth of images in [Snapshot Serengeti](https://www.snapshotserengeti.org/) or a particular cell dye staining as in Cell Slider.
 
-      + **Talk** - is the object-orientated discussion tool associated with your project. [Talk](talk) enables volunteers to comment on the subjects they've reviewed and promotes discussion amongst the volunteer community.  Talk is also a place where the research team and project volunteers can interact. Talk has a series of message boards for longer discussions. Additionally, each subject has a dedicated page on its project Talk where a registered volunteer can write a comment, add searchable Twitter-like hashtags, or  link multiple subjects together into groups called collections
+      + **Talk** - is the object-orientated discussion tool associated with your project. [Talk](/talk) enables volunteers to comment on the subjects they've reviewed and promotes discussion amongst the volunteer community.  Talk is also a place where the research team and project volunteers can interact. Talk has a series of message boards for longer discussions. Additionally, each subject has a dedicated page on its project Talk where a registered volunteer can write a comment, add searchable Twitter-like hashtags, or  link multiple subjects together into groups called collections
 
-        + **Talk Tags** - Tags are used to help note something as relating to a particular topic. For example, one way of using it would be the following:  you’ve found an image that you think would be good for the [Daily Zoo](https://daily.zooniverse.org/), and so you post it in [Talk](talk) and then include the tag #dailyzoo in the post. This makes it easier for it to be found as a suggestion, because you can do a search for a particular tag using the search bar. A list of popular tags is displayed on the right-hand side of the Talk page and clicking one will take you to instances of that tag in the Talk boards. So for example if you clicked on #dailyzoo, you’d then be shown all the different suggestions that people have made for it that they’ve tagged.
+        + **Talk Tags** - Tags are used to help note something as relating to a particular topic. For example, one way of using it would be the following:  you’ve found an image that you think would be good for the [Daily Zoo](https://daily.zooniverse.org/), and so you post it in [Talk](/talk) and then include the tag #dailyzoo in the post. This makes it easier for it to be found as a suggestion, because you can do a search for a particular tag using the search bar. A list of popular tags is displayed on the right-hand side of the Talk page and clicking one will take you to instances of that tag in the Talk boards. So for example if you clicked on #dailyzoo, you’d then be shown all the different suggestions that people have made for it that they’ve tagged.
 
-      + **Tasks** - A task could be listing how many of a particular thing a volunteer sees in an image and then drawing circles around them, identifying the various animals they can see in an image or identifying where abouts in an image something is. There are a wide variety of tools to help create a wide variety of different tasks in the [Project Builder](lab) tool. One or more tasks make up a workflow.
+      + **Tasks** - A task could be listing how many of a particular thing a volunteer sees in an image and then drawing circles around them, identifying the various animals they can see in an image or identifying where abouts in an image something is. There are a wide variety of tools to help create a wide variety of different tasks in the [Project Builder](/lab) tool. One or more tasks make up a workflow.
 
         + **Drawing Task** - A task where the volunteers are asked to directly highlight or mark something on an image (e.g. drawing a circle around a penguin if visible in the image presented)
 
@@ -97,7 +97,7 @@ counterpart.registerTranslations 'en',
 
         + **Survey task** - A survey task is a task where you identify something by selection from many options and then are asked a variety of questions about what you’ve just identified, like behaviour, number or color.  For example, you could be asked to identify an animal in an image and then answer questions on how many legs you can see, which way it is facing and whether it is an adult or baby. An example of such a project is [Camera CATalog](https://www.zooniverse.org/projects/panthera-research/camera-catalogue).
 
-      + **Tools** - tools enable volunteers draw or highlight a particular area of a subject image presented on the classification interface (e.g. draw a circle, draw a line, place a pointer). You can design your project such that a single task in the [Project Builder](lab) can have one or more tools available for volunteers to mark or identify different features found in your subject images.
+      + **Tools** - tools enable volunteers draw or highlight a particular area of a subject image presented on the classification interface (e.g. draw a circle, draw a line, place a pointer). You can design your project such that a single task in the [Project Builder](/lab) can have one or more tools available for volunteers to mark or identify different features found in your subject images.
 
       + **Tutorial** - is a very brief walk-through explaining the main goals and aims of your project. It quickly introduces and explains to the volunteer how to do the requested tasks. This is created in the project builder and is presented to first-time volunteers of your project. Project tutorials are optional.
 
@@ -109,7 +109,7 @@ counterpart.registerTranslations 'en',
 
         + **Inactive workflow** - Inactive workflows are ones that aren’t currently being shown to volunteers, but can be edited. You can make a workflow active and inactive by ticking the relevant box on the Visibility tab on the Project Builder page.
 
-      + **Zooniverse approved project** - this is a project that has undergone beta testing and been approved by the Zooniverse team. Details of this process can be found on the [Policy Page](lab-policies). Zooniverse approved projects that are currently live can be seen on the [Projects page](projects).
+      + **Zooniverse approved project** - this is a project that has undergone beta testing and been approved by the Zooniverse team. Details of this process can be found on the [Policy Page](/help/lab-policies). Zooniverse approved projects that are currently live can be seen on the [Projects page](/projects).
 
 
     '''
@@ -118,6 +118,6 @@ module.exports = React.createClass
   displayName: 'Glossary'
 
   render: ->
-    <div className="secondary-page centered-grid">
+    <div className="secondary-page">
       <Markdown>{counterpart "glossary.content"}</Markdown>
     </div>

@@ -3,13 +3,15 @@ counterpart = require 'counterpart'
 {Markdown} = (require 'markdownz').default
 
 counterpart.registerTranslations 'en',
-  howToPage:
+  howToBuildAProject:
     content: '''
       # How to Build a Project
 
       **So you want to build a project using the Zooniverse Project Builder?**
       This tutorial will help walk you through the process, using Kitteh Zoo as an example.
       You can [explore the actual project](https://www.zooniverse.org/projects/vrooje/kitteh-zoo).
+
+      If you'd like to read more on strategy on building and running a project, such as what to plan for when building your project and what to do after launch, check out the [Best Practices pages](/lab-best-practices).
 
       [![Kitteh Zoo screenshot](/assets/how-to-lab/how-to-1.jpg)](/assets/how-to-lab/how-to-1.jpg)
 
@@ -176,7 +178,7 @@ counterpart.registerTranslations 'en',
 
       ### DETAILS - Visibility
 
-      This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](/lab-policies).
+      This page is where you decide whether your project is public and whether it's ready to go live. For more information on the different project stages, see our [project builder policies](/help/lab-policies).
 
       ### DETAILS - Collaborators
 
@@ -245,9 +247,9 @@ counterpart.registerTranslations 'en',
     '''
 
 module.exports = React.createClass
-  displayName: 'HowToPage'
+  displayName: 'HowToBuildAProject'
 
   render: ->
-    <div className="secondary-page centered-grid">
-      <Markdown>{counterpart "howToPage.content"}</Markdown>
+    <div className="secondary-page">
+      <Markdown>{counterpart "howToBuildAProject.content"}</Markdown>
     </div>
