@@ -138,7 +138,7 @@
     flex: 1 0 auto
     flex-direction: column
     justify-content: center
-    
+
     &__buttons
       display: flex
       flex-direction: column
@@ -149,17 +149,18 @@
         pointer-events: none
 
   &__introduction
-    margin-bottom: 40px
     max-width: 400px
-    padding: 10% 0 0 10%
+    padding: 10% 0 2em 0
 
     span
       font-size: 2em
       font-weight: 600
       line-height: 1.5em
 
-  &__buttons
-    margin: 2em 0 0 0
+  &__content
+    flex: auto
+    margin: 3.5em 10%
+    width: 100%
 
     a
       background: transparent
@@ -173,23 +174,8 @@
         background-color: white
         color: black
 
-  &__content
-    flex: auto
-    background-color: #eff2f5
-    margin: 3em 4em
-    width: 100%
-
     h4
       color: #0f7481
-      margin: 1em 0
-      text-transform: uppercase
-
-  &__research
-    display: flex
-    flex-flow: row wrap
-
-    h4
-      margin-bottom: 2em
       text-transform: uppercase
 
   &__researcher-words
@@ -197,7 +183,7 @@
     color: DARK_BLUE
     display: flex
     flex: auto
-    width: 200px
+    width: 75px
     padding: 3em 3em 4em 2em
     position: relative
 
@@ -226,15 +212,11 @@
   &__about-text
     background-color: #0f7481
     flex: auto
-    width: 300px
-    padding: 3em 3em 4em 3em
+    width: 450px
+    padding: 3em 5em 4em 5em
 
-    span
-      line-height: 2
-
-  &__talk-status
-    display: flex
-    flex-flow: row wrap
+    p
+      line-height: 1.75
 
   &__talk-image
     background: black
@@ -283,11 +265,16 @@
     border-right: 25px solid white
     border-top: 12px solid transparent
 
-  &__workflow-choice
+  &__section
     display: flex
+    flex-flow: row wrap
     position: relative
     background-color: #eff2f5
     width: 100%
+
+    h4
+      margin-bottom: 2em
+      text-transform: uppercase
 
     a
       background: transparent
@@ -302,7 +289,7 @@
         background-color: #0f7481
         color: white
 
-  &__workflow-choice:before
+  .top-arrow:before
     position: absolute
     left: 14%
     bottom: 100%
@@ -396,7 +383,7 @@
 .project-metadata
   background: #eff2f5
   color: DARK_BLUE
-  padding: 3em 8.5vw
+  padding: 3em 10vw
 
   &-header
     :first-child

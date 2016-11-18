@@ -48,7 +48,7 @@ class TalkStatus extends React.Component {
     const peopleAmount = this.state.activeUsers === 1 ? 'person is' : 'people are';
 
     return (
-      <div className="project-home-page__talk-status">
+      <div className="project-home-page__section">
 
         {this.state.talkImages.map((image) => {
           return (

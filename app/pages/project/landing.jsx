@@ -30,9 +30,9 @@ class ProjectHomePage extends React.Component {
     const workflowDescription = this.props.project.workflow_description ? this.props.project.workflow_description : 'Choose a workflow and get started';
 
     return (
-      <div className="project-home-page__workflow-choice">
+      <div className="project-home-page__section">
 
-        <div className="project-home-page__content">
+        <div className="project-home-page__content top-arrow">
           <h4>{workflowDescription}</h4>
 
           {this.props.activeWorkflows.map((workflow) => {
@@ -120,7 +120,7 @@ class ProjectHomePage extends React.Component {
       redirectCondition = this.renderWorkflowAssignment();
     } else {
       redirectCondition = (
-        <div className="project-home-page__buttons">
+        <div>
           {getStarted}
           <Link to={`/projects/${this.props.project.slug}/about`} className="standard-button">
             Learn More
@@ -131,15 +131,15 @@ class ProjectHomePage extends React.Component {
 
     return (
       <div className="project-home-page">
-        <div className="call-to-action-container content-container">
-          <FinishedBanner project={this.props.project} />
+
+        <div className="project-home-page__content">
 
           <div className="project-home-page__introduction">
+            <FinishedBanner project={this.props.project} />
             <span>{this.props.project.description}</span>
-
-            {redirectCondition}
           </div>
 
+          {redirectCondition}
         </div>
 
         {!!this.state.showWorkflows && (
@@ -150,7 +150,7 @@ class ProjectHomePage extends React.Component {
 
         <ProjectMetadata project={this.props.project} activeWorkflows={this.props.activeWorkflows} />
 
-        <div className="project-home-page__research">
+        <div className="project-home-page__section">
           {this.renderResearcherWords()}
 
           <div className="project-home-page__about-text">
