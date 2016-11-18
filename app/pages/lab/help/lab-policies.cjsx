@@ -48,7 +48,7 @@ counterpart.registerTranslations 'en',
       - Communicate results to their communities, via open access publication, a blog or elsewhere.
       - Acknowledge Zooniverse in any publications. Please use the following text:
 
-      _This publication uses data generated via the Zooniverse.org platform, development of which was supported by a Global Impact Award from Google, and by the Alfred P. Sloan Foundation._
+      _This publication uses data generated via the [Zooniverse.org](https://www.zooniverse.org/) platform, development of is which funded by generous support, including a Global Impact Award from Google, and by a grant from the Alfred P. Sloan Foundation._
 
       - Report publications using Zooniverse-produced data to us via this [form](https://docs.google.com/forms/d/18jwLbtV_6M5HCM74xNFtFbiiszWAxpC5IGHaToYjeiw/viewform).
     '''
