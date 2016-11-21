@@ -71,6 +71,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 }
 
 ProjectHomeWorkflowButtons.contextTypes = {
+  geordi: React.PropTypes.object,
   user: React.PropTypes.object,
 };
 

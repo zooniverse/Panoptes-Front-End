@@ -80,6 +80,7 @@ export default class ProjectHomePage extends React.Component {
 }
 
 ProjectHomePage.contextTypes = {
+  geordi: React.PropTypes.object,
   user: React.PropTypes.object,
 };
 
