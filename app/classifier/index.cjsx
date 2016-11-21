@@ -22,6 +22,7 @@ experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 Shortcut = require './tasks/shortcut'
 `import CacheClassification from '../components/cache-classification'`
+MetadataBasedFeedback = require './metadata-based-feedback'
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -173,6 +174,8 @@ Classifier = React.createClass
     }</ChangeListener>
 
   renderTask: (classification, annotation, task) ->
+    visibleTasks = Object.keys(@props.workflow.tasks).filter (key) => key if @props.workflow.tasks[key].type isnt 'shortcut'
+
     TaskComponent = tasks[task.type]
 
     # Should we disable the "Back" button?
@@ -244,7 +247,7 @@ Classifier = React.createClass
             <Shortcut task={task} workflow={@props.workflow} annotation={annotation} classification={@props.classification} />}
 
           <nav className="task-nav">
-            {if Object.keys(@props.workflow.tasks).length > 1
+            {if visibleTasks.length > 1
               <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
             {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
               [ownerName, name] = @props.project.slug.split('/')
@@ -313,6 +316,21 @@ Classifier = React.createClass
   renderSummary: (classification) ->
     <div>
       Thanks!
+
+      {if 'metadata based feedback' in @props.project.experimental_tools
+        <MetadataBasedFeedback
+          subject={@props.subject}
+          classification={@props.classification}
+          dudLabel='DUD'
+          simLabel='SIM'
+          subjectLabel='SUB'
+          metaTypeFieldName='#Type'
+          metaSuccessMessageFieldName='#F_Success'
+          metaFailureMessageFieldName='#F_Fail'
+          metaSimCoordXPattern='#X'
+          metaSimCoordYPattern='#Y'
+          metaSimTolPattern='#Tol'
+        />}
 
       {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
         <strong>

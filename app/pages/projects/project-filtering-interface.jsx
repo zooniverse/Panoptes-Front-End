@@ -62,12 +62,13 @@ class ProjectFilteringInterface extends Component {
     apiClient.type('projects').get(query)
       .then(projects => {
         if (projects.length > 0) {
-          const pages = (projects[0] !== null && projects[0].getMeta() !== null)
-            ? projects[0].getMeta().page_count
-            : 0;
-          const projectCount = (projects[0] !== null && projects[0].getMeta() !== null)
-            ? projects[0].getMeta().count
-            : 0;
+          const hasMeta = (projects[0] !== null && projects[0].getMeta() !== null);
+          let pages = 0, projectCount = 0;
+          if (hasMeta) {
+            const meta = projects[0].getMeta();
+            pages = meta.page_count;
+            projectCount = meta.count;
+          }
           this.setState({ projects, pages, projectCount });
         } else {
           this.setState({ projects: [], pages: 0, projectCount: 0 });

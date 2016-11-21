@@ -70,6 +70,8 @@ EditWorkflowPage = React.createClass
 
     noTasksDefined = Object.keys(@props.workflow.tasks).length is 0
 
+    stats_completeness_type = @props.workflow.configuration.stats_completeness_type ? 'retirement'
+
     disabledStyle =
       opacity: 0.4
       pointerEvents: 'none'
@@ -305,6 +307,22 @@ EditWorkflowPage = React.createClass
 
             </div>}
 
+          <div>
+            <div>
+              <AutoSave resource={@props.workflow}>
+                <span className="form-label">Pan and zoom</span><br />
+                <small className="form-help">Pan and zoom allows the user to zoom in and out and pan image subjects in the classification interface.</small>
+                <br />
+                <label>
+                  <input ref="panAndZoomToggle" type="checkbox" checked={@props.workflow.configuration.pan_and_zoom} onChange={@handleSetPanAndZoom} />
+                  Pan and Zoom
+                </label>
+              </AutoSave>
+            </div>
+
+            <hr />
+          </div>
+
           <AutoSave tag="div" resource={@props.workflow}>
             <span className="form-label">Multi-image options</span><br />
             <small className="form-help">Choose how to display multiple images</small>
@@ -500,6 +518,10 @@ EditWorkflowPage = React.createClass
     @props.workflow.update changes
     @setState selectedTaskKey: nextTaskID
 
+  handleSetPanAndZoom: (e) ->
+    @props.workflow.update
+      'configuration.pan_and_zoom': e.target.checked
+
   handleSetHideClassificationSummaries: (e) ->
     @props.workflow.update
       'configuration.hide_classification_summaries': e.target.checked
@@ -593,7 +615,7 @@ EditWorkflowPage = React.createClass
 
       @props.workflow.delete().then =>
         @props.project.uncacheLink 'workflows'
-        @context.router "/lab/#{@props.project.id}"
+        @context.router.push "/lab/#{@props.project.id}"
       .catch (error) =>
         @setState deletionError: error
       .then =>

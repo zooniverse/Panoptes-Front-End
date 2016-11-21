@@ -1,5 +1,5 @@
 React = require 'react'
-HomePageLoggedIn = require './home-logged-in'
+`import HomePageLoggedIn from './home-for-user';`
 HomePageNotLoggedIn = require './home-not-logged-in'
 
 module.exports = React.createClass

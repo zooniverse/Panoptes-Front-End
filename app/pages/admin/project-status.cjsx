@@ -16,7 +16,6 @@ EXPERIMENTAL_FEATURES = [
   'dropdown'
   'mini-course'
   'hide classification summaries'
-  'pan and zoom'
   'worldwide telescope'
   'hide previous marks'
   'grid'
@@ -26,6 +25,7 @@ EXPERIMENTAL_FEATURES = [
   'expert comparison summary'
   'persist annotations'
   'shortcut'
+  'metadata based feedback'
 ]
 
 ProjectToggle = React.createClass

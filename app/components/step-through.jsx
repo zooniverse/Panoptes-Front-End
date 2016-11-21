@@ -49,14 +49,15 @@ class StepThrough extends Component {
   }
 
   handleKeyDown(e) {
-    e.preventDefault();
     switch (e.which) {
       // left
       case 37:
+        e.preventDefault();
         this.goPrevious();
         break;
       // right
       case 39:
+        e.preventDefault();
         this.goNext();
         break;
     }

@@ -149,7 +149,7 @@ module.exports = React.createClass
         {selectKeys.map (i) =>
           options = @getOptions(i)
           disabled = @getDisabledAttribute(i)
-          <div key={Math.random()}>
+          <div key={selects[i].id}>
             {if selects[i].title isnt @props.task.instruction
               <div>{selects[i].title}</div>}
             <Select

@@ -158,7 +158,7 @@ module.exports = React.createClass
 
           <div>
             External links<br />
-            <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and talk tabs.</small>
+            <small className="form-help">Adding an external link will make it appear as a new tab alongside the about, classify, talk, and collect tabs. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link below.</small>
             <ExternalLinksEditor project={@props.project} />
           </div>
         </div>

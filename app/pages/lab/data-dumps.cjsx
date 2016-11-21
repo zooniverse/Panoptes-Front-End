@@ -62,7 +62,7 @@ module.exports = React.createClass
               exportType="aggregations_export"
               newFeature=true 
             />
-            <small className="form-help">Text tasks cannot be aggregated at this time.</small>
+            <small className="form-help">Text tasks and survey tasks cannot be aggregated at this time.</small>
           </div>
           <hr />
 

@@ -23,6 +23,7 @@ counterpart.registerTranslations('en', {
       ourTeam: 'Our Team',
       education: 'Education',
       publications: 'Publications',
+      acknowledgements: 'Acknowledgements'
     },
     talk: {
       zooTalk: 'Zooniverse Talk',
@@ -130,6 +131,11 @@ const AppFooter = React.createClass({
                 {this.loggableLink(<Link to="/about/publications">
                   <Translate content="footer.about.publications" />
                 </Link>, 'footer.about.publications')}
+              </li>
+              <li>
+                {this.loggableLink(<Link to="/about/acknowledgements">
+                    <Translate content="footer.about.acknowledgements" />
+                    </Link>, 'footer.about.acknowledgements')}
               </li>
               <li>
                 {this.loggableLink(<Link to="/about/contact">

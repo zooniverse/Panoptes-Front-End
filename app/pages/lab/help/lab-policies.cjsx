@@ -57,6 +57,6 @@ module.exports = React.createClass
   displayName: 'LabPoliciesPage'
 
   render: ->
-    <div className="secondary-page centered-grid">
+    <div className="secondary-page">
       <Markdown>{counterpart "policiesPage.content"}</Markdown>
     </div>
