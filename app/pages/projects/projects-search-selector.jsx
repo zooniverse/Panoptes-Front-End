@@ -11,14 +11,12 @@ class SearchSelector extends Component {
     this.searchByName = this.searchByName.bind(this);
   }
 
-  navigateToProject(projectId) {
-    apiClient.type('projects').get(projectId)
-      .then(project => {
-        if (project.redirect != null && project.redirect.length !== 0) {
-          return browserHistory.push(project.redirect);
-        }
-        return browserHistory.push(['/projects', project.slug].join('/'));
-      });
+  navigateToProject(projectUrl) {
+    if (projectUrl.match(/^http.*/)) {
+      window.location.assign(projectUrl);
+    } else {
+      browserHistory.push(['/projects', projectUrl].join('/'));
+    }
   }
 
   searchByName(value, callback) {
@@ -32,9 +30,8 @@ class SearchSelector extends Component {
         page_size: 10,
       }).then(projects => {
         const opts = projects.map(project => ({
-          value: project.id,
-          label: project.display_name,
-          project,
+          value: project.redirect || project.slug,
+          label: project.display_name
         }));
         return callback(null, {
           options: opts || [],

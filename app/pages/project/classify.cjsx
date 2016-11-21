@@ -221,7 +221,7 @@ module.exports = React.createClass
         <FinishedBanner project={@props.project} />}
 
       {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
-        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}> 
+        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
           <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
         </CustomSignInPrompt>}
       {if @state.classification?
@@ -342,7 +342,7 @@ module.exports = React.createClass
               'preferences.selected_workflow': props.preferences.settings.workflow_id
             props.preferences.save()
 
-               
+
 # For debugging:
 window.currentWorkflowForProject = currentWorkflowForProject
 window.currentClassifications = currentClassifications

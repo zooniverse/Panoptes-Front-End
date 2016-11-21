@@ -1,13 +1,40 @@
 React = require 'react'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'
-PromiseRenderer = require '../components/promise-renderer'
 SingleSubmitButton = require '../components/single-submit-button'
 HandlePropChanges = require '../lib/handle-prop-changes'
 {Markdown} = (require 'markdownz').default
 CommentBox = require './comment-box'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
+
+
+Message = React.createClass
+  displayName: 'Message'
+  
+  getInitialState: ->
+    commentOwner: null
+  
+  componentDidMount: ->
+    @updateOwner @props.data.user_id
+
+  componentWillReceiveProps: (newProps) ->
+    @updateOwner newProps.data.user_id if newProps.data isnt @props.data
+
+  updateOwner: (user_id)->
+    apiClient.type 'users'
+      .get user_id
+      .then (commentOwner) =>
+        @setState {commentOwner}
+  
+  render: ->
+    <div className="conversation-message">
+      <span>
+        <strong><Link to="/users/#{@state.commentOwner?.login}">{@state.commentOwner?.display_name}</Link></strong>{' '}
+        <span>{timestamp(@props.data.updated_at)}</span>
+      </span>
+      <Markdown>{@props.data.body}</Markdown>
+    </div>
 
 module.exports = React.createClass
   displayName: 'InboxConversation'
@@ -48,18 +75,6 @@ module.exports = React.createClass
         messagesMeta = messages[0].getMeta()
         @setState {messages, messagesMeta}
 
-  message: (data, i) ->
-    <div className="conversation-message" key={data.id}>
-      <PromiseRenderer promise={apiClient.type('users').get(data.user_id)}>{(commentOwner) =>
-        <span>
-          <strong><Link to="/users/#{commentOwner.login}">{commentOwner.display_name}</Link></strong>{' '}
-          <span>{timestamp(data.updated_at)}</span>
-        </span>
-      }</PromiseRenderer>
-
-      <Markdown>{data.body}</Markdown>
-    </div>
-
   onSubmitMessage: (_, textContent) ->
     body = textContent
     user_id = +@props.user.id
@@ -95,7 +110,7 @@ module.exports = React.createClass
           </div>
           }
         <SingleSubmitButton className="delete-conversation" onClick={@handleDelete}>Archive this conversation</SingleSubmitButton>
-        <div>{@state.messages.map(@message)}</div>
+        <div>{@state.messages.map (message) -> <Message data={message} key={message.id} />}</div>
         <CommentBox
           header={"Send a message..."}
           content=""

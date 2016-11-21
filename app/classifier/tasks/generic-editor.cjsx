@@ -71,7 +71,7 @@ module.exports = React.createClass
         multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
 
         <span>
-          <label className="pill-button">
+          <label className="pill-button" title={multipleHelp}>
             <AutoSave resource={@props.workflow}>
               <input type="checkbox" checked={@props.task.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
               Allow multiple
@@ -151,13 +151,13 @@ module.exports = React.createClass
                       name="#{@props.taskPrefix}.#{choicesKey}.#{index}"
                       choice={choice}
                     />
-                    
+
                     if 'size' in options
                       <div key="size" className="workflow-choice-setting">
                         <AutoSave resource={@props.workflow}>
                           <label>Size{' '}
-                            <select 
-                            name="#{@props.taskPrefix}.#{choicesKey}.#{index}.size" 
+                            <select
+                            name="#{@props.taskPrefix}.#{choicesKey}.#{index}.size"
                             value={choice.size}
                             onChange={handleChange}
                             >

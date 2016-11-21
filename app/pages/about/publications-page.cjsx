@@ -10,6 +10,7 @@ counterpart.registerTranslations 'en',
     nav:
       showAll: 'Show All'
       space: 'Space'
+      physics: 'Physics'
       climate: 'Climate'
       humanities: 'Humanities'
       nature: 'Nature'

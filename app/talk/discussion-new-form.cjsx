@@ -6,7 +6,6 @@ commentValidations = require './lib/comment-validations'
 discussionValidations = require './lib/discussion-validations'
 talkClient = require 'panoptes-client/lib/talk-client'
 Loading = require '../components/loading-indicator'
-PromiseRenderer = require '../components/promise-renderer'
 projectSection = require '../talk/lib/project-section'
 
 module.exports = React.createClass
@@ -20,6 +19,23 @@ module.exports = React.createClass
   getInitialState: ->
     discussionValidationErrors: []
     loading: false
+    boards: []
+  
+  componentDidMount: ->
+    @updateBoards @props.subject
+  
+  componentWillReceiveProps: (newProps) ->
+    @updateBoards newProps.subject if newProps.subject isnt @props.subject
+
+  updateBoards: (subject) ->
+    subject?.get 'project'
+      .then (project) =>
+        talkClient.type 'boards'
+          .get
+            section: projectSection(project)
+            subject_default: false
+          .then (boards) =>
+            @setState {boards}
 
   discussionValidations: (commentBody) ->
     discussionTitle = ReactDOM.findDOMNode(@).querySelector('.new-discussion-title').value
@@ -72,14 +88,10 @@ module.exports = React.createClass
       <div className="talk-board-new-discussion">
         <h2>Create a discussion +</h2>
         {if not @props.boardId
-          <PromiseRenderer promise={@props.subject.get('project')}>{(project) =>
-            <PromiseRenderer promise={talkClient.type('boards').get(section: projectSection(project), subject_default: false)}>{(boards) =>
-              <div>
-                <h2>Board</h2>
-                {boards.map @boardRadio}
-              </div>
-            }</PromiseRenderer>
-          }</PromiseRenderer>
+          <div>
+            <h2>Board</h2>
+            {@state.boards.map @boardRadio}
+          </div>
           }
         <input
           className="new-discussion-title"

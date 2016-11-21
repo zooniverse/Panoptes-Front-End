@@ -6,7 +6,6 @@ commentValidations = require './lib/comment-validations'
 {getErrors} = require './lib/validations'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
-PromiseRenderer = require '../components/promise-renderer'
 SingleSubmitButton = require '../components/single-submit-button'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 Moderation = require './lib/moderation'
@@ -38,6 +37,7 @@ module.exports = React.createClass
     editingTitle: false
     reply: null
     moderationOpen: false
+    boards: []
 
   getDefaultProps: ->
     location: query: page: 1
@@ -70,6 +70,17 @@ module.exports = React.createClass
             query: @props.location.query
 
       @setComments(@props.location.query.page ? 1)
+    
+    if @props.user?
+      talkClient
+        .type 'roles'
+        .get 
+          user_id: @props.user.id
+          section: ['zooniverse', @state.discussion.section]
+          is_shown: true
+          page_size: 100
+        .then (roles) =>
+          @setState {roles}
 
   commentsRequest: (page) ->
     {board, discussion} = @props.params
@@ -106,6 +117,14 @@ module.exports = React.createClass
     @discussionsRequest(discussion)
       .then (discussion) =>
         @setState {discussion: discussion[0]}
+        
+        talkClient
+          .type 'boards'
+          .get
+            section: discussion[0].section
+            page_size: 100
+          .then (boards) =>
+            @setState {boards}
 
   onUpdateComment: (textContent, subject, commentId) ->
     {discussion} = @props.params
@@ -285,16 +304,14 @@ module.exports = React.createClass
                     <input name="locked" type="checkbox" defaultChecked={discussion?.locked}/>
                   </label>
 
-                  <PromiseRenderer promise={talkClient.type('boards').get({section: discussion.section, page_size: 100})}>{(boards) =>
-                    <div>
-                      <p><strong>Board:</strong></p>
-                      <select defaultValue={discussion.board_id}>
-                        {boards.map (board, i) =>
-                          <option key={board.id} value={board.id}>{board.title}</option>
-                          }
-                      </select>
-                    </div>
-                  }</PromiseRenderer>
+                  <div>
+                    <p><strong>Board:</strong></p>
+                    <select defaultValue={discussion.board_id}>
+                      {@state.boards.map (board, i) =>
+                        <option key={board.id} value={board.id}>{board.title}</option>
+                        }
+                    </select>
+                  </div>
 
                   <SingleSubmitButton type="submit" onClick={@onEditSubmit}>Update</SingleSubmitButton>
                 </form>}
@@ -357,9 +374,7 @@ module.exports = React.createClass
               <Link to="#{baseLink}users/#{@props.user.login}">{@props.user.display_name}</Link>
             </p>
             <div className="user-mention-name">@{@props.user.login}</div>
-            <PromiseRenderer promise={talkClient.type('roles').get(user_id: @props.user.id, section: ['zooniverse', discussion.section], is_shown: true, page_size: 100)}>{(roles) =>
-              <DisplayRoles roles={roles} section={discussion.section} />
-            }</PromiseRenderer>
+            <DisplayRoles roles={@state.roles} section={discussion.section} />
           </div>
 
           <CommentBox

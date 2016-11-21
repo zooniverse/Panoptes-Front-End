@@ -20,7 +20,9 @@ GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
+Shortcut = require './tasks/shortcut'
 `import CacheClassification from '../components/cache-classification'`
+MetadataBasedFeedback = require './metadata-based-feedback'
 {VisibilitySplit} = require('seven-ten')
 
 # For easy debugging
@@ -173,6 +175,8 @@ Classifier = React.createClass
     }</ChangeListener>
 
   renderTask: (classification, annotation, task) ->
+    visibleTasks = Object.keys(@props.workflow.tasks).filter (key) => key if @props.workflow.tasks[key].type isnt 'shortcut'
+
     TaskComponent = tasks[task.type]
 
     # Should we disable the "Back" button?
@@ -180,7 +184,7 @@ Classifier = React.createClass
 
     # Should we disable the "Next" or "Done" buttons?
     if TaskComponent.isAnnotationComplete?
-      waitingForAnswer = not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
+      waitingForAnswer = !annotation.shortcut and not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
 
     # Each answer of a single-answer task can have its own `next` key to override the task's.
     if TaskComponent is tasks.single
@@ -240,13 +244,16 @@ Classifier = React.createClass
 
           <hr />
 
+          {if task.unlinkedTask
+            <Shortcut task={task} workflow={@props.workflow} annotation={annotation} classification={@props.classification} />}
+
           <nav className="task-nav">
-            {if Object.keys(@props.workflow.tasks).length > 1
+            {if visibleTasks.length > 1
               <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
             {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
               [ownerName, name] = @props.project.slug.split('/')
               <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
-            {if nextTaskKey
+            {if nextTaskKey and !annotation.shortcut
               <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
             else
               <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
@@ -312,6 +319,21 @@ Classifier = React.createClass
   renderSummary: (classification) ->
     <div>
       Thanks!
+
+      {if 'metadata based feedback' in @props.project.experimental_tools
+        <MetadataBasedFeedback
+          subject={@props.subject}
+          classification={@props.classification}
+          dudLabel='DUD'
+          simLabel='SIM'
+          subjectLabel='SUB'
+          metaTypeFieldName='#Type'
+          metaSuccessMessageFieldName='#F_Success'
+          metaFailureMessageFieldName='#F_Fail'
+          metaSimCoordXPattern='#X'
+          metaSimCoordYPattern='#Y'
+          metaSimTolPattern='#Tol'
+        />}
 
       {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
         <strong>
@@ -460,13 +482,12 @@ Classifier = React.createClass
   completeClassification: ->
     if @props.workflow.configuration.persist_annotations
       CacheClassification.delete()
-    
+
     currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
     currentTask = @props.workflow.tasks[currentAnnotation?.task]
     currentTask?.tools?.map (tool) =>
       if tool.type is 'grid'
         GridTool.mapCells @props.classification.annotations
-
     @props.classification.update
       completed: true
       'metadata.session': getSessionID()
@@ -475,6 +496,11 @@ Classifier = React.createClass
         width: innerWidth
         height: innerHeight
 
+    if currentAnnotation.shortcut
+      @addAnnotationForTask @props.classification, currentTask.unlinkedTask
+      newAnnotation = classification.annotations[classification.annotations.length - 1]
+      newAnnotation['value'] = currentAnnotation.shortcut['index']
+      delete currentAnnotation['shortcut']
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
     else

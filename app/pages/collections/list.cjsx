@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-PromiseRenderer = require '../../components/promise-renderer'
 CollectionCard = require '../../partials/collection-card'
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
@@ -21,12 +20,19 @@ List = React.createClass
         translationObjectName = "project#{translationObjectName}"
       Object.assign({}, props, {favorite: favorite, translationObjectName:"#{translationObjectName}"})
   }
+  
+  getInitialState: ->
+    collections: null # has to be null initially, rather than [], in order to display the loading message
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
+    @listCollections @props
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
+  
+  componentWillReceiveProps: (newProps) ->
+    @listCollections newProps
 
   imagePromise: (collection) ->
     apiClient.type('subjects').get(collection_id: collection.id, page_size: 1)
@@ -43,18 +49,22 @@ List = React.createClass
       baseLink += "projects/#{@props.project.slug}/"
     "#{baseLink}collections/#{collection.slug}"
 
-  listCollections: ->
+  listCollections: (props) ->
     query = {}
-    if @props.params?.collection_owner?
-      query.owner = @props.params.collection_owner
-    else if @props.params?.profile_name?
-      query.owner = @props.params.profile_name
-    if @props.project?
-      query.project_ids = @props.project.id
-    query.favorite = @props.favorite
-    Object.assign query, @props.location.query
+    if props.params?.collection_owner?
+      query.owner = props.params.collection_owner
+    else if props.params?.profile_name?
+      query.owner = props.params.profile_name
+    if props.project?
+      query.project_ids = props.project.id
+    query.favorite = props.favorite
+    Object.assign query, props.location.query
 
-    apiClient.type('collections').get query
+    apiClient
+      .type 'collections'
+      .get query
+      .then (collections) =>
+        @setState {collections}
 
   render: ->
     {location} = @props
@@ -80,9 +90,8 @@ List = React.createClass
           user={@props.user}
           project={@props.project}
           baseType={@props.baseType} />}
-      <PromiseRenderer promise={@listCollections()}>{(collections) =>
-        if collections?.length > 0
-          meta = collections[0].getMeta()
+        {if @state.collections?.length > 0
+          meta = @state.collections[0].getMeta()
           <div>
             <div className="resource-results-counter collection-results-counter">
               <p>
@@ -121,13 +130,14 @@ List = React.createClass
               </p>
             </div>
             <div className="collections-card-list">
-              {for collection in collections
+              {for collection in @state.collections
                  <CollectionCard
                    key={collection.id}
                    collection={collection}
                    imagePromise={@imagePromise(collection)}
                    linkTo={@cardLink(collection)}
                    translationObjectName={@props.translationObjectName}
+                   subjectCount={collection.links.subjects?.length}
                    skipOwner={@props.params?.collection_owner?} />}
             </div>
             <nav>
@@ -150,7 +160,7 @@ List = React.createClass
                 </nav>}
             </nav>
           </div>
-        else if collections?.length is 0
+        else if @state.collections?.length is 0
           <div>
             <div className="resource-results-counter collection-results-counter">
               <Translate content="#{@props.translationObjectName}.notFoundMessage" component="p" />
@@ -162,7 +172,7 @@ List = React.createClass
               <Translate content="#{@props.translationObjectName}.loadMessage" component="p" />
             </div>
           </div>
-      }</PromiseRenderer>
+        }
     </section>
 
 module.exports = List

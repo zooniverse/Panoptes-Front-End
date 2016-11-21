@@ -3,7 +3,6 @@ apiClient = require 'panoptes-client/lib/api-client'
 getFavoritesName = require './get-favorites-name'
 alert = require '../lib/alert'
 SignInPrompt = require '../partials/sign-in-prompt'
-PromiseRenderer = require '../components/promise-renderer'
 
 module.exports = React.createClass
   displayName: 'CollectionFavoritesButton'
@@ -19,13 +18,11 @@ module.exports = React.createClass
     user: null
 
   getInitialState: ->
-    favoritesPromise: null
-    favoritedPromise: null
-    favorites: {}
+    favorites: null
     favorited: false
 
   contextTypes:
-    geordi: React.PropTypes.object
+    geordi: React.PropTypes.object 
 
   logSubjLike: (liked) ->
     @context.geordi?.logEvent
@@ -47,23 +44,25 @@ module.exports = React.createClass
       favorites.get('subjects', id: @props.subject.id)
         .then ([subject]) -> subject?
     else
-      Promise.resolve(false)
+      false
 
   componentWillMount: ->
     # see if the subject is in the project's favorites collection
     # to see if it's favorites
-    favoritesPromise = @findFavoriteCollection()
-    favoritedPromise = favoritesPromise.then (favs) => @findSubjectInCollection(favs)
-
-    @setState {favoritesPromise, favoritedPromise}
+    @findFavoriteCollection()
+      .then (favorites) =>
+        @setState {favorites}
+        @findSubjectInCollection(favorites)
+      .then (favorited) =>
+        @setState {favorited}
 
   addSubjectTo: (collection) ->
+    @setState favorited: true
     collection.addLink('subjects', [@props.subject.id.toString()])
-      .then (collection) => @setState favoritedPromise: Promise.resolve(true)
 
   removeSubjectFrom: (collection) ->
+    @setState favorited: false
     collection.removeLink('subjects', [@props.subject.id.toString()])
-      .then (collection) => @setState favoritedPromise: Promise.resolve(false)
 
   createFavorites: ->
     display_name = getFavoritesName(@props.project)
@@ -75,37 +74,33 @@ module.exports = React.createClass
     links.projects = [ project ] if project?
     collection = {favorite, display_name, links}
 
-    apiClient.type('collections').create(collection).save().then =>
-      @setState favoritedPromise: Promise.resolve(true)
+    @setState favorited: true
+    apiClient.type('collections').create(collection).save()
 
   toggleFavorite: ->
     if @props.user?
-      Promise.all([@state.favoritesPromise, @state.favoritedPromise])
-        .then ([favorites, favorited]) =>
-          if not favorites?
-            @createFavorites()
-            @logSubjLike 'favorite'
-          else if favorited
-            @removeSubjectFrom(favorites)
-            @logSubjLike 'unfavorite'
-          else
-            @addSubjectTo(favorites)
-            @logSubjLike 'favorite'
+      if not @state.favorites?
+        @createFavorites()
+        @logSubjLike 'favorite'
+      else if @state.favorited
+        @removeSubjectFrom(@state.favorites)
+        @logSubjLike 'unfavorite'
+      else
+        @addSubjectTo(@state.favorites)
+        @logSubjLike 'favorite'
     else
       @promptToSignIn()
       @logSubjLike 'favorite'
 
   render: ->
-    <PromiseRenderer promise={@state.favoritedPromise}>{(favorited) =>
-      <button
-        className="favorites-button #{@props.className ? ''}"
-        type="button"
-        title={if favorited then 'Unfavorite' else 'Favorite'}
-        onClick={@toggleFavorite}>
-        <i className="
-          fa fa-heart#{if favorited then '' else '-o'}
-          #{if favorited then 'favorited' else ''}
-          fa-fw
-        " />
-      </button>
-    }</PromiseRenderer>
+    <button
+      className="favorites-button #{@props.className ? ''}"
+      type="button"
+      title={if @state.favorited then 'Unfavorite' else 'Favorite'}
+      onClick={@toggleFavorite}>
+      <i className="
+        fa fa-heart#{if @state.favorited then '' else '-o'}
+        #{if @state.favorited then 'favorited' else ''}
+        fa-fw
+      " />
+    </button>

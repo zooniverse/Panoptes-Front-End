@@ -5,7 +5,6 @@ PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
-DisplayNameSlugEditor = require '../../partials/display-name-slug-editor'
 TagSearch = require '../../components/tag-search'
 {MarkdownEditor} = (require 'markdownz').default
 MarkdownHelp = require '../../partials/markdown-help'
@@ -14,6 +13,7 @@ alert = require('../../lib/alert')
 Select = require 'react-select'
 `import CharLimit from '../../components/char-limit'`
 `import ExternalLinksEditor from './external-links-editor'`
+`import DisplayNameSlugEditor from '../../partials/display-name-slug-editor'`
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -158,7 +158,7 @@ module.exports = React.createClass
 
           <div>
             External links<br />
-            <small className="form-help">Adding an external link will make it appear as a new tab alongside the science, classify, and talk tabs.</small>
+            <small className="form-help">Adding an external link will make it appear as a new tab alongside the about, classify, talk, and collect tabs. You can rearrange the displayed order by clicking and dragging on the left gray tab next to each link below.</small>
             <ExternalLinksEditor project={@props.project} />
           </div>
         </div>

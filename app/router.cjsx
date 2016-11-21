@@ -3,6 +3,7 @@ React = require 'react'
 
 `import ProjectsPage from './pages/projects/index';`
 `import FilteredProjectsList from './pages/projects/filtered-projects-list';`
+`import CollectionPageWrapper from './collections/show';`
 
 
 # <Redirect from="home" to="/" /> doesn't work.
@@ -22,14 +23,21 @@ module.exports =
   <Route path="/" component={require './partials/app'}>
     <IndexRoute component={require './pages/home'} />
     <Route path="home" component={ONE_UP_REDIRECT} />
+    <Route path="home-for-user" component={require('./pages/home-for-user').default} />
 
     <Route path="about" component={require './pages/about'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/about/about-home'} />
       <Route path="team" component={require './pages/about/team-page'} />
       <Route path="publications" component={require './pages/about/publications-page'} />
-      <Route path="education" component={require './pages/about/education-page'} />
+      <Route path="acknowledgements" component={require './pages/about/acknowledgements'} />
       <Route path="contact" component={require './pages/about/contact-page'} />
-      <Route path="volunteering" component={require './pages/about/volunteering-page'} />
+    </Route>
+
+    <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
+      <IndexRoute component={require './pages/get-involved/volunteering-page'} />
+      <Route path="education" component={require './pages/get-involved/education'} />
+      <Route path="callForProjects" component={require './pages/get-involved/call-for-projects'} />
+      <Route path="CollectionsList" component={require './pages/collections'} />
     </Route>
 
     <Route path="reset-password" component={require './pages/reset-password'} />
@@ -60,10 +68,15 @@ module.exports =
       <Route path="email" component={require './pages/settings/email' } />
     </Route>
 
+    <Route path="help" component={require './pages/lab/help'}>
+      <IndexRoute component={require './pages/lab/help/how-to-page'} />
+      <Route path="glossary" component={require './pages/lab/help/glossary'} />
+      <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
+      <Route path="best-practices" component={require './pages/lab/best-practices'} />
+    </Route>
+
     <Route path="projects" component={ProjectsPage}>
-      <IndexRoute component={FilteredProjectsList} status="live" />
-      <Route path="finished" component={FilteredProjectsList} status="finished" />
-      <Route path="outofdata" component={FilteredProjectsList} status="paused" />
+      <IndexRoute component={FilteredProjectsList} />
     </Route>
 
     <Route path="projects/:owner/:name" component={require './pages/project'}>
@@ -106,7 +119,7 @@ module.exports =
          <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
       </Route>
 
-      <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
+      <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
         <IndexRoute component={require './collections/show-list'} />
         <Route path="settings" component={require './collections/settings'} />
         <Route path="collaborators" component={require './collections/collaborators'} />
@@ -145,7 +158,7 @@ module.exports =
        <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
     </Route>
 
-    <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
+    <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
       <IndexRoute component={require './collections/show-list'} />
       <Route path="settings" component={require './collections/settings'} />
       <Route path="collaborators" component={require './collections/collaborators'} />
@@ -176,8 +189,9 @@ module.exports =
       <Route path="guide" component={require './pages/lab/field-guide'} />
       <Route path="mini-course" component={require './pages/lab/mini-course'} />
     </Route>
-    <Route path="lab-policies" component={require './pages/lab/lab-policies'} />
-    <Route path="lab-how-to" component={require './pages/lab/how-to-page'} />
+    <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
+    <Route path="lab-how-to" component={require './pages/lab/help'} />
+    <Route path="glossary" component={require './pages/lab/help/glossary'} />
 
     <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
       <IndexRedirect to="introduction" />
