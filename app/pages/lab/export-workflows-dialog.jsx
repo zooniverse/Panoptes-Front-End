@@ -27,10 +27,21 @@ class ExportWorkflowsDialog extends React.Component {
       return;
     }
 
-    apiClient.type('workflows')
-      .get(project.links.workflows)
+    const order = (project.configuration && project.configuration.workflow_order) || [];
+
+    // TODO: this API call duplicates information fetched to draw the lab sidebar.
+    // when we do the lab refactor, this should be cached somewhere
+    project.get('workflows', { fields: 'display_name' })
       .then((workflows) => {
-        this.setState({ workflows });
+        let result = workflows;
+
+        if (order) {
+          const dict = {};
+          workflows.forEach((workflow) => { dict[workflow.id] = workflow; });
+          result = order.map((id) => { return dict[id]; });
+        }
+
+        this.setState({ workflows: result });
       });
   }
 
