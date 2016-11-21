@@ -1,8 +1,7 @@
 import React from 'react';
 import assert from 'assert';
-import sinon from 'sinon';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
-import { shallow, render, mount } from 'enzyme';
+import { render, mount } from 'enzyme';
 
 
 const testWorkflows = [
@@ -26,7 +25,7 @@ const testUserPreferences = {
 
 const testProject = {
   redirect: 'www.testproject.com',
-}
+};
 
 describe('ProjectHomeWorkflowButtons', function() {
   let wrapper;
@@ -43,8 +42,10 @@ describe('ProjectHomeWorkflowButtons', function() {
       assert.equal(wrapper.find('.standard-button').length, 3);
     });
 
-    it('should disable buttons for levels that user has not reached', function() {
-      assert.equal(wrapper.find('.standard-button').last().props().disabled, true);
+    it('should render spans for levels that user has not reached', function() {
+      assert.equal(wrapper.find('.standard-button').last().matchesElement(
+        <span>Advanced Workflow</span>
+      ), true);
     });
   });
 

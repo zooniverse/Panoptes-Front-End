@@ -27,13 +27,19 @@ export default class ProjectHomeWorkflowButton extends React.Component {
       'call-to-action-button--disabled': this.props.disabled,
     });
 
+    if (this.props.disabled) {
+      return (
+        <span className={linkClasses}>
+          {this.props.workflow.display_name}
+        </span>
+      );
+    }
+
     return (
       <Link
         to={`/projects/${this.props.project.slug}/classify`}
         className={linkClasses}
         onClick={this.handleWorkflowSelection}
-        disabled={this.props.disabled}
-        ariaDisabled={this.props.disabled}
       >
         {(this.props.workflowAssignment && !this.props.disabled) ? `You've unlocked level ${this.props.workflow.display_name}` : this.props.workflow.display_name}
       </Link>
