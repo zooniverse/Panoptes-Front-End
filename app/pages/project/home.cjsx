@@ -4,6 +4,7 @@ FinishedBanner = require './finished-banner'
 `import ProjectMetadata from './metadata'`
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 {Link} = require 'react-router'
+{TextSplit} = require('seven-ten')
 
 module.exports = React.createClass
   displayName: 'ProjectHomePage'
@@ -26,7 +27,12 @@ module.exports = React.createClass
       <div className="call-to-action-container content-container">
         <FinishedBanner project={@props.project} />
 
-        <div className="description">{@props.project.description}</div>
+        <div className="description">
+          <TextSplit splitKey="landing.text"
+            textKey="description"
+            splits={@props.splits}
+            default={@props.project.description} />
+        </div>
         {if @props.project.workflow_description? and @props.project.workflow_description isnt ''
           <div className="workflow-description">{@props.project.workflow_description}</div>}
 
