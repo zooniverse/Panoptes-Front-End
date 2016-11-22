@@ -1,9 +1,9 @@
 React = require 'react'
-DisplayNameSlugEditor = require '../partials/display-name-slug-editor'
 alert = require '../lib/alert'
 SetToggle = require '../lib/set-toggle'
 CollectionRole = require '../lib/collection-role'
 ChangeListener = require '../components/change-listener'
+`import DisplayNameSlugEditor from '../partials/display-name-slug-editor'`
 
 CollectionDeleteDialog = React.createClass
   displayName: 'CollectionDeleteDialog'

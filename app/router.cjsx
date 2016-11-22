@@ -4,7 +4,7 @@ React = require 'react'
 `import ProjectsPage from './pages/projects/index';`
 `import FilteredProjectsList from './pages/projects/filtered-projects-list';`
 `import CollectionPageWrapper from './collections/show';`
-
+`import ProjectHomePage from './pages/project/home';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -80,7 +80,7 @@ module.exports =
     </Route>
 
     <Route path="projects/:owner/:name" component={require './pages/project'}>
-      <IndexRoute component={require './pages/project/home'} />
+      <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" component={require './pages/project/classify'} />
       <Redirect from="research" to="about/research"/>
