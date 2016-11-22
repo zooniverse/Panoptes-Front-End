@@ -96,7 +96,7 @@ const AppFooter = React.createClass({
                 </Link>, 'footer.discover.projectBuilder')}
               </li>
               <li>
-                {this.loggableLink(<Link to="/lab-how-to">
+                {this.loggableLink(<Link to="/help">
                   <Translate content="footer.discover.howToGuide" />
                 </Link>, 'footer.discover.howToGuide')}
               </li>
