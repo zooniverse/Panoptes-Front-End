@@ -4,9 +4,13 @@ import moment from 'moment';
 import Rcslider from 'rc-slider';
 
 export const Progress = (props) => {
-  const percent = props.progress * 100;
+  let progress = props.progress;
+  if (props.progress > 1) {
+    progress = 1;
+  }
+  const percent = progress * 100;
   const data = {
-    series: [props.progress, 1 - props.progress],
+    series: [progress, 1 - progress],
   };
   return (
     <div className="svg-container progress-container">
