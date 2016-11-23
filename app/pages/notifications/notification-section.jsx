@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Notification from './notification';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import { Link } from 'react-router';
+import Notification from './notification';
 import Paginator from '../../talk/lib/paginator';
 import updateQueryParams from '../../talk/lib/update-query-params';
 import ZooniverseLogo from '../../partials/zooniverse-logo';
@@ -13,6 +13,7 @@ class NotificationSection extends Component {
     this.onSectionToggle = this.onSectionToggle.bind(this);
     this.state = {
       currentMeta: { },
+      error: null,
       firstMeta: { },
       lastMeta: { },
       notificationsMap: { },
@@ -28,8 +29,8 @@ class NotificationSection extends Component {
       });
     } else {
       apiClient.type('projects').get({ id: this.props.projectID, cards: true })
-      .catch(() => {
-        return null;
+      .catch((error) => {
+        this.setState({ error });
       })
       .then(([project]) => {
         return this.setState({
@@ -103,8 +104,8 @@ class NotificationSection extends Component {
 
   getUnreadCount() {
     return talkClient.type('notifications').get({ page: 1, page_size: 1, delivered: false, section: this.props.section })
-    .catch(() => {
-      return null;
+    .catch((error) => {
+      this.setState({ error });
     })
     .then(([project]) => {
       if (project) {
@@ -171,7 +172,6 @@ class NotificationSection extends Component {
 
     return (
       <div onClick={this.onSectionToggle}>
-
         <div className="notification-section__container">
           <div className="notification-section__item">
             {this.avatarFor()}
@@ -183,7 +183,7 @@ class NotificationSection extends Component {
 
           <div className="notification-section__item">
             <button title="Toggle Section">
-              <i className={buttonType}></i>
+              <i className={buttonType} />
             </button>
           </div>
         </div>
@@ -198,6 +198,12 @@ class NotificationSection extends Component {
       <div className="notification-section">
 
         {this.renderHeader()}
+
+        {!!this.state.error && (
+          <div className="notification-section__error">
+            {this.state.error.toString()}
+          </div>
+        )}
 
         {(this.props.expanded) && (
           this.state.notifications.map((notification) => {
