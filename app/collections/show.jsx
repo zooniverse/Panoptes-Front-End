@@ -154,6 +154,12 @@ const CollectionPageWrapper = React.createClass({
     this.fetchCollection();
   },
 
+  componentWillReceiveProps(newProps) {
+    if (this.props.user !== newProps.user) {
+      this.fetchCollection();
+    }
+  },
+
   title() {
     return this.state.collection ? this.state.collection.display_name : '(Loading)';
   },
