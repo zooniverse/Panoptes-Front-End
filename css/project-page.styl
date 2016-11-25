@@ -151,15 +151,11 @@
   &__introduction
     display: flex
     flex-flow: row wrap
-    max-width: 400px
-    padding: 15% 0 4em 10%
+    flex-direction: column
+    position: relative
+    width: 100%
 
-    span
-      font-size: 2em
-      font-weight: 600
-      line-height: 1.5em
-
-    a
+    button, a
       background: transparent
       border: 2px solid white
       border-radius: .5em
@@ -171,9 +167,16 @@
         background-color: white
         color: black
 
+  &__description
+    max-width: 400px
+    font-size: 2em
+    font-weight: 600
+    line-height: 1.5em
+    padding: 15% 0 0 10%
+
   &__content
     flex: auto
-    margin: 3.5em 10%
+    margin: 5vh 10vw 8vh 10vw
     width: 100%
 
     h4
@@ -271,7 +274,7 @@
     width: 100%
 
     h4
-      margin-bottom: 2em
+      margin-bottom: 2vh
       text-transform: uppercase
 
     a

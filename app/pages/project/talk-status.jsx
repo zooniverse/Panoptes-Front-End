@@ -1,11 +1,11 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { sugarApiClient } from 'panoptes-client/lib/sugar';
 import { Link } from 'react-router';
 import talkClient from 'panoptes-client/lib/talk-client';
 import apiClient from 'panoptes-client/lib/api-client';
 import getSubjectLocation from '../../lib/get-subject-location';
 
-class TalkStatus extends React.Component {
+export default class TalkStatus extends React.Component {
 
   constructor() {
     super();
@@ -16,7 +16,6 @@ class TalkStatus extends React.Component {
   }
 
   componentWillMount() {
-    let recentSubjects;
     this.talkItems();
     talkClient.type('comments').get({ section: `project-${this.props.project.id}`, sort: '-created_at', focus_type: 'Subject' })
     .then((comments) => {
@@ -82,12 +81,14 @@ class TalkStatus extends React.Component {
   }
 }
 
-TalkStatus.propTypes = {
-  project: React.PropTypes.object.isRequired,
-};
-
 TalkStatus.defaultProps = {
   project: {},
 };
 
-export default TalkStatus;
+TalkStatus.propTypes = {
+  project: React.PropTypes.shape({
+    display_name: React.PropTypes.string,
+    id: React.PropTypes.string,
+    slug: React.PropTypes.string,
+  }).isRequired,
+};

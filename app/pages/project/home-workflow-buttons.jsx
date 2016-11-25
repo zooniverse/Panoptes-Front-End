@@ -5,10 +5,14 @@ import ProjectHomeWorkflowButton from './home-workflow-button';
 export default class ProjectHomeWorkflowButtons extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showWorkflows: false
+    };
 
     this.shouldWorkflowBeDisabled = this.shouldWorkflowBeDisabled.bind(this);
     this.renderRedirectLink = this.renderRedirectLink.bind(this);
     this.renderWorkflowButtons = this.renderWorkflowButtons.bind(this);
+    this.toggleWorkflows = this.toggleWorkflows.bind(this);
   }
 
   shouldWorkflowBeDisabled(workflow) {
@@ -24,6 +28,10 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     return false;
   }
 
+  toggleWorkflows() {
+    this.setState({ showWorkflows: !this.state.showWorkflows });
+  }
+
   renderRedirectLink() {
     return (<a href={this.props.project.redirect} className="call-to-action standard-button">
       <strong>Visit the project</strong><br />
@@ -32,39 +40,75 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   }
 
   renderWorkflowButtons() {
-    if (this.props.activeWorkflows.length > 0 && this.props.preferences) {
+    let workflowDescription;
+
+    if (this.props.project.workflow_description && this.props.project.workflow_description !== '') {
+      workflowDescription = this.props.project.workflow_description;
+    }
+
+    if (this.props.activeWorkflows.length > 0) {
       return (
-        <div className="call-to-action-container__buttons">
-          {this.props.activeWorkflows.map((workflow) => {
-            return (
-              <ProjectHomeWorkflowButton
-                key={workflow.id}
-                disabled={this.shouldWorkflowBeDisabled(workflow)}
-                onChangePreferences={this.props.onChangePreferences}
-                project={this.props.project}
-                workflow={workflow}
-                workflowAssignment={this.props.workflowAssignment}
-              />);
-          })
-        }</div>);
+        <div className="project-home-page__section top-arrow">
+          <div className="project-home-page__content">
+            {workflowDescription &&
+              <h4>{workflowDescription}</h4>}
+            {this.props.activeWorkflows.map((workflow) => {
+              return (
+                <ProjectHomeWorkflowButton
+                  key={workflow.id}
+                  disabled={this.shouldWorkflowBeDisabled(workflow)}
+                  onChangePreferences={this.props.onChangePreferences}
+                  project={this.props.project}
+                  workflow={workflow}
+                  workflowAssignment={this.props.workflowAssignment}
+                />);
+            })
+          }</div>
+        </div>);
     }
 
     return (<span>Loading...</span>);
   }
 
   render() {
+    let getStarted = (
+      <Link
+        to={`/projects/${this.props.project.slug}/classify`}
+        className="call-to-action standard-button"
+      >
+        Get started
+      </Link>
+    );
+
+    const learnMore = (
+      <Link to={`/projects/${this.props.project.slug}/about`} className="standard-button">
+        Learn More
+      </Link>
+    );
+
     if (this.props.project.redirect) {
       return this.renderRedirectLink();
     }
 
     if (this.props.showWorkflowButtons) {
-      return this.renderWorkflowButtons();
+      getStarted = (
+        <button className="call-to-action standard-button" onClick={this.toggleWorkflows}>
+          Get started
+        </button>
+      );
     }
 
     return (
-      <Link to={`/projects/${this.props.project.slug}/classify`} className="call-to-action standard-button">
-        Get started!
-      </Link>
+      <div>
+        <div className="project-home-page__content">
+          {getStarted}
+          {learnMore}
+        </div>
+
+        {this.state.showWorkflows && (
+          this.renderWorkflowButtons()
+        )}
+      </div>
     );
   }
 }
@@ -93,7 +137,8 @@ ProjectHomeWorkflowButtons.propTypes = {
   }),
   project: React.PropTypes.shape({
     redirect: React.PropTypes.string,
-    slug: React.PropTypes.string
+    slug: React.PropTypes.string,
+    workflow_description: React.PropTypes.string
   }).isRequired,
   showWorkflowButtons: React.PropTypes.bool.isRequired,
   splits: React.PropTypes.object,

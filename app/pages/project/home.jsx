@@ -106,4 +106,3 @@ ProjectHomePage.propTypes = {
   }).isRequired,
   splits: React.PropTypes.object,
 };
-
