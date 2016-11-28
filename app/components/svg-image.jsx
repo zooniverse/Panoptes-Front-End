@@ -1,21 +1,21 @@
 import React from 'react';
 
 const FILTERS = {
-    invert: "url('#svg-invert-filter')",
-}
+  invert: "url('#svg-invert-filter')",
+};
 
 const INVERT =
-  '<svg style="position: fixed; right: 100%; top: 100%; visibility: hidden;">\
-    <defs>\
-      <filter id="svg-invert-filter">\
-        <feComponentTransfer>\
-          <feFuncR type="table" tableValues="1 0"/>\
-          <feFuncG type="table" tableValues="1 0"/>\
-          <feFuncB type="table" tableValues="1 0"/>\
-        </feComponentTransfer>\
-      </filter>\
-    </defs>\
-  </svg>';
+  `<svg style="position: fixed; right: 100%; top: 100%; visibility: hidden;">
+    <defs>
+      <filter id="svg-invert-filter">
+        <feComponentTransfer>
+          <feFuncR type="table" tableValues="1 0"/>
+          <feFuncG type="table" tableValues="1 0"/>
+          <feFuncB type="table" tableValues="1 0"/>
+        </feComponentTransfer>
+      </filter>
+    </defs>
+  </svg>`;
 
 
 class SVGImage extends React.Component {
@@ -32,7 +32,7 @@ class SVGImage extends React.Component {
   componentDidUpdate() {
     this.fixWeirdSize();
   }
-  
+
   filterFinder() {
     if (this.props.modification.invert) {
       if (!document.getElementById('svg-invert-filter')) {
@@ -40,6 +40,7 @@ class SVGImage extends React.Component {
       }
       return { filter: FILTERS.invert };
     }
+    return {};
   }
 
   render() {
