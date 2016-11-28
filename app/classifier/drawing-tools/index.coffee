@@ -9,3 +9,5 @@ module.exports =
   column: require './column-rectangle'
   grid: require './grid'
   triangle: require './triangle'
+  freehandLine: require './freehand-line'
+  freehandShape: require './freehand-shape'
