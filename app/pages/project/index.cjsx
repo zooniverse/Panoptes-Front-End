@@ -253,6 +253,8 @@ ProjectPage = React.createClass
               @props.project.display_name}
           </IndexLink>}
 
+        <br className='responsive-break' />
+
         {unless @props.project.redirect
           <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.about'}>
             <Translate content="project.nav.about" />

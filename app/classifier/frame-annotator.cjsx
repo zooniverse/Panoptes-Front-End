@@ -37,7 +37,7 @@ module.exports = React.createClass
       LastTaskComponent = tasks[lastTask.type]
       if LastTaskComponent.onLeaveAnnotation?
         LastTaskComponent.onLeaveAnnotation lastTask, oldAnnotation
-  
+
   getSizeRect: ->
     clientRect = @refs.sizeRect?.getBoundingClientRect() # Read only
     return null unless clientRect?
@@ -74,6 +74,12 @@ module.exports = React.createClass
       # When cropped right next to the edge of the image,
       # the original tag can show through, so fill the SVG to cover it.
       svgStyle.background = 'black'
+
+      # Allow touch scrolling on subject for mobile and tablets
+      unless taskDescription?.type is 'drawing' or taskDescription?.type is 'crop'
+        svgStyle.pointerEvents = 'none'
+      if @props.panEnabled is true
+        svgStyle.pointerEvents = 'all'
 
     svgProps = {}
 
