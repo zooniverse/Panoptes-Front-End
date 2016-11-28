@@ -1,4 +1,21 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+
+const FILTERS = {
+    invert: "url('#svg-invert-filter')",
+}
+
+const INVERT =
+  '<svg style="position: fixed; right: 100%; top: 100%; visibility: hidden;">\
+    <defs>\
+      <filter id="svg-invert-filter">\
+        <feComponentTransfer>\
+          <feFuncR type="table" tableValues="1 0"/>\
+          <feFuncG type="table" tableValues="1 0"/>\
+          <feFuncB type="table" tableValues="1 0"/>\
+        </feComponentTransfer>\
+      </filter>\
+    </defs>\
+  </svg>';
 
 
 class SVGImage extends React.Component {
@@ -15,9 +32,18 @@ class SVGImage extends React.Component {
   componentDidUpdate() {
     this.fixWeirdSize();
   }
+  
+  filterFinder() {
+    if (this.props.modification.invert) {
+      if (!document.getElementById('svg-invert-filter')) {
+        document.body.insertAdjacentHTML('afterbegin', INVERT);
+      }
+      return { filter: FILTERS.invert };
+    }
+  }
 
   render() {
-    return <image ref="image" xlinkHref={this.props.src} {...this.props} />
+    return <image ref="image" xlinkHref={this.props.src} style={this.filterFinder()} {...this.props} />
   }
 
   fixWeirdSize() {
@@ -33,7 +59,14 @@ class SVGImage extends React.Component {
   }
 }
 SVGImage.propTypes = {
-  src: PropTypes.string.isRequired
-}
+  src: React.PropTypes.string.isRequired,
+  height: React.PropTypes.number.isRequired,
+  width: React.PropTypes.number.isRequired,
+  modification: React.PropTypes.object,
+};
+
+SVGImage.defaultProps = {
+  modification: {},
+};
 
 export default SVGImage;

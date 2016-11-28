@@ -4,7 +4,6 @@ tasks = require './tasks'
 seenThisSession = require '../lib/seen-this-session'
 getSubjectLocation = require '../lib/get-subject-location'
 WarningBanner = require './warning-banner'
-ModifiedImage = require '../components/modified-image'
 `import SVGImage from '../components/svg-image';`
 
 module.exports = React.createClass
@@ -106,13 +105,9 @@ module.exports = React.createClass
           <BeforeSubject {...hookProps} />}
         <svg className="subject" style=svgStyle viewBox={createdViewBox} {...svgProps}>
           <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
-          {if type is 'image' and @props.modification
+          {if type is 'image'
             <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>
-              <ModifiedImage className={"pan-active" if @props.panEnabled} src={src} modification={@props.modification} width={@props.naturalWidth} height={@props.naturalHeight}/>
-            </Draggable>
-          else if type is 'image'
-            <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>
-              <SVGImage className={"pan-active" if @props.panEnabled} src={src} width={@props.naturalWidth} height={@props.naturalHeight} />
+              <SVGImage className={"pan-active" if @props.panEnabled} src={src} width={@props.naturalWidth} height={@props.naturalHeight} modification={@props.modification} />
             </Draggable>
           }
 
