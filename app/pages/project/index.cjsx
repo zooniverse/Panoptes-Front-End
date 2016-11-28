@@ -320,6 +320,9 @@ ProjectPageController = React.createClass
 
   mixins: [TitleMixin]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   propTypes:
     params: React.PropTypes.object
     user: React.PropTypes.object
@@ -367,8 +370,15 @@ ProjectPageController = React.createClass
     if user
       Split.load("#{owner}/#{name}").then (splits) =>
         @setState {splits}
+        return unless splits
+        for split of splits
+          continue unless splits[split].state == 'active'
+          @context.geordi?.remember experiment: splits[split].name
+          @context.geordi?.remember cohort: splits[split].variant?.name
+          break
     else
       Split.clear()
+      @context.geordi?.forget ['experiment','cohort']
 
   fetchProjectData: (ownerName, projectName, user) ->
     @listenToPreferences null
