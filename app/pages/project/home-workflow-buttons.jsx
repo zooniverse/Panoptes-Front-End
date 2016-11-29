@@ -28,10 +28,10 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   }
 
   handleSplitWorkflowAssignment() {
-    let workflowAssignmentID = '2334';
+    let workflowAssignmentID = '2758';
 
     if (process.env.NODE_ENV === 'production' || locationMatch(/\W?env=(production)/)) {
-      workflowAssignmentID = '2360';
+      workflowAssignmentID = '3063';
     }
 
     if (this.props.splits['workflow.assignment']) {
@@ -47,7 +47,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   }
 
   renderWorkflowButtons() {
-    if (this.props.activeWorkflows.length > 0) {
+    if (this.props.activeWorkflows.length > 0 && this.props.preferences) {
       return (
         <div className="call-to-action-container__buttons">
           {this.props.activeWorkflows.map((workflow) => {
