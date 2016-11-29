@@ -35,7 +35,7 @@ class ExportWorkflowsDialog extends React.Component {
       .then((workflows) => {
         let result = workflows;
 
-        if (order) {
+        if (order && order.length > 0) {
           const dict = {};
           workflows.forEach((workflow) => { dict[workflow.id] = workflow; });
           result = order.map((id) => { return dict[id]; });
