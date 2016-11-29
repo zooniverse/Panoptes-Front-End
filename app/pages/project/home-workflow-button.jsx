@@ -35,6 +35,12 @@ export default class ProjectHomeWorkflowButton extends React.Component {
       );
     }
 
+    if (this.props.workflowAssignment &&
+        this.props.workflow.configuration &&
+        !this.props.workflow.configuration.level) {
+      return (null);
+    }
+
     return (
       <Link
         to={`/projects/${this.props.project.slug}/classify`}
@@ -62,6 +68,9 @@ ProjectHomeWorkflowButton.propTypes = {
     slug: React.PropTypes.string,
   }).isRequired,
   workflow: React.PropTypes.shape({
+    configuration: React.PropTypes.shape({
+      level: React.PropTypes.string,
+    }),
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,
   }).isRequired,

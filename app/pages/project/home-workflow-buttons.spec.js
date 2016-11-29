@@ -17,6 +17,10 @@ const testWorkflows = [
     configuration: { level: 3 },
     display_name: 'Advanced Workflow',
   },
+  { id: '6757',
+    configuration: { },
+    display_name: 'Active, no level workflow',
+  },
 ];
 
 const testUserPreferences = {
@@ -38,7 +42,7 @@ describe('ProjectHomeWorkflowButtons', function() {
       );
     });
 
-    it('should render workflow button options', function() {
+    it('should render active workflow button options that have a level', function() {
       assert.equal(wrapper.find('.standard-button').length, 3);
     });
 
@@ -57,7 +61,7 @@ describe('ProjectHomeWorkflowButtons', function() {
     });
 
     it('should render workflow button options', function() {
-      assert.equal(wrapper.find('.standard-button').length, 3);
+      assert.equal(wrapper.find('.standard-button').length, 4);
     });
   });
 
