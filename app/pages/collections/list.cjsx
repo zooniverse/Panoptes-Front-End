@@ -1,6 +1,6 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-CollectionCard = require './collection-card'
+`import CollectionCard from './collection-card';`
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 CollectionsNav = require './nav'

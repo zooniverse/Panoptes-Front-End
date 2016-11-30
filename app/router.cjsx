@@ -36,7 +36,8 @@ module.exports =
     <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/get-involved/volunteering-page'} />
       <Route path="education" component={require './pages/get-involved/education'} />
-      <Route path="call-or-projects" component={require './pages/get-involved/call-for-projects'} />
+      <Route path="call-for-projects" component={require './pages/get-involved/call-for-projects'} />
+      <Redirect from="callForProjects" to="call-for-projects" />
     </Route>
 
     <Route path="reset-password" component={require './pages/reset-password'} />
