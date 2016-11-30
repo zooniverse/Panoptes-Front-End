@@ -172,9 +172,9 @@ class Classifier extends React.Component {
       taskArea = (
         <RenderTask
           {...this.props}
-          classification={currentClassification}
-          annotation={currentAnnotation}
-          task={currentTask}
+          currentClassification={currentClassification}
+          currentAnnotation={currentAnnotation}
+          currentTask={currentTask}
           subjectLoading={this.state.subjectLoading}
           renderIntervention={this.state.renderIntervention}
           disableIntervention={this.disableIntervention}

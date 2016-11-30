@@ -6,6 +6,11 @@ import Shortcut from './tasks/shortcut';
 import { Link } from 'react-router';
 import CacheClassification from '../components/cache-classification';
 import GridTool from './drawing-tools/grid';
+import TriggeredModalForm from 'modal-form/triggered';
+import isAdmin from '../lib/is-admin';
+import TutorialButton from './tutorial-button';
+import MiniCourseButton from './mini-course-button';
+import { VisibilitySplit } from 'seven-ten';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -15,6 +20,11 @@ class RenderTask extends React.Component {
     super(props);
     this.warningToggleOn = this.warningToggleOn.bind(this);
     this.warningToggleOff = this.warningToggleOff.bind(this);
+    this.handleGoldStandardChange = this.handleGoldStandardChange.bind(this);
+    this.handleDemoModeChange = this.handleDemoModeChange.bind(this);
+    this.addAnnotationForTask = this.addAnnotationForTask.bind(this);
+    this.destroyCurrentAnnotation = this.destroyCurrentAnnotation.bind(this);
+    this.completeClassification = this.completeClassification.bind(this);
     this.state = {
       backButtonWarning: false,
     };
@@ -38,6 +48,37 @@ class RenderTask extends React.Component {
 
   warningToggleOff() {
     this.setState({ backButtonWarning: false });
+  }
+
+  handleGoldStandardChange(e) {
+    this.props.classification.update({ gold_standard: e.target.checked || undefined });
+  }
+
+  handleDemoModeChange(e) {
+    this.props.onChangeDemoMode(e.target.checked);
+  }
+
+  addAnnotationForTask(classification, taskKey) {
+    const taskDescription = this.props.workflow.tasks[taskKey];
+    let annotation = tasks[taskDescription.type].getDefaultAnnotation(taskDescription, this.props.workflow, tasks);
+    annotation.task = taskKey;
+    if (this.props.workflow.configuration && this.props.workflow.configuration.persist_annotations) {
+      const cachedAnnotation = CacheClassification.isAnnotationCached(taskKey);
+      if (cachedAnnotation) {
+        annotation = cachedAnnotation;
+      }
+    }
+    classification.annotations.push(annotation);
+    classification.update('annotations');
+  }
+
+  destroyCurrentAnnotation() {
+    const lastAnnotation = this.props.classification.annotations[this.props.classification.annotations.length - 1];
+    this.props.classification.annotations.pop();
+    this.props.classification.update('annotations');
+    if (this.props.workflow.configuration && this.props.workflow.persist_annotations) {
+      CacheClassification.update(lastAnnotation);
+    }
   }
 
   completeClassification() {
@@ -68,10 +109,37 @@ class RenderTask extends React.Component {
       }
     );
     if (currentAnnotation.shortcut) {
+      // not sure what this code block even does
+      // newAnnotation is never used anywhere...
       this.addAnnotationForTask(this.props.classification, currentTask.unlinkedTask);
       const newAnnotation = this.props.classification.annotations[this.props.classification.annotations.length - 1];
       newAnnotation.value = currentAnnotation.shortcut.index;
       delete currentAnnotation.shortcut;
+    }
+    if (this.props.workflow.configuration && this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
+      if (this.props.onCompleteAndLoadAnotherSubject) {
+        this.props.onCompleteAndLoadAnotherSubject();
+      }
+    } else {
+      if (this.props.onComplete) {
+        this.props.onComplete().then((classification) => {
+          // after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
+          const experimentName = this.props.experimentsClient.checkForExperiment(this.props.project.slug);
+          if (experimentName && this.props.user) {
+            this.props.experimentsClient.postDataToExperimentServer(
+              this.props.interventionMonitor,
+              this.context.geordi,
+              experimentName,
+              this.props.user.id,
+              classification.metadata.session,
+              'classification',
+              classification.id
+            );
+          }
+        }, (error) => {
+          console.log(error);
+        });
+      }
     }
   }
 
@@ -83,20 +151,20 @@ class RenderTask extends React.Component {
         return null;
       }
     });
-    const TaskComponent = tasks[this.props.task.type];
+    const TaskComponent = tasks[this.props.currentTask.type];
     // Should we disable the "Back" button?
-    const onFirstAnnotation = (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
+    const onFirstAnnotation = (this.props.currentClassification.annotations.indexOf(this.props.currentAnnotation) === 0);
     // Should we disable the "Next" or "Done" buttons?
     let waitingForAnswer;
     if (TaskComponent.isAnnotationComplete) {
-      waitingForAnswer = (!this.props.annotation.shortcut) && (!TaskComponent.isAnnotationComplete(this.props.task, this.props.annotation, this.props.workflow));
+      waitingForAnswer = (!this.props.currentAnnotation.shortcut) && (!TaskComponent.isAnnotationComplete(this.props.currentTask, this.props.currentAnnotation, this.props.workflow));
     }
     // Each answer of a single-answer task can have its own `next` key to override the task's.
     let currentAnswer;
-    let nextTaskKey = this.props.task.next;
+    let nextTaskKey = this.props.currentTask.next;
     if (TaskComponent === tasks.single) {
-      if (this.props.task.answers) {
-        currentAnswer = this.props.task.answers[this.props.annotation.value];
+      if (this.props.currentTask.answers) {
+        currentAnswer = this.props.currentTask.answers[this.props.currentAnnotation.value];
       }
       if (currentAnswer) {
         nextTaskKey = currentAnswer.next;
@@ -128,8 +196,8 @@ class RenderTask extends React.Component {
     const taskHookProps = {
       taskTypes: tasks,
       workflow: this.props.workflow,
-      classification: this.props.classification,
-      onChange: () => { this.props.classification.update(); },
+      classification: this.props.currentClassification,
+      onChange: () => { this.props.currentClassification.update(); },
     };
 
     let style;
@@ -170,19 +238,33 @@ class RenderTask extends React.Component {
       );
     }
 
-    let nextButton;
-    if (nextTaskKey && !this.props.annotation.shortcut) {
-      // I AM HERE
-      // move classification life cycle to this component!
-      // completeClassification, destroyCurrentAnnotation, addAnnotationForTask
-      nextButton = (
+    let nextOrDoneButton;
+    if (nextTaskKey && !this.props.currentAnnotation.shortcut) {
+      nextOrDoneButton = (
         <button
           type="button"
           className="continue major-button"
           disabled={waitingForAnswer}
-          onClick={this.props.addAnnotationForTask.bind()}
+          onClick={this.addAnnotationForTask.bind(this, this.props.currentClassification, nextTaskKey)}
         >
           Next
+        </button>
+      );
+    } else {
+      let icon;
+      if (this.props.demoMode) {
+        icon = <i className="fa fa-trash fa-fw"></i>;
+      } else if (this.props.classification.gold_standard) {
+        icon = <i className="fa fa-star fa-fw"></i>;
+      }
+      nextOrDoneButton = (
+        <button
+          type="button"
+          className="continue major-button"
+          disabled={waitingForAnswer}
+          onClick={this.completeClassification}
+        >
+          {icon}{' '}Done
         </button>
       );
     }
@@ -201,15 +283,116 @@ class RenderTask extends React.Component {
       );
     }
 
+    // this can be refactored to its own component
+    let expertOptions;
+    if (this.props.expertClassifier) {
+      let goldStandardMode;
+      if ((this.props.userRoles.indexOf('owner') > -1) || (this.props.userRoles.indexOf('expert') > -1)) {
+        goldStandardMode = (
+          <p>
+            <label>
+              <input
+                type="checkbox"
+                checked={this.props.classification.gold_standard}
+                onChange={this.handleGoldStandardChange}
+              />
+              {' '}
+              Gold standard mode
+            </label>
+            {' '}
+            <TriggeredModalForm trigger={<i className="fa fa-question-circle"></i>}>
+              <p>
+                A “gold standard” classification is one that is known to be completely accurate.
+                {' '}We’ll compare other classifications against it during aggregation.
+              </p>
+            </TriggeredModalForm>
+          </p>
+        );
+      }
+      let demoMode;
+      if (isAdmin() || (this.props.userRoles.indexOf('owner') > -1) || (this.props.userRoles.indexOf('collaborator') > -1)) {
+        demoMode = (
+          <p>
+            <label>
+              <input
+                type="checkbox"
+                checked={this.props.demoMode}
+                onChange={this.handleDemoModeChange}
+              />
+              {' '}
+              Demo mode
+            </label>
+            {' '}
+            <TriggeredModalForm trigger={<i className="fa fa-question-circle"></i>}>
+              <p>
+                In demo mode, classifications <strong>will not be saved</strong>.
+                {' '}Use this for quick, inaccurate demos of the classification interface.
+              </p>
+            </TriggeredModalForm>
+          </p>
+        );
+      }
+      expertOptions = (
+        <TriggeredModalForm trigger={<i className="fa fa-cog fa-fw"></i>}>
+          {goldStandardMode}
+          {demoMode}
+        </TriggeredModalForm>
+      );
+    }
+
     let shortcut;
-    if (this.props.task.unlinkedTask) {
+    if (this.props.currentTask.unlinkedTask) {
       shortcut = (
         <Shortcut
-          task={this.props.task}
+          task={this.props.currentTask}
           workflow={this.props.workflow}
-          annotation={this.props.annotation}
+          annotation={this.props.currentAnnotation}
           classification={this.props.classification}
         />
+      );
+    }
+
+    let backButtonWarning;
+    if (this.state.backButtonWarning) {
+      backButtonWarning = <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
+    }
+
+    let demoOrGoldWarning;
+    if (this.props.demoMode) {
+      demoOrGoldWarning = (
+        <p style={{ textAlign: 'center' }}>
+          <i className="fa fa-trash"></i>
+          {' '}
+          <small>
+            <strong>Demo mode:</strong>
+            <br />
+            No classifications are being recorded.
+            {' '}
+            <button type="button" className="secret-button" onClick={this.props.onChangeDemoMode.bind(null, false)}>
+              <u>Disable</u>
+            </button>
+          </small>
+        </p>
+      );
+    } else if (this.props.classification.gold_standard) {
+      demoOrGoldWarning = (
+        <p style={{ textAlign: 'center' }}>
+          <i className="fa fa-star"></i>
+          {' '}
+          <small>
+            <strong>Gold standard mode:</strong>
+            <br />
+            Please ensure this classification is completely accurate.
+            {' '}
+            <button
+              type="button"
+              className="secret-button"
+              onClick={this.props.classification.update.bind(this.props.classification, { gold_standard: undefined })}
+            >
+              <u>Disable</u>
+            </button>
+          </small>
+        </p>
       );
     }
 
@@ -222,9 +405,9 @@ class RenderTask extends React.Component {
             autoFocus
             taskTypes={tasks}
             workflow={this.props.workflow}
-            task={this.props.task}
+            task={this.props.currentTask}
             preferences={this.props.preferences}
-            annotation={this.props.annotation}
+            annotation={this.props.currentAnnotation}
             onChange={this.props.handleAnnotationChange.bind(this, this.porps.classification)}
           />
           {this.getHookComponts(persistentHooksAfterTask, taskHookProps)}
@@ -233,7 +416,44 @@ class RenderTask extends React.Component {
           <nav className="task-nav">
             {backButton}
             {doneAndTalkButton}
+            {nextOrDoneButton}
+            {expertOptions}
           </nav>
+          {backButtonWarning}
+          <p>
+            <small>
+              <strong>
+                <TutorialButton
+                  className="minor-button"
+                  user={this.props.user}
+                  workflow={this.props.workflow}
+                  project={this.props.project}
+                  style={{ marginTop: '2em' }}
+                >
+                  Show the project tutorial
+                </TutorialButton>
+              </strong>
+            </small>
+          </p>
+          <p>
+            <small>
+              <strong>
+                <VisibilitySplit splits={this.props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+                  <MiniCourseButton
+                    className="minor-button"
+                    user={this.props.user}
+                    preferences={this.props.preferences}
+                    project={this.props.project}
+                    workflow={this.props.workflow}
+                    style={{ marginTop: '2em' }}
+                  >
+                    Restart the project mini-course
+                  </MiniCourseButton>
+                </VisibilitySplit>
+              </strong>
+            </small>
+          </p>
+          {demoOrGoldWarning}
         </div>
       </div>
     );
@@ -245,11 +465,12 @@ RenderTask.propTypes = {
   owner: React.PropTypes.object,
   project: React.PropTypes.object,
   subject: React.PropTypes.object,
+  currentClassification: React.PropTypes.object,
   classification: React.PropTypes.object,
   preferences: React.PropTypes.object,
-  annotation: React.PropTypes.object,
+  currentAnnotation: React.PropTypes.object,
   workflow: React.PropTypes.object,
-  task: React.PropTypes.object,
+  currentTask: React.PropTypes.object,
   subjectLoading: React.PropTypes.bool,
   renderIntervention: React.PropTypes.bool,
   interventionMonitor: React.PropTypes.object,
@@ -258,6 +479,13 @@ RenderTask.propTypes = {
   handleAnnotationChange: React.PropTypes.func,
   destroyCurrentAnnotation: React.PropTypes.func,
   completeClassification: React.PropTypes.func,
+  onCompleteAndLoadAnotherSubject: React.PropTypes.func,
+  onComplete: React.PropTypes.func,
+  demoMode: React.PropTypes.bool,
+  userRoles: React.PropTypes.object,
+  onChangeDemoMode: React.PropTypes.func,
+  expertClassifier: React.PropTypes.bool,
+  splits: React.PropTypes.object,
 };
 
 export default RenderTask;
