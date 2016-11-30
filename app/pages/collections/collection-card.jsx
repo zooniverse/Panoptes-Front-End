@@ -28,8 +28,11 @@ export default class CollectionCard extends React.Component {
       .then((src) => {
         if (src) {
           this.collectionCard.style.backgroundImage = `url('${src}')`;
+          this.collectionCard.style.backgroundPosition = 'initial';
           this.collectionCard.style.backgroundRepeat = "no-repeat";
           this.collectionCard.style.backgroundSize = "cover";
+        } else {
+          this.collectionCard.style.backgroundImage = "url('/assets/simple-pattern.png')";
         }
       }).catch(() => {
         return null; // We don't care if there is an error. Default pattern in styles will show.
