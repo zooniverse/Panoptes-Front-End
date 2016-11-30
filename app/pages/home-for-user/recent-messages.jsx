@@ -177,7 +177,7 @@ const RecentCollectionsSection = React.createClass({
           {!!partner ? partner.display_name : LOADER_BULLETS}
         </span>
 
-        {screen.width > 350 && (
+        {screen.width > 400 && (
           <div className="recent-conversation-link__preview">
             <div className="recent-conversation-link__title">
               {conversation.title}
