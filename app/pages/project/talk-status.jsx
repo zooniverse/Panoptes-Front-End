@@ -17,23 +17,22 @@ export default class TalkStatus extends React.Component {
 
   componentWillMount() {
     this.talkItems();
-    talkClient.type('comments').get({ section: `project-${this.props.project.id}`, sort: '-created_at', focus_type: 'Subject' })
+    talkClient.type('comments').get({ section: `project-${this.props.project.id}`, page_size: 3, sort: '-created_at', focus_type: 'Subject' })
     .then((comments) => {
-      comments.splice(0, 3).map((comment) => {
-        apiClient.type('subjects').get(comment.focus_id)
+      const talkImages = comments.map((comment) => {
+        return apiClient.type('subjects').get(comment.focus_id)
         .then((image) => {
-          const newArray = this.state.talkImages.slice();
-          newArray.push(image);
-          this.setState({ talkImages: newArray });
+          return image;
         });
       });
-    })
-    .then(() => {
-      if (this.state.talkImages.length < 3) {
-        do {
-          this.state.talkImages.push('/assets/default-project-background.jpg');
-        } while (this.state.talkImages.length < 3);
-      }
+      Promise.all(talkImages).then((images) => {
+        if (images.length < 3) {
+          do {
+            images.push('/assets/default-project-background.jpg');
+          } while (images.length < 3);
+        }
+        this.setState({ talkImages: images });
+      });
     });
   }
 

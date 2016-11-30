@@ -46,7 +46,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
       workflowDescription = this.props.project.workflow_description;
     }
 
-    if (this.props.activeWorkflows.length > 0) {
+    if (this.props.activeWorkflows.length > 0 && this.props.preferences) {
       return (
         <div className="project-home-page__section top-arrow">
           <div className="project-home-page__content">
@@ -74,7 +74,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     let getStarted = (
       <Link
         to={`/projects/${this.props.project.slug}/classify`}
-        className="call-to-action standard-button"
+        className="call-to-action standard-button get-started"
       >
         Get started
       </Link>
@@ -92,7 +92,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
     if (this.props.showWorkflowButtons) {
       getStarted = (
-        <button className="call-to-action standard-button" onClick={this.toggleWorkflows}>
+        <button className="call-to-action standard-button get-started" onClick={this.toggleWorkflows}>
           Get started
         </button>
       );
