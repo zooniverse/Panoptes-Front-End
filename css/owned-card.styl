@@ -59,7 +59,10 @@
       background: lighten(LIGHT_GREEN_HEADER, 20%)
 
 .collection-card
+  background: url('/assets/simple-pattern.png') center center repeat
+  background-size: contain
   border-radius: 1em
+  position: relative
 
   .name
     margin-bottom: 1em
@@ -68,25 +71,25 @@
     text-overflow: ellipsis
     line-height: 1.45em
     max-height: 2.9em
+    
+    .fa-lock
+      margin-left: 0.3em
 
-  .owner,
-  .private
+  .owner
     margin: 0 auto
     height: 1.5em
-  .owner-private
-    height: 1.8em
-  .owner-public
-    height: 3.6em
 
-  .badge
+  &__badge
     background: rgba(black, 0.4)
-    border-radius: 2em
+    border-radius: 100%
     color: white
-    float: right
     font-weight: bold
     height: 1.5em
     margin: 0.2em 0.2em 0 0
     padding: 0 0.5em
+    position: absolute
+    right: 0
+    z-index: 1
 
 .project-card
   border-radius: 1em

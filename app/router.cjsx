@@ -36,8 +36,7 @@ module.exports =
     <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
       <IndexRoute component={require './pages/get-involved/volunteering-page'} />
       <Route path="education" component={require './pages/get-involved/education'} />
-      <Route path="callForProjects" component={require './pages/get-involved/call-for-projects'} />
-      <Route path="CollectionsList" component={require './pages/collections'} />
+      <Route path="call-or-projects" component={require './pages/get-involved/call-for-projects'} />
     </Route>
 
     <Route path="reset-password" component={require './pages/reset-password'} />
@@ -148,12 +147,12 @@ module.exports =
       <Route name="talk-discussion" path=":board/:discussion" component={require './talk/discussion'} />
     </Route>
 
-    <Route path="favorites" component={require('./pages/collections/index')}>
+    <Route path="favorites" component={require('./pages/collections')}>
       <IndexRoute component={require('./pages/collections/favorites-list')} />
       <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
     </Route>
 
-    <Route path="collections" component={require('./pages/collections/index')}>
+    <Route path="collections" component={require('./pages/collections')}>
        <IndexRoute component={require('./pages/collections/collections-list')} />
        <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
     </Route>
