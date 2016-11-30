@@ -33,6 +33,18 @@ class SVGImage extends React.Component {
     this.fixWeirdSize();
   }
 
+  fixWeirdSize() {
+    const image = this.refs.image;
+
+    if (this.props.width && image.width === this.props.width) {
+      image.setAttribute('width', this.props.width);
+    }
+
+    if (this.props.height && image.height === this.props.height) {
+      image.setAttribute('height', this.props.height);
+    }
+  }
+
   filterFinder() {
     if (this.props.modification.invert) {
       if (!document.getElementById('svg-invert-filter')) {
@@ -44,19 +56,9 @@ class SVGImage extends React.Component {
   }
 
   render() {
-    return <image ref="image" xlinkHref={this.props.src} style={this.filterFinder()} {...this.props} />
-  }
-
-  fixWeirdSize() {
-    const image = this.refs.image
-
-    if (this.props.width && image.width === this.props.width) {
-      image.setAttribute('width', this.props.width);
-    }
-
-    if (this.props.height && image.height === this.props.height) {
-      image.setAttribute('height', this.props.height);
-    }
+    const imageProps = Object.assign({}, this.props);
+    delete imageProps.modification;
+    return <image ref="image" xlinkHref={this.props.src} style={this.filterFinder()} {...imageProps} />;
   }
 }
 SVGImage.propTypes = {
