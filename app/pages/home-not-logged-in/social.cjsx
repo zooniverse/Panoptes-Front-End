@@ -67,7 +67,7 @@ module.exports = React.createClass
               <li key="post-#{i}">
                 <h3><a href={post.link}>{he.decode(post.title)}</a></h3>
                 <p>
-                  <a href={post.link}>{post.excerpt}</a>
+                  <a href={post.link}>{he.decode(post.excerpt)}</a>
                 </p>
                 <p className="home-social-timestamp">
                   {moment(new Date(post.created_at)).fromNow()}
