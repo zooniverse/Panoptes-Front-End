@@ -8,3 +8,4 @@ module.exports =
   bezier: require './poly-curve'
   column: require './column-rectangle'
   grid: require './grid'
+  triangle: require './triangle'
