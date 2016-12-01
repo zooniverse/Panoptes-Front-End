@@ -1,17 +1,19 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import ChangeListener from '../components/change-listener';
-import experimentsClient from '../lib/experiments-client';
-import interventionMonitor from '../lib/intervention-monitor';
-import Tutorial from '../lib/tutorial';
-import preloadSubject from '../lib/preload-subject';
-import SubjectViewer from '../components/subject-viewer';
-import FrameAnnotator from './frame-annotator';
-import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
-import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
+import ChangeListener from '../components/change-listener.cjsx';
+import experimentsClient from '../lib/experiments-client.coffee';
+import interventionMonitor from '../lib/intervention-monitor.coffee';
+import Tutorial from '../lib/tutorial.cjsx';
+import preloadSubject from '../lib/preload-subject.coffee';
+import SubjectViewer from '../components/subject-viewer.cjsx';
+import FrameAnnotator from './frame-annotator.cjsx';
+import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook.coffee';
+import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames.coffee';
 import RenderTask from './render-task';
 import RenderSummary from './render-summary';
 import RenderGravitySpyGoldStandard from './render-gravity-spy-gold-standard';
+
+/* eslint no-param-reassign: ["error", { "props": false }] */
 
 class Classifier extends React.Component {
   constructor(props) {
@@ -84,11 +86,28 @@ class Classifier extends React.Component {
     }
   }
 
-  prepareToClassify(classification) {
-    classification.annotations = classification.annotations || [];
-    if (classification.annotations.length === 0) {
-      this.addAnnotationForTask(classification, this.props.workflow.first_task);
-    }
+  getExpertClassification(workflow, subject) {
+    const awaitExpertClassification = Promise.resolve(() => {
+      apiClient.get('/classifications/gold_standard', {
+        workflow_id: workflow.id,
+        subject_ids: [subject.id],
+      }).catch(() => {
+        return [];
+      }).then(([expertClassification]) => {
+        return expertClassification;
+      });
+    });
+    awaitExpertClassification.then((expertClassificationIn) => {
+      let subjectExpertClassificationData;
+      if (subject.expert_classification_data) {
+        subjectExpertClassificationData = subject.expert_classification_data[workflow.id];
+      }
+      const expertClassification = expertClassificationIn || subjectExpertClassificationData;
+      if ((this.props.workflow === workflow) && (this.props.subject === subject)) {
+        window.expertClassification = expertClassification;
+        this.setState({ expertClassification });
+      }
+    });
   }
 
   loadSubject(subject) {
@@ -112,28 +131,11 @@ class Classifier extends React.Component {
     });
   }
 
-  getExpertClassification(workflow, subject) {
-    const awaitExpertClassification = Promise.resolve(() => {
-      apiClient.get('/classifications/gold_standard', {
-        workflow_id: workflow.id,
-        subject_ids: [subject.id],
-      }).catch(() => {
-        return [];
-      }).then(([expertClassification]) => {
-        return expertClassification;
-      });
-    });
-    awaitExpertClassification.then((expertClassificationIn) => {
-      let subjectExpertClassificationData;
-      if (subject.expert_classification_data) {
-        subjectExpertClassificationData = subject.expert_classification_data[workflow.id];
-      }
-      const expertClassification = expertClassificationIn || subjectExpertClassificationData;
-      if ((this.props.workflow === workflow) && (this.props.subject === subject)) {
-        window.expertClassification = expertClassification;
-        this.setState({ expertClassification });
-      }
-    });
+  prepareToClassify(classification) {
+    classification.annotations = classification.annotations || [];
+    if (classification.annotations.length === 0) {
+      this.addAnnotationForTask(classification, this.props.workflow.first_task);
+    }
   }
 
   disableIntervention() {
