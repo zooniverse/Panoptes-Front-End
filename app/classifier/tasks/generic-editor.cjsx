@@ -6,7 +6,7 @@ drawingTools = require '../drawing-tools'
 alert = require '../../lib/alert'
 DrawingTaskDetailsEditor = require './drawing-task-details-editor'
 NextTaskSelector = require './next-task-selector'
-{MarkdownEditor} = (require 'markdownz').default
+{MarkdownEditor} = require 'markdownz'
 MarkdownHelp = require '../../partials/markdown-help'
 
 `import MinMaxEditor from './drawing/min-max-editor';`

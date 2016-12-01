@@ -1,7 +1,7 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 FileButton = require '../../../components/file-button'
-{MarkdownEditor} = (require 'markdownz').default
+{MarkdownEditor} = require 'markdownz'
 
 ArticleEditor = React.createClass
   statics:

@@ -1,8 +1,6 @@
 import React from 'react';
-import markdownz from 'markdownz';
+import { Markdown } from 'markdownz';
 import { browserHistory } from 'react-router';
-
-const Markdown = markdownz.Markdown;
 
 const WrappedMarkdown = React.createClass({
   propTypes: {

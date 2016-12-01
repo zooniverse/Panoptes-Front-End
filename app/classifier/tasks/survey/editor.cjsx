@@ -8,7 +8,7 @@ AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
 NextTaskSelector = require '../next-task-selector'
 MediaArea = require '../../../components/media-area'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 Papa = require 'papaparse'
 
 module.exports = React.createClass

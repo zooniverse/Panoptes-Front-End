@@ -5,7 +5,7 @@ Translate = require 'react-translate-component'
 ZooniverseLogoType = require '../../partials/zooniverse-logotype'
 alert = require '../../lib/alert'
 LoginDialog = require '../../partials/login-dialog'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
   labLanding:

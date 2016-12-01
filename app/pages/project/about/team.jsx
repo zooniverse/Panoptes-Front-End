@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
-import markdownz from 'markdownz';
-const Markdown = markdownz.Markdown;
+import { Markdown } from 'markdownz';
 import AboutPageLayout from './about-page-layout';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';

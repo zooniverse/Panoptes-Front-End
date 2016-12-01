@@ -3,7 +3,7 @@ DiscussionPreview = require './discussion-preview'
 CommentLink = require './comment-link'
 parseSection = require './lib/parse-section'
 CommentContextIcon = require './lib/comment-context-icon'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 
 # This isn't very reuseable as it's prop is a comment resource with it's
 # linked discussion added on. Probably a better way to approach this.

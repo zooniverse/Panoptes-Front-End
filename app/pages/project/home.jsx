@@ -2,8 +2,7 @@ import React from 'react';
 import FinishedBanner from './finished-banner';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
-import markdownz from 'markdownz';
-const Markdown = markdownz.Markdown;
+import { Markdown } from 'markdownz';
 
 
 export default class ProjectHomePage extends React.Component {
