@@ -10,6 +10,7 @@ import FrameAnnotator from './frame-annotator';
 import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
 import RenderTask from './render-task';
+import RenderSummary from './render-summary';
 
 class Classifier extends React.Component {
   constructor(props) {
@@ -188,7 +189,12 @@ class Classifier extends React.Component {
     } else if (this.subjectIsGravitySpyGoldStandard()) {
       taskArea = <RenderGravitySpyGoldStandard></RenderGravitySpyGoldStandard>;
     } else if (!this.props.workflow.configuration.hide_classification_summaries) {
-      taskArea = <RenderSummary></RenderSummary>;
+      taskArea = (
+        <RenderSummary
+          {...this.props}
+          currentClassification={currentClassification}
+        />
+      );
     }
     window.classification = currentClassification;
     return (

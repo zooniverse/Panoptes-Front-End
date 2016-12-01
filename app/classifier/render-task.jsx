@@ -11,6 +11,7 @@ import isAdmin from '../lib/is-admin';
 import TutorialButton from './tutorial-button';
 import MiniCourseButton from './mini-course-button';
 import { VisibilitySplit } from 'seven-ten';
+import ExpertOptions from './render-expert-options';
 
 // For easy debugging
 window.cachedClassification = CacheClassification;
@@ -51,10 +52,12 @@ class RenderTask extends React.Component {
   }
 
   handleGoldStandardChange(e) {
+    // move to parent
     this.props.classification.update({ gold_standard: e.target.checked || undefined });
   }
 
   handleDemoModeChange(e) {
+    // move to parent
     this.props.onChangeDemoMode(e.target.checked);
   }
 
@@ -286,59 +289,15 @@ class RenderTask extends React.Component {
     // this can be refactored to its own component
     let expertOptions;
     if (this.props.expertClassifier) {
-      let goldStandardMode;
-      if ((this.props.userRoles.indexOf('owner') > -1) || (this.props.userRoles.indexOf('expert') > -1)) {
-        goldStandardMode = (
-          <p>
-            <label>
-              <input
-                type="checkbox"
-                checked={this.props.classification.gold_standard}
-                onChange={this.handleGoldStandardChange}
-              />
-              {' '}
-              Gold standard mode
-            </label>
-            {' '}
-            <TriggeredModalForm trigger={<i className="fa fa-question-circle"></i>}>
-              <p>
-                A “gold standard” classification is one that is known to be completely accurate.
-                {' '}We’ll compare other classifications against it during aggregation.
-              </p>
-            </TriggeredModalForm>
-          </p>
-        );
-      }
-      let demoMode;
-      if (isAdmin() || (this.props.userRoles.indexOf('owner') > -1) || (this.props.userRoles.indexOf('collaborator') > -1)) {
-        demoMode = (
-          <p>
-            <label>
-              <input
-                type="checkbox"
-                checked={this.props.demoMode}
-                onChange={this.handleDemoModeChange}
-              />
-              {' '}
-              Demo mode
-            </label>
-            {' '}
-            <TriggeredModalForm trigger={<i className="fa fa-question-circle"></i>}>
-              <p>
-                In demo mode, classifications <strong>will not be saved</strong>.
-                {' '}Use this for quick, inaccurate demos of the classification interface.
-              </p>
-            </TriggeredModalForm>
-          </p>
-        );
-      }
       expertOptions = (
-        <TriggeredModalForm trigger={<i className="fa fa-cog fa-fw"></i>}>
-          {goldStandardMode}
-          {demoMode}
-        </TriggeredModalForm>
+        <ExpertOptions
+          userRoles={this.props.userRoles}
+          goldStandard={this.props.classification.gold_standard}
+          demoMode={this.props.demoMode}
+          handleGoldStandardChange={this.handleGoldStandardChange}
+          handleDemoModeChange={this.handleDemoModeChange}
+        />
       );
-    }
 
     let shortcut;
     if (this.props.currentTask.unlinkedTask) {
