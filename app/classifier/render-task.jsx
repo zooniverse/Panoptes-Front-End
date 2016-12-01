@@ -21,8 +21,6 @@ class RenderTask extends React.Component {
     super(props);
     this.warningToggleOn = this.warningToggleOn.bind(this);
     this.warningToggleOff = this.warningToggleOff.bind(this);
-    this.handleGoldStandardChange = this.handleGoldStandardChange.bind(this);
-    this.handleDemoModeChange = this.handleDemoModeChange.bind(this);
     this.addAnnotationForTask = this.addAnnotationForTask.bind(this);
     this.destroyCurrentAnnotation = this.destroyCurrentAnnotation.bind(this);
     this.completeClassification = this.completeClassification.bind(this);
@@ -49,16 +47,6 @@ class RenderTask extends React.Component {
 
   warningToggleOff() {
     this.setState({ backButtonWarning: false });
-  }
-
-  handleGoldStandardChange(e) {
-    // move to parent
-    this.props.classification.update({ gold_standard: e.target.checked || undefined });
-  }
-
-  handleDemoModeChange(e) {
-    // move to parent
-    this.props.onChangeDemoMode(e.target.checked);
   }
 
   addAnnotationForTask(classification, taskKey) {
@@ -286,7 +274,6 @@ class RenderTask extends React.Component {
       );
     }
 
-    // this can be refactored to its own component
     let expertOptions;
     if (this.props.expertClassifier) {
       expertOptions = (
@@ -294,10 +281,10 @@ class RenderTask extends React.Component {
           userRoles={this.props.userRoles}
           goldStandard={this.props.classification.gold_standard}
           demoMode={this.props.demoMode}
-          handleGoldStandardChange={this.handleGoldStandardChange}
-          handleDemoModeChange={this.handleDemoModeChange}
+          {...this.props.expertOptoinsProps}
         />
       );
+    }
 
     let shortcut;
     if (this.props.currentTask.unlinkedTask) {
@@ -442,9 +429,13 @@ RenderTask.propTypes = {
   onComplete: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
   userRoles: React.PropTypes.object,
-  onChangeDemoMode: React.PropTypes.func,
   expertClassifier: React.PropTypes.bool,
   splits: React.PropTypes.object,
+  expertOptoinsProps: React.PropTypes.shape({
+    handleGoldStandardChange: React.PropTypes.func,
+    handleDemoModeChange: React.PropTypes.func,
+  }),
+  onChangeDemoMode: React.PropTypes.func,
 };
 
 export default RenderTask;

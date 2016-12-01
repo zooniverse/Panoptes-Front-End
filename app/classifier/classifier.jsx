@@ -11,6 +11,7 @@ import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames';
 import RenderTask from './render-task';
 import RenderSummary from './render-summary';
+import RenderGravitySpyGoldStandard from './render-gravity-spy-gold-standard';
 
 class Classifier extends React.Component {
   constructor(props) {
@@ -20,6 +21,10 @@ class Classifier extends React.Component {
     this.loadSubject = this.loadSubject.bind(this);
     this.prepareToClassify = this.prepareToClassify.bind(this);
     this.getExpertClassification = this.getExpertClassification.bind(this);
+    this.handleGoldStandardChange = this.handleGoldStandardChange.bind(this);
+    this.handleDemoModeChange = this.handleDemoModeChange.bind(this);
+    this.handleSubjectImageLoad = this.handleSubjectImageLoad.bind(this);
+    this.subjectIsGravitySpyGoldStandard = this.subjectIsGravitySpyGoldStandard.bind(this);
     this.state = {
       expertClassification: null,
       selectedExpertAnnotation: -1,
@@ -144,9 +149,39 @@ class Classifier extends React.Component {
     this.setState({ renderIntervention: true });
   }
 
+  subjectIsGravitySpyGoldStandard() {
+    let isGold = false;
+    if (this.props.workflow.configuration && this.props.subject.metadata) {
+      if (this.props.workflow.configuration.gravity_spy_gold_standard && (this.props.subject.metadata['#Type'] === 'Gold')) {
+        isGold = true;
+      }
+    }
+    return isGold;
+  }
+
   handleAnnotationChange(classification, newAnnotation) {
     classification.annotations[classification.annotations.length - 1] = newAnnotation;
     classification.update('annotations');
+  }
+
+  handleGoldStandardChange(e) {
+    this.props.classification.update({ gold_standard: e.target.checked || undefined });
+  }
+
+  handleDemoModeChange(e) {
+    this.props.onChangeDemoMode(e.target.checked);
+  }
+
+  handleSubjectImageLoad(e, frameIndex) {
+    if (this.context.geordi) {
+      if (this.props.subject) {
+        this.context.geordi.remember({ subjectID: this.props.subject.id });
+      }
+    }
+    const { naturalWidth, naturalHeight, clientWidth, clientHeight } = e.target;
+    const changes = {};
+    changes[`metadata.subject_dimensions.${frameIndex}`] = { naturalWidth, naturalHeight, clientWidth, clientHeight };
+    this.props.classification.update(changes);
   }
 
   render() {
@@ -169,6 +204,10 @@ class Classifier extends React.Component {
       }
     }
     let taskArea;
+    let expertOptoinsProps = {
+      handleGoldStandardChange: this.handleGoldStandardChange,
+      handleDemoModeChange: this.handleDemoModeChange,
+    };
     if (currentTask) {
       taskArea = (
         <RenderTask
@@ -184,15 +223,22 @@ class Classifier extends React.Component {
           experimentsClient={experimentsClient}
           destroyCurrentAnnotation={this.destroyCurrentAnnotation}
           completeClassification={this.completeClassification}
+          expertOptoinsProps={expertOptoinsProps}
         />
       );
     } else if (this.subjectIsGravitySpyGoldStandard()) {
-      taskArea = <RenderGravitySpyGoldStandard></RenderGravitySpyGoldStandard>;
+      taskArea = (
+        <RenderGravitySpyGoldStandard
+          {...this.props}
+          currentClassification={currentClassification}
+        />
+      );
     } else if (!this.props.workflow.configuration.hide_classification_summaries) {
       taskArea = (
         <RenderSummary
           {...this.props}
           currentClassification={currentClassification}
+          expertOptoinsProps={expertOptoinsProps}
         />
       );
     }
@@ -239,6 +285,8 @@ Classifier.propTypes = {
   preferences: React.PropTypes.object,
   project: React.PropTypes.object,
   onLoad: React.PropTypes.func,
+  onChangeDemoMode: React.PropTypes.func,
+  onClickNext: React.PropTypes.func,
 };
 
 Classifier.contextTypes = {
