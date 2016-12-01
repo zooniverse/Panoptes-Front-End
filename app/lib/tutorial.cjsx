@@ -4,7 +4,7 @@ MediaCard = require '../components/media-card'
 {Markdown} = (require 'markdownz').default
 apiClient = require 'panoptes-client/lib/api-client'
 
-`import StepThrough from '../components/step-through'`
+`import StepThrough from '../components/step-through';`
 
 completedThisSession = {}
 window?.tutorialsCompletedThisSession = completedThisSession
