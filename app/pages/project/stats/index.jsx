@@ -20,6 +20,7 @@ class ProjectStatsPageController extends React.Component {
     const fields = [
       'classifications_count',
       'completeness',
+      'configuration',
       'display_name',
       'retired_set_member_subjects_count',
       'retirement,subjects_count',
@@ -30,7 +31,11 @@ class ProjectStatsPageController extends React.Component {
     };
     getWorkflowsInOrder(this.props.project, query)
       .then((workflows) => {
-        this.setState({ workflowList: workflows });
+        const workflowsSetToBeVisible =
+          workflows.filter((workflow) => { 
+            return (!workflow.configuration.stats_hidden ? workflow : null);
+        })
+        this.setState({ workflowList: workflowsSetToBeVisible });
       });
   }
 
