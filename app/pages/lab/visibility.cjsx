@@ -82,7 +82,15 @@ module.exports = React.createClass
     workflow.update({ 'configuration.stats_completeness_type': e.target.value }).save()
       .catch((error) => 
         @setState {error}
-      ).then(() => @forceUpdate())  
+      ).then(() => @forceUpdate())
+
+  handleWorkflowStatsVisibility: (workflow, e) ->
+    checked = e.target.checked
+
+    workflow.update({ 'configuration.stats_hidden': checked }).save()
+      .catch((error) =>
+        @setState { error }
+      ).then(() => @forceUpdate())
 
   render: ->
     looksDisabled =
@@ -244,6 +252,9 @@ module.exports = React.createClass
                 <th>
                   Completeness statistic
                 </th>
+                <th>
+                  Statistic visibility
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -267,7 +278,7 @@ module.exports = React.createClass
                   &emsp;
                 </td>
                 <td>
-                  <label>
+                  <label style={whiteSpace: 'nowrap'}>
                     <input
                       type="radio"
                       name="stats_completeness_type.#{workflow.id}"
@@ -278,7 +289,7 @@ module.exports = React.createClass
                     Classification Count
                   </label>
                   &emsp;
-                  <label>
+                  <label style={whiteSpace: 'nowrap'}>
                     <input
                       type="radio"
                       name="stats_completeness_type.#{workflow.id}"
@@ -288,6 +299,20 @@ module.exports = React.createClass
                     />
                     Retirement Count
                   </label>
+                  &emsp;
+                </td>
+                <td>
+                  <label style={whiteSpace: 'nowrap'}>
+                    <input
+                      type="checkbox"
+                      name="stats_hidden.#{workflow.id}"
+                      value={workflow.configuration.stats_hidden}
+                      checked={workflow.configuration.stats_hidden}
+                      onChange={@handleWorkflowStatsVisibility.bind(this, workflow)}
+                    />
+                    Hide on Stats Page
+                  </label>
+                  &emsp;
                 </td>
               </tr>}
             </tbody>
@@ -311,5 +336,9 @@ module.exports = React.createClass
         {' '}Since the images are shown to users in a random order, this completeness estimate will be slow to increase until the project is close to being finished.
         {' '}If your project does not have a constant retirement limit (e.g. it uses a custom retiment rule) and/or subject sets 
         {' '}have been unlinked from a live workflow, this estimate will be the most accurate.
+      </p>
+      <p className="form-label">Statistics Visbiility</p>
+      <p className="form-help">
+        Active workflows are visible on the project's statistics page by default. If there is a reason to hide an active workflow from the statistics page, such as a workflow being used in an a/b split experiment, then toggle the "Hide on Stats Page" checkbox.
       </p>
     </div>
