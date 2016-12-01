@@ -1,6 +1,7 @@
 import React from 'react';
 import markdownz from 'markdownz';
 import { browserHistory } from 'react-router';
+
 const Markdown = markdownz.Markdown;
 
 const WrappedMarkdown = React.createClass({
@@ -11,8 +12,12 @@ const WrappedMarkdown = React.createClass({
   },
 
   onClick(e) {
+    const rightButtonPressed = (!!e.button && e.button > 0);
+    const modifierKey = (e.ctrlKey || e.metaKey);
     if (e.target.origin === window.location.origin &&
-      e.target.pathname !== window.location.pathname) {
+      e.target.pathname !== window.location.pathname &&
+      !rightButtonPressed &&
+      !modifierKey) {
       const newURL = e.target.pathname + e.target.search + e.target.hash;
       browserHistory.push(newURL);
       e.preventDefault();
