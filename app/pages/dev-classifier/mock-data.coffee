@@ -124,6 +124,9 @@ workflow = apiClient.type('workflows').create
         {type: 'bezier', label: 'Bezier', color: 'orange', details: MISC_DRAWING_DETAILS}
         {type: 'column', label: 'Column Rectangle', color: 'darkgreen'}
         {type: 'grid', label: 'Grid', color: 'purple'}
+        {type: 'arrow', label: 'Arrow', color: 'green'}
+        {type: 'mars-arrow', label: 'Mars Arrow', color: 'red'}
+        {type: 'compass', label: 'Compass', color: 'yellow'}
       ]
       next: 'survey'
 
@@ -455,8 +458,8 @@ workflow = apiClient.type('workflows').create
 subject = apiClient.type('subjects').create
   id: 'MOCK_SUBJECT_FOR_CLASSIFIER'
 
-  # Images originally from lorempixel.com shared under CC BY-SA, 
-  # but the service is often slow and/or fails to load at all. 
+  # Images originally from lorempixel.com shared under CC BY-SA,
+  # but the service is often slow and/or fails to load at all.
   # Noted original source next to each.
   locations: if navigator?.onLine
     [

@@ -204,6 +204,9 @@ module.exports = React.createClass
                 <small className="form-help">*column rectangle:* a box with full height but variable width; this tool *cannot* be rotated.</small>
                 {if @canUse("grid")
                   <small className="form-help">*grid table:* cells which can be made into a table for consecutive annotations.</small>}
+                <small className="form-help">*arrow:* a line with an arrow head at one end.</small>
+                <small className="form-help">*mars arrow:* a line with an arrow head at one end and a circle at its midpoint.</small>
+                <small className="form-help">*compass:* a line with an arrow head at one end and a circle at its midpoint that is transected by a short line perpendcular to the arrow.</small>
               </div>}
         </div>}
 
