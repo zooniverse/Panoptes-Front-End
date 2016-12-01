@@ -1,6 +1,6 @@
 React = require 'react'
 {Link} = require 'react-router'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 moment = require 'moment'
 talkClient = require 'panoptes-client/lib/talk-client'
 apiClient = require 'panoptes-client/lib/api-client'

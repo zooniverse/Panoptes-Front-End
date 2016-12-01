@@ -1,7 +1,7 @@
 React = require 'react'
 Dialog = require 'modal-form/dialog'
 MediaCard = require '../components/media-card'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 apiClient = require 'panoptes-client/lib/api-client'
 
 `import StepThrough from '../components/step-through';`

@@ -1,5 +1,5 @@
 React = require 'react'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 CroppedImage = require './cropped-image'
 
 module.exports = React.createClass

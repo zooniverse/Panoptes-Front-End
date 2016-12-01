@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
-import markdownz from 'markdownz';
-const Markdown = markdownz.Markdown;
+import { Markdown } from 'markdownz';
 
 const AboutPageLayout = ({ project, mainContent, aside }) => (
   <div className="columns-container">
