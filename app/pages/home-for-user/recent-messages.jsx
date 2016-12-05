@@ -174,19 +174,17 @@ const RecentCollectionsSection = React.createClass({
         </span>
         <img role="presentation" src={avatarSrc} className="recent-conversation-link__partner-avatar" />
         <span className="recent-conversation-link__partner">
-          {!!partner ? partner.display_name : LOADER_BULLETS}
+          {partner ? partner.display_name : LOADER_BULLETS}
         </span>
 
-        {screen.width > 400 && (
-          <div className="recent-conversation-link__preview">
-            <div className="recent-conversation-link__title">
-              {conversation.title}
-            </div>
-            <div className="recent-conversation-link__body-preview">
-              {!!message ? <StringTruncator>{message.body}</StringTruncator> : LOADER_BULLETS}
-            </div>
+        <div className="recent-conversation-link__preview">
+          <div className="recent-conversation-link__title">
+            {conversation.title}
           </div>
-        )}
+          <div className="recent-conversation-link__body-preview">
+            {message ? <StringTruncator>{message.body}</StringTruncator> : LOADER_BULLETS}
+          </div>
+        </div>
       </Link>
     );
   },
