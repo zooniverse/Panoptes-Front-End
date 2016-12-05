@@ -2,7 +2,7 @@ React = require 'react'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 TalkDataExportButton = require '../../talk/data-export-button'
-`import ExportWorkflowsDialog from './export-workflows-dialog';`
+`import WorkflowClassificationExportButton from './workflow-classification-export-button';`
 Dialog = require 'modal-form/dialog'
 
 counterpart.registerTranslations 'en',
@@ -44,8 +44,7 @@ module.exports = React.createClass
               exportType="classifications_export"  />
           </div>
           <div className="row">
-            <button onClick={@showWorkflowExport}>Request new workflow classification export</button>
-            <small className="form-help"> CSV format.</small>
+            <WorkflowClassificationExportButton project={@props.project} />
           </div>
           <div className="row">
             <DataExportButton
