@@ -19,14 +19,20 @@ class TextViewer extends Component {
     })
     .then((content) => {
       this.setState({ content });
-      const e = new Event('load');
-      e.target = ReactDOM.findDOMNode(this);
-      this.props.onLoad(e);
+      ReactDOM.findDOMNode(this).dispatchEvent(new Event('load'));
     })
     .catch((e) => {
       const content = e.message;
       this.setState({ content });
     });
+  }
+
+  componentDidMount() {
+    ReactDOM.findDOMNode(this).addEventListener('load', this.props.onLoad);
+  }
+
+  componentWillUnmount() {
+    ReactDOM.findDOMNode(this).removeEventListener('load', this.props.onLoad);
   }
 
   render() {
@@ -55,7 +61,7 @@ TextViewer.propTypes = {
 TextViewer.defaultProps = {
   type: 'text',
   format: 'plain',
-  onLoad: () => { return new Event('load'); },
+  onLoad: (e) => { console.log('text loaded', e); },
 };
 
 export default TextViewer;
