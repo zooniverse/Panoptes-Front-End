@@ -27,33 +27,35 @@ ClassificationsRibbon = React.createClass
       totalClassifications = 0
       for {classifications} in @props.projects
         totalClassifications += classifications ? 1
-
       others = []
 
       lastX = 0
-      <svg className="classifications-ribbon" width={@props.width} height={@props.height} viewBox="0 0 1 1" preserveAspectRatio="none" style={display: 'block'}>
-        {for {project, classifications}, i in @props.projects
-          width = (classifications ? 1) / totalClassifications
-          if width < @props.cutoff
-            others.push {project, classifications}
-            continue
-          else
-            band = <rect key={project} fill={getColorFromString project} stroke="none" x={lastX} y="0" width={width} height="1">
-              <title>
-                {project}: {classifications ? '?'}
-              </title>
-            </rect>
-            lastX += width
-            band}
+      <div>
+        <h4 style={marginBottom: '20px'}>{@props.totalClassifications} total classifications to date!</h4>
+        <svg className="classifications-ribbon" width={@props.width} height={@props.height} viewBox="0 0 1 1" preserveAspectRatio="none" style={display: 'block'}>
+          {for {project, classifications}, i in @props.projects
+            width = (classifications ? 1) / totalClassifications
+            if width < @props.cutoff
+              others.push {project, classifications}
+              continue
+            else
+              band = <rect key={project} fill={getColorFromString project} stroke="none" x={lastX} y="0" width={width} height="1">
+                <title>
+                  {project}: {classifications ? '?'}
+                </title>
+              </rect>
+              lastX += width
+              band}
 
-        {unless others.length is 0
-          othersWidth = 1 - lastX
-          <rect fill="gray" fillOpacity="0.5" stroke="none" x={lastX} y="0" width={othersWidth} height="1">
-            <title>
-              {("#{project}: #{classifications ? '?'}" for {project, classifications} in others when classifications > 0).join '\n'}
-            </title>
-          </rect>}
-      </svg>
+          {unless others.length is 0
+            othersWidth = 1 - lastX
+            <rect fill="gray" fillOpacity="0.5" stroke="none" x={lastX} y="0" width={othersWidth} height="1">
+              <title>
+                {("#{project}: #{classifications ? '?'}" for {project, classifications} in others when classifications > 0).join '\n'}
+              </title>
+            </rect>}
+        </svg>
+      </div>
 
 module.exports = React.createClass
   displayName: 'ClassificationsRibbonWrapper'
@@ -64,10 +66,11 @@ module.exports = React.createClass
   getInitialState: ->
     loading: false
     projects: []
+    totalClassifications: 0
 
   componentDidMount: ->
     if @props.user is null and location.hash.indexOf '/dev/' isnt -1
-      zooAPI.type('users').get('3').then (user) =>
+        zooAPI.type('users').get('3').then (user) =>
         @getClassificationCounts user
     else
       @getClassificationCounts @props.user
@@ -78,19 +81,20 @@ module.exports = React.createClass
 
   getClassificationCounts: (user) ->
     @setState loading: true
-
-    getUserClassificationCounts(@props.user).then (projects) =>
+    console.log 'user', user
+    getUserClassificationCounts(user).then (projects) =>
       pairs = []
-      for i in [0...projects.length]
+      projects.map (project) ->
         pairs.push
-          project: projects[i].display_name
-          classifications: projects[i].activity_count
+          project: project.display_name
+          classifications: project.activity_count
       @setState
         loading: false
         projects: pairs
+        totalClassifications: pairs.reduce ((total, pair) -> total + pair.classifications), 0
 
   render: ->
     if @state.loading
       <span>Loading ribbon...</span>
     else
-      <ClassificationsRibbon {...@props} projects={@state.projects} />
+      <ClassificationsRibbon {...@props} projects={@state.projects} totalClassifications={@state.totalClassifications} />

@@ -1,6 +1,7 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-ClassificationsRibbon = require '../../components/classifications-ribbon'
+# ClassificationsRibbon = require '../../components/classifications-ribbon'
+`import ClassificationsRibbonContainer from '../../components/classifications-ribbon-container';`
 ProjectIcon = require '../../components/project-icon'
 `import getUserClassificationCounts from '../../lib/get-user-classification-counts';`
 
@@ -43,7 +44,7 @@ module.exports = React.createClass
         # TODO: Braces after "style" here confuse coffee-reactify. That's really annoying.
         centered = textAlign: 'center'
         <div style=centered>
-          <p><ClassificationsRibbon user={@props.profileUser} /></p>
+          <div><ClassificationsRibbonContainer user={@props.profileUser} /></div>
           <div>
             {for id, project of @state.projects
               <span key="project#{id}">
