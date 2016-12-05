@@ -54,12 +54,37 @@ module.exports = React.createClass
     vertical = sizeRect?.height / @props.naturalHeight || 0
     {horizontal, vertical}
 
+  # transforms the event coordinates 
+  # to points in the SVG coordinate system
+  eventCoordsToSVGCoords: (x, y) ->
+    svg = @refs.svgSubjectArea
+    newPoint = svg.createSVGPoint()
+    newPoint.x = x
+    newPoint.y = y
+    matrixForWindowCoordsToSVGUserSpaceCoords = @getMatrixForWindowCoordsToSVGUserSpaceCoords()
+    pointForSVGSystem = newPoint.matrixTransform(matrixForWindowCoordsToSVGUserSpaceCoords)
+    pointForSVGSystem
+
+  # find the original matrix for the SVG coordinate space
+  getMatrixForWindowCoordsToSVGUserSpaceCoords: ->
+    transformationContainer = @refs.transformationContainer
+    transformationContainer.getScreenCTM().inverse()
+
+  # transforms the difference between two event coordinates
+  # into the difference as represent in the SVG coordinate system
+  normalizeDifference: (e, d) ->
+    difference = {}
+    normalizedPoint1 = @eventCoordsToSVGCoords(e.pageX - d.x, e.pageY - d.y)
+    normalizedPoint2 = @eventCoordsToSVGCoords(e.pageX, e.pageY)
+    difference.x =  normalizedPoint2.x - normalizedPoint1.x
+    difference.y =  normalizedPoint2.y - normalizedPoint1.y
+    difference
+
+  # get the offset of event coordiantes in terms of the SVG coordinate system
   getEventOffset: (e) ->
-    scale = @getScale()
-    sizeRect = @getSizeRect()
-    x = (e.pageX - sizeRect?.left) / scale.horizontal || 0
-    y = (e.pageY - sizeRect?.top) / scale.vertical || 0
-    {x, y}
+    eventOffset = @eventCoordsToSVGCoords(e.clientX, e.clientY)
+    console.log "eventOffset", eventOffset
+    eventOffset
 
   render: ->
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
@@ -109,19 +134,21 @@ module.exports = React.createClass
       <div className="subject-area">
         {if BeforeSubject?
           <BeforeSubject {...hookProps} />}
-        <svg className="subject" style=svgStyle viewBox={createdViewBox} {...svgProps}>
-          <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
-          {if type is 'image'
-            <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>
-              <SVGImage className={"pan-active" if @props.panEnabled} src={src} width={@props.naturalWidth} height={@props.naturalHeight} modification={@props.modification} />
-            </Draggable>
-          }
+        <svg ref="svgSubjectArea" className="subject" style=svgStyle viewBox={createdViewBox} {...svgProps}>
+          <g ref="transformationContainer" >
+            <rect ref="sizeRect" width={@props.naturalWidth} height={@props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
+            {if type is 'image'
+              <Draggable onDrag={@props.panByDrag} disabled={@props.disabled}>
+                <SVGImage className={"pan-active" if @props.panEnabled} src={src} width={@props.naturalWidth} height={@props.naturalHeight} modification={@props.modification} />
+              </Draggable>
+            }
 
-          {if InsideSubject? && !@props.panEnabled
-            <InsideSubject {...hookProps} />}
+            {if InsideSubject? && !@props.panEnabled
+              <InsideSubject {...hookProps} />}
 
-          {for anyTaskName, {PersistInsideSubject} of tasks when PersistInsideSubject?
-            <PersistInsideSubject key={anyTaskName} {...hookProps} />}
+            {for anyTaskName, {PersistInsideSubject} of tasks when PersistInsideSubject?
+              <PersistInsideSubject key={anyTaskName} {...hookProps} />}
+          </g>
         </svg>
         {@props.children}
         {if @state.alreadySeen
