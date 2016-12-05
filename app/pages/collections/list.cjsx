@@ -1,6 +1,6 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-CollectionCard = require '../../partials/collection-card'
+`import CollectionCard from './collection-card';`
 Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 CollectionsNav = require './nav'
@@ -40,8 +40,6 @@ List = React.createClass
         if subject?
           firstKey = Object.keys(subject.locations[0])[0]
           subject.locations[0][firstKey]
-        else
-          '/simple-avatar.png'
 
   cardLink: (collection) ->
     baseLink = "/"

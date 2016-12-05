@@ -1,8 +1,8 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
-import HomePageSection from './generic-section';
 import { Link } from 'react-router';
-import CollectionCard from '../../partials/collection-card';
+import HomePageSection from './generic-section';
+import CollectionCard from '../collections/collection-card';
 
 const RecentCollectionsSection = React.createClass({
   propTypes: {
