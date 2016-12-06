@@ -52,12 +52,9 @@ class ExportWorkflowsDialog extends React.Component {
   }
 
   requestDataExport() {
-    try {
-      apiClient.post(`/workflows/${this.workflowList.value}/classifications_export`, { media: { content_type: 'text/csv' } });
-      this.props.onSuccess();
-    } catch (err) {
-      this.props.onFail(err);
-    }
+    apiClient.post(`/workflows/${this.workflowList.value}/classifications_export`, { media: { content_type: 'text/csv' } })
+      .then(() => { this.props.onSuccess(); })
+      .catch((err) => { this.props.onFail(err); });
   }
 
   render() {
@@ -82,8 +79,8 @@ class ExportWorkflowsDialog extends React.Component {
 
 ExportWorkflowsDialog.propTypes = {
   project: React.PropTypes.shape({ links: React.PropTypes.object }).isRequired,
-  onSuccess: React.PropTypes.function,
-  onFail: React.PropTypes.function,
+  onSuccess: React.PropTypes.func.isRequired,
+  onFail: React.PropTypes.func.isRequired,
 };
 
 export default ExportWorkflowsDialog;
