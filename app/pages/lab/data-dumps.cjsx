@@ -43,9 +43,12 @@ module.exports = React.createClass
               buttonKey="projectDetails.classificationExport"
               exportType="classifications_export"  />
           </div>
-          <div className="row">
-            <WorkflowClassificationExportButton project={@props.project} />
-          </div>
+          {
+            if "export classifications by workflow" in @props.project.experimental_tools
+              <div className="row">
+                <WorkflowClassificationExportButton project={@props.project} />
+              </div>
+          }
           <div className="row">
             <DataExportButton
               project={@props.project}

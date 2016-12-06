@@ -26,6 +26,7 @@ EXPERIMENTAL_FEATURES = [
   'persist annotations'
   'shortcut'
   'metadata based feedback'
+  'export classifications by workflow'
 ]
 
 ProjectToggle = React.createClass
