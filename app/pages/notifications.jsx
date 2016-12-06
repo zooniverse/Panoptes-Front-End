@@ -1,9 +1,10 @@
 import React from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
-import Loading from '../components/loading-indicator';
 import talkClient from 'panoptes-client/lib/talk-client';
+import Loading from '../components/loading-indicator.cjsx';
 import NotificationSection from './notifications/notification-section';
+import CollapsableSection from '../components/collapsable-section';
 
 counterpart.registerTranslations('en', {
   notifications: {
@@ -75,18 +76,17 @@ export default class NotificationsPage extends React.Component {
       notificationView = (
         <div>
           <div className="list">
-            {this.state.projNotifications.map((notification) => {
+            {this.state.projNotifications.map((notification, i) => {
               return (
-                <NotificationSection
-                  key={notification.id}
-                  callbackParent={this.onChildChanged}
-                  location={this.props.location}
-                  expanded={notification.section === this.state.expanded}
-                  projectID={notification.project_id}
-                  slug={notification.project_slug}
-                  section={notification.section}
-                  user={this.props.user}
-                />
+                <CollapsableSection key={i} callbackParent={this.onChildChanged} expanded={notification.section === this.state.expanded} section={notification.section}>
+                  <NotificationSection
+                    key={notification.id}
+                    location={this.props.location}
+                    projectID={notification.project_id}
+                    slug={notification.project_slug}
+                    user={this.props.user}
+                  />
+                </CollapsableSection>
               );
             })}
           </div>
@@ -135,6 +135,6 @@ export default class NotificationsPage extends React.Component {
 
 NotificationsPage.propTypes = {
   location: React.PropTypes.object,
-  project: React.PropTypes.object.isRequired,
+  project: React.PropTypes.object,
   user: React.PropTypes.object,
 };

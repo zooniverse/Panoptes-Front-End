@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import { Link } from 'react-router';
-import Notification from './notification';
-import Paginator from '../../talk/lib/paginator';
-import updateQueryParams from '../../talk/lib/update-query-params';
-import ZooniverseLogo from '../../partials/zooniverse-logo';
+import Notification from './notification.cjsx';
+import Paginator from '../../talk/lib/paginator.cjsx';
+import ZooniverseLogo from '../../partials/zooniverse-logo.cjsx';
 
-class NotificationSection extends Component {
+export default class NotificationSection extends Component {
   constructor(props) {
     super(props);
-    this.onSectionToggle = this.onSectionToggle.bind(this);
     this.state = {
       currentMeta: { },
       error: null,
@@ -58,12 +56,6 @@ class NotificationSection extends Component {
       this.markAsRead('first');
       this.markAsRead('last');
     }
-  }
-
-  onSectionToggle() {
-    const expandToggle = this.props.expanded ? false : this.props.section;
-    updateQueryParams(this.context.router, { page: 1 });
-    this.props.callbackParent(expandToggle);
   }
 
   getNotifications(page) {
@@ -168,10 +160,10 @@ class NotificationSection extends Component {
   }
 
   renderHeader() {
-    const buttonType = this.props.expanded ? 'fa fa-chevron-up fa-lg' : 'fa fa-chevron-down fa-lg';
+    const buttonType = this.props.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
 
     return (
-      <div onClick={this.onSectionToggle}>
+      <div onClick={this.props.toggleSection}>
         <div className="notification-section__container">
           <div className="notification-section__item">
             {this.avatarFor()}
@@ -239,21 +231,15 @@ class NotificationSection extends Component {
 }
 
 NotificationSection.propTypes = {
-  callbackParent: React.PropTypes.func,
   expanded: React.PropTypes.bool,
   location: React.PropTypes.object,
   projectID: React.PropTypes.string,
   section: React.PropTypes.string,
   slug: React.PropTypes.string,
+  toggleSection: React.PropTypes.func,
   user: React.PropTypes.object,
-};
-
-NotificationSection.contextTypes = {
-  router: React.PropTypes.object.isRequired,
 };
 
 NotificationSection.defaultProps = {
   expanded: false,
 };
-
-export default NotificationSection;
