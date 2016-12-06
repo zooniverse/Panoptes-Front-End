@@ -58,16 +58,19 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   handleMainDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.x += difference.x
     @props.onChange @props.mark
 
   handleLeftDrag: (e, d) ->
-    if @props.mark.width - d.x / @props.scale.horizontal >= MINIMUM_WIDTH
-      @props.mark.x += d.x / @props.scale.horizontal
-      @props.mark.width -= d.x / @props.scale.horizontal
+    difference = @props.normalizeDifference(e, d)
+    if @props.mark.width - difference.x >= MINIMUM_WIDTH
+      @props.mark.x += difference.x
+      @props.mark.width -= difference.x 
       @props.onChange @props.mark
 
   handleRightDrag: (e, d) ->
-    if @props.mark.width + d.x / @props.scale.horizontal >= MINIMUM_WIDTH
-      @props.mark.width += d.x / @props.scale.horizontal
+    difference = @props.normalizeDifference(e, d)
+    if @props.mark.width + difference.x >= MINIMUM_WIDTH
+      @props.mark.width += difference.x
       @props.onChange @props.mark

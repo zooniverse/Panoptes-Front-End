@@ -65,7 +65,7 @@ module.exports = React.createClass
     pointForSVGSystem = newPoint.matrixTransform(matrixForWindowCoordsToSVGUserSpaceCoords)
     pointForSVGSystem
 
-  # find the original matrix for the SVG coordinate space
+  # find the original matrix for the SVG coordinate system
   getMatrixForWindowCoordsToSVGUserSpaceCoords: ->
     transformationContainer = @refs.transformationContainer
     transformationContainer.getScreenCTM().inverse()
@@ -83,8 +83,6 @@ module.exports = React.createClass
   # get the offset of event coordiantes in terms of the SVG coordinate system
   getEventOffset: (e) ->
     eventOffset = @eventCoordsToSVGCoords(e.clientX, e.clientY)
-    console.log "eventOffset", eventOffset
-    eventOffset
 
   render: ->
     taskDescription = @props.workflow.tasks[@props.annotation?.task]
@@ -125,6 +123,8 @@ module.exports = React.createClass
       getEventOffset: this.getEventOffset
       onChange: @props.onChange
       preferences: @props.preferences
+      eventCoordsToSVGCoords: @eventCoordsToSVGCoords
+      normalizeDifference: @normalizeDifference
 
     for task, Component of tasks when Component.getSVGProps?
       for key, value of Component.getSVGProps hookProps

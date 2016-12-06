@@ -70,12 +70,14 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   handleStrokeDrag: (e, d) ->
-    for n in [1..2]
-      @props.mark["x#{n}"] += d.x / @props.scale.horizontal
-      @props.mark["y#{n}"] += d.y / @props.scale.vertical
+    for n in [1..2]      
+      difference = @props.normalizeDifference(e, d)
+      @props.mark["x#{n}"] += difference.x
+      @props.mark["y#{n}"] += difference.y
     @props.onChange @props.mark
 
   handleHandleDrag: (n, e, d) ->
-    @props.mark["x#{n}"] += d.x / @props.scale.horizontal
-    @props.mark["y#{n}"] += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e,d)
+    @props.mark["x#{n}"] += difference.x
+    @props.mark["y#{n}"] += difference.y
     @props.onChange @props.mark

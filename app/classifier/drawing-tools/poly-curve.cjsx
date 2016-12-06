@@ -159,19 +159,18 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   handleMouseMove: (e) ->
-    xPos = e.pageX
-    yPos = e.pageY
+    newCoord = @props.getEventOffset(e)
 
-    mouseWithinViewer = if xPos < @props.containerRect.left || xPos > @props.containerRect.right
+    mouseWithinViewer = if e.pageX < @props.containerRect.left || e.pageX > @props.containerRect.right
       false
-    else if yPos < @props.containerRect.top || yPos > @props.containerRect.bottom
+    else if e.pageY < @props.containerRect.top || e.pageY > @props.containerRect.bottom
       false
     else
       true
 
     @setState
-      mouseX: (xPos - @props.containerRect.left) / @props.scale.horizontal
-      mouseY: (yPos - @props.containerRect.top) / @props.scale.vertical
+      mouseX: newCoord.x
+      mouseY: newCoord.y
       mouseWithinViewer: mouseWithinViewer
 
   handleFinishClick: ->
@@ -186,12 +185,14 @@ module.exports = React.createClass
     @props.onChange @props.mark
 
   handleMainDrag: (e, d) ->
+    difference = @props.normalizeDifference(e, d)
     for point in @props.mark.points
-      point.x += d.x / @props.scale.horizontal
-      point.y += d.y / @props.scale.vertical
+      point.x += difference.x
+      point.y += difference.y
     @props.onChange @props.mark
 
   handleHandleDrag: (index, e, d) ->
-    @props.mark.points[index].x += d.x / @props.scale.horizontal
-    @props.mark.points[index].y += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.points[index].x += difference.x
+    @props.mark.points[index].y += difference.y
     @props.onChange @props.mark

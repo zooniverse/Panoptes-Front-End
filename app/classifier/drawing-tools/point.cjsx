@@ -77,6 +77,8 @@ module.exports = React.createClass
     </DrawingToolRoot>
 
   handleDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.y += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e,d)
+    @props.mark.x += difference.x
+    @props.mark.y += difference.y 
     @props.onChange @props.mark
+    

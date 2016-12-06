@@ -133,15 +133,17 @@ module.exports = React.createClass
       </Draggable>
 
   handleTemplateDrag: (e, d) ->
+    difference = @props.normalizeDifference(e, d)
     mobileTemplate = (i for i in @props.classification.annotations[@props.classification.annotations.length - 1].value when i.templateID is @props.mark.templateID)
     for cell in mobileTemplate
-      cell.x += d.x / @props.scale.horizontal
-      cell.y += d.y / @props.scale.vertical
+      cell.x += difference.x
+      cell.y += difference.y
     @setState template: mobileTemplate
 
   handleMainDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.y += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.x += difference.x
+    @props.mark.y += difference.y
     @props.onChange @props.mark
 
   cellPoints: (mark) ->
