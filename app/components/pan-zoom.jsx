@@ -16,7 +16,7 @@ const PanZoom = React.createClass({
       enabled: false,
       frameDimensions: {
         height: 0,
-        width: 0
+        width: 0,
       }
     };
   },
@@ -31,7 +31,9 @@ const PanZoom = React.createClass({
         height: 0
       },
       zooming: false,
-      zoomingTimeoutId: null
+      zoomingTimeoutId: null,
+      rotation: 0,
+      transform: ''
     };
   },
 
@@ -66,7 +68,9 @@ const PanZoom = React.createClass({
       return React.cloneElement(child, {
         viewBoxDimensions: this.state.viewBoxDimensions,
         panByDrag: this.panByDrag,
-        panEnabled: this.state.panEnabled
+        panEnabled: this.state.panEnabled,
+        transform: this.state.transform,
+        rotation: this.state.rotation
       });
     });
     return (
@@ -112,6 +116,9 @@ const PanZoom = React.createClass({
             </div>
             <div>
               <button title="reset zoom levels" className={"reset fa fa-refresh" + (this.cannotZoomOut() ? " disabled" : "")} onClick={ this.zoomReset } ></button>
+            </div>
+            <div>
+              <button title="rotate" className={"fa fa-repeat"} onClick={ this.rotateClockwise } />
             </div>
           </div>
           : ""
@@ -306,8 +313,16 @@ const PanZoom = React.createClass({
         height: this.state.viewBoxDimensions.height
       }
     });
-  }
+  },
 
+  rotateClockwise() {
+    let newRotation = this.state.rotation + 90
+    console.log("newRotation", newRotation)
+    this.setState({
+      rotation: newRotation,
+      transform: `rotate(${newRotation} ${this.props.frameDimensions.width/2} ${this.props.frameDimensions.height/2})`
+    });
+  }
 });
 
 export default PanZoom;
