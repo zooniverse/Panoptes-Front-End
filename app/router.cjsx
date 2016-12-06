@@ -8,6 +8,8 @@ React = require 'react'
 `import AboutProject from './pages/project/about/index';`
 `import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
 `import AboutProjectTeam from './pages/project/about/team';`
+`import ProjectStatusList from './pages/admin/project-status-list';`
+
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -207,7 +209,7 @@ module.exports =
 
     <Route path="admin" component={require './pages/admin'}>
       <IndexRoute component={require './pages/admin/user-settings'} />
-      <Route path="project_status" component={require './pages/admin/project-status-list'} />
+      <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={require './pages/admin/project-status'} />
     </Route>
 
