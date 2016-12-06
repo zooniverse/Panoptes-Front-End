@@ -31,6 +31,7 @@ class AboutProject extends Component {
 
   constructPagesData(apiResponse) {
     const availablePages = [];
+
     for (const url_key in SLUG_MAP) {
       const matchingPage = apiResponse.find(page => page.url_key === url_key);
       if (matchingPage && matchingPage.content && matchingPage.content !== '') {
@@ -39,27 +40,23 @@ class AboutProject extends Component {
           title: matchingPage.title,
           content: matchingPage.content,
         });
+      } else if (['science_case', 'team'].includes(url_key)) {
+        availablePages.push({ slug: SLUG_MAP[url_key] });
       }
     }
+
     return availablePages;
   }
 
   getPages() {
+    this.getTeam();
     return this.props.project.get('pages')
       .then(this.constructPagesData)
-      .then((availablePages) => {
-        this.setState({ 
-          pages: availablePages, 
-          loaded: true,
-        });
-        return availablePages;
-      })
-      .then((availablePages) => {
-        if (availablePages.find(page => page.slug === 'team')) {
-          this.getTeam();
-        }
-      })
-      .catch((error) => console.error('Error retrieving project pages', error));
+      .then(availablePages => this.setState({ 
+        pages: availablePages, 
+        loaded: true,
+      }))
+      .catch(error => console.error('Error retrieving project pages', error));
   }
 
   getTeam() {
@@ -71,16 +68,14 @@ class AboutProject extends Component {
           .catch((error) => console.error('Error retrieving project team users', error));
       })
       .then(team => this.setState({ team }))
-      .catch((error) => console.error('Error retrieving project team data', error));
+      .catch(error => console.error('Error retrieving project team data', error));
   }
 
   constructTeamData(roles, users) {
-    return users.map(user => {
-      return {
-        userResource: user,
-        roles: roles.find(role => user.id === role.links.owner.id).roles,
-      };
-    });
+    return users.map(user => ({
+      userResource: user,
+      roles: roles.find(role => user.id === role.links.owner.id).roles,
+    }));
   }
 
   render() {
