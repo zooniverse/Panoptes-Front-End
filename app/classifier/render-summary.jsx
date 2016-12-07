@@ -1,9 +1,9 @@
 import React from 'react';
-import MetadataBasedFeedback from './metadata-based-feedback.cjsx';
-import WorldWideTelescope from './world-wide-telescope';
 import ClassificationSummary from './classification-summary';
-import ExpertOptions from './render-expert-options';
+import MetadataBasedFeedback from './metadata-based-feedback.cjsx';
+import WorldWideTelescope from './world-wide-telescope.cjsx';
 import { Link } from 'react-router';
+import { VisibilityWrapper } from './classifier-helpers';
 
 class RenderSummary extends React.Component {
   constructor(props) {
@@ -20,25 +20,6 @@ class RenderSummary extends React.Component {
   }
 
   render() {
-    let metadataBasedFeedback;
-    if (this.props.project.experimental_tools && (this.props.project.experimental_tools.indexOf('metadata-based-feedback') > -1)) {
-      metadataBasedFeedback = (
-        <MetadataBasedFeedback
-          subject={this.props.subject}
-          classification={this.props.classification}
-          dudLabel="DUD"
-          simLabel="SIM"
-          subjectLabel="SUB"
-          metaTypeFieldName="#Type"
-          metaSuccessMessageFieldName="#F_Success"
-          metaFailureMessageFieldName="#F_Fail"
-          metaSimCoordXPattern="#X"
-          metaSimCoordYPattern="#Y"
-          metaSimTolPattern="#Tol"
-        />
-      );
-    }
-
     let toggleButton;
     let showing;
     if (this.state.showingExpertClassification) {
@@ -53,67 +34,56 @@ class RenderSummary extends React.Component {
       );
     }
 
-    let worldWideTelescopeOrExpert;
-    if (this.props.workflow.configuration.custom_summary && (this.props.workflow.configuration.custom_summary.indexOf('world_wide_telescope') > -1)) {
-      worldWideTelescopeOrExpert = (
-        <strong>
+    return (
+      <div>
+        Thanks!
+        <VisibilityWrapper visible={this.props.project.experimental_tools && (this.props.project.experimental_tools.indexOf('metadata-based-feedback') > -1)}>
+          <MetadataBasedFeedback
+            subject={this.props.subject}
+            classification={this.props.classification}
+            dudLabel="DUD"
+            simLabel="SIM"
+            subjectLabel="SUB"
+            metaTypeFieldName="#Type"
+            metaSuccessMessageFieldName="#F_Success"
+            metaFailureMessageFieldName="#F_Fail"
+            metaSimCoordXPattern="#X"
+            metaSimCoordYPattern="#Y"
+            metaSimTolPattern="#Tol"
+          />
+        </VisibilityWrapper>
+        <VisibilityWrapper visible={this.props.workflow.configuration.custom_summary && (this.props.workflow.configuration.custom_summary.indexOf('world_wide_telescope') > -1)}>
           <WorldWideTelescope
+            visible={this.props.workflow.configuration.custom_summary && (this.props.workflow.configuration.custom_summary.indexOf('world_wide_telescope') > -1)}
             annotations={this.props.classification.annotations}
             subject={this.props.subject}
             workflow={this.props.workflow}
           />
-        </strong>
-      );
-    } else if (this.props.expertClassification) {
-      worldWideTelescopeOrExpert = (
-        <div>
-          Expert classification available.
-          {' '}
-          {toggleButton}
-        </div>
-      );
-    }
-
-    let talkLink;
-    if (this.props.owner && this.props.project) {
-      const [ownerName, name] = this.props.project.slug.split('/');
-      talkLink = (
-        <Link
-          onClick={this.props.onClickNext}
-          to={`/projects/${ownerName}/${name}/talk/subjects/${this.props.subject.id}`}
-          className="talk standard-button"
-        >
-          Talk
-        </Link>
-      );
-    }
-
-    let expertOptions;
-    if (this.props.expertClassifier) {
-      expertOptions = (
-        <ExpertOptions
-          userRoles={this.props.userRoles}
-          goldStandard={this.props.classification.gold_standard}
-          demoMode={this.props.demoMode}
-          {...this.props.expertOptoinsProps}
-        />
-      );
-    }
-
-    return (
-      <div>
-        Thanks!
-        {metadataBasedFeedback}
-        {worldWideTelescopeOrExpert}
+        </VisibilityWrapper>
+        <VisibilityWrapper visible={this.props.expertClassification}>
+          <div>
+            Expert classification available.
+            {' '}
+            {toggleButton}
+          </div>
+        </VisibilityWrapper>
         <div>
           <strong>{showing}</strong>
           <ClassificationSummary workflow={this.props.workflow} classification={this.props.currentClassification} />
         </div>
         <hr />
         <nav className="task-nav">
-          {talkLink}
+          <VisibilityWrapper visible={this.props.owner && this.props.project}>
+            <Link
+              onClick={this.props.onClickNext}
+              to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
+              className="talk standard-button"
+            >
+              Talk
+            </Link>
+          </VisibilityWrapper>
           <button type="button" autoFocus className="continue major-button" onClick={this.props.onClickNext}>Next</button>
-          {expertOptions}
+          {this.props.children}
         </nav>
       </div>
     );
@@ -130,12 +100,9 @@ RenderSummary.propTypes = {
   expertClassification: React.PropTypes.bool,
   onClickNext: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
-  userRoles: React.PropTypes.object,
+  userRoles: React.PropTypes.array,
   expertClassifier: React.PropTypes.bool,
-  expertOptoinsProps: React.PropTypes.shape({
-    handleGoldStandardChange: React.PropTypes.func,
-    handleDemoModeChange: React.PropTypes.func,
-  }),
+  children: React.PropTypes.node,
 };
 
 export default RenderSummary;

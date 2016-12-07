@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { VisibilityWrapper } from './classifier-helpers';
 
 const RenderGravitySpyGoldStandard = (props) => {
   const choiceLabels = [];
@@ -11,52 +12,41 @@ const RenderGravitySpyGoldStandard = (props) => {
     }
   }
   const match = choiceLabels.every((label) => { return label === props.subject.metadata['#Label']; });
+  const tooMany = (
+    <VisibilityWrapper visible={choiceLabels.length > 1}>
+      <p>You should only assign 1 label.</p>
+    </VisibilityWrapper>
+  );
 
-  let tooMany;
-  if (choiceLabels.length > 1) {
-    tooMany = (<p>You should only assign 1 label.</p>);
-  }
-
-  let message;
-  if (match) {
-    message = (
-      <div>
-        <p>Good work!</p>
-        <p>When our experts classified this image,<br />they also thought it was a {props.subject.metadata['#Label']}!</p>
-        {tooMany}
-      </div>
-    );
-  } else {
-    message = (
-      <div>
-        <p>You responded {choiceLabels.join(', ')}.</p>
-        {tooMany}
-        <p>When our experts classified this image,<br />they labeled it as a {props.subject.metadata['#Label']}.</p>
-        <p>Some of the glitch classes can look quite similar,<br />so please keep trying your best.</p>
-        <p>Check out the tutorial and the field guide for more guidance.</p>
-      </div>
-    );
-  }
-
-  let talkLink;
-  if (props.owner && props.project) {
-    const [ownerName, name] = props.project.slug.split('/');
-    talkLink = (
-      <Link
-        onClick={props.onClickNext}
-        to={`/projects/${ownerName}/${name}/talk/subjects/${props.subject.id}`}
-        className="talk standard-button"
-      >
-        Talk
-      </Link>
-    );
-  }
   return (
     <div>
-      {message}
+      <VisibilityWrapper visible={match}>
+        <div>
+          <p>Good work!</p>
+          <p>When our experts classified this image,<br />they also thought it was a {props.subject.metadata['#Label']}!</p>
+          {tooMany}
+        </div>
+      </VisibilityWrapper>
+      <VisibilityWrapper visible={!match}>
+        <div>
+          <p>You responded {choiceLabels.join(', ')}.</p>
+          {tooMany}
+          <p>When our experts classified this image,<br />they labeled it as a {props.subject.metadata['#Label']}.</p>
+          <p>Some of the glitch classes can look quite similar,<br />so please keep trying your best.</p>
+          <p>Check out the tutorial and the field guide for more guidance.</p>
+        </div>
+      </VisibilityWrapper>
       <hr />
       <nav className="task-nav">
-        {talkLink}
+        <VisibilityWrapper visible={props.owner && props.project}>
+          <Link
+            onClick={this.props.onClickNext}
+            to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
+            className="talk standard-button"
+          >
+            Talk
+          </Link>
+        </VisibilityWrapper>
         <button type="button" autoFocus className="continue major-button" onClick={props.onClickNext}>Next</button>
       </nav>
     </div>
