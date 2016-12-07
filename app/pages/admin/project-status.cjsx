@@ -10,6 +10,8 @@ handleInputChange = require '../../lib/handle-input-change'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 WorkflowToggle = require '../../components/workflow-toggle'
 
+`import VersionList from './project-status/version-list';`
+
 EXPERIMENTAL_FEATURES = [
   'crop'
   'combo'
@@ -122,27 +124,6 @@ ProjectRedirectToggle = React.createClass
         <span>{ @validUrlMessage() }</span>
       </AutoSave>
     </div>
-
-VersionList = React.createClass
-  displayName: "VersionList"
-
-  getDefaultProps: ->
-    project: null
-
-  render: ->
-    <PromiseRenderer promise={@props.project.get 'versions'}>{ (versions) =>
-      vs = versions.sort()
-      <h4>Recent Status Changes</h4>
-      <ul className="project-status__section-list">
-        {vs.map (version) =>
-          key = Object.keys(version.changeset)[0]
-          changes = 'from ' + version.changeset[key].join ' to '
-          m = moment(version.created_at)
-          <PromiseRenderer key={version.id} promise={apiClient.type('users').get(version.whodunnit)} >{ (user) =>
-            <li>{user.display_name} changed {key} {changes}  {m.fromNow()}</li>
-          }</PromiseRenderer>}
-      </ul>
-    }</PromiseRenderer>
 
 ProjectStatus = React.createClass
   displayName: "ProjectStatus"
