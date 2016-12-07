@@ -213,8 +213,7 @@ const HomePageForUser = React.createClass({
               <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
               <div className="home-page-for-user__welcome">
-                Hello, {this.props.user.display_name}
-                <p>{ totalClassifications ? totalClassifications : 'Loading '} total classifications to date!</p>
+                Hello {this.props.user.display_name}, <br/> you've made { totalClassifications ? totalClassifications : 'Loading '} total classifications to date.
               </div>
 
               {this.renderMenu(OpenSectionComponent)}

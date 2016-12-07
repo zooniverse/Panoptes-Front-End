@@ -2,13 +2,11 @@ import React, { Component, PropTypes } from 'react';
 
 import ClassificationsRibbon from 'classifications-ribbon';
 import getUserClassificationCounts from '../lib/get-user-classification-counts';
-import getColorFromString from '../lib/get-color-from-string';
 
 class ClassificationsRibbonContainer extends Component {
   constructor(props) {
     super(props);
     this.getClassificationCounts = this.getClassificationCounts.bind(this);
-    this.getColorFromString = this.getColorFromString.bind(this);
     this.state = {
       loading: false,
       projects: [],
@@ -29,18 +27,24 @@ class ClassificationsRibbonContainer extends Component {
   getClassificationCounts(user) {
     this.setState({ loading: true });
     getUserClassificationCounts(user)
-      .then((projects) => {
-        const pairs = [];
-        projects.map(project =>
-          pairs.push({
-            projects: project.display_name,
+      .then((data) => {
+        let lastX = 0;
+        const projects = [];
+        const totalClassifications = data.reduce((total, project) => {
+          return total + project.activity_count;
+        }, 0);
+        data.map(project =>
+          projects.push({
+            projectName: project.display_name,
             classifications: project.activity_count,
+            width: project.activity_count / totalClassifications,
+            x: 1 - (lastX += (project.activity_count / totalClassifications)),
           }),
         );
         this.setState({
           loading: false,
-          projects: pairs,
-          totalClassifications: pairs.reduce((total, pair) => total + pair.classifications, 0),
+          projects,
+          totalClassifications,
         });
       });
   }
@@ -52,7 +56,6 @@ class ClassificationsRibbonContainer extends Component {
           <span>Loading ribbon...</span> :
           <ClassificationsRibbon
             {...this.props}
-            getColor={this.getColorFromString()}
             projects={this.state.projects}
             totalClassifications={this.state.totalClassifications}
           />
