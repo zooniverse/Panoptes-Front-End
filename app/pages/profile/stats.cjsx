@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-# ClassificationsRibbon = require '../../components/classifications-ribbon'
 `import ClassificationsRibbonContainer from '../../components/classifications-ribbon-container';`
 ProjectIcon = require '../../components/project-icon'
 `import getUserClassificationCounts from '../../lib/get-user-classification-counts';`
