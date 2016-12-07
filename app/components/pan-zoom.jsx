@@ -203,7 +203,9 @@ const PanZoom = React.createClass({
         height: this.props.frameDimensions.height,
         x: 0,
         y: 0
-      }
+      },
+      rotation: 0,
+      transform: `rotate(${0} ${this.props.frameDimensions.width/2} ${this.props.frameDimensions.height/2})`
     });
   },
 
