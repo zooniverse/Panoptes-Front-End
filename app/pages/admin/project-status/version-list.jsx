@@ -59,9 +59,9 @@ class VersionList extends Component {
         const userIds = uniq(versions.map(version => version.whodunnit));
         return apiClient.type('users').get(userIds)
           .then(users => ({ versions, users }))
-          .catch(error => console.error('Error retrieving version author data', error));    
+          .catch(error => console.error('Error retrieving version author data', error));
       })
-      .then(({versions, users}) => {
+      .then(({ versions, users }) => {
         this.setState({
           loading: false,
           versions: versions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)),
@@ -76,7 +76,7 @@ class VersionList extends Component {
       <div>
         <h4>Recent Status Changes</h4>
         <ul className="project-status__section-list">
-          {this.state.versions.map(version => 
+          {this.state.versions.map(version =>
             <li key={version.id}>{this.createVersionString(version)}</li>
           )}
         </ul>
