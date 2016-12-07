@@ -48,7 +48,7 @@ SubjectNode = React.createClass
   render: ->
     logClick = @context.geordi?.makeHandler? 'about-menu'
     <div className="collection-subject-viewer">
-      <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user}>
+      <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project}>
         {if @isOwnerOrCollaborator()
           <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
             <i className="fa fa-close" />
