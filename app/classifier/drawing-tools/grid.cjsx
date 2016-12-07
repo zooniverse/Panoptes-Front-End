@@ -120,7 +120,7 @@ module.exports = React.createClass
         </Draggable>}
         {if @props.selected
           <g>
-            <DeleteButton tool={this} x={@props.mark.x} y={@props.mark.y} />
+            <DeleteButton tool={this} x={@props.mark.x} y={@props.mark.y} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
           </g>}
     </DrawingToolRoot>
 

@@ -319,7 +319,6 @@ const PanZoom = React.createClass({
 
   rotateClockwise() {
     let newRotation = this.state.rotation + 90
-    console.log("newRotation", newRotation)
     this.setState({
       rotation: newRotation,
       transform: `rotate(${newRotation} ${this.props.frameDimensions.width/2} ${this.props.frameDimensions.height/2})`

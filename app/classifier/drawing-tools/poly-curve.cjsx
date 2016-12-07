@@ -135,7 +135,7 @@ module.exports = React.createClass
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={deleteButtonPosition.x} y={deleteButtonPosition.y} />
+          <DeleteButton tool={this} x={deleteButtonPosition.x} y={deleteButtonPosition.y} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
           <path d={svgPathHelpers} strokeWidth={guideWidth} strokeDasharray={GUIDE_DASH} fill={'none'} />
 
           {if not @props.mark.closed and points.length and @state.mouseWithinViewer
@@ -149,7 +149,7 @@ module.exports = React.createClass
               className = "open-drag-handle"
             else
               className = undefined
-            <DragHandle className={className} key={i} x={point.x} y={point.y} scale={@props.scale} onDrag={@handleHandleDrag.bind this, i} />}
+            <DragHandle className={className} key={i} x={point.x} y={point.y} scale={@props.scale} onDrag={@handleHandleDrag.bind this, i} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />}
 
           {unless @props.mark.closed
             <g>

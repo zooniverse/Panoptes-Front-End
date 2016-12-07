@@ -73,7 +73,7 @@ module.exports = React.createClass
       </Draggable>
 
       {if @props.selected
-        <DeleteButton tool={this} {...@getDeleteButtonPosition()} />}
+        <DeleteButton tool={this} {...@getDeleteButtonPosition()}  getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />}
     </DrawingToolRoot>
 
   handleDrag: (e, d) ->

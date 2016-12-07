@@ -74,7 +74,7 @@ module.exports = React.createClass
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={deleteButtonPosition.x} y={deleteButtonPosition.y} />
+          <DeleteButton tool={this} x={deleteButtonPosition.x} y={deleteButtonPosition.y} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
 
           {if not @props.mark.closed and @props.mark.points.length and @state.mouseWithinViewer
             <line className="guideline" x1={lastPoint.x} y1={lastPoint.y} x2={@state.mouseX} y2={@state.mouseY} />}
@@ -83,7 +83,7 @@ module.exports = React.createClass
             <line className="guideline" x1={lastPoint.x} y1={lastPoint.y} x2={firstPoint.x} y2={firstPoint.y} />}
 
           {for point, i in @props.mark.points
-            <DragHandle key={i} x={point.x} y={point.y} scale={@props.scale} onDrag={@handleHandleDrag.bind this, i} />}
+            <DragHandle key={i} x={point.x} y={point.y} scale={@props.scale} onDrag={@handleHandleDrag.bind this, i} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />}
 
           {unless @props.mark.closed
             <g>

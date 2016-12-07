@@ -54,6 +54,11 @@ module.exports = React.createClass
     vertical = sizeRect?.height / @props.naturalHeight || 0
     {horizontal, vertical}
 
+  # get current transformation matrix
+  getScreenCurrentTransformationMatrix: ()->
+    svg = @refs.svgSubjectArea
+    matrix = svg.getScreenCTM()
+
   # transforms the event coordinates 
   # to points in the SVG coordinate system
   eventCoordsToSVGCoords: (x, y) ->
@@ -123,8 +128,8 @@ module.exports = React.createClass
       getEventOffset: this.getEventOffset
       onChange: @props.onChange
       preferences: @props.preferences
-      eventCoordsToSVGCoords: @eventCoordsToSVGCoords
       normalizeDifference: @normalizeDifference
+      getScreenCurrentTransformationMatrix: @getScreenCurrentTransformationMatrix
 
     for task, Component of tasks when Component.getSVGProps?
       for key, value of Component.getSVGProps hookProps
