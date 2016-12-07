@@ -9,11 +9,13 @@ module.exports = React.createClass
   displayName: 'Notification'
 
   propTypes:
+    data: React.PropTypes.object.isRequired
+    notification: React.PropTypes.object.isRequired
     project: React.PropTypes.object
     user: React.PropTypes.object.isRequired
-    notification: React.PropTypes.object.isRequired
 
   renderNotification: ->
+    console.log @props.notification.source_type
     switch @props.notification.source_type
       when 'Comment'
         <CommentNotification {...@props} />

@@ -5,6 +5,8 @@ import { Link } from 'react-router';
 import Notification from './notification.cjsx';
 import Paginator from '../../talk/lib/paginator.cjsx';
 import ZooniverseLogo from '../../partials/zooniverse-logo.cjsx';
+import getNotificationData from '../../lib/get-notification-data';
+import Loading from '../../components/loading-indicator.cjsx'
 
 export default class NotificationSection extends Component {
   constructor(props) {
@@ -14,8 +16,9 @@ export default class NotificationSection extends Component {
       error: null,
       firstMeta: { },
       lastMeta: { },
+      loading: false,
+      notificationData: [],
       notificationsMap: { },
-      notifications: [],
       page: 1,
     };
   }
@@ -59,6 +62,7 @@ export default class NotificationSection extends Component {
   }
 
   getNotifications(page) {
+    this.setState({ loading: true });
     let firstMeta;
     let lastMeta;
     return talkClient.type('notifications').get({ page, page_size: 5, section: this.props.section })
@@ -81,6 +85,10 @@ export default class NotificationSection extends Component {
         } else {
           firstMeta = lastMeta = meta;
         }
+
+        getNotificationData(newNotifications).then((notificationData) => {
+          this.setState({ notificationData, loading: false });
+        });
 
         this.setState({
           notifications: newNotifications,
@@ -120,9 +128,9 @@ export default class NotificationSection extends Component {
 
       if (unread.length === 0) return unread;
 
-      this.state.notifications.forEach((notification) => {
-        if (unread.indexOf(notification.id) > -1) {
-          notification.update({ delivered: true }).save();
+      this.state.notificationData.forEach((data) => {
+        if (unread.indexOf(data.notification.id) > -1) {
+          data.notification.update({ delivered: true }).save();
         }
       });
     }
@@ -197,12 +205,19 @@ export default class NotificationSection extends Component {
           </div>
         )}
 
-        {(this.props.expanded) && (
-          this.state.notifications.map((notification) => {
+        {this.state.loading && (
+          <span className="notification-section__container">
+            <Loading />
+          </span>
+        )}
+
+        {(this.props.expanded && !this.state.loading) && (
+          this.state.notificationData.map((item) => {
             return (
               <Notification
-                notification={notification}
-                key={notification.id}
+                data={item.data}
+                key={item.notification.id}
+                notification={item.notification}
                 user={this.props.user}
               />);
           })
