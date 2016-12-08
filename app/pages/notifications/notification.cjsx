@@ -15,7 +15,6 @@ module.exports = React.createClass
     user: React.PropTypes.object.isRequired
 
   renderNotification: ->
-    console.log @props.notification.source_type
     switch @props.notification.source_type
       when 'Comment'
         <CommentNotification {...@props} />
