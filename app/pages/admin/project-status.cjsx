@@ -12,37 +12,7 @@ WorkflowToggle = require '../../components/workflow-toggle'
 
 `import VersionList from './project-status/version-list';`
 `import ExperimentalFeatures from './project-status/experimental-features';`
-
-ProjectToggle = React.createClass
-  displayName: "ProjectToggle"
-
-  mixins: [SetToggle]
-
-  getDefaultProps: ->
-    project: null
-    field: null
-    trueLabel: "True"
-    falseLabel: "False"
-
-  getInitialState: ->
-    error: null
-    setting: {}
-
-  setterProperty: 'project'
-
-  render: ->
-    setting = @props.project[@props.field]
-    <span>
-      <label style={whiteSpace: 'nowrap'}>
-        <input type="radio" name={@props.field} value={true} data-json-value={true} checked={setting} disabled={@state.setting.private} onChange={@set.bind this, @props.field, true} />
-        {@props.trueLabel}
-      </label>
-      &emsp;
-      <label style={whiteSpace: 'nowrap'}>
-        <input type="radio" name={@props.field} value={false} data-json-value={true} checked={not setting} disabled={@state.setting.private} onChange={@set.bind this, @props.field, false} />
-        {@props.falseLabel}
-      </label>
-    </span>
+`import Toggle from './project-status/toggle';`
 
 ProjectRedirectToggle = React.createClass
   displayName: "ProjectRedirectToggle"
@@ -135,12 +105,12 @@ ProjectStatus = React.createClass
         <div className="project-status__section">
           <h4>Visibility Settings</h4>
           <ul className="project-status__section-list">
-            <li>Private: <ProjectToggle project={@props.project} field="private" trueLabel="Private" falseLabel="Public" /></li>
-            <li>Live: <ProjectToggle project={@props.project} field="live" trueLabel="Live" falseLabel="Development" /></li>
-            <li>Beta Requested: <ProjectToggle project={@props.project} field="beta_requested" /></li>
-            <li>Beta Approved: <ProjectToggle project={@props.project} field="beta_approved" /></li>
-            <li>Launch Requested: <ProjectToggle project={@props.project} field="launch_requested" /></li>
-            <li>Launch Approved: <ProjectToggle project={@props.project} field="launch_approved" /></li>
+            <li>Private: <Toggle project={@props.project} field="private" trueLabel="Private" falseLabel="Public" /></li>
+            <li>Live: <Toggle project={@props.project} field="live" trueLabel="Live" falseLabel="Development" /></li>
+            <li>Beta Requested: <Toggle project={@props.project} field="beta_requested" /></li>
+            <li>Beta Approved: <Toggle project={@props.project} field="beta_approved" /></li>
+            <li>Launch Requested: <Toggle project={@props.project} field="launch_requested" /></li>
+            <li>Launch Approved: <Toggle project={@props.project} field="launch_approved" /></li>
           </ul>
         </div>
         <ProjectRedirectToggle project={@props.project} />
