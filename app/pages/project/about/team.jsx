@@ -6,15 +6,20 @@ import counterpart from 'counterpart';
 import Avatar from '../../../partials/avatar';
 
 counterpart.registerTranslations('en', {
+  aboutPages: {
+    missingContent: {
+      team: 'This project has no team information.',
+    }
+  },
   projectRoles: {
-      title: 'The Team',
-      owner: 'Owner',
-      collaborator: 'Collaborator',
-      translator: 'Translator',
-      scientist: 'Researcher',
-      moderator: 'Moderator',
-      tester: 'Tester',
-      expert: 'Expert',
+    title: 'The Team',
+    owner: 'Owner',
+    collaborator: 'Collaborator',
+    translator: 'Translator',
+    scientist: 'Researcher',
+    moderator: 'Moderator',
+    tester: 'Tester',
+    expert: 'Expert',
   }
 });
 
@@ -48,7 +53,7 @@ const AboutProjectTeam = ({ pages, project, team }) => {
   const teamPage = pages.find(page => page.slug === 'team');
   const mainContent = (teamPage && teamPage.content && teamPage.content !== '') 
       ? teamPage.content 
-      : 'This project has no team information.';
+      : counterpart('aboutPages.missingContent.team');
   const aside = createTeamList(team);
 
   return <AboutPageLayout

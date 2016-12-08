@@ -15,7 +15,7 @@ counterpart.registerTranslations('en', {
 
 const AboutNav = ({ pages, projectPath }) => (
   <span>
-    {pages.map((page) => 
+    {pages.map(page => 
       <Link key={page.slug}
         to={`${projectPath}/about/${page.slug}`} 
         activeClassName="active"
