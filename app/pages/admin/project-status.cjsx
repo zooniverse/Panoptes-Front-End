@@ -6,46 +6,13 @@ moment = require 'moment'
 ChangeListener = require '../../components/change-listener'
 ProjectIcon = require '../../components/project-icon'
 AutoSave = require '../../components/auto-save'
-handleInputChange = require '../../lib/handle-input-change'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 WorkflowToggle = require '../../components/workflow-toggle'
 
 `import VersionList from './project-status/version-list';`
 `import ExperimentalFeatures from './project-status/experimental-features';`
 `import Toggle from './project-status/toggle';`
-
-ProjectRedirectToggle = React.createClass
-  displayName: "ProjectRedirectToggle"
-
-  mixins: [SetToggle]
-
-  getDefaultProps: ->
-    project: null
-    validUrlRegex: /https?:\/\/[\w-]+(\.[\w-]*)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?/
-    invalidUrl: "invalidUrl"
-
-  getInitialState: ->
-    error: null
-
-  updateRedirect:  (e) ->
-    _redirectUrl = this.refs.redirectUrl.value
-    if _redirectUrl?.match(@props.validUrlRegex) || _redirectUrl == ""
-      handleInputChange.call(@props.project, e)
-    else
-      @setState(error: @props.invalidUrl)
-
-  validUrlMessage: ->
-    if @state.error == @props.invalidUrl
-      "Invalid URL - must be in https?://format"
-
-  render: ->
-    <div className="project-status__section">
-      <h4>Project Redirect</h4>
-      <AutoSave resource={@props.project}>
-        <input type="text" name="redirect" ref="redirectUrl" value={@props.project.redirect} placeholder="External redirect" onBlur={@updateRedirect} onChange={handleInputChange.bind @props.project} />
-        <span>{ @validUrlMessage() }</span>
-      </AutoSave>
-    </div>
+`import RedirectToggle from './project-status/redirect-toggle';`
 
 ProjectStatus = React.createClass
   displayName: "ProjectStatus"
@@ -113,7 +80,7 @@ ProjectStatus = React.createClass
             <li>Launch Approved: <Toggle project={@props.project} field="launch_approved" /></li>
           </ul>
         </div>
-        <ProjectRedirectToggle project={@props.project} />
+        <RedirectToggle project={@props.project} />
         <ExperimentalFeatures project={@props.project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
