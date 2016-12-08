@@ -11,24 +11,7 @@ getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 WorkflowToggle = require '../../components/workflow-toggle'
 
 `import VersionList from './project-status/version-list';`
-
-EXPERIMENTAL_FEATURES = [
-  'crop'
-  'combo'
-  'dropdown'
-  'mini-course'
-  'hide classification summaries'
-  'worldwide telescope'
-  'hide previous marks'
-  'grid'
-  'workflow assignment'
-  'Gravity Spy Gold Standard'
-  'allow workflow query'
-  'expert comparison summary'
-  'persist annotations'
-  'shortcut'
-  'metadata based feedback'
-]
+`import ExperimentalFeatures from './project-status/experimental-features';`
 
 ProjectToggle = React.createClass
   displayName: "ProjectToggle"
@@ -60,37 +43,6 @@ ProjectToggle = React.createClass
         {@props.falseLabel}
       </label>
     </span>
-
-ProjectExperimentalFeatures = React.createClass
-  displayName: "ProjectExperimentalFeatures"
-
-  getDefaultProps: ->
-    project: null
-
-  setting: (task) ->
-    task in (@props.project?.experimental_tools or [])
-
-  updateTasks: (task) ->
-    tools = @props.project.experimental_tools or []
-    if task in tools
-      tools.splice(tools.indexOf(task), 1)
-    else
-      tools = tools.concat([task])
-    @props.project.update({experimental_tools: tools})
-
-  render: ->
-    <div className="project-status__section">
-      <h4>Experimental Features</h4>
-      <AutoSave resource={@props.project}>
-        <div className="project-status__section-table">
-          {EXPERIMENTAL_FEATURES.map (task) =>
-            <label key={task} className="project-status__section-table-row">
-              <input type="checkbox" name={task} checked={@setting(task)} onChange={@updateTasks.bind @, task} />
-              {task.charAt(0).toUpperCase() + task.slice(1)}
-            </label>}
-          </div>
-      </AutoSave>
-    </div>
 
 ProjectRedirectToggle = React.createClass
   displayName: "ProjectRedirectToggle"
@@ -192,7 +144,7 @@ ProjectStatus = React.createClass
           </ul>
         </div>
         <ProjectRedirectToggle project={@props.project} />
-        <ProjectExperimentalFeatures project={@props.project} />
+        <ExperimentalFeatures project={@props.project} />
         <div className="project-status__section">
           <h4>Workflow Settings</h4>
           <small>The workflow level dropdown is for the workflow assignment experimental feature.</small>
