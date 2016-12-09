@@ -1,5 +1,5 @@
 import React from 'react';
-import tasks from './tasks';
+import tasks from './tasks/index.coffee';
 
 const ClassificationSummary = (props) => {
   let body = 'No annotations';
