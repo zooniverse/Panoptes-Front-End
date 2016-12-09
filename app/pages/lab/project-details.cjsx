@@ -42,13 +42,23 @@ module.exports = React.createClass
         @setState({ researchers })
 
     avatar = @getAvatar()
-      .then ([avatar]) =>
+      .then (avatar) =>
+        # FireFox returns an object, other browsers return an array
+        if avatar.src?
+          avatar
+        else 
+          avatar = avatar[0]
         @setState {avatar}
       .catch (error) =>
         console.log error
 
     backround = @getBackground()
-      .then ([background]) =>
+      .then (background) =>
+        # FireFox returns an object, other browsers return an array
+        if background.src?
+          background
+        else 
+          background = background[0]
         @setState {background}
       .catch (error) =>
         console.log error
@@ -73,20 +83,29 @@ module.exports = React.createClass
   getAvatar: ->
     avatar = @props.project.get('avatar')
       .then (avatar) => if avatar? then avatar else null
-      .catch ->
+      .catch =>
         console.log error
 
   getBackground: ->
     background = @props.project.get('background')
       .then (background) => if background? then background else null
-      .catch (error) ->
+      .catch (error) =>
         console.log error
+
+  splitTags: (kind) ->
+    disciplineTagList = []
+    otherTagList = []
+    for t in @props.project.tags
+      if DISCIPLINES.some((el) -> el.value == t)
+        disciplineTagList.push(t)
+      else
+        otherTagList.push(t)
+    {disciplineTagList, otherTagList}
 
   render: ->
     # Failures on media GETs are acceptable here,
     # but the JSON-API lib doesn't cache failed requests,
     # so do it manually:
-
     avatarPlaceholder = <div className="form-help content-container">Drop an avatar image here</div>
     backgroundPlaceholder = <div className="form-help content-container">Drop a background image here</div>
 
