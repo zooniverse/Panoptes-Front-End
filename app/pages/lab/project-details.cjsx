@@ -127,7 +127,7 @@ module.exports = React.createClass
             <AutoSave resource={@props.project}>
               <span className="form-label">Announcement Banner</span>
               <br />
-              <textarea className="standard-input full" name="configuration.announcement" value={@props.project.configuration?.announcement} onChange={handleInputChange.bind @props.project} />
+              <MarkdownEditor className="full" name="configuration.announcement" rows="2" value={@props.project.configuration?.announcement} project={@props.project} onChange={handleInputChange.bind @props.project} onHelp={-> alert <MarkdownHelp/>}/>
             </AutoSave>
             <small className="form-help">This text will appear as a banner at the top of all your project's pages. Only use this when you've got a big important announcement to make!</small>
           </p>
