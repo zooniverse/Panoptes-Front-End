@@ -168,7 +168,7 @@ export default class NotificationSection extends Component {
   }
 
   renderHeader() {
-    const buttonType = this.props.expanded ? 'fa fa-times fa-lg' : 'fa fa-chevron-down fa-lg';
+    const buttonType = this.props.expanded ? 'fa fa-chevron-up fa-lg' : 'fa fa-chevron-down fa-lg';
 
     return (
       <div onClick={this.props.toggleSection}>
@@ -257,4 +257,5 @@ NotificationSection.propTypes = {
 
 NotificationSection.defaultProps = {
   expanded: false,
+  toggleSection: () => {},
 };
