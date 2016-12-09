@@ -41,9 +41,17 @@ module.exports = React.createClass
       apiClient.type('users').get(scientists).then (researchers) =>
         @setState({ researchers })
 
-    @getAvatar()
+    avatar = @getAvatar()
       .then ([avatar]) =>
         @setState {avatar}
+      .catch (error) =>
+        console.log error
+
+    backround = @getBackground()
+      .then ([background]) =>
+        @setState {background}
+      .catch (error) =>
+        console.log error
 
   splitTags: (kind) ->
     disciplineTagList = []
@@ -65,29 +73,29 @@ module.exports = React.createClass
   getAvatar: ->
     avatar = @props.project.get('avatar')
       .then (avatar) => if avatar? then avatar else null
+      .catch ->
+        console.log error
+
+  getBackground: ->
+    background = @props.project.get('background')
+      .then (background) => if background? then background else null
+      .catch (error) ->
+        console.log error
 
   render: ->
-    console.log "render @state.avatar", @state.avatar
     # Failures on media GETs are acceptable here,
     # but the JSON-API lib doesn't cache failed requests,
     # so do it manually:
 
-    @avatarGet ?= @props.project.get 'avatar'
-      .catch ->
-        null
-
-    @backgroundGet ?= @props.project.get 'background'
-      .catch ->
-        null
-
-    placeholder = <div className="form-help content-container">Drop an avatar image here</div>
+    avatarPlaceholder = <div className="form-help content-container">Drop an avatar image here</div>
+    backgroundPlaceholder = <div className="form-help content-container">Drop a background image here</div>
 
     <div>
       <p className="form-help">Input the basic information about your project, and set up its home page.</p>
       <div className="columns-container">
         <div>
           Avatar<br />
-          <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={@state.avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
+          <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={@state.avatar?.src} placeholder={avatarPlaceholder} onChange={@handleMediaChange.bind this, 'avatar'} />
           {if @state.avatarError
             <div className="form-help error">{@state.avatarError.toString()}</div>}
 
@@ -96,10 +104,7 @@ module.exports = React.createClass
           <hr />
 
           Background image<br />
-          <PromiseRenderer promise={@backgroundGet} then={(background) =>
-            placeholder = <div className="form-help content-container">Drop a background image here</div>
-            <ImageSelector maxSize={MAX_BACKGROUND_SIZE} src={background?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
-          } />
+          <ImageSelector maxSize={MAX_BACKGROUND_SIZE} src={@state.background?.src} placeholder={backgroundPlaceholder} onChange={@handleMediaChange.bind this, 'background'} />
           {if @state.backgroundError
             <div className="form-help error">{@state.backgroundError.toString()}</div>}
 
