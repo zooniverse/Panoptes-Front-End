@@ -41,6 +41,10 @@ module.exports = React.createClass
       apiClient.type('users').get(scientists).then (researchers) =>
         @setState({ researchers })
 
+    @getAvatar()
+      .then ([avatar]) =>
+        @setState {avatar}
+
   splitTags: (kind) ->
     disciplineTagList = []
     otherTagList = []
@@ -58,7 +62,12 @@ module.exports = React.createClass
       options.push Object.assign value: researcher.id, label: researcher.display_name
     options
 
+  getAvatar: ->
+    avatar = @props.project.get('avatar')
+      .then (avatar) => if avatar? then avatar else null
+
   render: ->
+    console.log "render @state.avatar", @state.avatar
     # Failures on media GETs are acceptable here,
     # but the JSON-API lib doesn't cache failed requests,
     # so do it manually:
@@ -71,15 +80,14 @@ module.exports = React.createClass
       .catch ->
         null
 
+    placeholder = <div className="form-help content-container">Drop an avatar image here</div>
+
     <div>
       <p className="form-help">Input the basic information about your project, and set up its home page.</p>
       <div className="columns-container">
         <div>
           Avatar<br />
-          <PromiseRenderer promise={@avatarGet} then={(avatar) =>
-            placeholder = <div className="form-help content-container">Drop an avatar image here</div>
-            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
-          } />
+          <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={@state.avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
           {if @state.avatarError
             <div className="form-help error">{@state.avatarError.toString()}</div>}
 
