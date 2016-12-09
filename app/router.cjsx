@@ -64,7 +64,6 @@ module.exports =
       <Route path="favorites" component={require('./pages/collections/favorites-list')} />
       <Route path="collections" component={require('./pages/collections/collections-list')} />
       <Route path="message" component={require './pages/profile/private-message'} />
-      <Route path="stats" component={require './pages/profile/stats'} />
     </Route>
 
     <Route path="inbox" component={require './talk/inbox'} />
@@ -138,7 +137,6 @@ module.exports =
         <Route path="favorites" component={require('./pages/collections/favorites-list')} />
         <Route path="collections" component={require('./pages/collections/collections-list')} />
         <Route path="message" component={require './pages/profile/private-message'} />
-        <Route path="stats" component={require './pages/profile/stats'} />
       </Route>
     </Route>
 
@@ -224,6 +222,5 @@ module.exports =
       else
         require './pages/dev-classifier'
     } />
-    <Route path="dev/ribbon" component={require './components/classifications-ribbon'} />
     <Route path="*" component={require './pages/not-found'} />
   </Route>
