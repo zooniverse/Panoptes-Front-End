@@ -33,8 +33,7 @@ module.exports = React.createClass
     content = [
       <img key="image" alt="" src={@state.avatar ? @props.defaultAvatarSrc} />
       <div key="label" className="label">
-        <span className="owner">{@props.project.links.owner?.display_name}</span><br />
-        <span className="display-name"><strong>{@props.project.display_name}</strong></span>
+        <span className="display-name"><strong>{@props.project.name}</strong></span>
       </div>
       <div key="badge" className="badge">{@props.badge}</div> if @props.badge
     ]

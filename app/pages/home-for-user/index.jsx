@@ -42,6 +42,7 @@ const HomePageForUser = React.createClass({
       backgroundSrc: '',
       avatarSrc: '',
       showNews: false,
+      totalClassifications: 0,
       ribbonData: [],
       loading: false,
       error: null,
@@ -95,8 +96,8 @@ const HomePageForUser = React.createClass({
     });
 
     user.get('avatar')
-    .catch(() => {
-      return [];
+    .catch((error) => {
+      console.log('Something went wrong. Error: ', error);
     })
     .then((avatars) => {
       const avatar = [].concat(avatars)[0];
@@ -113,6 +114,9 @@ const HomePageForUser = React.createClass({
       this.setState({
         ribbonData: ribbonData,
         updatedProjects: updatedProjects,
+        totalClassifications: ribbonData.reduce((total, project) => {
+          return total + project.classifications;
+        }, 0)
       });
     })
     .catch((error) => {
@@ -208,12 +212,15 @@ const HomePageForUser = React.createClass({
             <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
               <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
-              <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
+              <div className="home-page-for-user__welcome">
+                Hello {this.props.user.display_name},<br/>
+                you've made {this.state.totalClassifications} classifications to date.
+              </div>
 
               {this.renderMenu(OpenSectionComponent)}
 
               {OpenSectionComponent && (
-                <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
+                <OpenSectionComponent projects={this.state.ribbonData} user={this.props.user} onClose={this.deselectSection} />
               )}
             </div>
           )}

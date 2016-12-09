@@ -10,8 +10,9 @@ function getUserClassificationCounts(user) {
     const projectIDs = activePreferences.map((projectPreference) => {
       return projectPreference.links.project;
     });
-    return apiClient.type('projects').get({ id: projectIDs, cards: true, page_size: activePreferences.length }).catch(() => {
-      return null;
+    return apiClient.type('projects').get({ id: projectIDs, cards: true, page_size: activePreferences.length })
+    .catch((error) => {
+      console.log('Something went wrong. Error: ', error);
     })
     .then((projects) => {
       const classifications = activePreferences.reduce((counts, projectPreference) => {

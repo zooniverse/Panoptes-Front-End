@@ -6,6 +6,7 @@ function getUserRibbonData(user) {
     return projects.map((project, i) => {
       if (projects[i] !== null) {
         return {
+          avatar_src: projects[i].avatar_src,
           id: projects[i].id,
           slug: projects[i].slug,
           name: projects[i].display_name,
