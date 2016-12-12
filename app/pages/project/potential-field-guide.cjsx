@@ -5,6 +5,7 @@ FieldGuide = require '../../components/field-guide'
 
 module.exports = React.createClass
   getDefaultProps: ->
+    onHomePage: false
     project: null
 
   getInitialState: ->
@@ -49,7 +50,9 @@ module.exports = React.createClass
     @setState revealed: not @state.revealed
 
   render: ->
-    if @state.guide? and @state.guide.items.length isnt 0
+    activeFieldGuide = @state.guide? and @state.guide.items.length isnt 0
+
+    if activeFieldGuide and !@props.onHomePage
       <Pullout className="field-guide-pullout" side="right" open={@state.revealed}>
         <button type="button" className="field-guide-pullout-toggle" onClick={@toggleFieldGuide}>
           <strong>Field guide</strong>

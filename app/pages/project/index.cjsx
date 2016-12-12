@@ -218,6 +218,7 @@ ProjectPage = React.createClass
 
   render: ->
     projectPath = "/projects/#{@props.project.slug}"
+    onHomePage = projectPath is @props.location.pathname
 
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
@@ -311,7 +312,7 @@ ProjectPage = React.createClass
       {unless @props.project.launch_approved or @props.project.beta_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
 
-      <PotentialFieldGuide project={@props.project} />
+      <PotentialFieldGuide project={@props.project} onHomePage={onHomePage} />
     </div>
 
 
