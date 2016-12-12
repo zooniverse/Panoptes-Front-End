@@ -2,12 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import HomePageSection from './generic-section';
 import ProjectIcon from '../../components/project-icon';
 
-const initialState = {
-  loading: false,
-  error: null,
-  projects: [],
-};
-
 const RecentProjectsSection = ({ onClose, projects, updatedProjects }) => {
   return (
     <HomePageSection
