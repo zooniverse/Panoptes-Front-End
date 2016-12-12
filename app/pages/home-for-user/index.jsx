@@ -134,7 +134,7 @@ const HomePageForUser = React.createClass({
   recentlyUpdatedProjects(data) {
     return data.sort((a, b) => {
       return new Date(b.updated_at) - new Date(a.updated_at);
-    }).splice(0, 5);
+    });
   },
 
   findProjectLink(project) {
