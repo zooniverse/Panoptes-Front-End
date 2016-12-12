@@ -7,6 +7,7 @@
     "react/no-multi-comp": 0,
     "arrow-body-style": ["warn", "always"],
     "no-else-return": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "multiline-ternary": ["warn", "never"]
   }
 }
