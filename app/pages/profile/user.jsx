@@ -9,7 +9,6 @@ counterpart.registerTranslations('en', {
   profile: {
     nav: {
       comments: 'Recent comments',
-      stats: 'Stats',
       collections: 'Collections',
       favorites: 'Favorites',
       message: 'Message',
@@ -75,20 +74,11 @@ class ProfileUser extends Component {
   renderUserLink() {
     const baseLink = this.props.project ? `/projects/${this.props.project.slug}/` : '/';
     const classes = classNames({ 'about-tabs': !!this.props.project });
-
-    if (this.props.user === this.props.profileUser) {
-      return (
-        <Link to={`${baseLink}users/${this.props.profileUser.login}/stats`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'stats')}>
-          <Translate content="profile.nav.stats" />
-        </Link>
-      );
-    } else {
-      return (
-        <Link to={`${baseLink}users/${this.props.profileUser.login}/message`} className={classes} activeClassName="active" onClick={this.logMessageClick}>
-          <Translate content="profile.nav.message" />
-        </Link>
-      );
-    }
+    return (
+      <Link to={`${baseLink}users/${this.props.profileUser.login}/message`} className={classes} activeClassName="active" onClick={this.logMessageClick}>
+        <Translate content="profile.nav.message" />
+      </Link>
+    );
   }
 
   renderNavLinks() {
