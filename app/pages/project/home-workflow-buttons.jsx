@@ -81,7 +81,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     );
 
     const learnMore = (
-      <Link to={`/projects/${this.props.project.slug}/about`} className="standard-button">
+      <Link to={`/projects/${this.props.project.slug}/about`} className="standard-button learn-more">
         Learn More
       </Link>
     );
@@ -101,8 +101,8 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     return (
       <div>
         <div className="project-home-page__content">
-          {getStarted}
           {learnMore}
+          {getStarted}
         </div>
 
         {this.state.showWorkflows && (

@@ -1,39 +1,18 @@
 import React from 'react';
 import { sugarApiClient } from 'panoptes-client/lib/sugar';
 import { Link } from 'react-router';
-import talkClient from 'panoptes-client/lib/talk-client';
-import apiClient from 'panoptes-client/lib/api-client';
-import getSubjectLocation from '../../lib/get-subject-location';
 
 export default class TalkStatus extends React.Component {
 
   constructor() {
     super();
     this.state = {
-      talkImages: [],
       activeUsers: 0,
     };
   }
 
   componentWillMount() {
     this.talkItems();
-    talkClient.type('comments').get({ section: `project-${this.props.project.id}`, page_size: 3, sort: '-created_at', focus_type: 'Subject' })
-    .then((comments) => {
-      const talkImages = comments.map((comment) => {
-        return apiClient.type('subjects').get(comment.focus_id)
-        .then((image) => {
-          return image;
-        });
-      });
-      Promise.all(talkImages).then((images) => {
-        if (images.length < 3) {
-          do {
-            images.push('/assets/default-project-background.jpg');
-          } while (images.length < 3);
-        }
-        this.setState({ talkImages: images });
-      });
-    });
   }
 
   talkItems() {
@@ -50,31 +29,12 @@ export default class TalkStatus extends React.Component {
     const peopleAmount = this.state.activeUsers === 1 ? 'person is' : 'people are';
 
     return (
-      <div className="project-home-page__section">
-
-        {this.state.talkImages.map((image) => {
-          if (typeof (image) === 'string') {
-            return (
-              <div key={image.id} className="project-home-page__talk-image">
-                <img alt="" src={image} />
-              </div>
-            );
-          }
-          return (
-            <div key={image.id} className="project-home-page__talk-image">
-              <img alt="" src={getSubjectLocation(image).src} />
-            </div>
-          );
-        })}
-
-        <div className="project-home-page__talk-stat">
-          <span>
-            <strong>{this.state.activeUsers}</strong> {peopleAmount} talking about <strong>{this.props.project.display_name}
-            </strong> right now.
-          </span>
-          <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in standard-button">Join In</Link>
-        </div>
-
+      <div className="project-home-page__talk-stat">
+        <span>
+          <strong>{this.state.activeUsers}</strong> {peopleAmount} talking about <strong>{this.props.project.display_name}
+          </strong> right now.
+        </span>
+        <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in standard-button">Join In</Link>
       </div>
     );
   }

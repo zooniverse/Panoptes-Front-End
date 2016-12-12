@@ -1,7 +1,9 @@
 import React from 'react';
 import markdownz from 'markdownz';
-import FinishedBanner from './finished-banner';
-import TalkStatus from './talk-status';
+import apiClient from 'panoptes-client/lib/api-client';
+import talkClient from 'panoptes-client/lib/talk-client';
+import FinishedBanner from './finished-banner.cjsx';
+import TalkImages from './talk-images';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
 
@@ -13,9 +15,25 @@ export default class ProjectHomePage extends React.Component {
 
     this.state = {
       showWorkflowButtons: false,
+      talkImages: [],
     };
 
     this.showWorkflowButtons = this.showWorkflowButtons.bind(this);
+  }
+
+  componentWillMount() {
+    talkClient.type('comments').get({ section: `project-${this.props.project.id}`, page_size: 3, sort: '-created_at', focus_type: 'Subject' })
+    .then((comments) => {
+      const talkImages = comments.map((comment) => {
+        return apiClient.type('subjects').get(comment.focus_id)
+        .then((image) => {
+          return image;
+        });
+      });
+      Promise.all(talkImages).then((images) => {
+        this.setState({ talkImages: images });
+      });
+    });
   }
 
   componentDidMount() {
@@ -56,6 +74,8 @@ export default class ProjectHomePage extends React.Component {
   }
 
   render() {
+    const renderImages = this.state.talkImages.length > 2;
+
     return (
       <div className="project-home-page">
         <div className="project-home-page__introduction">
@@ -75,9 +95,11 @@ export default class ProjectHomePage extends React.Component {
 
         </div>
 
-        <TalkStatus project={this.props.project} user={this.context.user} />
+        {renderImages && (
+          <TalkImages images={this.state.talkImages} project={this.props.project} user={this.context.user} />
+        )}
 
-        <ProjectMetadata project={this.props.project} activeWorkflows={this.props.activeWorkflows} />
+        <ProjectMetadata project={this.props.project} activeWorkflows={this.props.activeWorkflows} showTalkStatus={!renderImages} />
 
         <div className="project-home-page__section">
           {this.renderResearcherWords()}
@@ -115,6 +137,7 @@ ProjectHomePage.propTypes = {
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,
     experimental_tools: React.PropTypes.arrayOf(React.PropTypes.string),
+    id: React.PropTypes.string,
     introduction: React.PropTypes.string,
   }).isRequired,
   splits: React.PropTypes.object,

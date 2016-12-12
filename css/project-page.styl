@@ -178,11 +178,19 @@
   &__content
     flex: auto
     margin: 5vh 10vw 8vh 10vw
-    width: 100%
 
     .get-started
-      background: TEAL
-      border-color: TEAL
+      background: white
+      color: TEAL
+
+      &:hover
+        background: TEAL
+        border-color: TEAL
+        color: white
+
+    .learn-more
+      &:hover
+        color: TEAL
 
     h4
       color: #0f7481
@@ -192,16 +200,16 @@
     background-color: white
     color: DARK_BLUE
     display: flex
-    flex: auto
-    width: 160px
-    padding: 3em 3em 4em 2em
+    flex: 2 0 auto
+    width: 250px
+    padding: 3em 4vw
     position: relative
 
     img
       border-radius: 50%
       flex-shrink: 0
       height: 5em
-      margin: 3em 1em
+      margin: 3em 0.5em
       vertical-align: middle
       width: 5em
 
@@ -221,7 +229,7 @@
 
   &__about-text
     background-color: #0f7481
-    flex: auto
+    flex: 3 0 auto
     padding: 3em 3em 4em 3em
     text-align: center
     width: 600px
@@ -231,7 +239,8 @@
 
   &__talk-image
     background: black
-    flex: auto
+    border:0.1em solid white
+    flex: 2 0 auto
     width: 240px
 
     img
@@ -242,7 +251,7 @@
     background: white
     color: DARK_BLUE
     display: flex
-    flex: auto
+    flex: 2 0 auto
     flex-direction: column
     justify-content: center
     min-height: 100px
@@ -343,11 +352,13 @@
       margin: 0 auto
 
 .project-disclaimer
-  justify-content: center
-  text-align: center
-  padding: 2em 0
+  background-color: #0b517c
+  color: rgba(white, 0.5)
   font-size: .75em
-  color: #CDCDCD
+  justify-content: center
+  margin: 0
+  padding: 2em 0em
+  text-align: center
 
 .collection-page-with-project-context,
 .project-text-content
@@ -390,6 +401,7 @@
 .project-metadata
   background: #eff2f5
   color: DARK_BLUE
+  flex: 7 2 auto
   padding: 3em 10vw
 
   &-header

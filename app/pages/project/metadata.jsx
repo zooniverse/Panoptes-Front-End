@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import TalkStatus from './talk-status';
 
 class ProjectMetadataStat extends React.Component {
   render() {
@@ -76,21 +77,27 @@ class ProjectMetadata extends React.Component {
     const statsLink = `/projects/${project.slug}/stats`;
 
     return (
-      <div className="project-metadata">
-        <div className="project-metadata-header">
-          <Link className="project-metadata-header__link" to={statsLink}>
-            <span>{project.display_name}{' '}Statistics</span>
-          </Link>
-        </div>
+      <div className="project-home-page__section">
+        <div className="project-metadata">
+          <div className="project-metadata-header">
+            <Link className="project-metadata-header__link" to={statsLink}>
+              <span>{project.display_name}{' '}Statistics</span>
+            </Link>
+          </div>
 
-        {this.renderStatus()}
+          {this.renderStatus()}
 
-        <div className="project-metadata-stats">
-          <ProjectMetadataStat label="Volunteers" value={project.classifiers_count.toLocaleString()} />
-          <ProjectMetadataStat label="Classifications" value={this.state.classificationsCount.toLocaleString()} />
-          <ProjectMetadataStat label="Subjects" value={project.subjects_count.toLocaleString()} />
-          <ProjectMetadataStat label="Completed Subjects" value={project.retired_subjects_count.toLocaleString()} />
+          <div className="project-metadata-stats">
+            <ProjectMetadataStat label="Volunteers" value={project.classifiers_count.toLocaleString()} />
+            <ProjectMetadataStat label="Classifications" value={this.state.classificationsCount.toLocaleString()} />
+            <ProjectMetadataStat label="Subjects" value={project.subjects_count.toLocaleString()} />
+            <ProjectMetadataStat label="Completed Subjects" value={project.retired_subjects_count.toLocaleString()} />
+          </div>
+
         </div>
+        {this.props.showTalkStatus && (
+          <TalkStatus project={this.props.project} />
+        )}
       </div>
     );
   }
@@ -103,11 +110,13 @@ ProjectMetadata.contextTypes = {
 ProjectMetadata.propTypes = {
   activeWorkflows: React.PropTypes.array,
   project: React.PropTypes.object.isRequired,
+  showTalkStatus: React.PropTypes.bool,
 };
 
 ProjectMetadata.defaultProps = {
   activeWorkflows: [],
   project: {},
+  showTalkStatus: false,
 };
 
 export default ProjectMetadata;
