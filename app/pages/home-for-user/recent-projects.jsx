@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import HomePageSection from './generic-section';
 import ProjectIcon from '../../components/project-icon';
 
@@ -9,6 +10,10 @@ class RecentProjectsSection extends Component {
     this.state = {
       allProjects: false,
     };
+  }
+  
+  componentDidUpdate() {
+    !this.state.allProjects && ReactDOM.findDOMNode(this).scrollIntoView();
   }
 
   toggleAllProjects() {
@@ -21,6 +26,7 @@ class RecentProjectsSection extends Component {
     const { onClose, updatedProjects } = this.props;
     const visibleProjects = updatedProjects.slice(0, 5);
     const hiddenProjects = updatedProjects.slice(5);
+    const className = this.state.allProjects ? 'open' : 'closed'
     return (
       <HomePageSection
         title="Recent projects"
@@ -30,35 +36,35 @@ class RecentProjectsSection extends Component {
         ? <div className="home-page-section__header-label">
             <p> You have no recent projects. </p>
           </div>
-        : <div className="project-card-list">
-          {visibleProjects.map((project) => {
-            return (
-              <span key={project.id}>
-                <ProjectIcon project={project} badge={project.classifications} />
-                &ensp;
-              </span>
-            );
-          })}
+        : <div>
+            <div className="project-card-list">
+            {visibleProjects.map((project) => {
+              return (
+                <span key={project.id}>
+                  <ProjectIcon project={project} badge={project.classifications} />
+                  &ensp;
+                </span>
+              );
+            })}
+            </div>
+            <div className={`project-card-list ${className}`}>
+            {hiddenProjects.map((project) => {
+              return (
+                <span key={project.id}>
+                  <ProjectIcon project={project} badge={project.classifications} />
+                  &ensp;
+                </span>
+              );
+            })}
+            </div>
         </div>}
-        <div className="home-page-section">
-          <header className="home-page-section__header">
-            <button type="button" className="outlined-button" onClick={this.toggleAllProjects}>
-              <div className="home-page-section__header-label">
-                See all
-                <br />
-                <i className={this.state.allProjects ? "fa fa-chevron-up" : "fa fa-chevron-down"}></i>
-              </div>
-            </button>
-          </header>
-        </div>
-        {this.state.allProjects && hiddenProjects.map((project) => {
-          return (
-            <span key={project.id}>
-              <ProjectIcon project={project} badge={project.classifications} />
-              &ensp;
-            </span>
-          );
-        })}
+        <button type="button" className="outlined-button" onClick={this.toggleAllProjects}>
+          <span className="home-page-section__header-label">
+            See all
+            <br />
+            <i className={this.state.allProjects ? "fa fa-chevron-up" : "fa fa-chevron-down"}></i>
+          </span>
+        </button>
       </HomePageSection>
     );
   }
