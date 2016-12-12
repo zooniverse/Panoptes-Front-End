@@ -31,7 +31,7 @@ counterpart.registerTranslations 'en',
 
     ### Deadline
 
-    We will begin reviewing proposals from December 4th 2016, but project proposals are welcomed until January 31st 2017.
+    Applicants can submit project proposals until January 31st, 2017.
 
 
     [SUBMIT A BIOMEDICAL PROPOSAL](https://goo.gl/forms/uUGdO5CpWDNFE5Uz2)
@@ -55,7 +55,7 @@ counterpart.registerTranslations 'en',
     5. 	We will not accept projects for which the material has previously been edited, i.e. the novels of Jane Austen.
 
     ### Deadline
-    Applicants can submit project proposals until February 1st, 2017.
+    Applicants can submit project proposals until January 31st, 2017.
 
 
     [SUBMIT A TEXT TRANSCRIPTION PROPOSAL](https://goo.gl/forms/VZX5IdlK59B1eBez2)
