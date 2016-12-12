@@ -33,6 +33,7 @@ RecentProjectsSection.propTypes = {
 };
 
 RecentProjectsSection.defaultProps = {
+  onClose: () => {},
   projects: [],
   updatedProjects: [],
 };
