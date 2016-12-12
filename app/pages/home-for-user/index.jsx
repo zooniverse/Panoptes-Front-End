@@ -134,7 +134,7 @@ const HomePageForUser = React.createClass({
   recentlyUpdatedProjects(data) {
     return data.sort((a, b) => {
       return new Date(b.updated_at) - new Date(a.updated_at);
-    }).splice(0, 3);
+    }).splice(0, 5);
   },
 
   findProjectLink(project) {
@@ -220,7 +220,11 @@ const HomePageForUser = React.createClass({
               {this.renderMenu(OpenSectionComponent)}
 
               {OpenSectionComponent && (
-                <OpenSectionComponent projects={this.state.ribbonData} user={this.props.user} onClose={this.deselectSection} />
+                <OpenSectionComponent
+                  updatedProjects={this.state.updatedProjects}
+                  projects={this.state.ribbonData}
+                  onClose={this.deselectSection}
+                />
               )}
             </div>
           )}

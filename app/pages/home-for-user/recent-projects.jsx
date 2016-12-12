@@ -1,56 +1,46 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import HomePageSection from './generic-section';
-import { Link } from 'react-router';
 import ProjectIcon from '../../components/project-icon';
-import apiClient from 'panoptes-client/lib/api-client';
 
-const RecentProjectsSection = React.createClass({
-  propTypes: {
-    onClose: React.PropTypes.func,
-  },
+const initialState = {
+  loading: false,
+  error: null,
+  projects: [],
+};
 
-  getInitialState() {
-    return {
-      loading: false,
-      error: null,
-      projects: [],
-      avatars: {},
-    };
-  },
+const RecentProjectsSection = ({ onClose, projects, updatedProjects }) => {
+  return (
+    <HomePageSection
+      title="Recent projects"
+      onClose={onClose}
+    >
+      {(updatedProjects === 0)
+      ? <div className="home-page-section__header-label">
+          <p> You have no recent projects. </p>
+        </div>
+      : <div className="project-card-list">
+        {updatedProjects.map((project) => {
+          return (
+            <span key={project.id}>
+              <ProjectIcon project={project} badge={project.classifications} />
+              &ensp;
+            </span>
+          );
+        })}
+      </div>}
+    </HomePageSection>
+  );
+};
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.projects !== nextProps.projects) {
-      this.setState({
-        projects: nextProps.projects,
-      });
-    }
-  },
+RecentProjectsSection.propTypes = {
+  onClose: React.PropTypes.func.isRequired,
+  projects: React.PropTypes.array.isRequired,
+  updatedProjects: React.PropTypes.array.isRequired,
+};
 
-  render() {
-    return (
-      <HomePageSection
-        title="Recent projects"
-        loading={this.state.loading}
-        error={this.state.error}
-        onClose={this.props.onClose}
-      >
-        {(this.props.projects === 0)
-        ? <div className="home-page-section__header-label">
-            <p> You have no recent projects. </p>
-          </div>
-        : <div className="project-card-list">
-          {this.props.projects.map((project) => {
-            return (
-              <span key={project.id}>
-                <ProjectIcon project={project} badge={project.classifications} />
-                &ensp;
-              </span>
-            );
-          })}
-        </div>}
-      </HomePageSection>
-    );
-  },
-});
+RecentProjectsSection.defaultProps = {
+  projects: [],
+  updatedProjects: [],
+};
 
 export default RecentProjectsSection;
