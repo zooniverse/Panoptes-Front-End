@@ -4,7 +4,7 @@ ReactDOM = require 'react-dom'
 TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
-FinishedBanner = require './finished-banner'
+`import FinishedBanner from './finished-banner'`
 Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
