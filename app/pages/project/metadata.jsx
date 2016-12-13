@@ -77,7 +77,7 @@ class ProjectMetadata extends React.Component {
     const statsLink = `/projects/${project.slug}/stats`;
 
     return (
-      <div className="project-home-page__section">
+      <div className="project-home-page__container">
         <div className="project-metadata">
           <div className="project-metadata-header">
             <Link className="project-metadata-header__link" to={statsLink}>

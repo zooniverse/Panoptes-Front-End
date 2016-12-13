@@ -168,6 +168,10 @@
         border-color: white
         color: black
 
+  &__container
+    display: flex
+    flex-flow: row wrap
+
   &__description
     max-width: 400px
     font-size: 2em
@@ -177,7 +181,7 @@
 
   &__content
     flex: auto
-    margin: 5vh 10vw 8vh 10vw
+    padding: 5vh 10vw 8vh 10vw
 
     .get-started
       background: white
@@ -229,10 +233,13 @@
 
   &__about-text
     background-color: #0f7481
-    flex: 3 0 auto
+    flex: 3 1 auto
     padding: 3em 3em 4em 3em
     text-align: center
     width: 600px
+
+    img
+      max-width: 100%
 
     p
       line-height: 1.75
@@ -264,6 +271,7 @@
       margin-bottom: 0.75em
 
     .join-in
+      background-color: white
       border: 2px solid DARK_BLUE
       color: DARK_BLUE
       width: 4em

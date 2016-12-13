@@ -83,6 +83,12 @@ ProjectPage = React.createClass
     @context.geordi?.forget ['projectToken']
 
   componentWillReceiveProps: (nextProps, nextContext) ->
+    projLanding = document.getElementById('projectLandingIntro')
+    if projLanding
+      sectionHeight = projLanding.getBoundingClientRect().bottom;
+      if @state.backgroundHeight isnt sectionHeight
+        @setState backgroundHeight: sectionHeight
+
     if nextProps.project isnt @props.project
       @fetchInfo nextProps.project
       @getAllWorkflows(nextProps.project)
@@ -218,6 +224,7 @@ ProjectPage = React.createClass
 
   render: ->
     projectPath = "/projects/#{@props.project.slug}"
+    onHomePage = projectPath is @props.location.pathname
 
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
@@ -232,6 +239,10 @@ ProjectPage = React.createClass
 
     if @state.background?
       backgroundStyle = backgroundImage: "url('#{@state.background.src}')"
+      if onHomePage
+        backgroundStyle.height = @state.backgroundHeight
+      else
+        backgroundStyle.height = "auto"
 
     <div className="project-page">
       <div className="project-background" style={backgroundStyle}></div>

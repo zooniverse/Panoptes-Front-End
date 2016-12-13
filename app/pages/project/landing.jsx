@@ -22,10 +22,13 @@ export default class ProjectHomePage extends React.Component {
   }
 
   componentWillMount() {
-    talkClient.type('comments').get({ section: `project-${this.props.project.id}`, page_size: 3, sort: '-created_at', focus_type: 'Subject' })
+    talkClient.type('comments').get({ section: `project-${this.props.project.id}`, page_size: 6, sort: '-created_at', focus_type: 'Subject' })
     .then((comments) => {
-      const talkImages = comments.map((comment) => {
-        return apiClient.type('subjects').get(comment.focus_id)
+      const subjectIds = comments.map(x => x.focus_id);
+      const uniqueImages = [...new Set(subjectIds)];
+      uniqueImages.splice(3, 3);
+      const talkImages = uniqueImages.map((id) => {
+        return apiClient.type('subjects').get(id)
         .then((image) => {
           return image;
         });
@@ -78,7 +81,7 @@ export default class ProjectHomePage extends React.Component {
 
     return (
       <div className="project-home-page">
-        <div className="project-home-page__introduction">
+        <div id="projectLandingIntro" className="project-home-page__introduction">
           <FinishedBanner project={this.props.project} />
 
           <div className="project-home-page__description">{this.props.project.description}</div>
