@@ -70,7 +70,7 @@ export default class ProjectHomePage extends React.Component {
 
         <div>
           <h4>Words from the researcher</h4>
-          <span>&quot;Here are some inspiring words about how much we need your help!&quot;</span>
+          <span>&quot;{this.props.project.researcher_quote}&quot;</span>
         </div>
       </div>
     );
@@ -81,7 +81,7 @@ export default class ProjectHomePage extends React.Component {
 
     return (
       <div className="project-home-page">
-        <div id="projectLandingIntro" className="project-home-page__introduction">
+        <div id="projectLandingIntro" className="project-home-page__introduction call-to-action-container">
           <FinishedBanner project={this.props.project} />
 
           <div className="project-home-page__description">{this.props.project.description}</div>
@@ -104,8 +104,10 @@ export default class ProjectHomePage extends React.Component {
 
         <ProjectMetadata project={this.props.project} activeWorkflows={this.props.activeWorkflows} showTalkStatus={!renderImages} />
 
-        <div className="project-home-page__section">
-          {this.renderResearcherWords()}
+        <div className="project-home-page__container">
+
+          {this.props.project.researcher_quote && (
+            this.renderResearcherWords())}
 
           <div className="project-home-page__about-text">
             <h4>About {this.props.project.display_name}</h4>
@@ -142,6 +144,7 @@ ProjectHomePage.propTypes = {
     experimental_tools: React.PropTypes.arrayOf(React.PropTypes.string),
     id: React.PropTypes.string,
     introduction: React.PropTypes.string,
+    researcher_quote: React.PropTypes.string,
   }).isRequired,
   splits: React.PropTypes.object,
 };

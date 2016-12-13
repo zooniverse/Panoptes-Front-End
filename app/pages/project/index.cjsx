@@ -68,6 +68,8 @@ ProjectPage = React.createClass
     selectedWorkflow: null
 
   componentDidMount: ->
+    this.resizeBackground()
+    addEventListener "resize", this.resizeBackground
     @context.setAppHeaderVariant 'demoted'
     unless @props.user?
       @context.revealSiteHeader()
@@ -77,18 +79,13 @@ ProjectPage = React.createClass
     @context.geordi?.remember projectToken: @props.project?.slug
 
   componentWillUnmount: ->
+    removeEventListener "resize", this.resizeBackground
     @context.setAppHeaderVariant null
     document.documentElement.classList.remove 'on-project-page'
     @updateSugarSubscription null
     @context.geordi?.forget ['projectToken']
 
   componentWillReceiveProps: (nextProps, nextContext) ->
-    projLanding = document.getElementById('projectLandingIntro')
-    if projLanding
-      sectionHeight = projLanding.getBoundingClientRect().bottom;
-      if @state.backgroundHeight isnt sectionHeight
-        @setState backgroundHeight: sectionHeight
-
     if nextProps.project isnt @props.project
       @fetchInfo nextProps.project
       @getAllWorkflows(nextProps.project)
@@ -106,6 +103,13 @@ ProjectPage = React.createClass
     if nextProps.preferences?.preferences? and @state.selectedWorkflow?
       if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow.id
         @getSelectedWorkflow(nextProps.project, nextProps.preferences)
+
+  resizeBackground: ->
+    projLanding = document.getElementById('projectLandingIntro')
+    if projLanding
+      sectionHeight = projLanding.getBoundingClientRect().bottom;
+      if @state.backgroundHeight isnt sectionHeight
+        @setState backgroundHeight: sectionHeight
 
   fetchInfo: (project) ->
     @setState
