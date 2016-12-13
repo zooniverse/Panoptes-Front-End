@@ -8,6 +8,7 @@ React = require 'react'
 `import AboutProject from './pages/project/about/index';`
 `import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
 `import AboutProjectTeam from './pages/project/about/team';`
+`import UserSettingsList from './pages/admin/user-settings-list';`
 `import ProjectStatusList from './pages/admin/project-status-list';`
 `import ProjectStatus from './pages/admin/project-status';`
 
@@ -208,7 +209,7 @@ module.exports =
     </Route>
 
     <Route path="admin" component={require './pages/admin'}>
-      <IndexRoute component={require './pages/admin/user-settings'} />
+      <IndexRoute component={UserSettingsList} />
       <Route path="project_status" component={ProjectStatusList} />
       <Route path="project_status/:owner/:name" component={ProjectStatus} />
     </Route>
