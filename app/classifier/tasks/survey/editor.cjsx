@@ -7,7 +7,7 @@ surveyEditorHelp = require './editor-help'
 AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
 NextTaskSelector = require '../next-task-selector'
-MediaArea = require '../../../components/media-area'
+`import MediaArea from '../../../pages/lab/media-area/';`
 {Markdown} = require 'markdownz'
 Papa = require 'papaparse'
 
