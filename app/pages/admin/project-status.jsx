@@ -16,6 +16,7 @@ class ProjectStatus extends Component {
     super(props);
     this.onChangeWorkflowLevel = this.onChangeWorkflowLevel.bind(this);
     this.getWorkflows = this.getWorkflows.bind(this);
+    this.rerender = this.rerender.bind(this);
     this.renderError = this.renderError.bind(this);
     this.renderWorkflows = this.renderWorkflows.bind(this);
 
@@ -31,6 +32,10 @@ class ProjectStatus extends Component {
     this.getProject().then(() => this.getWorkflows());
   }
 
+  componentWillUnmount() {
+    this.state.project.stopListening('change', this.rerender);
+  }
+
   onChangeWorkflowLevel(workflow, event) {
     this.setState({ error: null });
     let selected = event.target.value;
@@ -40,12 +45,18 @@ class ProjectStatus extends Component {
       .catch(error => this.setState({ error }));
   }
 
+  rerender() {
+    if (this.isMounted()) {
+      this.forceUpdate();
+    }
+  }
+
   getProject() {
     const slug = `${this.props.params.owner}/${this.props.params.name}`;
     return apiClient.type('projects').get({ slug }).then((projects) => {
       const project = projects[0];
       // TODO: We ought to improve this ChangeListener replacement
-      project.listen('change', this.forceUpdate.bind(this));
+      project.listen('change', this.rerender);
       this.setState({ project });
       return project;
     });
