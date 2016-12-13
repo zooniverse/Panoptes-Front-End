@@ -367,7 +367,7 @@ module.exports = React.createClass
     value?.charAt(0).toUpperCase() in ['T', 'X', 'Y', '1']
 
   makeID: (string) ->
-    string.replace(/[aeiouy\W]/gi, '').toUpperCase()
+    string.replace(/\W/g, '').toUpperCase()
 
   createChoice: (name) ->
     choiceID = @makeID name
