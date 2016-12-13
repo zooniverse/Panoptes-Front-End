@@ -1,6 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
 import ProjectHomeWorkflowButton from './home-workflow-button';
+
+counterpart.registerTranslations('en', {
+  buttons: {
+    learnMore: 'Learn more',
+    getStarted: 'Get started'
+  },
+  workflow: {
+    choice: 'Please choose a workflow'
+  }
+});
 
 export default class ProjectHomeWorkflowButtons extends React.Component {
   constructor(props) {
@@ -43,15 +55,18 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     let workflowDescription;
 
     if (this.props.project.workflow_description && this.props.project.workflow_description !== '') {
-      workflowDescription = this.props.project.workflow_description;
+      workflowDescription = (
+        <h4>{this.props.project.workflow_description}</h4>
+      );
+    } else {
+      workflowDescription = <Translate component="h4" content="workflow.choice" />;
     }
 
     if (this.props.activeWorkflows.length > 0 && this.props.preferences) {
       return (
         <div className="project-home-page__section top-arrow">
           <div className="project-home-page__content">
-            {workflowDescription &&
-              <h4>{workflowDescription}</h4>}
+            {workflowDescription}
             {this.props.activeWorkflows.map((workflow) => {
               return (
                 <ProjectHomeWorkflowButton
@@ -76,13 +91,13 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
         to={`/projects/${this.props.project.slug}/classify`}
         className="call-to-action standard-button get-started"
       >
-        Get started
+        <Translate content="buttons.getStarted" />
       </Link>
     );
 
     const learnMore = (
       <Link to={`/projects/${this.props.project.slug}/about`} className="standard-button learn-more">
-        Learn More
+        <Translate content="buttons.learnMore" />
       </Link>
     );
 
@@ -93,7 +108,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     if (this.props.showWorkflowButtons) {
       getStarted = (
         <button className="call-to-action standard-button get-started" onClick={this.toggleWorkflows}>
-          Get started
+          <Translate content="buttons.getStarted" />
         </button>
       );
     }
