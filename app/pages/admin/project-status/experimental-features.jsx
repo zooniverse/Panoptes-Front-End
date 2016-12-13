@@ -16,7 +16,8 @@ const experimentalFeatures = [
   'expert comparison summary',
   'persist annotations',
   'shortcut',
-  'metadata based feedback'
+  'metadata based feedback',
+  'export classifications by workflow'
 ];
 
 class ExperimentalFeatures extends Component {
