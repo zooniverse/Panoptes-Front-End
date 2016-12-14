@@ -36,6 +36,22 @@ export default class MediaAreaView extends React.Component {
         className={`media-area ${this.props.className}`.trim()}
         style={Object.assign({ position: 'relative' }, this.props.style)}
       >
+        {(this.props.pendingFiles.length !== 0) ? <hr /> : null}
+        {this.props.pendingFiles.map((file) => {
+          return (
+            <div key={file.name}>
+              <small>
+                <i className="fa fa-spinner fa-spin" />{' '}
+                <strong>{file.name}</strong>
+              </small>
+            </div>
+          );
+        })}
+        {this.props.errors.map(({ file, error }) => {
+          return (<div key={file.name}>{error.toString()} ({file.name})</div>);
+        })}
+        {this.props.errors.length !== 0 && <hr />}
+
         <DragAndDropTarget
           style={{
             bottom: '3px',
@@ -70,23 +86,6 @@ export default class MediaAreaView extends React.Component {
 
         {this.props.children && <hr />}
         {this.props.children}
-
-        {(this.props.pendingFiles.length !== 0) ? <hr /> : null}
-        {this.props.pendingFiles.map((file) => {
-          return (
-            <div key={file.name}>
-              <small>
-                <i className="fa fa-spinner fa-spin" />{' '}
-                <strong>{file.name}</strong>
-              </small>
-            </div>
-          );
-        })}
-
-        {this.props.errors.length !== 0 && <hr />}
-        {this.props.errors.map(({ file, error }) => {
-          return (<div key={file.name}>{error.toString()} ({file.name})</div>);
-        })}
       </div>
     );
   }

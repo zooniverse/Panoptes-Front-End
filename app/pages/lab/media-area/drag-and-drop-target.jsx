@@ -4,6 +4,11 @@ export default class DragAndDropTarget extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      canDrop: false,
+    };
+
+    this.handleDragEnter = this.handleDragEnter.bind(this);
     this.handleDragOver = this.handleDragOver.bind(this);
     this.handleDragLeave = this.handleDragLeave.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
@@ -11,18 +16,23 @@ export default class DragAndDropTarget extends React.Component {
 
   handleDragEnter(e) {
     e.preventDefault();
+    this.setState({ canDrop: true });
+    this.props.onDragEnter(...arguments);
   }
 
   handleDragOver(e) {
     e.preventDefault();
+    this.props.onDragOver(...arguments);
   }
 
   handleDragLeave(e) {
     e.preventDefault();
+    this.props.onDragLeave(...arguments);
   }
 
   handleDrop(e) {
     e.preventDefault();
+    this.setState({ canDrop: false });
     this.props.onDrop(...arguments);
   }
 
@@ -36,6 +46,7 @@ export default class DragAndDropTarget extends React.Component {
         onDragOver={this.handleDragOver}
         onDragLeave={this.handleDragLeave}
         onDrop={this.handleDrop}
+        data-can-drop={this.state.canDrop || null}
       >
         {this.props.children}
       </div>
@@ -46,11 +57,17 @@ export default class DragAndDropTarget extends React.Component {
 DragAndDropTarget.defaultProps = {
   children: null,
   className: '',
+  onDragEnter: () => {},
+  onDragOver: () => {},
+  onDragLeave: () => {},
   onDrop: () => {},
 };
 
 DragAndDropTarget.propTypes = {
   children: React.PropTypes.node,
   className: React.PropTypes.string,
+  onDragEnter: React.PropTypes.func,
+  onDragOver: React.PropTypes.func,
+  onDragLeave: React.PropTypes.func,
   onDrop: React.PropTypes.func,
 };
