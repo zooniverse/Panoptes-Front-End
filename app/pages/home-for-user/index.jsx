@@ -1,16 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
-import BlurredImage from './blurred-image';
 import Pullout from 'react-pullout';
-import getUserRibbonData from '../../lib/get-user-ribbon-data';
+import qs from 'qs';
+import BlurredImage from './blurred-image';
 import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
 import RecentCollectionsSection from './recent-collections';
 import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
 import ProjectStats from './project-stats';
-import qs from 'qs';
 import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-pullout';
 import getColorFromString from '../../lib/get-color-from-string';
@@ -114,16 +113,14 @@ const HomePageForUser = React.createClass({
     .then(() => {
       const updatedProjects = this.recentlyUpdatedProjects(this.state.ribbonData);
       this.setState({
-        updatedProjects: updatedProjects,
+        updatedProjects,
         totalClassifications: this.state.ribbonData.reduce((total, project) => {
           return total + project.classifications;
-        }, 0)
+        }, 0),
       });
     })
     .catch((error) => {
-      this.setState({
-        error: error,
-      });
+      this.setState({ error });
     })
     .then(() => {
       this.setState({
@@ -188,7 +185,7 @@ const HomePageForUser = React.createClass({
         const meta = projectPreferences[0].getMeta();
         if (meta.page === meta.page_count) {
         } else {
-          return getRibbonData(user, meta.page + 1);
+          getRibbonData(user, meta.page + 1);
         }
       }
     });
