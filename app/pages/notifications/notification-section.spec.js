@@ -50,7 +50,7 @@ describe('Notification Section', function() {
   describe('it correctly displays a project', function () {
     beforeEach(function () {
       wrapper = shallow(<NotificationSection />);
-      wrapper.setState({ name: 'Testing' })
+      wrapper.setState({ name: 'Testing' });
     });
 
     it('should display the correct title', function () {

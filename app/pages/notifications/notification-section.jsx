@@ -6,7 +6,7 @@ import Notification from './notification.cjsx';
 import Paginator from '../../talk/lib/paginator.cjsx';
 import ZooniverseLogo from '../../partials/zooniverse-logo.cjsx';
 import getNotificationData from '../../lib/get-notification-data';
-import Loading from '../../components/loading-indicator.cjsx'
+import Loading from '../../components/loading-indicator.cjsx';
 
 export default class NotificationSection extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ export default class NotificationSection extends Component {
         this.setState({ error });
       })
       .then(([project]) => {
-        return this.setState({
+        this.setState({
           name: project.display_name,
           avatar: project.avatar_src,
         });
@@ -134,6 +134,7 @@ export default class NotificationSection extends Component {
         }
       });
     }
+    return null;
   }
 
   avatarFor() {

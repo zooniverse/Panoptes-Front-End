@@ -20,12 +20,12 @@ describe('Notifications', function() {
 
   describe('it will display according to user', function() {
     it('will ask user to sign in', function() {
-      const wrapper = mount(<Notifications user={null} />);
+      wrapper = mount(<Notifications user={null} />);
       assert.equal(wrapper.find('.talk-module').text(), 'You\'re not signed in.');
     });
 
     it('will notify when no notifications present', function() {
-      const wrapper = mount(<Notifications user={{ id: 1 }} />);
+      wrapper = mount(<Notifications user={{ id: 1 }} />);
       assert(wrapper.contains(<span>You have no notifications.</span>));
     });
   });

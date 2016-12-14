@@ -26,12 +26,11 @@ function messageData(notification) {
 function moderationData(notification) {
   return talkClient.type('moderations').get(notification.source_id).then((moderation) => {
     const comment = moderation.target || moderation.destroyed_target;
-    const promises = [];
-    moderation.reports.map((report) => {
-      promises.push(apiClient.type('users').get(report.user_id.toString(), { }).then((user) => {
+    const promises = moderation.reports.map((report) => {
+      return apiClient.type('users').get(report.user_id.toString(), { }).then((user) => {
         report.user = user;
         return report;
-      }));
+      });
     });
     return apiClient.type('users').get(comment.user_id.toString()).then((commentUser) => {
       return Promise.all(promises).then((reports) => {
@@ -50,18 +49,15 @@ function discussionData(notification) {
 }
 
 function getNotificationData(notifications) {
+  const lookup = {
+    Comment: commentData,
+    DataRequest: requestData,
+    Message: messageData,
+    Moderation: moderationData,
+    Discussion: discussionData,
+  };
   const notificationData = notifications.map((notification) => {
-    if (notification.source_type === 'Comment') {
-      return commentData(notification);
-    } else if (notification.source_type === 'DataRequest') {
-      return requestData(notification);
-    } else if (notification.source_type === 'Message') {
-      return messageData(notification);
-    } else if (notification.source_type === 'Moderation') {
-      return moderationData(notification);
-    } else if (notification.source_type === 'Discussion') {
-      return discussionData(notification);
-    }
+    return lookup[notification.source_type].call(undefined, notification);
   });
 
   return Promise.all(notificationData);

@@ -135,6 +135,8 @@ export default class NotificationsPage extends React.Component {
 
 NotificationsPage.propTypes = {
   location: React.PropTypes.object,
-  project: React.PropTypes.object,
+  project: React.PropTypes.shape({
+    id: React.PropTypes.string,
+  }),
   user: React.PropTypes.object,
 };
