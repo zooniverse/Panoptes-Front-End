@@ -64,7 +64,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
     if (this.props.activeWorkflows.length > 0 && this.props.preferences) {
       return (
-        <div className="project-home-page__section top-arrow">
+        <div className="project-home-page__section workflow-choice">
           <div className="project-home-page__content">
             {workflowDescription}
             {this.props.activeWorkflows.map((workflow) => {
