@@ -110,15 +110,6 @@ const HomePageForUser = React.createClass({
     });
 
     this.getRibbonData(user)
-    .then(() => {
-      const updatedProjects = this.recentlyUpdatedProjects(this.state.ribbonData);
-      this.setState({
-        updatedProjects,
-        totalClassifications: this.state.ribbonData.reduce((total, project) => {
-          return total + project.classifications;
-        }, 0),
-      });
-    })
     .catch((error) => {
       this.setState({ error });
     })
@@ -177,9 +168,14 @@ const HomePageForUser = React.createClass({
               }
             }).filter(Boolean);
           })
-          .then((ribbonData) =>{
+          .then((projects) =>{
             this.setState((prevState) => {
-              return {ribbonData: prevState.ribbonData.concat(ribbonData)};
+              const ribbonData = prevState.ribbonData.concat(projects);
+              const updatedProjects = this.recentlyUpdatedProjects(ribbonData);
+              const totalClassifications = updatedProjects.reduce((total, project) => {
+          return total + project.classifications;
+        }, 0);
+              return {ribbonData, updatedProjects, totalClassifications };
             });
           });
         const meta = projectPreferences[0].getMeta();
