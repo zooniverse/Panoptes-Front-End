@@ -33,6 +33,9 @@ module.exports = React.createClass
     disciplineTagList: disciplineTagList
     otherTagList: otherTagList
     researchers: []
+    avatar: null
+    background: null
+    error: null
 
   componentWillMount: ->
     @props.project.get('project_roles', page_size: 100).then (roles) =>
@@ -41,26 +44,19 @@ module.exports = React.createClass
       apiClient.type('users').get(scientists).then (researchers) =>
         @setState({ researchers })
 
-    avatar = @getAvatar()
-      .then (avatar) =>
-        # FireFox returns an object, other browsers return an array
+    avatar = @props.project.get('avatar')
+    background = @props.project.get('background')
+
+    Promise.all([avatar, background])
+      .then ([avatar, background]) => 
         if avatar.src?
-          avatar
+            avatar
         else 
           avatar = avatar[0]
-        @setState {avatar}
-      .catch (error) =>
-        console.log error
-
-    backround = @getBackground()
-      .then (background) =>
-        # FireFox returns an object, other browsers return an array
-        if background.src?
-          background
-        else 
           background = background[0]
-        @setState {background}
+        @setState {avatar, background}
       .catch (error) =>
+        @setState {error}
         console.log error
 
   splitTags: (kind) ->
@@ -79,28 +75,6 @@ module.exports = React.createClass
     for researcher in @state.researchers
       options.push Object.assign value: researcher.id, label: researcher.display_name
     options
-
-  getAvatar: ->
-    avatar = @props.project.get('avatar')
-      .then (avatar) => if avatar? then avatar else null
-      .catch =>
-        console.log error
-
-  getBackground: ->
-    background = @props.project.get('background')
-      .then (background) => if background? then background else null
-      .catch (error) =>
-        console.log error
-
-  splitTags: (kind) ->
-    disciplineTagList = []
-    otherTagList = []
-    for t in @props.project.tags
-      if DISCIPLINES.some((el) -> el.value == t)
-        disciplineTagList.push(t)
-      else
-        otherTagList.push(t)
-    {disciplineTagList, otherTagList}
 
   render: ->
     # Failures on media GETs are acceptable here,
