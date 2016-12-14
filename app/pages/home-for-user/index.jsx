@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import apiClient from 'panoptes-client/lib/api-client';
 import BlurredImage from './blurred-image';
 import Pullout from 'react-pullout';
 import getUserRibbonData from '../../lib/get-user-ribbon-data';
@@ -12,6 +13,7 @@ import ProjectStats from './project-stats';
 import qs from 'qs';
 import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-pullout';
+import getColorFromString from '../../lib/get-color-from-string';
 
 
 const SECTIONS = {
@@ -108,13 +110,12 @@ const HomePageForUser = React.createClass({
       }
     });
 
-    getUserRibbonData(user)
-    .then((ribbonData) => {
-      const updatedProjects = this.recentlyUpdatedProjects(ribbonData.slice());
+    this.getRibbonData(user)
+    .then(() => {
+      const updatedProjects = this.recentlyUpdatedProjects(this.state.ribbonData);
       this.setState({
-        ribbonData: ribbonData,
         updatedProjects: updatedProjects,
-        totalClassifications: ribbonData.reduce((total, project) => {
+        totalClassifications: this.state.ribbonData.reduce((total, project) => {
           return total + project.classifications;
         }, 0)
       });
@@ -128,6 +129,68 @@ const HomePageForUser = React.createClass({
       this.setState({
         loading: false,
       });
+    });
+  },
+
+  getRibbonData(user, _page = 1) {
+    const getRibbonData = this.getRibbonData;
+    return user.get('project_preferences', {
+      page: _page,
+    })
+    .then((projectPreferences) => {
+      if (projectPreferences.length === 0) {
+        return projectPreferences;
+      } else {
+        const activePreferences = projectPreferences.filter((preference) => {
+          if (preference.activity_count > 0)
+            return preference;
+        });
+        const projectIDs = activePreferences.map((projectPreference) => {
+          return projectPreference.links.project;
+        });
+        apiClient.type('projects').get({ id: projectIDs, cards: true, page_size: activePreferences.length })
+          .catch((error) => {
+            console.log('Something went wrong. Error: ', error);
+          })
+          .then((projects) =>{
+            const classifications = activePreferences.reduce((counts, projectPreference) => {
+              counts[projectPreference.links.project] = projectPreference.activity_count;
+              return counts;
+            }, {});
+            const projectData = projects.map((project) => {
+              project.activity_count = classifications[project.id]
+              return project;
+            });
+            return projectData;
+          })
+          .then((projects) => {
+            return projects.map((project, i) => {
+              if (projects[i] !== null) {
+                return {
+                  avatar_src: projects[i].avatar_src,
+                  id: projects[i].id,
+                  slug: projects[i].slug,
+                  name: projects[i].display_name,
+                  color: getColorFromString(projects[i].slug),
+                  classifications: projects[i].activity_count,
+                  updated_at: projects[i].updated_at,
+                };
+              } else {
+                return null;
+              }
+            }).filter(Boolean);
+          })
+          .then((ribbonData) =>{
+            this.setState((prevState) => {
+              return {ribbonData: prevState.ribbonData.concat(ribbonData)};
+            });
+          });
+        const meta = projectPreferences[0].getMeta();
+        if (meta.page === meta.page_count) {
+        } else {
+          return getRibbonData(user, meta.page + 1);
+        }
+      }
     });
   },
 
