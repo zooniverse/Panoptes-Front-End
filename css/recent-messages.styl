@@ -14,6 +14,9 @@
   padding: 1ch 1em
   text-decoration: none
 
+  @media (max-width: 600px)
+    display: block
+
   &:hover
     box-shadow: 0 0 0 1px #eef2f5 inset
 
@@ -45,7 +48,14 @@
     width: 2em
 
   &__preview
-    margin: 0 0.5ch;
+    margin: 0 0.5ch
+    overflow: hidden
+    white-space: nowrap
+
+    div
+      overflow: hidden
+      white-space: nowrap
+      text-overflow: ellipsis
 
   &__title
     font-size: 1.2em
