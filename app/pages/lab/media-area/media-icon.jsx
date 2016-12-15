@@ -37,15 +37,17 @@ export default class MediaIcon extends React.Component {
           </TriggeredModalForm>
           <button type="button" className="media-icon-delete-button" disabled={this.state.deleting} onClick={this.handleDelete}>&times;</button>
         </div>
-        <div className="media-icon-label" style={{ position: 'relative' }}>{this.props.resource.metadata.filename}</div>
         {this.props.resource.metadata &&
-          <textarea
-            className="media-icon-markdown"
-            value={`![${this.props.resource.metadata.filename}(${this.props.resource.src})`}
-            readOnly
-            style={{ position: 'relative' }}
-            onFocus={(e) => { return (e.target.setSelectionRange(0, e.target.value.length)); }}
-          />}
+          <div>
+            <span className="media-icon-label" style={{ position: 'relative' }}>{this.props.resource.metadata.filename}</span>
+            <textarea
+              className="media-icon-markdown"
+              value={`![${this.props.resource.metadata.filename}(${this.props.resource.src})`}
+              readOnly
+              style={{ position: 'relative' }}
+              onFocus={(e) => { e.target.setSelectionRange(0, e.target.value.length); }}
+            />
+          </div>}
       </div>
     );
   }
