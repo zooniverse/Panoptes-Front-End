@@ -99,6 +99,11 @@ const VideoPlayer = React.createClass({
     const rates = [0.25, 0.5, 1];
     return (
       <div className="subject-video-frame">
+        <button
+          className="subject-video-frame__hidden-button"
+          onClick={this.playVideo.bind(this, !this.state.playing)}
+        />
+
         <video
           className="subject"
           ref="videoPlayer"
@@ -106,7 +111,6 @@ const VideoPlayer = React.createClass({
           type={`${this.props.type}/${this.props.format}`}
           preload="auto"
           onCanPlay={this.props.onLoad}
-          onClick={this.playVideo.bind(this, !this.state.playing)}
           onEnded={this.endVideo}
           onTimeUpdate={this.updateScrubber}
         >
