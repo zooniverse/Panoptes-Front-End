@@ -228,14 +228,14 @@ export default class NotificationSection extends Component {
           <div className="centering">
             <Paginator
               className="notification-section__container"
+              firstAndLast={false}
+              itemCount
+              nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
+              onClickNext={this.markAsRead.bind(this, 'first')}
               page={+this.state.currentMeta.page}
               pageCount={this.state.lastMeta.page_count}
-              itemCount={true}
-              firstAndLast={false}
               pageSelector={false}
-              nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
               previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
-              onClickNext={this.markAsRead.bind(this, 'first')}
               totalItems={<span className="notification-section__item-count">{(l.page * l.page_size) - (l.page_size - 1)} - {Math.min(l.page_size * l.page, l.count)} of {l.count}</span>}
             />
           </div>
@@ -248,12 +248,14 @@ export default class NotificationSection extends Component {
 
 NotificationSection.propTypes = {
   expanded: React.PropTypes.bool,
-  location: React.PropTypes.object,
   projectID: React.PropTypes.string,
   section: React.PropTypes.string,
   slug: React.PropTypes.string,
   toggleSection: React.PropTypes.func,
-  user: React.PropTypes.object,
+  user: React.PropTypes.shape({
+    display_name: React.PropTypes.string,
+    login: React.PropTypes.string,
+  }),
 };
 
 NotificationSection.defaultProps = {

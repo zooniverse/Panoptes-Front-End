@@ -28,7 +28,7 @@ function moderationData(notification) {
     const comment = moderation.target || moderation.destroyed_target;
     const promises = moderation.reports.map((report) => {
       return apiClient.type('users').get(report.user_id.toString(), { }).then((user) => {
-        report.user = user;
+        report.user = user; // eslint-disable-line
         return report;
       });
     });

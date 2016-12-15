@@ -25,12 +25,12 @@ export default class NotificationsPage extends React.Component {
     };
   }
 
-  componentWillMount() {
-    if (this.props.user) return this.getProjectNotifications(this.props.user);
+  componentWillMount() { // eslint-disable-line
+    if (this.props.user) return this.getProjectNotifications();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.user !== this.props.user) return this.getProjectNotifications(nextProps.user);
+  componentWillReceiveProps(nextProps) { // eslint-disable-line
+    if (nextProps.user !== this.props.user) return this.getProjectNotifications();
   }
 
   onChildChanged(section) {
@@ -46,8 +46,7 @@ export default class NotificationsPage extends React.Component {
     } else {
       talkClient.type('notifications').get({ page: 1, page_size: 50 })
       .then((projNotifications) => {
-        const groupedNotifications = this.groupNotifications(projNotifications);
-        this.setState({ projNotifications: groupedNotifications });
+        this.groupNotifications(projNotifications);
       });
     }
   }
@@ -66,7 +65,7 @@ export default class NotificationsPage extends React.Component {
         }
       }
     });
-    return projectNotifications;
+    this.setState({ projNotifications: projectNotifications });
   }
 
   renderNotifications() {
@@ -134,9 +133,14 @@ export default class NotificationsPage extends React.Component {
 }
 
 NotificationsPage.propTypes = {
-  location: React.PropTypes.object,
+  location: React.PropTypes.shape({
+    query: React.PropTypes.object,
+  }),
   project: React.PropTypes.shape({
     id: React.PropTypes.string,
   }),
-  user: React.PropTypes.object,
+  user: React.PropTypes.shape({
+    display_name: React.PropTypes.string,
+    login: React.PropTypes.string,
+  }),
 };
