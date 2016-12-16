@@ -5,9 +5,13 @@
     "react/prefer-es6-class": 0,
     "react/prefer-stateless-function": 0,
     "react/no-multi-comp": 0,
+    "array-callback-return": "off", 
     "arrow-body-style": ["warn", "always"],
-    "no-else-return": "off",
+    "comma-dangle": ["warn", "never"],
+    "jsx-no-bind": ["warn", "never"],
     "max-len": "off",
-    "multiline-ternary": ["warn", "never"]
+    "multiline-ternary": ["warn", "never"],
+    "no-else-return": "off",
+    "object-curly-spacing": ["error", "always", { "objectsInObjects": false }]
   }
 }
