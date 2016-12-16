@@ -1,7 +1,7 @@
 React = require 'react'
 alert = require '../lib/alert'
 SetToggle = require '../lib/set-toggle'
-CollectionRole = require '../lib/collection-role'
+checkIfCollectionOwner = require '../lib/check-if-collection-owner'
 ChangeListener = require '../components/change-listener'
 `import DisplayNameSlugEditor from '../partials/display-name-slug-editor'`
 
@@ -42,7 +42,7 @@ CollectionDeleteDialog = React.createClass
 
 module.exports = React.createClass
   displayName: "CollectionSettings"
-  mixins: [SetToggle, CollectionRole]
+  mixins: [SetToggle]
   setterProperty: 'collection'
 
   contextTypes:
@@ -58,7 +58,7 @@ module.exports = React.createClass
     hasSettingsRole: false
 
   componentDidMount: ->
-    @hasSettingsRole()
+    checkIfCollectionOwner(@props.user, @props.collection)
       .then (hasSettingsRole) =>
         @setState {hasSettingsRole}
     @props.collection.listen 'delete', @redirect

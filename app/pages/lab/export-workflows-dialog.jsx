@@ -1,17 +1,20 @@
 import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
+import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
 
 class ExportWorkflowsDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      project_id: -1,
+      loading: false,
       workflows: [],
       workflowSelected: false,
     };
 
     this.toggleExport = this.toggleExport.bind(this);
     this.requestDataExport = this.requestDataExport.bind(this);
+    this.updateWorkflowsFromProject = this.updateWorkflowsFromProject.bind(this);
+    this.renderWorkflowOptions = this.renderWorkflowOptions.bind(this);
   }
 
   componentDidMount() {
@@ -27,21 +30,12 @@ class ExportWorkflowsDialog extends React.Component {
       return;
     }
 
-    const order = (project.configuration && project.configuration.workflow_order) || [];
-
+    this.setState({ loading: true });
     // TODO: this API call duplicates information fetched to draw the lab sidebar.
     // when we do the lab refactor, this should be cached somewhere
-    project.get('workflows', { fields: 'display_name' })
+    getWorkflowsInOrder(project, { fields: 'display_name' })
       .then((workflows) => {
-        let result = workflows;
-
-        if (order && order.length > 0) {
-          const dict = {};
-          workflows.forEach((workflow) => { dict[workflow.id] = workflow; });
-          result = order.map((id) => { return dict[id]; });
-        }
-
-        this.setState({ workflows: result });
+        this.setState({ workflows, loading: false });
       });
   }
 
@@ -57,10 +51,13 @@ class ExportWorkflowsDialog extends React.Component {
       .catch((err) => { this.props.onFail(err); });
   }
 
-  render() {
-    return (
-      <div>
-        <span className="form-label">Select a Workflow:</span>
+  renderWorkflowOptions() {
+    if (this.state.loading) {
+      return (<p>Loading...</p>);
+    }
+
+    if (this.state.workflows && this.state.workflows.length > 0) {
+      return (
         <select size="5" ref={(c) => { this.workflowList = c; }} className="multiline-select standard-input" style={{ padding: '0.3vh 0.3vw' }} onChange={this.toggleExport}>
           {this.state.workflows.map((result) => {
             return (
@@ -68,6 +65,19 @@ class ExportWorkflowsDialog extends React.Component {
             );
           })}
         </select>
+      );
+    }
+
+    return (
+      <p>No workflows available to export.</p>
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        <span className="form-label">Select a Workflow:</span>
+        {this.renderWorkflowOptions()}
         <div style={{ textAlign: 'right' }}>
           <button className="minor-button" style={{ marginLeft: '1em' }}>Cancel</button>
           <button className="standard-button" style={{ marginLeft: '1em' }} disabled={!this.state.workflowSelected} onClick={this.requestDataExport}>Export</button>

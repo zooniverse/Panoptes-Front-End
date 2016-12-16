@@ -2,7 +2,7 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 UserSearch = require '../components/user-search'
 apiClient = require 'panoptes-client/lib/api-client'
-CollectionRole = require '../lib/collection-role'
+checkIfCollectionOwner = require '../lib/check-if-collection-owner'
 
 ID_PREFIX = 'COLLECTION_COLLABORATORS_PAGE_'
 
@@ -174,7 +174,6 @@ RoleRow = React.createClass
 
 module.exports = React.createClass
   displayName: "CollectionCollaborators"
-  mixins: [CollectionRole]
 
   getDefaultProps: ->
     collection: null
@@ -186,7 +185,7 @@ module.exports = React.createClass
     hasSettingsRole: false
 
   componentDidMount: ->
-    @hasSettingsRole()
+    checkIfCollectionOwner(@props.user, @props.collection)
       .then (hasSettingsRole) =>
         @setState {hasSettingsRole}
     @update()
