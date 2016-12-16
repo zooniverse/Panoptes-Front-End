@@ -10,6 +10,7 @@ React = require 'react'
 `import AboutProjectTeam from './pages/project/about/team';`
 `import ProjectStatusList from './pages/admin/project-status-list';`
 `import EditMediaPage from './pages/lab/media';`
+`import UserProfilePage from './pages/profile/index';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -56,7 +57,7 @@ module.exports =
     <Route path="privacy" component={require './pages/privacy-policy'} />
     <Route path="security" component={require './pages/security'} />
 
-    <Route path="users/:profile_name" component={require './pages/profile'}>
+    <Route path="users/:profile_name" component={UserProfilePage}>
       <IndexRoute component={require './pages/profile/feed'} />
       <Route path="favorites" component={require('./pages/collections/favorites-list')} />
       <Route path="collections" component={require('./pages/collections/collections-list')} />
@@ -130,7 +131,7 @@ module.exports =
         <Route path="collaborators" component={require './collections/collaborators'} />
         <Route path="talk" component={require './collections/show-list'} />
       </Route>
-      <Route path="users/:profile_name" component={require './pages/profile'}>
+      <Route path="users/:profile_name" component={UserProfilePage}>
         <IndexRoute component={require './pages/profile/feed'} />
         <Route path="favorites" component={require('./pages/collections/favorites-list')} />
         <Route path="collections" component={require('./pages/collections/collections-list')} />

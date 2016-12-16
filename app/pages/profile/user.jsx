@@ -1,0 +1,182 @@
+import React, { Component, PropTypes } from 'react';
+import { Link, IndexLink } from 'react-router';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
+import classNames from 'classnames';
+import Avatar from '../../partials/avatar';
+
+counterpart.registerTranslations('en', {
+  profile: {
+    nav: {
+      comments: 'Recent comments',
+      stats: 'Stats',
+      collections: 'Collections',
+      favorites: 'Favorites',
+      message: 'Message',
+      moderation: 'Moderation',
+      settings: 'Settings'
+    }
+  }
+});
+
+class ProfileUser extends Component {
+  constructor(props) {
+    super(props);
+    this.logMessageClick = this.logMessageClick.bind(this);
+    this.state = {
+      profileHeader: null
+    };
+  }
+
+  componentDidMount() {
+    document.documentElement.classList.add('on-secondary-page');
+    this.getProfileHeader(this.props.profileUser);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.profileUser !== this.props.profileUser) {
+      this.getProfileHeader(nextProps.profileUser);
+    }
+  }
+
+  componentWillUnmount() {
+    document.documentElement.classList.remove('on-secondary-page');
+  }
+
+  getProfileHeader() {
+    return this.props.profileUser.get('profile_header')
+      .catch(() => [])
+      .then(profileHeaders => this.setState({ profileHeader: profileHeaders[0] }));
+  }
+
+  hasGeordi() {
+    return this.context && this.context.geordi;
+  }
+
+  logClick() {
+    if (this.hasGeordi()) {
+      return this.context.geordi.makeHandler('user-menu');
+    }
+    return () => { };
+  }
+
+  logMessageClick() {
+    if (this.hasGeordi()) {
+      this.context.geordi.logEvent({
+        type: 'message-user',
+        data: {
+          sender: this.props.user.display_name,
+          recipient: this.props.profileUser.display_name
+        }
+      });
+    }
+  }
+
+  renderUserLink() {
+    const baseLink = this.props.project ? `/projects/${this.props.project.slug}/` : '/';
+    const classes = classNames({ 'about-tabs': !!this.props.project });
+
+    if (this.props.user === this.props.profileUser) {
+      return (
+        <Link to={`${baseLink}users/${this.props.profileUser.login}/stats`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'stats')}>
+          <Translate content="profile.nav.stats" />
+        </Link>
+      );
+    } else {
+      return (
+        <Link to={`${baseLink}users/${this.props.profileUser.login}/message`} className={classes} activeClassName="active" onClick={this.logMessageClick}>
+          <Translate content="profile.nav.message" />
+        </Link>
+      );
+    }
+  }
+
+  renderNavLinks() {
+    const baseLink = this.props.project ? `/projects/${this.props.project.slug}/` : '/';
+    const classes = classNames({ 'about-tabs': !!this.props.project });
+
+    return (
+      <span>
+        <IndexLink to={`${baseLink}users/${this.props.profileUser.login}`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'comments')}>
+          <Translate content="profile.nav.comments" />
+        </IndexLink>
+        {' '}
+        <Link to={`${baseLink}users/${this.props.profileUser.login}/collections`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'collections')}>
+          <Translate content="profile.nav.collections" />
+        </Link>
+        {' '}
+        <Link to={`${baseLink}users/${this.props.profileUser.login}/favorites`} className={classes} activeClassName="active" onClick={this.logClick.bind(this, 'favorites')}>
+          <Translate content="profile.nav.favorites" />
+        </Link>
+        {' '}
+
+        <span>
+          {this.renderUserLink()}
+        </span>
+      </span>
+    );
+  }
+
+  render() {
+    let headerStyle = { };
+
+    if (this.state.profileHeader && !this.props.project) {
+      headerStyle = {
+        backgroundImage: `url(${this.state.profileHeader.src})`
+      };
+    }
+
+    const pageClasses = classNames({
+      'secondary-page': true,
+      'all-resources-page': true,
+      'user-profile': true,
+      'has-project-context': !!this.props.project
+    });
+
+    const containerClasses = classNames({
+      'user-profile-content': true,
+      'project-text-content': !!this.props.project,
+      'in-project-context': !!this.props.project
+    });
+
+    return (
+      <div className={pageClasses}>
+        <section className="hero user-profile-hero" style={headerStyle}>
+          <div className="overlay" />
+          <div className="hero-container">
+            <h1>
+              <Avatar user={this.props.profileUser} />
+              {this.props.profileUser.display_name}
+              <span className="login-name">
+                ({this.props.profileUser.login})
+              </span>
+            </h1>
+
+            {!this.props.project ? <nav className="hero-nav">{this.renderNavLinks()}</nav> : null}
+          </div>
+        </section>
+
+        <section className={containerClasses}>
+          {this.props.project ? <nav className="hero-nav">{this.renderNavLinks()}</nav> : null}
+          {React.cloneElement(this.props.children, this.props)}
+        </section>
+      </div>
+    );
+  }
+}
+
+ProfileUser.propTypes = {
+  user: PropTypes.object,
+  project: PropTypes.object,
+  profileUser: PropTypes.object.isRequired
+};
+
+ProfileUser.defaultProps = {
+  profileUser: null
+};
+
+ProfileUser.contextTypes = {
+  geordi: PropTypes.object
+};
+
+export default ProfileUser;
