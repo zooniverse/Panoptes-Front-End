@@ -7,7 +7,7 @@ export default class TalkImages extends React.Component {
 
   render() {
     return (
-      <div className="project-home-page__section">
+      <div className="project-home-page__container">
 
         {this.props.images.map((image) => {
           const subject = getSubjectLocation(image);

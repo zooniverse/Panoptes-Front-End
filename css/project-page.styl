@@ -131,13 +131,43 @@
   flex-direction: column
   flex: 1 0 auto
   font-size: 14px
+  justify-content: center
+
+  button, a
+    background: white
+    border: 2px solid #00979d
+    border-radius: .5em
+    color: #00979d
+    margin-right: 1.5em
+    padding: 0.8em 1.4vw
+
+    &:hover
+      background: #00979d
+      border: 2px solid #00979d
+      color: white
+
+  h4
+    text-transform: uppercase
 
   .call-to-action-container
-    min-height: 200px
+    align-items: center
     display flex
     flex: 1 0 auto
     flex-direction: column
     justify-content: center
+    margin-top: 1.5em
+
+    a, button
+      background: none
+      border: none
+      color: white
+      cursor: pointer
+      margin: 0
+      padding: 0
+
+      &:hover
+        background: none
+        border: none
 
     &__buttons
       display: flex
@@ -147,26 +177,6 @@
         cursor: not-allowed
         opacity: 0.5
         pointer-events: none
-
-  &__introduction
-    display: flex
-    flex-flow: row wrap
-    flex-direction: column
-    position: relative
-    width: 100%
-
-    button, a
-      background: transparent
-      border: 2px solid white
-      border-radius: .5em
-      margin-right: 1.5em
-      font-size: 1em
-      padding: 0.8em 1.4vw
-
-      &:hover
-        background-color: white
-        border-color: white
-        color: black
 
   &__container
     display: flex
@@ -180,25 +190,22 @@
     padding: 12% 0 0 10%
 
   &__content
-    flex: auto
+    color: #0f7481
     padding: 5vh 10vw 8vh 10vw
 
-    .get-started
-      background: white
-      color: TEAL
-
-      &:hover
-        background: TEAL
-        border-color: TEAL
-        color: white
-
     .learn-more
-      &:hover
-        color: TEAL
+      background: transparent
+      border: 2px solid white
+      color: white
 
-    h4
-      color: #0f7481
-      text-transform: uppercase
+      &:hover
+        background-color: white
+        border: 2px solid white
+        color: #00979d
+
+    .get-started
+      border: 2px solid white
+      outline: none
 
   &__researcher-words
     background-color: white
@@ -211,17 +218,15 @@
 
     img
       border-radius: 50%
-      flex-shrink: 0
       height: 5em
       margin: 3em 0.5em
-      vertical-align: middle
       width: 5em
 
     span
       font-size: 1.75em
       font-style: italic
 
-  @media (min-width: 600px)
+  @media (min-width: 1000px)
     &__researcher-words:before
       left: 100%
       top: 7em
@@ -239,10 +244,16 @@
     width: 600px
 
     a
-      font-weight: bold
+      background: none
+      border: none
       color: #EFF2F5
+      font-weight: bold
+      margin: 0
+      padding: 0
 
       &:hover
+        background: none
+        border: none
         color: #F0B200
 
     hr
@@ -255,8 +266,7 @@
       line-height: 1.75
 
   &__talk-image
-    background: black
-    border:0.1em solid white
+    border: 0.1em solid white
     flex: 2 0 auto
     width: 240px
 
@@ -271,24 +281,23 @@
     flex: 2 0 auto
     flex-direction: column
     justify-content: center
-    min-height: 100px
+    min-height: 10em
     padding: 2em 2em 2em 4em
     position: relative
     width: 200px
 
     span
-      font-size: 18px
+      font-size: 1.2em
       margin-bottom: 0.75em
 
     .join-in
-      background-color: white
       border: 2px solid DARK_BLUE
       color: DARK_BLUE
       width: 4em
 
       &:hover
         background-color: DARK_BLUE
-        color: white
+        border: 2px solid DARK_BLUE
 
   &__talk-stat:before
     right: 100%
@@ -299,34 +308,14 @@
     border-right: 25px solid white
     border-top: 12px solid transparent
 
-  &__section
-    display: flex
-    flex-flow: row wrap
-    position: relative
-    background-color: #eff2f5
-    width: 100%
-
-    h4
-      margin-bottom: 2vh
-      text-transform: uppercase
-
-    a
-      background: transparent
-      border: 2px solid #0f7481
-      border-radius: .5em
-      color: #0f7481
-      margin-right: 1.5em
-      font-size: 1em
-      padding: 0.6em 1.4vw
-
-      &:hover
-        background-color: #0f7481
-        color: white
-
   .workflow-choice
     background-color: white
     box-shadow: 0 3px 3px 0px rgb(239,242,245)
+    position: relative
     z-index: 1
+
+    h4
+      margin-bottom: 1em
 
   .workflow-choice:before
     position: absolute
@@ -335,47 +324,23 @@
     width: 0
     height: 0
     content: " "
-    border-bottom: 20px solid #eff2f5
+    border-bottom: 20px solid white
     border-left: 10px solid transparent
     border-right: 10px solid transparent
-
-  .workflow-description
-    line-height: 1.5em
-    margin: 10px 0 30px 0
 
   .standard-button
     margin-top: 10px
     font-weight: 700
     line-height: 1.7em
 
-  hr
-    margin: 50px 0 0 0
-
-  .introduction
-    background: #fff
-    margin: 0
-    padding: 1.5em 3vw
-    width: 100%
-    box-sizing: border-box
-
-    .about-project
-      text-transform: uppercase
-      font-weight: 700
-      line-height: 2.5em
-      font-size: 15px
-      color: FOREGROUND
-      text-align: center
-      max-width: 800px
-      margin: 0 auto 1em
-
-   .markdown
-      line-height: 1.4em
-      text-align: center
-      max-width: 800px
-      margin: 0 auto
+  .markdown
+    line-height: 1.4em
+    text-align: center
+    max-width: 800px
+    margin: 0 auto
 
 .project-disclaimer
-  background-color: #0b517c
+  background-color: #007482
   color: rgba(white, 0.5)
   font-size: .75em
   justify-content: center
@@ -427,14 +392,19 @@
   flex: 7 2 auto
   padding: 3em 10vw
 
-  &-header
-    :first-child
-      font-weight: bold
+  a
+    background: none
+    border: none
+    color: DARK_BLUE
+    font-weight: bold
+    padding: 0
+    text-decoration: none
+    text-transform: uppercase
 
-    &__link
+    &:hover
+      background: none
+      border: none
       color: DARK_BLUE
-      text-decoration: none
-      text-transform: uppercase
 
   &-status-bar
     margin: 2.5em 0

@@ -1,9 +1,11 @@
 import React from 'react';
+import { Markdown } from 'markdownz';
+import apiClient from 'panoptes-client/lib/api-client';
+import talkClient from 'panoptes-client/lib/talk-client';
 import FinishedBanner from './finished-banner';
+import TalkImages from './talk-images';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
-import { Markdown } from 'markdownz';
-
 
 export default class ProjectHomePage extends React.Component {
   constructor(props) {
@@ -11,9 +13,28 @@ export default class ProjectHomePage extends React.Component {
 
     this.state = {
       showWorkflowButtons: false,
+      talkImages: [],
     };
 
     this.showWorkflowButtons = this.showWorkflowButtons.bind(this);
+  }
+
+  componentWillMount() {
+    talkClient.type('comments').get({ section: `project-${this.props.project.id}`, page_size: 6, sort: '-created_at', focus_type: 'Subject' })
+    .then((comments) => {
+      const subjectIds = comments.map(x => x.focus_id);
+      const uniqueImages = [...new Set(subjectIds)];
+      uniqueImages.splice(3, 3);
+      const talkImages = uniqueImages.map((id) => {
+        return apiClient.type('subjects').get(id)
+        .then((image) => {
+          return image;
+        });
+      });
+      Promise.all(talkImages).then((images) => {
+        this.setState({ talkImages: images });
+      });
+    });
   }
 
   componentDidMount() {
@@ -37,23 +58,34 @@ export default class ProjectHomePage extends React.Component {
     }
   }
 
-  render() {
-    let workflowDescription;
+  renderResearcherWords() {
+    // TODO: Show researcher avatar selected from lab and researcher words
+    const avatarSrc = '/assets/simple-avatar.png';
 
-    if (this.props.project.workflow_description && this.props.project.workflow_description !== '') {
-      workflowDescription = this.props.project.workflow_description;
-    }
+    return (
+      <div className="project-home-page__researcher-words">
+        <img role="presentation" src={avatarSrc} />
+
+        <div>
+          <h4>Words from the researcher</h4>
+          <span>&quot;{this.props.project.researcher_quote}&quot;</span>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const renderImages = this.state.talkImages.length > 2;
 
     return (
       <div className="project-home-page">
-        <div className="call-to-action-container content-container">
-          <FinishedBanner project={this.props.project} />
+        <div id="projectLandingIntro">
 
-          <div className="description">{this.props.project.description}</div>
-          {workflowDescription &&
-            <div className="workflow-description">
-              {workflowDescription}
-            </div>}
+          <div className="call-to-action-container">
+            <FinishedBanner project={this.props.project} />
+          </div>
+
+          <div className="project-home-page__description">{this.props.project.description}</div>
 
           <ProjectHomeWorkflowButtons
             activeWorkflows={this.props.activeWorkflows}
@@ -64,16 +96,26 @@ export default class ProjectHomePage extends React.Component {
             workflowAssignment={this.props.project.experimental_tools.includes('workflow assignment')}
             splits={this.props.splits}
           />
+
         </div>
 
-        <hr />
-        <div className="introduction content-container">
-          <h3 className="about-project">About {this.props.project.display_name}</h3>
-          {this.props.project.introduction &&
-            <Markdown project={this.props.project}>{this.props.project.introduction}</Markdown>}
+        {renderImages && (
+          <TalkImages images={this.state.talkImages} project={this.props.project} user={this.context.user} />
+        )}
+
+        <ProjectMetadata project={this.props.project} activeWorkflows={this.props.activeWorkflows} showTalkStatus={!renderImages} />
+
+        <div className="project-home-page__container">
+
+          {this.props.project.researcher_quote && (
+            this.renderResearcherWords())}
+
+          <div className="project-home-page__about-text">
+            <h4>About {this.props.project.display_name}</h4>
+            <Markdown project={this.props.project}>{this.props.project.introduction ? this.props.project.introduction : ''}</Markdown>
+          </div>
         </div>
 
-        <ProjectMetadata project={this.props.project} />
       </div>
     );
   }
@@ -101,8 +143,9 @@ ProjectHomePage.propTypes = {
     description: React.PropTypes.string,
     display_name: React.PropTypes.string,
     experimental_tools: React.PropTypes.arrayOf(React.PropTypes.string),
+    id: React.PropTypes.string,
     introduction: React.PropTypes.string,
-    workflow_description: React.PropTypes.string,
+    researcher_quote: React.PropTypes.string,
   }).isRequired,
   splits: React.PropTypes.object,
 };

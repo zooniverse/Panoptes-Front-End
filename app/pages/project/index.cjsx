@@ -107,7 +107,8 @@ ProjectPage = React.createClass
   resizeBackground: ->
     projLanding = document.getElementById('projectLandingIntro')
     if projLanding
-      sectionHeight = projLanding.getBoundingClientRect().bottom;
+      sectionBottom = projLanding.getBoundingClientRect().bottom;
+      sectionHeight = document.body.scrollTop + sectionBottom
       if @state.backgroundHeight isnt sectionHeight
         @setState backgroundHeight: sectionHeight
 

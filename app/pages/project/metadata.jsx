@@ -48,6 +48,7 @@ class ProjectMetadata extends React.Component {
     let percentComplete = 0;
     this.props.activeWorkflows.map((workflow) => {
       percentComplete += workflow.completeness;
+      return percentComplete;
     });
 
     if (this.props.activeWorkflows.length > 0) {
@@ -80,7 +81,7 @@ class ProjectMetadata extends React.Component {
       <div className="project-home-page__container">
         <div className="project-metadata">
           <div className="project-metadata-header">
-            <Link className="project-metadata-header__link" to={statsLink}>
+            <Link to={statsLink}>
               <span>{project.display_name}{' '}Statistics</span>
             </Link>
           </div>
@@ -108,8 +109,14 @@ ProjectMetadata.contextTypes = {
 };
 
 ProjectMetadata.propTypes = {
-  activeWorkflows: React.PropTypes.array,
-  project: React.PropTypes.object.isRequired,
+  activeWorkflows: React.PropTypes.arrayOf(React.PropTypes.object),
+  project: React.PropTypes.shape({
+    classifications_count: React.PropTypes.number,
+    display_name: React.PropTypes.string,
+    id: React.PropTypes.id,
+    slug: React.PropTypes.string,
+    subjects_count: React.propTypes.number,
+  }),
   showTalkStatus: React.PropTypes.bool,
 };
 
