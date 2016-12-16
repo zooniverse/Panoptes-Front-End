@@ -9,6 +9,8 @@ export default class Thumbnail extends React.Component {
     this.state = {
       failed: false,
     };
+
+    this.handleError = this.handleError.bind(this);
   }
 
   getThumbnailSrc({ origin, width, height, src }) {
@@ -40,7 +42,7 @@ export default class Thumbnail extends React.Component {
         <div>
           <video width="300" controls>
             <source src={this.props.src} type="video/mp4" />
-           </video>
+          </video>
         </div>
       );
     }
