@@ -6,7 +6,7 @@ counterpart.registerTranslations 'en',
   policiesPage:
     content: '''
       ## How to Launch your Project and Zooniverse Policies
-      This page is for people who have used our Project Builder, and would now like to share their project.
+      This page is for people who have used our Project Builder, and would now like to share their project with the Zooniverse community or their own crowd of collaborators or volunteers.
       &nbsp;
 
       ### How to Launch your Project
@@ -27,11 +27,11 @@ counterpart.registerTranslations 'en',
       **2. Review Project**
       If you would like the Zooniverse volunteer community to contribute to your project, the first step is to apply for review. You can do this in the project builder by clicking the “Apply for review” button within the “Visibility” section. At this point, your project is considered a “Review Project”.
 
-      Your project will then be subject to two stages of review – firstly, the Zooniverse team will check your project complies with Zooniverse rules (see below). If successful, your project will then be shared with a group of volunteer project testers who will provide feedback. It takes approximately six weeks to receive project feedback after applying for review.
+      Your project will then be subject to two stages of review – firstly, the Zooniverse team will check your project complies with Zooniverse rules (see below). Typically, we will respond to you within two weeks. If successful, your project will then be shared with a group of volunteer project testers who will provide feedback. We will contact you when a slot becomes available for volunteer review (this currently takes one to four weeks). Once your project has been shared with our volunteer project testers, the majority of project feedback is typically received within a week. This will be made immediately accessible to you.
 
-      During this process you should address the formal feedback provided by the volunteer project testers, as well as any comments on your project’s talk discussion pages. Any technical issues can be reported to us via the [GitHub repository](https://github.com/zooniverse/Panoptes-Front-End), but please consider carefully any comments on workflow design.
+      During this process you should address the formal feedback provided by the volunteer project testers, as well as any comments on your project’s Talk discussion pages. Any technical issues can be reported to us via the [GitHub repository](https://github.com/zooniverse/Panoptes-Front-End), but please consider carefully any comments on workflow design.
 
-      It is important you analyze the results produced during this review phase to ensure they are of sufficient quality for your research. If they aren’t, please consider re-approaching your project design, make any changes, and submit for review again.
+      It is important you review the results produced at this stage to ensure they are of sufficient quality for your research. If they aren’t, please consider re-approaching your project design, make any changes, and submit for review again.
       &nbsp;
 
       **3. Zooniverse Project**
@@ -45,6 +45,12 @@ counterpart.registerTranslations 'en',
       &nbsp;
 
       ### Zooniverse Policies
+      At present, we provide the Zooniverse Project Builder software and hosting for free. **We reserve the right to remove content for any reason whatsoever**. We will remove content and projects where:
+      - The content is not legal.
+      - The content is likely to cause offense, or is suitable only for an adult audience.
+      - The copyright on material uploaded to the site is not clear; please only use content you have the right to use.
+
+      We reserve the right to decide which projects appear on the main project page and which are promoted to the Zooniverse community. In particular, if you have a project that is very close to an existing Zooniverse project, please contact us to discuss.
 
       Projects promoted to the Zooniverse community **must**:
 
@@ -55,13 +61,6 @@ counterpart.registerTranslations 'en',
       "_This publication uses data generated via the [Zooniverse.org](https://www.zooniverse.org/) platform, development of which is funded by generous support, including a Global Impact Award from Google, and by a grant from the Alfred P. Sloan Foundation._"
       - Report publications using Zooniverse-produced data to us via this [form](https://docs.google.com/forms/d/18jwLbtV_6M5HCM74xNFtFbiiszWAxpC5IGHaToYjeiw/viewform).
       &nbsp;
-      
-      By using the Zooniverse Project Builder, you are using our software and hosting, and so **we reserve the right to remove content for any reason whatsoever**. We will remove content and projects where:
-      - The content is not legal.
-      - The content is likely to cause offense, or is suitable only for an adult audience.
-      - The copyright on material uploaded to the site is not clear; please only use content you have the right to use.
-
-      We reserve the right to decide which projects appear on the main project page and which are promoted to the Zooniverse community. In particular, if you have a project that is very close to an existing Zooniverse project, please contact us to discuss.
 
       If you have any questions relating to the content of this page, please [get in touch](/about/contact).
     '''
