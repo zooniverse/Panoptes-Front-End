@@ -9,7 +9,7 @@ React = require 'react'
 `import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
 `import AboutProjectTeam from './pages/project/about/team';`
 `import ProjectStatusList from './pages/admin/project-status-list';`
-
+`import EditMediaPage from './pages/lab/media';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -182,7 +182,7 @@ module.exports =
         <Route path="team" component={require './pages/lab/about/team'} />
       </Route>
       <Route path="collaborators" component={require './pages/lab/collaborators'} />
-      <Route path="media" component={require './pages/lab/media'} />
+      <Route path="media" component={EditMediaPage} />
       <Route path="workflow/:workflowID" component={require './pages/lab/workflow'} />
       <Route path="workflow/:workflowID/visualize" component={require './pages/lab/workflow-viewer'} />
       <Route path="workflow/:workflowID/visualise" component={require './pages/lab/workflow-viewer'} />
