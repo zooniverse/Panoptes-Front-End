@@ -85,4 +85,8 @@ class VersionList extends Component {
   }
 }
 
+VersionList.propTypes = {
+  project: React.PropTypes.object.isRequired
+};
+
 export default VersionList;

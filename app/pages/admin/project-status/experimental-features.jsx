@@ -78,6 +78,10 @@ class ExperimentalFeatures extends Component {
   }
 }
 
+ExperimentalFeatures.propTypes = {
+  project: React.PropTypes.object.isRequired
+};
+
 ExperimentalFeatures.defaultProps = {
   project: null
 };

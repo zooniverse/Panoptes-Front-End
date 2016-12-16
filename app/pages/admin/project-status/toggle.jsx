@@ -62,6 +62,13 @@ class Toggle extends Component {
   }
 }
 
+Toggle.propTypes = {
+  project: React.PropTypes.object.isRequired,
+  field: React.PropTypes.string.isRequired,
+  trueLabel: React.PropTypes.string,
+  falseLabel: React.PropTypes.string
+};
+
 Toggle.defaultProps = {
   project: null,
   field: null,

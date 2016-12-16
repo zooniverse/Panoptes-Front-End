@@ -48,4 +48,8 @@ class Projects extends Component {
   }
 }
 
+Projects.propTypes = {
+  user: React.PropTypes.object.isRequired
+};
+
 export default Projects;

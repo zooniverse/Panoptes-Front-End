@@ -52,6 +52,12 @@ class RedirectToggle extends Component {
   }
 }
 
+RedirectToggle.propTypes = {
+  project: React.PropTypes.object.isRequired,
+  invalidUrl: React.PropTypes.string,
+  validUrlRegex: React.PropTypes.object // regex
+};
+
 RedirectToggle.defaultProps = {
   project: null,
   validUrlRegex: /https?:\/\/[\w-]+(\.[\w-]*)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?/,

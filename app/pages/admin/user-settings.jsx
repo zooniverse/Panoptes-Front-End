@@ -69,6 +69,10 @@ class UserSettings extends Component {
   }
 }
 
+UserSettings.propTypes = {
+  editUser: React.PropTypes.object
+};
+
 UserSettings.defaultProps = {
   editUser: null
 };

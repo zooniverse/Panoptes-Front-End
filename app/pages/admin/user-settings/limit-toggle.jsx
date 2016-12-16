@@ -19,6 +19,10 @@ class LimitToggle extends Component {
   }
 }
 
+LimitToggle.propTypes = {
+  editUser: React.PropTypes.object.isRequired
+};
+
 LimitToggle.defaultProps = {
   editUser: null
 };
