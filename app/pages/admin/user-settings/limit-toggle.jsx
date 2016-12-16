@@ -4,13 +4,6 @@ import AutoSave from '../../../components/auto-save';
 import handleInputChange from '../../../lib/handle-input-change';
 
 class LimitToggle extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null
-    };
-  }
-
   render() {
     return (
       <div>

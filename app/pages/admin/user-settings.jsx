@@ -23,6 +23,10 @@ class UserSettings extends Component {
     nextProps.editUser.listen('change', this.boundForceUpdate);
   }
 
+  componentWillUnmount() {
+    this.props.editUser.stopListening('change', this.boundForceUpdate);
+  }
+
   render() {
     if (!this.props.editUser) {
       return (
@@ -37,22 +41,16 @@ class UserSettings extends Component {
         <h4>Settings for {this.props.editUser.login}</h4>
         <ul>
           <li>
-            <AutoSave resource={this.props.editUser}>
-              <input type="checkbox" name="admin" checked={this.props.editUser.admin} disabled onChange={handleChange} />{' '}
-              Admin
-            </AutoSave>
+            <input type="checkbox" name="admin" checked={this.props.editUser.admin} disabled />{' '}
+            Admin
           </li>
           <li>
-            <AutoSave resource={this.props.editUser}>
-              <input type="checkbox" name="login_prompt" checked={this.props.editUser.login_prompt} disabled onChange={handleChange} />{' '}
-              Login prompt
-            </AutoSave>
+            <input type="checkbox" name="login_prompt" checked={this.props.editUser.login_prompt} disabled />{' '}
+            Login prompt
           </li>
           <li>
-            <AutoSave resource={this.props.editUser}>
-              <input type="checkbox" name="private_profile" checked={this.props.editUser.private_profile} disabled onChange={handleChange} />{' '}
-              Private profile
-            </AutoSave>
+            <input type="checkbox" name="private_profile" checked={this.props.editUser.private_profile} disabled />{' '}
+            Private profile
           </li>
           <li>
             <AutoSave resource={this.props.editUser}>
