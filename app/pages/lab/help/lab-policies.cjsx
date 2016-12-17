@@ -62,7 +62,7 @@ counterpart.registerTranslations 'en',
       - Report publications using Zooniverse-produced data to us via this [form](https://docs.google.com/forms/d/18jwLbtV_6M5HCM74xNFtFbiiszWAxpC5IGHaToYjeiw/viewform).
       &nbsp;
 
-       If you have any questions relating to the content of this page, please [get in touch](/about/contact).
+      If you have any questions relating to the content of this page, please [get in touch](/about/contact).
 
     '''
 
