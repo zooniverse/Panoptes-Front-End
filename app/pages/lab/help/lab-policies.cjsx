@@ -63,7 +63,6 @@ counterpart.registerTranslations 'en',
       &nbsp;
 
       If you have any questions relating to the content of this page, please [get in touch](/about/contact).
-
     '''
 
 module.exports = React.createClass
