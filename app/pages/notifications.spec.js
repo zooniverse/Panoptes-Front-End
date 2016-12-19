@@ -1,3 +1,5 @@
+// These tests are skipped until a solution can be found for cjsx imports with the coffee-script test compiler
+
 import React from 'react';
 import assert from 'assert';
 // import Notifications from './notifications';
