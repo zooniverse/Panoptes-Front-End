@@ -169,15 +169,6 @@
         background: none
         border: none
 
-    &__buttons
-      display: flex
-      flex-direction: column
-
-      .call-to-action-button--disabled
-        cursor: not-allowed
-        opacity: 0.5
-        pointer-events: none
-
   &__container
     display: flex
     flex-flow: row wrap
@@ -206,6 +197,11 @@
     .get-started
       border: 2px solid white
       outline: none
+
+  .call-to-action-button--disabled
+    cursor: not-allowed
+    opacity: 0.4
+    pointer-events: none
 
   &__researcher-words
     background-color: white

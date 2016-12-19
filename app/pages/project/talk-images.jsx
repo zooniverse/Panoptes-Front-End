@@ -19,7 +19,7 @@ export default class TalkImages extends React.Component {
             );
           }
           return (
-            <div key={image.id} className="project-home-page__talk-image">
+            <div key={subject.id} className="project-home-page__talk-image">
               <img alt="" src={subject.src} />
             </div>
           );

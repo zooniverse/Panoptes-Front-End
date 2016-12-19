@@ -18,7 +18,7 @@ ProjectMetadataStat.propTypes = {
   value: React.PropTypes.string.isRequired,
 };
 
-class ProjectMetadata extends React.Component {
+export default class ProjectMetadata extends React.Component {
   constructor(props) {
     super(props);
 
@@ -80,11 +80,9 @@ class ProjectMetadata extends React.Component {
     return (
       <div className="project-home-page__container">
         <div className="project-metadata">
-          <div className="project-metadata-header">
-            <Link to={statsLink}>
-              <span>{project.display_name}{' '}Statistics</span>
-            </Link>
-          </div>
+          <Link to={statsLink}>
+            <span>{project.display_name}{' '}Statistics</span>
+          </Link>
 
           {this.renderStatus()}
 
@@ -115,7 +113,6 @@ ProjectMetadata.propTypes = {
     display_name: React.PropTypes.string,
     id: React.PropTypes.id,
     slug: React.PropTypes.string,
-    subjects_count: React.propTypes.number,
   }),
   showTalkStatus: React.PropTypes.bool,
 };
@@ -125,5 +122,3 @@ ProjectMetadata.defaultProps = {
   project: {},
   showTalkStatus: false,
 };
-
-export default ProjectMetadata;

@@ -45,7 +45,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   }
 
   renderRedirectLink() {
-    return (<a href={this.props.project.redirect} className="call-to-action standard-button">
+    return (<a href={this.props.project.redirect} className="standard-button">
       <strong>Visit the project</strong><br />
       <small>at {this.props.project.redirect}</small>
     </a>);
@@ -89,7 +89,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     let getStarted = (
       <Link
         to={`/projects/${this.props.project.slug}/classify`}
-        className="call-to-action standard-button get-started"
+        className="standard-button get-started"
       >
         <Translate content="buttons.getStarted" />
       </Link>
@@ -107,7 +107,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
     if (this.props.showWorkflowButtons) {
       getStarted = (
-        <button className="call-to-action standard-button get-started" onClick={this.toggleWorkflows}>
+        <button className="standard-button get-started" onClick={this.toggleWorkflows}>
           <Translate content="buttons.getStarted" />
         </button>
       );
@@ -115,7 +115,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
     return (
       <div>
-        <div className="project-home-page__content">
+        <div id="projectLandingIntro" className="project-home-page__content">
           {learnMore}
           {getStarted}
         </div>

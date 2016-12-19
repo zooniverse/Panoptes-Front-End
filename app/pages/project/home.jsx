@@ -10,7 +10,6 @@ import ProjectHomeWorkflowButtons from './home-workflow-buttons';
 export default class ProjectHomePage extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       showWorkflowButtons: false,
       talkImages: [],
@@ -79,25 +78,21 @@ export default class ProjectHomePage extends React.Component {
 
     return (
       <div className="project-home-page">
-        <div id="projectLandingIntro">
-
-          <div className="call-to-action-container">
-            <FinishedBanner project={this.props.project} />
-          </div>
-
-          <div className="project-home-page__description">{this.props.project.description}</div>
-
-          <ProjectHomeWorkflowButtons
-            activeWorkflows={this.props.activeWorkflows}
-            onChangePreferences={this.props.onChangePreferences}
-            preferences={this.props.preferences}
-            project={this.props.project}
-            showWorkflowButtons={this.state.showWorkflowButtons}
-            workflowAssignment={this.props.project.experimental_tools.includes('workflow assignment')}
-            splits={this.props.splits}
-          />
-
+        <div className="call-to-action-container">
+          <FinishedBanner project={this.props.project} />
         </div>
+
+        <div className="project-home-page__description">{this.props.project.description}</div>
+
+        <ProjectHomeWorkflowButtons
+          activeWorkflows={this.props.activeWorkflows}
+          onChangePreferences={this.props.onChangePreferences}
+          preferences={this.props.preferences}
+          project={this.props.project}
+          showWorkflowButtons={this.state.showWorkflowButtons}
+          workflowAssignment={this.props.project.experimental_tools.includes('workflow assignment')}
+          splits={this.props.splits}
+        />
 
         {renderImages && (
           <TalkImages images={this.state.talkImages} project={this.props.project} user={this.context.user} />
