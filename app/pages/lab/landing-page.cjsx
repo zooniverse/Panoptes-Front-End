@@ -5,7 +5,7 @@ Translate = require 'react-translate-component'
 ZooniverseLogoType = require '../../partials/zooniverse-logotype'
 alert = require '../../lib/alert'
 LoginDialog = require '../../partials/login-dialog'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 
 counterpart.registerTranslations 'en',
   labLanding:
@@ -21,6 +21,7 @@ counterpart.registerTranslations 'en',
       policies: 'Project Builder Policies'
       bestPractices: 'Best Practices Guide'
       buildTalk: 'Project Builder Talk'
+      acknowledgements: 'Acknowledgements'
       glossary: 'Glossary'
 
 module.exports = React.createClass
@@ -59,11 +60,12 @@ module.exports = React.createClass
 
         <div className="landing-links">
           <p className="heading"><Translate content="labLanding.links.heading" /></p>
-          <Link to="/lab-how-to"><Translate content="labLanding.links.buildHelp" /></Link>
-          <Link to="/lab-policies"><Translate content="labLanding.links.policies"></Translate></Link>
+          <Link to="/help"><Translate content="labLanding.links.buildHelp" /></Link>
+          <Link to="/help/lab-policies"><Translate content="labLanding.links.policies"></Translate></Link>
           <Link to="/lab-best-practices/introduction"><Translate content="labLanding.links.bestPractices" /></Link>
+          <Link to="/about/acknowledgements"><Translate content="labLanding.links.acknowledgements" /></Link>
           <Link to="/talk/18"><Translate content="labLanding.links.buildTalk" /></Link>
-          <Link to="/glossary"><Translate content="labLanding.links.glossary" /></Link>
+          <Link to="/help/glossary"><Translate content="labLanding.links.glossary" /></Link>
         </div>
       </div>
     </div>

@@ -41,3 +41,8 @@ module.exports =
   grid: <svg viewBox="0 0 100 100">
     <polyline className="shape" points="0, 25 50, 25 50, 75 0, 75 0, 25 50, 25 100, 25 100, 75 50, 75 50, 25" />
   </svg>
+
+  triangle: <svg viewBox="0 0 100 100">
+    <polygon class="shape" points="50, 12 95, 90 5,90 "/>
+    <ellipse class="shape" cx="50" cy="64" rx="17" ry="9"/>
+  </svg>

@@ -1,8 +1,9 @@
 React = require 'react'
 LoadingIndicator = require '../components/loading-indicator'
 getSubjectLocation = require '../lib/get-subject-location'
-`import VideoPlayer from './video-player'`
-`import PanZoom from './pan-zoom'`
+`import VideoPlayer from './video-player';`
+`import PanZoom from './pan-zoom';`
+`import TextViewer from './text-viewer';`
 
 SUBJECT_STYLE = display: 'block'
 NOOP = Function.prototype
@@ -31,7 +32,7 @@ module.exports = React.createClass
     frame = @props.frame
     {type, format, src} = getSubjectLocation @props.subject, @props.frame
     FrameWrapper = @props.frameWrapper
-    zoomEnabled = @props.project? && 'pan and zoom' in @props.project?.experimental_tools
+    zoomEnabled = @props.workflow?.configuration.pan_and_zoom
     frameDisplay = switch type
       when 'image'
         <div className="subject-image-frame" >
@@ -45,6 +46,8 @@ module.exports = React.createClass
       when 'video'
         <VideoPlayer src={src} type={type} format={format} frame={@props.frame} onLoad={@handleLoad}>
         </VideoPlayer>
+      when 'text'
+        <TextViewer  src={src} type={type} format={format} frame={@props.frame} onLoad={@handleLoad} /> 
 
     if FrameWrapper
       <PanZoom ref="panZoom" enabled={zoomEnabled} frameDimensions={@state.frameDimensions}>

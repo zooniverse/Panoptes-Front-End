@@ -54,21 +54,21 @@ const MyBuildsSection = React.createClass({
       this.setState({
         projects,
       });
-      projects.map((project) => {
-        if (project.links.avatar.id) {
-          apiClient.type('avatars').get(project.links.avatar.id)
-          .catch(() => {
-            return null;
-          })
-          .then((avatar) => {
+      return projects.map(project => project.links.avatar.id || null)
+        .filter(value => value !== null);
+    })
+    .then((projectAvatarIds) => {
+      if (projectAvatarIds.length > 0) {
+        apiClient.type('avatars').get(projectAvatarIds)
+          .then((avatars) => {
             const newState = Object.assign({}, this.state.avatars);
-            newState[project.id] = avatar;
+            avatars.map((avatar) => newState[avatar.links.linked.id] = avatar);
             this.setState({
-              avatars: newState
+              avatars: newState,
             });
-          });
-        }
-      });
+          })
+          .catch(error => console.error('Error getting project avatars', avatars));
+      }
     })
     .catch((error) => {
       this.setState({

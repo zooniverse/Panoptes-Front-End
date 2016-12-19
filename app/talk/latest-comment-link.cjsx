@@ -5,7 +5,7 @@ talkClient = require 'panoptes-client/lib/talk-client'
 DisplayRoles = require './lib/display-roles'
 Avatar = require '../partials/avatar'
 {Link} = require 'react-router'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 
 PAGE_SIZE = require('./config').discussionPageSize
 

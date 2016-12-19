@@ -33,6 +33,7 @@ workflow = apiClient.type('workflows').create
     multi_image_layout: 'grid3'
     invert_subject: true
     persist_annotations: true
+    pan_and_zoom: true
 
   first_task: 'init'
 
@@ -120,6 +121,7 @@ workflow = apiClient.type('workflows').create
         {type: 'polygon', label: 'Polygon', color: 'cyan', details: MISC_DRAWING_DETAILS}
         {type: 'circle', label: 'Circle', color: 'blue', details: MISC_DRAWING_DETAILS}
         {type: 'ellipse', label: 'Ellipse '.repeat(25), color: 'magenta', details: MISC_DRAWING_DETAILS}
+        {type: 'triangle', label: 'Triangle', color: 'salmon'}
         {type: 'bezier', label: 'Bezier', color: 'orange', details: MISC_DRAWING_DETAILS}
         {type: 'column', label: 'Column Rectangle', color: 'darkgreen'}
         {type: 'grid', label: 'Grid', color: 'purple'}
@@ -522,7 +524,7 @@ subject = apiClient.type('subjects').create
 project = apiClient.type('projects').create
   id: 'MOCK_PROJECT_FOR_CLASSIFIER'
   title: "The Dev Classifier"
-  experimental_tools: ['pan and zoom']
+  experimental_tools: []
 
 preferences = apiClient.type('project_preferences').create
   preferences: {}

@@ -6,8 +6,6 @@ import AdminOnly from '../components/admin-only';
 import AdminToggle from './admin-toggle';
 import { Link, IndexLink } from 'react-router';
 
-import style from './site-footer.styl';
-void style;
 
 counterpart.registerTranslations('en', {
   footer: {
@@ -23,6 +21,7 @@ counterpart.registerTranslations('en', {
       ourTeam: 'Our Team',
       education: 'Education',
       publications: 'Publications',
+      acknowledgements: 'Acknowledgements'
     },
     talk: {
       zooTalk: 'Zooniverse Talk',
@@ -95,12 +94,12 @@ const AppFooter = React.createClass({
                 </Link>, 'footer.discover.projectBuilder')}
               </li>
               <li>
-                {this.loggableLink(<Link to="/lab-how-to">
+                {this.loggableLink(<Link to="/help">
                   <Translate content="footer.discover.howToGuide" />
                 </Link>, 'footer.discover.howToGuide')}
               </li>
               <li>
-                {this.loggableLink(<Link to="/lab-policies">
+                {this.loggableLink(<Link to="/help/lab-policies">
                   <Translate content="footer.discover.projectBuilderPolicies" />
                 </Link>, 'footer.discover.projectBuilderPolicies')}
               </li>
@@ -117,7 +116,7 @@ const AppFooter = React.createClass({
                 </Link>, 'footer.about.aboutUs')}
               </li>
               <li>
-                {this.loggableLink(<Link to="/about/education">
+                {this.loggableLink(<Link to="/get-involved/education">
                   <Translate content="footer.about.education" />
                 </Link>, 'footer.about.education')}
               </li>
@@ -130,6 +129,11 @@ const AppFooter = React.createClass({
                 {this.loggableLink(<Link to="/about/publications">
                   <Translate content="footer.about.publications" />
                 </Link>, 'footer.about.publications')}
+              </li>
+              <li>
+                {this.loggableLink(<Link to="/about/acknowledgements">
+                    <Translate content="footer.about.acknowledgements" />
+                    </Link>, 'footer.about.acknowledgements')}
               </li>
               <li>
                 {this.loggableLink(<Link to="/about/contact">

@@ -56,10 +56,10 @@ module.exports = React.createClass
     @shouldScrollToBottom = true if @props.location.query?.scrollToLastComment
 
   componentWillMount: ->
-    @setDiscussion().then =>
+    @setDiscussion().then (discussion) =>
       if @props.location.query?.comment
         commentId = @props.location.query.comment
-        comments = @state.discussion.links.comments
+        comments = discussion.links.comments
         commentNumber = comments.indexOf(commentId) + 1
         page = Math.ceil commentNumber / PAGE_SIZE
 
@@ -125,6 +125,8 @@ module.exports = React.createClass
             page_size: 100
           .then (boards) =>
             @setState {boards}
+
+        discussion[0]
 
   onUpdateComment: (textContent, subject, commentId) ->
     {discussion} = @props.params

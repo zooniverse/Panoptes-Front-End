@@ -1,16 +1,25 @@
 React = require 'react'
 Select = require 'react-select'
 apiClient = require 'panoptes-client/lib/api-client'
-debounce = require 'debounce'
 
 module.exports = React.createClass
   displayName: 'CollectionSearch'
 
+  propTypes:
+    multi: React.PropTypes.bool
+    project: React.PropTypes.object
+
   getDefaultProps: ->
     multi: false
     project: null
+  
+  getInitialState: ->
+    collections: []
 
-  searchCollections: (value, callback) ->
+  onChange: (collections) ->
+    @setState {collections}
+
+  searchCollections: (value) ->
     query =
       page_size: 20
       favorite: false
@@ -27,20 +36,20 @@ module.exports = React.createClass
             collection: collection
           }
 
-        callback null, {
-          options: opts
-        }
+        {options: opts}
 
   getSelected: ->
-    @refs.collectionSelect.state.values
+    @state.collections
 
   render: ->
-    <Select
+    <Select.Async
       ref="collectionSelect"
       multi={@props.multi}
       name="collids"
+      value={@state.collections}
+      onChange={@onChange}
       placeholder="Type to search Collections"
       searchPromptText="Type to search Collections"
       className="collection-search"
       closeAfterClick={true}
-      asyncOptions={debounce(@searchCollections, 200)} />
+      loadOptions={@searchCollections} />

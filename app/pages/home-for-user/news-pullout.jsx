@@ -4,8 +4,6 @@ import ProjectCard from '../../partials/project-card';
 import Publications from '../../lib/publications';
 import moment from 'moment';
 
-import style from './news-pullout.styl';
-void style;
 
 const NewsSection = React.createClass({
 
@@ -115,21 +113,21 @@ const NewsSection = React.createClass({
           <h2> Zooniverse News </h2>
 
           <div className="home-page-news-pullout news-section">
-            <h4> Recent Publications </h4>
-            {this.state.publications.map((article) => {
-              return this.renderPublication(article);
-            })}
-          </div>
-
-          <div className="home-page-news-pullout news-section">
             <h4> Newest Project </h4>
             <ProjectCard href={projLink} key={this.state.newestProject.id} project={this.state.newestProject} imageSrc={avatarSrc} />
           </div>
 
           <div className="home-page-news-pullout news-section">
-            <h4> Updated Projects </h4>
+            <h4> Participated Project Updates </h4>
             {this.props.updatedProjects.map((project) => {
               return this.renderUpdatedProjects(project);
+            })}
+          </div>
+          
+          <div className="home-page-news-pullout news-section">
+            <h4> Recent Publications </h4>
+            {this.state.publications.map((article) => {
+              return this.renderPublication(article);
             })}
           </div>
         </div>

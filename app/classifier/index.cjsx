@@ -14,7 +14,7 @@ isAdmin = require '../lib/is-admin'
 Tutorial = require '../lib/tutorial'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
-WorldWideTelescope = require './world_wide_telescope'
+WorldWideTelescope = require './world-wide-telescope'
 MiniCourseButton = require './mini-course-button'
 GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
@@ -22,6 +22,8 @@ experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 Shortcut = require './tasks/shortcut'
 `import CacheClassification from '../components/cache-classification'`
+MetadataBasedFeedback = require './metadata-based-feedback'
+{VisibilitySplit} = require('seven-ten')
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -98,7 +100,7 @@ Classifier = React.createClass
       showingExpertClassification: false
       subjectLoading: true
 
-    if @props.project.experimental_tools.indexOf('expert comparison summary') > -1
+    if @props.project.experimental_tools?.indexOf('expert comparison summary') > -1
       @getExpertClassification @props.workflow, @props.subject
 
     preloadSubject subject
@@ -278,9 +280,11 @@ Classifier = React.createClass
           <p>
             <small>
               <strong>
-                <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
-                  Restart the project mini-course
-                </MiniCourseButton>
+                <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+                  <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
+                    Restart the project mini-course
+                  </MiniCourseButton>
+                </VisibilitySplit>
               </strong>
             </small>
           </p>
@@ -315,6 +319,21 @@ Classifier = React.createClass
   renderSummary: (classification) ->
     <div>
       Thanks!
+
+      {if @props.project.experimental_tools?.indexOf('metadata-based-feedback') > -1
+        <MetadataBasedFeedback
+          subject={@props.subject}
+          classification={@props.classification}
+          dudLabel='DUD'
+          simLabel='SIM'
+          subjectLabel='SUB'
+          metaTypeFieldName='#Type'
+          metaSuccessMessageFieldName='#F_Success'
+          metaFailureMessageFieldName='#F_Fail'
+          metaSimCoordXPattern='#X'
+          metaSimCoordYPattern='#Y'
+          metaSimTolPattern='#Tol'
+        />}
 
       {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
         <strong>

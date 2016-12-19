@@ -13,8 +13,6 @@ import qs from 'qs';
 import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-pullout';
 
-import style from './index.styl';
-void style;
 
 const SECTIONS = {
   projects: RecentProjectsSection,

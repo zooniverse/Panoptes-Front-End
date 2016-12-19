@@ -4,9 +4,13 @@ import moment from 'moment';
 import Rcslider from 'rc-slider';
 
 export const Progress = (props) => {
-  const percent = props.progress * 100;
+  let progress = props.progress;
+  if (props.progress > 1) {
+    progress = 1;
+  }
+  const percent = progress * 100;
   const data = {
-    series: [props.progress, 1 - props.progress],
+    series: [progress, 1 - progress],
   };
   return (
     <div className="svg-container progress-container">
@@ -53,10 +57,10 @@ export class Graph extends React.Component {
     };
 
     this.formatLabel = {
-      hour: (date) => (moment(date).format('MMM-DD hh:mm A')),
-      day: (date) => (moment(date).format('MMM-DD-YYYY')),
-      week: (date) => (moment(date).format('MMM-DD-YYYY')),
-      month: (date) => (moment(date).format('MMM-DD-YYYY')),
+      hour: (date) => { return moment(date).format('MMM-DD hh:mm A'); },
+      day: (date) => { return moment(date).format('MMM-DD-YYYY'); },
+      week: (date) => { return moment(date).format('MMM-DD-YYYY'); },
+      month: (date) => { return moment(date).format('MMM-DD-YYYY'); },
     };
 
     const data = this.processData(props.data, props.by);
@@ -320,15 +324,17 @@ Graph.propTypes = {
   handleRangeChange: React.PropTypes.func,
 };
 
-const DateRange = (props) => (
-  <div className="date-range">
-    <span className="progress-stats-label">Current date range:</span>
-    <span>{` ${props.dateMin} to ${props.dateMax}`}</span>
-    <button className="standard-button date-reset" onClick={props.setDefaultRange}>
-      Reset date range
-    </button>
-  </div>
-);
+const DateRange = (props) => {
+  return (
+    <div className="date-range">
+      <span className="progress-stats-label">Current date range:</span>
+      <span>{` ${props.dateMin} to ${props.dateMax}`}</span>
+      <button className="standard-button date-reset" onClick={props.setDefaultRange}>
+        Reset date range
+      </button>
+    </div>
+  );
+};
 
 DateRange.propTypes = {
   dateMin: React.PropTypes.string,

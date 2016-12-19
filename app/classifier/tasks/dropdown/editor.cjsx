@@ -4,7 +4,7 @@ Dialog = require 'modal-form/dialog'
 AutoSave = require '../../../components/auto-save'
 handleInputChange = require '../../../lib/handle-input-change'
 NextTaskSelector = require '../next-task-selector'
-{MarkdownEditor} = (require 'markdownz').default
+{MarkdownEditor} = require 'markdownz'
 MarkdownHelp = require '../../../partials/markdown-help'
 
 DropdownList = require './dropdown-list'

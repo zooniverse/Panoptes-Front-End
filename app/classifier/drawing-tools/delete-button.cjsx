@@ -1,6 +1,6 @@
 React = require 'react'
 
-RADIUS = 8
+RADIUS = if screen.width < 900 then 11 else 8
 STROKE_COLOR = 'white'
 FILL_COLOR = 'black'
 STROKE_WIDTH = 1.5

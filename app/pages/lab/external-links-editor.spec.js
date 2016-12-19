@@ -28,14 +28,20 @@ describe('ExternalLinksEditor', () => {
   it('should contain 3 table rows', () => {
     const wrapper = render(<ExternalLinksEditor project={testProject} />);
     const rows = wrapper.find('tbody > tr');
-    // assert there are the right number of rows
-    assert(rows.length, 3);
-    // assert the rows have the correct values
+
+    assert.strictEqual(rows.length, 3, 'the number of rows should equal the number of links');
+
     for (const idx of [0, 1, 2]) {
-      const inputLabel = wrapper.find(`input[name="urls.${idx}.label"]`);
-      const inputUrl = wrapper.find(`input[name="urls.${idx}.url"]`);
-      assert(inputLabel.get(0).attribs.value, testProject.urls[idx].label);
-      assert(inputUrl.get(0).attribs.value, testProject.urls[idx].url);
+      const inputLabel = wrapper.find(`input[name="urls.${idx}.label"]`).get(0).attribs.value;
+      const inputUrl = wrapper.find(`input[name="urls.${idx}.url"]`).get(0).attribs.value;
+      const testUrl = testProject.urls[idx];
+      assert.strictEqual(inputLabel, testUrl.label, 'the label should match the one passed in');
+      assert.strictEqual(inputUrl, testUrl.url, 'the url should match the one passed in');
     }
+  });
+
+  it('should not render a table if there are no URLs', () => {
+    const wrapper = shallow(<ExternalLinksEditor project={{ urls: [] }} />);
+    assert.equal(wrapper.contains('table'), false, `there shouldn't be a table if there are no links`);
   });
 });

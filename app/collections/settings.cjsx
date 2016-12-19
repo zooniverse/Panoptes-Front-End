@@ -1,10 +1,9 @@
 React = require 'react'
-DisplayNameSlugEditor = require '../partials/display-name-slug-editor'
 alert = require '../lib/alert'
 SetToggle = require '../lib/set-toggle'
-CollectionRole = require '../lib/collection-role'
+checkIfCollectionOwner = require '../lib/check-if-collection-owner'
 ChangeListener = require '../components/change-listener'
-PromiseRenderer = require '../components/promise-renderer'
+`import DisplayNameSlugEditor from '../partials/display-name-slug-editor'`
 
 CollectionDeleteDialog = React.createClass
   displayName: 'CollectionDeleteDialog'
@@ -43,7 +42,7 @@ CollectionDeleteDialog = React.createClass
 
 module.exports = React.createClass
   displayName: "CollectionSettings"
-  mixins: [SetToggle, CollectionRole]
+  mixins: [SetToggle]
   setterProperty: 'collection'
 
   contextTypes:
@@ -56,8 +55,12 @@ module.exports = React.createClass
     error: null
     setting:
       private: false
+    hasSettingsRole: false
 
   componentDidMount: ->
+    checkIfCollectionOwner(@props.user, @props.collection)
+      .then (hasSettingsRole) =>
+        @setState {hasSettingsRole}
     @props.collection.listen 'delete', @redirect
 
   componentDidUnMount: ->
@@ -79,39 +82,37 @@ module.exports = React.createClass
       @props.collection.private
 
   render: ->
-    <PromiseRenderer promise={@hasSettingsRole()}>{(hasSettingsRole) =>
-      if hasSettingsRole
-        <div className="collection-settings-tab">
-          <ChangeListener target={@props.collection}>{=>
-            <DisplayNameSlugEditor resource={@props.collection} resourceType="collection" />
-          }</ChangeListener>
+    if @state.hasSettingsRole
+      <div className="collection-settings-tab">
+        <ChangeListener target={@props.collection}>{=>
+          <DisplayNameSlugEditor resource={@props.collection} resourceType="collection" />
+        }</ChangeListener>
 
-          <hr />
+        <hr />
 
-          <span className="form-label">Visibility</span>
-          <p>
-            <label style={whiteSpace: 'nowrap'}>
-              <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} onChange={@set.bind this, 'private', true} />
-              Private
-            </label>
-            &emsp;
-            <label style={whiteSpace: 'nowrap'}>
-              <input type="radio" name="private" value={false} data-json-value={true} checked={@publicCollection()} onChange={@set.bind this, 'private', false} />
-              Public
-            </label>
-          </p>
+        <span className="form-label">Visibility</span>
+        <p>
+          <label style={whiteSpace: 'nowrap'}>
+            <input type="radio" name="private" value={true} data-json-value={true} checked={@props.collection.private} onChange={@set.bind this, 'private', true} />
+            Private
+          </label>
+          &emsp;
+          <label style={whiteSpace: 'nowrap'}>
+            <input type="radio" name="private" value={false} data-json-value={true} checked={@publicCollection()} onChange={@set.bind this, 'private', false} />
+            Public
+          </label>
+        </p>
 
-          <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
+        <p className="form-help">Only the assigned <strong>collaborators</strong> can view a private project. Anyone with the URL can access a public project.</p>
 
-          <hr />
+        <hr />
 
-          <div className="form-label">Delete this Collection</div>
-          <div className="delete-container">
-            <button className="error major-button" type="button" onClick={@confirmDelete}>Delete</button>
-          </div>
+        <div className="form-label">Delete this Collection</div>
+        <div className="delete-container">
+          <button className="error major-button" type="button" onClick={@confirmDelete}>Delete</button>
         </div>
-      else
-        <div className="collection-settings-tab">
-          <p>Not allowed to edit this collection</p>
-        </div>
-    }</PromiseRenderer>
+      </div>
+    else
+      <div className="collection-settings-tab">
+        <p>Not allowed to edit this collection</p>
+      </div>

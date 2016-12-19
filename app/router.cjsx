@@ -3,7 +3,15 @@ React = require 'react'
 
 `import ProjectsPage from './pages/projects/index';`
 `import FilteredProjectsList from './pages/projects/filtered-projects-list';`
-
+`import CollectionPageWrapper from './collections/show';`
+`import ProjectHomePage from './pages/project/home';`
+`import AboutProject from './pages/project/about/index';`
+`import { AboutProjectResearch, AboutProjectEducation, AboutProjectFAQ, AboutProjectResults } from './pages/project/about/simple-pages';`
+`import AboutProjectTeam from './pages/project/about/team';`
+`import UserSettingsList from './pages/admin/user-settings-list';`
+`import ProjectStatusList from './pages/admin/project-status-list';`
+`import ProjectStatus from './pages/admin/project-status';`
+`import EditMediaPage from './pages/lab/media';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -28,9 +36,15 @@ module.exports =
       <IndexRoute component={require './pages/about/about-home'} />
       <Route path="team" component={require './pages/about/team-page'} />
       <Route path="publications" component={require './pages/about/publications-page'} />
-      <Route path="education" component={require './pages/about/education-page'} />
+      <Route path="acknowledgements" component={require './pages/about/acknowledgements'} />
       <Route path="contact" component={require './pages/about/contact-page'} />
-      <Route path="volunteering" component={require './pages/about/volunteering-page'} />
+    </Route>
+
+    <Route path="get-involved" component={require './pages/get-involved'} ignoreScrollBehavior>
+      <IndexRoute component={require './pages/get-involved/volunteering-page'} />
+      <Route path="education" component={require './pages/get-involved/education'} />
+      <Route path="call-for-projects" component={require './pages/get-involved/call-for-projects'} />
+      <Redirect from="callForProjects" to="call-for-projects" />
     </Route>
 
     <Route path="reset-password" component={require './pages/reset-password'} />
@@ -61,25 +75,32 @@ module.exports =
       <Route path="email" component={require './pages/settings/email' } />
     </Route>
 
+    <Route path="help" component={require './pages/lab/help'}>
+      <IndexRoute component={require './pages/lab/help/how-to-page'} />
+      <Route path="glossary" component={require './pages/lab/help/glossary'} />
+      <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
+      <Route path="best-practices" component={require './pages/lab/best-practices'} />
+    </Route>
+
     <Route path="projects" component={ProjectsPage}>
       <IndexRoute component={FilteredProjectsList} />
     </Route>
 
     <Route path="projects/:owner/:name" component={require './pages/project'}>
-      <IndexRoute component={require './pages/project/home'} />
+      <IndexRoute component={ProjectHomePage} />
       <Route path="home" component={ONE_UP_REDIRECT} />
       <Route path="classify" component={require './pages/project/classify'} />
       <Redirect from="research" to="about/research"/>
       <Redirect from="results" to="about/results"/>
       <Redirect from="faq" to="about/faq"/>
       <Redirect from="education" to="about/education"/>
-      <Route path="about" component={require './pages/project/about'}>
+      <Route path="about" component={AboutProject}>
         <IndexRedirect to="research" />
-        <Route path="research" component={require './pages/project/about/research'} />
-        <Route path="results" component={require './pages/project/about/results'} />
-        <Route path="faq" component={require './pages/project/about/faq'} />
-        <Route path="education" component={require './pages/project/about/education'} />
-        <Route path="team" component={require './pages/project/about/team'} />
+        <Route path="research" component={AboutProjectResearch} />
+        <Route path="results" component={AboutProjectResults} />
+        <Route path="faq" component={AboutProjectFAQ} />
+        <Route path="education" component={AboutProjectEducation} />
+        <Route path="team" component={AboutProjectTeam} />
       </Route>
       <Route path="notifications" component={require './pages/notifications'} />
       <Route path="talk" component={require './pages/project/talk'}>
@@ -105,7 +126,7 @@ module.exports =
          <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
       </Route>
 
-      <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
+      <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
         <IndexRoute component={require './collections/show-list'} />
         <Route path="settings" component={require './collections/settings'} />
         <Route path="collaborators" component={require './collections/collaborators'} />
@@ -134,17 +155,17 @@ module.exports =
       <Route name="talk-discussion" path=":board/:discussion" component={require './talk/discussion'} />
     </Route>
 
-    <Route path="favorites" component={require('./pages/collections/index')}>
+    <Route path="favorites" component={require('./pages/collections')}>
       <IndexRoute component={require('./pages/collections/favorites-list')} />
       <Route path=":collection_owner" component={require('./pages/collections/favorites-list')} />
     </Route>
 
-    <Route path="collections" component={require('./pages/collections/index')}>
+    <Route path="collections" component={require('./pages/collections')}>
        <IndexRoute component={require('./pages/collections/collections-list')} />
        <Route path=":collection_owner" component={require('./pages/collections/collections-list')} />
     </Route>
 
-    <Route path="collections/:collection_owner/:collection_name" component={require './collections/show'}>
+    <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
       <IndexRoute component={require './collections/show-list'} />
       <Route path="settings" component={require './collections/settings'} />
       <Route path="collaborators" component={require './collections/collaborators'} />
@@ -163,7 +184,7 @@ module.exports =
         <Route path="team" component={require './pages/lab/about/team'} />
       </Route>
       <Route path="collaborators" component={require './pages/lab/collaborators'} />
-      <Route path="media" component={require './pages/lab/media'} />
+      <Route path="media" component={EditMediaPage} />
       <Route path="workflow/:workflowID" component={require './pages/lab/workflow'} />
       <Route path="workflow/:workflowID/visualize" component={require './pages/lab/workflow-viewer'} />
       <Route path="workflow/:workflowID/visualise" component={require './pages/lab/workflow-viewer'} />
@@ -175,9 +196,9 @@ module.exports =
       <Route path="guide" component={require './pages/lab/field-guide'} />
       <Route path="mini-course" component={require './pages/lab/mini-course'} />
     </Route>
-    <Route path="lab-policies" component={require './pages/lab/lab-policies'} />
-    <Route path="lab-how-to" component={require './pages/lab/how-to-page'} />
-    <Route path="glossary" component={require './pages/lab/glossary'} />
+    <Route path="lab-policies" component={require './pages/lab/help/lab-policies'} />
+    <Route path="lab-how-to" component={require './pages/lab/help'} />
+    <Route path="glossary" component={require './pages/lab/help/glossary'} />
 
     <Route path="lab-best-practices" component={require './pages/lab/best-practices'}>
       <IndexRedirect to="introduction" />
@@ -189,9 +210,9 @@ module.exports =
     </Route>
 
     <Route path="admin" component={require './pages/admin'}>
-      <IndexRoute component={require './pages/admin/user-settings'} />
-      <Route path="project_status" component={require './pages/admin/project-status-list'} />
-      <Route path="project_status/:owner/:name" component={require './pages/admin/project-status'} />
+      <IndexRoute component={UserSettingsList} />
+      <Route path="project_status" component={ProjectStatusList} />
+      <Route path="project_status/:owner/:name" component={ProjectStatus} />
     </Route>
 
     <Route path="todo" component={-> <div className="content-container"><i className="fa fa-cogs"></i> TODO</div>} />

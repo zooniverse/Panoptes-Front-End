@@ -1,6 +1,6 @@
 React = require 'react'
 alert = require '../../lib/alert'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 
 module.exports = React.createClass
   displayName: 'GenericTask'

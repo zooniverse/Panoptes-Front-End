@@ -153,13 +153,13 @@ EditProjectPage = React.createClass
             <div className="nav-list-header">Need some help?</div>
             <ul className="nav-list">
               <li>
-                <Link className="nav-list-item" to="/lab-how-to">Read a tutorial</Link>
+                <Link className="nav-list-item" to="/help">Read a tutorial</Link>
               </li>
               <li>
                 <Link to="/talk/18" className="nav-list-item">Ask for help on talk</Link>
               </li>
               <li>
-                <Link to="/glossary" className="nav-list-item">Glossary</Link>
+                <Link to="/help/glossary" className="nav-list-item">Glossary</Link>
               </li>
             </ul>
           </li>

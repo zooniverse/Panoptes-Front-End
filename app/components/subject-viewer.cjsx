@@ -1,7 +1,7 @@
 React = require 'react'
 FavoritesButton = require '../collections/favorites-button'
 Dialog = require 'modal-form/dialog'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 FrameViewer = require './frame-viewer'
@@ -101,11 +101,11 @@ module.exports = React.createClass
             else
               <span className="subject-frame-play-controls">
                 {if @state.playing
-                  <button aria-label="Pause" title="Pause" type="button" className="secret-button" onClick={@setPlaying.bind this, false}>
+                  <button aria-label="Pause" title="Pause" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, false}>
                     <i className="fa fa-pause fa-fw"></i>
                   </button>
                 else
-                  <button aria-label="Play" title="Play" type="button" className="secret-button" onClick={@setPlaying.bind this, true}>
+                  <button aria-label="Play" title="Play" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, true}>
                     <i className="fa fa-play fa-fw"></i>
                   </button>}
               </span>}

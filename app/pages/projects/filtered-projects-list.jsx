@@ -6,7 +6,7 @@ import ProjectFilteringInterface from './project-filtering-interface';
 counterpart.registerTranslations('en', {
   projects: {
     button: 'Get Started',
-    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(count)s projects found.',
+    countMessage: 'Showing %(pageStart)s-%(pageEnd)s of %(projectCount)s projects found.',
     notFoundMessage: 'Sorry, no projects found.',
   },
 });

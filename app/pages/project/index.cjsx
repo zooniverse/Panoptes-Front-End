@@ -2,7 +2,7 @@ counterpart = require 'counterpart'
 React = require 'react'
 Translate = require 'react-translate-component'
 {IndexLink, Link} = require 'react-router'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 PotentialFieldGuide = require './potential-field-guide'
 TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
@@ -10,6 +10,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 classNames = require 'classnames'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 isAdmin = require '../../lib/is-admin'
+{Split} = require('seven-ten')
 
 counterpart.registerTranslations 'en',
   project:
@@ -55,6 +56,7 @@ ProjectPage = React.createClass
     owner: null
     preferences: null
     loading: false
+    splits: null
 
   getInitialState: ->
     activeWorkflows: []
@@ -251,6 +253,8 @@ ProjectPage = React.createClass
               @props.project.display_name}
           </IndexLink>}
 
+        <br className='responsive-break' />
+
         {unless @props.project.redirect
           <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.about'}>
             <Translate content="project.nav.about" />
@@ -301,12 +305,14 @@ ProjectPage = React.createClass
         loadingSelectedWorkflow: @state.loadingSelectedWorkflow
         workflow: @state.selectedWorkflow
         activeWorkflows: @state.activeWorkflows
-        projectIsComplete: @state.projectIsComplete}
+        projectIsComplete: @state.projectIsComplete
+        splits: @props.splits}
 
       {unless @props.project.launch_approved or @props.project.beta_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
 
-      <PotentialFieldGuide project={@props.project} />
+      {unless @props.location.pathname is projectPath
+        <PotentialFieldGuide project={@props.project} />}
     </div>
 
 
@@ -314,6 +320,9 @@ ProjectPageController = React.createClass
   displayName: 'ProjectPageController'
 
   mixins: [TitleMixin]
+
+  contextTypes:
+    geordi: React.PropTypes.object
 
   propTypes:
     params: React.PropTypes.object
@@ -332,6 +341,7 @@ ProjectPageController = React.createClass
     project: null
     owner: null
     preferences: null
+    splits: null
 
   _listenedToPreferences: null
 
@@ -340,6 +350,7 @@ ProjectPageController = React.createClass
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
     @fetchProjectData @props.params.owner, @props.params.name, @props.user
+    @setupSplits()
 
   componentWillReceiveProps: (nextProps) ->
     {owner, name} = nextProps.params
@@ -348,6 +359,27 @@ ProjectPageController = React.createClass
 
     if pathChanged or userChanged
       @fetchProjectData owner, name, nextProps.user
+      @setupSplits nextProps
+
+  componentWillUnmount: ->
+    Split.clear()
+
+  setupSplits: (props = @props) ->
+    user = props.user
+    {owner, name} = props.params
+
+    if user
+      Split.load("#{owner}/#{name}").then (splits) =>
+        @setState {splits}
+        return unless splits
+        for split of splits
+          continue unless splits[split].state == 'active'
+          @context.geordi?.remember experiment: splits[split].name
+          @context.geordi?.remember cohort: splits[split].variant?.name
+          break
+    else
+      Split.clear()
+      @context.geordi?.forget ['experiment','cohort']
 
   fetchProjectData: (ownerName, projectName, user) ->
     @listenToPreferences null
@@ -425,6 +457,7 @@ ProjectPageController = React.createClass
           preferences={@state.preferences}
           loading={@state.loading}
           onChangePreferences={@handlePreferencesChange}
+          splits={@state.splits}
         />
 
       else if @state.loading

@@ -4,13 +4,16 @@ ReactDOM = require 'react-dom'
 TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
-FinishedBanner = require './finished-banner'
+`import FinishedBanner from './finished-banner'`
 Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
 MiniCourse = require '../../lib/mini-course'
 `import CustomSignInPrompt from './custom-sign-in-prompt'`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog'`
 experimentsClient = require '../../lib/experiments-client'
+{Split} = require('seven-ten')
+{VisibilitySplit} = require('seven-ten')
+
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
@@ -85,6 +88,7 @@ module.exports = React.createClass
     rejected: null
 
   componentDidMount: () ->
+    Split.classifierVisited();
     if @props.workflow and not @props.loadingSelectedWorkflow
       @loadAppropriateClassification(@props)
 
@@ -230,6 +234,7 @@ module.exports = React.createClass
           onComplete={@saveClassification}
           onCompleteAndLoadAnotherSubject={@saveClassificationAndLoadAnotherSubject}
           onClickNext={@loadAnotherSubject}
+          splits={@props.splits}
         />
       else if @state.rejected?.classification?
         <code>Please try again. Something went wrong: {@state.rejected.classification.toString()}</code>
@@ -266,6 +271,7 @@ module.exports = React.createClass
           console?.log 'Demo mode: Did NOT save classification'
         else
           console?.log 'Saved classification', classification.id
+          Split.classificationCreated(classification)
           classification.get('subjects')
             .then (subjects) =>
               seenThisSession.add @props.workflow, subjects
@@ -315,7 +321,10 @@ module.exports = React.createClass
     @loadAppropriateClassification(@props) if @props.workflow?
 
   maybeLaunchMiniCourse: ->
-    if classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
+    shouldPrompt = classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
+    split = @props.splits?['mini-course.visible']
+    isntHidden = not split or split?.variant?.value?.auto
+    if shouldPrompt and isntHidden
       MiniCourse.startIfNecessary({
         workflow: @props.workflow,
         preferences: @props.preferences,
@@ -325,7 +334,7 @@ module.exports = React.createClass
 
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog
-      WorkflowAssignmentDialog.start()
+      WorkflowAssignmentDialog.start({splits: props.splits})
         .then =>
           @setState { promptWorkflowAssignmentDialog: false }
         .then =>

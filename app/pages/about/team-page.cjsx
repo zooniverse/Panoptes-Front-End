@@ -7,7 +7,7 @@ counterpart.registerTranslations 'en',
     nav:
       showAll: 'Show All'
       oxford: 'Oxford'
-      chicago: 'Chicago'
+      chicago: 'The Adler Planetarium'
       minnesota: 'Minnesota'
       portsmouth: 'Portsmouth'
       california: 'California'

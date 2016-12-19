@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
-import ReactSwipe from 'react-swipe'
-import animatedScrollTo from 'animated-scrollto'
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import ReactSwipe from 'react-swipe';
+import animatedScrollTo from 'animated-scrollto';
 
 class StepThrough extends Component {
   constructor(props) {
@@ -49,14 +49,15 @@ class StepThrough extends Component {
   }
 
   handleKeyDown(e) {
-    e.preventDefault();
     switch (e.which) {
       // left
       case 37:
+        e.preventDefault();
         this.goPrevious();
         break;
       // right
       case 39:
+        e.preventDefault();
         this.goNext();
         break;
     }
@@ -118,14 +119,17 @@ class StepThrough extends Component {
 
   render() {
     const childrenCount = React.Children.count(this.props.children);
+    const swipeOptions = {
+      startSlide: this.state.step,
+      continuous: false,
+      callback: this.handleStep.bind(this, childrenCount),
+    };
     return (
-      <div className="step-through" {...this.props}>
+      <div className="step-through" className={this.props.className} style={this.props.style}>
         <ReactSwipe 
           ref="swiper" 
-          className="step-through-content" 
-          startSlide={this.state.step} 
-          continuous={false} 
-          callback={this.handleStep.bind(this, childrenCount)}
+          className="step-through-content"
+          swipeOptions={swipeOptions}
         >
           {this.props.children}
         </ReactSwipe>

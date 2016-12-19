@@ -1,7 +1,7 @@
 React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
 tasks = require '../../../classifier/tasks'
-{Markdown} = (require 'markdownz').default
+{Markdown} = require 'markdownz'
 
 # All classes in this file take in `workflow` and `taskKey` as props
 
