@@ -2,9 +2,10 @@ React = require 'react'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
-Thumbnail = require '../components/thumbnail'
 apiClient = require 'panoptes-client/lib/api-client'
 getSubjectLocation = require '../lib/get-subject-location'
+
+`import Thumbnail from '../components/thumbnail';`
 
 module.exports = React.createClass
   displayName: 'TalkDiscussionPreview'
