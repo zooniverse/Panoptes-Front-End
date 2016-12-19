@@ -62,17 +62,19 @@ module.exports = React.createClass
             Your search returned {resourceCount @state.meta.count, 'subjects'}.
           </div>
 
+          <Paginator page={+@state.meta.page} pageCount={@state.meta.page_count} />
+
           <div className="talk-search-results">
             <div className="talk-list-content">
-              <section>
+              <section className="tagged-results">
                 {for tag in @state.tags
-                  <div className="tagged-subject talk-search-result talk-module" key="tag-#{ tag.id }">
+                  <div className="tagged-subject talk-module" key="tag-#{ tag.id }">
                     <p>
                       <Link to="/projects/#{@props.params.owner}/#{@props.params.name}/talk/subjects/#{tag.subject.id}">
                         Subject {tag.subject.id}
                       </Link>
                     </p>
-                    <Thumbnail src={getSubjectLocation(tag.subject).src} width={100} format={getSubjectLocation(tag.subject).format} />
+                    <Thumbnail src={getSubjectLocation(tag.subject).src} width={300} format={getSubjectLocation(tag.subject).format} />
                     <ul className="tag-list">
                       {for subjectTag in tag.subjectTags
                         <li key={"tag-#{ tag.id }-#{ subjectTag.id }"}>
