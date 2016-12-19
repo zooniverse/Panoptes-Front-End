@@ -15,10 +15,10 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
-  
+
   getInitialState: ->
     subject: null
-  
+
   componentDidMount: ->
     @updateSubject @props.discussion
 
