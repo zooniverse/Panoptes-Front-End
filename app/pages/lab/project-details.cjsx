@@ -123,14 +123,14 @@ module.exports = React.createClass
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit={500} string={@props.project.workflow_description ? ''} /></small>
           </p>
 
-          <p>
+          <div>
             <AutoSave resource={@props.project}>
               <span className="form-label">Announcement Banner</span>
               <br />
               <MarkdownEditor className="full" name="configuration.announcement" rows="2" value={@props.project.configuration?.announcement} project={@props.project} onChange={handleInputChange.bind @props.project} onHelp={-> alert <MarkdownHelp/>}/>
             </AutoSave>
             <small className="form-help">This text will appear as a banner at the top of all your project's pages. Only use this when you've got a big important announcement to make!</small>
-          </p>
+          </div>
 
           <div>
             <AutoSave resource={@props.project}>
