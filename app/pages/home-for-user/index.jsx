@@ -163,6 +163,7 @@ const HomePageForUser = React.createClass({
                   color: getColorFromString(projects[i].slug),
                   classifications: projects[i].activity_count,
                   updated_at: projects[i].updated_at,
+                  redirect: projects[i].redirect
                 };
               } else {
                 return null;
