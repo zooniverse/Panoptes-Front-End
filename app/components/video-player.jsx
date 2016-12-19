@@ -11,19 +11,19 @@ const VideoPlayer = React.createClass({
     onLoad: React.PropTypes.func,
     showControls: React.PropTypes.bool,
     src: React.PropTypes.string,
-    type: React.PropTypes.string,
+    type: React.PropTypes.string
   },
 
   getDefaultProps() {
     return {
-      showControls: true,
+      showControls: true
     };
   },
 
   getInitialState() {
     return {
       playing: false,
-      playbackRate: 1,
+      playbackRate: 1
     };
   },
 
@@ -99,11 +99,6 @@ const VideoPlayer = React.createClass({
     const rates = [0.25, 0.5, 1];
     return (
       <div className="subject-video-frame">
-        <button
-          className="subject-video-frame__hidden-button"
-          onClick={this.playVideo.bind(this, !this.state.playing)}
-        />
-
         <video
           className="subject"
           ref="videoPlayer"
@@ -111,6 +106,7 @@ const VideoPlayer = React.createClass({
           type={`${this.props.type}/${this.props.format}`}
           preload="auto"
           onCanPlay={this.props.onLoad}
+          onClick={this.playVideo.bind(this, !this.state.playing)}
           onEnded={this.endVideo}
           onTimeUpdate={this.updateScrubber}
         >
@@ -155,7 +151,7 @@ const VideoPlayer = React.createClass({
         {this.props.children}
       </div>
     );
-  },
+  }
 
 });
 
