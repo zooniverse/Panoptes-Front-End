@@ -123,6 +123,7 @@ const HomePageForUser = React.createClass({
   getRibbonData(user, _page = 1) {
     const getRibbonData = this.getRibbonData;
     return user.get('project_preferences', {
+      sort: '-updated_at',
       page: _page,
     })
     .then((projectPreferences) => {
@@ -146,7 +147,7 @@ const HomePageForUser = React.createClass({
               return counts;
             }, {});
             const projectData = projects.map((project) => {
-              project.activity_count = classifications[project.id]
+              project.activity_count = classifications[project.id];
               return project;
             });
             return projectData;
@@ -171,11 +172,10 @@ const HomePageForUser = React.createClass({
           .then((projects) =>{
             this.setState((prevState) => {
               const ribbonData = prevState.ribbonData.concat(projects);
-              const updatedProjects = this.recentlyUpdatedProjects(ribbonData);
-              const totalClassifications = updatedProjects.reduce((total, project) => {
+              const totalClassifications = ribbonData.reduce((total, project) => {
           return total + project.classifications;
         }, 0);
-              return {ribbonData, updatedProjects, totalClassifications };
+              return { ribbonData, totalClassifications };
             });
           });
         const meta = projectPreferences[0].getMeta();
@@ -184,12 +184,6 @@ const HomePageForUser = React.createClass({
           getRibbonData(user, meta.page + 1);
         }
       }
-    });
-  },
-
-  recentlyUpdatedProjects(data) {
-    return data.sort((a, b) => {
-      return new Date(b.updated_at) - new Date(a.updated_at);
     });
   },
 
@@ -277,7 +271,7 @@ const HomePageForUser = React.createClass({
 
               {OpenSectionComponent && (
                 <OpenSectionComponent
-                  updatedProjects={this.state.updatedProjects}
+                  updatedProjects={this.state.ribbonData}
                   projects={this.state.ribbonData}
                   onClose={this.deselectSection}
                 />
