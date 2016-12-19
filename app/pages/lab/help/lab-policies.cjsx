@@ -10,7 +10,7 @@ counterpart.registerTranslations 'en',
       &nbsp;
 
       ### How to Launch your Project
-      A live project can exist in three different states, it may be a;
+      A live project can exist in three different states, it may be a:
       1. Public Project
       2. Review Project
       3. Zooniverse Project
@@ -50,7 +50,7 @@ counterpart.registerTranslations 'en',
       - The content is likely to cause offense, or is suitable only for an adult audience.
       - The copyright on material uploaded to the site is not clear; please only use content you have the right to use.
 
-      We reserve the right to decide which projects appear on the main project page and which are promoted to the Zooniverse community. In particular, if you have a project that is very close to an existing Zooniverse project, please contact us to discuss.
+      We reserve the right to decide which projects appear on the main project page and which are promoted to the Zooniverse community. In particular, if you have a project that is very close to an existing Zooniverse project, please [contact us](/about/contact) to discuss.
 
       Projects promoted to the Zooniverse community **must**:
 
