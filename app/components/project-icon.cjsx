@@ -1,6 +1,7 @@
 React = require 'react'
 {Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
+ProjectCard = require '../partials/project-card'
 
 module.exports = React.createClass
   displayName: 'ProjectIcon'
@@ -30,18 +31,7 @@ module.exports = React.createClass
       @setState avatar: '/assets/simple-avatar.jpg'
 
   render: ->
-    content = [
-      <img key="image" alt="" src={@state.avatar ? @props.defaultAvatarSrc} />
-      <div key="label" className="label">
-        <span className="display-name"><strong>{@props.project.name}</strong></span>
-      </div>
-      <div key="badge" className="badge">{@props.badge}</div> if @props.badge
-    ]
-
-    if @props.linkTo
-      if !!@props.project.redirect
-        <a href={@props.project.redirect} className="stats-project-icon">{content}</a>
-      else
-        <Link to="/projects/#{@props.project.slug}" className="stats-project-icon">{content}</Link>
-    else
-      <span className="stats-project-icon">{content}</span>
+    <span className="stats-project-icon">
+      <ProjectCard project={@props.project} />
+      {<div className="badge">{@props.badge}</div> if @props.badge}
+    </span>

@@ -24,8 +24,8 @@ class RecentProjectsSection extends Component {
 
   render() {
     const { onClose, updatedProjects } = this.props;
-    const visibleProjects = updatedProjects.slice(0, 5);
-    const hiddenProjects = updatedProjects.slice(5);
+    const visibleProjects = updatedProjects.slice(0, 4);
+    const hiddenProjects = updatedProjects.slice(4);
     const className = this.state.allProjects ? 'open' : 'closed'
     return (
       <HomePageSection
@@ -36,8 +36,8 @@ class RecentProjectsSection extends Component {
         ? <div className="home-page-section__header-label">
             <p> You have no recent projects. </p>
           </div>
-        : <div>
-            <div className="project-card-list">
+        : <div  className="project-card-list">
+            <span>
             {visibleProjects.map((project) => {
               return (
                 <span key={project.id}>
@@ -46,8 +46,8 @@ class RecentProjectsSection extends Component {
                 </span>
               );
             })}
-            </div>
-            <div className={`project-card-list ${className}`}>
+            </span>
+            <span className={className}>
             {hiddenProjects.map((project) => {
               return (
                 <span key={project.id}>
@@ -56,7 +56,7 @@ class RecentProjectsSection extends Component {
                 </span>
               );
             })}
-            </div>
+            </span>
         </div>}
         <button type="button" className="outlined-button" onClick={this.toggleAllProjects}>
           <span className="home-page-section__header-label">
