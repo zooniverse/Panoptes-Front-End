@@ -472,7 +472,7 @@ EditWorkflowPage = React.createClass
             toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
               <input type={if tutorials.length is 1 then "checkbox" else "radio"} checked={assignedTutorial} onChange={toggleTutorial} />
-              Tutorial #{tutorial.id}
+              Tutorial #{tutorial.id} {" - #{tutorial.display_name}" if tutorial.display_name}
             </label>}
         </form>
       else
@@ -493,7 +493,7 @@ EditWorkflowPage = React.createClass
             toggleTutorial = @handleTutorialToggle.bind this, tutorial, workflowTutorials
             <label key={tutorial.id}>
               <input type={if projectTutorials.length is 1 then "checkbox" else "radio"} checked={assignedTutorial} onChange={toggleTutorial} />
-              Mini-Course #{tutorial.id}
+              Mini-Course #{tutorial.id} {" - #{tutorial.display_name}" if tutorial.display_name}
             </label>}
         </form>
       else
