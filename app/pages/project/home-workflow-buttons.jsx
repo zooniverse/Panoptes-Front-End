@@ -1,14 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
 import ProjectHomeWorkflowButton from './home-workflow-button';
-import locationMatch from '../../lib/location-match';
-
 
 export default class ProjectHomeWorkflowButtons extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleSplitWorkflowAssignment = this.handleSplitWorkflowAssignment.bind(this);
     this.shouldWorkflowBeDisabled = this.shouldWorkflowBeDisabled.bind(this);
     this.renderRedirectLink = this.renderRedirectLink.bind(this);
     this.renderWorkflowButtons = this.renderWorkflowButtons.bind(this);
@@ -25,18 +22,6 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     }
 
     return false;
-  }
-
-  handleSplitWorkflowAssignment() {
-    let workflowAssignmentID = '2758';
-
-    if (process.env.NODE_ENV === 'production' || locationMatch(/\W?env=(production)/)) {
-      workflowAssignmentID = '3063';
-    }
-
-    if (this.props.splits['workflow.assignment']) {
-      this.props.onChangePreferences('preferences.selected_workflow', workflowAssignmentID);
-    }
   }
 
   renderRedirectLink() {
@@ -73,23 +58,6 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     }
 
     if (this.props.showWorkflowButtons) {
-      if (this.props.splits && this.props.preferences && this.props.workflowAssignment) {
-        const gravitySpySplit = (this.props.splits['workflow.assignment']) ? this.props.splits['workflow.assignment'].variant.value.description === 'Apprentice workflow assignment' : false;
-        const newToProject = Object.keys(this.props.preferences.preferences).length === 0;
-
-        if (newToProject && gravitySpySplit) {
-          return (
-            <Link
-              to={`/projects/${this.props.project.slug}/classify`}
-              className="call-to-action standard-button"
-              onClick={this.handleSplitWorkflowAssignment}
-            >
-              Get started!
-            </Link>
-          );
-        }
-      }
-
       return this.renderWorkflowButtons();
     }
 
@@ -103,7 +71,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
 ProjectHomeWorkflowButtons.contextTypes = {
   geordi: React.PropTypes.object,
-  user: React.PropTypes.object,
+  user: React.PropTypes.object
 };
 
 ProjectHomeWorkflowButtons.defaultProps = {
@@ -113,7 +81,7 @@ ProjectHomeWorkflowButtons.defaultProps = {
   project: {},
   showWorkflowButtons: false,
   splits: {},
-  workflowAssignment: false,
+  workflowAssignment: false
 };
 
 ProjectHomeWorkflowButtons.propTypes = {
@@ -121,13 +89,13 @@ ProjectHomeWorkflowButtons.propTypes = {
   onChangePreferences: React.PropTypes.func.isRequired,
   preferences: React.PropTypes.shape({
     preferences: React.PropTypes.object,
-    settings: React.PropTypes.objectOf(React.PropTypes.string),
+    settings: React.PropTypes.objectOf(React.PropTypes.string)
   }),
   project: React.PropTypes.shape({
     redirect: React.PropTypes.string,
-    slug: React.PropTypes.string,
+    slug: React.PropTypes.string
   }).isRequired,
   showWorkflowButtons: React.PropTypes.bool.isRequired,
   splits: React.PropTypes.object,
-  workflowAssignment: React.PropTypes.bool,
+  workflowAssignment: React.PropTypes.bool
 };

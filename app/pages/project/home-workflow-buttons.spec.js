@@ -6,29 +6,29 @@ import { render, mount } from 'enzyme';
 
 const testWorkflows = [
   { id: '2342',
-    configuration: { level: 1 },
-    display_name: 'Beginner Workflow',
+    configuration: { level: '1' },
+    display_name: 'Beginner Workflow'
   },
   { id: '1234',
-    configuration: { level: 2 },
-    display_name: 'Intermediate Workflow',
+    configuration: { level: '2' },
+    display_name: 'Intermediate Workflow'
   },
   { id: '4321',
-    configuration: { level: 3 },
-    display_name: 'Advanced Workflow',
+    configuration: { level: '3' },
+    display_name: 'Advanced Workflow'
   },
   { id: '6757',
     configuration: { },
-    display_name: 'Active, no level workflow',
-  },
+    display_name: 'Active, no level workflow'
+  }
 ];
 
 const testUserPreferences = {
-  settings: { workflow_id: '1234' },
+  settings: { workflow_id: '1234' }
 };
 
 const testProject = {
-  redirect: 'www.testproject.com',
+  redirect: 'www.testproject.com'
 };
 
 describe('ProjectHomeWorkflowButtons', function() {
