@@ -37,9 +37,17 @@ class UserProfilePage extends Component {
     if (this.state.profileUser) {
       return <ProfileUser {...this.props} profileUser={this.state.profileUser} user={this.props.user} />;
     } else if (this.state.loading) {
-      return <LoadingIndicator />;
+      return (
+        <div className="centered-grid">
+          <LoadingIndicator />
+        </div>
+      );
     } else {
-      return <p>User <strong>{this.props.params.profile_name}</strong> not found</p>;
+      return (
+        <div className="centered-grid">
+          <p>User <strong>{this.props.params.profile_name}</strong> not found</p>
+        </div>
+      );
     }
   }
 }
