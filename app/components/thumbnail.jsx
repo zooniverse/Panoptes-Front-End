@@ -7,9 +7,10 @@ export default class Thumbnail extends React.Component {
     super(props);
 
     this.state = {
-      failed: false,
+      failed: false
     };
 
+    this.playVideo = this.playVideo.bind(this);
     this.handleError = this.handleError.bind(this);
   }
 
@@ -24,23 +25,31 @@ export default class Thumbnail extends React.Component {
     }
   }
 
+  playVideo(e) {
+    if (e.target.paused) {
+      e.target.play();
+    } else {
+      e.target.pause();
+    }
+  }
+
   render() {
     const src = this.state.failed ? this.props.src : this.getThumbnailSrc(this.props);
 
     const dimensions = {
       width: null,
-      height: null,
+      height: null
     };
 
     const style = {
       maxWidth: this.props.width,
-      maxHeight: this.props.height,
+      maxHeight: this.props.height
     };
 
     if (this.props.format === 'mp4') {
       return (
         <div>
-          <video width="300" controls>
+          <video width="300" controls onClick={this.playVideo}>
             <source src={this.props.src} type="video/mp4" />
           </video>
         </div>
