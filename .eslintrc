@@ -1,6 +1,9 @@
 {
   "extends": "airbnb",
   "plugins": ["react"],
+  "env": {
+    "browser": true,
+  },
   "rules": {
     "react/jsx-boolean-value": ["error","always"],
     "react/prefer-es6-class": 0,
