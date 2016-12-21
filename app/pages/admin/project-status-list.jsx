@@ -14,6 +14,7 @@ class ProjectStatusList extends Component {
     this.state = {
       loading: false,
       projects: [],
+      error: null
     };
   }
 
@@ -29,25 +30,31 @@ class ProjectStatusList extends Component {
 
   getProjects() {
     const { query } = this.props.location;
+
     const projectsQuery = {
       include: 'avatar',
       page_size: 24,
-      sort: '-updated_at',
+      sort: '-updated_at'
     };
 
     if (query && query.filterBy && !query.slug) {
       projectsQuery[query.filterBy] = true;
     }
+    const mergedQuery = Object.assign({}, projectsQuery, query);
 
-    this.setState({ loading: true });
-    return apiClient.type('projects').get(projectsQuery)
-      .then((projects) => this.setState({ projects, loading: false }))
-      .catch((error) => console.error('Error requesting projects', error));
+    this.setState({ loading: true, error: null });
+    return apiClient.type('projects').get(mergedQuery)
+      .then((projects) => { this.setState({ projects, loading: false }); })
+      .catch((error) => { this.setState({ error: `Error requesting projects:, ${error}`, loading: false }); });
   }
 
   renderProjectList() {
     const { projects } = this.state;
-    const meta = projects[0].getMeta() || {};
+    let meta = {};
+    if (projects.length > 0) {
+      meta = projects[0].getMeta();
+    }
+
     return (projects.length === 0)
       ? <div className="project-status-list">No projects found for this filter</div>
       : <div>
@@ -79,10 +86,8 @@ class ProjectStatusList extends Component {
           <Link to="/admin/project_status?filterBy=beta_approved">Beta Approved</Link>
           <Link to="/admin/project_status?filterBy=beta_requested">Beta Requested</Link>
         </nav>
-        {(this.state.loading)
-          ? <LoadingIndicator />
-          : this.renderProjectList()
-        }
+        {(this.state.error) ? <p>{this.state.error}</p> : null}
+        {(this.state.loading) ? <LoadingIndicator /> : this.renderProjectList()}
       </div>
     );
   }
