@@ -50,9 +50,9 @@ class ProjectStatusList extends Component {
 
   renderProjectList() {
     const { projects } = this.state;
-
+    let meta = {};
     if (projects.length > 0) {
-      const meta = projects[0].getMeta();
+      meta = projects[0].getMeta();
     }
 
     return (projects.length === 0)
