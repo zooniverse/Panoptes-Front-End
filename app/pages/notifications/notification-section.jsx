@@ -19,14 +19,14 @@ export default class NotificationSection extends Component {
       loading: false,
       notificationData: [],
       notificationsMap: { },
-      page: 1,
+      page: 1
     };
   }
 
   componentWillMount() {
     if (this.props.section === 'zooniverse') {
       this.setState({
-        name: 'Zooniverse',
+        name: 'Zooniverse'
       });
     } else {
       apiClient.type('projects').get({ id: this.props.projectID, cards: true })
@@ -36,7 +36,7 @@ export default class NotificationSection extends Component {
       .then(([project]) => {
         this.setState({
           name: project.display_name,
-          avatar: project.avatar_src,
+          avatar: project.avatar_src
         });
       });
     }
@@ -96,7 +96,7 @@ export default class NotificationSection extends Component {
           firstMeta,
           lastMeta,
           notificationsMap,
-          page,
+          page
         });
         this.getUnreadCount();
       });
@@ -192,6 +192,14 @@ export default class NotificationSection extends Component {
     );
   }
 
+  renderError(item) {
+    return (
+      <div className="talk-module notification-section__error">
+        {item.error}
+      </div>
+    );
+  }
+
   render() {
     const l = this.state.currentMeta;
 
@@ -214,13 +222,16 @@ export default class NotificationSection extends Component {
 
         {(this.props.expanded && !this.state.loading) && (
           this.state.notificationData.map((item) => {
-            return (
-              <Notification
-                data={item.data}
-                key={item.notification.id}
-                notification={item.notification}
-                user={this.props.user}
-              />);
+            if (item.notification) {
+              return (
+                <Notification
+                  data={item.data}
+                  key={item.notification.id}
+                  notification={item.notification}
+                  user={this.props.user}
+                />);
+            }
+            return this.renderError(item);
           })
         )}
 
@@ -231,7 +242,7 @@ export default class NotificationSection extends Component {
               firstAndLast={false}
               itemCount
               nextLabel={<span>older <i className="fa fa-chevron-right" /></span>}
-              onClickNext={this.markAsRead.bind(this, 'first')}
+              onClickNext={this.markAsRead.bind(this, 'current')}
               page={+this.state.currentMeta.page}
               pageCount={this.state.lastMeta.page_count}
               pageSelector={false}
@@ -254,11 +265,11 @@ NotificationSection.propTypes = {
   toggleSection: React.PropTypes.func,
   user: React.PropTypes.shape({
     display_name: React.PropTypes.string,
-    login: React.PropTypes.string,
-  }),
+    login: React.PropTypes.string
+  })
 };
 
 NotificationSection.defaultProps = {
   expanded: false,
-  toggleSection: () => {},
+  toggleSection: () => {}
 };
