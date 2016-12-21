@@ -22,6 +22,9 @@ module.exports = React.createClass
 
       <div className="talk-started-discussion talk-module">
         <div>
+          {if @props.notification.delivered is false
+            <i title="Unread" className="fa fa-star fa-lg" />}
+
           <div className="title">
             <Link to={"#{slug}/talk/#{@props.data.discussion.board_id}/#{@props.data.discussion.id}"} {...@props}>
               {@props.notification.message}

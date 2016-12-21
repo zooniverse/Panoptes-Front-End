@@ -19,6 +19,7 @@ module.exports = React.createClass
       <div className="talk-comment">
         <Comment
           data={@props.data.comment}
+          delivered={@props.notification.delivered}
           user={@props.user}
           project={@props.project}
           params={@props.params} />

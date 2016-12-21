@@ -29,8 +29,7 @@ module.exports = React.createClass
 
   render: ->
     {notification} = @props
-    delivered = if notification.delivered then '' else 'unread'
     key = "#{ notification.source_type }-notification-#{ notification.source_id }"
-    <div className={"#{ delivered } notification"} key={key}>
+    <div className="notification" key={key}>
       {@renderNotification()}
     </div>
