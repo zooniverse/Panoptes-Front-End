@@ -1,4 +1,5 @@
 // talk default css rules
+NOTIFICATION_BACKGROUND = #fafafa
 TALK_BACKGROUND = #f7f7f7
 TALK_BORDER = #F2F1F1
 TALK_BORDER_RADIUS = 6px
@@ -721,7 +722,8 @@ COPY_GREY_LIGHT = #afaeae
     display: inline-block
 
   .talk-module
-    background-color: TALK_BACKGROUND
+    background-color: NOTIFICATION_BACKGROUND
+    border: none
     opacity: 0.97
 
   .title
@@ -729,7 +731,7 @@ COPY_GREY_LIGHT = #afaeae
     text-transform: capitalize
 
   .notification.unread .talk-module
-    border: 4px solid MAIN_HIGHLIGHT
+    border: 4px solid LIGHT_GREEN_HEADER
 
   .notification .talk-module
     transition: border-color 1s ease

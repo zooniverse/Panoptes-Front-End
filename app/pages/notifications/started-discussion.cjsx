@@ -1,5 +1,4 @@
 React = require 'react'
-talkClient = require 'panoptes-client/lib/talk-client'
 {Link} = require 'react-router'
 Loading = require '../../components/loading-indicator'
 Comment = require '../../talk/search-result'
@@ -8,39 +7,30 @@ module.exports = React.createClass
   displayName: 'CommentNotification'
 
   propTypes:
+    data: React.PropTypes.object.isRequired
+    notification: React.PropTypes.object.isRequired
     project: React.PropTypes.object
     user: React.PropTypes.object.isRequired
-    notification: React.PropTypes.object.isRequired
-
-  getInitialState: ->
-    discussion: null
-    comment: null
-
-  componentWillMount: ->
-    talkClient.type('discussions').get(@props.notification.source_id).then (discussion) =>
-      @setState {discussion}
-      talkClient.type('comments').get(discussion_id: discussion.id, sort: 'created_at', page_size: 1).then ([comment]) =>
-        @setState {comment}
 
   render: ->
-    if @state.discussion
-      [owner, name] = @state.discussion.project_slug?.split('/') or []
-      slug = if @state.discussion.project_slug
-        "/projects/#{@state.discussion.project_slug}"
+    if @props.data.discussion
+      [owner, name] = @props.data.discussion.project_slug?.split('/') or []
+      slug = if @props.data.discussion.project_slug
+        "/projects/#{@props.data.discussion.project_slug}"
       else
         ''
 
       <div className="talk-started-discussion talk-module">
         <div>
           <div className="title">
-            <Link to={"#{slug}/talk/#{@state.discussion.board_id}/#{@state.discussion.id}"} {...@props}>
+            <Link to={"#{slug}/talk/#{@props.data.discussion.board_id}/#{@props.data.discussion.id}"} {...@props}>
               {@props.notification.message}
             </Link>
           </div>
 
-          {if @state.comment
+          {if @props.data.comment
             <Comment
-              data={@state.comment}
+              data={@props.data.comment}
               user={@props.user}
               project={@props.project}
               params={@props.params} />
