@@ -115,7 +115,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
     return (
       <div>
-        <div id="projectLandingIntro" className="project-home-page__content">
+        <div id="projectLandingIntro" className="project-home-page__centering">
           {learnMore}
           {getStarted}
         </div>
