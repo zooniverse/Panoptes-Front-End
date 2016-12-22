@@ -26,8 +26,6 @@ module.exports = React.createClass
     [owner, name] = comment.project_slug?.split('/') or []
 
     <div className="talk-search-result talk-module">
-      {if @props.delivered is false
-        <i title="Unread" className="fa fa-star fa-lg" />}
       <CommentContextIcon comment={comment}></CommentContextIcon>
       <CommentLink comment={comment} project={@props.project}>{comment.discussion_title}</CommentLink>
       <Markdown content={comment.body} project={@props.project} />

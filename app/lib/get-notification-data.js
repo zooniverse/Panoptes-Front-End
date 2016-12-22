@@ -5,7 +5,9 @@ const STANDARD_ERROR = 'Sorry, this notification cannot be displayed.';
 
 function commentData(notification) {
   return talkClient.type('comments').get(notification.source_id).then((comment) => {
-    return { notification, data: { comment }};
+    return apiClient.type('users').get(comment.user_id).then((commentUser) => {
+      return { notification, data: { comment, commentUser }};
+    });
   }).catch(() => {
     return { error: STANDARD_ERROR };
   });
@@ -53,7 +55,9 @@ function moderationData(notification) {
 function discussionData(notification) {
   return talkClient.type('discussions').get(notification.source_id).then((discussion) => {
     return talkClient.type('comments').get({ discussion_id: discussion.id, sort: 'created_at', page_size: 1 }).then(([comment]) => {
-      return { notification, data: { discussion, comment }};
+      return apiClient.type('users').get(comment.user_id).then((commentUser) => {
+        return { notification, data: { discussion, comment, commentUser }};
+      });
     });
   }).catch(() => {
     return { error: STANDARD_ERROR };

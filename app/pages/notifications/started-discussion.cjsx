@@ -1,7 +1,7 @@
 React = require 'react'
 {Link} = require 'react-router'
 Loading = require '../../components/loading-indicator'
-Comment = require '../../talk/search-result'
+Comment = require './comment'
 
 module.exports = React.createClass
   displayName: 'CommentNotification'
@@ -33,10 +33,12 @@ module.exports = React.createClass
 
           {if @props.data.comment
             <Comment
-              data={@props.data.comment}
-              user={@props.user}
+              data={@props.data}
+              notification={@props.notification}
+              params={@props.params}
               project={@props.project}
-              params={@props.params} />
+              startedDiscussion={true}
+              user={@props.user} />
           }
         </div>
       </div>
