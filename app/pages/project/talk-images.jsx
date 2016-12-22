@@ -14,7 +14,7 @@ export default class TalkImages extends React.Component {
           if (subject.type === 'video') {
             return (
               <div key={image.id} className="project-home-page__talk-image">
-                <VideoPlayer src={subject.src} type={subject.type} format={subject.format} />
+                <VideoPlayer src={subject.src} type={subject.type} format={subject.format} showControls={false} />
               </div>
             );
           }
@@ -34,14 +34,14 @@ export default class TalkImages extends React.Component {
 
 TalkImages.defaultProps = {
   project: {},
-  images: [],
+  images: []
 };
 
 TalkImages.propTypes = {
   project: React.PropTypes.shape({
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,
-    slug: React.PropTypes.string,
+    slug: React.PropTypes.string
   }).isRequired,
-  images: React.PropTypes.arrayOf(React.PropTypes.object),
+  images: React.PropTypes.arrayOf(React.PropTypes.object)
 };

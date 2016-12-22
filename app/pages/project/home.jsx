@@ -6,6 +6,14 @@ import FinishedBanner from './finished-banner';
 import TalkImages from './talk-images';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
+
+counterpart.registerTranslations('en', {
+  researchQuote: {
+    default: 'Your contribution helps further scientific discoveries.'
+  }
+});
 
 export default class ProjectHomePage extends React.Component {
   constructor(props) {
@@ -58,8 +66,14 @@ export default class ProjectHomePage extends React.Component {
   }
 
   renderResearcherWords() {
-    // TODO: Show researcher avatar selected from lab and researcher words
     const avatarSrc = '/assets/simple-avatar.png';
+    let quote;
+
+    if (this.props.project.researcher_quote) {
+      quote = <span>&quot;{this.props.project.researcher_quote}&quot;</span>;
+    } else {
+      quote = <Translate component="span" content="researchQuote.default" />;
+    }
 
     return (
       <div className="project-home-page__researcher-words">
@@ -67,7 +81,7 @@ export default class ProjectHomePage extends React.Component {
 
         <div>
           <h4>Words from the researcher</h4>
-          <span>&quot;{this.props.project.researcher_quote}&quot;</span>
+          {quote}
         </div>
       </div>
     );
@@ -102,8 +116,7 @@ export default class ProjectHomePage extends React.Component {
 
         <div className="project-home-page__container">
 
-          {this.props.project.researcher_quote && (
-            this.renderResearcherWords())}
+          {this.renderResearcherWords()}
 
           <div className="project-home-page__about-text">
             <h4>About {this.props.project.display_name}</h4>
