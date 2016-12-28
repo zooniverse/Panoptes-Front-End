@@ -1,7 +1,6 @@
 React = require 'react'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
@@ -28,8 +27,6 @@ module.exports = React.createClass
 
   getInitialState: ->
     {disciplineTagList, otherTagList} = @splitTags()
-    avatarError: null
-    backgroundError: null
     disciplineTagList: disciplineTagList
     otherTagList: otherTagList
     researchers: []
@@ -46,14 +43,8 @@ module.exports = React.createClass
 
     avatar = @props.project.get('avatar')
     background = @props.project.get('background')
-
     Promise.all([avatar, background])
       .then ([avatar, background]) => 
-        if avatar.src?
-            avatar
-        else 
-          avatar = avatar[0]
-          background = background[0]
         @setState {avatar, background}
       .catch (error) =>
         @setState {error}
@@ -89,8 +80,8 @@ module.exports = React.createClass
         <div>
           Avatar<br />
           <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={@state.avatar?.src} placeholder={avatarPlaceholder} onChange={@handleMediaChange.bind this, 'avatar'} />
-          {if @state.avatarError
-            <div className="form-help error">{@state.avatarError.toString()}</div>}
+          {if @state.error
+            <div className="form-help error">{@state.error.toString()}</div>}
 
           <p><small className="form-help">Pick a logo to represent your project. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50 KB.</small></p>
 
@@ -98,8 +89,8 @@ module.exports = React.createClass
 
           Background image<br />
           <ImageSelector maxSize={MAX_BACKGROUND_SIZE} src={@state.background?.src} placeholder={backgroundPlaceholder} onChange={@handleMediaChange.bind this, 'background'} />
-          {if @state.backgroundError
-            <div className="form-help error">{@state.backgroundError.toString()}</div>}
+          {if @state.error
+            <div className="form-help error">{@state.error.toString()}</div>}
 
           <p><small className="form-help">This image will be the background for all of your project pages, including your project’s front page. To add an image, either drag and drop or left click to open your file viewer. For best results, use good quality images no more than 256 KB.</small></p>
 
