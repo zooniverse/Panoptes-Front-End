@@ -115,10 +115,10 @@ const PanZoom = React.createClass({
               />
             </div>
             <div>
-              <button title="reset zoom levels" className={"reset fa fa-refresh" + (this.cannotZoomOut() ? " disabled" : "")} onClick={ this.zoomReset } ></button>
+              <button title="rotate" className={"fa fa-repeat"} onClick={ this.rotateClockwise } />
             </div>
             <div>
-              <button title="rotate" className={"fa fa-repeat"} onClick={ this.rotateClockwise } />
+              <button title="reset zoom levels" className={"reset fa fa-refresh" + (this.cannotZoomOut() ? " disabled" : "")} onClick={ this.zoomReset } ></button>
             </div>
           </div>
           : ""
