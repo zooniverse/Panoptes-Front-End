@@ -46,6 +46,15 @@ export default class ProjectHomePage extends React.Component {
 
   componentDidMount() {
     this.showWorkflowButtons();
+    if (this.props.project.configuration.researcherID) {
+      return apiClient.type('users').get(this.props.project.configuration.researcherID).then((researcher) => {
+        return researcher.get('avatar').then(([avatar]) => {
+          if (avatar.src) {
+            this.setState({ researcherAvatar: avatar.src });
+          }
+        });
+      });
+    }
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -66,7 +75,7 @@ export default class ProjectHomePage extends React.Component {
   }
 
   renderResearcherWords() {
-    const avatarSrc = '/assets/simple-avatar.png';
+    const avatarSrc = this.state.researcherAvatar || '/assets/simple-avatar.png';
     let quote;
 
     if (this.props.project.researcher_quote) {
