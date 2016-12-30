@@ -30,6 +30,14 @@ module.exports = React.createClass
     backgroundError: null
     disciplineTagList: disciplineTagList
     otherTagList: otherTagList
+    researchers: []
+
+  componentWillMount: ->
+    @props.project.get('project_roles', page_size: 100).then (roles) =>
+      scientists = for role in roles when 'scientist' in role.roles
+        role.get 'owner'
+      Promise.all(scientists).then (researchers) =>
+        @setState({ researchers })
 
   splitTags: (kind) ->
     disciplineTagList = []
@@ -40,6 +48,12 @@ module.exports = React.createClass
       else
         otherTagList.push(t)
     {disciplineTagList, otherTagList}
+
+  researcherOptions: ->
+    options = []
+    for researcher in @state.researchers
+      options.push Object.assign value: researcher.id, label: researcher.display_name
+    options
 
   render: ->
     # Failures on media GETs are acceptable here,
@@ -127,6 +141,11 @@ module.exports = React.createClass
             <AutoSave resource={@props.project}>
               <span className="form-label">Researcher Quote</span>
               <br />
+              <Select
+                placeholder="Choose a Researcher"
+                onChange={@handleResearcherChange}
+                options={@researcherOptions()}
+                value={@props.project.configuration.researcherID} />
               <textarea className="standard-input full" name="researcher_quote" value={@props.project.researcher_quote} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">This text will appear on a project landing page alongside an avatar of the selected researcher. <CharLimit limit={255} string={@props.project.researcher_quote ? ''} /></small>
@@ -180,6 +199,12 @@ module.exports = React.createClass
     @setState disciplineTagList: newTags
     allTags = newTags.concat @state.otherTagList
     @handleTagChange(allTags)
+
+  handleResearcherChange: (option) ->
+    @props.project.update({
+      'configuration.researcherID': option?.value || ""
+    })
+    @props.project.save()
 
   handleOtherTagChange: (options) ->
     newTags = options.map (option) ->
