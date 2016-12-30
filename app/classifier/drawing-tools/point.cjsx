@@ -28,13 +28,10 @@ module.exports = React.createClass
     initMove: ({x, y}) ->
       {x, y}
 
-    initValid: (mark, {containerRect, scale}) ->
-      markRect =
-        left: containerRect.left + (mark.x * scale.vertical)
-        top: containerRect.top + (mark.y * scale.horizontal)
-        width: 1
-        height: 1
-      isInBounds markRect, containerRect
+    initValid: (mark, {naturalHeight, naturalWidth}) ->
+      notBeyondWidth = mark.x < naturalWidth
+      notBeyondHeight = mark.y < naturalHeight
+      notBeyondWidth and notBeyondHeight
 
     initRelease: ->
       _inProgress: false
