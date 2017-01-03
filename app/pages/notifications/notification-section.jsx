@@ -200,7 +200,7 @@ export default class NotificationSection extends Component {
           </div>
 
           <div className="notification-section__item">
-            <button className="notification-section__expand" title="Toggle Section">
+            <button title="Toggle Section">
               <i className={buttonType} />
             </button>
           </div>
