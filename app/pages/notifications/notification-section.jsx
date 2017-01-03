@@ -118,24 +118,13 @@ export default class NotificationSection extends Component {
     });
   }
 
-  markAllRead(e, query = { page: 1, total: 0 }) {
-    return talkClient.type('notifications').get({ page: query.page, page_size: 50, delivered: false, section: this.props.section })
-    .catch((error) => {
-      this.setState({ error });
-    })
-    .then((notifications) => {
-      const count = notifications[0].getMeta().count;
-      query.total += notifications.length;
-      notifications.map((notification) => {
-        notification.update({ delivered: true }).save();
-      });
-      if (query.total < count) {
-        query.page += 1;
-        this.markAllRead(null, query);
-      } else {
-        this.setState({ unread: 0 });
-      }
+  markAllRead() {
+    talkClient.put('/notifications/read', { section: this.props.section });
+    this.state.notificationData.forEach((data) => {
+      data.notification.update({ delivered: true }).save();
     });
+    this.setState({ unread: 0 });
+    this.context.notificationsCounter.setUnread(0);
   }
 
   markAsRead(position) {
@@ -294,6 +283,10 @@ NotificationSection.propTypes = {
     display_name: React.PropTypes.string,
     login: React.PropTypes.string
   })
+};
+
+NotificationSection.contextTypes = {
+  notificationsCounter: React.PropTypes.object
 };
 
 NotificationSection.defaultProps = {
