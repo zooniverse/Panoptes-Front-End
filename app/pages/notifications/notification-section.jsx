@@ -166,14 +166,21 @@ export default class NotificationSection extends Component {
   }
 
   unreadCircle() {
-    const centerNum = this.state.unread > 9 ? '30%' : '40%';
+    let centerNum = '40%';
+
+    if (this.state.unread > 99) {
+      centerNum = '20%';
+    } else if (this.state.unread > 9) {
+      centerNum = '30%';
+    }
+    const unreadNotifications = this.state.unread > 99 ? '99+' : this.state.unread;
 
     return (
       <svg className="notification-section__img">
         <circle cx="0" cy="0" r="100" fill="#E45950">
           <title> {`${this.state.unread} Unread Notification(s)`} </title>
         </circle>
-        <text x={centerNum} y="50%" stroke="white" strokeWidth="2px" dy=".3em">{this.state.unread}</text>
+        <text x={centerNum} y="50%" stroke="white" strokeWidth="2px" dy=".3em">{unreadNotifications}</text>
       </svg>
     );
   }
@@ -231,9 +238,10 @@ export default class NotificationSection extends Component {
         )}
 
         {(this.props.expanded && this.state.unread > 0) && (
-          <button onClickCapture={this.markAllRead}>
+          <label htmlFor="markRead">
+            <input type="checkbox" onChange={this.markAllRead} />
             Mark All Read
-          </button>
+          </label>
         )}
 
         {(this.props.expanded && !this.state.loading) && (
