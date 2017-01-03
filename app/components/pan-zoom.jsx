@@ -116,10 +116,10 @@ const PanZoom = React.createClass({
               />
             </div>
             <div>
-              <button title="rotate" className={'fa fa-repeat'} onClick={this.rotateClockwise} />
+              <button title="rotate" className={'rotate fa fa-repeat'} onClick={this.rotateClockwise} />
             </div>
             <div>
-              <button title="reset zoom levels" className={'reset fa fa-refresh' + (this.cannotZoomOut() ? ' disabled' : '')} onClick={this.zoomReset} />
+              <button title="reset zoom levels" className={'reset fa fa-refresh' + (this.cannotResetZoomRotate() ? ' disabled' : '')} onClick={this.zoomReset} />
             </div>
           </div>
           : ''
@@ -135,6 +135,10 @@ const PanZoom = React.createClass({
 
   cannotZoomOut() {
     return this.props.frameDimensions.width === this.state.viewBoxDimensions.width && this.props.frameDimensions.height === this.state.viewBoxDimensions.height;
+  },
+
+  cannotResetZoomRotate() {
+    return this.cannotZoomOut() && this.state.rotation === 0
   },
 
   continuousZoom(change) {
