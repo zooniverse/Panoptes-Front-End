@@ -13,7 +13,7 @@ import ProjectStats from './project-stats';
 import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-pullout';
 import getColorFromString from '../../lib/get-color-from-string';
-
+import mediaActions from '../lab/actions/media';
 
 const SECTIONS = {
   projects: RecentProjectsSection,
@@ -34,6 +34,8 @@ const HomePageForUser = React.createClass({
 
   getDefaultProps() {
     return {
+      actions: mediaActions,
+      metadata: {},
       user: {}
     };
   },
@@ -248,6 +250,14 @@ const HomePageForUser = React.createClass({
     );
   },
 
+  updateBackground(event) {
+    const file = event.target.files[0];
+    const location = this.props.user._getURL('profile_header')
+    return this.props.actions.createLinkedResource(file, location)
+      .then(this.props.actions.uploadMedia.bind(this, file))
+      .then(this.props.actions.fetchMedia);
+  },
+
   render() {
     if (!this.props.user) return null;
 
@@ -288,6 +298,7 @@ const HomePageForUser = React.createClass({
                   onClose={this.deselectSection}
                 />
               )}
+              <input type="file" onChange={this.updateBackground} />
             </div>
           )}
 
