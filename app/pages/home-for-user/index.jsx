@@ -193,6 +193,10 @@ const HomePageForUser = React.createClass({
 
     const OpenSectionComponent = SECTIONS[hashQuery.focus];
 
+    const totalClassifications = this.state.ribbonData.reduce((total, project) => {
+      return total + project.classifications;
+    }, 0);
+
     return (
       <div className="on-home-page">
         <div className="home-page-for-user">
@@ -208,7 +212,9 @@ const HomePageForUser = React.createClass({
             <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
               <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
-              <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
+              <div className="home-page-for-user__welcome">
+                Hello {this.props.user.display_name}, <br/> you've made { totalClassifications ? totalClassifications : 'Loading '} total classifications to date.
+              </div>
 
               {this.renderMenu(OpenSectionComponent)}
 
