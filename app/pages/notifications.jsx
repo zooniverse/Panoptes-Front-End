@@ -11,8 +11,8 @@ counterpart.registerTranslations('en', {
     title: 'My Notifications',
     signedOut: 'You\'re not signed in.',
     noNotifications: 'You have no notifications.',
-    participation: 'You can receive notifications by participating in Talk, following discussions, and receiving messages.',
-  },
+    participation: 'You can receive notifications by participating in Talk, following discussions, and receiving messages.'
+  }
 });
 
 export default class NotificationsPage extends React.Component {
@@ -21,7 +21,7 @@ export default class NotificationsPage extends React.Component {
     this.onChildChanged = this.onChildChanged.bind(this);
     this.state = {
       projNotifications: [],
-      expanded: false,
+      expanded: false
     };
   }
 
@@ -38,17 +38,10 @@ export default class NotificationsPage extends React.Component {
   }
 
   getProjectNotifications() {
-    if (this.props.project) {
-      talkClient.type('notifications').get({ page: 1, page_size: 1, section: `project-${this.props.project.id}` })
-      .then((projNotification) => {
-        this.setState({ projNotifications: projNotification });
-      });
-    } else {
-      talkClient.type('notifications').get({ page: 1, page_size: 50 })
-      .then((projNotifications) => {
-        this.groupNotifications(projNotifications);
-      });
-    }
+    talkClient.type('notifications').get({ page: 1, page_size: 50 })
+    .then((projNotifications) => {
+      this.groupNotifications(projNotifications);
+    });
   }
 
   groupNotifications(notifications) {
@@ -121,7 +114,7 @@ export default class NotificationsPage extends React.Component {
     return (
       <div className="talk notifications">
         <div className="content-container">
-          <h3 className={`centering title ${this.props.project ? 'notifications-title__project' : 'notifications-title'}`}>
+          <h3 className="centering title notifications-title">
             <Translate content="notifications.title" />
           </h3>
 
@@ -134,13 +127,10 @@ export default class NotificationsPage extends React.Component {
 
 NotificationsPage.propTypes = {
   location: React.PropTypes.shape({
-    query: React.PropTypes.object,
-  }),
-  project: React.PropTypes.shape({
-    id: React.PropTypes.string,
+    query: React.PropTypes.object
   }),
   user: React.PropTypes.shape({
     display_name: React.PropTypes.string,
-    login: React.PropTypes.string,
-  }),
+    login: React.PropTypes.string
+  })
 };

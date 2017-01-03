@@ -1,7 +1,7 @@
 React = require 'react'
 {Link} = require 'react-router'
 Loading = require '../../components/loading-indicator'
-Comment = require '../../talk/search-result'
+Comment = require './comment'
 
 module.exports = React.createClass
   displayName: 'CommentNotification'
@@ -22,6 +22,9 @@ module.exports = React.createClass
 
       <div className="talk-started-discussion talk-module">
         <div>
+          {if @props.notification.delivered is false
+            <i title="Unread" className="fa fa-star fa-lg" />}
+
           <div className="title">
             <Link to={"#{slug}/talk/#{@props.data.discussion.board_id}/#{@props.data.discussion.id}"} {...@props}>
               {@props.notification.message}
@@ -30,10 +33,12 @@ module.exports = React.createClass
 
           {if @props.data.comment
             <Comment
-              data={@props.data.comment}
-              user={@props.user}
+              data={@props.data}
+              notification={@props.notification}
+              params={@props.params}
               project={@props.project}
-              params={@props.params} />
+              startedDiscussion={true}
+              user={@props.user} />
           }
         </div>
       </div>

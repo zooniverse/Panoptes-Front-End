@@ -20,6 +20,8 @@ module.exports = React.createClass
       baseLink += "projects/#{@props.project.slug}/"
     if @props.data.message
       <div className="conversation-message talk-module">
+        {if notification.delivered is false
+          <i title="Unread" className="fa fa-star fa-lg" />}
         <Link to="/inbox/#{notification.source.conversation_id}" {...@props} className="message-link">
           {notification.message}{' '}
           in {@props.data.conversation.title}

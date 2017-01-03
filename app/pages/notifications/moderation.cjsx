@@ -23,6 +23,8 @@ module.exports = React.createClass
 
     if @props.data.moderation
       <div className="moderation talk-module">
+        {if notification.delivered is false
+          <i title="Unread" className="fa fa-star fa-lg" />}
         <div className="title">
           <Link to={path} {...@props}>{notification.message}</Link>
         </div>

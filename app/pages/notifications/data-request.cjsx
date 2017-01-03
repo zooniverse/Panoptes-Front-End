@@ -16,6 +16,8 @@ module.exports = React.createClass
   render: ->
     notification = @props.notification
     <div className="data-request-notification talk-module">
+      {if notification.delivered is false
+        <i title="Unread" className="fa fa-star fa-lg" />}
       <p className="title">
         Data export from {@props.data.projectName}
       </p>
