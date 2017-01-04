@@ -119,15 +119,15 @@ export default class NotificationSection extends Component {
   }
 
   markAllRead() {
-    talkClient.put('/notifications/read', { section: this.props.section });
     this.state.notificationData.forEach((data) => {
       data.notification.update({ delivered: true });
     });
     this.setState({ unread: 0 });
-    return talkClient.type('notifications').get({ page_size: 1, delivered: false })
-    .then(([notification]) => {
-      const count = notification.getMeta().count;
-      if (count === 0) this.context.notificationsCounter.setUnread(0);
+    return talkClient.put('/notifications/read', { section: this.props.section }).then(() => {
+      return talkClient.type('notifications').get({ page_size: 1, delivered: false }).then(([notification]) => {
+        const count = notification ? notification.getMeta().count : 0;
+        if (count === 0) this.context.notificationsCounter.setUnread(0);
+      });
     });
   }
 
@@ -223,6 +223,8 @@ export default class NotificationSection extends Component {
 
   render() {
     const l = this.state.currentMeta;
+    const firstNotification = (l.page * l.page_size) - (l.page_size - 1) || 0;
+    const lastNotification = Math.min(l.page_size * l.page, l.count) || 0;
 
     return (
       <div className="notification-section">
@@ -274,7 +276,7 @@ export default class NotificationSection extends Component {
               pageCount={this.state.lastMeta.page_count}
               pageSelector={false}
               previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
-              totalItems={<span className="notification-section__item-count">{(l.page * l.page_size) - (l.page_size - 1)} - {Math.min(l.page_size * l.page, l.count)} of {l.count}</span>}
+              totalItems={<span className="notification-section__item-count">{firstNotification} - {lastNotification} of {l.count}</span>}
             />
           </div>
         )}
