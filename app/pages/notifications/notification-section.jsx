@@ -121,10 +121,14 @@ export default class NotificationSection extends Component {
   markAllRead() {
     talkClient.put('/notifications/read', { section: this.props.section });
     this.state.notificationData.forEach((data) => {
-      data.notification.update({ delivered: true }).save();
+      data.notification.update({ delivered: true });
     });
     this.setState({ unread: 0 });
-    this.context.notificationsCounter.setUnread(0);
+    return talkClient.type('notifications').get({ page_size: 1, delivered: false })
+    .then(([notification]) => {
+      const count = notification.getMeta().count;
+      if (count === 0) this.context.notificationsCounter.setUnread(0);
+    });
   }
 
   markAsRead(position) {
@@ -200,7 +204,7 @@ export default class NotificationSection extends Component {
           </div>
 
           <div className="notification-section__item">
-            <button title="Toggle Section">
+            <button className="notification-section__expand" title="Toggle Section">
               <i className={buttonType} />
             </button>
           </div>
@@ -238,10 +242,9 @@ export default class NotificationSection extends Component {
         )}
 
         {(this.props.expanded && this.state.unread > 0) && (
-          <label htmlFor="markRead">
-            <input type="checkbox" onChange={this.markAllRead} />
+          <button onClick={this.markAllRead}>
             Mark All Read
-          </label>
+          </button>
         )}
 
         {(this.props.expanded && !this.state.loading) && (
