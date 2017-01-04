@@ -60,8 +60,8 @@ export default class ProjectMetadata extends React.Component {
         <svg width="100%" height="1em" viewBox="0 0 1 1" preserveAspectRatio="none" style={{ display: 'block' }}>
           <defs>
             <linearGradient id="linear-gradient">
-              <stop offset="14%" stopColor="#ff471a" stopOpacity="0%" />
-              <stop offset="79%" stopColor="#ffad33" stopOpacity="85%" />
+              <stop offset="14%" stopColor="#E45950" stopOpacity="0%" />
+              <stop offset="79%" stopColor="#F0B200" stopOpacity="85%" />
             </linearGradient>
           </defs>
           <rect fill="url(#linear-gradient)" stroke="none" x="0" y="0" width={percentComplete} height="1" />

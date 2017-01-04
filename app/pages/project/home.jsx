@@ -86,10 +86,10 @@ export default class ProjectHomePage extends React.Component {
 
     return (
       <div className="project-home-page__researcher-words">
-        <img role="presentation" src={avatarSrc} />
+        <h4>Words from the researcher</h4>
 
         <div>
-          <h4>Words from the researcher</h4>
+          <img role="presentation" src={avatarSrc} />
           {quote}
         </div>
       </div>
