@@ -19,22 +19,22 @@ const SECTIONS = {
   projects: RecentProjectsSection,
   collections: RecentCollectionsSection,
   messages: RecentMessagesSection,
-  builds: MyBuildsSection,
+  builds: MyBuildsSection
 };
 
 const HomePageForUser = React.createClass({
   propTypes: {
     user: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object,
+    location: React.PropTypes.object
   },
 
   contextTypes: {
-    setAppHeaderVariant: React.PropTypes.func,
+    setAppHeaderVariant: React.PropTypes.func
   },
 
   getDefaultProps() {
     return {
-      user: {},
+      user: {}
     };
   },
 
@@ -48,7 +48,7 @@ const HomePageForUser = React.createClass({
       loading: false,
       error: null,
       selectedProjectID: null,
-      openSection: null,
+      openSection: null
     };
   },
 
@@ -80,7 +80,7 @@ const HomePageForUser = React.createClass({
 
     this.setState({
       loading: true,
-      error: null,
+      error: null
     });
 
     user.get('profile_header')
@@ -89,9 +89,9 @@ const HomePageForUser = React.createClass({
     })
     .then((profileHeaders) => {
       const profileHeader = [].concat(profileHeaders)[0];
-      if (!!profileHeader) {
+      if (profileHeader) {
         this.setState({
-          backgroundSrc: profileHeader.src,
+          backgroundSrc: profileHeader.src
         });
       }
     });
@@ -102,9 +102,9 @@ const HomePageForUser = React.createClass({
     })
     .then((avatars) => {
       const avatar = [].concat(avatars)[0];
-      if (!!avatar) {
+      if (avatar) {
         this.setState({
-          avatarSrc: avatar.src,
+          avatarSrc: avatar.src
         });
       }
     });
@@ -115,7 +115,7 @@ const HomePageForUser = React.createClass({
     })
     .then(() => {
       this.setState({
-        loading: false,
+        loading: false
       });
     });
   },
@@ -124,16 +124,13 @@ const HomePageForUser = React.createClass({
     const getRibbonData = this.getRibbonData;
     return user.get('project_preferences', {
       sort: '-updated_at',
-      page: _page,
+      page: _page
     })
     .then((projectPreferences) => {
       if (projectPreferences.length === 0) {
         return projectPreferences;
       } else {
-        let activePreferences = projectPreferences.filter((preference) => {
-          if (preference.activity_count > 0)
-            return preference;
-        });
+        let activePreferences = projectPreferences.filter((preference) => { return preference.activity_count > 0; });
         activePreferences = activePreferences.map((preference, i) => {
           preference.sort_order = i;
           return preference;
@@ -145,24 +142,24 @@ const HomePageForUser = React.createClass({
           .catch((error) => {
             console.log('Something went wrong. Error: ', error);
           })
-          .then((projects) =>{
+          .then((projects) => {
             const classifications = activePreferences.reduce((counts, projectPreference) => {
               counts[projectPreference.links.project] = projectPreference.activity_count;
               return counts;
             }, {});
-            const sort_orders = activePreferences.reduce((orders, projectPreference) => {
+            const sortOrders = activePreferences.reduce((orders, projectPreference) => {
               orders[projectPreference.links.project] = projectPreference.sort_order;
               return orders;
             }, {});
             const projectData = projects.map((project) => {
               project.activity_count = classifications[project.id];
-              project.sort_order = sort_orders[project.id];
+              project.sort_order = sortOrders[project.id];
               return project;
             });
             return projectData;
           })
           .then((projects) => {
-            projects.sort((a, b) =>{
+            projects.sort((a, b) => {
               return a.sort_order - b.sort_order;
             });
             return projects.map((project, i) => {
@@ -183,18 +180,17 @@ const HomePageForUser = React.createClass({
               }
             }).filter(Boolean);
           })
-          .then((projects) =>{
+          .then((projects) => {
             this.setState((prevState) => {
               const ribbonData = prevState.ribbonData.concat(projects);
               const totalClassifications = ribbonData.reduce((total, project) => {
-          return total + project.classifications;
-        }, 0);
+                return total + project.classifications;
+              }, 0);
               return { ribbonData, totalClassifications };
             });
           });
         const meta = projectPreferences[0].getMeta();
-        if (meta.page === meta.page_count) {
-        } else {
+        if (meta.page !== meta.page_count) {
           getRibbonData(user, meta.page + 1);
         }
       }
@@ -207,7 +203,7 @@ const HomePageForUser = React.createClass({
 
   toggleNews() {
     this.setState({
-      showNews: !this.state.showNews,
+      showNews: !this.state.showNews
     });
   },
 
@@ -220,13 +216,13 @@ const HomePageForUser = React.createClass({
         <div className="home-page-for-user__menu-column">
           <Link to="#focus=projects" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-history fa-fw"></i>{' '}
+              <i className="fa fa-history fa-fw" />{' '}
               My recent projects
             </span>
           </Link>
           <Link to="#focus=collections" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-th-large fa-fw"></i>{' '}
+              <i className="fa fa-th-large fa-fw" />{' '}
               My collections
             </span>
           </Link>
@@ -234,13 +230,13 @@ const HomePageForUser = React.createClass({
         <div className="home-page-for-user__menu-column">
           <Link to="#focus=messages" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-envelope fa-fw"></i>{' '}
+              <i className="fa fa-envelope fa-fw" />{' '}
               Messages
             </span>
           </Link>
           <Link to="#focus=builds" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw"></i>{' '}
+              <i className="fa fa-cog fa-fw" />{' '}
               My builds
             </span>
           </Link>
@@ -277,8 +273,8 @@ const HomePageForUser = React.createClass({
               <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
               <div className="home-page-for-user__welcome">
-                Hello {this.props.user.display_name},<br/>
-                you've made {this.state.totalClassifications} classifications to date.
+                Hello {this.props.user.display_name},<br />
+                you have made {this.state.totalClassifications} classifications to date.
               </div>
 
               {this.renderMenu(OpenSectionComponent)}
@@ -296,7 +292,7 @@ const HomePageForUser = React.createClass({
           <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
             <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
               <div className="home-page-news-pullout__toggle-label">
-                <i className={this.state.showNews ? "fa fa-chevron-right" : "fa fa-chevron-left"}></i>
+                <i className={this.state.showNews ? 'fa fa-chevron-right' : 'fa fa-chevron-left'} />
                 <br />
                 News
               </div>
@@ -313,7 +309,7 @@ const HomePageForUser = React.createClass({
 
       </div>
     );
-  },
+  }
 });
 
 export default HomePageForUser;
