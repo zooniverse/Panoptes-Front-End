@@ -130,9 +130,13 @@ const HomePageForUser = React.createClass({
       if (projectPreferences.length === 0) {
         return projectPreferences;
       } else {
-        const activePreferences = projectPreferences.filter((preference) => {
+        let activePreferences = projectPreferences.filter((preference) => {
           if (preference.activity_count > 0)
             return preference;
+        });
+        activePreferences = activePreferences.map((preference, i) => {
+          preference.sort_order = i;
+          return preference;
         });
         const projectIDs = activePreferences.map((projectPreference) => {
           return projectPreference.links.project;
@@ -146,13 +150,21 @@ const HomePageForUser = React.createClass({
               counts[projectPreference.links.project] = projectPreference.activity_count;
               return counts;
             }, {});
+            const sort_orders = activePreferences.reduce((orders, projectPreference) => {
+              orders[projectPreference.links.project] = projectPreference.sort_order;
+              return orders;
+            }, {});
             const projectData = projects.map((project) => {
               project.activity_count = classifications[project.id];
+              project.sort_order = sort_orders[project.id];
               return project;
             });
             return projectData;
           })
           .then((projects) => {
+            projects.sort((a, b) =>{
+              return a.sort_order - b.sort_order;
+            });
             return projects.map((project, i) => {
               if (projects[i] !== null) {
                 return {
