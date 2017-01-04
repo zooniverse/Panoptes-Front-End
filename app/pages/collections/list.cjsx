@@ -56,6 +56,7 @@ List = React.createClass
     if props.project?
       query.project_ids = props.project.id
     query.favorite = props.favorite
+    query.sort = 'display_name'
     Object.assign query, props.location.query
 
     apiClient
