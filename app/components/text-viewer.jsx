@@ -44,7 +44,7 @@ class TextViewer extends Component {
       content = `Unsupported format: ${this.props.format}`;
     }
     return (
-      <div>
+      <div className="text-viewer" >
         { content }
       </div>
     );
