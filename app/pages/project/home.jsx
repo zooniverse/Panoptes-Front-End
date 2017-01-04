@@ -46,8 +46,9 @@ export default class ProjectHomePage extends React.Component {
 
   componentDidMount() {
     this.showWorkflowButtons();
-    if (this.props.project.configuration.researcherID) {
-      return apiClient.type('users').get(this.props.project.configuration.researcherID).then((researcher) => {
+    if (this.props.project.configuration && this.props.project.configuration.researcherID) {
+      return apiClient.type('users').get(this.props.project.configuration.researcherID)
+      .then((researcher) => {
         return researcher.get('avatar').then(([avatar]) => {
           if (avatar.src) {
             this.setState({ researcherAvatar: avatar.src });
