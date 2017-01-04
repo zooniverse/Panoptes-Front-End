@@ -30,7 +30,7 @@ module.exports = React.createClass
         {if notification.delivered is false and !@props.startedDiscussion
           <i title="Unread" className="fa fa-star fa-lg" />}
 
-        <Link to={notification.url} {...@props} className="message-link">
+        <Link to={notification.url} className="message-link">
           {comment.discussion_title}
         </Link>
 
@@ -40,7 +40,7 @@ module.exports = React.createClass
           <Link className="user-profile-link" to="/users/#{commentUser.login}">
             <Avatar user={commentUser} />{' '}{commentUser.display_name}
           </Link>{' '}
-          <Link to={notification.url} {...@props} className="time-ago">
+          <Link to={notification.url} className="time-ago">
             {moment(comment.created_at).fromNow()}
           </Link>
         </div>

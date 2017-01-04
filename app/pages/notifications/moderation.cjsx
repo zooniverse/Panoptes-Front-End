@@ -26,7 +26,7 @@ module.exports = React.createClass
         {if notification.delivered is false
           <i title="Unread" className="fa fa-star fa-lg" />}
         <div className="title">
-          <Link to={path} {...@props}>{notification.message}</Link>
+          <Link to={path}>{notification.message}</Link>
         </div>
 
         <Markdown>{@props.data.comment.body}</Markdown>
@@ -53,7 +53,7 @@ module.exports = React.createClass
 
           {' '}
 
-          <Link to={path} {...@props}>
+          <Link to={path}>
             {notification.message}{' '}
             {moment(notification.created_at).fromNow()}
           </Link>

@@ -4,7 +4,7 @@ Loading = require '../../components/loading-indicator'
 Comment = require './comment'
 
 module.exports = React.createClass
-  displayName: 'CommentNotification'
+  displayName: 'StartedDiscussionNotification'
 
   propTypes:
     data: React.PropTypes.object.isRequired
@@ -26,7 +26,7 @@ module.exports = React.createClass
             <i title="Unread" className="fa fa-star fa-lg" />}
 
           <div className="title">
-            <Link to={"#{slug}/talk/#{@props.data.discussion.board_id}/#{@props.data.discussion.id}"} {...@props}>
+            <Link to={"#{slug}/talk/#{@props.data.discussion.board_id}/#{@props.data.discussion.id}"}>
               {@props.notification.message}
             </Link>
           </div>

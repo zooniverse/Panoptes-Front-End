@@ -21,6 +21,7 @@ export default class NotificationSection extends Component {
       notificationsMap: { },
       page: 1
     };
+    this.markAllRead = this.markAllRead.bind(this);
   }
 
   componentWillMount() {
@@ -117,6 +118,19 @@ export default class NotificationSection extends Component {
     });
   }
 
+  markAllRead() {
+    this.state.notificationData.forEach((data) => {
+      data.notification.update({ delivered: true });
+    });
+    this.setState({ unread: 0 });
+    return talkClient.put('/notifications/read', { section: this.props.section }).then(() => {
+      return talkClient.type('notifications').get({ page_size: 1, delivered: false }).then(([notification]) => {
+        const count = notification ? notification.getMeta().count : 0;
+        if (count === 0) this.context.notificationsCounter.setUnread(0);
+      });
+    });
+  }
+
   markAsRead(position) {
     const ids = this.state[`${position}Meta`].notificationIds;
     const unread = [];
@@ -156,14 +170,21 @@ export default class NotificationSection extends Component {
   }
 
   unreadCircle() {
-    const centerNum = this.state.unread > 9 ? '30%' : '40%';
+    let centerNum = '40%';
+
+    if (this.state.unread > 99) {
+      centerNum = '20%';
+    } else if (this.state.unread > 9) {
+      centerNum = '30%';
+    }
+    const unreadNotifications = this.state.unread > 99 ? '99+' : this.state.unread;
 
     return (
       <svg className="notification-section__img">
         <circle cx="0" cy="0" r="100" fill="#E45950">
           <title> {`${this.state.unread} Unread Notification(s)`} </title>
         </circle>
-        <text x={centerNum} y="50%" stroke="white" strokeWidth="2px" dy=".3em">{this.state.unread}</text>
+        <text x={centerNum} y="50%" stroke="white" strokeWidth="2px" dy=".3em">{unreadNotifications}</text>
       </svg>
     );
   }
@@ -183,7 +204,7 @@ export default class NotificationSection extends Component {
           </div>
 
           <div className="notification-section__item">
-            <button title="Toggle Section">
+            <button className="notification-section__expand" title="Toggle Section">
               <i className={buttonType} />
             </button>
           </div>
@@ -202,6 +223,8 @@ export default class NotificationSection extends Component {
 
   render() {
     const l = this.state.currentMeta;
+    const firstNotification = (l.page * l.page_size) - (l.page_size - 1) || 0;
+    const lastNotification = Math.min(l.page_size * l.page, l.count) || 0;
 
     return (
       <div className="notification-section">
@@ -218,6 +241,12 @@ export default class NotificationSection extends Component {
           <span className="notification-section__container">
             <Loading />
           </span>
+        )}
+
+        {(this.props.expanded && this.state.unread > 0) && (
+          <button onClick={this.markAllRead}>
+            Mark All Read
+          </button>
         )}
 
         {(this.props.expanded && !this.state.loading) && (
@@ -247,7 +276,7 @@ export default class NotificationSection extends Component {
               pageCount={this.state.lastMeta.page_count}
               pageSelector={false}
               previousLabel={<span><i className="fa fa-chevron-left" /> previous</span>}
-              totalItems={<span className="notification-section__item-count">{(l.page * l.page_size) - (l.page_size - 1)} - {Math.min(l.page_size * l.page, l.count)} of {l.count}</span>}
+              totalItems={<span className="notification-section__item-count">{firstNotification} - {lastNotification} of {l.count}</span>}
             />
           </div>
         )}
@@ -267,6 +296,10 @@ NotificationSection.propTypes = {
     display_name: React.PropTypes.string,
     login: React.PropTypes.string
   })
+};
+
+NotificationSection.contextTypes = {
+  notificationsCounter: React.PropTypes.object
 };
 
 NotificationSection.defaultProps = {
