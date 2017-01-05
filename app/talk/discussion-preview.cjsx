@@ -62,8 +62,9 @@ module.exports = React.createClass
       <div className="preview-content">
 
         {if @state.subject?
+          subject = getSubjectLocation(@state.subject)
           <div className="subject-preview">
-            <Thumbnail src={getSubjectLocation(@state.subject).src} width={100} />
+            <Thumbnail src={subject.src} format={subject.format} width={100} controls={false} />
           </div>
         }
 

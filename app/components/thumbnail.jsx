@@ -47,9 +47,10 @@ export default class Thumbnail extends React.Component {
     };
 
     if (this.props.format === 'mp4') {
+      const width = this.props.width < 999 ? this.props.width : '300';
       return (
         <div>
-          <video width="300" controls onClick={this.playVideo}>
+          <video width={width} controls={this.props.controls} onClick={this.playVideo}>
             <source src={this.props.src} type="video/mp4" />
           </video>
         </div>
@@ -63,17 +64,19 @@ export default class Thumbnail extends React.Component {
 }
 
 Thumbnail.defaultProps = {
+  controls: true,
   format: 'image',
   height: MAX_THUMBNAIL_DIMENSION,
   origin: 'https://thumbnails.zooniverse.org',
   src: '',
-  width: MAX_THUMBNAIL_DIMENSION,
+  width: MAX_THUMBNAIL_DIMENSION
 };
 
 Thumbnail.propTypes = {
+  controls: React.PropTypes.bool,
   format: React.PropTypes.string,
   height: React.PropTypes.number,
   origin: React.PropTypes.string,
   src: React.PropTypes.string,
-  width: React.PropTypes.number,
+  width: React.PropTypes.number
 };
