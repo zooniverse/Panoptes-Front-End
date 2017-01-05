@@ -105,12 +105,13 @@ ProjectPage = React.createClass
         @getSelectedWorkflow(nextProps.project, nextProps.preferences)
 
   resizeBackground: ->
+    finishedBannerHeight = 70
     projLanding = document.getElementById('projectLandingIntro')
     if projLanding
       sectionBottom = projLanding.getBoundingClientRect().bottom;
       sectionHeight = document.body.scrollTop + sectionBottom
-      if @state.backgroundHeight isnt sectionHeight
-        @setState backgroundHeight: sectionHeight
+      if @state.backgroundHeight isnt sectionHeight + finishedBannerHeight
+        @setState backgroundHeight: sectionHeight + finishedBannerHeight
 
   fetchInfo: (project) ->
     @setState
