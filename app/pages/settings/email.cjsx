@@ -25,7 +25,7 @@ module.exports = React.createClass
       @getProjectPreferences()
 
   getProjectPreferences: ->
-    @props.user.get('project_preferences', page: @state.page)
+    @props.user.get('project_preferences', page: @state.page, sort: 'display_name')
       .then (projectPreferences) =>
         if projectPreferences
           projects = for preference in projectPreferences
