@@ -30,7 +30,7 @@ export default class ProjectHomePage extends React.Component {
     talkClient.type('comments').get({ section: `project-${this.props.project.id}`, page_size: 8, sort: '-created_at', focus_type: 'Subject' })
     .then((comments) => {
       const subjectIds = comments.map(x => x.focus_id);
-      const uniqueImages = [...new Set(subjectIds)];
+      const uniqueImages = subjectIds.filter((el, i, arr) => arr.indexOf(el) === i);
       uniqueImages.splice(3, 5);
       const talkImages = uniqueImages.map((id) => {
         return apiClient.type('subjects').get(id)
