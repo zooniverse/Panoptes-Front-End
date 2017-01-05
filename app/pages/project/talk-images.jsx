@@ -1,7 +1,7 @@
 import React from 'react';
 import getSubjectLocation from '../../lib/get-subject-location.coffee';
 import TalkStatus from './talk-status';
-import VideoPlayer from '../../components/video-player';
+import Thumbnail from '../../components/thumbnail';
 
 export default class TalkImages extends React.Component {
 
@@ -11,16 +11,9 @@ export default class TalkImages extends React.Component {
 
         {this.props.images.map((image) => {
           const subject = getSubjectLocation(image);
-          if (subject.type === 'video') {
-            return (
-              <div key={image.id} className="project-home-page__talk-image">
-                <VideoPlayer src={subject.src} type={subject.type} format={subject.format} showControls={false} />
-              </div>
-            );
-          }
           return (
             <div key={subject.id} className="project-home-page__talk-image">
-              <img alt="" src={subject.src} />
+              <Thumbnail alt="" src={subject.src} format={subject.format} controls={false} />
             </div>
           );
         })}
