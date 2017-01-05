@@ -22,26 +22,11 @@ const SECTIONS = {
   builds: MyBuildsSection
 };
 
-const HomePageForUser = React.createClass({
-  propTypes: {
-    user: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object
-  },
+export default class HomePageForUser extends React.Component {
+  constructor(props) {
+    super(props);
 
-  contextTypes: {
-    setAppHeaderVariant: React.PropTypes.func
-  },
-
-  getDefaultProps() {
-    return {
-      actions: mediaActions,
-      metadata: {},
-      user: {}
-    };
-  },
-
-  getInitialState() {
-    return {
+    this.state = {
       backgroundSrc: '',
       avatarSrc: '',
       showNews: false,
@@ -52,28 +37,32 @@ const HomePageForUser = React.createClass({
       selectedProjectID: null,
       openSection: null
     };
-  },
+
+    this.getRibbonData = this.getRibbonData.bind(this);
+    this.toggleNews = this.toggleNews.bind(this);
+    this.updateBackground = this.updateBackground.bind(this);
+  }
 
   componentDidMount() {
     this.context.setAppHeaderVariant('detached');
     addEventListener('hashChange', this.handleHashChange);
     this.fetchRibbonData(this.props.user);
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user !== this.props.user) {
       this.fetchRibbonData(nextProps.user);
     }
-  },
+  }
 
   componentWillUnmount() {
     this.context.setAppHeaderVariant(null);
     removeEventListener('hashChange', this.handleHashChange);
-  },
+  }
 
   handleHashChange() {
     this.forceUpdate();
-  },
+  }
 
   fetchRibbonData(user) {
     if (!user) {
@@ -120,7 +109,7 @@ const HomePageForUser = React.createClass({
         loading: false
       });
     });
-  },
+  }
 
   getRibbonData(user, _page = 1) {
     const getRibbonData = this.getRibbonData;
@@ -173,7 +162,7 @@ const HomePageForUser = React.createClass({
         }
       }
     });
-  },
+  }
 
   getProjectsForPreferences(preferences) {
     const projectIDs = preferences.map((projectPreference) => {
@@ -200,17 +189,17 @@ const HomePageForUser = React.createClass({
         return project;
       });
     });
-  },
+  }
 
   findProjectLink(project) {
     return `/projects/${project.slug}`;
-  },
+  }
 
   toggleNews() {
     this.setState({
       showNews: !this.state.showNews
     });
-  },
+  }
 
   renderMenu(openComponent) {
     if ((openComponent) && (screen.width < 700)) {
@@ -248,7 +237,7 @@ const HomePageForUser = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
   updateBackground(event) {
     const file = event.target.files[0];
@@ -256,7 +245,7 @@ const HomePageForUser = React.createClass({
     return this.props.actions.createLinkedResource(file, location)
       .then(this.props.actions.uploadMedia.bind(this, file))
       .then(this.props.actions.fetchMedia);
-  },
+  }
 
   render() {
     if (!this.props.user) return null;
@@ -279,7 +268,7 @@ const HomePageForUser = React.createClass({
             <div>{this.state.error.toString()}</div>
           )}
 
-          {!!hashQuery.project ? (
+          {hashQuery.project ? (
             <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
           ) : (
             <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
@@ -323,6 +312,37 @@ const HomePageForUser = React.createClass({
       </div>
     );
   }
-});
+}
 
-export default HomePageForUser;
+HomePageForUser.propTypes = {
+  actions: React.PropTypes.shape({
+    fetchMedia: React.PropTypes.func,
+    handleDrop: React.PropTypes.func,
+    handleDelete: React.PropTypes.func,
+    handleFileSelection: React.PropTypes.func,
+    addFiles: React.PropTypes.func,
+    handleFile: React.PropTypes.func,
+    addFile: React.PropTypes.func,
+    createLinkedResource: React.PropTypes.func,
+    uploadMedia: React.PropTypes.func,
+    handleSuccess: React.PropTypes.func,
+    handleError: React.PropTypes.func,
+    removeFromPending: React.PropTypes.func
+  }),
+  user: React.PropTypes.shape({
+    display_name: React.PropTypes.string
+  }),
+  location: React.PropTypes.shape({
+    hash: React.PropTypes.string
+  })
+};
+
+HomePageForUser.contextTypes = {
+  setAppHeaderVariant: React.PropTypes.func
+};
+
+HomePageForUser.defaultProps = {
+  actions: mediaActions,
+  metadata: {},
+  user: {}
+};
