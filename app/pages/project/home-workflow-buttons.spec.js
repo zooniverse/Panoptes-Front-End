@@ -40,10 +40,11 @@ describe('ProjectHomeWorkflowButtons', function() {
         <ProjectHomeWorkflowButtons activeWorkflows={testWorkflows} preferences={testUserPreferences} showWorkflowButtons={true} workflowAssignment={true} splits={null} />,
         { context: { user: { id: 1 } } }
       );
+      wrapper.setState({ showWorkflows: true });
     });
 
     it('should render active workflow button options that have a level', function() {
-      assert.equal(wrapper.find('.standard-button').length, 3);
+      assert.equal(wrapper.find('.standard-button').length, 5);
     });
 
     it('should render spans for levels that user has not reached', function() {
@@ -55,13 +56,14 @@ describe('ProjectHomeWorkflowButtons', function() {
 
   describe('if user chooses workflow assignment', function() {
     beforeEach(function () {
-      wrapper = render(
+      wrapper = mount(
         <ProjectHomeWorkflowButtons activeWorkflows={testWorkflows} showWorkflowButtons={true} />
       );
+      wrapper.setState({ showWorkflows: true });
     });
 
     it('should render workflow button options', function() {
-      assert.equal(wrapper.find('.standard-button').length, 4);
+      assert.equal(wrapper.find('.standard-button').length, 6);
     });
   });
 
@@ -72,12 +74,12 @@ describe('ProjectHomeWorkflowButtons', function() {
       );
     });
 
-    it('should render one button', function() {
-      assert.equal(wrapper.find('.standard-button').length, 1);
+    it('should render the learn more and get started buttons', function() {
+      assert.equal(wrapper.find('.standard-button').length, 2);
     });
 
     it('should have text "Get started!"', function() {
-      assert.equal(wrapper.find('.standard-button').text(), 'Get started!');
+      assert.equal(wrapper.find('.get-started').text(), 'Get started');
     })
   });
 
