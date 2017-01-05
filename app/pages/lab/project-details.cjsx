@@ -35,8 +35,8 @@ module.exports = React.createClass
   componentWillMount: ->
     @props.project.get('project_roles', page_size: 100).then (roles) =>
       scientists = for role in roles when 'scientist' in role.roles
-        role.get 'owner'
-      Promise.all(scientists).then (researchers) =>
+        role.links.owner.id
+      apiClient.type('users').get(scientists).then (researchers) =>
         @setState({ researchers })
 
   splitTags: (kind) ->
