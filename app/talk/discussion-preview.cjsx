@@ -41,18 +41,14 @@ module.exports = React.createClass
 
     if (@props.params?.owner and @props.params?.name) # get from url if possible
       {owner, name} = @props.params
-      projectTalk = "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
-      <Link to={projectTalk} onClick={@logDiscussionClick.bind null, this}>{discussion.title}</Link>
+      "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
     else if @props.project # otherwise fetch from project
       [owner, name] = @props.project.slug.split('/')
-      projectTalk = "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
-      <Link to={projectTalk} onClick={@logDiscussionClick.bind null, this}>{discussion.title}</Link>
+      "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
     else # link to zooniverse main talk
-      <Link to="/talk/#{discussion.board_id}/#{discussion.id}" onClick={@logDiscussionClick.bind null, this}>
-        {discussion.title}
-      </Link>
+      "/talk/#{discussion.board_id}/#{discussion.id}"
 
   render: ->
     {params, discussion} = @props
@@ -64,13 +60,17 @@ module.exports = React.createClass
         {if @state.subject?
           subject = getSubjectLocation(@state.subject)
           <div className="subject-preview">
-            <Thumbnail src={subject.src} format={subject.format} width={100} height={150} controls={false} />
+            <Link to={@discussionLink()} onClick={@logDiscussionClick.bind null, this}>
+              <Thumbnail src={subject.src} format={subject.format} width={100} height={150} controls={false} />
+            </Link>
           </div>
         }
 
         <h1>
           {<i className="fa fa-thumb-tack talk-sticky-pin"></i> if discussion.sticky}
-          {@discussionLink()}
+          <Link to={@discussionLink()} onClick={@logDiscussionClick.bind null, this}>
+            {discussion.title}
+          </Link>
         </h1>
 
         <LatestCommentLink {...@props} project={@props.project} discussion={discussion} comment={@props.comment} preview={true} />
