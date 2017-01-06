@@ -69,14 +69,15 @@ module.exports = React.createClass
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} />
-          <DragHandle onDrag={@handleRadiusHandleDrag} x={@props.mark.r} y={0} scale={@props.scale} />
+          <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} rotate={@props.mark.angle} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
+          <DragHandle onDrag={@handleRadiusHandleDrag} x={@props.mark.r} y={0} scale={@props.scale} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
         </g>}
     </DrawingToolRoot>
 
   handleMainDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.y += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.x += difference.x
+    @props.mark.y += difference.y
     @props.onChange @props.mark
 
   handleRadiusHandleDrag: (e, d) ->

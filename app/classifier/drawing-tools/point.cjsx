@@ -28,13 +28,10 @@ module.exports = React.createClass
     initMove: ({x, y}) ->
       {x, y}
 
-    initValid: (mark, {containerRect, scale}) ->
-      markRect =
-        left: containerRect.left + (mark.x * scale.vertical)
-        top: containerRect.top + (mark.y * scale.horizontal)
-        width: 1
-        height: 1
-      isInBounds markRect, containerRect
+    initValid: (mark, {naturalHeight, naturalWidth}) ->
+      notBeyondWidth = mark.x < naturalWidth
+      notBeyondHeight = mark.y < naturalHeight
+      notBeyondWidth and notBeyondHeight
 
     initRelease: ->
       _inProgress: false
@@ -73,10 +70,12 @@ module.exports = React.createClass
       </Draggable>
 
       {if @props.selected
-        <DeleteButton tool={this} {...@getDeleteButtonPosition()} />}
+        <DeleteButton tool={this} {...@getDeleteButtonPosition()}  getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />}
     </DrawingToolRoot>
 
   handleDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.y += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e,d)
+    @props.mark.x += difference.x
+    @props.mark.y += difference.y 
     @props.onChange @props.mark
+    

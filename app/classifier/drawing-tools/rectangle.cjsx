@@ -70,12 +70,12 @@ module.exports = React.createClass
 
       {if @props.selected
         <g>
-          <DeleteButton tool={this} x={deletePosition.x} y={y} />
+          <DeleteButton tool={this} x={deletePosition.x} y={y} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
 
-          <DragHandle x={x} y={y} scale={@props.scale} onDrag={@handleTopLeftDrag} onEnd={@normalizeMark} />
-          <DragHandle x={x + width} y={y} scale={@props.scale} onDrag={@handleTopRightDrag} onEnd={@normalizeMark} />
-          <DragHandle x={x +  width} y={y + height} scale={@props.scale} onDrag={@handleBottomRightDrag} onEnd={@normalizeMark} />
-          <DragHandle x={x} y={y + height} scale={@props.scale} onDrag={@handleBottomLeftDrag} onEnd={@normalizeMark} />
+          <DragHandle x={x} y={y} scale={@props.scale} onDrag={@handleTopLeftDrag} onEnd={@normalizeMark} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
+          <DragHandle x={x + width} y={y} scale={@props.scale} onDrag={@handleTopRightDrag} onEnd={@normalizeMark} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
+          <DragHandle x={x +  width} y={y + height} scale={@props.scale} onDrag={@handleBottomRightDrag} onEnd={@normalizeMark} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
+          <DragHandle x={x} y={y + height} scale={@props.scale} onDrag={@handleBottomLeftDrag} onEnd={@normalizeMark} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
         </g>}
     </DrawingToolRoot>
 
@@ -87,32 +87,37 @@ module.exports = React.createClass
     x: x
 
   handleMainDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.y += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.x += difference.x
+    @props.mark.y += difference.y
     @props.onChange @props.mark
 
   handleTopLeftDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.y += d.y / @props.scale.vertical
-    @props.mark.width -= d.x / @props.scale.horizontal
-    @props.mark.height -= d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.x += difference.x
+    @props.mark.y += difference.y
+    @props.mark.width -= difference.x
+    @props.mark.height -= difference.y
     @props.onChange @props.mark
 
   handleTopRightDrag: (e, d) ->
-    @props.mark.y += d.y / @props.scale.vertical
-    @props.mark.width += d.x / @props.scale.horizontal
-    @props.mark.height -= d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.y += difference.y
+    @props.mark.width += difference.x
+    @props.mark.height -= difference.y
     @props.onChange @props.mark
 
   handleBottomRightDrag: (e, d) ->
-    @props.mark.width += d.x / @props.scale.horizontal
-    @props.mark.height += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.width += difference.x
+    @props.mark.height += difference.y
     @props.onChange @props.mark
 
   handleBottomLeftDrag: (e, d) ->
-    @props.mark.x += d.x / @props.scale.horizontal
-    @props.mark.width -= d.x / @props.scale.horizontal
-    @props.mark.height += d.y / @props.scale.vertical
+    difference = @props.normalizeDifference(e, d)
+    @props.mark.x += difference.x 
+    @props.mark.width -= difference.x
+    @props.mark.height += difference.y
     @props.onChange @props.mark
 
   normalizeMark: ->

@@ -74,6 +74,8 @@ module.exports = React.createClass
                 onSelect: @handleSelect.bind this, annotation, mark
                 onDeselect: @handleDeselect
                 onDestroy: @handleDestroy.bind this, annotation, mark
+                normalizeDifference: @props.normalizeDifference
+                getScreenCurrentTransformationMatrix: @props.getScreenCurrentTransformationMatrix
 
               ToolComponent = drawingTools[toolDescription.type]
               <ToolComponent key={mark._key} {...toolProps} {...toolEnv} {...toolMethods} />}
