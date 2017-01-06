@@ -24,7 +24,7 @@ export default class ProjectHomeWorkflowButton extends React.Component {
     const linkClasses = classnames({
       'call-to-action': true,
       'standard-button': true,
-      'call-to-action-button--disabled': this.props.disabled,
+      'call-to-action-button--disabled': this.props.disabled
     });
 
     if (this.props.disabled) {
@@ -58,21 +58,21 @@ ProjectHomeWorkflowButton.defaultProps = {
   onChangePreferences: () => {},
   project: {},
   workflow: {},
-  workflowAssignment: false,
+  workflowAssignment: false
 };
 
 ProjectHomeWorkflowButton.propTypes = {
   disabled: React.PropTypes.bool,
   onChangePreferences: React.PropTypes.func.isRequired,
   project: React.PropTypes.shape({
-    slug: React.PropTypes.string,
+    slug: React.PropTypes.string
   }).isRequired,
   workflow: React.PropTypes.shape({
     configuration: React.PropTypes.shape({
-      level: React.PropTypes.string,
+      level: React.PropTypes.string
     }),
     display_name: React.PropTypes.string,
-    id: React.PropTypes.string,
+    id: React.PropTypes.string
   }).isRequired,
-  workflowAssignment: React.PropTypes.bool,
+  workflowAssignment: React.PropTypes.bool
 };

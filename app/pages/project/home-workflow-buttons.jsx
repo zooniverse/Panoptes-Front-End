@@ -27,6 +27,12 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
     this.toggleWorkflows = this.toggleWorkflows.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.showWorkflowButtons === true && !this.state.showWorkflows) {
+      this.setState({ showWorkflows: true });
+    }
+  }
+
   shouldWorkflowBeDisabled(workflow) {
     if (this.context.user && workflow.configuration.level && this.props.preferences) {
       const currentWorkflowAtLevel = this.props.activeWorkflows.filter((activeWorkflow) => {
@@ -86,6 +92,8 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   }
 
   render() {
+    const paddingBottom = this.state.showWorkflows ? { paddingBottom: '3em' } : {};
+
     let getStarted = (
       <Link
         to={`/projects/${this.props.project.slug}/classify`}
@@ -115,7 +123,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
 
     return (
       <div>
-        <div id="projectLandingIntro" className="project-home-page__centering">
+        <div id="projectLandingIntro" className="project-home-page__centering" style={paddingBottom}>
           {learnMore}
           {getStarted}
         </div>
