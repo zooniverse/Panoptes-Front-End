@@ -137,7 +137,7 @@ module.exports = React.createClass
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit={500} string={@props.project.workflow_description ? ''} /></small>
           </p>
 
-          <p>
+          <div>
             <AutoSave resource={@props.project}>
               <span className="form-label">Researcher Quote</span>
               <br />
@@ -149,7 +149,7 @@ module.exports = React.createClass
               <textarea className="standard-input full" name="researcher_quote" value={@props.project.researcher_quote} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">This text will appear on a project landing page alongside an avatar of the selected researcher. <CharLimit limit={255} string={@props.project.researcher_quote ? ''} /></small>
-          </p>
+          </div>
 
           <div>
             <AutoSave resource={@props.project}>
