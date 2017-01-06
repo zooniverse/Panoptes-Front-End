@@ -64,7 +64,7 @@ module.exports = React.createClass
         {if @state.subject?
           subject = getSubjectLocation(@state.subject)
           <div className="subject-preview">
-            <Thumbnail src={subject.src} format={subject.format} width={100} controls={false} />
+            <Thumbnail src={subject.src} format={subject.format} width={100} height={150} controls={false} />
           </div>
         }
 

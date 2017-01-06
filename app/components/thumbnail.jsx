@@ -47,10 +47,9 @@ export default class Thumbnail extends React.Component {
     };
 
     if (this.props.format === 'mp4') {
-      const width = this.props.width < 999 ? this.props.width : '300';
       return (
         <div>
-          <video width={width} controls={this.props.controls} onClick={this.playVideo}>
+          <video style={style} controls={this.props.controls} onClick={this.playVideo}>
             <source src={this.props.src} type="video/mp4" />
           </video>
         </div>
