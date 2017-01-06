@@ -34,6 +34,7 @@ export default class HomePageForUser extends React.Component {
       ribbonData: [],
       loading: false,
       error: null,
+      pendingMedia: [],
       selectedProjectID: null,
       openSection: null
     };
@@ -41,6 +42,8 @@ export default class HomePageForUser extends React.Component {
     this.getRibbonData = this.getRibbonData.bind(this);
     this.toggleNews = this.toggleNews.bind(this);
     this.updateBackground = this.updateBackground.bind(this);
+    this.createLinkedResource = this.props.actions.createLinkedResource.bind(this);
+    this.uploadMedia = this.props.actions.uploadMedia.bind(this);
   }
 
   componentDidMount() {
@@ -242,9 +245,11 @@ export default class HomePageForUser extends React.Component {
   updateBackground(event) {
     const file = event.target.files[0];
     const location = this.props.user._getURL('profile_header')
-    return this.props.actions.createLinkedResource(file, location)
-      .then(this.props.actions.uploadMedia.bind(this, file))
-      .then(this.props.actions.fetchMedia);
+    return this.createLinkedResource(file, location)
+      .then(this.uploadMedia.bind(this, file))
+      .then((media) => {
+        this.setState({ backgroundSrc: media.src });
+      });
   }
 
   render() {
@@ -316,18 +321,8 @@ export default class HomePageForUser extends React.Component {
 
 HomePageForUser.propTypes = {
   actions: React.PropTypes.shape({
-    fetchMedia: React.PropTypes.func,
-    handleDrop: React.PropTypes.func,
-    handleDelete: React.PropTypes.func,
-    handleFileSelection: React.PropTypes.func,
-    addFiles: React.PropTypes.func,
-    handleFile: React.PropTypes.func,
-    addFile: React.PropTypes.func,
     createLinkedResource: React.PropTypes.func,
-    uploadMedia: React.PropTypes.func,
-    handleSuccess: React.PropTypes.func,
-    handleError: React.PropTypes.func,
-    removeFromPending: React.PropTypes.func
+    uploadMedia: React.PropTypes.func
   }),
   user: React.PropTypes.shape({
     display_name: React.PropTypes.string

@@ -3,7 +3,6 @@ const putFile = require('../../../lib/put-file');
 
 const mediaActions = {
   fetchMedia(props = this.props) {
-    console.log(props);
     this.setState({ media: null });
 
     return props.resource.get(this.props.link, { page_size: this.props.pageSize })
