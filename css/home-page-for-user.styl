@@ -56,6 +56,30 @@ GRAY = #EFF2F5
     padding: 1em 2em
     text-align: left
 
+  &__change-background
+    border: 1px solid white
+    border-radius: 0.8em
+    cursor: pointer
+    padding: 0.8em
+    position: relative
+    margin: 5vh 0 0 5vw
+    opacity: 0.15
+    width: 10em
+    transition: opacity 0.4s
+
+    &:hover
+      background: white
+      color: black
+      opacity: 10
+
+    span
+      overflow: hidden
+      position: absolute
+
+    input
+      width: 100%
+      position: absolute
+
 .home-page-section
   align-self: stretch
   background: BACKGROUND_COLOR

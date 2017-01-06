@@ -273,6 +273,15 @@ export default class HomePageForUser extends React.Component {
             <div>{this.state.error.toString()}</div>
           )}
 
+          {screen.width > 700 && (
+            <label className="home-page-for-user__change-background">
+              <span>
+                <input type="file" accept="image/*" onChange={this.updateBackground} />
+              </span>
+              Change Background
+            </label>
+          )}
+
           {hashQuery.project ? (
             <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
           ) : (
@@ -292,7 +301,6 @@ export default class HomePageForUser extends React.Component {
                   onClose={this.deselectSection}
                 />
               )}
-              <input type="file" onChange={this.updateBackground} />
             </div>
           )}
 
