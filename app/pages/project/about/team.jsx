@@ -35,11 +35,13 @@ const createTeamList = (team) => (
             {teamMember.userResource.display_name}
             {' '}
           </span>
+          <br />
+          <span className="team-list-item__login">@{teamMember.userResource.login}</span>
           <span className="team-list-item__project-roles">
           {teamMember.roles.map(role => (
-            <Translate key={role} 
-              content={`projectRoles.${role}`} 
-              className={`project-role ${role}`} 
+            <Translate key={role}
+              content={`projectRoles.${role}`}
+              className={`project-role ${role}`}
             />
           ))}
           </span>
@@ -51,8 +53,8 @@ const createTeamList = (team) => (
 
 const AboutProjectTeam = ({ pages, project, team }) => {
   const teamPage = pages.find(page => page.slug === 'team');
-  const mainContent = (teamPage && teamPage.content && teamPage.content !== '') 
-      ? teamPage.content 
+  const mainContent = (teamPage && teamPage.content && teamPage.content !== '')
+      ? teamPage.content
       : counterpart('aboutPages.missingContent.team');
   const aside = createTeamList(team);
 
@@ -72,9 +74,10 @@ AboutProjectTeam.propTypes = {
   team: PropTypes.arrayOf(PropTypes.shape({
     userResource: PropTypes.shape({
       display_name: PropTypes.string.isRequired,
+      login: PropTypes.string.isRequired,
     }),
     roles: PropTypes.arrayOf(PropTypes.string).isRequired,
-  })), 
+  })),
 };
 
 export default AboutProjectTeam;
