@@ -135,50 +135,26 @@ const HomePageForUser = React.createClass({
           preference.sort_order = i;
           return preference;
         });
-        const projectIDs = activePreferences.map((projectPreference) => {
-          return projectPreference.links.project;
-        });
-        apiClient.type('projects').get({ id: projectIDs, cards: true, page_size: activePreferences.length })
-          .catch((error) => {
-            console.log('Something went wrong. Error: ', error);
-          })
+        this.getProjectsForPreferences(activePreferences)
           .then((projects) => {
-            const classifications = activePreferences.reduce((counts, projectPreference) => {
-              counts[projectPreference.links.project] = projectPreference.activity_count;
-              return counts;
-            }, {});
-            const sortOrders = activePreferences.reduce((orders, projectPreference) => {
-              orders[projectPreference.links.project] = projectPreference.sort_order;
-              return orders;
-            }, {});
-            const projectData = projects.map((project) => {
-              project.activity_count = classifications[project.id];
-              project.sort_order = sortOrders[project.id];
-              return project;
-            });
-            return projectData;
-          })
-          .then((projects) => {
-            projects.sort((a, b) => {
+            return projects
+            .sort((a, b) => {
               return a.sort_order - b.sort_order;
+            })
+            .filter(Boolean)
+            .map((project, i) => {
+              return {
+                avatar_src: projects[i].avatar_src,
+                id: projects[i].id,
+                slug: projects[i].slug,
+                display_name: projects[i].display_name,
+                description: projects[i].description,
+                color: getColorFromString(projects[i].slug),
+                classifications: projects[i].activity_count,
+                updated_at: projects[i].updated_at,
+                redirect: projects[i].redirect
+              };
             });
-            return projects.map((project, i) => {
-              if (projects[i] !== null) {
-                return {
-                  avatar_src: projects[i].avatar_src,
-                  id: projects[i].id,
-                  slug: projects[i].slug,
-                  display_name: projects[i].display_name,
-                  description: projects[i].description,
-                  color: getColorFromString(projects[i].slug),
-                  classifications: projects[i].activity_count,
-                  updated_at: projects[i].updated_at,
-                  redirect: projects[i].redirect
-                };
-              } else {
-                return null;
-              }
-            }).filter(Boolean);
           })
           .then((projects) => {
             this.setState((prevState) => {
@@ -194,6 +170,33 @@ const HomePageForUser = React.createClass({
           getRibbonData(user, meta.page + 1);
         }
       }
+    });
+  },
+
+  getProjectsForPreferences(preferences) {
+    const projectIDs = preferences.map((projectPreference) => {
+      return projectPreference.links.project;
+    });
+    return apiClient
+    .type('projects')
+    .get({ id: projectIDs, cards: true, page_size: preferences.length })
+    .catch((error) => {
+      console.log('Something went wrong. Error: ', error);
+    })
+    .then((projects) => {
+      const classifications = preferences.reduce((counts, projectPreference) => {
+        counts[projectPreference.links.project] = projectPreference.activity_count;
+        return counts;
+      }, {});
+      const sortOrders = preferences.reduce((orders, projectPreference) => {
+        orders[projectPreference.links.project] = projectPreference.sort_order;
+        return orders;
+      }, {});
+      return projects.map((project) => {
+        project.activity_count = classifications[project.id];
+        project.sort_order = sortOrders[project.id];
+        return project;
+      });
     });
   },
 
