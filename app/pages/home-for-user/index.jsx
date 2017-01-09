@@ -27,6 +27,7 @@ export default class HomePageForUser extends React.Component {
     super(props);
 
     this.state = {
+      buttonFocus: false,
       backgroundSrc: '',
       avatarSrc: '',
       showNews: false,
@@ -41,12 +42,16 @@ export default class HomePageForUser extends React.Component {
 
     this.getRibbonData = this.getRibbonData.bind(this);
     this.toggleNews = this.toggleNews.bind(this);
+    this.toggleFocus = this.toggleFocus.bind(this);
     this.updateBackground = this.updateBackground.bind(this);
     this.createLinkedResource = this.props.actions.createLinkedResource.bind(this);
     this.uploadMedia = this.props.actions.uploadMedia.bind(this);
   }
 
   componentDidMount() {
+    const backgroundBtn = document.getElementById('change-background');
+    backgroundBtn.addEventListener('focus', this.toggleFocus, true);
+    backgroundBtn.addEventListener('blur', this.toggleFocus, true);
     this.context.setAppHeaderVariant('detached');
     addEventListener('hashChange', this.handleHashChange);
     this.fetchRibbonData(this.props.user);
@@ -59,6 +64,9 @@ export default class HomePageForUser extends React.Component {
   }
 
   componentWillUnmount() {
+    const backgroundBtn = document.getElementById('change-background');
+    backgroundBtn.removeEventListener('focus', this.toggleFocus, true);
+    backgroundBtn.removeEventListener('blur', this.toggleFocus, true);
     this.context.setAppHeaderVariant(null);
     removeEventListener('hashChange', this.handleHashChange);
   }
@@ -252,6 +260,10 @@ export default class HomePageForUser extends React.Component {
       });
   }
 
+  toggleFocus() {
+    this.setState({ buttonFocus: !this.state.buttonFocus });
+  }
+
   render() {
     if (!this.props.user) return null;
 
@@ -261,7 +273,7 @@ export default class HomePageForUser extends React.Component {
     }
 
     const hashQuery = qs.parse(this.props.location.hash.slice(1));
-
+    const backgroundBtn = this.state.buttonFocus ? { background: 'white', opacity: '10', color: 'black' } : {};
     const OpenSectionComponent = SECTIONS[hashQuery.focus];
 
     return (
@@ -274,11 +286,11 @@ export default class HomePageForUser extends React.Component {
           )}
 
           {screen.width > 700 && (
-            <label className="home-page-for-user__change-background">
+            <label className="home-page-for-user__change-background" id="change-background" style={backgroundBtn}>
               <span>
                 <input type="file" accept="image/*" onChange={this.updateBackground} />
               </span>
-              Change Background
+              Update Background
             </label>
           )}
 
