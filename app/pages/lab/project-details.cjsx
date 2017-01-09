@@ -145,7 +145,7 @@ module.exports = React.createClass
                 placeholder="Choose a Researcher"
                 onChange={@handleResearcherChange}
                 options={@researcherOptions()}
-                value={@props.project.configuration.researcherID} />
+                value={@props.project?.configuration?.researcherID} />
               <textarea className="standard-input full" name="researcher_quote" value={@props.project.researcher_quote} onChange={handleInputChange.bind @props.project} />
             </AutoSave>
             <small className="form-help">This text will appear on a project landing page alongside an avatar of the selected researcher. <CharLimit limit={255} string={@props.project.researcher_quote ? ''} /></small>
