@@ -13,7 +13,7 @@ export default class TalkImages extends React.Component {
           const subject = getSubjectLocation(image);
           return (
             <div key={subject.id} className="project-home-page__talk-image">
-              <Thumbnail alt="" src={subject.src} width="600" height="300" format={subject.format} controls={false} />
+              <Thumbnail alt="" src={subject.src} width={600} height={300} format={subject.format} controls={false} />
             </div>
           );
         })}
