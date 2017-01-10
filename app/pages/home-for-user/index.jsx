@@ -49,9 +49,6 @@ export default class HomePageForUser extends React.Component {
   }
 
   componentDidMount() {
-    const backgroundBtn = document.getElementById('change-background');
-    backgroundBtn.addEventListener('focus', this.toggleFocus, true);
-    backgroundBtn.addEventListener('blur', this.toggleFocus, true);
     this.context.setAppHeaderVariant('detached');
     addEventListener('hashChange', this.handleHashChange);
     this.fetchRibbonData(this.props.user);
@@ -64,9 +61,6 @@ export default class HomePageForUser extends React.Component {
   }
 
   componentWillUnmount() {
-    const backgroundBtn = document.getElementById('change-background');
-    backgroundBtn.removeEventListener('focus', this.toggleFocus, true);
-    backgroundBtn.removeEventListener('blur', this.toggleFocus, true);
     this.context.setAppHeaderVariant(null);
     removeEventListener('hashChange', this.handleHashChange);
   }
@@ -264,6 +258,10 @@ export default class HomePageForUser extends React.Component {
     this.setState({ buttonFocus: !this.state.buttonFocus });
   }
 
+  test() {
+    console.log('buttnite');
+  }
+
   render() {
     if (!this.props.user) return null;
 
@@ -285,10 +283,10 @@ export default class HomePageForUser extends React.Component {
             <div>{this.state.error.toString()}</div>
           )}
 
-          {screen.width > 700 && (
-            <label className="home-page-for-user__change-background" id="change-background" style={backgroundBtn}>
+          {window.innerWidth > 700 && (
+            <label htmlFor="updateBackground" className="home-page-for-user__change-background" onFocus={this.toggleFocus} onBlur={this.toggleFocus} style={backgroundBtn}>
               <span>
-                <input type="file" accept="image/*" onChange={this.updateBackground} />
+                <input id="updateBackground" type="file" accept="image/*" onChange={this.updateBackground} />
               </span>
               Update Background
             </label>
