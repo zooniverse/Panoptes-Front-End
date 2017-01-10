@@ -17,7 +17,9 @@ const experimentalFeatures = [
   'persist annotations',
   'shortcut',
   'metadata based feedback',
-  'export classifications by workflow'
+  'export classifications by workflow',
+  'freehandLine',
+  'freehandShape',
 ];
 
 class ExperimentalFeatures extends Component {
