@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
-import { Markdown } from 'markdownz';
-import AboutPageLayout from './about-page-layout';
+import { Link } from 'react-router';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
+import AboutPageLayout from './about-page-layout';
 import Avatar from '../../../partials/avatar';
 
 counterpart.registerTranslations('en', {
@@ -23,7 +23,7 @@ counterpart.registerTranslations('en', {
   }
 });
 
-const createTeamList = (team) => (
+const createTeamList = (team, projectSlug) => (
   <div>
     <Translate content="projectRoles.title" />
     <ul className="team-list">
@@ -32,15 +32,18 @@ const createTeamList = (team) => (
           <span className="team-list-item__display-name">
             <Avatar user={teamMember.userResource} className="avatar" />
             {' '}
-            {teamMember.userResource.display_name}
+            <Link to={`/projects/${projectSlug}/users/${teamMember.userResource.login}`}>{teamMember.userResource.display_name}</Link>
             {' '}
           </span>
+          <br />
+          <span className="team-list-item__login">@{teamMember.userResource.login}</span>
           <span className="team-list-item__project-roles">
-          {teamMember.roles.map(role => (
-            <Translate key={role} 
-              content={`projectRoles.${role}`} 
-              className={`project-role ${role}`} 
-            />
+            {teamMember.roles.map(role => (
+              <Translate
+                key={role}
+                content={`projectRoles.${role}`}
+                className={`project-role ${role}`}
+              />
           ))}
           </span>
         </li>
@@ -51,17 +54,18 @@ const createTeamList = (team) => (
 
 const AboutProjectTeam = ({ pages, project, team }) => {
   const teamPage = pages.find(page => page.slug === 'team');
-  const mainContent = (teamPage && teamPage.content && teamPage.content !== '') 
-      ? teamPage.content 
+  const mainContent = (teamPage && teamPage.content && teamPage.content !== '')
+      ? teamPage.content
       : counterpart('aboutPages.missingContent.team');
-  const aside = createTeamList(team);
+  const aside = createTeamList(team, project.slug);
 
-  return <AboutPageLayout
-    project={project}
-    mainContent={mainContent}
-    aside={aside}
-  />;
-}
+  return (
+    <AboutPageLayout
+      project={project}
+      mainContent={mainContent}
+      aside={aside}
+    />);
+};
 
 AboutProjectTeam.propTypes = {
   pages: PropTypes.arrayOf(PropTypes.shape({
@@ -72,9 +76,10 @@ AboutProjectTeam.propTypes = {
   team: PropTypes.arrayOf(PropTypes.shape({
     userResource: PropTypes.shape({
       display_name: PropTypes.string.isRequired,
+      login: PropTypes.string.isRequired,
     }),
     roles: PropTypes.arrayOf(PropTypes.string).isRequired,
-  })), 
+  })),
 };
 
 export default AboutProjectTeam;
