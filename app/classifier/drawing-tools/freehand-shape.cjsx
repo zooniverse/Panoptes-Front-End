@@ -1,5 +1,4 @@
 React = require 'react'
-ReactDOM = require 'react-dom'
 DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
