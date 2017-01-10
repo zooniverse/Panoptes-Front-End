@@ -18,6 +18,8 @@ Select = require 'react-select'
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
 
+DISCIPLINE_NAMES = (discipline.value for discipline in DISCIPLINES)
+
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
 
@@ -35,10 +37,11 @@ module.exports = React.createClass
     disciplineTagList = []
     otherTagList = []
     for t in @props.project.tags
-      if DISCIPLINES.some((el) -> el.value == t)
-        disciplineTagList.push(t)
+      name = t[1]
+      if name in DISCIPLINE_NAMES
+        disciplineTagList.push name
       else
-        otherTagList.push(t)
+        otherTagList.push name
     {disciplineTagList, otherTagList}
 
   render: ->
