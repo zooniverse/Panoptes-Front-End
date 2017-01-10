@@ -36,7 +36,7 @@ module.exports = React.createClass
 
   componentWillMount: ->
     @props.project.get('project_roles', page_size: 100).then (roles) =>
-      scientists = for role in roles when 'scientist' in role.roles
+      scientists = for role in roles when 'scientist' or 'owner' in role.roles
         role.links.owner.id
       apiClient.type('users').get(scientists).then (researchers) =>
         @setState({ researchers })
@@ -44,7 +44,7 @@ module.exports = React.createClass
     avatar = @props.project.get('avatar')
     background = @props.project.get('background')
     Promise.all([avatar, background])
-      .then ([avatar, background]) => 
+      .then ([avatar, background]) =>
         @setState {avatar, background}
       .catch (error) =>
         @setState {error}
