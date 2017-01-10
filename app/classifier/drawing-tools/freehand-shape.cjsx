@@ -2,6 +2,7 @@ React = require 'react'
 DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
+{svgPathProperties} = require 'svg-path-properties'
 
 MINIMUM_LENGTH = 5
 GRAB_STROKE_WIDTH = 6
@@ -30,8 +31,8 @@ module.exports = React.createClass
       # This is a static method, so it doesn't have access to the component
       # instance. In order to get the DOM node for the path and get its length, 
       # we need to match the path by the d attribute.
-      pathNode = getPathNode path
-      pathNode.getTotalLength() > MINIMUM_LENGTH
+      properties = svgPathProperties path
+      properties.getTotalLength() > MINIMUM_LENGTH
 
   getDeletePosition: () ->
     scale = (@props.scale.horizontal + @props.scale.vertical) / 2
