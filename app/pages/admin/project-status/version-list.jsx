@@ -35,12 +35,14 @@ class VersionList extends Component {
 
   createVersionString(version) {
     const versionAuthor = this.state.users.find(user => user.id === version.whodunnit);
-    const property = Object.keys(version.changeset)[0];
-    const oldValue = version.changeset[property][0];
-    const newValue = version.changeset[property][1];
+    const [property] = Object.keys(version.changeset);
+    const [oldValue, newValue] = version.changeset[property];    
     const time = moment(version.created_at).fromNow();
 
-    const versionEntry = [versionAuthor.display_name, 'changed', property];
+    // There are some versions that have no `whodunnit` property, so set a fallback. 
+    // It was probably a ghost.
+    const versionAuthorName = (versionAuthor) ? versionAuthor.display_name : '👻 SOMEONE 👻';
+    const versionEntry = [versionAuthorName, 'changed', property];
     if (oldValue !== null && oldValue !== undefined) {
       versionEntry.push('from', oldValue);
     }
