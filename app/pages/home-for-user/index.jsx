@@ -27,7 +27,6 @@ export default class HomePageForUser extends React.Component {
     super(props);
 
     this.state = {
-      buttonFocus: false,
       backgroundSrc: '',
       avatarSrc: '',
       showNews: false,
@@ -42,7 +41,6 @@ export default class HomePageForUser extends React.Component {
 
     this.getRibbonData = this.getRibbonData.bind(this);
     this.toggleNews = this.toggleNews.bind(this);
-    this.toggleFocus = this.toggleFocus.bind(this);
     this.updateBackground = this.updateBackground.bind(this);
     this.createLinkedResource = this.props.actions.createLinkedResource.bind(this);
     this.uploadMedia = this.props.actions.uploadMedia.bind(this);
@@ -254,14 +252,6 @@ export default class HomePageForUser extends React.Component {
       });
   }
 
-  toggleFocus() {
-    this.setState({ buttonFocus: !this.state.buttonFocus });
-  }
-
-  test() {
-    console.log('buttnite');
-  }
-
   render() {
     if (!this.props.user) return null;
 
@@ -271,7 +261,7 @@ export default class HomePageForUser extends React.Component {
     }
 
     const hashQuery = qs.parse(this.props.location.hash.slice(1));
-    const backgroundBtn = this.state.buttonFocus ? { background: 'white', opacity: '10', color: 'black' } : {};
+
     const OpenSectionComponent = SECTIONS[hashQuery.focus];
 
     return (
@@ -284,9 +274,9 @@ export default class HomePageForUser extends React.Component {
           )}
 
           {window.innerWidth > 700 && (
-            <label htmlFor="updateBackground" className="home-page-for-user__change-background" onFocus={this.toggleFocus} onBlur={this.toggleFocus} style={backgroundBtn}>
+            <label htmlFor="updateBackground" className="home-page-for-user__change-background" tabIndex="0">
               <span>
-                <input id="updateBackground" type="file" accept="image/*" onChange={this.updateBackground} />
+                <input id="updateBackground" tabIndex="0" type="file" accept="image/*" onChange={this.updateBackground} />
               </span>
               Update Background
             </label>
