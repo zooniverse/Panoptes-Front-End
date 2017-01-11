@@ -16,10 +16,10 @@
       color: BURNT_ORANGE
 
     h2, h3, h4, h5, h6
-      color: DARK_BLUE
+      color: ZOONIVERSE_NAVY
 
     a
-      color: DARK_BLUE
+      color: ZOONIVERSE_NAVY
 
   .team-list
     padding: 0
@@ -30,6 +30,13 @@
 
     &__display-name
       whitespace: nowrap
+      a
+        color: #00979d
+
+    &__login
+      whitespace: nowrap
+      color: #afaeae
+      font-size: 0.8em
 
     &__project-roles
       display: flex
@@ -156,6 +163,10 @@
     flex-direction: column
     justify-content: center
     margin-top: 1.5em
+
+    &__buttons
+      display: flex
+      flex-direction: column
 
     a, button
       background: none
@@ -390,7 +401,7 @@
       background-color: #0072ff
 
   a
-    color: LIGHT_GREEN_HEADER
+    color: TEAL_MID
 
 &.in-project-context
   .pill-button

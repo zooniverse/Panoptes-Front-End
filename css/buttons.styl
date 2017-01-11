@@ -58,7 +58,7 @@
 
   .standard-button
     @extends $reset-button
-    background: LIGHT_GREEN_HEADER
+    background: TEAL_MID
     border-radius: 4px
     color: white
     font-size: 14px
@@ -66,7 +66,7 @@
 
     &:focus,
     &:hover
-      background: lighten(LIGHT_GREEN_HEADER, 20%)
+      background: lighten(TEAL_MID, 20%)
 
     &:disabled
       pointer-events: none
@@ -98,14 +98,14 @@
 .ghost-button
   @extends $reset-button
   background: transparent
-  border: 3px solid LIGHT_GREEN_HEADER
+  border: 3px solid TEAL_MID
   border-radius: 4px
-  color: LIGHT_GREEN_HEADER
+  color: TEAL_MID
   position: static // position: relative inherited from $reset-button was causing inconsistent rendering in chrome
 
   &:focus,
   &:hover
-    background: LIGHT_GREEN_HEADER
+    background: TEAL_MID
     color: white
 
 .link-button

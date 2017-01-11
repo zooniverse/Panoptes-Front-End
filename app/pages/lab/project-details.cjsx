@@ -1,7 +1,6 @@
 React = require 'react'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-PromiseRenderer = require '../../components/promise-renderer'
 ImageSelector = require '../../components/image-selector'
 apiClient = require 'panoptes-client/lib/api-client'
 putFile = require '../../lib/put-file'
@@ -18,6 +17,8 @@ Select = require 'react-select'
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
 
+DISCIPLINE_NAMES = (discipline.value for discipline in DISCIPLINES)
+
 module.exports = React.createClass
   displayName: 'EditProjectDetails'
 
@@ -26,57 +27,70 @@ module.exports = React.createClass
 
   getInitialState: ->
     {disciplineTagList, otherTagList} = @splitTags()
-    avatarError: null
-    backgroundError: null
     disciplineTagList: disciplineTagList
     otherTagList: otherTagList
+    researchers: []
+    avatar: null
+    background: null
+    error: null
+
+  componentWillMount: ->
+    @props.project.get('project_roles', page_size: 100).then (roles) =>
+      scientists = for role in roles when 'scientist' or 'owner' in role.roles
+        role.links.owner.id
+      apiClient.type('users').get(scientists).then (researchers) =>
+        @setState({ researchers })
+
+    avatar = @props.project.get('avatar')
+    background = @props.project.get('background')
+    Promise.all([avatar, background])
+      .then ([avatar, background]) =>
+        @setState {avatar, background}
+      .catch (error) =>
+        @setState {error}
+        console.log error
 
   splitTags: (kind) ->
     disciplineTagList = []
     otherTagList = []
     for t in @props.project.tags
-      if DISCIPLINES.some((el) -> el.value == t)
-        disciplineTagList.push(t)
+      name = t[1]
+      if name in DISCIPLINE_NAMES
+        disciplineTagList.push name
       else
-        otherTagList.push(t)
+        otherTagList.push name
     {disciplineTagList, otherTagList}
+
+  researcherOptions: ->
+    options = []
+    for researcher in @state.researchers
+      options.push Object.assign value: researcher.id, label: researcher.display_name
+    options
 
   render: ->
     # Failures on media GETs are acceptable here,
     # but the JSON-API lib doesn't cache failed requests,
     # so do it manually:
-
-    @avatarGet ?= @props.project.get 'avatar'
-      .catch ->
-        null
-
-    @backgroundGet ?= @props.project.get 'background'
-      .catch ->
-        null
+    avatarPlaceholder = <div className="form-help content-container">Drop an avatar image here</div>
+    backgroundPlaceholder = <div className="form-help content-container">Drop a background image here</div>
 
     <div>
       <p className="form-help">Input the basic information about your project, and set up its home page.</p>
       <div className="columns-container">
         <div>
           Avatar<br />
-          <PromiseRenderer promise={@avatarGet} then={(avatar) =>
-            placeholder = <div className="form-help content-container">Drop an avatar image here</div>
-            <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={avatar?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'avatar'} />
-          } />
-          {if @state.avatarError
-            <div className="form-help error">{@state.avatarError.toString()}</div>}
+          <ImageSelector maxSize={MAX_AVATAR_SIZE} ratio={1} src={@state.avatar?.src} placeholder={avatarPlaceholder} onChange={@handleMediaChange.bind this, 'avatar'} />
+          {if @state.error
+            <div className="form-help error">{@state.error.toString()}</div>}
 
           <p><small className="form-help">Pick a logo to represent your project. To add an image, either drag and drop or click to open your file viewer. For best results, use a square image of not more than 50 KB.</small></p>
 
           <hr />
 
           Background image<br />
-          <PromiseRenderer promise={@backgroundGet} then={(background) =>
-            placeholder = <div className="form-help content-container">Drop a background image here</div>
-            <ImageSelector maxSize={MAX_BACKGROUND_SIZE} src={background?.src} placeholder={placeholder} onChange={@handleMediaChange.bind this, 'background'} />
-          } />
-          {if @state.backgroundError
-            <div className="form-help error">{@state.backgroundError.toString()}</div>}
+          <ImageSelector maxSize={MAX_BACKGROUND_SIZE} src={@state.background?.src} placeholder={backgroundPlaceholder} onChange={@handleMediaChange.bind this, 'background'} />
+          {if @state.error
+            <div className="form-help error">{@state.error.toString()}</div>}
 
           <p><small className="form-help">This image will be the background for all of your project pages, including your project’s front page. To add an image, either drag and drop or left click to open your file viewer. For best results, use good quality images no more than 256 KB.</small></p>
 
@@ -122,6 +136,20 @@ module.exports = React.createClass
             </AutoSave>
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do. <CharLimit limit={500} string={@props.project.workflow_description ? ''} /></small>
           </p>
+
+          <div>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Researcher Quote</span>
+              <br />
+              <Select
+                placeholder="Choose a Researcher"
+                onChange={@handleResearcherChange}
+                options={@researcherOptions()}
+                value={@props.project?.configuration?.researcherID} />
+              <textarea className="standard-input full" name="researcher_quote" value={@props.project.researcher_quote} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
+            <small className="form-help">This text will appear on a project landing page alongside an avatar of the selected researcher. <CharLimit limit={255} string={@props.project.researcher_quote ? ''} /></small>
+          </div>
 
           <div>
             <AutoSave resource={@props.project}>
@@ -171,6 +199,12 @@ module.exports = React.createClass
     @setState disciplineTagList: newTags
     allTags = newTags.concat @state.otherTagList
     @handleTagChange(allTags)
+
+  handleResearcherChange: (option) ->
+    @props.project.update({
+      'configuration.researcherID': option?.value || ""
+    })
+    @props.project.save()
 
   handleOtherTagChange: (options) ->
     newTags = options.map (option) ->

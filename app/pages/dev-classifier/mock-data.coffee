@@ -125,6 +125,10 @@ workflow = apiClient.type('workflows').create
         {type: 'bezier', label: 'Bezier', color: 'orange', details: MISC_DRAWING_DETAILS}
         {type: 'column', label: 'Column Rectangle', color: 'darkgreen'}
         {type: 'grid', label: 'Grid', color: 'purple'}
+        {type: 'freehandLine', label: 'Freehand Line', color: 'deepskyblue'}
+        {type: 'freehandShape', label: 'Freehand Shape', color: 'darkseagreen'}
+        
+
       ]
       next: 'survey'
 

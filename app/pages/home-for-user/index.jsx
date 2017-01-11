@@ -1,39 +1,40 @@
 import React from 'react';
 import { Link } from 'react-router';
-import BlurredImage from './blurred-image';
+import apiClient from 'panoptes-client/lib/api-client';
 import Pullout from 'react-pullout';
-import getUserRibbonData from '../../lib/get-user-ribbon-data';
+import qs from 'qs';
+import BlurredImage from './blurred-image';
 import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
 import RecentCollectionsSection from './recent-collections';
 import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
 import ProjectStats from './project-stats';
-import qs from 'qs';
 import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-pullout';
+import getColorFromString from '../../lib/get-color-from-string';
 
 
 const SECTIONS = {
   projects: RecentProjectsSection,
   collections: RecentCollectionsSection,
   messages: RecentMessagesSection,
-  builds: MyBuildsSection,
+  builds: MyBuildsSection
 };
 
 const HomePageForUser = React.createClass({
   propTypes: {
     user: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object,
+    location: React.PropTypes.object
   },
 
   contextTypes: {
-    setAppHeaderVariant: React.PropTypes.func,
+    setAppHeaderVariant: React.PropTypes.func
   },
 
   getDefaultProps() {
     return {
-      user: {},
+      user: {}
     };
   },
 
@@ -42,11 +43,12 @@ const HomePageForUser = React.createClass({
       backgroundSrc: '',
       avatarSrc: '',
       showNews: false,
+      totalClassifications: 0,
       ribbonData: [],
       loading: false,
       error: null,
       selectedProjectID: null,
-      openSection: null,
+      openSection: null
     };
   },
 
@@ -78,7 +80,7 @@ const HomePageForUser = React.createClass({
 
     this.setState({
       loading: true,
-      error: null,
+      error: null
     });
 
     user.get('profile_header')
@@ -87,50 +89,115 @@ const HomePageForUser = React.createClass({
     })
     .then((profileHeaders) => {
       const profileHeader = [].concat(profileHeaders)[0];
-      if (!!profileHeader) {
+      if (profileHeader) {
         this.setState({
-          backgroundSrc: profileHeader.src,
+          backgroundSrc: profileHeader.src
         });
       }
     });
 
     user.get('avatar')
-    .catch(() => {
-      return [];
+    .catch((error) => {
+      console.log('Something went wrong. Error: ', error);
     })
     .then((avatars) => {
       const avatar = [].concat(avatars)[0];
-      if (!!avatar) {
+      if (avatar) {
         this.setState({
-          avatarSrc: avatar.src,
+          avatarSrc: avatar.src
         });
       }
     });
 
-    getUserRibbonData(user)
-    .then((ribbonData) => {
-      const updatedProjects = this.recentlyUpdatedProjects(ribbonData.slice());
-      this.setState({
-        ribbonData: ribbonData,
-        updatedProjects: updatedProjects,
-      });
-    })
+    this.getRibbonData(user)
     .catch((error) => {
-      this.setState({
-        error: error,
-      });
+      this.setState({ error });
     })
     .then(() => {
       this.setState({
-        loading: false,
+        loading: false
       });
     });
   },
 
-  recentlyUpdatedProjects(data) {
-    return data.sort((a, b) => {
-      return new Date(b.updated_at) - new Date(a.updated_at);
-    }).splice(0, 3);
+  getRibbonData(user, _page = 1) {
+    const getRibbonData = this.getRibbonData;
+    return user.get('project_preferences', {
+      sort: '-updated_at',
+      page: _page
+    })
+    .then((projectPreferences) => {
+      if (projectPreferences.length === 0) {
+        return projectPreferences;
+      } else {
+        let activePreferences = projectPreferences.filter((preference) => { return preference.activity_count > 0; });
+        activePreferences = activePreferences.map((preference, i) => {
+          preference.sort_order = i;
+          return preference;
+        });
+        this.getProjectsForPreferences(activePreferences)
+          .then((projects) => {
+            return projects
+            .sort((a, b) => {
+              return a.sort_order - b.sort_order;
+            })
+            .filter(Boolean)
+            .map((project, i) => {
+              return {
+                avatar_src: projects[i].avatar_src,
+                id: projects[i].id,
+                slug: projects[i].slug,
+                display_name: projects[i].display_name,
+                description: projects[i].description,
+                color: getColorFromString(projects[i].slug),
+                classifications: projects[i].activity_count,
+                updated_at: projects[i].updated_at,
+                redirect: projects[i].redirect
+              };
+            });
+          })
+          .then((projects) => {
+            this.setState((prevState) => {
+              const ribbonData = prevState.ribbonData.concat(projects);
+              const totalClassifications = ribbonData.reduce((total, project) => {
+                return total + project.classifications;
+              }, 0);
+              return { ribbonData, totalClassifications };
+            });
+          });
+        const meta = projectPreferences[0].getMeta();
+        if (meta.page !== meta.page_count) {
+          getRibbonData(user, meta.page + 1);
+        }
+      }
+    });
+  },
+
+  getProjectsForPreferences(preferences) {
+    const projectIDs = preferences.map((projectPreference) => {
+      return projectPreference.links.project;
+    });
+    return apiClient
+    .type('projects')
+    .get({ id: projectIDs, cards: true, page_size: preferences.length })
+    .catch((error) => {
+      console.log('Something went wrong. Error: ', error);
+    })
+    .then((projects) => {
+      const classifications = preferences.reduce((counts, projectPreference) => {
+        counts[projectPreference.links.project] = projectPreference.activity_count;
+        return counts;
+      }, {});
+      const sortOrders = preferences.reduce((orders, projectPreference) => {
+        orders[projectPreference.links.project] = projectPreference.sort_order;
+        return orders;
+      }, {});
+      return projects.map((project) => {
+        project.activity_count = classifications[project.id];
+        project.sort_order = sortOrders[project.id];
+        return project;
+      });
+    });
   },
 
   findProjectLink(project) {
@@ -139,7 +206,7 @@ const HomePageForUser = React.createClass({
 
   toggleNews() {
     this.setState({
-      showNews: !this.state.showNews,
+      showNews: !this.state.showNews
     });
   },
 
@@ -152,13 +219,13 @@ const HomePageForUser = React.createClass({
         <div className="home-page-for-user__menu-column">
           <Link to="#focus=projects" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-history fa-fw"></i>{' '}
+              <i className="fa fa-history fa-fw" />{' '}
               My recent projects
             </span>
           </Link>
           <Link to="#focus=collections" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-th-large fa-fw"></i>{' '}
+              <i className="fa fa-th-large fa-fw" />{' '}
               My collections
             </span>
           </Link>
@@ -166,13 +233,13 @@ const HomePageForUser = React.createClass({
         <div className="home-page-for-user__menu-column">
           <Link to="#focus=messages" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-envelope fa-fw"></i>{' '}
+              <i className="fa fa-envelope fa-fw" />{' '}
               Messages
             </span>
           </Link>
           <Link to="#focus=builds" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
-              <i className="fa fa-cog fa-fw"></i>{' '}
+              <i className="fa fa-cog fa-fw" />{' '}
               My builds
             </span>
           </Link>
@@ -208,12 +275,18 @@ const HomePageForUser = React.createClass({
             <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
               <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
-              <div className="home-page-for-user__welcome">Hello, {this.props.user.display_name}</div>
+              <div className="home-page-for-user__welcome">
+                Hello {this.props.user.display_name},<br />
+                you have made {this.state.totalClassifications} classifications to date.
+              </div>
 
               {this.renderMenu(OpenSectionComponent)}
 
               {OpenSectionComponent && (
-                <OpenSectionComponent user={this.props.user} onClose={this.deselectSection} />
+                <OpenSectionComponent
+                  projects={this.state.ribbonData}
+                  onClose={this.deselectSection}
+                />
               )}
             </div>
           )}
@@ -221,7 +294,7 @@ const HomePageForUser = React.createClass({
           <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
             <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
               <div className="home-page-news-pullout__toggle-label">
-                <i className={this.state.showNews ? "fa fa-chevron-right" : "fa fa-chevron-left"}></i>
+                <i className={this.state.showNews ? 'fa fa-chevron-right' : 'fa fa-chevron-left'} />
                 <br />
                 News
               </div>
@@ -238,7 +311,7 @@ const HomePageForUser = React.createClass({
 
       </div>
     );
-  },
+  }
 });
 
 export default HomePageForUser;
