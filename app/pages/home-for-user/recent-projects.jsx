@@ -24,8 +24,8 @@ class RecentProjectsSection extends React.Component {
 
   render() {
     const { onClose, projects } = this.props;
-    const visibleProjects = projects.slice(0, 4);
-    const hiddenProjects = projects.slice(4);
+    const visibleProjects = projects.slice(0, 5);
+    const hiddenProjects = projects.slice(5);
     const className = this.state.allProjects ? 'open' : 'closed';
     return (
       <HomePageSection
@@ -47,20 +47,14 @@ class RecentProjectsSection extends React.Component {
             <span>
             {visibleProjects.map((project) => {
               return (
-                <span key={project.id}>
-                  <ProjectIcon project={project} badge={project.classifications} />
-                  &ensp;
-                </span>
+                <ProjectIcon key={project.id} project={project} badge={project.classifications} />
               );
             })}
             </span>
             <span className={className}>
             {hiddenProjects.map((project) => {
               return (
-                <span key={project.id}>
-                  <ProjectIcon project={project} badge={project.classifications} />
-                  &ensp;
-                </span>
+                <ProjectIcon key={project.id} project={project} badge={project.classifications} />
               );
             })}
             </span>
