@@ -1,103 +1,77 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import HomePageSection from './generic-section';
-import { Link } from 'react-router';
-import ProjectCard from '../../partials/project-card';
-import apiClient from 'panoptes-client/lib/api-client';
+import ProjectIcon from '../../components/project-icon';
 
-const RecentProjectsSection = React.createClass({
-  propTypes: {
-    onClose: React.PropTypes.func,
-  },
-
-  contextTypes: {
-    user: React.PropTypes.object.isRequired,
-  },
-
-  getInitialState() {
-    return {
-      loading: false,
-      error: null,
-      projects: [],
-      avatars: {},
+class RecentProjectsSection extends React.Component {
+  constructor(props) {
+    super(props);
+    this.toggleAllProjects = this.toggleAllProjects.bind(this);
+    this.state = {
+      allProjects: false
     };
-  },
+  }
 
-  componentDidMount() {
-    this.fetchProjects(this.context.user);
-  },
+  componentDidUpdate() {
+    !this.state.allProjects && ReactDOM.findDOMNode(this).scrollIntoView();
+  }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextContext.user !== this.context.user) {
-      this.fetchProjects(nextContext.user);
-    }
-  },
-
-  fetchProjects(user) {
+  toggleAllProjects() {
     this.setState({
-      loading: true,
-      error: null,
-      avatars: {},
+      allProjects: !this.state.allProjects
     });
-
-    user.get('project_preferences', {
-      sort: '-updated_at',
-    })
-    .then((preferences) => {
-      const activePreferences = preferences.filter((projectPreference) => {
-        return projectPreference.activity_count > 0;
-      });
-      const recentPreferences = activePreferences.filter(Boolean).slice(0, 5);
-      const project_ids = recentPreferences.map((preference) => {
-        return preference.links.project
-      });
-      return apiClient.type('projects').get({id: project_ids, cards: true}).catch(() => {
-        return null;
-      });
-    })
-    .then((projects) => {
-      this.setState({
-        projects,
-      });
-    })
-    .catch((error) => {
-      this.setState({
-        error: error,
-        projects: [],
-      });
-    })
-    .then(() => {
-      this.setState({
-        loading: false,
-      });
-    });
-  },
+  }
 
   render() {
+    const { onClose, projects } = this.props;
+    const visibleProjects = projects.slice(0, 5);
+    const hiddenProjects = projects.slice(5);
+    const className = this.state.allProjects ? 'open' : 'closed';
     return (
       <HomePageSection
         title="Recent projects"
-        loading={this.state.loading}
-        error={this.state.error}
-        onClose={this.props.onClose}
+        onClose={onClose}
       >
-        <div className="home-page-section__sub-header">
-          <Link to={`/users/${this.context.user.login}/stats`} className="outlined-button">See all</Link>
-        </div>
-
-        {this.state.projects.length === 0 && (
-          <div className="home-page-section__header-label">
+        {(projects === 0)
+        ? <div className="home-page-section__header-label">
             <p> You have no recent projects. </p>
           </div>
-        )}
-
-        <div className="project-card-list">
-          {this.state.projects.map((project) => {
-            return <ProjectCard key={project.id} project={project} />;
-          })}
-        </div>
+        : [<div key="project-header" className="home-page-section__sub-header">
+            <a href="/#focus=projects" className="outlined-button" onClick={this.toggleAllProjects}>
+              <span className="home-page-section__header-label">
+                See all
+              </span>
+            </a>
+          </div>, 
+          <div key="project-list" className="project-card-list">
+            <span>
+            {visibleProjects.map((project) => {
+              return (
+                <ProjectIcon key={project.id} project={project} badge={project.classifications} />
+              );
+            })}
+            </span>
+            <span className={className}>
+            {hiddenProjects.map((project) => {
+              return (
+                <ProjectIcon key={project.id} project={project} badge={project.classifications} />
+              );
+            })}
+            </span>
+        </div>]}
       </HomePageSection>
     );
-  },
-});
+  }
+}
+
+RecentProjectsSection.propTypes = {
+  onClose: React.PropTypes.func.isRequired,
+  projects: React.PropTypes.array.isRequired
+};
+
+RecentProjectsSection.defaultProps = {
+  onClose: () => {},
+  projects: []
+};
 
 export default RecentProjectsSection;
