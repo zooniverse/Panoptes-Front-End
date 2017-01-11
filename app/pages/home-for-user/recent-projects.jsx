@@ -36,7 +36,14 @@ class RecentProjectsSection extends React.Component {
         ? <div className="home-page-section__header-label">
             <p> You have no recent projects. </p>
           </div>
-        : <div className="project-card-list">
+        : [<div key="project-header" className="home-page-section__sub-header">
+            <a href="/#focus=projects" className="outlined-button" onClick={this.toggleAllProjects}>
+              <span className="home-page-section__header-label">
+                See all
+              </span>
+            </a>
+          </div>, 
+          <div key="project-list" className="project-card-list">
             <span>
             {visibleProjects.map((project) => {
               return (
@@ -57,14 +64,7 @@ class RecentProjectsSection extends React.Component {
               );
             })}
             </span>
-        </div>}
-        <button type="button" className="outlined-button" onClick={this.toggleAllProjects}>
-          <span className="home-page-section__header-label">
-            See all
-            <br />
-            <i className={this.state.allProjects ? 'fa fa-chevron-up' : 'fa fa-chevron-down'} />
-          </span>
-        </button>
+        </div>]}
       </HomePageSection>
     );
   }
