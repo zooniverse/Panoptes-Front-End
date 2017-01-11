@@ -284,7 +284,6 @@ const HomePageForUser = React.createClass({
 
               {OpenSectionComponent && (
                 <OpenSectionComponent
-                  updatedProjects={this.state.ribbonData}
                   projects={this.state.ribbonData}
                   onClose={this.deselectSection}
                 />

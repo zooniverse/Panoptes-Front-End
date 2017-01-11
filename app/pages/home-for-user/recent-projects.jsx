@@ -1,42 +1,42 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import HomePageSection from './generic-section';
 import ProjectIcon from '../../components/project-icon';
 
-class RecentProjectsSection extends Component {
+class RecentProjectsSection extends React.Component {
   constructor(props) {
     super(props);
     this.toggleAllProjects = this.toggleAllProjects.bind(this);
     this.state = {
-      allProjects: false,
+      allProjects: false
     };
   }
-  
+
   componentDidUpdate() {
     !this.state.allProjects && ReactDOM.findDOMNode(this).scrollIntoView();
   }
 
   toggleAllProjects() {
     this.setState({
-      allProjects: !this.state.allProjects,
+      allProjects: !this.state.allProjects
     });
   }
 
   render() {
-    const { onClose, updatedProjects } = this.props;
-    const visibleProjects = updatedProjects.slice(0, 4);
-    const hiddenProjects = updatedProjects.slice(4);
-    const className = this.state.allProjects ? 'open' : 'closed'
+    const { onClose, projects } = this.props;
+    const visibleProjects = projects.slice(0, 4);
+    const hiddenProjects = projects.slice(4);
+    const className = this.state.allProjects ? 'open' : 'closed';
     return (
       <HomePageSection
         title="Recent projects"
         onClose={onClose}
       >
-        {(updatedProjects === 0)
+        {(projects === 0)
         ? <div className="home-page-section__header-label">
             <p> You have no recent projects. </p>
           </div>
-        : <div  className="project-card-list">
+        : <div className="project-card-list">
             <span>
             {visibleProjects.map((project) => {
               return (
@@ -62,7 +62,7 @@ class RecentProjectsSection extends Component {
           <span className="home-page-section__header-label">
             See all
             <br />
-            <i className={this.state.allProjects ? "fa fa-chevron-up" : "fa fa-chevron-down"}></i>
+            <i className={this.state.allProjects ? 'fa fa-chevron-up' : 'fa fa-chevron-down'} />
           </span>
         </button>
       </HomePageSection>
@@ -72,14 +72,12 @@ class RecentProjectsSection extends Component {
 
 RecentProjectsSection.propTypes = {
   onClose: React.PropTypes.func.isRequired,
-  projects: React.PropTypes.array.isRequired,
-  updatedProjects: React.PropTypes.array.isRequired,
+  projects: React.PropTypes.array.isRequired
 };
 
 RecentProjectsSection.defaultProps = {
   onClose: () => {},
-  projects: [],
-  updatedProjects: [],
+  projects: []
 };
 
 export default RecentProjectsSection;
