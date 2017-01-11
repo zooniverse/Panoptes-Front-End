@@ -54,10 +54,11 @@ module.exports = React.createClass
     deleteBtnX - (DELETE_BUTTON_WIDTH / scale) < 0
 
   render: ->
-    {path, _inProgress} = @props.mark
+    {_inProgress, path} = @props.mark
 
     <DrawingToolRoot tool={this}>
-      <path d={path} />
+        <path d={path} fill="none" strokeWidth="20" stroke="transparent" className="clickable" />
+        <path d={path} fill="none" className="clickable" />
 
       {if !_inProgress and @props.selected
         deletePosition = @getDeletePosition()
