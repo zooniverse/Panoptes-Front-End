@@ -37,6 +37,7 @@
     "seven-ten": "~3.0.0",
     "sort-into-columns": "~1.0.0",
     "sugar-client": "~1.0.1",
+    "svg-path-properties": "~0.1.1",
     "swipe-js-iso": "~2.0.1",
     "visible-element": "~1.0.1",
     "zooniverse-geordi-client": "^1.4"
