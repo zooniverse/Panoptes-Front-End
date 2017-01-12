@@ -36,7 +36,7 @@ module.exports = React.createClass
 
   componentWillMount: ->
     @props.project.get('project_roles', page_size: 100).then (roles) =>
-      scientists = for role in roles when 'scientist' or 'owner' in role.roles
+      scientists = for role in roles when 'scientist' in role.roles or 'owner' in role.roles
         role.links.owner.id
       apiClient.type('users').get(scientists).then (researchers) =>
         @setState({ researchers })
@@ -65,6 +65,7 @@ module.exports = React.createClass
     options = []
     for researcher in @state.researchers
       options.push Object.assign value: researcher.id, label: researcher.display_name
+    options.push Object.assign value: @props.project.display_name, label: "#{@props.project.display_name} Avatar"
     options
 
   render: ->
