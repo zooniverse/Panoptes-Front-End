@@ -2,12 +2,12 @@ import React from 'react';
 import { Markdown } from 'markdownz';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
+import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
 import FinishedBanner from './finished-banner';
 import TalkImages from './talk-images';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
-import Translate from 'react-translate-component';
-import counterpart from 'counterpart';
 
 counterpart.registerTranslations('en', {
   researchQuote: {
@@ -20,7 +20,7 @@ export default class ProjectHomePage extends React.Component {
     super(props);
     this.state = {
       showWorkflowButtons: false,
-      talkImages: [],
+      talkImages: []
     };
 
     this.showWorkflowButtons = this.showWorkflowButtons.bind(this);
@@ -47,6 +47,13 @@ export default class ProjectHomePage extends React.Component {
   componentDidMount() {
     this.showWorkflowButtons();
     if (this.props.project.configuration && this.props.project.configuration.researcherID) {
+      if (this.props.project.configuration.researcherID === this.props.project.display_name) {
+        return this.props.project.get('avatar').then((avatar) => {
+          if (avatar.src) {
+            this.setState({ researcherAvatar: avatar.src });
+          }
+        });
+      }
       return apiClient.type('users').get(this.props.project.configuration.researcherID)
       .then((researcher) => {
         return researcher.get('avatar').then(([avatar]) => {
@@ -141,7 +148,7 @@ export default class ProjectHomePage extends React.Component {
 
 ProjectHomePage.contextTypes = {
   geordi: React.PropTypes.object,
-  user: React.PropTypes.object,
+  user: React.PropTypes.object
 };
 
 ProjectHomePage.defaultProps = {
@@ -149,7 +156,7 @@ ProjectHomePage.defaultProps = {
   onChangePreferences: () => {},
   preferences: {},
   project: {},
-  splits: {},
+  splits: {}
 };
 
 ProjectHomePage.propTypes = {
@@ -163,7 +170,7 @@ ProjectHomePage.propTypes = {
     experimental_tools: React.PropTypes.arrayOf(React.PropTypes.string),
     id: React.PropTypes.string,
     introduction: React.PropTypes.string,
-    researcher_quote: React.PropTypes.string,
+    researcher_quote: React.PropTypes.string
   }).isRequired,
-  splits: React.PropTypes.object,
+  splits: React.PropTypes.object
 };

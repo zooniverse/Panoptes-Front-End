@@ -7,7 +7,7 @@ export default class TalkStatus extends React.Component {
   constructor() {
     super();
     this.state = {
-      activeUsers: 0,
+      activeUsers: 0
     };
   }
 
@@ -34,20 +34,20 @@ export default class TalkStatus extends React.Component {
           <strong>{this.state.activeUsers}</strong> {peopleAmount} talking about <strong>{this.props.project.display_name}
           </strong> right now.
         </span>
-        <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in standard-button">Join In</Link>
+        <Link to={`/projects/${this.props.project.slug}/talk`} className="join-in standard-button">Join in</Link>
       </div>
     );
   }
 }
 
 TalkStatus.defaultProps = {
-  project: {},
+  project: {}
 };
 
 TalkStatus.propTypes = {
   project: React.PropTypes.shape({
     display_name: React.PropTypes.string,
     id: React.PropTypes.string,
-    slug: React.PropTypes.string,
-  }).isRequired,
+    slug: React.PropTypes.string
+  }).isRequired
 };

@@ -8,9 +8,6 @@ counterpart.registerTranslations('en', {
   buttons: {
     learnMore: 'Learn more',
     getStarted: 'Get started'
-  },
-  workflow: {
-    choice: 'Please choose a workflow'
   }
 });
 
@@ -58,21 +55,13 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   }
 
   renderWorkflowButtons() {
-    let workflowDescription;
-
-    if (this.props.project.workflow_description && this.props.project.workflow_description !== '') {
-      workflowDescription = (
-        <h4>{this.props.project.workflow_description}</h4>
-      );
-    } else {
-      workflowDescription = <Translate component="h4" content="workflow.choice" />;
-    }
-
     if (this.props.activeWorkflows.length > 0 && this.props.preferences) {
       return (
         <div className="project-home-page__container workflow-choice">
           <div className="project-home-page__content">
-            {workflowDescription}
+            {this.props.project.workflow_description && (
+              <h4>{this.props.project.workflow_description}</h4>
+            )}
             {this.props.activeWorkflows.map((workflow) => {
               return (
                 <ProjectHomeWorkflowButton
