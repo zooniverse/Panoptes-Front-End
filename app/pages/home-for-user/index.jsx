@@ -28,7 +28,6 @@ export default class HomePageForUser extends React.Component {
 
     this.state = {
       backgroundSrc: '',
-      buttonFocus: false,
       avatarSrc: '',
       showNews: false,
       totalClassifications: 0,
@@ -42,7 +41,6 @@ export default class HomePageForUser extends React.Component {
 
     this.getRibbonData = this.getRibbonData.bind(this);
     this.toggleNews = this.toggleNews.bind(this);
-    this.toggleFocus = this.toggleFocus.bind(this);
     this.updateBackground = this.updateBackground.bind(this);
     this.createLinkedResource = this.props.actions.createLinkedResource.bind(this);
     this.uploadMedia = this.props.actions.uploadMedia.bind(this);
@@ -206,10 +204,6 @@ export default class HomePageForUser extends React.Component {
     });
   }
 
-  toggleFocus() {
-    this.setState({ buttonFocus: !this.state.buttonFocus });
-  }
-
   renderMenu(openComponent) {
     if ((openComponent) && (screen.width < 700)) {
       return;
@@ -267,7 +261,7 @@ export default class HomePageForUser extends React.Component {
     }
 
     const hashQuery = qs.parse(this.props.location.hash.slice(1));
-    const backgroundBtn = this.state.buttonFocus ? { background: 'white', opacity: '10', color: 'black' } : {};
+
     const OpenSectionComponent = SECTIONS[hashQuery.focus];
 
     return (
@@ -280,12 +274,14 @@ export default class HomePageForUser extends React.Component {
           )}
 
           {window.innerWidth > 700 && (
-            <label htmlFor="updateBackground" className="home-page-for-user__change-background" onFocus={this.toggleFocus} onBlur={this.toggleFocus} style={backgroundBtn}>
-              <span>
-                <input id="updateBackground" type="file" accept="image/*" onChange={this.updateBackground} />
-              </span>
-              Update Background
-            </label>
+            <div className="home-page-for-user__change-background">
+              <input id="updateBackground" type="file" accept="image/*" onChange={this.updateBackground} />
+              <label htmlFor="updateBackground">
+                <span>
+                  Update Background
+                </span>
+              </label>
+            </div>
           )}
 
           {hashQuery.project ? (

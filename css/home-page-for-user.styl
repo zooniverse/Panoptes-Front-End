@@ -57,30 +57,37 @@ GRAY = #EFF2F5
     text-align: left
 
   &__change-background
-    border: 1px solid white
-    border-radius: 0.8em
     cursor: pointer
-    font-weight: bold
     left: 5vw
-    padding: 0.8em
     position: absolute
-    opacity: 0.15
-    top: 12vh
-    transition: opacity 0.4s
-    width: 10em
+    top: 10vh
 
-    &:hover
-      background: white
-      color: black
-      opacity: 10
+    label
+      border: 1px solid white
+      border-radius: 1em
+      cursor: pointer
+      display: block
+      opacity: 0.15
+      transition: opacity 0.4s
 
-    span
-      overflow: hidden
-      position: absolute
+      &:hover
+        background: white
+        color: black
+        opacity: 10
+
+      span
+        display: block
+        font-weight: bold
+        padding: 1em
 
     input
-      width: 100%
+      left: -9999px
       position: absolute
+
+      &:focus + label
+        background: white
+        color: black
+        opacity: 10
 
 .home-page-section
   align-self: stretch
