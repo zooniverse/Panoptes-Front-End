@@ -161,6 +161,7 @@ Classifier = React.createClass
           allowFlipbook={workflowAllowsFlipbook @props.workflow}
           allowSeparateFrames={workflowAllowsSeparateFrames @props.workflow}
           onChange={@handleAnnotationChange.bind this, currentClassification}
+          playIterations={Infinity if @props.workflow?.configuration.infiniteLoop}
         />
 
         <div className="task-area">
