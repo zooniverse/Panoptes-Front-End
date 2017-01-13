@@ -56,6 +56,39 @@ GRAY = #EFF2F5
     padding: 1em 2em
     text-align: left
 
+  &__change-background
+    cursor: pointer
+    left: 5vw
+    position: absolute
+    top: 10vh
+
+    label
+      border: 1px solid white
+      border-radius: 1em
+      cursor: pointer
+      display: block
+      opacity: 0.15
+      transition: opacity 0.4s
+
+      &:hover
+        background: white
+        color: black
+        opacity: 10
+
+      span
+        display: block
+        font-weight: bold
+        padding: 1em
+
+    input
+      left: -9999px
+      position: absolute
+
+      &:focus + label
+        background: white
+        color: black
+        opacity: 10
+
 .home-page-section
   align-self: stretch
   background: BACKGROUND_COLOR
@@ -93,7 +126,7 @@ GRAY = #EFF2F5
     .details
       border-bottom-left-radius: 0.9em
       border-bottom-right-radius: 0.9em
-    
+
     .project-card-list
       overflow: hidden
 

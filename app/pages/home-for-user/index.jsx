@@ -13,7 +13,7 @@ import ProjectStats from './project-stats';
 import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-pullout';
 import getColorFromString from '../../lib/get-color-from-string';
-
+import mediaActions from '../lab/actions/media';
 
 const SECTIONS = {
   projects: RecentProjectsSection,
@@ -22,24 +22,11 @@ const SECTIONS = {
   builds: MyBuildsSection
 };
 
-const HomePageForUser = React.createClass({
-  propTypes: {
-    user: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object
-  },
+export default class HomePageForUser extends React.Component {
+  constructor(props) {
+    super(props);
 
-  contextTypes: {
-    setAppHeaderVariant: React.PropTypes.func
-  },
-
-  getDefaultProps() {
-    return {
-      user: {}
-    };
-  },
-
-  getInitialState() {
-    return {
+    this.state = {
       backgroundSrc: '',
       avatarSrc: '',
       showNews: false,
@@ -47,31 +34,38 @@ const HomePageForUser = React.createClass({
       ribbonData: [],
       loading: false,
       error: null,
+      pendingMedia: [],
       selectedProjectID: null,
       openSection: null
     };
-  },
+
+    this.getRibbonData = this.getRibbonData.bind(this);
+    this.toggleNews = this.toggleNews.bind(this);
+    this.updateBackground = this.updateBackground.bind(this);
+    this.createLinkedResource = this.props.actions.createLinkedResource.bind(this);
+    this.uploadMedia = this.props.actions.uploadMedia.bind(this);
+  }
 
   componentDidMount() {
     this.context.setAppHeaderVariant('detached');
     addEventListener('hashChange', this.handleHashChange);
     this.fetchRibbonData(this.props.user);
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user !== this.props.user) {
       this.fetchRibbonData(nextProps.user);
     }
-  },
+  }
 
   componentWillUnmount() {
     this.context.setAppHeaderVariant(null);
     removeEventListener('hashChange', this.handleHashChange);
-  },
+  }
 
   handleHashChange() {
     this.forceUpdate();
-  },
+  }
 
   fetchRibbonData(user) {
     if (!user) {
@@ -118,7 +112,7 @@ const HomePageForUser = React.createClass({
         loading: false
       });
     });
-  },
+  }
 
   getRibbonData(user, _page = 1) {
     const getRibbonData = this.getRibbonData;
@@ -171,7 +165,7 @@ const HomePageForUser = React.createClass({
         }
       }
     });
-  },
+  }
 
   getProjectsForPreferences(preferences) {
     const projectIDs = preferences.map((projectPreference) => {
@@ -198,17 +192,17 @@ const HomePageForUser = React.createClass({
         return project;
       });
     });
-  },
+  }
 
   findProjectLink(project) {
     return `/projects/${project.slug}`;
-  },
+  }
 
   toggleNews() {
     this.setState({
       showNews: !this.state.showNews
     });
-  },
+  }
 
   renderMenu(openComponent) {
     if ((openComponent) && (screen.width < 700)) {
@@ -246,7 +240,17 @@ const HomePageForUser = React.createClass({
         </div>
       </div>
     );
-  },
+  }
+
+  updateBackground(event) {
+    const file = event.target.files[0];
+    const location = this.props.user._getURL('profile_header')
+    return this.createLinkedResource(file, location)
+      .then(this.uploadMedia.bind(this, file))
+      .then((media) => {
+        this.setState({ backgroundSrc: media.src });
+      });
+  }
 
   render() {
     if (!this.props.user) return null;
@@ -269,7 +273,18 @@ const HomePageForUser = React.createClass({
             <div>{this.state.error.toString()}</div>
           )}
 
-          {!!hashQuery.project ? (
+          {window.innerWidth > 700 && (
+            <div className="home-page-for-user__change-background">
+              <input id="updateBackground" type="file" accept="image/*" onChange={this.updateBackground} />
+              <label htmlFor="updateBackground">
+                <span>
+                  Update Background
+                </span>
+              </label>
+            </div>
+          )}
+
+          {hashQuery.project ? (
             <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
           ) : (
             <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
@@ -312,6 +327,27 @@ const HomePageForUser = React.createClass({
       </div>
     );
   }
-});
+}
 
-export default HomePageForUser;
+HomePageForUser.propTypes = {
+  actions: React.PropTypes.shape({
+    createLinkedResource: React.PropTypes.func,
+    uploadMedia: React.PropTypes.func
+  }),
+  user: React.PropTypes.shape({
+    display_name: React.PropTypes.string
+  }),
+  location: React.PropTypes.shape({
+    hash: React.PropTypes.string
+  })
+};
+
+HomePageForUser.contextTypes = {
+  setAppHeaderVariant: React.PropTypes.func
+};
+
+HomePageForUser.defaultProps = {
+  actions: mediaActions,
+  metadata: {},
+  user: {}
+};

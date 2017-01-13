@@ -58,7 +58,7 @@ export default class MediaAreaView extends React.Component {
             left: '3px',
             position: 'absolute',
             right: '3px',
-            top: '3px',
+            top: '3px'
           }}
           onDrop={this.props.onDrop}
         />
