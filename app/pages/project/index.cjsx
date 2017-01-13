@@ -68,6 +68,8 @@ ProjectPage = React.createClass
     selectedWorkflow: null
 
   componentDidMount: ->
+    this.resizeBackground()
+    addEventListener "resize", this.resizeBackground
     @context.setAppHeaderVariant 'demoted'
     unless @props.user?
       @context.revealSiteHeader()
@@ -77,6 +79,7 @@ ProjectPage = React.createClass
     @context.geordi?.remember projectToken: @props.project?.slug
 
   componentWillUnmount: ->
+    removeEventListener "resize", this.resizeBackground
     @context.setAppHeaderVariant null
     document.documentElement.classList.remove 'on-project-page'
     @updateSugarSubscription null
@@ -100,6 +103,15 @@ ProjectPage = React.createClass
     if nextProps.preferences?.preferences? and @state.selectedWorkflow?
       if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow.id
         @getSelectedWorkflow(nextProps.project, nextProps.preferences)
+
+  resizeBackground: ->
+    finishedBannerHeight = 70
+    projLanding = document.getElementById('projectLandingIntro')
+    if projLanding
+      sectionBottom = projLanding.getBoundingClientRect().bottom;
+      sectionHeight = document.body.scrollTop + sectionBottom
+      if @state.backgroundHeight isnt sectionHeight + finishedBannerHeight
+        @setState backgroundHeight: sectionHeight + finishedBannerHeight
 
   fetchInfo: (project) ->
     @setState
@@ -218,6 +230,7 @@ ProjectPage = React.createClass
 
   render: ->
     projectPath = "/projects/#{@props.project.slug}"
+    onHomePage = projectPath is @props.location.pathname
 
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
@@ -232,6 +245,10 @@ ProjectPage = React.createClass
 
     if @state.background?
       backgroundStyle = backgroundImage: "url('#{@state.background.src}')"
+      if onHomePage
+        backgroundStyle.height = @state.backgroundHeight
+      else
+        backgroundStyle.height = "auto"
 
     <div className="project-page">
       <div className="project-background" style={backgroundStyle}></div>
