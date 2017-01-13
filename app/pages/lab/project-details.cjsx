@@ -144,6 +144,7 @@ module.exports = React.createClass
               <span className="form-label">Researcher Quote</span>
               <br />
               <Select
+                className="researcher-quote"
                 placeholder="Choose a Researcher"
                 onChange={@handleResearcherChange}
                 options={@researcherOptions()}
