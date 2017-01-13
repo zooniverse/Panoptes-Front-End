@@ -42,13 +42,14 @@ module.exports = React.createClass
         @setState({ researchers })
 
     avatar = @props.project.get('avatar')
+      .catch (error) =>
+        console.log error
     background = @props.project.get('background')
+      .catch (error) =>
+        console.log error
     Promise.all([avatar, background])
       .then ([avatar, background]) =>
         @setState {avatar, background}
-      .catch (error) =>
-        @setState {error}
-        console.log error
 
   splitTags: (kind) ->
     disciplineTagList = []
