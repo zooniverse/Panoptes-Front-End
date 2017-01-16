@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import HomePageSection from './generic-section';
 import ProjectIcon from '../../components/project-icon';
 
@@ -10,10 +9,6 @@ class RecentProjectsSection extends React.Component {
     this.state = {
       allProjects: false
     };
-  }
-
-  componentDidUpdate() {
-    !this.state.allProjects && ReactDOM.findDOMNode(this).scrollIntoView();
   }
 
   toggleAllProjects() {
@@ -37,7 +32,7 @@ class RecentProjectsSection extends React.Component {
             <p> You have no recent projects. </p>
           </div>
         : [<div key="project-header" className="home-page-section__sub-header">
-            <a href="/#focus=projects" className="outlined-button" onClick={this.toggleAllProjects}>
+            <a href="/#projects" className="outlined-button" onClick={this.toggleAllProjects}>
               <span className="home-page-section__header-label">
                 See all
               </span>
