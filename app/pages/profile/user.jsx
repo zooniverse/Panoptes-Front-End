@@ -13,7 +13,8 @@ counterpart.registerTranslations('en', {
       favorites: 'Favorites',
       message: 'Message',
       moderation: 'Moderation',
-      settings: 'Settings'
+      settings: 'Settings',
+      stats: 'Your stats'
     }
   }
 });
@@ -74,11 +75,19 @@ class ProfileUser extends Component {
   renderUserLink() {
     const baseLink = this.props.project ? `/projects/${this.props.project.slug}/` : '/';
     const classes = classNames({ 'about-tabs': !!this.props.project });
-    return (
-      <Link to={`${baseLink}users/${this.props.profileUser.login}/message`} className={classes} activeClassName="active" onClick={this.logMessageClick}>
-        <Translate content="profile.nav.message" />
-      </Link>
-    );
+    if (this.props.user !== this.props.profileUser) {
+      return (
+        <Link to={`${baseLink}users/${this.props.profileUser.login}/message`} className={classes} activeClassName="active" onClick={this.logMessageClick}>
+          <Translate content="profile.nav.message" />
+        </Link>
+      );
+    } else {
+      return (
+        <Link to="/#projects" className={classes} onClick={this.logClick.bind(this, 'stats')}>
+          <Translate content="profile.nav.stats" />
+        </Link>
+      );
+    }
   }
 
   renderNavLinks() {
@@ -156,6 +165,7 @@ class ProfileUser extends Component {
 }
 
 ProfileUser.propTypes = {
+  children: PropTypes.node,
   user: PropTypes.object,
   project: PropTypes.object,
   profileUser: PropTypes.object.isRequired

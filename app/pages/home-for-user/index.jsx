@@ -1,15 +1,14 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 import Pullout from 'react-pullout';
-import qs from 'qs';
 import BlurredImage from './blurred-image';
 import CircleRibbon from './circle-ribbon';
 import RecentProjectsSection from './recent-projects';
 import RecentCollectionsSection from './recent-collections';
 import RecentMessagesSection from './recent-messages';
 import MyBuildsSection from './my-builds';
-import ProjectStats from './project-stats';
 import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-pullout';
 import getColorFromString from '../../lib/get-color-from-string';
@@ -36,7 +35,8 @@ export default class HomePageForUser extends React.Component {
       error: null,
       pendingMedia: [],
       selectedProjectID: null,
-      openSection: null
+      openSection: null,
+      OpenSectionComponent: null
     };
 
     this.getRibbonData = this.getRibbonData.bind(this);
@@ -48,23 +48,33 @@ export default class HomePageForUser extends React.Component {
 
   componentDidMount() {
     this.context.setAppHeaderVariant('detached');
-    addEventListener('hashChange', this.handleHashChange);
     this.fetchRibbonData(this.props.user);
   }
 
   componentWillReceiveProps(nextProps) {
+    this.handleHashChange();
     if (nextProps.user !== this.props.user) {
       this.fetchRibbonData(nextProps.user);
+    }
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+    if( this.state.OpenSectionComponent !== prevState.OpenSectionComponent) {
+      if (this.openSection) {
+        this.openSection.scrollIntoView();
+      } else {
+        ReactDOM.findDOMNode(this).scrollIntoView();
+      }
     }
   }
 
   componentWillUnmount() {
     this.context.setAppHeaderVariant(null);
-    removeEventListener('hashChange', this.handleHashChange);
   }
 
   handleHashChange() {
-    this.forceUpdate();
+    const OpenSectionComponent = SECTIONS[window.location.hash.slice(1)];
+    this.setState({ OpenSectionComponent });
   }
 
   fetchRibbonData(user) {
@@ -209,15 +219,15 @@ export default class HomePageForUser extends React.Component {
       return;
     }
     return (
-      <div className="home-page-for-user__menu">
+      <div className="home-page-for-user__menu" onClick={this.handleHashChange.bind(this)}>
         <div className="home-page-for-user__menu-column">
-          <Link to="#focus=projects" className="home-page-for-user__menu-button">
+          <Link to="#projects" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-history fa-fw" />{' '}
               My recent projects
             </span>
           </Link>
-          <Link to="#focus=collections" className="home-page-for-user__menu-button">
+          <Link to="#collections" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-th-large fa-fw" />{' '}
               My collections
@@ -225,13 +235,13 @@ export default class HomePageForUser extends React.Component {
           </Link>
         </div>
         <div className="home-page-for-user__menu-column">
-          <Link to="#focus=messages" className="home-page-for-user__menu-button">
+          <Link to="#messages" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-envelope fa-fw" />{' '}
               Messages
             </span>
           </Link>
-          <Link to="#focus=builds" className="home-page-for-user__menu-button">
+          <Link to="#builds" className="home-page-for-user__menu-button">
             <span className="home-page-for-user__menu-label">
               <i className="fa fa-cog fa-fw" />{' '}
               My builds
@@ -259,10 +269,8 @@ export default class HomePageForUser extends React.Component {
     if (!avatarSrc) {
       avatarSrc = '/assets/simple-avatar.png';
     }
-
-    const hashQuery = qs.parse(this.props.location.hash.slice(1));
-
-    const OpenSectionComponent = SECTIONS[hashQuery.focus];
+    
+    const {OpenSectionComponent} = this.state;
 
     return (
       <div className="on-home-page">
@@ -284,27 +292,24 @@ export default class HomePageForUser extends React.Component {
             </div>
           )}
 
-          {hashQuery.project ? (
-            <ProjectStats projectID={hashQuery.project} onClose={this.deselectProject} />
-          ) : (
-            <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-              <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
+          <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
+            <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
-              <div className="home-page-for-user__welcome">
-                Hello {this.props.user.display_name},<br />
-                you have made {this.state.totalClassifications} classifications to date.
-              </div>
-
-              {this.renderMenu(OpenSectionComponent)}
-
-              {OpenSectionComponent && (
-                <OpenSectionComponent
-                  projects={this.state.ribbonData}
-                  onClose={this.deselectSection}
-                />
-              )}
+            <div className="home-page-for-user__welcome">
+              Hello {this.props.user.display_name},<br />
+              you have made {this.state.totalClassifications} classifications to date.
             </div>
-          )}
+
+            {this.renderMenu(OpenSectionComponent)}
+
+            {OpenSectionComponent && (
+              <OpenSectionComponent
+                ref={ (component) => this.openSection = ReactDOM.findDOMNode(component) }
+                projects={this.state.ribbonData}
+                onClose={this.deselectSection}
+              />
+            )}
+          </div>
 
           <Pullout className="home-page-news-pullout" side="right" open={this.state.showNews}>
             <button type="button" className="secret-button home-page-news-pullout__toggle-button" onClick={this.toggleNews}>
