@@ -31,7 +31,7 @@ module.exports = React.createClass
     mode = @props.workflow.configuration?.multi_image_mode or @defaultMode
     cloneMarksChecked = @props.workflow?.configuration.multi_image_clone_markers or false
     enableSwitchingChecked = @props.workflow?.configuration.enable_switching_flipbook_and_separate or false
-    enableInfiniteLoop = @props.workflow?.configuration.infiniteLoop or false
+    iterations = @props.workflow?.configuration.playIterations ? 3
     <ChangeListener target={@props.workflow}>{ =>
       <div className="multi-image-subject-layout-editor">
         <div>
@@ -43,10 +43,6 @@ module.exports = React.createClass
         <div>
           <input type="checkbox" id="enable_switching_flipbook_and_separate" name="enable_switching_flipbook_and_separate" checked={enableSwitchingChecked} onChange={@toggleEnableSwitching} />
           <label htmlFor="enable_switching_flipbook_and_separate">Allow users to choose flipbook or separate frames</label>
-        </div>
-        <div>
-          <input type="checkbox" id="flipbook_infinite_loop" name="flipbook_infinite_loop" checked={enableInfiniteLoop} onChange={@toggleInfiniteLoop} />
-          <label htmlFor="flipbook_infinite_loop">Play flipbook on infinite loop</label>
         </div>
         {if @props.workflow.configuration?.multi_image_mode is 'separate'
           <div>
@@ -62,6 +58,11 @@ module.exports = React.createClass
           <input type="checkbox" id="multi_image_clone_markers" name="multi_image_clone_markers" checked={cloneMarksChecked} onChange={@toggleCloneMarks} />
           <label htmlFor="multi_image_clone_markers">Clone markers in all frames</label>
         </div>
+        <div>
+          <label htmlFor="flipbook_play_iterations">Flipbook Play Iterations</label> {' '}
+          <input type="number" id="flipbook_play_iterations" value={iterations} name="flipbook_play_iterations" min="1" max="100" step="1" onChange={@toggleInfiniteLoop} /> <br />
+          <small>An empty iteration value denotes infinite loop.</small>
+        </div>
       </div>
     }</ChangeListener>
 
@@ -75,7 +76,7 @@ module.exports = React.createClass
 
   toggleInfiniteLoop: (e) ->
     @props.workflow.update
-      'configuration.infiniteLoop': e.target.checked
+      'configuration.playIterations': e.target.value
 
   handleSelectMode: (e) ->
     mode = e.target.value

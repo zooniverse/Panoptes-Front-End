@@ -218,7 +218,7 @@ module.exports = React.createClass
       @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
 
       autoStopDelay = @props.subject.locations.length * @props.playFrameDuration * @props.playIterations
-      unless autoStopDelay is Infinity
+      unless @props.playIterations is ''
         @_autoStop = setTimeout @setPlaying.bind(this, false), autoStopDelay
     else
       clearInterval @_playingInterval
