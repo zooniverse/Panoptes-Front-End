@@ -2,18 +2,10 @@ import React from 'react';
 import { Markdown } from 'markdownz';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
-import Translate from 'react-translate-component';
-import counterpart from 'counterpart';
 import FinishedBanner from './finished-banner';
 import TalkImages from './talk-images';
 import ProjectMetadata from './metadata';
 import ProjectHomeWorkflowButtons from './home-workflow-buttons';
-
-counterpart.registerTranslations('en', {
-  researchQuote: {
-    default: 'Your contribution helps further scientific discoveries.'
-  }
-});
 
 export default class ProjectHomePage extends React.Component {
   constructor(props) {
@@ -84,13 +76,6 @@ export default class ProjectHomePage extends React.Component {
 
   renderResearcherWords() {
     const avatarSrc = this.state.researcherAvatar || '/assets/simple-avatar.png';
-    let quote;
-
-    if (this.props.project.researcher_quote) {
-      quote = <span>&quot;{this.props.project.researcher_quote}&quot;</span>;
-    } else {
-      quote = <Translate component="span" content="researchQuote.default" />;
-    }
 
     return (
       <div className="project-home-page__researcher-words">
@@ -98,7 +83,7 @@ export default class ProjectHomePage extends React.Component {
 
         <div>
           <img role="presentation" src={avatarSrc} />
-          {quote}
+          <span>&quot;{this.props.project.researcher_quote}&quot;</span>
         </div>
       </div>
     );
@@ -133,7 +118,8 @@ export default class ProjectHomePage extends React.Component {
 
         <div className="project-home-page__container">
 
-          {this.renderResearcherWords()}
+          {this.props.project.researcher_quote && (
+            this.renderResearcherWords())}
 
           <div className="project-home-page__about-text">
             <h4>About {this.props.project.display_name}</h4>
