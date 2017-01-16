@@ -1,5 +1,6 @@
 import React from 'react';
 import { Markdown } from 'markdownz';
+import { Link } from 'react-router';
 import apiClient from 'panoptes-client/lib/api-client';
 import DiscussionPreview from './discussion-preview';
 import CommentLink from './comment-link';
@@ -52,7 +53,9 @@ export default class TalkSearchResult extends React.Component {
     return (
       <div className="talk-search-result talk-module">
         {this.state.subject && (
-          <Thumbnail src={this.state.subject.src} format={this.state.subject.format} width={100} height={150} controls={false} />
+          <CommentLink comment={comment} project={this.props.project}>
+            <Thumbnail src={this.state.subject.src} format={this.state.subject.format} width={100} height={150} controls={false} />
+          </CommentLink>
         )}
         <CommentContextIcon comment={comment} />
         <CommentLink comment={comment} project={this.props.project}>{comment.discussion_title}</CommentLink>
