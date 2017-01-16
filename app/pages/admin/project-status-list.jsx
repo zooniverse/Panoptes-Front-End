@@ -69,9 +69,7 @@ class ProjectStatusList extends Component {
     const [owner, name] = project.slug.split('/');
     return (
       <div key={project.id}>
-        <Link to={`/admin/project_status/${owner}/${name}`}>
-          <ProjectIcon linkTo={false} project={project} />
-        </Link>
+        <ProjectIcon linkTo={`/admin/project_status/${owner}/${name}`} project={project} />
       </div>
     );
   }
