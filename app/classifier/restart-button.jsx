@@ -3,20 +3,6 @@ import React from 'react';
 class RestartButton extends React.Component {
   constructor(props) {
     super(props);
-    this.fetchFor = this.fetchFor.bind(this);
-    this.state = {
-      dialog: null,
-    };
-  }
-
-  componentDidMount() {
-    this.fetchFor(this.props.workflow);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if ((nextProps.workflow !== this.props.workflow) && (nextProps.project === this.props.project)) {
-      this.fetchFor(nextProps.workflow);
-    }
   }
 
   getCallback() {
@@ -27,14 +13,6 @@ class RestartButton extends React.Component {
   shouldRender() {
     // override in sub-class
     return true;
-  }
-
-  fetchFor(workflow) {
-    this.setState({ dialog: null }, () => {
-      this.props.Dialog.find({ workflow }).then((dialog) => {
-        this.setState({ dialog });
-      });
-    });
   }
 
   render() {
@@ -54,9 +32,10 @@ class RestartButton extends React.Component {
 }
 
 RestartButton.defaultProps = {
-  wrkflow: null,
+  workflow: null,
   project: null,
   user: null,
+  dialog: null
 };
 
 RestartButton.propTypes = {
@@ -65,6 +44,7 @@ RestartButton.propTypes = {
   user: React.PropTypes.object,
   children: React.PropTypes.node,
   Dialog: React.PropTypes.func,
+  dialog: React.PropTypes.object
 };
 
 export default RestartButton;

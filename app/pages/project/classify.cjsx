@@ -95,6 +95,8 @@ module.exports = React.createClass
       @loadAppropriateClassification(@props)
     Tutorial.find @props.workflow
     .then (tutorial) =>
+      {user, preferences} = @props
+      Tutorial.startIfNecessary tutorial, user, preferences
       @setState {tutorial}
     MiniCourse.find @props.workflow
     .then (minicourse) =>
@@ -105,6 +107,8 @@ module.exports = React.createClass
     if nextProps.workflow isnt @props.workflow
       Tutorial.find nextProps.workflow
       .then (tutorial) =>
+        {user, preferences} = nextProps
+        Tutorial.startIfNecessary tutorial, user, preferences
         @setState {tutorial}
       MiniCourse.find nextProps.workflow
       .then (minicourse) =>
