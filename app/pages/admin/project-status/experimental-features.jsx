@@ -20,6 +20,7 @@ const experimentalFeatures = [
   'export classifications by workflow',
   'freehandLine',
   'freehandShape',
+  'enable subject flags'
 ];
 
 class ExperimentalFeatures extends Component {
