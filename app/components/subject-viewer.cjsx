@@ -102,11 +102,11 @@ module.exports = React.createClass
               <span className="subject-frame-play-controls">
                 {if @state.playing
                   <button aria-label="Pause" title="Pause" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, false}>
-                    <i className="fa fa-pause fa-fw"></i>
+                    <i className="fa fa-pause fa-lg fa-fw"></i>
                   </button>
                 else
                   <button aria-label="Play" title="Play" type="button" className="secret-button subject-tools__play" onClick={@setPlaying.bind this, true}>
-                    <i className="fa fa-play fa-fw"></i>
+                    <i className="fa fa-play fa-lg fa-fw"></i>
                   </button>}
               </span>}
           </span>
@@ -218,7 +218,8 @@ module.exports = React.createClass
       @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
 
       autoStopDelay = @props.subject.locations.length * @props.playFrameDuration * @props.playIterations
-      @_autoStop = setTimeout @setPlaying.bind(this, false), autoStopDelay
+      unless @props.playIterations is ''
+        @_autoStop = setTimeout @setPlaying.bind(this, false), autoStopDelay
     else
       clearInterval @_playingInterval
       clearTimeout @_autoStop
