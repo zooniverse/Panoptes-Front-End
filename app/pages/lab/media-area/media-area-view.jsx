@@ -66,14 +66,12 @@ export default class MediaAreaView extends React.Component {
         {(this.props.media && this.props.media.length === 0) ? <small><em>No media</em></small> : null}
 
         <ul className="media-area-list">
-          {this.props.media && this.renderMediaList()}
-
           <li className="media-area-item" style={{ alignSelf: 'stretch' }}>
             <div className="media-icon">
               <FileButton
                 className="media-area-add-button"
                 accept="image/*"
-                multiple
+                multiple={true}
                 style={addButtonStyle}
                 onSelect={this.props.onSelect}
               >
@@ -82,6 +80,8 @@ export default class MediaAreaView extends React.Component {
               <div className="media-icon-label">Select files</div>
             </div>
           </li>
+
+          {this.props.media && this.renderMediaList()}
         </ul>
 
         {this.props.children && <hr />}
