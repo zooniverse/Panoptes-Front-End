@@ -19,9 +19,10 @@ class RestartButton extends React.Component {
     // state and props are passed into getCallback and shouldRender
     // to avoind binding a sub-class function to the parent class `this`
     const onClick = this.getCallback(this.state, this.props);
+    const {className, style} = this.props;
     if (this.shouldRender(this.state, this.props)) {
       return (
-        <button type="button" {...this.props} onClick={onClick}>
+        <button type="button" className={className} style={style} onClick={onClick}>
           {this.props.children}
         </button>
       );
@@ -35,7 +36,9 @@ RestartButton.defaultProps = {
   workflow: null,
   project: null,
   user: null,
-  dialog: null
+  dialog: null,
+  className: null,
+  style: null
 };
 
 RestartButton.propTypes = {
@@ -44,7 +47,9 @@ RestartButton.propTypes = {
   user: React.PropTypes.object,
   children: React.PropTypes.node,
   Dialog: React.PropTypes.func,
-  dialog: React.PropTypes.object
+  dialog: React.PropTypes.object,
+  className: React.PropTypes.string,
+  style: React.PropTypes.object
 };
 
 export default RestartButton;
