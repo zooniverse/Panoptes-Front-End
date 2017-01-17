@@ -13,7 +13,7 @@ module.exports = React.createClass
   displayName: 'Tutorial'
 
   statics:
-    find: ({workflow}) ->
+    find: (workflow) ->
       # Prefer fetching the tutorial for the workflow, if a workflow is given.
       if workflow?
         apiClient.type('tutorials').get workflow_id: workflow.id

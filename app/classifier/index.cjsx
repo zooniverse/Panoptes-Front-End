@@ -11,7 +11,6 @@ preloadSubject = require '../lib/preload-subject'
 TriggeredModalForm = require 'modal-form/triggered'
 TutorialButton = require './tutorial-button'
 isAdmin = require '../lib/is-admin'
-Tutorial = require '../lib/tutorial'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 WorldWideTelescope = require './world-wide-telescope'
@@ -47,6 +46,7 @@ Classifier = React.createClass
     subject: null
     classification: null
     onLoad: Function.prototype
+    tutorial: null
 
   getInitialState: ->
     backButtonWarning: false
@@ -265,7 +265,7 @@ Classifier = React.createClass
           <p>
             <small>
               <strong>
-                <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} preferences={@props.preferences} project={@props.project} style={marginTop: '2em'}>
+                <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} preferences={@props.preferences} project={@props.project} tutorial={@props.tutorial} style={marginTop: '2em'}>
                   Show the project tutorial
                 </TutorialButton>
               </strong>
