@@ -20,9 +20,11 @@ module.exports = React.createClass
   getInitialState: ->
     validationErrors: []
 
-  validations: (message, subject, recipients) ->
-    userErrors = if (not recipients.length) then ['Messages must have a recipient'] else []
-    subjectErrors = getErrors(subject, subjectValidations)
+  validations: (message) ->
+    recipient_ids = ReactDOM.findDOMNode(@).querySelector('[name="userids"]').value
+
+    userErrors = if (not recipient_ids.length) then ['Messages must have a recipient'] else []
+    subjectErrors = getErrors(@refs.subject.value, subjectValidations)
     messageValidationErrors = getErrors(message, messageValidations)
 
     validationErrors = userErrors.concat subjectErrors.concat messageValidationErrors
@@ -39,9 +41,6 @@ module.exports = React.createClass
 
     title = @refs.subject.value
     user_id = @props.user.id
-
-    errored = @validations(body, title, recipient_ids)
-    return errored if errored
 
     conversation = {title, body, user_id, recipient_ids}
 
@@ -61,7 +60,7 @@ module.exports = React.createClass
           user={@props.user}
           header={null}
           content=""
-          validationCheck={ -> false }
+          validationCheck={@validations}
           validationErrors={@state.validationErrors}
           submitFeedback={"Sent!"}
           onSubmitComment={@onSubmitMessage}
