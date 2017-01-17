@@ -25,8 +25,7 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
-    startIfNecessary: ({workflow, user, preferences}) ->
-      @find({workflow}).then (tutorial) =>
+    startIfNecessary: (tutorial, user, preferences) ->
         if tutorial?
           @checkIfCompleted(tutorial, user, preferences).then (completed) =>
             unless completed

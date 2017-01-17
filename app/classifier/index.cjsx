@@ -21,7 +21,7 @@ Intervention = require '../lib/intervention'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 Shortcut = require './tasks/shortcut'
-`import CacheClassification from '../components/cache-classification'`
+`import CacheClassification from '../components/cache-classification';`
 MetadataBasedFeedback = require './metadata-based-feedback'
 {VisibilitySplit} = require('seven-ten')
 
@@ -70,13 +70,8 @@ Classifier = React.createClass
     interventionMonitor.on 'classificationTaskRequested', @disableIntervention
     @loadSubject @props.subject
     @prepareToClassify @props.classification
-    {workflow, project, preferences, user} = @props
-    Tutorial.startIfNecessary {workflow, user, preferences}
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.project isnt @props.project or nextProps.user isnt @props.user
-      {workflow, project, user, preferences} = nextProps
-      Tutorial.startIfNecessary {workflow, user, preferences} if preferences?
     if nextProps.subject isnt @props.subject
       @loadSubject subject
     if nextProps.classification isnt @props.classification
@@ -270,7 +265,7 @@ Classifier = React.createClass
           <p>
             <small>
               <strong>
-                <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} project={@props.project} style={marginTop: '2em'}>
+                <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} preferences={@props.preferences} project={@props.project} style={marginTop: '2em'}>
                   Show the project tutorial
                 </TutorialButton>
               </strong>

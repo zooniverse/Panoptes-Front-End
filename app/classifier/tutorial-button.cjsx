@@ -12,10 +12,18 @@ module.exports = React.createClass
 
   componentDidMount: ->
     @fetchTutorialFor @props.workflow
+    .then (tutorial) =>
+      {user, preferences} = @props
+      Tutorial.startIfNecessary tutorial, user, preferences
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.workflow is @props.workflow and nextProps.project is @props.project
       @fetchTutorialFor nextProps.workflow
+      .then (tutorial) =>
+        {user, preferences} = nextProps
+        Tutorial.startIfNecessary tutorial, user, preferences
+        
+        
 
   fetchTutorialFor: (workflow) ->
     @setState tutorial: null
