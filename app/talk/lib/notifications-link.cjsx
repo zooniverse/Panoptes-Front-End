@@ -24,7 +24,11 @@ module.exports = React.createClass
   render: ->
     return null unless @props.user and @context.unreadNotificationsCount?
 
+    {owner, name} = @props.params
     linkProps = @props.linkProps
     linkProps['aria-label'] = @ariaLabel()
 
-    <Link to="/notifications" {...linkProps}>{@label()}</Link>
+    if owner and name
+      <Link to="/projects/#{owner}/#{name}/notifications" {...linkProps}>{@label()}</Link>
+    else
+      <Link to="/notifications" {...linkProps}>{@label()}</Link>
