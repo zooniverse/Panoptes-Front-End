@@ -5,7 +5,7 @@ const PanZoom = React.createClass({
 
   propTypes: {
     children: React.PropTypes.node,
-    enabled: React.PropTypes.boolean,
+    enabled: React.PropTypes.bool,
     frameDimensions: React.PropTypes.shape({
       height: React.PropTypes.number,
       width: React.PropTypes.number
