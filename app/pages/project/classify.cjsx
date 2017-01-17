@@ -4,13 +4,14 @@ ReactDOM = require 'react-dom'
 TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
-`import FinishedBanner from './finished-banner'`
+`import FinishedBanner from './finished-banner';`
 Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
-MiniCourse = require '../../lib/mini-course'
-`import CustomSignInPrompt from './custom-sign-in-prompt'`
-`import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog'`
+`import CustomSignInPrompt from './custom-sign-in-prompt';`
+`import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 experimentsClient = require '../../lib/experiments-client'
+Tutorial = require '../../lib/tutorial'
+MiniCourse = require '../../lib/mini-course'
 {Split} = require('seven-ten')
 {VisibilitySplit} = require('seven-ten')
 
@@ -86,14 +87,32 @@ module.exports = React.createClass
     demoMode: sessionDemoMode
     promptWorkflowAssignmentDialog: false
     rejected: null
+    tutorial: null
 
   componentDidMount: () ->
     Split.classifierVisited();
     if @props.workflow and not @props.loadingSelectedWorkflow
       @loadAppropriateClassification(@props)
+    Tutorial.find @props.workflow
+    .then (tutorial) =>
+      {user, preferences} = @props
+      Tutorial.startIfNecessary tutorial, user, preferences
+      @setState {tutorial}
+    MiniCourse.find @props.workflow
+    .then (minicourse) =>
+      @setState {minicourse}
 
   componentWillUpdate: (nextProps, nextState) ->
     @context.geordi.remember workflowID: nextProps?.workflow?.id
+    if nextProps.workflow isnt @props.workflow
+      Tutorial.find nextProps.workflow
+      .then (tutorial) =>
+        {user, preferences} = nextProps
+        Tutorial.startIfNecessary tutorial, user, preferences
+        @setState {tutorial}
+      MiniCourse.find nextProps.workflow
+      .then (minicourse) =>
+        @setState {minicourse}
 
   componentWillUnmount: () ->
     @context.geordi?.forget ['workflowID']
@@ -235,6 +254,8 @@ module.exports = React.createClass
           onCompleteAndLoadAnotherSubject={@saveClassificationAndLoadAnotherSubject}
           onClickNext={@loadAnotherSubject}
           splits={@props.splits}
+          tutorial={@state.tutorial}
+          minicourse={@state.minicourse}
         />
       else if @state.rejected?.classification?
         <code>Please try again. Something went wrong: {@state.rejected.classification.toString()}</code>
@@ -325,12 +346,7 @@ module.exports = React.createClass
     split = @props.splits?['mini-course.visible']
     isntHidden = not split or split?.variant?.value?.auto
     if shouldPrompt and isntHidden
-      MiniCourse.startIfNecessary({
-        workflow: @props.workflow,
-        preferences: @props.preferences,
-        project: @props.project,
-        user: @props.user
-      })
+      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.project, @props.user
 
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog

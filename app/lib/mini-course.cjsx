@@ -14,7 +14,7 @@ module.exports = React.createClass
   displayName: 'MiniCourse'
 
   statics:
-    find: ({workflow}) ->
+    find: (workflow) ->
       # Prefer fetching the tutorial for the workflow, so we know which one to fetch if multiple exist.
       if workflow?
         apiClient.type('tutorials').get workflow_id: workflow.id, kind: "mini-course"
@@ -64,13 +64,11 @@ module.exports = React.createClass
           @createProjectPreferences(projectPreferences, minicourse.id, project.id).then (newProjectPreferences) =>
             @start minicourse, newProjectPreferences, user
 
-    startIfNecessary: ({workflow, preferences, project, user}) ->
-      if user?
-        @find({workflow}).then (minicourse) =>
-          if minicourse?
-            @checkIfCompletedOrOptedOut(minicourse, preferences, project, user).then (completed) =>
-              unless completed
-                @start minicourse, preferences, user
+    startIfNecessary: (minicourse, preferences, project, user) ->
+      if user? && minicourse?
+        @checkIfCompletedOrOptedOut(minicourse, preferences, project, user).then (completed) =>
+          unless completed
+            @start minicourse, preferences, user
 
     checkIfCompletedOrOptedOut: (minicourse, projectPreferences, project, user) ->
       if user? and projectPreferences.preferences?.minicourses?
