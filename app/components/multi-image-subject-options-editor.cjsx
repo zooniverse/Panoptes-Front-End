@@ -71,6 +71,8 @@ module.exports = React.createClass
             step="1"
             onChange={@toggleInfiniteLoop}
           />
+          <br />
+          <small>An empty iteration value denotes infinite loop.</small>
         </div>
       </div>
     }</ChangeListener>
