@@ -60,8 +60,17 @@ module.exports = React.createClass
         </div>
         <div>
           <label htmlFor="flipbook_play_iterations">Flipbook Play Iterations</label> {' '}
-          <input type="number" id="flipbook_play_iterations" value={iterations} name="flipbook_play_iterations" min="1" max="100" step="1" onChange={@toggleInfiniteLoop} /> <br />
-          <small>An empty iteration value denotes infinite loop.</small>
+          <input
+            type="number"
+            id="flipbook_play_iterations"
+            placeholder="∞"
+            value={iterations}
+            name="flipbook_play_iterations"
+            min="1"
+            max="100"
+            step="1"
+            onChange={@toggleInfiniteLoop}
+          />
         </div>
       </div>
     }</ChangeListener>
