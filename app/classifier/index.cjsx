@@ -39,6 +39,8 @@ Classifier = React.createClass
     subject: React.PropTypes.object
     classification: React.PropTypes.object
     onLoad: React.PropTypes.func
+    tutorial: React.PropTypes.object
+    minicourse: React.PropTypes.object
 
   getDefaultProps: ->
     user: null
@@ -47,6 +49,7 @@ Classifier = React.createClass
     classification: null
     onLoad: Function.prototype
     tutorial: null
+    minicourse: null
 
   getInitialState: ->
     backButtonWarning: false
@@ -276,7 +279,7 @@ Classifier = React.createClass
             <small>
               <strong>
                 <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
-                  <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} style={marginTop: '2em'}>
+                  <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} minicourse={@props.minicourse} style={marginTop: '2em'}>
                     Restart the project mini-course
                   </MiniCourseButton>
                 </VisibilitySplit>
