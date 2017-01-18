@@ -24,6 +24,12 @@ module.exports = React.createClass
   onChange: (users) ->
     @setState {users}
 
+  clear: ->
+    @setState users: []
+
+  value: ->
+    @state.users
+
   searchUsers: (value) ->
     clearTimeout @queryTimeout
     onSearch = @props.onSearch

@@ -15,8 +15,7 @@ module.exports = React.createClass
     return unless window.confirm('Are you sure that you want to add this user to the Zooniverse team?')
 
     e.preventDefault()
-    userSelect = ReactDOM.findDOMNode(@).querySelector('[name="userids"]')
-    userId = userSelect.value
+    userId = @userSearch.value().value
 
     talkClient.type('roles').create({
       name: 'admin'
@@ -37,7 +36,7 @@ module.exports = React.createClass
 
       <p style={color: 'red'}><strong>Careful:</strong> You are about to add someone to the Zooniverse team on Talk, this will grant them magical powers in the Zooniverse wide talk, and label them as 'Zooniverse Team'</p>
 
-      <UserSearch multi={false} />
+      <UserSearch ref={(component) => @userSearch = component} multi={false} />
 
       <button type="button" onClick={@onClickAddZooniverseTeamMember}>
         Add Member to The Zooniverse Team

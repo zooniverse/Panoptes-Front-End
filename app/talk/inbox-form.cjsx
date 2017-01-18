@@ -35,9 +35,7 @@ module.exports = React.createClass
 
   onSubmitMessage: (_, body) ->
     @logEvent 'send-message'
-    recipient_ids = ReactDOM.findDOMNode(@).querySelector('[name="userids"]').value
-      .split(',').map (id) -> parseInt(id)
-      .filter(Number)
+    recipient_ids = [parseInt @userSearch.value().value]
 
     title = @refs.subject.value
     user_id = @props.user.id
@@ -55,7 +53,7 @@ module.exports = React.createClass
     <div className="inbox-form talk-module">
       <div className="talk-form talk-moderation-children">
         <h2>To:</h2>
-        <UserSearch multi={false} onSearch={@logEvent.bind(this, 'username-search')} />
+        <UserSearch ref={(component) => @userSearch = component} multi={false} onSearch={@logEvent.bind(this, 'username-search')} />
 
         <h2>Message:</h2>
         <input placeholder="Subject" type="text" ref="subject"/>
