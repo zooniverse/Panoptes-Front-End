@@ -25,11 +25,11 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
-    startIfNecessary: (tutorial, user, preferences) ->
+    startIfNecessary: (tutorial, user, preferences, geordi) ->
         if tutorial?
           @checkIfCompleted(tutorial, user, preferences).then (completed) =>
             unless completed
-              @start tutorial, user
+              @start tutorial, user, preferences, geordi
 
     checkIfCompleted: (tutorial, user, preferences) ->
       if user?
@@ -38,7 +38,7 @@ module.exports = React.createClass
       else
         Promise.resolve completedThisSession[tutorial.id]?
 
-    start: (tutorial, user) ->
+    start: (tutorial, user, preferences, geordi) ->
       TutorialComponent = this
 
       if tutorial.steps.length isnt 0
@@ -53,55 +53,49 @@ module.exports = React.createClass
             mediaByID
 
         awaitTutorialMedia.then (mediaByID) =>
-          Dialog.alert(<TutorialComponent steps={tutorial.steps} media={mediaByID} />, {
+          Dialog.alert(<TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />, {
             className: 'tutorial-dialog',
             required: true,
             closeButton: true
           })
             .catch =>
               null # We don't really care if the user canceled or completed the tutorial.
-            .then =>
-              @markComplete tutorial, user
-
-    markComplete: (tutorial, user) ->
-      now = new Date().toISOString()
-      completedThisSession[tutorial.id] = now
-
-      if user?
-        tutorial.get('project').then (project) ->
-          user.get('project_preferences', project_id: project.id).then ([projectPreferences]) ->
-            projectPreferences ?= apiClient.type('project_preferences').create
-              links:
-                project: project.id
-              preferences: {}
-            # Build this manually. Having an index (even as a strings) keys creates an array.
-            projectPreferences.preferences ?= {}
-            projectPreferences.preferences.tutorials_completed_at ?= {}
-            projectPreferences.update "preferences.tutorials_completed_at.#{tutorial.id}": now
-            projectPreferences.save()
 
   propTypes:
-    steps: React.PropTypes.arrayOf React.PropTypes.shape
-      media: React.PropTypes.string
-      content: React.PropTypes.string
+    geordi: React.PropTypes.object
+    preferences: React.PropTypes.shape
+      preferences: React.PropTypes.object
+    tutorial: React.PropTypes.shape
+      steps: React.PropTypes.arrayOf React.PropTypes.shape
+        media: React.PropTypes.string
+        content: React.PropTypes.string
+    user: React.PropTypes.object
 
   getDefaultProps: ->
-    steps: []
+    geordi: {}
     media: {}
+    preferences: null
+    tutorial: {}
+    user: null
+
+  componentDidMount: ->
+    @props.geordi.makeHandler 'tutorial-completion'
+
+  componentWillUnmount: ->
+    @handleUnmount()
 
   render: ->
-
     isIE = 'ActiveXObject' of window
     if isIE
       tutorialStyle = height: '85vh'
     <StepThrough ref="stepThrough" className="tutorial-steps" style={tutorialStyle}>
-      {for step, i in @props.steps
+      {for step, i in @props.tutorial.steps
         step._key ?= Math.random()
         <MediaCard key={step._key} className="tutorial-step" src={@props.media[step.media]?.src}>
           <Markdown>{step.content}</Markdown>
           <hr />
           <p style={textAlign: 'center'}>
-            {if i is @props.steps.length - 1
+            {if i is @props.tutorial.steps.length - 1
               <button type="submit" className="major-button">Let’s go!</button>
             else
               <button type="button" className="standard-button" onClick={@handleNextClick}>Continue</button>}
@@ -111,3 +105,29 @@ module.exports = React.createClass
 
   handleNextClick: ->
     @refs.stepThrough.goNext()
+
+  handleUnmount: ->
+    now = new Date().toISOString()
+    completedThisSession[@props.tutorial.id] = now
+
+    if @props.user?
+      projectPreferences = @props.preferences
+      projectPreferences ?= apiClient.type('project_preferences').create
+        links:
+          project: project.id
+        preferences: {}
+      # Build this manually. Having an index (even as a strings) keys creates an array.
+      projectPreferences.preferences ?= {}
+      projectPreferences.preferences.tutorials_completed_at ?= {}
+      projectPreferences.update "preferences.tutorials_completed_at.#{@props.tutorial.id}": now
+      projectPreferences.save()
+
+      @logToGeordi now
+
+  logToGeordi: (datetime) ->
+    @props.geordi.logEvent {
+      type: 'tutorial-completion'
+      user: @props.user.id
+      tutorial: @props.tutorial.id
+      completed_at: datetime
+    }

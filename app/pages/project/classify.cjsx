@@ -96,7 +96,7 @@ module.exports = React.createClass
     Tutorial.find @props.workflow
     .then (tutorial) =>
       {user, preferences} = @props
-      Tutorial.startIfNecessary tutorial, user, preferences
+      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
       @setState {tutorial}
     MiniCourse.find @props.workflow
     .then (minicourse) =>
@@ -108,7 +108,7 @@ module.exports = React.createClass
       Tutorial.find nextProps.workflow
       .then (tutorial) =>
         {user, preferences} = nextProps
-        Tutorial.startIfNecessary tutorial, user, preferences
+        Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
         @setState {tutorial}
       MiniCourse.find nextProps.workflow
       .then (minicourse) =>
@@ -346,7 +346,7 @@ module.exports = React.createClass
     split = @props.splits?['mini-course.visible']
     isntHidden = not split or split?.variant?.value?.auto
     if shouldPrompt and isntHidden
-      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.project, @props.user
+      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.project, @props.user, @context.geordi
 
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog
