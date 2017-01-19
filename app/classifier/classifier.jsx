@@ -11,7 +11,7 @@ import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames
 import RenderSummary from './render-summary';
 import RenderGravitySpyGoldStandard from './render-gravity-spy-gold-standard';
 import CacheClassification from '../components/cache-classification';
-import tasks from './tasks/index.coffee';
+import tasks from './tasks';
 import GridTool from './drawing-tools/grid.cjsx';
 import { getSessionID } from '../lib/session.coffee';
 import TutorialButton from './tutorial-button';
