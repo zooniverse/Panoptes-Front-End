@@ -13,7 +13,7 @@ class TextViewer extends Component {
   }
 
   componentWillMount() {
-    fetch(this.props.src)
+    fetch(this.props.src, { mode: 'cors' })
     .then((response) => {
       return response.text();
     })
