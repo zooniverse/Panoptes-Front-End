@@ -56,7 +56,7 @@ CollaboratorCreator = React.createClass
         <p className="form-help error">{@state.error.toString()}</p>}
       <form style={style}>
         <div>
-          <UserSearch />
+          <UserSearch ref={(component) => @userSearch = component} />
         </div>
 
         <table className="standard-table">
@@ -80,8 +80,7 @@ CollaboratorCreator = React.createClass
     e.preventDefault()
     node = ReactDOM.findDOMNode(@)
     checkboxes = node.querySelectorAll '[name="role"]'
-    userids = node.querySelector('[name="userids"]')
-    users = userids.value.split(',').map (id) -> parseInt(id)
+    users = @userSearch.value().map (option) -> parseInt option.value
     roles = for checkbox in checkboxes when checkbox.checked
       checkbox.value
 
@@ -115,7 +114,7 @@ CollaboratorCreator = React.createClass
 
     Promise.all(roleSet.save() for roleSet in newRoles)
       .then =>
-        userids.value = ''
+        @userSearch.clear()
         for checkbox in checkboxes
           checkbox.checked = false
         @props.onAdd? arguments...

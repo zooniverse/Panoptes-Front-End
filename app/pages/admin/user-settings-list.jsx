@@ -24,8 +24,7 @@ class UserSettingsList extends Component {
 
   listUsers(e) {
     e.preventDefault();
-    const userSelect = this.list.querySelector('[name="userids"]');
-    const userId = userSelect.value;
+    const userId = this.userSearch.value().value;
 
     if (userId) {
       this.getEditUser(userId);
@@ -59,7 +58,7 @@ class UserSettingsList extends Component {
       <div ref={list => this.list = list}>
         <div className="columns-container">
           <div className="column">
-            <UserSearch multi={false} />
+            <UserSearch ref={(component) => { this.userSearch = component; }} multi={false} />
           </div>
           <button type="button" onClick={this.listUsers}>
             Find user
