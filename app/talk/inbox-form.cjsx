@@ -1,5 +1,4 @@
 React = require 'react'
-ReactDOM = require 'react-dom'
 talkClient = require 'panoptes-client/lib/talk-client'
 UserSearch = require '../components/user-search'
 {getErrors} = require './lib/validations'
@@ -21,9 +20,9 @@ module.exports = React.createClass
     validationErrors: []
 
   validations: (message) ->
-    recipient_ids = ReactDOM.findDOMNode(@).querySelector('[name="userids"]').value
+    recipient_ids = @userSearch.value()?.value?.length
 
-    userErrors = if (not recipient_ids.length) then ['Messages must have a recipient'] else []
+    userErrors = if (not recipient_ids) then ['Messages must have a recipient'] else []
     subjectErrors = getErrors(@refs.subject.value, subjectValidations)
     messageValidationErrors = getErrors(message, messageValidations)
 
