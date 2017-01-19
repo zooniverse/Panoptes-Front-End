@@ -37,6 +37,9 @@ class TextViewer extends Component {
 
   render() {
     let { content } = this.state;
+    if (content === "") {
+      return null;
+    }
     if (SUPPORTED_TYPES.indexOf(this.props.type) === -1) {
       content = `Unsupported type: ${this.props.type}`;
     }
