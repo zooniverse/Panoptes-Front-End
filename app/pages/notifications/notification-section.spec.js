@@ -3,7 +3,7 @@
 import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
-// import NotificationSection from './notification-section';
+import NotificationSection from './notification-section';
 
 const notifications = [
   { notification: {
@@ -26,7 +26,7 @@ const notifications = [
   },
 ];
 
-describe.skip('Notification Section', function() {
+describe('Notification Section', function() {
   let wrapper;
 
   describe('it can display a Zooniverse section', function () {
