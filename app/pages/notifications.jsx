@@ -64,7 +64,7 @@ export default class NotificationsPage extends React.Component {
   renderNotifications() {
     let notificationView;
 
-    if (this.state.projNotifications.length > 0) {
+    if (this.state.projNotifications && this.state.projNotifications.length > 0) {
       notificationView = (
         <div>
           <div className="list">
@@ -84,7 +84,7 @@ export default class NotificationsPage extends React.Component {
           </div>
         </div>
       );
-    } else if (this.state.projNotifications.length === 0) {
+    } else if (this.state.projNotifications && this.state.projNotifications.length === 0) {
       notificationView = (
         <div className="centering talk-module">
           <Translate content="notifications.noNotifications" />
