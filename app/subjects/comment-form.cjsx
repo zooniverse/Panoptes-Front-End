@@ -33,7 +33,7 @@ module.exports = React.createClass
     {owner, name} = @props.params
     board = createdDiscussion.board_id
     discussion = createdDiscussion.id
-    @context.router.push null, "/projects/#{owner}/#{name}/talk/#{board}/#{discussion}"
+    @context.router.push "/projects/#{owner}/#{name}/talk/#{board}/#{discussion}"
 
   linkToClassifier: (text) ->
     [owner, name] = @props.project.slug.split('/')
