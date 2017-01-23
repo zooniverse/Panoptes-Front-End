@@ -331,6 +331,24 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
+          {if 'enable subject flags' in @props.project.experimental_tools
+            <div>
+              <div>
+                <AutoSave resource={@props.workflow}>
+                  <span className="form-label">Subject Flags</span><br />
+                  <small className="form-help">Flags allow volunteers to mark subjects as inappropriate.</small>
+                  <br />
+                  <label>
+                    <input type="checkbox" onChange={@enableSubjectFlags} checked={@props.workflow.configuration.enable_subject_flags}/>
+                    Enable Subject Flags
+                  </label>
+                </AutoSave>
+              </div>
+
+              <hr />
+
+            </div>}
+
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
               <input type="checkbox" name="invert_subject" checked={@props.workflow.configuration.invert_subject} onChange={@handleSetInvert} />
@@ -537,6 +555,10 @@ EditWorkflowPage = React.createClass
   handleSetGravitySpyGoldStandard: (e) ->
     @props.workflow.update
       'configuration.gravity_spy_gold_standard': e.target.checked
+
+  enableSubjectFlags: (e) ->
+    @props.workflow.update
+      'configuration.enable_subject_flags': e.target.checked
 
   handleSetWorldWideTelescope: (e) ->
     if !@props.workflow.configuration.custom_summary
