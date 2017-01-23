@@ -1,13 +1,29 @@
-React = require 'react'
-Draggable = require '../lib/draggable'
-tasks = require './tasks'
-seenThisSession = require '../lib/seen-this-session'
-getSubjectLocation = require '../lib/get-subject-location'
-WarningBanner = require './warning-banner'
-`import SVGImage from '../components/svg-image';`
+import React from 'react';
+import Draggable from '../lib/draggable';
+import tasks from './tasks';
+import seenThisSession from '../lib/seen-this-session';
+import getSubjectLocation from '../lib/get-subject-location';
+import WarningBanner from './warning-banner';
+import SVGImage from '../components/svg-image';
 
-module.exports = React.createClass
-  displayName: 'FrameAnnotator'
+export default class FrameAnnotator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      alreadySeen: false,
+      showWarning: false
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ alreadySeen: this.props.subject.already_seen || seenThisSession.check(this.props.workflow, this.props.subject) });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.annotation !== this.props.annotation)
+      this.handleAnnotationChange(this.props.annotation, nextProps.annotation)
+  }
+}
 
   getDefaultProps: ->
     user: null
@@ -19,17 +35,6 @@ module.exports = React.createClass
     onLoad: Function.prototype
     frame: 0
     onChange: Function.prototype
-
-  getInitialState: ->
-    alreadySeen: false
-    showWarning: false
-
-  componentDidMount: ->
-    @setState alreadySeen: @props.subject.already_seen or seenThisSession.check @props.workflow, @props.subject
-
-  componentWillReceiveProps: (nextProps) ->
-    if nextProps.annotation isnt @props.annotation
-      @handleAnnotationChange @props.annotation, nextProps.annotation
 
   handleAnnotationChange: (oldAnnotation, currentAnnotation) ->
     if oldAnnotation?
@@ -59,7 +64,7 @@ module.exports = React.createClass
     svg = @refs.svgSubjectArea
     matrix = svg.getScreenCTM()
 
-  # transforms the event coordinates 
+  # transforms the event coordinates
   # to points in the SVG coordinate system
   eventCoordsToSVGCoords: (x, y) ->
     svg = @refs.svgSubjectArea
