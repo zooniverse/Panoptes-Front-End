@@ -78,7 +78,7 @@ module.exports = React.createClass
       <input
         type="radio"
         name="board"
-        defaultChecked={i is 0} # pre-check the first
+        defaultChecked={i is 0}
         value={board.id} />
       {board.title}
     </label>
