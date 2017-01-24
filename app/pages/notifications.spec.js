@@ -18,7 +18,7 @@ const testNotifications = [
 ];
 
 describe('Notifications', function() {
-  let wrapper;
+  let wrapper, notifications;
 
   describe('it will display according to user', function() {
     it('will ask user to sign in', function() {
@@ -32,22 +32,19 @@ describe('Notifications', function() {
     });
   });
 
-  // skip these since they try to test child components in a shallow render.
-  describe.skip('it correctly display projects', function() {
+  describe('it correctly display projects', function() {
     beforeEach(function () {
-      wrapper = shallow(
-        <Notifications user={{ id: 1 }} />,
-      );
-      const arrangedNotifications = wrapper.instance().groupNotifications(testNotifications);
-      wrapper.setState({ projNotifications: arrangedNotifications });
+      wrapper = shallow(<Notifications user={{ id: 1 }} />);
+      wrapper.instance().groupNotifications(testNotifications);
+      notifications = shallow( wrapper.instance().renderNotifications())
     });
 
     it('will place zooniverse section first', function() {
-      assert.equal(wrapper.find('.list').childAt(0).prop('section'), 'zooniverse');
+      assert.equal(notifications.find('.list').childAt(0).prop('section'), 'zooniverse');
     });
 
     it('will display correct number of sections', function() {
-      assert.equal(wrapper.find('.list').children().length, 3);
+      assert.equal(notifications.find('.list').children().length, 3);
     });
   });
 });
