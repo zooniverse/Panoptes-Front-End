@@ -2,7 +2,7 @@
 
 import React from 'react';
 import assert from 'assert';
-// import Notifications from './notifications';
+import Notifications from './notifications';
 import { mount, shallow } from 'enzyme';
 
 const testNotifications = [
@@ -15,10 +15,13 @@ const testNotifications = [
   { id: '125',
     section: 'zooniverse',
   },
+  { id: '126',
+    section: 'project-4321',
+  }
 ];
 
-describe.skip('Notifications', function() {
-  let wrapper;
+describe('Notifications', function() {
+  let wrapper, notifications;
 
   describe('it will display according to user', function() {
     it('will ask user to sign in', function() {
@@ -37,16 +40,16 @@ describe.skip('Notifications', function() {
       wrapper = shallow(
         <Notifications user={{ id: 1 }} />,
       );
-      const arrangedNotifications = wrapper.instance().groupNotifications(testNotifications);
-      wrapper.setState({ projNotifications: arrangedNotifications });
+      wrapper.instance().groupNotifications(testNotifications);
+      notifications = shallow(wrapper.instance().renderNotifications())
     });
 
     it('will place zooniverse section first', function() {
-      assert.equal(wrapper.find('.list').childAt(0).prop('section'), 'zooniverse');
+      assert.equal(notifications.find('.list').childAt(0).prop('section'), 'zooniverse');
     });
 
     it('will display correct number of sections', function() {
-      assert.equal(wrapper.find('.list').children().length, 3);
+      assert.equal(notifications.find('.list').children().length, 3);
     });
   });
 });
