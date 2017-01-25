@@ -1,4 +1,6 @@
 React = require 'react'
+apiClient = require 'panoptes-client/lib/api-client'
+{TextSplit} = require 'seven-ten'
 tasks = require './tasks'
 
 module.exports = React.createClass
@@ -7,9 +9,20 @@ module.exports = React.createClass
   getDefaultProps: ->
     workflow: null
     classification: null
+    classificationCount: null
 
   render: ->
+    # first time the subject was classified
+    firstTimeClassified = @props.classificationCount? and @props.classificationCount is 0
+
     <div className="classification-summary">
+      {if firstTimeClassified
+        <TextSplit splitKey="subject.first-to-classify"
+          textKey="message"
+          splits={this.props.splits}
+          default={''}
+          elementType={"p"} />}
+
       {if @props.classification.annotations.length is 0
         'No annotations'
       else
