@@ -101,11 +101,23 @@ Classifier = React.createClass
     if @props.project.experimental_tools?.indexOf('expert comparison summary') > -1
       @getExpertClassification @props.workflow, @props.subject
 
+    @loadClassificationsCount subject
+
     preloadSubject subject
       .then =>
         if @props.subject is subject # The subject could have changed while we were loading.
           @setState subjectLoading: false
           @props.onLoad?()
+
+  loadClassificationsCount: (subject) ->
+    if @props.splits?['subject.first-to-classify']
+      query =
+        workflow_id: @props.workflow.id
+        subject_id: subject.id
+
+      apiClient.type('subject_workflow_statuses').get(query).then ([sws]) =>
+        classificationCount = sws?.classifications_count or 0
+        @setState {classificationCount}
 
   getExpertClassification: (workflow, subject) ->
     awaitExpertClassification = Promise.resolve do =>
@@ -359,7 +371,12 @@ Classifier = React.createClass
           else
             'Your classification:'}
         </strong>
-        <ClassificationSummary workflow={@props.workflow} classification={classification} />
+        <ClassificationSummary
+          workflow={@props.workflow}
+          classification={classification}
+          classificationCount={@state.classificationCount}
+          splits={@props.splits}
+        />
       </div>
 
       <hr />
