@@ -17,7 +17,7 @@
     "lodash.pick": "~3.1.0",
     "lodash.uniq": "~3.2.2",
     "markdownz": "~7.0",
-    "modal-form": "~2.4.3",
+    "modal-form": "2.4.3",
     "moment": "~2.9.0",
     "panoptes-client": "~2.5.0",
     "papaparse": "mholt/PapaParse#cada171",
