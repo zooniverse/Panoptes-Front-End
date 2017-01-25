@@ -15,22 +15,13 @@ export default class FrameAnnotator extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState({ alreadySeen: this.props.subject.already_seen || seenThisSession.check(this.props.workflow, this.props.subject) });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.annotation !== this.props.annotation)
-      this.handleAnnotationChange(this.props.annotation, nextProps.annotation)
-  }
-
-  handleAnnotationChange(oldAnnotation, currentAnnotation) {
-    if (oldAnnotation) {
-      const lastTask = this.props.workflow.tasks[oldAnnotation.task];
-      const LastTaskComponent = tasks[lastTask.type];
-      if (LastTaskComponent.onLeaveAnnotation !== undefined) {
-        LastTaskComponent.onLeaveAnnotation(lastTask, oldAnnotation);
-      }
+    if (nextProps.annotation !== this.props.annotation) {
+      this.handleAnnotationChange(this.props.annotation, nextProps.annotation);
     }
   }
 
@@ -38,12 +29,13 @@ export default class FrameAnnotator extends React.Component {
     const clientRect = this.refs.sizeRect && this.refs.sizeRect.getBoundingClientRect();
 
     if (clientRect) {
-      const {left, right, top, bottom, width, height} = clientRect;
-      left += pageXOffset
-      right += pageXOffset
-      top += pageYOffset
-      bottom += pageYOffset
-      return {left, right, top, bottom, width, height}
+      const { width, height } = clientRect;
+      let { left, right, top, bottom } = clientRect;
+      left += pageXOffset;
+      right += pageXOffset;
+      top += pageYOffset;
+      bottom += pageYOffset;
+      return { left, right, top, bottom, width, height };
     }
     return null;
   }
@@ -53,13 +45,35 @@ export default class FrameAnnotator extends React.Component {
     const horizontal = sizeRect ? sizeRect.width / this.props.naturalWidth : 0;
     const vertical = sizeRect ? sizeRect.height / this.props.naturalHeight : 0;
 
-    return {horizontal, vertical};
+    return { horizontal, vertical };
   }
 
   // get current transformation matrix
   getScreenCurrentTransformationMatrix() {
     const svg = this.refs.svgSubjectArea;
     return svg.getScreenCTM();
+  }
+
+  // find the original matrix for the SVG coordinate system
+  getMatrixForWindowCoordsToSVGUserSpaceCoords() {
+    const transformationContainer = this.refs.transformationContainer;
+    transformationContainer.getScreenCTM().inverse();
+  }
+
+  // get the offset of event coordiantes in terms of the SVG coordinate system
+  getEventOffset(e) {
+    return this.eventCoordsToSVGCoords(e.clientX, e.clientY);
+  }
+
+  // transforms the difference between two event coordinates
+  // into the difference as represent in the SVG coordinate system
+  normalizeDifference(e, d) {
+    const difference = {};
+    const normalizedPoint1 = this.eventCoordsToSVGCoords(e.pageX - d.x, e.pageY - d.y);
+    const normalizedPoint2 = this.eventCoordsToSVGCoords(e.pageX, e.pageY);
+    difference.x = normalizedPoint2.x - normalizedPoint1.x;
+    difference.y = normalizedPoint2.y - normalizedPoint1.y;
+    return difference;
   }
 
   // transforms the event coordinates
@@ -73,32 +87,23 @@ export default class FrameAnnotator extends React.Component {
     return newPoint.matrixTransform(matrixForWindowCoordsToSVGUserSpaceCoords);
   }
 
-  // find the original matrix for the SVG coordinate system
-  getMatrixForWindowCoordsToSVGUserSpaceCoords() {
-    transformationContainer = this.refs.transformationContainer;
-    transformationContainer.getScreenCTM().inverse();
-  }
-
-  // transforms the difference between two event coordinates
-  // into the difference as represent in the SVG coordinate system
-  normalizeDifference(e, d) {
-    const difference = {}
-    const normalizedPoint1 = this.eventCoordsToSVGCoords(e.pageX - d.x, e.pageY - d.y);
-    const normalizedPoint2 = this.eventCoordsToSVGCoords(e.pageX, e.pageY);
-    difference.x =  normalizedPoint2.x - normalizedPoint1.x;
-    difference.y =  normalizedPoint2.y - normalizedPoint1.y;
-    return difference;
-  }
-
-  // get the offset of event coordiantes in terms of the SVG coordinate system
-  getEventOffset(e) {
-    return eventCoordsToSVGCoords(e.clientX, e.clientY);
+  handleAnnotationChange(oldAnnotation, currentAnnotation) {
+    if (oldAnnotation) {
+      const lastTask = this.props.workflow.tasks[oldAnnotation.task];
+      const LastTaskComponent = tasks[lastTask.type];
+      if (LastTaskComponent.onLeaveAnnotation !== undefined) {
+        LastTaskComponent.onLeaveAnnotation(lastTask, oldAnnotation);
+      }
+    }
   }
 
   render() {
     let warningBanner;
     let taskDescription;
     let TaskComponent;
+    let BeforeSubject;
+    let InsideSubject;
+    let AfterSubject;
 
     if (this.props.annotation) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
@@ -111,20 +116,21 @@ export default class FrameAnnotator extends React.Component {
           <p>Our records show that you’ve already seen this image. We might have run out of data for you in this workflow!</p>
           <p>Try choosing a different workflow or contributing to a different project.</p>
         </WarningBanner>
-      )
+      );
     } else if (this.props.subject.retired) {
       warningBanner = (
         <WarningBanner label="Finished!">
           <p>This subject already has enough classifications, so yours won’t be used in its analysis!</p>
           <p>If you’re looking to help, try choosing a different workflow or contributing to a different project.</p>
         </WarningBanner>
-    )}
+      );
+    }
 
-    const {type, format, src} = getSubjectLocation(this.props.subject, this.props.frame);
+    const { type, src } = getSubjectLocation(this.props.subject, this.props.frame);
     const createdViewBox = `${this.props.viewBoxDimensions.x} ${this.props.viewBoxDimensions.y} ${this.props.viewBoxDimensions.width} ${this.props.viewBoxDimensions.height}`;
 
-    const svgStyle = {}
-    if (type === 'image' && !props.loading) {
+    const svgStyle = {};
+    if (type === 'image' && !this.props.loading) {
       // Images are rendered again within the SVG itself.
       // When cropped right next to the edge of the image,
       // the original tag can show through, so fill the SVG to cover it.
@@ -132,8 +138,9 @@ export default class FrameAnnotator extends React.Component {
 
       // Allow touch scrolling on subject for mobile and tablets
       if (taskDescription) {
-        unless (taskDescription.type === 'drawing' || taskDescription.type === 'crop')
+        if (taskDescription.type !== 'drawing' || taskDescription.type !== 'crop') {
           svgStyle.pointerEvents = 'none';
+        }
       }
       if (this.props.panEnabled === true) {
         svgStyle.pointerEvents = 'all';
@@ -143,7 +150,9 @@ export default class FrameAnnotator extends React.Component {
     const svgProps = {};
 
     if (TaskComponent) {
-      const {BeforeSubject, InsideSubject, AfterSubject} = TaskComponent;
+      BeforeSubject = TaskComponent.BeforeSubject;
+      InsideSubject = TaskComponent.InsideSubject;
+      AfterSubject = TaskComponent.AfterSubject;
     }
 
     const hookProps = {
@@ -162,18 +171,18 @@ export default class FrameAnnotator extends React.Component {
       preferences: this.props.preferences,
       normalizeDifference: this.normalizeDifference,
       getScreenCurrentTransformationMatrix: this.getScreenCurrentTransformationMatrix
-    }
+    };
 
-    for (const task in tasks) {
+    tasks.forEach((task) => {
       const Component = tasks[task];
-      if (Component.getSVGProps !== null) {
+      if (Component.getSVGProps) {
         const ref = Component.getSVGProps(hookProps);
-        for (const key in ref) {
+        ref.forEach((key) => {
           const value = ref[key];
           svgProps[key] = value;
-        }
+        });
       }
-    }
+    });
 
     return (
       <div className="frame-annotator">
@@ -182,14 +191,14 @@ export default class FrameAnnotator extends React.Component {
           {BeforeSubject && (
             <BeforeSubject {...hookProps} />)}
 
-            <svg ref="svgSubjectArea" className="subject" style={svgStyle} viewBox={createdViewBox} {...svgProps}>
-              <g ref="transformationContainer" transform={this.props.transform}>
-                <rect ref="sizeRect" width={this.props.naturalWidth} height={this.props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
-                {type === 'image' && (
-                  <Draggable onDrag={this.props.panByDrag} disabled={this.props.disabled}>
-                    <SVGImage className={this.props.panEnabled ? "pan-active" : ''} src={src} width={this.props.naturalWidth} height={this.props.naturalHeight} modification={this.props.modification} />
-                  </Draggable>
-                )}
+          <svg ref="svgSubjectArea" className="subject" style={svgStyle} viewBox={createdViewBox} {...svgProps}>
+            <g ref="transformationContainer" transform={this.props.transform}>
+              <rect ref="sizeRect" width={this.props.naturalWidth} height={this.props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
+              {type === 'image' && (
+                <Draggable onDrag={this.props.panByDrag} disabled={this.props.disabled}>
+                  <SVGImage className={this.props.panEnabled ? 'pan-active' : ''} src={src} width={this.props.naturalWidth} height={this.props.naturalHeight} modification={this.props.modification} />
+                </Draggable>
+              )}
 
               {(InsideSubject && !this.props.panEnabled) && (
                 <InsideSubject {...hookProps} />
@@ -202,22 +211,56 @@ export default class FrameAnnotator extends React.Component {
                 }
               })}
 
-              </g>
-            </svg>
+            </g>
+          </svg>
 
-            {this.props.children}
+          {this.props.children}
 
-            {WarningBanner && (
-              WarningBanner
-            )}
+          {warningBanner && (
+            warningBanner
+          )}
 
-            {AfterSubject && (
-              <AfterSubject {...hookProps} />)}
-            </div>
-          </div>
-    )
+          {AfterSubject && (
+            <AfterSubject {...hookProps} />)}
+        </div>
+      </div>
+    );
   }
 }
+
+FrameAnnotator.propTypes = {
+  annotation: React.propTypes.shape({
+    task: React.propTypes.object
+  }),
+  children: React.propTypes.object,
+  classification: React.propTypes.shape({
+    loading: React.propTypes.bool
+  }),
+  disabled: React.propTypes.bool,
+  frame: React.propTypes.number,
+  loading: React.propTypes.bool,
+  modification: React.propTypes.object,
+  naturalHeight: React.propTypes.number,
+  naturalWidth: React.propTypes.number,
+  onChange: React.propTypes.func,
+  panByDrag: React.propTypes.func,
+  panEnabled: React.propTypes.bool,
+  preferences: React.propTypes.object,
+  subject: React.propTypes.shape({
+    already_seen: React.propTypes.bool,
+    retired: React.propTypes.object
+  }),
+  transform: React.propTypes.string,
+  viewBoxDimensions: React.propTypes.shape({
+    height: React.propTypes.number,
+    width: React.propTypes.number,
+    x: React.propTypes.number,
+    y: React.propTypes.number
+  }),
+  workflow: React.propTypes.shape({
+    tasks: React.propTypes.object
+  })
+};
 
 FrameAnnotator.defaultProps = {
   user: null,
