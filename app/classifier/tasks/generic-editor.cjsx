@@ -122,13 +122,17 @@ module.exports = React.createClass
                         Type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
                           {for toolKey of drawingTools
-                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape"]}
+                            <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey in ["grid", "freehandLine", "freehandShape", "freehandSegmentLine", "freehandSegmentShape"]}
                           {if @canUse("grid")
                             <option key="grid" value="grid">grid</option>}
                           {if @canUse("freehandLine")
                             <option key="freehandLine" value="freehandLine">freehand line</option>}
                           {if @canUse("freehandShape")
                             <option key="freehandShape" value="freehandShape">freehand shape</option>}
+                          {if @canUse("freehandSegmentLine")
+                            <option key="freehandSegmentLine" value="freehandSegmentLine">freehand segment line</option>}
+                          {if @canUse("freehandSegmentShape")
+                            <option key="freehandSegmentShape" value="freehandSegmentShape">freehand segment shape</option>}
                         </select>
                       </AutoSave>
                     </div>

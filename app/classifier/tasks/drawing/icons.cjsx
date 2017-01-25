@@ -54,3 +54,11 @@ module.exports =
   freehandShape: <svg viewBox="0 0 100 100">
     <path d="M20,60 C10,10,80,10,50,50 C20,90 90,90 80,40 z" />
   </svg>
+
+  freehandSegmentLine: <svg viewBox="0 0 100 100">
+    <path d="M10,50 Q25,10,50,50,75,90,90,50" fill={'none'} />
+  </svg>
+
+  freehandSegmentShape: <svg viewBox="0 0 100 100">
+    <path d="M20,60 C10,10,80,10,50,50 C20,90 90,90 80,40 z" />
+  </svg>

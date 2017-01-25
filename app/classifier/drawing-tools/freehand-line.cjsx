@@ -3,66 +3,71 @@ DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 {svgPathProperties} = require 'svg-path-properties'
+{createPathFromCoords} = require './freehand-helpers'
 
-MINIMUM_LENGTH = 20
-GRAB_STROKE_WIDTH = 6
 BUFFER = 16
 DELETE_BUTTON_WIDTH = 8
-
-getPathNode = (pathString) ->
-  document.querySelectorAll("path[d=\"#{pathString}\"]")[0]
+GRAB_STROKE_WIDTH = 6
+MINIMUM_LENGTH = 20
+SELECTED_STROKE_WIDTH = 6
+STROKE_WIDTH = 
 
 module.exports = React.createClass
   displayName: 'FreehandLineTool'
 
   statics:
-    initStart: ({x, y}, mark) ->
-      _inProgress: true
-      path: "M #{x},#{y}"
-
-    initMove: ({x, y}, mark) ->
-      path: mark.path + " L #{x},#{y}"
-
-    initRelease: (coords, mark) ->
+    defaultValues: ->
+      points: []
       _inProgress: false
 
-    initValid: ({path}) ->
-      # This is a static method, so it doesn't have access to the component
-      # instance. In order to get the DOM node for the path and get its length, 
-      # we need to match the path by the d attribute.
+    initStart: ({x, y}, mark) ->
+      mark.points.push {x, y}
+      _inProgress: true
+
+    initMove: ({x, y}, mark) ->
+      mark.points.push {x, y}
+
+    initRelease: ->
+      _inProgress: false
+
+    initValid: (mark) ->
+      path = createPathFromCoords mark.points
       properties = svgPathProperties path
       properties.getTotalLength() > MINIMUM_LENGTH
 
-  getDeletePosition: () ->
+  getDeletePosition: ([startCoords, otherCoords...]) ->
     scale = (@props.scale.horizontal + @props.scale.vertical) / 2
-    allCoords = @getCoordsFromPathString @props.mark.path
-    startCoords = allCoords[0]
-    x = startCoords.x - (BUFFER / scale)
-    if @outOfBounds(x, scale)
-      x = startCoords.x + (BUFFER / scale)
-    {x, y: startCoords.y}
+    mod = (BUFFER / scale)
+    x = startCoords.x - mod
+    x: if not @outOfBounds(x, scale) then x else startCoords.x + mod
+    y: startCoords.y
 
-  getCoordsFromPathString: (path) ->
-    path.split ' '
-      .filter (str) -> !/[a-zA-Z]+/.test str
-      .map (coordsStr) -> 
-        coordsPair = coordsStr.split ','
-        x: parseFloat coordsPair[0]
-        y: parseFloat coordsPair[1]
+  handleHover: (e) ->
+    if e.type == 'mouseenter'
+      @setState hover: true
+    else if e.type == 'mouseleave'
+      @setState hover: false
 
   outOfBounds: (deleteBtnX, scale) ->
     deleteBtnX - (DELETE_BUTTON_WIDTH / scale) < 0
 
   render: ->
-    {_inProgress, path} = @props.mark
+    {_inProgress, points} = @props.mark
+    path = createPathFromCoords points
 
     <DrawingToolRoot tool={this}>
-        <path d={path} fill="none" strokeWidth="20" stroke="transparent" className="clickable" />
-        <path d={path} fill="none" className="clickable" />
+      <path d={path} 
+        strokeWidth={GRAB_STROKE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)}
+        strokeOpacity="0" 
+        className="clickable" />
+      <path d={path} fill="none" className="clickable" />
 
-      {if !_inProgress and @props.selected
-        deletePosition = @getDeletePosition()
+      {if @props.selected
+        deletePosition = @getDeletePosition points
         <g>
-          <DeleteButton tool={this} x={deletePosition.x} y={deletePosition.y} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
+          <DeleteButton tool={this} 
+            x={deletePosition.x} 
+            y={deletePosition.y} 
+            getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
         </g>}
     </DrawingToolRoot>
