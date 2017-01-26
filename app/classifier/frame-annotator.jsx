@@ -31,7 +31,7 @@ export default class FrameAnnotator extends React.Component {
   }
 
   getSizeRect() {
-    const clientRect = this.refs.sizeRect && this.refs.sizeRect.getBoundingClientRect();
+    const clientRect = this.sizeRect && this.sizeRect.getBoundingClientRect();
 
     if (clientRect) {
       const { width, height } = clientRect;
@@ -199,7 +199,7 @@ export default class FrameAnnotator extends React.Component {
 
           <svg ref="svgSubjectArea" className="subject" style={svgStyle} viewBox={createdViewBox} {...svgProps}>
             <g ref="transformationContainer" transform={this.props.transform}>
-              <rect ref="sizeRect" width={this.props.naturalWidth} height={this.props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
+              <rect ref={(rect) => { this.sizeRect = rect; }} width={this.props.naturalWidth} height={this.props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
               {type === 'image' && (
                 <Draggable onDrag={this.props.panByDrag} disabled={this.props.disabled}>
                   <SVGImage className={this.props.panEnabled ? 'pan-active' : ''} src={src} width={this.props.naturalWidth} height={this.props.naturalHeight} modification={this.props.modification} />
