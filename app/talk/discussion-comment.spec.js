@@ -43,4 +43,16 @@ describe('DiscussionComment', function() {
       assert.equal(wrapper.find(CommentBox).props().user, user);
     })
   });
+  
+  describe('comment validation', function(){
+    it('will not allow empty comments', function(){
+      // weirdly, comment validations returns true if validation fails.
+      assert.equal(wrapper.instance().commentValidations(''), true);
+      assert.equal(wrapper.state().commentValidationErrors[0], 'Comments cannot be empty');
+    });
+    it('will allow reasonable comments', function(){
+      assert.equal(wrapper.instance().commentValidations('Hello world, I\'m a valid comment.'), false);
+      assert.equal(wrapper.state().commentValidationErrors.length, 0);
+    });
+  });
 });
