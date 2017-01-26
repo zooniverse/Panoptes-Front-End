@@ -78,16 +78,16 @@ module.exports = React.createClass
             pathname: @props.location.pathname
             query: @props.location.query
 
-        if @props.user?
-          talkClient
-            .type 'roles'
-            .get 
-              user_id: @props.user.id
-              section: ['zooniverse', @state.discussion.section]
-              is_shown: true
-              page_size: 100
-            .then (roles) =>
-              @setState {roles}
+      if @props.user?
+        talkClient
+          .type 'roles'
+          .get 
+            user_id: @props.user.id
+            section: ['zooniverse', @state.discussion.section]
+            is_shown: true
+            page_size: 100
+          .then (roles) =>
+            @setState {roles}
 
       @setComments(@props.location.query.page ? 1)
 
