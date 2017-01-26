@@ -13,6 +13,11 @@ export default class FrameAnnotator extends React.Component {
       alreadySeen: false,
       showWarning: false
     };
+    this.getScreenCurrentTransformationMatrix = this.getScreenCurrentTransformationMatrix.bind(this);
+    this.getEventOffset = this.getEventOffset.bind(this);
+    this.normalizeDifference = this.normalizeDifference.bind(this);
+    this.eventCoordsToSVGCoords = this.eventCoordsToSVGCoords.bind(this);
+    this.handleAnnotationChange = this.handleAnnotationChange.bind(this);
   }
 
   componentWillMount() {
@@ -57,7 +62,7 @@ export default class FrameAnnotator extends React.Component {
   // find the original matrix for the SVG coordinate system
   getMatrixForWindowCoordsToSVGUserSpaceCoords() {
     const transformationContainer = this.refs.transformationContainer;
-    transformationContainer.getScreenCTM().inverse();
+    return transformationContainer.getScreenCTM().inverse();
   }
 
   // get the offset of event coordiantes in terms of the SVG coordinate system
@@ -84,15 +89,16 @@ export default class FrameAnnotator extends React.Component {
     newPoint.x = x;
     newPoint.y = y;
     const matrixForWindowCoordsToSVGUserSpaceCoords = this.getMatrixForWindowCoordsToSVGUserSpaceCoords();
-    return newPoint.matrixTransform(matrixForWindowCoordsToSVGUserSpaceCoords);
+    const pointforSVGSystem = newPoint.matrixTransform(matrixForWindowCoordsToSVGUserSpaceCoords);
+    return pointforSVGSystem;
   }
 
   handleAnnotationChange(oldAnnotation, currentAnnotation) {
     if (oldAnnotation) {
       const lastTask = this.props.workflow.tasks[oldAnnotation.task];
       const LastTaskComponent = tasks[lastTask.type];
-      if (LastTaskComponent.onLeaveAnnotation !== undefined) {
-        LastTaskComponent.onLeaveAnnotation(lastTask, oldAnnotation);
+      if (LastTaskComponent.onLeaveAnnotation) {
+        return LastTaskComponent.onLeaveAnnotation(lastTask, oldAnnotation);
       }
     }
   }
@@ -104,6 +110,8 @@ export default class FrameAnnotator extends React.Component {
     let BeforeSubject;
     let InsideSubject;
     let AfterSubject;
+    const { type, src } = getSubjectLocation(this.props.subject, this.props.frame);
+    const createdViewBox = `${this.props.viewBoxDimensions.x} ${this.props.viewBoxDimensions.y} ${this.props.viewBoxDimensions.width} ${this.props.viewBoxDimensions.height}`;
 
     if (this.props.annotation) {
       taskDescription = this.props.workflow.tasks[this.props.annotation.task];
@@ -126,9 +134,6 @@ export default class FrameAnnotator extends React.Component {
       );
     }
 
-    const { type, src } = getSubjectLocation(this.props.subject, this.props.frame);
-    const createdViewBox = `${this.props.viewBoxDimensions.x} ${this.props.viewBoxDimensions.y} ${this.props.viewBoxDimensions.width} ${this.props.viewBoxDimensions.height}`;
-
     const svgStyle = {};
     if (type === 'image' && !this.props.loading) {
       // Images are rendered again within the SVG itself.
@@ -138,7 +143,7 @@ export default class FrameAnnotator extends React.Component {
 
       // Allow touch scrolling on subject for mobile and tablets
       if (taskDescription) {
-        if (taskDescription.type !== 'drawing' || taskDescription.type !== 'crop') {
+        if ((taskDescription.type !== 'drawing') && (taskDescription.type !== 'crop')) {
           svgStyle.pointerEvents = 'none';
         }
       }
@@ -173,14 +178,15 @@ export default class FrameAnnotator extends React.Component {
       getScreenCurrentTransformationMatrix: this.getScreenCurrentTransformationMatrix
     };
 
-    tasks.forEach((task) => {
+    Object.keys(tasks).map((task) => {
       const Component = tasks[task];
       if (Component.getSVGProps) {
-        const ref = Component.getSVGProps(hookProps);
-        ref.forEach((key) => {
-          const value = ref[key];
-          svgProps[key] = value;
-        });
+        const props = Component.getSVGProps(hookProps);
+        if (props) {
+          Object.keys(props).map((key) => {
+            svgProps[key] = props[key];
+          });
+        }
       }
     });
 
@@ -204,10 +210,10 @@ export default class FrameAnnotator extends React.Component {
                 <InsideSubject {...hookProps} />
               )}
 
-              {tasks.map((anyTaskName) => {
-                const PersistInsideSubject = tasks[anyTaskName];
+              {Object.keys(tasks).map((taskName) => {
+                const PersistInsideSubject = tasks[taskName].PersistInsideSubject;
                 if (PersistInsideSubject) {
-                  return <PersistInsideSubject key={anyTaskName} {...hookProps} />;
+                  return <PersistInsideSubject key={taskName} {...hookProps} />;
                 }
               })}
 
@@ -229,36 +235,37 @@ export default class FrameAnnotator extends React.Component {
 }
 
 FrameAnnotator.propTypes = {
-  annotation: React.propTypes.shape({
-    task: React.propTypes.object
+  annotation: React.PropTypes.shape({
+    task: React.PropTypes.string
   }),
-  children: React.propTypes.object,
-  classification: React.propTypes.shape({
-    loading: React.propTypes.bool
+  children: React.PropTypes.object,
+  classification: React.PropTypes.shape({
+    annotations: React.PropTypes.array,
+    loading: React.PropTypes.bool
   }),
-  disabled: React.propTypes.bool,
-  frame: React.propTypes.number,
-  loading: React.propTypes.bool,
-  modification: React.propTypes.object,
-  naturalHeight: React.propTypes.number,
-  naturalWidth: React.propTypes.number,
-  onChange: React.propTypes.func,
-  panByDrag: React.propTypes.func,
-  panEnabled: React.propTypes.bool,
-  preferences: React.propTypes.object,
-  subject: React.propTypes.shape({
-    already_seen: React.propTypes.bool,
-    retired: React.propTypes.object
+  disabled: React.PropTypes.bool,
+  frame: React.PropTypes.number,
+  loading: React.PropTypes.bool,
+  modification: React.PropTypes.object,
+  naturalHeight: React.PropTypes.number,
+  naturalWidth: React.PropTypes.number,
+  onChange: React.PropTypes.func,
+  panByDrag: React.PropTypes.func,
+  panEnabled: React.PropTypes.bool,
+  preferences: React.PropTypes.object,
+  subject: React.PropTypes.shape({
+    already_seen: React.PropTypes.bool,
+    retired: React.PropTypes.bool
   }),
-  transform: React.propTypes.string,
-  viewBoxDimensions: React.propTypes.shape({
-    height: React.propTypes.number,
-    width: React.propTypes.number,
-    x: React.propTypes.number,
-    y: React.propTypes.number
+  transform: React.PropTypes.string,
+  viewBoxDimensions: React.PropTypes.shape({
+    height: React.PropTypes.number,
+    width: React.PropTypes.number,
+    x: React.PropTypes.number,
+    y: React.PropTypes.number
   }),
-  workflow: React.propTypes.shape({
-    tasks: React.propTypes.object
+  workflow: React.PropTypes.shape({
+    tasks: React.PropTypes.object
   })
 };
 
