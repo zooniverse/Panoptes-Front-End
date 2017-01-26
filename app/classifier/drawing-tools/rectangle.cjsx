@@ -115,7 +115,7 @@ module.exports = React.createClass
 
   handleBottomLeftDrag: (e, d) ->
     difference = @props.normalizeDifference(e, d)
-    @props.mark.x += difference.x 
+    @props.mark.x += difference.x
     @props.mark.width -= difference.x
     @props.mark.height += difference.y
     @props.onChange @props.mark

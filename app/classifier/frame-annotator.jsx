@@ -42,7 +42,7 @@ export default class FrameAnnotator extends React.Component {
       bottom += pageYOffset;
       return { left, right, top, bottom, width, height };
     }
-    return null;
+    return { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 };
   }
 
   getScale() {
