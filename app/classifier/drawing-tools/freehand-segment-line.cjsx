@@ -35,6 +35,11 @@ module.exports = React.createClass
 
     isComplete: (mark) ->
       !mark._inProgress
+
+    forceComplete: (mark) ->
+      mark._inProgress = false
+      mark._currentlyDrawing = false
+      mark.auto_closed = true
     
   componentDidMount: ->
     document.addEventListener 'mousemove', @handleMouseMove
@@ -58,6 +63,7 @@ module.exports = React.createClass
   handleFinishClick: ->
     document.removeEventListener 'mousemove', @handleMouseMove
     @props.mark._inProgress = false
+    @props.mark._currentlyDrawing = false
     @props.onChange @props.mark
 
   handleFinishHover: (e) ->
@@ -107,27 +113,27 @@ module.exports = React.createClass
             getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
         </g>}
 
-        {if _inProgress and points.length and @state.mouseWithinViewer
-          <line className="guideline" 
-            x1={lastPoint.x} 
-            y1={lastPoint.y} 
-            x2={@state.mouseX} 
-            y2={@state.mouseY} />}
+      {if @props.selected and _inProgress and points.length and @state.mouseWithinViewer
+        <line className="guideline" 
+          x1={lastPoint.x} 
+          y1={lastPoint.y} 
+          x2={@state.mouseX} 
+          y2={@state.mouseY} />}
 
-        {if _inProgress and not _currentlyDrawing
-          averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
-          <g>
-            {if @state.lastPointHover
-              <circle r={FINISHER_RADIUS / averageScale} cx={lastPoint.x} cy={lastPoint.y} />}
-              
-            <circle className="clickable" 
-              r={POINT_RADIUS / averageScale} 
-              cx={lastPoint.x} 
-              cy={lastPoint.y} 
-              onClick={@handleFinishClick} 
-              onMouseEnter={@handleFinishHover} 
-              onMouseLeave={@handleFinishHover} 
-              fill="currentColor" />
-          </g>}
+      {if @props.selected and _inProgress and not _currentlyDrawing
+        averageScale = (@props.scale.horizontal + @props.scale.vertical) / 2
+        <g>
+          {if @state.lastPointHover
+            <circle r={FINISHER_RADIUS / averageScale} cx={lastPoint.x} cy={lastPoint.y} />}
+            
+          <circle className="clickable" 
+            r={POINT_RADIUS / averageScale} 
+            cx={lastPoint.x} 
+            cy={lastPoint.y} 
+            onClick={@handleFinishClick} 
+            onMouseEnter={@handleFinishHover} 
+            onMouseLeave={@handleFinishHover} 
+            fill="currentColor" />
+        </g>}
       }
     </DrawingToolRoot>
