@@ -181,12 +181,7 @@ export default class FrameAnnotator extends React.Component {
     Object.keys(tasks).map((task) => {
       const Component = tasks[task];
       if (Component.getSVGProps) {
-        const props = Component.getSVGProps(hookProps);
-        if (props) {
-          Object.keys(props).map((key) => {
-            svgProps[key] = props[key];
-          });
-        }
+        Object.assign(svgProps, Component.getSVGProps(hookProps));
       }
     });
 
@@ -194,7 +189,7 @@ export default class FrameAnnotator extends React.Component {
       <div className="frame-annotator">
         <div className="subject-area">
 
-          {BeforeSubject && (
+          {!!BeforeSubject && (
             <BeforeSubject {...hookProps} />)}
 
           <svg ref="svgSubjectArea" className="subject" style={svgStyle} viewBox={createdViewBox} {...svgProps}>
@@ -206,7 +201,7 @@ export default class FrameAnnotator extends React.Component {
                 </Draggable>
               )}
 
-              {(InsideSubject && !this.props.panEnabled) && (
+              {(!!InsideSubject && !this.props.panEnabled) && (
                 <InsideSubject {...hookProps} />
               )}
 
@@ -222,11 +217,11 @@ export default class FrameAnnotator extends React.Component {
 
           {this.props.children}
 
-          {warningBanner && (
+          {!!warningBanner && (
             warningBanner
           )}
 
-          {AfterSubject && (
+          {!!AfterSubject && (
             <AfterSubject {...hookProps} />)}
         </div>
       </div>
