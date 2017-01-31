@@ -155,9 +155,7 @@ export default class FrameAnnotator extends React.Component {
     const svgProps = {};
 
     if (TaskComponent) {
-      BeforeSubject = TaskComponent.BeforeSubject;
-      InsideSubject = TaskComponent.InsideSubject;
-      AfterSubject = TaskComponent.AfterSubject;
+      ({BeforeSubject, InsideSubject, AfterSubject} = TaskComponent);
     }
 
     const hookProps = {
