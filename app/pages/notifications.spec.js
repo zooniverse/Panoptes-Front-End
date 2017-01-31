@@ -20,10 +20,6 @@ const testNotifications = [
   }
 ];
 
-const testProject = {
-  id: '1234'
-};
-
 describe('Notifications', function() {
   let wrapper, notifications;
 
@@ -60,7 +56,7 @@ describe('Notifications', function() {
   describe('will open sections correctly', function() {
     beforeEach(function () {
       wrapper = shallow(
-        <Notifications user={{ id: 1 }} project={testProject} />,
+        <Notifications user={{ id: 1 }} />,
       );
       wrapper.setState({ expanded: 'project-1234' });
       wrapper.instance().groupNotifications(testNotifications);
