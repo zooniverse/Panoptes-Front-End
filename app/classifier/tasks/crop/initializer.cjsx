@@ -30,10 +30,10 @@ module.exports = React.createClass
           </Draggable>
 
           <g style={color: 'white'}>
-            <DragHandle x={x} y={y + (height / 2)} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragNear.bind this, 'x'}  style={cursor: 'ew-resize'} />
-            <DragHandle x={x + width} y={y + (height / 2)} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragFar.bind this, 'x'} style={cursor: 'ew-resize'} />
-            <DragHandle x={x + (width / 2)} y={y} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragNear.bind this, 'y'} style={cursor: 'ns-resize'} />
-            <DragHandle x={x + (width / 2)} y={y + height} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragFar.bind this, 'y'} style={cursor: 'ns-resize'} />
+            <DragHandle x={x} y={y + (height / 2)} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragNear.bind this, 'x'} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} style={cursor: 'ew-resize'} />
+            <DragHandle x={x + width} y={y + (height / 2)} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragFar.bind this, 'x'} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} style={cursor: 'ew-resize'} />
+            <DragHandle x={x + (width / 2)} y={y} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragNear.bind this, 'y'} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} style={cursor: 'ns-resize'} />
+            <DragHandle x={x + (width / 2)} y={y + height} scale={@props.scale} onStart={@handleStartHandle} onDrag={@handleDragFar.bind this, 'y'} getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} style={cursor: 'ns-resize'} />
           </g>
         </g>}
     </g>
@@ -56,10 +56,11 @@ module.exports = React.createClass
     @props.classification.update 'annotation'
 
   handleBoxDrag: (e, d) ->
+    difference = @props.normalizeDifference(e, d)
     maxX = (@props.containerRect.width / @props.scale.horizontal) - @props.annotation.value.width
     maxY = (@props.containerRect.height / @props.scale.vertical) - @props.annotation.value.height
-    @props.annotation.value.x = Math.max 0, Math.min maxX, @props.annotation.value.x + d.x
-    @props.annotation.value.y = Math.max 0, Math.min maxY, @props.annotation.value.y + d.y
+    @props.annotation.value.x = Math.max 0, Math.min maxX, @props.annotation.value.x += difference.x
+    @props.annotation.value.y = Math.max 0, Math.min maxY, @props.annotation.value.y += difference.y
     @props.classification.update 'annotations'
 
   handleStartHandle: (e) ->

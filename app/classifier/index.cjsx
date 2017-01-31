@@ -1,7 +1,6 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../components/change-listener'
-FrameAnnotator = require './frame-annotator'
 SubjectViewer = require '../components/subject-viewer'
 ClassificationSummary = require './classification-summary'
 {Link} = require 'react-router'
@@ -18,6 +17,7 @@ Intervention = require '../lib/intervention'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 Shortcut = require './tasks/shortcut'
+`import FrameAnnotator from './frame-annotator';`
 `import TutorialButton from './tutorial-button';`
 `import MiniCourseButton from './mini-course-button';`
 `import CacheClassification from '../components/cache-classification';`
