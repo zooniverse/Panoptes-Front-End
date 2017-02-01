@@ -56,9 +56,10 @@ module.exports = React.createClass
     path = createPathFromCoords points
 
     <DrawingToolRoot tool={this}>
-      <path d={path} 
+      <path d={path}
         strokeWidth={GRAB_STROKE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)}
-        strokeOpacity="0" 
+        strokeOpacity="0"
+        fill="none"
         className="clickable" />
       <path d={path} fill="none" className="clickable" />
 
