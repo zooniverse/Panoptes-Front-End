@@ -4,6 +4,8 @@ module.exports =
   column: require './column-rectangle'
   ellipse: require './ellipse'
   freehandLine: require './freehand-line'
+  freehandSegmentLine: require './freehand-segment-line'
+  freehandSegmentShape: require './freehand-segment-shape'
   freehandShape: require './freehand-shape'
   grid: require './grid'
   line: require './line'

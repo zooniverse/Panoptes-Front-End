@@ -20,7 +20,9 @@ const experimentalFeatures = [
   'export classifications by workflow',
   'freehandLine',
   'freehandShape',
-  'enable subject flags'
+  'freehandSegmentLine',
+  'freehandSegmentShape',
+  'enable subject flags',
 ];
 
 class ExperimentalFeatures extends Component {
@@ -51,7 +53,6 @@ class ExperimentalFeatures extends Component {
     if (this.props.project) {
       return this.props.project.experimental_tools || [];
     }
-
     return [];
   }
 

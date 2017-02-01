@@ -127,6 +127,8 @@ workflow = apiClient.type('workflows').create
         {type: 'grid', label: 'Grid', color: 'purple'}
         {type: 'freehandLine', label: 'Freehand Line', color: 'deepskyblue'}
         {type: 'freehandShape', label: 'Freehand Shape', color: 'darkseagreen'}
+        {type: 'freehandSegmentLine', label: 'Freehand Segment Line', color: 'gold'}
+        {type: 'freehandSegmentShape', label: 'Freehand Segment Shape', color: 'goldenrod'}
         
 
       ]
