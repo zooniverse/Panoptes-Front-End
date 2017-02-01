@@ -80,7 +80,7 @@ module.exports = React.createClass
       answer._key ?= Math.random()
       <label key={answer._key} className="minor-button answer-button #{if i is @props.annotation.value then 'active' else ''}">
         <div className="answer-button-icon-container">
-          <input type="radio" checked={i is @props.annotation.value} onChange={@handleChange.bind this, i} />
+          <input type="radio" checked={i is @props.annotation.value} value={i} onChange={@handleChange.bind this, i} />
         </div>
         <div className="answer-button-label-container">
           <Markdown className="answer-button-label">{answer.label}</Markdown>
