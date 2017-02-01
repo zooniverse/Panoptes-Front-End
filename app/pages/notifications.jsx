@@ -26,7 +26,7 @@ export default class NotificationsPage extends React.Component {
   }
 
   componentWillMount() { // eslint-disable-line
-    if (this.props.user) return this.getProjectNotifications();
+    if (this.props.user) this.getProjectNotifications();
   }
 
   componentWillReceiveProps(nextProps) { // eslint-disable-line
@@ -41,6 +41,9 @@ export default class NotificationsPage extends React.Component {
     talkClient.type('notifications').get({ page: 1, page_size: 50 })
     .then((projNotifications) => {
       this.groupNotifications(projNotifications);
+    })
+    .then(() => {
+      if (this.props.project) this.setState({ expanded: `project-${this.props.project.id}` });
     });
   }
 
@@ -58,6 +61,16 @@ export default class NotificationsPage extends React.Component {
         }
       }
     });
+    if (this.props.project && projectSections.indexOf(`project-${this.props.project.id}`) < 0) {
+      talkClient.type('notifications').get({ page: 1, page_size: 1, section: `project-${this.props.project.id}` })
+      .then(([notification]) => {
+        if (notification) {
+          projectNotifications.push(notification);
+          this.setState({ projNotifications: projectNotifications });
+          this.setState({ expanded: `project-${this.props.project.id}` });
+        }
+      });
+    }
     this.setState({ projNotifications: projectNotifications });
   }
 
@@ -69,8 +82,9 @@ export default class NotificationsPage extends React.Component {
         <div>
           <div className="list">
             {this.state.projNotifications.map((notification, i) => {
+              const opened = notification.section === this.state.expanded || this.state.projNotifications.length === 1;
               return (
-                <CollapsableSection key={i} callbackParent={this.onChildChanged} expanded={notification.section === this.state.expanded} section={notification.section}>
+                <CollapsableSection key={i} callbackParent={this.onChildChanged} expanded={opened} section={notification.section}>
                   <NotificationSection
                     key={notification.id}
                     location={this.props.location}
@@ -86,7 +100,7 @@ export default class NotificationsPage extends React.Component {
       );
     } else if (this.state.projNotifications.length === 0) {
       notificationView = (
-        <div className="centering talk-module">
+        <div className="centering talk-module notifications-title">
           <Translate content="notifications.noNotifications" />
           <Translate content="notifications.participation" />
         </div>
@@ -100,6 +114,7 @@ export default class NotificationsPage extends React.Component {
 
   render() {
     let signedIn;
+    const headerStyle = this.props.project ? 'notifications-title talk-module' : 'notifications-title';
 
     if (this.props.user) {
       signedIn = this.renderNotifications();
@@ -114,7 +129,7 @@ export default class NotificationsPage extends React.Component {
     return (
       <div className="talk notifications">
         <div className="content-container">
-          <h3 className="centering title notifications-title">
+          <h3 className={headerStyle}>
             <Translate content="notifications.title" />
           </h3>
 
@@ -128,6 +143,9 @@ export default class NotificationsPage extends React.Component {
 NotificationsPage.propTypes = {
   location: React.PropTypes.shape({
     query: React.PropTypes.object
+  }),
+  project: React.PropTypes.shape({
+    id: React.PropTypes.string
   }),
   user: React.PropTypes.shape({
     display_name: React.PropTypes.string,

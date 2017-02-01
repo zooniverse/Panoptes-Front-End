@@ -7,16 +7,16 @@ import { mount, shallow } from 'enzyme';
 
 const testNotifications = [
   { id: '123',
-    section: 'project-4321',
+    section: 'project-4321'
   },
   { id: '124',
-    section: 'project-1234',
+    section: 'project-1234'
   },
   { id: '125',
-    section: 'zooniverse',
+    section: 'zooniverse'
   },
   { id: '126',
-    section: 'project-4321',
+    section: 'project-4321'
   }
 ];
 
@@ -50,6 +50,27 @@ describe('Notifications', function() {
 
     it('will display correct number of sections', function() {
       assert.equal(notifications.find('.list').children().length, 3);
+    });
+  });
+
+  describe('will open sections correctly', function() {
+    beforeEach(function () {
+      wrapper = shallow(
+        <Notifications user={{ id: 1 }} />,
+      );
+      wrapper.setState({ expanded: 'project-1234' });
+      wrapper.instance().groupNotifications(testNotifications);
+      notifications = shallow(wrapper.instance().renderNotifications())
+    });
+
+    it('will open the active project', function() {
+      let activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-1234');
+      assert.equal(activeProject.prop('expanded'), true);
+    });
+
+    it('will keep other projects closed', function() {
+      let activeProject = notifications.find('CollapsableSection').filterWhere(n => n.prop('section') === 'project-4321');
+      assert.equal(activeProject.prop('expanded'), false);
     });
   });
 });
