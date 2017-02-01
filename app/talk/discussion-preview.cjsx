@@ -43,7 +43,7 @@ module.exports = React.createClass
       {owner, name} = @props.params
       "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
-    else if @props.project # otherwise fetch from project
+    else if @props.project.slug # otherwise fetch from project
       [owner, name] = @props.project.slug.split('/')
       "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
