@@ -48,7 +48,7 @@ export default class TalkSearchResult extends React.Component {
   render() {
     const comment = this.props.data;
     const discussion = this.discussionFromComment(comment);
-    const [owner, name] = comment.project_slug.split('/') || [];
+    const [owner, name] = comment.project_slug ? comment.project_slug.split('/') : [];
 
     return (
       <div className="talk-search-result talk-module">
