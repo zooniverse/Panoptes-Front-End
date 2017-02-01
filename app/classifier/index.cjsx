@@ -186,6 +186,7 @@ Classifier = React.createClass
     }</ChangeListener>
 
   renderTask: (classification, annotation, task) ->
+    disableTalk = @props.classification.metadata.subject_flagged?
     visibleTasks = Object.keys(@props.workflow.tasks).filter (key) => key if @props.workflow.tasks[key].type isnt 'shortcut'
 
     TaskComponent = tasks[task.type]
@@ -261,7 +262,7 @@ Classifier = React.createClass
           <nav className="task-nav">
             {if visibleTasks.length > 1
               <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
-            {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project?
+            {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project? and !disableTalk
               [ownerName, name] = @props.project.slug.split('/')
               <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
             {if nextTaskKey and !annotation.shortcut
@@ -328,6 +329,8 @@ Classifier = React.createClass
     </div>
 
   renderSummary: (classification) ->
+    disableTalk = @props.classification.metadata.subject_flagged?
+
     <div>
       Thanks!
 
@@ -382,7 +385,7 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
-        {if @props.owner? and @props.project?
+        {if @props.owner? and @props.project? and !disableTalk
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
         <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
@@ -423,6 +426,8 @@ Classifier = React.createClass
     </TriggeredModalForm>
 
   renderGravitySpyGoldStandard: (classification) ->
+    disableTalk = @props.classification.metadata.subject_flagged?
+
     choiceLabels = []
     for annotation in classification.annotations when @props.workflow.tasks[annotation.task].type is 'survey'
       for value in annotation.value
@@ -451,7 +456,7 @@ Classifier = React.createClass
       <hr />
 
       <nav className="task-nav">
-        {if @props.owner? and @props.project?
+        {if @props.owner? and @props.project? and !disableTalk
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
         <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
