@@ -10,7 +10,7 @@ NextTaskSelector = require './next-task-selector'
 MarkdownHelp = require '../../partials/markdown-help'
 
 # `import MinMaxEditor from './drawing/min-max-editor';`
-MinMaxEditor = require './drawing/min-max-editor'
+MinMaxEditor = require('./drawing/min-max-editor').default
 
 module.exports = React.createClass
   displayName: 'GenericTaskEditor'
