@@ -5,7 +5,8 @@ LatestCommentLink = require './latest-comment-link'
 apiClient = require 'panoptes-client/lib/api-client'
 getSubjectLocation = require '../lib/get-subject-location'
 
-`import Thumbnail from '../components/thumbnail';`
+# `import Thumbnail from '../components/thumbnail';`
+Thumbnail = require('../components/thumbnail').default
 
 module.exports = React.createClass
   displayName: 'TalkDiscussionPreview'
@@ -15,6 +16,9 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+  
+  getDefaultProps: ->
+    project: {}
 
   getInitialState: ->
     subject: null
@@ -43,7 +47,7 @@ module.exports = React.createClass
       {owner, name} = @props.params
       "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
-    else if @props.project # otherwise fetch from project
+    else if @props.project.slug # otherwise fetch from project
       [owner, name] = @props.project.slug.split('/')
       "/projects/#{owner}/#{name}/talk/#{discussion.board_id}/#{discussion.id}"
 
