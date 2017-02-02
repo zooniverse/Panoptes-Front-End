@@ -78,9 +78,6 @@ module.exports = React.createClass
     tutorial: {}
     user: null
 
-  componentDidMount: ->
-    @props.geordi.makeHandler 'tutorial-completion'
-
   componentWillUnmount: ->
     @handleUnmount()
 
@@ -126,8 +123,9 @@ module.exports = React.createClass
 
   logToGeordi: (datetime) ->
     @props.geordi.logEvent {
-      type: 'tutorial-completion'
-      user: @props.user.id
-      tutorial: @props.tutorial.id
-      completed_at: datetime
+      type: "tutorial-completion"
+      data: {
+        tutorial: @props.tutorial.id
+        tutorialCompleted: datetime
+      }
     }

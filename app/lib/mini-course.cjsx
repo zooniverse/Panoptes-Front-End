@@ -109,8 +109,6 @@ module.exports = React.createClass
     optOut: false
 
   componentDidMount: ->
-    @props.geordi.makeHandler 'tutorial-completion'
-
     # If user navigates away, record the next slide to load in prefs
     window.addEventListener 'beforeunload', @handleProjectPreferencesOnUnmount
 
@@ -168,8 +166,9 @@ module.exports = React.createClass
   logToGeordi: (datetime) ->
     @props.geordi.logEvent {
       type: 'mini-course-completion'
-      user: @props.user.id
-      minicourse: @props.minicourse.id
-      completed_at: datetime
+      data: {
+        minicourse: @props.minicourse.id
+        minicourseCompletedAt: datetime
+      }
     }
 
