@@ -16,6 +16,9 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+  
+  getDefaultProps: ->
+    project: {}
 
   getInitialState: ->
     subject: null
