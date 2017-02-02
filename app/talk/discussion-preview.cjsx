@@ -5,7 +5,8 @@ LatestCommentLink = require './latest-comment-link'
 apiClient = require 'panoptes-client/lib/api-client'
 getSubjectLocation = require '../lib/get-subject-location'
 
-`import Thumbnail from '../components/thumbnail';`
+# `import Thumbnail from '../components/thumbnail';`
+Thumbnail = require('../components/thumbnail').default
 
 module.exports = React.createClass
   displayName: 'TalkDiscussionPreview'
