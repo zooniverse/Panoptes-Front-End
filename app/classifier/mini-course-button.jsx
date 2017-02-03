@@ -6,8 +6,8 @@ class MiniCourseButton extends RestartButton {
     return (props.dialog) && (props.dialog.steps.length > 0) && (props.user);
   }
 
-  getCallback(state, props) {
-    return props.Dialog.restart.bind(props.Dialog, props.dialog, props.preferences, props.project, props.user);
+  getCallback(state, props, context) {
+    return props.Dialog.restart.bind(props.Dialog, props.dialog, props.preferences, props.project, props.user, context.geordi);
   }
 }
 

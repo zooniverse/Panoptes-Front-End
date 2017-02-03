@@ -6,8 +6,8 @@ class TutorialButton extends RestartButton {
     return (props.dialog) && (props.dialog.steps.length > 0);
   }
 
-  getCallback(state, props) {
-    return props.Dialog.start.bind(props.Dialog, props.dialog, props.user);
+  getCallback(state, props, context) {
+    return props.Dialog.start.bind(props.Dialog, props.dialog, props.user, props.preferences, context.geordi);
   }
 }
 

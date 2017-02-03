@@ -18,7 +18,7 @@ class RestartButton extends React.Component {
   render() {
     // state and props are passed into getCallback and shouldRender
     // to avoind binding a sub-class function to the parent class `this`
-    const onClick = this.getCallback(this.state, this.props);
+    const onClick = this.getCallback(this.state, this.props, this.context);
     const {className, style} = this.props;
     if (this.shouldRender(this.state, this.props)) {
       return (
@@ -30,6 +30,10 @@ class RestartButton extends React.Component {
       return null;
     }
   }
+}
+
+RestartButton.contextTypes = {
+  geordi: React.PropTypes.object
 }
 
 RestartButton.defaultProps = {

@@ -23,7 +23,7 @@ module.exports = React.createClass
       else
         Promise.resolve()
 
-    start: (minicourse, projectPreferences, user) ->
+    start: (minicourse, projectPreferences, user, geordi) ->
       MiniCourseComponent = this
       if minicourse.steps.length isnt 0
         awaitMiniCourseMedia = minicourse.get 'attached_images'
@@ -37,7 +37,7 @@ module.exports = React.createClass
             mediaByID
 
         awaitMiniCourseMedia.then (mediaByID) =>
-          Dialog.alert(<MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} />, {
+          Dialog.alert(<MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} geordi={geordi} />, {
             className: 'mini-course-dialog',
             required: true,
             closeButton: true,
@@ -46,7 +46,7 @@ module.exports = React.createClass
             .catch =>
               null # We don't really care if the user canceled or completed the tutorial.
 
-    restart: (minicourse, projectPreferences, project, user) ->
+    restart: (minicourse, projectPreferences, project, user, geordi) ->
       resetPreferences = {
         "preferences.minicourses.opt_out.id_#{minicourse.id}": false,
         "preferences.minicourses.slide_to_start.id_#{minicourse.id}": 0
@@ -58,17 +58,18 @@ module.exports = React.createClass
         if projectPreferences?.preferences.minicourses?
           projectPreferences.update resetPreferences
           projectPreferences.save().then =>
-            @start minicourse, projectPreferences, user
+            @start minicourse, projectPreferences, user, geordi
         else
           # Create default preferences if they don't exist
           @createProjectPreferences(projectPreferences, minicourse.id, project.id).then (newProjectPreferences) =>
-            @start minicourse, newProjectPreferences, user
 
-    startIfNecessary: (minicourse, preferences, project, user) ->
+            @start minicourse, newProjectPreferences, user, geordi
+
+    startIfNecessary: (minicourse, preferences, project, user, geordi) ->
       if user? && minicourse?
         @checkIfCompletedOrOptedOut(minicourse, preferences, project, user).then (completed) =>
           unless completed
-            @start minicourse, preferences, user
+            @start minicourse, preferences, user, geordi
 
     checkIfCompletedOrOptedOut: (minicourse, projectPreferences, project, user) ->
       if user? and projectPreferences.preferences?.minicourses?
@@ -98,6 +99,7 @@ module.exports = React.createClass
       projectPreferences
 
   getDefaultProps: ->
+    geordi: {}
     media: {}
     minicourse: {}
     projectPreferences: {}
@@ -153,8 +155,20 @@ module.exports = React.createClass
 
       @props.projectPreferences.update "preferences.minicourses.completed_at.id_#{@props.minicourse.id}": now
       @props.projectPreferences.save()
+
+      @logToGeordi now
     else
       nextSlide = @props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"] + 1
 
       @props.projectPreferences.update "preferences.minicourses.slide_to_start.id_#{@props.minicourse.id}": nextSlide
       @props.projectPreferences.save()
+
+  logToGeordi: (datetime) ->
+    @props.geordi.logEvent {
+      type: 'mini-course-completion'
+      data: {
+        minicourse: @props.minicourse.id
+        minicourseCompletedAt: datetime
+      }
+    }
+
