@@ -286,8 +286,8 @@ Classifier = React.createClass
                 <RestartButton
                   className="minor-button"
                   preferences={@props.preferences}
-                  shouldRender={(props.dialog) && (props.dialog.steps.length > 0)}
-                  start={Tutorialstart.bind(Tutorial, @props.tutorial, @props.user, @props.preferences, @context.geordi)}
+                  shouldRender={(@props.tutorial) && (@props.tutorial.steps.length > 0)}
+                  start={Tutorial.start.bind(Tutorial, @props.tutorial, @props.user, @props.preferences, @context.geordi)}
                   style={marginTop: '2em'}
                   user={@props.user}
                   workflow={@props.workflow}
@@ -305,7 +305,7 @@ Classifier = React.createClass
                   <RestartButton
                     className="minor-button"
                     preferences={@props.preferences}
-                    shouldRender={(@props.minicourse) && (@props.minicourse.steps.length > 0) && (@props.user)}
+                    shouldRender={(@props.minicourse) && (@props.user) && (@props.minicourse.steps.length > 0)}
                     start={MiniCourse.restart.bind(MiniCourse, @props.minicourse, @props.preferences, @props.user, @context.geordi)}
                     style={marginTop: '2em'}
                     user={@props.user}
