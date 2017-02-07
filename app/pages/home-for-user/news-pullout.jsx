@@ -91,7 +91,7 @@ const NewsSection = React.createClass({
     const timestamp = moment(new Date(project.updated_at)).fromNow();
     return (<div key={project.id} className="home-page-news-pullout news-section__link">
       <a href={link}>
-        <h5 className="home-page-news-pullout news-section__title">{project.name} </h5>
+        <h5 className="home-page-news-pullout news-section__title">{project.display_name} </h5>
         <h5> has been updated! </h5>
         <p className="home-page-news-pullout news-section__timestamp">{timestamp}</p>
       </a>

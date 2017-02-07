@@ -320,7 +320,7 @@ export default class HomePageForUser extends React.Component {
               </div>
             </button>
 
-            <NewsSection updatedProjects={this.state.updatedProjects} toggleNews={this.toggleNews} showNews={this.state.showNews} />
+            <NewsSection updatedProjects={this.state.ribbonData.slice(0,3)} toggleNews={this.toggleNews} showNews={this.state.showNews} />
 
           </Pullout>
         </div>
