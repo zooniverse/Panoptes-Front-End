@@ -326,6 +326,9 @@ const Publications = {
     ]},
     {name: "Season Spotter",
     publications: [
+      {citation: "Volunteer recruitment and retention in online citizen science projects using marketing strategies: lessons from Season Spotter, Crall+ 2017.",
+      href: "https://jcom.sissa.it/sites/default/files/documents/JCOM_1601_2017_A01.pdf",
+      date: "2017"},
       {citation: "Season Spotter: Using Citizen Science to Validate and Scale Plant Phenology from Near-Surface Remote Sensing, Kosmala+ 2016.",
       href: "http://www.mdpi.com/2072-4292/8/9/726",
       date: "August 23, 2016"}
@@ -395,6 +398,9 @@ const Publications = {
   meta: [
     {name: "Meta Studies",
     publications: [
+      {citation: "Assessing data quality in citizen science, Kosmala+ 2016.",
+      href: "http://biorxiv.org/content/early/2016/09/08/074104",
+      date: "2016"},
       {citation: "Giving Citizen Scientists a Chance: A Study of Volunteer-led Scientific Discovery, Straub 2016.",
       href: "http://theoryandpractice.citizenscienceassociation.org/articles/10.5334/cstp.40/",
       date: "2016"},
@@ -410,6 +416,9 @@ const Publications = {
       {citation: "Which Way Did They Go? Newcomer Movement through the Zooniverse, Jackson+ 2016.",
       href: "http://dl.acm.org/citation.cfm?id=2818048.2835197",
       date: "February - March 2016"},
+      {citation: "This Image Intentionally Left Blank: Mundane Images Increase Citizen Science Participation, Bowyer+ 2015.",
+      href: "http://www.humancomputation.com/2015/papers/45_Paper.pdf",
+      date: "2015"},
       {citation: "Defining and Measuring Success in Online Citizen Science: A Case Study of Zooniverse Projects, Cox+ 2015.",
       href: "http://eprints.whiterose.ac.uk/86535/",
       date: "Feb 2015"},
@@ -440,6 +449,12 @@ const Publications = {
       {citation: "Zooniverse: Observing the World’s Largest Citizen Science Platform, Simpson+ 2014.",
       href: "http://dl.acm.org/citation.cfm?id=2579215",
       date: "2014"},
+      {citation: '“Volunteering Versus Work for Pay: Incentives and Tradeoffs in Crowdsourcing, Mao+ 2013.',
+      href: "http://www.aaai.org/ocs/index.php/HCOMP/HCOMP13/paper/viewFile/7497/7408",
+      date: "2013"},
+      {citation: '“Why Stop Now? Predicting Worker Engagement in Online Crowdsourcing, Mao+ 2013.',
+      href: "http://research.microsoft.com/en-us/um/people/eckamar/papers/HCOMP12_engagement.pdf",
+      date: "2013"},
       {citation: '“I want to be a Captain! I want to be a Captain!": Gamification in the Old Weather citizen science project., Eveleigh+ 2013.',
       href: "http://discovery.ucl.ac.uk/1412171/",
       date: "2013"},
