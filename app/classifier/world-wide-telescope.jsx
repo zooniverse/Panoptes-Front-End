@@ -50,8 +50,8 @@ class StarChart {
     this.EQUATORIAL = 1;
     this.OTHER = 2;
 
-    let edges = [ [this.x, this.y], [this.x, this.y + this.height], [this.x + this.width, this.y], [this.x + this.width, this.y + this.height] ];
-    this.corners = edges.forEach((pt) => {
+    const edges = [[this.x, this.y], [this.x, this.y + this.height], [this.x + this.width, this.y], [this.x + this.width, this.y + this.height]];
+    this.corners = edges.map((pt) => {
       return new SimplePoint(pt[0], pt[1]);
     });
   }
@@ -64,14 +64,13 @@ class StarChart {
   }
 
   calculateDistance(p1, p2) {
-    return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+    return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2)); // eslint-disable-line
   }
 
   closestCornerDistance(p) {
-    const distance = this.corners.forEach((corner) => {
+    const distance = this.corners.map((corner) => {
       return this.calculateDistance(p, corner);
     });
-
     return {
       chart: this,
       distance: (Math.min.apply(null, distance))
@@ -96,7 +95,7 @@ class StarChart {
     if (!this.midpoints) {
       this.calculateMidpoints();
     }
-    const distances = this.midpoint.forEach((midpoint) => {
+    const distances = this.midpoints.map((midpoint) => {
       return this.calculateDistance(p, midpoint);
     });
     return {
@@ -138,7 +137,7 @@ class StarChart {
   }
 
   findLabels(range, labels) {
-    const midpoint = {x: (range[0].x + range[1].x) / 2, y: (range[1].y + range[1].y) / 2};
+    const midpoint = { x: (range[0].x + range[1].x) / 2, y: (range[1].y + range[1].y) / 2 };
     let label = null;
     let distance = Infinity;
     labels.forEach((point) => {
@@ -153,10 +152,11 @@ class StarChart {
   buildAxes() {
     if (this.axisPoints.length >= 3 && this.axisLabels.length >= 2) {
       this.valid = true;
-      xRange = (this.findAxis, this.axisPoints).xAxis.sort( (a, b) => {a.x > b.x} );
-      yRange = (this.findAxis, this.axisPoints).yAxis.sort( (a, b) => {a.y > b.y} );
-      xLabel = this.findLabels(xRange, this.axisLabels);
-      yLabel = this.findLabels(yRange, this.axisLabels);
+      console.log(this.findAxis(), this.axisPoints()).xAxis;
+      const xRange = (this.findAxis, this.axisPoints).xAxis.sort((a, b) => { return a.x > b.x; });
+      const yRange = (this.findAxis, this.axisPoints).yAxis.sort((a, b) => { return a.y > b.y; });
+      const xLabel = this.findLabels(xRange, this.axisLabels);
+      const yLabel = this.findLabels(yRange, this.axisLabels);
       this.xAxis = new Axis(xRange, xLabel.value);
       this.yAxis = new Axis(yRange, yLabel.value);
     }
@@ -164,39 +164,39 @@ class StarChart {
 
   coordinateSystem() {
     let coords = StarChart.OTHER;
-    if ((this.xAxis.unit == Axis.RA && this.yAxis.unit == Axis.DEC) || (this.xAxis.unit == Axis.DEC && this.yAxis.unit == Axis.RA)) {
+    if ((this.xAxis.unit === Axis.RA && this.yAxis.unit === Axis.DEC) || (this.xAxis.unit === Axis.DEC && this.yAxis.unit === Axis.RA)) {
       coords = StarChart.EQUATORIAL;
     }
-    if ((this.xAxis.unit == Axis.RA1950 && this.yAxis.unit == Axis.DEC1950) || (this.xAxis.unit == Axis.DEC1950 && this.yAxis.unit == Axis.RA1950)) {
+    if ((this.xAxis.unit === Axis.RA1950 && this.yAxis.unit === Axis.DEC1950) || (this.xAxis.unit === Axis.DEC1950 && this.yAxis.unit === Axis.RA1950)) {
       coords = StarChart.EQUATORIAL;
     }
-    if ((this.xAxis.unit == Axis.GLAT && this.yAxis.unit == Axis.GLON) || (this.xAxis.unit == Axis.GLON && this.yAxis.unit == Axis.GLAT)) {
+    if ((this.xAxis.unit === Axis.GLAT && this.yAxis.unit === Axis.GLON) || (this.xAxis.unit === Axis.GLON && this.yAxis.unit === Axis.GLAT)) {
       coords = StarChart.GALACTIC;
     }
     return coords;
   }
 }
-
+//
 class Plate {
   constructor(starChart, url) {
     let makeStarCoord;
     this.starChart = starChart;
     this.url = url;
     this.imageBounds = this.starChart.bounds();
-    let [xRange, yRange] = [this.starChart.xAxis.range, this.starChart.yAxis.range];
-
+    const [xRange, yRange] = [this.starChart.xAxis.range, this.starChart.yAxis.range];
+//
     this.xyCorners = [
       new SimplePoint(xRange[0].x, yRange[0].y), new SimplePoint(xRange[1].x, yRange[0].y),
       new SimplePoint(xRange[1].x, yRange[1].y), new SimplePoint(xRange[0].x, yRange[1].y)
     ];
 
-    if (this.starChart.coordinateSystem() == StarChart.EQUATORIAL) {
-     makeStarCoord = StarCoord.fromRaDec;
+    if (this.starChart.coordinateSystem() === StarChart.EQUATORIAL) {
+      makeStarCoord = StarChart.fromRaDec;
     } else {
-     makeStarCoord = StarCoord.fromGlatGlon;
+      makeStarCoord = StarChart.fromGlatGlon;
     }
-    const xAxisDec = (this.starChart.xAxis.unit == Axis.DEC || this.starChart.xAxis.unit == Axis.DEC1950 || this.starChart.xAxis.unit == Axis.GLAT) ? true : false;
-    const epoch1950 = (this.starChart.xAxis.unit == Axis.DEC1950 || this.starChart.xAxis.unit == Axis.RA1950) ? true : false;
+    const xAxisDec = (this.starChart.xAxis.unit === Axis.DEC || this.starChart.xAxis.unit === Axis.DEC1950 || this.starChart.xAxis.unit === Axis.GLAT);
+    const epoch1950 = (this.starChart.xAxis.unit === Axis.DEC1950 || this.starChart.xAxis.unit === Axis.RA1950);
     this.fullValues(xRange);
     this.fullValues(yRange);
     this.coordCorners = [
@@ -209,39 +209,40 @@ class Plate {
     let difference;
     let secondValue;
     const firstValue = ranges[0].value.match(/(-)?\d+(?:\.\d+)?/g);
-    if (!!ranges[1].value) {
+    if (ranges[1].value) {
       secondValue = ranges[1].value.match(/(-)?\d+(?:\.\d+)?/g);
     }
-    if (!!secondValue.length) {
+    if (secondValue.length) {
       difference = Math.abs(firstValue.length - secondValue.length);
     }
     if (difference > 0 && secondValue) {
-      let longerNumber = (firstValue.length > secondValue.length) ? firstValue : secondValue;
-      let shorterNumber = (secondValue.length < firstValue.length) ? secondValue : firstValue;
-      index = 0;
+      const longerNumber = (firstValue.length > secondValue.length) ? firstValue : secondValue;
+      const shorterNumber = (secondValue.length < firstValue.length) ? secondValue : firstValue;
+      let index = 0;
       do {
         shorterNumber.splice(index, 0, longerNumber[index]);
-        index = index + 1;
+        index += 1;
       } while (longerNumber.length !== shorterNumber.length);
-      return [ranges[0].value, ranges[1].value] = [firstValue.join(" "), secondValue.join(" ")];
+      [ranges[0].value, ranges[1].value] = [firstValue.join(' '), secondValue.join(' ')];
     }
+    return null;
   }
 
   scale() {
-    const [star1, star2] = [ this.coordCorners[0], this.coordCorners[2] ];
-    const [xy1, xy2] = [ this.xyCorners[0], this.xyCorners[2] ];
+    const [star1, star2] = [this.coordCorners[0], this.coordCorners[2]];
+    const [xy1, xy2] = [this.xyCorners[0], this.xyCorners[2]];
     const averageDec = (star1.dec + star2.dec) / 2;
-    const deltaRA = ((star2.ra - star1.ra) * Math.cos(averageDec * Math.PI/180)) * 3600;
+    const deltaRA = ((star2.ra - star1.ra) * Math.cos(averageDec * (Math.PI / 180))) * 3600;
     const deltaDec = (star2.dec - star1.dec) * 3600;
-    const angularSep = Math.sqrt(Math.pow(deltaRA, 2) + Math.pow(deltaDec, 2));
-    const pixelSep = Math.sqrt(Math.pow(xy1.x - xy2.x, 2) + Math.pow(xy1.y - xy2.y, 2));
+    const angularSep = Math.sqrt(Math.pow(deltaRA, 2) + Math.pow(deltaDec, 2)); // eslint-disable-line
+    const pixelSep = Math.sqrt(Math.pow(xy1.x - xy2.x, 2) + Math.pow(xy1.y - xy2.y, 2)); // eslint-disable-line
     return angularSep / pixelSep;
   }
 
   centerCoords() {
-    s = this.starChart;
-    const upperY = s.height - (s.yAxis.range[0].y - s.corners[0].y)
-    const lowerY = s.corners[3].y - s.yAxis.range[1].y
+    const s = this.starChart;
+    const upperY = s.height - (s.yAxis.range[0].y - s.corners[0].y);
+    const lowerY = s.corners[3].y - s.yAxis.range[1].y;
     return {
       x: ((s.xAxis.range[0].x - s.corners[0].x) + (s.xAxis.range[1].x - s.corners[0].x)) / 2,
       y: (upperY + lowerY) / 2,
@@ -251,14 +252,14 @@ class Plate {
   }
 
   getCropUrl() {
-    url = this.url.replace(/^https?\:\/\//i, "");
-    // TODO: we need to account for the fact that the size of the image might be different than
+    const url = this.url.replace(/^https?\:\/\//i, '');
+    //  TODO: we need to account for the fact that the size of the image might be different than
     // the size that it is displayed
-    return `http://imgproc.zooniverse.org/crop/${this.starChart.width}/${this.starChart.height}/${this.starChart.x}/${this.starChart.y}?u=${url}`
+    return `http://imgproc.zooniverse.org/crop/${this.starChart.width}/${this.starChart.height}/${this.starChart.x}/${this.starChart.y}?u=${url}`;
   }
 
   computeRotation() {
-    return (this.starChart.xAxis.unit == Axis.RA || this.starChart.xAxis.unit == Axis.RA1950 || this.starChart.xAxis.unit == Axis.GLON) ? 180 : 90;
+    return (this.starChart.xAxis.unit === Axis.RA || this.starChart.xAxis.unit === Axis.RA1950 || this.starChart.xAxis.unit === Axis.GLON) ? 180 : 90;
   }
 
   computeName() {
@@ -266,16 +267,16 @@ class Plate {
   }
 
   getWwtUrl() {
-    const base = "http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx";
+    const base = 'http://www.worldwidetelescope.org/wwtweb/ShowImage.aspx';
     const rotation = this.computeRotation();
     const name = this.computeName();
     const center = this.centerCoords();
-    return `${base}?name=${name}&ra=${center.ra}&dec=${center.dec}&x=${center.x}&y=${center.y}&scale=${this.scale()}&rotation=${rotation}&imageurl=${this.getCropUrl()}`
+    return `${base}?name=${name}&ra=${center.ra}&dec=${center.dec}&x=${center.x}&y=${center.y}&scale=${this.scale()}&rotation=${rotation}&imageurl=${this.getCropUrl()}`;
   }
 }
 
 class StarCoord {
-  constructor(ra, dec){
+  constructor(ra, dec) {
     this.ra = ra;
     this.dec = dec;
     this.s = StarCoord;
@@ -308,6 +309,7 @@ class StarCoord {
   }
 
   fromGlatGlon(xAxis, yAxis, xAxisGlat, epoch1950) {
+    const s = this.s;
     let glat;
     let glon;
     if (xAxisGlat === true) {
@@ -316,18 +318,18 @@ class StarCoord {
     } else {
       glon = xAxis;
       glat = yAxis;
-      glat = glat.replace(/[^\d.-]/g,'');
-      glon = glon.replace(/[^\d.-]/g,'');
+      glat = glat.replace(/[^\d.-]/g, '');
+      glon = glon.replace(/[^\d.-]/g, '');
     }
-    const [b, l, pole_ra, pole_dec, posangle] = [ s._toRadians(glat), s._toRadians(glon), s._toRadians(192.859508), s._toRadians(27.128336), s._toRadians(122.932-90.0) ];
-    const ra = this.s._toDegrees(Math.atan2((Math.cos(b) * Math.cos(l - posangle)), (Math.sin(b) * Math.cos(pole_dec) - Math.cos(b) * Math.sin(pole_dec) * Math.sin(l-posangle))) + pole_ra)
-    const dec = this.s._toDegrees(Math.asin(Math.cos(b) * Math.cos(pole_dec) * Math.sin(l - posangle) + Math.sin(b) * Math.sin(pole_dec)))
+    const [b, l, pole_ra, pole_dec, posangle] = [ s._toRadians(glat), s._toRadians(glon), s._toRadians(192.859508), s._toRadians(27.128336), s._toRadians(122.932 - 90.0)];
+    const ra = s._toDegrees(Math.atan2((Math.cos(b) * Math.cos(l - posangle)), ((Math.sin(b) * Math.cos(pole_dec)) - (Math.cos(b) * Math.sin(pole_dec) * Math.sin(l - posangle)))) + pole_ra)
+    const dec = s._toDegrees((Math.asin(Math.cos(b) * Math.cos(pole_dec) * Math.sin(l - posangle)) + (Math.sin(b) * Math.sin(pole_dec))))
     return new StarCoord(ra, dec);
   }
 
   _epochConvert(ra, dec) {
-    const RA2000 = ra + 0.640265 + 0.278369 * Math.sin(this._toDegrees(ra)) * Math.tan(this._toDegrees(dec));
-    const DEC2000 = dec + 0.278369 * Math.cos(this._toDegrees(ra));
+    const RA2000 = ra + 0.640265 + (0.278369 * Math.sin(this._toDegrees(ra)) * Math.tan(this._toDegrees(dec)));
+    const DEC2000 = dec + (0.278369 * Math.cos(this._toDegrees(ra)));
     return [RA2000, DEC2000];
   }
 
@@ -357,7 +359,7 @@ class StarCoord {
       ?                     // this term is optional
       ///`
     const match = reg.exec(str);
-    isNeg = match[1] == '-';
+    isNeg = match[1] === '-';
     match.shift();
     if (dec === true) {
       return this.s._decConvert(match, isNeg);
@@ -371,8 +373,8 @@ class StarCoord {
 
     return (parseInt(match[1], 10) * 15 +
     (parseInt(match[2], 10) / 4 || 0) +
-    (parseInt(match[3]) / 240 || 0)) *
-    multiplier
+    (parseInt(match[3], 10) / 240 || 0)) *
+    multiplier;
   }
 
   _decConvert(match, isNeg) {
@@ -380,7 +382,7 @@ class StarCoord {
 
     return (parseInt(match[1], 10) +
     (parseInt(match[2], 10) / 60 || 0) +
-    (parseInt(match[3]) / 3600 || 0)) *
+    (parseInt(match[3], 10) / 3600 || 0)) *
     multiplier;
   }
 }
@@ -396,27 +398,27 @@ export default class WorldWideTelescope extends React.Component {
     });
 
     // parse chart rectangles
-    this.charts = telescopeAnnotations[0].value.forEach((annotation) => {
+    this.charts = telescopeAnnotations[0].value.map((annotation) => {
       return new StarChart(annotation);
     });
 
     // assign axis points to charts
     telescopeAnnotations[1].value.forEach((annotation) => {
       const point = new AxisPoint(annotation);
-      const distances = this.charts.forEach((chart) => {
+      const distances = this.charts.map((chart) => {
         return chart.closestCornerDistance(point);
       });
-      let closest = distances.sort((a, b) => a.distance > b.distance)[0].chart
+      const closest = distances.sort((a, b) => { return a.distance > b.distance; })[0].chart;
       closest.addAxisPoint(point);
     });
 
     // assign axis labels to charts
     telescopeAnnotations[2].value.forEach((annotation) => {
       const label = new AxisLabel(annotation);
-      const distances = this.charts.forEach((chart) => {
+      const distances = this.charts.map((chart) => {
         return chart.closestMidpointDistance(label);
       });
-      const closest = distances.sort((a, b) => a.distance > b.distance)[0].chart
+      const closest = distances.sort((a, b) => { return a.distance > b.distance; })[0].chart;
       closest.addAxisLabel(label);
     });
 
@@ -426,20 +428,20 @@ export default class WorldWideTelescope extends React.Component {
   }
 
   render() {
-    const subjImage = this.props.subject.locations[0]["image/jpeg"];
+    const subjImage = this.props.subject.locations[0]['image/jpeg'];
     const plates = [];
 
     try {
       this.parseClassification();
+
+      this.charts.forEach((chart) => {
+        if (chart.valid) {
+          plates.push(new Plate(chart, subjImage));
+        }
+      });
     } catch (e) {
       console.warn(e);
     }
-
-    this.charts.forEach((chart) => {
-      if (chart.valid) {
-        plates.push(new Plate(chart, subjImage));
-      }
-    });
 
     return (
       <div>
@@ -455,5 +457,18 @@ export default class WorldWideTelescope extends React.Component {
       </div>
     );
   }
-
 }
+
+WorldWideTelescope.propTypes = {
+  annotations: React.PropTypes.arrayOf(React.PropTypes.object),
+  subject: React.PropTypes.shape({
+    locations: React.PropTypes.array
+  }),
+  workflow: React.PropTypes.shape({
+    tasks: React.PropTypes.object
+  })
+};
+
+WorldWideTelescope.defaultProps = {
+  annotations: []
+};

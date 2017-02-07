@@ -11,12 +11,12 @@ TriggeredModalForm = require 'modal-form/triggered'
 isAdmin = require '../lib/is-admin'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
-WorldWideTelescope = require './world-wide-telescope'
 GridTool = require './drawing-tools/grid'
 Intervention = require '../lib/intervention'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 Shortcut = require './tasks/shortcut'
+`import WorldWideTelescope from './world-wide-telescope';`
 `import FrameAnnotator from './frame-annotator';`
 `import TutorialButton from './tutorial-button';`
 `import MiniCourseButton from './mini-course-button';`
