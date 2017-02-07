@@ -2,7 +2,7 @@ React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../components/change-listener'
 SubjectViewer = require '../components/subject-viewer'
-ClassificationSummary = require './classification-summary'
+`import ClassificationSummary from './classification-summary';`
 {Link} = require 'react-router'
 tasks = require './tasks'
 {getSessionID} = require '../lib/session'
