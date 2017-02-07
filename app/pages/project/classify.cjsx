@@ -5,7 +5,7 @@ TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
 counterpart = require 'counterpart'
 `import FinishedBanner from './finished-banner';`
-Classifier = require '../../classifier'
+`import Classifier from '../../classifier';`
 seenThisSession = require '../../lib/seen-this-session'
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
