@@ -1,7 +1,22 @@
 import React from 'react';
 import tasks from './tasks/index.coffee';
+// Not sure why this import statement is here...
+import apiClient from 'panoptes-client/lib/api-client';
+import { TextSplit } from 'seven-ten';
 
 const ClassificationSummary = (props) => {
+  let firstTimeClassified;
+  if ((props.classificationCount) && (props.classificationCount === 0)) {
+    firstTimeClassified = (
+      <TextSplit
+        splitKey="subject.first-to-classify"
+        textKey="message"
+        splits={props.splits}
+        default={''}
+        elementType={"p"}
+      />
+    );
+  }
   let body = 'No annotations';
   if ((props.classification) && (props.classification.annotations.length > 0)) {
     body = [];
@@ -18,6 +33,7 @@ const ClassificationSummary = (props) => {
   }
   return (
     <div className="classification-summary">
+      {firstTimeClassified}
       {body}
     </div>
   );
@@ -26,12 +42,15 @@ const ClassificationSummary = (props) => {
 ClassificationSummary.defaultProps = {
   workflow: null,
   classification: null,
+  classificationCount: null
 };
 
 ClassificationSummary.propTypes = {
   workflow: React.PropTypes.object,
   classification: React.PropTypes.object,
+  classificationCount: React.PropTypes.number,
   onToggle: React.PropTypes.func,
+  splits: React.PropTypes.object
 };
 
 export default ClassificationSummary;
