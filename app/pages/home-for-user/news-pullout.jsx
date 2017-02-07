@@ -101,6 +101,10 @@ const NewsSection = React.createClass({
   render() {
     const projLink = `${window.location.origin}/projects/${this.state.newestProject.slug}`;
     const avatarSrc = !!this.state.newestAvatar ? this.state.newestAvatar.src : null;
+    const recentProjects = 
+      this.props.updatedProjects
+      .sort((a, b) => { return new Date(b.updated_at) - new Date(a.updated_at); })
+      .slice(0,3);
 
     return (
       <div className={"home-page-news-pullout news-main" + (this.props.showNews ? " active" : "")}>
@@ -119,7 +123,7 @@ const NewsSection = React.createClass({
 
           <div className="home-page-news-pullout news-section">
             <h4> Participated Project Updates </h4>
-            {this.props.updatedProjects.map((project) => {
+            {recentProjects.map((project) => {
               return this.renderUpdatedProjects(project);
             })}
           </div>
