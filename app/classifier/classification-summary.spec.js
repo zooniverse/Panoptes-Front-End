@@ -13,19 +13,19 @@ const workflow = {
       help: '',
       answers: [
         { label: 'answer one' },
-        { label: 'answer two' },
-      ],
-    },
-  },
+        { label: 'answer two' }
+      ]
+    }
+  }
 };
 
 const classification = {
   annotations: [
     {
       task: 'T0',
-      value: 0,
-    },
-  ],
+      value: 0
+    }
+  ]
 };
 
 describe('ClassificationSummary', function () {
