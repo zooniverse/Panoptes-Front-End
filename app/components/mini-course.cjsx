@@ -107,8 +107,7 @@ module.exports = React.createClass
       @handleProjectPreferencesOnUnmount()
 
   render: ->
-    stepIndex = if @props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"] then @props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"] else 0
-    step = @props.minicourse.steps[stepIndex]
+    step = @props.minicourse.steps[@props.projectPreferences.preferences.minicourses.slide_to_start["id_#{@props.minicourse.id}"]]
     <div className="mini-course-dialog__steps">
       <MediaCard className="steps__step" src={@props.media[step.media]?.src}>
         <Markdown>{step.content}</Markdown>
