@@ -5,7 +5,7 @@ import { TextSplit } from 'seven-ten';
 
 const ClassificationSummary = (props) => {
   let firstTimeClassified;
-  if ((props.classificationCount) && (props.classificationCount === 0)) {
+  if (props.classificationCount === 0) {
     firstTimeClassified = (
       <TextSplit
         splitKey="subject.first-to-classify"

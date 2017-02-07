@@ -2,6 +2,7 @@
 /* global describe, it, beforeEach */
 import React from 'react';
 import ClassificationSummary from './classification-summary';
+import { TextSplit } from 'seven-ten';
 import assert from 'assert';
 import { shallow } from 'enzyme';
 
@@ -49,5 +50,29 @@ describe('ClassificationSummary', function () {
     it('should render without crashing', function () {
       shallow(<ClassificationSummary />);
     });
+  });
+  describe('first to classify experiment', function(){
+    const splits = {
+      'subject.first-to-classify': {
+        key: 'subject.first-to-classify',
+        state: 'active',
+        variant: {
+          value: {
+            message: 'You\'re the first!'
+          }
+        }
+      }
+    };
+          
+    it('should show a message if the classification count is 0', function() {
+      const wrapper = shallow(<ClassificationSummary workflow={workflow} classification={classification} classificationCount={0} splits={splits} />);
+      assert.equal(wrapper.find(TextSplit).find({splitKey:'subject.first-to-classify', textKey:'message'}).length, 1);
+    });
+    
+    it('should not show a message if the classification count is greater than 0', function() {
+      const wrapper = shallow(<ClassificationSummary workflow={workflow} classification={classification} classificationCount={1} splits={splits} />);
+      assert.equal(wrapper.find(TextSplit).find({splitKey:'subject.first-to-classify', textKey:'message'}).length, 0);
+    });
+    
   });
 });
