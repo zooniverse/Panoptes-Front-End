@@ -1,6 +1,5 @@
 import React from 'react';
 import tasks from './tasks/index.coffee';
-// Not sure why this import statement is here...
 import apiClient from 'panoptes-client/lib/api-client';
 import { TextSplit } from 'seven-ten';
 
