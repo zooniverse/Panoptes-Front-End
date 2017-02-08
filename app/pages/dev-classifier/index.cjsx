@@ -1,7 +1,9 @@
 React = require 'react'
-Classifier = require '../../classifier'
+`import Classifier from '../../classifier';`
+# Classifier = require '../../classifier'
 mockData = require './mock-data'
-tasks = require '../../classifier/tasks'
+`import tasks from '../../classifier/tasks';`
+# tasks = require '../../classifier/tasks'
 
 ClassificationViewer = React.createClass
   getDefaultProps: ->
