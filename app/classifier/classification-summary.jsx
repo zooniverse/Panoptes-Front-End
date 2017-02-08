@@ -1,5 +1,4 @@
 import React from 'react';
-import tasks from './tasks/index.coffee';
 import { TextSplit } from 'seven-ten';
 import tasks from './tasks';
 
