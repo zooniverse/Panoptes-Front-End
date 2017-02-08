@@ -20,7 +20,7 @@ ComboTask = React.createClass
         Object.assign task: childTaskKey, defaultAnnotation
 
     isAnnotationComplete: (taskDescription, annotation, workflow) ->
-      taskTypes = require '..'
+      taskTypes = require('..').default
 
       method = if taskDescription.loosen_requirements
         'some'
