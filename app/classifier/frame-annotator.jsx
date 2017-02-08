@@ -10,8 +10,7 @@ export default class FrameAnnotator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      alreadySeen: false,
-      showWarning: false
+      alreadySeen: false
     };
     this.getScreenCurrentTransformationMatrix = this.getScreenCurrentTransformationMatrix.bind(this);
     this.getEventOffset = this.getEventOffset.bind(this);
@@ -55,14 +54,12 @@ export default class FrameAnnotator extends React.Component {
 
   // get current transformation matrix
   getScreenCurrentTransformationMatrix() {
-    const svg = this.refs.svgSubjectArea;
-    return svg.getScreenCTM();
+    return this.svgSubjectArea.getScreenCTM();
   }
 
   // find the original matrix for the SVG coordinate system
   getMatrixForWindowCoordsToSVGUserSpaceCoords() {
-    const transformationContainer = this.refs.transformationContainer;
-    return transformationContainer.getScreenCTM().inverse();
+    return this.transformationContainer.getScreenCTM().inverse();
   }
 
   // get the offset of event coordiantes in terms of the SVG coordinate system
@@ -84,8 +81,7 @@ export default class FrameAnnotator extends React.Component {
   // transforms the event coordinates
   // to points in the SVG coordinate system
   eventCoordsToSVGCoords(x, y) {
-    const svg = this.refs.svgSubjectArea;
-    const newPoint = svg.createSVGPoint();
+    const newPoint = this.svgSubjectArea.createSVGPoint();
     newPoint.x = x;
     newPoint.y = y;
     const matrixForWindowCoordsToSVGUserSpaceCoords = this.getMatrixForWindowCoordsToSVGUserSpaceCoords();
@@ -155,7 +151,7 @@ export default class FrameAnnotator extends React.Component {
     const svgProps = {};
 
     if (TaskComponent) {
-      ({BeforeSubject, InsideSubject, AfterSubject} = TaskComponent);
+      ({ BeforeSubject, InsideSubject, AfterSubject } = TaskComponent);
     }
 
     const hookProps = {
@@ -190,8 +186,8 @@ export default class FrameAnnotator extends React.Component {
           {!!BeforeSubject && (
             <BeforeSubject {...hookProps} />)}
 
-          <svg ref="svgSubjectArea" className="subject" style={svgStyle} viewBox={createdViewBox} {...svgProps}>
-            <g ref="transformationContainer" transform={this.props.transform}>
+          <svg ref={(svg) => { this.svgSubjectArea = svg; }} className="subject" style={svgStyle} viewBox={createdViewBox} {...svgProps}>
+            <g ref={(g) => { this.transformationContainer = g; }} transform={this.props.transform}>
               <rect ref={(rect) => { this.sizeRect = rect; }} width={this.props.naturalWidth} height={this.props.naturalHeight} fill="rgba(0, 0, 0, 0.01)" fillOpacity="0.01" stroke="none" />
               {type === 'image' && (
                 <Draggable onDrag={this.props.panByDrag} disabled={this.props.disabled}>
