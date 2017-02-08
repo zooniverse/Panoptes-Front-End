@@ -32,7 +32,7 @@ ComboTaskEditor = React.createClass
     @props.onChange @props.task
 
   renderSubtask: (taskKey, i) ->
-    tasks = require '..'
+    tasks = require('..').default
     taskDescription = @props.workflow.tasks[taskKey]
     taskDescription._key ?= Math.random()
     TaskComponent = tasks[taskDescription.type]
@@ -42,7 +42,7 @@ ComboTaskEditor = React.createClass
     </li>
 
   render: ->
-    tasks = require '..'
+    tasks = require('..').default
     <div>
       <p>Add any number of tasks here and they'll be shown in one step.</p>
       {if @props.task.tasks.length is 0

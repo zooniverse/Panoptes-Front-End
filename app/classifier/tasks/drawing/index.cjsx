@@ -4,7 +4,7 @@ Summary = require './summary'
 MarkingInitializer = require './marking-initializer'
 MarkingsRenderer = require './markings-renderer'
 HidePreviousMarksToggle = require './hide-previous-marks-toggle'
-GenericTask = require '../generic'
+GenericTask = require('../generic.jsx').default
 {Markdown} = require 'markdownz'
 icons = require './icons'
 drawingTools = require '../../drawing-tools'
@@ -58,7 +58,7 @@ module.exports = React.createClass
         (marksByTool[i] ? 0) >= (toolDescription.min ? 0)
 
     areMarksComplete: (task, annotation) ->
-      tasks = require '..' # Circular
+      tasks = require('..').default # Circular
       for mark in annotation.value
         toolDescription = task.tools[mark.tool]
         for detail, i in toolDescription.details ? [] when detail.required

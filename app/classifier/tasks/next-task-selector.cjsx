@@ -15,7 +15,7 @@ module.exports = React.createClass
     onChange: NOOP
 
   render: ->
-    tasks = require '.' # Work around circular dependency.
+    tasks = require('.').default # Work around circular dependency.
 
     <select name={@props.name} value={@props.value} onChange={@props.onChange}>
       <option value="">(End of classification!)</option>
