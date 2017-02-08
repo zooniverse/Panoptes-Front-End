@@ -8,6 +8,8 @@ FrameViewer = require './frame-viewer'
 classnames = require 'classnames'
 FlagSubjectButton = require './flag-subject-button'
 SignInPrompt = require '../partials/sign-in-prompt'
+seenThisSession = require('../lib/seen-this-session');
+WarningBanner = require('../classifier/warning-banner').default;
 
 NOOP = Function.prototype
 
@@ -48,12 +50,16 @@ module.exports = React.createClass
     workflow: null
 
   getInitialState: ->
+    alreadySeen: false
     loading: true
     playing: false
     frame: @props.frame ? 0
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
+
+  componentWillMount: ->
+    @setState({ alreadySeen: @props.subject.already_seen || seenThisSession.check(@props.workflow, @props.subject) });
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.subject is @props.subject
@@ -64,7 +70,20 @@ module.exports = React.createClass
     @context.geordi?.logEvent
       type: logType
 
+  renderWarningBanner: () ->
+    if @state.alreadySeen
+      <WarningBanner label="Already seen!">
+        <p>Our records show that you’ve already seen this image. We might have run out of data for you in this workflow!</p>
+        <p>Try choosing a different workflow or contributing to a different project.</p>
+      </WarningBanner>
+    else if @props.subject.retired
+      <WarningBanner label="Finished!">
+        <p>This subject already has enough classifications, so yours won’t be used in its analysis!</p>
+        <p>If you’re looking to help, try choosing a different workflow or contributing to a different project.</p>
+      </WarningBanner>
+
   render: ->
+    warningBanner = @renderWarningBanner()
     rootClasses = classnames('subject-viewer', {
       'default-root-style': @props.defaultStyle
       'subject-viewer--flipbook': @state.inFlipbookMode
@@ -115,6 +134,7 @@ module.exports = React.createClass
       {if type is 'image'
         @hiddenPreloadedImages()}
       <div className="subject-container" style={CONTAINER_STYLE} >
+        {warningBanner}
         {mainDisplay}
         {@props.children}
       </div>
