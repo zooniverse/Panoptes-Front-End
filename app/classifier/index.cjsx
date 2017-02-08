@@ -4,7 +4,7 @@ ChangeListener = require '../components/change-listener'
 SubjectViewer = require '../components/subject-viewer'
 `import ClassificationSummary from './classification-summary';`
 {Link} = require 'react-router'
-tasks = require './tasks'
+`import tasks from './tasks';`
 {getSessionID} = require '../lib/session'
 preloadSubject = require '../lib/preload-subject'
 TriggeredModalForm = require 'modal-form/triggered'
