@@ -46,7 +46,7 @@ module.exports = React.createClass
             .catch =>
               null # We don't really care if the user canceled or completed the tutorial.
 
-    restart: (minicourse, projectPreferences, project, user, geordi) ->
+    restart: (minicourse, projectPreferences, user, geordi) ->
       resetPreferences = {
         "preferences.minicourses.opt_out.id_#{minicourse.id}": false,
         "preferences.minicourses.slide_to_start.id_#{minicourse.id}": 0
@@ -54,24 +54,18 @@ module.exports = React.createClass
       }
 
       if user?
-        window.prefs = projectPreferences
-        if projectPreferences?.preferences.minicourses?
-          projectPreferences.update resetPreferences
-          projectPreferences.save().then =>
-            @start minicourse, projectPreferences, user, geordi
-        else
-          # Create default preferences if they don't exist
-          @createProjectPreferences(projectPreferences, minicourse.id, project.id).then (newProjectPreferences) =>
+        projectPreferences.update resetPreferences
+        projectPreferences.save().then =>
+          window.prefs = projectPreferences
+          @start minicourse, projectPreferences, user, geordi
 
-            @start minicourse, newProjectPreferences, user, geordi
-
-    startIfNecessary: (minicourse, preferences, project, user, geordi) ->
+    startIfNecessary: (minicourse, preferences, user, geordi) ->
       if user? && minicourse?
-        @checkIfCompletedOrOptedOut(minicourse, preferences, project, user).then (completed) =>
+        @checkIfCompletedOrOptedOut(minicourse, preferences, user).then (completed) =>
           unless completed
             @start minicourse, preferences, user, geordi
 
-    checkIfCompletedOrOptedOut: (minicourse, projectPreferences, project, user) ->
+    checkIfCompletedOrOptedOut: (minicourse, projectPreferences, user) ->
       if user? and projectPreferences.preferences?.minicourses?
         window.prefs = projectPreferences
         if projectPreferences.preferences.minicourses.completed_at?["id_#{minicourse.id}"]?
@@ -79,21 +73,15 @@ module.exports = React.createClass
         else
           Promise.resolve projectPreferences.preferences.minicourses.opt_out["id_#{minicourse.id}"]
       else if user?
-        newProjectPreferences = @createProjectPreferences(projectPreferences, minicourse.id, project.id)
+        newProjectPreferences = @setDefaultProjectPreferences(projectPreferences, minicourse.id)
         Promise.resolve newProjectPreferences.preferences.minicourses.opt_out["id_#{minicourse.id}"]
 
-    createProjectPreferences: (projectPreferences, minicourseID, projectID) ->
+    setDefaultProjectPreferences: (projectPreferences, minicourseID) ->
       defaultPreferences = {
         "preferences.minicourses.opt_out.id_#{minicourseID}": false,
         "preferences.minicourses.slide_to_start.id_#{minicourseID}": 0
       }
 
-      projectPreferences ?= apiClient.type('project_preferences').create({
-        links: {
-          project: projectID
-        },
-        preferences: {}
-      })
       projectPreferences.update defaultPreferences
       projectPreferences.save()
       projectPreferences

@@ -10,8 +10,8 @@ seenThisSession = require '../../lib/seen-this-session'
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 experimentsClient = require '../../lib/experiments-client'
-Tutorial = require '../../lib/tutorial'
-MiniCourse = require '../../lib/mini-course'
+Tutorial = require '../../components/tutorial'
+MiniCourse = require '../../components/mini-course'
 {Split} = require('seven-ten')
 {VisibilitySplit} = require('seven-ten')
 
@@ -346,7 +346,7 @@ module.exports = React.createClass
     split = @props.splits?['mini-course.visible']
     isntHidden = not split or split?.variant?.value?.auto
     if shouldPrompt and isntHidden
-      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.project, @props.user, @context.geordi
+      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.user, @context.geordi
 
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog

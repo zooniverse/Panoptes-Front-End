@@ -18,8 +18,9 @@ experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 Shortcut = require './tasks/shortcut'
 `import FrameAnnotator from './frame-annotator';`
-`import TutorialButton from './tutorial-button';`
-`import MiniCourseButton from './mini-course-button';`
+MiniCourse = require '../components/mini-course';
+Tutorial = require '../components/tutorial';
+`import RestartButton from './restart-button';`
 `import CacheClassification from '../components/cache-classification';`
 MetadataBasedFeedback = require './metadata-based-feedback'
 {VisibilitySplit} = require('seven-ten')
@@ -282,9 +283,17 @@ Classifier = React.createClass
           <p>
             <small>
               <strong>
-                <TutorialButton className="minor-button" user={@props.user} workflow={@props.workflow} preferences={@props.preferences} project={@props.project} dialog={@props.tutorial} style={marginTop: '2em'}>
+                <RestartButton
+                  className="minor-button"
+                  preferences={@props.preferences}
+                  shouldRender={(@props.tutorial) && (@props.tutorial.steps.length > 0)}
+                  start={Tutorial.start.bind(Tutorial, @props.tutorial, @props.user, @props.preferences, @context.geordi)}
+                  style={marginTop: '2em'}
+                  user={@props.user}
+                  workflow={@props.workflow}
+                >
                   Show the project tutorial
-                </TutorialButton>
+                </RestartButton>
               </strong>
             </small>
           </p>
@@ -293,9 +302,17 @@ Classifier = React.createClass
             <small>
               <strong>
                 <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
-                  <MiniCourseButton className="minor-button" user={@props.user} preferences={@props.preferences} project={@props.project} workflow={@props.workflow} dialog={@props.minicourse} style={marginTop: '2em'}>
+                  <RestartButton
+                    className="minor-button"
+                    preferences={@props.preferences}
+                    shouldRender={(@props.minicourse) && (@props.user) && (@props.minicourse.steps.length > 0)}
+                    start={MiniCourse.restart.bind(MiniCourse, @props.minicourse, @props.preferences, @props.user, @context.geordi)}
+                    style={marginTop: '2em'}
+                    user={@props.user}
+                    workflow={@props.workflow}
+                  >
                     Restart the project mini-course
-                  </MiniCourseButton>
+                  </RestartButton>
                 </VisibilitySplit>
               </strong>
             </small>
