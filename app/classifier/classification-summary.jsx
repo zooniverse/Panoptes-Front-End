@@ -1,5 +1,5 @@
 import React from 'react';
-import tasks from './tasks/index.coffee';
+import tasks from './tasks';
 import { TextSplit } from 'seven-ten';
 
 const ClassificationSummary = (props) => {

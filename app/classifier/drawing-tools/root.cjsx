@@ -52,7 +52,7 @@ module.exports = React.createClass
       </g>
 
       {if toolProps.selected and not toolProps.mark._inProgress and toolProps.details? and toolProps.details.length isnt 0
-        tasks = require '../tasks'
+        tasks = require('../tasks').default
 
         detailsAreComplete = toolProps.details.every (detailTask, i) =>
           TaskComponent = tasks[detailTask.type]

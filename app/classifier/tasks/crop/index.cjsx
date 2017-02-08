@@ -1,6 +1,6 @@
 React = require 'react'
 CropInitializer = require './initializer'
-GenericTask = require '../generic'
+GenericTask = require('../generic.jsx').default
 GenericEditor = require '../generic-editor'
 Summary = require './summary'
 
@@ -12,7 +12,7 @@ module.exports = React.createClass
     Summary: Summary
 
     getSVGProps: ({workflow, classification, annotation}) ->
-      tasks = require '../index'
+      tasks = require('../index').default
       [previousCropAnnotation] = classification.annotations.filter (anAnnotation) =>
         taskDescription = workflow.tasks[anAnnotation.task]
         TaskComponent = tasks[taskDescription.type]
