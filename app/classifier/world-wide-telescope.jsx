@@ -28,14 +28,14 @@ class Axis {
   constructor(range, unit) {
     this.range = range;
     this.unit = unit;
-    this.RA = 0;
-    this.RA1950 = 1;
-    this.DEC = 2;
-    this.DEC1950 = 3;
-    this.GLAT = 4;
-    this.GLON = 5;
   }
 }
+Axis.RA = 0;
+Axis.RA1950 = 1;
+Axis.DEC = 2;
+Axis.DEC1950 = 3;
+Axis.GLAT = 4;
+Axis.GLON = 5;
 
 class StarChart {
   constructor(annotation) {
@@ -152,9 +152,8 @@ class StarChart {
   buildAxes() {
     if (this.axisPoints.length >= 3 && this.axisLabels.length >= 2) {
       this.valid = true;
-      console.log(this.findAxis(), this.axisPoints()).xAxis;
-      const xRange = (this.findAxis, this.axisPoints).xAxis.sort((a, b) => { return a.x > b.x; });
-      const yRange = (this.findAxis, this.axisPoints).yAxis.sort((a, b) => { return a.y > b.y; });
+      const xRange = (this.findAxis(this.axisPoints)).xAxis.sort((a, b) => { return a.x > b.x; });
+      const yRange = (this.findAxis(this.axisPoints)).yAxis.sort((a, b) => { return a.y > b.y; });
       const xLabel = this.findLabels(xRange, this.axisLabels);
       const yLabel = this.findLabels(yRange, this.axisLabels);
       this.xAxis = new Axis(xRange, xLabel.value);
@@ -176,7 +175,104 @@ class StarChart {
     return coords;
   }
 }
-//
+StarChart.GALACTIC = 0;
+StarChart.EQUATORIAL = 1;
+StarChart.OTHER = 2;
+
+class StarCoord {
+  constructor(ra, dec) {
+    this.ra = ra;
+    this.dec = dec;
+  }
+}
+
+StarCoord.fromRaDec = (xAxis, yAxis, xAxisDec, epoch1950) => {
+  let ra;
+  let dec;
+  if (xAxisDec === true) {
+    ra = yAxis;
+    dec = xAxis;
+  } else {
+    ra = xAxis;
+    dec = yAxis;
+  }
+  ra = StarCoord._parseDegrees(ra, false);
+  dec = StarCoord._parseDegrees(dec, true);
+  if (epoch1950) {
+    [ra, dec] = StarCoord._epochConvert(ra, dec);
+  }
+  return new StarCoord(ra, dec);
+};
+
+StarCoord.fromGlatGlon = (xAxis, yAxis, xAxisGlat, epoch1950) => {
+  const s = StarCoord;
+  let glat;
+  let glon;
+  if (xAxisGlat === true) {
+    glat = xAxis;
+    glon = yAxis;
+  } else {
+    glon = xAxis;
+    glat = yAxis;
+    glat = glat.replace(/[^\d.-]/g, '');
+    glon = glon.replace(/[^\d.-]/g, '');
+  }
+  const [b, l, pole_ra, pole_dec, posangle] = [s._toRadians(glat), s._toRadians(glon), s._toRadians(192.859508), s._toRadians(27.128336), s._toRadians(122.932 - 90.0)];
+  const ra = s._toDegrees(Math.atan2((Math.cos(b) * Math.cos(l - posangle)), ((Math.sin(b) * Math.cos(pole_dec)) - (Math.cos(b) * Math.sin(pole_dec) * Math.sin(l - posangle)))) + pole_ra)
+  const dec = s._toDegrees((Math.asin(Math.cos(b) * Math.cos(pole_dec) * Math.sin(l - posangle)) + (Math.sin(b) * Math.sin(pole_dec))))
+  return new StarCoord(ra, dec);
+};
+
+StarCoord._epochConvert = (ra, dec) => {
+  const s = StarCoord;
+  const RA2000 = ra + 0.640265 + (0.278369 * Math.sin(s._toDegrees(ra)) * Math.tan(s._toDegrees(dec)));
+  const DEC2000 = dec + (0.278369 * Math.cos(s._toDegrees(ra)));
+  return [RA2000, DEC2000];
+};
+
+StarCoord._toRadians = (degrees) => {
+  return (degrees * Math.PI) / 180.0;
+};
+
+StarCoord._toDegrees = (radians) => {
+  return (radians * 180.0) / Math.PI;
+};
+
+StarCoord._parseDegrees = (str, dec) => {
+  if (!isNaN(str)) return parseFloat(str);
+  const s = StarCoord;
+
+  let isNeg = false;
+  const reg = /(?:(-)?(\d+(?:\.\d+)?))(?:\D+(\d+(?:\.\d+)?))?(?:\D+(\d+(?:\.\d+)?))?/;
+
+  const match = reg.exec(str);
+  isNeg = match[1] === '-';
+  match.shift();
+  if (dec === true) {
+    return s._decConvert(match, isNeg);
+  } else {
+    return s._raConvert(match, isNeg);
+  }
+};
+
+StarCoord._raConvert = (match, isNeg) => {
+  const multiplier = isNeg ? -1 : 1;
+
+  return (parseInt(match[1], 10) * 15 +
+  (parseInt(match[2], 10) / 4 || 0) +
+  (parseInt(match[3], 10) / 240 || 0)) *
+  multiplier;
+};
+
+StarCoord._decConvert = (match, isNeg) => {
+  const multiplier = isNeg ? -1 : 1;
+
+  return (parseInt(match[1], 10) +
+  (parseInt(match[2], 10) / 60 || 0) +
+  (parseInt(match[3], 10) / 3600 || 0)) *
+  multiplier;
+};
+
 class Plate {
   constructor(starChart, url) {
     let makeStarCoord;
@@ -184,16 +280,16 @@ class Plate {
     this.url = url;
     this.imageBounds = this.starChart.bounds();
     const [xRange, yRange] = [this.starChart.xAxis.range, this.starChart.yAxis.range];
-//
+
     this.xyCorners = [
       new SimplePoint(xRange[0].x, yRange[0].y), new SimplePoint(xRange[1].x, yRange[0].y),
       new SimplePoint(xRange[1].x, yRange[1].y), new SimplePoint(xRange[0].x, yRange[1].y)
     ];
 
     if (this.starChart.coordinateSystem() === StarChart.EQUATORIAL) {
-      makeStarCoord = StarChart.fromRaDec;
+      makeStarCoord = StarCoord.fromRaDec;
     } else {
-      makeStarCoord = StarChart.fromGlatGlon;
+      makeStarCoord = StarCoord.fromGlatGlon;
     }
     const xAxisDec = (this.starChart.xAxis.unit === Axis.DEC || this.starChart.xAxis.unit === Axis.DEC1950 || this.starChart.xAxis.unit === Axis.GLAT);
     const epoch1950 = (this.starChart.xAxis.unit === Axis.DEC1950 || this.starChart.xAxis.unit === Axis.RA1950);
@@ -275,118 +371,6 @@ class Plate {
   }
 }
 
-class StarCoord {
-  constructor(ra, dec) {
-    this.ra = ra;
-    this.dec = dec;
-    this.s = StarCoord;
-    this.fromRaDec = this.fromRaDec.bind(this);
-    this.fromGlatGlon = this.fromGlatGlon.bind(this);
-    this._epochConvert = this._epochConvert.bind(this);
-    this._toRadians = this._toRadians.bind(this);
-    this._toDegrees = this._toDegrees.bind(this);
-    this._parseDegrees = this._parseDegrees.bind(this);
-    this._raConvert = this._raConvert.bind(this);
-    this._decConvert = this._decConvert.bind(this);
-  }
-
-  fromRaDec(xAxis, yAxis, xAxisDec, epoch1950) {
-    let ra;
-    let dec;
-    if (xAxisDec === true) {
-      ra = yAxis;
-      dec = xAxis;
-    } else {
-      ra = xAxis;
-      dec = yAxis;
-    }
-    ra = StarCoord._parseDegrees(ra, false);
-    dec = StarCoord._parseDegrees(dec, true);
-    if (epoch1950) {
-      [ra, dec] = StarCoord._epochConvert(ra, dec);
-    }
-    return new StarCoord(ra, dec);
-  }
-
-  fromGlatGlon(xAxis, yAxis, xAxisGlat, epoch1950) {
-    const s = this.s;
-    let glat;
-    let glon;
-    if (xAxisGlat === true) {
-      glat = xAxis;
-      glon = yAxis;
-    } else {
-      glon = xAxis;
-      glat = yAxis;
-      glat = glat.replace(/[^\d.-]/g, '');
-      glon = glon.replace(/[^\d.-]/g, '');
-    }
-    const [b, l, pole_ra, pole_dec, posangle] = [ s._toRadians(glat), s._toRadians(glon), s._toRadians(192.859508), s._toRadians(27.128336), s._toRadians(122.932 - 90.0)];
-    const ra = s._toDegrees(Math.atan2((Math.cos(b) * Math.cos(l - posangle)), ((Math.sin(b) * Math.cos(pole_dec)) - (Math.cos(b) * Math.sin(pole_dec) * Math.sin(l - posangle)))) + pole_ra)
-    const dec = s._toDegrees((Math.asin(Math.cos(b) * Math.cos(pole_dec) * Math.sin(l - posangle)) + (Math.sin(b) * Math.sin(pole_dec))))
-    return new StarCoord(ra, dec);
-  }
-
-  _epochConvert(ra, dec) {
-    const RA2000 = ra + 0.640265 + (0.278369 * Math.sin(this._toDegrees(ra)) * Math.tan(this._toDegrees(dec)));
-    const DEC2000 = dec + (0.278369 * Math.cos(this._toDegrees(ra)));
-    return [RA2000, DEC2000];
-  }
-
-  _toRadians(degrees) {
-    return (degrees * Math.PI) / 180.0;
-  }
-
-  _toDegrees(radians) {
-    return (radians * 180.0) / Math.PI;
-  }
-
-  _parseDegrees(str, dec) {
-    if (isNaN(str)) return parseFloat(str);
-
-    let isNeg = false;
-    const reg = `///
-      (?:
-      (-)?                  // leading minus sign, if present
-      (\d+(?:\.\d+)?))      // a number that may or may not have decimal digits
-      (?:
-      \D+                   // one or more non-numeric digits (not captured)
-      (\d+(?:\.\d+)?))      // a number that may or may not have decimal digits
-      ?                     // this term is optional
-      (?:
-      \D+                   // one or more non-numeric digits (not captured)
-      (\d+(?:\.\d+)?))      // a number that may or may not have decimal digits
-      ?                     // this term is optional
-      ///`
-    const match = reg.exec(str);
-    isNeg = match[1] === '-';
-    match.shift();
-    if (dec === true) {
-      return this.s._decConvert(match, isNeg);
-    } else {
-      return this.s._raConvert(match, isNeg);
-    }
-  }
-
-  _raConvert(match, isNeg) {
-    const multiplier = isNeg ? -1 : 1;
-
-    return (parseInt(match[1], 10) * 15 +
-    (parseInt(match[2], 10) / 4 || 0) +
-    (parseInt(match[3], 10) / 240 || 0)) *
-    multiplier;
-  }
-
-  _decConvert(match, isNeg) {
-    const multiplier = isNeg ? -1 : 1;
-
-    return (parseInt(match[1], 10) +
-    (parseInt(match[2], 10) / 60 || 0) +
-    (parseInt(match[3], 10) / 3600 || 0)) *
-    multiplier;
-  }
-}
-
 export default class WorldWideTelescope extends React.Component {
   parseClassification() {
     const telescopeAnnotations = [];
@@ -440,7 +424,7 @@ export default class WorldWideTelescope extends React.Component {
         }
       });
     } catch (e) {
-      console.warn(e);
+      return null;
     }
 
     return (
