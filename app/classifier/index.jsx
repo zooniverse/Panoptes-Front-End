@@ -1,5 +1,5 @@
 import React from 'react';
-import Classifier from './classifier.jsx';
+import Classifier from './classifier';
 import isAdmin from '../lib/is-admin.coffee';
 
 class ClassifierWrapper extends React.Component {

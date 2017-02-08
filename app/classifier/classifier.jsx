@@ -5,7 +5,7 @@ import experimentsClient from '../lib/experiments-client.coffee';
 import interventionMonitor from '../lib/intervention-monitor.coffee';
 import preloadSubject from '../lib/preload-subject.coffee';
 import SubjectViewer from '../components/subject-viewer.cjsx';
-import FrameAnnotator from './frame-annotator.cjsx';
+import FrameAnnotator from './frame-annotator';
 import workflowAllowsFlipbook from '../lib/workflow-allows-flipbook.coffee';
 import workflowAllowsSeparateFrames from '../lib/workflow-allows-separate-frames.coffee';
 import RenderSummary from './render-summary';
