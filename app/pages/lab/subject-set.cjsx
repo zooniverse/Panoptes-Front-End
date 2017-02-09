@@ -331,9 +331,33 @@ module.exports = React.createClass
   getDefaultProps: ->
     params: null
 
+  getInitialState: ->
+    subject_set: null
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.params.subjectSetID isnt @props.params.subjectSetID
+      @setSubjectSet(nextProps.params.subjectSetID)
+
+
+  componentWillMount: ->
+    @setSubjectSet(@props.params.subjectSetID)
+
+
+  setSubjectSet: (subjectSetId) ->
+    subject_set = apiClient.type('subject_sets').get subjectSetId
+
+    subject_set.then( (subject_set) =>
+      @setState subject_set: subject_set
+    ).catch( (error) =>
+      console.log error
+    )
+
   render: ->
-    <PromiseRenderer promise={apiClient.type('subject_sets').get @props.params.subjectSetID}>{(subjectSet) =>
+    if @state.subject_set
+      subjectSet = @state.subject_set
       <ChangeListener target={subjectSet}>{=>
         <EditSubjectSetPage {...@props} subjectSet={subjectSet} />
       }</ChangeListener>
-    }</PromiseRenderer>
+    else
+      null
+
