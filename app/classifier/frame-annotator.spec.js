@@ -41,6 +41,21 @@ describe('<FrameAnnotator />', function() {
       />);
   });
 
+  it('should render children nodes', function() {
+    const wrapper = shallow(
+      <FrameAnnotator
+        annotation={annotation}
+        classification={classification}
+        loading={false}
+        naturalHeight={naturalHeight}
+        naturalWidth={naturalWidth}
+        subject={subject}
+        viewBoxDimensions={viewBoxDimensions}
+        workflow={workflow}
+      ><span>child</span></FrameAnnotator>);
+    assert.equal(wrapper.find('span').length, 1);
+  });
+
   describe('<SVGImage />', function() {
     let wrapper;
     before(function() {
