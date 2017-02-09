@@ -133,7 +133,7 @@ EditSubjectSetPage = React.createClass
     "You have uploaded " + user.uploaded_subjects_count + " subjects from an " +
     "allowance of " + user.subject_limit + ". Your uploaded subject count is the tally of all subjects " +
     "(including those deleted) that your account has uploaded through the project builder or Zooniverse API." +
-    "If you would like to upload more subjects than your allowance, please <a href="https://www.zooniverse.org/about/contact"> get in touch</a>."
+    "To increase your allowance, please <a href="https://www.zooniverse.org/about/contact"> get in touch</a>."
     
   render: ->
     <div>
