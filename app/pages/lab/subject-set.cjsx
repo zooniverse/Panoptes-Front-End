@@ -48,7 +48,7 @@ SubjectSetListingRow = React.createClass
     @props.onRemove @props.subject
 
 SubjectSetListingTable = React.createClass
-  displayName: 'SubjectSetListing'
+  displayName: 'SubjectSetListingTable'
 
   getDefaultProps: ->
     subjects: []
