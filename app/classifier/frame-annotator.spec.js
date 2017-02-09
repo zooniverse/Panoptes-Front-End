@@ -150,5 +150,23 @@ describe('<FrameAnnotator />', function() {
     it('renders AfterSubject hook', function() {
       assert.equal(wrapper.find(TaskComponent.AfterSubject).length, 1);
     });
+
+    it('renders PersistInsideSubject hook', function() {
+      const drawingAnnotation = { task: 'draw' };
+      TaskComponent = tasks['drawing'];
+      wrapper = shallow(
+        <FrameAnnotator
+          annotation={drawingAnnotation}
+          classification={classification}
+          loading={false}
+          naturalHeight={naturalHeight}
+          naturalWidth={naturalWidth}
+          subject={subject}
+          viewBoxDimensions={viewBoxDimensions}
+          workflow={workflow}
+        />);
+
+      assert.equal(wrapper.find(TaskComponent.PersistInsideSubject).length, 1)
+    });
   });
 });
