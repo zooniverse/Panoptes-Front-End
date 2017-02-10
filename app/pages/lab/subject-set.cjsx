@@ -1,7 +1,6 @@
 React = require 'react'
 AutoSave = require '../../components/auto-save'
 handleInputChange = require '../../lib/handle-input-change'
-PromiseRenderer = require '../../components/promise-renderer'
 apiClient = require 'panoptes-client/lib/api-client'
 ChangeListener = require '../../components/change-listener'
 Papa = require 'papaparse'
@@ -72,11 +71,19 @@ SubjectSetListing = React.createClass
   getInitialState: ->
     page: 1
     pageCount: NaN
+    subjects: null
 
-  render: ->
+  componentWillReceiveProps: (nextProps) ->
+    if @props.subjectSet.id isnt nextProps.subjectSet.id
+      @setSubjectResources(nextProps.subjectSet.id, "1")
+      
+  componentWillMount: ->
+    @setSubjectResources(@props.subjectSet.id, @state.page)
+
+  setSubjectResources: (subjetSetId, page) ->
     gettingSetMemberSubjects = apiClient.type('set_member_subjects').get
-      subject_set_id: @props.subjectSet.id
-      page: @state.page
+      subject_set_id: subjetSetId
+      page: page
 
     gettingSetMemberSubjects.then ([setMemberSubject]) =>
       newPageCount = setMemberSubject?.getMeta().page_count
@@ -84,21 +91,34 @@ SubjectSetListing = React.createClass
         @setState pageCount: newPageCount
 
     gettingSubjects = gettingSetMemberSubjects.get 'subject'
+    gettingSubjects.then( (subjects) =>
+      @setState 
+        subjects: subjects
+        page: page
+    ).catch( (error) =>
+      console.log error
+    )
 
-    <div>
-      <PromiseRenderer promise={gettingSubjects} then={(subjects) =>
-        <SubjectSetListingTable subjects={subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
-      } />
-      <nav className="pagination">
-        Page <select value={@state.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @setState page: e.target.value}>
-          {if isNaN @state.pageCount
-            <option>?</option>
-          else
-            for p in [1..@state.pageCount]
-              <option key={p} value={p}>{p}</option>}
-        </select> of {@state.pageCount || '?'}
-      </nav>
-    </div>
+  newPage: (e) ->
+    pageValue = e.target.value
+    @setSubjectResources @props.subjectSet.id, pageValue
+
+  render: ->
+    if @state.subjects
+      <div>
+        <SubjectSetListingTable subjects={@state.subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
+        <nav className="pagination">
+          Page <select value={@state.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @newPage(e)}>
+            {if isNaN @state.pageCount
+              <option>?</option>
+            else
+              for p in [1..@state.pageCount]
+                <option key={p} value={p}>{p}</option>}
+          </select> of {@state.pageCount || '?'}
+        </nav>
+      </div>
+    else
+      null
 
   previewSubject: (subject) ->
     alert <div className="content-container subject-preview">
@@ -338,10 +358,8 @@ module.exports = React.createClass
     if nextProps.params.subjectSetID isnt @props.params.subjectSetID
       @setSubjectSet(nextProps.params.subjectSetID)
 
-
   componentWillMount: ->
     @setSubjectSet(@props.params.subjectSetID)
-
 
   setSubjectSet: (subjectSetId) ->
     subject_set = apiClient.type('subject_sets').get subjectSetId
