@@ -105,7 +105,7 @@ module.exports = React.createClass
   syncAnnotations: () ->
     # this can only be called after props have been updated
     # as it relies on props.task and props.annotation.
-    # clear selections, then check each annotation.value 
+    # clear selections, then check each annotation.value
     # and set the corresponding selected option for each select
     selectedOptions = []
     optionsKeys = []
@@ -209,3 +209,7 @@ module.exports = React.createClass
     newAnnotation = Object.assign @props.annotation, {value}
     @setState {selectedOptions}
     @props.onChange newAnnotation
+
+# TODO consider renaming optionsKeys to optionsValues where appropriate
+# TODO change mock data dropdown task's values to reflect that they're values?
+# TODO see Dev Classifier - Best State Sports Team options don't populate once dropdowns above have selected answers, line 159 in render has unrelated option values
