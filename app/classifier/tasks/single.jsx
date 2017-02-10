@@ -36,7 +36,7 @@ class Summary extends React.Component {
     }
     if (this.state.expanded) {
       toggleButton = <button type="button" className="toggle-more" onClick={this.collapse}>Less</button>;
-      answers = []
+      answers = [];
       for (const [i, answer] of this.props.task.answers.entries()) {
         if (!answer._key) {
           answer._key = Math.random();
@@ -160,6 +160,6 @@ SingleChoiceTask.propTypes = {
 
 SingleChoiceTask.defaultProps = {
   task: null,
-  annotation: null,
+  annotation: { value: null },
   onChange: NOOP
 };
