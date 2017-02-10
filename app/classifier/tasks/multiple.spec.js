@@ -14,7 +14,7 @@ const task = {
 };
 
 const annotation = {
-  value: [0,1]
+  value: [0, 1]
 };
 
 describe('MultipleChoiceTask', function () {
@@ -48,6 +48,14 @@ describe('MultipleChoiceTask', function () {
   describe('static methods', function(){
     it('should be incomplete', function(){
       assert.equal(MultipleTask.isAnnotationComplete(task, annotation), false);
+    });
+
+    it('should be complete', function(){
+      assert.equal(MultipleTask.isAnnotationComplete(task, { value: [0, 1, 2] }), true);
+    });
+
+    it('should be complete when not required', function(){
+      assert.equal(MultipleTask.isAnnotationComplete(Object.assign({}, task, { required: undefined }), { value: [] }), true);
     });
 
     it('should have the correct question text', function(){
