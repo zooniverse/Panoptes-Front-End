@@ -26,7 +26,7 @@ class Summary extends React.Component {
   render() {
     let toggleButton = <button type="button" className="toggle-more" onClick={this.expand}>More</button>;
     let answers = <div className="answer">No answer</div>;
-    if (!this.state.expanded && this.props.annotation.value) {
+    if (!this.state.expanded && this.props.annotation.value !== null) {
       answers = (
         <div className="answer">
           <i className="fa fa-check-circle-o fa-fw"></i>
