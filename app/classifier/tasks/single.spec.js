@@ -49,6 +49,18 @@ describe('SingleChoiceTask', function () {
       assert.equal(SingleTask.isAnnotationComplete(task, annotation), true);
     });
 
+    it('should be complete when value is 0 (i.e. falsy)', function(){
+      assert.equal(SingleTask.isAnnotationComplete(task, { value: 0 }), true);
+    });
+
+    it('should not be complete when value is null', function(){
+      assert.equal(SingleTask.isAnnotationComplete(task, { value: null }), false);
+    });
+
+    it('should be complete when task is not required', function(){
+      assert.equal(SingleTask.isAnnotationComplete(Object.assign({}, task, { required: false }), { value: null }), true);
+    });
+
     it('should have the correct question text', function(){
       assert.equal(SingleTask.getTaskText(task), task.question);
     });
