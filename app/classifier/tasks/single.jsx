@@ -70,14 +70,23 @@ class Summary extends React.Component {
 }
 
 Summary.propTypes = {
-  task: React.PropTypes.object,
-  annotation: React.PropTypes.object,
+  task: React.PropTypes.shape(
+    {
+      answers: React.PropTypes.array,
+      question: React.PropTypes.string
+    }
+  ),
+  annotation: React.PropTypes.shape(
+    { value: React.PropTypes.number }
+  ).isRequired,
   expanded: React.PropTypes.bool
 };
 
 Summary.defaultProps = {
-  task: null,
-  annotation: null,
+  task: {
+    answers: [],
+    question: ''
+  },
   expanded: false
 };
 
@@ -149,17 +158,31 @@ SingleChoiceTask.getDefaultAnnotation = () => {
   return { value: null };
 };
 SingleChoiceTask.isAnnotationComplete = (task, annotation) => {
-  return (!task.required || !!annotation.value);
+  return (!task.required || annotation.value !== null);
 };
 
 SingleChoiceTask.propTypes = {
-  task: React.PropTypes.object,
-  annotation: React.PropTypes.object,
+  task: React.PropTypes.shape(
+    {
+      answers: React.PropTypes.array,
+      question: React.PropTypes.string,
+      help: React.PropTypes.string,
+      required: React.PropTypes.bool
+    }
+  ),
+  annotation: React.PropTypes.shape(
+    { value: React.PropTypes.number }
+  ),
   onChange: React.PropTypes.func
 };
 
 SingleChoiceTask.defaultProps = {
-  task: null,
+  task: {
+    answers: [],
+    question: '',
+    help: '',
+    required: false
+  },
   annotation: { value: null },
   onChange: NOOP
 };
