@@ -25,17 +25,16 @@ class MultipleChoiceSummary extends React.Component {
 
   render() {
     let toggleButton = <button type="button" className="toggle-more" onClick={this.expand}>More</button>;
-    let answers = <div className="answer">No answer</div>;
+    let answers = [<div className="answer">No answer</div>];
     if (!this.state.expanded && this.props.annotation.value.length > 0) {
-      answers = [];
-      for (const index of this.props.annotation.value) {
-        answers.push(
+      answers = this.props.annotation.value.map((index) => {
+        return (
           <div key={index} className="answer">
             <i className="fa fa-check-square-o fa-fw"></i>
             <Markdown tag="span" inline={true}>{this.props.task.answers[index].label}</Markdown>
           </div>
         );
-      }
+      });
     }
     if (this.state.expanded) {
       toggleButton = <button type="button" className="toggle-more" onClick={this.collapse}>Less</button>;
