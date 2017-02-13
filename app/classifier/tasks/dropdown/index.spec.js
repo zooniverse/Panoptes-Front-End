@@ -1,8 +1,10 @@
-/* eslint-disable no-undef, func-names, prefer-arrow-callback */
+/* eslint-disable func-names, prefer-arrow-callback */
+/* global describe, it, beforeEach */
 
 import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
+import Select from 'react-select'; // required to properly simulate change, see allowCreate related testing
 import DropdownTask from './';
 
 const task = {
@@ -121,24 +123,34 @@ describe('DropdownTask:annotation provided', function () {
   });
 });
 
-describe('DropdownTask:allowCreate false', function () {
-  const annotation = { value: [] };
-
-  it('should not have CreatableSelect', function () {
-    task.selects[0].allowCreate = false;
-    const wrapper = mount(<DropdownTask task={task} annotation={annotation} onChange={function (a) { return a; }} />);
-    const creatableSelect = wrapper.find('CreatableSelect');
-    assert.equal(creatableSelect.length, 0);
-  });
-});
-
 describe('DropdownTask:allowCreate true', function () {
   const annotation = { value: [] };
 
-  it('should have CreatableSelect', function () {
+  it('should save custom answer to annotation, with option false', function () {
     task.selects[0].allowCreate = true;
     const wrapper = mount(<DropdownTask task={task} annotation={annotation} onChange={function (a) { return a; }} />);
-    const creatableSelect = wrapper.find('CreatableSelect');
-    assert.equal(creatableSelect.length, 1);
+    const select = wrapper.find(Select);
+    const selectInput = select.find('input');
+    selectInput.simulate('change', { target: { value: 'Four' }});
+    selectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
+    const { option, value } = annotation.value[0];
+    assert.equal(value, 'Four');
+    assert.equal(option, false);
+  });
+});
+
+describe('DropdownTask:allowCreate false', function () {
+  const annotation = { value: [] };
+
+  it('should NOT save custom answer to annotation', function () {
+    task.selects[0].allowCreate = false;
+    const wrapper = mount(<DropdownTask task={task} annotation={annotation} onChange={function (a) { return a; }} />);
+    const select = wrapper.find(Select);
+    const selectInput = select.find('input');
+    selectInput.simulate('change', { target: { value: 'Four' }});
+    selectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
+    const { option, value } = annotation.value[0];
+    assert.equal(value, null);
+    assert.equal(option, false);
   });
 });
