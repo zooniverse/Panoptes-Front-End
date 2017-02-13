@@ -302,7 +302,7 @@ workflow = apiClient.type('workflows').create
       help: "Actual option values are 16-digit alphanumeric strings or if presets from editor then specific ids."
       selects: [
         {
-          id: "cd1c7a8a13726"
+          id: "countryID"
           title: "Country (required:true)"
           required: true
           options: {
@@ -314,11 +314,11 @@ workflow = apiClient.type('workflows').create
           }
         },
         {
-          id: "26971f135cb4b"
+          id: "stateID"
           title: "State (conditional:Country,required:true,allowCreate:false)"
           required: true
           allowCreate: false
-          condition: "cd1c7a8a13726"
+          condition: "countryID"
           options: {
             'USA-value': [
               {value: "HI", label: "Hawaii"},
@@ -338,10 +338,10 @@ workflow = apiClient.type('workflows').create
           }
         },
         {
-          id: "8f7afd193da42"
+          id: "countyID"
           title: "County (condition:State,allowCreate:true)"
           allowCreate: true
-          condition: "26971f135cb4b"
+          condition: "stateID"
           options: {
             'USA-value;HI': [
               {value: "Honolulu-value", label: "Honolulu"},
@@ -370,10 +370,10 @@ workflow = apiClient.type('workflows').create
           }
         },
         {
-          id: "fdd12d9f1ad52"
+          id: "cityID"
           title: "City (condition:County,allowCreate:false)"
           allowCreate: false
-          condition: "8f7afd193da42"
+          condition: "countyID"
           options: {
             'USA-value;HI;Honolulu-value': [
               {value: "Honolulu-value", label: "Honolulu city"}
@@ -409,10 +409,10 @@ workflow = apiClient.type('workflows').create
           }
         },
         {
-          id: "e45fdf113f07e"
+          id: "teamID"
           title: "Best State Team (condition:State,allowCreate:true)"
           allowCreate: true
-          condition: "26971f135cb4b"
+          condition: "stateID"
           options: {
             'USA-value;HI': [
               {value: "Sharks-value", label: "Sharks"},
