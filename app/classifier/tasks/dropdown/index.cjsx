@@ -92,6 +92,7 @@ module.exports = React.createClass
     annotationValues = @props.annotation.value
     unless annotationValues.length
       @props.annotation.value = @props.task.selects.map -> {value: null, option: false}
+      @syncAnnotations()
 
     if @props.autoFocus is true
       @handleFocus()

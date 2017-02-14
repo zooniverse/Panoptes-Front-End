@@ -4,7 +4,7 @@
 import React from 'react';
 import assert from 'assert';
 import { mount } from 'enzyme';
-import Select from 'react-select'; // required to properly simulate change, see allowCreate related testing
+import Select from 'react-select'; // required to properly simulate change
 import DropdownTask from './';
 import { workflow } from '../../../pages/dev-classifier/mock-data';
 
@@ -53,7 +53,7 @@ describe('DropdownTask:static methods', function () {
     assert.equal(DropdownTask.isAnnotationComplete(singleSelect, annotation), false);
   });
 
-  it('should not be complete if any required answer missing (Country answered, State missing)', function () {
+  it('should not be complete if one of two required answers missing (Country answered, State missing)', function () {
     const annotation = { value: [{ value: 'HI', option: true }] };
     assert.equal(DropdownTask.isAnnotationComplete(multiSelects, annotation), false);
   });
@@ -81,12 +81,13 @@ describe('DropdownTask:static methods', function () {
 describe('DropdownTask', function () {
   describe('with multiple selects', function () {
     describe('annotation not provided', function () {
-      const annotation = { value: [] };
-
+      let annotation;
       let wrapper;
 
       beforeEach(function () {
-        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />)
+        annotation = { value: [] };
+
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />);
       });
 
       it('should render without crashing', function () {
@@ -103,14 +104,14 @@ describe('DropdownTask', function () {
       });
 
       it('should have an annotation reflecting nothing selected', function () {
-        annotation.value.forEach((annotation) => {
-          const { option, value } = annotation
+        annotation.value.forEach((annotationValue) => {
+          const { option, value } = annotationValue;
           assert.equal(value, null);
           assert.equal(option, false);
         });
       });
 
-      it('should disable selects with unanswered conditions and allowCreate false', function () {
+      it('should disable selects with unanswered conditions and allowCreate false (State, City)', function () {
         assert.equal(wrapper.find('.is-disabled').length, 2);
       });
 
@@ -145,36 +146,118 @@ describe('DropdownTask', function () {
         assert.equal(option, true);
       });
 
-      it('should not save custom answer if allowCreate false', function () {});
-    });
-    describe('first annotation provided', function () {
-      const annotation = { value: [
-        { value: "USA-value", option: true },
-        { value: null, option: false },
-        { value: null, option: false },
-        { value: null, option: false },
-        { value: null, option: false },
-      ]};
+      it('should not save custom answer if allowCreate false', function () {
+        const countrySelect = wrapper.find('#countryID').find(Select);
+        const countrySelectInput = countrySelect.find('input');
 
+        countrySelectInput.simulate('change', { target: { value: 'test Country' }});
+        countrySelectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
+
+        const countryOption = annotation.value[0].option;
+        const countryValue = annotation.value[0].value;
+
+        assert.equal(countryValue, null);
+        assert.equal(countryOption, false);
+      });
+    });
+    describe('first annotation provided (Country)', function () {
+      let annotation;
       let wrapper;
 
       beforeEach(function () {
-        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />)
+        annotation = { value: [
+          { value: 'USA-value', option: true },
+          { value: null, option: false },
+          { value: null, option: false },
+          { value: null, option: false },
+          { value: null, option: false }
+        ] };
+
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />);
       });
 
-      it('should make selects conditional on first annotation and allowCreate false now enabled', function () {
+      it('should make selects conditional on first annotation and allowCreate false now enabled (State now enabled, City still disabled)', function () {
         assert.equal(wrapper.find('.is-disabled').length, 1);
       });
 
-      it('should show the proper options in selects conditional', function () {});
-    });
-    describe('all annotations provided', function () {
-      it('should have the supplied annotations selected, not including custom answers', function () {
-        // assert.equal(wrapper.find('[role="option"][aria-selected="true"]').text(), 'Three');
+      it('should show the proper options in selects conditional (State)', function () {
+        const stateSelect = wrapper.find('#stateID').find(Select);
+        // TODO is deepEqual ok to use here? alternative could be to check length, individual objects' contents
+        assert.deepEqual(stateSelect.props().options, multiSelects.selects[1].options['USA-value']);
       });
-      it('should have the supplied annotations selected, including custom answers', function () {});
-      it('should clear related selects when conditional select cleared', function () {});
-      it('should update the annotations provided on change', function () {});
+    });
+    describe('all annotations provided, no custom answers', function () {
+      let annotation;
+      let wrapper;
+
+      beforeEach(function () {
+        annotation = { value: [
+          { value: 'Mypos-value', option: true },
+          { value: 'Rohan-value', option: true },
+          { value: 'GothamCounty-value', option: true },
+          { value: 'Gotham-value', option: true },
+          { value: 'Isotopes-value', option: true }
+        ] };
+
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />);
+      });
+
+      it('should have the supplied annotations selected', function () {
+        assert.equal(wrapper.find('#countryID').find('[role="option"][aria-selected="true"]').text(), 'Mypos');
+        assert.equal(wrapper.find('#stateID').find('[role="option"][aria-selected="true"]').text(), 'Rohan');
+        assert.equal(wrapper.find('#countyID').find('[role="option"][aria-selected="true"]').text(), 'Gotham County');
+        assert.equal(wrapper.find('#cityID').find('[role="option"][aria-selected="true"]').text(), 'Gotham');
+        // TODO FIX FOLLOWING TEST:
+        // assert.equal(wrapper.find('#teamID').find('[role="option"][aria-selected="true"]').text(), 'Springfield Isotopes');
+      });
+      it('should clear related selects (County, City, Team) when conditional select (State) changed', function () {
+        wrapper.instance().onChangeSelect(1, multiSelects.selects[1].options['Mypos-value'][2]);
+        const expectedAnnotation = { value: [
+          { value: 'Mypos-value', option: true },
+          { value: 'Shire-value', option: true },
+          { value: null, option: false },
+          { value: null, option: false },
+          { value: null, option: false }
+        ] };
+        // TODO is deepEqual ok to use here? alternative could be to check length, individual objects' contents
+        assert.deepEqual(annotation, expectedAnnotation);
+      });
+    });
+    describe('all annotations provided, including custom answers', function () {
+      let annotation;
+      let wrapper;
+
+      beforeEach(function () {
+        annotation = { value: [
+          { value: 'Canada-value', option: true },
+          { value: 'QC', option: true },
+          { value: 'Laval', option: false },
+          { value: null, option: false },
+          { value: 'Rocket', option: false }
+        ] };
+
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />);
+      });
+
+      it('should have the supplied annotations selected', function () {
+        assert.equal(wrapper.find('#countryID').find('[role="option"][aria-selected="true"]').text(), 'Canada');
+        assert.equal(wrapper.find('#stateID').find('[role="option"][aria-selected="true"]').text(), 'Quebec');
+        assert.equal(wrapper.find('#countyID').find('[role="option"][aria-selected="true"]').text(), 'Laval');
+        // TODO FIX FOLLOWING TEST:
+        // assert.equal(wrapper.find('#teamID').find('[role="option"][aria-selected="true"]').text(), 'Rocket');
+      });
+      it('should clear related selects (County, City, Team) when conditional select (State) changed', function () {
+        wrapper.instance().onChangeSelect(1, multiSelects.selects[1].options['Canada-value'][1]);
+        const expectedAnnotation = { value: [
+          { value: 'Canada-value', option: true },
+          { value: 'ON', option: true },
+          { value: null, option: false },
+          { value: null, option: false },
+          { value: null, option: false }
+        ] };
+        // TODO is deepEqual ok to use here? alternative could be to check length, individual objects' contents
+        assert.deepEqual(annotation, expectedAnnotation);
+      });
     });
   });
 });
