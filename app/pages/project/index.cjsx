@@ -337,7 +337,7 @@ ProjectPage = React.createClass
         projectIsComplete: @state.projectIsComplete
         splits: @props.splits}
 
-      {unless @props.project.launch_approved or @props.project.beta_approved
+      {unless @props.project.launch_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
 
       {unless @props.location.pathname is projectPath
