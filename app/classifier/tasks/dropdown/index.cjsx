@@ -160,7 +160,7 @@ module.exports = React.createClass
           disabled = @getDisabledAttribute(i)
           selectedOption = if @state.selectedOptions[i]?.value then @state.selectedOptions[i] else null
           optionsKeys.push selectedOption.value if selectedOption?.value
-          <div key={select.id}>
+          <div id={select.id} key={select.id}>
             {if select.title isnt @props.task.instruction
               <div>{select.title}</div>}
             {if select.allowCreate

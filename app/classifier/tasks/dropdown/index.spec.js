@@ -6,8 +6,9 @@ import assert from 'assert';
 import { mount } from 'enzyme';
 import Select from 'react-select'; // required to properly simulate change, see allowCreate related testing
 import DropdownTask from './';
+import { workflow } from '../../../pages/dev-classifier/mock-data';
 
-const task = {
+const singleSelect = {
   instruction: 'Is there something here?',
   selects: [{
     id: 'numbers123',
@@ -22,9 +23,18 @@ const task = {
   }]
 };
 
+const multiSelects = workflow.tasks.dropdown;
+
+// multiSelects:
+//   1 - Country (required:true)
+//   2 - State (condition:Country, required:true, allowCreate:false)
+//   3 - County (condition:State, allowCreate:true)
+//   4 - City (condition:County, allowCreate:false)
+//   5 - Best State Team (condition:State, allowCreate:true)
+
 describe('DropdownTask:static methods', function () {
   it('should have the correct question text', function () {
-    assert.equal(DropdownTask.getTaskText(task), task.instruction);
+    assert.equal(DropdownTask.getTaskText(singleSelect), singleSelect.instruction);
   });
 
   it('the default annotation should be an empty array', function () {
@@ -32,125 +42,139 @@ describe('DropdownTask:static methods', function () {
   });
 
   it('should not be complete if required and unanswered', function () {
-    task.selects[0].required = true;
+    singleSelect.selects[0].required = true;
     const annotation = { value: [] };
-    assert.equal(DropdownTask.isAnnotationComplete(task, annotation), false);
+    assert.equal(DropdownTask.isAnnotationComplete(singleSelect, annotation), false);
   });
 
-  it('should not be complete if required and answer cleared', function () {
-    task.selects[0].required = true;
+  it('should not be complete if required answer cleared', function () {
+    singleSelect.selects[0].required = true;
     const annotation = { value: [{ value: null, option: false }] };
-    assert.equal(DropdownTask.isAnnotationComplete(task, annotation), false);
+    assert.equal(DropdownTask.isAnnotationComplete(singleSelect, annotation), false);
   });
 
-  it('should be complete if required and answered with option provided', function () {
-    task.selects[0].required = true;
+  it('should not be complete if any required answer missing (Country answered, State missing)', function () {
+    const annotation = { value: [{ value: 'HI', option: true }] };
+    assert.equal(DropdownTask.isAnnotationComplete(multiSelects, annotation), false);
+  });
+
+  it('should be complete if required and answered with provided option', function () {
+    singleSelect.selects[0].required = true;
     const annotation = { value: [{ option: true, value: 3 }] };
-    assert.equal(DropdownTask.isAnnotationComplete(task, annotation), true);
+    assert.equal(DropdownTask.isAnnotationComplete(singleSelect, annotation), true);
+  });
+
+  it('should be complete if required and answered with custom option', function () {
+    singleSelect.selects[0].required = true;
+    singleSelect.selects[0].allowCreate = true;
+    const annotation = { value: [{ option: false, value: 'Four' }] };
+    assert.equal(DropdownTask.isAnnotationComplete(singleSelect, annotation), true);
   });
 
   it('should be complete if not required', function () {
-    task.selects[0].required = false;
+    singleSelect.selects[0].required = false;
     const annotation = { value: [] };
-    assert.equal(DropdownTask.isAnnotationComplete(task, annotation), true);
+    assert.equal(DropdownTask.isAnnotationComplete(singleSelect, annotation), true);
   });
 });
 
-describe('DropdownTask:annotation not provided', function () {
-  const annotation = { value: [] };
+describe('DropdownTask', function () {
+  describe('with multiple selects', function () {
+    describe('annotation not provided', function () {
+      const annotation = { value: [] };
 
-  const wrapper = mount(<DropdownTask task={task} annotation={annotation} onChange={function (a) { return a; }} />);
+      let wrapper;
 
-  it('should render without crashing', function () {
-  });
+      beforeEach(function () {
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />)
+      });
 
-  it('should have a question', function () {
-    const question = wrapper.find('.question');
-    assert.equal(question.length, 1);
-  });
+      it('should render without crashing', function () {
+      });
 
-  it('should have an annotation reflecting nothing selected', function () {
-    const { option, value } = annotation.value[0];
-    assert.equal(value, null);
-    assert.equal(option, false);
-  });
+      it('should have a question', function () {
+        const question = wrapper.find('.question');
+        assert.equal(question.length, 1);
+      });
 
-  it('should update the annotation on change', function () {
-    wrapper.instance().onChangeSelect(0, task.selects[0].options['*'][0]);
-    const { option, value } = annotation.value[0];
-    assert.equal(value, 1);
-    assert.equal(option, true);
-  });
-});
+      it('should render all selects', function () {
+        const renderedSelects = wrapper.find(Select);
+        assert.equal(renderedSelects.length, multiSelects.selects.length);
+      });
 
-describe('DropdownTask:annotation provided', function () {
-  describe('and included as an option', function () {
-    const annotation = {
-      value: [{ option: true, value: 3 }]
-    };
+      it('should have an annotation reflecting nothing selected', function () {
+        annotation.value.forEach((annotation) => {
+          const { option, value } = annotation
+          assert.equal(value, null);
+          assert.equal(option, false);
+        });
+      });
 
-    const wrapper = mount(<DropdownTask task={task} annotation={annotation} onChange={function (a) { return a; }} />);
+      it('should disable selects with unanswered conditions and allowCreate false', function () {
+        assert.equal(wrapper.find('.is-disabled').length, 2);
+      });
 
-    it('should have the supplied annotation selected', function () {
-      assert.equal(wrapper.find('[role="option"][aria-selected="true"]').text(), 'Three');
+      it('should enable and save custom answer for selects with allowCreate true', function () {
+        const countySelect = wrapper.find('#countyID').find(Select);
+        const countySelectInput = countySelect.find('input');
+
+        countySelectInput.simulate('change', { target: { value: 'test County' }});
+        countySelectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
+
+        const countyOption = annotation.value[2].option;
+        const countyValue = annotation.value[2].value;
+        assert.equal(countyValue, 'test County');
+        assert.equal(countyOption, false);
+
+        const teamSelect = wrapper.find('#teamID').find(Select);
+        const teamSelectInput = teamSelect.find('input');
+
+        teamSelectInput.simulate('change', { target: { value: 'test Team' }});
+        teamSelectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
+
+        const teamOption = annotation.value[4].option;
+        const teamValue = annotation.value[4].value;
+        assert.equal(teamValue, 'test Team');
+        assert.equal(teamOption, false);
+      });
+
+      it('should update the annotation on change', function () {
+        wrapper.instance().onChangeSelect(0, multiSelects.selects[0].options['*'][0]);
+        const { option, value } = annotation.value[0];
+        assert.equal(value, 'USA-value');
+        assert.equal(option, true);
+      });
+
+      it('should not save custom answer if allowCreate false', function () {});
     });
+    describe('first annotation provided', function () {
+      const annotation = { value: [
+        { value: "USA-value", option: true },
+        { value: null, option: false },
+        { value: null, option: false },
+        { value: null, option: false },
+        { value: null, option: false },
+      ]};
 
-    it('should update the annotation on change', function () {
-      wrapper.instance().onChangeSelect(0, task.selects[0].options['*'][0]);
-      const { option, value } = annotation.value[0];
-      assert.equal(value, 1);
-      assert.equal(option, true);
+      let wrapper;
+
+      beforeEach(function () {
+        wrapper = mount(<DropdownTask task={multiSelects} annotation={annotation} onChange={function (a) { return a; }} />)
+      });
+
+      it('should make selects conditional on first annotation and allowCreate false now enabled', function () {
+        assert.equal(wrapper.find('.is-disabled').length, 1);
+      });
+
+      it('should show the proper options in selects conditional', function () {});
     });
-  });
-
-  describe('and not included as an option', function () {
-    const annotation = {
-      value: [{ option: false, value: 'Four' }]
-    };
-
-    const wrapper = mount(<DropdownTask task={task} annotation={annotation} onChange={function (a) { return a; }} />);
-
-    it('should have the supplied annotation selected', function () {
-      assert.equal(wrapper.find('[role="option"][aria-selected="true"]').text(), 'Four');
+    describe('all annotations provided', function () {
+      it('should have the supplied annotations selected, not including custom answers', function () {
+        // assert.equal(wrapper.find('[role="option"][aria-selected="true"]').text(), 'Three');
+      });
+      it('should have the supplied annotations selected, including custom answers', function () {});
+      it('should clear related selects when conditional select cleared', function () {});
+      it('should update the annotations provided on change', function () {});
     });
-
-    it('should update the annotation on change', function () {
-      wrapper.instance().onChangeSelect(0, task.selects[0].options['*'][0]);
-      const { option, value } = annotation.value[0];
-      assert.equal(value, 1);
-      assert.equal(option, true);
-    });
-  });
-});
-
-describe('DropdownTask:allowCreate true', function () {
-  const annotation = { value: [] };
-
-  it('should save custom answer to annotation, with option false', function () {
-    task.selects[0].allowCreate = true;
-    const wrapper = mount(<DropdownTask task={task} annotation={annotation} onChange={function (a) { return a; }} />);
-    const select = wrapper.find(Select);
-    const selectInput = select.find('input');
-    selectInput.simulate('change', { target: { value: 'Four' }});
-    selectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
-    const { option, value } = annotation.value[0];
-    assert.equal(value, 'Four');
-    assert.equal(option, false);
-  });
-});
-
-describe('DropdownTask:allowCreate false', function () {
-  const annotation = { value: [] };
-
-  it('should NOT save custom answer to annotation', function () {
-    task.selects[0].allowCreate = false;
-    const wrapper = mount(<DropdownTask task={task} annotation={annotation} onChange={function (a) { return a; }} />);
-    const select = wrapper.find(Select);
-    const selectInput = select.find('input');
-    selectInput.simulate('change', { target: { value: 'Four' }});
-    selectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
-    const { option, value } = annotation.value[0];
-    assert.equal(value, null);
-    assert.equal(option, false);
   });
 });
