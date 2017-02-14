@@ -230,7 +230,17 @@ ProjectPage = React.createClass
     getUserRoles.then (userRoles) =>
       isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles
 
+  renderProjectName: (betaApproved) ->
+    if betaApproved
+      <span>
+        <p>Under Review</p>
+        {@props.project.display_name}
+      </span>
+    else
+      @props.project.display_name
+
   render: ->
+    betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
     onHomePage = projectPath is @props.location.pathname
 
@@ -263,13 +273,13 @@ ProjectPage = React.createClass
             Visit {@props.project.display_name}
           </a>
         else
-          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.home'}>
+          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab #{('beta-approved' if betaApproved) ? ''}" onClick={logClick?.bind this, 'project.nav.home'}>
             {if @state.avatar?
               <Thumbnail src={@state.avatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
             {if @props.loading
               'Loading...'
             else
-              @props.project.display_name}
+              @renderProjectName(betaApproved)}
           </IndexLink>}
 
         <br className='responsive-break' />
