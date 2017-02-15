@@ -40,7 +40,13 @@ module.exports = React.createClass
     x = (@state.naturalWidth - width) / 2
     y = (@state.naturalHeight - height) / 2
 
-    <svg viewBox="#{x} #{y} #{width} #{height}" src={@props.src} width={@props.width} height={@props.height}>
+    <svg
+      viewBox="#{x} #{y} #{width} #{height}"
+      src={@props.src}
+      width={@props.width}
+      height={@props.height}
+      className={@props.className}
+      >
       <image ref="image" x="0" y="0" />
     </svg>
 
