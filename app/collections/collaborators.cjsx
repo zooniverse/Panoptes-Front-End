@@ -9,6 +9,7 @@ ID_PREFIX = 'COLLECTION_COLLABORATORS_PAGE_'
 POSSIBLE_ROLES = [
   "owner",
   "collaborator",
+  "contributor",
   "viewer"
 ]
 
@@ -19,6 +20,9 @@ ROLES_INFO =
   collaborator:
     label: "Collaborator"
     description: "Collaborators have full access to add and remove subjects from the collection."
+  contributor:
+    label: "Contributor"
+    description: "Contributors can add subjects to the collection, but not edit or delete from them."
   viewer:
     label: "Viewer"
     description: "Viewers can see this collection even if it's private."

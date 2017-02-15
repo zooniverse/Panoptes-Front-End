@@ -32,3 +32,6 @@ require('./lib/log-deployed-commit')()
 window?.zooAPI = require 'panoptes-client/lib/api-client'
 window?.talkAPI = require 'panoptes-client/lib/talk-client'
 require('./lib/split-config')
+
+# zooAPI.root = 'http://localhost:3000/api'
+# talkAPI.root = 'http://localhost:3001'
