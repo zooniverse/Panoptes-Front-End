@@ -49,10 +49,16 @@ List = React.createClass
 
   listCollections: (props) ->
     query = {}
-    if props.params?.collection_owner?
+    if props.params.collection_owner is props.user?.login
       query.current_user_roles = "owner,contributor,collaborator"
-    else if props.params?.profile_name?
+    else if props.params.collection_owner?
+      query.owner = props.params.collection_owner
+
+    if props.params.profile_name is props.user?.login
+      query.current_user_roles = "owner,contributor,collaborator"
+    else if props.params.profile_name?
       query.owner = props.params.profile_name
+
     if props.project?
       query.project_ids = props.project.id
     query.favorite = props.favorite
@@ -66,7 +72,8 @@ List = React.createClass
         @setState {collections}
 
   shared: (collection) ->
-    @props.params?.collection_owner? and @props.params?.collection_owner isnt collection.links.owner.display_name
+    if (@props.params.collection_owner is @props.user.login) or (@props.params.profile_name is @props.user.login)
+      @props.user?.id isnt collection.links.owner.id
 
   render: ->
     {location} = @props
