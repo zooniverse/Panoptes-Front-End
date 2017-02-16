@@ -105,7 +105,7 @@ module.exports = React.createClass
   syncAnnotations: () ->
     # this can only be called after props have been updated
     # as it relies on props.task and props.annotation.
-    # clear selections, then check each annotation.value 
+    # clear selections, then check each annotation.value
     # and set the corresponding selected option for each select
     selectedOptions = []
     optionsKeys = []
@@ -160,7 +160,7 @@ module.exports = React.createClass
           disabled = @getDisabledAttribute(i)
           selectedOption = if @state.selectedOptions[i]?.value then @state.selectedOptions[i] else null
           optionsKeys.push selectedOption.value if selectedOption?.value
-          <div key={select.id}>
+          <div id={select.id} key={select.id}>
             {if select.title isnt @props.task.instruction
               <div>{select.title}</div>}
             {if select.allowCreate
