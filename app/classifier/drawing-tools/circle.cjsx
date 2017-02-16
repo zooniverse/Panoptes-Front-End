@@ -47,6 +47,13 @@ module.exports = React.createClass
       Math.atan2(deltaY, deltaX) * (-180 / Math.PI)
 
   getDeletePosition: ->
+    deleteAngle = @repositionDelete()
+    console.log deleteAngle
+    theta = (deleteAngle - @props.mark.angle) * (Math.PI / 180)
+    x: (@props.mark.r + (BUFFER / @props.scale.horizontal)) * Math.cos theta
+    y: -1 * (@props.mark.r + (BUFFER / @props.scale.vertical)) * Math.sin theta
+
+  repositionDelete: ->
     deleteAngle = DELETE_BUTTON_ANGLE
     if (@props.mark.x + @props.mark.r) * @props.scale.horizontal >= @props.containerRect.width
       deleteAngle = 135
@@ -54,9 +61,7 @@ module.exports = React.createClass
       deleteAngle = 225
       if (@props.mark.x - @props.mark.r - BUFFER) * @props.scale.horizontal <= 0
         deleteAngle = 315
-    theta = (deleteAngle - @props.mark.angle) * (Math.PI / 180)
-    x: (@props.mark.r + (BUFFER / @props.scale.horizontal)) * Math.cos theta
-    y: -1 * (@props.mark.r + (BUFFER / @props.scale.vertical)) * Math.sin theta
+    deleteAngle
 
   render: ->
     positionAndRotate = "
