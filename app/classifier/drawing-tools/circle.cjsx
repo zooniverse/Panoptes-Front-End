@@ -48,7 +48,6 @@ module.exports = React.createClass
 
   getDeletePosition: ->
     deleteAngle = @repositionDelete()
-    console.log deleteAngle
     theta = (deleteAngle - @props.mark.angle) * (Math.PI / 180)
     x: (@props.mark.r + (BUFFER / @props.scale.horizontal)) * Math.cos theta
     y: -1 * (@props.mark.r + (BUFFER / @props.scale.vertical)) * Math.sin theta
