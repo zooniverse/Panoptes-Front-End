@@ -19,7 +19,7 @@ TalkTag = (props) ->
     </Link>
     {' '}
   </div>
-  
+
 module.exports = React.createClass
   displayName: 'TalkPopularTags'
 
@@ -29,10 +29,10 @@ module.exports = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
-  
+
   getInitialState: ->
     tags: []
-  
+
   componentWillMount: ->
     @tagsRequest()
 
@@ -51,6 +51,10 @@ module.exports = React.createClass
       .get query
       .then (tags) =>
         @setState {tags}
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.section isnt @props.section
+      @tagsRequest()
 
   render: ->
     <div className="talk-popular-tags">
