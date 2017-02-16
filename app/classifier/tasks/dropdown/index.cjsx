@@ -82,23 +82,21 @@ module.exports = React.createClass
         not select.required or (annotation.value[i]?.value? and annotation.value[i]?.value isnt "")
 
   getInitialState: ->
-    selectedOptions: []
+    optionsKeys: {}
 
   componentWillMount: ->
     @menus = []
     @syncAnnotations()
 
-  componentDidMount: ->
-    annotationValues = @props.annotation.value
-    unless annotationValues.length
-      @props.annotation.value = @props.task.selects.map -> {value: null, option: false}
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.task isnt @props.task
+      @syncAnnotations()
 
+  componentDidMount: ->
     if @props.autoFocus is true
       @handleFocus()
 
   componentDidUpdate: (prevProps) ->
-    if prevProps.task isnt @props.task
-      @syncAnnotations()
     if prevProps.task isnt @props.task and @props.autoFocus is true
       @handleFocus()
 
@@ -107,38 +105,48 @@ module.exports = React.createClass
     # as it relies on props.task and props.annotation.
     # clear selections, then check each annotation.value
     # and set the corresponding selected option for each select
-    selectedOptions = []
-    optionsKeys = []
-    @props.annotation.value.map (annotation, i) =>
-      if annotation.option
-        [selected] = @getOptions(i, optionsKeys).filter (option) -> option.value is annotation.value
-        optionsKeys.push selected.value if selected?.value
-        selectedOptions[i] = selected
-      else
-        selectedOptions[i] = {label: annotation.value, value: annotation.value}
-    @setState {selectedOptions}
+    if @props.annotation.value.length?
+      for answer, i in @props.annotation.value
+        @handleOptionsKeys(i, answer.value)
 
   handleFocus: ->
     @menus[0].focus()
 
-  getOptions: (i, optionsKeys) ->
-    optionsKey = if optionsKeys.length then optionsKeys.join(';') else '*'
+  handleOptionsKeys: (i, value) ->
+    {id, condition} = @props.task.selects[i]
+    optionsKeys = @state.optionsKeys
+
+    if value is null or i is 0 or i is '0'
+      optionsKeys[id] = value
+    else
+      optionsKeys[id] = "#{optionsKeys[condition]};#{value}"
+    @setState {optionsKeys}
+
+  getOptions: (i) ->
     select = @props.task.selects[i]
-    options = select.options[optionsKey]
-    if options then options else []
+    optionsKey = if not select.condition? then '*' else @state.optionsKeys[select.condition]
+    select.options[optionsKey] or []
+
+  getOptionFromAnnotation: (i) ->
+    if @props.annotation.value[i]?.option is false and @props.annotation.value[i]?.value isnt null
+      {value: @props.annotation.value[i]?.value, label: @props.annotation.value[i]?.value}
+    else if @props.annotation.value[i]?.option is true
+      filteredOption = @getOptions(i)?.filter (option) => option.value is @props.annotation.value[i]?.value
+      filteredOption[0]
+    else
+      null
 
   getDisabledAttribute: (i) ->
     {selects} = @props.task
     select = selects[i]
-    optionsKeys = (o.value for o in @state.selectedOptions.slice(0,i))
-    [condition] = selects.filter (filterSelect) => filterSelect.id is select.condition
-    conditionIndex = selects.indexOf(condition)
+    condition = selects.filter (filterSelect) => filterSelect.id is select.condition
+    conditionIndex = selects.indexOf(condition[0])
+    optionsKeys = @state.optionsKeys
 
-    if select.condition? and not @props.annotation.value[conditionIndex]
-      return true
-    if select.condition? and select.allowCreate is false and not @getOptions(i, optionsKeys).length
-      return true
-    false
+    if select.condition? and select.allowCreate is false and not @props.annotation.value[conditionIndex]?.option
+      true
+    else
+      false
 
   clearRelated: (i) ->
     {selects} = @props.task
@@ -150,16 +158,14 @@ module.exports = React.createClass
 
   render: ->
     {selects} = @props.task
-    optionsKeys = []
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <div>
         {selects.map (select, i) =>
           options = []
-          options.push option for option in @getOptions(i, optionsKeys)
+          options.push option for option in @getOptions(i)
+          value = @getOptionFromAnnotation(i)
           disabled = @getDisabledAttribute(i)
-          selectedOption = if @state.selectedOptions[i]?.value then @state.selectedOptions[i] else null
-          optionsKeys.push selectedOption.value if selectedOption?.value
           <div id={select.id} key={select.id}>
             {if select.title isnt @props.task.instruction
               <div>{select.title}</div>}
@@ -170,7 +176,7 @@ module.exports = React.createClass
             <SelectComponent
               options={options}
               onChange={@onChangeSelect.bind(@, i)}
-              value={selectedOption}
+              value={value}
               disabled={disabled}
               placeholder={if disabled then "N/A"}
               noResultsText={if not options?.length then null}
@@ -192,20 +198,18 @@ module.exports = React.createClass
     </GenericTask>
 
   onChangeSelect: (i, option = {label: null, value: null}) ->
-    {selectedOptions} = @state
-    selectedOptions[i] = option
     value = @props.annotation.value
 
-    optionsKeys = (o.value for o in selectedOptions.slice(0,i))
-    options = @getOptions(i, optionsKeys)
-    newIndex = options?.indexOf(option)
-    if newIndex is -1 or newIndex is undefined
+    newOptionIndex = @getOptions(i)?.indexOf(option)
+
+    if newOptionIndex is -1 or newOptionIndex is undefined
       value[i] = {value: option.value, option: false}
+      @handleOptionsKeys(i, null)
     else
       value[i] = {value: option.value, option: true}
+      @handleOptionsKeys(i, option.value)
 
     @clearRelated(i)
 
     newAnnotation = Object.assign @props.annotation, {value}
-    @setState {selectedOptions}
     @props.onChange newAnnotation
