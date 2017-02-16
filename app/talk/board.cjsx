@@ -15,9 +15,10 @@ merge = require 'lodash.merge'
 talkConfig = require './config'
 SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
-PopularTags = require './popular-tags'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
+
+`import PopularTags from './popular-tags.jsx';`
 
 promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 

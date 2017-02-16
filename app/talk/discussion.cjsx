@@ -13,10 +13,10 @@ SignInPrompt = require '../partials/sign-in-prompt'
 alert = require '../lib/alert'
 merge = require 'lodash.merge'
 FollowDiscussion = require './follow-discussion'
-PopularTags = require './popular-tags'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
 `import DiscussionComment from './discussion-comment';`
+`import PopularTags from './popular-tags.jsx';`
 
 PAGE_SIZE = talkConfig.discussionPageSize
 
@@ -50,7 +50,7 @@ module.exports = React.createClass
           if nextProps.user isnt @props.user
             talkClient
               .type 'roles'
-              .get 
+              .get
                 user_id: nextProps.user?.id
                 section: ['zooniverse', @state.discussion.section]
                 is_shown: true
@@ -81,7 +81,7 @@ module.exports = React.createClass
       if @props.user?
         talkClient
           .type 'roles'
-          .get 
+          .get
             user_id: @props.user.id
             section: ['zooniverse', @state.discussion.section]
             is_shown: true
@@ -126,7 +126,7 @@ module.exports = React.createClass
     @discussionsRequest(discussion)
       .then (discussion) =>
         @setState {discussion: discussion[0]}
-        
+
         talkClient
           .type 'boards'
           .get

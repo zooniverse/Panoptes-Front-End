@@ -6,10 +6,10 @@ Paginator = require './lib/paginator'
 getSubjectLocation = require '../lib/get-subject-location'
 resourceCount = require './lib/resource-count'
 Loading = require '../components/loading-indicator'
-PopularTags = require './popular-tags'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
 
+`import PopularTags from './popular-tags.jsx';`
 `import Thumbnail from '../components/thumbnail';`
 
 module.exports = React.createClass
