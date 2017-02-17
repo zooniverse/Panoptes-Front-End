@@ -92,7 +92,6 @@ module.exports = React.createClass
     annotationValues = @props.annotation.value
     unless annotationValues.length
       @props.annotation.value = @props.task.selects.map -> {value: null, option: false}
-      @syncAnnotations()
 
     if @props.autoFocus is true
       @handleFocus()
@@ -109,12 +108,10 @@ module.exports = React.createClass
     # clear selections, then check each annotation.value
     # and set the corresponding selected option for each select
     selectedOptions = []
-    optionsKeys = {}
     @props.annotation.value.map (annotation, i) =>
       if annotation.option
         select = @props.task.selects[i]
-        [selected] = @getOptions(i, optionsKeys).filter (option) -> option.value is annotation.value
-        optionsKeys[select.id] = selected.value if selected?.value
+        [selected] = @getOptions(i).filter (option) -> option.value is annotation.value
         selectedOptions[i] = selected
       else
         selectedOptions[i] = {label: annotation.value, value: annotation.value}
@@ -123,28 +120,30 @@ module.exports = React.createClass
   handleFocus: ->
     @menus[0].focus()
 
-  getOptions: (i, optionsKeys) ->
+  getOptionsKey: (i, optionsKey = '') ->
+    {selects} = @props.task
+    select = selects[i]
+    [condition] = selects.filter (filterSelect) => filterSelect.id is select.condition
+    conditionIndex = selects.indexOf(condition)
+    optionsKey = if optionsKey.length is 0 then @props.annotation.value[conditionIndex]?.value else "#{@props.annotation.value[conditionIndex]?.value};#{optionsKey}"
+    if condition.condition? then @getOptionsKey(conditionIndex, optionsKey) else optionsKey
+
+  getOptions: (i) ->
     select = @props.task.selects[i]
-    conditions = select.condition?.split ';'
-    conditions ?= []
-    optionsKey = conditions.map (condition) -> optionsKeys[condition]
-    optionsKey = if optionsKey.length then optionsKey.join(';') else '*'
+    optionsKey = if not select.condition? then '*' else @getOptionsKey(i)
     options = select.options[optionsKey]
-    if options then options else []
+    if options? then options else []
 
   getDisabledAttribute: (i) ->
     {selects} = @props.task
     select = selects[i]
-    optionsKeys = {}
-    @state.selectedOptions.slice(0,i).map (option, j) => optionsKeys[@props.task.selects[j].id] = option.value if option?.value
     [condition] = selects.filter (filterSelect) => filterSelect.id is select.condition
     conditionIndex = selects.indexOf(condition)
 
-    if select.condition? and not @props.annotation.value[conditionIndex]
-      return true
-    if select.condition? and select.allowCreate is false and not @getOptions(i, optionsKeys).length
-      return true
-    false
+    if select.condition? and select.allowCreate is false and not @props.annotation.value[conditionIndex]?.option
+      true
+    else
+      false
 
   clearRelated: (i) ->
     {selects} = @props.task
@@ -156,16 +155,14 @@ module.exports = React.createClass
 
   render: ->
     {selects} = @props.task
-    optionsKeys = {}
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <div>
         {selects.map (select, i) =>
           options = []
-          options.push option for option in @getOptions(i, optionsKeys)
+          options.push option for option in @getOptions(i)
           disabled = @getDisabledAttribute(i)
           selectedOption = if @state.selectedOptions[i]?.value then @state.selectedOptions[i] else null
-          optionsKeys[select.id] = selectedOption.value if selectedOption?.value
           <div id={select.id} key={select.id}>
             {if select.title isnt @props.task.instruction
               <div>{select.title}</div>}
@@ -202,9 +199,7 @@ module.exports = React.createClass
     selectedOptions[i] = option
     value = @props.annotation.value
 
-    optionsKeys = {}
-    selectedOptions.slice(0,i).map (option, j) => optionsKeys[@props.task.selects[j].id] = option.value if option?.value
-    options = @getOptions(i, optionsKeys)
+    options = @getOptions(i)
     newIndex = options?.indexOf(option)
     if newIndex is -1 or newIndex is undefined
       value[i] = {value: option.value, option: false}
