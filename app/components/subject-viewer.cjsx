@@ -50,7 +50,7 @@ module.exports = React.createClass
   getInitialState: ->
     loading: true
     playing: false
-    frame: @props.frame ? 0
+    frame: @props.frame ? parseInt(@props.subject.metadata.default_frame, 10) ? 0
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
