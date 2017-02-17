@@ -92,6 +92,7 @@ module.exports = React.createClass
     annotationValues = @props.annotation.value
     unless annotationValues.length
       @props.annotation.value = @props.task.selects.map -> {value: null, option: false}
+      @syncAnnotations()
 
     if @props.autoFocus is true
       @handleFocus()
@@ -108,11 +109,12 @@ module.exports = React.createClass
     # clear selections, then check each annotation.value
     # and set the corresponding selected option for each select
     selectedOptions = []
-    optionsKeys = []
+    optionsKeys = {}
     @props.annotation.value.map (annotation, i) =>
       if annotation.option
+        select = @props.task.selects[i]
         [selected] = @getOptions(i, optionsKeys).filter (option) -> option.value is annotation.value
-        optionsKeys.push selected.value if selected?.value
+        optionsKeys[select.id] = selected.value if selected?.value
         selectedOptions[i] = selected
       else
         selectedOptions[i] = {label: annotation.value, value: annotation.value}
@@ -122,15 +124,19 @@ module.exports = React.createClass
     @menus[0].focus()
 
   getOptions: (i, optionsKeys) ->
-    optionsKey = if optionsKeys.length then optionsKeys.join(';') else '*'
     select = @props.task.selects[i]
+    conditions = select.condition?.split ';'
+    conditions ?= []
+    optionsKey = conditions.map (condition) -> optionsKeys[condition]
+    optionsKey = if optionsKey.length then optionsKey.join(';') else '*'
     options = select.options[optionsKey]
     if options then options else []
 
   getDisabledAttribute: (i) ->
     {selects} = @props.task
     select = selects[i]
-    optionsKeys = (o.value for o in @state.selectedOptions.slice(0,i))
+    optionsKeys = {}
+    @state.selectedOptions.slice(0,i).map (option, j) => optionsKeys[@props.task.selects[j].id] = option.value if option?.value
     [condition] = selects.filter (filterSelect) => filterSelect.id is select.condition
     conditionIndex = selects.indexOf(condition)
 
@@ -150,7 +156,7 @@ module.exports = React.createClass
 
   render: ->
     {selects} = @props.task
-    optionsKeys = []
+    optionsKeys = {}
 
     <GenericTask question={@props.task.instruction} help={@props.task.help} required={@props.task.required}>
       <div>
@@ -159,7 +165,7 @@ module.exports = React.createClass
           options.push option for option in @getOptions(i, optionsKeys)
           disabled = @getDisabledAttribute(i)
           selectedOption = if @state.selectedOptions[i]?.value then @state.selectedOptions[i] else null
-          optionsKeys.push selectedOption.value if selectedOption?.value
+          optionsKeys[select.id] = selectedOption.value if selectedOption?.value
           <div id={select.id} key={select.id}>
             {if select.title isnt @props.task.instruction
               <div>{select.title}</div>}
@@ -196,7 +202,8 @@ module.exports = React.createClass
     selectedOptions[i] = option
     value = @props.annotation.value
 
-    optionsKeys = (o.value for o in selectedOptions.slice(0,i))
+    optionsKeys = {}
+    selectedOptions.slice(0,i).map (option, j) => optionsKeys[@props.task.selects[j].id] = option.value if option?.value
     options = @getOptions(i, optionsKeys)
     newIndex = options?.indexOf(option)
     if newIndex is -1 or newIndex is undefined
