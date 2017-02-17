@@ -18,7 +18,7 @@ alert = require '../lib/alert'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
 
-`import PopularTags from './popular-tags.jsx';`
+`import PopularTags from './popular-tags';`
 
 promptToSignIn = -> alert (resolve) -> <SignInPrompt onChoose={resolve} />
 

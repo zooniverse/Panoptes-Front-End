@@ -16,7 +16,7 @@ FollowDiscussion = require './follow-discussion'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
 `import DiscussionComment from './discussion-comment';`
-`import PopularTags from './popular-tags.jsx';`
+`import PopularTags from './popular-tags';`
 
 PAGE_SIZE = talkConfig.discussionPageSize
 

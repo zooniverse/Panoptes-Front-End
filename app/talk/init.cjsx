@@ -16,7 +16,7 @@ AddZooTeamForm = require './add-zoo-team-form'
 DragReorderable = require 'drag-reorderable'
 Paginator = require './lib/paginator'
 
-`import PopularTags from './popular-tags.jsx';`
+`import PopularTags from './popular-tags';`
 
 module.exports = React.createClass
   displayName: 'TalkInit'

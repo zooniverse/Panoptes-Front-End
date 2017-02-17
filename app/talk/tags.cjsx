@@ -9,7 +9,7 @@ Loading = require '../components/loading-indicator'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
 
-`import PopularTags from './popular-tags.jsx';`
+`import PopularTags from './popular-tags';`
 `import Thumbnail from '../components/thumbnail';`
 
 module.exports = React.createClass

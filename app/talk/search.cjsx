@@ -6,7 +6,7 @@ Loading = require '../components/loading-indicator'
 ActiveUsers = require './active-users'
 ProjectLinker = require './lib/project-linker'
 `import TalkSearchResult from './search-result'`;
-`import PopularTags from './popular-tags.jsx';`
+`import PopularTags from './popular-tags';`
 
 TALK_SEARCH_ERROR_MESSAGE = 'There was an error with your search. Please try again.'
 VALID_SEARCH_PARAMS = ['page', 'page_size', 'query', 'types', 'section']

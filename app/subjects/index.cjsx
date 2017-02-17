@@ -9,7 +9,7 @@ SubjectDiscussionList = require './discussion-list'
 SubjectMentionList = require './mention-list'
 SubjectCollectionList = require './collection-list'
 
-`import PopularTags from '../talk/popular-tags.jsx';`
+`import PopularTags from '../talk/popular-tags';`
 
 module.exports = React.createClass
   displayName: 'Subject'

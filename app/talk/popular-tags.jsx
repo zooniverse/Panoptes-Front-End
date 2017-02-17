@@ -27,7 +27,7 @@ const TalkTag = (props) => {
   );
 };
 
-export default class TalkPopularTags extends React.Component {
+class PopularTags extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,25 +36,25 @@ export default class TalkPopularTags extends React.Component {
   }
 
   componentWillMount() {
-    this.tagsRequest();
+    this.tagsRequest(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.section !== this.props.section) {
-      this.tagsRequest();
+      this.tagsRequest(nextProps);
     }
   }
 
-  tagsRequest() {
+  tagsRequest(props) {
     const query = {
-      section: this.props.section,
+      section: props.section,
       limit: 20,
       page_size: 20
     };
 
-    if (this.props.type && this.props.id) {
-      query.taggable_type = this.props.type;
-      query.taggable_id = this.props.id;
+    if (props.type && props.id) {
+      query.taggable_type = props.type;
+      query.taggable_id = props.id;
     }
 
     return talkClient.type('tags/popular').get(query)
@@ -94,12 +94,19 @@ export default class TalkPopularTags extends React.Component {
   }
 }
 
-TalkPopularTags.propTypes = {
-  header: React.PropTypes.object,
-  project: React.PropTypes.object,
+PopularTags.propTypes = {
+  header: React.PropTypes.shape({
+    props: React.PropTypes.object,
+    type: React.PropTypes.string
+  }),
+  project: React.PropTypes.shape({
+    slug: React.PropTypes.string
+  }),
   section: React.PropTypes.string.isRequired
 };
 
-TalkPopularTags.contextTypes = {
+PopularTags.contextTypes = {
   geordi: React.PropTypes.object
 };
+
+export default PopularTags;
