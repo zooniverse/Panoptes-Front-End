@@ -80,7 +80,7 @@ describe('DropdownTask:static methods', function () {
 
 describe('DropdownTask', function () {
   describe('with multiple selects', function () {
-    describe('annotation not provided', function () {
+    describe('and annotation not provided,', function () {
       let annotation;
       let wrapper;
 
@@ -111,6 +111,34 @@ describe('DropdownTask', function () {
         });
       });
 
+      it('should disable selects with unanswered conditions and allowCreate false (State, City)', function () {
+        assert.equal(wrapper.find('.is-disabled').length, 2);
+      });
+
+      it('should enable and save custom answer for selects with allowCreate true', function () {
+        const countySelect = wrapper.find('#countyID').find(Select);
+        const countySelectInput = countySelect.find('input');
+
+        countySelectInput.simulate('change', { target: { value: 'test County' }});
+        countySelectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
+
+        const countyOption = annotation.value[2].option;
+        const countyValue = annotation.value[2].value;
+        assert.equal(countyValue, 'test County');
+        assert.equal(countyOption, false);
+
+        const teamSelect = wrapper.find('#teamID').find(Select);
+        const teamSelectInput = teamSelect.find('input');
+
+        teamSelectInput.simulate('change', { target: { value: 'test Team' }});
+        teamSelectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
+
+        const teamOption = annotation.value[4].option;
+        const teamValue = annotation.value[4].value;
+        assert.equal(teamValue, 'test Team');
+        assert.equal(teamOption, false);
+      });
+
       it('should update the annotation on change', function () {
         wrapper.instance().onChangeSelect(0, multiSelects.selects[0].options['*'][0]);
         const { option, value } = annotation.value[0];
@@ -125,14 +153,10 @@ describe('DropdownTask', function () {
         countrySelectInput.simulate('change', { target: { value: 'test Country' }});
         countrySelectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
 
-        const countryOption = annotation.value[0].option;
-        const countryValue = annotation.value[0].value;
-
-        assert.equal(countryValue, null);
-        assert.equal(countryOption, false);
+        assert.equal(annotation.value.length, 0);
       });
     });
-    describe('first annotation provided (Country)', function () {
+    describe('and first annotation provided (Country),', function () {
       let annotation;
       let wrapper;
 
@@ -156,8 +180,21 @@ describe('DropdownTask', function () {
         const stateSelect = wrapper.find('#stateID').find(Select);
         assert.deepEqual(stateSelect.props().options, multiSelects.selects[1].options['USA-value']);
       });
+
+      it('should not save custom answer (for State) if allowCreate false', function () {
+        const stateSelect = wrapper.find('#stateID').find(Select);
+        const stateSelectInput = stateSelect.find('input');
+
+        stateSelectInput.simulate('change', { target: { value: 'test State' }});
+        stateSelectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
+
+        const stateOption = annotation.value[1].option;
+        const stateValue = annotation.value[1].value;
+        assert.equal(stateValue, null);
+        assert.equal(stateOption, false);
+      });
     });
-    describe('all annotations provided, no custom answers', function () {
+    describe('and all annotations provided, no custom answers,', function () {
       let annotation;
       let wrapper;
 
@@ -178,6 +215,7 @@ describe('DropdownTask', function () {
         assert.equal(wrapper.find('#stateID').find('[role="option"][aria-selected="true"]').text(), 'Rohan');
         assert.equal(wrapper.find('#countyID').find('[role="option"][aria-selected="true"]').text(), 'Gotham County');
         assert.equal(wrapper.find('#cityID').find('[role="option"][aria-selected="true"]').text(), 'Gotham');
+        assert.equal(wrapper.find('#teamID').find('[role="option"][aria-selected="true"]').text(), 'Springfield Isotopes');
       });
       it('should clear related selects (County, City, Team) when conditional select (State) changed', function () {
         wrapper.instance().onChangeSelect(1, multiSelects.selects[1].options['Mypos-value'][2]);
@@ -191,7 +229,7 @@ describe('DropdownTask', function () {
         assert.deepEqual(annotation, expectedAnnotation);
       });
     });
-    describe('all annotations provided, including custom answers', function () {
+    describe('and all annotations provided, including custom answers,', function () {
       let annotation;
       let wrapper;
 
@@ -211,6 +249,7 @@ describe('DropdownTask', function () {
         assert.equal(wrapper.find('#countryID').find('[role="option"][aria-selected="true"]').text(), 'Canada');
         assert.equal(wrapper.find('#stateID').find('[role="option"][aria-selected="true"]').text(), 'Quebec');
         assert.equal(wrapper.find('#countyID').find('[role="option"][aria-selected="true"]').text(), 'Laval');
+        assert.equal(wrapper.find('#teamID').find('[role="option"][aria-selected="true"]').text(), 'Rocket');
       });
       it('should clear related selects (County, City, Team) when conditional select (State) changed', function () {
         wrapper.instance().onChangeSelect(1, multiSelects.selects[1].options['Canada-value'][1]);
