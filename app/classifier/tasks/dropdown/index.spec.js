@@ -153,7 +153,10 @@ describe('DropdownTask', function () {
         countrySelectInput.simulate('change', { target: { value: 'test Country' }});
         countrySelectInput.simulate('keyDown', { keyCode: 13, which: 13, key: 'Enter' });
 
-        assert.equal(annotation.value.length, 0);
+        const countryOption = annotation.value[0].option;
+        const countryValue = annotation.value[0].value;
+        assert.equal(countryValue, null);
+        assert.equal(countryOption, false);
       });
     });
     describe('and first annotation provided (Country),', function () {
