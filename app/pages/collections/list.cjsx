@@ -133,7 +133,7 @@ List = React.createClass
                  <CollectionCard
                    key={collection.id}
                    collection={collection}
-                   imagePromise={@imagePromise(collection)}
+                   imagePromise={Promise.resolve null}
                    linkTo={@cardLink(collection)}
                    translationObjectName={@props.translationObjectName}
                    subjectCount={collection.links.subjects?.length}
