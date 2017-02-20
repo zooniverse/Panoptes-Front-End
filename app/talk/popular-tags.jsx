@@ -27,7 +27,7 @@ const TalkTag = (props) => {
   );
 };
 
-class PopularTags extends React.Component {
+export default class PopularTags extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,15 +65,15 @@ class PopularTags extends React.Component {
 
   render() {
     let tagType;
-    const logClick = this.context.geordi.makeHandler('hashtag-sidebar');
+    const logClick = this.context.geordi && this.context.geordi.makeHandler ? this.context.geordi.makeHandler('hashtag-sidebar') : null;
 
     if (this.props.project) {
       tagType = (tag) => {
-        return <ProjectTag key={tag.id} project={this.props.project} tag={tag} onClick={logClick.bind(this, tag)} />
+        return <ProjectTag key={tag.id} project={this.props.project} tag={tag} onClick={logClick ? logClick.bind(this, tag) : null} />
       };
     } else {
       tagType = (tag) => {
-        return <TalkTag key={tag.id} tag={tag} onClick={logClick.bind(this, tag)} />
+        return <TalkTag key={tag.id} tag={tag} onClick={logClick ? logClick.bind(this, tag) : null} />
       };
     }
 
@@ -108,5 +108,3 @@ PopularTags.propTypes = {
 PopularTags.contextTypes = {
   geordi: React.PropTypes.object
 };
-
-export default PopularTags;
