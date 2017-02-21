@@ -15,6 +15,8 @@ module.exports = React.createClass
 
   getInitialState: ->
     comments: []
+    authors: {}
+    subjects: {}
     boardTitle: null
     loading: true
 
@@ -57,6 +59,30 @@ module.exports = React.createClass
       boardTitle = comments[0].board_title if @props.params.board
       loading = false
       @setState {comments, boardTitle, meta, loading}
+      
+      author_ids = []
+      subject_ids = []
+      authors = {}
+      subjects = {}
+      comments.map (comment) =>
+        author_ids.push comment.user_id
+        subject_ids.push comment.focus_id if comment.focus_id.length
+
+      apiClient
+        .type 'users'
+        .get
+          id: author_ids
+        .then (users) =>
+          users.map (user) -> authors[user.id] = user
+          @setState {authors}
+
+      apiClient
+        .type 'subjects'
+        .get
+          id: subject_ids
+        .then (comment_subjects) =>
+          comment_subjects.map (subject) -> subjects[subject.id] = subject
+          @setState {subjects}
 
   toggleNotes: ->
     # Always reset to first page when toggling
@@ -84,6 +110,8 @@ module.exports = React.createClass
       project={@props.project}
       key={comment.id}
       data={comment}
+      author={@state.authors[data.user_id]}
+      subject={@state.subjects[data.focus_id]}
       user={@props.user}
       project={@props.project} />
 

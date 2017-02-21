@@ -3,6 +3,7 @@ ReactDOM = require 'react-dom'
 Comment = require './comment'
 CommentBox = require './comment-box'
 talkClient = require 'panoptes-client/lib/talk-client'
+apiClient = require 'panoptes-client/lib/api-client'
 Paginator = require './lib/paginator'
 SingleSubmitButton = require '../components/single-submit-button'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
@@ -35,6 +36,8 @@ module.exports = React.createClass
     reply: null
     moderationOpen: false
     boards: []
+    authors: {}
+    subjects: {}
 
   getDefaultProps: ->
     location: query: page: 1
@@ -96,10 +99,34 @@ module.exports = React.createClass
     talkClient.type('comments').get({discussion_id: discussion, page_size: PAGE_SIZE, page})
 
   setComments: (page = @props.location.query?.page) ->
+    subject_ids = []
+    author_ids = []
+    authors = {}
+    subjects = {}
     @commentsRequest(page)
       .then (comments) =>
         if comments.length
           commentsMeta = comments[0]?.getMeta() ? {}
+          comments.map (comment) ->
+            author_ids.push comment.user_id
+            subject_ids.push comment.focus_id if comment.focus_id
+
+          apiClient
+            .type 'users'
+            .get
+              id: author_ids
+            .then (users) =>
+              users.map (user) -> authors[user.id] = user
+              @setState {authors}
+
+          apiClient
+            .type 'subjects'
+            .get
+              id: subject_ids
+            .then (comment_subjects) =>
+              comment_subjects.map (subject) -> subjects[subject.id] = subject
+              @setState {subjects}
+
           @setState {comments, commentsMeta}, =>
             if @shouldScrollToBottom
               @scrollToBottomOfDiscussion()
@@ -187,6 +214,8 @@ module.exports = React.createClass
       key={data.id}
       index={i}
       data={data}
+      author={@state.authors[data.user_id]}
+      subject={@state.subjects[data.focus_id]}
       active={+data.id is +@props.location.query?.comment}
       user={@props.user}
       locked={@state.discussion?.locked}

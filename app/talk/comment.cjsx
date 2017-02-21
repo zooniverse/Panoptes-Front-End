@@ -47,9 +47,7 @@ module.exports = React.createClass
     editing: false
     commentValidationErrors: []
     replies: []
-    commentOwner: null
     roles: []
-    subject: null
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -59,20 +57,6 @@ module.exports = React.createClass
       type: itemClick
 
   componentWillMount: ->
-    apiClient
-      .type 'users'
-      .get
-        id: @props.data.user_id
-      .index 0
-      .then (commentOwner) =>
-        @setState {commentOwner}
-    
-    if @props.data.focus_id
-      apiClient
-        .type 'subjects'
-        .get @props.data.focus_id
-        .then (subject) =>
-          @setState {subject}
 
     talkClient
       .type 'roles'
@@ -180,7 +164,7 @@ module.exports = React.createClass
   #   - it's not a focused discussion OR
   #   - it's a focused discussion and this comment's focus is different
   shouldShowFocus: ->
-    return false unless @state.subject?
+    return false unless @props.subject?
     return false if @props.hideFocus
 
     notInDiscussion = not @props.index
@@ -198,7 +182,7 @@ module.exports = React.createClass
       profile_link = "/projects/#{@props.project.slug}#{profile_link}"
     <div className="talk-comment #{activeClass} #{isDeleted}">
       <div className="talk-comment-author">
-        {<Avatar user={@state.commentOwner} /> if @state.commentOwner?}
+        {<Avatar user={@props.author} /> if @props.author?}
         <div>
           <Link to={profile_link}>{@props.data.user_display_name}</Link>
           <div className="user-mention-name">@{@props.data.user_login}</div>
@@ -236,9 +220,9 @@ module.exports = React.createClass
 
             {if @shouldShowFocus()
               <div className="polaroid-image">
-                {@commentSubjectTitle(@props.data, @state.subject)}
+                {@commentSubjectTitle(@props.data, @props.subject)}
                 <SubjectViewer
-                  subject={@state.subject}
+                  subject={@props.subject}
                   user={@props.user}
                   project={@props.project}
                   linkToFullImage={true}
