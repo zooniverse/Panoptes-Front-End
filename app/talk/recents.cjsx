@@ -127,9 +127,9 @@ module.exports = React.createClass
       project={@props.project}
       key={comment.id}
       data={comment}
-      author={@state.authors[data.user_id]}
-      subject={@state.subjects[data.focus_id]}
-      roles={@state.author_roles[data.user_id]}
+      author={@state.authors[comment.user_id]}
+      subject={@state.subjects[comment.focus_id]}
+      roles={@state.author_roles[comment.user_id]}
       user={@props.user}
       project={@props.project} />
 
