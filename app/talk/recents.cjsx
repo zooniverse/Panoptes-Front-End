@@ -1,6 +1,7 @@
 React = require 'react'
 Comment = require './comment'
 {Link} = require 'react-router'
+apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
 updateQueryParams = require './lib/update-query-params'
@@ -15,6 +16,9 @@ module.exports = React.createClass
 
   getInitialState: ->
     comments: []
+    authors: {}
+    subjects: {}
+    author_roles: {}
     boardTitle: null
     loading: true
 
@@ -52,11 +56,50 @@ module.exports = React.createClass
     params
 
   getComments: (page = @props.location.query.page) ->
-    talkClient.type('comments').get(@commentParams(page)).then (comments) =>
+    params = @commentParams(page)
+    talkClient.type('comments').get(params).then (comments) =>
       meta = comments[0]?.getMeta() or { }
       boardTitle = comments[0].board_title if @props.params.board
       loading = false
       @setState {comments, boardTitle, meta, loading}
+      
+      author_ids = []
+      subject_ids = []
+      authors = {}
+      subjects = {}
+      author_roles={}
+      comments.map (comment) =>
+        author_ids.push comment.user_id
+        subject_ids.push comment.focus_id if comment.focus_id.length
+
+      apiClient
+        .type 'users'
+        .get
+          id: author_ids
+        .then (users) =>
+          users.map (user) -> authors[user.id] = user
+          @setState {authors}
+
+      apiClient
+        .type 'subjects'
+        .get
+          id: subject_ids
+        .then (comment_subjects) =>
+          comment_subjects.map (subject) -> subjects[subject.id] = subject
+          @setState {subjects}
+
+      talkClient
+        .type 'roles'
+        .get
+          user_id: author_ids
+          section: ['zooniverse', params.section]
+          is_shown: true
+          page_size: 100
+        .then (roles) =>
+          roles.map (role) ->
+            author_roles[role.user_id] ?= []
+            author_roles[role.user_id].push role
+          @setState {author_roles}
 
   toggleNotes: ->
     # Always reset to first page when toggling
@@ -84,6 +127,9 @@ module.exports = React.createClass
       project={@props.project}
       key={comment.id}
       data={comment}
+      author={@state.authors[comment.user_id]}
+      subject={@state.subjects[comment.focus_id]}
+      roles={@state.author_roles[comment.user_id]}
       user={@props.user}
       project={@props.project} />
 
