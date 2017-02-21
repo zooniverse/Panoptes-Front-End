@@ -72,7 +72,7 @@ List = React.createClass
         @setState {collections}
 
   shared: (collection) ->
-    if (@props.params.collection_owner is @props.user.login) or (@props.params.profile_name is @props.user.login)
+    if (@props.params.collection_owner is @props.user?.login) or (@props.params.profile_name is @props.user?.login)
       @props.user?.id isnt collection.links.owner.id
 
   render: ->

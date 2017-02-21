@@ -32,6 +32,10 @@ const RecentCollectionsSection = React.createClass({
     }
   },
 
+  shared(collection) {
+    return this.context.user.id !== collection.links.owner.id
+  },
+
   fetchCollections(user) {
     this.setState({
       loading: true,
@@ -40,10 +44,11 @@ const RecentCollectionsSection = React.createClass({
       collections: [],
     });
 
-    user.get('collections', {
+    apiClient.type('collections').get({
       page_size: 8,
       sort: '-updated_at',
       favorite: false,
+      current_user_roles: "owner,contributor,collaborator",
     })
     .then((collections) => {
       this.setState({ collections });
@@ -102,7 +107,7 @@ const RecentCollectionsSection = React.createClass({
         <div className="collections-card-list">
           {this.state.collections.map((collection) => {
             const subjectCount = collection.links.subjects ? collection.links.subjects.length : 0;
-            return <CollectionCard key={collection.id} subjectCount={subjectCount} collection={collection} imagePromise={this.state.images[collection.id]} linkTo={`/collections/${collection.slug}`} translationObjectName="collectionsPage" />;
+            return <CollectionCard key={collection.id} shared={this.shared(collection)} subjectCount={subjectCount} collection={collection} imagePromise={this.state.images[collection.id]} linkTo={`/collections/${collection.slug}`} translationObjectName="collectionsPage" />;
           })}
         </div>
       </HomePageSection>
