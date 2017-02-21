@@ -229,15 +229,15 @@ module.exports = React.createClass
     counter = 0
 
     flip = =>
-      if @state.playing and (counter < flips or infiniteLoop)
+      if @state.playing is on and (counter < flips or infiniteLoop is on)
         counter++
         @handleFrameChange (@state.frame + 1) %% totalFrames
         setTimeout flip, @props.playFrameDuration
-        if counter is flips and !infiniteLoop
+        if counter is flips and infiniteLoop is off
           @setPlaying false
       else @setPlaying false
 
-    if playing 
+    if playing is on
       setTimeout flip, 0
 
   handleFrameChange: (frame) ->
