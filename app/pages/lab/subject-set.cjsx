@@ -127,6 +127,7 @@ SubjectSetListing = React.createClass
 
   removeSubject: (subject) ->
     @props.subjectSet.removeLink('subjects', subject.id).then =>
+      @setSubjectResources(@props.subjectSet.id, @state.page)
       announceSetChange()
 
 EditSubjectSetPage = React.createClass
