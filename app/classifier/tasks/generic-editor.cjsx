@@ -102,7 +102,7 @@ module.exports = React.createClass
             choice._key ?= Math.random()
             <div key={choice._key} className="workflow-choice-editor">
               <AutoSave resource={@props.workflow}>
-                <textarea name="#{@props.taskPrefix}.#{choicesKey}.#{index}.label" value={choice.label} onChange={handleChange} />
+                <textarea name="#{@props.taskPrefix}.#{choicesKey}.#{index}.label" className="standard-input full" value={choice.label} onChange={handleChange} />
               </AutoSave>
 
               <div className="workflow-choice-settings">
