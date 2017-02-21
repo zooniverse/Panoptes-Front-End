@@ -50,10 +50,20 @@ module.exports = React.createClass
   getInitialState: ->
     loading: true
     playing: false
-    frame: @props.frame ? 0
+    frame: @getInitialFrame()
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
+
+  getInitialFrame: ->
+    {frame, allowFlipbook, subject} = @props
+    default_frame = parseInt(subject.metadata.default_frame, 10)
+    initialFrame = 0
+    if frame?
+      initialFrame = frame
+    else if allowFlipbook and typeof default_frame is 'number' and !isNaN(default_frame) and default_frame > 0 and default_frame <= subject.locations.length
+      initialFrame = default_frame - 1 
+    initialFrame
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.subject is @props.subject
@@ -217,7 +227,7 @@ module.exports = React.createClass
       @nextFrame()
       @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
 
-      autoStopDelay = @props.subject.locations.length * @props.playFrameDuration * @props.playIterations
+      autoStopDelay = (@props.subject.locations.length * @props.playFrameDuration * @props.playIterations) - @props.playFrameDuration
       unless @props.playIterations is ''
         @_autoStop = setTimeout @setPlaying.bind(this, false), autoStopDelay
     else
