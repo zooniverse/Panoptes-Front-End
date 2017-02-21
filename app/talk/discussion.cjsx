@@ -38,6 +38,7 @@ module.exports = React.createClass
     boards: []
     authors: {}
     subjects: {}
+    author_roles: {}
 
   getDefaultProps: ->
     location: query: page: 1
@@ -103,6 +104,7 @@ module.exports = React.createClass
     author_ids = []
     authors = {}
     subjects = {}
+    author_roles = {}
     @commentsRequest(page)
       .then (comments) =>
         if comments.length
@@ -126,6 +128,19 @@ module.exports = React.createClass
             .then (comment_subjects) =>
               comment_subjects.map (subject) -> subjects[subject.id] = subject
               @setState {subjects}
+
+          talkClient
+            .type 'roles'
+            .get
+              user_id: author_ids
+              section: ['zooniverse', @state.discussion.section]
+              is_shown: true
+              page_size: 100
+            .then (roles) =>
+              roles.map (role) ->
+                author_roles[role.user_id] ?= []
+                author_roles[role.user_id].push role
+              @setState {author_roles}
 
           @setState {comments, commentsMeta}, =>
             if @shouldScrollToBottom
@@ -216,6 +231,7 @@ module.exports = React.createClass
       data={data}
       author={@state.authors[data.user_id]}
       subject={@state.subjects[data.focus_id]}
+      roles={@state.author_roles[data.user_id]}
       active={+data.id is +@props.location.query?.comment}
       user={@props.user}
       locked={@state.discussion?.locked}

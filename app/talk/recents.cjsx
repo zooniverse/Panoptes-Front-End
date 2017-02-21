@@ -1,6 +1,7 @@
 React = require 'react'
 Comment = require './comment'
 {Link} = require 'react-router'
+apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 Paginator = require './lib/paginator'
 updateQueryParams = require './lib/update-query-params'
@@ -17,6 +18,7 @@ module.exports = React.createClass
     comments: []
     authors: {}
     subjects: {}
+    author_roles: {}
     boardTitle: null
     loading: true
 
@@ -54,7 +56,8 @@ module.exports = React.createClass
     params
 
   getComments: (page = @props.location.query.page) ->
-    talkClient.type('comments').get(@commentParams(page)).then (comments) =>
+    params = @commentParams(page)
+    talkClient.type('comments').get(params).then (comments) =>
       meta = comments[0]?.getMeta() or { }
       boardTitle = comments[0].board_title if @props.params.board
       loading = false
@@ -64,6 +67,7 @@ module.exports = React.createClass
       subject_ids = []
       authors = {}
       subjects = {}
+      author_roles={}
       comments.map (comment) =>
         author_ids.push comment.user_id
         subject_ids.push comment.focus_id if comment.focus_id.length
@@ -83,6 +87,19 @@ module.exports = React.createClass
         .then (comment_subjects) =>
           comment_subjects.map (subject) -> subjects[subject.id] = subject
           @setState {subjects}
+
+      talkClient
+        .type 'roles'
+        .get
+          user_id: author_ids
+          section: ['zooniverse', params.section]
+          is_shown: true
+          page_size: 100
+        .then (roles) =>
+          roles.map (role) ->
+            author_roles[role.user_id] ?= []
+            author_roles[role.user_id].push role
+          @setState {author_roles}
 
   toggleNotes: ->
     # Always reset to first page when toggling
@@ -112,6 +129,7 @@ module.exports = React.createClass
       data={comment}
       author={@state.authors[data.user_id]}
       subject={@state.subjects[data.focus_id]}
+      roles={@state.author_roles[data.user_id]}
       user={@props.user}
       project={@props.project} />
 

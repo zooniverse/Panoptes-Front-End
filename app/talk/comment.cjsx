@@ -10,7 +10,6 @@ CommentLink = require './comment-link'
 upvotedByCurrentUser = require './lib/upvoted-by-current-user'
 {Link} = require 'react-router'
 {timestamp} = require './lib/time'
-apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 Avatar = require '../partials/avatar'
 SubjectViewer = require '../components/subject-viewer'
@@ -47,7 +46,6 @@ module.exports = React.createClass
     editing: false
     commentValidationErrors: []
     replies: []
-    roles: []
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -55,18 +53,7 @@ module.exports = React.createClass
   logItemClick: (itemClick) ->
     @context.geordi?.logEvent
       type: itemClick
-
-  componentWillMount: ->
-
-    talkClient
-      .type 'roles'
-      .get
-        user_id: @props.data.user_id
-        section: ['zooniverse', @props.data.section]
-        is_shown: true
-        page_size: 100
-      .then (roles) =>
-        @setState {roles}
+    
 
   componentDidMount: ->
     if @props.active
@@ -187,7 +174,7 @@ module.exports = React.createClass
           <Link to={profile_link}>{@props.data.user_display_name}</Link>
           <div className="user-mention-name">@{@props.data.user_login}</div>
         </div>
-        <DisplayRoles roles={@state.roles} section={@props.data.section} />
+        <DisplayRoles roles={@props.roles} section={@props.data.section} />
       </div>
 
       <div className="talk-comment-body">
