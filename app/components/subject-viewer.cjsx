@@ -48,18 +48,22 @@ module.exports = React.createClass
     workflow: null
 
   getInitialState: ->
-    initialFrame = if @props.frame
-        @props.frame 
-      else if @props.allowFlipbook and @props.subject.metadata.default_frame? and @props.subject.metadata.default_frame <= @props.subject.locations.length
-          parseInt(@props.subject.metadata.default_frame, 10) - 1 
-      else 0
-
     loading: true
     playing: false
-    frame: initialFrame
+    frame: @getInitialFrame()
     frameDimensions: {}
     inFlipbookMode: @props.allowFlipbook
     promptingToSignIn: false
+
+  getInitialFrame: ->
+    {frame, allowFlipbook, subject} = @props
+    default_frame = parseInt(subject.metadata.default_frame, 10)
+    initialFrame = 0
+    if frame?
+      initialFrame = frame
+    else if allowFlipbook and typeof default_frame is 'number' and !isNaN(default_frame) and default_frame > 0 and default_frame <= subject.locations.length
+      initialFrame = default_frame - 1 
+    initialFrame
 
   componentWillReceiveProps: (nextProps) ->
     unless nextProps.subject is @props.subject
