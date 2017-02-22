@@ -81,12 +81,8 @@ module.exports = React.createClass
       task.selects.every (select, i) ->
         not select.required or (annotation.value[i]?.value? and annotation.value[i]?.value isnt "")
 
-  getInitialState: ->
-    selectedOptions: []
-
   componentWillMount: ->
     @menus = []
-    @syncAnnotations()
 
   componentDidMount: ->
     annotationValues = @props.annotation.value
@@ -97,12 +93,10 @@ module.exports = React.createClass
       @handleFocus()
 
   componentDidUpdate: (prevProps) ->
-    if prevProps.task isnt @props.task
-      @syncAnnotations()
     if prevProps.task isnt @props.task and @props.autoFocus is true
       @handleFocus()
 
-  syncAnnotations: () ->
+  selectedOptions: () ->
     # this can only be called after props have been updated
     # as it relies on props.task and props.annotation.
     # clear selections, then check each annotation.value
@@ -115,7 +109,7 @@ module.exports = React.createClass
         selectedOptions[i] = selected
       else
         selectedOptions[i] = {label: annotation.value, value: annotation.value}
-    @setState {selectedOptions}
+    selectedOptions
 
   handleFocus: ->
     @menus[0].focus()
@@ -162,7 +156,7 @@ module.exports = React.createClass
           options = []
           options.push option for option in @getOptions(i)
           disabled = @getDisabledAttribute(i)
-          selectedOption = if @state.selectedOptions[i]?.value then @state.selectedOptions[i] else null
+          selectedOption = if @selectedOptions()[i]?.value then @selectedOptions()[i] else null
           <div id={select.id} key={select.id}>
             {if select.title isnt @props.task.instruction
               <div>{select.title}</div>}
@@ -195,8 +189,6 @@ module.exports = React.createClass
     </GenericTask>
 
   onChangeSelect: (i, option = {label: null, value: null}) ->
-    {selectedOptions} = @state
-    selectedOptions[i] = option
     value = @props.annotation.value
 
     options = @getOptions(i)
@@ -209,5 +201,4 @@ module.exports = React.createClass
     @clearRelated(i)
 
     newAnnotation = Object.assign @props.annotation, {value}
-    @setState {selectedOptions}
     @props.onChange newAnnotation
