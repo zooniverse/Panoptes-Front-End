@@ -33,6 +33,7 @@ module.exports = React.createClass
 
   getInitialState: ->
     discussions: []
+    authors: {}
     subjects: {}
     board: {}
     discussionsMeta: {}
@@ -64,11 +65,22 @@ module.exports = React.createClass
     @discussionsRequest(page)
       .then (discussions) =>
         subject_ids = []
+        author_ids = []
         discussionsMeta = discussions[0]?.getMeta()
         @setState {discussions, discussionsMeta, loading: false}
         discussions.map (discussion) ->
           subject_ids.push discussion.focus_id if discussion.focus_id and discussion.focus_type is 'Subject'
-        
+          author_ids.push discussion.latest_comment.user_id
+
+        apiClient
+          .type 'users'
+          .get
+            id: author_ids
+          .then (users) =>
+            users.map (user) => 
+              @setState (prevState, props) ->
+                prevState.authors[user.id] = user
+
         apiClient
           .type 'subjects'
           .get
@@ -95,7 +107,13 @@ module.exports = React.createClass
     @setDiscussions()
 
   discussionPreview: (discussion, i) ->
-    <DiscussionPreview {...@props} key={i} discussion={discussion} subject={@state.subjects[discussion.focus_id]} />
+    <DiscussionPreview
+      {...@props}
+      key={i}
+      discussion={discussion}
+      subject={@state.subjects[discussion.focus_id]}
+      author={@state.authors[discussion.latest_comment.user_id]}
+    />
 
   onClickDeleteBoard: ->
     projectName = @state.board.title.toLowerCase()
