@@ -18,7 +18,7 @@ class ProjectStatsPageController extends React.Component {
   }
 
   componentDidMount() {
-    this.getWorkflows(this.project);
+    this.getWorkflows(this.props.project);
   }
 
   componentWillReceiveProps(nextProps) {
