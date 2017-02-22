@@ -11,6 +11,7 @@ classNames = require 'classnames'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 isAdmin = require '../../lib/is-admin'
 {Split} = require('seven-ten')
+Thumbnail = require('../../components/thumbnail').default
 
 counterpart.registerTranslations 'en',
   project:
@@ -257,13 +258,13 @@ ProjectPage = React.createClass
         {if @props.project.redirect
           <a href={@props.project.redirect} className="tabbed-content-tab" target="_blank">
             {if @state.avatar?
-              <img src={@state.avatar.src} className="avatar" />}
+              <Thumbnail src={@state.avatar.src} className="avatar" width={48} height={48} />}
             Visit {@props.project.display_name}
           </a>
         else
           <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.home'}>
             {if @state.avatar?
-              <img src={@state.avatar.src} className="avatar" />}
+              <Thumbnail src={@state.avatar.src} className="avatar" width={48} height={48} />}
             {if @props.loading
               'Loading...'
             else
