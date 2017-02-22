@@ -48,7 +48,10 @@ module.exports = React.createClass
   componentWillMount: ->
     comment = @props.comment or @props.discussion?.latest_comment
     return unless comment?
-    @updateRoles comment
+    if @props.roles
+      @setState {roles: @props.roles}
+    else
+      @updateRoles comment
     if @props.author
       @setState {commentUser: @props.author}
     else
@@ -58,8 +61,10 @@ module.exports = React.createClass
   componentWillReceiveProps: (newProps) ->
     oldComment = @props.comment or @props.discussion?.latest_comment
     comment = newProps.comment or newProps.discussion?.latest_comment
-    return if comment is oldComment or not comment?
-    @updateRoles comment
+    if newProps.roles
+      @setState {roles: newProps.roles}
+    else
+      @updateRoles comment
     if newProps.author
       @setState {commentUser: newProps.author}
     else

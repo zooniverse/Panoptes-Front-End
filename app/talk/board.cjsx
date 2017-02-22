@@ -34,6 +34,7 @@ module.exports = React.createClass
   getInitialState: ->
     discussions: []
     authors: {}
+    author_roles: {}
     subjects: {}
     board: {}
     discussionsMeta: {}
@@ -81,6 +82,19 @@ module.exports = React.createClass
               @setState (prevState, props) ->
                 prevState.authors[user.id] = user
 
+        talkClient
+          .type 'roles'
+          .get
+            user_id: author_ids
+            section: ['zooniverse', @props.section]
+            is_shown: true
+            page_size: 100
+          .then (roles) =>
+            roles.map (role) =>
+              @setState (prevState, props) ->
+                prevState.author_roles[role.user_id] ?= []
+                prevState.author_roles[role.user_id].push role
+
         apiClient
           .type 'subjects'
           .get
@@ -107,12 +121,15 @@ module.exports = React.createClass
     @setDiscussions()
 
   discussionPreview: (discussion, i) ->
+    roles = @state.author_roles[discussion.latest_comment.user_id]
+    roles ?= []
     <DiscussionPreview
       {...@props}
       key={i}
       discussion={discussion}
       subject={@state.subjects[discussion.focus_id]}
       author={@state.authors[discussion.latest_comment.user_id]}
+      roles={roles}
     />
 
   onClickDeleteBoard: ->

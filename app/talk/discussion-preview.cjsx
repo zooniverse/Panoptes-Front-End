@@ -66,6 +66,7 @@ module.exports = React.createClass
           discussion={discussion}
           comment={@props.comment}
           author={@props.author}
+          roles={@props.roles}
           preview={true}
         />
 
