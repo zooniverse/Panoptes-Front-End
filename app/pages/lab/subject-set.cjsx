@@ -17,9 +17,6 @@ VALID_SUBJECT_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.svg']
 INVALID_FILENAME_CHARS = ['/', '\\', ':', ',']
 MAX_FILE_SIZE = 600 * 1024
 
-announceSetChange = ->
-  apiClient.type('subject_sets').emit 'add-or-remove'
-
 SubjectSetListingRow = React.createClass
   displayName: 'SubjectSetListingRow'
 
@@ -128,7 +125,6 @@ SubjectSetListing = React.createClass
   removeSubject: (subject) ->
     @props.subjectSet.removeLink('subjects', subject.id).then =>
       @setSubjectResources(@props.subjectSet.id, @state.page)
-      announceSetChange()
 
 EditSubjectSetPage = React.createClass
   displayName: 'EditSubjectSetPage'
@@ -325,7 +321,6 @@ EditSubjectSetPage = React.createClass
           creationErrors: errors
           manifests: {}
           files: {}
-        announceSetChange()
 
   deleteSubjectSet: ->
     @setState deletionError: null
@@ -337,7 +332,6 @@ EditSubjectSetPage = React.createClass
 
       this.props.subjectSet.delete()
         .then =>
-          announceSetChange()
           @props.project.uncacheLink 'subject_sets'
           @context.router.push "/lab/#{@props.project.id}"
         .catch (error) =>
