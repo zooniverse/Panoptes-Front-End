@@ -60,6 +60,9 @@ const SliderTaskEditor = (props) => {
           <br />
           <br />
           {helpBox}
+          <hr />
+          <span className="form-label">Slider Properties</span>
+          <br />
           <span>
             <label className="pill-button" title={requiredHelp} htmlFor="requireCheckbox">
               <AutoSave resource={props.workflow}>
@@ -76,8 +79,6 @@ const SliderTaskEditor = (props) => {
             </label>
             {' '}
           </span>
-          <br />
-          <span className="form-label">Slider Properties</span>
           <br />
           <small className="form-help">Specify the minimum, maximum, and default values for the slider. You can also specify the step size for the slider.</small>
           <br />
