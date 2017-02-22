@@ -2,6 +2,7 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 {Link} = require 'react-router'
 DiscussionPreview = require './discussion-preview'
+apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 FollowBoard = require './follow-board'
 NewDiscussionForm = require './discussion-new-form'
@@ -32,6 +33,7 @@ module.exports = React.createClass
 
   getInitialState: ->
     discussions: []
+    subjects: {}
     board: {}
     discussionsMeta: {}
     newDiscussionOpen: false
@@ -61,8 +63,20 @@ module.exports = React.createClass
   setDiscussions: (page = @props.location.query.page) ->
     @discussionsRequest(page)
       .then (discussions) =>
+        subject_ids = []
         discussionsMeta = discussions[0]?.getMeta()
         @setState {discussions, discussionsMeta, loading: false}
+        discussions.map (discussion) ->
+          subject_ids.push discussion.focus_id if discussion.focus_id and discussion.focus_type is 'Subject'
+        
+        apiClient
+          .type 'subjects'
+          .get
+            id: subject_ids
+          .then (discussion_subjects) =>
+            discussion_subjects.map (subject) =>
+              @setState (prevState, props) ->
+                prevState.subjects[subject.id] = subject
 
   boardRequest: ->
     id = @props.params.board.toString()
@@ -81,7 +95,7 @@ module.exports = React.createClass
     @setDiscussions()
 
   discussionPreview: (discussion, i) ->
-    <DiscussionPreview {...@props} key={i} discussion={discussion} />
+    <DiscussionPreview {...@props} key={i} discussion={discussion} subject={@state.subjects[discussion.focus_id]} />
 
   onClickDeleteBoard: ->
     projectName = @state.board.title.toLowerCase()
