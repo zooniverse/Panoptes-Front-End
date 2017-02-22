@@ -15,7 +15,7 @@ class Summary extends React.Component {
         <div className="answers">
         {this.props.annotation.value ? (
           <div className="answer">
-            “<code>{this.props.annotation.value}</code>”
+            {this.props.annotation.value}
           </div>) : ""}
         </div>
       </div>
@@ -33,25 +33,42 @@ Summary.defaultProps = {
 class SliderTask extends React.Component {
   constructor(props) {
     super(props);
+    this.task = Object.assign(
+      {
+        help: '',
+        instruction: '',
+        required: false,
+        max: 1,
+        min: 0,
+        step: 0.1,
+        defaultValue: 0,
+      },
+      this.props.task
+    );
+    this.state = {
+      value: this.props.annotation.value !== null ?
+        this.props.annotation.value : this.task.defaultValue,
+    }
     this.handleChange = this.handleChange.bind(this);
-    this.val = parseInt(this.props.annotation.value);
   }
   handleChange() {
-    if (parseInt(this.slider.value) !== this.val) {
-      this.val = Math.max(Math.min(parseInt(this.slider.value), 100), 0);
-    } else {
+    let value = 0;
+    if (parseFloat(this.numeric.value) !== this.state.value) {
       if (this.numeric.value !== '') {
-        this.val = Math.max(Math.min(parseInt(this.numeric.value), 100), 0);
+        value = Math.max(
+          Math.min(parseFloat(this.numeric.value), this.task.max),
+          this.task.min
+        );
       } else return;
+    } else {
+      value = Math.max(
+        Math.min(parseFloat(this.slider.value), this.task.max),
+        this.task.min
+      );
     }
-    this.numeric.value = this.val;
-    this.slider.value = this.val;
-    const newAnnotation = Object.assign(this.props.annotation, {value: this.val});
+    const newAnnotation = Object.assign(this.props.annotation, { value });
     this.props.onChange(newAnnotation);
-  }
-  componentDidMount() {
-    if (this.slider) this.slider.value = this.val;
-    if (this.numeric) this.numeric.value = this.val;
+    this.setState({ value });
   }
   render() {
     return (
@@ -68,8 +85,10 @@ class SliderTask extends React.Component {
                 autoFocus={this.props.autoFocus}
                 ref={ r => { this.slider = r; }}
                 onChange={this.handleChange}
-                max={100}
-                min={0}
+                max={this.task.max}
+                min={this.task.min}
+                step={this.task.step}
+                value={this.state.value}
               />
             </label>
             <label className="answer">
@@ -78,8 +97,11 @@ class SliderTask extends React.Component {
                 autoFocus={this.props.autoFocus}
                 ref={ r => { this.numeric = r; }}
                 onChange={this.handleChange}
-                max="100"
-                min="0"
+                max={this.task.max}
+                min={this.task.min}
+                step={this.task.step / 20}
+                value={this.state.value}
+                style={{ minWidth: '30px' }}
               />
             </label>
           </div>
@@ -115,9 +137,13 @@ SliderTask.propTypes = {
   task: React.PropTypes.shape(
     {
       answers: React.PropTypes.array,
-      question: React.PropTypes.string,
       help: React.PropTypes.string,
-      required: React.PropTypes.bool
+      instruction: React.PropTypes.string,
+      required: React.PropTypes.bool,
+      max: React.PropTypes.number,
+      min: React.PropTypes.number,
+      step: React.PropTypes.number,
+      defaultValue: React.PropTypes.number,
     }
   ),
   annotation: React.PropTypes.shape(
@@ -128,13 +154,17 @@ SliderTask.propTypes = {
 
 SliderTask.defaultProps = {
   task: {
-    answers: [],
-    question: '',
     help: '',
-    required: false
+    instruction: '',
+    required: false,
+    max: 1,
+    min: 0,
+    step: 0.1,
+    defaultValue: 0,
   },
   annotation: { value: null },
   onChange: NOOP
 };
 
+//module.exports = SliderTask;
 export default SliderTask;
