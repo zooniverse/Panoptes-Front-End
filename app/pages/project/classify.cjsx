@@ -20,11 +20,6 @@ FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
 PROMPT_MINI_COURSE_EVERY = 5
 
-SKIP_CELLECT = location?.search.match(/\Wcellect=0(?:\W|$)/)?
-
-if SKIP_CELLECT
-  console?.warn 'Intelligent subject selection disabled'
-
 # Classification count tracked for mini-course prompt
 classificationsThisSession = 0
 
@@ -203,18 +198,17 @@ module.exports = React.createClass
       @maybePromptWorkflowAssignmentDialog(@props)
       subjectQuery =
         workflow_id: workflow.id
-        sort: 'queued' unless SKIP_CELLECT
       if subjectSet?
         subjectQuery.subject_set_id = subjectSet.id
 
-      fetchSubjects = apiClient.type('subjects').get subjectQuery
+      fetchSubjects = apiClient.get('/subjects/queued', subjectQuery)
         .catch (error) ->
           if error.message.indexOf('please try again') is -1
             throw error
           else
             new Promise (resolve, reject) ->
               fetchSubjectsAgain = ->
-                apiClient.type('subjects').get subjectQuery
+                apiClient.get('/subjects/queued', subjectQuery)
                   .then resolve
                   .catch reject
               setTimeout fetchSubjectsAgain, 2000
