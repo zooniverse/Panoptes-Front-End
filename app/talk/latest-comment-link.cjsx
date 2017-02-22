@@ -1,5 +1,4 @@
 React = require 'react'
-apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 {timeAgo} = require './lib/time'
 DisplayRoles = require './lib/display-roles'
@@ -31,9 +30,7 @@ module.exports = React.createClass
     preview: false
 
   getInitialState: ->
-    commentUser: null
     latestCommentText: ''
-    roles: []
 
   logProfileClick: (profileItem) ->
     @context.geordi?.logEvent
@@ -44,32 +41,6 @@ module.exports = React.createClass
 
   lastPage: ->
     Math.ceil @props.discussion.comments_count / PAGE_SIZE
-
-  componentWillMount: ->
-    comment = @props.comment or @props.discussion?.latest_comment
-    return unless comment?
-    if @props.roles
-      @setState {roles: @props.roles}
-    else
-      @updateRoles comment
-    if @props.author
-      @setState {commentUser: @props.author}
-    else
-      apiClient.type('users').get(comment.user_id).then (commentUser) =>
-        @setState {commentUser}
-
-  componentWillReceiveProps: (newProps) ->
-    oldComment = @props.comment or @props.discussion?.latest_comment
-    comment = newProps.comment or newProps.discussion?.latest_comment
-    if newProps.roles
-      @setState {roles: newProps.roles}
-    else
-      @updateRoles comment
-    if newProps.author
-      @setState {commentUser: newProps.author}
-    else
-      apiClient.type('users').get(comment.user_id).then (commentUser) =>
-        @setState {commentUser}
 
   componentDidMount: ->
     latestCommentText = @refs?.markdownText?.textContent
@@ -88,17 +59,6 @@ module.exports = React.createClass
     <Link className={className} onClick={logClick?.bind(this, childtext)} to={@context.router.createHref(locationObject)}>
       {childtext}
     </Link>
-
-  updateRoles: (comment) ->
-    talkClient
-      .type 'roles'
-      .get
-        user_id: comment.user_id
-        section: ['zooniverse', comment.section]
-        is_shown: true
-        page_size: 100
-      .then (roles) =>
-        @setState {roles}
 
   render: ->
     {discussion} = @props
@@ -120,13 +80,13 @@ module.exports = React.createClass
           <Markdown content={comment.body} />
         </div>
 
-        {if @state.commentUser?
-          <Link className="user-profile-link" to="#{baseLink}users/#{@state.commentUser.login}" onClick={@logProfileClick.bind this, 'view-profile-author'}>
-            <Avatar user={@state.commentUser} />{' '}{@state.commentUser.display_name}
+        {if @props.author?
+          <Link className="user-profile-link" to="#{baseLink}users/#{@props.author.login}" onClick={@logProfileClick.bind this, 'view-profile-author'}>
+            <Avatar user={@props.author} />{' '}{@props.author.display_name}
           </Link>}
 
         {' '}
-        <DisplayRoles roles={@state.roles} section={comment.section} />
+        <DisplayRoles roles={@props.roles} section={comment.section} />
 
         <span>
           {if discussion.title and @props.title

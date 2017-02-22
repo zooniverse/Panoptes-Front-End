@@ -1,6 +1,7 @@
 React = require 'react'
 BoardPreview = require './board-preview'
 ActiveUsers = require './active-users'
+apiClient = require 'panoptes-client/lib/api-client'
 talkClient = require 'panoptes-client/lib/talk-client'
 HandlePropChanges = require '../lib/handle-prop-changes'
 Moderation = require './lib/moderation'
@@ -37,6 +38,8 @@ module.exports = React.createClass
 
   getInitialState: ->
     boards: []
+    authors: {}
+    author_roles: {}
     boardsMeta: {}
     loading: true
     moderationOpen: false
@@ -49,13 +52,46 @@ module.exports = React.createClass
       @setBoards({}, nextProps)
 
   setBoards: (propValue, props = @props) ->
+    author_ids = []
     talkClient.type('boards').get(section: props.section, page_size: 20, page: props.location.query.page)
       .then (boards) =>
         boardsMeta = boards[0]?.getMeta()
         @setState {boards, boardsMeta, loading: false}
+        boards.map (board) ->
+          author_ids.push board.latest_discussion.user_id
+
+        apiClient
+          .type 'users'
+          .get
+            id: author_ids
+          .then (users) =>
+            users.map (user) => 
+              @setState (prevState, props) ->
+                prevState.authors[user.id] = user
+
+        talkClient
+          .type 'roles'
+          .get
+            user_id: author_ids
+            section: ['zooniverse', @props.section]
+            is_shown: true
+            page_size: 100
+          .then (roles) =>
+            roles.map (role) =>
+              @setState (prevState, props) ->
+                prevState.author_roles[role.user_id] ?= []
+                prevState.author_roles[role.user_id].push role
 
   boardPreview: (data, i) ->
-    <BoardPreview {...@props} key={i} data={data} />
+    roles = @state.author_roles[data.latest_discussion.user_id]
+    roles ?= []
+    <BoardPreview
+      {...@props}
+      key={i}
+      data={data}
+      author={@state.authors[data.latest_discussion.user_id]}
+      roles={roles}
+    />
 
   boardOrders: ->
     <DragReorderable
