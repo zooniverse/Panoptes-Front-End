@@ -28,6 +28,7 @@ module.exports = React.createClass
       when 'drawing' then ['instruction', 'tools']
       when 'crop' then ['instruction']
       when 'text' then ['instruction']
+      when 'slider' then ['instruction']
 
     isAQuestion = @props.task.type in ['single', 'multiple']
     canBeRequired = @props.task.type in ['single', 'multiple', 'text']

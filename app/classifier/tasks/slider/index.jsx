@@ -1,6 +1,6 @@
 import React from 'react';
 import GenericTask from '../generic';
-import GenericTaskEditor from '../generic-editor';
+import SliderTaskEditor from './editor';
 import { Markdown } from 'markdownz';
 
 const NOOP = Function.prototype;
@@ -89,16 +89,28 @@ class SliderTask extends React.Component {
   }
 }
 SliderTask.displayName = 'SliderTask';
-SliderTask.Editor = GenericTaskEditor;
+SliderTask.Editor = SliderTaskEditor;
 SliderTask.Summary = Summary;
-SliderTask.getDefaultTask = () => ({
-  type: 'slider',
-  instruction: 'Enter an Instruction.',
-  help: '',
-});
-SliderTask.getTaskText = task => task.instruction;
-SliderTask.getDefaultAnnotation = () => ({value: 0});
-SliderTask.isAnnotationComplete = (task, annotation) => annotation.value > 0;
+SliderTask.getDefaultTask = () => {
+  return {
+    type: 'slider',
+    instruction: 'Enter an Instruction.',
+    help: '',
+    min: 0,
+    max: 1,
+    step: 0.1,
+    defaultValue: 0
+  };
+};
+SliderTask.getTaskText = (task) => {
+  return task.instruction;
+};
+SliderTask.getDefaultAnnotation = () => {
+  return { value: null };
+};
+SliderTask.isAnnotationComplete = (task, annotation) => {
+  return (!task.required || annotation.value !== null);
+};
 SliderTask.propTypes = {
   task: React.PropTypes.shape(
     {
@@ -125,4 +137,4 @@ SliderTask.defaultProps = {
   onChange: NOOP
 };
 
-module.exports = SliderTask;
+export default SliderTask;
