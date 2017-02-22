@@ -137,7 +137,7 @@ ProjectPage = React.createClass
       .then (pages) =>
         @setState {pages}
 
-  getAllWorkflows: (project, query = { active: true }) ->
+  getAllWorkflows: (project, query = { active: true, fields: "active,completeness,configuration,display_name,finished_at,retirement,created_at" }) ->
     @setState { loadingSelectedWorkflow: true }
     getWorkflowsInOrder(project, query)
       .then (activeWorkflows) =>
