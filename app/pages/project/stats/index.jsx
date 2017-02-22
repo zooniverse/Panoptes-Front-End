@@ -10,6 +10,7 @@ class ProjectStatsPageController extends React.Component {
     this.handleGraphChange = this.handleGraphChange.bind(this);
     this.handleWorkflowChange = this.handleWorkflowChange.bind(this);
     this.handleRangeChange = this.handleRangeChange.bind(this);
+    this.getWorkflows = this.getWorkflows.bind(this);
 
     this.state = {
       workflowList: [],
@@ -17,6 +18,16 @@ class ProjectStatsPageController extends React.Component {
   }
 
   componentDidMount() {
+    this.getWorkflows(this.project);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.project !== nextProps.project) {
+      this.getWorkflows(nextProps.project);
+    }
+  }
+
+  getWorkflows(project) {
     const fields = [
       'classifications_count',
       'completeness',
@@ -29,7 +40,7 @@ class ProjectStatsPageController extends React.Component {
       active: true,
       fields: fields.join(','),
     };
-    getWorkflowsInOrder(this.props.project, query)
+    getWorkflowsInOrder(project, query)
       .then((workflows) => {
         const workflowsSetToBeVisible =
           workflows.filter((workflow) => { 
