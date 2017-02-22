@@ -84,7 +84,7 @@ const SliderTaskEditor = (props) => {
           <AutoSave resource={props.workflow}>
             <label htmlFor="minInput">
               <input
-                type="input"
+                type="number"
                 value={props.task.min}
                 name={`${props.taskPrefix}.min`}
                 onChange={handleChange}
@@ -97,7 +97,7 @@ const SliderTaskEditor = (props) => {
           <AutoSave resource={props.workflow}>
             <label htmlFor="maxInput">
               <input
-                type="input"
+                type="number"
                 value={props.task.max}
                 name={`${props.taskPrefix}.max`}
                 onChange={handleChange}
@@ -110,10 +110,13 @@ const SliderTaskEditor = (props) => {
           <AutoSave resource={props.workflow}>
             <label htmlFor="defaultValueInput">
               <input
-                type="input"
+                type="number"
                 value={props.task.defaultValue}
                 name={`${props.taskPrefix}.defaultValue`}
                 onChange={handleChange}
+                min={props.task.min}
+                max={props.task.max}
+                step={0.1 * (props.task.max - props.task.min)}
                 id="defaultValueInput"
               />
               Default value
@@ -123,10 +126,13 @@ const SliderTaskEditor = (props) => {
           <AutoSave resource={props.workflow}>
             <label htmlFor="stepInput">
               <input
-                type="input"
+                type="number"
                 value={props.task.step}
                 name={`${props.taskPrefix}.step`}
                 onChange={handleChange}
+                min={0}
+                max={0.5 * (props.task.max - props.task.min)}
+                step={0.1 * (props.task.max - props.task.min)}
                 id="stepInput"
               />
               Slider step size
@@ -149,10 +155,22 @@ SliderTaskEditor.propTypes = {
       instruction: React.PropTypes.string,
       help: React.PropTypes.string,
       required: React.PropTypes.bool,
-      min: React.PropTypes.number,
-      max: React.PropTypes.number,
-      defaultValue: React.PropTypes.number,
-      step: React.PropTypes.number
+      min: React.PropTypes.oneOfType([
+        React.PropTypes.number,
+        React.PropTypes.string
+      ]),
+      max: React.PropTypes.oneOfType([
+        React.PropTypes.number,
+        React.PropTypes.string
+      ]),
+      defaultValue: React.PropTypes.oneOfType([
+        React.PropTypes.number,
+        React.PropTypes.string
+      ]),
+      step: React.PropTypes.oneOfType([
+        React.PropTypes.number,
+        React.PropTypes.string
+      ])
     }
   )
 };
