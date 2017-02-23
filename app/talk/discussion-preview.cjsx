@@ -2,7 +2,6 @@ React = require 'react'
 {Link} = require 'react-router'
 resourceCount = require './lib/resource-count'
 LatestCommentLink = require './latest-comment-link'
-apiClient = require 'panoptes-client/lib/api-client'
 getSubjectLocation = require '../lib/get-subject-location'
 
 # `import Thumbnail from '../components/thumbnail';`
@@ -19,22 +18,6 @@ module.exports = React.createClass
   
   getDefaultProps: ->
     project: {}
-
-  getInitialState: ->
-    subject: null
-
-  componentDidMount: ->
-    @updateSubject @props.discussion
-
-  componentWillReceiveProps: (newProps) ->
-    @updateSubject newProps.discussion if newProps.discussion isnt @props.discussion
-
-  updateSubject: (discussion)->
-    if discussion.focus_id and discussion.focus_type is 'Subject'
-      apiClient.type 'subjects'
-        .get discussion.focus_id
-        .then (subject) =>
-          @setState {subject}
 
   logDiscussionClick: ->
     @context.geordi?.logEvent
@@ -61,8 +44,8 @@ module.exports = React.createClass
     <div className="talk-discussion-preview">
       <div className="preview-content">
 
-        {if @state.subject?
-          subject = getSubjectLocation(@state.subject)
+        {if @props.subject?
+          subject = getSubjectLocation(@props.subject)
           <div className="subject-preview">
             <Link to={@discussionLink()} onClick={@logDiscussionClick.bind null, this}>
               <Thumbnail src={subject.src} format={subject.format} width={100} height={150} controls={false} />
@@ -77,7 +60,15 @@ module.exports = React.createClass
           </Link>
         </h1>
 
-        <LatestCommentLink {...@props} project={@props.project} discussion={discussion} comment={@props.comment} preview={true} />
+        <LatestCommentLink
+          {...@props}
+          project={@props.project}
+          discussion={discussion}
+          comment={@props.comment}
+          author={@props.author}
+          roles={@props.roles}
+          preview={true}
+        />
 
       </div>
       <div className="preview-stats">

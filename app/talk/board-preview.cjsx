@@ -36,7 +36,14 @@ module.exports = React.createClass
 
         <p>{@props.data.description}</p>
 
-        <LatestCommentLink {...@props} title={true} project={@props.project} discussion={@props.data.latest_discussion} comment={@props.comment} />
+        <LatestCommentLink {...@props}
+          title={true}
+          project={@props.project}
+          discussion={@props.data.latest_discussion}
+          comment={@props.comment}
+          author={@props.author}
+          roles={@props.roles}
+        />
       </div>
 
       <div className="preview-stats">
