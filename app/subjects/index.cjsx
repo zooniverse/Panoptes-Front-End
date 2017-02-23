@@ -1,7 +1,6 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 SubjectViewer = require '../components/subject-viewer'
-PopularTags = require '../talk/popular-tags'
 ActiveUsers = require '../talk/active-users'
 ProjectLinker = require '../talk/lib/project-linker'
 SubjectCommentForm = require './comment-form'
@@ -9,6 +8,8 @@ SubjectCommentList = require './comment-list'
 SubjectDiscussionList = require './discussion-list'
 SubjectMentionList = require './mention-list'
 SubjectCollectionList = require './collection-list'
+
+`import PopularTags from '../talk/popular-tags';`
 
 module.exports = React.createClass
   displayName: 'Subject'

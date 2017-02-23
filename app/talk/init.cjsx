@@ -10,12 +10,13 @@ CreateSubjectDefaultButton = require './lib/create-subject-default-button'
 CreateBoardForm = require './lib/create-board-form'
 Loading = require '../components/loading-indicator'
 SingleSubmitButton = require '../components/single-submit-button'
-PopularTags = require './popular-tags'
 ZooniverseTeam = require './lib/zoo-team.cjsx'
 alert = require '../lib/alert'
 AddZooTeamForm = require './add-zoo-team-form'
 DragReorderable = require 'drag-reorderable'
 Paginator = require './lib/paginator'
+
+`import PopularTags from './popular-tags';`
 
 module.exports = React.createClass
   displayName: 'TalkInit'
