@@ -481,11 +481,11 @@ ProjectPageController = React.createClass
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
     betaApproved = @state.project?.beta_approved
-    wrapperClasses = classnames('project-page-wrapper', {
-      'beta-border': betaApproved
-    })
 
-    <div className={wrapperClasses}>
+    <div className="project-page-wrapper">
+
+      {if betaApproved
+        <div className="beta-border"></div>}
 
       {if @state.project? and @state.owner?
         <ProjectPage
