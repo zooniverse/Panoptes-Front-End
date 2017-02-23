@@ -12,6 +12,7 @@ getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 isAdmin = require '../../lib/is-admin'
 {Split} = require('seven-ten')
 Thumbnail = require('../../components/thumbnail').default
+classnames = require 'classnames'
 
 counterpart.registerTranslations 'en',
   project:
@@ -230,9 +231,22 @@ ProjectPage = React.createClass
     getUserRoles.then (userRoles) =>
       isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles
 
+  renderProjectName: (betaApproved) ->
+    if betaApproved
+      <div>
+        <p>Under Review</p>
+        {@props.project.display_name}
+      </div>
+    else
+      @props.project.display_name
+
   render: ->
+    betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
     onHomePage = projectPath is @props.location.pathname
+    avatarClasses = classnames('tabbed-content-tab', {
+      'beta-approved': betaApproved
+    })
 
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
@@ -263,13 +277,13 @@ ProjectPage = React.createClass
             Visit {@props.project.display_name}
           </a>
         else
-          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.home'}>
+          <IndexLink to="#{projectPath}" activeClassName="active" className={avatarClasses} onClick={logClick?.bind this, 'project.nav.home'}>
             {if @state.avatar?
               <Thumbnail src={@state.avatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
             {if @props.loading
               'Loading...'
             else
-              @props.project.display_name}
+              @renderProjectName(betaApproved)}
           </IndexLink>}
 
         <br className='responsive-break' />
@@ -327,7 +341,7 @@ ProjectPage = React.createClass
         projectIsComplete: @state.projectIsComplete
         splits: @props.splits}
 
-      {unless @props.project.launch_approved or @props.project.beta_approved
+      {unless @props.project.launch_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
 
       {unless @props.location.pathname is projectPath
@@ -466,8 +480,13 @@ ProjectPageController = React.createClass
 
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
+    betaApproved = @state.project?.beta_approved
 
     <div className="project-page-wrapper">
+
+      {if betaApproved
+        <div className="beta-border"></div>}
+
       {if @state.project? and @state.owner?
         <ProjectPage
           {...@props}
