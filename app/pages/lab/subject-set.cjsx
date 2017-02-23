@@ -71,8 +71,7 @@ SubjectSetListing = React.createClass
     subjects: null
 
   componentWillReceiveProps: (nextProps) ->
-    if @props.subjectSet.id isnt nextProps.subjectSet.id
-      @setSubjectResources(nextProps.subjectSet.id, "1")
+    @setSubjectResources(nextProps.subjectSet.id, "1")
       
   componentWillMount: ->
     @setSubjectResources(@props.subjectSet.id, @state.page)
