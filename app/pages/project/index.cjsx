@@ -38,6 +38,7 @@ SOCIAL_ICONS =
   'youtu.be/': 'youtube'
   'youtube.com/': 'youtube'
 
+AVATAR_SIZE = 100
 
 ProjectPage = React.createClass
   contextTypes:
@@ -258,13 +259,13 @@ ProjectPage = React.createClass
         {if @props.project.redirect
           <a href={@props.project.redirect} className="tabbed-content-tab" target="_blank">
             {if @state.avatar?
-              <Thumbnail src={@state.avatar.src} className="avatar" width={48} height={48} />}
+              <Thumbnail src={@state.avatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
             Visit {@props.project.display_name}
           </a>
         else
           <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.home'}>
             {if @state.avatar?
-              <Thumbnail src={@state.avatar.src} className="avatar" width={48} height={48} />}
+              <Thumbnail src={@state.avatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
             {if @props.loading
               'Loading...'
             else
