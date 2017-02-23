@@ -68,13 +68,9 @@ export default class PopularTags extends React.Component {
     const logClick = this.context.geordi && this.context.geordi.makeHandler ? this.context.geordi.makeHandler('hashtag-sidebar') : null;
 
     if (this.props.project) {
-      tagType = (tag) => {
-        return <ProjectTag key={tag.id} project={this.props.project} tag={tag} onClick={logClick ? logClick.bind(this, tag) : null} />
-      };
+      tagType = tag => <ProjectTag key={tag.id} project={this.props.project} tag={tag} onClick={logClick ? logClick.bind(this, tag) : null} />;
     } else {
-      tagType = (tag) => {
-        return <TalkTag key={tag.id} tag={tag} onClick={logClick ? logClick.bind(this, tag) : null} />
-      };
+      tagType = tag => <TalkTag key={tag.id} tag={tag} onClick={logClick ? logClick.bind(this, tag) : null} />;
     }
 
     return (
@@ -83,9 +79,7 @@ export default class PopularTags extends React.Component {
           <div>
             {this.props.header ? this.props.header : null}
             <section>
-              {this.state.tags.map((tag) => {
-                return tagType(tag);
-              })}
+              {this.state.tags.map(tag => tagType(tag))}
             </section>
           </div>
         )}
