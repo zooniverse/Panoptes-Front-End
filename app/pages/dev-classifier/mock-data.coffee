@@ -22,7 +22,14 @@ MISC_DRAWING_DETAILS = [{
 }, {
   type: 'text'
   instruction: 'Any additional comments?'
-}]
+}, {
+  type: 'slider'
+  instruction: 'Slide me'
+  min: '0'
+  max: '10'
+  step: '0.5'
+  defaultValue: '3'
+  }]
 
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
@@ -51,6 +58,7 @@ workflow = apiClient.type('workflows').create
         {label: 'Draw stuff', next: 'draw'}
         {label: 'Survey the image', next: 'survey'}
         {label: 'Maybe select something', next: 'dropdown'}
+        {label: 'Slide a slider', next: 'slider'}
         {label: 'We’re done here.', next: null}
       ]
       unlinkedTask: 'shortcut'
@@ -449,6 +457,14 @@ workflow = apiClient.type('workflows').create
           }
         }
       ]
+
+    slider:
+      type: 'slider'
+      instruction: 'Slide me'
+      min: '0'
+      max: '10'
+      step: '0.5'
+      defaultValue: '3'
 
 # Bulk up the survey task a bit:
 'abcdefghijlkmnopqrstuvwxyz1234'.split('').forEach (x, i) ->
