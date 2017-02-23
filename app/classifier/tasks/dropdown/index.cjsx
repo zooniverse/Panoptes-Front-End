@@ -97,10 +97,7 @@ module.exports = React.createClass
       @handleFocus()
 
   selectedOptions: () ->
-    # this can only be called after props have been updated
-    # as it relies on props.task and props.annotation.
-    # clear selections, then check each annotation.value
-    # and set the corresponding selected option for each select
+    # return annotation values mapped to react-select option objects
     selectedOptions = []
     @props.annotation.value.map (annotation, i) =>
       if annotation.option
@@ -117,10 +114,10 @@ module.exports = React.createClass
   getOptionsKey: (i, optionsKey = '') ->
     {selects} = @props.task
     select = selects[i]
-    [condition] = selects.filter (filterSelect) => filterSelect.id is select.condition
-    conditionIndex = selects.indexOf(condition)
+    [parentMenu] = selects.filter (filterSelect) => filterSelect.id is select.condition
+    conditionIndex = selects.indexOf(parentMenu)
     optionsKey = if optionsKey.length is 0 then @props.annotation.value[conditionIndex]?.value else "#{@props.annotation.value[conditionIndex]?.value};#{optionsKey}"
-    if condition.condition? then @getOptionsKey(conditionIndex, optionsKey) else optionsKey
+    if parentMenu.condition? then @getOptionsKey(conditionIndex, optionsKey) else optionsKey
 
   getOptions: (i) ->
     select = @props.task.selects[i]
