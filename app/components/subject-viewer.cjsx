@@ -223,19 +223,22 @@ module.exports = React.createClass
 
   setPlaying: (playing) ->
     @setState {playing}
-    if playing
-      @nextFrame()
-      @_playingInterval = setInterval @nextFrame, @props.playFrameDuration
+    totalFrames = @props.subject.locations.length
+    flips = totalFrames * @props.playIterations
+    infiniteLoop = @props.playIterations is ''
+    counter = 0
 
-      autoStopDelay = (@props.subject.locations.length * @props.playFrameDuration * @props.playIterations) - @props.playFrameDuration
-      unless @props.playIterations is ''
-        @_autoStop = setTimeout @setPlaying.bind(this, false), autoStopDelay
-    else
-      clearInterval @_playingInterval
-      clearTimeout @_autoStop
+    flip = =>
+      if @state.playing is on and (counter < flips or infiniteLoop is on)
+        counter++
+        @handleFrameChange (@state.frame + 1) %% totalFrames
+        setTimeout flip, @props.playFrameDuration
+        if counter is flips and infiniteLoop is off
+          @setPlaying false
+      else @setPlaying false
 
-  nextFrame: ->
-    @handleFrameChange (@state.frame + 1) %% @props.subject.locations.length
+    if playing is on
+      setTimeout flip, 0
 
   handleFrameChange: (frame) ->
     @setState {frame}
