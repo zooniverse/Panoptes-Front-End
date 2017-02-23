@@ -156,7 +156,7 @@ describe('SliderSummary', function () {
   });
 
   it('should have the correct answer label when the value if falsy (i.e. 0)', function () {
-    summary = mount(<SliderTask.Summary task={task} annotation={{ value: 0 }} />);
+    summary = mount(<SliderTask.Summary task={task} annotation={{ value: '' }} />);
     const answers = summary.find('.answer');
     assert.notEqual(answers.text(), 'No answer');
   });

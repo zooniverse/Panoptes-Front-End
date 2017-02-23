@@ -89,6 +89,7 @@ const SliderTaskEditor = (props) => {
                 value={props.task.min}
                 name={`${props.taskPrefix}.min`}
                 onChange={handleChange}
+                step="any"
                 id="minInput"
               />
               Minimum value
@@ -102,6 +103,7 @@ const SliderTaskEditor = (props) => {
                 value={props.task.max}
                 name={`${props.taskPrefix}.max`}
                 onChange={handleChange}
+                step="any"
                 id="maxInput"
               />
               Maximum value
@@ -117,7 +119,7 @@ const SliderTaskEditor = (props) => {
                 onChange={handleChange}
                 min={props.task.min}
                 max={props.task.max}
-                step={0.1 * (props.task.max - props.task.min)}
+                step="any"
                 id="defaultValueInput"
               />
               Default value
@@ -133,7 +135,7 @@ const SliderTaskEditor = (props) => {
                 onChange={handleChange}
                 min={0}
                 max={0.5 * (props.task.max - props.task.min)}
-                step={0.1 * (props.task.max - props.task.min)}
+                step="any"
                 id="stepInput"
               />
               Slider step size
@@ -156,22 +158,10 @@ SliderTaskEditor.propTypes = {
       instruction: React.PropTypes.string,
       help: React.PropTypes.string,
       required: React.PropTypes.bool,
-      min: React.PropTypes.oneOfType([
-        React.PropTypes.number,
-        React.PropTypes.string
-      ]),
-      max: React.PropTypes.oneOfType([
-        React.PropTypes.number,
-        React.PropTypes.string
-      ]),
-      defaultValue: React.PropTypes.oneOfType([
-        React.PropTypes.number,
-        React.PropTypes.string
-      ]),
-      step: React.PropTypes.oneOfType([
-        React.PropTypes.number,
-        React.PropTypes.string
-      ])
+      min: React.PropTypes.string,
+      max: React.PropTypes.string,
+      defaultValue: React.PropTypes.string,
+      step: React.PropTypes.string
     }
   )
 };

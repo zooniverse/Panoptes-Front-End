@@ -7,16 +7,17 @@ const NOOP = Function.prototype;
 
 class Summary extends React.Component {
   render() {
+    let answer = 'No answer';
+    if (this.props.annotation.value !== null) {
+      answer = this.props.annotation.value;
+    }
     return (
       <div>
         <div className="question">
           {this.props.task.instruction}
         </div>
-        <div className="answers">
-        {this.props.annotation.value ? (
-          <div className="answer">
-            {this.props.annotation.value}
-          </div>) : ""}
+        <div className="answer">
+          {answer}
         </div>
       </div>
     );
@@ -24,10 +25,17 @@ class Summary extends React.Component {
 }
 Summary.displayName = 'SliderSummary';
 
-Summary.defaultProps = {
-  task: React.PropTypes.object,
-  annotation: React.PropTypes.string,
-  expanded: React.PropTypes.bool,
+Summary.propTypes = {
+  task: React.PropTypes.shape(
+    {
+      instruction: React.PropTypes.string
+    }
+  ).isRequired,
+  annotation: React.PropTypes.shape(
+    {
+      value: React.PropTypes.string
+    }
+  ).isRequired
 };
 
 class SliderTask extends React.Component {
@@ -41,14 +49,15 @@ class SliderTask extends React.Component {
         max: 1,
         min: 0,
         step: 0.1,
-        defaultValue: 0,
+        defaultValue: 0
       },
       this.props.task
     );
-    this.state = {
-      value: this.props.annotation.value !== null ?
-        this.props.annotation.value : this.task.defaultValue,
+    let value = this.task.defaultValue;
+    if (this.props.annotation.value !== null) {
+      value = this.props.annotation.value;
     }
+    this.state = { value };
     this.handleChange = this.handleChange.bind(this);
   }
   handleChange() {
@@ -99,7 +108,7 @@ class SliderTask extends React.Component {
                 onChange={this.handleChange}
                 max={this.task.max}
                 min={this.task.min}
-                step={this.task.step / 20}
+                step="any"
                 value={this.state.value}
                 style={{ minWidth: '30px' }}
               />
@@ -118,10 +127,10 @@ SliderTask.getDefaultTask = () => {
     type: 'slider',
     instruction: 'Enter an Instruction.',
     help: '',
-    min: 0,
-    max: 1,
-    step: 0.1,
-    defaultValue: 0
+    min: '0',
+    max: '1',
+    step: '0.1',
+    defaultValue: '0'
   };
 };
 SliderTask.getTaskText = (task) => {
@@ -140,14 +149,14 @@ SliderTask.propTypes = {
       help: React.PropTypes.string,
       instruction: React.PropTypes.string,
       required: React.PropTypes.bool,
-      max: React.PropTypes.number,
-      min: React.PropTypes.number,
-      step: React.PropTypes.number,
-      defaultValue: React.PropTypes.number,
+      max: React.PropTypes.string,
+      min: React.PropTypes.string,
+      step: React.PropTypes.string,
+      defaultValue: React.PropTypes.string
     }
   ),
   annotation: React.PropTypes.shape(
-    { value: React.PropTypes.number }
+    { value: React.PropTypes.string }
   ),
   onChange: React.PropTypes.func
 };
@@ -157,14 +166,13 @@ SliderTask.defaultProps = {
     help: '',
     instruction: '',
     required: false,
-    max: 1,
-    min: 0,
-    step: 0.1,
-    defaultValue: 0,
+    max: '1',
+    min: '0',
+    step: '0.1',
+    defaultValue: '0'
   },
   annotation: { value: null },
   onChange: NOOP
 };
 
-//module.exports = SliderTask;
 export default SliderTask;
