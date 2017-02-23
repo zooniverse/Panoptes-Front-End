@@ -75,6 +75,7 @@ class SliderTask extends React.Component {
         this.task.min
       );
     }
+    value = String(value);
     const newAnnotation = Object.assign(this.props.annotation, { value });
     this.props.onChange(newAnnotation);
     this.setState({ value });
