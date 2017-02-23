@@ -8,7 +8,6 @@ import NextTaskSelector from '../next-task-selector';
 
 const SliderTaskEditor = (props) => {
   const handleChange = handleInputChange.bind(props.workflow);
-  const requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.';
   let nextTask;
   let helpBox;
   if (!props.isSubtask) {
@@ -62,23 +61,6 @@ const SliderTaskEditor = (props) => {
           {helpBox}
           <hr />
           <span className="form-label">Slider Properties</span>
-          <br />
-          <span>
-            <label className="pill-button" title={requiredHelp} htmlFor="requireCheckbox">
-              <AutoSave resource={props.workflow}>
-                <input
-                  type="checkbox"
-                  name={`${props.taskPrefix}.required`}
-                  checked={props.task.required}
-                  onChange={handleChange}
-                  id="requireCheckbox"
-                />
-                {' '}
-                Required
-              </AutoSave>
-            </label>
-            {' '}
-          </span>
           <br />
           <small className="form-help">Specify the minimum, maximum, and default values for the slider. You can also specify the step size for the slider.</small>
           <br />
@@ -157,7 +139,6 @@ SliderTaskEditor.propTypes = {
       next: React.PropTypes.string,
       instruction: React.PropTypes.string,
       help: React.PropTypes.string,
-      required: React.PropTypes.bool,
       min: React.PropTypes.string,
       max: React.PropTypes.string,
       defaultValue: React.PropTypes.string,
