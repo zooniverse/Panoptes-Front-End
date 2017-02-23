@@ -76,20 +76,32 @@ class SliderTask extends React.Component {
           help={this.props.task.help}
           required={this.props.task.required}
         >
-          <div className="standard-input full">
-            <label htmlFor="sliderInput" className="answer">
-              <input
-                type="range"
-                autoFocus={this.props.autoFocus}
-                onChange={this.handleChange}
-                max={this.props.task.max}
-                min={this.props.task.min}
-                step={this.props.task.step}
-                value={this.state.value}
-                id="sliderInput"
-              />
-            </label>
-            <label htmlFor="textInput" className="answer">
+          <div className="standard-input full slider-task-container">
+            <div className="slider-task-range">
+              <label htmlFor="sliderInput" className="answer">
+                <div>
+                  <input
+                    type="range"
+                    autoFocus={this.props.autoFocus}
+                    onChange={this.handleChange}
+                    max={this.props.task.max}
+                    min={this.props.task.min}
+                    step={this.props.task.step}
+                    value={this.state.value}
+                    id="sliderInput"
+                  />
+                </div>
+                <div className="slider-task-range__label-container">
+                  <div className="slider-task-range__label-container__left-label">
+                    {this.props.task.min}
+                  </div>
+                  <div className="slider-task-range__label-container__right-label">
+                    {this.props.task.max}
+                  </div>
+                </div>
+              </label>
+            </div>
+            <label htmlFor="textInput" className="answer slider-task-number">
               <input
                 type="number"
                 autoFocus={this.props.autoFocus}
@@ -98,7 +110,6 @@ class SliderTask extends React.Component {
                 min={this.props.task.min}
                 step="any"
                 value={this.state.value}
-                style={{ minWidth: '30px' }}
                 id="textInput"
               />
             </label>
