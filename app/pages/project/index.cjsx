@@ -12,6 +12,7 @@ getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
 isAdmin = require '../../lib/is-admin'
 {Split} = require('seven-ten')
 Thumbnail = require('../../components/thumbnail').default
+classnames = require 'classnames'
 
 counterpart.registerTranslations 'en',
   project:
@@ -232,10 +233,10 @@ ProjectPage = React.createClass
 
   renderProjectName: (betaApproved) ->
     if betaApproved
-      <span>
+      <div>
         <p>Under Review</p>
         {@props.project.display_name}
-      </span>
+      </div>
     else
       @props.project.display_name
 
@@ -243,6 +244,9 @@ ProjectPage = React.createClass
     betaApproved = @props.project.beta_approved
     projectPath = "/projects/#{@props.project.slug}"
     onHomePage = projectPath is @props.location.pathname
+    avatarClasses = classnames('tabbed-content-tab', {
+      'beta-approved': betaApproved
+    })
 
     pages = [{}, @state.pages...].reduce (map, page) =>
       map[page.url_key] = page
@@ -273,7 +277,7 @@ ProjectPage = React.createClass
             Visit {@props.project.display_name}
           </a>
         else
-          <IndexLink to="#{projectPath}" activeClassName="active" className="tabbed-content-tab #{('beta-approved' if betaApproved) ? ''}" onClick={logClick?.bind this, 'project.nav.home'}>
+          <IndexLink to="#{projectPath}" activeClassName="active" className={avatarClasses} onClick={logClick?.bind this, 'project.nav.home'}>
             {if @state.avatar?
               <Thumbnail src={@state.avatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
             {if @props.loading
@@ -477,11 +481,11 @@ ProjectPageController = React.createClass
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
     betaApproved = @state.project?.beta_approved
+    wrapperClasses = classnames('project-page-wrapper', {
+      'beta-border': betaApproved
+    })
 
-    <div className="project-page-wrapper">
-
-      {if betaApproved
-        <div className="beta-border"></div>}
+    <div className={wrapperClasses}>
 
       {if @state.project? and @state.owner?
         <ProjectPage
