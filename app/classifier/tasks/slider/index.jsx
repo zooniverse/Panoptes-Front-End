@@ -53,9 +53,9 @@ class SliderTask extends React.Component {
 
   handleChange(e) {
     let value = e.target.value;
-    if (value > this.props.task.max) {
+    if (parseFloat(value, 10) > parseFloat(this.props.task.max, 10)) {
       value = this.props.task.max;
-    } else if (value < this.props.task.min) {
+    } else if (parseFloat(value, 10) < parseFloat(this.props.task.min, 10)) {
       value = this.props.task.min;
     }
     this.setState({ value });
