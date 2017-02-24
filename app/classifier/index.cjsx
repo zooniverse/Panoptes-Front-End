@@ -1,6 +1,5 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-ChangeListener = require '../components/change-listener'
 SubjectViewer = require '../components/subject-viewer'
 `import ClassificationSummary from './classification-summary';`
 {Link} = require 'react-router'
@@ -59,6 +58,7 @@ Classifier = React.createClass
     showingExpertClassification: false
     subjectLoading: false
     renderIntervention: false
+    annotations: []
 
   disableIntervention: ->
     @setState renderIntervention: false
@@ -85,10 +85,16 @@ Classifier = React.createClass
 
   componentWillMount: () ->
     interventionMonitor.setProjectSlug @props.project.slug
+    @props.classification.listen 'change', =>
+      {annotations} = @props.classification
+      @setState {annotations}
 
   componentWillUnmount: () ->
     interventionMonitor.removeListener 'interventionRequested', @enableIntervention
     interventionMonitor.removeListener 'classificationTaskRequested', @disableIntervention
+    @props.classification.stopListening 'change', =>
+      {annotations} = @props.classification
+      @setState {annotations}
     try
       @context.geordi?.forget ['subjectID']
 
@@ -146,45 +152,43 @@ Classifier = React.createClass
     largeFormatImage = @props.workflow.configuration.image_layout and 'no-max-height' in @props.workflow.configuration.image_layout
     classifierClassNames = if largeFormatImage then "classifier large-image" else "classifier"
 
-    <ChangeListener target={@props.classification}>{=>
-      if @state.showingExpertClassification
-        currentClassification = @state.expertClassification
-      else
-        currentClassification = @props.classification
-        unless @props.classification.completed
-          currentAnnotation = currentClassification.annotations[currentClassification.annotations.length - 1]
-          currentTask = @props.workflow.tasks[currentAnnotation?.task]
+    if @state.showingExpertClassification
+      currentClassification = @state.expertClassification
+    else
+      currentClassification = @props.classification
+      unless @props.classification.completed
+        currentAnnotation = @state.annotations[@state.annotations.length - 1]
+        currentTask = @props.workflow.tasks[currentAnnotation?.task]
 
-      # This is just easy access for debugging.
-      window.classification = currentClassification
+    # This is just easy access for debugging.
+    window.classification = currentClassification
 
-      <div className={classifierClassNames} >
-        <SubjectViewer
-          user={@props.user}
-          project={@props.project}
-          subject={@props.subject}
-          workflow={@props.workflow}
-          preferences={@props.preferences}
-          classification={currentClassification}
-          annotation={currentAnnotation}
-          onLoad={@handleSubjectImageLoad}
-          frameWrapper={FrameAnnotator}
-          allowFlipbook={workflowAllowsFlipbook @props.workflow}
-          allowSeparateFrames={workflowAllowsSeparateFrames @props.workflow}
-          onChange={@handleAnnotationChange.bind this, currentClassification}
-          playIterations={@props.workflow?.configuration.playIterations}
-        />
+    <div className={classifierClassNames} >
+      <SubjectViewer
+        user={@props.user}
+        project={@props.project}
+        subject={@props.subject}
+        workflow={@props.workflow}
+        preferences={@props.preferences}
+        classification={currentClassification}
+        annotation={currentAnnotation}
+        onLoad={@handleSubjectImageLoad}
+        frameWrapper={FrameAnnotator}
+        allowFlipbook={workflowAllowsFlipbook @props.workflow}
+        allowSeparateFrames={workflowAllowsSeparateFrames @props.workflow}
+        onChange={@handleAnnotationChange.bind this, currentClassification}
+        playIterations={@props.workflow?.configuration.playIterations}
+      />
 
-        <div className="task-area">
-          {if currentTask?
-            @renderTask currentClassification, currentAnnotation, currentTask
-          else if @subjectIsGravitySpyGoldStandard()
-            @renderGravitySpyGoldStandard currentClassification
-          else if not @props.workflow.configuration?.hide_classification_summaries # Classification is complete; show summary if enabled
-            @renderSummary currentClassification}
-        </div>
+      <div className="task-area">
+        {if currentTask?
+          @renderTask currentClassification, currentAnnotation, currentTask
+        else if @subjectIsGravitySpyGoldStandard()
+          @renderGravitySpyGoldStandard currentClassification
+        else if not @props.workflow.configuration?.hide_classification_summaries # Classification is complete; show summary if enabled
+          @renderSummary currentClassification}
       </div>
-    }</ChangeListener>
+    </div>
 
   renderTask: (classification, annotation, task) ->
     disableTalk = @props.classification.metadata.subject_flagged?
