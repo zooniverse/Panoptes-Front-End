@@ -38,7 +38,9 @@ module.exports = React.createClass
     not @props.project.beta_approved
 
   isValidProject: ->
-    @props.project.subject_count >= 100
+    activeWorkflows = @state.workflows?.filter (workflow) -> workflow.active
+    @props.project.subject_count >= 100 and
+    (activeWorkflows and activeWorkflows.length > 0)
 
   canApplyForReview: ->
     @isReviewable() and
