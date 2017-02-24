@@ -14,6 +14,7 @@ React = require 'react'
 `import EditMediaPage from './pages/lab/media';`
 `import UserProfilePage from './pages/profile/index';`
 `import NotificationsPage from './pages/notifications';`
+`import NewsletterPage from './pages/lab/newsletter';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
@@ -193,6 +194,7 @@ module.exports =
       <Route path="visibility" component={require './pages/lab/visibility'} />
       <Route path="talk" component={require './pages/lab/talk'} />
       <Route path="data-exports" component={require './pages/lab/data-dumps'} />
+      <Route path="newsletter" component={NewsletterPage} />
       <Route path="tutorial" component={require './pages/lab/tutorial'} />
       <Route path="guide" component={require './pages/lab/field-guide'} />
       <Route path="mini-course" component={require './pages/lab/mini-course'} />

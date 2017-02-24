@@ -86,6 +86,9 @@ EditProjectPage = React.createClass
           <li><Link to={@labPath('/talk')} activeClassName='active' className="nav-list-item" title="Setup project specific discussion boards">
             Talk
           </Link></li>
+          <li><Link to={@labPath('/newsletter')} activeClassName='active' className="nav-list-item" title="Send a newsletter to your volunteers">
+            Newsletter
+          </Link></li>
           <li><Link to={@labPath('/data-exports')} activeClassName='active' className="nav-list-item" title="Get your project's data exports">
             Data Exports
           </Link></li>
