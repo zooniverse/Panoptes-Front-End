@@ -32,14 +32,17 @@ module.exports = React.createClass
 
   isReviewable: ->
     not @props.project.private and
-    @props.project.live and not
-    @state.setting.beta_requested and not
-    @props.project.beta_requested and not
-    @props.project.beta_approved and
+    @props.project.live and 
+    not @state.setting.beta_requested and 
+    not @props.project.beta_requested and 
+    not @props.project.beta_approved
+
+  isValidProject: ->
     @props.project.subject_count >= 100
 
   canApplyForReview: ->
     @isReviewable() and
+    @isValidProject() and
     @state.labPolicyReviewed and
     @state.bestPracticesReviewed and
     @state.feedbackReviewed
