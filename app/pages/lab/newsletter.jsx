@@ -2,6 +2,9 @@ import React from 'react';
 
 const PreviousLetter = (props) => {
   // this makes use of the talk comment styling
+  // depanding on what data is saved on the API this should also display information
+  // about the "status" of the newsletter (e.g. accepted, pending, rejected)
+  // and metadata such as data sent out.
   return (
     <div>
       <div className="talk-comment-body">
@@ -37,8 +40,7 @@ export default class NewsletterPage extends React.Component {
 
   handleSubmit() {
     // Make the submit API call when that exists
-    // will have to parse the markdown into plan text
-    // or we could use a normal <input> box to avoid that
+    // the textarea style should be extracted to css
     this.setState({ busy: true }, () => {
       const previousNewsletters = this.state.previousNewsletters.slice();
       previousNewsletters.push(this.state.newsletter);
@@ -62,12 +64,13 @@ export default class NewsletterPage extends React.Component {
         <textarea
           className="full"
           rows="15"
-          cols="150"
+          style={{ width: '100%' }}
           value={this.state.newsletter}
           onChange={this.handleChange}
         />
         <br />
         <small className="form-help">Send a newsletter to your volunteers.  When you use the submit button below your newsletter will be reviewed by the Zooniverse before being sent out to your uses.</small>
+        <br />
         <button
           type="button"
           className="major-button"
