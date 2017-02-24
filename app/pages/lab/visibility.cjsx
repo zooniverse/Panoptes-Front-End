@@ -35,7 +35,8 @@ module.exports = React.createClass
     @props.project.live and not
     @state.setting.beta_requested and not
     @props.project.beta_requested and not
-    @props.project.beta_approved
+    @props.project.beta_approved and
+    @props.project.subject_count >= 100
 
   canApplyForReview: ->
     @isReviewable() and
