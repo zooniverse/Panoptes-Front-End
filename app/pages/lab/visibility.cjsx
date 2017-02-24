@@ -4,6 +4,7 @@ WorkflowToggle = require '../../components/workflow-toggle'
 SetToggle = require '../../lib/set-toggle'
 Dialog = require 'modal-form/dialog'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
+uniq = require 'lodash.uniq'
 
 module.exports = React.createClass
   displayName: 'EditProjectVisibility'
@@ -45,7 +46,7 @@ module.exports = React.createClass
 
   applyForReview: ->
     @validateProject()
-      .then () => @set.bind this, 'beta_requested', true
+      .then () => @set 'beta_requested', true
       .catch (errors) => @setState validationErrors: errors
 
   validateProject: ->
@@ -61,21 +62,23 @@ module.exports = React.createClass
         if projectData.activeWorkflows.length
           apiClient
             .type 'subject_sets'
-            .get projectData.activeWorkflows?.map (workflow) -> workflow.links.subject_sets
+            .get uniq projectData.activeWorkflows?.map (workflow) -> workflow.links.subject_sets
       .then (sets) ->
+        console.info sets
         if sets
           projectData.activeSubjects = sets.reduce (count, set) -> 
-            count + set.set_member_subjects_count
+            count += set.set_member_subjects_count
             count
           , 0
       .catch (error) -> console.error 'Error requesting project info', error
       .then () =>
         errors = []
+        console.info 'active', projectData.activeSubjects
         
-        if projectData.activeWorkflows?.length is < 1
+        if projectData.activeWorkflows?.length < 1
           errors.push 'Project must have at least one active workflow.'
 
-        if projectData.activeSubjects < 100
+        if projectData.activeSubjects <= 100
           errors.push 'Project must have at least 100 subjects in active workflows.'
 
         if projectData.pages.length < 5
