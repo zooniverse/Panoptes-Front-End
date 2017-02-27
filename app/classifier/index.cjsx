@@ -49,7 +49,6 @@ Classifier = React.createClass
     minicourse: null
 
   getInitialState: ->
-    backButtonWarning: false
     expertClassification: null
     selectedExpertAnnotation: -1
     showingExpertClassification: false
@@ -189,10 +188,6 @@ Classifier = React.createClass
             annotation={currentAnnotation}
             completeClassification={@completeClassification}
             renderExpertOptions={@renderExpertOptions}
-            backButtonWarning={@state.backButtonWarning}
-            renderBackButtonWarning={@renderBackButtonWarning}
-            warningToggleOn={@warningToggleOn}
-            warningToggleOff={@warningToggleOff}
           >
             <p>
               <small>
@@ -440,15 +435,6 @@ Classifier = React.createClass
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
-
-  warningToggleOn: ->
-    @setState backButtonWarning: true unless @props.workflow.configuration.persist_annotations
-
-  warningToggleOff: ->
-    @setState backButtonWarning: false
-
-  renderBackButtonWarning: ->
-    <p className="back-button-warning" >Going back will clear your work for the current task.</p>
 
   subjectIsGravitySpyGoldStandard: ->
     @props.workflow.configuration?.gravity_spy_gold_standard and @props.subject.metadata?['#Type'] is 'Gold'

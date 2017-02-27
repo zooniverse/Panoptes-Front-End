@@ -9,6 +9,9 @@ import GridTool from './drawing-tools/grid';
 import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
 
+const BackButtonWarning = (props) =>
+  <p className="back-button-warning" >Going back will clear your work for the current task.</p>
+
 class Task extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +19,11 @@ class Task extends React.Component {
     this.addAnnotationForTask = this.addAnnotationForTask.bind(this);
     this.completeClassification = this.completeClassification.bind(this);
     this.destroyCurrentAnnotation = this.destroyCurrentAnnotation.bind(this);
+    this.warningToggleOn = this.warningToggleOn.bind(this);
+    this.warningToggleOff = this.warningToggleOff.bind(this);
+    this.state = {
+      BackButtonWarning: false
+    }
   }
   
   componentWillMount() {
@@ -93,6 +101,18 @@ class Task extends React.Component {
 
     if (workflow.configuration.persist_annotations) {
       CacheClassification.update(lastAnnotation);
+    }
+  }
+
+  warningToggleOn() {
+    if (!this.props.workflow.configuration.persist_annotations) {
+      this.setState({backButtonWarning: true});
+    }
+  }
+
+  warningToggleOff() {
+    if (!this.props.workflow.configuration.persist_annotations) {
+      this.setState({backButtonWarning: false});
     }
   }
 
@@ -207,10 +227,10 @@ class Task extends React.Component {
                 className="back minor-button"
                 disabled={onFirstAnnotation}
                 onClick={this.destroyCurrentAnnotation}
-                onMouseEnter={this.props.warningToggleOn}
-                onFocus={this.props.warningToggleOn}
-                onMouseLeave={this.props.warningToggleOff}
-                onBlur={this.props.warningToggleOff}
+                onMouseEnter={this.warningToggleOn}
+                onFocus={this.warningToggleOn}
+                onMouseLeave={this.warningToggleOff}
+                onBlur={this.warningToggleOff}
               >
                 Back
               </button>}
@@ -244,7 +264,7 @@ class Task extends React.Component {
               </button>}
             {this.props.renderExpertOptions()}
           </nav>
-          {this.props.backButtonWarning && this.props.renderBackButtonWarning()}
+          {this.state.backButtonWarning && <BackButtonWarning />}
 
           {this.props.children}
         </div>
@@ -265,7 +285,6 @@ Task.propTypes ={
   disableIntervention: React.PropTypes.func,
   preferences: React.PropTypes.object,
   project: React.PropTypes.object,
-  renderBackButtonWarning: React.PropTypes.func,
   renderExpertOptions: React.PropTypes.func,
   renderIntervention: React.PropTypes.func,
   subject: React.PropTypes.shape({
@@ -274,8 +293,6 @@ Task.propTypes ={
   subjectLoading: React.PropTypes.bool,
   task: React.PropTypes.object,
   user: React.PropTypes.object,
-  warningToggleOn: React.PropTypes.func,
-  warningToggleOff: React.PropTypes.func,
   workflow: React.PropTypes.object
 }
 
