@@ -51,38 +51,28 @@ module.exports = React.createClass
 
   validateProject: ->
     @setState validationErrors: []
-    projectData = 
+    validationCriteria = 
       activeWorkflows: @state.workflows?.filter (workflow) -> workflow.active
-      activeSubjects: 0
-      pages: []
+      missingPages: []
 
     @props.project.get 'pages'
-      .then (pages) -> 
-        projectData.pages = pages
-        if projectData.activeWorkflows.length
-          apiClient
-            .type 'subject_sets'
-            .get uniq projectData.activeWorkflows?.map (workflow) -> workflow.links.subject_sets
-      .then (sets) ->
-        console.info sets
-        if sets
-          projectData.activeSubjects = sets.reduce (count, set) -> 
-            count += set.set_member_subjects_count
-            count
-          , 0
+      .then (projectPages) -> 
+        requiredPages = ['Research', 'FAQ']
+        validationCriteria.missingPages = requiredPages.reduce (missingPages, requiredPage) ->
+          pagePresent = projectPages.find (page) -> requiredPage is page.title
+          if !pagePresent or (pagePresent.content is null or '')
+            missingPages.push requiredPage
+          missingPages
+        , []
       .catch (error) -> console.error 'Error requesting project info', error
       .then () =>
         errors = []
-        console.info 'active', projectData.activeSubjects
         
-        if projectData.activeWorkflows?.length < 1
+        if validationCriteria.activeWorkflows?.length < 1
           errors.push 'Project must have at least one active workflow.'
 
-        if projectData.activeSubjects <= 100
-          errors.push 'Project must have at least 100 subjects in active workflows.'
-
-        if projectData.pages.length < 5
-          errors.push 'All project About pages must contain some content.'
+        if validationCriteria.missingPages.length > 0
+          errors.push 'The following About pages are missing: ' + validationCriteria.missingPages.join ', '
 
         if errors.length 
           Promise.reject errors
