@@ -72,7 +72,7 @@ module.exports = React.createClass
         @setState {discussions, discussionsMeta, loading: false}
         discussions.map (discussion) ->
           subject_ids.push discussion.focus_id if discussion.focus_id and discussion.focus_type is 'Subject'
-          author_ids.push discussion.latest_comment.user_id
+          author_ids.push discussion.latest_comment.user_id if discussion.latest_comment?
 
         apiClient
           .type 'users'
@@ -122,14 +122,15 @@ module.exports = React.createClass
     @setDiscussions()
 
   discussionPreview: (discussion, i) ->
-    roles = @state.author_roles[discussion.latest_comment.user_id]
+    user_id = discussion.latest_comment?.user_id
+    roles = @state.author_roles[user_id]
     roles ?= []
     <DiscussionPreview
       {...@props}
       key={i}
       discussion={discussion}
       subject={@state.subjects[discussion.focus_id]}
-      author={@state.authors[discussion.latest_comment.user_id]}
+      author={@state.authors[user_id]}
       roles={roles}
     />
 

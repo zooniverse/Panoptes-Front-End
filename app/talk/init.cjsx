@@ -59,7 +59,8 @@ module.exports = React.createClass
         boardsMeta = boards[0]?.getMeta()
         @setState {boards, boardsMeta, loading: false}
         boards.map (board) ->
-          author_ids.push board.latest_discussion.latest_comment.user_id
+          user_id = board.latest_discussion?.latest_comment.user_id
+          author_ids.push user_id if user_id?
 
         apiClient
           .type 'users'
@@ -84,13 +85,14 @@ module.exports = React.createClass
                 prevState.author_roles[role.user_id].push role
 
   boardPreview: (data, i) ->
-    roles = @state.author_roles[data.latest_discussion.latest_comment.user_id]
+    user_id = data.latest_discussion?.latest_comment.user_id
+    roles = @state.author_roles[user_id]
     roles ?= []
     <BoardPreview
       {...@props}
       key={i}
       data={data}
-      author={@state.authors[data.latest_discussion.latest_comment.user_id]}
+      author={@state.authors[user_id]}
       roles={roles}
     />
 
