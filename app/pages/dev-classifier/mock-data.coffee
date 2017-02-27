@@ -32,7 +32,7 @@ workflow = apiClient.type('workflows').create
     enable_switching_flipbook_and_separate: true
     multi_image_layout: 'grid3'
     invert_subject: true
-    persist_annotations: true
+    persist_annotations: false
     pan_and_zoom: true
 
   first_task: 'init'
