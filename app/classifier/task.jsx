@@ -256,7 +256,7 @@ class Task extends React.Component {
 Task.propTypes ={
   annotation: React.PropTypes.shape({
     shortcut: React.PropTypes.object,
-    value: React.PropTypes.object
+    value: React.PropTypes.any.isRequired
   }),
   backButtonWarning: React.PropTypes.bool,
   classification: React.PropTypes.object,
