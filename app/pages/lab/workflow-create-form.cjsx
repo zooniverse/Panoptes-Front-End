@@ -46,7 +46,7 @@ WorkflowCreateForm = React.createClass
       <label>
         <span className="form-label">New Workflow Title</span>
         <br />
-        <input className="standard-input full" type="text" ref="newDisplayName" defaultValue="new worfklow title" autoFocus required />
+        <input className="standard-input full" type="text" ref="newDisplayName" defaultValue="new workflow title" autoFocus required />
       </label>
       <br />
       {if @state.error?
