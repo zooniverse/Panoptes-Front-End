@@ -64,8 +64,11 @@ export default class CollectionCard extends React.Component {
               <span>{this.props.collection.display_name}</span>
               {this.props.collection.private ? <i className="fa fa-lock" /> : null}
             </div>
-            {!this.props.skipOwner ?
-              <div className="owner">{this.props.collection.links.owner.display_name}</div> : null}
+              <div className="owner">
+                {this.props.shared ?
+                  <span><i className="fa fa-users"></i>{" "}</span> : null}
+                {this.props.collection.links.owner.display_name}
+              </div>
           </div>
         </div>
       </FlexibleLink>
@@ -82,8 +85,8 @@ CollectionCard.propTypes = {
   }).isRequired,
   imagePromise: React.PropTypes.any,
   linkTo: React.PropTypes.string.isRequired,
-  skipOwner: React.PropTypes.bool,
   subjectCount: React.PropTypes.number,
+  shared: React.PropTypes.bool,
   translationObjectName: React.PropTypes.string.isRequired,
 };
 
@@ -91,7 +94,6 @@ CollectionCard.defaultProps = {
   collection: {},
   imagePromise: null,
   linkTo: '',
-  skipOwner: false,
   subjectCount: 0,
   translationObjectName: '',
 };

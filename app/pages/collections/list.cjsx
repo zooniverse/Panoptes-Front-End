@@ -20,7 +20,7 @@ List = React.createClass
         translationObjectName = "project#{translationObjectName}"
       Object.assign({}, props, {favorite: favorite, translationObjectName:"#{translationObjectName}"})
   }
-  
+
   getInitialState: ->
     collections: null # has to be null initially, rather than [], in order to display the loading message
 
@@ -30,7 +30,7 @@ List = React.createClass
 
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
-  
+
   componentWillReceiveProps: (newProps) ->
     @listCollections newProps
 
@@ -49,10 +49,16 @@ List = React.createClass
 
   listCollections: (props) ->
     query = {}
-    if props.params?.collection_owner?
+    if props.params.collection_owner is props.user?.login
+      query.current_user_roles = "owner,contributor,collaborator"
+    else if props.params.collection_owner?
       query.owner = props.params.collection_owner
-    else if props.params?.profile_name?
+
+    if props.params.profile_name is props.user?.login
+      query.current_user_roles = "owner,contributor,collaborator"
+    else if props.params.profile_name?
       query.owner = props.params.profile_name
+
     if props.project?
       query.project_ids = props.project.id
     query.favorite = props.favorite
@@ -64,6 +70,10 @@ List = React.createClass
       .get query
       .then (collections) =>
         @setState {collections}
+
+  shared: (collection) ->
+    if (@props.params.collection_owner is @props.user?.login) or (@props.params.profile_name is @props.user?.login)
+      @props.user?.id isnt collection.links.owner.id
 
   render: ->
     {location} = @props
@@ -137,7 +147,7 @@ List = React.createClass
                    linkTo={@cardLink(collection)}
                    translationObjectName={@props.translationObjectName}
                    subjectCount={collection.links.subjects?.length}
-                   skipOwner={@props.params?.collection_owner?} />}
+                   shared={@shared(collection)} /> }
             </div>
             <nav>
               {if meta
