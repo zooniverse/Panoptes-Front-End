@@ -9,7 +9,6 @@ TriggeredModalForm = require 'modal-form/triggered'
 isAdmin = require '../lib/is-admin'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
-GridTool = require './drawing-tools/grid'
 experimentsClient = require '../lib/experiments-client'
 interventionMonitor = require '../lib/intervention-monitor'
 `import WorldWideTelescope from './world-wide-telescope';`
@@ -71,11 +70,11 @@ Classifier = React.createClass
     interventionMonitor.on 'interventionRequested', @enableIntervention
     interventionMonitor.on 'classificationTaskRequested', @disableIntervention
     @loadSubject @props.subject
-    @prepareToClassify @props.classification
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.subject isnt @props.subject
       @loadSubject nextProps.subject
+
     if @props.subject isnt nextProps.subject or !@context.geordi?.keys["subjectID"]?
       @context.geordi?.remember subjectID: nextProps.subject?.id
     
@@ -86,7 +85,6 @@ Classifier = React.createClass
       nextProps.classification.listen 'change', =>
         {annotations} = nextProps.classification
         @setState {annotations}
-      @prepareToClassify nextProps.classification
 
   componentWillMount: () ->
     interventionMonitor.setProjectSlug @props.project.slug
@@ -148,11 +146,6 @@ Classifier = React.createClass
         window.expertClassification = expertClassification
         @setState {expertClassification}
 
-  prepareToClassify: (classification) ->
-    classification.annotations ?= []
-    if classification.annotations.length is 0
-      @addAnnotationForTask classification, @props.workflow.first_task
-
   render: ->
     largeFormatImage = @props.workflow.configuration.image_layout and 'no-max-height' in @props.workflow.configuration.image_layout
     classifierClassNames = if largeFormatImage then "classifier large-image" else "classifier"
@@ -186,7 +179,7 @@ Classifier = React.createClass
       />
 
       <div className="task-area">
-        {if currentTask?
+        {unless currentClassification.completed
           <Task
             preferences={@props.preferences}
             user={@props.user}
@@ -194,13 +187,10 @@ Classifier = React.createClass
             classification={currentClassification}
             task={currentTask}
             annotation={currentAnnotation}
-            addAnnotationForTask={@addAnnotationForTask}
             completeClassification={@completeClassification}
-            handleAnnotationChange={@handleAnnotationChange.bind(this, currentClassification)}\
             renderExpertOptions={@renderExpertOptions}
             backButtonWarning={@state.backButtonWarning}
             renderBackButtonWarning={@renderBackButtonWarning}
-            destroyCurrentAnnotation={@destroyCurrentAnnotation}
             warningToggleOn={@warningToggleOn}
             warningToggleOff={@warningToggleOff}
           >
@@ -421,56 +411,11 @@ Classifier = React.createClass
     changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
     @props.classification.update changes
 
-  handleAnnotationChange: (classification, newAnnotation) ->
-    classification.annotations[classification.annotations.length - 1] = newAnnotation
+  handleAnnotationChange: (classification, newAnnotation) ->		
+    classification.annotations[classification.annotations.length - 1] = newAnnotation		
     classification.update 'annotations'
-
-  # Next (or start):
-  addAnnotationForTask: (classification, taskKey) ->
-    taskDescription = @props.workflow.tasks[taskKey]
-    annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
-    annotation.task = taskKey
-
-    if @props.workflow.configuration.persist_annotations
-      cachedAnnotation = CacheClassification.isAnnotationCached(taskKey)
-      if cachedAnnotation?
-        annotation = cachedAnnotation
-
-    classification.annotations.push annotation
-    classification.update 'annotations'
-
-  # Back up:
-  destroyCurrentAnnotation: ->
-    lastAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-
-    @props.classification.annotations.pop()
-    @props.classification.update 'annotations'
-
-    if @props.workflow.configuration.persist_annotations
-      CacheClassification.update(lastAnnotation)
 
   completeClassification: ->
-    if @props.workflow.configuration.persist_annotations
-      CacheClassification.delete()
-
-    currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-    currentTask = @props.workflow.tasks[currentAnnotation?.task]
-    currentTask?.tools?.map (tool) =>
-      if tool.type is 'grid'
-        GridTool.mapCells @props.classification.annotations
-    @props.classification.update
-      completed: true
-      'metadata.session': getSessionID()
-      'metadata.finished_at': (new Date).toISOString()
-      'metadata.viewport':
-        width: innerWidth
-        height: innerHeight
-
-    if currentAnnotation.shortcut
-      @addAnnotationForTask @props.classification, currentTask.unlinkedTask
-      newAnnotation = classification.annotations[classification.annotations.length - 1]
-      newAnnotation['value'] = currentAnnotation.shortcut['index']
-      delete currentAnnotation['shortcut']
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
     else

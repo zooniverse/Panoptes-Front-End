@@ -1,17 +1,95 @@
 import React from 'react';
 import { Link } from 'react-router';
-import {getSessionID} from '../lib/session'
+import { getSessionID } from '../lib/session';
+import CacheClassification from '../components/cache-classification';
 import experimentsClient from '../lib/experiments-client';
 import interventionMonitor from '../lib/intervention-monitor';
 import tasks from './tasks';
+import GridTool from './drawing-tools/grid';
 import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
 
 const Task = (props) => {
   const { annotation, classification, task, workflow } = props;
+
+  // Next (or first question)
+  function addAnnotationForTask(taskKey) {
+    const taskDescription = workflow.tasks[taskKey];
+    let annotation = tasks[taskDescription.type].getDefaultAnnotation(taskDescription, workflow, tasks);
+    annotation.task = taskKey;
+
+    if (workflow.configuration.persist_annotations) {
+      const cachedAnnotation = CacheClassification.isAnnotationCached(taskKey);
+      if (cachedAnnotation) {
+        annotation = cachedAnnotation;
+      }
+    }
+
+    classification.annotations.push(annotation);
+    classification.update('annotations');
+  }
+
+  classification.annotations = classification.annotations ? classification.annotations : [];
+  if (classification.annotations.length === 0) {
+    addAnnotationForTask(workflow.first_task);
+  }
+
+  if (!task) {
+    return null;
+  }
+
+  function handleAnnotationChange(newAnnotation) {
+    classification.annotations[classification.annotations.length - 1] = newAnnotation;
+    classification.update('annotations');
+  }
+
+  // Back
+  function destroyCurrentAnnotation() {
+    const lastAnnotation = classification.annotations[classification.annotations.length - 1];
+
+    classification.annotations.pop();
+    classification.update('annotations');
+
+    if (workflow.configuration.persist_annotations) {
+      CacheClassification.update(lastAnnotation);
+    }
+  }
+
+  // Done
+  function completeClassification() {
+    if (workflow.configuration.persist_annotations) {
+      CacheClassification.delete();
+    }
+
+    const currentAnnotation = classification.annotations[classification.annotations.length - 1];
+    const currentTask = workflow.tasks[currentAnnotation.task];
+    !!currentTask && !!currentTask.tools && currentTask.tools.map((tool) => {
+      if (tool.type === 'grid') {
+        GridTool.mapCells(classification.annotations);
+      }
+    });
+    classification.update({
+      completed: true,
+      'metadata.session': getSessionID(),
+      'metadata.finished_at': (new Date()).toISOString(),
+      'metadata.viewport': {
+        width: innerWidth,
+        height: innerHeight
+      }
+    });
+      
+
+    if (currentAnnotation.shortcut) {
+      addAnnotationForTask(currentTask.unlinkedTask);
+      const newAnnotation = classification.annotations[classification.annotations.length - 1];
+      newAnnotation.value = currentAnnotation.shortcut.index;
+      delete currentAnnotation.shortcut;
+    }
+    props.completeClassification();
+  }
+
   const disableTalk = classification.metadata.subject_flagged;
   const visibleTasks = Object.keys(workflow.tasks).filter(key => workflow.tasks[key].type !== 'shortcut');
-
   const TaskComponent = tasks[task.type];
 
   // Should we disable the "Back" button?
@@ -19,7 +97,7 @@ const Task = (props) => {
 
   // Should we disable the "Next" or "Done" buttons?
   let waitingForAnswer;
-  if (TaskComponent.isAnnotationComplete) {
+  if (TaskComponent && TaskComponent.isAnnotationComplete) {
     waitingForAnswer = !props.annotation.shortcut && !TaskComponent.isAnnotationComplete(task, annotation, workflow);
   }
 
@@ -29,7 +107,7 @@ const Task = (props) => {
     const currentAnswer = task.answers[annotation.value];
     nextTaskKey = currentAnswer ? currentAnswer.next : '';
   } else {
-    nextTaskKey = props.task.next;
+    nextTaskKey = task.next;
   }
 
   if (!!nextTaskKey && !props.workflow.tasks[nextTaskKey]) {
@@ -65,9 +143,6 @@ const Task = (props) => {
     onChange: props.classification.update
   };
 
-  function addAnnotationForTask() {
-    props.addAnnotationForTask(classification, nextTaskKey);
-  }
   return (
     <div className="task-container" style={disabledStyle ? props.subjectLoading : ''}>
       {!!props.renderIntervention &&
@@ -86,7 +161,7 @@ const Task = (props) => {
           <HookComponent key={key} {...taskHookProps} />})
         }
 
-        <TaskComponent autoFocus={true} taskTypes={tasks} workflow={props.workflow} task={task} preferences={props.preferences} annotation={annotation} onChange={props.handleAnnotationChange} />
+        <TaskComponent autoFocus={true} taskTypes={tasks} workflow={props.workflow} task={task} preferences={props.preferences} annotation={annotation} onChange={handleAnnotationChange} />
 
         {persistentHooksAfterTask.map((HookComponent, i) => {
           const key = i + Math.random();
@@ -108,7 +183,7 @@ const Task = (props) => {
             <button type="button"
               className="back minor-button"
               disabled={onFirstAnnotation}
-              onClick={props.destroyCurrentAnnotation}
+              onClick={destroyCurrentAnnotation}
               onMouseEnter={props.warningToggleOn}
               onFocus={props.warningToggleOn}
               onMouseLeave={props.warningToggleOff}
@@ -130,7 +205,7 @@ const Task = (props) => {
               type="button"
               className="continue major-button"
               disabled={waitingForAnswer}
-              onClick={addAnnotationForTask}
+              onClick={addAnnotationForTask.bind(this, nextTaskKey)}
             >
               Next
             </button> :
@@ -138,7 +213,7 @@ const Task = (props) => {
               type="button"
               className="continue major-button"
               disabled={waitingForAnswer}
-              onClick={props.completeClassification}
+              onClick={completeClassification}
             >
               {props.demoMode && <i className="fa fa-trash fa-fw"></i>}
               {props.classification.gold_standard && <i className="fa fa-star fa-fw"></i>}
@@ -163,9 +238,7 @@ Task.propTypes ={
   classification: React.PropTypes.object,
   completeClassification: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
-  destroyCurrentAnnotation: React.PropTypes.func,
   disableIntervention: React.PropTypes.func,
-  handleAnnotationChange: React.PropTypes.func,
   preferences: React.PropTypes.object,
   project: React.PropTypes.object,
   renderBackButtonWarning: React.PropTypes.func,
