@@ -23,6 +23,10 @@ ClassificationViewer = React.createClass
     unless "#{key}".charAt(0) is '_'
       value
 
+  togglePersistAnnotations: (e) ->
+    @props.classification._workflow.configuration.persist_annotations = e.target.checked
+    @forceUpdate()
+
   render: ->
     showing =  if @state.showOnlyLast
       @props.classification.annotations[@props.classification.annotations.length - 1]
@@ -43,6 +47,11 @@ ClassificationViewer = React.createClass
       <label>
         <input type="checkbox" checked={@state.showThrowaways} onChange={(e) => @setState showThrowaways: e.target.checked} />{' '}
         Show throwaway properties
+      </label>
+      &ensp;
+      <label>
+        <input type="checkbox" checked={@props.classification._workflow.configuration.persist_annotations} onChange={@togglePersistAnnotations} />{' '}
+        Persist Annotations
       </label>
       <br />
       <pre>{JSON.stringify showing, replacer, 2}</pre>
