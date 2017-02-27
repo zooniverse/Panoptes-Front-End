@@ -49,26 +49,34 @@ module.exports = React.createClass
       .then () => @set 'beta_requested', true
       .catch (errors) => @setState validationErrors: errors
 
-  validateProject: ->
-    @setState validationErrors: []
-    validationCriteria = 
-      activeWorkflows: @state.workflows?.filter (workflow) -> workflow.active
-      missingPages: []
-
+  validateProjectPages: () ->
+    requiredPages = ['Research', 'FAQ']
     @props.project.get 'pages'
       .then (projectPages) -> 
-        requiredPages = ['Research', 'FAQ']
-        validationCriteria.missingPages = requiredPages.reduce (missingPages, requiredPage) ->
+        requiredPages.reduce (missingPages, requiredPage) ->
           pagePresent = projectPages.find (page) -> requiredPage is page.title
           if !pagePresent or (pagePresent.content is null or '')
             missingPages.push requiredPage
           missingPages
         , []
+
+  validateProject: ->
+    @setState validationErrors: []
+    validationCriteria = 
+      activeWorkflows: @state.workflows?.filter (workflow) -> workflow.active
+
+    validations = [
+      @validateProjectPages()
+    ]
+
+    Promise.all validations
       .catch (error) -> console.error 'Error requesting project info', error
-      .then () =>
+      .then ([missingPages]) ->
+        validationCriteria = Object.assign validationCriteria,
+          missingPages: missingPages    
         errors = []
-        
-        if validationCriteria.activeWorkflows?.length < 1
+
+        if validationCriteria.activeWorkflows.length < 1
           errors.push 'Project must have at least one active workflow.'
 
         if validationCriteria.missingPages.length > 0
