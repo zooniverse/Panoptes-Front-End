@@ -1,5 +1,6 @@
 React = require 'react'
 auth = require 'panoptes-client/lib/auth'
+`import AppStatus from './app-status';`
 IOStatus = require './io-status'
 AppLayout = require('../layout').default
 GeordiLogger = require '../lib/geordi-logger'
@@ -70,6 +71,7 @@ PanoptesApp = React.createClass
 
   render: ->
     <div className="panoptes-main">
+      <AppStatus />
       <IOStatus />
       <AppLayout {...@props}>
         {React.cloneElement @props.children, user: @state.user}
