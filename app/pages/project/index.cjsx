@@ -140,7 +140,7 @@ ProjectPage = React.createClass
       .then (pages) =>
         @setState {pages}
 
-  getAllWorkflows: (project, query = { active: true }) ->
+  getAllWorkflows: (project, query = { active: true, fields: "active,completeness,configuration,display_name" }) ->
     @setState { loadingSelectedWorkflow: true }
     getWorkflowsInOrder(project, query)
       .then (activeWorkflows) =>
@@ -182,10 +182,17 @@ ProjectPage = React.createClass
       @state.activeWorkflows[randomIndex].id
 
   getWorkflow: (selectedWorkflowIndex) ->
-    @setState {
-      selectedWorkflow: @state.activeWorkflows[selectedWorkflowIndex],
-      loadingSelectedWorkflow: false
-    }
+    apiClient.type('workflows').get({ id: "#{@state.activeWorkflows[selectedWorkflowIndex].id}" })
+      .catch (error) =>
+        console.error error
+        @setState {
+          loadingSelectedWorkflow: false
+        }
+      .then ([workflow]) =>
+        @setState {
+          selectedWorkflow: workflow,
+          loadingSelectedWorkflow: false
+        }
 
   isWorkflowInactive: (project, selectedWorkflowID) ->
     selectedWorkflowIndex = @state.activeWorkflows.findIndex (workflow, index) ->
