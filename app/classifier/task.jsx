@@ -10,7 +10,7 @@ import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
 
 const BackButtonWarning = (props) =>
-  <p className="back-button-warning" >Going back will clear your work for the current task.</p>
+  <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
 
 class Task extends React.Component {
   constructor(props) {
@@ -23,11 +23,11 @@ class Task extends React.Component {
     this.warningToggleOff = this.warningToggleOff.bind(this);
     this.state = {
       BackButtonWarning: false
-    }
+    };
   }
-  
+
   componentWillMount() {
-    const {workflow, classification} = this.props;
+    const { workflow, classification } = this.props;
     classification.annotations = classification.annotations ? classification.annotations : [];
     if (classification.annotations.length === 0) {
       this.addAnnotationForTask(workflow.first_task);
@@ -35,14 +35,14 @@ class Task extends React.Component {
   }
 
   handleAnnotationChange(newAnnotation) {
-    const {workflow, classification} = this.props;
+    const { classification } = this.props;
     classification.annotations[classification.annotations.length - 1] = newAnnotation;
     classification.update('annotations');
   }
 
   // Next (or first question)
   addAnnotationForTask(taskKey) {
-    const {workflow, classification} = this.props;
+    const { workflow, classification } = this.props;
     const taskDescription = workflow.tasks[taskKey];
     let annotation = tasks[taskDescription.type].getDefaultAnnotation(taskDescription, workflow, tasks);
     annotation.task = taskKey;
@@ -60,7 +60,7 @@ class Task extends React.Component {
 
   // Done
   completeClassification() {
-    const {workflow, classification} = this.props;
+    const { workflow, classification } = this.props;
     if (workflow.configuration.persist_annotations) {
       CacheClassification.delete();
     }
@@ -83,17 +83,17 @@ class Task extends React.Component {
     });
 
     if (currentAnnotation.shortcut) {
-      addAnnotationForTask(currentTask.unlinkedTask);
+      this.addAnnotationForTask(currentTask.unlinkedTask);
       const newAnnotation = classification.annotations[classification.annotations.length - 1];
       newAnnotation.value = currentAnnotation.shortcut.index;
       delete currentAnnotation.shortcut;
     }
-    this. props.completeClassification();
+    this.props.completeClassification();
   }
 
   // Back
   destroyCurrentAnnotation() {
-    const {workflow, classification} = this.props;
+    const { workflow, classification } = this.props;
     const lastAnnotation = classification.annotations[classification.annotations.length - 1];
 
     classification.annotations.pop();
@@ -106,13 +106,13 @@ class Task extends React.Component {
 
   warningToggleOn() {
     if (!this.props.workflow.configuration.persist_annotations) {
-      this.setState({backButtonWarning: true});
+      this.setState({ backButtonWarning: true });
     }
   }
 
   warningToggleOff() {
     if (!this.props.workflow.configuration.persist_annotations) {
-      this.setState({backButtonWarning: false});
+      this.setState({ backButtonWarning: false });
     }
   }
 
@@ -173,19 +173,19 @@ class Task extends React.Component {
     // These props will be passed into the hooks. Append as necessary when creating hooks.
     const taskHookProps = {
       taskTypes: tasks,
-      workflow: workflow,
-      classification: classification,
+      workflow,
+      classification,
       onChange: classification.update
     };
 
     return (
-      <div className="task-container" style={disabledStyle ? this.props.subjectLoading : ''}>
+      <div className="task-container" style={this.props.subjectLoading ?  disabledStyle : null}>
         {!!this.props.renderIntervention &&
           <Intervention
-            user={props.user}
-            experimentName={interventionMonitor.latestFromSugar['experiment_name']}
+            user={this.props.user}
+            experimentName={interventionMonitor.latestFromSugar.experiment_name}
             sessionID={getSessionID()}
-            interventionID={interventionMonitor.latestFromSugar['next_event']}
+            interventionID={interventionMonitor.latestFromSugar.next_event}
             interventionDetails={experimentsClient.constructInterventionFromSugarData(interventionMonitor.latestFromSugar)}
             disableInterventionFunction={this.props.disableIntervention}
           />
@@ -193,8 +193,8 @@ class Task extends React.Component {
         <div className="coverable-task-container">
           {persistentHooksBeforeTask.map((HookComponent, i) => {
             const key = i + Math.random();
-            <HookComponent key={key} {...taskHookProps} />})
-          }
+            <HookComponent key={key} {...taskHookProps} />;
+          })}
 
           <TaskComponent
             autoFocus={true}
@@ -208,12 +208,12 @@ class Task extends React.Component {
 
           {persistentHooksAfterTask.map((HookComponent, i) => {
             const key = i + Math.random();
-            <HookComponent key={key} {...taskHookProps} />})
-          }
+            <HookComponent key={key} {...taskHookProps} />;
+          })}
 
           <hr />
 
-          {!!task.unlinkedTask && 
+          {!!task.unlinkedTask &&
             <Shortcut
               task={task}
               workflow={workflow}
@@ -222,8 +222,9 @@ class Task extends React.Component {
             />}
 
           <nav className="task-nav">
-            {(visibleTasks.length > 1) && 
-              <button type="button"
+            {(visibleTasks.length > 1) &&
+              <button
+                type="button"
                 className="back minor-button"
                 disabled={onFirstAnnotation}
                 onClick={this.destroyCurrentAnnotation}
@@ -234,7 +235,7 @@ class Task extends React.Component {
               >
                 Back
               </button>}
-            {(!nextTaskKey && workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk) && 
+            {(!nextTaskKey && workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk) &&
               <Link
                 onClick={this.completeClassification}
                 to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
@@ -243,7 +244,7 @@ class Task extends React.Component {
               >
                 Done &amp; Talk
               </Link>}
-            {(nextTaskKey && !annotation.shortcut) ? 
+            {(nextTaskKey && !annotation.shortcut) ?
               <button
                 type="button"
                 className="continue major-button"
@@ -258,8 +259,8 @@ class Task extends React.Component {
                 disabled={waitingForAnswer}
                 onClick={this.completeClassification}
               >
-                {this.props.demoMode && <i className="fa fa-trash fa-fw"></i>}
-                {classification.gold_standard && <i className="fa fa-star fa-fw"></i>}
+                {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
+                {classification.gold_standard && <i className="fa fa-star fa-fw" />}
                 {' '}Done
               </button>}
             {this.props.renderExpertOptions()}
@@ -271,14 +272,14 @@ class Task extends React.Component {
       </div>
     );
   }
-};
+}
 
-Task.propTypes ={
+Task.propTypes = {
   annotation: React.PropTypes.shape({
     shortcut: React.PropTypes.object,
     value: React.PropTypes.any.isRequired
   }),
-  backButtonWarning: React.PropTypes.bool,
+  children: React.PropTypes.node,
   classification: React.PropTypes.object,
   completeClassification: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
@@ -294,6 +295,6 @@ Task.propTypes ={
   task: React.PropTypes.object,
   user: React.PropTypes.object,
   workflow: React.PropTypes.object
-}
+};
 
 export default Task;

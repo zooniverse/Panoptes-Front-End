@@ -188,6 +188,7 @@ Classifier = React.createClass
             annotation={currentAnnotation}
             completeClassification={@completeClassification}
             renderExpertOptions={@renderExpertOptions}
+            subjectLoading={@state.subjectLoading}
           >
             <p>
               <small>
