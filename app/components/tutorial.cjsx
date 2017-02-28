@@ -16,7 +16,7 @@ module.exports = React.createClass
     find: (workflow) ->
       # Prefer fetching the tutorial for the workflow, if a workflow is given.
       if workflow?
-        apiClient.type('tutorials').get workflow_id: workflow.id
+        apiClient.type('tutorials').get workflow_id: workflow.id, include: 'attached_images'
           .then (tutorials) ->
             # Backwards compatibility for null kind values. We assume these are standard tutorials.
             onlyStandardTutorials = tutorials.filter (tutorial) ->
