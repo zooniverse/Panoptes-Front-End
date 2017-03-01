@@ -6,6 +6,7 @@ import fetch from 'isomorphic-fetch';
 //const APP_STATUS_URL = 'https://www.theguardian.com/uk/rss';
 //const APP_STATUS_URL = 'http://localhost:3735/favicon.ico';
 const APP_STATUS_URL = 'https://static.zooniverse.org/variants.shakespearesworld.org/sake.txt';
+//const APP_STATUS_URL = 'https://static.zooniverse.org/index.html';
 
 export default class AppStatus extends React.Component {
   constructor(props) {
@@ -70,7 +71,7 @@ export default class AppStatus extends React.Component {
     return (
       <div className="app-status">
         <button className="fa fa-close" onClick={this.hide.bind(this)}></button>
-        <div className="message">{this.state.message}</div>
+        <div className="message" dangerouslySetInnerHTML={{ __html: this.state.message }}></div>
       </div>
     );
   }
