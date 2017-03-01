@@ -2,8 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import { getSessionID } from '../lib/session';
 import CacheClassification from '../components/cache-classification';
-import experimentsClient from '../lib/experiments-client';
-import interventionMonitor from '../lib/intervention-monitor';
 import tasks from './tasks';
 import GridTool from './drawing-tools/grid';
 import Intervention from '../lib/intervention';
@@ -180,16 +178,10 @@ class Task extends React.Component {
 
     return (
       <div className="task-container" style={this.props.subjectLoading ?  disabledStyle : null}>
-        {!!this.props.renderIntervention &&
-          <Intervention
-            user={this.props.user}
-            experimentName={interventionMonitor.latestFromSugar.experiment_name}
-            sessionID={getSessionID()}
-            interventionID={interventionMonitor.latestFromSugar.next_event}
-            interventionDetails={experimentsClient.constructInterventionFromSugarData(interventionMonitor.latestFromSugar)}
-            disableInterventionFunction={this.props.disableIntervention}
-          />
-        }
+        <Intervention
+          project={this.props.project}
+          user={this.props.user}
+        />
         <div className="coverable-task-container">
           {persistentHooksBeforeTask.map((HookComponent, i) => {
             const key = i + Math.random();
@@ -283,11 +275,9 @@ Task.propTypes = {
   classification: React.PropTypes.object,
   completeClassification: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
-  disableIntervention: React.PropTypes.func,
   preferences: React.PropTypes.object,
   project: React.PropTypes.object,
   renderExpertOptions: React.PropTypes.func,
-  renderIntervention: React.PropTypes.func,
   subject: React.PropTypes.shape({
     id: React.PropTypes.string
   }),

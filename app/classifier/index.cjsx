@@ -9,8 +9,6 @@ TriggeredModalForm = require 'modal-form/triggered'
 isAdmin = require '../lib/is-admin'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
-experimentsClient = require '../lib/experiments-client'
-interventionMonitor = require '../lib/intervention-monitor'
 `import WorldWideTelescope from './world-wide-telescope';`
 `import FrameAnnotator from './frame-annotator';`
 `import CacheClassification from '../components/cache-classification';`
@@ -18,8 +16,10 @@ MetadataBasedFeedback = require './metadata-based-feedback'
 `import Task from './task';`
 { VisibilitySplit } = require('seven-ten');
 `import RestartButton from './restart-button';`
-MiniCourse = require '../components/mini-course';
-Tutorial = require '../components/tutorial';
+MiniCourse = require '../components/mini-course'
+Tutorial = require '../components/tutorial'
+interventionMonitor = require '../lib/intervention-monitor'
+experimentsClient = require '../lib/experiments-client'
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -53,21 +53,9 @@ Classifier = React.createClass
     selectedExpertAnnotation: -1
     showingExpertClassification: false
     subjectLoading: false
-    renderIntervention: false
     annotations: []
 
-  disableIntervention: ->
-    @setState renderIntervention: false
-
-  enableIntervention: ->
-    experimentsClient.logExperimentState @context.geordi, interventionMonitor?.latestFromSugar, "interventionDetected"
-    @setState renderIntervention: true
-
   componentDidMount: ->
-    experimentsClient.startOrResumeExperiment interventionMonitor, @context.geordi
-    @setState renderIntervention: interventionMonitor?.shouldShowIntervention()
-    interventionMonitor.on 'interventionRequested', @enableIntervention
-    interventionMonitor.on 'classificationTaskRequested', @disableIntervention
     @loadSubject @props.subject
 
   componentWillReceiveProps: (nextProps) ->
@@ -86,14 +74,11 @@ Classifier = React.createClass
         @setState {annotations}
 
   componentWillMount: () ->
-    interventionMonitor.setProjectSlug @props.project.slug
     @props.classification.listen 'change', =>
       {annotations} = @props.classification
       @setState {annotations}
 
   componentWillUnmount: () ->
-    interventionMonitor.removeListener 'interventionRequested', @enableIntervention
-    interventionMonitor.removeListener 'classificationTaskRequested', @disableIntervention
     @props.classification.stopListening 'change', =>
       {annotations} = @props.classification
       @setState {annotations}
@@ -182,6 +167,7 @@ Classifier = React.createClass
           <Task
             preferences={@props.preferences}
             user={@props.user}
+            project={@props.project}
             workflow={@props.workflow}
             classification={currentClassification}
             task={currentTask}
