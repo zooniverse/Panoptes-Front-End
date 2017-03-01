@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { getSessionID } from '../lib/session';
 import tasks from './tasks';
+import CacheClassification from '../components/cache-classification';
+import GridTool from './drawing-tools/grid';
 
 const BackButtonWarning = (props) =>
   <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
@@ -8,11 +11,86 @@ const BackButtonWarning = (props) =>
 class TaskNav extends React.Component {
   constructor(props) {
     super(props);
+    this.addAnnotationForTask = this.addAnnotationForTask.bind(this);
+    this.completeClassification = this.completeClassification.bind(this);
+    this.destroyCurrentAnnotation = this.destroyCurrentAnnotation.bind(this);
     this.warningToggleOn = this.warningToggleOn.bind(this);
     this.warningToggleOff = this.warningToggleOff.bind(this);
     this.state = {
       BackButtonWarning: false
     };
+  }
+
+  componentWillMount() {
+    const { workflow, classification } = this.props;
+    classification.annotations = classification.annotations ? classification.annotations : [];
+    if (classification.annotations.length === 0) {
+      this.addAnnotationForTask(workflow.first_task);
+    }
+  }
+
+  // Next (or first question)
+  addAnnotationForTask(taskKey) {
+    const { workflow, classification } = this.props;
+    const taskDescription = workflow.tasks[taskKey];
+    let annotation = tasks[taskDescription.type].getDefaultAnnotation(taskDescription, workflow, tasks);
+    annotation.task = taskKey;
+
+    if (workflow.configuration.persist_annotations) {
+      const cachedAnnotation = CacheClassification.isAnnotationCached(taskKey);
+      if (cachedAnnotation) {
+        annotation = cachedAnnotation;
+      }
+    }
+
+    classification.annotations.push(annotation);
+    classification.update('annotations');
+  }
+
+  // Done
+  completeClassification() {
+    const { workflow, classification } = this.props;
+    if (workflow.configuration.persist_annotations) {
+      CacheClassification.delete();
+    }
+
+    const currentAnnotation = classification.annotations[classification.annotations.length - 1];
+    const currentTask = workflow.tasks[currentAnnotation.task];
+    !!currentTask && !!currentTask.tools && currentTask.tools.map((tool) => {
+      if (tool.type === 'grid') {
+        GridTool.mapCells(classification.annotations);
+      }
+    });
+    classification.update({
+      completed: true,
+      'metadata.session': getSessionID(),
+      'metadata.finished_at': (new Date()).toISOString(),
+      'metadata.viewport': {
+        width: innerWidth,
+        height: innerHeight
+      }
+    });
+
+    if (currentAnnotation.shortcut) {
+      this.addAnnotationForTask(currentTask.unlinkedTask);
+      const newAnnotation = classification.annotations[classification.annotations.length - 1];
+      newAnnotation.value = currentAnnotation.shortcut.index;
+      delete currentAnnotation.shortcut;
+    }
+    this.props.completeClassification();
+  }
+
+  // Back
+  destroyCurrentAnnotation() {
+    const { workflow, classification } = this.props;
+    const lastAnnotation = classification.annotations[classification.annotations.length - 1];
+
+    classification.annotations.pop();
+    classification.update('annotations');
+
+    if (workflow.configuration.persist_annotations) {
+      CacheClassification.update(lastAnnotation);
+    }
   }
 
   warningToggleOn() {
@@ -28,6 +106,9 @@ class TaskNav extends React.Component {
   }
 
   render() {
+    if (!this.props.annotation) {
+      return null;
+    }
     const task = this.props.task ? this.props.task : this.props.workflow.tasks[this.props.workflow.first_task];
 
     const disableTalk = this.props.classification.metadata.subject_flagged;
@@ -71,7 +152,7 @@ class TaskNav extends React.Component {
               type="button"
               className="back minor-button"
               disabled={onFirstAnnotation}
-              onClick={this.props.destroyCurrentAnnotation}
+              onClick={this.destroyCurrentAnnotation}
               onMouseEnter={this.warningToggleOn}
               onFocus={this.warningToggleOn}
               onMouseLeave={this.warningToggleOff}
@@ -81,7 +162,7 @@ class TaskNav extends React.Component {
             </button>}
           {(!nextTaskKey && this.props.workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk) &&
             <Link
-              onClick={this.props.completeClassification}
+              onClick={this.completeClassification}
               to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
               className="talk standard-button"
               style={waitingForAnswer ? disabledStyle : {}}
@@ -93,7 +174,7 @@ class TaskNav extends React.Component {
               type="button"
               className="continue major-button"
               disabled={waitingForAnswer}
-              onClick={this.props.addAnnotationForTask.bind(this, nextTaskKey)}
+              onClick={this.addAnnotationForTask.bind(this, nextTaskKey)}
             >
               Next
             </button> :
@@ -101,13 +182,13 @@ class TaskNav extends React.Component {
               type="button"
               className="continue major-button"
               disabled={waitingForAnswer}
-              onClick={this.props.completeClassification}
+              onClick={this.completeClassification}
             >
               {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
               {this.props.classification.gold_standard && <i className="fa fa-star fa-fw" />}
               {' '}Done
             </button>}
-          {this.props.renderExpertOptions()}
+          {this.props.children}
         </nav>
         {this.state.backButtonWarning && <BackButtonWarning />}
       </div>
@@ -116,17 +197,15 @@ class TaskNav extends React.Component {
 }
 
 TaskNav.propTypes = {
-  addAnnotationForTask: React.PropTypes.func,
   annotation: React.PropTypes.shape({
     shortcut: React.PropTypes.object,
     value: React.PropTypes.any.isRequired
   }),
+  children: React.PropTypes.node,
   classification: React.PropTypes.object,
   completeClassification: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
-  destroyCurrentAnnotation: React.PropTypes.func,
   project: React.PropTypes.object,
-  renderExpertOptions: React.PropTypes.func,
   subject: React.PropTypes.shape({
     id: React.PropTypes.string
   }),

@@ -1,8 +1,5 @@
 import React from 'react';
-import { getSessionID } from '../lib/session';
-import CacheClassification from '../components/cache-classification';
 import tasks from './tasks';
-import GridTool from './drawing-tools/grid';
 import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
 import TaskNav from './task-nav';
@@ -11,17 +8,6 @@ class Task extends React.Component {
   constructor(props) {
     super(props);
     this.handleAnnotationChange = this.handleAnnotationChange.bind(this);
-    this.addAnnotationForTask = this.addAnnotationForTask.bind(this);
-    this.completeClassification = this.completeClassification.bind(this);
-    this.destroyCurrentAnnotation = this.destroyCurrentAnnotation.bind(this);
-  }
-
-  componentWillMount() {
-    const { workflow, classification } = this.props;
-    classification.annotations = classification.annotations ? classification.annotations : [];
-    if (classification.annotations.length === 0) {
-      this.addAnnotationForTask(workflow.first_task);
-    }
   }
 
   handleAnnotationChange(newAnnotation) {
@@ -30,75 +16,8 @@ class Task extends React.Component {
     classification.update('annotations');
   }
 
-  // Next (or first question)
-  addAnnotationForTask(taskKey) {
-    const { workflow, classification } = this.props;
-    const taskDescription = workflow.tasks[taskKey];
-    let annotation = tasks[taskDescription.type].getDefaultAnnotation(taskDescription, workflow, tasks);
-    annotation.task = taskKey;
-
-    if (workflow.configuration.persist_annotations) {
-      const cachedAnnotation = CacheClassification.isAnnotationCached(taskKey);
-      if (cachedAnnotation) {
-        annotation = cachedAnnotation;
-      }
-    }
-
-    classification.annotations.push(annotation);
-    classification.update('annotations');
-  }
-
-  // Done
-  completeClassification() {
-    const { workflow, classification } = this.props;
-    if (workflow.configuration.persist_annotations) {
-      CacheClassification.delete();
-    }
-
-    const currentAnnotation = classification.annotations[classification.annotations.length - 1];
-    const currentTask = workflow.tasks[currentAnnotation.task];
-    !!currentTask && !!currentTask.tools && currentTask.tools.map((tool) => {
-      if (tool.type === 'grid') {
-        GridTool.mapCells(classification.annotations);
-      }
-    });
-    classification.update({
-      completed: true,
-      'metadata.session': getSessionID(),
-      'metadata.finished_at': (new Date()).toISOString(),
-      'metadata.viewport': {
-        width: innerWidth,
-        height: innerHeight
-      }
-    });
-
-    if (currentAnnotation.shortcut) {
-      this.addAnnotationForTask(currentTask.unlinkedTask);
-      const newAnnotation = classification.annotations[classification.annotations.length - 1];
-      newAnnotation.value = currentAnnotation.shortcut.index;
-      delete currentAnnotation.shortcut;
-    }
-    this.props.completeClassification();
-  }
-
-  // Back
-  destroyCurrentAnnotation() {
-    const { workflow, classification } = this.props;
-    const lastAnnotation = classification.annotations[classification.annotations.length - 1];
-
-    classification.annotations.pop();
-    classification.update('annotations');
-
-    if (workflow.configuration.persist_annotations) {
-      CacheClassification.update(lastAnnotation);
-    }
-  }
-
   render() {
     const { annotation, classification, workflow } = this.props;
-    if (!annotation) {
-      return null;
-    }
     const task = this.props.task ? this.props.task : workflow.tasks[workflow.first_task];
     const TaskComponent = tasks[task.type];
 
@@ -169,19 +88,17 @@ class Task extends React.Component {
             />}
 
           <TaskNav
-            addAnnotationForTask={this.addAnnotationForTask}
             annotation={annotation}
             classification={classification}
-            completeClassification={this.completeClassification}
+            completeClassification={this.props.completeClassification}
             demoMode={this.props.demoMode}
-            destroyCurrentAnnotation={this.destroyCurrentAnnotation}
             project={this.props.project}
-            renderExpertOptions={this.props.renderExpertOptions}
             subject={this.props.subject}
-            warningToggleOn={this.warningToggleOn}
-            warningToggleOff={this.warningToggleOff}
+            task={task}
             workflow={workflow}
-          />
+          >
+            {this.props.renderExpertOptions()}
+          </TaskNav>
 
           {this.props.children}
         </div>
