@@ -1,12 +1,7 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
 
-//const APP_STATUS_URL = 'http://static.zooniverse.org/everybody_panic.txt';
-//const APP_STATUS_URL = 'http://shaunanoordin.com/feed/';
-//const APP_STATUS_URL = 'https://www.theguardian.com/uk/rss';
-//const APP_STATUS_URL = 'http://localhost:3735/favicon.ico';
-const APP_STATUS_URL = 'https://static.zooniverse.org/variants.shakespearesworld.org/sake.txt';
-//const APP_STATUS_URL = 'https://static.zooniverse.org/index.html';
+const APP_STATUS_URL = 'https://static.zooniverse.org/zooniverse.org-status.txt';
 
 export default class AppStatus extends React.Component {
   constructor(props) {
