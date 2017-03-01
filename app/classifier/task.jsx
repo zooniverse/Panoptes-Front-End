@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router';
 import { getSessionID } from '../lib/session';
 import CacheClassification from '../components/cache-classification';
 import tasks from './tasks';
 import GridTool from './drawing-tools/grid';
 import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
+import TaskNav from './task-nav'
 
 const BackButtonWarning = (props) =>
   <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
@@ -120,32 +120,7 @@ class Task extends React.Component {
       return null;
     }
     const task = this.props.task ? this.props.task : workflow.tasks[workflow.first_task];
-
-    const disableTalk = classification.metadata.subject_flagged;
-    const visibleTasks = Object.keys(workflow.tasks).filter(key => workflow.tasks[key].type !== 'shortcut');
     const TaskComponent = tasks[task.type];
-
-    // Should we disable the "Back" button?
-    const onFirstAnnotation = (classification.annotations.indexOf(annotation) === 0);
-
-    // Should we disable the "Next" or "Done" buttons?
-    let waitingForAnswer;
-    if (TaskComponent && TaskComponent.isAnnotationComplete) {
-      waitingForAnswer = !annotation.shortcut && !TaskComponent.isAnnotationComplete(task, annotation, workflow);
-    }
-
-    // Each answer of a single-answer task can have its own `next` key to override the task's.
-    let nextTaskKey;
-    if (TaskComponent === tasks.single) {
-      const currentAnswer = task.answers[annotation.value];
-      nextTaskKey = currentAnswer ? currentAnswer.next : '';
-    } else {
-      nextTaskKey = task.next;
-    }
-
-    if (nextTaskKey && !workflow.tasks[nextTaskKey]) {
-      nextTaskKey = '';
-    }
 
     // TODO: Actually disable things that should be.
     // For now we'll just make them non-mousable.
@@ -213,50 +188,20 @@ class Task extends React.Component {
               classification={classification}
             />}
 
-          <nav className="task-nav">
-            {(visibleTasks.length > 1) &&
-              <button
-                type="button"
-                className="back minor-button"
-                disabled={onFirstAnnotation}
-                onClick={this.destroyCurrentAnnotation}
-                onMouseEnter={this.warningToggleOn}
-                onFocus={this.warningToggleOn}
-                onMouseLeave={this.warningToggleOff}
-                onBlur={this.warningToggleOff}
-              >
-                Back
-              </button>}
-            {(!nextTaskKey && workflow.configuration.hide_classification_summaries && this.props.project && !disableTalk) &&
-              <Link
-                onClick={this.completeClassification}
-                to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
-                className="talk standard-button"
-                style={waitingForAnswer ? disabledStyle : {}}
-              >
-                Done &amp; Talk
-              </Link>}
-            {(nextTaskKey && !annotation.shortcut) ?
-              <button
-                type="button"
-                className="continue major-button"
-                disabled={waitingForAnswer}
-                onClick={this.addAnnotationForTask.bind(this, nextTaskKey)}
-              >
-                Next
-              </button> :
-              <button
-                type="button"
-                className="continue major-button"
-                disabled={waitingForAnswer}
-                onClick={this.completeClassification}
-              >
-                {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
-                {classification.gold_standard && <i className="fa fa-star fa-fw" />}
-                {' '}Done
-              </button>}
-            {this.props.renderExpertOptions()}
-          </nav>
+          <TaskNav
+            addAnnotationForTask={this.addAnnotationForTask}
+            annotation={annotation}
+            classification={classification}
+            completeClassification={this.completeClassification}
+            demoMode={this.props.demoMode}
+            destroyCurrentAnnotation={this.destroyCurrentAnnotation}
+            project={this.props.project}
+            renderExpertOptions={this.props.renderExpertOptions}
+            subject={this.props.subject}
+            warningToggleOn={this.warningToggleOn}
+            warningToggleOff={this.warningToggleOff}
+            workflow={workflow}
+          />
           {this.state.backButtonWarning && <BackButtonWarning />}
 
           {this.props.children}
