@@ -70,16 +70,16 @@ module.exports = React.createClass
     options = @props.workflow.tasks[@props.task.unlinkedTask]?.answers
     options ?= []
 
-    <div>
+    <div className="unlinked-shortcut">
 
       {for answer, i in options
           answer._key ?= Math.random()
           <p key={answer._key}>
-            <label className="answer-button">
-              <small className="unlinked-shortcut #{if i is @state.index then 'active' else ''}">
+            <label key={answer._key} className="answer minor-button answer-button #{if i is @state.index then 'active' else ''}">
+              <small>
                 <strong>
                   <input type="checkbox" checked={i is @state.index} onChange={@toggleShortcut.bind this, i, answer} />
-                    {answer.label}
+                    {' '}{answer.label}
                 </strong>
               </small>
             </label>
