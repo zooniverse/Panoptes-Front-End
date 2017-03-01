@@ -5,10 +5,7 @@ import tasks from './tasks';
 import GridTool from './drawing-tools/grid';
 import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
-import TaskNav from './task-nav'
-
-const BackButtonWarning = (props) =>
-  <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
+import TaskNav from './task-nav';
 
 class Task extends React.Component {
   constructor(props) {
@@ -17,11 +14,6 @@ class Task extends React.Component {
     this.addAnnotationForTask = this.addAnnotationForTask.bind(this);
     this.completeClassification = this.completeClassification.bind(this);
     this.destroyCurrentAnnotation = this.destroyCurrentAnnotation.bind(this);
-    this.warningToggleOn = this.warningToggleOn.bind(this);
-    this.warningToggleOff = this.warningToggleOff.bind(this);
-    this.state = {
-      BackButtonWarning: false
-    };
   }
 
   componentWillMount() {
@@ -102,18 +94,6 @@ class Task extends React.Component {
     }
   }
 
-  warningToggleOn() {
-    if (!this.props.workflow.configuration.persist_annotations) {
-      this.setState({ backButtonWarning: true });
-    }
-  }
-
-  warningToggleOff() {
-    if (!this.props.workflow.configuration.persist_annotations) {
-      this.setState({ backButtonWarning: false });
-    }
-  }
-
   render() {
     const { annotation, classification, workflow } = this.props;
     if (!annotation) {
@@ -152,7 +132,7 @@ class Task extends React.Component {
     };
 
     return (
-      <div className="task-container" style={this.props.subjectLoading ?  disabledStyle : null}>
+      <div className="task-container" style={this.props.subjectLoading ? disabledStyle : null}>
         <Intervention
           project={this.props.project}
           user={this.props.user}
@@ -202,7 +182,6 @@ class Task extends React.Component {
             warningToggleOff={this.warningToggleOff}
             workflow={workflow}
           />
-          {this.state.backButtonWarning && <BackButtonWarning />}
 
           {this.props.children}
         </div>
