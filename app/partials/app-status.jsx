@@ -1,5 +1,31 @@
+/*
+"App Status" Banner
+===================
+
+The AppStatus banner has one job: it displays a static message to the users, if
+it detects a non-empty "status message" file at a specified static URL. 
+(The static resource is defined by the hardcoded APP_STATUS_URL.)
+
+Intended use: Zooniverse admins can manually change the status file (e.g. via
+AWS CLI) so we can quickly notify zooniverse.org users of certain messages,
+notably in emergencies, e.g. "Sorry folks but the animals have escaped, brb"
+
+Expected Input/Output:
+* static file found, is non-empty => show contents of static file in banner
+* static file found, is empty => don't show status banner
+* static file not found (403, 404, etc) => don't show status banner
+
+Assumption: the static "status message" resource is stored on a reliable,
+scalable host.
+
+See https://github.com/zooniverse/Panoptes-Front-End/issues/3530 for initial
+feature specs.
+
+(shaun.a.noordin 20170301)
+********************************************************************************
+ */
+
 import React from 'react';
-import fetch from 'isomorphic-fetch';
 
 const APP_STATUS_URL = 'https://static.zooniverse.org/zooniverse.org-status.txt';
 
@@ -13,50 +39,30 @@ export default class AppStatus extends React.Component {
     };
   }
   
-  componentDidMount() {
-    /**/
-    var request = new XMLHttpRequest();
-    request.onreadystatechange = () => {
-      if (request.readyState === 4 && request.status === 200) {
-        console.log('AppStatus: Received status data from ' + APP_STATUS_URL + '.');
-        if (!request.responseText || request.responseText === '') console.log('AppStatus: Nothing to report.');
-        this.setState({
-          show: true,
-          message: request.responseText,
-        });
-      } else if (request.readyState === 4) {
-        console.log('AppStatus: No status data from ' + APP_STATUS_URL + '. Assuming everything is OK.');
+  componentDidMount() {  //Display only first time user loads zooniverse.org
+    fetch(APP_STATUS_URL, { mode: 'cors' })
+    .then((response) => {
+      if (!response.ok) {
+        console.error('AppStatus: ERROR')
+        throw Error(response.statusText);
       }
-    };
-    request.open("GET", APP_STATUS_URL, true);
-    request.send();
-    /**/
-    
-    /*
-    fetch(APP_STATUS_URL, {
-      mode: 'cors',
-      method: 'GET',
+      
+      return response.text();
     })
-    .then((dataStream) => {
-      if (!dataStream) return;
-      
-      let dataText = '', chunk;
-      
-      dataStream.on('end', function() {
+    .then((text) => {
+      console.log('AppStatus: Received status data from ' + APP_STATUS_URL + '.');
+      if (!text || text === '') {
+        console.log('AppStatus: Nothing to report.');
+      } else {
         this.setState({
           show: true,
-          message: dataText,
-        });
-      });
-      
-      dataStream.on('readable', () => {
-        while ((chunk = dataStream.read()) !== null) { dataText += chunk; }
-      });
+          message: text,
+        });  
+      }
     })
     .catch((err) => {
-      console.error('AppStatus ERROR: ', err);
+      console.error('AppStatus: No status data from ' + APP_STATUS_URL + '. ', err);
     });
-    /**/
   }
   
   render() {
@@ -66,7 +72,7 @@ export default class AppStatus extends React.Component {
     return (
       <div className="app-status">
         <button className="fa fa-close" onClick={this.hide.bind(this)}></button>
-        <div className="message" dangerouslySetInnerHTML={{ __html: this.state.message }}></div>
+        <div className="message">{this.state.message}</div>
       </div>
     );
   }
