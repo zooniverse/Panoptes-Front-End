@@ -15,8 +15,9 @@ Expected Input/Output:
 * static file found, is empty => don't show status banner
 * static file not found (403, 404, etc) => don't show status banner
 
-Assumption: the static "status message" resource is stored on a reliable,
-scalable host.
+Assumptions:
+* the static "status message" resource is stored on a reliable, scalable host.
+* fetch() polyfill is available.
 
 See https://github.com/zooniverse/Panoptes-Front-End/issues/3530 for initial
 feature specs.
