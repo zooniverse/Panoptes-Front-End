@@ -42,15 +42,18 @@ module.exports = React.createClass
       TutorialComponent = this
 
       if tutorial.steps.length isnt 0
-        awaitTutorialMedia = apiClient.type('media').get(tutorial.links.attached_images?.ids)
-          .catch ->
-            # Checking for attached images throws if there are none.
-            []
-          .then (mediaResources) ->
-            mediaByID = {}
-            for mediaResource in mediaResources
-              mediaByID[mediaResource.id] = mediaResource
-            mediaByID
+        if tutorial.links.attached_images.ids?.length
+          awaitTutorialMedia = apiClient.type('media').get(tutorial.links.attached_images?.ids)
+            .catch ->
+              # Checking for attached images throws if there are none.
+              []
+            .then (mediaResources) ->
+              mediaByID = {}
+              for mediaResource in mediaResources
+                mediaByID[mediaResource.id] = mediaResource
+              mediaByID
+        else
+          awaitTutorialMedia = Promise.resolve()
 
         awaitTutorialMedia.then (mediaByID) =>
           Dialog.alert(<TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />, {
