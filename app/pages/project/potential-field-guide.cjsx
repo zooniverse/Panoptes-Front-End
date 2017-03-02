@@ -29,10 +29,10 @@ module.exports = React.createClass
       guide: null
       icons: {}
       revealed: false
-    apiClient.type('field_guides').get project_id: project.id
+    apiClient.type('field_guides').get(project_id: project.id, include: ['attached_images']) 
       .then ([guide]) =>
         @setState {guide}
-        guide?.get('attached_images')?.then (images) =>
+        apiClient.type('media').get(guide.links.attached_images.ids).then (images) => 
           icons = {}
           for image in images
             icons[image.id] = image
