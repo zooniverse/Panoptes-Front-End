@@ -109,10 +109,6 @@ module.exports = React.createClass
 
     if @props.user?
       projectPreferences = @props.preferences
-      projectPreferences ?= apiClient.type('project_preferences').create
-        links:
-          project: project.id
-        preferences: {}
       # Build this manually. Having an index (even as a strings) keys creates an array.
       projectPreferences.preferences ?= {}
       projectPreferences.preferences.tutorials_completed_at ?= {}
