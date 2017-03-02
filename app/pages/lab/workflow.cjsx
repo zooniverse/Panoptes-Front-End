@@ -72,9 +72,10 @@ EditWorkflowPage = React.createClass
 
     stats_completeness_type = @props.workflow.configuration.stats_completeness_type ? 'retirement'
 
-    disabledStyle =
-      opacity: 0.4
-      pointerEvents: 'none'
+    disabledIfLive = if @props.project.live and @props.workflow.active 
+                       {opacity: 0.4, pointerEvents: 'none'}
+                     else
+                       {}
 
     <div className="edit-workflow-page">
       <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
@@ -90,7 +91,7 @@ EditWorkflowPage = React.createClass
       <p className="form-help">If you have multiple workflows you can rearrange the order in which they are listed on your project's front page by clicking and dragging on the left gray tab next to each workflow title in the left menu bar.</p>
       {if @props.project.live and @props.workflow.active
         <p className="form-help warning"><strong>You cannot edit an active workflow if the project is live.</strong></p>}
-      <div className="columns-container" style={disabledStyle if @props.project.live and @props.workflow.active}>
+      <div className="columns-container">
         <div className="column">
           <div>
             <AutoSave tag="label" resource={@props.workflow}>
@@ -102,7 +103,7 @@ EditWorkflowPage = React.createClass
 
             <br />
 
-            <div>
+            <div style={disabledIfLive}>
               <div className="nav-list standalone">
                 <span className="nav-list-header">Tasks</span>
                 <br />
@@ -386,19 +387,19 @@ EditWorkflowPage = React.createClass
 
             </div>}
 
-          <div style={pointerEvents: 'all'}>
+          <div>
             <a href={@workflowLink()} className="standard-button" target="from-lab" onClick={@handleViewClick}>Test this workflow</a>
           </div>
 
           <hr />
 
-          <div style={pointerEvents: 'all'}>
+          <div>
             <Link to="/lab/#{@props.project.id}/workflow/#{@props.workflow.id}/visualize" className="standard-button" params={workflowID: @props.workflow.id, projectID: @props.project.id} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">Visualize this workflow</Link>
           </div>
 
           <hr />
 
-          <div>
+          <div style={disabledIfLive}>
             <small>
               <button type="button" className="minor-button" disabled={@state.deletionInProgress} data-busy={@state.deletionInProgress || null} onClick={@handleDelete}>
                 Delete this workflow
@@ -409,7 +410,7 @@ EditWorkflowPage = React.createClass
           </div>
         </div>
 
-        <div className="column">
+        <div className="column" style={disabledIfLive}>
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
             <div>
