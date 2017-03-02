@@ -45,15 +45,7 @@ export default class ProjectMetadata extends React.Component {
   }
 
   renderStatus() {
-    let percentComplete = 0;
-    this.props.activeWorkflows.map((workflow) => {
-      percentComplete += workflow.completeness;
-      return percentComplete;
-    });
-
-    if (this.props.activeWorkflows.length > 0) {
-      percentComplete /= this.props.activeWorkflows.length;
-    }
+    const percentComplete = this.props.project.completeness;
 
     return (
       <div className="project-metadata-status-bar">
@@ -107,9 +99,9 @@ ProjectMetadata.contextTypes = {
 };
 
 ProjectMetadata.propTypes = {
-  activeWorkflows: React.PropTypes.arrayOf(React.PropTypes.object),
   project: React.PropTypes.shape({
     classifications_count: React.PropTypes.number,
+    completeness: React.PropTypes.number,
     display_name: React.PropTypes.string,
     id: React.PropTypes.id,
     slug: React.PropTypes.string,
@@ -118,7 +110,6 @@ ProjectMetadata.propTypes = {
 };
 
 ProjectMetadata.defaultProps = {
-  activeWorkflows: [],
   project: {},
   showTalkStatus: false,
 };

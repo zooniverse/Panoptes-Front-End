@@ -11,10 +11,8 @@ export default class FinishedBanner extends React.Component {
     this.state = {
       hasResultsPage: false,
       hide: false,
-      projectIsComplete: false,
     };
 
-    this.getCompleteness = this.getCompleteness.bind(this);
     this.getResultsPageExistence = this.getResultsPageExistence.bind(this);
     this.hide = this.hide.bind(this);
     this.refresh = this.refresh.bind(this);
@@ -29,25 +27,6 @@ export default class FinishedBanner extends React.Component {
     if (nextProps.project !== this.props.project) {
       this.refresh(this.props.project);
     }
-  }
-
-  getCompleteness(project) {
-    if (project.redirect) {
-      return Promise.resolve(false);
-    }
-
-    return getWorkflowsInOrder(project, { active: true, fields: 'finished_at' })
-      .then((activeWorkflows) => {
-        if (activeWorkflows.length === 0) {
-          // No active workflows? This is probably a custom project.
-          return false;
-        } else {
-          const activeUnfinishedWorkflows = activeWorkflows.filter((workflow) => {
-            return !workflow.finished_at ? workflow : null;
-          });
-          return activeUnfinishedWorkflows.length === 0;
-        }
-      });
   }
 
   getResultsPageExistence(project) {
@@ -71,15 +50,12 @@ export default class FinishedBanner extends React.Component {
     this.setState({
       hasResultsPage: false,
       hide: false,
-      projectIsComplete: false,
     });
 
-    Promise.all([
-      this.getCompleteness(project),
-      this.getResultsPageExistence(project),
-    ]).then(([projectIsComplete, hasResultsPage]) => {
-      this.setState({ projectIsComplete, hasResultsPage });
-    });
+    this.getResultsPageExistence(project)
+      .then((hasResultsPage) => {
+        this.setState({ hasResultsPage });
+      });
   }
 
   renderResultsPage() {
@@ -103,7 +79,7 @@ export default class FinishedBanner extends React.Component {
     const dismissals = finishedProjectDismissals ? JSON.parse(finishedProjectDismissals) : {};
     const recentlyDismissed = Date.now() - dismissals[this.props.project.id] < this.props.dismissFor;
 
-    if (recentlyDismissed || !this.state.projectIsComplete || this.state.hide) {
+    if (recentlyDismissed || this.state.hide) {
       return null;
     }
 
@@ -130,4 +106,5 @@ FinishedBanner.propTypes = {
     id: React.PropTypes.string,
     slug: React.PropTypes.string,
   }),
+  projectIsComplete: React.PropTypes.bool
 };

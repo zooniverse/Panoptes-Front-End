@@ -94,9 +94,10 @@ export default class ProjectHomePage extends React.Component {
 
     return (
       <div className="project-home-page">
-        <div className="call-to-action-container">
-          <FinishedBanner project={this.props.project} />
-        </div>
+        {this.props.projectIsComplete &&
+          (<div className="call-to-action-container">
+            <FinishedBanner project={this.props.project} />
+          </div>)}
 
         <div className="project-home-page__description">{this.props.project.description}</div>
 
@@ -142,6 +143,7 @@ ProjectHomePage.defaultProps = {
   onChangePreferences: () => {},
   preferences: {},
   project: {},
+  projectIsComplete: false,
   splits: {}
 };
 
@@ -158,5 +160,6 @@ ProjectHomePage.propTypes = {
     introduction: React.PropTypes.string,
     researcher_quote: React.PropTypes.string
   }).isRequired,
+  projectIsComplete: React.PropTypes.bool,
   splits: React.PropTypes.object
 };
