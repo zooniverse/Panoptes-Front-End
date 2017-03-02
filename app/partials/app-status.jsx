@@ -33,6 +33,7 @@ const APP_STATUS_URL = 'https://static.zooniverse.org/zooniverse.org-status.txt'
 export default class AppStatus extends React.Component {
   constructor(props) {
     super(props);
+    this.button = null;
     
     this.state = {
       show: false,
@@ -58,7 +59,8 @@ export default class AppStatus extends React.Component {
         this.setState({
           show: true,
           message: text,
-        });  
+        });
+        if (this.button) { this.button.focus(); }
       }
     })
     .catch((err) => {
@@ -72,7 +74,7 @@ export default class AppStatus extends React.Component {
     
     return (
       <div className="app-status">
-        <button className="fa fa-close" onClick={this.hide.bind(this)}></button>
+        <button ref={b=>this.button=b} className="fa fa-close" onClick={this.hide.bind(this)} autofocus={true}></button>
         <div className="message">{this.state.message}</div>
       </div>
     );
