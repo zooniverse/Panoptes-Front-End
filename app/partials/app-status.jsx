@@ -60,7 +60,6 @@ export default class AppStatus extends React.Component {
           show: true,
           message: text,
         });
-        if (this.button) { this.button.focus(); }  //<button autofocus=true/> won't work, so we'll manually trigger it.
       }
     })
     .catch((err) => {
@@ -74,7 +73,7 @@ export default class AppStatus extends React.Component {
     
     return (
       <div className="app-status">
-        <button ref={b=>this.button=b} className="fa fa-close" onClick={this.hide.bind(this)}></button>
+        <button className="fa fa-close" onClick={this.hide.bind(this)} autoFocus={true}></button>
         <div className="message">{this.state.message}</div>
       </div>
     );
