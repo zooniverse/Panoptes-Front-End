@@ -17,6 +17,7 @@ export default class GenericTask extends React.Component {
         <Markdown className="classification-task-help">
           {this.props.help}
         </Markdown>
+        <button autoFocus className="standard-button" onClick={this.reject}>Close</button>
       </div>
     );
   }
