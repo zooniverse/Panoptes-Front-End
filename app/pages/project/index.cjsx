@@ -49,24 +49,25 @@ ProjectPage = React.createClass
     initialLoadComplete: React.PropTypes.bool
 
   propTypes:
-    project: React.PropTypes.object.isRequired
     owner: React.PropTypes.object.isRequired
     preferences: React.PropTypes.object
+    project: React.PropTypes.object.isRequired
     loading: React.PropTypes.bool
 
   getDefaultProps: ->
-    project: null
-    owner: null
-    preferences: null
+    background: null
     loading: false
+    owner: {}
+    preferences: null
+    pages: null
+    project: {}
+    projectAvatar: null
+    projectRoles: null
     splits: null
 
   getInitialState: ->
     activeWorkflows: []
-    avatar: null
-    background: null
     loadingSelectedWorkflow: false
-    pages: []
     projectIsComplete: false
     selectedWorkflow: null
 
@@ -77,7 +78,6 @@ ProjectPage = React.createClass
     unless @props.user?
       @context.revealSiteHeader()
     document.documentElement.classList.add 'on-project-page'
-    @fetchInfo @props.project
     @updateSugarSubscription @props.project
     @context.geordi?.remember projectToken: @props.project?.slug
 
@@ -90,7 +90,6 @@ ProjectPage = React.createClass
 
   componentWillReceiveProps: (nextProps, nextContext) ->
     if nextProps.project isnt @props.project
-      @fetchInfo nextProps.project
       @getAllWorkflows(nextProps.project)
       @updateSugarSubscription nextProps.project
       @context.geordi?.remember projectToken: nextProps.project?.slug
@@ -115,30 +114,6 @@ ProjectPage = React.createClass
       sectionHeight = document.body.scrollTop + sectionBottom
       if @state.backgroundHeight isnt sectionHeight + finishedBannerHeight
         @setState backgroundHeight: sectionHeight + finishedBannerHeight
-
-  fetchInfo: (project) ->
-    @setState
-      background: null
-      avatar: null
-      pages: []
-
-    project.get 'background'
-      .catch =>
-        null
-      .then (background) =>
-        @setState {background}
-
-    project.get 'avatar'
-      .catch =>
-        null
-      .then (avatar) =>
-        @setState {avatar}
-
-    project.get 'pages'
-      .catch =>
-        []
-      .then (pages) =>
-        @setState {pages}
 
   getAllWorkflows: (project, query = { active: true, fields: "active,completeness,configuration,display_name" }) ->
     @setState { loadingSelectedWorkflow: true }
@@ -255,7 +230,7 @@ ProjectPage = React.createClass
       'beta-approved': betaApproved
     })
 
-    pages = [{}, @state.pages...].reduce (map, page) =>
+    pages = [{}, @props.pages...].reduce (map, page) =>
       map[page.url_key] = page
       map
 
@@ -266,8 +241,8 @@ ProjectPage = React.createClass
       "active": @props.project? and (@props.routes[2].path is "collections" or @props.routes[2].path is "favorites")
     }
 
-    if @state.background?
-      backgroundStyle = backgroundImage: "url('#{@state.background.src}')"
+    if @props.background?
+      backgroundStyle = backgroundImage: "url('#{@props.background.src}')"
       if onHomePage
         backgroundStyle.height = @state.backgroundHeight
       else
@@ -279,14 +254,14 @@ ProjectPage = React.createClass
       <nav className="project-nav tabbed-content-tabs">
         {if @props.project.redirect
           <a href={@props.project.redirect} className="tabbed-content-tab" target="_blank">
-            {if @state.avatar?
-              <Thumbnail src={@state.avatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
+            {if @props.projectAvatar?
+              <Thumbnail src={@props.projectAvatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
             Visit {@props.project.display_name}
           </a>
         else
           <IndexLink to="#{projectPath}" activeClassName="active" className={avatarClasses} onClick={logClick?.bind this, 'project.nav.home'}>
-            {if @state.avatar?
-              <Thumbnail src={@state.avatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
+            {if @props.projectAvatar?
+              <Thumbnail src={@props.projectAvatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
             {if @props.loading
               'Loading...'
             else
@@ -346,7 +321,10 @@ ProjectPage = React.createClass
         workflow: @state.selectedWorkflow
         activeWorkflows: @state.activeWorkflows
         projectIsComplete: @state.projectIsComplete
-        splits: @props.splits}
+        splits: @props.splits
+        projectAvatar: @props.projectAvatar
+        projectRoles: @props.projectRoles
+        pages: @props.pages}
 
       {unless @props.project.launch_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
@@ -376,11 +354,14 @@ ProjectPageController = React.createClass
     user: null
 
   getInitialState: ->
-    loading: false
+    background: null
     error: null
-    project: null
+    loading: false
     owner: null
     preferences: null
+    project: null
+    projectAvatar: null
+    projectRoles: null
     splits: null
 
   _listenedToPreferences: null
@@ -424,20 +405,32 @@ ProjectPageController = React.createClass
   fetchProjectData: (ownerName, projectName, user) ->
     @listenToPreferences null
     @setState
-      loading: true
+      background: null
       error: null
+      loading: true
+      owner: null
+      pages: null
       preferences: null
+      projectAvatar: null
+      projectRoles: null
 
     slug = ownerName + '/' + projectName
 
-    apiClient.type('projects').get {slug}
+    apiClient.type('projects').get({ slug, include: 'avatar,background,owners,project_roles' })
       .then ([project]) =>
         @setState {project}
 
         if project?
-          awaitOwner = project.get 'owner'
-            .then (owner) =>
-              @setState {owner}
+          # Use apiClient with cached resources from include to get out of cache
+          awaitBackground = apiClient.type('backgrounds').get(project.links.background.id).catch((error) => [])
+
+          awaitOwner = apiClient.type('users').get(project.links.owner.id).catch((error) => console.error(error))
+
+          awaitPages = project.get('pages').catch((error) => []) # does not appear in project links?
+
+          awaitProjectAvatar = apiClient.type('avatars').get(project.links.avatar.id).catch((error) => [])
+
+          awaitProjectRoles = apiClient.type('project_roles').get(project.links.project_roles).catch((error) => console.error(error))
 
           awaitPreferences = if user?
             user.get 'project_preferences', project_id: project.id
@@ -457,15 +450,21 @@ ProjectPageController = React.createClass
 
           awaitPreferences = awaitPreferences.then (preferences) =>
             @listenToPreferences preferences
-            @setState {preferences}
 
-          Promise.all [awaitOwner, awaitPreferences]
+          Promise.all([awaitBackground, awaitOwner, awaitPages, awaitProjectAvatar, awaitProjectRoles, awaitPreferences])
+            .then(([background, owner, pages, projectAvatar, projectRoles, preferences]) => 
+              @setState({ background, owner, pages, projectAvatar, projectRoles, preferences })
+            ).catch((error) => console.error(error))
 
         else
           this.setState
-            owner: null,
-            preferences: null
+            background: null
             error: new Error 'NOT_FOUND'
+            owner: null
+            pages: null
+            preferences: null
+            projectAvatar: null
+            projectRoles: null
 
       .catch (error) =>
         @setState {error}
@@ -497,11 +496,14 @@ ProjectPageController = React.createClass
       {if @state.project? and @state.owner?
         <ProjectPage
           {...@props}
-          project={@state.project}
-          owner={@state.owner}
-          preferences={@state.preferences}
+          background={@state.background}
           loading={@state.loading}
           onChangePreferences={@handlePreferencesChange}
+          owner={@state.owner}
+          pages={@state.pages}
+          preferences={@state.preferences}
+          project={@state.project}
+          projectAvatar={@state.projectAvatar}
           splits={@state.splits}
         />
 
