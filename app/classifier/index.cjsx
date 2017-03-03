@@ -13,13 +13,14 @@ workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 `import FrameAnnotator from './frame-annotator';`
 `import CacheClassification from '../components/cache-classification';`
 MetadataBasedFeedback = require './metadata-based-feedback'
-`import Task from './task';`
 { VisibilitySplit } = require('seven-ten');
 `import RestartButton from './restart-button';`
 MiniCourse = require '../components/mini-course'
 Tutorial = require '../components/tutorial'
 interventionMonitor = require '../lib/intervention-monitor'
 experimentsClient = require '../lib/experiments-client'
+Task = require('./task').default
+TaskNav = require('./task-nav').default
 ExpertOptions = require('./expert-options').default
 
 # For easy debugging
@@ -166,22 +167,32 @@ Classifier = React.createClass
       <div className="task-area">
         {unless currentClassification.completed
           <Task
-            expertClassifier={@props.expertClassifier}
             preferences={@props.preferences}
             user={@props.user}
-            userRoles={@props.userRoles}
             project={@props.project}
             workflow={@props.workflow}
-            subject={@props.subject}
             classification={currentClassification}
             task={currentTask}
             annotation={currentAnnotation}
-            completeClassification={@completeClassification}
-            renderExpertOptions={@renderExpertOptions}
             subjectLoading={@state.subjectLoading}
-            demoMode={@props.demoMode}
-            onChangeDemoMode={@props.onChangeDemoMode}
           >
+            <TaskNav
+              annotation={currentAnnotation}
+              classification={currentClassification}
+              completeClassification={@completeClassification}
+              project={@props.project}
+              subject={@props.subject}
+              task={currentTask}
+              workflow={@props.workflow}
+            >
+              {if @props.expertClassifier
+                <ExpertOptions
+                  classification={currentClassification}
+                  userRoles={@props.userRoles}
+                  demoMode={@props.demoMode}
+                  onChangeDemoMode={@props.onChangeDemoMode}
+                />}
+            </TaskNav>
             <p>
               <small>
                 <strong>
@@ -219,6 +230,33 @@ Classifier = React.createClass
                 </strong>
               </small>
             </p>
+
+            {if @props.demoMode
+              <p style={{ textAlign: 'center' }}>
+                <i className="fa fa-trash" />{' '}
+                <small>
+                  <strong>Demo mode:</strong>
+                  <br />
+                  No classifications are being recorded.{' '}
+                  <button type="button" className="secret-button" onClick={@props.onChangeDemoMode.bind(this, false)}>
+                    <u>Disable</u>
+                  </button>
+                </small>
+              </p>
+            }
+            {if currentClassification.gold_standard
+              <p style={{ textAlign: 'center' }}>
+                <i className="fa fa-star" />{' '}
+                <small>
+                  <strong>Gold standard mode:</strong>
+                  <br />
+                  Please ensure this classification is completely accurate.{' '}
+                  <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
+                    <u>Disable</u>
+                  </button>
+                </small>
+              </p>
+            }
           </Task>
         else if @subjectIsGravitySpyGoldStandard()
           @renderGravitySpyGoldStandard currentClassification

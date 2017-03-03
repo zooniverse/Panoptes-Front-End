@@ -1,9 +1,7 @@
 import React from 'react';
 import tasks from './tasks';
-import ExpertOptions from './expert-options';
 import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
-import TaskNav from './task-nav';
 
 class Task extends React.Component {
   constructor(props) {
@@ -90,55 +88,8 @@ class Task extends React.Component {
               classification={classification}
             />}
 
-          <TaskNav
-            annotation={annotation}
-            classification={classification}
-            completeClassification={this.props.completeClassification}
-            demoMode={this.props.demoMode}
-            project={this.props.project}
-            subject={this.props.subject}
-            task={task}
-            workflow={workflow}
-          >
-            {!!this.props.expertClassifier &&
-            <ExpertOptions
-              classification={classification}
-              userRoles={this.props.userRoles}
-              demoMode={this.props.demoMode}
-              onChangeDemoMode={this.props.onChangeDemoMode}
-            />}
-          </TaskNav>
-
           {this.props.children}
 
-          {this.props.demoMode ?
-            <p style={{ textAlign: 'center' }}>
-              <i className="fa fa-trash" />{' '}
-              <small>
-                <strong>Demo mode:</strong>
-                <br />
-                No classifications are being recorded.{' '}
-                <button type="button" className="secret-button" onClick={this.props.onChangeDemoMode.bind(this, false)}>
-                  <u>Disable</u>
-                </button>
-              </small>
-            </p> :
-            null
-          }
-          {classification.gold_standard ?
-            <p style={{ textAlign: 'center' }}>
-              <i className="fa fa-star" />{' '}
-              <small>
-                <strong>Gold standard mode:</strong>
-                <br />
-                Please ensure this classification is completely accurate.{' '}
-                <button type="button" className="secret-button" onClick={classification.update.bind(classification, { gold_standard: undefined })}>
-                  <u>Disable</u>
-                </button>
-              </small>
-            </p> :
-            null
-          }
         </div>
       </div>
     );
@@ -154,17 +105,10 @@ Task.propTypes = {
   classification: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
-  completeClassification: React.PropTypes.func,
-  demoMode: React.PropTypes.bool,
   preferences: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
   project: React.PropTypes.shape({
-    id: React.PropTypes.string
-  }),
-  expertClassifier: React.PropTypes.bool,
-  onChangeDemoMode: React.PropTypes.func,
-  subject: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
   subjectLoading: React.PropTypes.bool,
@@ -174,7 +118,6 @@ Task.propTypes = {
   user: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
-  userRoles: React.PropTypes.arrayOf(React.PropTypes.string),
   workflow: React.PropTypes.shape({
     id: React.PropTypes.string
   })
