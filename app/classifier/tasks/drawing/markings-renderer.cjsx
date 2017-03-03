@@ -18,8 +18,7 @@ module.exports = React.createClass
     # console.log 'Old marks were', @state.oldSetOfMarks
     newSetOfMarks = []
     # Automatically select new marks.
-    annotations = nextProps.classification?.annotations ? []
-    annotation = annotations[annotations.length - 1]
+    annotation = nextProps.annotation
     if annotation?
       taskDescription = @props.workflow?.tasks[annotation.task]
     if taskDescription?.type is 'drawing' and Array.isArray annotation.value

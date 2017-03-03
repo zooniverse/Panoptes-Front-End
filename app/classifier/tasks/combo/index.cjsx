@@ -72,13 +72,28 @@ ComboTask = React.createClass
           allComboAnnotations.push annotation.value...
 
       <g className="combo-task-persist-inside-subject-container">
-        {Object.keys(props.taskTypes).map (taskType) ->
+        {Object.keys(props.taskTypes).map (taskType, idx) ->
           unless taskType is 'combo'
             TaskComponent = props.taskTypes[taskType]
             if TaskComponent.PersistInsideSubject?
               fauxClassification =
                 annotations: allComboAnnotations
-              <TaskComponent.PersistInsideSubject key={taskType} {...props} classification={fauxClassification} />}
+                update: () => props.classification.update(arguments)
+              fauxChange = (annotation) ->
+                  allComboAnnotations[idx] = annotation
+                  props.onChange Object.assign({}, props.annotation, { value: allComboAnnotations })
+              if props.workflow.tasks[props.annotation?.task]?.type is 'combo'
+                # if the current annotation is for the combo task pass in the `inner` annotations
+                fauxAnnotation = allComboAnnotations[idx]
+              else
+                fauxAnnotation = props.annotation
+              <TaskComponent.PersistInsideSubject
+                key={taskType}
+                {...props}
+                onChange={fauxChange}
+                annotation={fauxAnnotation}
+                classification={fauxClassification}
+              />}
       </g>
 
   getDefaultProps: ->
@@ -102,7 +117,7 @@ ComboTask = React.createClass
         TaskComponent = @props.taskTypes[taskDescription.type]
         annotation = @props.annotation.value[i]
 
-        unsupported = TaskComponent is @props.taskTypes.drawing
+        unsupported = TaskComponent is @props.taskTypes.crop
 
         <div key={i} style={outline: '1px solid red' if unsupported}>
           {if unsupported
