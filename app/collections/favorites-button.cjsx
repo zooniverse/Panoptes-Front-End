@@ -44,7 +44,7 @@ module.exports = React.createClass
       favorites.get('subjects', id: @props.subject.id)
         .then ([subject]) -> subject?
     else
-      false
+      Promise.resolve false
 
   componentWillMount: ->
     # see if the subject is in the project's favorites collection
