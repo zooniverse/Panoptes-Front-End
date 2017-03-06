@@ -5,31 +5,33 @@ BLANK_IMAGE = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgAQMAAAA',
   'PH06nAAAABlBMVEXMzMyWlpYU2uzLAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAA',
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgzwCX4AAB9Dl2RwAAAABJRU5ErkJggg=='].join ''
 
-MISC_DRAWING_DETAILS = [{
-  type: 'single'
-  question: 'Cool?'
-  answers: [
-    {label: 'Yeah'}
-    {label: 'Nah'}
-  ]
-}, {
-  type: 'multiple'
-  question: 'Cool stuff?'
-  answers: [
-    {label: 'Ice'}
-    {label: 'Snow'}
-  ]
-}, {
-  type: 'text'
-  instruction: 'Any additional comments?'
-}, {
-  type: 'slider'
-  instruction: 'Slide me'
-  min: '0'
-  max: '10'
-  step: '0.5'
-  defaultValue: '3'
-  }]
+MISC_DRAWING_DETAILS = [
+  {
+    type: 'single'
+    question: 'Cool?'
+    answers: [
+      {label: 'Yeah'}
+      {label: 'Nah'}
+    ]
+  }, {
+    type: 'multiple'
+    question: 'Cool stuff?'
+    answers: [
+      {label: 'Ice'}
+      {label: 'Snow'}
+    ]
+  }, {
+    type: 'text'
+    instruction: 'Any additional comments?'
+  }, {
+    type: 'slider'
+    instruction: 'Slide me'
+    min: '0'
+    max: '10'
+    step: '0.5'
+    defaultValue: '3'
+  }
+]
 
 workflow = apiClient.type('workflows').create
   id: 'MOCK_WORKFLOW_FOR_CLASSIFIER'
@@ -79,6 +81,7 @@ workflow = apiClient.type('workflows').create
         'features'
         'draw'
         'survey'
+        'slider'
       ]
       next: 'init'
 

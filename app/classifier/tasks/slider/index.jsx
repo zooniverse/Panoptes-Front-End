@@ -78,7 +78,7 @@ class SliderTask extends React.Component {
         >
           <div className="standard-input full slider-task-container">
             <div className="slider-task-range">
-              <label htmlFor="sliderInput" className="answer">
+              <label className="answer">
                 <div>
                   <input
                     type="range"
@@ -88,7 +88,6 @@ class SliderTask extends React.Component {
                     min={this.props.task.min}
                     step={this.props.task.step}
                     value={this.state.value}
-                    id="sliderInput"
                   />
                 </div>
                 <div className="slider-task-range__label-container">
@@ -101,7 +100,7 @@ class SliderTask extends React.Component {
                 </div>
               </label>
             </div>
-            <label htmlFor="textInput" className="answer slider-task-number">
+            <label className="answer slider-task-number">
               <input
                 type="number"
                 autoFocus={this.props.autoFocus}
@@ -110,7 +109,6 @@ class SliderTask extends React.Component {
                 min={this.props.task.min}
                 step="any"
                 value={this.state.value}
-                id="textInput"
               />
             </label>
           </div>
