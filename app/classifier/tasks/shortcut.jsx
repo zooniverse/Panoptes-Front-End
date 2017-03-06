@@ -76,7 +76,6 @@ export default class Shortcut extends React.Component {
 
   render() {
     const options = this.props.workflow.tasks[this.props.task.unlinkedTask].answers;
-    console.log(options);
 
     return (
       <div className="unlinked-shortcut">
@@ -129,12 +128,12 @@ Shortcut.propTypes = {
   ),
   classification: React.PropTypes.shape(
     {
-      annotation: React.PropTypes.object,
+      annotations: React.PropTypes.array,
       update: React.PropTypes.func
     }
   ),
   task: React.PropTypes.shape(
-    { unlinkedTask: React.PropTypes.number }
+    { unlinkedTask: React.PropTypes.string }
   ),
   workflow: React.PropTypes.shape(
     { tasks: React.PropTypes.object }
@@ -142,8 +141,8 @@ Shortcut.propTypes = {
 };
 
 Shortcut.defaultProps = {
-  annotation: null,
-  classification: null,
-  task: null,
-  workflow: null
+  annotation: { value: null },
+  classification: { },
+  task: { },
+  workflow: { }
 };
