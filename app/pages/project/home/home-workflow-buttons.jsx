@@ -31,7 +31,7 @@ export default class ProjectHomeWorkflowButtons extends React.Component {
   }
 
   shouldWorkflowBeDisabled(workflow) {
-    if (this.context.user && workflow.configuration.level && this.props.preferences) {
+    if (this.context.user && workflow.configuration.level && this.props.preferences && this.props.preferences.settings) {
       const currentWorkflowAtLevel = this.props.activeWorkflows.filter((activeWorkflow) => {
         return (activeWorkflow.id === this.props.preferences.settings.workflow_id) ? activeWorkflow : null;
       });
