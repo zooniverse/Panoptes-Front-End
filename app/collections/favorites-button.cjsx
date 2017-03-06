@@ -56,6 +56,12 @@ module.exports = React.createClass
       .then (favorited) =>
         @setState {favorited}
 
+  componentDidUpdate: (prevProps) ->
+    if prevProps.subject isnt @props.subject
+      @findSubjectInCollection(@state.favorites)
+      .then (favorited) =>
+        @setState {favorited}
+
   addSubjectTo: (collection) ->
     @setState favorited: true
     collection.addLink('subjects', [@props.subject.id.toString()])
