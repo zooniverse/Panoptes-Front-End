@@ -28,6 +28,9 @@ export default class FrameAnnotator extends React.Component {
     if (nextProps.annotation !== this.props.annotation) {
       this.handleAnnotationChange(this.props.annotation, nextProps.annotation);
     }
+    if (nextProps.subject !== this.props.subject) {
+      this.setState({ alreadySeen: nextProps.subject.already_seen || seenThisSession.check(nextProps.workflow, nextProps.subject) });
+    }
   }
 
   getSizeRect() {

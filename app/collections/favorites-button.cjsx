@@ -44,7 +44,7 @@ module.exports = React.createClass
       favorites.get('subjects', id: @props.subject.id)
         .then ([subject]) -> subject?
     else
-      false
+      Promise.resolve false
 
   componentWillMount: ->
     # see if the subject is in the project's favorites collection
@@ -53,6 +53,12 @@ module.exports = React.createClass
       .then (favorites) =>
         @setState {favorites}
         @findSubjectInCollection(favorites)
+      .then (favorited) =>
+        @setState {favorited}
+
+  componentDidUpdate: (prevProps) ->
+    if prevProps.subject isnt @props.subject
+      @findSubjectInCollection(@state.favorites)
       .then (favorited) =>
         @setState {favorited}
 

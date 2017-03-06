@@ -77,11 +77,18 @@ Classifier = React.createClass
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.subject isnt @props.subject
-      @loadSubject subject
-    if nextProps.classification isnt @props.classification
-      @prepareToClassify nextProps.classification
+      @loadSubject nextProps.subject
     if @props.subject isnt nextProps.subject or !@context.geordi?.keys["subjectID"]?
       @context.geordi?.remember subjectID: nextProps.subject?.id
+    
+    if nextProps.classification isnt @props.classification
+      @props.classification.stopListening 'change', =>
+        {annotations} = @props.classification
+        @setState {annotations}
+      nextProps.classification.listen 'change', =>
+        {annotations} = nextProps.classification
+        @setState {annotations}
+      @prepareToClassify nextProps.classification
 
   componentWillMount: () ->
     interventionMonitor.setProjectSlug @props.project.slug
@@ -619,9 +626,7 @@ module.exports = React.createClass
       @loadClassification nextProps.classification
 
   loadClassification: (classification) ->
-    @setState subject: null
-
-    # TODO: These underscored references are temporary stopgaps.
+# TODO: These underscored references are temporary stopgaps.
 
     Promise.resolve(classification._subjects ? classification.get 'subjects').then ([subject]) =>
       # We'll only handle one subject per classification right now.
