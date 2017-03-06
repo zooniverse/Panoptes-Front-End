@@ -169,7 +169,7 @@ ProjectPage = React.createClass
     @isWorkflowInactive(project, selectedWorkflowID)
 
   checkIfProjectIsComplete: (project) ->
-    projectIsComplete = (true for workflow in @state.activeWorkflows when not workflow.finished_at?).length is 0
+    projectIsComplete = project.completeness > 0.99
     @setState { projectIsComplete }
 
   selectRandomWorkflow: (project) ->
