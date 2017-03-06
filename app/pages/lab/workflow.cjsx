@@ -72,7 +72,7 @@ EditWorkflowPage = React.createClass
 
     stats_completeness_type = @props.workflow.configuration.stats_completeness_type ? 'retirement'
 
-    disabledIfLive = if @props.project.live and @props.workflow.active 
+    disabledIfLive = if @props.project.live and @props.workflow.active
                        {opacity: 0.4, pointerEvents: 'none'}
                      else
                        {}
@@ -450,8 +450,8 @@ EditWorkflowPage = React.createClass
 
   renderSubjectSets: ->
     projectAndWorkflowSubjectSets = Promise.all [
-      @props.project.get 'subject_sets', sort: 'display_name', page_size: 100
-      @props.workflow.get 'subject_sets', sort: 'display_name', page_size: 100
+      @props.project.get 'subject_sets', sort: 'display_name', page_size: 250
+      @props.workflow.get 'subject_sets', sort: 'display_name', page_size: 250
     ]
 
     <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
