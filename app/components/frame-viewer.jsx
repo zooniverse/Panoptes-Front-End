@@ -115,7 +115,7 @@ FrameViewer.propTypes = {
     { id: React.PropTypes.string }
   ),
   classification: React.PropTypes.shape(
-    { id: React.PropTypes.string }
+    { annotations: React.PropTypes.array }
   ),
   frame: React.PropTypes.number,
   frameWrapper: React.PropTypes.func,
@@ -134,9 +134,16 @@ FrameViewer.propTypes = {
 };
 
 FrameViewer.defaultProps = {
-  classification: { },
+  classification: {
+    annotations: []
+  },
   frame: 0,
   onChange: NOOP,
-  subject: { },
-  workflow: { }
+  preferences: { },
+  subject: {
+    locations: []
+  },
+  workflow: {
+    configuration: {}
+  }
 };
