@@ -17,7 +17,7 @@ module.exports = React.createClass
     find: (workflow) ->
       # Prefer fetching the tutorial for the workflow, so we know which one to fetch if multiple exist.
       if workflow?
-        apiClient.type('tutorials').get workflow_id: workflow.id, kind: "mini-course", include: 'attached_images'
+        apiClient.type('tutorials').get workflow_id: workflow.id, kind: "mini-course", include: ['attached_images']
           .then ([minicourse]) ->
             minicourse
       else
