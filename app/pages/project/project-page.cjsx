@@ -3,7 +3,6 @@ React = require 'react'
 Translate = require 'react-translate-component'
 {IndexLink, Link} = require 'react-router'
 {Markdown} = require 'markdownz'
-PotentialFieldGuide = require './potential-field-guide'
 {sugarClient} = require 'panoptes-client/lib/sugar'
 Thumbnail = require('../../components/thumbnail').default
 classnames = require 'classnames'
@@ -217,9 +216,6 @@ ProjectPage = React.createClass
 
       {unless @props.project.launch_approved
         <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
-
-      {unless @props.location.pathname is projectPath
-        <PotentialFieldGuide project={@props.project} />}
     </div>
 
 module.exports = ProjectPage

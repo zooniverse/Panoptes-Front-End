@@ -23,6 +23,7 @@ Task = require('./task').default
 TaskNav = require('./task-nav').default
 ExpertOptions = require('./expert-options').default
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
+PotentialFieldGuide = require '../components/potential-field-guide'
 
 # For easy debugging
 window.cachedClassification = CacheClassification
