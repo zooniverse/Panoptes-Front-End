@@ -14,6 +14,7 @@ FileButton = require '../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
 workflowActions = require './actions/workflow'
 ShortcutEditor = require '../../components/shortcut-editor'
+classnames = require 'classnames'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -72,10 +73,11 @@ EditWorkflowPage = React.createClass
 
     stats_completeness_type = @props.workflow.configuration.stats_completeness_type ? 'retirement'
 
-    disabledIfLive = if @props.project.live and @props.workflow.active
-                       {opacity: 0.4, pointerEvents: 'none'}
-                     else
-                       {}
+    projectLiveWorkflowActive = @props.project.live and @props.workflow.active
+    projectLiveWorkflowInactive = @props.project.live and !@props.workflow.active
+    disabledIfLive = classnames({ 'disabled-section': projectLiveWorkflowActive })
+    disabledIfWorkflowInactive = classnames({ 'disabled-section': projectLiveWorkflowInactive })
+    taskEditorClasses = classnames({'column': true, 'disabled-section': projectLiveWorkflowActive})
 
     <div className="edit-workflow-page">
       <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
@@ -103,7 +105,7 @@ EditWorkflowPage = React.createClass
 
             <br />
 
-            <div style={disabledIfLive}>
+            <div className={disabledIfLive}>
               <div className="nav-list standalone">
                 <span className="nav-list-header">Tasks</span>
                 <br />
@@ -247,10 +249,11 @@ EditWorkflowPage = React.createClass
               <hr />
             </div>}
 
-          <div>
+          <div className={disabledIfWorkflowInactive}>
             <AutoSave resource={@props.project}>
               <span className="form-label">Set as default</span><br />
               <small className="form-help">If you have more than one workflow, you can set which should be default. Only one can be default.</small>
+              {<span><br /><small className="form-help">Inactive workflows on live projects cannot be made default.</small></span> if projectLiveWorkflowInactive}
               <br />
               <label>
                 <input ref="defaultWorkflow" type="checkbox" checked={@props.project.configuration?.default_workflow is @props.workflow.id} onChange={@handleDefaultWorkflowToggle} />
@@ -399,7 +402,7 @@ EditWorkflowPage = React.createClass
 
           <hr />
 
-          <div style={disabledIfLive}>
+          <div className={disabledIfLive}>
             <small>
               <button type="button" className="minor-button" disabled={@state.deletionInProgress} data-busy={@state.deletionInProgress || null} onClick={@handleDelete}>
                 Delete this workflow
@@ -410,7 +413,7 @@ EditWorkflowPage = React.createClass
           </div>
         </div>
 
-        <div className="column" style={disabledIfLive}>
+        <div className={taskEditorClasses}>
           {if @state.selectedTaskKey? and @props.workflow.tasks[@state.selectedTaskKey]?
             TaskEditorComponent = tasks[@props.workflow.tasks[@state.selectedTaskKey].type].Editor
             <div>
