@@ -31,8 +31,8 @@ class Task extends React.Component {
     // Run through the existing annotations to build up sets of persistent hooks in the order of the associated annotations. Skip duplicates.
     const persistentHooksBeforeTask = [];
     const persistentHooksAfterTask = [];
-    classification.annotations.map(annotation => {
-      const taskDescription = workflow.tasks[annotation.task];
+    classification.annotations.map((classificationAnnotation) => {
+      const taskDescription = workflow.tasks[classificationAnnotation.task];
       const { PersistBeforeTask, PersistAfterTask } = tasks[taskDescription.type];
       if (PersistBeforeTask && !persistentHooksBeforeTask.includes(PersistBeforeTask)) {
         persistentHooksBeforeTask.push(PersistBeforeTask);
@@ -59,7 +59,7 @@ class Task extends React.Component {
         <div className="coverable-task-container">
           {persistentHooksBeforeTask.map((HookComponent, i) => {
             const key = i + Math.random();
-            <HookComponent key={key} {...taskHookProps} />;
+            return (<HookComponent key={key} {...taskHookProps} />);
           })}
 
           <TaskComponent
@@ -74,7 +74,7 @@ class Task extends React.Component {
 
           {persistentHooksAfterTask.map((HookComponent, i) => {
             const key = i + Math.random();
-            <HookComponent key={key} {...taskHookProps} />;
+            return (<HookComponent key={key} {...taskHookProps} />);
           })}
 
           <hr />
@@ -110,22 +110,34 @@ class Task extends React.Component {
 Task.propTypes = {
   annotation: React.PropTypes.shape({
     shortcut: React.PropTypes.object,
-    value: React.PropTypes.any.isRequired
+    value: React.PropTypes.any
   }),
   children: React.PropTypes.node,
-  classification: React.PropTypes.object,
+  classification: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }),
   completeClassification: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
-  preferences: React.PropTypes.object,
-  project: React.PropTypes.object,
+  preferences: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }),
+  project: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }),
   renderExpertOptions: React.PropTypes.func,
   subject: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
   subjectLoading: React.PropTypes.bool,
-  task: React.PropTypes.object,
-  user: React.PropTypes.object,
-  workflow: React.PropTypes.object
+  task: React.PropTypes.shape({
+    type: React.PropTypes.string
+  }),
+  user: React.PropTypes.shape({
+    id: React.PropTypes.string
+  }),
+  workflow: React.PropTypes.shape({
+    id: React.PropTypes.string
+  })
 };
 
 export default Task;
