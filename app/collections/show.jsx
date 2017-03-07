@@ -175,6 +175,17 @@ const CollectionPageWrapper = React.createClass({
         { include: ['owner'] }
       )
       .then(([collection]) => {
+        if (collection) {
+          return [collection]
+        } else {
+          return apiClient.type('collections')
+          .get({
+            id: this.props.params.collection_name,
+            include: ['owner']
+          })
+        }
+      })
+      .then(([collection]) => {
         return apiClient.type('collection_roles')
           .get({
             collection_id: collection.id,
