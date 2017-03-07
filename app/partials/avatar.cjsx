@@ -33,14 +33,7 @@ module.exports = React.createClass
     @props.user.stopListening 'change', @handleResourceChange
 
   handleResourceChange: (user = @props.user) ->
-    @setState loading: true
-    user.get 'avatar'
-      .then ([avatar]) =>
-        @setState src: avatar.src
-      .catch =>
-        @setState src: DEFAULT_AVATAR
-      .then =>
-        @setState loading: false
+    @setState src: (user.avatar_src || DEFAULT_AVATAR)
 
   handleError: ->
     @setState src: DEFAULT_AVATAR
@@ -50,7 +43,6 @@ module.exports = React.createClass
       src={@state.src}
       alt="Avatar for #{@props.user.display_name}"
       className={"avatar #{@props.className}".trim()}
-      data-loading={@state.loading || null}
       style={
         height: @props.size
         width: @props.size
