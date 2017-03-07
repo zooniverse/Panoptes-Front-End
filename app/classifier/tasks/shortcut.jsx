@@ -42,7 +42,7 @@ Summary.propTypes = {
 };
 
 Summary.defaultProps = {
-  annotation: null,
+  annotation: { },
   task: {
     answers: [],
     question: ''
@@ -81,13 +81,13 @@ export default class Shortcut extends React.Component {
       <div className="unlinked-shortcut">
 
         {options.map((answer, i) => {
-          if (answer._key == null) { answer._key = Math.random(); }
+          if (answer._key === undefined) { answer._key = Math.random(); }
           return (
             <p key={answer._key}>
-              <label htmlFor="shortcut" key={answer._key} className={`answer minor-button answer-button ${i === this.state.index ? 'active' : ''}`}>
+              <label htmlFor={`shortcut-${i}`} className={`answer minor-button answer-button ${i === this.state.index ? 'active' : ''}`}>
                 <small>
                   <strong>
-                    <input type="checkbox" checked={i === this.state.index} onChange={this.toggleShortcut.bind(this, i, answer)} />
+                    <input id={`shortcut-${i}`} type="checkbox" checked={i === this.state.index} onChange={this.toggleShortcut.bind(this, i, answer)} />
                     {' '}{answer.label}
                   </strong>
                 </small>
@@ -122,8 +122,8 @@ Shortcut.getDefaultAnnotation = () => {
 Shortcut.propTypes = {
   annotation: React.PropTypes.shape(
     {
-      shortcut: React.PropTypes.number,
-      task: React.PropTypes.object
+      shortcut: React.PropTypes.object,
+      task: React.PropTypes.string
     }
   ),
   classification: React.PropTypes.shape(

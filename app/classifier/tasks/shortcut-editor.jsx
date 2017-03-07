@@ -1,12 +1,13 @@
 import React from 'react';
-import AutoSave from './auto-save';
-import handleInputChange from '../lib/handle-input-change';
-import Shortcut from '../classifier/tasks/shortcut';
+import AutoSave from '../../components/auto-save';
+import handleInputChange from '../../lib/handle-input-change';
+import Shortcut from './shortcut';
 
 export default class ShortcutEditor extends React.Component {
   constructor(props) {
     super(props);
     this.addAnswer = this.addAnswer.bind(this);
+    this.toggleShortcut = this.toggleShortcut.bind(this);
   }
 
   toggleShortcut(e) {
@@ -54,7 +55,7 @@ export default class ShortcutEditor extends React.Component {
     }
     const handleChange = handleInputChange.bind(this.props.workflow);
     const children = React.Children.map(this.props.children, (child) => {
-      React.cloneElement(child);
+      return React.cloneElement(child);
     });
 
     return (
@@ -66,7 +67,7 @@ export default class ShortcutEditor extends React.Component {
         <label htmlFor="shortcut" title="Shortcut Options to End Classification">
           <AutoSave resource={this.props.workflow}>
             <span className="form-label">Shortcut Option</span>{' '}
-            <input type="checkbox" checked={shortcuts === true} onChange={this.toggleShortcut} />
+            <input type="checkbox" checked={shortcuts != null} onChange={this.toggleShortcut} />
           </AutoSave>
         </label>
 
