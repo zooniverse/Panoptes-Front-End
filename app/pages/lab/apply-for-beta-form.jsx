@@ -1,10 +1,96 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import uniq from 'lodash.uniq';
 import apiClient from 'panoptes-client/lib/api-client';
 
+// Constants
 const MINIMUM_SUBJECT_COUNT = 100;
 const REQUIRED_PAGES = ['Research', 'FAQ'];
 
+// Static functions
+const projectHasActiveWorkflows = (workflows) => {
+  return workflows.some((workflow) => {
+    return workflow.active;
+  });
+};
+
+const projectHasMinimumActiveSubjects = (workflows) => {
+  const activeWorkflows = workflows.filter((workflow) => {
+    return workflow.active;
+  });
+  const uniqueSetIDs = uniq(activeWorkflows.map((workflow) => {
+    return workflow.links.subject_sets;
+  }));
+  // Second parameter is an empty object to prevent request caching.
+  return apiClient.type('subject_sets', {})
+    .get(uniqueSetIDs)
+    .then((sets) => {
+      const subjectCount = sets.reduce((count, set) => {
+        return count + set.set_member_subjects_count;
+      }, 0);
+      return (subjectCount >= MINIMUM_SUBJECT_COUNT) ? true : `The project only has ${subjectCount} of ${MINIMUM_SUBJECT_COUNT} required subjects`;
+    });
+};
+
+const projectHasRequiredContent = (project) => {
+  // Second parameter is an empty object to prevent request caching.
+  return apiClient.type('projects')
+    .get(project.id)
+    .get('pages', {})
+    .then((projectPages) => {
+      const missingPages = REQUIRED_PAGES.reduce((accumulator, requiredPage) => {
+        const pagePresent = projectPages.find((page) => {
+          return requiredPage === page.title;
+        });
+        if (!pagePresent || (pagePresent.content === null || pagePresent.content === '')) {
+          accumulator.push(requiredPage);
+        }
+        return accumulator;
+      }, []);
+      const errorMessage = `The following pages are missing content: ${missingPages.join(', ')}`;
+      return (missingPages.length === 0) ? true : errorMessage;
+    });
+};
+
+const projectIsLive = (project) => {
+  return project.live === true;
+};
+
+const projectIsPublic = (project) => {
+  return project.private === false;
+};
+
+const renderValidationErrors = (errors) => {
+  if (errors.length) {
+    return (
+      <div>
+        <p className="form-help">The following errors need to be fixed:</p>
+        <ul className="form-help error-messages">
+          {errors.map((error) => {
+            return <li key={error}>{error}</li>;
+          })}
+        </ul>
+      </div>
+    );
+  }
+  return null;
+};
+
+const shallowCompare = (a, b) => {
+  let result = true;
+  Object.keys(a).forEach((key) => {
+    if (!(key in b) || a[key] !== b[key]) {
+      result = false;
+    }
+  });
+  Object.keys(b).forEach((key) => {
+    if (!(key in a) || a[key] !== b[key]) {
+      result = false;
+    }
+  });
+  return result;
+};
+
+// Component
 class ApplyForBetaForm extends React.Component {
   constructor(props) {
     super(props);
@@ -12,68 +98,26 @@ class ApplyForBetaForm extends React.Component {
     this.attemptApplyForBeta = this.attemptApplyForBeta.bind(this);
     this.canApplyForReview = this.canApplyForReview.bind(this);
     this.createCheckbox = this.createCheckbox.bind(this);
-    this.projectHasActiveWorkflows = this.projectHasActiveWorkflows.bind(this);
-    this.projectHasMinimumActiveSubjects = this.projectHasMinimumActiveSubjects.bind(this);
-    this.projectHasRequiredContent = this.projectHasRequiredContent.bind(this);
-    this.projectIsLive = this.projectIsLive.bind(this);
-    this.projectIsPublic = this.projectIsPublic.bind(this);
-    this.renderValidationErrors = this.renderValidationErrors.bind(this);
     this.testAsyncValidations = this.testAsyncValidations.bind(this);
     this.toggleValidation = this.toggleValidation.bind(this);
     this.updateValidationsFromProps = this.updateValidationsFromProps.bind(this);
-    
+
     this.state = {
       validations: {
-        projectIsPublic: this.projectIsPublic(props.project),
-        projectIsLive: this.projectIsLive(props.project),
-        projectHasActiveWorkflows: this.projectHasActiveWorkflows(props.workflows),
+        projectIsPublic: projectIsPublic(props.project),
+        projectIsLive: projectIsLive(props.project),
+        projectHasActiveWorkflows: projectHasActiveWorkflows(props.workflows),
         labPolicyReviewed: false,
         bestPracticesReviewed: false,
-        feedbackReviewed: false,
+        feedbackReviewed: false
       },
       validationErrors: [],
-      doingAsyncValidation: false,
+      doingAsyncValidation: false
     };
   }
 
-  attemptApplyForBeta() {
-    this.testAsyncValidations()
-      .then(() => {
-        this.props.applyFn();
-      })
-      .catch(errors => {
-        this.setState({
-          validationErrors: errors,
-        });
-      });
-  }
-
-  projectHasMinimumActiveSubjects(workflows) { 
-    const activeWorkflows = workflows.filter(workflow => workflow.active);
-    const uniqueSetIDs = uniq(activeWorkflows.map(workflow => workflow.links.subject_sets));
-    // Second parameter is an empty object to prevent request caching.
-    return apiClient.type('subject_sets', {})
-      .get(uniqueSetIDs)
-      .then(sets => {
-        const subjectCount = sets.reduce((count, set) => count + set.set_member_subjects_count, 0);
-        return (subjectCount >= MINIMUM_SUBJECT_COUNT) ? true : `The project only has ${subjectCount} of ${MINIMUM_SUBJECT_COUNT} required subjects`;
-      });
-  }
-  
-  projectHasRequiredContent(project) { 
-    // Second parameter is an empty object to prevent request caching.
-    return apiClient.type('projects')
-      .get(project.id)
-      .get('pages', {})
-      .then(projectPages => {
-        const missingPages = REQUIRED_PAGES.reduce((accumulator, requiredPage) => {
-          const pagePresent = projectPages.find(page => requiredPage === page.title);
-          if (!pagePresent || (pagePresent.content === null || pagePresent.content === ''))
-            accumulator.push(requiredPage);
-          return accumulator;
-        }, []);
-        return (missingPages.length === 0) ? true : 'The following pages are missing content: ' + missingPages.join(', ');
-      });
+  componentWillUpdate(nextProps) {
+    this.updateValidationsFromProps(nextProps);
   }
 
   testAsyncValidations() {
@@ -81,30 +125,24 @@ class ApplyForBetaForm extends React.Component {
     // error messages.
     this.setState({ doingAsyncValidation: true });
     return Promise.all([
-      this.projectHasMinimumActiveSubjects(this.props.workflows),
-      this.projectHasRequiredContent(this.props.project),
+      projectHasMinimumActiveSubjects(this.props.workflows),
+      projectHasRequiredContent(this.props.project)
     ])
-    .catch(error => console.error('Error requesting project data', error))
-    .then(results => {
+    .catch((error) => {
+      console.error('Error requesting project data', error);
+    })
+    .then((results) => {
       this.setState({ doingAsyncValidation: false });
-      if (results.every(result => typeof result === 'boolean' && result === true)) {
+      if (results.every((result) => {
+        return typeof result === 'boolean' && result === true;
+      })) {
         return true;
       }
-      const errors = results.filter(result => typeof result !== 'boolean');
+      const errors = results.filter((result) => {
+        return typeof result !== 'boolean';
+      });
       return Promise.reject(errors);
-    })
-  }
-
-  projectIsPublic(project) {
-    return project.private === false;
-  }
-
-  projectIsLive(project) {
-    return project.live === true;
-  }
-
-  projectHasActiveWorkflows(workflows) {
-    return workflows.some(workflow => workflow.active);
+    });
   }
 
   toggleValidation(validationName, event) {
@@ -116,94 +154,96 @@ class ApplyForBetaForm extends React.Component {
   canApplyForReview() {
     const { validations } = this.state;
     const values = Object.keys(validations)
-      .map(key => validations[key]);
-    return values.every(value => value === true);
+      .map((key) => {
+        return validations[key];
+      });
+    return values.every((value) => {
+      return value === true;
+    });
   }
 
   createCheckbox(validationName, content, disabled = false) {
-    // If it's a non-user controlled checkbox, we don't want to trigger anything 
+    // If it's a non-user controlled checkbox, we don't want to trigger anything
     // on change, so we use Function.prototype as a noop.
     const changeFn = (disabled) ? Function.prototype : this.toggleValidation.bind(this, validationName);
     return (
-      <label style={{ display: 'block' }}>
-        <input type="checkbox"
+      <label htmlFor={`checkbox-${validationName}`} style={{ display: 'block' }}>
+        <input
+          id={`checkbox-${validationName}`}
+          type="checkbox"
           onChange={changeFn}
           checked={this.state.validations[validationName] === true}
           disabled={disabled}
-          />
-          {content}
+        />
+        {content}
       </label>
     );
   }
 
-  componentWillUpdate(nextProps) {
-    this.updateValidationsFromProps(nextProps);
+  attemptApplyForBeta() {
+    this.testAsyncValidations()
+      .then(() => {
+        this.props.applyFn();
+      })
+      .catch((errors) => {
+        this.setState({
+          validationErrors: errors
+        });
+      });
   }
 
   updateValidationsFromProps(props) {
     // We need to do a props comparison, otherwise we get a loop where props
     // update state -> updates state repeatedly.
-    // 
-    // Unfortunately, we have to do it by comparing the new props against the 
-    // current state, instead of using shouldComponentUpdate. This is because 
-    // the project prop passed down is mutable, which breaks the props/nextProps 
+    //
+    // Unfortunately, we have to do it by comparing the new props against the
+    // current state, instead of using shouldComponentUpdate. This is because
+    // the project prop passed down is mutable, which breaks the props/nextProps
     // comparison used by shouldComponentUpdate.
     const validations = Object.assign({}, this.state.validations);
 
     const newValues = {
-      projectIsPublic: this.projectIsPublic(props.project),
-      projectIsLive: this.projectIsLive(props.project),
-      projectHasActiveWorkflows: this.projectHasActiveWorkflows(props.workflows),
+      projectIsPublic: projectIsPublic(props.project),
+      projectIsLive: projectIsLive(props.project),
+      projectHasActiveWorkflows: projectHasActiveWorkflows(props.workflows)
     };
 
-    for (let key in newValues) {
-      if (validations[key] !== newValues[key])
+    Object.keys(newValues).forEach((key) => {
+      if (validations[key] !== newValues[key]) {
         validations[key] = newValues[key];
-    }
+      }
+    });
 
-    if (!shallowCompare(validations, this.state.validations))
+    if (!shallowCompare(validations, this.state.validations)) {
       this.setState({ validations });
-  }
-
-  renderValidationErrors(errors) {
-    if (errors.length) {
-      return (
-        <div>
-          <p className="form-help">The following errors need to be fixed:</p>
-          <ul className="form-help error-messages">
-            {errors.map(error => <li key={error}>{error}</li>)}
-          </ul>
-        </div>
-      );
     }
-    return null;
   }
 
   render() {
-    const applyButtonDisabled = !this.canApplyForReview() || 
+    const applyButtonDisabled = !this.canApplyForReview() ||
       this.state.doingAsyncValidation;
-    
+
     return (
       <div>
 
-        {this.createCheckbox('projectIsPublic', <span>Project is public</span>, true)}  
+        {this.createCheckbox('projectIsPublic', <span>Project is public</span>, true)}
 
         {this.createCheckbox('projectIsLive', <span>Project is live</span>, true)}
 
         {this.createCheckbox('projectHasActiveWorkflows', <span>Project has at least one active workflow</span>, true)}
 
-        {this.createCheckbox('labPolicyReviewed', <span>I have reviewed the <a href="/lab-policies" target="_blank">policies</a></span>)}
+        {this.createCheckbox('labPolicyReviewed', <span>I have reviewed the <a href="/lab-policies" target="_blank" rel="noopener noreferrer">policies</a></span>)}
 
-        {this.createCheckbox('bestPracticesReviewed', <span>I have reviewed the <a href="/lab-best-practices" target="_blank">best practices</a></span>)}
+        {this.createCheckbox('bestPracticesReviewed', <span>I have reviewed the <a href="/lab-best-practices" target="_blank" rel="noopener noreferrer">best practices</a></span>)}
 
-        {this.createCheckbox('feedbackReviewed', <span>I have reviewed the sample <a href="https://docs.google.com/a/zooniverse.org/forms/d/1o7yTqpytWWhSOqQhJYiKaeHIaax7xYVUyTOaG3V0xA4/viewform" target="_blank">project review feedback form</a></span>)}
+        {this.createCheckbox('feedbackReviewed', <span>I have reviewed the sample <a href="https://docs.google.com/a/zooniverse.org/forms/d/1o7yTqpytWWhSOqQhJYiKaeHIaax7xYVUyTOaG3V0xA4/viewform" target="_blank" rel="noopener noreferrer">project review feedback form</a></span>)}
 
         <p className="form-help">To be eligible for beta review, projects also require:</p>
         <ul className="form-help">
           <li>at least {MINIMUM_SUBJECT_COUNT} subjects in active workflows</li>
           <li>content on the Research and FAQ pages in the About page</li>
         </ul>
-        <p className="form-help">These will be checked when you click "Apply for review".</p>
+        <p className="form-help">These will be checked when you click &quot;Apply for review&quot;.</p>
 
         <button
           type="button"
@@ -214,30 +254,32 @@ class ApplyForBetaForm extends React.Component {
           Apply for review
         </button>
 
-        {this.renderValidationErrors(this.state.validationErrors)}
+        {renderValidationErrors(this.state.validationErrors)}
 
       </div>
     );
-
   }
 }
 
 ApplyForBetaForm.defaultProps = {
   project: {},
   workflows: [],
-}
+  applyFn: Function.prototype
+};
+
+ApplyForBetaForm.propTypes = {
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    live: PropTypes.bool.isRequired,
+    private: PropTypes.bool.isRequired
+  }).isRequired,
+  workflows: PropTypes.arrayOf(PropTypes.shape({
+    active: PropTypes.bool.isRequired,
+    links: PropTypes.shape({
+      subject_sets: PropTypes.arrayOf(PropTypes.string).isRequired
+    })
+  })).isRequired,
+  applyFn: PropTypes.func.isRequired
+};
 
 export default ApplyForBetaForm;
-
-// Helper function for comparing objects
-const shallowCompare = (a, b) => {
-  for (let key in a) {
-    if (!(key in b) || a[key] !== b[key])
-      return false;
-  }
-  for (let key in b) {
-    if(!(key in a) || a[key] !== b[key])
-      return false;
-  }
-  return true;
-}
