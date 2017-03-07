@@ -125,7 +125,7 @@ EditProjectPage = React.createClass
           <li>
             <br />
             <div className="nav-list-header">Subject sets</div>
-            <PromiseRenderer promise={@props.project.get 'subject_sets', sort: 'display_name', page_size: 100}>{(subjectSets) =>
+            <PromiseRenderer promise={@props.project.get 'subject_sets', sort: 'display_name', page_size: 250}>{(subjectSets) =>
               <ul className="nav-list">
                 {renderSubjectSetListItem = (subjectSet) ->
                   subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>
