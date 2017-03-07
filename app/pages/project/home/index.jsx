@@ -29,7 +29,7 @@ export default class ProjectHomeContainer extends React.Component {
     }
 
     if (this.props.project !== nextProps.project) {
-      this.fetchResearcherAvatar(nextProps.props);
+      this.fetchResearcherAvatar(nextProps);
     }
   }
 
@@ -54,16 +54,16 @@ export default class ProjectHomeContainer extends React.Component {
         if (props.projectAvatar && props.projectAvatar.src) {
           this.setState({ researcherAvatar: props.projectAvatar.src });
         }
+      } else {
+        apiClient.type('users').get(this.props.project.configuration.researcherID)
+          .then((researcher) => {
+            researcher.get('avatar').then(([avatar]) => {
+              if (avatar.src) {
+                this.setState({ researcherAvatar: avatar.src });
+              }
+            });
+          }).catch(error => console.error(error));
       }
-
-      apiClient.type('users').get(this.props.project.configuration.researcherID)
-        .then((researcher) => {
-          researcher.get('avatar').then(([avatar]) => {
-            if (avatar.src) {
-              this.setState({ researcherAvatar: avatar.src });
-            }
-          });
-        }).catch(error => console.error(error));
     }
   }
 
