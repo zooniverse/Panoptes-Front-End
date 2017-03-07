@@ -2,11 +2,13 @@ import React from 'react';
 import apiClient from 'panoptes-client/lib/api-client';
 import talkClient from 'panoptes-client/lib/talk-client';
 import ProjectHomePage from './project-home';
+import getWorkflowsInOrder from '../../../lib/get-workflows-in-order';
 
 export default class ProjectHomeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeWorkflows: [],
       showWorkflowButtons: false,
       researcherAvatar: null,
       talkSubjects: []
@@ -30,6 +32,15 @@ export default class ProjectHomeContainer extends React.Component {
 
     if (this.props.project !== nextProps.project) {
       this.fetchResearcherAvatar(nextProps);
+    }
+  }
+
+  fetchAllWorkflows(props = this.props, query = { active: true, fields: 'active,completeness,configuration,display_name' }) {
+    if (this.state.activeWorkflows.length === 0) {
+      getWorkflowsInOrder(props.project, query)
+        .then((activeWorkflows) => {
+          this.setState({ activeWorkflows });
+        });
     }
   }
 
@@ -72,7 +83,7 @@ export default class ProjectHomeContainer extends React.Component {
 
     if ((props.project.configuration && props.project.configuration.user_chooses_workflow && !workflowAssignment) ||
       (workflowAssignment && context.user)) {
-      this.setState({ showWorkflowButtons: true });
+      this.setState({ showWorkflowButtons: true }, this.fetchAllWorkflows);
     } else {
       this.setState({ showWorkflowButtons: false });
     }
@@ -81,7 +92,7 @@ export default class ProjectHomeContainer extends React.Component {
   render() {
     return (
       <ProjectHomePage
-        activeWorkflows={this.props.activeWorkflows}
+        activeWorkflows={this.state.activeWorkflows}
         onChangePreferences={this.props.onChangePreferences}
         preferences={this.props.preferences}
         project={this.props.project}
@@ -101,7 +112,6 @@ ProjectHomeContainer.contextTypes = {
 };
 
 ProjectHomeContainer.defaultProps = {
-  activeWorkflows: [],
   onChangePreferences: () => {},
   preferences: {},
   project: {},
@@ -110,7 +120,6 @@ ProjectHomeContainer.defaultProps = {
 };
 
 ProjectHomeContainer.propTypes = {
-  activeWorkflows: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
   onChangePreferences: React.PropTypes.func.isRequired,
   preferences: React.PropTypes.object,
   project: React.PropTypes.shape({

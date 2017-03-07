@@ -25,6 +25,7 @@ const ProjectHomePage = (props) => {
         onChangePreferences={props.onChangePreferences}
         preferences={props.preferences}
         project={props.project}
+        projectIsComplete={props.projectIsComplete}
         showWorkflowButtons={props.showWorkflowButtons}
         workflowAssignment={props.project.experimental_tools.includes('workflow assignment')}
         splits={props.splits}
