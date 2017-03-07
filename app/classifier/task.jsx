@@ -62,15 +62,17 @@ class Task extends React.Component {
             return (<HookComponent key={key} {...taskHookProps} />);
           })}
 
-          <TaskComponent
-            autoFocus={true}
-            taskTypes={tasks}
-            workflow={workflow}
-            task={task}
-            preferences={this.props.preferences}
-            annotation={annotation}
-            onChange={this.handleAnnotationChange}
-          />
+          {!!annotation &&
+            <TaskComponent
+              autoFocus={true}
+              taskTypes={tasks}
+              workflow={workflow}
+              task={task}
+              preferences={this.props.preferences}
+              annotation={annotation}
+              onChange={this.handleAnnotationChange}
+            />
+          }
 
           {persistentHooksAfterTask.map((HookComponent, i) => {
             const key = i + Math.random();
