@@ -256,7 +256,7 @@ EditWorkflowPage = React.createClass
               {<span><br /><small className="form-help">Inactive workflows on live projects cannot be made default.</small></span> if projectLiveWorkflowInactive}
               <br />
               <label>
-                <input ref="defaultWorkflow" type="checkbox" checked={@props.project.configuration?.default_workflow is @props.workflow.id} onChange={@handleDefaultWorkflowToggle} />
+                <input ref="defaultWorkflow" type="checkbox" disabled={projectLiveWorkflowInactive} checked={@props.project.configuration?.default_workflow is @props.workflow.id} onChange={@handleDefaultWorkflowToggle} />
                 Default workflow
               </label>
             </AutoSave>
