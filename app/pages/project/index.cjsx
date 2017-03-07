@@ -45,27 +45,26 @@ ProjectPageController = React.createClass
 
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
-    @fetchProjectData @props.params.owner, @props.params.name, @props.user
+    @fetchProjectData @props.params.owner, @props.params.name, @props.user if @context.initialLoadComplete
     @setupSplits()
 
-  componentWillReceiveProps: (nextProps) ->
+  componentWillReceiveProps: (nextProps, nextContext) ->
     {owner, name} = nextProps.params
     pathChanged = owner isnt @props.params.owner or name isnt @props.params.name
-    userChanged = nextProps.user isnt @props.user
+    userChanged = nextContext.initialLoadComplete and nextProps.user isnt @props.user
 
-    if pathChanged or userChanged
-      @fetchProjectData owner, name, nextProps.user
+    # Wait until we know if there's a user
+    if pathChanged or userChanged or nextContext.initialLoadComplete
+      @fetchProjectData owner, name, nextProps.user unless @state.loading
       @setupSplits nextProps
 
   componentWillUpdate: (nextProps, nextState) ->
     if nextProps.location.query?.workflow? and @canFetchWorkflowByQuery(nextProps.project, nextProps.user)
-      console.log('theres a workflow query')
-      @getSelectedWorkflow(nextProps.project, nextState.preferences)
+      @getSelectedWorkflow(nextProps.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
 
     if nextState.preferences?.preferences?.selected_workflow? and @state.workflow?
       if nextState.preferences?.preferences.selected_workflow isnt @state.workflow.id
-        console.log('next prefs isnt current state workflow', nextState, @state)
-        @getSelectedWorkflow(nextProps.project, nextState.preferences)
+        @getSelectedWorkflow(nextProps.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
 
   componentWillUnmount: ->
     Split.clear()
@@ -140,10 +139,11 @@ ProjectPageController = React.createClass
             awaitPreferences
           ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) => 
               @setState({ background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
-            ).then(@getSelectedWorkflow())
+              @getSelectedWorkflow(project, preferences)
+            ).catch((error) => @setState({ error }); console.error(error); );
 
         else
-          this.setState
+          @setState
             background: null
             error: new Error 'NOT_FOUND'
             owner: null
@@ -189,20 +189,20 @@ ProjectPageController = React.createClass
       project.uncacheLink 'workflows'
     else
       randomIndex = Math.floor Math.random() * linkedWorkflows.length
-      console.log 'Chose random workflow', linkedWorkflows[randomIndex]
+      # console.log 'Chose random workflow', linkedWorkflows[randomIndex]
       linkedWorkflows[randomIndex]
 
   getWorkflow: (selectedWorkflowID) ->
     apiClient.type('workflows').get({ active: true, id: "#{selectedWorkflowID}" })
       .catch (error) =>
         console.error error
-        @setState({ loadingSelectedWorkflow: false })
+        # TODO: Handle 404 once json-api-client error handling is fixed.
+        @setState({ error: error, loadingSelectedWorkflow: false })
       .then ([workflow]) =>
-        console.log('workflow', workflow)
         if workflow
           @setState({ loadingSelectedWorkflow: false, workflow })
         else
-          console.error "No workflow #{selectedWorkflowID} for project #{project.id}"
+          console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
           @clearInactiveWorkflow(selectedWorkflowID)
             .then(@getSelectedWorkflow())
 
@@ -215,7 +215,7 @@ ProjectPageController = React.createClass
       preferences.update 'preferences.selected_workflow': undefined
       preferences.save()
     else if selectedWorkflowID is preferences.settings?.workflow_id
-      preferences.update 'preferences.settings.workflow_id': undefined
+      preferences.update 'settings.workflow_id': undefined
       preferences.save()
     else
       Promise.resolve(null)
