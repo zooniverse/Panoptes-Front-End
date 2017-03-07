@@ -85,6 +85,7 @@ export default class ProjectHomeContainer extends React.Component {
         onChangePreferences={this.props.onChangePreferences}
         preferences={this.props.preferences}
         project={this.props.project}
+        projectIsComplete={this.props.projectIsComplete}
         researcherAvatar={this.state.researcherAvatar}
         showWorkflowButtons={this.state.showWorkflowButtons}
         splits={this.props.splits}
@@ -104,6 +105,7 @@ ProjectHomeContainer.defaultProps = {
   onChangePreferences: () => {},
   preferences: {},
   project: {},
+  projectIsComplete: false,
   splits: {}
 };
 
@@ -120,5 +122,6 @@ ProjectHomeContainer.propTypes = {
     introduction: React.PropTypes.string,
     researcher_quote: React.PropTypes.string
   }).isRequired,
+  projectIsComplete: React.PropTypes.bool.isRequired,
   splits: React.PropTypes.object
 };

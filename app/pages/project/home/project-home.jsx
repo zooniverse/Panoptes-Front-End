@@ -13,9 +13,10 @@ const ProjectHomePage = (props) => {
 
   return (
     <div className="project-home-page">
-      <div className="call-to-action-container">
-        <FinishedBanner project={props.project} />
-      </div>
+      {props.projectIsComplete &&
+        (<div className="call-to-action-container">
+          <FinishedBanner project={props.project} />
+        </div>)}
 
       <div className="project-home-page__description">{props.project.description}</div>
 
@@ -82,6 +83,7 @@ ProjectHomePage.defaultProps = {
   onChangePreferences: () => {},
   preferences: {},
   project: {},
+  projectIsComplete: false,
   showWorkflowButtons: false,
   splits: {},
   talkSubjects: []
@@ -100,6 +102,7 @@ ProjectHomePage.propTypes = {
     introduction: React.PropTypes.string,
     researcher_quote: React.PropTypes.string
   }).isRequired,
+  projectIsComplete: React.PropTypes.bool.isRequired,
   researcherAvatar: React.PropTypes.string,
   showWorkflowButtons: React.PropTypes.bool,
   splits: React.PropTypes.object,
