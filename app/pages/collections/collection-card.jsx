@@ -46,9 +46,10 @@ export default class CollectionCard extends React.Component {
     }
     const [owner, name] = this.props.collection.slug.split('/');
     const dataText = `view-${translationObjectName}`;
+    const linkTo = name ? this.props.linkTo : `${this.props.linkTo}${this.props.collection.id}`;
 
     const linkProps = {
-      to: this.props.linkTo,
+      to: linkTo,
       geordiHandler: 'profile-menu',
       logText: dataText,
       params: { owner, name },
