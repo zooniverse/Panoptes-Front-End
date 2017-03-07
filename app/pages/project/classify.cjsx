@@ -287,10 +287,9 @@ module.exports = React.createClass
         else
           console?.log 'Saved classification', classification.id
           Split.classificationCreated(classification)
-          classification.get('subjects')
-            .then (subjects) =>
-              seenThisSession.add @props.workflow, subjects
-              classification.destroy()
+          {workflow, subjects} = classification.links
+          seenThisSession.add workflow, subjects
+          classification.destroy()
         @saveAllQueuedClassifications()
       .catch (error) =>
         console?.warn 'Failed to save classification:', error
