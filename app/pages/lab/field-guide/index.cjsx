@@ -50,7 +50,7 @@ FieldGuideEditor = React.createClass
 
   fetchIcons: (guide) ->
     guide.uncacheLink 'attached_images'
-    guide.get 'attached_images'
+    guide.get 'attached_images', page_size: 50
       .then (images) =>
         icons = {}
         images.forEach (image) ->

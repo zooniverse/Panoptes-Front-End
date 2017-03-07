@@ -30,7 +30,7 @@ module.exports = React.createClass
     apiClient.type('field_guides').get project_id: project.id
       .then ([guide]) =>
         @setState {guide}
-        guide?.get('attached_images')?.then (images) =>
+        guide?.get('attached_images', page_size: 50)?.then (images) =>
           icons = {}
           for image in images
             icons[image.id] = image
