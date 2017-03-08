@@ -54,8 +54,12 @@ ProjectPageController = React.createClass
     userChanged = nextContext.initialLoadComplete and nextProps.user isnt @props.user
 
     # Wait until we know if there's a user
-    if pathChanged or userChanged or nextContext.initialLoadComplete
+    if pathChanged or nextContext.initialLoadComplete
       @fetchProjectData owner, name, nextProps.user unless @state.loading
+      @setupSplits nextProps
+
+    if userChanged and nextProps.project?
+      @getUserProjectPreferences(nextProps.project, nextProps.user)
       @setupSplits nextProps
 
   componentWillUpdate: (nextProps, nextState) ->
@@ -110,24 +114,7 @@ ProjectPageController = React.createClass
 
           awaitProjectRoles = apiClient.type('project_roles').get(project.links.project_roles).catch((error) => console.error(error))
 
-          awaitPreferences = if user?
-            user.get 'project_preferences', project_id: project.id
-              .then ([preferences]) =>
-                preferences ? newPreferences = apiClient.type('project_preferences').create({
-                  links: {
-                    project: project.id
-                  },
-                  preferences: {}
-                }).save()
-          else
-            Promise.resolve apiClient.type('project_preferences').create
-              id: 'GUEST_PREFERENCES_DO_NOT_SAVE'
-              links:
-                project: project.id
-              preferences: {}
-
-          awaitPreferences = awaitPreferences.then (preferences) =>
-            @listenToPreferences preferences
+          awaitPreferences = @getUserProjectPreferences(project, user)
 
           Promise.all([
             awaitBackground,
@@ -161,7 +148,30 @@ ProjectPageController = React.createClass
         @setState loading: false
 
   canFetchWorkflowByQuery: (project, user) ->
-    'allow workflow query' in project.experimental_tools or @checkUserRoles(project, user)
+    if project?
+      'allow workflow query' in project.experimental_tools or @checkUserRoles(project, user)
+
+  getUserProjectPreferences: (project, user) ->
+    userPreferences = if user?
+      user.get 'project_preferences', project_id: project.id
+        .then ([preferences]) =>
+          preferences ? newPreferences = apiClient.type('project_preferences').create({
+            links: {
+              project: project.id
+            },
+            preferences: {}
+          }).save()
+    else
+      Promise.resolve apiClient.type('project_preferences').create
+        id: 'GUEST_PREFERENCES_DO_NOT_SAVE'
+        links:
+          project: project.id
+        preferences: {}
+
+    userPreferences
+      .then((preferences) =>
+        @listenToPreferences preferences
+      )
 
   getSelectedWorkflow: (project = @state.project, preferences = @state.preferences) ->
     @setState({ loadingSelectedWorkflow: true })
@@ -221,15 +231,10 @@ ProjectPageController = React.createClass
       Promise.resolve(null)
 
   checkUserRoles: (project, user) ->
-    console.log('projectroles', @state.projectRoles)
-    getUserRoles = project.get('project_roles', user_id: user.id)
-      .then ([userRoles]) =>
-        userRoles.roles
-      .catch =>
-        []
+    currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user.id)
+    roles = currentUserRoleSets[0].roles
 
-    getUserRoles.then (userRoles) =>
-      isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles
+    isAdmin() or 'owner' in roles or 'collaborator' in roles
 
   listenToPreferences: (preferences) ->
     @_listenedToPreferences?.stopListening 'change', @_boundForceUpdate
