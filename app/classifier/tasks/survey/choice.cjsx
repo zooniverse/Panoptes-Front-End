@@ -96,7 +96,7 @@ module.exports = React.createClass
                   <ImageFlipper images={@props.task.images[filename] for filename in otherChoice.images} />
                   <Markdown content={choice.confusions[otherChoiceID]} />
                   <div className="survey-task-choice-confusion-buttons" style={textAlign: 'center'}>
-                    <button type="submit" autoFocus={true} className="major-button identfiy">Dismiss</button>
+                    <button type="submit" autoFocus={true and otherChoice.images.length < 2} className="major-button identfiy">Dismiss</button>
                     {' '}
                     <button type="button" className="standard-button cancel" onClick={@props.onSwitch.bind null, otherChoiceID}>I think it’s this</button>
                   </div>
