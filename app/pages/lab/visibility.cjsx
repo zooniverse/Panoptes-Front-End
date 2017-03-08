@@ -321,7 +321,6 @@ module.exports = React.createClass
       <p className="form-label">Status</p>
       <p className="form-help">In a live project active workflows are available to volunteers and cannot be edited. Inactive workflows can be edited if a project is live or in development.</p>
       <p className="form-help">If an active workflow is the default workflow for the project and is made inactive, then it will be removed as the default workflow.</p>
-      <p className="form-help">On a live project, if you want to switch which subjects sets are associated with an active workflow: set the workflow to inactive, next change which subject sets are linked in the Workflow Section within the Project Builder, then return the workflow to active.</p>
       <p className="form-label">Completeness statistic</p>
       <p className="form-help">Use this option to change how each workflow's completeness is calculated on the public statistics page.</p>
       <p className="form-help">
