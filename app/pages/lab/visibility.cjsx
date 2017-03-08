@@ -1,8 +1,10 @@
 React = require 'react'
+apiClient = require 'panoptes-client/lib/api-client'
 WorkflowToggle = require '../../components/workflow-toggle'
 SetToggle = require '../../lib/set-toggle'
 Dialog = require 'modal-form/dialog'
 getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
+uniq = require 'lodash.uniq'
 
 module.exports = React.createClass
   displayName: 'EditProjectVisibility'
@@ -10,38 +12,80 @@ module.exports = React.createClass
   getDefaultProps: ->
     project: null
 
-  getInitialState: -> {
-    error: null,
-    setting: {
-      private: false,
-      beta_requested: false,
-      launch_requested: false,
-    },
-    workflows: null 
-  }
+  getInitialState: -> 
+    error: null
+    setting:
+      private: false
+      beta_requested: false
+      launch_requested: false
+    workflows: null
+    validatingProject: false
+    validationErrors: []
 
   mixins: [SetToggle]
 
   setterProperty: 'project'
 
   componentDidMount: ->
-    getWorkflowsInOrder(@props.project, fields: 'display_name,active,configuration')
-      .then((workflows) =>
-        @setState({ workflows })
-      )
+    getWorkflowsInOrder @props.project
+      .then (workflows) =>
+        @setState { workflows }
 
   isReviewable: ->
     not @props.project.private and
-    @props.project.live and not
-    @state.setting.beta_requested and not
-    @props.project.beta_requested and not
-    @props.project.beta_approved
+    @props.project.live and 
+    not @state.setting.beta_requested and 
+    not @props.project.beta_requested and 
+    not @props.project.beta_approved
 
   canApplyForReview: ->
     @isReviewable() and
     @state.labPolicyReviewed and
     @state.bestPracticesReviewed and
     @state.feedbackReviewed
+
+  applyForReview: ->
+    @validateProject()
+      .then () => @set 'beta_requested', true
+      .catch (errors) => @setState validationErrors: errors
+
+  validateProjectPages: () ->
+    requiredPages = ['Research', 'FAQ']
+    @props.project.get 'pages'
+      .then (projectPages) -> 
+        requiredPages.reduce (missingPages, requiredPage) ->
+          pagePresent = projectPages.find (page) -> requiredPage is page.title
+          if !pagePresent or (pagePresent.content is null or '')
+            missingPages.push requiredPage
+          missingPages
+        , []
+
+  validateProject: ->
+    @setState validationErrors: []
+    validationCriteria = 
+      activeWorkflows: @state.workflows?.filter (workflow) -> workflow.active
+
+    validations = [
+      @validateProjectPages()
+    ]
+
+    Promise.all validations
+      .catch (error) -> console.error 'Error requesting project info', error
+      .then ([missingPages]) ->
+        validationCriteria = Object.assign validationCriteria,
+          missingPages: missingPages    
+        errors = []
+
+        if validationCriteria.activeWorkflows.length < 1
+          errors.push 'Project must have at least one active workflow.'
+
+        if validationCriteria.missingPages.length > 0
+          errors.push 'The following About pages are missing: ' + validationCriteria.missingPages.join ', '
+
+        if errors.length 
+          Promise.reject errors
+        else 
+          return
 
   setRadio: (property, value) ->
     @set property, value
@@ -161,8 +205,8 @@ module.exports = React.createClass
             <button
               type="button"
               className="standard-button"
-              disabled={not @canApplyForReview()}
-              onClick={@set.bind this, 'beta_requested', true}
+              disabled={not @canApplyForReview() or @state.validatingProject}
+              onClick={@applyForReview}
             >Apply for review</button>{' '}
 
             {if @props.project.private
@@ -173,6 +217,15 @@ module.exports = React.createClass
               <span>Review status has been applied for. <button type="button" disabled={@state.setting.beta_requested} onClick={@set.bind this, 'beta_requested', false}>Cancel application</button></span>}
           </p>
         </div>
+
+        {if @state.validationErrors.length > 0
+          <span>
+            <p className="form-help">The following problems with your project need to be fixed before it can be reviewed:</p>
+            <ul className="form-help">
+              {@state.validationErrors.map (error) ->
+                <li key={error}>{error}</li>}
+            </ul>
+          </span>}
 
         {unless @props.project.beta_approved
           <p className="form-help">Pending approval, expose this project to users who have opted in to help test new projects.</p>}
