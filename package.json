@@ -49,6 +49,7 @@
     "babel-loader": "~6.2.4",
     "babel-plugin-add-module-exports": "~0.2.1",
     "babel-plugin-react-transform": "~2.0.2",
+    "babel-plugin-rewire": "~1.0.0",
     "babel-plugin-transform-object-assign": "~6.8.0",
     "babel-plugin-transform-react-jsx": "~6.7.5",
     "babel-plugin-typecheck": "~3.9.0",
@@ -111,6 +112,6 @@
     "stage-with-docker": "./bin/run-through-docker.sh 'npm run stage'",
     "_deploy": "export PATH_ROOT=www.zooniverse.org; npm run _build && npm run _publish",
     "deploy": "export NODE_ENV=production; npm run _deploy",
-    "test": "export NODE_ENV=development; mocha test/setup.js $(find app -name *.spec.js) --reporter nyan --compilers js:babel-core/register,coffee:coffee-script/register,cjsx:coffee-react/register"
+    "test": "NODE_ENV=development BABEL_ENV=test mocha test/setup.js $(find app -name *.spec.js) --reporter nyan --compilers js:babel-core/register,coffee:coffee-script/register,cjsx:coffee-react/register || true"
   }
 }

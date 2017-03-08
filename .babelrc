@@ -28,6 +28,13 @@
       "plugins": [
         ["transform-react-jsx"]
       ]
+    },
+    "test": {
+      "plugins": [
+        ["babel-plugin-rewire"],
+        ["transform-react-jsx"],
+        ["typecheck"]        
+      ] 
     }
   }
 }
