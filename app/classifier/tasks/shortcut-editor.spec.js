@@ -1,6 +1,6 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'], 'react/jsx-filename-extension': 0 */
 /* global describe, it, beforeEach */
-import { mount } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import React from 'react';
 import assert from 'assert';
 import sinon from 'sinon';
@@ -39,10 +39,10 @@ const emptyTask = {
 };
 
 describe('ShortcutEditor', function () {
-  describe('shortcutRendering', function () {
+  describe('rendering', function () {
     let wrapper;
 
-    beforeEach(function () {
+    before(function () {
       wrapper = mount(<ShortcutEditor task={task} workflow={workflow} />);
     });
 
@@ -60,11 +60,11 @@ describe('ShortcutEditor', function () {
     });
   });
 
-  describe('emptyRendering', function () {
+  describe('rendering without a shortcut', function () {
     let wrapper;
 
-    beforeEach(function () {
-      wrapper = mount(<ShortcutEditor task={emptyTask} workflow={emptyWorkflow} />);
+    before(function () {
+      wrapper = shallow(<ShortcutEditor task={emptyTask} workflow={emptyWorkflow} />);
     });
 
     it('should not be checked if there are not shortcuts', function () {
@@ -90,7 +90,7 @@ describe('ShortcutEditor', function () {
       sinon.assert.called(toggleStub);
     });
 
-    it('should remove the correct shortcut when deleted', function () {
+    it('should call remove handler when clicked', function () {
       const removeStub = sinon.stub(wrapper.instance(), 'removeChoice');
       const removeButton = wrapper.find('button.workflow-choice-remove-button').first();
       wrapper.update();
@@ -98,7 +98,7 @@ describe('ShortcutEditor', function () {
       sinon.assert.called(removeStub);
     });
 
-    it('should add a default shortcut when expanded', function () {
+    it('should call add handler when clicked', function () {
       const addStub = sinon.stub(wrapper.instance(), 'addAnswer');
       const addButton = wrapper.find('button.workflow-choice-add-button').first();
       wrapper.update();

@@ -5,7 +5,7 @@ class Summary extends React.Component {
   render() {
     let answer;
 
-    if (this.props.annotation.value) {
+    if (this.props.annotation.value != null) {
       answer = (
         <div className="answer">
           <i className="fa fa-check-circle-o fa-fw" />
