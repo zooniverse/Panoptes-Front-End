@@ -205,13 +205,19 @@ $survey-task-pill-button
   border-radius: 50%
   color: white
   display: inline-block
-  height: 1em
+  height: .5em
   overflow: hidden
   text-indent: 1em
-  width: 1em
+  width: .5em
+  
+  input[type=radio]
+    position: absolute
+    height: 0
+    width: 0
+    left: -100px
 
   &.active
-    background: white
+    opacity: .3
 
 .survey-task-choice
   background:  #f7f7f7

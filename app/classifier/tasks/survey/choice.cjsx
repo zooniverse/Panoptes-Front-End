@@ -26,10 +26,9 @@ ImageFlipper = React.createClass
       <div className="survey-task-image-flipper-pips">
         {unless @props.images.length is 1
           for index in [0...@props.images.length]
-            <span key={@props.images[index]}>
-              <button type="button" className="survey-task-image-flipper-pip" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>
-              {' '}
-            </span>}
+            <label key={@props.images[index]}  className="survey-task-image-flipper-pip #{if index is @state.frame then 'active' else ''}">
+              <input type="radio" name="image-flipper" autoFocus={index is 0} checked={index is @state.frame} onChange={@handleFrameChange.bind this, index} />{index + 1}
+            </label>}
       </div>
     </span>
 
@@ -97,7 +96,7 @@ module.exports = React.createClass
                   <ImageFlipper images={@props.task.images[filename] for filename in otherChoice.images} />
                   <Markdown content={choice.confusions[otherChoiceID]} />
                   <div className="survey-task-choice-confusion-buttons" style={textAlign: 'center'}>
-                    <button type="submit" className="major-button identfiy">Dismiss</button>
+                    <button type="submit" autoFocus={true} className="major-button identfiy">Dismiss</button>
                     {' '}
                     <button type="button" className="standard-button cancel" onClick={@props.onSwitch.bind null, otherChoiceID}>I think it’s this</button>
                   </div>
