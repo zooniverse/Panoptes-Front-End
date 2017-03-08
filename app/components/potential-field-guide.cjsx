@@ -4,6 +4,8 @@ Pullout = require 'react-pullout'
 FieldGuide = require './field-guide'
 
 module.exports = React.createClass
+  displayName: 'PotentialFieldGuide'
+
   getDefaultProps: ->
     project: null
 
