@@ -4,25 +4,22 @@ SubjectViewer = require '../components/subject-viewer'
 `import ClassificationSummary from './classification-summary';`
 {Link} = require 'react-router'
 `import tasks from './tasks';`
-{getSessionID} = require '../lib/session'
 preloadSubject = require '../lib/preload-subject'
 TriggeredModalForm = require 'modal-form/triggered'
 isAdmin = require '../lib/is-admin'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
-GridTool = require './drawing-tools/grid'
-Intervention = require '../lib/intervention'
-experimentsClient = require '../lib/experiments-client'
-interventionMonitor = require '../lib/intervention-monitor'
-Shortcut = require './tasks/shortcut'
 `import WorldWideTelescope from './world-wide-telescope';`
 `import FrameAnnotator from './frame-annotator';`
-MiniCourse = require '../components/mini-course';
-Tutorial = require '../components/tutorial';
-`import RestartButton from './restart-button';`
 `import CacheClassification from '../components/cache-classification';`
 MetadataBasedFeedback = require './metadata-based-feedback'
-{VisibilitySplit} = require('seven-ten')
+`import Task from './task';`
+{ VisibilitySplit } = require('seven-ten');
+`import RestartButton from './restart-button';`
+MiniCourse = require '../components/mini-course'
+Tutorial = require '../components/tutorial'
+interventionMonitor = require '../lib/intervention-monitor'
+experimentsClient = require '../lib/experiments-client'
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -52,32 +49,19 @@ Classifier = React.createClass
     minicourse: null
 
   getInitialState: ->
-    backButtonWarning: false
     expertClassification: null
     selectedExpertAnnotation: -1
     showingExpertClassification: false
     subjectLoading: false
-    renderIntervention: false
     annotations: []
 
-  disableIntervention: ->
-    @setState renderIntervention: false
-
-  enableIntervention: ->
-    experimentsClient.logExperimentState @context.geordi, interventionMonitor?.latestFromSugar, "interventionDetected"
-    @setState renderIntervention: true
-
   componentDidMount: ->
-    experimentsClient.startOrResumeExperiment interventionMonitor, @context.geordi
-    @setState renderIntervention: interventionMonitor?.shouldShowIntervention()
-    interventionMonitor.on 'interventionRequested', @enableIntervention
-    interventionMonitor.on 'classificationTaskRequested', @disableIntervention
     @loadSubject @props.subject
-    @prepareToClassify @props.classification
 
   componentWillReceiveProps: (nextProps) ->
     if nextProps.subject isnt @props.subject
       @loadSubject nextProps.subject
+
     if @props.subject isnt nextProps.subject or !@context.geordi?.keys["subjectID"]?
       @context.geordi?.remember subjectID: nextProps.subject?.id
     
@@ -88,17 +72,13 @@ Classifier = React.createClass
       nextProps.classification.listen 'change', =>
         {annotations} = nextProps.classification
         @setState {annotations}
-      @prepareToClassify nextProps.classification
 
   componentWillMount: () ->
-    interventionMonitor.setProjectSlug @props.project.slug
     @props.classification.listen 'change', =>
       {annotations} = @props.classification
       @setState {annotations}
 
   componentWillUnmount: () ->
-    interventionMonitor.removeListener 'interventionRequested', @enableIntervention
-    interventionMonitor.removeListener 'classificationTaskRequested', @disableIntervention
     @props.classification.stopListening 'change', =>
       {annotations} = @props.classification
       @setState {annotations}
@@ -150,11 +130,6 @@ Classifier = React.createClass
         window.expertClassification = expertClassification
         @setState {expertClassification}
 
-  prepareToClassify: (classification) ->
-    classification.annotations ?= []
-    if classification.annotations.length is 0
-      @addAnnotationForTask classification, @props.workflow.first_task
-
   render: ->
     largeFormatImage = @props.workflow.configuration.image_layout and 'no-max-height' in @props.workflow.configuration.image_layout
     classifierClassNames = if largeFormatImage then "classifier large-image" else "classifier"
@@ -188,173 +163,92 @@ Classifier = React.createClass
       />
 
       <div className="task-area">
-        {if currentTask?
-          @renderTask currentClassification, currentAnnotation, currentTask
+        {unless currentClassification.completed
+          <Task
+            preferences={@props.preferences}
+            user={@props.user}
+            project={@props.project}
+            workflow={@props.workflow}
+            subject={@props.subject}
+            classification={currentClassification}
+            task={currentTask}
+            annotation={currentAnnotation}
+            completeClassification={@completeClassification}
+            renderExpertOptions={@renderExpertOptions}
+            subjectLoading={@state.subjectLoading}
+          >
+            <p>
+              <small>
+                <strong>
+                  <RestartButton
+                    className="minor-button"
+                    preferences={@props.preferences}
+                    shouldRender={(@props.tutorial) && (@props.tutorial.steps.length > 0)}
+                    start={Tutorial.start.bind(Tutorial, @props.tutorial, @props.user, @props.preferences, @context.geordi)}
+                    style={{marginTop: '2em'}}
+                    user={@props.user}
+                    workflow={@props.workflow}
+                  >
+                    Show the project tutorial
+                  </RestartButton>
+                </strong>
+              </small>
+            </p>
+
+            <p>
+              <small>
+                <strong>
+                  <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+                    <RestartButton
+                      className="minor-button"
+                      preferences={@props.preferences}
+                      shouldRender={(@props.minicourse) && (@props.user) && (@props.minicourse.steps.length > 0)}
+                      start={MiniCourse.restart.bind(MiniCourse, @props.minicourse, @props.preferences, @props.user, @context.geordi)}
+                      style={{marginTop: '2em'}}
+                      user={@props.user}
+                      workflow={@props.workflow}
+                    >
+                      Restart the project mini-course
+                    </RestartButton>
+                  </VisibilitySplit>
+                </strong>
+              </small>
+            </p>
+
+            {if @props.demoMode
+              <p style={{textAlign: 'center'}}>
+                <i className="fa fa-trash"></i>{' '}
+                <small>
+                  <strong>Demo mode:</strong>
+                  <br />
+                  No classifications are being recorded.{' '}
+                  <button type="button" className="secret-button" onClick={@onChangeDemoMode}>
+                    <u>Disable</u>
+                  </button>
+                </small>
+              </p>
+            }
+            {if @props.classification.gold_standard?
+              <p style={{textAlign: 'center'}}>
+                <i className="fa fa-star"></i>{' '}
+                <small>
+                  <strong>Gold standard mode:</strong>
+                  <br />
+                  Please ensure this classification is completely accurate.{' '}
+                  <button type="button" className="secret-button" onClick={@props.classification.update.bind( @props.classification, {gold_standard: undefined})}>
+                    <u>Disable</u>
+                  </button>
+                </small>
+              </p>
+            }
+          </Task>
         else if @subjectIsGravitySpyGoldStandard()
           @renderGravitySpyGoldStandard currentClassification
         else if not @props.workflow.configuration?.hide_classification_summaries # Classification is complete; show summary if enabled
           @renderSummary currentClassification}
       </div>
     </div>
-
-  renderTask: (classification, annotation, task) ->
-    disableTalk = @props.classification.metadata.subject_flagged?
-    visibleTasks = Object.keys(@props.workflow.tasks).filter (key) => key if @props.workflow.tasks[key].type isnt 'shortcut'
-
-    TaskComponent = tasks[task.type]
-
-    # Should we disable the "Back" button?
-    onFirstAnnotation = classification.annotations.indexOf(annotation) is 0
-
-    # Should we disable the "Next" or "Done" buttons?
-    if TaskComponent.isAnnotationComplete?
-      waitingForAnswer = !annotation.shortcut and not TaskComponent.isAnnotationComplete task, annotation, @props.workflow
-
-    # Each answer of a single-answer task can have its own `next` key to override the task's.
-    if TaskComponent is tasks.single
-      currentAnswer = task.answers?[annotation.value]
-      nextTaskKey = currentAnswer?.next
-    else
-      nextTaskKey = task.next
-
-    unless @props.workflow.tasks[nextTaskKey]?
-      nextTaskKey = ''
-
-    # TODO: Actually disable things that should be.
-    # For now we'll just make them non-mousable.
-    disabledStyle =
-      opacity: 0.5
-      pointerEvents: 'none'
-
-    # Run through the existing annotations to build up sets of persistent hooks in the order of the associated annotations. Skip duplicates.
-    persistentHooksBeforeTask = []
-    persistentHooksAfterTask = []
-    classification.annotations.forEach (annotation) =>
-      taskDescription = @props.workflow.tasks[annotation.task]
-      TaskComponent = tasks[taskDescription.type]
-      {PersistBeforeTask, PersistAfterTask} = TaskComponent
-      if PersistBeforeTask? and PersistBeforeTask not in persistentHooksBeforeTask
-        persistentHooksBeforeTask.push PersistBeforeTask
-      if PersistAfterTask? and PersistAfterTask not in persistentHooksAfterTask
-        persistentHooksAfterTask.push PersistAfterTask
-
-    # These props will be passed into the hooks. Append as necessary when creating hooks.
-    taskHookProps =
-      taskTypes: tasks
-      workflow: @props.workflow
-      classification: classification
-      onChange: -> classification.update()
-
-    <div className="task-container" style={disabledStyle if @state.subjectLoading}>
-      {if @state.renderIntervention
-        <Intervention
-            user={@props.user}
-            experimentName={interventionMonitor?.latestFromSugar["experiment_name"]}
-            sessionID={getSessionID()}
-            interventionID={interventionMonitor?.latestFromSugar["next_event"]}
-            interventionDetails={experimentsClient.constructInterventionFromSugarData interventionMonitor?.latestFromSugar}
-            disableInterventionFunction={@disableIntervention}
-          />}
-        <div className="coverable-task-container">
-          {persistentHooksBeforeTask.map (HookComponent, i) =>
-            key = i + Math.random()
-            <HookComponent key={key} {...taskHookProps} />}
-
-          <TaskComponent autoFocus={true} taskTypes={tasks} workflow={@props.workflow} task={task} preferences={@props.preferences} annotation={annotation} onChange={@handleAnnotationChange.bind this, classification} />
-
-          {persistentHooksAfterTask.map (HookComponent, i) =>
-            key = i + Math.random()
-            <HookComponent key={key} {...taskHookProps} />}
-
-          <hr />
-
-          {if task.unlinkedTask
-            <Shortcut task={task} workflow={@props.workflow} annotation={annotation} classification={@props.classification} />}
-
-          <nav className="task-nav">
-            {if visibleTasks.length > 1
-              <button type="button" className="back minor-button" disabled={onFirstAnnotation} onClick={@destroyCurrentAnnotation} onMouseEnter={@warningToggleOn} onFocus={@warningToggleOn} onMouseLeave={@warningToggleOff} onBlur={@warningToggleOff}>Back</button>}
-            {if not nextTaskKey and @props.workflow.configuration?.hide_classification_summaries and @props.owner? and @props.project? and !disableTalk
-              [ownerName, name] = @props.project.slug.split('/')
-              <Link onClick={@completeClassification} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button" style={if waitingForAnswer then disabledStyle}>Done &amp; Talk</Link>}
-            {if nextTaskKey and !annotation.shortcut
-              <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@addAnnotationForTask.bind this, classification, nextTaskKey}>Next</button>
-            else
-              <button type="button" className="continue major-button" disabled={waitingForAnswer} onClick={@completeClassification}>
-                {if @props.demoMode
-                  <i className="fa fa-trash fa-fw"></i>
-                else if @props.classification.gold_standard
-                  <i className="fa fa-star fa-fw"></i>}
-                {' '}Done
-              </button>}
-            {@renderExpertOptions()}
-          </nav>
-          { @renderBackButtonWarning() if @state.backButtonWarning }
-
-          <p>
-            <small>
-              <strong>
-                <RestartButton
-                  className="minor-button"
-                  preferences={@props.preferences}
-                  shouldRender={(@props.tutorial) && (@props.tutorial.steps.length > 0)}
-                  start={Tutorial.start.bind(Tutorial, @props.tutorial, @props.user, @props.preferences, @context.geordi)}
-                  style={marginTop: '2em'}
-                  user={@props.user}
-                  workflow={@props.workflow}
-                >
-                  Show the project tutorial
-                </RestartButton>
-              </strong>
-            </small>
-          </p>
-
-          <p>
-            <small>
-              <strong>
-                <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
-                  <RestartButton
-                    className="minor-button"
-                    preferences={@props.preferences}
-                    shouldRender={(@props.minicourse) && (@props.user) && (@props.minicourse.steps.length > 0)}
-                    start={MiniCourse.restart.bind(MiniCourse, @props.minicourse, @props.preferences, @props.user, @context.geordi)}
-                    style={marginTop: '2em'}
-                    user={@props.user}
-                    workflow={@props.workflow}
-                  >
-                    Restart the project mini-course
-                  </RestartButton>
-                </VisibilitySplit>
-              </strong>
-            </small>
-          </p>
-
-          {if @props.demoMode
-            <p style={textAlign: 'center'}>
-              <i className="fa fa-trash"></i>{' '}
-              <small>
-                <strong>Demo mode:</strong>
-                <br />
-                No classifications are being recorded.{' '}
-                <button type="button" className="secret-button" onClick={@props.onChangeDemoMode.bind null, false}>
-                  <u>Disable</u>
-                </button>
-              </small>
-            </p>
-          else if @props.classification.gold_standard
-            <p style={textAlign: 'center'}>
-              <i className="fa fa-star"></i>{' '}
-              <small>
-                <strong>Gold standard mode:</strong>
-                <br />
-                Please ensure this classification is completely accurate.{' '}
-                <button type="button" className="secret-button" onClick={@props.classification.update.bind @props.classification, gold_standard: undefined}>
-                  <u>Disable</u>
-                </button>
-              </small>
-            </p>}
-        </div>
-    </div>
+    
 
   renderSummary: (classification) ->
     disableTalk = @props.classification.metadata.subject_flagged?
@@ -500,56 +394,11 @@ Classifier = React.createClass
     changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
     @props.classification.update changes
 
-  handleAnnotationChange: (classification, newAnnotation) ->
-    classification.annotations[classification.annotations.length - 1] = newAnnotation
+  handleAnnotationChange: (classification, newAnnotation) ->		
+    classification.annotations[classification.annotations.length - 1] = newAnnotation		
     classification.update 'annotations'
-
-  # Next (or start):
-  addAnnotationForTask: (classification, taskKey) ->
-    taskDescription = @props.workflow.tasks[taskKey]
-    annotation = tasks[taskDescription.type].getDefaultAnnotation taskDescription, @props.workflow, tasks
-    annotation.task = taskKey
-
-    if @props.workflow.configuration.persist_annotations
-      cachedAnnotation = CacheClassification.isAnnotationCached(taskKey)
-      if cachedAnnotation?
-        annotation = cachedAnnotation
-
-    classification.annotations.push annotation
-    classification.update 'annotations'
-
-  # Back up:
-  destroyCurrentAnnotation: ->
-    lastAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-
-    @props.classification.annotations.pop()
-    @props.classification.update 'annotations'
-
-    if @props.workflow.configuration.persist_annotations
-      CacheClassification.update(lastAnnotation)
 
   completeClassification: ->
-    if @props.workflow.configuration.persist_annotations
-      CacheClassification.delete()
-
-    currentAnnotation = @props.classification.annotations[@props.classification.annotations.length - 1]
-    currentTask = @props.workflow.tasks[currentAnnotation?.task]
-    currentTask?.tools?.map (tool) =>
-      if tool.type is 'grid'
-        GridTool.mapCells @props.classification.annotations
-    @props.classification.update
-      completed: true
-      'metadata.session': getSessionID()
-      'metadata.finished_at': (new Date).toISOString()
-      'metadata.viewport':
-        width: innerWidth
-        height: innerHeight
-
-    if currentAnnotation.shortcut
-      @addAnnotationForTask @props.classification, currentTask.unlinkedTask
-      newAnnotation = classification.annotations[classification.annotations.length - 1]
-      newAnnotation['value'] = currentAnnotation.shortcut['index']
-      delete currentAnnotation['shortcut']
     if @props.workflow.configuration?.hide_classification_summaries and not @subjectIsGravitySpyGoldStandard()
       @props.onCompleteAndLoadAnotherSubject?()
     else
@@ -574,15 +423,6 @@ Classifier = React.createClass
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
-
-  warningToggleOn: ->
-    @setState backButtonWarning: true unless @props.workflow.configuration.persist_annotations
-
-  warningToggleOff: ->
-    @setState backButtonWarning: false
-
-  renderBackButtonWarning: ->
-    <p className="back-button-warning" >Going back will clear your work for the current task.</p>
 
   subjectIsGravitySpyGoldStandard: ->
     @props.workflow.configuration?.gravity_spy_gold_standard and @props.subject.metadata?['#Type'] is 'Gold'
