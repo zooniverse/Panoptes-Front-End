@@ -3,14 +3,15 @@ import apiClient from 'panoptes-client/lib/api-client';
 import { Link } from 'react-router';
 import HomePageSection from './generic-section';
 import CollectionCard from '../collections/collection-card';
+import getCollectionCovers from '../../lib/get-collection-covers';
 
 const RecentCollectionsSection = React.createClass({
   propTypes: {
-    onClose: React.PropTypes.func,
+    onClose: React.PropTypes.func
   },
 
   contextTypes: {
-    user: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object.isRequired
   },
 
   getInitialState() {
@@ -18,7 +19,7 @@ const RecentCollectionsSection = React.createClass({
       loading: false,
       error: null,
       collections: [],
-      images: {},
+      images: {}
     };
   },
 
@@ -33,7 +34,7 @@ const RecentCollectionsSection = React.createClass({
   },
 
   shared(collection) {
-    return this.context.user.id !== collection.links.owner.id
+    return this.context.user.id !== collection.links.owner.id;
   },
 
   fetchCollections(user) {
@@ -41,47 +42,29 @@ const RecentCollectionsSection = React.createClass({
       loading: true,
       error: null,
       images: {},
-      collections: [],
+      collections: []
     });
 
     apiClient.type('collections').get({
       page_size: 8,
       sort: '-updated_at',
       favorite: false,
-      current_user_roles: "owner,contributor,collaborator",
+      current_user_roles: "owner,contributor,collaborator"
     })
     .then((collections) => {
       this.setState({ collections });
-
-      return Promise.all(collections.map((collection) => {
-        return apiClient.type('subjects').get({
-          collection_id: collection.id,
-          page_size: 1,
-        })
-        .then(([subject]) => {
-          let imageSrc;
-          if (subject !== undefined) {
-            const firstLocationKey = Object.keys(subject.locations[0])[0];
-            imageSrc = subject.locations[0][firstLocationKey];
-          } else {
-            imageSrc = '/simple-avatar.png';
-          }
-          const imageState = Object.assign({}, this.state.images);
-          imageState[collection.id] = imageSrc;
-          this.setState({
-            images: imageState,
-          });
-        });
-      }));
+      getCollectionCovers(collections).then((images) => {
+        this.setState({ images });
+      });
     })
     .catch((error) => {
       this.setState({
-        error: error,
+        error: error
       });
     })
     .then(() => {
       this.setState({
-        loading: false,
+        loading: false
       });
     });
   },
@@ -107,12 +90,12 @@ const RecentCollectionsSection = React.createClass({
         <div className="collections-card-list">
           {this.state.collections.map((collection) => {
             const subjectCount = collection.links.subjects ? collection.links.subjects.length : 0;
-            return <CollectionCard key={collection.id} shared={this.shared(collection)} subjectCount={subjectCount} collection={collection} imagePromise={this.state.images[collection.id]} linkTo={`/collections/${collection.slug}`} translationObjectName="collectionsPage" />;
+            return <CollectionCard key={collection.id} shared={this.shared(collection)} subjectCount={subjectCount} collection={collection} coverSrc={this.state.images[collection.id]} linkTo={`/collections/${collection.slug}`} translationObjectName="collectionsPage" />;
           })}
         </div>
       </HomePageSection>
     );
-  },
+  }
 });
 
 export default RecentCollectionsSection;
