@@ -53,6 +53,7 @@ module.exports = React.createClass
 
   getInitialState: ->
     answers: {}
+    focusedAnswer: ''
 
   checkFilledIn: ->
     # if there are no questions, don't make them fill one in
@@ -122,9 +123,10 @@ module.exports = React.createClass
                   answerID in (@state.answers[questionID] ? [])
                 else
                   answerID is @state.answers[questionID]
+                isFocused = @state.focusedAnswer is "#{questionID}/#{answerID}"
                 <span key={answerID}>
-                  <label className="survey-task-choice-answer" data-checked={isChecked || null}>
-                    <input ref={questionID} name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
+                  <label className="survey-task-choice-answer" data-checked={isChecked || null} data-focused={isFocused || null}>
+                    <input ref={questionID} name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} onFocus={@handleFocus.bind this, questionID, answerID} onBlur={@handleFocus.bind this, null, null} />
                     {answer.label}
                   </label>
                   {' '}
@@ -157,6 +159,12 @@ module.exports = React.createClass
       else
         @state.answers[questionID] = answerID
     @setState answers: @state.answers
+
+  handleFocus: (questionID, answerID, e) ->
+    if questionID and answerID
+      @setState focusedAnswer: "#{questionID}/#{answerID}"
+    else
+      @setState focusedAnswer: ''
 
   handleIdentification: ->
     @props.onConfirm @props.choiceID, @state.answers
