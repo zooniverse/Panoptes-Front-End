@@ -271,6 +271,7 @@ Classifier = React.createClass
         else if not @props.workflow.configuration?.hide_classification_summaries # Classification is complete; show summary if enabled
           @renderSummary currentClassification}
       </div>
+      <PotentialFieldGuide guide={@props.guide} guideIcons={@props.guideIcons} />
     </div>
 
   renderSummary: (classification) ->
@@ -462,9 +463,14 @@ module.exports = React.createClass
   getInitialState: ->
     subject: null
     expertClassifier: null
+    guide: null
+    guideIcons: null
     userRoles: []
     tutorial: null
     minicourse: null
+
+  componentWillMount: ->
+    @loadFieldGuide(@props.project.id)
 
   componentDidMount: ->
     @checkExpertClassifier()
@@ -495,6 +501,16 @@ module.exports = React.createClass
 
     unless nextProps.classification is @props.classification
       @loadClassification nextProps.classification
+
+  loadFieldGuide: (projectId) ->
+    apiClient.type('field_guides').get(project_id: projectId).then ([guide]) =>
+      @setState {guide}
+      guide?.get('attached_images', page_size: 100)?.then (images) =>
+        guideIcons = {}
+        for image in images
+          guideIcons[image.id] = image
+        @setState {guideIcons}
+
 
   loadClassification: (classification) ->
 # TODO: These underscored references are temporary stopgaps.
@@ -552,6 +568,8 @@ module.exports = React.createClass
           userRoles={@state.userRoles}
           tutorial={@state.tutorial}
           minicourse={@state.minicourse}
+          guide={@state.guide}
+          guideIcons={@state.guideIcons}
           onComplete={@onComplete}
           onCompleteAndLoadAnotherSubject={@onCompleteAndLoadAnotherSubject}
         />
