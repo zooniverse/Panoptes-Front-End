@@ -1,7 +1,7 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-{Link} = require 'react-router'
 apiClient = require 'panoptes-client/lib/api-client'
+FlexibleLink = require('../../components/flexible-link').default
 ZooniverseLogo = require '../../partials/zooniverse-logo'
 FEATURED_PROJECTS = require '../../lib/featured-projects'
 loadImage = require '../../lib/load-image'
@@ -80,7 +80,7 @@ module.exports = React.createClass
             <i className="controls angles fa fa-angle-left" onClick={=> @switchTo(projectIndex - 1)} />
             <i className="controls angles fa fa-angle-right" onClick={=> @switchTo(projectIndex + 1)} />
 
-            <Link to={if project.redirect then project.redirect else "/projects/#{project.slug}"} className="standard-button">Join Our Team</Link>
+            <FlexibleLink to={if project.redirect then project.redirect else "/projects/#{project.slug}"} className="standard-button">Join Our Team</FlexibleLink>
 
             <div className="controls circles">
               {for _, controlIndex in @state.projects
