@@ -17,9 +17,9 @@ const projectHasMinimumActiveSubjects = (workflows) => {
   const activeWorkflows = workflows.filter((workflow) => {
     return workflow.active;
   });
-  const uniqueSetIDs = uniq(activeWorkflows.map((workflow) => {
-    return workflow.links.subject_sets;
-  }));
+  const uniqueSetIDs = activeWorkflows.reduce((sets, workflow) => {
+    return uniq(sets.concat(workflow.links.subject_sets));
+  }, []);
   // Second parameter is an empty object to prevent request caching.
   return apiClient.type('subject_sets', {})
     .get(uniqueSetIDs)
@@ -64,7 +64,7 @@ const renderValidationErrors = (errors) => {
     return (
       <div>
         <p className="form-help">The following errors need to be fixed:</p>
-        <ul className="form-help error-messages">
+        <ul className="form-help error error-messages">
           {errors.map((error) => {
             return <li key={error}>{error}</li>;
           })}
@@ -245,6 +245,8 @@ class ApplyForBetaForm extends React.Component {
         </ul>
         <p className="form-help">These will be checked when you click &quot;Apply for review&quot;.</p>
 
+        {renderValidationErrors(this.state.validationErrors)}
+
         <button
           type="button"
           className="standard-button"
@@ -253,8 +255,6 @@ class ApplyForBetaForm extends React.Component {
         >
           Apply for review
         </button>
-
-        {renderValidationErrors(this.state.validationErrors)}
 
       </div>
     );
