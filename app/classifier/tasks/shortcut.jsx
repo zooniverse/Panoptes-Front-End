@@ -6,12 +6,14 @@ class Summary extends React.Component {
     let answer;
 
     if (this.props.annotation.value != null) {
-      answer = (
-        <div className="answer">
-          <i className="fa fa-check-circle-o fa-fw" />
-          <Markdown tag="span" inline={true}>{this.props.task.answers[this.props.annotation.value].label}</Markdown>
-        </div>
-      );
+      answer = this.props.annotation.value.map((index) => {
+        return (
+          <div key={index} className="answer">
+            <i className="fa fa-check-circle-o fa-fw" />
+            <Markdown tag="span" inline={true}>{this.props.task.answers[index].label}</Markdown>
+          </div>
+        );
+      });
     } else {
       answer = <div className="answer">No answer</div>;
     }
@@ -31,7 +33,7 @@ class Summary extends React.Component {
 
 Summary.propTypes = {
   annotation: React.PropTypes.shape(
-    { value: React.PropTypes.number }
+    { value: React.PropTypes.array }
   ).isRequired,
   task: React.PropTypes.shape(
     {
@@ -50,12 +52,6 @@ Summary.defaultProps = {
 };
 
 export default class Shortcut extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      index: null
-    };
-  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.annotation.task !== this.props.annotation.task) {
@@ -63,19 +59,29 @@ export default class Shortcut extends React.Component {
     }
   }
 
-  toggleShortcut(i, shortcut, e) {
+  toggleShortcut(index, e) {
+    const value = this.props.annotation.shortcut ? this.props.annotation.shortcut.value : [];
+    let newAnnotation;
     if (e.target.checked) {
-      this.props.annotation.shortcut = { index: i };
-      this.setState({ index: i });
+      if (!value.includes(index)) {
+        value.push(index);
+      }
+    } else if (value.includes(index)) {
+      const indexInValue = value.indexOf(index);
+      value.splice(indexInValue, 1);
+    }
+    if (value.length) {
+      newAnnotation = Object.assign({}, this.props.annotation, { shortcut: { value }});
     } else {
       delete (this.props.annotation.shortcut);
-      this.setState({ index: null });
-      this.props.classification.update('annotations');
+      newAnnotation = Object.assign({}, this.props.annotation);
     }
+    this.props.onChange(newAnnotation);
   }
 
   render() {
-    const options = this.props.workflow.tasks[this.props.task.unlinkedTask].answers;
+    const options = this.props.workflow.tasks[this.props.task.unlinkedTask] ? this.props.workflow.tasks[this.props.task.unlinkedTask].answers : [];
+    const active = this.props.annotation.shortcut ? this.props.annotation.shortcut.value : [];
 
     return (
       <div className="unlinked-shortcut">
@@ -84,10 +90,10 @@ export default class Shortcut extends React.Component {
           if (answer._key === undefined) { answer._key = Math.random(); }
           return (
             <p key={answer._key}>
-              <label htmlFor={`shortcut-${i}`} className={`answer minor-button answer-button ${i === this.state.index ? 'active' : ''}`}>
+              <label htmlFor={`shortcut-${i}`} className={`answer minor-button answer-button ${active.includes(i) ? 'active' : ''}`}>
                 <small>
                   <strong>
-                    <input id={`shortcut-${i}`} type="checkbox" checked={i === this.state.index} onChange={this.toggleShortcut.bind(this, i, answer)} />
+                    <input id={`shortcut-${i}`} type="checkbox" checked={active.includes(i)} onChange={this.toggleShortcut.bind(this, i)} />
                     {' '}{answer.label}
                   </strong>
                 </small>
@@ -113,9 +119,10 @@ Shortcut.getDefaultTask = (question) => {
 };
 
 Shortcut.getDefaultAnnotation = () => {
+  console.log('SHORTCUT ANNOTATION');
   return {
     _key: Math.random(),
-    value: null
+    value: []
   };
 };
 
@@ -126,12 +133,7 @@ Shortcut.propTypes = {
       task: React.PropTypes.string
     }
   ),
-  classification: React.PropTypes.shape(
-    {
-      annotations: React.PropTypes.array,
-      update: React.PropTypes.func
-    }
-  ),
+  onChange: React.PropTypes.func,
   task: React.PropTypes.shape(
     { unlinkedTask: React.PropTypes.string }
   ),
