@@ -3,7 +3,7 @@ DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 {svgPathProperties} = require 'svg-path-properties'
-{createPathFromCoords} = require './freehand-helpers'
+{createPathFromCoords, filterDupeCoords} = require './freehand-helpers'
 
 BUFFER = 16
 DELETE_BUTTON_WIDTH = 8
@@ -26,6 +26,7 @@ module.exports = React.createClass
 
     initRelease: (coords, mark) ->
       mark.points.push mark.points[0]
+      mark.points = filterDupeCoords mark.points
       _inProgress: false
 
     initValid: (mark) ->
@@ -49,17 +50,17 @@ module.exports = React.createClass
     fill = if _inProgress then 'none' else @props.color
 
     <DrawingToolRoot tool={this}>
-      <path d={path} 
-        fill={fill} 
-        fillOpacity="0.2" 
+      <path d={path}
+        fill={fill}
+        fillOpacity="0.2"
         className="clickable" />
 
       {if !_inProgress and @props.selected
         deletePosition = @getDeletePosition points
         <g>
-          <DeleteButton tool={this} 
-            x={deletePosition.x} 
-            y={deletePosition.y} 
+          <DeleteButton tool={this}
+            x={deletePosition.x}
+            y={deletePosition.y}
             getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
         </g>}
     </DrawingToolRoot>

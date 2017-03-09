@@ -3,14 +3,14 @@ DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
 {svgPathProperties} = require 'svg-path-properties'
-{createPathFromCoords} = require './freehand-helpers'
+{createPathFromCoords, filterDupeCoords} = require './freehand-helpers'
 
 BUFFER = 16
 DELETE_BUTTON_WIDTH = 8
 GRAB_STROKE_WIDTH = 6
 MINIMUM_LENGTH = 20
 SELECTED_STROKE_WIDTH = 6
-STROKE_WIDTH = 
+STROKE_WIDTH =
 
 module.exports = React.createClass
   displayName: 'FreehandLineTool'
@@ -27,7 +27,8 @@ module.exports = React.createClass
     initMove: ({x, y}, mark) ->
       mark.points.push {x, y}
 
-    initRelease: ->
+    initRelease: (coords, mark) ->
+      points: filterDupeCoords mark.points
       _inProgress: false
 
     initValid: (mark) ->
@@ -66,9 +67,9 @@ module.exports = React.createClass
       {if @props.selected
         deletePosition = @getDeletePosition points
         <g>
-          <DeleteButton tool={this} 
-            x={deletePosition.x} 
-            y={deletePosition.y} 
+          <DeleteButton tool={this}
+            x={deletePosition.x}
+            y={deletePosition.y}
             getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
         </g>}
     </DrawingToolRoot>

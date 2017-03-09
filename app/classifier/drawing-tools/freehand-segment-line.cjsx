@@ -2,7 +2,7 @@ React = require 'react'
 DrawingToolRoot = require './root'
 deleteIfOutOfBounds = require './delete-if-out-of-bounds'
 DeleteButton = require './delete-button'
-{createPathFromCoords} = require './freehand-helpers'
+{createPathFromCoords, filterDupeCoords} = require './freehand-helpers'
 
 BUFFER = 16
 DELETE_BUTTON_WIDTH = 8
@@ -30,17 +30,19 @@ module.exports = React.createClass
     initMove: ({x, y}, mark) ->
       mark.points.push {x, y}
 
-    initRelease: ->
+    initRelease: (coords, mark) ->
       _currentlyDrawing: false
+      points: filterDupeCoords mark.points
 
     isComplete: (mark) ->
       !mark._inProgress
 
     forceComplete: (mark) ->
+      mark.points = filterDupeCoords mark.points
       mark._inProgress = false
       mark._currentlyDrawing = false
       mark.auto_closed = true
-    
+
   componentDidMount: ->
     document.addEventListener 'mousemove', @handleMouseMove
 
@@ -83,7 +85,7 @@ module.exports = React.createClass
       true
 
     @setState
-      mouseX: newCoord.x 
+      mouseX: newCoord.x
       mouseY: newCoord.y
       mouseWithinViewer: mouseWithinViewer
 
@@ -95,10 +97,10 @@ module.exports = React.createClass
     path = createPathFromCoords points
 
     <DrawingToolRoot tool={this}>
-      <path d={path} 
-        fill="none" 
+      <path d={path}
+        fill="none"
         strokeWidth={GRAB_STROKE_WIDTH / ((@props.scale.horizontal + @props.scale.vertical) / 2)}
-        stroke="transparent" 
+        stroke="transparent"
         className="clickable" />
       <path d={path} fill="none" className="clickable" />
 
@@ -107,17 +109,17 @@ module.exports = React.createClass
         [..., lastPoint] = points
 
         <g>
-          <DeleteButton tool={this} 
-            x={deletePosition.x} 
-            y={deletePosition.y} 
+          <DeleteButton tool={this}
+            x={deletePosition.x}
+            y={deletePosition.y}
             getScreenCurrentTransformationMatrix={@props.getScreenCurrentTransformationMatrix} />
         </g>}
 
       {if @props.selected and _inProgress and points.length and @state.mouseWithinViewer
-        <line className="guideline" 
-          x1={lastPoint.x} 
-          y1={lastPoint.y} 
-          x2={@state.mouseX} 
+        <line className="guideline"
+          x1={lastPoint.x}
+          y1={lastPoint.y}
+          x2={@state.mouseX}
           y2={@state.mouseY} />}
 
       {if @props.selected and _inProgress and not _currentlyDrawing
@@ -125,14 +127,14 @@ module.exports = React.createClass
         <g>
           {if @state.lastPointHover
             <circle r={FINISHER_RADIUS / averageScale} cx={lastPoint.x} cy={lastPoint.y} />}
-            
-          <circle className="clickable" 
-            r={POINT_RADIUS / averageScale} 
-            cx={lastPoint.x} 
-            cy={lastPoint.y} 
-            onClick={@handleFinishClick} 
-            onMouseEnter={@handleFinishHover} 
-            onMouseLeave={@handleFinishHover} 
+
+          <circle className="clickable"
+            r={POINT_RADIUS / averageScale}
+            cx={lastPoint.x}
+            cy={lastPoint.y}
+            onClick={@handleFinishClick}
+            onMouseEnter={@handleFinishHover}
+            onMouseLeave={@handleFinishHover}
             fill="currentColor" />
         </g>}
       }
