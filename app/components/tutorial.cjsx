@@ -42,7 +42,7 @@ module.exports = React.createClass
       TutorialComponent = this
 
       if tutorial.steps.length isnt 0
-        if tutorial.links.attached_images.ids?.length
+        if tutorial.links.attached_images.ids? and tutorial.links.attached_images.ids.length isnt 0
           awaitTutorialMedia = apiClient.type('media').get(tutorial.links.attached_images?.ids)
             .catch ->
               # Checking for attached images throws if there are none.

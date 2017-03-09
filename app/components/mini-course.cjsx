@@ -26,7 +26,7 @@ module.exports = React.createClass
     start: (minicourse, projectPreferences, user, geordi) ->
       MiniCourseComponent = this
       if minicourse.steps.length isnt 0
-        if minicourse.links.attached_images.ids?.length
+        if minicourse.links.attached_images.ids? and minicourse.links.attached_images.ids.length isnt 0
           awaitMiniCourseMedia = apiClient.type('media').get(minicourse.links.attached_images.ids)
               .catch ->
                 # Checking for attached images throws if there are none.
