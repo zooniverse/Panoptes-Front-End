@@ -243,12 +243,12 @@ describe('ApplyForBeta component:', function() {
         checkbox.simulate('change', { target: { checked: true }});
       });
       wrapper.find('button.standard-button').first().simulate('click');
-      setTimeout(() => {
+      setTimeout(function() {
         const errorMessages = wrapper.find('ul.form-help').at(1).text();
         const containsError = regex.test(errorMessages);
         assert.ok(containsError === result, condition);
         done();
-      }, 0)
+      }, 50);
     };
 
     describe('content page checks:', function () {
