@@ -74,7 +74,7 @@ class TaskNav extends React.Component {
     if (currentAnnotation.shortcut) {
       this.addAnnotationForTask(currentTask.unlinkedTask);
       const newAnnotation = classification.annotations[classification.annotations.length - 1];
-      newAnnotation.value = currentAnnotation.shortcut.index;
+      newAnnotation.value = currentAnnotation.shortcut.value;
       delete currentAnnotation.shortcut;
     }
     this.props.completeClassification();

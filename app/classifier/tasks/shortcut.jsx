@@ -136,8 +136,15 @@ Shortcut.propTypes = {
 };
 
 Shortcut.defaultProps = {
-  annotation: { value: null },
-  classification: { },
-  task: { },
-  workflow: { }
+  annotation: {
+    task: null,
+    value: null
+  },
+  onChange: () => {},
+  task: {
+    unlinkedTask: null
+  },
+  workflow: {
+    tasks: {}
+  }
 };

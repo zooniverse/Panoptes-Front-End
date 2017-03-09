@@ -14,10 +14,6 @@ const workflow = {
   }
 };
 
-const classification = {
-  update: () => {}
-};
-
 const task = {
   answers: [
     { label: 'Yes' },
@@ -27,12 +23,14 @@ const task = {
   unlinkedTask: 'T1'
 };
 
+const annotation = {
+  task: 'T0',
+  shortcut: { value: [1] },
+  value: null
+};
+
 describe('Shortcut', function() {
   let wrapper;
-  const annotation = {
-    task: 'T0',
-    value: 'something'
-  };
 
   it('should render with default props', function() {
     wrapper = shallow(<Shortcut />);
@@ -46,22 +44,20 @@ describe('Shortcut', function() {
 
 describe('Shortcut functionality', function () {
   let wrapper;
-  const annotation = {
-    task: 'T0',
-    value: null
-  };
 
-  beforeEach(function () {
-    wrapper = mount(<Shortcut annotation={annotation} classification={classification} task={task} workflow={workflow} />);
+  before(function () {
+    wrapper = mount(<Shortcut task={task} annotation={annotation} workflow={workflow} />);
     wrapper.find('input').first().simulate('change', { target: { checked: true }});
+    wrapper.update();
   });
 
-  it('should turn the button active when clicked', function () {
+  it('should show an active button with a shortcut', function () {
     assert.equal(wrapper.find('label').first().hasClass('active'), true);
   });
 
   it('should remove shortcut when deselected', function () {
     wrapper.find('input').first().simulate('change', { target: { checked: false }});
+    wrapper.update();
     assert.equal(wrapper.find('label').first().hasClass('active'), false);
   });
 
@@ -70,6 +66,7 @@ describe('Shortcut functionality', function () {
   });
 
   it('should add a shortcut to the current annotation', function () {
-    assert.equal(wrapper.props().annotation.shortcut.index, 0);
+    wrapper.find('input').first().simulate('change', { target: { checked: true }});
+    assert.equal(wrapper.props().annotation.shortcut.value.length, 2)
   });
 });
