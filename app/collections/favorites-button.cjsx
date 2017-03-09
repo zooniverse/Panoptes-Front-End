@@ -39,28 +39,18 @@ module.exports = React.createClass
       .get({project_ids: @props.project?.id, favorite: true, owner: @props.user.login})
       .then ([favorites]) -> if favorites? then favorites else null
 
-  findSubjectInCollection: (favorites) ->
-    if favorites?
-      favorites.get('subjects', id: @props.subject.id)
-        .then ([subject]) -> subject?
-    else
-      Promise.resolve false
-
   componentWillMount: ->
-    # see if the subject is in the project's favorites collection
-    # to see if it's favorites
+    favorited = @props.subject.favorite
+    @setState {favorited}
     @findFavoriteCollection()
       .then (favorites) =>
         @setState {favorites}
-        @findSubjectInCollection(favorites)
-      .then (favorited) =>
-        @setState {favorited}
+
 
   componentDidUpdate: (prevProps) ->
     if prevProps.subject isnt @props.subject
-      @findSubjectInCollection(@state.favorites)
-      .then (favorited) =>
-        @setState {favorited}
+      favorited = @props.subject.favorite
+      @setState {favorited}
 
   addSubjectTo: (collection) ->
     @setState favorited: true
