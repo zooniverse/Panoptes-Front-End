@@ -10,12 +10,12 @@ export default class CollectionCard extends React.Component {
   }
 
   componentDidMount() {
-    this.refreshImage(this.props.imagePromise);
+    this.refreshImage(this.props.coverSrc);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.imagePromise !== this.props.imagePromise) {
-      this.refreshImage(nextProps.imagePromise);
+    if (nextProps.coverSrc !== this.props.coverSrc) {
+      this.refreshImage(nextProps.coverSrc);
     }
   }
 
@@ -23,20 +23,12 @@ export default class CollectionCard extends React.Component {
     apiClient.type(this.props.collection.links.owner.type).get(this.props.collection.links.owner.id);
   }
 
-  refreshImage(promise) {
-    Promise.resolve(promise)
-      .then((src) => {
-        if (src) {
-          this.collectionCard.style.backgroundImage = `url('${src}')`;
-          this.collectionCard.style.backgroundPosition = 'initial';
-          this.collectionCard.style.backgroundRepeat = "no-repeat";
-          this.collectionCard.style.backgroundSize = "cover";
-        } else {
-          this.collectionCard.style.backgroundImage = "url('/assets/simple-pattern.png')";
-        }
-      }).catch(() => {
-        return null; // We don't care if there is an error. Default pattern in styles will show.
-      });
+  refreshImage(src) {
+    const source = src.includes('.mp4') ? '/assets/simple-pattern.png' : src;
+    this.collectionCard.style.backgroundImage = `url('${source}')`;
+    this.collectionCard.style.backgroundPosition = 'initial';
+    this.collectionCard.style.backgroundRepeat = 'no-repeat';
+    this.collectionCard.style.backgroundSize = 'cover';
   }
 
   render() {
@@ -52,7 +44,7 @@ export default class CollectionCard extends React.Component {
       to: linkTo,
       geordiHandler: 'profile-menu',
       logText: dataText,
-      params: { owner, name },
+      params: { owner, name }
     };
 
     return (
@@ -65,11 +57,11 @@ export default class CollectionCard extends React.Component {
               <span>{this.props.collection.display_name}</span>
               {this.props.collection.private ? <i className="fa fa-lock" /> : null}
             </div>
-              <div className="owner">
-                {this.props.shared ?
-                  <span><i className="fa fa-users"></i>{" "}</span> : null}
-                {this.props.collection.links.owner.display_name}
-              </div>
+            <div className="owner">
+              {this.props.shared ?
+                <span><i className="fa fa-users" />{' '}</span> : null}
+              {this.props.collection.links.owner.display_name}
+            </div>
           </div>
         </div>
       </FlexibleLink>
@@ -80,21 +72,22 @@ export default class CollectionCard extends React.Component {
 CollectionCard.propTypes = {
   collection: React.PropTypes.shape({
     display_name: React.PropTypes.string,
+    id: React.PropTypes.string,
     links: React.PropTypes.object,
     private: React.PropTypes.bool,
-    slug: React.PropTypes.string,
+    slug: React.PropTypes.string
   }).isRequired,
-  imagePromise: React.PropTypes.any,
+  coverSrc: React.PropTypes.string,
   linkTo: React.PropTypes.string.isRequired,
   subjectCount: React.PropTypes.number,
   shared: React.PropTypes.bool,
-  translationObjectName: React.PropTypes.string.isRequired,
+  translationObjectName: React.PropTypes.string.isRequired
 };
 
 CollectionCard.defaultProps = {
   collection: {},
-  imagePromise: null,
+  coverSrc: '/assets/simple-pattern.png',
   linkTo: '',
   subjectCount: 0,
-  translationObjectName: '',
+  translationObjectName: ''
 };

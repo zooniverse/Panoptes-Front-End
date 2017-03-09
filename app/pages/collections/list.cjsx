@@ -5,6 +5,7 @@ Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 CollectionsNav = require './nav'
 classNames = require 'classnames'
+`import getCollectionCovers from '../../lib/get-collection-covers';`
 
 List = React.createClass
   displayName: 'List'
@@ -23,6 +24,7 @@ List = React.createClass
 
   getInitialState: ->
     collections: null # has to be null initially, rather than [], in order to display the loading message
+    collectionCovers: {}
 
   componentDidMount: ->
     document.documentElement.classList.add 'on-secondary-page'
@@ -31,15 +33,9 @@ List = React.createClass
   componentWillUnmount: ->
     document.documentElement.classList.remove 'on-secondary-page'
 
-  componentWillReceiveProps: (newProps) ->
-    @listCollections newProps
-
-  imagePromise: (collection) ->
-    apiClient.type('subjects').get(collection_id: collection.id, page_size: 1)
-      .then ([subject]) ->
-        if subject?
-          firstKey = Object.keys(subject.locations[0])[0]
-          subject.locations[0][firstKey]
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.location.query.page isnt @props.location.query.page
+      @listCollections nextProps
 
   cardLink: (collection) ->
     baseLink = "/"
@@ -70,6 +66,8 @@ List = React.createClass
       .get query
       .then (collections) =>
         @setState {collections}
+        getCollectionCovers(collections).then (collectionCovers) =>
+          @setState {collectionCovers}
 
   shared: (collection) ->
     if (@props.params.collection_owner is @props.user?.login) or (@props.params.profile_name is @props.user?.login)
@@ -143,7 +141,7 @@ List = React.createClass
                  <CollectionCard
                    key={collection.id}
                    collection={collection}
-                   imagePromise={Promise.resolve null}
+                   coverSrc={@state.collectionCovers[collection.id]}
                    linkTo={@cardLink(collection)}
                    translationObjectName={@props.translationObjectName}
                    subjectCount={collection.links.subjects?.length}
