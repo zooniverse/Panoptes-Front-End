@@ -102,7 +102,7 @@ ProjectPage = React.createClass
       else
         @getAllWorkflows(nextProps.project)
 
-    if nextProps.preferences?.preferences? and @state.selectedWorkflow?
+    if nextProps.preferences?.preferences?.selected_workflow? and @state.selectedWorkflow?
       if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow.id
         @getSelectedWorkflow(nextProps.project, nextProps.preferences)
 
@@ -404,15 +404,12 @@ ProjectPageController = React.createClass
 
   fetchProjectData: (ownerName, projectName, user) ->
     @listenToPreferences null
-    @setState
-      background: null
-      error: null
-      loading: true
-      owner: null
-      pages: null
-      preferences: null
-      projectAvatar: null
-      projectRoles: null
+    @setState({ 
+      error: null,
+      loading: true,
+      preferences: null,
+    })
+
 
     slug = ownerName + '/' + projectName
 
