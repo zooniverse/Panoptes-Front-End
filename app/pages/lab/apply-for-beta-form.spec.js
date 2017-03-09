@@ -9,7 +9,7 @@ const REQUIRED_PAGES = ['Research', 'FAQ'];
 
 const createProjectProp = (properties) => {
   return Object.assign({}, {
-    id: 1234,
+    id: "1234",
     private: false,
     live: true,
   }, properties);
@@ -65,7 +65,7 @@ describe('ApplyForBeta component:', function() {
         if (type === 'projects') {
           result = {
             get: () => resolver(mockPages),
-          };  
+          };
         } else if (type === 'subject_sets') {
           result = resolver(mockSubjectSets);
         }
@@ -97,7 +97,7 @@ describe('ApplyForBeta component:', function() {
 
         beforeEach(testSetup);
 
-        it('should exist', function() { 
+        it('should exist', function() {
           setPublicStatusWrappers();
           assertLabelAndCheckboxExist(label, checkbox);
         });
@@ -155,7 +155,7 @@ describe('ApplyForBeta component:', function() {
 
         beforeEach(testSetup);
 
-        it('should exist', function() { 
+        it('should exist', function() {
           setActiveWorkflowStatusWrappers();
           assertLabelAndCheckboxExist(label, checkbox);
         });
@@ -219,7 +219,7 @@ describe('ApplyForBeta component:', function() {
         const setFeedbackFormWrappers = function() {
           setWrappers('I have reviewed the sample project review feedback form');
         };
-        
+
         beforeEach(testSetup);
 
         it('should exist', function() {
@@ -268,7 +268,7 @@ describe('ApplyForBeta component:', function() {
             content: '',
           });
           testForErrorMessage(regex, true, `${pageTitle} page doesn't contain any content`, done);
-        });        
+        });
 
         it(`shouldn't show an error if ${pageTitle} exists and has content`, function(done) {
           mockPages.push({
@@ -276,7 +276,7 @@ describe('ApplyForBeta component:', function() {
             content: 'foobar',
           });
           testForErrorMessage(regex, false, `${pageTitle} page doesn't contain any content`, done);
-        });  
+        });
       });
     });
 
@@ -292,7 +292,7 @@ describe('ApplyForBeta component:', function() {
 
       it(`shouldn't show an error if there are ${MINIMUM_SUBJECT_COUNT} subjects`, function(done) {
         mockSubjectSets.push({
-          id: "1", 
+          id: "1",
           set_member_subjects_count: 98,
         });
         testForErrorMessage(regex, false, `Project contains ${MINIMUM_SUBJECT_COUNT} subjects`, done);
@@ -300,10 +300,10 @@ describe('ApplyForBeta component:', function() {
 
       it(`shouldn't show an error if there are more than ${MINIMUM_SUBJECT_COUNT} subjects`, function(done) {
         mockSubjectSets.push({
-          id: "1", 
+          id: "1",
           set_member_subjects_count: 98,
         }, {
-          id: "2", 
+          id: "2",
           set_member_subjects_count: 1,
         });
         testForErrorMessage(regex, false, `Project contains ${MINIMUM_SUBJECT_COUNT} subjects`, done);
@@ -335,14 +335,14 @@ describe('ApplyForBeta component:', function() {
     it('should call the applyFn prop on click if all validations pass', function(done) {
       workflows[0].active = true;
       mockPages.push({
-        title: 'Research', 
-        content: 'foobar', 
+        title: 'Research',
+        content: 'foobar',
       }, {
-        title: 'FAQ', 
-        content: 'foobar', 
+        title: 'FAQ',
+        content: 'foobar',
       });
       mockSubjectSets.push({
-        id: "1", 
+        id: "1",
         set_member_subjects_count: 2,
       });
 
@@ -351,7 +351,7 @@ describe('ApplyForBeta component:', function() {
         checkbox.simulate('change', { target: { checked: true }});
       })
       wrapper.find('button.standard-button').first().simulate('click');
-      
+
       setTimeout(function() {
         assert.ok(applyFn.calledOnce, 'applyFn has been called');
         done();
