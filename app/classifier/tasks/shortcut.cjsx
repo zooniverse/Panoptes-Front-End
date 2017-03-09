@@ -41,10 +41,14 @@ module.exports = React.createClass
       value: null
 
   getDefaultProps: ->
-    annotation: null
+    annotation: 
+      task: null
+      value: null
     classification: null
-    task: null
-    workflow: null
+    task:
+      unlinkedTask: null
+    workflow:
+      tasks:[]
 
   getInitialState: ->
     index: null
@@ -63,7 +67,8 @@ module.exports = React.createClass
     @props.classification.update 'annotations'
 
   render: ->
-    options = @props.workflow.tasks[@props.task.unlinkedTask].answers
+    options = @props.workflow.tasks[@props.task.unlinkedTask]?.answers
+    options ?= []
 
     <div>
 
