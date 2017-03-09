@@ -53,12 +53,6 @@ Summary.defaultProps = {
 
 export default class Shortcut extends React.Component {
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.annotation.task !== this.props.annotation.task) {
-      this.setState({ index: null });
-    }
-  }
-
   toggleShortcut(index, e) {
     const value = this.props.annotation.shortcut ? this.props.annotation.shortcut.value : [];
     let newAnnotation;
@@ -119,7 +113,6 @@ Shortcut.getDefaultTask = (question) => {
 };
 
 Shortcut.getDefaultAnnotation = () => {
-  console.log('SHORTCUT ANNOTATION');
   return {
     _key: Math.random(),
     value: []

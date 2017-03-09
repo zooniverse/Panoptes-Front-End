@@ -43,7 +43,12 @@ export default class ShortcutEditor extends React.Component {
 
   removeChoice(index) {
     if (this.props.task) {
-      this.props.workflow.tasks[this.props.task.unlinkedTask].answers.splice(index, 1);
+      const answers = this.props.workflow.tasks[this.props.task.unlinkedTask].answers;
+      answers.splice(index, 1);
+      if (!answers.length) {
+        delete this.props.workflow.tasks[this.props.task.unlinkedTask];
+        delete this.props.task.unlinkedTask;
+      }
     }
     this.props.workflow.update('tasks');
   }
