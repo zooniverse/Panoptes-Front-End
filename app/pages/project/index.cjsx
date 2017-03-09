@@ -92,7 +92,11 @@ ProjectPageController = React.createClass
 
   fetchProjectData: (ownerName, projectName, user) ->
     @listenToPreferences null
-    @setState({ loading: true })
+    @setState({ 
+      error: null,
+      loading: true,
+      preferences: null,
+    })
 
     slug = ownerName + '/' + projectName
 
