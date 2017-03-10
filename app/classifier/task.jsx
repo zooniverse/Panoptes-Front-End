@@ -2,7 +2,6 @@ import React from 'react';
 import tasks from './tasks';
 import Intervention from '../lib/intervention';
 import Shortcut from './tasks/shortcut';
-import TaskNav from './task-nav';
 
 class Task extends React.Component {
   constructor(props) {
@@ -89,20 +88,8 @@ class Task extends React.Component {
               classification={classification}
             />}
 
-          <TaskNav
-            annotation={annotation}
-            classification={classification}
-            completeClassification={this.props.completeClassification}
-            demoMode={this.props.demoMode}
-            project={this.props.project}
-            subject={this.props.subject}
-            task={task}
-            workflow={workflow}
-          >
-            {this.props.renderExpertOptions()}
-          </TaskNav>
-
           {this.props.children}
+
         </div>
       </div>
     );
@@ -118,16 +105,10 @@ Task.propTypes = {
   classification: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
-  completeClassification: React.PropTypes.func,
-  demoMode: React.PropTypes.bool,
   preferences: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
   project: React.PropTypes.shape({
-    id: React.PropTypes.string
-  }),
-  renderExpertOptions: React.PropTypes.func,
-  subject: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
   subjectLoading: React.PropTypes.bool,

@@ -13,13 +13,15 @@ workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
 `import FrameAnnotator from './frame-annotator';`
 `import CacheClassification from '../components/cache-classification';`
 MetadataBasedFeedback = require './metadata-based-feedback'
-`import Task from './task';`
 { VisibilitySplit } = require('seven-ten');
 `import RestartButton from './restart-button';`
 MiniCourse = require '../components/mini-course'
 Tutorial = require '../components/tutorial'
 interventionMonitor = require '../lib/intervention-monitor'
 experimentsClient = require '../lib/experiments-client'
+Task = require('./task').default
+TaskNav = require('./task-nav').default
+ExpertOptions = require('./expert-options').default
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -169,14 +171,28 @@ Classifier = React.createClass
             user={@props.user}
             project={@props.project}
             workflow={@props.workflow}
-            subject={@props.subject}
             classification={currentClassification}
             task={currentTask}
             annotation={currentAnnotation}
-            completeClassification={@completeClassification}
-            renderExpertOptions={@renderExpertOptions}
             subjectLoading={@state.subjectLoading}
           >
+            <TaskNav
+              annotation={currentAnnotation}
+              classification={currentClassification}
+              completeClassification={@completeClassification}
+              project={@props.project}
+              subject={@props.subject}
+              task={currentTask}
+              workflow={@props.workflow}
+            >
+              {if @props.expertClassifier
+                <ExpertOptions
+                  classification={currentClassification}
+                  userRoles={@props.userRoles}
+                  demoMode={@props.demoMode}
+                  onChangeDemoMode={@props.onChangeDemoMode}
+                />}
+            </TaskNav>
             <p>
               <small>
                 <strong>
@@ -216,26 +232,26 @@ Classifier = React.createClass
             </p>
 
             {if @props.demoMode
-              <p style={{textAlign: 'center'}}>
-                <i className="fa fa-trash"></i>{' '}
+              <p style={{ textAlign: 'center' }}>
+                <i className="fa fa-trash" />{' '}
                 <small>
                   <strong>Demo mode:</strong>
                   <br />
                   No classifications are being recorded.{' '}
-                  <button type="button" className="secret-button" onClick={@onChangeDemoMode}>
+                  <button type="button" className="secret-button" onClick={@changeDemoMode.bind(this, false)}>
                     <u>Disable</u>
                   </button>
                 </small>
               </p>
             }
-            {if @props.classification.gold_standard?
-              <p style={{textAlign: 'center'}}>
-                <i className="fa fa-star"></i>{' '}
+            {if currentClassification.gold_standard
+              <p style={{ textAlign: 'center' }}>
+                <i className="fa fa-star" />{' '}
                 <small>
                   <strong>Gold standard mode:</strong>
                   <br />
                   Please ensure this classification is completely accurate.{' '}
-                  <button type="button" className="secret-button" onClick={@props.classification.update.bind( @props.classification, {gold_standard: undefined})}>
+                  <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
                     <u>Disable</u>
                   </button>
                 </small>
@@ -311,41 +327,16 @@ Classifier = React.createClass
           [ownerName, name] = @props.project.slug.split('/')
           <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
         <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
-        {@renderExpertOptions()}
+        {if @props.expertClassifier
+          <ExpertOptions
+            classification={@props.classification}
+            userRoles={@props.userRoles}
+            demoMode={@props.demoMode}
+            onChangeDemoMode={@props.onChangeDemoMode}
+          />}
       </nav>
     </div>
-
-  renderExpertOptions: ->
-    return unless @props.expertClassifier
-    <TriggeredModalForm trigger={
-      <i className="fa fa-cog fa-fw"></i>
-    }>
-      {if 'owner' in @props.userRoles or 'expert' in @props.userRoles
-        <p>
-          <label>
-            <input type="checkbox" checked={@props.classification.gold_standard} onChange={@handleGoldStandardChange} />{' '}
-            Gold standard mode
-          </label>{' '}
-          <TriggeredModalForm trigger={
-            <i className="fa fa-question-circle"></i>
-          }>
-            <p>A “gold standard” classification is one that is known to be completely accurate. We’ll compare other classifications against it during aggregation.</p>
-          </TriggeredModalForm>
-        </p>}
-
-        {if isAdmin() or 'owner' in @props.userRoles or 'collaborator' in @props.userRoles
-          <p>
-            <label>
-              <input type="checkbox" checked={@props.demoMode} onChange={@handleDemoModeChange} />{' '}
-              Demo mode
-            </label>{' '}
-            <TriggeredModalForm trigger={
-              <i className="fa fa-question-circle"></i>
-            }>
-              <p>In demo mode, classifications <strong>will not be saved</strong>. Use this for quick, inaccurate demos of the classification interface.</p>
-            </TriggeredModalForm>
-          </p>}
-    </TriggeredModalForm>
+    
 
   renderGravitySpyGoldStandard: (classification) ->
     disableTalk = @props.classification.metadata.subject_flagged?
@@ -415,14 +406,11 @@ Classifier = React.createClass
       , (error) =>
         console.log error
 
-  handleGoldStandardChange: (e) ->
-    @props.classification.update gold_standard: e.target.checked || undefined # Delete the whole key.
-
-  handleDemoModeChange: (e) ->
-    @props.onChangeDemoMode e.target.checked
-
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
+  
+  changeDemoMode: (demoMode) ->
+    @props.onChangeDemoMode demoMode
 
   subjectIsGravitySpyGoldStandard: ->
     @props.workflow.configuration?.gravity_spy_gold_standard and @props.subject.metadata?['#Type'] is 'Gold'
