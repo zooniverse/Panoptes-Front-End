@@ -20,7 +20,7 @@ export default class ProjectHomeContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.showWorkflowButtons();
+    this.showWorkflowButtons(this.props, this.context);
     this.fetchResearcherAvatar(this.props);
     this.fetchTalkSubjects(this.props);
   }
@@ -35,7 +35,7 @@ export default class ProjectHomeContainer extends React.Component {
     }
   }
 
-  fetchAllWorkflows(props = this.props, query = { active: true, fields: 'active,completeness,configuration,display_name' }) {
+  fetchAllWorkflows(props, query) {
     if (this.state.activeWorkflows.length === 0) {
       getWorkflowsInOrder(props.project, query)
         .then((activeWorkflows) => {
@@ -78,12 +78,12 @@ export default class ProjectHomeContainer extends React.Component {
     }
   }
 
-  showWorkflowButtons(props = this.props, context = this.context) {
+  showWorkflowButtons(props, context) {
     const workflowAssignment = this.props.project.experimental_tools.includes('workflow assignment');
 
     if ((props.project.configuration && props.project.configuration.user_chooses_workflow && !workflowAssignment) ||
       (workflowAssignment && context.user)) {
-      this.setState({ showWorkflowButtons: true }, this.fetchAllWorkflows);
+      this.setState({ showWorkflowButtons: true }, this.fetchAllWorkflows.bind(this, this.props, { active: true, fields: 'active,completeness,configuration,display_name' }));
     } else {
       this.setState({ showWorkflowButtons: false });
     }
