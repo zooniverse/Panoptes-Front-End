@@ -2,7 +2,7 @@ import React from 'react';
 import tasks from './tasks';
 import { TextSplit } from 'seven-ten';
 
-const ClassificationSummary = (props) => {
+const DefaultClassificationSummary = (props) => {
   let firstTimeClassified;
   if (props.classificationCount === 0) {
     firstTimeClassified = (
@@ -37,13 +37,13 @@ const ClassificationSummary = (props) => {
   );
 };
 
-ClassificationSummary.defaultProps = {
+DefaultClassificationSummary.defaultProps = {
   workflow: null,
   classification: null,
   classificationCount: null
 };
 
-ClassificationSummary.propTypes = {
+DefaultClassificationSummary.propTypes = {
   workflow: React.PropTypes.object,
   classification: React.PropTypes.object,
   classificationCount: React.PropTypes.number,
@@ -51,4 +51,4 @@ ClassificationSummary.propTypes = {
   splits: React.PropTypes.object
 };
 
-export default ClassificationSummary;
+export default DefaultClassificationSummary;

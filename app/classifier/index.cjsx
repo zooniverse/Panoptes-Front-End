@@ -1,7 +1,7 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 SubjectViewer = require '../components/subject-viewer'
-`import ClassificationSummary from './classification-summary';`
+`import DefaultClassificationSummary from './default-classification-summary';`
 {Link} = require 'react-router'
 `import tasks from './tasks';`
 preloadSubject = require '../lib/preload-subject'
@@ -320,7 +320,7 @@ Classifier = React.createClass
           else
             'Your classification:'}
         </strong>
-        <ClassificationSummary
+        <DefaultClassificationSummary
           workflow={@props.workflow}
           classification={classification}
           classificationCount={@state.classificationCount}
