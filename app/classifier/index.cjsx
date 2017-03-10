@@ -257,7 +257,7 @@ Classifier = React.createClass
                   <strong>Gold standard mode:</strong>
                   <br />
                   Please ensure this classification is completely accurate.{' '}
-                  <button type="button" className="secret-button" onClick={@handleGoldStandardChange}>
+                  <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
                     <u>Disable</u>
                   </button>
                 </small>
@@ -341,7 +341,7 @@ Classifier = React.createClass
           />}
       </nav>
     </div>
-    
+
 
   renderGravitySpyGoldStandard: (classification) ->
     disableTalk = @props.classification.metadata.subject_flagged?
