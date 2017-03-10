@@ -47,7 +47,7 @@ class Task extends React.Component {
       taskTypes: tasks,
       workflow,
       classification,
-      onChange: classification.update
+      onChange: (...args) => classification.update(args)
     };
 
     return (
