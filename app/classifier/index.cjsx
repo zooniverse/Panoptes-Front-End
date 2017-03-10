@@ -1,7 +1,7 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
 SubjectViewer = require '../components/subject-viewer'
-`import DefaultClassificationSummary from './default-classification-summary';`
+`import ClassificationSummary from './classification-summary';`
 {Link} = require 'react-router'
 `import tasks from './tasks';`
 preloadSubject = require '../lib/preload-subject'
@@ -9,17 +9,15 @@ TriggeredModalForm = require 'modal-form/triggered'
 isAdmin = require '../lib/is-admin'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
-`import WorldWideTelescope from './world-wide-telescope';`
 `import FrameAnnotator from './frame-annotator';`
 `import CacheClassification from '../components/cache-classification';`
-MetadataBasedFeedback = require './metadata-based-feedback'
+`import Task from './task';`
 { VisibilitySplit } = require('seven-ten');
 `import RestartButton from './restart-button';`
 MiniCourse = require '../components/mini-course'
 Tutorial = require '../components/tutorial'
 interventionMonitor = require '../lib/intervention-monitor'
 experimentsClient = require '../lib/experiments-client'
-Task = require('./task').default
 TaskNav = require('./task-nav').default
 ExpertOptions = require('./expert-options').default
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
@@ -279,54 +277,15 @@ Classifier = React.createClass
 
     <div>
       Thanks!
-
-      {if @props.project.experimental_tools?.indexOf('metadata-based-feedback') > -1
-        <MetadataBasedFeedback
-          subject={@props.subject}
-          classification={@props.classification}
-          dudLabel='DUD'
-          simLabel='SIM'
-          subjectLabel='SUB'
-          metaTypeFieldName='#Type'
-          metaSuccessMessageFieldName='#F_Success'
-          metaFailureMessageFieldName='#F_Fail'
-          metaSimCoordXPattern='#X'
-          metaSimCoordYPattern='#Y'
-          metaSimTolPattern='#Tol'
-        />}
-
-      {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
-        <strong>
-          <WorldWideTelescope
-            annotations={@props.classification.annotations}
-            subject={@props.subject}
-            workflow={@props.workflow}
-          />
-        </strong>
-
-      else if @state.expertClassification?
-        <div className="has-expert-classification">
-          Expert classification available.{' '}
-          {if @state.showingExpertClassification
-            <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
-          else
-            <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
-        </div>}
-
-      <div>
-        <strong>
-          {if @state.showingExpertClassification
-            'Expert classification:'
-          else
-            'Your classification:'}
-        </strong>
-        <DefaultClassificationSummary
-          workflow={@props.workflow}
-          classification={classification}
-          classificationCount={@state.classificationCount}
-          splits={@props.splits}
-        />
-      </div>
+      <ClassificationSummary
+        project={@props.project}
+        workflow={@props.workflow}
+        subject={@props.subject}
+        classification={classification}
+        expertClassification={@state.expertClassification}
+        splits={@props.splits}
+        classificationCount={@state.classificationCount}
+      />
 
       <hr />
 
@@ -344,7 +303,6 @@ Classifier = React.createClass
           />}
       </nav>
     </div>
-
 
   renderGravitySpyGoldStandard: (classification) ->
     disableTalk = @props.classification.metadata.subject_flagged?
