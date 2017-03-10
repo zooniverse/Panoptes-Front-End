@@ -119,7 +119,7 @@ export default class MultipleChoiceTask extends React.Component {
         answer._key = Math.random();
       }
       let active = '';
-      if (i === this.props.annotation.value) {
+      if (this.props.annotation.value.includes(i)) {
         active = 'active';
       }
       answers.push(
