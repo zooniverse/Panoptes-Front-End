@@ -238,7 +238,7 @@ Classifier = React.createClass
                   <strong>Demo mode:</strong>
                   <br />
                   No classifications are being recorded.{' '}
-                  <button type="button" className="secret-button" onClick={@props.onChangeDemoMode.bind(this, false)}>
+                  <button type="button" className="secret-button" onClick={@changeDemoMode.bind(this, false)}>
                     <u>Disable</u>
                   </button>
                 </small>
@@ -408,6 +408,9 @@ Classifier = React.createClass
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
+  
+  changeDemoMode: (demoMode) ->
+    @props.onChangeDemoMode demoMode
 
   subjectIsGravitySpyGoldStandard: ->
     @props.workflow.configuration?.gravity_spy_gold_standard and @props.subject.metadata?['#Type'] is 'Gold'
