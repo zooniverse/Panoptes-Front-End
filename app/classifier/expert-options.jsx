@@ -18,7 +18,7 @@ function ExpertOptions(props) {
       {(props.userRoles.includes('owner') || props.userRoles.includes('expert')) &&
         <p>
           <label>
-            <input type="checkbox" checked={props.classification.gold_standard} onChange={handleGoldStandardChange} />{' '}
+            <input type="checkbox" checked={!!props.classification.gold_standard} onChange={handleGoldStandardChange} />{' '}
             Gold standard mode
           </label>{' '}
           <TriggeredModalForm
