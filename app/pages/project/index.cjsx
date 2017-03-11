@@ -54,12 +54,8 @@ ProjectPageController = React.createClass
     userChanged = nextContext.initialLoadComplete and nextProps.user isnt @props.user
 
     # Wait until we know if there's a user
-    if pathChanged or nextContext.initialLoadComplete
+    if pathChanged or userChanged or nextContext.initialLoadComplete and @state.project is null
       @fetchProjectData owner, name, nextProps.user unless @state.loading
-      @setupSplits nextProps
-
-    if userChanged and nextProps.project?
-      @getUserProjectPreferences(nextProps.project, nextProps.user)
       @setupSplits nextProps
 
   componentWillUpdate: (nextProps, nextState) ->
@@ -91,7 +87,6 @@ ProjectPageController = React.createClass
       @context.geordi?.forget ['experiment','cohort']
 
   fetchProjectData: (ownerName, projectName, user) ->
-    @listenToPreferences null
     @setState({ 
       error: null,
       loading: true,
@@ -156,6 +151,8 @@ ProjectPageController = React.createClass
       'allow workflow query' in project.experimental_tools or @checkUserRoles(project, user)
 
   getUserProjectPreferences: (project, user) ->
+    @listenToPreferences null
+
     userPreferences = if user?
       user.get 'project_preferences', project_id: project.id
         .then ([preferences]) =>
