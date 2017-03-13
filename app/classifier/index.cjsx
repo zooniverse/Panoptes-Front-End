@@ -55,6 +55,7 @@ Classifier = React.createClass
     selectedExpertAnnotation: -1
     showingExpertClassification: false
     subjectLoading: false
+    subjectDimensions: []
     annotations: []
 
   componentDidMount: ->
@@ -86,6 +87,11 @@ Classifier = React.createClass
       @setState {annotations}
     try
       @context.geordi?.forget ['subjectID']
+
+  shouldComponentUpdate: (nextProps, nextState) ->
+    if nextState.subjectDimensions isnt @state.subjectDimensions
+      return false
+    return true
 
   loadSubject: (subject) ->
     @setState
@@ -182,6 +188,7 @@ Classifier = React.createClass
               completeClassification={@completeClassification}
               project={@props.project}
               subject={@props.subject}
+              subjectDimensions={@state.subjectDimensions}
               task={currentTask}
               workflow={@props.workflow}
             >
@@ -382,8 +389,9 @@ Classifier = React.createClass
 
     {naturalWidth, naturalHeight, clientWidth, clientHeight} = e.target
     changes = {}
-    changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
-    @props.classification.update changes
+    subjectDimensions = @state.subjectDimensions.slice()
+    subjectDimensions["#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
+    @setState({ subjectDimensions })
 
   handleAnnotationChange: (classification, newAnnotation) ->		
     classification.annotations[classification.annotations.length - 1] = newAnnotation		
