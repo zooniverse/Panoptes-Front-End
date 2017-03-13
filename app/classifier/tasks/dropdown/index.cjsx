@@ -81,6 +81,10 @@ module.exports = React.createClass
       task.selects.every (select, i) ->
         not select.required or (annotation.value[i]?.value? and annotation.value[i]?.value isnt "")
 
+  getDefaultProps: ->
+    task:
+      selects: []
+
   componentWillMount: ->
     @menus = []
 

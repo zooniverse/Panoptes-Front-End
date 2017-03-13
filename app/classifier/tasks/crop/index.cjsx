@@ -38,8 +38,10 @@ module.exports = React.createClass
       annotation.value? or not task.required
 
   getDefaultProps: ->
-    task: null
-    annotation: null
+    task:
+      instruction: ''
+    annotation:
+      value: null
     onChange: Function.prototype
 
   render: ->

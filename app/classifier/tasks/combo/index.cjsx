@@ -83,7 +83,8 @@ ComboTask = React.createClass
   getDefaultProps: ->
     taskTypes: null
     workflow: null
-    task: null
+    task:
+      tasks: []
     annotation: null
     onChange: ->
 

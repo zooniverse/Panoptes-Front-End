@@ -48,8 +48,10 @@ module.exports = React.createClass
       annotation.value isnt '' or not task.required
 
   getDefaultProps: ->
-    task: null
-    annotation: null
+    task:
+      instruction: ''
+    annotation:
+      value: null
     onChange: NOOP
 
   getInitialState: ->
