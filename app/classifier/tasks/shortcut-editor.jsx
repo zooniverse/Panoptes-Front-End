@@ -45,7 +45,7 @@ export default class ShortcutEditor extends React.Component {
     if (this.props.task) {
       const answers = this.props.workflow.tasks[this.props.task.unlinkedTask].answers;
       answers.splice(index, 1);
-      if (!answers.length) {
+      if (answers.length === 0) {
         delete this.props.workflow.tasks[this.props.task.unlinkedTask];
         delete this.props.task.unlinkedTask;
       }
@@ -72,7 +72,7 @@ export default class ShortcutEditor extends React.Component {
         <label htmlFor="shortcut" title="Shortcut Options to End Classification">
           <AutoSave resource={this.props.workflow}>
             <span className="form-label">Shortcut Option</span>{' '}
-            <input type="checkbox" checked={shortcuts != null} onChange={this.toggleShortcut} />
+            <input id="shortcut" type="checkbox" checked={shortcuts !== undefined} onChange={this.toggleShortcut} />
           </AutoSave>
         </label>
 
@@ -86,7 +86,7 @@ export default class ShortcutEditor extends React.Component {
         {shortcuts && (
           <div className="workflow-task-editor-choices">
             {shortcuts.answers.map((shortcut, index) => {
-              if (shortcut._key == null) { shortcut._key = Math.random(); }
+              if (shortcut._key === undefined) { shortcut._key = Math.random(); }
               return (
                 <div key={shortcut._key} className="workflow-choice-editor">
                   <AutoSave resource={this.props.workflow}>
