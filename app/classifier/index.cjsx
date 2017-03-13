@@ -61,12 +61,18 @@ Classifier = React.createClass
     @loadSubject @props.subject
 
   componentWillReceiveProps: (nextProps) ->
+    if nextProps.user isnt @props.user
+      if @props.demoMode
+        @props.onChangeDemoMode false
+      if @props.classification.gold_standard
+        @props.classification.update gold_standard: undefined
+
     if nextProps.subject isnt @props.subject
       @loadSubject nextProps.subject
 
     if @props.subject isnt nextProps.subject or !@context.geordi?.keys["subjectID"]?
       @context.geordi?.remember subjectID: nextProps.subject?.id
-    
+
     if nextProps.classification isnt @props.classification
       @props.classification.stopListening 'change', =>
         {annotations} = @props.classification
@@ -264,7 +270,6 @@ Classifier = React.createClass
           @renderSummary currentClassification}
       </div>
     </div>
-    
 
   renderSummary: (classification) ->
     disableTalk = @props.classification.metadata.subject_flagged?
@@ -336,7 +341,7 @@ Classifier = React.createClass
           />}
       </nav>
     </div>
-    
+
 
   renderGravitySpyGoldStandard: (classification) ->
     disableTalk = @props.classification.metadata.subject_flagged?
@@ -385,8 +390,8 @@ Classifier = React.createClass
     changes["metadata.subject_dimensions.#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
     @props.classification.update changes
 
-  handleAnnotationChange: (classification, newAnnotation) ->		
-    classification.annotations[classification.annotations.length - 1] = newAnnotation		
+  handleAnnotationChange: (classification, newAnnotation) ->
+    classification.annotations[classification.annotations.length - 1] = newAnnotation
     classification.update 'annotations'
 
   completeClassification: ->
@@ -408,7 +413,7 @@ Classifier = React.createClass
 
   toggleExpertClassification: (value) ->
     @setState showingExpertClassification: value
-  
+
   changeDemoMode: (demoMode) ->
     @props.onChangeDemoMode demoMode
 
