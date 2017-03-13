@@ -14,6 +14,7 @@ counterpart.registerTranslations 'en',
     required: 'Required'
     looksGood: 'Looks good'
     userName: 'User name'
+    whyUserName: 'You’ll use this name to log in. It will be shown publicly.'
     badChars: "Only letters, numbers, '.', '_', and '-'."
     nameConflict: 'That username is taken'
     forgotPassword: 'Forget your password?'
@@ -77,6 +78,7 @@ module.exports = React.createClass
               </span>}
         </span>
         <input type="text" ref="name" className="standard-input full" disabled={@props.user?} autoFocus onChange={@handleNameChange} maxLength="255" />
+        <Translate component="span" className="form-help info" content="registerForm.whyUserName" />
       </label>
 
       <br />
