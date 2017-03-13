@@ -14,10 +14,7 @@ for (const key in tasks) {
   
     it('should update on annotation change', function() {
       wrapper = shallow(<TaskComponent />);
-      let annotation = {
-        task: 'T0',
-        value: TaskComponent.getDefaultAnnotation()
-      }
+      let annotation = TaskComponent.getDefaultAnnotation()
       wrapper.setProps({annotation});
     });
   });
