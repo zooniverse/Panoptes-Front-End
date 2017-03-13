@@ -388,7 +388,6 @@ Classifier = React.createClass
     @context.geordi?.remember subjectID: @props.subject?.id
 
     {naturalWidth, naturalHeight, clientWidth, clientHeight} = e.target
-    changes = {}
     subjectDimensions = @state.subjectDimensions.slice()
     subjectDimensions["#{frameIndex}"] = {naturalWidth, naturalHeight, clientWidth, clientHeight}
     @setState({ subjectDimensions })
