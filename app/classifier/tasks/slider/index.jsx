@@ -5,29 +5,26 @@ import SliderTaskEditor from './editor';
 
 const NOOP = Function.prototype;
 
-class Summary extends React.Component {
-  render() {
-    let answer = 'No answer';
-    if (this.props.annotation.value !== null) {
-      answer = this.props.annotation.value;
-    }
-    return (
-      <div>
-        <div className="question">
-          <Markdown tag="span" inline={true}>
-            {this.props.task.instruction}
-          </Markdown>
-        </div>
-        <div className="answer">
-          {answer}
-        </div>
-      </div>
-    );
+const SliderSummary = (props) => {
+  let answer = 'No answer';
+  if (this.props.annotation.value !== null) {
+    answer = this.props.annotation.value;
   }
+  return (
+    <div>
+      <div className="question">
+        <Markdown tag="span" inline={true}>
+          {this.props.task.instruction}
+        </Markdown>
+      </div>
+      <div className="answer">
+        {answer}
+      </div>
+    </div>
+  );
 }
-Summary.displayName = 'SliderSummary';
 
-Summary.propTypes = {
+SliderSummary.propTypes = {
   task: React.PropTypes.shape(
     {
       instruction: React.PropTypes.string
@@ -119,7 +116,7 @@ class SliderTask extends React.Component {
 }
 SliderTask.displayName = 'SliderTask';
 SliderTask.Editor = SliderTaskEditor;
-SliderTask.Summary = Summary;
+SliderTask.Summary = SliderSummary;
 SliderTask.getDefaultTask = () => {
   return {
     type: 'slider',
