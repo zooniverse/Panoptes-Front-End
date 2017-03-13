@@ -7,14 +7,14 @@ const NOOP = Function.prototype;
 
 const SliderSummary = (props) => {
   let answer = 'No answer';
-  if (this.props.annotation.value !== null) {
-    answer = this.props.annotation.value;
+  if (props.annotation.value !== null) {
+    answer = props.annotation.value;
   }
   return (
     <div>
       <div className="question">
         <Markdown tag="span" inline={true}>
-          {this.props.task.instruction}
+          {props.task.instruction}
         </Markdown>
       </div>
       <div className="answer">
