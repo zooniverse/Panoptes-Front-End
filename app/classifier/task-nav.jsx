@@ -5,7 +5,7 @@ import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
 import GridTool from './drawing-tools/grid';
 
-const BackButtonWarning = (props) =>
+const BackButtonWarning = props =>
   <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
 
 class TaskNav extends React.Component {
@@ -201,15 +201,30 @@ TaskNav.propTypes = {
     value: React.PropTypes.any.isRequired
   }),
   children: React.PropTypes.node,
-  classification: React.PropTypes.object,
+  classification: React.PropTypes.shape({
+    annotations: React.PropTypes.array,
+    gold_standard: React.PropTypes.bool,
+    id: React.PropTypes.string,
+    metadata: React.PropTypes.object
+  }),
   completeClassification: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
-  project: React.PropTypes.object,
+  project: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    slug: React.PropTypes.string
+  }),
   subject: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
-  task: React.PropTypes.object,
-  workflow: React.PropTypes.object
+  task: React.PropTypes.shape({
+    type: React.PropTypes.string
+  }),
+  workflow: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    configuration: React.PropTypes.object,
+    first_task: React.PropTypes.string,
+    tasks: React.PropTypes.object
+  })
 };
 
 export default TaskNav;
