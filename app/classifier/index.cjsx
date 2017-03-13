@@ -270,10 +270,6 @@ Classifier = React.createClass
           @renderSummary currentClassification}
       </div>
     </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> Rewrite Shortcut into ES6
 
   renderSummary: (classification) ->
     disableTalk = @props.classification.metadata.subject_flagged?
