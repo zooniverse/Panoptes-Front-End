@@ -13,6 +13,7 @@ ComboTask = React.createClass
       "#{task.tasks.length}-task combo"
 
     getDefaultAnnotation: (taskDescription, workflow, taskComponents) ->
+      taskDescription ?= tasks: []
       value: taskDescription.tasks.map (childTaskKey) ->
         childTaskDescription = workflow.tasks[childTaskKey]
         ChildTaskComponent = taskComponents[childTaskDescription.type]
