@@ -21,14 +21,13 @@ class TaskNav extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidUpdate() {
     const { workflow, classification } = this.props;
     classification.annotations = classification.annotations ? classification.annotations : [];
     if (classification.annotations.length === 0) {
       this.addAnnotationForTask(workflow.first_task);
     }
   }
-
   // Next (or first question)
   addAnnotationForTask(taskKey) {
     const { workflow, classification } = this.props;
