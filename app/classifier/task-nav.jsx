@@ -63,6 +63,7 @@ class TaskNav extends React.Component {
     });
     classification.update({
       completed: true,
+      'metadata.subject_dimensions': this.props.subjectDimensions,
       'metadata.session': getSessionID(),
       'metadata.finished_at': (new Date()).toISOString(),
       'metadata.viewport': {
@@ -209,6 +210,7 @@ TaskNav.propTypes = {
   subject: React.PropTypes.shape({
     id: React.PropTypes.string
   }),
+  subjectDimensions: React.PropTypes.array,
   task: React.PropTypes.object,
   workflow: React.PropTypes.object
 };
