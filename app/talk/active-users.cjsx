@@ -81,7 +81,7 @@ module.exports = React.createClass
 
   restartTimer: ->
     @resetTimer()
-    @updateTimeout = setTimeout @update, 10000
+    @updateTimeout = setTimeout @update, 60000
 
   userLink: (user) ->
     baseLink = "/"
