@@ -74,7 +74,8 @@ module.exports = React.createClass
       @areMarksComplete(task, annotation) and @areThereEnoughMarks(task, annotation) and annotation.value.length >= (task.required ? 0)
 
   getDefaultProps: ->
-    task: null
+    task:
+      tools: []
     annotation: null
     onChange: Function.prototype
 
