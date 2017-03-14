@@ -23,7 +23,7 @@ module.exports = React.createClass
     query =
       page_size: 20
       favorite: false
-      current_user_roles: 'owner,collaborator,contributor'
+      current_user_roles: 'owner,collaborator,contributor,viewer'
     query.search = "#{value}" unless value is ''
 
     apiClient.type('collections').get query
