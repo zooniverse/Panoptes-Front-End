@@ -423,9 +423,6 @@ Classifier = React.createClass
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
 
-  contextTypes:
-    geordi: React.PropTypes.object
-
   propTypes:
     classification: React.PropTypes.object
     onLoad: React.PropTypes.func
@@ -448,32 +445,12 @@ module.exports = React.createClass
     subject: null
     expertClassifier: null
     userRoles: []
-    tutorial: null
-    minicourse: null
 
   componentDidMount: ->
     @checkExpertClassifier()
     @loadClassification @props.classification
-    Tutorial.find @props.workflow
-    .then (tutorial) =>
-      {user, preferences} = @props
-      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
-      @setState {tutorial}
-    MiniCourse.find @props.workflow
-    .then (minicourse) =>
-      @setState {minicourse}
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.workflow isnt @props.workflow
-      Tutorial.find nextProps.workflow
-      .then (tutorial) =>
-        {user, preferences} = nextProps
-        Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
-        @setState {tutorial}
-      MiniCourse.find nextProps.workflow
-      .then (minicourse) =>
-        @setState {minicourse}
-
     if @props.user isnt nextProps.user
       @setState expertClassifier: null
       @checkExpertClassifier nextProps
@@ -512,9 +489,6 @@ module.exports = React.createClass
         workflow={@props.workflow}
         subject={@state.subject}
         expertClassifier={@state.expertClassifier}
-        userRoles={@state.userRoles}
-        tutorial={@state.tutorial}
-        minicourse={@state.minicourse}
-      />
+        userRoles={@state.userRoles} />
     else
       <span>Loading classifier...</span>
