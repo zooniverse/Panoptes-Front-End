@@ -26,10 +26,9 @@ ImageFlipper = React.createClass
       <div className="survey-task-image-flipper-pips">
         {unless @props.images.length is 1
           for index in [0...@props.images.length]
-            <span key={@props.images[index]}>
-              <button type="button" className="survey-task-image-flipper-pip" disabled={index is @state.frame} onClick={@handleFrameChange.bind this, index}>{index + 1}</button>
-              {' '}
-            </span>}
+            <label key={@props.images[index]}  className="survey-task-image-flipper-pip #{if index is @state.frame then 'active' else ''}">
+              <input type="radio" name="image-flipper" autoFocus={index is 0} checked={index is @state.frame} onChange={@handleFrameChange.bind this, index} />{index + 1}
+            </label>}
       </div>
     </span>
 
@@ -54,6 +53,7 @@ module.exports = React.createClass
 
   getInitialState: ->
     answers: {}
+    focusedAnswer: ''
 
   checkFilledIn: ->
     # if there are no questions, don't make them fill one in
@@ -97,7 +97,7 @@ module.exports = React.createClass
                   <ImageFlipper images={@props.task.images[filename] for filename in otherChoice.images} />
                   <Markdown content={choice.confusions[otherChoiceID]} />
                   <div className="survey-task-choice-confusion-buttons" style={textAlign: 'center'}>
-                    <button type="submit" className="major-button identfiy">Dismiss</button>
+                    <button type="submit" autoFocus={true and otherChoice.images.length < 2} className="major-button identfiy">Dismiss</button>
                     {' '}
                     <button type="button" className="standard-button cancel" onClick={@props.onSwitch.bind null, otherChoiceID}>I think it’s this</button>
                   </div>
@@ -123,9 +123,10 @@ module.exports = React.createClass
                   answerID in (@state.answers[questionID] ? [])
                 else
                   answerID is @state.answers[questionID]
+                isFocused = @state.focusedAnswer is "#{questionID}/#{answerID}"
                 <span key={answerID}>
-                  <label className="survey-task-choice-answer" data-checked={isChecked || null}>
-                    <input ref={questionID} name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} />
+                  <label className="survey-task-choice-answer" data-checked={isChecked || null} data-focused={isFocused || null}>
+                    <input ref={questionID} name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} onFocus={@handleFocus.bind this, questionID, answerID} onBlur={@handleFocus.bind this, null, null} />
                     {answer.label}
                   </label>
                   {' '}
@@ -158,6 +159,12 @@ module.exports = React.createClass
       else
         @state.answers[questionID] = answerID
     @setState answers: @state.answers
+
+  handleFocus: (questionID, answerID, e) ->
+    if questionID and answerID
+      @setState focusedAnswer: "#{questionID}/#{answerID}"
+    else
+      @setState focusedAnswer: ''
 
   handleIdentification: ->
     @props.onConfirm @props.choiceID, @state.answers
