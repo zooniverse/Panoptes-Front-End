@@ -198,7 +198,7 @@ class TaskNav extends React.Component {
 TaskNav.propTypes = {
   annotation: React.PropTypes.shape({
     shortcut: React.PropTypes.object,
-    value: React.PropTypes.any.isRequired
+    value: React.PropTypes.any
   }),
   children: React.PropTypes.node,
   classification: React.PropTypes.shape({
