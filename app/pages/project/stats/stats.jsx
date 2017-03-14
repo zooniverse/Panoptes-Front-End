@@ -390,7 +390,7 @@ export class ProjectStatsPage extends React.Component {
             </div>
             <div className="project-metadata-stat">
               <div>{this.props.currentClassifications.toLocaleString()}</div>
-              <div>Recent Classifications</div>
+              <div>Classifications Yesterday</div>
             </div>
           </div>
           <hr />
