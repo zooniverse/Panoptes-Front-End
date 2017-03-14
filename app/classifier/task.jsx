@@ -85,7 +85,7 @@ class Task extends React.Component {
               task={task}
               workflow={workflow}
               annotation={annotation}
-              classification={classification}
+              onChange={this.handleAnnotationChange}
             />}
 
           {this.props.children}

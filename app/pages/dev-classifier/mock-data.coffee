@@ -53,6 +53,13 @@ workflow = apiClient.type('workflows').create
         {label: 'Maybe select something', next: 'dropdown'}
         {label: 'We’re done here.', next: null}
       ]
+      unlinkedTask: 'shortcut'
+
+    shortcut:
+      type: 'shortcut'
+      answers: [
+        {label: "Nothing Here"}
+      ]
 
     combo:
       type: 'combo'
