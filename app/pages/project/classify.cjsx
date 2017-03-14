@@ -10,8 +10,6 @@ seenThisSession = require '../../lib/seen-this-session'
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 experimentsClient = require '../../lib/experiments-client'
-Tutorial = require '../../components/tutorial'
-MiniCourse = require '../../components/mini-course'
 {Split} = require('seven-ten')
 {VisibilitySplit} = require('seven-ten')
 
@@ -82,32 +80,14 @@ module.exports = React.createClass
     demoMode: sessionDemoMode
     promptWorkflowAssignmentDialog: false
     rejected: null
-    tutorial: null
 
   componentDidMount: () ->
     Split.classifierVisited();
     if @props.workflow and not @props.loadingSelectedWorkflow
       @loadAppropriateClassification(@props)
-    Tutorial.find @props.workflow
-    .then (tutorial) =>
-      {user, preferences} = @props
-      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
-      @setState {tutorial}
-    MiniCourse.find @props.workflow
-    .then (minicourse) =>
-      @setState {minicourse}
 
   componentWillUpdate: (nextProps, nextState) ->
     @context.geordi.remember workflowID: nextProps?.workflow?.id
-    if nextProps.workflow isnt @props.workflow
-      Tutorial.find nextProps.workflow
-      .then (tutorial) =>
-        {user, preferences} = nextProps
-        Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
-        @setState {tutorial}
-      MiniCourse.find nextProps.workflow
-      .then (minicourse) =>
-        @setState {minicourse}
 
   componentWillUnmount: () ->
     @context.geordi?.forget ['workflowID']
@@ -248,8 +228,6 @@ module.exports = React.createClass
           onCompleteAndLoadAnotherSubject={@saveClassificationAndLoadAnotherSubject}
           onClickNext={@loadAnotherSubject}
           splits={@props.splits}
-          tutorial={@state.tutorial}
-          minicourse={@state.minicourse}
         />
       else if @state.rejected?.classification?
         <code>Please try again. Something went wrong: {@state.rejected.classification.toString()}</code>
