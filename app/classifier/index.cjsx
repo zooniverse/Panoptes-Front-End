@@ -423,6 +423,9 @@ Classifier = React.createClass
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   propTypes:
     classification: React.PropTypes.object
     onLoad: React.PropTypes.func
