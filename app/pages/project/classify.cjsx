@@ -114,6 +114,7 @@ module.exports = React.createClass
 
   componentWillReceiveProps: (nextProps) ->
     if @props.project isnt nextProps.project
+      @handleDemoModeChange(false)
       @loadAppropriateClassification(nextProps)
     unless nextProps.loadingSelectedWorkflow
       if @props.workflow isnt nextProps.workflow
