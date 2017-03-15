@@ -22,6 +22,7 @@ experimentsClient = require '../lib/experiments-client'
 Task = require('./task').default
 TaskNav = require('./task-nav').default
 ExpertOptions = require('./expert-options').default
+`import CustomSignInPrompt from './custom-sign-in-prompt';`
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -420,8 +421,24 @@ Classifier = React.createClass
   subjectIsGravitySpyGoldStandard: ->
     @props.workflow.configuration?.gravity_spy_gold_standard and @props.subject.metadata?['#Type'] is 'Gold'
 
+###############################################################################
+# Page Wrapper Component
+###############################################################################
+auth = require 'panoptes-client/lib/auth'
+
+# Classification count tracked for mini-course prompt
+classificationsThisSession = 0
+
+auth.listen ->
+  classificationsThisSession = 0
+
+PROMPT_MINI_COURSE_EVERY = 5
+
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
+
+  contextTypes:
+    geordi: React.PropTypes.object
 
   propTypes:
     classification: React.PropTypes.object
@@ -445,12 +462,32 @@ module.exports = React.createClass
     subject: null
     expertClassifier: null
     userRoles: []
+    tutorial: null
+    minicourse: null
 
   componentDidMount: ->
     @checkExpertClassifier()
     @loadClassification @props.classification
+    Tutorial.find @props.workflow
+    .then (tutorial) =>
+      {user, preferences} = @props
+      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
+      @setState {tutorial}
+    MiniCourse.find @props.workflow
+    .then (minicourse) =>
+      @setState {minicourse}
 
   componentWillReceiveProps: (nextProps) ->
+    if nextProps.workflow isnt @props.workflow
+      Tutorial.find nextProps.workflow
+      .then (tutorial) =>
+        {user, preferences} = nextProps
+        Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
+        @setState {tutorial}
+      MiniCourse.find nextProps.workflow
+      .then (minicourse) =>
+        @setState {minicourse}
+
     if @props.user isnt nextProps.user
       @setState expertClassifier: null
       @checkExpertClassifier nextProps
@@ -465,6 +502,23 @@ module.exports = React.createClass
       # We'll only handle one subject per classification right now.
       # TODO: Support multi-subject classifications in the future.
       @setState {subject}
+
+  onCompleteAndLoadAnotherSubject: ->
+    classificationsThisSession += 1
+    @maybeLaunchMiniCourse()
+    @props.onCompleteAndLoadAnotherSubject?()
+
+  onComplete: ->
+    classificationsThisSession += 1
+    @maybeLaunchMiniCourse()
+    @props.onComplete?()
+
+  maybeLaunchMiniCourse: ->
+    shouldPrompt = classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
+    split = @props.splits?['mini-course.visible']
+    isntHidden = not split or split?.variant?.value?.auto
+    if shouldPrompt and isntHidden
+      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.user, @context.geordi
 
   checkExpertClassifier: (props = @props) ->
     if props.project and props.user and @state.expertClassifier is null
@@ -484,11 +538,22 @@ module.exports = React.createClass
         @setState {expertClassifier, userRoles}
 
   render: ->
-    if @props.workflow? and @state.subject?
-      <Classifier {...@props}
-        workflow={@props.workflow}
-        subject={@state.subject}
-        expertClassifier={@state.expertClassifier}
-        userRoles={@state.userRoles} />
-    else
-      <span>Loading classifier...</span>
+    <div>
+      {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
+        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
+          <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
+        </CustomSignInPrompt>}
+      {if @props.workflow? and @state.subject?
+        <Classifier {...@props}
+          workflow={@props.workflow}
+          subject={@state.subject}
+          expertClassifier={@state.expertClassifier}
+          userRoles={@state.userRoles}
+          tutorial={@state.tutorial}
+          minicourse={@state.minicourse}
+          onComplete={@onComplete}
+          onCompleteAndLoadAnotherSubject={@onCompleteAndLoadAnotherSubject}
+        />
+      else
+        <span>Loading classifier...</span>}
+    </div>

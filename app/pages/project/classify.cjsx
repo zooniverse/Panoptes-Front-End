@@ -7,24 +7,13 @@ counterpart = require 'counterpart'
 `import FinishedBanner from './finished-banner';`
 Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
-`import CustomSignInPrompt from './custom-sign-in-prompt';`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 experimentsClient = require '../../lib/experiments-client'
-Tutorial = require '../../components/tutorial'
-MiniCourse = require '../../components/mini-course'
 {Split} = require('seven-ten')
 {VisibilitySplit} = require('seven-ten')
 
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
-
-PROMPT_MINI_COURSE_EVERY = 5
-
-# Classification count tracked for mini-course prompt
-classificationsThisSession = 0
-
-auth.listen ->
-  classificationsThisSession = 0
 
 # Map each project ID to a promise of its last randomly-selected workflow ID.
 # This is to maintain the same random workflow for each project when none is specified by the user.
@@ -82,32 +71,14 @@ module.exports = React.createClass
     demoMode: sessionDemoMode
     promptWorkflowAssignmentDialog: false
     rejected: null
-    tutorial: null
 
   componentDidMount: () ->
     Split.classifierVisited();
     if @props.workflow and not @props.loadingSelectedWorkflow
       @loadAppropriateClassification(@props)
-    Tutorial.find @props.workflow
-    .then (tutorial) =>
-      {user, preferences} = @props
-      Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
-      @setState {tutorial}
-    MiniCourse.find @props.workflow
-    .then (minicourse) =>
-      @setState {minicourse}
 
   componentWillUpdate: (nextProps, nextState) ->
     @context.geordi.remember workflowID: nextProps?.workflow?.id
-    if nextProps.workflow isnt @props.workflow
-      Tutorial.find nextProps.workflow
-      .then (tutorial) =>
-        {user, preferences} = nextProps
-        Tutorial.startIfNecessary tutorial, user, preferences, @context.geordi
-        @setState {tutorial}
-      MiniCourse.find nextProps.workflow
-      .then (minicourse) =>
-        @setState {minicourse}
 
   componentWillUnmount: () ->
     @context.geordi?.forget ['workflowID']
@@ -234,10 +205,6 @@ module.exports = React.createClass
       {if @props.projectIsComplete
         <FinishedBanner project={@props.project} />}
 
-      {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
-        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
-          <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
-        </CustomSignInPrompt>}
       {if @state.classification?
         <Classifier
           {...@props}
@@ -248,8 +215,6 @@ module.exports = React.createClass
           onCompleteAndLoadAnotherSubject={@saveClassificationAndLoadAnotherSubject}
           onClickNext={@loadAnotherSubject}
           splits={@props.splits}
-          tutorial={@state.tutorial}
-          minicourse={@state.minicourse}
         />
       else if @state.rejected?.classification?
         <code>Please try again. Something went wrong: {@state.rejected.classification.toString()}</code>
@@ -295,9 +260,6 @@ module.exports = React.createClass
         console?.warn 'Failed to save classification:', error
         @queueClassification classification
 
-      classificationsThisSession += 1
-      @maybeLaunchMiniCourse()
-
     return savingClassification
 
   queueClassification: (classification) ->
@@ -333,13 +295,6 @@ module.exports = React.createClass
     currentClassifications.forWorkflow[@props.workflow.id] = null
 
     @loadAppropriateClassification(@props) if @props.workflow?
-
-  maybeLaunchMiniCourse: ->
-    shouldPrompt = classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
-    split = @props.splits?['mini-course.visible']
-    isntHidden = not split or split?.variant?.value?.auto
-    if shouldPrompt and isntHidden
-      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.user, @context.geordi
 
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog
