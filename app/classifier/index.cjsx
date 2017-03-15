@@ -22,6 +22,7 @@ experimentsClient = require '../lib/experiments-client'
 Task = require('./task').default
 TaskNav = require('./task-nav').default
 ExpertOptions = require('./expert-options').default
+`import CustomSignInPrompt from './custom-sign-in-prompt';`
 
 # For easy debugging
 window.cachedClassification = CacheClassification
@@ -537,16 +538,22 @@ module.exports = React.createClass
         @setState {expertClassifier, userRoles}
 
   render: ->
-    if @props.workflow? and @state.subject?
-      <Classifier {...@props}
-        workflow={@props.workflow}
-        subject={@state.subject}
-        expertClassifier={@state.expertClassifier}
-        userRoles={@state.userRoles}
-        tutorial={@state.tutorial}
-        minicourse={@state.minicourse}
-        onComplete={@onComplete}
-        onCompleteAndLoadAnotherSubject={@onCompleteAndLoadAnotherSubject}
-      />
-    else
-      <span>Loading classifier...</span>
+    <div>
+      {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
+        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
+          <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
+        </CustomSignInPrompt>}
+      {if @props.workflow? and @state.subject?
+        <Classifier {...@props}
+          workflow={@props.workflow}
+          subject={@state.subject}
+          expertClassifier={@state.expertClassifier}
+          userRoles={@state.userRoles}
+          tutorial={@state.tutorial}
+          minicourse={@state.minicourse}
+          onComplete={@onComplete}
+          onCompleteAndLoadAnotherSubject={@onCompleteAndLoadAnotherSubject}
+        />
+      else
+        <span>Loading classifier...</span>}
+    </div>

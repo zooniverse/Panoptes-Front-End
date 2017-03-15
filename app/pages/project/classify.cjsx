@@ -7,7 +7,6 @@ counterpart = require 'counterpart'
 `import FinishedBanner from './finished-banner';`
 Classifier = require '../../classifier'
 seenThisSession = require '../../lib/seen-this-session'
-`import CustomSignInPrompt from './custom-sign-in-prompt';`
 `import WorkflowAssignmentDialog from '../../components/workflow-assignment-dialog';`
 experimentsClient = require '../../lib/experiments-client'
 {Split} = require('seven-ten')
@@ -206,10 +205,6 @@ module.exports = React.createClass
       {if @props.projectIsComplete
         <FinishedBanner project={@props.project} />}
 
-      {if @props.project.experimental_tools.indexOf('workflow assignment') > -1 and not @props.user # Gravity Spy
-        <CustomSignInPrompt classificationsThisSession={classificationsThisSession}>
-          <p>Please sign in or sign up to access more glitch types and classification options as well as our mini-course.</p>
-        </CustomSignInPrompt>}
       {if @state.classification?
         <Classifier
           {...@props}
