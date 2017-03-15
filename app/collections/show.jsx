@@ -76,7 +76,7 @@ const CollectionPage = React.createClass({
       const idMatch = (role.links.owner.id === this.props.user.id);
       const isOwner = role.roles.includes('owner');
       const isCollaborator = role.roles.includes('collaborator');
-      return ((isOwner && idMatch) || (isCollaborator && idMatch));
+      return (isOwner || isCollaborator) && idMatch;
     });
   },
 
