@@ -420,6 +420,19 @@ Classifier = React.createClass
   subjectIsGravitySpyGoldStandard: ->
     @props.workflow.configuration?.gravity_spy_gold_standard and @props.subject.metadata?['#Type'] is 'Gold'
 
+###############################################################################
+# Page Wrapper Component
+###############################################################################
+auth = require 'panoptes-client/lib/auth'
+
+# Classification count tracked for mini-course prompt
+classificationsThisSession = 0
+
+auth.listen ->
+  classificationsThisSession = 0
+
+PROMPT_MINI_COURSE_EVERY = 5
+
 module.exports = React.createClass
   displayName: 'ClassifierWrapper'
 
@@ -489,6 +502,23 @@ module.exports = React.createClass
       # TODO: Support multi-subject classifications in the future.
       @setState {subject}
 
+  onCompleteAndLoadAnotherSubject: ->
+    classificationsThisSession += 1
+    @maybeLaunchMiniCourse()
+    @props.onCompleteAndLoadAnotherSubject?()
+
+  onComplete: ->
+    classificationsThisSession += 1
+    @maybeLaunchMiniCourse()
+    @props.onComplete?()
+
+  maybeLaunchMiniCourse: ->
+    shouldPrompt = classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
+    split = @props.splits?['mini-course.visible']
+    isntHidden = not split or split?.variant?.value?.auto
+    if shouldPrompt and isntHidden
+      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.user, @context.geordi
+
   checkExpertClassifier: (props = @props) ->
     if props.project and props.user and @state.expertClassifier is null
       getUserRoles = props.project.get('project_roles', user_id: props.user.id)
@@ -515,6 +545,8 @@ module.exports = React.createClass
         userRoles={@state.userRoles}
         tutorial={@state.tutorial}
         minicourse={@state.minicourse}
+        onComplete={@onComplete}
+        onCompleteAndLoadAnotherSubject={@onCompleteAndLoadAnotherSubject}
       />
     else
       <span>Loading classifier...</span>

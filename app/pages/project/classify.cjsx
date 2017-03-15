@@ -16,14 +16,6 @@ experimentsClient = require '../../lib/experiments-client'
 
 FAILED_CLASSIFICATION_QUEUE_NAME = 'failed-classifications'
 
-PROMPT_MINI_COURSE_EVERY = 5
-
-# Classification count tracked for mini-course prompt
-classificationsThisSession = 0
-
-auth.listen ->
-  classificationsThisSession = 0
-
 # Map each project ID to a promise of its last randomly-selected workflow ID.
 # This is to maintain the same random workflow for each project when none is specified by the user.
 currentWorkflowForProject = {}
@@ -273,9 +265,6 @@ module.exports = React.createClass
         console?.warn 'Failed to save classification:', error
         @queueClassification classification
 
-      classificationsThisSession += 1
-      @maybeLaunchMiniCourse()
-
     return savingClassification
 
   queueClassification: (classification) ->
@@ -311,13 +300,6 @@ module.exports = React.createClass
     currentClassifications.forWorkflow[@props.workflow.id] = null
 
     @loadAppropriateClassification(@props) if @props.workflow?
-
-  maybeLaunchMiniCourse: ->
-    shouldPrompt = classificationsThisSession % PROMPT_MINI_COURSE_EVERY is 0
-    split = @props.splits?['mini-course.visible']
-    isntHidden = not split or split?.variant?.value?.auto
-    if shouldPrompt and isntHidden
-      MiniCourse.startIfNecessary @state.minicourse, @props.preferences, @props.user, @context.geordi
 
   maybePromptWorkflowAssignmentDialog: (props) ->
     if @state.promptWorkflowAssignmentDialog
