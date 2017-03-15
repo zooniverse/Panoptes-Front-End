@@ -60,11 +60,11 @@ ProjectPageController = React.createClass
 
   componentWillUpdate: (nextProps, nextState) ->
     if nextProps.location.query?.workflow? and @canFetchWorkflowByQuery(nextProps.project, nextProps.user)
-      @getSelectedWorkflow(nextProps.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
+      @getSelectedWorkflow(nextState.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
 
     if nextState.preferences?.preferences?.selected_workflow? and @state.workflow?
       if nextState.preferences?.preferences.selected_workflow isnt @state.workflow.id
-        @getSelectedWorkflow(nextProps.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
+        @getSelectedWorkflow(nextState.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
 
   componentWillUnmount: ->
     Split.clear()
@@ -174,7 +174,7 @@ ProjectPageController = React.createClass
         @listenToPreferences preferences
       )
 
-  getSelectedWorkflow: (project = @state.project, preferences = @state.preferences) ->
+  getSelectedWorkflow: (project, preferences) ->
     @setState({ loadingSelectedWorkflow: true })
     # preference workflow query, then user selected workflow, then project owner set workflow, then default workflow
     # if none of those are set, select random workflow
@@ -204,7 +204,7 @@ ProjectPageController = React.createClass
       linkedWorkflows[randomIndex]
 
   getWorkflow: (selectedWorkflowID) ->
-    apiClient.type('workflows').get({ active: true, id: "#{selectedWorkflowID}" })
+    apiClient.type('workflows').get({ active: true, id: "#{selectedWorkflowID}", project_id: @state.project.id })
       .catch (error) =>
         console.error error
         # TODO: Handle 404 once json-api-client error handling is fixed.
@@ -215,7 +215,7 @@ ProjectPageController = React.createClass
         else
           console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
           @clearInactiveWorkflow(selectedWorkflowID)
-            .then(@getSelectedWorkflow())
+            .then(@getSelectedWorkflow(@state.project, @state.preferences))
 
   clearInactiveWorkflow: (selectedWorkflowID) ->
     preferences = @state.preferences
