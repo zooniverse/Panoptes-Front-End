@@ -70,7 +70,7 @@ module.exports = React.createClass
               <TaskComponent autoFocus={i is 0} key={detailTask._key} task={detailTask} annotation={toolProps.mark.details[i]} onChange={@handleDetailsChange.bind this, i} />}
             <hr />
             <p style={textAlign: 'center'}>
-              <button autoFocus type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
+              <button autoFocus={toolProps.details[0].type in ['single', 'multiple']} type="submit" className="standard-button" disabled={not detailsAreComplete}>OK</button>
             </p>
           </ModalFocus>
         </StickyModalForm>}
