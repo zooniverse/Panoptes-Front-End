@@ -13,12 +13,13 @@ export default class GenericTask extends React.Component {
 
   showHelp() {
     alert(
-      <div className="content-container">
-        <Markdown className="classification-task-help">
-          {this.props.help}
-        </Markdown>
-        <button autoFocus className="standard-button" onClick={this.reject}>Close</button>
-      </div>
+      (resolve, reject) =>
+        <div className="content-container">
+          <Markdown className="classification-task-help">
+            {this.props.help}
+          </Markdown>
+          <button autoFocus={true} className="standard-button" onClick={reject}>Close</button>
+        </div>
     );
   }
 
