@@ -7,7 +7,7 @@ getSubjectLocation = require '../lib/get-subject-location'
 
 `import Thumbnail from '../components/thumbnail';`
 
-RADIUS = if screen.width < 400 then 75 else 100
+RADIUS = if innerWidth < 400 then 75 else 100
 
 module.exports = React.createClass
   displayName: 'CollectionPreview'
