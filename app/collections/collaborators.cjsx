@@ -151,7 +151,7 @@ RoleRow = React.createClass
 
     promise
       .then =>
-        callback =>
+        callback()
         @setState saving: false
       .catch (error) =>
         @setState { error }
