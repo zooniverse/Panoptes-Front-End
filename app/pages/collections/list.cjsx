@@ -5,6 +5,7 @@ Translate = require 'react-translate-component'
 {Link} = require 'react-router'
 CollectionsNav = require './nav'
 classNames = require 'classnames'
+Paginator = require '../../talk/lib/paginator'
 `import getCollectionCovers from '../../lib/get-collection-covers';`
 
 List = React.createClass
@@ -45,6 +46,12 @@ List = React.createClass
     if @props.project?
       baseLink += "projects/#{@props.project.slug}/"
     "#{baseLink}collections/#{collection.slug}"
+
+  onPageChange: (page) ->
+    nextQuery = Object.assign {}, @props.location.query, { page }
+    @context.router.push
+      pathname: @props.location.pathname
+      query: nextQuery
 
   listCollections: (props) ->
     query = {}
@@ -102,6 +109,7 @@ List = React.createClass
           baseType={@props.baseType} />}
         {if @state.collections?.length > 0
           meta = @state.collections[0].getMeta()
+          console.log meta
           <div>
             <div className="resource-results-counter collection-results-counter">
               <p>
@@ -157,6 +165,10 @@ List = React.createClass
                   "project-pill-button": @props.project?
                 }
                 <nav className="pagination">
+                  <Paginator
+                    page={meta.page}
+                    onPageChange={@onPageChange}
+                    pageCount={meta.page_count} />
                   {for page in [1..meta.page_count]
                     active = (page is +location.query.page) or (page is 1 and not location.search)
                     <Link
