@@ -85,6 +85,28 @@ $flex-section
       background: #FFFFFF
       color: ZOONIVERSE_TEAL
 
+  .alternate-button
+    border: 2px solid
+    border-radius: 6px
+    border-color: ZOONIVERSE_NAVY
+    background: none
+    padding: 0.75em 1.75em
+    transition: background 500ms ease
+    margin: 50px 10px 0 10px
+    font-size: 1.5em
+    font-weight: bold
+    text-decoration: none
+    color: ZOONIVERSE_NAVY
+
+    @media (max-width: 900px)
+      margin-top: 20px
+
+    &:hover,
+    &:active,
+    &:focus
+      background: ZOONIVERSE_NAVY
+      color: #FFFFFF
+
   .home-link-down
     position: absolute
     bottom: 0
@@ -156,6 +178,46 @@ $flex-section
         background: LIGHT-BLUE-GREEN
         color: #FFFFFF
 
+  .home-featured
+    padding: 50px 30px
+    min-height: 10vw
+    
+    h1
+      color: COPY
+      font-size: 1.3em
+      text-transform: uppercase
+    
+    h2
+      color: ZOONIVERSE_NAVY
+    
+    p
+      color: FOREGROUND
+      width: 70vw
+      font-size: 2em
+
+      @media (max-width: 900px)
+        width: 100%
+      
+    .home-featured-images
+      margin: 1em 0
+      display: flex
+      flex-direction: row
+      justify-content: center
+      align-items: center
+      
+      img
+        display: block
+        width: 22vw
+        margin: 1vw
+        flex: 1 1 auto
+        
+        @media (max-width: 900px)
+          width: 30vw
+          margin: 1vw
+    
+    .alternate-button
+      margin-top: 20px
+
   .home-discover
     background-color: WHITE
 
@@ -170,28 +232,6 @@ $flex-section
       @media (max-width: 900px)
         width: 100%
         font-size: 1.5em
-
-    .discover-button
-      border: 2px solid
-      border-radius: 6px
-      border-color: ZOONIVERSE_NAVY
-      background: none
-      padding: 0.75em 1.75em
-      transition: background 500ms ease
-      margin: 50px 10px 0 10px
-      font-size: 1.5em
-      font-weight: bold
-      text-decoration: none
-      color: ZOONIVERSE_NAVY
-
-      @media (max-width: 900px)
-        margin-top: 20px
-
-      &:hover,
-      &:active,
-      &:focus
-        background: ZOONIVERSE_NAVY
-        color: #FFFFFF
 
   .home-promoted
     padding: 0
