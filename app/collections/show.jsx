@@ -69,6 +69,17 @@ const CollectionPage = React.createClass({
     document.documentElement.classList.remove('on-collection-page');
   },
 
+  canCollaborate() {
+    if (!this.props.user) return false;
+
+    return this.props.roles.some((role) => {
+      const idMatch = (role.links.owner.id === this.props.user.id);
+      const isOwner = role.roles.includes('owner');
+      const isCollaborator = role.roles.includes('collaborator');
+      return (isOwner || isCollaborator) && idMatch;
+    });
+  },
+
   render() {
     if (!this.state.owner) {
       return null;
@@ -81,7 +92,6 @@ const CollectionPage = React.createClass({
     }
     const baseCollectionLink = `${baseLink}/collections/${this.props.collection.slug}`;
     const baseCollectionsLink = `${baseLink}/${baseType}/${this.state.owner.login}`;
-    const isOwner = !!this.props.user && this.props.user.id === this.state.owner.id;
     const profileLink = `${baseLink}/users/${this.state.owner.login}`;
     const collectionsLinkMessageKey = `collectionPage.${baseType}Link`;
 
@@ -92,7 +102,7 @@ const CollectionPage = React.createClass({
             <Avatar user={this.state.owner} />
             {this.props.collection.display_name}
           </IndexLink>
-          {isOwner ?
+          {this.canCollaborate() ?
             <span>
               <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="tabbed-content-tab" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
                 <Translate content="collectionPage.settings" />

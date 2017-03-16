@@ -49,7 +49,7 @@ const RecentCollectionsSection = React.createClass({
       page_size: 8,
       sort: '-updated_at',
       favorite: false,
-      current_user_roles: "owner,contributor,collaborator"
+      current_user_roles: 'owner,contributor,collaborator,viewer'
     })
     .then((collections) => {
       this.setState({ collections });

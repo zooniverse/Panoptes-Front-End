@@ -34,6 +34,9 @@ List = React.createClass
     document.documentElement.classList.remove 'on-secondary-page'
 
   componentWillReceiveProps: (nextProps) ->
+    if nextProps.user isnt @props.user
+      @listCollections nextProps
+
     if nextProps.location.query.page isnt @props.location.query.page
       @listCollections nextProps
 
@@ -46,12 +49,12 @@ List = React.createClass
   listCollections: (props) ->
     query = {}
     if props.params.collection_owner is props.user?.login
-      query.current_user_roles = "owner,contributor,collaborator"
+      query.current_user_roles = "owner,contributor,collaborator,viewer"
     else if props.params.collection_owner?
       query.owner = props.params.collection_owner
 
     if props.params.profile_name is props.user?.login
-      query.current_user_roles = "owner,contributor,collaborator"
+      query.current_user_roles = "owner,contributor,collaborator,viewer"
     else if props.params.profile_name?
       query.owner = props.params.profile_name
 

@@ -150,11 +150,11 @@ RoleRow = React.createClass
       @props.roleSet.delete()
 
     promise
+      .then =>
+        callback()
+        @setState saving: false
       .catch (error) =>
         @setState { error }
-      .then =>
-        callback =>
-          @setState saving: false
 
   render: ->
     { owner } = @state
