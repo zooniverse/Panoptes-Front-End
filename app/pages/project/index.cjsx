@@ -42,6 +42,8 @@ SOCIAL_ICONS =
 AVATAR_SIZE = 100
 
 ProjectPage = React.createClass
+  displayName: 'ProjectPage'
+
   contextTypes:
     setAppHeaderVariant: React.PropTypes.func
     revealSiteHeader: React.PropTypes.func

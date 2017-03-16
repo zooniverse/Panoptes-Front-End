@@ -3,6 +3,8 @@ React = require 'react'
 CroppedImage = require './cropped-image'
 
 module.exports = React.createClass
+  displayName: 'FieldGuide'
+  
   getDefaultProps: ->
     title: null
     content: null
