@@ -13,6 +13,7 @@ import HomePageSocial from '../home-not-logged-in/social';
 import NewsSection from './news-pullout';
 import getColorFromString from '../../lib/get-color-from-string';
 import mediaActions from '../lab/actions/media';
+import FeaturedProject from '../home-common/featured-project';
 
 const SECTIONS = {
   projects: RecentProjectsSection,
@@ -323,6 +324,10 @@ export default class HomePageForUser extends React.Component {
             <NewsSection updatedProjects={this.state.ribbonData} toggleNews={this.toggleNews} showNews={this.state.showNews} />
 
           </Pullout>
+        </div>
+        
+        <div className="home-page-for-user on-home-page-logged-in">
+          <FeaturedProject />
         </div>
 
         <div className="home-page-for-user on-home-page-logged-in">
