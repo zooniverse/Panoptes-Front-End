@@ -3,17 +3,60 @@
   flex: 1 0 auto
   flex-direction: column
 
-  .collection-container
-    padding: 0 3vw
+  .collection-header
+    display: flex
+    flex: 1 0 auto
+    margin-bottom: 3em
+    font-size: 0.8em
+    color: COPY
+    justify-content: space-between
 
-  .collection-settings-tab
-    max-width: 800px
-    margin: 0 auto
+  .collection-title
+    @extends $reset-button
+    font-size: 1.5em
+    font-weight: bold
+
+  .collection-owner
+    @extends $reset-button
+    text-transform: uppercase
+
+  .collection-nav
+    display: flex
+    align-items: flex-end
+    justify-content: space-between
+
+  .collection-nav-item
+    @extends $reset-button
+    margin-left: 1.5em
+    text-transform: uppercase
 
   .collections-show
-    flex-wrap: wrap
-    max-width: 1200px
     margin: 0 auto
+
+    .collection-buttons-container
+      display: flex
+      justify-content: flex-end
+      margin-bottom: 2em
+
+    .select-images-button
+      @extends $reset-button
+      margin-left: 1.5em
+      min-width: 10em
+      border-radius: 2px
+      border: HIGHLIGHT_COLOR
+      background-color: transparent
+      padding: 0.6em 1.2em
+      text-align: center
+      font-size: 0.8em
+
+      &:focus,
+      &:hover
+        background-color: HIGHLIGHT_COLOR
+        color: white
+
+    .collection-subjects-list
+      display: flex
+      flex-flow: row wrap
 
     .collection-subject-viewer
       width: 18em
@@ -38,40 +81,20 @@
       top: 0
       left: 0
 
-    .collection-subject-viewer-delete-button
-      background: white
-      border: none
-      border-bottom-left-radius: 50%
-      cursor: pointer
-      display: flex
-      height: 1.3em
-      margin-left: -2px
-      position: absolute
-      right: -0.3em
-      top: -0.3em
-      width: 1.3em
-      z-index: 1
+    // .collection-subject-viewer-delete-button
 
-      &:hover
-        color: red
+    // .collection-subject-viewer-circle-open
+
+    // .collection-subject-viewer-circle-checked
+
+  .collection-settings-tab
+    max-width: 800px
+    margin: 0 auto
 
   .helpful-tip
     color: #777
     font-style: italic
     text-align: center
-
-.collection-nav
-  margin-left: 0
-  margin-top: 2em
-  text-align: left
-
-  .tabbed-content-tab
-    position: relative
-
-  .avatar
-    height: 4em
-    vertical-align: middle
-    margin: -2em 1vw -2em 0px
 
 .collections-manager
   h1

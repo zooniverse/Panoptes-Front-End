@@ -69,13 +69,16 @@ SubjectNode = React.createClass
     logClick = @context.geordi?.makeHandler? 'about-menu'
     <div className="collection-subject-viewer">
       <SubjectViewer defaultStyle={false} subject={@props.subject} user={@props.user} project={@state.project} isFavorite={@state.isFavorite}>
-        {if @isOwnerOrCollaborator()
-          <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
-            <i className="fa fa-close" />
-          </button>}
           <Link className="subject-link" to={"/projects/#{@state.project?.slug}/talk/subjects/#{@props.subject.id}"} onClick={logClick?.bind(this, 'view-favorite')}>
             <span></span>
           </Link>
+          {if @isOwnerOrCollaborator()
+            <button type="button" className="collection-subject-viewer-delete-button" onClick={@props.onDelete}>
+              <i className="fa fa-close" />
+            </button>}
+          <button className="collection-subject-viewer-circle-open" onClick={@props.selectSubject}>
+            <i className="fa fa-circle-o" />
+          </button>
       </SubjectViewer>
     </div>
 
@@ -89,6 +92,7 @@ module.exports = React.createClass
   getInitialState: ->
     subjects: null
     error: null
+    selecting: false
 
   componentWillMount: ->
     @fetchCollectionSubjects pick @props.location.query, VALID_COLLECTION_MEMBER_SUBJECTS_PARAMS
@@ -120,6 +124,9 @@ module.exports = React.createClass
       pathname: @props.location.pathname
       query: nextQuery
 
+  toggleSelect: ->
+    @setState selecting: !@state.selecting
+
   handleDeleteSubject: (subject) ->
     subjects = @state.subjects
     index = subjects.indexOf subject
@@ -129,6 +136,9 @@ module.exports = React.createClass
     @props.collection.removeLink 'subjects', [subject.id.toString()]
       .then =>
         @props.collection.uncacheLink 'subjects'
+
+  selectSubject: (subject) ->
+    console.log subject
 
   render: ->
     if @state.subjects?
@@ -140,6 +150,17 @@ module.exports = React.createClass
           meta = @state.subjects[0].getMeta()
 
           <div>
+          {if @state.selecting
+            <div className="collection-buttons-container">
+              <button className="select-images-button">Add to Collection</button>
+              <button className="select-images-button">Remove from Collection</button>
+              <button className="select-images-button" onClick={@toggleSelect}>Cancel</button>
+            </div>
+          else
+            <div className="collection-buttons-container">
+              <button className="select-images-button" onClick={@toggleSelect}>Select Images</button>
+            </div>
+          }
             <div className="collection-subjects-list">
               {@state.subjects.map (subject) =>
                 <SubjectNode
@@ -149,6 +170,7 @@ module.exports = React.createClass
                   user={@props.user}
                   roles={@props.roles}
                   onDelete={@handleDeleteSubject.bind @, subject}
+                  selectSubject={@selectSubject.bind @, subject}
                 />
               }
             </div>

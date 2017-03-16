@@ -1,24 +1,22 @@
 import React from 'react';
-import apiClient from 'panoptes-client/lib/api-client';
 import { IndexLink, Link } from 'react-router';
 import Translate from 'react-translate-component';
+import apiClient from 'panoptes-client/lib/api-client';
+import classNames from 'classnames';
 import counterpart from 'counterpart';
-import Avatar from '../partials/avatar';
 import Loading from '../components/loading-indicator';
 import TitleMixin from '../lib/title-mixin';
-import classNames from 'classnames';
 
 counterpart.registerTranslations('en', {
   collectionPage: {
-    settings: 'Settings',
+    settings: 'Collection Settings',
     collaborators: 'Collaborators',
     collectionsLink: '%(user)s\'s Collections',
-    favoritesLink: '%(user)s\'s Favorites',
-    userLink: '%(user)s\'s Profile',
+    favoritesLink: '%(user)s\'s Favorites'
   },
   collectionsPageWrapper: {
-    error: 'There was an error retrieving this collection.',
-  },
+    error: 'There was an error retrieving this collection.'
+  }
 });
 
 const CollectionPage = React.createClass({
@@ -28,16 +26,16 @@ const CollectionPage = React.createClass({
     collection: React.PropTypes.object.isRequired,
     project: React.PropTypes.object,
     children: React.PropTypes.node,
-    roles: React.PropTypes.array,
+    roles: React.PropTypes.array
   },
 
   contextTypes: {
-    geordi: React.PropTypes.object,
+    geordi: React.PropTypes.object
   },
 
   getDefaultProps() {
     return {
-      collection: null,
+      collection: null
     };
   },
 
@@ -101,30 +99,34 @@ const CollectionPage = React.createClass({
 
     return (
       <div className="collections-page">
-        <nav className="collection-nav tabbed-content-tabs">
-          <IndexLink to={baseCollectionLink} activeClassName="active" className="tabbed-content-tab" onClick={!!this.logClick ? this.logClick.bind(this, 'view-collection') : null}>
-            <Avatar user={this.state.owner} />
-            {this.props.collection.display_name}
-          </IndexLink>
-          {this.state.canCollaborate ?
-            <span>
-              <Link to={`${baseCollectionLink}/settings`} activeClassName="active" className="tabbed-content-tab" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
-                <Translate content="collectionPage.settings" />
-              </Link>
-              <Link to={`${baseCollectionLink}/collaborators`} activeClassName="active" className="tabbed-content-tab" onClick={!!this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
-                <Translate content="collectionPage.collaborators" />
-              </Link>
-            </span> :
-            null
-          }
-          <Link to={baseCollectionsLink} className="tabbed-content-tab">
-            <Translate content={collectionsLinkMessageKey} user={this.state.owner.display_name} />
-          </Link>
-          <Link to={profileLink} activeClassName="active" className="tabbed-content-tab">
-            <Translate content="collectionPage.userLink" user={this.state.owner.display_name} />
-          </Link>
-        </nav>
-        <div className="collection-container talk">
+        <div className="collection-header">
+          <div>
+            <IndexLink to={baseCollectionLink} className="collection-title">
+              {this.props.collection.display_name}
+            </IndexLink>
+            <br />
+            <Link to={profileLink} className="collection-owner">
+              BY {this.state.owner.display_name}
+            </Link>
+          </div>
+          <nav className="collection-nav">
+            {isOwner ?
+              <span>
+                <Link to={`${baseCollectionLink}/settings`} className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'settings-collection') : null}>
+                  <Translate content="collectionPage.settings" />
+                </Link>
+                <Link to={`${baseCollectionLink}/collaborators`} className="collection-nav-item" onClick={!!this.logClick ? this.logClick.bind(this, 'collab-collection') : null}>
+                  <Translate content="collectionPage.collaborators" />
+                </Link>
+              </span> :
+              null
+            }
+            <Link to={baseCollectionsLink} className="collection-nav-item">
+              <Translate content={collectionsLinkMessageKey} user={this.state.owner.display_name} />
+            </Link>
+          </nav>
+        </div>
+        <div className="talk">
           {React.cloneElement(this.props.children, {
             canCollaborate: this.state.canCollaborate,
             collection: this.props.collection,
@@ -134,7 +136,7 @@ const CollectionPage = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 });
 
 const CollectionPageWrapper = React.createClass({
