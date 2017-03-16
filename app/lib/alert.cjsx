@@ -18,6 +18,8 @@ module.exports = (message) ->
   container.classList.add 'dialog-container'
   document.body.appendChild container
 
+  previousActiveElement = document.activeElement
+
   closeButton = <button aria-label='Close' onClick={defer.resolve}>&times;</button>
   ReactDOM.render <Dialog className="alert" controls={closeButton} onEscape={defer.resolve}>
     {message}
@@ -26,6 +28,7 @@ module.exports = (message) ->
   unmount = ->
     ReactDOM.unmountComponentAtNode container
     container.parentNode.removeChild container
+    previousActiveElement?.focus()
 
   promise.then unmount, unmount
   promise
