@@ -63,7 +63,7 @@ module.exports = React.createClass
             true
 
         <StickyModalForm ref="detailsForm" style={SEMI_MODAL_FORM_STYLE} underlayStyle={SEMI_MODAL_UNDERLAY_STYLE} onSubmit={@handleDetailsFormClose} onCancel={@handleDetailsFormClose}>
-          <ModalFocus onEscape={@handleDetailsFormClose}>
+          <ModalFocus onEscape={@handleDetailsFormClose} preserveFocus={false}>
             {for detailTask, i in toolProps.details
               detailTask._key ?= Math.random()
               TaskComponent = tasks[detailTask.type]

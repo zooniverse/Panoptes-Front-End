@@ -19,7 +19,7 @@ class ModalFocus extends React.Component {
   }
 
   componentWillUnmount() {
-    !!this.previousActiveElement && this.previousActiveElement.focus();
+    !!this.props.preserveFocus && !!this.previousActiveElement && this.previousActiveElement.focus();
   }
 
   handleKeyDown(e) {
@@ -55,11 +55,13 @@ class ModalFocus extends React.Component {
 ModalFocus.propTypes = {
   children: React.PropTypes.node,
   className: React.PropTypes.string,
-  onEscape: React.PropTypes.func
+  onEscape: React.PropTypes.func,
+  preserveFocus: React.PropTypes.bool
 };
 
 ModalFocus.defaultProps = {
-  onEscape: () => null
+  onEscape: () => null,
+  preserveFocus: true
 };
 
 export default ModalFocus;
