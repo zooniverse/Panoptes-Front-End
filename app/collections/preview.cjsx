@@ -7,8 +7,6 @@ getSubjectLocation = require '../lib/get-subject-location'
 
 `import Thumbnail from '../components/thumbnail';`
 
-RADIUS = if innerWidth < 400 then 75 else 100
-
 module.exports = React.createClass
   displayName: 'CollectionPreview'
 
@@ -31,6 +29,8 @@ module.exports = React.createClass
       @setState {subjects}
 
   render: ->
+    radius = if innerWidth < 400 then 75 else 100
+
     <div className="collection-preview">
       <div className="collection">
         <p className="title">
@@ -51,7 +51,7 @@ module.exports = React.createClass
                   <Thumbnail
                     key={"collection-preview-#{@props.collection.id}-#{subject.id}"}
                     src={getSubjectLocation(subject).src}
-                    width={RADIUS} />}
+                    width={radius} />}
               </div>
             </Link>
           else
