@@ -59,7 +59,7 @@ ProjectPageController = React.createClass
       @setupSplits nextProps
 
   componentWillUpdate: (nextProps, nextState) ->
-    if nextProps.location.query?.workflow? and @canFetchWorkflowByQuery(nextState.project, nextProps.user)
+    if nextState.project? and nextState.preferences? and nextProps.location.query?.workflow? and @canFetchWorkflowByQuery(nextState.project, nextProps.user)
       @getSelectedWorkflow(nextState.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
 
     if nextState.preferences?.preferences?.selected_workflow? and @state.workflow?
@@ -181,7 +181,7 @@ ProjectPageController = React.createClass
     if @props.location.query?.workflow? and @canFetchWorkflowByQuery(project, @props.user)
       selectedWorkflowID = @props.location.query.workflow
       unless preferences?.preferences.selected_workflow is selectedWorkflowID
-        @handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID)
+        @handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID) if preferences
     else if preferences?.preferences.selected_workflow?
       selectedWorkflowID = preferences?.preferences.selected_workflow
     else if preferences?.settings?.workflow_id?
