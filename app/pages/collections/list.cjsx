@@ -74,7 +74,7 @@ List = React.createClass
 
   shared: (collection) ->
     if (@props.params.collection_owner is @props.user?.login) or (@props.params.profile_name is @props.user?.login)
-      @props.user?.id isnt collection.links.owner.id
+      @props.user and @props.user?.id isnt collection.links.owner.id
 
   render: ->
     {location} = @props
