@@ -105,7 +105,7 @@ module.exports = React.createClass
           for choiceID, i in sortedFilteredChoices
             choice = @props.task.choices[choiceID]
             chosenAlready = choiceID in selectedChoices
-            <button key={choiceID + i} type="button" className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}" onClick={@props.onChoose.bind null, choiceID}>
+            <button autoFocus={choiceID is @props.focusedChoice} key={choiceID + i} type="button" className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}" onClick={@props.onChoose.bind null, choiceID}>
               <span className="survey-task-chooser-choice">
                 {if choice.images?.length > 0
                   thumbnailSrc = @props.task.images[choice.images[0]]

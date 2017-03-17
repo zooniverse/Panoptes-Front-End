@@ -41,11 +41,12 @@ module.exports = React.createClass
   getInitialState: ->
     filters: {}
     selectedChoiceID: ''
+    focusedChoice: ''
 
   render: ->
     <div className="survey-task">
       {if @state.selectedChoiceID is ''
-        <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} annotation={@props.annotation} />
+        <Chooser task={@props.task} filters={@state.filters} onFilter={@handleFilter} onChoose={@handleChoice} annotation={@props.annotation} focusedChoice={@state.focusedChoice} />
       else
         <Choice task={@props.task} choiceID={@state.selectedChoiceID} onSwitch={@handleChoice} onCancel={@clearSelection} onConfirm={@handleAnnotation} />}
     </div>
@@ -67,7 +68,9 @@ module.exports = React.createClass
     @setState filters: {}
 
   clearSelection: ->
-    @setState selectedChoiceID: ''
+    @setState 
+      selectedChoiceID: ''
+      focusedChoice: @state.selectedChoiceID
     newAnnotation = Object.assign {}, @props.annotation, _choiceInProgress: false
     @props.onChange newAnnotation
 
