@@ -181,7 +181,7 @@ ProjectPageController = React.createClass
     if @props.location.query?.workflow? and @canFetchWorkflowByQuery(project, @props.user)
       selectedWorkflowID = @props.location.query.workflow
       unless preferences?.preferences.selected_workflow is selectedWorkflowID
-        @handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID) if preferences?
+        @handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID)
     else if preferences?.preferences.selected_workflow?
       selectedWorkflowID = preferences?.preferences.selected_workflow
     else if preferences?.settings?.workflow_id?
@@ -245,9 +245,10 @@ ProjectPageController = React.createClass
   handlePreferencesChange: (key, value) ->
     changes = {}
     changes[key] = value
-    @state.preferences.update changes
-    if @props.user?
-      @state.preferences.save()
+    if @state.preferences
+      @state.preferences.update changes
+      if @props.user?
+        @state.preferences.save()
 
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
