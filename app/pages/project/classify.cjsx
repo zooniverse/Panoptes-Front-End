@@ -165,7 +165,7 @@ module.exports = React.createClass
 
     # If there aren't any left (or there weren't any to begin with), refill the list.
     if upcomingSubjects.forWorkflow[workflow.id].length is 0
-      # console.log 'Fetching subjects'
+      # console.log 'Fetching subjects', workflow.id
       @maybePromptWorkflowAssignmentDialog(@props)
       subjectQuery =
         workflow_id: workflow.id

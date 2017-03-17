@@ -104,6 +104,7 @@ ProjectPage = React.createClass
 
     if nextProps.preferences?.preferences?.selected_workflow? and @state.selectedWorkflow?
       if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow.id
+        @setState { loadingSelectedWorkflow: true }
         @getSelectedWorkflow(nextProps.project, nextProps.preferences)
 
   resizeBackground: ->
