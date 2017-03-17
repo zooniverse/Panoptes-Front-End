@@ -59,7 +59,7 @@ ProjectPageController = React.createClass
       @setupSplits nextProps
 
   componentWillUpdate: (nextProps, nextState) ->
-    if nextProps.location.query?.workflow? and @canFetchWorkflowByQuery(nextState.project, nextProps.user)
+    if nextState.project? and nextState.preferences? and nextProps.location.query?.workflow? and @canFetchWorkflowByQuery(nextState.project, nextProps.user)
       @getSelectedWorkflow(nextState.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
 
     if nextState.preferences?.preferences?.selected_workflow? and @state.workflow?
@@ -245,9 +245,10 @@ ProjectPageController = React.createClass
   handlePreferencesChange: (key, value) ->
     changes = {}
     changes[key] = value
-    @state.preferences.update changes
-    if @props.user?
-      @state.preferences.save()
+    if @state.preferences
+      @state.preferences.update changes
+      if @props.user?
+        @state.preferences.save()
 
   render: ->
     slug = @props.params.owner + '/' + @props.params.name
