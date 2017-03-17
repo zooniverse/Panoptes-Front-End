@@ -27,7 +27,6 @@ export default class HomePageForUser extends React.Component {
 
     this.state = {
       backgroundSrc: '',
-      avatarSrc: '',
       showNews: false,
       totalClassifications: 0,
       ribbonData: [],
@@ -96,19 +95,6 @@ export default class HomePageForUser extends React.Component {
       if (profileHeader) {
         this.setState({
           backgroundSrc: profileHeader.src
-        });
-      }
-    });
-
-    user.get('avatar')
-    .catch((error) => {
-      console.log('Something went wrong. Error: ', error);
-    })
-    .then((avatars) => {
-      const avatar = [].concat(avatars)[0];
-      if (avatar) {
-        this.setState({
-          avatarSrc: avatar.src
         });
       }
     });
@@ -265,11 +251,6 @@ export default class HomePageForUser extends React.Component {
   render() {
     if (!this.props.user) return null;
 
-    let avatarSrc = this.state.avatarSrc;
-    if (!avatarSrc) {
-      avatarSrc = '/assets/simple-avatar.png';
-    }
-    
     const {OpenSectionComponent} = this.state;
 
     return (
@@ -293,7 +274,7 @@ export default class HomePageForUser extends React.Component {
           )}
 
           <div className="home-page-for-user__content" style={{ position: 'relative', zIndex: 1 }}>
-            <CircleRibbon user={this.props.user} loading={this.state.loading} image={avatarSrc} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
+            <CircleRibbon user={this.props.user} loading={this.state.loading} data={this.state.ribbonData} hrefTemplate={this.findProjectLink} />
 
             <div className="home-page-for-user__welcome">
               Hello {this.props.user.display_name},<br />

@@ -13,12 +13,14 @@ const CircleRibbon = React.createClass({
     size: React.PropTypes.string,
     weight: React.PropTypes.number,
     gap: React.PropTypes.number,
-    image: React.PropTypes.string,
     loading: React.PropTypes.bool,
     data: React.PropTypes.array,
     hrefTemplate: React.PropTypes.func,
     onClick: React.PropTypes.func,
-    user: React.PropTypes.object.isRequired,
+    user: React.PropTypes.shape({
+      avatar_src: React.PropTypes.string,
+      login: React.PropTypes.string
+    }).isRequired
   },
 
   getDefaultProps() {
@@ -26,11 +28,11 @@ const CircleRibbon = React.createClass({
       size: '10em',
       weight: 10,
       gap: 2,
-      image: '//lorempixel.com/100/100/animals/1',
       loading: false,
       data: [],
       hrefTemplate: defaultHREFTemplate,
       onClick: () => {},
+      user: { avatar_src: '/assets/simple-avatar.png' }
     };
   },
 
@@ -168,6 +170,8 @@ const CircleRibbon = React.createClass({
       tooltipPosition = this.getTooltipPoint(hoveredArc, 50);
     }
 
+    const avatar = this.props.user.avatar_src ? this.props.user.avatar_src : '/assets/simple-avatar.png';
+
     return (
       <div ref="container" className="circle-ribbon" style={{ position: 'relative' }}>
         <svg ref="svg" viewBox="0 0 100 100" width={this.props.size} height={this.props.size}>
@@ -177,19 +181,17 @@ const CircleRibbon = React.createClass({
             </clipPath>
           </defs>
 
-          {!!this.props.image && (
-            <SVGLink to={`/users/${this.props.user.login}/stats`} aria-label={`${this.props.user.login} stats`}>
-              <image
-                xlinkHref={this.props.image}
-                x={this.props.weight + this.props.gap}
-                y={this.props.weight + this.props.gap}
-                width={imageSize}
-                height={imageSize}
-                clipPath={`url('#circle-ribbon-clip-${this.id}')`}
-                className={`url('#circle-ribbon-shadow-${this.id}')`}
-              />
-            </SVGLink>
-          )}
+          <SVGLink to={`/users/${this.props.user.login}/stats`} aria-label={`${this.props.user.login} stats`}>
+            <image
+              xlinkHref={avatar}
+              x={this.props.weight + this.props.gap}
+              y={this.props.weight + this.props.gap}
+              width={imageSize}
+              height={imageSize}
+              clipPath={`url('#circle-ribbon-clip-${this.id}')`}
+              className={`url('#circle-ribbon-shadow-${this.id}')`}
+            />
+          </SVGLink>
 
           <g ref="arcGroup" fill="none" stroke="none" transform="translate(50, 50)">
             {this.props.loading && (
