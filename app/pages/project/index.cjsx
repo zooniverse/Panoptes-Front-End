@@ -1,339 +1,9 @@
-counterpart = require 'counterpart'
 React = require 'react'
-Translate = require 'react-translate-component'
-{IndexLink, Link} = require 'react-router'
-{Markdown} = require 'markdownz'
-PotentialFieldGuide = require './potential-field-guide'
 TitleMixin = require '../../lib/title-mixin'
 apiClient = require 'panoptes-client/lib/api-client'
-{sugarClient} = require 'panoptes-client/lib/sugar'
-classNames = require 'classnames'
-getWorkflowsInOrder = require '../../lib/get-workflows-in-order'
+{ Split } = require('seven-ten')
 isAdmin = require '../../lib/is-admin'
-{Split} = require('seven-ten')
-Thumbnail = require('../../components/thumbnail').default
-classnames = require 'classnames'
-
-counterpart.registerTranslations 'en',
-  project:
-    loading: 'Loading project'
-    disclaimer: "This project has been built using the Zooniverse Project Builder but is not yet an official Zooniverse project. Queries and issues relating to this project directed at the Zooniverse Team may not receive any response."
-    nav:
-      about: 'About'
-      classify: 'Classify'
-      talk: 'Talk'
-      collections: 'Collect'
-
-SOCIAL_ICONS =
-  'bitbucket.com/': 'bitbucket'
-  'facebook.com/': 'facebook-square'
-  'github.com/': 'github'
-  'pinterest.com/': 'pinterest'
-  'plus.google.com/': 'google-plus'
-  'reddit.com/': 'reddit'
-  'tumblr.com/': 'tumblr'
-  'twitter.com/': 'twitter'
-  'vine.com/': 'vine'
-  'weibo.com/': 'weibo'
-  'wordpress.com/': 'wordpress'
-  'youtu.be/': 'youtube'
-  'youtube.com/': 'youtube'
-
-AVATAR_SIZE = 100
-
-ProjectPage = React.createClass
-  contextTypes:
-    setAppHeaderVariant: React.PropTypes.func
-    revealSiteHeader: React.PropTypes.func
-    geordi: React.PropTypes.object
-    initialLoadComplete: React.PropTypes.bool
-
-  propTypes:
-    owner: React.PropTypes.object.isRequired
-    preferences: React.PropTypes.object
-    project: React.PropTypes.object.isRequired
-    loading: React.PropTypes.bool
-
-  getDefaultProps: ->
-    background: null
-    loading: false
-    owner: {}
-    preferences: null
-    pages: null
-    project: {}
-    projectAvatar: null
-    projectRoles: null
-    splits: null
-
-  getInitialState: ->
-    activeWorkflows: []
-    loadingSelectedWorkflow: false
-    projectIsComplete: false
-    selectedWorkflow: null
-
-  componentDidMount: ->
-    this.resizeBackground()
-    addEventListener "resize", this.resizeBackground
-    @context.setAppHeaderVariant 'demoted'
-    unless @props.user?
-      @context.revealSiteHeader()
-    document.documentElement.classList.add 'on-project-page'
-    @updateSugarSubscription @props.project
-    @context.geordi?.remember projectToken: @props.project?.slug
-
-  componentWillUnmount: ->
-    removeEventListener "resize", this.resizeBackground
-    @context.setAppHeaderVariant null
-    document.documentElement.classList.remove 'on-project-page'
-    @updateSugarSubscription null
-    @context.geordi?.forget ['projectToken']
-
-  componentWillReceiveProps: (nextProps, nextContext) ->
-    if nextProps.project isnt @props.project
-      @getAllWorkflows(nextProps.project)
-      @updateSugarSubscription nextProps.project
-      @context.geordi?.remember projectToken: nextProps.project?.slug
-
-    # Only call to get workflow if we know if there is a user or not and the project is finished loading
-    if nextContext.initialLoadComplete and not nextProps.loading and nextProps.preferences and @state.activeWorkflows.length is 0 and not @state.loadingSelectedWorkflow
-
-      if nextProps.location.query?.workflow? and ('allow workflow query' in nextProps.project.experimental_tools or @checkUserRoles(nextProps.project, nextProps.user))
-        @getAllWorkflows(nextProps.project, { id: nextProps.location.query.workflow })
-      else
-        @getAllWorkflows(nextProps.project)
-
-    if nextProps.preferences?.preferences?.selected_workflow? and @state.selectedWorkflow?
-      if nextProps.preferences?.preferences.selected_workflow isnt @state.selectedWorkflow.id
-        @setState { loadingSelectedWorkflow: true }
-        @getSelectedWorkflow(nextProps.project, nextProps.preferences)
-
-  resizeBackground: ->
-    finishedBannerHeight = 70
-    projLanding = document.getElementById('projectLandingIntro')
-    if projLanding
-      sectionBottom = projLanding.getBoundingClientRect().bottom;
-      sectionHeight = document.body.scrollTop + sectionBottom
-      if @state.backgroundHeight isnt sectionHeight + finishedBannerHeight
-        @setState backgroundHeight: sectionHeight + finishedBannerHeight
-
-  getAllWorkflows: (project, query = { active: true, fields: "active,completeness,configuration,display_name" }) ->
-    @setState { loadingSelectedWorkflow: true }
-    getWorkflowsInOrder(project, query)
-      .then (activeWorkflows) =>
-        @setState { activeWorkflows }
-      .then =>
-        @checkIfProjectIsComplete(project)
-      .then =>
-        @getSelectedWorkflow(project, @props.preferences)
-
-  getSelectedWorkflow: (project, preferences) ->
-    # preference workflow query, then user selected workflow, then project owner set workflow, then default workflow
-    # if none of those are set, select random workflow
-    if @props.location.query?.workflow? and ('allow workflow query' in @props.project.experimental_tools or @checkUserRoles(project, @props.user))
-      selectedWorkflowID = @props.location.query.workflow
-      unless preferences?.preferences.selected_workflow is selectedWorkflowID
-        @props.onChangePreferences 'preferences.selected_workflow', selectedWorkflowID
-    else if preferences?.preferences.selected_workflow?
-      selectedWorkflowID = preferences?.preferences.selected_workflow
-    else if preferences?.settings?.workflow_id?
-      selectedWorkflowID = preferences?.settings.workflow_id
-    else if project.configuration?.default_workflow?
-      selectedWorkflowID = project.configuration?.default_workflow
-    else
-      selectedWorkflowID = @selectRandomWorkflow(project)
-
-    @isWorkflowInactive(project, selectedWorkflowID)
-
-  checkIfProjectIsComplete: (project) ->
-    projectIsComplete = project.completeness > 0.99
-    @setState { projectIsComplete }
-
-  selectRandomWorkflow: (project) ->
-    if @state.activeWorkflows.length is 0
-      throw new Error "No workflows for project #{project.id}"
-      project.uncacheLink 'workflows'
-    else
-      randomIndex = Math.floor Math.random() * @state.activeWorkflows.length
-      # console.log 'Chose random workflow', @state.activeWorkflows[randomIndex].id
-      @state.activeWorkflows[randomIndex].id
-
-  getWorkflow: (selectedWorkflowIndex) ->
-    apiClient.type('workflows').get({ id: "#{@state.activeWorkflows[selectedWorkflowIndex].id}" })
-      .catch (error) =>
-        console.error error
-        @setState {
-          loadingSelectedWorkflow: false
-        }
-      .then ([workflow]) =>
-        @setState {
-          selectedWorkflow: workflow,
-          loadingSelectedWorkflow: false
-        }
-
-  isWorkflowInactive: (project, selectedWorkflowID) ->
-    selectedWorkflowIndex = @state.activeWorkflows.findIndex (workflow, index) ->
-      workflow.id is selectedWorkflowID
-
-    if selectedWorkflowIndex is -1
-      console.error "No workflow #{selectedWorkflowID} for project #{project.id}"
-      @clearInactiveWorkflow(selectedWorkflowID)
-        .then(@getSelectedWorkflow(project, @props.preferences))
-    else
-      @getWorkflow(selectedWorkflowIndex)
-
-  clearInactiveWorkflow: (selectedWorkflowID) ->
-    preferences = @props.preferences
-
-    Promise.resolve(
-      if selectedWorkflowID is preferences.preferences.selected_workflow
-        preferences.update 'preferences.selected_workflow': undefined
-      else if selectedWorkflowID is preferences.settings?.workflow_id
-        preferences.update 'preferences.settings.workflow_id': undefined
-
-      preferences.save()
-    )
-
-  _lastSugarSubscribedID: null
-
-  updateSugarSubscription: (project) ->
-    if @_lastSugarSubscribedID?
-      sugarClient.unsubscribeFrom "project-#{@_lastSugarSubscribedID}"
-    if project?
-      sugarClient.subscribeTo "project-#{project.id}"
-
-  redirectClassifyLink: (redirect) ->
-    "#{redirect.replace(/\/?#?\/+$/, "")}/#/classify"
-
-  checkUserRoles: (project, user) ->
-    getUserRoles = project.get('project_roles', user_id: user.id)
-      .then ([userRoles]) =>
-        userRoles.roles
-      .catch =>
-        []
-
-    getUserRoles.then (userRoles) =>
-      isAdmin() or 'owner' in userRoles or 'collaborator' in userRoles
-
-  renderProjectName: (betaApproved) ->
-    if betaApproved
-      <div>
-        <p>Under Review</p>
-        {@props.project.display_name}
-      </div>
-    else
-      @props.project.display_name
-
-  render: ->
-    betaApproved = @props.project.beta_approved
-    projectPath = "/projects/#{@props.project.slug}"
-    onHomePage = projectPath is @props.location.pathname
-    avatarClasses = classnames('tabbed-content-tab', {
-      'beta-approved': betaApproved
-    })
-
-    pages = [{}, @props.pages...].reduce (map, page) =>
-      map[page.url_key] = page
-      map
-
-    logClick = @context?.geordi?.makeHandler? 'project-menu'
-
-    collectClasses = classNames {
-      "tabbed-content-tab": true
-      "active": @props.project? and (@props.routes[2].path is "collections" or @props.routes[2].path is "favorites")
-    }
-
-    if @props.background?
-      backgroundStyle = backgroundImage: "url('#{@props.background.src}')"
-      if onHomePage
-        backgroundStyle.height = @state.backgroundHeight
-      else
-        backgroundStyle.height = "auto"
-
-    <div className="project-page">
-      <div className="project-background" style={backgroundStyle}></div>
-
-      <nav className="project-nav tabbed-content-tabs">
-        {if @props.project.redirect
-          <a href={@props.project.redirect} className="tabbed-content-tab" target="_blank">
-            {if @props.projectAvatar?
-              <Thumbnail src={@props.projectAvatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
-            Visit {@props.project.display_name}
-          </a>
-        else
-          <IndexLink to="#{projectPath}" activeClassName="active" className={avatarClasses} onClick={logClick?.bind this, 'project.nav.home'}>
-            {if @props.projectAvatar?
-              <Thumbnail src={@props.projectAvatar.src} className="avatar" width={AVATAR_SIZE} height={AVATAR_SIZE} />}
-            {if @props.loading
-              'Loading...'
-            else
-              @renderProjectName(betaApproved)}
-          </IndexLink>}
-
-        <br className='responsive-break' />
-
-        {unless @props.project.redirect
-          <Link to="#{projectPath}/about" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.about'}>
-            <Translate content="project.nav.about" />
-          </Link>}
-
-        {if @props.project.redirect
-          <a href={@redirectClassifyLink(@props.project.redirect)} className="tabbed-content-tab" target="_blank" onClick={logClick?.bind this, 'project.nav.classify'}>
-            <Translate content="project.nav.classify" />
-          </a>
-        else if @state.selectedWorkflow is null
-          <span className="classify tabbed-content-tab" title="Loading..." style={opacity: 0.5}>
-            <Translate content="project.nav.classify" />
-          </span>
-        else
-          <Link to="#{projectPath}/classify" activeClassName="active" className="classify tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.classify'}>
-            <Translate content="project.nav.classify" />
-          </Link>}
-
-        <Link to="#{projectPath}/talk" activeClassName="active" className="tabbed-content-tab" onClick={logClick?.bind this, 'project.nav.talk'}>
-          <Translate content="project.nav.talk" />
-        </Link>
-
-         <Link to="#{projectPath}/collections" activeClassName="active" className={collectClasses}>
-          <Translate content="project.nav.collections" />
-        </Link>
-
-        {@props.project.urls.map ({label, url}, i) =>
-          unless !!label
-            for pattern, icon of SOCIAL_ICONS
-              if url.indexOf(pattern) isnt -1
-                iconForLabel = icon
-            iconForLabel ?= 'globe'
-            label = <i className="fa fa-#{iconForLabel} fa-fw fa-2x"></i>
-          <a key={i} href={url} className="tabbed-content-tab" target="#{@props.project.id}#{url}">{label}</a>}
-      </nav>
-
-      {if !!@props.project.configuration?.announcement
-        <div className="informational project-announcement-banner">
-          <Markdown>{@props.project.configuration.announcement}</Markdown>
-        </div>}
-
-      {React.cloneElement @props.children,
-        user: @props.user
-        project: @props.project
-        owner: @props.owner
-        preferences: @props.preferences
-        onChangePreferences: @props.onChangePreferences
-        loadingSelectedWorkflow: @state.loadingSelectedWorkflow
-        workflow: @state.selectedWorkflow
-        activeWorkflows: @state.activeWorkflows
-        projectIsComplete: @state.projectIsComplete
-        splits: @props.splits
-        projectAvatar: @props.projectAvatar
-        projectRoles: @props.projectRoles
-        pages: @props.pages}
-
-      {unless @props.project.launch_approved
-        <Translate component="p" className="project-disclaimer" content="project.disclaimer" />}
-
-      {unless @props.location.pathname is projectPath
-        <PotentialFieldGuide project={@props.project} />}
-    </div>
-
+ProjectPage = require './project-page'
 
 ProjectPageController = React.createClass
   displayName: 'ProjectPageController'
@@ -342,6 +12,7 @@ ProjectPageController = React.createClass
 
   contextTypes:
     geordi: React.PropTypes.object
+    initialLoadComplete: React.PropTypes.bool
 
   propTypes:
     params: React.PropTypes.object
@@ -358,12 +29,15 @@ ProjectPageController = React.createClass
     background: null
     error: null
     loading: false
+    loadingSelectedWorkflow: false
     owner: null
     preferences: null
     project: null
     projectAvatar: null
+    projectIsComplete: false
     projectRoles: null
     splits: null
+    workflow: null
 
   _listenedToPreferences: null
 
@@ -371,17 +45,26 @@ ProjectPageController = React.createClass
 
   componentDidMount: ->
     @_boundForceUpdate = @forceUpdate.bind this
-    @fetchProjectData @props.params.owner, @props.params.name, @props.user
+    @fetchProjectData @props.params.owner, @props.params.name, @props.user if @context.initialLoadComplete
     @setupSplits()
 
-  componentWillReceiveProps: (nextProps) ->
+  componentWillReceiveProps: (nextProps, nextContext) ->
     {owner, name} = nextProps.params
     pathChanged = owner isnt @props.params.owner or name isnt @props.params.name
-    userChanged = nextProps.user isnt @props.user
+    userChanged = nextContext.initialLoadComplete and nextProps.user isnt @props.user
 
-    if pathChanged or userChanged
-      @fetchProjectData owner, name, nextProps.user
+    # Wait until we know if there's a user
+    if pathChanged or userChanged or nextContext.initialLoadComplete and @state.project is null
+      @fetchProjectData owner, name, nextProps.user unless @state.loading
       @setupSplits nextProps
+
+  componentWillUpdate: (nextProps, nextState) ->
+    if nextProps.location.query?.workflow? and @canFetchWorkflowByQuery(nextState.project, nextProps.user)
+      @getSelectedWorkflow(nextState.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
+
+    if nextState.preferences?.preferences?.selected_workflow? and @state.workflow?
+      if nextState.preferences?.preferences.selected_workflow isnt @state.workflow.id
+        @getSelectedWorkflow(nextState.project, nextState.preferences) unless nextState.loadingSelectedWorkflow
 
   componentWillUnmount: ->
     Split.clear()
@@ -404,13 +87,11 @@ ProjectPageController = React.createClass
       @context.geordi?.forget ['experiment','cohort']
 
   fetchProjectData: (ownerName, projectName, user) ->
-    @listenToPreferences null
     @setState({ 
       error: null,
       loading: true,
       preferences: null,
     })
-
 
     slug = ownerName + '/' + projectName
 
@@ -428,47 +109,133 @@ ProjectPageController = React.createClass
 
           awaitProjectAvatar = apiClient.type('avatars').get(project.links.avatar.id).catch((error) => [])
 
+          awaitProjectCompleteness = Promise.resolve(project.completeness > 0.99)
+
           awaitProjectRoles = apiClient.type('project_roles').get(project.links.project_roles).catch((error) => console.error(error))
 
-          awaitPreferences = if user?
-            user.get 'project_preferences', project_id: project.id
-              .then ([preferences]) =>
-                preferences ? newPreferences = apiClient.type('project_preferences').create({
-                  links: {
-                    project: project.id
-                  },
-                  preferences: {}
-                }).save()
-          else
-            Promise.resolve apiClient.type('project_preferences').create
-              id: 'GUEST_PREFERENCES_DO_NOT_SAVE'
-              links:
-                project: project.id
-              preferences: {}
+          awaitPreferences = @getUserProjectPreferences(project, user)
 
-          awaitPreferences = awaitPreferences.then (preferences) =>
-            @listenToPreferences preferences
-
-          Promise.all([awaitBackground, awaitOwner, awaitPages, awaitProjectAvatar, awaitProjectRoles, awaitPreferences])
-            .then(([background, owner, pages, projectAvatar, projectRoles, preferences]) => 
-              @setState({ background, owner, pages, projectAvatar, projectRoles, preferences })
-            ).catch((error) => console.error(error))
+          Promise.all([
+            awaitBackground,
+            awaitOwner,
+            awaitPages,
+            awaitProjectAvatar,
+            awaitProjectCompleteness,
+            awaitProjectRoles,
+            awaitPreferences
+          ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) => 
+              @setState({ background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
+              @getSelectedWorkflow(project, preferences)
+            ).catch((error) => @setState({ error }); console.error(error); );
 
         else
-          this.setState
+          @setState
             background: null
             error: new Error 'NOT_FOUND'
             owner: null
             pages: null
             preferences: null
             projectAvatar: null
+            projectIsComplete: false
             projectRoles: null
+            workflow: null
 
       .catch (error) =>
         @setState {error}
 
       .then =>
         @setState loading: false
+
+  canFetchWorkflowByQuery: (project, user) ->
+    if project?
+      'allow workflow query' in project.experimental_tools or @checkUserRoles(project, user)
+
+  getUserProjectPreferences: (project, user) ->
+    @listenToPreferences null
+
+    userPreferences = if user?
+      user.get 'project_preferences', project_id: project.id
+        .then ([preferences]) =>
+          preferences ? newPreferences = apiClient.type('project_preferences').create({
+            links: {
+              project: project.id
+            },
+            preferences: {}
+          }).save()
+    else
+      Promise.resolve apiClient.type('project_preferences').create
+        id: 'GUEST_PREFERENCES_DO_NOT_SAVE'
+        links:
+          project: project.id
+        preferences: {}
+
+    userPreferences
+      .then((preferences) =>
+        @listenToPreferences preferences
+      )
+
+  getSelectedWorkflow: (project, preferences) ->
+    @setState({ loadingSelectedWorkflow: true })
+    # preference workflow query, then user selected workflow, then project owner set workflow, then default workflow
+    # if none of those are set, select random workflow
+    if @props.location.query?.workflow? and @canFetchWorkflowByQuery(project, @props.user)
+      selectedWorkflowID = @props.location.query.workflow
+      unless preferences?.preferences.selected_workflow is selectedWorkflowID
+        @handlePreferencesChange('preferences.selected_workflow', selectedWorkflowID)
+    else if preferences?.preferences.selected_workflow?
+      selectedWorkflowID = preferences?.preferences.selected_workflow
+    else if preferences?.settings?.workflow_id?
+      selectedWorkflowID = preferences?.settings.workflow_id
+    else if project.configuration?.default_workflow?
+      selectedWorkflowID = project.configuration?.default_workflow
+    else
+      selectedWorkflowID = @selectRandomWorkflow(project)
+
+    @getWorkflow(selectedWorkflowID)
+
+  selectRandomWorkflow: (project) ->
+    linkedWorkflows = project.links.workflows
+    if linkedWorkflows.length is 0
+      throw new Error "No workflows for project #{project.id}"
+      project.uncacheLink 'workflows'
+    else
+      randomIndex = Math.floor Math.random() * linkedWorkflows.length
+      # console.log 'Chose random workflow', linkedWorkflows[randomIndex]
+      linkedWorkflows[randomIndex]
+
+  getWorkflow: (selectedWorkflowID) ->
+    apiClient.type('workflows').get({ active: true, id: "#{selectedWorkflowID}", project_id: @state.project.id })
+      .catch (error) =>
+        console.error error
+        # TODO: Handle 404 once json-api-client error handling is fixed.
+        @setState({ error: error, loadingSelectedWorkflow: false })
+      .then ([workflow]) =>
+        if workflow
+          @setState({ loadingSelectedWorkflow: false, workflow })
+        else
+          console.log "No workflow #{selectedWorkflowID} for project #{@state.project.id}"
+          @clearInactiveWorkflow(selectedWorkflowID)
+            .then(@getSelectedWorkflow(@state.project, @state.preferences))
+
+  clearInactiveWorkflow: (selectedWorkflowID) ->
+    preferences = @state.preferences
+    selectedWorkflow = preferences.preferences.selected_workflow
+    projectSetWorkflow = preferences.settings?.workflow_id
+
+    if selectedWorkflowID is preferences.preferences.selected_workflow
+      preferences.update 'preferences.selected_workflow': undefined
+      preferences.save()
+    else if selectedWorkflowID is preferences.settings?.workflow_id
+      preferences.update 'settings.workflow_id': undefined
+      preferences.save()
+    else
+      Promise.resolve(null)
+
+  checkUserRoles: (project, user) ->
+    currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user.id)
+    roles = currentUserRoleSets[0].roles
+
+    isAdmin() or 'owner' in roles or 'collaborator' in roles
 
   listenToPreferences: (preferences) ->
     @_listenedToPreferences?.stopListening 'change', @_boundForceUpdate
@@ -496,13 +263,16 @@ ProjectPageController = React.createClass
           {...@props}
           background={@state.background}
           loading={@state.loading}
+          loadingSelectedWorkflow={@state.loadingSelectedWorkflow}
           onChangePreferences={@handlePreferencesChange}
           owner={@state.owner}
           pages={@state.pages}
           preferences={@state.preferences}
           project={@state.project}
           projectAvatar={@state.projectAvatar}
+          projectIsComplete={@state.projectIsComplete}
           splits={@state.splits}
+          workflow={@state.workflow}
         />
 
       else if @state.loading
