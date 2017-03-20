@@ -178,15 +178,15 @@ module.exports = React.createClass
 
   handleKeyDown: (choiceID, e) ->
     switch e.which
-      when 8
+      when BACKSPACE
         @props.onRemove choiceID
-      when 38
+      when UP
         index = @choiceButtons.indexOf document.activeElement
         newIndex = index - 1
         if newIndex is -1 then newIndex = @choiceButtons.length - 1
         @choiceButtons[newIndex].focus()
         e.preventDefault()
-      when 40
+      when DOWN
         index = @choiceButtons.indexOf document.activeElement
         newIndex = (index + 1) % @choiceButtons.length
         @choiceButtons[newIndex].focus()
