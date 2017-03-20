@@ -72,7 +72,7 @@ ComboTask = React.createClass
           allComboAnnotations.push annotation.value...
 
       <g className="combo-task-persist-inside-subject-container">
-        {Object.keys(props.taskTypes).map (taskType, idx) ->
+        {Object.keys(props.taskTypes).map (taskType) ->
           unless taskType is 'combo'
             TaskComponent = props.taskTypes[taskType]
             if TaskComponent.PersistInsideSubject?
@@ -83,8 +83,13 @@ ComboTask = React.createClass
                   allComboAnnotations[idx] = annotation
                   props.onChange Object.assign({}, props.annotation, { value: allComboAnnotations })
               if props.workflow.tasks[props.annotation?.task]?.type is 'combo'
-                # if the current annotation is for the combo task pass in the `inner` annotations
-                fauxAnnotation = allComboAnnotations[idx]
+                allTaskTypes = props.task.tasks.map (childTaskKey) -> props.workflow.tasks[childTaskKey].type
+                idx = allTaskTypes.indexOf(taskType)
+                if idx > -1
+                  # if the current annotation is for the combo task pass in the `inner` annotations
+                  fauxAnnotation = allComboAnnotations[idx]
+                else
+                  fauxAnnotation = props.annotation
               else
                 fauxAnnotation = props.annotation
               <TaskComponent.PersistInsideSubject
