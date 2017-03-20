@@ -11,6 +11,9 @@ Paginator = require '../../talk/lib/paginator'
 List = React.createClass
   displayName: 'List'
 
+  contextTypes:
+    router: React.PropTypes.object.isRequired
+
   statics: {
     getPropsForList: (props,favorite)->
       translationObjectName = "collectionsPage"
@@ -109,7 +112,6 @@ List = React.createClass
           baseType={@props.baseType} />}
         {if @state.collections?.length > 0
           meta = @state.collections[0].getMeta()
-          console.log meta
           <div>
             <div className="resource-results-counter collection-results-counter">
               <p>
@@ -166,19 +168,10 @@ List = React.createClass
                 }
                 <nav className="pagination">
                   <Paginator
+                    className='talk'
                     page={meta.page}
                     onPageChange={@onPageChange}
                     pageCount={meta.page_count} />
-                  {for page in [1..meta.page_count]
-                    active = (page is +location.query.page) or (page is 1 and not location.search)
-                    <Link
-                      key={page}
-                      to={"#{@props.location.pathname}?page=#{page}"}
-                      activeClassName="active"
-                      className={buttonClasses}
-                      style={border: "2px solid" if active}>
-                      {page}
-                    </Link>}
                 </nav>}
             </nav>
           </div>

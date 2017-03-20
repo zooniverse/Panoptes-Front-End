@@ -22,7 +22,7 @@ SubjectNode = React.createClass
 
   getInitialState: ->
     project: null
-  
+
   componentWillMount: ->
     @fetchProject(@props.subject)
       .then (project) =>
@@ -58,7 +58,7 @@ SubjectNode = React.createClass
           </Link>
       </SubjectViewer>
     </div>
-    
+
 module.exports = React.createClass
   displayName: 'CollectionShowList'
 
@@ -105,7 +105,7 @@ module.exports = React.createClass
     index = subjects.indexOf subject
     subjects.splice index, 1
     @setState {subjects}
-    
+
     @props.collection.removeLink 'subjects', [subject.id.toString()]
       .then =>
         @props.collection.uncacheLink 'subjects'
