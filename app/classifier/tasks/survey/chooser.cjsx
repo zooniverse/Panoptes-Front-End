@@ -16,6 +16,10 @@ module.exports = React.createClass
     onFilter: Function.prototype
     onChoose: Function.prototype
 
+  componentWillMount: ->
+    # refs for the choices
+    @choiceButtons = []
+
   getFilteredChoices: ->
     for choiceID in @props.task.choicesOrder
       choice = @props.task.choices[choiceID]
@@ -48,6 +52,8 @@ module.exports = React.createClass
       3
 
   render: ->
+    @choiceButtons = []
+
     filteredChoices = @getFilteredChoices()
 
     thumbnailSize = @whatSizeThumbnails filteredChoices
@@ -122,6 +128,7 @@ module.exports = React.createClass
             <button
               autoFocus={choiceID is @props.focusedChoice}
               key={choiceID + i}
+              ref={(button) => @choiceButtons.push button}
               type="button"
               className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}"
               onClick={@props.onChoose.bind null, choiceID}
@@ -155,6 +162,17 @@ module.exports = React.createClass
     switch e.which
       when 8
         @props.onRemove choiceID
+      when 38
+        index = @choiceButtons.indexOf document.activeElement
+        newIndex = index - 1
+        if newIndex is -1 then newIndex = @choiceButtons.length - 1
+        @choiceButtons[newIndex].focus()
+        e.preventDefault()
+      when 40
+        index = @choiceButtons.indexOf document.activeElement
+        newIndex = (index + 1) % @choiceButtons.length
+        @choiceButtons[newIndex].focus()
+        e.preventDefault()
       else
         true
     
