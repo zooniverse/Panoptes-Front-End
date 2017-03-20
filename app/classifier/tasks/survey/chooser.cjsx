@@ -20,6 +20,24 @@ module.exports = React.createClass
     # refs for the choices
     @choiceButtons = []
 
+  componentDidMount: ->
+    @sortChoiceButtons()
+
+  componentDidUpdate: ->
+   @sortChoiceButtons()
+
+  sortChoiceButtons: ->
+    # overrides default DOM focus order by sorting the buttons in alphabetical order
+    @choiceButtons = @choiceButtons
+      .filter Boolean
+      .sort (a, b) =>
+        order = 0
+        if a.textContent < b.textContent
+          order = -1
+        if a.textContent > b.textContent
+          order = 1
+        order
+
   getFilteredChoices: ->
     for choiceID in @props.task.choicesOrder
       choice = @props.task.choices[choiceID]
