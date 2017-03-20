@@ -29,7 +29,7 @@ module.exports = React.createClass
       @setState {subjects}
 
   render: ->
-    radius = if innerWidth < 400 then 75 else 100
+    maxWidth = if innerWidth < 400 then 75 else 100
 
     <div className="collection-preview">
       <div className="collection">
@@ -51,7 +51,7 @@ module.exports = React.createClass
                   <Thumbnail
                     key={"collection-preview-#{@props.collection.id}-#{subject.id}"}
                     src={getSubjectLocation(subject).src}
-                    width={radius} />}
+                    width={maxWidth} />}
               </div>
             </Link>
           else
