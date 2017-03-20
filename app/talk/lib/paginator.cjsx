@@ -12,6 +12,7 @@ module.exports = React.createClass
     pageSelector: React.PropTypes.bool            # show page selector?
     itemCount: React.PropTypes.bool               # show number of items out of total
     pageKey: React.PropTypes.string               # optional name for key param (defaults to 'page')
+    data: React.PropTypes.object                  # additional data to be added to the data field when logging to Geordi
 
   contextTypes:
     geordi: React.PropTypes.object
@@ -29,18 +30,19 @@ module.exports = React.createClass
     pageSelector: true
     previousLabel: <span><i className="fa fa-long-arrow-left" /> Previous</span>
     nextLabel: <span>Next <i className="fa fa-long-arrow-right" /></span>
+    data: {}
 
   componentDidMount: ->
     @logClick = @context.geordi?.makeHandler 'change-page'
-
-  componentWillReceiveProps: (nextProps, nextContext)->
-    @logClick = nextContext?.geordi?.makeHandler? 'change-page'
 
   setPage: (activePage) ->
     @props.onPageChange.call(this, activePage)
 
   onClickNext: ->
-    @logClick 'next-page'
+    @context.geordi?.logEvent
+      type: 'change-page'
+      relatedID: 'next-page'
+      data: {page:@props[@props.pageKey], {...@props.data}}
     {pageCount} = @props
     page = @props[@props.pageKey]
     @props.onClickNext?()
@@ -49,7 +51,10 @@ module.exports = React.createClass
     @setPage(nextPage)
 
   onClickPrev: ->
-    @logClick 'previous-page'
+    @context.geordi?.logEvent
+      type: 'change-page'
+      relatedID: 'previous-page'
+      data: {page:@props[@props.pageKey], {...@props.data}}
     page = @props[@props.pageKey]
     @props.onClickPrev?()
 
@@ -57,7 +62,10 @@ module.exports = React.createClass
     @setPage(prevPage)
 
   onSelectPage: (e) ->
-    @logClick 'select-page'
+    @context.geordi?.logEvent
+      type: 'change-page'
+      relatedID: 'select-page'
+      data: {page:@refs.pageSelect.value, {...@props.data}}
     selectedPage = +@refs.pageSelect.value
     @setPage(selectedPage)
 
@@ -74,7 +82,13 @@ module.exports = React.createClass
       {if @props.firstAndLast
         <button
           className="paginator-first"
-          onClick={=> @setPage(1); @logClick 'first-page'}
+          onClick={=>
+            @setPage(1);
+            @context.geordi?.logEvent
+              type: 'change-page'
+              relatedID: 'first-page'
+              data: {page:1, {...@props.data}}
+          }
           disabled={page is 1}>
           <i className="fa fa-fast-backward" /> First
         </button>}
@@ -111,7 +125,13 @@ module.exports = React.createClass
       {if @props.firstAndLast
         <button
           className="paginator-last"
-          onClick={=> @setPage(pageCount); @logClick 'last-page'}
+          onClick={=>
+            @setPage(pageCount);
+            @context.geordi?.logEvent
+              type: 'change-page'
+              relatedID: 'last-page'
+              data: {page:pageCount, {...@props.data}}
+          }
           disabled={page is pageCount}>
           Last <i className="fa fa-fast-forward" />
         </button>}

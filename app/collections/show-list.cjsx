@@ -133,6 +133,7 @@ module.exports = React.createClass
             </div>
 
             <Paginator
+              data={collection:@props.collection.slug}
               page={meta.page}
               onPageChange={@onPageChange}
               pageCount={meta.page_count} />
