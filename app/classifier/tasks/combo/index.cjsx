@@ -3,7 +3,7 @@ React = require 'react'
 ComboTask = React.createClass
   statics:
     Editor: require './editor'
-    Summary: require './summary'
+    Summary: require('./summary.jsx').default
 
     getDefaultTask: ->
       type: 'combo'
