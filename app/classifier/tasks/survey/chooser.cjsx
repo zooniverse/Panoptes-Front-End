@@ -27,16 +27,15 @@ module.exports = React.createClass
    @sortChoiceButtons()
 
   sortChoiceButtons: ->
-    # overrides default DOM focus order by sorting the buttons in alphabetical order
-    @choiceButtons = @choiceButtons
+    # overrides default DOM focus order by sorting the buttons according to task.choicesOrder
+    newChoiceButtons = []
+    @choiceButtons
       .filter Boolean
-      .sort (a, b) =>
-        order = 0
-        if a.textContent < b.textContent
-          order = -1
-        if a.textContent > b.textContent
-          order = 1
-        order
+      .map (button) =>
+        choiceID = button.getAttribute 'data-choiceID'
+        index = @props.task.choicesOrder.indexOf choiceID
+        newChoiceButtons[index] = button
+    @choiceButtons = newChoiceButtons.filter Boolean
 
   getFilteredChoices: ->
     for choiceID in @props.task.choicesOrder
@@ -145,7 +144,8 @@ module.exports = React.createClass
             chosenAlready = choiceID in selectedChoices
             <button
               autoFocus={choiceID is @props.focusedChoice}
-              key={choiceID + i}
+              key={choiceID}
+              data-choiceID={choiceID}
               ref={(button) => @choiceButtons.push button}
               type="button"
               className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}"
