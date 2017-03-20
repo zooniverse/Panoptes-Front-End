@@ -85,12 +85,11 @@ ComboTask = React.createClass
           unless taskType is 'combo'
             TaskComponent = props.taskTypes[taskType]
             if TaskComponent.PersistInsideSubject?
-              # allComboAnnotations needs to be here so previous combo task annotations don't disapear
+              # allComboAnnotations needs to be here so previous combo task annotations don't disappear
               fauxClassification =
                 annotations: allComboAnnotations
                 update: () => props.classification.update()
               fauxChange = (annotation) ->
-                  allComboAnnotations[idx] = annotation
                   props.onChange Object.assign({}, props.annotation, { value: currentComboAnnotations })
               if props.workflow.tasks[props.annotation?.task]?.type is 'combo'
                 idx = allComboTypes.lastIndexOf(taskType)
