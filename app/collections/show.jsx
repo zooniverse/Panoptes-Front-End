@@ -170,6 +170,15 @@ const CollectionPageWrapper = React.createClass({
     }
   },
 
+  componentWillUnmount() {
+    this.state.collection.stopListening('change', this.listenToCollection);
+  },
+
+  listenToCollection() {
+    const collection = this.state.collection;
+    this.setState({ collection });
+  },
+
   title() {
     return this.state.collection ? this.state.collection.display_name : '(Loading)';
   },
@@ -201,6 +210,7 @@ const CollectionPageWrapper = React.createClass({
             collection_id: collection.id,
           })
           .then((roles) => {
+            collection.listen('change', this.listenToCollection);
             this.setState({
               error: false,
               loading: false,
