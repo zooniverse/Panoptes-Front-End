@@ -78,7 +78,16 @@ module.exports = React.createClass
                 if autoFocus
                   hasBeenAutoFocused = true
 
-                <button key={valueID} type="submit" title={value.label} className="survey-task-chooser-characteristic-value" disabled={disabled} data-selected={selected} autoFocus={autoFocus} onClick={@handleFilter.bind this, characteristicID, valueID}>
+                <button
+                  key={valueID}
+                  type="submit"
+                  title={value.label}
+                  className="survey-task-chooser-characteristic-value"
+                  disabled={disabled}
+                  data-selected={selected}
+                  autoFocus={autoFocus}
+                  onClick={@handleFilter.bind this, characteristicID, valueID}
+                >
                   {if value.image?
                     <img src={@props.task.images[value.image]} alt={value.label} className="survey-task-chooser-characteristic-value-icon" />}
                 </button>}
@@ -110,7 +119,14 @@ module.exports = React.createClass
           for choiceID, i in sortedFilteredChoices
             choice = @props.task.choices[choiceID]
             chosenAlready = choiceID in selectedChoices
-            <button autoFocus={choiceID is @props.focusedChoice} key={choiceID + i} type="button" className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}" onClick={@props.onChoose.bind null, choiceID} onKeyDown={@handleKeyDown.bind(this, choiceID)}>
+            <button
+              autoFocus={choiceID is @props.focusedChoice}
+              key={choiceID + i}
+              type="button"
+              className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}"
+              onClick={@props.onChoose.bind null, choiceID}
+              onKeyDown={@handleKeyDown.bind(this, choiceID)}
+            >
               <span className="survey-task-chooser-choice">
                 {if choice.images?.length > 0
                   thumbnailSrc = @props.task.images[choice.images[0]]
