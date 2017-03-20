@@ -2,6 +2,11 @@ React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
 sortIntoColumns = require 'sort-into-columns'
 
+# key codes
+BACKSPACE = 8
+UP = 38
+DOWN = 40
+
 module.exports = React.createClass
   displayName: 'Chooser'
 
@@ -105,7 +110,7 @@ module.exports = React.createClass
           for choiceID, i in sortedFilteredChoices
             choice = @props.task.choices[choiceID]
             chosenAlready = choiceID in selectedChoices
-            <button autoFocus={choiceID is @props.focusedChoice} key={choiceID + i} type="button" className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}" onClick={@props.onChoose.bind null, choiceID}>
+            <button autoFocus={choiceID is @props.focusedChoice} key={choiceID + i} type="button" className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}" onClick={@props.onChoose.bind null, choiceID} onKeyDown={@handleKeyDown.bind(this, choiceID)}>
               <span className="survey-task-chooser-choice">
                 {if choice.images?.length > 0
                   thumbnailSrc = @props.task.images[choice.images[0]]
@@ -129,3 +134,11 @@ module.exports = React.createClass
   handleClearFilters: ->
     for characteristicID in @props.task.characteristicsOrder
       @props.onFilter characteristicID, undefined
+
+  handleKeyDown: (choiceID, e) ->
+    switch e.which
+      when 8
+        @props.onRemove choiceID
+      else
+        true
+    
