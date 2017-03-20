@@ -37,7 +37,8 @@ List = React.createClass
     if nextProps.user isnt @props.user
       @listCollections nextProps
 
-    if nextProps.location.query.page isnt @props.location.query.page
+    newRoute = @props.route?.path isnt nextProps.route?.path
+    if nextProps.location.query.page isnt @props.location.query.page || newRoute
       @listCollections nextProps
 
   cardLink: (collection) ->
