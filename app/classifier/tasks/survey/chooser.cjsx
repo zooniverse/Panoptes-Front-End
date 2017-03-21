@@ -80,12 +80,12 @@ module.exports = React.createClass
 
     <div className="survey-task-chooser">
       <div className="survey-task-chooser-characteristics">
-        {for characteristicID in @props.task.characteristicsOrder
+        {for characteristicID, i in @props.task.characteristicsOrder
           characteristic = @props.task.characteristics[characteristicID]
           selectedValue = characteristic.values[@props.filters[characteristicID]]
           hasBeenAutoFocused = false
 
-          <TriggeredModalForm key={characteristicID} ref="#{characteristicID}-dropdown" className="survey-task-chooser-characteristic-menu" trigger={
+          <TriggeredModalForm key={characteristicID} ref="#{characteristicID}-dropdown" className="survey-task-chooser-characteristic-menu" triggerProps={autoFocus: i is 0 and not @props.focusedChoice} trigger={
             <span className="survey-task-chooser-characteristic" data-is-active={selectedValue? || null}>
               <span className="survey-task-chooser-characteristic-label">{selectedValue?.label ? characteristic.label}</span>
             </span>
