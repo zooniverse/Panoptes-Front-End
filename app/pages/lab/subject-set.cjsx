@@ -109,7 +109,7 @@ SubjectSetListing = React.createClass
       <div>
         <SubjectSetListingTable subjects={@state.subjects} onPreview={@previewSubject} onRemove={@removeSubject} />
         <nav className="pagination">
-          Page <select value={@props.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @newPage(e.target.value, @state.pageCount)}>
+          Page <select value={@props.page} disabled={@state.pageCount < 2 or isNaN @state.pageCount} onChange={(e) => @newPage(e.target.value)}>
             {if isNaN @state.pageCount
               <option>?</option>
             else
