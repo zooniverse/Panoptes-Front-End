@@ -1,6 +1,5 @@
 import React from 'react';
 import alert from '../lib/alert';
-import checkIfCollectionOwner from '../lib/check-if-collection-owner';
 import DisplayNameSlugEditor from '../partials/display-name-slug-editor';
 import CollectionDeleteDialog from './collection-delete-dialog';
 
@@ -10,7 +9,6 @@ export default class CollectionSettings extends React.Component {
 
     this.state = {
       error: null,
-      hasSettingsRole: true,
       isDeleting: false,
       setting: {
         private: false
@@ -24,11 +22,6 @@ export default class CollectionSettings extends React.Component {
   }
 
   componentDidMount() {
-    console.log('roles', this.props.roles);
-    // checkIfCollectionOwner(this.props.user, this.props.collection)
-    //   .then((hasSettingsRole) => {
-    //     this.setState({ hasSettingsRole });
-    //   }).catch((error) => { this.setState({ error }); });
     this.props.collection.listen('delete', this.redirect);
   }
 
@@ -67,13 +60,14 @@ export default class CollectionSettings extends React.Component {
 
   handleToggle(event) {
     const property = event.target.name;
-    const value = event.target.value;
+    const checked = event.target.checked;
     const setting = this.state.setting;
     setting[property] = true;
     this.setState({ error: null, setting });
 
     const changes = {};
-    changes[property] = value;
+    changes[property] = checked;
+    console.log('changes', changes)
     this.props.collection.update(changes).save()
       .catch((error) => {
         this.setState({ error });
@@ -84,7 +78,7 @@ export default class CollectionSettings extends React.Component {
   }
 
   render() {
-    if (!this.state.hasSettingsRole) {
+    if (!this.props.canCollaborate) {
       return (
         <div className="collection-settings-tab">
           <p>Not allowed to edit this collection</p>
@@ -106,8 +100,7 @@ export default class CollectionSettings extends React.Component {
             <input
               type="radio"
               name="private"
-              value={true}
-              data-json-value={true}
+              value="true"
               disabled={this.state.setting.private}
               checked={this.props.collection.private}
               onChange={this.handleToggle}
@@ -119,10 +112,9 @@ export default class CollectionSettings extends React.Component {
             <input
               type="radio"
               name="private"
-              value={false}
-              data-json-value={true}
+              value="false"
               disabled={this.state.setting.private}
-              checked={this.props.collection.private ? !this.props.collection.private : this.props.collection.private}
+              checked={this.props.collection.private ? !this.props.collection.private : false}
               onChange={this.handleToggle}
             />
             Public
@@ -147,12 +139,14 @@ CollectionSettings.contextTypes = {
 };
 
 CollectionSettings.defaultProps = {
+  canCollaborate: false,
   collection: {},
   roles: [],
   user: null
 };
 
 CollectionSettings.propTypes = {
+  canCollaborate: React.PropTypes.bool,
   collection: React.PropTypes.shape({
     private: React.PropTypes.bool
   }),

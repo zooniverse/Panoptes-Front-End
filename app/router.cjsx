@@ -169,7 +169,7 @@ module.exports =
 
     <Route path="collections/:collection_owner/:collection_name" component={CollectionPageWrapper}>
       <IndexRoute component={require './collections/show-list'} />
-      <Route path="settings" component={require './collections/settings'} />
+      <Route path="settings" component={CollectionSettings} />
       <Route path="collaborators" component={require './collections/collaborators'} />
       <Route path="talk" component={require './collections/show-list'} />
     </Route>
