@@ -5,11 +5,11 @@ import FrameViewer from './frame-viewer';
 import FrameAnnotator from '../classifier/frame-annotator';
 
 const subject = {
-  locations: [{ image: '/assets/dev-classifier/landscape.jpeg' }]
+  locations: [{ 'image/jpeg': '/assets/dev-classifier/landscape.jpeg' }]
 };
 
 const videoSubject = {
-  locations: [{ video: 'www.testvideo.com' }]
+  locations: [{ 'video/mp4': 'testvideo.mp4' }]
 };
 
 const clickProps = {
