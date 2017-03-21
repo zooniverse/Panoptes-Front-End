@@ -2,6 +2,12 @@ import React from 'react';
 
 
 const CollectionDeleteDialog = ({ deleteCollection, isDeleting, onComplete }) => {
+  const handleDelete = () => {
+    deleteCollection().then(() => {
+      onComplete();
+    });
+  };
+
   return (
     <div>
       <p>Are you sure you want to delete this collection? This action is irreversible!</p>
@@ -14,7 +20,7 @@ const CollectionDeleteDialog = ({ deleteCollection, isDeleting, onComplete }) =>
 
       {!isDeleting &&
         <div>
-          <button className="major-button" onClick={deleteCollection}>Yes, delete it!</button>
+          <button className="major-button" onClick={handleDelete}>Yes, delete it!</button>
           {' '}
           <button className="minor-button" onClick={onComplete}>No, don't delete it.</button>
         </div>}

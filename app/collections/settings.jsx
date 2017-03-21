@@ -50,24 +50,20 @@ export default class CollectionSettings extends React.Component {
   deleteCollection() {
     this.setState({ isDeleting: true });
 
-    this.props.collection.delete()
+    return this.props.collection.delete()
       .catch((error) => {
         this.setState({ error, isDeleting: false });
-      }).then(() => {
-        this.setState({ isDeleting: false });
       });
   }
 
-  handleToggle(event) {
+  handleToggle(privacy, event) {
     const property = event.target.name;
-    const checked = event.target.checked;
     const setting = this.state.setting;
     setting[property] = true;
     this.setState({ error: null, setting });
-
     const changes = {};
-    changes[property] = checked;
-    console.log('changes', changes)
+    changes[property] = privacy;
+
     this.props.collection.update(changes).save()
       .catch((error) => {
         this.setState({ error });
@@ -102,8 +98,8 @@ export default class CollectionSettings extends React.Component {
               name="private"
               value="true"
               disabled={this.state.setting.private}
-              checked={this.props.collection.private}
-              onChange={this.handleToggle}
+              defaultChecked={this.props.collection.private}
+              onChange={this.handleToggle.bind(this, true)}
             />
             Private
           </label>
@@ -114,8 +110,8 @@ export default class CollectionSettings extends React.Component {
               name="private"
               value="false"
               disabled={this.state.setting.private}
-              checked={this.props.collection.private ? !this.props.collection.private : false}
-              onChange={this.handleToggle}
+              defaultChecked={!this.props.collection.private ? true : !this.props.collection.private}
+              onChange={this.handleToggle.bind(this, false)}
             />
             Public
           </label>
