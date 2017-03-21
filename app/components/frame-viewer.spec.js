@@ -1,18 +1,18 @@
 import React from 'react';
 import assert from 'assert';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import FrameViewer from './frame-viewer';
 import FrameAnnotator from '../classifier/frame-annotator';
 
 const subject = {
-  locations: [{ image: 'www.testimage.com' }]
+  locations: [{ image: '/assets/dev-classifier/landscape.jpeg' }]
 };
 
 const videoSubject = {
   locations: [{ video: 'www.testvideo.com' }]
 };
 
-const clickSimulate = {
+const clickProps = {
   target: { videoWidth: 0, videoHeight: 0 }
 };
 
@@ -32,7 +32,7 @@ describe('FrameViewer', function () {
     });
 
     it('should setState correctly in handleLoad', function () {
-      wrapper.instance().handleLoad(clickSimulate);
+      wrapper.instance().handleLoad(clickProps);
       assert.equal(wrapper.state('loading'), false);
     });
 
@@ -43,12 +43,12 @@ describe('FrameViewer', function () {
 
   describe('if loading other subjects', function() {
     it('should load a video subject correctly', function () {
-      const wrapper = mount(<FrameViewer subject={videoSubject} />);
+      const wrapper = shallow(<FrameViewer subject={videoSubject} />);
       assert.equal(wrapper.find('VideoPlayer').length, 1);
     });
 
     it('should load nothing without a subject or wrapper present', function () {
-      const wrapper = mount(<FrameViewer />);
+      const wrapper = shallow(<FrameViewer />);
       assert.equal(wrapper.children().length, 0);
     });
   });

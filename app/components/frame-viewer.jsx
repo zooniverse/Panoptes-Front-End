@@ -5,9 +5,6 @@ import VideoPlayer from './video-player';
 import PanZoom from './pan-zoom';
 import TextViewer from './text-viewer';
 
-const SUBJECT_STYLE = { display: 'block' };
-const NOOP = Function.prototype;
-
 export default class FrameViewer extends React.Component {
   constructor(props) {
     super(props);
@@ -43,26 +40,24 @@ export default class FrameViewer extends React.Component {
   }
 
   render() {
-    let type;
-    let format;
-    let src;
     const zoomEnabled = this.props.workflow.configuration.pan_and_zoom;
     const FrameWrapper = this.props.frameWrapper;
-    ({ type, format, src } = getSubjectLocation(this.props.subject, this.props.frame));
+    const { type, format, src } = getSubjectLocation(this.props.subject, this.props.frame);
+
     const frameDisplay = ((subject) => {
       switch (subject) {
         case 'image':
           return (
             <div className="subject-image-frame" >
               <img
+                role="presentation"
                 ref="subjectImage"
                 className="subject pan-active"
                 src={src}
-                style={SUBJECT_STYLE}
                 onLoad={this.handleLoad}
                 tabIndex={0}
-                onFocus={this.refs.panZoom ? this.refs.panZoom.togglePanOn : NOOP}
-                onBlur={this.refs.panZoom ? this.refs.panZoom.togglePanOff : NOOP}
+                onFocus={this.panZoom ? this.panZoom.togglePanOn : () => {}}
+                onBlur={this.panZoom ? this.panZoom.togglePanOff : () => {}}
               />
 
               {this.state.loading && (
@@ -86,7 +81,7 @@ export default class FrameViewer extends React.Component {
 
     if (FrameWrapper) {
       return (
-        <PanZoom ref="panZoom" enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
+        <PanZoom ref={(c) => { this.panZoom = c; }} enabled={zoomEnabled} frameDimensions={this.state.frameDimensions}>
           <FrameWrapper
             frame={this.props.frame}
             naturalWidth={this.state.frameDimensions.width || 0}
@@ -138,7 +133,7 @@ FrameViewer.defaultProps = {
     annotations: []
   },
   frame: 0,
-  onChange: NOOP,
+  onChange: () => {},
   preferences: { },
   subject: {
     locations: []
