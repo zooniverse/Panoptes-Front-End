@@ -2,6 +2,11 @@ React = require 'react'
 TriggeredModalForm = require 'modal-form/triggered'
 sortIntoColumns = require 'sort-into-columns'
 
+# key codes
+BACKSPACE = 8
+UP = 38
+DOWN = 40
+
 module.exports = React.createClass
   displayName: 'Chooser'
 
@@ -10,6 +15,27 @@ module.exports = React.createClass
     filters: {}
     onFilter: Function.prototype
     onChoose: Function.prototype
+
+  componentWillMount: ->
+    # refs for the choices
+    @choiceButtons = []
+
+  componentDidMount: ->
+    @sortChoiceButtons()
+
+  componentDidUpdate: ->
+   @sortChoiceButtons()
+
+  sortChoiceButtons: ->
+    # overrides default DOM focus order by sorting the buttons according to task.choicesOrder
+    newChoiceButtons = []
+    @choiceButtons
+      .filter Boolean
+      .map (button) =>
+        choiceID = button.getAttribute 'data-choiceID'
+        index = @props.task.choicesOrder.indexOf choiceID
+        newChoiceButtons[index] = button
+    @choiceButtons = newChoiceButtons.filter Boolean
 
   getFilteredChoices: ->
     for choiceID in @props.task.choicesOrder
@@ -43,6 +69,8 @@ module.exports = React.createClass
       3
 
   render: ->
+    @choiceButtons = []
+
     filteredChoices = @getFilteredChoices()
 
     thumbnailSize = @whatSizeThumbnails filteredChoices
@@ -52,12 +80,12 @@ module.exports = React.createClass
 
     <div className="survey-task-chooser">
       <div className="survey-task-chooser-characteristics">
-        {for characteristicID in @props.task.characteristicsOrder
+        {for characteristicID, i in @props.task.characteristicsOrder
           characteristic = @props.task.characteristics[characteristicID]
           selectedValue = characteristic.values[@props.filters[characteristicID]]
           hasBeenAutoFocused = false
 
-          <TriggeredModalForm key={characteristicID} ref="#{characteristicID}-dropdown" className="survey-task-chooser-characteristic-menu" trigger={
+          <TriggeredModalForm key={characteristicID} ref="#{characteristicID}-dropdown" className="survey-task-chooser-characteristic-menu" triggerProps={autoFocus: i is 0 and not @props.focusedChoice} trigger={
             <span className="survey-task-chooser-characteristic" data-is-active={selectedValue? || null}>
               <span className="survey-task-chooser-characteristic-label">{selectedValue?.label ? characteristic.label}</span>
             </span>
@@ -73,7 +101,16 @@ module.exports = React.createClass
                 if autoFocus
                   hasBeenAutoFocused = true
 
-                <button key={valueID} type="submit" title={value.label} className="survey-task-chooser-characteristic-value" disabled={disabled} data-selected={selected} autoFocus={autoFocus} onClick={@handleFilter.bind this, characteristicID, valueID}>
+                <button
+                  key={valueID}
+                  type="submit"
+                  title={value.label}
+                  className="survey-task-chooser-characteristic-value"
+                  disabled={disabled}
+                  data-selected={selected}
+                  autoFocus={autoFocus}
+                  onClick={@handleFilter.bind this, characteristicID, valueID}
+                >
                   {if value.image?
                     <img src={@props.task.images[value.image]} alt={value.label} className="survey-task-chooser-characteristic-value-icon" />}
                 </button>}
@@ -105,7 +142,16 @@ module.exports = React.createClass
           for choiceID, i in sortedFilteredChoices
             choice = @props.task.choices[choiceID]
             chosenAlready = choiceID in selectedChoices
-            <button key={choiceID + i} type="button" className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}" onClick={@props.onChoose.bind null, choiceID}>
+            <button
+              autoFocus={choiceID is @props.focusedChoice}
+              key={choiceID}
+              data-choiceID={choiceID}
+              ref={(button) => @choiceButtons.push button}
+              type="button"
+              className="survey-task-chooser-choice-button #{'survey-task-chooser-choice-button-chosen' if chosenAlready}"
+              onClick={@props.onChoose.bind null, choiceID}
+              onKeyDown={@handleKeyDown.bind(this, choiceID)}
+            >
               <span className="survey-task-chooser-choice">
                 {if choice.images?.length > 0
                   thumbnailSrc = @props.task.images[choice.images[0]]
@@ -129,3 +175,23 @@ module.exports = React.createClass
   handleClearFilters: ->
     for characteristicID in @props.task.characteristicsOrder
       @props.onFilter characteristicID, undefined
+
+  handleKeyDown: (choiceID, e) ->
+    switch e.which
+      when BACKSPACE
+        @props.onRemove choiceID
+        e.preventDefault()
+      when UP
+        index = @choiceButtons.indexOf document.activeElement
+        newIndex = index - 1
+        if newIndex is -1 then newIndex = @choiceButtons.length - 1
+        @choiceButtons[newIndex].focus()
+        e.preventDefault()
+      when DOWN
+        index = @choiceButtons.indexOf document.activeElement
+        newIndex = (index + 1) % @choiceButtons.length
+        @choiceButtons[newIndex].focus()
+        e.preventDefault()
+      else
+        true
+    
