@@ -82,7 +82,7 @@ ClassificationSummary.propTypes = {
   subject: React.PropTypes.object.isRequired,
   classification: React.PropTypes.object.isRequired,
   expertClassification: React.PropTypes.object,
-  splits: React.PropTypes.array,
+  splits: React.PropTypes.object,
   classificationCount: React.PropTypes.number
 };
 
