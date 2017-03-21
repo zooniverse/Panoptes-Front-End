@@ -74,9 +74,11 @@ module.exports = React.createClass
     canIdentify = answerProvided.every (answer) -> answer is true
 
   render: ->
+    hasFocus = false
     choice = @props.task.choices[@props.choiceID]
     <div className="survey-task-choice">
       {unless choice.images.length is 0
+        hasFocus = choice.images.length > 1
         <ImageFlipper images={@props.task.images[filename] for filename in choice.images} />}
       <div className="survey-task-choice-content">
         <div className="survey-task-choice-label">{choice.label}</div>
@@ -86,14 +88,19 @@ module.exports = React.createClass
           <div className="survey-task-choice-confusions">
             Often confused with
             {' '}
-            {for otherChoiceID in choice.confusionsOrder
+            {for otherChoiceID, i in choice.confusionsOrder
               otherChoice = @props.task.choices[otherChoiceID]
               <span key={otherChoiceID}>
-                <TriggeredModalForm className="survey-task-confusions-modal" trigger={
-                  <span className="survey-task-choice-confusion">
-                    {otherChoice.label}
-                  </span>
-                } style={maxWidth: '60ch'}>
+                <TriggeredModalForm
+                  className="survey-task-confusions-modal"
+                  triggerProps={autoFocus: not hasFocus and i is 0}
+                  trigger={
+                    <span className="survey-task-choice-confusion">
+                      {otherChoice.label}
+                      </span>
+                  }
+                  style={maxWidth: '60ch'}
+                >
                   <ImageFlipper images={@props.task.images[filename] for filename in otherChoice.images} />
                   <Markdown content={choice.confusions[otherChoiceID]} />
                   <div className="survey-task-choice-confusion-buttons" style={textAlign: 'center'}>
@@ -103,6 +110,7 @@ module.exports = React.createClass
                   </div>
                 </TriggeredModalForm>
                 {' '}
+                {hasFocus = true}
               </span>}
           </div>}
 
@@ -117,7 +125,7 @@ module.exports = React.createClass
               'radio'
             <div key={questionID} className="survey-task-choice-question" data-multiple={question.multiple || null}>
               <div className="survey-task-choice-question-label">{question.label}</div>
-              {for answerID in question.answersOrder
+              {for answerID, i in question.answersOrder
                 answer = question.answers[answerID]
                 isChecked = if question.multiple
                   answerID in (@state.answers[questionID] ? [])
@@ -126,10 +134,20 @@ module.exports = React.createClass
                 isFocused = @state.focusedAnswer is "#{questionID}/#{answerID}"
                 <span key={answerID}>
                   <label className="survey-task-choice-answer" data-checked={isChecked || null} data-focused={isFocused || null}>
-                    <input ref={questionID} name={questionID} type={inputType} checked={isChecked} onChange={@handleAnswer.bind this, questionID, answerID} onFocus={@handleFocus.bind this, questionID, answerID} onBlur={@handleFocus.bind this, null, null} />
+                    <input
+                      ref={questionID}
+                      name={questionID}
+                      type={inputType}
+                      autoFocus={not hasFocus and i is 0}
+                      checked={isChecked}
+                      onChange={@handleAnswer.bind this, questionID, answerID}
+                      onFocus={@handleFocus.bind this, questionID, answerID}
+                      onBlur={@handleFocus.bind this, null, null}
+                    />
                     {answer.label}
                   </label>
                   {' '}
+                  {hasFocus=true}
                 </span>}
             </div>}
 
@@ -137,7 +155,7 @@ module.exports = React.createClass
           <hr />}
       </div>
       <div style={textAlign: 'center'}>
-        <button type="button" className="minor-button" onClick={@props.onCancel}>Cancel</button>
+        <button type="button" autoFocus={not hasFocus} className="minor-button" onClick={@props.onCancel}>Cancel</button>
         {' '}
         <button type="button" className="standard-button" disabled={not @checkFilledIn()} onClick={@handleIdentification}>
           <strong>Identify</strong>
