@@ -180,6 +180,7 @@ module.exports = React.createClass
     switch e.which
       when BACKSPACE
         @props.onRemove choiceID
+        e.preventDefault()
       when UP
         index = @choiceButtons.indexOf document.activeElement
         newIndex = index - 1
