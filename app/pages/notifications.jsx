@@ -26,7 +26,9 @@ export default class NotificationsPage extends React.Component {
   }
 
   componentWillMount() { // eslint-disable-line
-    if (this.props.user) this.getProjectNotifications();
+    if (this.props.user) {
+      this.getProjectNotifications();
+    }
   }
 
   componentWillReceiveProps(nextProps) { // eslint-disable-line
@@ -44,6 +46,9 @@ export default class NotificationsPage extends React.Component {
     })
     .then(() => {
       if (this.props.project) this.setState({ expanded: `project-${this.props.project.id}` });
+    })
+    .catch((e) => {
+      console.error('Unable to load notifications', e);
     });
   }
 
