@@ -64,7 +64,7 @@ export default class SubjectSetsPage extends React.Component {
                   activeClassName="active"
                   className="nav-list-item"
                   title="A subject is an image (or group of images) to be analyzed."
-                  to={this.labPath('/subject-set/#{subjectSet.id}')}
+                  to={this.labPath(`/subject-set/${subjectSet.id}`)}
                 >
                   {subjectSetListLabel}
                 </Link>
