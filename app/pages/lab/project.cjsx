@@ -90,6 +90,12 @@ EditProjectPage = React.createClass
           <li><Link to={@labPath('/data-exports')} activeClassName='active' className="nav-list-item" title="Get your project's data exports">
             Data Exports
           </Link></li>
+          <li><Link to={@labPath('/workflows')} activeClassName='active' className="nav-list-item" title="View your project's workflows">
+            Workflows
+          </Link></li>
+          <li><Link to={@labPath('/subjectsets')} activeClassName='active' className="nav-list-item" title="View your project's subject sets">
+            Subject Sets
+          </Link></li>
 
           <li>
             <br />
