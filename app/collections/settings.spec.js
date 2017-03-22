@@ -1,8 +1,9 @@
 import React from 'react';
 import assert from 'assert';
-import CollectionSettings from './settings';
+import { shallow } from 'enzyme';
+import sinon from 'sinon';
 import DisplayNameSlugEditor from '../partials/display-name-slug-editor';
-import { render, shallow, mount } from 'enzyme';
+import CollectionSettings from './settings';
 
 const user = {
   id: '2',
@@ -16,51 +17,66 @@ const collection = {
   slug: 'username/a-collection'
 };
 
-const roles = [
-  { id: '2',
-    links: {
-      owner: {
-        id: '2',
-        type: 'users'
-      }
-    },
-    roles: ['owner']
-  }
-];
-
 describe('<CollectionSettings />', function() {
   describe('renders', function() {
     let wrapper;
     before(function() {
-      wrapper = shallow(<CollectionSettings collection={collection} roles={roles} user={user} />, { context: { router: {} } });
+      wrapper = shallow(<CollectionSettings canCollaborate={true} collection={collection} user={user} />, { context: { router: {} } });
     });
 
     it('without crashing', function() {
       assert.equal(wrapper, wrapper);
     });
 
-    it('the display name in the display name editor', function() {
-      // const displayNameInput = wrapper.find('input[name="display_name"]').props().value;
-      console.log('input', wrapper.find('input'))
-      // assert.equal(displayNameInput, collection.display_name);
-    });
-
-    it('the collection slug as a link', function() {
-      assert.equal(wrapper.contains(<a href="/collections/username/a-collection">/collections/username/a-collection</a>), true);
+    it('<DisplayNameSlugEditor />', function() {
+      assert.equal(wrapper.find(DisplayNameSlugEditor).length, 1);
     });
 
     it('the correct default checked attribute for visibility', function() {
-      const privateChecked = wrapper.find('input[type="radio"]').first().checked;
-      const publicChecked = wrapper.find('input[type="radio"]').last().checked;
-      assert.notEqual(privateChecked, collection.private);
-      assert.equal(publicChecked, collection.private);
+      const privateChecked = wrapper.find('input[type="radio"]').first().props().defaultChecked;
+      const publicChecked = wrapper.find('input[type="radio"]').last().props().defaultChecked;
+      assert.equal(privateChecked, collection.private);
+      assert.notEqual(publicChecked, collection.private);
     });
 
     it('permission messaging if there is no user', function() {
-      wrapper.setProps({ user: null });
+      wrapper.setProps({ canCollaborate: false, user: null });
       const permissionMessage = wrapper.contains(<p>Not allowed to edit this collection</p>);
       assert(permissionMessage, true);
     });
   });
 
+  describe('delete methods', function() {
+    let wrapper;
+    let deleteSpy;
+    let redirectSpy;
+    let deleteButton;
+    before(function() {
+      wrapper = shallow(<CollectionSettings canCollaborate={true} collection={collection} user={user} />, { context: { router: {} } });
+      deleteSpy = sinon.spy(wrapper.instance(), 'deleteCollection');
+      redirectSpy = sinon.spy(wrapper.instance(), 'redirect');
+      deleteButton = wrapper.find('button');
+    });
+
+    it('should open a confirmation dialog when the delete button is clicked', function() {
+      deleteButton.simulate('click');
+      console.log('wrapper', wrapper.html());
+      assert.equal(wrapper.find('.confirm-delete-dialog').length, 1);
+    });
+
+    it('should close dialog on cancel', function() {
+      const cancelButton = wrapper.find('button.minor-button');
+      console.log('cancelButton', cancelButton.html())
+    });
+
+    // it('should call this.deleteCollection() when deletion is confirmed', function() {
+    //   const yesDeleteButton = wrapper.find('button.major-button');
+    //   console.log
+    //   assert()
+    // });
+
+    // it('should call this.redirect() on the delete event', function() {
+
+    // });
+  });
 });

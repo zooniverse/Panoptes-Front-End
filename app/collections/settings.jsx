@@ -1,7 +1,6 @@
 import React from 'react';
 import alert from '../lib/alert';
 import DisplayNameSlugEditor from '../partials/display-name-slug-editor';
-import CollectionDeleteDialog from './collection-delete-dialog';
 
 export default class CollectionSettings extends React.Component {
   constructor(props) {
@@ -35,13 +34,24 @@ export default class CollectionSettings extends React.Component {
 
   confirmDelete() {
     alert((resolve) => {
+      const handleDelete = () => { this.deleteCollection().then(resolve); };
+
       return (
         <div className="confirm-delete-dialog content-container">
-          <CollectionDeleteDialog
-            deleteCollection={this.deleteCollection}
-            isDeleting={this.state.isDeleting}
-            onComplete={resolve}
-          />
+          <p>Are you sure you want to delete this collection? This action is irreversible!</p>
+
+          {this.state.isDeleting &&
+            <div>
+              <button className="major-button" disabled={true}><i className="fa fa-spinner" /></button>
+              {' '}
+            </div>}
+
+          {!this.state.isDeleting &&
+            <div>
+              <button className="major-button" onClick={handleDelete}>Yes, delete it!</button>
+              {' '}
+              <button className="minor-button" onClick={resolve}>No, don't delete it.</button>
+            </div>}
         </div>
       );
     });
@@ -84,13 +94,14 @@ export default class CollectionSettings extends React.Component {
 
     return (
       <div className="collection-settings-tab">
+        {this.state.error &&
+          <p>Something went wrong. Please try again</p>}
         <DisplayNameSlugEditor resource={this.props.collection} resourceType="collection" />
 
         <hr />
 
         <span className="form-label">Visibility</span>
-        {this.state.error &&
-          <span>Something went wrong. Please try again</span>}
+
         <form>
           <label>
             <input
@@ -137,7 +148,6 @@ CollectionSettings.contextTypes = {
 CollectionSettings.defaultProps = {
   canCollaborate: false,
   collection: {},
-  roles: [],
   user: null
 };
 
@@ -146,7 +156,6 @@ CollectionSettings.propTypes = {
   collection: React.PropTypes.shape({
     private: React.PropTypes.bool
   }),
-  roles: React.PropTypes.arrayOf(React.PropTypes.object),
   user: React.PropTypes.object
 };
 
