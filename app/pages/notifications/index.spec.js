@@ -2,7 +2,7 @@
 
 import React from 'react';
 import assert from 'assert';
-import Notifications from './notifications';
+import Notifications from './index';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
@@ -32,7 +32,7 @@ describe('Notifications', function() {
     });
 
     it('will notify when no notifications present', function() {
-      const stub = sinon.stub(Notifications.prototype, 'componentWillMount');
+      const stub = sinon.stub(Notifications.prototype, 'componentDidMount');
       wrapper = mount(<Notifications user={{ id: 1 }} />);
       assert(wrapper.contains(<span>You have no notifications.</span>));
       stub.restore();
@@ -42,7 +42,8 @@ describe('Notifications', function() {
   describe('it correctly display projects', function() {
     beforeEach(function () {
       wrapper = shallow(
-        <Notifications />,
+        <Notifications user={{ id: 1 }} />,
+        { disableLifecycleMethods: true }
       );
       wrapper.instance().groupNotifications(testNotifications);
       notifications = shallow(wrapper.instance().renderNotifications());
@@ -60,7 +61,8 @@ describe('Notifications', function() {
   describe('will open sections correctly', function() {
     beforeEach(function () {
       wrapper = shallow(
-        <Notifications />,
+        <Notifications user={{ id: 1 }} />,
+        { disableLifecycleMethods: true }
       );
       wrapper.setState({ expanded: 'project-1234' });
       wrapper.instance().groupNotifications(testNotifications);

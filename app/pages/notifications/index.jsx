@@ -2,9 +2,9 @@ import React from 'react';
 import counterpart from 'counterpart';
 import Translate from 'react-translate-component';
 import talkClient from 'panoptes-client/lib/talk-client';
-import Loading from '../components/loading-indicator.cjsx';
-import NotificationSection from './notifications/notification-section';
-import CollapsableSection from '../components/collapsable-section';
+import Loading from '../../components/loading-indicator.cjsx';
+import NotificationSection from '../notifications/notification-section';
+import CollapsableSection from '../../components/collapsable-section';
 
 counterpart.registerTranslations('en', {
   notifications: {
@@ -25,14 +25,16 @@ export default class NotificationsPage extends React.Component {
     };
   }
 
-  componentWillMount() { // eslint-disable-line
+  componentDidMount() { // eslint-disable-line
     if (this.props.user) {
       this.getProjectNotifications();
     }
   }
 
   componentWillReceiveProps(nextProps) { // eslint-disable-line
-    if (nextProps.user !== this.props.user) return this.getProjectNotifications();
+    if (nextProps.user !== null && nextProps.user !== this.props.user) {
+      this.getProjectNotifications();
+    }
   }
 
   onChildChanged(section) {

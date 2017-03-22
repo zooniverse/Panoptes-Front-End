@@ -14,7 +14,7 @@ React = require 'react'
 `import ProjectStatus from './pages/admin/project-status';`
 `import EditMediaPage from './pages/lab/media';`
 `import UserProfilePage from './pages/profile/index';`
-`import NotificationsPage from './pages/notifications';`
+`import NotificationsPage from './pages/notifications/index';`
 
 # <Redirect from="home" to="/" /> doesn't work.
 ONE_UP_REDIRECT = React.createClass
