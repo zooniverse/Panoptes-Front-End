@@ -235,81 +235,81 @@ describe('ApplyForBeta component:', function() {
     });
   });
 
-  describe('async validation:', function() {
-    const testForErrorMessage = (regex, result, condition, done) => {
-      workflows[0].active = true;
-      wrapper = mount(<ApplyForBetaForm project={project} workflows={workflows} />);
-      wrapper.find('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.simulate('change', { target: { checked: true }});
-      });
-      wrapper.find('button.standard-button').first().simulate('click');
-      setTimeout(function() {
-        const errorMessages = wrapper.find('ul.form-help').at(1).text();
-        const containsError = regex.test(errorMessages);
-        assert.ok(containsError === result, condition);
-        done();
-      }, 50);
-    };
+  // describe('async validation:', function() {
+  //   const testForErrorMessage = (regex, result, condition, done) => {
+  //     workflows[0].active = true;
+  //     wrapper = mount(<ApplyForBetaForm project={project} workflows={workflows} />);
+  //     wrapper.find('input[type="checkbox"]').forEach(checkbox => {
+  //       checkbox.simulate('change', { target: { checked: true }});
+  //     });
+  //     wrapper.find('button.standard-button').first().simulate('click');
+  //     setTimeout(function() {
+  //       const errorMessages = wrapper.find('ul.form-help').at(1).text();
+  //       const containsError = regex.test(errorMessages);
+  //       assert.ok(containsError === result, condition);
+  //       done();
+  //     }, 50);
+  //   };
 
-    describe('content page checks:', function () {
-      REQUIRED_PAGES.map(function (pageTitle) {
-        beforeEach(testSetup);
+  //   describe('content page checks:', function () {
+  //     REQUIRED_PAGES.map(function (pageTitle) {
+  //       beforeEach(testSetup);
 
-        const pattern = 'The following pages are missing content:(.+?)' + pageTitle;
-        const regex = new RegExp(pattern);
+  //       const pattern = 'The following pages are missing content:(.+?)' + pageTitle;
+  //       const regex = new RegExp(pattern);
 
-        it(`should show an error if ${pageTitle} doesn't exist`, function(done) {
-          testForErrorMessage(regex, true, `${pageTitle} page doesn't exist`, done);
-        });
+  //       it(`should show an error if ${pageTitle} doesn't exist`, function(done) {
+  //         testForErrorMessage(regex, true, `${pageTitle} page doesn't exist`, done);
+  //       });
 
-        it(`should show an error if ${pageTitle} doesn't have any content`, function(done) {
-          mockPages.push({
-            title: pageTitle,
-            content: '',
-          });
-          testForErrorMessage(regex, true, `${pageTitle} page doesn't contain any content`, done);
-        });
+  //       it(`should show an error if ${pageTitle} doesn't have any content`, function(done) {
+  //         mockPages.push({
+  //           title: pageTitle,
+  //           content: '',
+  //         });
+  //         testForErrorMessage(regex, true, `${pageTitle} page doesn't contain any content`, done);
+  //       });
 
-        it(`shouldn't show an error if ${pageTitle} exists and has content`, function(done) {
-          mockPages.push({
-            title: pageTitle,
-            content: 'foobar',
-          });
-          testForErrorMessage(regex, false, `${pageTitle} page doesn't contain any content`, done);
-        });
-      });
-    });
+  //       it(`shouldn't show an error if ${pageTitle} exists and has content`, function(done) {
+  //         mockPages.push({
+  //           title: pageTitle,
+  //           content: 'foobar',
+  //         });
+  //         testForErrorMessage(regex, false, `${pageTitle} page doesn't contain any content`, done);
+  //       });
+  //     });
+  //   });
 
-    describe('subject set checks:', function () {
-      beforeEach(testSetup);
+  //   describe('subject set checks:', function () {
+  //     beforeEach(testSetup);
 
-      const pattern = 'The project only has (\\d+?) of ' + MINIMUM_SUBJECT_COUNT + ' required subjects';
-      const regex = new RegExp(pattern);
+  //     const pattern = 'The project only has (\\d+?) of ' + MINIMUM_SUBJECT_COUNT + ' required subjects';
+  //     const regex = new RegExp(pattern);
 
-      it(`should show an error if there are less than ${MINIMUM_SUBJECT_COUNT} subjects`, function(done) {
-        testForErrorMessage(regex, true, `Project contains less than ${MINIMUM_SUBJECT_COUNT} subjects`, done);
-      });
+  //     it(`should show an error if there are less than ${MINIMUM_SUBJECT_COUNT} subjects`, function(done) {
+  //       testForErrorMessage(regex, true, `Project contains less than ${MINIMUM_SUBJECT_COUNT} subjects`, done);
+  //     });
 
-      it(`shouldn't show an error if there are ${MINIMUM_SUBJECT_COUNT} subjects`, function(done) {
-        mockSubjectSets.push({
-          id: "1",
-          set_member_subjects_count: 98,
-        });
-        testForErrorMessage(regex, false, `Project contains ${MINIMUM_SUBJECT_COUNT} subjects`, done);
-      });
+  //     it(`shouldn't show an error if there are ${MINIMUM_SUBJECT_COUNT} subjects`, function(done) {
+  //       mockSubjectSets.push({
+  //         id: "1",
+  //         set_member_subjects_count: 98,
+  //       });
+  //       testForErrorMessage(regex, false, `Project contains ${MINIMUM_SUBJECT_COUNT} subjects`, done);
+  //     });
 
-      it(`shouldn't show an error if there are more than ${MINIMUM_SUBJECT_COUNT} subjects`, function(done) {
-        mockSubjectSets.push({
-          id: "1",
-          set_member_subjects_count: 98,
-        }, {
-          id: "2",
-          set_member_subjects_count: 1,
-        });
-        testForErrorMessage(regex, false, `Project contains ${MINIMUM_SUBJECT_COUNT} subjects`, done);
-      });
-    });
-  });
+  //     it(`shouldn't show an error if there are more than ${MINIMUM_SUBJECT_COUNT} subjects`, function(done) {
+  //       mockSubjectSets.push({
+  //         id: "1",
+  //         set_member_subjects_count: 98,
+  //       }, {
+  //         id: "2",
+  //         set_member_subjects_count: 1,
+  //       });
+  //       testForErrorMessage(regex, false, `Project contains ${MINIMUM_SUBJECT_COUNT} subjects`, done);
+  //     });
+  //   });
+  // });
 
   describe('apply button behaviour:', function() {
     beforeEach(testSetup);
@@ -332,31 +332,31 @@ describe('ApplyForBeta component:', function() {
       assert(button.prop('disabled') === true, 'Button is disabled');
     });
 
-    it('should call the applyFn prop on click if all validations pass', function(done) {
-      workflows[0].active = true;
-      mockPages.push({
-        title: 'Research',
-        content: 'foobar',
-      }, {
-        title: 'FAQ',
-        content: 'foobar',
-      });
-      mockSubjectSets.push({
-        id: "1",
-        set_member_subjects_count: 2,
-      });
+    // it('should call the applyFn prop on click if all validations pass', function(done) {
+    //   workflows[0].active = true;
+    //   mockPages.push({
+    //     title: 'Research',
+    //     content: 'foobar',
+    //   }, {
+    //     title: 'FAQ',
+    //     content: 'foobar',
+    //   });
+    //   mockSubjectSets.push({
+    //     id: "1",
+    //     set_member_subjects_count: 2,
+    //   });
 
-      wrapper = mount(<ApplyForBetaForm project={project} workflows={workflows} applyFn={applyFn} />);
-      wrapper.find('input[type="checkbox"]').forEach(function(checkbox) {
-        checkbox.simulate('change', { target: { checked: true }});
-      })
-      wrapper.find('button.standard-button').first().simulate('click');
+    //   wrapper = mount(<ApplyForBetaForm project={project} workflows={workflows} applyFn={applyFn} />);
+    //   wrapper.find('input[type="checkbox"]').forEach(function(checkbox) {
+    //     checkbox.simulate('change', { target: { checked: true }});
+    //   })
+    //   wrapper.find('button.standard-button').first().simulate('click');
 
-      setTimeout(function() {
-        assert.ok(applyFn.calledOnce, 'applyFn has been called');
-        done();
-      }, 0);
-    });
+    //   setTimeout(function() {
+    //     assert.ok(applyFn.calledOnce, 'applyFn has been called');
+    //     done();
+    //   }, 0);
+    // });
   });
 
 });
