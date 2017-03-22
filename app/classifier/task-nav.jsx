@@ -5,6 +5,8 @@ import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
 import GridTool from './drawing-tools/grid';
 
+/* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
+
 const BackButtonWarning = () => {
   return <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
 };
@@ -182,17 +184,17 @@ class TaskNav extends React.Component {
             >
               Next
             </button> : !completed ?
-            <button
-              type="button"
-              className="continue major-button"
-              disabled={waitingForAnswer}
-              onClick={this.completeClassification}
-            >
-              {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
-              {this.props.classification.gold_standard && <i className="fa fa-star fa-fw" />}
-              {' '}Done
-            </button> :
-            null
+              <button
+                type="button"
+                className="continue major-button"
+                disabled={waitingForAnswer}
+                onClick={this.completeClassification}
+              >
+                {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
+                {this.props.classification.gold_standard && <i className="fa fa-star fa-fw" />}
+                {' '}Done
+              </button> :
+              null
           }
           {completed &&
             <Link

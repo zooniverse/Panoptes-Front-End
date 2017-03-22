@@ -247,9 +247,7 @@ Classifier = React.createClass
               </p>
             }
           </Task>
-        else if @subjectIsGravitySpyGoldStandard()
-          @renderGravitySpyGoldStandard currentClassification
-        else if not @props.workflow.configuration?.hide_classification_summaries # Classification is complete; show summary if enabled
+        else
           <ClassificationSummary
             project={@props.project}
             workflow={@props.workflow}
@@ -258,7 +256,9 @@ Classifier = React.createClass
             expertClassification={@state.expertClassification}
             splits={@props.splits}
             classificationCount={@state.classificationCount}
-          />}
+            hasGSGoldStandard={@subjectIsGravitySpyGoldStandard()}
+          />
+        }
 
         <TaskNav
           annotation={currentAnnotation}
@@ -280,44 +280,6 @@ Classifier = React.createClass
         </TaskNav>
       </div>
       <PotentialFieldGuide guide={@props.guide} guideIcons={@props.guideIcons} />
-    </div>
-
-  renderGravitySpyGoldStandard: (classification) ->
-    disableTalk = @props.classification.metadata.subject_flagged?
-
-    choiceLabels = []
-    for annotation in classification.annotations when @props.workflow.tasks[annotation.task].type is 'survey'
-      for value in annotation.value
-        choiceLabels.push @props.workflow.tasks[annotation.task].choices[value.choice].label
-    match = choiceLabels.every (label) => label is @props.subject.metadata['#Label']
-
-    <div>
-    {if match
-      <div>
-        <p>Good work!</p>
-        <p>When our experts classified this image,<br />they also thought it was a {@props.subject.metadata['#Label']}!</p>
-        {if choiceLabels.length > 1
-          <p>You should only assign 1 label.</p>}
-      </div>
-    else
-      <div>
-        <p>You responded {choiceLabels.join(', ')}.</p>
-        {if choiceLabels.length > 1
-          <p>You should only assign 1 label.</p>}
-        <p>When our experts classified this image,<br />they labeled it as a {@props.subject.metadata['#Label']}.</p>
-        <p>Some of the glitch classes can look quite similar,<br />so please keep trying your best.</p>
-        <p>Check out the tutorial and the field guide for more guidance.</p>
-      </div>}
-
-
-      <hr />
-
-      <nav className="task-nav">
-        {if @props.owner? and @props.project? and !disableTalk
-          [ownerName, name] = @props.project.slug.split('/')
-          <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
-        <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
-      </nav>
     </div>
 
   # Whenever a subject image is loaded in the annotator, record its size at that time.

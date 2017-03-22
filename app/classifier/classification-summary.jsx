@@ -1,7 +1,8 @@
 import React from 'react';
 
-import MetadataBasedFeedback from './metadata-based-feedback';
 import DefaultClassificationSummary from './default-classification-summary';
+import GSGoldStandardSummary from './gs-gold-standard-summary';
+import MetadataBasedFeedback from './metadata-based-feedback';
 import WorldWideTelescope from './world-wide-telescope';
 
 /* eslint-disable multiline-ternary, react/forbid-prop-types */
@@ -19,6 +20,16 @@ class ClassificationSummary extends React.Component {
 
   render() {
     const tools = this.props.project.experimental_tools || [];
+
+    if (this.props.hasGSGoldStandard) {
+      return (
+        <GSGoldStandardSummary
+          classification={this.props.classification}
+          subject={this.props.subject}
+          workflow={this.props.workflow}
+        />
+      );
+    }
 
     if (tools.includes('metadata-based-feedback')) {
       return (
@@ -83,7 +94,8 @@ ClassificationSummary.propTypes = {
   classification: React.PropTypes.object.isRequired,
   expertClassification: React.PropTypes.object,
   splits: React.PropTypes.object,
-  classificationCount: React.PropTypes.number
+  classificationCount: React.PropTypes.number,
+  hasGSGoldStandard: React.PropTypes.bool
 };
 
 export default ClassificationSummary;
