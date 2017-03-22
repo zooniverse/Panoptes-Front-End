@@ -112,7 +112,6 @@ class TaskNav extends React.Component {
   }
 
   render() {
-    const annotation = this.props.annotation || {};
     const completed = !!this.props.classification.completed;
 
     const task = this.props.task ? this.props.task : this.props.workflow.tasks[this.props.workflow.first_task];
@@ -122,18 +121,18 @@ class TaskNav extends React.Component {
     const TaskComponent = tasks[task.type];
 
     // Should we disable the "Back" button?
-    const onFirstAnnotation = (this.props.classification.annotations.indexOf(annotation) === 0);
+    const onFirstAnnotation = !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
 
     // Should we disable the "Next" or "Done" buttons?
-    let waitingForAnswer;
-    if (TaskComponent && TaskComponent.isAnnotationComplete) {
-      waitingForAnswer = !annotation.shortcut && !TaskComponent.isAnnotationComplete(task, annotation, this.props.workflow);
+    let waitingForAnswer = false;
+    if (TaskComponent && TaskComponent.isAnnotationComplete && this.props.annotation) {
+      waitingForAnswer = !this.props.annotation.shortcut && !TaskComponent.isAnnotationComplete(task, this.props.annotation, this.props.workflow);
     }
 
     // Each answer of a single-answer task can have its own `next` key to override the task's.
-    let nextTaskKey;
-    if (TaskComponent === tasks.single) {
-      const currentAnswer = task.answers[annotation.value];
+    let nextTaskKey = '';
+    if (TaskComponent === tasks.single && this.props.annotation) {
+      const currentAnswer = task.answers[this.props.annotation.value];
       nextTaskKey = currentAnswer ? currentAnswer.next : '';
     } else {
       nextTaskKey = task.next;
@@ -175,7 +174,7 @@ class TaskNav extends React.Component {
             >
               Done &amp; Talk
             </Link>}
-          {(nextTaskKey && !annotation.shortcut) ?
+          {(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut) ?
             <button
               type="button"
               className="continue major-button"

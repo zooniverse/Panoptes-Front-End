@@ -7,8 +7,8 @@ const GSGoldStandardSummary = ({ classification, subject, workflow }) => {
 
   classification.annotations
     .filter((annotation) => { return workflow.tasks[annotation.task].type === 'survey'; })
-    .each((annotation) => {
-      annotation.value.each((value) => {
+    .forEach((annotation) => {
+      annotation.value.forEach((value) => {
         choiceLabels.push(workflow.tasks[annotation.task].choices[value.choice].label);
       });
     });
