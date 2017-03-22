@@ -182,23 +182,6 @@ Classifier = React.createClass
             annotation={currentAnnotation}
             subjectLoading={@state.subjectLoading}
           >
-            <TaskNav
-              annotation={currentAnnotation}
-              classification={currentClassification}
-              completeClassification={@completeClassification}
-              project={@props.project}
-              subject={@props.subject}
-              task={currentTask}
-              workflow={@props.workflow}
-            >
-              {if @props.expertClassifier
-                <ExpertOptions
-                  classification={currentClassification}
-                  userRoles={@props.userRoles}
-                  demoMode={@props.demoMode}
-                  onChangeDemoMode={@props.onChangeDemoMode}
-                />}
-            </TaskNav>
             <p>
               <small>
                 <strong>
@@ -267,41 +250,36 @@ Classifier = React.createClass
         else if @subjectIsGravitySpyGoldStandard()
           @renderGravitySpyGoldStandard currentClassification
         else if not @props.workflow.configuration?.hide_classification_summaries # Classification is complete; show summary if enabled
-          @renderSummary currentClassification}
+          <ClassificationSummary
+            project={@props.project}
+            workflow={@props.workflow}
+            subject={@props.subject}
+            classification={classification}
+            expertClassification={@state.expertClassification}
+            splits={@props.splits}
+            classificationCount={@state.classificationCount}
+          />}
+
+        <TaskNav
+          annotation={currentAnnotation}
+          classification={currentClassification}
+          completeClassification={@completeClassification}
+          nextSubject={@props.onClickNext}
+          project={@props.project}
+          subject={@props.subject}
+          task={currentTask}
+          workflow={@props.workflow}
+        >
+          {if @props.expertClassifier
+            <ExpertOptions
+              classification={currentClassification}
+              userRoles={@props.userRoles}
+              demoMode={@props.demoMode}
+              onChangeDemoMode={@props.onChangeDemoMode}
+            />}
+        </TaskNav>
       </div>
       <PotentialFieldGuide guide={@props.guide} guideIcons={@props.guideIcons} />
-    </div>
-
-  renderSummary: (classification) ->
-    disableTalk = @props.classification.metadata.subject_flagged?
-
-    <div>
-      Thanks!
-      <ClassificationSummary
-        project={@props.project}
-        workflow={@props.workflow}
-        subject={@props.subject}
-        classification={classification}
-        expertClassification={@state.expertClassification}
-        splits={@props.splits}
-        classificationCount={@state.classificationCount}
-      />
-
-      <hr />
-
-      <nav className="task-nav">
-        {if @props.owner? and @props.project? and !disableTalk
-          [ownerName, name] = @props.project.slug.split('/')
-          <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
-        <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
-        {if @props.expertClassifier
-          <ExpertOptions
-            classification={@props.classification}
-            userRoles={@props.userRoles}
-            demoMode={@props.demoMode}
-            onChangeDemoMode={@props.onChangeDemoMode}
-          />}
-      </nav>
     </div>
 
   renderGravitySpyGoldStandard: (classification) ->
