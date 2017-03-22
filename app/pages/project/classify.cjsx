@@ -185,7 +185,7 @@ module.exports = React.createClass
               setTimeout fetchSubjectsAgain, 2000
         .then (subjects) ->
           nonLoadedSubjects = (newSubject for newSubject in subjects when newSubject isnt subjectToLoad)
-          filteredSubjects = nonLoadedSubjects.filter((subject) => subject if !subject.already_seen)
+          filteredSubjects = nonLoadedSubjects.filter((subject) => !subject.already_seen && !subject.retired)
           subjectsToLoad = if filteredSubjects.length > 0 then filteredSubjects else nonLoadedSubjects
           upcomingSubjects.forWorkflow[workflow.id].push subjectsToLoad...
 
