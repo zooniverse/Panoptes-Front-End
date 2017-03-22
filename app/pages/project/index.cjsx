@@ -84,7 +84,7 @@ ProjectPageController = React.createClass
       @context.geordi?.forget ['experiment','cohort']
 
   fetchProjectData: (ownerName, projectName, user) ->
-    @setState({ 
+    @setState({
       error: null,
       loading: true,
       preferences: null,
@@ -120,7 +120,7 @@ ProjectPageController = React.createClass
             awaitProjectCompleteness,
             awaitProjectRoles,
             awaitPreferences
-          ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) => 
+          ]).then(([background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences]) =>
               @setState({ background, owner, pages, projectAvatar, projectIsComplete, projectRoles, preferences })
               @getSelectedWorkflow(project, preferences)
             ).catch((error) => @setState({ error }); console.error(error); );
@@ -201,7 +201,7 @@ ProjectPageController = React.createClass
       linkedWorkflows[randomIndex]
 
   getWorkflow: (selectedWorkflowID) ->
-    apiClient.type('workflows').get({ active: true, id: "#{selectedWorkflowID}", project_id: @state.project.id })
+    apiClient.type('workflows').get({ id: "#{selectedWorkflowID}", project_id: @state.project.id })
       .catch (error) =>
         console.error error
         # TODO: Handle 404 once json-api-client error handling is fixed.
