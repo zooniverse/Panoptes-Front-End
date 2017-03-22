@@ -13,7 +13,7 @@ module.exports = React.createClass
   getDefaultProps: ->
     project: null
 
-  getInitialState: -> 
+  getInitialState: ->
     error: null
     setting:
       private: false
@@ -28,7 +28,7 @@ module.exports = React.createClass
 
   componentDidMount: ->
     @setState { loadingWorkflows: true }
-    getWorkflowsInOrder @props.project
+    getWorkflowsInOrder @props.project, fields: 'active,configuration,display_name'
       .then (workflows) =>
         @setState
           workflows: workflows
@@ -56,7 +56,7 @@ module.exports = React.createClass
 
   handleSetStatsCompletenessType: (workflow, e) ->
     workflow.update({ 'configuration.stats_completeness_type': e.target.value }).save()
-      .catch((error) => 
+      .catch((error) =>
         @setState {error}
       ).then(() => @forceUpdate())
 
@@ -241,7 +241,7 @@ module.exports = React.createClass
       <p className="form-help">
         When using "Retirement Count" the completeness will increase after each image retires (note: this value is re-calculated once an hour).
         {' '}Since the images are shown to users in a random order, this completeness estimate will be slow to increase until the project is close to being finished.
-        {' '}If your project does not have a constant retirement limit (e.g. it uses a custom retiment rule) and/or subject sets 
+        {' '}If your project does not have a constant retirement limit (e.g. it uses a custom retiment rule) and/or subject sets
         {' '}have been unlinked from a live workflow, this estimate will be the most accurate.
       </p>
       <p className="form-label">Statistics Visbiility</p>
