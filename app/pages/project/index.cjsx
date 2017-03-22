@@ -201,7 +201,12 @@ ProjectPageController = React.createClass
       linkedWorkflows[randomIndex]
 
   getWorkflow: (selectedWorkflowID) ->
-    apiClient.type('workflows').get({ id: "#{selectedWorkflowID}", project_id: @state.project.id })
+    query =
+      id: "#{selectedWorkflowID}",
+      project_id: @state.project.id
+    unless @checkUserRoles(@state.project, @props.user)
+      query['active'] = 'true'
+    apiClient.type('workflows').get(query)
       .catch (error) =>
         console.error error
         # TODO: Handle 404 once json-api-client error handling is fixed.
