@@ -234,10 +234,11 @@ ProjectPageController = React.createClass
       Promise.resolve(null)
 
   checkUserRoles: (project, user) ->
-    currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user.id)
-    roles = currentUserRoleSets[0].roles
+    if user
+      currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user.id)
+      roles = currentUserRoleSets[0].roles
 
-    isAdmin() or 'owner' in roles or 'collaborator' in roles
+      isAdmin() or 'owner' in roles or 'collaborator' in roles
 
   listenToPreferences: (preferences) ->
     @_listenedToPreferences?.stopListening 'change', @_boundForceUpdate
