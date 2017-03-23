@@ -53,13 +53,13 @@ export default class AppStatus extends React.Component {
     })
     .then((text) => {
       console.log('AppStatus: Received status data from ' + APP_STATUS_URL + '.');
-      const cleanedtext = text.trim();  //If text is just white space or newlines...
-      if (!cleanedtext || cleanedtext === '') {  //...ignore it.
+      const cleanedText = (text) ? text.trim() : '';  //If text is just white space or newlines...
+      if (cleanedText === '') {  //...ignore it.
         console.log('AppStatus: Nothing to report.');
       } else {
         this.setState({
           show: true,
-          message: cleanedtext,
+          message: cleanedText,
         });
       }
     })
