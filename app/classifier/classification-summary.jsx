@@ -83,6 +83,8 @@ class ClassificationSummary extends React.Component {
           <strong>
             { this.state.showExpert ? 'Expert Classification:' : 'Your classification:' }
           </strong>
+          {this.props.workflow.configuration.sim_notification && this.props.subject.metadata['#sim'] &&
+            <p>This was simulated data that we show volunteers in order to calibrate the project.</p>}
           <DefaultClassificationSummary
             workflow={this.props.workflow}
             classification={this.state.showExpert ? this.props.expertClassification : this.props.classification}
@@ -96,8 +98,12 @@ class ClassificationSummary extends React.Component {
 }
 
 ClassificationSummary.propTypes = {
-  project: React.PropTypes.object.isRequired,
-  workflow: React.PropTypes.object.isRequired,
+  project: React.PropTypes.shape({
+    experimental_tools: React.PropTypes.array
+  }).isRequired,
+  workflow: React.PropTypes.shape({
+    configuration: React.PropTypes.object
+  }).isRequired,
   subject: React.PropTypes.object.isRequired,
   classification: React.PropTypes.object.isRequired,
   expertClassification: React.PropTypes.object,

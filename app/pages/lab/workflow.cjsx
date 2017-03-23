@@ -293,6 +293,25 @@ EditWorkflowPage = React.createClass
               <hr />
             </div>}
 
+          {if 'sim notification' in @props.project.experimental_tools
+            <div>
+              <div>
+                <AutoSave resource={@props.workflow}>
+                  <span className="form-label">Simulation subject notification</span><br />
+                  <small className="form-help">Simulation subject notification will display a small message in the classification summary that lets the volunteer know the subject is a simulation:</small><br /><br />
+                  <small className="form-help">This was simulated data that we show volunteers in order to calibrate the project.</small><br /><br />
+                  <small className="form-help">For this feature to work, it requires hidden subject metadata with the column label <code>{'#sim'}</code> and the value set to <code>true</code> or <code>false.</code></small>
+                  <br />
+                  <label>
+                    <input type="checkbox" checked={@props.workflow.configuration.sim_notification} onChange={@handleSetSimNotification} />
+                    Simluation subject notification
+                  </label>
+                </AutoSave>
+              </div>
+
+              <hr />
+            </div>}
+
           {if 'Gravity Spy Gold Standard' in @props.project.experimental_tools
             <div>
               <div>
@@ -551,6 +570,10 @@ EditWorkflowPage = React.createClass
   handlePersistAnnotationsToggle: (e) ->
     @props.workflow.update
       'configuration.persist_annotations': e.target.checked
+
+  handleSetSimNotification: (e) ->
+    @props.workflow.update
+      'configuration.sim_notification': e.target.checked
 
   handleSetInvert: (e) ->
     @props.workflow.update
