@@ -144,6 +144,7 @@ Classifier = React.createClass
 
     if @state.showingExpertClassification
       currentClassification = @state.expertClassification
+      currentClassification.completed = true
     else
       currentClassification = @props.classification
       unless @props.classification.completed
@@ -192,6 +193,7 @@ Classifier = React.createClass
             splits={@props.splits}
             classificationCount={@state.classificationCount}
             hasGSGoldStandard={@subjectIsGravitySpyGoldStandard()}
+            toggleExpertClassification={@toggleExpertClassification}
           />
         }
 

@@ -12,8 +12,14 @@ class ClassificationSummary extends React.Component {
     super(props);
 
     this.state = { showExpert: false };
-    this.dontShowExpert = () => { this.setState({ showExpert: false }); };
-    this.doShowExpert = () => { this.setState({ showExpert: true }); };
+    this.dontShowExpert = () => {
+      this.setState({ showExpert: false });
+      this.props.toggleExpertClassification(false);
+    };
+    this.doShowExpert = () => {
+      this.setState({ showExpert: true });
+      this.props.toggleExpertClassification(true);
+    };
 
     this.hasExpert = !!this.props.expertClassification;
   }
@@ -95,7 +101,8 @@ ClassificationSummary.propTypes = {
   expertClassification: React.PropTypes.object,
   splits: React.PropTypes.object,
   classificationCount: React.PropTypes.number,
-  hasGSGoldStandard: React.PropTypes.bool
+  hasGSGoldStandard: React.PropTypes.bool,
+  toggleExpertClassification: React.PropTypes.func
 };
 
 export default ClassificationSummary;
