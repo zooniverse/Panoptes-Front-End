@@ -84,7 +84,7 @@ class ClassificationSummary extends React.Component {
             { this.state.showExpert ? 'Expert Classification:' : 'Your classification:' }
           </strong>
           {this.props.workflow.configuration.sim_notification && this.props.subject.metadata['#sim'] &&
-            <p>This was a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>}
+            <p style={{fontWeight: 'bold'}}>This was a simulated planet. We include these to help calibrate the project. Keep going to discover a real planet!</p>}
           <DefaultClassificationSummary
             workflow={this.props.workflow}
             classification={this.state.showExpert ? this.props.expertClassification : this.props.classification}
