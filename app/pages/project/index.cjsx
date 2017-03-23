@@ -201,12 +201,7 @@ ProjectPageController = React.createClass
       linkedWorkflows[randomIndex]
 
   getWorkflow: (selectedWorkflowID) ->
-    query =
-      id: "#{selectedWorkflowID}",
-      project_id: @state.project.id
-    unless @checkUserRoles(@state.project, @props.user)
-      query['active'] = 'true'
-    apiClient.type('workflows').get(query)
+    apiClient.type('workflows').get({ active: true, id: "#{selectedWorkflowID}", project_id: @state.project.id })
       .catch (error) =>
         console.error error
         # TODO: Handle 404 once json-api-client error handling is fixed.
@@ -234,11 +229,10 @@ ProjectPageController = React.createClass
       Promise.resolve(null)
 
   checkUserRoles: (project, user) ->
-    if user
-      currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user.id)
-      roles = currentUserRoleSets[0].roles
+    currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user.id)
+    roles = currentUserRoleSets[0].roles
 
-      isAdmin() or 'owner' in roles or 'collaborator' in roles
+    isAdmin() or 'owner' in roles or 'collaborator' in roles
 
   listenToPreferences: (preferences) ->
     @_listenedToPreferences?.stopListening 'change', @_boundForceUpdate
