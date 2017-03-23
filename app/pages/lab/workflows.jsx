@@ -105,7 +105,7 @@ export default class WorkflowsPage extends React.Component {
         <DragReorderable tag="ul" className="nav-list" items={this.state.workflows} render={this.renderWorkflow} onChange={this.handleWorkflowReorder} />
 
         {(this.state.workflows.length === 0 && this.state.loading === false) && (
-          <p> No workflows are currently associated with this project. </p>
+          <p>No workflows are currently associated with this project.</p>
         )}
 
         <div className="nav-list-item">

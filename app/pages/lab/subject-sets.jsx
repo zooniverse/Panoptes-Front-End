@@ -57,7 +57,7 @@ export default class SubjectSetsPage extends React.Component {
     const subjectSet = apiClient.type('subject_sets').create({
       display_name: DEFAULT_SUBJECT_SET_NAME,
       links:
-        { project: 999999999999 }
+        { project: this.props.project.id }
     });
 
     this.setState({
@@ -108,11 +108,16 @@ export default class SubjectSetsPage extends React.Component {
           })}
 
           {(this.state.subjectSets.length === 0 && this.state.loading === false) && (
-            <p> No subject sets are currently associated with this project. </p>
+            <p>No subject sets are currently associated with this project.</p>
           )}
 
           <li className="nav-list-item">
-            <button type="button" onClick={this.createNewSubjectSet} disabled={this.state.subjectSetCreationInProgress} title="A subject is an image (or group of images) to be analyzed.">
+            <button
+              type="button"
+              onClick={this.createNewSubjectSet}
+              disabled={this.state.subjectSetCreationInProgress}
+              title="A subject is an image (or group of images) to be analyzed."
+            >
               New subject set{' '}
               <LoadingIndicator off={!this.state.subjectSetCreationInProgress} />
             </button>{' '}
