@@ -39,7 +39,8 @@ module.exports = React.createClass
           <br />
           <textarea name="#{@props.taskPrefix}.#{mainTextKey}" value={@props.task[mainTextKey]} className="standard-input full" onChange={handleChange} />
         </AutoSave>
-        <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You can use markdown to format this text.</small><br />
+        <small className="form-help">Describe the task, or ask the question, in a way that is clear to a non-expert. You 
+        use markdown to format this text.</small><br />
       </div>
       <br />
 
@@ -204,15 +205,15 @@ module.exports = React.createClass
             when 'tools'
               <div>
                 <small className="form-help">Select which marks you want for this task, and what to call each of them. The tool name will be displayed on the classification page next to each marking option. Use the simplest tool that will give you the results you need for your research.</small><br />
-                <small className="form-help"><b>bezier:</b> an arbitrary shape made of point-to-point curves. The midpoint of each segment drawn can dragged to adjust the curvature. </small><br />
+                <small className="form-help"><b>bezier:</b> an arbitrary shape made of point-to-point curves. The midpoint of each segment drawn can be dragged to adjust the curvature. </small><br />
                 <small className="form-help"><b>circle:</b> a point and a radius.</small><br />
-                <small className="form-help"><b>column:</b> a box with full height but variable width; this tool <b>cannot</b> be rotated.</small>
-                <small className="form-help"><b>ellipse:</b> an oval of any size and axis ratio; this tool <b>can</b> be rotated.</small><br />
+                <small className="form-help"><b>column:</b> a box with full height but variable width; this tool <i>cannot</i> be rotated.</small><br />
+                <small className="form-help"><b>ellipse:</b> an oval of any size and axis ratio; this tool <i>can</i> be rotated.</small><br />
                 <small className="form-help"><b>line:</b>: a straight line at any angle.</small><br />
-                <small className="form-help"><b>point:</b>: X marks the spot.</small><br />
+                <small className="form-help"><b>point:</b> X marks the spot.</small><br />
                 <small className="form-help"><b>polygon:</b> an arbitrary shape made of point-to-point lines.</small><br />
-                <small className="form-help"><b>rectangle:</b> a box of any size and length-width ratio; this tool <b>cannot</b> be rotated.</small><br />
-                <small className="form-help"><b>triangle:</b> an equilateral triangle of any size and vertex distance from the center; this tool <b>can</b> be rotated.</small><br />
+                <small className="form-help"><b>rectangle:</b> a box of any size and length-width ratio; this tool <i>cannot</i> be rotated.</small><br />
+                <small className="form-help"><b>triangle:</b> an equilateral triangle of any size and vertex distance from the center; this tool <i>can</i> be rotated.</small><br />
                 {if @canUse("grid")
                   <small className="form-help"><b>grid table</b>: cells which can be made into a table for consecutive annotations.</small>}
               </div>}
