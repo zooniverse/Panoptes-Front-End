@@ -37,7 +37,7 @@ class ClassificationSummary extends React.Component {
       );
     }
 
-    if (tools.includes('metadata-based-feedback')) {
+    if (tools.includes('metadata based feedback')) {
       return (
         <MetadataBasedFeedback
           subject={this.props.subject}
@@ -55,7 +55,7 @@ class ClassificationSummary extends React.Component {
       );
     }
 
-    if (tools.includes('world_wide_telescope')) {
+    if (tools.includes('worldwide telescope')) {
       return (
         <strong>
           <WorldWideTelescope
