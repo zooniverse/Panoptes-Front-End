@@ -298,8 +298,7 @@ EditWorkflowPage = React.createClass
               <div>
                 <AutoSave resource={@props.workflow}>
                   <span className="form-label">Simulation subject notification</span><br />
-                  <small className="form-help">Simulation subject notification will display a small message in the classification summary that lets the volunteer know the subject is a simulation:</small><br /><br />
-                  <small className="form-help">This was simulated data that we show volunteers in order to calibrate the project.</small><br /><br />
+                  <small className="form-help">Simulation subject notification will display a small message in the classification summary that lets the volunteer know the subject is a simulation.</small><br /><br />
                   <small className="form-help">For this feature to work, it requires hidden subject metadata with the column label <code>{'#sim'}</code> and the value set to <code>true</code> or <code>false.</code></small>
                   <br />
                   <label>
