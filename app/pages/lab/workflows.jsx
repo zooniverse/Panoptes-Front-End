@@ -151,7 +151,9 @@ WorkflowsPage.contextTypes = {
 };
 
 WorkflowsPage.defaultProps = {
-  project: {}
+  project: {
+    configuration: {}
+  }
 };
 
 WorkflowsPage.propTypes = {
