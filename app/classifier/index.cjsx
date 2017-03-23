@@ -9,17 +9,15 @@ TriggeredModalForm = require 'modal-form/triggered'
 isAdmin = require '../lib/is-admin'
 workflowAllowsFlipbook = require '../lib/workflow-allows-flipbook'
 workflowAllowsSeparateFrames = require '../lib/workflow-allows-separate-frames'
-`import WorldWideTelescope from './world-wide-telescope';`
 `import FrameAnnotator from './frame-annotator';`
 `import CacheClassification from '../components/cache-classification';`
-MetadataBasedFeedback = require './metadata-based-feedback'
+`import Task from './task';`
 { VisibilitySplit } = require('seven-ten');
 `import RestartButton from './restart-button';`
 MiniCourse = require '../components/mini-course'
 Tutorial = require '../components/tutorial'
 interventionMonitor = require '../lib/intervention-monitor'
 experimentsClient = require '../lib/experiments-client'
-Task = require('./task').default
 TaskNav = require('./task-nav').default
 ExpertOptions = require('./expert-options').default
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
@@ -146,6 +144,7 @@ Classifier = React.createClass
 
     if @state.showingExpertClassification
       currentClassification = @state.expertClassification
+      currentClassification.completed = true
     else
       currentClassification = @props.classification
       unless @props.classification.completed
@@ -183,205 +182,105 @@ Classifier = React.createClass
             task={currentTask}
             annotation={currentAnnotation}
             subjectLoading={@state.subjectLoading}
-          >
-            <TaskNav
-              annotation={currentAnnotation}
+          />
+        else
+          <ClassificationSummary
+            project={@props.project}
+            workflow={@props.workflow}
+            subject={@props.subject}
+            classification={classification}
+            expertClassification={@state.expertClassification}
+            splits={@props.splits}
+            classificationCount={@state.classificationCount}
+            hasGSGoldStandard={@subjectIsGravitySpyGoldStandard()}
+            toggleExpertClassification={@toggleExpertClassification}
+          />
+        }
+
+        <TaskNav
+          annotation={currentAnnotation}
+          classification={currentClassification}
+          completeClassification={@completeClassification}
+          nextSubject={@props.onClickNext}
+          project={@props.project}
+          subject={@props.subject}
+          task={currentTask}
+          workflow={@props.workflow}
+        >
+          {if @props.expertClassifier
+            <ExpertOptions
               classification={currentClassification}
-              completeClassification={@completeClassification}
-              project={@props.project}
-              subject={@props.subject}
-              task={currentTask}
-              workflow={@props.workflow}
-            >
-              {if @props.expertClassifier
-                <ExpertOptions
-                  classification={currentClassification}
-                  userRoles={@props.userRoles}
-                  demoMode={@props.demoMode}
-                  onChangeDemoMode={@props.onChangeDemoMode}
-                />}
-            </TaskNav>
-            <p>
-              <small>
-                <strong>
-                  <RestartButton
-                    className="minor-button"
-                    preferences={@props.preferences}
-                    shouldRender={(@props.tutorial) && (@props.tutorial.steps.length > 0)}
-                    start={Tutorial.start.bind(Tutorial, @props.tutorial, @props.user, @props.preferences, @context.geordi)}
-                    style={{marginTop: '2em'}}
-                    user={@props.user}
-                    workflow={@props.workflow}
-                  >
-                    Show the project tutorial
-                  </RestartButton>
-                </strong>
-              </small>
-            </p>
+              userRoles={@props.userRoles}
+              demoMode={@props.demoMode}
+              onChangeDemoMode={@props.onChangeDemoMode}
+            />}
+        </TaskNav>
+        <p>
+          <small>
+            <strong>
+              <RestartButton
+                className="minor-button"
+                preferences={@props.preferences}
+                shouldRender={(@props.tutorial) && (@props.tutorial.steps.length > 0)}
+                start={Tutorial.start.bind(Tutorial, @props.tutorial, @props.user, @props.preferences, @context.geordi)}
+                style={{marginTop: '2em'}}
+                user={@props.user}
+                workflow={@props.workflow}
+              >
+                Show the project tutorial
+              </RestartButton>
+            </strong>
+          </small>
+        </p>
 
-            <p>
-              <small>
-                <strong>
-                  <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
-                    <RestartButton
-                      className="minor-button"
-                      preferences={@props.preferences}
-                      shouldRender={(@props.minicourse) && (@props.user) && (@props.minicourse.steps.length > 0)}
-                      start={MiniCourse.restart.bind(MiniCourse, @props.minicourse, @props.preferences, @props.user, @context.geordi)}
-                      style={{marginTop: '2em'}}
-                      user={@props.user}
-                      workflow={@props.workflow}
-                    >
-                      Restart the project mini-course
-                    </RestartButton>
-                  </VisibilitySplit>
-                </strong>
-              </small>
-            </p>
+        <p>
+          <small>
+            <strong>
+              <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+                <RestartButton
+                  className="minor-button"
+                  preferences={@props.preferences}
+                  shouldRender={(@props.minicourse) && (@props.user) && (@props.minicourse.steps.length > 0)}
+                  start={MiniCourse.restart.bind(MiniCourse, @props.minicourse, @props.preferences, @props.user, @context.geordi)}
+                  style={{marginTop: '2em'}}
+                  user={@props.user}
+                  workflow={@props.workflow}
+                >
+                  Restart the project mini-course
+                </RestartButton>
+              </VisibilitySplit>
+            </strong>
+          </small>
+        </p>
 
-            {if @props.demoMode
-              <p style={{ textAlign: 'center' }}>
-                <i className="fa fa-trash" />{' '}
-                <small>
-                  <strong>Demo mode:</strong>
-                  <br />
-                  No classifications are being recorded.{' '}
-                  <button type="button" className="secret-button" onClick={@changeDemoMode.bind(this, false)}>
-                    <u>Disable</u>
-                  </button>
-                </small>
-              </p>
-            }
-            {if currentClassification.gold_standard
-              <p style={{ textAlign: 'center' }}>
-                <i className="fa fa-star" />{' '}
-                <small>
-                  <strong>Gold standard mode:</strong>
-                  <br />
-                  Please ensure this classification is completely accurate.{' '}
-                  <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
-                    <u>Disable</u>
-                  </button>
-                </small>
-              </p>
-            }
-          </Task>
-        else if @subjectIsGravitySpyGoldStandard()
-          @renderGravitySpyGoldStandard currentClassification
-        else if not @props.workflow.configuration?.hide_classification_summaries # Classification is complete; show summary if enabled
-          @renderSummary currentClassification}
+        {if @props.demoMode
+          <p style={{ textAlign: 'center' }}>
+            <i className="fa fa-trash" />{' '}
+            <small>
+              <strong>Demo mode:</strong>
+              <br />
+              No classifications are being recorded.{' '}
+              <button type="button" className="secret-button" onClick={@changeDemoMode.bind(this, false)}>
+                <u>Disable</u>
+              </button>
+            </small>
+          </p>
+        }
+        {if currentClassification.gold_standard
+          <p style={{ textAlign: 'center' }}>
+            <i className="fa fa-star" />{' '}
+            <small>
+              <strong>Gold standard mode:</strong>
+              <br />
+              Please ensure this classification is completely accurate.{' '}
+              <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
+                <u>Disable</u>
+              </button>
+            </small>
+          </p>
+        }
       </div>
       <PotentialFieldGuide guide={@props.guide} guideIcons={@props.guideIcons} />
-    </div>
-
-  renderSummary: (classification) ->
-    disableTalk = @props.classification.metadata.subject_flagged?
-
-    <div>
-      Thanks!
-
-      {if @props.project.experimental_tools?.indexOf('metadata-based-feedback') > -1
-        <MetadataBasedFeedback
-          subject={@props.subject}
-          classification={@props.classification}
-          dudLabel='DUD'
-          simLabel='SIM'
-          subjectLabel='SUB'
-          metaTypeFieldName='#Type'
-          metaSuccessMessageFieldName='#F_Success'
-          metaFailureMessageFieldName='#F_Fail'
-          metaSimCoordXPattern='#X'
-          metaSimCoordYPattern='#Y'
-          metaSimTolPattern='#Tol'
-        />}
-
-      {if @props.workflow.configuration.custom_summary and 'world_wide_telescope' in @props.workflow.configuration.custom_summary
-        <strong>
-          <WorldWideTelescope
-            annotations={@props.classification.annotations}
-            subject={@props.subject}
-            workflow={@props.workflow}
-          />
-        </strong>
-
-      else if @state.expertClassification?
-        <div className="has-expert-classification">
-          Expert classification available.{' '}
-          {if @state.showingExpertClassification
-            <button type="button" onClick={@toggleExpertClassification.bind this, false}>Hide</button>
-          else
-            <button type="button" onClick={@toggleExpertClassification.bind this, true}>Show</button>}
-        </div>}
-
-      <div>
-        <strong>
-          {if @state.showingExpertClassification
-            'Expert classification:'
-          else
-            'Your classification:'}
-        </strong>
-        <ClassificationSummary
-          workflow={@props.workflow}
-          classification={classification}
-          classificationCount={@state.classificationCount}
-          splits={@props.splits}
-        />
-      </div>
-
-      <hr />
-
-      <nav className="task-nav">
-        {if @props.owner? and @props.project? and !disableTalk
-          [ownerName, name] = @props.project.slug.split('/')
-          <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
-        <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
-        {if @props.expertClassifier
-          <ExpertOptions
-            classification={@props.classification}
-            userRoles={@props.userRoles}
-            demoMode={@props.demoMode}
-            onChangeDemoMode={@props.onChangeDemoMode}
-          />}
-      </nav>
-    </div>
-
-
-  renderGravitySpyGoldStandard: (classification) ->
-    disableTalk = @props.classification.metadata.subject_flagged?
-
-    choiceLabels = []
-    for annotation in classification.annotations when @props.workflow.tasks[annotation.task].type is 'survey'
-      for value in annotation.value
-        choiceLabels.push @props.workflow.tasks[annotation.task].choices[value.choice].label
-    match = choiceLabels.every (label) => label is @props.subject.metadata['#Label']
-
-    <div>
-    {if match
-      <div>
-        <p>Good work!</p>
-        <p>When our experts classified this image,<br />they also thought it was a {@props.subject.metadata['#Label']}!</p>
-        {if choiceLabels.length > 1
-          <p>You should only assign 1 label.</p>}
-      </div>
-    else
-      <div>
-        <p>You responded {choiceLabels.join(', ')}.</p>
-        {if choiceLabels.length > 1
-          <p>You should only assign 1 label.</p>}
-        <p>When our experts classified this image,<br />they labeled it as a {@props.subject.metadata['#Label']}.</p>
-        <p>Some of the glitch classes can look quite similar,<br />so please keep trying your best.</p>
-        <p>Check out the tutorial and the field guide for more guidance.</p>
-      </div>}
-
-
-      <hr />
-
-      <nav className="task-nav">
-        {if @props.owner? and @props.project? and !disableTalk
-          [ownerName, name] = @props.project.slug.split('/')
-          <Link onClick={@props.onClickNext} to="/projects/#{ownerName}/#{name}/talk/subjects/#{@props.subject.id}" className="talk standard-button">Talk</Link>}
-        <button type="button" autoFocus={true} className="continue major-button" onClick={@props.onClickNext}>Next</button>
-      </nav>
     </div>
 
   # Whenever a subject image is loaded in the annotator, record its size at that time.

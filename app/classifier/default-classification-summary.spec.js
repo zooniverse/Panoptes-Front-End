@@ -1,7 +1,7 @@
 /* eslint prefer-arrow-callback: 0, func-names: 0, 'react/jsx-boolean-value': ['error', 'always'] */
 /* global describe, it, beforeEach */
 import React from 'react';
-import ClassificationSummary from './classification-summary';
+import DefaultClassificationSummary from './default-classification-summary';
 import { TextSplit } from 'seven-ten';
 import assert from 'assert';
 import { shallow } from 'enzyme';
@@ -29,12 +29,12 @@ const classification = {
   ]
 };
 
-describe('ClassificationSummary', function () {
+describe('DefaultClassificationSummary', function () {
   describe('if classification is provided', function () {
     let wrapper;
 
     beforeEach(function () {
-      wrapper = shallow(<ClassificationSummary workflow={workflow} classification={classification} />);
+      wrapper = shallow(<DefaultClassificationSummary workflow={workflow} classification={classification} />);
     });
 
     it('should render without crashing', function () {
@@ -48,7 +48,7 @@ describe('ClassificationSummary', function () {
 
   describe('if classification is not provided', function () {
     it('should render without crashing', function () {
-      shallow(<ClassificationSummary />);
+      shallow(<DefaultClassificationSummary />);
     });
   });
   describe('first to classify experiment', function(){
@@ -63,16 +63,16 @@ describe('ClassificationSummary', function () {
         }
       }
     };
-          
+
     it('should show a message if the classification count is 0', function() {
-      const wrapper = shallow(<ClassificationSummary workflow={workflow} classification={classification} classificationCount={0} splits={splits} />);
+      const wrapper = shallow(<DefaultClassificationSummary workflow={workflow} classification={classification} classificationCount={0} splits={splits} />);
       assert.equal(wrapper.find(TextSplit).find({splitKey:'subject.first-to-classify', textKey:'message'}).length, 1);
     });
-    
+
     it('should not show a message if the classification count is greater than 0', function() {
-      const wrapper = shallow(<ClassificationSummary workflow={workflow} classification={classification} classificationCount={1} splits={splits} />);
+      const wrapper = shallow(<DefaultClassificationSummary workflow={workflow} classification={classification} classificationCount={1} splits={splits} />);
       assert.equal(wrapper.find(TextSplit).find({splitKey:'subject.first-to-classify', textKey:'message'}).length, 0);
     });
-    
+
   });
 });

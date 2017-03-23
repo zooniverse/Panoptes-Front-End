@@ -5,8 +5,11 @@ import tasks from './tasks';
 import CacheClassification from '../components/cache-classification';
 import GridTool from './drawing-tools/grid';
 
-const BackButtonWarning = props =>
-  <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
+/* eslint-disable multiline-ternary, no-nested-ternary, react/jsx-no-bind */
+
+const BackButtonWarning = () => {
+  return <p className="back-button-warning" >Going back will clear your work for the current task.</p>;
+};
 
 class TaskNav extends React.Component {
   constructor(props) {
@@ -55,11 +58,15 @@ class TaskNav extends React.Component {
 
     const currentAnnotation = classification.annotations[classification.annotations.length - 1];
     const currentTask = workflow.tasks[currentAnnotation.task];
-    !!currentTask && !!currentTask.tools && currentTask.tools.map((tool) => {
-      if (tool.type === 'grid') {
-        GridTool.mapCells(classification.annotations);
-      }
-    });
+
+    if (currentTask && currentTask.tools) {
+      currentTask.tools.map((tool) => {
+        if (tool.type === 'grid') {
+          GridTool.mapCells(classification.annotations);
+        }
+      });
+    }
+
     classification.update({
       completed: true,
       'metadata.session': getSessionID(),
@@ -105,27 +112,26 @@ class TaskNav extends React.Component {
   }
 
   render() {
-    if (!this.props.annotation) {
-      return null;
-    }
+    const completed = !!this.props.classification.completed;
+
     const task = this.props.task ? this.props.task : this.props.workflow.tasks[this.props.workflow.first_task];
 
     const disableTalk = this.props.classification.metadata.subject_flagged;
-    const visibleTasks = Object.keys(this.props.workflow.tasks).filter(key => this.props.workflow.tasks[key].type !== 'shortcut');
+    const visibleTasks = Object.keys(this.props.workflow.tasks).filter((key) => { return this.props.workflow.tasks[key].type !== 'shortcut'; });
     const TaskComponent = tasks[task.type];
 
     // Should we disable the "Back" button?
-    const onFirstAnnotation = (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
+    const onFirstAnnotation = !completed && (this.props.classification.annotations.indexOf(this.props.annotation) === 0);
 
     // Should we disable the "Next" or "Done" buttons?
-    let waitingForAnswer;
-    if (TaskComponent && TaskComponent.isAnnotationComplete) {
+    let waitingForAnswer = false;
+    if (TaskComponent && TaskComponent.isAnnotationComplete && this.props.annotation) {
       waitingForAnswer = !this.props.annotation.shortcut && !TaskComponent.isAnnotationComplete(task, this.props.annotation, this.props.workflow);
     }
 
     // Each answer of a single-answer task can have its own `next` key to override the task's.
-    let nextTaskKey;
-    if (TaskComponent === tasks.single) {
+    let nextTaskKey = '';
+    if (TaskComponent === tasks.single && this.props.annotation) {
       const currentAnswer = task.answers[this.props.annotation.value];
       nextTaskKey = currentAnswer ? currentAnswer.next : '';
     } else {
@@ -146,7 +152,7 @@ class TaskNav extends React.Component {
     return (
       <div>
         <nav className="task-nav">
-          {(visibleTasks.length > 1) &&
+          {(visibleTasks.length > 1) && !completed &&
             <button
               type="button"
               className="back minor-button"
@@ -168,7 +174,7 @@ class TaskNav extends React.Component {
             >
               Done &amp; Talk
             </Link>}
-          {(nextTaskKey && !this.props.annotation.shortcut) ?
+          {(nextTaskKey && this.props.annotation && !this.props.annotation.shortcut) ?
             <button
               type="button"
               className="continue major-button"
@@ -176,16 +182,33 @@ class TaskNav extends React.Component {
               onClick={this.addAnnotationForTask.bind(this, nextTaskKey)}
             >
               Next
-            </button> :
-            <button
-              type="button"
-              className="continue major-button"
-              disabled={waitingForAnswer}
-              onClick={this.completeClassification}
+            </button> : !completed ?
+              <button
+                type="button"
+                className="continue major-button"
+                disabled={waitingForAnswer}
+                onClick={this.completeClassification}
+              >
+                {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
+                {this.props.classification.gold_standard && <i className="fa fa-star fa-fw" />}
+                {' '}Done
+              </button> :
+              null
+          }
+          {completed &&
+            <Link
+              to={`/projects/${this.props.project.slug}/talk/subjects/${this.props.subject.id}`}
+              className="talk standard-button"
             >
-              {this.props.demoMode && <i className="fa fa-trash fa-fw" />}
-              {this.props.classification.gold_standard && <i className="fa fa-star fa-fw" />}
-              {' '}Done
+              Talk
+            </Link>}
+          {completed &&
+            <button
+              autoFocus={true}
+              className="continue major-button"
+              onClick={this.props.nextSubject}
+            >
+              Next
             </button>}
           {this.props.children}
         </nav>
@@ -203,11 +226,13 @@ TaskNav.propTypes = {
   children: React.PropTypes.node,
   classification: React.PropTypes.shape({
     annotations: React.PropTypes.array,
+    completed: React.PropTypes.bool,
     gold_standard: React.PropTypes.bool,
     id: React.PropTypes.string,
     metadata: React.PropTypes.object
   }),
   completeClassification: React.PropTypes.func,
+  nextSubject: React.PropTypes.func,
   demoMode: React.PropTypes.bool,
   project: React.PropTypes.shape({
     id: React.PropTypes.string,

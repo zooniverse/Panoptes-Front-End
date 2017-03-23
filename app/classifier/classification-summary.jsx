@@ -1,54 +1,110 @@
 import React from 'react';
-import tasks from './tasks';
-import { TextSplit } from 'seven-ten';
 
-const ClassificationSummary = (props) => {
-  let firstTimeClassified;
-  if (props.classificationCount === 0) {
-    firstTimeClassified = (
-      <TextSplit
-        splitKey="subject.first-to-classify"
-        textKey="message"
-        splits={props.splits}
-        default={''}
-        elementType={"p"}
-      />
+import DefaultClassificationSummary from './default-classification-summary';
+import GSGoldStandardSummary from './gs-gold-standard-summary';
+import MetadataBasedFeedback from './metadata-based-feedback';
+import WorldWideTelescope from './world-wide-telescope';
+
+/* eslint-disable multiline-ternary, react/forbid-prop-types */
+
+class ClassificationSummary extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { showExpert: false };
+    this.dontShowExpert = () => {
+      this.setState({ showExpert: false });
+      this.props.toggleExpertClassification(false);
+    };
+    this.doShowExpert = () => {
+      this.setState({ showExpert: true });
+      this.props.toggleExpertClassification(true);
+    };
+
+    this.hasExpert = !!this.props.expertClassification;
+  }
+
+  render() {
+    const tools = this.props.project.experimental_tools || [];
+
+    if (this.props.hasGSGoldStandard) {
+      return (
+        <GSGoldStandardSummary
+          classification={this.props.classification}
+          subject={this.props.subject}
+          workflow={this.props.workflow}
+        />
+      );
+    }
+
+    if (tools.includes('metadata based feedback')) {
+      return (
+        <MetadataBasedFeedback
+          subject={this.props.subject}
+          classification={this.props.classification}
+          dudLabel="DUD"
+          simLabel="SIM"
+          subjectLabel="SUB"
+          metaTypeFieldName="#Type"
+          metaSuccessMessageFieldName="#F_Success"
+          metaFailureMessageFieldName="#F_Fail"
+          metaSimCoordXPattern="#X"
+          metaSimCoordYPattern="#Y"
+          metaSimTolPattern="#Tol"
+        />
+      );
+    }
+
+    if (this.props.workflow.configuration &&
+        this.props.workflow.configuration.custom_summary &&
+        this.props.workflow.configuration.custom_summary.includes('worldwide telescope')) {
+      return (
+        <strong>
+          <WorldWideTelescope
+            annotations={this.props.classification.annotations}
+            subject={this.props.subject}
+            workflow={this.props.workflow}
+          />
+        </strong>
+      );
+    }
+
+    return (
+      <div>
+        { this.hasExpert ?
+          <div className="has-expert-classification">
+            Expert classification available.&nbsp;
+            { this.state.showExpert ?
+              <button type="button" onClick={this.dontShowExpert}>Hide</button> :
+              <button type="button" onClick={this.doShowExpert}>Show</button> }
+          </div> : '' }
+
+        <div>
+          <strong>
+            { this.state.showExpert ? 'Expert Classification:' : 'Your classification:' }
+          </strong>
+          <DefaultClassificationSummary
+            workflow={this.props.workflow}
+            classification={this.state.showExpert ? this.props.expertClassification : this.props.classification}
+            classificationCount={this.props.classificationCount}
+            splits={this.props.splits}
+          />
+        </div>
+      </div>
     );
   }
-  let body = 'No annotations';
-  if ((props.classification) && (props.classification.annotations.length > 0)) {
-    body = [];
-    props.classification.annotations.map((annotation) => {
-      annotation._key = Math.random();
-      const task = props.workflow.tasks[annotation.task];
-      const SummaryComponent = tasks[task.type].Summary; // TODO: There's a lot of duplicated code in these modules.
-      body.push(
-        <div key={annotation._key} className="classification-task-summary">
-          <SummaryComponent task={task} annotation={annotation} onToggle={props.onToggle} />
-        </div>
-      );
-    });
-  }
-  return (
-    <div className="classification-summary">
-      {firstTimeClassified}
-      {body}
-    </div>
-  );
-};
-
-ClassificationSummary.defaultProps = {
-  workflow: null,
-  classification: null,
-  classificationCount: null
-};
+}
 
 ClassificationSummary.propTypes = {
-  workflow: React.PropTypes.object,
-  classification: React.PropTypes.object,
+  project: React.PropTypes.object.isRequired,
+  workflow: React.PropTypes.object.isRequired,
+  subject: React.PropTypes.object.isRequired,
+  classification: React.PropTypes.object.isRequired,
+  expertClassification: React.PropTypes.object,
+  splits: React.PropTypes.object,
   classificationCount: React.PropTypes.number,
-  onToggle: React.PropTypes.func,
-  splits: React.PropTypes.object
+  hasGSGoldStandard: React.PropTypes.bool,
+  toggleExpertClassification: React.PropTypes.func
 };
 
 export default ClassificationSummary;
