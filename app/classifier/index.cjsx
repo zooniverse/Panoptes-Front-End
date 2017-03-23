@@ -181,72 +181,7 @@ Classifier = React.createClass
             task={currentTask}
             annotation={currentAnnotation}
             subjectLoading={@state.subjectLoading}
-          >
-            <p>
-              <small>
-                <strong>
-                  <RestartButton
-                    className="minor-button"
-                    preferences={@props.preferences}
-                    shouldRender={(@props.tutorial) && (@props.tutorial.steps.length > 0)}
-                    start={Tutorial.start.bind(Tutorial, @props.tutorial, @props.user, @props.preferences, @context.geordi)}
-                    style={{marginTop: '2em'}}
-                    user={@props.user}
-                    workflow={@props.workflow}
-                  >
-                    Show the project tutorial
-                  </RestartButton>
-                </strong>
-              </small>
-            </p>
-
-            <p>
-              <small>
-                <strong>
-                  <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
-                    <RestartButton
-                      className="minor-button"
-                      preferences={@props.preferences}
-                      shouldRender={(@props.minicourse) && (@props.user) && (@props.minicourse.steps.length > 0)}
-                      start={MiniCourse.restart.bind(MiniCourse, @props.minicourse, @props.preferences, @props.user, @context.geordi)}
-                      style={{marginTop: '2em'}}
-                      user={@props.user}
-                      workflow={@props.workflow}
-                    >
-                      Restart the project mini-course
-                    </RestartButton>
-                  </VisibilitySplit>
-                </strong>
-              </small>
-            </p>
-
-            {if @props.demoMode
-              <p style={{ textAlign: 'center' }}>
-                <i className="fa fa-trash" />{' '}
-                <small>
-                  <strong>Demo mode:</strong>
-                  <br />
-                  No classifications are being recorded.{' '}
-                  <button type="button" className="secret-button" onClick={@changeDemoMode.bind(this, false)}>
-                    <u>Disable</u>
-                  </button>
-                </small>
-              </p>
-            }
-            {if currentClassification.gold_standard
-              <p style={{ textAlign: 'center' }}>
-                <i className="fa fa-star" />{' '}
-                <small>
-                  <strong>Gold standard mode:</strong>
-                  <br />
-                  Please ensure this classification is completely accurate.{' '}
-                  <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
-                    <u>Disable</u>
-                  </button>
-                </small>
-              </p>
-            }
-          </Task>
+          />
         else
           <ClassificationSummary
             project={@props.project}
@@ -278,6 +213,70 @@ Classifier = React.createClass
               onChangeDemoMode={@props.onChangeDemoMode}
             />}
         </TaskNav>
+        <p>
+          <small>
+            <strong>
+              <RestartButton
+                className="minor-button"
+                preferences={@props.preferences}
+                shouldRender={(@props.tutorial) && (@props.tutorial.steps.length > 0)}
+                start={Tutorial.start.bind(Tutorial, @props.tutorial, @props.user, @props.preferences, @context.geordi)}
+                style={{marginTop: '2em'}}
+                user={@props.user}
+                workflow={@props.workflow}
+              >
+                Show the project tutorial
+              </RestartButton>
+            </strong>
+          </small>
+        </p>
+
+        <p>
+          <small>
+            <strong>
+              <VisibilitySplit splits={@props.splits} splitKey={'mini-course.visible'} elementKey={'button'}>
+                <RestartButton
+                  className="minor-button"
+                  preferences={@props.preferences}
+                  shouldRender={(@props.minicourse) && (@props.user) && (@props.minicourse.steps.length > 0)}
+                  start={MiniCourse.restart.bind(MiniCourse, @props.minicourse, @props.preferences, @props.user, @context.geordi)}
+                  style={{marginTop: '2em'}}
+                  user={@props.user}
+                  workflow={@props.workflow}
+                >
+                  Restart the project mini-course
+                </RestartButton>
+              </VisibilitySplit>
+            </strong>
+          </small>
+        </p>
+
+        {if @props.demoMode
+          <p style={{ textAlign: 'center' }}>
+            <i className="fa fa-trash" />{' '}
+            <small>
+              <strong>Demo mode:</strong>
+              <br />
+              No classifications are being recorded.{' '}
+              <button type="button" className="secret-button" onClick={@changeDemoMode.bind(this, false)}>
+                <u>Disable</u>
+              </button>
+            </small>
+          </p>
+        }
+        {if currentClassification.gold_standard
+          <p style={{ textAlign: 'center' }}>
+            <i className="fa fa-star" />{' '}
+            <small>
+              <strong>Gold standard mode:</strong>
+              <br />
+              Please ensure this classification is completely accurate.{' '}
+              <button type="button" className="secret-button" onClick={currentClassification.update.bind(currentClassification, { gold_standard: undefined })}>
+                <u>Disable</u>
+              </button>
+            </small>
+          </p>
+        }
       </div>
       <PotentialFieldGuide guide={@props.guide} guideIcons={@props.guideIcons} />
     </div>
