@@ -55,7 +55,9 @@ class ClassificationSummary extends React.Component {
       );
     }
 
-    if (tools.includes('worldwide telescope')) {
+    if (this.props.workflow.configuration &&
+        this.props.workflow.configuration.custom_summary &&
+        this.props.workflow.configuration.custom_summary.includes('world_wide_telescope')) {
       return (
         <strong>
           <WorldWideTelescope
