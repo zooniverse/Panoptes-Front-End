@@ -28,8 +28,6 @@ EditProjectPage = React.createClass
     workflowActions: workflowActions
 
   getInitialState: ->
-    subjectSetCreationError: null
-    subjectSetCreationInProgress: false
     deletionError: null
     deletionInProgress: false
 
@@ -85,32 +83,6 @@ EditProjectPage = React.createClass
 
           <li>
             <br />
-            <div className="nav-list-header">Subject sets</div>
-            <PromiseRenderer promise={@props.project.get 'subject_sets', sort: 'display_name', page_size: 250}>{(subjectSets) =>
-              <ul className="nav-list">
-                {renderSubjectSetListItem = (subjectSet) ->
-                  subjectSetListLabel = subjectSet.display_name || <i>{'Untitled subject set'}</i>
-                  <li key={subjectSet.id}>
-                    <Link to={@labPath("/subject-set/#{subjectSet.id}")} activeClassName="active" className="nav-list-item" title="A subject is an image (or group of images) to be analyzed.">{subjectSetListLabel}</Link>
-                  </li>}
-
-                {for subjectSet in subjectSets
-                  <ChangeListener key={subjectSet.id} target={subjectSet} eventName="save" handler={renderSubjectSetListItem.bind this, subjectSet} />}
-
-                <li className="nav-list-item">
-                  <button type="button" onClick={@createNewSubjectSet} disabled={@state.subjectSetCreationInProgress} title="A subject is an image (or group of images) to be analyzed.">
-                    New subject set{' '}
-                    <LoadingIndicator off={not @state.subjectSetCreationInProgress} />
-                  </button>{' '}
-                  {if @state.subjectSetCreationError?
-                    <div className="form-help error">{@state.subjectSetCreationError.message}</div>}
-                </li>
-              </ul>
-            }</PromiseRenderer>
-          </li>
-
-          <li>
-            <br />
             <div className="nav-list-header">Need some help?</div>
             <ul className="nav-list">
               <li>
@@ -144,26 +116,6 @@ EditProjectPage = React.createClass
         } />
       </div>
     </div>
-
-  createNewSubjectSet: ->
-    subjectSet = apiClient.type('subject_sets').create
-      display_name: DEFAULT_SUBJECT_SET_NAME
-      links:
-        project: @props.project.id
-
-    @setState
-      subjectSetCreationError: null
-      subjectSetCreationInProgress: true
-
-    subjectSet.save()
-      .then =>
-        @context.router.push "/lab/#{@props.project.id}/subject-set/#{subjectSet.id}"
-      .catch (error) =>
-        @setState subjectSetCreationError: error
-      .then =>
-        @props.project.uncacheLink 'subject_sets'
-        if @isMounted()
-          @setState subjectSetCreationInProgress: false
 
   deleteProject: ->
     @setState deletionError: null

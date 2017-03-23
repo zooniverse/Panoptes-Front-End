@@ -11,6 +11,7 @@ export default class WorkflowsPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       workflowCreationInProgress: false,
       workflows: []
     };
@@ -23,7 +24,7 @@ export default class WorkflowsPage extends React.Component {
     this.handleWorkflowReorder = this.handleWorkflowReorder.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const page = this.props.location.query.page || 1;
     this.getWorkflowList(page);
   }
@@ -46,7 +47,7 @@ export default class WorkflowsPage extends React.Component {
   getWorkflowList(page = 1) {
     getWorkflowsInOrder(this.props.project, { fields: 'display_name', page_size: 20, page })
     .then((workflows) => {
-      this.setState({ workflows });
+      this.setState({ workflows, loading: false });
     });
   }
 
@@ -99,12 +100,21 @@ export default class WorkflowsPage extends React.Component {
 
     return (
       <div>
-        <div className="nav-list-header">Workflows</div>
+        <div className="form-label">Workflows</div>
 
         <DragReorderable tag="ul" className="nav-list" items={this.state.workflows} render={this.renderWorkflow} onChange={this.handleWorkflowReorder} />
 
+        {(this.state.workflows.length === 0 && this.state.loading === false) && (
+          <p> No workflows are currently associated with this project. </p>
+        )}
+
         <div className="nav-list-item">
-          <button type="button" onClick={this.showCreateWorkflow} disabled={this.state.workflowCreationInProgress} title="A workflow is the sequence of tasks that you’re asking volunteers to perform.">
+          <button
+            type="button"
+            onClick={this.showCreateWorkflow}
+            disabled={this.state.workflowCreationInProgress}
+            title="A workflow is the sequence of tasks that you’re asking volunteers to perform."
+          >
             New workflow{' '}
             <LoadingIndicator off={!this.state.workflowCreationInProgress} />
           </button>
@@ -122,7 +132,7 @@ export default class WorkflowsPage extends React.Component {
           </ModalFormDialog>
         )}
 
-        {this.state.workflows.length && (
+        {this.state.workflows.length > 0 && (
           <Paginator
             className="talk"
             page={meta.page}
