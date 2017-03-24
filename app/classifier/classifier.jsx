@@ -85,10 +85,45 @@ export default class Classifier extends React.Component {
     });
     try {
       !!this.context.geordi && this.context.geordi.forget(['subjectID']);
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
     }
+  }
+
+  getExpertClassification(workflow, subject) {
+    const awaitExpertClassification = Promise.resolve(
+      apiClient.get('/classifications/gold_standard', {
+        workflow_id: workflow.id,
+        subject_ids: [subject.id]
+      })
+      .catch(() => [])
+      .then(([expertClassification]) => expertClassification)
+    );
+
+    awaitExpertClassification.then((expertClassification) => {
+      expertClassification = expertClassification || subject.expert_classification_data[workflow.id];
+      if (this.props.workflow === workflow && this.props.subject === subject) {
+        window.expertClassification = expertClassification;
+        this.setState({ expertClassification });
+      }
+    });
+  }
+
+  loadClassificationsCount(subject) {
+    let query = {};
+    if (this.props.splits && this.props.splits['subject.first-to-classify']) {
+      query = {
+        workflow_id: this.props.workflow.id,
+        subject_id: subject.id
+      };
+    }
+
+    apiClient.type('subject_workflow_statuses')
+    .get(query)
+    .then(([sws]) => {
+      const classificationCount = sws.classifications_count ? sws.classifications_count : 0;
+      this.setState({ classificationCount });
+    });
   }
 
   loadSubject(subject) {
@@ -114,40 +149,56 @@ export default class Classifier extends React.Component {
     });
   }
 
-  loadClassificationsCount(subject) {
-    let query = {};
-    if (this.props.splits && this.props.splits['subject.first-to-classify']) {
-      query = {
-        workflow_id: this.props.workflow.id,
-        subject_id: subject.id
-      };
-    }
+  // Whenever a subject image is loaded in the annotator, record its size at that time.
+  handleSubjectImageLoad(e, frameIndex) {
+    this.context.geordi.remember({ subjectID: this.props.subject.id });
 
-    apiClient.type('subject_workflow_statuses')
-    .get(query)
-    .then(([sws]) => {
-      const classificationCount = sws.classifications_count ? sws.classifications_count : 0;
-      this.setState({ classificationCount });
-    });
+    const { naturalWidth, naturalHeight, clientWidth, clientHeight } = e.target;
+    const changes = {};
+    changes[`metadata.subject_dimensions.${frameIndex}`] = { naturalWidth, naturalHeight, clientWidth, clientHeight };
+    this.props.classification.update(changes);
   }
 
-  getExpertClassification(workflow, subject) {
-    const awaitExpertClassification = Promise.resolve(
-      apiClient.get('/classifications/gold_standard', {
-        workflow_id: workflow.id,
-        subject_ids: [subject.id]
-      })
-      .catch(() => [])
-      .then(([expertClassification]) => expertClassification)
-    );
+  handleAnnotationChange(classification, newAnnotation) {
+    classification.annotations[classification.annotations.length - 1] = newAnnotation;
+    classification.update('annotations');
+  }
 
-    awaitExpertClassification.then((expertClassification) => {
-      expertClassification = expertClassification ? expertClassification : subject.expert_classification_data[workflow.id];
-      if (this.props.workflow === workflow && this.props.subject === subject) {
-        window.expertClassification = expertClassification;
-        this.setState({ expertClassification });
-      }
-    });
+  completeClassification() {
+    if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
+      this.props.onCompleteAndLoadAnotherSubject();
+    } else {
+      this.props.onComplete()
+      .then((classification) => {
+        // after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
+        const experimentName = experimentsClient.checkForExperiment(this.props.project.slug);
+        if (experimentName && this.props.user) {
+          experimentsClient.postDataToExperimentServer(
+            interventionMonitor,
+            this.context.geordi,
+            experimentName,
+            this.props.user.id,
+            classification.metadata.session,
+            'classification',
+            classification.id
+          );
+        }
+      },
+      error => console.error(error)
+    );
+    }
+  }
+
+  toggleExpertClassification(value) {
+    this.setState({ showingExpertClassification: value });
+  }
+
+  changeDemoMode(demoMode) {
+    this.props.onChangeDemoMode(demoMode);
+  }
+
+  subjectIsGravitySpyGoldStandard() {
+    this.props.workflow.configuration.gravity_spy_gold_standard && this.props.subject.metadata['#Type'] === 'Gold';
   }
 
   render() {
@@ -299,58 +350,6 @@ export default class Classifier extends React.Component {
         <PotentialFieldGuide guide={this.props.guide} guideIcons={this.props.guideIcons} />
       </div>
     );
-  }
-
-  // Whenever a subject image is loaded in the annotator, record its size at that time.
-  handleSubjectImageLoad(e, frameIndex) {
-    this.context.geordi.remember({ subjectID: this.props.subject.id });
-
-    const { naturalWidth, naturalHeight, clientWidth, clientHeight } = e.target;
-    const changes = {};
-    changes[`metadata.subject_dimensions.${frameIndex}`] = { naturalWidth, naturalHeight, clientWidth, clientHeight };
-    this.props.classification.update(changes);
-  }
-
-  handleAnnotationChange(classification, newAnnotation) {
-    classification.annotations[classification.annotations.length - 1] = newAnnotation;
-    classification.update('annotations');
-  }
-
-  completeClassification() {
-    if (this.props.workflow.configuration.hide_classification_summaries && !this.subjectIsGravitySpyGoldStandard()) {
-      this.props.onCompleteAndLoadAnotherSubject();
-    } else {
-      this.props.onComplete()
-      .then((classification) => {
-        //after classification is saved, if we are in an experiment and logged in, notify experiment server to advance the session plan
-        const experimentName = experimentsClient.checkForExperiment(this.props.project.slug);
-        if (experimentName && this.props.user) {
-          experimentsClient.postDataToExperimentServer(
-            interventionMonitor,
-            this.context.geordi,
-            experimentName,
-            this.props.user.id,
-            classification.metadata.session,
-            'classification',
-            classification.id
-          );
-        }
-      },
-      error => console.error(error)
-    );
-    }
-  }
-
-  toggleExpertClassification(value) {
-    this.setState({ showingExpertClassification: value });
-  }
-
-  changeDemoMode(demoMode) {
-    this.props.onChangeDemoMode(demoMode);
-  }
-
-  subjectIsGravitySpyGoldStandard() {
-    this.props.workflow.configuration.gravity_spy_gold_standard && this.props.subject.metadata['#Type'] === 'Gold';
   }
 }
 
