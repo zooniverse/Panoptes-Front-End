@@ -59,6 +59,9 @@ List = React.createClass
       query: nextQuery
 
   listCollections: (props) ->
+    unless props.project? or props.route?.path is ':collection_owner'
+      return null
+
     query = {}
     if props.params.collection_owner is props.user?.login
       query.current_user_roles = "owner,contributor,collaborator,viewer"
