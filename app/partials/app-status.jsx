@@ -28,7 +28,9 @@ feature specs.
 
 import React from 'react';
 
-const APP_STATUS_URL = 'https://static.zooniverse.org/zooniverse.org-status.txt';
+const APP_STATUS_URL = (process.env.NODE_ENV === 'staging' || process.env.NODE_ENV === 'development')
+  ? 'https://static.zooniverse.org/zooniverse.org-status-TEST.txt'
+  : 'https://static.zooniverse.org/zooniverse.org-status.txt';
 
 export default class AppStatus extends React.Component {
   constructor(props) {
@@ -53,12 +55,13 @@ export default class AppStatus extends React.Component {
     })
     .then((text) => {
       console.log('AppStatus: Received status data from ' + APP_STATUS_URL + '.');
-      if (!text || text === '') {
+      const cleanedText = (text) ? text.trim() : '';  //If text is just white space or newlines...
+      if (cleanedText === '') {  //...ignore it.
         console.log('AppStatus: Nothing to report.');
       } else {
         this.setState({
           show: true,
-          message: text,
+          message: cleanedText,
         });
       }
     })
