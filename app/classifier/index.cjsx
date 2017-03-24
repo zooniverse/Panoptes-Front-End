@@ -1,6 +1,6 @@
 React = require 'react'
 apiClient = require 'panoptes-client/lib/api-client'
-Classifier = require './classifier'
+Classifier = require('./classifier').default
 MiniCourse = require '../components/mini-course'
 Tutorial = require '../components/tutorial'
 `import CustomSignInPrompt from './custom-sign-in-prompt';`
