@@ -6,6 +6,7 @@ Translate = require 'react-translate-component'
 CollectionsNav = require './nav'
 classNames = require 'classnames'
 Paginator = require '../../talk/lib/paginator'
+`import Announcement from './announcement';`
 `import getCollectionCovers from '../../lib/get-collection-covers';`
 
 List = React.createClass
@@ -104,91 +105,94 @@ List = React.createClass
     if username?
       userCollectionsLink = "/users/#{username}/#{@props.baseType}"
 
-    <section className={classes}>
-      {if !@props.params.profile_name? and @props.project?
-        <CollectionsNav
-          translationObjectName="#{@props.translationObjectName}"
-          user={@props.user}
-          project={@props.project}
-          baseType={@props.baseType} />}
-        {if @state.collections?.length > 0
-          meta = @state.collections[0].getMeta()
-          <div>
-            <div className="resource-results-counter collection-results-counter">
-              <p>
+    if @props.project? or @props.route?.path is ':collection_owner'
+      <section className={classes}>
+        {if !@props.params.profile_name? and @props.project?
+          <CollectionsNav
+            translationObjectName="#{@props.translationObjectName}"
+            user={@props.user}
+            project={@props.project}
+            baseType={@props.baseType} />}
+          {if @state.collections?.length > 0
+            meta = @state.collections[0].getMeta()
+            <div>
+              <div className="resource-results-counter collection-results-counter">
+                <p>
+                  {if meta
+                    pageStart = meta.page * meta.page_size - meta.page_size + 1
+                    pageEnd = Math.min(meta.page * meta.page_size, meta.count)
+                    count = meta.count
+                    translateProps = {
+                      pageStart: pageStart
+                      pageEnd: pageEnd
+                      count: count
+                    }
+                    if @props.project?
+                      projectNameForMessages = @props.project.display_name
+                    else
+                      projectNameForMessages = "Zooniverse"
+                    translateProps["project"] = projectNameForMessages
+                    if username?
+                      countMessageKey = "#{@props.translationObjectName}.countForUserMessage"
+                      translateProps["user"] = username
+                    else
+                      countMessageKey = "#{@props.translationObjectName}.countMessage"
+                    <Translate {...translateProps} content={countMessageKey}/>}
+                  {if @props.params.profile_name? or @props.params.collection_owner?
+                    <span>
+                      <br/>
+                      {if @props.params.profile_name?
+                        <Link className="show-more" to={projectCollectionsLink}>
+                          <Translate content="#{@props.translationObjectName}.projectWide" project={projectNameForMessages}/>
+                        </Link>}
+                      {if username? and @props.project?
+                        <Link className="show-more" to={userCollectionsLink}>
+                          <Translate content="#{@props.translationObjectName}.userWide" user={username}/>
+                        </Link>}
+                    </span>}
+                </p>
+              </div>
+              <div className="collections-card-list">
+                {for collection in @state.collections
+                   <CollectionCard
+                     key={collection.id}
+                     collection={collection}
+                     coverSrc={@state.collectionCovers[collection.id]}
+                     linkTo={@cardLink(collection)}
+                     translationObjectName={@props.translationObjectName}
+                     subjectCount={collection.links.subjects?.length}
+                     shared={@shared(collection)} /> }
+              </div>
+              <nav>
                 {if meta
-                  pageStart = meta.page * meta.page_size - meta.page_size + 1
-                  pageEnd = Math.min(meta.page * meta.page_size, meta.count)
-                  count = meta.count
-                  translateProps = {
-                    pageStart: pageStart
-                    pageEnd: pageEnd
-                    count: count
+                  buttonClasses = classNames {
+                    "pill-button": true
+                    "project-pill-button": @props.project?
                   }
-                  if @props.project?
-                    projectNameForMessages = @props.project.display_name
-                  else
-                    projectNameForMessages = "Zooniverse"
-                  translateProps["project"] = projectNameForMessages
-                  if username?
-                    countMessageKey = "#{@props.translationObjectName}.countForUserMessage"
-                    translateProps["user"] = username
-                  else
-                    countMessageKey = "#{@props.translationObjectName}.countMessage"
-                  <Translate {...translateProps} content={countMessageKey}/>}
-                {if @props.params.profile_name? or @props.params.collection_owner?
-                  <span>
-                    <br/>
-                    {if @props.params.profile_name?
-                      <Link className="show-more" to={projectCollectionsLink}>
-                        <Translate content="#{@props.translationObjectName}.projectWide" project={projectNameForMessages}/>
-                      </Link>}
-                    {if username? and @props.project?
-                      <Link className="show-more" to={userCollectionsLink}>
-                        <Translate content="#{@props.translationObjectName}.userWide" user={username}/>
-                      </Link>}
-                  </span>}
-              </p>
+                  <nav className="pagination">
+                    <Paginator
+                      className='talk'
+                      page={meta.page}
+                      onPageChange={@onPageChange}
+                      pageCount={meta.page_count} />
+                  </nav>}
+              </nav>
             </div>
-            <div className="collections-card-list">
-              {for collection in @state.collections
-                 <CollectionCard
-                   key={collection.id}
-                   collection={collection}
-                   coverSrc={@state.collectionCovers[collection.id]}
-                   linkTo={@cardLink(collection)}
-                   translationObjectName={@props.translationObjectName}
-                   subjectCount={collection.links.subjects?.length}
-                   shared={@shared(collection)} /> }
+          else if @state.collections?.length is 0
+            <div>
+              <div className="resource-results-counter collection-results-counter">
+                <Translate content="#{@props.translationObjectName}.notFoundMessage" component="p" />
+              </div>
             </div>
-            <nav>
-              {if meta
-                buttonClasses = classNames {
-                  "pill-button": true
-                  "project-pill-button": @props.project?
-                }
-                <nav className="pagination">
-                  <Paginator
-                    className='talk'
-                    page={meta.page}
-                    onPageChange={@onPageChange}
-                    pageCount={meta.page_count} />
-                </nav>}
-            </nav>
-          </div>
-        else if @state.collections?.length is 0
-          <div>
-            <div className="resource-results-counter collection-results-counter">
-              <Translate content="#{@props.translationObjectName}.notFoundMessage" component="p" />
+          else
+            <div>
+              <div className="resource-results-counter collection-results-counter">
+                <Translate content="#{@props.translationObjectName}.loadMessage" component="p" />
+              </div>
             </div>
-          </div>
-        else
-          <div>
-            <div className="resource-results-counter collection-results-counter">
-              <Translate content="#{@props.translationObjectName}.loadMessage" component="p" />
-            </div>
-          </div>
-        }
-    </section>
+          }
+      </section>
+    else
+      <Announcement />
 
 module.exports = List
