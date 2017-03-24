@@ -13,18 +13,21 @@ const workflows = [
   { id: '2', display_name: 'Cool Workflow', getMeta: meta }
 ];
 
-const context = { router: {}};
+const project = { id: '1', configuration: {}};
 
-describe('SubjectSetsPage', function () {
+const createHref = function(channel) { return { bind: function(event, callback) { } }};
+const isActive = function(channel) { return { bind: function(event, callback) { } }};
+const context = { router: { createHref, isActive }};
+
+describe('WorkflowsPage', function () {
   let wrapper;
 
   before(function () {
-    sinon.stub(WorkflowsPage.prototype, 'componentDidMount');
-    wrapper = mount(
+    wrapper = shallow(
       <WorkflowsPage />,
       { disableLifecycleMethods: true, context }
     );
-    wrapper.setState({ loading: false, workflows });
+    wrapper.setState({ loading: false });
   });
 
   it('will display a message when no workflows are present', function () {
@@ -33,9 +36,6 @@ describe('SubjectSetsPage', function () {
   });
 
   // it('will display the correct number of workflows', function () {
-  //   wrapper.setState({ workflows });
-  //   console.log(wrapper.find('button'));
-  //   assert.equal(wrapper.find('a').length, 2);
   // });
   //
   // it('will display workflows as a link', function () {
@@ -43,4 +43,21 @@ describe('SubjectSetsPage', function () {
   //
   // it('will allow for the creation of a new sworkflow', function () {
   // });
+});
+
+describe('WorkflowsPage', function () {
+  let wrapper;
+
+  before(function () {
+    sinon.stub(WorkflowsPage.prototype, 'componentDidMount');
+    wrapper = mount(
+      <WorkflowsPage />,
+      { context }
+    );
+    wrapper.setState({ workflows, loading: false });
+  });
+
+  it('will display a message when no workflows are present', function () {
+    const message = 'No workflows are currently associated with this project.';
+  });
 });
