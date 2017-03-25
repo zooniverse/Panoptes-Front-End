@@ -109,7 +109,7 @@ ProjectPageController = React.createClass
 
           awaitProjectCompleteness = Promise.resolve(project.completeness > 0.99)
 
-          awaitProjectRoles = apiClient.type('project_roles').get(project.links.project_roles).catch((error) => console.error(error))
+          awaitProjectRoles = apiClient.type('project_roles').get({ project_id: project.id, user_id: user?.id, page_size: 50 }).catch((error) => console.error(error))
 
           awaitPreferences = @getUserProjectPreferences(project, user)
 
@@ -239,7 +239,7 @@ ProjectPageController = React.createClass
       Promise.resolve(null)
 
   checkUserRoles: (project, user) ->
-    currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user.id)
+    currentUserRoleSets = @state.projectRoles.filter((roleSet) => roleSet.links.owner.id is user?.id)
     roles = currentUserRoleSets[0]?.roles or []
 
     isAdmin() or 'owner' in roles or 'collaborator' in roles
