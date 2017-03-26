@@ -109,7 +109,7 @@ ProjectPageController = React.createClass
 
           awaitProjectCompleteness = Promise.resolve(project.completeness > 0.99)
 
-          awaitProjectRoles = apiClient.type('project_roles').get({ project_id: project.id, user_id: user?.id }).catch((error) => console.error(error))
+          awaitProjectRoles = apiClient.type('project_roles').get({ project_id: project.id, page_size: 50 }).catch((error) => console.error(error))
 
           awaitPreferences = @getUserProjectPreferences(project, user)
 
