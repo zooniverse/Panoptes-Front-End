@@ -16,7 +16,7 @@ module.exports = React.createClass
     find: (workflow) ->
       # Prefer fetching the tutorial for the workflow, if a workflow is given.
       if workflow?
-        apiClient.type('tutorials').get workflow_id: workflow.id, include: ['attached_images']
+        apiClient.type('tutorials').get workflow_id: workflow.id
           .then (tutorials) ->
             # Backwards compatibility for null kind values. We assume these are standard tutorials.
             onlyStandardTutorials = tutorials.filter (tutorial) ->
@@ -42,18 +42,15 @@ module.exports = React.createClass
       TutorialComponent = this
 
       if tutorial.steps.length isnt 0
-        if tutorial.links.attached_images.ids? and tutorial.links.attached_images.ids.length isnt 0
-          awaitTutorialMedia = apiClient.type('media').get(tutorial.links.attached_images?.ids)
-            .catch ->
-              # Checking for attached images throws if there are none.
-              []
-            .then (mediaResources) ->
-              mediaByID = {}
-              for mediaResource in mediaResources
-                mediaByID[mediaResource.id] = mediaResource
-              mediaByID
-        else
-          awaitTutorialMedia = Promise.resolve()
+        awaitTutorialMedia = tutorial.get 'attached_images'
+          .catch ->
+            # Checking for attached images throws if there are none.
+            []
+          .then (mediaResources) ->
+            mediaByID = {}
+            for mediaResource in mediaResources
+              mediaByID[mediaResource.id] = mediaResource
+            mediaByID
 
         awaitTutorialMedia.then (mediaByID) =>
           Dialog.alert(<TutorialComponent tutorial={tutorial} media={mediaByID} preferences={preferences} user={user} geordi={geordi} />, {
