@@ -4,6 +4,7 @@ apiClient = require 'panoptes-client/lib/api-client'
 ModalFormDialog = require 'modal-form/dialog'
 projectActions = require './actions/project'
 LandingPage = require './landing-page'
+`import LabStatus from '../../partials/lab-status.jsx';`
 
 ProjectLink = React.createClass
   getDefaultProps: ->
@@ -233,6 +234,7 @@ module.exports = React.createClass
   render: ->
     if @props.user?
       <div>
+        <LabStatus />
         <ProjectList
           title="Your projects"
           page={@props.location.query['owned-page']}
