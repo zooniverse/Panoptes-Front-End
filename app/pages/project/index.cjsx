@@ -93,7 +93,7 @@ ProjectPageController = React.createClass
 
     slug = ownerName + '/' + projectName
 
-    apiClient.type('projects').get({ slug, include: 'avatar,background,project_roles' })
+    apiClient.type('projects').get({ slug, include: 'avatar,background,owners' })
       .then ([project]) =>
         @setState {project}
 
@@ -109,7 +109,7 @@ ProjectPageController = React.createClass
 
           awaitProjectCompleteness = Promise.resolve(project.completeness > 0.99)
 
-          awaitProjectRoles = apiClient.type('project_roles').get({ project_id: project.id, page_size: 50 }).catch((error) => console.error(error))
+          awaitProjectRoles = project.get('project_roles', { page_size: 50 }).catch((error) => console.error(error))
 
           awaitPreferences = @getUserProjectPreferences(project, user)
 
