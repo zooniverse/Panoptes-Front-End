@@ -42,14 +42,19 @@ module.exports = React.createClass
       .then ([favorites]) -> if favorites? then favorites else null
 
   componentWillMount: ->
-    favorited = @props.isFavorite
-    @setState {favorited}
-
+    @favoriteSubject(@props.isFavorite)
 
   componentDidUpdate: (prevProps) ->
     if prevProps.subject isnt @props.subject
-      favorited = @props.isFavorite
-      @setState {favorited}
+      @favoriteSubject(@props.isFavorite)
+
+  componentWillReceiveProps: (nextProps) ->
+    if @props.isFavorite isnt nextProps.isFavorite
+      @favoriteSubject(nextProps.isFavorite)
+
+  favoriteSubject: (isFavorite) ->
+    favorited = isFavorite
+    @setState {favorited}
 
   addSubjectTo: (collection) ->
     @setState favorited: true
