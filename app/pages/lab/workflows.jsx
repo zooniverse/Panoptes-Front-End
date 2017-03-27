@@ -153,6 +153,9 @@ WorkflowsPage.contextTypes = {
 WorkflowsPage.defaultProps = {
   project: {
     configuration: {}
+  },
+  workflowActions: {
+    createWorkflowForProject: () => {}
   }
 };
 

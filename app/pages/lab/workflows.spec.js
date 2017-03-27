@@ -1,7 +1,6 @@
 import React from 'react';
 import assert from 'assert';
-import { shallow, mount } from 'enzyme';
-import sinon from 'sinon';
+import { shallow } from 'enzyme';
 import WorkflowsPage from './workflows';
 
 const meta = () => {
@@ -35,29 +34,17 @@ describe('WorkflowsPage', function () {
     assert.equal(wrapper.find('p').text(), message);
   });
 
-  // it('will display the correct number of workflows', function () {
-  // });
-  //
-  // it('will display workflows as a link', function () {
-  // });
-  //
-  // it('will allow for the creation of a new sworkflow', function () {
-  // });
-});
-
-describe('WorkflowsPage', function () {
-  let wrapper;
-
-  before(function () {
-    sinon.stub(WorkflowsPage.prototype, 'componentDidMount');
-    wrapper = mount(
-      <WorkflowsPage />,
-      { context }
-    );
+  it('will display the correct amount of workflows', function () {
     wrapper.setState({ workflows, loading: false });
+    assert.equal(wrapper.find('DragReorderable').render().find('li').length, 2);
   });
 
-  it('will display a message when no workflows are present', function () {
-    const message = 'No workflows are currently associated with this project.';
+  it('will display a form to create a new workflow', function () {
+    wrapper.find('button').simulate('click');
+    assert.equal(wrapper.find('WorkflowCreateForm').length, 1);
+  });
+
+  it('will display a paginator', function () {
+    assert.equal(wrapper.find('Paginator').length, 1);
   });
 });

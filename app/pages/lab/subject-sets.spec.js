@@ -2,7 +2,6 @@ import React from 'react';
 import assert from 'assert';
 import sinon from 'sinon';
 import { shallow } from 'enzyme';
-import Paginator from '../../talk/lib/paginator';
 import SubjectSetsPage from './subject-sets';
 
 const meta = () => {
@@ -39,7 +38,7 @@ describe('SubjectSetsPage', function () {
 
   it('will display a paginator', function () {
     wrapper.setState({ subjectSets });
-    assert.equal(wrapper.find(Paginator).length, 1);
+    assert.equal(wrapper.find('Paginator').length, 1);
   });
 
   it('will allow for the creation of a new subject set', function () {
