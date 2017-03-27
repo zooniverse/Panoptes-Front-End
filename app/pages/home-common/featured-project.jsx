@@ -7,13 +7,11 @@ export default class FeaturedProject extends React.Component {
       <section className="home-featured">
         <h1>Featured Projects</h1>
         <div className="home-featured-images">
-          <img src="https://zooniverse-static.s3.amazonaws.com/www.penguinwatch.org/subjects/standard/58c29152f62070004000217f.JPG" />
-          <img src="https://zooniverse-static.s3.amazonaws.com/www.penguinwatch.org/subjects/standard/58c29342f62070004001b6f7.JPG" />
-          <img src="https://zooniverse-static.s3.amazonaws.com/www.penguinwatch.org/subjects/standard/58c29175f620700040003e01.JPG" />
+          <img src="./assets/featured-projects/featured-project-20170328-stargazing-live.jpg" />
         </div>
         <h2>Stargazing Live</h2>
-        <p>Join Professor Brian Cox, Dara O&#769; Briain, and Julia Zemiro as they look for Planet Nine and other exoplanets live on <b>BBC Two</b> in the UK March 28 and <b>ABC</b> in Australia April 4.</p>
-        <Link to="/projects" className="alternate-button">March 28: Planet Nine</Link>
+        <p>The Zooniverse has teamed up with BBC Stargazing Live and the SkyMapper Telescope team to bring you Planet 9. Join us in our quest to discover our Solar System's elusive 9th planet!</p>
+        <Link to="/projects/skymap/planet-9" className="alternate-button">March 28: Planet Nine</Link>
       </section>
     );
   }
