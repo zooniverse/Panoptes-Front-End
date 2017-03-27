@@ -17,7 +17,7 @@ module.exports = React.createClass
     find: (workflow) ->
       # Prefer fetching the tutorial for the workflow, so we know which one to fetch if multiple exist.
       if workflow?
-        apiClient.type('tutorials').get workflow_id: workflow.id, kind: "mini-course", include: ['attached_images']
+        apiClient.type('tutorials').get workflow_id: workflow.id, kind: "mini-course"
           .then ([minicourse]) ->
             minicourse
       else
@@ -26,18 +26,15 @@ module.exports = React.createClass
     start: (minicourse, projectPreferences, user, geordi) ->
       MiniCourseComponent = this
       if minicourse.steps.length isnt 0
-        if minicourse.links.attached_images.ids? and minicourse.links.attached_images.ids.length isnt 0
-          awaitMiniCourseMedia = apiClient.type('media').get(minicourse.links.attached_images.ids)
-              .catch ->
-                # Checking for attached images throws if there are none.
-                []
-              .then (mediaResources) ->
-                mediaByID = {}
-                for mediaResource in mediaResources
-                  mediaByID[mediaResource.id] = mediaResource
-                mediaByID
-        else
-          awaitMiniCourseMedia = Promise.resolve()
+        awaitMiniCourseMedia = minicourse.get 'attached_images'
+            .catch ->
+              # Checking for attached images throws if there are none.
+              []
+            .then (mediaResources) ->
+              mediaByID = {}
+              for mediaResource in mediaResources
+                mediaByID[mediaResource.id] = mediaResource
+              mediaByID
 
         awaitMiniCourseMedia.then (mediaByID) =>
           Dialog.alert(<MiniCourseComponent projectPreferences={projectPreferences} user={user} minicourse={minicourse} media={mediaByID} geordi={geordi} />, {
